@@ -153,6 +153,9 @@ printf(
   "                  terminal exons.  Not recommended for ESTs.\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d.\n"
   "   -extendThroughN  Allows extension of alignment through large blocks of Ns.\n"
+  "\n"
+  "  To filter PSL files to the best hits (e.g. minimum ID > 90%% or 'only best match'),\n"
+  "  you can use the commands pslReps, pslCDnaFilter or pslUniq.\n"
   , gfVersion, MAXSINGLEPIECESIZE, ffIntronMaxDefault
   );
 exit(-1);
