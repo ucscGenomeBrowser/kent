@@ -92,24 +92,24 @@ dyStringPrintf(queryDy, "%s", words[0]);
 for (int i = 1; i < wordCount; ++i)
     dyStringPrintf(queryDy, " %s", words[i]);
 
-char query[4096];
-if (allowAll)
-    sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE);", asmListTable, queryDy->string);
-else
-    sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1;", asmListTable, queryDy->string);
-long long matchCount = sqlQuickLongLong(conn, query);
+struct dyString *query = dyStringNew(64);
+sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+if (!allowAll)
+    sqlDyStringPrintf(query, " AND browserExists=1");
+long long matchCount = sqlQuickLongLong(conn, query->string);
 if (matchCount > 0)
     {
-    verbose(1, "DBG: matchCount: %lld from search '%s'\n", matchCount, query);
     *totalMatchCount = matchCount;
-    if (allowAll)
-	sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE) ORDER BY priority LIMIT %d;", asmListTable, queryDy->string, maxItemsOutput);
-    else
-	sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1 ORDER BY priority LIMIT %d;", asmListTable, queryDy->string, maxItemsOutput);
-    struct sqlResult *sr = sqlGetResult(conn, query);
+    dyStringFree(&query);
+    query = dyStringNew(64);
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+    if (!allowAll)
+	sqlDyStringPrintf(query, " AND browserExists=1");
+    sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
     itemCount = sqlJsonOut(jw, sr);
-    verbose(1, "DBG: itemCount: %lld from search '%s'\n", itemCount, query);
     sqlFreeResult(&sr);
+    dyStringFree(&query);
     }
 return itemCount;
 }
@@ -119,25 +119,24 @@ static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, str
  *   and number of potential matches totalMatchCount
  */
 {
-char query[4096];
 long long itemCount = 0;
 *totalMatchCount = 0;
 
-if (allowAll)
-    sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE);", asmListTable, searchWord);
-else
-    sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1;", asmListTable, searchWord);
+struct dyString *query = dyStringNew(64);
+sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
+if (!allowAll)
+    sqlDyStringPrintf(query, " AND browserExists=1");
 
-verbose(1, "DBG '%s'\n", query);
-long long matchCount = sqlQuickLongLong(conn, query);
+long long matchCount = sqlQuickLongLong(conn, query->string);
 boolean prefixSearch = FALSE;
 if (matchCount < 1)	/* no match, add the * wild card match to make a prefix match */
     {
-    if (allowAll)
-        sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE);", asmListTable, searchWord);
-    else
-        sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1;", asmListTable, searchWord);
-    matchCount = sqlQuickLongLong(conn, query);
+    dyStringFree(&query);
+    query = dyStringNew(64);
+    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
+    if (!allowAll)
+        sqlDyStringPrintf(query, " AND browserExists=1");
+    matchCount = sqlQuickLongLong(conn, query->string);
     if (matchCount > 0)
 	prefixSearch = TRUE;
     }
@@ -145,13 +144,17 @@ if (matchCount < 1)
     return itemCount;
 *totalMatchCount = matchCount;
 
-if (allowAll)
-    sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE) ORDER BY priority LIMIT %d;", asmListTable, searchWord, prefixSearch ? "*" : "", maxItemsOutput);
-else
-    sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE) AND browserExists=1 ORDER BY priority LIMIT %d;", asmListTable, searchWord, prefixSearch ? "*" : "", maxItemsOutput);
-struct sqlResult *sr = sqlGetResult(conn, query);
+dyStringFree(&query);
+query = dyStringNew(64);
+
+sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, prefixSearch ? "*" : "");
+if (!allowAll)
+    sqlDyStringPrintf(query, " AND browserExists=1");
+sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
+struct sqlResult *sr = sqlGetResult(conn, query->string);
 itemCount = sqlJsonOut(jw, sr);
 sqlFreeResult(&sr);
+dyStringFree(&query);
 
 return itemCount;
 }	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw) */
