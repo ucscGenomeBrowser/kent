@@ -433,8 +433,44 @@ var hubCreate = (function() {
         }
     }
 
+    function createHubSuccess(jqXhr, textStatus) {
+        console.log(jqXhr);
+        $("#newTrackHubDialog").dialog("close");
+    }
+
+    function createHub(db, hubName) {
+        // send a request to hgHubConnect to create a hub for this user
+        cart.setCgi("hgHubConnect");
+        cart.send({createHub: {db: db, name: hubName}}, createHubSuccess, null);
+        cart.flush();
+    }
+
+    function startHubCreate() {
+        // put up a dialog to walk a user through setting up a track hub
+        console.log("create a hub button clicked!");
+        $("#newTrackHubDialog").dialog({
+            minWidth: $("#newTrackHubDialog").width(),
+        });
+        // attach the event handler to save this hub to this users hubspace
+        let saveBtn = document.getElementById("doNewCollection");
+        saveBtn.addEventListener("click", (e) => {
+            let db = document.getElementById("db").value;
+            let hubName = document.getElementById("hubName").value;
+            // TODO: add a spinner while we wait for the request to complete
+            createHub(db, hubName);
+        });
+        $("#newTrackHubDialog").dialog("open");
+    }
+
     let tableInitOptions = {
-        //columnDefs: [{orderable: false, targets: [0,1]}],
+        layout: {
+            topStart: {
+                buttons: [
+                    {text: 'Create hub',
+                     action: startHubCreate},
+                ]
+            }
+        },
         columnDefs: [
             {
                 orderable: false, targets: 0,
@@ -492,8 +528,14 @@ var hubCreate = (function() {
 
     function showExistingFiles(d) {
         // Make the DataTable for each file
+        // make buttons have the same style as other buttons
+        $.fn.dataTable.Buttons.defaults.dom.button.className = 'button';
         tableInitOptions.data = d;
-        $("#filesTable").DataTable(tableInitOptions);
+        let table = new DataTable("#filesTable", tableInitOptions);
+        let toRemove = document.getElementById("welcomeDiv");
+        if (d.length > 0 && toRemove !== null) {
+            toRemove.remove();
+        }
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -573,21 +615,17 @@ var hubCreate = (function() {
             //     choosing file types
             //     creating default trackDbs
             //     editing trackDbs
-            // TODO: make hgHubConnect respond to requests
-            // TODO: initialize tus-client
-            // TODO: get user name
-            // TODO: send a request with username
-            // TODO: have tusd respond on server
-            let uploadSection = document.getElementById("chosenFilesSection");
-            if (uploadSection.style.display === "none") {
-                uploadSection.style.display = "";
-            }
+            let welcomeDiv = document.createElement("div");
+            welcomeDiv.id = "welcomeDiv";
+            welcomeDiv.textContent = "Once files are uploaded they will display here. Click \"Choose files\" above or \"Create Hub\" below to get started";
+            let fileDiv = document.getElementById('filesDiv');
+            fileDiv.insertBefore(welcomeDiv, fileDiv.firstChild);
             if (typeof userFiles !== 'undefined' && typeof userFiles.fileList !== 'undefined' &&
                     userFiles.fileList.length > 0) { 
                 uiState.fileList= userFiles.fileList;
                 uiState.userUrl = userFiles.userUrl;
-                showExistingFiles(uiState.fileList);
             }
+            showExistingFiles(uiState.fileList);
             inputBtn.addEventListener("click", (e) => uiState.input.click());
             //uiState.input.addEventListener("change", listPickedFiles);
             // TODO: add event handler for when file is succesful upload
@@ -595,6 +633,14 @@ var hubCreate = (function() {
             // TODO: display quota somewhere
             // TODO: customize the li to remove the picked file
         }
+        $("#newTrackHubDialog").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "Create new track hub",
+            closeOnEscape: true,
+            minWidth: 400,
+            minHeight: 120
+        });
     }
     return { init: init,
              uiState: uiState,

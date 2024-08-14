@@ -70,8 +70,14 @@ umask(oldUmask);
 // now make the hub.txt with some basic information
 char *hubFile = catTwoStrings(path, "/hub.txt");
 FILE *f = mustOpen(hubFile, "w");
-fprintf(stderr, "would write \"hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n\" to %s", hubName, emailForUserName(userName), hubName, hubName, db, hubFile);
-//fprintf(f, "hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n", hubName, emailForUserName(userName), hubName, hubName, db);
+//fprintf(stderr, "would write \"hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n\" to %s", hubName, emailForUserName(userName), hubName, hubName, db, hubFile);
+fprintf(f, "hub %s\n"
+    "email %s\n"
+    "shortLabel %s\n"
+    "longLabel %s\n"
+    "useOneFile on\n\n"
+    "genome %s\n\n",
+    hubName, emailForUserName(userName), hubName, hubName, db);
 carefulClose(&f);
 }
 
@@ -94,17 +100,22 @@ if (userName)
     if (isDirectory(path))
         {
         // can't make a hub that already exists!
+        fprintf(stdout, "Status: 400 Bad Request\n\n");
+        fprintf(stdout, "Hub already exists, select hub from dropdown or try a different name");
+        fflush(stdout);
+        exit(1);
         }
     else
         {
         // good we can make a new directory and stuff a hub.txt in it
         // the directory needs to be 777, so ignore umask for now
         writeHubText(path, userName, name, db);
+        // TODO: add a row to the hubspace table for the hub.txt
+        // return json to fill out the table
+        jsonWriteString(cj->jw, "hubName", name);
+        jsonWriteString(cj->jw, "db", db);
         }
     }
-fprintf(stderr, "Status: 204 No Content\n\n");
-fflush(stdout);
-exit(0);
 }
 
 static void outFilesForUser()
@@ -146,50 +157,18 @@ jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
 jsIncludeFile("tus.js", NULL);
 jsIncludeFile("hgMyData.js", NULL);
-webIncludeResourceFile("../style/bootstrap.min.css");
-webIncludeResourceFile("../style/gb.css");
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
+    "href=\"https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css\">\n");
 puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>");
-puts("<div id='hubUpload' class='hubList'>\n");
+    "src=\"https://cdn.datatables.net/2.1.3/js/dataTables.min.js\"></script>");
+puts("<link rel=\"stylesheet\" type=\"text/css\" "
+    "href=\"https://cdn.datatables.net/buttons/3.1.1/css/buttons.dataTables.min.css\">\n");
+puts("<script type=\"text/javascript\" "
+    "src=\"https://cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.min.js\"></script>");
 
-puts("<div class='row'>\n");
-puts("<div class='col-md-6'>\n");
-puts("<div class='row'>\n");
-puts("<div class='tabSection'>\n");
-puts("<h4>Create your own hub</h4>\n");
-puts("<p>After choosing files, click \"Create Hub\" to begin uploading the files to our server</p>\n");
-puts("<div class='buttonDiv' id='chooseAndSendFilesRow'>\n");
-puts("<button  id='btnForInput' class='button' for=\"chosenFiles\">Choose files</button>\n");
-puts("</div>\n"); // .buttonDiv
-puts("<div id='fileList' style=\"clear: right\"></div>\n");
-puts("</div>"); // .tabSection
-puts("</div>\n"); // row
-
-puts("<div class='row'>\n");
-puts("<div class='tabSection'>");
-puts("For information on making track hubs, see the following pages: \n "
-    "<ul>\n"
-    "<li><a href='../goldenPath/help/hubQuickStart.html' style='color:#121E9A' target=_blank>Quick Start Guide</a></li>\n"
-    "<li><a href=\"../goldenPath/help/hgTrackHubHelp.html\" style='color:#121E9A' TARGET=_blank>Track Hub User's Guide</a></li>\n"
-    "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\" style='color:#121E9A' target=_blank>Where to Host Your Track Hub</a></li>\n"
-    "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\" style='color:#121E9A' target=_blank>Track Hub Settings Reference</a></li>\n"
-    "<li><a href=\"../goldenPath/help/publicHubGuidelines.html\" style='color:#121E9A' target=_blank>Guidelines for Submitting a Public Hub</a></li>\n"
-    "</ul>\n"
-    "<BR>You may also <a href='../contacts.html' style='color:#121E9A'>contact us</a> if you have any "
-    "issues or questions on hub development.");
-puts("</div>"); // .tabSection
-puts("</div>\n"); // col-md-6
-puts("</div>\n"); // row
-
-puts("<div id='chosenFilesSection' style=\"display: none\" class='col-md-6 tabSection'>");
-puts("<h4>Your uploaded hubs</h4>");
+// the skeleton HTML:
 webIncludeFile("inc/hgMyData.html");
-puts("</div>\n");
-puts("</div>\n"); // row
-puts("</div>\n"); // row
 
 // get the current files stored for this user
 outFilesForUser();

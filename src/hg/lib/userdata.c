@@ -91,6 +91,40 @@ else
     return NULL;
 }
 
+void addNewFileForUser(char *userName, char *fileName, long long fileSize, char *fileType,
+        time_t lastModified, char *hubName, char *db, char *location)
+/* We created a file for a user, now add an entry to the hubSpace table for it */
+{
+struct hubSpace *row = NULL;
+AllocVar(row);
+row->userName = userName;
+row->fileName = fileName;
+row->fileSize = fileSize;
+row->fileType = fileType;
+row->creationTime = NULL; // automatically handled by mysql
+row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
+row->hubNameList = hubName;
+row->db = db;
+row->location = location;
+row->md5sum = md5HexForFile(row->location);
+struct sqlConnection *conn = hConnectCentral();
+
+// now write out row to hubSpace table
+if (!sqlTableExistsOnMain(conn, "hubSpace"))
+    {
+    errAbort("No hubSpace MySQL table is present. Please send an email to us describing the steps you took just before you got this error");
+    }
+struct dyString *sqlUpdateStmt = dyStringNew(0);
+sqlDyStringPrintf(sqlUpdateStmt, "insert into hubSpace values ('%s', '%s', %llu, "
+        "'%s', NULL, '%s', '', '%s', '%s', '%s')",
+        row->userName, row->fileName, row->fileSize, row->fileType,
+        row->lastModified, row->db, row->location, row->md5sum);
+fprintf(stderr, "%s\n", sqlUpdateStmt->string);
+fflush(stderr);
+sqlUpdate(conn, sqlUpdateStmt->string);
+hubSpaceFree(&row);
+}
+
 void removeFileForUser(char *fname, char *userName)
 /* Remove a file for this user if it exists */
 {

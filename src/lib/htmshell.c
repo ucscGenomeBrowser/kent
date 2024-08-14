@@ -1038,6 +1038,8 @@ dyStringAppend(policy, " d3js.org/d3.v3.min.js");
 
 // jsHelper
 dyStringAppend(policy, " cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js");
+dyStringAppend(policy, " cdn.datatables.net/2.1.3/js/dataTables.min.js");
+dyStringAppend(policy, " cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.min.js");
 
 // shephered js for tutorial overlay
 dyStringAppend(policy, " cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js");

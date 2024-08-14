@@ -1,60 +1,81 @@
-<div class='container-fluid gbPage'>
+<div id='hubUpload'>
 
-    <div class='row gbTrackTitleBanner'>
-        <div class='col-md-9'>
-            Manage my data
-            &nbsp;&nbsp;&nbsp;
-            <a href='#INFO_SECTION' title='Jump to help section'>
-                <span class='gbIconSmall fa-stack'>
-                    <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
-                    <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
-                </span>
-            </a>
-        </div>
+    <div id='titleDiv' class='gbTrackTitleBanner'>
+        Manage my data
+        &nbsp;&nbsp;&nbsp;
+        <a href='#INFO_SECTION' title='Jump to help section'>
+            <span class='gbIconSmall fa-stack'>
+                <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
+                <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
+            </span>
+        </a>
     </div>
 
-    <div class='row' >
-        <div class='col-md-10'>
+    <div id='fileTableInfoDiv' class='tabSection'>
+        <p>THIS IS JUST EXAMPLE COPY. Below are all uploaded track data files associated with your current browsing
+        session that have not been saved yet. Note that if you reset your browsing session
+        you will lose access to these data. Please click the save button below or create a
+        browsing save these files to your account.</p>
+    </div>
+
+    <!-- The actual input to add files, this gets majorly worked up by the javascript -->
+    <div id='filePicker' class='hubList tabSection'>
+        <h4>Create your own hub</h4>
+        <p>After choosing files, click &quot;Submit&quot; to begin uploading the files to our server</p>
+        <div class='buttonDiv' id='chooseAndSendFilesRow'>
+            <button  id='btnForInput' class='button' for="chosenFiles">Choose files</button>
+        </div>
+        <div id='fileList' style="clear: right"></div>
+    </div>
+
+    <div id='filesDiv' class='tabSection'>
+        <table id="filesTable" class="sessionTable stripe hover row-border compact" borderwidth=0>
+        </table>
+    </div>
+
+
+    <div>
+        For information on making track hubs, see the following pages:
+        <ul>
+            <li><a href='../goldenPath/help/hubQuickStart.html' style='color:#121E9A' target=_blank>Quick Start Guide</a></li>
+            <li><a href=\"../goldenPath/help/hgTrackHubHelp.html\" style='color:#121E9A' TARGET=_blank>Track Hub User's Guide</a></li>
+            <li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\" style='color:#121E9A' target=_blank>Where to Host Your Track Hub</a></li>
+            <li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\" style='color:#121E9A' target=_blank>Track Hub Settings Reference</a></li>
+            <li><a href=\"../goldenPath/help/publicHubGuidelines.html\" style='color:#121E9A' target=_blank>Guidelines for Submitting a Public Hub</a></li>
+        </ul>
+        <BR>You may also <a href='../contacts.html' style='color:#121E9A'>contact us</a> if you have any 
+            issues or questions on hub development.
+    </div>
+
+    <div id='newTrackHubDialog' class='myTitleClass' title='Create New Track Hub' style='background:white; width:725px; display:none'>
+        <div>
+            <label id='hubNameLabel' for="hubName">Enter the name of the hub:</label>
+            <input id='hubName'></input>
+            <br>
+            <label id='dbLabel' for="">Enter the genome assembly database of the hub:</label>
+            <input id='db'></input>
+        </div>
+
+        <!--
+        <div id='CustomTrackOptions' >
             <div>
-                <p>Below are all uploaded track data files associated with your current browsing
-                session that have not been saved yet. Note that if you reset your browsing session
-                you will lose access to these data. Please click the save button below or create a
-                browsing save these files to your account.</p>
-            </div>
-            <div style="max-width: 1024px">
-                <table id="filesTable" class="sessionTable stripe hover row-border compact" borderwidth=0>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class='row' style='display: none'>
-        <div class='col-md-10'>
-            <div class='row gbSectionBanner'>
-                <div class='col-md-12'>Saved track data</div>
+                <label class='gbInputLabel'  for='name'>Name:</label>
+                <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
             </div>
             <div>
-                <p>Below are all track data files you have uploaded and saved. You can rename or delete
-                these files via the &quot;edit&quot; or &quot;delete&quot; buttons.</p>
+                <br><label class='gbInputLabel'  for='description'>Description:</label>
+                <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
             </div>
-            <div id='saved' class=''></div>
-        </div>
-    </div>
 
-    <div class='row' style='display: none'>
-        <div class='col-md-10'>
-            <div class='row gbSectionBanner'>
-                <div class='col-md-12'>Connected track hubs</div>
-            </div>
             <div>
-                <p>Below are all the non-public track hubs associated with your user. Please note
-                that track hubs are not hosted at UCSC, but instead by other websites/institutions.
-                Please contact the creators of the track hub for help saving this data. You can use
-                the &quot;disconnect&quot; buttons below to remove these track hubs from your current
-                browsing session.</p>
+                <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
+                <input id='customColorPicker'>           
             </div>
-            <div id='hubs' class=''></div>
+
+        </div>
+        -->
+
+        <div>
+            <input class='gbButton'  id="doNewCollection" type="submit" value="Save"   >
         </div>
     </div>
-
-</div>

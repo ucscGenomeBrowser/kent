@@ -67,7 +67,7 @@ else
             setenv("HTTP_COOKIE", reqCookie, 0);
             }
         fprintf(stderr, "reqCookie='%s'\n", reqCookie);
-        char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+        char *userName = getUserName();
         fprintf(stderr, "userName='%s'\n'", userName);
         if (!userName)
             {

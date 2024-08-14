@@ -141,33 +141,7 @@ else
         // to the mysql table and return to the client that we were successful
         if (exitStatus == 0)
             {
-            struct hubSpace *row = NULL;
-            AllocVar(row);
-            row->userName = userName;
-            row->fileName = fileName;
-            row->fileSize = fileSize;
-            row->fileType = fileType;
-            row->creationTime = NULL; // automatically handled by mysql
-            row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
-            row->hubNameList = NULL;
-            row->db = db;
-            row->location = location;
-            row->md5sum = md5HexForFile(row->location);
-            struct sqlConnection *conn = hConnectCentral();
-
-            // now write out row to hubSpace table
-            if (!sqlTableExistsOnMain(conn, "hubSpace"))
-                {
-                errAbort("No hubSpace MySQL table is present. Please send us an email");
-                }
-            struct dyString *sqlUpdateStmt = dyStringNew(0);
-            sqlDyStringPrintf(sqlUpdateStmt, "insert into hubSpace values ('%s', '%s', %llu, "
-                    "'%s', NULL, '%s', '', '%s', '%s', '%s')",
-                    row->userName, row->fileName, row->fileSize, row->fileType,
-                    row->lastModified, row->db, row->location, row->md5sum);
-            fprintf(stderr, "%s\n", sqlUpdateStmt->string);
-            fflush(stderr);
-            sqlUpdate(conn, sqlUpdateStmt->string);
+            addNewFileForUser(userName, fileName, fileSize, fileType, lastModified, NULL, db, location);
             }
         }
     if (errCatch->gotError)

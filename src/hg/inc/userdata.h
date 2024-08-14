@@ -50,6 +50,10 @@ char *getDataDir(char *userName);
 char *prefixUserFile(char *userName, char *fname);
 /* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
 
+void addNewFileForUser(char *userName, char *fileName, long long fileSize, char *fileType,
+        time_t lastModified, char *hubName, char *db, char *location);
+/* We created a file for a user, now add an entry to the hubSpace table for it */
+
 void removeFileForUser(char *fname, char *userName);
 /* Remove a file for this user if it exists */
 
