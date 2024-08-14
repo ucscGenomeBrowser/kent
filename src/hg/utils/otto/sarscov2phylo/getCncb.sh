@@ -45,6 +45,12 @@ curlRetry $metadataUrl \
 | perl -wpe 's/[^[:print:]^\t^\n]+/?/g;' \
     > cncb.metadata.tsv
 
+colCount=$(head -1 cncb.metadata.tsv | tawk '{print NF;}')
+if [[ $colCount != 16 ]]; then
+    echo "Metadata format error: expected 16 columns, got $colCount"
+    exit 1
+fi
+
 # Make a cncbToDate file for ID mapping.
 tail -n+2 cncb.metadata.tsv \
 | cut -f 1,10 \
