@@ -30,6 +30,14 @@ fprintf(f, "../cgi-bin/hgc?%s&g=refGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
     curGeneEnd, database);
 }
 
+static void printNcbiRefseqUrl(FILE *f, char *accession)
+/* Print URL for ncbiRefSeq in hgc on a nucleotide. */
+{
+fprintf(f, "../cgi-bin/hgc?%s&g=ncbiRefSeq&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
+    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneStart,
+    curGeneEnd, database);
+}
+
 static int countAlias(char *id, struct sqlConnection *conn)
 /* Count how many valid gene symbols to be printed */
 {
@@ -320,6 +328,16 @@ else
 	sqlSafef(query, sizeof(query), "select value from %s where name='%s'", toRefTable,
 		id);
 	refSeqAcc = emptyForNull(sqlQuickString(conn, query));
+        if (sqlTableExists(conn, "ncbiRefSeqLink"))
+            {
+            // Find the versioned accession number.  Technically GENCODE might have specified a different
+            // version (e.g. their record lists NM_XXX.5, we cut off the .5 for kgXref, and our (older)
+            // ncbiRefSeq track still has the .4 version of the transcript).  Probably better to link to
+            // an older transcript version than nothing though.  On the plus side, this should help
+            // insulate kgXref from changes to ncbiRefSeq.
+            sqlSafef(query, sizeof(query), "select id from ncbiRefSeqLink where id like '%s%%'", refSeqAcc);
+            refSeqAcc = emptyForNull(sqlQuickString(conn, query));
+            }
 	}
     if (sqlTableExists(conn, "kgXref"))
 	{
@@ -335,7 +353,10 @@ else
 if (refSeqAcc[0] != 0)
     {
     hPrintf("<B>RefSeq Accession: </B> <A HREF=\"");
-    printOurRefseqUrl(stdout, refSeqAcc);
+    if (stringIn(".",refSeqAcc))
+        printNcbiRefseqUrl(stdout, refSeqAcc);
+    else
+        printOurRefseqUrl(stdout, refSeqAcc);
     hPrintf("\">%s</A><BR>\n", refSeqAcc);
     }
 else if (mrnaAcc[0] != 0)

@@ -6,9 +6,8 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hgConfig.h"
 #include "assemblyList.h"
-
-
 
 char *assemblyListCommaSepFieldNames = "name,priority,commonName,scientificName,taxId,clade,description,browserExists,hubUrl";
 
@@ -329,4 +328,17 @@ fputc('}',f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+static char *_assemblyListTableName = NULL;
+
+char *assemblyListTableName()
+/* return the assemblyList table name from the environment,
+ * or hg.conf, or use the default.  Cache the result */
+{
+if (_assemblyListTableName == NULL)
+    _assemblyListTableName = cfgOptionEnvDefault("HGDB_ASSEMBLYLIST_STATUS_TABLE",
+	    assemblyListTableConfVariable, defaultAssemblyListTableName);
+
+return _assemblyListTableName;
+}
 

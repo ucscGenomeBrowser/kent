@@ -85,5 +85,17 @@ void assemblyListJsonOutput(struct assemblyList *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
+#define defaultAssemblyListTableName "assemblyList"
+/* Name of table that maintains the list of all assemblies, whether
+ *  available here or could be built */
+
+#define assemblyListTableConfVariable    "hub.assemblyListTableName"
+/* the name of the hg.conf variable to use something other than the default */
+
+char *assemblyListTableName();
+/* return the assemblyList table name from the environment,
+ * or hg.conf, or use the default.  Cache the result */
+
 #endif /* ASSEMBLYLIST_H */
 
