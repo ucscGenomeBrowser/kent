@@ -164,8 +164,7 @@
             buttons: [ tutorialButtons.back, {
                          text: 'Next',
                          action: function() {
-                             const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
-                             rtsMenuItem.click();
+                             showPopup();
                              clinicalTour.next();
                              }
                       }],
