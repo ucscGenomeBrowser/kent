@@ -4873,8 +4873,7 @@ pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data ar
 
 include phastBias.ra
 
-include omim.ra beta,public
-include omim.alpha.ra alpha
+include omim.ra
 
 include ../refSeqComposite.ra
 
