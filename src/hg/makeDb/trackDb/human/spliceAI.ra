@@ -6,7 +6,7 @@ group phenDis
 type bigBed 9 +
 tableBrowser off
 dataVersion Illumina SpliceAI Score v1.3
-pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Xxx Xx, 2024"
+pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
 
     track spliceAIsnvs
     type bigBed 9 +

@@ -46,34 +46,26 @@ static long long sqlJsonOut(struct jsonWrite *jw, struct sqlResult *sr)
 {
 int itemCount = 0;
 char **row;
-if (statsOnly)	// only counting, nothing returned
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    while ((row = sqlNextRow(sr)) != NULL)
-        ++itemCount;
-    }
-else
-    {
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct assemblyList *el = assemblyListLoadWithNull(row);
-	jsonWriteObjectStart(jw, el->name);
-	jsonWriteNumber(jw, "priority", (long long)el->priority);
-	jsonWriteString(jw, "commonName", el->commonName);
-	jsonWriteString(jw, "scientificName", el->scientificName);
-	jsonWriteNumber(jw, "taxId", (long long)el->taxId);
-	jsonWriteString(jw, "clade", el->clade);
-	jsonWriteString(jw, "description", el->description);
-	if (1 == *el->browserExists)
-	    jsonWriteBoolean(jw, "browserExists", TRUE);
-	else
-	    jsonWriteBoolean(jw, "browserExists", FALSE);
-	if (isEmpty(el->hubUrl))
-	    jsonWriteString(jw, "hubUrl", NULL);
-	else
-	    jsonWriteString(jw, "hubUrl", el->hubUrl);
-	jsonWriteObjectEnd(jw);
-        ++itemCount;
-	}
+    struct assemblyList *el = assemblyListLoadWithNull(row);
+    jsonWriteObjectStart(jw, el->name);
+    jsonWriteNumber(jw, "priority", (long long)el->priority);
+    jsonWriteString(jw, "commonName", el->commonName);
+    jsonWriteString(jw, "scientificName", el->scientificName);
+    jsonWriteNumber(jw, "taxId", (long long)el->taxId);
+    jsonWriteString(jw, "clade", el->clade);
+    jsonWriteString(jw, "description", el->description);
+    if (1 == *el->browserExists)
+        jsonWriteBoolean(jw, "browserExists", TRUE);
+    else
+        jsonWriteBoolean(jw, "browserExists", FALSE);
+    if (isEmpty(el->hubUrl))
+        jsonWriteString(jw, "hubUrl", NULL);
+    else
+        jsonWriteString(jw, "hubUrl", el->hubUrl);
+    jsonWriteObjectEnd(jw);
+    ++itemCount;
     }
 return (itemCount);
 }
@@ -100,16 +92,23 @@ long long matchCount = sqlQuickLongLong(conn, query->string);
 if (matchCount > 0)
     {
     *totalMatchCount = matchCount;
-    dyStringFree(&query);
-    query = dyStringNew(64);
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
-    if (!allowAll)
-	sqlDyStringPrintf(query, " AND browserExists=1");
-    sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
-    struct sqlResult *sr = sqlGetResult(conn, query->string);
-    itemCount = sqlJsonOut(jw, sr);
-    sqlFreeResult(&sr);
-    dyStringFree(&query);
+    if (statsOnly)	// only counting, nothing returned
+	{	// the LIMIT would limit results to maxItemsOutput
+	itemCount = min(maxItemsOutput, matchCount);
+	}	// when less than totalMatchCount
+    else
+	{
+	dyStringFree(&query);
+	query = dyStringNew(64);
+	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+	if (!allowAll)
+	    sqlDyStringPrintf(query, " AND browserExists=1");
+	sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
+	struct sqlResult *sr = sqlGetResult(conn, query->string);
+	itemCount = sqlJsonOut(jw, sr);
+	sqlFreeResult(&sr);
+	dyStringFree(&query);
+	}
     }
 return itemCount;
 }
@@ -140,21 +139,28 @@ if (matchCount < 1)	/* no match, add the * wild card match to make a prefix matc
     if (matchCount > 0)
 	prefixSearch = TRUE;
     }
-if (matchCount < 1)
+if (matchCount < 1)	// nothing found, returning zero
     return itemCount;
 *totalMatchCount = matchCount;
 
-dyStringFree(&query);
-query = dyStringNew(64);
+if (statsOnly)	// only counting, nothing returned
+    {	// the LIMIT would limit results to maxItemsOutput
+    itemCount = min(maxItemsOutput, matchCount);
+    }	// when less than totalMatchCount
+else
+    {
+    dyStringFree(&query);
+    query = dyStringNew(64);
 
-sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, prefixSearch ? "*" : "");
-if (!allowAll)
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, prefixSearch ? "*" : "");
+    if (!allowAll)
     sqlDyStringPrintf(query, " AND browserExists=1");
-sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-itemCount = sqlJsonOut(jw, sr);
-sqlFreeResult(&sr);
-dyStringFree(&query);
+    sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    itemCount = sqlJsonOut(jw, sr);
+    sqlFreeResult(&sr);
+    dyStringFree(&query);
+    }
 
 return itemCount;
 }	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw) */
