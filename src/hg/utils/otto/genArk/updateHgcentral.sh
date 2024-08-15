@@ -93,6 +93,8 @@ prevSum=`grep -v "^#" previousList.txt | sort | md5sum | cut -d' ' -f1`
 
 if [ "${prevSum}" = "${newSum}" ]; then
   rm -f list.${DS}
+  ### new assemblyList table in hgcentraltest 2024-08-08
+  /hive/data/inside/GenArk/addAssemblyList.sh
   exit 0
 fi
 
