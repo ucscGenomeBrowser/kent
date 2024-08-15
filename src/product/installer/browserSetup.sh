@@ -6,7 +6,7 @@
 # you can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
-exec > >(tee -a "${HOME}/browserSetup.sh") 2>&1
+exec > >(tee -a "${HOME}/browserSetup.log") 2>&1
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
@@ -46,8 +46,10 @@ CGIBINDIR=$APACHEDIR/cgi-bin
 # directory for temporary files
 TRASHDIR=$APACHEDIR/trash
 
-# mysql data directory 
-# for most genome annotation data
+# Mysql data directory 
+# Yes we only support mariaDB anymore, but the variables will keep their names
+# Below please assume that mariadb is meant when mysql is written.
+# For most genome annotation data
 # (all non-mysql data is stored in /gbdb)
 MYSQLDIR=/var/lib/mysql
 
@@ -368,6 +370,11 @@ command is one of:
                downloaded on-the-fly from UCSC.
   mirror     - download a full assembly (also see the -t option below).
                After completion, no data is downloaded on-the-fly from UCSC.
+  offline    - put the browser offline, so no more loading of missing tables
+               from UCSC on-the-fly. Much faster, but depending on how much
+               you downloaded, means that you have many fewer tracks available.
+  online     - put the browser online, so any missing files and tracks are
+               loaded on-the-fly from UCSC.
   update     - update the genome browser software and data, updates
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
@@ -379,6 +386,10 @@ command is one of:
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
                wise these packages may be missing: libpng zlib libmysqlclient
+  dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
+               ~/kent and build the CGIs into /usr/local/apache so you can try
+               them right away. Useful if you want to develop your own track 
+               types.
   mysql      - Patch my.cnf and recreate Mysql users. This can fix
                a broken Mysql server after an update to Mysql 8. 
                
@@ -689,6 +700,41 @@ function setupCgiOsx ()
     # dbTrash tool needed for trash cleaning
 }
 
+# This should not be needed anymore: hgGeneGraph has moved to Python3 finally. But leaving the code in here
+# anyways, as it should not hurt and some mirrors may have old Python2 code or old CGIs around. 
+# We can remove this section in around 1-2 years when we are sure that no one needs Python2 anymore
+function installPy2MysqlRedhat () {
+    yum install -y python2 mysql-devel python2-devel wget gcc
+    if [ -f /usr/include/mysql/my_config.h ]; then
+	    echo my_config.h found
+    else
+	wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+    fi
+
+    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
+    # somehow the mysql.h does not have the "reconnect" field anymore in Fedora
+    if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
+	echo /usr/include/mysql/mysql.h already has reconnect attribute
+    else
+	sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
+    fi
+
+    # fedora > 34 doesn't have any pip2 package anymore so install it now
+    if ! type "pip2" > /dev/null; then
+	 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+	 python2 get-pip.py
+	 mv /usr/bin/pip /usr/bin/pip2
+
+    fi
+    pip2 install MySQL-python
+   }
+
+# little function that compares two floating point numbers
+# see https://stackoverflow.com/questions/8654051/how-can-i-compare-two-floating-point-numbers-in-bash
+function numCompare () {
+   awk -v n1="$1" -v n2="$2" 'BEGIN {printf (n1<n2?"<":">=") }'
+}
+
 # redhat specific part of mysql and apache installation
 function installRedhat () {
     echo2 
@@ -705,7 +751,7 @@ function installRedhat () {
         yum -y install epel-release
     fi
 
-    yum -y install ghostscript rsync ImageMagick R-core curl
+    yum -y install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
 
     # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -714,12 +760,29 @@ function installRedhat () {
         yum -y install libpng12
     fi
     
+    # try to activate the powertools repo. Exists on CentOS and Rocky but not Redhat
+    # this may only be necessary for chkconfig? If so, we probably want to avoid using chkconfig.
+    if grep 'Red Hat' /etc/redhat-release ; then
+        if yum repolist | grep -i codeready ; then
+            echo codeready repo enabled
+        else
+            echo2 This is a RHEL server and the codeready repository is not enabled. 
+            echo2 Please activate it and also the EPEL reposity, then run the browserSetup command again. 
+            exit 1
+        fi
+    else
+        set +o pipefail
+        echo2 Not on RHEL: Enabling the powertools repository
+        yum config-manager --set-enabled powertools || true
+        set -o pipefail
+    fi
+    
     # install apache if not installed yet
     if [ ! -f /usr/sbin/httpd ]; then
         echo2
         echo2 Installing Apache and making it start on boot
         waitKey
-        yum -y install httpd
+        yum -y install httpd chkconfig
         # start apache on boot
         chkconfig --level 2345 httpd on
         # there will be an error message that the apache 
@@ -753,17 +816,15 @@ function installRedhat () {
        service iptables restart
     fi
     
-    # MYSQL INSTALL ON REDHAT
+    # MARIADB INSTALL ON REDHAT
 
     # centos7 provides only a package called mariadb-server
     # Mysql 8 does not allow copying MYISAM files anymore into the DB. 
     # -> we cannot support Mysql 8 anymore
-    #if yum list mysql-server 2> /dev/null ; then
-       #MYSQLPKG=mysql-server
     if yum list mariadb-server 2> /dev/null ; then
         MYSQLPKG=mariadb-server
     else
-        echo2 Cannot find a mysql-server package in the current yum repositories
+        echo2 Cannot find a mariadb-server package in the current yum repositories
         exit 100
     fi
     
@@ -784,6 +845,7 @@ function installRedhat () {
         fi
             
         # start mysql on boot
+        yum -y install chkconfig
         chkconfig --level 2345 $MYSQLD on 
 
         # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
@@ -807,31 +869,19 @@ function installRedhat () {
     # So we install python2, the mysql libraries and fix up my_config.h manually
     # This is strange, but I was unable to find a different working solution. MariaDB simply does not have my_config.h
     else
-            yum install -y python2 mysql-devel python2-devel wget gcc
-            if [ -f /usr/include/mysql/my_config.h ]; then
-                    echo my_config.h found
-            else
-                wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
-            fi
-
-	    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
-            # somehow the mysql.h does not have the "reconnect" field anymore in Fedora
-            if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
-                echo /usr/include/mysql/mysql.h already has reconnect attribute
-            else
-                sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
-            fi
-
-	    # fedora > 34 doesn't have any pip2 package anymore so install it now
-	    if ! type "pip2" > /dev/null; then
-                 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-		 python2 get-pip.py
-		 mv /usr/bin/pip /usr/bin/pip2
-
+	    if [ `numCompare $VERNUM 9` == "<" ] ; then
+                installPy2MysqlRedhat
+	    else
+	        echo2 Not installing Python2, this Linux does not have it and it should not be needed anymore
 	    fi
-            pip2 install MySQL-python
     fi
 
+    # open port 80 in firewall
+    if which firewall-cmd ; then
+        echo2 Opening port HTTP/80 in firewall using the command firewall-cmd
+        sudo firewall-cmd --zone=public --permanent --add-service=http
+        sudo firewall-cmd --reload
+    fi
 }
 
 # OSX specific setup of the installation
@@ -976,6 +1026,9 @@ function installDebian ()
        touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
+    # the new tzdata package comes up interactive questions, suppress these
+    export DEBIAN_FRONTEND=noninteractive
+
     echo2 Installing ghostscript and imagemagick
     waitKey
     # ghostscript for PDF export
@@ -983,19 +1036,25 @@ function installDebian ()
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
     apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
-    # python-mysqldb has been removed in newer distros
+    # python-mysqldb has been removed in almost all distros as of 2021
     if apt-cache policy python-mysqldb | grep "Candidate: .none." > /dev/null; then 
 	    echo2 The package python-mysqldb is not available anymore. Working around it
 	    echo2 by installing python2 and MySQL-python with pip2
-            apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
-	    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
-	    python2 /tmp/get-pip.py
-            if [ -f /usr/include/mysql/my_config.h ]; then
-                    echo my_config.h found
-            else
-                wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
-            fi
-            pip2 install MySQL-python
+	    if apt-cache policy python2 | grep "Candidate: .none." > /dev/null; then 
+               # Ubuntu >= 21 does not have python2 anymore - hgGeneGraph has been ported, so not an issue anymore
+   	       echo2 Python2 package is not available either for this distro, so not installing Python2 at all.
+	    else
+               # workaround for Ubuntu 16-20 - keeping this section for a few years, just in case
+               apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+    	       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+    	       python2 /tmp/get-pip.py
+               if [ -f /usr/include/mysql/my_config.h ]; then
+                   echo my_config.h found
+               else
+                   wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+               fi
+               pip2 install MySQL-python
+	    fi
     else
 	    apt-get --assume-yes install python-mysqldb
     fi
@@ -1357,18 +1416,46 @@ function mysqlDbSetup ()
     $MYSQL -e "FLUSH PRIVILEGES;"
 }
 
+# set this machine for browser development: install required tools, clone the tree, build it
+function buildTree () 
+{
+   echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
+   waitKey
+   if [[ "$DIST" == "debian" ]]; then
+      apt-get install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev
+   elif [[ "$DIST" == "redhat" ]]; then
+      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
+   else 
+      echo Error: Cannot identify linux distribution
+      exit 100
+   fi
+
+   echo2 Cloning kent repo into ~/kent using git with --depth=1
+   waitKey
+   cd ~
+   git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
+
+   echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
+   echo2 Copying JS/HTML/CSS to /usr/local/apache/htdocs
+   waitKey
+   cd ~/kent/src
+   make -j8 cgi-alpha
+}
+
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
 function installBrowser () 
 {
     if [ -f $COMPLETEFLAG ]; then
         echo2 error: the file $COMPLETEFLAG exists. It seems that you have installed the browser already.
+        echo2 If you want to reset the Apache directory, you can run '"rm -rf /usr/local/apache"' and 
+        echo2 then run this script again.
         exit 100
     fi
 
     echo '--------------------------------'
     echo UCSC Genome Browser installation
     echo '--------------------------------'
-    echo Detected OS: $OS/$DIST, $VER
+    echo Detected OS: $OS/$DIST, Version $VERNUM, Release: $VER
     echo 
     echo This script will go through three steps:
     echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
@@ -1636,7 +1723,14 @@ function downloadGenomes
 
     set +f
 
+    # Alexander Stuy reported that at FSU they had a few mysql databases with incorrect users on them
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+    
+    startMysql
+
     mysqlCheck
+
+    hideSomeTracks
 
     goOffline # modify hg.conf and remove all statements that use the UCSC download server
 
@@ -1674,6 +1768,8 @@ function stopMysql
             service mysql stop
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld stop
+    elif [ -f /etc/init.d/mariadb ]; then 
+            service mariadb stop
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl stop mariadb
@@ -1692,6 +1788,8 @@ function startMysql
             service mysql start
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld start
+    elif [ -f /etc/init.d/mariadb ]; then 
+            service mariadb start
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl start mariadb
@@ -1710,6 +1808,37 @@ function mysqlCheck
     mysqlcheck --all-databases --auto-repair --quick --fast --silent
 }
 
+function hideSomeTracks
+# hide the big tracks and the ones that we are not allowed to distribute
+{
+    # these tables are not used for searches by default. Searches are very slow. We focus on genes.
+    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
+
+    # these tracks are hidden by default
+    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna omimGene2 omimAvSnp'
+
+    echo2 Hiding some tracks by default and removing some tracks from searches
+    for db in $DBS; do
+       echo $db
+       if [ "$db" == "go" -o "$db" == "uniProt" -o "$db" == "visiGene" -o "$db" == "hgFixed" -o "$db" == "proteome" ] ; then
+               continue
+       fi
+       for track in $hideTracks; do
+            mysql $db -e 'UPDATE trackDb set visibility=0 WHERE tableName="'$track'"'
+        done
+
+       for track in $notSearchTables; do
+            mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
+        done
+    done
+
+    # cannot activate this part, not clear what to do when mirror goes offline or online
+    # now fix up trackDb, remove rows of tracks that this mirror does not have locally
+    #for db in `mysql -NB -e 'show databases' | egrep  'proteome|uniProt|visiGene|go$|hgFixed'`; do 
+            #fixTrackDb $db trackDb; 
+    #done
+}
+
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
@@ -1725,12 +1854,6 @@ function downloadMinimal
 
     # only these db tables are copied over by default
     minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsembl.* --include=wgEncodeRegTfbsCells.* --include=encRegTfbsClusteredSources.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.* --include=ncbiRefSeq*"
-
-    # these tables are not used for searches by default. Searches are very slow. We focus on genes.
-    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
-
-    # these tracks are hidden by default
-    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna omimGene2'
 
     stopMysql
 
@@ -1748,17 +1871,7 @@ function downloadMinimal
 
     startMysql
 
-    echo2 Hiding some tracks by default and removing some tracks from searches
-    for db in $DBS; do
-       echo $db
-       for track in $hideTracks; do
-            mysql $db -e 'UPDATE trackDb set visibility=0 WHERE tableName="'$track'"'
-        done
-
-       for track in $notSearchTables; do
-            mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
-        done
-    done
+    hideSomeTracks
 
     mysqlCheck
 
@@ -1800,6 +1913,8 @@ function updateBlatServers ()
    downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
    # the blat servers don't have fully qualified dom names in the download data
    $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
+   # just in case that we ever add fully qualified dom names
+   $MYSQL hgcentral -e 'UPDATE blatServers SET host=replace(host,".soe.ucsc.edu.soe.ucsc.edu", ".soe.ucsc.edu");'
 }
 
 function cgiUpdate ()
@@ -1833,12 +1948,14 @@ function updateBrowser {
 
    # update the mysql DBs
    stopMysql
-   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
+   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(multi-master.info)|(sys)|(lost.found)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db
        $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done
    startMysql
+
+   hideSomeTracks
 
    echo2 update finished
 }
@@ -1991,6 +2108,16 @@ elif [[ $unameStr == Linux* ]] ; then
                 APACHEUSER=apache
         fi
     fi
+
+    VERNUM=0
+    # only works on redhats IMHO
+    if [ -f /etc/system-release-cpe ] ; then
+	VERNUM=`cut /etc/system-release-cpe -d: -f5`
+    fi
+    # os-release should work everywhere and has the full version number
+    if [ -f /etc/os-release ] ; then
+	VERNUM=`cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d '"'`
+    fi
 fi
 
 if [ "$DIST" == "none" ]; then
@@ -2043,8 +2170,17 @@ elif [ "${1:-}" == "addTools" ]; then
 elif [ "${1:-}" == "mysql" ]; then
     mysqlDbSetup
 
+elif [ "${1:-}" == "online" ]; then
+    goOnline
+
+elif [ "${1:-}" == "offline" ]; then
+    goOffline
+
+elif [ "${1:-}" == "dev" ]; then
+    buildTree 
+
 else
-   echo Unknown command: $1
+   echo Unknown command: ${1:-}
    echo "$HELP_STR"
    exit 100
 fi

@@ -1,5 +1,3 @@
-include ../../refSeqComposite.ra
-
 include barCharts.ra
 
 include hoffMap.ra
@@ -33,8 +31,6 @@ include toothKrivanek.ra
 include hippocampusAyhan.ra
 include brainDevRegions.ra
 include t2t.ra alpha
-include multiz100Logo.ra alpha
-include multiz30Logo.ra alpha
 
 include gtexEqtlHighConf.ra
 
@@ -174,7 +170,6 @@ url https://cancer.sanger.ac.uk/cosmic/search?q=$$
 urlLabel Genomic Mutation ID:
 noScoreFilter on
 dataVersion COSMIC v98
-pennantIcon New red ../goldenPath/newsarch.html#091523 "Released Sep. 15, 2023"
 
 track vistaEnhancersBb
 shortLabel VISTA Enhancers
@@ -182,10 +177,10 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
 type bigBed 9 +
-urlLabel Vista Enhancer Browser
+mouseOverField patternExpression
+urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon New red ../goldenPath/newsarch.html
 
 track coriellDelDup override
 origAssembly hg19 
@@ -204,10 +199,6 @@ include nonCodingRNAs.ra
 track hgIkmc override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
-
-track fishClones override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track fosEndPairs override
 origAssembly hg18
@@ -237,9 +228,6 @@ group rep
 priority 4
 visibility hide
 
-track stsMap override
-visibility hide
-
 searchName assemblyAcc
 searchTable gold
 searchMethod prefix
@@ -254,37 +242,6 @@ html gap
 visibility hide
 
 include rmskTracks.ra
-
-track ctgPos2
-shortLabel GRC Contigs
-longLabel Genome Reference Consortium Contigs
-group map
-visibility hide
-type ctgPos
-url https://www.ncbi.nlm.nih.gov/nuccore/$$
-chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
-
-searchTable ctgPos2
-searchMethod prefix
-shortCircuit 1
-termRegex [GK][LI][028][0-9]+(\.[0-9]+)?
-query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
-searchPriority 5
-
-track scaffolds
-shortLabel Scaffolds
-longLabel GRCh38 Defined Scaffold Identifiers
-group map
-visibility hide
-color 0,0,0
-type bed 4 .
-
-searchTable scaffolds
-searchMethod prefix
-searchType bed
-shortCircuit 1
-termRegex [1-9HMXY][0-9A-Z_]*
-searchPriority 18
 
 track analysisGap
 shortLabel Analysis Gap
@@ -564,13 +521,13 @@ include hg38Patch11.ra alpha
 
 include knownGene.ra
 include knownGeneArchive.ra alpha
+include knownGene.alpha.ra alpha
 
 include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
-include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
-include trackDb.447way.ra alpha
+include trackDb.447way.ra
 
 # track multiz145way
 # shortLabel 145way maf
@@ -708,7 +665,10 @@ include encode3.ra
 
 include hic.ra
 
-include gnomad.ra
+include gnomad.ra public
+include gnomad.alpha.ra beta
+include gnomadSv.alpha.ra alpha
+
 
 include platinumGenomes.ra
 
@@ -744,20 +704,6 @@ exonArrows on
     color 180,0,134
     priority 2
 
-#RefSeq Select is a subtrack part of the RefSeq Composite in ../../refSeqComposite.ra
-#For more information on this change, see RM#24787
-track ncbiRefSeqSelect
-parent refSeqComposite off
-priority 8
-type genePred
-shortLabel RefSeq Select and MANE
-longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
-trackHandler ncbiRefSeq
-idXref ncbiRefSeqLink mrnaAcc name
-color 20,20,160
-baseColorUseCds given
-baseColorDefault genomicCodons
-
 track clinGenCnv override
 filter.size 773:11309456
 filterLimits.size 773:11309456
@@ -780,7 +726,7 @@ include dbSnpArchiveHg38.ra
 include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra
-include spliceAi.ra
+#include spliceAi.ra
 
 track genotypeArrays
 shortLabel Array Probesets
@@ -789,6 +735,7 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
+pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on
@@ -856,6 +803,17 @@ compositeTrack on
     priority 6
     noScoreFilter on
 
+    track affyCytoScanHD
+    parent genotypeArrays on
+    shortLabel Affy CytoScan HD
+    longLabel Affymetrix Cytoscan HD GeneChip Array
+    type bigBed 12
+    bigDataUrl /gbdb/hg38/genotypeArrays/affyCytoScanHD.bb
+    visibility pack
+    html genotypeArrays
+    itemRgb on
+    priority 7
+
 searchTable snpArrayIllumina450k
 searchMethod exact
 searchType bigBed
@@ -893,30 +851,24 @@ include hprcChain.ra alpha
 include hprcCoverage97.ra alpha
 
 # other HPRC experiments
-include chainsHprc.ra alpha
-include hprcChains.ra alpha
-include hprcNets.ra alpha
+include hprcChainNet.ra
+
+# the hprcChainNet.ra replaces these two:
+# include hprcChains.ra alpha
+# include hprcNets.ra alpha
+
+#include chainsHprc.ra alpha
 include hprcCoverage.ra alpha
-include trackDb.hprc90way.ra alpha
-include hprcArr.ra alpha
-include hprcVCF.ra alpha
+include trackDb.hprc90way.ra
+include hprcArr.ra
+include hprcVCF.ra
 include hprcVCFTest.ra alpha
 
-track ncbiRefSeqHistorical
+track ncbiRefSeq override
 parent refSeqComposite off
-priority 10000
-type genePred
-shortLabel RefSeq Historical
-longLabel NCBI RefSeq Historical Transcript Versions
-color 12,12,120
-idXref ncbiRefSeqLinkHistorical mrnaAcc name
-baseColorUseCds given
-baseColorDefault genomicCodons
-release alpha
 
-searchTable ncbiRefSeqHistorical
-searchMethod exact
-searchType genePred
-semiShortCircuit 1
-termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
-searchPriority 20
+include ../../trackDb.mgc-orfeome.ra
+
+include assemblyTracks.ra
+
+include primates11way.ra alpha

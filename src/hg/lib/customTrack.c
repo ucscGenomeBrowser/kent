@@ -894,21 +894,38 @@ boolean removedCt = FALSE;
 boolean changedCt = FALSE;
 if (customTracksExist(cart, &ctFileName))
     {
-    /* protect against corrupted CT trash file or table */
+    /* protect against corrupted CT trash file or table, or transient system error */
+    boolean loadFailed = FALSE;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
+        if (cartOptionalString(cart, "ctTest") != NULL)
+            errAbort("ctTest set");
         ctList =
             customFactoryParse(genomeDb, ctFileName, TRUE, retBrowserLines);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
-        remove(ctFileName);
-        warn("Custom track error (%s): removing custom tracks",
-                        errCatch->message->string);
+        if ( errCatch->message->string != NULL)
+            {
+            unsigned len = strlen(errCatch->message->string);
+            if (len > 0) // remove the newline
+                errCatch->message->string[len - 1] = 0;
+            }
+        warn("Custom track loading error (%s): failed to load custom tracks. "
+             "This is a temporary internal error, please refresh your browser. If you continue to experience this issue"
+             "please reach out to genome-www@soe.ucsc.edu and send us a session link "
+             "where this error occurs",
+             errCatch->message->string);
+        loadFailed = TRUE;
         }
     errCatchFree(&errCatch);
+    // If there was a failure in loading the custom tracks, return immediately -- don't try to
+    // add or merge in new custom tracks.  The cartRemove statements below will be skipped, so we
+    // can try again next click.
+    if (loadFailed)
+        return NULL;
 
     /* handle selected tracks -- update doc, remove, etc. */
     char *selectedTable = NULL;

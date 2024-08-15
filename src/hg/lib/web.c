@@ -174,6 +174,7 @@ if (sameString(cgiUsualString("action",""),"encodeReleaseLog") ||
 /* Preamble. */
 dnaUtilOpen();
 
+
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
@@ -181,7 +182,7 @@ if (withHttpHeader)
 if (endsWith(scriptName, "hgc") && db != NULL && !stringIn(db, textOutBufDb))
     {
     struct dyString *newTitle = dyStringNew(0);
-    dyStringPrintf(newTitle, "%s %s", db, textOutBufDb);
+    dyStringPrintf(newTitle, "%s %s", trackHubSkipHubName(db), textOutBufDb);
     textOutBufDb = dyStringCannibalize(&newTitle);
     }
 if (withHtmlHeader)
@@ -200,6 +201,8 @@ if (withHtmlHeader)
 	"<HEAD>" "\n"
 	);
     generateCspMetaHeader(stdout);
+    htmlPrintAnalyticsLink(stdout);
+
     printf("\t%s\n", headerText);
     webPragmasEtc();
 
@@ -224,6 +227,7 @@ if (withHtmlHeader)
     webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
+
     printf("</HEAD>\n");
     printBodyTag(stdout);
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
@@ -692,7 +696,7 @@ int numGenomes = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(10); // 2^^10 entries = 1024
 char *selGenome = hGenome(db);
-char *values [1024];
+char *values [4096];
 char *cgiName;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -1464,6 +1468,19 @@ if(offset < len)
 return dyStringCannibalize(&dy);
 }
 
+void webIncludeLocalJs()
+/* some mirrors want special JS on their site */
+{
+char *addJs = cfgOption("addJs");
+if (addJs)
+    {
+    struct slName *jsList = slNameListFromString(addJs, ',');
+    for(; jsList; jsList = jsList->next)
+        jsIncludeFile(jsList->name, NULL);
+    slNameFreeList(&jsList);
+    }
+}
+
 char *menuBar(struct cart *cart, char *db)
 // Return HTML for the menu bar (read from a configuration file);
 // we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
@@ -1490,6 +1507,8 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery.plugins.js", NULL);
 jsIncludeFile("utils.js", NULL);
 webIncludeResourceFile("nice_menu.css");
+
+webIncludeLocalJs();
 
 // Read in menu bar html
 safef(buf, sizeof(buf), "%s/%s", docRoot, navBarFile);

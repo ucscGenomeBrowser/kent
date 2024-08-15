@@ -86,8 +86,7 @@ tail -n+2 clade-paths.public \
 | cut -f 1,3 > lineageToPath.public
 
 
-cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
-echo "sarscov2phylo release 13-11-20; NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
+echo "sarscov2phylo release 13-11-20; NCBI, COG-UK and CNCB sequences downloaded $today" \
     > version.txt
 
 $matUtils extract -i public-$today.all.masked.pb -u samples.public.$today
@@ -116,11 +115,9 @@ read y m d < <(echo $today | sed -re 's/-/ /g')
 archive=$archiveRoot/$y/$m/$d
 mkdir -p $archive
 gzip -c public-$today.all.nwk > $archive/public-$today.all.nwk.gz
-ln -f `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
+ln -f `pwd`/public-$today.all.masked.vcf.gz $archive/
 gzip -c public-$today.all.masked.pb > $archive/public-$today.all.masked.pb.gz
 ln -f `pwd`/public-$today.metadata.tsv.gz $archive/
-gzip -c public-$today.all.masked.nextclade.pangolin.pb \
-    > $archive/public-$today.all.masked.nextclade.pangolin.pb.gz
 gzip -c lineageToPublicName > $archive/lineageToPublicName.tsv.gz
 gzip -c cladeToPublicName > $archive/cladeToPublicName.tsv.gz
 ln -f `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
@@ -129,7 +126,6 @@ ln -f `pwd`/public-$today.all.masked.ShUShER.pb.gz $archive/
 
 # Update 'latest' in $archiveRoot
 ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
-ln -f $archive/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
 ln -f $archive/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.masked.pb.gz
 ln -f $archive/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
 ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz

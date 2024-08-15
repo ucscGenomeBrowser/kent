@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Stem Cell Hub, California Institute for Regenerative Medicine CESCG at UC Santa Cruz</title>
+    <title>SSPsyGene Staging Portal</title>
     <link rel="shortcut icon" href="<!--#echo var='ROOT'-->images/schub.ico" type="image/png" />
 
     <!-- Local stylesheet -->
@@ -43,21 +43,11 @@
       $('[data-toggle="popover"]').popover();
     });
   </script>
-
-    <!--#if expr='("${SERVER_NAME}" = /cirmdcm.soe.ucsc.edu/ || "${SERVER_NAME}" = /cirm-01*/)'-->
-
-    <div class="securesite-banner">
-      <div class="securesite-text">
-        This is the secure site for labs to access pre-publication data. Public CIRM CESCG data
-        may be accessed at <a class="securesite" href="https://cirm.ucsc.edu">https://cirm.ucsc.edu</a>.
-      </div>
-    </div>
-    <!--#else -->
+  
     <div class="cirm-banner"></div>
-    <!--#endif -->
     <div class="container-fluid" style="width: 90%">
       <div class="row">
-        <a href="<!--#echo var='ROOT'-->cirmIndex"><img src="<!--#echo var='ROOT'-->images/cirmSChubLogo.png"
+        <a href="<!--#echo var='ROOT'-->sspsygene"><img src="<!--#echo var='ROOT'-->images/ssPsyGeneLogo.jpg"
         style="margin-top: 15px; max-width: 450px;" /></a>
       </div>
       <div class="row">
@@ -70,31 +60,13 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
               <li class="nav-item back-dark-blue rounded">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->cirmIndex">Home</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->sspsygene">Home</a></h5>
               </li>
               <li class="nav-item back-dark-pink rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse">Data</a></h5>
               </li>
-              <li class="nav-item back-light-blue rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->projects">Projects</a></h5>
-              </li>
-              <li class="nav-item back-light-green rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->tools">Tools</a></h5>
-              </li>
-              <li class="nav-item back-orange rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->bestPractices">Standards</a></h5>
-              </li>
               <li class="nav-item back-dark-blue rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->help/cirmBasics">Help</a></h5>
-              </li>
-              <li class="nav-item dropdown back-dark-pink rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link dropdown-toggle text-white padded-nav-link" href="#" id="navbarDropdownMenuLink"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="<!--#echo var='ROOT'-->cescg/cescgOrg">Organization</a>
-                  <a class="dropdown-item" href="<!--#echo var='ROOT'-->cescg/cescgPeople">People</a>
-                  <a class="dropdown-item" href="<!--#echo var='ROOT'-->cescg/cescgPubs">Publications</a>
-                </div></h5>
               </li>
 	      <!--#if expr='"$SERVER_NAME" != /cirm.ucsc.edu/'-->
               <li class="nav-item back-gray rounded" style="margin-left: 6px">

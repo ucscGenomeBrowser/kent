@@ -224,3 +224,359 @@ bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
 
 
 bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
+##############################################################################
+# gnomAD v4 - Nov 1, 2023 - ChrisL - DONE
+##############################################################################
+# See /hive/data/outside/gnomAD.4/make.txt for how to download
+# the new version
+# Make the work dir:
+mkdir -p /hive/data/inside/gnomAD/v4
+cd /hive/data/inside/gnomAD/v4
+
+# for each vcf in the download  dirs, install files into /gbdb and load up a table with the pointers
+gbdbPath="/gbdb/hg38/gnomAD/v4/"
+dataPath="/hive/data/outside/gnomAD.4/"
+for tbl in exomes genomes
+do
+    mkdir -p ${gbdbPath}${tbl}
+    ln -s ${dataPath}${tbl}/*.vcf.bgz* ${gbdbPath}${tbl}
+    cp /dev/null ${tbl}.txt
+    if [ ${tbl} == "exomes" ]; then
+        for c in {1..22} X Y
+        do
+            f=${gbdbPath}${tbl}/gnomad.exomes.v4.0.sites.chr${c}.vcf.bgz
+            echo -e "${f}\tchr${c}" >> ${tbl}.txt
+        done
+    else
+        for c in {1..22} X Y
+        do
+            f=${gbdbPath}${tbl}/gnomad.genomes.v4.0.sites.chr${c}.vcf.bgz
+            echo -e "${f}\tchr${c}" >> ${tbl}.txt
+        done
+    fi
+    tName="${tbl^}"
+    hgLoadSqlTab hg38 gnomad${tName}V4 ~/kent/src/hg/lib/bbiChroms.sql genomes.txt
+done
+
+
+##############################################################################
+# Add cancer/non-cancer filter to gnomAD v3.1.1  - Feb 16, 2024 - ChrisL - DONE
+##############################################################################
+# see /hive/data/inside/gnomAD/v3.1.1/2024-02-12/README
+# for the steps
+##############################################################################
+
+##############################################################################
+# Update transcript contraint scores for gnomAD v4  - Mar 1, 2024 - ChrisL - DONE
+##############################################################################
+# The data is not the same as the hg19 version, many less fields, but we mostly threw a lot of them
+# away before anyways. Also this file had both ENST and NM/XM transcripts
+
+# Here are the fields used in the previous version:
+zcat ../../gnomAD.2/constraint/gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz | head -1 | tawk '{print $76,$77,$78,$65,$66,$1,$2,$4,$5,$6,$34,$13,$14,$15,$33,$18,$21,$22,$25,$26,$27,$28,$29,$30,$31}'
+chromosome  start_position  end_position    gene_id transcript_level    gene    transcript  obs_mis exp_mis oe_mis  mis_z   obs_syn exp_syn oe_syn  syn_z   obs_lof exp_lof pLI oe_lof  oe_syn_lower    oe_syn_upper    oe_mis_lower    oe_mis_upper    oe_lof_lower    oe_lof_upper
+# Right off the bat we will be missing the chrom,start and end
+
+# Get the transcripts to get the coordinates and exon-intron boundaries
+hgsql -Ne "select * from wgEncodeGencodeCompV39" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout | sed -Ee 's/\.[0-9]+//' \
+    | sort -k4 > hg38.gencodeCompV39.bed12
+hgsql -Ne "select * from ncbiRefSeq" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout \
+    | sort -k4 > hg38.refSeq.bed12
+cat hg38.gencodeCompV39.bed12 hg38.refSeq.bed12 | sort -k4 > transcripts.coords
+
+f=gnomad.v4.0.constraint_metrics.tsv
+# I don't think this command will work just copying and pasting like the above will
+tail -n +2 $f \
+    | tawk '{print $1,$2,$24,$25,$27,$32,$37,$38,$40,$45,$12,$13,$17,$15,$42,$43,$29,$30,$20,$21}' \
+    | sort -k2 | join -t $'\t' -1 4 -2 2 transcripts.coords - \
+    | tawk '{for (i=1; i<=12; i++) {printf "%s\t", $i} printf "%s\t%s\t%s\t\t\t", $2, $3, $4; for (i=13; i <= NF; i++) {printf "%s", $i; if (i != NF) {printf "\t"}}; printf "\n"} ' \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true
+bedSort pliByTranscript.tab pliByTranscript.tab
+bedSort missenseByTranscript.tab missenseByTranscript.tab
+
+# Copy the old autosql file:
+cp ../../gnomAD.2/constraint/{missense,pli}Metrics.as .
+
+# Turn into a bigBed and link
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.tab $sizes pliByTranscript.bb
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.tab $sizes missenseByTranscript.bb
+
+##############################################################################
+# gnomAD v4.1 Update to bigBed - May 02, 2024 - ChrisL
+##############################################################################
+# start a screen as this will take a while
+screen -S gnomADv4
+WORKDIR=/hive/data/inside/gnomAD/v4/v4.1
+cd $WORKDIR
+db="hg38"
+mkdir -p $db/{exomes,genomes}
+
+# get the headers:
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/genomes/gnomad.genomes.v4.1.sites.chr1.vcf.bgz > gnomad.v4.1.genomes.header
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr1.vcf.bgz > gnomad.v4.1.exomes.header
+
+# Looks like there are INFO field differences between the two files, for some reason
+# there are different populations included for each?
+# The Genomes data has Amish population information, while the exomes data has UK BioBank
+# data and faf95_mid?
+# For the full list of differences, use this command:
+sdiff <(grep -Eo "^##.*=<[^,]+," gnomad.v4.1.genomes.header  | sort) <(grep -Eo "^##.*=<[^,]+," gnomad.v4.1.exomes.header | sort ) | less
+# List out the INFO fields for each set:
+grep -Eo "^##INFO=<ID=[^,]+" gnomad.v4.1.exomes.header | cut -d'=' -f3 > gnomad.v4.1.exomes.infoFields
+grep -Eo "^##INFO=<ID=[^,]+" gnomad.v4.1.genomes.header | cut -d'=' -f3 > gnomad.v4.1.genomes.infoFields
+
+# The VEP field has most of the important information, format:
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr1.vcf.bgz | grep vep | grep -o "Format: .*$" | cut -d' ' -f2- | tr '|' '\t' | tl > gnomad.exomes.v4.1.vep.fields
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/genomes/gnomad.genomes.v4.1.sites.chr1.vcf.bgz | grep vep | grep -o "Format: .*$" | cut -d' ' -f2- | tr '|' '\t' | tl > gnomad.genomes.v4.1.vep.fields
+# at least the VEP fields are the same
+
+# Use the fields from v3.1.1 as a starting point:
+grep "^fields" ../../v3.1.1/runVcfToBed.sh | cut -d'=' -f2 | tr ',' '\n' | tr -d '"' > v3.1.1.vcfToBed.fieldList
+# check at least those fields are present in both sets:
+for line in $(cat v3.1.1.vcfToBed.fieldList); do grep $line gnomad.v4.1.exomes.infoFields &> /dev/null; if [ $? != 0 ]; then echo "$line not in v4.1 exomes"; fi; done
+popmax not in v4.1 exomes
+AC_popmax not in v4.1 exomes
+AN_popmax not in v4.1 exomes
+AF_popmax not in v4.1 exomes
+AC_ami not in v4.1 exomes
+AN_ami not in v4.1 exomes
+AF_ami not in v4.1 exomes
+nhomalt_ami not in v4.1 exomes
+AC_oth not in v4.1 exomes
+AN_oth not in v4.1 exomes
+AF_oth not in v4.1 exomes
+nhomalt_oth not in v4.1 exomes
+revel_score not in v4.1 exomes
+splice_ai_max_ds not in v4.1 exomes
+splice_ai_consequence not in v4.1 exomes
+primate_ai_score not in v4.1 exomes
+
+for line in $(cat v3.1.1.vcfToBed.fieldList); do grep $line gnomad.v4.1.genomes.infoFields &> /dev/null; if [ $? != 0 ]; then echo "$line not in v4.1 genomes"; fi; done
+
+# So they changed popmax to grpmax, and spliceAI and revel scores:
+grep -i "revel\|splice\|primate" gnomad.v4.1.exomes.infoFields
+revel_max
+spliceai_ds_max
+grep -i "revel\|splice\|primate" gnomad.v4.1.genomes.infoFields
+revel_max
+spliceai_ds_max
+cp v3.1.1.vcfToBed.fieldList v4.1.vcfToBed.exomes.fieldList
+cp v3.1.1.vcfToBed.fieldList v4.1.vcfToBed.genomes.fieldList
+# Make the fixups in vim, including the population information changes: remove ami from exomes, oth to remaining and the revel and splice_ai field changes, add variant_type
+# I used this command fixing up until there was nothing only on the left
+# and no '|' on the right
+sdiff <(sort v4.1.vcfToBed.exomes.fieldList) <(sort gnomad.v4.1.exomes.infoFields) | grep -v "ukb" | less
+
+# Now make two control scripts for specifying fields, see
+# /hive/data/inside/gnomAD/v4/v4.1/runVcfToBed.{exomes,genomes}.sh and
+# /hive/data/inside/gnomAD/v4/v4.1/convertBeds.{exomes,genomes}.sh
+# for more information
+
+# First convert the VCFs to beds:
+#    Need a jobList for parallel to run:
+for c in {1..22} X Y; do
+    echo "./runVcfToBed.exomes.sh /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr$c.vcf.bgz $WORKDIR/$db/exomes/gnomad.v4.1.chr$c.bed"
+done > vcfToBed.jobList
+for c in {1..22} X Y; do
+    echo "./runVcfToBed.genomes.sh /hive/data/outside/gnomAD.4/v4.1/genomes/gnomad.genomes.v4.1.sites.chr$c.vcf.bgz $WORKDIR/$db/genomes/gnomad.v4.1.chr$c.bed"
+done >> vcfToBed.jobList
+parallel --joblog vcfToBed.run.log --jobs 15 :::: vcfToBed.jobList
+
+# Average of 105 minutes per job:
+tail -n +2 /hive/data/inside/gnomAD/v4/v4.1/vcfToBed.run.log | cut -f4 | awk '{sum += $1} END {print (sum/NR) / 60}'
+54.0564
+
+# convert the beds into a smaller bed file + a tab sep file with everything else
+for c in {1..22} X Y; do
+    echo "./convertBeds.exomes.sh $WORKDIR/$db/exomes/gnomad.v4.1.chr$c.bed $WORKDIR/$db/exomes/chr$c.bed"
+done > convertBed.jobList
+for c in {1..22} X Y; do
+    echo "./convertBeds.genomes.sh $WORKDIR/$db/genomes/gnomad.v4.1.chr$c.bed $WORKDIR/$db/genomes/chr$c.bed"
+done >> convertBed.jobList
+
+# convert the beds into a smaller bed file + a tab sep file with everything else
+time (parallel --joblog convertBed.run.log --jobs 25 :::: convertBed.jobList) &> convertBed.log &
+# real    178m32.563s
+# user    2843m21.030s
+# sys     134m13.788s
+
+# Now we have one bed file and one external file per chromosome, use bgzip and
+# bedJoinTabOffset to combine them together:
+# Merge all the tab files together:
+# First exomes:
+time sort --merge ${WORKDIR}/hg38/exomes/gnomad.*.tab > gnomad.v4.1.exomes.details.pre.tab
+# real    15m11.762s
+# user    2m11.927s
+# sys     11m1.171s
+
+time bgzip -iI gnomad.v4.1.exomes.details.tab.gz.gzi -c gnomad.v4.1.exomes.details.pre.tab > gnomad.v4.1.exomes.details.tab.gz
+# real    159m17.597s
+# user    79m31.099s
+# sys     5m1.504s
+
+# The parallel command changes {} into the input file (example: hg38/exomes/chr1.bed), and
+# {/} to the basename (example: chr1.bed)
+time (ls -1S hg38/exomes/chr*.bed |
+    parallel --joblog join.run.log --max-procs 12 \\
+        bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.exomes.details.pre.tab {} joined/exomes/{/}) &> bedJoinTabOffset.log
+# real    129m2.819s
+# user    379m29.001s
+# sys     58m4.237s
+
+time sort -S 40G --merge joined/exomes/*.bed | grep -v "^#" > gnomad.v4.1.exomes.joined.bed
+# real    7m43.575s
+# user    83m46.236s
+# sys     9m1.771s
+
+# Then genomes:
+time sort --merge ${WORKDIR}/hg38/genomes/gnomad.*.tab > gnomad.v4.1.genomes.details.pre.tab
+# real    55m0.135s
+# user    8m46.206s
+# sys     41m47.511s
+
+time bgzip -iI gnomad.v4.1.genomes.details.tab.gz.gzi -c gnomad.v4.1.genomes.details.pre.tab > gnomad.v4.1.genomes.details.tab.gz
+# real    245m46.743s
+# user    232m29.072s
+# sys     11m57.409s
+
+# The parallel command changes {} into the input file (example: hg38/genomes/chr1.bed), and
+# {/} to the basename (example: chr1.bed)
+time (ls -1S hg38/genomes/chr*.bed |
+    parallel --joblog join.run.log --max-procs 12 \\
+        bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.genomes.details.pre.tab {} joined/genomes/{/}) &> bedJoinTabOffset.genomes.log
+# real    373m33.753s
+# user    1643m28.197s
+# sys     275m53.429s
+
+time sort -S 40G --merge joined/genomes/*.bed | grep -v "^#" > gnomad.v4.1.genomes.joined.bed
+# real    27m20.072s
+# user    16m46.584s
+# sys     12m3.441s
+
+# and lastly turn the merged beds into bigBeds:
+time (bedToBigBed -type=bed9+21 -tab -as=exomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.exomes.joined.bed /hive/data/genomes/hg38/chrom.sizes exomes.bb) &> bigBed.exomeslog &
+# pass1 - making usageList (24 chroms): 172816 millis
+# pass2 - checking and writing primary data (183717261 records, 31 fields): 1872918 millis
+# Sorting and writing extra index 0: 248199 millis
+# Sorting and writing extra index 1: 206027 millis
+# Sorting and writing extra index 2: 99569 millis
+
+# real    46m32.224s
+# user    43m8.900s
+# sys     2m32.009s
+
+time (bedToBigBed -maxAlloc=250000000000 -type=bed9+21 -tab -as=genomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.genomes.joined.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb) &> bigBed.genomeslog &
+# pass1 - making usageList (24 chroms): 776401 millis
+# pass2 - checking and writing primary data (759336320 records, 31 fields): 10139390 millis
+# Sorting and writing extra index 0: 1502079 millis
+# Sorting and writing extra index 1: 1460242 millis
+# Sorting and writing extra index 2: 433804 millis
+
+# real    254m58.161s
+# user    230m40.491s
+# sys     21m41.152s
+
+##############################################################################
+# gnomAD v4.1 Missense and pli by transcript tracks- June 03, 2024 - ChrisL
+##############################################################################
+wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/constraint/gnomad.v4.1.constraint_metrics.tsv
+
+# Get the transcripts to get the coordinates and exon-intron boundaries
+hgsql -Ne "select * from wgEncodeGencodeCompV39" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout | sed -Ee 's/\.[0-9]+//' \
+    | sort -k4 > hg38.gencodeCompV39.bed12
+hgsql -Ne "select * from ncbiRefSeq" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout \
+    | sort -k4 > hg38.refSeq.bed12
+cat hg38.gencodeCompV39.bed12 hg38.refSeq.bed12 | sort -k4 > transcripts.coords
+
+f=gnomad.v4.1.constraint_metrics.tsv
+# The order of fields is different between v4.0 and v4.1, figure out the fields we need to extract:
+head -1 ../gnomad.v4.0.constraint_metrics.tsv | tawk '{print $1,$2,$24,$25,$27,$32,$37,$38,$40,$45,$12,$13,$17,$15,$42,$43,$29,$30,$20,$21}' | tr '\t' '\n' > v4.0.wantedFields
+head -1 ../gnomad.v4.0.constraint_metrics.tsv | tr '\t' '\n' | nl > v4.0.fieldOrder
+head -1 $f | tr '\t' '\n' | nl > v4.1.fieldOrder
+grep -Fwf v4.0.wantedFields v4.1.fieldOrder  > v4.1.wantedFields
+for field in $(head -1 ../gnomad.v4.0.constraint_metrics.tsv | tawk '{print $1,$2,$24,$25,$27,$32,$37,$38,$40,$45,$12,$13,$17,$15,$42,$43,$29,$30,$20,$21}' | tr '\t' '\n'); do grep -w $field v4.1.fieldOrder; done | cut -f1 | tr '\n' ',' | tr -d ' '; echo
+# I don't think this command will work just copying and pasting like the above will
+tail -n +2 $f \
+    | tawk '{print $1,$3,$28,$29,$31,$36,$41,$42,$44,$49,$14,$15,$19,$17,$46,$47,$33,$34,$22,$23}' \
+    | sort -k2 | join -t $'\t' -1 4 -2 2 transcripts.coords - \
+    | tawk '{for (i=1; i<=12; i++) {printf "%s\t", $i} printf "%s\t%s\t%s\t\t\t", $2, $3, $4; for (i=13; i <= NF; i++) {printf "%s", $i; if (i != NF) {printf "\t"}}; printf "\n"} ' \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true
+bedSort pliByTranscript.tab pliByTranscript.tab
+bedSort missenseByTranscript.tab missenseByTranscript.tab
+
+# Copy the old autosql file:
+cp ../{missense,pli}Metrics.as .
+
+# Turn into a bigBed and link
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.tab $sizes pliByTranscript.bb
+pass1 - making usageList (376 chroms): 443 millis
+pass2 - checking and writing primary data (168326 records, 18 fields): 3529 millis
+Sorting and writing extra index 0: 91 millis
+Sorting and writing extra index 1: 83 millis
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.tab $sizes missenseByTranscript.bb
+pass1 - making usageList (376 chroms): 505 millis
+pass2 - checking and writing primary data (168326 records, 17 fields): 2841 millis
+Sorting and writing extra index 0: 171 millis
+Sorting and writing extra index 1: 89 millis
+##############################################################################
+# gnomAD Structural Variants v4 - Gerardo
+# Redmine #33823
+
+    cd /hive/data/outside/gnomAD.4/sv
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/genome_sv/gnomad.v4.1.sv.sites.bed.gz
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/genome_sv/gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz
+    #Used the gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz file to build the track since it has
+    #additional annotations of frequencies among non_neuro samples, and non_control samples and the
+    #two bed files have the same records.
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | tawk '{print $1, $2, $3, $4, $26, $29, $27, $28, $30, $31, $32, $33, $34, $39, $41, $44, $45, $47, $48, $49, $52, $53}'  > $out.bed4Plus; done
+    # variant types:
+
+    zcat  gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz | cut -f45 | sort | uniq -c
+     356035 BND
+        721 CNV
+      15189 CPX
+         99 CTX
+    1206278 DEL
+     269326 DUP
+     304645 INS
+       2193 INV
+          1 SVTYPE
+
+    # add colors based on gnomad website and get in to proper bed9+
+    cp /hive/data/outside/gnomAD.2/structuralVariants/gnomadSvToUcsc.awk .
+    #Modified the gnomadSvToUcsc.awk script and named it gnomadSvToUcsc_mod.awk to get the following
+    #fields:
+      #Allele Count for Non-neuro (field #627)
+      #Allele Number for Non-neuro (field #626)
+      #Allele Frequency for Non-neuro (field #628)
+      #Number of heterozygous variant carriers for Non-neuro (field #631)
+      #Number of homozygous alternate variant carriers for Non-neuro fiedl (field #632)
+      #Allele Count Controls (field #803)
+      #Allele Number Controls (field #802)
+      #Allele Frequency Controls (field #804)
+      #Number of heterozygous variant carriers for Controls (field #807)
+      #Number of homozygous alternate variant carriers for Controls (fiedl #808)
+
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed4Plus; do out=${f/.bed4Plus/}; bedClip -truncate $f /hive/data/genomes/hg38/chrom.sizes stdout | ./gnomadSvToUcsc_mod.awk | sort -k1,1 -k2,2n > $out.bed9Plus; done
+
+    cp /hive/data/outside/gnomAD.2/structuralVariants/gnomadSv.as .
+    #Modified the gnomadSv.as file to include the non_neuro samples, and the control samples, and
+    #named the file gnomadSvMod.as 
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSvMod.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
+    cd /gbdb/hg38/gnomAD/v4
+    mkdir structuralVariants; cd structuralVariants
+    cp -s /hive/data/outside/gnomAD.4/sv/gnomad.v4.1.sv.non_neuro_controls.sites.bb .
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+    cp gnomad.alpha.ra gnomadSV.alpha.ra
+    #Copied the gnomadSvFull track stanza from ~/kent/src/hg/makeDb/trackDb/human/hg19/trackDb.gnomad.ra
+    # Added filters for non-neurological and control Allele Frequencies  
+    cp ../hg19/gnomadSv.html .
+    #Updated the gnomadSv.html
+    
+##############################################################################

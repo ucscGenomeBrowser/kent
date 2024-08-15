@@ -351,6 +351,9 @@ if (startsWithWord("bigBarChart", type) ||
     startsWithWord("bigInteract", type) ||
     startsWithWord("bigLolly", type) ||
     startsWithWord("bigRmsk", type) ||
+    startsWithWord("bigDbSnp", type) ||
+    startsWithWord("bigMaf", type) ||
+    startsWithWord("bigChain", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
@@ -462,12 +465,52 @@ else
     return NULL;
 }
 
+static int genArkCmpName(const void *va, const void *vb)
+/* Compare two genark elements: gcAccession, ignore case. */
+{
+const struct genark *a = *((struct genark **)va);
+const struct genark *b = *((struct genark **)vb);
+return strcasecmp(a->gcAccession, b->gcAccession);
+}
+
 static int dbDbCmpName(const void *va, const void *vb)
 /* Compare two dbDb elements: name, ignore case. */
 {
 const struct dbDb *a = *((struct dbDb **)va);
 const struct dbDb *b = *((struct dbDb **)vb);
 return strcasecmp(a->name, b->name);
+}
+
+long long genArkSize()
+/* return the number of rows in genark table */
+{
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s", genarkTableName());
+return sqlQuickLongLong(conn, query);
+}
+
+struct genark *genArkList(char *oneAccession)
+/* return the genark table as an slList, or just the one accession when given */
+{
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+if (oneAccession)
+    sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE gcAccession = '%s'", genarkTableName(), oneAccession);
+else
+    sqlSafef(query, sizeof(query), "SELECT * FROM %s ORDER BY gcAccession limit %d", genarkTableName(), maxItemsOutput);
+struct genark *list = NULL, *el = NULL;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = genarkLoad(row);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slSort(&list, genArkCmpName);
+return list;
 }
 
 struct dbDb *ucscDbDb()
@@ -690,30 +733,6 @@ if (hubGenome->settingsHash)
         chromAliasSetupBb(NULL, absFileName);
         }
     }
-}
-
-char *genArkPath(char *genome)
-/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
- *               GCA/021/951/015/GCA_021951015.1
- * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
- *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
- *
- *   already been proven that genome is a GCx_ name prefix before calling
- */
-{
-struct dyString *genArkPath = dyStringNew(0);
-
-char tmpBuf[4];
-safencpy(tmpBuf, sizeof(tmpBuf), genome, 3);
-dyStringPrintf(genArkPath, "%s/", tmpBuf);
-safencpy(tmpBuf, sizeof(tmpBuf), genome+4, 3);
-dyStringPrintf(genArkPath, "%s/", tmpBuf);
-safencpy(tmpBuf, sizeof(tmpBuf), genome+7, 3);
-dyStringPrintf(genArkPath, "%s/", tmpBuf);
-safencpy(tmpBuf, sizeof(tmpBuf), genome+10, 3);
-dyStringPrintf(genArkPath, "%s", tmpBuf);
-
-return dyStringCannibalize(&genArkPath);
 }
 
 static struct dyString *textOutput = NULL;

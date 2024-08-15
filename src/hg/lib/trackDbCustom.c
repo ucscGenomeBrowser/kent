@@ -745,7 +745,13 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
         {
         char *words[3];
         int wordCount = chopLine(cloneString( type), words);
-        if ((  ((wordCount > 1) && (atoi(words[1]) >= 5))
+        if (sameString("bigBed", type) && (wordCount == 1)) // no following words
+            {
+            cType = cfgBedScore;
+	    if (!bedHasFilters(tdb))
+		cType = cfgNone;
+            }
+        else if ((  ((wordCount > 1) && (atoi(words[1]) >= 5))
             || trackDbSetting(tdb, "scoreMin") != NULL)
         &&  // Historically needed 'bed n .' but encode didn't follow bed n .
             (  (wordCount >= 3)
@@ -1587,7 +1593,7 @@ boolean trackSettingIsFile(char *setting)
 {
 return endsWith(setting, "Url") ||
     sameString(setting, "bigDataIndex") ||
-    sameString(setting, "instaPort") ||
+    sameString(setting, "quickLiftUrl") ||
     sameString(setting, "frames") ||
     sameString(setting, "summary") ||
     sameString(setting, "searchTrix") ||

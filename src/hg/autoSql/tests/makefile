@@ -81,16 +81,16 @@ binTest: mkout
 
 
 # testHarness
-testHarness: output/mainTest.o output/simpleTest.o testHarness.o
-	${CC} -o testHarness testHarness.o output/mainTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
+testHarness: output/mainTest.c
+	${CC} ${CC_PROG_OPTS} -o testHarness testHarness.c output/mainTest.c ${MYLIBS} ${MYSQLLIBS} ${L}
 	./testHarness > output/testHarness.out
 	${DIFF} expected/testHarness.out output/testHarness.out
 
 output/mainTest.c: mainTest
 
 # dbLinkTest:
-dbLinkTest:  output/newTest.o dbLinkTest.o
-	${CC} -o dbLinkTest dbLinkTest.o output/newTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
+dbLinkTest:  output/newTest.c
+	${CC} ${CC_PROG_OPTS} -o dbLinkTest dbLinkTest.c output/newTest.c ${MYLIBS} ${MYSQLLIBS} ${L}
 	./dbLinkTest >& output/dbLinkTest.out
 	${DIFF} expected/dbLinkTest.out output/dbLinkTest.out
 
@@ -105,21 +105,19 @@ symTest: mkout
 	${DIFF} expected/symTest.c   output/symTest.c  
 	${DIFF} expected/symTest.err   output/symTest.err
 
-output/symTest.c: symTest
-
-symColsTest: testSymCols.o output/symTest.o
-	${CC} -o testSymCols testSymCols.o output/symTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
+symColsTest: output/symTest.c
+	${CC} ${CC_PROG_OPTS} -o testSymCols testSymCols.c output/symTest.c ${MYLIBS} ${MYSQLLIBS} ${L}
 	./testSymCols
 	${DIFF} expected/symColsTest.tab output/symColsTest.tab
 	${DIFF} expected/symColsTest.tab output/symColsTestComma.tab
 	${DIFF} expected/symColsTest.tab output/symColsTestDb.tab
 	rm testSymCols
 
-testSymCols.o: output/symTest.c
+output/symTest.c: symTest
 
 # test of JSON output
-jsonTest: output/doc.o output/doc2.o jsonTest.o
-	${CC} -o jsonTest jsonTest.o output/doc.o output/doc2.o ${MYLIBS} ${MYSQLLIBS} ${L}
+jsonTest: output/doc.c output/doc2.c
+	${CC} ${CC_PROG_OPTS} -o jsonTest jsonTest.c output/doc.c output/doc2.c ${MYLIBS} ${MYSQLLIBS} ${L}
 	./jsonTest >& output/jsonTest.out
 	${DIFF} expected/jsonTest.out output/jsonTest.out
 

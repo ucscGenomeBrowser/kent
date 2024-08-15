@@ -13,7 +13,8 @@ use strict;
 my $maxOmicronMuts = 5;
 my $maxReversions = 5;
 
-# Column offsets:
+# nextclade v2 column offsets
+# (NOTE: nextclade v3 adds a first column 'index' so these are all off by at least one):
 #0       seqName
 #1       clade
 #22      privateNucMutations.reversionSubstitutions
@@ -25,6 +26,8 @@ my $maxReversions = 5;
 # reversions example: T4181G,T7124C,T8986C,T9053G,T16466C,G21618C,C27638T,T27752C,T29402G
 # labeled example: T5386G|21K,G8393A|21K,C10449A|21K&21L&21M,A11537G|21K,T13195C|21K&21M,A17236G|21J,A18163G|21K&21L,C21762T|21K&21D&21M,C23525T|21K&20J&21L&21M,T23599G|21K&21L&21M,G23604A|20I&21K&21H&21L&21E&21M,G23948T|21K&21L,C24130A|21K&21M,C24503T|21K,A26530G|21K&21M,C26577G|21K&21L&21M,T27291C|21J,-28271T|21K&21G&21L&21M,C28311T|21K&21F&21G&21L&21M,T28881A|20I&21K&20B&20J&20F&20D&21G&21L&21E&21M
 
+my $seqNameIx = 0;
+my $cladeIx = 1;
 my $reversionsIx = 22;
 my $labeledIx = 23;
 my $ambigIx = 34;
@@ -92,17 +95,32 @@ sub privateOmicronCount($$) {
   return $count;
 }
 
+my $foundHeader = 0;
 while (<>) {
   chomp;
   s/"//g;
   my @w = split("\t");
+  # Rough way to detect nextclade v3 without header: look for numeric first column (index)
+  if (! $foundHeader && $w[0] =~ /^\d+$/) {
+    shift @w;
+    $seqNameIx = 0;
+    $cladeIx = 1;
+    $reversionsIx = 31;
+    $labeledIx = 32;
+    $ambigIx = 40;
+  }
   my ($seqName, $clade, $reversionStr, $labeledStr, $ambigStr) =
-    ($w[0], $w[1], $w[$reversionsIx], $w[$labeledIx], $w[$ambigIx]);
-  if ($seqName eq 'seqName') {
+    ($w[$seqNameIx], $w[$cladeIx], $w[$reversionsIx], $w[$labeledIx], $w[$ambigIx]);
+  if ($seqName eq 'seqName' || $seqName eq 'index') {
     # Just in case they tweak the column order, if this looks like a header line, get the
     # indices from it:
+    $foundHeader = 1;
     for (my $ix = 1;  $ix < @w;  $ix++) {
-      if ($w[$ix] eq 'privateNucMutations.reversionSubstitutions') {
+      if ($w[$ix] eq 'seqName') {
+        $seqNameIx = $ix;
+      } elsif ($w[$ix] eq 'clade') {
+        $cladeIx = $ix;
+      } elsif ($w[$ix] eq 'privateNucMutations.reversionSubstitutions') {
         $reversionsIx = $ix;
       } elsif ($w[$ix] eq 'privateNucMutations.labeledSubstitutions') {
         $labeledIx = $ix;

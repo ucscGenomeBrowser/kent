@@ -1,10 +1,60 @@
 <h2>Description</h2>
+<p>
+This track shows regions of the human genome that are alignable to other Homo sapiens genomes.
+The alignable parts are shown with thick blocks that look like exons.
+Non-alignable parts between these are shown with thin lines like introns.
+More description on this display can be found below.
+</p>
+
+<p>
+Other assemblies included in this track are from the
+<a href="https://humanpangenome.org/data/" target="_blank">HPRC project</a>.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<h3>Chain Track</h3>
+
+<p>
+The chain track shows alignments of the human genome to other
+Homo sapiens genomes using a gap scoring system that allows longer gaps
+than traditional affine gap scoring systems. It can also tolerate gaps in both
+source and target assemblies simultaneously. These
+&quot;double-sided&quot; gaps can be caused by local inversions and
+overlapping deletions in both species.
+<p>
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.
+Single lines indicate gaps that are largely due to a deletion in the
+query assembly or an insertion in the target assembly.
+assembly.  Double lines represent more complex gaps that involve substantial
+sequence in both species. This may result from inversions, overlapping
+deletions, an abundance of local mutation, or an unsequenced gap in one
+species.  In cases where multiple chains align over a particular region of
+the target genome, the chains with single-lined gaps are often
+due to processed pseudogenes, while chains with double-lined gaps are more
+often due to paralogs and unprocessed pseudogenes.</p>
+<p>
+In the &quot;pack&quot; and &quot;full&quot; display
+modes, the individual feature names indicate the chromosome, strand, and
+location (in thousands) of the match for each matching alignment.</p>
+
+<p>By default, the chains to chromosome-based assemblies are colored
+based on which chromosome they map to in the aligning organism. To turn
+off the coloring, check the &quot;off&quot; button next to: Color
+track based on chromosome.</p>
+<p>
+To display only the chains of one chromosome in the aligning
+organism, enter the name of that chromosome (e.g. chr4) in box next to:
+Filter by chromosome.</p>
 
 <h2>Methods</h2>
-something something about bigChains fetched.
-
-See /cluster/data/hg38/bed/hprc//bigChains/fetch.sh
 <p>
+The bigChain files were obtained from the
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=submissions/A512ED34-9A91-4FC1-91A5-7AA162D7AFB2--Y1-BIGCHAINS/GRCh38-f1g-90-mc-aug11/aggr_bigchains/"
+target="_blank">HPRC S3 bucket</a> (Amazon Web Services). For more
+information about how the bigChain files were generated, please refer to the HPRC publication below.
+</p>
+
 <h2>Credits</h2>
 <p>
 Thank you to Glenn Hickey for providing the HAL file from the HPRC project.
@@ -13,46 +63,47 @@ Thank you to Glenn Hickey for providing the HAL file from the HPRC project.
 <h2>References</h2>
 
 <p>
-Wen-Wei Liao, Mobin Asri, Jana Ebler, ...<em>et al</em>, Heng Lin,
-Benedict Paten
-<a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>
+Liao WW, Asri M, Ebler J, Doerr D, Haukness M, Hickey G, Lu S, Lucas JK, Monlong J, Abel HJ <em>et
+al</em>.
+<a href="https://doi.org/10.1038/s41586-023-05896-x" target="_blank">
 A draft human pangenome reference</a>.
 <em>Nature</em>. 2023 May;617(7960):312-324.
-PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>37165242</a>;
-PMC: <a href='http://www.ncbi.nlm.nih.gov/pmc/articles/pmc10172123/' target=_blank>PMC1017212</a>;
-DOI: <a href='https://doi.org/10.1038/s41586-023-05896-x' target='_blank'>10.1038/s41586-023-05896-x</a>
+DOI: <a href="https://doi.org/10.1038/s41586-023-05896-x"
+target="_blank">10.1038/s41586-023-05896-x</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/37165242" target="_blank">37165242</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10172123/" target="_blank">PMC10172123</a>
 </p>
 
 <p>
-Glenn Hickey, Jean Monlong, Jana Ebler, Adam M Novak, Jordan M Eizenga,
-Yan Gao; Human Pangenome Reference Consortium; Tobias Marschall, Heng Li,
-Benedict Paten
-<a href='https://pubmed.ncbi.nlm.nih.gov/37165083/' target='_blank'>
+Hickey G, Monlong J, Ebler J, Novak AM, Eizenga JM, Gao Y, Human Pangenome Reference Consortium,
+Marschall T, Li H, Paten B.
+<a href="https://doi.org/10.1038/s41587-023-01793-w" target="_blank">
 Pangenome graph construction from genome alignments with Minigraph-Cactus</a>.
-<em>Nature Biotechnology</em>. 2023 May 10. doi: 10.1038/s41587-023-01793-w.
-PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165083/' target='_blank'>37165083</a>;
-DOI: <a href=;https://doi.org/10.1038/s41587-023-01793-w; target='_blank'>10.1038/s41587-023-01793-w</a>
+<em>Nat Biotechnol</em>. 2023 May 10;.
+DOI: <a href="https://doi.org/10.1038/s41587-023-01793-w"
+target="_blank">10.1038/s41587-023-01793-w</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/37165083" target="_blank">37165083</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10638906/" target="_blank">PMC10638906</a>
 </p>
 
 <p>
-Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q,
-Xie D, Feng S, Stiller J
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, Feng S, Stiller J
 <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
+<a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">
 Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
 <em>Nature</em>. 2020 Nov;587(7833):246-251.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>;
-DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">10.1038/s41586-020-2871-y</a>
+DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y"
+target="_blank">10.1038/s41586-020-2871-y</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>
 </p>
 
 <p>
 Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">
+<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=21665927" target="_blank">
 Cactus: Algorithms for genome multiple sequence alignment</a>.
 <em>Genome Res</em>. 2011 Sep;21(9):1512-28.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>;
-DOI: <a href="https://doi.org/10.1101/gr.123356.111" target="_blank">10.1101/gr.123356.111</a>
+DOI: <a href="https://doi.org/10.1101/gr.123356.111" target="_blank">10.1101/gr.123356.111</a>;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>
 </p>
-

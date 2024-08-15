@@ -227,6 +227,34 @@ if (sameString(how, "text"))
 else if (sameString(how, "picture"))
     {
     char *psFile = cartString(cart, hggMrnaFoldPs);
+
+    // Sanity check the psFile variable
+    // It should point to a .ps file that exists in the trash/foldUtr5 or foldUtr3 directory.
+    // That means it should match trashDir()/foldUtr[35]/foldUtr[35]_.*\.ps as a regex,
+    // and that the file should exist.
+
+    if (!endsWith(psFile, ".ps"))
+        {
+        warn("Invalid file provided for creating of RNA structure pdf/image");
+        return;
+        }
+    char sanCheck[4096];
+    safef(sanCheck, sizeof(sanCheck), "%s/foldUtr5/foldUtr5_", trashDir());
+    if (!startsWith(sanCheck, psFile))
+        {
+        safef(sanCheck, sizeof(sanCheck), "%s/foldUtr3/foldUtr3_", trashDir());
+        if (!startsWith(sanCheck, psFile))
+            {
+            warn("Invalid file provided for creating of RNA structure pdf/image");
+            return;
+            }
+        }
+    if (!fileExists(psFile))
+        {
+        warn("Indicated postscript file for RNA structure pdf/image generation does not exist.");
+        return;
+        }
+
     char *rootName = cloneString(psFile);
     char pngName[256];
     char pdfName[256];

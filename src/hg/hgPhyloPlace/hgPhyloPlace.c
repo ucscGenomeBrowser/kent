@@ -1,6 +1,6 @@
 /* hgPhyloPlace - Upload SARS-CoV-2 or MPXV sequence for placement in phylo tree. */
 
-/* Copyright (C) 2020-2022 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "botDelay.h"
@@ -29,13 +29,13 @@
 struct cart *cart = NULL;      // CGI and other variables
 struct hash *oldVars = NULL;   // Old contents of cart before it was updated by CGI
 boolean measureTiming = FALSE; // Print out how long things take
-char *leftLabelWidthForLongNames = "55";// Leave plenty of room for tree and long virus strain names
 
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
 static boolean issueBotWarning = FALSE;
 static long enteredMainTime = 0;
 
+#define orgVar "hgpp_org"
 #define seqFileVar "sarsCoV2File"
 #define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
@@ -79,82 +79,44 @@ else if (isNotEmpty(fileBinaryCoords))
 return lf;
 }
 
-static char *labelForDb(char *db)
-/* The assembly hub name is just the accession; make a special label for hMPXV.  Otherwise just
- * return hGenome(db). */
-{
-char *label = phyloPlaceDbSetting(db, "name");
-if (isEmpty(label))
-    label = hGenome(db);
-return label;
-}
-
-static int labelCmp(const void *va, const void *vb)
-/* Compare two slPairs on their string values -- but treat SARS-CoV-2 as more important. */
-{
-const struct slPair *a = *((struct slPair **)va);
-const struct slPair *b = *((struct slPair **)vb);
-if (sameString((char *)(a->val), "SARS-CoV-2"))
-    return -1;
-else if (sameString((char *)(b->val), "SARS-CoV-2"))
-    return 1;
-return strcmp((char *)(a->val), (char *)(b->val));
-}
-
-
-static struct slName *sortByLabel(struct slName *dbList)
-/* Return a newly allocated version of dbList, sorted by labelForDb value -- but favor SARS-CoV-2. */
-{
-struct slPair *dbLabelList = NULL;
-struct slName *sln;
-for (sln = dbList;  sln != NULL;  sln = sln->next)
-    slPairAdd(&dbLabelList, sln->name, cloneString(labelForDb(sln->name)));
-slSort(&dbLabelList, labelCmp);
-struct slName *newList = NULL;
-struct slPair *slp;
-for (slp = dbLabelList;  slp != NULL;  slp = slp->next)
-    slAddHead(&newList, slNameNew(slp->name));
-slReverse(&newList);
-slPairFreeValsAndList(&dbLabelList);
-return newList;
-}
-
-static void selectDb(char **pDb, char **pLabel)
-/* Search for assembly config.ra files in hgPhyloPlaceData.  If there is more than one
- * supported assembly, then make a menu / select input for supported  assemblies;
+static void selectOrg(char **pOrg, char **pLabel)
+/* Search for config files in hgPhyloPlaceData.  If there is more than one
+ * supported organism, then make a menu / select input for supported organisms;
  * reload the page on change. */
 {
-struct slName *supportedDbs = sortByLabel(phyloPlaceDbList(cart));
-if (supportedDbs == NULL)
+struct slPair *orgLabelList = phyloPlaceOrgList(cart);
+if (orgLabelList == NULL)
     errAbort("Sorry, this server is not configured to perform phylogenetic placement.");
-if (!slNameInList(supportedDbs, *pDb))
+if (!slPairFind(orgLabelList, *pOrg))
     {
-    *pDb = cloneString(supportedDbs->name);
+    *pOrg = cloneString(orgLabelList->name);
     }
-*pLabel = labelForDb(*pDb);
-int supportedDbCount = slCount(supportedDbs);
-if (supportedDbCount > 1)
+*pLabel = phyloPlaceOrgSetting(*pOrg, "name");
+if (isEmpty(*pLabel))
+    *pLabel = *pOrg;
+char *selectVar = orgVar;
+int orgCount = slCount(orgLabelList);
+if (orgCount > 1)
     {
-    char *labels[supportedDbCount];
-    char *values[supportedDbCount];
-    struct slName *sDb;
+    char *labels[orgCount];
+    char *values[orgCount];
+    struct slPair *orgLabel;
     int i;
-    for (sDb = supportedDbs, i = 0;  i < supportedDbCount;  sDb = sDb->next, i++)
+    for (orgLabel = orgLabelList, i = 0;  i < orgCount;  orgLabel = orgLabel->next, i++)
         {
-        values[i] = sDb->name;
-        labels[i] = labelForDb(values[i]);
+        values[i] = orgLabel->name;
+        labels[i] = orgLabel->val;
         }
-    char *selectVar = "db";
     struct dyString *dy = jsOnChangeStart();
     jsDropDownCarryOver(dy, selectVar);
     char *js = jsOnChangeEnd(&dy);
     puts("<p>Choose your pathogen: ");
-    cgiMakeDropListFull(selectVar, labels, values, supportedDbCount, *pDb, "change", js);
+    cgiMakeDropListFull(selectVar, labels, values, orgCount, *pOrg, "change", js);
     puts("</p>");
     }
 else
-    cgiMakeHiddenVar("db", *pDb);
-slNameFreeList(&supportedDbs);
+    cgiMakeHiddenVar(selectVar, *pOrg);
+slPairFreeList(&orgLabelList);
 }
 
 static void newPageStartStuff()
@@ -278,7 +240,7 @@ webEndJWest();
     "     return false; " \
     "   } else { loadingImage.run(); return true; } }"
 
-static void inputForm(char *db)
+static void inputForm(char *org)
 /* Ask the user for FASTA or VCF. */
 {
 printf("<form action='%s' name='mainForm' method=POST enctype='multipart/form-data'>\n\n",
@@ -288,18 +250,18 @@ puts("<div class='readableWidth'>");
 puts("  <div class='gbControl col-md-12'>");
 puts("<div style='font-size: 20px; font-weight: 500; margin-top: 15px; margin-bottom: 10px;'>"
      "Place your sequences in a global phylogenetic tree</div>");
-// If db is not a supported db then switch to the default supported db, and if multiple dbs are
-// supported then make a menu so the user can select.
 char *label = NULL;
-selectDb(&db, &label);
+selectOrg(&org, &label);
 printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
 printf("<input type='file' id='%s' name='%s'>",
        seqFileVar, seqFileVar);
 printf("</p><p>or paste in sequence names/IDs:<br>\n");
 cgiMakeTextArea(pastedIdVar, "", 10, 70);
-struct treeChoices *treeChoices = loadTreeChoices(db);
-if (treeChoices)
+if (phyloPlaceOrgSetting(org, "nextcladeIndex") == NULL)
     {
+    // This is not a multi-reference organism, this is an old-style single-reference setup for
+    // which the user can directly choose the tree (i.e. SARS-CoV-2).
+    struct treeChoices *treeChoices = loadTreeChoices(org, org);
     puts("</p><p>");
     printf("Phylogenetic tree version: ");
     char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
@@ -319,13 +281,13 @@ cgiMakeIntVarWithLimits("subtreeSize", subtreeSize, dy->string, 5, 10, MAX_SUBTR
 puts("</p><p>");
 cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
                            "submit", "Upload");
-char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
+char *exampleFile = phyloPlaceOrgSettingPath(org, "exampleFile");
 if (isNotEmpty(exampleFile))
     {
     puts("&nbsp;&nbsp;");
     cgiMakeOnClickSubmitButton("{ loadingImage.run(); return true; }",
                                "exampleButton", "Upload Example File");
-    if (sameString(db, "wuhCor1"))
+    if (sameString(org, "wuhCor1"))
         {
         puts("&nbsp;&nbsp;");
         puts("<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>More example files</a>");
@@ -348,7 +310,7 @@ puts("  <div class='gbControl col-md-12'>");
 puts("<h2>More information</h2>");
 printf("<p>Upload your %s sequence (FASTA or VCF file) to find the most similar\n"
        "complete, high-coverage samples from \n", label);
-if (sameString(db, "wuhCor1"))
+if (sameString(org, "wuhCor1"))
     {
     puts("<a href='https://www.gisaid.org/' target='_blank'>GISAID</a>\n"
          "or from public sequence databases (INSDC: GenBank/ENA/DDBJ accessed using "
@@ -363,7 +325,7 @@ if (sameString(db, "wuhCor1"))
     }
 else
     {
-    //#*** TODO get NCBI link from db not hardcoded
+    //#*** TODO get NCBI Virus link that is not hardcoded to MPXV
     puts("public sequence databases (INSDC: GenBank/ENA/DDBJ accessed using "
          "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Monkeypox%20virus%20(monkeypox),%20taxid:10244' "
          "target=_blank>NCBI Virus</a>)\n"
@@ -388,7 +350,7 @@ if (microbeTraceHost())
            "epidemiologic data and offers multiple visualization options of your combined data.\n",
            MAX_MICROBETRACE_SUBTREE_SIZE);
 puts("</p>");
-if (sameString(db, "wuhCor1"))
+if (sameString(org, "wuhCor1"))
     {
     puts("<p>\n"
          "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
@@ -422,7 +384,7 @@ puts("<h3>Please do not upload "
      "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a>,\n"
      "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a>\n"
      "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n");
-if (sameString(db, "wuhCor1"))
+if (sameString(org, "wuhCor1"))
     puts("and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>\n");
 puts(".</p>\n");
 puts("</div>");
@@ -444,17 +406,17 @@ puts("</div>");
 puts("</form>");
 }
 
-static void mainPage(char *db)
+static void mainPage(char *org)
 {
 // Start web page with new-style header
-webStartGbNoBanner(cart, db, "UShER: Upload");
+webStartGbNoBanner(cart, org, "UShER: Upload");
 jsInit();
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
-// Hidden form for reloading page when db select is changed
-static char *saveVars[] = { "db" };
+// Hidden form for reloading page when hpp_org select is changed
+static char *saveVars[] = { orgVar };
 jsCreateHiddenForm(cart, cgiScriptName(), saveVars, ArraySize(saveVars));
 
 puts("<div class='row'>"
@@ -466,7 +428,7 @@ puts("<div class='row'>"
      "<div class='row'>\n");
 if (hgPhyloPlaceEnabled())
     {
-    inputForm(db);
+    inputForm(org);
     }
 else
     {
@@ -479,10 +441,21 @@ puts("</div>\n");
 newPageEndStuff();
 }
 
-static void resultsPage(char *db, struct lineFile *lf)
+static void resultsPage(char *db, char *org, struct lineFile *lf)
 /* QC the user's uploaded sequence(s) or VCF; if input looks valid then run usher
  * and display results. */
 {
+// If org is a real database or hub then set db to org.
+if (hDbExists(org))
+    db = org;
+else
+    {
+    // Not a db -- see if it's a hub that is already connected:
+    struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(org);
+    if (hubGenome != NULL)
+        db = org;
+    // Otherwise we're counting on the config to specify a .2bit file and we won't make CTs.
+    }
 webStartGbNoBanner(cart, db, "UShER: Results");
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
@@ -504,10 +477,6 @@ puts("<div class='row'>"
      "  </div>\n"
      "</div>\n"
      "<div class='row'>\n");
-// Form submits subtree custom tracks to hgTracks
-printf("<form action='%s' name='resultsForm' method=%s>\n\n",
-       hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
-cartSaveSession(cart);
 puts("  <div class='gbControl col-md-12'>");
 fflush(stdout);
 
@@ -519,25 +488,14 @@ if (lf != NULL)
     // Do our best to place the user's samples, make custom tracks if successful:
     char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
-    boolean success = FALSE;
-    char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
-                                     tl.fontHeight, &success);
-    if (ctFile)
-        {
-        cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
-        if (tl.leftLabelWidthChars < 0 || tl.leftLabelWidthChars == leftLabelWidthDefaultChars)
-            cgiMakeHiddenVar(leftLabelWidthVar, leftLabelWidthForLongNames);
-        cgiMakeButton("submit", "view in Genome Browser");
-        puts("  </div>");
-        puts("</form>");
-        }
-    else if (! success)
+    boolean success = phyloPlaceSamples(lf, db, org, phyloPlaceTree, measureTiming, subtreeSize,
+                                        &tl, cart);
+    if (! success)
         {
         puts("<p></p>");
         puts("  </div>");
-        puts("</form>");
         // Let the user upload something else and try again:
-        inputForm(db);
+        inputForm(org);
         }
     }
 else
@@ -546,8 +504,7 @@ else
          "&quot;try example&quot; button.");
     // Let the user try again:
     puts("  </div>");
-    puts("</form>");
-    inputForm(db);
+    inputForm(org);
     }
 puts("</div>\n");
 
@@ -578,7 +535,7 @@ fputc('\n', stderr);
 
 #define CONTENT_TYPE "Content-Type: text/plain\n\n"
 
-static void sendServerCommand(char *db)
+static void sendServerCommand(char *org)
 /* If a recognized server command is requested (with minimal auth to prevent DoS), and usher server
  * is configured, then send the command to the usher server's manager fifo. */
 {
@@ -588,62 +545,66 @@ char *plain = cgiOptionalString(serverPlainVar);
 char *salty = cgiOptionalString(serverSaltyVar);
 if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
     {
-    if (serverIsConfigured(db))
+    if (serverIsConfigured(org))
         {
         char *command = cgiString(serverCommandVar);
         char *comment = cgiOptionalString(serverCommentVar);
         struct tempName tnCheckServer;
         trashDirFile(&tnCheckServer, "ct", "usher_check_server", ".txt");
         FILE *errFile = mustOpen(tnCheckServer.forCgi, "w");
-        boolean serverUp = serverIsRunning(db, errFile);
+        boolean serverUp = serverIsRunning(org, errFile);
         carefulClose(&errFile);
         if (sameString(command, "start"))
             {
             // This one is really a command for the CGI not the server manager fifo (because the
             // server is not yet running and needs to be started at this point), but uses the
             // same CGI interface.
-            struct treeChoices *treeChoices = loadTreeChoices(db);
+
+            //#*** TODO implement this at the org level, descending into ref subdirs.  For now
+            //#*** this is working because only SARS-CoV-2 has a server and org==ref for it.
+
+            struct treeChoices *treeChoices = loadTreeChoices(org, org);
             if (treeChoices != NULL)
                 {
                 if (serverUp)
-                    errAbort("Server is already running for db %s, see %s",
-                             db, tnCheckServer.forCgi);
+                    errAbort("Server is already running for org %s, see %s",
+                             org, tnCheckServer.forCgi);
                 struct tempName tnServerStartup;
                 trashDirFile(&tnServerStartup, "ct", "usher_server_startup", ".txt");
                 errFile = mustOpen(tnServerStartup.forCgi, "w");
-                fprintf(stderr, "Usher server start for %s", db);
+                fprintf(stderr, "Usher server start for %s", org);
                 maybeComment(comment);
-                boolean success = startServer(db, treeChoices, errFile);
+                boolean success = startServer(org, treeChoices, errFile);
                 carefulClose(&errFile);
                 if (success)
                     {
                     fprintf(stderr, "Spawned usher server background process, details in %s",
                             tnServerStartup.forCgi);
-                    printf(CONTENT_TYPE"Started server for %s\n", db);
+                    printf(CONTENT_TYPE"Started server for %s\n", org);
                     }
                 else
                     errAbort("Unable to spawn usher server background process, details in %s",
                              tnServerStartup.forCgi);
                 }
             else
-                errAbort("No treeChoices for db=%s", db);
+                errAbort("No treeChoices for org=%s", org);
             }
         else if (serverUp)
             {
             if (sameString(command, "reload"))
                 {
-                struct treeChoices *treeChoices = loadTreeChoices(db);
-                fprintf(stderr, "Usher server reload for %s", db);
+                struct treeChoices *treeChoices = loadTreeChoices(org, org);
+                fprintf(stderr, "Usher server reload for %s", org);
                 maybeComment(comment);
-                serverReloadProtobufs(db, treeChoices);
-                printf(CONTENT_TYPE"Sent reload command for %s\n", db);
+                serverReloadProtobufs(org, treeChoices);
+                printf(CONTENT_TYPE"Sent reload command for %s\n", org);
                 }
             else if (sameString(command, "stop"))
                 {
-                fprintf(stderr, "Usher server stop for %s", db);
+                fprintf(stderr, "Usher server stop for %s", org);
                 maybeComment(comment);
-                serverStop(db);
-                printf(CONTENT_TYPE"Sent stop command for %s\n", db);
+                serverStop(org);
+                printf(CONTENT_TYPE"Sent stop command for %s\n", org);
                 }
             else
                 {
@@ -658,15 +619,15 @@ if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
                         {
                         fprintf(stderr, "Usher server thread count set to %d", val);
                         maybeComment(comment);
-                        serverSetThreadCount(db, val);
-                        printf(CONTENT_TYPE"Sent thread %d command for %s\n", val, db);
+                        serverSetThreadCount(org, val);
+                        printf(CONTENT_TYPE"Sent thread %d command for %s\n", val, org);
                         }
                     else if (sameString(words[0], "timeout"))
                         {
                         fprintf(stderr, "Usher server timeout set to %d", val);
                         maybeComment(comment);
-                        serverSetTimeout(db, val);
-                        printf(CONTENT_TYPE"Sent timeout %d command for %s\n", val, db);
+                        serverSetTimeout(org, val);
+                        printf(CONTENT_TYPE"Sent timeout %d command for %s\n", val, org);
                         }
                     else
                         errAbort("Unrecognized command '%s'", command);
@@ -677,10 +638,10 @@ if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
             }
         else
             errAbort("Server for %s is down (see %s), cannot send command '%s'",
-                     db, tnCheckServer.forCgi, command);
+                     org, tnCheckServer.forCgi, command);
         }
     else
-        errAbort("Usher server mode not configured for db=%s", db);
+        errAbort("Usher server mode not configured for org=%s", org);
     }
 else
     errAbort("Bad request");
@@ -695,6 +656,20 @@ cart = theCart;
 char *db = NULL, *genome = NULL;
 // Get the current db from the cart
 getDbAndGenome(cart, &db, &genome, oldVars);
+// The currently selected organism may or may not be a db/hub.
+char *org = cartOptionalString(cart, orgVar);
+if (isEmpty(org))
+    {
+    // If orgVar is not found but old cart var is set, use it and then remove it to tidy up.
+    org = cartOptionalString(cart, "hpp_ref");
+    if (isNotEmpty(org))
+        cartRemove(cart, "hpp_ref");
+    }
+if (isEmpty(org))
+    {
+    // Default to db
+    org = cloneString(db);
+    }
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
@@ -708,33 +683,33 @@ char *newExampleButton = cgiOptionalString("exampleButton");
 if ((submitLabel && sameString(submitLabel, "try example")) ||
     (newExampleButton && sameString(newExampleButton, "Upload Example File")))
     {
-    char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
+    char *exampleFile = phyloPlaceOrgSettingPath(org, "exampleFile");
     struct lineFile *lf = lineFileOpen(exampleFile, TRUE);
-    resultsPage(db, lf);
+    resultsPage(db, org, lf);
     }
 else if (cgiOptionalString(remoteFileVar))
     {
     char *url = cgiString(remoteFileVar);
     struct lineFile *lf = netLineFileOpen(url);
-    resultsPage(db, lf);
+    resultsPage(db, org, lf);
     }
 else if (isNotEmpty(trimSpaces(cgiOptionalString(pastedIdVar))))
     {
     char *pastedIds = cgiString(pastedIdVar);
     struct lineFile *lf = lineFileOnString("pasted names/IDs", TRUE, pastedIds);
-    resultsPage(db, lf);
+    resultsPage(db, org, lf);
     }
 else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filename"))
     {
     struct lineFile *lf = lineFileFromFileInput(cart, seqFileVar);
-    resultsPage(db, lf);
+    resultsPage(db, org, lf);
     }
 else if (isNotEmpty(cgiOptionalString(serverCommandVar)))
     {
-    sendServerCommand(db);
+    sendServerCommand(org);
     }
 else
-    mainPage(db);
+    mainPage(org);
 }
 
 #define LD_LIBRARY_PATH "LD_LIBRARY_PATH"

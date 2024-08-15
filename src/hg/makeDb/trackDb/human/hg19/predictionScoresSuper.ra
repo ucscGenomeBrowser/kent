@@ -1,0 +1,9 @@
+track predictionScoresSuper
+shortLabel Prediction Scores
+longLabel Human Prediction Scores
+superTrack on hide
+visibility hide
+group phenDis
+
+# bayesDel track
+include bayesDel.ra

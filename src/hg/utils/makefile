@@ -25,10 +25,12 @@ UTILS_APPLIST = \
 	bedMergeAdjacent \
 	bedPartition \
 	bigChainBreaks \
+	bigChainToChain \
 	bigGenePredToGenePred \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
+	chainToBigChain \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \
@@ -59,7 +61,8 @@ UTILS_APPLIST = \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask \
-	vcfToBed
+	vcfToBed \
+	fixTrackDb
 
 USER_APP_SCRIPTS = \
 	vai.pl

@@ -1,7 +1,7 @@
 track mane
 bigDataUrl /gbdb/hg38/mane/mane.bb
 shortLabel MANE
-longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project
+longLabel MANE Select Plus Clinical: Representative transcript from RefSeq & GENCODE
 searchIndex name
 searchTrix /gbdb/hg38/mane/mane.ix
 type bigGenePred
@@ -9,14 +9,16 @@ visibility hide
 group genes
 labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
 defaultLabelFields geneName2
+baseColorDefault genomicCodons
 maxItems 5000
 itemRgb on
 skipFields cdsStartStat,cdsEndStat,exonFrames,geneType,type
+mouseOver $ncbiId, $name
 urls name2="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" geneName="https://www.ensembl.org/homo_sapiens/Gene/Summary?g=$$&db=core" geneName2="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" ensemblProtAcc="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" ncbiId="https://www.ncbi.nlm.nih.gov/nuccore/$$" ncbiProtAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 dataVersion /gbdb/hg38/mane/README_versions.txt
 
 searchTable mane
 searchType bigBed
-searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project
-searchPriority 1.3
-
+searchDescription MANE Select Plus Clinical: Representative transcript from RefSeq & GENCODE
+searchPriority 1.01
+shortCircuit 1

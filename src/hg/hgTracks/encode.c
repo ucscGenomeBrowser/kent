@@ -193,13 +193,13 @@ char startBuf[16], endBuf[16];
 struct bigBedFilter *filters = NULL;
 struct bigBedFilter *filter;
 
-if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, SCORE_FILTER, "0:1000", "score")) != NULL)
+if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, SCORE_FILTER, "0:1000", "score", FALSE)) != NULL)
     slAddHead(&filters, filter);
-if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, SIGNAL_FILTER, NULL, "signalValue")) != NULL)
+if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, SIGNAL_FILTER, NULL, "signalValue", FALSE)) != NULL)
     slAddHead(&filters, filter);
-if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, PVALUE_FILTER, NULL, "pValue")) != NULL)
+if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, PVALUE_FILTER, NULL, "pValue", FALSE)) != NULL)
     slAddHead(&filters, filter);
-if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, QVALUE_FILTER, NULL, "qValue")) != NULL)
+if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, QVALUE_FILTER, NULL, "qValue", FALSE)) != NULL)
     slAddHead(&filters, filter);
 if (compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
    labelTrackAsFiltered(tg);
@@ -208,7 +208,7 @@ unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    if (bigBedFilterInterval(bedRow, filters))
+    if (bigBedFilterInterval(bbi, bedRow, filters))
         {
         struct encodePeak *peak = encodePeakGeneralLoad(bedRow, pt);
         struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);

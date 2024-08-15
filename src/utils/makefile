@@ -87,6 +87,7 @@ UTILS_APPLIST = \
 	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
+	pslSpliceJunctions \
 	pslSwap \
 	pslToPslx \
 	randomLines \
@@ -147,6 +148,7 @@ UCSC_APPS = \
 	pslToXa \
 	scrambleFa \
 	subs \
+	tabToMmHash \
 	tableSum \
 	textHist2 \
 	udcCleanup \

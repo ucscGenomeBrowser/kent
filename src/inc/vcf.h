@@ -99,6 +99,7 @@ struct vcfFile
     struct vcfInfoDef *filterDefs;	// Header's definitions of FILTER column failure codes
     struct vcfInfoDef *altDefs;	// Header's defs of symbolic alternate alleles (e.g. DEL, INS)
     struct vcfInfoDef *gtFormatDefs;	// Header's defs of GENOTYPE compnts. listed in FORMAT col.
+    struct hash *infoDefHash; // Hash of all INFO keys, as there can be hundreds of them
     bool allPhased;         // True if all record->genotypes have been phased
     int genotypeCount;		// Number of optional genotype columns described in header
     char **genotypeIds;		// Array of optional genotype column names described in header
@@ -218,6 +219,11 @@ struct vcfFile *vcfTabixFileAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl,
  * range into vcff->records.  If maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
+
+struct vcfFile *vcfTabixFileAndIndexMayOpenExt(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
+				    int maxErr, int maxRecords, char *abortMessage);
+/* Extension routine for vcfTabixFileAndIndexMayOpen().  Allows caller to specify an
+ * errAbort message if maxRecords is exceeded. */
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
 				    int maxErr, int maxRecords);

@@ -150,7 +150,7 @@ slSort(&dtList, dbTableCmp);
 return dtList;
 }
 
-static void showLinkedTables(struct joiner *joiner, struct dbTable *inList,
+static void showLinkedTables(char *mainDb, char *mainTable, struct joiner *joiner, struct dbTable *inList,
 	char *varPrefix, char *buttonName, char *buttonText)
 /* Print section with list of linked tables and check boxes to turn them
  * on. */
@@ -196,6 +196,11 @@ for (in = inList; in != NULL; in = in->next)
     }
 slSort(&outList, dbTableCmp);
 
+// if the track is knownGeneV32, activate some special filters
+boolean doFilterDbKg = FALSE;
+if (startsWith("knownGeneV", mainTable))
+    doFilterDbKg = TRUE;
+
 /* Print html. */
 if (outList != NULL)
     {
@@ -203,6 +208,17 @@ if (outList != NULL)
     hTableStart();
     for (out = outList; out != NULL; out = out->next)
 	{
+        if (doFilterDbKg) 
+            {
+            // if user selected the knownGeneV32 track...
+            // - do not show the current hg38 knownGene tables
+            if (sameOk(out->db, mainDb))
+                continue;
+            // - only show the tables in knownGeneV32, not knownGeneV35
+            else if (startsWith(out->db, "knownGeneV") && !sameOk(out->db, mainTable))
+                continue;
+            }
+
 	struct sqlConnection *conn = hAllocConn(out->db);
 	struct asObject *asObj = asForTable(conn, out->table);
 	char *var = dbTableVar(varPrefix, out->db, out->table);
@@ -271,19 +287,19 @@ if (withGetButton)
     if (doGalaxy()) /* need form fields here and Galaxy so add step to Galaxy */
         cgiMakeButton(hgtaDoGalaxySelectedFields, "done with selections");
     else
-        cgiMakeButton(hgtaDoPrintSelectedFields, "get output");
+        cgiMakeButton(hgtaDoPrintSelectedFields, "Get output");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoMainPage, "cancel");
+    cgiMakeButton(hgtaDoMainPage, "Cancel");
     hPrintf(" ");
     }
 jsInit();
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table),
-			   "check all");
+			   "Check all");
 hPrintf(" ");
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
-			   "clear all");
+			   "Clear all");
 cgiDown(0.7); // Extra spacing below the buttons
 }
 
@@ -466,8 +482,8 @@ dtList = extraTableList(selFieldLinkedTablePrefix());
 showLinkedFields(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
-showLinkedTables(joiner, dtList, selFieldLinkedTablePrefix(),
-	hgtaDoSelectFieldsMore, "allow selection from checked tables");
+showLinkedTables(db, table, joiner, dtList, selFieldLinkedTablePrefix(),
+	hgtaDoSelectFieldsMore, "Allow selection from checked tables");
 
 /* clean up. */
 hPrintf("</FORM>");
@@ -1014,7 +1030,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
+if (!(isWig||isBedGr||isBb||isBam||isVcf||isLongTabix||isHic))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -1047,9 +1063,9 @@ if (isWig||isBedGr||isBam||isVcf||isLongTabix||isHic)
 freez(&table);
 hFreeConn(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "submit");
+cgiMakeButton(hgtaDoFilterSubmit, "Submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "cancel");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
 }
 
 static void filterControlsForTableCt(char *db, char *table)
@@ -1236,8 +1252,8 @@ dtList = extraTableList(filterLinkedTablePrefix);
 showLinkedFilters(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
-showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
-	hgtaDoFilterMore, "allow filtering using fields in checked tables");
+showLinkedTables(db, table, joiner, dtList, filterLinkedTablePrefix,
+	hgtaDoFilterMore, "Allow filtering using fields in checked tables");
 
 hPrintf("</FORM>\n");
 cgiDown(0.9);

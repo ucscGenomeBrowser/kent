@@ -26,10 +26,13 @@
 
 <li class="menuparent" id="tools2"><a href="../cgi-bin/hgTracks">Genome Browser</a>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
+	<li id="backToBrowserLi" class="first"><a id="backToGenomeBrowser" href="../cgi-bin/hgTracks">Back to Genome Browser</a></li>
+	<li><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
 	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
+	<li><a id="shortMatchLink" href="../cgi-bin/hgTrackUi?g=oligoMatch&oligoMatch=pack">Short Exact DNA Match</a></li>
         <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
-	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset">Reset All User Settings</a></li>
+        <!-- OPTIONAL_EXPORTED_TRACK_DATA_HUBS_MENU -->
+	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset?skipLs=1">Reset All User Settings</a></li>
         </ul>
 </li>
 
@@ -40,10 +43,8 @@
 	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
 	<li><a id="tableBrowserMenuLink" href="../cgi-bin/hgTables">Table Browser</a></li>
 	<li><a id="liftOverMenuLink" href="../cgi-bin/hgLiftOver">LiftOver</a></li>
-	<li><a id="gsMenuLink" href="../cgi-bin/hgNear">Gene Sorter</a></li>
 	<li><a id="vaiMenuLink" href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
 	<li><a id="diMenuLink" href="../cgi-bin/hgIntegrator">Data Integrator</a></li>
-	<li><a id="ggMenuLink" href="../cgi-bin/hgGenome">Genome Graphs</a></li>
         <li><a title="Explore gene/protein interactions and pathways" id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
 	<li class="last"><a href="../util.html">Other Tools</a></li>
 	</ul>
@@ -97,25 +98,20 @@
     <li><a href="../FAQ/">FAQs & Search</a></li>
     <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
     <li><a href="../training/index.html">Training</a></li>
-    <li><a href="../contacts.html">Contact Us</a></li>
-    <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
+    <li class="last"><a href="../contacts.html">Contact Us</a></li>
     </ul>
 </li>
 
 <li class="menuparent last" id="aboutUs"><span>About Us</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
-	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
-	<li class="odd"><a href="http://genome.ucsc.edu/blog/">Blog</a></li>
 	<li class="even"><a href="../cite.html">Cite Us</a></li>
-	<li class="odd"><a href="../goldenPath/credits.html">Credits</a></li>
-	<li class="even"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
-	<li class="odd"><a href="../staff.html">Staff</a></li>
-	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
-	<li class="odd"><a href="../goldenPath/history.html">Our History</a></li>
-	<li class="even"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
-	<li class="odd last"><a href="../license/">Licenses</a></li>
-	<li><a href="../contacts.html">Contact Us</a></li>
+	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
+	<li class="even"><a href="../staff.html">Staff</a></li>
+	<li class="odd"><a href="../conditions.html">Conditions of Use</a></li>
+	<li class="even"><a href="../goldenPath/history.html">Our History</a></li>
+	<li class="odd"><a href="../license/">Licenses</a></li>
+	<li class="even last"><a href="../contacts.html">Contact Us</a></li>
 	</ul>
 </li>
 

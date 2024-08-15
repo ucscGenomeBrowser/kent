@@ -151,7 +151,7 @@ if ($vgpIndex) {
      $vgpSubset = "(set of legacy/superseded assemblies)";
   }
   print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, track statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -171,7 +171,7 @@ END
 } else {
   if ($hprcIndex) {
     print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium assembly hubs, track statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -190,7 +190,7 @@ Human Pangenome Reference Consortium.</a>
 END
   } else {
     print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="$Name genomes assembly hubs, track statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -297,7 +297,7 @@ if ($assemblyTotal > 1) {
   print <<"END"
 
 </tbody>
-<tfoot><tr><th>TOTALS:</th><td align=center colspan=$colSpanFill>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
+<tfoot><tr><th>TOTALS:</th><td style='text-align: center;' colspan=$colSpanFill>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
   </tr></tfoot>
 </table>
 END
@@ -441,9 +441,9 @@ sub tableContents() {
     }
     if (! -s "$twoBit") {
       printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
-      printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-      printf "<td align=center>%s</td>\n", $accessionId;
-      printf "<th colspan=15 align=center>missing masked 2bit file</th>\n";
+      printf "<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount;
+      printf "<td style='text-align: center;'>%s</td>\n", $accessionId;
+      printf "<th colspan=15 style='text-align: center;'>missing masked 2bit file</th>\n";
       printf "</tr>\n";
       next;
     }
@@ -502,8 +502,8 @@ sub tableContents() {
     } elsif ($testOutput) {
       $browserUrl = "https://genome-test.gi.ucsc.edu/h/$accessionId";
     }
-    printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-    printf "<td align=center><a href='%s' target=_blank>%s<br>%s</a></td>\n", $browserUrl, $browserName, $accessionId;
+    printf "<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount;
+    printf "<td style='text-align: center;'><a href='%s' target=_blank>%s<br>%s</a></td>\n", $browserUrl, $browserName, $accessionId;
     foreach my $track (@trackList) {
       my $trackFile = "$buildDir/bbi/$asmId.$track";
       my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
@@ -625,12 +625,12 @@ sub tableContents() {
         $customKey =~ s/[ %]+//;
       }
       if (length($customKey)) {
-        printf "    <td align=right sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
+        printf "    <td style='text-align: right;' sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
       } else {
         if ($itemCount eq "n/a") {
-      printf "    <td align=right>n/a</td>\n";
+      printf "    <td style='text-align: right;'>n/a</td>\n";
         } else {
-      printf "    <td align=right>%s<br>(%s)</td>\n", $itemCount, $percentCover;
+      printf "    <td style='text-align: right;'>%s<br>(%s)</td>\n", $itemCount, $percentCover;
         }
       }
       $tracksCounted += 1 if ($itemCount ne "n/a");

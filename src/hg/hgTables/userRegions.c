@@ -41,11 +41,11 @@ hPrintf("Or upload file: <INPUT TYPE=FILE NAME=\"%s\">&nbsp;<BR>\n",
 hPrintf("</TD></TR><TR><TD COLSPAN=2 ALIGN=LEFT>\n");
 cgiMakeTextArea(hgtaEnteredUserRegions, oldPasted, 10, 70);
 hPrintf("</TD></TR><TR><TD COLSPAN=2 ALIGN=LEFT>\n");
-cgiMakeButton(hgtaDoSubmitUserRegions, "submit");
+cgiMakeButton(hgtaDoSubmitUserRegions, "Submit");
 hPrintf("&nbsp;");
-cgiMakeButton(hgtaDoClearSetUserRegionsText, "clear");
+cgiMakeButton(hgtaDoClearSetUserRegionsText, "Clear");
 hPrintf("&nbsp;");
-cgiMakeButton(hgtaDoMainPage, "cancel");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</TD></TR></TABLE>");
 hPrintf("</FORM><BR>\n");
 webIncludeHelpFile("hgTbUserRegionsHelp", FALSE);

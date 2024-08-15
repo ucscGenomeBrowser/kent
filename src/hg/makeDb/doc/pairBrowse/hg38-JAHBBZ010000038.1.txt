@@ -1,0 +1,9 @@
+mkdir /hive/users/braney/pairBrowse/hg38-JAHBBZ010000038.1
+cd /hive/users/braney/pairBrowse/hg38-JAHBBZ010000038.1
+
+cp /cluster/data/hg38/bed/hprc/chain/hg38.chainHprcGCA_018472585.1.chain .
+
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/018/472/585/GCA_018472585.1/GCA_018472585.1.2bit"
+
+/cluster/home/braney/kent/src/hg/utils/buildPairAssembly/makePair hg38 chr7 /cluster/data/hg38/hg38.2bit  GCA_018472585.1 JAHBBZ010000038.1 GCA_018472585.1.2bit hg38.chainHprcGCA_018472585.1.chain
+

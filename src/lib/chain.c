@@ -11,6 +11,8 @@
 #include "dnautil.h"
 #include "chain.h"
 
+#undef BIGNUM
+#define BIGNUM 0x7fffffff	/* larger than the standard size BIGNUM */
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */

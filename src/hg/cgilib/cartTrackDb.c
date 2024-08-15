@@ -18,6 +18,14 @@
 static boolean useAC = FALSE;
 static struct slRef *accessControlTrackRefList = NULL;
 
+/* Caches used for searching */
+struct trackDb *hgFindTdbList = NULL;
+struct grp *hgFindGrpList = NULL;
+struct hash *hgFindGroupHash = NULL;
+
+/* Also used by hgFind and defined there */
+extern struct hash *hgFindTrackHash;
+
 static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp **pHubGroups)
 {
 struct trackDb *list = hTrackDb(db);
@@ -497,3 +505,73 @@ if (useJoiner)
 hashFree(&uniqHash);
 return nameList;
 }
+
+static struct trackDb *addSupers(struct trackDb *trackList)
+/* Insert supertracks into the hierarchy. */
+{
+struct trackDb *newList = NULL;
+struct trackDb *tdb, *nextTdb;
+struct hash *superHash = newHash(5);
+
+for(tdb = trackList; tdb;  tdb = nextTdb)
+    {
+    nextTdb = tdb->next;
+    if (tdb->parent)
+        {
+        // part of a super track
+        if (hashLookup(superHash, tdb->parent->track) == NULL)
+            {
+            hashStore(superHash, tdb->parent->track);
+
+            slAddHead(&newList, tdb->parent);
+            }
+        slAddTail(&tdb->parent->subtracks, tdb);
+        }
+    else
+        slAddHead(&newList, tdb);
+    }
+slReverse(&newList);
+return newList;
+}
+
+static void hashTdbNames(struct trackDb *tdb, struct hash *trackHash)
+/* Store the track names for lookup, except for knownGene which gets its own special
+ * category in the UI */
+{
+struct trackDb *tmp;
+for (tmp = tdb; tmp != NULL; tmp = tmp->next)
+    {
+    if (tmp->subtracks)
+        hashTdbNames(tmp->subtracks, trackHash);
+    hashAdd(trackHash, tmp->track, tmp);
+    }
+}
+
+
+void hashTracksAndGroups(struct cart *cart, char *db)
+/* get the list of tracks available for this assembly, along with their group names
+ * and visibility-ness. Note that this implicitly makes connected hubs show up
+ * in the trackList struct, which means we get item search for connected
+ * hubs for free */
+{
+if (hgFindTdbList != NULL && hgFindGrpList != NULL)
+    return;
+
+if (!hgFindTrackHash)
+    hgFindTrackHash = hashNew(0);
+if (!hgFindGroupHash)
+    hgFindGroupHash = hashNew(0);
+cartTrackDbInit(cart, &hgFindTdbList, &hgFindGrpList, FALSE);
+if (!hgFindTdbList)
+    errAbort("Error getting tracks for %s", db);
+if (!hgFindGrpList)
+    errAbort("Error getting groups for %s", db);
+struct trackDb *superList = addSupers(hgFindTdbList);
+hgFindTdbList = superList;
+hashTdbNames(superList, hgFindTrackHash);
+struct grp *g;
+for (g = hgFindGrpList; g != NULL; g = g->next)
+    if (!sameString(g->name, "allTracks") && !sameString(g->name, "allTables"))
+        hashStore(hgFindGroupHash, g->name);
+}
+

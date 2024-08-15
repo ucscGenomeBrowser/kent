@@ -54,6 +54,9 @@
 
 char *hgAppName = "";
 
+/* Caches used by hgFind.c */
+struct hash *hgFindTrackHash = NULL;
+
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "intronEst", "all_est", "xenoEst", NULL };
 static char *estLabels[] = { "Spliced ESTs", "ESTs", "Other ESTs", NULL };
@@ -600,7 +603,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         pos->name = cloneString(nameBuf);
         pos->browserName = cloneString(row[0]);
         if (tp->tsr->snippet)
-            pos->description = tp->tsr->snippet;
+            if (!sameString(hgAppName, "hgSearch") && !sameString(hgAppName, "cartJson"))
+                pos->description = htmlTextStripTags(tp->tsr->snippet);
+            else
+                pos->description = tp->tsr->snippet;
         else
             pos->description = cloneString(row[5]);
         pos->canonical = row[6] != NULL;
@@ -2053,89 +2059,103 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
 	{
-	char *tableName = table->name;
-	if (startsWith("all_", tableName))
-	    tableName += strlen("all_");
-
-	// clear the tdb cache if this track is a hub track
-	if (isHubTrack(tableName))
-	    tdbList = NULL;
-	struct trackDb *tdb = tdbForTrack(db, tableName, &tdbList);
-	if (!tdb)
-            errAbort("no track for table \"%s\" found via a findSpec", tableName);
-	char *trackName = tdb->track;
-	char *vis = hCarefulTrackOpenVisCart(cart, db, trackName);
-	boolean excludeTable = FALSE;
-        if(!containerDivPrinted)
+    char *trackName = table->name, *tableName = table->name;
+    struct trackDb *tdb = NULL;
+    // clear the tdb cache if this track is a hub track
+    if ((sameString("trackDb", tableName) || sameString("helpDocs", tableName) ||
+            sameString("publicHubs", tableName)))
+        // not relevant for hgTables/hgVai/hgIntegrator
+        continue;
+    else
+        {
+        if (isHubTrack(tableName))
+            tdbList = NULL;
+        tdb = tdbForTrack(db, tableName, &tdbList);
+        if (!tdb && startsWith("all_", tableName))
+            tdb = tdbForTrack(db, tableName+strlen("all_"), &tdbList);
+        if (!tdb && startsWith("xeno", tableName))
             {
-            fprintf(f, "<div id='hgFindResults'>\n");
-            if (hgp->singlePos == NULL) // we might be called with only one result
-                fprintf(f, "<p>Your search resulted in multiple matches.  "
-                        "Please select a position:</p>\n");
-            containerDivPrinted = TRUE;
+            // due to genbank track changes over the years, sometimes tables
+            // get left on different servers when their trackDb entry was removed
+            // long ago. In that case skip those hits
+            continue;
             }
-	if (table->htmlStart) 
-	    table->htmlStart(table, f);
-	else
-	    fprintf(f, "<H2>%s</H2><PRE>\n", table->description);
-	for (pos = table->posList; pos != NULL; pos = pos->next)
-	    {
-	    if (table->htmlOnePos)
-	        table->htmlOnePos(table, pos, f);
-	    else
-		{
-		char *matches = excludeTable ? "" : pos->browserName;
-		char *encMatches = cgiEncode(matches);
-		hgPosBrowserRange(pos, range);
-		fprintf(f, "<A HREF=\"%s%cposition=%s",
-			hgAppName, hgAppCombiner, range);
-		if (ui != NULL)
-		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&", extraCgi);
-		fprintf(f, "%s=%s&", trackName, vis);
-		// this is magic to tell the browser to make the 
-		// composite and this subTrack visible
-		if (tdb->parent)
-		    {
-		    if (tdbIsSuperTrackChild(tdb))
-			fprintf(f, "%s=show&", tdb->parent->track);
-		    else
-			{
-			// tdb is a subtrack of a composite or a view
-			fprintf(f, "%s_sel=1&", trackName);
-			fprintf(f, "%s_sel=1&", tdb->parent->track);
-			}
-		    }
+        if (!tdb)
+            errAbort("no track for table \"%s\" found via a findSpec", tableName);
+        trackName = tdb->track;
+        }
+    char *vis = hCarefulTrackOpenVisCart(cart, db, trackName);
+    boolean excludeTable = FALSE;
+    if(!containerDivPrinted)
+        {
+        fprintf(f, "<div id='hgFindResults'>\n");
+        if (hgp->singlePos == NULL) // we might be called with only one result
+            fprintf(f, "<p>Your search resulted in multiple matches.  "
+                    "Please select a position:</p>\n");
+        containerDivPrinted = TRUE;
+        }
+    if (table->htmlStart) 
+        table->htmlStart(table, f);
+    else
+        fprintf(f, "<H2>%s</H2><PRE>\n", table->description);
+    for (pos = table->posList; pos != NULL; pos = pos->next)
+        {
+        if (table->htmlOnePos)
+            table->htmlOnePos(table, pos, f);
+        else
+        {
+        char *matches = excludeTable ? "" : pos->browserName;
+        char *encMatches = cgiEncode(matches);
+        hgPosBrowserRange(pos, range);
+        fprintf(f, "<A HREF=\"%s%cposition=%s",
+            hgAppName, hgAppCombiner, range);
+        if (ui != NULL)
+            fprintf(f, "&%s", ui);
+        fprintf(f, "%s&", extraCgi);
+        fprintf(f, "%s=%s&", trackName, vis);
+        // this is magic to tell the browser to make the 
+        // composite and this subTrack visible
+        if (tdb->parent)
+            {
+            if (tdbIsSuperTrackChild(tdb))
+            fprintf(f, "%s=show&", tdb->parent->track);
+            else
+            {
+            // tdb is a subtrack of a composite or a view
+            fprintf(f, "%s_sel=1&", trackName);
+            fprintf(f, "%s_sel=1&", tdb->parent->track);
+            }
+            }
                 if (isNotEmpty(pos->highlight))
                     {
                     char *encHighlight = cgiEncode(pos->highlight);
                     fprintf(f, "addHighlight=%s&", encHighlight);
                     freeMem(encHighlight);
                     }
-		fprintf(f, "hgFind.matches=%s,\">", encMatches);
-		// Bold canonical genes. 
-		if(pos->canonical) {
-		    fprintf(f, "<B>");
-		    }
-		htmTextOut(f, pos->name);
-		if(pos->canonical) {
-		    fprintf(f, "</B>");
-		    }
-		fprintf(f, " at %s</A>", range);
-		desc = pos->description;
-		if (desc)
-		    {
-		    fprintf(f, " - ");
-		    htmTextOut(f, desc);
-		    }
-		fprintf(f, "\n");
-		freeMem(encMatches);
-		}
-	    }
-	if (table->htmlEnd) 
-	    table->htmlEnd(table, f);
-	else
-	    fprintf(f, "</PRE>\n");
+        fprintf(f, "hgFind.matches=%s,\">", encMatches);
+        // Bold canonical genes. 
+        if(pos->canonical) {
+            fprintf(f, "<B>");
+            }
+        htmTextOut(f, pos->name);
+        if(pos->canonical) {
+            fprintf(f, "</B>");
+            }
+        fprintf(f, " at %s</A>", range);
+        desc = pos->description;
+        if (desc)
+            {
+            fprintf(f, " - ");
+            htmTextOut(f, desc);
+            }
+        fprintf(f, "\n");
+        freeMem(encMatches);
+        }
+        }
+    if (table->htmlEnd) 
+        table->htmlEnd(table, f);
+    else
+        fprintf(f, "</PRE>\n");
 	}
     }
 
@@ -2157,7 +2177,7 @@ static struct hgPositions *hgPositionsSearch(char *db, char *spec,
                                              char **retChromName, int *retWinStart, int *retWinEnd,
                                              boolean *retIsMultiTerm, struct cart *cart,
                                              char *hgAppName, char **retMultiChrom,
-                                             struct dyString *dyWarn)
+                                             struct dyString *dyWarn, struct searchCategory *categories)
 /* Search for positions that match spec (possibly ;-separated in which case *retIsMultiTerm is set).
  * Return a container of tracks and positions (if any) that match term.  If different components
  * of a multi-term search land on different chromosomes then *retMultiChrom will be set. */
@@ -2183,7 +2203,7 @@ for (i = 0;  i < termCount;  i++)
     // Append warning messages to dyWarn, but allow errAborts to continue
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
-        hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm, measureTiming, NULL);
+        hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm, measureTiming, categories);
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         errAbort("%s", errCatch->message->string);
@@ -2231,7 +2251,7 @@ if (isNotEmpty(lastPosition) && !IS_CART_VAR_EMPTY(lastPosition))
         lastPosition = cartUsualString(cart, "nonVirtPosition", hDefaultPos(db));
         }
     hgp = hgPositionsSearch(db, lastPosition, retChrom, retStart, retEnd, &isMultiTerm,
-                            cart, hgAppName, &multiDiffChrom, dyWarn);
+                            cart, hgAppName, &multiDiffChrom, dyWarn, NULL);
     if (hgp->singlePos && !(isMultiTerm && isNotEmpty(multiDiffChrom)))
         {
         freez(pPosition);
@@ -2244,7 +2264,7 @@ if (isNotEmpty(lastPosition) && !IS_CART_VAR_EMPTY(lastPosition))
     }
 char *defaultPosition = hDefaultPos(db);
 hgp = hgPositionsSearch(db, defaultPosition, retChrom, retStart, retEnd, &isMultiTerm,
-                        cart, hgAppName, &multiDiffChrom, dyWarn);
+                        cart, hgAppName, &multiDiffChrom, dyWarn, NULL);
 if (hgp->singlePos && !(isMultiTerm && isNotEmpty(multiDiffChrom)))
     {
     freez(pPosition);
@@ -2266,7 +2286,7 @@ return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
 
 struct hgPositions *hgFindSearch(struct cart *cart, char **pPosition,
                                  char **retChrom, int *retStart, int *retEnd,
-                                 char *hgAppName, struct dyString *dyWarn)
+                                 char *hgAppName, struct dyString *dyWarn, struct searchCategory *categories)
 /* If *pPosition is a search term, then try to resolve it to genomic position(s).
  * If unable to find a unique position then revert pPosition to lastPosition (or default position).
  * Return a container of matching tables and positions.  Warnings/errors are appended to dyWarn. */
@@ -2282,7 +2302,7 @@ else
     char *multiDiffChrom = NULL;
     char *db = cartString(cart, "db");
     hgp = hgPositionsSearch(db, *pPosition, retChrom, retStart, retEnd,
-                            &isMultiTerm, cart, hgAppName, &multiDiffChrom, dyWarn);
+                            &isMultiTerm, cart, hgAppName, &multiDiffChrom, dyWarn, categories);
     if (isMultiTerm && isNotEmpty(multiDiffChrom))
         {
         dyStringPrintf(dyWarn, "Sites occur on different chromosomes: %s, %s.",
@@ -2897,9 +2917,6 @@ else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
 return isVisible;
 }
 
-struct hash *hgFindTrackHash = NULL;
-struct hash *hgFindGroupHash = NULL;
-
 int cmpCategories(const void *a, const void *b)
 /* Compare two categories for uniquifying */
 {
@@ -2930,7 +2947,6 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
             "%s.searchTable=%s.tableName or "
             "%s.searchName=%s.tableName or "
             "%s.searchTable = concat('all_', %s.tableName) "
-            "where searchTable !='knownGene' and searchName != 'knownGene' "
             "order by priority,shortLabel",
             findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName);
         struct sqlResult *sr = sqlGetResult(conn, query);
@@ -3128,9 +3144,20 @@ else if (hashLookup(groupHash, categName) != NULL)
 else
     {
     // must be a track, ret will contain subtracks if necessary
-    struct trackDb *tdb = hashFindVal(hgFindTrackHash, categName);
-    if (tdb)
-        ret = makeCategoryForTrack(tdb, searchTrack);
+    // sometimes duplicate tracks point to the same (eg knownGeneAlpha and knownGene)
+    // this shouldn't happen anymore due to cartTrackDb.c:hashTdbNames() changes, but
+    // just in case it pops up again this code will stay
+    struct hashEl *hel = hashLookup(hgFindTrackHash, categName);
+    while (hel != NULL)
+        {
+        struct trackDb *tdb = hel->val;
+        if (tdb)
+            {
+            struct searchCategory *temp = makeCategoryForTrack(tdb, searchTrack);
+            slAddHead(&ret, temp);
+            }
+        hel = hashLookupNext(hel);
+        }
     }
 return ret;
 }
@@ -3139,9 +3166,6 @@ struct searchCategory *getCategsForNonDb(struct cart *cart, char *db, struct has
 /* Return the default categories for all databases */
 {
 struct searchCategory *ret = NULL;
-struct searchCategory *kgCategory = makeCategory(cart, "knownGene", NULL, db, groupHash);
-if (kgCategory)
-    slAddHead(&ret, kgCategory);
 struct searchCategory *helpDocCategory = makeCategory(cart, "helpDocs", NULL, db, groupHash);
 if (helpDocCategory)
     slAddHead(&ret, helpDocCategory);
@@ -3453,7 +3477,7 @@ if (!(multiTerm) || (multiTerm && !foundIt))
     {
     for (hfs = longList; hfs != NULL; hfs = hfs->next)
         {
-        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL && !sameString(hfs->searchTable, "knownGene"))
+        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL)
             continue;
         foundIt |= hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
         }
@@ -3575,7 +3599,7 @@ if (hgvsList)
                 trackTable = "lrgTranscriptAli";
             else if (startsWith("wgEncodeGencode", pslTable))
                 trackTable = pslTable;
-            else if (startsWith("ncbiRefSeqPsl", pslTable))
+            else if (sameString("ncbiRefSeqPsl", pslTable))
                 {
                 if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
                     startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
@@ -3586,6 +3610,8 @@ if (hgvsList)
                 else
                     trackTable = "ncbiRefSeq";
                 }
+            else if (sameString("ncbiRefSeqPslHistorical", pslTable))
+                trackTable = "ncbiRefSeqHistorical";
             else
                 trackTable = "refGene";
             dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,

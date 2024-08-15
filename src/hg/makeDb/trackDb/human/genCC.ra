@@ -1,6 +1,6 @@
 track genCC
 shortLabel GenCC
-longLabel The Gene Curation Coalition Annotations
+longLabel GenCC: The Gene Curation Coalition Annotations
 type bigBed 9 + 33
 bigDataUrl /gbdb/$D/bbi/genCC.bb
 group phenDis

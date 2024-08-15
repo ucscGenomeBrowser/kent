@@ -30,8 +30,8 @@ my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
 ################### writing out hub.txt file, twice ##########################
-sub singleFileHub($$$$$$$$$$$$$) {
-  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority) = @_;
+sub singleFileHub($$$$$$$$$$$$$$) {
+  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority, $hugeGenome) = @_;
   my @fhN;
   push @fhN, $fh1;
   push @fhN, $fh2;
@@ -98,9 +98,9 @@ sub singleFileHub($$$$$$$$$$$$$) {
     printf $fh "htmlPath html/%s.description.html\n", $asmId;
     # until blat server host is ready for hgdownload, avoid these lines
     if ($blatHosts[$fileCount] ne $downloadHost) {
-      printf $fh "blat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
-      printf $fh "transBlat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
-      printf $fh "isPcr %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
+      printf $fh "blat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount]+$hugeGenome;
+      printf $fh "transBlat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount]+$hugeGenome;
+      printf $fh "isPcr %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount]+$hugeGenome;
     }
     foreach my $otherDb (sort keys %liftOverGz) {
        printf $fh "liftOver.%s %s\n", $otherDb, $liftOverGz{$otherDb};
@@ -111,7 +111,7 @@ sub singleFileHub($$$$$$$$$$$$$) {
     }
     ++$fileCount;
   }
-}
+}	#	sub singleFileHub($$$$$$$$$$$$$$)
 
 ##############################################################################
 my $home = $ENV{'HOME'};
@@ -237,6 +237,11 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
      printf "%s\n", $chromAuthority;
   }
   printf "organism %s %s\n", $assemblyName, $asmDate;
+  my $hugeGenome = 0;
+  my $fourGb = 2**32 - 1;
+  my $asmSize=`ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+  chomp $asmSize;
+  $hugeGenome = 1 if ($asmSize > $fourGb);
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
   my $bigChrom=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$NF}'`;
@@ -256,9 +261,11 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   # until blat server host is ready for hgdownload, avoid these lines
   if ($blatHost ne $downloadHost) {
     if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
-      printf "blat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
-    printf "transBlat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
-      printf "isPcr $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
+      printf "blat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
+    printf "transBlat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
+      printf "isPcr $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
+    } else {
+      printf STDERR "# missing ${destDir}/$accessionId.trans.gfidx\n";
     }
   }
   printf "\n";
@@ -281,7 +288,8 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
 
   singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId, $asmDate,
-	$defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority);
+	$defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority,
+           $hugeGenome);
 
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
@@ -308,9 +316,9 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   # until blat server host is ready for hgdownload, avoid these lines
   if ($blatHost ne $downloadHost) {
     if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
-      printf GF "blat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
-      printf GF "transBlat $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
-     printf GF "isPcr $blatHost$blatHostDomain $blatPort dynamic $accessionDir/$accessionId\n";
+      printf GF "blat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
+      printf GF "transBlat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
+     printf GF "isPcr $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
     }
   }
   close (GF);

@@ -407,7 +407,7 @@ touch /data/mysql/hg38/gtexGeneV8.{MYI,MYD,frm}
 touch /data/mysql/hgFixed/gtexTissueV8.{MYI,MYD,frm}
 
 # add encode cCREs track, #32440
-touch /data/mysql/hg38/encRegTfbsClusteredSources.{MYi,MYD,frm}
+touch /data/mysql/hg38/encRegTfbsClusteredSources.{MYI,MYD,frm}
 
 # Feb 2021, knownCds is required for knownGene display
 for db in hg38 mm10; do
@@ -480,6 +480,7 @@ if [ "$1" != "hgwdev" ] ; then
   echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/ --exclude hubSearch* --exclude tableDescriptions* --exclude hubSearchText* --exclude gbNode* --exclude geoIp* ; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
   mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
+  mysql hgcentral -e 'UPDATE blatServers SET host=replace(host,".soe.ucsc.edu.soe.ucsc.edu", ".soe.ucsc.edu");'
   # the box does not officially support the HAL right now, remove the ecoli hubs
   mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
 fi
@@ -529,6 +530,8 @@ mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
 mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
+mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
+mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
 
 # temporary fix for hgdownload problem, Oct 2014
 ls /data/mysql/eboVir3 > /dev/null 2> /dev/null && mysql eboVir3 -e 'drop table if exists history'
@@ -576,5 +579,6 @@ fi
 ln -sf /data/gbdb /gbdb
 
 touch /root/lastUpdateTime.flag
+rm -f /usr/local/apache/trash/registration.txt
 echo - GBiB update done
 cat /etc/issue | tr -s '\n'

@@ -122,10 +122,19 @@ dasHelp("UCSC DAS Server.\n"
     "(http://genome.ucsc.edu/FAQ/FAQdownloads#download29).\n\n"
     "Note that DAS is an inefficient protocol which does not support\n"
     "all types of annotation in our database.  We recommend you\n"
-    "access the UCSC database by downloading the tab-separated files in\n"
+    "1) use our API at https://api.genome.ucsc.edu/\n"
+    "2) access the UCSC database by downloading the tab-separated files in\n"
     "the downloads section (http://hgdownload.soe.ucsc.edu/downloads.html)\n"
-    "or by using the Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
-    "instead of DAS in most circumstances.");
+    "3) use the Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
+    "instead of DAS in most circumstances.\n"
+    "4) alternatively, use our command line tools. They can all load data directly from a URL,\n"
+    "e.g. \n"
+    "  wget https://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa\n"
+    "  chmod a+x twoBitToFa\n"
+    "  twoBitToFa https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/latest/hg38.2bit -bed=test.bed out.fa\n"
+    "See also the 'Data Access' section of any genome browser track with details on how to\n"
+    "access the annotation data using our tools or contact us by email so we can suggest the fastest way forward..\n"
+    );
 exit(0);
 }
 
@@ -1097,10 +1106,6 @@ if (cgiVarExists("verbose"))
     verboseSetLevel(cgiInt("verbose"));
 if (argc == 2)
     path = argv[1];
-/* Temporary measure to shut down abusive clients */
-#if 0
-   blockHog("pix39.systemsbiology.net", "198.107.152.39");
-#endif
 
 int delay = hgBotDelayTimeFrac(0.03);
 if (delay > 2000)

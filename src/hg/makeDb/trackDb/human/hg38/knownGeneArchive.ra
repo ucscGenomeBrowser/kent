@@ -80,3 +80,85 @@ html ../../knownGeneArchive
     intronGap 12
     defaultLinkedTables kgXref
 
+    track knownGeneV43
+    #table knownGene
+    shortLabel GENCODE V43
+    longLabel GENCODE V43
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred
+    bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV43
+    maxItems 50000
+    html knownGeneV43
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+    squishyPackPoint 2
+    squishyPackField rank
+
+    track knownGeneV44
+    #table knownGene
+    shortLabel GENCODE V44
+    longLabel GENCODE V44
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred knownGenePep knownGeneMrna
+    bigDataUrl /gbdb/hg38/gencode/gencodeV44.bb
+    #downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV44
+    maxItems 50000
+    html knownGeneV44
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+    squishyPackPoint 1
+    squishyPackField rank
+    squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
+
+    track knownGeneV45
+    #table knownGene
+    shortLabel GENCODE V45
+    longLabel GENCODE V45
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred knownGenePep knownGeneMrna
+    bigDataUrl /gbdb/hg38/gencode/gencodeV45.bb
+    #downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV45
+    maxItems 50000
+    html knownGeneV45
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+    squishyPackPoint 1
+    squishyPackField rank
+    squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
+

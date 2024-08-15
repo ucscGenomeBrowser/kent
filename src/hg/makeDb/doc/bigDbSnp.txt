@@ -500,6 +500,107 @@
     grep otherMapErr hg38.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
 #86636
 
+
+# Partial redo 2024-03-08 similar to Galt's dbSnp155 partial redo 2023-03-26 below, to fix the same
+# comma-parsing problem with clinicalSignificance -- see RM #33070.  Finished 2024-03-14.
+    topDir=/hive/data/outside/dbSNP/153
+    freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+        -assemblyList=GRCh37.p13,GRCh38.p12 -debug
+
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2024-03-08
+
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2024-03-08
+
+    # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2019-08-07/split split
+    rmdir splitProcessed
+    ln -s ../bigDbSnp.2019-08-07/splitProcessed splitProcessed
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+        -assemblyList=GRCh37.p13,GRCh38.p12 \
+        -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+    # It failed at the fixHg19ChrM step because the script expects chrom to be "chrMT" but instead
+    # it's "NC_012920.1".  Maybe things changed after b153?  Anyway, run these modified commands
+    # in place of doFixHg19ChrM.sh:
+# For hg19, liftOver chrMT annotations to hg19 chrM.
+sed -e 's/NC_012920 /NC_012920.1 /' \
+  /hive/data/outside/dbSNP/131/human/NC_012920ToChrM.over.chain \
+  > hg19.mitoLiftover.chain
+# For liftOver, convert 0-base fully-closed to 0-based half-open because liftOver
+# doesn't deal with 0-base items.
+# already done: mv hg19.dbSnp153.bigDbSnp hg19.preChrMFix.dbSnp153.bigDbSnp
+time (grep ^NC_012920.1 hg19.preChrMFix.dbSnp153.bigDbSnp \
+      | awk -F$'\t' 'BEGIN{OFS="'$'\t''";} {$3 += 1; print;}' \
+      | liftOver -tab -bedPlus=3 stdin \
+          hg19.mitoLiftover.chain stdout chrM.unmapped \
+      | awk -F$'\t' 'BEGIN{OFS="'$'\t''";} {$3 -= 1; print;}' \
+      | sort -k2n,2n \
+        > hg19.chrM.dbSnp153.bigDbSnp)
+#real    4m20.207s
+wc -l hg19.chrM.dbSnp153.bigDbSnp chrM.unmapped
+#  3312 hg19.chrM.dbSnp153.bigDbSnp
+#    14 chrM.unmapped
+# 7 "Partially deleted in new" items
+time grep -v ^NC_012920.1 hg19.preChrMFix.dbSnp153.bigDbSnp \
+     | sort --merge -k1,1 -k2n,2n - hg19.chrM.dbSnp153.bigDbSnp \
+       > hg19.dbSnp153.bigDbSnp
+#real    5m21.835s
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+        -assemblyList=GRCh37.p13,GRCh38.p12 \
+        -buildDir=`pwd` -continue check -stop install \
+      >& do2.log &
+    tail -f do2.log
+# *** All done !  (through the 'install' step)  Elapsed time: 177m56s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2024-03-08
+
+    # Ah, but the compare-bot, Gerardo and Lou found that dbSnp153Common lost some items --
+    # it turned out that no indels made it into dbSnp153Common due to a change for 155 in
+    # dbSnpJsonToTab.c that broke something else for 153.  Run again (but repeat the manual
+    # version of the fixHg19ChrM step.
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+        -assemblyList=GRCh37.p13,GRCh38.p12 \
+        -buildDir=`pwd` -continue convert -stop mergeChroms \
+      >& do.log &
+    tail -f do.log
+# *** All done !  (through the 'mergeChroms' step)  Elapsed time: 164m12s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2024-03-08
+
+# For hg19, liftOver chrMT annotations to hg19 chrM.
+sed -e 's/NC_012920 /NC_012920.1 /' \
+  /hive/data/outside/dbSNP/131/human/NC_012920ToChrM.over.chain \
+  > hg19.mitoLiftover.chain
+# For liftOver, convert 0-base fully-closed to 0-based half-open because liftOver
+# doesn't deal with 0-base items.
+mv hg19.dbSnp153.bigDbSnp hg19.preChrMFix.dbSnp153.bigDbSnp
+time (grep ^NC_012920.1 hg19.preChrMFix.dbSnp153.bigDbSnp \
+      | awk -F$'\t' 'BEGIN{OFS="'$'\t''";} {$3 += 1; print;}' \
+      | liftOver -tab -bedPlus=3 stdin \
+          hg19.mitoLiftover.chain stdout chrM.unmapped \
+      | awk -F$'\t' 'BEGIN{OFS="'$'\t''";} {$3 -= 1; print;}' \
+      | sort -k2n,2n \
+        > hg19.chrM.dbSnp153.bigDbSnp)
+#real    4m44.075s
+wc -l hg19.chrM.dbSnp153.bigDbSnp chrM.unmapped
+#  3312 hg19.chrM.dbSnp153.bigDbSnp
+#    14 chrM.unmapped
+# 7 "Partially deleted in new" items
+time grep -v ^NC_012920.1 hg19.preChrMFix.dbSnp153.bigDbSnp \
+     | sort --merge -k1,1 -k2n,2n - hg19.chrM.dbSnp153.bigDbSnp \
+       > hg19.dbSnp153.bigDbSnp
+#real    5m58.364s
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+        -assemblyList=GRCh37.p13,GRCh38.p12 \
+        -buildDir=`pwd` -continue check -stop install \
+      >& do2.log &
+    tail -f do2.log
+# *** All done !  (through the 'install' step)  Elapsed time: 176m58s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2024-03-08
+
+
 ##############################################################################
 # dbSnp155: dbSNP build 155 (IN-PROGRESS 11/25/19 galt)
 
@@ -880,5 +981,16 @@ redoing for 2023-03-26
  *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
 
     # checked errors and warnings, did not see anything concerning.
+
+#############################################################################
+
+H3AFRICA is the dbsnp study with african variants that we want.
+
+https://h3africa.org/
+
+v155 and v156 did not have H3AFRICA.
+
+V156 is still the latest release at this time (2024-06-10)
+
 
 #############################################################################

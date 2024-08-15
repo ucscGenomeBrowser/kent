@@ -18,7 +18,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "getRnaPred - Get virtual RNA for gene predictions\n"
+  "getRnaPred - Get genome putative RNA for gene predictions\n"
   "usage:\n"
   "   getRnaPred [options] database table chromosome output.fa\n"
   "table can be a table or a file.  Specify chromosome of 'all' to\n"
@@ -32,7 +32,7 @@ errAbort(
   "      acc  start  end\n"
   "    where start..end are genbank style, one-based coordinates\n"
   "   -keepMasking - un/masked in upper/lower case.\n"
-  "   -pslOut=psl - output a PSLs for the virtual mRNAs.  Allows virtual\n"
+  "   -pslOut=psl - output a PSLs for the genomic mRNAs.  Allows \n"
   "    mRNA to be analyzed by tools that work on PSLs\n"
   "   -suffix=suf - append suffix to each id to avoid confusion with mRNAs\n"
   "    use to define the genes.\n"
@@ -205,7 +205,7 @@ if (cdsFh != NULL)
 }
 
 void writePsl(char *db, struct genePred *gp, FILE* pslFh)
-/* create a PSL for the virtual mRNA */
+/* create a PSL for the genomic mRNA */
 {
 int rnaSize = genePredBases(gp);
 int qStart = 0, iExon;

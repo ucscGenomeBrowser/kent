@@ -67,6 +67,9 @@ BA.2:
              103, 110, 119, 121, 154, 162, 164, 214, 228, 239,
              # amplicon dropout (there are so many more; omitting to avoid recombinant trouble)
              22786, 22882, 23854,
+             # Recurrent multi-muts / misaligned insertions
+             # https://github.com/cov-lineages/pango-designation/issues/2327#issuecomment-1763481773
+             28245, 28251, 28254,
              # 3' UTR
              29760, 29762, 29764,
              29766,                   # only Luxembourg, made a mini-BA.2
@@ -97,6 +100,51 @@ BN.1.2.3:
     representative: England/QEUH-326228D4/2022
     sites: [ 337 # https://github.com/cov-lineages/pango-designation/issues/2016#issuecomment-1626159006
            ]
+
+BA.2.86:
+    # Inherits from BA.2
+    # @Over-There-Is requested 21610 - very messy indeed.
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606#issuecomment-1801095482
+    # @aviczhl2 pointed out some recurring reversions:
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
+    representative: Denmark/DCGC-661170/2023
+    ranges: [ [ 21294, 21296 ],  # run of muts, makes a mini-JN.1
+              [ 21539, 21542 ],  # run of muts, France/...-HCL, makes a mini-JN.1
+              [ 21765, 21770 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
+              [ 21610, 21624 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1347
+              [ 21625, 21626 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+                                 # 21627 taken back out 2024-05-26 by email request from FedeGueli
+              [ 21628, 21631 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+              [ 22194, 22196 ] ] # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+    sites: [ 58, 59,   # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1089
+             13427,    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1313
+             21302, 21304, 21305, # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1190
+           ]
+    reversions: [ T21711C, C22032T, A22033C, G22034A, A22770G, A23012G, G26610A,
+                  # Added 2024-03-01 because they're causing reversion branches with >= 100 samples.
+                  # Unfortunately 6183 and 9142 will be incorrect in XDD, XDR, XDS.
+                  T2790C, T4321C, G6183A, T9142C, C13339T, A22353C, G22556A, C22577G, T22674C,
+                  T22686C, G22688A, T22813G, C22895G, A22896T, A22898G, T22916C, G22917T, A22942T,
+                  A23005T, C23075T, G23599T, G23604C, T24378C, T26858C,
+                  # Added 2024-04-15 by request from Cornelius Roemer, doesn't affect currently
+                  # designated recombinants fortunately:
+                  T21941G,
+                ]
+
+JN.1:
+    # Inherits from BA.2.86
+    representative: Denmark/DCGC-661561/2023
+    ranges: [ [ 23008, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
+            ]
+    sites: [ 1871,          # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1466
+             17562,         # very homoplasic (or systematic error?) in JN.1, email from FedeGueli
+           ]
+
+KP.1:
+    # Inherits from JN.1
+    representative: England/CLIMB-CM7YEN1U/2024
+    reversions: [ T17334G        # Reversion of JN.1.11.1 mutation, email from FedeGueli
+                ]
 
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
@@ -163,9 +211,26 @@ XBB.1.5:
     representative: England/BRBR-32671539/2022
     reversions: [ T27915G ]
 
+GE.1.2.1:
+    # Inherits from XBB (GE is XBB.2.3.10).
+    # https://github.com/cov-lineages/pango-designation/commit/cb172ab49c31a1a12f774ddf00247e8c8e6985f3
+    representative: Netherlands/NH-RIVM-135739/2023
+    sites: [ 27383, 27384, 27385, 27395, 27431, 27688, 27810, 28218 ]
+
 XBC:
     # Inherits nothing!  Should find out its deletions.
+    # Deletion 22289-22294 pointed out in #2405.
     # Cornelius Roemer requested to mask several reversions in
     # https://github.com/cov-lineages/pango-designation/issues/1100#issuecomment-1426502678
     representative: Philippines/PH-VUI-142736/2022
+    ranges: [ [ 22289, 22294 ] ]
     reversions: [ G5584A, T13019C, T22329C, T25000C, C27718T, T28271A ]
+
+XCK:
+    # Inherits from XBB.1.5
+    # @FedeGueli pointed out that the usher tree had a very flaky 29729. TL;DR mafft is counfounding
+    # two nearby deletions, a new 29726 and the old 29734-29759, and making a false subst by getting
+    # the deletion boundaries wrong.  Mask 29729 here.
+    representative: USA/TX-CDC-QDX84451512/2023
+    representativeBacktrack: 2
+    sites: [ 29729 ]

@@ -598,7 +598,7 @@ if (tdb->parent)
     }
 }
 
-struct dyString *trackDbString(struct trackDb *tdb)
+static struct dyString *trackDbString(struct trackDb *tdb)
 /* Convert a trackDb entry into a dyString. */
 {
 struct dyString *dy;

@@ -1,10 +1,10 @@
 track knownGene
-shortLabel GENCODE VM33
-longLabel GENCODE VM33
+shortLabel GENCODE VM35
+longLabel GENCODE VM35
 priority 1
 visibility pack
 type bigGenePred
-bigDataUrl /gbdb/mm39/gencode/gencodeVM33.bb
+bigDataUrl /gbdb/mm39/gencode/gencodeVM35.bb
 baseColorDefault genomicCodons
 group genes
 isGencode3 on
@@ -12,14 +12,14 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-#externalDb knownGeneVM33
+#externalDb knownGeneVM35
 maxItems 50000
-html knownGeneVM33
+html knownGeneVM35
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
-pennantIcon Updated red ../goldenPath/newsarch.html#090723 "Updated Sep. 7, 2023"
+pennantIcon Updated red ../goldenPath/newsarch.html#052224 "Updated May. 22, 2024"
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -35,6 +35,6 @@ searchTable knownGene
 searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
-searchTrix /gbdb/mm39/knownGeneFastVM33.ix
+searchTrix /gbdb/mm39/knownGeneFastVM35.ix
 doPage 1
 

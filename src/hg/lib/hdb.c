@@ -1405,7 +1405,7 @@ return hDnaFromSeq(db, chromName, 0, size, dnaLower);
 struct slName *hAllChromNames(char *db)
 /* Get list of all chromosome names in database. */
 {
-if (trackHubDatabase(db))
+if (trackHubDatabase(db) || hubConnectIsCurated(trackHubSkipHubName(db)))
     return trackHubAllChromNames(db);
 struct slName *list = NULL;
 struct sqlConnection *conn = hAllocConn(db);
@@ -3706,7 +3706,7 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist in %s database, or hFindTableInfoDb failed", rootTable, db);
+    warn("hExtendedRangeQuery: table %s doesn't exist in %s database, or hFindTableInfoWithConn failed", rootTable, db);
     }
 else
     {
@@ -3848,7 +3848,7 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
+boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
                               struct trackDb **tdbList, struct hash *loaded)
 /* Load a trackDb table, including handling profiles:tbl. Returns
  * TRUE if table exists */
@@ -3883,7 +3883,7 @@ hFreeConn(&conn);
 return exists;
 }
 
-static struct trackDb *loadTrackDb(char *db, char *where)
+struct trackDb *loadTrackDb(char *db, char *where)
 /* Load each trackDb table.  Will put supertracks in parent field of given tracks but
  * these are still in track list. */
 {
@@ -3961,7 +3961,16 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost))
+// normally we trust trackDb, but sometimes we don't!
+static boolean checkedTrust = FALSE;
+static boolean trustTrackDb = TRUE;
+if (!checkedTrust)
+    {
+    trustTrackDb = cfgOptionBooleanDefault("trustTrackDb", FALSE);
+    checkedTrust = TRUE;
+    }
+
+if ((!tdb->private || privateHost) && (trustTrackDb || trackDataAccessible(database, tdb)) )
     {
     // we now allow references to native tracks in track hubs (for track collections)
     // so we need to give the downstream code the table name if there is no bigDataUrl.

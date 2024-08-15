@@ -19,18 +19,6 @@ visibility hide
 track mrna override
 priority 2.1
 
-track ncbiRefSeqSelect
-parent refSeqComposite off
-priority 8
-type genePred
-shortLabel RefSeq Select
-longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
-trackHandler ncbiRefSeq
-idXref ncbiRefSeqLink mrnaAcc name
-color 20,20,160
-baseColorUseCds given
-baseColorDefault genomicCodons
-
 searchTable gold
 shortCircuit 1
 termRegex [ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?
@@ -40,7 +28,6 @@ searchPriority 8
 #include evaSnp.ra
 include xenoRefGene.ra
 include trackDb.35way.ra
-include ../../refSeqComposite.ra
 include trackDb.chainNet.ra
 include trackDb.syntenicNet.ra alpha
 include trackDb.rbestNet.ra alpha
@@ -57,7 +44,8 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=2&experiment_id=$<experimentId>
 type bigBed 9 +
-urlLabel Vista Enhancer Browser
+urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm39/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon New red ../goldenPath/newsarch.html
+
+include ../refSeqComposite.mm10.mm39.ra

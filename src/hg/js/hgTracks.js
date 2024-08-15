@@ -716,9 +716,19 @@ var posting = {
         var done = false;
         // if we clicked on a merged item then show all the items, similar to clicking a
         // dense track to turn it to pack
-        if (this && this.href && this.href.indexOf("i=mergedItem") !== -1) {
-            var id = this.href.slice(this.href.indexOf("&g="));
-            id = id.split(/&[^=]+=/)[1];
+        if (!(this && this.href)) {
+            writeToApacheLog(`no href for mapClk, this = `);
+        }
+        let parsedUrl = parseUrl(this.href);
+        let cgi = parsedUrl.cgi;
+
+        // for some reason, '-' characters are encoded here? unencode them so lookups into
+        // hgTracks.trackDb will work
+        let id = "";
+        if (typeof parsedUrl.queryArgs.g !== "undefined") {
+            id = parsedUrl.queryArgs.g.replace("%2D", "-");
+        }
+        if (parsedUrl.queryArgs.i === "mergedItem") {
             updateObj={};
             updateObj[id+".doMergeItems"] = 0;
             hgTracks.trackDb[id][id+".doMergeItems"] = 0;
@@ -727,47 +737,38 @@ var posting = {
             return false;
         }
 
-        if (false && imageV2.inPlaceUpdate) {
-            // XXXX experimental and only turned on in larrym's tree.
-            // Use in-place update if the map item just modifies the current position (this is nice
-            // because it's faster and preserves the users relative position in the track image).
-            //
-            // First test handles next/prev item.
-            var str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)" +
-                                                                    "&(hgt.(next|prev)Item=[^&]+)";
-            var reg = new RegExp(str);
-            var a = reg.exec(this.href);
-            if (a && a[1] && a[1] === hgTracks.chromName) {
-                imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]) + 
-                                                                            "&" + a[4], null, true);
-                done = true;
-            } else {
-                // handle next/prev exon
-                str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)$";
-                reg = new RegExp(str);
-                a = reg.exec(this.href);
-                if (a && a[1]) {
-                    imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]), 
-                                                                                        null, true);
-                    done = true;
-                } else {
-                    // handle toggle visibility.
-                    // Request may include a track set, so we cannot use requestImgUpdate.
-                    str = "/cgi-bin/hgTracks\\?(position=[^:]+:.+&hgsid=\\d+&([^=]+)=([^&]+))$";
-                    reg = new RegExp(str);
-                    a = reg.exec(this.href);
-                    if (a && a[1]) {
-                        imageV2.navigateInPlace(a[1], null, true);
-                        // imageV2.requestImgUpdate(a[1], a[1] + "=" + a[2], "", a[2]);
-                        done = true;
-                    }
-                }
-            }
-        }
         if (done)
             return false;
-        else
-            return posting.saveSettings(this);
+        else {
+            // first check if we are allowed to click, we could be in the middle
+            // of a drag select
+            if (posting.blockUseMap === true) {
+                return false;
+            } else if (cgi === "hgGene") {
+                id = parsedUrl.queryArgs.hgg_type;
+                popUpHgcOrHgGene.hgc(id, this.href);
+                return false;
+            } else if (cgi === "hgTrackUi") {
+                rec = hgTracks.trackDb[id];
+                if (rec && tdbIsLeaf(rec)) {
+                    popUp.hgTrackUi(id, false);
+                } else {
+                    location.assign(href);
+                }
+            } else if (cgi === "hgc") {
+                if (id.startsWith("multiz")) {
+                    // multiz tracks have a form that lets you change highlighted bases
+                    // that does not play well in a pop up
+                    location.assign(href);
+                    return false;
+                }
+                popUpHgcOrHgGene.hgc(id, this.href);
+                return false;
+            } else {
+                // must be changing the density of a track, save the settings and post the form:
+                return posting.saveSettings(this);
+            }
+        }
     },
 
     saveSettings: function (obj)
@@ -1014,8 +1015,8 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
-    hlColorDefault: '#aaedff', // default highlight color, if nothing specified
-    hlColor :       '#aaedff', // current highlight color
+    hlColor :       '#aac6ff', // current highlight color
+    hlColorDefault: '#aac6ff', // default highlight color, if nothing specified
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
@@ -1175,22 +1176,14 @@ var dragSelect = {
                              "<li>Using the keyboard, highlight the current position with <tt>h then m</tt>" +
                              "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
-                             "</ul></p>" +
-                             "<p>Highlight color: <input type='text' style='width:70px' id='hlColorInput' value='"+dragSelect.loadHlColor()+"'>" +
-                             "&nbsp;&nbsp;<input id='hlColorPicker'>" + 
-                             "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
-                             "<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
+                             "</ul></p>");
+            makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);
+            $("#dragSelectDialog").append("<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
                              "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
                              "Selected chromosome position: <span id='dragSelectPosition'></span>");
             dragSelectDialog = $("#dragSelectDialog")[0];
             // reset value
-            $('#hlReset').click(function() { 
-                var hlDefault = dragSelect.hlColorDefault;
-                $('#hlColorInput').val(hlDefault);
-                $("#hlColorPicker").spectrum("set", hlDefault);
-                dragSelect.saveHlColor(hlDefault);
-            });
             // allow to click checkbox by clicking on the label
             $('#hlNotShowAgainMsg').click(function() { $('#disableDragHighlight').click();});
             // click "add highlight" when enter is pressed in color input box
@@ -1199,21 +1192,7 @@ var dragSelect = {
                     $(".ui-dialog-buttonset button:nth-child(3)").click();
                 }
             });
-            // activate the color picker
-            var opt = {
-                hideAfterPaletteSelect : true,
-                color : $('#hlColorInput').val(),
-                showPalette: true,
-                showInput: true,
-                preferredFormat: "hex",
-                change: function() { var color = $("#hlColorPicker").spectrum("get"); $('#hlColorInput').val(color); },
-                };
-            $("#hlColorPicker").spectrum(opt);
-            // update the color picker if you change the input box
-            $("#hlColorInput").change(function(){ $("#hlColorPicker").spectrum("set", $('#hlColorInput').val()); });
         }
-
-        $("#hlColorPicker").spectrum("set", $('#hlColorInput').val());
 
         if (hgTracks.windows) {
             var i,len;
@@ -1324,14 +1303,6 @@ var dragSelect = {
         });
         $(dragSelectDialog).dialog('open');
         
-        // put the cursor into the input field
-        // we are not doing this for now - default behavior was to zoom when enter was pressed
-        // so people may still expect that "enter" on the dialog will zoom.
-        //var el = $("#hlColorInput")[0];
-        //el.selectionStart = 0;
-        //el.selectionEnd = el.value.length;
-        //el.focus();
-
     },
 
     selectEnd: function (img, selection, event)
@@ -2228,6 +2199,13 @@ var rightClick = {
         // by prompt in IE 7+.   Callback is called if user presses "OK".
         $("body").append("<div id = 'myPrompt'><div id='dialog' title='Basic dialog'><form>" +
                             msg + "<input id='myPromptText' value=''></form>");
+        $('#myPromptText').bind('keypress', function(e) {
+            if (e.which === 13) {  // listens for return key
+                e.preventDefault();   // prevents return from also submitting whole form
+                $("#myPrompt").dialog("close");
+                callback($("#myPromptText").val());
+            }
+        });
         $("#myPrompt").dialog({
                                 modal: true,
                                 closeOnEscape: true,
@@ -2379,10 +2357,10 @@ var rightClick = {
         } else if (cmd === 'zoomCodon' || cmd === 'zoomExon') {
             var num, ajaxCmd, msg;
             if (cmd === 'zoomCodon') {
-                msg = "Please enter the codon number to jump to:";
+                msg = "Please enter the codon number to zoom to:";
                 ajaxCmd = 'codonToPos';
             } else {
-                msg = "Please enter the exon number to jump to:";
+                msg = "Please enter the exon number to zoom to:";
                 ajaxCmd = 'exonToPos';
             }
             rightClick.myPrompt(msg, function(results) {
@@ -2506,10 +2484,9 @@ var rightClick = {
                 }
             }
             if (cmd === 'followLink') {
-                // XXXX This is blocked by Safari's popup blocker (without any warning message).
-                location.assign(href);
+                popUpHgcOrHgGene.hgc(rightClick.selectedMenuItem.id, href);
             } else {
-                // Remove hgsid to force a new session (see redmine ticket 1333).
+                // XXXX This is blocked by Safari's popup blocker (without any warning message).
                 href = removeHgsid(href);
                 if ( ! window.open(href) ) {
                     rightClick.windowOpenFailedMsg();
@@ -2859,7 +2836,8 @@ var rightClick = {
                                         return true;
                                     }
                                 };
-                            if (rightClick.supportZoomCodon && rec.type.indexOf("genePred") !== -1) {
+                            if (rightClick.supportZoomCodon &&
+                                    (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
@@ -2886,15 +2864,8 @@ var rightClick = {
                                     }
                                 }
                                 if (name && table) {
-                                    o[rightClick.makeImgTag("magnify.png")+" Zoom to codon"] =
-                                    {   onclick: function(menuItemClicked, menuObject) {
-                                            rightClick.hit(menuItemClicked, menuObject,
-                                                        "zoomCodon",
-                                                        {name: name, table: table});
-                                            return true;}
-                                    };
                                     if (exonNum > 0) {
-                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
+                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to this exon"] = {
                                             onclick: function(menuItemClicked, menuObject) {
                                                 $.ajax({
                                                         type: "GET",
@@ -2908,6 +2879,20 @@ var rightClick = {
                                                         cache: true
                                                     });
                                                 return true; }
+                                        };
+                                    o[rightClick.makeImgTag("magnify.png")+" Enter codon to zoom to..."] =
+                                    {   onclick: function(menuItemClicked, menuObject) {
+                                            rightClick.hit(menuItemClicked, menuObject,
+                                                        "zoomCodon",
+                                                        {name: name, table: table});
+                                            return true;}
+                                    };
+                                        o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom to..."] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "zoomExon",
+                                                            {name: name, table: table});
+                                                return true;}
                                         };
                                     }
                                 }
@@ -3381,6 +3366,228 @@ var popUpHgt = {
     }
 };
 
+var popUpHgcOrHgGene = {
+
+    whichHgcMethod: "", // either hgc or hgGene or whatever else
+    table: "", // the g= parameter
+    title: "",
+    saveAllVars: null, // when a click brings up hgTrackUi or something else with a form
+    loadingId: null, // the id of the loading overlay
+    href: "", // the link we're populating the pop up with
+
+    cleanup: function ()
+    {  // Clean out the popup box on close
+        if ($('#hgcDialog').html().length > 0 ) {
+            // clear out html after close to prevent problems caused by duplicate html elements
+            $('#hgcDialog').html("");
+            popUpHgcOrHgGene.whichHgcMethod = "";
+            popUpHgcOrHgGene.title = "";
+            popUpHgcOrHgGene.table = "";
+            if (loadingId) {
+                hideLoadingImage(loadingId);
+            }
+        }
+    },
+
+    _uiDialogRequest: function (table, href)
+    { // popup cfg dialog
+        let cgi = parseUrl(href).pathInfo.split('/')[1];
+        popUpHgcOrHgGene.whichHgcMethod = cgi;
+        // the table name gets passed in
+        popUpHgcOrHgGene.table = table;
+        popUpHgcOrHgGene.title  = hgTracks.trackDb[table].shortLabel;
+        popUpHgcOrHgGene.href = href;
+        var rec = hgTracks.trackDb[table];
+        if (popUpHgcOrHgGene.whichHgcMethod === "hgTrackUi" && rec && rec.configureBy) {
+            if (rec.configureBy === 'none')
+                return;
+            else if (rec.configureBy === 'clickThrough') {
+                window.location = cart.addUpdatesToUrl(href);
+                return;
+            }  // default falls through to configureBy popup
+        }
+        loadingId = showLoadingImage("imgTbl");
+        $.ajax({
+                    type: "GET",
+                    url: cart.addUpdatesToUrl(href),
+                    dataType: "html",
+                    trueSuccess: popUpHgcOrHgGene.uiDialog,
+                    success: catchErrorOrDispatch,
+                    error: errorHandler,
+                    loadingId: loadingId,
+                    cache: true
+                });
+    },
+
+    hgc: function (table, url)
+    {   // Launches the popup but shields the ajax with a waitOnFunction
+        if (typeof doHgcInPopUp !== 'undefined' && doHgcInPopUp === true) {
+            waitOnFunction(popUpHgcOrHgGene._uiDialogRequest, table, url);
+        } else {
+            window.location = cart.addUpdatesToUrl(url);
+        }
+    },
+
+    uiDialogOk: function (trackName)
+    {
+        // See popUp.uiDialogOk for a detailed explanation of the below vis-setting
+        // code
+        var rec = hgTracks.trackDb[trackName];
+        var subtrack = tdbIsSubtrack(rec) ? trackName : undefined;  // subtrack vis rules differ
+        var allVars = getAllVars($('#hgcDialog'), subtrack );
+        var changedVars = varHashChanges(allVars,popUpHgcOrHgGene.saveAllVars);
+
+        // special case these hprc tracks that allow you to turn on different tracks
+        if (trackName.startsWith("hprcDeletions") || trackName.startsWith("hprcInserts") ||
+                trackName.startsWith("hprcArr") || trackName.startsWith("hprcDouble")) {
+            trackName = "chainHprc";
+        }
+        var newVis = changedVars[trackName];
+        // subtracks do not have "hide", thus '[]'
+        var hide = (newVis && (newVis === 'hide' || newVis === '[]'));
+        if ( ! normed($('#imgTbl')) ) { // On findTracks or config page
+            if (objNotEmpty(changedVars))
+                cart.setVarsObj(changedVars);
+        }
+        else {  // On image page
+            if (hide) {
+                if (objNotEmpty(changedVars))
+                    cart.setVarsObj(changedVars);
+                $(document.getElementById('tr_' + trackName)).remove();
+                imageV2.afterImgChange(true);
+                cart.updateSessionPanel();
+            } else {
+                // Keep local state in sync if user changed visibility
+                if (newVis) {
+                    vis.update(trackName, newVis);
+                }
+                if (objNotEmpty(changedVars)) {
+                    var urlData = cart.varsToUrlData(changedVars);
+                    if (imageV2.mapIsUpdateable) {
+                        imageV2.requestImgUpdate(trackName,urlData,"fake");
+                    } else {
+                        window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                    }
+                }
+            }
+        }
+    },
+
+    uiDialog: function (response, status)
+    {
+    // Take html from hgc/hgGene and put it up as a modal dialog.
+
+        // make sure all links (e.g. help links) open up in a new window
+        //response = response.replace(/<a /ig, "<a target='_blank' ");
+
+        var cleanHtml = response;
+        cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
+        cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
+        var nonceJs = {};
+        cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
+        cleanHtml = stripMainMenu(cleanHtml, false, nonceJs); // DEBUG msg with true
+
+        // this is dumb but all relative links need to be stripped of _target = blank so we
+        // can jump down the page rather than out to a new tab
+        cleanHtml = cleanHtml.replace(/_target ?= ?["']blank["']/g,"");
+
+        $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ cleanHtml +"</div>");
+        appendNonceJsToPage(nonceJs);
+        // if there is anything on the hgc page that would normally run
+        // on document.ready, run it now
+        hgc.initPage();
+        let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
+        popUpHgcOrHgGene.saveAllVars = getAllVars( $('#hgcDialog'), subtrack );
+
+
+
+        // Strategy for popups with js:
+        // - jsFiles and CSS should not be included in html.  Here they are shluped out.
+        // - The resulting files ought to be loadable dynamically (with getScript()),
+        //   but this was not working nicely with the modal dialog
+        //   Therefore include files must be included with hgc CGI !
+        // - embedded js should not be in the popup box.
+        // - Somethings should be in a popup.ready() function, and this is emulated below,
+        //   as soon as the cleanHtml is added
+        //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
+
+        // -- popup.ready() -- Here is the place to do things that might otherwise go
+        //                     into a $('#pop').ready() routine!
+
+        // Searching for some semblance of size suitability
+        var popMaxHeight = (window.innerHeight - (window.innerHeight * 0.15)); // make 15% of the bottom of the screen still visible
+        var popMaxWidth     = (window.innerWidth - (window.innerWidth * 0.1)); // take up 90% of the window
+
+        // Create dialog buttons for UI popup
+        // this could be more buttons later
+        var uiDialogButtons = {};
+        uiDialogButtons.Close = function() {
+            // if there was a form to submit, submit it:
+            popUpHgcOrHgGene.uiDialogOk(popUpHgcOrHgGene.table);
+            $(this).dialog("close");
+        };
+
+        $('#hgcDialog').dialog({
+            resizable: true,               // Let scroll vertically
+            height: popMaxHeight,
+            width: popMaxWidth,
+            minHeight: 200,
+            minWidth: 400,
+            modal: true,
+            closeOnEscape: true,
+            autoOpen: false,
+            buttons: uiDialogButtons,
+
+            open: function (event) {
+                // fix popup to a location -- near the top and somewhat centered on the browser image
+                $(event.target).parent().css('position', 'fixed');
+                $(event.target).parent().css('top', '10%');
+                $('#hgcDialog').find('.filterBy,.filterComp').each(
+                    function(i) {  // ddcl.js is dropdown checklist lib support
+                        if ($(this).hasClass('filterComp'))
+                            ddcl.setup(this);
+                        else
+                            ddcl.setup(this, 'noneIsAll');
+                    }
+                );
+            },
+
+            close: function() {
+                popUpHgcOrHgGene.cleanup();
+            }
+        });
+        let openIcon = "<a class='dialogNewWindowIcon' target='_blank' href='" + popUpHgcOrHgGene.href + "'><svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg></a>";
+        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel + " (Item Details)" + openIcon;
+
+        $('#hgcDialog').dialog('option' , 'title', titleText);
+        $('#hgcDialog').dialog('open');
+        document.addEventListener('click', e => {
+            // if we clicked outside of the pop up, close the popup:
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            popUpBox = document.getElementById("hgcDialog").parentElement.getBoundingClientRect();
+            if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
+                    mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
+                $("#hgcDialog").dialog("close");
+            }
+        });
+
+        // Customize message based on current mode
+        // Make 'Cancel' button close dialog
+        $('input[name="Cancel"]').click(function() {
+            $('#hgcDialog').dialog('close');
+        });
+    }
+};
+
+// Show the exported data hubs popup
+function showExportedDataHubsPopup() {
+    let popUp = document.getElementById("exportedDataHubsPopup");
+    title = popUp.title;
+    if (title.length === 0 && popUp.getAttribute("mouseovertext") !== "") {title = popUp.getAttribute("mouseovertext");}
+    $('#exportedDataHubsPopup').dialog({width:'650', title: title});
+}
+
 // Show the recommended track sets popup
 function showRecTrackSetsPopup() {
     // Update links with current position
@@ -3389,7 +3596,10 @@ function showRecTrackSetsPopup() {
         var link = $this.attr("href").replace(/position=.*/, 'position=');
         $this.attr("href", link + genomePos.original);
     });
-    $('#recTrackSetsPopup').dialog({width:'650'});
+    let popUp = document.getElementById("recTrackSetsPopup");
+    title = popUp.title;
+    if (title.length === 0 && popUp.getAttribute("mouseovertext") !== "") {title = popUp.getAttribute("mouseovertext");}
+    $('#recTrackSetsPopup').dialog({width:'650', title: title});
 }
 
 function removeSessionPanel() {
@@ -3840,15 +4050,27 @@ var imageV2 = {
                 suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
-                                genomePos.set(item.id, getSizeFromCoordinates(item.id));
-                                if ($("#suggestTrack").length && $('#hgFindMatches').length) {
-                                    // Set cart variables to open the hgSuggest gene track and highlight
-                                    // the chosen transcript.  These variables will be submittted by the goButton
-                                    // click handler.
-                                    vis.makeTrackVisible($("#suggestTrack").val());
-                                    cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                                        item.id.startsWith("hgc")) {
+                                    if (item.geneSymbol) {
+                                        selectedGene = item.geneSymbol;
+                                        // Overwrite item's long value with symbol after the autocomplete plugin is done:
+                                        window.setTimeout($('#positionInput').val(item.geneSymbol), 0);
+                                    } else {
+                                        selectedGene = item.value;
+                                    }
+                                    window.location.assign(item.id);
+                                } else {
+                                    genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                    if ($("#suggestTrack").length && $('#hgFindMatches').length) {
+                                        // Set cart variables to open the hgSuggest gene track and highlight
+                                        // the chosen transcript.  These variables will be submittted by the goButton
+                                        // click handler.
+                                        vis.makeTrackVisible($("#suggestTrack").val());
+                                        cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                    }
+                                    $("#goButton").click();
                                 }
-                                $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
@@ -3967,6 +4189,9 @@ var imageV2 = {
             var newJsonRec = newJson.trackDb[id];
             var oldJsonRec = oldJson.trackDb[id];
             
+            // use limitedVis as visibility if set
+            if (newJsonRec.limitedVis !== undefined)
+                newJsonRec.visibility = newJsonRec.limitedVis;
             if (newJsonRec.visibility === 0)  // hidden 'ruler' is in newJson.trackDb!
                 continue;
             if (newJsonRec.type === "remote")
@@ -4166,7 +4391,7 @@ var imageV2 = {
                 // this updates src in img_left_ID, img_center_ID and img_data_ID
                 // and map in map_data_ID
                 var id = this.id;
-                if (imageV2.updateImgForId(response, id, false)) {
+                if (imageV2.updateImgForId(response, id, false, newJson)) {
                     imageV2.afterReload(id);
                     imageV2.updateBackground(response);  // Added by galt to update window separators
                 } else {
@@ -4711,8 +4936,16 @@ var mouseOver = {
 
     // called from: updateImgForId when it has updated a track in place
     // need to refresh the event handlers and json data
-    updateMouseOver: function (trackName, trackDb)
+    updateMouseOver: function (trackName, newJson)
     {
+      if (! newJson ) { return; }
+      var trackDb = null;
+      for ( var id in newJson.trackDb ) {
+         if (id === trackName) {
+            trackDb = newJson.trackDb[id];
+            break;
+         }
+      }
       var trackType = null;
       var hasChildren = null;
       if (trackDb) {
@@ -4723,30 +4956,23 @@ var mouseOver = {
       } else if (mouseOver.trackType[trackName]) {
 	trackType = mouseOver.trackType[trackName];
       }
+      var validType = false;
+      if (trackType) {
+	if (trackType.indexOf("wig") === 0) { validType = true; }
+	if (trackType.indexOf("bigWig") === 0) { validType = true; }
+	if (trackType.indexOf("wigMaf") === 0) { validType = false; }
+	if (hasChildren) { validType = false; }
+      }
+      if (! validType ) { return; }
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
       var imgData = "img_data_" + trackName;
       var imgDataId  = document.getElementById(imgData);
       if (imgDataId && tdDataId) {
 	var url = mouseOver.jsonFileName(imgDataId);
-        if (mouseOver.tracks[trackName]) {  // > 0 -> seen before in receiveData
-            $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-            $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-            mouseOver.fetchJsonData(url);  // may be a refresh, don't know
-        } else {
-	  if (trackType) {
-            var validType = false;
-            if (trackType.indexOf("wig") === 0) { validType = true; }
-            if (trackType.indexOf("bigWig") === 0) { validType = true; }
-            if (trackType.indexOf("wigMaf") === 0) { validType = false; }
-            if (hasChildren) { validType = false; }
-            if (validType) {
-              $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-              $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-              mouseOver.fetchJsonData(url);
-            }
-          }
-        }
+        $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+        $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+        mouseOver.fetchJsonData(url);  // may be a refresh, don't know
       }
     },
 
@@ -5463,6 +5689,11 @@ $(document).ready(function()
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
 
+        if (typeof clinicalTour !== 'undefined') {
+            if (typeof startClinicalOnLoad !== 'undefined' && startClinicalOnLoad){
+                clinicalTour.start();
+            }
+        }
         // show a tutorial page if this is a new user
         if (typeof tour !== 'undefined' && tour) {
             setupSteps();
@@ -5472,13 +5703,17 @@ $(document).ready(function()
             let lsKey = "hgTracks_hideTutorial";
             let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
             let hideTutorial = localStorage.getItem(lsKey);
+            let tutMsgKey = "hgTracks_tutMsgCount";
+            let tmp = localStorage.getItem(tutMsgKey), tutMsgCount = 0;
+            if (tmp !== null) {tutMsgCount = parseInt(tmp);}
             // if the user is not logged in and they have not already gone through the
             // tutorial
-            if (!isUserLoggedIn && !hideTutorial) {
+            if (!isUserLoggedIn && !hideTutorial && tutMsgCount < 5) {
                 let msg = "A guided tutorial is available for new users: " +
                     "<button id='showTutorialLink' href=\"#showTutorial\">Start tutorial</button>";
                 notifBoxSetup("hgTracks", "hideTutorial", msg);
                 notifBoxShow("hgTracks", "hideTutorial");
+                localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").click(function() {
                     $("#hgTracks_hideTutorialnotifyHide").click();
                     tour.start();

@@ -49,9 +49,13 @@ visibility hide
 
 track decipher override
 pennantIcon snowflake.png https://www.deciphergenomics.org/about/faqs "This track on hg19 has been frozen in its current state and will receive no further updates. The hg38 version of this track is regularly updated to reflect the most recent DECIPHER release."
+longLabel DECIPHER CNVs (not updated anymore - use the hg38 track)
+html decipher.html
 
 track decipherSnvs override
 pennantIcon snowflake.png https://www.deciphergenomics.org/about/faqs "This track on hg19 has been frozen in its current state and will receive no further updates. The hg38 version of this track is regularly updated to reflect the most recent DECIPHER release."
+longLabel DECIPHER SNVs (not updated anymore - use the hg38 track)
+html decipher.html
 
 track patSeq override
 url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/${-$}?appInClaims=1
@@ -1319,9 +1323,6 @@ include altSeqComposite10.ra alpha
 
 include hg19Patch13.ra alpha
 
-track vistaEnhancers override
-url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
-
 track evofold override
 mafTrack multiz46way
 origAssembly hg17
@@ -2018,26 +2019,6 @@ track decodeRmap override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
-track knownGene
-shortLabel UCSC Genes
-longLabel UCSC Genes (RefSeq, GenBank, CCDS, Rfam, tRNAs & Comparative Genomics)
-group genes
-visibility pack
-priority 1
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-exonNumbers on
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-defaultLinkedTables kgXref
-intronGap 12
-bigGeneDataUrl /gbdb/hg19/knownGene.bb
-release beta,public
-
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA
 # UCSC Genes (rev 13).  Once UCSC Genes is released, this track can go away.
@@ -2082,7 +2063,7 @@ searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
-include knownGene.alpha.ra alpha
+include knownGene.ra
 include lincRNAs.ra
 
 track sibTxGraph override
@@ -2318,10 +2299,6 @@ track gtexTranscExpr override
 bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb
 origAssembly hg38
 
-# change these two to switch to the new refSeqComposite 2018-02
-#include trackDb.refGene.ra public
-include ../../refSeqComposite.ra
-
 track ensGene override
 ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
 
@@ -2342,6 +2319,7 @@ include hic.ra
 include exomeProbesets.ra
 include reMap.ra
 include fantom5.ra
+include predictionScoresSuper.ra
 
 track epdNew
 shortLabel EPDnew Promoters
@@ -2382,20 +2360,6 @@ altColor 128,228,128
     canPack off
     spectrum on
 
-#RefSeq Select is a subtrack part of the RefSeq Composite in ../../refSeqComposite.ra
-#For more information on this change, see RM#24787
-track ncbiRefSeqSelect
-parent refSeqComposite off
-priority 8
-type genePred
-shortLabel RefSeq Select
-longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
-trackHandler ncbiRefSeq
-idXref ncbiRefSeqLink mrnaAcc name
-color 20,20,160
-baseColorUseCds given
-baseColorDefault genomicCodons
-
 track clinGenCnv override
 filter.size 773:11309570
 filterLimits.size 773:11309570
@@ -2435,7 +2399,11 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
 type bigBed 9 +
-urlLabel Vista Enhancer Browser
+urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg19/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon New red ../goldenPath/newsarch.html
+
+track ncbiRefSeq override
+parent refSeqComposite off
+
+include ../../trackDb.mgc-orfeome.ra

@@ -1140,6 +1140,31 @@ var hgGateway = (function() {
         }
     }
 
+    function onSelectOther(item) {
+        function overwriteWithGene() {
+            $('#positionInput').val(item.geneSymbol);
+        }
+        if (item.geneSymbol) {
+            selectedGene = item.geneSymbol;
+            // Overwrite item's long value with symbol after the autocomplete plugin is done:
+            window.setTimeout(overwriteWithGene, 0);
+        } else {
+            selectedGene = item.value;
+        }
+        window.location.assign(item.id);
+    }
+
+    function onSelect(item) {
+        // Switch out to the right type of select function for the type of category
+        // match: track hits (including genes), help page, etc
+        if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                item.id.startsWith("hgc")) {
+            onSelectOther(item);
+        } else {
+            onSelectGene(item);
+        }
+    }
+
     function setAssemblyOptions(uiState) {
         var assemblySelectLabel = 'Assembly';
         if (uiState.dbOptions) {
@@ -1250,12 +1275,13 @@ var hgGateway = (function() {
                              { baseUrl: suggestUrl,
                                watermark: positionWatermark,
                                onServerReply: processHgSuggestResults,
-                               onSelect: onSelectGene,
+                               onSelect: onSelect,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
         selectedGene = null;
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
+        $('#positionInput').focus(function() {$(this).autocompleteCat("search", "");});
         if (uiState.db && $('#findPositionContents').css('display') === 'none') {
             initFindPositionContents();
         }
@@ -1461,7 +1487,10 @@ var hgGateway = (function() {
         var taxId = item.taxId || -1;
         var db = item.db;
         var org = item.org;
-        if (item.hubUrl) {
+        if (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) {
+            db = item.genome;
+            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName, true);
+        } else if (item.hubUrl) {
             // The autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;

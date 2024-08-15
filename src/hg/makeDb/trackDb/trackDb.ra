@@ -22,6 +22,10 @@ include trackDb.nt.ra
 include trackDb.genbank.ra 
 include uniprot.ra
 
+include jaspar.ra
+
+include evaSnp.ra
+
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
 # like 'hg18'.  See the README file in this directory for a description of the format.
@@ -2424,7 +2428,7 @@ searchPriority 50
 
 searchTable knownGene
 searchType knownGene
-searchPriority 1
+searchPriority 1002
 
 searchTable pseudoYaleEncode
 searchType genePred
@@ -3005,82 +3009,6 @@ longLabel Repeats by tantan
 group varRep
 visibility hide
 type bed 3 .
-
-track evaSnp
-shortLabel EVA SNP Release 3
-longLabel Short Genetic Variants from European Variant Archive Release 3
-type bigBed 9 +
-group varRep
-visibility hide
-itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
-bigDataUrl /gbdb/$D/bbi/evaSnp.bb
-url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
-filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
-filterLabel.varClass Variant class from EVA SO term
-filterLabel.ucscClass Functional effect per UCSC Variant Annotation
-filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
-filterType.ucscClass multipleListOnlyOr
-filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
-filterLabel.itemRgb General variant types by color grouping
-maxWindowCoverage 250000
-maxItems 1000000
-
-searchTable evaSnp
-searchType bigBed
-searchMethod exact
-padding 20
-
-track evaSnp4
-shortLabel EVA SNP Release 4
-longLabel Short Genetic Variants from European Variant Archive Release 4
-type bigBed 9 +
-group varRep
-visibility hide
-itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
-bigDataUrl /gbdb/$D/bbi/evaSnp4.bb
-url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
-filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
-filterLabel.varClass Variant class from EVA SO term
-filterLabel.ucscClass Functional effect per UCSC Variant Annotation
-filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
-filterType.ucscClass multipleListOnlyOr
-filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
-filterLabel.itemRgb General variant types by color grouping
-maxWindowCoverage 250000
-maxItems 1000000
-
-searchTable evaSnp4
-searchType bigBed
-searchMethod exact
-padding 20
-
-track evaSnp5
-shortLabel EVA SNP Release 5
-longLabel Short Genetic Variants from European Variant Archive Release 5
-type bigBed 9 +
-group varRep
-visibility dense
-itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
-bigDataUrl /gbdb/$D/bbi/evaSnp5.bb
-url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
-filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
-filterLabel.varClass Variant class from EVA SO term
-filterLabel.ucscClass Functional effect per UCSC Variant Annotation
-filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
-filterType.ucscClass multipleListOnlyOr
-filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
-filterLabel.itemRgb General variant types by color grouping
-maxWindowCoverage 250000
-maxItems 1000000
-pennantIcon New red ../goldenPath/newsarch.html#091923 "Released Sep. 19, 2023"
-
-searchTable evaSnp5
-searchType bigBed
-searchMethod exact
-padding 20
 
 track HLTOGAannotvHg38v1
 bigDataUrl /gbdb/$D/TOGAvHg38v1/HLTOGAannotVsHg38v1.bb

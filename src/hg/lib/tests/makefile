@@ -14,6 +14,10 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/hgvsTester \
 	${BIN_DIR}/sqlCheck 
 
+${BIN_DIR}/%: %.c ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
+
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
@@ -23,17 +27,14 @@ mkdirs:
 	@${MKDIR} output ${BIN_DIR}
 
 loaders:
-	rm -f loader
-	ln -s ${CGI_BIN}/loader .
+	ln -sf ${CGI_BIN}/loader .
 
-spDbTest: spDbTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.o ${MYLIBS} $L
+spDbTest: ${BIN_DIR}/spDbTest mkdirs
 	${BIN_DIR}/spDbTest sp121210 Q9FFH7 > output/spDbTest
 	${BIN_DIR}/spDbTest sp121210 P29312 >> output/spDbTest
 	diff expected/spDbTest output/spDbTest
 
-hdbTest: hdbTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/hdbTest hdbTest.o ${MYLIBS} $L
+hdbTest: ${BIN_DIR}/hdbTest mkdirs
 	${BIN_DIR}/hdbTest > output/hdbTest
 	diff expected/hdbTest output/hdbTest
 
@@ -48,7 +49,6 @@ pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 
 customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
-	rm -f loader
 
 hgvsTest: ${BIN_DIR}/hgvsTester mkdirs
 	${MAKE} -f hgvsTests.mk test
@@ -59,34 +59,6 @@ binTest: mkdirs ${BIN_DIR}/binTest
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
 
-
-${BIN_DIR}/genePredTester: genePredTester.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
-
-${BIN_DIR}/pslReaderTester: pslReaderTester.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
-
-${BIN_DIR}/annoGratorTester: annoGratorTester.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
-
-${BIN_DIR}/hgvsTester: hgvsTester.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
-
-${BIN_DIR}/binTest: binTest.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
-
-${BIN_DIR}/customTrackTester: customTrackTester.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
-
-${BIN_DIR}/sqlCheck: sqlCheck.o ${MYLIBS}
-	@${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 clean:
 	rm -rf *.o bin output *.tmp loader udcCache

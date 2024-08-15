@@ -16,7 +16,7 @@ compositeTrack on
     #thickDrawItem on
     itemRgb on
     denseCoverage 100
-    maxItems 50000
+    #maxItems 50000
     maxWindowCoverage 50000
     html ../reMap
     bigDataUrl /gbdb/mm39/reMap/reMap2022.bb

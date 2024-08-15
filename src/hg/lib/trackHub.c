@@ -54,17 +54,42 @@
 #include "hic.h"
 #include "hui.h"
 #include "chromAlias.h"
+#include "trashDir.h"
+#include "hgConfig.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
 
+struct grp *trackHubGrps = NULL;   // global with grps loaded from track hubs
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
 static struct hash *hubAssemblyUndecoratedHash; // mapping of undecorated assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
+
+static void tdbListAddHubToGroup(char *hubName, struct trackDb *tdbList)
+/* Prepend hub name to  group name for every tdb. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char buffer[4096];
+
+    char *grp = trackDbSetting(tdb, "group");
+    if (grp == NULL)
+        tdb->grp = cloneString(hubName);
+    else
+        {
+        safef(buffer, sizeof buffer, "%s_%s", hubName, grp);
+        tdb->grp = cloneString(buffer);
+        }
+    hashReplace(tdb->settingsHash, "group", tdb->grp);
+    }
+}
+
+
 
 char *trackHubRelativeUrl(char *hubUrl, char *path)
 /* Return full path (in URL form if it's a remote hub) given
@@ -469,7 +494,7 @@ if ((str = hashFindVal(hash, name)) == NULL)
 return str;
 }
 
-static struct grp *readGroupRa(char *groupFileName)
+struct grp *readGroupRa(char *groupFileName)
 /* Read in the ra file that describes the groups in an assembly hub. */
 {
 if (groupFileName == NULL)
@@ -479,18 +504,27 @@ struct grp *list = NULL;
 struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, MAX_HUB_GROUP_FILE_SIZE);
 while ((ra = raNextRecord(lf)) != NULL)
     {
+    char *str;
     struct grp *grp;
     AllocVar(grp);
     slAddHead(&list, grp);
 
     grp->name = cloneString(getRequiredGrpSetting(ra, "name", lf));
     grp->label = cloneString(getRequiredGrpSetting(ra, "label", lf));
-    grp->priority = atof(getRequiredGrpSetting(ra, "priority", lf));
-    grp->defaultIsClosed = sqlUnsigned(getRequiredGrpSetting(ra,"defaultIsClosed",lf));
+
+    grp->priority = BIGDOUBLE;
+    str = hashFindVal(ra, "priority");
+    if (str != NULL)
+        grp->priority = atof(str);
+
+    str = hashFindVal(ra, "defaultIsClosed");
+    if ((str != NULL) && (sameString("on",str) || sameString("1", str)))
+        grp->defaultIsClosed = 1;
     hashFree(&ra);
     }
 if (list)
-    slReverse(&list);
+    slSort(&list, grpCmpPriorityLabel);
+
 lineFileClose(&lf);
 
 return list;
@@ -621,8 +655,8 @@ while ((ra = raNextRecord(lf)) != NULL)
     if (hashFindVal(ra, "track"))
         break;
 
-    char *twoBitPath = hashFindVal(ra, "twoBitPath");
-    char *twoBitBptUrl = hashFindVal(ra, "twoBitBptUrl");
+    char *twoBitPath = hReplaceGbdb(hashFindVal(ra, "twoBitPath"));
+    char *twoBitBptUrl = hReplaceGbdb(hashFindVal(ra, "twoBitBptUrl"));
     char *genome, *trackDb;
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
@@ -681,6 +715,13 @@ while ((ra = raNextRecord(lf)) != NULL)
 	    el->groups = trackHubRelativeUrl(url, groups);
 	addAssembly(genome, el, hub);
 	}
+    else
+        {
+	if (groups != NULL)
+            {
+	    el->groups = trackHubRelativeUrl(url, groups);
+            }
+        }
     el->settingsHash = ra;
     hashAdd(ra, "hubName", hub->shortLabel);
     el->chromAuthority = hashFindVal(ra, "chromAuthority");
@@ -708,7 +749,7 @@ if (val == NULL)
 return val;
 }
 
-static struct trackHub *grabHashedHub(char *hubName)
+struct trackHub *grabHashedHub(char *hubName)
 /* see if a trackHub with this name is in the cache */
 {
 if ( trackHubHash == NULL)
@@ -963,6 +1004,7 @@ else
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigLolly", type) ||
+                  startsWithWord("bigBaseView", type) ||
                   startsWithWord("bigRmsk", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
@@ -1103,10 +1145,15 @@ validateTracks(hub, genome, tdbList);
 trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
-if (genome->twoBitPath == NULL || *foundFirstGenome)
-    trackHubAddGroupName(hub->name, tdbList);
-else
+
+if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
+else if ((genome->groups != NULL) && hubsCanAddGroups())
+    tdbListAddHubToGroup(hub->name, tdbList);
+else
+    trackHubAddGroupName(hub->name, tdbList);
+
+
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     trackDbFieldsFromSettings(tdb);
@@ -1413,4 +1460,213 @@ if (relativeUrl != NULL)
         errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
     freez(&bigDataUrl);
     }
+}
+
+static void outHubHeader(FILE *f, char *db)
+// output a track hub header
+{
+fprintf(f,"hub quickLiftHub%s\n\
+shortLabel Quicklift from %s\n\
+longLabel Quicklift from %s\n\
+useOneFile on\n\
+email genome-www@soe.ucsc.edu\n\n", db, db, db);
+fprintf(f,"genome %s\n\n", db);
+}
+
+static char *getHubName(struct cart *cart, char *db)
+// get the name of the hub to use for quickLifted tracks
+{
+struct tempName hubTn;
+char buffer[4096];
+#define quickLiftCartName     "hubQuickLift"
+safef(buffer, sizeof buffer, "%s-%s", quickLiftCartName, db);
+char *hubName = cartOptionalString(cart, buffer);
+int fd = -1;
+
+if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
+    {
+    trashDirDateFile(&hubTn, "quickLift", "hub", ".txt");
+    hubName = cloneString(hubTn.forCgi);
+    cartSetString(cart, buffer, hubName);
+    FILE *f = mustOpen(hubName, "a");
+    outHubHeader(f, db);
+    fclose(f);
+    }
+
+if (fd >= 0)
+    close(fd);
+
+cartSetString(cart, "hubUrl", hubName);
+cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
+return hubName;
+}
+
+static void dumpTdbAndParents(struct dyString *dy, struct trackDb *tdb, struct hash *existHash, struct hash *wantHash)
+/* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
+{
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {   
+    if (!hashLookup(existHash, hel->name) && ((wantHash == NULL) || hashLookup(wantHash, hel->name)))    
+        {
+        dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
+        hashStore(existHash, hel->name);
+        }
+    }
+
+if (tdb->parent)
+    {
+    struct hash *newWantHash = newHash(4);
+    hashStore(newWantHash, "type"); // right now we only want type from parents
+    dumpTdbAndParents(dy, tdb->parent, existHash, newWantHash);
+    }
+}
+
+static bool subtrackEnabledInTdb(struct trackDb *subTdb)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
+{
+bool enabled = TRUE;
+char *words[2];
+char *setting;
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            enabled = FALSE;
+    }
+else
+    return subTdb->visibility != tvHide;
+
+return enabled;
+}
+
+static bool isSubtrackVisible(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = subtrackEnabledInTdb(tdb);
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}       
+            
+        
+static bool isParentVisible(struct cart *cart, struct trackDb *tdb)
+// Are this track's parents visible?
+{
+if (tdb->parent == NULL)
+    return TRUE;
+        
+if (!isParentVisible(cart, tdb->parent))
+    return FALSE;
+        
+char *cartVis = cartOptionalString(cart, tdb->parent->track);
+boolean vis;
+if (cartVis != NULL)
+    vis =  differentString(cartVis, "hide");
+else if (tdbIsSuperTrack(tdb->parent))
+    vis = tdb->parent->isShow;
+else
+    vis = tdb->parent->visibility != tvHide;
+
+return vis;
+}
+
+struct dyString *trackDbString(struct trackDb *tdb)
+/* Convert a trackDb entry into a dyString. */
+{
+struct dyString *dy;
+struct hash *existHash = newHash(5);
+struct hashEl *hel;
+
+hel = hashLookup(tdb->settingsHash, "track");
+if (hel == NULL)
+    errAbort("can't find track variable in tdb");
+
+dy = dyStringNew(200);
+dyStringPrintf(dy, "track %s\n", trackHubSkipHubName((char *)hel->val));
+hashStore(existHash, "track");
+    
+dumpTdbAndParents(dy, tdb, existHash, NULL);
+
+return dy;
+}
+
+static void walkTree(FILE *f, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy)
+/* walk tree looking for visible tracks. */
+{
+for(; tdb; tdb = tdb->next)
+    {
+    if (tdb->subtracks)
+        walkTree(f, cart, tdb->subtracks, visDy);
+    else 
+        {
+        if (!startsWith("big", tdb->type))
+            continue;
+        boolean isVisible = FALSE;
+        if (tdb->parent == NULL)
+            {
+            char *cartVis = cartOptionalString(cart, tdb->track);
+            if (cartVis != NULL)
+                {
+                tdb->visibility = hTvFromString(cartVis);
+                }
+            isVisible =  tdb->visibility != tvHide;
+            }
+        else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+            {
+            char *cartVis = cartOptionalString(cart, tdb->parent->track);
+            tdb->visibility = hTvFromString(cartVis);
+            isVisible = TRUE;
+            }
+
+        if (isVisible)
+            {
+            dyStringPrintf(visDy, "&%s=%s", tdb->track,hStringFromTv(tdb->visibility));
+            //if (hashLookup(tdb->settingsHash, "customized") == NULL)
+                {
+                hashRemove(tdb->settingsHash, "maxHeightPixels");
+                hashRemove(tdb->settingsHash, "superTrack");
+                hashRemove(tdb->settingsHash, "subGroups");
+                hashRemove(tdb->settingsHash, "polished");
+                hashRemove(tdb->settingsHash, "noInherit");
+                hashRemove(tdb->settingsHash, "group");
+                hashRemove(tdb->settingsHash, "parent");
+                }
+
+            //hashReplace(tdb->settingsHash, "customized", "on");
+
+            struct dyString *dy = trackDbString(tdb);
+
+            fprintf(f, "%s\n", dy->string);
+            }
+        }
+    }
+}
+
+char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy)
+/* Build a track hub using trackDb and the cart. */
+{
+struct trackDb *tdb = hTrackDb(db);
+slSort(&tdb,trackDbCmp);
+char *filename = getHubName(cart, db);
+
+FILE *f = mustOpen(filename, "a");
+chmod(filename, 0666);
+
+walkTree(f, cart, tdb, visDy);
+fclose(f);
+
+return cloneString(filename);
+}
+
+struct grp *trackHubGetGrps()
+/* Get the groups defined by attached track hubs. */
+{
+return trackHubGrps;
 }

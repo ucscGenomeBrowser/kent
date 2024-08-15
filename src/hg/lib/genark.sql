@@ -11,6 +11,8 @@ CREATE TABLE genark (
     scientificName varchar(255) not null,	# scientific name: Homo sapiens
     commonName varchar(255) not null,	# common name: human
     taxId int not null,	# taxon id: 9606
+    priority int not null,	# search priority to order hgGateway results
+    clade varchar(255) not null,	# clade group in the GenArk system
               #Indices
     PRIMARY KEY(gcAccession)
 );

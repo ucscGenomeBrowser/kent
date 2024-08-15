@@ -276,13 +276,13 @@ chromAliasGlobals.lm = lmInit(0);
 static void chromAliasSetupHub(char *database)
 /* Look for a chromAlias text table and load the hashes with its contents. */
 {
-char *aliasBbFile = trackHubAliasBbFile(database);
+char *aliasBbFile = hReplaceGbdb(trackHubAliasBbFile(database));
 if (aliasBbFile != NULL)
     {
     chromAliasSetupBb(database, aliasBbFile);
     return;
     }
-char *aliasFile = trackHubAliasFile(database);
+char *aliasFile = hReplaceGbdb(trackHubAliasFile(database));
 if (aliasFile == NULL)
     return;
 

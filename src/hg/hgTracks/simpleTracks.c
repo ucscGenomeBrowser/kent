@@ -384,6 +384,9 @@ return doWiggle;
 boolean checkIfWiggling(struct cart *cart, struct track *tg)
 /* Check to see if a track should be drawing as a wiggle. */
 {
+if (tg->limitWiggle)
+    return TRUE;
+
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
@@ -809,14 +812,31 @@ return tg->lineHeight;
 int maximumTrackItems(struct track *tg)
 /* Return the maximum number of items allowed in track. */
 {
-return trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+static boolean set = FALSE;
+static unsigned maxItemsPossible = 0;
+
+if (!set)
+    {
+    char *maxItemsPossibleStr = cfgOptionDefault("maxItemsPossible", "100000");
+    maxItemsPossible = sqlUnsigned(maxItemsPossibleStr);
+    }
+
+unsigned int maxItems = trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+
+if (maxItems > maxItemsPossible)
+    maxItems = maxItemsPossible;
+
+return maxItems;
 }
 
 int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
 int maxItems = maximumTrackItems(tg);
-return maxItems * tl.fontHeight;
+int height = maxItems * tl.fontHeight;
+if (height > 31000)
+    height = 31000;
+return height;
 }
 
 static int maxItemsToOverflow(struct track *tg)
@@ -847,6 +867,7 @@ if (doWiggle)
         char *words[3];
         words[0] = "bedGraph";
 	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
+        wigCart->windowingFunction = wiggleWindowingMean;
 	tg->wigCartData = (void *) wigCart;
 	}
     return wigTotalHeight(tg, vis);
@@ -1189,7 +1210,7 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
-char buf[256];
+char buf[4096];
 if (tdbIsCompositeChild(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks",
           curGroup->shortLabel);
@@ -1689,6 +1710,147 @@ if (charsInBox < strlen(shortLabel))
     return;
 Color labelColor = hvGfxContrastingColor(hvg, color);
 hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
+}
+
+struct xyPair {
+    double x, y;
+};
+
+struct glyphShape {
+    int nPoints;
+    struct xyPair* points;
+};
+
+/* An obtuse representation, but this is a list of the glyphs we know how to draw along with coordinates for
+ * the sequential points of each glyph on the unit square.  Those will then be scaled by whatever the current
+ * track height is for actual drawing. */
+static struct glyphShape glyphShapes[] = {
+    [GLYPH_CIRCLE] = (struct glyphShape) {0, NULL},
+
+    [GLYPH_TRIANGLE] = (struct glyphShape) {3, (struct xyPair[]) {{0.5,0},{1.07735,1},{-0.07735,1}}},
+    [GLYPH_INV_TRIANGLE] = (struct glyphShape) {3, (struct xyPair[]) {{0.5,1},{1.07735,0},{-0.07735,0}}},
+    [GLYPH_SQUARE] = (struct glyphShape) {4, (struct xyPair[]) {{0,0},{1,0},{1,1},{0,1}}},
+    [GLYPH_DIAMOND] = (struct glyphShape) {4, (struct xyPair[]) {{0.5,0},{1,0.5},{0.5,1},{0,0.5}}},
+    [GLYPH_PENTAGRAM] = (struct glyphShape) {5, (struct xyPair[]) {{0.5,0.0},{0.824920,1.0},{-0.025731,0.381966},
+            {1.02573,0.381966},{0.175080,1}}},
+    [GLYPH_OCTAGON] = (struct glyphShape) {8, (struct xyPair[]) {{0.292893,1},{0.707107,1},{1,0.707107},
+            {1,0.292893},{0.707107,0},{0.292893,0},{0,0.292893},{0,0.707107}}},
+    [GLYPH_STAR] = (struct glyphShape) {10, (struct xyPair[]) {{0.500000,0.000000},{0.624108,0.381966},{1.025731,0.381966},
+            {0.700811,0.618034},{0.824920,1.000000},{0.500000,0.763932},{0.175080,1.000000},{0.299189,0.618034},
+            {-0.025731,0.381966},{0.375892,0.381966}}}
+};
+
+
+
+void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+                      int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor)
+/* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
+ * which may have transparency.
+ */
+{
+int glyphHeight = heightPer-1;
+int startX, endX;
+double middleX, middleY = y+heightPer/2.0;
+// A glyph might be defined on a wide range - find the center and draw specifically there
+// so we don't have a glyph shifting if only part of that window is in view.
+int centeredStart, centeredEnd;
+centeredStart = (chromStart + chromEnd)/2;
+centeredEnd = (chromStart + chromEnd+1)/2;
+int ptCount, i, x0, y0;
+if (!scaledBoxToPixelCoords(centeredStart, centeredEnd, scale, xOff, &startX, &endX))
+    return;  // apparently we don't intersect the window
+middleX = (startX+endX)/2.0;
+switch (glyph)
+    {
+    case GLYPH_CIRCLE:
+        hvGfxCircle(hvg, middleX, middleY, heightPer/2, fillColor, TRUE);
+        hvGfxCircle(hvg, middleX, middleY, heightPer/2, outlineColor, FALSE);
+        break;
+    default:
+        ptCount = glyphShapes[glyph].nPoints;
+        struct gfxPoly *poly = gfxPolyNew();
+        for (i=0; i<ptCount; i++)
+            {
+            x0 = middleX + (glyphShapes[glyph].points[i].x-0.5)*glyphHeight;
+            y0 = middleY + (glyphShapes[glyph].points[i].y-0.5)*glyphHeight;
+            gfxPolyAddPoint(poly, x0, y0);
+            }
+        hvGfxDrawPoly(hvg,poly,fillColor,TRUE);
+        hvGfxDrawPoly(hvg,poly,outlineColor,FALSE);
+        gfxPolyFree(&poly);
+        break;
+    }
+}
+
+#define GLYPH_STRING_CIRCLE "Circle"
+#define GLYPH_STRING_TRIANGLE "Triangle"
+#define GLYPH_STRING_INV_TRIANGLE "InvTriangle"
+#define GLYPH_STRING_SQUARE "Square"
+#define GLYPH_STRING_DIAMOND "Diamond"
+#define GLYPH_STRING_OCTAGON "Octagon"
+#define GLYPH_STRING_STAR "Star"
+#define GLYPH_STRING_PENTAGRAM "Pentagram"
+
+glyphType parseGlyphType(char *glyphStr)
+/* Return the enum glyph type for a string specifying a glyph.
+ * Defaults to GLYPH_CIRCLE if the string is unrecognized. */
+{
+if (sameWordOk(glyphStr, GLYPH_STRING_TRIANGLE))
+    return GLYPH_TRIANGLE;
+if (sameWordOk(glyphStr, GLYPH_STRING_INV_TRIANGLE))
+    return GLYPH_INV_TRIANGLE;
+if (sameWordOk(glyphStr, GLYPH_STRING_SQUARE))
+    return GLYPH_SQUARE;
+if (sameWordOk(glyphStr, GLYPH_STRING_DIAMOND))
+    return GLYPH_DIAMOND;
+if (sameWordOk(glyphStr, GLYPH_STRING_OCTAGON))
+    return GLYPH_OCTAGON;
+if (sameWordOk(glyphStr, GLYPH_STRING_STAR))
+    return GLYPH_STAR;
+if (sameWordOk(glyphStr, GLYPH_STRING_PENTAGRAM))
+    return GLYPH_PENTAGRAM;
+
+return GLYPH_CIRCLE;
+}
+
+void filterItemsOnNames(struct track *tg)
+/* Only keep items with a name in the .nameFilter cart var. 
+ * Not using filterItems(), because filterItems has no state at all. */
+{
+char varName[SMALLBUF];
+safef(varName, sizeof(varName), "%s.nameFilter", tg->tdb->track);
+char *nameFilterStr = cartNonemptyString(cart, varName);
+
+if (nameFilterStr==NULL)
+    return;
+
+struct slName *names = slNameListFromString(nameFilterStr, ',');
+struct hash *nameHash = hashFromSlNameList(names);
+
+struct slList *newList = NULL, *el, *next;
+for (el = tg->items; el != NULL; el = next)
+    {
+    next = el->next;
+    struct linkedFeatures *lf = (struct linkedFeatures*)el;
+    char *name = lf->name;
+    if (name && hashLookup(nameHash, name))
+	slAddHead(&newList, el);
+}
+tg->items = newList;
+
+char *suf = "";
+int nameCount = slCount(names);
+if (nameCount > 1)
+    suf = "s";
+
+char buf[SMALLBUF];
+safef(buf, sizeof(buf), " (manually filtered to show only %d accession%s)", nameCount, suf);
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(tg->longLabel, buf);
+freez(&oldLabel);
+
+slFreeList(&names);
+hashFree(&nameHash);
 }
 
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item),
@@ -2500,6 +2662,43 @@ if (*pNewWinEnd > virtSeqBaseCount)
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
+#define EXONTEXTLEN 256
+
+static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase, int endPhase, char *buf) 
+/* Write mouseover text that describes the exon's phase into buf[EXONTEXTLEN].
+
+   Note that start/end-phases are in the direction of transcription:
+   if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
+   if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
+{
+
+if (startPhase==-1) // UTRs don't have a frame at all
+    {
+    safef(buf, EXONTEXTLEN, ", untranslated region");
+    }
+else
+    {
+    char *exonNote = "";
+    boolean isNotLastExon = (exonIntronNumber<numExons);
+    if (isNotLastExon)
+        {
+        if (startPhase==endPhase)
+            exonNote = ": in-frame exon";
+        else
+            exonNote = ": out-of-frame exon";
+        safef(buf, EXONTEXTLEN, ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
+        } 
+    else
+        {
+        if (startPhase==0)
+            exonNote = ": in-frame exon";
+        else
+            exonNote = ": out-of-frame exon";
+        safef(buf, EXONTEXTLEN, ", start codon phase %d%s", startPhase, exonNote);
+        }
+    }
+}
+
 boolean linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
 /* Draw a mapBox over the arrow-button on an *item already in the window*. */
 /* Clicking this will do one of several things: */
@@ -2732,7 +2931,9 @@ while (exon != NULL)
     }
 /* Now sort it. */
 slSort(&exonList, exonSlRefCmp);
+
 numExons = slCount(exonList);
+struct genePred *gp = lf->original;
 boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
@@ -2745,6 +2946,7 @@ if (lButton)
     picStart += buttonW;
 if (rButton)
     picEnd -= buttonW;
+
 for (ref = exonList; TRUE; )
     {
     exon = ref->val;
@@ -2759,7 +2961,7 @@ for (ref = exonList; TRUE; )
 	e = exon->start;
 	}
     // skip exons and introns that are completely outside the window
-    if (!(s > winEnd) || (e < winStart))
+    if (s <= winEnd && e >= winStart)
 	{
 	int sClp = (s < winStart) ? winStart : s;
 	int eClp = (e > winEnd)   ? winEnd   : e;
@@ -2769,13 +2971,13 @@ for (ref = exonList; TRUE; )
 
         // skip regions entirely outside available picture
         // (accounts for space taken by exon arrows buttons)
-	if (!(sx > picEnd) || (ex < picStart))
+	if (sx <= picEnd && ex >= picStart)
 	    {
 	    // clip it to avail pic
 	    sx = (sx < picStart) ? picStart : sx;
     	    ex = (ex > picEnd)   ? picEnd   : ex;
 
-	    int w = ex - sx;
+	    int w = ex - sx; // w could be negative, but we'll skip drawing if it is
 
 	    int exonIntronNumber;
 	    char *exonIntronText;
@@ -2800,30 +3002,108 @@ for (ref = exonList; TRUE; )
                 strandChar = '-';
             }
 
+            // we still need to show the existing mouseover text
             char* existingText = lf->mouseOver;
             if (isEmpty(existingText))
                 existingText = lf->name;
 
-            if (!isEmpty(existingText))
-                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", 
-                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
-            else
-                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", 
-                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+            // construct a string that tells the user about the codon frame situation of this exon
+            // char *frameText = "";
+            // for coding exons, determine the start and end phase of the exon and an English text describing both:
+            // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
+            // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
+            int startPhase = -1;
+            int endPhase = -1;
+            char phaseText[EXONTEXTLEN];
+            phaseText[0] = 0;
+            if ((gp != NULL) && gp->exonFrames && isExon)
+                {
+                startPhase = gp->exonFrames[exonIx-1];
+                //printf("start phase is set<br>");
+                if (!revStrand) 
+                    endPhase = gp->exonFrames[exonIx];
+                else 
+                    if (exonIx>1)
+                        endPhase = gp->exonFrames[exonIx-2];
+                // construct a string that tells the user about the codon frame situation of this exon
+                makeExonFrameText(exonIntronNumber, numExons, startPhase, endPhase, phaseText);
+                }
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
-                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                // prefer a lf->mouseOver over the itemName
-                char *oldMouseOver = lf->mouseOver;
-                lf->mouseOver = NULL;
-		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-		    sItem, eItem, sx, y, w, heightPer);
-                // and restore the mouseOver
-                lf->mouseOver = oldMouseOver;
+                // draw mapBoxes for the codons if we are zoomed in far enough
+                if (isExon && lf->codons && zoomedToCdsColorLevel)
+                    {
+                    struct simpleFeature *codon;
+                    struct dyString *codonDy = dyStringNew(0);
+                    int codonS, codonE;
+                    for (codon = lf->codons; codon != NULL; codon = codon->next)
+                        {
+                        codonS = codon->start; codonE = codon->end;
+                        if (codonS > e || codonE < s)
+                            continue; // only write out mouseovers for codons in the current exon
+                        if (codonS <= winEnd && codonE >= winStart)
+                            {
+                            int codonSClp = (codonS < winStart) ? winStart : codonS;
+                            int codonEClp = (codonE > winEnd)   ? winEnd   : codonE;
 
-		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
-		}
+                            int codonsx = round((codonSClp - winStart)*scale) + insideX;
+                            int codonex = round((codonEClp - winStart)*scale) + insideX;
+
+                            // skip regions entirely outside available picture
+                            // (accounts for space taken by exon arrows buttons)
+                            if (codonsx <= picEnd && codonex >= picStart)
+                                {
+                                // clip it to avail pic
+                                codonsx = (codonsx < picStart) ? picStart : codonsx;
+                                codonex = (codonex > picEnd)   ? picEnd   : codonex;
+
+                                int w = codonex - codonsx;
+                                if (w > 0)
+                                    {
+                                    // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
+                                    // prefer a lf->mouseOver over the itemName
+                                    char *oldMouseOver = lf->mouseOver;
+                                    lf->mouseOver = NULL;
+                                    dyStringClear(codonDy);
+                                    if (!isEmpty(existingText))
+                                        dyStringPrintf(codonDy, "%s, ", existingText);
+                                    int codonHgvsIx = (codon->codonIndex - 1) * 3;
+                                    if (codonHgvsIx >= 0)
+                                        dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    dyStringPrintf(codonDy, "strand %c, %s %d of %d%s",
+                                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                                    tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
+                                            sItem, eItem, codonsx, y, w, heightPer);
+                                    // and restore the mouseOver
+                                    lf->mouseOver = oldMouseOver;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                else // either an intron, or else an exon zoomed out too far for codons (or no codons)
+                    {
+                    char *sep = "";
+                    if (!isEmpty(existingText))
+                        sep = ", ";
+
+                    safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s",
+                            existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+
+                    // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
+                    // prefer a lf->mouseOver over the itemName
+                    char *oldMouseOver = lf->mouseOver;
+                    lf->mouseOver = NULL;
+                    tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
+                        sItem, eItem, sx, y, w, heightPer);
+                    // and restore the old mouseOver
+                    lf->mouseOver = oldMouseOver;
+
+                    picStart = ex;  // prevent pileups. is this right? add 1? does it work?
+                                    // JC: Why do we care about pileups?  First mapbox drawn wins.
+                    }
+                }
 	    }
 	}
 
@@ -2844,6 +3124,7 @@ for (ref = exonList; TRUE; )
 	break;
 
     }
+
 slFreeList(&exonList);
 }
 
@@ -3817,7 +4098,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		innerLine(hvg, x1, midY2, w, color);
 		}
 	    }
-	if (intronGap && (qGap == 0) && (tGap >= intronGap))
+	if ((vis == tvFull || vis == tvPack) && (intronGap && (qGap == 0) && (tGap >= intronGap)))
 	    {
             clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
 			 lf->orientation, bColor, FALSE);
@@ -3895,6 +4176,12 @@ lfColors(tg, lf, hvg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
+color = colorFromCart(tg, color);
+
+struct genePred *gp = NULL;
+if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
+    gp = (struct genePred *)(lf->original);
+
 boolean baseColorNeedsCodons = (drawOpt == baseColorDrawItemCodons ||
 				drawOpt == baseColorDrawDiffCodons ||
 				drawOpt == baseColorDrawGenomicCodons);
@@ -3907,9 +4194,6 @@ if (psl && baseColorNeedsCodons)
     }
 else if (drawOpt > baseColorDrawOff)
     {
-    struct genePred *gp = NULL;
-    if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
-	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE));
     }
@@ -3969,6 +4253,8 @@ if (!hideArrows)
     }
 
 components = (lf->codons && zoomedToCdsColorLevel) ? lf->codons : lf->components;
+
+
 for (sf = components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
@@ -4076,7 +4362,7 @@ if (vis != tvDense)
      * drawn so that exons sharing the pixel don't overdraw differences. */
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
-    if (indelShowQueryInsert || indelShowPolyA)
+    if (psl && (indelShowQueryInsert || indelShowPolyA))
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
 				 qSeq, qOffset, psl, font, winStart, drawOpt,
 				 indelShowQueryInsert, indelShowPolyA);
@@ -4204,7 +4490,7 @@ if (startsWith("bigGenePred", type) || startsWith("genePred", type))
     defVal = "on";
 
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
-return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
+return (withExonNumbers && exonNumbers && (vis==tvSquish || vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }
 
@@ -4274,7 +4560,7 @@ if (rButton)
     }
 
 boolean compat = exonNumberMapsCompatible(tg, vis);
-if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
+if (vis == tvSquish || vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
     {
     int w = x2-textX;
     if (lButton)
@@ -4796,6 +5082,22 @@ else
     countsToPixelsDown(counts, pre);
 }
 
+static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
+/* Convert bbiSummaryElement array into a preDrawElement array */
+{
+struct preDrawElement *pe = &pre->preDraw[pre->preDrawZero];
+struct preDrawElement *lastPe = &pe[insideWidth];
+
+for (; pe < lastPe; pe++, summary++)
+    {
+    pe->count = summary->validCount;
+    pe->min = summary->minVal;
+    pe->max = summary->maxVal;
+    pe->sumData = summary->sumData;
+    pe->sumSquares = summary->sumSquares;
+    }
+}
+
 static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
                                        struct hvGfx *hvg, int xOff, int yOff, int width,
                                        MgFont *font, Color color, enum trackVisibility vis)
@@ -4812,10 +5114,16 @@ if (autoScale == NULL)
 char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
 if (windowingFunction == NULL)
     wigCart->windowingFunction = wiggleWindowingMean;
-unsigned *counts = countOverlaps(tg);
+wigCart->alwaysZero = TRUE;
 
-countsToPixels(counts, pre);
-freez(&counts);
+if (tg->summary)
+    summaryToPixels(tg->summary, pre);
+else
+    {
+    unsigned *counts = countOverlaps(tg);
+    countsToPixels(counts, pre);
+    freez(&counts);
+    }
 
 tg->colorShades = shadesOfGray;
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
@@ -4962,6 +5270,8 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 withIndividualLabels = TRUE;  // set this back to default just in case someone left it false (I'm looking at you pgSnp)
 
+color = colorFromCart(tg, color);
+
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && baseColorCanDraw(tg))
@@ -4998,6 +5308,8 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
                         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
+color = colorFromCart(tg, color);
+
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
@@ -6632,6 +6944,8 @@ else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
+
+filterItemsOnNames(tg);
 
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
@@ -11194,6 +11508,12 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
 return ct;
 }
 
+static boolean canWiggle(struct track *tg)
+/* Is this a track type that can wiggle. */
+{
+return tg->isBigBed || startsWith("vcfTabix", tg->tdb->type);
+}
+
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items and
  * by parent visibility if part of a coposite track.
@@ -11238,21 +11558,41 @@ if (!tg->limitedVisSet)
                 limitVisibility(subtrack);
             }
         }
-    while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+    if (canWiggle(tg))   // if this is a track type that can wiggle, we want to go straight to that rather than reduce visibility
         {
-        if (vis == tvFull && tg->canPack)
-            vis = tvPack;
-        else if (vis == tvPack)
-            vis = tvSquish;
+        if ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            tg->limitWiggle = TRUE;
+            }
+        if ( tg->limitWiggle)   // auto-density coverage is alway tvFull
+            {
+            if (tg->visibility == tvDense)
+                tg->visibility = tg->limitedVis = tvDense;
+            else
+                tg->visibility = tg->limitedVis = tvFull;
+            }
         else
-            vis = tvDense;
+            tg->limitedVis = vis;
         }
-    tg->height = h;
-    if (tg->limitedVis == tvHide)
-        tg->limitedVis = vis;
     else
-        tg->limitedVis = tvMin(vis,tg->limitedVis);
+        {
+        while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            if (vis == tvFull && tg->canPack)
+                vis = tvPack;
+            else if (vis == tvPack)
+                vis = tvSquish;
+            else
+                vis = tvDense;
+            }
 
+        if (tg->limitedVis == tvHide)
+            tg->limitedVis = vis;
+        else
+            tg->limitedVis = tvMin(vis,tg->limitedVis);
+        }
+
+    tg->height = h;
     if (tg->syncChildVisToSelf)
         {
         struct track *subtrack;
@@ -11268,7 +11608,8 @@ if (!tg->limitedVisSet)
         struct track *subtrack;
         for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
             {
-            subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
+            if ( tg->limitWiggle) // these are always in tvFull
+                subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
             // But don't prevent subtracks from being further restricted!
             //subtrack->limitedVisSet = tg->limitedVisSet;
             }
@@ -14364,6 +14705,11 @@ else if (sameWord(type, "bigRmsk"))
     track->isBigBed = TRUE;
     track->mapsSelf = TRUE;
     bigRmskMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "bigBaseView"))
+    {
+    track->isBigBed = TRUE;
+    bigBaseViewMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigLolly"))
     {

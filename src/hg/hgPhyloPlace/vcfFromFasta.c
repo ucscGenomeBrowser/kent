@@ -1,13 +1,15 @@
 /* Align user sequence to the reference genome and write VCF */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "fa.h"
 #include "genoFind.h"
 #include "iupac.h"
+#include "mmHash.h"
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
+#include "pipeline.h"
 #include "psl.h"
 #include "trashDir.h"
 
@@ -52,7 +54,7 @@ if (strchr(seqName, '(') || strchr(seqName, ')') || strchr(seqName, ':') || strc
     }
 }
 
-static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
+static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hashOrMmHash *treeNames,
                                       int minSeqSize, int maxSeqSize, struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
  * If any sequences have names that are already in the tree, add a prefix so usher doesn't
@@ -139,15 +141,24 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
-            if (treeNames &&
-                (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name)))
+            // If non-NULL treeNames was passed in then we're using original usher not usher-sampled
+            // and need to modify uploaded names that are already in the tree, if any.
+            if (treeNames)
                 {
-                // usher will reject any sequence whose name is already in the tree, even a
-                // numeric internal node name.  Add a prefix so usher won't reject sequence.
-                char newName[strlen(seq->name)+32];
-                safef(newName, sizeof newName, "uploaded_%s", seq->name);
-                freeMem(seq->name);
-                seq->name = cloneString(newName);
+                boolean foundInTreeNames = FALSE;
+                if (treeNames->hash)
+                    foundInTreeNames = (hashLookup(treeNames->hash, seq->name) != NULL);
+                else
+                    foundInTreeNames = (mmHashFindVal(treeNames->mmh, seq->name) != NULL);
+                if (foundInTreeNames || isInternalNodeName(seq->name, 0))
+                    {
+                    // usher will reject any sequence whose name is already in the tree, even a
+                    // numeric internal node name.  Add a prefix so usher won't reject sequence.
+                    char newName[strlen(seq->name)+32];
+                    safef(newName, sizeof newName, "uploaded_%s", seq->name);
+                    freeMem(seq->name);
+                    seq->name = cloneString(newName);
+                    }
                 }
             struct seqInfo *si;
             AllocVar(si);
@@ -214,23 +225,20 @@ for (psl = psls;  psl != NULL;  psl = nextPsl)
     struct psl *otherPsl = hashFindVal(alignedSeqs, psl->qName);
     if (otherPsl)
         {
-        //#*** Is this ever going to happen?  Maybe if there's a large dup???
-        //#*** Is there any condition under which we would want to try to merge?  (Would expect blat
-        //#*** to have done that)
-        struct dyString *dy = dyStringCreate("Warning: multiple alignments found for sequence %s "
-                                             "(%d-%d and %d-%d).  Skipping alignment of %d-%d",
+        struct dyString *dy = dyStringCreate("Warning: multiple alignments to reference found for "
+                                             "sequence %s (%d-%d and %d-%d).  "
+                                             "Skipping alignment of %d-%d",
                                               psl->qName, otherPsl->qStart, otherPsl->qEnd,
                                               psl->qStart, psl->qEnd, psl->qStart, psl->qEnd);
         slPairAdd(retFailedPsls, dyStringCannibalize(&dy), psl);
         passes = FALSE;
         }
-    hashAdd(alignedSeqs, psl->qName, psl);
+    else
+        hashAdd(alignedSeqs, psl->qName, psl);
     if (passes)
         {
         si = hashFindVal(userSeqsByName, psl->qName);
-        if (si)
-            si->psl = psl;
-        else
+        if (! si)
             warn("Aligned sequence name '%s' does not match any input sequence name", psl->qName);
         slAddHead(&filteredPsls, psl);
         }
@@ -372,7 +380,8 @@ for (gtIx = 0, qSeq = querySeqs;  qSeq != NULL;  gtIx++, qSeq = qSeq->next)
         break;
 if (!qSeq)
     errAbort("PSL query '%s' not found in input sequences", qName);
-*retGtIx = gtIx;
+if (retGtIx)
+    *retGtIx = gtIx;
 return qSeq;
 }
 
@@ -531,8 +540,8 @@ static void pslSnvsToVcfFile(struct psl *psls, struct dnaSeq *ref, struct seqInf
 /* Find single-nucleotide differences between each query sequence and reference, and
  * write out a VCF file with genotype columns for the queries. */
 {
-struct snvInfo *snvsByPos[ref->size];
-memset(snvsByPos, 0, sizeof snvsByPos);
+struct snvInfo **snvsByPos = NULL;
+AllocArray(snvsByPos, ref->size);
 extractSnvs(psls, ref, querySeqs, snvsByPos, maskSites);
 int sampleCount = slCount(querySeqs);
 char *sampleNames[sampleCount];
@@ -541,16 +550,18 @@ int i;
 for (i = 0, qSeq = querySeqs;  i < sampleCount;  i++, qSeq = qSeq->next)
     sampleNames[i] = qSeq->seq->name;
 writeSnvsToVcfFile(snvsByPos, ref, sampleNames, sampleCount, maskSites, vcfFileName);
+freeMem(snvsByPos);
 }
 
-static void analyzeGaps(struct seqInfo *filteredSeqs, struct dnaSeq *refGenome)
+static void analyzeGaps(struct psl *filteredAlignments, struct seqInfo *filteredSeqs,
+                        struct dnaSeq *refGenome)
 /* Tally up actual insertions and deletions in each psl; ignore skipped N bases. */
 {
-struct seqInfo *si;
-for (si = filteredSeqs;  si != NULL;  si = si->next)
+struct psl *psl;
+for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
     {
-    struct psl *psl = si->psl;
-    if (psl && (psl->qBaseInsert || psl->tBaseInsert))
+    struct seqInfo *si = mustFindSeqAndIx(psl->qName, filteredSeqs, NULL);
+    if (psl->qBaseInsert || psl->tBaseInsert)
         {
         struct dyString *dyIns = dyStringNew(0);
         struct dyString *dyDel = dyStringNew(0);
@@ -602,11 +613,408 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
         si->insRanges = dyStringCannibalize(&dyIns);
         si->delRanges = dyStringCannibalize(&dyDel);
         }
+    si->basesAligned = 0;
+    int i;
+    for (i = 0;  i < psl->blockCount;  i++)
+        si->basesAligned += psl->blockSizes[i];
+    si->tStart = psl->tStart;
+    si->tEnd = psl->tEnd;
     }
 }
 
-struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
-                              struct slName **maskSites, struct hash *treeNames,
+static struct tempName *alignWithBlat(struct seqInfo *filteredSeqs, struct dnaSeq *refGenome,
+                                      struct slName **maskSites, struct slName **retSampleIds,
+                                      struct seqInfo **retSeqInfo, struct slPair **retFailedSeqs,
+                                      struct slPair **retFailedPsls, int *pStartTime)
+/* Use blat gf code to align filteredSeqs to refGenome, extract SNVs from alignment, and
+ * save as VCF with sample genotype columns. */
+{
+struct tempName *tn = NULL;
+struct slName *sampleIds = NULL;
+struct psl *alignments = alignSequences(refGenome, filteredSeqs, pStartTime);
+struct psl *filteredAlignments = checkAlignments(alignments, filteredSeqs, retFailedPsls);
+removeUnalignedSeqs(&filteredSeqs, filteredAlignments, retFailedSeqs);
+if (filteredAlignments)
+    {
+    AllocVar(tn);
+    trashDirFile(tn, "ct", "pp", ".vcf");
+    pslSnvsToVcfFile(filteredAlignments, refGenome, filteredSeqs, tn->forCgi, maskSites);
+    struct psl *psl;
+    for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
+        slNameAddHead(&sampleIds, psl->qName);
+    analyzeGaps(filteredAlignments, filteredSeqs, refGenome);
+    slReverse(&sampleIds);
+    reportTiming(pStartTime, "write VCF for uploaded FASTA");
+    }
+*retSampleIds = sampleIds;
+*retSeqInfo = filteredSeqs;
+return tn;
+}
+
+char *runNextcladeRun(char *seqFile, char *nextcladeDataset)
+/* Run the nextclade run command on uploaded seqs, return output TSV file name. */
+{
+char *nextcladePath = getNextcladePath();
+struct tempName tnNextcladeOut;
+trashDirFile(&tnNextcladeOut, "ct", "usher_nextclade_run", ".tsv");
+#define NEXTCLADE_NUM_THREADS "4"
+char *cmd[] = { nextcladePath, "run",
+                "--input-dataset", nextcladeDataset,
+                "--output-tsv", tnNextcladeOut.forCgi,
+                "--output-columns-selection",
+                "alignmentStart,alignmentEnd,substitutions,deletions,insertions,missing,nonACGTNs",
+                "-j", NEXTCLADE_NUM_THREADS,
+                seqFile, NULL };
+char **cmds[] = { cmd, NULL };
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, "/dev/stderr", 0);
+pipelineClose(&pl);
+return cloneString(tnNextcladeOut.forCgi);
+}
+
+static int countNextcladeAlignedSeqs(char *nextcladeOut, struct seqInfo **pFilteredSeqs,
+                                     struct slPair **retFailedSeqs)
+/* Before we can start building genotype arrays for VCF we need to know the number of aligned
+ * sequences, and to remove unaligned sequences from pFilteredSeqs (add them to retFailedSeqs). */
+{
+struct hash *alignedSeqNames = hashNew(0);
+struct lineFile *lf = lineFileOpen(nextcladeOut, TRUE);
+// First line is header; get column indexes
+char *row[100];
+int headerColCount = lineFileChopTab(lf, row);
+if (headerColCount <= 0)
+    errAbort("nextclade run output is empty");
+int seqNameIx = stringArrayIx("seqName", row,  headerColCount);
+int alStartIx = stringArrayIx("alignmentStart", row,  headerColCount);
+int gtCount = 0;
+int colCount = 0;
+while ((colCount = lineFileChopTab(lf, row)) > 0)
+    {
+    char *seqName = row[seqNameIx];
+    if (hashLookup(alignedSeqNames, seqName) != NULL)
+        errAbort("Duplicate seqName '%s' in nextclade output", seqName);
+    // Nextclade still includes unaligned sequences in its output, just with empty alignment columns
+    if (isNotEmpty(row[alStartIx]))
+        {
+        hashAdd(alignedSeqNames, seqName, NULL);
+        gtCount++;
+        }
+    }
+lineFileClose(&lf);
+// Set pFilteredSeqs and retFailedSeqs according to which seqs could be aligned or not.
+struct seqInfo *alignedSeqs = NULL, *nextSi = NULL;
+struct slPair *newFailedSeqs = NULL;
+struct seqInfo *si;
+for (si = *pFilteredSeqs;  si != NULL;  si = nextSi)
+    {
+    nextSi = si->next;
+    if (hashLookup(alignedSeqNames, si->seq->name) != NULL)
+        slAddHead(&alignedSeqs, si);
+    else
+        {
+        struct dyString *dy = dyStringCreate("Sequence %s could not be aligned to the reference; "
+                                             "skipping", si->seq->name);
+        slPairAdd(&newFailedSeqs, dyStringCannibalize(&dy), si);
+        }
+    }
+slReverse(&alignedSeqs);
+slReverse(&newFailedSeqs);
+*pFilteredSeqs = alignedSeqs;
+*retFailedSeqs = slCat(*retFailedSeqs, newFailedSeqs);
+hashFree(&alignedSeqNames);
+return gtCount;
+}
+
+static void parseNextcladeSubstitutions(char *substStr, struct seqInfo *si, struct dnaSeq *ref,
+                                        struct slName **maskSites, int gtIx, int gtCount,
+                                        struct snvInfo **snvsByPos, boolean *positionsCalled)
+/* Add genotypes for substitutions; also build up si fields for substs and masked substs */
+{
+int substCount = chopByChar(substStr, ',', NULL, 0);
+char *substArr[substCount];
+chopCommas(substStr, substArr);
+int i;
+for (i = 0;  i < substCount; i++)
+    {
+    char *subst = substArr[i];
+    int t = atol(subst+1) - 1;
+    char altBase = subst[strlen(subst)-1];
+    int gt = addCall(snvsByPos, t, ref->dna[t], tolower(altBase), gtIx, gtCount);
+    positionsCalled[t] = TRUE;
+    if (gt > 0)
+        {
+        struct singleNucChange *snc = sncNew(t, ref->dna[t], '\0', altBase);
+        struct slName *maskedReasons = maskSites[t];
+        if (maskedReasons)
+            {
+            slAddHead(&si->maskedSncList, snc);
+            slAddHead(&si->maskedReasonsList, slRefNew(maskedReasons));
+            }
+        else
+            slAddHead(&si->sncList, snc);
+        }
+    }
+}
+
+static void parseNextcladeMissing(char *nRangeStr, struct dnaSeq *ref, struct slName **maskSites,
+                                  int gtIx, int gtCount, struct snvInfo **snvsByPos,
+                                  boolean *positionsCalled)
+/*  Add no-calls to snvsByPos for ranges of N bases */
+{
+int nRangeCount = chopByChar(nRangeStr, ',', NULL, 0);
+char *nRangeArr[nRangeCount];
+chopCommas(nRangeStr, nRangeArr);
+int i;
+for (i = 0;  i < nRangeCount;  i++)
+    {
+    char *nRange = nRangeArr[i];
+    int nStart = atol(nRange) - 1;
+    int nEnd = nStart + 1;
+    char *p = strchr(nRange, '-');
+    if (p)
+        nEnd = atol(p+1);
+    int t;
+    for (t = nStart;  t < nEnd;  t++)
+        if (!maskSites[t])
+            {
+            addCall(snvsByPos, t, ref->dna[t], 'n', gtIx, gtCount);
+            positionsCalled[t] = TRUE;
+            }
+    }
+}
+
+static void parseNextcladeAmbig(char *ambigStr, struct dnaSeq *ref,
+                                int gtIx, int gtCount, struct snvInfo **snvsByPos,
+                                boolean *positionsCalled)
+/*  Add calls to snvsByPos for non-N ambiguous bases */
+{
+int ambigCount = chopByChar(ambigStr, ',', NULL, 0);
+char *ambigArr[ambigCount];
+chopCommas(ambigStr, ambigArr);
+int i;
+for (i = 0;  i < ambigCount;  i++)
+    {
+    char *ambig = ambigArr[i];
+    char *p = strchr(ambig, ':');
+    if (! p)
+        errAbort("missing ':' separator in ambig '%s'", ambig);
+    int aStart = atol(p+1) - 1;
+    int aEnd = aStart+1;
+    p = strchr(ambig, '-');
+    if (p != NULL)
+        aEnd = atol(p+1);
+    int t;
+    for (t = aStart;  t < aEnd;  t++)
+        {
+        addCall(snvsByPos, t, ref->dna[t], ambig[0], gtIx, gtCount);
+        positionsCalled[t] = TRUE;
+        }
+    }
+}
+
+static void parseNextcladeDeletions(char *delStr, struct seqInfo *si, struct dnaSeq *ref)
+/*  We don't add calls for insertions or deletions, but we do describe them in seqInfo */
+{
+int delRangeCount = chopByChar(delStr, ',', NULL, 0);
+char *delRangeArr[delRangeCount];
+chopCommas(delStr, delRangeArr);
+int delBases = 0;
+struct dyString *dy = dyStringNew(0);
+int i;
+for (i = 0;  i < delRangeCount;  i++)
+    {
+    char *delRange = delRangeArr[i];
+    int delStart = atol(delRange) - 1;
+    int delEnd = delStart + 1;
+    char *p = strchr(delRange, '-');
+    if (p)
+        delEnd = atol(p+1);
+    int delLen = delEnd - delStart;
+    delBases += delLen;
+    if (isNotEmpty(dy->string))
+        dyStringAppend(dy, ", ");
+    if (delLen <= 12)
+        {
+        char delSeq[delLen+1];
+        safencpy(delSeq, sizeof delSeq, ref->dna + delStart, delLen);
+        touppers(delSeq);
+        dyStringPrintf(dy, "%d-%d:%s", delStart + 1, delEnd, delSeq);
+        }
+    else
+        dyStringPrintf(dy, "%d-%d:%d bases", delStart + 1, delEnd, delLen);
+    }
+si->delBases = delBases;
+si->delRanges = dyStringCannibalize(&dy);
+}
+
+static void parseNextcladeInsertions(char *insStr, struct seqInfo *si, struct dnaSeq *ref)
+/*  We don't add calls for insertions or deletions, but we do describe them in seqInfo */
+{
+int insCount = chopByChar(insStr, ',', NULL, 0);
+char *insArr[insCount];
+chopCommas(insStr, insArr);
+int insBases = 0;
+struct dyString *dy = dyStringNew(0);
+int i;
+for (i = 0;  i < insCount;  i++)
+    {
+    char *ins = insArr[i];
+    int t = atol(ins);
+    char *p = strchr(ins, ':');
+    if (! p)
+        errAbort("missing ':' separator in insertion '%s'", ins);
+    char *insSeq = p+1;
+    int insLen = strlen(insSeq);
+    insBases += insLen;
+    if (isNotEmpty(dy->string))
+        dyStringAppend(dy, ", ");
+    if (insLen <= 12)
+        dyStringPrintf(dy, "%d-%d:%s", t, t+1, insSeq);
+    else
+        dyStringPrintf(dy, "%d-%d:%d bases", t, t+1, insLen);
+    }
+si->insBases = insBases;
+si->insRanges = dyStringCannibalize(&dy);
+}
+
+static void addRefCalls(struct snvInfo **snvsByPos, boolean *positionsCalled, struct dnaSeq *ref,
+                        int gtIx, int gtCount)
+/* Add call for ref allele at any base not already called otherwise. */
+{
+int i;
+for (i = 0;  i < ref->size;  i++)
+    {
+    if (! positionsCalled[i])
+        addCall(snvsByPos, i, ref->dna[i], ref->dna[i], gtIx, gtCount);
+    }
+}
+
+static struct snvInfo **parseNextcladeRun(char *nextcladeOut, struct seqInfo **pFilteredSeqs,
+                                          struct dnaSeq *ref, struct slName **maskSites,
+                                          struct slPair **retFailedSeqs)
+/* Parse the TSV output from nextcladeRun into a per-base array of snvInfo for making VCF,
+ * while filling in alignment-related seqInfo fields.
+ * Append any unaligned sequences to retFailedSeqs and set pFilteredSeqs to aligned seqs. */
+{
+struct snvInfo **snvsByPos = NULL;
+AllocArray(snvsByPos, ref->size);
+int gtCount = countNextcladeAlignedSeqs(nextcladeOut, pFilteredSeqs, retFailedSeqs);
+struct lineFile *lf = lineFileOpen(nextcladeOut, TRUE);
+// First line is header; get column indexes
+char *row[100];
+int headerColCount = lineFileChopTab(lf, row);
+if (headerColCount <= 0)
+    errAbort("nextclade run output is empty");
+int seqNameIx = stringArrayIx("seqName", row,  headerColCount);
+int alStartIx = stringArrayIx("alignmentStart", row,  headerColCount);
+int alEndIx = stringArrayIx("alignmentEnd", row,  headerColCount);
+int substIx = stringArrayIx("substitutions", row,  headerColCount);
+int delIx = stringArrayIx("deletions", row,  headerColCount);
+int insIx = stringArrayIx("insertions", row,  headerColCount);
+int nIx = stringArrayIx("missing", row,  headerColCount);
+int ambigIx = stringArrayIx("nonACGTNs", row,  headerColCount);
+if (seqNameIx == -1 || alStartIx == -1 || alEndIx == -1 || substIx == -1 || delIx == -1 ||
+    insIx == -1 || nIx == -1 || ambigIx == -1)
+    errAbort("nextclade run output header line does not contain all expected columns");
+boolean *positionsCalled = NULL;
+AllocArray(positionsCalled, ref->size);
+int colCount = 0;
+while ((colCount = lineFileChopTab(lf, row)) > 0)
+    {
+    zeroBytes(positionsCalled, ref->size * sizeof positionsCalled[0]);
+    char *seqName = row[seqNameIx];
+    // Nextclade still includes unaligned sequences in its output, just with empty alignment columns
+    if (isEmpty(row[alStartIx]))
+        continue;
+    int gtIx;
+    struct seqInfo *si = mustFindSeqAndIx(seqName, *pFilteredSeqs, &gtIx);
+    int tStart = atol(row[alStartIx]) - 1;
+    // Add no-calls for unaligned bases before alignmentStart
+    int t;
+    for (t = 0;  t < tStart;  t++)
+        {
+        if (!maskSites[t])
+            {
+            addCall(snvsByPos, t, ref->dna[t], 'n', gtIx, gtCount);
+            positionsCalled[t] = TRUE;
+            }
+        }
+    int tEnd = atol(row[alEndIx]);
+    // Add no-calls for unaligned bases after alignmentEnd
+    for (t = tEnd;  t < ref->size;  t++)
+        {
+        if (!maskSites[t])
+            {
+            addCall(snvsByPos, t, ref->dna[t], 'n', gtIx, gtCount);
+            positionsCalled[t] = TRUE;
+            }
+        }
+    parseNextcladeSubstitutions(row[substIx], si, ref, maskSites, gtIx, gtCount, snvsByPos,
+                                positionsCalled);
+    parseNextcladeMissing(row[nIx], ref, maskSites, gtIx, gtCount, snvsByPos, positionsCalled);
+    parseNextcladeAmbig(row[ambigIx], ref, gtIx, gtCount, snvsByPos, positionsCalled);
+    parseNextcladeDeletions(row[delIx], si, ref);
+    parseNextcladeInsertions(row[insIx], si, ref);
+    addRefCalls(snvsByPos, positionsCalled, ref, gtIx, gtCount);
+    si->basesAligned = tEnd - tStart - si->delBases - si->insBases;
+    si->tStart = tStart;
+    si->tEnd = tEnd;
+    }
+lineFileClose(&lf);
+return snvsByPos;
+}
+
+static struct tempName *alignWithNextclade(struct seqInfo *filteredSeqs, char *nextcladeDataset,
+                                           struct dnaSeq *ref, struct slName **maskSites,
+                                           struct slName **retSampleIds,
+                                           struct seqInfo **retSeqInfo,
+                                           struct slPair **retFailedSeqs, int *pStartTime)
+/* Use nextclade to align filteredSeqs to ref, extract SNVs from alignment, and
+ * save as VCF with sample genotype columns. */
+{
+struct tempName *tn = NULL;
+struct slName *sampleIds = NULL;
+// Dump filteredSeqs to fasta file for nextclade
+struct tempName tnSeqFile;
+trashDirFile(&tnSeqFile, "ct", "usher_nextclade_input", ".txt");
+FILE *f = mustOpen(tnSeqFile.forCgi, "w");
+struct seqInfo *si;
+for (si = filteredSeqs;  si != NULL;  si = si->next)
+    faWriteNext(f, si->seq->name, si->seq->dna, si->seq->size);
+carefulClose(&f);
+reportTiming(pStartTime, "dump sequences to file");
+char *nextcladeOut = runNextcladeRun(tnSeqFile.forCgi, nextcladeDataset);
+reportTiming(pStartTime, "run nextclade run");
+struct snvInfo **snvsByPos = parseNextcladeRun(nextcladeOut, &filteredSeqs, ref, maskSites,
+                                               retFailedSeqs);
+// Write VCF
+if (filteredSeqs)
+    {
+    AllocVar(tn);
+    trashDirFile(tn, "ct", "pp", ".vcf");
+    int sampleCount = slCount(filteredSeqs);
+    char *sampleNames[sampleCount];
+    struct seqInfo *si;
+    int i;
+    for (i = 0, si = filteredSeqs;  i < sampleCount;  i++, si = si->next)
+        {
+        sampleNames[i] = si->seq->name;
+        slNameAddHead(&sampleIds, si->seq->name);
+        }
+    slReverse(&sampleIds);
+    writeSnvsToVcfFile(snvsByPos, ref, sampleNames, sampleCount, maskSites, tn->forCgi);
+    }
+
+// Clean up
+freeMem(snvsByPos);
+unlink(tnSeqFile.forCgi);
+unlink(nextcladeOut);
+*retSampleIds = sampleIds;
+*retSeqInfo = filteredSeqs;
+return tn;
+}
+
+struct tempName *vcfFromFasta(struct lineFile *lf, char *org, char *db, struct dnaSeq *refGenome,
+                              struct slName **maskSites, struct hashOrMmHash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime)
@@ -615,16 +1023,15 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
  * with sample genotype columns. */
 {
 struct tempName *tn = NULL;
-struct slName *sampleIds = NULL;
 struct dnaSeq *allSeqs = faReadAllMixedInLf(lf);
 int minSeqSize = 0, maxSeqSize = 0;
 // Default to SARS-CoV-2 or hMPXV values if setting is missing from config.ra.
-char *minSeqSizeSetting = phyloPlaceDbSetting(db, "minSeqSize");
+char *minSeqSizeSetting = phyloPlaceRefSetting(org, db, "minSeqSize");
 if (isEmpty(minSeqSizeSetting))
     minSeqSize = sameString(db, "wuhCor1") ? 10000 : 100000;
 else
     minSeqSize = atoi(minSeqSizeSetting);
-char *maxSeqSizeSetting = phyloPlaceDbSetting(db, "maxSeqSize");
+char *maxSeqSizeSetting = phyloPlaceRefSetting(org, db, "maxSeqSize");
 if (isEmpty(maxSeqSizeSetting))
     maxSeqSize = sameString(db, "wuhCor1") ? 35000 : 220000;
 else
@@ -634,24 +1041,17 @@ struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, minSeqSize, ma
 reportTiming(pStartTime, "read and check uploaded FASTA");
 if (filteredSeqs)
     {
-    struct psl *alignments = alignSequences(refGenome, filteredSeqs, pStartTime);
-    struct psl *filteredAlignments = checkAlignments(alignments, filteredSeqs, retFailedPsls);
-    removeUnalignedSeqs(&filteredSeqs, filteredAlignments, retFailedSeqs);
-    if (filteredAlignments)
+    char *nextcladeDataset = phyloPlaceRefSettingPath(org, db, "nextcladeDataset");
+    if (nextcladeDataset)
         {
-        AllocVar(tn);
-        trashDirFile(tn, "ct", "pp", ".vcf");
-        pslSnvsToVcfFile(filteredAlignments, refGenome, filteredSeqs, tn->forCgi, maskSites);
-        struct psl *psl;
-        for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
-            slNameAddHead(&sampleIds, psl->qName);
-        analyzeGaps(filteredSeqs, refGenome);
-        slReverse(&sampleIds);
-        reportTiming(pStartTime, "write VCF for uploaded FASTA");
+        *retFailedPsls = NULL;
+        tn = alignWithNextclade(filteredSeqs, nextcladeDataset, refGenome, maskSites, retSampleIds,
+                                retSeqInfo, retFailedSeqs, pStartTime);
         }
+    else
+        tn = alignWithBlat(filteredSeqs, refGenome, maskSites, retSampleIds, retSeqInfo,
+                           retFailedSeqs, retFailedPsls, pStartTime);
     }
-*retSampleIds = sampleIds;
-*retSeqInfo = filteredSeqs;
 return tn;
 }
  

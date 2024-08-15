@@ -148,9 +148,9 @@ function makeVisInput(parentEl, name, trackName="", defaultVis="Hide") {
         let ctrl = document.createElement("input");
         ctrl.classList.add(name);
         ctrl.type = "radio";
-        ctrl.name = name;
-        ctrl.value = vis;
-        if (defaultVis == vis) {
+        ctrl.name = "chainHprc" + trackName;
+        ctrl.value = vis.toLowerCase();
+        if (defaultVis.toLowerCase() === vis.toLowerCase()) {
             ctrl.checked = true;
         }       
         ctrl.setAttribute("data-default", ctrl.checked);
@@ -216,12 +216,14 @@ function makeHPRCTable() {
         
         // go through and make each link
         asms.split(",").forEach(function(asm) {
-            asmSafe = asm.replaceAll(".","_");
+            asmSafe = asm.replaceAll(".","v");
             let trackTextDiv = document.createElement("div");
             trackTextDiv.append(asmSafe + " display mode:");
             newTblDiv.append(trackTextDiv);
             let trackCtrlDiv = document.createElement("div");
-            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asm);
+            let defaultVis = "Hide";
+            if (typeof chainVis !== "undefined" && asm in chainVis) {defaultVis = chainVis[asm];}
+            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asmSafe, defaultVis=defaultVis);
             newTblDiv.append(trackCtrlDiv);
             trackTextDiv.classList.add("gridItem");
             trackCtrlDiv.classList.add("gridItem");
@@ -258,9 +260,6 @@ function makeHPRCTable() {
                 if (input.name.endsWith("SetAllVis") || (input.getAttribute("data-default") === input.checked.toString())) {
                     input.disabled = true;
                 } else {
-                    // change the form name to a track name so the track can be on
-                    trackName = "chainHprc" + input.getAttribute("data-trackName");
-                    input.name = trackName;
                     input.value = input.value.toLowerCase();
                 }
             }
@@ -269,11 +268,7 @@ function makeHPRCTable() {
 }
 
 
-
-
-// on page load initialize VEP, Population Frequency and Haplotype Tables
-// for gnomAD v3.1.1 track
-$(document).ready(function() {
+function initPage() {
     if (typeof doHPRCTable !== "undefined") {
         makeHPRCTable();
     }
@@ -349,4 +344,13 @@ $(document).ready(function() {
             last.parentNode.insertBefore(document.createElement("br"), newTable);
         }
     }
+}
+
+// Export a way to call the document.ready() functions after ajax
+var hgc = {initPage: initPage};
+
+// on page load initialize VEP, Population Frequency and Haplotype Tables
+// for gnomAD v3.1.1 track
+$(document).ready(function() {
+    initPage();
 });

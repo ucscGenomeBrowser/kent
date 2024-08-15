@@ -82,7 +82,7 @@ def main():
             fields = line.strip('\n').split('\t')
             geneList.append(geneFields(chrom=fields[0],chromStart=int(fields[1]),chromEnd=int(fields[2]),name=fields[3]))
 
-    with open(sys.argv[1], "r") as inputFile:
+    with open(sys.argv[1], "r", encoding="utf8") as inputFile:
         header = inputFile.readline()
         for line in inputFile:
             fields = line.strip('\n').split('\t')

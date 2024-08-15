@@ -177,4 +177,10 @@ struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr);
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
  * no scoring info) */
 
+struct psl *bamToPslUnscored2(const bam1_t *bam, const bam_hdr_t *hdr, int inclHardClipped);
+/* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
+ * no scoring info).  If inclHardClipped is True, the size of the hard-clipped regions
+ * are include in the PSL.  This is required for supplementary alignments to have the
+ * correct query sizes and offsets.
+ */
 #endif//ndef BAMFILE_H

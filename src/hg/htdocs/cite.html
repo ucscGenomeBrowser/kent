@@ -7,51 +7,70 @@
 
 <h1>Citing the UCSC Browser in a Publication or Web Page</h1>
 <p>
-You are free to use all graphics produced by this website in your published work or on other websites, there
-is no need to contact us to request permission, see the <a href="/license/">license page</a> for details.
-</p>
+<b>You are free to use all graphics produced by this website in your published work or on other websites</b>, 
+there is no need to contact us to request permission. See the <a href="/license/">license page</a> for details.</p>
+
+<h2>How to cite the UCSC Genome Browser</h2>
 <p>
-But the UCSC Genome Browser is exclusively funded by NIH and if research articles do 
-not cite or mention us, we cannot report the citations and it is harder for NIH to justify funding one of the 
-few stable resources in genomics that you can rely on.
-</p>
-
+The UCSC Genome Browser is exclusively funded by the NIH, please consider citing us properly 
+so that we may report usage and continue to develop this resource.</p>
+<h3>What manuscript to cite?</h3>
 <p>
-At the moment, the most recent UCSC Genome Browser paper has the <a target=_blank href="https://pubmed.ncbi.nlm.nih.gov/36420891/">PMID 36420891</a>,
- DOI 10.1093/nar/gkac1072</a>.  In addition, you can include a reference to the Genome 
-Browser website in your manuscript: <a href="index.html" 
-target="_blank">http://genome.ucsc.edu</a> or mention in the text that you used the "UCSC Genome Browser". 
-To cite just one of our computational tools, see the <a href="#ref">reference section</a> below.
-</p>
+Please cite our latest paper, currently <a target=_blank 
+href="https://pubmed.ncbi.nlm.nih.gov/36420891/">PMID 36420891</a>, 
+DOI 10.1093/nar/gkac1072. In addition, you can reference the Genome Browser website 
+in your manuscript: <a href="index.html" target="_blank">http://genome.ucsc.edu</a> or 
+mention in the text that you used the "UCSC Genome Browser". To cite one of our 
+computational tools, see the <a href="#ref">reference section</a> below.</p>
 
-<p>While doing this, you can check if the genome coordinates in your paper are
-clear to the readers and if you specified the genome assembly that you used.
-One cannot mention the genome assembly too often. Computational
-biologists will appreciate if your supplemental files with genome annotations
-include the genome assembly identifier directly in the file name. We keep these 
-identifiers short, currently they are "hg19" and "hg38" for the most common
-human assemblies. In a similar vein, references to nucleotides ideally have the
-full chromosome position in your publication text somewhere or in a
-supplemental table, and not only the position on the transcript and or coding
-sequence, as transcript models can change a lot.
-</p>
-
-<p>To make this even easier, when refering to a gene or genomic location, you can 
-use the menu <a href="../cgi-bin/hgSession">"My Data &gt; My Sessions"</a>, to
-generate a short, stable link to your current genome browser view for your
-publication. In this way, readers can jump from your publication to this
-genome location and get their view configured for your particular message.
-You can even add your own annotations to the UCSC Genome Browser, either as
-very simple text labels, by pasting a line like "chr1 1 1000 my_annotation"
-into the box found under <a href="../cgi-bin/hgCustom">"My Data &gt; Custom
-    Tracks"</a> or by loading all your genomics results into the browser with 
-<a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">Track Hubs</a>.
-</p>
+<h3>General best practices for publications</h3>
+<p>
+The following are recommendations to improve communication in your
+scientific manuscript and ensure readers in 10 years can still find the
+DNA sequence that you analyzed. This requires mention of the assembly, 
+chromosome position, any transcripts, and ideally also a 
+Genome Browser stable link:</p>
+<ol>
+<li><b>Assembly:</b> Provide a clear mention of which genome assembly you are working with, e.g. 
+"hg19" or "hg38". It is often helpful to place the assembly name directly on 
+any supplemental file names if they contain annotations. E.g. "promoters.hg38.bed".</li>
+<li><b>Chromosome Position:</b> References to nucleotides should have full chromosome positions in the 
+publication text or a supplemental table, whenever possible. Including only the position on the 
+transcript or coding sequence can be confusing later as transcript models change.
+E.g. mention "NC_000023.11:g.32389644G&gt;A", in addition to the transcript-based
+description "NM_004006.2:c.4375C&gt;T". Or, in the manuscript, you can add the chromosome
+location in brackets, such as "(hg38,chr11:32389644)", when nucleotide 4375 of
+NM_004006.2 is discussed.</li>
+<li><b>Transcript:</b> Transcripts change. Always mention the accession of a transcript, not only the gene name. E.g. "NM_004006.2", not just 
+"the longest transcript of the gene DMD". Gene symbols and transcripts change over time, so any sort of accession is helpful.
+<li><b>Stable links:</b> A UCSC Genome Browser link is a great way to
+share results or regions of 
+interest in a way readers and reviewers can explore. It includes the assembly, position, all transcripts, 
+any tracks visible, all filter settings that you made and any other settings in the browser. 
+If you would like to include 
+a link, do not copy the URL directly from the address bar, the one with
+"hgsid=xxx". These links are long and expire after a few days.
+Instead, use the menu option <a href="../cgi-bin/hgSession">"My Data &gt; My
+Sessions"</a>, to generate a short, 
+stable link to your current genome browser view. For more information on how to add your 
+own annotations to share this way see <a href="../cgi-bin/hgCustom">Custom Tracks</a> 
+and <a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">Track Hubs</a>.</li>
+</ol>
 
 <a name="ref"></a>
 <h2>Genome Browser software and website references</h2>
+
 <p>
-<strong>Most recent UCSC Genome Browser publication:</strong>
+<strong>Genome Browser screenshots:</strong><br>
+Journal-quality screenshots of the Genome Browser can be produced by using the View -&gt; PDF
+utility in the top navigation bar from the tracks page. When including a
+screenshot in your manuscript, reference <em>http://genome.ucsc.edu</em> in the caption and cite
+the most recent Genome Browser paper in the manuscript. As mentioned above, we recommend including a <a 
+href="goldenPath/help/hgSessionHelp.html#Introduction">My Data &gt; My Sesssion URL</a>
+of your screenshot to allow readers to interact with your data and get more information.</p>
+
+<p>
+<strong>Most recent UCSC Genome Browser publication:</strong><br>
 Nassar et al.
 <a href="https://pubmed.ncbi.nlm.nih.gov/36420891/" target="_blank">
 The UCSC Genome Browser database: 2023 update</a>. 
@@ -59,66 +78,131 @@ The UCSC Genome Browser database: 2023 update</a>.
 </p>
 
 <p>
-All present and past UCSC Genome Browser updates sorted by date can be shown with this 
-<a
-    target=_blank href="https://pubmed.ncbi.nlm.nih.gov/?term=%28%28UCSC+Genome+Browser%5BTitle%5D%29+AND+%28update%5BTitle%5D+OR+updates%5BTitle%5D%29+AND+%22Nucleic+acids+research%22%5BJournal%5D%29+NOT+ENCODE%5BTitle%5D&sort=date">PubMed search</a>.
-</p>
-<p>
-<strong>Original UCSC Genome Browser publication:</strong>
+<strong>Original UCSC Genome Browser publication:</strong><br>
 Kent WJ, Sugnet CW, Furey TS, Roskin KM, Pringle TH, Zahler AM, Haussler D.  
 <a href="http://www.genome.org/cgi/content/abstract/12/6/996" target="_blank">The human genome 
 browser at UCSC</a>. 
 <em>Genome Res.</em> 2002 Jun;12(6):996-1006.</p>
 
 <p>
-<strong>Genome Browser screenshots:</strong>
-Journal-quality screenshots of the Genome Browser can be produced by using the View -&gt;PDF
-utility in the top navigation bar from the tracks page. When including a
-screenshot in your manuscript, reference <em>http://genome.ucsc.edu</em> in the caption and cite
-the most recent Genome Browser paper in the manuscript. As mentioned above, we recommend including a <a 
-href="goldenPath/help/hgSessionHelp.html#Introduction">My Data &gt; My Sesssion URL</a>
-of your screenshot to allow readers to interact with your data and get more information.</p>
+All present and past UCSC Genome Browser updates sorted by date can be shown with this 
+<a
+    target=_blank href="https://pubmed.ncbi.nlm.nih.gov/?term=%28%28UCSC+Genome+Browser%5BTitle%5D%29+AND+%28update%5BTitle%5D+OR+updates%5BTitle%5D%29+AND+%22Nucleic+acids+research%22%5BJournal%5D%29+NOT+ENCODE%5BTitle%5D&sort=date">PubMed search</a>.
+</p>
+
+<hr>
+
 <p>
-<strong>BLAT:</strong> 
+<strong>BLAT:</strong><br>
 Kent WJ. 
 <a href="http://www.genome.org/cgi/content/abstract/12/4/656" target="_blank">BLAT - the BLAST-like 
 alignment tool</a>. 
 <em>Genome Res.</em> 2002 Apr;12(4):656-64.</p>
 
+<hr>
+
 <p>
-<strong>UCSC Table Browser:</strong>
+<strong>LiftOver:</strong><br>
+Hinrichs AS, Karolchik D, Baertsch R, Barber GP, Bejerano G, Clawson H, Diekhans M, Furey TS, Harte
+RA, Hsu F <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkj144" target="_blank">
+The UCSC Genome Browser Database: update 2006</a>.
+<em>Nucleic Acids Res</em>. 2006 Jan 1;34(Database issue):D590-8.
+</p>
+
+<hr>
+
+<p>
+<strong>UCSC Table Browser:</strong><br>
 Karolchik D, Hinrichs AS, Furey TS, Roskin KM, Sugnet CW, Haussler D, Kent WJ. 
 <a href="http://nar.oupjournals.org/cgi/content/abstract/32/suppl_1/D493?ijkey=06tIQcBr2VZNz&keytype=ref" 
 target="_blank">The UCSC Table Browser data retrieval tool</a>. 
 <em>Nucleic Acids Res</em>. 2004 Jan 1;32(Database issue):D493-6.</p>
+
+<hr>
+
 <p>
-<strong>BigWig and BigBed tools:</strong>
+<strong>UCSC Data Integrator and Variant Annotation Integrator:</strong><br>
+Hinrichs AS, Raney BJ, Speir ML, Rhead B, Casper J, Karolchik D, Kuhn RM, Rosenbloom KR, Zweig AS,
+Haussler D <em>et al</em>.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btv766"
+target="_blank">
+UCSC Data Integrator and Variant Annotation Integrator</a>.
+<em>Bioinformatics</em>. 2016 May 1;32(9):1430-2.
+</p>
+
+<hr>
+
+<p>
+<strong>BigWig and BigBed tools:</strong><br>
 Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D.  
 <a href="http://bioinformatics.oxfordjournals.org/content/26/17/2204.long" target="_blank">BigWig 
 and BigBed: enabling browsing of large distributed data sets</a>.
 <em>Bioinformatics</em>. 2010 Sep 1;26(17):2204-7.</p>
+
+<hr>
+
 <p>
-<strong>Track Data Hubs:</strong>
+<strong>RESTful API:</strong><br>
+Lee CM, Barber GP, Casper J, Clawson H, Diekhans M, Gonzalez JN, Hinrichs AS, Lee BT, Nassar LR,
+Powell CC <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkz1012" target="_blank">
+UCSC Genome Browser enters 20th year</a>.
+<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D756-D761.
+</p>
+
+<hr>
+
+<p>
+<strong>Track Data Hubs:</strong><br>
 Raney BJ, Dreszer TR, Barber GP, Clawson H, Fujita PA, Wang T, Nguyen N, Paten B, Zweig AS, 
 Karolchik D, Kent WJ.
 <a href="http://bioinformatics.oxfordjournals.org/content/30/7/1003"
 target="_blank">Track Data Hubs enable visualization of user-defined genome-wide annotations on the 
 UCSC Genome Browser</a>.
 <em>Bioinformatics</em>. 2014 Apr 1;30(7):1003-5. Epub 2013 Nov 13.</p>
+
+<hr>
+
 <p>
-<strong>UCSC Gene Sorter:</strong>
+<strong>Genome Browser in a Box (GBiB):</strong><br>
+Haeussler M, Raney BJ, Hinrichs AS, Clawson H, Zweig AS, Karolchik D, Casper J, Speir ML, Haussler
+D, Kent WJ.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btu712"
+target="_blank">
+Navigating protected genomics data with UCSC Genome Browser in a Box</a>.
+<em>Bioinformatics</em>. 2015 Mar 1;31(5):764-6.</p>
+
+<hr>
+
+<p>
+<strong>UCSC Gene Sorter:</strong><br>
 Kent WJ, Hsu F, Karolchik D, Kuhn RM, Clawson H, Trumbower H, Haussler D. 
 <a href="http://www.genome.org/cgi/content/abstract/15/5/737" target="_blank">Exploring 
 relationships and mining data with the UCSC Gene Sorter</a>.
 <em>Genome Res</em>. 2005 May;15(5):737-41.</p>
+
+<hr>
+
 <p>
-<strong>UCSC SARS-CoV-2 Genome Browser</strong>
+<strong>UCSC SARS-CoV-2 Genome Browser:</strong><br>
 Fernandes JD, Hinrichs AS, Clawson H, et al. 
 <a href="https://www.nature.com/articles/s41588-020-0700-8" 
 target="_blank">The UCSC SARS-CoV-2 Genome Browser</a>. 
 <em>Nat Genet.</em> 2020 Sept 9; 52:991-998.</p>
+<hr>
 
-<p><strong>Other genome assemblies:</strong> 
+<p>
+<strong>GenArk: UCSC Genome Archive:</strong><br>
+Clawson H, Lee BT, Raney BJ, Barber GP, Casper J, Diekhans M, Fischer C, Gonzalez JN, Hinrichs AS,
+Lee CM <em>et al</em>.
+<a href="https://doi.org/10.21203/rs.3.rs-2697398/v1" target="_blank">
+GenArk: Towards a million UCSC Genome Browsers</a>.
+<em>Res Sq</em>. 2023 Apr 3;.
+</p>
+
+
+<p><strong>Other genome assemblies:</strong><br>
 Manuscripts that include the use of Genome Browser assembly data from organisms other than human 
 should, e.g. one of the thousands of GenArk assemblies that we provide, should cite the relevant sequencing paper. 
 Usually this information can be found on the 

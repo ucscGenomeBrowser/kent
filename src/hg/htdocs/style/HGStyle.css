@@ -43,8 +43,8 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
 }
 
 #trackCtrlTable {
-        width: 90%;
-
+        width: 95%;
+        margin-top: 6px;
 }
 
 .moveButtonText {
@@ -161,9 +161,13 @@ A:visited IMG { border-width: 0px; padding: 0px; margin: 0px;}
 A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 
 /* A toggle bar can be seen in hgTracks, under the image groups that can be opened and closed. */
-.redToggleBar {font-weight: bold; color:#FFFFFF; background-color:#ff0000; height:28px; width:100%;
+.hubToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
-.blueToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
+.quickToggleBar {font-weight: bold; color:#FFFFFF; background-color:#108020; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap;}
+.errorToggleBar {font-weight: bold; color:#FFFFFF; background-color:#ff0000; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap;}
+.nativeToggleBar {font-weight: bold; color:#FFFFFF; background-color:#00457c; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
 .toggleButton  {height: 20px; width: 20px; vertical-align:middle;}
 
@@ -855,6 +859,7 @@ div.warnDialog .ui-dialog-title { font-weight: bold; color: #000000; }
 div.warnDialog .ui-dialog-content { background-color: #FFFEE8; font-size: 1em; }
 div.warnDialog .ui-dialog-buttonpane { border-width: 0; text-align: center; }
 div.warnDialog .ui-dialog-buttonset { width: 100%; display: inline-block; }
+body > div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable * { font-size: 14px; }
 
 .centeredImage
 {
@@ -1146,7 +1151,7 @@ span.gbSessionChanged {
     visibility: hidden;
     background-color: rgb(238,238,238);
     color: black;
-    text-align: center;
+    text-align: left;
     position: fixed;
     z-index: 1003; /* these indices are all over the place for various things */
     opacity: 0;
@@ -1161,4 +1166,20 @@ span.gbSessionChanged {
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 0.9;
+}
+
+.chainBreak {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    row-gap: 10px;
+}  
+
+.dialogNewWindowIcon {
+    position: absolute;
+    right: 1.4em;
+    top: 50%;
+    width: 19px;
+    margin: -8px 0 0 0;
+    padding: 1px;
+    height: 18px;
 }

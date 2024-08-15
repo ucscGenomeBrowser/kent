@@ -863,7 +863,3 @@ semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9864
 padding 250
-
-include jaspar.ra
-
-

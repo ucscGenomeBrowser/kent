@@ -32,6 +32,7 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "obscure.h"
+#include "chromAlias.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -212,14 +213,20 @@ return serverList;
 void doHelp()
 /* Print up help page */
 {
-puts(
-"In-Silico PCR searches a sequence database with a pair of\n"
-"PCR primers, using an indexing strategy for fast performance.\n"
+printf(
+"In-Silico PCR V%s searches a sequence database with a pair of\n"
+"PCR primers, using the BLAT index for fast performance.\n"
 "See an example\n"
 "<a href='https://youtu.be/U8_QYwmdGYU'"
 "target='_blank'>video</a>\n"
-"on our YouTube channel.\n"
-"\n"
+"on our YouTube channel.<br>\n"
+"This tool is not guaranteed to find absolutely all off-target locations,\n"
+"it is optimized for targets with higher identities. For\n"
+"use in primer design, especially in repetitive regions, consider additional validation with tools such as\n"
+"<a target='_blank' href='https://www.ncbi.nlm.nih.gov/tools/primer-blast/'>"
+"primer blast</a>.<br>\n"
+"If you are looking for matches to RT-PCR primers, where primers often straddle intron-exon boundaries, change the <b>Target</b> option and select "
+"a gene transcript set.<br>\n"
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
 "<B>Target</B> - If available, choose to query transcribed sequences.<BR>\n" 
@@ -251,7 +258,7 @@ puts(
 "aagcactttgctctcagctccacGCAGCTGCTTTAGGAGCCACTCATGaG\n"
 "</PRE></TT>\n"
 "The + between the coordinates in the fasta header indicates \n"
-"this is on the positive strand.  \n"
+"this is on the positive strand.  \n", gfVersion
 );
 }
 
@@ -433,30 +440,30 @@ else
     cgiMakeHiddenVar("wp_target", "genome");
 
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
-printf("Forward Primer:<BR>");
+printf("Forward primer:<BR>");
 cgiMakeTextVar("wp_f", fPrimer, 22);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER COLWIDTH=2>\n");
-printf(" Reverse Primer:<BR>");
+printf(" Reverse primer:<BR>");
 cgiMakeTextVar("wp_r", rPrimer, 22);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("&nbsp;<BR>");
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 printf("%s", "</CENTER></TD>\n");
 
 printf("</TR></TABLE><BR>");
 
 printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=4><TR>\n");
 printf("%s", "<TD><CENTER>\n");
-printf("Max Product Size: ");
+printf("Max product size: ");
 cgiMakeIntVar("wp_size", maxSize, 5);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min Perfect Match: ");
+printf(" Min perfect match: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
 printf("%s", "</CENTER></TD>\n");
 
@@ -464,12 +471,12 @@ jsOnEventById("click", "Submit", "if ($('#wp_r').val()==='' || $('#wp_f').val()=
         "{ alert('Please specify at least a forward and reverse primer. Both input boxes need to be filled out.'); event.preventDefault(); }");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min Good Match: ");
+printf(" Min good match: ");
 cgiMakeIntVar("wp_good", minGood, 2);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Flip Reverse Primer: ");
+printf(" Flip reverse primer: ");
 cgiMakeCheckBox("wp_flipReverse", flipReverse);
 printf("%s", "</CENTER></TD>\n");
 
@@ -625,6 +632,13 @@ struct gfPcrOutput *gpoList =
     gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
 
+// translate native names to chromAuthority names
+struct gfPcrOutput *gpo;
+for(gpo = gpoList ; gpo; gpo = gpo->next)
+    {
+    char *displayChromName = cloneString(chromAliasGetDisplayChrom(server->db, cart, gpo->seqName));
+    gpo->seqName = displayChromName;
+    }
 
 if (gpoList != NULL)
     {
@@ -641,7 +655,9 @@ if (gpoList != NULL)
     }
 else
     {
-    printf("No matches to %s %s in %s %s", gpi->fPrimer, gpi->rPrimer, 
+    printf("<p>No matches to %s %s in %s %s.</p>"
+            "<p>To find RT-PCR primers that straddle intron splice sites, go back and change the <b>Target</b> option to a gene transcript set.</p>",
+            gpi->fPrimer, gpi->rPrimer, 
 	   server->genome, server->description);
     }
 gfDisconnect(&conn);
@@ -759,6 +775,7 @@ boolean appendToResults = cartUsualBoolean(cart, "wp_append", TRUE);
 struct pcrServer *serverList = getServerList();
 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 
 /* Get variables. */
 maxSize = cartUsualInt(cart, "wp_size", maxSize);

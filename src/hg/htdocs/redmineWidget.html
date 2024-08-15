@@ -1,4 +1,4 @@
-<!--#if expr='"$SERVER_NAME" == /.*.ucsc.edu/ || "$SERVER_NAME" == /.*.sdsc.edu/ || "$SERVER_NAME" == /browser/'-->
+<!--#if expr='("$SERVER_NAME" == /.*.ucsc.edu/ || "$SERVER_NAME" == /.*.sdsc.edu/ || "$SERVER_NAME" == /browser/) && ("$SERVER_NAME" != /genome-preview.*\.ucsc\.edu/) && ("$SERVER_NAME" != /hgwalpha.*\.ucsc\.edu/)'-->
 <div id="helpdesk_widget"></div>
 <script type="text/javascript" src="https://redmine.soe.ucsc.edu/helpdesk_widget/widget.js"></script>
 <script>

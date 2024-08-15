@@ -3,7 +3,6 @@ shortLabel Problematic Regions
 longLabel Problematic/special genomic regions for sequencing or very variable regions
 superTrack on
 html problematic
-pennantIcon New red ../goldenPath/newsarch.html#062123 "Released Jun. 21, 2023"
 group map
 
     track problematic
@@ -54,7 +53,6 @@ group map
     longLabel Highly Reproducible genomic regions for sequencing
     visibility hide
     html problematic
-    pennantIcon New red ../goldenPath/newsarch.html#062123 "Released Jun. 21, 2023"
     type bed 3
 
         track highReproBeds

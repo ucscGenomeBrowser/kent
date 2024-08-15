@@ -457,7 +457,7 @@ sub getDbFromPath {
   my $dbFromName = basename($val);
   $dbFromName =~ s/.2bit//;
   if (! $opt_noDbNameCheck) {
-    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat|$patchDbFormat)((\.2bit)|(/(\S+)?))?$@) {
+    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat|$patchDbFormat)((\.2bit)|(/(\S+)?))?$@ ) {
       $db = $1;
     } else {
       die "Error: $DEF variable $var=$val must be a full path with " .
@@ -996,6 +996,19 @@ chainPreNet $inclHap $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 netChainSubset -verbose=0 noClass.net $chain stdout \\
 | chainStitchId stdin stdout | gzip -c > $tDb.$qDb.over.chain.gz
 
+hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $tDb.$qDb.over.chain.gz
+wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainLiftOver${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainLiftOver${QDb}Link.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}Link.bb
+set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chainLiftOver${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainLiftOver${QDb}Link.txt
+rm -f link.tab chain.tab bigChain.as bigLink.as chainLiftOver${QDb}Link.tab chainLiftOver${QDb}.tab
+
 _EOF_
     );
   my $seq1Dir = $defVars{'SEQ1_DIR'};
@@ -1205,7 +1218,7 @@ mv align.tab net$QDb.tab
 _EOF_
       );
       # target may be database assembly, special set of gbdb symLinks
-      if ($dbExists && $tChromInfoExists) {
+      if ( $dbExists && $tChromInfoExists && $tDb !~ m/^GC/ ) {
       $bossScript->add(<<_EOF_
 if ( -s "\$buildDir/axtChain/chain${QDb}.bb" ) then
   mkdir -p /gbdb/$tDb/chainNet
@@ -1602,7 +1615,6 @@ sub installDownloads {
   if ($tDb =~ m/^GC/) {
      $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
   }
-printf STDERR "# DBG: tDb '%s' have liftOverDir: '%s'\n", $tDb, $liftOverDir;
   my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
   my $andNets = $isSelf ? "." :
@@ -1626,7 +1638,7 @@ _EOF_
     my $axt = ($splitRef ?
 	       "mkdir -p axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
 	       "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
-    if ( -s "$runDir/$tDb.$qDb.net.gz") {
+    if ( -s "$runDir/$tDb.$qDb.net.gz" ) {
     $bossScript->add(<<_EOF_
 ln -s $runDir/$tDb.$qDb.net.gz .
 _EOF_
@@ -1837,12 +1849,14 @@ if (\$lineCount > 0) then
 netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
   | hgLoadNet -test -noBin -warn -verbose=0 $tDb netSyn$QDb stdin
 mv align.tab netSyn$QDb.tab
-if ( -s "$buildDir/axtChain/chainSyn${QDb}.bb" ) then
-  mkdir -p /gbdb/$tDb/chainNet
-  rm -f "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
-  ln -s "$buildDir/axtChain/chainSyn${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb"
-  ln -s "$buildDir/axtChain/chainSyn${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
-endif
+  if ( -s "$buildDir/axtChain/chainSyn${QDb}.bb" ) then
+    if ( "$tDb" !~ "GC*" ) then
+      mkdir -p /gbdb/$tDb/chainNet
+      rm -f "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
+      ln -s "$buildDir/axtChain/chainSyn${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb"
+      ln -s "$buildDir/axtChain/chainSyn${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
+    endif
+  endif
 endif
 rm -f link.tab
 rm -f chain.tab
@@ -1884,10 +1898,12 @@ if (\$lineCount > 0) then
   rm -f $tDb.$qDb.synNet.txt $tDb.$qDb.synNet.summary.tab \\
         $tDb.$qDb.synNet.summary.bed
   if ( -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" ) then
-    mkdir -p /gbdb/$tDb/chainNet
-    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
-    ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
-    ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+    if ( "$tDb" !~ "GC*" ) then
+      mkdir -p /gbdb/$tDb/chainNet
+      rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+      ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
+      ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+    endif
   endif
 endif
 _EOF_

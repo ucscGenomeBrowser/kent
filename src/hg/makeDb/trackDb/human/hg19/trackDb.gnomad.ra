@@ -341,10 +341,11 @@ html gnomad
     type bigBed 12
     labelFields name,geneName
     visibility pack
+    dataVersion Release 2.1.1 (March 6, 2019)
 
         track pliByGene
         shortLabel gnomAD Gene LoF Constraint
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI)
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -362,7 +363,7 @@ html gnomad
 
         track missenseByGene
         shortLabel gnomAD Gene Missense Constraint
-        longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
+        longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -379,7 +380,7 @@ html gnomad
 
         track pliByTranscript
         shortLabel gnomAD Transcript LoF Constraint
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI)
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -396,7 +397,7 @@ html gnomad
 
         track missenseByTranscript
         shortLabel gnomAD Transcript Missense Constraint
-        longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
+        longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -413,8 +414,8 @@ html gnomad
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset) 
-        longLabel gnomAD Predicted Regional Missense Constraint Metrics (O/E scores from ExAc Dataset)
+        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset, as on DECIPHER Browser) 
+        longLabel gnomAD Predicted Regional Missense Constraint Metrics (O/E scores from ExAc Dataset) v2.1.1
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
@@ -437,6 +438,7 @@ html gnomad
     viewLimits 0:1
     visibility full
     html gnomadPext
+    dataVersion Release 2.1.1 (March 6, 2019)
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
@@ -908,8 +910,13 @@ html gnomad
     parent gnomadSuper
     visibility squish
     dataVersion Release 2.1.1
-    labelFields name,rsId
-    defaultLabelFields name
+    labelFields rsId,_displayName
+    defaultLabelFields _displayName
+    skipFields _displayName
+    skipEmptyFields on
+    filterValues.AC_non_cancer Non-Cancer
+    filterValuesDefault.AC_non_cancer Non-Cancer
+    filterType.AC_non_cancer single
     filterValues.annot pLoF,missense,synonymous,other
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
     filterType.FILTER multipleListAnd

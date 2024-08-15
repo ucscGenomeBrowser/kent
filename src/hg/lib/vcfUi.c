@@ -730,6 +730,7 @@ if (boxed && fileExists(hHelpFile("hgVcfTrackHelp")))
            "TARGET=_BLANK>VCF configuration help</A></TD>");
 
 printf("</TR></TABLE>");
+wigOption(cart, name, title, tdb);
 
 if (!boxed && fileExists(hHelpFile("hgVcfTrackHelp")))
     printf("<P><A HREF=\"../goldenPath/help/hgVcfTrackHelp.html\" TARGET=_BLANK>VCF "

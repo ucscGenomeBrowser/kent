@@ -1,0 +1,277 @@
+<h2>Description</h2>
+
+<p>
+This track shows multiple alignments of 11 primate
+assemblies on this <em>target/reference</em> assembly
+(huamn/CHM13v2/hs1 - Jan. 2022 - T2T).
+</p>
+<p>
+This is a composite track with both a <em>multiz</em> calculated
+multiple alignment and the same set of assemblies used to calculate
+the 11-way multiple alignment
+with the <a href='https://cglgenomics.ucsc.edu/data/cactus/' target=_blank>
+cactus</a> alignment procedure.
+</p>
+
+<p>
+The <em>multiz</em> multiple alignment is generated using <em>multiz</em> and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
+</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  Missing sequence in any
+assembly is highlighted in the track display by regions of yellow when zoomed
+out and by Ns when displayed at base level.  The following conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the huamn/CHM13v2/hs1 - Jan. 2022 - T2T genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the huamn/CHM13v2/hs1 - Jan. 2022 - T2T genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the huamn/CHM13v2/hs1 - Jan. 2022 - T2T sequence at those
+alignment positions relative to the longest non-huamn/CHM13v2/hs1 sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+
+<p>
+<blockquote>
+<table border=1 class='stdTbl'>
+<tr><th>count</th>
+    <th>alignment<br>percent</th>
+    <th>assembly&nbsp;and<br>browser&nbsp;link</th>
+    <th>maf&nbsp;file<br>type</th>
+    <th>common&nbsp;name/assembly&nbsp;date<br>assembly&nbsp;submitter</th>
+</tr>
+<tr><th>01</th>
+    <td>n/a</td>
+    <td style='text-align:left;'><a href='/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a></td>
+    <td style='text-align:left;'>reference</td>
+    <td>human/T2T CHM13v2.0/hs1/Jan. 2022</td>
+<tr>
+<tr><th>02</th>
+    <td>93.227</td>
+    <td style='text-align:left;'><a href='/cgi-bin/hgTracks?db=hg38' target=_blank>hg38</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>Human/hg38/Dec. 2013 (GRCh38/hg38)/GRCh38 Genome Reference Consortium Human Reference 38 (GCA_000001405.15)</td>
+<tr>
+<tr><th>03</th>
+    <td>91.315</td>
+    <td style='text-align:left;'><a href='/h/GCA_028858775.2?position=lastDbPos' target=_blank>GCA_028858775.2</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>chimpanzee/2024-01-08/NHGRI/NIH</td>
+<tr>
+<tr><th>04</th>
+    <td>91.315</td>
+    <td style='text-align:left;'><a href='/h/GCA_029289425.2?position=lastDbPos' target=_blank>GCA_029289425.2</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>pygmy chimpanzee/2024-01-08/NHGRI/NIH</td>
+<tr>
+<tr><th>05</th>
+    <td>90.999</td>
+    <td style='text-align:left;'><a href='/h/GCA_029281585.2?position=lastDbPos' target=_blank>GCA_029281585.2</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>western lowland gorilla/2024-01-08/NHGRI/NIH</td>
+<tr>
+<tr><th>06</th>
+    <td>88.699</td>
+    <td style='text-align:left;'><a href='/h/GCA_028885655.2?position=lastDbPos' target=_blank>GCA_028885655.2</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>Sumatran orangutan/2024-01-05/NHGRI/NIH</td>
+<tr>
+<tr><th>07</th>
+    <td>88.670</td>
+    <td style='text-align:left;'><a href='/h/GCA_028885625.2?position=lastDbPos' target=_blank>GCA_028885625.2</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>Bornean orangutan/2024-01-08/NHGRI/NIH</td>
+<tr>
+<tr><th>08</th>
+    <td>84.462</td>
+    <td style='text-align:left;'><a href='/h/GCA_028878055.2?position=lastDbPos' target=_blank>GCA_028878055.2</a></td>
+    <td style='text-align:left;'>syntenic net</td>
+    <td>siamang/2024-01-05/NHGRI/NIH</td>
+<tr>
+<tr><th>09</th>
+    <td>66.921</td>
+    <td style='text-align:left;'><a href='/h/GCF_011100555.1?position=lastDbPos' target=_blank>GCF_011100555.1</a></td>
+    <td style='text-align:left;'>maf net</td>
+    <td>white-tufted-ear marmoset/2021-04-28/VGP</td>
+<tr>
+<tr><th>10</th>
+    <td>31.755</td>
+    <td style='text-align:left;'><a href='/h/GCF_020740605.2?position=lastDbPos' target=_blank>GCF_020740605.2</a></td>
+    <td style='text-align:left;'>maf net</td>
+    <td>Ring-tailed lemur/2021-11-04/VGP</td>
+<tr>
+<tr><th>11</th>
+    <td>14.855</td>
+    <td style='text-align:left;'><a href='/h/GCF_027406575.1?position=lastDbPos' target=_blank>GCF_027406575.1</a></td>
+    <td style='text-align:left;'>maf net</td>
+    <td>slow loris/2022-12-28/VGP</td>
+<tr>
+</table>
+</blockquote>
+</p>
+<h3>Alignments identity</h3>
+<p>
+<table border='1'>
+<caption>showing percent identity, how much of the target is matched by the query</caption>
+<thead style='position:sticky; top:0; background-color: white;'><tr>
+<th>chains</th><th>syntenic</th><th>reciprocal<br>best</th><th>common<br>name</th><th>assembly</th>
+</tr></thead><tbody>
+<tr><td style='text-align:right;'>93.227</td><td style='text-align:right;'>92.923</td><td style='text-align:right;'>91.864</td><td>Human</td><td>hg38</td></tr>
+<tr><td style='text-align:right;'>91.315</td><td style='text-align:right;'>90.674</td><td style='text-align:right;'>89.076</td><td>chimpanzee</td><td>GCA_028858775.2</td></tr>
+<tr><td style='text-align:right;'>91.315</td><td style='text-align:right;'>90.708</td><td style='text-align:right;'>89.043</td><td>pygmy chimpanzee</td><td>GCA_029289425.2</td></tr>
+<tr><td style='text-align:right;'>90.999</td><td style='text-align:right;'>90.319</td><td style='text-align:right;'>88.448</td><td>western lowland gorilla</td><td>GCA_029281585.2</td></tr>
+<tr><td style='text-align:right;'>88.699</td><td style='text-align:right;'>87.864</td><td style='text-align:right;'>85.780</td><td>Sumatran orangutan</td><td>GCA_028885655.2</td></tr>
+<tr><td style='text-align:right;'>88.670</td><td style='text-align:right;'>87.822</td><td style='text-align:right;'>85.755</td><td>Bornean orangutan</td><td>GCA_028885625.2</td></tr>
+<tr><td style='text-align:right;'>84.462</td><td style='text-align:right;'>83.337</td><td style='text-align:right;'>80.990</td><td>siamang</td><td>GCA_028878055.2</td></tr>
+<tr><td style='text-align:right;'>66.921</td><td style='text-align:right;'>65.793</td><td style='text-align:right;'>64.181</td><td>white-tufted-ear marmoset</td><td>GCF_011100555.1</td></tr>
+<tr><td style='text-align:right;'>31.755</td><td style='text-align:right;'>30.955</td><td style='text-align:right;'>30.652</td><td>Ring-tailed lemur</td><td>GCF_020740605.2</td></tr>
+<tr><td style='text-align:right;'>14.855</td><td style='text-align:right;'>14.032</td><td style='text-align:right;'>14.306</td><td>slow loris</td><td>GCF_027406575.1</td></tr>
+</tbody></table>
+</p>
+<h2>Display Conventions and Configuration</h2>
+<p>
+In full and pack display modes, conservation scores are displayed as a
+<em>wiggle track</em> (histogram) in which the height reflects the
+size of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
+target=_blank>Graph configuration help</a> link for an explanation
+of the configuration options.</p>
+
+<h2>Methods</h2>
+<p>
+Pairwise alignments of each species to the
+huamn/CHM13v2/hs1/Homo_sapiens/hs1/Jan. 2022 genome are
+displayed below the conservation histogram as a grayscale density plot (in
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Note that excluding species from the pairwise display does not alter the
+the conservation score display.</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</p>
+<p>
+From the <em>cactus</em> alignment, a target specific <em>maf</em> file
+was extracted from the <b>cactus</b> <em>hal</em> file.  This <em>maf</em>
+file is used to construct the track.</p>
+
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<li> Tree image generator: phyloPng by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</ul>
+</p>
+
+<h2>References</h2>
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<h3>PhyloP:</h3>
+<p>
+Cooper GM, Stone EA, Asimenos G, NISC Comparative Sequencing Program., Green ED, Batzoglou S, Sidow
+A.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/15965027" target="_blank">
+Distribution and intensity of constraint in mammalian genomic sequence</a>.
+<em>Genome Res</em>. 2005 Jul;15(7):901-13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15965027" target="_blank">15965027</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1172034/" target="_blank">PMC1172034</a>;
+DOI: <a href="https://doi.org/10.1101/gr.3577405" target="_blank">10.1101/gr.3577405</a>
+</p>
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="https://link.springer.com/content/pdf/10.1007%2F0-387-27733-1_12.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+DOI: <a href="https://doi.org/10.1007/0-387-27733-1_12" target="_blank">10.1007/0-387-27733-1_12</a>
+</p>
+
+<p>
+Siepel A, Pollard KS, and Haussler D. New methods for detecting
+lineage-specific selection. In Proceedings of the 10th International
+Conference on Research in Computational Molecular Biology (RECOMB 2006), pp. 190-205.
+DOI: <a href="https://doi.org/10.1007/11732990_17" target="_blank">10.1007/11732990_17</a>
+</p>
+<p>
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, Feng S, Stiller J
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">
+Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
+<em>Nature</em>. 2020 Nov;587(7833):246-251.
+DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y"
+target="_blank">10.1038/s41586-020-2871-y</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>
+</p>

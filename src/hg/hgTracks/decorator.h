@@ -62,7 +62,7 @@ struct decorator
                               // depending on the draw mode of the decorator.  The hash is keyed by decoratedItem
     };
 
-struct decorator *decoratorListFromBbi(struct trackDb *decTdb, char *chrom, struct bigBedInterval *intervalList, struct bigBedFilter *decoratorFilters, int fieldCount, struct mouseOverScheme *mouseScheme);
+struct decorator *decoratorListFromBbi(struct trackDb *decTdb, char *chrom, struct bigBedInterval *intervalList, struct bigBedFilter *decoratorFilters, struct bbiFile *bbi, struct mouseOverScheme *mouseScheme);
 /* Turn an intervalList (as retrieved from a bbi file) and turn it into a list of decorations.
  * The resulting decorator should also include a hash table that is keyed on the decorated
  * items of the primary track

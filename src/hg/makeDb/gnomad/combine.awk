@@ -18,7 +18,10 @@ BEGIN {
 
 {
 chrom=$2
-gnomadChrom = sprintf("chr%s", $13)
+gnomadChrom=$13
+if (substr($13, 1, 3) != "chr") {
+    gnomadChrom=sprintf("chr%s", $13)
+}
 if (chrom != gnomadChrom) {
     # so far just the multiple mapping PAR regions
     printf "bad join: %s\n", $0 > "/dev/stderr"

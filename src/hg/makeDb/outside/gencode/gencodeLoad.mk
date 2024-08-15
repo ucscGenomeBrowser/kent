@@ -32,51 +32,51 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-#preRelease = no
 preRelease = yes
+#preRelease = no
 #db = hg38
 #db = hg19
 db = mm39
-ifeq (${db},mm10)
-    # mm10 lift back was never revewed and released
-    grcRefAssembly = GRCm38
-    verBase = M25
-    prevVer = M24
-    backmapTargetVer = M25
-    ver = ${verBase}lift37
-    gencodeOrg = Gencode_mouse
-    ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
-    annGffTypeName = chr_patch_hapl_scaff.annotation
-    isBackmap = yes
-else ifeq (${db},mm39)
-    grcRefAssembly = GRCm39
-    ver = M34
-    prevVer = M33
-    gencodeOrg = Gencode_mouse
-    ftpReleaseSubdir = release_${ver}
-    annGffTypeName = chr_patch_hapl_scaff.annotation
+ifeq (${db},mm39)
+    ver = M36
+    prevVer = M35
 else ifeq (${db},hg38)
-    grcRefAssembly = GRCh38
-    ver = 45
-    prevVer = 44
-    gencodeOrg = Gencode_human
-    ftpReleaseSubdir = release_${ver}
-    annGffTypeName = chr_patch_hapl_scaff.annotation
+    ver = 47
+    prevVer = 46
 else ifeq (${db},hg19)
-    grcRefAssembly = GRCh37
-    verBase = 45
-    prevVer = 44lift37
+    verBase = 47
+    prevVerBase = 46
     ver = ${verBase}lift37
-    backmapTargetVer = 19
-    ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    gencodeOrg = Gencode_human
-    annGffTypeName = annotation
-    isBackmap = yes
 else
     $(error unimplement genome database: ${db})
 endif
 # END EDIT THESE EACH RELEASE
 
+ifeq (${db},mm39)
+    grcRefAssembly = GRCm39
+    gencodeOrg = Gencode_mouse
+    ftpReleaseSubdir = release_${ver}
+    annGffTypeName = chr_patch_hapl_scaff.annotation
+else ifeq (${db},hg38)
+    grcRefAssembly = GRCh38
+    gencodeOrg = Gencode_human
+    ftpReleaseSubdir = release_${ver}
+    annGffTypeName = chr_patch_hapl_scaff.annotation
+else ifeq (${db},hg19)
+    grcRefAssembly = GRCh37
+    ver = ${verBase}lift37
+    prevVer = ${prevVerBase}lift37
+    backmapTargetVer = 19
+    ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
+    gencodeOrg = Gencode_human
+    annGffTypeName = annotation
+    isBackmap = yes
+    # caused by change in PAR gencode ids, backmap needs to be made smarted, until then,
+    # just drop old transcipts that gets included
+    dropIdsOpts = --drop=ENST00000302805.2
+else
+    $(error unimplement genome database: ${db})
+endif
 
 ifeq (${preRelease},yes)
     # pre-release
@@ -294,7 +294,7 @@ ${gencodeToUcscChain}:
 # other tab files, just copy to name following convention to make load rules
 # work
 ifeq (${isBackmap}, yes)
-   metaFilterCmd = ${gencodeBackMapMetadataIds} ${db} ${gencodeTsv} ${targetGencodeTsv}
+   metaFilterCmd = ${gencodeBackMapMetadataIds} ${dropIdsOpts} ${db} ${gencodeTsv} ${targetGencodeTsv}
    metaFilterCmdGz = ${metaFilterCmd}
    metaFilterDepend = ${gencodeTsv} ${targetGencodeTsv}
 else
@@ -352,13 +352,13 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${metaFilterDepend}
 ##
 ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${dropIdsOpts} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
+	${gencodeGxfToAttrs} ${dropIdsOpts} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${targetGencodeTsv}:
@@ -369,7 +369,7 @@ ${targetGencodeTsv}:
 
 # check attributes so code can be updated to handle new biotypes
 checkAttrs: ${annotationGff}
-	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} /dev/null
+	${gencodeGxfToAttrs} ${dropIdsOpts} ${transcriptRanksOpt} ${annotationGff} /dev/null
 
 ##
 # load tables

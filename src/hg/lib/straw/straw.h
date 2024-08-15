@@ -1,23 +1,18 @@
 /*
-  The straw library (straw.cpp, straw.h) is used with permission of the Aiden
-  Lab at the Broad Institute.  It is included below, along with modifications
-  to work in the environment of the UCSC Genome Browser, under the following
-  license:
-
   The MIT License (MIT)
- 
+
   Copyright (c) 2011-2016 Broad Institute, Aiden Lab
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,114 +27,106 @@
 #include <fstream>
 #include <set>
 #include <vector>
-#include <stdexcept>
+#include <map>
 
-/* Simple exception wrapper class */
-class strawException : public std::runtime_error {
-  public:
-  strawException(const std::string& error):
-    std::runtime_error(error) {
-  }
-};
-
-
-// pointer structure for reading blocks or matrices, holds the size and position 
+// pointer structure for reading blocks or matrices, holds the size and position
 struct indexEntry {
-  int size;
-  long position;
+    int64_t size;
+    int64_t position;
 };
 
-// sparse matrix entry
+// sparse matrixType entry
 struct contactRecord {
-  int binX;
-  int binY;
+  int32_t binX;
+  int32_t binY;
   float counts;
 };
 
-// The combination of chrom index, normalization, unit, and resolution that serves as an index
-// into the block map.
-class normVector {
-  public:
-  int chrIdx;
-  std::string normtype;
-  std::string unit;
-  int resolution;
-
-  normVector(int c, std::string n, std::string u, int r) {
-    chrIdx = c;
-    normtype = n;
-    unit = u;
-    resolution = r;
-  }
-  bool operator <(const normVector &other) const {
-    if (chrIdx != other.chrIdx)
-      return chrIdx < other.chrIdx;
-    else if (normtype != other.normtype)
-      return normtype < other.normtype;
-    else if (unit != other.unit)
-      return unit < other.unit;
-    else
-      return resolution < other.resolution;
-  }
+// chromosome
+struct chromosome {
+    std::string name;
+    int32_t index;
+    int64_t length;
 };
 
-class Straw {
-    private:
-    // map of block numbers to pointers
-    std::map <int, indexEntry> blockMap;
-    bool haveReadFooter;
-    std::map <std::string, long> chrchrMap;
-    std::map <normVector, std::pair<long,int>> normVectors;
+// this is for creating a stream from a byte array for ease of use
+// see https://stackoverflow.com/questions/41141175/how-to-implement-seekg-seekpos-on-an-in-memory-buffer
+struct membuf : std::streambuf {
+    membuf(char *begin, int32_t l) {
+        setg(begin, begin, begin + l);
+    }
+};
 
-    long master;
-    std::string fileName;
+struct memstream : virtual membuf, std::istream {
+    memstream(char *begin, int32_t l) :
+            membuf(begin, l),
+            std::istream(static_cast<std::streambuf*>(this)) {
+    }
 
-    int fileIsOpen();
-    bool readMagicString();
+    std::istream::pos_type seekpos(std::istream::pos_type sp, std::ios_base::openmode which) override {
+        return seekoff(sp - std::istream::pos_type(std::istream::off_type(0)), std::ios_base::beg, which);
+    }
 
+    std::istream::pos_type seekoff(std::istream::off_type off,
+                                    std::ios_base::seekdir dir,
+                                    std::ios_base::openmode which = std::ios_base::in) override {
+        if (dir == std::ios_base::cur)
+            gbump(off);
+        else if (dir == std::ios_base::end)
+            setg(eback(), egptr() + off, egptr());
+        else if (dir == std::ios_base::beg)
+            setg(eback(), eback() + off, egptr());
+        return gptr() - eback();
+    }
+};
+
+// for holding data from URL call
+struct MemoryStruct {
+    char *memory;
+    size_t size;
+};
+
+std::map<int32_t, indexEntry>
+readMatrixZoomData(std::istream &fin, const std::string &myunit, int32_t mybinsize, float &mySumCounts,
+                   int32_t &myBlockBinCount,
+                   int32_t &myBlockColumnCount, bool &found);
+
+std::map<int32_t, indexEntry>
+readMatrix(std::istream &fin, int32_t myFilePosition, std::string unit, int32_t resolution, float &mySumCounts,
+           int32_t &myBlockBinCount, int32_t &myBlockColumnCount);
+
+std::vector<double> readNormalizationVector(std::istream &fin, indexEntry entry);
+
+std::vector<contactRecord>
+straw(const std::string& matrixType, const std::string& norm, const std::string& fname, const std::string& chr1loc,
+      const std::string& chr2loc, const std::string &unit, int32_t binsize);
+
+std::vector<std::vector<float>>
+strawAsMatrix(const std::string &matrixType, const std::string &norm, const std::string &fileName,
+              const std::string &chr1loc, const std::string &chr2loc, const std::string &unit, int32_t binsize);
+
+int64_t getNumRecordsForFile(const std::string& filename, int32_t binsize, bool interOnly);
+
+int64_t getNumRecordsForChromosomes(const std::string& filename, int32_t binsize, bool interOnly);
+
+/* Added at UCSC */
+void getHeaderFields(const std::string &filename, std::string &genome, std::vector<std::string> &chromNames,
+        std::vector<int> &chromSizes, std::vector<int> &bpResolutions, std::vector<int> &fragResolutions,
+        std::vector<std::string> &attributes);
+/* Fill in the provided fields with information from the header of the hic file in the supplied filename.
+ * fragResolutions is left empty for now, as we're not making use of it. */
+
+class strawException : public std::runtime_error {
+/* Simple exception wrapper class */
     public:
-    // version number
-    int version;
-    long total_bytes;
-    std::string genome;
-    int nChrs;
-    std::vector<std::string> chrNames;
-    std::vector<int> chrSizes;
-    std::map <std::string, std::string> attributes;
-    std::vector<int> bpResolutions;
-    std::vector<int> fragResolutions;
-
-
-    void loadHeader();
-    bool readMatrixZoomData(std::istream& fin, std::string myunit, int mybinsize, int &myBlockBinCount, int &myBlockColumnCount);
-    bool readMatrixZoomDataHttp(char *url, long &myFilePosition, std::string myunit, int mybinsize, int &myBlockBinCount, int &myBlockColumnCount);
-    void readMatrixHttp(char *url, long myFilePosition, std::string unit, int resolution, int &myBlockBinCount, int &myBlockColumnCount);
-    void readMatrix(std::istream& fin, long myFilePosition, std::string unit, int resolution, int &myBlockBinCount, int &myBlockColumnCount);
-    std::set<int> getBlockNumbersForRegionFromBinPosition(int* regionIndices, int blockBinCount, int blockColumnCount, bool intra);
-    std::vector<contactRecord> readBlock(std::istream& fin, char *url, bool isHttp, int blockNumber);
-    std::vector<double> readNormalizationVector(std::istream& bufferin);
-
-    Straw(std::string fname) {
-        master = 0;
-        fileName = "";
-        genome = "";
-        chrNames.clear();
-        chrSizes.clear();
-        attributes.clear();
-        blockMap.clear();
-        haveReadFooter = false;
-        open(fname);
+    strawException(const std::string& error):
+        std::runtime_error(error) {
     }
+};
 
-    ~Straw() {
-    }
-
-    int open(std::string fname);
-    void close();
-    void getChrInfo(std::string chr1, std::string chr2, int &c1pos1, int &c1pos2, int &c2pos1, int &c2pos2, int &chr1ind, int &chr2ind);
-    void readFooter(std::istream& fin, long master, int c1, int c2, std::string norm, std::string unit, int resolution, long &myFilePos, indexEntry &c1NormEntry, indexEntry &c2NormEntry);
-    void straw(std::string norm, int binsize, std::string chr1loc, std::string chr2loc, std::string unit, std::vector<int> &xActual, std::vector<int> &yActual, std::vector<float> &counts);
-
-}; // Cstraw class
+std::set<std::string> getNormOptions();
+/* Return the set of normalization options that have been encountered through footer parsing.
+ * The result will be empty unless at least one straw() request has been made.
+ */
 
 #endif

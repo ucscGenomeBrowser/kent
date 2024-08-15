@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>STS Maps vs. Genome Sequence Assembly Guide</TITLE>
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+
+<TR><TD COLSPAN=2 HEIGHT=40><noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='../../js/jquery.js'></script>
+<script type='text/javascript' SRC='../../js/jquery.plugins.js'></script>
+<script type='text/javascript' SRC='../..//js/utils.js'></script>
+<LINK rel='STYLESHEET' href='../../style/nice_menu.css' TYPE='text/css'>
+<div id="main-menu-whole">
+
+		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
+
+	<div class="upcorner"></div>
+	<div class="blockbg">
+		<div class="blockcontent">
+						<div class="content">
+
+<ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
+
+<li class="first even" id="home"><a href="../../index.html" ><span id="home-link">Home</span></a></li> 
+
+<li class="menuparent" id="tools1"><a href="../../cgi-bin/hgGateway">Genomes</a>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
+	<li><a href="../../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
+        <li><a href="../../cgi-bin/hgTracks?db=hub_3671779_hs1&position=lastDbPos">Human T2T-CHM13/hs1</a></li>
+	<li><a href="../../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
+	<li><a href="../../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Archive GenArk</a></li>
+	<li><a href="../../cgi-bin/hgTracks?db=wuhCor1&amp;position=lastDbPos">SARS-CoV-2 (COVID-19)</a></li>
+	<li class="last"><a href="../../cgi-bin/hgGateway">Other</a></li>
+        </ul>
+</li>
+
+<li class="menuparent" id="tools2"><a href="../../cgi-bin/hgTracks">Genome Browser</a>
+	<ul style="display: none; visibility: hidden;">
+	<li id="backToBrowserLi" class="first"><a id="backToGenomeBrowser" href="../../cgi-bin/hgTracks">Back to Genome Browser</a></li>
+	<li><a id="configureMenuLink" href="../../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
+	<li><a id="trackSearchMenuLink" href="../../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
+	<li><a id="shortMatchLink" href="../../cgi-bin/hgTrackUi?g=oligoMatch&oligoMatch=pack">Short Exact DNA Match</a></li>
+        <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
+	<li><a id="cartResetMenuLink" href="../../cgi-bin/cartReset?skipLs=1">Reset All User Settings</a></li>
+        </ul>
+</li>
+
+
+<li class="menuparent" id="tools3"><span>Tools</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a id="blatMenuLink" href="../../cgi-bin/hgBlat?command=start">Blat</a></li>
+	<li><a id="ispMenuLink" href="../../cgi-bin/hgPcr">In-Silico PCR</a></li>
+	<li><a id="tableBrowserMenuLink" href="../../cgi-bin/hgTables">Table Browser</a></li>
+	<li><a id="liftOverMenuLink" href="../../cgi-bin/hgLiftOver">LiftOver</a></li>
+	<li><a id="gsMenuLink" href="../../cgi-bin/hgNear">Gene Sorter</a></li>
+	<li><a id="vaiMenuLink" href="../../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
+	<li><a id="diMenuLink" href="../../cgi-bin/hgIntegrator">Data Integrator</a></li>
+	<li><a id="ggMenuLink" href="../../cgi-bin/hgGenome">Genome Graphs</a></li>
+        <li><a title="Explore gene/protein interactions and pathways" id="interactionMenuLink" href="../../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
+	<li class="last"><a href="../../util.html">Other Tools</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="mirrors"><span>Mirrors</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../../mirror.html">Euro/Asia Mirrors</a></li>
+	<li><a href="../../goldenPath/help/mirror.html">Mirroring Instructions</a></li>
+	<!-- OPTIONAL_MIRROR_MENU -->
+	</ul>
+
+</li>
+<li class="menuparent" id="downloads"><span>Downloads</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="https://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+	<li><a href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
+	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
+	<li class="last"><a href="../../goldenPath/help/ftp.html">FTP</a></li>
+	<li class="last"><a href="../../goldenPath/help/mysql.html">MySQL Access</a></li>
+	<li class="last"><a href="../../goldenPath/help/cloud.html">Cloud Access</a></li>
+	<li class="last"><a href="../../goldenPath/help/api.html">REST API</a></li>
+	</ul>
+</li>
+<li class="menuparent" id="myData"><span>My Data</span>
+	<ul style="display: none; visibility: hidden;">
+	<li><a id="customTracksMenuLink" href="../../cgi-bin/hgCustom">Custom Tracks</a></li>
+	<li><a id="sessionsMenuLink" href="../../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
+	<li><a id="trackHubsMenuLink" href="../../cgi-bin/hgHubConnect">Track Hubs</a></li>
+	<li><a id="customCompositeMenuLink" href="../../cgi-bin/hgCollection">Track Collection Builder</a></li>
+	<li class="last"><a id="publicSessionsMenuLink" href="../../cgi-bin/hgPublicSessions">Public Sessions</a></li>
+	</ul>
+</li>
+
+<!-- OPTIONAL_VIEW_MENU -->
+
+<!-- OPTIONAL_PROJECT_MENU_START -->
+<li class="menuparent" id="projects"><span>Projects</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
+	<li><a href="../../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
+	<li><a href="../../singlecell.html">UCSC Cell Browser</a></li>
+	<li class="last"><a href="../../covid19.html">UCSC COVID-19 Research</a></li>
+	</ul>
+</li>
+<!-- OPTIONAL_PROJECT_MENU_END -->
+
+<li class="menuparent" id="help"><span>Help</span>
+    <ul style="display: none; visibility: hidden;">
+<!-- CONTEXT_SPECIFIC_HELP -->
+    <li><a href="../../FAQ/">FAQs & Search</a></li>
+    <li><a href="../../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
+    <li><a href="../../training/index.html">Training</a></li>
+    <li><a href="../../contacts.html">Contact Us</a></li>
+    <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
+    </ul>
+</li>
+
+<li class="menuparent last" id="aboutUs"><span>About Us</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first odd"><a href="../../goldenPath/newsarch.html">News</a></li>
+	<li class="even"><a href="../../goldenPath/pubs.html">Publications</a></li>
+	<li class="odd"><a href="http://genome.ucsc.edu/blog/">Blog</a></li>
+	<li class="even"><a href="../../cite.html">Cite Us</a></li>
+	<li class="odd"><a href="../../goldenPath/credits.html">Credits</a></li>
+	<li class="even"><a href="../../goldenPath/releaseLog.html">Release Log</a></li>
+	<li class="odd"><a href="../../staff.html">Staff</a></li>
+	<li class="even"><a href="../../conditions.html">Conditions of Use</a></li>
+	<li class="odd"><a href="../../goldenPath/history.html">Our History</a></li>
+	<li class="even"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
+	<li class="odd last"><a href="../../license/">Licenses</a></li>
+	<li><a href="../../contacts.html">Contact Us</a></li>
+	</ul>
+</li>
+
+</ul>
+</div>
+		</div>
+	</div>
+	<div class="downcorner"></div>
+
+</div>
+</div><!-- end main-menu -->
+</div><!-- end main-menu-whole -->
+<script type='text/javascript' nonce='RejSI3nxU0IUVD76BzIxkLQKgGj1'>
+$("#tools1 ul li a").each( function (a) {
+    if (this.href && this.href.indexOf("hgTracks") !== -1) {
+        var obj = this;
+        obj.onclick = function(e) {
+            var pix = calculateHgTracksWidth();
+            e.currentTarget.href += "&pix=" + pix;
+        }
+    }
+});
+</script>
+</TD></TR>
+<!--Content Tables------------------------------------------------------->
+<TR><TD COLSPAN=2 CELLPADDING=10>	
+ <table BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><tr><td>
+ <table BGCOLOR="D9E4F8"  BACKGROUND="../../images/hr.gif" WIDTH=100%><tr><td>
+ <font SIZE="4"><a NAME="TOC"></a><b>&nbsp; Users Guide for STS Maps vs. Genome Sequence Asembly Comparison Plots</font>
+ </td></tr></table>
+
+<!--outer table is for border purposes--> <table BGCOLOR="fffee8"
+WIDTH="100%" CELLPADDING=0 CELLSPACING=0><th HEIGHT=15></th><tr><td
+WIDTH=10></td><td> 
+
+	The purpose of the STS Maps vs. Genome Sequence Assembly
+	scatter plots is to show the correspondence between previously
+	constructed genome-wide STS maps and the different clones
+	maps.  We show one plot for each chromosome that displays the
+	STS marker posistions for the Genethon, Marshfield, GeneMap99,
+	G3, TNG, Whitehead Integrated and Whitehead-YAC maps.  The
+	y-axis of the plots represent positions in the STS maps, while
+	the x-axis represents positions in the clone maps.  The
+	primary plots are scaled to fit an entire chromosome on one
+	page. Additional plots are available which show portions of
+	each chromosome in fixed scale 50mb windows and 10mb
+	windows.<P></P>
+      
+        Each STS marker is represented by a point that is colored and
+        shape-coded as described in the legend in the upper right
+        corner. The horizontal position of the point is the location
+        of the marker on the clone map of the chromosome in
+        megabases. The vertical position of the point is the distance
+        of the marker along the chromosome as determined by one of the
+        seven STS maps. All seven maps are scaled to have comparable
+        distance ranges to facilitate comparison. Some markers map to
+        different chromosomes entirely. These are shown at the top of
+        the display.<P></P>
+      
+        As you mouse-over the graph, the contig you are in, as
+        determined by your horizontal position, is displayed in the
+        little window at the bottom of the browser. (Position of this
+        is dependent on the browser and platform being used.) Clicking
+        on a contig will bring up a corresponding Summary Page which
+        is part of our <A HREF="http://genome.ucsc.edu/goldenPath/chromReports">
+        Chromosome Reports</A> web pages.  This Summary Page displays
+        information about that particular contig with links to more
+        detailed information.<P></P>
+
+      <B>Caveats:</B>
+      <UL>
+	<LI>Due to the resolution, it is hard to pinpoint the clone
+	contig for some markers. Go to a higher resolution plot if it
+	appears that the marker you clicked on is not included in the
+	report you get.  
+	<LI>We use BLAT to place STS markers, but do
+	not require an exact match of the STS sequence and/or primer
+	sequences.  This will cause some false positive placements,
+	and some false negatives as well, mainly due to the draft
+	nature of the sequence.  
+        <LI>We have not yet incorporated LOD
+	scores for the markers. 
+	<LI>There are limitations of the
+	accuracy of each of the seven maps, for more details see 
+	"<A HREF="http://www.nature.com/genomics/human/papers/409860a0_fs_1.html">Initial
+	sequencing and analysis of the human genome</A>," by the
+	International Human Genome Sequencing Consortium, Nature,
+	409:860-921.
+      </UL>
+      <hr>
+	<address><a href="mailto:booch@cse.ucsc.edu">Terry Furey</a></address>
+	<!-- Created: Fri Aug  3 13:14:49 PDT 2001 -->
+	<!-- hhmts start -->
+Last modified: Fri Mar 22 13:48:36 PST 2002
+<!-- hhmts end -->
+</TD></TR></TABLE>
+	</TD></TR></TABLE>
+</TD></TR></TABLE>	
+
+</TD></TR></TABLE>
+</BODY></HTML>

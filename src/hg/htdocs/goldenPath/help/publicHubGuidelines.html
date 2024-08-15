@@ -83,6 +83,27 @@ target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
 <h2>Recommended Guidelines</h2>
 <p>These guidelines in the following sections are recommended to improve user experience, but are
    not required to be implemented before the hub is added to our list of Public Hubs.</p>
+
+<a id="stability"></a>
+<p><b style="color: red;">Note on stability</b></p>
+<p>
+Keep in mind that users may start to rely on your track hub for their work. If the track hub web
+server is down or the URL changes, users of the track hub will have no access to the data. Users may
+also have stable session links in manuscripts that include the track hub data and the sessions
+could all stop working. We check public track hubs periodically and send an email after a 24-hour
+downtime. We will remove track hubs if they are offline for several days. Contact us
+(genome-www@soe.ucsc.edu) if there is a change such as moving webservers of the track hub.
+</p>
+
+<p>
+Sudden changes can also impact users where large changes to the track hub can change the analysis
+of users such as removing tracks or changing options. In these cases, keeping a previous version of
+the tracks and making them in a different track group with suffixes such as &quot;V1&quot;, 
+&quot;(previous versions)&quot; or hint in the track long labels. Labeling tracks with informative
+labels will help users. You can also add a &quot;dataVersion&quot; trackDb statement to indicate to
+users what version of the data is being used.
+</p>
+
 <h3>Track organization recommendations</h3>
 <p>
 Related tracks can be grouped in a few different ways, namely <a href="trackDb/trackDbHub.html#superTrack"

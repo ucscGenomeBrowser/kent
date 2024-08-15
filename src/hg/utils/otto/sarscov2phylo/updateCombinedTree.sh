@@ -46,7 +46,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     # $scriptDir/usherClusterRun.sh $today
     # Instead of the cluster, use Cheng's blazingly fast new usher-sampled:
     time $usher \
-        -T 64 -A -e 5 \
+        -T 50 -A -e 5 \
         -i prevRenamed.pb \
         -v new.masked.vcf.gz \
         -o merged.pb \
@@ -58,7 +58,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     $matUtils extract -i merged.deltaMasked.pb \
         --max-parsimony 20 \
         --max-branch-length 60 \
-        --max-path-length 175 \
+        --max-path-length 225 \
         -O -o merged.deltaMasked.filtered.pb
     # matOptimize: used -r 8 -M2 until 2023-05-12, then switched to Cheng's recommended
     # -m 0.00000001 -M 4 (avoid identical-child-node problem in
@@ -75,11 +75,16 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
         -o gisaidAndPublic.$today.masked.preTrim.pb \
         >& matOptimize.filtered.log
 
+    # Fix grandparent-reversion nodes that cause some lineages to be incorrectly placed as
+    # sublineages of siblings.
+    $matUtils fix -i gisaidAndPublic.$today.masked.preTrim.pb -c 10 \
+        -o gisaidAndPublic.$today.masked.preTrim.fix.pb
+
     # Again prune samples with too many private mutations and internal branches that are too long.
-    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
+    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.fix.pb \
         --max-parsimony 20 \
         --max-branch-length 60 \
-        --max-path-length 175 \
+        --max-path-length 225 \
         -O -o gisaidAndPublic.$today.masked.pb
 fi
 
@@ -96,7 +101,7 @@ $scriptDir/combineMetadata.sh $prevDate $today
 
 # version/description files
 cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
-echo "sarscov2phylo release 13-11-20; GISAID, NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
+echo "sarscov2phylo release 13-11-20; GISAID, NCBI, COG-UK and CNCB sequences downloaded $today" \
     > version.plusGisaid.txt
 sampleCountComma=$(echo $(wc -l < samples.$today) \
                    | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
@@ -125,8 +130,7 @@ time $matUtils annotate -T 50 \
     >& annotate.pango
 
 # Replace protobuf with annotated protobuf.
-mv gisaidAndPublic.$today.masked{,.unannotated}.pb
-ln -f gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
+mv gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
 
 # Save paths and annotations for use tomorrow.
 $matUtils extract -i gisaidAndPublic.$today.masked.pb -C clade-paths
@@ -163,6 +167,23 @@ rm tmp1 tmp2
 # public names & IDs, we can match them.
 cut -f 1,3 $epiToPublic > epiToPublic.latest
 
+# Memory-mapped hash tables for metadata and name lookup
+tabToMmHash gisaidAndPublic.$today.metadata.tsv.gz gisaidAndPublic.$today.metadata.mmh
+ln -sf $(pwd)/gisaidAndPublic.$today.metadata.mmh \
+    /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.metadata.mmh
+awk -F\| '{ print $0 "\t" $0;  print $1 "\t" $0; if ($3 != "") { print $2 "\t" $0; } }' \
+    samples.$today \
+| tawk '$1 != "RNA" && $1 !~ /\/RNA\// && $1 !~/^Germany\/Molecular_surveillance_of_SARS/ && \
+        $1 !~ /^Iceland\/SARS-CoV-2_Iceland/' \
+    > nameLookup.tab
+cut -f 1,3 $epiToPublic \
+| subColumn -skipMiss 2 stdin nameLookup.tab tmp.tab
+cat tmp.tab >> nameLookup.tab
+rm tmp.tab
+tabToMmHash nameLookup.tab samples.$today.mmh
+rm nameLookup.tab
+ln -sf $(pwd)/samples.$today.mmh /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.names.mmh
+
 # Update links to latest public+GISAID protobuf and metadata in hgwdev cgi-bin directories
 pigz -p 8 -c samples.$today > samples.$today.gz
 for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
@@ -183,9 +204,12 @@ usher_to_taxonium --input gisaidAndPublic.$today.masked.pb \
     --name_internal_nodes \
     --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
     --output gisaidAndPublic.$today.masked.taxonium.jsonl.gz \
-    >& utt.log
+    >& utt.log &
 
 $scriptDir/extractPublicTree.sh $today $prevDate
 
 set +o pipefail
 grep skipping annotate* | cat
+
+# Clean up
+nice xz -f new*fa &

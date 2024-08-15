@@ -2796,14 +2796,14 @@ return FALSE;
 }
 
 struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
-                                      struct bigBedFilter *filters, int freqSourceIx)
+                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi)
 /* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
 {
 struct linkedFeatures *lf = NULL;
 char startBuf[16], endBuf[16];
 char *bedRow[32];
 bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-if (bigBedFilterInterval(bedRow, filters))
+if (bigBedFilterInterval(bbi, bedRow, filters))
     {
     struct bigDbSnp *bds = bigDbSnpLoad(bedRow);
     double minMaf = cartUsualDoubleClosestToHome(cart, tdb, FALSE, "minMaf", 0.0);
@@ -2885,17 +2885,7 @@ int maxItems = isNotEmpty(maxItemStr) ? atoi(maxItemStr) : 250000;
 bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd, freqSourceIx, 0, FALSE, 4, &lfList,
                                maxItems);
 slReverse(&lfList);
-// if the summary is filled in then the number of items in the region is greater than maxItems.
-if (tg->summary != NULL)
-    {
-    // too many items to display
-    tg->drawItems = bigDrawWarning;
-    tg->networkErrMsg = "Too many variants in display (zoom in to see details)";
-    tg->totalHeight = bigWarnTotalHeight;
-    tg->items = NULL;
-    }
-else
-    tg->items = lfList;
+tg->items = lfList;
 }
 
 static Color bigDbSnpColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -3035,18 +3025,25 @@ void bigDbSnpDraw(struct track *tg, int seqStart, int seqEnd,
                   MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-if (vis == tvDense ||
-    (tg->limitedVisSet && tg->limitedVis == tvDense))
-    {
-    // Sort so that items with the strongest colors appear on top.
-    slSort(&tg->items, lfColorCmp);
-    }
+if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
+    {           
+        bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
+    } 
 else
     {
-    // Sort by position as usual
-    slSort(&tg->items, linkedFeaturesCmp);
+    if (vis == tvDense ||
+        (tg->limitedVisSet && tg->limitedVis == tvDense))
+        {
+        // Sort so that items with the strongest colors appear on top.
+        slSort(&tg->items, lfColorCmp);
+        }
+    else
+        {
+        // Sort by position as usual
+        slSort(&tg->items, linkedFeaturesCmp);
+        }
+    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
-genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void bigDbSnpMethods(struct track *track)

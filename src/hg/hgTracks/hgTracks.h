@@ -315,6 +315,7 @@ struct track
     struct lollyCartOptions *lollyCart;
     double squishyPackPoint;    /* the value at which we switch to squish mode. */
     char * originalTrack;       /* the name of the original track if this a pseduo-duplicate track used for squishyPack */
+    boolean limitWiggle;       /* TRUE if this track is drawing in coverage mode because of limited visibility */
     };
 
 struct window  // window in multiwindow image
@@ -405,7 +406,7 @@ struct linkedFeatures
     float score;                        /* score for this feature */
     char *name;				/* Accession of query seq. Usually also the label. */
     int orientation;                    /* Orientation. */
-    struct simpleFeature *components;   /* List of component simple features. */
+    struct simpleFeature *components;   /* List of component simple features. Usually exons. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
     boolean useItemRgb;                 /* If true, use rgb from item. */
     void *extra;			/* Extra info that varies with type. */
@@ -752,6 +753,27 @@ void drawScaledBoxLabel(struct hvGfx *hvg,
      int chromStart, int chromEnd, double scale,
      int xOff, int y, int height, Color color, MgFont *font,  char *label);
 /* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
+
+typedef enum {
+    GLYPH_CIRCLE,
+    GLYPH_TRIANGLE,
+    GLYPH_INV_TRIANGLE,
+    GLYPH_SQUARE,
+    GLYPH_DIAMOND,
+    GLYPH_OCTAGON,
+    GLYPH_STAR,
+    GLYPH_PENTAGRAM
+    } glyphType;
+
+void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+                      int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
+/* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
+ * which may have transparency.
+ */
+
+glyphType parseGlyphType(char *glyphStr);
+/* Return the enum glyph type for a string specifying a glyph.
+ * Defaults to GLYPH_CIRCLE if the string is unrecognized. */
 
 Color whiteIndex();
 /* Return index of white. */
@@ -1648,6 +1670,10 @@ void instaPortMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* instaPort track type methods */
 
+void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* bigBaseView track type methods */
+
 void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Lollipop track type methods */
@@ -1674,6 +1700,10 @@ void dontLoadItems(struct track *tg);
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item), 
                 char *filterType);
 /* Filter out items from track->itemList. */
+
+void filterItemsOnNames(struct track *tg);
+/* Only keep items with a name in the .nameFilter cart var. 
+ * Not using filterItems(), because filterItems has no state at all. */
 
 int gCmpPriority(const void *va, const void *vb);
 /* Compare groups based on priority. */
@@ -1809,5 +1839,8 @@ Color colorFromSoTerm(enum soTerm term);
 
 void maybeNewFonts(struct hvGfx *hvg);
 /* Check to see if we want to use the alternate font engine (FreeType2). */
+
+Color colorFromCart(struct track *tg, Color color);
+/* Return the RGB color from the cart setting 'colorOverride' or just return color */
 #endif /* HGTRACKS_H */
 

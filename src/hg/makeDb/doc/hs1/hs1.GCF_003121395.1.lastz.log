@@ -1,0 +1,85 @@
+##############################################################################
+# LASTZ Human Hs1 vs. water buffalo GCF_003121395.1
+#    (DONE - 2023-06-04 - hiram)
+
+    mkdir /hive/data/genomes/hs1/bed/lastzGCF_003121395.1.2023-06-04
+    cd /hive/data/genomes/hs1/bed/lastzGCF_003121395.1.2023-06-04
+
+    printf '# water buffalo GCF_003121395.1 vs. Human Hs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human  hs1
+SEQ1_DIR=/hive/data/genomes/hs1/hs1.2bit
+SEQ1_LEN=/hive/data/genomes/hs1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: water buffalo 2018-05-14 GCF_003121395.1_ASM312139v1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hs1/bed/lastzGCF_003121395.1.2023-06-04
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_003121395.1_ASM312139v1 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	857m46.525s
+
+    sed -e 's/^/    # /;' fb.hs1.chainGCF_003121395.1Link.txt
+    # 1376689878 bases of 3117292070 (44.163%) in intersection
+    sed -e 's/^/    # /;' fb.hs1.chainSynGCF_003121395.1Link.txt
+    # 1318110714 bases of 3117292070 (42.284%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.chrom.sizes.txt" \
+        hs1 GCF_003121395.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	295m15.899s
+
+    sed -e 's/^/    # /;' fb.hs1.chainRBest.GCF_003121395.1.txt
+    # 1292589037 bases of 3117292070 (41.465%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/003/121/395/GCF_003121395.1_ASM312139v1/trackData/blastz.hs1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_003121395.1_ASM312139v1 /hive/data/genomes/hs1/bed/lastzGCF_003121395.1.2023-06-04/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	76m14.076s
+
+    sed -e 's/^/    # /;' fb.GCF_003121395.1.chainHs1Link.txt
+    # 1344758101 bases of 2655780776 (50.635%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_003121395.1.chainSynHs1Link.txt
+    # 1306560447 bases of 2655780776 (49.197%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/003/121/395/GCF_003121395.1/GCF_003121395.1.chrom.sizes.txt" \
+   GCF_003121395.1 hs1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	283m51.583s
+
+    sed -e 's/^/    # /;' fb.GCF_003121395.1.chainRBest.Hs1.txt
+    # 1293210856 bases of 2655780776 (48.694%) in intersection
+
+##############################################################################
+
+real	1513m16.014s
+user	0m2.665s
+sys	0m2.320s

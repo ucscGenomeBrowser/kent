@@ -77,6 +77,13 @@ while (<>) {
       if (! $gbGeo) {
         $gbGeo = $bCountry;
       }
+      if ($gbName !~ m@/@ && $gbGeo ne "" && $gbDate =~ /^\d{4}/) {
+        my $country = $gbGeo;
+        $country =~ s/:.*//;  $country =~ s/ //g;
+        my $year = $gbDate;
+        $year =~ s/^(\d{4}).*/$1/;
+        $gbName = "$country/$gbName/$year";
+      }
       print join("\t", $gbAcc, $bAcc, $gbDate, $gbGeo, $host, $gbName, $completeness, $len);
     } else {
       # BioSample file doesn't have info for this BioSample accession

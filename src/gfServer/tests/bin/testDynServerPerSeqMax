@@ -1,0 +1,24 @@
+#!/bin/bash -e
+set -beEu -o pipefail
+if [ $# != 1 ] ; then
+    echo "wrong # args $0 gfServer" >&2
+    exit 1
+fi
+testName=$(basename $0)
+gfServer=$1
+
+# build index
+gfRootDir=output/${testName}_root
+gfDir=${gfRootDir}/crea
+rm -rf $gfDir
+mkdir -p $gfDir
+cp -f input/creaGeno.2bit $gfDir/crea.2bit
+$gfServer index $gfDir/crea.untrans.gfidx $gfDir/crea.2bit >/dev/null
+echo "crea.2bit:hCreaGeno" >$gfDir/crea.perseqmax
+echo "crea.2bit:mCreatGeno2" >>$gfDir/crea.perseqmax
+
+# test query
+
+./dynTester --gfServer=${gfServer} $gfRootDir query crea crea input/crea.mrna output/${testName}.ver.out
+sed -e 's/^version .*$/version XXX/' output/${testName}.ver.out > output/${testName}.out
+diff -u expected/${testName}.out output/${testName}.out

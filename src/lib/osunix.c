@@ -165,7 +165,7 @@ return list;
 }
 
 struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
-	time_t lastAccess)
+	time_t lastAccess, time_t creationTime)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);
@@ -174,6 +174,7 @@ fi->size = size;
 fi->isDir = isDir;
 fi->statErrno = statErrno;
 fi->lastAccess = lastAccess;
+fi->creationTime = creationTime;
 strcpy(fi->name, name);
 return fi;
 }
@@ -244,7 +245,7 @@ while ((de = readdir(d)) != NULL)
 		isDir = TRUE;
 	    if (fullPath)
 		fileName = pathName;
-	    el = newFileInfo(fileName, st.st_size, isDir, statErrno, st.st_atime);
+	    el = newFileInfo(fileName, st.st_size, isDir, statErrno, st.st_atime, st.st_ctime);
 	    slAddHead(&list, el);
 	    }
 	}
@@ -825,4 +826,17 @@ rts.userSecs = timevalToSeconds(usage.ru_utime);
 rts.sysSecs = timevalToSeconds(usage.ru_stime);
 
 return rts;
+}
+
+void setMemLimit(unsigned long maxMem)
+/* Set the maximum amount of memory that the application can use. */
+{
+struct rlimit rlimit;
+
+rlimit.rlim_cur = maxMem;
+rlimit.rlim_max = rlimit.rlim_cur ;
+int val = setrlimit(RLIMIT_AS, &rlimit);
+
+if (val != 0)
+    errnoAbort("Couldn't set maxMem to %ld\n", maxMem);
 }

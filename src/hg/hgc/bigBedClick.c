@@ -14,7 +14,7 @@
 #include "subText.h"
 #include "web.h"
 #include "chromAlias.h"
-#include "instaPort.h"
+#include "quickLift.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -94,9 +94,14 @@ slSafeAddHead(&subList, subTextNew("ex:", "exon "));
 slSafeAddHead(&subList, subTextNew("in:", "intron "));
 slSafeAddHead(&subList, subTextNew("|", "-"));
 
-struct sqlConnection *conn = hAllocConn(database);
-
-boolean hasLocus = sqlTableExists(conn, "locusName");
+boolean hasDb = sqlDatabaseExists(database);
+boolean hasLocus = FALSE;
+struct sqlConnection *conn = NULL;
+if (hasDb)
+    {
+    conn = hAllocConn(database);
+    hasLocus = sqlTableExists(conn, "locusName");
+    }
 
 if (coordCount==0)
     puts("Too many off-targets found to display or no off-targets. Please use the Crispor.org link at the top of the page to show all off-targets.\n");
@@ -178,7 +183,8 @@ for (i=0; i<coordCount; i++)
 
     printf("</tr>\n");
     }
-hFreeConn(&conn);
+if (hasDb)
+    hFreeConn(&conn);
 printf("<tr>\n");
 if (coordCount!=0)
     printf("</table>\n");
@@ -284,6 +290,7 @@ for (i=0; i<fieldCount; i++)
     else
         {
         printFieldLabel(name);
+        printf("<td>%s</td></tr>\n", val);
         }
     printCount++;
     }
@@ -372,11 +379,11 @@ if (start == end)
     ivStart = max(0, start-1);
     ivEnd++;
     }
-char *instaFile = cloneString(trackDbSetting(tdb, "instaPortUrl"));
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
 struct bigBedInterval *bbList = NULL;
-if (instaFile)
-    bbList = instaIntervals(instaFile, bbi, chrom, ivStart, ivEnd, &chainHash);
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, chrom, ivStart, ivEnd, &chainHash);
 else
     bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
@@ -442,9 +449,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = NULL;
-    if (instaFile)
+    if (quickLiftFile)
         {
-        if ((bed = instaBed(bbi, chainHash, bb)) == NULL)
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
             errAbort("can't port %s",fields[3]);
         }
     else
@@ -489,6 +496,33 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             }
         if (sameString(tdb->type, "bigGenePred"))
             bigGenePredLinks(tdb->track, item);
+        if (startsWith("hprcDeletions", tdb->track) || startsWith("hprcInserts", tdb->track) || startsWith("hprcArr", tdb->track))
+            {
+            // the source field, which is the first item after the itemRgb will
+            // have all the other chains
+            // TODO: make this controlled by a trackDb setting
+            char *oChainList[2048];
+            int i, numChains = chopCommas(cloneString(restFields[6]), oChainList);
+            char *oChain = NULL;
+            struct dyString *ds = dyStringNew(0);
+            dyStringPrintf(ds, "var chainVis = {");
+            for (i = 0; i < numChains; i++)
+                {
+                oChain = oChainList[i];
+                char *cartVar = catTwoStrings("chainHprc", oChain);
+                char *chainVis = cartOptionalString(cart, cartVar);
+                if (chainVis == NULL)
+                    {
+                    cartVar = catTwoStrings(cartVar, "_sel");
+                    chainVis = cartOptionalString(cart, cartVar);
+                    // TODO: this is not getting the vis right, because _sel is not the
+                    // same as a visibility
+                    }
+                dyStringPrintf(ds, "\"%s\": \"%s\", ", oChain, chainVis != NULL ? hStringFromTv(hTvFromString(chainVis)) : "Hide");
+                }
+            dyStringPrintf(ds, "};\n");
+            jsInline(dyStringCannibalize(&ds));
+            }
         }
     if (isCustomTrack(tdb->track))
 	{

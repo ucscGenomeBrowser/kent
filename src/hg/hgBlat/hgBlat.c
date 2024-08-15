@@ -33,6 +33,7 @@
 #include "chromInfo.h"
 #include "net.h"
 #include "fuzzyFind.h"
+#include "chromAlias.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -582,7 +583,7 @@ if(feelingLucky)
        results. */
     else 
 	{
-	cartWebStart(cart, database, "%s (%s) BLAT Results", trackHubSkipHubName(organism), database);
+	cartWebStart(cart, trackHubSkipHubName(database), "%s (%s) BLAT Results", trackHubSkipHubName(organism), trackHubSkipHubName(database));
 	showAliPlaces(pslName, faName, customText, database, qType, tType, organism, FALSE);
 	cartWebEnd();
 	}
@@ -640,7 +641,14 @@ else  // hyperlink
         printf("<TR><TD> Custom track description: ");
         cgiMakeTextVar( "trackDescription", trackDescription,50);
         printf("</TD></TR>");
-        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Build a custom track with these results\"></TD></TR>\n");
+        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Create a stable custom track with these results\">\n");
+        printInfoIcon("The BLAT results below are temporary and will be replaced by your next BLAT search. "
+                "However, when saved as a custom track with the button on the left, BLAT results are stored on our "
+                "servers and can be saved as stable session (View &gt; My Sessions) links that can be shared via email or in manuscripts. "
+                "\n<p>We have never cleaned up the data under stable session links so far. "
+                "To reduce track clutter in your own sessions, you can delete BLAT custom tracks from the main Genome Browser "
+                "view using the little trash icon next to each custom track.</p>");
+        puts("</TD></TR>");
         printf("</TABLE></FORM></DIV>");
         }
 
@@ -660,7 +668,7 @@ else  // hyperlink
     maxQChromNameSize = max(maxQChromNameSize,5);
     maxTChromNameSize = max(maxTChromNameSize,5);
 
-    printf("   ACTIONS      QUERY ");
+    printf("   ACTIONS                 QUERY ");
     
     spaceOut(stdout, maxQChromNameSize - 5);
 
@@ -669,7 +677,7 @@ else  // hyperlink
 
     printf(" STRAND  START       END   SPAN\n");
 
-    printf("---------------------------------------------------------------------------------------------");
+    printf("----------------------------------------------------------------------------------------------------------");
     repeatCharOut(stdout, '-', maxQChromNameSize - 5);
     repeatCharOut(stdout, '-', maxTChromNameSize - 5);
 
@@ -677,16 +685,31 @@ else  // hyperlink
 
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
+        char *browserHelp = "Open a Genome Browser showing this match";
+        char *helpText = "Open a Genome Browser with the BLAT results, but in a new internet browser tab";
+        // XX putting SVG into C code like this is ugly. define somewhere? maybe have globals for these?
+        char *icon = "<svg style='height:10px; padding-left:2px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg>";
+
         if (customText)
-            printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">",
-                browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+            {
+            printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">browser</A>&nbsp;",
+                browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
                 customText, uiState, unhideTrack);
-        else
-            printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">",
-                browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+            printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s\">new tab%s</A>&nbsp;",
+                helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+                customText, unhideTrack, icon);
+            } 
+            else 
+            {
+            printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">browser</A>&nbsp;",
+                browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
                 pslName, faName, uiState, unhideTrack);
-	printf("browser</A> ");
-	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
+            printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">new tab%s</A>&nbsp;",
+                helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+                pslName, faName, unhideTrack, icon);
+            }
+	printf("<A title='Show query sequence, genome hit and sequence alignment' "
+                "HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
 	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
@@ -696,8 +719,9 @@ else  // hyperlink
 	printf(" %5d %5d %5d %5d   %5.1f%%  ",
 	    pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
-	printf("%s",psl->tName);
-	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
+        char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+	printf("%s",displayChromName);
+	spaceOut(stdout, maxTChromNameSize - strlen(displayChromName));
 	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
@@ -807,7 +831,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    freez(&nameClone);
 	    }
 	}
-    hashAddUnique(hash, seq->name, hash);
+    if (hashLookup(hash, seq->name) != NULL)
+        errAbort("The sequence identifier '%s' is duplicated in the input. "
+                "FASTA sequence identifiers should be unique and they cannot contain spaces. "
+                "You can make them unique by adding a suffix such as _1, _2, ... to the duplicated names, e.g. '%s_1'.", 
+                seq->name, seq->name);
+    hashAdd(hash, seq->name, hash);
     }
 freeHash(&hash);
 }
@@ -1334,6 +1363,7 @@ double expected = genomeSize;
 for (k=1; k<36; k++)
     {
     expected /= alphaBetSize;
+    // Set this to .19 to allow 18bp searches on hg18 (no effect on hg38?).
     if (expected < .004)
 	break;
     }
@@ -1477,7 +1507,7 @@ boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 
 if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
-    cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
+    cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
@@ -1681,8 +1711,15 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     if (oneSize < minSuggested)
         {
-	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum)", 
-		seq->name, oneSize, minSuggested);
+	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br><br>"
+                "To search for short sequences in the browser window, use the <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
+                "You can also use our commandline tool <tt>findMotifs</tt> "
+                "(see <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>) to "
+                "search for sequences on the entire genome.<br><br>"
+                "For primers, you can use the <a href='hgPcr?%s=%s'>In-silico PCR</a> tool. In-silico PCR can search the entire genome or a set of "
+                "transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
+                "Contact us for additional help using BLAT or its related tools: genome@soe.ucsc.edu",
+		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
 	// minimum possible length = tileSize+stepSize, so mpl=16 for dna stepSize=5, mpl=10 for protein.
@@ -1864,7 +1901,7 @@ puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
-puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"submit file\"><P>\n");
+puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit file\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
@@ -1890,7 +1927,12 @@ printf("<P>For programmatic access, BLAT supports URL queries which return in JS
 
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
-           " for best results instead of BLAT.</P>", db);
+           " for best results instead of BLAT. " 
+           "To search for short sequences &lt; 20bp only in the sequence shown on the Genome Browser, "
+           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
+           "If you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
+           "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.</p>",
+           db, cartSessionVarName(), cartSessionId(cart));
 puts("</TD></TR></TABLE>\n");
 
 
@@ -2119,6 +2161,7 @@ orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
     cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 char *oldDb = cloneString(db);
 
 // n.b. this changes to default db if db doesn't have BLAT

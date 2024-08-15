@@ -1,0 +1,43 @@
+##########################################################################
+### adding crispr track to hs1 browser
+##########################################################################
+###  (DONE - Hiram - 2023-12-24 - 2024-01-05)
+
+mkdir /hive/data/genomes/hs1/bed/crisprAll
+cd /hive/data/genomes/hs1/bed/crisprAll
+
+time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -forHub -stop=guides -buildDir=`pwd` -smallClusterHub=hgwdev hs1) \
+            > guides.log 2>&1
+
+real    60m0.007s
+user    0m0.077s
+sys     0m0.052s
+
+time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=ranges \
+       -forHub -stop=guides -buildDir=`pwd` -smallClusterHub=hgwdev hs1) \
+            > ranges.log 2>&1
+
+real    4m37.523s
+user    0m0.136s
+sys     0m0.106s
+
+
+time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScoreJobList \
+         -forHub -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev hs1) \
+            > load.log 2>&1
+
+real    9733m25.872s
+user    0m2.929s
+sys     0m3.832s
+
+time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=cleanup \
+        -forHub -buildDir=`pwd` -smallClusterHub=hgwdev hs1) \
+           > cleanup.log 2>&1
+
+real    196m33.622s
+user    0m0.090s
+sys     0m0.048s
+
+
+##########################################################################

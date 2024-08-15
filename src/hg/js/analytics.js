@@ -12,9 +12,9 @@ function addGtag() {
   } else if (hostName.search("hgw[0-9]") > -1) {
     analyticsKey = "G-P5EV0BL192";
   } else if (hostName.search("genome-euro") > -1) {
-    analyticsKey = "G-G5K9F3K9H2";
+    analyticsKey = "G-XDB54C19MG";
   } else if (hostName.search("genome-asia") > -1) {
-    analyticsKey = "G-LGP1NRZN4H";
+    analyticsKey = "G-Z7QQFEZN0L";
   } else if (hostName.search("genome-test") > -1) {
     analyticsKey = "G-RT83HV74PS";
   } else if (hostName.search("hgwdev.gi") > -1) {

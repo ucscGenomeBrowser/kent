@@ -58,23 +58,9 @@ return !pslTypeTargetIsProtein(pslType);
 static void setPslBoundsCounts(struct psl* psl)
 /* set sequences bounds and counts from blocks on a PSL */
 {
-int lastBlk = psl->blockCount-1;
-
-/* set start/end of sequences */
-psl->qStart = psl->qStarts[0];
-psl->qEnd = psl->qStarts[lastBlk] + psl->blockSizes[lastBlk];
-if (pslQStrand(psl) == '-')
-    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
-
-psl->tStart = psl->tStarts[0];
-psl->tEnd = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-if (pslTStrand(psl) == '-')
-    reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
-
-psl->match = 0;
-for (int iBlk = 0; iBlk < psl->blockCount; iBlk++)
-    psl->match += psl->blockSizes[iBlk];
 pslComputeInsertCounts(psl);
+pslRecalcBounds(psl);
+pslRecalcMatchCounts(psl);
 }
 
 static unsigned int roundUpToMultipleOf3(unsigned n) {
@@ -123,7 +109,7 @@ psl->blockCount--;
 static void editBlockOverlap(struct psl *psl, int iBlk,
                              unsigned overlapAmt3)
 /* remove overlap between two blocks.  If multiple blocks are covered,
- * then shift remove the block */
+ * then shift over the blocks */
 {
 while ((overlapAmt3 > 0) && (iBlk < ((int)psl->blockCount) - 1))
     {
@@ -153,7 +139,6 @@ for (int iBlk = 0; iBlk < ((int)psl->blockCount) - 1; iBlk++)
     if (overlapAmt3 > 0)
         editBlockOverlap(psl, iBlk, overlapAmt3);
     }
-setPslBoundsCounts(psl);
 }
 
 
@@ -182,12 +167,11 @@ static int blockIsAligned(struct block *blk)
 return (blk->qEnd != 0) && (blk->tEnd != 0); // can start at zero
 }
 
-static void pslProtToNAConvert(struct psl *psl)
+void pslProtToNAConvert(struct psl *psl)
 /* convert a protein/NA or protein/protein alignment to a NA/NA alignment */
 {
 boolean isProtNa = pslIsProtein(psl);
 int iBlk;
-
 psl->qStart *= 3;
 psl->qEnd *= 3;
 psl->qSize *= 3;
@@ -199,8 +183,10 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     psl->qStarts[iBlk] *= 3;
     if (!isProtNa)
         psl->tStarts[iBlk] *= 3;
+    psl->match += psl->blockSizes[iBlk];
     }
 removeOverlappingBlock(psl);
+setPslBoundsCounts(psl);
 if (pslCheck("converted to NA", stderr, psl) > 0)
     {
     pslTabOut(psl, stderr);

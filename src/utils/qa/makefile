@@ -30,18 +30,22 @@ install:
 	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
 	cp -p --remove-destination checkHTTPS              ${SCRIPTS}
+	cp -p --remove-destination checkHubSearchCronWrapper.py ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
 	cp -p --remove-destination checkMetaAday.csh       ${SCRIPTS}
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
 	cp -p --remove-destination checkPushedFiles.csh    ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
+	cp -p --remove-destination checkSessionsFromRR.py  ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
 	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
 	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
 	cp -p --remove-destination checkSyncAndMetaDataAll.py ${SCRIPTS}
+	cp -p --remove-destination checkSyncMetaDataWrapper.py ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
+	cp -p --remove-destination checkTableStatusDump.sh ${SCRIPTS}
 	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
 	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}
 	cp -p --remove-destination commTrio.csh            ${SCRIPTS}
@@ -112,6 +116,7 @@ install:
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination idHitter.csh            ${SCRIPTS}
 	cp -p --remove-destination imageComp.py            ${SCRIPTS}
+	cp -p --remove-destination jasparUpdate.py         ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination kgTables                ${SCRIPTS}
@@ -122,6 +127,7 @@ install:
 	cp -p --remove-destination longSessionCartDumps.sh ${SCRIPTS}
 	cp -p --remove-destination makeCytoBandIdeo.csh    ${SCRIPTS}
 	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
+	cp -p --remove-destination makeHub.sh              ${SCRIPTS}
 	cp -p --remove-destination makeTouchCommands.csh   ${SCRIPTS}
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
@@ -149,6 +155,7 @@ install:
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
 	cp -p --remove-destination staticpaths             ${SCRIPTS}
 	cp -p --remove-destination syncAday.csh            ${SCRIPTS}
+	cp -p --remove-destination trackCountsParse        ${SCRIPTS}
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.sh        ${SCRIPTS}

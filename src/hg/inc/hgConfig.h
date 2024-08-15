@@ -44,4 +44,7 @@ struct slName *cfgNamesWithPrefix();
 unsigned long cfgModTime();
 /* Return modification time of config file */
 
+void cfgSetMaxMem();
+/* Check hg.conf for maxMem.  If not set, don't limit memory.  Otherwise
+ * limit memory usage to that number. */
 #endif

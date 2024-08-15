@@ -1,29 +1,37 @@
 kentSrc = ..
+
+# use recursive make to compile 32-bit and 64-bit index versions
+# if IDXSIZE=64 is passed in, we get the 64-bit version
+
+all: compile
+compile::
+	${MAKE} build
+	${MAKE} build IDXSIZE=huge
+
+ifeq (${IDXSIZE},huge)
+A = gfServerHuge
+CFLAGS += -DGFSERVER_HUGE
+preMyLibs += ../lib/$(MACHTYPE)/jkOwnLibHuge.a
+else
 A = gfServer
 preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
+endif
+# this must be include here, after the above setup but before the build target
 include $(kentSrc)/inc/userApp.mk
+
+build: ${DESTDIR}${BINDIR}/${A}${EXE}
 L += -lm $(SOCKETLIB)
 
+gfServerHuge.c: gfServer.c
+	ln -sf $< $@
+
 test::
-	${MKDIR} tests/output
-	${DESTBINDIR}/${A} direct tests/input/mCrea.mrna tests/input/hCreaGeno.nib \
-		tests/input/mCreaGeno.nib > tests/output/testNib.out
-	diff tests/expected/testNib.out tests/output/testNib.out
-	${DESTBINDIR}/${A} direct tests/input/mCrea.mrna tests/input/creaGeno.2bit \
-		>tests/output/testTwoBit.out
-	diff tests/expected/testTwoBit.out tests/output/testTwoBit.out
-	cd tests && ./testProtNib
-	cd tests && ./testProtTwoBit
-	cd tests && ./testTransNib
-	cd tests && ./testTransTwoBit
-	cd tests && ./testPcr
-	cd tests && ./testIndexFile
-	cd tests && ./testIndexFileTrans
-	cd tests && ./testDynServer
-	cd tests && ./testDynServerTrans
-	cd tests && ./testDynServerWithDir
-	cd tests && ./testDynServerPerSeqMax
-	cd tests && ./testDynServerPcr
+	cd tests && ${MAKE} test
 
 clean::
-	rm -fr ${O} tests/output
+	${MAKE} clean_idxsize
+	${MAKE} clean_idxsize IDXSIZE=HUGE
+	cd tests && ${MAKE} clean
+
+clean_idxsize:
+	rm -fr ${O} gfServerHuge.c

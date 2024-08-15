@@ -722,7 +722,7 @@ void htmlVaBadRequestAbort(char *format, va_list args)
 puts("Status: 400\r");
 puts("Content-Type: text/plain; charset=UTF-8\r");
 puts("\r");
-if (format != NULL && args != NULL)
+if (format != NULL)
     {
     vfprintf(stdout, format, args);
     fprintf(stdout, "\n");
@@ -819,6 +819,12 @@ void htmlSetGa4Key(char *key)
 /* Set GA4 key. Needs to be called before htmlStart or htmShell. */
 {
 analyticsKey = key;
+}
+
+void htmlPrintAnalyticsLink(FILE *f) {
+/* print the link to the analytics javascript file in the html header. (Analytics 4 wants the javascript file referenced in the header) */
+if (analyticsKey)
+    fprintf(f, "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n", analyticsKey);
 }
 
 void htmlSetStyleTheme(char *style)
@@ -1002,6 +1008,8 @@ dyStringAppend(policy, " www.googletagmanager.com/gtag/js");
 
 // cirm cdw lib and web browse
 dyStringAppend(policy, " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js");
+// genome-china analytics
+dyStringAppend(policy, " hm.baidu.com/hm.js");
 
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js");
@@ -1120,20 +1128,8 @@ void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, i
  * and CGI returned .htmls need, including optional head info */
 {
 if (printDocType)
-    {
-//#define TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-#ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-    fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
-#else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-    char *browserVersion;
-    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
-        fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
-    else
-        fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
-              "\"http://www.w3.org/TR/html4/loose.dtd\">\n",f);
-    // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
-#endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
-    }
+    fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+          "\"http://www.w3.org/TR/html4/loose.dtd\">\n",f);
 
 if (doNotTranslate)
     fputs("<HTML lang='en' class='notranslate' translate='no'>\n", f); // switches off auto-translation question
@@ -1159,8 +1155,9 @@ if (htmlStyleSheet != NULL)
     fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n", htmlStyleSheet);
 if (htmlStyleTheme != NULL)
     fputs(htmlStyleTheme, f);
-if (analyticsKey)
-    fprintf(f, "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n", analyticsKey);
+
+// With Analytics 4 we need the Javascript file in the header
+htmlPrintAnalyticsLink(f);
 
 fputs("</HEAD>\n\n",f);
 printBodyTag(f);

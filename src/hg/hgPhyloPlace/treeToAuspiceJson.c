@@ -1,14 +1,16 @@
 /* Convert a (sub)tree with condensed nodes to JSON for Nextstrain to display, adding in sample
  * mutations, protein changes and metadata. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
+#include "dnaseq.h"
 #include "errCatch.h"
 #include "hash.h"
 #include "hui.h"
 #include "jsonWrite.h"
 #include "linefile.h"
+#include "obscure.h"
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "phyloTree.h"
@@ -46,6 +48,13 @@ jsonWriteString(jw, NULL, valA);
 jsonWriteString(jw, NULL, valB);
 jsonWriteListEnd(jw);
 }
+
+static void jsonWriteAppendData(struct jsonWrite *jw, char *data)
+/* Append data to jw->dy, trusting that it will maintain well-formed JSON results. */
+{
+dyStringAppend(jw->dy, data);
+}
+
 
 static void auspiceMetaColoringSarsCov2Nextclade(struct jsonWrite *jw, char *key, char *title)
 /* Write a coloring spec for SARS-CoV-2 Nextstrain clades.  (Non-VoC clades are omitted and
@@ -97,17 +106,27 @@ for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
         int i;
         for (i = 0;  i < gi->psl->blockCount;  i++)
             {
+            int cStart = gi->psl->tStarts[i];
+            int cEnd = gi->psl->tStarts[i] + gi->psl->blockSizes[i];
+            if (cEnd < gi->cdsStart)
+                continue;
+            if (cStart > gi->cdsEnd)
+                break;
+            if (cStart < gi->cdsStart)
+                cStart = gi->cdsStart;
+            if (cEnd > gi->cdsEnd)
+                cEnd = gi->cdsEnd;
             jsonWriteObjectStart(jw, NULL);
-            jsonWriteNumber(jw, "start", gi->psl->tStarts[i]+1);
-            jsonWriteNumber(jw, "end", gi->psl->tStarts[i] + gi->psl->blockSizes[i]);
+            jsonWriteNumber(jw, "start", cStart+1);
+            jsonWriteNumber(jw, "end", cEnd);
             jsonWriteObjectEnd(jw);
             }
         jsonWriteListEnd(jw);
         }
     else
         {
-        jsonWriteNumber(jw, "start", gi->psl->tStart+1);
-        jsonWriteNumber(jw, "end", gi->psl->tEnd);
+        jsonWriteNumber(jw, "start", gi->cdsStart+1);
+        jsonWriteNumber(jw, "end", gi->cdsEnd);
         }
     jsonWriteString(jw, "strand", (pslOrientation(gi->psl) > 0) ? "+" : "-");
     jsonWriteString(jw, "type", "CDS");
@@ -122,6 +141,41 @@ jsonWriteObjectEnd(jw);
 jsonWriteObjectEnd(jw);
 }
 
+//#*** TODO: in v459 or later, remove the organism-specific code.
+static struct slName *getColorFields(char *db, boolean isRsv, boolean isFlu)
+{
+struct slName *colorFields = NULL;
+if (sameString(db, "wuhCor1"))
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_clade_usher");
+    slNameAddHead(&colorFields, "pango_lineage_usher");
+    slNameAddHead(&colorFields, "Nextstrain_clade");
+    slNameAddHead(&colorFields, "pango_lineage");
+    }
+else if (isRsv)
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "GCC_nextclade");
+    slNameAddHead(&colorFields, "GCC_usher");
+    slNameAddHead(&colorFields, "GCC_assigned_2023-11");
+    slNameAddHead(&colorFields, "goya_nextclade");
+    slNameAddHead(&colorFields, "goya_usher");
+    }
+else if (isFlu)
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_clade");
+    }
+else
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_lineage");
+    }
+return colorFields;
+}
+
+//#*** TODO: in v459 or later, remove the organism-specific stuff
 static char *getDefaultColor(struct slName *colorFields)
 /* Pick default color from available color fields from metadata.  Do not free returned string. */
 {
@@ -132,8 +186,8 @@ else if (slNameInList(colorFields, "Nextstrain_lineage"))
     colorDefault = "Nextstrain_lineage";
 else if (slNameInList(colorFields, "Nextstrain_clade"))
     colorDefault = "Nextstrain_clade";
-else if (slNameInList(colorFields, "goya_usher"))
-    colorDefault = "goya_usher";
+else if (slNameInList(colorFields, "GCC_usher"))
+    colorDefault = "GCC_usher";
 else if (colorFields != NULL)
     colorDefault = colorFields->name;
 else
@@ -141,6 +195,7 @@ else
 return colorDefault;
 }
 
+//#*** TODO: in v459 or later, remove the organism-specific stuff
 static void auspiceMetaColorings(struct jsonWrite *jw, char *source, struct slName *colorFields,
                                  char *db)
 /* Write coloring specs for colorFields from metadata, locally added userOrOld, and
@@ -177,12 +232,12 @@ for (col = colorFields;  col != NULL;  col = col->next)
         auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by nextclade");
     else if (sameString(col->name, "goya_usher"))
         auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by UShER");
-    else if (sameString(col->name, "ramaekers_nextclade"))
-        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 clade assigned by nextclade");
-    else if (sameString(col->name, "ramaekers_usher"))
-        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 clade assigned by UShER");
-    else if (sameString(col->name, "ramaekers_tableS1"))
-        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 Table S1 designation");
+    else if (sameString(col->name, "GCC_nextclade"))
+        auspiceMetaColoringCategorical(jw, col->name, "RGCC lineage assigned by nextclade");
+    else if (sameString(col->name, "GCC_usher"))
+        auspiceMetaColoringCategorical(jw, col->name, "RGCC lineage assigned by UShER");
+    else if (sameString(col->name, "GCC_assigned_2023-11"))
+        auspiceMetaColoringCategorical(jw, col->name, "RGCC designated lineage");
     else if (sameString(col->name, "country"))
         auspiceMetaColoringCategorical(jw, col->name, "Country");
     else
@@ -192,8 +247,8 @@ jsonWriteListEnd(jw);
 }
 
 static void writeAuspiceMeta(struct jsonWrite *jw, struct slName *subtreeUserSampleIds, char *source,
-                             char *db, struct slName *colorFields, struct geneInfo *geneInfoList,
-                             uint genomeSize)
+                             char *org, char *db, struct geneInfo *geneInfoList,
+                             uint genomeSize, boolean isRsv, boolean isFlu)
 /* Write metadata to configure Auspice display. */
 {
 jsonWriteObjectStart(jw, "meta");
@@ -223,44 +278,58 @@ jsonWriteListStart(jw, "panels");
 jsonWriteString(jw, NULL, "tree");
 jsonWriteString(jw, NULL, "entropy");
 jsonWriteListEnd(jw);
-// Default label & color
-jsonWriteObjectStart(jw, "display_defaults");
-jsonWriteString(jw, "branch_label", "aa mutations");
-jsonWriteString(jw, "color_by", getDefaultColor(colorFields));
-jsonWriteObjectEnd(jw);
-// Colorings: userOrOld, gt and whatever we got from metadata
-auspiceMetaColorings(jw, source, colorFields, db);
-// Filters didn't work when I tried them a long time ago... revisit someday.
-jsonWriteListStart(jw, "filters");
-jsonWriteString(jw, NULL, "userOrOld");
-jsonWriteString(jw, NULL, "country");
-//#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
-//#*** in config, or better yet, compute while building tree object in memory, then write the
-//#*** header object, then write the tree.
-if (sameString(db, "wuhCor1"))
+char *metaJsonFile = phyloPlaceRefSettingPath(org, db, "auspiceMeta");
+if (isNotEmpty(metaJsonFile) && fileExists(metaJsonFile))
     {
-    jsonWriteString(jw, NULL, "pango_lineage_usher");
-    jsonWriteString(jw, NULL, "pango_lineage");
-    jsonWriteString(jw, NULL, "Nextstrain_clade_usher");
-    jsonWriteString(jw, NULL, "Nextstrain_clade");
-    }
-else if (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db))
-    {
-    jsonWriteString(jw, NULL, "goya_usher");
-    jsonWriteString(jw, NULL, "goya_nextclade");
-    jsonWriteString(jw, NULL, "ramaekers_tableS1");
-    jsonWriteString(jw, NULL, "ramaekers_usher");
-    jsonWriteString(jw, NULL, "ramaekers_nextclade");
-    }
-else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
-    {
-    jsonWriteString(jw, NULL, "Nextstrain_clade");
+    char *metaJson = NULL;
+    size_t size = 0;
+    readInGulp(metaJsonFile, &metaJson, &size);
+    while (size > 0 && metaJson[size-1] == '\n')
+        metaJson[--size] = '\0';
+    jsonWriteAppendData(jw, ", ");
+    jsonWriteAppendData(jw, metaJson);
+    freeMem(metaJson);
     }
 else
     {
-    jsonWriteString(jw, NULL, "Nextstrain_lineage");
+    // Default label & color
+    struct slName *colorFields = getColorFields(db, isRsv, isFlu);
+    jsonWriteObjectStart(jw, "display_defaults");
+    jsonWriteString(jw, "branch_label", "aa mutations");
+    jsonWriteString(jw, "color_by", getDefaultColor(colorFields));
+    jsonWriteObjectEnd(jw);
+    // Colorings: userOrOld, gt and whatever we got from metadata
+    auspiceMetaColorings(jw, source, colorFields, db);
+    // Filters
+    jsonWriteListStart(jw, "filters");
+    jsonWriteString(jw, NULL, "userOrOld");
+    jsonWriteString(jw, NULL, "country");
+    //#*** TODO: in v459 or later, remove the organism-specific stuff
+    if (sameString(db, "wuhCor1"))
+        {
+        jsonWriteString(jw, NULL, "pango_lineage_usher");
+        jsonWriteString(jw, NULL, "pango_lineage");
+        jsonWriteString(jw, NULL, "Nextstrain_clade_usher");
+        jsonWriteString(jw, NULL, "Nextstrain_clade");
+        }
+    else if (isRsv)
+        {
+        jsonWriteString(jw, NULL, "GCC_usher");
+        jsonWriteString(jw, NULL, "GCC_nextclade");
+        jsonWriteString(jw, NULL, "GCC_assigned_2023-11");
+        jsonWriteString(jw, NULL, "goya_usher");
+        jsonWriteString(jw, NULL, "goya_nextclade");
+        }
+    else if (isFlu)
+        {
+        jsonWriteString(jw, NULL, "Nextstrain_clade");
+        }
+    else
+        {
+        jsonWriteString(jw, NULL, "Nextstrain_lineage");
+        }
+    jsonWriteListEnd(jw);
     }
-jsonWriteListEnd(jw);
 // Annotations for coloring/filtering by base
 writeAuspiceMetaGenomeAnnotations(jw, geneInfoList, genomeSize);
 jsonWriteObjectEnd(jw);
@@ -293,84 +362,108 @@ else
     safef(lineageUrl, lineageUrlSize, OUTBREAK_INFO_URLBASE "%s", lineage);
 }
 
-static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
-                                        struct sampleMetadata *met, boolean isUserSample,
-                                        char *source, struct hash *sampleUrls,
-                                        struct hash *samplePlacements, boolean isRsv,
-                                        char **retUserOrOld, char **retNClade, char **retGClade,
-                                        char **retLineage, char **retNLineage,
-                                        char **retNCladeUsher, char **retLineageUsher)
+struct auspiceJsonInfo
+/* Collection of a bunch of things used when writing out auspice JSON for a subtree, so the
+ * recursive function doesn't need a dozen args. */
+    {
+    struct jsonWrite *jw;
+    struct slName *subtreeUserSampleIds;  // Subtree node names for user samples (not from big tree)
+    struct geneInfo *geneInfoList;        // Transcript seq & alignment for predicting AA change
+    struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
+    struct sampleMetadataStore *sampleMetadata; // Sample metadata for decorating tree
+    struct hash *sampleUrls;              // URLs for samples, if applicable
+    struct hash *samplePlacements;        // Sample placement info e.g. clade/lineage from usher
+    int nodeNum;                          // For generating sequential node ID (in absence of name)
+    char *source;                         // Source of non-user sequences in tree (GISAID or public)
+    };
+
+static void jsonWriteLeafNodeAttributes(struct auspiceJsonInfo *aji, char *name,
+                                        boolean isUserSample, boolean isRsv,
+                                        int branchAttrCount, char **branchAttrCols,
+                                        char **branchAttrVals)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
  * or may be a new sample from the user.  Set rets for color categories so parent branches can
  * determine their color categories. */
 {
-*retUserOrOld = isUserSample ? "uploaded sample" : source;
-jsonWriteObjectValue(jw, "userOrOld", *retUserOrOld);
-if (met && met->date)
-    jsonWriteObjectValue(jw, "date", met->date);
-if (met && met->author)
+char *userOrOld = isUserSample ? "uploaded sample" : aji->source;
+jsonWriteObjectValue(aji->jw, "userOrOld", userOrOld);
+int i;
+for (i = 0;  i < branchAttrCount;  i++)
+    branchAttrVals[i] = "";
+if (branchAttrCount > 0 && sameString(branchAttrCols[0], "userOrOld"))
+    branchAttrVals[0] = userOrOld;
+char **met = name ? metadataForSample(aji->sampleMetadata, name) : NULL;
+if (met != NULL)
     {
-    jsonWriteObjectValue(jw, "author", met->author);
-    // Note: Nextstrain adds paper_url and title when available; they also add author and use
-    // a uniquified value (e.g. "author": "Wenjie Tan et al" / "value": "Wenjie Tan et al A")
+    int i;
+    for (i = 0;  i < aji->sampleMetadata->columnCount;  i++)
+        {
+        char *colName = aji->sampleMetadata->columnNames[i];
+        // Tweak old column name if found
+        if (sameString(colName, "pangolin_lineage"))
+            colName = "pango_lineage";
+        // Link out to outbreak.info for Pango lineages
+        if (startsWith("pango_lineage", colName))
+            {
+            if (isNotEmpty(met[i]))
+                {
+                char lineageUrl[1024];
+                makeLineageUrl(met[i], lineageUrl, sizeof lineageUrl);
+                jsonWriteObjectValueUrl(aji->jw, colName, met[i], lineageUrl);
+                }
+            else
+                jsonWriteObjectValue(aji->jw, colName, met[i]);
+            }
+        else
+            jsonWriteObjectValue(aji->jw, colName, met[i]);
+        // Some columns get passed upwards for aggregation so we can color internal nodes/branches.
+        int j;
+        for (j = 0;  j < branchAttrCount;  j++)
+            {
+            if (sameString(colName, branchAttrCols[j]))
+                {
+                branchAttrVals[j] = met[i];
+                break;
+                }
+            }
+        }
     }
-struct placementInfo *pi = (isUserSample && name) ? hashFindVal(samplePlacements, name) : NULL;
-
-*retNClade = (met && met->nClade) ? met->nClade : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retNClade))
-    jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), *retNClade);
-*retGClade = (met && met->gClade) ? met->gClade : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retGClade))
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_tableS1" : "GISAID_clade"), *retGClade);
-*retLineage =  (met && met->lineage) ? met->lineage : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retLineage))
+else if (isUserSample)
     {
-    char lineageUrl[1024];
-    makeLineageUrl(*retLineage, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, (isRsv ? "ramaekers_nextclade" : "pango_lineage"),
-                            *retLineage, lineageUrl);
+    struct placementInfo *pi = name ? hashFindVal(aji->samplePlacements, name) : NULL;
+    int i;
+    for (i = 0;  i < branchAttrCount;  i++)
+        {
+        branchAttrVals[i] = "uploaded sample";
+        // Special cases for using placementInfo of user sample for _usher lineage/clade calls
+        // and outbreak.info link for Pango lineage
+        //#*** TODO: think of a way to make this config-driven
+        boolean wroteLink = FALSE;
+        if (pi)
+            {
+            if (pi->nextClade && (sameString(branchAttrCols[i], "Nextstrain_clade_usher") ||
+                                  sameString(branchAttrCols[i], "goya_usher")))
+                branchAttrVals[i] = pi->nextClade;
+            else if (pi->pangoLineage)
+                {
+                if (sameString(branchAttrCols[i], "pango_lineage_usher"))
+                    {
+                    branchAttrVals[i] = pi->pangoLineage;
+                    char lineageUrl[1024];
+                    makeLineageUrl(pi->pangoLineage, lineageUrl, sizeof lineageUrl);
+                    jsonWriteObjectValueUrl(aji->jw, branchAttrCols[i], branchAttrVals[i],
+                                            lineageUrl);
+                    wroteLink = TRUE;
+                    }
+                else if (sameString(branchAttrCols[i], "GCC_usher"))
+                    branchAttrVals[i] = pi->pangoLineage;
+                }
+            }
+        if (!wroteLink)
+            jsonWriteObjectValue(aji->jw, branchAttrCols[i], branchAttrVals[i]);
+        }
     }
-*retNLineage = (met && met->nLineage) ? met->nLineage : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retNLineage))
-    {
-    jsonWriteObjectValue(jw, "Nextstrain_lineage", *retNLineage);
-    }
-if (met && met->epiId)
-    jsonWriteObjectValue(jw, "gisaid_epi_isl", met->epiId);
-if (met && met->gbAcc)
-    jsonWriteObjectValue(jw, "genbank_accession", met->gbAcc);
-if (met && met->country)
-    jsonWriteObjectValue(jw, "country", met->country);
-if (met && met->division)
-    jsonWriteObjectValue(jw, "division", met->division);
-if (met && met->location)
-    jsonWriteObjectValue(jw, "location", met->location);
-if (met && met->countryExp)
-    jsonWriteObjectValue(jw, "country_exposure", met->countryExp);
-if (met && met->divExp)
-    jsonWriteObjectValue(jw, "division_exposure", met->divExp);
-if (met && met->origLab)
-    jsonWriteObjectValue(jw, "originating_lab", met->origLab);
-if (met && met->subLab)
-    jsonWriteObjectValue(jw, "submitting_lab", met->subLab);
-if (met && met->region)
-    jsonWriteObjectValue(jw, "region", met->region);
-*retNCladeUsher = (pi && pi->nextClade) ? pi->nextClade :
-                  (met && met->nCladeUsher) ? met->nCladeUsher :
-                  isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retNCladeUsher))
-    jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), *retNCladeUsher);
-*retLineageUsher = (pi && pi->pangoLineage) ? pi->pangoLineage :
-                   (met && met->lineageUsher) ? met->lineageUsher :
-                   isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retLineageUsher))
-    {
-    char lineageUrl[1024];
-    makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"),
-                            *retLineageUsher, lineageUrl);
-    }
-char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
+char *sampleUrl = (aji->sampleUrls && name) ? hashFindVal(aji->sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
     {
     char *p = strstr(sampleUrl, "subtreeAuspice");
@@ -380,32 +473,24 @@ if (isNotEmpty(sampleUrl))
         int num = atoi(subtreeNum);
         char subtreeLabel[1024];
         safef(subtreeLabel, sizeof subtreeLabel, "view subtree %d", num);
-        jsonWriteObjectValueUrl(jw, "subtree", subtreeLabel, sampleUrl);
+        jsonWriteObjectValueUrl(aji->jw, "subtree", subtreeLabel, sampleUrl);
         }
     else
-        jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
+        jsonWriteObjectValueUrl(aji->jw, "subtree", sampleUrl, sampleUrl);
     }
 }
 
-static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, boolean isRsv, char *userOrOld,
-                                          char *nClade, char *gClade, char *lineage, char *nLineage,
-                                          char *nCladeUsher, char *lineageUsher)
+static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, boolean isRsv,
+                                          int branchAttrCount, char **branchAttrCols,
+                                          char **branchAttrVals)
 /* Write elements of node_attrs for a branch. */
 {
-if (userOrOld)
-    jsonWriteObjectValue(jw, "userOrOld", userOrOld);
-if (nClade)
-    jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), nClade);
-if (gClade)
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_tableS1" : "GISAID_clade"), gClade);
-if (lineage)
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_nextclade" : "pango_lineage"), lineage);
-if (nLineage)
-    jsonWriteObjectValue(jw, "Nextstrain_lineage", lineage);
-if (nCladeUsher)
-    jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), nCladeUsher);
-if (lineageUsher)
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"), lineageUsher);
+int i;
+for (i = 0;  i < branchAttrCount;  i++)
+    {
+    if (isNotEmpty(branchAttrVals[i]))
+        jsonWriteObjectValue(jw, branchAttrCols[i], branchAttrVals[i]);
+    }
 }
 
 INLINE char maybeComplement(char base, struct psl *psl)
@@ -425,11 +510,11 @@ struct slName *aaChange = NULL;
 if (codonVpTxList != NULL)
     {
     struct vpTx *vpTx = codonVpTxList;
-    int firstAaStart = vpTx->start.txOffset / 3;
+    int firstAaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
     int codonStart = firstAaStart * 3;
-    int codonOffset = vpTx->start.txOffset - codonStart;
+    int codonOffset = vpTx->start.txOffset - gi->cds->start - codonStart;
     char oldCodon[4];
-    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + gi->cds->start + codonStart, 3);
     touppers(oldCodon);
     boolean isRc = (pslOrientation(gi->psl) < 0);
     int codonStartG = isRc ? vpTx->start.gOffset + codonOffset : vpTx->start.gOffset - codonOffset;
@@ -456,11 +541,11 @@ if (codonVpTxList != NULL)
     safecpy(newCodon, sizeof newCodon, oldCodon);
     for (vpTx = codonVpTxList;  vpTx != NULL;  vpTx = vpTx->next)
         {
-        int aaStart = vpTx->start.txOffset / 3;
+        int aaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
         if (aaStart != firstAaStart)
             errAbort("codonVpTxToAaChange: program error: firstAaStart %d != aaStart %d",
                      firstAaStart, aaStart);
-        int codonOffset = vpTx->start.txOffset - codonStart;
+        int codonOffset = vpTx->start.txOffset - gi->cds->start - codonStart;
         // vpTx->txRef[0] is always the reference base, not like singleNucChange parBase,
         // so we can't compare it to expected value as we could for ancMuts above.
         newCodon[codonOffset] = vpTx->txAlt[0];
@@ -480,8 +565,7 @@ return aaChange;
 
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
                               struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
-/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }.
- * Note: this assumes there is no UTR in transcript, only CDS.  True so far for pathogens... */
+/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
 {
 struct slPair *geneChangeList = NULL;
 struct geneInfo *gi;
@@ -499,9 +583,10 @@ for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
             char gAlt[2];
             safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
             struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
-            if (vpTx->start.region == vpExon)
+            if (vpTx->start.region == vpExon && vpTx->start.txOffset < gi->cds->end &&
+                vpTx->end.txOffset > gi->cds->start)
                 {
-                int aaStart = vpTx->start.txOffset / 3;
+                int aaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
                 // Accumulate vpTxs in the same codon
                 if (aaStart == prevAaStart || prevAaStart == -1)
                     {
@@ -619,21 +704,6 @@ if (node->priv != NULL)
     }
 }
 
-struct auspiceJsonInfo
-/* Collection of a bunch of things used when writing out auspice JSON for a subtree, so the
- * recursive function doesn't need a dozen args. */
-    {
-    struct jsonWrite *jw;
-    struct slName *subtreeUserSampleIds;  // Subtree node names for user samples (not from big tree)
-    struct geneInfo *geneInfoList;        // Transcript seq & alignment for predicting AA change
-    struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
-    struct hash *sampleMetadata;          // Sample metadata for decorating tree
-    struct hash *sampleUrls;              // URLs for samples, if applicable
-    struct hash *samplePlacements;        // Sample placement info e.g. clade/lineage from usher
-    int nodeNum;                          // For generating sequential node ID (in absence of name)
-    char *source;                         // Source of non-user sequences in tree (GISAID or public)
-    };
-
 static int cmpstringp(const void *p1, const void *p2)
 /* strcmp on pointers to strings, as in 'man qsort' but tolerate NULLs */
 {
@@ -676,9 +746,7 @@ return (maxRunLength > (arraySize >> 1)) ? maxRunVal : NULL;
 
 static void rTreeToAuspiceJson(struct phyloTree *node, int depth, struct auspiceJsonInfo *aji,
                                struct singleNucChange *ancestorMuts, boolean isRsv,
-                               char **retUserOrOld, char **retNClade, char **retGClade,
-                               char **retLineage, char **retNLineage,
-                               char **retNCladeUsher, char **retLineageUsher)
+                               int branchAttrCount, char **branchAttrCols, char **branchAttrVals)
 /* Write Augur/Auspice V2 JSON for tree.  Enclosing object start and end are written by caller. */
 {
 struct singleNucChange *sncList = node->priv;
@@ -690,7 +758,6 @@ boolean isUserSample = FALSE;
 if (node->ident->name)
     isUserSample = slNameInList(aji->subtreeUserSampleIds, node->ident->name);
 char *name = node->ident->name;
-struct sampleMetadata *met = name ? metadataForSample(aji->sampleMetadata, name) : NULL;
 if (name)
     jsonWriteString(aji->jw, "name", name);
 else
@@ -705,51 +772,36 @@ if (node->numEdges > 0)
     else
         allMuts = sncList;
     jsonWriteListStart(aji->jw, "children");
-    char *kidUserOrOld[node->numEdges];
-    char *kidNClade[node->numEdges];
-    char *kidGClade[node->numEdges];
-    char *kidLineage[node->numEdges];
-    char *kidNCladeUsher[node->numEdges];
-    char *kidLineageUsher[node->numEdges];
-    char *kidNLineage[node->numEdges];
+    char *kidAttrVals[branchAttrCount][node->numEdges];
     // Step through children in reverse order because nextstrain/Auspice draws upside-down. :)
     int i;
     for (i = node->numEdges - 1;  i >= 0;  i--)
         {
+        char *kidNodeAttrVals[branchAttrCount];
         jsonWriteObjectStart(aji->jw, NULL);
         rTreeToAuspiceJson(node->edges[i], depth, aji, allMuts, isRsv,
-                           &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i],
-                           &kidNLineage[i], &kidNCladeUsher[i], &kidLineageUsher[i]);
+                           branchAttrCount, branchAttrCols, kidNodeAttrVals);
         jsonWriteObjectEnd(aji->jw);
+        int j;
+        for (j = 0;  j < branchAttrCount;  j++)
+            kidAttrVals[j][i] = kidNodeAttrVals[j];
         }
     jsonWriteListEnd(aji->jw);
-    if (retUserOrOld)
-        *retUserOrOld = majorityMaybe(kidUserOrOld, node->numEdges);
-    if (retNClade)
-        *retNClade = majorityMaybe(kidNClade, node->numEdges);
-    if (retGClade)
-        *retGClade = majorityMaybe(kidGClade, node->numEdges);
-    if (retLineage)
-        *retLineage = majorityMaybe(kidLineage, node->numEdges);
-    if (retNCladeUsher)
-        *retNCladeUsher = majorityMaybe(kidNCladeUsher, node->numEdges);
-    if (retLineageUsher)
-        *retLineageUsher = majorityMaybe(kidLineageUsher, node->numEdges);
-    if (retNLineage)
-        *retNLineage = majorityMaybe(kidNLineage, node->numEdges);
+    if (branchAttrVals)
+        {
+        for (i = 0;  i < branchAttrCount;  i++)
+            branchAttrVals[i] = majorityMaybe(kidAttrVals[i], node->numEdges);
+        }
     if (ancLast)
         ancLast->next = NULL;
     }
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
-    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
-                                aji->samplePlacements, isRsv,
-                                retUserOrOld, retNClade, retGClade, retLineage, retNLineage,
-                                retNCladeUsher, retLineageUsher);
-else if (retUserOrOld && retGClade && retLineage)
-    jsonWriteBranchNodeAttributes(aji->jw, isRsv, *retUserOrOld, *retNClade, *retGClade, *retLineage,
-                                  *retNLineage, *retNCladeUsher, *retLineageUsher);
+    jsonWriteLeafNodeAttributes(aji, name, isUserSample, isRsv,
+                                branchAttrCount, branchAttrCols, branchAttrVals);
+else if (branchAttrVals)
+    jsonWriteBranchNodeAttributes(aji->jw, isRsv, branchAttrCount, branchAttrCols, branchAttrVals);
 jsonWriteObjectEnd(aji->jw);
 }
 
@@ -804,7 +856,16 @@ if (bbi)
         gi->psl = genePredToPsl((struct genePred *)gp, refGenome->size, txLen);
         gi->psl->qName = cloneString(gp->name2);
         gi->txSeq = newDnaSeq(seq, txLen, gp->name2);
-        slAddHead(&geneInfoList, gi);
+        gi->cdsStart = gp->cdsStart;
+        gi->cdsEnd = gp->cdsEnd;
+        AllocVar(gi->cds);
+        genePredToCds((struct genePred *)gp, gi->cds);
+        int cdsLen = gi->cds->end - gi->cds->start;
+        // Skip genes with no CDS (like RNA genes) or obviously incomplete/incorrect CDS.
+        if (cdsLen > 0 && (cdsLen % 3) == 0)
+            {
+            slAddHead(&geneInfoList, gi);
+            }
         }
     lmCleanup(&lm);
     bigBedFileClose(&bbi);
@@ -813,8 +874,30 @@ slReverse(&geneInfoList);
 return geneInfoList;
 }
 
-void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
-                       struct seqWindow *gSeqWin, struct hash *sampleMetadata,
+static int getBranchAttrCols(char *org, char *db, char ***retBranchAttrCols)
+/* Alloc an array of metadata column names to use as branch attributes and return count.
+ * There will always be at least 1 (userOrOld / Sample type); others come from config setting. */
+{
+int branchAttrCount = 1;
+struct slName *attrList = NULL, *attr;
+char *branchAttrSetting = phyloPlaceRefSetting(org, db, "branchAttributes");
+if (isNotEmpty(branchAttrSetting))
+    {
+    attrList = slNameListFromComma(branchAttrSetting);
+    branchAttrCount += slCount(attrList);
+    }
+char **branchAttrCols = NULL;
+AllocArray(branchAttrCols, branchAttrCount);
+branchAttrCols[0] = cloneString("userOrOld");
+int i;
+for (i = 1, attr = attrList;  i < branchAttrCount && attr != NULL;  i++, attr = attr->next)
+    branchAttrCols[i] = cloneString(trimSpaces(attr->name));
+*retBranchAttrCols = branchAttrCols;
+return branchAttrCount;
+}
+
+void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct geneInfo *geneInfoList,
+                       struct seqWindow *gSeqWin, struct sampleMetadataStore *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
                        char *jsonFile, char *source)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
@@ -825,41 +908,11 @@ FILE *outF = mustOpen(jsonFile, "w");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "version", "v2");
-//#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
-//#*** in config, or better yet, compute while building tree object in memory, then write the
-//#*** header object, then write the tree.
-boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db));
-struct slName *colorFields = NULL;
-if (sameString(db, "wuhCor1"))
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "Nextstrain_clade_usher");
-    slNameAddHead(&colorFields, "pango_lineage_usher");
-    slNameAddHead(&colorFields, "Nextstrain_clade");
-    slNameAddHead(&colorFields, "pango_lineage");
-    }
-else if (isRsv)
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "ramaekers_nextclade");
-    slNameAddHead(&colorFields, "ramaekers_usher");
-    slNameAddHead(&colorFields, "ramaekers_tableS1");
-    slNameAddHead(&colorFields, "goya_nextclade");
-    slNameAddHead(&colorFields, "goya_usher");
-    }
-else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "Nextstrain_clade");
-    }
-else
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "Nextstrain_lineage");
-    }
-//#*** END FIXME
-writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, db, colorFields, geneInfoList,
-                 gSeqWin->end);
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) ||
+                 startsWith("RGCC", db));
+boolean isFlu = (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db));
+writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, org, db, geneInfoList,
+                 gSeqWin->end, isRsv, isFlu);
 jsonWriteObjectStart(jw, "tree");
 int nodeNum = 10000; // Auspice.us starting node number for newick -> json
 int depth = 0;
@@ -870,7 +923,11 @@ phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, sampleUrls, samplePlacements, nodeNum, source };
-rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+
+char **branchAttrCols = NULL;
+int branchAttrCount = getBranchAttrCols(org, db, &branchAttrCols);
+rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, branchAttrCount, branchAttrCols, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
 fputs(jw->dy->string, outF);

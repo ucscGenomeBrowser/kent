@@ -571,6 +571,8 @@ static struct tdbRecord *findParent(struct tdbRecord *rec,
  * match parents and children from the same release if possible.  Our
  * strategy is to just ignore records from the wrong release. */
 {
+if (rec->override)  // don't do these
+    return NULL;
 if (clNoCompSub)
     return NULL;
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
@@ -915,6 +917,22 @@ if (endsWith(name, "FilterType"))
 if (endsWith(name, "FilterLimits"))
     return TRUE;
 if (endsWith(name, "FilterText"))
+    return TRUE;
+if (startsWith("highlight.", name))
+    return TRUE;
+if (startsWith("highlightValues.", name))
+    return TRUE;
+if (startsWith("highlightValuesDefault.", name))
+    return TRUE;
+if (startsWith("highlightType.", name))
+    return TRUE;
+if (startsWith("highlightLimits.", name))
+    return TRUE;
+if (startsWith("highlightLabel.", name))
+    return TRUE;
+if (startsWith("highlightByRange.", name))
+    return TRUE;
+if (startsWith("highlightText.", name))
     return TRUE;
 return FALSE;
 }

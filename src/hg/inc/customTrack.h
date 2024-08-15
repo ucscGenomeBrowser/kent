@@ -21,8 +21,8 @@
 #define CT_DEFAULT_TRACK_NAME    "User Track"
 #define CT_DEFAULT_TRACK_DESCR   "User Supplied Track"
 
-#define CT_MANAGE_BUTTON_LABEL   "manage custom tracks"
-#define CT_ADD_BUTTON_LABEL      "add custom tracks"
+#define CT_MANAGE_BUTTON_LABEL   "Manage custom tracks"
+#define CT_ADD_BUTTON_LABEL      "Add custom tracks"
 
 /* setting used when creating custom tracks in table browser -- indicates
  * custom track file in trash has not been through the factory parser */

@@ -12,6 +12,9 @@
 #include "twoBit.h"
 #include "fa.h"
 
+#undef BIGNUM
+#define BIGNUM 0x7fffffff	/* larger than the standard size BIGNUM */
+
 struct dnaSeq *qFaList;
 struct dnaSeq *tFaList;
 

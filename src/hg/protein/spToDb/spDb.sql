@@ -5,7 +5,7 @@
 
 #Relate ID and primary accession. A good table to use just get handle on all records.
 CREATE TABLE displayId (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     val char(24) not null,	# SwissProt display ID
               #Indices
     PRIMARY KEY(acc),
@@ -14,7 +14,7 @@ CREATE TABLE displayId (
 
 #Relate ID and other accessions
 CREATE TABLE otherAcc (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     val char(12) not null,	# Secondary accession
               #Indices
     INDEX(val),
@@ -31,7 +31,7 @@ CREATE TABLE organelle (
 
 #Small stuff with at most one copy associated with each SwissProt record
 CREATE TABLE info (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     isCurated tinyint not null,	# True if curated (SwissProt rather than trEMBL)
     aaSize int not null,	# Size in amino acids
     molWeight int not null,	# Molecular weight
@@ -45,7 +45,7 @@ CREATE TABLE info (
 
 #Description lines
 CREATE TABLE description (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     val longtext not null,	# SwissProt DE lines
               #Indices
     PRIMARY KEY(acc)
@@ -53,7 +53,7 @@ CREATE TABLE description (
 
 #Gene including and/or logic if multiple
 CREATE TABLE geneLogic (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     val longtext not null,	# Gene(s) and logic to relate them.
               #Indices
     PRIMARY KEY(acc)
@@ -61,7 +61,7 @@ CREATE TABLE geneLogic (
 
 #Gene/accession relationship. Both sides can be multiply valued.
 CREATE TABLE gene (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     val varchar(255) not null,	# Single gene name
     isPrimary tinyint not null,	# True if primary gene name, false if a synonym
               #Indices
@@ -90,7 +90,7 @@ CREATE TABLE commonName (
 
 #accession/taxon relationship
 CREATE TABLE accToTaxon (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     taxon int not null,	# ID in taxon table
               #Indices
     INDEX(acc),
@@ -117,7 +117,7 @@ CREATE TABLE keyword (
 
 #Relate keywords and accessions
 CREATE TABLE accToKeyword (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     keyword int not null,	# ID in keyword table
               #Indices
     INDEX(acc),
@@ -143,7 +143,7 @@ CREATE TABLE commentVal (
 
 #A structured comment
 CREATE TABLE comment (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     commentType int not null,	# ID in commentType table
     commentVal int not null,	# ID in commentVal table
               #Indices
@@ -152,7 +152,7 @@ CREATE TABLE comment (
 
 #Amino acid sequence
 CREATE TABLE protein (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession (maybe with variant extension)
     val longblob not null,	# Amino acids
               #Indices
     PRIMARY KEY(acc)
@@ -169,14 +169,14 @@ CREATE TABLE extDb (
 
 #A reference to another database
 CREATE TABLE extDbRef (
-    acc char(12) not null,	# Primary SwissProt accession
+    acc char(20) not null,	# Primary SwissProt accession
     extDb int not null,	# ID in extDb table
     extAcc1 varchar(255) not null,	# External accession
     extAcc2 varchar(255) not null,	# External accession
     extAcc3 varchar(255) not null,	# External accession
               #Indices
     INDEX(acc),
-    INDEX(extAcc1(10))
+    INDEX(extAcc1(20))
 );
 
 #A class of feature
@@ -207,7 +207,7 @@ CREATE TABLE featureId (
 
 #A description of part of a protein
 CREATE TABLE feature (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     start int not null,	# Start coordinate (zero based)
     end int not null,	# End coordinate (non-inclusive)
     featureClass int not null,	# ID of featureClass
@@ -260,7 +260,7 @@ CREATE TABLE citationRp (
 #A SwissProt citation of a reference
 CREATE TABLE citation (
     id int not null,	# ID of this citation
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     reference int not null,	# ID in reference table
     rp int not null,	# ID in rp table
               #Indices
@@ -296,7 +296,7 @@ CREATE TABLE citationRc (
 
 #Contains just the variably spliced proteins
 CREATE TABLE varProtein (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     val longblob not null,	# Amino acids
               #Indices
     PRIMARY KEY(acc)
@@ -304,9 +304,9 @@ CREATE TABLE varProtein (
 
 #Accessions and other info on the variably-spliced proteins
 CREATE TABLE varAcc (
-    varAcc char(12) not null,	# Accession of variant
-    parAcc char(12) not null,	# Accession of parent (non-variant)
-    variant char(4) not null,	# Variant part of accession
+    varAcc char(20) not null,	# Accession of variant
+    parAcc char(20) not null,	# Accession of parent (non-variant)
+    variant char(5) not null,	# Variant part of accession
               #Indices
     PRIMARY KEY(varAcc)
 );
@@ -321,7 +321,7 @@ CREATE TABLE proteinEvidenceType (
 
 #Associate protein with evidence for its existence
 CREATE TABLE proteinEvidence (
-    acc char(12) not null,	# Primary accession
+    acc char(20) not null,	# Primary accession
     proteinEvidenceType int not null,	# ID in proteinEvidenceType table
               #Indices
     INDEX(acc)

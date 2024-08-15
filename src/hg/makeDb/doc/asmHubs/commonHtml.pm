@@ -47,7 +47,7 @@ $asmCounts{'legacy'} = $legacyCount;
 # different table output for VGP index
 
 if ((0 == $vgpIndex)) {
-  printf "<p>\n<table border='1' style='margin-left:auto; margin-right:auto;'><thead>\n";
+  printf "<p>\n<table style='border: 1px solid black; margin-left:auto; margin-right:auto;'><thead>\n";
   printf "<tr><th colspan=4 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
   printf "<tr><th>Collection</th>\n";
   printf "    <th>Hub index pages:</th>\n";
@@ -99,7 +99,7 @@ if ((0 == $vgpIndex)) {
   printf "    <th><a href='../HPRC/trackData.html'>track stats</a></th>\n";
   printf "</tr></thead>\n</table>\n</p>\n";
 } elsif (1 == $vgpIndex) {
-  printf "<p>\n<table border='1'><thead>\n";
+  printf "<p>\n<table style='border: 1px solid black;'><thead>\n";
   printf "<tr><th colspan=5 style='text-align:center;'>Alternate sets of VGP assemblies</th><th style='text-align:center;'>NCBI Refseq</th></tr>\n";
   printf "<tr><th>Index pages:&nbsp;</th>\n";
   printf "<th><a href='index.html'>primary assembly</a></th>\n";
@@ -138,7 +138,7 @@ print <<"END"
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="\$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
+<script src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
 </body></html>
 END
 }

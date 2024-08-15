@@ -1,0 +1,5 @@
+1	Comparative genomic analyses of frog virus 3, type species of the genus Ranavirus (family Iridoviridae).	Virology 323:70-84(2004).	15165820		10.1016/j.virol.2004.02.019
+2	Genome of invertebrate iridescent virus type 3 (mosquito iridescent virus).	J. Virol. 80:8439-8449(2006).	16912294		10.1128/jvi.00464-06
+3	Analysis of the first complete DNA sequence of an invertebrate iridovirus: coding strategy of the genome of Chilo iridescent virus.	Virology 286:182-196(2001).	11448171		10.1006/viro.2001.0963
+4	Comparative genomic analysis of the family Iridoviridae: re-annotating and defining the core set of iridovirus genes.	Virol. J. 4:11-11(2007).	17239238		10.1186/1743-422x-4-11
+5		Submitted (FEB-2004) to the EMBL/GenBank/DDBJ databases.			

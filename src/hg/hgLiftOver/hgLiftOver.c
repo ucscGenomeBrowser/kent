@@ -74,8 +74,8 @@ char *fromOrg = hOrganism(chain->fromDb), *toOrg = hOrganism(chain->toDb);
 char *chainString = chainStringVal(chain);
 cgiParagraph(
     "This tool converts genome coordinates and annotation files "
-    "between assemblies.&nbsp;&nbsp;"
-    "The input data can be entered into the text box or uploaded as a file.&nbsp;&nbsp;"
+    "from the original to the new assembly using an alignment.&nbsp;&nbsp;"
+    "The input regions can be entered into the text box or uploaded as a file.&nbsp;&nbsp;"
     "For files over 500Mb, use the command-line tool described in our "
     "<a href=\"../goldenPath/help/hgTracksHelp.html#Liftover\">LiftOver documentation</a>."
     "&nbsp;&nbsp;If a pair of assemblies cannot be selected from the pull-down menus,"
@@ -94,10 +94,10 @@ puts("\n<TABLE WIDTH=\"100%\">\n");
 
 /* top two rows -- genome and assembly menus */
 cgiSimpleTableRowStart();
-cgiTableField("Original Genome: ");
-cgiTableField("Original Assembly: ");
-cgiTableField("New Genome: ");
-cgiTableField("New Assembly: ");
+cgiTableField("Original genome: ");
+cgiTableField("Original assembly: ");
+cgiTableField("New genome: ");
+cgiTableField("New assembly: ");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
@@ -129,28 +129,32 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
 
-cgiParagraph("&nbsp;");
+printf("<br>");
 cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
 cgiTableField("Minimum ratio of bases that must remap:");
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINMATCH, (keepSettings) ? minMatch : chain->minMatch,6);
+puts("&nbsp;");
+printInfoIcon("The minimum ratio of basepairs of the input region covered by an alignment. Regions scoring lower than this will not be lifted at all.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
+
 cgiSimpleTableRowStart();
-cgiTableField("<B>BED 4 to BED 6 Options</B>");
+cgiTableField("<B>Regions defined by chrom:start-end (BED 4 to BED 6)</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("Allow multiple output regions:");
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_MULTIPLE,multiple);
+puts("&nbsp;");
+printInfoIcon("By default, input regions that map to multiple regions will not be lifted at all. When this option is checked, all targets are output.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -158,6 +162,8 @@ cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINSIZEQ,(keepSettings) ? minSizeQ : chain->minSizeQ,4);
+puts("&nbsp;");
+printInfoIcon("In multiple output mode, repeated regions within longer input regions can lead to artifacts. The 'hit size' filter allows to keep only targets with a certain length.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -165,29 +171,37 @@ cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum chain size in target:");
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINCHAINT,(keepSettings) ? minChainT : chain->minChainT,4);
+puts("&nbsp;");
+printInfoIcon("In multiple output mode, keeps only targets lifted through alignments of a certain length. At higher phylogenetic distances (e.g. human/mouse), the filters can be useful to keep all copies of the input regions but remove dozens of new small targets introduced by a repeat/transposon within a longer input region.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("<B>BED 12 Options</B>");
+cgiTableField("<B>Regions with an exon-intron structure (usually transcripts, BED 12)</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("Min ratio of alignment blocks or exons that must map:");
+cgiTableField("Minimum ratio of alignment blocks or exons that must map:");
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINBLOCKS,(keepSettings) ? minBlocks : chain->minBlocks,6);
+puts("&nbsp;");
+printInfoIcon("The minimum ratio of the number of exons (not their bases) covered by the alignment. Transcripts lower than this will not be output at all. If an exon (range thickStart-thickEnd) is not alignable at all, it will be skipped or, if the option below is checked, lifted it to the closest alignable base.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
+cgiTableField("If exon is not mapped, use the closest mapped base:");
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_FUDGETHICK,(keepSettings) ? fudgeThick : (chain->fudgeThick[0]=='Y'));
+puts("&nbsp;");
+printInfoIcon("If checked, exons that are not covered by an alignment will be lifted to the closest alignable base.");
 cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
 cgiTableRowEnd();
 
 cgiTableEnd();
@@ -235,7 +249,7 @@ cgiParagraph("&nbsp;Or upload data from a file (<a href=\"../FAQ/FAQformat.html#
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
-puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
+puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit file\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
 printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",
@@ -254,7 +268,7 @@ webNewSection("Parameters Used");
 cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
-cgiTableField("Minimum ratio of bases that must remap:");
+cgiTableField("Minimum ratio of bases that must map:");
 cgiSimpleTableFieldStart();
 printf("%.2f",minMatch);
 cgiTableFieldEnd();

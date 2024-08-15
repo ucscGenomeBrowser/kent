@@ -1,6 +1,0 @@
-#!/bin/bash -e
-gfServer start -trans localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
-sleep 1
-gfServer protQuery localhost 17768 input/mCrea.pep > output/testProtTwoBit.out
-gfServer stop localhost 17768 > /dev/null
-diff -u expected/testProtTwoBit.out output/testProtTwoBit.out

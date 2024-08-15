@@ -21,7 +21,7 @@ errAbort(
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
   "  -warnAndContinue - on bad genePreds being created, put out warning but continue\n"
-  "  -useName - rather than using 'id' as name, use the 'name' tag\n"
+  "  -useName - use the 'name' tag as the name, if present\n"
   "  -rnaNameAttr=attr - If this attribute exists on an RNA record, use it as the genePred\n"
   "   name column\n"
   "  -geneNameAttr=attr - If this attribute exists on a gene record, use it as the genePred\n"
@@ -268,27 +268,42 @@ else
 }
 
 static boolean isGeneWithCdsChildCase(struct gff3Ann* mrna)
-/* is this one of the refseq gene with a direct CDS child? */
+/* is this one of the refseq gene with a direct CDS child  */
 {
-return sameString(mrna->type, gff3FeatGene) && (mrna->children != NULL)
-    && (sameString(mrna->children->ann->type, gff3FeatCDS));
+// NCBI changed the format for YPs around 2020 or so, now they're mrna > exon > CDS, originally Gene > CDS
+// I don't know why the exon level is missing at this point in the code, but it is.
+return ((sameString(mrna->type, gff3FeatGene) || sameString(mrna->type, gff3FeatMRna)) && (mrna->children != NULL)
+    && (sameString(mrna->children->ann->type, gff3FeatCDS)));
 }
 
 static char* refSeqHacksFindName(struct gff3Ann* mrna)
 /* return the value to use for the genePred name field under refSeqHacks
  * rules. */
 {
-// if this is a gene with CDS child, the get the id out of the CDS if it looks like
+// if this is a gene with CDS child or a mRNA > exon > CDS, the get the id out of the CDS if it looks like
 // a refseq accession
 if (isGeneWithCdsChildCase(mrna))
     {
     // is name something like YP_203370.1 (don't try too hard)
     struct gff3Ann *cds = mrna->children->ann;
+    if (!sameString(cds->type, gff3FeatCDS))
+        cds = mrna->children->ann->children->ann; // post-2018-format
+    // Also checking now for 'Y' as a prefix, as otherwise this would apply to all normal transcripts
     if ((cds->name != NULL) && (strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
-        && (cds->name[2] == '_') && isdigit(cds->name[3]))
+        && (cds->name[2] == '_') && isdigit(cds->name[3]) && cds->name[0] == 'Y')
         return cds->name;
     }
 return NULL;
+}
+
+static char* getAttrVal(struct gff3Ann* ann, char *name)
+/* return the single value for name or NULL */
+{
+struct gff3Attr *attr = gff3AnnFindAttr(ann, name);
+if (attr != NULL)
+    return attr->vals->name;
+else
+    return NULL;
 }
 
 static char* getRnaName(struct gff3Ann* mrna)
@@ -296,17 +311,26 @@ static char* getRnaName(struct gff3Ann* mrna)
 {
 char *name = NULL;
 if (rnaNameAttr != NULL)
-    {
-    struct gff3Attr *attr = gff3AnnFindAttr(mrna, rnaNameAttr);
-    if (attr != NULL)
-        name = attr->vals->name;
-    }
+    name = getAttrVal(mrna, rnaNameAttr);
 if (isEmpty(name) && refseqHacks)
     name = refSeqHacksFindName(mrna);
+if (isEmpty(name) && useName)
+    name = mrna->name;
+// try other possible fields
 if (isEmpty(name))
-    name = (useName ? mrna->name : mrna->id);
+    name = getAttrVal(mrna, "transcript_id");
 if (isEmpty(name))
-    name = mrna->id;
+    name = getAttrVal(mrna, "transcript_name");
+if (isEmpty(name))
+    name = getAttrVal(mrna, "Name");
+if (isEmpty(name))
+    name = getAttrVal(mrna, "Gene");
+if (isEmpty(name))
+    name = getAttrVal(mrna, "gene");   // also for RefSeq when no transcript name
+if (isEmpty(name))
+    name = getAttrVal(mrna, "gene_name");
+if (isEmpty(name))
+    name = mrna->id; // desperation
 return name;
 }
 

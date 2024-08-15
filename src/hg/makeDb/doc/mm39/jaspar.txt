@@ -29,3 +29,11 @@ rm JASPAR2022.bb
 mv JASPAR2022_mm39.bb JASPAR2022.bb
 ls -lh
 ls -lh /gbdb/mm39/jaspar
+
+#############################################################################
+# JASPAR 2024 bigBed update 11/13/24
+
+cd /hive/data/genomes/mm39/bed/jaspar
+wget https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/mm39/JASPAR2024_mm39.bb
+mv JASPAR2024_mm39.bb JASPAR2024.bb
+ln -s JASPAR2024.bb /gbdb/mm39/jaspar/JASPAR2024.bb

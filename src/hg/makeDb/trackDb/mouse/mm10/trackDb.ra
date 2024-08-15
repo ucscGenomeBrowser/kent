@@ -1,6 +1,3 @@
-
-include ../../refSeqComposite.ra
-
 include ../../crispr10K.ra
 
 include knownGene.ra
@@ -63,18 +60,6 @@ group genes
 visibility hide
 color 20,20,170
 type bed 12
-
-track ncbiRefSeqSelect
-parent refSeqComposite off
-priority 8
-type genePred
-shortLabel RefSeq Select
-longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
-trackHandler ncbiRefSeq
-idXref ncbiRefSeqLink mrnaAcc name
-color 20,20,160
-baseColorUseCds given
-baseColorDefault genomicCodons
 
 track xenoClinvar
 shortLabel Human Variants
@@ -435,7 +420,9 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=2&experiment_id=$<experimentId>
 type bigBed 9 +
-urlLabel Vista Enhancer Browser
+urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm10/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon New red ../goldenPath/newsarch.html
+
+include ../../trackDb.mgc-orfeome.ra
+include ../refSeqComposite.mm10.mm39.ra

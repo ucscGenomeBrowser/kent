@@ -387,12 +387,24 @@ static void spParseFeature(struct lineFile *lf, char *line,
 struct spFeature *feat;
 char *class = nextWord(&line);
 char *start = nextWord(&line);
-char *end = nextWord(&line);
+char *end;
+if (strchr(start, '.'))
+    {
+    end = strrchr(start, '.')+1;
+    }
+else
+    {
+    end = start;
+    }
+
+
+// NB - we no longer expect content on the first FT line after the coordinates
 char *type = skipLeadingSpaces(line);
+if (type != NULL && type[0] != 0)
+    errAbort("Unexpected content at end of FT line %d of %s", lf->lineIx, lf->fileName);
+
 char *FTId;
 char c;
-if (end == NULL || end[0] == 0)
-    errAbort("Short FT line %d of %s", lf->lineIx, lf->fileName);
 lmAllocVar(lm, feat);
 feat->class = lmCloneString(lm, class);
 c = *start;
@@ -420,53 +432,36 @@ else if (c == '?')
 feat->start = atoi(start)-1;
 feat->end = atoi(end);
 
-if (type != NULL)
+/* Looks like multi-line type. */
+// NB: looks like they're always multi-line type now
+while (lineFileNext(lf, &line, NULL))
     {
-    /* Looks like multi-line type. */
-    dyStringClear(dy);
-    dyStringAppend(dy, type);
-    dyStringAppend(dy, " ");  /* space between lines */
-    while (lineFileNext(lf, &line, NULL))
-	{
-	char *sig = "FT    ";	/* Extra space after FT */
-	if (!startsWith(sig, line))
-	    {
-	    lineFileReuse(lf);
-	    break;
-	    }
-	line = skipLeadingSpaces(line+strlen(sig));
-        FTId= strstr(line, "/FTId=");
-    	if (FTId != NULL)
-    	    {
-    	    FTId = lmCloneString(lm, FTId+6);
-	    stripLastPeriod(FTId);
-	    feat->FTId = FTId;
-	    }
-        else
-	    {
-	    dyStringAppend(dy, line);
-            dyStringAppend(dy, " "); /* space between lines */
-	    }
-	}
-    eraseTrailingSpaces(dy->string); /* remove last space */
-    stripLastPeriod(dy->string);
-    feat->type = lmCloneString(lm, dy->string);
-    }
-else
-    {
-    lineFileNext(lf, &line, NULL);
-    FTId= strstr(line, "/FTId=");
-    if (FTId != NULL)
-    	{
-    	FTId = lmCloneString(lm, FTId+6);
-	stripLastPeriod(FTId);
-	feat->FTId = FTId;
-	}
-    else
+    char *sig = "FT    ";	/* Extra space after FT */
+    if (!startsWith(sig, line))
         {
-	lineFileReuse(lf);
+        lineFileReuse(lf);
+        break;
+        }
+    line = skipLeadingSpaces(line+strlen(sig));
+    FTId= strstr(line, "/id=");
+    if (FTId != NULL)
+        {
+        FTId+=4;
+        stripEnclosingDoubleQuotes(FTId);
+        FTId = lmCloneString(lm, FTId);
+        feat->FTId = FTId;
+        }
+    char *typeStr = strstr(line, "/note=");
+    if (typeStr != NULL)
+        {
+        typeStr += 6;
+        typeStr = stripEnclosingDoubleQuotes(typeStr);
+        type = lmCloneString(lm, typeStr);
 	}
+    // not sure what to do with other info like ligand, ligand_id, ligand_label, and ligand_note
     }
+feat->type = type;
+
 slAddHead(&spr->featureList, feat);
 }
 
@@ -683,9 +678,13 @@ for (;;)
 	s += taxonSigLen;
 	while ((word = nextWord(&s)) != NULL)
 	    {
-	    lmAllocVar(lm, taxon);
-	    taxon->id = atoi(word);
-	    slAddHead(&spr->taxonList, taxon);
+            // Sometimes there are words in this line, skip those
+            if (atoi(word) != 0)
+                {
+                lmAllocVar(lm, taxon);
+                taxon->id = atoi(word);
+                slAddHead(&spr->taxonList, taxon);
+                }
 	    }
 	}
     else if (startsWith("OH", type))

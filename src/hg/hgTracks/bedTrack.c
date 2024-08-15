@@ -17,6 +17,7 @@
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 #include "snake.h"
+#include "quickLift.h"
 
 #define SEQ_DELIM '~'
 
@@ -84,8 +85,15 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
 else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
     struct bbiFile *bbi = fetchBbiForTrack(tg);
+    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+    struct hash *chainHash = NULL;
+    struct bigBedInterval *bb, *bbList = NULL;
+    if (quickLiftFile)
+        bbList = quickLiftIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
+    else
+        bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
+
     char *bedRow[bbi->fieldCount];
     char startBuf[16], endBuf[16];
 
@@ -101,12 +109,18 @@ else if (tg->isBigBed)
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (!bigBedFilterInterval(bedRow, filters))
+        if (!bigBedFilterInterval(bbi, bedRow, filters))
             {
             filtered++;
             continue;
             }
-        bed = loader(bedRow);
+        if (quickLiftFile)
+            {
+            if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+                continue;
+            }
+        else
+            bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
         // fix how label is stored so it doesn't trash custom bed field
         // BRANEY says: the loader should be returning bed structures which include the label field.
@@ -115,8 +129,10 @@ else if (tg->isBigBed)
 
         slAddHead(&list, bed);
         }
+
     if (filtered)
        labelTrackAsFilteredNumber(tg, filtered);
+
     lmCleanup(&lm);
     }
 else
@@ -540,7 +556,25 @@ if(tg->extraUiData)
     filterBed(tg, &lfList);
 slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
+filterItemsOnNames(tg);
 maybeLoadSnake(tg);   // if we're in snake mode, change the methods
+}
+
+Color colorFromCart(struct track *tg, Color color)
+/* Return the RGB color from the cart setting 'colorOverride' or just return color */
+{
+char varName[1024];
+safef(varName, sizeof(varName), "%s.%s", tg->tdb->track, "colorOverride");
+char *hexColorStr = cartOptionalString(cart, varName);
+if (hexColorStr==NULL || isEmpty(hexColorStr))
+    return color;
+if (hexColorStr[0]=='#')
+    hexColorStr++;
+if (strlen(hexColorStr)!=6)
+    return color;
+long rgb = strtol(hexColorStr,NULL,16); // Big and little Endians
+tg->itemColor = NULL;
+return MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
 }
 
 void bedDrawSimpleAt(struct track *tg, void *item,
@@ -574,6 +608,9 @@ else if (tg->colorShades)
     adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
     color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
+
+color = colorFromCart(tg, color);
+
 /*	Keep the item at least 4 pixels wide at all viewpoints */
 if (thickDrawItem && (w < 4))
     {
@@ -627,6 +664,8 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 {
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
+
+color = colorFromCart(tg, color);
 
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {

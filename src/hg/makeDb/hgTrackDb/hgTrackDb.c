@@ -53,7 +53,7 @@ errAbort(
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything.\n"
-  "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
+  "  -gbdbList=list - list of files to confirm existance of bigDataUrl files\n"
   "  -addVersion - add cartVersion pseudo-table\n"
   "  -noHtmlCheck - don't check for HTML even if strict is set\n"
   );

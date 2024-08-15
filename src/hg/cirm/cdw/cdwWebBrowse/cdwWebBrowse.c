@@ -69,7 +69,7 @@ hashElFreeList(&list);
 char *fileTableFields = NULL;
 char *visibleFacetFields = NULL;
 #define FILEFIELDS "file_name,file_size,ucsc_db"
-#define FILEFACETFIELDS "species,assay,format,output,organ_anatomical_name,lab,data_set_id,biosample_cell_type,sample_label"
+#define FILEFACETFIELDS "species,assay,format,lab,data_set_id"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -2016,12 +2016,12 @@ void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
 printf("<table><tr><td>");
-printf("<img src=\"../images/freeStemCell.jpg\" width=%d height=%d>\n", 200, 275);
+printf("<img src=\"../images/sspsygene_data_portal_data_img.jpg\" width=%d height=%d>\n", 200, 275);
 printf("</td><td>");
 
 /* Print sentence with summary of bytes, files, and labs */
 char query[256];
-printf("The CIRM Stem Cell Hub contains ");
+printf("The SSPsyGene Staging Portal contains ");
 sqlSafef(query, sizeof(query),
     "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id "
     " and (errorMessage = '' or errorMessage is null)"
@@ -2048,8 +2048,11 @@ printf(" files");
 sqlSafef(query, sizeof(query),
     "select count(*) from cdwLab "
     );
+#ifdef OLD
 long long labCount = sqlQuickLongLong(conn, query);  
 printf(" from %llu labs.<BR>\n", labCount); 
+#endif /* OLD */
+printf(".<BR>\n");
 
 printf("Try using the browse menu on files or tracks. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
@@ -2058,7 +2061,7 @@ printf("<BR>\n");
 
 /* Print out some pie charts on important fields */
 static char *pieTags[] = 
-    {"lab", "format", "assay", };
+  {"lab", "format", "assay", "species",};
 struct facetField *pieFacetList = facetFieldsFromSqlTable(conn, getCdwTableSetting("cdwFileFacets"), 
 						    pieTags, ArraySize(pieTags), "N/A", NULL, NULL, NULL);
 struct facetField *ff;
@@ -2302,7 +2305,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.62");
+localWebStartWrapper("SSPsyGene Staging Portal");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 jsInlineFinish();

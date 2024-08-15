@@ -2,6 +2,7 @@
 
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 // The 'mat*' functions are designed to support subtrack config by 2D+ matrix of controls
 
@@ -1403,7 +1404,9 @@ $(document).ready(function()
 
     // Register tables with drag and drop
     $("table.tableWithDragAndDrop").each(function (ix) {
-        tableDragAndDropRegister(this);
+        if ($(this)[0].id !== "imgTbl") {
+            tableDragAndDropRegister(this);
+        }
     });
 
     // Put navigation links in top corner
@@ -1473,3 +1476,103 @@ function advancedSearchOnChange(controlName) {
 }
 
 
+var hlColor = '#aac6ff';
+var prevHlColor;
+var hlColorDefault = '#aac6ff';
+function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hlColorDefault) {
+/* Create an input with a color selection field, optionally append the resulting
+ * html to parentEl, if parent is not null */
+    /* Some helper function for keeping track of colors */
+    let saveHlColor = function(hlColor, trackName) {
+        hlColor = hlColor;
+        if (typeof common !== "undefined" && common.track) {
+            // regular hgTrackUi
+            setCartVars([cartVar], [hlColor], null, true);
+        } else if (trackName) {
+            // hgTrackUi pop up
+            cart.setVars([cartVar], [hlColor], null, false);
+        } else {
+            // hgTracks dragSelect, uses different cart variable
+            cart.setVars(["prevHlColor"], [hlColor], null, false);
+        }
+        prevHlColor = hlColor;
+        return hlColor;
+    };
+
+    let loadHlColor = function() {
+        // load hlColor from prevHlColor in the cart, or use default color, set and return it
+        // color is a 6-char hex string prefixed by #
+        if (typeof prevHlColor !== "undefined" && prevHlColor.length > 0) {
+            hlColor = prevHlColor;
+        } else if (typeof cartHighlightColor !== "undefined" && cartHighlightColor.length > 0) {
+            hlColor = cartHighlightColor;
+        } else {
+            hlColor = hlColorDefault;
+        }
+        return hlColor;
+    };
+
+    let colorPickerContainer = document.createElement("p");
+    colorPickerContainer.textContent = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color:";
+    let inpText = document.createElement("input");
+    // special case the drag select highlight feature because it has special code:
+    if (cartVar === "hlColor") {
+        inpText.id = cartVar + "Input";
+    } else {
+        inpText.id = "colorPicker." + cartVar + "Input";
+    }
+    inpText.value = loadHlColor();
+    inpText.type = "text";
+    inpText.style = "width: 70px";
+    // The actual color picker:
+    let inpSpec = document.createElement("input");
+    if (cartVar === "hlColor") {
+        inpSpec.id = cartVar + "Picker";
+    } else {
+        inpSpec.id = "colorPicker." + cartVar + "Picker";
+    }
+    let inpResetLink  = document.createElement("a");
+    inpResetLink.href = "#";
+    inpResetLink.id = cartVar + "Reset";
+    inpResetLink.textContent = "Reset";
+    colorPickerContainer.appendChild(inpText);
+    colorPickerContainer.appendChild(inpSpec);
+    colorPickerContainer.appendChild(inpResetLink);
+
+    if (typeof parentEl !== undefined) {
+        parentEl.appendChild(colorPickerContainer);
+    } else {
+        alert("Must supply parentNode to append color picker");
+        throw new Error();
+    }
+    let opt = {
+        hideAfterPaletteSelect: true,
+        color: $(inpSpec).val(),
+        showPalette: true,
+        showInput: true,
+        showSelectionPalette: true,
+        showInitial: true,
+        preferredFormat: "hex",
+        localStorageKey: "genomebrowser",
+        change: function() {
+            let color = $(inpSpec).spectrum("get");
+            $(inpText).val(color);
+            saveHlColor(color, trackName);
+        },
+    };
+    $(inpSpec).spectrum(opt);
+
+    // update the color picker if you change the input box
+    $(inpText).change(function() {
+        $(inpSpec).spectrum("set", $(inpText).val());
+        saveHlColor($(inpText).val(), trackName);
+    });
+    // Restore the default on Reset link click
+    $(inpResetLink).click(function() {
+        let hlDefault = hlColorDefault;
+        $(inpText).val(hlDefault);
+        $(inpSpec).spectrum("set", hlDefault);
+        saveHlColor(hlDefault, trackName);
+    });
+    $(inpSpec).spectrum("set", $(inpText).val());
+}

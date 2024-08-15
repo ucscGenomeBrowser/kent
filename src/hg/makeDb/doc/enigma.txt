@@ -1,0 +1,11 @@
+#RM#32919
+
+mkdir /hive/data/inside/enigmaTracksData
+# excel data provided by Anna on RM and converted to txt and uploaded to directory for all tracks
+mkdir /gbdb/hg38/bbi/enigma
+mkdir /gbdb/hg19/bbi/enigma
+
+#The 5 tracks were then created by individual scripts that can all be found in the following directory:
+~/kent/src/hg/makeDb/scripts/enigma/
+
+#Quick link for github: https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/enigma

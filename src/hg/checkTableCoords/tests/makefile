@@ -11,14 +11,14 @@ BEDS = bed3CTC bed4CTC bed8CTC bed12CTC
 PSLS = pslCTC
 TESTS = ${GENEPREDS} ${BEDS} ${PSLS}
 
-test: run
+test: ${TESTS}
 
-clean:
-	rm -fr output
-	rm -f *.tab
-	${hgsql} test -e 'drop table chromInfo;' > /dev/null 2>&1; true
+${TESTS}: load mkdirs
+	${CTC} test ${@}Good
+	-${CTC} test ${@}Bad > output/${@}Bad.out || true
+	diff expected/${@}Bad.out output/${@}Bad.out
 
-load: clean
+load:
 	${hgsql} test < input/fakeChromInfo.sql
 	for TEST in ${GENEPREDS} ; do \
 	  ${ldHgGene} -nobin -predTab test $${TEST}Good input/$${TEST}Good.tab -verbose=0 ; \
@@ -33,18 +33,14 @@ load: clean
 	 ${hgLoadPsl} -noHistory test -table=$${TEST}Bad  input/$${TEST}Bad.psl -verbose=0 ; \
 	done
 
-# If mkdirs is done in parallel with load, load's clean dependency can race with mkdirs,
-# so ensure that mkdirs happens after load:
-mkdirs: load
-	mkdir -p output
+mkdirs:
+	@mkdir -p output
 
-run: mkdirs
-	${MAKE} ${TESTS}
+clean:
+	rm -fr output
+	rm -f *.tab
+	${hgsql} test -e 'drop table if exists chromInfo;'
 
-${TESTS}:
-	${CTC} test ${@}Good
-	-${CTC} test ${@}Bad > output/${@}Bad.out || true
-	diff expected/${@}Bad.out output/${@}Bad.out
 
 # angie I removed -verbose=2 from the Bad test because it is unstable.
 # if somebody adds some extra statements in libraries and utilities with verbose,

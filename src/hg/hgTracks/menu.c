@@ -19,6 +19,7 @@
 #include "extTools.h"
 #include "trackVersion.h"
 #include "chromAlias.h"
+#include "exportedDataHubs.h"
 
 /* list of links to display in a menu */
 /* a link with an empty name is displayed as a horizontal separator line */
@@ -249,16 +250,29 @@ if (recTrackSetsEnabled() && recTrackSetsForDb())
     if (stringIn(recTrackSetsMenuItemId, menuStr))
         jsOnEventById("click", recTrackSetsMenuItemId, "showRecTrackSetsPopup(); return false;");
     }
+if (exportedDataHubsEnabled())
+    {
+    #define exportedDataHubsMenuItemId     "exportedDataHubsMenuItem"
+    struct dyString *menuItemDs = dyStringCreate("<li><a href='#' id='%s'>Exported Data Hubs</a></li>",
+                                       exportedDataHubsMenuItemId);
+    menuStr = replaceChars(menuStr, "<!-- OPTIONAL_EXPORTED_TRACK_DATA_HUBS_MENU -->", 
+                                dyStringCannibalize(&menuItemDs));
+    if (stringIn(exportedDataHubsMenuItemId, menuStr))
+        jsOnEventById("click", exportedDataHubsMenuItemId, "showExportedDataHubsPopup(); return false;");
+    }
 
 // Create top items in view menu
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
 appendLink(&links, buf, "PDF", "pdfLink", FALSE);
-safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
-      hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
+safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s",
+      hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database);
 //appendLink(&links, buf, "DNA", "dnaLink", FALSE);
-appendLinkWithShortcut(&links, buf, "DNA", "dnaLink", "Show DNA sequence in view", "v d", FALSE, FALSE);
+appendLinkWithShortcut(&links, buf, "DNA Sequence", "dnaLink", "Show DNA sequence in view", "v d", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
 appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
+
+safef(buf, sizeof(buf), "../cgi-bin/hgTracks?chromInfoPage=&hgsid=%s&db=%s", cartSessionId(cart), database);
+appendLinkWithShortcut(&links, buf, "Chromosomes", "showSizesLink", "Show a table of all chromsomes in this assembly (or scaffolds/contigs) and their sizes.", "v s", FALSE, FALSE);
 
 // add the sendTo menu
 if (fileExists("extTools.ra"))
@@ -417,7 +431,9 @@ appendLinkWithShortcut(&links, buf, "Default Tracks", "defaultTracksMenuLink", "
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", "Re-order tracks to be in default order", "d o", FALSE, FALSE);
 appendLinkWithOnclick(&links, "#", "Remove all highlights", "cleaerHighlightLink", "Remove all highlights on all genomes", "highlightCurrentPosition('clear'); $('ul.nice-menu li ul').hide();", "h c", FALSE, FALSE);
-appendLinkWithShortcut(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
+appendLinkWithOnclick(&links, "#", "Highlight here", "highlightHereMenu", "Add a highlight that covers the entire currently shown region, using the default color. Keyboard shortcut memo is 'highlight mark here'", "highlightCurrentPosition('add'); $('ul.nice-menu li ul').hide();", "h m", FALSE, FALSE);
+
+appendLinkWithShortcut(&links, "../cgi-bin/cartReset?skipLs=1", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);

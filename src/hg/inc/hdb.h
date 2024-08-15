@@ -218,7 +218,14 @@ char *hReplaceGbdbLocal(char* fileName);
 
 char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
- * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
+ * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed.
+ * This function either returns a local filename or a URL to the same file on hgdownload.
+ *
+ * NB: This header is duplicated in hg/lib/straw/hReplaceGbdb.h so that it can be used
+ * in cStraw.cpp without wrestling with warnings about converting string data types
+ * in included library headers.  If this function signature changes, it will also need
+ * to be changed there.
+ * */
 
 char *hReplaceGbdbSeqDir(char *path, char *db);
 /* similar to hReplaceGbdb, but accepts a nib or 2bit "directory" (basename) under
@@ -295,11 +302,13 @@ struct dnaSeq *hLoadChrom(char *db, char *chromName);
 /* Fetch entire chromosome into memory. */
 
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING]);
-/* Get .nib file associated with chromosome. */
+/* Get .2bit or .nib file associated with chromosome. These days, at UCSC, will always return
+ * a .2bit file. On mirrors, it may return a URL. */
 
 void hNibForChromFromPath(char *nibPath, char *db, char *chromName, 
 			  char retNibName[HDB_MAX_PATH_STRING]);
-/* Get .nib file associated with chromosome, given a nib file path. */
+/* Get .2bit or .nib file associated with chromosome given a directory. These days, at UCSC, will always return
+ * a .2bit file. On mirrors, it may return a URL. */
 
 struct slName *hAllChromNames(char *db);
 /* Get list of all chromosomes in database. */

@@ -1,0 +1,6 @@
+# Apr 13 2022 - Max (actually committed more than a year later, forgot to open ticket)
+mkdir /hive/data/genomes/hg38/bed/avada
+cd /hive/data/genomes/hg38/bed/avada
+ln -s ../../../hg19/bed/avada/avadaPapers.bed
+liftOver avadaPapers.bed /hive/data/genomes/hg19/bed/blat.hg38.2018-06-01/hg19ToHg38.over.chain.gz avadaPapers.hg38.bed unmapped -bedPlus=8 -tab
+bedSort avadaPapers.hg38.bed avadaPapers.hg38.bed

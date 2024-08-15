@@ -186,9 +186,21 @@ If your initial query is unsuccessful, try entering a different related term tha
 same location. For example, if a query on a gene symbol produces no results, try entering an mRNA
 accession, gene ID number, or descriptive words associated with the gene.</p>
 
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/5zc9sqd4SD4?rel=0"
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe></p>
+<p>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../../../videos/5zc9sqd4SD4.mp4'>
+    <img src=../../images/videoIcon.png></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
+<iframe width="560" height="350" src="https://www.youtube.com/embed/5zc9sqd4SD4?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe> </p>
+<p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a> for more videos.
+<!--#endif -->
+</p>
+
 
 <h6>Finding a genome location using BLAT</h6>
 <p>
@@ -552,9 +564,22 @@ restore the defaults, click the &quot;Reset All User Settings&quot; under the to
 Browser menu.</p>
 
 <h3> Video tutorial on changing track display modes</h3>
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/jKix2B3hwnw?rel=0"
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe></p>
+
+<p>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../../../videos/jKix2B3hwnw.mp4'>
+    <img src=../../images/videoIcon.png></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
+<iframe width="560" height="350" src="https://www.youtube.com/embed/jKix2B3hwnw?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe> </p>
+<p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a> for more videos.
+<!--#endif -->
+</p>
+
 
 <a name="NAV"></a>
 <h3>Zooming and scrolling the tracks display</h3>
@@ -1229,7 +1254,9 @@ assemblies. This tool is available in both web-based and command line forms, and
 forward/reverse conversions as well as conversions between species. You can use the
 <a href="../../FAQ/FAQformat.html#format1">BED format</a> (e.g. &quot;chr4 100000 100001&quot;,
 0-based) or directly paste text from the position box (&quot;chr4:100,001-100,001&quot;, 1-based).
-See our <a href="https://genome-blog.gi.ucsc.edu/blog/patches/">Coordinate Counting</a> blog post
+See our
+<a href="https://genome-blog.gi.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"
+>Coordinate Counting</a> blog post
 for a discussion of the difference. If the coordinates do not cover a single base pair e.g.
 &quot;chr4 100000 100000&quot; (BED) or &quot;chr4:100,001-100,000&quot; (text), this tool
 automatically extends them to at least one base pair.</p>
@@ -1510,8 +1537,6 @@ READMEs in these directories and the description of the
 <a href "../../FAQformat.html#format5">Multiple Alignment Format</a> (MAF).</p>
 
 <!-- =======Custom tracks======= -->
-<a name="CustomTracks"></a>
-<h2>Creating custom annotation tracks</h2>
 <!--#include virtual="customTrackText.html"-->
 
 <a name="TrackHubs"></a>

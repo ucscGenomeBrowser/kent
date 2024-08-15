@@ -1,0 +1,111 @@
+#!/bin/tcsh -efx
+# hgwdev.
+
+export DBDATE=240202
+export DB=sp$DBDATE
+export OLDDBDATE=180404
+
+# Set up working directory
+mkdir -p /hive/data/outside/uniProt/$DBDATE/build
+
+# Download uniProt. This will take about 12 hours
+cd /hive/data/outside/uniProt/$DBDATE/build
+wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+# 658,371,534  330KB/s   in 36m 58s
+# Following Max's lead, switching to the SIB server in Switzerland (20MB/s vs 330KB/s)
+wget https://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
+# 182,682,062,273 19.9MB/s   in 2h 29m
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
+# 8,495,311   5.11MB/s   in 1.6s
+
+# Records now have notes and evidence sometimes split across multiple lines.
+# Wrote a short script to join those FT lines into one
+
+# Turn flat file into relational tab-separated files.
+# strip out evidence tags
+time (zcat *.dat.gz | perl joinLines.pl | /cluster/home/jcasper/bin/x86_64/stripEvidence stdin stdout |  /cluster/home/jcasper/bin/x86_64/spToDb stdin ../tabFiles)
+
+# real    259m33.935s
+# user    615m51.206s
+# sys     53m19.369s
+
+cd ../tabFiles
+wc -l *.txt | awk '{print $2,$1}' | sort > counts
+cd ../..
+
+#join 170510/tabFiles/counts 180404/tabFiles/counts | awk '{print $1, $3/$2}' | awk '{if (($2 > 2) || ($2 < 0.5)) print}'
+join $OLDDBDATE/tabFiles/counts $DBDATE/tabFiles/counts | awk '{print $1, $3/$2}' | awk '{if (($2 > 2) || ($2 < 0.5)) print}'
+
+# accToKeyword.txt 13.6915
+# accToTaxon.txt 17.2785
+# citation.txt 8.23396
+# citationRc.txt 8.42574
+# comment.txt 12.3309
+# commonName.txt 0.18579
+# description.txt 8.65138
+# displayId.txt 8.65138
+# extDbRef.txt 11.1583
+# feature.txt 41.5864
+# featureId.txt 13.3898
+# gene.txt 10.8138
+# geneLogic.txt 10.2501
+# info.txt 8.65138
+# organelle.txt 2.8554
+# otherAcc.txt 4.54279
+# protein.txt 8.65138
+# proteinEvidence.txt 8.65138
+# rcVal.txt 3.0725
+# taxon.txt 0.037334
+# total 11.6354
+
+# Wait, so commonName.txt and taxon.txt actually shrank?  Looks like maybe they dropped
+# some viruses ....  What else, if anything?
+
+# Create the database.  
+hgsql mm10 -e "create database sp$DBDATE"
+
+# Load it up with table definitions from source directory
+hgsql sp$DBDATE < ~/kent/src/hg/protein/spToDb/spDb.sql
+
+# Load up the data from tab files.  This takes about an hour.
+# What is this, old csh?  Rewriting in bash
+#set s=`date +%s`
+#cd /hive/data/outside/uniProt/$DBDATE/tabFiles
+#foreach i (*.txt)
+#  hgsqlimport --local sp$DBDATE $i
+#end
+s=`date +%s`
+cd /hive/data/outside/uniProt/$DBDATE/tabFiles
+for i in *.txt
+  do hgsqlimport --local sp$DBDATE $i
+done
+
+#set e=`date +%s`
+e=`date +%s`
+expr $e - $s
+
+
+# 23006
+
+# Add varsplice info 
+zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp$DBDATE stdin .
+hgLoadSqlTab sp$DBDATE -notOnServer -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append varAcc /dev/null varAcc.txt
+
+# for i in displayId.txt accToTaxon.txt geneLogic.txt gene.txt description.txt; do hgsqlimport --local sp$DBDATE $i; done
+
+hgLoadSqlTab sp$DBDATE -notOnServer -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append geneLogic /dev/null varGeneLogic.txt
+tawk '{$(NF+1) = "0"; print}' varGene.txt | hgLoadSqlTab sp$DBDATE -notOnServer -append gene /dev/null stdin
+hgLoadSqlTab sp$DBDATE -notOnServer -append description /dev/null varDescription.txt
+
+# Add table descriptions
+makeTableDescriptions sp$DBDATE ~/kent/src/hg/protein/spToDb/spDbTables.as
+
+# Zip up tab files for people who prefer them to database.
+gzip *.txt
+
+# Don't forget to ask the admins to update the database softlink - "uniProt"
+# should go to this newest version of the sp* database.

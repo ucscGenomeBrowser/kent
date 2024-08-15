@@ -28,6 +28,7 @@
 #include "cdwLib.h"
 #include "mailViaPipe.h"
 #include "tagStorm.h"
+#include "tagSchema.h"
 
 boolean doUpdate = FALSE;
 boolean noRevalidate = FALSE;
@@ -759,7 +760,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 return updateCount;
 }
 
-static void rCheckTagValid(struct tagStorm *tagStorm, struct tagStanza *list)
+static void rCheckTagValid(struct tagStorm *tagStorm, struct tagStanza *list, struct hash *schemaHash)
 /* Check tagStorm tags */
 {
 struct tagStanza *stanza;
@@ -768,16 +769,16 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
-	cdwValidateTagName(pair->name);
+	cdwValidateTagName(pair->name, schemaHash);
 	}
-    rCheckTagValid(tagStorm, stanza->children);
+    rCheckTagValid(tagStorm, stanza->children, schemaHash);
     }
 }
 
-void checkMetaTags(struct tagStorm *tagStorm)
+void checkMetaTags(struct tagStorm *tagStorm, struct hash *schemaHash)
 /* Check tags are all good. */
 {
-rCheckTagValid(tagStorm, tagStorm->forest);
+rCheckTagValid(tagStorm, tagStorm->forest, schemaHash);
 }
 
 boolean isEnrichedInFormat(char *format)
@@ -789,7 +790,7 @@ return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 
 void checkManifestAndMetadata( struct fieldedTable *table, 
     int fileIx, int formatIx, int metaIx, int enrichedInIx,
-    struct tagStorm *tagStorm, struct hash *metaHash)
+    struct tagStorm *tagStorm, struct hash *metaHash, struct hash *schemaHash)
 /* Make sure that all file names are unique, all metadata tags are unique, and that
  * meta tags in table exist in tagStorm.  Some of the replace a file logic is here. */
 {
@@ -842,11 +843,11 @@ int i;
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
-    cdwValidateTagName(field);
+    cdwValidateTagName(field, schemaHash);
     }
 
 /* Check meta.txt tags */
-checkMetaTags(tagStorm);
+checkMetaTags(tagStorm, schemaHash);
 }
 
 char *nullForNaOrEmpty(char *s)
@@ -1043,9 +1044,17 @@ struct hash *metaHash = tagStormIndexExtended(tagStorm, "meta", TRUE, FALSE);
 verbose(1, "Got %d items in metaHash\n", metaHash->elCount);
 
 struct sqlConnection *conn = cdwConnectReadWrite();
+char *schemaFile = cdwRequiredSetting(conn, "schema");
+verbose(2, "Reading schema from %s\n", schemaFile);
+struct tagSchema *schemaList = tagSchemaFromFile(schemaFile);
+struct hash *schemaHash = tagSchemaHash(schemaList);
+verbose(1, "Got %d items in tagSchema\n", schemaHash->elCount);
+
 struct cdwUser *user = cdwMustGetUserFromEmail(conn, email);
+uglyf("about to checkManifest\n");
 checkManifestAndMetadata(table, fileIx, formatIx, metaIx, enrichedInIx,
-    tagStorm, metaHash);
+    tagStorm, metaHash, schemaHash);
+uglyf("done checkManifest\n");
 
 /* Convert to data structure that has more fields.  If submission contains
  * replacement files, check that the accessions being replaced are legitimate. */

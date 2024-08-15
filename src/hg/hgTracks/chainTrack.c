@@ -159,12 +159,20 @@ if (tg->isBigBed)
     char *fileName = trackDbSetting(tg->tdb, "linkDataUrl");
     if (fileName == NULL)
         {
-        warn("Cannot find linkDataUrl in custom track \"%s\"\n", tg->shortLabel);
-        return;
+        char buffer[4096];
+
+        char *bigDataUrl = cloneString(trackDbSetting(tg->tdb, "bigDataUrl"));
+        char *dot = strrchr(bigDataUrl, '.');
+        if (dot == NULL)
+            errAbort("No linkDataUrl in track %s", tg->track);
+
+        *dot = 0;
+        safef(buffer, sizeof buffer, "%s.link.bb", bigDataUrl);
+        fileName = buffer;
         }
     struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     if (bbi == NULL)
-        return;
+        errAbort("cannot open linkDataUrl %s", fileName);
     bbClosure.bbi =  bbi;
     }
 else
@@ -332,7 +340,57 @@ if (tg->isBigBed)
     bbiFileClose(&bbClosure.bbi);
 else
     hFreeConn(&sqlClosure.conn);
+}
+
+static void denseChainReverse(struct track *tg, int seqStart, int seqEnd,
+                        struct hvGfx *hvg, int xOff, int yOff, int width,
+                        MgFont *font, Color color, enum trackVisibility vis)
+/* draw a dense chain in a mode that only shows the gaps. */
+{
+hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
+struct slList *item;
+int y = yOff;
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int heightPer = tg->heightPer;
+color = hvGfxFindRgb(hvg, &undefinedYellowColor);
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    struct linkedFeatures *lf = (struct linkedFeatures *)item;
+    struct simpleFeature *sf = lf->components;
+    unsigned prev = winStart;
+    for (; sf; sf = sf->next)
+        {
+        unsigned s = sf->start;
+        drawScaledBox(hvg, prev, s,  scale, xOff, y, heightPer, color);
+        prev = sf->end;
+        }
+    drawScaledBox(hvg, prev, winEnd,  scale, xOff, y, heightPer, color);
+
+    break;
     }
+
+color = MG_BLACK;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    struct linkedFeatures *lf = (struct linkedFeatures *)item;
+    struct simpleFeature *sf = lf->components;
+
+    mapBoxHgcOrHgGene(hvg, winStart, winEnd, xOff, yOff, insideWidth, heightPer, tg->track,
+                  lf->extra, "Go to hg38", NULL, TRUE, NULL);
+    struct simpleFeature *prev = NULL;
+    for (; sf; sf = sf->next)
+        {
+        unsigned s = sf->start;
+        if (prev)
+            {
+            if (prev->qEnd != sf->qStart)
+                drawScaledBox(hvg, s, s,  scale, xOff, y, heightPer, color);
+            }
+        prev = sf;
+        }
+    }
+}
+
 void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
@@ -344,7 +402,12 @@ void chainDraw(struct track *tg, int seqStart, int seqEnd,
 if (tg->items == NULL)		/*Exit Early if nothing to do */
     return;
 
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+char *chainType = trackDbSetting(tg->tdb, "chainType");
+if ((chainType != NULL) && (vis == tvDense) )
+    denseChainReverse(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+	font, color, vis);
+else
+    linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis);
 }
 

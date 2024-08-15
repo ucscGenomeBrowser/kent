@@ -979,7 +979,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOverField"><span class="types bigBed"></span>
+<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigNarrowPeak bigGenePred"></span>
     <div class="format">
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
@@ -1001,7 +1001,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOver"><span class="types bigBed"></span>
+<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigNarrowPeak bigGenePred"></span>
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
@@ -1936,11 +1936,17 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="maxItems"><span class="types bed bigBed broadPeak psl"></span>
 <div class="format"><code>maxItems &lt;integer&gt;</code></div>
-    <P>Maximum number of items to display individually in full mode.  When the maximum is
-    exceeded, the excess items are drawn on top of one another on the last line.
-    In packed mode this refers to the number of lines rather than number of items.
-    Default: 10,000. For <code>type bigBed</code> tracks, this setting can never 
-    be larger than than 100,000.</P>
+    <P>Maximum number of items to display individually in full or pack or squish mode.  When the maximum is
+    exceeded, the track switches to coverage mode.
+    Default: 1000. For <code>type bigBed</code> tracks, this setting can never 
+    be larger than the hg.conf setting bigBedMaxItems, which by default is 100,000 at UCSC.
+    </P>
+    <P>bigBedMaxItems is configured globally for a Genome Browser server and sets an upper limit
+    on how many features can be loaded at most from a bigBed file, to avoid a
+    single track making a Genome Browser view unusable at high zoom levels so
+    it the upper limit for all maxItems settings of any tracks shown on a
+    Genome Browser.  If you have feedback on these values,
+    please do not hesitate to contact us.</P>
     <P><B>Example:</B>
     </P>
     <pre>   maxItems 25</pre>
@@ -2121,9 +2127,10 @@ There are no extra options that can appear on the type hic line.
 </DIV>
 
 <DIV class="refUrl"><span class="types bam"></span>
-<div class="format"><code>refUrl &lt;url&gt;</code></div>
-    <P>See <A HREF="../cram.html">CRAM track format page</A> for a description of how to use this setting.
-
+<div class="format"><code>refUrl &lt;url&gt/%s</code></div>
+This setting specifies the RefGet reference server by a URL to retrieve genome sequences instead of
+the default EBI CRAM Reference Registry. The <tt>%s</tt> is replaced by the RefGet MD5 checksum
+that identifies the reference sequence.
 </DIV>
 
 <DIV class="bedNameLabel"><span class="types bed bigBed"></span>
@@ -2598,8 +2605,14 @@ There are no extra options that can appear on the type hic line.
     highest point in the viewing window of any visible tracks in the same
     composite.  Like most graph settings, this is configurable by the user.
     Setting it to "<code>on</code>" in trackDb will default the track to
-    <code>auto-scale to data view</code>.  Setting it to "<code>group</code>"
-    in trackDb will default the track to <code>group auto-scale</code>. The
+    <code>auto-scale to data view</code>. The setting will independently
+    scale its y-axis based on the data within the track. Setting it to
+    "<code>group</code>" in trackDb will default the track to
+    <code>group auto-scale</code>. With this setting, tracks within the same
+    group will share the same y-axis scaling. This means that the maximum and
+    minimum values on the y-axis will be determined based on the data across
+    all tracks within the same group. This can be useful when comparing
+    multiple tracks and wanting to ensure consistency in scaling. The
     default is "<code>off</code>" which will set the track to
     <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
@@ -4600,7 +4613,7 @@ a haplotype display. For more information on this display, please see the
 <DIV class="vcfPhasedTrio"><span class="types vcfPhasedTrio"></span>
 <div class="format"><code>type vcfPhasedTrio</code></div>
     <P>
-    blah
+There are no extra options that can appear on the type vcfPhasedTrio line.
     </P>
 </DIV>
 

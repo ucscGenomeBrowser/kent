@@ -25,6 +25,7 @@ static struct optionSpec optionSpecs[] = {
     {"swapMap", OPTION_BOOLEAN},
     {"swapIn", OPTION_BOOLEAN},
     {"mapInfo", OPTION_STRING},
+    {"tsv", OPTION_BOOLEAN},
     {"mappingPsls", OPTION_STRING},
     {"inType", OPTION_STRING},
     {"mapType", OPTION_STRING},
@@ -42,12 +43,13 @@ static boolean swapIn = FALSE;
 static boolean check = FALSE;
 static boolean simplifyMappingIds = FALSE;
 static char* mapInfoFile = NULL;
+static boolean tsv = FALSE;
 static char* mappingPslFile = NULL;
 static enum pslType inPslType = pslTypeUnspecified;
 static enum pslType mapPslType = pslTypeUnspecified;
 
 static char *mapInfoHdr =
-    "#srcQName\t" "srcQStart\t" "srcQEnd\t" "srcQSize\t"
+    "srcQName\t" "srcQStart\t" "srcQEnd\t" "srcQSize\t"
     "srcTName\t" "srcTStart\t" "srcTEnd\t"
     "srcStrand\t" "srcAligned\t"
     "mappingQName\t" "mappingQStart\t" "mappingQEnd\t"
@@ -387,6 +389,8 @@ outPslFh = mustOpen(outPslFile, "w");
 if (mapInfoFile != NULL)
     {
     mapInfoFh = mustOpen(mapInfoFile, "w");
+    if (!tsv)
+        fputc('#', mapInfoFh);
     fputs(mapInfoHdr, mapInfoFh);
     }
 if (mappingPslFile != NULL)
@@ -428,6 +432,7 @@ if ((typeStr = optionVal("mapType", NULL)) != NULL)
     mapPslType = parsePslType(typeStr);
 
 mapInfoFile = optionVal("mapInfo", NULL);
+tsv = optionExists("tsv");
 mappingPslFile = optionVal("mappingPsls", NULL);
 pslMap(argv[1], argv[2], argv[3]);
 

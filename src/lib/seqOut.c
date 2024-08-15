@@ -52,7 +52,7 @@ if (cfm->italic)
 if (cfm->bold)
   fprintf(cfm->out, "<B>");
 if (cfm->underline)
-    fprintf(cfm->out, "<span style='text-decoration:underline;'>");
+    fprintf(cfm->out, "<span style='text-decoration:underline;text-decoration-skip-ink:none'>");
 if (cfm->color != 0)
     fprintf(cfm->out, "<span style='color:#%06X;'>", cfm->color);
 }

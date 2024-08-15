@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Docker help page" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Docker Help Page</h1>
+
+<h2>Contents</h2>
+
+<h6><a href="#docker">What is Docker?</a></h6>
+<h6><a href="#installingDocker">How to Install Docker Desktop?</a></h6>
+<h6><a href="#dockerUCSCgb">Using Docker Desktop for UCSC Genome Browser</a></h6>
+<h6><a href="#dockerVolume">Create a Docker Volume for Data Persistence</a></h6>
+<h6><a href="#updateGB">Updating the Latest UCSC Genome Browser Version</a></h6>
+<h6><a href="#hg.conf">Customize a UCSC Genome Browser Docker Container</a></h6>
+
+<!-- ========== What is Docker? ============================== -->
+<a id="docker"></a>
+<h2>What is Docker?</h2>
+<p>
+Docker is a platform for developing, testing and running applications. 
+Docker can be used to run genomics tools and manage software such as the UCSC Genome Browser. 
+Docker offers consistency across different computers and environments by packaging everything
+needed including specific software versions and configurations into a self-contained unit called
+a container.
+
+<h3>Container</h3>
+<p>
+A container is software that packages up code and all its dependencies to run an application
+quickly and reliably from one computing environment to another. A container is isolated from other
+containers and a Docker container can be run on a developer's local laptop, virtual machines, on
+cloud providers, or other combinations of environments. A genomics analysis pipeline or entire
+analysis environment can be packaged to a local computer into a Docker container and moved to a
+cluster or a cloud server. See also: <a href="https://docs.docker.com/get-started/"
+target=_blank>Use containers to Build, Share and Run applications</a>
+
+<h3>Image</h3>
+<p>
+A Dockerfile is a text file that provides instructions to build an image. The Dockerfile is written
+in <a href="https://docs.docker.com/build/guide/intro/#the-dockerfile"
+target=_blank>Dockerfile syntax</a>.
+A docker image is a read-only template with instructions and everything needed to run an
+application for the container. See also: <a href="https://docs.docker.com/get-started/"
+target=_blank>Overview of the get started guide</a>
+</p>
+
+
+<a id="installingDocker"></a>
+<h2>How to Install Docker Desktop?</h2>
+
+<h3>Windows</h3>
+<ul>
+   <li>Go to the <a href="https://docs.docker.com/desktop/install/windows-install/"
+   target=_blank>Install Docker Desktop on Windows</a> page</li>
+   <li>Check <a href="https://docs.docker.com/desktop/install/windows-install/#system-requirements"
+       target=_blank>system requirements</a></li>
+   <li><a href="https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows"
+   target=_blank>Install Docker interactively or from the command line</a>
+</ul> 
+<h3>macOS</h3>
+<ul>
+   <li>Go to the <a href="https://docs.docker.com/desktop/install/mac-install/"
+   target=_blank>Install and run Docker Desktop on Mac</a> page</li>
+   <li>Check <a href="https://docs.docker.com/desktop/install/mac-install/#system-requirements"
+       target=_blank>system requirements</a></li>
+   <li><a href="https://docs.docker.com/desktop/install/mac-install/#install-and-run-docker-desktop-on-mac"
+   target=_blank>Install Docker interactively or from the command line</a></li></ul>
+<h3>Linux</h3>
+<ul>
+   <li>Go to the <a href="https://docs.docker.com/desktop/install/linux-install/#supported-platforms"
+   target=_blank>Install Docker Desktop on Linux</a> page and select Linux distribution</li>
+   <li>Check <a href="https://docs.docker.com/desktop/install/linux-install/#system-requirements"
+       target=_blank>system requirements</a></li>
+   <li>Follow <a href="https://docs.docker.com/desktop/install/linux-install/#generic-installation-steps"
+   target=_blank>Generic installation steps</a> 
+</ul>
+
+<a id="dockerUCSCgb"></a>
+<h2>Using Docker Desktop for UCSC Genome Browser</h2>
+<p>Start Docker Desktop after installation is complete:</p>
+<ul>
+   <li><b>Windows</b>: start Docker Desktop from the Start menu
+   <li><b>macOS</b>: start Docker Desktop from the Applications folder
+   <li><b>Linux</b>: start the Docker service by running the following command on the terminal: 
+   <pre><code>sudo systemctl start docker</pre></code>
+</ul>
+<h3>Obtaining a UCSC Genome Browser Dockerfile</h3>
+<p>The UCSC Genome Browser dockerfile can be obtained from the
+<a href="https://github.com/ucscGenomeBrowser/" target=_blank>UCSC Genome Browser Github</a>
+by using the wget command:</p>
+<pre><code>wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/Dockerfile</code></pre>
+<h3>Creating a Image</h3>
+<p>
+Once the dockerfile has been downloaded, running the docker build with the 't' option allows the
+naming and the optional tag (format: &quot;name:tag&quot;) of the image. The image can be created by
+running the following command in the same directory where the dockerfile is located:</p>
+<pre><code>docker build . -t user_name/ucsc_genomebrowser_image</code></pre>
+<h3>Creating a Container</h3>
+<p>After the image has been created, running the docker run command and the image with the -d
+option allows the container to be run in the background, whereas the default runs the container in
+the foreground. The -p option publishes a container's port(s) to the host. The following command
+maps port 8080 on the host machine to port 80 in the container and names the container using the -name option:
+<pre><code>docker run -d --name ucsc_genomebrowser_container -p 8080:80 user_name/ucsc_genomebrowser_image</code></pre></p>
+
+<p>Accessing the running container via http://localhost:8080</p>
+<p>Running the following command will list the running container:
+<pre><code>docker container ls</code></pre></p>
+
+<p>Running the following command stops the running container::
+<pre><code>docker stop &lt;container_name_or_id&gt;</code></pre></p>
+
+<p>Running the following command removes the existing container::
+<pre><code>docker rm &lt;container_name_or_id&gt;</code></pre></p>
+
+<h3>Using Docker Desktop to Create a Container</h3>
+<p>The Docker Desktop user interface can be used to run the container by going to the images tab
+and clicking the run button under Actions:</p>
+
+
+<div class="text-center">
+        <img src="../../images/docker_image.png" style="width:50%;max-width:1083px">
+</div>
+
+<p>Click Optional settings in the &quot;Run a new container&quot; pop-up window:</p>
+<div class="text-center">
+        <img src="../../images/docker_optional_settings.png" style="width:50%;max-width:1083px">
+</div>
+
+<p>Enter a Container name and a Host port in the &quot;Run a new container&quot; popup window:</p>
+<div class="text-center">
+        <img src="../../images/container_settings.png" style="width:20%;max-width:1083px">
+</div>
+
+<p>Click the link with the Host port to go to the running container via localhost:</p>
+<div class="text-center">
+        <img src="../../images/container_logs.png" style="width:60%;max-width:1083px">
+</div>
+
+<a id="dockerVolume"></a>
+<h2>Create a Docker Volume for Data Persistence</h2>
+<p>
+A Docker volume allows the data to be persistent (long-lasting) after the container restarts and
+mount to a host directory or another container's data volume into the UCSC Genome Browser container.
+</p>
+
+<p>The following command creates a new volume named ucsc_genomebrowser_volume that containers can
+consume and store data in:</p>
+<pre><code>docker volume create ucsc_genomebrowser_volume</code></pre></p> 
+
+<p>
+After creating the volume named ucsc_genomebrowser_volume, running the docker run command starts the
+UCSC Genome Browser container using the user_name/ucsc_genomebrowser_image image and the -v option
+to mount the volume created in the previous step.</p>
+<pre><code>docker run -d --name ucsc_genomebrowser_volume -p 8080:80 -v ucsc_genomebrowser_volume:/data user_name/ucsc_genomebrowser_image</code></pre></p>
+
+<p>Files can be copied into the Docker volume or a bind mount can be used to link a host directory
+containing data to the /data directory inside the container. The following command copies a file
+to the data directory inside the container:</p>
+<pre><code>docker cp file.txt ucsc_genomebrowser_volume:/data</code></pre></p>
+
+<p>Running the execute command will list the file inside the running container:</p>
+<pre><code>docker exec ucsc_genomebrowser_volume ls data</code></pre></p>
+
+<a id="updateGB"></a>
+<h2>Updating the Latest UCSC Genome Browser Software</h2>
+<h3>Access the Docker Container's Shell</h3>
+<p>Updating the latest UCSC Genome Browser version will require access to the Docker container
+running shell (command-line interface) of the UCSC Genome Browser. The execute command can be run
+inside a running Docker container with the -it options. The -i or --interactive option allows
+interaction with the command being executed and keeps STDIN open even if not attached. This will
+allow input to be provided for the command. The  -t or --tty option allocates a pseudo-TTY and
+allows for a more interactive experience. The following example shows how to run exec command and
+the -it options:
+<pre><code>docker exec -it &lt;container_name_or_id&gt; /bin/bash</code></pre></p>
+
+
+<h3>Update the Genome Browser Software</h3>
+<p>Running the following command updates the Genome Browser software:
+<pre><code> bash root/browserSetup.sh cgiUpdate</code></pre></p>
+
+<h2>Customize a UCSC Genome Browser Docker Container</h2>
+<a id="hg.conf"></a>
+<h3>Editing hg.conf</h3>
+<p>The hg.conf file is a file that has information on how to connect to MariaDB, the location of
+the other directories and various other settings.</p>
+
+<p>
+The hg.conf file can be edited by running the execute command inside a running Docker container
+with the -it options. The -i or --interactive option allows interaction with the command being
+executed and keeps STDIN open even if not attached. This will allow input to be provided for the
+command. The -t or --tty option allocates a pseudo-TTY and allows for a more interactive
+experience. Any common text editors such as vi, nano, and vim can be used with the execute command
+and the -it options. The following example shows how to edit the hg.conf file using vi:
+<pre><code>docker exec -it &lt;container_name_or_id&gt; vi /usr/local/apache/cgi-bin/hg.conf</code></pre></p>
+
+
+<a id="defaults"></a>
+<h3>Changing the Default Genome Browser Options</h3>
+<p>Track settings such as fonts, text size, default tracks, attached hubs, and the default region
+can be customized and set as the default settings. These settings will appear every time the UCSC
+Genome Browser graphic display is opened and will also appear after a reset of all user settings.
+This can be useful when working with a different assembly than hg38, having track hubs
+automatically attached, or changing the visibility of tracks.</p>
+<ul>
+   <li>The first step is to create a <a href="#UsrAcct">Session</a> containing all desired display
+       options, hubs, tracks, and default region in the UCSC Genome Browser Docker container.
+       Open the UCSC Genome Browser Docker container shell. See the
+       <a href="#updateGB">Access the Docker Container's Shell</a> section of this page.</li>
+   <li>Create a new file, 'defaultCart.sql', to make a new MySQL table. Add the following to the defaultCart.sql file:
+      <pre>
+#The default cart
+CREATE TABLE defaultCart (
+    contents longblob not null  # cart contents
+);</pre></li>
+   <li>Drop the existing defaultCart table by running the following query:
+<pre>
+mysql hgcentral -Ne "DROP TABLE defaultCart"
+</pre></li>
+   <li>Load the defaultCart.sql file as a table by running the following query:</p>
+<pre>
+mysql hgcentral < defaultCart.sql
+</pre></li>
+   <li>Insert the session to the default cart table by using the user name and the session name,
+       which was the session saved in the earlier step, and run the following query (add userName):
+<pre>
+mysql hgcentral -Ne "insert into defaultCart select contents from namedSessionDb where sessionName='nameOfSession' and userName='nameOfUser'"
+</pre></li>
+</ul>
+
+
+
+
+
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

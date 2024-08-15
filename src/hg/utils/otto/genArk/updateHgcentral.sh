@@ -12,7 +12,8 @@ set -beEu -o pipefail
 
 function usage() {
   printf "usage: ./updateCentral.sh makeItSo\n" 1>&2
-  printf "updates hgcentral.genark with the latest hub list from hgdownload\n" 1>&2
+  printf "updates hgcentraltest.genark with the latest hub list from hgdownload\n" 1>&2
+  printf "and the hgcentraltest.assemblyList table from NCBI listings.\n" 1>&2
 }
 
 # check for an 'unbound' variable safely
@@ -30,8 +31,7 @@ cd /hive/data/inside/GenArk
 export DS=`date "+%F"`
 export YYYY=`date "+%Y"`
 export LC_NUMERIC=en_US
-export msgTo="hclawson@ucsc.edu"
-# export msgTo="hclawson@ucsc.edu,otto-group@ucsc.edu"
+export msgTo="hclawson@ucsc.edu,otto-group@ucsc.edu"
 export msgFile="/tmp/ottoGenArk.$$.txt"
 
 ###########################################################################
@@ -52,7 +52,7 @@ function oddRowCounts() {
   todayCount=$1
   mysqlCount=$2
   msgToFrom
-  printf "Subject: ALERT: hgcentral.genark update problem\n" >> ${msgFile}
+  printf "Subject: ALERT: hgcentraltest.genark update problem\n" >> ${msgFile}
   printf "\n" >> ${msgFile}
   printf "# puzzling, count in file %'d is not larger than the MySQL table %'d\n" "${todayCount}" "${mysqlCount}" >> ${msgFile}
   sendMsg
@@ -62,9 +62,9 @@ function updateIncorrect() {
   todayCount=$1
   mysqlCount=$2
   msgToFrom
-  printf "Subject: ALERT: hgcentral.genark update problem\n" >> ${msgFile}
+  printf "Subject: ALERT: hgcentraltest.genark update problem\n" >> ${msgFile}
   printf "\n" >> ${msgFile}
-  printf "# ERROR: hgcentral.genark table has been reloaded, but row count %'d is not larger than than previous MySQL table %'d\n" "${todayCount}" "${mysqlCount}" >> ${msgFile}
+  printf "# ERROR: hgcentraltest.genark table has been reloaded, but row count %'d is not larger than than previous MySQL table %'d\n" "${todayCount}" "${mysqlCount}" >> ${msgFile}
   sendMsg
 }
 
@@ -72,8 +72,10 @@ function updateOK() {
   todayCount=$1
   mysqlCount=$2
   msgToFrom
-  printf "Subject: NOTE: hgcentral.genark has been updated\n" >> ${msgFile}
+  printf "Subject: NOTE: hgcentraltest.genark has been updated\n" >> ${msgFile}
   printf "\n" >> ${msgFile}
+  printf "# this message is from the otto cron job:\n" >> "${msgFile}"
+  printf "# 37 10 * * 2 /hive/data/inside/GenArk/updateHgcentral.sh makeItSo\n" >> "${msgFile}"
   printf "# today MySQL rowCount %'d vs. previous MySQL rowCount %'d\n" "${todayCount}" "${mysqlCount}" >> ${msgFile}
   sendMsg
 }
@@ -91,6 +93,8 @@ prevSum=`grep -v "^#" previousList.txt | sort | md5sum | cut -d' ' -f1`
 
 if [ "${prevSum}" = "${newSum}" ]; then
   rm -f list.${DS}
+  ### new assemblyList table in hgcentraltest 2024-08-08
+  /hive/data/inside/GenArk/addAssemblyList.sh
   exit 0
 fi
 
@@ -104,7 +108,7 @@ if [ "${countToday}" -gt "${rowCount}" ]; then
 
   ./genArkListToSql.pl list.${DS} > genark.tsv
   hgsql hgcentraltest -e 'drop table genark;'
-  hgsql hgcentraltest < ~/kent/src/hg/lib/genark.sql
+  hgsql hgcentraltest < /hive/data/inside/GenArk/genark.sql
  hgsql hgcentraltest -e "LOAD DATA LOCAL INFILE 'genark.tsv' INTO TABLE genark;"
   newCount=`hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat`
   if [ "${newCount}" -gt "${rowCount}" ]; then
@@ -119,5 +123,8 @@ else
   oddRowCounts "${countToday}" "${rowCount}"
   exit 255
 fi
+
+### new assemblyList table in hgcentraltest 2024-08-08
+/hive/data/inside/GenArk/addAssemblyList.sh
 
 exit $?

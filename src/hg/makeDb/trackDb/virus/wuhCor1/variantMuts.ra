@@ -5,7 +5,7 @@ shortLabel Variants of Concern
 longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) (configure to show more lineages)
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
-subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa J_BA1=Omicron_BA.1 K_BA2=Omicron_BA.2 L_BA4=Omicron_BA.4 M_BA5=Omicron_BA.5 N_BA2121=Omicron_BA.2.12.1 O_BA275=Omicron_BA.2.75 P_BQ1=Omicron_BQ.1 Q_XBB=Omicron_XBB R_XBB15=Omicron_XBB.1.5 S_XBB116=Omicron_XBB.1.16 T_CH11=Omicron_CH.1.1 U_XBB19=Omicron_XBB.1.9 V_XBB23=Omicron_XBB.2.3 W_EG51=Omicron_EG.5.1
+subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa J_BA1=Omicron_BA.1 K_BA2=Omicron_BA.2 L_BA4=Omicron_BA.4 M_BA5=Omicron_BA.5 N_BA2121=Omicron_BA.2.12.1 O_BA275=Omicron_BA.2.75 P_BQ1=Omicron_BQ.1 Q_XBB=Omicron_XBB R_XBB15=Omicron_XBB.1.5 S_XBB116=Omicron_XBB.1.16 T_CH11=Omicron_CH.1.1 U_XBB19=Omicron_XBB.1.9 V_XBB23=Omicron_XBB.2.3 W_EG51=Omicron_EG.5.1 X_XBB1570=Omicron_XBB.1.5.70 Y_HK3=Omicron_HK.3 Z_BA286=Omicron_BA.2.86 ZA_JN1=Omicron_JN.1
 subGroup3 designation Designation VOC=VOC VOI=VOI VUM=VUM
 sortOrder designation=+ variant=+ mutation=+
 bedNameLabel Mutation
@@ -14,7 +14,7 @@ darkerLabels on
 noScoreFilter on
 group varRep
 allButtonPair on
-dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021, May 4, 2022 and September 22, 2023
+dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021, May 4, 2022, September 22, 2023, and January 29, 2024
 visibility dense
 html variantMuts
 
@@ -284,6 +284,50 @@ html variantMuts
         color 219,40,35
         priority 24
 
+        track variantAaMuts_XBB_1_5_70
+        parent variantMuts off
+        subGroups variant=X_XBB1570 mutation=AA designation=VOI
+        shortLabel Omicron XBB.1.5.70 AA Muts
+        longLabel Omicron XBB.1.5.70 amino acid mutations from GISAID sequences (Jan 29, 2024)
+        url https://outbreak.info/situation-reports?pango=XBB.1.5.70
+        urlLabel XBB.1.5.70 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.5.70_prot.bb
+        color 219,40,35
+        priority 25
+
+        track variantAaMuts_HK_3
+        parent variantMuts off
+        subGroups variant=Y_HK3 mutation=AA designation=VOI
+        shortLabel Omicron HK.3 AA Muts
+        longLabel Omicron HK.3 amino acid mutations from GISAID sequences (Jan 29, 2024)
+        url https://outbreak.info/situation-reports?pango=HK.3
+        urlLabel HK.3 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/HK.3_prot.bb
+        color 219,40,35
+        priority 26
+
+        track variantAaMuts_BA_2_86
+        parent variantMuts off
+        subGroups variant=Z_BA286 mutation=AA designation=VOI
+        shortLabel Omicron BA.2.86 AA Muts
+        longLabel Omicron BA.2.86 amino acid mutations from GISAID sequences (Jan 29, 2024)
+        url https://outbreak.info/situation-reports?pango=BA.2.86
+        urlLabel BA.2.86 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.86_prot.bb
+        color 219,40,35
+        priority 27
+
+        track variantAaMuts_JN_1
+        parent variantMuts on
+        subGroups variant=ZA_JN1 mutation=AA designation=VOI
+        shortLabel Omicron JN.1 AA Muts
+        longLabel Omicron JN.1 amino acid mutations from GISAID sequences (Jan 29, 2024)
+        url https://outbreak.info/situation-reports?pango=JN.1
+        urlLabel JN.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/JN.1_prot.bb
+        color 219,40,35
+        priority 28
+
 
 # Nucleotide tracks
 
@@ -551,3 +595,46 @@ html variantMuts
         color 219,40,35
         priority 134
 
+        track variantNucMuts_XBB_1_5_70
+        parent variantMuts off
+        subGroups variant=X_XBB1570 mutation=NUC designation=VOI
+        shortLabel Omicron XBB.1.5.70 Nuc Muts
+        longLabel Omicron VOC (XBB.1.5.70) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        url https://outbreak.info/situation-reports?pango=XBB.1.5.70
+        urlLabel XBB.1.5.70 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.5.70_nuc.bb
+        color 219,40,35
+        priority 135
+
+        track variantNucMuts_HK_3
+        parent variantMuts off
+        subGroups variant=Y_HK3 mutation=NUC designation=VOI
+        shortLabel Omicron HK.3 Nuc Muts
+        longLabel Omicron VOC (HK.3) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        url https://outbreak.info/situation-reports?pango=HK.3
+        urlLabel HK.3 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/HK.3_nuc.bb
+        color 219,40,35
+        priority 136
+
+        track variantNucMuts_BA_2_86
+        parent variantMuts off
+        subGroups variant=Z_BA286 mutation=NUC designation=VOI
+        shortLabel Omicron BA.2.86 Nuc Muts
+        longLabel Omicron VOC (BA.2.86) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        url https://outbreak.info/situation-reports?pango=BA.2.86
+        urlLabel BA.2.86 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.86_nuc.bb
+        color 219,40,35
+        priority 137
+
+        track variantNucMuts_JN_1
+        parent variantMuts off
+        subGroups variant=ZA_JN1 mutation=NUC designation=VOI
+        shortLabel Omicron JN.1 Nuc Muts
+        longLabel Omicron VOC (JN.1) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        url https://outbreak.info/situation-reports?pango=JN.1
+        urlLabel JN.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/JN.1_nuc.bb
+        color 219,40,35
+        priority 138

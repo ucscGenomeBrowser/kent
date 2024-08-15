@@ -1,0 +1,3 @@
+654924	Frog virus 3	Viruses; Varidnaviria; Bamfordvirae; Nucleocytoviricota; Megaviricetes; Pimascovirales; Iridoviridae; Alphairidovirinae; Ranavirus.
+345201	Invertebrate iridescent virus 3	Viruses; Varidnaviria; Bamfordvirae; Nucleocytoviricota; Megaviricetes; Pimascovirales; Iridoviridae; Betairidovirinae; Chloriridovirus.
+176652	Invertebrate iridescent virus 6	Viruses; Varidnaviria; Bamfordvirae; Nucleocytoviricota; Megaviricetes; Pimascovirales; Iridoviridae; Betairidovirinae; Iridovirus.

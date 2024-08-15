@@ -96,7 +96,8 @@ class BioTags(set):
         return True
 
 class GencodeTranscriptLocus(object):
-    """object for a transcript at a given locus.  Need due to PAR"""
+    """object for a transcript at a given locus.  Need due to PAR on older GENCODEs were
+    id was duplicated"""
     __slots__ = ("transcript", "gp", "geneLocus")
 
     def __init__(self, transcript, gp):
@@ -142,6 +143,8 @@ class GencodeTranscript(object):
     __slots__ = ("id", "name", "bioType", "havanaId", "ccdsId", "proteinId", "transcriptRank",
                  "source", "tags", "gene", "level", "extendedMethod", "transcriptSupportLevel", "transcriptLoci")
 
+    # FIXME: gene and transcript tags should not really be combined, but
+    # need to have geneTag and transcriptTag tables load from table dumps.
     def __init__(self, transcriptId):
         self.id = transcriptId
         self.name = None
@@ -160,7 +163,7 @@ class GencodeTranscript(object):
 
     def finish(self):
         "finish construction, sorting into predictable order"
-        self.transcriptLoci.sort(key=lambda l: (l.gp.chrom, l.gp.txStart))
+        self.transcriptLoci.sort(key=lambda loci: (loci.gp.chrom, loci.gp.txStart))
 
     @property
     def transcriptClass(self):
@@ -243,7 +246,7 @@ class GencodeGeneLocus(object):
 
     def finish(self):
         "finish construction, sorting into predictable order"
-        self.transcriptLoci.sort(key=lambda l: (l.gp.chrom, l.gp.txStart))
+        self.transcriptLoci.sort(key=lambda loci: (loci.gp.chrom, loci.gp.txStart))
 
     @property
     def id(self):
@@ -287,7 +290,7 @@ class GencodeGene(object):
     def finish(self):
         "finish construction, sorting into predictable order"
         self.transcripts.sort(key=lambda t: (t.id,))
-        self.geneLoci.sort(key=lambda l: (l.chrom, l.chromStart))
+        self.geneLoci.sort(key=lambda loci: (loci.chrom, loci.chromStart))
 
     def hasCds(self):
         for trans in self.transcripts:
@@ -484,10 +487,12 @@ class GencodeGenes(object):
             self._setInfoRowTranscript(info, gene, trans)
         elif not ((trans.name == info.transcriptName) and (trans.bioType == info.transcriptType)):
             raise GencodeGenesException("inconsistent transcript meta-data from multiple info rows: " + info.transcriptId)
-        # accumulate tags (PAR tag not on all copies).  May not have it tag if loading from database dump
-        tags = getattr(info, "tags", None)
-        if tags is not None:
-            trans.tags |= tags
+        # accumulate tags (PAR tag not on all copies).  May not have it tag if loading from database
+        # also may or may not be split into geneTags and transcriptTags
+        for tagFld in ("tags", "geneTags", "transcriptTags"):
+            tags = getattr(info, tagFld, None)
+            if tags is not None:
+                trans.tags |= tags
         if trans.gene is None:
             self._linkTranscriptToGene(gene, trans)
 
@@ -514,7 +519,8 @@ class GencodeGenes(object):
                        "transcriptType": BioType,
                        "source": GencodeSource,
                        "level": int,
-                       "tags": BioTags,
+                       "geneTags": BioTags,
+                       "transcriptTags": BioTags,
                        "havanaGene": _noneIfEmpty,
                        "havanaTranscript": _noneIfEmpty,
                        "ccdsId": _noneIfEmpty}

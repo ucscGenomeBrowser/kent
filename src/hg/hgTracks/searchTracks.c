@@ -299,7 +299,7 @@ while(1)
         pfd->done = FALSE;
         boolean foundFirstGenome = FALSE;
         struct hash *trackDbNameHash = newHash(5);
-        struct trackDb *tdbList = hubAddTracks(hst->hub, database, &foundFirstGenome, trackDbNameHash);
+        struct trackDb *tdbList = hubAddTracks(hst->hub, database, &foundFirstGenome, trackDbNameHash, NULL);
         if (measureTiming)
             measureTime("After connecting to hub %s: '%d': ", hst->hubUrl, hst->hubId);
         // get composite and subtracks into trackList
@@ -1101,12 +1101,12 @@ jsOnEventById("keyup", "simpleSearch", "findTracks.searchButtonsEnable(true);");
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 //hPrintf("</td></tr></table>");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' "
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' "
         "style='font-size:.8em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button'id='doSTClear1' name='clear' value='clear' class='clear' "
+hPrintf("<input type='button'id='doSTClear1' name='clear' value='Clear' class='clear' "
         "style='font-size:.8em;'>\n");
 jsOnEventById("click", "doSTClear1", "findTracks.clear();");
-hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' "
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
         "style='font-size:.8em;'>\n");
 hPrintf("</div>\n");
 
@@ -1182,12 +1182,12 @@ if (metaDbExists)
     }
 
 hPrintf("</table>\n");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' "
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' "
         "style='font-size:.8em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button' id='doSTClear2' name='clear' value='clear' class='clear' "
+hPrintf("<input type='button' id='doSTClear2' name='clear' value='Clear' class='clear' "
         "style='font-size:.8em;'>\n");
 jsOnEventById("click", "doSTClear2", "findTracks.clear();");
-hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' "
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
         "style='font-size:.8em;'>\n");
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n");

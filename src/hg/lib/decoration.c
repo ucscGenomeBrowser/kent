@@ -318,38 +318,6 @@ if (sameWordOk(decoration->style, "Glyph"))
 return retVal;
 }
 
-#define DECORATION_GLYPH_STRING_CIRCLE "Circle"
-#define DECORATION_GLYPH_STRING_TRIANGLE "Triangle"
-#define DECORATION_GLYPH_STRING_INV_TRIANGLE "InvTriangle"
-#define DECORATION_GLYPH_STRING_SQUARE "Square"
-#define DECORATION_GLYPH_STRING_DIAMOND "Diamond"
-#define DECORATION_GLYPH_STRING_OCTAGON "Octagon"
-#define DECORATION_GLYPH_STRING_STAR "Star"
-#define DECORATION_GLYPH_STRING_PENTAGRAM "Pentagram"
-
-
-decorationGlyphType decorationGetGlyphType(struct decoration *decoration)
-/* Return the enum glyph type for the decoration, based on the contents of the glyph field.
- * Defaults to DECORATION_GLYPH_CIRCLE if the string is unrecognized. */
-{
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_TRIANGLE))
-    return DECORATION_GLYPH_TRIANGLE;
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_INV_TRIANGLE))
-    return DECORATION_GLYPH_INV_TRIANGLE;
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_SQUARE))
-    return DECORATION_GLYPH_SQUARE;
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_DIAMOND))
-    return DECORATION_GLYPH_DIAMOND;
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_OCTAGON))
-    return DECORATION_GLYPH_OCTAGON;
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_STAR))
-    return DECORATION_GLYPH_STAR;
-if (sameWordOk(decoration->glyph, DECORATION_GLYPH_STRING_PENTAGRAM))
-    return DECORATION_GLYPH_PENTAGRAM;
-
-return DECORATION_GLYPH_CIRCLE;
-}
-
 int decorationGetParentExtent(struct decoration *decoration, char **chrom, int *start, int *end)
 /* Parse out the chrom:start-end from the "decoratedItem" field of a decoration and return
  * those in the corresponding pointers if they're non-NULL.  The chromosome string must be

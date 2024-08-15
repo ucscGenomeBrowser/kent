@@ -1,6 +1,6 @@
 /* Invoke usher to place user's uploaded samples in the phylogenetic tree & parse output files. */
 
-/* Copyright (C) 2020-2022 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "dnautil.h"
@@ -726,22 +726,22 @@ dyStringFree(&dyScratch);
 rmdir(outDir);
 }
 
-static void runUsherCommand(char *cmd[], char *stderrFile, int *pStartTime)
+static void runUsherCommand(char *cmd[], char *stderrFile, char *anchorFile, int *pStartTime)
 /* Run the standalone usher command with its stderr output redirected to stderrFile. */
 {
 char **cmds[] = { cmd, NULL };
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, stderrFile, 0);
 pipelineClose(&pl);
-reportTiming(pStartTime, "run usher");
+reportTiming(pStartTime, "run usher command");
 }
 
-boolean serverIsConfigured(char *db)
+boolean serverIsConfigured(char *org)
 /* Return TRUE if all necessary configuration settings are in place to run usher-sampled-server. */
 {
 char *serverDir = cfgOption("hgPhyloPlaceServerDir");
 if (isNotEmpty(serverDir))
     {
-    char *usherServerEnabled = phyloPlaceDbSetting(db, "usherServerEnabled");
+    char *usherServerEnabled = phyloPlaceOrgSetting(org, "usherServerEnabled");
     if (isNotEmpty(usherServerEnabled) && SETTING_IS_ON(usherServerEnabled) &&
         fileExists(PHYLOPLACE_DATA_DIR "/usher-sampled-server"))
         {
@@ -751,8 +751,8 @@ if (isNotEmpty(serverDir))
 return FALSE;
 }
 
-static char *getUsherServerFilePath(char *db, char *file)
-/* Alloc & return the path to special server file in $hgPhyloPlaceServerDir/$db/ . */
+static char *getUsherServerFilePath(char *org, char *file)
+/* Alloc & return the path to special server file in $hgPhyloPlaceServerDir/$org/ . */
 {
 char *serverDir = cfgOption("hgPhyloPlaceServerDir");
 // We need host name in order to prevent clashes between hgw1 and hgw2 sharing the same hg.conf
@@ -765,34 +765,34 @@ char *p = strchr(host, '.');
 if (p)
     *p = '\0';
 struct dyString *dyPath = dyStringCreate("%s/%s/%s.%s",
-                                         serverDir, trackHubSkipHubName(db), host, file);
+                                         serverDir, trackHubSkipHubName(org), host, file);
 return dyStringCannibalize(&dyPath);
 }
 
-static char *getUsherServerMfifoPath(char *db)
-/* Alloc & return path to server manager fifo file for db. */
+static char *getUsherServerMfifoPath(char *org)
+/* Alloc & return path to server manager fifo file for org. */
 {
-return getUsherServerFilePath(db, "server.fifo");
+return getUsherServerFilePath(org, "server.fifo");
 }
 
-static char *getUsherServerSocketPath(char *db)
-/* Alloc & return path to server socket file for db. */
+static char *getUsherServerSocketPath(char *org)
+/* Alloc & return path to server socket file for org. */
 {
-return getUsherServerFilePath(db, "server.socket");
+return getUsherServerFilePath(org, "server.socket");
 }
 
-static char *getUsherServerLogPath(char *db)
-/* Alloc & return path to server log file (very important because it tells us the pid) for db. */
+static char *getUsherServerLogPath(char *org)
+/* Alloc & return path to server log file (very important because it tells us the pid) for org. */
 {
-return getUsherServerFilePath(db, "server.log");
+return getUsherServerFilePath(org, "server.log");
 }
 
-boolean serverIsRunning(char *db, FILE *errFile)
+boolean serverIsRunning(char *org, FILE *errFile)
 /* Return TRUE if logFile exists and its first line specifies a pid as expected from daemonishSpawn,
  * and that pid looks alive according to /proc. */
 {
 boolean pidIsLive = FALSE;
-char *logFile = getUsherServerLogPath(db);
+char *logFile = getUsherServerLogPath(org);
 struct lineFile *lf = lineFileMayOpen(logFile, TRUE);
 if (lf)
     {
@@ -984,17 +984,17 @@ else if (fork1 == 0)
 return fork1;
 }
 
-boolean startServer(char *db, struct treeChoices *treeChoices, FILE *errFile)
+boolean startServer(char *org, struct treeChoices *treeChoices, FILE *errFile)
 /* Start up an usher-sampled-server process to run in the background. */
 {
 boolean success = FALSE;
-if (serverIsConfigured(db))
+if (serverIsConfigured(org))
     {
     char *serverDir = cfgOption("hgPhyloPlaceServerDir");
     if (! fileExists(serverDir))
         makeDir(serverDir);
     char path[PATH_LEN];
-    safef(path, sizeof path, "%s/%s", serverDir, db);
+    safef(path, sizeof path, "%s/%s", serverDir, org);
     if (! fileExists(path))
         makeDir(path);
 
@@ -1002,8 +1002,8 @@ if (serverIsConfigured(db))
     // Each protobuf file from treeChoices must appear as a separate arg after -l,
     // so we have to dynamically build up serverCmd, but can use a static for the first args.
     char *serverCmdBase[] = { usherServerPath,
-                              "-m", getUsherServerMfifoPath(db),
-                              "-s", getUsherServerSocketPath(db),
+                              "-m", getUsherServerMfifoPath(org),
+                              "-s", getUsherServerSocketPath(org),
                               "-T", USHER_NUM_THREADS,
                               "-t", USHER_SERVER_CHILD_TIMEOUT,
                               "-l" };
@@ -1024,21 +1024,21 @@ if (serverIsConfigured(db))
         fputs(serverCmd[ix], errFile);
         }
     fputc('\n', errFile);
-    success = (daemonishSpawn(serverCmd, getUsherServerLogPath(db)) > 0);
+    success = (daemonishSpawn(serverCmd, getUsherServerLogPath(org)) > 0);
     if (success)
         fputs("Server spawned; first fork returned successfully.\n", errFile);
     else
         fputs("Server spawn failed at first fork!\n", errFile);
     }
 else
-    errAbort("Usher server is not configured for %s, not starting", db);
+    errAbort("Usher server is not configured for %s, not starting", org);
 return success;
 }
 
-void serverReloadProtobufs(char *db, struct treeChoices *treeChoices)
-/* Send a reload command and list of protobufs for db to usher server. */
+void serverReloadProtobufs(char *org, struct treeChoices *treeChoices)
+/* Send a reload command and list of protobufs for org to usher server. */
 {
-char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+char *usherServerMfifoPath = getUsherServerMfifoPath(org);
 FILE *mf = fopen(usherServerMfifoPath, "a");
 if (mf)
     {
@@ -1053,10 +1053,10 @@ else
     warn("serverReload: unable to open '%s', command not sent", usherServerMfifoPath);
 }
 
-void serverStop(char *db)
+void serverStop(char *org)
 /* Send stop command to usher server. */
 {
-char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+char *usherServerMfifoPath = getUsherServerMfifoPath(org);
 FILE *mf = fopen(usherServerMfifoPath, "a");
 if (mf)
     {
@@ -1067,10 +1067,10 @@ else
     warn("serverStop: unable to open '%s', command not sent", usherServerMfifoPath);
 }
 
-void serverSetThreadCount(char *db, int val)
+void serverSetThreadCount(char *org, int val)
 /* Send thread command and value to usher server. */
 {
-char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+char *usherServerMfifoPath = getUsherServerMfifoPath(org);
 FILE *mf = fopen(usherServerMfifoPath, "a");
 if (mf)
     {
@@ -1084,10 +1084,10 @@ else
     warn("serverSetTimeout: unable to open '%s', command not sent", usherServerMfifoPath);
 }
 
-void serverSetTimeout(char *db, int val)
+void serverSetTimeout(char *org, int val)
 /* Send timeout command and value (in seconds) to usher server. */
 {
-char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+char *usherServerMfifoPath = getUsherServerMfifoPath(org);
 FILE *mf = fopen(usherServerMfifoPath, "a");
 if (mf)
     {
@@ -1101,7 +1101,7 @@ else
     warn("serverSetTimeout: unable to open '%s', command not sent", usherServerMfifoPath);
 }
 
-static int getServerSocket(char *db, struct treeChoices *treeChoices, FILE *errFile)
+static int getServerSocket(char *org, struct treeChoices *treeChoices, FILE *errFile)
 /* Try to connect to server; attempt to restart server and then connect if it seems like the server
  * is down.  Return -1 if unable to connect. */
 {
@@ -1120,7 +1120,7 @@ else
     // };
     struct sockaddr_un addr;
     addr.sun_family=AF_UNIX;
-    char *usherServerSocketPath = getUsherServerSocketPath(db);
+    char *usherServerSocketPath = getUsherServerSocketPath(org);
     safecpy(addr.sun_path, sizeof(addr.sun_path), usherServerSocketPath);
     int ret = connect(socketFd, (struct sockaddr *)&addr, sizeof(addr));
     if (ret < 0)
@@ -1130,8 +1130,8 @@ else
         // Does the server need to be restarted, or (in case another web request prompted some
         // other hgPhyloPlace process to restart it but it isn't quite up yet) should we wait a
         // few seconds and try again?
-        if (serverIsRunning(db, errFile) ||
-            startServer(db, treeChoices, errFile))
+        if (serverIsRunning(org, errFile) ||
+            startServer(org, treeChoices, errFile))
             {
             sleep(5);
             ret = connect(socketFd, (struct sockaddr *)&addr, sizeof(addr));
@@ -1151,8 +1151,8 @@ return socketFd;
 // Server sends ASCII EOT character (4) when done. Sadly I can't find a header file that defines EOT.
 #define EOT 4
 
-static boolean sendQuery(int socketFd, char *cmd[], char *db, struct treeChoices *treeChoices,
-                         FILE *errFile, boolean addNoIgnorePrefix)
+static boolean sendQuery(int socketFd, char *cmd[], char *org, struct treeChoices *treeChoices,
+                         FILE *errFile, boolean addNoIgnorePrefix, char *anchorFile)
 /* Send command to socket, read response on socket, return TRUE if we get a successful response. */
 {
 boolean success = FALSE;
@@ -1168,6 +1168,8 @@ for (ix = 0;  cmd[ix] != NULL;  ix++)
 if (addNoIgnorePrefix)
     // Needed when placing uploaded sequences, but not when finding uploaded names
     dyStringPrintf(dyMessage, "--no-ignore-prefix\n"USHER_DEDUP_PREFIX"\n");
+if (isNotEmpty(anchorFile))
+    dyStringPrintf(dyMessage, "--anchor-samples\n%s\n", anchorFile);
 dyStringAppendC(dyMessage, '\n');
 boolean serverError = FALSE;
 int bytesWritten = write(socketFd, dyMessage->string, dyMessage->stringSize);
@@ -1182,7 +1184,7 @@ if (bytesWritten == dyMessage->stringSize)
             if (startsWith("Tree", line) && endsWith(line, "not found"))
                 {
                 // Tell the server to reload the latest protobufs
-                serverReloadProtobufs(getUsherServerMfifoPath(db), treeChoices);
+                serverReloadProtobufs(org, treeChoices);
                 // Reloading multiple trees takes a while, so fall back on standalone usher(-sampled)
                 serverError = TRUE;
                 // Continue reading output from server.
@@ -1206,23 +1208,26 @@ dyStringFree(&dyMessage);
 return success;
 }
 
-static boolean runUsherServer(char *db, char *cmd[], char *stderrFile,
-                              struct treeChoices *treeChoices, int *pStartTime)
+static boolean runUsherServer(char *org, char *cmd[], char *stderrFile,
+                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
 /* Start the server if necessary, connect to it, send a query, get response and return TRUE if.
  * all goes well. If unsuccessful, write reasons to errFile and return FALSE. */
 {
 boolean success = FALSE;
-if (serverIsConfigured(db))
+if (serverIsConfigured(org))
     {
     FILE *errFile = mustOpen(stderrFile, "w");
-    int serverSocket = getServerSocket(db, treeChoices, errFile);
+    int serverSocket = getServerSocket(org, treeChoices, errFile);
 
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile, TRUE);
+        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, TRUE, anchorFile);
         close(serverSocket);
-        reportTiming(pStartTime, "send query");
+        if (success)
+            reportTiming(pStartTime, "send query and get response (successful)");
+        else
+            reportTiming(pStartTime, "send query and get response (failed)");
         }
     carefulClose(&errFile);
     }
@@ -1231,9 +1236,9 @@ return success;
 
 #define MAX_SUBTREES 1000
 
-struct usherResults *runUsher(char *db, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
+struct usherResults *runUsher(char *org, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
                               int subtreeSize, struct slName **pUserSampleIds,
-                              struct treeChoices *treeChoices, int *pStartTime)
+                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output.  The usher-sampled version of usher might
@@ -1249,13 +1254,14 @@ char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOu
                 "-T", USHER_NUM_THREADS,       // Don't pass args from -T onward to server
                 "--optimization_radius", "0",  // Don't pass these to original usher, only -sampled
                 "--no-ignore-prefix", USHER_DEDUP_PREFIX,
+                "--anchor-samples", anchorFile,
                 NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
 struct tempName tnServerStderr;
 trashDirFile(&tnServerStderr, "ct", "usher_server_stderr", ".txt");
 char *stderrFile = tnServerStderr.forCgi;
-if (! runUsherServer(db, cmd, tnServerStderr.forCgi, treeChoices, pStartTime))
+if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, anchorFile, pStartTime))
     {
     if (!endsWith(usherPath, "-sampled"))
         {
@@ -1264,7 +1270,14 @@ if (! runUsherServer(db, cmd, tnServerStderr.forCgi, treeChoices, pStartTime))
         if (ix > 0)
             cmd[ix] = NULL;
         }
-    runUsherCommand(cmd, tnStderr.forCgi, pStartTime);
+    else if (isEmpty(anchorFile))
+        {
+        // Don't pass --anchor-samples option unless it's configured
+        int ix = stringArrayIx("--anchor-samples", cmd, ArraySize(cmd)-1);
+        if (ix > 0)
+            cmd[ix] = NULL;
+        }
+    runUsherCommand(cmd, tnStderr.forCgi, anchorFile, pStartTime);
     stderrFile = tnStderr.forCgi;
     }
 
@@ -1308,7 +1321,7 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
 
 static void runMatUtilsExtractCommand(char *matUtilsPath, char *protobufPath,
                                       char *subtreeSizeStr, struct tempName *tnSamples,
-                                      struct tempName *tnOutDir, int *pStartTime)
+                                      struct tempName *tnOutDir, char *anchorFile, int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -1316,18 +1329,25 @@ static void runMatUtilsExtractCommand(char *matUtilsPath, char *protobufPath,
 char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir->forCgi,
                 "-s", tnSamples->forCgi,
                 "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", USHER_NUM_THREADS,
-                "--usher-clades-txt", NULL };
+                "--usher-clades-txt", "--usher-anchor-samples", anchorFile, NULL };
 char **cmds[] = { cmd, NULL };
+// Don't pass --usher-anchor-samples option unless it's configured
+if (isEmpty(anchorFile))
+    {
+    int ix = stringArrayIx("--usher-anchor-samples", cmd, ArraySize(cmd)-1);
+    if (ix > 0)
+        cmd[ix] = NULL;
+    }
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
 pipelineClose(&pl);
-reportTiming(pStartTime, "run matUtils");
+reportTiming(pStartTime, "run matUtils command");
 }
 
-static boolean runMatUtilsServer(char *db, char *protobufPath, char *subtreeSizeStr,
+static boolean runMatUtilsServer(char *org, char *protobufPath, char *subtreeSizeStr,
                                  struct tempName *tnSamples, struct tempName *tnOutDir,
-                                 struct treeChoices *treeChoices, int *pStartTime)
+                                 struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
 /* Cheng Ye added a 'matUtils mode' to usher-sampled-server so we can get subtrees super-fast
  * for uploaded sample names too. */
 {
@@ -1338,26 +1358,30 @@ char *cmd[] = { "usher-sampled-server", "-i", protobufPath, "-d", tnOutDir->forC
                 NULL };
 struct tempName tnErrFile;
 trashDirFile(&tnErrFile, "ct", "matUtils_server_stderr", ".txt");
-if (serverIsConfigured(db))
+if (serverIsConfigured(org))
     {
     FILE *errFile = mustOpen(tnErrFile.forCgi, "w");
-    int serverSocket = getServerSocket(db, treeChoices, errFile);
+    int serverSocket = getServerSocket(org, treeChoices, errFile);
 
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile, FALSE);
+        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, FALSE, anchorFile);
         close(serverSocket);
-        reportTiming(pStartTime, "send query");
+        if (success)
+            reportTiming(pStartTime, "send query and get response (successful)");
+        else
+            reportTiming(pStartTime, "send query and get response (failed)");
         }
     carefulClose(&errFile);
     }
 return success;
 }
 
-struct usherResults *runMatUtilsExtractSubtrees(char *db, char *matUtilsPath, char *protobufPath,
+struct usherResults *runMatUtilsExtractSubtrees(char *org, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                struct treeChoices *treeChoices, int *pStartTime)
+                                                struct treeChoices *treeChoices, char *anchorFile,
+                                                int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -1374,10 +1398,10 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
 carefulClose(&f);
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
-if (! runMatUtilsServer(db, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir, treeChoices,
-                        pStartTime))
+if (! runMatUtilsServer(org, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir, treeChoices,
+                        anchorFile, pStartTime))
     runMatUtilsExtractCommand(matUtilsPath, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir,
-                              pStartTime);
+                              anchorFile, pStartTime);
 addEmptyPlacements(sampleIds, results->samplePlacements);
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];

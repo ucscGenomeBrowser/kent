@@ -28,6 +28,21 @@
 #include "asmAlias.h"
 #include "cheapcgi.h"
 
+boolean hubsCanAddGroups()
+/* can track hubs have their own groups? */
+{
+static boolean canHubs = FALSE;
+static boolean canHubsSet = FALSE;
+
+if (!canHubsSet)
+    {
+    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", FALSE);
+    canHubsSet = TRUE;
+    }
+
+return canHubs;
+}
+
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
 {
@@ -114,6 +129,27 @@ if (cartVarExists(cart, hgHubConnectRemakeTrackHub))
 	    }
 	}
     slPairFreeList(&hubVarList);
+
+    // now see if we should quicklift any hubs
+    struct sqlConnection *conn = hConnectCentral();
+    char query[2048];
+    hubVarList = cartVarsWithPrefix(cart, "quickLift");
+    for (hubVar = hubVarList; hubVar != NULL; hubVar = hubVar->next)
+        {
+        unsigned hubNumber = atoi(hubVar->name + sizeof("quickLift"));
+        sqlSafef(query, sizeof(query), "select path from exportedDataHubs where id='%d'", hubNumber);
+        char *hubUrl = sqlQuickString(conn, query);
+        char *errorMessage;
+        unsigned hubId = hubFindOrAddUrlInStatusTable(cart, hubUrl, &errorMessage);
+
+        if (firstOne)
+            firstOne = FALSE;
+        else
+            dyStringAppendC(trackHubs, ' ');
+        dyStringPrintf(trackHubs, "%d:%s", hubId,(char *)hubVar->val);
+        }
+    hDisconnectCentral(&conn);
+
     cartSetString(cart, hubConnectTrackHubsVarName, trackHubs->string);
     dyStringFree(&trackHubs);
     cartRemove(cart, hgHubConnectRemakeTrackHub);
@@ -182,7 +218,9 @@ return dateIsOlderBy(notOkStatus, "%F %T", checkTime);
 
 /* Given a hub ID return associated status. Returns NULL if no such hub.  If hub
  * exists but has problems will return with errorMessage field filled in. */
-struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
+struct hubConnectStatus *hubConnectStatusForIdExt(struct sqlConnection *conn, int id, char *replaceDb, char *newDb, char *quickLiftChain)
+/* Given a hub ID return associated status. For quickLifted hubs, replace the db with our current db and
+ * keep track of the quickLiftChain for updating trackDb later.*/
 {
 struct hubConnectStatus *hub = NULL;
 char query[1024];
@@ -218,10 +256,30 @@ if (row != NULL)
             //else
                 //warn("Could not connect to hub \"%s\": %s", hub->shortLabel, hub->errorMessage);
 	    }
+        if ((hub->trackHub != NULL) && (replaceDb != NULL))
+            {
+            struct trackHubGenome *genome = hub->trackHub->genomeList;
+
+            for(; genome; genome = genome->next)
+                {
+                if (sameString(genome->name, replaceDb))
+                    {
+                    genome->name = newDb;
+                    hashAdd(hub->trackHub->genomeHash, newDb, genome);
+                    genome->quickLiftChain = quickLiftChain;
+                    genome->quickLiftDb = replaceDb;
+                    }
+                }
+            }
 	}
     }
 sqlFreeResult(&sr);
 return hub;
+}
+
+struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
+{
+return hubConnectStatusForIdExt(conn, id, NULL, NULL, NULL);
 }
 
 struct hubConnectStatus *hubConnectStatusListFromCartAll(struct cart *cart)
@@ -252,13 +310,39 @@ return hubList;
 struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart)
 /* Return list of track hubs that are turned on by user in cart. */
 {
-struct hubConnectStatus *hubList = NULL, *hub;
+struct hubConnectStatus *hubList = NULL, *hub = NULL;
 struct slName *name, *nameList = hubConnectHubsInCart(cart);
 struct sqlConnection *conn = hConnectCentral();
 for (name = nameList; name != NULL; name = name->next)
     {
-    int id = sqlSigned(name->name);
-    hub = hubConnectStatusForId(conn, id);
+    // items in trackHub statement may need to be quickLifted.  This is implied
+    // by the hubStatus id followed by a colon and then a index into the quickLiftChain table
+    char *copy = cloneString(name->name);
+    char *colon = strchr(copy, ':');
+    if (colon)
+        *colon++ = 0;
+    int id = sqlSigned(copy);
+    if (colon == NULL)  // not quickLifted
+        hub = hubConnectStatusForId(conn, id);
+    else
+        {
+        char query[4096];
+        sqlSafef(query, sizeof(query), "select fromDb, toDb, path from %s where id = \"%s\"", "quickLiftChain", colon);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row;
+        char *replaceDb = NULL;
+        char *quickLiftChain = NULL;
+        char *toDb = NULL;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            replaceDb = cloneString(row[0]);
+            toDb = cloneString(row[1]);
+            quickLiftChain = cloneString(row[2]);
+            break; // there's only one
+            }
+        sqlFreeResult(&sr);
+        hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
+        }
     if (hub != NULL)
 	{
 	if (!isEmpty(hub->errorMessage) && (strstr(hub->hubUrl, "hgComposite") != NULL))
@@ -288,6 +372,21 @@ char *ptr1 = strchr(cartName, '.');
 char *ptr2 = strchr(ptr1 + 1, '.');
 
 return sqlUnsigned(ptr2+1);
+}
+
+char *hubNameFromGroupName(char *groupName)
+/* Given something like "hub_123_myWig" return hub_123 */
+{
+char *hubName = cloneString(groupName);
+
+char *ptr1 = hubName;
+ptr1 += 4;
+char *ptr2 = strchr(ptr1, '_');
+
+if (ptr2 != NULL)
+    *ptr2 = 0;
+
+return hubName;
 }
 
 unsigned hubIdFromTrackName(char *trackName)
@@ -369,6 +468,60 @@ trackHubPolishTrackNames(hub->trackHub, tdb);
 trackHubAddDescription(hubGenome->trackDbFile, tdb);
 }
 
+static void assignQuickLift(struct trackDb *tdbList, char *quickLiftChain)
+/* step through a trackDb list and assign a quickLift chain to each track */
+{
+if (tdbList == NULL)
+    return;
+
+struct trackDb *tdb;
+for(tdb = tdbList; tdb; tdb = tdb->next)
+    {
+    assignQuickLift(tdb->subtracks, quickLiftChain);
+
+    hashAdd(tdb->settingsHash, "quickLiftUrl", quickLiftChain);
+    }
+}
+
+// a string to define trackDb for quickLift chain
+static char *chainTdbString = 
+    "shortLabel chain to %s\n"
+    "longLabel chain to %s\n"
+    "type bigChain %s\n"
+    "chainType reverse\n"
+    "bigDataUrl %s\n";
+
+static struct trackDb *makeQuickLiftChainTdb(struct trackHubGenome *hubGenome,  struct hubConnectStatus *hub)
+// make a trackDb entry for a quickLift chain
+{
+struct trackDb *tdb;
+
+AllocVar(tdb);
+
+char buffer[4096];
+safef(buffer, sizeof buffer, "hub_%d_quickLiftChain", hub->id);
+tdb->table = tdb->track = cloneString(buffer);
+safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain);
+tdb->settings = cloneString(buffer);
+tdb->settingsHash = trackDbSettingsFromString(tdb, buffer);
+trackDbFieldsFromSettings(tdb);
+tdb->visibility = tvDense;
+
+return tdb;
+}
+
+static struct trackDb *fixForQuickLift(struct trackDb *tdbList, struct trackHubGenome *hubGenome, struct hubConnectStatus *hub)
+// assign a quickLift chain to the tdbList and make a trackDb entry for the chain. 
+{
+assignQuickLift(tdbList, hubGenome->quickLiftChain);
+
+struct trackDb *quickLiftTdb = makeQuickLiftChainTdb(hubGenome, hub);
+quickLiftTdb->grp = tdbList->grp;
+slAddHead(&tdbList, quickLiftTdb);
+
+return tdbList;
+}
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
     char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
@@ -382,12 +535,8 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
 if (hubGenome == NULL)
     errAbort("Cannot find genome %s in hub %s", database, hub->hubUrl);
 boolean foundFirstGenome = FALSE;
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL, &foundFirstGenome);
-tdbList = trackDbLinkUpGenerations(tdbList);
-tdbList = trackDbPolishAfterLinkup(tdbList, database);
-//this next line causes warns to print outside of warn box on hgTrackUi
-//trackDbPrioritizeContainerItems(tdbList);
-trackHubPolishTrackNames(hub->trackHub, tdbList);
+struct hash *trackDbNameHash = newHash(5);
+struct trackDb *tdbList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash, NULL);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);
 rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
@@ -718,7 +867,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[64 * 1024];
+char query[1024 * 1024];
 struct trackHub *tHub = NULL;
 
 if (hub != NULL)
@@ -753,7 +902,21 @@ else if (tHub != NULL)
 hDisconnectCentral(&conn);
 }
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash)
+static void grpListAddHubName(struct grp *grpList, struct trackHub *hub)
+/* Add the hub name to the groups defined by a hub. */
+{
+char buffer[4096];
+
+for (; grpList; grpList = grpList->next)
+    {
+    safef(buffer, sizeof buffer, "%s_%s", hub->name, grpList->name);
+    grpList->name = cloneString(buffer);
+    safef(buffer, sizeof buffer, "Hub: %s : %s", hub->shortLabel, grpList->label);
+    grpList->label = cloneString(buffer);
+    }
+}
+
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash, struct grp **hubGroups)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file. Only the first example of a genome gets to 
  * populate groups, the others get a group for the trackHub.  A particular 
@@ -772,6 +935,17 @@ if (trackHub != NULL)
 
     if (hubGenome != NULL)
 	{
+        // add groups
+	if ((hubGenome->groups != NULL) && hubsCanAddGroups())
+            {
+            struct grp *list = readGroupRa(hubGenome->groups);
+            grpListAddHubName(list, hub->trackHub);
+
+            if (hubGroups)
+                *hubGroups = slCat(*hubGroups, list);
+            }
+
+        // now grab tracks
         boolean doCache = trackDbCacheOn();
 
         if (doCache)
@@ -784,6 +958,9 @@ if (trackHub != NULL)
                 udcFileClose(&checkCache);
 
                 struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
+
+                if (cacheTdb && hubGenome->quickLiftChain)
+                    cacheTdb = fixForQuickLift(cacheTdb, hubGenome, hub);
 
                 if (cacheTdb != NULL)
                     return cacheTdb;
@@ -801,6 +978,9 @@ if (trackHub != NULL)
 
         if (doCache)
             trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
+
+        if (tdbList && hubGenome->quickLiftChain)
+            tdbList = fixForQuickLift(tdbList, hubGenome, hub);
 	}
     }
 return tdbList;
@@ -814,7 +994,14 @@ AllocVar(grp);
 char name[16];
 safef(name, sizeof(name), "hub_%d", hub->id);
 grp->name = cloneString(name);
-grp->label = cloneString(hub->shortLabel);
+if (startsWith("Quick", hub->shortLabel))
+    grp->label = hub->shortLabel;
+else
+    {
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "Hub: %s", hub->shortLabel);
+    grp->label = cloneString(buffer);
+    }
 return grp;
 }
 
@@ -845,7 +1032,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
 	    {
-	    struct trackDb *thisList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash);
+	    struct trackDb *thisList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash, &hubGroups);
 	    tdbList = slCat(tdbList, thisList);
 	    }
         errCatchEnd(errCatch);
@@ -1055,8 +1242,9 @@ hDisconnectCentral(&conn);
 if (!isEmpty(dir))
     {
     char *path = &dir[sizeof hubCuratedPrefix - 1];
-    char url[4096];
-    safef(url, sizeof url, "%s/%s/hub.txt", path, curatedHubPrefix);
+    char urlBuf[4096];
+    safef(urlBuf, sizeof urlBuf, "%s/%s/hub.txt", path, curatedHubPrefix);
+    char *url = hReplaceGbdb(urlBuf);
 
     struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
 

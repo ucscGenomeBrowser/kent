@@ -34,6 +34,8 @@
 #include "regexHelper.h"
 #include "windowsToAscii.h"
 #include "jsonWrite.h"
+#include "verbose.h"
+#include "genark.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -899,12 +901,11 @@ if (stats && dyMessage)
                        atLeast, stats->binaryCount);
     if (stats->weirdCharsCount)
         dyStringPrintf(dyMessage,
-                       "%s%d setting names contained unexpected characters, for example '%s'.  ",
-                       atLeast, stats->weirdCharsCount, htmlEncode(stats->weirdCharsExample));
+                       "%s%d setting names contained unexpected characters.  ",
+                       atLeast, stats->weirdCharsCount);
     if (stats->dataCount)
-        dyStringPrintf(dyMessage, "%s%d lines appeared to be custom track data, for example "
-                       "a line begins with '%s'.  ",
-                       atLeast, stats->dataCount, stats->dataExample);
+        dyStringPrintf(dyMessage, "%s%d lines appeared to be custom track data.",
+                       atLeast, stats->dataCount);
     if (stats->varTooLongCount)
         dyStringPrintf(dyMessage, "%s%d setting names were too long (up to %d).  ",
                        atLeast, stats->varTooLongCount, stats->varTooLongLength);
@@ -1394,13 +1395,35 @@ for(; tdb; tdb = tdb->next)
 cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
 }
 
+static void fixUpDb(struct cart *cart)
+// we want to load Genark hubs or error out if db is not available
+{
+char *db = cartOptionalString(cart,"db");
+
+if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
+    return;
+else
+    {
+    char *url = genarkUrl(db);
+
+    if (url != NULL)
+        {
+        cartSetString(cart, "genome", db);
+        cartSetString(cart, "hubUrl", url);
+        cartRemove(cart, "db");
+        }
+    else if (!hDbIsActive(db))
+	errAbort("Can not find database '%s'", db);
+    }
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
 cgiApoptosisSetup();
-if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
+if (cfgOptionBooleanDefault("showEarlyErrors", TRUE))
     errAbortSetDoContentType(TRUE);
 
 if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
@@ -1436,6 +1459,8 @@ safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
+
+fixUpDb(cart); // now is the time to see if someone is loading a Genark hub or specified a bad database.
 
 // I think this is the place to justify old and new values
 cartJustify(cart, oldVars);
@@ -2731,6 +2756,17 @@ if (position != NULL && oldVars != NULL)
     }
 }
 
+static void cartGenericStartup(struct cart *cart) 
+/* generic startup code to initialize settings from the cart when using either -WithHead or -MaybeContent cartShell functions */
+{
+setThemeFromCart(cart);
+googleAnalyticsSetGa4Key();
+
+int verbose = cgiOptionalInt("verbose", -1);
+if (verbose != -1)
+    verboseSetLevel(verbose);
+}
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -2752,8 +2788,7 @@ safef(titlePlus, sizeof(titlePlus), "%s %s %s %s",
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
 
-setThemeFromCart(cart);
-googleAnalyticsSetGa4Key();
+cartGenericStartup(cart);
 
 htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
@@ -2772,7 +2807,9 @@ static void cartEmptyShellMaybeContent(void (*doMiddle)(struct cart *cart), char
  * put in optional hash oldVars. */
 {
 struct cart *cart = cartAndCookieWithHtml(cookieName, exclude, oldVars, doContentType);
-setThemeFromCart(cart);
+
+cartGenericStartup(cart);
+
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }

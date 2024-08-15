@@ -15,7 +15,7 @@ dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
 
         track ncbiRefSeq
-        parent refSeqComposite off
+        parent refSeqComposite on
         color 12,12,120
         shortLabel RefSeq All
         longLabel NCBI RefSeq genes, curated and predicted (NM_*, XM_*, NR_*, XR_*, NP_*, YP_*)
@@ -56,7 +56,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         type bigBed 12 +
         labelFields gene
         skipEmptyFields on
-        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
 
         track ncbiRefSeqPsl
         priority 5
@@ -95,7 +95,6 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         color 12,12,120
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
-        dataVersion 
         priority 7
         baseColorUseCds given
         baseColorDefault genomicCodons

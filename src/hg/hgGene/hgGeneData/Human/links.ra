@@ -49,12 +49,12 @@ idSql select hgncId from kgXref,proteome.hgncXref where kgID = '%s' and geneSymb
 url http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s
 priority 10
 
-name hprd
-shortLabel HPRD
-tables knownToHprd 
-idSql select value from knownToHprd where name = '%s';
-url http://www.hprd.org/protein/%s 
-priority 10
+#name hprd
+#shortLabel HPRD
+#tables knownToHprd 
+#idSql select value from knownToHprd where name = '%s';
+#url http://www.hprd.org/protein/%s 
+#priority 10
 
 name reactome
 shortLabel Reactome
@@ -127,7 +127,7 @@ name malacards
 shortLabel Malacards
 tables knownToMalacards
 idSql select knownToMalacards.value from kgXref, knownToMalacards where kgID = '%s' and kgXref.geneSymbol = knownToMalacards.value
-url http://malacards.org/search/results/%s
+url http://malacards.org/search/results?q=%s
 priority 10
 
 name hgGeneGraph
@@ -145,3 +145,9 @@ idSql select value from knownToMyGene2 where name = '%s'
 url https://mygene2.org/MyGene2/variantsbygene?gene=%s
 priority 10
 
+name orcs
+shortLabel BioGrid CRISPR DB
+tables kgXref hgFixed.refLink
+idSql select hgFixed.refLink.locusLinkId from kgXref,hgFixed.refLink where kgID = '%s' and kgXref.refseq = hgFixed.refLink.mrnaAcc
+url https://orcs.thebiogrid.org/Gene/%s
+priority 12
