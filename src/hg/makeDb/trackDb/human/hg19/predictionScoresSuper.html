@@ -8,7 +8,12 @@ scores.</p>
 <p>BayesDel is a deleteriousness meta-score for coding and non-coding variants, single nucleotide
 variants, and small insertion/deletions. The range of the score is from -1.29334 to 0.75731.
 The higher the score, the more likely the variant is pathogenic.</p>
-
+<p>
+MaxAF stands for maximum allele frequency. The old ACMG (American College of Medical Genetics and
+Genomics) rules utilize allele frequency to classify variants, so the "BayesDel without MaxAF"
+tracks were created to avoid double-dipping. However, new ACMG rules will not include allele
+frequency, so it is okay to use the "BayesDel with MaxAF" for variant classification in the future.
+For gene discovery research, it is better to use BayesDel with MaxAF.</p>
 <p>
 For gene discovery research, a universal cutoff value (0.0692655 with MaxAF, -0.0570105 without
 MaxAF) was obtained by maximizing sensitivity and specificity in classifying ClinVar variants;
