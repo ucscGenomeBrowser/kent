@@ -26,7 +26,8 @@
 #define DEFAULT_MAX_LABEL_BASECOUNT 200000
 #define MAX_LABEL_BASECOUNT_VAR "maxLabelBases"
 
-struct trackDb *getTdbForDecorator(struct trackDb *tdb)
+
+struct trackDb *getTdbForDecorator(struct trackDb *tdb, char *prefix)
 /* Gin up a fake tdb structure to pretend decorator settings are for
  * their own track.  This makes processing filter options much
  * easier. */
@@ -34,13 +35,17 @@ struct trackDb *getTdbForDecorator(struct trackDb *tdb)
 struct trackDb *new = NULL;
 AllocVar(new);
 struct dyString *raString = dyStringNew(0);
-struct slName *decoratorSettings = trackDbSettingsWildMatch(tdb, "decorator.default.*");
+char decPrefix[2048];
+safef(decPrefix, sizeof(decPrefix), "decorator.%s.*", prefix);
+struct slName *decoratorSettings = trackDbSettingsWildMatch(tdb, decPrefix);
 struct slName *thisSet = decoratorSettings;
+
+safef(decPrefix, sizeof(decPrefix), "decorator.%s.", prefix);
 while (thisSet != NULL)
     {
-    if (startsWith("decorator.default.", thisSet->name))
+    if (startsWith(decPrefix, thisSet->name))
         {
-        char *newName = thisSet->name + strlen("decorator.default.");
+        char *newName = thisSet->name + strlen(decPrefix);
         dyStringPrintf(raString, "\n%s %s", newName, trackDbSetting(tdb, thisSet->name));
         }
     thisSet = thisSet->next;
@@ -50,7 +55,7 @@ new->type = cloneString("bigBed");
 new->parent = NULL;
 new->settingsHash = NULL;
 new->isNewFilterHash = NULL;
-struct dyString *trackName = dyStringCreate("%s.decorator.default", tdb->track);
+struct dyString *trackName = dyStringCreate("%s.decorator.%s", tdb->track, prefix);
 new->track = dyStringCannibalize(&trackName);
 trackDbHashSettings(new);
 
@@ -59,9 +64,48 @@ trackDbHashSettings(new);
 return new;
 }
 
+struct trackDb *getTdbsForDecorators(struct trackDb *tdb)
+/* Generate a list of faked-up trackDb structures for each of the decorators listed
+ * in the provided track.
+ */
+{
+struct trackDb *decTdbs = NULL;
+struct slName *decoratorSettings = trackDbSettingsWildMatch(tdb, "decorator.*");
+struct slName *decoratorNames = NULL;
+for (struct slName *thisSetting = decoratorSettings; thisSetting != NULL; thisSetting = thisSetting->next)
+    {
+    char *decoratorName = cloneString(strchr(thisSetting->name, '.')+1);
+    char *nameEnd = strchr(decoratorName, '.');
+    if (nameEnd != NULL)
+        {
+        nameEnd[0] = '\0';
+        // slNameStore isn't especially efficient, but we don't anticipate a huge number of
+        // decorators for any one track.  If that's wrong, swap this to a hash and pull the
+        // keys afterward.
+        slNameStore(&decoratorNames, decoratorName);
+        }
+    else
+        {
+        warn("Invalid decorator setting %s in track %s", thisSetting->name, tdb->track);
+        }
+    }
 
+//slReverse(&decoratorNames);
+// decoratorNames is now a list of the various decorator names, so we just iterate and make a tdb for each
+for (struct slName *thisName = decoratorNames; thisName != NULL; thisName = thisName->next)
+    {
+    struct trackDb *new = getTdbForDecorator(tdb, thisName->name);
+    slAddHead(&decTdbs, new);
+    }
+// Right now the double reverse cancels out and the decorator tdbs are provided in the order
+// they came out of the settings.  This could change if we replace slNameStore.
+//slReverse(&decTdbs);
+return decTdbs;
+}
 void decoratorUi(struct trackDb *tdb, struct cart *cart, struct slName *decoratorSettings)
-/* decoratorSettings is a list of the decorator-relevant trackDb settings for this track.
+/* decoratorSettings is expected to be a list of the decorator-relevant trackDb settings
+ * for this track (i.e. anything starting with "decorator."), which might compass settings
+ * for multiple decorators.
  * Right now it's populated by including parent settings; that might be a bad idea.
  * We'll see.
  */
@@ -80,47 +124,56 @@ printf("<p>Decorators are optional sub-annotations shown in addition to the rect
 // have to be paired with skipping the load of those data types (for pathological cases),
 // but if your decorator has no glyphs, why should we display a config box for them?
 
-struct trackDb *mockTdbForDecorator = getTdbForDecorator(tdb);
+struct trackDb *mockTdbsForDecorators = getTdbsForDecorators(tdb);
 
 char *menuOpt[] = {HIDE_MODE_STR, OVERLAY_MODE_STR, ADJACENT_MODE_STR};
 
-printf("<b>Block</b> decoration placement:&nbsp");
-safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, BLOCK_DISPLAY_VAR);
-char *currentBlockMode = cartNonemptyString(cart, cartVar);
-if (currentBlockMode == NULL)
-    currentBlockMode = BLOCK_DISPLAY_DEFAULT; // can pass through trackDbSetting first later for creator config
-cgiMakeDropList(cartVar, menuOpt, 3, currentBlockMode);
-
-safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, OVERLAY_BLOCK_LABEL_TOGGLE_VAR);
-boolean checkBoxStatus = decoratorUiShowOverlayLabels(mockTdbForDecorator, cart);
-printf("\ninclude labels in overlay mode:&nbsp;&nbsp;");
-cgiMakeCheckBoxWithMsg(cartVar, checkBoxStatus, "Draw labels for blocks in overlay mode");
-printf("<br>&nbsp;&nbsp;Auto-hide labels when window is larger than ");
-long currentMaxBase = decoratorUiMaxLabeledBaseCount(mockTdbForDecorator, cart);
-safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, MAX_LABEL_BASECOUNT_VAR);
-cgiMakeIntVar(cartVar, currentMaxBase, 9);
-printf("bp\n");
-
-printf("<br>\n");
-printf("<b>Glyph</b> decoration placement:&nbsp");
-safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, GLYPH_DISPLAY_VAR);
-char *currentGlyphMode = cartNonemptyString(cart, cartVar);
-if (currentGlyphMode == NULL)
-    currentGlyphMode = GLYPH_DISPLAY_DEFAULT; // can pass through trackDbSetting first later for creator config
-cgiMakeDropList(cartVar, menuOpt, 3, currentGlyphMode);
-printf("<br>\n");
-
-char decoratorName[2048];
-safef(decoratorName, sizeof(decoratorName), "%s.decorator.default", tdb->track);
-filterBy_t *filterBySet = filterBySetGet(mockTdbForDecorator, cart, decoratorName);
-
-if (filterBySet != NULL)
+for (struct trackDb *mockTdbForDecorator = mockTdbsForDecorators;
+        mockTdbForDecorator != NULL;
+        mockTdbForDecorator = mockTdbForDecorator->next)
     {
-    if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
-        jsIncludeFile("hui.js",NULL);
+    printf("<b>Block</b> decoration placement:&nbsp");
+    decoratorMode currentBlockMode = decoratorDrawMode(mockTdbForDecorator, cart, DECORATION_STYLE_BLOCK);
+    char *modeStr = HIDE_MODE_STR;
+    if (currentBlockMode == DECORATOR_MODE_OVERLAY)
+        modeStr = OVERLAY_MODE_STR;
+    else if (currentBlockMode == DECORATOR_MODE_ADJACENT)
+        modeStr = ADJACENT_MODE_STR;
+    cgiMakeDropList(cartVar, menuOpt, 3, modeStr);
 
-    filterBySetCfgUi(cart,mockTdbForDecorator,filterBySet,TRUE, decoratorName);
-    filterBySetFree(&filterBySet);
+    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, OVERLAY_BLOCK_LABEL_TOGGLE_VAR);
+    boolean checkBoxStatus = decoratorUiShowOverlayLabels(mockTdbForDecorator, cart);
+    printf("\ninclude labels in overlay mode:&nbsp;&nbsp;");
+    cgiMakeCheckBoxWithMsg(cartVar, checkBoxStatus, "Draw labels for blocks in overlay mode");
+    printf("<br>&nbsp;&nbsp;Auto-hide labels when window is larger than ");
+    long currentMaxBase = decoratorUiMaxLabeledBaseCount(mockTdbForDecorator, cart);
+    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, MAX_LABEL_BASECOUNT_VAR);
+    cgiMakeIntVar(cartVar, currentMaxBase, 9);
+    printf("bp\n");
+
+    printf("<br>\n");
+    printf("<b>Glyph</b> decoration placement:&nbsp");
+
+    decoratorMode currentGlyphMode = decoratorDrawMode(mockTdbForDecorator, cart, DECORATION_STYLE_GLYPH);
+    modeStr = HIDE_MODE_STR;
+    if (currentGlyphMode == DECORATOR_MODE_OVERLAY)
+        modeStr = OVERLAY_MODE_STR;
+    else if (currentGlyphMode == DECORATOR_MODE_ADJACENT)
+        modeStr = ADJACENT_MODE_STR;
+    cgiMakeDropList(cartVar, menuOpt, 3, modeStr);
+
+    printf("<br>\n");
+
+    filterBy_t *filterBySet = filterBySetGet(mockTdbForDecorator, cart, mockTdbForDecorator->track);
+
+    if (filterBySet != NULL)
+        {
+        if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
+            jsIncludeFile("hui.js",NULL);
+
+        filterBySetCfgUi(cart,mockTdbForDecorator,filterBySet,TRUE, mockTdbForDecorator->track);
+        filterBySetFree(&filterBySet);
+        }
     }
 }
 

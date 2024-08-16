@@ -205,6 +205,33 @@ priority 10
 dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadV4.1
 
+track gnomadStructuralVariants
+parent gnomadVariants on
+bigDataUrl /gbdb/hg38/gnomAD/v4/structuralVariants/gnomad.v4.1.sv.non_neuro_controls.sites.bb
+shortLabel gnomAD Structural Variants
+longLabel Genome Aggregation Database (gnomAD) - Structural Variants v4
+dataVersion Release 4.0 (November 01, 2023)
+type bigBed 9 +
+itemRgb on
+visibility dense
+url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r4
+urlLabel gnomAD Structural Variant Browser
+filter.af_non_neuro 0:1
+filterByRange.af_non_neuro on
+filterLimits.af_non_neuro 0:1
+filterLabel.af_non_neuro Filter by non-neurological allele frequency
+filter.af_controls 0:1
+filterByRange.af_controls on
+filterLimits.af_controls 0:1
+filterLabel.af_controls Filter by common disease control allele frequency
+filterLabel.svtype Type of Variation
+filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+filter.svlen 50:199840172
+filterByRange.svlen on
+filterLabel.svlen Filter by Variant Size
+mouseOverField _mouseOver
+html gnomadSv.html
+
 searchTable pliByTranscript
 searchType bigBed
 searchDescription gnomAD Loss of Function Metrics by Transcript

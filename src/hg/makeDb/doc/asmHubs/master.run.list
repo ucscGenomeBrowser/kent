@@ -122,6 +122,7 @@
 ./runBuild GCA_000787875.1_SME_r2.5.1 plants Solanum_melongena
 ./runBuild GCA_000831365.1_hl_SW_version_1.0.fasta plants Humulus_lupulus_var._lupulus
 ./runBuild GCA_000844025.1_ViralProj14465 viral Equid_alphaherpesvirus_1
+./runBuild GCA_000845665.1_ViralProj14458 viral Murid_gammaherpesvirus_4
 ./runBuild GCA_000845685.2_ViralProj14462 viral Human_betaherpesvirus_6A
 ./runBuild GCA_000847005.2_ViralProj14566 viral Gallid_alphaherpesvirus_1
 ./runBuild GCA_000934455.1_Ppar_1.0 invertebrate Apostichopus_parvimensis

@@ -75,9 +75,10 @@
 #define argJsonOutputArrays	"jsonOutputArrays"
 #define argCategories "categories"
 #define argSearchTerm "search"
+/* used in findGenome */
 #define argGenomeSearchTerm "genomeSearch"
-#define argAllowAll "allowAll"
 #define argStatsOnly "statsOnly"
+#define argBrowser "browser"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
