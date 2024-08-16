@@ -133,11 +133,13 @@ for (struct trackDb *mockTdbForDecorator = mockTdbsForDecorators;
         mockTdbForDecorator = mockTdbForDecorator->next)
     {
     printf("<b>Block</b> decoration placement:&nbsp");
-    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, BLOCK_DISPLAY_VAR);
-    char *currentBlockMode = cartNonemptyString(cart, cartVar);
-    if (currentBlockMode == NULL)
-        currentBlockMode = BLOCK_DISPLAY_DEFAULT; // can pass through trackDbSetting first later for creator config
-    cgiMakeDropList(cartVar, menuOpt, 3, currentBlockMode);
+    decoratorMode currentBlockMode = decoratorDrawMode(mockTdbForDecorator, cart, DECORATION_STYLE_BLOCK);
+    char *modeStr = HIDE_MODE_STR;
+    if (currentBlockMode == DECORATOR_MODE_OVERLAY)
+        modeStr = OVERLAY_MODE_STR;
+    else if (currentBlockMode == DECORATOR_MODE_ADJACENT)
+        modeStr = ADJACENT_MODE_STR;
+    cgiMakeDropList(cartVar, menuOpt, 3, modeStr);
 
     safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, OVERLAY_BLOCK_LABEL_TOGGLE_VAR);
     boolean checkBoxStatus = decoratorUiShowOverlayLabels(mockTdbForDecorator, cart);
@@ -151,15 +153,17 @@ for (struct trackDb *mockTdbForDecorator = mockTdbsForDecorators;
 
     printf("<br>\n");
     printf("<b>Glyph</b> decoration placement:&nbsp");
-    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, GLYPH_DISPLAY_VAR);
-    char *currentGlyphMode = cartNonemptyString(cart, cartVar);
-    if (currentGlyphMode == NULL)
-        currentGlyphMode = GLYPH_DISPLAY_DEFAULT; // can pass through trackDbSetting first later for creator config
-    cgiMakeDropList(cartVar, menuOpt, 3, currentGlyphMode);
+
+    decoratorMode currentGlyphMode = decoratorDrawMode(mockTdbForDecorator, cart, DECORATION_STYLE_GLYPH);
+    modeStr = HIDE_MODE_STR;
+    if (currentGlyphMode == DECORATOR_MODE_OVERLAY)
+        modeStr = OVERLAY_MODE_STR;
+    else if (currentGlyphMode == DECORATOR_MODE_ADJACENT)
+        modeStr = ADJACENT_MODE_STR;
+    cgiMakeDropList(cartVar, menuOpt, 3, modeStr);
+
     printf("<br>\n");
 
-    char decoratorName[2048];
-    safef(decoratorName, sizeof(decoratorName), "%s.decorator.default", tdb->track);
     filterBy_t *filterBySet = filterBySetGet(mockTdbForDecorator, cart, mockTdbForDecorator->track);
 
     if (filterBySet != NULL)
