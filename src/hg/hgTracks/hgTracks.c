@@ -7746,65 +7746,67 @@ return 0;
 
 
 void loadDecorators(struct track *track)
-/* Load decorations from a source (file) and put them in a decorator, then add that
- * decorator to the list of the track's decorators.  Within the new decorator, each
+/* Load decorations from a source (file) and put them into decorators, then add those
+ * decorators to the list of the track's decorators.  Within the new decorators, each
  * of the decorations should have been entered into a hash table that is indexed by the
  * name of the linked feature.  That way when we're drawing the linked feature, we'll
  * be able to quickly locate the associated decorations.
- *
- * Note that this will need amendment when multiple decoration sources are possible.
  */
 {
-char *decoratorUrl = trackDbSetting(track->tdb, "decorator.default.bigDataUrl");
-if (!decoratorUrl)
+struct trackDb *decoratorTdbs = getTdbsForDecorators(track->tdb);
+for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
+        decoratorTdb = decoratorTdb->next)
     {
-    errAbort ("Decorator tags are present in track %s, but no decorator file specified (decorator.default.bigDataUrl is missing)",
-            track->track);
-    return;
+    char *decoratorUrl = trackDbSetting(decoratorTdb, "bigDataUrl");
+    if (!decoratorUrl)
+        {
+        warn ("Decorator tags are present as %s, but no decorator file specified (bigDataUrl is missing)",
+                decoratorTdb->track);
+        continue;
+        }
+
+    struct bbiFile *bbi = NULL;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        if (isValidBigDataUrl(decoratorUrl,TRUE))
+            bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        warn ("Network error while attempting to retrieve decorations from %s (track %s) - %s",
+                decoratorUrl, track->track, dyStringContents(errCatch->message));
+        continue;
+        }
+    errCatchFree(&errCatch);
+
+    struct asObject *decoratorFileAsObj = asParseText(bigBedAutoSqlText(bbi));
+    if (!asColumnNamesMatchFirstN(decoratorFileAsObj, decorationAsObj(), DECORATION_NUM_COLS))
+        {
+        warn ("Decoration file associated with track %s (%s) does not match the expected format - see decoration.as",
+                track->track, decoratorUrl);
+        continue;
+        }
+
+    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, decoratorTdb);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *result = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+
+    struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
+
+    // insert resulting entries into track->decorators, leaving room for having multiple sources applied
+    // to the same track in the future.
+    if (track->decoratorGroup == NULL)
+        track->decoratorGroup = newDecoratorGroup();
+
+    struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
+    track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
+    for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
+        d->group = track->decoratorGroup;
+    lmCleanup(&lm);
+    bigBedFileClose(&bbi);
     }
-
-struct bbiFile *bbi = NULL;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    if (isValidBigDataUrl(decoratorUrl,TRUE))
-        bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    errAbort ("Network error while attempting to retrieve decorations from %s (track %s) - %s",
-            decoratorUrl, track->track, dyStringContents(errCatch->message));
-    return;
-    }
-errCatchFree(&errCatch);
-
-struct asObject *decoratorFileAsObj = asParseText(bigBedAutoSqlText(bbi));
-if (!asColumnNamesMatchFirstN(decoratorFileAsObj, decorationAsObj(), DECORATION_NUM_COLS))
-    {
-    errAbort ("Decoration file associated with track %s (%s) does not match the expected format - see decoration.as",
-            track->track, decoratorUrl);
-    return;
-    }
-
-struct trackDb *decoratorTdb = getTdbForDecorator(track->tdb);
-struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, decoratorTdb);
-struct lm *lm = lmInit(0);
-struct bigBedInterval *result = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
-
-struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
-
-// insert resulting entries into track->decorators, leaving room for having multiple sources applied
-// to the same track in the future.
-if (track->decoratorGroup == NULL)
-    track->decoratorGroup = newDecoratorGroup();
-
-struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
-track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
-for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
-    d->group = track->decoratorGroup;
-lmCleanup(&lm);
-bigBedFileClose(&bbi);
 }
 
 static void *remoteParallelLoad(void *threadParam)
