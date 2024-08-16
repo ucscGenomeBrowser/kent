@@ -4474,14 +4474,22 @@ void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
 		  filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the filter UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All", prefix, FALSE);
+char selectIdPrefix[4096];
+safef(selectIdPrefix, sizeof(selectIdPrefix), "fbc_%s", prefix);
+// Our checklists use ddcl.js, which doesn't seem to play nicely when elements have id strings that include '.'
+replaceChar(selectIdPrefix, '.', '_');
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", selectIdPrefix, "All", prefix, FALSE);
 }
 
 void highlightBySetCfgUi(struct cart *cart, struct trackDb *tdb,
 		     filterBy_t *filterBySet, boolean onOneLine, char *prefix, boolean isHighlight)
 /* Does the highlight UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None", prefix, TRUE);
+char selectIdPrefix[4096];
+safef(selectIdPrefix, sizeof(selectIdPrefix), "hbc_%s", prefix);
+// Our checklists use ddcl.js, which doesn't seem to play nicely when elements have id strings that include '.'
+replaceChar(selectIdPrefix, '.', '_');
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", selectIdPrefix, "None", prefix, TRUE);
 }
 
 #define COLOR_BG_DEFAULT_IX     0
