@@ -77,7 +77,6 @@
 #define argSearchTerm "search"
 /* used in findGenome */
 #define argGenomeSearchTerm "genomeSearch"
-#define argAllowAll "allowAll"
 #define argStatsOnly "statsOnly"
 #define argBrowser "browser"
 

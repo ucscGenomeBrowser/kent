@@ -22,7 +22,6 @@ struct combinedSummary
 static char *genarkTable = NULL;
 static char *asmListTable = NULL;
 static boolean statsOnly = FALSE;
-static boolean allowAll = FALSE;	/* default only show existing browsers*/
 /* these three are radio button states, only one of these three can be TRUE */
 static boolean browserMustExist = TRUE;	/* default: browser must exist */
 static boolean browserMayExist = FALSE;
@@ -124,7 +123,7 @@ if (matchCount > 0)
 return itemCount;
 }
 
-static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, long long *totalMatchCount)
+static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, long long *totalMatchCount, boolean *prefixSearch)
 /* perform search on a single word, prepare json and return number of matches
  *   and number of potential matches totalMatchCount
  */
@@ -140,7 +139,7 @@ else if (browserNotExist)
     sqlDyStringPrintf(query, " AND browserExists=0");
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
-boolean prefixSearch = FALSE;
+*prefixSearch = FALSE;	/* assume not */
 if (matchCount < 1)	/* no match, add the * wild card match to make a prefix match */
     {
     dyStringFree(&query);
@@ -153,7 +152,7 @@ if (matchCount < 1)	/* no match, add the * wild card match to make a prefix matc
 	sqlDyStringPrintf(query, " AND browserExists=0");
     matchCount = sqlQuickLongLong(conn, query->string);
     if (matchCount > 0)
-	prefixSearch = TRUE;
+	*prefixSearch = TRUE;
     }
 if (matchCount < 1)	// nothing found, returning zero
     return itemCount;
@@ -168,7 +167,7 @@ else
     dyStringFree(&query);
     query = dyStringNew(64);
 
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, prefixSearch ? "*" : "");
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, *prefixSearch ? "*" : "");
     /* add specific browserExists depending upon options */
     if (browserMustExist)
 	sqlDyStringPrintf(query, " AND browserExists=1");
@@ -182,7 +181,7 @@ else
     }
 
 return itemCount;
-}	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw) */
+}	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, boolean *prefixSearch) */
 
 static void elapsedTime(struct jsonWrite *jw)
 {
@@ -196,6 +195,7 @@ void apiFindGenome(char *pathString[MAX_PATH_INFO])
 {
 char *searchString = cgiOptionalString(argGenomeSearchTerm);
 char *inputSearchString = cloneString(searchString);
+boolean prefixSearch = FALSE;
 char *extraArgs = verifyLegalArgs(argFindGenome);
 genarkTable = genarkTableName();
 asmListTable = assemblyListTableName();
@@ -239,16 +239,6 @@ if (isNotEmpty(browserExistString))
      else
 	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, must be one of: mustExist, mayExist or notExist", argBrowser, browserExistString);
     }
-char *allowAllString = cgiOptionalString(argAllowAll);
-if (isNotEmpty(allowAllString))
-    {
-    if (SETTING_IS_ON(allowAllString))
-	allowAll = TRUE;
-    else if (SETTING_IS_OFF(allowAllString))
-	allowAll = FALSE;
-    else
-	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, can only be =1 or =0", argAllowAll, allowAllString);
-    }
 
 char *statsOnlyString = cgiOptionalString(argStatsOnly);
 if (isNotEmpty(statsOnlyString))
@@ -278,10 +268,7 @@ apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 
 
 struct jsonWrite *jw = apiStartOutput();
 
-jsonWriteString(jw, argGenomeSearchTerm, searchString);
 jsonWriteString(jw, argBrowser, browserExistString);
-if (allowAll)
-	jsonWriteBoolean(jw, argAllowAll, allowAll);
 
 long long itemCount = 0;
 long long totalMatchCount = 0;
@@ -289,9 +276,18 @@ char **words;
 AllocArray(words, wordCount);
 (void) chopByWhite(searchString, words, wordCount);
 if (1 == wordCount)
-    itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount);
+    itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
 else	/* multiple word search */
     itemCount = multipleWordSearch(conn, words, wordCount, jw, &totalMatchCount);
+
+if (prefixSearch)
+    {
+    struct dyString *addedStar = dyStringNew(64);
+    dyStringPrintf(addedStar, "%s*", inputSearchString);
+    jsonWriteString(jw, argGenomeSearchTerm, dyStringCannibalize(&addedStar));
+    }
+else
+    jsonWriteString(jw, argGenomeSearchTerm, inputSearchString);
 
 /* rules about what can be in the search string:
  *  + sign before a word indicates the word must be in the result
@@ -306,6 +302,11 @@ else	/* multiple word search */
  *  | OR operator 'thisWord | otherWord'
  */
 
+struct dyString *query = dyStringNew(64);
+sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s", asmListTable);
+long long universeCount = sqlQuickLongLong(conn, query->string);
+dyStringFree(&query);
+
 elapsedTime(jw);
 if (statsOnly)
     jsonWriteBoolean(jw, "statsOnly", TRUE);
@@ -313,6 +314,7 @@ if (itemCount)
     {
     jsonWriteNumber(jw, "itemCount", itemCount);
     jsonWriteNumber(jw, "totalMatchCount", totalMatchCount);
+    jsonWriteNumber(jw, "availableAssemblies", universeCount);
     if (totalMatchCount > itemCount)
 	jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
     apiFinishOutput(0, NULL, jw);
