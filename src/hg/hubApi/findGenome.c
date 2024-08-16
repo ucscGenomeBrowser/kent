@@ -23,6 +23,10 @@ static char *genarkTable = NULL;
 static char *asmListTable = NULL;
 static boolean statsOnly = FALSE;
 static boolean allowAll = FALSE;	/* default only show existing browsers*/
+/* these three are radio button states, only one of these three can be TRUE */
+static boolean browserMustExist = TRUE;	/* default: browser must exist */
+static boolean browserMayExist = FALSE;
+static boolean browserNotExist = FALSE;
 
 /*
 hgsql -e 'desc assemblyList;' hgcentraltest
@@ -84,10 +88,14 @@ dyStringPrintf(queryDy, "%s", words[0]);
 for (int i = 1; i < wordCount; ++i)
     dyStringPrintf(queryDy, " %s", words[i]);
 
+/* initial SELECT allows any browser exist status, existing or not */
 struct dyString *query = dyStringNew(64);
 sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
-if (!allowAll)
+/* add specific browserExists depending upon options */
+if (browserMustExist)
     sqlDyStringPrintf(query, " AND browserExists=1");
+else if (browserNotExist)
+    sqlDyStringPrintf(query, " AND browserExists=0");
 long long matchCount = sqlQuickLongLong(conn, query->string);
 if (matchCount > 0)
     {
@@ -101,8 +109,11 @@ if (matchCount > 0)
 	dyStringFree(&query);
 	query = dyStringNew(64);
 	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
-	if (!allowAll)
+	/* add specific browserExists depending upon options */
+	if (browserMustExist)
 	    sqlDyStringPrintf(query, " AND browserExists=1");
+	else if (browserNotExist)
+	    sqlDyStringPrintf(query, " AND browserExists=0");
 	sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
 	struct sqlResult *sr = sqlGetResult(conn, query->string);
 	itemCount = sqlJsonOut(jw, sr);
@@ -123,8 +134,10 @@ long long itemCount = 0;
 
 struct dyString *query = dyStringNew(64);
 sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
-if (!allowAll)
+if (browserMustExist)
     sqlDyStringPrintf(query, " AND browserExists=1");
+else if (browserNotExist)
+    sqlDyStringPrintf(query, " AND browserExists=0");
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
 boolean prefixSearch = FALSE;
@@ -133,8 +146,11 @@ if (matchCount < 1)	/* no match, add the * wild card match to make a prefix matc
     dyStringFree(&query);
     query = dyStringNew(64);
     sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
-    if (!allowAll)
-        sqlDyStringPrintf(query, " AND browserExists=1");
+    /* add specific browserExists depending upon options */
+    if (browserMustExist)
+	sqlDyStringPrintf(query, " AND browserExists=1");
+    else if (browserNotExist)
+	sqlDyStringPrintf(query, " AND browserExists=0");
     matchCount = sqlQuickLongLong(conn, query->string);
     if (matchCount > 0)
 	prefixSearch = TRUE;
@@ -153,8 +169,11 @@ else
     query = dyStringNew(64);
 
     sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, prefixSearch ? "*" : "");
-    if (!allowAll)
-    sqlDyStringPrintf(query, " AND browserExists=1");
+    /* add specific browserExists depending upon options */
+    if (browserMustExist)
+	sqlDyStringPrintf(query, " AND browserExists=1");
+    else if (browserNotExist)
+	sqlDyStringPrintf(query, " AND browserExists=0");
     sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
     struct sqlResult *sr = sqlGetResult(conn, query->string);
     itemCount = sqlJsonOut(jw, sr);
@@ -196,12 +215,36 @@ boolean genArkExists = hTableExists("hgcentraltest", genarkTable);
 if (!genArkExists)
     apiErrAbort(err400, err400Msg, "table hgcentraltest.%s does not exist for /findGenome", genarkTable);
 
+char *browserExistString = cgiOptionalString(argBrowser);
+if (isNotEmpty(browserExistString))
+    {	/* from radio buttons, only one can be on */
+    if (sameWord(browserExistString, "mustExist"))
+	{
+	browserMustExist = TRUE;	/* default: browser must exist */
+        browserMayExist = FALSE;
+        browserNotExist = FALSE;
+	}
+    else if (sameWord(browserExistString, "mayExist"))
+	{
+	browserMustExist = FALSE;
+        browserMayExist = TRUE;
+        browserNotExist = FALSE;
+	}
+    else if (sameWord(browserExistString, "notExist"))
+	{
+	browserMustExist = FALSE;
+        browserMayExist = FALSE;
+        browserNotExist = TRUE;
+	}
+     else
+	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, must be one of: mustExist, mayExist or notExist", argBrowser, browserExistString);
+    }
 char *allowAllString = cgiOptionalString(argAllowAll);
 if (isNotEmpty(allowAllString))
     {
-    if (sameString("1", allowAllString))
+    if (SETTING_IS_ON(allowAllString))
 	allowAll = TRUE;
-    else if (sameString("0", allowAllString))
+    else if (SETTING_IS_OFF(allowAllString))
 	allowAll = FALSE;
     else
 	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, can only be =1 or =0", argAllowAll, allowAllString);
@@ -210,9 +253,9 @@ if (isNotEmpty(allowAllString))
 char *statsOnlyString = cgiOptionalString(argStatsOnly);
 if (isNotEmpty(statsOnlyString))
     {
-    if (sameString("1", statsOnlyString))
+    if (SETTING_IS_ON(statsOnlyString))
 	statsOnly = TRUE;
-    else if (sameString("0", statsOnlyString))
+    else if (SETTING_IS_OFF(statsOnlyString))
 	statsOnly = FALSE;
     else
 	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, can only be =1 or =0", argStatsOnly, statsOnlyString);
@@ -236,6 +279,7 @@ apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 
 struct jsonWrite *jw = apiStartOutput();
 
 jsonWriteString(jw, argGenomeSearchTerm, searchString);
+jsonWriteString(jw, argBrowser, browserExistString);
 if (allowAll)
 	jsonWriteBoolean(jw, argAllowAll, allowAll);
 
