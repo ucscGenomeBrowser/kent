@@ -666,8 +666,7 @@ include encode3.ra
 include hic.ra
 
 include gnomad.ra public
-include gnomad.alpha.ra beta
-include gnomadSv.alpha.ra alpha
+include gnomad.alpha.ra alpha
 
 
 include platinumGenomes.ra
