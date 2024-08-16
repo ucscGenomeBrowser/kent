@@ -164,7 +164,8 @@
             buttons: [ tutorialButtons.back, {
                          text: 'Next',
                          action: function() {
-                             showPopup();
+                             const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
+                             rtsMenuItem.click();
                              clinicalTour.next();
                              }
                       }],
@@ -184,7 +185,8 @@
                   'Each available track set loads a display curated to the specific theme. '+
                   'The <b>Clinical SNVs</b> and <b>Clinical CNVs</b> track sets are '+
                   'routinely updated to include existing and new annotations available on the '+
-                  'Genome Browser used in variant interpretation according to ACMG/AMP guidelines.'+
+                  'Genome Browser used in variant interpretation according to ACMG/AMP '+
+                  'and ClinGen guidelines.'+
                   '<br><br>'+
                   'To use these track sets as your default view, bookmark these links:'+
                   '<ul>'+
@@ -238,6 +240,10 @@
                   '  <li><a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator</a>:'+
                   '      Provides effect prediction and annotation associations for '+
                   '      variant calls.</li>'+
+                  '  <li><a href="/cgi-bin/hgConvert" target="_blank">View in other Genomes '+
+                  '      (Convert)</a>: The Genome Browser Convert utility is useful for locating'+
+                  '      the position of a feature of interest in a different release of the same'+
+                  '      genome or (in some cases) in a genome assembly of another species.'+
                   '  <li><a href="/cgi-bin/hgSession" target="_blank">Sessions</a>: Allows you to '+
                   '      save your own pre-configured displays and create stable links.</li>'+
                   '  <li><a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track'+
