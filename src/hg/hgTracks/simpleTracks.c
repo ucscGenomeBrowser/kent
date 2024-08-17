@@ -11563,6 +11563,7 @@ if (!tg->limitedVisSet)
         if ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
             {
             tg->limitWiggle = TRUE;
+            tg->tdb->type = cloneString("wig");
             }
         if ( tg->limitWiggle)   // auto-density coverage is alway tvFull
             {
