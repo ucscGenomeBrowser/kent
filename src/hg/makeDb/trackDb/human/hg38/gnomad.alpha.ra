@@ -6,6 +6,7 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
+cartVersion 6
 html gnomadV4.1
 
     track gnomadVariantsV2

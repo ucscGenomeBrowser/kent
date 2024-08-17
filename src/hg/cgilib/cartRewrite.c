@@ -14,6 +14,7 @@ void cartEdit1(struct cart *cart);
 void cartEdit2(struct cart *cart);
 void cartEdit3(struct cart *cart);
 void cartEdit4(struct cart *cart);
+void cartEdit5(struct cart *cart);
 
 struct cartRewrite
 {
@@ -28,6 +29,7 @@ static struct cartRewrite cartRewrites[] =
 { cartEdit2},
 { cartEdit3},
 { cartEdit4},
+{ cartEdit5},
 };
 
 void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion)
@@ -78,4 +80,14 @@ for(ii = 0; ii < numTracks; ii++)
 
 if (cartTurnOnSuper)
     cartSetString(cart, superTrackName, "show");
+}
+
+void cartMatchVis(struct cart *cart, char *oldTrackName,  char *newTrackName)
+/* Make new track have the same visibility as an old track */
+{
+char *vis = cartOptionalString(cart, oldTrackName);
+
+printf("in cartMatch %s %s %s\n",oldTrackName, newTrackName, vis);
+if (vis)
+    cartSetString(cart, newTrackName, vis);
 }
