@@ -111,7 +111,7 @@
 	<li class="odd"><a href="../conditions.html">Conditions of Use</a></li>
 	<li class="even"><a href="../goldenPath/history.html">Our History</a></li>
 	<li class="odd"><a href="../license/">Licenses</a></li>
-	<li class="even last"><a href="../contacts.html">Contact Us</a></li>
+	<li class="even last" id="aboutContactLink"><a href="../contacts.html">Contact Us</a></li>
 	</ul>
 </li>
 
