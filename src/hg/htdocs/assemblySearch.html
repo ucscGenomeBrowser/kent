@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
-<!--#set var="TITLE" value="prototype assembly search page" -->
-<!--#set var="ROOT" value="../.." -->
+<!--#set var="TITLE" value="Genome Assembly Search" -->
+<!--#set var="ROOT" value="" -->
 
 <!--#include virtual='$ROOT/inc/gbPageStartHardcoded.html' -->
 
-<link rel="stylesheet" type="text/css" href="search.css">
+<link rel="stylesheet" type="text/css" href="<!--#echo var='ROOT' -->/style/assemblySearch.css">
 
     <h1>Assembly search page</h1>
 <hr>
@@ -97,13 +97,12 @@
     </div>
     </hr>
 
-    <!-- Include external JavaScript file -->
-    <script src="/~hiram/genomeSearch/scripts.js"></script>
 
 <hr />
 <!--#include virtual='$ROOT/inc/garModal.html' -->
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
-<script src="sorttable.js"></script>
+<script src="<!--#echo var='ROOT' -->/js/assemblySearch.js"></script>
+<script src="<!--#echo var='ROOT' -->/js/sorttable.js"></script>
 </body></html>

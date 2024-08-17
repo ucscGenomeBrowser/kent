@@ -113,7 +113,7 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     document.getElementById("loadingSpinner").style.display = "block";
 
     var xhr = new XMLHttpRequest();
-    var url = "https://genome-test.gi.ucsc.edu/cgi-bin/hubApi/findGenome?genomeSearch=" + encodeURIComponent(queryString);
+    var url = "/cgi-bin/hubApi/findGenome?genomeSearch=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
 
