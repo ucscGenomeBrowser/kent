@@ -1,0 +1,165 @@
+.fixedHeightTable {
+  max-width: 100%;
+  max-height: 1024px;
+  overflow-y: auto;
+    /* overflow-x: auto; */
+}
+
+.stickyTable {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+}
+
+table {
+  width: 98%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+
+thead th {
+  border: 3px solid black;
+}
+
+.fifthRowHighlight tr:nth-child(5n) th,
+.fifthRowHighlight tr:nth-child(5n) td {
+   background-color: #d3d3d3;
+}
+
+.submitContainer {
+  position: relative;
+  display: inline-block;
+}
+
+/* Spinner styles */
+.spinner {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 5%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    border: 8px solid transparent; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-bottom: 8px solid #9834db; /* light grey */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+/*    border: 8px solid #f3f3f3; light grey
+    border-top: 8px solid #3498db;  blue
+*/
+
+.submitContainer.loading button {
+    opacity: 0.5;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* CSS styles to position radio button groups */
+.radioGroupContainer {
+    display: flex; /* Use flexbox to align items horizontally */
+    gap: 20px; /* Optional: Add space between the two groups */
+    border: 2px solid #000; /* Add a 2px solid black border around the container */
+    padding: 10px; /* Optional: Add padding inside the border */
+}
+
+.radioGroup {
+    display: flex;
+    flex-direction: column; /* Arrange radio buttons vertically */
+}
+
+.radioGroup:last-child {
+    align-items: center;
+    justify-content: flex-end; /* Aligns the radio button and label to the right */
+    margin-left: auto; /* Push the second group to the right */
+}
+
+.formDiv > div, .radioGroupContainer {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.searchtip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background-color: #ccc;
+    color: #008;
+}
+
+.searchtiptext {
+    visibility: hidden;
+    width: 600px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid black;
+    text-align: left;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: -525%; /* Position above the text */
+    left: 50%;
+    /* margin-left: -70px; /* Center the searchtip */
+    margin-left: -600px;
+    transition: opacity 0.3s;
+}
+
+.searchtip:hover .searchtiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+ol.noBullets {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#modalWrapper.overlay::before {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,0.7);
+}
+
+#modalWindow {
+    display: none;
+    z-index: 200;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 460px;
+    height: 80%;
+    overflow: auto;
+    padding: 10px 20px;
+    background: #fff;
+    border: 5px solid #999;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#modalWrapper.overlay #modalWindow {
+    display: block;
+}
+
