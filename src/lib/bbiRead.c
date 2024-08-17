@@ -23,17 +23,23 @@ if (desiredReduction < 0)
    errAbort("bad value %d for desiredReduction in bbiBestZoom", desiredReduction);
 if (desiredReduction <= 1)
     return NULL;
-int closestDiff = BIGNUM;
+unsigned closestDiff = ~0;
 struct bbiZoomLevel *closestLevel = NULL;
 struct bbiZoomLevel *level;
 
 for (level = levelList; level != NULL; level = level->next)
     {
-    int diff = desiredReduction - level->reductionLevel;
-    if (diff >= 0 && diff < closestDiff)
+    if (desiredReduction > level->reductionLevel)
         {
-	closestDiff = diff;
-	closestLevel = level;
+        // I think we could just break here since levels
+        // are sorted in increasing order, but.. maybe they
+        // aren't always, so let's go ahead and look at the other levels
+        unsigned diff = desiredReduction - level->reductionLevel;
+        if (diff < closestDiff)
+            {
+            closestDiff = diff;
+            closestLevel = level;
+            }
 	}
     }
 return closestLevel;
