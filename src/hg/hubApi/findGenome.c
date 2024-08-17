@@ -47,7 +47,7 @@ hgsql -e 'desc assemblyList;' hgcentraltest
 static long long sqlJsonOut(struct jsonWrite *jw, struct sqlResult *sr)
 /* given a sqlResult, walk through the rows and output the json */
 {
-int itemCount = 0;
+long long itemCount = 0;
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -183,11 +183,12 @@ else
 return itemCount;
 }	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, boolean *prefixSearch) */
 
-static void elapsedTime(struct jsonWrite *jw)
+static long elapsedTime(struct jsonWrite *jw)
 {
 long nowTime = clock1000();
 long elapsedTimeMs = nowTime - enteredMainTime;
 jsonWriteNumber(jw, "elapsedTimeMs", elapsedTimeMs);
+return elapsedTimeMs;
 }
 
 void apiFindGenome(char *pathString[MAX_PATH_INFO])
@@ -195,6 +196,7 @@ void apiFindGenome(char *pathString[MAX_PATH_INFO])
 {
 char *searchString = cgiOptionalString(argGenomeSearchTerm);
 char *inputSearchString = cloneString(searchString);
+char *endResultSearchString = NULL;
 boolean prefixSearch = FALSE;
 char *extraArgs = verifyLegalArgs(argFindGenome);
 genarkTable = genarkTableName();
@@ -284,10 +286,14 @@ if (prefixSearch)
     {
     struct dyString *addedStar = dyStringNew(64);
     dyStringPrintf(addedStar, "%s*", inputSearchString);
-    jsonWriteString(jw, argGenomeSearchTerm, dyStringCannibalize(&addedStar));
+    endResultSearchString = dyStringCannibalize(&addedStar);
+    jsonWriteString(jw, argGenomeSearchTerm, endResultSearchString);
     }
 else
+    {
+    endResultSearchString = inputSearchString;
     jsonWriteString(jw, argGenomeSearchTerm, inputSearchString);
+    }
 
 /* rules about what can be in the search string:
  *  + sign before a word indicates the word must be in the result
@@ -307,7 +313,9 @@ sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s", asmListTable);
 long long universeCount = sqlQuickLongLong(conn, query->string);
 dyStringFree(&query);
 
-elapsedTime(jw);
+long elapTimeMs = elapsedTime(jw);
+/* apache error_log recording */
+fprintf(stderr, "findGenome: '%s' found %lld returned %lld in %ld ms\n", endResultSearchString, totalMatchCount, itemCount, elapTimeMs);
 if (statsOnly)
     jsonWriteBoolean(jw, "statsOnly", TRUE);
 if (itemCount)
