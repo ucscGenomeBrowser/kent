@@ -8,9 +8,7 @@
 
     <h1>Assembly search page</h1>
 <hr>
-    <p>When a browser exists, the <b>name</b> column will be a link to
-       that browser.<br>
-       TO BE DONE: when browser doesn't exist: pop-up request form
+    <p><b>TO BE DONE:</b> when browser doesn't exist: pop-up request form
     </p>
     <form id="searchForm">
         <div class="formDiv">
@@ -29,27 +27,11 @@
            <option value="50">50</option>
            <option value="100">100</option>
            <option value="200">200</option>
-           <option value="500">500</option>
+           <option value="500" selected>500</option>
         </select>
-        count</label>
-        </div>
-        <div class="radioGroupContainer">
-           <div class="radioGroup">
-           <label><input type="radio" name="browserExist" value="mustExist" checked>
-              show results only when browser is available
-           </label><br>
-           <label><input type="radio" name="browserExist" value="mayExist">
-              show results when browser is available or assembly can be requested
-           </label><br>
-           <label><input type="radio" name="browserExist" value="notExist">
-              show results only for assemblies that can be requested
-           </label>
-           </div>
-           <div class="radioGroup">
-              <label>may match any word <input type="radio" name="wordMatch" value="anyWord" checked></label>
-              <label>must match all words <input type="radio" name="wordMatch" value="allWords"></label>
-               <span class="searchtip">advanced search tips
-      <span class="searchtiptext">
+        count</label>&nbsp;-
+               <span class="searchTip">advanced search tips
+      <span class="searchTiptext">
 <ol class="noBullets">
 <li> + (plus) sign before <b>+word</b> to force included in result</li>
 <li> - (minus) sign before <b>-word</b> to exclude word from result</li>
@@ -60,6 +42,19 @@
 </ol>
 </span>
                </span>
+        </div>
+        <div class="radioGroupContainer">
+           <div class="radioGroup">
+           <label><input type="checkbox" id="mustExist" name="mustExist" value="mustExist" checked>
+              show assemblies in available browsers
+           </label><br>
+           <label><input type="checkbox" id="notExist" name="notExist" value="notExist" checked>
+              show assemblies that can be requested
+           </label>
+           </div>
+           <div class="radioGroup">
+              <label>may match any word <input type="radio" name="wordMatch" value="anyWord"></label>
+              <label>must match all words <input type="radio" name="wordMatch" value="allWords" checked></label>
            </div>
         </div>
         </div>
@@ -74,18 +69,18 @@
     <hr>
     <table id="dataTable" class="sorttable fifthRowHighlight" style="border: 1px solid black; display:block; max-height: 800px; max-width:1300px; overflow:auto; position:sticky; top:0;">
         <colgroup>
-          <col style="width: 5%">
+          <col style="width: 10%">
           <col style="width: 10%">
           <col style="width: 10%">
           <col style="width: 20%">
           <col style="width: 8%">
-          <col style="width: 47%">
+          <col style="width: 42%">
         </colgroup>
         <thead style="position:sticky; top:0; border:1px solid #ddd; width:100%" id="tableHeader">
-         <tr><th>count</th>
-         <th>name</th>
-         <th>scientificName</th>
-         <th>commonName</th>
+         <tr><th>view/<br>request</th>
+         <th>English common name</th>
+         <th>scientific name</th>
+         <th>assembly</th>
          <th>clade</th>
          <th>description</th>
          </tr>

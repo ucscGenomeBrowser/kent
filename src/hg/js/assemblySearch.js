@@ -12,7 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var searchTerm = document.getElementById('searchBox').value;
         var resultCountLimit = document.getElementById('limitResultCount');
-        var browserExist = document.querySelector('input[name="browserExist"]:checked').value;
+        var browserExist = "mustExist";
+        var mustExist = document.getElementById('mustExist').checked;
+        var notExist = document.getElementById('notExist').checked;
+        if (mustExist && notExist) {
+           browserExist = "mayExist";
+        } else if (notExist) {
+           browserExist = "notExist";
+        }
         var wordMatch = document.querySelector('input[name="wordMatch"]:checked').value;
         makeRequest(searchTerm, browserExist, resultCountLimit.value, wordMatch);
     });
@@ -49,10 +56,10 @@ function populateTableAndInfo(jsonData) {
     //  the last sorted column, need to rebuild the headerRow to get the
     //  header back to pristine condition for the next sort
     var headerRow = '<tr>';
-    headerRow += '<th>count</th>';
-    headerRow += '<th>name</th>';
-    headerRow += '<th>scientificName</th>';
-    headerRow += '<th>commonName</th>';
+    headerRow += '<th>view/<br>request</th>';
+    headerRow += '<th>English common name</th>';
+    headerRow += '<th>scientific name</th>';
+    headerRow += '<th>assembly</th>';
     headerRow += '<th>clade</th>';
     headerRow += '<th>description</th>';
     headerRow += '</tr>';
@@ -61,18 +68,22 @@ function populateTableAndInfo(jsonData) {
     var count = 0;
     for (const id in genomicEntries) {
         var dataRow = '<tr>';
-        dataRow += "<th>" + ++count + "</th>";
-        var urlReference = id;
+        var browserUrl = id;
+        var ncbiUrl = id;
         if (genomicEntries[id].browserExists) {
           if (id.startsWith("GC")) {
-            urlReference = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>" + id + "</a>";
+            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>view</a>";
+            ncbiUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>"
           } else {
-            urlReference = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>" + id + "</a>";
+            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>view</a>";
           }
+          dataRow += "<th>" + browserUrl + "</th>";
+        } else {
+          dataRow += "<th>request</th>";
         }
-        dataRow += "<th>" + urlReference + "</th>";
         dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
+        dataRow += "<th>" + ncbiUrl + "</th>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
         dataRow += '</tr>';
