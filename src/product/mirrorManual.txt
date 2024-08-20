@@ -1363,9 +1363,9 @@ One thing that does not work with GET is "upload file" inputs.
 The Genome Browser is a complicated piece of software of more than 2 million lines of
 code that have been developed over 20 years. There is a risk of bugs and security issues,
 and we take that seriously. At UCSC, we run a security scan on the Genome Browser once a
-month and play close attention to the results. Frequently, however, the scanners complain
+month and pay close attention to the results. Frequently, however, the scanners complain
 about things in the Genome Browser that are not actually problems. The Browser is designed
-for significant flexibility when accessing and sharing data.  As a result, security
+for significant flexibility when accessing and sharing data. As a result, security
 scanners often complain about potential vulnerabilities that are actually intentional
 features:
 
@@ -1389,7 +1389,7 @@ features:
   and anything that the Genome Browser can access may be displayable by any 
   Genome Browser user. For example, if you restrict internal files to access from only the
   Genome Browser IP address, as with most other servers without dedicated security layers,
-  assume that these can be accessed by anyone who is using the browser. We strongly advise
+  assume that these can be accessed by anyone who is using the Browser. We strongly advise
   you to constrain access to and from your local mirror of the Browser if this is a concern
   for you.
 * On our webservers at UCSC and your own internal mirror, even though the
@@ -1397,8 +1397,8 @@ features:
   so an XSS exploit is not possible through these. 
   We use CSP and a nonce to block Javascript injection in these pages. CSP/nonce is a system that many
   security scanners do not recognize. You can disregard XSS warnings from the
-  security scanners, and refer your IT department to our CSP declarations in
-  the HTML headers, unless you can think that you found a case where it is possible to get
+  security scanners and refer your IT department to our CSP declarations in
+  the HTML headers unless you think that you found a case where it is possible to get
   through the CSP/nonce system. Feel free to send us the security report from
   your scanner when in doubt.
 * Our CSP/nonce system also secures the Javascript libraries. We use customized jquery libraries 
