@@ -82,7 +82,7 @@ if (cartTurnOnSuper)
     cartSetString(cart, superTrackName, "show");
 }
 
-void cartMatchVis(struct cart *cart, char *oldTrackName,  char *newTrackName)
+void cartMatchValue(struct cart *cart, char *oldTrackName,  char *newTrackName)
 /* Make new track have the same visibility as an old track */
 {
 char *vis = cartOptionalString(cart, oldTrackName);
