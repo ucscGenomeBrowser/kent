@@ -85,6 +85,10 @@ def allCommonNames():
             gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
             commonNames[gcAcc] = row[1]
 
+    if len(commonNames) < 1000000:
+        sys.stderr.write(f"ERROR: assemblyList.py: allCommonNames is failing\n")
+        sys.exit(255)
+
     return commonNames
 
 ####################################################################
@@ -188,11 +192,18 @@ def cladePriority(c):
 ####################################################################
 ### read one of the NCBI files from
 ### /hive/data/outside/ncbi/genomes/reports/assembly_summary_{suffix}
+### returning three items:
+### 1. sorted list of dictionaries representing all the data read in
+### 2. dictionary: key gcAccession and value year of assembly
+### 3. dictionary: key gcAccession and value genome version and refseq status
 ####################################################################
 def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
 
     # Initialize a list to hold the dictionaries
     dataList = []
+    yearDict = {} # key is gcAccession, value is year
+    statusDict = {}
+         # key is gcAccession, value is version_status and refseq_category
 
     filePath = "/hive/data/outside/ncbi/genomes/reports/assembly_summary_" + suffix
 
@@ -203,19 +214,28 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                continue
             if row[0].startswith('#'):
                continue
-            if row[0] in prioExists:
+            gcAccession = row[0]
+            ### record the year and status here before bailing out so
+            ### these can get into genArk if needed
+            asmName = row[15]
+            year = re.sub(r'/.*', '', row[14])
+            yearDict[gcAccession] = year
+            versionStatus = row[10]
+            refseqCategory = re.sub(r'genome', '', row[4])
+            if refseqCategory == "na":
+               refseqCategory = ""
+            genomeStatus = refseqCategory + versionStatus
+            statusDict[gcAccession] = genomeStatus
+            if gcAccession in prioExists:
                continue
             if len(row) != 38:
                 print(f"ERROR: incorrect number of fields in {file}")
                 sys.exit(255)
-            gcAccession = row[0]
             strain = re.sub(r'breed=', '', row[8])
             s0 = re.sub(r'cultivar=', '', strain)
             strain = re.sub(r'ecotype=', '', s0)
             s0 = re.sub(r'strain=', '', strain)
             strain = re.sub(r'na', '', s0)
-            year = re.sub(r'/.*', '', row[14])
-            asmName = row[15]
             asmId = gcAccession + "_" + asmName
             asmSubmitter = row[16]
             asmType = row[23]
@@ -236,7 +256,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                 "commonName": commonName,
                 "taxId": row[5],
                 "clade": clade,
-                "other": asmSubmitter + " " + strain + " " + asmType + " " + year,
+                "other": asmSubmitter + " " + strain + " " + asmType + " " + year + " " + genomeStatus,
                 "sortOrder": cladeP,
             }
 
@@ -244,7 +264,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             # Append the dictionary to the list
             dataList.append(utf8Encoded)
 
-    return sorted(dataList, key=lambda x: x['sortOrder'])
+    return sorted(dataList, key=lambda x: x['sortOrder']), yearDict, statusDict
 
 ####################################################################
 ### given a URL to hgdownload file: /hubs/UCSC_GI.assemblyHubList.txt
@@ -414,6 +434,27 @@ def genarkPath(gcAccession):
     path = f"{prefix}/{parts[0]}/{parts[1]}/{parts[2]}/{gcAccession}/hub.txt"
 
     return path
+
+
+####################################################################
+### scan the genArks items, add years and status if not already there
+####################################################################
+def addYearsStatus(genArks, years, status):
+    for item in genArks:
+        gcAccession = item['gcAccession']
+        if gcAccession in years:
+            year = years[gcAccession]
+            pat = r'\b' + re.escape(year) + r'\b'
+            if not re.search(pat, item['commonName']):
+                if not re.search(pat, item['taxId']):
+                    item['taxId'] += " " + year
+        if gcAccession in status:
+            stat = status[gcAccession]
+            pat = r'\b' + re.escape(stat) + r'\b'
+            if not re.search(pat, item['taxId']):
+                item['taxId'] += " " + stat
+
+    return
 
 ####################################################################
 ### for the genArk set, establish some ad-hoc priorities
@@ -680,10 +721,14 @@ def main():
     commonNames = allCommonNames()
     print("# all common names: ", len(commonNames))
 
-    refSeqList = readAsmSummary("refseq.txt", allPriorities, commonNames, asmIdClade)
+    refSeqList, refSeqYears, refSeqStatus = readAsmSummary("refseq.txt", allPriorities, commonNames, asmIdClade)
     print("# refSeq assemblies: ", len(refSeqList))
-    genBankList = readAsmSummary("genbank.txt", allPriorities, commonNames, asmIdClade)
+    genBankList, genBankYears, genBankStatus = readAsmSummary("genbank.txt", allPriorities, commonNames, asmIdClade)
     print("# genBank assemblies: ", len(genBankList))
+    ### dictionary unpacking, combine both dictionaries (Python 3.5+)
+    allYears = {**refSeqYears, **genBankYears}
+    allStatus = {**refSeqStatus, **genBankStatus}
+    addYearsStatus(genArkItems, allYears, allStatus)
 
     refSeqGenBankList = refSeqList + genBankList
     print("# refSeq + genBank assemblies: ", len(refSeqGenBankList))
@@ -752,7 +797,7 @@ def main():
         clade = entry['clade']
         descr = f"{asmName} {entry['taxId']} {entry['other']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\n"
+        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\n"
         fileOut.write(outLine)
         incrementPriority += 1
         itemCount += 1

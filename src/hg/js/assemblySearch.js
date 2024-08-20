@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to generate the table and extra information
 function populateTableAndInfo(jsonData) {
+    var tableHeader = document.getElementById('tableHeader');
     var tableBody = document.getElementById('tableBody');
     var metaData = document.getElementById('metaData');
     document.getElementById('searchString').innerHTML = "";
@@ -28,6 +29,7 @@ function populateTableAndInfo(jsonData) {
     document.getElementById('elapsedTime').innerHTML = "0";
 
     // Clear existing table content
+    tableHeader.innerHTML = '';
     tableBody.innerHTML = '';
     metaData.innerHTML = '';
 
@@ -42,6 +44,19 @@ function populateTableAndInfo(jsonData) {
             extraInfo[key] = jsonData[key];
         }
     }
+
+    // re-populate header row - the sortable system added a class to
+    //  the last sorted column, need to rebuild the headerRow to get the
+    //  header back to pristine condition for the next sort
+    var headerRow = '<tr>';
+    headerRow += '<th>count</th>';
+    headerRow += '<th>name</th>';
+    headerRow += '<th>scientificName</th>';
+    headerRow += '<th>commonName</th>';
+    headerRow += '<th>clade</th>';
+    headerRow += '<th>description</th>';
+    headerRow += '</tr>';
+    tableHeader.innerHTML = headerRow;
 
     var count = 0;
     for (const id in genomicEntries) {

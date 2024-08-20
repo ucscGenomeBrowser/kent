@@ -1714,11 +1714,11 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br><br>"
                 "To search for short sequences in the browser window, use the <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
                 "You can also use our commandline tool <tt>findMotifs</tt> "
-                "(see <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>) to "
+                "(see the <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>) to "
                 "search for sequences on the entire genome.<br><br>"
                 "For primers, you can use the <a href='hgPcr?%s=%s'>In-silico PCR</a> tool. In-silico PCR can search the entire genome or a set of "
                 "transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
-                "Contact us for additional help using BLAT or its related tools: genome@soe.ucsc.edu",
+                "<a href='../contacts.html'>Contact us</a> for additional help using BLAT or its related tools.",
 		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
