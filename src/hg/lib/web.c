@@ -1504,6 +1504,7 @@ if(docRoot == NULL)
     return NULL;
 
 jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-migrate-1.4.1.js", NULL);
 jsIncludeFile("jquery.plugins.js", NULL);
 jsIncludeFile("utils.js", NULL);
 webIncludeResourceFile("nice_menu.css");
