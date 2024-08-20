@@ -1658,7 +1658,7 @@ There are no extra options that can appear on the type hic line.
     at or below the lowest negative value in order to avoid actively filtering items by
     default (unless that is the intended behavior)</li>
     <li>In order for filters to work, the track must be &quot;<code>type bigBed N +</code>&quot; or
-    &quot;<code>type bigBed N .&quot;.</code>. Including the &quot;+&quot; (for bigBed+ tracks) or a 
+    &quot;<code>type bigBed N .</code>&quot;. Including the &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
     at least a bed5</li>
@@ -1743,7 +1743,7 @@ There are no extra options that can appear on the type hic line.
     it can be enabled on entirely numerical fields, such as <code>chromStart</code>, if one is 
     looking to filter numerical values <strong>as text</strong></li>
     <li>In order for filters to work, the track must be &quot;<code>type bigBed N +</code>&quot; or
-    &quot;<code>type bigBed N .&quot;.</code>. Including the &quot;+&quot; (for bigBed+ tracks) or a
+    &quot;<code>type bigBed N .</code>&quot;. Including the &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
     at least a bed5</li>
@@ -1845,7 +1845,7 @@ There are no extra options that can appear on the type hic line.
     of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable that default 
     filter</li>
     <li>In order for filters to work, the track must be &quot;<code>type bigBed N +</code>&quot; or
-    &quot;<code>type bigBed N .&quot;.</code>. Including the &quot;+&quot; (for bigBed+ tracks) or a
+    &quot;<code>type bigBed N .</code>&quot;. Including the &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
     at least a bed5</li>
