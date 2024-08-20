@@ -87,7 +87,6 @@ void cartMatchVis(struct cart *cart, char *oldTrackName,  char *newTrackName)
 {
 char *vis = cartOptionalString(cart, oldTrackName);
 
-printf("in cartMatch %s %s %s\n",oldTrackName, newTrackName, vis);
 if (vis)
     cartSetString(cart, newTrackName, vis);
 }
