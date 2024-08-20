@@ -1,6 +1,25 @@
 #ifndef FAKE_CURL
 #define FAKE_CURL
 
+#define CURL fakeCURL
+#define curl_easy_init fake_curl_easy_init
+#define curl_easy_setopt fake_curl_easy_setopt
+#define curl_easy_perform fake_curl_easy_perform
+#define curl_easy_strerror fake_curl_easy_strerror
+#define curl_easy_cleanup fake_curl_easy_cleanup
+#define CURLoption fakeCURLoption
+#define CURLOPT_URL fakeCURLOPT_URL
+#define CURLOPT_FOLLOWLOCATION fakeCURLOPT_FOLLOWLOCATION
+#define CURLOPT_USERAGENT fakeCURLOPT_USERAGENT
+#define CURLOPT_WRITEFUNCTION fakeCURLOPT_WRITEFUNCTION
+#define CURLOPT_WRITEDATA fakeCURLOPT_WRITEDATA
+#define CURLOPT_HEADERFUNCTION fakeCURLOPT_HEADERFUNCTION
+#define CURLOPT_RANGE fakeCURLOPT_RANGE
+#define CURLOPT_FAILONERROR fakeCURLOPT_FAILONERROR
+#define CURLcode fakeCURLcode
+#define CURLE_OK fakeCURLE_OK
+#define CURLE_NOTOK fakeCURLE_NOTOK
+
 typedef enum {
     CURLOPT_WRITEDATA,
     CURLOPT_RANGE,
