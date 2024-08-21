@@ -6,31 +6,20 @@
 
 <link rel="stylesheet" type="text/css" href="<!--#echo var='ROOT' -->/style/assemblySearch.css">
 
-    <h1>Assembly search page</h1>
+    <h1>Genome assembly search and request</h1>
 <hr>
-    <p><b>TO BE DONE:</b> when browser doesn't exist: pop-up request form
-    </p>
     <form id="searchForm">
         <div class="formDiv">
         <div>
         <label for="searchBox">Enter search term(s) to find assembly:</label>
         <input type="text" id="searchBox" name="searchBox" required>
         <div class="submitContainer">
-           <button id="submitButton" type="submit">Search</button>
+           <button id="submitSearch" type="submit">Search</button>
            <div id="loadingSpinner" class="spinner"></div>
         </div>
-        <button type="button" id="clearSearch">Clear</button>
-        <label for="limitResultCount">limit results to:
-        <select id="limitResultCount" name="limitResultCount">
-           <option value="10">10</option>
-           <option value="20">20</option>
-           <option value="50">50</option>
-           <option value="100">100</option>
-           <option value="200">200</option>
-           <option value="500" selected>500</option>
-        </select>
-        count</label>&nbsp;-
-               <span class="searchTip">advanced search tips
+        <button type="button" id="clearSearch">Clear</button>&nbsp;-
+        <span class="searchTip">advanced search tips
+        <input type="hidden" id="maxItemsOutput" value="500">
       <span class="searchTiptext">
 <ol class="noBullets">
 <li> + (plus) sign before <b>+word</b> to force included in result</li>
@@ -39,6 +28,7 @@
 <li> enclose "words in quotes" to form a phrase for the search</li>
 <li> all searches are case insensitive</li>
 <li> single word searches become prefix searches if the word does not match by itself </li>
+<li>example API call: <span id="recentAjax">n/a</span></li>
 </ol>
 </span>
                </span>
@@ -60,30 +50,23 @@
         </div>
     </form>
     <div>
-    <p><b>results for search string: '</b><span id="searchString">&nbsp;</span>',
-    <b>total matching: </b><span id="matchCounts">0</span>,
-    <b>from total number of assemblies: </b><span id="availableAssemblies">0</span>,
-    <b>search time: </b><span id="elapsedTime">0 milliseconds</span>.
-    </p>
+    <span id="resultCounts">&nbsp;</span>
+    <span id="measureTiming">- <em>search time: </em><span id="elapsedTime">0 milliseconds</span>.</span>
     </div>
     <hr>
-    <table id="dataTable" class="sorttable fifthRowHighlight" style="border: 1px solid black; display:block; max-height: 800px; max-width:1300px; overflow:auto; position:sticky; top:0;">
-        <colgroup>
-          <col style="width: 10%">
-          <col style="width: 10%">
-          <col style="width: 10%">
-          <col style="width: 20%">
-          <col style="width: 8%">
-          <col style="width: 42%">
+    <table id="dataTable" class="dataTable sorttable fifthRowHighlight" style="border: 1px solid black; display:block; max-width:1300px; position:sticky; top:0;">
+        <colgroup id='colDefinitions'>
+          <col id='viewReq' style="width: 10%">
+          <col id='comName' style="width: 10%">
+          <col id='sciName' style="width: 10%">
+          <col id='asmId' style="width: 20%">
+          <col id='clade' style="width: 8%">
+          <col id='description' style="width: 42%">
         </colgroup>
         <thead style="position:sticky; top:0; border:1px solid #ddd; width:100%" id="tableHeader">
-         <tr><th>view/<br>request</th>
-         <th>English common name</th>
-         <th>scientific name</th>
-         <th>assembly</th>
-         <th>clade</th>
-         <th>description</th>
-         </tr>
+         <!-- table header rows are filled in by javaScript since they can
+              be altered by the sorttable system and need to be refreshed -->
+         <tr><td>&nbsp;</td></tr>
         </thead>
         <tbody id="tableBody"></tbody>
     </table>
