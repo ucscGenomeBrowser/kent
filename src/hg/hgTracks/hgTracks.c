@@ -4957,10 +4957,18 @@ if (theImgBox)
 struct flatTracks *flatTracks = NULL;
 struct flatTracks *flatTrack = NULL;
 
+// There are two ways to get the amino acids to show up:
+// 1) either by setting the ruler track viz to full
+// 2) or by checking the box on the ruler track's trackUi page.
+// Any selection on the trackUi page takes precedence. 
 if (rulerMode != tvFull)
     {
     rulerCds = FALSE;
     }
+
+// the code below will only use the checkbox on trackUi if a setting on the trackUi page has been made. 
+if (cartVarExists(cart, BASE_SHOWCODONS))
+    rulerCds = cartUsualBoolean(cart, BASE_SHOWCODONS, TRUE);
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
