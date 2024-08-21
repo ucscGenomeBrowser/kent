@@ -8,6 +8,8 @@ var asmIdText = null;
 var betterCommonName = null;
 var comment = null;
 var requestSubmitButton = null;
+var completedAsmId = new Map();	// keep track of requests completed
+				// so they won't be repeated
 
 // This function is called on DOMContentLoaded as the initialization
 //  procedure for first time page draw
@@ -89,7 +91,7 @@ function headerRefresh(tableHead) {
   headerRow += '<th><div class=tooltip>view/<br>request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
   headerRow += '<th><div class="tooltip">scientific name (count) &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">binomial scientific name</span></div></th>';
-  headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record.</span></div></th>';
+  headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
   headerRow += '<th><div class="tooltip"><em>genark</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
   headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
   headerRow += '</tr>';
@@ -127,13 +129,14 @@ function populateTableAndInfo(jsonData) {
     for (var id in genomicEntries) {
         var dataRow = '<tr>';
         var browserUrl = id;
-        var ncbiUrl = id;
+        var asmInfoUrl = id;
         if (genomicEntries[id].browserExists) {
           if (id.startsWith("GC")) {
             browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>view</a>";
-            ncbiUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>";
+            asmInfoUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>";
           } else {
             browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>view</a>";
+            asmInfoUrl = "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/" + id + "/bigZips/' target=_blank>" + id + "</a>";
           }
           dataRow += "<th>" + browserUrl + "</th>";
         } else {
@@ -141,7 +144,7 @@ function populateTableAndInfo(jsonData) {
         }
         dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
-        dataRow += "<th>" + ncbiUrl + "</th>";
+        dataRow += "<th>" + asmInfoUrl + "</th>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
         dataRow += '</tr>';
@@ -360,7 +363,15 @@ function asmOpenModal(e) {
     document.getElementById("formSciName").textContent = sciName;
     document.getElementById("formAsmId").textContent = e.name;
     document.getElementById("comment").textContent = descr;
-    requestSubmitButton.value = "Submit request";
+    if (completedAsmId.has(e.name)) {
+      requestSubmitButton.value = "request completed";
+      requestSubmitButton.disabled = false;
+      document.getElementById("modalWrapper").className = "overlay";
+      return;
+    } else {
+      completedAsmId.set(e.name, true);
+      requestSubmitButton.value = "Submit request";
+    }
     document.getElementById("modalWrapper").className = "overlay";
     requestSubmitButton.disabled = false;
     var overflow = modalWindow.offsetHeight - document.documentElement.clientHeight;
