@@ -3232,7 +3232,7 @@ var popUpHgt = {
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
         var cleanHtml = response;
-        cleanHtml = stripCspHeader(cleanHtml,false); // DEBUG msg with true
+        //cleanHtml = stripCspHeader(cleanHtml,false); // DEBUG msg with true
         cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
         //cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true // Obsolete by CSP2?

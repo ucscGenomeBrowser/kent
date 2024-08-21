@@ -3439,8 +3439,8 @@ var dragReorder = {
     {   // Sets the 'order' value for the image table after a drag reorder
         var varsToUpdate = {};
         $("tr.imgOrd").each(function (i) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
-                $(this).attr('abbr',$(this).attr('rowIndex').toString());
+            if ($(this).prop('abbr') !== $(this).prop('rowIndex').toString()) {
+                $(this).attr('abbr', $(this).prop('rowIndex').toString());
                 var name = this.id.substring('tr_'.length) + '_imgOrd';
                 varsToUpdate[name] = $(this).attr('abbr');
             }
