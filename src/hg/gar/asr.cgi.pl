@@ -111,6 +111,7 @@ $cleanEmail =~ s/@/ at /;
 $cleanEmail =~ s/\./ dot /g;
 
 # and then send the email to the google group with the cleanEmail in text
+if ( $genArkRequestGroup ne $myAddr ) {	# debugging do not send mail twice
 open (FH, "|/usr/sbin/sendmail -f \"${bounceAddr}\" -t -oi");
 printf FH "To: %s
 Reply-to: %s
@@ -127,6 +128,6 @@ date: '%s'
 ", $genArkRequestGroup, $legitimateFrom, $legitimateFrom, $incoming{"asmId"}, $incoming{"name"}, $cleanEmail, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, ${DS};
 
 close (FH);
+}
 
-printf "<h3>at end of asr</h3>\n";
 print "</body></html>\n";
