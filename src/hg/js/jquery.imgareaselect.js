@@ -542,11 +542,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
         options.enable = options.disable = undefined;
     };
 
-    if (jQuery.browser.msie)
-        jQuery(img).attr('unselectable', 'on');
-
-    jQuery.imgAreaSelect.keyPress = jQuery.browser.msie ||
-        jQuery.browser.safari ? 'keydown' : 'keypress';
+    jQuery.imgAreaSelect.keyPress = 'keypress';
+    
 
     $a.add($o).css({ display: 'none', position: fixed ? 'fixed' : 'absolute',
         overflow: 'hidden', zIndex: zIndex > 0 ? zIndex : '0' });
