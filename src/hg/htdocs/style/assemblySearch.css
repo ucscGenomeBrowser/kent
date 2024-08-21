@@ -163,3 +163,66 @@ ol.noBullets {
     display: block;
 }
 
+/* allow content in table header cells to overflow to allow tooltip
+ *  legend display outside the cell
+ */
+.dataTable thead tr th {
+  overflow: visible;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
+.dataTable thead tr th:hover .tooltiptext {
+  visibility: visible;
+}
+
+.dataTable thead tr th:hover .tooltiptextright {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: left;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  left: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* right most two columns have right margins instead of left so as
+ *  not to run off the page to the right
+ */
+
+.tooltip .tooltiptextright {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: right;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  right: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
