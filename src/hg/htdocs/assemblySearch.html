@@ -9,8 +9,8 @@
     <h1>Genome assembly search and request</h1>
 <hr>
     <form id="searchForm">
-        <div class="formDiv">
-        <div>
+        <div class="formDiv"> <!-- the entire form element -->
+        <div>	<!-- container div for search box and submit/clear buttons -->
         <label for="searchBox">Enter search term(s) to find assembly:</label>
         <input type="text" id="searchBox" name="searchBox" required>
         <div class="submitContainer">
@@ -18,27 +18,31 @@
            <div id="loadingSpinner" class="spinner"></div>
         </div>
         <button type="button" id="clearSearch">Clear</button>&nbsp;-
-        <span class="searchTip">advanced search tips
-        <input type="hidden" id="maxItemsOutput" value="500">
-      <span class="searchTiptext">
-<ol class="noBullets">
+        <button type="button" id="advancedSearchButton">show advanced search options</button>
+           <!-- mouse over this text to see pop-up help message -->
+           <span class="searchTip">advanced search help
+      <span class="searchTiptext"> <!-- hidden span for pop-up help message -->
+<ol id="searchTipList" class="noBullets">
 <li> + (plus) sign before <b>+word</b> to force included in result</li>
 <li> - (minus) sign before <b>-word</b> to exclude word from result</li>
 <li> * (asterisk) character at end of <b>word*</b> to make the word be a prefix search</li>
 <li> enclose "words in quotes" to form a phrase for the search</li>
 <li> all searches are case insensitive</li>
 <li> single word searches become prefix searches if the word does not match by itself </li>
-<li>example API call: <span id="recentAjax">n/a</span></li>
+<!-- javaScript will add an extra element in debug mode
+     to show the API reference -->
 </ol>
-</span>
-               </span>
-        </div>
-        <div class="radioGroupContainer">
+</span> <!-- a hidden span for a pop-up help message -->
+           </span>
+        <!-- URL argument maxItemsOutput to html page can change this -->
+        <input type="hidden" id="maxItemsOutput" value="500">
+        </div> <!-- container div for search box and submit/clear buttons -->
+        <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
-           <label><input type="checkbox" id="mustExist" name="mustExist" value="mustExist" checked>
+           <label><input type="checkbox" id="mustExist" onclick="atLeastOneCheckBoxOn(this)" name="mustExist" value="mustExist" checked>
               show assemblies in available browsers
            </label><br>
-           <label><input type="checkbox" id="notExist" name="notExist" value="notExist" checked>
+           <label><input type="checkbox" id="notExist" onclick="atLeastOneCheckBoxOn(this)" name="notExist" value="notExist" checked>
               show assemblies that can be requested
            </label>
            </div>
@@ -46,13 +50,13 @@
               <label>may match any word <input type="radio" name="wordMatch" value="anyWord"></label>
               <label>must match all words <input type="radio" name="wordMatch" value="allWords" checked></label>
            </div>
-        </div>
-        </div>
+        </div>	<!-- the radioGroupContainer -->
+        </div> <!-- the entire form element -->
     </form>
-    <div>
+    <div>	<!-- search results status line -->
     <span id="resultCounts">&nbsp;</span>
     <span id="measureTiming">- <em>search time: </em><span id="elapsedTime">0 milliseconds</span>.</span>
-    </div>
+    </div>	<!-- search results status line -->
     <hr>
     <table id="dataTable" class="dataTable sorttable fifthRowHighlight" style="border: 1px solid black; display:block; max-width:1300px; position:sticky; top:0;">
         <colgroup id='colDefinitions'>

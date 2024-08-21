@@ -1,5 +1,6 @@
 // global variables:
 
+var debug = false;
 var measureTiming = false;
 var urlParams;
 var searchFor = "";
@@ -25,8 +26,27 @@ document.addEventListener('DOMContentLoaded', function() {
          measureTiming = true;
        }
     }
+    if (urlParams.has('debug')) { // accepts no value or other string
+       var debugValue = urlParams.get('debug');
+       if ("0" === debugValue | "off" === debugValue) {
+         debug = false;
+       } else {			// any other string turns it on
+         debug = true;
+       }
+    }
+
+    // add extra element to the help text bullet list for API example
+    if (debug) {
+      var searchTipList = document.getElementById("searchTipList");
+      // Create a new list item
+      var li = document.createElement("li");
+      li.innerHTML = "example API call: <span id=\"recentAjax\">n/a</span>";
+      // Append the new list item to the ordered list
+      searchTipList.appendChild(li);
+    }
 
     var searchForm = document.getElementById('searchForm');
+    var advancedSearchButton = document.getElementById('advancedSearchButton');
     var searchInput = document.getElementById('searchBox');
     var clearButton = document.getElementById('clearSearch');
     asmIdText = document.getElementById("formAsmId");
@@ -56,6 +76,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         var wordMatch = document.querySelector('input[name="wordMatch"]:checked').value;
         makeRequest(searchTerm, browserExist, resultCountLimit.value, wordMatch);
+    });
+
+    advancedSearchButton.addEventListener('click', function() {
+       var advancedSearchOptions = document.getElementById("advancedSearchOptions");
+       // I don't know why it is false the first time ?
+       if (! advancedSearchOptions.style.display ||
+             advancedSearchOptions.style.display === "none") {
+          advancedSearchOptions.style.display = "flex";
+          this.textContent = "hide advanced search options"; // Change button text
+       } else {
+          advancedSearchOptions.style.display = "none";
+          this.textContent = "show advanced search options"; // Change button text
+       }
     });
 
     var tableHeader = document.getElementById('tableHeader');
@@ -276,6 +309,18 @@ function sendRequest(name, email, asmId, betterName, comment) {
 
 }  //      sendRequest: function(name, email. asmId)
 
+// do not allow both checkboxes to go off
+function atLeastOneCheckBoxOn(e) {
+  var mustExist = document.getElementById('mustExist').checked;
+  var notExist = document.getElementById('notExist').checked;
+  if (! mustExist && ! notExist ) {  // turn on the other one when both off
+     if (e.name === "mustExist") {
+       document.getElementById('notExist').checked = true;
+     } else {
+       document.getElementById('mustExist').checked = true;
+     }
+  }
+}
 
 function checkForm(e) {
   if (requestSubmitButton.value === "request completed") {
@@ -418,8 +463,10 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
 
-    var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
-    document.getElementById("recentAjax").innerHTML = apiUrl;
+    if (debug) {
+      var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
+      document.getElementById("recentAjax").innerHTML = apiUrl;
+    }
 
     xhr.open('GET', urlPrefix + url, true);
 

@@ -71,8 +71,9 @@ thead th {
 }
 
 /* CSS styles to position radio button groups */
+/* display will be flex to show this box on 'show advanced search options' */
 .radioGroupContainer {
-    display: flex; /* Use flexbox to align items horizontally */
+    display: none; /* Use flexbox to align items horizontally */
     gap: 20px; /* Optional: Add space between the two groups */
     border: 2px solid #000; /* Add a 2px solid black border around the container */
     padding: 10px; /* Optional: Add padding inside the border */
