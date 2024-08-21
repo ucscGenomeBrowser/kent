@@ -3462,7 +3462,7 @@ var dragReorder = {
         var trs = tbody.rows;
         var needToSort = false;
         $(trs).each(function(ix) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
+            if (this.getAttribute('abbr') !== this.getAttribute('rowIndex')) {
                 needToSort = true;
                 return false;  // break for each() loops
             }
@@ -3844,7 +3844,8 @@ function boundingRect(refEl) {
         // if we are dealing with an <area> element, the refEl width and height
         // are for the whole image and not for just the area, so
         // getBoundingClientRect() will return nothing, sad!
-        let refImg = $("[usemap=#" + refEl.parentNode.name + "]")[0];
+        let refImg = document.querySelector("[usemap='#" + refEl.parentNode.name + "']");
+        if (refImg === null) {return;}
         let refImgRect = refImg.getBoundingClientRect();
         let refImgWidth = refImgRect.width;
         let label = $("[id^=td_side]")[0];
@@ -4218,7 +4219,7 @@ function titleTagToMouseover(mapEl) {
 
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
-    $("[title]").each(function(i, a) {
+    document.querySelectorAll("[title]").forEach(function(a) {
         if (a.title !== undefined &&
                 (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";
