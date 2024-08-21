@@ -123,7 +123,7 @@ function headerRefresh(tableHead) {
   var headerRow = '<tr>';
   headerRow += '<th><div class=tooltip>view/<br>request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">scientific name (count) &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">binomial scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
   headerRow += '<th><div class="tooltip"><em>genark</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
   headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
@@ -175,8 +175,8 @@ function populateTableAndInfo(jsonData) {
         } else {
           dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>request</button></th>";
         }
-        dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
+        dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<th>" + asmInfoUrl + "</th>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
