@@ -11,20 +11,26 @@ endif
 
 my::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN_USER)/gar
+	cp -p --remove-destination  asr.cgi.pl $(CGI_BIN_USER)/asr
 
 cgi::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN_USER)/gar
+	cp -p --remove-destination  asr.cgi.pl $(CGI_BIN_USER)/asr
 
 alpha::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN)/gar
+	cp -p --remove-destination  asr.cgi.pl $(CGI_BIN)/asr
 
 beta::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN_BETA)/gar
+	cp -p --remove-destination  asr.cgi.pl $(CGI_BIN_BETA)/asr
 
 install::
 	cp -p --remove-destination  gar.cgi.pl $(CGI_BIN)/gar
+	cp -p --remove-destination  asr.cgi.pl $(CGI_BIN)/asr
 
 compile::
 	@ls -og gar.cgi.pl
+	@ls -og asr.cgi.pl
 
 clean::

@@ -94,15 +94,15 @@ thead th {
     box-sizing: border-box;
 }
 
-.searchtip {
+.searchTip {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    background-color: #ccc;
-    color: #008;
+    background-color: #e5cb99;
+    color: #00f;
 }
 
-.searchtiptext {
+.searchTiptext {
     visibility: hidden;
     width: 600px;
     background-color: #fff;
@@ -113,14 +113,14 @@ thead th {
     padding: 5px;
     position: absolute;
     z-index: 1;
-    bottom: -525%; /* Position above the text */
+    bottom: -925%; /* Position above the text */
     left: 50%;
-    /* margin-left: -70px; /* Center the searchtip */
-    margin-left: -600px;
+    /* margin-left: -70px; /* Center the searchTip */
+    margin-left: -300px;
     transition: opacity 0.3s;
 }
 
-.searchtip:hover .searchtiptext {
+.searchTip:hover .searchTiptext {
     visibility: visible;
     opacity: 1;
 }

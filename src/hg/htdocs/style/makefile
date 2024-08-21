@@ -12,7 +12,7 @@ ifeq (${FIND},)
     endif
 endif
 
-CSS_FILES=HGStyle.css autocomplete.css blueStyle.css \
+CSS_FILES=HGStyle.css assemblySearch.css autocomplete.css blueStyle.css \
     encodeProject.css facets.css floretStyle.css gar.css \
     hgHubConnect.css jquery-ui.css jquery.contextmenu.css \
     jquery.ui.autocomplete.css jquery.ui.colorPicker.css \

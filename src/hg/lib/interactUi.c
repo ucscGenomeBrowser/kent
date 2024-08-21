@@ -81,8 +81,8 @@ printf("&nbsp;%s&nbsp;", "rectangle");
 void interactUiEndpointFilter(struct cart *cart, char *track, struct trackDb *tdb)
 /* Radio buttons to allow excluding items lacking endpoints in window */
 {
-char *endsVisible = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
-                                    INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
+char *endsVisible = cartOrTdbString(cart, tdb, INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
+
 char cartVar[1024];
 puts("<b>Show interactions:</b> ");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_ENDS_VISIBLE);
