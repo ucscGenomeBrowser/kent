@@ -828,72 +828,97 @@ file name should correspond to the symbolic name of the top-level track in the c
 <!-- ========== Adding Groups to a Track hub ==================== -->
 <a name="Group"></a>
 <h2>Adding groups to a Track Hub</h2>
-
-<p>You can add groups to your track hub by using the groups setting, which points to a separate
-text document that defines the track groups under the primary genome browser image display. As an
-example using the
-<a href="examples/hubExamples/epdHub/epdHub.txt" target="_blank">EPD Viewer Hub</a>,
-here is how the track hub displays without the groups setting:</p>
+<p>
+To organize tracks within your track hub, you can utilize the <b>groups</b> setting, which references a
+separate text file that defines track groups for display under the genome browser graphic.</p>
 <div class="text-center">
-        <img class='text-center' width="95%" src="../../images/epdHubEx.png">
+        <img class='text-center' width="95%" src="../../images/groupsEx.png">
 </div>
+<p>
+The <b>groups</b> setting can be applied to a UCSC genome, a GenArk assembly, or an assembly hub.
+These track hub groups are kept separate from other track hubs and the native UCSC Genome Browser
+track groups, allowing for greater organizational flexibility. For instance, you can add a 
+&quot;genes&quot; group without causing conflicts or confusion.</p>
+<p>
+You can define groups with names like  &quot;Category 1&quot;,  &quot;Category 2&quot;, and
+&quot;Category 3&quot;. These group names are specified in the  &quot;groups.txt file &quot;, which
+defines the track groups. Below is an example stanza demonstrating how to define these groups:</p>
 
-<p>Groups such as Histone, CAGE, RAMPAGE, and Fantom5 groups can be added. The text document that
-defines the track groups can be named  groups.txt and specifies the groups such as the following:
-</p>
-<pre><code>name histone
-label Histone
-priority 1 </code></pre>
+<pre><code>name category1
+label Category 1</code></pre>
 
-<pre><code>name cage
-label CAGE
-priority 2 </code></pre>
+<pre><code>name category2
+label Category 2
+priority 1</code></pre>
 
-<pre><code>name rampage
-label RAMPAGE
-priority 3 </code></pre>
-
-<pre><code>name fantom5
-label Fantom5
-priority 4
+<pre><code>name category3
+label Category 3
 defaultIsClosed 1</code></pre>
 
+
+<p>
+You can access the complete  &quot;groups.txt &quot; file containing these group definitions here:
+<a href="/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/groups.txt" 
+target="_blank">groups.txt</a>.</p>
+
+<p>
+Within this file:</p>
+
 <ul>
-   <li>The <b>name</b> is used in the trackDb.txt track definition group, to assign a particular track to
-       a group.</li>
-   <li>The <b>label</b> is displayed on the genome browser as the title of the group under the primary
-       genome browser image display</li>
-   <li>The <b>priority</b> orders the track group with the other track groups</li>
-   <li>The <b>defaultIsClosed</b> determines if the track group is expanded or closed by default. Values to use are 0 or 1</li>
+   <li>The <b>name</b> setting is used in the trackDb.txt file to associate specific tracks with a
+       group.</li>
+   <li>The <b>label</b> setting specifies the title of the group in the genome browser. By default,
+       groups are sorted alphabetically based on the label.</li>
+   <li>The <b>priority</b> setting dictates the display order of the track groups, with lower
+       numbers shown first.</li>
+   <li>The <b>defaultIsClosed</b> setting controls whether the group is initially expanded or
+       collapsed (0 for expanded, 1 for collapsed).</li>
 </ul>
 
+<p>
+After defining the &quot;groups.txt&quot; file, tracks can be assigned to a specific group
+within the &quot;trackDb.txt&quot; file using the <b>group</b> setting. For example, to assign the
+&quot;bigBed1&quot; track to the &quot;bigBed&quot; group, you could use the following stanza:
+</p>
 
-<p>You would then add the group name to your tracks in the trackDb stanza. For example, adding the
-Histone Marks track to the Histone group:<p>
-<pre><code>track 1histone
-type bigWig
-longLabel Selected Histone Marks
-autoScale on
-smoothingWindow 10
-priority 1
-compositeTrack on
-allButtonPair on
-windowingFunction mean
-shortLabel Histone Marks
-visibility full
-<strong>group</strong> histone</code></pre>
+<pre><code>track bigBed1
+bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
+shortLabel bigBed example 1
+longLabel This bigBed file is an example from the NCBI RefSeq Diffs Track
+type bigBed
+<strong>group</strong> category1
+visibility dense</code></pre>
 
-<p>The groups.txt file then needs to be added to the genome stanza. The genome can be a UCSC genome or an assembly hub. The hg38 genome will be used as an example:
+<p>
+The full &quot;trackDb.txt&quot; file, which includes the &quot;bigBed1&quot; track and additional examples, can be viewed here:
+<a href="/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hg38/trackDb.txt" 
+target="_blank">trackDb.txt</a>.</p>
+
+<p>
+Next, incorporate the &quot;groups.txt&quot; file with the <b>groups</b> setting into the genome stanza. This can be for a UCSC
+genome, a GenArk assembly, or an assembly hub. Below is an example using the hg38 genome:</p>
+
 <pre><code>genome hg38
 trackDb hg38/trackDb.txt
-groups groups.txt</code></pre>
+<strong>groups</strong> groups.txt</code></pre>
 
-<p>Attaching the
-<a href="examples/hubExamples/hubGroupings/epdHub/epdHub.txt" target="_blank">EPD Viewer Hub</a>,
-with these group settings will then display the tracks within the groups:</p>
-<div class="text-center">
-        <img class='text-center' width="95%" src="../../images/epdHub_Groups.png">
-</div>
+<p>
+An example &quot;genomes.txt&quot; file, which includes the hg38 genome, a GenArk assembly, and an
+assembly hub, is available here:
+<a href="/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/genomes.txt" 
+target="_blank">genomes.txt</a>.</p>
+
+<p>
+By attaching the hub with these group settings, the tracks will be displayed within the specified groups. Below are URLs showing the group settings for the hg38 genome, a GenArk assembly, and an assembly hub:</p>
+<ul>
+   <li><b>hg38</b>: <a href="../../cgi-bin/hgTracks?hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hub.txt&db=hg38" 
+target="_blank">hg38 Genome</a>.</p></li>
+   <li><b>GCF_000951035.1</b>: <a href="../../cgi-bin/hgTracks?hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hub.txt&db=GCF_000951035.1" 
+target="_blank">GenArk Assembly</a>.</p></li>
+   <li><b>Arabidopsis thaliana Assembly Hub</b>: <a href="../../cgi-bin/hgTracks?hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hub.txt&genome=araTha1" 
+target="_blank">Assembly Hub</a>.</p></li>
+</ul>
+
 
 <!-- ========== Debugging and Updating Track Hubs ============================== -->
 <a name="Debug"></a>
