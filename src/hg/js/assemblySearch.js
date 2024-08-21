@@ -250,7 +250,6 @@ function sendRequest(name, email, asmId, betterName, comment) {
     var urlComponents = encodeURIComponent(name) + "&email=" + encodeURIComponent(email) + "&asmId=" + encodeURIComponent(asmId) + "&betterName=" + encodeURIComponent(betterName) + "&comment=" + encodeURIComponent(comment);
 
     var url = "/cgi-bin/asr?name=" + urlComponents;
-alert("request url: '" + url + "'");
 // information about escaping characters:
 // https://stackoverflow.com/questions/10772066/escaping-special-character-in-a-url/10772079
 // encodeURI() will not encode: ~!@#$&*()=:/,;?+'
@@ -276,7 +275,6 @@ alert("request url: '" + url + "'");
 
 
 function checkForm(e) {
-alert("checkForm");
   if (requestSubmitButton.value === "request completed") {
      if (e.preventDefault) {
        e.preventDefault();
