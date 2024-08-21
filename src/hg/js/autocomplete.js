@@ -121,7 +121,7 @@ var suggestBox = {
                     // document.TrackHeaderForm.submit();
                 }
             })
-            .data("autocomplete")._renderMenu = function(ul, items) {
+            ._renderMenu = function(ul, items) {
                 var that = this;
                 jQuery.each(items, function(index, item) {
                     that._renderItem(ul, item);
@@ -132,7 +132,7 @@ var suggestBox = {
                     ul.append("<div style='color:grey'>Click the go button or press Enter to search across all tracks, hubs and our website. See 'examples' link above.</div>");
                 }
             };
-            $("#positionInput").data("autocomplete")._renderItem = function(ul, item) {
+            $("#positionInput")._renderItem = function(ul, item) {
                 // In order to use HTML markup in the autocomplete, one has to overwrite
                 // autocomplete's _renderItem method using .html instead of .text.
                 // http://forum.jquery.com/topic/using-html-in-autocomplete

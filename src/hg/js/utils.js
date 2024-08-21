@@ -3462,7 +3462,7 @@ var dragReorder = {
         var trs = tbody.rows;
         var needToSort = false;
         $(trs).each(function(ix) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
+            if (this.getAttribute('abbr') !== this.getAttribute('rowIndex')) {
                 needToSort = true;
                 return false;  // break for each() loops
             }
@@ -3845,6 +3845,7 @@ function boundingRect(refEl) {
         // are for the whole image and not for just the area, so
         // getBoundingClientRect() will return nothing, sad!
         let refImg = document.querySelector("[usemap='#" + refEl.parentNode.name + "']");
+        if (refImg === null) {return;}
         let refImgRect = refImg.getBoundingClientRect();
         let refImgWidth = refImgRect.width;
         let label = document.querySelector("[id^=td_side]");
