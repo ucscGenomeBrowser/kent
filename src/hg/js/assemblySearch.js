@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
     if (urlParams.has('searchFor')) {
-       searchFor = urlParams.get('searchFor')
+       searchFor = urlParams.get('searchFor');
        if (searchFor.length > 0) {
           searchInput.value = searchFor;
           document.getElementById('submitSearch').click();
@@ -110,10 +110,10 @@ function populateTableAndInfo(jsonData) {
     metaData.innerHTML = '';
 
     // Extract the genomic entries and the extra info
-    const genomicEntries = {};
-    const extraInfo = {};
+    var genomicEntries = {};
+    var extraInfo = {};
 
-    for (const key in jsonData) {
+    for (var key in jsonData) {
         if (jsonData[key].scientificName) {
             genomicEntries[key] = jsonData[key];
         } else {
@@ -124,14 +124,14 @@ function populateTableAndInfo(jsonData) {
     headerRefresh(tableHeader);
 
     var count = 0;
-    for (const id in genomicEntries) {
+    for (var id in genomicEntries) {
         var dataRow = '<tr>';
         var browserUrl = id;
         var ncbiUrl = id;
         if (genomicEntries[id].browserExists) {
           if (id.startsWith("GC")) {
             browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>view</a>";
-            ncbiUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>"
+            ncbiUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>";
           } else {
             browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>view</a>";
           }
@@ -150,11 +150,11 @@ function populateTableAndInfo(jsonData) {
     var dataTable = document.getElementById('dataTable');
     sorttable.makeSortable(dataTable);
 
-    var itemCount = parseInt(extraInfo['itemCount'], 10);
-    var totalMatchCount = parseInt(extraInfo['totalMatchCount'], 10);
-    var availableAssemblies = parseInt(extraInfo['availableAssemblies'], 10);
+    var itemCount = parseInt(extraInfo.itemCount, 10);
+    var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
+    var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo['genomeSearch'] + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.genomeSearch + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -164,7 +164,7 @@ function populateTableAndInfo(jsonData) {
     resultCounts += "<em>out of </em><b>" + availableAssemblies.toLocaleString() + "</b> <em>total number of assemblies</em>";
     document.getElementById('resultCounts').innerHTML = resultCounts;
     if (measureTiming) {
-      var etMs = extraInfo['elapsedTimeMs'];
+      var etMs = extraInfo.elapsedTimeMs;
       var elapsedTime = "<b>" + etMs.toLocaleString() + "</b> <em>milliseconds</em>";
       if ( etMs > 1000 ) {
          var etSec = etMs/1000;
@@ -385,12 +385,12 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     var queryString = query;
     // for allWords, place + sign in front of each word if not already there
     if (wordMatch === "allWords") {
-      const words = query.split(/\s+/);
+      var words = query.split(/\s+/);
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
-        words.forEach(word => {
+        words.forEach(function(word) {
           if (word.startsWith("+")) {
-            queryPlus += " " + word;	// space separated each word
+            queryPlus += " " + word; // space separates each word
           } else {
             queryPlus += " +" + word;
           }
@@ -404,7 +404,7 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     document.getElementById("loadingSpinner").style.display = "block";
 
     var xhr = new XMLHttpRequest();
-    var urlPrefix = "/cgi-bin/hubApi"
+    var urlPrefix = "/cgi-bin/hubApi";
     var url = "/findGenome?genomeSearch=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
