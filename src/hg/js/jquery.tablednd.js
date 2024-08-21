@@ -143,7 +143,7 @@ jQuery.tableDnD = {
                     jQuery.tableDnD.dragObject = this.parentNode;
                     jQuery.tableDnD.currentTable = table;
                     jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
-                    config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
+                    config.dragStartIndex = $(jQuery.tableDnD.dragObject).prop('rowIndex');
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
                         config.onDragStart(ev, table, this.parentNode);  // UCSC
@@ -186,7 +186,7 @@ jQuery.tableDnD = {
                             jQuery.tableDnD.dragObject = this;
                             jQuery.tableDnD.currentTable = table;
                             jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
-                            config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
+                            config.dragStartIndex = $(jQuery.tableDnD.dragObject).prop('rowIndex');
                             if (config.onDragStart) {
                                 // Call the onDrop method if there is one
                                 config.onDragStart(ev, table, this);

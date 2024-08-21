@@ -998,7 +998,7 @@ var vis = {
         // Now we can rid the submt of the burden of all those vis boxes
         var form = $('form#TrackForm');
         $(form).submit(function () {
-            $('select.normalText,select.hiddenText').attr('disabled',true);
+            $('select.normalText,select.hiddenText').prop('disabled',true);
         });
         $(form).attr('method','get');
     },
@@ -1006,7 +1006,7 @@ var vis = {
     restoreFromBackButton: function()
     // Re-enabling vis dropdowns is necessary because initForAjax() disables them on submit.
     {
-        $('select.normalText,select.hiddenText').attr('disabled',false);
+        $('select.normalText,select.hiddenText').prop('disabled',false);
     }
 };
 
@@ -1240,7 +1240,7 @@ var dragSelect = {
                     "Zoom In": function() {
                         // Zoom to selection
                         $(this).dialog("option", "revertToOriginalPos", false);
-                        if ($("#disableDragHighlight").attr('checked'))
+                        if ($("#disableDragHighlight").prop('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
                             if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
@@ -1261,7 +1261,7 @@ var dragSelect = {
                     "Single Highlight": function() {
                         // Clear old highlight and Highlight selection
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                        if ($("#disableDragHighlight").attr('checked'))
+                        if ($("#disableDragHighlight").prop('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         var hlColor = $("#hlColorInput").val();
                         dragSelect.highlightThisRegion(newPosition, false, hlColor);
@@ -1269,7 +1269,7 @@ var dragSelect = {
                     },
                     "Add Highlight": function() {
                         // Highlight selection
-                        if ($("#disableDragHighlight").attr('checked'))
+                        if ($("#disableDragHighlight").prop('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         var hlColor = $("#hlColorInput").val();
                         dragSelect.highlightThisRegion(newPosition, true, hlColor);
@@ -1294,7 +1294,7 @@ var dragSelect = {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                     if ($(this).dialog("option", "revertToOriginalPos"))
                         genomePos.revertToOriginalPos();
-                    if ($("#disableDragHighlight").attr('checked'))
+                    if ($("#disableDragHighlight").prop('checked'))
                         $(this).remove();
                     else
                         $(this).hide();
@@ -3233,7 +3233,7 @@ var popUpHgt = {
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
         var cleanHtml = response;
-        cleanHtml = stripCspHeader(cleanHtml,false); // DEBUG msg with true
+        //cleanHtml = stripCspHeader(cleanHtml,false); // DEBUG msg with true
         cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
         //cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true // Obsolete by CSP2?
@@ -3324,19 +3324,19 @@ var popUpHgt = {
                                enterSelectsIdentical: true });
         // Make multi-region option inputs select their associated radio buttons
         $('input[name="emPadding"]').keyup(function() {
-            $('#virtModeType[value="exonMostly"]').attr('checked', true); });
+            $('#virtModeType[value="exonMostly"]').prop('checked', true); });
         $('input[name="gmPadding"]').keyup(function() {
-            $('#virtModeType[value="geneMostly"]').attr('checked', true); });
+            $('#virtModeType[value="geneMostly"]').prop('checked', true); });
         $('#multiRegionsBedInput').keyup(function() {
-            $('#virtModeType[value="customUrl"]').attr('checked', true); });
+            $('#virtModeType[value="customUrl"]').prop('checked', true); });
         $('#singleAltHaploId').keyup(function() {
-            $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
+            $('#virtModeType[value="singleAltHaplo"]').prop('checked', true); });
 
         // disable exit if not in MR mode
         if (!hgTracks.virtModeType) {
             $('#virtModeTypeDefaultLabel').addClass('disabled');
-            $('#virtModeType[value="exonMostly"]').attr('checked', true);
-            $('#virtModeType[value="default"]').attr('disabled', 'disabled');
+            $('#virtModeType[value="exonMostly"]').prop('checked', true);
+            $('#virtModeType[value="default"]').prop('disabled', 'disabled');
         } else {
             $('#virtModeType[value="default"]').removeAttr('disabled');
         }
@@ -3528,6 +3528,9 @@ var popUpHgcOrHgGene = {
             $(this).dialog("close");
         };
 
+        let openIcon = "<a class='dialogNewWindowIcon' target='_blank' href='" + popUpHgcOrHgGene.href + "'><svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg></a>";
+        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel + " (Item Details)" + openIcon;
+
         $('#hgcDialog').dialog({
             resizable: true,               // Let scroll vertically
             height: popMaxHeight,
@@ -3555,12 +3558,14 @@ var popUpHgcOrHgGene = {
 
             close: function() {
                 popUpHgcOrHgGene.cleanup();
+            },
+            title: function() {
+                this.innerHTML = titleText;
             }
         });
-        let openIcon = "<a class='dialogNewWindowIcon' target='_blank' href='" + popUpHgcOrHgGene.href + "'><svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg></a>";
-        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel + " (Item Details)" + openIcon;
 
-        $('#hgcDialog').dialog('option' , 'title', titleText);
+        // override the _title function to show custom html:
+        //$('#hgcDialog').dialog('option' , 'title', titleText);
         $('#hgcDialog').dialog('open');
         document.addEventListener('click', e => {
             // if we clicked outside of the pop up, close the popup:
@@ -4509,7 +4514,7 @@ var imageV2 = {
     {   // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
         if (imageV2.inPlaceUpdate) {
             var params = ele.name + "=" + ele.value;
-            $(ele).attr('disabled', 'disabled');
+            $(ele).prop('disabled', 'disabled');
             // dinking navigation needs additional data
             if (ele.name === "hgt.dinkLL" || ele.name === "hgt.dinkLR") {
                 params += "&dinkL=" + $("input[name='dinkL']").val();
