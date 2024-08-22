@@ -4939,12 +4939,19 @@ var mouseOver = {
     updateMouseOver: function (trackName, newJson)
     {
       if (! newJson ) { return; }
+      // this newJson object appears to be a single trackDb, not
+      //  an array of them
       var trackDb = null;
-      for ( var id in newJson.trackDb ) {
-         if (id === trackName) {
-            trackDb = newJson.trackDb[id];
-            break;
-         }
+      // so, if the type attribute exists, then it is the trackDb
+      if (newJson.type) {
+         trackDb = newJson;
+      } else {	// otherwise, search through the array
+        for ( var id in newJson.trackDb ) {
+           if (id === trackName) {
+              trackDb = newJson.trackDb[id];
+              break;
+           }
+        }
       }
       var trackType = null;
       var hasChildren = null;
