@@ -289,6 +289,8 @@ if (withGetButton)
     else
         cgiMakeButton(hgtaDoPrintSelectedFields, "Get output");
     hPrintf(" ");
+    cgiMakeButton(hgtaDoCurlSelected, "get curl command");
+    hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "Cancel");
     hPrintf(" ");
     }
@@ -475,6 +477,7 @@ hPrintf("<FORM NAME=\"mainForm\" ACTION=\"%s\" METHOD=%s>\n", cgiScriptName(),
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
+cgiMakeHiddenVar(hgtaFieldSelectTable, getDbTable(db, table));
 dbOverrideFromTable(dbTableBuf, &db, &table);
 
 showTableFields(db, table, TRUE);
@@ -992,6 +995,7 @@ boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
 boolean isLongTabix = tdb ? tdbIsLongTabix(tdb) : isLongTabixTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
 boolean isHic = tdb ? tdbIsHic(tdb) : isHicTable(rootTable);
+boolean isKnownGene = sameOk(table, "knownGene");
 
 if (isWig)
     {
@@ -1030,7 +1034,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBb||isBam||isVcf||isLongTabix||isHic))
+if (!(isWig||isBedGr||(isBb && !isKnownGene)||isBam||isVcf||isLongTabix||isHic))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
