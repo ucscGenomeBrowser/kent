@@ -71,8 +71,9 @@ thead th {
 }
 
 /* CSS styles to position radio button groups */
+/* display will be flex to show this box on 'show advanced search options' */
 .radioGroupContainer {
-    display: flex; /* Use flexbox to align items horizontally */
+    display: none; /* Use flexbox to align items horizontally */
     gap: 20px; /* Optional: Add space between the two groups */
     border: 2px solid #000; /* Add a 2px solid black border around the container */
     padding: 10px; /* Optional: Add padding inside the border */
@@ -94,15 +95,15 @@ thead th {
     box-sizing: border-box;
 }
 
-.searchtip {
+.searchTip {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    background-color: #ccc;
-    color: #008;
+    background-color: #e5cb99;
+    color: #00f;
 }
 
-.searchtiptext {
+.searchTiptext {
     visibility: hidden;
     width: 600px;
     background-color: #fff;
@@ -113,14 +114,14 @@ thead th {
     padding: 5px;
     position: absolute;
     z-index: 1;
-    bottom: -525%; /* Position above the text */
+    bottom: -925%; /* Position above the text */
     left: 50%;
-    /* margin-left: -70px; /* Center the searchtip */
-    margin-left: -600px;
+    /* margin-left: -70px; /* Center the searchTip */
+    margin-left: -300px;
     transition: opacity 0.3s;
 }
 
-.searchtip:hover .searchtiptext {
+.searchTip:hover .searchTiptext {
     visibility: visible;
     opacity: 1;
 }
@@ -161,5 +162,68 @@ ol.noBullets {
 
 #modalWrapper.overlay #modalWindow {
     display: block;
+}
+
+/* allow content in table header cells to overflow to allow tooltip
+ *  legend display outside the cell
+ */
+.dataTable thead tr th {
+  overflow: visible;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
+.dataTable thead tr th:hover .tooltiptext {
+  visibility: visible;
+}
+
+.dataTable thead tr th:hover .tooltiptextright {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: left;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  left: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* right most two columns have right margins instead of left so as
+ *  not to run off the page to the right
+ */
+
+.tooltip .tooltiptextright {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: right;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  right: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
 }
 

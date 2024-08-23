@@ -2148,10 +2148,17 @@ puts("&nbsp;<B>Show ruler</B></P>");
 puts("<P>");
 cgiMakeCheckBox(BASE_SCALE_BAR, showScaleBar);
 puts("&nbsp;<B>Show scale bar</B>");
+
 puts("<P>");
 cgiMakeCheckBox(BASE_SHOWASM_SCALEBAR, cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE));
 puts("&nbsp;<B>Show assembly next to scale bar</B>");
 puts("</P>");
+
+puts("<P>");
+cgiMakeCheckBox(BASE_SHOWCODONS, cartUsualBoolean(cart, BASE_SHOWCODONS, FALSE));
+puts("&nbsp;<B>Show amino acids for all three possible reading frames</B>");
+puts("</P>");
+
 puts("<P><B>Zoom factor:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");

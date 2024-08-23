@@ -67,7 +67,7 @@ static struct hash *getRefSeqTable(struct sqlConnection *conn,  char *version)
 {
 char versionQuery[4096];
 
-safef(versionQuery, sizeof versionQuery, "select * from wgEncodeGencodeRefSeq%s",  version);
+sqlSafef(versionQuery, sizeof versionQuery, "select * from wgEncodeGencodeRefSeq%s",  version);
 
 char **row;
 struct sqlResult *sr;
@@ -88,7 +88,7 @@ static struct hash *getAttrsTable(struct sqlConnection *conn,  char *version)
 {
 char versionQuery[4096];
 
-safef(versionQuery, sizeof versionQuery, "select * from wgEncodeGencodeAttrs%s",  version);
+sqlSafef(versionQuery, sizeof versionQuery, "select * from wgEncodeGencodeAttrs%s",  version);
 
 char **row;
 struct sqlResult *sr;
@@ -110,9 +110,9 @@ static struct hash *getMapTable(struct sqlConnection *conn, char *query, char *v
 char versionQuery[4096];
 
 if (version != NULL)
-    safef(versionQuery, sizeof versionQuery, "%s%s", query, version);
+    sqlSafef(versionQuery, sizeof versionQuery, query, version);
 else
-    safecpy(versionQuery, sizeof versionQuery,  query);
+    sqlSafef(versionQuery, sizeof versionQuery, query, NULL);
 
 char **row;
 struct sqlResult *sr;
@@ -135,7 +135,7 @@ char versionQuery[4096];
 char **row;
 struct sqlResult *sr;
 
-safef(versionQuery, sizeof versionQuery, "%s%s", query, version);
+sqlSafef(versionQuery, sizeof versionQuery, query, version);
 sr = sqlGetResult(conn, versionQuery);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -266,7 +266,7 @@ static char *descriptionFromAcc(struct sqlConnection *conn, char *acc)
 {
 char query[4096];
 
-safef(query, sizeof query, "select d.name from all_mrna a, hgFixed.gbCdnaInfo c, hgFixed.description d where a.qName=\"%s\" and  a.qName=c.acc and c.description = d.id", acc );
+sqlSafef(query, sizeof query, "select d.name from all_mrna a, hgFixed.gbCdnaInfo c, hgFixed.description d where a.qName=\"%s\" and  a.qName=c.acc and c.description = d.id", acc );
 return sqlQuickString(conn, query);
 }
 
@@ -274,7 +274,7 @@ static char *uniProtDescriptionFromAcc(struct sqlConnection *conn, char *acc)
 {
 char query[4096];
 
-safef(query, sizeof query, "select v.val from commentVal v, comment c where c.acc = '%s' and v.id=c.commentVal", acc);
+sqlSafef(query, sizeof query, "select v.val from commentVal v, comment c where c.acc = '%s' and v.id=c.commentVal", acc);
 return sqlQuickString(conn, query);
 }
 
@@ -282,7 +282,7 @@ static char *displayIdFromAcc(struct sqlConnection *conn, char *acc)
 {
 char query[4096];
 
-safef(query, sizeof query, "select val from displayId where acc = '%s'", acc);
+sqlSafef(query, sizeof query, "select val from displayId where acc = '%s'", acc);
 return sqlQuickString(conn, query);
 }
 
@@ -298,10 +298,12 @@ if (wgr != NULL)
     char buffer[256];
 
     safecpy(buffer, sizeof buffer, wgr->rnaAcc);
+
+/*  Don't need to strip the version; we're getting info from ncbiRefSeqLink now, which includes them
     char *ptr = strrchr(buffer, '.');
     if (ptr != NULL)
 	*ptr = 0;
-
+*/
     description = (char *)hashFindVal(hashes->refSeqToDescription, buffer);
 
     if (!isEmpty(description))
@@ -639,23 +641,24 @@ struct hashes hashes;
 hashes.genToUC = getMap(txToAccTab);
 hashes.genToAttrs = getAttrsTable(conn, version);
 //hashes.genToAnnRemark = getMapTable(conn, "select transcriptId, remark from wgEncodeGencodeAnnotationRemark", version);
-hashes.genToUniProt = getMapTable(conn, "select transcriptId, acc from wgEncodeGencodeUniProt", version);
+hashes.genToUniProt = getMapTable(conn, "select transcriptId, acc from wgEncodeGencodeUniProt%s", version);
 hashes.genToRefSeq = getRefSeqTable(conn, version);
 //hashes.genToRefSeq = getMapTable(tconn, "select name, value from knownToRefSeq", NULL);
-struct genePred *compGenePreds = loadGenePreds(conn, "select * from wgEncodeGencodeComp", version);
-struct genePred *pseudoGenePreds = loadGenePreds(conn, "select * from wgEncodeGencodePseudoGene", version);
+struct genePred *compGenePreds = loadGenePreds(conn, "select * from wgEncodeGencodeComp%s", version);
+struct genePred *pseudoGenePreds = loadGenePreds(conn, "select * from wgEncodeGencodePseudoGene%s", version);
 compGenePreds = slCat(compGenePreds, pseudoGenePreds);
 hashes.refSeqToPepName = getMapTable(conn, "select mrnaAcc,protAcc from hgFixed.refLink", NULL);
 //hashes.mrnaToDescription = getMapTable(conn, "select a.name,d.name from all_mrna a, gbCdnaInfo c, description d where a.qName=c.acc and c.description = d.id", NULL);
-hashes.refSeqToDescription = getMapTable(conn, "select g.name,d.name from refGene g, hgFixed.gbCdnaInfo c, hgFixed.description d where g.name=c.acc and c.description = d.id", NULL);
+//hashes.refSeqToDescription = getMapTable(conn, "select g.name,d.name from refGene g, hgFixed.gbCdnaInfo c, hgFixed.description d where g.name=c.acc and c.description = d.id", NULL);
+hashes.refSeqToDescription = getMapTable(conn, "select id,product from ncbiRefSeqLink", NULL);
 hashes.hgncDescriptionFromGeneName = getMapTable(pconn, "select symbol, name from hgnc", NULL);
 hashes.refSeqToStatus = getMapTable(conn, "select mrnaAcc, status from hgFixed.refSeqStatus", NULL);
-hashes.genToPdb = getMapTable(conn, "select transcriptId, pdbId from wgEncodeGencodePdb", version);
+hashes.genToPdb = getMapTable(conn, "select transcriptId, pdbId from wgEncodeGencodePdb%s", version);
 //hashes.displayIdFromUniProtId = getMapTable(uconn, "select acc, val from displayId", NULL);
 //printf("displayIdFromUniProtId %ld\n", time(NULL) - start);
 //hashes.descriptionFromUniProtId = getMapTable(uconn, "select c.acc, v.val from commentVal v, comment c where v.id=c.commentVal", NULL);
 //printf("descriptionFromUniProtId %ld\n", time(NULL) - start);
-hashes.genToTags = getMapTable(conn, "select transcriptId, tag from wgEncodeGencodeTag", version);
+hashes.genToTags = getMapTable(conn, "select transcriptId, tag from wgEncodeGencodeTag%s", version);
 if (!justKnown)
     outputKnownCanonical(compGenePreds, &hashes);
 outputKnownGene(compGenePreds, &hashes);
