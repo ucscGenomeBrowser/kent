@@ -2155,7 +2155,7 @@ puts("&nbsp;<B>Show assembly next to scale bar</B>");
 puts("</P>");
 
 puts("<P>");
-cgiMakeCheckBox(BASE_SHOWCODONS, cartUsualBoolean(cart, BASE_SHOWCODONS, TRUE));
+cgiMakeCheckBox(BASE_SHOWCODONS, cartUsualBoolean(cart, BASE_SHOWCODONS, FALSE));
 puts("&nbsp;<B>Show amino acids for all three possible reading frames</B>");
 puts("</P>");
 
