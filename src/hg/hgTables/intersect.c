@@ -281,12 +281,12 @@ else
     }
 
 char *hgsid = cartSessionId(cart);
-hPrintf("<P style='margin-top:3px; margin-bottom:10px; padding:0px'>");
-hPrintf("<b>If these options are not sufficient:</b><BR>The intersection configured on this page only outputs fields from the track selected under \"Select Dataset\" on the previous page, for those features that are overlapped by the second track, selected on this page.<BR>");
-hPrintf("If you want to intersect two tracks and output fields from both, e.g. to show which Chip-seq peak overlaps which enhancer, or which dbSNP variant overlaps which ClinVar CNV, then use our <a href='hgIntegrator?hgsid=%s'>Data Integrator</a>.<BR>", hgsid);
-hPrintf("If you want to annotate a track with variants in VCF format with the transcript positions, then use our <a href='hgVai?hgsid=%s'>Variant Annotation Integrator</a>.<br>", hgsid);
-hPrintf("More complex operations may require command line tools. We provide <a target=_blank href='https://hgdownload.soe.ucsc.edu/admin/exe/'>several hundred command line tools</a> that can help with overlaps and intersections, e.g. overlapSelect, featureBits, pslMap and others.<br>");
+hPrintf("<b>More options:</b><UL><LI>The intersection configured on this page only outputs fields from the track selected under \"Select Dataset\" on the previous page, limited to features that overlap with the second track selected on this page.</LI>");
+hPrintf("<LI>For intersecting two datasets and outputting fields from both (e.g., identifying which ChIP-seq peak overlaps with an enhancer, or determining which dbSNP variant overlaps with a ClinVar CNV), use the  <a href='hgIntegrator?hgsid=%s'>Data Integrator</a>.</LI>", hgsid);
+hPrintf("<LI>To annotate a track with variants in VCF format with the transcript positions, use the <a href='hgVai?hgsid=%s'>Variant Annotation Integrator</a>.</LI>", hgsid);
+hPrintf("<LI>For more complex operations, command-line tools may be required. We provide <a target=_blank href='https://hgdownload.soe.ucsc.edu/admin/exe/'>several hundred command line tools</a>, including overlapSelect, featureBits, pslMap, and others, for handling overlaps and intersections.</UL>");
 hPrintf("</P>");
+
 
 cgiMakeButton(hgtaDoIntersectSubmit, "Submit");
 hPrintf(" ");
