@@ -519,9 +519,10 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra
-include knownGeneArchive.ra alpha
+include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
+include knownGeneArchive.ra alpha
+include knownGene.nmd_deco.ra alpha
 
 include trackDb.100way.ra 
 include trackDb.145way.ra alpha
