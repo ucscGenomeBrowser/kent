@@ -288,8 +288,8 @@ if (withGetButton)
         cgiMakeButton(hgtaDoGalaxySelectedFields, "done with selections");
     else
         cgiMakeButton(hgtaDoPrintSelectedFields, "Get output");
-    hPrintf(" ");
-    cgiMakeButton(hgtaDoCurlSelected, "get curl command");
+    //hPrintf(" ");
+    //cgiMakeButton(hgtaDoCurlSelected, "get curl command");
     hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "Cancel");
     hPrintf(" ");
@@ -477,7 +477,7 @@ hPrintf("<FORM NAME=\"mainForm\" ACTION=\"%s\" METHOD=%s>\n", cgiScriptName(),
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
-cgiMakeHiddenVar(hgtaFieldSelectTable, getDbTable(db, table));
+//cgiMakeHiddenVar(hgtaFieldSelectTable, getDbTable(db, table));
 dbOverrideFromTable(dbTableBuf, &db, &table);
 
 showTableFields(db, table, TRUE);
