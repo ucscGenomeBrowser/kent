@@ -1,0 +1,6 @@
+hub BRC
+shortLabel BRC
+longLabel BRC project
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html
