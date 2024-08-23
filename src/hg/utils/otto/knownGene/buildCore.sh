@@ -53,7 +53,7 @@ hgsql $db -Ne "create view $tempDb.trackDb as select * from trackDb"
 hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
 hgLoadGenePred -genePredExt $tempDb  knownGeneExt knownGeneExt.gp
 hgMapToGene -geneTableType=genePred  -type=psl -all -tempDb=$tempDb $db all_mrna knownGene knownToMrna
-hgMapToGene -geneTableType=genePred  -tempDb=$tempDb $db refGene knownGene knownToRefSeq
+hgMapToGene -geneTableType=genePred  -tempDb=$tempDb $db ncbiRefSeq knownGene knownToRefSeq
 hgMapToGene -geneTableType=genePred  -type=psl -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
 
 # makes kgXref.tab  knownCanonical.tab knownIsoforms.tab kgColor.tab  
@@ -75,7 +75,7 @@ hgsql $db -Ne "select * from wgEncodeGencodeAttrs$GENCODE_VERSION" | tawk '{prin
 
 # MANE transcript coloring override (mark MANE Select and Plus Clinical with a different color
 hgsql $db -Ne "select transcriptId from wgEncodeGencodeTag$GENCODE_VERSION where tag = 'MANE_Select' or tag = 'MANE_Plus_Clinical'" > mane.transcripts
-cat colors.preMane | perl -e 'open $fh "<" "mane.transcripts" or die "mane.transcripts missing"; %h = (); while (<$fh>) {chomp; $h{$_}=1;} while (<STDIN>)){ chomp; if (m/^(\S+)) { $s = $_; if (defined $h{$1}) {$s = "$1\t12\t109\t173";}} print "$s\n";' > colors.txt
+cat colors.preMane | perl -e 'open($fh,"<","mane.transcripts") or die "mane.transcripts missing"; %h = (); while (<$fh>) {chomp; $h{$_}=1;} while (<STDIN>){ chomp; if (m/^(\S+)/) { $s = $_; if (defined $h{$1}) {$s = "$1\t12\t109\t173";}} print "$s\n";}' > colors.txt
 
 hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql colors.txt
 
