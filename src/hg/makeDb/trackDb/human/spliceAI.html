@@ -32,13 +32,12 @@ splicing analysis and masked tracks for variant interpretation.
 
 <h2>Display Conventions and Interpretation</h2>
 <p>
-Variants are colored by their predicted effects:
+Variants are colored according to Walker et al. 2023 splicing imact:
 </p>
 <ul>
-<li><b><font color="#FF0000">Acceptor gain (red)</font></b> </li>
-<li><b><font color="#FF8000">Acceptor loss (orange)</font></b> </li>
-<li><b><font color="#0000FF">Donor gain (blue)</font></b> </li>
-<li><b><font color="#D400FF">Donor loss (violet)</font></b> </li>
+<li><b><font color="#FF8000">Predicted impact on splicing: Score &gt;&#61; 0.2 </font></b> </li>
+<li><b><font color="#808080">Not informative: Score &lt; 0.2 and &gt; 0.1 </font></b> </li>
+<li><b><font color="#0000FF">No impact on splicing: Score &lt;&#61; 0.1 </font></b> </li>
 </ul>
 </p>
 Mouseover on items shows the variant, gene name, type of change (donor gain/loss, acceptor
@@ -106,4 +105,15 @@ Arbelaez J, Cui W, Schwartz GB <em>et al</em>.
 Predicting Splicing from Primary Sequence with Deep Learning</a>.
 <em>Cell</em>. 2019 Jan 24;176(3):535-548.e24.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30661751" target="_blank">30661751</a>
+</p>
+
+<p>
+Walker LC, Hoya M, Wiggins GAR, Lindy A, Vincent LM, Parsons MT, Canson DM, Bis-Brewer D, Cass A,
+Tchourbanov A <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(23)00203-3" target="_blank">
+Using the ACMG/AMP framework to capture evidence related to predicted and observed impact on
+splicing: Recommendations from the ClinGen SVI Splicing Subgroup</a>.
+<em>Am J Hum Genet</em>. 2023 Jul 6;110(7):1046-1067.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37352859" target="_blank">37352859</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10357475/" target="_blank">PMC10357475</a>
 </p>
