@@ -1202,6 +1202,24 @@ safef(namePrefix, sizeof(namePrefix), "%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
 }
 
+char *trackHubGetHubName(char *name)
+/* Get the hub_#_ prefix in a hub name. */
+{
+if ((name == NULL) || !startsWith("hub_", name))
+    return NULL;
+
+char *ret = cloneString(name);
+char *under = strchr(&ret[4], '_');
+
+if (under)
+    {
+    *under = 0;
+    return ret;
+    }
+
+return NULL;
+}
+
 char *trackHubSkipHubName(char *name)
 /* Skip the hub_#_ prefix in a hub name. */
 {
