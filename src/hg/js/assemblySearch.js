@@ -88,9 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var searchTerm = document.getElementById('searchBox').value;
         var resultCountLimit = document.getElementById('maxItemsOutput');
-        browserExist = "mayExist";
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
+        browserExist = "mustExist";
         if (mustExist && notExist) {
            browserExist = "mayExist";
         } else if (notExist) {
@@ -484,6 +484,15 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     var url = "/findGenome?q=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
+
+    var historyUrl = "?q=" + encodeURIComponent(queryString) + ";browser=" + browserExist + ";maxItemsOutput=" + resultLimit;
+    if (debug) {
+       historyUrl += ";debug=1";
+    }
+    if (measureTiming) {
+       historyUrl += ";measureTiming=1";
+    }
+    history.pushState(null, '', historyUrl);
 
     if (debug) {
       var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
