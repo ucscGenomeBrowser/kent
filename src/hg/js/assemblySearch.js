@@ -143,6 +143,17 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
              document.getElementById("anyWord").checked = true;
           }
+          if (stateObject.refSeqLatest) {
+             document.getElementById('refSeqLatest').checked = true;
+          } else {
+             document.getElementById('refSeqLatest').checked = false;
+          }
+          if (stateObject.refSeqRepresentative) {
+             document.getElementById('refSeqRepresentative').checked = true;
+          } else {
+             document.getElementById('refSeqRepresentative').checked = false;
+          }
+
           document.getElementById('searchBox').value = stateObject.queryString;
 	  populateTableAndInfo(JSON.parse(stateObject.jsonData));
 //          alert("state: '" + JSON.stringify(stateObject) + "'");
@@ -510,9 +521,20 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     // Disable the submit button
     disableButtons();
     var queryString = query;
+    // if 'latest' requested, add '+latest' if not already in query
+    if (document.getElementById('refSeqLatest').checked) {
+       if (! /latest/.test(queryString) ) {
+         queryString += " +latest";
+       }
+    }
+    if (document.getElementById('refSeqRepresentative').checked) {
+       if (! /representative/.test(queryString) ) {
+         queryString += " +representative";
+       }
+    }
     // for allWords, place + sign in front of each word if not already there
     if (wordMatch === "allWords") {
-      var words = query.split(/\s+/);
+      var words = queryString.split(/\s+/);
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
         words.forEach(function(word) {
@@ -522,9 +544,11 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
             queryPlus += " +" + word;
           }
         });
-      queryString = queryPlus.trimStart();	// remove first space character
+        queryString = queryPlus.trim();
       }
     }
+    // remove stray white space from beginning or end
+    queryString = queryString.trim();
 
     // Show the wait spinner
     document.querySelector(".submitContainer").classList.add("loading");
@@ -554,6 +578,8 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     stateObject.debug = debug;
     stateObject.measureTiming = measureTiming;
     stateObject.wordMatch = wordMatch;
+    stateObject.refSeqLatest = document.getElementById('refSeqLatest').checked;
+    stateObject.refSeqRepresentative = document.getElementById('refSeqRepresentative').checked;
 
     xhr.open('GET', urlPrefix + url, true);
 
