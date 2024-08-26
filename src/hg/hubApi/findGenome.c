@@ -194,7 +194,7 @@ return elapsedTimeMs;
 void apiFindGenome(char *pathString[MAX_PATH_INFO])
 /* 'findGenome' function */
 {
-char *searchString = cgiOptionalString(argGenomeSearchTerm);
+char *searchString = cgiOptionalString(argQ);
 char *inputSearchString = cloneString(searchString);
 char *endResultSearchString = NULL;
 boolean prefixSearch = FALSE;
@@ -264,9 +264,9 @@ int wordCount = 0;
 wordCount = chopByWhite(searchString, NULL, 0);
 
 if (wordCount < 1)
-apiErrAbort(err400, err400Msg, "search term '%s' does not contain a word ? for function /findGenome", argGenomeSearchTerm);
+apiErrAbort(err400, err400Msg, "search term '%s' does not contain a word ? for function /findGenome", argQ);
 if (wordCount > 5)
-apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 words for function /findGenome", argGenomeSearchTerm, searchString);
+apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 words for function /findGenome", argQ, searchString);
 
 struct jsonWrite *jw = apiStartOutput();
 
@@ -287,12 +287,12 @@ if (prefixSearch)
     struct dyString *addedStar = dyStringNew(64);
     dyStringPrintf(addedStar, "%s*", inputSearchString);
     endResultSearchString = dyStringCannibalize(&addedStar);
-    jsonWriteString(jw, argGenomeSearchTerm, endResultSearchString);
+    jsonWriteString(jw, argQ, endResultSearchString);
     }
 else
     {
     endResultSearchString = inputSearchString;
-    jsonWriteString(jw, argGenomeSearchTerm, inputSearchString);
+    jsonWriteString(jw, argQ, inputSearchString);
     }
 
 /* rules about what can be in the search string:
@@ -328,7 +328,7 @@ if (itemCount)
     apiFinishOutput(0, NULL, jw);
     }
 else
-    apiErrAbort(err400, err400Msg, "no genomes found matching search term %s='%s' for endpoint: /findGenome", argGenomeSearchTerm, inputSearchString);
+    apiErrAbort(err400, err400Msg, "no genomes found matching search term %s='%s' for endpoint: /findGenome", argQ, inputSearchString);
 
 hDisconnectCentral(&conn);
 

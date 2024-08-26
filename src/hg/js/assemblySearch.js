@@ -3,11 +3,14 @@
 var debug = false;
 var measureTiming = false;
 var urlParams;
-var searchFor = "";
+var query = "";
 var maxItemsOutput = 500;
 var asmIdText = null;
+// adjust default here and in assemblySearch.html
+var browserExist = "mayExist";
 var betterCommonName = null;
 var comment = null;
+var stateObject = {};	// maintain page state
 var requestSubmitButton = null;
 var completedAsmId = new Map();	// keep track of requests completed
 				// so they won't be repeated
@@ -16,14 +19,34 @@ var completedAsmId = new Map();	// keep track of requests completed
 //  procedure for first time page draw
 document.addEventListener('DOMContentLoaded', function() {
     // allow semi colon separators as well as ampersand
-    var queryString = window.location.search.replaceAll(";", "&");
-    urlParams = new URLSearchParams(queryString);
+    var urlArgList = window.location.search.replaceAll(";", "&");
+    urlParams = new URLSearchParams(urlArgList);
     if (urlParams.has('measureTiming')) { // accepts no value or other string
        var measureValue = urlParams.get('measureTiming');
        if ("0" === measureValue | "off" === measureValue) {
          measureTiming = false;
        } else {			// any other string turns it on
          measureTiming = true;
+       }
+    }
+    if (urlParams.has('browser')) {
+       var browserValue = urlParams.get('browser');
+       if ("mayExist" === browserValue) {
+          browserExist = "mayExist";
+          document.getElementById('mustExist').checked = true;
+          document.getElementById('notExist').checked = true;
+       } else if ("mustExist" === browserValue) {
+          browserExist = "mustExist";
+          document.getElementById('mustExist').checked = true;
+          document.getElementById('notExist').checked = false;
+       } else if ("notExist" === browserValue) {
+          browserExist = "notExist";
+          document.getElementById('mustExist').checked = false;
+          document.getElementById('notExist').checked = true;
+//       } else {
+         // not going to worry about this here today, but there should be
+         // a non-obtrusive dialog pop-up message about illegal arguments
+//         alert("warning: illegal value for browser=... must be one of: mayExist, mustExist, notExist");
        }
     }
     if (urlParams.has('debug')) { // accepts no value or other string
@@ -45,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
       searchTipList.appendChild(li);
     }
 
+    // default starts as hidden
+    stateObject.advancedSearchVisible = false;
     var searchForm = document.getElementById('searchForm');
     var advancedSearchButton = document.getElementById('advancedSearchButton');
     var searchInput = document.getElementById('searchBox');
@@ -66,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var searchTerm = document.getElementById('searchBox').value;
         var resultCountLimit = document.getElementById('maxItemsOutput');
-        var browserExist = "mustExist";
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
+        browserExist = "mustExist";
         if (mustExist && notExist) {
            browserExist = "mayExist";
         } else if (notExist) {
@@ -79,15 +104,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     advancedSearchButton.addEventListener('click', function() {
-       var advancedSearchOptions = document.getElementById("advancedSearchOptions");
+       var searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
-       if (! advancedSearchOptions.style.display ||
-             advancedSearchOptions.style.display === "none") {
-          advancedSearchOptions.style.display = "flex";
-          this.textContent = "hide advanced search options"; // Change button text
+       if (! searchOptions.style.display
+             || searchOptions.style.display === "none") {
+          advancedSearchVisible(true);
        } else {
-          advancedSearchOptions.style.display = "none";
-          this.textContent = "show advanced search options"; // Change button text
+          advancedSearchVisible(false);
+       }
+    });
+
+    // restore history on back button
+    window.addEventListener('popstate', function(e) {
+       const state = event.state;
+       if (state) {
+          stateObject.queryString = state.queryString;
+          stateObject.maxItemsOutput = state.maxItemsOutput;
+          stateObject.browser = state.browser;
+          stateObject.debug = state.debug;
+          stateObject.measureTiming = state.measureTiming;
+          stateObject.wordMatch = state.wordMatch;
+          stateObject.jsonData = state.jsonData;
+          document.getElementById('mustExist').checked = false;
+          document.getElementById('notExist').checked = false;
+          if (stateObject.browser === "mustExist") {
+             document.getElementById('mustExist').checked = true;
+          }
+          if (stateObject.browser === "notExist") {
+             document.getElementById('notExist').checked = true;
+          }
+          if (stateObject.browser === "mayExist") {
+             document.getElementById('mustExist').checked = true;
+             document.getElementById('notExist').checked = true;
+          }
+          advancedSearchVisible(stateObject.advancedSearchVisible);
+          if (stateObject.wordMatch === "allWords") {
+             document.getElementById("allWords").checked = true;
+          } else {
+             document.getElementById("anyWord").checked = true;
+          }
+          document.getElementById('searchBox').value = stateObject.queryString;
+	  populateTableAndInfo(JSON.parse(stateObject.jsonData));
+//          alert("state: '" + JSON.stringify(stateObject) + "'");
        }
     });
 
@@ -103,10 +161,10 @@ document.addEventListener('DOMContentLoaded', function() {
        }
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
-    if (urlParams.has('searchFor')) {
-       searchFor = urlParams.get('searchFor');
-       if (searchFor.length > 0) {
-          searchInput.value = searchFor;
+    if (urlParams.has('q')) {
+       query = urlParams.get('q');
+       if (query.length > 0) {
+          searchInput.value = query;
           document.getElementById('submitSearch').click();
        }
     }
@@ -129,6 +187,21 @@ function headerRefresh(tableHead) {
   headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
+}
+
+// call with visible true to make visible, false to hide
+function advancedSearchVisible(visible) {
+  var advancedSearchButton = document.getElementById("advancedSearchButton");
+  var searchOptions = document.getElementById("advancedSearchOptions");
+  if (visible) {
+    searchOptions.style.display = "flex";
+    advancedSearchButton.textContent = "hide advanced search options";
+    stateObject.advancedSearchVisible = true;
+  } else {
+    searchOptions.style.display = "none";
+    advancedSearchButton.textContent = "show advanced search options";
+    stateObject.advancedSearchVisible = false;
+  }
 }
 
 // Function to generate the table and extra information
@@ -190,7 +263,7 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.genomeSearch + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -459,14 +532,28 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
 
     var xhr = new XMLHttpRequest();
     var urlPrefix = "/cgi-bin/hubApi";
-    var url = "/findGenome?genomeSearch=" + encodeURIComponent(queryString);
+    var url = "/findGenome?q=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
+
+    var historyUrl = "?q=" + encodeURIComponent(queryString) + ";browser=" + browserExist + ";maxItemsOutput=" + resultLimit;
+    if (debug) {
+       historyUrl += ";debug=1";
+    }
+    if (measureTiming) {
+       historyUrl += ";measureTiming=1";
+    }
 
     if (debug) {
       var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
       document.getElementById("recentAjax").innerHTML = apiUrl;
     }
+    stateObject.queryString = queryString;
+    stateObject.maxItemsOutput = maxItemsOutput;
+    stateObject.browser = browserExist;
+    stateObject.debug = debug;
+    stateObject.measureTiming = measureTiming;
+    stateObject.wordMatch = wordMatch;
 
     xhr.open('GET', urlPrefix + url, true);
 
@@ -476,6 +563,10 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
             enableButtons();
+
+            stateObject.jsonData = xhr.responseText;
+            history.pushState(stateObject, '', historyUrl);
+
             var data = JSON.parse(xhr.responseText);
 	    populateTableAndInfo(data);
         } else {
