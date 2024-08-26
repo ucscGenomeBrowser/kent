@@ -10,6 +10,7 @@ var asmIdText = null;
 var browserExist = "mayExist";
 var betterCommonName = null;
 var comment = null;
+var stateObject = {};	// maintain page state
 var requestSubmitButton = null;
 var completedAsmId = new Map();	// keep track of requests completed
 				// so they won't be repeated
@@ -67,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
       searchTipList.appendChild(li);
     }
 
+    // default starts as hidden
+    stateObject.advancedSearchVisible = false;
     var searchForm = document.getElementById('searchForm');
     var advancedSearchButton = document.getElementById('advancedSearchButton');
     var searchInput = document.getElementById('searchBox');
@@ -101,15 +104,58 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     advancedSearchButton.addEventListener('click', function() {
-       var advancedSearchOptions = document.getElementById("advancedSearchOptions");
+       var searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
-       if (! advancedSearchOptions.style.display ||
-             advancedSearchOptions.style.display === "none") {
-          advancedSearchOptions.style.display = "flex";
-          this.textContent = "hide advanced search options"; // Change button text
+       if (! searchOptions.style.display || searchOptions.style.display === "none") {
+          advancedSearchVisible(true);
        } else {
-          advancedSearchOptions.style.display = "none";
-          this.textContent = "show advanced search options"; // Change button text
+          advancedSearchVisible(false);
+       }
+    });
+
+    // restore history on back button
+    window.addEventListener('popstate', function(e) {
+       var state = event.state;
+       if (state) {
+          stateObject.queryString = state.queryString;
+          stateObject.maxItemsOutput = state.maxItemsOutput;
+          stateObject.browser = state.browser;
+          stateObject.debug = state.debug;
+          stateObject.measureTiming = state.measureTiming;
+          stateObject.wordMatch = state.wordMatch;
+          stateObject.jsonData = state.jsonData;
+          document.getElementById('mustExist').checked = false;
+          document.getElementById('notExist').checked = false;
+          if (stateObject.browser === "mustExist") {
+             document.getElementById('mustExist').checked = true;
+          }
+          if (stateObject.browser === "notExist") {
+             document.getElementById('notExist').checked = true;
+          }
+          if (stateObject.browser === "mayExist") {
+             document.getElementById('mustExist').checked = true;
+             document.getElementById('notExist').checked = true;
+          }
+          advancedSearchVisible(stateObject.advancedSearchVisible);
+          if (stateObject.wordMatch === "allWords") {
+             document.getElementById("allWords").checked = true;
+          } else {
+             document.getElementById("anyWord").checked = true;
+          }
+          if (stateObject.refSeqLatest) {
+             document.getElementById('refSeqLatest').checked = true;
+          } else {
+             document.getElementById('refSeqLatest').checked = false;
+          }
+          if (stateObject.refSeqRepresentative) {
+             document.getElementById('refSeqRepresentative').checked = true;
+          } else {
+             document.getElementById('refSeqRepresentative').checked = false;
+          }
+
+          document.getElementById('searchBox').value = stateObject.queryString;
+	  populateTableAndInfo(JSON.parse(stateObject.jsonData));
+//          alert("state: '" + JSON.stringify(stateObject) + "'");
        }
     });
 
@@ -151,6 +197,21 @@ function headerRefresh(tableHead) {
   headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
+}
+
+// call with visible true to make visible, false to hide
+function advancedSearchVisible(visible) {
+  var advancedSearchButton = document.getElementById("advancedSearchButton");
+  var searchOptions = document.getElementById("advancedSearchOptions");
+  if (visible) {
+    searchOptions.style.display = "flex";
+    advancedSearchButton.textContent = "hide advanced search options";
+    stateObject.advancedSearchVisible = true;
+  } else {
+    searchOptions.style.display = "none";
+    advancedSearchButton.textContent = "show advanced search options";
+    stateObject.advancedSearchVisible = false;
+  }
 }
 
 // Function to generate the table and extra information
@@ -459,9 +520,20 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     // Disable the submit button
     disableButtons();
     var queryString = query;
+    // if 'latest' requested, add '+latest' if not already in query
+    if (document.getElementById('refSeqLatest').checked) {
+       if (! /latest/.test(queryString) ) {
+         queryString += " +latest";
+       }
+    }
+    if (document.getElementById('refSeqRepresentative').checked) {
+       if (! /representative/.test(queryString) ) {
+         queryString += " +representative";
+       }
+    }
     // for allWords, place + sign in front of each word if not already there
     if (wordMatch === "allWords") {
-      var words = query.split(/\s+/);
+      var words = queryString.split(/\s+/);
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
         words.forEach(function(word) {
@@ -471,9 +543,11 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
             queryPlus += " +" + word;
           }
         });
-      queryString = queryPlus.trimStart();	// remove first space character
+        queryString = queryPlus.trim();
       }
     }
+    // remove stray white space from beginning or end
+    queryString = queryString.trim();
 
     // Show the wait spinner
     document.querySelector(".submitContainer").classList.add("loading");
@@ -492,12 +566,19 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     if (measureTiming) {
        historyUrl += ";measureTiming=1";
     }
-    history.pushState(null, '', historyUrl);
 
     if (debug) {
       var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
       document.getElementById("recentAjax").innerHTML = apiUrl;
     }
+    stateObject.queryString = queryString;
+    stateObject.maxItemsOutput = maxItemsOutput;
+    stateObject.browser = browserExist;
+    stateObject.debug = debug;
+    stateObject.measureTiming = measureTiming;
+    stateObject.wordMatch = wordMatch;
+    stateObject.refSeqLatest = document.getElementById('refSeqLatest').checked;
+    stateObject.refSeqRepresentative = document.getElementById('refSeqRepresentative').checked;
 
     xhr.open('GET', urlPrefix + url, true);
 
@@ -507,6 +588,10 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
             enableButtons();
+
+            stateObject.jsonData = xhr.responseText;
+            history.pushState(stateObject, '', historyUrl);
+
             var data = JSON.parse(xhr.responseText);
 	    populateTableAndInfo(data);
         } else {

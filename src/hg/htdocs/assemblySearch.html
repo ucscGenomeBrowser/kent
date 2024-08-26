@@ -47,8 +47,12 @@
            </label>
            </div>
            <div class="radioGroup">
-              <label>may match any word <input type="radio" name="wordMatch" value="anyWord"></label>
-              <label>must match all words <input type="radio" name="wordMatch" value="allWords" checked></label>
+              <label><input type="checkbox" name="refSeqLatest" value="refSeqLatest" id="refSeqLatest"> must also be RefSeq '<em>latest</em>' status</label>
+              <label><input type="checkbox" name="refSeqRepresentative" value="refSeqRepresentative" id="refSeqRepresentative"> must also be RefSeq '<em>representative</em>' status</label>
+           </div>
+           <div class="radioGroup">
+              <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> may match any word</label>
+              <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> must match all words</label>
            </div>
         </div>	<!-- the radioGroupContainer -->
         </div> <!-- the entire form element -->
