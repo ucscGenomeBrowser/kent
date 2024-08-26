@@ -9504,6 +9504,9 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     jsIncludeFile("ajax.js",NULL);
     jsIncludeFile("hui.js",NULL);
     jsIncludeFile("subCfg.js",NULL);
+    jsIncludeFile("ddcl.js", NULL);
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
     }
 cgiDown(0.3);
 
