@@ -10,8 +10,8 @@ source `which qaConfig.csh`
 #### echo
 #### echo " --------------------------------------------"
 ####
-#### echo "server hgwdev.soe.ucsc.edu /
-#### machine hgwdev.soe.ucsc.edu /
+#### echo "server hgwdev.gi.ucsc.edu /
+#### machine hgwdev.gi.ucsc.edu /
 #### quick false /
 #### dbSpec $db /
 #### table all /
