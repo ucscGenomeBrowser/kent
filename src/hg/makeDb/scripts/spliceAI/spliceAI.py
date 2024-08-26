@@ -10,13 +10,23 @@ allFiles = {'hg19MaskedIndel': '/hive/data/outside/spliceAi/scoresFromIllumina/s
            'hg19RawSnv': '/hive/data/outside/spliceAi/scoresFromIllumina/spliceai_scores.raw.snv.hg19.vcf.gz',\
            'hg38RawSnv': '/hive/data/outside/spliceAi/scoresFromIllumina/spliceai_scores.raw.snv.hg38.vcf.gz'}
 
+def colorByScore(score):
+    if score <= 0.1:
+        color = '0,0,255' #blue
+    elif score > 0.1 and score < 0.2:
+        color = '128,128,128' #grey
+    elif score >= 0.2:
+        color = '255,128,0' #orange
+    return(color)
+        
+
 def processAndMakeBedFile(dbsAndMasking,filePath):
     with gzip.open(filePath, 'rt') as f:
         with open('/hive/data/outside/spliceAi/'+dbsAndMasking+'.bed', 'w', newline='', encoding='utf-8') as outfile1:
             AIwriter = csv.writer(outfile1, delimiter='\t')
-            atypes = {'acceptor_gain' : '255,0,0', 
-              'acceptor_loss' : '255,128,0', 
-              'donor_gain' : '0,0,255', 
+            atypes = {'acceptor_gain' : '255,0,0',
+              'acceptor_loss' : '255,128,0',
+              'donor_gain' : '0,0,255',
               'donor_loss' : '212,0,255'}
             for line in f:
                 if line.startswith('#'):
@@ -34,8 +44,9 @@ def processAndMakeBedFile(dbsAndMasking,filePath):
                         # make clear if position is upstream or downstream
                         if position > 0:
                             position = '+' + str(position)
+                        color = colorByScore(score)
                   #      print(f"Type: {atype}, Score: {score}, Position: {position}")
-                        AIwriter.writerow(['chr'+chrom, startpos, startpos+1, ref+'>'+alt, 0, '+', startpos, startpos, atypes[atype], score, atype, position, name])
+                        AIwriter.writerow(['chr'+chrom, startpos, startpos+1, ref+'>'+alt, 0, '+', startpos, startpos, color, score, atype, position, name])
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -70,5 +81,5 @@ for track in allFiles:
             BBname = "spliceAIindels"
     bash("bedToBigBed -type=bed9+4 -tab -as=/hive/data/outside/spliceAi/spliceAI.as "+bedFile+" \
     /hive/data/genomes/"+dbs+"/chrom.sizes /hive/data/outside/spliceAi/"+dbs+"/"+BBname+".bb")
-
+    
     bash("ln -sf /hive/data/outside/spliceAi/"+dbs+"/"+BBname+".bb /gbdb/"+dbs+"/bbi/"+BBname+".bb")

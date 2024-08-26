@@ -14,7 +14,7 @@ html ../../knownGeneArchive
     shortLabel UCSC Genes 2013
     longLabel Legacy UCSC Genes track (knownGene) from 2013
     parent knownGeneArchive
-    priority 1
+    priority 5
     visibility pack
     type bigGenePred
     bigDataUrl /gbdb/hg19/knownGeneKent.bb
@@ -33,11 +33,29 @@ html ../../knownGeneArchive
     intronGap 12
     defaultLinkedTables kgXref
 
-#searchName knownGeneFast
-#searchTable knownGene
-#searchType knownGeneFast
-#shortCircuit 1
-#searchPriority 1001
-#searchTrix /gbdb/hg38/knownGeneFastV36.ix
-#doPage 1
+    track knownGeneV45lift37
+    shortLabel GENCODE V45lift37
+    longLabel GENCODE V45lift37
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred
+    bigDataUrl /gbdb/hg19/gencode/gencodeV45lift37.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV45lift37
+    maxItems 50000
+    html knownGeneV45lift37
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+    squishyPackPoint 1
+    squishyPackField rank
+    squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
 

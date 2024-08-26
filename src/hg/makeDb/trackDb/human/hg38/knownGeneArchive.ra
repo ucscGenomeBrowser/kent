@@ -14,7 +14,7 @@ html ../../knownGeneArchive
     longLabel GENCODE V36
     parent knownGeneArchive
     priority 5
-    visibility pack
+    visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
     baseColorDefault genomicCodons
@@ -38,7 +38,7 @@ html ../../knownGeneArchive
     longLabel GENCODE V38
     parent knownGeneArchive
     priority 5
-    visibility pack
+    visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV38.bb
     baseColorDefault genomicCodons
@@ -62,7 +62,7 @@ html ../../knownGeneArchive
     longLabel GENCODE V39
     parent knownGeneArchive
     priority 5
-    visibility pack
+    visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV39.bb
     baseColorDefault genomicCodons
@@ -86,7 +86,7 @@ html ../../knownGeneArchive
     longLabel GENCODE V43
     parent knownGeneArchive
     priority 5
-    visibility pack
+    visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
     baseColorDefault genomicCodons
@@ -112,7 +112,7 @@ html ../../knownGeneArchive
     longLabel GENCODE V44
     parent knownGeneArchive
     priority 5
-    visibility pack
+    visibility hide
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV44.bb
     #downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
@@ -154,6 +154,34 @@ html ../../knownGeneArchive
     externalDb knownGeneV45
     maxItems 50000
     html knownGeneV45
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+    squishyPackPoint 1
+    squishyPackField rank
+    squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
+
+    track knownGeneV46
+    #table knownGene
+    shortLabel GENCODE V46
+    longLabel GENCODE V46
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred knownGenePep knownGeneMrna
+    bigDataUrl /gbdb/hg38/gencode/gencodeV46.bb
+    #downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV46
+    maxItems 50000
+    html knownGeneV46
     searchIndex name
     idXref kgAlias kgID alias
     intronGap 12

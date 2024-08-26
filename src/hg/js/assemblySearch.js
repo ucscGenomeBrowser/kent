@@ -1,10 +1,13 @@
 // global variables:
 
+var debug = false;
 var measureTiming = false;
 var urlParams;
-var searchFor = "";
+var query = "";
 var maxItemsOutput = 500;
 var asmIdText = null;
+// adjust default here and in assemblySearch.html
+var browserExist = "mayExist";
 var betterCommonName = null;
 var comment = null;
 var requestSubmitButton = null;
@@ -15,8 +18,8 @@ var completedAsmId = new Map();	// keep track of requests completed
 //  procedure for first time page draw
 document.addEventListener('DOMContentLoaded', function() {
     // allow semi colon separators as well as ampersand
-    var queryString = window.location.search.replaceAll(";", "&");
-    urlParams = new URLSearchParams(queryString);
+    var urlArgList = window.location.search.replaceAll(";", "&");
+    urlParams = new URLSearchParams(urlArgList);
     if (urlParams.has('measureTiming')) { // accepts no value or other string
        var measureValue = urlParams.get('measureTiming');
        if ("0" === measureValue | "off" === measureValue) {
@@ -25,8 +28,47 @@ document.addEventListener('DOMContentLoaded', function() {
          measureTiming = true;
        }
     }
+    if (urlParams.has('browser')) {
+       var browserValue = urlParams.get('browser');
+       if ("mayExist" === browserValue) {
+          browserExist = "mayExist";
+          document.getElementById('mustExist').checked = true;
+          document.getElementById('notExist').checked = true;
+       } else if ("mustExist" === browserValue) {
+          browserExist = "mustExist";
+          document.getElementById('mustExist').checked = true;
+          document.getElementById('notExist').checked = false;
+       } else if ("notExist" === browserValue) {
+          browserExist = "notExist";
+          document.getElementById('mustExist').checked = false;
+          document.getElementById('notExist').checked = true;
+//       } else {
+         // not going to worry about this here today, but there should be
+         // a non-obtrusive dialog pop-up message about illegal arguments
+//         alert("warning: illegal value for browser=... must be one of: mayExist, mustExist, notExist");
+       }
+    }
+    if (urlParams.has('debug')) { // accepts no value or other string
+       var debugValue = urlParams.get('debug');
+       if ("0" === debugValue | "off" === debugValue) {
+         debug = false;
+       } else {			// any other string turns it on
+         debug = true;
+       }
+    }
+
+    // add extra element to the help text bullet list for API example
+    if (debug) {
+      var searchTipList = document.getElementById("searchTipList");
+      // Create a new list item
+      var li = document.createElement("li");
+      li.innerHTML = "example API call: <span id=\"recentAjax\">n/a</span>";
+      // Append the new list item to the ordered list
+      searchTipList.appendChild(li);
+    }
 
     var searchForm = document.getElementById('searchForm');
+    var advancedSearchButton = document.getElementById('advancedSearchButton');
     var searchInput = document.getElementById('searchBox');
     var clearButton = document.getElementById('clearSearch');
     asmIdText = document.getElementById("formAsmId");
@@ -46,9 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var searchTerm = document.getElementById('searchBox').value;
         var resultCountLimit = document.getElementById('maxItemsOutput');
-        var browserExist = "mustExist";
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
+        browserExist = "mustExist";
         if (mustExist && notExist) {
            browserExist = "mayExist";
         } else if (notExist) {
@@ -56,6 +98,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         var wordMatch = document.querySelector('input[name="wordMatch"]:checked').value;
         makeRequest(searchTerm, browserExist, resultCountLimit.value, wordMatch);
+    });
+
+    advancedSearchButton.addEventListener('click', function() {
+       var advancedSearchOptions = document.getElementById("advancedSearchOptions");
+       // I don't know why it is false the first time ?
+       if (! advancedSearchOptions.style.display ||
+             advancedSearchOptions.style.display === "none") {
+          advancedSearchOptions.style.display = "flex";
+          this.textContent = "hide advanced search options"; // Change button text
+       } else {
+          advancedSearchOptions.style.display = "none";
+          this.textContent = "show advanced search options"; // Change button text
+       }
     });
 
     var tableHeader = document.getElementById('tableHeader');
@@ -70,10 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
        }
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
-    if (urlParams.has('searchFor')) {
-       searchFor = urlParams.get('searchFor');
-       if (searchFor.length > 0) {
-          searchInput.value = searchFor;
+    if (urlParams.has('q')) {
+       query = urlParams.get('q');
+       if (query.length > 0) {
+          searchInput.value = query;
           document.getElementById('submitSearch').click();
        }
     }
@@ -90,7 +145,7 @@ function headerRefresh(tableHead) {
   var headerRow = '<tr>';
   headerRow += '<th><div class=tooltip>view/<br>request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">scientific name (count) &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">binomial scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
   headerRow += '<th><div class="tooltip"><em>genark</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
   headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
@@ -142,8 +197,8 @@ function populateTableAndInfo(jsonData) {
         } else {
           dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>request</button></th>";
         }
-        dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
+        dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<th>" + asmInfoUrl + "</th>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
@@ -157,7 +212,7 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.genomeSearch + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -276,6 +331,18 @@ function sendRequest(name, email, asmId, betterName, comment) {
 
 }  //      sendRequest: function(name, email. asmId)
 
+// do not allow both checkboxes to go off
+function atLeastOneCheckBoxOn(e) {
+  var mustExist = document.getElementById('mustExist').checked;
+  var notExist = document.getElementById('notExist').checked;
+  if (! mustExist && ! notExist ) {  // turn on the other one when both off
+     if (e.name === "mustExist") {
+       document.getElementById('notExist').checked = true;
+     } else {
+       document.getElementById('mustExist').checked = true;
+     }
+  }
+}
 
 function checkForm(e) {
   if (requestSubmitButton.value === "request completed") {
@@ -414,12 +481,23 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
 
     var xhr = new XMLHttpRequest();
     var urlPrefix = "/cgi-bin/hubApi";
-    var url = "/findGenome?genomeSearch=" + encodeURIComponent(queryString);
+    var url = "/findGenome?q=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
 
-    var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
-    document.getElementById("recentAjax").innerHTML = apiUrl;
+    var historyUrl = "?q=" + encodeURIComponent(queryString) + ";browser=" + browserExist + ";maxItemsOutput=" + resultLimit;
+    if (debug) {
+       historyUrl += ";debug=1";
+    }
+    if (measureTiming) {
+       historyUrl += ";measureTiming=1";
+    }
+    history.pushState(null, '', historyUrl);
+
+    if (debug) {
+      var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
+      document.getElementById("recentAjax").innerHTML = apiUrl;
+    }
 
     xhr.open('GET', urlPrefix + url, true);
 

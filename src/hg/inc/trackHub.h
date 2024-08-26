@@ -189,6 +189,9 @@ void trackHubFixName(char *name);
 struct grp *trackHubLoadGroups(char *database);
 /* Load the grp structures for this track hub database. */
 
+char *trackHubGetHubName(char *name);
+/* Get the hub_#_ prefix in a hub name. */
+
 char *trackHubSkipHubName(char *name);
 /* Skip the hub_#_ prefix in a hub name. */
 

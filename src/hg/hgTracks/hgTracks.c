@@ -7055,6 +7055,12 @@ for (track = *pTrackList; track != NULL; track = track->next)
         group = NULL;
     else
 	group = hashFindVal(hash, track->groupName);
+    if ((group == NULL) && (track->groupName != NULL))
+        {
+        char *hubName = trackHubGetHubName(track->groupName);
+        if (hubName != NULL)
+            group = hashFindVal(hash, hubName);
+        }
     if (group == NULL)
         {
 	if (unknown == NULL)
