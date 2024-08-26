@@ -3,9 +3,11 @@
 var debug = false;
 var measureTiming = false;
 var urlParams;
-var searchFor = "";
+var query = "";
 var maxItemsOutput = 500;
 var asmIdText = null;
+// adjust default here and in assemblySearch.html
+var browserExist = "mayExist";
 var betterCommonName = null;
 var comment = null;
 var requestSubmitButton = null;
@@ -16,14 +18,34 @@ var completedAsmId = new Map();	// keep track of requests completed
 //  procedure for first time page draw
 document.addEventListener('DOMContentLoaded', function() {
     // allow semi colon separators as well as ampersand
-    var queryString = window.location.search.replaceAll(";", "&");
-    urlParams = new URLSearchParams(queryString);
+    var urlArgList = window.location.search.replaceAll(";", "&");
+    urlParams = new URLSearchParams(urlArgList);
     if (urlParams.has('measureTiming')) { // accepts no value or other string
        var measureValue = urlParams.get('measureTiming');
        if ("0" === measureValue | "off" === measureValue) {
          measureTiming = false;
        } else {			// any other string turns it on
          measureTiming = true;
+       }
+    }
+    if (urlParams.has('browser')) {
+       var browserValue = urlParams.get('browser');
+       if ("mayExist" === browserValue) {
+          browserExist = "mayExist";
+          document.getElementById('mustExist').checked = true;
+          document.getElementById('notExist').checked = true;
+       } else if ("mustExist" === browserValue) {
+          browserExist = "mustExist";
+          document.getElementById('mustExist').checked = true;
+          document.getElementById('notExist').checked = false;
+       } else if ("notExist" === browserValue) {
+          browserExist = "notExist";
+          document.getElementById('mustExist').checked = false;
+          document.getElementById('notExist').checked = true;
+//       } else {
+         // not going to worry about this here today, but there should be
+         // a non-obtrusive dialog pop-up message about illegal arguments
+//         alert("warning: illegal value for browser=... must be one of: mayExist, mustExist, notExist");
        }
     }
     if (urlParams.has('debug')) { // accepts no value or other string
@@ -66,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var searchTerm = document.getElementById('searchBox').value;
         var resultCountLimit = document.getElementById('maxItemsOutput');
-        var browserExist = "mustExist";
+        browserExist = "mayExist";
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
         if (mustExist && notExist) {
@@ -103,10 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
        }
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
-    if (urlParams.has('searchFor')) {
-       searchFor = urlParams.get('searchFor');
-       if (searchFor.length > 0) {
-          searchInput.value = searchFor;
+    if (urlParams.has('q')) {
+       query = urlParams.get('q');
+       if (query.length > 0) {
+          searchInput.value = query;
           document.getElementById('submitSearch').click();
        }
     }
@@ -190,7 +212,7 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.genomeSearch + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -459,7 +481,7 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
 
     var xhr = new XMLHttpRequest();
     var urlPrefix = "/cgi-bin/hubApi";
-    var url = "/findGenome?genomeSearch=" + encodeURIComponent(queryString);
+    var url = "/findGenome?q=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
 

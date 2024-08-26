@@ -53,7 +53,7 @@ char *argListFiles[] = { argGenome, argMaxItemsOutput, argFormat, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argRevComp, NULL };
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
-char *argFindGenome[] = {argGenomeSearchTerm, argMaxItemsOutput, argJsonOutputArrays, argStatsOnly, argBrowser, NULL};
+char *argFindGenome[] = {argQ, argMaxItemsOutput, argJsonOutputArrays, argStatsOnly, argBrowser, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */

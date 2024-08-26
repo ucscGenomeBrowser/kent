@@ -75,8 +75,8 @@
 #define argJsonOutputArrays	"jsonOutputArrays"
 #define argCategories "categories"
 #define argSearchTerm "search"
-/* used in findGenome */
-#define argGenomeSearchTerm "genomeSearch"
+/* used in findGenome, 'q' is for the query search term */
+#define argQ "q"
 #define argStatsOnly "statsOnly"
 #define argBrowser "browser"
 
