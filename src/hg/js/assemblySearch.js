@@ -106,8 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
     advancedSearchButton.addEventListener('click', function() {
        var searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
-       if (! searchOptions.style.display
-             || searchOptions.style.display === "none") {
+       if (! searchOptions.style.display || searchOptions.style.display === "none") {
           advancedSearchVisible(true);
        } else {
           advancedSearchVisible(false);
@@ -116,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // restore history on back button
     window.addEventListener('popstate', function(e) {
-       const state = event.state;
+       var state = event.state;
        if (state) {
           stateObject.queryString = state.queryString;
           stateObject.maxItemsOutput = state.maxItemsOutput;
