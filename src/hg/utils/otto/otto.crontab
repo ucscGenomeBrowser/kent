@@ -72,7 +72,7 @@ MAILTO=otto-group@ucsc.edu
 11 5 * * 1 python3 /hive/data/outside/otto/mane/doMane.py
 
 #GenCC
-11 5 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
+8 16 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
 
 #OMIM
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
