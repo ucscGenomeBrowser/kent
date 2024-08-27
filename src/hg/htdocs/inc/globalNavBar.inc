@@ -61,7 +61,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a title="Download underlying Genome Browser data files" href="https://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
 	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
-	<li><a title="Purchase a commerical license for certain Genome Browser software" href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
+	<li><a title="Purchase a commercial license for certain Genome Browser software" href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
 	<li><a title="Download utilities for working with Genome Browser data" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
