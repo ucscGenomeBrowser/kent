@@ -3844,11 +3844,11 @@ function boundingRect(refEl) {
         // if we are dealing with an <area> element, the refEl width and height
         // are for the whole image and not for just the area, so
         // getBoundingClientRect() will return nothing, sad!
-        let refImg = $("[usemap=#" + refEl.parentNode.name + "]")[0];
+        let refImg = document.querySelector("[usemap='#" + refEl.parentNode.name + "']");
         let refImgRect = refImg.getBoundingClientRect();
         let refImgWidth = refImgRect.width;
-        let label = $("[id^=td_side]")[0];
-        let btn = $("[id^=td_btn]")[0];
+        let label = document.querySelector("[id^=td_side]");
+        let btn = document.querySelector("[id^=td_btn]");
         let labelWidth = 0, btnWidth = 0;
         if (label && btn) {
             labelWidth = label.getBoundingClientRect().width;
