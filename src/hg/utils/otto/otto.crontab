@@ -72,7 +72,7 @@ MAILTO=otto-group@ucsc.edu
 11 5 * * 1 python3 /hive/data/outside/otto/mane/doMane.py
 
 #GenCC
-11 5 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
+8 16 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
 
 #OMIM
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
@@ -82,6 +82,11 @@ MAILTO=otto-group@ucsc.edu
 
 #Mastermind
 05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
+
+# UniProt massive 110+ database update, takes 3-4 days.
+#Format: Minute - Hour - DayofMonth month Day-of-week
+MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
+00 07 26 * * /hive/data/outside/otto/uniprot/doUpdate.sh run
 
 #wuhCor1 uniprot otto cron by Max, May 2021
 00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
@@ -108,12 +113,15 @@ MAILTO=otto-group@ucsc.edu
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
 
-# UniProt massive 110+ database update, takes 3-4 days.
-#Format: Minute - Hour - DayofMonth month Day-of-week
-MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
-00 11 16 * * /hive/data/outside/otto/uniprot/doUpdate.sh run
+MAILTO=bwick@ucsc.edu
+# Cell Browser news sec update by Matt/Brittney Sept 2022
+04 12 * * 1-5 ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
+
+# Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 
 #Format: Minute - Hour - DayofMonth month Day-of-week
+MAILTO=mhaeussl@ucsc.edu
+04 04 20 * * /hive/data/outside/otto/malacards/update.sh
 
 MAILTO=jbirgmei@ucsc.edu
 # PubTator3 dbSNP track update
