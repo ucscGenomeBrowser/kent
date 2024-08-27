@@ -1,4 +1,3 @@
-
 ./runBuild GCA_000001905.1_Loxafr3.0 mammals Loxodonta_africana
 ./runBuild GCA_000001985.1_JCVI-PMFA1-2.0 fungi Talaromyces_marneffei_ATCC_18224
 ./runBuild GCA_000002305.1_EquCab2.0 mammals Equus_caballus
@@ -2151,6 +2150,7 @@
 ./runBuild GCF_000026365.1_ASM2636v1 fungi Zygosaccharomyces_rouxii
 ./runBuild GCF_000026945.1_ASM2694v1 fungi Candida_dubliniensis_CD36
 ./runBuild GCF_000027005.1_ASM2700v1 fungi Komagataella_phaffii_GS115
+./runBuild GCF_000068585.1_ASM6858v1 bacteria Chlamydia_trachomatis
 ./runBuild GCF_000090745.1_AnoCar2.0 vertebrate Anolis_carolinensis
 ./runBuild GCF_000090745.2_AnoCar2.0 vertebrate Anolis_carolinensis
 ./runBuild GCF_000090795.1_v1.0 invertebrate Amphimedon_queenslandica
