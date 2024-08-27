@@ -1,0 +1,9 @@
+This directory is for the various scripts used to parse only the trackLog
+lines out of an apache error_log and collate the various trackLog N lines
+together.
+
+The output of this is used by various other scripts like
+dbTrackAndSearchUsage/generateSearchUse.py
+
+Typically this would be run as a cronjob:
+43 9 * * mon /path/to/script/runTrimLogs.sh -t
