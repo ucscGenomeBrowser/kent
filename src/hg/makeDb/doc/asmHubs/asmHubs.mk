@@ -12,7 +12,7 @@
 #    a file by the same name existing.  These rules don't make these files,
 #    they are just procedures to run.
 
-.PHONY: sanityCheck makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+.PHONY: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
 
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 htdocsHgDownload=/usr/local/apache/htdocs-hgdownload
@@ -22,7 +22,7 @@ downloadDest1=hgdownload1.soe.ucsc.edu
 downloadDest2=hgdownload2.soe.ucsc.edu
 # 2024-02-06 hgdownload2.gi.ucsc.edu has address 128.114.198.53
 
-all:: sanityCheck makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+all:: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
 
 makeDirs:
 	mkdir -p ${destDir}
@@ -45,6 +45,9 @@ sshKeyDynablat:
 
 sshKeyCheck: sshKeyDownload sshKeyDynablat
 	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
+
+mkJson::
+	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assembly.list.json 2> ${name}.jsonData.txt
 
 # mkGenomes needs symLinks to run before mkGenomes runs, and then
 # the second symLinks after mkGenomes uses business created by mkGenomes
