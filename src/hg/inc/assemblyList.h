@@ -6,7 +6,7 @@
 #define ASSEMBLYLIST_H
 
 #include "jksql.h"
-#define ASSEMBLYLIST_NUM_COLS 9
+#define ASSEMBLYLIST_NUM_COLS 13
 
 extern char *assemblyListCommaSepFieldNames;
 
@@ -23,6 +23,10 @@ struct assemblyList
     char *description;	/* other description text */
     unsigned char *browserExists;	/* 1 == this assembly is available at UCSC, 0 == can be requested */
     char *hubUrl;	/* path name to hub.txt: GCF/000/001/405/GCF_000001405.39/hub.txt */
+    unsigned *year;	/* year of assembly construction */
+    char *refSeqCategory;	/* one of: reference, representative or na */
+    char *versionStatus;	/* one of: latest, replaced or suppressed */
+    char *assemblyLevel;	/* one of: complete, chromosome, scaffold or contig */
     };
 
 void assemblyListStaticLoadWithNull(char **row, struct assemblyList *ret);
@@ -84,7 +88,6 @@ void assemblyListJsonOutput(struct assemblyList *el, FILE *f);
 /* Print out assemblyList in JSON format. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
 
 #define defaultAssemblyListTableName "assemblyList"
 /* Name of table that maintains the list of all assemblies, whether
