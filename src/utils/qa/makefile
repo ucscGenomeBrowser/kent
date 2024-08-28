@@ -26,6 +26,7 @@ install:
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
 	cp -p --remove-destination checkCoverage.csh       ${SCRIPTS}
 	cp -p --remove-destination checkEncodeRegions.csh  ${SCRIPTS}
+	cp -p --remove-destination checkErrorLogsAreUpToDate.py ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
 	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
@@ -149,6 +150,7 @@ install:
 	cp -p --remove-destination runCheckHgFindSpec      ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
 	cp -p --remove-destination runQaAutoTrack.sh       ${SCRIPTS}
+	cp -p --remove-destination runTrimLogs.sh          ${SCRIPTS}
 	cp -p --remove-destination searchedTermsCron.py    ${SCRIPTS}
 	cp -p --remove-destination sessionStats.csh        ${SCRIPTS}
 	cp -p --remove-destination showLastGit.csh         ${SCRIPTS}
