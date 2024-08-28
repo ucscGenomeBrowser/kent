@@ -1,6 +1,6 @@
 hub BRC
 shortLabel BRC
-longLabel BRC project
+longLabel Bioinformatics Research Center / VEuPathDB
 genomesFile genomes.txt
 email genome-www@soe.ucsc.edu
 descriptionUrl index.html
