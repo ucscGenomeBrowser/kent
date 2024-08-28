@@ -4218,7 +4218,11 @@ function titleTagToMouseover(mapEl) {
 
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
-    $("[title]").each(function(i, a) {
+    document.querySelectorAll("[title]").forEach(function(a, i) {
+        if (a.id !== "" && (a.id === "hotkeyHelp" || a.id.endsWith("Dialog") || a.id.endsWith("Popup"))) {
+            // these divs are populated by ui-dialog, they should not have tooltips
+            return;
+        }
         if (a.title !== undefined &&
                 (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";
