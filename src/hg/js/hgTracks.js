@@ -998,7 +998,7 @@ var vis = {
         // Now we can rid the submt of the burden of all those vis boxes
         var form = $('form#TrackForm');
         $(form).submit(function () {
-            $('select.normalText,select.hiddenText').attr('disabled',true);
+            $('select.normalText,select.hiddenText').prop('disabled',true);
         });
         $(form).attr('method','get');
     },
@@ -1006,7 +1006,7 @@ var vis = {
     restoreFromBackButton: function()
     // Re-enabling vis dropdowns is necessary because initForAjax() disables them on submit.
     {
-        $('select.normalText,select.hiddenText').attr('disabled',false);
+        $('select.normalText,select.hiddenText').prop('disabled',false);
     }
 };
 
@@ -1239,7 +1239,7 @@ var dragSelect = {
                     "Zoom In": function() {
                         // Zoom to selection
                         $(this).dialog("option", "revertToOriginalPos", false);
-                        if ($("#disableDragHighlight").attr('checked'))
+                        if ($("#disableDragHighlight").prop('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
                             if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
@@ -1260,7 +1260,7 @@ var dragSelect = {
                     "Single Highlight": function() {
                         // Clear old highlight and Highlight selection
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                        if ($("#disableDragHighlight").attr('checked'))
+                        if ($("#disableDragHighlight").prop('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         var hlColor = $("#hlColorInput").val();
                         dragSelect.highlightThisRegion(newPosition, false, hlColor);
@@ -1268,7 +1268,7 @@ var dragSelect = {
                     },
                     "Add Highlight": function() {
                         // Highlight selection
-                        if ($("#disableDragHighlight").attr('checked'))
+                        if ($("#disableDragHighlight").prop('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         var hlColor = $("#hlColorInput").val();
                         dragSelect.highlightThisRegion(newPosition, true, hlColor);
@@ -1293,7 +1293,7 @@ var dragSelect = {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                     if ($(this).dialog("option", "revertToOriginalPos"))
                         genomePos.revertToOriginalPos();
-                    if ($("#disableDragHighlight").attr('checked'))
+                    if ($("#disableDragHighlight").prop('checked'))
                         $(this).remove();
                     else
                         $(this).hide();
@@ -3323,19 +3323,19 @@ var popUpHgt = {
                                enterSelectsIdentical: true });
         // Make multi-region option inputs select their associated radio buttons
         $('input[name="emPadding"]').keyup(function() {
-            $('#virtModeType[value="exonMostly"]').attr('checked', true); });
+            $('#virtModeType[value="exonMostly"]').prop('checked', true); });
         $('input[name="gmPadding"]').keyup(function() {
-            $('#virtModeType[value="geneMostly"]').attr('checked', true); });
+            $('#virtModeType[value="geneMostly"]').prop('checked', true); });
         $('#multiRegionsBedInput').keyup(function() {
-            $('#virtModeType[value="customUrl"]').attr('checked', true); });
+            $('#virtModeType[value="customUrl"]').prop('checked', true); });
         $('#singleAltHaploId').keyup(function() {
-            $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
+            $('#virtModeType[value="singleAltHaplo"]').prop('checked', true); });
 
         // disable exit if not in MR mode
         if (!hgTracks.virtModeType) {
             $('#virtModeTypeDefaultLabel').addClass('disabled');
-            $('#virtModeType[value="exonMostly"]').attr('checked', true);
-            $('#virtModeType[value="default"]').attr('disabled', 'disabled');
+            $('#virtModeType[value="exonMostly"]').prop('checked', true);
+            $('#virtModeType[value="default"]').prop('disabled', 'disabled');
         } else {
             $('#virtModeType[value="default"]').removeAttr('disabled');
         }
@@ -4513,7 +4513,7 @@ var imageV2 = {
     {   // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
         if (imageV2.inPlaceUpdate) {
             var params = ele.name + "=" + ele.value;
-            $(ele).attr('disabled', 'disabled');
+            $(ele).prop('disabled', 'disabled');
             // dinking navigation needs additional data
             if (ele.name === "hgt.dinkLL" || ele.name === "hgt.dinkLR") {
                 params += "&dinkL=" + $("input[name='dinkL']").val();
