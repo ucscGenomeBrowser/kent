@@ -317,7 +317,7 @@ if (isNotEmpty(levelString))
 	{
 	if (differentWord(assemblyLevel, "chromosome"))
 	    if (differentWord(assemblyLevel, "scaffold"))
-		if (differentWord(assemblyLevel, "scaffold"))
+		if (differentWord(assemblyLevel, "contig"))
 		    apiErrAbort(err400, err400Msg, "values for argument %s=%s must be one of: 'complete', 'chromosome', 'scaffold' or 'contig'", argLevel, levelString);
 	}
     }
