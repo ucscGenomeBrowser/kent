@@ -24,7 +24,7 @@ JQUERY_FILES_UNTOUCHED= \
     jquery.cookie.js jquery.watermark.js jquery.watermarkinput.js jquery.ui.colorPicker.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js \
     jquery.validate.min.js jquery.history.js jquery.treetable.js mousetrap.min.js dagre-d3.js \
-	jquery-migrate-1.4.1.js
+	jquery-migrate-3.5.2.js
 
 # JQUERY or other third pary files which HAVE BEEN MODIFIED by UCSC
 JQUERY_FILES_MODIFIED=jquery.tablednd.js ui.dropdownchecklist.js
