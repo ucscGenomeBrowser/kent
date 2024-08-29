@@ -79,6 +79,10 @@
 #define argQ "q"
 #define argStatsOnly "statsOnly"
 #define argBrowser "browser"
+#define argYear "year"
+#define argCategory "category"
+#define argStatus "status"
+#define argLevel "level"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
