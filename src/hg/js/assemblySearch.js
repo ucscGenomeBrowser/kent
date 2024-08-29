@@ -1,7 +1,7 @@
 // global variables:
 
-var debug = false;
-var measureTiming = false;
+var debug = true;
+var measureTiming = true;
 var urlParams;
 var query = "";
 var maxItemsOutput = 500;
@@ -81,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById("modalFeedback").addEventListener("submit", checkForm, false);
     modalInit();
+    var tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '<tr><td style="text-align:center;" colspan=8><b>(empty table)</b></td></tr>';
 
     clearButton.addEventListener('click', function() {
         searchInput.value = ''; // Clear the search input field
@@ -99,8 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (notExist) {
            browserExist = "notExist";
         }
-        var wordMatch = document.querySelector('input[name="wordMatch"]:checked').value;
-        makeRequest(searchTerm, browserExist, resultCountLimit.value, wordMatch);
+        makeRequest(searchTerm, browserExist, resultCountLimit.value);
     });
 
     advancedSearchButton.addEventListener('click', function() {
@@ -123,6 +124,9 @@ document.addEventListener('DOMContentLoaded', function() {
           stateObject.debug = state.debug;
           stateObject.measureTiming = state.measureTiming;
           stateObject.wordMatch = state.wordMatch;
+          stateObject.asmStatus = state.asmStatus;
+          stateObject.refSeqCategory = state.refSeqCategory;
+          stateObject.asmLevel = state.asmLevel;
           stateObject.jsonData = state.jsonData;
           document.getElementById('mustExist').checked = false;
           document.getElementById('notExist').checked = false;
@@ -142,16 +146,35 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
              document.getElementById("anyWord").checked = true;
           }
-          if (stateObject.refSeqLatest) {
-             document.getElementById('refSeqLatest').checked = true;
-          } else {
-             document.getElementById('refSeqLatest').checked = false;
-          }
-          if (stateObject.refSeqRepresentative) {
+          // only one of these four cases will be true
+          if (stateObject.asmStatus === "statusAny")
+             document.getElementById('statusAny').checked = true;
+          if (stateObject.asmStatus === "latest")
+             document.getElementById('statusLatest').checked = true;
+          if (stateObject.asmStatus === "replaced")
+             document.getElementById('statusReplaced').checked = true;
+          if (stateObject.asmStatus === "suppressed")
+             document.getElementById('statusSuppressed').checked = true;
+
+          // only one of these three cases will be true
+          if (stateObject.refSeqCategory === "refSeqAny")
+             document.getElementById('refSeqAny').checked = true;
+          if (stateObject.refSeqCategory === "reference")
+             document.getElementById('refSeqReference').checked = true;
+          if (stateObject.refSeqCategory === "representative")
              document.getElementById('refSeqRepresentative').checked = true;
-          } else {
-             document.getElementById('refSeqRepresentative').checked = false;
-          }
+
+          // only one of these five cases will be true
+          if (stateObject.asmLevel === "asmLevelAny")
+             document.getElementById('asmLevelAny').checked = true;
+          if (stateObject.asmLevel === "complete")
+             document.getElementById('asmLevelComplete').checked = true;
+          if (stateObject.asmLevel === "chromosome")
+             document.getElementById('asmLevelChromosome').checked = true;
+          if (stateObject.asmLevel === "scaffold")
+             document.getElementById('asmLevelScaffold').checked = true;
+          if (stateObject.asmLevel === "contig")
+             document.getElementById('asmLevelContig').checked = true;
 
           document.getElementById('searchBox').value = stateObject.queryString;
 	  populateTableAndInfo(JSON.parse(stateObject.jsonData));
@@ -193,8 +216,10 @@ function headerRefresh(tableHead) {
   headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
   headerRow += '<th><div class="tooltip">scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
+  headerRow += '<th><div class="tooltip">year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
   headerRow += '<th><div class="tooltip"><em>genark</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
   headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
+  headerRow += '<th><div class="tooltip">status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
 }
@@ -261,8 +286,26 @@ function populateTableAndInfo(jsonData) {
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
         dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
         dataRow += "<th>" + asmInfoUrl + "</th>";
+        dataRow += "<td>" + genomicEntries[id].year + "</td>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
+        var status =  "<td>" + genomicEntries[id].priority + " ";
+        var hardSpace = "&nbsp;";
+        if (genomicEntries[id].refSeqCategory) {
+           status += " " + genomicEntries[id].refSeqCategory;
+           hardSpace = "";
+        }
+        if (genomicEntries[id].versionStatus) {
+           status += " " + genomicEntries[id].versionStatus;
+           hardSpace = "";
+        }
+        if (genomicEntries[id].assemblyLevel) {
+           status += " " + genomicEntries[id].assemblyLevel;
+           hardSpace = "";
+        }
+        status += "</td>";
+//        status += hardSpace + "</td>";
+        dataRow += status;
         dataRow += '</tr>';
         tableBody.innerHTML += dataRow;
     }
@@ -516,21 +559,17 @@ function asmOpenModal(e) {
   }
 }
 
-function makeRequest(query, browserExist, resultLimit, wordMatch) {
+function makeRequest(query, browserExist, resultLimit) {
     // Disable the submit button
     disableButtons();
+    var wordMatch = document.querySelector('input[name="wordMatch"]:checked').value;
+    var asmStatus = document.querySelector('input[name="asmStatus"]:checked').value;
+    var refSeqCategory = document.querySelector('input[name="refSeqCategory"]:checked').value;
+    var asmLevel = document.querySelector('input[name="asmLevel"]:checked').value;
+
+    // start with what the user requested:
     var queryString = query;
-    // if 'latest' requested, add '+latest' if not already in query
-    if (document.getElementById('refSeqLatest').checked) {
-       if (! /latest/.test(queryString) ) {
-         queryString += " +latest";
-       }
-    }
-    if (document.getElementById('refSeqRepresentative').checked) {
-       if (! /representative/.test(queryString) ) {
-         queryString += " +representative";
-       }
-    }
+
     // for allWords, place + sign in front of each word if not already there
     if (wordMatch === "allWords") {
       var words = queryString.split(/\s+/);
@@ -558,6 +597,12 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     var url = "/findGenome?q=" + encodeURIComponent(queryString);
     url += ";browser=" + browserExist;
     url += ";maxItemsOutput=" + resultLimit;
+    if (asmStatus !== "statusAny")	// default is any assembly status
+       url += ";status=" + asmStatus;	// something specific is being requested
+    if (refSeqCategory !== "refSeqAny")	// default is any RefSeq category
+       url += ";category=" + refSeqCategory;	// something specific
+    if (asmLevel !== "asmLevelAny")	// default is any level of assembly
+       url += ";level=" + asmLevel;	// something specific
 
     var historyUrl = "?q=" + encodeURIComponent(queryString) + ";browser=" + browserExist + ";maxItemsOutput=" + resultLimit;
     if (debug) {
@@ -577,8 +622,9 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
     stateObject.debug = debug;
     stateObject.measureTiming = measureTiming;
     stateObject.wordMatch = wordMatch;
-    stateObject.refSeqLatest = document.getElementById('refSeqLatest').checked;
-    stateObject.refSeqRepresentative = document.getElementById('refSeqRepresentative').checked;
+    stateObject.asmStatus = asmStatus;
+    stateObject.refSeqCategory = refSeqCategory;
+    stateObject.asmLevel = asmLevel;
 
     xhr.open('GET', urlPrefix + url, true);
 
@@ -600,10 +646,10 @@ function makeRequest(query, browserExist, resultLimit, wordMatch) {
             document.getElementById("loadingSpinner").style.display = "none";
             enableButtons();
 	    var tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = "<tr><td style='text-align:center;' colspan=8><b>no results found for query: <em>'" + queryString + "'</em></b></td></tr>";
             var metaData = document.getElementById('metaData');
-            tableBody.innerHTML = '';
             metaData.innerHTML = '';
-            metaData.innerHTML = "<b>no results found for query: '" + queryString + "'</b>";
+//            metaData.innerHTML = "<b>no results found for query: '" + queryString + "'</b>";
             document.getElementById('resultCounts').innerHTML = "";
             document.getElementById('elapsedTime').innerHTML = "0";
         }

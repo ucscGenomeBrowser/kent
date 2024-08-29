@@ -84,6 +84,11 @@ thead th {
     flex-direction: column; /* Arrange radio buttons vertically */
 }
 
+.colVertical {
+    display: flex;
+    flex-direction: column; /* Arrange radio buttons vertically */
+}
+
 .formDiv > div, .radioGroupContainer {
     width: 100%;
     box-sizing: border-box;
