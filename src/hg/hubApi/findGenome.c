@@ -139,6 +139,8 @@ addBrowserExists(query);
 addCategory(query);
 addStatus(query);
 addLevel(query);
+if (specificYear > 0)
+    sqlDyStringPrintf(query, " AND year='%u'", specificYear);
 }
 
 static long long multipleWordSearch(struct sqlConnection *conn, char **words, int wordCount, struct jsonWrite *jw, long long *totalMatchCount)
