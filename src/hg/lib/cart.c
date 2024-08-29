@@ -2624,7 +2624,7 @@ pushWarnHandler(htmlVaWarn);
 webStartWrapper(cart, trackHubSkipHubName(db), format, args, withHttpHeader, FALSE);
 inWeb = TRUE;
 jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery-migrate-1.4.1.js", NULL);
+jsIncludeFile("jquery-migrate-3.5.2.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 }
