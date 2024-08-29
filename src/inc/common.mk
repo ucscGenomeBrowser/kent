@@ -123,7 +123,7 @@ endif
 ifeq (${HALDIR},)
     # ONLY on hgwdev, not any other machine here (i.e. hgcompute-01)
     ifeq (${IS_HGWDEV},yes)
-      HALDIR = /hive/groups/browser/hal/build/hal.2020-12-18
+      HALDIR = /hive/groups/browser/hal/build/hal.2024-08-20
       ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1
