@@ -53,10 +53,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct assemblyList *el = assemblyListLoadWithNull(row);
     jsonWriteObjectStart(jw, el->name);
-    jsonWriteNumber(jw, "priority", (long long)el->priority);
+    if (el->priority)
+        jsonWriteNumber(jw, "priority", (long long)*el->priority);
+    else
+        jsonWriteNumber(jw, "priority", (long long)0);
     jsonWriteString(jw, "commonName", el->commonName);
     jsonWriteString(jw, "scientificName", el->scientificName);
-    jsonWriteNumber(jw, "taxId", (long long)el->taxId);
+    if (el->taxId)
+        jsonWriteNumber(jw, "taxId", (long long)*el->taxId);
+    else
+        jsonWriteNumber(jw, "taxId", (long long)0);
     jsonWriteString(jw, "clade", el->clade);
     jsonWriteString(jw, "description", el->description);
     if (1 == *el->browserExists)
@@ -67,6 +73,22 @@ while ((row = sqlNextRow(sr)) != NULL)
         jsonWriteString(jw, "hubUrl", NULL);
     else
         jsonWriteString(jw, "hubUrl", el->hubUrl);
+    if (el->year)
+        jsonWriteNumber(jw, "year", (long long)*el->year);
+    else
+        jsonWriteNumber(jw, "year", (long long)0);
+    if (isEmpty(el->refSeqCategory))
+        jsonWriteString(jw, "refSeqCategory", NULL);
+    else
+        jsonWriteString(jw, "refSeqCategory", el->refSeqCategory);
+    if (isEmpty(el->versionStatus))
+        jsonWriteString(jw, "versionStatus", NULL);
+    else
+        jsonWriteString(jw, "versionStatus", el->versionStatus);
+    if (isEmpty(el->assemblyLevel))
+        jsonWriteString(jw, "assemblyLevel", NULL);
+    else
+        jsonWriteString(jw, "assemblyLevel", el->assemblyLevel);
     jsonWriteObjectEnd(jw);
     ++itemCount;
     }
@@ -107,7 +129,7 @@ if (matchCount > 0)
 	{
 	dyStringFree(&query);
 	query = dyStringNew(64);
-	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
 	/* add specific browserExists depending upon options */
 	if (browserMustExist)
 	    sqlDyStringPrintf(query, " AND browserExists=1");
@@ -132,7 +154,7 @@ long long itemCount = 0;
 *totalMatchCount = 0;
 
 struct dyString *query = dyStringNew(64);
-sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
+sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
 if (browserMustExist)
     sqlDyStringPrintf(query, " AND browserExists=1");
 else if (browserNotExist)
@@ -144,7 +166,7 @@ if (matchCount < 1)	/* no match, add the * wild card match to make a prefix matc
     {
     dyStringFree(&query);
     query = dyStringNew(64);
-    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
+    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
     /* add specific browserExists depending upon options */
     if (browserMustExist)
 	sqlDyStringPrintf(query, " AND browserExists=1");
@@ -167,7 +189,7 @@ else
     dyStringFree(&query);
     query = dyStringNew(64);
 
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, *prefixSearch ? "*" : "");
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, *prefixSearch ? "*" : "");
     /* add specific browserExists depending upon options */
     if (browserMustExist)
 	sqlDyStringPrintf(query, " AND browserExists=1");
