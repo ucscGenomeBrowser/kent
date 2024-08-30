@@ -1008,8 +1008,10 @@
     <P>For bigBed files with more than 8 fields (not counting any extra bigBed fields), 
     this adds mouse over text 
     from a pattern based on the values
-    of fields in the file.  The pattern is constructed with fieldnames from the .as file, preceded
-    by the dollar sign ($), and can include arbitrary text between the fieldnames.</P>
+    of fields in the file.  The pattern is constructed with fieldnames from the .as file, 
+    preceded by the dollar sign ($) and optional curly braces ({}), and can include arbitrary 
+    text between the field names. When field names may be prefixes or overlap with one another, 
+    as in the below example, curly braces can be used to more clearly define the field name to be used.</P>
 
     <P><B>Example:</B></P>
     <pre>
