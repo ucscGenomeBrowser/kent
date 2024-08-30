@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // default starts as hidden
     stateObject.advancedSearchVisible = false;
+    advancedSearchVisible(false);
     var searchForm = document.getElementById('searchForm');
     var advancedSearchButton = document.getElementById('advancedSearchButton');
     var searchInput = document.getElementById('searchBox');
@@ -119,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
        var state = event.state;
        if (state) {
           stateObject.queryString = state.queryString;
+          stateObject.advancedSearchVisible = state.advancedSearchVisible;
           stateObject.maxItemsOutput = state.maxItemsOutput;
           stateObject.browser = state.browser;
           stateObject.debug = state.debug;
@@ -594,29 +596,32 @@ function makeRequest(query, browserExist, resultLimit) {
 
     var xhr = new XMLHttpRequest();
     var urlPrefix = "/cgi-bin/hubApi";
-    var url = "/findGenome?q=" + encodeURIComponent(queryString);
-    url += ";browser=" + browserExist;
-    url += ";maxItemsOutput=" + resultLimit;
+    var historyUrl = "?q=" + encodeURIComponent(queryString);
+    historyUrl += ";browser=" + browserExist;
+    historyUrl += ";maxItemsOutput=" + resultLimit;
     if (asmStatus !== "statusAny")	// default is any assembly status
-       url += ";status=" + asmStatus;	// something specific is being requested
+       historyUrl += ";status=" + asmStatus;	// something specific is being requested
     if (refSeqCategory !== "refSeqAny")	// default is any RefSeq category
-       url += ";category=" + refSeqCategory;	// something specific
+       historyUrl += ";category=" + refSeqCategory;	// something specific
     if (asmLevel !== "asmLevelAny")	// default is any level of assembly
-       url += ";level=" + asmLevel;	// something specific
-
-    var historyUrl = "?q=" + encodeURIComponent(queryString) + ";browser=" + browserExist + ";maxItemsOutput=" + resultLimit;
-    if (debug) {
+       historyUrl += ";level=" + asmLevel;	// something specific
+    if (debug)
        historyUrl += ";debug=1";
-    }
-    if (measureTiming) {
+    if (measureTiming)
        historyUrl += ";measureTiming=1";
-    }
+
+    var url = "/findGenome" + historyUrl;
 
     if (debug) {
       var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
       document.getElementById("recentAjax").innerHTML = apiUrl;
     }
     stateObject.queryString = queryString;
+    var searchOptions = document.getElementById("advancedSearchOptions");
+    if (searchOptions.style.display === "flex")
+        stateObject.advancedSearchVisible = true;
+    else
+        stateObject.advancedSearchVisible = false;
     stateObject.maxItemsOutput = maxItemsOutput;
     stateObject.browser = browserExist;
     stateObject.debug = debug;
