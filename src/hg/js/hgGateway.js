@@ -1281,7 +1281,7 @@ var hgGateway = (function() {
         selectedGene = null;
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
-        $('#positionInput').focus(function() {$(this).autocompleteCat("search", "");});
+        $('#positionInput').on("focus", function() {$(this).autocompleteCat("search", "");});
         if (uiState.db && $('#findPositionContents').css('display') === 'none') {
             initFindPositionContents();
         }
@@ -1533,7 +1533,7 @@ var hgGateway = (function() {
     function onClickCopyPosition() {
         // Copy the displayed position into the position input:
         var posDisplay = $('#positionDisplay').text();
-        $('#positionInput').val(posDisplay).focus();
+        $('#positionInput').val(posDisplay).trigger("focus");
     }
 
     function goToHgTracks() {

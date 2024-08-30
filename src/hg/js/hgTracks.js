@@ -1809,7 +1809,7 @@ jQuery.fn.panImages = function(){
 
         panAdjustHeight(prevX);
 
-        pan.mousedown(function(e){
+        pan.on("mousedown", function(e){
              if (e.which > 1 || e.button > 1 || e.shiftKey || e.metaKey || e.altKey || e.ctrlKey)
                  return true;
             if (mouseIsDown === false) {
@@ -4723,7 +4723,7 @@ var imageV2 = {
         
         // The 'statechange' function triggerd by the back-button.
         // Whenever the position changes, then use ajax-update to refetch the position
-        imageV2.history.Adapter.bind(window,'statechange',function(){
+        imageV2.history.Adapter._bind(window, 'statechange',function(){
             var prevDbPos = imageV2.history.getState().data.lastDbPos;
             var prevPos = imageV2.history.getState().data.position;
             var curDbPos = hgTracks.lastDbPos;
