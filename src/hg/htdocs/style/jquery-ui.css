@@ -82,7 +82,7 @@
 ----------------------------------*/
 .ui-widget {
 	font-family: Verdana,Arial,sans-serif;
-	font-size: 1em;
+	font-size: 1.1em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -144,6 +144,8 @@
 	top: 0;
 	left: 0;
 	cursor: default;
+    overflow: scroll;
+    font-size: .75em;
 }
 .ui-menu {
 	list-style: none;
@@ -198,7 +200,7 @@
 	right: 0;
 }
 .ui-button {
-	padding: .4em 1em;
+	padding: 0;
 	display: inline-block;
 	position: relative;
 	line-height: normal;
@@ -220,7 +222,7 @@
 
 /* to make room for the icon, a width needs to be set here */
 .ui-button-icon-only {
-	width: 2em;
+	width: 2.2em;
 	box-sizing: border-box;
 	text-indent: -9999px;
 	white-space: nowrap;
@@ -238,6 +240,7 @@ input.ui-button.ui-button-icon-only {
 	left: 50%;
 	margin-top: -8px;
 	margin-left: -8px;
+    text-indent: -9999px;
 }
 
 .ui-button.ui-icon-notext .ui-icon {
@@ -521,7 +524,7 @@ button.ui-button::-moz-focus-inner {
     background: #FFF9D2;
 }
 .ui-dialog .ui-dialog-titlebar {
-	padding: .3em .5em;
+	padding: .4em 1em;
 	position: relative;
     background: #D9E4F8;
     border: 1px outset #000088;
@@ -538,10 +541,6 @@ button.ui-button::-moz-focus-inner {
 	margin: -10px 0 0 0;
 	padding: 1px;
 	height: 18px;
-}
-.ui-dialog .ui-dialog-titlebar-close span {
-    display: block;
-    margin: 1px;
 }
 .ui-dialog .ui-dialog-content {
 	border: 0;
@@ -566,8 +565,11 @@ button.ui-button::-moz-focus-inner {
 	margin: 2px 1px;
 	cursor: pointer;
     min-width: 80px;
-    border-color: #003399
+    border-color: #003399;
+    font-size: small;
+    padding: 0 1em;
 }
+
 .ui-dialog .ui-resizable-se {
     width: 14px;
     height: 14px;
@@ -820,6 +822,7 @@ button.ui-button::-moz-focus-inner {
 .ui-tabs {
 	position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	padding: .2em;
+    background: #FFF9D2;
 }
 .ui-tabs .ui-tabs-nav {
 	margin: 0;
@@ -830,19 +833,22 @@ button.ui-button::-moz-focus-inner {
 	float: left;
 	position: relative;
 	top: 0;
-	margin: 1px .2em 0 0;
-	border-bottom-width: 0;
+	margin: 0 .2em -1px 0;
+    border-bottom: 0 !important;
+	border-bottom-width: 0 !important;
+    background: #FFFEE8;
 	padding: 0;
 	white-space: nowrap;
 }
 .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 	float: left;
-	padding: .5em 1em;
+	padding: .1em 1.5em;
 	text-decoration: none;
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
 	margin-bottom: -1px;
 	padding-bottom: 1px;
+    background: #FFF9D2;
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
 .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
@@ -855,8 +861,8 @@ button.ui-button::-moz-focus-inner {
 .ui-tabs .ui-tabs-panel {
 	display: block;
 	border-width: 0;
-	padding: 1em 1.4em;
-	background: none;
+	padding: .6em 1em;
+	background: #FFF9D2;
 }
 .ui-tooltip {
 	padding: 8px;
@@ -931,7 +937,7 @@ a.ui-button:focus {
 a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
-	border: 1px solid #003eff;
+	border: 1px solid #aaaaaa;
 	background: #007fff;
 	font-weight: normal;
 	color: #ffffff;
@@ -944,7 +950,7 @@ a.ui-button:active,
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	color: #ffffff;
+	color: #212121;
 	text-decoration: none;
 }
 
