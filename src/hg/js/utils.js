@@ -204,7 +204,7 @@ function normed(thing)
     ||  (thing.length !== undefined && thing.length === 0)  // Empty array (or 'array like object')
     ||  ($.isPlainObject(thing) && $.isEmptyObject(thing))) // Empty simple object
         return undefined;
-    if (thing.length && thing.length === 1 && jQuery.type(thing) !== 'string') // string is overkill
+    if (thing.length && thing.length === 1 && typeof thing !== 'string') // string is overkill
         return thing[0]; // Container of one item should return the item itself.
     return thing;
 }
@@ -1010,7 +1010,7 @@ function getAllVars(obj,subtrackName)
                     urlData[name]        = val;
                 }
             } else {
-                if ($.isArray( val) && val.length > 1) {
+                if (Array.isArray( val) && val.length > 1) {
                     urlData[name] = "[" + val.toString() + "]";
                 } else
                     urlData[name] = val;
@@ -1650,11 +1650,11 @@ var bindings = {
             ixEnd = someString.length;
         var insideBeg = ixBeg;
         var insideEnd = ixEnd;
-        if (jQuery.type(begToken) === "regexp")
+        if (begToken.constructor.name === "RegExp")
             insideBeg = someString.search(begToken);
         else if (begToken.length > 0)
             insideBeg = someString.indexOf(begToken,ixBeg);
-        if (jQuery.type(endToken) === "regexp")
+        if (endToken.constructor.name === "RegExp")
             insideEnd = someString.search(endToken);
         else if (endToken.length > 0)
             insideEnd = someString.indexOf(endToken,ixBeg);
@@ -1670,7 +1670,7 @@ var bindings = {
     // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
         var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
         if (bounds.start > -1) {
-            if (jQuery.type(begToken) === "regexp")
+            if (begToken.constructor.name === "RegExp")
                 bounds.start += someString.match(begToken)[0].length;
             else
                 bounds.start += begToken.length;
@@ -1684,7 +1684,7 @@ var bindings = {
     // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
         var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
         if (bounds.start > -1) {
-            if (jQuery.type(endToken) === "regexp") 
+            if (endToken.constructor.name === "RegExp") 
                 bounds.stop  += someString.match(endToken)[0].length;
             else
                 bounds.stop  += endToken.length;
@@ -3776,18 +3776,18 @@ var dragReorder = {
         var btns = $("p.btn");
         if (btns.length > 0) {
             dragReorder.zipButtons($('#imgTbl'));
-            $(btns).mouseenter( dragReorder.buttonMouseOver );
-            $(btns).mouseleave( dragReorder.buttonMouseOut  );
+            $(btns).on("mouseenter", dragReorder.buttonMouseOver );
+            $(btns).on("mouseleave", dragReorder.buttonMouseOut  );
             $(btns).show();
         }
         var handle = $("td.dragHandle");
         if (handle.length > 0) {
-            $(handle).mouseenter( dragReorder.dragHandleMouseOver );
-            $(handle).mouseleave( dragReorder.dragHandleMouseOut  );
+            $(handle).on("mouseenter", dragReorder.dragHandleMouseOver );
+            $(handle).on("mouseleave", dragReorder.dragHandleMouseOut  );
         }
 
         // setup mouse callbacks for the area tags
-        $("#imgTbl").find("tr").mouseover( dragReorder.trMouseOver );
+        $("#imgTbl").find("tr").on("mouseover", dragReorder.trMouseOver );
         $("#imgTbl").find("tr").each( function (i, row) {
             // save the original y positions of each row
             //if (row.id in dragReorder.originalHeights === false) {

@@ -149,8 +149,8 @@ var suggestBox = {
 
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
-        $('#positionInput').focus(function() {$(this).autocomplete("search", "");});
-        $("#positionInput").change(function(event) {
+        $('#positionInput').on("focus", function() {$(this).autocomplete("search", "");});
+        $("#positionInput").on("change", function(event) {
             if (!lastSelected || lastSelected !== $('#positionInput').val()) {
                 // This handles case where user typed or edited something rather than choosing from a suggest list;
                 // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
@@ -165,12 +165,12 @@ var suggestBox = {
             }
         });
 
-        $("#positionDisplay").mousedown(function(event) {
+        $("#positionDisplay").on("mousedown", function(event) {
             // this let's the user click on the genomic position (e.g. if they want to edit it)
             lastMouseDown = event.offsetX;
         });
 
-        $("#positionDisplay").mouseup(function(event) {
+        $("#positionDisplay").on("mouseup", function(event) {
             if (event.offsetX !== lastMouseDown)
                 return; 
             // this let's the user click on the genomic position (e.g. if they want to edit it)
