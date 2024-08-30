@@ -10,4 +10,8 @@ table assemblyList
     string description;	"other description text"
     ubyte browserExists;	"1 == this assembly is available at UCSC, 0 == can be requested"
     string hubUrl;      "path name to hub.txt: GCF/000/001/405/GCF_000001405.39/hub.txt"
+    uint year;	        "year of assembly construction"
+    string refSeqCategory;	"one of: reference, representative or na"
+    string versionStatus;	"one of: latest, replaced or suppressed"
+    string assemblyLevel;	"one of: complete, chromosome, scaffold or contig"
     )

@@ -218,14 +218,24 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             ### record the year and status here before bailing out so
             ### these can get into genArk if needed
             asmName = row[15]
+            assemblyLevel = re.sub(r'genome', '', row[11], flags=re.IGNORECASE)
             year = re.sub(r'/.*', '', row[14])
             yearDict[gcAccession] = year
             versionStatus = row[10]
-            refseqCategory = re.sub(r'genome', '', row[4])
-            if refseqCategory == "na":
-               refseqCategory = ""
-            genomeStatus = refseqCategory + versionStatus
-            statusDict[gcAccession] = genomeStatus
+            refSeqCategory = re.sub(r'genome', '', row[4])
+            if refSeqCategory == "na":
+               refSeqCategory = ""
+            if versionStatus == "na":
+               versionStatus = ""
+            if assemblyLevel == "na":
+               assemblyLevel = ""
+            genomeStatus = f"{refSeqCategory} {versionStatus} {assemblyLevel}"
+            thisStat = {
+                "refSeqCategory": refSeqCategory,
+                "versionStatus": versionStatus,
+                "assemblyLevel": assemblyLevel,
+            }
+            statusDict[gcAccession] = thisStat
             if gcAccession in prioExists:
                continue
             if len(row) != 38:
@@ -256,7 +266,11 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                 "commonName": commonName,
                 "taxId": row[5],
                 "clade": clade,
-                "other": asmSubmitter + " " + strain + " " + asmType + " " + year + " " + genomeStatus,
+                "other": f"{asmSubmitter} {strain} {asmType} {year} {genomeStatus}",
+                "year": year,
+                "refSeqCategory": refSeqCategory,
+                "versionStatus": versionStatus,
+                "assemblyLevel": assemblyLevel,
                 "sortOrder": cladeP,
             }
 
@@ -292,6 +306,10 @@ def readGenArkData(url):
             "commonName": row[3],
             "taxId": row[4],
             "clade": clade,
+            "year": 0,
+            "refSeqCategory": "na",
+            "versionStatus": "na",
+            "assemblyLevel": "na",
             "sortOrder": cladeP,
         }
 
@@ -309,7 +327,9 @@ def readGenArkData(url):
 ### a manually maintained clade listing for UCSC dbDb assemblies
 ####################################################################
 def dbDbCladeList(filePath):
-    returnList = {}
+    returnClade = {}
+    returnYear = {}
+    returnNcbi = {}
 
     with open(filePath, 'r') as file:
         reader = csv.reader(file, delimiter='\t')
@@ -318,9 +338,11 @@ def dbDbCladeList(filePath):
                continue
             if row[0].startswith('#'):
                continue
-            returnList[row[0]] = row[1]
+            returnClade[row[0]] = row[1]
+            returnYear[row[0]] = row[2]
+            returnNcbi[row[0]] = row[3]
 
-    return returnList
+    return returnClade, returnYear, returnNcbi
 
 ####################################################################
 ### out of the genArkData list, extract the given clade
@@ -347,7 +369,7 @@ def getFirstWordCaseInsensitive(row):
 ####################################################################
 ### process the hgcentral.dbDb data into a dictionary
 ####################################################################
-def processDbDbData(data, clades):
+def processDbDbData(data, clades, years, ncbi):
     # Initialize a list to hold the dictionaries
     dataList = []
 
@@ -360,6 +382,8 @@ def processDbDbData(data, clades):
         # Split each row into columns
         columns = row.split('\t')
         clade = clades.get(columns[0], "n/a")
+        year = years.get(columns[0], "n/a")
+        gcAccession = ncbi.get(columns[0], "n/a")
         cladeP = cladePriority(clade)
 
         # corresponds with the SELECT statement
@@ -373,6 +397,8 @@ def processDbDbData(data, clades):
             "sourceName": columns[4],
             "description": columns[5],
             "clade": clade,
+            "year": year,
+            "gcAccession": gcAccession,
             "sortOrder": cladeP,
         }
 
@@ -444,15 +470,19 @@ def addYearsStatus(genArks, years, status):
         gcAccession = item['gcAccession']
         if gcAccession in years:
             year = years[gcAccession]
+            item['year'] = year
             pat = r'\b' + re.escape(year) + r'\b'
             if not re.search(pat, item['commonName']):
                 if not re.search(pat, item['taxId']):
                     item['taxId'] += " " + year
         if gcAccession in status:
             stat = status[gcAccession]
-            pat = r'\b' + re.escape(stat) + r'\b'
-            if not re.search(pat, item['taxId']):
-                item['taxId'] += " " + stat
+            item['refSeqCategory'] = stat['refSeqCategory']
+            item['versionStatus'] = stat['versionStatus']
+            item['assemblyLevel'] = stat['assemblyLevel']
+##            pat = r'\b' + re.escape(stat) + r'\b'
+##            if not re.search(pat, item['taxId']):
+##                item['taxId'] += " " + stat
 
     return
 
@@ -688,8 +718,8 @@ def main():
     if len(sys.argv) != 2:
         print("assemblyList.py - prepare assemblyList.tsv file from")
         print("    dbDb.hgcentral and UCSC_GI.assemblyHubList.txt file.\n")
-        print("Usage: assemblyList.py dbDb.name.clade.tsv\n")
-        print("the dbDb.name.clade.tsv file is a manually curated file to relate")
+        print("Usage: assemblyList.py dbDb.clade.year.acc.tsv\n")
+        print("the dbDb.clade.year.tsv file is a manually curated file to relate")
         print("    UCSC database names to GenArk clades, in source tree hubApi/")
         print("This script is going to read the dbDb.hgcentral table, and the file")
         print("    UCSC_GI.assemblyHubList.txt from hgdownload.")
@@ -706,10 +736,10 @@ def main():
     dbDbNameCladeFile = sys.argv[1]
 
     # the correspondence of dbDb names to GenArk clade categories
-    dbDbClades = dbDbCladeList(dbDbNameCladeFile)
+    dbDbClades, dbDbYears, dbDbNcbi = dbDbCladeList(dbDbNameCladeFile)
     # Get the dbDb.hgcentral table data
     rawData = dbDbData()
-    dbDbItems = processDbDbData(rawData, dbDbClades)
+    dbDbItems = processDbDbData(rawData, dbDbClades, dbDbYears, dbDbNcbi)
 
     # read the GenArk data from hgdownload into a list of dictionaries
     genArkUrl = "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt"
@@ -723,14 +753,18 @@ def main():
 
     refSeqList, refSeqYears, refSeqStatus = readAsmSummary("refseq.txt", allPriorities, commonNames, asmIdClade)
     print("# refSeq assemblies: ", len(refSeqList))
+    refSeqListHist, refSeqYearsHist, refSeqStatusHist = readAsmSummary("refseq_historical.txt", allPriorities, commonNames, asmIdClade)
+    print("# refSeq historical assemblies: ", len(refSeqListHist))
     genBankList, genBankYears, genBankStatus = readAsmSummary("genbank.txt", allPriorities, commonNames, asmIdClade)
     print("# genBank assemblies: ", len(genBankList))
+    genBankListHist, genBankYearsHist, genBankStatusHist = readAsmSummary("genbank_historical.txt", allPriorities, commonNames, asmIdClade)
+    print("# genBank historical  assemblies: ", len(genBankListHist))
     ### dictionary unpacking, combine both dictionaries (Python 3.5+)
-    allYears = {**refSeqYears, **genBankYears}
-    allStatus = {**refSeqStatus, **genBankStatus}
+    allYears = {**refSeqYears, **genBankYears, **refSeqYearsHist, **genBankYearsHist}
+    allStatus = {**refSeqStatus, **genBankStatus, **refSeqStatusHist, **genBankStatusHist}
     addYearsStatus(genArkItems, allYears, allStatus)
 
-    refSeqGenBankList = refSeqList + genBankList
+    refSeqGenBankList = refSeqList + genBankList + refSeqListHist + genBankListHist
     print("# refSeq + genBank assemblies: ", len(refSeqGenBankList))
 
     refSeqGenBankSorted =  sorted(refSeqGenBankList, key=lambda x: x['sortOrder'])
@@ -752,10 +786,21 @@ def main():
             sys.exit(255)
 
         clade = entry['clade']
+        year = entry['year']
+        gcAccession = entry['gcAccession']
+        refSeqCategory = ""
+        versionStatus = ""
+        assemblyLevel = ""
+        if "na" not in gcAccession:
+            if gcAccession in allStatus:
+              stat = allStatus[gcAccession]
+              refSeqCategory = stat['refSeqCategory']
+              versionStatus = stat['versionStatus']
+              assemblyLevel = stat['assemblyLevel']
 
         descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\n"
+        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -777,7 +822,11 @@ def main():
         clade = entry['clade']
         descr = f"{entry['asmName']} {entry['taxId']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\n"
+        year = entry['year']
+        refSeqCategory = entry['refSeqCategory']
+        versionStatus = entry['versionStatus']
+        assemblyLevel = entry['assemblyLevel']
+        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -795,9 +844,13 @@ def main():
         scientificName = entry['scientificName']
         asmName = entry['asmName']
         clade = entry['clade']
+        year = entry['year']
+        refSeqCategory = entry['refSeqCategory']
+        versionStatus = entry['versionStatus']
+        assemblyLevel = entry['assemblyLevel']
         descr = f"{asmName} {entry['taxId']} {entry['other']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\n"
+        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)
         incrementPriority += 1
         itemCount += 1

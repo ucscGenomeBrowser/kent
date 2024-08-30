@@ -1,0 +1,248 @@
+# manually curated list of dbDb assemblies to relate to GenArk clades
+# initial construction was via:
+#
+# grep -v "^#" UCSC* | cut -f3,6 | sort -u > genArk.sciName.clade.tsv
+# 
+# hgsql -hgenome-centdb -N -e \
+#  'select scientificName,name from dbDb where active=1;' hgcentral \
+#     | sort -u > dbDb.sciName.name.tsv
+# 
+# join -t $'\t' <(sort genArk.sciName.clade.tsv) \
+#    <(sort dbDb.sciName.name.tsv) | grep -v "(L)" \
+#    | awk -F$'\t' '{printf "%s\t%s\n", $3, $2}' | sort -u > dbDb.name.clade.tsv
+# 
+# sort -t$'\t' -k2,2 dbDb.sciName.name.tsv \
+#    | join -t $'\t' -1 2 -v1 - dbDb.name.clade.tsv > dbDb.name.missingClade.tsv
+#
+# then those few missingClade that didn't match were manually added
+# if new genomes are added to dbDb, they would need to be added here
+#
+# the years were added by getting the year out of dbDb, and joining
+#   that list with the previous two column table of name,clade
+#
+# hgsql -N -e 'select name,description from dbDb;' hgcentraltest \
+#   | awk '{printf "%s\t%s\n", $1,$3}' | sort > dbDb.name.year
+#
+# and the RefSeq/GenBank accession correspondence was obtained by working
+#   with the asmEquivalence table in hgFixed to get as many as possible
+
+ailMel1	mammals	2009	GCF_000004335.2
+allMis1	vertebrate	2012	GCF_000281125.1
+anoCar1	vertebrate	2007	na
+anoCar2	vertebrate	2010	GCF_000090745.1
+anoGam1	invertebrate	2003	na
+anoGam3	invertebrate	2006	GCF_000005575.2
+apiMel1	invertebrate	2004	na
+apiMel2	invertebrate	2005	na
+aplCal1	invertebrate	2008	na
+aptMan1	birds	2015	GCF_001039765.1
+aquChr2	birds	2014	GCF_000766835.1
+balAcu1	mammals	2013	GCF_000493695.1
+bisBis1	mammals	2014	GCA_000754665.1
+bosTau2	mammals	2005	na
+bosTau3	mammals	2006	na
+bosTau4	mammals	2007	na
+bosTau6	mammals	2009	na
+bosTau7	mammals	2011	GCF_000003205.5
+bosTau8	mammals	2014	GCF_000003055.5
+bosTau9	mammals	2018	GCF_002263795.1
+braFlo1	invertebrate	2006	na
+caeJap1	invertebrate	2008	na
+caePb1	invertebrate	2007	na
+caePb2	invertebrate	2008	na
+caeRem2	invertebrate	2006	na
+caeRem3	invertebrate	2007	na
+calJac1	primates	2007	na
+calJac3	primates	2009	GCF_000004665.1
+calJac4	primates	2020	GCF_009663435.1
+calMil1	vertebrate	2013	GCF_000165045.1
+canFam1	mammals	2004	na
+canFam2	mammals	2005	na
+canFam3	mammals	2011	GCF_000002285.3
+canFam4	mammals	2020	GCF_011100685.1
+canFam5	mammals	2019	GCF_005444595.1
+canFam6	mammals	2020	GCF_000002285.5
+cavPor3	mammals	2008	GCF_000151735.1
+cb1	invertebrate	2002	na
+cb3	invertebrate	2007	na
+ce10	invertebrate	2010	na
+ce11	invertebrate	2013	GCF_000002985.6
+ce2	invertebrate	2004	na
+ce4	invertebrate	2007	na
+ce6	invertebrate	2008	na
+cerSim1	mammals	2012	GCF_000283155.1
+chlSab2	primates	2014	GCF_000409795.2
+choHof1	mammals	2008	GCA_000164785.1
+chrPic1	vertebrate	2011	na
+ci1	invertebrate	2002	GCA_000183065.1
+ci2	invertebrate	2005	na
+ci3	invertebrate	2011	GCF_000224145.1
+criGri1	mammals	2013	GCF_000419365.1
+criGriChoV1	mammals	2011	GCF_000223135.1
+criGriChoV2	mammals	2017	GCA_900186095.1
+danRer10	fish	2014	GCF_000002035.5
+danRer11	fish	2017	GCF_000002035.6
+danRer3	fish	2005	na
+danRer4	fish	2006	na
+danRer5	fish	2007	na
+danRer6	fish	2008	na
+danRer7	fish	2010	GCF_000002035.4
+dasNov3	mammals	2011	GCF_000208655.1
+dipOrd1	mammals	2008	GCA_000151885.1
+dm1	invertebrate	2003	na
+dm2	invertebrate	2004	na
+dm3	invertebrate	2006	na
+dm6	invertebrate	2014	GCF_000001215.4
+dp2	invertebrate	2003	na
+dp3	invertebrate	2004	na
+droAna1	invertebrate	2004	na
+droAna2	invertebrate	2005	na
+droEre1	invertebrate	2005	na
+droGri1	invertebrate	2005	na
+droMoj1	invertebrate	2004	na
+droMoj2	invertebrate	2005	na
+droPer1	invertebrate	2005	GCF_000005195.2
+droSec1	invertebrate	2005	GCF_000005215.3
+droSim1	invertebrate	2005	na
+droVir1	invertebrate	2004	na
+droVir2	invertebrate	2005	na
+droYak1	invertebrate	2004	na
+droYak2	invertebrate	2005	na
+eboVir3	viral	2014	na
+echTel1	mammals	2005	na
+echTel2	mammals	2012	GCF_000313985.1
+enhLutNer1	mammals	2019	GCA_006410715.1
+equCab1	mammals	2007	na
+equCab2	mammals	2007	na
+equCab3	mammals	2018	GCF_002863925.1
+eriEur1	mammals	2006	na
+eriEur2	mammals	2012	GCF_000296755.1
+felCat3	mammals	2006	na
+felCat4	mammals	2008	GCA_000003115.1
+felCat5	mammals	2011	GCF_000181335.1
+felCat8	mammals	2014	GCF_000181335.2
+felCat9	mammals	2017	GCF_000181335.3
+fr1	fish	2002	na
+fr2	fish	2004	na
+fr3	fish	2011	GCF_000180615.1
+gadMor1	fish	2010	GCA_000231765.1
+galGal2	birds	2004	na
+galGal3	birds	2006	na
+galGal4	birds	2011	GCF_000002315.3
+galGal5	birds	2015	GCF_000002315.4
+galGal6	birds	2018	GCF_000002315.5
+galVar1	mammals	2014	GCF_000696425.1
+gasAcu1	fish	2006	na
+geoFor1	birds	2012	GCF_000277835.1
+gorGor3	primates	2011	na
+gorGor4	primates	2014	GCF_000151905.2
+gorGor5	primates	2016	GCA_900006655.1
+gorGor6	primates	2019	GCF_008122165.1
+hetGla1	mammals	2011	GCF_000230445.1
+hetGla2	mammals	2012	GCF_000247695.1
+hg16	primates	2003	na
+hg17	primates	2004	na
+hg18	primates	2006	na
+hg19	primates	2009	GCF_000001405.25
+hg38	primates	2013	GCA_000001405.28
+hs1	primates	2022	GCF_009914755.1
+latCha1	vertebrate	2011	GCF_000225785.1
+loxAfr3	mammals	2009	GCF_000001905.1
+macEug2	mammals	2009	GCA_000004035.1
+macFas5	primates	2013	GCF_000364345.1
+manPen1	mammals	2014	GCA_000738955.1
+melGal1	birds	2009	GCF_000146605.1
+melGal5	birds	2014	GCF_000146605.2
+melUnd1	birds	2011	GCF_000238935.1
+micMur1	primates	2007	GCA_000165445.1
+micMur2	primates	2015	GCF_000165445.1
+mm10	mammals	2011	GCF_000001635.26
+mm39	mammals	2020	GCF_000001635.27
+mm7	mammals	2005	na
+mm8	mammals	2006	na
+mm9	mammals	2007	na
+monDom1	mammals	2004	na
+monDom4	mammals	2006	na
+monDom5	mammals	2006	na
+mpxvRivers	viral	2022	GCF_014621545.1
+musFur1	mammals	2011	GCF_000215625.1
+nanPar1	vertebrate	2015	GCF_000935625.1
+nasLar1	primates	2014	GCA_000772465.1
+neoSch1	mammals	2017	GCF_002201575.1
+nomLeu1	primates	2010	na
+nomLeu2	primates	2011	na
+nomLeu3	primates	2012	GCF_000146795.2
+ochPri2	mammals	2008	GCA_000164825.1
+ochPri3	mammals	2012	GCF_000292845.1
+oreNil2	fish	2011	GCF_000188235.2
+ornAna1	mammals	2007	GCA_000002275.2
+ornAna2	mammals	2007	GCA_000002275.2
+oryCun2	mammals	2009	GCF_000003625.3
+oryLat2	fish	2005	na
+otoGar3	primates	2011	GCF_000181295.1
+oviAri1	mammals	2010	GCA_000005525.1
+oviAri3	mammals	2012	GCF_000298735.1
+oviAri4	mammals	2015	GCF_000298735.2
+panPan1	primates	2012	GCF_000258655.1
+panPan2	primates	2015	GCF_000258655.2
+panPan3	primates	2020	GCF_013052645.1
+panTro1	primates	2003	na
+panTro2	primates	2006	na
+panTro3	primates	2010	GCF_000001515.5
+panTro4	primates	2011	GCF_000001515.6
+panTro5	primates	2016	GCF_000001515.7
+panTro6	primates	2018	GCF_002880755.1
+papAnu2	primates	2012	GCF_000264685.1
+papAnu4	primates	2017	GCF_000264685.3
+papHam1	primates	2008	na
+petMar1	vertebrate	2007	na
+petMar2	vertebrate	2010	GCA_000148955.1
+petMar3	vertebrate	2017	GCA_002833325.1
+ponAbe2	primates	2007	na
+ponAbe3	primates	2018	GCF_002880775.1
+priPac1	invertebrate	2007	na
+proCap1	mammals	2008	GCA_000152225.1
+pteVam1	mammals	2008	GCA_000151845.1
+rheMac10	primates	2019	GCF_003339765.1
+rheMac2	primates	2006	na
+rheMac3	primates	2010	GCA_000230795.1
+rheMac8	primates	2015	GCF_000772875.2
+rhiRox1	primates	2014	GCF_000769185.1
+rn3	mammals	2003	na
+rn4	mammals	2004	na
+rn5	mammals	2012	na
+rn6	mammals	2014	GCF_000001895.5
+rn7	mammals	2020	GCF_015227675.2
+sacCer1	fungi	2003	na
+sacCer2	fungi	2008	na
+sacCer3	fungi	2011	GCF_000146045.2
+saiBol1	primates	2011	GCF_000235385.1
+sarHar1	mammals	2011	GCF_000189315.1
+sorAra1	mammals	2006	na
+sorAra2	mammals	2008	GCF_000181275.1
+speTri2	mammals	2011	GCF_000236235.1
+strPur1	invertebrate	2005	na
+strPur2	invertebrate	2006	na
+susScr11	mammals	2017	GCF_000003025.6
+susScr2	mammals	2009	na
+susScr3	mammals	2011	GCF_000003025.5
+taeGut1	birds	2008	na
+taeGut2	birds	2013	GCF_000151805.1
+tarSyr1	primates	2008	na
+tarSyr2	primates	2013	GCF_000164805.1
+tetNig1	fish	2004	na
+tetNig2	fish	2007	na
+thaSir1	vertebrate	2015	GCF_001077635.1
+triMan1	mammals	2011	GCF_000243295.1
+tupBel1	mammals	2006	na
+turTru2	mammals	2011	GCA_000151865.2
+vicPac1	mammals	2008	na
+vicPac2	mammals	2013	GCF_000164845.2
+wuhCor1	viral	2020	GCF_009858895.2
+xenLae2	vertebrate	2016	GCF_001663975.1
+xenTro1	vertebrate	2004	na
+xenTro10	vertebrate	2019	GCF_000004195.4
+xenTro2	vertebrate	2005	na
+xenTro3	vertebrate	2009	na
+xenTro7	vertebrate	2012	GCF_000004195.2
+xenTro9	vertebrate	2016	GCF_000004195.3

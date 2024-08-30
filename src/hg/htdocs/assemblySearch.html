@@ -39,16 +39,48 @@
         </div> <!-- container div for search box and submit/clear buttons -->
         <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
+             <fieldset class="colVertical">
+             <legend>assembly view/request</legend>
            <label><input type="checkbox" id="mustExist" onclick="atLeastOneCheckBoxOn(this)" name="mustExist" value="mustExist" checked>
-              show assemblies in available browsers
+              in available browsers
            </label><br>
            <label><input type="checkbox" id="notExist" onclick="atLeastOneCheckBoxOn(this)" name="notExist" value="notExist" checked>
-              show assemblies that can be requested
+              can be requested
            </label>
+             </fieldset>
            </div>
            <div class="radioGroup">
-              <label>may match any word <input type="radio" name="wordMatch" value="anyWord"></label>
-              <label>must match all words <input type="radio" name="wordMatch" value="allWords" checked></label>
+              <fieldset class="colVertical">
+              <legend>assembly status</legend>
+              <label><input type="radio" name="asmStatus" value="latest" id="statusLatest"> latest</label>
+              <label><input type="radio" name="asmStatus" value="replaced" id="statusReplaced"> replaced</label>
+              <label><input type="radio" name="asmStatus" value="suppressed" id="statusSuppressed"> suppressed</label>
+              <label><input type="radio" name="asmStatus" value="statusAny" id="statusAny" checked> any assembly status</label>
+              </fieldset>
+           </div>
+           <div class="radioGroup">
+              <fieldset class="colVertical">
+              <legend>RefSeq category</legend>
+              <label><input type="radio" name="refSeqCategory" value="reference" id="refSeqReference"> reference</label>
+              <label><input type="radio" name="refSeqCategory" value="representative" id="refSeqRepresentative"> representative</label>
+              <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> any RefSeq category</label>
+              </fieldset>
+           </div>
+           <div class="radioGroup">
+              <fieldset class="colVertical">
+              <legend>assembly level</legend>
+              <label><input type="radio" name="asmLevel" value="complete" id="asmLevelComplete"> complete</label>
+              <label><input type="radio" name="asmLevel" value="chromosome" id="asmLevelChromosome"> chromosome</label>
+              <label><input type="radio" name="asmLevel" value="scaffold" id="asmLevelScaffold"> scaffold</label>
+              <label><input type="radio" name="asmLevel" value="contig" id="asmLevelContig"> contig</label>
+              <label><input type="radio" name="asmLevel" value="asmLevelAny" id="asmLevelAny" checked> any level assembly</label>
+              </fieldset>
+           </div>
+           <div class="radioGroup">
+              <fieldset class="colVertical">
+              <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> may match any word</label>
+              <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> must match all words</label>
+              </fieldset>
            </div>
         </div>	<!-- the radioGroupContainer -->
         </div> <!-- the entire form element -->
@@ -63,9 +95,11 @@
           <col id='viewReq' style="width: 10%">
           <col id='comName' style="width: 10%">
           <col id='sciName' style="width: 10%">
-          <col id='asmId' style="width: 20%">
+          <col id='asmId' style="width: 15%">
+          <col id='year' style="width: 5%">
           <col id='clade' style="width: 8%">
-          <col id='description' style="width: 42%">
+          <col id='description' style="width: 30%">
+          <col id='status' style="width: 12%">
         </colgroup>
         <thead style="position:sticky; top:0; border:1px solid #ddd; width:100%" id="tableHeader">
          <!-- table header rows are filled in by javaScript since they can

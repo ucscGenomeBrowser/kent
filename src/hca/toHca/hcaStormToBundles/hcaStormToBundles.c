@@ -267,7 +267,7 @@ writeJsonTag(f, "schema_version", &firstOut);
 writeJsonVal(f, "3.0.0", FALSE);
 writeJsonTag(f, "schema_url", &firstOut);
 char schema_url[PATH_LEN];
-safef(schema_url, sizeof(schema_url), "http://hgwdev.soe.ucsc.edu/~kent/hca/schema/%s.json",
+safef(schema_url, sizeof(schema_url), "http://hgwdev.gi.ucsc.edu/~kent/hca/schema/%s.json",
     type);
 writeJsonVal(f, schema_url, FALSE);
 fprintf(f, "}");

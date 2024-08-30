@@ -3844,11 +3844,11 @@ function boundingRect(refEl) {
         // if we are dealing with an <area> element, the refEl width and height
         // are for the whole image and not for just the area, so
         // getBoundingClientRect() will return nothing, sad!
-        let refImg = $("[usemap=#" + refEl.parentNode.name + "]")[0];
+        let refImg = document.querySelector("[usemap='#" + refEl.parentNode.name + "']");
         let refImgRect = refImg.getBoundingClientRect();
         let refImgWidth = refImgRect.width;
-        let label = $("[id^=td_side]")[0];
-        let btn = $("[id^=td_btn]")[0];
+        let label = document.querySelector("[id^=td_side]");
+        let btn = document.querySelector("[id^=td_btn]");
         let labelWidth = 0, btnWidth = 0;
         if (label && btn) {
             labelWidth = label.getBoundingClientRect().width;
@@ -4218,7 +4218,11 @@ function titleTagToMouseover(mapEl) {
 
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
-    $("[title]").each(function(i, a) {
+    document.querySelectorAll("[title]").forEach(function(a, i) {
+        if (a.id !== "" && (a.id === "hotkeyHelp" || a.id.endsWith("Dialog") || a.id.endsWith("Popup"))) {
+            // these divs are populated by ui-dialog, they should not have tooltips
+            return;
+        }
         if (a.title !== undefined &&
                 (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";

@@ -137,6 +137,8 @@ JN.1:
     ranges: [ [ 23008, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
             ]
     sites: [ 1871,          # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1466
+             1368,          # GBW artifact, email from FedeGueli
+             6569,          # ''
              17562,         # very homoplasic (or systematic error?) in JN.1, email from FedeGueli
            ]
 

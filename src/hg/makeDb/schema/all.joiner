@@ -10838,12 +10838,13 @@ identifier omimAvSnpId external=OMIM
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
-    hgFixed.refLink.omimId dupeOk exclude=0
-    $hg.omimGene2.name minCheck=0.90
+    $hg.omimGene2.name dupeOk
+    $hg.ncbiRefSeqLink.omimId minCheck=0.60
+    hgFixed.refLink.omimId exclude=0
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.omimGeneMap.omimId minCheck=0.85
     $hg.omimGeneMap2.omimId minCheck=0.85
-    $hg.omim2gene.omimId minCheck=0.60
+    $hg.omim2gene.omimId minCheck=0.50
 
 identifier omimAvId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV ID"

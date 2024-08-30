@@ -688,10 +688,12 @@ printStep(stepNumber++);
     {
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
-    if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
-    {
-    hti = getHti(database, curTable, conn); isPositional = htiIsPositional(hti);
-        } isLongTabix = isLongTabixTable( curTable);
+    if (isHubTrack(curTable) || hashFindVal(fullTableToTdbHash, curTable) != NULL)  /* In same database */
+        {
+        hti = getHti(database, curTable, conn);
+        isPositional = htiIsPositional(hti);
+        }
+    isLongTabix = isLongTabixTable( curTable);
     isBam = isBamTable(curTable);
     isHic = isHicTable(curTable);
     isVcf = isVcfTable(curTable, NULL);
