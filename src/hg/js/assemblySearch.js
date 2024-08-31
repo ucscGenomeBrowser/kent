@@ -1,5 +1,7 @@
 // global variables:
 
+/* jshint esnext: true */
+
 var debug = true;
 var measureTiming = true;
 var urlParams;
@@ -271,7 +273,7 @@ function highlightMatch(queryString, rowData) {
               if (typeof rowData[key] === 'string') {
                  let value = rowData[key];
                  let subWords = value.split(/\s+/);
-                 let newString = ""
+                 let newString = "";
                  for (let subWord of subWords) {
                    if ( word.toLowerCase() === subWord.toLowerCase() ) {
                       newString += " <span class='highlight'>" + subWord + "</span>";
@@ -294,7 +296,7 @@ function highlightMatch(queryString, rowData) {
               if (typeof rowData[key] === 'string') {
                  let value = rowData[key];
                  let subWords = value.split(/\s+/);
-                 let newString = ""
+                 let newString = "";
                  for (let subWord of subWords) {
                    if ( subWord.toLowerCase().startsWith(word.toLowerCase())) {
                       newString += " <span class='highlight'>" + subWord + "</span>";
