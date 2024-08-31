@@ -241,6 +241,77 @@ function advancedSearchVisible(visible) {
   }
 }
 
+// Function to highlight words in the result that match the words
+//  in the queryString.  Work through each item of the rowData object,
+//  for each string, find out if it matches any of the words in the
+//  queryString.  This is tricky, there are extra characters besides
+//  just [a-zA-Z] that are getting in the way of these matches, where
+//  the MySQL could match, for example: checking:
+//      'HG02257' =? '(HG02257.pat'
+//      'HG02257' =? 'HG02257.alt.pat.f1_v2'
+//  doesn't match here, but MySQL match did
+
+function highlightMatch(queryString, rowData) {
+    // fixup the queryString words to get rid of the special characters
+    var words = queryString.split(/\s+/);
+    var wholeWord = [];	// going to be words that match completely
+    var prefix = [];	// going to be words that match prefix
+    for (let word of words) {
+       var noPrefix = word.replace(/^[-+]/, '');	// remove + - beginning
+       if (noPrefix.endsWith("*")) {
+         prefix.push(noPrefix.replace(/\*$/, ''));
+       } else {
+         wholeWord.push(noPrefix);
+       }
+    }
+    if (wholeWord.length > 0) {
+      for (let word of wholeWord) {
+        for (let key in rowData) {
+           if (rowData.hasOwnProperty(key)) {
+              if (typeof rowData[key] === 'string') {
+                 let value = rowData[key];
+                 let subWords = value.split(/\s+/);
+                 let newString = ""
+                 for (let subWord of subWords) {
+                   if ( word.toLowerCase() === subWord.toLowerCase() ) {
+                      newString += " <span class='highlight'>" + subWord + "</span>";
+                   } else {
+                      newString += " " + subWord;
+                   }
+                 }
+                 newString = newString.trim();
+                 if (newString !== rowData[key])
+                    rowData[key] = newString;
+              }
+           }
+        }
+      }
+    }
+    if (prefix.length > 0) {
+      for (let word of prefix) {
+        for (let key in rowData) {
+           if (rowData.hasOwnProperty(key)) {
+              if (typeof rowData[key] === 'string') {
+                 let value = rowData[key];
+                 let subWords = value.split(/\s+/);
+                 let newString = ""
+                 for (let subWord of subWords) {
+                   if ( subWord.toLowerCase().startsWith(word.toLowerCase())) {
+                      newString += " <span class='highlight'>" + subWord + "</span>";
+                   } else {
+                      newString += " " + subWord;
+                   }
+                 }
+                 newString = newString.trim();
+                 if (newString !== rowData[key])
+                    rowData[key] = newString;
+              }
+           }
+        }
+      }
+    }
+}
+
 // Function to generate the table and extra information
 function populateTableAndInfo(jsonData) {
     var tableHeader = document.getElementById('tableHeader');
@@ -270,6 +341,7 @@ function populateTableAndInfo(jsonData) {
 
     var count = 0;
     for (var id in genomicEntries) {
+        highlightMatch(extraInfo.q, genomicEntries[id]);
         var dataRow = '<tr>';
         var browserUrl = id;
         var asmInfoUrl = id;
