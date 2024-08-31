@@ -272,13 +272,13 @@ function highlightMatch(queryString, rowData) {
            if (rowData.hasOwnProperty(key)) {
               if (typeof rowData[key] === 'string') {
                  let value = rowData[key];
-                 let subWords = value.split(/\s+/);
+                 let subWords = value.match(/(\w+)|(\W+)/g);
                  let newString = "";
                  for (let subWord of subWords) {
                    if ( word.toLowerCase() === subWord.toLowerCase() ) {
-                      newString += " <span class='highlight'>" + subWord + "</span>";
+                      newString += "<span class='highlight'>" + subWord + "</span>";
                    } else {
-                      newString += " " + subWord;
+                      newString += subWord;
                    }
                  }
                  newString = newString.trim();
@@ -295,13 +295,13 @@ function highlightMatch(queryString, rowData) {
            if (rowData.hasOwnProperty(key)) {
               if (typeof rowData[key] === 'string') {
                  let value = rowData[key];
-                 let subWords = value.split(/\s+/);
+                 let subWords = value.match(/(\w+)|(\W+)/g);
                  let newString = "";
                  for (let subWord of subWords) {
                    if ( subWord.toLowerCase().startsWith(word.toLowerCase())) {
-                      newString += " <span class='highlight'>" + subWord + "</span>";
+                      newString += "<span class='highlight'>" + subWord + "</span>";
                    } else {
-                      newString += " " + subWord;
+                      newString += subWord;
                    }
                  }
                  newString = newString.trim();
