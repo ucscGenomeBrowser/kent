@@ -226,3 +226,8 @@ ol.noBullets {
   color: #000000;
 }
 
+.highlight {
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+}
