@@ -577,6 +577,11 @@ elif 'hub_24302' in driver.page_source:
 else:
      driver.find_element_by_xpath("//td[@id='td_data_hub_37972_multiWig4']/div[2]/map/area").click()
 
+# Tests hub with HAL tracks
+cartReset()
+driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://genecats.gi.ucsc.edu/qa/hubTesting/CICHLID2023/myHub/hub.txt&genome=hub_68124_Anc0&position=lastDbPos")
+driver.get(machine + "/cgi-bin/hgTracks")
+driver.find_element_by_id("positionInput").clear()
 
 # Tests hgBlat All and Monk Seal/Human MYLK Protein
 cartReset()
