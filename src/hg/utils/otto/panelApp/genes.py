@@ -100,16 +100,18 @@ def getGenesLocations(jsonFh):
         while True:
             try:
                 myResponse = requests.get(url)
-                break
+                if myResponse.ok:
+                    break
+                else:
+                    logging.error("Some error on %s, retrying after 1 minute (trial %d)" % (url, count))
+                    time.sleep(60)
+
             except:
                 logging.error("HTTP error on %s, retrying after 1 minute (trial %d)" % (url, count))
                 time.sleep(60)
                 count += 1
                 if count > 10:
                     assert(False) # cannot get URL
-
-        if not (myResponse.ok):
-            assert(False)
 
         jsonData = myResponse.content
         #jData = myResponse.json()
