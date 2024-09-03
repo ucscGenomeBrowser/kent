@@ -34,12 +34,15 @@
 </ol>
 </span> <!-- a hidden span for a pop-up help message -->
            </span>
+        <span id="shareThisSearch">
+          <a href="assemblySearch.html">share this search</a>
+        </span>
         <!-- URL argument maxItemsOutput to html page can change this -->
         <input type="hidden" id="maxItemsOutput" value="500">
         </div> <!-- container div for search box and submit/clear buttons -->
         <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
-             <fieldset class="colVertical">
+             <fieldset class="colVertical" onchange="optionsChange(event)">
              <legend>assembly view/request</legend>
            <label><input type="checkbox" id="mustExist" onclick="atLeastOneCheckBoxOn(this)" name="mustExist" value="mustExist" checked>
               in available browsers
@@ -50,34 +53,34 @@
              </fieldset>
            </div>
            <div class="radioGroup">
-              <fieldset class="colVertical">
+              <fieldset class="colVertical" onchange="optionsChange(event)">
               <legend>assembly status</legend>
               <label><input type="radio" name="asmStatus" value="latest" id="statusLatest"> latest</label>
               <label><input type="radio" name="asmStatus" value="replaced" id="statusReplaced"> replaced</label>
               <label><input type="radio" name="asmStatus" value="suppressed" id="statusSuppressed"> suppressed</label>
-              <label><input type="radio" name="asmStatus" value="statusAny" id="statusAny" checked> any assembly status</label>
+              <label><input type="radio" name="asmStatus" value="statusAny" id="statusAny" checked> any status</label>
               </fieldset>
            </div>
            <div class="radioGroup">
-              <fieldset class="colVertical">
+              <fieldset class="colVertical" onchange="optionsChange(event)">
               <legend>RefSeq category</legend>
               <label><input type="radio" name="refSeqCategory" value="reference" id="refSeqReference"> reference</label>
               <label><input type="radio" name="refSeqCategory" value="representative" id="refSeqRepresentative"> representative</label>
-              <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> any RefSeq category</label>
+              <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> any category</label>
               </fieldset>
            </div>
            <div class="radioGroup">
-              <fieldset class="colVertical">
+              <fieldset class="colVertical" onchange="optionsChange(event)">
               <legend>assembly level</legend>
               <label><input type="radio" name="asmLevel" value="complete" id="asmLevelComplete"> complete</label>
               <label><input type="radio" name="asmLevel" value="chromosome" id="asmLevelChromosome"> chromosome</label>
               <label><input type="radio" name="asmLevel" value="scaffold" id="asmLevelScaffold"> scaffold</label>
               <label><input type="radio" name="asmLevel" value="contig" id="asmLevelContig"> contig</label>
-              <label><input type="radio" name="asmLevel" value="asmLevelAny" id="asmLevelAny" checked> any level assembly</label>
+              <label><input type="radio" name="asmLevel" value="asmLevelAny" id="asmLevelAny" checked> any level</label>
               </fieldset>
            </div>
            <div class="radioGroup">
-              <fieldset class="colVertical">
+              <fieldset class="colVertical" onchange="optionsChange(event)">
               <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> may match any word</label>
               <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> must match all words</label>
               </fieldset>
