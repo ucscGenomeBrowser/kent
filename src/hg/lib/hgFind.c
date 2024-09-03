@@ -1300,7 +1300,7 @@ for (i = 0;
      i<tableCount && (limitResults == EXHAUSTIVE_SEARCH_REQUIRED || rowCount < limitResults);
      ++i)
     {
-    struct slName *idList = NULL, *idEl;
+    struct slName *idList = NULL;
     char *grepIndexFile = NULL;
     
     /* I'm doing this query in two steps in C rather than
@@ -1313,35 +1313,34 @@ for (i = 0;
 	idList = genbankGrepQuery(grepIndexFile, field, key);
     else
         idList = genbankSqlFuzzyQuery(conn, field, key, limitResults);
-    for (idEl = idList;
-         idEl != NULL && (limitResults == EXHAUSTIVE_SEARCH_REQUIRED || rowCount < limitResults);
-         idEl = idEl->next)
+    /* don't check srcDb to exclude refseq for compat with older tables */
+    if (idList)
         {
-        /* don't check srcDb to exclude refseq for compat with older tables */
-	struct dyString *query = sqlDyStringCreate(
-	      "select acc, organism from %s where %s = '%s' "
-	      " and type = 'mRNA'", gbCdnaInfoTable, skipDb(field), idEl->name);
+        struct dyString *query = sqlDyStringCreate("select acc, organism from %s where %s in (",
+                gbCdnaInfoTable, skipDb(field));
+        sqlDyStringPrintValuesList(query, idList);
+        sqlDyStringPrintf(query, ") and type = 'mRNA'");
         // limit results to avoid CGI timeouts (#11626).
         if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
             sqlDyStringPrintf(query, " limit %d", limitResults);
-	sr = sqlGetResult(conn, dyStringContents(query));
+        sr = sqlGetResult(conn, dyStringContents(query));
         dyStringFree(&query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    char *acc = row[0];
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            char *acc = row[0];
             /* will use this later to distinguish xeno mrna */
-	    int organismID = sqlUnsigned(row[1]);
-	    if (!isRefSeqAcc(acc) && !hashLookup(hash, acc))
-		{
-		el = newSlName(acc);
+            int organismID = sqlUnsigned(row[1]);
+            if (!isRefSeqAcc(acc) && !hashLookup(hash, acc))
+                {
+                el = newSlName(acc);
                 slAddHead(&list, el);
                 hashAddInt(hash, acc, organismID);
                 // limit results to avoid CGI timeouts (#11626).
                 if (rowCount++ > limitResults && limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
                     break;
-		}
-	    }
-	sqlFreeResult(&sr);
+                }
+            }
+        sqlFreeResult(&sr);
         }
     slFreeList(&idList);
     }
@@ -1739,53 +1738,56 @@ if (rlList != NULL)
     {
     struct hgPosTable *table = NULL;
     struct hash *hash = newHash(8);
+    struct genePredReader *gpr;
+    struct genePred *gp;
+    struct slName *values = NULL;
+    struct dyString *where = sqlDyStringCreate("name in (");
+    // convert the rlList to slNames for sql comma sep strings
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
-        char where[64];
-        struct genePredReader *gpr;
-        struct genePred *gp;
-
         /* Don't return duplicate mrna accessions */
         if (hashFindVal(hash, rl->mrnaAcc))
             {            
-            hashAdd(hash, rl->mrnaAcc, rl);
             continue;
             }
-
         hashAdd(hash, rl->mrnaAcc, rl);
-        sqlSafef(where, sizeof where, "name = '%s'", rl->mrnaAcc);
-        gpr = genePredReaderQuery(conn, hfs->searchTable, where);
-	while ((gp = genePredReaderNext(gpr)) != NULL)
-	    {
-	    struct hgPos *pos = NULL;
-	    AllocVar(pos);
-	    if (table == NULL)
-		{
-		char desc[256];
-		AllocVar(table);
-                table->searchTime = -1;
-		table->name = cloneString(hfs->searchTable);
-		if (startsWith("xeno", hfs->searchTable))
-                    safef(desc, sizeof(desc), "Non-%s RefSeq Genes", hOrganism(db));
-		else
-                    safef(desc, sizeof(desc), "RefSeq Genes");
-		table->description = cloneString(desc);
-		slAddHead(&hgp->tableList, table);
-		}
-	    slAddHead(&table->posList, pos);
-	    pos->name = cloneString(rl->name);
-	    pos->browserName = cloneString(rl->mrnaAcc);
-	    dyStringClear(ds);
-	    dyStringPrintf(ds, "(%s) %s", rl->mrnaAcc, rl->product);
-	    pos->description = cloneString(ds->string);
-	    pos->chrom = hgOfficialChromName(db, gp->chrom);
-	    pos->chromStart = gp->txStart;
-	    pos->chromEnd = gp->txEnd;
-	    genePredFree(&gp);
-	    found = TRUE;
-	    }
-        genePredReaderFree(&gpr);
-	}
+        slAddHead(&values, slNameNew(rl->mrnaAcc));
+        }
+    slReverse(&values);
+    sqlDyStringPrintValuesList(where, values);
+    sqlDyStringPrintf(where, ") order by find_in_set(name, '%s')", slNameListToString(values,','));
+    gpr = genePredReaderQuery(conn, hfs->searchTable, dyStringCannibalize(&where));
+    while ((gp = genePredReaderNext(gpr)) != NULL)
+        {
+        struct hgPos *pos = NULL;
+        AllocVar(pos);
+        if (table == NULL)
+            {
+            char desc[256];
+            AllocVar(table);
+            table->searchTime = -1;
+            table->name = cloneString(hfs->searchTable);
+            if (startsWith("xeno", hfs->searchTable))
+                safef(desc, sizeof(desc), "Non-%s RefSeq Genes", hOrganism(db));
+            else
+                safef(desc, sizeof(desc), "RefSeq Genes");
+            table->description = cloneString(desc);
+            slAddHead(&hgp->tableList, table);
+            }
+        struct refLink *rl = (struct refLink *)hashFindVal(hash, gp->name);
+        slAddHead(&table->posList, pos);
+        pos->name = cloneString(rl->name);
+        pos->browserName = cloneString(rl->mrnaAcc);
+        dyStringClear(ds);
+        dyStringPrintf(ds, "(%s) %s", rl->mrnaAcc, rl->product);
+        pos->description = cloneString(ds->string);
+        pos->chrom = hgOfficialChromName(db, gp->chrom);
+        pos->chromStart = gp->txStart;
+        pos->chromEnd = gp->txEnd;
+        genePredFree(&gp);
+        found = TRUE;
+        }
+    genePredReaderFree(&gpr);
     if (table != NULL && measureTiming)
         table->searchTime = clock1000() - startTime;
     refLinkFreeList(&rlList);
@@ -2502,7 +2504,7 @@ struct dyString *dy = dyStringCreate("%s.%s:%u-%u#%s", db, chrom, start+1, end, 
 return dyStringCannibalize(&dy);
 }
 
-static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
+static boolean doQuery(char *db, struct hgFindSpec *hfs, struct slPair *xrefList, char *term,
 		       struct hgPositions *hgp,
 		       boolean relativeFlag, int relStart, int relEnd,
 		       boolean multiTerm, int limitResults, boolean measureTiming)
@@ -2540,10 +2542,42 @@ if (hgp->tableList != NULL &&
     sameString(hgp->tableList->description, description))
     table = hgp->tableList;
 
-for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
+// this is taken from hgFindSpecCustom.c:checkQueryFormat() and changed to
+// capture the name field for a table
+static char *queryFormatRegexForIdField =
+    "^select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ "
+    "from %s where ([[:alnum:]]+) (r?like|=) ['\"]?.*%s.*['\"]?$";
+regmatch_t substrs[3];
+for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next )
     {
-    // we do not have control over the original sql since it comes from trackDb.ra or elsewhere?
     struct dyString *query = sqlDyStringCreate(hfs->query, tPtr->name, term);
+    if (xrefList)
+        {
+        // NOTE: hfsPolish guarantees the query format and allows the below regex to work.
+        // See hgFindSpecCustom.c for more details, specifically checkQueryFormat()
+        if (regexMatchSubstr(hfs->query, queryFormatRegexForIdField, substrs, ArraySize(substrs)))
+            {
+            char *idField = regexSubstringClone(hfs->query, substrs[1]);
+            sqlDyStringPrintf(query, " or %s in (", idField);
+            struct slName *vals = NULL;
+            struct slPair *ptr = xrefList;
+            for (; ptr != NULL; ptr = ptr->next)
+                {
+                if (ptr->name && isNotEmpty(ptr->name))
+                    {
+                    // we got an actual xref term, otherwise the val
+                    // just is the term clonestring'd, which we may have
+                    // changed via termPrefix above
+                    slAddHead(&vals, newSlName((char *)ptr->val));
+                    }
+                }
+            if (!vals)
+                slAddHead(&vals, newSlName(term));
+            slReverse(&vals);
+            sqlDyStringPrintValuesList(query, vals);
+            sqlDyStringPrintf(query, ") order by find_in_set(%s, '%s')", idField, slNameListToString(vals, ','));
+            }
+        }
     if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
         sqlDyStringPrintf(query, " limit %d", limitResults);
     sr = sqlGetResult(conn, dyStringContents(query));
@@ -2563,19 +2597,10 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
         pos->chrom = cloneString(row[0]);
         pos->chromStart = atoi(row[1]);
         pos->chromEnd = atoi(row[2]);
-        if (isNotEmpty(xrefTerm))
-            truncatef(buf, sizeof(buf), xrefTerm);
-        else
-            safef(buf, sizeof(buf), "%s%s",
-                  termPrefix ? termPrefix : "", row[3]);
+        safef(buf, sizeof(buf), "%s%s",
+              termPrefix ? termPrefix : "", row[3]);
         pos->name = cloneString(buf);
         pos->browserName = cloneString(row[3]);
-        if (isNotEmpty(xrefTerm))
-            {
-            safef(buf, sizeof(buf), "(%s%s)",
-                  termPrefix ? termPrefix : "", row[3]);
-            pos->description = cloneString(buf);
-            }
         if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
             {
             pos->chromEnd   = pos->chromStart + relEnd;
@@ -2614,7 +2639,7 @@ static boolean hgFindUsingSpec(struct cart *cart,
 /* Perform the search described by hfs on term.  If successful, put results
  * in hgp and return TRUE.  (If not, don't modify hgp.) */
 {
-struct slPair *xrefList = NULL, *xrefPtr = NULL; 
+struct slPair *xrefList = NULL; 
 boolean found = FALSE;
 
 if (hfs == NULL || term == NULL || hgp == NULL)
@@ -2656,11 +2681,8 @@ if (isNotEmpty(hfs->xrefTable))
 else
     xrefList = slPairNew(cloneString(""), cloneString(term));
 
-for (xrefPtr = xrefList;  xrefPtr != NULL;  xrefPtr = xrefPtr->next)
-    {
-    found |= doQuery(db, hfs, xrefPtr->name, (char *)xrefPtr->val, hgp,
-		     relativeFlag, relStart, relEnd, multiTerm, limitResults, measureTiming);
-    }
+found |= doQuery(db, hfs, xrefList, term, hgp,
+         relativeFlag, relStart, relEnd, multiTerm, limitResults, measureTiming);
 slPairFreeValsAndList(&xrefList);
 return(found);
 }
@@ -3463,9 +3485,13 @@ hubCategoryList = hubCategoriesToTdbList(categories);
 struct hgFindSpec *hfs;
 for (hfs = shortList; hfs != NULL; hfs = hfs->next)
     {
+    if (hashFindVal(foundSpecHash, hfs->searchTable))
+        continue; // we've already found a hit for this table, don't search it again
     boolean foundSpec = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
     if (foundSpec)
+        {
         hashAdd(foundSpecHash, hfs->searchTable, hfs->searchTable);
+        }
     foundIt |= foundSpec;
 
     // for multiTerm searches (like '15q11;15q13'), each individual component
@@ -3473,6 +3499,7 @@ for (hfs = shortList; hfs != NULL; hfs = hfs->next)
     if (multiTerm && foundSpec)
         break;
     }
+
 if (!(multiTerm) || (multiTerm && !foundIt))
     {
     for (hfs = longList; hfs != NULL; hfs = hfs->next)

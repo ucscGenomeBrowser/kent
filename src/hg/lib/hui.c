@@ -4983,6 +4983,12 @@ switch(cType)
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
 			break;
     case cfgGenePred:   genePredCfgUi(db, cart,tdb,prefix,title,boxed);
+                        if(startsWith("bigGenePred", tdb->type))
+                            {
+                            char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+                            int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+                            scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+                            }
 			break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
 			break;
@@ -9504,6 +9510,9 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     jsIncludeFile("ajax.js",NULL);
     jsIncludeFile("hui.js",NULL);
     jsIncludeFile("subCfg.js",NULL);
+    jsIncludeFile("ddcl.js", NULL);
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
     }
 cgiDown(0.3);
 

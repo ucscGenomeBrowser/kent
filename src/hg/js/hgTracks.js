@@ -1175,6 +1175,7 @@ var dragSelect = {
                              "<li>To cancel, press <tt>Esc</tt> anytime during the drag" +
                              "<li>Using the keyboard, highlight the current position with <tt>h then m</tt>" +
                              "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
+                             "<li>Clear specific highlights with right click &gt; Remove highlight" +
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>");
             makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);

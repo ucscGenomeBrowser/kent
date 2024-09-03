@@ -233,10 +233,10 @@ void fbOptionsHtiCart(struct hTableInfo *hti, struct cart *cart)
 boolean isGene;
 char *setting, *fbQual;
 
-if (sameString("psl", hti->type))
-    isGene = FALSE;
-else
+if (sameString("genePred", hti->type) || sameString("bigGenePred", hti->type))
     isGene = TRUE;
+else
+    isGene = FALSE;
 
 puts("<TABLE><TR><TD>\n");
 fbQual = cartCgiUsualString(cart, "fbQual", "whole");

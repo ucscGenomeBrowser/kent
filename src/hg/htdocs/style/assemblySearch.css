@@ -84,10 +84,9 @@ thead th {
     flex-direction: column; /* Arrange radio buttons vertically */
 }
 
-.radioGroup:last-child {
-    align-items: center;
-    justify-content: flex-end; /* Aligns the radio button and label to the right */
-    margin-left: auto; /* Push the second group to the right */
+.colVertical {
+    display: flex;
+    flex-direction: column; /* Arrange radio buttons vertically */
 }
 
 .formDiv > div, .radioGroupContainer {
@@ -227,3 +226,8 @@ ol.noBullets {
   color: #000000;
 }
 
+.highlight {
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+}

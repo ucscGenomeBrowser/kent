@@ -247,13 +247,10 @@ for(row = aliasTable->rowList; row; row = row->next)
 static char * gbdbBbExists(char *database)
 /* use a gbdb bigBed as our alias file. */
 {
-// not supported at the moment
-/*
 char buffer[4096];
-safef(buffer, sizeof buffer, "/gbdb/%s/chromAlias.bb", database);
+safef(buffer, sizeof buffer, "/gbdb/%s/%s.chromAlias.bb", database,database);
 if (fileExists(buffer))
     return cloneString(buffer);
-    */
 return NULL;
 }
 

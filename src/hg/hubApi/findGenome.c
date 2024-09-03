@@ -26,6 +26,13 @@ static boolean statsOnly = FALSE;
 static boolean browserMustExist = TRUE;	/* default: browser must exist */
 static boolean browserMayExist = FALSE;
 static boolean browserNotExist = FALSE;
+static unsigned specificYear = 0;	/* from year=1234 argument */
+/* from category= reference or representative */
+static char *refSeqCategory = NULL;
+/* from status= one of: latest, replaced or suppressed */
+static char *versionStatus = NULL;
+/* from level= one of complete, chromosome, scaffold or contig */
+static char *assemblyLevel = NULL;
 
 /*
 hgsql -e 'desc assemblyList;' hgcentraltest
@@ -53,10 +60,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct assemblyList *el = assemblyListLoadWithNull(row);
     jsonWriteObjectStart(jw, el->name);
-    jsonWriteNumber(jw, "priority", (long long)el->priority);
+    if (el->priority)
+        jsonWriteNumber(jw, "priority", (long long)*el->priority);
+    else
+        jsonWriteNumber(jw, "priority", (long long)0);
     jsonWriteString(jw, "commonName", el->commonName);
     jsonWriteString(jw, "scientificName", el->scientificName);
-    jsonWriteNumber(jw, "taxId", (long long)el->taxId);
+    if (el->taxId)
+        jsonWriteNumber(jw, "taxId", (long long)*el->taxId);
+    else
+        jsonWriteNumber(jw, "taxId", (long long)0);
     jsonWriteString(jw, "clade", el->clade);
     jsonWriteString(jw, "description", el->description);
     if (1 == *el->browserExists)
@@ -67,10 +80,67 @@ while ((row = sqlNextRow(sr)) != NULL)
         jsonWriteString(jw, "hubUrl", NULL);
     else
         jsonWriteString(jw, "hubUrl", el->hubUrl);
+    if (el->year)
+        jsonWriteNumber(jw, "year", (long long)*el->year);
+    else
+        jsonWriteNumber(jw, "year", (long long)0);
+    if (isEmpty(el->refSeqCategory))
+        jsonWriteString(jw, "refSeqCategory", NULL);
+    else
+        jsonWriteString(jw, "refSeqCategory", el->refSeqCategory);
+    if (isEmpty(el->versionStatus))
+        jsonWriteString(jw, "versionStatus", NULL);
+    else
+        jsonWriteString(jw, "versionStatus", el->versionStatus);
+    if (isEmpty(el->assemblyLevel))
+        jsonWriteString(jw, "assemblyLevel", NULL);
+    else
+        jsonWriteString(jw, "assemblyLevel", el->assemblyLevel);
     jsonWriteObjectEnd(jw);
     ++itemCount;
     }
 return (itemCount);
+}
+
+static void addBrowserExists(struct dyString *query)
+/* add the AND clauses for browserExist depending upon option */
+{
+if (browserMustExist)
+    sqlDyStringPrintf(query, " AND browserExists=1");
+else if (browserNotExist)
+    sqlDyStringPrintf(query, " AND browserExists=0");
+}
+
+static void addCategory(struct dyString *query)
+/* refSeqCategory = reference or representative */
+{
+if (isNotEmpty(refSeqCategory))
+    sqlDyStringPrintf(query, " AND refSeqCategory='%s'", refSeqCategory);
+}
+
+static void addStatus(struct dyString *query)
+/* versionStatus = latest, replaced or suppressed */
+{
+if (isNotEmpty(versionStatus))
+    sqlDyStringPrintf(query, " AND versionStatus='%s'", versionStatus);
+}
+
+static void addLevel(struct dyString *query)
+/* assemblyLevel = complete, chromosome, scaffold or contig */
+{
+if (isNotEmpty(assemblyLevel))
+    sqlDyStringPrintf(query, " AND assemblyLevel='%s'", assemblyLevel);
+}
+
+static void addConditions(struct dyString *query)
+/* add any of the optional conditions */
+{
+addBrowserExists(query);
+addCategory(query);
+addStatus(query);
+addLevel(query);
+if (specificYear > 0)
+    sqlDyStringPrintf(query, " AND year='%u'", specificYear);
 }
 
 static long long multipleWordSearch(struct sqlConnection *conn, char **words, int wordCount, struct jsonWrite *jw, long long *totalMatchCount)
@@ -90,11 +160,8 @@ for (int i = 1; i < wordCount; ++i)
 /* initial SELECT allows any browser exist status, existing or not */
 struct dyString *query = dyStringNew(64);
 sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
-/* add specific browserExists depending upon options */
-if (browserMustExist)
-    sqlDyStringPrintf(query, " AND browserExists=1");
-else if (browserNotExist)
-    sqlDyStringPrintf(query, " AND browserExists=0");
+addConditions(query);	/* add optional SELECT options */
+
 long long matchCount = sqlQuickLongLong(conn, query->string);
 if (matchCount > 0)
     {
@@ -107,12 +174,8 @@ if (matchCount > 0)
 	{
 	dyStringFree(&query);
 	query = dyStringNew(64);
-	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
-	/* add specific browserExists depending upon options */
-	if (browserMustExist)
-	    sqlDyStringPrintf(query, " AND browserExists=1");
-	else if (browserNotExist)
-	    sqlDyStringPrintf(query, " AND browserExists=0");
+	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+	addConditions(query);	/* add optional SELECT options */
 	sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
 	struct sqlResult *sr = sqlGetResult(conn, query->string);
 	itemCount = sqlJsonOut(jw, sr);
@@ -132,11 +195,8 @@ long long itemCount = 0;
 *totalMatchCount = 0;
 
 struct dyString *query = dyStringNew(64);
-sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
-if (browserMustExist)
-    sqlDyStringPrintf(query, " AND browserExists=1");
-else if (browserNotExist)
-    sqlDyStringPrintf(query, " AND browserExists=0");
+sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
+addConditions(query);	/* add optional SELECT options */
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
 *prefixSearch = FALSE;	/* assume not */
@@ -144,12 +204,8 @@ if (matchCount < 1)	/* no match, add the * wild card match to make a prefix matc
     {
     dyStringFree(&query);
     query = dyStringNew(64);
-    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
-    /* add specific browserExists depending upon options */
-    if (browserMustExist)
-	sqlDyStringPrintf(query, " AND browserExists=1");
-    else if (browserNotExist)
-	sqlDyStringPrintf(query, " AND browserExists=0");
+    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
+    addConditions(query);	/* add optional SELECT options */
     matchCount = sqlQuickLongLong(conn, query->string);
     if (matchCount > 0)
 	*prefixSearch = TRUE;
@@ -167,12 +223,8 @@ else
     dyStringFree(&query);
     query = dyStringNew(64);
 
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, *prefixSearch ? "*" : "");
-    /* add specific browserExists depending upon options */
-    if (browserMustExist)
-	sqlDyStringPrintf(query, " AND browserExists=1");
-    else if (browserNotExist)
-	sqlDyStringPrintf(query, " AND browserExists=0");
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, *prefixSearch ? "*" : "");
+    addConditions(query);	/* add optional SELECT options */
     sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
     struct sqlResult *sr = sqlGetResult(conn, query->string);
     itemCount = sqlJsonOut(jw, sr);
@@ -217,7 +269,65 @@ boolean genArkExists = hTableExists("hgcentraltest", genarkTable);
 if (!genArkExists)
     apiErrAbort(err400, err400Msg, "table hgcentraltest.%s does not exist for /findGenome", genarkTable);
 
+char *yearString = cgiOptionalString(argYear);
+char *categoryString = cgiOptionalString(argCategory);
+char *statusString = cgiOptionalString(argStatus);
+char *levelString = cgiOptionalString(argLevel);
+/* protect sqlUnsigned from errors */
+if (isNotEmpty(yearString))
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+        specificYear = sqlUnsigned(yearString);
+        if ((specificYear < 1800) || (specificYear > 2100))
+	    apiErrAbort(err400, err400Msg, "year specified '%s' must be >= 1800 and <= 2100", yearString);
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	apiErrAbort(err400, err400Msg, "can not recognize year '%s' as a number", yearString);
+    }
+/* probably be better to place this arg checking business into a function
+ * operating from a list
+ */
+if (isNotEmpty(categoryString))
+    {
+    refSeqCategory = cloneString(categoryString);
+    toLowerN(refSeqCategory, strlen(refSeqCategory));
+    if (differentWord(refSeqCategory, "reference"))
+	{
+        if (differentWord(refSeqCategory, "representative"))
+	    apiErrAbort(err400, err400Msg, "values for argument %s=%s must be 'reference' or 'representative'", argCategory, categoryString);
+	}
+    }
+if (isNotEmpty(statusString))
+    {
+    versionStatus = cloneString(statusString);
+    toLowerN(versionStatus, strlen(versionStatus));
+    if (differentWord(versionStatus, "latest"))
+	{
+        if (differentWord(versionStatus, "replaced"))
+	    if (differentWord(versionStatus, "suppressed"))
+		apiErrAbort(err400, err400Msg, "values for argument %s=%s must be one of: 'latest', 'replaced' or 'suppressed'", argStatus, statusString);
+	}
+    }
+if (isNotEmpty(levelString))
+    {
+    assemblyLevel = cloneString(levelString);
+    toLowerN(assemblyLevel, strlen(assemblyLevel));
+    if (differentWord(assemblyLevel, "complete"))
+	{
+	if (differentWord(assemblyLevel, "chromosome"))
+	    if (differentWord(assemblyLevel, "scaffold"))
+		if (differentWord(assemblyLevel, "contig"))
+		    apiErrAbort(err400, err400Msg, "values for argument %s=%s must be one of: 'complete', 'chromosome', 'scaffold' or 'contig'", argLevel, levelString);
+	}
+    }
+
 char *browserExistString = cgiOptionalString(argBrowser);
+if (NULL == browserExistString)	/* set default if none given */
+    browserExistString = cloneString("mustExist");
+
 if (isNotEmpty(browserExistString))
     {	/* from radio buttons, only one can be on */
     if (sameWord(browserExistString, "mustExist"))
@@ -270,7 +380,17 @@ apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 
 
 struct jsonWrite *jw = apiStartOutput();
 
+/* show options in effect in JSON return */
+
 jsonWriteString(jw, argBrowser, browserExistString);
+if (specificYear > 0)
+    jsonWriteNumber(jw, argYear, specificYear);
+if (isNotEmpty(refSeqCategory))
+    jsonWriteString(jw, argCategory, refSeqCategory);
+if (isNotEmpty(versionStatus))
+    jsonWriteString(jw, argStatus, versionStatus);
+if (isNotEmpty(assemblyLevel))
+    jsonWriteString(jw, argLevel, assemblyLevel);
 
 long long itemCount = 0;
 long long totalMatchCount = 0;

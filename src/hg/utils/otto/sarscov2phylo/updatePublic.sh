@@ -57,23 +57,28 @@ set +o pipefail
 grep skip annotate.pango annotate.nextclade | cat
 grep 'Could not' annotate.pango annotate.nextclade | cat
 
-# Check for newly added lineages that are missing from pango.clade-mutations.tsv
+# Check for lineages that should be annotated on the tree but are not, and vice versa.
 set +x
 lineages=~angie/github/pango-designation/lineages.csv
-tail -n+2 $lineages | cut -d, -f 2 | uniq | grep -E '^(AY|[B-Z][A-Z])' | sort -u \
-    > $TMPDIR/designatedDoubleLetters
-cut -f 1 $scriptDir/pango.clade-mutations.tsv  \
-| grep -E '^(AY|[B-Z][A-Z])' | grep -v _ | sort -u \
-    > $TMPDIR/cladeMutDoubleLetters
-missingLineages=$(comm -23 $TMPDIR/designatedDoubleLetters $TMPDIR/cladeMutDoubleLetters)
-if [[ "$missingLineages" != "" ]]; then
-    echo "LINEAGES MISSING FROM lineages.csv:"
-    echo $missingLineages
+tail -n+2 $lineages | cut -d, -f 2 | uniq | sort -u \
+    > $TMPDIR/designatedLineages
+cut -f 1 $buildDir/clade-paths | egrep '^[A-Z]' | grep -v _ | sort \
+    > $TMPDIR/annotatedLineages
+designatedNotAnnotated=$(comm -23 $TMPDIR/designatedLineages $TMPDIR/annotatedLineages \
+                         | grep -vFwf $scriptDir/designatedNotAnnotated | cat)
+if [[ "$designatedNotAnnotated" != "" ]]; then
+    echo "MISSING LINEAGES:"
+    echo "$designatedNotAnnotated"
+else
+    echo "No unexpectedly missing lineages, good."
 fi
-extraLineages=$(comm -13 $TMPDIR/designatedDoubleLetters $TMPDIR/cladeMutDoubleLetters)
-if [[ "$extraLineages" != "" ]]; then
-    echo "EXTRA LINEAGES (withdrawn?) in pango.clade-mutations.tsv:"
-    echo $extraLineages
+annotatedNotDesignated=$(comm -13 $TMPDIR/designatedLineages $TMPDIR/annotatedLineages \
+                         | grep -vFwf $scriptDir/annotatedNotDesignated | cat)
+if [[ "$annotatedNotDesignated" != "" ]]; then
+    echo "EXTRA LINEAGES (withdrawn?) in tree:"
+    echo "$annotatedNotDesignated"
+else
+    echo "No extra lineages, good."
 fi
 set -o pipefail
 set -x

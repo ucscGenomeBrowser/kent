@@ -70,7 +70,7 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
 .trackLabelTd {
         max-width: 14em;
         vertical-align: top;
-        word-break: break-all;
+        word-break: normal;
 }
 
 .trackDeleteIcon {

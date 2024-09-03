@@ -134,7 +134,7 @@ visibility hide
         parent constraintV4
         priority 2
 
-    track constraintV4.1
+    track constraintV4_1
     parent gnomadPLI off
     shortLabel Constraint V4.1
     longLabel gnomAD Constraint Metrics V4.1
@@ -142,9 +142,9 @@ visibility hide
     visibility pack
     type bigBed 12 +
 
-        track pliByTranscriptV4.1
+        track pliByTranscriptV4_1
         shortLabel Transcript LoF v4.1
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v4
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v4.1
         subGroups view=v4_1
         type bigBed 12 +
         mouseOverField _mouseOver
@@ -157,10 +157,10 @@ visibility hide
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
-        parent constraintV4.1
+        parent constraintV4_1
         priority 2
 
-        track missenseByTranscriptV4.1
+        track missenseByTranscriptV4_1
         shortLabel Transcript Missense v4.1
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v4.1
         subGroups view=v4_1
@@ -174,5 +174,5 @@ visibility hide
         filter._zscore -20:11
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
-        parent constraintV4.1
+        parent constraintV4_1
         priority 2

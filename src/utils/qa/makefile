@@ -26,6 +26,7 @@ install:
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
 	cp -p --remove-destination checkCoverage.csh       ${SCRIPTS}
 	cp -p --remove-destination checkEncodeRegions.csh  ${SCRIPTS}
+	cp -p --remove-destination checkErrorLogsAreUpToDate.py ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
 	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}

@@ -35,6 +35,7 @@ static struct optionSpec optionSpecs[] = {
     {"exampleFor",      OPTION_STRING},
     {"checkIndexes",    OPTION_BOOLEAN},
     {"makeExamples",    OPTION_BOOLEAN},
+    {"noHtml",          OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -58,6 +59,8 @@ errAbort(
 "                      not, some of them could be excluded from searches.)\n"
 "  -checkIndexes       Make sure that an index is defined on each field to\n"
 "                      be searched.\n"
+"  -noHtml             Do not print the html results list, just figure out\n"
+"                      the search results and print timing\n"
 /**#*** IMPLEMENT ME!
 "  -exampleFor=search  Randomly choose a term for the specified search (from\n"
 "                      the target table for the search).  Search for it.\n"
@@ -68,7 +71,7 @@ errAbort(
 }
 
 
-boolean reportSearch(char *termToSearch)
+boolean reportSearch(char *termToSearch, boolean noHtml)
 /* Show the list of tables that will be searched, and how long it took to 
  * figure that out.  Then do the search; show results and time required. */
 //#*** this doesn't handle ; in termToSearch (until the actual search)
@@ -164,8 +167,7 @@ if (isNotEmpty(termToSearch))
 	printf("\nSingle result for %s from %s: %s:%d-%d   [%s | %s | %s]\n",
 	       termToSearch, table, chrom, chromStart+1, chromEnd,
 	       name, browserName, description);
-	}
-    else
+	} else if (!noHtml)
         hgPositionsHtml(database, hgp, "checkHgFindSpec", cart);
     printf("\nTook %dms to search for %s.\n\n",
 	   endMs - startMs, termToSearch);
@@ -366,7 +368,7 @@ return(gotError);
 
 int checkHgFindSpec(char *db, char *termToSearch, boolean showSearches,
 		    boolean checkTermRegex, char *exampleFor,
-		    boolean checkIndexes, boolean makeExamples)
+		    boolean checkIndexes, boolean makeExamples, boolean noHtml)
 /* Perform searches/checks as specified, summarize errors, 
  * return nonzero if there are errors. */
 {
@@ -376,15 +378,15 @@ database = db;
 initGenbankTableNames(db);
 
 if (isNotEmpty(termToSearch))
-    gotError |= reportSearch(termToSearch);
+    gotError |= reportSearch(termToSearch, noHtml);
 if (showSearches)
-    gotError |= reportSearch(NULL);
+    gotError |= reportSearch(NULL, noHtml);
 if (checkTermRegex)
     gotError |= doCheckTermRegex();
 if (isNotEmpty(exampleFor))
     {
     termToSearch = getExampleFor(exampleFor);
-    gotError |= reportSearch(termToSearch);
+    gotError |= reportSearch(termToSearch, noHtml);
     }
 if (checkIndexes)
     gotError |= doCheckIndexes();
@@ -407,6 +409,7 @@ boolean checkTermRegex = FALSE;
 char   *exampleFor     = NULL;
 boolean checkIndexes   = FALSE;
 boolean makeExamples   = FALSE;
+boolean noHtml = FALSE;
 
 optionInit(&argc, argv, optionSpecs);
 /* Allow "checkHgFindSpec db" or "checkHgFindSpec db termToSearch" usage: */
@@ -423,6 +426,7 @@ checkTermRegex = optionExists("checkTermRegex");
 exampleFor = optionVal("exampleFor", exampleFor);
 checkIndexes = optionExists("checkIndexes");
 makeExamples = optionExists("makeExamples");
+noHtml = optionExists("noHtml");
 
 /* If no termToSearch or options are specified, do showSearches. */
 if (termToSearch == NULL && exampleFor == NULL &&
@@ -432,5 +436,5 @@ if (termToSearch == NULL && exampleFor == NULL &&
 cgiSpoof(&argc, argv);
 cart = cartAndCookie(hUserCookie(), excludeVars, NULL);
 return checkHgFindSpec(argv[1], termToSearch, showSearches, checkTermRegex,
-		       exampleFor, checkIndexes, makeExamples);
+		       exampleFor, checkIndexes, makeExamples, noHtml);
 }

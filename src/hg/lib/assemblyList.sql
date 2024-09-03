@@ -14,7 +14,11 @@ CREATE TABLE assemblyList (
     description varchar(1023),	# other description text
     browserExists tinyint unsigned,	# 1 == this assembly is available at UCSC, 0 == can be requested
     hubUrl varchar(511),	# path name to hub.txt: GCF/000/001/405/GCF_000001405.39/hub.txt
-    FULLTEXT gIdx (name, commonName, scientificName, clade, description),
+    year int unsigned,	# year of assembly construction
+    refSeqCategory varchar(31),	# one of: reference, representative or na
+    versionStatus varchar(15),	# one of: latest, replaced or suppressed
+    assemblyLevel varchar(15),	# one of: complete, chromosome, scaffold or contig
+    FULLTEXT gIdx (name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel),
               #Indices
     PRIMARY KEY(name)
 );
