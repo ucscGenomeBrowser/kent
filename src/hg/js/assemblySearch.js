@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     advancedSearchVisible(false);
     if (urlParams.has('advancedSearch')) {
         let advancedSearch = urlParams.get('advancedSearch');
-        advancedSearchVisible(advancedSearch)
+        advancedSearchVisible(advancedSearch);
         stateObject.advancedSearchVisible = advancedSearch;
     }
     if (urlParams.has('measureTiming')) { // accepts no value or other string
@@ -755,7 +755,7 @@ function makeRequest(query, browserExist, resultLimit) {
     let shareThisSearch = document.getElementById('shareThisSearch');
     let thisPageHref = "<a href='assemblySearch.html";
     thisPageHref += historyUrl;
-    thisPageHref += "'>share this search</a>"
+    thisPageHref += "'>share this search</a>";
     shareThisSearch.innerHTML = thisPageHref;
 
     xhr.open('GET', urlPrefix + url, true);
