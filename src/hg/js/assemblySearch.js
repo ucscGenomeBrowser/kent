@@ -23,6 +23,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // allow semi colon separators as well as ampersand
     var urlArgList = window.location.search.replaceAll(";", "&");
     urlParams = new URLSearchParams(urlArgList);
+    if (urlParams.has('level')) {
+       let asmLevel = urlParams.get('level');
+       document.getElementById('asmLevelAny').checked = true;  // default
+       // only one of these four cases will be true
+       if (asmLevel === "complete")
+         document.getElementById('asmLevelComplete').checked = true;
+       if (asmLevel === "chromosome")
+         document.getElementById('asmLevelChromosome').checked = true;
+       if (asmLevel === "scaffold")
+         document.getElementById('asmLevelScaffold').checked = true;
+       if (asmLevel === "contig")
+         document.getElementById('asmLevelContig').checked = true;
+    }
+    if (urlParams.has('status')) {
+       let asmStatus = urlParams.get('status');
+       document.getElementById('statusAny').checked = true; // default
+       // only one of these three cases will be true
+       if (asmStatus === "latest")
+          document.getElementById('statusLatest').checked = true;
+       if (asmStatus === "replaced")
+          document.getElementById('statusReplaced').checked = true;
+       if (asmStatus === "suppressed")
+          document.getElementById('statusSuppressed').checked = true;
+    }
+    if (urlParams.has('category')) {
+       let refSeqCategory = urlParams.get('category');
+       document.getElementById('refSeqAny').checked = true; // default
+       // only one of these etwo cases will be true
+       if (refSeqCategory === "reference")
+          document.getElementById('refSeqReference').checked = true;
+       if (refSeqCategory === "representative")
+          document.getElementById('refSeqRepresentative').checked = true;
+    }
+    // default starts as hidden
+    stateObject.advancedSearchVisible = false;
+    advancedSearchVisible(false);
+    if (urlParams.has('advancedSearch')) {
+        let advancedSearch = urlParams.get('advancedSearch');
+        advancedSearchVisible(advancedSearch)
+        stateObject.advancedSearchVisible = advancedSearch;
+    }
     if (urlParams.has('measureTiming')) { // accepts no value or other string
        var measureValue = urlParams.get('measureTiming');
        if ("0" === measureValue | "off" === measureValue) {
@@ -70,9 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
       searchTipList.appendChild(li);
     }
 
-    // default starts as hidden
-    stateObject.advancedSearchVisible = false;
-    advancedSearchVisible(false);
     var searchForm = document.getElementById('searchForm');
     var advancedSearchButton = document.getElementById('advancedSearchButton');
     var searchInput = document.getElementById('searchBox');
@@ -108,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     advancedSearchButton.addEventListener('click', function() {
-       var searchOptions = document.getElementById("advancedSearchOptions");
+       let shareThisSearch = document.getElementById('shareThisSearch');
+       shareThisSearch.innerHTML = "&nbsp;";
+       let searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
        if (! searchOptions.style.display || searchOptions.style.display === "none") {
           advancedSearchVisible(true);
@@ -635,6 +675,12 @@ function asmOpenModal(e) {
   }
 }
 
+function optionsChange(e) {
+  // options are changing, share URL is no longer viable, eliminate it
+  let shareThisSearch = document.getElementById('shareThisSearch');
+  shareThisSearch.innerHTML = "&nbsp;";
+}
+
 function makeRequest(query, browserExist, resultLimit) {
     // Disable the submit button
     disableButtons();
@@ -692,10 +738,12 @@ function makeRequest(query, browserExist, resultLimit) {
     }
     stateObject.queryString = queryString;
     var searchOptions = document.getElementById("advancedSearchOptions");
-    if (searchOptions.style.display === "flex")
+    if (searchOptions.style.display === "flex") {
         stateObject.advancedSearchVisible = true;
-    else
+        historyUrl += ";advancedSearch=true";
+    } else {
         stateObject.advancedSearchVisible = false;
+    }
     stateObject.maxItemsOutput = maxItemsOutput;
     stateObject.browser = browserExist;
     stateObject.debug = debug;
@@ -704,6 +752,11 @@ function makeRequest(query, browserExist, resultLimit) {
     stateObject.asmStatus = asmStatus;
     stateObject.refSeqCategory = refSeqCategory;
     stateObject.asmLevel = asmLevel;
+    let shareThisSearch = document.getElementById('shareThisSearch');
+    let thisPageHref = "<a href='assemblySearch.html";
+    thisPageHref += historyUrl;
+    thisPageHref += "'>share this search</a>"
+    shareThisSearch.innerHTML = thisPageHref;
 
     xhr.open('GET', urlPrefix + url, true);
 
