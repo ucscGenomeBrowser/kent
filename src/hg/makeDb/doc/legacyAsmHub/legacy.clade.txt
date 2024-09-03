@@ -68,6 +68,7 @@ GCA_000956105.1_Pcoq_1.0	primates
 GCA_000961545.1_S_schenckii_v1	fungi
 GCA_000968595.1_ASM96859v1	fungi
 GCA_001015335.1_Stomoxys_calcitrans-1.0.1	invertebrate
+GCA_001189475.1_ASM118947v1	fungi
 GCA_001305755.1_ASM130575v1	mammals
 GCA_001417885.1_Kmar_1.0	fungi
 GCA_001417965.1_Aiptasia_genome_1.1	invertebrate
@@ -179,6 +180,7 @@ GCA_015227805.2_bHirRus1.pri.v2	birds
 GCA_015227805.3_bHirRus1.pri.v3	birds
 GCA_016128335.1_ZJU1.0	birds
 GCA_016432865.1_AdamAnt	mammals
+GCA_017916325.1_LU_Lmar_1.0	invertebrate
 GCA_017976375.1_bCucCan1.pri	birds
 GCA_017976425.1_fToxJac2.pri	fish
 GCA_018139145.1_ASM1813914v1	birds
@@ -194,6 +196,7 @@ GCA_020826845.1_mDicBic1.mat.cur	mammals
 GCA_021462225.2_DD_fGirMul_XY1	fish
 GCA_021950905.1_HG002.pat.cur.20211005	primates
 GCA_021951015.1_HG002.mat.cur.20211005	primates
+GCA_022059095.1_T.mel.1	invertebrate
 GCA_022682495.1_HLdesRot8A	mammals
 GCA_023343835.1_bLagMut1_primary	birds
 GCA_023634085.1_bFalChe1.pri	birds
