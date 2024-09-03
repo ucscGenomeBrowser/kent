@@ -1034,6 +1034,9 @@ hPrintf("</TABLE>\n");
 	hPrintf(" ");
 	}
 
+    if (cfgOptionBooleanDefault("curl", 0))
+        cgiMakeButton(hgtaDoCurl, "get curl command");
+
 #ifdef SOMETIMES
     hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "test");

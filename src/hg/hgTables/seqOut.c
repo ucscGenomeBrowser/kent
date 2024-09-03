@@ -11,6 +11,7 @@
 #include "cart.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "hgConfig.h"
 #include "web.h"
 #include "hui.h"
 #include "hdb.h"
@@ -61,6 +62,14 @@ htmlOpen("Select sequence type for %s", track->shortLabel);
 hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 
+for (struct cgiVar *vars = cgiVarList(); vars!=NULL; vars=vars->next)
+    {
+    //if ((sameOk(vars->name, hgtaDoTopSubmit)) || (sameOk(vars->name, hgtaDoCurl) || sameOk(vars->name, hgtaDoCurlSelected)))
+        //continue;
+    
+    cgiMakeHiddenVar(vars->name, vars->val);
+    }
+
 if (isRefGeneTrack(track->table))
     {
     /* RefGene covers all 3 types, but in it's own way. */
@@ -86,6 +95,11 @@ else
     }
 cgiMakeButton(hgtaDoGenePredSequence, "submit");
 hPrintf(" ");
+if (cfgOptionBooleanDefault("curl", 0))
+    {
+    cgiMakeButton(hgtaDoCurlGenePredSequence, "get curl command");
+    hPrintf(" ");
+    }
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 cgiDown(0.9);

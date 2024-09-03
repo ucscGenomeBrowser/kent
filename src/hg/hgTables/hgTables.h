@@ -389,6 +389,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 	 		  * from cart. */
 #define hgtaDoMainPage "hgta_doMainPage"
 #define hgtaDoTopSubmit "hgta_doTopSubmit"
+#define hgtaDoCurl "hgta_doCurl"
+#define hgtaDoCurlSelected "hgta_doCurlSelected"
 #define hgtaDoSummaryStats "hgta_doSummaryStats"
 #define hgtaDoSchema "hgta_doSchema"
 #define hgtaDoPasteIdentifiers "hgta_doPasteIdentifiers"
@@ -424,6 +426,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoClearAllFieldPrefix "hgta_doClearAllField."
 #define hgtaDoSetAllFieldPrefix "hgta_doSetAllField."
 #define hgtaDoGenePredSequence "hgta_doGenePredSequence"
+#define hgtaDoCurlGenePredSequence "hgta_doCurlGenePredSequence"
 #define hgtaDoGenomicDna "hgta_doGenomicDna"
 #define hgtaDoGetBed "hgta_doGetBed"
 #define hgtaDoGetCustomTrackGb "hgta_doGetCustomTrackGb"
