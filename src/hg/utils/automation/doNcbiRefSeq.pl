@@ -930,7 +930,7 @@ export here=`pwd`
 if [ -s "\$md5Sum" ]; then
   origSum=`realpath \$md5Sum`
   bakFile="\${origSum}.\$DS"
-  if [! -s "\$bakFIle" ]; then
+  if [! -s "\$bakFile" ]; then
     mv \$origSum \$bakFile
     cd \$gpDir
     md5sum *gz > \$origSum
