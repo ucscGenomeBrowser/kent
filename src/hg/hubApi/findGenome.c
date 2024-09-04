@@ -102,6 +102,59 @@ while ((row = sqlNextRow(sr)) != NULL)
 return (itemCount);
 }
 
+/* MySQL FULLTEXT indexing has indexed 'words' as broken up by
+ *   word break characters, such as in the regular expression: '\W+'
+ *   or, in this case, checking the string with isalnum() function,
+ *   must all be isalnum()
+ * Return: TRUE when there are word breaks
+ *         FALSE - the string is all one 'word'
+ */
+static boolean hasWordBreaks(char *s)
+/* Return TRUE if there is any word break in string.
+ * allowing characters _ * + - as those are special characters
+ *  to the MySQL FULLTEXT search
+ *  The string has already been checked for the special prefix
+ *   characters of: " - +
+ *   or the special end character of: *
+ */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (c == '_' || c == '*' || c == '+' || c == '-')
+	continue;
+    if (! isalnum(c))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static char *quoteWords(char *s)
+/* given a string with word break characters, break it up into
+ *  a quoted string with the word break characters turned to single space
+ */
+{
+struct dyString *quoteString = dyStringNew(128);
+dyStringPrintf(quoteString, "\"");
+char c;
+int spaceCount = 0;
+while ((c = *s++) != 0)
+    if (isalnum(c) || c == '_' || c == '*' || c == '+' || c == '-')
+	{
+	dyStringPrintf(quoteString, "%c", c);
+	spaceCount = 0;
+	}
+    else
+	{
+	if (spaceCount)
+	    continue;
+	dyStringPrintf(quoteString, " ");
+	++spaceCount;
+	}
+dyStringPrintf(quoteString, "\"");
+return dyStringCannibalize(&quoteString);
+}
+
 static void addBrowserExists(struct dyString *query)
 /* add the AND clauses for browserExist depending upon option */
 {
@@ -248,7 +301,7 @@ void apiFindGenome(char *pathString[MAX_PATH_INFO])
 {
 char *searchString = cgiOptionalString(argQ);
 char *inputSearchString = cloneString(searchString);
-char *endResultSearchString = NULL;
+char *endResultSearchString = inputSearchString;
 boolean prefixSearch = FALSE;
 char *extraArgs = verifyLegalArgs(argFindGenome);
 genarkTable = genarkTableName();
@@ -398,7 +451,25 @@ char **words;
 AllocArray(words, wordCount);
 (void) chopByWhite(searchString, words, wordCount);
 if (1 == wordCount)
-    itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
+    {
+    boolean doQuote = TRUE;
+    if (startsWith("\"", words[0]))
+	doQuote = FALSE;
+    if (startsWith("-", words[0]))
+	doQuote = FALSE;
+    if (startsWith("+", words[0]))
+	doQuote = FALSE;
+    if (endsWith(words[0], "*"))
+	doQuote = FALSE;
+    if (doQuote && hasWordBreaks(words[0]))
+	{
+	char *quotedWords = quoteWords(words[0]);
+	endResultSearchString = quotedWords;
+	itemCount = oneWordSearch(conn, quotedWords, jw, &totalMatchCount, &prefixSearch);
+	} else {
+	itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
+	}
+    }
 else	/* multiple word search */
     itemCount = multipleWordSearch(conn, words, wordCount, jw, &totalMatchCount);
 
@@ -411,8 +482,7 @@ if (prefixSearch)
     }
 else
     {
-    endResultSearchString = inputSearchString;
-    jsonWriteString(jw, argQ, inputSearchString);
+    jsonWriteString(jw, argQ, endResultSearchString);
     }
 
 /* rules about what can be in the search string:
