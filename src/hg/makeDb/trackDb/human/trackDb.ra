@@ -1,9 +1,6 @@
 #PanelApp
 include panelApp.ra
 
-#ENIGMA tracks
-include trackDb.enigmaTracks.ra
-
 # ENCODE tracks
 include trackDb.encode.ra
 

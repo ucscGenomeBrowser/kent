@@ -1,9 +1,21 @@
 #!/usr/bin/python
+#/cluster/software/bin/python3
 
-import subprocess, os, sys
+import subprocess, os, sys, requests
 from PIL import Image, ImageChops
 from datetime import date
 import getpass
+import subprocess
+
+def bash(cmd):
+    """Run the cmd in bash subprocess"""
+    try:
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
+        bashStdoutt = rawBashOutput.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    return(bashStdoutt)
 
 # Notes
 # Currently this only supports a single session comparison
@@ -12,51 +24,29 @@ import getpass
 
 ### Functions
 
-def run(command):
-    """Helper function to execute shell commands."""
-    try:
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        retcode = process.returncode
-        return retcode, stdout, stderr
-    except Exception as e:
-        print("An error occurred while running the command: {}".format(e))
-        return -1, None, None
-
-def createImageFromSessions(sessionData,saveDir,serverUrl):
-    '''Function used to query all sessions on hgcentral'''
-    processedSessionData = sessionData[1].split("\n")[:-1]
-    imageFiles = []
-    for session in processedSessionData[2:]:
-        userName = session.split('\t')[0]
-        sessionName = session.split('\t')[1]
-        run(["wget","--output-file=/dev/null", "--output-document="+saveDir+"/"+userName+"."+sessionName+"-"+str(date.today())+".png", serverUrl+"/cgi-bin/hgRenderTracks?hgS_doOtherUser=submit&hgS_otherUserName="+userName+"&hgS_otherUserSessionName="+sessionName])
-        imageFiles.append(userName+"."+sessionName+"-"+str(date.today())+".png")
-    return(imageFiles)
+# def createImageFromSessions(sessionData,saveDir,serverUrl):
+#     '''Function used to query all sessions on hgcentral'''
+#     processedSessionData = sessionData[1].split("\n")[:-1]
+#     imageFiles = []
+#     for session in processedSessionData[2:]:
+#         userName = session.split('\t')[0]
+#         sessionName = session.split('\t')[1]
+#         run(["wget","--output-file=/dev/null", "--output-document="+saveDir+"/"+userName+"."+sessionName+"-"+str(date.today())+".png", serverUrl+"/cgi-bin/hgRenderTracks?hgS_doOtherUser=submit&hgS_otherUserName="+userName+"&hgS_otherUserSessionName="+sessionName])
+#         imageFiles.append(userName+"."+sessionName+"-"+str(date.today())+".png")
+#     return(imageFiles)
 
 def createImageFromSession(userName, sessionName, saveDir, serverUrl):
     '''Function for extracting only a single session'''
     output_file = "{}/{}.{}-{}.png".format(saveDir, userName, sessionName, date.today())
-    url = "{}/cgi-bin/hgRenderTracks?hgS_doOtherUser=submit&hgS_otherUserName={}&hgS_otherUserSessionName={}".format(
+    url = "{}cgi-bin/hgRenderTracks?hgS_doOtherUser=submit&hgS_otherUserName={}&hgS_otherUserSessionName={}".format(
         serverUrl, userName, sessionName
     )
-    
-    command = [
-        "wget",
-        "--output-file=/dev/null",  # Suppresses wget's output to a file named /dev/null (discarded)
-        "--output-document=" + output_file,  # Specify output document (the image)
-        url
-    ]
-    
-    #For debugging
-#     print("Command to be executed:", command)  # Debug print statement
 
-    # Execute the command
-    retcode, stdout, stderr = run(command)
-
-    if retcode != 0:
-        print("Error downloading the image: {}".format(stderr))
-        
+#     print(url, output_file)  #for debug
+#     urllib.urlretrieve(url, output_file)
+    with open(output_file,'wb') as f:
+        f.write(requests.get(url).content)
+    
     return "{}.{}-{}.png".format(userName, sessionName, date.today())
 
 def populateServerDir1checkExist(userName,sessionName,serverDir1,serverUrl1):
@@ -69,7 +59,7 @@ def populateServerDir1checkExist(userName,sessionName,serverDir1,serverUrl1):
             print("Archive images found")
     else:
         sys.exit("Sever one directory given does not exist")
-        
+
 def populateServerDir1(userName,sessionName,serverDir1,serverUrl1):
     '''Creates all the image files for server 1 regardless of existence or not'''
     if os.path.exists(serverDir1) and os.path.isdir(serverDir1):
@@ -115,7 +105,8 @@ def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImag
         print("\nDifferences were observed in the following session(s):")
         for image in diffImages:
             print(image)
-            run(["ln", "-sf", diffImagesDir+image, publicHtmlDirToSave+image])
+#             run(["ln", "-sf", diffImagesDir+image, publicHtmlDirToSave+image])
+            bash(["ln", "-sf", diffImagesDir+image, publicHtmlDirToSave+image])
             print("Link: "+publicHtmlDirToView+image)
             print("session 1: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s"
                    %(serverUrl1,sessionUser1,sessionName1))
@@ -133,8 +124,8 @@ def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImag
 def main():
     user = getpass.getuser()
     #Define cars
-    serverUrl1 = "https://hgwdev.gi.ucsc.edu/"
-    serverUrl2 = "https://hgwbeta.soe.ucsc.edu/"
+    serverUrl1 = "http://hgwdev.gi.ucsc.edu/"
+    serverUrl2 = "http://hgwbeta.soe.ucsc.edu/"
     # If you want to add more sessions, do so in the next 4 lines. Add the user and session name to the list
     sessionUser1 = ["lou","lou","lou","lou"]
     sessionUser2 = ["lou","lou","lou","lou"]
