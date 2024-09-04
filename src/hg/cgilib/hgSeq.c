@@ -17,6 +17,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 
 int hgSeqChromSize(char *db, char *chromName)
@@ -444,8 +445,8 @@ else
     safef(recName, sizeof(recName),
           "%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
           "strand=%c repeatMasking=%s",
-          db, 
-          name,
+          hubConnectSkipHubPrefix(db), 
+          hubConnectSkipHubPrefix(name),
           chrom, seqStart+1, seqEnd,
           padding5, padding3,
           (isRc ? '-' : '+'),
