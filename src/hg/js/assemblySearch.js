@@ -712,7 +712,9 @@ function makeRequest(query, browserExist, resultLimit) {
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
         words.forEach(function(word) {
-          if (word.startsWith("+")) {
+          if (word.startsWith("-")) {
+            queryPlus += " " + word; // do not add + to -
+          } else if (word.startsWith("+")) {
             queryPlus += " " + word; // space separates each word
           } else {
             queryPlus += " +" + word;
