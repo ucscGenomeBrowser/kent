@@ -256,14 +256,14 @@ function headerRefresh(tableHead) {
   //  the last sorted column, need to rebuild the headerRow to get the
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
-  headerRow += '<th><div class=tooltip>view/<br>request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class=tooltip>View/<br>Request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">Scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
-  headerRow += '<th><div class="tooltip">year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
-  headerRow += '<th><div class="tooltip"><em>genark</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
-  headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
-  headerRow += '<th><div class="tooltip">status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
+  headerRow += '<th><div class="tooltip">Year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
+  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
 }
@@ -274,11 +274,11 @@ function advancedSearchVisible(visible) {
   var searchOptions = document.getElementById("advancedSearchOptions");
   if (visible) {
     searchOptions.style.display = "flex";
-    advancedSearchButton.textContent = "hide advanced search options";
+    advancedSearchButton.textContent = "Hide advanced search options";
     stateObject.advancedSearchVisible = true;
   } else {
     searchOptions.style.display = "none";
-    advancedSearchButton.textContent = "show advanced search options";
+    advancedSearchButton.textContent = "Show advanced search options";
     stateObject.advancedSearchVisible = false;
   }
 }
@@ -389,15 +389,15 @@ function populateTableAndInfo(jsonData) {
         var asmInfoUrl = id;
         if (genomicEntries[id].browserExists) {
           if (id.startsWith("GC")) {
-            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>view</a>";
+            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>View</a>";
             asmInfoUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>";
           } else {
-            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>view</a>";
+            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>View</a>";
             asmInfoUrl = "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/" + id + "/bigZips/' target=_blank>" + id + "</a>";
           }
           dataRow += "<th>" + browserUrl + "</th>";
         } else {
-          dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>request</button></th>";
+          dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>Request</button></th>";
         }
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
         dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
@@ -755,7 +755,7 @@ function makeRequest(query, browserExist, resultLimit) {
     let shareThisSearch = document.getElementById('shareThisSearch');
     let thisPageHref = "<a href='assemblySearch.html";
     thisPageHref += historyUrl;
-    thisPageHref += "'>share this search</a>";
+    thisPageHref += "'>Share this search</a>";
     shareThisSearch.innerHTML = thisPageHref;
 
     xhr.open('GET', urlPrefix + url, true);
