@@ -301,7 +301,16 @@ function highlightMatch(queryString, rowData) {
     for (let word of words) {
        var noPrefix = word.replace(/^[-+]/, '');	// remove + - beginning
        if (noPrefix.endsWith("*")) {
-         prefix.push(noPrefix.replace(/\*$/, ''));
+         let subPrefix = noPrefix.replace(/\*$/, '').match(/(\w+)/g);
+         if (subPrefix.length > 1) {
+           let i = 0;
+           for ( ; i < subPrefix.length - 1; i++) {
+              wholeWord.push(subPrefix[i]);
+           }
+           prefix.push(subPrefix[i].replace(/\*$/, ''));
+         } else {
+           prefix.push(noPrefix.replace(/\*$/, ''));
+         }
        } else {
          wholeWord.push(noPrefix);
        }
@@ -314,21 +323,26 @@ function highlightMatch(queryString, rowData) {
                  let value = rowData[key];
                  let subWords = value.match(/(\w+)|(\W+)/g);
                  let newString = "";
-                 for (let subWord of subWords) {
-                   if ( word.toLowerCase() === subWord.toLowerCase() ) {
-                      newString += "<span class='highlight'>" + subWord + "</span>";
-                   } else {
-                      newString += subWord;
-                   }
-                 }
-                 newString = newString.trim();
-                 if (newString !== rowData[key])
-                    rowData[key] = newString;
-              }
-           }
-        }
-      }
-    }
+                 let wholeSubs = word.match(/(\w+)/g);
+                 if (wholeSubs.length > 0) {
+                   for (let whole of wholeSubs) {
+                     for (let subWord of subWords) {
+                       if ( whole.toLowerCase() === subWord.toLowerCase() ) {
+                          newString += "<span class='highlight'>" + subWord + "</span>";
+                       } else {
+                          newString += subWord;
+                       }
+                     }
+                     newString = newString.trim();
+                     if (newString !== rowData[key])
+                        rowData[key] = newString;
+                   }	//	for (let whole of wholeSubs)
+                 }	//	if (wholeSubs.length > 0)
+              }	//	if (typeof rowData[key] === 'string')
+           }	//	if (rowData.hasOwnProperty(key))
+        }	//	for (let key in rowData)
+      }	//	for (let word of wholeWord)
+    }	//	if (wholeWord.length > 0)
     if (prefix.length > 0) {
       for (let word of prefix) {
         for (let key in rowData) {
@@ -698,7 +712,9 @@ function makeRequest(query, browserExist, resultLimit) {
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
         words.forEach(function(word) {
-          if (word.startsWith("+")) {
+          if (word.startsWith("-")) {
+            queryPlus += " " + word; // do not add + to -
+          } else if (word.startsWith("+")) {
             queryPlus += " " + word; // space separates each word
           } else {
             queryPlus += " +" + word;
