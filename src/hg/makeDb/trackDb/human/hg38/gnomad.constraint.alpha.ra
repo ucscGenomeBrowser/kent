@@ -151,7 +151,7 @@ visibility hide
         itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.v4.1.bb
-        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4.1
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
         filter._pli 0:1
@@ -168,7 +168,7 @@ visibility hide
         mouseOverField _mouseOver
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.v4.1.bb
-        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4.1
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
         filter._zscore -20:11
