@@ -290,7 +290,7 @@ n = driver.find_element_by_id("customTracksMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_name("hgct_customText").clear()
-driver.find_element_by_name("hgct_customText").send_keys("https://hgwdev-gperez2.gi.ucsc.edu/~gperez2/testing/selenium/chrmAliasTestHg38_track")
+driver.find_element_by_name("hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/chrmAliasTestHg38_track")
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 # click into hgTrackUi of customTrack
