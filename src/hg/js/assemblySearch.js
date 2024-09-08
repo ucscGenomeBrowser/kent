@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('refSeqRepresentative').checked = true;
     }
     // default starts as hidden
+    let copyIcon0 = document.getElementById('copyIcon0');
+    stateObject.copyIcon0 = copyIcon0.innerHTML;
+    document.getElementById('urlCopyLink').style.display = "none";
     stateObject.advancedSearchVisible = false;
     advancedSearchVisible(false);
     if (urlParams.has('advancedSearch')) {
@@ -146,8 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     advancedSearchButton.addEventListener('click', function() {
-       let shareThisSearch = document.getElementById('shareThisSearch');
-       shareThisSearch.innerHTML = "&nbsp;";
+       document.getElementById('urlCopyLink').style.display = "none";
        let searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
        if (! searchOptions.style.display || searchOptions.style.display === "none") {
@@ -467,6 +469,7 @@ function populateTableAndInfo(jsonData) {
     } else {
       document.getElementById("measureTiming").style.display = "none";
     }
+    document.getElementById('urlCopyLink').style.display = "inline";
 }	//	function populateTableAndInfo(jsonData)
 
 function enableButtons() {
@@ -514,7 +517,7 @@ function clickHandler(e) {
     if(e.target.tagName === "DIV") {
       if(e.target.id != "modalWindow") closeModal(e);
   }
-} 
+}
 
 function keyHandler(e) {
   if(e.keyCode === 27) closeModal(e);
@@ -564,6 +567,41 @@ function sendRequest(name, email, asmId, betterName, comment) {
     xmlhttp.send();
 
 }  //      sendRequest: function(name, email. asmId)
+
+// borrowed this code from utils.js
+function copyToClipboard(ev) {
+    /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon.
+     * The attribute data-target of this element is the ID of the element that contains the text to copy.
+     * The text is either in the attribute data-copy or the innerText.
+     * see C function printCopyToClipboardButton(iconId, targetId);
+     * */
+
+    ev.preventDefault();
+
+    var buttonEl = ev.target.closest("button"); // user can click SVG or BUTTON element
+
+    var targetId = buttonEl.getAttribute("data-target");
+    if (targetId===null)
+        targetId = ev.target.parentNode.getAttribute("data-target");
+    var textEl = document.getElementById(targetId);
+    var text = textEl.getAttribute("data-copy");
+    if (text===null)
+        text = textEl.innerText;
+
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    buttonEl.innerHTML = 'Copied';
+    ev.preventDefault();
+}
 
 // do not allow both checkboxes to go off
 function atLeastOneCheckBoxOn(e) {
@@ -691,8 +729,8 @@ function asmOpenModal(e) {
 
 function optionsChange(e) {
   // options are changing, share URL is no longer viable, eliminate it
-  let shareThisSearch = document.getElementById('shareThisSearch');
-  shareThisSearch.innerHTML = "&nbsp;";
+  document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
+  document.getElementById('urlCopyLink').style.display = "none";
 }
 
 function makeRequest(query, browserExist, resultLimit) {
@@ -711,11 +749,20 @@ function makeRequest(query, browserExist, resultLimit) {
       var words = queryString.split(/\s+/);
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
+        let inQuote = false;
         words.forEach(function(word) {
-          if (word.startsWith("-")) {
-            queryPlus += " " + word; // do not add + to -
-          } else if (word.startsWith("+")) {
-            queryPlus += " " + word; // space separates each word
+          if (word.match(/^[-+]?"/)) {
+             if (word.match(/^[-+]/))
+                queryPlus += " " + word; // do not add + to - or + already there
+             else
+                queryPlus += " +" + word;
+             inQuote = true;
+          } else if (inQuote) {
+             queryPlus += " " + word; // space separates each word
+             if (word.endsWith('"'))
+                inQuote = false;
+          } else if (word.match(/[^-+]/)) {
+            queryPlus += " " + word; // do not add + to - or + already there
           } else {
             queryPlus += " +" + word;
           }
@@ -768,11 +815,9 @@ function makeRequest(query, browserExist, resultLimit) {
     stateObject.asmStatus = asmStatus;
     stateObject.refSeqCategory = refSeqCategory;
     stateObject.asmLevel = asmLevel;
-    let shareThisSearch = document.getElementById('shareThisSearch');
-    let thisPageHref = "<a href='assemblySearch.html";
-    thisPageHref += historyUrl;
-    thisPageHref += "'>Share this search</a>";
-    shareThisSearch.innerHTML = thisPageHref;
+    let urlText0 = document.getElementById('urlText0');
+    let hostName = window.location.hostname;
+    urlText0.innerHTML = "https://" + hostName + "/assemblySearch.html" + historyUrl;
 
     xhr.open('GET', urlPrefix + url, true);
 
@@ -781,6 +826,7 @@ function makeRequest(query, browserExist, resultLimit) {
             // Hide the wait spinner once the AJAX request is complete
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
             enableButtons();
 
             stateObject.jsonData = xhr.responseText;
@@ -792,6 +838,8 @@ function makeRequest(query, browserExist, resultLimit) {
             // Hide the wait spinner once the AJAX request is complete
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
+            document.getElementById('urlCopyLink').style.display = "none";
             enableButtons();
 	    var tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = "<tr><td style='text-align:center;' colspan=8><b>no results found for query: <em>'" + queryString + "'</em></b></td></tr>";
