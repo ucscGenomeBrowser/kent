@@ -2,7 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 compile:
-	cp -p hubtools ${DESTBINDIR}/hubMake
+	cp -p hubtools ${DESTBINDIR}/hubtools
 
 lint:
 	pylint hubtools
