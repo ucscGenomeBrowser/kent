@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent form submission
 
-        var searchTerm = document.getElementById('searchBox').value;
+        // the trim() removes stray white space before or after the string
+        var searchTerm = document.getElementById('searchBox').value.trim();
         var resultCountLimit = document.getElementById('maxItemsOutput');
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
@@ -241,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
     if (urlParams.has('q')) {
-       query = urlParams.get('q');
+       query = urlParams.get('q').trim();
        if (query.length > 0) {
           searchInput.value = query;
           document.getElementById('submitSearch').click();
@@ -326,7 +327,7 @@ function highlightMatch(queryString, rowData) {
                  let subWords = value.match(/(\w+)|(\W+)/g);
                  let newString = "";
                  let wholeSubs = word.match(/(\w+)/g);
-                 if (wholeSubs.length > 0) {
+                 if (wholeSubs && wholeSubs.length > 0) {
                    for (let whole of wholeSubs) {
                      for (let subWord of subWords) {
                        if ( whole.toLowerCase() === subWord.toLowerCase() ) {
@@ -399,7 +400,7 @@ function populateTableAndInfo(jsonData) {
 
     var count = 0;
     for (var id in genomicEntries) {
-        highlightMatch(extraInfo.q, genomicEntries[id]);
+        highlightMatch(extraInfo.q.trim(), genomicEntries[id]);
         var dataRow = '<tr>';
         var browserUrl = id;
         var asmInfoUrl = id;
@@ -448,7 +449,7 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q.trim() + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -752,7 +753,7 @@ function makeRequest(query, browserExist, resultLimit) {
         let inQuote = false;
         words.forEach(function(word) {
           if (word.match(/^[-+]?"/)) {
-             if (word.match(/^[-+]/))
+             if (/^[-+]/.test(word))
                 queryPlus += " " + word; // do not add + to - or + already there
              else
                 queryPlus += " +" + word;
@@ -761,7 +762,7 @@ function makeRequest(query, browserExist, resultLimit) {
              queryPlus += " " + word; // space separates each word
              if (word.endsWith('"'))
                 inQuote = false;
-          } else if (word.match(/[^-+]/)) {
+          } else if (/^[-+]/.test(word)) {
             queryPlus += " " + word; // do not add + to - or + already there
           } else {
             queryPlus += " +" + word;
