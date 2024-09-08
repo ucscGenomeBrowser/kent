@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('refSeqRepresentative').checked = true;
     }
     // default starts as hidden
+    let copyIcon0 = document.getElementById('copyIcon0');
+    stateObject.copyIcon0 = copyIcon0.innerHTML;
+    document.getElementById('urlCopyLink').style.display = "none";
     stateObject.advancedSearchVisible = false;
     advancedSearchVisible(false);
     if (urlParams.has('advancedSearch')) {
@@ -146,8 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     advancedSearchButton.addEventListener('click', function() {
-       let shareThisSearch = document.getElementById('shareThisSearch');
-       shareThisSearch.innerHTML = "&nbsp;";
+       document.getElementById('urlCopyLink').style.display = "none";
        let searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
        if (! searchOptions.style.display || searchOptions.style.display === "none") {
@@ -256,14 +258,14 @@ function headerRefresh(tableHead) {
   //  the last sorted column, need to rebuild the headerRow to get the
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
-  headerRow += '<th><div class=tooltip>view/<br>request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class=tooltip>View/<br>Request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">Scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
-  headerRow += '<th><div class="tooltip">year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
-  headerRow += '<th><div class="tooltip"><em>genark</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
-  headerRow += '<th><div class="tooltip">description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
-  headerRow += '<th><div class="tooltip">status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
+  headerRow += '<th><div class="tooltip">Year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
+  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
 }
@@ -274,11 +276,11 @@ function advancedSearchVisible(visible) {
   var searchOptions = document.getElementById("advancedSearchOptions");
   if (visible) {
     searchOptions.style.display = "flex";
-    advancedSearchButton.textContent = "hide advanced search options";
+    advancedSearchButton.textContent = "Hide advanced search options";
     stateObject.advancedSearchVisible = true;
   } else {
     searchOptions.style.display = "none";
-    advancedSearchButton.textContent = "show advanced search options";
+    advancedSearchButton.textContent = "Show advanced search options";
     stateObject.advancedSearchVisible = false;
   }
 }
@@ -301,7 +303,16 @@ function highlightMatch(queryString, rowData) {
     for (let word of words) {
        var noPrefix = word.replace(/^[-+]/, '');	// remove + - beginning
        if (noPrefix.endsWith("*")) {
-         prefix.push(noPrefix.replace(/\*$/, ''));
+         let subPrefix = noPrefix.replace(/\*$/, '').match(/(\w+)/g);
+         if (subPrefix.length > 1) {
+           let i = 0;
+           for ( ; i < subPrefix.length - 1; i++) {
+              wholeWord.push(subPrefix[i]);
+           }
+           prefix.push(subPrefix[i].replace(/\*$/, ''));
+         } else {
+           prefix.push(noPrefix.replace(/\*$/, ''));
+         }
        } else {
          wholeWord.push(noPrefix);
        }
@@ -314,21 +325,26 @@ function highlightMatch(queryString, rowData) {
                  let value = rowData[key];
                  let subWords = value.match(/(\w+)|(\W+)/g);
                  let newString = "";
-                 for (let subWord of subWords) {
-                   if ( word.toLowerCase() === subWord.toLowerCase() ) {
-                      newString += "<span class='highlight'>" + subWord + "</span>";
-                   } else {
-                      newString += subWord;
-                   }
-                 }
-                 newString = newString.trim();
-                 if (newString !== rowData[key])
-                    rowData[key] = newString;
-              }
-           }
-        }
-      }
-    }
+                 let wholeSubs = word.match(/(\w+)/g);
+                 if (wholeSubs.length > 0) {
+                   for (let whole of wholeSubs) {
+                     for (let subWord of subWords) {
+                       if ( whole.toLowerCase() === subWord.toLowerCase() ) {
+                          newString += "<span class='highlight'>" + subWord + "</span>";
+                       } else {
+                          newString += subWord;
+                       }
+                     }
+                     newString = newString.trim();
+                     if (newString !== rowData[key])
+                        rowData[key] = newString;
+                   }	//	for (let whole of wholeSubs)
+                 }	//	if (wholeSubs.length > 0)
+              }	//	if (typeof rowData[key] === 'string')
+           }	//	if (rowData.hasOwnProperty(key))
+        }	//	for (let key in rowData)
+      }	//	for (let word of wholeWord)
+    }	//	if (wholeWord.length > 0)
     if (prefix.length > 0) {
       for (let word of prefix) {
         for (let key in rowData) {
@@ -389,15 +405,15 @@ function populateTableAndInfo(jsonData) {
         var asmInfoUrl = id;
         if (genomicEntries[id].browserExists) {
           if (id.startsWith("GC")) {
-            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>view</a>";
+            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>View</a>";
             asmInfoUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>";
           } else {
-            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>view</a>";
+            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>View</a>";
             asmInfoUrl = "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/" + id + "/bigZips/' target=_blank>" + id + "</a>";
           }
           dataRow += "<th>" + browserUrl + "</th>";
         } else {
-          dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>request</button></th>";
+          dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>Request</button></th>";
         }
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
         dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
@@ -453,6 +469,7 @@ function populateTableAndInfo(jsonData) {
     } else {
       document.getElementById("measureTiming").style.display = "none";
     }
+    document.getElementById('urlCopyLink').style.display = "inline";
 }	//	function populateTableAndInfo(jsonData)
 
 function enableButtons() {
@@ -500,7 +517,7 @@ function clickHandler(e) {
     if(e.target.tagName === "DIV") {
       if(e.target.id != "modalWindow") closeModal(e);
   }
-} 
+}
 
 function keyHandler(e) {
   if(e.keyCode === 27) closeModal(e);
@@ -550,6 +567,41 @@ function sendRequest(name, email, asmId, betterName, comment) {
     xmlhttp.send();
 
 }  //      sendRequest: function(name, email. asmId)
+
+// borrowed this code from utils.js
+function copyToClipboard(ev) {
+    /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon.
+     * The attribute data-target of this element is the ID of the element that contains the text to copy.
+     * The text is either in the attribute data-copy or the innerText.
+     * see C function printCopyToClipboardButton(iconId, targetId);
+     * */
+
+    ev.preventDefault();
+
+    var buttonEl = ev.target.closest("button"); // user can click SVG or BUTTON element
+
+    var targetId = buttonEl.getAttribute("data-target");
+    if (targetId===null)
+        targetId = ev.target.parentNode.getAttribute("data-target");
+    var textEl = document.getElementById(targetId);
+    var text = textEl.getAttribute("data-copy");
+    if (text===null)
+        text = textEl.innerText;
+
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    buttonEl.innerHTML = 'Copied';
+    ev.preventDefault();
+}
 
 // do not allow both checkboxes to go off
 function atLeastOneCheckBoxOn(e) {
@@ -677,8 +729,8 @@ function asmOpenModal(e) {
 
 function optionsChange(e) {
   // options are changing, share URL is no longer viable, eliminate it
-  let shareThisSearch = document.getElementById('shareThisSearch');
-  shareThisSearch.innerHTML = "&nbsp;";
+  document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
+  document.getElementById('urlCopyLink').style.display = "none";
 }
 
 function makeRequest(query, browserExist, resultLimit) {
@@ -697,9 +749,20 @@ function makeRequest(query, browserExist, resultLimit) {
       var words = queryString.split(/\s+/);
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
+        let inQuote = false;
         words.forEach(function(word) {
-          if (word.startsWith("+")) {
-            queryPlus += " " + word; // space separates each word
+          if (word.match(/^[-+]?"/)) {
+             if (word.match(/^[-+]/))
+                queryPlus += " " + word; // do not add + to - or + already there
+             else
+                queryPlus += " +" + word;
+             inQuote = true;
+          } else if (inQuote) {
+             queryPlus += " " + word; // space separates each word
+             if (word.endsWith('"'))
+                inQuote = false;
+          } else if (word.match(/[^-+]/)) {
+            queryPlus += " " + word; // do not add + to - or + already there
           } else {
             queryPlus += " +" + word;
           }
@@ -752,11 +815,9 @@ function makeRequest(query, browserExist, resultLimit) {
     stateObject.asmStatus = asmStatus;
     stateObject.refSeqCategory = refSeqCategory;
     stateObject.asmLevel = asmLevel;
-    let shareThisSearch = document.getElementById('shareThisSearch');
-    let thisPageHref = "<a href='assemblySearch.html";
-    thisPageHref += historyUrl;
-    thisPageHref += "'>share this search</a>";
-    shareThisSearch.innerHTML = thisPageHref;
+    let urlText0 = document.getElementById('urlText0');
+    let hostName = window.location.hostname;
+    urlText0.innerHTML = "https://" + hostName + "/assemblySearch.html" + historyUrl;
 
     xhr.open('GET', urlPrefix + url, true);
 
@@ -765,6 +826,7 @@ function makeRequest(query, browserExist, resultLimit) {
             // Hide the wait spinner once the AJAX request is complete
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
             enableButtons();
 
             stateObject.jsonData = xhr.responseText;
@@ -776,6 +838,8 @@ function makeRequest(query, browserExist, resultLimit) {
             // Hide the wait spinner once the AJAX request is complete
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
+            document.getElementById('urlCopyLink').style.display = "none";
             enableButtons();
 	    var tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = "<tr><td style='text-align:center;' colspan=8><b>no results found for query: <em>'" + queryString + "'</em></b></td></tr>";

@@ -67,11 +67,26 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
     margin-left: 3em;
 }
 
+/* Word wrap if possible staying in width. this allows easy-to-read labels
+ * .trackLabelTdBreakAll is added to when any one word is too long to
+ * work break and stay in width (RM #34299).
+ */
 .trackLabelTd {
-        max-width: 14em;
+        /* WARNING: min-width must match hgTracks/hgTracks.c MAX_WIDTH_CHARS */
+        min-width: 16ch
+        max-width: 22ch;
         vertical-align: top;
-        word-break: normal;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: break-word;
+
 }
+
+/* For words that exceed max-width */
+.trackLabelTdBreakAll {
+    word-break: break-all;
+}
+
 
 .trackDeleteIcon {
         margin-right: 4px;

@@ -12,15 +12,15 @@
         <div class="formDiv"> <!-- the entire form element -->
         <div>	<!-- container div for search box and submit/clear buttons -->
         <label for="searchBox">Enter search term(s) to find assembly:</label>
-        <input type="text" id="searchBox" name="searchBox" required>
+        <input type="text" id="searchBox" placeholder="e.g.: white rhino* -southern" name="searchBox" required>
         <div class="submitContainer">
            <button id="submitSearch" type="submit">Search</button>
            <div id="loadingSpinner" class="spinner"></div>
         </div>
         <button type="button" id="clearSearch">Clear</button>&nbsp;-
-        <button type="button" id="advancedSearchButton">show advanced search options</button>
+        <button type="button" id="advancedSearchButton">Show advanced search options</button>
            <!-- mouse over this text to see pop-up help message -->
-           <span class="searchTip">advanced search help
+           <span class="searchTip">Advanced search help
       <span class="searchTiptext"> <!-- hidden span for pop-up help message -->
 <ol id="searchTipList" class="noBullets">
 <li> + (plus) sign before <b>+word</b> to force included in result</li>
@@ -34,55 +34,52 @@
 </ol>
 </span> <!-- a hidden span for a pop-up help message -->
            </span>
-        <span id="shareThisSearch">
-          <a href="assemblySearch.html">share this search</a>
-        </span>
         <!-- URL argument maxItemsOutput to html page can change this -->
         <input type="hidden" id="maxItemsOutput" value="500">
         </div> <!-- container div for search box and submit/clear buttons -->
         <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
              <fieldset class="colVertical" onchange="optionsChange(event)">
-             <legend>assembly view/request</legend>
+             <legend>Assembly view/request</legend>
            <label><input type="checkbox" id="mustExist" onclick="atLeastOneCheckBoxOn(this)" name="mustExist" value="mustExist" checked>
-              in available browsers
+              In available browsers
            </label><br>
            <label><input type="checkbox" id="notExist" onclick="atLeastOneCheckBoxOn(this)" name="notExist" value="notExist" checked>
-              can be requested
+              Can be requested
            </label>
              </fieldset>
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend>assembly status</legend>
-              <label><input type="radio" name="asmStatus" value="latest" id="statusLatest"> latest</label>
-              <label><input type="radio" name="asmStatus" value="replaced" id="statusReplaced"> replaced</label>
-              <label><input type="radio" name="asmStatus" value="suppressed" id="statusSuppressed"> suppressed</label>
-              <label><input type="radio" name="asmStatus" value="statusAny" id="statusAny" checked> any status</label>
+              <legend>Assembly status</legend>
+              <label><input type="radio" name="asmStatus" value="latest" id="statusLatest"> Latest</label>
+              <label><input type="radio" name="asmStatus" value="replaced" id="statusReplaced"> Replaced</label>
+              <label><input type="radio" name="asmStatus" value="suppressed" id="statusSuppressed"> Suppressed</label>
+              <label><input type="radio" name="asmStatus" value="statusAny" id="statusAny" checked> Any status</label>
               </fieldset>
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
               <legend>RefSeq category</legend>
-              <label><input type="radio" name="refSeqCategory" value="reference" id="refSeqReference"> reference</label>
-              <label><input type="radio" name="refSeqCategory" value="representative" id="refSeqRepresentative"> representative</label>
-              <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> any category</label>
+              <label><input type="radio" name="refSeqCategory" value="reference" id="refSeqReference"> Reference</label>
+              <label><input type="radio" name="refSeqCategory" value="representative" id="refSeqRepresentative"> Representative</label>
+              <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> Any category</label>
               </fieldset>
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend>assembly level</legend>
-              <label><input type="radio" name="asmLevel" value="complete" id="asmLevelComplete"> complete</label>
-              <label><input type="radio" name="asmLevel" value="chromosome" id="asmLevelChromosome"> chromosome</label>
-              <label><input type="radio" name="asmLevel" value="scaffold" id="asmLevelScaffold"> scaffold</label>
-              <label><input type="radio" name="asmLevel" value="contig" id="asmLevelContig"> contig</label>
-              <label><input type="radio" name="asmLevel" value="asmLevelAny" id="asmLevelAny" checked> any level</label>
+              <legend>Assembly level</legend>
+              <label><input type="radio" name="asmLevel" value="complete" id="asmLevelComplete"> Complete</label>
+              <label><input type="radio" name="asmLevel" value="chromosome" id="asmLevelChromosome"> Chromosome</label>
+              <label><input type="radio" name="asmLevel" value="scaffold" id="asmLevelScaffold"> Scaffold</label>
+              <label><input type="radio" name="asmLevel" value="contig" id="asmLevelContig"> Contig</label>
+              <label><input type="radio" name="asmLevel" value="asmLevelAny" id="asmLevelAny" checked> Any level</label>
               </fieldset>
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> may match any word</label>
-              <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> must match all words</label>
+              <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> May match any word</label>
+              <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> Must match all words</label>
               </fieldset>
            </div>
         </div>	<!-- the radioGroupContainer -->
@@ -92,6 +89,14 @@
     <span id="resultCounts">&nbsp;</span>
     <span id="measureTiming">- <em>search time: </em><span id="elapsedTime">0 milliseconds</span>.</span>
     </div>	<!-- search results status line -->
+    <div id=urlCopyLink>	<!-- copy link to share this search -->
+        <b>Share link to this search:&nbsp;</b>
+        <span id="urlText0" style="display:none">https://assemblySearch.html</span>
+        <span class="copyLinkSpan" data-target="urlText0">
+            <button onclick="copyToClipboard(event)" id="copyIcon0" class="copyLink" type="button" title="Copy URL to clipboard" data-target="urlText0">
+<svg style="width:0.9em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> <path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"></path></svg>&nbsp;Copy</button></span>
+    </div>	<!-- copy link to share this search -->
     <hr>
     <table id="dataTable" class="dataTable sorttable fifthRowHighlight" style="border: 1px solid black; display:block; max-width:1300px; position:sticky; top:0;">
         <colgroup id='colDefinitions'>
