@@ -10,7 +10,7 @@ def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] <cmd> - create and edit UCSC track hubs
             
-    hubtools make: create a track hub for all bigBed/bigWig files under a directory. Creates single-file hub.txt
+    hubtools make <assemblyCode>: create a track hub for all bigBed/bigWig files under a directory. Creates single-file hub.txt
     - bigBed/bigWig files in the current directory will be top level tracks
     - big* files in subdirectories become composites
     - for every filename, the part before the first dot becomes the track base name
@@ -29,6 +29,7 @@ def parseArgs():
     - <db> is assembly identifier 
 
     Examples:
+    hubtools make hg38
     hubtools jbrowse http://furlonglab.embl.de/FurlongBrowser/ dm3
     """)
 
@@ -238,7 +239,7 @@ def writeStanza(ofh, indent, tdb):
     " write a stanza given a tdb key-val dict "
     track = tdb["track"]
 
-    shortLabel = tdb.get("shortLabel", track)
+    shortLabel = tdb.get("shortLabel", track.replace("_", " "))
     visibility = tdb.get("visibility", "pack")
     longLabel  = tdb.get("longLabel", shortLabel)
 
@@ -433,9 +434,9 @@ def importJbrowse(baseUrl, db, outDir):
         tdb["track"] = tl["label"]
         tdb["shortLabel"] = tl["key"]
         if "data_file" in tl:
-            tdb["bigDataUrl"] = baseUrl+"/"+tl["data_file"]
+            tdb["bigDataUrl"] = baseUrl+"/data/"+tl["data_file"]
         else:
-            tdb["bigDataUrl"] = baseUrl+"/"+tl["urlTemplate"]
+            tdb["bigDataUrl"] = baseUrl+"/data/"+tl["urlTemplate"]
         if tl["storeClass"] == "JBrowse/Store/SeqFeature/BigWig":
             tdb["type"] = "bigWig"
 
@@ -497,21 +498,21 @@ def hubt(args, options):
 
     if cmd=="jbrowse":
         importJbrowse(args[1], args[2], tdbDir)
-        return
+    elif cmd == "make":
+        db = args[1]
+        dirFiles = readDirs(inDir)
 
-    dirFiles = readDirs(inDir)
+        hubFname = join(tdbDir, "hub.txt")
+        logging.info("Writing %s" % hubFname)
+        ofh = open(hubFname, "w")
 
-    hubFname = join(tdbDir, "hub.txt")
-    logging.info("Writing %s" % hubFname)
-    ofh = open(hubFname, "w")
+        meta = parseMeta(inDir)
+        writeHubGenome(ofh, db, meta)
 
-    meta = parseMeta(inDir)
-    writeHubGenome(ofh, db, meta)
+        writeTdb(inDir, dirFiles, "top", tdbDir, ofh)
+        writeTdb(inDir, dirFiles, "comps", tdbDir, ofh)
 
-    writeTdb(inDir, dirFiles, "top", tdbDir, ofh)
-    writeTdb(inDir, dirFiles, "comps", tdbDir, ofh)
-
-    ofh.close()
+        ofh.close()
 
 
 # ----------- main --------------
