@@ -39,9 +39,20 @@ from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re, sys, argparse
 import getpass
 import os
+import psutil
 
 user = getpass.getuser()
 
+# List of process names to check
+proc_names_to_check = ["chrome", "chromedriver", "google-chrome", "chrome_crashpad_handler"] 
+# Iterate over all running processes
+for proc in psutil.process_iter():
+    # Check if the process name matches any in the list
+    if proc.name() in proc_names_to_check:
+       # Check if the process belongs to the specified user
+       if proc.username() == user:
+          # Kill the process
+          proc.kill()
 
 #Make tmpdir for the cron
 try:
