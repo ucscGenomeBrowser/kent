@@ -323,12 +323,12 @@ function highlightMatch(queryString, rowData) {
         for (let key in rowData) {
            if (rowData.hasOwnProperty(key)) {
               if (typeof rowData[key] === 'string') {
-                 let value = rowData[key];
-                 let subWords = value.match(/(\w+)|(\W+)/g);
-                 let newString = "";
                  let wholeSubs = word.match(/(\w+)/g);
                  if (wholeSubs && wholeSubs.length > 0) {
                    for (let whole of wholeSubs) {
+                     let newString = "";
+                     let value = rowData[key];
+                     let subWords = value.match(/(\w+)|(\W+)/g);
                      for (let subWord of subWords) {
                        if ( whole.toLowerCase() === subWord.toLowerCase() ) {
                           newString += "<span class='highlight'>" + subWord + "</span>";
