@@ -5209,6 +5209,12 @@ For the complete bigInteract format definitions please see the
     </P>
 </DIV>
 
+<DIV class="endsVisible"><span class="types bigInteract"></span>
+<div class="format"><code>endsVisible two</code></div>
+    <P>This setting makes the default behavior for the track show only interactions with both ends in the window.
+    </P>
+</DIV>
+
 <DIV class="interact_example"><span class="types bigInteract"></span>
 <div class="format"><B>Example of an interact/bigInteract track</B></div>
     <pre>
