@@ -373,6 +373,7 @@ struct auspiceJsonInfo
     struct sampleMetadataStore *sampleMetadata; // Sample metadata for decorating tree
     struct hash *sampleUrls;              // URLs for samples, if applicable
     struct hash *samplePlacements;        // Sample placement info e.g. clade/lineage from usher
+    struct hash *anchorSamples;           // Sample names found in setting anchorSamples (if any)
     int nodeNum;                          // For generating sequential node ID (in absence of name)
     char *source;                         // Source of non-user sequences in tree (GISAID or public)
     };
@@ -462,6 +463,13 @@ else if (isUserSample)
         if (!wroteLink)
             jsonWriteObjectValue(aji->jw, branchAttrCols[i], branchAttrVals[i]);
         }
+    }
+// If sample is in anchorSamples, write an empty "vaccine" object attribute to get the "X" icon
+// in auspice.
+if (aji->anchorSamples && hashLookup(aji->anchorSamples, name))
+    {
+    jsonWriteObjectStart(aji->jw, "vaccine");
+    jsonWriteObjectEnd(aji->jw);
     }
 char *sampleUrl = (aji->sampleUrls && name) ? hashFindVal(aji->sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
@@ -896,6 +904,24 @@ for (i = 1, attr = attrList;  i < branchAttrCount && attr != NULL;  i++, attr = 
 return branchAttrCount;
 }
 
+struct hash *getAnchorSamples(char *org, char *db)
+/* If config setting/file anchorSamples exists then make a hash with its names for quick
+ * lookup. */
+{
+struct hash *anchorSamples = NULL;
+char *anchorFile = phyloPlaceRefSettingPath(org, db, "anchorSamples");
+if (anchorFile && fileExists(anchorFile))
+    {
+    anchorSamples = hashNew(0);
+    struct lineFile *lf = lineFileOpen(anchorFile, TRUE);
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        hashAddInt(anchorSamples, line, 1);
+    lineFileClose(&lf);
+    }
+return anchorSamples;
+}
+
 void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct sampleMetadataStore *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
@@ -917,13 +943,16 @@ jsonWriteObjectStart(jw, "tree");
 int nodeNum = 10000; // Auspice.us starting node number for newick -> json
 int depth = 0;
 
+// Hash names in setting anchorSamples if found
+struct hash *anchorSamples = getAnchorSamples(org, db);
+
 // Add an extra root node because otherwise Auspice won't draw branch from big tree root to subtree
 struct phyloTree *root = phyloTreeNewNode("wrapper");
 phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
-                               sampleMetadata, sampleUrls, samplePlacements, nodeNum, source };
-
+                               sampleMetadata, sampleUrls, samplePlacements, anchorSamples,
+                               nodeNum, source };
 
 char **branchAttrCols = NULL;
 int branchAttrCount = getBranchAttrCols(org, db, &branchAttrCols);
