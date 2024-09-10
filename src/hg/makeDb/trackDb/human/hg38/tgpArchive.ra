@@ -1,7 +1,7 @@
 track tgpArchive
 superTrack on
-shortLabel 1000G Archive
-longLabel 1000 Genomes Archive
+shortLabel 1000 Genomes
+longLabel 1000 Genomes Phase 3
 cartVersion 2
 visibility hide
 group varRep

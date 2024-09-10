@@ -105,8 +105,7 @@ def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImag
         print("\nDifferences were observed in the following session(s):")
         for image in diffImages:
             print(image)
-#             run(["ln", "-sf", diffImagesDir+image, publicHtmlDirToSave+image])
-            bash(["ln", "-sf", diffImagesDir+image, publicHtmlDirToSave+image])
+            bash("ln -sf "+diffImagesDir+image+" "+publicHtmlDirToSave+image)
             print("Link: "+publicHtmlDirToView+image)
             print("session 1: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s"
                    %(serverUrl1,sessionUser1,sessionName1))
