@@ -98,8 +98,9 @@ thead th {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    background-color: #e5cb99;
-    color: #00f;
+    border: 1px solid #888;
+    padding: 2px;
+    border-radius: 4px;
 }
 
 .searchTiptext {
@@ -113,10 +114,9 @@ thead th {
     padding: 5px;
     position: absolute;
     z-index: 1;
-    bottom: -925%; /* Position above the text */
-    left: 50%;
-    /* margin-left: -70px; /* Center the searchTip */
-    margin-left: -300px;
+    top: 20px; /* Position below the prompt text */
+    right: 0;	/* right border of this pop-up aligns with right border of
+                   prompt text */
     transition: opacity 0.3s;
 }
 
