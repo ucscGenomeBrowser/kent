@@ -260,14 +260,14 @@ function headerRefresh(tableHead) {
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
   let circleQuestion = '<svg width="24" height="24"> <circle cx="12" cy="12" r="10" fill="#4444ff" /> <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="13px" font-family="Verdana" dy=".3em">?</text>?</svg>';
-  headerRow += '<th><div class=tooltip>View/<br>Request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class=tooltip>View/<br>Request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>View</b> opens the genome browser for an existing assembly, <b>Request</b> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Binomial scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
   headerRow += '<th><div class="tooltip">Year&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
-  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
-  headerRow += '<th><div class="tooltip">Description&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
-  headerRow += '<th><div class="tooltip">Status&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
+  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Clade specification as found in the <a href="https://hgdownload.soe.ucsc.edu/hubs/index.html" target=_blank>GenArk</a> system, this is not a strict taxonomy category, merely a division of assemblies into several categories.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Description&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Description may include other names, the <b>taxId</b>, year of assembly release and assembly center.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Status&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">When specified, status will show the <b>Assembly status</b> the <b>RefSeq category</b> and the <b>Assembly level</b>.</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
 }
@@ -425,12 +425,12 @@ function populateTableAndInfo(jsonData) {
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
         var status =  "<td>" + genomicEntries[id].priority + " ";
         var hardSpace = "&nbsp;";
-        if (genomicEntries[id].refSeqCategory) {
-           status += " " + genomicEntries[id].refSeqCategory;
-           hardSpace = "";
-        }
         if (genomicEntries[id].versionStatus) {
            status += " " + genomicEntries[id].versionStatus;
+           hardSpace = "";
+        }
+        if (genomicEntries[id].refSeqCategory) {
+           status += " " + genomicEntries[id].refSeqCategory;
            hardSpace = "";
         }
         if (genomicEntries[id].assemblyLevel) {
