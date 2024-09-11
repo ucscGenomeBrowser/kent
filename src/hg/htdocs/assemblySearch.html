@@ -39,10 +39,10 @@
         <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
              <fieldset class="colVertical" onchange="optionsChange(event)">
-             <legend><span class="searchTip">Assembly view/request&nbsp;&#9432;<span class="searchTiptext" style="width:500px; right:-400px;"><ul>
+             <legend><span class="searchTip">Assembly view/request&nbsp;&#9432;<span class="searchTiptext" style="width:500px; right:-400px;"><ol class="noBullets">
 <li><b>In available browsers</b> - the assembly exists in the UCSC browser system, the <b>view</b> link will lead to the browser</li>
 <li><b>Can be requested</b> - assembly is not yet in the UCSC browser system, the <b>request</b> link will open a request form to ask for the assembly to be added to the UCSC browser system</li>
-</ul></span></span></legend>
+</ol></span></span></legend>
            <label><input type="checkbox" id="mustExist" onclick="atLeastOneCheckBoxOn(this)" name="mustExist" value="mustExist" checked>
               In available browsers
            </label><br>
@@ -53,12 +53,12 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend><span class="searchTip">Assembly status&nbsp;&#9432;<span class="searchTiptext" style="width:600px; right:-400px;"><ul>
+              <legend><span class="searchTip">Assembly status&nbsp;&#9432;<span class="searchTiptext" style="width:600px; right:-400px;"><ol class="noBullets">
 <li><b>Latest</b> - the most recent of all the versions for this assembly chain</li>
 <li><b>Replaced</b> - this version has been replaced by a newer version of the assembly in the same chain</li>
 <li><b>Suppressed</b> - this version of the assembly has been suppressed</li>
 <li>An assembly chain is the collection of all versions for the same assembly accession.</li>
-</ul></span></span></legend>
+</ol></span></span></legend>
               <label><input type="radio" name="asmStatus" value="latest" id="statusLatest"> Latest</label>
               <label><input type="radio" name="asmStatus" value="replaced" id="statusReplaced"> Replaced</label>
               <label><input type="radio" name="asmStatus" value="suppressed" id="statusSuppressed"> Suppressed</label>
@@ -67,12 +67,12 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend><span class="searchTip">RefSeq category&nbsp;&#9432;<span class="searchTiptext" style="width:600px; right:-400px;"<ul>
+              <legend><span class="searchTip">RefSeq category&nbsp;&#9432;<span class="searchTiptext" style="width:600px; right:-400px;"><ol class="noBullets">
 <li><b>Reference</b> genome - a manually selected high quality genome assembly that NCBI and the community have identified as being important as a standard against which other data are compared</li>
 <li><b>Representative</b> genome - a genome computationally or manually selected as a representative from among the best genomes available for a species or clade that does not have a designated reference genome</li>
 <li>There are assemblies which have no RefSeq category assignment</li>
 <li>For more information, see also: <a href='https://www.ncbi.nlm.nih.gov/refseq/about/prokaryotes/#referencegenome' target=_blank>www.ncbi.nlm.nih.gov/refseq/about/prokaryotes/#referencegenome</a></li>
-</ul></span></span></legend>
+</ol></span></span></legend>
               <label><input type="radio" name="refSeqCategory" value="reference" id="refSeqReference"> Reference</label>
               <label><input type="radio" name="refSeqCategory" value="representative" id="refSeqRepresentative"> Representative</label>
               <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> Any category</label>
@@ -80,12 +80,12 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend><span class="searchTip">Assembly level&nbsp;&#9432;<span class="searchTiptext" style="width:500px; right:-250px;"><ul>
+              <legend><span class="searchTip">Assembly level&nbsp;&#9432;<span class="searchTiptext" style="width:500px; right:-250px;"><ol class="noBullets">
 <li><b>Complete genome</b> - all chromosomes are gapless and have no runs of 10 or more ambiguous bases (Ns), there are no unplaced or unlocalized scaffolds, and all the expected chromosomes are present (i.e. the assembly is not noted as having partial genome representation). Plasmids and organelles may or may not be included in the assembly but if present then the sequences are gapless.</li>
 <li><b>Chromosome</b> - there is sequence for one or more chromosomes. This could be a completely sequenced chromosome without gaps or a chromosome containing scaffolds or contigs with gaps between them. There may also be unplaced or unlocalized scaffolds.</li>
 <li><b>Scaffold</b>- some sequence contigs have been connected across gaps to create scaffolds, but the scaffolds are all unplaced or unlocalized.</li>
 <li><b>Contig</b>- nothing is assembled beyond the level of sequence contigs</li>
-</ul></span></span></legend>
+</ol></span></span></legend>
               <label><input type="radio" name="asmLevel" value="complete" id="asmLevelComplete"> Complete</label>
               <label><input type="radio" name="asmLevel" value="chromosome" id="asmLevelChromosome"> Chromosome</label>
               <label><input type="radio" name="asmLevel" value="scaffold" id="asmLevelScaffold"> Scaffold</label>

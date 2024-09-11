@@ -125,7 +125,8 @@ thead th {
     opacity: 1;
 }
 
-ol.noBullets {
+/* for the pop-up help listings, do not need the list markers */
+.noBullets {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -201,6 +202,7 @@ ol.noBullets {
   top: 0;
   background: #ffffff;
   color: #000000;
+  font-weight: normal;
 }
 
 /* right most two columns have right margins instead of left so as
@@ -224,6 +226,7 @@ ol.noBullets {
   top: 0;
   background: #ffffff;
   color: #000000;
+  font-weight: normal;
 }
 
 .highlight {
