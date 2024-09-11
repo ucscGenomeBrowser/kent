@@ -278,11 +278,11 @@ function advancedSearchVisible(visible) {
   var searchOptions = document.getElementById("advancedSearchOptions");
   if (visible) {
     searchOptions.style.display = "flex";
-    advancedSearchButton.textContent = "Hide advanced search options";
+    advancedSearchButton.textContent = "Hide search options";
     stateObject.advancedSearchVisible = true;
   } else {
     searchOptions.style.display = "none";
-    advancedSearchButton.textContent = "Show advanced search options";
+    advancedSearchButton.textContent = "Show search options";
     stateObject.advancedSearchVisible = false;
   }
 }
