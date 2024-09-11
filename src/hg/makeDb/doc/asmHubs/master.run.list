@@ -1614,6 +1614,7 @@
 ./runBuild GCA_900036025.1_v1.0 invertebrate Lymnaea_stagnalis
 ./runBuild GCA_900044135.1_GZPH1RResV1 fungi Fusarium_graminearum
 ./runBuild GCA_900088365.1_Bl71nemr invertebrate Branchiostoma_lanceolatum
+./runBuild GCA_900093555.2_GCA_900093555 invertebrate Plasmodium_vivax
 ./runBuild GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
 ./runBuild GCA_900103655.1_IMG-taxon_2597490363_annotated_assembly bacteria Lactobacillus_kefiranofaciens
 ./runBuild GCA_900108605.1_NNQGG.v01 mammals Neovison_vison
