@@ -1,17 +1,3 @@
-.fixedHeightTable {
-  max-width: 100%;
-  max-height: 1024px;
-  overflow-y: auto;
-    /* overflow-x: auto; */
-}
-
-.stickyTable {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: white;
-}
-
 table {
   width: 98%;
   table-layout: auto;
@@ -28,11 +14,6 @@ th {
 
 thead th {
   border: 3px solid black;
-}
-
-.fifthRowHighlight tr:nth-child(5n) th,
-.fifthRowHighlight tr:nth-child(5n) td {
-   background-color: #d3d3d3;
 }
 
 .submitContainer {
@@ -90,7 +71,7 @@ thead th {
 }
 
 .formDiv > div, .radioGroupContainer {
-    width: 100%;
+    width: 98%;
     box-sizing: border-box;
 }
 
@@ -117,12 +98,17 @@ thead th {
     top: 20px; /* Position below the prompt text */
     right: 0;	/* right border of this pop-up aligns with right border of
                    prompt text */
-    transition: opacity 0.3s;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .searchTip:hover .searchTiptext {
     visibility: visible;
+    transition-delay: 1s;
     opacity: 1;
+}
+
+.searchTip:not(hover) .searchTiptext {
+    transition-delay: 0s;
 }
 
 /* for the pop-up help listings, do not need the list markers */
@@ -178,10 +164,12 @@ thead th {
 }
 
 .dataTable thead tr th:hover .tooltiptext {
+  transition-delay: 1s;
   visibility: visible;
 }
 
 .dataTable thead tr th:hover .tooltiptextright {
+  transition-delay: 1s;
   visibility: visible;
 }
 
