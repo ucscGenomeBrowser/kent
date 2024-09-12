@@ -3656,7 +3656,7 @@ struct tempName tnNextcladeOut;
 trashDirFile(&tnNextcladeOut, "ct", "usher_nextclade_sort", ".tsv");
 #define NEXTCLADE_NUM_THREADS "4"
 char *cmd[] = { nextcladePath, "sort", seqFile, "-m", nextcladeIndex,
-                "-j", NEXTCLADE_NUM_THREADS, "-r", tnNextcladeOut.forCgi, NULL };
+                "-j", NEXTCLADE_NUM_THREADS, "-r", tnNextcladeOut.forCgi, "--all-matches", NULL };
 char **cmds[] = { cmd, NULL };
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL, 0);
 pipelineClose(&pl);
@@ -3714,6 +3714,26 @@ else
     }
 }
 
+static void storeRefMatch(char *org, char *sample, char *ref, struct hash *sampleRef,
+                          struct hash *refOpenFileHandles, struct dyString *dyRefDesc,
+                          struct refMatch **pRefFiles)
+/* sample has been matched to ref -- save the mapping in sampleRef, build up refOpenFileHandles
+ * for writing per-ref fasta files, and add new struct refMatch to head of *pRefFiles. */
+{
+if (! hashFindVal(sampleRef, sample))
+    {
+    hashAdd(sampleRef, sample, cloneString(ref));
+    if (! hashFindVal(refOpenFileHandles, ref))
+        {
+        struct tempName tnRefSamples;
+        trashDirFile(&tnRefSamples, "ct", "usher_ref_samples", ".txt");
+        hashAdd(refOpenFileHandles, ref, mustOpen(tnRefSamples.forCgi, "w"));
+        describeRef(org, ref, dyRefDesc);
+        slAddHead(pRefFiles, refMatchNew(ref, dyRefDesc->string, tnRefSamples.forCgi));
+        }
+    }
+}
+
 static struct refMatch *matchSamplesWithReferences(char *org, char *nextcladeIndex,
                                                    struct lineFile *lf,
                                                    struct slName **retNoMatches, int *pStartTime)
@@ -3735,7 +3755,8 @@ char *row[5];
 // Check header line... the nextclade guys change output columns frequently
 if (lineFileRow(nlf, row))
     {
-    if (differentString(row[1], "seqName") || differentString(row[2], "dataset"))
+    if (differentString(row[1], "seqName") || differentString(row[2], "dataset") ||
+        differentString(row[3], "score") || differentString(row[4], "numHits"))
         errAbort("nextclade sort output header format has changed");
     }
 else
@@ -3747,25 +3768,43 @@ struct slName *noMatches = NULL;
 struct hash *sampleRef = hashNew(0);
 struct hash *refOpenFileHandles = hashNew(0);
 struct dyString *dyRefDesc = dyStringNew(0);
+char *prevSample = NULL, *bestRef = NULL;
+double maxAdjustedScore = 0.0;
 while (lineFileRowTab(nlf, row))
     {
     char *sample = row[1];
     char *ref = row[2];
+    double score = atof(row[3]);
+    int numHits = atol(row[4]);
     if (isEmpty(ref))
         slNameAddHead(&noMatches, sample);
-    else if (! hashFindVal(sampleRef, sample))
+    else
         {
-        hashAdd(sampleRef, sample, cloneString(ref));
-        if (! hashFindVal(refOpenFileHandles, ref))
+        double adjustedScore = score * numHits;
+        if (prevSample == NULL || differentString(sample, prevSample))
             {
-            struct tempName tnRefSamples;
-            trashDirFile(&tnRefSamples, "ct", "usher_ref_samples", ".txt");
-            hashAdd(refOpenFileHandles, ref, mustOpen(tnRefSamples.forCgi, "w"));
-            describeRef(org, ref, dyRefDesc);
-            slAddHead(&refFiles, refMatchNew(ref, dyRefDesc->string, tnRefSamples.forCgi));
+            if (prevSample != NULL)
+                storeRefMatch(org, prevSample, bestRef, sampleRef, refOpenFileHandles, dyRefDesc,
+                              &refFiles);
+            freez(&bestRef);
+            bestRef = cloneString(ref);
+            maxAdjustedScore = adjustedScore;
+            freez(&prevSample);
+            prevSample = cloneString(sample);
+            }
+        else
+            {
+            if (adjustedScore > maxAdjustedScore)
+                {
+                maxAdjustedScore = adjustedScore;
+                freez(&bestRef);
+                bestRef = cloneString(ref);
+                }
             }
         }
     }
+if (prevSample)
+    storeRefMatch(org, prevSample, bestRef, sampleRef, refOpenFileHandles, dyRefDesc, &refFiles);
 dyStringFree(&dyRefDesc);
 lineFileClose(&nlf);
 // Sort refFiles alphabetically by description
