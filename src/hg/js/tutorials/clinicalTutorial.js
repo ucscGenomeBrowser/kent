@@ -13,9 +13,9 @@
     });
     
     // log when a tutorial is started (commented out for now)
-   // clinicalTour.on('start', function() {
-  //      writeToApacheLog("clinical start " + getHgsid());
-  //  });
+    clinicalTour.on('start', function() {
+        writeToApacheLog("clinicalTutorial start " + getHgsid());
+    });
     
     var tutorialButtons = {
         'back': {
@@ -41,7 +41,7 @@
         'end': {
             action() {
                 // log when the tutorial is finished (commented out for now)
-                //writeToApacheLog("clinical finish " + getHgsid());
+                writeToApacheLog("clinicalTutorial finish " + getHgsid());
                 //localStorage.setItem("hgTracks_hideTutorial", "1");
                 hideMenu('#help > ul');
                 return this.complete();
@@ -109,8 +109,8 @@
     
     // Function to close the popup
     function closePopup() {
-         const rtsMenuClose = document.querySelector('.ui-dialog-titlebar-close');
-         rtsMenuClose.click();
+        const rtsMenuClose = document.querySelector('.ui-dialog-titlebar-close');
+        rtsMenuClose.click();
     }
     
     // Function to add steps to the clinicalTour
