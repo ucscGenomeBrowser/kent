@@ -253,7 +253,7 @@ if (recTrackSetsEnabled() && recTrackSetsForDb())
 if (exportedDataHubsEnabled())
     {
     #define exportedDataHubsMenuItemId     "exportedDataHubsMenuItem"
-    struct dyString *menuItemDs = dyStringCreate("<li><a href='#' id='%s'>Exported Data Hubs</a></li>",
+    struct dyString *menuItemDs = dyStringCreate("<li><a href='#' id='%s'>Add Tracks From Other Genome</a></li>",
                                        exportedDataHubsMenuItemId);
     menuStr = replaceChars(menuStr, "<!-- OPTIONAL_EXPORTED_TRACK_DATA_HUBS_MENU -->", 
                                 dyStringCannibalize(&menuItemDs));

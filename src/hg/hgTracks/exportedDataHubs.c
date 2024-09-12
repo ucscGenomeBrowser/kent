@@ -27,7 +27,7 @@ void printExportedDataHubs(char *db)
 if (!exportedDataHubsEnabled())
     return;
 
-hPrintf("<div style='display:none;' id='exportedDataHubsPopup' title='Exported Data Hubs'>\n");
+hPrintf("<div style='display:none;' id='exportedDataHubsPopup' title='Add Tracks From Other Genomes'>\n");
 struct sqlConnection *conn = hConnectCentral();
 char **row;
 char query[2048];
