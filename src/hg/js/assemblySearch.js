@@ -423,7 +423,7 @@ function populateTableAndInfo(jsonData) {
         dataRow += "<td>" + genomicEntries[id].year + "</td>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
-        var status =  "<td>" + genomicEntries[id].priority + " ";
+        var status =  "<td>";
         var hardSpace = "&nbsp;";
         if (genomicEntries[id].versionStatus) {
            status += " " + genomicEntries[id].versionStatus;

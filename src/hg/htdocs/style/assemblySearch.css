@@ -58,6 +58,7 @@ thead th {
     gap: 20px; /* Optional: Add space between the two groups */
     border: 2px solid #000; /* Add a 2px solid black border around the container */
     padding: 10px; /* Optional: Add padding inside the border */
+    margin: 5px; /* Optional: Add padding inside the border */
 }
 
 .radioGroup {
@@ -103,12 +104,8 @@ thead th {
 
 .searchTip:hover .searchTiptext {
     visibility: visible;
-    transition-delay: 1s;
+    transition-delay: 0.5s;
     opacity: 1;
-}
-
-.searchTip:not(hover) .searchTiptext {
-    transition-delay: 0s;
 }
 
 /* for the pop-up help listings, do not need the list markers */
@@ -164,12 +161,12 @@ thead th {
 }
 
 .dataTable thead tr th:hover .tooltiptext {
-  transition-delay: 1s;
+  transition-delay: 0.5s;
   visibility: visible;
 }
 
 .dataTable thead tr th:hover .tooltiptextright {
-  transition-delay: 1s;
+  transition-delay: 0.5s;
   visibility: visible;
 }
 
