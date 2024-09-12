@@ -111,7 +111,9 @@ return (itemCount);
  */
 static boolean hasWordBreaks(char *s)
 /* Return TRUE if there is any word break in string.
- * allowing characters _ * + - as those are special characters
+ * allowing - and + characters as first since those are
+ *   special characters to the MySQL FULLTEXT search
+ * after that, allowing _ * + - as those are special characters
  *  to the MySQL FULLTEXT search
  *  The string has already been checked for the special prefix
  *   characters of: " - +
@@ -119,9 +121,11 @@ static boolean hasWordBreaks(char *s)
  */
 {
 char c;
+if (startsWith("-", s) || startsWith("+", s))
+    s++;
 while ((c = *s++) != 0)
     {
-    if (c == '_' || c == '*' || c == '+' || c == '-')
+    if (c == '_')	/* TBD: maybe dot . and apostrophe ' */
 	continue;
     if (! isalnum(c))
         return TRUE;
@@ -134,12 +138,19 @@ static char *quoteWords(char *s)
  *  a quoted string with the word break characters turned to single space
  */
 {
-struct dyString *quoteString = dyStringNew(128);
-dyStringPrintf(quoteString, "\"");
 char c;
+struct dyString *quoteString = dyStringNew(128);
+/* start with the special MySQL characters if present at the beginning */
+if (startsWith("-", s) || startsWith("+", s))
+    {
+    c = *s++;
+    dyStringPrintf(quoteString, "%c", c);
+    }
+/* then continue with the " to start the quoted string */
+dyStringPrintf(quoteString, "\"");
 int spaceCount = 0;
 while ((c = *s++) != 0)
-    if (isalnum(c) || c == '_' || c == '*' || c == '+' || c == '-')
+    if (isalnum(c) || c == '_')	/* TBD: maybe dot . and apostrophe ' */
 	{
 	dyStringPrintf(quoteString, "%c", c);
 	spaceCount = 0;
@@ -453,13 +464,8 @@ AllocArray(words, wordCount);
 if (1 == wordCount)
     {
     boolean doQuote = TRUE;
-    if (startsWith("\"", words[0]))
-	doQuote = FALSE;
-    if (startsWith("-", words[0]))
-	doQuote = FALSE;
-    if (startsWith("+", words[0]))
-	doQuote = FALSE;
-    if (endsWith(words[0], "*"))
+    /* already quoted, let it go as-is */
+    if (startsWith("\"", words[0]) && endsWith(words[0],"\""))
 	doQuote = FALSE;
     if (doQuote && hasWordBreaks(words[0]))
 	{
