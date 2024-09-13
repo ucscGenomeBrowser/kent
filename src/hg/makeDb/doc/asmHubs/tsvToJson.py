@@ -304,7 +304,7 @@ def main():
         fileIn = sys.stdin
     else:
         try:
-          fileIn = open(listFile, 'r')
+          fileIn = open(listFile, 'r', encoding='latin-1')
         except FileNotFoundError:
           print(f"Error: File '{listFile}' not found.", file=sys.stderr)
           sys.exit(1)
