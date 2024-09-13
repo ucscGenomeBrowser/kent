@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('refSeqRepresentative').checked = true;
     }
     // default starts as hidden
+    let copyIcon0 = document.getElementById('copyIcon0');
+    stateObject.copyIcon0 = copyIcon0.innerHTML;
+    document.getElementById('urlCopyLink').style.display = "none";
     stateObject.advancedSearchVisible = false;
     advancedSearchVisible(false);
     if (urlParams.has('advancedSearch')) {
@@ -132,7 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent form submission
 
-        var searchTerm = document.getElementById('searchBox').value;
+        // the trim() removes stray white space before or after the string
+        var searchTerm = document.getElementById('searchBox').value.trim();
         var resultCountLimit = document.getElementById('maxItemsOutput');
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
@@ -146,8 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     advancedSearchButton.addEventListener('click', function() {
-       let shareThisSearch = document.getElementById('shareThisSearch');
-       shareThisSearch.innerHTML = "&nbsp;";
+       document.getElementById('urlCopyLink').style.display = "none";
        let searchOptions = document.getElementById("advancedSearchOptions");
        // I don't know why it is false the first time ?
        if (! searchOptions.style.display || searchOptions.style.display === "none") {
@@ -239,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
     if (urlParams.has('q')) {
-       query = urlParams.get('q');
+       query = urlParams.get('q').trim();
        if (query.length > 0) {
           searchInput.value = query;
           document.getElementById('submitSearch').click();
@@ -256,14 +259,15 @@ function headerRefresh(tableHead) {
   //  the last sorted column, need to rebuild the headerRow to get the
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
-  headerRow += '<th><div class=tooltip>View/<br>Request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
-  headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">Scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
-  headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
-  headerRow += '<th><div class="tooltip">Year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
-  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
-  headerRow += '<th><div class="tooltip">Description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
-  headerRow += '<th><div class="tooltip">Status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
+  let circleQuestion = '<svg width="24" height="24"> <circle cx="12" cy="12" r="10" fill="#4444ff" /> <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="13px" font-family="Verdana" dy=".3em">?</text>?</svg>';
+  headerRow += '<th><div class=tooltip>View/<br>Request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>View</b> opens the genome browser for an existing assembly, <b>Request</b> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
+  headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Binomial scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
+  headerRow += '<th><div class="tooltip">Year&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
+  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Clade specification as found in the <a href="https://hgdownload.soe.ucsc.edu/hubs/index.html" target=_blank>GenArk</a> system, this is not a strict taxonomy category, merely a division of assemblies into several categories.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Description&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Description may include other names, the <b>taxId</b>, year of assembly release and assembly center.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Status&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">When specified, status will show the <b>Assembly status</b> the <b>RefSeq category</b> and the <b>Assembly level</b>.</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
 }
@@ -274,11 +278,11 @@ function advancedSearchVisible(visible) {
   var searchOptions = document.getElementById("advancedSearchOptions");
   if (visible) {
     searchOptions.style.display = "flex";
-    advancedSearchButton.textContent = "Hide advanced search options";
+    advancedSearchButton.textContent = "Hide search options";
     stateObject.advancedSearchVisible = true;
   } else {
     searchOptions.style.display = "none";
-    advancedSearchButton.textContent = "Show advanced search options";
+    advancedSearchButton.textContent = "Show search options";
     stateObject.advancedSearchVisible = false;
   }
 }
@@ -301,7 +305,16 @@ function highlightMatch(queryString, rowData) {
     for (let word of words) {
        var noPrefix = word.replace(/^[-+]/, '');	// remove + - beginning
        if (noPrefix.endsWith("*")) {
-         prefix.push(noPrefix.replace(/\*$/, ''));
+         let subPrefix = noPrefix.replace(/\*$/, '').match(/(\w+)/g);
+         if (subPrefix.length > 1) {
+           let i = 0;
+           for ( ; i < subPrefix.length - 1; i++) {
+              wholeWord.push(subPrefix[i]);
+           }
+           prefix.push(subPrefix[i].replace(/\*$/, ''));
+         } else {
+           prefix.push(noPrefix.replace(/\*$/, ''));
+         }
        } else {
          wholeWord.push(noPrefix);
        }
@@ -311,24 +324,29 @@ function highlightMatch(queryString, rowData) {
         for (let key in rowData) {
            if (rowData.hasOwnProperty(key)) {
               if (typeof rowData[key] === 'string') {
-                 let value = rowData[key];
-                 let subWords = value.match(/(\w+)|(\W+)/g);
-                 let newString = "";
-                 for (let subWord of subWords) {
-                   if ( word.toLowerCase() === subWord.toLowerCase() ) {
-                      newString += "<span class='highlight'>" + subWord + "</span>";
-                   } else {
-                      newString += subWord;
-                   }
-                 }
-                 newString = newString.trim();
-                 if (newString !== rowData[key])
-                    rowData[key] = newString;
-              }
-           }
-        }
-      }
-    }
+                 let wholeSubs = word.match(/(\w+)/g);
+                 if (wholeSubs && wholeSubs.length > 0) {
+                   for (let whole of wholeSubs) {
+                     let newString = "";
+                     let value = rowData[key];
+                     let subWords = value.match(/(\w+)|(\W+)/g);
+                     for (let subWord of subWords) {
+                       if ( whole.toLowerCase() === subWord.toLowerCase() ) {
+                          newString += "<span class='highlight'>" + subWord + "</span>";
+                       } else {
+                          newString += subWord;
+                       }
+                     }
+                     newString = newString.trim();
+                     if (newString !== rowData[key])
+                        rowData[key] = newString;
+                   }	//	for (let whole of wholeSubs)
+                 }	//	if (wholeSubs.length > 0)
+              }	//	if (typeof rowData[key] === 'string')
+           }	//	if (rowData.hasOwnProperty(key))
+        }	//	for (let key in rowData)
+      }	//	for (let word of wholeWord)
+    }	//	if (wholeWord.length > 0)
     if (prefix.length > 0) {
       for (let word of prefix) {
         for (let key in rowData) {
@@ -383,7 +401,7 @@ function populateTableAndInfo(jsonData) {
 
     var count = 0;
     for (var id in genomicEntries) {
-        highlightMatch(extraInfo.q, genomicEntries[id]);
+        highlightMatch(extraInfo.q.trim(), genomicEntries[id]);
         var dataRow = '<tr>';
         var browserUrl = id;
         var asmInfoUrl = id;
@@ -405,14 +423,14 @@ function populateTableAndInfo(jsonData) {
         dataRow += "<td>" + genomicEntries[id].year + "</td>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
-        var status =  "<td>" + genomicEntries[id].priority + " ";
+        var status =  "<td>";
         var hardSpace = "&nbsp;";
-        if (genomicEntries[id].refSeqCategory) {
-           status += " " + genomicEntries[id].refSeqCategory;
-           hardSpace = "";
-        }
         if (genomicEntries[id].versionStatus) {
            status += " " + genomicEntries[id].versionStatus;
+           hardSpace = "";
+        }
+        if (genomicEntries[id].refSeqCategory) {
+           status += " " + genomicEntries[id].refSeqCategory;
            hardSpace = "";
         }
         if (genomicEntries[id].assemblyLevel) {
@@ -432,7 +450,7 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q.trim() + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -453,6 +471,7 @@ function populateTableAndInfo(jsonData) {
     } else {
       document.getElementById("measureTiming").style.display = "none";
     }
+    document.getElementById('urlCopyLink').style.display = "inline";
 }	//	function populateTableAndInfo(jsonData)
 
 function enableButtons() {
@@ -500,7 +519,7 @@ function clickHandler(e) {
     if(e.target.tagName === "DIV") {
       if(e.target.id != "modalWindow") closeModal(e);
   }
-} 
+}
 
 function keyHandler(e) {
   if(e.keyCode === 27) closeModal(e);
@@ -550,6 +569,41 @@ function sendRequest(name, email, asmId, betterName, comment) {
     xmlhttp.send();
 
 }  //      sendRequest: function(name, email. asmId)
+
+// borrowed this code from utils.js
+function copyToClipboard(ev) {
+    /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon.
+     * The attribute data-target of this element is the ID of the element that contains the text to copy.
+     * The text is either in the attribute data-copy or the innerText.
+     * see C function printCopyToClipboardButton(iconId, targetId);
+     * */
+
+    ev.preventDefault();
+
+    var buttonEl = ev.target.closest("button"); // user can click SVG or BUTTON element
+
+    var targetId = buttonEl.getAttribute("data-target");
+    if (targetId===null)
+        targetId = ev.target.parentNode.getAttribute("data-target");
+    var textEl = document.getElementById(targetId);
+    var text = textEl.getAttribute("data-copy");
+    if (text===null)
+        text = textEl.innerText;
+
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    buttonEl.innerHTML = 'Copied';
+    ev.preventDefault();
+}
 
 // do not allow both checkboxes to go off
 function atLeastOneCheckBoxOn(e) {
@@ -677,8 +731,8 @@ function asmOpenModal(e) {
 
 function optionsChange(e) {
   // options are changing, share URL is no longer viable, eliminate it
-  let shareThisSearch = document.getElementById('shareThisSearch');
-  shareThisSearch.innerHTML = "&nbsp;";
+  document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
+  document.getElementById('urlCopyLink').style.display = "none";
 }
 
 function makeRequest(query, browserExist, resultLimit) {
@@ -697,9 +751,20 @@ function makeRequest(query, browserExist, resultLimit) {
       var words = queryString.split(/\s+/);
       if (words.length > 1) {	// not needed on only one word
         var queryPlus = "";	// compose new query string
+        let inQuote = false;
         words.forEach(function(word) {
-          if (word.startsWith("+")) {
-            queryPlus += " " + word; // space separates each word
+          if (word.match(/^[-+]?"/)) {
+             if (/^[-+]/.test(word))
+                queryPlus += " " + word; // do not add + to - or + already there
+             else
+                queryPlus += " +" + word;
+             inQuote = true;
+          } else if (inQuote) {
+             queryPlus += " " + word; // space separates each word
+             if (word.endsWith('"'))
+                inQuote = false;
+          } else if (/^[-+]/.test(word)) {
+            queryPlus += " " + word; // do not add + to - or + already there
           } else {
             queryPlus += " +" + word;
           }
@@ -752,11 +817,9 @@ function makeRequest(query, browserExist, resultLimit) {
     stateObject.asmStatus = asmStatus;
     stateObject.refSeqCategory = refSeqCategory;
     stateObject.asmLevel = asmLevel;
-    let shareThisSearch = document.getElementById('shareThisSearch');
-    let thisPageHref = "<a href='assemblySearch.html";
-    thisPageHref += historyUrl;
-    thisPageHref += "'>Share this search</a>";
-    shareThisSearch.innerHTML = thisPageHref;
+    let urlText0 = document.getElementById('urlText0');
+    let hostName = window.location.hostname;
+    urlText0.innerHTML = "https://" + hostName + "/assemblySearch.html" + historyUrl;
 
     xhr.open('GET', urlPrefix + url, true);
 
@@ -765,6 +828,7 @@ function makeRequest(query, browserExist, resultLimit) {
             // Hide the wait spinner once the AJAX request is complete
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
             enableButtons();
 
             stateObject.jsonData = xhr.responseText;
@@ -776,6 +840,8 @@ function makeRequest(query, browserExist, resultLimit) {
             // Hide the wait spinner once the AJAX request is complete
             document.querySelector(".submitContainer").classList.remove("loading");
             document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById('copyIcon0').innerHTML = stateObject.copyIcon0;
+            document.getElementById('urlCopyLink').style.display = "none";
             enableButtons();
 	    var tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = "<tr><td style='text-align:center;' colspan=8><b>no results found for query: <em>'" + queryString + "'</em></b></td></tr>";

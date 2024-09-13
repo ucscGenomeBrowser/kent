@@ -218,18 +218,17 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             ### record the year and status here before bailing out so
             ### these can get into genArk if needed
             asmName = row[15]
-            assemblyLevel = re.sub(r'genome', '', row[11], flags=re.IGNORECASE)
+            assemblyLevel = re.sub(r'genome', '', row[11], flags=re.IGNORECASE).lower()
             year = re.sub(r'/.*', '', row[14])
             yearDict[gcAccession] = year
-            versionStatus = row[10]
-            refSeqCategory = re.sub(r'genome', '', row[4])
+            versionStatus = row[10].lower()
+            refSeqCategory = re.sub(r'genome', '', row[4]).lower()
             if refSeqCategory == "na":
                refSeqCategory = ""
             if versionStatus == "na":
                versionStatus = ""
             if assemblyLevel == "na":
                assemblyLevel = ""
-            genomeStatus = f"{refSeqCategory} {versionStatus} {assemblyLevel}"
             thisStat = {
                 "refSeqCategory": refSeqCategory,
                 "versionStatus": versionStatus,
@@ -266,7 +265,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                 "commonName": commonName,
                 "taxId": row[5],
                 "clade": clade,
-                "other": f"{asmSubmitter} {strain} {asmType} {year} {genomeStatus}",
+                "other": f"{asmSubmitter} {strain} {asmType} {year}",
                 "year": year,
                 "refSeqCategory": refSeqCategory,
                 "versionStatus": versionStatus,
@@ -307,9 +306,9 @@ def readGenArkData(url):
             "taxId": row[4],
             "clade": clade,
             "year": 0,
-            "refSeqCategory": "na",
-            "versionStatus": "na",
-            "assemblyLevel": "na",
+            "refSeqCategory": "",
+            "versionStatus": "",
+            "assemblyLevel": "",
             "sortOrder": cladeP,
         }
 
@@ -477,9 +476,9 @@ def addYearsStatus(genArks, years, status):
                     item['taxId'] += " " + year
         if gcAccession in status:
             stat = status[gcAccession]
-            item['refSeqCategory'] = stat['refSeqCategory']
-            item['versionStatus'] = stat['versionStatus']
-            item['assemblyLevel'] = stat['assemblyLevel']
+            item['refSeqCategory'] = stat['refSeqCategory'].lower()
+            item['versionStatus'] = stat['versionStatus'].lower()
+            item['assemblyLevel'] = stat['assemblyLevel'].lower()
 ##            pat = r'\b' + re.escape(stat) + r'\b'
 ##            if not re.search(pat, item['taxId']):
 ##                item['taxId'] += " " + stat
@@ -791,16 +790,19 @@ def main():
         refSeqCategory = ""
         versionStatus = ""
         assemblyLevel = ""
+        organism = entry['organism']
         if "na" not in gcAccession:
             if gcAccession in allStatus:
               stat = allStatus[gcAccession]
-              refSeqCategory = stat['refSeqCategory']
-              versionStatus = stat['versionStatus']
-              assemblyLevel = stat['assemblyLevel']
+              refSeqCategory = stat['refSeqCategory'].lower()
+              versionStatus = stat['versionStatus'].lower()
+              assemblyLevel = stat['assemblyLevel'].lower()
 
-        descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']}\n"
+        descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']}"
+        if year not in organism and year not in descr:
+            descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
+        outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -818,15 +820,17 @@ def main():
             sys.exit(255)
 
         hubPath = genarkPath(gcAccession)
-        cleanName = removeNonAlphanumeric(entry['commonName'])
+        commonName = entry['commonName']
         clade = entry['clade']
-        descr = f"{entry['asmName']} {entry['taxId']}"
-        description = re.sub(r'\s+', ' ', descr).strip()
         year = entry['year']
-        refSeqCategory = entry['refSeqCategory']
-        versionStatus = entry['versionStatus']
-        assemblyLevel = entry['assemblyLevel']
-        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
+        descr = f"{entry['asmName']} {entry['taxId']}"
+        if year not in commonName and year not in descr:
+            descr = f"{entry['asmName']} {entry['taxId']} {year}"
+        description = re.sub(r'\s+', ' ', descr).strip()
+        refSeqCategory = entry['refSeqCategory'].lower()
+        versionStatus = entry['versionStatus'].lower()
+        assemblyLevel = entry['assemblyLevel'].lower()
+        outLine = f"{entry['gcAccession']}\t{priority}\t{commonName.encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -845,10 +849,12 @@ def main():
         asmName = entry['asmName']
         clade = entry['clade']
         year = entry['year']
-        refSeqCategory = entry['refSeqCategory']
-        versionStatus = entry['versionStatus']
-        assemblyLevel = entry['assemblyLevel']
+        refSeqCategory = entry['refSeqCategory'].lower()
+        versionStatus = entry['versionStatus'].lower()
+        assemblyLevel = entry['assemblyLevel'].lower()
         descr = f"{asmName} {entry['taxId']} {entry['other']}"
+        if year not in commonName and year not in descr:
+            descr = f"{asmName} {entry['taxId']} {entry['other']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)

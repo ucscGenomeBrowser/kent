@@ -7497,9 +7497,37 @@ void collapseGroup(char *name, boolean doCollapse)
 cartSetBoolean(cart, collapseGroupVar(name), doCollapse);
 }
 
-void myControlGridStartCell(struct controlGrid *cg, boolean isOpen, char *id)
+static boolean shouldBreakAll(char *text)
+/* Check if any word in the label exceeds the cell width and should
+ * be broken. */
+{
+/* Must match htdocs/style/HGStyle.css .trackListId between min and max width
+ * it CSS to allow room for different character width calculations in web
+ * browser. */
+static const int MAX_WIDTH_CHARS = 20;
+int wordLen = 0;
+for (char *textPtr = text; *textPtr != '\0'; textPtr++)
+    {
+    if (isspace(*textPtr))
+        {
+        if (wordLen > MAX_WIDTH_CHARS)
+            return TRUE;  // early exit
+        wordLen = 0;
+        }
+    else
+        {
+        wordLen++;
+        }
+    }
+// check gain if there are no spaces.
+return (wordLen > MAX_WIDTH_CHARS);
+}
+
+void myControlGridStartCell(struct controlGrid *cg, boolean isOpen, char *id, boolean breakAll)
 /* Start a new cell in control grid; support Javascript open/collapsing by including id's in tr's.
-   id is used as id prefix (a counter is added to make id's unique). */
+   id is used as id prefix (a counter is added to make id's unique). The breakAll arguments
+   indicates if breaking anywhere to prevent cell overflow is allowed vs only word-break.
+*/
 {
 static int counter = 1;
 if (cg->columnIx == cg->columns)
@@ -7510,10 +7538,11 @@ if (!cg->rowOpen)
     printf("<tr %sid='%s-%d'>", isOpen ? "" : "style='display: none' ", id, counter++);
     cg->rowOpen = TRUE;
     }
+char *cls = breakAll ? "trackLabelTd trackLabelTdBreakAll" : "trackLabelTd";
 if (cg->align)
-    printf("<td class='trackLabelTd' align=%s>", cg->align);
+    printf("<td class='%s' align=%s>", cls, cg->align);
 else
-    printf("<td class='trackLabelTd'>");
+    printf("<td class='%s'>", cls);
 }
 
 static void pruneRedundantCartVis(struct track *trackList)
@@ -9584,7 +9613,7 @@ if (!hideControls)
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
 		showedRuler = TRUE;
-		myControlGridStartCell(cg, isOpen, group->name);
+		myControlGridStartCell(cg, isOpen, group->name, FALSE);
 		hPrintf("<A HREF=\"%s\">", url);
 		hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
 		hPrintf("</A>");
@@ -9603,7 +9632,8 @@ if (!hideControls)
 	    /* Display track controls */
             if (group->errMessage)
                 {
-		myControlGridStartCell(cg, isOpen, group->name);
+		myControlGridStartCell(cg, isOpen, group->name,
+                                       shouldBreakAll(group->errMessage));
                 hPrintf("%s", group->errMessage);
 		controlGridEndCell(cg);
                 }
@@ -9614,7 +9644,8 @@ if (!hideControls)
 		if (tdbIsSuperTrackChild(track->tdb))
 		    /* don't display supertrack members */
 		    continue;
-		myControlGridStartCell(cg, isOpen, group->name);
+		myControlGridStartCell(cg, isOpen, group->name,
+                                       shouldBreakAll(track->shortLabel));
 
                 printTrackLink(track);
 

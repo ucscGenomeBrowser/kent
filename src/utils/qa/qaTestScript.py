@@ -39,9 +39,20 @@ from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re, sys, argparse
 import getpass
 import os
+import psutil
 
 user = getpass.getuser()
 
+# List of process names to check
+proc_names_to_check = ["chrome", "chromedriver", "google-chrome", "chrome_crashpad_handler"] 
+# Iterate over all running processes
+for proc in psutil.process_iter():
+    # Check if the process name matches any in the list
+    if proc.name() in proc_names_to_check:
+       # Check if the process belongs to the specified user
+       if proc.username() == user:
+          # Kill the process
+          proc.kill()
 
 #Make tmpdir for the cron
 try:
@@ -290,7 +301,7 @@ n = driver.find_element_by_id("customTracksMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_name("hgct_customText").clear()
-driver.find_element_by_name("hgct_customText").send_keys("https://hgwdev-gperez2.gi.ucsc.edu/~gperez2/testing/selenium/chrmAliasTestHg38_track")
+driver.find_element_by_name("hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/chrmAliasTestHg38_track")
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 # click into hgTrackUi of customTrack
