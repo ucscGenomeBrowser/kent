@@ -5,6 +5,7 @@ GCA_000002525.1_ASM252v1	fungi
 GCA_000002545.2_ASM254v2	fungi
 GCA_000002595.3_Chlamydomonas_reinhardtii_v5.5	plants
 GCA_000002725.2_ASM272v2	invertebrate
+GCA_000002765.3_GCA_000002765	invertebrate
 GCA_000002875.2_ASM287v2	invertebrate
 GCA_000003205.6_Btau_5.0.1	mammals
 GCA_000003525.2_BD_ER3_V1	fungi
@@ -169,6 +170,7 @@ GCA_011100635.1_mTriVul1.pri	mammals
 GCA_011762505.1_mArvNil1.pat.X	mammals
 GCA_011762595.1_mTurTru1.mat.Y	mammals
 GCA_012275295.1_bMelUnd1.mat.Z	birds
+GCA_013339725.1_BIME_Rmic_1.3	invertebrate
 GCA_013347855.1_fAngAng1.pri	vertebrate
 GCA_014108255.1_mRhiFer1.p	mammals
 GCA_014176215.1_mRouAeg1.p	mammals
