@@ -799,8 +799,7 @@ def main():
               assemblyLevel = stat['assemblyLevel'].lower()
 
         descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']}"
-        yearSearch = r'\b{}\b'.format(year)
-        if not re.search(yearSearch, organism) and not re.search(yearSearch,descr):
+        if year not in organism and year not in descr:
             descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
@@ -825,8 +824,7 @@ def main():
         clade = entry['clade']
         year = entry['year']
         descr = f"{entry['asmName']} {entry['taxId']}"
-        yearSearch = r'\b{}\b'.format(year)
-        if not re.search(yearSearch, commonName) and not re.search(yearSearch, descr):
+        if year not in commonName and year not in descr:
             descr = f"{entry['asmName']} {entry['taxId']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
         refSeqCategory = entry['refSeqCategory'].lower()
@@ -855,8 +853,7 @@ def main():
         versionStatus = entry['versionStatus'].lower()
         assemblyLevel = entry['assemblyLevel'].lower()
         descr = f"{asmName} {entry['taxId']} {entry['other']}"
-        yearSearch = r'\b{}\b'.format(year)
-        if not re.search(yearSearch, commonName) and not re.search(yearSearch, descr):
+        if year not in commonName and year not in descr:
             descr = f"{asmName} {entry['taxId']} {entry['other']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
