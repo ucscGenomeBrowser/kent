@@ -234,7 +234,7 @@ mouseOverField _mouseOver
 html gnomadSv.html
 
 # The missense and pLI contraint tracks
-include gnomad.constraint.alpha.ra alpha
+include gnomad.constraint.alpha.ra alpha,beta
 
 searchTable pliByTranscript
 searchType bigBed
