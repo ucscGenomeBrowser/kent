@@ -42,7 +42,6 @@
             action() {
                 // log when the tutorial is finished (commented out for now)
                 writeToApacheLog("clinicalTutorial finish " + getHgsid());
-                //localStorage.setItem("hgTracks_hideTutorial", "1");
                 hideMenu('#help > ul');
                 return this.complete();
             },
@@ -113,6 +112,14 @@
         rtsMenuClose.click();
     }
     
+    // Function to log finishing the clinical tutorial
+    function listenForBasicTutorial() {
+        document.getElementById('basicTutorialLink').addEventListener('click', function() {
+            writeToApacheLog("clinicalTutorial finish " + getHgsid());
+            clinicalTour.complete();
+        });
+    }
+
     // Function to add steps to the clinicalTour
     function clinicalSteps() {
         clinicalTour.addStep({
@@ -347,14 +354,18 @@
                   'Also, if you are new to the '+
                   'UCSC Genome Browser, consider exploring our '+
                   '<a href="/cgi-bin/hgTracks?startTutorial=true" '+
-                  'target="_blank">basic tutorial</a>.',
+                  'id="basicTutorialLink" '+
+                  '>basic tutorial</a>.',
             attachTo: {
                 element: '#contactUs',
                 on: 'right'
             },
             buttons: [ tutorialButtons.back, tutorialButtons.end ],
             when: {
-                show: () => keepMenuVisible('#help > ul'),
+                show: () => {
+                    keepMenuVisible('#help > ul');
+                    listenForBasicTutorial(); // listener to log if the basic tutorial was started
+                },
                 hide: () => hideMenu('#help > ul')
             }
         });
