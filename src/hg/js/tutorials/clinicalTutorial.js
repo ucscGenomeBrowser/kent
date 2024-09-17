@@ -61,7 +61,7 @@
             menu.style.display = 'block';
             menu.style.visibility = 'visible';
         };
-        const events = ['mouseover', 'pointermove','pointerenter', 'pointerout', 'pointerover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
+        const events = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
         // Add event listeners to keep the menu open
         events.forEach(event => {
             menu.addEventListener(event, makeVisible);
@@ -86,7 +86,7 @@
         };
 
         const events = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
-        // Add event listeners to keep the menu open
+        // Remove event listeners to keep the menu open
         events.forEach(event => {
              menu.removeEventListener(event, hideVisible);
         });
@@ -123,7 +123,7 @@
     // Function to add steps to the clinicalTour
     function clinicalSteps() {
         clinicalTour.addStep({
-            title: 'Clinical Genetics in the UCSC Genome Browser',
+            title: 'Clinical genetics in the UCSC Genome Browser',
             text: 'This brief tutorial will cover the primary resources used in standard variant '+
                   'interpretation available to clinical geneticists as per the ACMG/AMP guidelines.'+
                   '<br><br>'+
@@ -138,7 +138,7 @@
         });
     
         clinicalTour.addStep({
-            title: 'Searching for Variants and other Queries',
+            title: 'Searching for variants and other queries',
             text: 'The search bar allows you to navigate to a region on the genome using ' +
                   '<a href="http://varnomen.hgvs.org/" target="_blank">HGVS terms</a>, '+
                   '<a href="https://genome-blog.soe.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"' +
@@ -188,7 +188,7 @@
         });
     
         clinicalTour.addStep({
-            title: 'Display Annotations for a Specific Scenario',
+            title: 'Display annotations for a specific scenario',
             text: 
                   '<em>Note: Loading a track set may hide some tracks in your current view.</em>'+
                   '<br><br>'+
@@ -222,7 +222,7 @@
         });
 
         clinicalTour.addStep({
-            title: 'Search for Available Datasets',
+            title: 'Search for available datasets',
             text:
                   '<a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track '+
                   'search</a> through all available annotations for any '+
@@ -247,7 +247,7 @@
         });
 
         clinicalTour.addStep({
-            title: 'Associate Annotations to Variant Calls',
+            title: 'Associate annotations to variant calls',
             text:
                   '<a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator</a> '+
                   '(VAI) provides effect prediction and annotation associations for '+
@@ -274,7 +274,7 @@
         });
 
         clinicalTour.addStep({
-            title: 'Save and Share Snapshots of the Browser',
+            title: 'Save and share snapshots of the Browser',
             text:
                   '<a href="/cgi-bin/hgSession" target="_blank">Sessions</a> allows you to '+
                   '      save your own pre-configured displays and create stable links. '+
@@ -297,16 +297,16 @@
         });
 
         clinicalTour.addStep({
-            title: 'View this Region in Another Genome (Convert)',
+            title: 'View this region in another genome (Convert)',
             text:
                   '<a href="/cgi-bin/hgConvert" target="_blank">'+
                   'The Genome Browser Convert utility</a> is useful for locating '+
                   'the position of a feature of interest in a different release of the same '+
                   'genome or (in some cases) in a genome assembly of another species.'+
                   '<br><br>'+
-                  'When coordinate conversion is available for an assembly, '+
+                  '<em>When coordinate conversion is available for an assembly, '+
                   'you will be presented with a list of the '+
-                  'genome/assembly conversion options available.'+
+                  'genome/assembly conversion options available.</em>'+
                   '<br><br>'+
                   'If the conversion is successful, the '+
                   'browser will return a list of regions in the new assembly, along with the '+
@@ -324,12 +324,15 @@
         });
 
         clinicalTour.addStep({
-            title: 'Add Color to the Region',
+            title: 'Highlighting a region and keyboard shortcuts',
             text:
                   'Our <a href="/goldenPath/help/hgTracksHelp.html#Highlight" '+
                   '      target="_blank">highlight</a> feature can accentuate specific regions '+
                   '      in your view. '+
-                  'Highlight the current position with the keyboard shortcut "h then m".'+
+                  'Highlight the current position with the keyboard shortcut "h" then "m".'+
+                  '<br><br>'+
+                  'The full list of keyboard shortcuts can be accessed using the "?" keyboard '+
+                  'shortcut.'+
                   '<br><br>'+
                   '<img src="/images/right_click_example.png" width="350">' +
                   '<br>'+
@@ -346,7 +349,7 @@
         });
 
         clinicalTour.addStep({
-            title: 'Additional Resources and Feedback',
+            title: 'Additional resources and feedback',
             text: 'If you have any questions or suggestions including annotations '+
                   'that you feel are missing from a track set or a new track set theme, '+
                   '<a href="/contacts.html" target="_blank">please write to us</a>. '+
