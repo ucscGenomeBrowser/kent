@@ -1871,9 +1871,9 @@ function downloadMinimal
 
     startMysql
 
-    hideSomeTracks
-
     mysqlCheck
+
+    hideSomeTracks
 
     echo2 
     echo2 The mirror should be functional now. It contains some basic assembly tables 
@@ -1954,6 +1954,8 @@ function updateBrowser {
        $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done
    startMysql
+
+   mysqlCheck
 
    hideSomeTracks
 
