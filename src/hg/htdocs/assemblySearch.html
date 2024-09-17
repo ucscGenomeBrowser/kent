@@ -8,20 +8,20 @@
 
     <h1>Genome assembly search and request</h1>
 <hr>
+    <div style="border:2px solid black; padding:5px;">
     <form id="searchForm">
         <div class="formDiv"> <!-- the entire form element -->
         <div>	<!-- container div for search box and submit/clear buttons -->
-        <label for="searchBox">Enter search term(s) to find assembly:</label>
-        <input type="text" id="searchBox" placeholder="e.g.: white rhino* -southern" name="searchBox" required>
+        <label for="searchBox">Enter search term(s):</label>
+        <input type="text" id="searchBox" placeholder="e.g. white rhino* -southern" name="searchBox" style="width:20%;" required>
         <div class="submitContainer">
            <button id="submitSearch" type="submit">Search</button>
            <div id="loadingSpinner" class="spinner"></div>
         </div>
         <button type="button" id="clearSearch">Clear</button>&nbsp;-
-        <button type="button" id="advancedSearchButton">Show advanced search options</button>
+        <button type="button" id="advancedSearchButton">Show search options</button>
            <!-- mouse over this text to see pop-up help message -->
-           <span class="searchTip">Advanced search help
-      <span class="searchTiptext"> <!-- hidden span for pop-up help message -->
+           <span class="searchTip" style="float: right;">Advanced search help&nbsp;&#9432;<span class="searchTiptext"> <!-- hidden span for pop-up help message -->
 <ol id="searchTipList" class="noBullets">
 <li> + (plus) sign before <b>+word</b> to force included in result</li>
 <li> - (minus) sign before <b>-word</b> to exclude word from result</li>
@@ -40,7 +40,10 @@
         <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
              <fieldset class="colVertical" onchange="optionsChange(event)">
-             <legend>Assembly view/request</legend>
+             <legend><span class="searchTip">Assembly view/request&nbsp;&#9432;<span class="searchTiptext" style="width:500px; left:160px;"><ol class="noBullets">
+<li><b>In available browsers</b> - the assembly exists in the UCSC browser system, the <b>view</b> link will lead to the browser</li>
+<li><b>Can be requested</b> - assembly is not yet in the UCSC browser system, the <b>request</b> link will open a request form to ask for the assembly to be added to the UCSC browser system</li>
+</ol></span></span></legend>
            <label><input type="checkbox" id="mustExist" onclick="atLeastOneCheckBoxOn(this)" name="mustExist" value="mustExist" checked>
               In available browsers
            </label><br>
@@ -51,7 +54,12 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend>Assembly status</legend>
+              <legend><span class="searchTip">Assembly status&nbsp;&#9432;<span class="searchTiptext" style="width:600px; left:130px;"><ol class="noBullets">
+<li><b>Latest</b> - the most recent of all the versions for this assembly chain</li>
+<li><b>Replaced</b> - this version has been replaced by a newer version of the assembly in the same chain</li>
+<li><b>Suppressed</b> - this version of the assembly has been suppressed</li>
+<li>An assembly chain is the collection of all versions for the same assembly accession.</li>
+</ol></span></span></legend>
               <label><input type="radio" name="asmStatus" value="latest" id="statusLatest"> Latest</label>
               <label><input type="radio" name="asmStatus" value="replaced" id="statusReplaced"> Replaced</label>
               <label><input type="radio" name="asmStatus" value="suppressed" id="statusSuppressed"> Suppressed</label>
@@ -60,7 +68,12 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend>RefSeq category</legend>
+              <legend><span class="searchTip">RefSeq category&nbsp;&#9432;<span class="searchTiptext" style="width:600px; left:140px;"><ol class="noBullets">
+<li><b>Reference</b> genome - a manually selected high quality genome assembly that NCBI and the community have identified as being important as a standard against which other data are compared</li>
+<li><b>Representative</b> genome - a genome computationally or manually selected as a representative from among the best genomes available for a species or clade that does not have a designated reference genome</li>
+<li>There are assemblies which have no RefSeq category assignment</li>
+<li>For more information, see also: <a href='https://www.ncbi.nlm.nih.gov/refseq/about/prokaryotes/#referencegenome' target=_blank>www.ncbi.nlm.nih.gov/refseq/about/prokaryotes/#referencegenome</a></li>
+</ol></span></span></legend>
               <label><input type="radio" name="refSeqCategory" value="reference" id="refSeqReference"> Reference</label>
               <label><input type="radio" name="refSeqCategory" value="representative" id="refSeqRepresentative"> Representative</label>
               <label><input type="radio" name="refSeqCategory" value="refSeqAny" id="refSeqAny" checked> Any category</label>
@@ -68,7 +81,12 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend>Assembly level</legend>
+              <legend><span class="searchTip">Assembly level&nbsp;&#9432;<span class="searchTiptext" style="width:500px; left:-510px;"><ol class="noBullets">
+<li><b>Complete genome</b> - all chromosomes are gapless and have no runs of 10 or more ambiguous bases (Ns), there are no unplaced or unlocalized scaffolds, and all the expected chromosomes are present (i.e. the assembly is not noted as having partial genome representation). Plasmids and organelles may or may not be included in the assembly but if present then the sequences are gapless.</li>
+<li><b>Chromosome</b> - there is sequence for one or more chromosomes. This could be a completely sequenced chromosome without gaps or a chromosome containing scaffolds or contigs with gaps between them. There may also be unplaced or unlocalized scaffolds.</li>
+<li><b>Scaffold</b>- some sequence contigs have been connected across gaps to create scaffolds, but the scaffolds are all unplaced or unlocalized.</li>
+<li><b>Contig</b>- nothing is assembled beyond the level of sequence contigs</li>
+</ol></span></span></legend>
               <label><input type="radio" name="asmLevel" value="complete" id="asmLevelComplete"> Complete</label>
               <label><input type="radio" name="asmLevel" value="chromosome" id="asmLevelChromosome"> Chromosome</label>
               <label><input type="radio" name="asmLevel" value="scaffold" id="asmLevelScaffold"> Scaffold</label>
@@ -78,6 +96,7 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
+              <legend class="searchTip"><span>word match control&nbsp;&#9432;<span class="searchTiptext" style="width:400px; left:-410px">For multiple word search, <b>May match</b> will allow any combination of word matches, where <b>Must match</b> will force all words to be in the search result.</span></span></legend>
               <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> May match any word</label>
               <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> Must match all words</label>
               </fieldset>
@@ -85,6 +104,7 @@
         </div>	<!-- the radioGroupContainer -->
         </div> <!-- the entire form element -->
     </form>
+    </div>
     <div>	<!-- search results status line -->
     <span id="resultCounts">&nbsp;</span>
     <span id="measureTiming">- <em>search time: </em><span id="elapsedTime">0 milliseconds</span>.</span>
@@ -98,7 +118,7 @@
 <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> <path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"></path></svg>&nbsp;Copy</button></span>
     </div>	<!-- copy link to share this search -->
     <hr>
-    <table id="dataTable" class="dataTable sorttable fifthRowHighlight" style="border: 1px solid black; display:block; max-width:1300px; position:sticky; top:0;">
+    <table id="dataTable" class="dataTable sorttable" style="border: 1px solid black; display:block; margin-left: 0; border-collapse:separate; position:sticky; top:0;">
         <colgroup id='colDefinitions'>
           <col id='viewReq' style="width: 10%">
           <col id='comName' style="width: 10%">
@@ -109,7 +129,7 @@
           <col id='description' style="width: 30%">
           <col id='status' style="width: 12%">
         </colgroup>
-        <thead style="position:sticky; top:0; border:1px solid #ddd; width:100%" id="tableHeader">
+        <thead style="position:sticky; top:0; width:100%" id="tableHeader">
          <!-- table header rows are filled in by javaScript since they can
               be altered by the sorttable system and need to be refreshed -->
          <tr><td>&nbsp;</td></tr>

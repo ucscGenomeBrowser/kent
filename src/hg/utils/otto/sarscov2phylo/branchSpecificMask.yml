@@ -148,6 +148,15 @@ KP.1:
     reversions: [ T17334G        # Reversion of JN.1.11.1 mutation, email from FedeGueli
                 ]
 
+KP.3.1.1:
+    # Inherits from JN.1
+    representative: England/CLIMB-CM7YJCHG/2024
+    reversions: [ C22926T,  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1914
+                  C22928T,  # ''
+                  # Others I noticed while looking at the above:
+                  G7842A, T23948G, C3565T, T17334G, G19722A, G23055A, T28271A, T23063A, G22910A
+                ]
+
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
     representative: SouthAfrica/NICD-N41664/2022

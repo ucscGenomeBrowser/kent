@@ -1,17 +1,3 @@
-.fixedHeightTable {
-  max-width: 100%;
-  max-height: 1024px;
-  overflow-y: auto;
-    /* overflow-x: auto; */
-}
-
-.stickyTable {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: white;
-}
-
 table {
   width: 98%;
   table-layout: auto;
@@ -28,11 +14,6 @@ th {
 
 thead th {
   border: 3px solid black;
-}
-
-.fifthRowHighlight tr:nth-child(5n) th,
-.fifthRowHighlight tr:nth-child(5n) td {
-   background-color: #d3d3d3;
 }
 
 .submitContainer {
@@ -77,6 +58,7 @@ thead th {
     gap: 20px; /* Optional: Add space between the two groups */
     border: 2px solid #000; /* Add a 2px solid black border around the container */
     padding: 10px; /* Optional: Add padding inside the border */
+    margin: 5px; /* Optional: Add padding inside the border */
 }
 
 .radioGroup {
@@ -90,7 +72,7 @@ thead th {
 }
 
 .formDiv > div, .radioGroupContainer {
-    width: 100%;
+    width: 98%;
     box-sizing: border-box;
 }
 
@@ -98,8 +80,9 @@ thead th {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    background-color: #e5cb99;
-    color: #00f;
+    border: 1px solid #888;
+    padding: 2px;
+    border-radius: 4px;
 }
 
 .searchTiptext {
@@ -113,19 +96,20 @@ thead th {
     padding: 5px;
     position: absolute;
     z-index: 1;
-    bottom: -925%; /* Position above the text */
-    left: 50%;
-    /* margin-left: -70px; /* Center the searchTip */
-    margin-left: -300px;
-    transition: opacity 0.3s;
+    top: 20px; /* Position below the prompt text */
+    right: 0;	/* right border of this pop-up aligns with right border of
+                   prompt text */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .searchTip:hover .searchTiptext {
     visibility: visible;
+    transition-delay: 0.5s;
     opacity: 1;
 }
 
-ol.noBullets {
+/* for the pop-up help listings, do not need the list markers */
+.noBullets {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -177,10 +161,12 @@ ol.noBullets {
 }
 
 .dataTable thead tr th:hover .tooltiptext {
+  transition-delay: 0.5s;
   visibility: visible;
 }
 
 .dataTable thead tr th:hover .tooltiptextright {
+  transition-delay: 0.5s;
   visibility: visible;
 }
 
@@ -201,6 +187,7 @@ ol.noBullets {
   top: 0;
   background: #ffffff;
   color: #000000;
+  font-weight: normal;
 }
 
 /* right most two columns have right margins instead of left so as
@@ -224,6 +211,7 @@ ol.noBullets {
   top: 0;
   background: #ffffff;
   color: #000000;
+  font-weight: normal;
 }
 
 .highlight {

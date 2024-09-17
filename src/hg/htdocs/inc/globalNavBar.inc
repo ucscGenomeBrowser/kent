@@ -98,7 +98,7 @@
     <li><a title="See frequently asked questions and search our help documentation" href="../FAQ/">FAQs & Search</a></li>
     <li><a title="Help documentation covering all aspects of the Genome Browser" href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
     <li><a title="How-to videos for various Genome Browser tasks and other materials" href="../training/index.html">Training</a></li>
-    <li class="last"><a title="Ask us a question" href="../contacts.html">Contact Us</a></li>
+    <li class="last" id="contactUs"><a title="Ask us a question" href="../contacts.html">Contact Us</a></li>
     </ul>
 </li>
 
@@ -111,7 +111,7 @@
 	<li class="odd"><a href="../conditions.html">Conditions of Use</a></li>
 	<li class="even"><a href="../goldenPath/history.html">Our History</a></li>
 	<li class="odd"><a href="../license/">Licenses</a></li>
-	<li class="even last"><a href="../contacts.html">Contact Us</a></li>
+	<li class="even last" id="aboutContactLink"><a href="../contacts.html">Contact Us</a></li>
 	</ul>
 </li>
 

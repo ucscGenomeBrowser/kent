@@ -1,0 +1,59 @@
+#This first section checks to see if the RR has different URLs in the hubPublic table 
+hgsql -e "select hubUrl from hubPublic" hgcentraltest | sort -u > dev.URLs
+hgsql -h genome-centdb hgcentral -e "select hubUrl from hubPublic" | sort -u > rr.URLs
+comm -2 -3 rr.URLs dev.URLs
+check=`comm -2 -3 rr.URLs dev.URLs | wc | awk '{print $1}'`
+if [ "$check" -gt 0 ]
+  then echo;
+  echo "The URL(s) above differs in hgcentral on the RR compared with what is on hgwdev's hubPublic table."
+  echo "When there are mismatching URLs the search files about to be built will fail to work.";
+  echo;
+  echo "Please update hubPublic on dev, beta, and the RR to have the same correct URL for the above hub(s)."
+  exit 1;
+fi
+rm -f rr.URLs dev.URLs
+#This section starts the building of the index files. 
+rm publicHubCrawl.txt
+
+# Added 6/21/17 to support new public hub search mechanism
+function cleanUp {
+rm -f $workingDir/$$.jobFile
+rm -f $workingDir/$$.*.txt
+}
+trap cleanUp EXIT
+workingDir=`pwd`
+
+i=0
+# end added 6/21/17
+#
+hgsql -e "select hubUrl from hubPublic" hgcentraltest | tail -n +2  |  \
+while read url; 
+do 
+    # rm -rf /data/tmp/braney/hubCrawl
+    # hubCrawl -udcDir=/data/tmp/braney/hubCrawl $url >> publicHubCrawl.txt
+    # hubCheck -searchFile=publicHubCrawl.txt -udcDir=/data/tmp/braney/hubCrawl $url
+    # Added 6/21/17 to support new public hub search mechanism
+    printf "hubCrawl -udcDir=/hive/groups/browser/hubCrawl/udcCache $url > $$.$i.txt || true\n" >> $$.jobFile
+    ((i++))
+    # end added 6/21/17
+    #echo $url
+done
+# Added 6/21/17 to support new public hub search mechanism
+xargs -a $$.jobFile -P 25 -I % sh -c '%'
+cat $$.*.txt > publicHubCrawl.txt
+cleanUp
+#chmod -R 775 /hive/groups/browser/hubCrawl/udcCache
+#Get directory and file permissions in order before pushing
+find udcCache -type d | xargs chmod 777
+find udcCache -type f | xargs chmod 666
+hgLoadSqlTab hgcentraltest hubSearchText ~/kent/src/hg/lib/hubSearchText.sql publicHubCrawl.txt
+echo "Now ask the admins to push the /hive/groups/browser/hubCrawl/udcCache directory from here to hgnfs1,"
+echo "euro, and asia at /usr/local/apache/userdata/hgHubConnect/,"
+echo "and also ask them to push the hubSearchText table from hgcentraltest to hgcentralbeta/rr/etc."
+echo "Don't forget to test!"
+# end added 6/21/17
+# ixIxx publicHubCrawl.txt public.ix public.ixx
+
+#rm -f /gbdb/hubs/public.ix /gbdb/hubs/public.ixx
+#ln -s `pwd`/public.ix /gbdb/hubs
+#ln -s `pwd`/public.ixx /gbdb/hubs

@@ -517,7 +517,6 @@ priority 2
         track ncbiRefSeq
         parent refSeqComposite on
         color 12,12,120
-        altColor 120,12,12
         shortLabel RefSeq All
         type bigGenePred
         labelFields name,geneName,geneName2

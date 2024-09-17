@@ -331,8 +331,9 @@ if (colon)
     *colon = '\0';
     vpn->nodeName = cloneString(nodeName);
     char *mutString = trimSpaces(colon+1);
-    char *mutWords[strlen(mutString)/4];
-    int mutCount = chopCommas(mutString, mutWords);
+    int mutCount = chopCommas(mutString, NULL);
+    char *mutWords[mutCount];
+    chopCommas(mutString, mutWords);
     int i;
     for (i = 0;  i < mutCount;  i++)
         {
@@ -1234,6 +1235,16 @@ if (serverIsConfigured(org))
 return success;
 }
 
+static int indexOfNull(char *stringArray[])
+/* Return the index of the first NULL element of stringArray.
+ * Do not call this unless stringArray has at least one NULL! */
+{
+int ix = 0;
+while (stringArray[ix] != NULL)
+    ix++;
+return ix;
+}
+
 #define MAX_SUBTREES 1000
 
 struct usherResults *runUsher(char *org, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
@@ -1252,9 +1263,8 @@ trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
                 "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-u",
                 "-T", USHER_NUM_THREADS,       // Don't pass args from -T onward to server
-                "--optimization_radius", "0",  // Don't pass these to original usher, only -sampled
-                "--no-ignore-prefix", USHER_DEDUP_PREFIX,
-                "--anchor-samples", anchorFile,
+                // Room for extra arguments if using usher-sampled
+                NULL, NULL, NULL, NULL, NULL, NULL,
                 NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
@@ -1263,19 +1273,25 @@ trashDirFile(&tnServerStderr, "ct", "usher_server_stderr", ".txt");
 char *stderrFile = tnServerStderr.forCgi;
 if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, anchorFile, pStartTime))
     {
-    if (!endsWith(usherPath, "-sampled"))
+    if (endsWith(usherPath, "-sampled"))
         {
-        // Truncate cmd for original usher: remove usher-sampled-specific option
-        int ix = stringArrayIx("--optimization_radius", cmd, ArraySize(cmd)-1);
-        if (ix > 0)
-            cmd[ix] = NULL;
-        }
-    else if (isEmpty(anchorFile))
-        {
-        // Don't pass --anchor-samples option unless it's configured
-        int ix = stringArrayIx("--anchor-samples", cmd, ArraySize(cmd)-1);
-        if (ix > 0)
-            cmd[ix] = NULL;
+        // Add --no-ignore-prefix
+        int ix = indexOfNull(cmd);
+        cmd[ix++] = "--no-ignore-prefix";
+        cmd[ix++] = USHER_DEDUP_PREFIX;
+        // Add --anchor-samples if configured
+        if (isNotEmpty(anchorFile))
+            {
+            cmd[ix++] = "--anchor-samples";
+            cmd[ix++] = anchorFile;
+            }
+        // Add --optimization-radius 0 unless optimization is explicitly enabled
+        char *enableOptimization = phyloPlaceOrgSetting(org, "enableOptimization");
+        if (SETTING_NOT_ON(enableOptimization))
+            {
+            cmd[ix++] = "--optimization_radius";
+            cmd[ix++] = "0";
+            }
         }
     runUsherCommand(cmd, tnStderr.forCgi, anchorFile, pStartTime);
     stderrFile = tnStderr.forCgi;

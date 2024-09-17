@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent form submission
 
-        var searchTerm = document.getElementById('searchBox').value;
+        // the trim() removes stray white space before or after the string
+        var searchTerm = document.getElementById('searchBox').value.trim();
         var resultCountLimit = document.getElementById('maxItemsOutput');
         var mustExist = document.getElementById('mustExist').checked;
         var notExist = document.getElementById('notExist').checked;
@@ -241,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
        document.getElementById('maxItemsOutput').value = maxItemsOutput;
     }
     if (urlParams.has('q')) {
-       query = urlParams.get('q');
+       query = urlParams.get('q').trim();
        if (query.length > 0) {
           searchInput.value = query;
           document.getElementById('submitSearch').click();
@@ -258,14 +259,15 @@ function headerRefresh(tableHead) {
   //  the last sorted column, need to rebuild the headerRow to get the
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
-  headerRow += '<th><div class=tooltip>View/<br>Request &#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><em>"view"</em> opens the genome browser for an existing assembly, <em>"request"</em> opens an assembly request form.</span></div></th>';
-  headerRow += '<th><div class="tooltip">English common name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">Scientific name &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">scientific name</span></div></th>';
-  headerRow += '<th><div class="tooltip">NCBI Assembly &#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
-  headerRow += '<th><div class="tooltip">Year &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
-  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">clade specification as found in the GenArk system.</span></div></th>';
-  headerRow += '<th><div class="tooltip">Description &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">other meta data for this assembly.</span></div></th>';
-  headerRow += '<th><div class="tooltip">Status &#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">various other status</span></div></th>';
+  let circleQuestion = '<svg width="24" height="24"> <circle cx="12" cy="12" r="10" fill="#4444ff" /> <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="13px" font-family="Verdana" dy=".3em">?</text>?</svg>';
+  headerRow += '<th><div class=tooltip>View/<br>Request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>View</b> opens the genome browser for an existing assembly, <b>Request</b> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
+  headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Binomial scientific name</span></div></th>';
+  headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
+  headerRow += '<th><div class="tooltip">Year&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
+  headerRow += '<th><div class="tooltip"><em>GenArk</em> clade&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Clade specification as found in the <a href="https://hgdownload.soe.ucsc.edu/hubs/index.html" target=_blank>GenArk</a> system, this is not a strict taxonomy category, merely a division of assemblies into several categories.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Description&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Description may include other names, the <b>taxId</b>, year of assembly release and assembly center.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Status&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">When specified, status will show the <b>Assembly status</b> the <b>RefSeq category</b> and the <b>Assembly level</b>.</span></div></th>';
   headerRow += '</tr>';
   tableHead.innerHTML = headerRow;
 }
@@ -276,11 +278,11 @@ function advancedSearchVisible(visible) {
   var searchOptions = document.getElementById("advancedSearchOptions");
   if (visible) {
     searchOptions.style.display = "flex";
-    advancedSearchButton.textContent = "Hide advanced search options";
+    advancedSearchButton.textContent = "Hide search options";
     stateObject.advancedSearchVisible = true;
   } else {
     searchOptions.style.display = "none";
-    advancedSearchButton.textContent = "Show advanced search options";
+    advancedSearchButton.textContent = "Show search options";
     stateObject.advancedSearchVisible = false;
   }
 }
@@ -322,12 +324,12 @@ function highlightMatch(queryString, rowData) {
         for (let key in rowData) {
            if (rowData.hasOwnProperty(key)) {
               if (typeof rowData[key] === 'string') {
-                 let value = rowData[key];
-                 let subWords = value.match(/(\w+)|(\W+)/g);
-                 let newString = "";
                  let wholeSubs = word.match(/(\w+)/g);
-                 if (wholeSubs.length > 0) {
+                 if (wholeSubs && wholeSubs.length > 0) {
                    for (let whole of wholeSubs) {
+                     let newString = "";
+                     let value = rowData[key];
+                     let subWords = value.match(/(\w+)|(\W+)/g);
                      for (let subWord of subWords) {
                        if ( whole.toLowerCase() === subWord.toLowerCase() ) {
                           newString += "<span class='highlight'>" + subWord + "</span>";
@@ -399,7 +401,7 @@ function populateTableAndInfo(jsonData) {
 
     var count = 0;
     for (var id in genomicEntries) {
-        highlightMatch(extraInfo.q, genomicEntries[id]);
+        highlightMatch(extraInfo.q.trim(), genomicEntries[id]);
         var dataRow = '<tr>';
         var browserUrl = id;
         var asmInfoUrl = id;
@@ -421,14 +423,14 @@ function populateTableAndInfo(jsonData) {
         dataRow += "<td>" + genomicEntries[id].year + "</td>";
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
-        var status =  "<td>" + genomicEntries[id].priority + " ";
+        var status =  "<td>";
         var hardSpace = "&nbsp;";
-        if (genomicEntries[id].refSeqCategory) {
-           status += " " + genomicEntries[id].refSeqCategory;
-           hardSpace = "";
-        }
         if (genomicEntries[id].versionStatus) {
            status += " " + genomicEntries[id].versionStatus;
+           hardSpace = "";
+        }
+        if (genomicEntries[id].refSeqCategory) {
+           status += " " + genomicEntries[id].refSeqCategory;
            hardSpace = "";
         }
         if (genomicEntries[id].assemblyLevel) {
@@ -448,7 +450,7 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q + "'</b>, ";
+    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q.trim() + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
       resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
     } else {
@@ -752,7 +754,7 @@ function makeRequest(query, browserExist, resultLimit) {
         let inQuote = false;
         words.forEach(function(word) {
           if (word.match(/^[-+]?"/)) {
-             if (word.match(/^[-+]/))
+             if (/^[-+]/.test(word))
                 queryPlus += " " + word; // do not add + to - or + already there
              else
                 queryPlus += " +" + word;
@@ -761,7 +763,7 @@ function makeRequest(query, browserExist, resultLimit) {
              queryPlus += " " + word; // space separates each word
              if (word.endsWith('"'))
                 inQuote = false;
-          } else if (word.match(/[^-+]/)) {
+          } else if (/^[-+]/.test(word)) {
             queryPlus += " " + word; // do not add + to - or + already there
           } else {
             queryPlus += " +" + word;
