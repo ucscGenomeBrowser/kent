@@ -61,7 +61,7 @@
             menu.style.display = 'block';
             menu.style.visibility = 'visible';
         };
-        const events = ['mouseover', 'pointermove','pointerenter', 'pointerout', 'pointerover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
+        const events = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
         // Add event listeners to keep the menu open
         events.forEach(event => {
             menu.addEventListener(event, makeVisible);
@@ -86,7 +86,7 @@
         };
 
         const events = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
-        // Add event listeners to keep the menu open
+        // Remove event listeners to keep the menu open
         events.forEach(event => {
              menu.removeEventListener(event, hideVisible);
         });
