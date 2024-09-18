@@ -3587,6 +3587,28 @@ function showExportedDataHubsPopup() {
     title = popUp.title;
     if (title.length === 0 && popUp.getAttribute("mouseovertext") !== "") {title = popUp.getAttribute("mouseovertext");}
     $('#exportedDataHubsPopup').dialog({width:'650', title: title});
+
+    // the below functions are defined in quickLift.js:
+    let treeDiv=$('#exportableTracksTree');
+    treeDiv.jstree({
+           //'plugins' : ['conditionalselect', 'contextmenu'],
+           //'contextmenu': { "items" : currentTrackItems},
+           //'dnd': {
+           //     "check_callback" : checkCallback,
+           //    'always_copy' : true,
+           //     is_draggable: isDraggable,
+           //},
+           'core' :  {
+               "data" : quickLift.buildTracks,
+               "check_callback" : quickLift.checkCallback,
+               "dblclick_toggle" : false,
+            },
+    });
+    treeDiv.on("ready.jstree", quickLift.trackTreeReady);
+    //treeDiv.on("select_node.jstree", function (evt, data)  {
+    //    $(evt.target).jstree("open_node", data.node);
+    //});
+    //treeDiv.on('click', '.jstree-themeicon ', plusHit);
 }
 
 // Show the recommended track sets popup

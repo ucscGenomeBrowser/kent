@@ -362,6 +362,9 @@ void printExportedDataHubs(char *db)
 if (!exportedDataHubsEnabled())
     return;
 
+puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
+puts("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n");
+jsIncludeFile("quickLift.js", NULL);
 hPrintf("<div style='display:none;' id='exportedDataHubsPopup' title='Add Tracks From Other Genomes'>\n");
 struct sqlConnection *conn = hConnectCentral();
 /*
