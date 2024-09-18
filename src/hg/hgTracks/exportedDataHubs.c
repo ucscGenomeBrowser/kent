@@ -216,7 +216,7 @@ else
 jsInlineF("{%s id:'%s',li_attr:{title:'%s',shortlabel:'%s', longlabel:'%s',color:'#%06x',name:'%s'},text:'%s (%s)',parent:'%s'}",userString, trackHubSkipHubName(tdb->track),title, escapeLabel(tdb->shortLabel), escapeLabel(tdb->longLabel), IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB),trackHubSkipHubName(tdb->track),escapeLabel(tdb->shortLabel),escapeLabel(tdb->longLabel),parent);
 }
 
-static void addVisibleTracks(struct hash *groupHash, struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
+static void addVisibleTracks(char *db, struct hash *groupHash, struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
 // add the visible tracks table rows.
 {
 struct trackDb *tdb;
@@ -240,7 +240,7 @@ if (tdbRefList != NULL)
     dyStringPrintf(rootChildren, ",children:true");
 dyStringPrintf(rootChildren, "}");
 
-jsInlineF("trackData['visible'] = [");
+jsInlineF("trackList['%s']['visible'] = [", db);
 for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
     {
     trackToClient("visible", tdbRef->tdb,  FALSE);
@@ -251,11 +251,11 @@ jsInlineF("];");
 }
 
 
-void subTracksToClient(char *arrayName, struct trackDb *parentTdb, boolean user)
+void subTracksToClient(char *db, char *arrayName, struct trackDb *parentTdb, boolean user)
 {
 if (parentTdb->subtracks == NULL)
     return;
-jsInlineF("%s['%s'] = [", arrayName, trackHubSkipHubName(parentTdb->track));
+jsInlineF("%s['%s']['%s'] = [", arrayName, db, trackHubSkipHubName(parentTdb->track));
 boolean first = TRUE;
 struct trackDb *tdb;
 for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
@@ -267,12 +267,11 @@ for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
     }
 jsInlineF("];");
 for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
-    subTracksToClient(arrayName,tdb, user);
+    subTracksToClient(db, arrayName,tdb, user);
 }
 
 static void doTable(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
 {
-jsInlineF("console.log(\"fromDb: '%s'\");", db); 
 struct grp *curGroup = NULL;
 struct hash *groupHash = newHash(10);
 int count = 0;
@@ -284,26 +283,16 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     hashAdd(groupHash, curGroup->name, curGroup);
     }
 
-jsInlineF("var collectionData = []; ");
-struct dyString *dyNames = dyStringNew(1024);
-struct dyString *dyLabels = dyStringNew(1024);
-jsInlineF("var collectionNames = [];");
-jsInlineF("var collectionLabels = [];");
-jsInlineF("collectionData['#'] = [];");
-
-jsInlineF("%s", dyNames->string);
-jsInlineF("%s", dyLabels->string);
-
-jsInlineF("var trackData = []; ");
+jsInlineF("var trackList = {'%s': {}};\n", db);
 struct dyString *rootChildren = dyStringNew(512);
-addVisibleTracks(groupHash, rootChildren, cart, trackList);
+addVisibleTracks(db, groupHash, rootChildren, cart, trackList);
 for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     {
     if (!isEmpty(rootChildren->string))
         dyStringPrintf(rootChildren, ",");
     dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'%s', text:'%s', parent:'#', children:true,li_attr:{title:'%s'}}", curGroup->name, escapeLabel(curGroup->label), FOLDER_TITLE);
     struct trackDb *tdb;
-    jsInlineF("trackData['%s'] = [", curGroup->name);
+    jsInlineF("trackList['%s']['%s'] = [", db, curGroup->name);
     boolean first = TRUE;
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
@@ -315,14 +304,14 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
             first = FALSE;
             }
         }
-    jsInlineF("];");
+    jsInlineF("];\n");
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if ( sameString(tdb->grp, curGroup->name))
-            subTracksToClient("trackData", tdb, FALSE);
+            subTracksToClient(db, "trackList", tdb, FALSE);
         }
     }
-jsInlineF("trackData['#'] = [%s];", rootChildren->string);
+jsInlineF("trackList['%s']['#'] = [%s];\n", db, rootChildren->string);
 }
 
 void writeTrackSelections(char *toDb, struct slName *fromDbs, struct sqlConnection *conn)
@@ -347,15 +336,19 @@ void writeFromDbSelection(char *toDb, struct slName *fromDbs, struct sqlConnecti
 {
 struct slName *fromDb;
 boolean doneOne = FALSE;
+hPrintf("<div>Please pick an assembly to port tracks FROM</div>");
 for (fromDb = fromDbs; fromDb != NULL; fromDb = fromDb->next)
     {
     if (!doneOne)
         {
         doneOne = TRUE;
         hPrintf("<select name='fromDb' id='quickLiftFromDb'>");
-        hPrintf("<option value='default'>Please pick an assembly to port tracks FROM</option>");
+        hPrintf("<option value='%s' selected>%s</option>", fromDb->name, fromDb->name);
         }
-    hPrintf("<option value='%s'>%s</option>", fromDb->name, fromDb->name);
+    else
+        {
+        hPrintf("<option value='%s'>%s</option>", fromDb->name, fromDb->name);
+        }
     }
 if (!doneOne)
     hPrintf("No quickLift chains available to this assembly. Please email us to request one");
