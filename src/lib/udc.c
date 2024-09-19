@@ -228,8 +228,19 @@ ioStats->bytesRead += bytesRead;
 return bytesRead;
 }
 
+static char * udcStopReadsMessage;  // if not-NULL then udcRead errAborts with message
+
+void udcReadStopMessage(char *message)
+// set message for errAbort on udcRead.  If message is NULL, no abort is made
+{
+udcStopReadsMessage = cloneString(message);
+}
+
 static void ourMustRead(struct ioStats *ioStats, int fd, void *buf, size_t size)
 {
+if (udcStopReadsMessage != NULL)
+    errAbort("%s", udcStopReadsMessage);
+
 ioStats->numReads++;
 ioStats->bytesRead += size;
 mustReadFd(fd, buf, size);

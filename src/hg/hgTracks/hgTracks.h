@@ -1842,5 +1842,8 @@ void maybeNewFonts(struct hvGfx *hvg);
 
 Color colorFromCart(struct track *tg, Color color);
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
+
+unsigned getParaLoadTimeout();
+// get the parallel load timeout if any
 #endif /* HGTRACKS_H */
 
