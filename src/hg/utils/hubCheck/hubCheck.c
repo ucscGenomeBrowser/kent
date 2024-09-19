@@ -780,6 +780,26 @@ if (errCatchStart(errCatch))
     char *type = trackDbRequiredSetting(tdb, "type");
     char *splitType[4];
     int numWords = chopByWhite(cloneString(type), splitType, sizeof(splitType));
+    char *trackType = splitType[0];
+    boolean isParentTrack = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
+    if (!isParentTrack &&
+            // these are the valid trackDb types for hub data tracks:
+            !(sameString("bigNarrowPeak", trackType) || sameString("bigBed", trackType) ||
+                    sameString("bigGenePred", trackType)  || sameString("bigPsl", trackType)||
+                    sameString("bigChain", trackType)|| sameString("bigMaf", trackType) ||
+                    sameString("bigBarChart", trackType) || sameString("bigInteract", trackType) ||
+                    sameString("bigLolly", trackType) || sameString("bigRmsk", trackType) ||
+                    sameString("bigWig", trackType) || sameString("longTabix", trackType) ||
+                    sameString("vcfTabix", trackType) || sameString("vcfPhasedTrio", trackType) ||
+                    sameString("bam", trackType) || sameString("hic", trackType)
+            #ifdef USE_HAL
+                    || sameString("halSnake", trackType)
+            #endif
+            ))
+        {
+        errAbort("error in type line \"%s\" for track \"%s\". The only valid types for tracks that are not composites, views or supertracks are: bigWig, bigBed and bigBed variants like bigGenePred/bigChain/bigBarChart/etc, longTabix, vcfTabix, vcfPhasedTrio, bam, hic and halSnake.", trackType, tdb->track);
+        }
+
     if (sameString(splitType[0], "bigBed"))
         {
         if (numWords > 1 && (strchr(splitType[1], '+') || strchr(splitType[1], '.')))

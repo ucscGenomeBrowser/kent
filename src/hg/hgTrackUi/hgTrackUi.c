@@ -3212,6 +3212,7 @@ if (!ajax)
     jsIncludeFile("jquery.tablednd.js", NULL);
     jsonObjectAddGlobal("track", newJsonString(tdb->track));
     jsonObjectAddGlobal("db", newJsonString(database));
+    jsIncludeFile("hui.js",NULL);
     }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];

@@ -83,6 +83,7 @@
 #include "decoratorUi.h"
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
+#include "signal.h"
 
 //#include "bed3Sources.h"
 
@@ -8580,6 +8581,33 @@ printf("'>Aliases</a></div>");
 #endif
 
 
+static void paraLoadTimeoutFunc(int sig)
+// signal handler for alarm timeout.   Tell parallel loads to stop by errAborts
+// in udcRead
+{
+udcReadStopMessage("Parallel read timeout message"); 
+alarm(0); // disable the alarm
+}
+
+unsigned getParaLoadTimeout()
+// get the parallel load timeout in milliseconds if any
+{
+char *cfg = cfgOption("paraLoadTimeout");
+
+if (cfg == NULL)
+    return 0;
+
+char *paraLoadTimeoutStr = cartOptionalString(cart, "paraLoadTimeout");
+if (paraLoadTimeoutStr == NULL)
+    paraLoadTimeoutStr = cfg;
+
+unsigned paraLoadTimeout = 0;
+if (paraLoadTimeoutStr != NULL)
+    paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
+
+return paraLoadTimeout;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8786,6 +8814,9 @@ trackList = windows->trackList;  // restore original track list
 // Loop over each window loading all tracks
 trackLoadingInProgress = TRUE;
 
+// see if we have a parallel load time out 
+unsigned paraLoadTimeout = getParaLoadTimeout();
+
 // LOAD OPTIMIZATION HACK GALT
 // This is an attempt to try to optimize loading by having multiple regions
 // treated as a single span.  The hack just grabs the dimensions of the first and last windows
@@ -8818,6 +8849,17 @@ for (window=windows; window; window=window->next)
 	if (currentWindow == windows) // first window
 	    winEnd = lastWinEnd; // so now we load the entire span inside the first window.
 	}
+
+    if (paraLoadTimeout)  // we stop loading after a number of milliseconds
+        {
+        struct sigaction siga;
+        siga.sa_handler = paraLoadTimeoutFunc;
+        siga.sa_flags = SA_RESTART;
+        sigaction(SIGALRM, &siga, NULL);
+        
+        udcReadStopMessage(NULL); // ask udcRead to NOT errAbort
+        ualarm(paraLoadTimeout * 1000, 0);
+        }
 
     /* pre-load remote tracks in parallel */
     int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
@@ -8910,6 +8952,12 @@ for (window=windows; window; window=window->next)
 	}
     }
 trackLoadingInProgress = FALSE;
+
+if (paraLoadTimeout)
+    {
+    udcReadStopMessage(NULL); // ask udcRead to NOT errAbort
+    alarm(0);
+    }
 
 setGlobalsFromWindow(windows); // first window // restore globals
 trackList = windows->trackList;  // restore track list
