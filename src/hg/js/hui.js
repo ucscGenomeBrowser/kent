@@ -1507,7 +1507,7 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         } else if (typeof cartHighlightColor !== "undefined" && cartHighlightColor.length > 0) {
             hlColor = cartHighlightColor;
         } else {
-            hlColor = hlColorDefault;
+            hlColor = cartColor;
         }
         return hlColor;
     };
