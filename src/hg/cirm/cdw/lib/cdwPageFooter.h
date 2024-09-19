@@ -16,6 +16,8 @@
       "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
       "<a href='https://sspsygene.ucsc.edu/resources/' target='_blank'>SSPsyGene Resource Page <i\n"
       "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
+      "<a  href='../sspsygeneTimeline.html' target='_blank'>SSPsyGene Timelines <i\n"
+      "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
       "</p>\n"
     "</div>\n"
 
