@@ -20,15 +20,17 @@ errAbort(
   "usage:\n"
   "   faToTwoBit in.fa [in2.fa in3.fa ...] out.2bit\n"
   "options:\n"
-  "   -long          use 64-bit offsets for index.   Allow for twoBit to contain more than 4Gb of sequence. \n"
-  "                  NOT COMPATIBLE WITH OLDER CODE.\n"
-  "   -noMask        Ignore lower-case masking in fa file.\n"
-  "   -stripVersion  Strip off version number after '.' for GenBank accessions.\n"
-  "   -ignoreDups    Convert first sequence only if there are duplicate sequence\n"
-  "                  names.  Use 'twoBitDup' to find duplicate sequences."
+  "   -long            use 64-bit offsets for index.   Allow for twoBit to contain more than 4Gb of sequence. \n"
+  "                    NOT COMPATIBLE WITH OLDER CODE.\n"
+  "   -noMask          Ignore lower-case masking in fa file.\n"
+  "   -stripVersion    Strip off version number after '.' for GenBank accessions.\n"
+  "   -ignoreDups      Convert first sequence only if there are duplicate sequence\n"
+  "                    names.  Use 'twoBitDup' to find duplicate sequences.\n"
+  "   -namePrefix=XX.  add XX. to start of sequence name in 2bit."
   );
 }
 
+char *namePrefix = "";
 boolean noMask = FALSE;
 boolean stripVersion = FALSE;
 boolean ignoreDups = FALSE;
@@ -39,6 +41,7 @@ static struct optionSpec options[] = {
    {"stripVersion", OPTION_BOOLEAN},
    {"ignoreDups", OPTION_BOOLEAN},
    {"long", OPTION_BOOLEAN},
+   {"namePrefix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -73,6 +76,7 @@ FILE *f;
 for (i=0; i<inFileCount; ++i)
     {
     char *fileName = inFiles[i];
+    char seqName[512];
     struct lineFile *lf = lineFileOpen(fileName, TRUE);
     struct dnaSeq seq;
     ZeroVar(&seq);
@@ -84,6 +88,10 @@ for (i=0; i<inFileCount; ++i)
 	    continue;
 	    }
 	    
+        /* add name prefix */
+        safef(seqName, sizeof(seqName), "%s%s", namePrefix, seq.name);
+        strcpy(seq.name, seqName);
+
         /* strip off version number */
         if (stripVersion)
             {
@@ -130,6 +138,7 @@ noMask = optionExists("noMask");
 stripVersion = optionExists("stripVersion");
 ignoreDups = optionExists("ignoreDups");
 useLong = optionExists("long");
+namePrefix = optionVal("namePrefix", namePrefix);
 dnaUtilOpen();
 faToTwoBit(argv+1, argc-2, argv[argc-1]);
 return 0;
