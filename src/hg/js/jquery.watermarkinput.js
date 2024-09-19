@@ -70,9 +70,9 @@
 						input.css("color",defaultColor);				
 				}
 
-				input.focus(clearMessage);
-				input.blur(insertMessage);								
-				input.change(insertMessage);
+				input.on("focus", clearMessage);
+				input.on("blur", insertMessage);								
+				input.on("change", insertMessage);
 				if (input[0] !== document.activeElement) {
 					insertMessage();
 				}

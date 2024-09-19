@@ -94,7 +94,7 @@ function exposeAll()
     if (visDD) {
         if ($(visDD).attr('selectedIndex') === 0) {
             $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
-	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
+	        $(visDD).trigger("change");// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
 
         // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
@@ -194,7 +194,7 @@ function _matSetMatrixCheckBoxes(state)
         if (this.checked !== state) {
             this.checked = state;
             matSubCBsetShadow(this,false);
-            $(this).change();  // NOTE: if "subCfg" then 'change' event will update it
+            $(this).trigger("change");  // NOTE: if "subCfg" then 'change' event will update it
         }
     });
     if (state)
@@ -309,7 +309,7 @@ function matSubCBcheckOne(subCB,state)
     if (subCB.checked !== state) {
         subCB.checked = state;
         matSubCBsetShadow(subCB,false);
-        $(subCB).change();  // NOTE: if "subCfg" then 'change' event will update it
+        $(subCB).trigger("change");  // NOTE: if "subCfg" then 'change' event will update it
         hideOrShowSubtrack(subCB);
     }
 }
@@ -334,7 +334,7 @@ function matSubCBsetShadow(subCB,triggerChange)
         if (typeof(subCfg) === "object") { // Is subCfg.js file included
             subCfg.enableCfg(subCB,(shadowState === 1));
             if (triggerChange)
-                $(subCB).change(); // 'change' event will update "subCfg"
+                $(subCB).trigger("change"); // 'change' event will update "subCfg"
         }
     }
 }
@@ -595,10 +595,10 @@ function compositeCfgRegisterOnchangeAction(prefix)    // FIXME: OBSOLETE when s
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
     var list = $("input[name^='"+prefix+".']").not("[name$='.vis']");
-    $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
+    $(list).on("change", function(){compositeCfgUpdateSubtrackCfgs(this);});
 
     list = $("select[name^='"+prefix+".']").not("[name$='.vis']");
-    $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
+    $(list).on("change", function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
 function subtrackCfgHideAll(table)
@@ -719,7 +719,7 @@ function showOrHideSelectedSubtracks(inp)
     if (arguments.length > 0)
         showHide=inp;
     else {
-        var onlySelected = $("input.allOrOnly'");
+        var onlySelected = $("input.allOrOnly");
         if (onlySelected.length > 0)
             showHide = onlySelected[0].checked;
         else
@@ -1203,7 +1203,7 @@ var superT = {
         if (thisForm && $(thisForm).length === 1) {
            thisForm = thisForm[0];
            $(thisForm).attr('action',obj.href); // just attach the straight href
-           $(thisForm).submit();
+           $(thisForm).trigger("submit");
            return false;  // should not get here!
         }
         return true;
@@ -1372,8 +1372,8 @@ var mat = { // Beginings of matrix object
                             function (e) {mat.cellHover(this,false);}
                         );
                         // blur doesn't work because the screen isn't repainted
-                        $(mat.matrix).blur(mat.clearGhostHilites());
-                        $(window).bind('focus',function (e) {mat.clearGhostHilites();});
+                        $(mat.matrix).on("blur", mat.clearGhostHilites());
+                        $(window).on('focus',function (e) {mat.clearGhostHilites();});
                     }
                 }
             }
@@ -1422,10 +1422,10 @@ function selectLinkChanges($changed, $affected, mapping) {
 // is disabled.  If $changed doesn't have a pickySetting, then all options
 // are enabled.
     var $affectedOptions = $affected.children('option');
-    $changed.bind("change", function () {
+    $changed.on("change", function () {
         var changedVal = $changed.val();
         var subst = mapping[changedVal];
-        $affectedOptions.removeAttr('disabled');
+        $affectedOptions.prop('disabled', false);
         if (subst) {
             var affectedVal = $affected.val();
             if (subst[affectedVal]) {
@@ -1456,7 +1456,7 @@ function multiWigSetupOnChange(track) {
 
 // toggle the visibility of advanced controls in the filters
 function advancedSearchOnChange(controlName) {
-        $(document.getElementById(controlName)).click(function() {
+        $(document.getElementById(controlName)).on("click", function() {
             // get the list of advanced controls 
             advancedControls = document.getElementsByClassName('advanced'); 
 
@@ -1471,8 +1471,7 @@ function advancedSearchOnChange(controlName) {
 
             for (var control in advancedControls ) 
                 advancedControls[control].style = newStyle;
-            }
-        );
+        });
 }
 
 
@@ -1507,7 +1506,7 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         } else if (typeof cartHighlightColor !== "undefined" && cartHighlightColor.length > 0) {
             hlColor = cartHighlightColor;
         } else {
-            hlColor = hlColorDefault;
+            hlColor = cartColor;
         }
         return hlColor;
     };
@@ -1563,12 +1562,12 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     $(inpSpec).spectrum(opt);
 
     // update the color picker if you change the input box
-    $(inpText).change(function() {
+    $(inpText).on("change", function() {
         $(inpSpec).spectrum("set", $(inpText).val());
         saveHlColor($(inpText).val(), trackName);
     });
     // Restore the default on Reset link click
-    $(inpResetLink).click(function() {
+    $(inpResetLink).on("click", function() {
         let hlDefault = hlColorDefault;
         $(inpText).val(hlDefault);
         $(inpSpec).spectrum("set", hlDefault);

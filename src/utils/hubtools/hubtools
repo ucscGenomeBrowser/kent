@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import logging, sys, optparse, os, json, subprocess, shutil
+import logging, sys, optparse, os, json, subprocess, shutil, string
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, relpath, abspath, splitext, isdir
 
@@ -27,6 +27,10 @@ def parseArgs():
     hubtools jbrowse <url> <db> : convert Jbrowse trackList.json files to hub.txt.
     - <url> is the URL to the Jbrowse2 installation, e.g. http://furlonglab.embl.de/FurlongBrowser/
     - <db> is assembly identifier 
+
+    hubtools tab <fname>: convert a hub.txt or trackDb.txt to tab-sep format, easier to bulk-edit with sed/cut/etc.
+    - <fname> is the input filename. "hub" and "genome" stanzas are skipped.
+    - output goes to stdout
 
     Examples:
     hubtools make hg38
@@ -306,6 +310,8 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
         indent = 0
         parentHasViews = False
 
+        groupMeta = {}
+
         if dirType=="comps":
             tdb = {
                     "track" : parentName,
@@ -353,7 +359,8 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
                 metaOverride(tdbViewSig, parentMeta)
                 writeStanza(ofh, indent, tdbViewSig)
         else:
-                groupMeta = parseMeta(subDir)
+            # no composites
+            groupMeta = parseMeta(subDir)
 
         for trackBase, typeFnames in typeDict.items():
             for fileType, absFnames in typeFnames.items():
@@ -452,7 +459,6 @@ def importJbrowse(baseUrl, db, outDir):
             tdb["visibility"] = "pack"
     
         writeStanza(ofh, 0, tdb)
-        
 
 def installModule(package):
     " install a package "
@@ -479,6 +485,56 @@ def uploadFiles(tdbDir):
         uploader = my_client.uploader(fpath, metadata=meta)
         uploader.upload()
 
+def iterRaStanzas(fname):
+    " parse an ra-style (trackDb) file and yield dictionaries "
+    data = dict()
+    with open(fname, "rt") as ifh:
+        for l in ifh:
+            l = l.lstrip(" ").rstrip("\r\n")
+            if len(l)==0:
+                yield data
+                data = dict()
+            else:
+                if " " not in l:
+                    continue
+                key, val = l.split(" ", maxsplit=1)
+                data[key] = val
+
+    if len(data)!=0:
+        yield data
+
+def raToTab(fname):
+    " convert .ra file to .tsv "
+    stanzas = []
+    allFields = set()
+    for stanza in iterRaStanzas(fname):
+        if "hub" in stanza or "genome" in stanza:
+            continue
+        allFields.update(stanza.keys())
+        stanzas.append(stanza)
+
+    if "track" in allFields:
+        allFields.remove("track")
+    if "shortLabel" in allFields:
+        allFields.remove("shortLabel")
+
+    sortedFields = sorted(list(allFields))
+    # make sure that track and shortLabel are first and always there, handy for manual edits
+    sortedFields.insert(0, "shortLabel")
+    sortedFields.insert(0, "track")
+
+    ofh = sys.stdout
+    ofh.write("#")
+    ofh.write("\t".join(sortedFields))
+    ofh.write("\n")
+
+    for s in stanzas:
+        row = []
+        for fieldName in sortedFields:
+            row.append(s.get(fieldName, ""))
+        ofh.write("\t".join(row))
+        ofh.write("\n")
+
 def hubt(args, options):
     """ get writeLn(ofh, indent, d .bb files under dirName and create a trackDb.txt for them"""
 
@@ -498,6 +554,8 @@ def hubt(args, options):
 
     if cmd=="jbrowse":
         importJbrowse(args[1], args[2], tdbDir)
+    elif cmd == "tab":
+        raToTab(args[1])
     elif cmd == "make":
         db = args[1]
         dirFiles = readDirs(inDir)

@@ -1442,21 +1442,6 @@ removeMetaData();
 
 void dispatch();
 
-void doTopCurl(struct sqlConnection *conn, char *addVar)
-{
-    htmlOpen("Curl command to get output");
-    puts("<p><tt>curl");
-    for (struct cgiVar *vars = cgiVarList(); vars!=NULL; vars=vars->next)
-    {
-        if ((sameOk(vars->name, "hgsid")) || (sameOk(vars->name, hgtaDoCurl) || sameOk(vars->name, hgtaDoCurlSelected)))
-            continue;
-        else
-            printf(" --data '%s=%s'", vars->name, vars->val);
-    }
-    printf(" --data '%s=submit' %shgTables</tt></p>", addVar, hLocalHostCgiBinUrl());
-    htmlClose();
-}
-
 void doTopSubmit(struct sqlConnection *conn)
 /* Respond to submit button on top level page.
  * This basically just dispatches based on output type. */
@@ -1480,8 +1465,6 @@ else
 	track = cTdb;
     }
 checkNoGenomeDisabled(database, table);
-
-
 if (track != NULL)
     {
     if (sameString(track->table, "gvPos") &&
@@ -1510,7 +1493,6 @@ if (doGreat())
     verifyGreatFormat(output);
 if (doGalaxy())
     verifyGalaxyFormat(output);
-
 if (sameString(output, outPrimaryTable))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
@@ -1595,17 +1577,6 @@ if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
-else if (cartVarExists(cart, hgtaDoCurl))
-    {
-    if (sameOk(cartOptionalString(cart, hgtaOutputType), outSelectedFields))
-        doTopSubmit(conn);
-    else
-        doTopCurl(conn, hgtaDoTopSubmit);
-    }
-else if (cartVarExists(cart, hgtaDoCurlSelected))
-    doTopCurl(conn, hgtaDoPrintSelectedFields);
-else if (cartVarExists(cart, hgtaDoCurlGenePredSequence))
-    doTopCurl(conn, hgtaDoGenePredSequence);
 else if (cartVarExists(cart, hgtaDoSchema))
     doSchema(conn);
 else if (cartVarExists(cart, hgtaDoTopSubmit))

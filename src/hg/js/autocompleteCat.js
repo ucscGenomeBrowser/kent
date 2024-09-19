@@ -44,7 +44,7 @@ var autocompleteCat = (function() {
                    // Hits to assembly hub top level (not individial db names) have no item label,
                    // so use the value instead
                    return $("<li></li>")
-                       .data("item.autocomplete", item)
+                       .data("ui-autocomplete-item", item)
                        .append($("<a></a>").html(clockIcon + (item.label !== null ? item.label : item.value)))
                        .appendTo(ul);
                }

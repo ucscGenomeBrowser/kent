@@ -467,6 +467,9 @@ if (1 == wordCount)
     /* already quoted, let it go as-is */
     if (startsWith("\"", words[0]) && endsWith(words[0],"\""))
 	doQuote = FALSE;
+    /* already wildcard, let it go as-is */
+    if (endsWith(words[0],"*"))
+	doQuote = FALSE;
     if (doQuote && hasWordBreaks(words[0]))
 	{
 	char *quotedWords = quoteWords(words[0]);

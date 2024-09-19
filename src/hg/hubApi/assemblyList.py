@@ -382,7 +382,7 @@ def processDbDbData(data, clades, years, ncbi):
         columns = row.split('\t')
         clade = clades.get(columns[0], "n/a")
         year = years.get(columns[0], "n/a")
-        gcAccession = ncbi.get(columns[0], "n/a")
+        gcAccession = ncbi.get(columns[0], "na")
         cladeP = cladePriority(clade)
 
         # corresponds with the SELECT statement
@@ -787,6 +787,7 @@ def main():
         clade = entry['clade']
         year = entry['year']
         gcAccession = entry['gcAccession']
+        description = entry['description']
         refSeqCategory = ""
         versionStatus = ""
         assemblyLevel = ""
@@ -797,8 +798,10 @@ def main():
               refSeqCategory = stat['refSeqCategory'].lower()
               versionStatus = stat['versionStatus'].lower()
               assemblyLevel = stat['assemblyLevel'].lower()
+            if gcAccession not in description:
+              description += " " + gcAccession
 
-        descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']}"
+        descr = f"{entry['sourceName']} {entry['taxId']} {description}"
         if year not in organism and year not in descr:
             descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
