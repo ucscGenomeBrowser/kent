@@ -826,7 +826,7 @@ if(doIdeo)
     if (!psOutput)
 	{
         hPrintf("</MAP>\n");
-	jsInline("$('area.cytoBand').click(function(){return false;});\n");
+	jsInline("$('area.cytoBand').on(\"click\", function(){return false;});\n");
 	}
     }
 
@@ -8533,7 +8533,7 @@ hPrintf("&nbsp;");
 // Not a submit button, because this is not a CGI function, it only calls Javascript function
 hPrintf("<button id='highlightThis' title='Add a highlight that covers the entire region shown<br><i>Keyboard shortcut:</i> h, "
         "then m'>Highlight</button>");
-jsInlineF("$('#highlightThis').click( function(ev) { highlightCurrentPosition('add'); return false; } );");
+jsInlineF("$('#highlightThis').on(\"click\", function(ev) { highlightCurrentPosition('add'); return false; } );");
 
 hPrintf("&nbsp;");
 hButtonWithMsg("hgt.hideAll", "Hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");

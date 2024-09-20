@@ -104,11 +104,11 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
         if (resetKeyPress !== false) {
             if (jQuery.imgAreaSelect.keyPress != docKeyPress)
-                jQuery(document).unbind(jQuery.imgAreaSelect.keyPress,
+                jQuery(document).off(jQuery.imgAreaSelect.keyPress,
                     jQuery.imgAreaSelect.onKeyPress);
 
             if (options.keys)
-                jQuery(document).bind(jQuery.imgAreaSelect.keyPress,
+                jQuery(document).on(jQuery.imgAreaSelect.keyPress,
                     jQuery.imgAreaSelect.onKeyPress = docKeyPress);
         }
     }
@@ -155,8 +155,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
             x1 = viewX(resize[H] == 'w' ? selection.x2 : selection.x1);
             y1 = viewY(resize[V] == 'n' ? selection.y2 : selection.y1);
 
-            jQuery(document).mousemove(selectingMouseMove);
-            $border2.unbind('mousemove', areaMouseMove);
+            jQuery(document).on("mousemove", selectingMouseMove);
+            $border2.off('mousemove', areaMouseMove);
 
             jQuery(document).one('mouseup', function (event) {
                 selection.event = event;
@@ -169,8 +169,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
                 options.onSelectEnd(img, selection, event);
 
-                jQuery(document).unbind('mousemove', selectingMouseMove);
-                $border2.mousemove(areaMouseMove);
+                jQuery(document).off('mousemove', selectingMouseMove);
+                $border2.on("mousemove", areaMouseMove);
             });
         }
         else if (options.movable) {
@@ -179,16 +179,16 @@ jQuery.imgAreaSelect.init = function (img, options) {
             startX = evX(event);
             startY = evY(event);
 
-            jQuery(document).mousemove(movingMouseMove)
+            jQuery(document).on("mousemove", movingMouseMove)
                 .one('mouseup', function (event) {
                     selection.event = event;
                     options.onSelectEnd(img, selection, event);
 
-                    jQuery(document).unbind('mousemove', movingMouseMove);
+                    jQuery(document).off('mousemove', movingMouseMove);
                 });
         }
         else
-            jQuery(img).mousedown(event);
+            jQuery(img).on("mousedown", event);
 
         return false;
     }
@@ -348,9 +348,9 @@ jQuery.imgAreaSelect.init = function (img, options) {
         $o.css('cursor', "crosshair"); // Outside of borders (needed for dragging right)
         $a.css('cursor', "crosshair"); // Inside borders (needed for dragging left)
 
-        jQuery(document).unbind('mouseup', cancelSelection)
-            .mousemove(selectingMouseMove);
-        $border2.unbind('mousemove', areaMouseMove);
+        jQuery(document).off('mouseup', cancelSelection)
+            .on("mousemove", selectingMouseMove);
+        $border2.off('mousemove', areaMouseMove);
 
         options.onSelectStart(img, selection);
 
@@ -364,8 +364,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
             //$o.css('cursor', ""); // Not even necessary
             //$a.css('cursor', "");
 
-            jQuery(document).unbind('mousemove', selectingMouseMove);
-            $border2.mousemove(areaMouseMove);
+            jQuery(document).off('mousemove', selectingMouseMove);
+            $border2.on("mousemove", areaMouseMove);
         });
     }
 
@@ -374,7 +374,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         // The default behavior of imgareaselect is to cancel selection if the user let's go of the mouse before
         // moving it; we change the behavior so we can treat this as a single click, centering event.
         selection.event = event;
-        jQuery(document).unbind('mousemove', startSelection);
+        jQuery(document).off('mousemove', startSelection);
         $a.add($o).hide();
 
         selection.x1 = selection.x2 = selX(startX = x1 = x2 = evX(event));
@@ -524,17 +524,17 @@ jQuery.imgAreaSelect.init = function (img, options) {
             d[0] / d[1] : null;
 
         if (options.disable || options.enable === false) {
-            $a.unbind('mousemove', areaMouseMove).unbind('mousedown', areaMouseDown);
-            jQuery(img).add($o).unbind('mousedown', imgMouseDown);
-            jQuery(window).unbind('resize', windowResize);
+            $a.off('mousemove', areaMouseMove).off('mousedown', areaMouseDown);
+            jQuery(img).add($o).off('mousedown', imgMouseDown);
+            jQuery(window).off('resize', windowResize);
         }
         else if (options.enable || options.disable === false) {
             if (options.resizable || options.movable)
-                $a.mousemove(areaMouseMove).mousedown(areaMouseDown);
+                $a.on("mousemove", areaMouseMove).on("mousedown", areaMouseDown);
 
             if (!options.persistent)
-                jQuery(img).add($o).mousedown(imgMouseDown);
-            jQuery(window).resize(windowResize);
+                jQuery(img).add($o).on("mousedown", imgMouseDown);
+            jQuery(window).on("resize", windowResize);
         }
 
         jQuery(options.parent).append($o.add($a));
@@ -542,11 +542,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
         options.enable = options.disable = undefined;
     };
 
-    if (jQuery.browser.msie)
-        jQuery(img).attr('unselectable', 'on');
-
-    jQuery.imgAreaSelect.keyPress = jQuery.browser.msie ||
-        jQuery.browser.safari ? 'keydown' : 'keypress';
+    jQuery.imgAreaSelect.keyPress = 'keypress';
+    
 
     $a.add($o).css({ display: 'none', position: fixed ? 'fixed' : 'absolute',
         overflow: 'hidden', zIndex: zIndex > 0 ? zIndex : '0' });

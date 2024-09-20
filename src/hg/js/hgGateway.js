@@ -727,7 +727,7 @@ var hgGateway = (function() {
                 // scroll the image to that species and clear the species autocomplete input.
                 onClick = setTaxId.bind(null, taxId, null, null, true, true);
                 // Onclick for both the icon and its sibling label:
-                $('.jwIconSprite' + name).parent().children().click(onClick);
+                $('.jwIconSprite' + name).parent().children().on("click", onClick);
                 haveIcon = true;
             } else {
                 // Inactive on this site -- hide it
@@ -811,7 +811,7 @@ var hgGateway = (function() {
         $stripe.attr('title', 'Click to scroll the tree display');
         $stripe.css('background-color', color);
         $stripe.height(stripeHeight);
-        $stripe.click(onClickStripe.bind(null, scrollTop));
+        $stripe.on("click", onClickStripe.bind(null, scrollTop));
         return $stripe;
     }
 
@@ -932,7 +932,7 @@ var hgGateway = (function() {
                                 containment: '#speciesGraphic',
                                 drag: onDragSlider
                                 });
-        $speciesPicker.scroll(onScrollImage);
+        $speciesPicker.on("scroll", onScrollImage);
     }
 
     function findScrollbarWidth() {
@@ -1281,7 +1281,7 @@ var hgGateway = (function() {
         selectedGene = null;
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
-        $('#positionInput').focus(function() {$(this).autocompleteCat("search", "");});
+        $('#positionInput').on("focus", function() {$(this).autocompleteCat("search", "");});
         if (uiState.db && $('#findPositionContents').css('display') === 'none') {
             initFindPositionContents();
         }
@@ -1533,7 +1533,7 @@ var hgGateway = (function() {
     function onClickCopyPosition() {
         // Copy the displayed position into the position input:
         var posDisplay = $('#positionDisplay').text();
-        $('#positionInput').val(posDisplay).focus();
+        $('#positionInput').val(posDisplay).trigger("focus");
     }
 
     function goToHgTracks() {
@@ -1564,7 +1564,7 @@ var hgGateway = (function() {
         function onSuccess(jqXHR, textStatus) {
             if (jqXHR.chromName !== null) {
                 $('body').append($form);
-                $form.submit();
+                $form.trigger("submit");
             } else  {
                 window.location.assign("../cgi-bin/hgSearch?search=" + searchTerm  + "&hgsid="+ window.hgsid );
             }
@@ -1587,7 +1587,7 @@ var hgGateway = (function() {
             // Make a form and submit it.  In order for this to work in IE, the form
             // must be appended to the body.
             $('body').append($form);
-            $form.submit();
+            $form.trigger("submit");
         } else {
             // User has entered a search term with no suggestion, go to the disambiguation
             // page so the user can choose a position
@@ -1668,11 +1668,11 @@ var hgGateway = (function() {
                                    onSelect: setDbFromAutocomplete,
                                    onServerReply: processSpeciesResults,
                                    enterSelectsIdentical: false });
-            $('#selectAssembly').change(onChangeDbMenu);
-            $('#positionDisplay').click(onClickCopyPosition);
-            $('#copyPosition').click(onClickCopyPosition);
-            $('.jwGoButtonContainer').click(goToHgTracks);
-            $(window).resize(setRightColumnWidth.bind(null, scrollbarWidth));
+            $('#selectAssembly').on("change", onChangeDbMenu);
+            $('#positionDisplay').on("click", onClickCopyPosition);
+            $('#copyPosition').on("click", onClickCopyPosition);
+            $('.jwGoButtonContainer').on("click", goToHgTracks);
+            $(window).on("resize", setRightColumnWidth.bind(null, scrollbarWidth));
             displaySurvey();
             replaceHgsidInLinks();
             // Fill in searchObj here once everything is displayed.

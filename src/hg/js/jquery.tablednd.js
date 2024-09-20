@@ -135,7 +135,7 @@ jQuery.tableDnD = {
             var cells = jQuery("td."+table.tableDnDConfig.dragHandle, table);
             cells.each(function() {
                 // The cell is bound to "this"
-                jQuery(this).mousedown(function(ev) {
+                jQuery(this).on("mousedown", function(ev) {
                     if(ev.button > 1)
                         return true;
                     if(jQuery.tableDnD == undefined)
@@ -143,7 +143,7 @@ jQuery.tableDnD = {
                     jQuery.tableDnD.dragObject = this.parentNode;
                     jQuery.tableDnD.currentTable = table;
                     jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
-                    config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
+                    config.dragStartIndex = $(jQuery.tableDnD.dragObject).prop('rowIndex');
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
                         config.onDragStart(ev, table, this.parentNode);  // UCSC
@@ -155,8 +155,8 @@ jQuery.tableDnD = {
 
                     // Capture the mouse move events only if dragStart
                     jQuery(document)
-                        .bind('mousemove', jQuery.tableDnD.mousemove)
-                        .bind('mouseup', jQuery.tableDnD.mouseup);
+                        .on('mousemove', jQuery.tableDnD.mousemove)
+                        .on('mouseup', jQuery.tableDnD.mouseup);
 
                     config.downOffset = 0;
                     config.upOffset = 0;
@@ -181,12 +181,12 @@ jQuery.tableDnD = {
                 // Iterate through each row, the row is bound to "this"
                 var row = jQuery(this);
                 if (! row.hasClass("nodrag")) {
-                    row.mousedown(function(ev) {
+                    row.on("mousedown", function(ev) {
                         if (ev.target.tagName == "TD") {
                             jQuery.tableDnD.dragObject = this;
                             jQuery.tableDnD.currentTable = table;
                             jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
-                            config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
+                            config.dragStartIndex = $(jQuery.tableDnD.dragObject).prop('rowIndex');
                             if (config.onDragStart) {
                                 // Call the onDrop method if there is one
                                 config.onDragStart(ev, table, this);
@@ -263,8 +263,8 @@ jQuery.tableDnD = {
         if(jQuery.tableDnD === undefined
         || jQuery.tableDnD.dragObject === null) {  //// UCSC Binding should occur at dragStart
             jQuery(document)
-                .unbind('mousemove')//, jQuery.tableDnD.mousemove);
-                .unbind('mouseup');//, jQuery.tableDnD.mouseup);
+                .off('mousemove')//, jQuery.tableDnD.mousemove);
+                .off('mouseup');//, jQuery.tableDnD.mouseup);
             return;
         }
         ///// UCSC if (jQuery.tableDnD.dragObject == null) {
@@ -436,8 +436,8 @@ jQuery.tableDnD = {
     mouseup: function(e) {
         if(jQuery.tableDnD == undefined) {
             jQuery(document)
-                .unbind('mousemove')//, jQuery.tableDnD.mousemove);
-                .unbind('mouseup');//, jQuery.tableDnD.mouseup);
+                .off('mousemove')//, jQuery.tableDnD.mousemove);
+                .off('mouseup');//, jQuery.tableDnD.mouseup);
             return;
         }
         if (jQuery.tableDnD.currentTable && jQuery.tableDnD.dragObject) {

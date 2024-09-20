@@ -1191,10 +1191,10 @@ span.gbSessionChanged {
 
 .dialogNewWindowIcon {
     position: absolute;
-    right: 1.4em;
+    right: 1.5em;
     top: 50%;
     width: 19px;
-    margin: -8px 0 0 0;
+    margin: -10px 0 0 0;
     padding: 1px;
     height: 18px;
 }
