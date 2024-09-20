@@ -36,6 +36,8 @@ my $vgpIndex = 0;
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
 my $hprcIndex = 0;
 $hprcIndex = 1 if ($Name =~ m/hprc/i);
+my $brcIndex = 0;
+$brcIndex = 1 if ($Name =~ m/brc/i);
 
 my $assemblyTotal = 0;	# complete list of assemblies in this group
 my $asmCount = 0;	# count of assemblies completed and in the table
@@ -110,6 +112,27 @@ END
 This assembly hub contains assemblies released
 by the <a href='https://humanpangenome.org/' target=_blank>
 Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } elsif ($brcIndex) {
+    print <<"END";
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="BRC - Bioinformatics Research Center - assembly statistics" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>BRC - Bioinformatics Research Center - assembly statistics</h1>
+<p>
+<a href='https://brc-analytics.org/' target=_blank>
+<img src='BRClogo.svg' height=26 alt='BRC logo'></a></p>
+<p>
+This site will provide data access to genomes and annotations for all
+eukaryotic pathogens, host taxa, and vectors previously served by
+VEuPathDB. This is a part of the BRC Analytics project funded by the NIAID.
+For more information, see also:
+<a href=' https://brc-analytics.org' target=_blank>brc-analytics.org</a>
 </p>
 
 END
