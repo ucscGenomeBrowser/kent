@@ -8,7 +8,7 @@ my $thisMachine = `uname -n`;
 chomp $thisMachine;
 
 if ($thisMachine ne "hgdownload") {
-  if ($thisMachine ne "hgdownload1") {
+  if ($thisMachine ne "hgdownload1" && $thisMachine ne "hgdownload2") {
     if ($thisMachine ne "hgdownload1.soe.ucsc.edu") {
      printf STDERR "# NOTE: This script is only used on hgdownload\n";
      exit 255;
