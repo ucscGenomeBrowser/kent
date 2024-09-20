@@ -6,15 +6,6 @@ type bed
 group map
 compositeTrack on
 
-track itr
-longLabel ITR Annotations from Alex Gener
-shortLabel ITR Annotations
-parent masks
-itemRgb on
-bigDataUrl  /gbdb/mpxvRivers/mask/itr.bb
-mouseOverField comment
-type bigBed 9 +
-
 track squirrel
 longLabel Mask used by Squirrel
 shortLabel Squirrel Mask
@@ -28,3 +19,12 @@ shortLabel Nextstrain Mask
 parent masks
 bigDataUrl  /gbdb/mpxvRivers/mask/nextstrain.bb
 type bigBed 4
+
+track itr
+longLabel ITR Annotations from Alex Gener
+shortLabel ITR Annotations
+parent masks
+itemRgb on
+bigDataUrl  /gbdb/mpxvRivers/mask/itr.bb
+mouseOverField comment
+type bigBed 9 +

@@ -2,6 +2,7 @@ import subprocess, sys
 from collections import defaultdict
 #from array import array
 import numpy as np
+import json
 
 # based on revelToWig.py in kent/src/hg/makeDb/scripts/revel/
 # two arguments: chrom.sizes and input filename 
@@ -14,6 +15,8 @@ def parseChromSizes(chromSizesFname):
     chromSizes = {}
     for line in open(chromSizesFname):
         chrom, size = line.strip().split()
+        #if chrom!="chr21":
+            #continue
         size = int(size)
         chromSizes[chrom] = size
     return chromSizes
@@ -29,19 +32,45 @@ def initValues(chromSizes, chrom):
     print('arrays done')
     return arrs
 
+def outTransIds(chrom, pos, ref, prevTransIds, bedFh):
+    " output features of all (alt, score, transId) to bed file. We need to output all we have at this position "
+    #print(chrom, pos, ref, alt, revel, prevTransIds)
+    start = pos
+    chrom = "chr"+chrom
+    for alt, scoreTransList in prevTransIds.items():
+        tableDict = {}
+        tableLines = []
+        mouseOvers = []
+        for revelScore, transIdStr in scoreTransList:
+            mouseOvers.append("transcript %s -> score %f" % (transIdStr, revelScore))
+            #tableLines.append(transIdStr.replace(",", ", ")+"|"+str(revelScore))
+            assert(transIdStr not in tableDict)
+            tableDict[transIdStr] = str(revelScore)
+
+        #bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, ";".join(tableLines), ", ".join(mouseOvers))
+        bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, json.dumps(tableDict), ", ".join(mouseOvers))
+        bed = [str(x) for x in bed]
+        bedFh.write("\t".join(bed))
+        bedFh.write("\n")
+
+#def inputLinePos(fname, chromSizes):
+
 def inputLineChunk(fname, chromSizes):
     " read all values for one chrom and return as four arrays, -1 means 'no value'"
     # chr,hg19_pos,grch38_pos,ref,alt,aaref,aaalt,REVEL
     values = []
-    prevTransIds = {}
+    prevTransIds = defaultdict(list)
 
     if fname.endswith(".gz"):
         ifh = subprocess.Popen(['zcat', fname], stdout=subprocess.PIPE, encoding="ascii").stdout
     else:
         ifh = open(fname)
 
-    chromValues = initValues(chromSizes, "chr1")
-    lastChrom = "1"
+    #chromValues = initValues(chromSizes, "chr1")
+    lastChrom = None
+    prevPos = None
+    prevRef = None
+    doTrans = False
     for line in ifh:
         if line.startswith("chr"):
             continue
@@ -58,37 +87,41 @@ def inputLineChunk(fname, chromSizes):
         # the file has duplicate values in the hg38 column, but for different hg19 positions!
         revel = float(revel)
 
-        if chrom != lastChrom and lastChrom!=None:
-            yield lastChrom, chromValues
+        if pos!=prevPos:
+
+            if doTrans:
+                outTransIds(lastChrom, prevPos, prevRef, prevTransIds, bedFh)
+            prevTransIds = defaultdict(list)
+            doTrans = False
+
+        if chrom != lastChrom:
+            if lastChrom!=None:
+                yield lastChrom, chromValues
             lastChrom = chrom
             chromValues = initValues(chromSizes, "chr"+chrom)
-            prevTransIds = {}
+            prevTransIds = defaultdict(list)
+            doTrans = False
 
         nuclIdx = "ACGT".find(alt)
 
-        #chromValues[nuclIdx][pos] = revel
         oldVal = chromValues[nuclIdx][pos]
         if oldVal != -1 and oldVal != revel:
-            # OK, we know that we have two values at this position for this alt allele now
-            # so we write the original transcriptId and the current one to the BED file
-            start = pos
-            chrom = "chr"+chrom
-            bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, prevTransIds[(alt, oldVal)], oldVal)
-            bed = [str(x) for x in bed]
-            bedFh.write("\t".join(bed))
-            bedFh.write("\n")
-            bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, transId, revel)
-            bed = [str(x) for x in bed]
-            bedFh.write("\t".join(bed))
-            bedFh.write("\n")
-            # and only keep the maximum in the bigWig
+            # OK, we know that we have at least two different revel values at this position for this alt allele now
+            # so we set a flag that for this position, we must output all the alts, their scores, and transIds
+            # also, we always use the worst score per position, when there are overlaps
+            doTrans = True
             revel = max(oldVal, revel)
 
         chromValues[nuclIdx][pos] = revel
-        prevTransIds[(alt, revel)] = transId
+        prevTransIds[alt].append((revel, transId))
+        prevPos = pos
+        prevRef = ref
+        prevRevel = revel
 
 
     # last line of file
+    if doTrans:
+        outTransIds(lastChrom, prevPos, prevRef, prevTransIds, bedFh)
     yield chrom, chromValues
 
 chromSizesFname = sys.argv[1]
@@ -106,6 +139,7 @@ chromSizes = parseChromSizes(chromSizesFname)
 bedFh = open("overlap.bed", "w")
 
 for chrom, nuclValues in inputLineChunk(fname, chromSizes):
+    #print(chrom, nuclValues, len(nuclValues[0]))
     if len(nuclValues)==0:
         continue
 

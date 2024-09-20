@@ -10,6 +10,7 @@
 #include "filePath.h"
 #include "linefile.h"
 #include "jsHelper.h"
+#include "web.h"
 
 #define CGI_NAME "cgi-bin/hgMenubar"
 #define NAVBAR_INC_PATH "/inc/globalNavBar.inc"
@@ -29,6 +30,7 @@ printf ("<script type='text/javascript' SRC='%sjs/jquery.js'></script>\n", baseD
 printf ("<script type='text/javascript' SRC='%sjs/jquery.plugins.js'></script>\n", baseDir);
 printf("<script type='text/javascript' SRC='%s/js/utils.js'></script>\n", baseDir);
 printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css'>\n", baseDir);
+webIncludeLocalJs();
 }
 
 void printMenuBar(char *cgiPath, char *docRoot, char *pagePath, char *filePath)

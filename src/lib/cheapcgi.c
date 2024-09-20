@@ -942,9 +942,15 @@ while (namePt != NULL && namePt[0] != 0)
     hashAddSaveName(hash, namePt, el, &el->name);
     namePt = nextNamePt;
     }
+
 slReverse(&list);
 *retList = list;
 *retHash = hash;
+
+// GA4 adds these two vars for cross-site tracking. This was an easy way to get rid of them
+cgiVarExclude("_gl");
+cgiVarExclude("_ga");
+
 }
 
 static jmp_buf cgiParseRecover;

@@ -116,9 +116,9 @@ if (hguid)
     }
 /* send database and organism and table for Galaxy's info. If hub is genark, strip off hub_#_ prefix */
 char *galaxyDb = database;
-char *skipHubDb = trackHubSkipHubName(galaxyDb);
-if ((skipHubDb != NULL) && startsWith("GC",  skipHubDb))
-    galaxyDb = skipHubDb;
+//char *skipHubDb = trackHubSkipHubName(galaxyDb);
+//if ((skipHubDb != NULL) && startsWith("GC",  skipHubDb))
+    //galaxyDb = skipHubDb;
 cgiMakeHiddenVar("db", galaxyDb);
 if (cartVarExists(cart, "org"))
     cgiMakeHiddenVar("org", cartString(cart, "org"));

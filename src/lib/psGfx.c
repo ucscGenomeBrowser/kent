@@ -511,6 +511,28 @@ else
     fprintf(f, "[] 0 setdash\n");
 }
 
+char * convertPdfToSvg(char *pdfFile) 
+/* Convert PDF to SVG in same directory as PDF and return new filename */
+{
+char *svgFile=NULL;
+svgFile = cloneString(pdfFile);
+chopSuffix(svgFile);
+svgFile = addSuffix(svgFile, ".svg");
+
+struct pipeline *pl = NULL;
+char *pipeCmd[] = { "pdftocairo", "-svg", pdfFile, svgFile, NULL } ;
+pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL, 0);
+
+int sysVal = 0;
+sysVal = pipelineWait(pl);
+if(sysVal != 0) 
+    {
+    freez(&svgFile);
+    return NULL;
+    }
+return svgFile;
+}
+
 char * convertEpsToPdf(char *epsFile) 
 /* Convert EPS to PDF and return filename, or NULL if failure. */
 {

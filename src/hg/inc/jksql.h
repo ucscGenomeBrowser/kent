@@ -612,6 +612,9 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
 void sqlSetParanoid(boolean beParanoid);
 /* If set to TRUE, will make more diagnostic stderr messages. */
 
+void sqlSetIsUcscMirror(boolean isMirror);
+/* If set to TRUE, will ask user to email genome-www and show links to main mirror. */
+
 boolean sqlIsRemote(struct sqlConnection *conn);
 /* test if the conn appears to be to a remote system.
  * Current only tests for a TCP/IP connection */

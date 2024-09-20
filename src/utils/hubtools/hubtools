@@ -17,9 +17,16 @@ def parseArgs():
     - for every filename, the part before the first dot becomes the track base name
     - if a directory has more than 80% of track base names with both a bigBed
       and bigWig file, views are activated for this composite
-    - track attributes can be changed using tracks.tsv or tracks.json files, in
-      each top or subdirectory
-    - tracks.tsv must have a first column named 'track'.
+    - track attributes can be changed using tracks.tsv or json/ra/yaml files, in
+      each top or subdirectory. Both subdir and top directory are searched, subdir
+      values override any values specified in a parent directory.
+    - tracks.tsv (or tracks.json/ra/yaml) must have a first column named 'track'. For json and yaml,
+      the key is the track name. "hub" is a special key to provide email/shortLabel of the hub.
+    - the track name in this column can be either the full one <parent>__fileBasename__type or just
+      the fileBasename, this makes it easier. In practice, filenames are unique enough and don't
+      usually clash between subdirs or filetype, in practice.
+    - the track order is the one on disk, so relatively random. To order tracks, create a hub,
+      use the "tab" command below, reorder tracks in tsv file, then re-run the "make" command.
 
     hubtools up: upload files to hubSpace
     - needs ~/.hubt.conf with username and password. Create one with 'hubt conf'
@@ -27,16 +34,18 @@ def parseArgs():
 
     hubtools jbrowse <url> <db> : convert Jbrowse trackList.json files to hub.txt.
     - <url> is the URL to the Jbrowse2 installation, e.g. http://furlonglab.embl.de/FurlongBrowser/
-    - <db> is assembly identifier 
+    - <db> is assembly identifier
 
     hubtools tab <fname>: convert a hub.txt or trackDb.txt to tab-sep format, easier to bulk-edit with sed/cut/etc.
+       The resulting file if named tracks.tsv can be used as inputs for future runs.
     - <fname> is the input filename. "hub" and "genome" stanzas are skipped.
     - output goes to stdout
 
     Examples:
-    hubtools make hg38
     hubtools jbrowse http://furlonglab.embl.de/FurlongBrowser/ dm3
-    hubtools tab hub.txt > tracks.tsv
+    hubtools make hg38
+    hubtools tab hub.txt | cut -f1-3 > tracks.tsv # then edit tracks.tsv
+    hubtools make hg38 # will pick up tracks.tsv edits to create a new hub.txt
 
     tracks.json can look like this:
     { "hub" : {"hub": "mouse_motor_atac", "shortLabel":"scATAC-seq Developing Cranial Motor Neurons"} }
@@ -140,30 +149,33 @@ def parseMetaYaml(fname):
         except yaml.YAMLError as exc:
             logging.error(exc)
 
-def parseMeta(inDir):
-    " parse a tab-sep file with headers and return an ordered dict firstField -> dictionary "
-    fname = join(inDir, "tracks.tsv")
+def parseMeta(inDirs):
+    """ parse a tab-sep file with headers and return an ordered dict firstField -> dictionary.
+    Takes a list of input directories and the last directory overrides values in parent directories.
+    """
     meta = OrderedDict()
-    if isfile(fname):
-        tsvMeta = parseMetaTsv(fname)
-        meta = allMetaOverride(meta, tsvMeta)
+    for inDir in inDirs:
+        fname = join(inDir, "tracks.tsv")
+        if isfile(fname):
+            tsvMeta = parseMetaTsv(fname)
+            meta = allMetaOverride(meta, tsvMeta)
 
-    fname = join(inDir, "tracks.json")
-    if isfile(fname):
-        jsonMeta = parseMetaJson(fname)
-        meta = allMetaOverride(meta, jsonMeta)
+        fname = join(inDir, "tracks.json")
+        if isfile(fname):
+            jsonMeta = parseMetaJson(fname)
+            meta = allMetaOverride(meta, jsonMeta)
 
-    fname = join(inDir, "tracks.ra")
-    if isfile(fname):
-        raMeta = parseMetaRa(fname)
-        meta = allMetaOverride(meta, raMeta)
+        fname = join(inDir, "tracks.ra")
+        if isfile(fname):
+            raMeta = parseMetaRa(fname)
+            meta = allMetaOverride(meta, raMeta)
 
-    fname = join(inDir, "tracks.yaml")
-    if isfile(fname):
-        yamlMeta = parseMetaYaml(fname)
-        meta = allMetaOverride(meta, yamlMeta)
+        fname = join(inDir, "tracks.yaml")
+        if isfile(fname):
+            yamlMeta = parseMetaYaml(fname)
+            meta = allMetaOverride(meta, yamlMeta)
 
-    logging.debug("Got meta from %s: %s" % (inDir, str(meta)))
+        logging.debug("Got meta from %s: %s" % (inDir, str(meta)))
     return meta
 
 def writeHubGenome(ofh, db, inMeta):
@@ -383,7 +395,7 @@ def reorderTracks(fileDict, meta):
     assert(len(newFiles)==len(fileDict))
     return newFiles
 
-def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
+def makeTrackDbEntries(inDir, dirDict, dirType, tdbDir, ofh):
     " given a dict with basename -> type -> filenames, write track entries to ofh "
     # this code is getting increasingly complex because it supports composites/views and pairing of bigBed/bigWig files
     # either this needs better comments or maybe a separate code path for this rare use case
@@ -393,11 +405,11 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
 
     for parentName, typeDict in fnameDict.items():
         if parentName is None: # top level tracks: use top tracks.tsv
-            subDir = inDir
-        else: # container tracks -> use tracks.tsv in the subdirectory
-            subDir = join(inDir, parentName)
+            subDirs = [inDir]
+        else: # container tracks -> use tracks.tsv in the parent and subdirectory
+            subDirs = [inDir, join(inDir, parentName)]
 
-        parentMeta = parseMeta(subDir)
+        parentMeta = parseMeta(subDirs)
 
         indent = 0
         parentHasViews = False
@@ -427,7 +439,7 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
 
             if parentHasViews:
                 # we have composites with paired files? -> write the track stanzas for the two views
-                groupMeta = parseMeta(subDir)
+                groupMeta = parseMeta(subDirs)
                 tdbViewPeaks = {
                         "track" : parentName+"ViewPeaks",
                         "shortLabel" : parentName+" Peaks",
@@ -454,7 +466,7 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
                 writeStanza(ofh, indent, tdbViewSig)
         else:
             # no composites
-            groupMeta = parseMeta(subDir)
+            groupMeta = parseMeta(subDirs)
 
         typeDict = reorderTracks(typeDict, groupMeta)
 
@@ -663,18 +675,17 @@ def hubt(args, options):
     elif cmd == "make":
         db = args[1]
 
-        meta = parseMeta(inDir)
+        meta = parseMeta([inDir])
         dirFiles = readDirs(inDir, meta)
 
         hubFname = join(tdbDir, "hub.txt")
         logging.info("Writing %s" % hubFname)
         ofh = open(hubFname, "w")
 
-        meta = parseMeta(inDir)
         writeHubGenome(ofh, db, meta)
 
-        writeTdb(inDir, dirFiles, "top", tdbDir, ofh)
-        writeTdb(inDir, dirFiles, "comps", tdbDir, ofh)
+        makeTrackDbEntries(inDir, dirFiles, "top", tdbDir, ofh)
+        makeTrackDbEntries(inDir, dirFiles, "comps", tdbDir, ofh)
 
         ofh.close()
     else:

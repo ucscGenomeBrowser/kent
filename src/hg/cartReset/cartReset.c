@@ -34,7 +34,8 @@ if (problem)
 	   "Request for destination=[%s] rejected.\n", destination);
     }
 cartResetInDb(hUserCookie());
-resetLocalStorage();
+if (!cgiVarExists("skipLs"))
+    resetLocalStorage();
 }
 
 int main(int argc, char *argv[])

@@ -346,18 +346,18 @@ if (pt != gappedPeak)
 else  /* must be gappedPeak */
 /* deal with thickStart, thickEnd, itemRgb even though they're not used */
     {
-    int thickStart = lineFileNeedNum(lf, row, 6);
-    int thickEnd = lineFileNeedNum(lf, row, 7);
-    int itemRgb = 0;
-    char *comma;
+    //int thickStart = lineFileNeedNum(lf, row, 6);
+    //int thickEnd = lineFileNeedNum(lf, row, 7);
+    //int itemRgb = 0;
+    //char *comma;
     /*	Allow comma separated list of rgb values here	*/
-    comma = strchr(row[8], ',');
-    if (comma)
-	itemRgb = bedParseRgb(row[8]);
-    else
-	itemRgb = lineFileNeedNum(lf, row, 8);
-    if ((thickStart != 0) || (thickEnd != 0) || (itemRgb != 0))
-	lineFileAbort(lf, "thickStart, thickEnd, and itemRgb columns not used in gappedPeak type, set all to 0");
+    //comma = strchr(row[8], ',');
+    //if (comma)
+	//itemRgb = bedParseRgb(row[8]);
+    //else
+	//itemRgb = lineFileNeedNum(lf, row, 8);
+    //if ((thickStart != 0) || (thickEnd != 0) || (itemRgb != 0))
+	//lineFileAbort(lf, "thickStart, thickEnd, and itemRgb columns not used in gappedPeak type, set all to 0");
     }
 /* Deal with blocks */
 if ((pt == gappedPeak) || (pt == encodePeak))

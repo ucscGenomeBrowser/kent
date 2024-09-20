@@ -8580,6 +8580,33 @@ printf("'>Aliases</a></div>");
 }
 #endif
 
+void printGlobalTrackControls() {
+
+puts("<tr><td colspan='8'>");
+puts("<label for='hubSelect'>Third-party tracks:</label>");
+puts("<select style='width:200px' id='hubSelect' name='hubUrl'>");
+struct sqlConnection *conn = hConnectCentral();
+char query[1000];
+sqlSafef(query, sizeof(query), "SELECT hubUrl, shortLabel FROM hubPublic WHERE dbList like '%%%s%%'", database);
+struct sqlResult *sr = sr = sqlGetResult(conn, query);
+
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *hubUrl = row[0];
+    char *shortLabel = row[1];
+
+    printf("<option value='%s'>%s</option>\n", hubUrl, shortLabel);
+    }
+sqlFreeResult(&sr);
+puts("</select>");
+hPrintf("<input type='submit' name='hgt.refresh' value='Connect' "
+        "title='Update image with your changes'>\n");
+hDisconnectCentral(&conn);
+puts("</td></tr>");
+
+jsInline("$(document).ready(function() { $('#hubSelect').selectize()});\n");
+}
 
 static void paraLoadTimeoutFunc(int sig)
 // signal handler for alarm timeout.   Tell parallel loads to stop by errAborts
@@ -9231,6 +9258,15 @@ if (!hideControls)
         }
     hPrintf("<BR>\n");
 
+    char* lastHgvsDb = cartOptionalString(cart, "lastHgvsDb");
+    if (lastHgvsDb) 
+        {
+        char* lastHgvsPos = cartOptionalString(cart, "lastHgvsPos");
+        char* lastHgvsTerm = cartOptionalString(cart, "lastHgvsTerm");
+        if (lastHgvsPos && lastHgvsTerm)
+            printf("<b>Variant in Focus:</b> %s, %s<br>", lastHgvsPos, lastHgvsTerm);
+        }
+
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
@@ -9561,6 +9597,9 @@ if (!hideControls)
         hButtonWithOnClick("hgt.expandGroups", "Expand all", "Expand all track groups",
                            "return vis.expandAllGroups(true)");
         hPrintf("</td></tr>");
+
+        if (cfgOptionBooleanDefault("newTrackControls", FALSE))
+            printGlobalTrackControls();
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
         struct hash *superHash = hashNew(8);
@@ -9959,31 +9998,59 @@ if(!trackImgOnly)
 
     printf("<div style=\"margin: 10px\">\n");
     printf("<H1>PDF Output</H1>\n");
-    printf("PDF images can be printed with Acrobat Reader "
+    printf("<P>PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
-           "Illustrator or Inkscape.<BR>");
+           "Illustrator or Inkscape.</P>");
+    printf("<H3>Preview</H3>\n");
     }
+
+// user can land at this page from hgTracks, which doesn't set the special variables, or from this page, which sets the special variables
+boolean doShowGuides = cartUsualBoolean(cart, "guidelines", TRUE);
+
+if (cgiVarExists("guidelines_off"))
+    doShowGuides = FALSE;
+
+char *guideVal = "";
+if (!doShowGuides)
+    guideVal = "&guidelines_off=1";
+
+printf("<p><div id='wrap' style='width:800px; height:400px'><IFRAME style='width:1600px; height:800px; background-color: grey; overflow:scroll; transform: scale(0.5); transform-origin: top left; border-style:none; border: 2px solid black' src=\"hgRenderTracks?%s=%s%s\"></IFRAME></DIV></p>\n", cartSessionVarName(), cartSessionId(cart), guideVal);
+
+puts("<p>");
+puts("<form>\n");
+
+char *guideAttr = "";
+if (!doShowGuides)
+    guideAttr = " checked";
+
+//printf("doShowGuides %d, guideVal %s guideAttr %s", doShowGuides, guideVal, guideAttr);
+
+//if (cartCgiUsualBoolean(cart, "PdfNoGuides", FALSE))
+    //cartSetString(cart, "guidelines", "off");
+
+printf("<label><input type='CHECKBOX' name='guidelines_off' value='off'%s>Hide blue guidelines</label><br>\n", guideAttr);
+puts("<input type='hidden' name='hgt.psOutput' value='on' />");
+puts("<input type='submit' value='Update preview image' />");
+puts("</form></p>\n");
+
 doTrackForm(psTn.forCgi, &ideoPsTn);
 
+//if (cgiBoolean("PdfNoGuides"))
+    //cartSetString(cart, "guidelines", "on");
+
 pdfFile = convertEpsToPdf(psTn.forCgi);
+char *svgFile = convertPdfToSvg(pdfFile);
+
 if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
 if (pdfFile != NULL)
     {
-    printf("<UL style=\"margin-top:5px;\">\n");
-    printf("<LI>Download <A TARGET=_blank HREF=\"%s\">"
-       "the current browser graphic in PDF</A>\n", pdfFile);
+    printf("<A HREF=\"%s\"><button>Download browser graphic PDF</button></A>\n", pdfFile);
+    printf("<A HREF=\"%s\"><button>Download browser graphic SVG</button></A>\n", svgFile);
     if (ideoPdfFile != NULL)
-        printf("<LI>Download <A TARGET=_blank HREF=\"%s\">"
-               "the current chromosome ideogram in PDF</A>\n", ideoPdfFile);
-    printf("</UL>\n");
+        printf("<A HREF=\"%s\"><button>Download chromosome ideogram</button></A>\n", ideoPdfFile);
     freez(&pdfFile);
     freez(&ideoPdfFile);
-
-    printf("EPS (PostScript) output has been discontinued in pursuit of additional features\n");
-    printf("that are not PostScript-compatible.  If you require PostScript output for your\n");
-    printf("workflow, please <a href='https://genome.ucsc.edu/contacts.html'>reach out to us</a>\n");
-    printf("and let us know what your needs are - we may be able to help.\n");
 
     // see redmine #1077
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
@@ -10026,6 +10093,10 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+
+if (cgiVarExists("guidelines_off")) 
+    withGuidelines = FALSE;
+
 if (!cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
@@ -10188,16 +10259,40 @@ if (h && h->db && sameString(h->db, database))
 static void setupTimeWarning()
 /* add javascript that outputs a warning message if page takes too long to load */
 {
-char *maxTimeStr = cfgOption("warnSeconds");
+char *maxTimeStr = cfgOptionDefault("warnSeconds", 0);
 if (!maxTimeStr)
     return;
-
 double maxTime = atof(maxTimeStr);
+
+// this is the code that will be run if document.ready ever fires, so most of the page completes
+// and the javascript inline <script> code block will be output -> warning is shown as HTML on our page
 struct dyString *dy = dyStringNew(150);
 dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(0)}, %f);\n", maxTime);
 dyStringPrintf(dy, "$(document).ready( function() { clearTimeout(warnTimingTimer); hgtWarnTiming(%f)});\n", maxTime);
 jsInline(dy->string);
 dyStringFree(&dy);
+
+// this is code that will be run if the page never completes and document ready is never run.
+// it will show a slightly different, barebones message as a confirm() dialog and will radically hide all tracks
+// as a solution
+//printf("<script nonce='%s'>\n", getNonce());
+//printf("window.hgMaxTimeWarning = %f;\n", maxTime);
+//// this will trigger one second after the other timer and stops itself on document.ready
+////puts("var skipNotification = localStorage.getItem('hgTracks.hideSpeedNotification');\n"
+//     //"if (skipNotification)\n"
+//     //"   return;\n");
+//puts("function hgtWarnTimingMinimal() {\n"
+//     "msg = 'This page took more than '+window.hgMaxTimeWarning+' seconds to load. We strive to keep"
+//     " the UCSC Genome Browser quick and responsive. See our display speed FAQ at https://genome.ucsc.edu/FAQ/FAQtracks.html#speed \\n"
+//     " If this problem continues, you can create a session link My Data > My Sessions and send the link to genome-www@soe.ucsc.edu. "
+//     " Hit OK to continue, or cancel to never show this message again. All tracks will be hidden, to make the genome browser fast again. ';\n"
+//     "var isOk = confirm(msg);\n"
+//     "window.location.search += '&hideTracks=1';\n"
+//     "}\n");
+//
+//printf("var warnTimingTimer = setTimeout( hgtWarnTimingMinimal, %f);\n", (maxTime+1)*1000.0);
+//printf( "$(document).ready( function() { clearTimeout(warnTimingTimer);\n});");
+//puts("</script>\n");
 }
 
 
@@ -10205,6 +10300,9 @@ void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
+setupTimeWarning();
+fflush(stdout);
+
 char titleVar[256];
 char *oldPosition = cartUsualString(cart, "oldPosition", "");
 boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
@@ -10697,7 +10795,6 @@ if (recTrackSetsEnabled())
     printRecTrackSets();
 if (exportedDataHubsEnabled())
     printExportedDataHubs(database);
-setupTimeWarning();
 }
 
 static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
@@ -11468,11 +11565,13 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+    jsIncludeFile("selectize.min.js", NULL);
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);
 #endif///def LOWELAB
 
+    webIncludeResourceFile("selectize.default.min.css");
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
     if (enableMouseOver)

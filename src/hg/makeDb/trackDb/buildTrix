@@ -36,7 +36,7 @@ buildDbTrix() {
     local tmpFile3=`mktemp`;
     makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
     if test -s $tmpFile; then
-        ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
+        ixIxx -verbose=2 -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
         # trixContextIndex makes the $db_$trixName.offsets and $db_$trixName.offsets.ixx files:
         trixContextIndex $tmpFile ${db}_${trixName}
         chmod 664  $tmpFile2 $tmpFile3 $tmpFile ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx

@@ -9,9 +9,11 @@ echo "Converting BED files to bigBED files..."
 #looping through files for loop code based on https://stackoverflow.com/a/10523501
 for bed in ./output/*.bed
 do
+  baseName=`basename $bed .bed`
   sort -k1,1 -k2,2n "${bed}" -o "${bed}"
-  bedToBigBed -as=prs.as -type=bed9+2 "${bed}" /hive/data/genomes/hg19/chrom.sizes "${bed}.bb"
+  bedToBigBed -as=prs.as -type=bed9+2 "${bed}" /hive/data/genomes/hg19/chrom.sizes bigBed/${baseName}.bb
   rm ${bed}
 done
 
 echo "Done!"
+echo do not forget symlinks in /gbdb/hg19/prsEmerge/

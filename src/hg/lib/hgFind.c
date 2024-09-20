@@ -3589,6 +3589,9 @@ static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPos
  * matches more than one transcript, fill out the hgp with the potential matches so the user
  * can choose where to go, otherwise return a singlePos */
 {
+printf("got to matches hgvs ");
+cartSetString(cart, "FOOBAR", "YES");
+
 boolean foundIt = FALSE;
 long startTime = clock1000();
 struct hgvsVariant *hgvsList = hgvsParseTerm(term);
@@ -3745,6 +3748,19 @@ if (hgvsList)
     if (measureTiming && hgp && hgp->tableList)
         table->searchTime = clock1000() - startTime;
     }
+
+if (foundIt && hgp->tableList && hgp->tableList->posList) 
+    {
+    struct hgPos *pos = hgp->tableList->posList;
+
+    char buf[1024];
+    safef(buf, 1024, "%s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
+    cartSetString(cart, "lastHgvsPos", buf);
+
+    cartSetString(cart, "lastHgvsDb", db);
+    cartSetString(cart, "lastHgvsTerm", term);
+    }
+
 return foundIt;
 }
 
@@ -3814,6 +3830,8 @@ if (categories != NULL)
     if (multiTerm)
         collapseSamePos(hgp);
     fixSinglePos(hgp);
+    printf("Found HGVS?");
+    cartSetString(cart, "FOORBAR2", "TEST");
     if (cart && hgp->singlePos && isNotEmpty(hgp->singlePos->highlight))
         cartSetString(cart, "addHighlight", hgp->singlePos->highlight);
     if (hgp->posCount > 0)

@@ -4,6 +4,9 @@ include ../../inc/common.mk
 compile:
 	cp -p hubtools ${DESTBINDIR}/hubtools
 
+alpha:
+	cp -p hubtools ${DESTBINDIR}/hubtools
+
 lint:
 	pylint hubtools
 
