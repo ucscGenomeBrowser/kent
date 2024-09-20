@@ -47,7 +47,7 @@ sshKeyCheck: sshKeyDownload sshKeyDynablat
 	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
 
 mkJson::
-	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assembly.list.json 2> ${name}.jsonData.txt
+	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt
 
 # mkGenomes needs symLinks to run before mkGenomes runs, and then
 # the second symLinks after mkGenomes uses business created by mkGenomes
@@ -72,6 +72,9 @@ symLinks::
 done
 	@for txt in groups hub genomes download.genomes ; do \
 [ -L ${hubsDownload}/$${txt}.txt ] && true || ln -s ${asmHubSrc}/$${txt}.txt ${hubsDownload} ; \
+done
+	@for json in assemblyList ; do \
+[ -L ${hubsDownload}/$${json}.json ] && true || ln -s ${asmHubSrc}/$${json}.json ${hubsDownload} ; \
 done
 
 hubIndex::
@@ -122,6 +125,12 @@ sendDownload:: sshKeyCheck
 	${toolsDir}/mkSendList.pl ${orderList} | while read F; do \
 	  ${toolsDir}/sendToHgdownload.sh $$F < /dev/null; done
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
+		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
+		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
@@ -169,6 +178,12 @@ verifyDynamicBlat:
 	  ${toolsDir}/testDynBlat.sh $$asmId < /dev/null; done
 
 sendIndexes::
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
+		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
+		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${indexName}.html

@@ -38,9 +38,11 @@ printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly
 my $hprcIndex = 0;
 my $ccgpIndex = 0;
 my $vgpIndex = 0;
+my $brcIndex = 0;
 $hprcIndex = 1 if ($Name =~ m/hprc/i);
 $ccgpIndex = 1 if ($Name =~ m/ccgp/i);
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
+$brcIndex = 1 if ($Name =~ m/brc/i);
 my %extraClass;	# key is asmId, value is taxon 'class' as set by VGP project
 if ($vgpIndex || $ccgpIndex) {
   my $whichIndex = "vgp";
@@ -147,6 +149,30 @@ END
 This assembly hub contains assemblies released
 by the <a href='https://humanpangenome.org/' target=_blank>
 Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } elsif ($brcIndex) {
+    print <<"END";
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="BRC - Bioinformatics Research Center" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>BRC - Bioinformatics Research Center</h1>
+<p>
+<a href='https://brc-analytics.org/' target=_blank>
+<img src='BRClogo.svg' height=26 alt='BRC logo'></a></p>
+<p>
+This site will provide data access to genomes and annotations for all
+eukaryotic pathogens, host taxa, and vectors previously served by
+VEuPathDB. This is a part of the BRC Analytics project funded by the NIAID.
+For more information, see also:
+<a href=' https://brc-analytics.org' target=_blank>brc-analytics.org</a>.
+Access this assembly data in
+<a href='assemblyList.json' target=_blank rel='noopener noreferrer' aria-label='Download the assembly data in JSON format'>
+JSON format</a>.
 </p>
 
 END
@@ -409,7 +435,7 @@ sub tableContents() {
     #  common name and view in browser
     if ( $asmId =~ m/^GC/ ) {
        my $hubTxt = "${hubUrl}/hub.txt";
-       my $igvUrl = "https://igv.org/app-test/?hubURL=$hubTxt";
+       my $igvUrl = "https://igv.org/app/?hubURL=$hubTxt";
        printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
     } else {
        printf "<td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;

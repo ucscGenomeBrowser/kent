@@ -8,7 +8,7 @@ my $thisMachine = `uname -n`;
 chomp $thisMachine;
 
 if ($thisMachine ne "hgdownload") {
-  if ($thisMachine ne "hgdownload1") {
+  if ($thisMachine ne "hgdownload1" && $thisMachine ne "hgdownload2") {
     if ($thisMachine ne "hgdownload1.soe.ucsc.edu") {
      printf STDERR "# NOTE: This script is only used on hgdownload\n";
      exit 255;
@@ -47,6 +47,7 @@ my %expectedList = (
  "VGP" => 1,
  "CCGP" => 1,
  "HPRC" => 1,
+ "BRC" => 1,
  "birds" => 1,
  "fish" => 1,
  "globalReference" => 1,
@@ -65,6 +66,7 @@ my %titles = (
  "VGP" => "Vertebrate Genomes Project collection",
  "CCGP" => "The California Conservation Genomics Project",
  "HPRC" => "Human Pangenome Reference Consortium",
+ "BRC" => "BRC Analytics - Bioinformatics Research Center",
  "birds" => "NCBI bird genomes",
  "fish" => "NCBI fish genomes",
  "globalReference" => "Global Human Reference genomes, January 2020",
@@ -108,6 +110,7 @@ my @orderOutHubs = (
  "VGP",
  "CCGP",
  "HPRC",
+ "BRC",
  "globalReference",
  "mouseStrains",
  "legacy",
@@ -134,6 +137,7 @@ my %indexPage = (
  "VGP" => "index.html",
  "CCGP" => "index.html",
  "HPRC" => "index.html",
+ "BRC" => "index.html",
  "mouseStrains" => "hubIndex.html",
  "globalReference" => "index.html",
  "gtexAnalysis" => "index.html",
@@ -160,7 +164,7 @@ my $genomeCount = `grep -h ^genome /mirrordata/hubs/VGP/*enomes.txt | wc -l`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
-my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'CCGP', 'HPRC', 'globalReference');
+my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'CCGP', 'HPRC', 'BRC', 'globalReference');
 
 foreach my $hubSet (@checkList) {
   $genomeCount = `grep -h ^genome /mirrordata/hubs/$hubSet/genomes.txt | wc -l`;
@@ -212,6 +216,14 @@ printf "</p>\n";
 
 printf "<p>\n";
 printf "Please use the <a href='https://genome.ucsc.edu/assemblyRequest.html?all' target=_blank>Assembly Request</a> page to find and request GenBank assemblies that have not yet been included in the collections here.\n";
+printf "</p>\n";
+
+printf "<p>\n";
+printf "To reference these resources in publications, please credit:<br><br>\n";
+printf "Clawson, H., Lee, B.T., Raney, B.J. et al.<br>\n";
+printf "<b>GenArk: towards a million UCSC genome browsers</b>.<br><em>Genome Biol</em> 24, 217 (2023).\n";
+printf "<a href='https://doi.org/10.1186/s13059-023-03057-x' target=_blank>\n";
+printf "https://doi.org/10.1186/s13059-023-03057-x</a>\n";
 printf "</p>\n";
 
 endHtml;
