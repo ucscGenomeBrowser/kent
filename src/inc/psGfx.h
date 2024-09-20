@@ -124,9 +124,6 @@ void psDrawCurve(struct psGfx *ps, double x1, double y1, double x2, double y2,
 void psSetDash(struct psGfx *ps, boolean on);
 /* Set dashed line mode on or off. If set on, show two points marked, with one point of space */
 
-char * convertPdfToSvg(char *pdfFile);
-/* Convert PDF to SVG in same directory as PDF and return new filename. NULL on failure. */
-
 char * convertEpsToPdf(char *epsFile);
 /* Convert EPS to PDF and return filename, or NULL if failure. */
 

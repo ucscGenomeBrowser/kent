@@ -5178,17 +5178,11 @@ struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 
 struct grp *pGrpList = NULL;
+struct trackDb *hubList = hubCollectTracks(database, &pGrpList);
 
 ctdbList = slCat(ctdbList, tdbList);
-
-//if (! trackHubDatabase(database)) 
-    //{
-    struct trackDb *hubList = hubCollectTracks(database, &pGrpList);
-    ctdbList = slCat(ctdbList, hubList);
-    //}
-
+ctdbList = slCat(ctdbList, hubList);
 tdbList = slCat(utdbList, ctdbList);
-
 return tdbList;
 }
 

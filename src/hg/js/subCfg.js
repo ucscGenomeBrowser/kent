@@ -443,14 +443,7 @@ var subCfg = { // subtrack config module.
                 else if (parentVis === 4)
                     visText = 'full';
                 var children = subCfg.visChildrenFind(parentObj);
-
-                var checkedCount = 0;
                 $(children).each(function (i) {
-                    // the checkbox is in the <td> right before the one of $(this)
-                    if ($(this).parent().prev().find("[type='checkbox']")[0].checked)
-                        checkedCount++;
-
-                    // apply the visibility to the subtrack
                     if ($(this).hasClass('fauxInput')) {
                         $(this).text(visText);
                     } else {
@@ -458,12 +451,6 @@ var subCfg = { // subtrack config module.
                         subCfg.clearChange(this);
                     }
                 });
-
-                // when nothing is checked, the visibility has been applied but everything is still hidden. 
-                // This is probably not what the user wanted, so in lack of a better idea, we select all checkboxes
-                if (checkedCount === 0)
-                    // check all checkboxes
-                    $(".subCB[type='checkbox']").attr("checked", "checked");
             }
         } else {
             // First get composite vis to limit with

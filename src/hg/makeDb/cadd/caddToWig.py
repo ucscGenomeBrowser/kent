@@ -1,4 +1,3 @@
-import sys
 import subprocess
 
 def inputLineChunk():
@@ -13,7 +12,7 @@ def inputLineChunk():
     lastPos = None
 
     #for line in gzip.open("whole_genome_SNVs.tsv.gz"):
-    for line in subprocess.Popen(['zcat', sys.argv[1]], stdout=subprocess.PIPE, encoding="ascii").stdout:
+    for line in subprocess.Popen(['zcat', "whole_genome_SNVs.tsv.gz"], stdout=subprocess.PIPE, encoding="ascii").stdout:
         if line.startswith("#"):
             continue
         row = line.rstrip("\n").split("\t")

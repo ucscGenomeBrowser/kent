@@ -1671,77 +1671,6 @@ return TRUE;
 }
 
 
-void drawNotches(struct hvGfx* hvg, int x1, int x2, int y, int height, Color color, int startPhase, int endPhase) 
-{
-// do nothing for -1 and 0. Also ignore invalid exonFrame numbers, e.g. 4.
-int w = (int)(height*0.75);
-int halfHeight = (int)(height/2);
-
-if (x2-x1 < 2*w)
-    w = ((x2-x1)/2);
-
-//if ((x2-x1) > 8*height) // TODO: this should use the letter-width somehow...
-    //return;
-
-if ((startPhase==1 || startPhase==2))
-    {
-    struct gfxPoly *poly = gfxPolyNew();
-    switch (startPhase)
-        {
-        case 1 :
-            // a triangle
-            gfxPolyAddPoint(poly, x1, y+halfHeight);
-            gfxPolyAddPoint(poly, x1+w, y);
-            gfxPolyAddPoint(poly, x1+w, y+height);
-            break;
-            
-        case 2 :
-            {
-            // the opposite of a triangle
-            int halfW = (int)(w/2);
-            gfxPolyAddPoint(poly, x1, y);
-            gfxPolyAddPoint(poly, x1, y+height);
-            gfxPolyAddPoint(poly, x1+w, y+height);
-            gfxPolyAddPoint(poly, x1+halfW, y+halfHeight);
-            gfxPolyAddPoint(poly, x1+w, y);
-            break;
-            }
-        }
-
-    hvGfxDrawPoly(hvg,poly,color,TRUE);
-    gfxPolyFree(&poly);
-    }
-
-if (endPhase==1 || endPhase==2)
-    {
-    struct gfxPoly *poly = gfxPolyNew();
-    switch (endPhase)
-        {
-        case 1 :
-            // a triangle
-            gfxPolyAddPoint(poly, x2-w, y);
-            gfxPolyAddPoint(poly, x2+w, y+halfHeight);
-            gfxPolyAddPoint(poly, x2-w, y+height);
-            break;
-            
-        case 2 :
-            {
-            // the opposite of a triangle
-            int halfW = (int)(w/2);
-            gfxPolyAddPoint(poly, x2-w, y);
-            gfxPolyAddPoint(poly, x2-w, y+height);
-            gfxPolyAddPoint(poly, x2, y+height);
-            gfxPolyAddPoint(poly, x2-halfW, y+halfHeight);
-            gfxPolyAddPoint(poly, x2, y);
-            break;
-            }
-        }
-
-    hvGfxDrawPoly(hvg,poly,color,TRUE);
-    gfxPolyFree(&poly);
-    }
-}
-
 void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
                    double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates.
@@ -2745,7 +2674,7 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
 
 if (startPhase==-1) // UTRs don't have a frame at all
     {
-    safef(buf, EXONTEXTLEN, "<br>untranslated region");
+    safef(buf, EXONTEXTLEN, ", untranslated region");
     }
 else
     {
@@ -2754,18 +2683,18 @@ else
     if (isNotLastExon)
         {
         if (startPhase==endPhase)
-            exonNote = " = in-frame exon";
+            exonNote = ": in-frame exon";
         else
-            exonNote = " = out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "<br><b>Codon Phase:</b> Start %d, End %d%s", startPhase, endPhase, exonNote);
+            exonNote = ": out-of-frame exon";
+        safef(buf, EXONTEXTLEN, ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
         } 
     else
         {
         if (startPhase==0)
-            exonNote = " = in-frame exon";
+            exonNote = ": in-frame exon";
         else
-            exonNote = " = out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "<br><b>Start Codon Phase:</b> %d%s", startPhase, exonNote);
+            exonNote = ": out-of-frame exon";
+        safef(buf, EXONTEXTLEN, ", start codon phase %d%s", startPhase, exonNote);
         }
     }
 }
@@ -2969,262 +2898,11 @@ slFreeList(&crList);
 return result;
 }
 
-/* this is a take at refactoring linkedFeaturesItemExonMaps */
-static void drawExonMapsNotches(struct track *tg, struct hvGfx *hvg, void *item, double scale,
-    int y, int heightPer, int sItem, int eItem,
-    boolean lButton, boolean rButton, int buttonW, Color color)
-/* Draw mapBoxes over exons and introns labeled with exon/intron numbers, phase information, and draw notches for phases. */
-{
-struct linkedFeatures *lf = item;
-struct simpleFeature *exons = lf->components;
-struct simpleFeature *exon = exons;
-char *exonText, *intronText;
-int numExons = 0;
-int exonIx = 1;
-struct slRef *exonList = NULL, *ref;
-// TODO this exonText (and intronText) setting is just a made-up placeholder.
-// could add a real setting name. Maybe someday extend to exon names (LRG?) instead of just exon numbers
-if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track) || startsWith("net", tg->tdb->track))
-    {
-    exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Block");
-    intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Gap"  ); // what really goes here for chain type?
-    }
-else
-    {
-    exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Exon"  );
-    intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Intron");
-    }
-
-while (exon != NULL)
-/* Make a stupid list of exons separate from what's given. */
-/* It seems like lf->components isn't necessarily sorted. */
-    {
-    refAdd(&exonList, exon);
-    exon = exon->next;
-    }
-/* Now sort it. */
-slSort(&exonList, exonSlRefCmp);
-
-numExons = slCount(exonList);
-boolean revStrand = (lf->orientation == -1);
-int eLast = -1;
-int s = -1;
-int e = -1;
-boolean isExon = TRUE;
-int picStart = insideX;
-int picEnd = picStart + insideWidth;
-if (lButton)
-    picStart += buttonW;
-if (rButton)
-    picEnd -= buttonW;
-
-for (ref = exonList; TRUE; )
-    {
-    exon = ref->val;
-    if (isExon)
-	{
-	s = exon->start;
-	e = exon->end;
-	}
-    else
-	{
-	s = eLast;
-	e = exon->start;
-	}
-    // skip exons and introns that are completely outside the window
-    if (s <= winEnd && e >= winStart)
-	{
-	int sClp = (s < winStart) ? winStart : s;
-	int eClp = (e > winEnd)   ? winEnd   : e;
-
-	int sx = round((sClp - winStart)*scale) + insideX;
-	int ex = round((eClp - winStart)*scale) + insideX;
-
-        // skip regions entirely outside available picture
-        // (accounts for space taken by exon arrows buttons)
-	if (sx <= picEnd && ex >= picStart)
-	    {
-	    // clip it to avail pic
-	    sx = (sx < picStart) ? picStart : sx;
-    	    ex = (ex > picEnd)   ? picEnd   : ex;
-
-	    int w = ex - sx;
-
-	    if (w > 0) // draw exon or intron if width is greater than 0
-		{
-                int exonIntronNumber;
-                char *exonIntronText;
-                int numExonIntrons = numExons;
-                if (isExon)
-                    {
-                    exonIntronText = exonText;
-                    }
-                else
-                    {
-                    exonIntronText = intronText;
-                    --numExonIntrons;  // introns are one fewer than exons
-                    }
-
-                char strandChar;
-                if (!revStrand) {
-                    exonIntronNumber = exonIx;
-                    strandChar = '+';
-                }
-                else {
-                    exonIntronNumber = numExonIntrons-exonIx+1;
-                    strandChar = '-';
-                }
-
-                // we still need to show the existing mouseover text
-                char* existingText = lf->mouseOver;
-                if (isEmpty(existingText))
-                    existingText = lf->name;
-
-                int startPhase = -1;
-                int endPhase = -1;
-                char phaseText[EXONTEXTLEN];
-                phaseText[0] = 0;
-                struct genePred *gp = lf->original;
-                if ((gp != NULL) && gp->exonFrames && isExon)
-                    {
-                    startPhase = gp->exonFrames[exonIx-1];
-                    if (!revStrand) 
-                        endPhase = gp->exonFrames[exonIx];
-                    else 
-                        if (exonIx>1)
-                            endPhase = gp->exonFrames[exonIx-2];
-                    makeExonFrameText(exonIntronNumber, numExons, startPhase, endPhase, phaseText);
-                    }
-
-                // draw mapBoxes for the codons if we are zoomed in far enough
-                struct simpleFeature *codon;
-                struct dyString *codonDy = dyStringNew(0);
-                int codonS, codonE;
-                if (isExon && lf->codons && zoomedToCdsColorLevel)
-                    {
-                    for (codon = lf->codons; codon != NULL; codon = codon->next)
-                        {
-                        codonS = codon->start; codonE = codon->end;
-                        if (codonS <= winEnd && codonE >= winStart)
-                            {
-                            int codonSClp = (codonS < winStart) ? winStart : codonS;
-                            int codonEClp = (codonE > winEnd)   ? winEnd   : codonE;
-
-                            int codonsx = round((codonSClp - winStart)*scale) + insideX;
-                            int codonex = round((codonEClp - winStart)*scale) + insideX;
-
-                            // skip regions entirely outside available picture
-                            // (accounts for space taken by exon arrows buttons)
-                            if (codonsx <= picEnd && codonex >= picStart)
-                                {
-                                // clip it to avail pic
-                                codonsx = (codonsx < picStart) ? picStart : codonsx;
-                                codonex = (codonex > picEnd)   ? picEnd   : codonex;
-
-                                int w = codonex - codonsx;
-                                if (w > 0)
-                                    {
-                                    // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                                    // prefer a lf->mouseOver over the itemName
-                                    char *oldMouseOver = lf->mouseOver;
-                                    lf->mouseOver = NULL;
-                                    dyStringClear(codonDy);
-                                    if (!isEmpty(existingText))
-                                        dyStringPrintf(codonDy, "%s, ", existingText);
-                                    int codonHgvsIx = (codon->codonIndex - 1) * 3;
-                                    if (codonHgvsIx >= 0)
-                                        dyStringPrintf(codonDy, "<b>cDNA Pos:</b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
-                                    dyStringPrintf(codonDy, "<b>Strand:</b> %c<br><b>%s</b> %d of %d%s",
-                                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-                                    tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
-                                            sItem, eItem, codonsx, y, w, heightPer);
-                                    // and restore the mouseOver
-                                    lf->mouseOver = oldMouseOver;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                /*else
-                    {
-                    // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                    // prefer a lf->mouseOver over the itemName
-                    if (!isEmpty(existingText))
-                        safef(mouseOverText, sizeof(mouseOverText), "%s, W < 0 ?? strand %c, %s %d of %d%s",
-                                existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-                    else
-                        safef(mouseOverText, sizeof(mouseOverText), "W < 0 ?? strand %c, %s %d of %d%s",
-                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-                    char *oldMouseOver = lf->mouseOver;
-                    lf->mouseOver = NULL;
-                    tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-                        sItem, eItem, sx, y, w, heightPer);
-                    // and restore the mouseOver
-                    lf->mouseOver = oldMouseOver;
-                    }
-                */
-
-	    /*if (w > 0) // draw exon or intron if width is greater than 0
-		{
-                char *sep = "";
-                if (!isEmpty(existingText))
-                    sep = ", ";
-
-                safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s", 
-                        existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-
-                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                // prefer a lf->mouseOver over the itemName
-                char *oldMouseOver = lf->mouseOver;
-                lf->mouseOver = NULL;
-		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-		    sItem, eItem, sx, y, w, heightPer);
-                // and restore the old mouseOver
-                lf->mouseOver = oldMouseOver;
-
-		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
-
-                Color notchColor = lighterColor(hvg, color);
-                Color notchColor2 = lighterColor(hvg, notchColor);
-                struct rgbColor rgb = hvGfxColorIxToRgb(hvg, notchColor2);
-                Color notchColor3 = MAKECOLOR_32_A(rgb.r,rgb.g,rgb.b,0.5);
-                drawNotches(hvg, sx, ex, y, heightPer, notchColor3, startPhase, endPhase);
-		}
-                */
-	    }
-	}
-
-    if (isExon)
-	{
-    	eLast = e;
-	ref = ref->next;
-	if (!ref)
-	    break;
-	}
-    else
-	{
-	exonIx++;
-	}
-    isExon = !isExon;
-
-    if (s > winEnd) // since the rest will also be outside the window
-	break;
-
-    }
-
-slFreeList(&exonList);
-}
-
-/* OLD CODE - under hg.conf control - to be removed one day */
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
     int y, int heightPer, int sItem, int eItem,
-    boolean lButton, boolean rButton, int buttonW, Color color)
+    boolean lButton, boolean rButton, int buttonW)
 /* Draw mapBoxes over exons and introns labeled with exon/intron numbers */
 {
-if (cfgOptionBooleanDefault("newExonTooltips", FALSE))
-    drawExonMapsNotches(tg, hvg, item, scale, y, heightPer, sItem, eItem, lButton, rButton, buttonW, color);
-
 struct linkedFeatures *lf = item;
 struct simpleFeature *exons = lf->components;
 struct simpleFeature *exon = exons;
@@ -3449,7 +3127,6 @@ for (ref = exonList; TRUE; )
 
 slFreeList(&exonList);
 }
-/* END OLD CODE */
 
 static struct window *makeMergedWindowList(struct window *windows)
 /* Make a copy of the windows list, merging nearby regions on the same chrom
@@ -4610,7 +4287,8 @@ for (sf = components; sf != NULL; sf = sf->next)
 	    }
 	else
 	    {
-	    drawScaledBox(hvg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
+	    drawScaledBox(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
+		color);
 	    }
 	e = s2;
 	}
@@ -4899,8 +4577,7 @@ if (vis == tvSquish || vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
 
     if (compat)
 	{  // draw labeled exon/intron maps with exon/intron numbers
-        linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW, color);
-
+	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
 	x2 = x1;
 	w = x2-textX;
 	}
@@ -4937,7 +4614,7 @@ else if (vis == tvFull)
 	}
     if (compat)
 	{  // draw labeled exon/intron maps with exon/intron numbers
-	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW, color);
+	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
 	if (!lButton)
 	    {
 	    int w = x1 - geneMapBoxX;
@@ -13425,7 +13102,6 @@ else
     useItemRgb = bedItemRgb(ct->tdb);
     }
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
-
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = bedDetailLoadAsLf(row, rowOffset, bedSize, useItemRgb);

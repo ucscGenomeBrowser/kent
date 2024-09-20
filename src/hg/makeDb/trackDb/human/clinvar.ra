@@ -39,7 +39,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on
-        searchIndex _dbVarSsvId,vcvId
+        searchIndex _dbVarSsvId
         maxWindowCoverage 10000000
 
         track clinvarCnv
@@ -102,5 +102,5 @@ termRegex ^[ne]ssv[0-9]+
 
 searchTable clinvarMain
 searchType bigBed
-searchDescription ClinVar Short Nucleotide Variants
-termRegex (^[ne]ssv[0-9]+|vcv[0-9]+.[0-9])
+searchDescription ClinVar Copy Number Variants
+termRegex ^[ne]ssv[0-9]+

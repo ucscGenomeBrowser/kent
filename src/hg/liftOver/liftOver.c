@@ -212,7 +212,7 @@ if (optionExists("bedPlus"))
 ends = optionInt("ends", ends);
 hasBin = optionExists("hasBin");
 tabSep = optionExists("tab") || optionExists("tabSep");
-if (hasBin && !bedPlus)
+if ((hasBin || tabSep) && !bedPlus)
     usage();
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))

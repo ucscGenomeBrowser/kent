@@ -11,7 +11,7 @@
 #include "udc.h"
 #include "bigWig.h"
 #include "obscure.h"
-#include "hgConfig.h"
+
 
 char *clChrom = NULL;
 int clStart = -1;
@@ -77,13 +77,6 @@ clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
-
-char *prots = cfgOption("resolvProts");
-char *prefix = cfgOption("resolvPrefix");
-char *cmd = cfgOption("resolvCmd");
-if (prots && cmd)
-    udcSetResolver(prots, prefix, cmd);
-
 bigWigToWig(argv[1], argv[2]);
 if (verboseLevel() > 1)
     printVmPeak();
