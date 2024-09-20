@@ -1,0 +1,9 @@
+track nuMtSeq
+shortLabel NuMTs Sequence
+longLabel Nuclear mitochondrial DNA segments
+spectrum on
+scoreMax 100
+type bigBed 6
+group rep
+priority 3
+bigDataUrl /gbdb/hg38/bbi/nuMtSeq/nuMtSeq_hg38.bb
