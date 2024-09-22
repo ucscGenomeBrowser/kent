@@ -788,7 +788,7 @@ if [ -s process/\$asmId.rna.cds ]; then
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
 
   if [ -s ncbiRefSeqGenomicDiff.bed ]; then
-    wget -O txAliDiff.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/txAliDiff.as"
+    wget -O txAliDiff.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/txAliDiff.as'
     bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
       ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
   else
