@@ -1,0 +1,125 @@
+<h2>Description</h2>
+<p>
+The <b>${longLabel}</b> track set shows Copy number variant (CNV) calls generated from a set of ES
+samples that largely overlaps those in gnomAD v4. The gnomAD exome CNVs v4.1 release includes
+464,297 unrelated exomes. More information can be found at the 
+<a href="https://gnomad.broadinstitute.org/help/dataset-selection" target="_blank">
+gnomAD site</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are colored by the type of variant:
+<table class="stdTbl">
+  <tr>
+    <th>Variant Type</th>
+  <tr>
+    <td style="background-color: rgb(255,0,0)">Deletion (DEL)</td>
+    <td>1206278</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(0,0,255)">Duplication (DUP)</td>
+    <td>269326</td>
+  </tr>
+</table>.</p>
+
+<p><b>Mouseover</b> on an item will display the position, size of variant, and Genes impacted by
+variant (&gt;=10% CDS overlap by deletion or &gt;=75% CDS overlap by duplication).</p>
+
+
+<H2>Methods</H2>
+<p>
+The bed files was obtained from the gnomAD Google Storage bucket:
+
+<pre>
+https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/exome_cnv/gnomad.v4.1.cnv.non_neuro_controls.bed
+</pre>
+
+The data was then transformed into a bigBed track. For the full list of commands used to make this
+track please see the &quot;gnomAD Structural Variants v4&quot; section of the
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt"
+target="_blank">makedoc</a>.</p>
+
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all 
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.  However, for bulk 
+processing, it is recommended to download the dataset. The genome annotation is stored in a bigBed 
+file that can be downloaded from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/gnomAD/structuralVariants/">download server</a>.
+The exact filenames can be found in the track configuration file. Annotations can be converted to
+ASCII text by our tool <code>bigBedToBed</code> which can be compiled from the source code or
+downloaded as a precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can
+also be used to obtain only features within a given range, for example:</p>
+
+<pre>
+bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v4/cnv/gnomad.v4.1.cnv.non_neuro_controls.bb -chrom=chr6 -start=0 -end=1000000 stdout
+</pre>
+
+<p>
+Please refer to our
+<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/gnomAD"
+target="_blank">mailing list archives</a>
+for questions and example queries, or our
+<a HREF="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a>
+for more information.</p>
+
+<p>
+More information about using and understanding the gnomAD data can be found in the
+<a target="_blank" href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a> site.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(ODbL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+</p>
+
+
+<h2>References</h2>
+
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alf&#246;ldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
+</p>
+

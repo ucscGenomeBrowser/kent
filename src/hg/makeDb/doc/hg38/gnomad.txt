@@ -580,3 +580,66 @@ Sorting and writing extra index 1: 89 millis
     #Updated the gnomadSv.html
     
 ##############################################################################
+# gnomAD CNVs v4.1 - Gerardo
+# Redmine #34253
+
+
+    cd /hive/data/outside/gnomAD.4
+    mkdir cnv; cd cnv
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/exome_cnv/gnomad.v4.1.cnv.non_neuro_controls.bed
+
+    #Looked at the bed file and decided to get the following columns
+    #chrom	chromStart	chromEnd	name	score	strand	thickStart	thickEnd	itemRgb	SVLEN	SVTYPE	Genes	SC	SN	SF	SC_XX	SN_XX	SF_XX	SC_XY	SN_XY	SF_XY
+    #Need to remove the "variant_is_80_" substring from the 4th column string to make the values into gnomAD variant IDs.    
+    #Need to add colors to the 9th column. Variant Types. Deletion (DEL):"255,0,0" and Duplication (DUP):"0,0,255"
+    
+    #Loop through each file matching the pattern (in this case, only gnomad.v4.1.cnv.non_neuro_controls.bed).
+    for f in gnomad.v4.1.cnv.non_neuro_controls.bed; do 
+    
+        #Create an output filename by replacing the ".bed" extension with nothing.
+        #This will be used later to save the modified file with a new suffix.
+        out=${f/.bed/}
+    
+        #Process the file:
+        # Skip the first 100 lines using `tail -n +101`.
+        # Use `awk` to modify and print the desired columns.
+        cat $f | tail -n +101 | \
+    
+        #First awk block to make a bed9plus:
+        # Set both the input and output field separators to tabs (FS=OFS="\t").
+        # Use gsub() to remove the "variant_is_80_" prefix from column 4.
+        # Print specific columns:
+        #  Columns 1, 2, 3, 4.  A zero constant for column 5. A period constant for column 6. Columns 2 and 3 again for columns 7 and 8. Columns 9, 13, 14, 19, 22, 32, 42, 52, 62, 72, 82, 92, and 102.
+        awk 'BEGIN {FS=OFS="\t"} {gsub("variant_is_80_", "", $4); print $1, $2, $3, $4, 0, ".", $2, $3, $9, $13, $14, $19, $22, $32, $42, $52, $62, $72, $82, $92, $102}' | \
+    
+        #Second awk block to add colors to column 9:
+        # Set both the input and output field separators to tabs (FS=OFS="\t").
+        # Check the value of column 11:
+        #  If column 11 contains "DEL", set column 9 to "255,0,0" (red color).
+        #  If column 11 contains "DUP", set column 9 to "0,0,255" (blue color).
+        # Print the modified line with the updated values.
+        awk 'BEGIN {FS=OFS="\t"} {if ($11 == "DEL") $9="255,0,0"; else if ($11 == "DUP") $9="0,0,255"; print}' \
+    
+        #Redirect the output to a new file, appending the suffix ".bed9Plus" to the original filename.
+        > $out.bed9Plus
+
+    # End of the loop.
+    done
+    
+    cat gnomad.v4.1.cnv.non_neuro_controls.bed9Plus | cut -f11 | sort | uniq -c
+     20989 DEL
+     25026 DUP
+
+    #Made the as file and the file is located in the following directory: /hive/data/outside/gnomAD.4/cnv/gnomadCNV.as
+    
+    #Made a bigBed9plus
+    for f in gnomad.v4.1.cnv.non_neuro_controls.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+12 -as=gnomadCNV.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
+    
+    cd /gbdb/hg38/gnomAD/v4
+    mkdir cnv; cd cnv
+    ln -s /hive/data/outside/gnomAD.4/cnv/gnomad.v4.1.cnv.non_neuro_controls.bb
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+    #Edited the gnomad.alpha.ra file
+    cp gnomadSv.html gnomadCNV.html
+    #Updated the gnomadCNV.html
+##############################################################################
