@@ -5,6 +5,7 @@ import sys
 import re
 import site
 import json
+import subprocess
 
 ####################################################################
 ### this is kinda like an environment setting, it gets everything
@@ -183,7 +184,7 @@ def extractNames(asmRpt, hapX):
 
 ### inFh is a file handle to a list of assembly identifiers,
 ###  might be a multi column file, ignore anything after the first column
-def processList(inFh):
+def processList(inFh, dbGcaGcfDict):
     outStr = f"taxId\tasmId\tgenBankAcc\trefSeqAcc\tidentical\tsciName\tcomName"
     print(outStr, file=sys.stderr)
     schema = [
@@ -212,54 +213,86 @@ def processList(inFh):
       if asmId.startswith('#'):	# ignore comment lines
         print(f"{asmId}", file=sys.stderr)
         continue
-      asmId = asmId.split(' ',1)[0]	# only the first column
-      p = asmId.split('_', 2)	# split on _ maximum of three results in list
-      accession = p[0] + '_' + p[1]
-      nPart = p[1]
-      by3 = [nPart[i:i+3] for i in range(0, len(nPart), 3)]
-      gcX = p[0]
-      d0 = by3[0]
-      d1 = by3[1]
-      d2 = by3[2]
-      asmName = "na"
-      if (len(p) == 3):
-        asmName = p[2]
+# felCat8 *** NOT GC..
+# 0 ['felCat8'
+# 1 'Nov. 2014 (ICGSC Felis_catus_8.0/felCat8)'
+# 2 '/gbdb/felCat8'
+# 3 'Cat'
+# 4 'chrA2:53484451-53597660'
+# 5 '1'
+# 6 '3240'
+# 7 'Cat'
+# 8 'Felis catus'
+# 9 '/gbdb/felCat8/html/description.html'
+# 10 '0'
+# 11 '0'
+# 12 'International Cat Genome Sequencing Consortium'
+# 13 '9685']
+      if not asmId.startswith('GC'):
+        sql = f"select * from dbDb where name='{asmId}'"
+        hgsqlReturn = subprocess.run(['hgsql', 'hgcentraltest', '-N', '-e', sql], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        dbDb = hgsqlReturn.stdout.strip().split('\t')
+        taxId = dbDb[13]
+        genBankAcc = "n/a"
+        refSeqAcc = "n/a"
+        identical = False
+        if asmId in dbGcaGcfDict:
+            genBankAcc = dbGcaGcfDict[asmId][0]
+            refSeqAcc = dbGcaGcfDict[asmId][1]
+            identical = dbGcaGcfDict[asmId][2]
+        sciName = dbDb[8]
+        comName = f"{dbDb[7]} - {dbDb[1]}"
+        ucscBrowser = f"https://genome.ucsc.edu/cgi-bin/hgTracks?db={asmId}"
+      else:
+        asmId = asmId.split(' ',1)[0]	# only the first column
+        p = asmId.split('_', 2)	# split on _ maximum of three results in list
+        accession = p[0] + '_' + p[1]
+        nPart = p[1]
+        by3 = [nPart[i:i+3] for i in range(0, len(nPart), 3)]
+        gcX = p[0]
+        d0 = by3[0]
+        d1 = by3[1]
+        d2 = by3[2]
+        asmName = "na"
+        if (len(p) == 3):
+          asmName = p[2]
 #      print(f"{accession}\t{asmName}\t{asmId}")
-      srcDir = f"{ncbiSrc}/{gcX}/{d0}/{d1}/{d2}/{asmId}"
-      asmRpt = f"{srcDir}/{asmId}_assembly_report.txt"
+        srcDir = f"{ncbiSrc}/{gcX}/{d0}/{d1}/{d2}/{asmId}"
+        asmRpt = f"{srcDir}/{asmId}_assembly_report.txt"
 #      print(f"{asmRpt}", file=sys.stderr)
-      if not os.path.isfile(asmRpt):
-        print(f"{asmId}\tmissing '{asmRpt}'", file=sys.stderr)
-        continue
-      asmNameAbbrev = asmName
-      hapX = ""
-      abbrevPattern = r'hap1|hap2|alternate_haplotype|primary_haplotype'
-      if re.search(abbrevPattern, asmNameAbbrev):
-        hapX = asmNameAbbrev
-        ab = asmNameAbbrev.replace('.hap1','')
-        asmNameAbbrev = ab.replace('.hap2','')
-        ab = asmNameAbbrev.replace('_alternate_haplotype','')
-        asmNameAbbrev = ab.replace('_primary_haplotype','')
-        hx = asmNameAbbrev + '.'
-        ab = hapX.replace(hx,'')
-        hapX = ab
-      asmType, sciName, orgName, yearDate, isolate, cultivar, extraStrings, genBankAcc, refSeqAcc, identical, taxId = extractNames(asmRpt, hapX)
-      if len(extraStrings):
-        pat = re.compile(r'[()\[\]+*]')
-        extraStrings = pat.sub('', extraStrings)
-        pat = re.compile(r'\?')
-        extraStrings = pat.sub(' ', extraStrings)
-        extraStrings = re.sub(re.escape(asmNameAbbrev) + ' ', '', extraStrings)
-        extraStrings = re.sub(r'\s+', ' ', extraStrings)
-        words = extraStrings.split()
-        orgList = orgName.split()
-        orgName = " ".join([orgWord for orgWord in orgList if orgWord not in words])
-        orgName = re.sub(r'=|\s+$|^\s+', '', orgName)
-        orgName = re.sub(r'\s+', ' ', orgName).strip()
-        outStr = f"{taxId}\t{asmId}\t{genBankAcc}\t{refSeqAcc}\t{identical}\t{sciName}\t{comName}"
+        if not os.path.isfile(asmRpt):
+          print(f"{asmId}\tmissing '{asmRpt}'", file=sys.stderr)
+          continue
+        asmNameAbbrev = asmName
+        hapX = ""
+        abbrevPattern = r'hap1|hap2|alternate_haplotype|primary_haplotype'
+        if re.search(abbrevPattern, asmNameAbbrev):
+          hapX = asmNameAbbrev
+          ab = asmNameAbbrev.replace('.hap1','')
+          asmNameAbbrev = ab.replace('.hap2','')
+          ab = asmNameAbbrev.replace('_alternate_haplotype','')
+          asmNameAbbrev = ab.replace('_primary_haplotype','')
+          hx = asmNameAbbrev + '.'
+          ab = hapX.replace(hx,'')
+          hapX = ab
+        asmType, sciName, orgName, yearDate, isolate, cultivar, extraStrings, genBankAcc, refSeqAcc, identical, taxId = extractNames(asmRpt, hapX)
+        if len(extraStrings):
+          pat = re.compile(r'[()\[\]+*]')
+          extraStrings = pat.sub('', extraStrings)
+          pat = re.compile(r'\?')
+          extraStrings = pat.sub(' ', extraStrings)
+          extraStrings = re.sub(re.escape(asmNameAbbrev) + ' ', '', extraStrings)
+          extraStrings = re.sub(r'\s+', ' ', extraStrings)
+          words = extraStrings.split()
+          orgList = orgName.split()
+          orgName = " ".join([orgWord for orgWord in orgList if orgWord not in words])
+          orgName = re.sub(r'=|\s+$|^\s+', '', orgName)
+          orgName = re.sub(r'\s+', ' ', orgName).strip()
+          ucscBrowser = f"https://genome.ucsc.edu/h/{accession}"
 
-        ucscBrowser = f"https://genome.ucsc.edu/h/{accession}"
-        rowData = {
+      outStr = f"{taxId}\t{asmId}\t{genBankAcc}\t{refSeqAcc}\t{identical}\t{sciName}\t{comName}"
+
+      rowData = {
           "taxId": int(taxId),
           "asmId": asmId,
           "genBank": genBankAcc,
@@ -268,13 +301,10 @@ def processList(inFh):
           "sciName": sciName,
           "comName": comName,
           "ucscBrowser": ucscBrowser,
-        }
-        dataOut.append(rowData)
-        print(outStr, file=sys.stderr)
+      }
+      dataOut.append(rowData)
+      print(outStr, file=sys.stderr)
 
-    dataJson = {
-      "data": [[obj["taxId"], obj["asmId"], obj["genBank"], obj["refSeq"], obj["identical"], obj["sciName"], obj["comName"], obj["ucscBrowser"]] for obj in dataOut]
-    }
 #    schemaPlusData = schema + dataOut
     schemaPlusData = {
       "columns": schema,
@@ -283,10 +313,31 @@ def processList(inFh):
     jsonOut = json.dumps(schemaPlusData)
     print(jsonOut)
 
+# read three column file: db  gca  gcf
+# for UCSC db to GCA and GCF accession equivalence
+def readDbGcaGcf(tsvFile):
+    dbDict = {}
+
+    try:
+        fh = open(tsvFile, 'r', encoding='latin-1')
+    except FileNotFoundError:
+        print(f"Error: File '{tsvFile}' not found.", file=sys.stderr)
+        sys.exit(1)
+
+    for line in fh:
+        if line.startswith('#'):
+            continue
+        db, gca, gcf, identical = line.strip().split('\t')
+        ident = False
+        if identical.lower().startswith('yes'):
+            ident = True
+        dbDict[db] = [gca, gcf, ident]
+
+    return dbDict
+
 #      print(f"asmType: '{asmType}', {sciName}, {orgName}, {yearDate}, {isolate}, {cultivar} {extraStrings}")
 
 def main():
-    site.ENABLE_USER_SITE = False
     if len(sys.argv) != 2:
 #        print(f"sys.path: {sys.path}")
         print("Usage: ./commonNames.py <filename|stdin>", file=sys.stderr)
@@ -300,6 +351,11 @@ def main():
 
     listFile = sys.argv[1]
 
+    dbGcaGcfDict = {}
+    dbGcaGcf = "dbGcaGcf.tsv"
+    if os.path.isfile(dbGcaGcf):
+        dbGcaGcfDict = readDbGcaGcf(dbGcaGcf)
+
     if listFile == 'stdin':
         fileIn = sys.stdin
     else:
@@ -309,7 +365,7 @@ def main():
           print(f"Error: File '{listFile}' not found.", file=sys.stderr)
           sys.exit(1)
 
-    processList(fileIn)
+    processList(fileIn, dbGcaGcfDict)
 
 if __name__ == "__main__":
     main()

@@ -4968,7 +4968,7 @@ if (rulerMode != tvFull)
     }
 
 // the code below will only use the checkbox on trackUi if a setting on the trackUi page has been made. 
-if (cartVarExists(cart, BASE_SHOWCODONS))
+if (cartVarExists(cart, BASE_SHOWCODONS) && zoomedToCdsColorLevel)
     rulerCds = cartUsualBoolean(cart, BASE_SHOWCODONS, TRUE);
 
 /* Figure out height of each visible track. */

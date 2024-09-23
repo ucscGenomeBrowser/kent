@@ -102,6 +102,7 @@ GCA_001698545.1_ASM169854v1	primates
 GCA_001704415.1_ARS1	mammals
 GCA_001720195.2_ASM172019v2	fungi
 GCA_001857705.1_PanPar1.0	mammals
+GCA_001876365.2_canu_80X_arrow2.2	invertebrate
 GCA_001890085.1_ASM189008v1	mammals
 GCA_001922835.1_NIST_Tur_tru_v1	mammals
 GCA_002007445.1_ASM200744v1	mammals
@@ -154,6 +155,7 @@ GCA_004363495.1_PhoPho_v1_BIUU	mammals
 GCA_004363515.1_IniGeo_v1_BIUU	mammals
 GCA_004365145.1_OryAfe_v1_BIUU	mammals
 GCA_004365275.1_TupTan_v1_BIUU	mammals
+GCA_004936735.2_CCh_genotype_I	invertebrate
 GCA_006229205.1_meerkat_22Aug2017_6uvM2_HiC	mammals
 GCA_006496715.1_Aalbo_primary.1	invertebrate
 GCA_007210705.1_Tcal_SD_v2.1	invertebrate
