@@ -6800,12 +6800,17 @@ char *prevHighlightColor(struct cart *cart, struct trackDb *tdb)
 return cartOrTdbString(cart, tdb, HIGHLIGHT_COLOR_CART_VAR, HIGHLIGHT_COLOR_DEFAULT);
 }
 
+static boolean didHighlightSelector = FALSE;
 void printHighlightColorPicker(struct cart *cart, struct trackDb *tdb)
 {
+if (didHighlightSelector)
+    return;
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hui.js", NULL);
-puts("<br>");
-puts("Choose highlight color:");
+puts("<div id='hgTrackUiColorPicker' style=\"padding-top: 2px; padding-bottom: 2px;\">");
+char *text = "Note that multiple highlight selections use the same color, and are applied successively. So any item that meets at least one criteria will be highlighted.";
+printInfoIcon(text);
+puts("</div>");
 puts("<div id='hgTrackUiColorPicker'></div>");
 jsInlineF("var cartHighlightColor = \"%s\"\n;", prevHighlightColor(cart, tdb));
 jsInlineF("makeHighlightPicker(\"%s.highlightColor\", document.getElementById(\"hgTrackUiColorPicker\"), \"%s\");\n", tdb->track, tdb->track);
@@ -6873,7 +6878,12 @@ if (trackDbFilters)
         if (trackDbLabel)
             label = trackDbLabel;
         else
-            safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
+            {
+            if (isHighlight)
+                safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Highlight items with Minimum ", field );
+            else
+                safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
+            }
 
         if (isHighlight && count == 0)
             printHighlightColorPicker(cart, tdb);
@@ -7074,7 +7084,6 @@ if (filterBySet != NULL)
 
 // add any highlights:
 // Numeric highlights are first
-boolean didHighlightSelector = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title, TRUE) > 0)
     {
     didHighlightSelector = TRUE;
