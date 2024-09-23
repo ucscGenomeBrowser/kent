@@ -122,7 +122,7 @@ the decorated item).
 
 <a id="examples"></a>
 <h2>Examples</h2>
-<a id="example1"></a
+<a id="example1"></a>
 <h3>Example &num;1: Building a decorator bigBed</h3>
 <p>
 Here is an example of how to use this format. Consider the item in BED format as a &quot;feature&quot;:
@@ -172,12 +172,30 @@ chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:featu
 <p>
 Both of these bed decorations can be stored in a file named
 <a href="examples/decorator/decoratorsEx.bed">decoratorsEx.bed</a> and then built as a 
-<a href="examples/decorator/decoratorsEx1.bb">decoratorsEx.bb</a> using the
+<a href="examples/decorator/decoratorsEx.bb">decoratorsEx.bb</a> using the
 <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em></a> and the
 <a href="examples/decorator/decoration.as">decoration.as</a> files and running the following
 command:</p>
 <pre>bedToBigBed -type=bed12+ -as=decoration.as decoratorsEx.bed hg38.chrom.sizes decoratorsEx.bb
 </pre>
+
+<h6>Debugging the decorator bigBed</h6>
+
+<p>
+The resulting <a href="examples/decorator/decoratorsEx.bb">decoratorsEx.bb</a> file can be
+displayed as a stand-alone custom track for debugging purposes. This process allows verification
+that the decorations are correctly applied. The <code>decoratorsEx.bb</code> file can be accessed
+via the following URL:</p>
+<a href="https://genome.ucsc.edu/goldenPath/help/examples/decorator/decoratorsEx.bb"
+target="_blank"><pre>
+https://genome.ucsc.edu/goldenPath/help/examples/decorator/decoratorsEx.bb</pre></a>
+
+<p>To display the decorator bigBed, navigate to the
+<a href="https://genome.ucsc.edu/cgi-bin/hgCustom"
+target="_blank">UCSC Genome Browser Custom Tracks page</a> and paste the URL into the designated
+text field. Once the decorator bigBed is loaded, the decorations will be rendered on the UCSC Genome
+Browser, allowing for verification of the correct display.
+</p>
 
 <a id="example2"></a>
 <a name="Example2"></a>
