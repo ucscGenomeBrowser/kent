@@ -139,6 +139,7 @@ for (struct trackDb *mockTdbForDecorator = mockTdbsForDecorators;
         modeStr = OVERLAY_MODE_STR;
     else if (currentBlockMode == DECORATOR_MODE_ADJACENT)
         modeStr = ADJACENT_MODE_STR;
+    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, BLOCK_DISPLAY_VAR);
     cgiMakeDropList(cartVar, menuOpt, 3, modeStr);
 
     safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, OVERLAY_BLOCK_LABEL_TOGGLE_VAR);
@@ -160,6 +161,7 @@ for (struct trackDb *mockTdbForDecorator = mockTdbsForDecorators;
         modeStr = OVERLAY_MODE_STR;
     else if (currentGlyphMode == DECORATOR_MODE_ADJACENT)
         modeStr = ADJACENT_MODE_STR;
+    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, GLYPH_DISPLAY_VAR);
     cgiMakeDropList(cartVar, menuOpt, 3, modeStr);
 
     printf("<br>\n");
