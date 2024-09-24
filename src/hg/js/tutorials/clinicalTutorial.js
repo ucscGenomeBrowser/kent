@@ -102,7 +102,7 @@
     function showPopup() {
         const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
         rtsMenuItem.click();
-        const titleSpan = document.querySelector('#ui-dialog-title-recTrackSetsPopup');
+        const titleSpan = document.querySelector('#ui-id-2');
         titleSpan.textContent = 'Recommended Track Sets';
     }
     
@@ -208,7 +208,7 @@
                   '   <a target="_blank" href="/cgi-bin/hgTracks?db=hg19&hgS_otherUserName=View&rtsLoad=CNVs%20Clinical">hg19</a></li>'+
                   '</ul>',
             attachTo: {
-                element: '.ui-dialog[aria-labelledby="ui-dialog-title-recTrackSetsPopup"]',
+                element: '.ui-dialog[aria-describedby="recTrackSetsPopup"]',
                 on: 'right'
             },
             buttons: [ tutorialButtons.back, tutorialButtons.next ],
