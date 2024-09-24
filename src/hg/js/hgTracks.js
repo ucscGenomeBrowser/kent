@@ -1179,9 +1179,9 @@ var dragSelect = {
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>");
             makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);
-            $("#dragSelectDialog").append("<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
+            $("#dragSelectDialog").append("<div style='padding-top: 4px'><input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
-                             "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
+                             "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></div>"+ 
                              "Selected chromosome position: <span id='dragSelectPosition'></span>");
             dragSelectDialog = $("#dragSelectDialog")[0];
             // reset value

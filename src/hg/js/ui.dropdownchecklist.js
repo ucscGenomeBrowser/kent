@@ -624,8 +624,8 @@
              			/** Floats above subsequent content, but does NOT scroll */
 		                instance.dropWrapper.css({
 		                    position: 'absolute'
-		                ,   top: instance.controlWrapper.position().top + instance.controlWrapper.outerHeight() + "px"
-		                ,   left: instance.controlWrapper.position().left + "px"
+		                ,   top: instance.controlWrapper.offset().top + instance.controlWrapper.outerHeight() + "px"
+		                ,   left: instance.controlWrapper.offset().left + "px"
 		                });
 		            } else if (config.positionHow == 'relative') {
 		            	/** Scrolls with the parent but does NOT float above subsequent content */

@@ -1511,8 +1511,10 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         return hlColor;
     };
 
-    let colorPickerContainer = document.createElement("p");
-    colorPickerContainer.textContent = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color:";
+    let colorPickerContainer = document.createElement("div");
+    colorPickerContainer.textContent = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color: ";
+    // display: inline means if there is an info icon it will show up in line with the color picker
+    colorPickerContainer.style = "display: inline";
     let inpText = document.createElement("input");
     // special case the drag select highlight feature because it has special code:
     if (cartVar === "hlColor") {
@@ -1535,7 +1537,9 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     inpResetLink.id = cartVar + "Reset";
     inpResetLink.textContent = "Reset";
     colorPickerContainer.appendChild(inpText);
+    colorPickerContainer.append(" ");
     colorPickerContainer.appendChild(inpSpec);
+    colorPickerContainer.append(" ");
     colorPickerContainer.appendChild(inpResetLink);
 
     if (typeof parentEl !== undefined) {
