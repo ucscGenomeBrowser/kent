@@ -302,8 +302,8 @@
                   '<a href="/cgi-bin/hgConvert" target="_blank">'+
                   'The Genome Browser Convert utility</a> is useful for locating '+
                   'the position of a feature of interest in a different release of the same '+
-                  'genome or (in some cases) in a genome assembly of another species.'+
-                  'You can use this tool to perform a conversion between hg19 and hg38.'+
+                  'genome. For example, you can use this tool to perform a conversion between '+
+                  'hg19 and hg38.'+
                   '<br><br>'+
                   '<em>When coordinate conversion is available for an assembly, '+
                   'you will be presented with a list of the '+
