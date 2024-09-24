@@ -520,7 +520,6 @@ GCA_016772295.1_ASM1677229v1	basidiomycetes C.cinerea (A43mut B43mut pab1-1 #326
 GCF_000182895.1_CC3	basidiomycetes C.cinerea (okayama7#130 2010 refseq)
 GCF_036417295.1_ASM3641729v1	basidiomycetes C.decagattii (7685027 2024)
 GCF_001720195.1_ASM172019v2	basidiomycetes C.depauperatus (CBS 7841 2024 refseq)
-GCA_001720195.2_ASM172019v2	basidiomycetes C.depauperatus (CBS 7841 2024)
 GCA_001720245.2_ASM172024v2	basidiomycetes C.depauperatus (CBS 7855 2024 gebnak)
 GCF_002954075.1_C._deuterogattii_R265_chr	basidiomycetes C.deuterogattii (R265 2018)
 GCA_000835745.1_Cryp_gatt_EJB2_V1	basidiomycetes C.gattii (EJB2 2015)
@@ -557,15 +556,12 @@ GCF_000344685.1_Glotr1_1	basidiomycetes G.trabeum ATCC 11539
 GCF_000320585.1_Heterobasidion_irregulare_v2.0	basidiomycetes H.irregulare TC 32-1
 GCF_003144245.1_Jamsp1	basidiomycetes J.rosea
 GCF_000512585.2_ASM51258v3	basidiomycetes K.bestiolae (CBS 10118 2024 refseq)
-GCA_000512585.3_ASM51258v3	basidiomycetes K.bestiolae (CBS 10118 2024)
 GCF_036426115.1_ASM3642611v1	basidiomycetes K.botswanensis (CBS 12716 2024)
-GCA_000512565.3_ASM51256v3	basidiomycetes K.dejecticola (CBS 10117 2024)
 GCF_000512565.2_ASM51256v3	basidiomycetes K.dejecticola (v2 CBS 10117 2024 refseq)
 GCF_036810415.1_ASM3681041v1	basidiomycetes K.dendrophila (CBS 6074 2024)
 GCF_036810445.1_ASM3681044v1	basidiomycetes K.europaea (PYCC6329 2024)
 GCA_000507425.3_Cryp_heve_CBS569_V2	basidiomycetes K.heveanensis (CBS 569 2016)
 GCF_002102565.1_Kocim1	basidiomycetes K.imperatae
-GCA_000507465.4_ASM50746v4	basidiomycetes K.mangroviensis (CBS 8507 2024)
 GCF_000507465.2_ASM50746v4	basidiomycetes K.mangroviensis (v2 CBS 8507 2024 refseq)
 GCF_000512605.1_Cryp_pinu_CBS10737_V1	basidiomycetes K.pini CBS 10737
 GCF_008629635.2_ASM862963v2	basidiomycetes K.shandongensis (v2 CBS 12478 2024)
@@ -747,7 +743,6 @@ GCF_000218685.1_v1.0	dry rot fungus
 GCA_000218725.1_v1.0	dry rot fungus (S7.3 2011)
 GCA_000347355.1_ASM34735v1	ergot fungus (20.1 2012)
 GCF_018924745.1_UU_Maror_2	fairy-ring mushroom
-GCA_000002945.3_ASM294v3	fission yeast (972h- 2019)
 GCF_000002945.2_ASM294v3	fission yeast (v2 972h- 2019 refseq)
 GCA_002749535.1_ASM274953v1	fungi A.variabilis (NCCPF 102052 2017)
 GCF_025118155.1_Cokrec1	fungi C.recurvatus (NRRL 2243 2022)
