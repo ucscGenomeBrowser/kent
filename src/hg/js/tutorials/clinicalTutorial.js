@@ -303,10 +303,11 @@
                   'The Genome Browser Convert utility</a> is useful for locating '+
                   'the position of a feature of interest in a different release of the same '+
                   'genome or (in some cases) in a genome assembly of another species.'+
+                  'You can use this tool to perform a conversion between hg19 and hg38.'+
                   '<br><br>'+
                   '<em>When coordinate conversion is available for an assembly, '+
                   'you will be presented with a list of the '+
-                  'genome/assembly conversion options available.</em>'+
+                  'genome/assembly conversion options.</em>'+
                   '<br><br>'+
                   'If the conversion is successful, the '+
                   'browser will return a list of regions in the new assembly, along with the '+
