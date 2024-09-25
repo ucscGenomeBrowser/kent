@@ -1216,10 +1216,10 @@ var superT = {
             superSel = superSel[0];
             if (show) {
                 $(superSel).addClass('normalText');
-                $(superSel).attr('selectedIndex',1);
+                $(superSel).prop('selectedIndex',1);
                 $(superSel).removeClass('hiddenText');
             } else {
-                $(superSel).attr('selectedIndex',0);
+                $(superSel).prop('selectedIndex',0);
                 $(superSel).removeClass('normalText');
                 $(superSel).addClass('hiddenText');
             }
@@ -1229,7 +1229,7 @@ var superT = {
     plusMinus: function (check)
     {
         $("input:checkbox").each(function (i) {
-            $(this).attr("checked",check);
+            $(this).prop("checked",check);
             superT.childChecked(this,1);
             if (!check) // all are unchecked so we can hide this whole thing.
                 superT.topVis(check);
@@ -1238,12 +1238,12 @@ var superT = {
 
     childChecked: function (cb,defaultVis)
     {
-	var name = cb.id;
-	name = name.substring(0, name.length - "_check".length); 
+        var name = cb.id;
+        name = name.substring(0, name.length - "_check".length);
         var sel = $('select[name="' + name + '"]');
         if (sel && sel.length === 1) {
             sel = sel[0];
-            var selIx = parseInt($(sel).attr('selectedIndex'));
+            var selIx = sel.selectedIndex;
             if (cb.checked && selIx === 0) {
                 // What can be done to more intelligently default this?
                 // All to dense?  Probably the best idea
@@ -1262,9 +1262,9 @@ var superT = {
     {
         var selIx = val;
         if (val === undefined || val === null) // onchange event
-            selIx = $(sel).attr('selectedIndex');
+            selIx = sel.selectedIndex;
         else // called from childChecked() so set value
-            $(sel).attr('selectedIndex',val);
+            $(sel).prop('selectedIndex',val);
 
         if (selIx === 0) {
             $(sel).removeClass('normalText');
@@ -1278,7 +1278,7 @@ var superT = {
             var cb = $('input#'+sel.name+'_check');
             if (cb && cb.length === 1) {
                 cb = cb[0];
-                $(cb).attr('checked',(selIx > 0));
+                $(cb).prop('checked', (selIx > 0));
             }
         }
     }
