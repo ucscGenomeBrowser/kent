@@ -182,6 +182,7 @@ GCA_000150585.1_ASM15058v1	ascomycetes C.posadasii (RMSCC 1038 2008)
 GCA_000150185.1_ASM15018v1	ascomycetes C.posadasii (RMSCC 2133 2007)
 GCA_000150055.1_ASM15005v1	ascomycetes C.posadasii (RMSCC 3488 2007)
 GCA_000150215.1_ASM15021v1	ascomycetes C.posadasii (RMSCC 3700 2007)
+GCA_018416015.2_ASM1841601v2	ascomycetes C.posadasii str. (Silveira 2022)
 GCF_000585535.1_Clad_psam_CBS_110553_V1	ascomycetes C.psammophila CBS 110553
 GCA_001430955.1_ASM143095v1	ascomycetes C.queenslandicum (CBS 280.77 2015)
 GCF_011075155.1_ASM1107515v1	ascomycetes C.scovillei
@@ -536,6 +537,7 @@ GCF_000149385.1_ASM14938v1	basidiomycetes C.neoformans var. neoformans B-3501A
 GCF_001027345.1_Triol1	basidiomycetes C.oleaginosum
 GCF_008065305.1_ASM806530v1	basidiomycetes C.oleaginosum (ATCC 20508 2019)
 GCF_000271625.1_Conpu1	basidiomycetes C.puteana RWD-64-598 SS2
+GCA_000835755.2_ASM83575v2	basidiomycetes C.tetragattii (IND107 2024)
 GCF_001720155.1_Tsuc_wing_CBS7118_V1	basidiomycetes C.wingfieldii CBS 7118
 GCF_025882075.1_ASM2588207v1	basidiomycetes D.hungarica (PDD-24b-2 2022)
 GCF_000292625.1_Dacryopinax_sp._DJM_731_SSP1_v1.0	basidiomycetes D.primogenitus DJM-731 SS1

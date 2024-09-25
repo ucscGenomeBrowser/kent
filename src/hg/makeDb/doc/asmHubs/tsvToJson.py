@@ -185,7 +185,7 @@ def extractNames(asmRpt, hapX):
 ### inFh is a file handle to a list of assembly identifiers,
 ###  might be a multi column file, ignore anything after the first column
 def processList(inFh, dbGcaGcfDict):
-    outStr = f"taxId\tasmId\tgenBankAcc\trefSeqAcc\tidentical\tsciName\tcomName"
+    outStr = f"# taxId\tasmId\tgenBankAcc\trefSeqAcc\tidentical\tsciName\tcomName\tucscBrowser"
     print(outStr, file=sys.stderr)
     schema = [
         {"name": "taxId", "type": "integer"},
@@ -290,7 +290,7 @@ def processList(inFh, dbGcaGcfDict):
           orgName = re.sub(r'\s+', ' ', orgName).strip()
           ucscBrowser = f"https://genome.ucsc.edu/h/{accession}"
 
-      outStr = f"{taxId}\t{asmId}\t{genBankAcc}\t{refSeqAcc}\t{identical}\t{sciName}\t{comName}"
+      outStr = f"{taxId}\t{asmId}\t{genBankAcc}\t{refSeqAcc}\t{identical}\t{sciName}\t{comName}\t{ucscBrowser}"
 
       rowData = {
           "taxId": int(taxId),
