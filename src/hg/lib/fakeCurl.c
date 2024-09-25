@@ -25,6 +25,8 @@ CURL *curl_easy_init(void)
     new->WriteFunction = NULL;
     new->HeaderFunction = NULL;
     new->failonerror = 0;
+    new->udc = NULL;
+    new->udcSize = 0;
     return new;
 }
 
@@ -35,6 +37,8 @@ void curl_easy_cleanup(CURL *curl)
 {
     if (curl != NULL)
     {
+        if (curl->udc)
+            udcFileClose(&(curl->udc));
         // clear the local copies of URL strings
         if (curl->url)
             free(curl->url);
@@ -61,6 +65,7 @@ CURLcode curl_easy_setopt(CURL *curl, CURLoption option, ...)
 {
     va_list args;
     va_start(args, option);
+    char *newUrl = NULL;
     switch (option) {
         case CURLOPT_WRITEDATA:
             curl->writeBuffer = va_arg(args, void *);
@@ -74,9 +79,14 @@ CURLcode curl_easy_setopt(CURL *curl, CURLoption option, ...)
             curl->WriteFunction = va_arg(args, curl_write_callback);
             break;
         case CURLOPT_URL:
+            newUrl = va_arg(args, char*);
+            if (curl->url && sameString(curl->url, newUrl))
+                break;
+            if (curl->udc)
+                udcFileClose(&(curl->udc));
             if (curl->url)
                 free(curl->url);
-            curl->url = cloneString(va_arg(args,char *));
+            curl->url = cloneString(newUrl);
             break;
         case CURLOPT_FOLLOWLOCATION:
             // ignored
@@ -107,14 +117,17 @@ CURLcode curl_easy_perform(CURL *curl)
  */
 {
     // Open the file using UDC, returning an error if that fails
-    struct udcFile *udc = udcFileMayOpen(curl->url, NULL);
-    if (udc == NULL)
+    if (curl->udc == NULL)
+        {
+        curl->udc = udcFileMayOpen(curl->url, NULL);
+        curl->udcSize = (long) udcFileSize(curl->url);
+        }
+    if (curl->udc == NULL)
         return CURLE_NOTOK;
-    long fileSize = (long) udcFileSize(curl->url);
 
     // Set up the seek offset if there's a range supplied
     long start = 0;
-    long end = fileSize;
+    long end = curl->udcSize;
     if (curl->range != NULL)
     {
         start = atol(curl->range);
@@ -123,18 +136,18 @@ CURLcode curl_easy_perform(CURL *curl)
             end = atol(end_pos+1);
     }
 
-    if (end >= fileSize)
-        end = fileSize-1;
+    if (end >= curl->udcSize)
+        end = curl->udcSize-1;
 
     char headerbuf[4096];
 
-    if (start < 0 || start >= fileSize)
+    if (start < 0 || start >= curl->udcSize)
     {
         // We need to gin up a 416 error response here and abort if FAILONERROR is set.
         // Otherwise our next step is udcSeek, which will just attempt an lseek
         // and then errAbort when the requested range isn't within the file bounds.
         safef(headerbuf, sizeof(headerbuf),
-                "HTTP/1.1 416 Requested Range Not Satisfiable\nContent-Range: bytes */%ld", fileSize);
+                "HTTP/1.1 416 Requested Range Not Satisfiable\nContent-Range: bytes */%ld", curl->udcSize);
         if (curl->HeaderFunction != NULL)
         {
             char buf[4096];
@@ -146,7 +159,7 @@ CURLcode curl_easy_perform(CURL *curl)
     }
 
     // Fake up a Content-Range string in a header in case there's a header function to call.
-    safef(headerbuf, sizeof(headerbuf), "Content-Range: bytes %ld-%ld/%ld", start, end, fileSize);
+    safef(headerbuf, sizeof(headerbuf), "Content-Range: bytes %ld-%ld/%ld", start, end, curl->udcSize);
     if (curl->HeaderFunction != NULL)
     {
         char buf[4096];
@@ -154,8 +167,8 @@ CURLcode curl_easy_perform(CURL *curl)
     }
 
     char *readBuffer = (char*) malloc(end-start);
-    udcSeek(udc, start);
-    long bytesRead = udcRead(udc, readBuffer, end-start);
+    udcSeek(curl->udc, start);
+    long bytesRead = udcRead(curl->udc, readBuffer, end-start);
     // Technically we should pay attention to the value returned by udcRead, as it might indicate
     // that fewer bytes than requested were actually read.  Worry about that a bit later.
 
