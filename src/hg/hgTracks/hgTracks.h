@@ -339,7 +339,6 @@ struct window  // window in multiwindow image
     struct track *trackList;   // track list for window
     };
 
-extern boolean forceWiggle; // we've run out of space so all tracks become coverage tracks
 
 typedef void (*TrackHandler)(struct track *tg);
 

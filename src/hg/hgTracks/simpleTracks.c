@@ -11519,11 +11519,6 @@ enum trackVisibility limitVisibility(struct track *tg)
  * by parent visibility if part of a coposite track.
  * This also sets tg->height. */
 {
-if (forceWiggle && canWiggle(tg))
-    {
-    tg->limitWiggle = TRUE;
-    }
-
 if (!tg->limitedVisSet)
     {
     tg->limitedVisSet = TRUE;  // Prevents recursive loop!
