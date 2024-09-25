@@ -24,10 +24,13 @@ GCA_000151335.1_JCVI-cpa1-1.0	fungi
 GCA_000151735.1_Cavpor3.0	mammals
 GCA_000165445.3_Mmur_3.0	primates
 GCA_000182895.1_CC3	fungi
+GCA_000182985.1_ASM18298v1	fungi
+GCA_000184105.1_Geom_destructans_V1	fungi
 GCA_000184155.1_FraVesHawaii_1.0	plants
 GCA_000208615.1_JCVI_ISG_i3_1.0	invertebrate
 GCA_000208655.2_Dasnov3.0	mammals
 GCA_000209185.1_CulPip1.0	invertebrate
+GCA_000209485.1_ASM20948v1	fungi
 GCA_000219625.1_MYCGR_v2.0	fungi
 GCA_000226395.1_PenChr_Nov2007	fungi
 GCA_000243295.1_TriManLat1.0	mammals
@@ -348,6 +351,7 @@ GCF_000344595.1_CheMyd_1.0	vertebrate
 GCF_000364345.1_Macaca_fascicularis_5.0	primates
 GCF_000365465.2_Ptep_2.0	invertebrate
 GCF_000442215.1_Lipotes_vexillifer_v1	mammals
+GCF_000457365.1_ASM45736v1	invertebrate
 GCF_000471905.2_AMTR1.0	plants
 GCF_000495115.1_PopEup_1.0	plants
 GCF_000503995.1_CerSol_1.0	invertebrate
