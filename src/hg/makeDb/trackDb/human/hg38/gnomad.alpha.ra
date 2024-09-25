@@ -237,8 +237,8 @@ html gnomadSv.html
 track gnomadCopyNumberVariants
 parent gnomadVariants on
 bigDataUrl /gbdb/hg38/gnomAD/v4/cnv/gnomad.v4.1.cnv.non_neuro_controls.bb
-shortLabel gnomAD CNVs
-longLabel Genome Aggregation Database (gnomAD) - Copy number variants v4.1
+shortLabel gnomAD rare CNV variants
+longLabel Genome Aggregation Database (gnomAD) - Rare CNV variants (<1% overall site frequency)
 dataVersion Release 4.1 (November 01, 2023)
 type bigBed 9 +
 itemRgb on
@@ -247,7 +247,8 @@ url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_cnv_r4
 urlLabel gnomAD Copy number variants Browser
 filterLabel.svtype Type of Variation
 filterValues.svtype DEL|Deletion,DUP|Duplication
-mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}
+searchIndex name
+mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}<br> <b>Site frequency (non-neuro control samples)</b>: ${sf}
 html gnomadCNV
 
 # The missense and pLI contraint tracks
