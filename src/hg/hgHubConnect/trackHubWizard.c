@@ -24,7 +24,7 @@
 void removeOneFile(char *userName, char *cgiFileName)
 /* Remove one single file for userName */
 {
-char *fileName = prefixUserFile(userName, cgiFileName);
+char *fileName = prefixUserFile(userName, cgiEncodeFull(cgiFileName));
 if (fileExists(fileName))
     {
     fprintf(stderr, "deleting file: '%s'\n", fileName);
@@ -111,9 +111,12 @@ if (userName)
         // the directory needs to be 777, so ignore umask for now
         writeHubText(path, userName, name, db);
         // TODO: add a row to the hubspace table for the hub.txt
+        //addHubTxtToTable(userName, path, name, db);
         // return json to fill out the table
         jsonWriteString(cj->jw, "hubName", name);
         jsonWriteString(cj->jw, "db", db);
+        time_t now = time(NULL);
+        jsonWriteString(cj->jw, "creationTime", sqlUnixTimeToDate(&now, FALSE));
         }
     }
 }
@@ -136,9 +139,19 @@ if (userName)
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
         jsonWriteString(jw, "fileType", file->fileType);
-        jsonWriteString(jw, "hub", "temp");
+        jsonWriteString(jw, "hub", "");
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "createTime", file->creationTime);
+        jsonWriteObjectEnd(jw);
+        }
+    jsonWriteListEnd(jw);
+    jsonWriteListStart(jw, "hubList");
+    struct userHubs *hub, *hubList = listHubsForUser(userName);
+    for (hub = hubList; hub != NULL; hub = hub->next)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "hubName", hub->hubName);
+        jsonWriteString(jw, "genome", hub->genome);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);

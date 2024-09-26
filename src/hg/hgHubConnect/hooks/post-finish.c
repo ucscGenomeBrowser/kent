@@ -18,6 +18,7 @@
 #include "hdb.h"
 #include "hubSpace.h"
 #include "md5.h"
+#include "cheapcgi.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -86,7 +87,7 @@ else
         else
             {
             // NOTE: All Upload.MetaData values are strings
-            fileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
+            fileName = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL));
             fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
             fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
             db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);

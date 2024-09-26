@@ -2,6 +2,7 @@
 debugCartJson = true;
 
 function prettyFileSize(num) {
+    if (!num) {return "n/a";}
     if (num < (1000 * 1024)) {
         return `${(num/1000).toFixed(1)}kb`;
     } else if (num < (1000 * 1000 * 1024)) {
@@ -19,6 +20,8 @@ var hubCreate = (function() {
         pendingQueue: [], // our queue of pending [tus.Upload, file], kind of like the toUpload object
         fileList: [], // the files this user has uploaded, initially populated by the server
                         // on page load, but gets updated as the user uploades/deletes files
+        hubList: [], // the hubs this user has created/uploaded, initially populated by server
+                        // on page load, but gets updated as the user creates/deletes hubs
         userUrl: "", // the web accesible path where the uploads are stored for this user
     };
 
@@ -436,6 +439,14 @@ var hubCreate = (function() {
     function createHubSuccess(jqXhr, textStatus) {
         console.log(jqXhr);
         $("#newTrackHubDialog").dialog("close");
+        addNewUploadedFileToTable({
+            createTime: jqXhr.creationTime,
+            fileType: "hub",
+            fileName: jqXhr.hubName,
+            genome: jqXhr.db,
+            fileSize: null,
+            hub: jqXhr.hubName
+        });
     }
 
     function createHub(db, hubName) {
@@ -483,8 +494,48 @@ var hubCreate = (function() {
                 orderable: false, targets: 1,
                 data: "action", title: "Action",
                 render: function(data, type, row) {
+                    /* Return a node for rendering the actions column */
+                    // all of our actions will be buttons in this div:
+                    let container = document.createElement("div");
+
                     // click to call hgHubDelete file
-                    return "<button class='deleteFileBtn'>Delete</button><button class='viewInBtn'>View In GB</button>";
+                    let delBtn = document.createElement("button");
+                    delBtn.textContent = "Delete";
+                    delBtn.type = 'button';
+                    delBtn.addEventListener("click", function() {
+                        deleteFile(0, row.fileName);
+                    });
+
+                    // click to view hub/file in gb:
+                    let viewBtn = document.createElement("button");
+                    viewBtn.textContent = "View in Genome Browser";
+                    viewBtn.type = 'button';
+                    viewBtn.addEventListener("click", function() {
+                        viewInGenomeBrowser(row.fileName, row.genome);
+                    });
+
+                    // click to rename file or hub:
+                    let renameBtn = document.createElement("button");
+                    renameBtn.textContent = "Rename";
+                    renameBtn.type = 'button';
+                    renameBtn.addEventListener("click", function() {
+                        console.log("rename btn clicked!");
+                    });
+
+                    // click to associate this track to a hub
+                    let addToHubBtn = document.createElement("button");
+                    addToHubBtn.textContent = "Add to hub";
+                    addToHubBtn.type = 'button';
+                    addToHubBtn.addEventListener("click", function() {
+                        console.log("add to hub button clicked!");
+                    });
+
+                    container.appendChild(delBtn);
+                    container.appendChild(viewBtn);
+                    container.appendChild(renameBtn);
+                    container.appendChild(addToHubBtn);
+                    
+                    return container;
                 }
             },
             {
@@ -505,7 +556,9 @@ var hubCreate = (function() {
             {data: "createTime", title: "Creation Time"},
         ],
         order: [[6, 'desc']],
+        /*
         drawCallback: function(settings) {
+            // every time we draw we need to update event handlers if we've added/deleted a row
             let table = this.DataTable();
             btns = document.querySelectorAll('.deleteFileBtn');
             let i, numRows= table.rows().data().length;
@@ -524,6 +577,7 @@ var hubCreate = (function() {
                 });
             }
         },
+        */
     };
 
     function showExistingFiles(d) {
@@ -536,6 +590,24 @@ var hubCreate = (function() {
         if (d.length > 0 && toRemove !== null) {
             toRemove.remove();
         }
+    }
+
+    function showExistingHubs(d) {
+        // Add the hubs to the files table
+        let table = $("#filesTable").DataTable();
+        d.forEach((hub) => {
+            let hubName = hub.hubName;
+            let db = hub.genome;
+            let data = {
+                fileName: hubName,
+                fileSize: null,
+                fileType: "hub",
+                genome: db,
+                hub: hubName,
+                createTime: null,
+            };
+            table.row.add(data).draw();
+        });
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -620,12 +692,13 @@ var hubCreate = (function() {
             welcomeDiv.textContent = "Once files are uploaded they will display here. Click \"Choose files\" above or \"Create Hub\" below to get started";
             let fileDiv = document.getElementById('filesDiv');
             fileDiv.insertBefore(welcomeDiv, fileDiv.firstChild);
-            if (typeof userFiles !== 'undefined' && typeof userFiles.fileList !== 'undefined' &&
-                    userFiles.fileList.length > 0) { 
-                uiState.fileList= userFiles.fileList;
+            if (typeof userFiles !== 'undefined' && (userFiles.fileList.length > 0 || userFiles.hubList.length > 0)) { 
+                uiState.fileList = userFiles.fileList;
+                uiState.hubList = userFiles.hubList;
                 uiState.userUrl = userFiles.userUrl;
             }
             showExistingFiles(uiState.fileList);
+            showExistingHubs(uiState.hubList);
             inputBtn.addEventListener("click", (e) => uiState.input.click());
             //uiState.input.addEventListener("change", listPickedFiles);
             // TODO: add event handler for when file is succesful upload
