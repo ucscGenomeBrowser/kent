@@ -5136,7 +5136,7 @@ for (track = trackList; track != NULL; track = track->next)
                         !(doHideEmpties && slCount(subtrack->items) == 0))
                         // Ignore subtracks with no items in window
                     {
-                    addPreFlatTrack(&preFlatTracks, track);
+                    addPreFlatTrack(&preFlatTracks, subtrack);
                     }
                 }
             }
@@ -5146,6 +5146,7 @@ for (track = trackList; track != NULL; track = track->next)
         addPreFlatTrack(&preFlatTracks, track);
 	}
     }
+slReverse(&preFlatTracks);
 
 // check total height
 #define MAXSAFEHEIGHT "maxTrackImageHeightPx"
