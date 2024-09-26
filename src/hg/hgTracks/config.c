@@ -678,6 +678,11 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
         );
     }
 
+hPrintf("<TR><TD>Parallel load time out:");
+hPrintf("<TD style=\"text-align: right\">");
+hIntVar("parallelFetch.timeout", getParaLoadTimeout(), 3);
+hPrintf("<TD>seconds<TD></TR>");
+
 themeDropDown(cart);
 
 hTableStart();

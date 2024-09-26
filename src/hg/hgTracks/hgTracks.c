@@ -8580,6 +8580,18 @@ printf("'>Aliases</a></div>");
 #endif
 
 
+unsigned getParaLoadTimeout()
+// get the parallel load timeout in seconds (defaults to 90)
+{
+char *paraLoadTimeoutStr = cartOptionalString(cart, "parallelFetch.timeout");
+if (paraLoadTimeoutStr == NULL)
+    paraLoadTimeoutStr = cfgOptionDefault("parallelFetch.timeout", "90");  // wait up to default 90 seconds.
+
+unsigned paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
+
+return paraLoadTimeout;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8904,7 +8916,7 @@ for (window=windows; window; window=window->next)
     if (ptMax > 0)
 	{
 	/* wait for remote parallel load to finish */
-	remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+	remoteParallelLoadWait(getParaLoadTimeout());  // wait up to default 90 seconds.
 	if (measureTiming)
 	    measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
 	}
