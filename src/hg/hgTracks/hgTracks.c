@@ -4872,6 +4872,16 @@ for (track = trackList; track != NULL; track = nextTrack)
     }
 }
 
+boolean forceWiggle; // we've run out of space so all tracks become coverage tracks
+
+static void addPreFlatTrack(struct trackRef **list, struct track *track)
+{
+struct trackRef *trackRef;
+AllocVar(trackRef);
+trackRef->track = track;
+slAddHead(list, trackRef);
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -5029,6 +5039,9 @@ expandSquishyPackTracks(trackList);
 
 // set heights and visibilities.
 struct window *window = NULL;
+
+// we may come through this way twice if we exceed the 32k limit for screen image
+retry:
 for(window=windows;window;window=window->next)
     {
     setGlobalsFromWindow(window);
@@ -5097,7 +5110,8 @@ if (wigOrder != NULL)
         }
     }
 
-// Construct flatTracks
+// Construct pre-flatTracks 
+struct trackRef *preFlatTracks = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (isLimitedVisHiddenForAllWindows(track))
@@ -5107,7 +5121,7 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks, track, cart, orderedWiggles);
+            addPreFlatTrack(&preFlatTracks, track);
         else
             {
             boolean doHideEmpties = doHideEmptySubtracksNoMultiBed(cart, track);
@@ -5122,16 +5136,58 @@ for (track = trackList; track != NULL; track = track->next)
                         !(doHideEmpties && slCount(subtrack->items) == 0))
                         // Ignore subtracks with no items in window
                     {
-                    flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
+                    addPreFlatTrack(&preFlatTracks, track);
                     }
                 }
             }
         }
     else
 	{	
-        flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
+        addPreFlatTrack(&preFlatTracks, track);
 	}
     }
+
+// check total height
+#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
+int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
+boolean safeHeight = TRUE;
+struct trackRef *pfRef;
+int tmpPixHeight = pixHeight;
+for(pfRef = preFlatTracks; pfRef; pfRef = pfRef->next)
+    {
+    struct track *pf = pfRef->track;
+    int totalHeight = tmpPixHeight+trackPlusLabelHeight(pf,fontHeight);
+    if (totalHeight > maxSafeHeight)
+        {
+        if (!forceWiggle)
+            {
+            forceWiggle = TRUE;
+            goto retry;
+            }
+        char numBuf[SMALLBUF];
+        sprintLongWithCommas(numBuf, maxSafeHeight);
+        if (safeHeight)  // Only one message
+            warn("Image is over %s pixels high (%d pix) at the following track which is now "
+                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, pf->tdb->longLabel,
+                 (pf->next != NULL ?
+                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
+        safeHeight = FALSE;
+	struct track *winTrack;
+	for(winTrack=pf;winTrack;winTrack=winTrack->nextWindow)
+	    {
+	    pf->limitedVis = tvHide;
+	    pf->limitedVisSet = TRUE;
+	    }
+        }
+    if (!isLimitedVisHiddenForAllWindows(pf))
+        tmpPixHeight += trackPlusLabelHeight(pf, fontHeight);
+    }
+pixHeight = tmpPixHeight;
+
+// Construct flatTracks
+for(; preFlatTracks; preFlatTracks = preFlatTracks->next)
+    flatTracksAdd(&flatTracks,preFlatTracks->track,cart, orderedWiggles);
+
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
 
 if (orderedWiggles)
@@ -5163,35 +5219,11 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 
 
 // fill out track->prevTrack, and check for maxSafeHeight
-boolean safeHeight = TRUE;
-/* firefox on Linux worked almost up to 34,000 at the default 620 width */
-/* More recent hardware/browsers may be able to handle more - we had a success with an 8192x64891 image */
-#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
-int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
 struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
     assert(track->limitedVis != tvHide);
-    // ORIG int totalHeight = pixHeight+trackPlusLabelHeight(track,fontHeight);
-    int totalHeight = pixHeight+flatTrack->maxHeight;
-    if (totalHeight > maxSafeHeight)
-        {
-        char numBuf[SMALLBUF];
-        sprintLongWithCommas(numBuf, maxSafeHeight);
-        if (safeHeight)  // Only one message
-            warn("Image is over %s pixels high (%d pix) at the following track which is now "
-                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
-                 (flatTrack->next != NULL ?
-                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
-        safeHeight = FALSE;
-	struct track *winTrack;
-	for(winTrack=track;winTrack;winTrack=winTrack->nextWindow)
-	    {
-	    track->limitedVis = tvHide;
-	    track->limitedVisSet = TRUE;
-	    }
-        }
     if (!isLimitedVisHiddenForAllWindows(track))
         {
 	struct track *winTrack;
@@ -5202,7 +5234,6 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         // ORIG pixHeight += trackPlusLabelHeight(track, fontHeight);
 	if (!theImgBox) // prevTrack may have altered the height, so recalc height
 	    setFlatTrackMaxHeight(flatTrack, fontHeight);
-	pixHeight += flatTrack->maxHeight;
         prevTrack = track;
         }
     }
