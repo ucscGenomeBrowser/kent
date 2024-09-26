@@ -64,7 +64,7 @@ else
         char *db = NULL;
         char *location = NULL;
         char *reqLm = NULL;
-        time_t lastModified;
+        time_t lastModified = 0;
 
         struct lineFile *lf = lineFileStdin(FALSE);
         char *request = lineFileReadAll(lf);
