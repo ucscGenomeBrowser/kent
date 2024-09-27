@@ -30,6 +30,7 @@
 #include "web.h"
 #include "botDelay.h"
 #include "genark.h"
+#include "assemblyList.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -978,13 +979,23 @@ if (genarkPrefix == NULL)
 
 struct gHubMatch *gHubMatchList = NULL;
 char *genarkTbl = genarkTableName();
+int colCount = genArkColumnCount();
 struct sqlConnection *conn = hConnectCentral();
 if (sqlTableExists(conn, genarkTbl))
     {
     char query[1024];
-    sqlSafef(query, sizeof(query), "select * from %s where "
+    if (colCount > 6)
+	{
+	sqlSafef(query, sizeof(query), "select * from %s where "
+             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by priority",
+             genarkTbl, term, term, term, term);
+	}
+    else
+	{
+	sqlSafef(query, sizeof(query), "select * from %s where "
              "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by taxId ASC, commonName DESC",
              genarkTbl, term, term, term, term);
+	}
     struct genark *matchList = genarkLoadByQuery(conn, query);
     gHubMatchList = filterGenarkMatches(genarkPrefix, matchList);
     }
