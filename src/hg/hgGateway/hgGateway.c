@@ -978,9 +978,9 @@ struct gHubMatch *ret = NULL;
 struct dyString *query = dyStringNew(64);
 /* LIMIT of 100 will allow enough results to include some genArk assemblies */
 if (wildCard)
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1 LIMIT 100", asmListTable, term);
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1 ORDER BY priority LIMIT 100", asmListTable, term);
 else
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1 LIMIT 100", asmListTable, term);
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1 ORDER BY priority LIMIT 100", asmListTable, term);
 
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 dyStringFree(&query);
