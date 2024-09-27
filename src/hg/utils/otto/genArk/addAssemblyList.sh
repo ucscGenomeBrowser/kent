@@ -11,7 +11,7 @@ export dayOfMonth=`date "+%d" |  sed -e 's/^0//;'`
 
 mkdir -p history/${YYYY}
 
-time (./assemblyList.py dbDb.name.clade.tsv) > history/${YYYY}/asmList${DS}.log 2>&1
+time (./assemblyList.py dbDb.clade.year.acc.tsv) > history/${YYYY}/asmList${DS}.log 2>&1
 
 rm -f beforeSort.prio
 mv assemblyList.tsv beforeSort.asmList
@@ -25,6 +25,12 @@ hgsql hgcentraltest -e 'select count(*) from assemblyList;' >> history/${YYYY}/a
 
 sort genark.tsv | join -t$'\t' - <(sort assemblyList.tsv | cut -f1-2,6) \
   | sort -t$'\t' -k7n > newGenark.tsv
+
+hgsql hgcentraltest -e 'DROP TABLE IF EXISTS genark;'
+hgsql hgcentraltest < /hive/data/inside/GenArk/newGenark.sql
+hgsql hgcentraltest -e "LOAD DATA LOCAL INFILE 'newGenark.tsv' INTO TABLE genark;"
+
+hgsql hgcentraltest -e 'SELECT COUNT(*) FROM genark;' >> history/${YYYY}/asmList${DS}.log 2>&1
 
 # once a month (in the first week) archive the assemblyList.tsv
 if [ "${dayOfMonth}" -lt 8 ]; then
