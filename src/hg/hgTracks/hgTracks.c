@@ -5162,6 +5162,9 @@ for(pfRef = preFlatTracks; pfRef; pfRef = pfRef->next)
         {
         if (!forceWiggle)
             {
+            char buffer[1024];
+            sprintLongWithCommas(buffer, totalHeight);
+            warn("Image was over 32,000 pixels high (%s pix). All bed tracks are now displayed as density graphs. Zoom in to restore previous display modes.", buffer);
             forceWiggle = TRUE;
             goto retry;
             }
