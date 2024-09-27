@@ -3159,7 +3159,7 @@ function showExtToolDialog() {
 
         // also copied from the hgTrackUi code below
         $('#extToolDialog').dialog({
-            resizable: true,               // Let description scroll vertically
+            resizable: false,
             height: popMaxHeight,
             width: popWidth,
             minHeight: 200,
@@ -3272,7 +3272,7 @@ var popUpHgt = {
                 // This doesn't work
                 cache: true
             },
-            resizable: true,               // Let scroll vertically
+            resizable: false,
             height: 'auto',
             width: popWidth,
             minHeight: 200,
@@ -3532,7 +3532,7 @@ var popUpHgcOrHgGene = {
         let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel + " (Item Details)" + openIcon;
 
         $('#hgcDialog').dialog({
-            resizable: true,               // Let scroll vertically
+            resizable: false,
             height: popMaxHeight,
             width: popMaxWidth,
             minHeight: 200,
@@ -3591,7 +3591,7 @@ function showExportedDataHubsPopup() {
     let popUp = document.getElementById("exportedDataHubsPopup");
     title = popUp.title;
     if (title.length === 0 && popUp.getAttribute("mouseovertext") !== "") {title = popUp.getAttribute("mouseovertext");}
-    $('#exportedDataHubsPopup').dialog({width:'650', title: title});
+    $('#exportedDataHubsPopup').dialog({resizable: false, width:'650', title: title});
 }
 
 // Show the recommended track sets popup
@@ -3612,7 +3612,7 @@ function removeSessionPanel() {
 
 // A function to show the keyboard help dialog box, bound to ? and called from the menu bar
 function showHotkeyHelp() {
-    $("#hotkeyHelp").dialog({width:'600'});
+    $("#hotkeyHelp").dialog({width:'600', resizable: false});
 }
 
 // A function to add an entry for the keyboard help dialog box to the menubar 
@@ -3900,10 +3900,6 @@ var popUp = {
         }
 
         $('#hgTrackUiDialog').dialog({
-            ajaxOptions: {
-                // This doesn't work
-                cache: true
-            },
             resizable: true,               // Let description scroll vertically
             height: (popUp.trackDescriptionOnly ? popMaxHeight : 'auto'),
             width: popWidth,
@@ -5521,7 +5517,7 @@ var downloadCurrentTrackData = {
             };
             $(downloadDialog).dialog({
                 title: "Download track data in view",
-                resizable: true,               // Let scroll vertically
+                resizable: false,
                 height: 'auto',
                 width: popWidth,
                 minHeight: 200,
