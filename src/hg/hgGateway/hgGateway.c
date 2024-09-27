@@ -31,6 +31,7 @@
 #include "botDelay.h"
 #include "genark.h"
 #include "assemblyList.h"
+#include <limits.h>
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -560,7 +561,7 @@ else
     safeAddN(&p, &size, targetSpecies, termLen);
     safeAdd(&p, &size, "</b>");
     // add the rest of the species:
-    safeAdd(&p, &size, targetSpecies+termLen); 
+    safeAdd(&p, &size, targetSpecies+termLen);
     }
 if (*p != '\0' || size != 1)
     errAbort("boldTerm: bad arithmetic (size is %d, *p is '%c')", size, *p);
@@ -760,10 +761,10 @@ struct gHubMatch
     char *asmName;
     char *scientificName;
     char *commonName;
-    int priority; // reserver for later ranking, currently unused
+    unsigned priority; // for ranking, currently unused
     };
 
-static struct gHubMatch *gHubMatchNew(char *acc, char *hubUrl, char *asmName, char *scientificName, char *commonName, int priority)
+static struct gHubMatch *gHubMatchNew(char *acc, char *hubUrl, char *asmName, char *scientificName, char *commonName, unsigned priority)
 /* Allocate and return a description of an assembly hub db. */
 {
 struct gHubMatch *match;
@@ -970,18 +971,83 @@ if (ret)
 return ret;
 }
 
+static struct gHubMatch *filterAssemblyListMatches(struct sqlConnection *conn,
+   char *asmListTable, char *term, char *genarkPrefix, boolean wildCard)
+{
+struct gHubMatch *ret = NULL;
+struct dyString *query = dyStringNew(64);
+/* LIMIT of 100 will allow enough results to include some genArk assemblies */
+if (wildCard)
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1 LIMIT 100", asmListTable, term);
+else
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1 LIMIT 100", asmListTable, term);
+
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+dyStringFree(&query);
+char **row;
+int c = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct assemblyList *el = assemblyListLoadWithNull(row);
+    if (isGenArk(el->name))
+	{
+	++c;
+	char genarkUrl[PATH_MAX];
+	safef(genarkUrl, sizeof(genarkUrl), "%s/%s", genarkPrefix, el->hubUrl);
+	slAddHead(&ret, gHubMatchNew(el->name, genarkUrl, NULL, el->scientificName, el->commonName, *el->priority));
+	}
+    if ( c > 20 )	/* allow only 20 genArk returns */
+	break;
+    }
+sqlFreeResult(&sr);
+
+if (ret)
+    slReverse(&ret);
+return ret;
+}
+
 static struct gHubMatch *searchGenark(char *term)
-/* Search through the genark table for hubs matches term */
+/* Search through the genark table (or assemblyList table) for hubs
+   matches term */
 {
 char *genarkPrefix = cfgOption("genarkHubPrefix");
 if (genarkPrefix == NULL)
     return NULL;
 
+struct sqlConnection *conn = hConnectCentral();
 struct gHubMatch *gHubMatchList = NULL;
 char *genarkTbl = genarkTableName();
 int colCount = genArkColumnCount();
-struct sqlConnection *conn = hConnectCentral();
-if (sqlTableExists(conn, genarkTbl))
+int termLength = strlen(term);
+
+char *asmListTable = assemblyListTableName();
+/* only allow the asmList query when the search term is more than 2 letters */
+if ((termLength > 2) && sqlTableExists(conn, asmListTable))
+    {
+    int wordCount = chopByWhite(term, NULL, 0);
+    if (1 == wordCount)
+	{
+	struct dyString *query = dyStringNew(64);
+	sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1", asmListTable, term);
+
+	long long matchCount = sqlQuickLongLong(conn, query->string);
+
+	dyStringFree(&query);
+        boolean wildCard = FALSE;
+        if (0 == matchCount)	/* try prefix search */
+	    {
+	    query = dyStringNew(64);
+	    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1", asmListTable, term);
+	    matchCount = sqlQuickLongLong(conn, query->string);
+	    dyStringFree(&query);
+            if (matchCount > 0)
+		wildCard = TRUE;
+	    }
+        if (matchCount > 0)
+            gHubMatchList = filterAssemblyListMatches(conn, asmListTable, term, genarkPrefix, wildCard);
+	}	/* 1 == wordCout  */
+    }	/* termLength > 2	*/
+else if (sqlTableExists(conn, genarkTbl))
     {
     char query[1024];
     if (colCount > 6)
