@@ -6,7 +6,9 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
-html gnomadV4
+cartVersion 6
+html gnomadV4.1
+pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -19,7 +21,7 @@ html gnomadV4
     maxWindowToDraw 200000
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     dataVersion Release 2.1.1 (March 6, 2019)
-    html gnomadV3_1_1
+    html gnomadV4.1
     priority 4
     visibility hide
 
@@ -46,9 +48,9 @@ html gnomadV4
     showHardyWeinberg on
     configureByPopup off
     maxWindowToDraw 200000
-    html gnomad
+    html gnomad4.1
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
-    priority 3
+    priority 3.3
     visibility hide
     url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
     urlLabel gnomAD:
@@ -61,9 +63,9 @@ html gnomadV4
     dataVersion Release 3.1 (October 29, 2020)
     type bigBed 9 +
     itemRgb on
-    html gnomadV3_1_1
+    html gnomadV4.1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1/variants/genomes.bb
-    priority 2
+    priority 3.2
     labelFields name,rsId
     defaultLabelFields name
     sepFields AC_afr
@@ -84,16 +86,16 @@ html gnomadV4
 
     track gnomadGenomesVariantsV3_1_1
     parent gnomadVariants
-    visibility squish
+    visibility hide
     shortLabel gnomAD v3.1.1
     longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
     dataVersion Release v3.1.1 (March 20, 2021) and v3.1 chrM Release (November 17, 2020)
     type bigBed 9 +
     itemRgb on
     searchIndex name,_displayName,rsId
-    html gnomadV3_1_1
+    html gnomadV4.1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
-    priority 2
+    priority 3.1
     labelFields rsId,_displayName
     defaultLabelFields _displayName
     skipFields _displayName
@@ -117,12 +119,87 @@ html gnomadV4
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
 
+    track gnomadVariantsV4.1
+    parent gnomadVariants
+    compositeTrack on
+    shortLabel gnomAD v4.1
+    longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants v4.1
+    type bigBed 9 +
+    configureByPopup off
+    maxWindowCoverage 200000
+    maxItems 50000
+    dataVersion Release v4.1 (April 19, 2024)
+    html gnomadV4.1
+    priority 1
+    visibility squish
+    pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
+        track gnomadExomesVariantsV4_1
+        parent gnomadVariantsV4.1 on
+        visibility squish
+        shortLabel gnomAD v4.1 Exomes
+        longLabel Genome Aggregation Database (gnomAD) Exomes Variants v4.1
+        dataVersion Release v4.1 (April 19, 2024)
+        type bigBed 9 +
+        itemRgb on
+        searchIndex name,_displayName,rsId
+        html gnomadV4.1
+        bigDataUrl /gbdb/hg38/gnomAD/v4.1/exomes/exomes.bb
+        priority 2
+        labelFields rsId,_displayName
+        defaultLabelFields _displayName
+        skipFields _displayName
+        skipEmptyFields on
+        filterValues.annot pLoF,missense,synonymous,other
+        filterValuesDefault.annot pLoF,missense,synonymous
+        filterValues.FILTER PASS,InbreedingCoeff,RF,AC0,AS_VQSR,indel_stack (chrM only),npg (chrM only)
+        filterType.FILTER multipleListAnd
+        filterValuesDefault.FILTER PASS
+        filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,NMD_transcript_variant,coding_sequence_variant,frameshift_variant,incomplete_terminal_codon_variant,inframe_deletion,inframe_insertion,intron_variant,mature_miRNA_variant,missense_variant,non_coding_transcript_exon_variant,non_coding_transcript_variant,protein_altering_variant,splice_acceptor_variant,splice_donor_variant,splice_region_variant,start_lost,start_retained_variant,stop_gained,stop_lost,stop_retained_variant,synonymous_variant,transcript_ablation
+        filterType.variation_type multipleListOr
+        filter.AF 0.0
+        filterLabel.AF Minor Allele Frequency Filter
+        mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>TotalAF</b>: ${AF} (${AC}/${AN})<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: ${FILTER}<br> <b>PopMaxAF</b>: ${grpmax}<br> <b>Homozygous Individuals</b>: ${nhomalt}<br> <b>Hemizygous Individuals (only in chrX & chrY)</b>: ${nhemi}
+        url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r4
+        urlLabel View this variant at gnomAD
+        detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
+        detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1/exomes/gnomad.v4.1.exomes.details.tab.gz
+
+        track gnomadGenomesVariantsV4_1
+        parent gnomadVariantsV4.1 on
+        visibility squish
+        shortLabel gnomAD v4.1 Genomes
+        longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.1
+        dataVersion Release v4.1 (April 19, 2024)
+        type bigBed 9 +
+        itemRgb on
+        searchIndex name,_displayName,rsId
+        html gnomadV4.1
+        bigDataUrl /gbdb/hg38/gnomAD/v4.1/genomes/genomes.bb
+        priority 1
+        labelFields rsId,_displayName
+        defaultLabelFields _displayName
+        skipFields _displayName
+        skipEmptyFields on
+        filterValues.annot pLoF,missense,synonymous,other
+        filterValuesDefault.annot pLoF,missense,synonymous
+        filterValues.FILTER PASS,InbreedingCoeff,RF,AC0,AS_VQSR,indel_stack (chrM only),npg (chrM only)
+        filterType.FILTER multipleListAnd
+        filterValuesDefault.FILTER PASS
+        filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,NMD_transcript_variant,coding_sequence_variant,frameshift_variant,incomplete_terminal_codon_variant,inframe_deletion,inframe_insertion,intron_variant,mature_miRNA_variant,missense_variant,non_coding_transcript_exon_variant,non_coding_transcript_variant,protein_altering_variant,splice_acceptor_variant,splice_donor_variant,splice_region_variant,start_lost,start_retained_variant,stop_gained,stop_lost,stop_retained_variant,synonymous_variant,transcript_ablation
+        filterType.variation_type multipleListOr
+        filter.AF 0.0
+        filterLabel.AF Minor Allele Frequency Filter
+        mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>TotalAF</b>: ${AF} (${AC}/${AN})<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: ${FILTER}<br> <b>PopMaxAF</b>: ${grpmax}<br> <b>Homozygous Individuals</b>: ${nhomalt}<br> <b>Hemizygous Individuals (only in chrX & chrY)</b>: ${nhemi}
+        url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r4
+        urlLabel View this variant at gnomAD
+        detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
+        detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1/genomes/gnomad.v4.1.genomes.details.tab.gz
 
 track gnomadConstraint
 parent gnomadVariants on
 shortLabel gnomAD Mut Constraint
-longLabel Genome Aggregation Database (gnomAD) non-coding constraint of haploinsufficient variation (Gnocchi), includes chrX
+longLabel Gnocchi: Genome Aggregation Database (gnomAD) non-coding constraint of haploinsufficient variation, includes chrX
 bigDataUrl /gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw
 type bigWig
 altColor 0,150,0
@@ -132,43 +209,10 @@ viewLimitsMax -3:3
 autoScale on
 priority 10
 dataVersion Release 3.1.2 (October 22, 2021)
-html gnomadV3_1_1
+html gnomadV4.1
 
 # The missense and pLI contraint tracks
 include gnomad.constraint.public.ra
-
-track gnomadVariantsV4
-parent gnomadVariants
-compositeTrack on
-shortLabel gnomAD v4 Pre-Release
-longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.0.0 Pre-Release
-type vcfTabix
-showHardyWeinberg on
-configureByPopup off
-visibility dense
-dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
-priority 1
-url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r4&ignore=$$
-urlLabel gnomAD:
-html gnomadV4.html
-
-    track gnomadGenomesV4
-    parent gnomadVariantsV4
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-    shortLabel gnomAD4 Genome Vars
-    longLabel Genome Aggregation Database (gnomAD) Genomes Variants v4.0.0 Pre-Release
-    maxWindowCoverage 1000
-    maxWindowToDraw 10000
-    visibility pack
-
-    track gnomadExomesV4
-    parent gnomadVariantsV4
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-    shortLabel gnomAD4 Exome Vars
-    longLabel Genome Aggregation Database (gnomAD) Exomes Variants v4.0.0 Pre-Release
-    visibility pack
-    maxWindowCoverage 1000
-    maxWindowToDraw 10000
 
 track gnomadStructuralVariants
 parent gnomadVariants on
@@ -196,6 +240,7 @@ filterByRange.svlen on
 filterLabel.svlen Filter by Variant Size
 mouseOverField _mouseOver
 html gnomadSv.html
+pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
 
 track gnomadCopyNumberVariants
@@ -214,6 +259,7 @@ filterValues.svtype DEL|Deletion,DUP|Duplication
 searchIndex name
 mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}<br> <b>Site frequency (non-neuro control samples)</b>: ${sf}
 html gnomadCNV
+pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
 
 searchTable pliByTranscript
@@ -228,7 +274,7 @@ searchName gnomadGenomesVariantsV3_1_1_displayName
 searchTable gnomadGenomesVariantsV3_1_1
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
-termRegex ^chr([1-9][0-9]?|[XYM]):[0-9]+-[0-9]+-*
+termRegex ^chr([1-9][0-9]?|[XYM])-[0-9]+-.*
 
 searchName gnomadGenomesVariantsV3_1_1_rsId
 searchTable gnomadGenomesVariantsV3_1_1
@@ -239,3 +285,35 @@ termRegex ^rs*
 searchTable gnomadGenomesVariantsV3_1_1_name
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
+
+searchName gnomadGenomesVariantsV4_1_displayName
+searchTable gnomadGenomesVariantsV4_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v4.1
+termRegex ^chr([1-9][0-9]?|[XYM])-[0-9]+-.*
+
+searchName gnomadGenomesVariantsV4_1_rsId
+searchTable gnomadGenomesVariantsV4_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v4.1
+termRegex ^rs*
+
+searchTable gnomadGenomesVariantsV4_1_name
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v4.1
+
+searchName gnomadExomesVariantsV4_1_displayName
+searchTable gnomadExomesVariantsV4_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Exomes Variants v4.1
+termRegex ^chr([1-9][0-9]?|[XYM])-[0-9]+-.*
+
+searchName gnomadExomesVariantsV4_1_rsId
+searchTable gnomadExomesVariantsV4_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Exomes Variants v4.1
+termRegex ^rs*
+
+searchTable gnomadExomesVariantsV4_1_name
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Exomes Variants v4.1

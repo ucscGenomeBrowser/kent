@@ -10,6 +10,7 @@ dataVersion Release v4.1 (April 19, 2024), Release v4 (November 2023), Release 2
 subGroup1 view Views v2=constraintV2 v4=constraintV4 v4_1=constraintV4.1
 html gnomadPLI.html
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
     track constraintV2
     parent gnomadPLI off
@@ -96,7 +97,7 @@ visibility hide
     shortLabel Constraint V4
     longLabel gnomAD Constraint Metrics V4
     view v4
-    visibility pack
+    visibility hide
     type bigBed 12 +
     
         track pliByTranscriptV4
@@ -159,6 +160,7 @@ visibility hide
         filterByRange._pli on
         parent constraintV4_1
         priority 2
+        pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
         track missenseByTranscriptV4_1
         shortLabel Transcript Missense v4.1
@@ -176,3 +178,4 @@ visibility hide
         filterByRange._zscore on
         parent constraintV4_1
         priority 2
+        pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
