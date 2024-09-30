@@ -197,6 +197,4 @@ void *udcMMapFetch(struct udcFile *file, bits64 offset, bits64 size);
 bool udcIsResolvable(char *url);
 /* check if third-party protocol resolving (e.g. for "s3://") is enabled and if a URL can be resolved this way to HTTP */
 
-void udcReadStopMessage(char *message);
-// set message for errAbort on udcRead.  If message is NULL, no abort is made
 #endif /* UDC_H */

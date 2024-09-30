@@ -83,7 +83,6 @@
 #include "decoratorUi.h"
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
-#include "signal.h"
 
 //#include "bed3Sources.h"
 
@@ -4873,6 +4872,16 @@ for (track = trackList; track != NULL; track = nextTrack)
     }
 }
 
+boolean forceWiggle; // we've run out of space so all tracks become coverage tracks
+
+static void addPreFlatTrack(struct trackRef **list, struct track *track)
+{
+struct trackRef *trackRef;
+AllocVar(trackRef);
+trackRef->track = track;
+slAddHead(list, trackRef);
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -5030,6 +5039,9 @@ expandSquishyPackTracks(trackList);
 
 // set heights and visibilities.
 struct window *window = NULL;
+
+// we may come through this way twice if we exceed the 32k limit for screen image
+retry:
 for(window=windows;window;window=window->next)
     {
     setGlobalsFromWindow(window);
@@ -5098,7 +5110,8 @@ if (wigOrder != NULL)
         }
     }
 
-// Construct flatTracks
+// Construct pre-flatTracks 
+struct trackRef *preFlatTracks = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (isLimitedVisHiddenForAllWindows(track))
@@ -5108,7 +5121,7 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks, track, cart, orderedWiggles);
+            addPreFlatTrack(&preFlatTracks, track);
         else
             {
             boolean doHideEmpties = doHideEmptySubtracksNoMultiBed(cart, track);
@@ -5123,16 +5136,62 @@ for (track = trackList; track != NULL; track = track->next)
                         !(doHideEmpties && slCount(subtrack->items) == 0))
                         // Ignore subtracks with no items in window
                     {
-                    flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
+                    addPreFlatTrack(&preFlatTracks, subtrack);
                     }
                 }
             }
         }
     else
 	{	
-        flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
+        addPreFlatTrack(&preFlatTracks, track);
 	}
     }
+slReverse(&preFlatTracks);
+
+// check total height
+#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
+int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
+boolean safeHeight = TRUE;
+struct trackRef *pfRef;
+int tmpPixHeight = pixHeight;
+for(pfRef = preFlatTracks; pfRef; pfRef = pfRef->next)
+    {
+    struct track *pf = pfRef->track;
+    int totalHeight = tmpPixHeight+trackPlusLabelHeight(pf,fontHeight);
+    if (totalHeight > maxSafeHeight)
+        {
+        if (!forceWiggle)
+            {
+            char buffer[1024];
+            sprintLongWithCommas(buffer, totalHeight);
+            warn("Image was over 32,000 pixels high (%s pix). All bed tracks are now displayed as density graphs. Zoom in to restore previous display modes.", buffer);
+            forceWiggle = TRUE;
+            goto retry;
+            }
+        char numBuf[SMALLBUF];
+        sprintLongWithCommas(numBuf, maxSafeHeight);
+        if (safeHeight)  // Only one message
+            warn("Image is over %s pixels high (%d pix) at the following track which is now "
+                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, pf->tdb->longLabel,
+                 (pf->next != NULL ?
+                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
+        safeHeight = FALSE;
+	struct track *winTrack;
+	for(winTrack=pf;winTrack;winTrack=winTrack->nextWindow)
+	    {
+	    pf->limitedVis = tvHide;
+	    pf->limitedVisSet = TRUE;
+	    }
+        }
+    if (!isLimitedVisHiddenForAllWindows(pf))
+        tmpPixHeight += trackPlusLabelHeight(pf, fontHeight);
+    }
+pixHeight = tmpPixHeight;
+
+// Construct flatTracks
+for(; preFlatTracks; preFlatTracks = preFlatTracks->next)
+    flatTracksAdd(&flatTracks,preFlatTracks->track,cart, orderedWiggles);
+
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
 
 if (orderedWiggles)
@@ -5164,35 +5223,11 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 
 
 // fill out track->prevTrack, and check for maxSafeHeight
-boolean safeHeight = TRUE;
-/* firefox on Linux worked almost up to 34,000 at the default 620 width */
-/* More recent hardware/browsers may be able to handle more - we had a success with an 8192x64891 image */
-#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
-int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
 struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
     assert(track->limitedVis != tvHide);
-    // ORIG int totalHeight = pixHeight+trackPlusLabelHeight(track,fontHeight);
-    int totalHeight = pixHeight+flatTrack->maxHeight;
-    if (totalHeight > maxSafeHeight)
-        {
-        char numBuf[SMALLBUF];
-        sprintLongWithCommas(numBuf, maxSafeHeight);
-        if (safeHeight)  // Only one message
-            warn("Image is over %s pixels high (%d pix) at the following track which is now "
-                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
-                 (flatTrack->next != NULL ?
-                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
-        safeHeight = FALSE;
-	struct track *winTrack;
-	for(winTrack=track;winTrack;winTrack=winTrack->nextWindow)
-	    {
-	    track->limitedVis = tvHide;
-	    track->limitedVisSet = TRUE;
-	    }
-        }
     if (!isLimitedVisHiddenForAllWindows(track))
         {
 	struct track *winTrack;
@@ -5203,7 +5238,6 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         // ORIG pixHeight += trackPlusLabelHeight(track, fontHeight);
 	if (!theImgBox) // prevTrack may have altered the height, so recalc height
 	    setFlatTrackMaxHeight(flatTrack, fontHeight);
-	pixHeight += flatTrack->maxHeight;
         prevTrack = track;
         }
     }
@@ -8581,29 +8615,14 @@ printf("'>Aliases</a></div>");
 #endif
 
 
-static void paraLoadTimeoutFunc(int sig)
-// signal handler for alarm timeout.   Tell parallel loads to stop by errAborts
-// in udcRead
-{
-udcReadStopMessage("Parallel read timeout message"); 
-alarm(0); // disable the alarm
-}
-
 unsigned getParaLoadTimeout()
-// get the parallel load timeout in milliseconds if any
+// get the parallel load timeout in seconds (defaults to 90)
 {
-char *cfg = cfgOption("paraLoadTimeout");
-
-if (cfg == NULL)
-    return 0;
-
-char *paraLoadTimeoutStr = cartOptionalString(cart, "paraLoadTimeout");
+char *paraLoadTimeoutStr = cartOptionalString(cart, "parallelFetch.timeout");
 if (paraLoadTimeoutStr == NULL)
-    paraLoadTimeoutStr = cfg;
+    paraLoadTimeoutStr = cfgOptionDefault("parallelFetch.timeout", "90");  // wait up to default 90 seconds.
 
-unsigned paraLoadTimeout = 0;
-if (paraLoadTimeoutStr != NULL)
-    paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
+unsigned paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
 
 return paraLoadTimeout;
 }
@@ -8814,9 +8833,6 @@ trackList = windows->trackList;  // restore original track list
 // Loop over each window loading all tracks
 trackLoadingInProgress = TRUE;
 
-// see if we have a parallel load time out 
-unsigned paraLoadTimeout = getParaLoadTimeout();
-
 // LOAD OPTIMIZATION HACK GALT
 // This is an attempt to try to optimize loading by having multiple regions
 // treated as a single span.  The hack just grabs the dimensions of the first and last windows
@@ -8849,17 +8865,6 @@ for (window=windows; window; window=window->next)
 	if (currentWindow == windows) // first window
 	    winEnd = lastWinEnd; // so now we load the entire span inside the first window.
 	}
-
-    if (paraLoadTimeout)  // we stop loading after a number of milliseconds
-        {
-        struct sigaction siga;
-        siga.sa_handler = paraLoadTimeoutFunc;
-        siga.sa_flags = SA_RESTART;
-        sigaction(SIGALRM, &siga, NULL);
-        
-        udcReadStopMessage(NULL); // ask udcRead to NOT errAbort
-        ualarm(paraLoadTimeout * 1000, 0);
-        }
 
     /* pre-load remote tracks in parallel */
     int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
@@ -8946,18 +8951,12 @@ for (window=windows; window; window=window->next)
     if (ptMax > 0)
 	{
 	/* wait for remote parallel load to finish */
-	remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+	remoteParallelLoadWait(getParaLoadTimeout());  // wait up to default 90 seconds.
 	if (measureTiming)
 	    measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
 	}
     }
 trackLoadingInProgress = FALSE;
-
-if (paraLoadTimeout)
-    {
-    udcReadStopMessage(NULL); // ask udcRead to NOT errAbort
-    alarm(0);
-    }
 
 setGlobalsFromWindow(windows); // first window // restore globals
 trackList = windows->trackList;  // restore track list

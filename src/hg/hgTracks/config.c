@@ -678,14 +678,10 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
         );
     }
 
-
-if ( cfgOption("paraLoadTimeout") )
-    {
-    hPrintf("<TR><TD>Parallel load time out:");
-    hPrintf("<TD style=\"text-align: right\">");
-    hIntVar("paraLoadTimeout", getParaLoadTimeout(), 5);
-    hPrintf("<TD>milliseconds<TD></TR>");
-    }
+hPrintf("<TR><TD>Parallel load time out:");
+hPrintf("<TD style=\"text-align: right\">");
+hIntVar("parallelFetch.timeout", getParaLoadTimeout(), 3);
+hPrintf("<TD>seconds<TD></TR>");
 
 themeDropDown(cart);
 

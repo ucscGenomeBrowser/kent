@@ -44,6 +44,8 @@ typedef struct {
     size_t (*HeaderFunction) (char *buffer, size_t size, size_t nitems, void *outstream);
     int failonerror;
     // currently ignoring follow location setting and user agent string - we always follow, no string
+    struct udcFile *udc; // As long as we're querying the same URL, keep the udcFile open and just seek
+    long udcSize; // to simplify repeated checks against udcFileSize
 } CURL;
 
 typedef size_t (*curl_write_callback)(char *buffer, size_t size, size_t nitems, void *outstream);

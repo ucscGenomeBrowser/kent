@@ -55,7 +55,8 @@ if (xrefSpec != NULL)
     xrefTable = words[0];
     idField = words[1];
     aliasField = words[2];
-    if (!sqlTableExists(conn, xrefTable) ||
+
+    if (!conn || !sqlTableExists(conn, xrefTable) ||
 	sqlFieldIndex(conn, xrefTable, idField) < 0 ||
 	sqlFieldIndex(conn, xrefTable, aliasField) < 0)
 	xrefTable = idField = aliasField = NULL;

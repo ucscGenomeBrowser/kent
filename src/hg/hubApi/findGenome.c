@@ -6,17 +6,7 @@
 #include "cartJson.h"
 #include "genark.h"
 #include "asmAlias.h"
-#include "asmSummary.h"
 #include "assemblyList.h"
-
-struct combinedSummary
-/* may have information from any of:  asmSummary, genark or dbDb */
-    {
-    struct combinedSummary *next;	/* Next in singly linked list */
-    struct asmSummary *summary;		/* from asmSummary table */
-    struct genark *genArk;		/* from genark table */
-    struct dbDb *dbDb;			/* from dbDb table */
-    };
 
 /* will be initialized as this function begins */
 static char *genarkTable = NULL;
@@ -317,21 +307,18 @@ boolean prefixSearch = FALSE;
 char *extraArgs = verifyLegalArgs(argFindGenome);
 genarkTable = genarkTableName();
 asmListTable = assemblyListTableName();
+struct sqlConnection *conn = hConnectCentral();
 
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /findGenome'%s'", extraArgs);
 
-boolean asmListExists = hTableExists("hgcentraltest", asmListTable);
+boolean asmListExists = sqlTableExists(conn, asmListTable);
 if (!asmListExists)
-    apiErrAbort(err400, err400Msg, "table hgcentraltest.assemblyList does not exist for /findGenome");
+    apiErrAbort(err400, err400Msg, "table central.assemblyList does not exist for /findGenome");
 
-boolean asmSummaryExists = hTableExists("hgcentraltest", "asmSummary");
-if (!asmSummaryExists)
-    apiErrAbort(err400, err400Msg, "table hgcentraltest.asmSummary does not exist for /findGenome");
-
-boolean genArkExists = hTableExists("hgcentraltest", genarkTable);
+boolean genArkExists = sqlTableExists(conn, genarkTable);
 if (!genArkExists)
-    apiErrAbort(err400, err400Msg, "table hgcentraltest.%s does not exist for /findGenome", genarkTable);
+    apiErrAbort(err400, err400Msg, "table central.%s does not exist for /findGenome", genarkTable);
 
 char *yearString = cgiOptionalString(argYear);
 char *categoryString = cgiOptionalString(argCategory);
@@ -427,7 +414,6 @@ if (isNotEmpty(statsOnlyString))
 	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, can only be =1 or =0", argStatsOnly, statsOnlyString);
     }
 
-struct sqlConnection *conn = hConnectCentral();
 
 if (!sqlTableExists(conn, asmListTable))
     apiErrAbort(err500, err500Msg, "missing central.assemblyList table in function /findGenome'%s'", extraArgs);

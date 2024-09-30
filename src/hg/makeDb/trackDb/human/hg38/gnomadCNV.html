@@ -1,10 +1,9 @@
 <h2>Description</h2>
 <p>
-The <b>${longLabel}</b> track set shows Copy number variant (CNV) calls generated from a set of ES
-samples that largely overlaps those in gnomAD v4. The gnomAD exome CNVs v4.1 release includes
-464,297 unrelated exomes. More information can be found at the 
-<a href="https://gnomad.broadinstitute.org/help/dataset-selection" target="_blank">
-gnomAD site</a>.</p>
+The <b>${longLabel}</b> track set shows rare autosomal coding copy number variants (CNVs) with an overall
+site frequency of less than 1%. These variants were identified from exome sequencing (ES) data of
+464,297 individuals. The data can also be explored via the
+<a href="https://gnomad.broadinstitute.org/" target="_blank">gnomAD browser</a>.
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -15,28 +14,74 @@ Items are colored by the type of variant:
     <th>Variant Type</th>
   <tr>
     <td style="background-color: rgb(255,0,0)">Deletion (DEL)</td>
-    <td>1206278</td>
+    <td>20989</td>
   </tr>
   <tr>
     <td style="background-color: rgb(0,0,255)">Duplication (DUP)</td>
-    <td>269326</td>
+    <td>25026</td>
   </tr>
 </table>.</p>
 
-<p><b>Mouseover</b> on an item will display the position, size of variant, and Genes impacted by
-variant (&gt;=10% CDS overlap by deletion or &gt;=75% CDS overlap by duplication).</p>
+<p><b>Mouseover</b> on an item will display the position, size of variant, genes impacted by
+variant (&gt;=10% CDS overlap by deletion or &gt;=75% CDS overlap by duplication), and site
+frequency of non-neuro control samples. Item description pages include a linkout to
+the gnomAD browser showing additional genetic ancestry group information.</p>
 
 
 <H2>Methods</H2>
+
+<h3>Exome CNV Discovery Method: GATK-gCNV</h3>
 <p>
-The bed files was obtained from the gnomAD Google Storage bucket:
+To identify rare coding CNVs from the ES data of 464,297 individuals in gnomAD v4, the GATK-gCNV
+method was employed, as described in Babadi et al., Nat Genet, 2023.</p>
+
+<img style='margin-left: 40px;' height=300 width=500
+src="../images/gnomADv4_GATK_gCNV.png">
+
+<p>The CNV discovery process started with collecting the number of reads mapped to 363,301 autosomal
+target intervals derived from protein-coding exons (Fig. 1a, b; Babadi et al.). These read counts
+were used to capture sample-level technical variability, such as differences in exome capture kits
+or sequencing centers, and generated 1,045 different batches of samples for parallel processing
+(Fig. 1c). For each of these batches, 200 random samples were selected for training GATK-gCNV in
+cohort mode,which can be thought of as the creation of a "panel of normals" (PoN). The resulting
+PoN models were then used to efficiently delineate CNV events on all of the samples of their
+respective cohorts using the GATK-gCNV case mode (Fig. 1d,e).
+</p>
+
+<p>
+The raw, individual-level CNV calls produced by GATK-gCNV for all samples were then collated,
+and variants observed in multiple individuals were clustered using single-linkage clustering.
+Quality filtering followed the procedures outlined in Babadi et al., filtering CNVs based on
+sample-level (number of events per individual) and call-level (frequency, size, quality score) metrics
+Due to the significant increase in cohort size and heterogeneity compared to the datasets reported
+in Babadi et al., additional filters were applied. Samples with more than five chromosomes harboring
+rare CNVs, as well as those containing more than three rare terminal CNVs, were excluded. 1,049
+sites producing noisy normalized read-depth signals were masked. The final retained CNVs and sites
+were subsequently annotated for impacted genes and frequencies.</p>
+
+<h3>Limitations of ES-based rare coding CNVs in gnomAD v4</h3>
+<ol>
+  <li>This dataset includes only rare coding CNVs, filtered to &lt;1% site frequency in the overall
+      dataset.</li>
+  <li>This dataset only includes variants that span three or more exons that received sufficient
+      coverage.</li>
+  <li>This dataset is limited to autosomal CNVs for now.</li>
+</ol>
+
+<p>
+More information can be found at the
+<a href="https://gnomad.broadinstitute.org/news/2023-11-v4-copy-number-variants/" target="_blank">
+gnomAD site</a>.</p>
+
+<p>
+The bed files was obtained from the gnomAD Google Storage bucket:</p>
 
 <pre>
 https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/exome_cnv/gnomad.v4.1.cnv.non_neuro_controls.bed
 </pre>
 
 The data was then transformed into a bigBed track. For the full list of commands used to make this
-track please see the &quot;gnomAD Structural Variants v4&quot; section of the
+track please see the &quot;gnomAD CNVs v4.1&quot; section of the
 <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt"
 target="_blank">makedoc</a>.</p>
 
@@ -85,13 +130,33 @@ href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open D
 <h2>References</h2>
 
 <p>
-Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
-AJ, Cummings BB <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
-Analysis of protein-coding genetic variation in 60,706 humans</a>.
-<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+Babadi M, Fu JM, Lee SK, Smirnov AN, Gauthier LD, Walker M, Benjamin DI, Zhao X, Karczewski KJ, Wong
+I <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-023-01449-0" target="_blank">
+GATK-gCNV enables the discovery of rare copy number variants from exome sequencing data</a>.
+<em>Nat Genet</em>. 2023 Sep;55(9):1589-1597.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37604963" target="_blank">37604963</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10904014/" target="_blank">PMC10904014</a>
+</p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
 </p>
 
 <p>
@@ -105,21 +170,11 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC
 </p>
 
 <p>
-Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
-Gauthier LD, Wang H <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
-A structural variation reference for medical and population genetics</a>.
-<em>Nature</em>. 2020 May;581(7809):444-451.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
 </p>
-<p>
-Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
-Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
-Transcript expression-aware annotation improves rare variant interpretation</a>.
-<em>Nature</em>. 2020 May;581(7809):452-458.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
-</p>
-

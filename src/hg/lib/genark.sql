@@ -14,5 +14,6 @@ CREATE TABLE genark (
     priority int not null,	# search priority to order hgGateway results
     clade varchar(255) not null,	# clade group in the GenArk system
               #Indices
+    FULLTEXT gIdx (gcAccession, asmName, scientificName, commonName, clade),
     PRIMARY KEY(gcAccession)
 );

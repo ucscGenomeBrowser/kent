@@ -1,4 +1,3 @@
-
 track knownGeneArchive
 superTrack on
 shortLabel GENCODE Archive
@@ -7,13 +6,12 @@ group genes
 type bed 6 +
 html ../../knownGeneArchive
 
-
     track knownGeneV36
     #table knownGene
     shortLabel GENCODE V36
     longLabel GENCODE V36
     parent knownGeneArchive
-    priority 5
+    priority 7
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
@@ -32,12 +30,13 @@ html ../../knownGeneArchive
     intronGap 12
     defaultLinkedTables kgXref
 
+
     track knownGeneV38
     #table knownGene
     shortLabel GENCODE V38
     longLabel GENCODE V38
     parent knownGeneArchive
-    priority 5
+    priority 6
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV38.bb
@@ -85,7 +84,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V43
     longLabel GENCODE V43
     parent knownGeneArchive
-    priority 5
+    priority 4
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
@@ -111,7 +110,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V44
     longLabel GENCODE V44
     parent knownGeneArchive
-    priority 5
+    priority 3
     visibility hide
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV44.bb
@@ -139,7 +138,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V45
     longLabel GENCODE V45
     parent knownGeneArchive
-    priority 5
+    priority 2
     visibility pack
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV45.bb
@@ -167,7 +166,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V46
     longLabel GENCODE V46
     parent knownGeneArchive
-    priority 5
+    priority 1
     visibility pack
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV46.bb
@@ -189,4 +188,3 @@ html ../../knownGeneArchive
     squishyPackPoint 1
     squishyPackField rank
     squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
-

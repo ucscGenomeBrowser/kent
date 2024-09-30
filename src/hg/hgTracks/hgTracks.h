@@ -339,6 +339,7 @@ struct window  // window in multiwindow image
     struct track *trackList;   // track list for window
     };
 
+extern boolean forceWiggle; // we've run out of space so all tracks become coverage tracks
 
 typedef void (*TrackHandler)(struct track *tg);
 
@@ -1844,6 +1845,6 @@ Color colorFromCart(struct track *tg, Color color);
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 
 unsigned getParaLoadTimeout();
-// get the parallel load timeout if any
+// get the parallel load timeout in seconds (defaults to 90)
 #endif /* HGTRACKS_H */
 
