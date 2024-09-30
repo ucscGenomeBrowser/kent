@@ -184,7 +184,9 @@ char *prefix = cfgOption("udc.localDir");
 if (prefix == NULL)
     {
     if (doAbort)
-        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s', unless " \
+                "the udc.localDir variable is set to a prefix of the file's path in the " \
+                "cgi-bin/hg.conf of this UCSC Genome Browser", url);
     return FALSE;
     }
 else if (!startsWith(prefix, url))
