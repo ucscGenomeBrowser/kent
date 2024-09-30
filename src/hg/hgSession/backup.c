@@ -1142,7 +1142,7 @@ char *cwd = cloneString(getCurrentDir());
 setCurrentDir(tempOutRand);
 char excludeBuf[4096];
 safef(excludeBuf, sizeof excludeBuf, "--exclude=%s", archiveName);
-char *pipeCmd1[] = { "tar", "-zcphf", archiveName, ".", excludeBuf, NULL};
+char *pipeCmd1[] = { "tar", "-zcphf", archiveName, excludeBuf, ".", NULL};
 struct pipeline *pl = pipelineOpen1(pipeCmd1, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int sysVal = pipelineWait(pl);
 setCurrentDir(cwd);
