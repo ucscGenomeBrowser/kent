@@ -953,18 +953,25 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     }
 }
 
+/* maximum limit of how many matches to display from genark */
+#define GENARK_LIMIT 20
+
 static struct gHubMatch *filterGenarkMatches(char *genarkHubUrl, struct genark *matchList)
 /* Turn the sql results into a struct gHubMatch list */
 {
 struct genark *match;
 struct gHubMatch *ret = NULL;
 
+int c = 0;
 for (match = matchList; match != NULL; match = match->next)
     {
+    ++c;
     // the match contains tab-sep accession, hubUrl, asmName, scientificName, commonName
     char hubUrl[PATH_LEN+1];
     safef(hubUrl, sizeof(hubUrl), "%s/%s", genarkHubUrl, match->hubUrl);
     slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
+    if (c > GENARK_LIMIT)
+	break;
     }
 if (ret)
     slReverse(&ret);
@@ -996,7 +1003,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	safef(genarkUrl, sizeof(genarkUrl), "%s/%s", genarkPrefix, el->hubUrl);
 	slAddHead(&ret, gHubMatchNew(el->name, genarkUrl, NULL, el->scientificName, el->commonName, *el->priority));
 	}
-    if ( c > 20 )	/* allow only 20 genArk returns */
+    if ( c > GENARK_LIMIT)	/* limit genArk returns */
 	break;
     }
 sqlFreeResult(&sr);
