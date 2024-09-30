@@ -2126,6 +2126,59 @@ var rightClick = {
     supportZoomCodon: true,  // add zoom to exon and zoom to codon to right click menu
     clickedHighlightIdx : null,  // the index (0,1,...) of the highlight item that overlaps the last right-click
 
+    moveTo : function(id, topOrBottom) {
+        /* move a track to either "top" or "bottom" position */
+        let newPos = "-1";
+        if (topOrBottom==="bottom") {
+            //newPos = String(parseInt($(".trDraggable").last().attr("abbr"))+1);
+            newPos = 9999;
+        }
+
+        let trEl = $(document.getElementById('tr_' + id));
+        trEl.attr('abbr', newPos);
+
+        dragReorder.sort($("#imgTbl"));
+        //cart.setVarsObj({},null,false);
+
+        // The C code seems to assume that the track order is linearly increasing, so fix that up now
+
+        dragReorder.setOrder($("#imgTbl"));
+    },
+    hideTracks: function (ids) 
+    {
+        var cartVars = [];
+        var cartVals = [];
+
+        for (var i = 0; i<ids.length; i++) {
+            var id = ids[i];
+            var rec = hgTracks.trackDb[id];
+            if (tdbIsSubtrack(rec)) {
+                // Remove subtrack level vis and explicitly uncheck.
+                //cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); 
+                cartVars.push(id);
+                cartVals.push('[]');
+
+                cartVars.push(id+"_sel");
+                cartVals.push(0);
+            } else if (tdbIsFolderContent(rec)) {
+                // supertrack children need to have _sel set to trigger superttrack reshaping
+                //cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); 
+                cartVars.push(id);
+                cartVals.push('hide');
+
+                cartVars.push(id+"_sel");
+                cartVals.push(0);
+            } else {
+                //cart.setVars([id], ['hide']);  // Others, just set vis hide.
+                cartVars.push(id);
+                cartVals.push('hide');
+            }
+            $(document.getElementById('tr_' + id)).remove();
+        }
+        imageV2.afterImgChange(true);
+        cart.setVars( cartVars, cartVals );
+    },
+
     makeMapItem: function (id)
     {   // Create a dummy mapItem on the fly
         // (for objects that don't have corresponding entry in the map).
@@ -2431,6 +2484,17 @@ var rightClick = {
             });
 
             imageV2.fullReload();
+        } else if (cmd === "hideOthers") {
+            var hideIds = [];
+            for (var otherId in hgTracks.trackDb) {
+                if (otherId!==id) 
+                    hideIds.push(otherId);
+            }
+            rightClick.hideTracks(hideIds);
+        } else if (cmd === "moveTop") {
+            rightClick.moveTo(id, "top");
+        } else if (cmd === "moveBottom") {
+            rightClick.moveTo(id, "bottom");
         } else if ((cmd === 'sortExp') || (cmd === 'sortSim')) {
             url = "hgTracks?hgsid=" + getHgsid() + "&" + cmd + "=";
             rec = hgTracks.trackDb[id];
@@ -2598,17 +2662,7 @@ var rightClick = {
             if (imageV2.enabled && cmd === 'hide') {
                 // Hide local display of this track and update server side cart.
                 // Subtracks controlled by 2 settings so del vis and set sel=0.
-                if (tdbIsSubtrack(rec)) {
-                    // Remove subtrack level vis and explicitly uncheck.
-                    cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); 
-                } else if (tdbIsFolderContent(rec)) {
-                    // supertrack children need to have _sel set to trigger superttrack reshaping
-                    cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); 
-                } else {
-                    cart.setVars([id], ['hide']);  // Others, just set vis hide.
-                }
-                $(document.getElementById('tr_' + id)).remove();
-                imageV2.afterImgChange(true);
+                rightClick.hideTracks([id]);
             } else if (!imageV2.mapIsUpdateable) {
                 jQuery('body').css('cursor', 'wait');
                 if (selectUpdated) {
@@ -2941,6 +2995,32 @@ var rightClick = {
                     }
                 }
             }
+
+
+            menu.push($.contextMenu.separator);
+            o = {};
+            o[" Hide all other tracks "] = {
+                onclick: function(menuItemClicked, menuObject) {
+                    rightClick.hit(menuItemClicked, menuObject, "hideOthers");
+                    return true; }
+            };  
+            menu.push(o);
+
+            o = {};
+            o[" Move to top "] = {
+                onclick: function(menuItemClicked, menuObject) {
+                    rightClick.hit(menuItemClicked, menuObject, "moveTop");
+                    return true; }
+            };  
+            menu.push(o);
+
+            o = {};
+            o[" Move to bottom "] = {
+                onclick: function(menuItemClicked, menuObject) {
+                    rightClick.hit(menuItemClicked, menuObject, "moveBottom");
+                    return true; }
+            };  
+            menu.push(o);
 
             if (rightClick.selectedMenuItem && rec) {
                 // Add cfg options at just shy of end...
@@ -5844,5 +5924,4 @@ function hgtWarnTiming(maxSeconds) {
         "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.";
     notifBoxSetup("hgTracks", "hideSpeedNotification", msg);
     notifBoxShow("hgTracks", "hideSpeedNotification");
-
 }
