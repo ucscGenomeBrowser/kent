@@ -933,12 +933,69 @@ hDisconnectCentral(&conn);
 return aHubMatchList;
 }
 
-static void writeGenarkMatches(struct jsonWrite *jw, struct gHubMatch *gHubMatchList)
+static char *genarkBold(char *target, char *term)
+/* given a string 'term', find it in target and add <b> </b> around it
+ *  similar to boldTerm() for dbDb match highlighting */
+{
+int termLen = strlen(term);
+int targetLen = strlen(target);
+int resultSize = targetLen + strlen("<b></b>") + 1;
+char result[resultSize];
+char *p = result;
+int size = sizeof(result);
+char *leftP = strstrNoCase(target, term);
+if (leftP)	/* found term in target */
+    {
+    size_t offset = (size_t) (leftP - target);
+    safeAddN(&p, &size, target, offset);
+    safeAdd(&p, &size, "<b>");
+    safeAddN(&p, &size, target+offset, termLen);
+    safeAdd(&p, &size, "</b>");
+    safeAdd(&p, &size, target+offset+termLen);
+    }
+else
+    safeAdd(&p, &size, target);
+
+return cloneStringZ(result, resultSize);
+}
+
+static void writeGenarkMatches(struct jsonWrite *jw, struct gHubMatch *gHubMatchList, char *searchString)
 /* Write out JSON for each genark hub that matched the users term */
 {
+/* get the search terms in an array for bold highlighting */
+/* beware, the chopByWhite cannabilizes the string, thus the cloneString() */
+char *searchCopy = cloneString(searchString);
+int searchWordCount = chopByWhite(searchCopy, NULL, 0); /* no cannabilizing yet */
+char **searchWords;
+AllocArray(searchWords, searchWordCount);
+(void) chopByWhite(searchCopy, searchWords, searchWordCount);
+/* eliminate the potential extra characters before and aft on these words */
+for (int i = 0; i < searchWordCount; ++i)
+    {
+    /* remove trailing " or * characters, or beginning " + - characters  */
+    if ('"' == lastChar(searchWords[i]) || '*' == lastChar(searchWords[i]))
+	searchWords[i][strlen(searchWords[i])-1] = '\0';
+    else if ('"' == searchWords[i][0] ||
+	     '+' == searchWords[i][0] ||
+	     '-' == searchWords[i][0] )
+	    searchWords[i] += 1;
+    }
+
 struct gHubMatch *gHubMatch;
 for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next)
     {
+    char *comBold = genarkBold(gHubMatch->commonName, searchWords[0]);
+    char *sciBold = genarkBold(gHubMatch->scientificName, searchWords[0]);
+    for (int i = 1; i < searchWordCount; ++i)
+	{
+        char *savePtr = comBold;
+        comBold = genarkBold(savePtr, searchWords[i]);
+        freeMem(savePtr);
+        savePtr = sciBold;
+        sciBold = genarkBold(savePtr, searchWords[i]);
+        freeMem(savePtr);
+	}
+
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "genome", gHubMatch->gcAccession);
     jsonWriteString(jw, "db", gHubMatch->asmName);
@@ -948,7 +1005,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     jsonWriteString(jw, "category", "UCSC GenArk - bulk-annotated assemblies from NCBI Genbank/RefSeq");
     jsonWriteString(jw, "value", gHubMatch->asmName);
     // Use just the db as label, since shortLabel is included in the category label.
-    jsonWriteStringf(jw, "label", "%s - %s", gHubMatch->commonName, gHubMatch->scientificName);
+    jsonWriteStringf(jw, "label", "%s - %s", comBold, sciBold);
     jsonWriteObjectEnd(jw);
     }
 }
@@ -1021,21 +1078,24 @@ char *genarkPrefix = cfgOption("genarkHubPrefix");
 if (genarkPrefix == NULL)
     return NULL;
 
+/* the chopByWhite is going to cannabilize the term string, make a copy */
+char *termCopy = cloneString(term);
+
 struct sqlConnection *conn = hConnectCentral();
 struct gHubMatch *gHubMatchList = NULL;
 char *genarkTbl = genarkTableName();
 int colCount = genArkColumnCount();
-int termLength = strlen(term);
+int termLength = strlen(termCopy);
 
 char *asmListTable = assemblyListTableName();
 /* only allow the asmList query when the search term is more than 2 letters */
 if ((termLength > 2) && sqlTableExists(conn, asmListTable))
     {
-    int wordCount = chopByWhite(term, NULL, 0);
+    int wordCount = chopByWhite(termCopy, NULL, 0);
     if (1 == wordCount)
 	{
 	struct dyString *query = dyStringNew(64);
-	sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1", asmListTable, term);
+	sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE) AND browserExists=1", asmListTable, termCopy);
 
 	long long matchCount = sqlQuickLongLong(conn, query->string);
 
@@ -1044,18 +1104,18 @@ if ((termLength > 2) && sqlTableExists(conn, asmListTable))
         if (0 == matchCount)	/* try prefix search */
 	    {
 	    query = dyStringNew(64);
-	    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1", asmListTable, term);
+	    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE) AND browserExists=1", asmListTable, termCopy);
 	    matchCount = sqlQuickLongLong(conn, query->string);
 	    dyStringFree(&query);
             if (matchCount > 0)
 		wildCard = TRUE;
 	    }
         if (matchCount > 0)
-            gHubMatchList = filterAssemblyListMatches(conn, asmListTable, term, genarkPrefix, wildCard);
+            gHubMatchList = filterAssemblyListMatches(conn, asmListTable, termCopy, genarkPrefix, wildCard);
 	}	/* 1 == wordCout single word search  */
     else
 	{	/* multiple word search */
-        char *matchAllWords = asmListMatchAllWords(term);
+        char *matchAllWords = asmListMatchAllWords(termCopy);
         gHubMatchList = filterAssemblyListMatches(conn, asmListTable, matchAllWords, genarkPrefix, FALSE);
 	}	/* multiple word search */
     }	/* termLength > 2	*/
@@ -1119,8 +1179,8 @@ char *category = aHubMatchList ? "UCSC Genome Browser assemblies - annotation tr
 struct dbDbMatch *match;
 for (match = matchList;  match != NULL;  match = match->next)
     writeDbDbMatch(jw, match, term, category);
-// Write out genark matches, if any
-writeGenarkMatches(jw, gHubMatchList);
+// Write out genark matches, if any, pass term so the matches can be highlighted
+writeGenarkMatches(jw, gHubMatchList, term);
 // Write out assembly hub matches, if any.
 writeAssemblyHubMatches(jw, aHubMatchList);
 jsonWriteListEnd(jw);
