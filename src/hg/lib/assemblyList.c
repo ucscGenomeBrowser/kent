@@ -417,3 +417,43 @@ if (_assemblyListTableName == NULL)
 
 return _assemblyListTableName;
 }
+
+char *asmListMatchAllWords(char *searchString)
+/* given a multiple word search string, fix it up so it will be
+ *  a 'match all words' MySQL FULLTEXT query, with the required + signs
+ *  in front of the words when appropriate
+ */
+{
+struct dyString *allWords = dyStringNew(64);
+int wordCount = wordCount = chopByWhite(searchString, NULL, 0);
+/* single word ?  simply return it, doesn't need anything */
+if (1 == wordCount)
+    dyStringPrintf(allWords, "%s", searchString);
+else
+    {
+    char **words;
+    AllocArray(words, wordCount);
+    (void) chopByWhite(searchString, words, wordCount);
+    boolean inQuote = FALSE;
+    for (int i = 0; i < wordCount; ++i)
+	{
+        if (inQuote)
+	    {
+	    dyStringPrintf(allWords, " %s", words[i]);
+	    if ('"' == lastChar(words[i]))
+		inQuote = FALSE;
+	    }
+        else if ('"' == words[i][0])
+	    {	/* "quoted string" becomes: +"quoted string"	*/
+	    dyStringPrintf(allWords, " +%s", words[i]);
+	    inQuote = TRUE;
+	    }
+        else if ('+' == words[i][0] || '-' == words[i][0])
+	    dyStringPrintf(allWords, " %s", words[i]);	/* nothing needed */
+        else
+	    dyStringPrintf(allWords, " +%s", words[i]);	/* add + to all words */
+	}
+    }
+/* trimSpaces will remove any leading or trailing white space */
+return trimSpaces(dyStringCannibalize(&allWords));
+}

@@ -100,5 +100,11 @@ char *assemblyListTableName();
 /* return the assemblyList table name from the environment,
  * or hg.conf, or use the default.  Cache the result */
 
+char *asmListMatchAllWords(char *searchString);
+/* given a multiple word search string, fix it up so it will be
+ *  a 'match all words' MySQL FULLTEXT query, with the required + signs
+ *  in front of the words when appropriate
+ */
+
 #endif /* ASSEMBLYLIST_H */
 

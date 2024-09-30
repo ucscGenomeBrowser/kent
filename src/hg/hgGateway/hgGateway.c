@@ -879,7 +879,7 @@ slReverse(&aHubMatchList);
 hDisconnectCentral(&conn);
 dyStringFree(&query);
 return aHubMatchList;
-}
+}	/*	static struct aHubMatch *filterHubSearchTextMatches()	*/
 
 static void writeAssemblyHubMatches(struct jsonWrite *jw, struct aHubMatch *aHubMatchList)
 /* Write out JSON for each assembly in each assembly hub that matched the search term. */
@@ -1004,7 +1004,7 @@ sqlFreeResult(&sr);
 if (ret)
     slReverse(&ret);
 return ret;
-}
+}	/*	static struct gHubMatch *filterAssemblyListMatche	*/
 
 static struct gHubMatch *searchGenark(char *term)
 /* Search through the genark table (or assemblyList table) for hubs
@@ -1045,7 +1045,12 @@ if ((termLength > 2) && sqlTableExists(conn, asmListTable))
 	    }
         if (matchCount > 0)
             gHubMatchList = filterAssemblyListMatches(conn, asmListTable, term, genarkPrefix, wildCard);
-	}	/* 1 == wordCout  */
+	}	/* 1 == wordCout single word search  */
+    else
+	{	/* multiple word search */
+        char *matchAllWords = asmListMatchAllWords(term);
+        gHubMatchList = filterAssemblyListMatches(conn, asmListTable, matchAllWords, genarkPrefix, FALSE);
+	}	/* multiple word search */
     }	/* termLength > 2	*/
 else if (sqlTableExists(conn, genarkTbl))
     {
