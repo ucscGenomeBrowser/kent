@@ -986,6 +986,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     {
     char *comBold = genarkBold(gHubMatch->commonName, searchWords[0]);
     char *sciBold = genarkBold(gHubMatch->scientificName, searchWords[0]);
+    char *gcxBold = genarkBold(gHubMatch->gcAccession, searchWords[0]);
     for (int i = 1; i < searchWordCount; ++i)
 	{
         char *savePtr = comBold;
@@ -993,6 +994,9 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
         freeMem(savePtr);
         savePtr = sciBold;
         sciBold = genarkBold(savePtr, searchWords[i]);
+        freeMem(savePtr);
+        savePtr = gcxBold;
+        gcxBold = genarkBold(savePtr, searchWords[i]);
         freeMem(savePtr);
 	}
 
@@ -1005,7 +1009,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     jsonWriteString(jw, "category", "UCSC GenArk - bulk-annotated assemblies from NCBI Genbank/RefSeq");
     jsonWriteString(jw, "value", gHubMatch->asmName);
     // Use just the db as label, since shortLabel is included in the category label.
-    jsonWriteStringf(jw, "label", "%s - %s", comBold, sciBold);
+    jsonWriteStringf(jw, "label", "%s - %s (%s)", comBold, sciBold, gcxBold);
     jsonWriteObjectEnd(jw);
     }
 }
