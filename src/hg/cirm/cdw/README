@@ -1,5 +1,6 @@
 Here lies code to implement the CIRM Data Warehouse (CDW).  The CDW is designed to track 
 a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts:
+
 1) A Linux file system with a fairly large block size.
 2) A MySQL database with tables tracking
     a) Users (by their email name)
@@ -7,6 +8,10 @@ a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts
     c) Files (by hub file name and CDW license plate).
     d) Groups and file permissions
     e) Results of automatic quality assurance results on files.
+3) A bunch of command line programs, some of which are run by a daemon, that load
+   the database and run quality assurance on it's contents.
+
+Please seed the install/README file for how to set up the CDW
 
 The schema for the database is in lib/*.as, with most of the information in cdw.as. 
 There is also a script lib/resetCdw that will delete the existing database and create 
@@ -312,12 +317,11 @@ a combination of infrequent polling of the database, and a unix fifo which can b
 sent a signal (anything ending with a newline actually) that tells it to go look
 at database now.
 usage:
-   cdwRunDaemon database table count fifo
+   cdwRunDaemon database table count 
 where:
    database - mySQL database where cdwRun table lives
    table - table with same six fields as cdwRun table
    count - number of simultanious jobs to run
-   fifo - named pipe used to notify daemon of new data
 options:
    -debug - don't fork, close stdout, and daemonize self
    -log=logFile - send error messages and warnings of daemon itself to logFile
