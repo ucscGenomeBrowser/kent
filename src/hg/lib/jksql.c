@@ -207,7 +207,7 @@ static void sqlProfileAssocDb(struct sqlProfile *sp, char *db)
 {
 struct sqlProfile *sp2 = hashFindVal(dbToProfile, db);
 if ((sp2 != NULL) && (sp2 != sp))
-    errAbort("databases %s already associated with profile %s, trying to associated it with %s",
+    errAbort("databases '%s' already associated with hg.conf database profile '%s.*', trying to associated it with '%s.*'",
              db, sp2->name, sp->name);
 if (sp2 == NULL)
     {
@@ -315,7 +315,7 @@ void sqlProfileAddDb(char *profileName, char *db)
 {
 struct sqlProfile *sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
-    errAbort("can't find profile %s for database %s in hg.conf", profileName, db);
+    errAbort("can't find profile '%s.*' for database '%s' in hg.conf", profileName, db);
 sqlProfileAssocDb(sp, db);
 }
 
@@ -358,8 +358,8 @@ if (sp == NULL)
     return NULL;
 #if UNUSED // FIXME: this breaks hgHeatMap, enable when logicalDb removed
 if ((database != NULL) && (sp->dbs != NULL) && !slNameInList(sp->dbs, database))
-    errAbort("attempt to obtain SQL profile %s for database %s, "
-             "which is not associate with this database-specific profile",
+    errAbort("attempt to obtain SQL  profile '%s.*' for database '%s', "
+             "which is not associate with this database-specific profile (check hg.conf)",
              profileName, database);
 #endif
 return sp;
@@ -419,17 +419,17 @@ struct sqlProfile* sp = sqlProfileGet(profileName, database);
 if (sp == NULL)
     {
     if (profileName == NULL)
-        errAbort("can't find mysql connection info for database %s in hg.conf or ~/.hg.conf, should have a default profile named \"db\", so values for at least db.host, "
+        errAbort("can't find mysql connection info for database '%s' in hg.conf or ~/.hg.conf, should have a default profile named 'db', so values for at least db.host, "
                 "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", database);
     else if (sameWord(profileName, "backupcentral"))
-        errAbort("can't find profile %s in hg.conf. This error most likely indicates that the "
+        errAbort("can't find profile '%s.*' in hg.conf. This error most likely indicates that the "
             "Genome Browser could not connect to MySQL/MariaDB. Either the databases server is not running"
             "or the database connection socket indicated in hg.conf is not the one used by your server.", 
             profileName);
     else if (database == NULL)
-        errAbort("can't find profile %s in hg.conf", profileName);
+        errAbort("can't find profile '%s.*' in hg.conf", profileName);
     else
-        errAbort("can't find profile %s for database %s in hg.conf", profileName, database);
+        errAbort("can't find profile '%s.*' for database '%s.*' in hg.conf", profileName, database);
     }
 return sp;
 }
@@ -1175,10 +1175,10 @@ if (mysql_real_connect(
             "continuing your work while we are fixing the problem. ";
 
     if (abort)
-	errAbort("Couldn't connect to database %s on %s as %s.\n%s\n%s",
+	errAbort("Couldn't connect to database '%s' on '%s' as %s.\n%s\n%s",
 	    database, sp->host, sp->user, mysql_error(conn), extraMsg);
     else if (sqlParanoid)
-	fprintf(stderr, "Couldn't connect to database %s on %s as %s.  "
+	fprintf(stderr, "Couldn't connect to database '%s' on '%s' as '%s'.  "
 		"mysql: %s  pid=%ld\n",
 		database, sp->host, sp->user, mysql_error(conn), (long)getpid());
     return NULL;
@@ -2889,11 +2889,11 @@ static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
 // obtain profile
 struct sqlProfile *profile = NULL;
 if ((cache->host != NULL) && (profileName != NULL))
-    errAbort("can't specify profileName (%s) when sqlConnCache is create with a specific host (%s)",
+    errAbort("can't specify profileName '%s' when sqlConnCache is create with a specific host '%s'",
              profileName, cache->host);
 if ((profileName != NULL) && (cache->profile != NULL)
     && !sameString(profileName, cache->profile->name))
-    errAbort("profile name %s doesn't match profile associated with sqlConnCache %s",
+    errAbort("profile name '%s' doesn't match profile associated with sqlConnCache '%s'",
              profileName, cache->profile->name);
 if (cache->profile != NULL)
     profile = cache->profile;
