@@ -446,6 +446,7 @@ char *ignoredFormats[] = {
 	"tsv",
 	"pdf",
 	"png",
+	"fasta",
 	"unknown",
 	};
 
