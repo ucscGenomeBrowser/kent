@@ -8,14 +8,17 @@ Installation overview for Cell Data Warehouse (CDW).
    the cdw user.
    	$HOME/cdw/bin/scripts
 	$HOME/cdw/bin/x86_64
-	/data/cirm
+	$HOME/cdw/backups
 	/usr/local/apache/cgi-bin-cdw
+   Also set up the environmental variable CIRM to point to $HOME/cdw
 6) Log in as the cdw user
 7) Get the Kent UCSC source and execute the following makes from the 
    src directory:
        cd ~/kent/src
        make -j 16 libs
        cd ~/kent/src/hg/cirm/cdw
+       make -j 16
+       cd ~/kent/src/tagStorm
        make -j 16
        cd ~/kent/src/hg/hgsql
        make
@@ -24,6 +27,12 @@ Installation overview for Cell Data Warehouse (CDW).
        cd ~/kent/src/hg/encode3/encodeDataWarehouse/utils/edwBamStats
        make
        cd ~/kent/src/hg/encode3/encodeDataWarehouse/utils/edwSamRepeatAnalysis
+       make
+       cd ~/kent/src/utils/fastqStatsAndSubsample
+       make
+       cd ~/kent/src/utils/bigBedToBed
+       make
+       cd ~/kent/src/utils/bigWigAverageOverBed
        make
 8) Make up a configuration file for accessing the database in ~/.hg.conf
     with the following six lines:
@@ -59,7 +68,11 @@ Installation overview for Cell Data Warehouse (CDW).
 	cdwCreateUser wisulliv@ucsc.edu
 14) Run script to load up validations:
         ~/kent/src/hg/cirm/cdw/initQa
-15) Start up the daemons
+15) Find the following programs and make them accessible to the cdw user.
+         bowtie 
+	 tabix (version 0.2.5 is what we use)
+	 bgzip (part of Heng Li's tabix kit)
+16) Start up the daemons
 	cd /data/cirm/cdw
 	cdwRunDaemon cdw cdwJob 5 -log=cdwJob.log
     Sometimes the daemons will crash out.  Usually it's on a new data type. Do a
