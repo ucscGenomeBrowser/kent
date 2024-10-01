@@ -66,10 +66,10 @@ $(function() {
 // cookie option requires jquery.cookie.js
 $(function() {
   $("#tabs").tabs({
-      cookie: {
-          name: 'hubTab_cookie',
-          expires: 30
-      }
+      active: localStorage.getItem("hubTab") !== null ? localStorage.getItem("hubTab") : 0,
+      activate: function(event, ui) {
+          localStorage.setItem("hubTab", ui.newTab.index());
+      },
   });
 });
 
