@@ -113,7 +113,7 @@ MAILTO=otto-group@ucsc.edu
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
 
-MAILTO=bwick@ucsc.edu
+MAILTO=cells@ucsc.edu
 # Cell Browser news sec update by Matt/Brittney Sept 2022
 04 12 * * 1-5 ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
 
