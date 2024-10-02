@@ -1458,6 +1458,11 @@ while (lineFileNext(lf, &line, NULL))
         }
     }
 lineFileClose(&lf);
+
+// Now to clean up the temp files: bedTn, mappedBedTn, and unmappedBedTn
+unlink(bedTn.forCgi);
+unlink(mappedBedTn.forCgi);
+unlink(unmappedBedTn.forCgi);
 return ct;
 }
 
