@@ -61,13 +61,11 @@ Installation overview for Cell Data Warehouse (CDW).
        insert into cdwSettings set name='schema',val='/data/cirm/valData/tags.schema';
     Note these lines control the prefix to the accession numbers for the files,
     and the tagStorm schema respectively.
-13) Set up users for cdw system, people who can submit files:
-        cdwCreateUser kent@soe.ucsc.edu
-        hgsql -e "update cdwUser set isAdmin=1 where email='kent@soe.ucsc.edu'" cdw
-	cdwCreateUser mhaeussl@ucsc.edu
-	cdwCreateUser wisulliv@ucsc.edu
-14) Run script to load up validations:
-        ~/kent/src/hg/cirm/cdw/initQa
+13) Set up users and groups for cdw system, people who can submit files and groups they
+    belong to.  You'll need to edit this script for different installations.
+       ~/kent/src/hg/cirm/cdw/install/initUsersGroups
+14) Run script to load up validation and quality assurance files
+        ~/kent/src/hg/cirm/cdw/install/initQa
 15) Find the following bioinformatics programs and make them accessible to the cdw user.
 	 tabix (version 0.2.5 is what we use)
 	 bgzip (part of Heng Li's tabix kit)
