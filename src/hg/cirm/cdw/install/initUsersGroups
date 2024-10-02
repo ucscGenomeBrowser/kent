@@ -1,0 +1,15 @@
+#!/bin/tcsh -efx
+
+# Create initial users
+cdwCreateUser kent@soe.ucsc.edu
+cdwCreateUser mhaeussl@ucsc.edu
+cdwCreateUser wisulliv@ucsc.edu
+cdwCreateUser brianlee@ucsc.edu 
+
+# Set Jim and Max as superusers
+hgsql -e "update cdwUser set isAdmin=1 where email='kent@soe.ucsc.edu'" cdw
+hgsql -e "update cdwUser set isAdmin=1 where email='mhaessl@ucsc.edu'" cdw
+
+# Set up groups
+cdwCreateGroup sspsygene "People associated with the SSPsyGene Consortium"
+cdwGroupUser sspsygene kent@soe.ucsc.edu mhaeussl@ucsc.edu wisulliv@ucsc.edu brianlee@ucsc.edu -primary

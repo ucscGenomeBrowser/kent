@@ -3,7 +3,9 @@ include ../../../inc/common.mk
 
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   bin bedPlus3 bed8 bed12 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug zeroWidth
+test:   bin bedPlus3 bed8 bed12 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug zeroWidth \
+	bed12PreserveInput bed3PreserveInput gffPreserveInput pslPreserveInput samplePreserveInput \
+	genePredPreserveInput gtfPreserveInput positionPreserveInput
 
 # tests too slow to use in default test suite
 testSlow: mm3 multiple
@@ -179,6 +181,70 @@ multiple:	mkdirs
                     output/mm3.multiple.bad.bed
 	cat output/mm3.multiple.{good,bad}.bed | \
                 diff - expected/mm3.multiple.bed 1>&2
+
+bed12PreserveInput: mkdirs
+	${liftOver} -preserveInput \
+            input/bed12Preserve.bed \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/bed12Preserve.good.bed output/bed12Preserve.bad.bed 2> /dev/null
+	cat output/bed12Preserve.{good,bad}.bed | \
+                diff - expected/bed12Preserve.bed 1>&2
+
+bed3PreserveInput: mkdirs
+	${liftOver} -preserveInput \
+            input/bed3Preserve.bed \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/bed3Preserve.good.bed output/bed3Preserve.bad.bed 2> /dev/null
+	cat output/bed3Preserve.{good,bad}.bed | \
+                diff - expected/bed3Preserve.bed 1>&2
+
+genePredPreserveInput: mkdirs
+	${liftOver} -preserveInput -genePred \
+            input/genePredPreserve.gp \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/genePredPreserve.good.gp output/genePredPreserve.bad.gp 2> /dev/null
+	cat output/genePredPreserve.{good,bad}.gp | \
+                diff - expected/genePredPreserve.gp 1>&2
+
+gtfPreserveInput: mkdirs
+	${liftOver} -preserveInput -gff \
+            input/gtfPreserve.gtf \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/gtfPreserve.good.gtf output/gtfPreserve.bad.gtf 2> /dev/null
+	cat output/gtfPreserve.{good,bad}.gtf | \
+                diff - expected/gtfPreserve.gtf 1>&2
+
+pslPreserveInput: mkdirs
+	${liftOver} -preserveInput -pslT \
+            input/pslPreserve.psl \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/pslPreserve.good.psl output/pslPreserve.bad.psl 2> /dev/null
+	cat output/pslPreserve.{good,bad}.psl | \
+                diff - expected/pslPreserve.psl 1>&2
+
+gffPreserveInput: mkdirs
+	${liftOver} -preserveInput -gff \
+            input/gffPreserve.gff \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/gffPreserve.good.gff output/gffPreserve.bad.gff 2> /dev/null
+	cat output/gffPreserve.{good,bad}.gff | \
+                diff - expected/gffPreserve.gff 1>&2
+
+samplePreserveInput: mkdirs
+	${liftOver} -preserveInput -sample \
+            input/samplePreserve.sample \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/samplePreserve.good.sample output/samplePreserve.bad.sample 2> /dev/null
+	cat output/samplePreserve.{good,bad}.sample | \
+                diff - expected/samplePreserve.sample 1>&2
+
+positionPreserveInput: mkdirs
+	${liftOver} -preserveInput -positions \
+            input/positionPreserve.pos \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
+                output/positionPreserve.good.pos output/positionPreserve.bad.pos 2> /dev/null
+	cat output/positionPreserve.{good,bad}.pos | \
+                diff - expected/positionPreserve.pos 1>&2
 
 mkdirs:
 	mkdir -p output
