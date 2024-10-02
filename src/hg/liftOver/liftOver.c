@@ -46,6 +46,7 @@ static struct optionSpec optionSpecs[] = {
     {"ends", OPTION_INT},
     {"tab", OPTION_BOOLEAN},
     {"tabSep", OPTION_BOOLEAN},
+    {"preserveInput", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -95,7 +96,9 @@ errAbort(
   "   -minSizeQ               Min matching region size in query with -multiple.\n"
   "   -chainTable             Used with -multiple, format is db.tablename,\n"
   "                               to extend chains from net (preserves dups)\n"
-  "   -errorHelp              Explain error messages\n",
+  "   -errorHelp              Explain error messages\n"
+  "   -preserveInput          Attach positions from the input file to item names, to assist in\n"
+  "                           determining what got mapped where (bed4+, gff, genePred, sample only)\n",
     LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS
   );
 }
@@ -103,7 +106,7 @@ errAbort(
 void liftOver(char *oldFile, char *mapFile, double minMatch, 
                 double minBlocks, int minSizeT, int minSizeQ,
                 int minChainT, int minChainQ, bool multiple, bool noSerial, char *chainTable,
-                char *newFile, char *unmappedFile)
+                char *newFile, char *unmappedFile, bool preserveInput)
 /* liftOver - Move annotations from one assembly to another. */
 {
 struct hash *chainHash = newHash(0);		/* Old chromosome name keyed, chromMap valued. */
@@ -123,14 +126,14 @@ if (optionExists("gff"))
         errAbort("ERROR: -multiple is not supported for -gff.");
     if (chainTable)
         errAbort("ERROR: -chainTable is not supported for -gff.");
-    liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped);
+    liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped, preserveInput);
     }
 else if (optionExists("genePred"))
     {
     if (chainTable)
         errAbort("ERROR: -chainTable is not supported for -genePred.");
     liftOverGenePred(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
-                     mapped, unmapped, multiple);
+                     mapped, unmapped, multiple, preserveInput);
     }
 else if (optionExists("sample"))
     {
@@ -139,7 +142,7 @@ else if (optionExists("sample"))
     if (chainTable)
         errAbort("ERROR: -chainTable is not supported for -sample.");
     liftOverSample(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
-                        mapped, unmapped);
+                        mapped, unmapped, preserveInput);
     }
 else if (optionExists("pslT"))
     {
@@ -155,12 +158,12 @@ else if (optionExists("ends"))
     liftOverBedPlusEnds(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
-		chainTable, bedPlus, hasBin, tabSep, ends, &errCt);
+		chainTable, bedPlus, hasBin, tabSep, ends, &errCt, preserveInput);
 else if (optionExists("bedPlus"))
     liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
-		chainTable, bedPlus, hasBin, tabSep, &errCt);
+		chainTable, bedPlus, hasBin, tabSep, &errCt, preserveInput);
 else if (optionExists("positions"))
     liftOverPositions(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
@@ -168,7 +171,7 @@ else if (optionExists("positions"))
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
-		chainTable, &errCt);
+		chainTable, &errCt, preserveInput);
 if (!optionExists("positions"))
 /* I guess liftOverPositions closes these files.  This is a little akward though. */
     {
@@ -186,6 +189,7 @@ int minChainT = 0;
 int minChainQ = 0;
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
+bool preserveInput = FALSE;
 
 optionInit(&argc, argv, optionSpecs);
 minMatch = optionDouble("minMatch", minMatch);
@@ -217,9 +221,11 @@ if ((hasBin || tabSep) && !bedPlus)
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
     errAbort("%s", liftOverErrHelp());
+if (optionExists("preserveInput"))
+    preserveInput = TRUE;
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 
-	 minChainT, minChainQ, multiple, noSerial, chainTable, argv[3], argv[4]);
+	 minChainT, minChainQ, multiple, noSerial, chainTable, argv[3], argv[4], preserveInput);
 return 0;
 }
