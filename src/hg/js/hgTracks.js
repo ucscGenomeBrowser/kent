@@ -2130,18 +2130,13 @@ var rightClick = {
         /* move a track to either "top" or "bottom" position */
         let newPos = "-1";
         if (topOrBottom==="bottom") {
-            //newPos = String(parseInt($(".trDraggable").last().attr("abbr"))+1);
-            newPos = 9999;
+            newPos = String(parseInt($(".imgOrd").last().attr("abbr"))+1);
         }
 
         let trEl = $(document.getElementById('tr_' + id));
         trEl.attr('abbr', newPos);
 
         dragReorder.sort($("#imgTbl"));
-        //cart.setVarsObj({},null,false);
-
-        // The C code seems to assume that the track order is linearly increasing, so fix that up now
-
         dragReorder.setOrder($("#imgTbl"));
     },
     hideTracks: function (ids) 
