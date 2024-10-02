@@ -33,6 +33,18 @@ if (fileExists(fileName))
     }
 }
 
+void removeHubDir(char *userName, char *cgiFileName)
+/* Remove one single file for userName */
+{
+char *fileName = prefixUserFile(userName, cgiEncodeFull(cgiFileName));
+if (fileExists(fileName))
+    {
+    fprintf(stderr, "deleting file: '%s'\n", fileName);
+    removeHubForUser(fileName, userName);
+    fflush(stderr);
+    }
+}
+
 void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 /* Process the request to remove a file */
 {
@@ -42,14 +54,14 @@ if (userName)
     struct jsonElement *deleteJson = hashFindVal(paramHash, "fileNameList");
     //struct jsonWrite *errors = jsonWriteNew();
     // TODO: Check request is well-formed
-    struct slRef *ele, *deleteList = deleteJson->val.jeList;
+    char *fname = ((struct jsonElement *)(deleteJson->val.jeList->val))->val.jeString;
+    boolean isHub = sameString("hub", ((struct jsonElement *)(deleteJson->val.jeList->next->val))->val.jeString);
     jsonWriteListStart(cj->jw, "deletedList");
-    for (ele = deleteList; ele != NULL; ele = ele->next)
-        {
-        struct jsonElement *jsonVal = ele->val;
-        removeOneFile(userName, jsonVal->val.jeString);
-        jsonWriteString(cj->jw, NULL, jsonVal->val.jeString);
-        }
+    if (isHub)
+        removeHubDir(userName, fname);
+    else
+        removeOneFile(userName, fname);
+    jsonWriteString(cj->jw, NULL, fname);
     jsonWriteListEnd(cj->jw);
     }
 }
@@ -93,10 +105,11 @@ if (userName)
     // paramHash is an object with everything necessary to create a hub: name and assembly
     char *db = jsonStringVal(hashFindVal(paramHash, "db"), "db");
     char *name = jsonStringVal(hashFindVal(paramHash, "name"), "name");
-    fprintf(stderr, "creating hub '%s' for db '%s'\n", name, db);
+    char *encodedName = cgiEncodeFull(name);
+    fprintf(stderr, "creating hub '%s' for db '%s'\n", encodedName, db);
     fflush(stderr);
     // check if this hub already exists, must have a directory and hub.txt already:
-    char *path = prefixUserFile(userName, name);
+    char *path = prefixUserFile(userName, encodedName);
     if (isDirectory(path))
         {
         // can't make a hub that already exists!
@@ -109,7 +122,7 @@ if (userName)
         {
         // good we can make a new directory and stuff a hub.txt in it
         // the directory needs to be 777, so ignore umask for now
-        writeHubText(path, userName, name, db);
+        writeHubText(path, userName, encodedName, db);
         // TODO: add a row to the hubspace table for the hub.txt
         //addHubTxtToTable(userName, path, name, db);
         // return json to fill out the table

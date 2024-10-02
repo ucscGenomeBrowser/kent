@@ -386,7 +386,7 @@ var hubCreate = (function() {
         return prettyFileSize(data);
     }
 
-    function deleteFileFromTable(rowIx, fname) {
+    function deleteFileFromTable(fname) {
         // req is an object with properties of an uploaded file, make a new row
         // for it in the filesTable
         let table = $("#filesTable").DataTable();
@@ -394,14 +394,14 @@ var hubCreate = (function() {
         row.remove().draw();
     }
 
-    function deleteFile(rowIx, fname) {
+    function deleteFile(fname, fileType) {
         // Send an async request to hgHubConnect to delete the file
         // Note that repeated requests, like from a bot, will return 404 as a correct response
         console.log(`sending delete req for ${fname}`);
         cart.setCgi("hgHubConnect");
-        cart.send({deleteFile: {fileNameList: [fname]}});
+        cart.send({deleteFile: {fileNameList: [fname, fileType]}});
         cart.flush();
-        deleteFileFromTable(rowIx, fname);
+        deleteFileFromTable(fname);
     }
 
     function deleteFileList() {
@@ -503,7 +503,7 @@ var hubCreate = (function() {
                     delBtn.textContent = "Delete";
                     delBtn.type = 'button';
                     delBtn.addEventListener("click", function() {
-                        deleteFile(0, row.fileName);
+                        deleteFile(row.fileName, row.fileType);
                     });
 
                     // click to view hub/file in gb:
@@ -556,28 +556,6 @@ var hubCreate = (function() {
             {data: "createTime", title: "Creation Time"},
         ],
         order: [[6, 'desc']],
-        /*
-        drawCallback: function(settings) {
-            // every time we draw we need to update event handlers if we've added/deleted a row
-            let table = this.DataTable();
-            btns = document.querySelectorAll('.deleteFileBtn');
-            let i, numRows= table.rows().data().length;
-            for (i = 0; i < numRows; i++) {
-                let fname = table.cell(i, 2).data();
-                btns[i].addEventListener("click", (e) => {
-                    deleteFile(i, fname);
-                });
-            }
-            btns = document.querySelectorAll('.viewInBtn');
-            for (i = 0; i < numRows; i++) {
-                let fname = table.cell(i, 2).data();
-                let genome = table.cell(i, 5).data();
-                btns[i].addEventListener("click", (e) => {
-                    viewInGenomeBrowser(fname, genome);
-                });
-            }
-        },
-        */
     };
 
     function showExistingFiles(d) {

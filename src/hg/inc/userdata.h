@@ -57,6 +57,9 @@ void addNewFileForUser(char *userName, char *fileName, long long fileSize, char 
 void removeFileForUser(char *fname, char *userName);
 /* Remove a file for this user if it exists */
 
+void removeHubForUser(char *path, char *userName);
+/* Remove a hub directory for this user (and all files in the directory), if it exists */
+
 struct userHubs *listHubsForUser(char *userName);
 /* Lists the directories for a particular user */
 

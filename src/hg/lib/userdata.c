@@ -125,6 +125,14 @@ sqlUpdate(conn, sqlUpdateStmt->string);
 hubSpaceFree(&row);
 }
 
+static void deleteHubSpaceRow(char *fname)
+/* Deletes a row from the hubspace table for a given fname */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *deleteQuery = sqlDyStringCreate("delete from hubSpace where location='%s'", fname);
+sqlUpdate(conn, dyStringCannibalize(&deleteQuery));
+}
+
 void removeFileForUser(char *fname, char *userName)
 /* Remove a file for this user if it exists */
 {
@@ -136,9 +144,23 @@ if (fileExists(fname))
     // delete the actual file
     mustRemove(fname);
     // delete the table row
-    struct sqlConnection *conn = hConnectCentral();
-    struct dyString *deleteQuery = sqlDyStringCreate("delete from hubSpace where location='%s'", fname);
-    sqlUpdate(conn, dyStringCannibalize(&deleteQuery));
+    deleteHubSpaceRow(fname);
+    }
+}
+
+void removeHubForUser(char *path, char *userName)
+/* Remove a hub directory for this user (and all files in the directory), if it exists */
+{
+if (!startsWith(getDataDir(userName), path))
+    return;
+if (isDirectory(path))
+    {
+    struct fileInfo *f, *flist = listDirX(path, NULL, TRUE);
+    for (f = flist; f != NULL; f = f->next)
+        mustRemove(f->name);
+    // now we have deleted all the files in the dir we can safely rmdir
+    mustRemove(path);
+    deleteHubSpaceRow(path);
     }
 }
 

@@ -570,6 +570,23 @@ button.ui-button::-moz-focus-inner {
     padding: 0 1em;
 }
 
+.ui-dialog .ui-resizable-n {
+       height: 2px;
+       top: 0;
+}
+.ui-dialog .ui-resizable-e {
+       width: 2px;
+       right: 0;
+}
+.ui-dialog .ui-resizable-s {
+       height: 2px;
+       bottom: 0;
+}
+.ui-dialog .ui-resizable-w {
+       width: 2px;
+       left: 0;
+}
+
 .ui-dialog .ui-resizable-se {
     width: 14px;
     height: 14px;
