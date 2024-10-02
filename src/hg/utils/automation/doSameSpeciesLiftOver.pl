@@ -24,8 +24,9 @@ use vars qw/
     $opt_targetSizes
     $opt_query2Bit
     $opt_querySizes
+    $opt_chainRam
+    $opt_chainCpu
     $opt_localTmp
-    $opt_ram
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -40,6 +41,12 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $dbHost = 'hgwdev';
+my $ramG = '4g';
+my $cpu = 1;
+my $blatRam = '4g';	# -ram=Ng argument
+my $blatCpu = 1;	# -cpu=N argument
+my $chainRam = '16g';	# -chainRam=Ng argument
+my $chainCpu = 1;	# -chainCpu=N argument
 
 # This could be made into an option:
 # BLAT -fastMap will not work with query chunks greater than 5000
@@ -69,13 +76,16 @@ options:
     -query2Bit /path/query.2bit    Full path to query sequence (toDb)
     -targetSizes /path/target.chrom.sizes  Full path to target chrom.sizes (fromDb)
     -querySizes  /path/query.chrom.sizes   Full path to query chrom.sizes (toDb)
+    -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
+    -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
     -localTmp  /dev/shm  Full path to temporary storage for heavy I/O usage
-    -ram Ng               set -ram=Ng argument to para create command (default 8g)
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
 						'fileServer' => '',
+						'ram' => $ramG,
+						'cpu' => $cpu,
 						'bigClusterHub' => '');
   print STDERR "
 Automates UCSC's same-species liftOver (blat/chain/net) pipeline, based on
@@ -122,8 +132,9 @@ sub checkOptions {
 		      'targetSizes=s',
 		      'query2Bit=s',
 		      'querySizes=s',
+		      'chainRam=s',
+		      'chainCpu=i',
 		      'localTmp=s',
-		      'ram=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -196,10 +207,6 @@ sub doAlign {
   my $runDir = "$buildDir/run.blat";
   &HgAutomate::mustMkdir($runDir);
 
-  my $ramG = "-ram=8g";
-  if ($opt_ram) {
-     $ramG = "-ram=$opt_ram";
-  }
   my $ooc = "/hive/data/genomes/$tDb/11.ooc";
   if ($opt_ooc) {
     if ($opt_ooc eq 'none') {
@@ -294,6 +301,7 @@ _EOF_
 			'job.csh $(path1) $(path2) {check out line ' .
 			 $pslDir . '/$(file1)/$(file2).psl}');
 
+  my $paraRun = &HgAutomate::paraRun($blatRam, $blatCpu);
   my $whatItDoes = "It performs a cluster run of blat -fastMap.";
   my $bossScript = new HgRemoteScript("$runDir/doAlign.csh", $paraHub,
 				      $runDir, $whatItDoes);
@@ -330,11 +338,7 @@ end
 
 $gensub2 t.lst q.lst gsub jobList
 
-/parasol/bin/para $ramG make jobList
-/parasol/bin/para check
-/parasol/bin/para time > run.time
-cat run.time
-
+$paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -437,7 +441,7 @@ _EOF_
   my $whatItDoes = "It does a cluster run to chain the blat alignments.";
   my $bossScript = new HgRemoteScript("$runDir/doChain.csh", $paraHub,
 				      $runDir, $whatItDoes);
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($chainRam, $chainCpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir chainRaw
@@ -553,8 +557,8 @@ _EOF_
   } else {
     $bossScript->add(<<_EOF_
 hgLoadChain -test -noBin -tIndex $tDb chain$QDb $buildDir/$liftOverChainFile
-wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
-wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
 sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
@@ -668,6 +672,10 @@ $QDb = ucfirst($qDb);
 $liftOverChainDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
 $liftOverChainFile = "${tDb}To${QDb}.over.chain.gz";
 $liftOverChainPath = "$liftOverChainDir/$liftOverChainFile";
+$chainRam = $opt_chainRam ? $opt_chainRam : $chainRam;
+$chainCpu = $opt_chainCpu ? $opt_chainCpu : $chainCpu;
+$blatRam = $opt_ram ? $opt_ram : $blatRam;
+$blatCpu = $opt_cpu ? $opt_cpu : $blatCpu;
 
 my $date = `date +%Y-%m-%d`;
 chomp $date;
