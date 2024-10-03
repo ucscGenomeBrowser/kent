@@ -5,8 +5,7 @@ include ../../../inc/common.mk
 
 test:   bin bedPlus3 bed8 bed12 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug zeroWidth \
 	bed12PreserveInput bed3PreserveInput gffPreserveInput pslPreserveInput samplePreserveInput \
-	genePredPreserveInput gtfPreserveInput
-# omitting positionPreserveInput right now because it creates extra junk files in the current directory
+	genePredPreserveInput gtfPreserveInput positionPreserveInput
 
 # tests too slow to use in default test suite
 testSlow: mm3 multiple
@@ -239,8 +238,6 @@ samplePreserveInput: mkdirs
 	cat output/samplePreserve.{good,bad}.sample | \
                 diff - expected/samplePreserve.sample 1>&2
 
-# this isn't being tested right now because liftOver -positions creates temp bed files in the current
-# directory and then never cleans them up
 positionPreserveInput: mkdirs
 	${liftOver} -preserveInput -positions \
             input/positionPreserve.pos \

@@ -277,7 +277,7 @@
             title: 'Download data from the current view',
             text:
                   'Once at a region of interest you wish to export into Excel, '+
-                  'you can use this feature can download the track data '+
+                  'you can use this feature to download the track data '+
                   'from the current region. '+
                   '<br><br>'+
                   '<img src="/images/tutorialImages/downloadCurrentTracks.png" width="350">' +
