@@ -151,11 +151,11 @@ cgiTableField("<B>Regions defined by chrom:start-end (BED 4 to BED 6)</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("Prepend input positions to item names:");
+cgiTableField("Keep original positions in output:");
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_EXTRA_NAME_INFO,extraNameInfo);
 puts("&nbsp;");
-printInfoIcon("Lifted items will include their original positions as part of their output names to assist in determining what got mapped where (in case multiple items have the same name in the input).  Coordinates are 1-based fully closed, so the BED entry &quot;chr1 100 150 item1&quot; will be labeled &quot;chr1:101-150:item1&quot;.");
+printInfoIcon("Lifted items for BED4 and up will include their original positions as part of their output names to assist in determining what got mapped where (in case multiple items have the same name in the input).  Coordinates are 1-based fully closed, so the BED entry &quot;chr1 100 150 item1&quot; will be labeled &quot;chr1:101-150:item1&quot;.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
