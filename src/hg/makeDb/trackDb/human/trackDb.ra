@@ -40,6 +40,7 @@ include trackDb.giab.ra
 
 # CADD scores
 include cadd.ra
+include cadd1.7.ra
 
 # Revel scores
 include revel.ra

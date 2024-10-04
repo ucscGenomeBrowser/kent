@@ -736,7 +736,6 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
-pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on
