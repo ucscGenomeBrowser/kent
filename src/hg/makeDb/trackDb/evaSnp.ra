@@ -5,7 +5,6 @@ group varRep
 type bigBed 9 +
 compositeTrack on
 visibility dense
-pennantIcon New red ../goldenPath/newsarch.html#072524 "July 25, 2024"
 
 track evaSnp
 shortLabel EVA SNP Release 3
@@ -100,7 +99,6 @@ filterLabel.itemRgb General variant types by color grouping
 maxWindowCoverage 250000
 maxItems 1000000
 html evaSnpContainer
-pennantIcon New red ../goldenPath/newsarch.html#072524 "July 25, 2024"
 
 searchTable evaSnp6
 searchType bigBed
