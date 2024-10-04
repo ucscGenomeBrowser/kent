@@ -34,7 +34,7 @@ include trackDb.rbestNet.ra alpha
 include trackDb.gencode.ra
 include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
-include knownGeneArchive.ra alpha
+include knownGeneArchive.ra alpha,beta
 include reMap.ra
 
 include liftOverMm10.ra
