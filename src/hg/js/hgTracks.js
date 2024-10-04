@@ -2128,7 +2128,7 @@ var rightClick = {
 
     moveTo : function(id, topOrBottom) {
         /* move a track to either "top" or "bottom" position */
-        let newPos = "-1";
+        let newPos = "0.5";
         if (topOrBottom==="bottom") {
             newPos = String(parseInt($(".imgOrd").last().attr("abbr"))+1);
         }
@@ -2482,7 +2482,7 @@ var rightClick = {
         } else if (cmd === "hideOthers") {
             var hideIds = [];
             for (var otherId in hgTracks.trackDb) {
-                if (otherId!==id) 
+                if (otherId!==id && otherId!=="ruler") 
                     hideIds.push(otherId);
             }
             rightClick.hideTracks(hideIds);
