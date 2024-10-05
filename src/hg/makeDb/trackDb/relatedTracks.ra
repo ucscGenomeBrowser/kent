@@ -2,6 +2,9 @@
 # ucscDb track trackLinkingTo reason
 
 # hg38:
+hg38 knownGene knownGeneArchive View previous versions of GENCODE Genes
+hg38 knownGeneArchive knownGene View the latest GENCODE Genes version
+
 hg38 miRnaAtlas nonCodingRNAs View associated precursor miRnas
 hg38 nonCodingRNAs miRnaAtlas View expression of cleaved miRnas
 
@@ -56,3 +59,8 @@ hg19 liftHg38 ReMap ReMap, even though it has the same name, is a database of tr
 
 hg19 refSeqComposite pseudoYale60 NCBI RefSeq Curated and RefSeq Other contains pseudogenes, but the Yale annotation should be more comprehensive for this transcript type
 hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also contain some transcribed and untranscribed pseudogenes, respectively.
+
+# mm39:
+
+mm39 knownGene knownGeneArchive View previous versions of GENCODE Genes
+mm39 knownGeneArchive knownGene View the latest GENCODE Genes version
