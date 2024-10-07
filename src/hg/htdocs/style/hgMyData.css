@@ -1,0 +1,31 @@
+#fileList {
+    display: grid;
+    grid-template-columns: 20px 2fr 1fr 1fr 1fr;
+    column-gap: 2px;
+}
+
+.fileListHeader {
+    display: none;
+}
+
+.batchTypeSelect {
+    grid-column-start: 3;
+}
+
+.batchDbSelect {
+    grid-column-start: 4;
+}
+
+.button {
+    background-color: #E8E8E8;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px ridge black;
+    font-size: 0.8rem;
+}
+
+.pickedFiles {
+}
+.pickedFile {
+    font-size: smaller;
+}

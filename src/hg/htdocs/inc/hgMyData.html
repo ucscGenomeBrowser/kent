@@ -12,20 +12,30 @@
     </div>
 
     <div id='fileTableInfoDiv' class='tabSection'>
-        <p>THIS IS JUST EXAMPLE COPY. Below are all uploaded track data files associated with your current browsing
-        session that have not been saved yet. Note that if you reset your browsing session
-        you will lose access to these data. Please click the save button below or create a
-        browsing save these files to your account.</p>
+        <p>THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. 
+THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. 
+        </p>
     </div>
 
-    <!-- The actual input to add files, this gets majorly worked up by the javascript -->
-    <div id='filePicker' class='hubList tabSection'>
-        <h4>Create your own hub</h4>
-        <p>After choosing files, click &quot;Submit&quot; to begin uploading the files to our server</p>
-        <div class='buttonDiv' id='chooseAndSendFilesRow'>
-            <button  id='btnForInput' class='button' for="chosenFiles">Choose files</button>
+    <div id='filePickerModal' style="display: none">
+        <!-- The actual input to add files, this gets majorly worked up by the javascript -->
+        <div id='filePicker'>
+            <h4>Create your own hub</h4>
+            <p>Example copy, is it even needed here?</p>
+            <div class='buttonDiv' id='chooseAndSendFilesRow'>
+                <button  id='btnForInput' class='button' for="chosenFiles">Choose files</button>
+            </div>
+            <!-- css grid of selected files, with some controls at the top and bottom, populated
+                by the javascript  -->
+            <div id='fileList'>
+                <!-- Headers -->
+                <div class="fileListHeader"></div>
+                <div class="fileListHeader">File Name</div>
+                <div class="fileListHeader">File Type</div>
+                <div class="fileListHeader">Database</div>
+                <div class="fileListHeader">File Size</div>
+            </div>
         </div>
-        <div id='fileList' style="clear: right"></div>
     </div>
 
     <div id='filesDiv' class='tabSection'>

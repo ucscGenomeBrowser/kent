@@ -593,6 +593,14 @@ button.ui-button::-moz-focus-inner {
 	right: 3px;
 	bottom: 3px;
 }
+
+.ui-dialog .ui-resizable-se,
+.ui-dialog .ui-resizable-sw,
+.ui-dialog .ui-resizable-ne,
+.ui-dialog .ui-resizable-nw {
+       width: 14px;
+       height: 14px;
+}
 .ui-draggable .ui-dialog-titlebar {
 	cursor: move;
 }

@@ -20,6 +20,7 @@
 #include "cartJson.h"
 #include "hubSpace.h"
 #include "hubConnect.h"
+#include "trackHub.h"
 
 void removeOneFile(char *userName, char *cgiFileName)
 /* Remove one single file for userName */
@@ -29,6 +30,11 @@ if (fileExists(fileName))
     {
     fprintf(stderr, "deleting file: '%s'\n", fileName);
     removeFileForUser(fileName, userName);
+    fflush(stderr);
+    }
+else
+    {
+    fprintf(stderr, "file '%s' does not exist\n", fileName);
     fflush(stderr);
     }
 }
@@ -71,7 +77,7 @@ void doMoveFile(struct cartJson *cj, struct hash *paramHash)
 {
 }
 
-static void writeHubText(char *path, char *userName, char *hubName, char *db)
+static void writeHubText(char *path, char *userName, char *encodedHubName, char *hubName, char *db)
 /* Create a hub.txt file, optionally creating the directory holding it */
 {
 int oldUmask = 00;
@@ -89,7 +95,7 @@ fprintf(f, "hub %s\n"
     "longLabel %s\n"
     "useOneFile on\n\n"
     "genome %s\n\n",
-    hubName, emailForUserName(userName), hubName, hubName, db);
+    encodedHubName, emailForUserName(userName), hubName, hubName, db);
 carefulClose(&f);
 }
 
@@ -122,7 +128,7 @@ if (userName)
         {
         // good we can make a new directory and stuff a hub.txt in it
         // the directory needs to be 777, so ignore umask for now
-        writeHubText(path, userName, encodedName, db);
+        writeHubText(path, userName, encodedName, name, db);
         // TODO: add a row to the hubspace table for the hub.txt
         //addHubTxtToTable(userName, path, name, db);
         // return json to fill out the table
@@ -149,12 +155,14 @@ if (userName)
     for (file = fileList; file != NULL; file = file->next)
         {
         jsonWriteObjectStart(jw, NULL);
+        cgiDecodeFull(file->fileName, file->fileName, strlen(file->fileName));
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
         jsonWriteString(jw, "fileType", file->fileType);
         jsonWriteString(jw, "hub", "");
         jsonWriteString(jw, "genome", file->db);
-        jsonWriteString(jw, "createTime", file->creationTime);
+        jsonWriteString(jw, "lastModified", file->lastModified);
+        jsonWriteString(jw, "uploadTime", file->creationTime);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
@@ -163,6 +171,7 @@ if (userName)
     for (hub = hubList; hub != NULL; hub = hub->next)
         {
         jsonWriteObjectStart(jw, NULL);
+        cgiDecodeFull(hub->hubName, hub->hubName, strlen(hub->hubName));
         jsonWriteString(jw, "hubName", hub->hubName);
         jsonWriteString(jw, "genome", hub->genome);
         jsonWriteObjectEnd(jw);
@@ -174,7 +183,7 @@ jsInlineF("var userFiles = %s;\n", dyStringCannibalize(&jw->dy));
 jsonWriteFree(&jw);
 }
 
-void doTrackHubWizard()
+void doTrackHubWizard(char *database)
 /* Offer an upload form so users can upload all their hub files */
 {
 jsIncludeFile("utils.js", NULL);
@@ -195,9 +204,11 @@ puts("<script type=\"text/javascript\" "
 
 // the skeleton HTML:
 webIncludeFile("inc/hgMyData.html");
+webIncludeResourceFile("hgMyData.css");
 
 // get the current files stored for this user
 outFilesForUser();
+jsInlineF("\nvar cartDb=\"%s %s\";\n", hGenome(database), trackHubSkipHubName(database));
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

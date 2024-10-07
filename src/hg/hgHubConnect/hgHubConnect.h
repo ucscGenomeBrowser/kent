@@ -29,7 +29,7 @@ void doCreateHub(struct cartJson *cj, struct hash *paramHash);
 void doEditHub(struct cartJson *cj, struct hash *paramHash);
 /* Edit the hub.txt for a hub */
 
-void doTrackHubWizard();
+void doTrackHubWizard(char *database);
 /* Print out the html to allow a user to upload some files from their machine to us */
 
 #endif /* HGHUBCONNECT_H */

@@ -14,7 +14,7 @@ endif
 
 CSS_FILES=HGStyle.css assemblySearch.css autocomplete.css blueStyle.css \
     encodeProject.css facets.css floretStyle.css gar.css \
-    hgHubConnect.css jquery-ui.css jquery.contextmenu.css \
+    hgHubConnect.css hgMyData.css jquery-ui.css jquery.contextmenu.css \
     jquery.ui.autocomplete.css jquery.ui.colorPicker.css \
     jquery.treetable.css jquery.treetable.theme.default.css  \
     jWest.css jWest.afterNiceMenu.css mouseOver.css \

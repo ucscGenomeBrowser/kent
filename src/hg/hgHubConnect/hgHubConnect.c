@@ -1511,7 +1511,6 @@ void printIncludes()
 {
 printf(
 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
 "<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
 );
@@ -1530,10 +1529,10 @@ void blankWarn()
 {
 }
 
-void hgHubConnectOfferUpload()
+void hgHubConnectOfferUpload(char *db)
 /* Make the tab that allows users to upload data files and create a hub on the fly */
 {
-doTrackHubWizard();
+doTrackHubWizard(db);
 }
 
 void doMiddle(struct cart *theCart)
@@ -1706,7 +1705,7 @@ hgHubConnectUnlisted(hubList, publicHash);
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     hgHubConnectDeveloperMode();
 if (cfgOptionBooleanDefault("storeUserFiles", TRUE))
-    hgHubConnectOfferUpload();
+    hgHubConnectOfferUpload(database);
 
 printf("</div>"); // #tabs
 
