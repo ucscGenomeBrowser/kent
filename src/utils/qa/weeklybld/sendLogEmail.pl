@@ -12,9 +12,10 @@ if ($argc != 2) {
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',clayfischer@ucsc.edu,lrnassar@ucsc.edu';
+my $buildMeisterOnly = $ENV{'BUILDMEISTEREMAIL'};
+my $buildMeisterEtc =  $buildMeisterOnly . ',clayfischer@ucsc.edu,lrnassar@ucsc.edu';
 # the bounceEmail address needs to be in the ucsc.edu domain to work correctly
-my $bounceEmail = $buildMeisterEmail;
+my $bounceEmail = $buildMeisterOnly;
 my $returnEmail = ' lrnassar@ucsc.edu';
 
 my @victims;
@@ -42,7 +43,7 @@ while (my $line = <FH>) {
 close (FH);
 
 my $victimList = join(' ', sort @victims);
-open (FH, "|mail -r $returnEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEmail") or die "can not run mail command";
+open (FH, "|mail -r $returnEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEtc") or die "can not run mail command";
 printf FH "%s\n", $victimList;
 close (FH);
 foreach my $victim (sort keys %victimEmail) {

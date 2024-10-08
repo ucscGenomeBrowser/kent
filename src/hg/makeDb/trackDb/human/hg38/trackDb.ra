@@ -523,7 +523,7 @@ include hg38Patch11.ra alpha
 
 include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
-include knownGeneArchive.ra alpha
+include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
 include trackDb.100way.ra 
@@ -736,7 +736,6 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
-pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on

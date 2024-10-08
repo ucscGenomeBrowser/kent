@@ -274,6 +274,28 @@
         });
 
         clinicalTour.addStep({
+            title: 'Download data from the current view',
+            text:
+                  'Once at a region of interest you wish to export into Excel, '+
+                  'you can use this feature to download the track data '+
+                  'from the current region. '+
+                  '<br><br>'+
+                  '<img src="/images/tutorialImages/downloadCurrentTracks.png" width="350">' +
+                  '<br><br>'+
+                  'Select/unselect any of the visible tracks, and export them in various '+
+                  'formats, <em>including CSV and TSV</em>.',
+            attachTo: {
+                element: '#hgTracksDownload',
+                on: 'right'
+            },
+            buttons: [ tutorialButtons.back, tutorialButtons.next ],
+            when: {
+                show: () => keepMenuVisible('#downloads > ul'),
+                hide: () => hideMenu('#downloads > ul')
+            }
+        });
+
+        clinicalTour.addStep({
             title: 'Save and share snapshots of the Browser',
             text:
                   '<a href="/cgi-bin/hgSession" target="_blank">Sessions</a> allows you to '+

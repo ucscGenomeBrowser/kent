@@ -48,7 +48,8 @@ int liftOverBed(char *fileName, struct hash *chainHash,
                         int minSizeT, int minSizeQ,
                         int minChainT, int minChainQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
-                        bool multiple, bool noSerial, char *chainTable, int *errCt);
+                        bool multiple, bool noSerial, char *chainTable, int *errCt,
+                        bool preserveInput);
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 
@@ -56,7 +57,7 @@ int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
                     bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
-                    bool tabSep, int *errCt);
+                    bool tabSep, int *errCt, bool preserveInput);
 /* Lift bed with N+ (where n=bedPlus param) format.
  * Return the number of records successfully converted */
 
@@ -64,7 +65,7 @@ int liftOverBedPlusEnds(char *fileName, struct hash *chainHash, double minMatch,
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
                     bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
-			bool tabSep, int ends, int *errCt);
+			bool tabSep, int ends, int *errCt, bool preserveInput);
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
 
@@ -95,7 +96,7 @@ char *liftOverRemapRange(struct hash *chainHash, double minRatio,
 
 void liftOverGff(char *fileName, struct hash *chainHash, 
                     double minMatch, double minBlocks, 
-                    FILE *mapped, FILE *unmapped);
+                    FILE *mapped, FILE *unmapped, bool preserveInput);
 /* Lift over GFF file */
 
 void liftOverPsl(char *fileName, struct hash *chainHash, 
@@ -105,12 +106,12 @@ void liftOverPsl(char *fileName, struct hash *chainHash,
 
 void liftOverGenePred(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                      FILE *mapped, FILE *unmapped, boolean multiple);
+                      FILE *mapped, FILE *unmapped, boolean multiple, bool preserveInput);
 /* Lift over file in genePred format. */
 
 void liftOverSample(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                        FILE *mapped, FILE *unmapped);
+                        FILE *mapped, FILE *unmapped, bool preserveInput);
 /* Open up sample file,  and lift it */
 
 void readLiftOverMap(char *fileName, struct hash *chainHash);

@@ -2128,23 +2128,18 @@ var rightClick = {
 
     moveTo : function(id, topOrBottom) {
         /* move a track to either "top" or "bottom" position */
-        let newPos = "-1";
+        let newPos = "0.5";
         if (topOrBottom==="bottom") {
-            //newPos = String(parseInt($(".trDraggable").last().attr("abbr"))+1);
-            newPos = 9999;
+            newPos = String(parseInt($(".imgOrd").last().attr("abbr"))+1);
         }
 
         let trEl = $(document.getElementById('tr_' + id));
         trEl.attr('abbr', newPos);
 
         dragReorder.sort($("#imgTbl"));
-        //cart.setVarsObj({},null,false);
-
-        // The C code seems to assume that the track order is linearly increasing, so fix that up now
-
         dragReorder.setOrder($("#imgTbl"));
     },
-    hideTracks: function (ids) 
+    hideTracks: function (ids, hideParent) 
     {
         var cartVars = [];
         var cartVals = [];
@@ -2152,28 +2147,39 @@ var rightClick = {
         for (var i = 0; i<ids.length; i++) {
             var id = ids[i];
             var rec = hgTracks.trackDb[id];
-            if (tdbIsSubtrack(rec)) {
-                // Remove subtrack level vis and explicitly uncheck.
-                //cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); 
-                cartVars.push(id);
-                cartVals.push('[]');
-
-                cartVars.push(id+"_sel");
-                cartVals.push(0);
-            } else if (tdbIsFolderContent(rec)) {
-                // supertrack children need to have _sel set to trigger superttrack reshaping
-                //cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); 
-                cartVars.push(id);
-                cartVals.push('hide');
-
-                cartVars.push(id+"_sel");
-                cartVals.push(0);
-            } else {
-                //cart.setVars([id], ['hide']);  // Others, just set vis hide.
+            if (hideParent) {
+                // only hide the parent, not children
+                $(document.getElementById('tr_' + id)).remove();
+                if (tdbHasParent(rec) && tdbIsLeaf(rec)) {
+                    id = rec.parentTrack;
+                }
                 cartVars.push(id);
                 cartVals.push('hide');
             }
-            $(document.getElementById('tr_' + id)).remove();
+            else { 
+                if (tdbIsSubtrack(rec)) {
+                    // Remove subtrack level vis and explicitly uncheck.
+                    //cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); 
+                    cartVars.push(id);
+                    cartVals.push('[]');
+
+                    cartVars.push(id+"_sel");
+                    cartVals.push(0);
+                } else if (tdbIsFolderContent(rec)) {
+                    // supertrack children need to have _sel set to trigger superttrack reshaping
+                    //cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); 
+                    cartVars.push(id);
+                    cartVals.push('hide');
+
+                    cartVars.push(id+"_sel");
+                    cartVals.push(0);
+                } else {
+                    //cart.setVars([id], ['hide']);  // Others, just set vis hide.
+                    cartVars.push(id);
+                    cartVals.push('hide');
+                }
+                $(document.getElementById('tr_' + id)).remove();
+            }
         }
         imageV2.afterImgChange(true);
         cart.setVars( cartVars, cartVals );
@@ -2487,10 +2493,10 @@ var rightClick = {
         } else if (cmd === "hideOthers") {
             var hideIds = [];
             for (var otherId in hgTracks.trackDb) {
-                if (otherId!==id) 
+                if (otherId!==id && otherId!=="ruler") 
                     hideIds.push(otherId);
             }
-            rightClick.hideTracks(hideIds);
+            rightClick.hideTracks(hideIds, true);
         } else if (cmd === "moveTop") {
             rightClick.moveTo(id, "top");
         } else if (cmd === "moveBottom") {
@@ -2662,7 +2668,7 @@ var rightClick = {
             if (imageV2.enabled && cmd === 'hide') {
                 // Hide local display of this track and update server side cart.
                 // Subtracks controlled by 2 settings so del vis and set sel=0.
-                rightClick.hideTracks([id]);
+                rightClick.hideTracks([id], false);
             } else if (!imageV2.mapIsUpdateable) {
                 jQuery('body').css('cursor', 'wait');
                 if (selectUpdated) {
