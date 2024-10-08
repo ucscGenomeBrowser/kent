@@ -11511,7 +11511,10 @@ return ct;
 static boolean canWiggle(struct track *tg)
 /* Is this a track type that can wiggle. */
 {
-return tg->isBigBed || startsWith("vcfTabix", tg->tdb->type);
+return (tg->isBigBed && 
+            !startsWith("bigInteract",tg->tdb->type) &&
+            !startsWith("bigLolly",tg->tdb->type))
+        || startsWith("vcfTabix", tg->tdb->type);
 }
 
 enum trackVisibility limitVisibility(struct track *tg)
