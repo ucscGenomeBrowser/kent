@@ -94,6 +94,9 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 #ClinGen
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
+#ClinGen CSpec
+11 11 * * 3 /hive/data/outside/otto/clinGen/clinGenCspec/makeClinGenCspec.sh
+
 #GRC Incident
 MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
