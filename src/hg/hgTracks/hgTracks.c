@@ -5227,8 +5227,7 @@ struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
-    if (track->limitedVis == tvHide)
-        continue;
+    assert(track->limitedVis != tvHide);
     if (!isLimitedVisHiddenForAllWindows(track))
         {
 	struct track *winTrack;
