@@ -62,7 +62,7 @@ pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
     track clinGenCspec
     shortLabel ClinGen VCEP Specifications
-    longLabel Clingen CSPEC Variant Interpretation VCEP Specifications
+    longLabel Clingen CSpec Variant Interpretation VCEP Specifications
     parent clinGenComp on
     noScoreFilter on
     type bigBed 9 +
