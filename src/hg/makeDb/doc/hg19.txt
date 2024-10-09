@@ -35558,3 +35558,23 @@ ln -s /hive/data/genomes/hg19/bed/abSplice/AbSplice.bb
 cd ~/kent/src/hg/makeDb/trackDb/human/hg19
 vi abSplice.ra #Indented subtracks, changed bigDataUrl, adding group phenDis and html line
 ##############################################################################
+# CADD Jeltje Fri Sep 13 11:22:19 PDT 2024
+cd /hive/data/genomes/hg19/bed/cadd/v1.7
+aria2c -x4 -c https://kircherlab.bihealth.org/download/CADD/v1.7/GRCh37/whole_genome_SNVs.tsv.gz
+aria2c -x4 -c https://kircherlab.bihealth.org/download/CADD/v1.7/GRCh37/gnomad.genomes-exomes.r4.0.indel.tsv.gz
+python ~/kent/src/hg/makeDb/cadd/caddToBed.py gnomad.genomes-exomes.r4.0.indel.tsv.gz
+python ~/kent/src/hg/makeDb/cadd/caddToWig.py
+bedSort del.bed del.bed
+bedSort ins.bed ins.bed
+bedToBigBed del.bed ../../../chrom.sizes del.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as &
+bedToBigBed ins.bed ../../../chrom.sizes ins.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/cadd/cadd.as &
+wigToBigWig a.wig ../../../chrom.sizes a.bw &
+wigToBigWig c.wig ../../../chrom.sizes c.bw &
+wigToBigWig g.wig ../../../chrom.sizes g.bw &
+wigToBigWig t.wig ../../../chrom.sizes t.bw &
+rm -f *.wig *.bed
+# as per note from v1.6
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/1.7
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/1.7
+cp /hive/data/genomes/hg19/bed/cadd/v1.7/*.b[bw] .
+##############################################################################

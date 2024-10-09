@@ -85,6 +85,51 @@ is not in the track, you will need to use CADD's
 <a target="_blank" href="https://cadd.gs.washington.edu/score">online scoring tool</a>
 to obtain them.</p>
 
+<h2>Methods</h2>
+
+<p>
+In CADD version 1.7, new features have been added to improve CADD scores for certain variant
+effects, boosting the overall performance of CADD and bringing new developments to the community.
+CADD v1.7 integrates annotations from recent efforts to assess variant effects, along with new
+conservation and mutation scores.</p>
+<p>
+CADD v1.7 supports only the major chromosomes of the hg38/GRCh38 reference genome (chromosomes 1-22,
+X, and Y) and may be the last version to support the hg19/GRCh37 human reference genome.</p>
+<p>
+This version includes scores derived from Evolutionary Scale Modeling (ESM) for assessing variants
+in protein-coding regions, along with scores from a convolutional neural network (CNN) trained on
+open chromatin sequences, used as a proxy for regulatory regions in the genome. The previously
+included conservation scores have been updated with data from the Zoonomia project. New annotations
+have also been added for 3' Untranslated Regions (3' UTRs), along with models of genome-wide
+mutational rates. The gene and transcript models have been updated by advancing from Ensembl version
+95 to version 110, and the Ensembl Variant Effect Predictor (VEP) has been upgraded accordingly.</p>
+<p>
+The models in CADD v1.7 have been trained similarly to the version 1.6 release. The logistic
+regression uses an L2 penalty with C = 1, and training was completed after thirteen L-BFGS
+iterations using the sklearn library The new models exhibit a high degree of similarity to the
+previous release, with a Spearman correlation of 0.946 for CADD scores calculated for 100,000
+randomly selected variants between CADD GRCh38-v1.6 and CADD GRCh38-v1.7. The v1.7 models perform
+comparably to earlier versions in distinguishing known pathogenic variants (ClinVar) from common
+variants (gnomAD) across the genome. Improvements in CADD v1.7 are particularly evident when
+focusing on specific variant categories, such as missense or 3' UTR variants, where the latest
+release includes updated annotations.</p>
+<p>
+More information can be found at the
+<a href="https://cadd.bihealth.org/download" target="_blank">CADD site</a>
+and the Schubach et al., Nucleic Acids Res, 2024 publication.
+
+
+Data were converted from the files provided on
+<a href="https://cadd.bihealth.org/download" target="_blank">the CADD Downloads website</a>,
+provided by the Kircher lab, using
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/cadd" target="_blank">
+custom Python scripts</a>,
+documented in our <a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cadd.txt">
+makeDoc</a> files.
+</p>
+
+
 <h2>Data access</h2>
 <p>
 CADD scores are freely available for all non-commercial applications from
@@ -99,7 +144,7 @@ The CADD data on the UCSC Genome Browser can be explored interactively with the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed
 files that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd1.7/" target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw, ins.bb and del.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
 or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
@@ -107,24 +152,12 @@ binary for your system. Instructions for downloading source code and binaries ca
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tools can also be used to obtain features confined to a given range, e.g.,
 <br>
-<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/a.bw stdout</tt>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd1.7/a.bw stdout</tt>
 <br>
 or
 <br>
-<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/ins.bb stdout</tt></p>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd1.7/ins.bb stdout</tt></p>
 
-<h2>Methods</h2>
-
-<p>
-Data were converted from the files provided on
-<a href="https://cadd.gs.washington.edu/download" target="_blank">the CADD Downloads website</a>,
-provided by the Kircher lab, using
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/cadd" target="_blank">
-custom Python scripts</a>, 
-documented in our <a target="_blank"
-href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cadd.txt">
-makeDoc</a> files.
-</p>
 
 <h2>Credits</h2>
 <p>
@@ -148,4 +181,14 @@ CADD: predicting the deleteriousness of variants throughout the human genome</a>
 <em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D886-D894.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30371827" target="_blank">30371827</a>;
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323892/" target="_blank">PMC6323892</a>
+</p>
+
+<p>
+Schubach M, Maass T, Nazaretyan L, R&#246;ner S, Kircher M.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad989" target="_blank">
+CADD v1.7: using protein language models, regulatory CNNs and other nucleotide-level scores to
+improve genome-wide variant predictions</a>.
+<em>Nucleic Acids Res</em>. 2024 Jan 5;52(D1):D1143-D1154.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38183205" target="_blank">38183205</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10767851/" target="_blank">PMC10767851</a>
 </p>
