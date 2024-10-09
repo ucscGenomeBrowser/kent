@@ -100,6 +100,7 @@ GCF_029168945.1_ASM2916894v1	eudicot C.sativa (Pink pepper KNU-18-1 2023)
 GCF_963576675.1_ddEupLath1.1	eudicot E.lathyris (primary hap 2023)
 GCF_033153095.1_APGP_CSIRO_Gbil_v1	eudicot G.bilobum (WA Gb01-03AN 2023)
 GCF_951802175.1_ddPopNigr1.1	eudicot P.nigra (primary hap 2023)
+GCF_000499845.2_P._vulgaris_v2.0	eudicot P.vulgaris (G19833 2024)
 GCF_958449725.1_drRosRugo1.1	eudicot R.rugosa (primary hap 2023)
 GCF_000495115.2_PopEup_1.0	Euphrates poplar (v2 2014)
 GCF_916048215.2_drMalSylv7.2	European crab apple (2022)
@@ -159,9 +160,9 @@ GCF_004785595.1_Jm3101_v1.0	J.microcarpa x regia eudicots (UCDavis 2019)
 GCF_000346735.1_P.mume_V1.0	Japanese apricot
 GCF_030272615.1_Sugi_1.0	Japanese cedar (2023)
 GCF_001879475.1_Asagao_1.1	Japanese morning glory
-GCF_001433935.1_IRGSP-1.0	Japanese rice (Nipponbare 2015)
 GCF_034140825.1_ASM3414082v1	Japanese rice (2023)
 GCA_009797565.1_Osativa_Kitaake_v2.0	Japanese rice (Kitaake 2020)
+GCF_001433935.1_IRGSP-1.0	Japanese rice (Nipponbare 2015)
 GCF_026212465.1_ASM2621246v1	Joseph's coat eudicots (Red AtriRed21 2022)
 GCA_001602275.1_ASM160227v1	Korean lawngrass (Nagirizaki 2016)
 GCA_000227445.1_Legassy_V2	lettuce eudicots (Salinas 2011)
@@ -192,6 +193,7 @@ GCA_003675935.1_DSBC_Pcab_1.0	patchouli (Gaoche1L2016 2018)
 GCF_000346465.2_Prunus_persica_NCBIv2	peach
 GCF_003086295.2_arahy.Tifrunner.gnm1.KYV3	peanut
 GCA_004170445.1_ASM417044v1	peanut (GDAAS-fuhuasheng2018 2019)
+GCF_963583255.1_drPyrComm1.1	pear (primary hap 2023)
 GCA_002174835.2_ASM217483v2	pearl millet (Tift 23D2B1-P1-P5 2018)
 GCF_018687715.1_C.illinoinensisPawnee_v1	pecan
 GCF_019359855.1_MPB_Lper_Kyuss_1697	perennial ryegrass (Kyuss_39 2021)
