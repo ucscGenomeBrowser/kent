@@ -1,5 +1,8 @@
 #! /bin/bash
 
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 cd /hive/data/outside/otto/clinGen/clinGenCspec
 
 wget -q -O svis.json https://cspec.genome.network/cspec/api/svis
