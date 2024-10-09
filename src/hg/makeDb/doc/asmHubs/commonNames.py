@@ -69,7 +69,7 @@ def extractNames(asmRpt, hapX):
             if re.search(pat, orgName):
               orgName = sciName
             else:
-              pat = r'bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats'
+              pat = r'apicomplexans|bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats|tunicates|tsetse fly'
               if re.search(pat, orgName):
                 order = orgName.split()[0]
                 if re.search('budding', order):
@@ -120,8 +120,14 @@ def extractNames(asmRpt, hapX):
                 restWords = " ".join(words[1:])
                 if re.search("eukaryotes", orgName):
                   orgName = words[0][0].upper() + "." + restWords
+                elif re.search("apicomplexans", orgName):
+                  orgName = "apicomplexans " + words[0][0].upper() + "." + restWords
                 elif re.search("flies", orgName):
                   orgName = "fly " + words[0][0].upper() + "." + restWords
+                elif re.search("tsetse", orgName):
+                  orgName = "tsetse fly " + words[0][0].upper() + "." + restWords
+                elif re.search("tunicates", orgName):
+                  orgName = "tunicate " + words[0][0].upper() + "." + restWords
                 else:
                   orgName = order + " " + words[0][0].upper() + "." + restWords
               elif re.search("viruses", orgName):
