@@ -69,7 +69,7 @@ def extractNames(asmRpt, hapX):
             if re.search(pat, orgName):
               orgName = sciName
             else:
-              pat = r'apicomplexans|bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats|tunicates|tsetse fly'
+              pat = r'apicomplexans|bryozoans|bugs|ciliates|crustaceans|diatoms|hydrozoans|gastropods|nematodes|flatworm|pelagophytes|scorpions|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats|tunicates|tsetse fly|cellular slime molds|stony corals'
               if re.search(pat, orgName):
                 order = orgName.split()[0]
                 if re.search('budding', order):
@@ -122,10 +122,28 @@ def extractNames(asmRpt, hapX):
                   orgName = words[0][0].upper() + "." + restWords
                 elif re.search("apicomplexans", orgName):
                   orgName = "apicomplexans " + words[0][0].upper() + "." + restWords
+                elif re.search("bryozoans", orgName):
+                  orgName = "bryozoans " + words[0][0].upper() + "." + restWords
+                elif re.search("ciliates", orgName):
+                  orgName = "ciliates " + words[0][0].upper() + "." + restWords
+                elif re.search("diatoms", orgName):
+                  orgName = "diatoms " + words[0][0].upper() + "." + restWords
+                elif re.search("hydrozoans", orgName):
+                  orgName = "hydrozoans " + words[0][0].upper() + "." + restWords
+                elif re.search("gastropods", orgName):
+                  orgName = "gastropods " + words[0][0].upper() + "." + restWords
+                elif re.search("pelagophytes", orgName):
+                  orgName = "pelagophytes " + words[0][0].upper() + "." + restWords
+                elif re.search("scorpions", orgName):
+                  orgName = "scorpions " + words[0][0].upper() + "." + restWords
                 elif re.search("flies", orgName):
                   orgName = "fly " + words[0][0].upper() + "." + restWords
                 elif re.search("tsetse", orgName):
                   orgName = "tsetse fly " + words[0][0].upper() + "." + restWords
+                elif re.search("cellular slime mold", orgName):
+                  orgName = "cellular slime mold " + words[0][0].upper() + "." + restWords
+                elif re.search("stony corals", orgName):
+                  orgName = "stony coral " + words[0][0].upper() + "." + restWords
                 elif re.search("tunicates", orgName):
                   orgName = "tunicate " + words[0][0].upper() + "." + restWords
                 else:
