@@ -39,9 +39,8 @@ include trackDb.clinGen.ra
 include trackDb.giab.ra
 
 # CADD scores
-include cadd.alpha.ra alpha
-include cadd.ra beta,public
-
+include cadd.ra
+include cadd1_7.ra
 
 # Revel scores
 include revel.ra

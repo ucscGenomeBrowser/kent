@@ -1,80 +1,79 @@
-track caddSuper
-shortLabel CADD 1.6
-longLabel CADD 1.6 Score for all single-basepair mutations and selected insertions/deletions
+track caddSuper1_7
+shortLabel CADD 1.7
+longLabel CADD 1.7 Score for all single-basepair mutations and selected insertions/deletions
 superTrack on hide
 type bed
 visibility hide
 group phenDis
 color 100,130,160
-html caddSuper.html
+html caddSuper1_7
 
-track cadd
-shortLabel CADD 1.6
-longLabel CADD 1.6 Score for all possible single-basepair mutations (zoom in for scores)
+track cadd1_7
+shortLabel CADD 1.7
+longLabel CADD 1.7 Score for all possible single-basepair mutations (zoom in for scores)
 type bigWig
 compositeTrack on
-parent caddSuper
+parent caddSuper1_7
 visibility dense
 #maxWindowToQuery 500000
 group phenDis
 color 100,130,160
-html caddSuper
 maxWindowToDraw 10000000
-mouseOverFunction noAverage
+#mouseOverFunction noAverage
 
-        track caddA
+        track cadd1_7_A
         shortLabel Mutation: A
-        longLabel CADD 1.6 Score: Mutation is A
+        longLabel CADD 1.7 Score: Mutation is A
         type bigWig
-        parent cadd on
+        parent cadd1_7 on
         visibility dense
-        bigDataUrl /gbdb/$D/cadd/a.bw
+        bigDataUrl /gbdb/$D/cadd1.7/a.bw
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
 
-        track caddC
+        track cadd1_7_C
         shortLabel Mutation: C
-        longLabel CADD 1.6 Score: Mutation is C
+        longLabel CADD 1.7 Score: Mutation is C
         type bigWig
-        parent cadd on
+        parent cadd1_7 on
         visibility dense
-        bigDataUrl /gbdb/$D/cadd/c.bw
+        bigDataUrl /gbdb/$D/cadd1.7/c.bw
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
 
-        track caddG
+        track cadd1_7_G
         shortLabel Mutation: G
-        longLabel CADD 1.6 Score: Mutation is G
+        longLabel CADD 1.7 Score: Mutation is G
         type bigWig
-        parent cadd on
+        parent cadd1_7 on
         visibility dense
-        bigDataUrl /gbdb/$D/cadd/g.bw
+        bigDataUrl /gbdb/$D/cadd1.7/g.bw
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
 
-        track caddT
+        track cadd1_7_T
         shortLabel Mutation: T
-        longLabel CADD 1.6 Score: Mutation is T
+        longLabel CADD 1.7 Score: Mutation is T
         type bigWig
-        parent cadd on
+        parent cadd1_7 on
         visibility dense
-        bigDataUrl /gbdb/$D/cadd/t.bw
+        bigDataUrl /gbdb/$D/cadd1.7/t.bw
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
 
-track caddIns
-shortLabel CADD 1.6 Ins
-longLabel CADD 1.6 Score: Insertions - label is length of insertion
+track cadd1_7_Ins
+shortLabel CADD 1.7 Ins
+longLabel CADD 1.7 Score: Insertions - label is length of insertion
 type bigBed 9 +
-parent caddSuper
+parent caddSuper1_7 on
 visibility dense
-bigDataUrl /gbdb/$D/cadd/ins.bb
+bigDataUrl /gbdb/$D/cadd1.7/ins.bb
 mouseOver Mutation: $change CADD Phred score: $phred
-html caddSuper
+html caddSuper1.7
 filter.score 10:100
 filterByRange.score on
 filterLabel.score Show only items with PHRED scale score of
@@ -83,15 +82,15 @@ filterLimits.score 0:100
 #maxItems 100000
 #maxWindowToDraw 9000000
 
-track caddDel
-shortLabel CADD 1.6 Del
-longLabel CADD 1.6 Score: Deletions - label is length of deletion
+track cadd1_7_Del
+shortLabel CADD 1.7 Del
+longLabel CADD 1.7 Score: Deletions - label is length of deletion
 type bigBed 9 +
-parent caddSuper
+parent caddSuper1_7 on
 visibility dense
-bigDataUrl /gbdb/$D/cadd/del.bb
+bigDataUrl /gbdb/$D/cadd1.7/del.bb
 mouseOver Mutation: $change CADD Phred score: $phred
-html caddSuper
+html caddSuper1.7
 filter.score 10:100
 filterByRange.score on
 filterLabel.score Show only items with PHRED scale score of
