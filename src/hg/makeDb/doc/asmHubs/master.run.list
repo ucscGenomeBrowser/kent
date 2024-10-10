@@ -3713,6 +3713,7 @@
 ./runBuild GCF_006229205.1_meerkat_22Aug2017_6uvM2_HiC mammals Suricata_suricatta
 ./runBuild GCF_006345805.1_ASM634580v1 invertebrate Octopus_sinensis
 ./runBuild GCF_006381635.1_ASM638163v2 plants Hibiscus_syriacus
+./runBuild GCF_006384225.1_ASM638422v1 bacteria Rhodococcus_qingshengii
 ./runBuild GCF_006386435.1_YSFRI_EMoa_1.0 fish Epinephelus_moara
 ./runBuild GCF_006496715.1_Aalbo_primary.1 invertebrate Aedes_albopictus
 ./runBuild GCF_006496715.2_Aalbo_primary.1 invertebrate Aedes_albopictus
