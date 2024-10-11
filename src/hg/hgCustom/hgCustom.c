@@ -362,7 +362,7 @@ puts("<TD COLSPAN=2>");
 if (dataUrl)
     {
     /* can't update via pasting if loaded from URL */
-    safef(buf, sizeof buf, "Replace data at URL: %s", ctDataUrl(ct));
+    safef(buf, sizeof buf, "Data was uploaded from URL: %s\nTo see changes made to the data at the URL, re-load the URL on the \"Add custom tracks\" page.", ctDataUrl(ct));
     cgiMakeTextAreaDisableable(hgCtDataText, buf,
                                 TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
     }
