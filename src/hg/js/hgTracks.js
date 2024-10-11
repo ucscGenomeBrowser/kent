@@ -2129,6 +2129,9 @@ var rightClick = {
     moveTo : function(id, topOrBottom) {
         /* move a track to either "top" or "bottom" position */
         let newPos = "0.5";
+        if (hgTracks.trackDb[0]!=="ruler")
+            newPos = 0;
+
         if (topOrBottom==="bottom") {
             newPos = String(parseInt($(".imgOrd").last().attr("abbr"))+1);
         }
