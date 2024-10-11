@@ -824,7 +824,7 @@ function notifBoxShow(cgiName, keyName) {
     }
 }
 
-function notifBoxSetup(cgiName, keyName, msg) {
+function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
 /* Create a notification box if one hasn't been created, and
  * add msg to the list of shown notifications.
  * cgiName.keyName will be saved to localStorage in order to show
@@ -851,8 +851,16 @@ function notifBoxSetup(cgiName, keyName, msg) {
             notifBox.innerHTML = msg;
         }
     }
-    notifBox.innerHTML += "<div style='text-align:center'>"+
-        "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+    var closeHtml = "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;";
+    var buttonStyles = "text-align: center";
+    // XX code review: The close button does not sense at all, why not just always remove it?
+    if (skipCloseButton===true) {
+        closeHtml = "";
+        buttonStyles += "; display: inline; margin-left: 20px";
+    }
+
+    notifBox.innerHTML += "<div style='"+buttonStyles+"'>"+
+        closeHtml +
         "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
         "</div>";
     if (!alreadyPresent) {

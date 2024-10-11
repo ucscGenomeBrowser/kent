@@ -5801,9 +5801,9 @@ $(document).ready(function()
             // if the user is not logged in and they have not already gone through the
             // tutorial
             if (!isUserLoggedIn && !hideTutorial && tutMsgCount < 5) {
-                let msg = "A guided tutorial is available for new users: " +
+                let msg = "New to the Genome Browser? A 3-minute introduction is available in the menu at the top of the screen under 'Help > Interactive Tutorial' or here: " +
                     "<button id='showTutorialLink' href=\"#showTutorial\">Start tutorial</button>";
-                notifBoxSetup("hgTracks", "hideTutorial", msg);
+                notifBoxSetup("hgTracks", "hideTutorial", msg, true);
                 notifBoxShow("hgTracks", "hideTutorial");
                 localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").on("click", function() {
