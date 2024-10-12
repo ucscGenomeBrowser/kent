@@ -7,6 +7,7 @@ visibility hide
 group phenDis
 color 100,130,160
 html caddSuper1_7
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
 track cadd1_7
 shortLabel CADD 1.7
@@ -21,6 +22,7 @@ color 100,130,160
 html caddSuper1_7
 maxWindowToDraw 10000000
 mouseOverFunction noAverage
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
         track cadd1_7_A
         shortLabel Mutation: A
@@ -82,6 +84,7 @@ filterLimits.score 0:100
 #maxWindowCoverage 40000
 #maxItems 100000
 #maxWindowToDraw 9000000
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
 track cadd1_7_Del
 shortLabel CADD 1.7 Del
@@ -99,3 +102,4 @@ filterLimits.score 0:100
 #maxWindowCoverage 40000
 #maxItems 100000
 #maxWindowToDraw 9000000
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
