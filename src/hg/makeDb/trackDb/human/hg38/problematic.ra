@@ -12,6 +12,7 @@ group map
     compositeTrack on
     hideEmptySubtracks off
     visibility pack
+    priority 1
     type bigBed 3 +
 
         track comments
@@ -53,6 +54,7 @@ group map
     longLabel Highly Reproducible genomic regions for sequencing
     visibility hide
     html problematic
+    priority 2
     type bed 3
 
         track highReproBeds
@@ -137,6 +139,49 @@ group map
             shortLabel HR_NA12878 Variants
             longLabel HR_NA12878 Variants
             type vcfTabix
+
+    track problematicGIAB
+    parent problematicSuper
+    compositeTrack on
+    type bigBed 3
+    shortLabel GIAB Problematic Regions
+    longLabel Difficult regions from GIAB via NCBI
+    hideEmptySubtracks off
+    visibility dense
+    priority 3
+    html problematic
+    
+        track alldifficultregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/all_difficult_regions.bb
+        shortLabel All difficult regions
+        longLabel Genome-in-a-bottle: all difficult regions
+        type bigBed 3
+        visibility dense
+    
+        track alllowmapandsegdupregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/all_low_mapping_regions.bb
+        shortLabel Low mapping regions
+        longLabel Genome-in-a-bottle: low mapping regions
+        type bigBed 3
+        visibility dense
+    
+        track notinalldifficultregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/not_difficult_regions.bb
+        shortLabel Not difficult regions
+        longLabel Genome-in-a-bottle: not difficult regions
+        type bigBed 3
+        visibility dense
+    
+        track notinalllowmapandsegdupregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/not_low_mapping_regions.bb
+        shortLabel Not low mapping regions
+        longLabel Genome-in-a-bottle: not low mapping regions
+        type bigBed 3
+        visibility dense
 
 searchTable comments
 searchPriority 0.5
