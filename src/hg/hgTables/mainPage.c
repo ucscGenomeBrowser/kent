@@ -631,11 +631,9 @@ hPrintf(" <div class='tbTooltip'>");
 hPrintf("<span class='tbTooltipLabel'><b>%s</b>",
             stepLabels[num-1]);
 
-hPrintf("&nbsp;<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>");
-hPrintf("<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>");
-hPrintf("<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>");
-hPrintf("<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/>");
-hPrintf("</svg></span>");
+hPrintf("&nbsp;");
+printInfoIconSvg();
+hPrintf("</span>");
 
 hPrintf("<span class='tbTooltiptext'>%s <a target='_blank' href='%s'>%s</a></span>\n",
             stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
