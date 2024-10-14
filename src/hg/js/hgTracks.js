@@ -4036,6 +4036,14 @@ var popUp = {
             }
         });
         
+        $(".ui-dialog").on("keypress", function(e) {
+            e.preventDefault();
+            var key = e.charCode || e.keyCode || 0;     
+            if (key == 13) {
+                $(".ui-button:contains('OK')").click();
+            }
+        });
+
         // FIXME: Why are open and close no longer working!!!
         if (popUp.trackDescriptionOnly) {
             var myWidth =  $(window).width() - 300;
