@@ -136,7 +136,8 @@ if (write (fileNo, paddedGroup, strlen(paddedGroup)) == -1)
 char *settings = sqlProfileToMyCnf(profile);
 if (!settings)
     errAbort("Could not connect to MySQL. Profile '%s.*' not found in sqlProfileToMyCnf() -- failed for file '%s' with errno %d. "
-            "Most likely the statements db.host, db.user and db.password as missing in ~/.hg.conf.", profile, defaultFileName, errno);
+            "Most likely the statements %s.host, %s.user and %s.password are missing in ~/.hg.conf or (...)/cgi-bin/hg.conf.", 
+            profile, defaultFileName, errno, profile, profile, profile);
 if (sameString(prog, "mysqldump"))
     {  // need to suppress the database setting, it messes up mysqldump and is not needed. comment it out
     settings = replaceChars(settings, "\ndatabase=", "\n#database=");
