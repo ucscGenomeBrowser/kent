@@ -22,7 +22,7 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     filterLabel.spliceType Splice type
     filter.AIscore 0.02
     filterLimits.AIscore 0.02:1
-    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b> $spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
     html spliceAI
 
     track spliceAIindels
@@ -39,7 +39,7 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     filterLabel.spliceType Splice type
     filter.AIscore 0.02
     filterLimits.AIscore 0.02:1
-    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b> $spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
     html spliceAI
 
     track spliceAIsnvsMasked
@@ -56,7 +56,7 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     filterLabel.spliceType Splice type
     filter.AIscore 0.02
     filterLimits.AIscore 0.02:1
-    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b> $spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
     html spliceAI
 
     track spliceAIindelsMasked
@@ -73,5 +73,5 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     filterLabel.spliceType Splice type
     filter.AIscore 0.02
     filterLimits.AIscore 0.02:1
-    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b> $spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
     html spliceAI
