@@ -628,8 +628,13 @@ if (num > STEP_MAX)
 hPrintf("<tr height='16px'><td></td></tr>");
 hPrintf("<tr><td>");
 hPrintf(" <div class='tbTooltip'>");
-hPrintf("<span class='tbTooltipLabel'><b>%s</b></span>",
+hPrintf("<span class='tbTooltipLabel'><b>%s</b>",
             stepLabels[num-1]);
+
+hPrintf("&nbsp;");
+printInfoIconSvg();
+hPrintf("</span>");
+
 hPrintf("<span class='tbTooltiptext'>%s <a target='_blank' href='%s'>%s</a></span>\n",
             stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
 hPrintf("</div>");

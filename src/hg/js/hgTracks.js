@@ -2129,6 +2129,9 @@ var rightClick = {
     moveTo : function(id, topOrBottom) {
         /* move a track to either "top" or "bottom" position */
         let newPos = "0.5";
+        if (hgTracks.trackDb[0]!=="ruler")
+            newPos = 0;
+
         if (topOrBottom==="bottom") {
             newPos = String(parseInt($(".imgOrd").last().attr("abbr"))+1);
         }
@@ -4033,6 +4036,14 @@ var popUp = {
             }
         });
         
+        $(".ui-dialog").on("keypress", function(e) {
+            e.preventDefault();
+            var key = e.charCode || e.keyCode || 0;     
+            if (key == 13) {
+                $(".ui-button:contains('OK')").click();
+            }
+        });
+
         // FIXME: Why are open and close no longer working!!!
         if (popUp.trackDescriptionOnly) {
             var myWidth =  $(window).width() - 300;
@@ -5801,9 +5812,9 @@ $(document).ready(function()
             // if the user is not logged in and they have not already gone through the
             // tutorial
             if (!isUserLoggedIn && !hideTutorial && tutMsgCount < 5) {
-                let msg = "A guided tutorial is available for new users: " +
+                let msg = "New to the Genome Browser? A 3-minute introduction is available in the menu at the top of the screen under 'Help > Interactive Tutorial' or here: " +
                     "<button id='showTutorialLink' href=\"#showTutorial\">Start tutorial</button>";
-                notifBoxSetup("hgTracks", "hideTutorial", msg);
+                notifBoxSetup("hgTracks", "hideTutorial", msg, true);
                 notifBoxShow("hgTracks", "hideTutorial");
                 localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").on("click", function() {
