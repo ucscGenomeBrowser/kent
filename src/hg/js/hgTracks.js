@@ -2142,52 +2142,72 @@ var rightClick = {
         dragReorder.sort($("#imgTbl"));
         dragReorder.setOrder($("#imgTbl"));
     },
-    hideTracks: function (ids, hideParent) 
+    hideTracks: function (ids)
     {
         var cartVars = [];
         var cartVals = [];
 
-        for (var i = 0; i<ids.length; i++) {
-            var id = ids[i];
+        // find parent tracks that are losing all their children (lone parents)
+        var familyAnalysis = tdbFindChildless(hgTracks.trackDb, ids);
+
+        // lone parents get special treatment
+        for (var delFam of familyAnalysis.loneParents) {
+            var loneParent = delFam[0];
+            var loneParentChildren = delFam[1];
+
+            // remove all the lone parent children now from the track image
+            for (var childName of loneParentChildren) {
+                $(document.getElementById('tr_' + childName)).remove();
+            }
+
+            // and set the lone parent to hide in the cart and also in the track list below
+            cartVars.push(loneParent);
+            cartVals.push('[]');
+            vis.update(loneParent, 'hide');
+        }
+
+        // handle all other tracks, they are either not parents or parents with at least one child left
+        var delIds = familyAnalysis.others;
+        for (var i = 0; i<delIds.length; i++) {
+            var id = delIds[i];
             var rec = hgTracks.trackDb[id];
-            if (hideParent) {
-                // only hide the parent, not children
-                $(document.getElementById('tr_' + id)).remove();
-                if (tdbHasParent(rec) && tdbIsLeaf(rec)) {
-                    id = rec.parentTrack;
-                }
+            if (tdbIsSubtrack(rec)) {
+                cartVars.push(id);
+                cartVals.push('[]');
+
+                cartVars.push(id+"_sel");
+                cartVals.push(0);
+            } else if (tdbIsFolderContent(rec)) {
+                // supertrack children need to have _sel set to trigger superttrack reshaping
+                cartVars.push(id);
+                cartVals.push('hide');
+
+                cartVars.push(id+"_sel");
+                cartVals.push(0);
+            } else {
+                // normal, top-level track
                 cartVars.push(id);
                 cartVals.push('hide');
             }
-            else { 
-                if (tdbIsSubtrack(rec)) {
-                    // Remove subtrack level vis and explicitly uncheck.
-                    //cart.setVars( [ id, id+"_sel" ], [ '[]', 0 ] ); 
-                    cartVars.push(id);
-                    cartVals.push('[]');
-
-                    cartVars.push(id+"_sel");
-                    cartVals.push(0);
-                } else if (tdbIsFolderContent(rec)) {
-                    // supertrack children need to have _sel set to trigger superttrack reshaping
-                    //cart.setVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); 
-                    cartVars.push(id);
-                    cartVals.push('hide');
-
-                    cartVars.push(id+"_sel");
-                    cartVals.push(0);
-                } else {
-                    //cart.setVars([id], ['hide']);  // Others, just set vis hide.
-                    cartVars.push(id);
-                    cartVals.push('hide');
-                }
-                $(document.getElementById('tr_' + id)).remove();
-            }
+            $(document.getElementById('tr_' + id)).remove();
         }
         imageV2.afterImgChange(true);
         cart.setVars( cartVars, cartVals );
     },
 
+    hideOthers: function (id) {
+        /* hide all tracks but 'id'. Hide parents of composites/folders, rather than their children */
+        var myParent = hgTracks.trackDb[id].parentTrack;
+
+        var hideList = [];
+        for (var otherId in hgTracks.trackDb) {
+            if (otherId===id || otherId==="ruler")
+                continue;
+
+            hideList.push(otherId);
+        }
+        rightClick.hideTracks(hideList);
+    },
     makeMapItem: function (id)
     {   // Create a dummy mapItem on the fly
         // (for objects that don't have corresponding entry in the map).
@@ -2494,12 +2514,7 @@ var rightClick = {
 
             imageV2.fullReload();
         } else if (cmd === "hideOthers") {
-            var hideIds = [];
-            for (var otherId in hgTracks.trackDb) {
-                if (otherId!==id && otherId!=="ruler") 
-                    hideIds.push(otherId);
-            }
-            rightClick.hideTracks(hideIds, true);
+            rightClick.hideOthers(id);
         } else if (cmd === "moveTop") {
             rightClick.moveTo(id, "top");
         } else if (cmd === "moveBottom") {
@@ -2671,7 +2686,7 @@ var rightClick = {
             if (imageV2.enabled && cmd === 'hide') {
                 // Hide local display of this track and update server side cart.
                 // Subtracks controlled by 2 settings so del vis and set sel=0.
-                rightClick.hideTracks([id], false);
+                rightClick.hideTracks([id]);
             } else if (!imageV2.mapIsUpdateable) {
                 jQuery('body').css('cursor', 'wait');
                 if (selectUpdated) {
