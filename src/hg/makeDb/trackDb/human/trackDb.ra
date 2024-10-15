@@ -2793,8 +2793,8 @@ otherDb hg38
 chainNormScoreAvailable on
 
 track chainSelf
-shortLabel Self Chain
-longLabel Chained Self-Alignments
+shortLabel Self Alignment
+longLabel Self-Alignment: Chained alignment of the human genome to itself
 group rep
 visibility hide
 color 100,50,0
