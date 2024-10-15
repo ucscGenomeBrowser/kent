@@ -477,7 +477,7 @@ char *fileName = vcfMustFindFileName(conn, table, hDefaultChrom(database), isTab
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
-printDownloadLink("VCF", fileName);
+printDownloadLink("VCF", tdb, fileName);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 

@@ -642,6 +642,18 @@ hPrintf("</td></tr>");
 hPrintf("<tr height='6px'><td></td></tr>");
 }
 
+void printNoGenomeWarning(struct trackDb *curTrack) {
+    /* print a message box that explains why a track is not downloadable */
+    hPrintf("<DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
+    char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
+    hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
+    if (noGenomeNote)
+        hPrintf("Reason: %s", noGenomeNote);
+    else
+        hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
+    hPrintf("</DIV>");
+}
+
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
@@ -814,14 +826,9 @@ if (isPositional)
     hPrintf("</TD></TR>\n");
 
     if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
-        hPrintf("<tr><td><DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
-        char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
-        hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
-        if (noGenomeNote)
-            hPrintf("Reason: %s", noGenomeNote);
-        else
-            hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
-        hPrintf("</DIV></td></tr>");
+        hPrintf("<tr><td>");
+        printNoGenomeWarning(curTrack);
+        hPrintf("</td></tr>");
     }
 
     }
