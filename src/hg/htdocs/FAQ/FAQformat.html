@@ -1042,6 +1042,16 @@ For instance, in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, whe
 Gencode Version number. See this <a href="../../FAQ/FAQgenes.html#coding"
 target="_blank">coding/non-coding genes FAQ</a> for more information.</p>
 
+<p>
+The field <code>exonFrames</code> is a comma-separated list of the numbers
+with the possible values 0, 1, 2 or -1, one per exon, in order of transcription.
+This order means that the first value for a transcript on the minus (-) strand is
+the exon on the right of the screen on the Genome Browser. 
+A value of zero means that the first codon of the exon starts at the first nucleotide of the
+exon. A value of one means that the first codon starts after the first
+nucleotide and a value of two means that it starts after the second nucleotide. 
+UTRs are non-coding and their exonFrame value is -1.</p>
+
 <a name=RefFlat></a>
 <p><strong>Gene Predictions and RefSeq Genes with Gene Names</strong></p>
 <p>
