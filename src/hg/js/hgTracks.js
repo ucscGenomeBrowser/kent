@@ -5559,7 +5559,7 @@ var downloadCurrentTrackData = {
                         break;
                 }
                 anchor.download = fname;
-                anchor.trigger("click");
+                anchor.click();
                 window.URL.revokeObjectURL(anchor.href);
                 downloadCurrentTrackData.downloadData = {};
             }
@@ -5919,8 +5919,11 @@ $(document).ready(function()
         newLink.textContent = "Download Current Track Data";
         newLink.href = "#";
         newListEl.appendChild(newLink);
-        $("#downloads > ul")[0].appendChild(newListEl);
-        $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
+        let opt = document.querySelector("#downloads > ul");
+        if (opt) {
+            opt.appendChild(newListEl);
+            $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
+        }
     }
 
     if (typeof showMouseovers !== 'undefined' && showMouseovers) {

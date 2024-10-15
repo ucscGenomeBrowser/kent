@@ -1915,6 +1915,73 @@ There are no extra options that can appear on the type hic line.
     the label to just "Strand (Orientation)".</P>
 </DIV>
 
+<DIV class="highlight"><span class="types bed bigBed"></span>
+<div class="format">
+    <code>highlight.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
+    <code>highlightByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
+    <code>highlightLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    </div>
+    <P>Similar to filters, There are a number of different highlights available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more information on setting up filters. Note: for configurable features, like highlights, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
+
+    <p>All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained above, except instead of items being excluded from the display, they are striped with a colored background to appear &quot;highlighted&quot; compared to the other items in the display. You can control the default highlight color with the highlightColor setting, or with the color picker on the configuration page when interacting with the track. Please note that at this time only one higlight color is available per track, and if multiple highlight settings are present on the same track, only items that pass ALL highlight settings will highlighted.</p>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    </pre>
+</DIV>
+
+<DIV class="highlightText"><span class="types bigBed"></span>
+<div class="format">
+    <code>highlightText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
+    <code>highlightType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
+    </div>
+    <P>Similar to filters, There are a number of different highlights available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more information on setting up filters. Note: for configurable features, like highlights, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
+
+    <p>All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained above, except instead of items being excluded from the display, they are striped with a colored background to appear &quot;highlighted&quot; compared to the other items in the display. You can control the default highlight color with the highlightColor setting, or with the color picker on the configuration page when interacting with the track. Please note that at this time only one higlight color is available per track, and if multiple highlight settings are present on the same track, only items that pass ALL highlight settings will highlighted.</p>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    </pre>
+</DIV>
+
+<DIV class="highlightValues"><span class="types bigBed"></span>
+<div class="format">
+    <code>highlightValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+    <code>highlightValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+    <code>highlightType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
+    </div>
+    <P>Similar to filters, There are a number of different highlights available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more information on setting up filters. Note: for configurable features, like highlights, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
+
+    <p>All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained above, except instead of items being excluded from the display, they are striped with a colored background to appear &quot;highlighted&quot; compared to the other items in the display. You can control the default highlight color with the highlightColor setting, or with the color picker on the configuration page when interacting with the track. Please note that at this time only one higlight color is available per track, and if multiple highlight settings are present on the same track, only items that pass ALL highlight settings will highlighted.</p>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    </pre>
+</DIV>
+
+<DIV class="highlightColor"><span class="types bigBed"></span>
+<div class="format">
+    <code>highlightColor &lt;hexcolor&gt;</code><BR>
+</div>
+    <P>Sets the default color for all of the various highlights defined in this stanza</P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    </pre>
+</DIV>
+
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
 <div class="format"><code>itemRgb on</code></div>
     <P>In bed formats supporting 

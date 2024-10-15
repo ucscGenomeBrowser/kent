@@ -40,8 +40,6 @@
         },
         'end': {
             action() {
-                // log when the tutorial is finished (commented out for now)
-                writeToApacheLog("clinicalTutorial finish " + getHgsid());
                 hideMenu('#help > ul');
                 return this.complete();
             },
@@ -115,7 +113,6 @@
     // Function to log finishing the clinical tutorial
     function listenForBasicTutorial() {
         document.getElementById('basicTutorialLink').addEventListener('click', function() {
-            writeToApacheLog("clinicalTutorial finish " + getHgsid());
             clinicalTour.complete();
         });
     }
@@ -390,6 +387,8 @@
             when: {
                 show: () => {
                     keepMenuVisible('#help > ul');
+                    // log when the tutorial is finished (commented out for now)
+                    writeToApacheLog("clinicalTutorial finish " + getHgsid());
                     listenForBasicTutorial(); // listener to log if the basic tutorial was started
                 },
                 hide: () => hideMenu('#help > ul')
