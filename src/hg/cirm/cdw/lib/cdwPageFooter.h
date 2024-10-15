@@ -4,7 +4,7 @@
     "<div class='row'>\n"
       "<div class='col'>\n"
       "<p class='text-muted'>\n"
-      "<a href='../cirmIndex'>Home</a><br />\n"
+      "<a href='../sspsygene.html'>Home</a><br />\n"
       "<a href='https://www.ucsc.edu/' target='_blank'>UCSC Home <i\n"
       "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
       "<a href='https://www.nimh.nih.gov/' target='_blank'>NIMH Home <i\n"
