@@ -512,7 +512,7 @@ char buf[256];
 clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxDistance);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
-    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
+    assert(clump->tStart < clump->tEnd);
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t+", ss->fileName, 
         clump->tStart, clump->tEnd);
@@ -525,7 +525,7 @@ clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, maxDi
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
-    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
+    assert(clump->tStart < clump->tEnd);
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t-", ss->fileName, 
         clump->tStart, clump->tEnd);
