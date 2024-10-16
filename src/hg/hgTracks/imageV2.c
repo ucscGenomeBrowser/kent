@@ -206,6 +206,19 @@ else if (tdbIsMultiTrackChild(tdb))
 return kindOfChild;
 }
 
+char* tdbTopParent(struct trackDb *tdb)
+/* return the name of the top-most parent, so the parent of a composite or the name of the superTrack for 
+ * a composite in a superTrack. Or return NULL if this is already a top-level track. */
+{
+    if (!tdb->parent)
+        return NULL;
+
+    while (tdb->parent) {
+        tdb = tdb->parent;
+    }
+    return tdb->track;
+}
+
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
 
@@ -237,6 +250,10 @@ enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
 enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
 jsonObjectAdd(ele, "kindOfParent", newJsonNumber(kindOfParent));
 jsonObjectAdd(ele, "kindOfChild", newJsonNumber(kindOfChild));
+
+char* topParent = tdbTopParent(track->tdb);
+if (topParent)
+    jsonObjectAdd(ele, "topParent", newJsonString(topParent));
 
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)

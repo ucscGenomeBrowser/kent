@@ -234,16 +234,24 @@ else
     return hgTablesName();
 }
 
-void printDownloadLink(char *typeLabel, char *fileName)
+void printDownloadLink(char *typeLabel, struct trackDb *tdb, char *fileName)
 /* print a link to the file, so the user can download it right here */
 {
 if (fileName==NULL)
     return;
-char *downPrefix = "";
-if (startsWith("/gbdb", fileName))
-    downPrefix = "https://hgdownload.soe.ucsc.edu";
 
-hPrintf("<B>%s File Download:</B> <A HREF='%s%s'>%s</A>", typeLabel, downPrefix, fileName, fileName);
+boolean disableGenome = (tdb && cartTrackDbIsNoGenome(database, tdb->table));
+
+if (disableGenome) 
+    printNoGenomeWarning(tdb);
+else 
+    {
+    char *downPrefix = "";
+    if (startsWith("/gbdb", fileName))
+        downPrefix = "https://hgdownload.soe.ucsc.edu";
+
+    hPrintf("<B>%s File Download:</B> <A HREF='%s%s'>%s</A>", typeLabel, downPrefix, fileName, fileName);
+    }
 }
 
 boolean printTypeHelpDesc(char *type)

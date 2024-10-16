@@ -7,6 +7,7 @@ visibility hide
 group phenDis
 color 100,130,160
 html caddSuper1_7
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
 track cadd1_7
 shortLabel CADD 1.7
@@ -18,8 +19,10 @@ visibility dense
 #maxWindowToQuery 500000
 group phenDis
 color 100,130,160
+html caddSuper1_7
 maxWindowToDraw 10000000
-#mouseOverFunction noAverage
+mouseOverFunction noAverage
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
         track cadd1_7_A
         shortLabel Mutation: A
@@ -73,7 +76,7 @@ parent caddSuper1_7 on
 visibility dense
 bigDataUrl /gbdb/$D/cadd1.7/ins.bb
 mouseOver Mutation: $change CADD Phred score: $phred
-html caddSuper1.7
+html caddSuper1_7
 filter.score 10:100
 filterByRange.score on
 filterLabel.score Show only items with PHRED scale score of
@@ -81,6 +84,7 @@ filterLimits.score 0:100
 #maxWindowCoverage 40000
 #maxItems 100000
 #maxWindowToDraw 9000000
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
 track cadd1_7_Del
 shortLabel CADD 1.7 Del
@@ -90,7 +94,7 @@ parent caddSuper1_7 on
 visibility dense
 bigDataUrl /gbdb/$D/cadd1.7/del.bb
 mouseOver Mutation: $change CADD Phred score: $phred
-html caddSuper1.7
+html caddSuper1_7
 filter.score 10:100
 filterByRange.score on
 filterLabel.score Show only items with PHRED scale score of
@@ -98,3 +102,4 @@ filterLimits.score 0:100
 #maxWindowCoverage 40000
 #maxItems 100000
 #maxWindowToDraw 9000000
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"

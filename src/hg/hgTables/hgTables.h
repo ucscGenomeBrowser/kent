@@ -90,8 +90,11 @@ boolean varOn(char *var);
 void printMainHelp();
 /* Put up main page help info. */
 
-void printDownloadLink(char *typeLabel, char *fileName);
+void printDownloadLink(char *typeLabel, struct trackDb *tdb, char *fileName);
 /* print a link to the file, so the user can download it right here */
+
+void printNoGenomeWarning(struct trackDb *curTrack);
+/* print a message box that explains why a track is not downloadable */
 
 boolean printTypeHelpDesc(char *fileType);
 /* print a little link to our help docs given a file type. Return true if file type is a big* file format. */

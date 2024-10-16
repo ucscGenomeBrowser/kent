@@ -152,11 +152,9 @@ def checkSession(session):
             pass
         # Check for the hubCollection error by matching the exact string pattern
         elif re.search(re.escape(hubCollection_error), checkLoad):
-            print("Collections error")
             pass
         # Check for buffer overflow error by matching the exact string pattern
         elif re.search(re.escape(buffer_error), checkLoad):
-            print("Buffer error")
             pass
         else: #If session does not contains strings to check, add error to list 
              error_list.append('error')
@@ -189,12 +187,9 @@ def output_if_file_exists(file_path):
             print(file.read())
         print("\nErrors that output 'hui::wiggleScaleStringToEnum() - Unknown option' can be ignored.")
 
-#year=datetime.now().strftime("%Y-%m-"+"01")
 
 server='https://genecats.gi.ucsc.edu/qa/qaCrons'
 
-#Saves the montly hgcentral session dump to a varaiable
-#monthly_hgcentral_dump="/usr/local/apache/htdocs-genecats/qa/test-results/hgcentral/"+year+"/rr.namedSessionDb"
 
 num_lines=10000 # Number of random lines to select
 

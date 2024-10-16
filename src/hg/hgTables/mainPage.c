@@ -631,17 +631,27 @@ hPrintf(" <div class='tbTooltip'>");
 hPrintf("<span class='tbTooltipLabel'><b>%s</b>",
             stepLabels[num-1]);
 
-hPrintf("&nbsp;<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>");
-hPrintf("<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>");
-hPrintf("<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>");
-hPrintf("<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/>");
-hPrintf("</svg></span>");
+hPrintf("&nbsp;");
+printInfoIconSvg();
+hPrintf("</span>");
 
 hPrintf("<span class='tbTooltiptext'>%s <a target='_blank' href='%s'>%s</a></span>\n",
             stepHelp[num-1], stepHelpLinks[num-1], HELP_LABEL);
 hPrintf("</div>");
 hPrintf("</td></tr>");
 hPrintf("<tr height='6px'><td></td></tr>");
+}
+
+void printNoGenomeWarning(struct trackDb *curTrack) {
+    /* print a message box that explains why a track is not downloadable */
+    hPrintf("<DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
+    char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
+    hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
+    if (noGenomeNote)
+        hPrintf("Reason: %s", noGenomeNote);
+    else
+        hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
+    hPrintf("</DIV>");
 }
 
 void showMainControlTable(struct sqlConnection *conn)
@@ -816,14 +826,9 @@ if (isPositional)
     hPrintf("</TD></TR>\n");
 
     if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
-        hPrintf("<tr><td><DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
-        char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
-        hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
-        if (noGenomeNote)
-            hPrintf("Reason: %s", noGenomeNote);
-        else
-            hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
-        hPrintf("</DIV></td></tr>");
+        hPrintf("<tr><td>");
+        printNoGenomeWarning(curTrack);
+        hPrintf("</td></tr>");
     }
 
     }

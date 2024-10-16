@@ -12,6 +12,7 @@ group map
     compositeTrack on
     hideEmptySubtracks off
     visibility pack
+    priority 1
     type bigBed 3 +
 
         track comments
@@ -53,6 +54,7 @@ group map
     longLabel Highly Reproducible genomic regions for sequencing
     visibility hide
     html problematic
+    priority 2
     type bed 3
 
         track highReproBeds
@@ -137,6 +139,49 @@ group map
             shortLabel HR_NA12878 Variants
             longLabel HR_NA12878 Variants
             type vcfTabix
+
+    track problematicGIAB
+    parent problematicSuper
+    compositeTrack on
+    type bigBed 3
+    shortLabel GIAB Problematic Regions
+    longLabel Difficult regions from GIAB via NCBI
+    hideEmptySubtracks off
+    visibility dense
+    priority 3
+    html problematic
+    
+        track alldifficultregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/all_difficult_regions.bb
+        shortLabel All difficult regions
+        longLabel Genome-in-a-bottle: all difficult regions
+        type bigBed 3
+        visibility dense
+    
+        track alllowmapandsegdupregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/all_low_map_and_segdupregions.bb
+        shortLabel LowMap+SegDup 
+        longLabel Genome-in-a-bottle: lowMap+SegDup regions
+        type bigBed 3
+        visibility dense
+    
+        track notinalldifficultregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/not_in_all_difficult_regions.bb
+        shortLabel Not difficult regions
+        longLabel Genome-in-a-bottle: not difficult regions
+        type bigBed 3
+        visibility dense
+    
+        track notinalllowmapandsegdupregions
+        parent problematicGIAB on
+        bigDataUrl /gbdb/hg38/problematic/GIAB/not_in_all_low_map_and_segdupregions.bb
+        shortLabel Not lowMap+SegDup
+        longLabel Genome-in-a-bottle: not lowMap+SegDup mapping regions
+        type bigBed 3
+        visibility dense
 
 searchTable comments
 searchPriority 0.5

@@ -92,8 +92,8 @@ function exposeAll()
     // Make main display dropdown show full if currently hide
     var visDD = normed($("select.visDD")); // limit to hidden
     if (visDD) {
-        if ($(visDD).attr('selectedIndex') === 0) {
-            $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+        if ($(visDD).prop('selectedIndex') === 0) {
+            $(visDD).prop('selectedIndex',$(visDD).children('option').length - 1);
 	        $(visDD).trigger("change");// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
 
@@ -404,6 +404,11 @@ function matCbFindFromSubCb(subCB)
     // (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
     classList = aryRemove(classList,["subCB","changed","disabled"]);
     var classes = classList.slice(0,2).join('.');   // Assume X and Y they are the first 2
+    if (classes==="")
+        // no hit, so this must be a 1D matrix. 
+        // New jquery does not accept selectors that end with . anymore, so return right away
+        return undefined;
+
     var matCB = $("input.matCB."+classes).not(".abc"); // Note, this works for filtering because we want 'AND'
     if (matCB.length === 1)
         return matCB;

@@ -469,6 +469,58 @@ function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  === 3); }
 function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  === 2 || tdb.kindOfChild === 3); }
 function tdbHasParent(tdb)            { return (tdb.kindOfChild  !== 0 && tdb.parentTrack); }
 
+function tdbFindChildless(trackDb, delTracks) {
+    /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
+     * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks*/
+    others = [];
+
+    var familySize = {};
+    var families = {};
+    // sort trackDb into object topParent -> count of children
+    for (var trackName of Object.keys(hgTracks.trackDb)) {
+        var rec = hgTracks.trackDb[trackName];
+        if (rec.topParent===undefined) {
+            //others.push(trackName);
+            continue; // ignore top-level tracks
+        }
+
+        var topParent = rec.topParent;
+        if (!familySize.hasOwnProperty(topParent)) {
+            familySize[topParent] = 0;
+            families[topParent] = [];
+        }
+        familySize[topParent]++;
+        families[topParent].push(trackName);
+    }
+
+    // decrease the parent's count for each track to delete
+    for (var delTrack of delTracks) {
+        var tdbRec = hgTracks.trackDb[delTrack];
+        if (tdbRec.topParent)
+            familySize[tdbRec.topParent]--;
+    }
+
+    // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
+    loneParents = [];
+    for (delTrack of delTracks) {
+        var parentName = hgTracks.trackDb[delTrack].topParent;
+        if (parentName) {
+            if (familySize[parentName]===0)
+                loneParents.push([parentName, families[parentName]]);
+            else
+                for (var child of families[parentName])
+                    others.push(child);
+        } else {
+            others.push(delTrack);
+        }
+    }
+
+    o = {};
+    o.loneParents = loneParents;
+    o.others = others;
+    return o;
+}
+
 function aryFind(ary,val)
 {// returns the index of a value on the array or -1;
     for (var ix=0; ix < ary.length; ix++) {
@@ -824,7 +876,7 @@ function notifBoxShow(cgiName, keyName) {
     }
 }
 
-function notifBoxSetup(cgiName, keyName, msg) {
+function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
 /* Create a notification box if one hasn't been created, and
  * add msg to the list of shown notifications.
  * cgiName.keyName will be saved to localStorage in order to show
@@ -851,8 +903,16 @@ function notifBoxSetup(cgiName, keyName, msg) {
             notifBox.innerHTML = msg;
         }
     }
-    notifBox.innerHTML += "<div style='text-align:center'>"+
-        "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+    var closeHtml = "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;";
+    var buttonStyles = "text-align: center";
+    // XX code review: The close button does not sense at all, why not just always remove it?
+    if (skipCloseButton===true) {
+        closeHtml = "";
+        buttonStyles += "; display: inline; margin-left: 20px";
+    }
+
+    notifBox.innerHTML += "<div style='"+buttonStyles+"'>"+
+        closeHtml +
         "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
         "</div>";
     if (!alreadyPresent) {
