@@ -500,14 +500,19 @@ function tdbFindChildless(trackDb, delTracks) {
             familySize[tdbRec.topParent]--;
     }
 
-    // for the parents with a count of 0, create an array of [parentName, children]
+    // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
     loneParents = [];
-    for (var parentName of Object.keys(familySize)) {
-        if (familySize[parentName]===0)
-            loneParents.push([parentName, families[parentName]]);
-        else
-            for (var child of families[parentName])
-                others.push(child);
+    for (delTrack of delTracks) {
+        var parentName = hgTracks.trackDb[delTrack].topParent;
+        if (parentName) {
+            if (familySize[parentName]===0)
+                loneParents.push([parentName, families[parentName]]);
+            else
+                for (var child of families[parentName])
+                    others.push(child);
+        } else {
+            others.push(delTrack);
+        }
     }
 
     o = {};
