@@ -5946,7 +5946,7 @@ function hgtWarnTiming(maxSeconds) {
         return;
 
     msg = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
-        "the UCSC Genome Browser quick and responsive. See our "+
+        "the UCSC Genome Browser quick and responsive and load times under "+maxSeconds+" seconds. See our "+
         "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
         "common causes and solutions to slow performance. If this problem continues, you can create a  "+
         "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.";
