@@ -13,6 +13,7 @@ include ../../inc/cgi_build_rules.mk
  
 compile: $O
 	${CC} -o $A${EXE} -g $O ${MYLIBS} ${L}
+	cd hooks && make
 
 alpha:: compile
-	cd hooks && make
+	cd hooks && make alpha

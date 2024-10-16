@@ -21,5 +21,8 @@ compile: pre-create post-finish
 install:: compile
 	mv ${HOOKEXE} /cluster/home/chmalee/tusd/tusd_linux_amd64/hooks/
 
+alpha::
+	@echo 'would run make alpha'
+
 clean:
 	rm -f *.o ${HOOKEXE}
