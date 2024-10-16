@@ -10194,8 +10194,15 @@ if (!maxTimeStr)
 
 double maxTime = atof(maxTimeStr);
 struct dyString *dy = dyStringNew(150);
-dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(0)}, %f);\n", maxTime);
+
+// The idea of the timer below is that if the page takes a ton of time to load, the message will come up while the page still builds
+// However, due to gzip compression of the page and also most of the time spent in the CGI itself, the timer only starts
+// when most of the work has been completed. So the timer is only useful if what takes long is our own hgTracks javascript
+dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(%f)}, %f);\n", maxTime, maxTime*1000);
+// In most cases, since the timer does not work well in practice, the following will always work: 
+// once the page is ready, we check how long it took to load.
 dyStringPrintf(dy, "$(document).ready( function() { clearTimeout(warnTimingTimer); hgtWarnTiming(%f)});\n", maxTime);
+
 jsInline(dy->string);
 dyStringFree(&dy);
 }
