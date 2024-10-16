@@ -5936,6 +5936,7 @@ function hgtWarnTiming(maxSeconds) {
     /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */
     var loadTime = window.performance.timing.domContentLoadedEventStart-window.performance.timing.navigationStart; /// in msecs
     var loadSeconds = loadTime/1000;
+    alert(loadSeconds+"<"+maxSeconds);
     if (loadSeconds < maxSeconds)
         return;
 
@@ -5945,8 +5946,8 @@ function hgtWarnTiming(maxSeconds) {
     if (skipNotification)
         return;
 
-    msg = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
-        "the UCSC Genome Browser quick and responsive and load times under "+maxSeconds+" seconds. See our "+
+    msg = "This page took "+loadSeconds+" seconds to load, more than "+maxSeconds+" seconds. We strive to keep "+
+        "the UCSC Genome Browser quick and responsive. See our "+
         "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
         "common causes and solutions to slow performance. If this problem continues, you can create a  "+
         "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.";
