@@ -10357,7 +10357,7 @@ outs[4] = endString;
 ins[5] = "$s";
 outs[5] = skipChr(seqName);
 ins[6] = "$D";
-outs[6] = db;
+outs[6] = trackHubSkipHubName(db);
 ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
 ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
 if (stringIn(":", idInUrl)) {
