@@ -991,7 +991,7 @@ if ((vis == tvPack) || (vis == tvFull))
     if (tg->ss)  // got past trackLoadingInProgress
 	{
 	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
-	assert(ss); // viz matches, we have the right one
+//	assert(ss); // viz matches, we have the right one
 
 	if (ss && ss->rowCount != 0)
 	    {
