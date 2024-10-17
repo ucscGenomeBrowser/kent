@@ -1025,14 +1025,14 @@ function getAllVars(obj,subtrackName)
     var inp = $(obj).find('input');
     var sel = $(obj).find('select');
     //warn("obj:"+$(obj).attr('id') + " inputs:"+$(inp).length+ " selects:"+$(sel).length);
-    $(inp).filter('[name]:enabled').each(function (i) {
+    $(inp).filter(':not([name^="boolshad"]):enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
-        if ($(this).attr('type') === 'checkbox') {
+        if ($(this).attr('type') === 'checkbox' || $(this).attr('type') === "CHECKBOX") {
             name = cgiBooleanShadowPrefix() + name;
-            val = $(this).attr('checked') ? 1 : 0;
+            val = $(this).prop('checked') ? 1 : 0;
         } else if ($(this).attr('type') === 'radio') {
-            if (!$(this).attr('checked')) {
+            if (!$(this).prop('checked')) {
                 name = undefined;
             }
         }
