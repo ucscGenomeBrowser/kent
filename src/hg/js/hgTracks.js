@@ -5936,7 +5936,6 @@ function hgtWarnTiming(maxSeconds) {
     /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */
     var loadTime = window.performance.timing.domContentLoadedEventStart-window.performance.timing.navigationStart; /// in msecs
     var loadSeconds = loadTime/1000;
-    alert(loadSeconds+"<"+maxSeconds);
     if (loadSeconds < maxSeconds)
         return;
 
