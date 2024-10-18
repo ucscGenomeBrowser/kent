@@ -2283,3 +2283,30 @@ track->loadPreDraw = wigLoadPreDraw;
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 
 }	/*	wigMethods()	*/
+
+
+int setupForWiggle(struct track *tg, enum trackVisibility vis)
+/* Check to see if this track should show density coverage and if so
+ * make sure it has the cart data to support it.
+ */
+{
+boolean doWiggle = checkIfWiggling(cart, tg);
+int height = 0;
+if (doWiggle)
+    {
+    struct wigCartOptions *wigCart = tg->wigCartData;
+    if (tg->wigCartData == NULL)
+	{
+        // fake the trackDb range for this auto-wiggle
+        int wordCount = 3;
+        char *words[3];
+        words[0] = "bedGraph";
+	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
+        wigCart->windowingFunction = wiggleWindowingMean;
+	tg->wigCartData = (void *) wigCart;
+	}
+    height = wigTotalHeight(tg, vis);
+    }
+return height;
+}
+

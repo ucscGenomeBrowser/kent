@@ -198,4 +198,9 @@ int normalizeCount(struct preDrawElement *el, double countFactor,
 
 void wigLogoMafCheck(struct track *tg,  int start, int end);
 /* Check to see if we should draw a sequence logo for the wiggle contents. */
+
+int setupForWiggle(struct track *tg, enum trackVisibility vis);
+/* Check to see if this track should show density coverage and if so
+ * make sure it has the cart data to support it.
+ */
 #endif /* WIGCOMMON_H */

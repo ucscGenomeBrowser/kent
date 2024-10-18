@@ -3596,7 +3596,7 @@ var dragReorder = {
         var rows = $(table).find('tr');
 
         // Find start index
-        var startIndex = $(row).attr('rowIndex');
+        var startIndex = $(row).prop('rowIndex');
         var endIndex = startIndex;
         for (var ix=startIndex-1; ix >= 0; ix--) {
             btn = $( rows[ix] ).find("p.btn");

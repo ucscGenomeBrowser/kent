@@ -235,6 +235,7 @@ _EOF_
   ;
   close($fh);
 
+  my $tmpDir = &HgAutomate::tmpDir();
   # Cluster job script:
   $fh = &HgAutomate::mustOpen(">$runDir/RMRun.csh");
   print $fh <<_EOF_
@@ -251,7 +252,7 @@ set catOut = \$finalOut:r.cat
 
 # Use local disk for output, and move the final result to \$outPsl
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p /scratch/tmp doRepeatMasker.cluster.XXXXXX`
+set tmpDir = `mktemp -d -p $tmpDir doRepeatMasker.cluster.XXXXXX`
 pushd \$tmpDir
 
 # Initialize local library

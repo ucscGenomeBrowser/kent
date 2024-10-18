@@ -28,6 +28,7 @@
 #include "memgfx.h"
 #include "chromAlias.h"
 #include "hgConfig.h"
+#include "wigCommon.h"
 
 // Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
 Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
@@ -2208,6 +2209,10 @@ static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return height of haplotype graph (2 * #samples * lineHeight);
  * 2 because we're assuming diploid genomes here, no XXY, tetraploid etc. */
 {
+int height;
+if ((height = setupForWiggle(tg, vis)) != 0)
+    return height;
+
 const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return 0;
@@ -3064,7 +3069,8 @@ if (errCatchStart(errCatch))
 	{
 	filterRecords(vcff, tg);
         int vis = tdbVisLimitedByAncestors(cart,tg->tdb,TRUE,TRUE);
-	if (hapClustEnabled && vcff->genotypeCount > 1 &&
+        boolean doWiggle = checkIfWiggling(cart, tg);
+	if (!doWiggle && hapClustEnabled && vcff->genotypeCount > 1 &&
 	    (vis == tvPack || vis == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
