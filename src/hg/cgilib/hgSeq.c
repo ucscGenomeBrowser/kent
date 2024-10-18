@@ -19,6 +19,9 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 
+// primer3 can design primers around exons like exonprimer, but needs some flanking
+// sequence around the transcript for the first and the last primer
+const int PRIMER3EXTEND = 200;
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
@@ -270,7 +273,7 @@ for (int i=0;  i < rCount;  i++)
 return exonStr;
 }
 
-static void printPrimerForm(char *seq, char *exons, char *db, char strand, char *returnUrl) {
+static void printPrimerForm(char *seq, char *exons, char *db, char strand, char *returnUrl, int primer3Extend) {
     /* print the form to send arguments to primer3 and click the submit button */
     puts("<form id='primer3Form' method='POST' action='https://dev.primer3plus.com/primer3plus/api/v1/upload'>\n");
 
@@ -284,7 +287,10 @@ static void printPrimerForm(char *seq, char *exons, char *db, char strand, char 
     char *winLeft = cgiString("l");
     char *winRight = cgiString("r");
 
-    printf("<input type='hidden' name='P3P_GB_POSITION' value='%s:%s-%s'>\n", chrom, winLeft, winRight);
+    int chromStart = atoi(winLeft) - primer3Extend;
+    int chromEnd = atoi(winRight) + primer3Extend;
+
+    printf("<input type='hidden' name='P3P_GB_POSITION' value='%s:%d-%d'>\n", chrom, chromStart, chromEnd);
     puts("<input style='display:none' type='submit' value='Submit'>");
     puts("</form>");
     jsInline("document.getElementById(\"primer3Form\").submit();\n");
@@ -437,7 +443,7 @@ if (isRc && !toPrimer3)
 if (toPrimer3)
 {
     struct dyString* primer3Exons = genPrimer3Exons(rCount, rStarts, rSizes, exonFlags, seqStart);
-    printPrimerForm(cSeq->dna, primer3Exons->string, db, strand, hgAbsUrlCgi("hgTracks"));
+    printPrimerForm(cSeq->dna, primer3Exons->string, db, strand, hgAbsUrlCgi("hgTracks"), PRIMER3EXTEND);
     dyStringFree(&primer3Exons);
 }
 else
@@ -586,14 +592,14 @@ char *granularity  = cgiOptionalString("hgSeq.granularity");
 boolean toPrimer3  = cgiBoolean("primer3");
 if (toPrimer3) 
 {
-    promoter = FALSE;
+    promoter = TRUE;
     utrExon5 = TRUE;
     intron = TRUE;
     cdsExon = TRUE;
     utrExon3 = TRUE;
-    downstream = FALSE;
-    downstreamSize = 0;
-    promoterSize = 0;
+    downstream = TRUE;
+    downstreamSize = PRIMER3EXTEND;
+    promoterSize = PRIMER3EXTEND;
     granularity = "gene";
 }
 
