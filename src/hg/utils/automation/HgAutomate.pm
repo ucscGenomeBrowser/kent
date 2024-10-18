@@ -31,7 +31,7 @@ use File::Spec;
 	chooseFilesystemsForCluster checkClusterPath
       ),
     # General-purpose utility routines:
-    qw( checkCleanSlate checkExistsUnlessDebug closeStdin
+    qw( tmpDir checkCleanSlate checkExistsUnlessDebug closeStdin
 	getAssemblyInfo getSpecies hubDateName gensub2 machineHasFile
 	databaseExists dbTableExists makeGsub mustMkdir asmHubBuildDir
 	asmHubDownloadDir mustOpen nfsNoodge paraRun run verbose
@@ -567,6 +567,40 @@ $setMachtype = "setenv MACHTYPE `uname -m | sed -e 's/i686/i386/;'`";
 
 #########################################################################
 # General utility subroutines:
+
+### decide on an appropriate temporary directory
+sub tmpDir {
+  my $tDir="/tmp";	# default, most likely overridden
+  if (defined($ENV{'TMPDIR'}) && -d $ENV{'TMPDIR'}) {	# TMPDIR above all else
+    $tDir = $ENV{'TMPDIR'};
+  } elsif ( -d "/data/tmp" ) {	# UCSC local file system
+    $tDir = "/data/tmp";
+  } elsif ( -d "/scratch/tmp" ) {	# UCSC cluster node local file system
+    $tDir = "/scratch/tmp";
+  } else {
+    my $tmpSz = `df --output=avail -k /tmp | tail -1`;
+    my $shmSz = `df --output=avail -k /dev/shm | tail -1`;
+    chomp ($tmpSz, $shmSz);
+    if ( $shmSz > $tmpSz ) {	# use /dev/shm when it is the larger one
+       my $shmTmp = "/dev/shm/tmp";
+       my $saveUmask = umask(0000);	# do not allow user's umask to interfere
+       if (! mkdir($shmTmp, 0777)) {
+          my $errString = $!;
+          if ($errString =~ /File exists/i) {	# this error OK
+            if ( -w "${shmTmp}" ) {	# use only when writable
+                $tDir = $shmTmp;
+            }
+          }	# mkdir other errors cause use of default
+       } else {				# no error on the mkdir
+          if ( -w "${shmTmp}" ) {	# use only when writable
+            $tDir = $shmTmp;
+          }
+       }
+       umask($saveUmask);	# restore
+    }
+  }
+return $tDir;
+}
 
 sub checkCleanSlate {
   # Exit with an error message if it looks like this step has already been run
