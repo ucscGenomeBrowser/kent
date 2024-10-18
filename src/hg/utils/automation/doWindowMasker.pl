@@ -116,11 +116,12 @@ sub doCount {
   my $bossScript = new HgRemoteScript("$runDir/doCount.csh", $workhorse,
 				      $runDir, $whatItDoes);
 
+  my $tmpDir = &HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
 set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker
 set fa = $db.fa
-set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
+set tmpDir = `mktemp -d -p $tmpDir doWindowMasker.XXXXXX`
 chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 pushd \$tmpDir
@@ -151,11 +152,12 @@ sub doSdust {
   my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = new HgRemoteScript("$runDir/doSdust.csh", $workhorse,
 				      $runDir, $whatItDoes);
+  my $tmpDir = &HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
 set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker
 set fa = $db.fa
-set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
+set tmpDir = `mktemp -d -p $tmpDir doWindowMasker.XXXXXX`
 chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 cp windowmasker.counts \$tmpDir

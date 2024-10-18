@@ -116,7 +116,7 @@ Assumptions:
 # Globals:
 # Command line args: tDb=fromDb, qDb=toDb
 my ($tDb, $qDb);
-my $localTmp = "/scratch/tmp";	# UCSC default cluster temporary I/O
+my $localTmp = &HgAutomate::tmpDir();	# do the right thing in UCSC environment
 
 # Other:
 my ($buildDir);

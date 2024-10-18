@@ -741,8 +741,6 @@ var subCfg = { // subtrack config module.
 
         if ($(cfg).css('display') === 'none') {
             if ($(wrench).hasClass('disabled')) {
-                alert("This track is not active. To configure this track, please make it visible first by clicking the checkbox, "+
-                        "then click the 'Configure' link.");
                 return;
             }
             // Don't allow if this composite is not enabled!

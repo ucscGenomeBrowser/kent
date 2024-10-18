@@ -163,7 +163,7 @@ jQuery.tableDnD = {
                     if (config.dragObjects.length > 1) {
                         for(var ix = 0; ix < config.dragObjects.length; ix++) {
                             var row = config.dragObjects[ix];
-                            var rowIx = $(row).attr('rowIndex');
+                            var rowIx = $(row).prop('rowIndex');
                             if (rowIx < config.dragStartIndex)
                                 config.upOffset -= $(row).height();
                             else if (rowIx > config.dragStartIndex)
@@ -332,7 +332,7 @@ jQuery.tableDnD = {
 
             if (config.dragObjects.length > 1) {
                 for (var ix=0;ix < config.dragObjects.length;ix++) {
-                    var thisIx = $( config.dragObjects[ix] ).attr('rowIndex');
+                    var thisIx = $( config.dragObjects[ix] ).prop('rowIndex');
                     if (firstDragRowIx > thisIx)
                         firstDragRowIx = thisIx;
                     if (lastDragRowIx < thisIx)
@@ -350,7 +350,7 @@ jQuery.tableDnD = {
 
                 ////// UCSC
                 if (config.dragObjects.length > 1) {
-                    var targetRowIx = $( currentRow ).attr('rowIndex');
+                    var targetRowIx = $( currentRow ).prop('rowIndex');
                     if (targetRowIx >= 0 && targetRowIx < rows.length) {
 
                         var plusIx=0;
