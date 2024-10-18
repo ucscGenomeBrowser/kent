@@ -162,6 +162,7 @@ sub doCluster {
      $trfCmd = "trf.4.09";
   }
   # Cluster job script:
+  my $tmpDir = &HgAutomate::tmpDir();
   my $fh = &HgAutomate::mustOpen(">$runDir/TrfRun.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
@@ -175,7 +176,7 @@ $HgAutomate::setMachtype
 
 # Use local disk for output, and move the final result to \$finalOut
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p /scratch/tmp doSimpleRepeat.cluster.XXXXXX`
+set tmpDir = `mktemp -d -p $tmpDir doSimpleRepeat.cluster.XXXXXX`
 pushd \$tmpDir
 
 foreach spec (`cat \$inLst`)
@@ -188,7 +189,7 @@ foreach spec (`cat \$inLst`)
   twoBitToFa \$spec stdout \\
   | sed -e "s/^>.*/>\$base/" \\
   | $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
-      stdin /dev/null -bedAt=\$base.bed -tempDir=/scratch/tmp
+      stdin /dev/null -bedAt=\$base.bed -tempDir=$tmpDir
 end
 
 # Due to the large chunk size, .lft files can have thousands of lines.
@@ -296,11 +297,12 @@ sub doSingle {
      $trf409Option = "-l=$trf409";
      $trfCmd = "trf.4.09";
   }
+  my $tmpDir = &HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
 $HgAutomate::setMachtype
 twoBitToFa $unmaskedSeq stdout \\
 | $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
-      stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+      stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=$tmpDir
 _EOF_
   );
   $bossScript->execute();
