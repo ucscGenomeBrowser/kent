@@ -855,23 +855,9 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
-
-boolean doWiggle = checkIfWiggling(cart, tg);
-if (doWiggle)
-    {
-    struct wigCartOptions *wigCart = tg->wigCartData;
-    if (tg->wigCartData == NULL)
-	{
-        // fake the trackDb range for this auto-wiggle
-        int wordCount = 3;
-        char *words[3];
-        words[0] = "bedGraph";
-	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
-        wigCart->windowingFunction = wiggleWindowingMean;
-	tg->wigCartData = (void *) wigCart;
-	}
-    return wigTotalHeight(tg, vis);
-    }
+int height;
+if ((height = setupForWiggle(tg, vis)) != 0)
+    return height;
 
 int rows;
 double maxHeight = maximumTrackHeight(tg);
