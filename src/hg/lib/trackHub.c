@@ -1188,6 +1188,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     addPrefixToSetting(tdb->settingsHash, "track", prefix);
     addPrefixToSetting(tdb->settingsHash, "parent", prefix);
+    addPrefixToSetting(tdb->settingsHash, "wigColorBy", prefix);
     reprefixString(&tdb->track, prefix);
     if (tdb->table != NULL)
         reprefixString(&tdb->table, prefix);
