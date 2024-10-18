@@ -34,8 +34,8 @@ mach = $(shell uname -m)
 ##
 #preRelease = yes
 preRelease = no
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 #db = mm39
 ifeq (${db},mm39)
     ver = M36
