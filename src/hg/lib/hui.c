@@ -5998,7 +5998,7 @@ safef(varName, sizeof(varName), "%s.doWiggle", name);
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 char *style = option ? "display:block" : "display:none";
-printf("<DIV ID=\"densGraphOptions\" STYLE=\"%s\">\n", style);
+printf("<DIV id=\"densGraphOptions%s\" STYLE=\"%s\">\n", name, style);
 
 // we need to fool the wiggle dialog into defaulting to autoscale and maximum
 char *origType = tdb->type;
@@ -6010,8 +6010,8 @@ if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
 wigCfgUi(cart,tdb,name,title,TRUE);
 tdb->type = origType;
 printf("</DIV>\n\n");
-jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n"
-    , varName); // XSS FILTER?
+jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions%s').toggle();} );\n"
+    , varName, name); // XSS FILTER?
 }
 
 void filterNameOption(struct cart *cart, char *name, struct trackDb *tdb)
