@@ -1509,68 +1509,76 @@ boolean isPslRaw= sameWordOk(output, "pslRaw");
 if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
+seqList = faSeqListFromMemTextRaw(seqLetters);
+
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
-    seqList = faSeqListFromMemText(seqLetters, TRUE);
-    uToT(seqList);
     isTx = FALSE;
     xType = "dna"; 
     }
-else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
+else if (sameWord(type, "translated RNA"))
     {
-    seqList = faSeqListFromMemText(seqLetters, TRUE);
-    uToT(seqList);
     isTx = TRUE;
     isTxTx = TRUE;
     xType = "rnax"; 
-    txTxBoth = sameWord(type, "translated DNA");
-    if (txTxBoth)
-	xType = "dnax"; 
+    }
+else if (sameWord(type, "translated DNA"))
+    {
+    isTx = TRUE;
+    isTxTx = TRUE;
+    txTxBoth = TRUE;
+    xType = "dnax"; 
     }
 else if (sameWord(type, "protein"))
     {
-    seqList = faSeqListFromMemText(seqLetters, FALSE);
     isTx = TRUE;
     qIsProt = TRUE;
     xType = "prot"; 
     }
 else  // BLAT's Guess
     {
-    seqList = faSeqListFromMemTextRaw(seqLetters);
     if (seqList)
 	{
 	isTx = !seqIsDna(seqList); // only tests first element, assumes the rest are the same type.
-	if (!isTx)
+	if (isTx)
 	    {
-	    xType = "dna"; 
-	    for (seq = seqList; seq != NULL; seq = seq->next)
-		{
-		seq->size = dnaFilteredSize(seq->dna);
-		dnaFilter(seq->dna, seq->dna);
-		toLowerN(seq->dna, seq->size);
-		subChar(seq->dna, 'u', 't');
-		}
-	    }
-	else
-	    {
-	    for (seq = seqList; seq != NULL; seq = seq->next)
-		{
-		seq->size = aaFilteredSize(seq->dna);
-		aaFilter(seq->dna, seq->dna);
-		toUpperN(seq->dna, seq->size);
-		}
 	    qIsProt = TRUE;
 	    xType = "prot"; 
 	    }
+	else
+	    {
+	    xType = "dna"; 
+	    }
 	}
     }
+if (isTx && !isTxTx)
+    {
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	{
+	seq->size = aaFilteredSize(seq->dna);
+	aaFilter(seq->dna, seq->dna);
+	toUpperN(seq->dna, seq->size);
+	}
+    }
+else
+    {
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	{
+	seq->size = dnaFilteredSize(seq->dna);
+	dnaFilter(seq->dna, seq->dna);
+	toLowerN(seq->dna, seq->size);
+	subChar(seq->dna, 'u', 't');
+	}
+    }
+
 if (seqList != NULL && seqList->name[0] == 0)
     {
     freeMem(seqList->name);
     seqList->name = cloneString("YourSeq");
     }
 trimUniq(seqList);
+
 
 /* If feeling lucky only do the first one. */
 if(feelingLucky && seqList != NULL)
