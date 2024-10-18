@@ -1,12 +1,33 @@
 #!/usr/bin/env python3
 
-import logging, sys, optparse, os, json, subprocess, shutil, string
+import logging, sys, optparse, os, json, subprocess, shutil, string, glob, tempfile, re
+import shlex
+from pathlib import Path
 from collections import defaultdict, OrderedDict
 from os.path import join, basename, dirname, isfile, relpath, abspath, splitext, isdir
 #import pyyaml   # not loaded here, so it's not a hard requirement, is lazy loaded in parseMetaYaml()
 
 # ==== functions =====
-    
+asHead = """table bed
+"Browser extensible data (<=12 fields) "
+    (
+"""
+
+asLines = """
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+""".split("\n")
+
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] <cmd> - create and edit UCSC track hubs
@@ -17,9 +38,11 @@ def parseArgs():
     - for every filename, the part before the first dot becomes the track base name
     - if a directory has more than 80% of track base names with both a bigBed
       and bigWig file, views are activated for this composite
-    - track attributes can be changed using tracks.tsv or tracks.json files, in
+    - track attributes can be changed using tracks.ra, tracks.tsv, tracks.json or tracks.yaml files, in
       each top or subdirectory
-    - tracks.tsv must have a first column named 'track'.
+    - The first column of tracks.tsv must be 'track'.
+    - tracks.json and tracks.yaml must be object at the top level, the attributes are <trackName> or
+      the special attribute "hub".
 
     hubtools up: upload files to hubSpace
     - needs ~/.hubt.conf with username and password. Create one with 'hubt conf'
@@ -27,19 +50,39 @@ def parseArgs():
 
     hubtools jbrowse <url> <db> : convert Jbrowse trackList.json files to hub.txt.
     - <url> is the URL to the Jbrowse2 installation, e.g. http://furlonglab.embl.de/FurlongBrowser/
-    - <db> is assembly identifier 
+    - <db> is assembly identifier
 
     hubtools tab <fname>: convert a hub.txt or trackDb.txt to tab-sep format, easier to bulk-edit with sed/cut/etc.
     - <fname> is the input filename. "hub" and "genome" stanzas are skipped.
     - output goes to stdout
 
+    hubtools conv -i myTsvDir
+    - convert .tsv files in inDir to .bigBed files in current directory
+
+    hubtools ct -i xxx/archive -o outDir
+    - Create a hub from an extracted xxx.tar.gz file "archive" directory. You can download a .tar.gz from
+      in the Genome Browser under My Data > My Session. The archive contains all your custom tracks.
+
     Examples:
+    hubtools conv -i myTsvs/
     hubtools make hg38
     hubtools jbrowse http://furlonglab.embl.de/FurlongBrowser/ dm3
     hubtools tab hub.txt > tracks.tsv
 
-    tracks.json can look like this:
-    { "hub" : {"hub": "mouse_motor_atac", "shortLabel":"scATAC-seq Developing Cranial Motor Neurons"} }
+    tar xvfz SC_20230723_backup.tar.gz
+    hubtools ct -i archive -o hub
+
+    For the "make" step:
+
+    tracks.json can look like this, can have more keys, one per track, or the special key "hub":
+    {
+        "hub" :      { "hub": "mouse_motor_atac", "shortLabel":"scATAC-seq Developing Cranial Motor Neurons" },
+        "myTrack" :  { "shortLabel" : "My nice track" }
+    }
+
+    tracks.tsv should look like this, but can have any number of columns:
+    #track<tab>shortLabel
+    myTrack<tab>My nice track
     """)
 
 
@@ -65,6 +108,10 @@ def errAbort(msg):
     " print and abort) "
     logging.error(msg)
     sys.exit(1)
+
+def makedirs(d):
+    if not isdir(d):
+        os.makedirs(d)
 
 def parseMetaRa(fname):
     """parse tracks.ra or tracks.txt and return as a dict of trackName -> dict of key->val """
@@ -289,6 +336,8 @@ def writeStanza(ofh, indent, tdb):
     visibility = tdb.get("visibility", "pack")
     longLabel  = tdb.get("longLabel", shortLabel)
 
+    if not "type" in tdb:
+        errAbort("Track info has no type attribute: %s" % tdb)
     trackType = tdb["type"]
 
     writeLn(ofh, indent, "track %s" % track)
@@ -526,7 +575,6 @@ def importJbrowse(baseUrl, db, outDir):
     trackList = requests.get(trackListUrl).json()
     tdbs = []
     for tl in trackList["tracks"]:
-        #print(tl)
         if "type" in tl and tl["type"]=="SequenceTrack":
             logging.info("Genome is: "+tl["label"])
             continue
@@ -639,14 +687,352 @@ def raToTab(fname):
         ofh.write("\t".join(row))
         ofh.write("\n")
 
-def hubt(args, options):
-    """ get writeLn(ofh, indent, d .bb files under dirName and create a trackDb.txt for them"""
+def guessFieldDesc(fieldNames):
+    "given a list of field names, try to guess to which fields in bed12 they correspond "
+    logging.info("No field description specified, guessing fields from TSV headers: %s" % fieldNames)
+    fieldDesc = {}
+    skipFields = set()
+
+    for fieldIdx, fieldName in enumerate(fieldNames):
+        caseField = fieldName.lower()
+        if caseField in ["chrom", "chromosome"]:
+            name = "chrom"
+        elif caseField.endswith(" id") or caseField.endswith("accession"):
+            name = "name"
+        elif caseField in ["start", "chromstart", "position"]:
+            name = "start"
+        elif caseField in ["Reference"]:
+            name = "refAllele"
+        elif caseField in ["strand"]:
+            name = "strand"
+        elif caseField in ["score"]:
+            name = "score"
+        else:
+            continue
+        fieldDesc[name] = fieldIdx
+        skipFields.add(fieldIdx)
+    logging.info("TSV <-> BED correspondance: %s" % fieldDesc)
+    return fieldDesc, skipFields
+
+def parseFieldDesc(fieldDescStr, fieldNames):
+    " given a string chrom=1,start=2,end=3,... return dict {chrom:1,...} "
+    if not fieldDescStr:
+        return guessFieldDesc(fieldNames)
+
+    fieldDesc, skipFields = guessFieldDesc(fieldNames)
+
+    if fieldDescStr:
+        for part in fieldDescStr.split(","):
+            fieldName, fieldIdx = part.split("=")
+            fieldIdx = int(fieldIdx)
+            fieldDesc[fieldName] = fieldIdx
+            skipFields.add(fieldIdx)
+
+    return fieldDesc, skipFields
+
+def makeBedRow(row, fieldDesc, skipFields, isOneBased):
+    " given a row of a tsv file and a fieldDesc with BedFieldName -> field-index, return a bed12+ row with extra fields "
+    bedRow = []
+
+    # first construct the bed 12 fields
+    for fieldName in ["chrom", "start", "end", "name", "score", "strand",
+            "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "chromStarts"]:
+
+        fieldIdx = fieldDesc.get(fieldName)
+        if fieldIdx is not None:
+            if fieldName=="start":
+                chromStart = int(row[fieldDesc["start"]])
+                if isOneBased:
+                    chromStart = chromStart-1
+                val = str(chromStart)
+            elif fieldName=="end":
+                chromEnd = int(val)
+            else:
+                val = row[fieldIdx]
+        else:
+            if fieldName=="end":
+                chromEnd = chromStart+1
+                val = str(chromEnd)
+            elif fieldName=="score":
+                val = "0"
+            elif fieldName=="strand":
+                val = "."
+            elif fieldName=="thickStart":
+                val = str(chromStart)
+            elif fieldName=="thickEnd":
+                val = str(chromEnd)
+            elif fieldName=="itemRgb":
+                val = "0,0,0"
+            elif fieldName=="blockCount":
+                val = "1"
+            elif fieldName=="blockSizes":
+                val = str(chromEnd-chromStart)
+            elif fieldName=="chromStarts":
+                #val = str(chromStart)
+                val = "0"
+            else:
+                logging.error("Cannot find a field for %s" % fieldName)
+                sys.exit(1)
+
+        bedRow.append(val)
+
+    # now handle all other fields
+    for fieldIdx, val in enumerate(row):
+        if not fieldIdx in skipFields:
+            bedRow.append( row[fieldIdx] )
+
+    return bedRow
+
+def fetchChromSizes(db, outputFileName):
+    " find on local disk or download a <db>.sizes text file "
+    # Construct the URL based on the database name
+    url = f"https://hgdownload.cse.ucsc.edu/goldenPath/{db}/database/chromInfo.txt.gz"
+    # Send a request to download the file
+    response = requests.get(url, stream=True)
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Open the output gzip file for writing
+        with gzip.open(outputFileName, 'wt') as outFile:
+            # Open the response content as a gzip file in text mode
+            with gzip.GzipFile(fileobj=response.raw, mode='r') as inFile:
+                # Read the content using csv reader to handle tab-separated values
+                reader = csv.reader(inFile, delimiter='\t')
+                writer = csv.writer(outFile, delimiter='\t', lineterminator='\n')
+                # Iterate through each row, and retain only the first two fields
+                for row in reader:
+                    writer.writerow(row[:2])  # Write only the first two fields
+    else:
+        raise Exception(f"Failed to download file from {url}, status code: {response.status_code}")
+    logging.info("Downloaded %s to %s" % (db, outputFileName))
+
+def getChromSizesFname(db):
+    " return fname of chrom sizes, download into ~/.local/ucscData/ if not found "
+    fname = "/hive/data/genomes/%s/chrom.sizes" % db
+    if isfile(fname):
+        return fname
+
+    dataDir = "~/.local/hubtools"
+    fname = join(dataDir, "%s.sizes" % db)
+    fname = os.path.expanduser(fname)
+    if not isfile(fname):
+        makedirs(dataDir)
+        fetchChromSizes(db, fname)
+    return fname
+
+def convTsv(db, tsvFname, outBedFname, outAsFname, outBbFname):
+    " convert tsv files in inDir to outDir, assume that they all have one column for chrom, start and end. Try to guess these or fail. "
+    #tsvFname, outBedFname, outAsFname = args
+
+    # join and output merged bed
+    bigCols = set() # col names of columns with > 255 chars
+
+    #bedFh = open(bedFname, "w")
+    unsortedBedFh = tempfile.NamedTemporaryFile(suffix=".bed", dir=dirname(outBedFname), mode="wt")
+    fieldNames = None
+    #isOneBased = options.oneBased
+    isOneBased = True
+    bedFieldsDesc = None # in the future, the user may want to input a string like name=0,start=1, but switch this off for now
+
+    for line in open(tsvFname):
+        row = line.rstrip("\r\n").split("\t")
+        if fieldNames is None:
+            fieldNames = row
+            fieldDesc, notExtraFields = parseFieldDesc(bedFieldsDesc, fieldNames)
+            continue
+
+        # note fields with data > 255 chars.
+        for colName, colData in zip(fieldNames, row):
+            if len(colData)>255:
+                bigCols.add(colName)
+
+        bedRow = makeBedRow(row, fieldDesc, notExtraFields, isOneBased)
+
+        chrom = bedRow[0]
+        if chrom.isdigit() or chrom in ["X", "Y"]:
+            bedRow[0] = "chr"+bedRow[0]
+
+        unsortedBedFh.write( ("\t".join(bedRow)))
+        unsortedBedFh.write("\n")
+    unsortedBedFh.flush()
+
+    cmd = "sort -k1,1 -k2,2n %s > %s" % (unsortedBedFh.name, outBedFname)
+    assert(os.system(cmd)==0)
+    unsortedBedFh.close() # removes the temp file
+
+    # generate autosql
+    # BED fields
+    #bedColCount = int(options.type.replace("bed", "").replace("+" , ""))
+    bedColCount = 12
+    asFh = open(outAsFname, "w")
+    asFh.write(asHead)
+    asFh.write("\n".join(asLines[:bedColCount+1]))
+    asFh.write("\n")
+
+    # extra fields
+    #fieldNames = fieldNames[bedColCount:]
+    for fieldIdx, field in enumerate(fieldNames):
+        if fieldIdx in notExtraFields:
+            continue
+        name = field.replace(" ","")
+        name = field.replace("%","perc_")
+        name = re.sub("[^a-zA-Z0-9]", "", name)
+        name = name[0].lower()+name[1:]
+        fType = "string"
+        if field in bigCols:
+            fType = "lstring"
+        asFh.write('      %s %s; "%s" \n' % (fType, name, field))
+    asFh.write(")\n")
+    asFh.close()
+
+    chromSizesFname = getChromSizesFname(db)
+
+    cmd = ["bedToBigBed", outBedFname, chromSizesFname, outBbFname, "-tab", "-type=bed%d+" % bedColCount, "-as=%s" % outAsFname]
+    subprocess.check_call(cmd)
+
+def convTsvDir(inDir, db, outDir):
+    " find tsv files under inDir and convert them all to .bb "
+    ext = "tsv"
+    pat = join(inDir, '**/*.'+ext)
+    logging.debug("Finding files under %s (%s), writing output to %s" % (inDir, pat, outDir))
+
+    for fname in glob.glob(pat, recursive=True):
+        logging.debug("Found %s" % fname)
+        absFname = abspath(fname)
+        relFname = relpath(absFname, inDir)
+        outPath = Path(join(outDir, relFname))
+
+        if not outPath.parents[0].is_dir():
+            logging.debug("mkdir -p %s" % outPath.parents[0])
+            makedirs(outPath.parents[0])
+
+        bedFname = outPath.with_suffix(".bed")
+        asFname = outPath.with_suffix(".as")
+        bbFname = outPath.with_suffix(".bb")
+
+        convTsv(db, fname, bedFname, asFname, bbFname)
+
+def parseTrackLine(s):
+    " Use shlex to split the string respecting quotes, written by chatGPT "
+    lexer = shlex.shlex(s, posix=True)
+    lexer.whitespace_split = True
+    lexer.wordchars += '='  # Allow '=' as part of words
+
+    tokens = list(lexer)
+
+    # Convert the tokens into a dictionary
+    it = iter(tokens)
+    result = {}
+    for token in it:
+        if '=' in token:
+            key, value = token.split('=', 1)
+            result[key] = value.strip('"')  # Remove surrounding quotes if present
+        else:
+            result[token] = next(it).strip('"')  # Handle cases like name="...".
+
+    return result
+
+def readTrackLines(fnames):
+    " read the first line and convert to a dict of all fnames. "
+    logging.debug("Reading track lines from %s" % fnames)
+    ret = {}
+    for fn in fnames:
+        line1 = open(fn).readline().rstrip("\n")
+        notTrack = line1.replace("track ", "", 1)
+        tdb = parseTrackLine(notTrack)
+        ret[fn] = tdb
+    return ret
+
+def stripFirstLine(inputFilename, outputFilename):
+    " written by chatGpt: copies all lines to output, except the first line "
+    with open(inputFilename, 'r') as infile, open(outputFilename, 'w') as outfile:
+        # Skip the first line
+        next(infile)
+        # Write the rest of the lines to the output file
+        for line in infile:
+            outfile.write(line)
+
+def bedToBigBed(inFname, db, outFname):
+    " convert bed to bigbed file, handles chrom.sizes download "
+    chromSizesFname = getChromSizesFname(db)
+    cmd = ["bedToBigBed", inFname, chromSizesFname, outFname]
+    logging.debug("Running %s" % cmd)
+    logging.info(f'Converting {inFname} to {outFname}. (chromSizes: {chromSizesFname}')
+    subprocess.check_call(cmd)
+
+def convCtDb(db, inDir, outDir):
+    " convert one db part of a track archive to an output directory "
+    findGlob = join(inDir, "*.ct")
+    inFnames = glob.glob(findGlob)
+    if len(inFnames)==0:
+        logging.info("No *.ct files found in %s" % findGlob)
+        return
+
+    tdbData = readTrackLines(inFnames)
+
+    makedirs(outDir)
+    hubTxtFname = join(outDir, "hub.txt")
+    ofh = open(hubTxtFname, "wt")
+
+    meta = parseMeta(inDir)
+    writeHubGenome(ofh, db, meta)
+
+    tdbIdx = 0
+    for fname, tdb in tdbData.items():
+        tdbIdx += 1
+        # custom track names can include spaces, spec characters, etc. Strip all those
+        # append a number to make sure that the result is unique
+        track = tdb["name"]
+        track = re.sub('[^A-Za-z0-9]+', '', track)+"_"+str(tdbIdx)
+        tdb["track"] = track
+
+        tdb["shortLabel"] = tdb["name"]
+        del tdb["name"]
+        tdb["longLabel"] = tdb["description"]
+        del tdb["description"]
+
+        if "bigDataUrl" not in tdb:
+            bedFname = join(outDir, tdb["track"]+".bed")
+            bbFname = join(outDir, tdb["track"]+".bb")
+            stripFirstLine(fname, bedFname)
+            bedToBigBed(bedFname, db, bbFname)
+            os.remove(bedFname)
+            tdb["bigDataUrl"] = tdb["track"]+".bb"
+            tdb["type"] = "bigBed"
+
+        writeStanza(ofh, 0, tdb)
+
+    logging.info("Wrote %s" % hubTxtFname)
+    ofh.close()
+
+def convCtDir(inDir, outDir):
+    " convert a directory created from the .tar.gz file downloaded via our track archive feature "
+    dbContent = os.listdir(inDir)
+    dbDirs = []
+    for db in dbContent:
+        subDir = join(inDir, db)
+        if isdir(subDir):
+            dbDirs.append((db, subDir))
+
+    if len(dbDirs)==0:
+        errAbort("No directories found under %s. Extract the tarfile and point this program at the 'archive' directory." % inDir)
+
+    for db, inSubDir in dbDirs:
+        logging.debug("Processing %s, db=%s" % (inSubDir, db))
+        outSubDir = join(outDir, db)
+        convCtDb(db, inSubDir, outSubDir)
+
+def hubtools(args, options):
+    """ find files under dirName and create a trackDb.txt for them"""
 
     cmd = args[0]
 
     inDir = "."
     if options.inDir:
         inDir = options.inDir
+
+    outDir = "."
+    if options.outDir:
+        outDir = options.outDir
 
     if cmd=="up":
         uploadFiles(inDir)
@@ -677,6 +1063,15 @@ def hubt(args, options):
         writeTdb(inDir, dirFiles, "comps", tdbDir, ofh)
 
         ofh.close()
+
+    elif cmd=="conv":
+        db = args[1]
+
+        convTsvDir(inDir, db, outDir)
+
+    elif cmd=="ct":
+        convCtDir(inDir, outDir)
+
     else:
         logging.error("Unknown command: '%s'" % args[1])
 
@@ -685,10 +1080,7 @@ def hubt(args, options):
 def main():
     args, options = parseArgs()
 
-    hubt(args, options)
+    hubtools(args, options)
 
-    #if options.test:
-        #logging.debug("test is set")
-        #f = open(options.file, "r")
 
 main()

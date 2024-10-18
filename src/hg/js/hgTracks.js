@@ -5945,7 +5945,7 @@ function hgtWarnTiming(maxSeconds) {
     if (skipNotification)
         return;
 
-    msg = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
+    msg = "This page took "+loadSeconds+" seconds to load, more than "+maxSeconds+" seconds. We strive to keep "+
         "the UCSC Genome Browser quick and responsive. See our "+
         "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
         "common causes and solutions to slow performance. If this problem continues, you can create a  "+

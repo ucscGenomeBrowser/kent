@@ -6,12 +6,20 @@ export LC_ALL=en_US.UTF-8
 cd /hive/data/outside/otto/clinGen/clinGenCspec
 
 wget -q -O svis.json https://cspec.genome.network/cspec/api/svis
+
+# Check if the files are the same
+if cmp -s svis.json svis.json.old; then
+  # Files are the same, exit silently
+  rm svis.json
+  exit 0
+else
+  # Files are different, continue with the script or add actions
+  echo "Updating ClinGen VCEP track..."
+fi
+
 wget -q http://purl.obolibrary.org/obo/mondo.json
 wget -q -O geneToDisease.csv https://search.clinicalgenome.org/kb/gene-validity/download
 bigBedToBed /gbdb/hg38/hgnc/hgnc.bb hgnc.bed
-
-oldCountHg38=$(bigBedInfo clinGenCspecHg38.bb | grep -i "itemCount")
-oldCountHg19=$(bigBedInfo clinGenCspecHg19.bb | grep -i "itemCount")
 
 python3 - << END | sort -k1,1 -k2,2n > cspec.bed
 import json
@@ -114,7 +122,7 @@ table clinGenCspec
     )
 _EOF_
 
-bedToBigBed -type=bed9+2 -tab -as=clinGenCspec.as cspec.bed /hive/data/genomes/hg38/chrom.sizes clinGenCspecHg38.bb
+bedToBigBed -type=bed9+2 -tab -as=clinGenCspec.as cspec.bed /hive/data/genomes/hg38/chrom.sizes clinGenCspecHg38.new.bb
 rm cspec.bed
 
 bigBedToBed /gbdb/hg19/hgnc/hgnc.bb hgnc.bed
@@ -201,15 +209,40 @@ for panel in data:
                 print(f'{mane[name]}\t{color}\t{diseaseURL}\t{affURL}\t{status}')
 END
 
-bedToBigBed -type=bed9+2 -tab -as=clinGenCspec.as cspec.bed /hive/data/genomes/hg19/chrom.sizes clinGenCspecHg19.bb
+bedToBigBed -type=bed9+2 -tab -as=clinGenCspec.as cspec.bed /hive/data/genomes/hg19/chrom.sizes clinGenCspecHg19.new.bb
 
-rm hgnc.bed cspec.bed mondo.json geneToDisease.csv svis.json 
+rm hgnc.bed cspec.bed mondo.json geneToDisease.csv
 
-newCountHg38=$(bigBedInfo clinGenCspecHg38.bb | grep -i "itemCount")
-newCountHg19=$(bigBedInfo clinGenCspecHg19.bb | grep -i "itemCount")
+oldCountHg38=$(bigBedInfo clinGenCspecHg38.bb | grep -i "itemCount" | awk '{print $NF}')
+oldCountHg19=$(bigBedInfo clinGenCspecHg19.bb | grep -i "itemCount" | awk '{print $NF}')
+
+newCountHg38=$(bigBedInfo clinGenCspecHg38.new.bb | grep -i "itemCount" | awk '{print $NF}')
+newCountHg19=$(bigBedInfo clinGenCspecHg19.new.bb | grep -i "itemCount" | awk '{print $NF}')
+
+# Calculate the percentage difference
+diffHg38=$(echo "scale=2; (($newCountHg38 - $oldCountHg38) / $oldCountHg38) * 100" | bc)
+diffHg19=$(echo "scale=2; (($newCountHg19 - $oldCountHg19) / $oldCountHg19) * 100" | bc)
+
+# Get the absolute values of the differences
+absDiffHg38=$(echo "$diffHg38" | sed 's/-//')
+absDiffHg19=$(echo "$diffHg19" | sed 's/-//')
+
+# Check if the absolute difference is greater than 20%
+if (( $(echo "$absDiffHg38 > 20" | bc -l) || $(echo "$absDiffHg19 > 20" | bc -l) )); then
+    echo
+    echo "Error: Difference in item count exceeds 20%."
+    echo "Difference in hg38: $diffHg38%"
+    echo "Difference in hg19: $diffHg19%"
+    exit 1
+fi
+
+# If the difference is within the 20%, proceed
+mv clinGenCspecHg38.new.bb clinGenCspecHg38.bb
+mv clinGenCspecHg19.new.bb clinGenCspecHg19.bb
+mv svis.json svis.json.old
 
 echo
-echo Item counts for hg38 old vs. new bigBed. Old: $oldCountHg38 New: $newCountHg38
-echo Item counts for hg19 old vs. new bigBed. Old: $oldCountHg19 New: $newCountHg19
+echo "Item counts for hg38 old vs. new bigBed. Old: $oldCountHg38 New: $newCountHg38"
+echo "Item counts for hg19 old vs. new bigBed. Old: $oldCountHg19 New: $newCountHg19"
 echo
-echo ClinGen VCEP specifications track built successfully.
+echo "ClinGen VCEP specifications track built successfully."

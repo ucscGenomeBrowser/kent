@@ -1931,6 +1931,8 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
+    highlight.blockCount 4
+    highlightColor #ff0000
     </pre>
 </DIV>
 

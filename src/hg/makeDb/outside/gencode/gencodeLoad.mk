@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-preRelease = yes
-#preRelease = no
+#preRelease = yes
+preRelease = no
 #db = hg38
 #db = hg19
 db = mm39
