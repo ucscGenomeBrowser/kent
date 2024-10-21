@@ -6036,8 +6036,9 @@ safef(varName, sizeof(varName), "%s.colorOverride", name);
 
 char *colorValue = cartUsualString(cart, varName, "");
 
-puts("&nbsp;<div id='colorPicker'>");
-jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker'), '%s', 'Change track color:', '%s');", varName, name, colorValue); // id="xx" is necessary as id contains a dot
+printf("&nbsp;<div id='colorPicker_%s'>", name);
+jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', 'Change track color:', '%s');",
+        varName, name, name, colorValue); // id="xx" is necessary as id contains a dot
 puts("</div>\n\n");
 }
 
