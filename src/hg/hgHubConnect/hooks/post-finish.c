@@ -142,7 +142,26 @@ else
         // to the mysql table and return to the client that we were successful
         if (exitStatus == 0)
             {
-            addNewFileForUser(userName, fileName, fileSize, fileType, lastModified, NULL, db, location);
+            // create a hub for this upload, which can be edited later
+            char *hubName = createNewTempHubForUpload(reqId, userName, db, fileName, fileType);
+            fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
+            fflush(stderr);
+            struct hubSpace *row = NULL;
+            AllocVar(row);
+            row->userName = userName;
+            row->fileName = fileName;
+            row->fileSize = fileSize;
+            row->fileType = fileType;
+            row->creationTime = NULL; // automatically handled by mysql
+            row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
+            row->hubNameList = hubName;
+            row->db = db;
+            row->location = location;
+            row->md5sum = md5HexForFile(row->location);
+            addHubSpaceRowForFile(row);
+            hubSpaceFree(&row);
+            fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
+            fflush(stderr);
             }
         }
     if (errCatch->gotError)

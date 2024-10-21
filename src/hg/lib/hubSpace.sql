@@ -9,7 +9,7 @@ CREATE TABLE hubSpace (
     fileName longblob not null,	# name of uploaded files. The actual path to this file is different
     fileSize bigint not null,	# size of the uploaded file
     fileType varchar(255) not null,	# track type of file
-    creationTime timestamp,	# first upload time
+    creationTime timestamp default CURRENT_TIMESTAMP(),	# first upload time
     lastModified timestamp,	# last change time
     hubNameList longblob,	# comma separated list of hubs this file is a part of
     db varchar(255) not null,	# genome assembly associated with this file

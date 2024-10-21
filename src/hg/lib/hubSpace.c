@@ -8,8 +8,6 @@
 #include "jksql.h"
 #include "hubSpace.h"
 
-
-
 char *hubSpaceCommaSepFieldNames = "userName,fileName,fileSize,fileType,creationTime,lastModified,hubNameList,db,location,md5sum";
 
 void hubSpaceStaticLoad(char **row, struct hubSpace *ret)
@@ -59,8 +57,8 @@ void hubSpaceSaveToDb(struct sqlConnection *conn, struct hubSpace *el, char *tab
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType,  el->creationTime,  el->lastModified,  el->hubNameList,  el->db,  el->location,  el->md5sum);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s',NULL,'%s','%s','%s','%s','%s')", 
+	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType, el->lastModified,  el->hubNameList,  el->db,  el->location,  el->md5sum);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }

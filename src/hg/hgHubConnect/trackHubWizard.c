@@ -40,13 +40,13 @@ else
 }
 
 void removeHubDir(char *userName, char *cgiFileName)
-/* Remove one single file for userName */
+/* Remove one single hub for userName */
 {
-char *fileName = prefixUserFile(userName, cgiEncodeFull(cgiFileName));
-if (fileExists(fileName))
+char *hubDir = prefixUserFile(userName, cgiEncodeFull(cgiFileName));
+if (isDirectory(hubDir))
     {
-    fprintf(stderr, "deleting file: '%s'\n", fileName);
-    removeHubForUser(fileName, userName);
+    fprintf(stderr, "deleting directory: '%s'\n", hubDir);
+    removeHubForUser(hubDir, userName);
     fflush(stderr);
     }
 }
@@ -57,46 +57,31 @@ void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 char *userName = getUserName();
 if (userName)
     {
-    struct jsonElement *deleteJson = hashFindVal(paramHash, "fileNameList");
-    //struct jsonWrite *errors = jsonWriteNew();
-    // TODO: Check request is well-formed
-    char *fname = ((struct jsonElement *)(deleteJson->val.jeList->val))->val.jeString;
-    boolean isHub = sameString("hub", ((struct jsonElement *)(deleteJson->val.jeList->next->val))->val.jeString);
+    // our array of objects, each object represents a track file
+    struct jsonElement *deleteJson = hashFindVal(paramHash, "fileList");
+    struct slRef *f, *fileList = deleteJson->val.jeList;
     jsonWriteListStart(cj->jw, "deletedList");
-    if (isHub)
-        removeHubDir(userName, fname);
-    else
-        removeOneFile(userName, fname);
-    jsonWriteString(cj->jw, NULL, fname);
+    for (f = fileList; f != NULL; f = f->next)
+        {
+        struct jsonElement *fileObj = (struct jsonElement *)f->val;
+        char *fileName = jsonStringField(fileObj, "fileName");
+        //char *fileType = jsonStringField(fileObj, "fileType");
+        //struct slName *hubList  = slNameListFromComma(jsonStringField(fileObj, "hubNameList"));
+        removeOneFile(userName, fileName);
+        jsonWriteString(cj->jw, NULL, fileName);
+        }
     jsonWriteListEnd(cj->jw);
+    /*
+    //for now don't worry about this:
+    //if (isHub)
+    //    removeHubDir(userName, fname);
+    */
     }
 }
 
 void doMoveFile(struct cartJson *cj, struct hash *paramHash)
 /* Move a file to a new hub */
 {
-}
-
-static void writeHubText(char *path, char *userName, char *encodedHubName, char *hubName, char *db)
-/* Create a hub.txt file, optionally creating the directory holding it */
-{
-int oldUmask = 00;
-oldUmask = umask(0);
-makeDirsOnPath(path);
-// restore umask
-umask(oldUmask);
-// now make the hub.txt with some basic information
-char *hubFile = catTwoStrings(path, "/hub.txt");
-FILE *f = mustOpen(hubFile, "w");
-//fprintf(stderr, "would write \"hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n\" to %s", hubName, emailForUserName(userName), hubName, hubName, db, hubFile);
-fprintf(f, "hub %s\n"
-    "email %s\n"
-    "shortLabel %s\n"
-    "longLabel %s\n"
-    "useOneFile on\n\n"
-    "genome %s\n\n",
-    encodedHubName, emailForUserName(userName), hubName, hubName, db);
-carefulClose(&f);
 }
 
 void doCreateHub(struct cartJson *cj, struct hash *paramHash)
@@ -159,13 +144,14 @@ if (userName)
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
         jsonWriteString(jw, "fileType", file->fileType);
-        jsonWriteString(jw, "hub", "");
+        jsonWriteString(jw, "hub", file->hubNameList);
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "lastModified", file->lastModified);
         jsonWriteString(jw, "uploadTime", file->creationTime);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
+    /*
     jsonWriteListStart(jw, "hubList");
     struct userHubs *hub, *hubList = listHubsForUser(userName);
     for (hub = hubList; hub != NULL; hub = hub->next)
@@ -174,11 +160,14 @@ if (userName)
         cgiDecodeFull(hub->hubName, hub->hubName, strlen(hub->hubName));
         jsonWriteString(jw, "hubName", hub->hubName);
         jsonWriteString(jw, "genome", hub->genome);
+        jsonWriteNumber(jw, "lastModified", getHubLatestTime(hub));
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
+    */
     }
 jsonWriteObjectEnd(jw);
+jsInlineF("var isLoggedIn = %s\n", getUserName() ? "true" : "false");
 jsInlineF("var userFiles = %s;\n", dyStringCannibalize(&jw->dy));
 jsonWriteFree(&jw);
 }
@@ -208,7 +197,7 @@ webIncludeResourceFile("hgMyData.css");
 
 // get the current files stored for this user
 outFilesForUser();
-jsInlineF("\nvar cartDb=\"%s %s\";\n", hGenome(database), trackHubSkipHubName(database));
+jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

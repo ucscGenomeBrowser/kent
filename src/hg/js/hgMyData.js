@@ -182,7 +182,7 @@ var hubCreate = (function() {
     }
 
     function submitPickedFiles() {
-        
+
         let tusdServer = getTusdEndpoint();
 
         let onBeforeRequest = function(req) {
@@ -211,6 +211,19 @@ var hubCreate = (function() {
 
             // if nothing else we can close the dialog
             if (uiState.pendingQueue.length === 0) {
+                // first remove the grid headers
+                let headerEle = document.querySelectorAll(".fileListHeader");
+                headerEle.forEach( (header) => {
+                    if (header.style.display !== "none") {
+                        header.style.display = "none";
+                    }
+                });
+                //check if we can remove the batch change selects
+                if (uiState.pendingQueue.length > 1) {
+                    document.querySelectorAll("[id^=batchChangeSelect]").forEach( (select) => {
+                        select.remove();
+                    });
+                }
                 $("#filePickerModal").dialog("close");
             }
             const d = new Date(req.lastModified);
@@ -300,6 +313,9 @@ var hubCreate = (function() {
         cartChoice.id = cartDb;
         cartChoice.label = cartDb;
         cartChoice.value = cartDb.split(" ").slice(-1);
+        if (cartChoice.value.startsWith("hub_")) {
+            cartChoice.label = cartDb.split(" ").slice(0,-1).join(" "); // take off the actual db value
+        }
         cartChoice.selected = true;
         genomeInp.appendChild(cartChoice);
         choices.forEach( (e) =>  {
@@ -346,6 +362,37 @@ var hubCreate = (function() {
         return [typeInp, genomeInp];
     }
 
+    function deletePickedFile(eventInst) {
+        // called when the trash icon has been clicked to remove a file
+        // the sibling text content is the file name, which we use to
+        // find all the other elements to delete
+        let trashIconDiv = eventInst.currentTarget;
+        fname = trashIconDiv.nextSibling.textContent;
+        document.querySelectorAll("[id^='" + fname + "']").forEach( (sib) => {
+            sib.remove();
+        });
+        trashIconDiv.remove();
+        delete uiState.toUpload[fname];
+        // if there are no file rows left (1 row for the header) in the picker hide the headers:
+        let container = document.getElementById("fileList");
+        if (getComputedStyle(container).getPropertyValue("grid-template-rows").split(" ").length === 1) {
+            let headerEle = document.querySelectorAll(".fileListHeader");
+            headerEle.forEach( (header) => {
+                if (header.style.display !== "none") {
+                    header.style.display = "none";
+                }
+            });
+        }
+        // if there is only one file picked hide the batch change selects, we may or may not have
+        // hidden the headers yet, so we should have 3 or less rows
+        if (getComputedStyle(container).getPropertyValue("grid-template-rows").split(" ").length <= 3) {
+            let batchChange = document.querySelectorAll("[id^=batchChangeSelect]");
+            batchChange.forEach( (select) => {
+                select.remove();
+            });
+        }
+    }
+
     function listPickedFiles() {
         // displays the users chosen files in a grid:
         if (uiState.input.files.length === 0) {
@@ -371,8 +418,10 @@ var hubCreate = (function() {
                 sizeCell.classList.add("pickedFile");
                 sizeCell.id = `${file.name}#fileSize`;
                 sizeCell.textContent = prettyFileSize(file.size);
-                
-                displayList.appendChild(deleteEle.cloneNode(true));
+
+                newDelIcon = deleteEle.cloneNode(true);
+                newDelIcon.addEventListener("click", deletePickedFile);
+                displayList.appendChild(newDelIcon);
                 displayList.appendChild(nameCell);
                 displayList.appendChild(typeCell);
                 displayList.appendChild(dbCell);
@@ -423,27 +472,6 @@ var hubCreate = (function() {
                 displayList.appendChild(batchDb);
             }
             document.querySelectorAll(".deleteFileIcon").forEach( (i) => {
-                i.addEventListener("click", function(e) {
-                    // the sibling text content is the file name, which we use to
-                    // find all the other elements to delete
-                    let trashIconDiv = e.currentTarget;
-                    fname = trashIconDiv.nextSibling.textContent;
-                    document.querySelectorAll("[id^='" + fname + "']").forEach( (sib) => {
-                        sib.remove();
-                    });
-                    trashIconDiv.remove();
-                    delete uiState.toUpload[fname];
-                    // if there are no rows left in the picker hide the headers:
-                    let container = document.getElementById("fileList");
-                    if (getComputedStyle(container).getPropertyValue("grid-template-rows").split(" ").length === 1) {
-                        let headerEle = document.querySelectorAll(".fileListHeader");
-                        headerEle.forEach( (header) => {
-                            if (header.style.display !== "none") {
-                                header.style.display = "none";
-                            }
-                        });
-                    }
-                });
             });
         }
         // always clear the input element
@@ -454,6 +482,12 @@ var hubCreate = (function() {
         return prettyFileSize(data);
     }
 
+    function dataTablePrintGenome(data, type, row, meta) {
+        if (data.startsWith("hub_"))
+            return data.split("_").slice(2).join("_");
+        return data;
+    }
+
     function deleteFileFromTable(fname) {
         // req is an object with properties of an uploaded file, make a new row
         // for it in the filesTable
@@ -462,12 +496,16 @@ var hubCreate = (function() {
         row.remove().draw();
     }
 
-    function deleteFile(fname, fileType) {
+    function deleteFile(fname, fileType, hubNameList) {
         // Send an async request to hgHubConnect to delete the file
         // Note that repeated requests, like from a bot, will return 404 as a correct response
         console.log(`sending delete req for ${fname}`);
         cart.setCgi("hgHubConnect");
-        cart.send({deleteFile: {fileNameList: [fname, fileType]}});
+        // a little complex, but the format is:
+        // {commandToCgi: {arg: val, ...}
+        // but we make val an object as well, becoming:
+        // {commandToCgi: {fileList: [{propertyName1: propertyVal1, ...}, {propertName2: ...}]}}
+        cart.send({deleteFile: {fileList: [{fileName: fname, fileType: fileType, hubNameList: hubNameList}]}});
         cart.flush();
         deleteFileFromTable(fname);
     }
@@ -487,14 +525,15 @@ var hubCreate = (function() {
         cart.flush();
     }
 
-    function viewInGenomeBrowser(fname, ftype, genome) {
+    function viewInGenomeBrowser(fname, ftype, genome, hubName) {
         // redirect to hgTracks with this track open in the hub
         if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
             if (ftype in extensionMap) {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                window.location.assign("../cgi-bin/hgTracks?db=" + genome + "&hgt.customText=" + uiState.userUrl + fname);
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt";
+                window.location.assign(url);
                 return false;
             }
         }
@@ -556,6 +595,14 @@ var hubCreate = (function() {
             },
             */
             "Close": function() {
+                // delete everything that isn't the headers, which we set to hide:
+                let fileList = document.getElementById("fileList");
+                let headers = document.querySelectorAll(".fileListHeader");
+                fileList.replaceChildren(...headers);
+                headers.forEach( (header) => {
+                    header.style.display = "none";
+                });
+                uiState.input = createInput();
                 $(this).dialog("close");
             }
         };
@@ -575,14 +622,14 @@ var hubCreate = (function() {
     }
 
     let tableInitOptions = {
-        language: {
-            emptyTable: "Uploaded files will appear here. Click \"Upload\" to get started",
-        },
         layout: {
             topStart: {
                 buttons: [
-                    {text: 'Upload',
-                     action: startUploadDialog},
+                    {
+                        text: 'Upload',
+                        action: startUploadDialog,
+                        enabled: false, // disable by default in case user is not logged in
+                    },
                 ]
             }
         },
@@ -607,7 +654,7 @@ var hubCreate = (function() {
                     delBtn.textContent = "Delete";
                     delBtn.type = 'button';
                     delBtn.addEventListener("click", function() {
-                        deleteFile(row.fileName, row.fileType);
+                        deleteFile(row.fileName, row.fileType, row.hub);
                     });
 
                     // click to view hub/file in gb:
@@ -615,7 +662,7 @@ var hubCreate = (function() {
                     viewBtn.textContent = "View in Genome Browser";
                     viewBtn.type = 'button';
                     viewBtn.addEventListener("click", function() {
-                        viewInGenomeBrowser(row.fileName, row.fileType, row.genome);
+                        viewInGenomeBrowser(row.fileName, row.fileType, row.genome, row.hub);
                     });
 
                     // click to rename file or hub:
@@ -638,7 +685,7 @@ var hubCreate = (function() {
                     container.appendChild(viewBtn);
                     container.appendChild(renameBtn);
                     container.appendChild(addToHubBtn);
-                    
+
                     return container;
                 }
             },
@@ -646,6 +693,12 @@ var hubCreate = (function() {
                 targets: 3,
                 render: function(data, type, row) {
                     return dataTablePrintSize(data);
+                }
+            },
+            {
+                targets: 5,
+                render: function(data, type, row) {
+                    return dataTablePrintGenome(data);
                 }
             },
             {
@@ -661,12 +714,17 @@ var hubCreate = (function() {
             {data: "fileName", title: "File name"},
             {data: "fileSize", title: "File size", render: dataTablePrintSize},
             {data: "fileType", title: "File type"},
-            {data: "genome", title: "Genome"},
+            {data: "genome", title: "Genome", render: dataTablePrintGenome},
             {data: "hub", title: "Hubs"},
             {data: "lastModified", title: "File Last Modified"},
             {data: "uploadTime", title: "Upload Time"},
         ],
         order: [[6, 'desc']],
+        drawCallback: function(settings) {
+            if (isLoggedIn) {
+                settings.api.buttons(0).enable();
+            }
+        }
     };
 
     function showExistingFiles(d) {
@@ -674,6 +732,11 @@ var hubCreate = (function() {
         // make buttons have the same style as other buttons
         $.fn.dataTable.Buttons.defaults.dom.button.className = 'button';
         tableInitOptions.data = d;
+        if (isLoggedIn) {
+            tableInitOptions.language = {emptyTable: "Uploaded files will appear here. Click \"Upload\" to get started"};
+        } else {
+            tableInitOptions.language = {emptyTable: "You are not logged in, please navigate to \"My Data\" > \"My Sessions\" and log in or create an account to begin uploading files"};
+        }
         let table = new DataTable("#filesTable", tableInitOptions);
     }
 
@@ -774,19 +837,15 @@ var hubCreate = (function() {
             //     creating default trackDbs
             //     editing trackDbs
             let fileDiv = document.getElementById('filesDiv');
-            if (typeof userFiles !== 'undefined') {
+            if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
                 uiState.fileList = userFiles.fileList;
                 uiState.hubList = userFiles.hubList;
                 uiState.userUrl = userFiles.userUrl;
             }
-            showExistingFiles(uiState.fileList);
-            showExistingHubs(uiState.hubList);
+            showExistingFiles(uiState.fileList.filter((row) => row.fileType !== "hub"));
             inputBtn.addEventListener("click", (e) => uiState.input.click());
-            //uiState.input.addEventListener("change", listPickedFiles);
-            // TODO: add event handler for when file is succesful upload
             // TODO: add event handlers for editing defaults, grouping into hub
             // TODO: display quota somewhere
-            // TODO: customize the li to remove the picked file
         }
         $("#newTrackHubDialog").dialog({
             modal: true,

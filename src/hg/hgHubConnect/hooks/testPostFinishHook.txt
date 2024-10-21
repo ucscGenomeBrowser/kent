@@ -6,22 +6,25 @@
 "*\/*"
 ],
 "Accept-Encoding": [
-"gzip, deflate, br"
+"gzip, deflate, br, zstd"
 ],
 "Accept-Language": [
 "en-US,en;q=0.5"
+],
+"Cache-Control": [
+"no-cache"
 ],
 "Connection": [
 "Keep-Alive"
 ],
 "Content-Length": [
-"10004"
+"23504"
 ],
 "Content-Type": [
 "application\/offset+octet-stream"
 ],
 "Cookie": [
-"_ga_EGJY1746VM=GS1.1.1707943256.27.0.1707943311.0.0.0; _ga=GA1.1.335386585.1703110328; hguid.genome-test=26137075_KUY2JKAiELSKetV4oPouuuXFnFu9; _ga_RT83HV74PS=GS1.1.1707943273.70.1.1707943914.0.0.0; _ga_1KXQRJXYYY=GS1.1.1706551456.3.0.1706551456.0.0.0; hguid=1736152956_MBoGauSUMzQHWyp37BfI9f0NpyuO; _ga_P5EV0BL192=GS1.1.1707933118.38.0.1707933118.0.0.0; _ga_X4EVCTYJ3E=GS1.1.1705442714.2.1.1705444010.0.0.0; _ga_JYTK4VHQFB=GS1.1.1707239615.5.0.1707239615.0.0.0; _ga_QTHV5R36YZ=GS1.1.1707239615.6.0.1707239615.0.0.0; hguid.hgwbeta=26444215_KhmSytkajKRhXjdy6za02cJXnUP4; _ga_PWFD1NPDNM=GS1.1.1705596833.1.1.1705597341.0.0.0; _ga_G5K9F3K9H2=GS1.1.1706049421.1.0.1706049424.0.0.0; hguid.genome-euro=456620926_1CEBuAmepzYdQGgvmMf1jSobJFtn; wikidb_mw1_UserName=chmalee; wikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2; _ga_BWJ4Z4Y66X=GS1.1.1707247503.1.0.1707247508.0.0.0; DEVwikidb_mw1_UserName=chmalee; DEVwikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2"
+"hguid.genome-test=34073696_imozxYZxh6N4N70UVQPjFG0DZ8Fo; hguid=1906684090_csfMSuypAjXzDdwuX3o0DzpWULAa; hguid.hgwbeta=26640189_YKH15FM5Z0ua6oyLjT02qDsYH0fW; hguid.genome-japan=790611497_ffLG5cOeGQ8MIa4m43bcmIoIju1T; hguid.hgwdev-jcasper=50503146_FUomXAw4z56o0f7bE4h1RyTCG1CA; hguid.genome-euro=488980124_aNiKQsACsMknTPAH3naVEUxH4I7Z; hguid.hgwdev-demo4=50677835_ADyR4MaWFj3dxQa1e3txA4XTBHt7; DEVwikidb_mw1_UserName=chmalee; DEVwikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2"
 ],
 "Dnt": [
 "1"
@@ -31,6 +34,9 @@
 ],
 "Origin": [
 "https:\/\/hgwdev-chmalee.gi.ucsc.edu"
+],
+"Pragma": [
+"no-cache"
 ],
 "Referer": [
 "https:\/\/hgwdev-chmalee.gi.ucsc.edu\/"
@@ -44,9 +50,6 @@
 "Sec-Fetch-Site": [
 "same-site"
 ],
-"Sec-Gpc": [
-"1"
-],
 "Tus-Resumable": [
 "1.0.0"
 ],
@@ -54,10 +57,10 @@
 "0"
 ],
 "User-Agent": [
-"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko\/20100101 Firefox\/120.0"
+"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.15; rv:130.0) Gecko\/20100101 Firefox\/130.0"
 ],
 "X-Forwarded-For": [
-"2600:1700:5fa5:2550:70f6:e705:9c8f:da0b"
+"2600:1700:5fa5:2550:4909:df61:e7d:4db5"
 ],
 "X-Forwarded-Host": [
 "hgwdev-hubspace.gi.ucsc.edu"
@@ -70,24 +73,26 @@
 ]
 },
 "Method": "PATCH",
-"RemoteAddr": "127.0.0.1:58602",
-"URI": "\/files\/e45c08a3704579e3a57ec4d94f2c69ba"
+"RemoteAddr": "127.0.0.1:34674",
+"URI": "\/files\/39fe861b630c1f869aace7cd59ff3a4f"
 },
 "Upload": {
-"ID": "e45c08a3704579e3a57ec4d94f2c69ba",
+"ID": "39fe861b630c1f869aace7cd59ff3a4f",
 "IsFinal": false,
 "IsPartial": false,
 "MetaData": {
-"fileSize": "10004",
-"fileType": "text\/csv",
-"filename": "gnomAD_v3.1.2_(non-cancer)_7-155800188-155800407_2024_01_29_13_02_13.csv"
+"fileName": "Chick_ES1_ATAC_region_reads.bw",
+"fileSize": "23504",
+"fileType": "bigWig",
+"genome": "GCA_027408225.1",
+"lastModified": "1728062683912"
 },
-"Offset": 10004,
+"Offset": 23504,
 "PartialUploads": null,
-"Size": 10004,
+"Size": 23504,
 "SizeIsDeferred": false,
 "Storage": {
-"Path": "\/hive\/users\/chmalee\/tmp\/userDataDir\/e45c08a3704579e3a57ec4d94f2c69ba",
+"Path": "\/hive\/users\/chmalee\/tmp\/userDataDir\/39fe861b630c1f869aace7cd59ff3a4f",
 "Type": "filestore"
 }
 }

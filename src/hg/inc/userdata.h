@@ -6,6 +6,8 @@
 #ifndef USERDATA_H
 #define USERDATA_H
 
+#include "hubSpace.h"
+
 struct userFiles
 {
 char *userName;
@@ -18,6 +20,7 @@ struct userHubs *next;
 char *hubName; // name of this hub
 char *genome; // only one genome allowed per hub for now
 char *userName; // for convenience
+time_t lastModified; // actually last access time but this works
 struct userFiles *fileList; // list of files (tracks) in the hub
 };
 
@@ -50,8 +53,15 @@ char *getDataDir(char *userName);
 char *prefixUserFile(char *userName, char *fname);
 /* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
 
-void addNewFileForUser(char *userName, char *fileName, long long fileSize, char *fileType,
-        time_t lastModified, char *hubName, char *db, char *location);
+char *writeHubText(char *path, char *userName, char *encodedHubName, char *hubName, char *db);
+/* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
+ * the file name of the created hub, which can be freed. */
+
+char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackName, char *trackType);
+/* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
+ * for convenience. */
+
+void addHubSpaceRowForFile(struct hubSpace *row);
 /* We created a file for a user, now add an entry to the hubSpace table for it */
 
 void removeFileForUser(char *fname, char *userName);
@@ -62,6 +72,9 @@ void removeHubForUser(char *path, char *userName);
 
 struct userHubs *listHubsForUser(char *userName);
 /* Lists the directories for a particular user */
+
+time_t getHubLatestTime(struct userHubs *hub);
+/* Return the latest access time of the files in a hub */
 
 struct userFiles *listFilesForUserHub(char *userName, char *hubName);
 /* Get all the files for a particular hub for a particular user */
