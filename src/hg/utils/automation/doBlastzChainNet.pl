@@ -87,6 +87,8 @@ my $bigClusterHub = 'ku';
 # my $smallClusterHub = 'encodek';
 my $smallClusterHub = 'ku';
 my $dbHost = 'hgwdev';
+my $ram = '3g';
+my $cpu = 1;
 my $workhorse = 'hgwdev';
 my $defaultChainLinearGap = "loose";
 my $defaultChainMinScore = "1000";	# from axtChain itself
@@ -143,6 +145,8 @@ print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 				      'workhorse' => $workhorse,
 				      'fileServer' => '',
 				      'bigClusterHub' => $bigClusterHub,
+				      'ram' => $ram,
+				      'cpu' => $cpu,
 				      'smallClusterHub' => $smallClusterHub);
 print STDERR "
 Automates UCSC's blastz/chain/net pipeline:
@@ -644,7 +648,7 @@ sub doBlastzClusterRun {
   my $whatItDoes = "It sets up and performs the big cluster blastz run.";
   my $bossScript = new HgRemoteScript("$runDir/doClusterRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 $gensub2 $targetList $queryList gsub jobList
@@ -697,7 +701,7 @@ _EOF_
 each subdirectory of $outRoot into a per-target-chunk file.";
   my $bossScript = new HgRemoteScript("$runDir/doCatRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 (cd $outRoot; find . -maxdepth 1 -type d | grep '^./') \\
