@@ -571,11 +571,11 @@ $setMachtype = "setenv MACHTYPE `uname -m | sed -e 's/i686/i386/;'`";
 ### decide on an appropriate temporary directory
 sub tmpDir {
   my $tDir="/tmp";	# default, most likely overridden
-  if (defined($ENV{'TMPDIR'}) && -d $ENV{'TMPDIR'}) {	# TMPDIR above all else
+  if (defined($ENV{'TMPDIR'}) && -d $ENV{'TMPDIR'} && -w "$ENV{'TMPDIR'}") {	# TMPDIR above all else
     $tDir = $ENV{'TMPDIR'};
-  } elsif ( -d "/data/tmp" ) {	# UCSC local file system
+  } elsif ( -d "/data/tmp" && -w "/data/tmp" ) {	# UCSC local file system
     $tDir = "/data/tmp";
-  } elsif ( -d "/scratch/tmp" ) {	# UCSC cluster node local file system
+  } elsif ( -d "/scratch/tmp" && -w "/scratch/tmp" ) {	# UCSC cluster node local file system
     $tDir = "/scratch/tmp";
   } else {
     my $tmpSz = `df --output=avail -k /tmp | tail -1`;
