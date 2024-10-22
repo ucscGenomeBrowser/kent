@@ -155,6 +155,14 @@ y +=  baseline;
 unsigned short buff[length * 4];
 length = utf8ToUnicode(text, buff, length * 4);
 unsigned short *sBuf = (unsigned short *)buff;
+
+// account for strange short at front of string that tells us byte order
+if (*sBuf == 0xfeff)
+    {
+    length--;
+    sBuf++;
+    }
+
 for(n = 0; n < length; n++)
     {
     int dx;
