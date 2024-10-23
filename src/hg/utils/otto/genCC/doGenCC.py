@@ -217,9 +217,9 @@ def buildFileHg19(genCCfile,outPutFile):
 def checkIfUpdateIsNeeded():
     bash("wget -q https://search.thegencc.org/download/action/submissions-export-tsv -O /hive/data/outside/otto/genCC/newSubmission.tsv")
     newMd5sum = bash("md5sum /hive/data/outside/otto/genCC/newSubmission.tsv")
-    newMd5sum.split("  ")[0]
+    newMd5sum = newMd5sum.split("  ")[0]
     oldMd5sum = bash("md5sum /hive/data/outside/otto/genCC/prevSubmission.tsv")
-    oldMd5sum.split("  ")[0]
+    oldMd5sum = oldMd5sum.split("  ")[0]
     if oldMd5sum != newMd5sum:
         return(True)
     else:
