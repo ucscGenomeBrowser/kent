@@ -178,6 +178,7 @@ GCA_009819705.1_fHipHip1.pri	fish
 GCA_009829125.1_fPerMag1.pri	fish
 GCA_009873245.2_mBalMus1.v2	mammals
 GCA_009914755.4_T2T-CHM13v2.0	primates
+GCA_010993605.1_kPetMar1.pri	vertebrate
 GCA_010909765.1_sAmbRad1.pri	vertebrate
 GCA_011004845.1_fEsoLuc1.pri	fish
 GCA_011064685.1_ZJU_Sfru_1.0	invertebrate
