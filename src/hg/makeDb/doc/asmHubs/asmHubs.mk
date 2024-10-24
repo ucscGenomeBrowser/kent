@@ -160,6 +160,9 @@ sendDownload:: sshKeyCheck
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${dataName}.html
+
+# no longer sending genomes.txt file 2024-10-23 - becomes static
+obsolete:
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${genomesTxt}.txt
