@@ -12,7 +12,7 @@
 #    a file by the same name existing.  These rules don't make these files,
 #    they are just procedures to run.
 
-.PHONY: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+.PHONY: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData groupsTxt
 
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 htdocsHgDownload=/usr/local/apache/htdocs-hgdownload
@@ -22,7 +22,7 @@ downloadDest1=hgdownload1.soe.ucsc.edu
 downloadDest2=hgdownload2.soe.ucsc.edu
 # 2024-02-06 hgdownload2.gi.ucsc.edu has address 128.114.198.53
 
-all:: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+all:: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData groupsTxt
 
 makeDirs:
 	mkdir -p ${destDir}
@@ -57,10 +57,20 @@ mkGenomes::
 	${toolsDir}/mkSymLinks.pl ${orderList}
 	@date "+%s %F %T" 1>&2
 	@rm -f hasChainNets.txt
+	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > /dev/null
+	@printf "# finished mkGenomes " 1>&2
+	@date "+%s %F %T" 1>&2
+
+# temporary mkGenomes to get the single file genomes.txt made on a special
+# one time only static list
+staticMkGenomes:
+	@printf "# starting staticMkGenomes " 1>&2
+	@date "+%s %F %T" 1>&2
+	@rm -f hasChainNets.txt
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
 	rm -f ${destDir}/download.${genomesTxt}.txt
 	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
-	@printf "# finished mkGenomes " 1>&2
+	@printf "# finished staticMkGenomes " 1>&2
 	@date "+%s %F %T" 1>&2
 
 symLinks::
@@ -101,6 +111,7 @@ trackData::
 indexPages: hubIndex asmStats trackData
 	echo indexPages done
 
+### obsolete, these hub.txt files are now static 2024-10-23
 hubTxt:
 	rm -f ${destDir}/${testHubFile}.txt ${destDir}/${hubFile}.txt
 	sed -e "s#index.html#${indexName}.html#; s#genomes.txt#${genomesTxt}.txt#;" ${srcDir}/${hubTxtFile} > ${destDir}/${hubFile}.txt
@@ -160,6 +171,9 @@ sendDownload:: sshKeyCheck
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${dataName}.html
+
+# no longer sending genomes.txt file 2024-10-23 - becomes static
+obsolete:
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${genomesTxt}.txt

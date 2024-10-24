@@ -92,12 +92,13 @@ rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P
   2>&1 | grep -v "X11 forwarding request"
 wait
 
+### obsolete hub.txt files no longer sending out, became static 2024-10-23
 # the new single file hub genome trackDb file:
-printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloadDest1}:${destDir}/hub.txt\"\n" 1>&2
-printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloadDest2}:${destDir}/hub.txt\"\n" 1>&2
-rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest1}:${destDir}/hub.txt" \
-  2>&1 | grep -v "X11 forwarding request" &
-rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest2}:${destDir}/hub.txt" \
-  2>&1 | grep -v "X11 forwarding request"
-wait
+# printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloadDest1}:${destDir}/hub.txt\"\n" 1>&2
+# printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloadDest2}:${destDir}/hub.txt\"\n" 1>&2
+# rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest1}:${destDir}/hub.txt" \
+#   2>&1 | grep -v "X11 forwarding request" &
+# rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest2}:${destDir}/hub.txt" \
+#   2>&1 | grep -v "X11 forwarding request"
+# wait
 printf "# successful rsync\n"

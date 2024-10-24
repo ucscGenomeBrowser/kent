@@ -128,6 +128,7 @@ html ../../knownGeneArchive
     track knownGeneVM35
     shortLabel GENCODE VM35
     longLabel GENCODE VM35
+    parent knownGeneArchive
     priority 5
     visibility pack
     type bigGenePred
