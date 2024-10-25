@@ -678,7 +678,9 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
         );
     }
 
-hPrintf("<TR><TD>Parallel load time out:");
+hPrintf("<TR><TD>Maximum track load time: ");
+printInfoIcon("Maximum time in seconds the Genome Browser will wait for any individual track to "
+"load. This limit can be hit by slower network connections, or densely populated tracks, especially in large regions.");
 hPrintf("<TD style=\"text-align: right\">");
 hIntVar("parallelFetch.timeout", getParaLoadTimeout(), 3);
 hPrintf("<TD>seconds<TD></TR>");

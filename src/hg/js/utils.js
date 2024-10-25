@@ -469,6 +469,29 @@ function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  === 3); }
 function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  === 2 || tdb.kindOfChild === 3); }
 function tdbHasParent(tdb)            { return (tdb.kindOfChild  !== 0 && tdb.parentTrack); }
 
+function cartHideAnyTrack (id, cartVars, cartVals) {
+    /* set the right cart variables to hide a track, changes cartVars and cartVals */
+    var rec = hgTracks.trackDb[id];
+    if (tdbIsSubtrack(rec)) {
+        cartVars.push(id);
+        cartVals.push('[]');
+
+        cartVars.push(id+"_sel");
+        cartVals.push(0);
+    } else if (tdbIsFolderContent(rec)) {
+        // supertrack children need to have _sel set to trigger superttrack reshaping
+        cartVars.push(id);
+        cartVals.push('hide');
+
+        cartVars.push(id+"_sel");
+        cartVals.push(0);
+    } else {
+        // normal, top-level track
+        cartVars.push(id);
+        cartVals.push('hide');
+    }
+}
+
 function tdbFindChildless(trackDb, delTracks) {
     /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
      * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks*/
@@ -501,15 +524,21 @@ function tdbFindChildless(trackDb, delTracks) {
     }
 
     // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
-    loneParents = [];
+    var loneParents = [];
+    var doneParents = [];
     for (delTrack of delTracks) {
         var parentName = hgTracks.trackDb[delTrack].topParent;
         if (parentName) {
-            if (familySize[parentName]===0)
-                loneParents.push([parentName, families[parentName]]);
-            else
+            if (familySize[parentName]===0) {
+                if (!doneParents.includes(parentName)) {
+                    loneParents.push([parentName, families[parentName]]);
+                    doneParents.push(parentName);
+                }
+            } else
                 for (var child of families[parentName])
-                    others.push(child);
+                    // but do not hide tracks of lone parents that are not in delTracks
+                    if (delTracks.includes(child))
+                        others.push(child);
         } else {
             others.push(delTrack);
         }

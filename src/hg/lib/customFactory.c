@@ -4152,7 +4152,7 @@ for (pfd = pfdRunning; pfd; pfd = pfd->next)
     {
     // unfinished track
     char temp[256];
-    safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s", maxTimeInMilliseconds, pfd->track->tdb->track);
+    safef(temp, sizeof temp, "Track timed out: %s took more than %d milliseconds to load. Zoom in or increase max load time via menu 'Genome Browser > Configure'", pfd->track->tdb->track, maxTimeInMilliseconds);
     pfd->track->networkErrMsg = cloneString(temp);
     ++errCount;
     }
