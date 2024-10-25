@@ -28,6 +28,7 @@
 #include "maf.h"
 #include "hgMaf.h"
 #include "chromAlias.h"
+#include "hubConnect.h"
 
 struct wigItem
 /* A wig track item. */
@@ -767,6 +768,37 @@ double graphRange = *graphUpperLimit - *graphLowerLimit;
 *epsilon = graphRange / lineHeight;
 return(graphRange);
 }
+        
+static struct trackDb *makeFakeColorTrackTdb(char *bb)
+{
+struct trackDb *tdb;
+
+AllocVar(tdb);
+//tdb->loadItems = loadBed9;
+//tdb->isBigBed = isBigBed;
+tdb->grp = "other";
+tdb->track = "fakeTrackForColorBy";
+tdb->type = "bigBed 9";
+tdb->settingsHash = newHash(5);
+hashAdd(tdb->settingsHash, "bigDataUrl", hubConnectSkipHubPrefix(bb));
+//tdb->drawItemAt =  linkedFeaturesDrawAt;
+
+return tdb;
+}
+
+struct track *colorTrackIsBigBed(char *colorTrack)
+{
+//                cTrack = trackFromTrackDb(tdb);
+struct track *cTrack = NULL;
+
+if (endsWith(colorTrack, ".bb"))
+    {
+    cTrack = trackFromTrackDb(makeFakeColorTrackTdb(colorTrack));
+    printf("colorTrack is bb %s\n", colorTrack);
+    }
+
+return cTrack;
+}
 
 static Color * makeColorArray(struct preDrawElement *preDraw, int width,
     int preDrawZero, struct wigCartOptions *wigCart, struct track *tg, struct hvGfx *hvg)
@@ -803,9 +835,12 @@ if (colorTrack != NULL)
     struct track *cTrack = hashFindVal(trackHash, colorTrack);
     if (cTrack == NULL) // rightClick update of wigColorBy track may not have colorTrack in hash
         {               // so create it on the fly
-        struct trackDb *tdb = hTrackDbForTrack(database,colorTrack);
-        if (tdb != NULL)
-            cTrack = trackFromTrackDb(tdb);
+        if ((cTrack = colorTrackIsBigBed(colorTrack)) == NULL)
+            {
+            struct trackDb *tdb = hTrackDbForTrack(database,colorTrack);
+            if (tdb != NULL)
+                cTrack = trackFromTrackDb(tdb);
+            }
         }
     if (cTrack != NULL)
         wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
