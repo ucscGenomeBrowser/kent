@@ -70,6 +70,12 @@ int x1 = 0, x2 = 0;
 int i = 0;
 for(lf = lfList; lf != NULL; lf = lf->next)
     {
+    unsigned color;
+    if (colorTrack->isColorBigBed)
+        color = bedColorToGfxColor(lf->filterColor);
+    else
+        color = colorTrack->ixAltColor;
+
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	x1 = round((double)((int)sf->start-winStart)*scale);
@@ -81,7 +87,7 @@ for(lf = lfList; lf != NULL; lf = lf->next)
 	if(x1 == x2)
 	    x2++;
 	for(i = x1; i < x2; i++)
-	    colArray[i] = colorTrack->ixAltColor;
+            colArray[i] = color;
 	}
     }
 }
@@ -769,21 +775,22 @@ double graphRange = *graphUpperLimit - *graphLowerLimit;
 return(graphRange);
 }
         
-static struct trackDb *makeFakeColorTrackTdb(char *bb)
+static struct track *makeFakeColorTrack(char *bb)
+/* make a fake track to color a wig. */
 {
 struct trackDb *tdb;
 
 AllocVar(tdb);
-//tdb->loadItems = loadBed9;
-//tdb->isBigBed = isBigBed;
 tdb->grp = "other";
 tdb->track = "fakeTrackForColorBy";
 tdb->type = "bigBed 9";
 tdb->settingsHash = newHash(5);
 hashAdd(tdb->settingsHash, "bigDataUrl", hubConnectSkipHubPrefix(bb));
-//tdb->drawItemAt =  linkedFeaturesDrawAt;
 
-return tdb;
+struct track *cTrack =  trackFromTrackDb(tdb);
+cTrack->isColorBigBed = TRUE;
+
+return cTrack;
 }
 
 struct track *colorTrackIsBigBed(char *colorTrack)
@@ -791,11 +798,8 @@ struct track *colorTrackIsBigBed(char *colorTrack)
 //                cTrack = trackFromTrackDb(tdb);
 struct track *cTrack = NULL;
 
-if (endsWith(colorTrack, ".bb"))
-    {
-    cTrack = trackFromTrackDb(makeFakeColorTrackTdb(colorTrack));
-    printf("colorTrack is bb %s\n", colorTrack);
-    }
+if (endsWith(colorTrack, ".bb") || endsWith(colorTrack, ".bigBed"))
+    cTrack = makeFakeColorTrack(colorTrack);
 
 return cTrack;
 }
@@ -805,6 +809,7 @@ static Color * makeColorArray(struct preDrawElement *preDraw, int width,
 /*	allocate and fill in a coloring array based on another track */
 {
 char *colorTrack = wigCart->colorTrack;
+char *colorBigBed = wigCart->colorBigBed;
 int x1;
 Color *colorArray = NULL;       /*      Array of pixels to be drawn.    */
 
@@ -829,22 +834,26 @@ for(x1 = 0; x1 < width; ++x1)
 	}
     }
 
-/* Fill in colors from alternate track if necessary. */
-if (colorTrack != NULL)
+/* Fill in colors from alternate track or bigBed if necessary. */
+struct track *cTrack = NULL;
+
+if (colorBigBed != NULL)
+    {
+    cTrack = makeFakeColorTrack(colorBigBed);
+    }
+else if (colorTrack != NULL)
     {
     struct track *cTrack = hashFindVal(trackHash, colorTrack);
     if (cTrack == NULL) // rightClick update of wigColorBy track may not have colorTrack in hash
         {               // so create it on the fly
-        if ((cTrack = colorTrackIsBigBed(colorTrack)) == NULL)
-            {
-            struct trackDb *tdb = hTrackDbForTrack(database,colorTrack);
-            if (tdb != NULL)
-                cTrack = trackFromTrackDb(tdb);
-            }
+        struct trackDb *tdb = hTrackDbForTrack(database,colorTrack);
+        if (tdb != NULL)
+            cTrack = trackFromTrackDb(tdb);
         }
-    if (cTrack != NULL)
-        wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
     }
+
+if (cTrack != NULL)
+    wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
 
 return colorArray;
 }
@@ -2266,6 +2275,7 @@ wigCart->minHeight = minHeight;
 wigFetchMinMaxYWithCart(cart,tdb,tdb->track, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
 
 wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
+wigCart->colorBigBed = trackDbSetting(tdb, "setColorWith");
 
 char *containerType = trackDbSetting(tdb, "container");
 if (containerType != NULL && sameString(containerType, "multiWig"))
