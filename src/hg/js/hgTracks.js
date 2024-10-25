@@ -2156,13 +2156,24 @@ var rightClick = {
             var loneParentChildren = delFam[1];
 
             // remove all the lone parent children now from the track image
+            // and also unselect them, if they are children of a composite
             for (var childName of loneParentChildren) {
                 $(document.getElementById('tr_' + childName)).remove();
+                var rec = hgTracks.trackDb[childName];
+                // the following means that all composite children are always unselected, so you cannot get the
+                // current selection easily back, since we always hide them all, instead of just hiding the parent.
+                // The problem is that it's not easy to find out if there is an easier way to hide them, the code
+                // would have to go over all possible parents, not just topParents. Maybe one day.
+                if (tdbIsSubtrack(rec)) {
+                    cartVars.push(childName+"_sel");
+                    cartVals.push('0');
+                }
             }
 
             // and set the lone parent to hide in the cart and also in the track list below
             cartVars.push(loneParent);
             cartVals.push('[]');
+             
             vis.update(loneParent, 'hide');
         }
 
@@ -2170,25 +2181,7 @@ var rightClick = {
         var delIds = familyAnalysis.others;
         for (var i = 0; i<delIds.length; i++) {
             var id = delIds[i];
-            var rec = hgTracks.trackDb[id];
-            if (tdbIsSubtrack(rec)) {
-                cartVars.push(id);
-                cartVals.push('[]');
-
-                cartVars.push(id+"_sel");
-                cartVals.push(0);
-            } else if (tdbIsFolderContent(rec)) {
-                // supertrack children need to have _sel set to trigger superttrack reshaping
-                cartVars.push(id);
-                cartVals.push('hide');
-
-                cartVars.push(id+"_sel");
-                cartVals.push(0);
-            } else {
-                // normal, top-level track
-                cartVars.push(id);
-                cartVals.push('hide');
-            }
+            cartHideAnyTrack(id, cartVars, cartVals);
             $(document.getElementById('tr_' + id)).remove();
         }
         imageV2.afterImgChange(true);
@@ -3029,6 +3022,14 @@ var rightClick = {
                     return true; }
             };  
             menu.push(o);
+
+            //o = {};
+            //o[" Float "] = {
+                //onclick: function(menuItemClicked, menuObject) {
+                    //rightClick.hit(menuItemClicked, menuObject, "float");
+                    //return true; }
+            //};  
+            //menu.push(o);
 
             o = {};
             o[" Move to top "] = {
