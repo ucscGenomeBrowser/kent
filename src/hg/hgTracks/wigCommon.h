@@ -28,6 +28,7 @@ struct wigCartOptions
     int minHeight;	/*	minimum pixels height from trackDb	*/
     double yLineMark;	/*	user requested line at y = */
     char *colorTrack;   /*	Track to use for coloring wiggle track. */
+    char *colorBigBed;  /*	bigBed to use for coloring wiggle track. */
     int graphColumn;	/*	column to be graphing (bedGraph tracks)	*/
     boolean bedGraph;	/*	is this a bedGraph track ?	*/
     boolean isMultiWig;	/*      If true it's a multi-wig. */
