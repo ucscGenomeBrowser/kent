@@ -1409,7 +1409,7 @@ else
     if (url != NULL)
         {
         cartSetString(cart, "genome", db);
-        cartSetString(cart, "hubUrl", url);
+        cartAddString(cart, "hubUrl", url);
         cartRemove(cart, "db");
         }
     else if (!hDbIsActive(db))

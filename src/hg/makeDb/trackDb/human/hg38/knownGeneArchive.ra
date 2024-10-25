@@ -11,7 +11,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V36
     longLabel GENCODE V36
     parent knownGeneArchive
-    priority 7
+    priority 8
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV36.bb
@@ -36,7 +36,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V38
     longLabel GENCODE V38
     parent knownGeneArchive
-    priority 6
+    priority 7
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV38.bb
@@ -60,7 +60,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V39
     longLabel GENCODE V39
     parent knownGeneArchive
-    priority 5
+    priority 6
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV39.bb
@@ -84,7 +84,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V43
     longLabel GENCODE V43
     parent knownGeneArchive
-    priority 4
+    priority 5
     visibility hide
     type bigGenePred
     bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
@@ -110,7 +110,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V44
     longLabel GENCODE V44
     parent knownGeneArchive
-    priority 3
+    priority 4
     visibility hide
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV44.bb
@@ -138,7 +138,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V45
     longLabel GENCODE V45
     parent knownGeneArchive
-    priority 2
+    priority 3
     visibility pack
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV45.bb
@@ -166,7 +166,7 @@ html ../../knownGeneArchive
     shortLabel GENCODE V46
     longLabel GENCODE V46
     parent knownGeneArchive
-    priority 1
+    priority 2
     visibility pack
     type bigGenePred knownGenePep knownGeneMrna
     bigDataUrl /gbdb/hg38/gencode/gencodeV46.bb

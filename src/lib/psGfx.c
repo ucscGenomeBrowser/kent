@@ -12,6 +12,9 @@
 #include "psGfx.h"
 #include "linefile.h"
 #include "pipeline.h"
+#include "iconv.h"
+
+#include "reEncodeFont.c"  // a windows 1252 encoding
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -124,6 +127,9 @@ psWriteHeader(ps, ptWidth, ptHeight);
 /* adding a gsave here fixes an old ghostview bug with cliprestore */
 fprintf(ps->f, "gsave\n");
 
+/* put out the Windows 1252 encoding */
+fputs(encodeFont, ps->f);
+
 /* Set initial clipping rectangle. */
 psClipRect(ps, 0, 0, ps->userWidth, ps->userHeight);
 
@@ -227,7 +233,7 @@ fprintf(f, "fill\n");
 void psSetFont(struct psGfx *ps, char *fontName, double size)
 {
 FILE *f = ps->f;
-fprintf(f, "/%s findfont ", fontName);
+fprintf(f, "/%s-Win /%s  reencodefont ", fontName, fontName);
 
 /* Note the 1.2 and the 1.0 below seem to get it to 
  * position about where the stuff developed for pixel
@@ -249,10 +255,41 @@ fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
 ps->fontHeight = size*0.8;
 }
 
+static iconv_t ourIconv; // convert context UTF-8 > Windows 1252
+
+static size_t utf8ToWindows1252(char *text, unsigned char *buffer, size_t nLength)
+/* Convert UTF-8 string to Unicode string. */
+{
+if (ourIconv == NULL)
+    {
+    ourIconv = iconv_open("WINDOWS-1252//", "UTF-8");
+        
+    if (ourIconv == NULL)
+        errAbort("iconv problem errno %d\n",errno);
+    }
+
+size_t length = strlen(text);
+char *newText = (char *)buffer;
+
+int ret = iconv(ourIconv, &text, &length, &newText,  &nLength);
+
+if (ret < 0)
+    errAbort("iconv problem errno %d\n",errno);
+
+return (newText - (char *)buffer);
+}
+
 void psTextOutEscaped(struct psGfx *ps, char *text)
 /* Output post-script-escaped text. 
  * Notice that ps uses escaping similar to C itself.*/
 {
+size_t length = strlen(text);
+unsigned char buff[length * 2];  // should be way too much
+
+length = utf8ToWindows1252(text, buff, length * 4);
+buff[length] = '\0';
+
+text = (char *)buff;
 char c;
 while ((c = *text++) != 0)
     {

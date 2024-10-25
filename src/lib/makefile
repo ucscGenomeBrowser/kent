@@ -52,6 +52,11 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 	ar rcus $(MACHTYPE)/jkweb.a $(O)
 
+psGfx.o:      reEncodeFont.c
+
+reEncodeFont.c:   reEncodeFont.ps
+	stringify -static -var=encodeFont reEncodeFont.ps > reEncodeFont.c
+
 $(MACHTYPE):
 	mkdir -p $(MACHTYPE)
 
