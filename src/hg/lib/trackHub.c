@@ -978,7 +978,7 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (! isCustomComposite(tdb))
+    if (0)//! isCustomComposite(tdb))
         {
         if (startsWithWord("mathWig", type) )
             {
@@ -1625,8 +1625,8 @@ for(; tdb; tdb = tdb->next)
         walkTree(f, cart, tdb->subtracks, visDy);
     else 
         {
-        if (!startsWith("big", tdb->type))
-            continue;
+//        if (!startsWith("big", tdb->type))
+ //           continue;
         boolean isVisible = FALSE;
         if (tdb->parent == NULL)
             {
