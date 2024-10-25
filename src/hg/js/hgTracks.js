@@ -5834,7 +5834,7 @@ $(document).ready(function()
                 notifBoxShow("hgTracks", "hideTutorial");
                 localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").on("click", function() {
-                    $("#hgTracks_hideTutorialnotifyHide").trigger("click");
+                    $("#hgTracks_hideTutorialnotifyHideForever").trigger("click");
                     tour.start();
                 });
             }
