@@ -186,6 +186,9 @@ struct hubConnectStatus *hubFromId(unsigned hubId);
 /* Given a hub ID number, return corresponding trackHub structure.
  * ErrAbort if there's a problem. */
 
+struct hubConnectStatus *hubFromIdNoAbort(unsigned hubId);
+/* Given a hub ID number, return corresponding trackHub structure. */
+
 struct hubConnectStatus *hubConnectNewHub();
 /* return the hub of the hubUrl we added (if any) */
 

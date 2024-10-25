@@ -4202,6 +4202,19 @@ struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)
 {
 if (trackHubDatabase(db))
     return NULL;
+
+if (isHubTrack(db))
+    {
+    // this means the db has a hub_#_ prefix but didn't get loaded at init time
+    unsigned hubId = hubIdFromTrackName(db);
+    struct hubConnectStatus *status = hubFromIdNoAbort(hubId);
+
+    if (status->errorMessage)
+        errAbort("Cannot set database to %s.  Hub %s is reporting error: %s\n", hubConnectSkipHubPrefix(db), status->hubUrl, status->errorMessage);
+    else
+        errAbort("Cannot find genome %s in %s\n", hubConnectSkipHubPrefix(db), status->hubUrl);
+    }
+
 struct trackDb *tdbList = NULL;
 
 boolean doCache = trackDbCacheOn();

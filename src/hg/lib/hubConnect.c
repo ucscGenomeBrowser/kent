@@ -418,13 +418,20 @@ assert(trackName != NULL);
 return trackName + 1;
 }
 
-struct hubConnectStatus *hubFromId(unsigned hubId)
-/* Given a hub ID number, return corresponding trackHub structure. 
- * ErrAbort if there's a problem. */
+struct hubConnectStatus *hubFromIdNoAbort(unsigned hubId)
+/* Given a hub ID number, return corresponding trackHub structure. */
 {
 struct sqlConnection *conn = hConnectCentral();
 struct hubConnectStatus *status = hubConnectStatusForId(conn, hubId);
 hDisconnectCentral(&conn);
+return status;
+}
+
+struct hubConnectStatus *hubFromId(unsigned hubId)
+/* Given a hub ID number, return corresponding trackHub structure. 
+ * ErrAbort if there's a problem. */
+{
+struct hubConnectStatus *status = hubFromIdNoAbort(hubId);
 if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
 if (!isEmpty(status->errorMessage))
