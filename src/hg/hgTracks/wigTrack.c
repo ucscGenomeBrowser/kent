@@ -80,7 +80,7 @@ for(lf = lfList; lf != NULL; lf = lf->next)
 	if(x1 == x2)
 	    x2++;
 	for(i = x1; i < x2; i++)
-	    colArray[i] = bedColorToGfxColor(lf->filterColor);
+	    colArray[i] = colorTrack->ixAltColor;
 	}
     }
 }
