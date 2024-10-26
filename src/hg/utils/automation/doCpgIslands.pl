@@ -172,7 +172,23 @@ _EOF_
     print $fh <<_EOF_
 #!/bin/bash
 set -beEu -o pipefail
-export tmpFile=`mktemp -p /dev/shm doCpg.\$\$.XXXXX`
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  tmpSz=`df --output=avail -k /tmp | tail -1`
+  shmSz=`df --output=avail -k /dev/shm | tail -1`
+  if [ "\${shmSz}" -gt "\${tmpSz}" ]; then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     export TMPDIR="/dev/shm/tmp"
+  else
+     export TMPDIR="/tmp"
+  fi
+fi
+
+export tmpFile=`mktemp -p \$TMPDIR doCpg.\$\$.XXXXX`
 export chromSizes=$chromSizes
 export fileSpec="\${1}"
 export file=`echo \$fileSpec | cut -d':' -f1`
@@ -349,7 +365,7 @@ $maxSplitSize = $maxSeqSize;
 $splitRun = 0;
 #   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
 #   or if maxSeqSize over 1Gb
-if ( ($maxSeqSize > 4*1024**3) || ($maxSeqSize > 1024**3) ) {
+if ( ($totalSeqSize > 4*1024**3) || ($maxSeqSize > 1024**3) ) {
    $splitRun = 1;
    $maxSplitSize = 1000000000;
 }

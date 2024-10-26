@@ -172,11 +172,26 @@ set finalOut = \$1
 set inLst = \$finalOut:r
 set inLft = \$inLst:r.lft
 
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  set tmpSz = `df --output=avail -k /tmp | tail -1`
+  set shmSz = `df --output=avail -k /dev/shm | tail -1`
+  if ( "\${shmSz}" > "\${tmpSz}" ) then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     setenv TMPDIR "/dev/shm/tmp"
+  else
+     setenv TMPDIR "/tmp"
+  endif
+endif
 $HgAutomate::setMachtype
 
 # Use local disk for output, and move the final result to \$finalOut
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p $tmpDir doSimpleRepeat.cluster.XXXXXX`
+set tmpDir = `mktemp -d -p \$TMPDIR doSimpleRepeat.cluster.XXXXXX`
 pushd \$tmpDir
 
 foreach spec (`cat \$inLst`)
