@@ -123,15 +123,7 @@ if ( -d "/data/tmp" ) then
 else if ( -d "/scratch/tmp" ) then
   setenv TMPDIR "/scratch/tmp"
 else
-  set tmpSz = `df --output=avail -k /tmp | tail -1`
-  set shmSz = `df --output=avail -k /dev/shm | tail -1`
-  if ( "\${shmSz}" > "\${tmpSz}" ) then
-     mkdir -p /dev/shm/tmp
-     chmod 777 /dev/shm/tmp
-     setenv TMPDIR "/dev/shm/tmp"
-  else
-     setenv TMPDIR "/tmp"
-  endif
+  setenv TMPDIR "/tmp"
 endif
 set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker
@@ -174,15 +166,7 @@ if ( -d "/data/tmp" ) then
 else if ( -d "/scratch/tmp" ) then
   setenv TMPDIR "/scratch/tmp"
 else
-  set tmpSz = `df --output=avail -k /tmp | tail -1`
-  set shmSz = `df --output=avail -k /dev/shm | tail -1`
-  if ( "\${shmSz}" > "\${tmpSz}" ) then
-     mkdir -p /dev/shm/tmp
-     chmod 777 /dev/shm/tmp
-     setenv TMPDIR "/dev/shm/tmp"
-  else
-     setenv TMPDIR "/tmp"
-  endif
+  setenv TMPDIR "/tmp"
 endif
 set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker

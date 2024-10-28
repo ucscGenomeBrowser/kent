@@ -78,7 +78,7 @@ options:
     -querySizes  /path/query.chrom.sizes   Full path to query chrom.sizes (toDb)
     -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
     -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
-    -localTmp  /dev/shm  Full path to temporary storage for heavy I/O usage
+    -localTmp  /tmp  Full path to temporary storage for heavy I/O usage
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -533,7 +533,7 @@ chains file, and calls hgAddLiftOverChain to register the $HgAutomate::gbdb loca
 mkdir -p $liftOverChainDir
 rm -f $liftOverChainPath
 ln -s $buildDir/$liftOverChainFile $liftOverChainPath
-set tmpFile = `mktemp -t -p /dev/shm tmpMd5.XXXXXX`
+set tmpFile = `mktemp -t -p /tmp tmpMd5.XXXXXX`
 csh -c "grep -v $liftOverChainFile $liftOverChainDir/md5sum.txt || true" > \$tmpFile
 md5sum $buildDir/$liftOverChainFile | sed -e "s#$buildDir/##;" >> \$tmpFile
 sort \$tmpFile > $liftOverChainDir/md5sum.txt

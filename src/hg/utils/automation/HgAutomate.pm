@@ -577,27 +577,6 @@ sub tmpDir {
     $tDir = "/data/tmp";
   } elsif ( -d "/scratch/tmp" && -w "/scratch/tmp" ) {	# UCSC cluster node local file system
     $tDir = "/scratch/tmp";
-  } else {
-    my $tmpSz = `df --output=avail -k /tmp | tail -1`;
-    my $shmSz = `df --output=avail -k /dev/shm | tail -1`;
-    chomp ($tmpSz, $shmSz);
-    if ( $shmSz > $tmpSz ) {	# use /dev/shm when it is the larger one
-       my $shmTmp = "/dev/shm/tmp";
-       my $saveUmask = umask(0000);	# do not allow user's umask to interfere
-       if (! mkdir($shmTmp, 0777)) {
-          my $errString = $!;
-          if ($errString =~ /File exists/i) {	# this error OK
-            if ( -w "${shmTmp}" ) {	# use only when writable
-                $tDir = $shmTmp;
-            }
-          }	# mkdir other errors cause use of default
-       } else {				# no error on the mkdir
-          if ( -w "${shmTmp}" ) {	# use only when writable
-            $tDir = $shmTmp;
-          }
-       }
-       umask($saveUmask);	# restore
-    }
   }
 return $tDir;
 }

@@ -221,7 +221,7 @@ set gtfFile = \$resultGz:t:r
 set errFile = "augErr/\$resultGz:h:t/\$gtfFile:r:t.err"
 mkdir -p \$resultGz:h
 mkdir -p \$errFile:h
-set tmpDir = "/dev/shm/\$db.\$chrName.\$start.\$end"
+set tmpDir = "/tmp/\$db.\$chrName.\$start.\$end"
 
 mkdir -p \$tmpDir
 pushd \$tmpDir

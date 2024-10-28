@@ -1674,15 +1674,7 @@ if [ -d "/data/tmp" ]; then
 elif [ -d "/scratch/tmp" ]; then
   export TMPDIR="/scratch/tmp"
 else
-  tmpSz=`df --output=avail -k /tmp | tail -1`
-  shmSz=`df --output=avail -k /dev/shm | tail -1`
-  if [ "\${shmSz}" -gt "\${tmpSz}" ]; then
-     mkdir -p /dev/shm/tmp
-     chmod 777 /dev/shm/tmp
-     export TMPDIR="/dev/shm/tmp"
-  else
-     export TMPDIR="/tmp"
-  fi
+  export TMPDIR="/tmp"
 fi
 # Update (or create) liftOver/md5sum.txt with the new .over.chain.gz.
 if (-e $gpLiftOverDir/md5sum.txt) then
