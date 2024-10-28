@@ -262,7 +262,7 @@ static size_t utf8ToWindows1252(char *text, unsigned char *buffer, size_t nLengt
 {
 if (ourIconv == NULL)
     {
-    ourIconv = iconv_open("WINDOWS-1252//", "UTF-8");
+    ourIconv = iconv_open("WINDOWS-1252//TRANSLIT", "UTF-8");
         
     if (ourIconv == NULL)
         errAbort("iconv problem errno %d\n",errno);
