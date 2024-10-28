@@ -14,6 +14,21 @@ if [ $# -ne 3 ]; then
   exit 255
 fi
 
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  tmpSz=`df --output=avail -k /tmp | tail -1`
+  shmSz=`df --output=avail -k /dev/shm | tail -1`
+  if [ "${shmSz}" -gt "${tmpSz}" ]; then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     export TMPDIR="/dev/shm/tmp"
+  else
+     export TMPDIR="/tmp"
+  fi
+fi
 export dateStamp=`date "+%FT%T %s"`
 
 export asmId=$1
@@ -80,7 +95,7 @@ if [ -d "${destDir}" ]; then
   mkdir -p bbi
   dateStamp=`date "+%FT%T %s"`
   printf "# %s processing %s\n" "${dateStamp}" "${rmOutFile}" 1>&2
-  export rmOutTmp=`mktemp -p /dev/shm rmskProcess.${asmId}.XXXXX`
+  export rmOutTmp=`mktemp -p "${TMPDIR}" rmskProcess.${asmId}.XXXXX`
   printf "%s\n" '   SW  perc perc perc  query      position in query           matching       repeat              position in  repeat
 score  div. del. ins.  sequence    begin     end    (left)    repeat         class/family         begin  end (left)   ID
 ' > "${rmOutTmp}"
