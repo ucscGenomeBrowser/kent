@@ -358,6 +358,7 @@ sub compositeFasta($$$) {
   }
   close(FH);
   close(FA);
+  `rm -f $tmpFile`;
 }	# sub compositeFasta($$$)
 
 #########################################################################
@@ -458,6 +459,7 @@ sub unlocalizedFasta($$$) {
   }
   close(FH);
   close(FA);
+  `rm -f $tmpFile`;
 }	# sub unlocalizedFasta($$$)
 
 #########################################################################
@@ -690,6 +692,7 @@ sub unplacedFasta($$$$$$$) {
     close (FH);
     close (NAMES);
   }
+  `rm -f $tmpFile`;
 }	# sub unplacedFasta($$$$)
 
 #########################################################################
