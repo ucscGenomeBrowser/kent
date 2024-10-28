@@ -135,43 +135,6 @@ color 200,0,0
 type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
-track decipher
-shortLabel DECIPHER CNVs
-longLabel DECIPHER CNVs
-group phenDis
-visibility hide
-type bigBed 9 +
-itemRgb on
-tableBrowser off knownCanonToDecipher knownToDecipher decipherRaw
-bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
-url https://www.deciphergenomics.org/patient/$$
-urlLabel Decipher Patient View:
-filter.size 0
-filterByRange.size on
-filterLimits.size 2:170487333
-filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Trip
-filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
-mergeSpannedItems on
-searchIndex name
-mouseOverField _mouseOver
-
-searchTable decipher
-searchMethod exact
-searchType bigBed
-release alpha,beta
-
-track decipherSnvs
-shortLabel DECIPHER SNVs
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
-group phenDis
-visibility hide
-color 0,0,0
-type bed 4
-tableBrowser off decipherSnvsRaw
-prevExonText Left edge
-nextExonText Right edge
-html decipher
-
 track phegeni
 shortLabel PheGenI SNPs
 longLabel NCBI Phenotype-Genotype Integrator SNPs
@@ -4873,20 +4836,10 @@ include phastBias.ra
 
 include omim.ra
 
+include decipher.alpha.ra alpha
+include decipher.ra beta,public
+
 include ../refSeqComposite.ra
-
-searchName decipherId
-searchTable decipher
-termRegex [0-9]+
-searchType bed
-searchPriority 50
-release public
-
-searchName decipherSnvsId
-searchTable decipherSnvs
-termRegex [0-9]+
-searchType bed
-searchPriority 50
 
 searchTable ensGene
 searchType genePred

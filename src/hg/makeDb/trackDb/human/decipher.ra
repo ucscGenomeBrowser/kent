@@ -1,0 +1,48 @@
+track decipher
+shortLabel DECIPHER CNVs
+longLabel DECIPHER CNVs
+group phenDis
+visibility hide
+type bigBed 9 +
+itemRgb on
+tableBrowser off knownCanonToDecipher knownToDecipher decipherRaw
+bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
+url https://www.deciphergenomics.org/patient/$$
+urlLabel Decipher Patient View:
+filter.size 0
+filterByRange.size on
+filterLimits.size 2:170487333
+filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Trip
+filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
+mergeSpannedItems on
+searchIndex name
+mouseOverField _mouseOvera
+html decipher
+
+track decipherSnvs
+shortLabel DECIPHER SNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
+group phenDis
+visibility hide
+color 0,0,0
+type bed 4
+tableBrowser off decipherSnvsRaw
+prevExonText Left edge
+nextExonText Right edge
+html decipher
+
+searchTable decipher
+searchMethod exact
+searchType bigBed
+
+searchName decipherId
+searchTable decipher
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
+searchName decipherSnvsId
+searchTable decipherSnvs
+termRegex [0-9]+
+searchType bed
+searchPriority 50
