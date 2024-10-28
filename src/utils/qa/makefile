@@ -70,6 +70,7 @@ install:
 	cp -p --remove-destination doPublicCrawl           ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
+	cp -p --remove-destination errorLogKeywordSearch.py ${SCRIPTS}
 	cp -p --remove-destination filterCartDumps.sh      ${SCRIPTS}
 	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
