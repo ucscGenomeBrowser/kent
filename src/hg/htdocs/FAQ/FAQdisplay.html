@@ -13,6 +13,7 @@
 <li><a href="#display1">Problems accessing the Genome Browser or Blat</a></li>
 <li><a href="#display2">Error message - &quot;Can't find organism&quot;</a></li>
 <li><a href="#display3">Resetting the Genome Browser display to default settings</a></li>
+<li><a href="#display4">Errors in the LiftOver output</a></li>
 </ul>
 <hr>
 <p>
@@ -54,5 +55,61 @@ To return all of the browser's tracks to their default settings, click the Genom
 User Settings option in the top menu bar. <strong><em>Be aware that this action will remove all 
 custom tracks and will clear all track filter and configuration settings that may have 
 modified.</em></strong></p>
+
+<a name="display4"></a>
+<h2>Errors in the LiftOver output</h2>
+<h6>When I run LiftOver, I get some errors in my output and do not know what they mean.</h6>
+<p>
+Error messages from liftOver are usually related to some complexity encountered when trying to map
+a region between two assemblies. This sometimes means that a part of the assembly was either
+removed or significantly rearranged between the two. Below is a description of the errors:</p>
+<ul>
+  <li><b>Deleted in new</b>: This indicates that nothing in the new assembly aligns with that
+   region of the original assembly. This error could be due to any of several reasons, such as the
+   region being part of a problematic contig or later being identified as highly repetitive and
+   masked before we built the alignment. This message is also displayed when no sequence name
+   matches are found between your input regions and the file used to map between assemblies. If
+   this is coming up for many or all of your items, check that the sequence names (e.g. chr1, chr2)
+   match the names we use on the query assembly selected.
+</li>
+  <li><b>Partially deleted in new</b>: This means that only a fragment of the original assembly
+   aligns with the new assembly. However, the alignment is below the threshold percentage of
+   bases, and it is insufficient to map the entire region. By default, this threshold is set at 95%
+   of the input region size, but it can be adjusted using the "Minimum ratio of bases that must
+   remap" option.
+   </li>
+  <li><b>Split in new</b>: In this case, the original assembly region is fragmented across multiple
+   locations in the new assembly, but all hits fall below the threshold percentage of bases to be
+   considered a match. The threshold is set at 95% of the input region size, but it can be adjusted
+   via the "Minimum ratio of bases that must remap" option.
+  <li><b>Duplicated in new</b>: The original assembly region maps to multiple locations in the new
+   assembly, with strong matches exceeding the base percentage threshold. However, no specific
+   region is selected due to the absence of the "Allow multiple output regions" option. The remap
+   threshold can also be configured with the "Minimum ratio of bases that must remap" setting.</li>
+  <li><b>Boundary problem</b>: This error occurs when there is a missing start or end base in an
+   exon.</li>
+</ul>
+<p>We recommend exploring the
+<a href="/cgi-bin/hgTrackUi?&db=hg38&g=grcIncidentDb" target="_blank">hg38</a> and 
+<a href="/cgi-bin/hgTrackUi?&db=hg19&g=grcIncidentDb" target="_blank">hg19</a>
+<b>GRC Incident tracks</b>, which highlights areas where assembly issues have been identified or
+resolved by the
+<a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank">Genome Reference Consortium (GRC)</a>.
+It is important to note that mappings between genome assemblies are not
+always symmetrical, so you may encounter differences when lifting between assemblies (e.g., from
+hg19 to hg38). These discrepancies are expected, as regions in new assemblies may shift, and
+corrections for previous assembly errors (such as bad data) are made, which is reflected in the GRC
+Incident track. We also recommend reviewing the <b>liftOver tracks</b> on
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=liftHg19" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUidb=hg19&g=liftHg38" target="_blank">hg19</a>
+to visualize the liftOver alignment and identify which parts of the input region overlap or don't
+overlap. Both
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=hg38ContigDiff" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUidb=hg19&g=hg38ContigDiff" target="_blank">hg19</a> 
+include <b>Diff tracks</b> that show exactly what regions are included, excluded, or differ
+between the assemblies, as well as any changes in the contigs used to assemble specific regions.</p> 
+
+
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
