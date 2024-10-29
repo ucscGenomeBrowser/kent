@@ -1990,10 +1990,10 @@ export asmId=$defaultName
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
   time (~/kent/src/hg/utils/automation/doAugustus.pl -ram=6g -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
-    -bigClusterHub=$bigClusterHub -species=$augustusSpecies -workhorse=$workhorse \\
+    -bigClusterHub=ku -species=$augustusSpecies -workhorse=$workhorse \\
     -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > makeDb.log 2>&1
   time (~/kent/src/hg/utils/automation/doAugustus.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\
-    -bigClusterHub=$bigClusterHub -species=$augustusSpecies -workhorse=$workhorse \\
+    -bigClusterHub=ku -species=$augustusSpecies -workhorse=$workhorse \\
     -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > cleanup.log 2>&1
 else
   printf "# augustus genes step previously completed\\n" 1>&2
