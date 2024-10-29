@@ -42,6 +42,8 @@ my $stepper = new HgStepManager(
 my $defaultSmallClusterHub = 'most available';
 my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
+my $ram = '4g';
+my $cpu = 1;
 my $unmaskedSeq = "\$db.unmasked.2bit";
 my $trf409 = "";
 
@@ -71,6 +73,8 @@ _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
+						'ram' => $ram,
+						'cpu' => $cpu,
 						'smallClusterHub' => '');
   my ($sizeM, $chunkM) = ($singleRunSize, $chunkSize);
   $sizeM =~ s/000000$/Mb/;  $chunkM =~ s/000000$/Mb/;
@@ -250,7 +254,7 @@ _EOF_
     );
   }
 
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   if ($opt_unmaskedSeq) {
     $bossScript->add(<<_EOF_
@@ -264,7 +268,7 @@ $paraRun
 _EOF_
     );
   } else {
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x TrfRun.csh
