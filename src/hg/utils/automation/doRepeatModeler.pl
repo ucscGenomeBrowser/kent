@@ -217,6 +217,7 @@ cat run.time
 
 _EOF_
   );
+  `touch "$runDir/para_hub_$paraHub"`;
   $bossScript->execute() if (! $opt_debug);
 } # doCluster
 
