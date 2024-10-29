@@ -226,7 +226,7 @@ do
 done
 mkdir -p results
 chmod a+x runCpg.bash oneSplit.bash
-grep -v "parts/part" part.list | xargs -L 1 --no-run-if-empty ./oneSplit.bash
+(grep -v "parts/part" part.list || true) | xargs -L 1 --no-run-if-empty ./oneSplit.bash
 rm -f file.list
 find ./partFa -type f > file.list
 $gensub2 file.list single gsub jobList
