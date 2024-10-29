@@ -59,7 +59,7 @@ def compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches):
 
 def findGitFilesBuildDics():
     """Find all files in git minus exceptions and get md5sums, build dics"""
-    fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -v 'uniprot\|ncbiRefSeq\|crontab\|README*\|clinvarSubLolly\|makefile\|.c$\|sarscov2phylo\|nextstrainNcov\|knownGene\|rsv/exclude.ids' | xargs md5sum")
+    fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -v 'uniprot\|ncbiRefSeq\|crontab\|README*\|clinvarSubLolly\|makefile\|.c$\|sarscov2phylo\|nextstrainNcov\|knownGene\|rsv/exclude.ids\|mask.bed' | xargs md5sum")
     fileNameDic = {}
     fileNameHiveMatches = {}
     fileListWithMd5sum[0].split("  ")
