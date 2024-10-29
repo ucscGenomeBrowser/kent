@@ -274,6 +274,7 @@ chmod +x runOne
 $paraRun
 _EOF_
   );
+  `touch "$runDir/para_hub_$paraHub"`;
   $bossScript->execute();
 } # doAugustus
 
