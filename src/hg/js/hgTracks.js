@@ -4053,9 +4053,9 @@ var popUp = {
         });
         
         $(".ui-dialog").on("keypress", function(e) {
-            e.preventDefault();
             var key = e.charCode || e.keyCode || 0;     
             if (key == 13) {
+                e.preventDefault();
                 $(".ui-button:contains('OK')").click();
             }
         });
