@@ -221,7 +221,7 @@ puts("<p style='margin-left:3px'>Paste your data below, using one position per l
         "<a href='../../FAQ/FAQformat.html#format1'>BED </a> (e.g. \"chr4 100000 100001\", "
         "0-based) and position box (\"chr4:100,001-100,001\", 1-based). "
         "Refer to the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a> "
-        "for detailed information. LiftOver is not recommended for SNPs with with rsIDs; refer to our "
+        "for detailed information. LiftOver is not recommended for SNPs with rsIDs; refer to our "
         "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for additional information. For "
         "information on errors in the LiftOver output, see our "
         "<a href='/FAQ/FAQdisplay.html#display4'>FAQ</a>.\n");
