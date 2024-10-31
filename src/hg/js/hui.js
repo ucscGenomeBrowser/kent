@@ -1517,7 +1517,7 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     };
 
     let colorPickerContainer = document.createElement("div");
-    colorPickerContainer.textContent = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color: ";
+    colorPickerContainer.innerHTML = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color: ";
     // display: inline means if there is an info icon it will show up in line with the color picker
     colorPickerContainer.style = "display: inline";
     let inpText = document.createElement("input");

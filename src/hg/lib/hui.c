@@ -6024,7 +6024,7 @@ safef(varName, sizeof(varName), "%s.nameFilter", name);
 char *onlyTransStr = cartUsualString(cart, varName, "");
 
 cgiMakeTextVar(varName, onlyTransStr, 60);
-printf("&nbsp;<small>Separate multiple accessions with commas</small>");
+printInfoIcon("Enter the primary accession of the track, so RefSeq IDs for the RefSeq track, Gencode IDs for the Gencode track, etc. Separate multiple accessions with commas.");
 puts("</DIV>\n\n");
 }
 
@@ -6037,7 +6037,7 @@ safef(varName, sizeof(varName), "%s.colorOverride", name);
 char *colorValue = cartUsualString(cart, varName, "");
 
 printf("&nbsp;<div id='colorPicker_%s'>", name);
-jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', 'Change track color:', '%s');",
+jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', '<b>Change track color: </b>&nbsp;', '%s');",
         varName, name, name, colorValue); // id="xx" is necessary as id contains a dot
 puts("</div>\n\n");
 }

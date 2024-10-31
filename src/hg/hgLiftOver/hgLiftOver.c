@@ -217,12 +217,14 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-puts("<p style='margin-left:3px'>Paste in data below, one position per line. You can use the "
-        "<a href='../../FAQ/FAQformat.html#format1'>BED format</a> (e.g. \"chr4 100000 100001\", "
-        "0-based) or the format of the position box (\"chr4:100,001-100,001\", 1-based). "
-        "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n"
-        "We do not recommend liftOver for SNPs that have rsIDs. See our "
-        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for more information.</p>\n");
+puts("<p style='margin-left:3px'>Paste your data below, using one position per line. Supported formats include "
+        "<a href='../../FAQ/FAQformat.html#format1'>BED </a> (e.g. \"chr4 100000 100001\", "
+        "0-based) and position box (\"chr4:100,001-100,001\", 1-based). "
+        "Refer to the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a> "
+        "for detailed information. LiftOver is not recommended for SNPs with rsIDs; refer to our "
+        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for additional information. For "
+        "information on errors in the LiftOver output, see our "
+        "<a href='/FAQ/FAQdisplay.html#display4'>FAQ</a>.\n");
 
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();

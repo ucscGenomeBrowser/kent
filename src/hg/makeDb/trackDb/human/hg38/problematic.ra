@@ -155,7 +155,7 @@ group map
         parent problematicGIAB on
         bigDataUrl /gbdb/hg38/problematic/GIAB/all_difficult_regions.bb
         shortLabel All difficult regions
-        longLabel Genome-in-a-bottle: all difficult regions
+        longLabel Genome In a Bottle: all difficult regions
         type bigBed 3
         visibility dense
     
@@ -163,7 +163,7 @@ group map
         parent problematicGIAB on
         bigDataUrl /gbdb/hg38/problematic/GIAB/all_low_map_and_segdupregions.bb
         shortLabel LowMap+SegDup 
-        longLabel Genome-in-a-bottle: lowMap+SegDup regions
+        longLabel Genome In a Bottle: lowMap+SegDup regions
         type bigBed 3
         visibility dense
     
@@ -171,7 +171,7 @@ group map
         parent problematicGIAB on
         bigDataUrl /gbdb/hg38/problematic/GIAB/not_in_all_difficult_regions.bb
         shortLabel Not difficult regions
-        longLabel Genome-in-a-bottle: not difficult regions
+        longLabel Genome In a Bottle: not difficult regions
         type bigBed 3
         visibility dense
     
@@ -179,7 +179,7 @@ group map
         parent problematicGIAB on
         bigDataUrl /gbdb/hg38/problematic/GIAB/not_in_all_low_map_and_segdupregions.bb
         shortLabel Not lowMap+SegDup
-        longLabel Genome-in-a-bottle: not lowMap+SegDup mapping regions
+        longLabel Genome In a Bottle: not lowMap+SegDup mapping regions
         type bigBed 3
         visibility dense
 
