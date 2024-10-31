@@ -676,7 +676,7 @@ if (intervalList != NULL)
         for (interval = intervalList; interval != NULL; interval = interval->next)
             {
             bits32 base;
-            for(base = interval->start; base < end && base < interval->end; base++); 
+            for(base = interval->start; base < end && base < interval->end; base++)
                 {
                 unsigned offset = base - start;
                 unsigned startPos = round(offset * pixelsPerBase);
