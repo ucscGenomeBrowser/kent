@@ -1045,6 +1045,9 @@ dyStringAppend(policy, " cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.
 dyStringAppend(policy, " cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js");
 dyStringAppend(policy, " www.google.com/recaptcha/api.js");
 
+// uppy for hubSpace uploads
+dyStringAppend(policy, " releases.transloadit.com/uppy/v4.5.0/uppy.min.js");
+
 dyStringAppend(policy, ";");
 
 

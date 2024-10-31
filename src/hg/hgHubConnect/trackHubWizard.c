@@ -180,7 +180,8 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
 jsIncludeFile("tus.js", NULL);
-jsIncludeFile("hgMyData.js", NULL);
+// this file must be included as a module for now as it needs to import:
+//puts("<script src=\"../js/hgMyData.js\" type=\"module\"></script>");
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
     "href=\"https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css\">\n");
@@ -190,6 +191,9 @@ puts("<link rel=\"stylesheet\" type=\"text/css\" "
     "href=\"https://cdn.datatables.net/buttons/3.1.1/css/buttons.dataTables.min.css\">\n");
 puts("<script type=\"text/javascript\" "
     "src=\"https://cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.min.js\"></script>");
+puts("<link href=\"https://releases.transloadit.com/uppy/v4.5.0/uppy.min.css\" rel=\"stylesheet\">");
+puts("<script type=\"text/javascript\" src=\"https://releases.transloadit.com/uppy/v4.5.0/uppy.min.js\"></script>");
+jsIncludeFile("hgMyData.js", NULL);
 
 // the skeleton HTML:
 webIncludeFile("inc/hgMyData.html");
@@ -198,6 +202,7 @@ webIncludeResourceFile("hgMyData.css");
 // get the current files stored for this user
 outFilesForUser();
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
+//jsInlineF("\nimport {hubCreate} from \"../js/hgMyData.js;\n");
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

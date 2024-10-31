@@ -1,5 +1,5 @@
 /* jshint esnext: true */
-debugCartJson = true;
+var debugCartJson = true;
 
 function prettyFileSize(num) {
     if (!num) {return "n/a";}
@@ -11,6 +11,24 @@ function prettyFileSize(num) {
         return `${(((num/1000)/1000)/1000).toFixed(1)}gb`;
     }
 }
+
+// make our Uppy instance:
+const uppy = new Uppy.Uppy({
+    debug: true,
+    onBeforeUpload: (files) => {
+        // set all the fileTypes and genomes from their selects
+        for (let [key, file] of Object.entries(files)) {
+            if (!file.meta.genome || !file.meta.fileType) {
+                uppy.getPlugin("Dashboard").info("error!");
+            }
+            uppy.setFileMeta(file.id, {
+                fileName: file.name,
+                fileSize: file.size,
+                lastModified: file.data.lastModified,
+            });
+        }
+    },
+});
 
 var hubCreate = (function() {
     let uiState = { // our object for keeping track of the current UI and what to do
@@ -163,24 +181,20 @@ var hubCreate = (function() {
     };
 
     function detectFileType(fileName) {
-        let selectedType = document.getElementById(`${file.name}#typeInput`).selectedOptions[0].value;
-        if (selectedType === "Auto-detect from extension") {
-            let fileLower = fileName.toLowerCase();
-            for (let fileType in extensionMap) {
-                for (let extIx in extensionMap[fileType]) {
-                    let ext = extensionMap[fileType][extIx];
-                    if (fileLower.endsWith(ext)) {
-                        return fileType;
-                    }
+        let fileLower = fileName.toLowerCase();
+        for (let fileType in extensionMap) {
+            for (let extIx in extensionMap[fileType]) {
+                let ext = extensionMap[fileType][extIx];
+                if (fileLower.endsWith(ext)) {
+                    return fileType;
                 }
             }
-            //TODO: raise an error
-            alert(`file extension for ${fileName} not found, please explicitly select it`);
-        } else {
-            return selectedType;
         }
+        //TODO: raise an error
+        alert(`file extension for ${fileName} not found, please explicitly select it`);
     }
 
+    /*
     function submitPickedFiles() {
 
         let tusdServer = getTusdEndpoint();
@@ -226,17 +240,6 @@ var hubCreate = (function() {
                 }
                 $("#filePickerModal").dialog("close");
             }
-            const d = new Date(req.lastModified);
-            newReqObj = {
-                "uploadTime": Date.now(),
-                "lastModified": d.toJSON(),
-                "fileName": metadata.fileName,
-                "fileSize": metadata.fileSize,
-                "fileType": metadata.fileType,
-                "genome": metadata.genome,
-                "hub": ""
-            };
-            addNewUploadedFileToTable(newReqObj);
         };
 
         let onError = function(metadata, err) {
@@ -288,80 +291,76 @@ var hubCreate = (function() {
         addCancelAllButton();
         return;
     }
+    */
 
+    /*
     function clearPickedFiles() {
         while (uiState.pickedList.firstChild) {
             uiState.pickedList.removeChild(uiState.pickedList.firstChild);
         }
-        uiState.input = createInput();
-        uiState.toUpload = {};
+        //uiState.input = createInput();
+        //uiState.toUpload = {};
+    }
+    */
+
+    function defaultFileType(file) {
+        return detectFileType(file);
     }
 
-    function makeGenomeSelect(fileName) {
-        let genomeInp = document.createElement("select");
-        genomeInp.classList.add("genomePicker");
-        genomeInp.name = `${fileName}#genomeInput`;
-        genomeInp.id = `${fileName}#genomeInput`;
-        let labelChoice = document.createElement("option");
-        labelChoice.label = "Choose Genome";
-        labelChoice.value = "Choose Genome";
-        labelChoice.selected = true;
-        labelChoice.disabled = true;
-        genomeInp.appendChild(labelChoice);
+    function defaultDb() {
+        return cartDb.split(" ").slice(-1)[0];
+    }
+
+    function makeGenomeSelectOptions() {
+        // Returns an array of options for genomes
+        let ret = [];
         let choices = ["Human hg38", "Human T2T", "Human hg19", "Mouse mm39", "Mouse mm10"];
-        let cartChoice = document.createElement("option");
+        let cartChoice = {};
         cartChoice.id = cartDb;
         cartChoice.label = cartDb;
-        cartChoice.value = cartDb.split(" ").slice(-1);
+        cartChoice.value = cartDb.split(" ").slice(-1)[0];
         if (cartChoice.value.startsWith("hub_")) {
             cartChoice.label = cartDb.split(" ").slice(0,-1).join(" "); // take off the actual db value
         }
         cartChoice.selected = true;
-        genomeInp.appendChild(cartChoice);
+        ret.push(cartChoice);
         choices.forEach( (e) =>  {
             if (e === cartDb) {return;} // don't print the cart database twice
-            let choice = document.createElement("option");
+            let choice = {};
             choice.id = e;
             choice.label = e;
             choice.value = e.split(" ")[1];
-            genomeInp.appendChild(choice);
+            ret.push(choice);
         });
-        return genomeInp;
+        return ret;
     }
 
-    function makeTypeSelect(fileName) {
-        let typeInp = document.createElement("select");
-        typeInp.classList.add("typePicker");
-        typeInp.name = `${fileName}#typeInput`;
-        typeInp.id = `${fileName}#typeInput`;
-        let labelChoice = document.createElement("option");
-        labelChoice.label = "Choose File Type";
-        labelChoice.value = "Choose File Type";
-        labelChoice.disabled = true;
-        typeInp.appendChild(labelChoice);
-        let autoChoice = document.createElement("option");
+    function makeTypeSelectOptions() {
+        let ret = [];
+        let autoChoice = {};
         autoChoice.label = "Auto-detect from extension";
         autoChoice.value = "Auto-detect from extension";
         autoChoice.selected = true;
-        typeInp.appendChild(autoChoice);
+        ret.push(autoChoice);
         let choices = ["bigBed", "bam", "vcf", "vcf (bgzip or gzip compressed)", "bigWig", "hic", "cram", "bigBarChart", "bigGenePred", "bigMaf", "bigInteract", "bigPsl", "bigChain"];
         choices.forEach( (e) =>  {
-            let choice = document.createElement("option");
+            let choice = {};
             choice.id = e;
             choice.label = e;
             choice.value = e;
-            typeInp.appendChild(choice);
+            ret.push(choice);
         });
-        return typeInp;
+        return ret;
     }
 
 
     function createTypeAndDbDropdown(fileName) {
         typeInp = makeTypeSelect(fileName);
-        genomeInp = makeGenomeSelect(fileName);
+        genomeInp = makeGenomeSelectOptions(fileName);
         return [typeInp, genomeInp];
     }
 
+    /*
     function deletePickedFile(eventInst) {
         // called when the trash icon has been clicked to remove a file
         // the sibling text content is the file name, which we use to
@@ -392,6 +391,7 @@ var hubCreate = (function() {
             });
         }
     }
+    */
 
     function listPickedFiles() {
         // displays the users chosen files in a grid:
@@ -441,7 +441,7 @@ var hubCreate = (function() {
                 let batchType = document.createElement("div");
                 batchType = makeTypeSelect("batchChangeSelectType");
                 let batchDb = document.createElement("div");
-                batchDb = makeGenomeSelect("batchChangeSelectDb");
+                batchDb = makeGenomeSelectOptions("batchChangeSelectDb");
 
                 // place into the grid in the right spot:
                 batchType.classList.add('batchTypeSelect');
@@ -572,6 +572,7 @@ var hubCreate = (function() {
         cart.flush();
     }
 
+    /*
     function startUploadDialog() {
         // put up a dialog to walk a user through uploading data files and setting up a track hub
         console.log("create a hub button clicked!");
@@ -588,12 +589,10 @@ var hubCreate = (function() {
                     $("#filePickerModal").dialog("option", "buttons", currBtns);
                 }
             },
-            /*
             "Cancel": function() {
                 clearPickedFiles();
                 $(this).dialog("close");
             },
-            */
             "Close": function() {
                 // delete everything that isn't the headers, which we set to hide:
                 let fileList = document.getElementById("fileList");
@@ -608,7 +607,7 @@ var hubCreate = (function() {
         };
         $("#filePickerModal").dialog({
             modal: true,
-            buttons: hubUploadButtons,
+            //buttons: hubUploadButtons,
             minWidth: $("#filePickerModal").width(),
             width: (window.innerWidth * 0.8),
             height: (window.innerHeight * 0.55),
@@ -620,6 +619,7 @@ var hubCreate = (function() {
         });
         $("#filePickerModal").dialog("open");
     }
+    */
 
     let tableInitOptions = {
         layout: {
@@ -627,7 +627,8 @@ var hubCreate = (function() {
                 buttons: [
                     {
                         text: 'Upload',
-                        action: startUploadDialog,
+                        action: function() {return;},
+                        className: 'uploadButton',
                         enabled: false, // disable by default in case user is not logged in
                     },
                 ]
@@ -811,10 +812,12 @@ var hubCreate = (function() {
         } else {
             // TODO: graceful handle of leaving the page and coming back?
         }
+        /*
         let parent = document.getElementById("chooseAndSendFilesRow");
         let input = createInput();
         uiState.input = input;
         inputBtn.parentNode.appendChild(input);
+        */
 
         if (typeof cartJson !== "undefined") {
             if (typeof cartJson.warning !== "undefined") {
@@ -843,7 +846,7 @@ var hubCreate = (function() {
                 uiState.userUrl = userFiles.userUrl;
             }
             showExistingFiles(uiState.fileList.filter((row) => row.fileType !== "hub"));
-            inputBtn.addEventListener("click", (e) => uiState.input.click());
+            //inputBtn.addEventListener("click", (e) => uiState.input.click());
             // TODO: add event handlers for editing defaults, grouping into hub
             // TODO: display quota somewhere
         }
@@ -855,12 +858,195 @@ var hubCreate = (function() {
             minWidth: 400,
             minHeight: 120
         });
+        // create a custom uppy plugin to batch change the type and db fields
+        class BatchChangePlugin extends Uppy.BasePlugin {
+            constructor(uppy, opts) {
+                super(uppy, opts);
+                this.id = "BatchChangePlugin";
+                this.type = "progressindicator";
+                this.opts = opts;
+            }
+
+            createOptsForSelect(select, opts) {
+                opts.forEach( (opt) => {
+                    let option = document.createElement("option");
+                    option.value = opt.value;
+                    option.label = opt.label;
+                    option.id = opt.id;
+                    option.selected = typeof opt.selected !== 'undefined' ? opt.selected : false;
+                    select.appendChild(option);
+                });
+            }
+
+            addSelectsForFile(file) {
+                /* create two selects for the file object, to include the db and type */
+                const id = "uppy_" + file.id;
+                let fileDiv = document.getElementById(id);
+                // this might not exist yet depending on where we are in the render cycle
+                if (fileDiv) {
+                    let dbSelectId = "db_select_" + file.id;
+                    if (!document.getElementById(dbSelectId)) {
+                        let dbSelect = document.createElement("select");
+                        dbSelect.id = dbSelectId;
+                        let dbOpts = makeGenomeSelectOptions();
+                        this.createOptsForSelect(dbSelect, dbOpts);
+                        fileDiv.appendChild(dbSelect);
+                    }
+                    let typeSelectId = "type_select_" + file.id;
+                    if (!document.getElementById(typeSelectId)) {
+                        let typeSelect = document.createElement("select");
+                        typeSelect.id = typeSelectId;
+                        let typeOpts = makeTypeSelectOptions();
+                        this.createOptsForSelect(typeSelect, typeOpts);
+                        fileDiv.appendChild(typeSelect);
+                    }
+                }
+            }
+
+            removeBatchSelectsFromDashboard() {
+                let batchSelectDiv = document.getElementById("batch-selector-div");
+                if (batchSelectDiv) {
+                    batchSelectDiv.remove();
+                }
+            }
+
+            addBatchSelectsToDashboard() {
+                if (!document.getElementById("batch-selector-div")) {
+                    let batchSelectDiv = document.createElement("div");
+                    batchSelectDiv.id = "batch-selector-div";
+                    let batchDbSelect = document.createElement("select");
+                    let batchTypeSelect = document.createElement("select");
+                    this.createOptsForSelect(batchDbSelect, [{id: "batchChangeDb", name: "batchChangeDb"}]);
+                    this.createOptsForSelect(batchTypeSelect, [{id: "batchChangeType", name: "batchChangeType"}]);
+                    batchSelectDiv.textContent = "Change options for all files";
+                    batchSelectDiv.appendChild(batchDbSelect);
+                    batchSelectDiv.appendChild(batchTypeSelect);
+                    batchSelectDiv.style.display = "flex";
+                    batchSelectDiv.style.justifyContent = "center";
+                    let titleBarText = document.querySelector(".uppy-DashboardContent-title");
+                    if (titleBarText) {
+                        batchSelectDiv.style.color = getComputedStyle(titleBarText).color;
+                    }
+                    // append the batch changes to the bottom of the file list, for some reason
+                    // I can't append to the actual Dashboard-files, it must be getting emptied
+                    // and re-rendered or something
+                    let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
+                    if (uppyFilesDiv) {
+                        uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
+                    }
+                }
+            }
+
+            install() {
+                this.uppy.on("file-added", (file) => {
+                    // add default meta data for genome and fileType
+                    console.log("file-added");
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name)});
+                    if (this.uppy.getFiles().length > 1) {
+                        this.addBatchSelectsToDashboard()
+                    }
+                });
+                this.uppy.on("file-removed", (file) => {
+                    // remove the batch change selects if now <2 files present
+                    if (this.uppy.getFiles().length < 2) {
+                        this.removeBatchSelectsFromDashboard();
+                    }
+                });
+
+                this.uppy.on("dashboard:modal-open", () => {
+                    // check if there were already files chosen from before:
+                    if (this.uppy.getFiles().length > 2) {
+                        this.addBatchSelectsToDashboard();
+                    }
+                    if (this.uppy.getFiles().length < 2) {
+                        this.removeBatchSelectsFromDashboard();
+                    }
+                });
+                this.uppy.on("dashboard:modal-close", () => {
+                    if (this.uppy.getFiles().length < 2) {
+                        this.removeBatchSelectsFromDashboard();
+                    }
+                });
+            }
+            uninstall() {
+                // not really used because we aren't ever uninstalling the uppy instance
+                this.uppy.off("file-added");
+            }
+        }
+        let uppyOptions = {
+            //target: "#filePickerModal", // this seems nice but then the jquery css interferes with
+                                          // the uppy css
+            trigger: ".uploadButton",
+            showProgressDetails: true,
+            note: "Example text in the note field",
+            meta: {"genome": null, "fileType": null},
+            metaFields: (file) => {
+                const fields = [{id: 'name', name: 'File name'}];
+                fields.push({
+                    id: 'genome',
+                    name: 'Genome',
+                    render: ({value, onChange}, h) => {
+                        return h('select',
+                            {onChange: e => onChange(e.target.value)}, 
+                            makeGenomeSelectOptions().map( (genomeObj) => {
+                                return h('option', genomeObj, genomeObj.label);
+                            })
+                        );
+                    },
+                });
+                fields.push({
+                    id: 'fileType',
+                    name: 'File Type',
+                    render: ({value, onChange}, h) => {
+                        return h( 'select',
+                            {onChange: e => {
+                                if (e.target.value === "Auto-detect from extension") {
+                                    onChange(detectFileType(file.name));
+                                } else {
+                                    onChange(e.target.value);
+                                }
+                            }},
+                            makeTypeSelectOptions().map( (typeObj) => {
+                                return h('option', typeObj, typeObj.label);
+                            })
+                        );
+                    },
+                });
+                return fields;
+            },
+            restricted: {requiredMetaFields: ["genome", "fileType"]},
+            closeModalOnClickOutside: true,
+            closeAfterFinish: true,
+            theme: 'auto',
+        };
+        let tusOptions = {
+            endpoint: getTusdEndpoint(),
+            withCredentials: true,
+            retryDelays: null,
+        };
+        uppy.use(Uppy.Dashboard, uppyOptions);
+        uppy.use(Uppy.Tus, tusOptions);
+        uppy.use(BatchChangePlugin, {target: Uppy.Dashboard});
+        uppy.on('upload-success', (file, response) => {
+            const metadata = file.meta;
+            const d = new Date(metadata.lastModified);
+            newReqObj = {
+                "uploadTime": Date.now(),
+                "lastModified": d.toJSON(),
+                "fileName": metadata.fileName,
+                "fileSize": metadata.fileSize,
+                "fileType": metadata.fileType,
+                "genome": metadata.genome,
+                "hub": ""
+            };
+            addNewUploadedFileToTable(newReqObj);
+        });
     }
     return { init: init,
              uiState: uiState,
            };
-
 }());
+
 
 
 // when a user reaches this page from the back button we can display our saved state
