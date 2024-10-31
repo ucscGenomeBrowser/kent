@@ -6024,7 +6024,7 @@ safef(varName, sizeof(varName), "%s.nameFilter", name);
 char *onlyTransStr = cartUsualString(cart, varName, "");
 
 cgiMakeTextVar(varName, onlyTransStr, 60);
-printInfoIcon("Separate multiple accessions with commas");
+printInfoIcon("Enter the primary accession of the track, so RefSeq IDs for the RefSeq track, Gencode IDs for the Gencode track, etc. Separate multiple accessions with commas.");
 puts("</DIV>\n\n");
 }
 
