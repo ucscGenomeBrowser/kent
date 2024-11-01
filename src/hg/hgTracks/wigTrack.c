@@ -86,6 +86,8 @@ for(lf = lfList; lf != NULL; lf = lf->next)
 	    x2 = colSize;
 	if(x1 == x2)
 	    x2++;
+        if ((x1 >= colSize) || (x2 >= colSize))
+            break;
 	for(i = x1; i < x2; i++)
             colArray[i] = color;
 	}
