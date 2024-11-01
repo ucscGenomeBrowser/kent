@@ -1669,13 +1669,14 @@ _EOF_
     }
 
     $bossScript->add(<<_EOF_
-if [ -d "/data/tmp" ]; then
-  export TMPDIR="/data/tmp"
-elif [ -d "/scratch/tmp" ]; then
-  export TMPDIR="/scratch/tmp"
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
 else
-  export TMPDIR="/tmp"
-fi
+  setenv TMPDIR "/tmp"
+endif
 # Update (or create) liftOver/md5sum.txt with the new .over.chain.gz.
 if (-e $gpLiftOverDir/md5sum.txt) then
   set tmpFile = `mktemp -t tmpMd5.XXXXXX`
