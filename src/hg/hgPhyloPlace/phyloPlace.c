@@ -29,6 +29,7 @@
 #include "pthreadWrap.h"
 #include "ra.h"
 #include "regexHelper.h"
+#include "sessionData.h"
 #include "trackHub.h"
 #include "trashDir.h"
 #include "vcf.h"
@@ -3302,6 +3303,19 @@ if (slCount(sampleIds) >= minSamplesForOwnTree)
 return tree;
 }
 
+static void saveTrashFile(struct tempName *tn)
+/* If hg.conf specifies a long-term storage place for user data, then save tn there and make its
+ * original location a symbolic link to the new location.  Note: tn has "hgPhyloPlace" in the path
+ * already, and we're not associating these with hgLogin user IDs, so there's no need to build
+ * the path up past sessionDataDir (unlike in hgSession). */
+{
+char *sessionDataDir = cfgOption("sessionDataDir");
+if (isNotEmpty(sessionDataDir))
+    {
+    sessionDataSaveTrashFile(tn->forCgi, sessionDataDir);
+    }
+}
+
 static void phyloPlaceSamplesOneRef(struct lineFile *lf, char *db, char *org,
                                     char *refName, char *defaultProtobuf,
                                     boolean doMeasureTiming, int subtreeSize,
@@ -3446,6 +3460,7 @@ if (results && results->singleSubtreeInfo)
     char *bigGenePredFile = phyloPlaceRefSettingPath(org, refName, "bigGenePredFile");
     struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
     struct seqWindow *gSeqWin = memSeqWindowNew(refGenome->name, refGenome->dna);
+    boolean subtreePersist = cartUsualBoolean(cart, "subtreePersist", FALSE);
     struct hash *sampleUrls = hashNew(0);
     struct tempName *jsonTns[subtreeCount];
     struct subtreeInfo *ti;
@@ -3455,9 +3470,11 @@ if (results && results->singleSubtreeInfo)
         AllocVar(jsonTns[ix]);
         char subtreeName[512];
         safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
-        trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
+        trashDirFile(jsonTns[ix], "hgPhyloPlace", subtreeName, ".json");
         treeToAuspiceJson(ti, org, refName, geneInfoList, gSeqWin, sampleMetadata, NULL,
                           results->samplePlacements, jsonTns[ix]->forCgi, source);
+        if (subtreePersist)
+            saveTrashFile(jsonTns[ix]);
         // Add a link for every sample to this subtree, so the single-subtree JSON can
         // link to subtree JSONs
         char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
@@ -3467,9 +3484,11 @@ if (results && results->singleSubtreeInfo)
         }
     struct tempName *singleSubtreeJsonTn;
     AllocVar(singleSubtreeJsonTn);
-    trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+    trashDirFile(singleSubtreeJsonTn, "hgPhyloPlace", "singleSubtreeAuspice", ".json");
     treeToAuspiceJson(results->singleSubtreeInfo, org, refName, geneInfoList, gSeqWin, sampleMetadata,
                       sampleUrls, results->samplePlacements, singleSubtreeJsonTn->forCgi, source);
+    if (subtreePersist)
+        saveTrashFile(singleSubtreeJsonTn);
     reportTiming(&startTime, "make Auspice JSON");
     char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
     if (dbSetting)
