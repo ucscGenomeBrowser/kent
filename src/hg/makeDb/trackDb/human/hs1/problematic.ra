@@ -5,7 +5,7 @@ shortLabel Problematic Regions
 longLabel Difficult regions from GIAB via NCBI
 hideEmptySubtracks off
 group map
-visibility dense
+visibility hide
 html problematic
 
     track alldifficultregions
@@ -35,7 +35,7 @@ html problematic
     track notinalllowmapandsegdupregions
     parent problematic on
     bigDataUrl /gbdb/hs1/problematic/GIAB/notinalllowmapandsegdupregions.bb
-    shortLabel lowMap+SegDup
+    shortLabel Not lowMap+SegDup
     longLabel Genome In a Bottle: not lowMap+SegDup mapping regions
     type bigBed 3
     visibility dense
