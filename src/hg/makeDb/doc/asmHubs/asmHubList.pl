@@ -2,7 +2,7 @@
 
 #
 # asmHubList.pl - can scan the ./GCF and ./GCA directories to find the
-#               - hubs that have a genomes.txt and thus are functional hubs
+#               - hubs that have a hub.txt and thus are functional hubs
 #  works on hgwdev and on hgdownload
 
 use strict;
@@ -25,20 +25,64 @@ chomp $thisMachine;
 
 if ($thisMachine eq "hgwdev") {
   chdir ("/hive/data/genomes/asmHubs");
-} else {
-  die "ERROR: not running on hgdownload ?  Good for only hgwdev and hgdownload" if ( ! -d "/mirrordata/hubs" );
+} elsif ($thisMachine eq "hgdownload1.soe.ucsc.edu") {
   chdir ("/mirrordata/hubs");
+} elsif ($thisMachine eq "hgdownload2") {
+  chdir ("/mirrordata/hubs");
+} else {
+  die "ERROR: not running on hgdownload ?  Good for only hgwdev and hgdownload";
 }
+
+my %cladeListings;	# key is assemblyName GCA/GCF identifier, value is clade
+# one off until this group gets out here
+$cladeListings{"GCF_000007345.1"} = "archaea";
+
+open (FH, "ls /dev/shm/clade.*.list|grep -v legacy|") or die "can not read /dev/shm/clade.*.list";
+while (my $cladeList = <FH>) {
+  chomp $cladeList;
+  my $clade = basename($cladeList);
+  $clade =~ s/clade.//;
+  $clade =~ s/.list//;
+  my $genomeCount = 0;
+  open (CL, "<$cladeList") or die "can not read $cladeList\n";
+  while (my $genome = <CL>) {
+    chomp $genome;
+    if (defined($cladeListings{$genome})) {
+      printf STDERR "# warning: already defined clade for %s '%s' again '%s'\n", $genome, $cladeListings{$genome}, $clade;
+    }
+    $cladeListings{$genome} = $clade;
+    ++$genomeCount;
+  }
+  printf STDERR "# clade %s has %d genomes\n", $clade, $genomeCount;
+  close (CL);
+}
+close (FH);
+
+open (FH, "</home/qateam/cronJobs/legacy.clade.txt") or die "can not read legacy.clade.txt";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($genome, $clade) = split('\t', $line);
+  my @a = split("_", $genome);
+  $genome = sprintf("%s_%s", $a[0], $a[1]);
+  if (defined($cladeListings{$genome})) {
+    printf STDERR "# warning: already defined clade for %s '%s' again '%s' legacy\n", $genome, $cladeListings{$genome}, $clade;
+  } else {
+    $cladeListings{$genome} = $clade . "(L)";
+  }
+}
+close (FH);
+
+my $missCount = 0;
 
 open (FH, "find ./GCF ./GCA -mindepth 4 -maxdepth 4 -type d |") or die "can not find ./GCF ./GCA";
 while (my $path = <FH>) {
   chomp $path;
-  my $genomes = "$path/genomes.txt";
-  if ( ! -s "$genomes" ) {
-    $genomes = "$path/hub.txt";
+  my $hubTxt = "$path/hub.txt";
+  if ( ! -s "$hubTxt" ) {
+    printf STDERR "# ERROR: can not find hub.txt in\n%s\n", $hubTxt;
   }
-  if ( -s "$genomes" ) {
-    open (GE, "egrep '^description|^scientificName|^htmlPath|^taxId' $genomes|tr -d ''|") or die "can not read $genomes";;
+  if ( -s "$hubTxt" ) {
+    open (GE, "egrep '^description|^scientificName|^htmlPath|^taxId' $hubTxt|tr -d ''|") or die "can not read $hubTxt";
     my $descr = "";
     my $sciName = "";
     my $asmId = "";
@@ -62,10 +106,17 @@ while (my $path = <FH>) {
     }
     close (GE);
     my $acc = basename($path);
-    printf "%s\t%s\t%s\t%s\t%s\n", $acc, $asmName, $sciName, $descr, $taxId;
+    my $clade = "n/a";
+    $clade = $cladeListings{$acc} if (defined($cladeListings{$acc}));
+    printf "%s\t%s\t%s\t%s\t%s\t%s\n", $acc, $asmName, $sciName, $descr, $taxId, $clade;
   } else {
-    printf STDERR "# missing '%s'\n", $genomes;
+    ++$missCount;
+    printf STDERR "# missing '%s'\n", $hubTxt;
   }
 }
 close (FH);
 
+if ($missCount > 0) {
+  printf STDERR "# failed to find %d genomes in clade listings vs. genome files here\n", $missCount;
+  exit 255;
+}
