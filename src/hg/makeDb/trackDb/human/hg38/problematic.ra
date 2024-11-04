@@ -153,7 +153,7 @@ group map
     
         track alldifficultregions
         parent problematicGIAB on
-        bigDataUrl /gbdb/hg38/problematic/GIAB/all_difficult_regions.bb
+        bigDataUrl /gbdb/hg38/problematic/GIAB/alldifficultregions.bb
         shortLabel All difficult regions
         longLabel Genome In a Bottle: all difficult regions
         type bigBed 3
@@ -161,7 +161,7 @@ group map
     
         track alllowmapandsegdupregions
         parent problematicGIAB on
-        bigDataUrl /gbdb/hg38/problematic/GIAB/all_low_map_and_segdupregions.bb
+        bigDataUrl /gbdb/hg38/problematic/GIAB/alllowmapandsegdupregions.bb
         shortLabel LowMap+SegDup 
         longLabel Genome In a Bottle: lowMap+SegDup regions
         type bigBed 3
@@ -169,7 +169,7 @@ group map
     
         track notinalldifficultregions
         parent problematicGIAB on
-        bigDataUrl /gbdb/hg38/problematic/GIAB/not_in_all_difficult_regions.bb
+        bigDataUrl /gbdb/hg38/problematic/GIAB/notinalldifficultregions.bb
         shortLabel Not difficult regions
         longLabel Genome In a Bottle: not difficult regions
         type bigBed 3
@@ -177,7 +177,7 @@ group map
     
         track notinalllowmapandsegdupregions
         parent problematicGIAB on
-        bigDataUrl /gbdb/hg38/problematic/GIAB/not_in_all_low_map_and_segdupregions.bb
+        bigDataUrl /gbdb/hg38/problematic/GIAB/notinalllowmapandsegdupregions.bb
         shortLabel Not lowMap+SegDup
         longLabel Genome In a Bottle: not lowMap+SegDup mapping regions
         type bigBed 3

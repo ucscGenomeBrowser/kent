@@ -160,16 +160,22 @@ close (FH);
 ### Determine genome counts:
 my %genomeCounts;
 
-my $genomeCount = `grep -h ^genome /mirrordata/hubs/VGP/*enomes.txt | wc -l`;
+my $asmListJson = "/mirrordata/hubs/VGP/assemblyList.json";
+my $genomeCount = `cat $asmListJson | python -mjson.tool | grep -c '"asmId":'`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
 my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'CCGP', 'HPRC', 'BRC', 'globalReference');
 
 foreach my $hubSet (@checkList) {
-  $genomeCount = `grep -h ^genome /mirrordata/hubs/$hubSet/genomes.txt | wc -l`;
-  chomp $genomeCount;
-  $genomeCounts{$hubSet} = $genomeCount;
+  $asmListJson = "/mirrordata/hubs/$hubSet/assemblyList.json";
+  if ( -s "${asmListJson}" ) {
+    $genomeCount = `cat $asmListJson | python -mjson.tool | grep -c '"asmId":'`;
+    chomp $genomeCount;
+    $genomeCounts{$hubSet} = $genomeCount;
+  } else {
+    printf STDERR "# ERROR: can not find assemblyList.json:\n%s\n", $asmListJson;
+  }
 }
 
 my $hubCount = 0;
