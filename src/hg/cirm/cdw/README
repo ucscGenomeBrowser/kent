@@ -87,6 +87,30 @@ o - Run ixIxx to make the full text index in /gbdb
 o - You *might* need to run cdwChangeAccess to update the accessibility to make things
     group readable, (or if the access all tag is intended but left off, world readable)
 
+TROUBLE_SHOOTING SETTING UP LOGIN
+---------------------------------
+The site requires HTTP login to access, and the first step is to put the same type
+of basicAuth apache config statements for a new server as the last server. In
+the apache config on the previous server there is a user/password file. An easy approach
+is to copy the existing username/password file to the new server. A script called
+cdwWebsiteAcess, a wrapper around htpasswd, can be used with the user/password file.
+
+Or you can use these commands to add a user to the file  /etc/httpd/passwords on the new machine.
+
+htpasswd passwordfile username
+
+         htpasswd /etc/httpd/passwords -n bob
+         New password:
+         Re-type new password:
+
+A line like this will be added to /etc/httpd/passwords where that password is encrypted.
+bob:$apr1$Xd2b1SuY$T17QLQnFyaH1fQrcVjDjg0
+
+Once the user exists the Apache settings also have to be enabled feeding the
+authorization back into the site. Request the following edit to httpd.conf:
+
+        SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
 
 COMMAND LINE USAGE
 
