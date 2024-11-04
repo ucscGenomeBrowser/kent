@@ -5466,7 +5466,7 @@ var trackSearch = {
                                 show: function(event, ui) {
                                     $('#currentTab').val(ui.panel.id);
                                 },
-                                select: function(event, ui) { findTracks.switchTabs(ui); }
+                                activate: function(event, ui) { findTracks.switchTabs(ui); }
                             });
             $('#tabs').show();
             $("#tabs").tabs('option', 'selected', '#' + val);

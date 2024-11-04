@@ -332,7 +332,7 @@ var ddcl = {
 
         // These values can only be taken from the select before it becomes a DDCL
         var maxWidth = $(obj).width();
-        if (maxWidth === 0) // currently hidden so wait for a reinit();
+        if (maxWidth <= 0) // currently hidden so wait for a reinit();
             return;
 
         var minWidth = $(obj).css('min-width');
