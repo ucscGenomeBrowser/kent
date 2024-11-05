@@ -1,0 +1,102 @@
+########################################################################################
+# DECIPHER Developmental Disorders panel in the Gene2Phenotype database (DDG2P)
+# November 5, 2024 - Yesenia Puga, Jairo Navarro, Gerardo Perez
+
+# Download required files
+wget https://www.deciphergenomics.org/files/downloads/population_cnv_grch38.txt.gz  # Downloads the CNV data file for hg38
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes  # Downloads chromosome size data for hg38
+wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample2.as  # Downloads the .as file defining custom track fields
+wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed  # Downloads the bedToBigBed utility for converting BED to bigBed format
+chmod 700 bedToBigBed  # Changes permissions to make bedToBigBed executable
+
+# Prepare the BED file:
+# Decompresses and trims the CNV data to the first 15 fields
+zcat population_cnv_grch38.txt.gz | cut -f1-15 > population_cnv_grch38.bed
+
+# reorders columns to fit BED format
+awk 'BEGIN {OFS="\t"} {print $2, $3, $4, $1, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15}' population_cnv_grch38.bed > population_cnv_grch38_reordered.bed
+
+# removes the header line
+tail -n +2 population_cnv_grch38_reordered.bed > population_cnv_grch38_final.bed
+
+# Adjust the BED file for bigBed conversion:
+# prepends 'chr' to chromosome numbers and adjusts fields for bigBed
+awk 'BEGIN{OFS="\t"} {print "chr"$1, $2, $3, $4, 0, ".", $2, $3, 0, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15}' population_cnv_grch38_final.bed > population_cnv_grch38_final_chr.bed
+
+# Sort the BED file:
+# sorts lexicographically by chromosome and numerically by start position
+LC_ALL=C sort -k1,1 -k2,2n population_cnv_grch38_final_chr.bed > population_cnv_grch38_final_sorted.bed
+
+
+# Add RGB colors to the BED file using a Python script:
+python3 ../assign_rgb_to_bed.py population_cnv_grch38_final_sorted.bed output_population_cnv_grch38.bed
+
+# Convert the BED file to bigBed format, indexing by gene name for faster lookups:
+./bedToBigBed -type=bed9+ -as=bedExample2.as -tab -extraIndex=name output_population_cnv_grch38.bed hg38.chrom.sizes population_cnv_grch38.bb
+
+#######################################################
+Author: Yesenia Puga
+Program: assign_rgb_to_bed.py 
+#######################################################
+ # The Python script 'assign_rgb_to_bed.py' is crucial in the data processing pipeline.
+ # It assigns RGB color values based on CNV type ('loss', 'gain', 'del/dup')
+ # to each entry, enhancing visual differentiation on the Genome Browser. It also updates the
+ # 'type' column from numeric identifiers to descriptive text,
+ # which is used in the browser for informative mouseover tooltips, aiding in quick and clear
+ # variant identification.
+import csv
+import sys
+
+# Define the color mappings for the RGB column based on the CNV type
+def get_rgb_color(cnv_type):
+    if cnv_type == "loss":
+        return '255,0,0'  # Red
+    elif cnv_type == "gain":
+        return '0,0,255'  # Blue
+    elif cnv_type == "del/dup":
+        return '128,128,128'  # Grey
+    else:
+        raise ValueError(f"Unexpected CNV type: {cnv_type}")
+
+# Convert numeric CNV values to descriptive text
+cnv_descriptions = {
+    '-1': 'loss',
+    '0': 'del/dup',
+    '1': 'gain'
+}
+
+def process_file(input_bed_file, output_bed_file):
+    with open(input_bed_file, 'r') as infile, open(output_bed_file, 'w', newline='') as outfile:
+        reader = csv.reader(infile, delimiter='\t')
+        writer = csv.writer(outfile, delimiter='\t')
+
+        for row in reader:
+            if len(row) < 19:
+                raise ValueError("Row does not contain enough columns to include the CNV type.")
+
+            cnv_type_value = row[18]
+            if cnv_type_value not in cnv_descriptions:
+                raise ValueError(f"Invalid CNV type value found: {cnv_type_value}")
+
+            cnv_type_description = cnv_descriptions[cnv_type_value]
+            row[18] = cnv_type_description  # Update the type description in the 19th column
+            rgb_value = get_rgb_color(cnv_type_description)
+            
+            if len(row) < 9:
+                raise ValueError("Row does not contain enough columns to include the RGB value.")
+
+            row[8] = rgb_value  # Update RGB value in the 9th column
+
+            writer.writerow(row)
+
+        print(f"Updated file successfully. Output saved to {output_bed_file}.")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python update_rgb.py <input_bed_file> <output_bed_file>")
+    else:
+        input_bed_file = sys.argv[1]
+        output_bed_file = sys.argv[2]
+        process_file(input_bed_file, output_bed_file)
+
+########################################################################################
