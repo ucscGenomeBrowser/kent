@@ -249,9 +249,8 @@ for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
                                                         // not tags, either a file or table search
         if (slCount(pairs) > 0)
             {
-            safef(id, sizeof id, "%i_select", row);
             char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
-                                                id, pairs,mdbSelect->val, ANYLABEL,"mdbVal",
+                                                buf, pairs,mdbSelect->val, ANYLABEL,"mdbVal",
                                                 "change", "findTracks.mdbValChanged(this);",
                                                 "min-width:200px; font-size:.9em;", NULL);
             if (dropDownHtml)
