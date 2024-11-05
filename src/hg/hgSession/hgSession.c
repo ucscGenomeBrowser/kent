@@ -39,6 +39,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "errCatch.h"
+#include "sessionData.h"
 
 char *database = NULL;
 
@@ -900,8 +901,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-saveSessionData(cart, encUserName, encSessionName,
-                cgiOptionalString(hgsSessionDataDbSuffix));
+sessionDataSaveSession(cart, encUserName, encSessionName, cgiOptionalString(hgsSessionDataDbSuffix));
 
 /* Remove pre-existing session (if any) before updating. */
 dyStringClear(dy);

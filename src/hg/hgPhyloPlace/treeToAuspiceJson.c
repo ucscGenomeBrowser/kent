@@ -14,6 +14,7 @@
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "phyloTree.h"
+#include "pipeline.h"
 #include "variantProjector.h"
 
 
@@ -922,6 +923,25 @@ if (anchorFile && fileExists(anchorFile))
 return anchorSamples;
 }
 
+static void dumpTextMaybeGzip(char *fileName, char *text)
+/* If fileName ends with ".gz" then write gzip-compressed output to file, otherwise plain. */
+{
+if (endsWith(fileName, ".gz"))
+    {
+    static char *gzipCmd[] = {"gzip", "-c", NULL};
+    struct pipeline *gzipPl = pipelineOpen1(gzipCmd, pipelineWrite, fileName, NULL, 0);
+    FILE *outF = pipelineFile(gzipPl);
+    fputs(text, outF);
+    pipelineClose(&gzipPl);
+    }
+else
+    {
+    FILE *outF = mustOpen(fileName, "w");
+    fputs(text, outF);
+    carefulClose(&outF);
+    }
+}
+
 void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct sampleMetadataStore *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
@@ -930,7 +950,6 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct gene
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 {
 struct phyloTree *tree = sti->subtree;
-FILE *outF = mustOpen(jsonFile, "w");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "version", "v2");
@@ -959,8 +978,7 @@ int branchAttrCount = getBranchAttrCols(org, db, &branchAttrCols);
 rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, branchAttrCount, branchAttrCols, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
-fputs(jw->dy->string, outF);
+dumpTextMaybeGzip(jsonFile, jw->dy->string);
 jsonWriteFree(&jw);
-carefulClose(&outF);
 }
 

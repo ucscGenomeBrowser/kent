@@ -1,7 +1,6 @@
-/* sessionData -- if hg.conf defines sessionDataDir & sessionDataDbPrefix, scan cart for trash filesb
- * and customTrash tables; move them to a safe location and update paths in cart, files, tables. */
-
-/* Copyright (C) 2019 The Regents of the University of California
+/* sessionData - functions for moving user data out of trash into permanent storage
+ *
+ * Copyright (C) 2019-2024 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
@@ -13,6 +12,7 @@
 #include "hgConfig.h"
 #include "md5.h"
 #include "trashDir.h"
+#include "sessionData.h"
 
 INLINE boolean isTrashPath(char *path)
 /* Return TRUE if path starts with trashDir. */
@@ -74,7 +74,7 @@ if (symlink(newPath, oldPath) != 0)
     errnoAbort("moveAndLink: symlink(newPath='%s', oldPath='%s') failed", newPath, oldPath);
 }
 
-static char *saveTrashFile(char *trashPath, char *sessionDir)
+char *sessionDataSaveTrashFile(char *trashPath, char *sessionDir)
 /* If trashPath exists and is not already a soft-link to sessionDir, alloc and return a new path in
  * sessionDir; move trashPath to new path and soft-link from trashPath to new path.
  * If trashPath is already a soft-link, return the path that it links to.
@@ -104,9 +104,9 @@ if (fileExists(trashPath))
         if (fileExists(newPath))
             {
             if (unlink(newPath) != 0)
-                errnoAbort("saveTrashFile: newPath='%s' already existed but unlink failed",
+                errnoAbort("sessionDataSaveTrashFile: newPath='%s' already existed but unlink failed",
                            newPath);
-            fprintf(stderr, "saveTrashFile: new path '%s' already exists; overwriting", newPath);
+            fprintf(stderr, "sessionDataSaveTrashFile: new path '%s' already exists; overwriting", newPath);
             }
         makeDirsForFile(newPath);
         moveAndLink(trashPath, newPath);
@@ -161,7 +161,7 @@ for (i = 0;  i < ArraySize(stealthFiles);  i++)
         {
         char stealthPath[strlen(trashPath) + strlen(sf->suffix) + 1];
         safef(stealthPath, sizeof stealthPath, "%s%s", trashPath, sf->suffix);
-        saveTrashFile(stealthPath, sessionDir);
+        sessionDataSaveTrashFile(stealthPath, sessionDir);
         break;
         }
     }
@@ -184,7 +184,7 @@ if (retString && sessionDir)
             cgiDecode(encTrashPath, trashPath, encLen);
         else
             safecpy(trashPath, sizeof(trashPath), encTrashPath);
-        char *newPath = saveTrashFile(trashPath, sessionDir);
+        char *newPath = sessionDataSaveTrashFile(trashPath, sessionDir);
         if (newPath)
             {
             saveStealthFile(trashPath, sessionDir);
@@ -302,7 +302,7 @@ if (sessionDir)
                     actualTrashPath = trashPath+2;
                 if (isTrashPath(actualTrashPath))
                     {
-                    char *newPath = saveTrashFile(actualTrashPath, sessionDir);
+                    char *newPath = sessionDataSaveTrashFile(actualTrashPath, sessionDir);
                     if (newPath)
                         replaceColumnValue(conn, tableName, columnName, newPath);
                     freeMem(newPath);
@@ -464,7 +464,8 @@ safef(dayString, sizeof dayString, "%02u", tm->tm_mday);
 return dayString;
 }
 
-void saveSessionData(struct cart *cart, char *encUserName, char *encSessionName, char *dbSuffix)
+void sessionDataSaveSession(struct cart *cart, char *encUserName, char *encSessionName,
+                            char *dbSuffix)
 /* If hg.conf specifies safe places to store files and/or tables that belong to user sessions,
  * then scan cart for trashDir files and/or customTrash tables, store them in safe locations,
  * and update cart to point to the new locations. */
