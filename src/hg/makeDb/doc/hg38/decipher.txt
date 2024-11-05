@@ -1,5 +1,5 @@
 ########################################################################################
-# DECIPHER Developmental Disorders panel in the Gene2Phenotype database (DDG2P)
+# DECIPHER Developmental Disorders panel in the Gene2Phenotype database (DDG2P), hg38/hg19
 # November 5, 2024 - Yesenia Puga, Jairo Navarro, Gerardo Perez
 
 # Download required files
@@ -33,6 +33,14 @@ python3 ../assign_rgb_to_bed.py population_cnv_grch38_final_sorted.bed output_po
 
 # Convert the BED file to bigBed format, indexing by gene name for faster lookups:
 ./bedToBigBed -type=bed9+ -as=bedExample2.as -tab -extraIndex=name output_population_cnv_grch38.bed hg38.chrom.sizes population_cnv_grch38.bb
+
+# Add files to hive
+cp hg19/population_cnv_grch37.bb /hive/data/genomes/hg19/bed/ddg2p/ddg2pSyndromes.bb
+cp hg38/population_cnv_grch38.bb /hive/data/genomes/hg38/bed/ddg2p/ddg2pSyndromes.bb
+
+# Create symlinks from hive to /gbdb
+ln -s /hive/data/genomes/hg19/bed/ddg2p/ddg2pSyndromes.bb /gbdb/hg19/decipher/ddg2pSyndromes.bb
+ln -s /hive/data/genomes/hg38/bed/ddg2p/ddg2pSyndromes.bb /gbdb/hg38/decipher/ddg2pSyndromes.bb
 
 #######################################################
 Author: Yesenia Puga
