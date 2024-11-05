@@ -3466,6 +3466,9 @@ var findTracks = {
             else
                 $('div#found').hide();
         }
+        // explicitly set the hidden form input for the current tab because jquery-ui won't do
+        // it for us anymore
+        $("#currentTab").val(id);
     }
 };
 
