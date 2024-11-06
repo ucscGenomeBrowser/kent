@@ -59,6 +59,8 @@ void hubSpaceSaveToDb(struct sqlConnection *conn, struct hubSpace *el, char *tab
 struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s',NULL,'%s','%s','%s','%s','%s')", 
 	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType, el->lastModified,  el->hubNameList,  el->db,  el->location,  el->md5sum);
+fprintf(stderr, "hubSpace row insert:\n\n%s\n\n", update->string);
+fflush(stderr);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }

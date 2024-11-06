@@ -130,25 +130,38 @@ carefulClose(&f);
 return hubFile;
 }
 
-char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType)
+char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *reqHubName)
 /* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
- * for convenience. */
+ * for convenience. If the reqHubName argument is non-NULL, use that as the hub name instead of
+ * a random string AND do not create a hub.txt, only for use from hubtools up command */
 {
-char *encodedHubName = cgiEncodeFull(requestId);
-char *path = prefixUserFile(userName, encodedHubName);
-char *hubFileName = writeHubText(path, userName, encodedHubName, requestId, db);
-char *encodedTrack = cgiEncodeFull(trackFileName);
-struct dyString *trackFilePath = dyStringCreate("../%s", encodedTrack);
-FILE *f = mustOpen(hubFileName, "a");
-fprintf(f, "track %s\n"
-    "bigDataUrl %s\n"
-    "type %s\n"
-    "shortLabel %s\n"
-    "longLabel %s\n"
-    "\n",
-    encodedTrack, dyStringCannibalize(&trackFilePath),
-    trackType, trackFileName, trackFileName);
-carefulClose(&f);
+char *encodedHubName = reqHubName != NULL ? cgiEncodeFull(reqHubName) : cgiEncodeFull(requestId);
+char *hubFileName = NULL;
+char *path = NULL;
+if (reqHubName)
+    {
+    // coming from hubtools command
+    struct dyString *hubPath = dyStringNew(0);
+    dyStringPrintf(hubPath, "%s%s/hub.txt", getDataDir(userName), reqHubName);
+    path = hubFileName = dyStringCannibalize(&hubPath);
+    }
+else
+    {
+    path = prefixUserFile(userName, encodedHubName);
+    hubFileName = writeHubText(path, userName, encodedHubName, requestId, db);
+    char *encodedTrack = cgiEncodeFull(trackFileName);
+    struct dyString *trackFilePath = dyStringCreate("../%s", encodedTrack);
+    FILE *f = mustOpen(hubFileName, "a");
+    fprintf(f, "track %s\n"
+        "bigDataUrl %s\n"
+        "type %s\n"
+        "shortLabel %s\n"
+        "longLabel %s\n"
+        "\n",
+        encodedTrack, dyStringCannibalize(&trackFilePath),
+        trackType, trackFileName, trackFileName);
+    carefulClose(&f);
+    }
 
 // we should update the mysql table now with a record of the hub.txt
 struct hubSpace *row = NULL;

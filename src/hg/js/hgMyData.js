@@ -943,7 +943,7 @@ var hubCreate = (function() {
                     console.log("file-added");
                     this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name)});
                     if (this.uppy.getFiles().length > 1) {
-                        this.addBatchSelectsToDashboard()
+                        this.addBatchSelectsToDashboard();
                     }
                 });
                 this.uppy.on("file-removed", (file) => {

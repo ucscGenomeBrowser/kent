@@ -57,9 +57,10 @@ char *writeHubText(char *path, char *userName, char *encodedHubName, char *hubNa
 /* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
  * the file name of the created hub, which can be freed. */
 
-char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackName, char *trackType);
+char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *reqHubName);
 /* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
- * for convenience. */
+ * for convenience. If the reqHubName argument is non-NULL, use that as the hub name instead of
+ * a random string AND do not create a hub.txt, only for use from hubtools up command */
 
 void addHubSpaceRowForFile(struct hubSpace *row);
 /* We created a file for a user, now add an entry to the hubSpace table for it */

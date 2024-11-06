@@ -66,6 +66,8 @@ else
         char *location = NULL;
         char *reqLm = NULL;
         time_t lastModified = 0;
+        char *subdir = NULL; // special optional argument from hubtools commands
+        char *reqHubName = NULL; // special optional argument from hubtools commands
 
         struct lineFile *lf = lineFileStdin(FALSE);
         char *request = lineFileReadAll(lf);
@@ -93,6 +95,8 @@ else
             db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
             reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
             lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
+            subdir = jsonQueryString(req, "", "Event.Upload.MetaData.subdir", NULL);
+            reqHubName = jsonQueryString(req, "", "Event.Upload.MetaData.hubName", NULL);
             char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
             if (fileName == NULL)
                 {
@@ -106,18 +110,23 @@ else
                 {
                 char *tusInfo = catTwoStrings(tusFile, ".info");
                 char *dataDir = getDataDir(userName);
-                char *newFile = catTwoStrings(dataDir, fileName);
-                fprintf(stderr, "moving %s to %s\n", tusFile, newFile);
+                struct dyString *newFile = dyStringNew(0);
+                // if subdir provided we are throwing the files in there
+                if (subdir)
+                    dataDir = catTwoStrings(dataDir, subdir);
+                dyStringPrintf(newFile, "%s%s", dataDir, fileName);
+
+                fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
                 // TODO: check if file exists or not and let user choose to overwrite
                 // and re-call this hook, for now just exit if the file exists
-                if (fileExists(newFile))
+                if (fileExists(dyStringContents(newFile)))
                     {
-                    errAbort("file '%s' exists already, not overwriting", newFile);
+                    errAbort("file '%s' exists already, not overwriting", dyStringContents(newFile));
                     }
                 else
                     {
                     // set our mysql table location:
-                    location = newFile;
+                    location = dyStringContents(newFile);
                     // the directory may not exist yet
                     int oldUmask = 00;
                     if (!isDirectory(dataDir))
@@ -129,11 +138,12 @@ else
                         // restore umask
                         umask(oldUmask);
                         }
-                    copyFile(tusFile, newFile);
+                    copyFile(tusFile, dyStringContents(newFile));
                     // the files definitely should not be executable!
-                    chmod(newFile, 0666);
+                    chmod(dyStringContents(newFile), 0666);
                     mustRemove(tusFile);
                     mustRemove(tusInfo);
+                    dyStringCannibalize(&newFile);
                     }
                 }
             }
@@ -143,7 +153,7 @@ else
         if (exitStatus == 0)
             {
             // create a hub for this upload, which can be edited later
-            char *hubName = createNewTempHubForUpload(reqId, userName, db, fileName, fileType);
+            char *hubName = createNewTempHubForUpload(reqId, userName, db, fileName, fileType, reqHubName);
             fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
             fflush(stderr);
             struct hubSpace *row = NULL;
