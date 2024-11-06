@@ -688,8 +688,12 @@ bool readFooterURL(CURL *curl, int64_t master, int32_t version, int32_t c1, int3
     }
     delete buffer;
     if (!found1 || !found2) {
+/*
         cerr << "Remote file did not contain " << norm << " normalization vectors for one or both chromosomes at "
              << resolution << " " << unit << endl;
+*/
+        throw strawException("Remote file did not contain " + norm + " normalization vectors for one or both chromosomes at "
+             + to_string(resolution) + " " + unit);
     }
     return true;
 }
@@ -834,8 +838,12 @@ bool readFooter(istream &fin, int64_t master, int32_t version, int32_t c1, int32
         }
     }
     if (!found1 || !found2) {
+/*
         cerr << "File did not contain " << norm << " normalization vectors for one or both chromosomes at "
              << resolution << " " << unit << endl;
+*/
+        throw strawException("File did not contain " + norm + " normalization vectors for one or both chromosomes at "
+             + to_string(resolution) + " " + unit);
     }
     return true;
 }
