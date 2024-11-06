@@ -2142,7 +2142,19 @@ var rightClick = {
         dragReorder.sort($("#imgTbl"));
         dragReorder.setOrder($("#imgTbl"));
     },
+    hideLegends : function() {
+        /* if no pliBy track is shown, hide the pli legend */
+        hasPliTracks = false;
+        for (var trDomEl of $(".imgOrd")){
+            var trackName = trDomEl.id.split("_")[1];
+            if (trackName.startsWith("pliBy"))
+                hasPliTracks = true;
+        }
+        if (!hasPliTracks)
+            $("#gnomadColorKeyLegend").hide();
+    },
     hideTracks: function (ids)
+        /* hide specified list of tracks, take care to hide parents rather than children, whenever possible */
     {
         var cartVars = [];
         var cartVals = [];
@@ -2176,6 +2188,7 @@ var rightClick = {
              
             // update the track list below the image
             vis.update(loneParent, 'hide');
+            rightClick.hideLegends();
         }
 
         // handle all other tracks, they are either not parents or parents with at least one child left
