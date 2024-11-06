@@ -5309,6 +5309,7 @@ else
     }
 
 // put up the color key for the gnomAD pLI track
+// If you change this code below, you must also change hgTracks.js:hideLegends
 if (startsWith("pliBy", tg->track))
     doPliColors = TRUE;
 }
