@@ -46,12 +46,19 @@ collects clinical information about chromosomal
 microdeletions/duplications/insertions, translocations and inversions, 
 and displays this information on the human genome map.
 <p>
-These tracks show genomic regions of reported cases and their 
+The <b>CNVs and SNVs</b> tracks show genomic regions of reported cases and their 
 associated phenotype information.  All data have passed the strict
 consent requirements of the DECIPHER project and are approved for
 unrestricted public release.  Clicking the Patient View ID link
 brings up a more detailed informational page on the patient at the 
-DECIPHER web site. 
+DECIPHER web site.</p>
+
+<p>
+The <b>DDG2P (Developmental Disorders Genotype-to-Phenotype)</b> track represents a curated
+collection of genomic variants associated with developmental disorders. 
+Each entry in the DDG2P track corresponds to specific genomic regions linked to developmental
+disorders, annotated with relevant phenotypic descriptions. 
+</p>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -87,6 +94,30 @@ of the variant:
  </ul>
 </P>
 
+<p>
+For the <b>DDG2P track</b>, genomic variants are visually differentiated to facilitate quick and
+clear identification. Variants are colored according to their clinical significance and type:
+</P>
+<ul>
+  <li><font color="#FF0000"><strong>Red</strong></font> - exclusively deletion site. (deletions)</li>
+  <li><font color="#0000FF"><strong>Blue</strong></font> - exclusively duplication site. (duplication)</li>
+  <li><font color="#808080"><strong>Grey</strong></font> - deletions and duplications site. (del/dup)</li>
+</ul>
+
+<P>
+The DDG2P track's <b>mouseover</b> tooltip provides the following information about the data:
+</P>
+<ul>
+  <li><strong>Position:</strong> Specifies the chromosomal range of the CNV.</li>
+  <li><strong>Type of CNV:</strong> Indicates if the variation is a loss, gain, or
+      deletions/duplications(del/dup).</li>
+  <li><strong>Frequency of CNV:</strong> Reflects how often the CNV occurs in the sampled
+      population.</li>
+  <li><strong>Number of Observations:</strong> The count of times this CNV was observed in the
+      dataset.</li>
+  <li><strong>Sample Size of Study:</strong> The total number of samples examined.</li>
+</ul>
+
 <H2>Method</H2>
 <P>
 Data provided by the DECIPHER project group are imported and processed
@@ -103,6 +134,25 @@ For more information on DECIPHER, please contact
 &#99;&#111;n&#116;&#97;c&#116;&#64;&#100;&#101;&#99;&#105;p&#104;&#101;&#114;&#103;&#101;&#110;&#111;&#109;&#105;c&#115;.
 &#111;&#114;g</A>
 </P>
+
+<h2>Data Access</h2>
+<p>
+The DECIPHER project data access and documentation can be found at
+<a href="https://www.deciphergenomics.org/about/downloads" target="_blank">DECIPHER Downloads</a>.
+</p>
+<p>
+The raw data can be explored interactively with the
+<a target="_blank" href="/cgi-bin/hgTables">Table Browser</a> or the
+<a target="_blank" href="/cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated analysis, the data may be queried from our
+<a target="_blank" href="/goldenPath/help/api.html">REST API</a> 
+or downloaded from our <a target="_blank" href="https://hgdownload.soe.ucsc.edu/gbdb/$db/decipher/">
+Downloads site</a>. Please refer to our
+<a target="_blank" href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
+mailing list archives</a> for questions, or our
+<a target="_blank" href="/FAQ/FAQdownloads.html#downloads36">
+Data Access FAQ</a> for more information.
+</p>
 
 <H2>References</H2>
 <p>
