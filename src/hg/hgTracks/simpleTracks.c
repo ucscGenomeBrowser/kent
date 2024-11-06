@@ -1886,8 +1886,6 @@ if (color)
        newList = slCat(newList, oldList);
    }
 tg->items = newList;
-
-filterItemsOnNames(tg);
 }
 
 int getFilterColor(char *type, int colorIx)
@@ -5311,7 +5309,6 @@ else
     }
 
 // put up the color key for the gnomAD pLI track
-// make sure to adapt hgTracks.js:hideTracks if you change this (when a track is hidden, the legend is removed by the javascript)
 if (startsWith("pliBy", tg->track))
     doPliColors = TRUE;
 }
@@ -6933,6 +6930,8 @@ else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
+
+filterItemsOnNames(tg);
 
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);

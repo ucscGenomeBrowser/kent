@@ -9519,7 +9519,6 @@ if (!hideControls)
         }
     if (doPliColors)
         {
-        hPrintf("<div id='gnomadColorKeyLegend'>");
         hPrintf("<B>gnomAD Loss-of-Function Constraint (LOEUF) Color Key:</B><BR> ");
         hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
         hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 0.1</td>\n");
@@ -9534,7 +9533,6 @@ if (!hideControls)
         hPrintf("<td style=\"background-color:rgb(0,244,153)\">&ge; 0.9</td>\n");
         hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No LOEUF score</td>\n");
         hPrintf("</tr></table>\n");
-        hPrintf("</div>"); // gnomadColorKeyLegend
         }
 
     if (showTrackControls)
@@ -10214,8 +10212,6 @@ void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
-setupTimeWarning();
-
 char titleVar[256];
 char *oldPosition = cartUsualString(cart, "oldPosition", "");
 boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
@@ -10708,6 +10704,7 @@ if (recTrackSetsEnabled())
     printRecTrackSets();
 if (exportedDataHubsEnabled())
     printExportedDataHubs(database);
+setupTimeWarning();
 }
 
 static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
