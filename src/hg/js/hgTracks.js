@@ -5464,12 +5464,11 @@ var trackSearch = {
             var val = $('#currentTab').val();
             $("#tabs").tabs({
                                 show: function(event, ui) {
-                                    $('#currentTab').val(ui.panel.id);
+                                    $('#currentTab').val(ui.newPanel[0].id);
                                 },
-                                select: function(event, ui) { findTracks.switchTabs(ui); }
+                                activate: function(event, ui) { findTracks.switchTabs(ui); }
                             });
             $('#tabs').show();
-            $("#tabs").tabs('option', 'selected', '#' + val);
             if (val === 'simpleTab' && $('div#found').length < 1) {
                 $('input#simpleSearch').trigger("focus");
             }

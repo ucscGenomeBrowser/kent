@@ -608,7 +608,7 @@ without arguments to get the usage statement.
 </p>
 
 <a name="snpExtract"></a>
-<h6>How can I extract a list of rsIDs using chrom:start-end or vise versa?</h6>
+<h6>How can I extract a list of rsIDs using chrom:start-end or vice versa?</h6>
 <p>
 Several utilities for working with bigBed-formatted binary files can be downloaded
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
@@ -628,13 +628,14 @@ Run a utility with no arguments to see a brief description of the utility and it
 <a name="snpExamples"></a>
 <h6>Examples:</h6>
 <ol>
-  <li>Retrieve all variants in the region chr1:200001-200400</p>
+  <li>Retrieve all variants in the region chr1:200001-200400
   <pre><tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
   </li>
   <li>Retrieve variant rs6657048
   <pre><tt>bigBedNamedItems dbSnp155.bb rs6657048 stdout</tt></pre>
   </li>
-  <li>Retrieve all variants with rs# IDs in file myIds.txt</p>
+  <li>Retrieve all variants with rs# IDs in a file (myIds.txt)
+      and output to another file (dbSnp155.myIds.bed)
   <pre><tt>bigBedNamedItems -nameFile dbSnp155.bb myIds.txt dbSnp155.myIds.bed</tt></pre>
   </li>
 </ol>

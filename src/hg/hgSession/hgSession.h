@@ -91,9 +91,4 @@ void makeDownloadSessionCtData(char *param1, char *backgroundProgress);
 void doDownloadSessionCtData(struct hashEl *downloadPathList);
 /* Download given table to browser to save. */
 
-void saveSessionData(struct cart *cart, char *encUserName, char *encSessionName, char *dbSuffix);
-/* If hg.conf specifies safe places to store files and/or tables that belong to user sessions,
- * then scan cart for trashDir files and/or customTrash tables, store them in safe locations,
- * and update cart to point to the new locations. */
-
 #endif /* HGSESSION_H */
