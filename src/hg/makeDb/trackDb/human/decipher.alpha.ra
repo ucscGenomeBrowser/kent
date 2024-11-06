@@ -24,7 +24,7 @@ group phenDis
     mergeSpannedItems on
     searchIndex name
     mouseOverField _mouseOvera
-    html decipher
+    html decipherContainer.html
     parent decipherContainer
 
     track decipherSnvs
@@ -37,10 +37,27 @@ group phenDis
     tableBrowser off decipherSnvsRaw
     prevExonText Left edge
     nextExonText Right edge
-    html decipher
+    html decipherContainer.html
     parent decipherContainer
 
+    track decipherDDG2P
+    parent decipherContainer
+    type bigBed 9 +
+    shortLabel DECIPHER DDG2P
+    longLabel DECIPHER: Developmental Disorders panel in the Gene2Phenotype database (DDG2P)
+    bigDataUrl /gbdb/$D/decipher/ddg2pSyndromes.bb
+    group phenDis
+    visibility pack
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Type of CNV</b>: $type<br> <b>Frequency of CNV</b>: $frequency<br> <b>Number of Observations</b>: $observations<br> <b>Sample Size of Study</b>: $sample_size<br>
+    html decipherContainer.html
+    searchIndex name
+
+
 searchTable decipher
+searchMethod exact
+searchType bigBed
+
+searchTable decipherDDG2P
 searchMethod exact
 searchType bigBed
 

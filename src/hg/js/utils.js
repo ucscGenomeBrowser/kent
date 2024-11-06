@@ -3441,12 +3441,13 @@ var findTracks = {
     switchTabs: function (ui)
     {   // switching tabs on findTracks page
 
-        if (ui.panel.id === 'simpleTab' && $('div#found').length < 1) {
+        id = ui.newPanel[0].id;
+        if (id === 'simpleTab' && $('div#found').length < 1) {
             // delay necessary, since select event not afterSelect event
             setTimeout(function() { 
                             $('input#simpleSearch').focus(); 
                         },20); 
-        } else if (ui.panel.id === 'advancedTab') {
+        } else if (id === 'advancedTab') {
             // Advanced tab has DDCL wigets which were sized badly because the hidden width
             // was unknown delay necessary, since select event not afterSelect event
             setTimeout(function() { 
@@ -3454,17 +3455,20 @@ var findTracks = {
                         },20);
         }
         if ($('div#filesFound').length === 1) {
-            if (ui.panel.id === 'filesTab')
+            if (id === 'filesTab')
                 $('div#filesFound').show();
             else
                 $('div#filesFound').hide();
         }
         if ($('div#found').length === 1) {
-            if (ui.panel.id !== 'filesTab')
+            if (id !== 'filesTab')
                 $('div#found').show();
             else
                 $('div#found').hide();
         }
+        // explicitly set the hidden form input for the current tab because jquery-ui won't do
+        // it for us anymore
+        $("#currentTab").val(id);
     }
 };
 

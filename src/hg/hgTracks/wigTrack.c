@@ -80,14 +80,19 @@ for(lf = lfList; lf != NULL; lf = lf->next)
 	{
 	x1 = round((double)((int)sf->start-winStart)*scale);
 	x2 = round((double)((int)sf->end-winStart)*scale);
+
+        // make sure x1 is at least zero and not greater than the array size
 	if(x1 < 0)
 	    x1 = 0;
-	if(x2 > colSize)
-	    x2 = colSize;
+        else if (x1 > colSize) 
+            break;
+
+        // make sure x2 is at least one bigger than x1 and that it's not bigger than the array
 	if(x1 == x2)
 	    x2++;
-        if ((x1 >= colSize) || (x2 >= colSize))
-            break;
+	if(x2 > colSize)
+	    x2 = colSize;
+
 	for(i = x1; i < x2; i++)
             colArray[i] = color;
 	}

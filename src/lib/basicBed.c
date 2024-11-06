@@ -1565,6 +1565,17 @@ if (bedFieldCount > 9)
     tempArraySize = bed->blockCount;
     }
 
+if (bedFieldCount > 12)
+    // get the microarray/colored-exon field count; we might need to increase tempArraySize
+    // if expCount > blockCount, since the allocated array is used for both exons and expScores
+    {
+    lineFileAllInts(lf, row, 12, &bed->expCount, TRUE, 4, "integer", TRUE);
+    if (!(bed->expCount >= 1))
+	lineFileAbort(lf, "Expecting expCount (%d) to be 1 or more.", bed->expCount);
+    if (!isCt && bed->expCount > tempArraySize)
+        tempArraySize = bed->expCount;
+    }
+
 // this memory never gets freed, but tempArraySize can be huge so
 // we can't allocate it off the stack and we don't want to be 
 // allocating and freeing it millions of times on huge beds.
@@ -1655,9 +1666,6 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 if (bedFieldCount > 12)
     // get the microarray/colored-exon fields
     {
-    lineFileAllInts(lf, row, 12, &bed->expCount, TRUE, 4, "integer", TRUE);
-    if (!(bed->expCount >= 1))
-	lineFileAbort(lf, "Expecting expCount (%d) to be 1 or more.", bed->expCount);
     if (isCt)
 	{
 	AllocArray(bed->expIds,bed->expCount+1); // having +1 allows us to detect incorrect size
