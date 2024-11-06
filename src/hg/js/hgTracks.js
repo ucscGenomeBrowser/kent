@@ -2170,10 +2170,11 @@ var rightClick = {
                 }
             }
 
-            // and set the lone parent to hide in the cart and also in the track list below
+            // and set the lone parent to hide in the cart
             cartVars.push(loneParent);
-            cartVals.push('[]');
+            cartVals.push('hide');  // need to explicitely set to "hide", not "[]", to hide the default tracks
              
+            // update the track list below the image
             vis.update(loneParent, 'hide');
         }
 
