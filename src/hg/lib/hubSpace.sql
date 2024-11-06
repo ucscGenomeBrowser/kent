@@ -16,7 +16,7 @@ CREATE TABLE hubSpace (
     location longblob not null,	# file system path or URL to file
     md5sum varchar(255) not null,	# md5sum of file
               #Indices
-    PRIMARY KEY(userName, fileName(25)),
+    PRIMARY KEY(userName, fileName(255)), # hopefully 255 is long enough to get unique fileNames
     INDEX(userName),
     INDEX(fileName(25)),
     INDEX(fileType),
