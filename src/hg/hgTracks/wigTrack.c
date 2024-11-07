@@ -84,10 +84,10 @@ for(lf = lfList; lf != NULL; lf = lf->next)
         // make sure x1 is at least zero and not greater than the array size
 	if(x1 < 0)
 	    x1 = 0;
-        else if (x1 > colSize) 
+        else if (x1 >= colSize) 
             break;
 
-        // make sure x2 is at least one bigger than x1 and that it's not bigger than the array
+        // make sure x2 is at least one bigger than x1 and that it's not bigger than the array size + 1
 	if(x1 == x2)
 	    x2++;
 	if(x2 > colSize)
