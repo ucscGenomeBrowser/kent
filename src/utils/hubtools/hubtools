@@ -682,7 +682,7 @@ def uploadFiles(tdbDir, hubName):
         installModule("tuspy")
         from tusclient import client
 
-    serverUrls = cfgOption("tusUrl", "https://hubspace.gi.ucsc.edu/files")
+    serverUrl = cfgOption("tusUrl", "https://hubspace.gi.ucsc.edu/files")
 
     cookies = {}
     cookieNameUser = cfgOption("wiki.userNameCookie", "wikidb_mw1_UserName")
