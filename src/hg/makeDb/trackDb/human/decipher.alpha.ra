@@ -51,6 +51,9 @@ group phenDis
     mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Type of CNV</b>: $type<br> <b>Frequency of CNV</b>: $frequency<br> <b>Number of Observations</b>: $observations<br> <b>Sample Size of Study</b>: $sample_size<br>
     html decipherContainer.html
     searchIndex name
+    noScoreFilter on
+    filterValues.type loss,gain,del/dup
+    filter.sample_size 0
 
 
 searchTable decipher
