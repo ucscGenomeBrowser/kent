@@ -1996,8 +1996,7 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
-    highlightValues.OddEven Odd
-    </pre>
+    highlightValues.OddEven Odd</pre>
     <p>
     In this example, we are applying <code>highlightValues.<fieldname></code> to the
     <code>OddEven</code> field, which designates either &quot;Even&quot; or &quot;Odd&quot;. We
@@ -2006,22 +2005,19 @@ There are no extra options that can appear on the type hic line.
     user can highlight both even and odd items at the same time.</p>
     <pre>
     highlightValues.OddEven Odd,Even
-    highlightType.OddEven singleList
-    </pre>
+    highlightType.OddEven singleList</pre>
     <p>
     In this example, we are passing the <code>highlightType.<fieldname> singleList</code> parameter,
     which means only one options can be chosen -- &quot;Even&quot; or &quot;Odd&quot;. This setting
     removed the default setting that allows multiple selections.</p>
     <pre>
-    highlighValuesDefault.OddEven Odd
-    </pre>
+    highlighValuesDefault.OddEven Odd</pre>
     <p>
     In this third example, we are using the <code>highlightValuesDefault.<fieldname></code> setting
     to set a default value for the highlight setting. Now the default will be to highlight items
     with an Odd value when the hub is loaded on the Genome Browser.</p>
     <pre>
-    highlightValues.annotationType DNA-BR,AS,BS,BSi
-    </pre>
+    highlightValues.annotationType DNA-BR,AS,BS,BSi</pre>
     <p>
     In this fourth example, we are applying a highlight to multiple values in the
     <code>annotationType</code> field. We can select from these values in the
@@ -2029,8 +2025,7 @@ There are no extra options that can appear on the type hic line.
     page, and highlight only items wthat match our selections. The selection choices will let
     us match one, all or any combination of th esupplied values.</p>
     <pre>
-    highlightValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site
-    </pre>
+    highlightValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
     <p>
     Similar to the last example, but we have changed the name of the itmes that show up in the
     drop-down menu to be more descriptive than the dense file format values. For example, if we
@@ -2046,8 +2041,7 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
-    highlightColor #ff0000
-    </pre>
+    highlightColor #ff0000</pre>
     <p>
     In this example, we are using the <code>highlightColor <hex_color></code> to set the default
     highlight color. With this setting, all highlight stripes will use the color red,
