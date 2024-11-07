@@ -401,13 +401,27 @@ else
 return NULL;
 }
 
+char *wikiLinkUserId()
+/* Return the user ID specified in cookies from the browser. Does not check if user is logged in.
+ * To make sure that the ID is valid, call this only after you have checked with wikiLinkUserName() that the user is logged in. */
+{
+    return findCookieData(wikiLinkLoggedInCookie());
+}
+
+char *wikiLinkEncodeReturnUrl(char *hgsid, char *cgiName, char* urlSuffix)
+/* Return a CGI-encoded URL with hgsid to a CGI.  Free when done. */
+{
+char retBuf[1024];
+safef(retBuf, sizeof(retBuf), "%s%s?hgsid=%s%s",
+      hLocalHostCgiBinUrl(), cgiName, hgsid, urlSuffix);
+return cgiEncode(retBuf);
+}
+
+
 static char *encodedHgSessionReturnUrl(char *hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
-char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "%shgSession?hgsid=%s",
-      hLocalHostCgiBinUrl(), hgsid);
-return cgiEncode(retBuf);
+return wikiLinkEncodeReturnUrl(hgsid, "hgSession", "");
 }
 
 
