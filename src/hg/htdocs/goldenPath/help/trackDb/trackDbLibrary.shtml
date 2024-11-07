@@ -1931,9 +1931,24 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
-    highlight.blockCount 4
-    highlightColor #ff0000
-    </pre>
+    highlight.blockCount 4</pre>
+    <p>
+    In this example, highlighting is enabled for the <code>blockCount</code> field. We are passing
+    a default value of 4, which will highlight items where the blockCount is 4 or above.</p>
+    <pre>
+    highlight.score 300</pre>
+    <p>
+    In this example, highlighting is enabled for the <code>score</code> field. We are passing a
+    default value of 300, which will highlight all items with a score of 300 or above.</p>
+    <pre>
+    highlight.score 300:400
+    highlightByRange.score on
+    highlightLimits.score 200:500</pre>
+    <p>
+    In this example, we are enabling highlights for a range on the <code>score</code> field. The
+    <code>highlightByRange</code> setting is also enabled, allowing for highlighting between
+    interval values. Lastly, the <code>highlightLimits</code> are being used to modify the
+    accepted values between 200 and 500 as opposed to the default 0 to 1000.</p>
 </DIV>
 
 <DIV class="highlightText"><span class="types bigBed"></span>
@@ -1951,7 +1966,18 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
-    </pre>
+    highlightText.name NM*</pre>
+    <p>
+    In this example, we are applying a highlight on the field <code>name</code> so any items that
+    start with <code>NM</code> are highlighted.</p>
+    <pre>
+    highlightText.name \.1$
+    highlightType.name regexp</pre>
+    <p>
+    In this example, we are enabling highlighting on the same name field, <code>name</code>
+    but declaring the search parameter with the <code>highlightType</code>. In this case, we are
+    using regular expression to highlight all items in the <code>name</code> field that are
+    version 1.</p>
 </DIV>
 
 <DIV class="highlightValues"><span class="types bigBed"></span>
@@ -1970,7 +1996,46 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
+    highlightValues.OddEven Odd
     </pre>
+    <p>
+    In this example, we are applying <code>highlightValues.<fieldname></code> to the
+    <code>OddEven</code> field, which designates either &quot;Even&quot; or &quot;Odd&quot;. We
+    can then highlight the OddEven field with a drop-down menu displayed on the track controls page
+    to highlight the even or odd items. Since there is no <code>highlightType</code> setting, the
+    user can highlight both even and odd items at the same time.</p>
+    <pre>
+    highlightValues.OddEven Odd,Even
+    highlightType.OddEven singleList
+    </pre>
+    <p>
+    In this example, we are passing the <code>highlightType.<fieldname> singleList</code> parameter,
+    which means only one options can be chosen -- &quot;Even&quot; or &quot;Odd&quot;. This setting
+    removed the default setting that allows multiple selections.</p>
+    <pre>
+    highlighValuesDefault.OddEven Odd
+    </pre>
+    <p>
+    In this third example, we are using the <code>highlightValuesDefault.<fieldname></code> setting
+    to set a default value for the highlight setting. Now the default will be to highlight items
+    with an Odd value when the hub is loaded on the Genome Browser.</p>
+    <pre>
+    highlightValues.annotationType DNA-BR,AS,BS,BSi
+    </pre>
+    <p>
+    In this fourth example, we are applying a highlight to multiple values in the
+    <code>annotationType</code> field. We can select from these values in the
+    <code>annotationType</code> field with a drop-down menu displayed on the track settings
+    page, and highlight only items wthat match our selections. The selection choices will let
+    us match one, all or any combination of th esupplied values.</p>
+    <pre>
+    highlightValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site
+    </pre>
+    <p>
+    Similar to the last example, but we have changed the name of the itmes that show up in the
+    drop-down menu to be more descriptive than the dense file format values. For example, if we
+    wanted to highlight only items with <code>annotationType</code> of <code>DNA-BR</code>, on
+    the track settings page, we would select <code>DNA-binding region</code>.</p>
 </DIV>
 
 <DIV class="highlightColor"><span class="types bigBed"></span>
@@ -1981,7 +2046,12 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
+    highlightColor #ff0000
     </pre>
+    <p>
+    In this example, we are using the <code>highlightColor <hex_color></code> to set the default
+    highlight color. With this setting, all highlight stripes will use the color red,
+    <code>#ff0000</code>.</p>
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
