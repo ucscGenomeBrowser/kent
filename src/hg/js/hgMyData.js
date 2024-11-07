@@ -1018,6 +1018,7 @@ var hubCreate = (function() {
             closeModalOnClickOutside: true,
             closeAfterFinish: true,
             theme: 'auto',
+            autoOpen: "metaEditor",
         };
         let tusOptions = {
             endpoint: getTusdEndpoint(),
