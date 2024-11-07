@@ -66,7 +66,7 @@ else
         char *location = NULL;
         char *reqLm = NULL;
         time_t lastModified = 0;
-        char *subdir = NULL; // special optional argument from hubtools commands
+        char *parentDir = NULL; // special optional argument from hubtools commands
         char *reqHubName = NULL; // special optional argument from hubtools commands
 
         struct lineFile *lf = lineFileStdin(FALSE);
@@ -95,8 +95,8 @@ else
             db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
             reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
             lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
-            subdir = jsonQueryString(req, "", "Event.Upload.MetaData.subdir", NULL);
-            reqHubName = jsonQueryString(req, "", "Event.Upload.MetaData.hubName", NULL);
+            parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+            reqHubName = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.hubName", NULL));
             char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
             if (fileName == NULL)
                 {
@@ -111,9 +111,16 @@ else
                 char *tusInfo = catTwoStrings(tusFile, ".info");
                 char *dataDir = getDataDir(userName);
                 struct dyString *newFile = dyStringNew(0);
-                // if subdir provided we are throwing the files in there
-                if (subdir)
-                    dataDir = catTwoStrings(dataDir, subdir);
+                // if hubName is provided that becomes the top level directory
+                if (reqHubName)
+                    dataDir = catTwoStrings(dataDir, catTwoStrings(reqHubName, "/"));
+                // if parentDir provided we are throwing the files in there
+                if (parentDir)
+                    {
+                    if (!endsWith(parentDir, "/"))
+                        parentDir = catTwoStrings(parentDir, "/");
+                    dataDir = catTwoStrings(dataDir, parentDir);
+                    }
                 dyStringPrintf(newFile, "%s%s", dataDir, fileName);
 
                 fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
@@ -153,7 +160,7 @@ else
         if (exitStatus == 0)
             {
             // create a hub for this upload, which can be edited later
-            char *hubName = createNewTempHubForUpload(reqId, userName, db, fileName, fileType, reqHubName);
+            createNewTempHubForUpload(reqId, userName, db, fileName, fileType, reqHubName, parentDir);
             fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
             fflush(stderr);
             struct hubSpace *row = NULL;
@@ -164,10 +171,11 @@ else
             row->fileType = fileType;
             row->creationTime = NULL; // automatically handled by mysql
             row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
-            row->hubNameList = hubName;
+            row->parentDir = parentDir;
             row->db = db;
             row->location = location;
             row->md5sum = md5HexForFile(row->location);
+            row->parentDir = parentDir ? parentDir : "";
             addHubSpaceRowForFile(row);
             hubSpaceFree(&row);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);

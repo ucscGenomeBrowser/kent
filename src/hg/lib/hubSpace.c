@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hubSpace.h"
 
-char *hubSpaceCommaSepFieldNames = "userName,fileName,fileSize,fileType,creationTime,lastModified,hubNameList,db,location,md5sum";
+char *hubSpaceCommaSepFieldNames = "userName,fileName,fileSize,fileType,creationTime,lastModified,db,location,md5sum,parentDir";
 
 void hubSpaceStaticLoad(char **row, struct hubSpace *ret)
 /* Load a row from hubSpace table into ret.  The contents of ret will
@@ -21,10 +21,10 @@ ret->fileSize = sqlLongLong(row[2]);
 ret->fileType = row[3];
 ret->creationTime = row[4];
 ret->lastModified = row[5];
-ret->hubNameList = row[6];
-ret->db = row[7];
-ret->location = row[8];
-ret->md5sum = row[9];
+ret->db = row[6];
+ret->location = row[7];
+ret->md5sum = row[8];
+ret->parentDir = row[9];
 }
 
 struct hubSpace *hubSpaceLoadByQuery(struct sqlConnection *conn, char *query)
@@ -58,7 +58,7 @@ void hubSpaceSaveToDb(struct sqlConnection *conn, struct hubSpace *el, char *tab
 {
 struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s',NULL,'%s','%s','%s','%s','%s')", 
-	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType, el->lastModified,  el->hubNameList,  el->db,  el->location,  el->md5sum);
+	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType, el->lastModified,  el->db,  el->location,  el->md5sum, el->parentDir);
 fprintf(stderr, "hubSpace row insert:\n\n%s\n\n", update->string);
 fflush(stderr);
 sqlUpdate(conn, update->string);
@@ -78,10 +78,10 @@ ret->fileSize = sqlLongLong(row[2]);
 ret->fileType = cloneString(row[3]);
 ret->creationTime = cloneString(row[4]);
 ret->lastModified = cloneString(row[5]);
-ret->hubNameList = cloneString(row[6]);
-ret->db = cloneString(row[7]);
-ret->location = cloneString(row[8]);
-ret->md5sum = cloneString(row[9]);
+ret->db = cloneString(row[6]);
+ret->location = cloneString(row[7]);
+ret->md5sum = cloneString(row[8]);
+ret->parentDir = cloneString(row[9]);
 return ret;
 }
 
@@ -136,10 +136,10 @@ ret->fileSize = sqlLongLongComma(&s);
 ret->fileType = sqlStringComma(&s);
 ret->creationTime = sqlStringComma(&s);
 ret->lastModified = sqlStringComma(&s);
-ret->hubNameList = sqlStringComma(&s);
 ret->db = sqlStringComma(&s);
 ret->location = sqlStringComma(&s);
 ret->md5sum = sqlStringComma(&s);
+ret->parentDir = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -156,10 +156,10 @@ freeMem(el->fileName);
 freeMem(el->fileType);
 freeMem(el->creationTime);
 freeMem(el->lastModified);
-freeMem(el->hubNameList);
 freeMem(el->db);
 freeMem(el->location);
 freeMem(el->md5sum);
+freeMem(el->parentDir);
 freez(pEl);
 }
 
@@ -202,8 +202,6 @@ fprintf(f, "%s", el->lastModified);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->hubNameList);
-if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->db);
@@ -215,6 +213,8 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->md5sum);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parentDir);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -270,14 +270,6 @@ fprintf(f, "%s", el->lastModified);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"hubNameList");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-fprintf(f, "%s", el->hubNameList);
-fputc('"',f);
-fputc(',',f);
-fputc('"',f);
 fprintf(f,"db");
 fputc('"',f);
 fputc(':',f);
@@ -299,6 +291,14 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->md5sum);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"hubNameList");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->parentDir);
 fputc('"',f);
 fputc('}',f);
 }

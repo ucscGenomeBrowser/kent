@@ -130,55 +130,48 @@ carefulClose(&f);
 return hubFile;
 }
 
-char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *reqHubName)
+char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *reqHubName, char *parentDir)
 /* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
  * for convenience. If the reqHubName argument is non-NULL, use that as the hub name instead of
  * a random string AND do not create a hub.txt, only for use from hubtools up command */
 {
-char *encodedHubName = reqHubName != NULL ? cgiEncodeFull(reqHubName) : cgiEncodeFull(requestId);
 char *hubFileName = NULL;
 char *path = NULL;
-if (reqHubName)
-    {
-    // coming from hubtools command
-    struct dyString *hubPath = dyStringNew(0);
-    dyStringPrintf(hubPath, "%s%s/hub.txt", getDataDir(userName), reqHubName);
-    path = hubFileName = dyStringCannibalize(&hubPath);
-    }
-else
-    {
-    path = prefixUserFile(userName, encodedHubName);
-    hubFileName = writeHubText(path, userName, encodedHubName, requestId, db);
-    char *encodedTrack = cgiEncodeFull(trackFileName);
-    struct dyString *trackFilePath = dyStringCreate("../%s", encodedTrack);
-    FILE *f = mustOpen(hubFileName, "a");
-    fprintf(f, "track %s\n"
-        "bigDataUrl %s\n"
-        "type %s\n"
-        "shortLabel %s\n"
-        "longLabel %s\n"
-        "\n",
-        encodedTrack, dyStringCannibalize(&trackFilePath),
-        trackType, trackFileName, trackFileName);
-    carefulClose(&f);
-    }
+struct dyString *hubPath = dyStringNew(0);
+dyStringPrintf(hubPath, "%s%s", getDataDir(userName), reqHubName);
+// the reqHubName was used to make a directory, so it is cgi-encoded and has a '/' at the end
+char *decoded = needMem(strlen(reqHubName));
+cgiDecodeFull(reqHubName, decoded, strlen(reqHubName));
+path = hubFileName = writeHubText(dyStringCannibalize(&hubPath), userName, reqHubName, decoded, db);
+char *encodedTrack = cgiEncodeFull(trackFileName);
+struct dyString *trackFilePath = dyStringCreate("../%s", encodedTrack);
+FILE *f = mustOpen(hubFileName, "a");
+fprintf(f, "track %s\n"
+    "bigDataUrl %s\n"
+    "type %s\n"
+    "shortLabel %s\n"
+    "longLabel %s\n"
+    "\n",
+    encodedTrack, dyStringCannibalize(&trackFilePath),
+    trackType, trackFileName, trackFileName);
+carefulClose(&f);
 
 // we should update the mysql table now with a record of the hub.txt
 struct hubSpace *row = NULL;
 AllocVar(row);
 row->userName = userName;
-row->fileName = hubFileName;
+row->fileName = "hub.txt";
 row->fileSize = fileSize(hubFileName);
 row->fileType = "hub";
 row->creationTime = NULL;
 time_t lastModTime = fileModTime(hubFileName);
 row->lastModified = sqlUnixTimeToDate(&lastModTime, TRUE);
-row->hubNameList = "";
 row->db = db;
 row->location = path;
 row->md5sum = md5HexForFile(hubFileName);
+row->parentDir = parentDir ? parentDir : "";
 addHubSpaceRowForFile(row);
-return encodedHubName;
+return reqHubName;
 }
 
 static void deleteHubSpaceRow(char *fname)

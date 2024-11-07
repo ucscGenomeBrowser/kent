@@ -1,5 +1,6 @@
 /* jshint esnext: true */
 var debugCartJson = true;
+var hubNameDefault = "My First Hub";
 
 function prettyFileSize(num) {
     if (!num) {return "n/a";}
@@ -941,7 +942,7 @@ var hubCreate = (function() {
                 this.uppy.on("file-added", (file) => {
                     // add default meta data for genome and fileType
                     console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name)});
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "hubName": hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
                     }
@@ -1012,6 +1013,19 @@ var hubCreate = (function() {
                         );
                     },
                 });
+                fields.push({
+                    id: 'hubName',
+                    name: 'Hub Name',
+                    render: ({value, onChange, required, form}, h) => {
+                        return h('input',
+                            {type: 'text',
+                             required: required,
+                             form: form,
+                             value: hubNameDefault,
+                            }
+                        );
+                    },
+                });
                 return fields;
             },
             restricted: {requiredMetaFields: ["genome", "fileType"]},
@@ -1038,7 +1052,7 @@ var hubCreate = (function() {
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
-                "hub": ""
+                "hub": metadata.hubName,
             };
             addNewUploadedFileToTable(newReqObj);
         });

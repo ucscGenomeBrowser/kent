@@ -20,10 +20,10 @@ struct hubSpace
     char *fileType;	/* track type of file */
     char *creationTime;	/* first upload time */
     char *lastModified;	/* last change time */
-    char *hubNameList;	/* comma separated list of hubs this file is a part of */
     char *db;	/* genome assembly associated with this file */
     char *location;	/* file system path or URL to file */
     char *md5sum;	/* md5sum of file */
+    char *parentDir;	/* parent directory of file */
     };
 
 void hubSpaceStaticLoad(char **row, struct hubSpace *ret);

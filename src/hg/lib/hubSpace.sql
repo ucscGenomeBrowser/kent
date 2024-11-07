@@ -6,17 +6,17 @@
 #file storage table for users to store uploaded tracks
 CREATE TABLE hubSpace (
     userName varchar(255) not null,	# userName of user uploading file
-    fileName longblob not null,	# name of uploaded files. The actual path to this file is different
+    fileName varchar(10000) not null,	# name of uploaded files or directory. The actual path to this file is different
     fileSize bigint not null,	# size of the uploaded file
-    fileType varchar(255) not null,	# track type of file
+    fileType varchar(255) not null,	# track type of file, or subdir if not a track file
     creationTime timestamp default CURRENT_TIMESTAMP(),	# first upload time
     lastModified timestamp,	# last change time
-    hubNameList longblob,	# comma separated list of hubs this file is a part of
     db varchar(255) not null,	# genome assembly associated with this file
-    location longblob not null,	# file system path or URL to file
+    location varchar(10000) not null,	# file system path or URL to file
     md5sum varchar(255) not null,	# md5sum of file
+    parentDir varchar(1024) not null, # parent directory of file
               #Indices
-    PRIMARY KEY(userName, fileName(255)), # hopefully 255 is long enough to get unique fileNames
+    PRIMARY KEY(userName, fileName(500), parentDir(245)),
     INDEX(userName),
     INDEX(fileName(25)),
     INDEX(fileType),
@@ -24,5 +24,6 @@ CREATE TABLE hubSpace (
     INDEX(location(25)),
     INDEX(creationTime),
     INDEX(lastModified),
-    INDEX(md5sum)
+    INDEX(md5sum),
+    INDEX(parentDir)
 );
