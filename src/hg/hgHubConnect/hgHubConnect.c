@@ -431,7 +431,7 @@ else
     {
     puts("<div class='help'>To use the <tt>hubtools up</tt> command, create a file ~/.hubtools.conf and add this line:</div>");
     puts("<div style='margin-left: 15px; font-family: monospace'>");
-    printf("apiKey='%s@%s'", userName, userId);
+    printf("apiKey=%s@%s", userName, userId);
     puts("</div>");
     }
 
