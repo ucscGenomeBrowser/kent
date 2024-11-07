@@ -5,6 +5,7 @@ group genes
 shortLabel GENCODE Versions
 longLabel Container of all new and previous GENCODE releases
 # don't set wgEncode attribute here, since newer GENCODEs are not ENCODE
+pennantIcon Updated red ../goldenPath/newsarch.html#111024 "Updated Nov. 2024"
 
 include wgEncodeGencodeV20.ra
 include wgEncodeGencodeV21.ra
