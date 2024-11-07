@@ -111,6 +111,11 @@ authorization back into the site. Request the following edit to httpd.conf:
 
         SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
 
+There will be a File Download problem if the mod_xsendfile module is missing and not
+activated in Apache. Once installed mod_xsendfile will enable logged-in users
+to download files.
+
+
 
 COMMAND LINE USAGE
 
