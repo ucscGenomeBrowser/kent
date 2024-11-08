@@ -136,9 +136,19 @@ size_t length = strlen(text);
 char *newText = (char *)buffer;
 
 int ret = iconv(ourIconv, &text, &length, &newText,  &nLength);
-
-if (ret < 0)
-    errAbort("iconv problem errno %d\n",errno);
+while((ret = iconv(ourIconv, &text, &length, &newText,  &nLength)) < 0)
+    {
+    if (errno == EILSEQ)  // this means we hit an illegal character.  Skip it and put a '?' there, then go back into iconv
+        {
+        text++;
+        
+        // stash the Unicode question mark in the translated string
+        *newText++ = '?';
+        *newText++ = 0;
+        }
+    else
+        errAbort("iconv problem errno %d\n",errno);
+    }
 
 return (newText - (char *)buffer) / sizeof(unsigned short);
 }
