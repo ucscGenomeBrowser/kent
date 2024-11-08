@@ -8,6 +8,19 @@ from os.path import join, basename, dirname, isfile, relpath, abspath, splitext,
 #import pyyaml   # not loaded here, so it's not a hard requirement, is lazy loaded in parseMetaYaml()
 
 # ==== functions =====
+# allowed file types by hubtools up
+fileTypes = {
+    "bb" : "bigBed",
+    "bigBed" : "bigBed",
+    "bam" : "bam",
+    "vcf.gz" : "vcf",
+    "bigWig" : "bigWig",
+    "bw" : "bigWig",
+    "hic" : "hic",
+    "cram" : "cram",
+    "txt" : "text",
+}
+
 asHead = """table bed
 "Browser extensible data (<=12 fields) "
     (
@@ -726,11 +739,23 @@ def uploadFiles(tdbDir, hubName):
                     continue
 
             cache = {}
-            cache["mtime"] = os.stat(fullPath).st_mtime
+            mtime = os.stat(fullPath).st_mtime
+            cache["mtime"] = mtime
             cache["size"] = os.stat(fullPath).st_size
             uploadCache[fpath] = cache
 
-            meta = {"subdir" : rootDir, "genome":"NA", "hubName" : hubName}
+            #timestamp = datetime.fromtimestamp(mtime, tz=timezone.utc).timestamp() # seconds since 1970
+
+            parentDir = join(hubName, rootDir)
+            meta = {
+                    "parentDir" : parentDir,
+                    "genome":"NA",
+                    "fileName" : fbase,
+                    "hubName" : hubName,
+                    "fileType":"NA",
+                    "lastModified" : str(int(mtime)),
+                }
+
             logging.info(f"Uploading {fpath}, meta {meta}")
             uploader = my_client.uploader(fullPath, metadata=meta)
             uploader.upload()
