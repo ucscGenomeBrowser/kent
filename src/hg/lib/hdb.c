@@ -4209,7 +4209,9 @@ if (isHubTrack(db))
     unsigned hubId = hubIdFromTrackName(db);
     struct hubConnectStatus *status = hubFromIdNoAbort(hubId);
 
-    if (status->errorMessage)
+    if (status == NULL)
+        errAbort("Cannot set database to %s.  Hub with id %d is not found in hubStatus.\n",hubConnectSkipHubPrefix(db), hubId);
+    else if (status->errorMessage)
         errAbort("Cannot set database to %s.  Hub %s is reporting error: %s\n", hubConnectSkipHubPrefix(db), status->hubUrl, status->errorMessage);
     else
         errAbort("Cannot find genome %s in %s\n", hubConnectSkipHubPrefix(db), status->hubUrl);

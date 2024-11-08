@@ -23,7 +23,7 @@ def parseAliasMappingFile(fileUrl):
             bicNom = line[340].split(",")[0]
             protChange = line[337]
             synonyms = line[351].split(",")
-        
+
             if HGVSname not in aliasMappingDic.keys():
                 aliasMappingDic[HGVSname]={}
             aliasMappingDic[HGVSname]["bicNom"]= bicNom
@@ -44,7 +44,7 @@ def processEastonFile(fileUrl,eastonVarsToMapDic):
             familyLR = 10**(float(line[1].replace("?", "-")))
             coocurrenceLR = 10**(float(line[2].replace("?", "-")))
             segregationLR = 10**(float(line[3].replace("?", "-")))
-        
+
             if varName not in eastonVarsToMapDic.keys():
                 eastonVarsToMapDic[varName] = {}
                 eastonVarsToMapDic[varName]["familyLR"] = familyLR
@@ -181,17 +181,17 @@ def parseDicsAndCreateFinalLLRdic(caputoVarsDic,parsonsVarsDic,liVarsDic,eastonV
                             finalCombinedLRdic[variant][dic][LR] = float(combinedDic[dic][variant][LR])
                             #First value for the combined
                             finalCombinedLRdic[variant][LR+"combined"] = float(combinedDic[dic][variant][LR])
-
+                            
     for var in finalCombinedLRdic.keys():
         finalCombinedLRdic[var]["combinedLRscore"] = 1
         for combinedLR in finalCombinedLRdic[var].keys():
             if combinedLR.endswith("combined"):
                 finalCombinedLRdic[var]["combinedLRscore"] = finalCombinedLRdic[var]["combinedLRscore"] * finalCombinedLRdic[var][combinedLR]
 
-    print("Total number of final variables in combined dataset: "+str(len(finalVarsList)))    
+    print("Total number of final variables in combined dataset: "+str(len(finalVarsList)))
     #The result is a dictionary as such:
     #Level 1: Variants, e.g. NM_000059.4:c.3509C>T
-    #Level 2: A dictionary for each dataset, a combined score for each LR (5 total), and a final combinedLR from multiplying all combined individual scores 
+    #Level 2: A dictionary for each dataset, a combined score for each LR (5 total), and a final combinedLR from multiplying all combined individual scores
     #Level 3: The only level 3 dic is each individual dataset have their value recorded for each LR, e.g. 'parsonsVarsDic': {'coocurrenceLR': 1.1570849263,'familyLR': 1.6809221375,}
     return(finalCombinedLRdic)
 
@@ -231,7 +231,7 @@ def assignACMGcode(LR):
 def checkVarAndWriteToLine(potentialDataset,combinedLRdic,variant,dataset,listOfValues,lineToWrite):
     if dataset in combinedLRdic[variant].keys():
         if potentialDataset in combinedLRdic[variant][dataset].keys():
-            listOfValues.append(str(round(combinedLRdic[variant][dataset][potentialDataset],3)))
+            listOfValues.append(str(round(combinedLRdic[variant][dataset][potentialDataset],5)))
         else:
             listOfValues.append("NULL")
     return(lineToWrite)
@@ -242,24 +242,24 @@ def createOutputBedLine(combinedLRdic,vcfVarCoords):
     for variant in combinedLRdic.keys():
         ACMGcode = assignACMGcode(combinedLRdic[variant]["combinedLRscore"])
         _mouseOver = "<b>HGVSc:</b> "+variant+"<br>"+\
-            "<b>Combined LR:</b> "+str(round(combinedLRdic[variant]["combinedLRscore"],3))+\
+            "<b>Combined LR:</b> "+str(round(combinedLRdic[variant]["combinedLRscore"],5))+\
             "<br><b>ACMG Code:</b> "+ACMGcode
         itemRGB = assignRGBcolorByLR(combinedLRdic[variant]["combinedLRscore"])
-        
+
         if variant in vcfVarCoords.keys():
             #first three fields chrom, chromStart, chromEnd- then next 5 standard bed fields
             lineToWrite = ("\t".join(vcfVarCoords[variant])+\
             "\t"+variant+"\t0\t.\t"+"\t".join(vcfVarCoords[variant][1:])+\
-            "\t"+itemRGB+"\t"+str(round(combinedLRdic[variant]["combinedLRscore"],3))+"\t"+\
+            "\t"+itemRGB+"\t"+str(round(combinedLRdic[variant]["combinedLRscore"],5))+"\t"+\
             ACMGcode+"\t")
-            
+
             #Add the combined LRs
             for LRcombined in ["familyLRcombined","coocurrenceLRcombined","segregationLRcombined","pathologyLRcombined","caseControlLRcombined"]:
                 if LRcombined in combinedLRdic[variant].keys():
-                    lineToWrite = lineToWrite+str(round(combinedLRdic[variant][LRcombined],3))+"\t"
+                    lineToWrite = lineToWrite+str(round(combinedLRdic[variant][LRcombined],5))+"\t"
                 else:
                     lineToWrite = lineToWrite+"\t"
-                  
+
             for dataset in ['caputoVarsDic','parsonsVarsDic','liVarsDic','eastonVarsDic']:
                 if dataset == 'caputoVarsDic':
                     listOfValues = []
@@ -281,16 +281,16 @@ def createOutputBedLine(combinedLRdic,vcfVarCoords):
                     for potentialDataset in ["familyLR","coocurrenceLR","segregationLR"]:
                         lineToWrite = checkVarAndWriteToLine(potentialDataset,combinedLRdic,variant,dataset,listOfValues,lineToWrite)
                     lineToWrite = lineToWrite+",".join(listOfValues)+'\t'
-            
+
             lineToWrite = lineToWrite+_mouseOver+"\n"
             outputBedFile.write(lineToWrite)
-        
+
         else:
             n+=1
             print(variant)
     print("A total of "+str(n)+" variants did not match.")
     outputBedFile.close()
-
+    
 def mapVariantsHGVSandMakeBedFile(combinedLRdic):
     varsToConvertToVcf = open('/hive/data/inside/enigmaTracksData/varsToConvert.txt','w')
     for variant in combinedLRdic.keys():
@@ -364,7 +364,7 @@ def createFinalBigBedFile():
 
     bash("ln -sf /hive/data/inside/enigmaTracksData/BRCAmfaHg38.bb /gbdb/hg38/bbi/enigma/BRCAmfa.bb")
     bash("ln -sf /hive/data/inside/enigmaTracksData/BRCAmfaHg19.bb /gbdb/hg19/bbi/enigma/BRCAmfa.bb")
-    
+
 #Build 3 basic dictionaries, these are all simiar
 caputoVarsDic = parseParsonsOrCaputoOrLiData("/hive/data/inside/enigmaTracksData/LRtrack/DataFromCaputo2021,34597585.txt","caputoVarsDic")
 parsonsVarsDic = parseParsonsOrCaputoOrLiData("/hive/data/inside/enigmaTracksData/HUMU-40-1557-s001-1.txt","parsonsVarsDic")
