@@ -1086,5 +1086,13 @@ cgiDown(0.9);
 freez(&groupTarget);
 webEndSectionTables();
 hPrintf("</FORM>");
+
+// The previous version of the hgTracks js object will get over-written by this page,
+// so add all the variables needed htere. So any new hgTracks.somefield references
+// added to hgTracks.js may need to be put here.
+
+jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
+
+
 }
 
