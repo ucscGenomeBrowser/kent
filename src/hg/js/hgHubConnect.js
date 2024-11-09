@@ -71,6 +71,12 @@ $(function() {
           localStorage.setItem("hubTab", ui.newTab.index());
       },
   });
+  // activate tabs if the current URL ends with #dev or #conn
+  var tabName = window.location.hash;
+  if (tabName==="#dev")
+      $("#tabs").tabs("option", "active", 2);
+  if (tabName==="#conn")
+      $("#tabs").tabs("option", "active", 1);
 });
 
 // creates keyup event; listening for return key press

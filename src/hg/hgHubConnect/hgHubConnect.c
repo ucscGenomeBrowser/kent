@@ -30,7 +30,7 @@
 #include "hubSearchText.h"
 #include "pipeline.h"
 #include "hubPublic.h"
-
+#include "wikiLink.h"
 
 static boolean measureTiming;
 
@@ -415,6 +415,29 @@ errCatchFree(&errCatch);
 return ret;
 }
 
+void printApiKeySection()
+{
+puts("<div id='apiKey' class='tabSection'>");
+puts("<h4>Hubtools API key</h4>");
+char *userName = wikiLinkUserName();
+char *userId = wikiLinkUserId();
+if (userName==NULL || userId==NULL)
+    {
+    char *hgsid = cartSessionId(cart);
+    char *loginUrl = wikiLinkUserLoginUrlReturning(hgsid, wikiLinkEncodeReturnUrl(hgsid, "hgHubConnect", "#dev"));
+    printf("<div class='help'>You are not logged in. Please <a href='%s'>Login</a> now, then this page will show the API key.</div>", loginUrl);
+    }
+else
+    {
+    puts("<div class='help'>To use the <tt>hubtools up</tt> command, create a file ~/.hubtools.conf and add this line:</div>");
+    puts("<div style='margin-left: 15px; font-family: monospace'>");
+    printf("apiKey=%s@%s", userName, userId);
+    puts("</div>");
+    }
+
+puts("</div>"); // tabSection apiKey
+}
+
 void hgHubConnectDeveloperMode()
 /* Put up the controls for the "Hub Development" Tab, which includes a button to run the
  * hubCheck utility on a hub and load a hub with the udcTimeout and measureTiming
@@ -507,9 +530,14 @@ printf("<div class='help'>Current setting: %s</div>\n", timeDesc);
 puts("</FORM>");
 puts("</div>"); // margin-left
 puts("</div>"); // tabSection
-puts("</div>"); // #hubDeveloper
 
 jsOnEventById("click", "hubValidateButton", "makeIframe(event)");
+
+// API Key section 
+if (cfgOptionBooleanDefault("showHubApiKey", FALSE)) // This should probably not be shown on mirrors, so default to FALSE
+    printApiKeySection();
+puts("</div>"); // hub developement tab
+
 }
 
 void printSearchAndFilterBoxes(int searchEnabled, char *hubSearchTerms, char *dbFilter)

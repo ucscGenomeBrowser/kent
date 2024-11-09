@@ -8,6 +8,19 @@ from os.path import join, basename, dirname, isfile, relpath, abspath, splitext,
 #import pyyaml   # not loaded here, so it's not a hard requirement, is lazy loaded in parseMetaYaml()
 
 # ==== functions =====
+# allowed file types by hubtools up
+fileTypes = {
+    "bb" : "bigBed",
+    "bigBed" : "bigBed",
+    "bam" : "bam",
+    "vcf.gz" : "vcf",
+    "bigWig" : "bigWig",
+    "bw" : "bigWig",
+    "hic" : "hic",
+    "cram" : "cram",
+    "txt" : "text",
+}
+
 asHead = """table bed
 "Browser extensible data (<=12 fields) "
     (
@@ -59,18 +72,23 @@ def parseArgs():
     hubtools conv -i myTsvDir
     - convert .tsv files in inDir to .bigBed files in current directory
 
-    hubtools ct -i xxx/archive -o outDir
+    hubtools archive -i xxx/archive -o outDir
     - Create a hub from an extracted xxx.tar.gz file "archive" directory. You can download a .tar.gz from
       in the Genome Browser under My Data > My Session. The archive contains all your custom tracks.
+
+    hubtools ct <hgTracksUrl>
 
     Examples:
     hubtools conv -i myTsvs/
     hubtools make hg38
     hubtools jbrowse http://furlonglab.embl.de/FurlongBrowser/ dm3
     hubtools tab hub.txt > tracks.tsv
+    hubtools session
 
     tar xvfz SC_20230723_backup.tar.gz
-    hubtools ct -i archive -o hub
+    hubtools archive -i archive -o hub
+    hubtools ct 'https://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr7%3A155798978%2D155810671&hgsid=345826202_8d3Mpumjaw9IXYI2RDaSt5xMoUhH'
+
 
     For the "make" step:
 
@@ -112,6 +130,53 @@ def errAbort(msg):
 def makedirs(d):
     if not isdir(d):
         os.makedirs(d)
+
+def parseConf(fname):
+    " parse a hg.conf style file, return as dict key -> value (all strings) "
+    logging.debug("Parsing "+fname)
+    conf = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        elif line.startswith("include "):
+            inclFname = line.split()[1]
+            absFname = normpath(join(dirname(fname), inclFname))
+            if os.path.isfile(absFname):
+                inclDict = parseConf(absFname)
+                conf.update(inclDict)
+        elif "=" in line: # string search for "="
+            key, value = line.split("=",1)
+            conf[key] = value
+    return conf
+
+# cache of hg.conf contents
+hgConf = None
+
+def parseHgConf():
+    """ return hg.conf as dict key:value. """
+    global hgConf
+    if hgConf is not None:
+        return hgConf
+
+    hgConf = dict() # python dict = hash table
+
+    fname = os.path.expanduser("~/.hubtools.conf")
+    if isfile(fname):
+        hgConf = parseConf(fname)
+    else:
+        fname = os.path.expanduser("~/.hg.conf")
+        if isfile(fname):
+            hgConf = parseConf(fname)
+
+def cfgOption(name, default=None):
+    " return hg.conf option or default "
+    global hgConf
+
+    if not hgConf:
+        parseHgConf()
+
+    return hgConf.get(name, default)
 
 def parseMetaRa(fname):
     """parse tracks.ra or tracks.txt and return as a dict of trackName -> dict of key->val """
@@ -609,25 +674,93 @@ def installModule(package):
     logging.info("Could not find Python module '%s', trying to install with pip" % package)
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-def uploadFiles(tdbDir):
-    "upload files to hubspace"
+def cacheLoad(fname):
+    " load file cache from json file "
+    if not isfile(fname):
+        logging.debug("No upload cache present")
+        return {}
+
+    logging.debug("Loading "+fname)
+    return json.load(open(fname))
+
+def cacheWrite(uploadCache, fname):
+    logging.debug("Writing "+fname)
+    json.dump(uploadCache, open(fname, "w"), indent=4)
+
+def uploadFiles(tdbDir, hubName):
+    "upload files to hubspace. Server name and token can come from ~/.hubtools.conf "
     try:
         from tusclient import client
     except ModuleNotFoundError:
         installModule("tuspy")
+        from tusclient import client
 
-    serverUrl="https://hgwdev-hubspace.gi.ucsc.edu/files"
-    my_client = client.TusClient(serverUrl, headers={})
-    logging.info(f"Target server is {serverUrl}")
+    serverUrl = cfgOption("tusUrl", "https://hubspace.gi.ucsc.edu/files")
 
-    for fname in os.listdir(tdbDir):
-        fpath = join(tdbDir, fname)
-        if isdir(fpath):
-            continue
-        logging.info(f"Uploading {fpath}")
-        meta = {"db":"hg19"}
-        uploader = my_client.uploader(fpath, metadata=meta)
-        uploader.upload()
+    cookies = {}
+    cookieNameUser = cfgOption("wiki.userNameCookie", "wikidb_mw1_UserName")
+    cookieNameId = cfgOption("wiki.loggedInCookie", "wikidb_mw1_UserID")
+
+    apiKey = cfgOption("apiKey")
+    if apiKey is None:
+        errAbort("To upload files, the file ~/.hubtools.conf must contain a line like apiKey='xxx@yyy').\n"
+                "Go to https://genome.ucsc.edu/cgi-bin/hgHubConnect#dev to get your apiKey value.")
+
+    if not "@" in apiKey:
+        errAbort("The apiKey value in ~/.hubtools.conf must contain an @ character.")
+
+    cookieUser, cookieId = apiKey.split("@")
+
+    cookies = {}
+    cookies[cookieNameUser] = cookieUser
+    cookies[cookieNameId] = cookieId
+    cookie_header = "; ".join(f"{key}={value}" for key, value in cookies.items())
+
+    headers = {"Cookie" : cookie_header}
+
+    logging.info(f"TUS server URL: {serverUrl}")
+    logging.debug("HTTP headers: "+repr(headers))
+    my_client = client.TusClient(serverUrl, headers=headers)
+
+    cacheFname = join(tdbDir, ".hubtools.json")
+    uploadCache = cacheLoad(cacheFname)
+
+    for rootDir, dirs, files in os.walk(tdbDir):
+        for fbase in files:
+            if fbase.startswith("."):
+                continue
+            fpath = join(rootDir, fbase)
+            fullPath = join(tdbDir, fpath)
+
+            # skip files that have not changed their mtime since last upload
+            if fpath in uploadCache:
+                if os.stat(fullPath).st_mtime == uploadCache[fpath]["mtime"]:
+                    logging.info("%s: file mtime unchanged, not uploading again" % fullPath)
+                    continue
+
+            cache = {}
+            mtime = os.stat(fullPath).st_mtime
+            cache["mtime"] = mtime
+            cache["size"] = os.stat(fullPath).st_size
+            uploadCache[fpath] = cache
+
+            #timestamp = datetime.fromtimestamp(mtime, tz=timezone.utc).timestamp() # seconds since 1970
+
+            parentDir = join(hubName, rootDir)
+            meta = {
+                    "parentDir" : parentDir,
+                    "genome":"NA",
+                    "fileName" : fbase,
+                    "hubName" : hubName,
+                    "fileType":"NA",
+                    "lastModified" : str(int(mtime)),
+                }
+
+            logging.info(f"Uploading {fpath}, meta {meta}")
+            uploader = my_client.uploader(fullPath, metadata=meta)
+            uploader.upload()
+
+    cacheWrite(uploadCache, cacheFname)
 
 def iterRaStanzas(fname):
     " parse an ra-style (trackDb) file and yield dictionaries "
@@ -1004,7 +1137,7 @@ def convCtDb(db, inDir, outDir):
     logging.info("Wrote %s" % hubTxtFname)
     ofh.close()
 
-def convCtDir(inDir, outDir):
+def convArchDir(inDir, outDir):
     " convert a directory created from the .tar.gz file downloaded via our track archive feature "
     dbContent = os.listdir(inDir)
     dbDirs = []
@@ -1021,6 +1154,24 @@ def convCtDir(inDir, outDir):
         outSubDir = join(outDir, db)
         convCtDb(db, inSubDir, outSubDir)
 
+def hgsidFromUrl(url):
+    " return hgsid given a URL. written by chatGPT "
+    # Parse the URL
+    parsed_url = urllib.parse.urlparse(url)
+    server_name = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    query_params = urllib.parse.parse_qs(parsed_url.query)
+    hgsid = query_params.get('hgsid')
+    # Return the hgsid value if it exists
+    if hgsid:
+        return server_name, hgsid[0]  # Extracting the first value from the list
+    errAbort("hgsid parameter not found in "+url)
+
+def convCtUrl(url, outDir):
+    " given an hgTracks URL with an hgsid on it, get all custom track lines and create a hub file for it. Does not download custom tracks. "
+    serverUrl, hgsid = hgsidFromUrl(url)
+    cartDumpUrl = serverUrl+"/cgi-bin/cartDump?hgsid="+hgsid
+
+
 def hubtools(args, options):
     """ find files under dirName and create a trackDb.txt for them"""
 
@@ -1035,7 +1186,11 @@ def hubtools(args, options):
         outDir = options.outDir
 
     if cmd=="up":
-        uploadFiles(inDir)
+        if len(args)<2:
+            errAbort("The 'up' command requires one argument, the name of the hub. You can specify any name, "
+                "ideally a short, meaningful string, e.g. atacseq, muscle-rna or yamamoto2022.")
+        hubName = args[1]
+        uploadFiles(inDir, hubName)
         return
 
     tdbDir = inDir
@@ -1069,8 +1224,12 @@ def hubtools(args, options):
 
         convTsvDir(inDir, db, outDir)
 
+    elif cmd=="archive":
+        convArchDir(inDir, outDir)
+
     elif cmd=="ct":
-        convCtDir(inDir, outDir)
+        url = args[1]
+        convCtUrl(url, outDir)
 
     else:
         logging.error("Unknown command: '%s'" % args[1])

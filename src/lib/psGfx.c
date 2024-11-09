@@ -271,12 +271,23 @@ if (ourIconv == NULL)
 size_t length = strlen(text);
 char *newText = (char *)buffer;
 
-int ret = iconv(ourIconv, &text, &length, &newText,  &nLength);
+// loop calling iconv until we get through the whole string
+int ret;
+while((ret = iconv(ourIconv, &text, &length, &newText,  &nLength)) < 0)
+    {
+    if (errno == EILSEQ)  // this means we hit an illegal character.  Skip it and put a '?' there, then go back into iconv
+        {
+        text++;
+        *newText++ = '?';
+        }
+    else
+        errAbort("iconv problem errno %d\n",errno);
+    }
 
-if (ret < 0)
-    errAbort("iconv problem errno %d\n",errno);
-
-return (newText - (char *)buffer);
+// null terminate that puppy
+int newLength = newText - (char *)buffer;
+buffer[newLength] = 0;
+return newLength;
 }
 
 void psTextOutEscaped(struct psGfx *ps, char *text)
@@ -284,10 +295,9 @@ void psTextOutEscaped(struct psGfx *ps, char *text)
  * Notice that ps uses escaping similar to C itself.*/
 {
 size_t length = strlen(text);
-unsigned char buff[length * 2];  // should be way too much
+unsigned char buff[length * 4];  // should be way too much
 
-length = utf8ToWindows1252(text, buff, length * 4);
-buff[length] = '\0';
+length = utf8ToWindows1252(text, buff, sizeof(buff));
 
 text = (char *)buff;
 char c;
