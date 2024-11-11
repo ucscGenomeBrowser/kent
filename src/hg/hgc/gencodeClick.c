@@ -452,7 +452,12 @@ prTdEnsIdAnchor(transAttrs->geneId,
                 (isGrcH37Native(tdb) ? ensemblH37GeneIdUrl : ensemblGeneIdUrl));
 printf("</tr>\n");
 
-if (transAttrs->proteinId != NULL)
+printf("<tr><th>Name");
+printf("<td>%s", transAttrs->transcriptName);
+printf("<td>%s", transAttrs->geneName);
+printf("</tr>\n");
+
+if (isNotEmpty(transAttrs->proteinId))
     {
     // protein id in database, maybe not for this transcript
     printf("<tr><th>Protein id");

@@ -63,6 +63,8 @@ GCF_000308155.1_EptFus1.0	big brown bat (BU_THK_EF1 2012)
 GCF_027574615.1_DD_ASM_mEF_20220401	big brown bat (TK198812 2023)
 GCA_004026945.1_OviCan_v1_BIUU	bighorn sheep (BS48 2019)
 GCA_037893015.1_bilby.v1.9.chrom.fasta	bilby (mMagLag1 2024)
+GCA_043290085.1_mRhyPet1.hap1	black and rufous elephant shrew (mRhyPet1hap1 2024)
+GCA_043290065.1_mRhyPet1.hap2	black and rufous elephant shrew (mRhyPet1hap2 2024)
 GCF_000325575.1_ASM32557v1	black flying fox
 GCF_011064425.1_Rrattus_CSIRO_v1	black rat
 GCA_004027315.1_DicBicMic_v1_BIUU	black rhinoceros (BS38 2019 Broad)
@@ -240,6 +242,7 @@ GCF_902686445.1_mSciCar1.2	gray squirrel (2020)
 GCA_902685475.1_mSciCar1.1_alternate_haplotype	gray squirrel (alternate hap 2019)
 GCA_905319855.2_mCanLor1.2	gray wolf (2021)
 GCA_905319845.1_mCanLor1.1_alternate_haplotype	gray wolf (alternate hap 2021)
+GCA_038363175.2_mArtLit1.hap2	great fruit-eating bat (mArtLit1hap2 2024)
 GCA_038363095.2_mArtLit.hap1	great fruit-eating bat (v2 hap1 2024)
 GCF_001890085.2_ASM189008v1	great roundleaf bat (v2 ML-2016 2016)
 GCA_004026585.1_NocLep_v1_BIUU	greater bulldog bat
@@ -369,6 +372,7 @@ GCF_001595765.1_Mnat.v1	Natal long-fingered bat
 GCA_964212035.1_mMyoNat1.hap1.1	Natterer's bat (mMyoNat1.hap1.1 2024)
 GCA_964212025.1_mMyoNat1.hap2.1	Natterer's bat (mMyoNat1.hap2.1 2024)
 GCF_014824575.2_WHU_Shon_v2.1	neotropical fruit bat
+GCA_011762505.2_mArvNil1.pat.X	Nile rat (mArvNil1 2024)
 GCA_004026825.1_HemHyl_v1_BIUU	Nilgiri tahr
 GCA_030445055.1_mDasNov1.hap1	nine-banded armadillo (mDasNov1 hap1 2023)
 GCA_030445055.2_mDasNov1.1.hap1	nine-banded armadillo (mDasNov1 hap1 2023)
