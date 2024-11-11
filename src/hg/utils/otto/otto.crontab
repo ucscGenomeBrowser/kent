@@ -22,7 +22,7 @@ ottomeister=otto-group@ucsc.edu
 
 MAILTO=otto-group@ucsc.edu
 #Daily sandbox update
-41 07 * * 1-5 /cluster/home/otto/bin/sandboxupdate
+41 00 * * 1-7 /cluster/home/otto/bin/sandboxupdate
 
 # save shell history and last log into log files in ~/lastLog/
 # last day of the month to catch them just before log rotation
