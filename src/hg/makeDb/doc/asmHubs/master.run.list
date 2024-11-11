@@ -2547,7 +2547,6 @@
 ./runBuild GCF_000195955.2_ASM19595v2 bacteria Mycobacterium_tuberculosis_H37Rv
 ./runBuild GCF_000196175.1_ASM19617v1 bacteria Bdellovibrio_bacteriovorus_HD1002004-02-10
 ./runBuild GCF_000203795.1_v1.0 fungi Batrachochytrium_dendrobatidis_JAM81
-./runBuild GCF_000203795.2_v1.0 fungi Batrachochytrium_dendrobatidis_JAM81
 ./runBuild GCF_000203795.2_v1.1 fungi Batrachochytrium_dendrobatidis_JAM81
 ./runBuild GCF_000203815.1_DFas_2.0 invertebrate Cavenderia_fasciculata
 ./runBuild GCF_000204055.1_v1.0 fungi Melampsora_larici-populina_98AG31
