@@ -168,7 +168,7 @@ sub doCluster {
 
   # First, make sure previous step has completed:
   if ( ! $opt_debug ) {
-    if ( ! -s "$runDir/$db.nsq" ) {
+    if ( ! (-s "$runDir/$db.nsq" || -s "$runDir/$db.00.nsq") ) {
       die "doCluster: previous 'blastDb' step has not completed, $db.nsq not present\n";
     }
     # And, verify this step has not run before
