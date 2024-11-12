@@ -191,7 +191,18 @@ printf '#!/bin/bash
 
 set -beEu -o pipefail
 
-export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+elif [ -d "/dev/shm" ]; then
+  export TMPDIR="/dev/shm"
+else
+  export TMPDIR="/tmp"
+fi
+
+export tmpDir=`mktemp -d -p \$TMPDIR rModeler.XXXXXX`
 
 # working directory
 cd "\${tmpDir}"
