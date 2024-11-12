@@ -102,9 +102,46 @@ if (!sqlTableExistsOnMain(conn, "hubSpace"))
     errAbort("No hubSpace MySQL table is present. Please send an email to genome-www@soe.ucsc.edu  describing the exact steps you took just before you got this error");
     }
 hubSpaceSaveToDb(conn, row, "hubSpace", 0);
+hDisconnectCentral(&conn);
 }
 
-char *writeHubText(char *path, char *userName, char *encodedHubName, char *hubName, char *db)
+static void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr)
+/* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
+ * final subdirectory component of parentDirStr */
+{
+int i, slashCount = countChars(parentDirStr, '/');
+char *components[256];
+struct dyString *currLocation = dyStringNew(0);
+int foundSlashes = chopByChar(cloneString(parentDirStr), '/', components, slashCount);
+if (foundSlashes > 256)
+    errAbort("parentDir setting '%s' too long", parentDirStr);
+for (i = 0; i < foundSlashes; i++)
+    {
+    char *subdir = components[i];
+    if (sameString(subdir, "."))
+        continue;
+    fprintf(stderr, "making row for parent dir: '%s'\n", subdir);
+    if (!subdir)
+        errAbort("error: empty subdirectory components for parentDir string '%s'", parentDirStr);
+    struct hubSpace *row = NULL;
+    AllocVar(row);
+    row->userName = userName;
+    row->fileName = subdir;
+    row->fileSize = 0;
+    row->fileType = subdir;
+    row->creationTime = NULL;
+    row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
+    row->db = db;
+    row->location = cloneString(dyStringContents(currLocation));
+    row->md5sum = "";
+    row->parentDir = i > 0 ? components[i-1] : "";
+    addHubSpaceRowForFile(row);
+    dyStringAppendC(currLocation, '/');
+    dyStringAppend(currLocation, components[i]);
+    }
+}
+
+char *writeHubText(char *path, char *userName, char *hubName, char *db)
 /* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
  * the file name of the created hub, which can be freed. */
 {
@@ -125,26 +162,37 @@ fprintf(f, "hub %s\n"
     "\n"
     "genome %s\n"
     "\n",
-    encodedHubName, emailForUserName(userName), hubName, hubName, db);
+    hubName, emailForUserName(userName), hubName, hubName, db);
 carefulClose(&f);
 return hubFile;
 }
 
-char *createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *reqHubName, char *parentDir)
+char *hubNameFromParentDir(char *parentDir)
+/* Assume parentDir does not have leading '/' or '.', parse out the first dir component */
+{
+char *copy = cloneString(parentDir);
+char *firstSlash = strchr(copy, '/');
+if (!firstSlash)
+    {
+    return copy;
+    }
+firstSlash = 0;
+return copy;
+}
+
+void createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *parentDir)
 /* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
- * for convenience. If the reqHubName argument is non-NULL, use that as the hub name instead of
- * a random string AND do not create a hub.txt, only for use from hubtools up command */
+ * for convenience.  */
 {
 char *hubFileName = NULL;
 char *path = NULL;
 struct dyString *hubPath = dyStringNew(0);
-dyStringPrintf(hubPath, "%s%s", getDataDir(userName), reqHubName);
-// the reqHubName was used to make a directory, so it is cgi-encoded and has a '/' at the end
-char *decoded = needMem(strlen(reqHubName));
-cgiDecodeFull(reqHubName, decoded, strlen(reqHubName));
-path = hubFileName = writeHubText(dyStringCannibalize(&hubPath), userName, reqHubName, decoded, db);
+char *hubName = hubNameFromParentDir(parentDir);
+dyStringPrintf(hubPath, "%s%s", getDataDir(userName), hubName);
+fprintf(stderr, "hubPath: %s\n", hubPath->string);
+path = hubFileName = writeHubText(dyStringCannibalize(&hubPath), userName, hubName, db);
 char *encodedTrack = cgiEncodeFull(trackFileName);
-struct dyString *trackFilePath = dyStringCreate("../%s", encodedTrack);
+struct dyString *trackFilePath = dyStringCreate("%s%s%s", parentDir != NULL ? parentDir : "", parentDir != NULL ? "/" : "", encodedTrack);
 FILE *f = mustOpen(hubFileName, "a");
 fprintf(f, "track %s\n"
     "bigDataUrl %s\n"
@@ -169,9 +217,14 @@ row->lastModified = sqlUnixTimeToDate(&lastModTime, TRUE);
 row->db = db;
 row->location = path;
 row->md5sum = md5HexForFile(hubFileName);
-row->parentDir = parentDir ? parentDir : "";
+fprintf(stderr, "making parent dir rows\n");
+fflush(stderr);
+makeParentDirRows(userName, lastModTime, db, parentDir);
+row->parentDir = hubName;
+struct dyString *parentsPath = dyStringCreate("%s%s", getDataDir(userName), parentDir);
+fprintf(stderr, "parentDir of hub.txt: '%s'\n", parentsPath->string);
+fflush(stderr);
 addHubSpaceRowForFile(row);
-return reqHubName;
 }
 
 static void deleteHubSpaceRow(char *fname)
@@ -211,12 +264,6 @@ if (isDirectory(path))
     mustRemove(path);
     deleteHubSpaceRow(path);
     }
-}
-
-void uploadTrack()
-/* Saves a new track to the persistent storage for this user */
-{
-//char *userName = getUserName();
 }
 
 static time_t getFileListLatestTime(struct userFiles *userFiles)

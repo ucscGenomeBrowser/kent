@@ -113,7 +113,7 @@ if (userName)
         {
         // good we can make a new directory and stuff a hub.txt in it
         // the directory needs to be 777, so ignore umask for now
-        writeHubText(path, userName, encodedName, name, db);
+        writeHubText(path, userName, encodedName, db);
         // TODO: add a row to the hubspace table for the hub.txt
         //addHubTxtToTable(userName, path, name, db);
         // return json to fill out the table
@@ -144,7 +144,7 @@ if (userName)
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
         jsonWriteString(jw, "fileType", file->fileType);
-        jsonWriteString(jw, "hub", file->hubNameList);
+        jsonWriteString(jw, "hub", file->fileName);
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "lastModified", file->lastModified);
         jsonWriteString(jw, "uploadTime", file->creationTime);

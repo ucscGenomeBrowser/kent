@@ -6,61 +6,34 @@
 "*\/*"
 ],
 "Accept-Encoding": [
-"gzip, deflate, br, zstd"
-],
-"Accept-Language": [
-"en-US,en;q=0.5"
-],
-"Cache-Control": [
-"no-cache"
+"gzip, deflate"
 ],
 "Connection": [
 "Keep-Alive"
 ],
 "Content-Length": [
-"23504"
-],
-"Content-Type": [
-"application\/offset+octet-stream"
+"0"
 ],
 "Cookie": [
-"hguid.genome-test=34073696_imozxYZxh6N4N70UVQPjFG0DZ8Fo; hguid=1906684090_csfMSuypAjXzDdwuX3o0DzpWULAa; hguid.hgwbeta=26640189_YKH15FM5Z0ua6oyLjT02qDsYH0fW; hguid.genome-japan=790611497_ffLG5cOeGQ8MIa4m43bcmIoIju1T; hguid.hgwdev-jcasper=50503146_FUomXAw4z56o0f7bE4h1RyTCG1CA; hguid.genome-euro=488980124_aNiKQsACsMknTPAH3naVEUxH4I7Z; hguid.hgwdev-demo4=50677835_ADyR4MaWFj3dxQa1e3txA4XTBHt7; DEVwikidb_mw1_UserName=chmalee; DEVwikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2"
-],
-"Dnt": [
-"1"
+"DEVwikidb_mw1_UserName=chmalee; DEVwikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2"
 ],
 "Host": [
 "hgwdev-hubspace.gi.ucsc.edu"
 ],
-"Origin": [
-"https:\/\/hgwdev-chmalee.gi.ucsc.edu"
-],
-"Pragma": [
-"no-cache"
-],
-"Referer": [
-"https:\/\/hgwdev-chmalee.gi.ucsc.edu\/"
-],
-"Sec-Fetch-Dest": [
-"empty"
-],
-"Sec-Fetch-Mode": [
-"cors"
-],
-"Sec-Fetch-Site": [
-"same-site"
-],
 "Tus-Resumable": [
 "1.0.0"
 ],
-"Upload-Offset": [
+"Upload-Length": [
 "0"
 ],
+"Upload-Metadata": [
+"parentDir Li90ZXN0Mg==,genome TkE=,hubName dGVtcA=="
+],
 "User-Agent": [
-"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.15; rv:130.0) Gecko\/20100101 Firefox\/130.0"
+"python-requests\/2.27.1"
 ],
 "X-Forwarded-For": [
-"2600:1700:5fa5:2550:4909:df61:e7d:4db5"
+"2607:f5f0:136:1::26"
 ],
 "X-Forwarded-Host": [
 "hgwdev-hubspace.gi.ucsc.edu"
@@ -72,30 +45,30 @@
 "hgwdev-hubspace.gi.ucsc.edu"
 ]
 },
-"Method": "PATCH",
-"RemoteAddr": "127.0.0.1:34674",
-"URI": "\/files\/39fe861b630c1f869aace7cd59ff3a4f"
+"Method": "POST",
+"RemoteAddr": "127.0.0.1:59194",
+"URI": "/files"
 },
 "Upload": {
-"ID": "39fe861b630c1f869aace7cd59ff3a4f",
+"ID": "5bf1d5070510430e06cb580a50bc3b71",
 "IsFinal": false,
 "IsPartial": false,
 "MetaData": {
-"fileName": "Chick_ES1_ATAC_region_reads.bw",
-"fileSize": "23504",
-"fileType": "bigWig",
-"genome": "GCA_027408225.1",
-"lastModified": "1728062683912"
+"genome": "NA",
+"hubName": "temp",
+"lastModified": "1731021410",
+"parentDir": "./test2"
 },
-"Offset": 23504,
+"Offset": 0,
 "PartialUploads": null,
-"Size": 23504,
+"Size": 0,
 "SizeIsDeferred": false,
 "Storage": {
-"Path": "\/hive\/users\/chmalee\/tmp\/userDataDir\/39fe861b630c1f869aace7cd59ff3a4f",
+"Path": "/hive/users/chmalee/tmp/userDataDir/5bf1d5070510430e06cb580a50bc3b71",
 "Type": "filestore"
 }
 }
 },
 "Type": "post-finish"
 }
+

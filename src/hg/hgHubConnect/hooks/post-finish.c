@@ -66,8 +66,7 @@ else
         char *location = NULL;
         char *reqLm = NULL;
         time_t lastModified = 0;
-        char *parentDir = NULL; // special optional argument from hubtools commands
-        char *reqHubName = NULL; // special optional argument from hubtools commands
+        char *parentDir = NULL;
 
         struct lineFile *lf = lineFileStdin(FALSE);
         char *request = lineFileReadAll(lf);
@@ -96,7 +95,14 @@ else
             reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
             lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
             parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
-            reqHubName = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.hubName", NULL));
+            fprintf(stderr, "parentDir = '%s'\n", parentDir);
+            fflush(stderr);
+            // strip out plain leading '.' and '/' components
+            // middle '.' components are dealt with later
+            if (startsWith("./", parentDir) || startsWith("/", parentDir))
+                parentDir = skipBeyondDelimit(parentDir, '/');
+            fprintf(stderr, "parentDir = '%s'\n", parentDir);
+            fflush(stderr);
             char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
             if (fileName == NULL)
                 {
@@ -111,9 +117,6 @@ else
                 char *tusInfo = catTwoStrings(tusFile, ".info");
                 char *dataDir = getDataDir(userName);
                 struct dyString *newFile = dyStringNew(0);
-                // if hubName is provided that becomes the top level directory
-                if (reqHubName)
-                    dataDir = catTwoStrings(dataDir, catTwoStrings(reqHubName, "/"));
                 // if parentDir provided we are throwing the files in there
                 if (parentDir)
                     {
@@ -160,7 +163,7 @@ else
         if (exitStatus == 0)
             {
             // create a hub for this upload, which can be edited later
-            createNewTempHubForUpload(reqId, userName, db, fileName, fileType, reqHubName, parentDir);
+            createNewTempHubForUpload(reqId, userName, db, fileName, fileType, parentDir);
             fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
             fflush(stderr);
             struct hubSpace *row = NULL;
@@ -177,7 +180,6 @@ else
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = parentDir ? parentDir : "";
             addHubSpaceRowForFile(row);
-            hubSpaceFree(&row);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
             fflush(stderr);
             }

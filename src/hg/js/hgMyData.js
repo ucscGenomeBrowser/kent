@@ -1,6 +1,6 @@
 /* jshint esnext: true */
 var debugCartJson = true;
-var hubNameDefault = "My First Hub";
+var hubNameDefault = "MyFirstHub";
 
 function prettyFileSize(num) {
     if (!num) {return "n/a";}
@@ -667,26 +667,8 @@ var hubCreate = (function() {
                         viewInGenomeBrowser(row.fileName, row.fileType, row.genome, row.hub);
                     });
 
-                    // click to rename file or hub:
-                    let renameBtn = document.createElement("button");
-                    renameBtn.textContent = "Rename";
-                    renameBtn.type = 'button';
-                    renameBtn.addEventListener("click", function() {
-                        console.log("rename btn clicked!");
-                    });
-
-                    // click to associate this track to a hub
-                    let addToHubBtn = document.createElement("button");
-                    addToHubBtn.textContent = "Add to hub";
-                    addToHubBtn.type = 'button';
-                    addToHubBtn.addEventListener("click", function() {
-                        addFileToHub(row);
-                    });
-
                     container.appendChild(delBtn);
                     container.appendChild(viewBtn);
-                    container.appendChild(renameBtn);
-                    container.appendChild(addToHubBtn);
 
                     return container;
                 }
@@ -917,16 +899,15 @@ var hubCreate = (function() {
                     batchSelectDiv.id = "batch-selector-div";
                     let batchDbSelect = document.createElement("select");
                     let batchTypeSelect = document.createElement("select");
-                    this.createOptsForSelect(batchDbSelect, [{id: "batchChangeDb", name: "batchChangeDb"}]);
-                    this.createOptsForSelect(batchTypeSelect, [{id: "batchChangeType", name: "batchChangeType"}]);
+                    this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
+                    this.createOptsForSelect(batchTypeSelect, makeTypeSelectOptions());
                     batchSelectDiv.textContent = "Change options for all files";
                     batchSelectDiv.appendChild(batchDbSelect);
                     batchSelectDiv.appendChild(batchTypeSelect);
                     batchSelectDiv.style.display = "flex";
                     batchSelectDiv.style.justifyContent = "center";
-                    let titleBarText = document.querySelector(".uppy-DashboardContent-title");
-                    if (titleBarText) {
-                        batchSelectDiv.style.color = getComputedStyle(titleBarText).color;
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                        batchSelectDiv.style.color = "#eaeaea";
                     }
                     // append the batch changes to the bottom of the file list, for some reason
                     // I can't append to the actual Dashboard-files, it must be getting emptied
@@ -942,7 +923,7 @@ var hubCreate = (function() {
                 this.uppy.on("file-added", (file) => {
                     // add default meta data for genome and fileType
                     console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "hubName": hubNameDefault});
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "parentDir": hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
                     }
@@ -1014,7 +995,7 @@ var hubCreate = (function() {
                     },
                 });
                 fields.push({
-                    id: 'hubName',
+                    id: 'parentDir',
                     name: 'Hub Name',
                     render: ({value, onChange, required, form}, h) => {
                         return h('input',
@@ -1052,7 +1033,7 @@ var hubCreate = (function() {
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
-                "hub": metadata.hubName,
+                "parentDir": metadata.parentDir,
             };
             addNewUploadedFileToTable(newReqObj);
         });

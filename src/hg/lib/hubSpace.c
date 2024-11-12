@@ -63,6 +63,8 @@ fprintf(stderr, "hubSpace row insert:\n\n%s\n\n", update->string);
 fflush(stderr);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
+fprintf(stderr, "hubSpace update successful\n");
+fflush(stderr);
 }
 
 struct hubSpace *hubSpaceLoad(char **row)
