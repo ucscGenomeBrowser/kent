@@ -11498,6 +11498,7 @@ if(!trackImgOnly)
             {
             puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
             puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+            jsIncludeFile("hgTracksPopup.js", NULL);
             jsIncludeFile("tutorial.js",NULL);
             jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification

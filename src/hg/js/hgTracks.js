@@ -5853,6 +5853,15 @@ $(document).ready(function()
             $("#hgTracksHelpTutorialLink").on("click", function () {
                 tour.start();
             });
+            // Create a new button in the Help menu to show all available javascript tutorials
+            let tutorialLinks = document.createElement("li");
+            tutorialLinks.id = "hgTracksHelpTutorialLinks";
+            tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
+                "Show All Interactive Tutorials</a>";
+            $("#help > ul")[0].appendChild(tutorialLinks);
+            $("#hgTracksHelpTutorialLinks").on("click", function () {
+                openTutorialPopup();
+            });
         }
         
         // Any highlighted region must be shown and warnBox must play nice with it.
