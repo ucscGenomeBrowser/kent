@@ -5818,10 +5818,9 @@ $(document).ready(function()
             }
         }
         // show a tutorial page if this is a new user
-        if (typeof tour !== 'undefined' && tour) {
-            setupSteps();
+        if (typeof basicTour !== 'undefined') {
             if (typeof startTutorialOnLoad !== 'undefined' && startTutorialOnLoad) {
-                tour.start();
+                basicTour.start();
             }
             let lsKey = "hgTracks_hideTutorial";
             let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
@@ -5840,7 +5839,7 @@ $(document).ready(function()
                 localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").on("click", function() {
                     $("#hgTracks_hideTutorialnotifyHideForever").trigger("click");
-                    tour.start();
+                    basicTour.start();
                 });
             }
             // allow user to bring the tutorial up under the help menu whether they've seen
@@ -5851,7 +5850,7 @@ $(document).ready(function()
                 "Interactive Tutorial</a>";
             $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
             $("#hgTracksHelpTutorialLink").on("click", function () {
-                tour.start();
+                basicTour.start();
             });
             // Create a new button in the Help menu to show all available javascript tutorials
             let tutorialLinks = document.createElement("li");
