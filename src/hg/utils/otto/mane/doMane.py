@@ -20,6 +20,7 @@ def doMane():
     workindDir = "/hive/data/outside/otto/mane/mane."+version
     filePathBB = workindDir+"/our.bb"
     filePathBed = workindDir+"/our.bed"
+    filePathArchive = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg38/mane/mane."+version+".bb"
     if not os.path.isfile(filePathBB):
         print("New MANE update: "+latestReleaseUrl)
         bash("mkdir -p "+workindDir)
@@ -30,6 +31,7 @@ def doMane():
         print(bash("bigBedInfo /gbdb/hg38/mane/mane.bb | grep -i itemCount"))
         bash("rm -f /gbdb/hg38/mane/mane.bb")
         bash("ln -s "+filePathBB+" /gbdb/hg38/mane/mane.bb")
+        bash("ln -sf "+filePathBB+" "+filePathArchive)
         print("New version itemCount:")
         print(bash("bigBedInfo /gbdb/hg38/mane/mane.bb | grep -i itemCount"))
         bash("tawk '{print $13, $18, $19, $21, $22, $23, $24}' "+filePathBed+" > "+workindDir+"/our.ixInput")
@@ -40,5 +42,5 @@ def doMane():
         bash("wget https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_"+version+"/README_versions.txt -O "+workindDir+"/README_versions.txt")
         bash("rm -f /gbdb/hg38/mane/README_versions.txt")
         bash("ln -s "+workindDir+"/README_versions.txt /gbdb/hg38/mane")
-        
+
 doMane()
