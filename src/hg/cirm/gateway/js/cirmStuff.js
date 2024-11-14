@@ -85,7 +85,7 @@ $(document).ready(function() {
                 if (loginInfo.auth === "basic") {
 		    console.log("Basic auth detected. Setting logout handler.");
                     $('#logoutLink').click(function(){
-                        cirmSiteFunctions.basicAuthLogout('/', 'http://cirm.ucsc.edu'); return false;
+                        cirmSiteFunctions.basicAuthLogout('/', 'https://sspsygene.ucsc.edu/'); return false;
                         });
                 }
             } else {
