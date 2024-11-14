@@ -650,15 +650,24 @@ def runDot(fname, alg, format="png"):
     # https://stackoverflow.com/questions/29809462/uncss-error-c-utf-8-not-a-valid-language-tag
     os.environ["LC_ALL"] = "en_US.utf8"
 
-    cmd = [binPath, "-Gdpi=96", "-Gsize=12,5", "-Gratio=fill", "-K"+alg, "-T"+format, fname, "-o",outFname, "-q 2"]
+    # when the RR is overloaded due to bot activity, make sure that stuck dot programs do not accumulate and clog the server even more 
+    # but have them stop at some point
+    dotTimeout = cfgOption("dotTimeout", "20s")
+
+    # it seems that "timeout" is installed on all our own servers 
+    cmd = ["timeout", dotTimeout, binPath, "-Gdpi=96", "-Gsize=12,5", "-Gratio=fill", "-K"+alg, "-T"+format, fname, "-o",outFname, "-q 2"]
     # create a html map for png format
     if format=="png":
         cmd.extend(["-Tcmapx", "-o", outMap])
     ret = runCmd(cmd, mustRun=False)
 
     if ret!=0:
-        print(("Could not run the command '%s'. <p>" % " ".join(cmd)))
-        printDotErrorHelpAndExit()
+        if ret==124:
+            print("Error %d: The gene graph took too long to build. Please contact us." % ret)
+            sys.exit(0)
+        else:
+            print(("Error %d: Could not run the command '%s'. <p>" % (ret, " ".join(cmd))))
+            printDotErrorHelpAndExit()
 
     return outFname, outMap
 
