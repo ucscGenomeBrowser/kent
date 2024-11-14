@@ -14,16 +14,25 @@ window.openTutorialPopup = function() {
     navigate through various tools and pages on the UCSC Genome Browser.</p>
     <h4 id="hgTracksTutorials">Genome Browser tutorials</h4>
     <table style="width:600px; border-color:#666666; border-collapse:collapse; margin: auto;">
-      <tr><td style="padding: 8px;width: 200px;">
+      <tr><td style="padding: 8px;width: 200px; text-align: center; border: 1px solid #666666;">
           <a href="#" id="basicTutorial">Basic tutorial</a></td>
-          <td style="width: 350px; word-wrap: break-word;">
-          Some description about the first tutorial
+          <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
+          <small>
+          An introductory tutorial designed to help new users navigate the UCSC Genome Browser.
+          Learn how to configure display settings, search for tracks, and view the negative
+          strand (3' to 5').</small>
           </td></tr>
-      <tr><td style="width: 200px; padding: 8px;">
-          <a href="#" id="clinicalTutorial">Advanced tutorial for clinicians</a></td>
-          <td style="width: 350px; word-wrap: break-word;">
-          Some explaination about why you would use this tutorial over another
-          (only available on hg19 & hg38)
+      <tr><td style="width: 250px; padding: 8px; text-align: center; border: 1px solid #666666;">
+          <a href="#" id="clinicalTutorial">Advanced tutorial for clinicians</a><br>
+          <em style="font-size: 11px">(only available on hg19 & hg38)</em></td>
+          <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
+          <small>
+          A tutorial aimed to educate clinical geneticists and showcase resources that
+          may be useful in variant interpretation.
+          <br>
+          Learn how to search for variants,
+          view recommended track sets, and save your configuration settings to share with others.
+          </small>
           </td></tr>
     </table>
   `;
@@ -50,7 +59,7 @@ window.openTutorialPopup = function() {
   document.getElementById('basicTutorial').addEventListener('click', function(event) {
     event.preventDefault();
     $("#tutorialContainer").dialog("close");
-    clinicalTour.start();
+    basicTour.start();
   });
 
   // Function to control the clincial tutorial link
