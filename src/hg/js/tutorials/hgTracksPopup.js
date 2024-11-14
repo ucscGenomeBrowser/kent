@@ -1,7 +1,8 @@
 
 
-// funtion to create the pop-up on hgTracks
 
+
+// funtion to create the pop-up on hgTracks
 window.openTutorialPopup = function() {
   // Create the pop-up container
   const tutorialDiv = document.createElement("div");
@@ -54,6 +55,13 @@ window.openTutorialPopup = function() {
     }],*/
     position: {my: "center top", at: "center top+100", of: window}
   });
+  
+  // Function to get which databse you are on
+  function getDb (){
+    const currentUrl = window.location.href;
+    const dbValue = new URLSearchParams(window.location.search).get("db");
+    return dbValue;
+  }
 
   // Function to control the basic tutorial link
   document.getElementById('basicTutorial').addEventListener('click', function(event) {
@@ -66,6 +74,12 @@ window.openTutorialPopup = function() {
   document.getElementById('clinicalTutorial').addEventListener('click', function(event) {
     event.preventDefault();
     $("#tutorialContainer").dialog("close");
-    clinicalTour.start();
+    const db = getDb(); // Get which database you are viewing
+    if (db == "hg38" || db =="hg19") {
+        clinicalTour.start(); // If you are on hg38 or hg19, then start the tutorial
+    } else {
+        // Otherwise go to hg38 and start the tutorial.
+        window.location.href = "/cgi-bin/hgTracks?db=hg38&startClinical=true";
+    }
   });
 };
