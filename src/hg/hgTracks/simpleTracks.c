@@ -1886,6 +1886,8 @@ if (color)
        newList = slCat(newList, oldList);
    }
 tg->items = newList;
+
+filterItemsOnNames(tg);
 }
 
 int getFilterColor(char *type, int colorIx)
@@ -6931,8 +6933,6 @@ else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
-
-filterItemsOnNames(tg);
 
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
