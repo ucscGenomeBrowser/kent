@@ -18,9 +18,16 @@ const uppy = new Uppy.Uppy({
     debug: true,
     onBeforeUpload: (files) => {
         // set all the fileTypes and genomes from their selects
+        let doUpload = true;
         for (let [key, file] of Object.entries(files)) {
-            if (!file.meta.genome || !file.meta.fileType) {
-                uppy.getPlugin("Dashboard").info("error!");
+            if (!file.meta.genome) {
+                uppy.info(`Error: No genome selected for file ${file.name}!`, 'error', 2000);
+                doUpload = false;
+                continue;
+            } else if  (!file.meta.fileType) {
+                uppy.info(`Error: File type not supported, please rename file: ${file.name}!`, 'error', 2000);
+                doUpload = false;
+                continue;
             }
             uppy.setFileMeta(file.id, {
                 fileName: file.name,
@@ -28,6 +35,7 @@ const uppy = new Uppy.Uppy({
                 lastModified: file.data.lastModified,
             });
         }
+        return doUpload;
     },
 });
 
@@ -179,6 +187,8 @@ var hubCreate = (function() {
         "bigInteract": [".biginteract"],
         "bigPsl": [".bigpsl"],
         "bigChain": [".bigchain"],
+        "bamIndex": [".bam.bai", ".bai"],
+        "tabixIndex": [".vcf.gz.tbi", "vcf.bgz.tbi"],
     };
 
     function detectFileType(fileName) {
@@ -191,8 +201,11 @@ var hubCreate = (function() {
                 }
             }
         }
-        //TODO: raise an error
-        alert(`file extension for ${fileName} not found, please explicitly select it`);
+        //we could alert here but instead just explicitly set the value to null
+        //and let the backend reject it instead, forcing the user to rename their
+        //file
+        //alert(`file extension for ${fileName} not found, please explicitly select it`);
+        return null;
     }
 
     /*
@@ -875,6 +888,7 @@ var hubCreate = (function() {
                         this.createOptsForSelect(dbSelect, dbOpts);
                         fileDiv.appendChild(dbSelect);
                     }
+                    /*
                     let typeSelectId = "type_select_" + file.id;
                     if (!document.getElementById(typeSelectId)) {
                         let typeSelect = document.createElement("select");
@@ -883,6 +897,7 @@ var hubCreate = (function() {
                         this.createOptsForSelect(typeSelect, typeOpts);
                         fileDiv.appendChild(typeSelect);
                     }
+                    */
                 }
             }
 
@@ -898,12 +913,12 @@ var hubCreate = (function() {
                     let batchSelectDiv = document.createElement("div");
                     batchSelectDiv.id = "batch-selector-div";
                     let batchDbSelect = document.createElement("select");
-                    let batchTypeSelect = document.createElement("select");
+                    //let batchTypeSelect = document.createElement("select");
                     this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
-                    this.createOptsForSelect(batchTypeSelect, makeTypeSelectOptions());
+                    //this.createOptsForSelect(batchTypeSelect, makeTypeSelectOptions());
                     batchSelectDiv.textContent = "Change options for all files";
                     batchSelectDiv.appendChild(batchDbSelect);
-                    batchSelectDiv.appendChild(batchTypeSelect);
+                    //batchSelectDiv.appendChild(batchTypeSelect);
                     batchSelectDiv.style.display = "flex";
                     batchSelectDiv.style.justifyContent = "center";
                     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -963,8 +978,24 @@ var hubCreate = (function() {
             note: "Example text in the note field",
             meta: {"genome": null, "fileType": null},
             metaFields: (file) => {
-                const fields = [{id: 'name', name: 'File name'}];
-                fields.push({
+                const fields = [{
+                    id: 'name',
+                    name: 'File name',
+                    render: ({value, onChange, required, form}, h) => {
+                        return h('input',
+                            {type: "text",
+                            value: value,
+                            onChange: e => {
+                                onChange(e.target.value);
+                                file.meta.fileType = detectFileType(e.target.value);
+                            },
+                            required: required,
+                            form: form,
+                            }
+                        );
+                    },
+                },
+                {
                     id: 'genome',
                     name: 'Genome',
                     render: ({value, onChange}, h) => {
@@ -975,7 +1006,8 @@ var hubCreate = (function() {
                             })
                         );
                     },
-                });
+                },
+                /*
                 fields.push({
                     id: 'fileType',
                     name: 'File Type',
@@ -994,7 +1026,8 @@ var hubCreate = (function() {
                         );
                     },
                 });
-                fields.push({
+                */
+                {
                     id: 'parentDir',
                     name: 'Hub Name',
                     render: ({value, onChange, required, form}, h) => {
@@ -1006,10 +1039,10 @@ var hubCreate = (function() {
                             }
                         );
                     },
-                });
+                }];
                 return fields;
             },
-            restricted: {requiredMetaFields: ["genome", "fileType"]},
+            restricted: {requiredMetaFields: ["genome"]},
             closeModalOnClickOutside: true,
             closeAfterFinish: true,
             theme: 'auto',
