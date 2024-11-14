@@ -40,7 +40,7 @@ PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=otto-group@ucsc.edu
 
 #md5sum checker script - makes sure otto scripts in hive match git tree
-0 0 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
+0 7 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
 
 # PanelApp
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu

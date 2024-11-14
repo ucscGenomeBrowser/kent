@@ -1091,7 +1091,8 @@ hPrintf("</FORM>");
 // so add all the variables needed htere. So any new hgTracks.somefield references
 // added to hgTracks.js may need to be put here.
 
-jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
+if (differentString(virtModeType, "default"))
+    jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
 
 
 }

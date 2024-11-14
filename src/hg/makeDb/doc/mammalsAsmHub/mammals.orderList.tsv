@@ -146,6 +146,8 @@ GCF_022682495.1_HLdesRot8A	common vampire bat (HL8 primary hap 2022 refseq)
 GCF_002940915.2_ASM294091v3	common vampire bat (v3 DRU21DN04 2018)
 GCF_016906955.1_ROS_Pafr_v1	common warthog (WHEZ1 2021)
 GCF_900497805.2_bare-nosed_wombat_genome_assembly	common wombat
+GCA_030463245.1_zhanglab2022	Corsac fox (zsh2022 2023)
+GCA_034620425.1_Cla-1	coyote (coyote_06102 2023)
 GCF_018167655.1_Mior012	creeping vole
 GCA_004026905.1_HysCri_v1_BIUU	crested porcupine
 GCA_004364475.1_ZipCav_v1_BIUU	Cuvier's beaked whale
@@ -161,9 +163,16 @@ GCF_943737965.1_PHOROB	desert hamster (2022)
 GCA_004027915.1_CapPil_v1_BIUU	Desmarest's hutia
 GCF_012295265.1_UNSW_AlpineDingo_1.0	dingo (2020 Alpine COOINDA U.NSW)
 GCF_003254725.2_ASM325472v2	dingo (Sandy 2020 James Cook U)
+GCA_004886185.2_Basenji_breed-1.1	dog (Basenji MU ID 185726 2019)
+GCA_013276365.2_UNSW_CanFamBas_1.2	dog (Basenji UNSW-BAS-2019 2021)
+GCA_031010765.1_BD_1.0	dog (Bernese Mountain Dog BD 2023)
+GCA_031010635.1_OD_1.0	dog (Bernese Mountain Dog OD 2023)
 GCF_000002285.3_CanFam3.1	dog (boxer Tasha 2011)
 GCF_000002285.5_Dog10K_Boxer_Tasha	dog (boxer Tasha 2020)
+GCA_031010295.1_CA611_1.0	dog (Cairn Terrier CA611 2023)
 GCF_011100685.1_UU_Cfam_GSD_1.0	dog (German shepard Mischka 2020)
+GCA_008641055.3_ASM864105v3	dog (German Shepherd Nala 2020)
+GCA_031165255.1_Yella_v2	dog (Labrador retriever 2023)
 GCF_014441545.1_ROS_Cfam_1.0	dog (labrador SID07034 2020)
 GCF_000181335.3_Felis_catus_9.0	domestic cat (Abyssinian Cinnamon 2017 WashU)
 GCA_000181335.5_felCat9.1_X	domestic cat (Abyssinian Cinnamon 2021 WashU)
@@ -234,6 +243,7 @@ GCF_017639785.1_BCM_Maur_2.0	golden hamster (Baylor 2021)
 GCF_000349665.1_MesAur1.0	golden hamster (Broad 2013 refseq)
 GCF_903995435.1_mAcoRus1.1	golden spiny mouse (2020)
 GCA_004024945.1_UroGra_v1_BIUU	gracile shrew mole
+GCA_032313775.1_UCinereo1.0	gray fox (Vermont ataVT051 2023)
 GCF_012393455.1_Tufts_HGry_1.1	gray seal
 GCA_027917375.1_mMonDom1.alt	gray short-tailed opossum (mMonDom1 alternate hap 2023)
 GCF_027887165.1_mMonDom1.pri	gray short-tailed opossum (mMonDom1 primary hap 2023 refseq)
@@ -539,6 +549,7 @@ GCA_028389975.1_mMacEug1.alt	tammar wallaby (mMacEug1 alternate hap 2023)
 GCA_028372415.1_mMacEug1.pri	tammar wallaby (mMacEug1 primary hap 2023)
 GCF_902635505.1_mSarHar1.11	Tasmanian devil
 GCF_016881025.1_HiC_Itri_2	thirteen-lined ground squirrel (2021 HiC)
+GCA_024500485.1_ASM2450048v1	Tibetan sand fox (lyu1992 2022)
 GCF_018350195.1_P.tigris_Pti1_mat1.1	tiger
 GCA_026230055.1_mCorTow1.0.hap1	Townsend's big-eared bat (haplotype 1 of 2 COTO_CA2020_CCGP 2022)
 GCA_026230045.1_mCorTow1.0.hap2	Townsend's big-eared bat (haplotype 2 of 2 COTO_CA2020_CCGP 2022)
