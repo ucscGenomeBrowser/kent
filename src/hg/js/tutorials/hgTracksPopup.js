@@ -19,16 +19,16 @@ window.createTutorialPopup = function() {
           <a href="#" id="basicTutorial">Basic tutorial</a></td>
           <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
           <small>
-          An introductory tutorial designed to help new users navigate the UCSC Genome Browser.
-          Learn how to configure display settings, search for tracks, and view the negative
-          strand (3' to 5').</small>
+          An introductory tutorial to help new users navigate the UCSC Genome Browser tracks
+          display. Learn how to configure display settings, search for tracks, and view the
+          negative strand (3' to 5').</small>
           </td></tr>
       <tr><td style="width: 250px; padding: 8px; text-align: center; border: 1px solid #666666;">
           <a href="#" id="clinicalTutorial">Advanced tutorial for clinicians</a><br>
           <em style="font-size: 11px">(only available on hg19 & hg38)</em></td>
           <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
           <small>
-          A tutorial aimed to educate clinical geneticists and showcase resources that
+          A tutorial focused on clinical genetics to showcase resources that
           may be useful in variant interpretation.
           <br>
           Learn how to search for variants,
@@ -41,7 +41,7 @@ window.createTutorialPopup = function() {
 
   $("#tutorialContainer").dialog({
     modal: false,
-    title: "All Interactive Tutorials",
+    title: "Interactive Tutorials",
     draggable: true,
     resizable: false,
     width: 650,

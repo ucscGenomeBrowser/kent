@@ -5842,28 +5842,21 @@ $(document).ready(function()
                     basicTour.start();
                 });
             }
-            // allow user to bring the tutorial up under the help menu whether they've seen
-            // it or not
-            let tutorialLinkMenuItem = document.createElement("li");
-            tutorialLinkMenuItem.id = "hgTracksHelpTutorialMenuItem";
-            tutorialLinkMenuItem.innerHTML = "<a id='hgTracksHelpTutorialLink' href='#showTutorial'>" +
-                "Interactive Tutorial</a>";
-            $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
-            $("#hgTracksHelpTutorialLink").on("click", function () {
-                basicTour.start();
-            });
-            // Create a new button in the Help menu to show all available javascript tutorials
+            // allow the user to bring the tutorials popup via a new help menu button
             let tutorialLinks = document.createElement("li");
             tutorialLinks.id = "hgTracksHelpTutorialLinks";
             tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
-                "Show All Interactive Tutorials</a>";
+                "Interactive Tutorials</a>";
             $("#help > ul")[0].appendChild(tutorialLinks);
             $("#hgTracksHelpTutorialLinks").on("click", function () {
-                let tutorialPopupExists = document.getElementById ("tutorialContainer"); // Check to see if the <div> has been generated already
+                // Check to see if the tutorial popup has been generated already
+                let tutorialPopupExists = document.getElementById ("tutorialContainer");
                 if (!tutorialPopupExists) {
-                    createTutorialPopup(); // Create the tutorial popup if it doesn't exist
+                    // Create the tutorial popup if it doesn't exist
+                    createTutorialPopup();
                 } else {
-                    $("#tutorialContainer").dialog("open"); //otherwise use jquery-ui to open the popup
+                    //otherwise use jquery-ui to open the popup
+                    $("#tutorialContainer").dialog("open");
                 }
             });
         }
