@@ -5,17 +5,18 @@ var hubNameDefault = "MyFirstHub";
 function prettyFileSize(num) {
     if (!num) {return "n/a";}
     if (num < (1000 * 1024)) {
-        return `${(num/1000).toFixed(1)}kb`;
+        return `${(num/1000).toFixed(1)}KB`;
     } else if (num < (1000 * 1000 * 1024)) {
-        return `${((num/1000)/1000).toFixed(1)}mb`;
+        return `${((num/1000)/1000).toFixed(1)}MB`;
     } else {
-        return `${(((num/1000)/1000)/1000).toFixed(1)}gb`;
+        return `${(((num/1000)/1000)/1000).toFixed(1)}GB`;
     }
 }
 
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
+    allowMultipleUploadBatches: false,
     onBeforeUpload: (files) => {
         // set all the fileTypes and genomes from their selects
         let doUpload = true;
@@ -912,18 +913,68 @@ var hubCreate = (function() {
                 if (!document.getElementById("batch-selector-div")) {
                     let batchSelectDiv = document.createElement("div");
                     batchSelectDiv.id = "batch-selector-div";
-                    let batchDbSelect = document.createElement("select");
-                    //let batchTypeSelect = document.createElement("select");
-                    this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
-                    //this.createOptsForSelect(batchTypeSelect, makeTypeSelectOptions());
-                    batchSelectDiv.textContent = "Change options for all files";
-                    batchSelectDiv.appendChild(batchDbSelect);
-                    //batchSelectDiv.appendChild(batchTypeSelect);
-                    batchSelectDiv.style.display = "flex";
-                    batchSelectDiv.style.justifyContent = "center";
+                    batchSelectDiv.style.display = "grid";
+                    batchSelectDiv.style.width = "80%";
+                    // the grid syntax is 2 columns, 3 rows
+                    batchSelectDiv.style.gridTemplateColumns = "50% 50%";
+                    batchSelectDiv.style.gridTemplateRows = "25px 25px 25px";
+                    batchSelectDiv.style.margin = "10px auto"; // centers this div
                     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
                         batchSelectDiv.style.color = "#eaeaea";
                     }
+
+                    // first just explanatory text:
+                    let batchSelectText = document.createElement("div");
+                    batchSelectText.textContent = "Change options for all files:";
+                    // syntax here is rowStart / columnStart / rowEnd / columnEnd
+                    batchSelectText.style.gridArea = "1 / 1 / 1 / 2";
+
+                    // the batch change db select
+                    let batchDbSelect = document.createElement("select");
+                    this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
+                    batchDbSelect.id = "batchDbSelect";
+                    batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
+                    batchDbSelect.style.margin = "1px 1px auto";
+                    let batchDbLabel = document.createElement("label");
+                    batchDbLabel.textContent = "Genome";
+                    batchDbLabel.for = "batchDbSelect";
+                    batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
+
+                    // the batch change hub name
+                    let batchParentDirInput = document.createElement("input");
+                    batchParentDirInput.id = "batchParentDir";
+                    batchParentDirInput.value = hubNameDefault;
+                    batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
+                    batchParentDirInput.style.margin= "1px 1px auto";
+                    let batchParentDirLabel = document.createElement("label");
+                    batchParentDirLabel.textContent = "Hub Name";
+                    batchParentDirLabel.for = "batchParentDir";
+                    batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+
+                    // add event handlers to change metadata, use an arrow function
+                    // because otherwise 'this' keyword will be the element instead of
+                    // our class
+                    batchDbSelect.addEventListener("change", (ev) => {
+                        let files = this.uppy.getFiles();
+                        let val = ev.target.value;
+                        for (let [key, file] of Object.entries(files)) {
+                            this.uppy.setFileMeta(file.id, {genome: val});
+                        }
+                    });
+                    batchParentDirInput.addEventListener("change", (ev) => {
+                        let files = this.uppy.getFiles();
+                        let val = ev.target.value;
+                        for (let [key, file] of Object.entries(files)) {
+                            this.uppy.setFileMeta(file.id, {parentDir: val});
+                        }
+                    });
+
+                    batchSelectDiv.appendChild(batchSelectText);
+                    batchSelectDiv.appendChild(batchDbLabel);
+                    batchSelectDiv.appendChild(batchDbSelect);
+                    batchSelectDiv.appendChild(batchParentDirLabel);
+                    batchSelectDiv.appendChild(batchParentDirInput);
+
                     // append the batch changes to the bottom of the file list, for some reason
                     // I can't append to the actual Dashboard-files, it must be getting emptied
                     // and re-rendered or something
@@ -941,6 +992,10 @@ var hubCreate = (function() {
                     this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "parentDir": hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
+                    } else {
+                        // only open the file editor when there is one file
+                        const dash = uppy.getPlugin("Dashboard");
+                        dash.toggleFileCard(true, file.id);
                     }
                 });
                 this.uppy.on("file-removed", (file) => {
@@ -999,43 +1054,34 @@ var hubCreate = (function() {
                     id: 'genome',
                     name: 'Genome',
                     render: ({value, onChange}, h) => {
-                        return h('select',
-                            {onChange: e => onChange(e.target.value)}, 
+                        return h('select', {
+                            onChange: e => {
+                                onChange(e.target.value);
+                                file.meta.genome = e.target.value;
+                            }
+                            },
                             makeGenomeSelectOptions().map( (genomeObj) => {
-                                return h('option', genomeObj, genomeObj.label);
+                                return h('option', {
+                                    value: genomeObj.value,
+                                    label: genomeObj.label,
+                                    selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === defaultDb()
+                                });
                             })
                         );
                     },
                 },
-                /*
-                fields.push({
-                    id: 'fileType',
-                    name: 'File Type',
-                    render: ({value, onChange}, h) => {
-                        return h( 'select',
-                            {onChange: e => {
-                                if (e.target.value === "Auto-detect from extension") {
-                                    onChange(detectFileType(file.name));
-                                } else {
-                                    onChange(e.target.value);
-                                }
-                            }},
-                            makeTypeSelectOptions().map( (typeObj) => {
-                                return h('option', typeObj, typeObj.label);
-                            })
-                        );
-                    },
-                });
-                */
                 {
                     id: 'parentDir',
                     name: 'Hub Name',
                     render: ({value, onChange, required, form}, h) => {
                         return h('input',
                             {type: 'text',
+                             value: value,
+                             onChange: e => {
+                                onChange(e.target.value);
+                             },
                              required: required,
                              form: form,
-                             value: hubNameDefault,
                             }
                         );
                     },
@@ -1046,7 +1092,6 @@ var hubCreate = (function() {
             closeModalOnClickOutside: true,
             closeAfterFinish: true,
             theme: 'auto',
-            autoOpen: "metaEditor",
         };
         let tusOptions = {
             endpoint: getTusdEndpoint(),
