@@ -2063,8 +2063,7 @@ searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
-include knownGene.ra public
-include knownGene.alpha.ra alpha,beta
+include knownGene.ra
 include lincRNAs.ra
 
 track sibTxGraph override
