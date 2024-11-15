@@ -5859,7 +5859,12 @@ $(document).ready(function()
                 "Show All Interactive Tutorials</a>";
             $("#help > ul")[0].appendChild(tutorialLinks);
             $("#hgTracksHelpTutorialLinks").on("click", function () {
-                openTutorialPopup();
+                let tutorialPopupExists = document.getElementById ("tutorialContainer"); // Check to see if the <div> has been generated already
+                if (!tutorialPopupExists) {
+                    createTutorialPopup(); // Create the tutorial popup if it doesn't exist
+                } else {
+                    $("#tutorialContainer").dialog("open"); //otherwise use jquery-ui to open the popup
+                }
             });
         }
         

@@ -3,17 +3,17 @@
 
 
 // funtion to create the pop-up on hgTracks
-window.openTutorialPopup = function() {
+window.createTutorialPopup = function() {
   // Create the pop-up container
   const tutorialDiv = document.createElement("div");
   tutorialDiv.id = "tutorialContainer";
+  tutorialDiv.style.display = "none";
  
   // Create the contents for the popup
   tutorialDiv.innerHTML = `
     <p>
     These interactive tutorials will provide step-by-step guides to help
     navigate through various tools and pages on the UCSC Genome Browser.</p>
-    <h4 id="hgTracksTutorials">Genome Browser tutorials</h4>
     <table style="width:600px; border-color:#666666; border-collapse:collapse; margin: auto;">
       <tr><td style="padding: 8px;width: 200px; text-align: center; border: 1px solid #666666;">
           <a href="#" id="basicTutorial">Basic tutorial</a></td>
@@ -35,14 +35,13 @@ window.openTutorialPopup = function() {
           view recommended track sets, and save your configuration settings to share with others.
           </small>
           </td></tr>
-    </table>
-  `;
+    </table>`;
 
-  document.body.appendChild(tutorialDiv);
+  document.body.appendChild(tutorialDiv); // Add tutorial popup <div> to the page
 
   $("#tutorialContainer").dialog({
-    modal: true,
-    title: "All Interactive Tutorials Available",
+    modal: false,
+    title: "All Interactive Tutorials",
     draggable: true,
     resizable: false,
     width: 650,
@@ -56,13 +55,6 @@ window.openTutorialPopup = function() {
     position: {my: "center top", at: "center top+100", of: window}
   });
   
-  // Function to get which databse you are on
-  function getDb (){
-    const currentUrl = window.location.href;
-    const dbValue = new URLSearchParams(window.location.search).get("db");
-    return dbValue;
-  }
-
   // Function to control the basic tutorial link
   document.getElementById('basicTutorial').addEventListener('click', function(event) {
     event.preventDefault();

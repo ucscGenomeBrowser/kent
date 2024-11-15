@@ -98,11 +98,7 @@
     
     // Function to show the popup
     function showPopup() {
-        $("#recTrackSetsPopup").dialog({
-            autoOpen: true,
-            resizeable: false,
-            width: 650
-        });
+        showRecTrackSetsPopup(); // Call the function that generates the popup
     }
     
     // Function to close the popup
@@ -396,8 +392,10 @@
         });
     }
 
-    clinicalSteps();
+    if (typeof window.clinicalTour === 'undefined') {
+        clinicalSteps();
 
-    //Export the clinicalTour globalally
-    window.clinicalTour = clinicalTour;
+        //Export the clinicalTour globalally
+        window.clinicalTour = clinicalTour;
+    }
 })();

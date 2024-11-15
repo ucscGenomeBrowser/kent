@@ -260,8 +260,11 @@
             id: 'lastPopUp'
         });
     }
-    setupSteps();
 
-    //Export the basicTour globally
-    window.basicTour = tour;
+    if (typeof window.basicTour === 'undefined') {
+        setupSteps();
+
+        //Export the basicTour globally
+        window.basicTour = tour;
+    }    
 })();
