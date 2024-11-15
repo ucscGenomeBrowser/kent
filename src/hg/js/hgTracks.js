@@ -3451,15 +3451,6 @@ var popUpHgt = {
         $('#singleAltHaploId').on("keyup", function() {
             $('#virtModeType[value="singleAltHaplo"]').prop('checked', true); });
 
-        // disable exit if not in MR mode
-        if (!hgTracks.virtModeType) {
-            $('#virtModeTypeDefaultLabel').addClass('disabled');
-            $('#virtModeType[value="exonMostly"]').prop('checked', true);
-            $('#virtModeType[value="default"]').prop('disabled', 'disabled');
-        } else {
-            $('#virtModeType[value="default"]').prop('disabled', false);
-        }
-
         // Customize message based on current mode
         var msg = "<em>Select a multi-region viewing mode below.</em>";  // default
         if (hgTracks.virtModeType) {
