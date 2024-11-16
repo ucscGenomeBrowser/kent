@@ -4780,7 +4780,7 @@ a9b4bfc8 (braney          2009-07-17 22:55:20 +0000 4776)
 bdaefd6a (Cricket Sloan   2010-08-31 16:11:44 -0700 4780) target ZZZ3
 9dbf117e (tdreszer        2010-01-11 17:30:58 +0000 4781) antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW)
 f16e7b0e (tdreszer        2010-01-26 20:00:17 +0000 4782) targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
-9dbf117e (tdreszer        2010-01-11 17:30:58 +0000 4783) orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
+9dbf117e (tdreszer        2010-01-11 17:30:58 +0000 4783) orderUrl https://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 bdaefd6a (Cricket Sloan   2010-08-31 16:11:44 -0700 4784) vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
 3b9a3565 (Cricket Sloan   2010-08-04 15:44:02 -0700 4785) vendorId  ;
 9dbf117e (tdreszer        2010-01-11 17:30:58 +0000 4786) lab Struhl

@@ -333,7 +333,7 @@ html crispr
     scoreLabel MIT Guide Specificity Score
     # details page is not using a mysql table but a tab-sep file
     detailsTabUrls _offset=/gbdb/$db/crispr/crisprDetails.tab
-    url http://crispor.tefor.net/crispor.py?org=$D&pos=$S:${&pam=NGG
+    url http://crispor.gi.ucsc.edu/crispor.py?org=$D&pos=$S:${&pam=NGG
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
     html crispr
 

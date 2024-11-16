@@ -1343,7 +1343,7 @@ visibility hide
     scoreFilterMax 100
     type bed 6 .
     urlLabel TargetScan link:
-    url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    url https://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
     track targetScanMiRnaSitesV72
     parent targetScanMiRnaSites
@@ -1355,7 +1355,7 @@ visibility hide
     filter.targetScanScore -1
     filterLimits.targetScanScore -1:99
     urlLabel View miRNA target at TargetScan
-    url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    url https://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
     bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
 
 track ntHumChimpCodingDiff override

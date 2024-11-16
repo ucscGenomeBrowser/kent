@@ -91,7 +91,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Ep
 group immu
 type bigBed 12 .
 visibility hide
-urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=https://www.iedb.org/assayId/$$ referenceID=https://www.iedb.org/refId/$$ epitopeID=https://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHC_Allele_Name
 
 track iedbTcellLong
@@ -100,7 +100,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Ep
 group immu
 type bigBed 12 .
 visibility hide
-urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=https://www.iedb.org/assayId/$$ referenceID=https://www.iedb.org/refId/$$ epitopeID=https://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHC_Allele_Name
 
 track iedbPred
@@ -117,7 +117,7 @@ group immu
 type bigBed 12 .
 visibility dense
 color 0,90,100
-urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=https://www.iedb.org/assayId/$$ referenceID=https://www.iedb.org/refId/$$ epitopeID=https://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 
 track arjun
 shortLabel Pred MHCI-binding

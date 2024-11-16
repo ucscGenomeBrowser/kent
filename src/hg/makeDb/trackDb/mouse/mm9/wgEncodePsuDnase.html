@@ -58,10 +58,10 @@ DNaseI-digested ends were captured from three different DNase concentrations, an
 <p>
 The read length for sequences from DNase-seq is 20 bases long due to a MmeI cutting step of the approximately 50 kb DNA fragments extracted after DNaseI digestion. 
 Sequences from each experiment were mapped to the mouse genome (mm9 assembly) using the program
-<a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a> (Langmead <em>et al.</em>, 2009).  
+<a href="https://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a> (Langmead <em>et al.</em>, 2009).  
 Reads mapping to more than one location were not removed. For such reads, only the best mapping result was used ("--best" option).
 Sequences from multiple lanes were combined for a single replicate and converted to the sam/bam format using
-<a href="http://samtools.sourceforge.net/" target="_blank">SAMtools</a>.  
+<a href="https://samtools.sourceforge.net/" target="_blank">SAMtools</a>.  
 Using F-seq, the resulting digital signal was converted to a continuous wiggle track that employs a Parzen kernel density estimation to create base pair scores (Boyle <em>et al.</em>, 2008).
 </p>
 
