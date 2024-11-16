@@ -59,11 +59,14 @@ my %incoming = (
 my $validIncoming = 0;
 my $extraneousArgs = 0;
 
+# limit all to reasonable lengths
+my $maxLength = 1024;
+
 foreach my $tag ($query->param) {
   my $value = $query->escapeHTML(uri_unescape($query->param($tag)));
   # only accept known inputs, the five defined above for %incoming defaults
   if (defined($incoming{$tag}) && defined($value)) {
-      $incoming{$tag} = $value;
+      $incoming{$tag} = substr($value, 0, $maxLength);
       ++$validIncoming;
   } else {
     ++$extraneousArgs;
@@ -79,6 +82,7 @@ if ( ($validIncoming != 5) || ($extraneousArgs > 0) || ($referDomain ne $domainM
   print "</body></html>\n";
   exit 0;
 }
+
 
 printf "<ul>\n";
 printf "<li> name: '%s'</li>\n", $incoming{"name"};
