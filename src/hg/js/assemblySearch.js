@@ -260,7 +260,7 @@ function headerRefresh(tableHead) {
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
   let circleQuestion = '<svg width="24" height="24"> <circle cx="12" cy="12" r="10" fill="#4444ff" /> <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="13px" font-family="Verdana" dy=".3em">?</text>?</svg>';
-  headerRow += '<th><div class=tooltip>View/<br>Request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>View</b> opens the genome browser for an existing assembly, <b>Request</b> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class=tooltip>view/<br>request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>view</b> opens the genome browser for an existing assembly, <b>request</b> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
   headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Binomial scientific name</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
@@ -407,15 +407,15 @@ function populateTableAndInfo(jsonData) {
         var asmInfoUrl = id;
         if (genomicEntries[id].browserExists) {
           if (id.startsWith("GC")) {
-            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>View</a>";
+            browserUrl = "<a href='/h/" + id + "?position=lastDbPos' target=_blank>view</a>";
             asmInfoUrl = "<a href='https://www.ncbi.nlm.nih.gov/assembly/" + id + "' target=_blank>" + id + "</a>";
           } else {
-            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>View</a>";
+            browserUrl = "<a href='/cgi-bin/hgTracks?db=" + id + "' target=_blank>view</a>";
             asmInfoUrl = "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/" + id + "/bigZips/' target=_blank>" + id + "</a>";
           }
           dataRow += "<th>" + browserUrl + "</th>";
         } else {
-          dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + "'>Request</button></th>";
+          dataRow += "<th><button type=button' onclick='asmOpenModal(this)' name=" + id + ">request</button></th>";
         }
         dataRow += "<td>" + genomicEntries[id].commonName + "</td>";
         dataRow += "<td>" + genomicEntries[id].scientificName + "</td>";
