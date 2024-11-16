@@ -1452,7 +1452,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	}
     else // Otherwise print a label and description. 
 	{
-	printf("<li class='list-group-item'><B>%s (%s)</B><BR>\n", label, datasetId);
+        printf("<li class='list-group-item'><b><a href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</a></b><br>\n", datasetId, label, datasetId);
 	printf("%s\n", desc);
 	}
     printf("</li>\n");
