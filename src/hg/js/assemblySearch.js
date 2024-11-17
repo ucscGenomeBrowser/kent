@@ -16,6 +16,7 @@ var stateObject = {};	// maintain page state
 var requestSubmitButton = null;
 var completedAsmId = new Map();	// keep track of requests completed
 				// so they won't be repeated
+var maxLength = 1024;	// limit all incoming strings to this length
 
 // This function is called on DOMContentLoaded as the initialization
 //  procedure for first time page draw
@@ -119,8 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var searchInput = document.getElementById('searchBox');
     var clearButton = document.getElementById('clearSearch');
     asmIdText = document.getElementById("formAsmId");
+    asmIdText.textContent = asmIdText.textContent.substring(0,maxLength);
     betterCommonName = document.getElementById("betterCommonName");
+    betterCommonName.value = betterCommonName.value.substring(0,maxLength);
     comment = document.getElementById("comment");
+    comment.value = comment.value.substring(0,maxLength);
     requestSubmitButton = document.getElementById("submitButton");
 
     document.getElementById("modalFeedback").addEventListener("submit", checkForm, false);
@@ -639,6 +643,7 @@ function checkForm(e) {
     }
     return;
   }
+  form.name.value = form.name.value.substring(0,maxLength);
   if(form.email.value === "") {
     alert("Please enter a valid Email address");
     form.email.focus();
@@ -649,6 +654,7 @@ function checkForm(e) {
     }
     return;
   }
+  form.email.value = form.email.value.substring(0,maxLength);
 // validation regex from:
 //      https://www.w3resource.com/javascript/form/email-validation.php
 // another example from
@@ -703,7 +709,7 @@ function asmOpenModal(e) {
     document.getElementById("commonName").textContent = comName;
     document.getElementById("formSciName").textContent = sciName;
     document.getElementById("formAsmId").textContent = e.name;
-    document.getElementById("comment").textContent = descr;
+    document.getElementById("comment").value = descr;
     if (completedAsmId.has(e.name)) {
       requestSubmitButton.value = "request completed";
       requestSubmitButton.disabled = false;
