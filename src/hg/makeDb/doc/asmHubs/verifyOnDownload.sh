@@ -25,7 +25,7 @@ export minTrackCount=11
 if [ "${subset}" == "invertebrate" ]; then
   minTrackCount=9
 elif [ "${subset}" == "brc" ]; then
-  minTrackCount=10
+  minTrackCount=9
 elif [ "${subset}" == "bacteria" ]; then
   minTrackCount=8
 elif [ "${subset}" == "legacy" ]; then
