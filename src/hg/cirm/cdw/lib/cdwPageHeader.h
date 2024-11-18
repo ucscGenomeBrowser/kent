@@ -21,7 +21,7 @@
 "            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../cgi-bin/cdwWebBrowse'>Data</a></h5>\n"
 "          </li>\n"
 "          <li class='nav-item back-dark-blue rounded' style='margin-left: 6px'>\n"
-"            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../help/cirmBasics'>Help</a></h5>\n"
+"            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../help/sspsygeneHelp.html'>Help</a></h5>\n"
 "          </li>\n"
 "          <li class='nav-item back-gray rounded' style='margin-left: 6px'>\n"
 "            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link login' href='../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1'>\n"
