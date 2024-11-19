@@ -144,7 +144,7 @@ if (userName)
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
         jsonWriteString(jw, "fileType", file->fileType);
-        jsonWriteString(jw, "hub", file->fileName);
+        jsonWriteString(jw, "parentDir", file->parentDir);
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "lastModified", file->lastModified);
         jsonWriteString(jw, "uploadTime", file->creationTime);
@@ -169,6 +169,9 @@ if (userName)
 jsonWriteObjectEnd(jw);
 jsInlineF("var isLoggedIn = %s\n", getUserName() ? "true" : "false");
 jsInlineF("var userFiles = %s;\n", dyStringCannibalize(&jw->dy));
+// if the user is not logged, the 0 for the quota is ignored
+jsInlineF("var userQuota = %llu\n", getUserName() ? checkUserQuota(getUserName()) : 0);
+jsInlineF("var maxQuota = %llu\n", getUserName() ? getMaxUserQuota(getUserName()) : HUB_SPACE_DEFAULT_QUOTA);
 jsonWriteFree(&jw);
 }
 

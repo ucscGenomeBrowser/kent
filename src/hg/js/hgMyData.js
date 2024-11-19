@@ -31,7 +31,7 @@ const uppy = new Uppy.Uppy({
                 continue;
             }
             uppy.setFileMeta(file.id, {
-                fileName: file.name,
+                fileName: file.meta.name,
                 fileSize: file.size,
                 lastModified: file.data.lastModified,
             });
@@ -312,7 +312,7 @@ var hubCreate = (function() {
             {data: "fileSize", title: "File size", render: dataTablePrintSize},
             {data: "fileType", title: "File type"},
             {data: "genome", title: "Genome", render: dataTablePrintGenome},
-            {data: "hub", title: "Hubs"},
+            {data: "parentDir", title: "Hubs"},
             {data: "lastModified", title: "File Last Modified"},
             {data: "uploadTime", title: "Upload Time"},
         ],
@@ -696,7 +696,7 @@ var hubCreate = (function() {
             const d = new Date(metadata.lastModified);
             newReqObj = {
                 "uploadTime": Date.now(),
-                "lastModified": d.toJSON(),
+                "lastModified": d.toLocaleString(),
                 "fileName": metadata.fileName,
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
