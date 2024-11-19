@@ -268,7 +268,7 @@ var hubCreate = (function() {
                     delBtn.textContent = "Delete";
                     delBtn.type = 'button';
                     delBtn.addEventListener("click", function() {
-                        deleteFile(row.fileName, row.fileType, row.hub);
+                        deleteFile(row.fileName, row.fileType, row.parentDir);
                     });
 
                     // click to view hub/file in gb:
@@ -276,7 +276,7 @@ var hubCreate = (function() {
                     viewBtn.textContent = "View in Genome Browser";
                     viewBtn.type = 'button';
                     viewBtn.addEventListener("click", function() {
-                        viewInGenomeBrowser(row.fileName, row.fileType, row.genome, row.hub);
+                        viewInGenomeBrowser(row.fileName, row.fileType, row.genome, row.parentDir);
                     });
 
                     container.appendChild(delBtn);
