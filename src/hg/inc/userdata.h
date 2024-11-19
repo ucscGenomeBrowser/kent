@@ -82,6 +82,9 @@ struct userFiles *listFilesForUserHub(char *userName, char *hubName);
 struct hubSpace *listFilesForUser(char *userName);
 /* Return the files the user has uploaded */
 
+char *defaultHubNameForUser(char *userName);
+/* Return a name to use as a default for a hub, starts with myFirstHub, then myFirstHub2, ... */
+
 long long getMaxUserQuota(char *userName);
 /* Return how much space is allocated for this user or the default */
 

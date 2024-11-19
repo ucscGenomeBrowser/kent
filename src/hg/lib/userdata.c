@@ -105,6 +105,16 @@ hubSpaceSaveToDb(conn, row, "hubSpace", 0);
 hDisconnectCentral(&conn);
 }
 
+static boolean checkHubSpaceRowExists(struct hubSpace *row)
+/* Return TRUE if row already exists */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace where userName='%s' and fileName='%s' and parentDir='%s'", row->userName, row->fileName, row->parentDir);
+int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
+hDisconnectCentral(&conn);
+return ret > 0;
+}
+
 static void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr)
 /* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
  * final subdirectory component of parentDirStr */
@@ -135,7 +145,9 @@ for (i = 0; i < foundSlashes; i++)
     row->location = cloneString(dyStringContents(currLocation));
     row->md5sum = "";
     row->parentDir = i > 0 ? components[i-1] : "";
-    addHubSpaceRowForFile(row);
+    // only insert a row for this parentDir if it's unique to the table
+    if (!checkHubSpaceRowExists(row))
+        addHubSpaceRowForFile(row);
     dyStringAppendC(currLocation, '/');
     dyStringAppend(currLocation, components[i]);
     }
@@ -151,7 +163,12 @@ makeDirsOnPath(path);
 // restore umask
 umask(oldUmask);
 // now make the hub.txt with some basic information
-char *hubFile = catTwoStrings(path, "/hub.txt");
+char *hubFile = NULL;
+struct dyString *hubFileDy = dyStringCreate("%s%shub.txt", path, endsWith(path, "/") ? "" : "/");
+hubFile = dyStringCannibalize(&hubFileDy);
+if (fileExists(hubFile))
+    return hubFile;
+
 FILE *f = mustOpen(hubFile, "w");
 //fprintf(stderr, "would write \"hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n\" to %s", hubName, emailForUserName(userName), hubName, hubName, db, hubFile);
 fprintf(f, "hub %s\n"
@@ -224,7 +241,8 @@ row->parentDir = hubName;
 struct dyString *parentsPath = dyStringCreate("%s%s", getDataDir(userName), parentDir);
 fprintf(stderr, "parentDir of hub.txt: '%s'\n", parentsPath->string);
 fflush(stderr);
-addHubSpaceRowForFile(row);
+if (!checkHubSpaceRowExists(row))
+    addHubSpaceRowForFile(row);
 }
 
 static void deleteHubSpaceRow(char *fname)
@@ -333,7 +351,40 @@ struct hubSpace *listFilesForUser(char *userName)
 struct sqlConnection *conn = hConnectCentral();
 struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by creationTime, fileName", userName);
 struct hubSpace *fileList = hubSpaceLoadByQuery(conn, dyStringCannibalize(&query));
+hDisconnectCentral(&conn);
 return fileList;
+}
+
+#define defaultHubName "defaultHub"
+char *defaultHubNameForUser(char *userName)
+/* Return a name to use as a default for a hub, starts with defaultHub, then defaultHub2, ... */
+{
+if (!userName)
+    return defaultHubName;
+struct dyString *query = sqlDyStringCreate("select distinct(fileName) from hubSpace where parentDir='' and fileName like '%s%%' and userName='%s'", defaultHubName, userName);
+struct sqlConnection *conn = hConnectCentral();
+struct slName *hubNames = sqlQuickList(conn, dyStringCannibalize(&query));;
+hDisconnectCentral(&conn);
+if (hubNames == NULL)
+    // user has no hubs created
+    return defaultHubName;
+slSort(&hubNames,slNameCmpStringsWithEmbeddedNumbers);
+slReverse(&hubNames);
+// now the first element of the list has the most recent integer to use (or no integer)
+char *currHubName = cloneString(hubNames->name);
+int currHubStrLen = strlen(currHubName);
+int defaultLen = strlen(defaultHubName);
+if (currHubStrLen == defaultLen)
+    // probably a common case
+    return "defaultHub2";
+else
+    {
+    currHubName[defaultLen-1] = 0;
+    currHubName += strlen(defaultHubName);
+    int hubNum = sqlUnsigned(currHubName) + 1;
+    struct dyString *hubName = dyStringCreate("%s%d", defaultHubName, hubNum);
+    return dyStringCannibalize(&hubName);
+    }
 }
 
 long long getMaxUserQuota(char *userName)

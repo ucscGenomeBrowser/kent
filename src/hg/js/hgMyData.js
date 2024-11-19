@@ -1,6 +1,5 @@
 /* jshint esnext: true */
 var debugCartJson = true;
-var hubNameDefault = "MyFirstHub";
 
 function prettyFileSize(num) {
     if (!num) {return "n/a";}

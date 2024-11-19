@@ -151,24 +151,11 @@ if (userName)
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
-    /*
-    jsonWriteListStart(jw, "hubList");
-    struct userHubs *hub, *hubList = listHubsForUser(userName);
-    for (hub = hubList; hub != NULL; hub = hub->next)
-        {
-        jsonWriteObjectStart(jw, NULL);
-        cgiDecodeFull(hub->hubName, hub->hubName, strlen(hub->hubName));
-        jsonWriteString(jw, "hubName", hub->hubName);
-        jsonWriteString(jw, "genome", hub->genome);
-        jsonWriteNumber(jw, "lastModified", getHubLatestTime(hub));
-        jsonWriteObjectEnd(jw);
-        }
-    jsonWriteListEnd(jw);
-    */
     }
 jsonWriteObjectEnd(jw);
 jsInlineF("var isLoggedIn = %s\n", getUserName() ? "true" : "false");
 jsInlineF("var userFiles = %s;\n", dyStringCannibalize(&jw->dy));
+jsInlineF("var hubNameDefault = \"%s\";\n", defaultHubNameForUser(getUserName()));
 // if the user is not logged, the 0 for the quota is ignored
 jsInlineF("var userQuota = %llu\n", getUserName() ? checkUserQuota(getUserName()) : 0);
 jsInlineF("var maxQuota = %llu\n", getUserName() ? getMaxUserQuota(getUserName()) : HUB_SPACE_DEFAULT_QUOTA);
@@ -205,7 +192,6 @@ webIncludeResourceFile("hgMyData.css");
 // get the current files stored for this user
 outFilesForUser();
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
-//jsInlineF("\nimport {hubCreate} from \"../js/hgMyData.js;\n");
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }
