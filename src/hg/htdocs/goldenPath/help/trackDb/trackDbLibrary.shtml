@@ -2022,12 +2022,12 @@ There are no extra options that can appear on the type hic line.
     In this fourth example, we are applying a highlight to multiple values in the
     <code>annotationType</code> field. We can select from these values in the
     <code>annotationType</code> field with a drop-down menu displayed on the track settings
-    page, and highlight only items wthat match our selections. The selection choices will let
-    us match one, all or any combination of th esupplied values.</p>
+    page, and highlight only items that match our selections. The selection choices will let
+    us match one, all or any combination of the supplied values.</p>
     <pre>
     highlightValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
     <p>
-    Similar to the last example, but we have changed the name of the itmes that show up in the
+    Similar to the last example, but we have changed the name of the items that show up in the
     drop-down menu to be more descriptive than the dense file format values. For example, if we
     wanted to highlight only items with <code>annotationType</code> of <code>DNA-BR</code>, on
     the track settings page, we would select <code>DNA-binding region</code>.</p>
