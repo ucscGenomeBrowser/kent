@@ -1,4 +1,4 @@
-/* post-finish  - tus daemon post-finish hook program. Reads
+/* pre-finish  - tus daemon pre-finish hook program. Reads
  * a JSON encoded request to finsh an upload from a tus
  * client and moves a downloaded file to a specific user
  * directory. */
@@ -24,9 +24,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "post-finish - tus daemon post-finish hook program\n"
+  "pre-finish - tus daemon pre-finish hook program\n"
   "usage:\n"
-  "   post-finish < input\n"
+  "   pre-finish < input\n"
   );
 }
 
@@ -35,8 +35,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int postFinish()
-/* post-finish hook for tus daemon. Read JSON encoded hook request from
+int preFinish()
+/* pre-finish hook for tus daemon. Read JSON encoded hook request from
  * stdin and write a JSON encoded hook to stdout. Writing to stderr
  * will be redirected to the tusd log and not seen by the user, so for
  * errors that the user needs to see, they need to be in the JSON response */
@@ -202,5 +202,5 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 1)
     usage();
-return postFinish();
+return preFinish();
 }
