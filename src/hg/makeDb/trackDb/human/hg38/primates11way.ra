@@ -88,3 +88,104 @@ html primates11way
         speciesCodonDefault hg38
         sGroup_Primates hs1 GCA_029289425.2 GCA_028858775.2 GCA_029281585.2 GCA_028885655.2 GCA_028885625.2 GCA_028878055.2 GCF_011100555.1 GCF_020740605.2 GCF_027406575.1
         speciesLabels GCF_020740605.2="ring-tailed lemur" GCF_027406575.1="slow loris" GCA_029281585.2="western lowland gorilla" GCA_029289425.2="pygmy chimpanzee" GCA_028858775.2="chimpanzee" GCA_028885655.2="Sumatran orangutan" GCA_028885625.2="Bornean orangutan" GCF_011100555.1="white-tufted-ear marmoset" GCA_028878055.2="siamang" hg38="human/GRCh38.p14" hs1="T2T CHM13v2.0" hg38="human/hg38" hs1="T2T CHM13v2.0/hs1"
+
+track fastGa11cons
+parent primates11way
+compositeTrack on
+shortLabel fastGa 11-way
+longLabel fastGa pair-wise alignments on 11 primate species
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+html primates11way
+
+    track fastGa_hs1
+    parent fastGa11cons
+    type bigChain hs1
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-hs1.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-hs1Link.bb
+    shortLabel T2T CHM13v2.0
+    longLabel FastGA hs1/T2T CHM13v2.0/GCA_009914755.4
+    priority 1
+
+    track fastGa_GCA_029289425.2
+    parent fastGa11cons
+    type bigChain GCA_029289425.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_029289425.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_029289425.2Link.bb
+    shortLabel pygmy chimpanzee
+    longLabel FastGA alignment pygmy chimpanzee
+    priority 2
+
+    track fastGa_GCA_028858775.2
+    parent fastGa11cons
+    type bigChain GCA_028858775.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028858775.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028858775.2Link.bb
+    shortLabel chimpanzee
+    longLabel FastGA alignment chimpanzee
+    priority 3
+
+    track fastGa_GCA_029281585.2
+    parent fastGa11cons
+    type bigChain GCA_029281585.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_029281585.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_029281585.2Link.bb
+    shortLabel western lowland gorilla
+    longLabel FastGA alignment western lowland gorilla
+    priority 4
+
+    track fastGa_GCA_028885655.2
+    parent fastGa11cons
+    type bigChain GCA_028885655.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028885655.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028885655.2Link.bb
+    shortLabel Sumatran orangutan
+    longLabel FastGA alignment Sumatran orangutan
+    priority 5
+
+    track fastGa_GCA_028885625.2
+    parent fastGa11cons
+    type bigChain GCA_028885625.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028885625.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028885625.2Link.bb
+    shortLabel Bornean orangutan
+    longLabel FastGA alignment Bornean orangutan
+    priority 6
+
+    track fastGa_GCA_028878055.2
+    parent fastGa11cons
+    type bigChain GCA_028878055.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028878055.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCA_028878055.2Link.bb
+    shortLabel siamang
+    longLabel FastGA alignment siamang
+    priority 7
+
+    track fastGa_GCF_011100555.1
+    parent fastGa11cons
+    type bigChain GCF_011100555.1
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCF_011100555.1.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCF_011100555.1Link.bb
+    shortLabel white-tufted-ear marmoset lemur
+    longLabel FastGA alignment white-tufted-ear marmoset
+    priority 8
+
+    track fastGa_GCF_020740605.2
+    parent fastGa11cons
+    type bigChain GCF_020740605.2
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCF_020740605.2.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCF_020740605.2Link.bb
+    shortLabel ring-tailed lemur
+    longLabel FastGA alignment ring-tailed lemur
+    priority 9
+
+    track fastGa_GCF_027406575.1
+    parent fastGa11cons
+    type bigChain GCF_027406575.1
+    bigDataUrl /gbdb/hg38/fastGaChain/hg38-GCF_027406575.1.bb
+    linkDataUrl /gbdb/hg38/fastGaChain/hg38-GCF_027406575.1Link.bb
+    shortLabel slow loris
+    longLabel FastGA alignment slow loris
+    priority 10
