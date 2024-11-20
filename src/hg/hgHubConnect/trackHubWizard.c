@@ -22,10 +22,10 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 
-void removeOneFile(char *userName, char *cgiFileName)
+void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
 {
-char *fileName = prefixUserFile(userName, cgiEncodeFull(cgiFileName));
+char *fileName = prefixUserFile(userName, cgiEncodeFull(fullPath), NULL);
 if (fileExists(fileName))
     {
     fprintf(stderr, "deleting file: '%s'\n", fileName);
@@ -42,7 +42,7 @@ else
 void removeHubDir(char *userName, char *cgiFileName)
 /* Remove one single hub for userName */
 {
-char *hubDir = prefixUserFile(userName, cgiEncodeFull(cgiFileName));
+char *hubDir = prefixUserFile(userName, cgiEncodeFull(cgiFileName), NULL);
 if (isDirectory(hubDir))
     {
     fprintf(stderr, "deleting directory: '%s'\n", hubDir);
@@ -65,9 +65,11 @@ if (userName)
         {
         struct jsonElement *fileObj = (struct jsonElement *)f->val;
         char *fileName = jsonStringField(fileObj, "fileName");
-        //char *fileType = jsonStringField(fileObj, "fileType");
-        //struct slName *hubList  = slNameListFromComma(jsonStringField(fileObj, "hubNameList"));
-        removeOneFile(userName, fileName);
+        char *fileType = jsonStringField(fileObj, "fileType");
+        char *db = jsonStringField(fileObj, "genome");
+        //char *parentDir = jsonStringField(fileObj, "parentDir");
+        char *fullPath = jsonStringField(fileObj, "fullPath");
+        removeOneFile(userName, fileName, fullPath, db, fileType);
         jsonWriteString(cj->jw, NULL, fileName);
         }
     jsonWriteListEnd(cj->jw);
@@ -100,7 +102,7 @@ if (userName)
     fprintf(stderr, "creating hub '%s' for db '%s'\n", encodedName, db);
     fflush(stderr);
     // check if this hub already exists, must have a directory and hub.txt already:
-    char *path = prefixUserFile(userName, encodedName);
+    char *path = prefixUserFile(userName, encodedName, NULL);
     if (isDirectory(path))
         {
         // can't make a hub that already exists!
@@ -148,6 +150,7 @@ if (userName)
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "lastModified", file->lastModified);
         jsonWriteString(jw, "uploadTime", file->creationTime);
+        jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);

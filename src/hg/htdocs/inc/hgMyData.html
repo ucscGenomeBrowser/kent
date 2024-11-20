@@ -17,7 +17,12 @@ THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY. THIS IS JUST EXAMPLE COPY.
         </p>
     </div>
 
-    <div id='filePickerModal'></div>
+    <div id='selectedFileInfo' class="tabSection">
+        <div id='placeHolderInfo'>Selected file information</div>
+        <div style="display: none">
+            <span id='numberSelectedFiles'></span> selected. <button id='viewSelectedFiles'></button><button id='deleteSelectedFiles'></button>
+        </div>
+    </div>
 
     <div id='filesDiv' class='tabSection'>
         <table id="filesTable" class="sessionTable stripe hover row-border compact" borderwidth=0>

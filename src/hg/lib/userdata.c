@@ -59,6 +59,19 @@ fprintf(stderr, "userDataDir = '%s'\n", newDataDir->string);
 return dyStringCannibalize(&newDataDir);
 }
 
+char *stripDataDir(char *fname, char *userName)
+/* Strips the getDataDir(userName) off of fname */
+{
+char *dataDir = getDataDir(userName);
+int prefixSize = strlen(dataDir);
+if (startsWith(dataDir, fname))
+    {
+    char *ret = fname + prefixSize;
+    return ret;
+    }
+return NULL;
+}
+
 char *getHubDataDir(char *userName, char *hub)
 {
 char *dataDir = getDataDir(userName);
@@ -81,12 +94,21 @@ if (userName)
 return retUrl;
 }
 
-char *prefixUserFile(char *userName, char *fname)
-/* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
+char *prefixUserFile(char *userName, char *fname, char *parentDir)
+/* Allocate a new string that contains the full per-user path to fname, NULL otherwise.
+ * parentDir is optional and will go in between the per-user dir and the fname */
 {
 char *pathPrefix = getDataDir(userName);
 if (pathPrefix)
-    return catTwoStrings(pathPrefix, fname);
+    {
+    if (parentDir)
+        {
+        struct dyString *ret = dyStringCreate("%s%s%s%s", pathPrefix, parentDir, lastChar(parentDir) == '/' ? "" : "/", fname);
+        return dyStringCannibalize(&ret);
+        }
+    else
+        return catTwoStrings(pathPrefix, fname);
+    }
 else
     return NULL;
 }
@@ -245,11 +267,11 @@ if (!checkHubSpaceRowExists(row))
     addHubSpaceRowForFile(row);
 }
 
-static void deleteHubSpaceRow(char *fname)
+static void deleteHubSpaceRow(char *fname, char *userName)
 /* Deletes a row from the hubspace table for a given fname */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *deleteQuery = sqlDyStringCreate("delete from hubSpace where location='%s'", fname);
+struct dyString *deleteQuery = sqlDyStringCreate("delete from hubSpace where location='%s' and userName='%s'", fname, userName);
 sqlUpdate(conn, dyStringCannibalize(&deleteQuery));
 }
 
@@ -264,7 +286,7 @@ if (fileExists(fname))
     // delete the actual file
     mustRemove(fname);
     // delete the table row
-    deleteHubSpaceRow(fname);
+    deleteHubSpaceRow(fname, userName);
     }
 }
 
@@ -280,7 +302,7 @@ if (isDirectory(path))
         mustRemove(f->name);
     // now we have deleted all the files in the dir we can safely rmdir
     mustRemove(path);
-    deleteHubSpaceRow(path);
+    deleteHubSpaceRow(path, userName);
     }
 }
 
@@ -306,6 +328,13 @@ time_t getHubLatestTime(struct userHubs *hub)
 {
 // NOTE: every hub is guaranteed to have at least one file
 return getFileListLatestTime(hub->fileList);
+}
+
+char *findParentDirs(char *parentDir, char *userName, char *fname)
+/* For a given file with parentDir, go up the tree and find the full path back to
+ * the rootmost parentDir */
+{
+return NULL;
 }
 
 struct userFiles *listFilesForUserHub(char *userName, char *hubName)

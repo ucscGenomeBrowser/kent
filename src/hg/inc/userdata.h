@@ -50,8 +50,12 @@ char *getDataDir(char *userName);
  * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
  * on the RR, this is /userdata/userStore/hash/userName/ */
 
-char *prefixUserFile(char *userName, char *fname);
-/* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
+char *stripDataDir(char *fname, char *userName);
+/* Strips the getDataDir(userName) off of fname */
+
+char *prefixUserFile(char *userName, char *fname, char *parentDir);
+/* Allocate a new string that contains the full per-user path to fname, NULL otherwise.
+ * parentDir is optional and will go in between the per-user dir and the fname */
 
 char *writeHubText(char *path, char *userName, char *hubName, char *db);
 /* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
@@ -78,6 +82,10 @@ time_t getHubLatestTime(struct userHubs *hub);
 
 struct userFiles *listFilesForUserHub(char *userName, char *hubName);
 /* Get all the files for a particular hub for a particular user */
+
+char *findParentDirs(char *parentDir, char *userName, char *fname);
+/* For a given file with parentDir, go up the tree and find the full path back to
+ * the rootmost parentDir */
 
 struct hubSpace *listFilesForUser(char *userName);
 /* Return the files the user has uploaded */

@@ -139,6 +139,165 @@ var hubCreate = (function() {
         return ret;
     }
 
+    function viewInGenomeBrowser(fname, ftype, genome, hubName) {
+        // redirect to hgTracks with this track open in the hub
+        if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
+            if (ftype in extensionMap) {
+                // TODO: tusd should return this location in it's response after
+                // uploading a file and then we can look it up somehow, the cgi can
+                // write the links directly into the html directly for prev uploaded files maybe?
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt";
+                window.location.assign(url);
+                return false;
+            }
+        }
+    }
+
+    // helper object so we don't need to use an AbortController to update
+    // the data this function is using
+    let selectedData = {};
+    function viewAllInGenomeBrowser(ev) {
+        // redirect to hgTracks with these tracks/hubs open
+        let data = selectedData;
+        if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
+            let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
+            let genome; // may be multiple genomes in list, just redirect to the first one
+                        // TODO: this should probably raise an alert to click through
+            let hubsAdded = {};
+            _.forEach(data, (d) => {
+                if (!genome) {
+                    genome = d.genome;
+                    url += "&db=" + genome;
+                }
+                if (d.fileType in extensionMap) {
+                    // TODO: tusd should return this location in it's response after
+                    // uploading a file and then we can look it up somehow, the cgi can
+                    // write the links directly into the html directly for prev uploaded files maybe?
+                    if (!(d.parentDir in hubsAdded)) {
+                        // NOTE: hubUrls get added regardless of whether they are on this assembly
+                        // or not, because multiple genomes may have been requested. If this user
+                        // switches to another genome we want this hub to be connected already
+                        url += "&hubUrl=" + uiState.userUrl + d.parentDir + "hub.txt";
+                    }
+                    hubsAdded[d.parentDir] = true;
+                    if (d.genome == genome) {
+                        // turn the track on if its for this db
+                        url += "&" + d.fileName + "=pack";
+                    }
+                }
+            });
+            window.location.assign(url);
+            return false;
+        }
+    }
+
+    /*
+    function deleteFile(fname, fileType, parentDir, db) {
+        // Send an async request to hgHubConnect to delete the file
+        // Note that repeated requests, like from a bot, will return 404 as a correct response
+        console.log(`sending delete req for ${fname}`);
+        cart.setCgi("hgHubConnect");
+        // a little complex, but the format is:
+        // {commandToCgi: {arg: val, ...}}
+        // but we make val an object as well, becoming:
+        // {commandToCgi: {fileList: [{propertyName1: propertyVal1, ...}, {propertName2: ...}]}}
+        cart.send({
+            deleteFile: {
+                fileList: [
+                    {
+                        fileName: fname,
+                        fileType: fileType,
+                        parentDir: parentDir,
+                        db: db,
+                    }
+                ]
+            }
+        });
+        cart.flush();
+        deleteFileFromTable(fname);
+    }
+    */
+
+    function deleteFileList(ev) {
+        // same as deleteFile() but acts on the selectedData variable
+        let data = selectedData;
+        let cartData = {deleteFile: {fileList: []}};
+        cart.setCgi("hgHubConnect");
+        _.forEach(data, (d) => {
+            cartData.deleteFile.fileList.push({
+                fileName: d.fileName,
+                fileType: d.fileType,
+                parentDir: d.parentDir,
+                genome: d.genome,
+                fullPath: d.fullPath,
+            });
+        });
+        cart.send(cartData);
+        cart.flush();
+        
+    }
+
+    function updateSelectedFileDiv(data) {
+        // update the div that shows how many files are selected
+        let numSelected = Object.entries(data).length;
+        let infoDiv = document.getElementById("selectedFileInfo");
+        let span = document.getElementById("numberSelectedFiles");
+        let spanParentDiv = span.parentElement;
+        span.textContent = `${numSelected} ${numSelected > 1 ? "files" : "file"}`;
+        if (numSelected > 0) {
+            // (re) set up the handlers for the selected file info div:
+            let viewBtn = document.getElementById("viewSelectedFiles");
+            selectedData= data;
+            viewBtn.addEventListener("click", viewAllInGenomeBrowser);
+            viewBtn.textContent = numSelected === 1 ? "View selected file in Genome Browser" : "View all selected files in Genome Browser";
+            let deleteBtn = document.getElementById("deleteSelectedFiles");
+            deleteBtn.addEventListener("click", deleteFileList);
+            deleteBtn.textContent = numSelected === 1 ? "Delete selected file" : "Delete selected files";
+            
+        }
+
+        // set the visibility of the placeholder text and info text
+        spanParentDiv.style.display = numSelected === 0 ? "none": "block";
+        let placeholder = document.getElementById("placeHolderInfo");
+        placeholder.style.display = numSelected === 0 ? "block" : "none";
+    }
+
+    function handleCheckboxSelect(ev) {
+        let checkbox = ev.target;
+        let table = $("#filesTable").DataTable();
+
+        // depending on the state of the checkbox, we will be adding information
+        // to the div, or removing information. We will also be potentially checking/unchecking
+        // all of the checkboxes if the selectAll box was clicked. The data variable
+        // will hold all the information we want to keep visible in the info div
+        let data = {};
+
+        // first check if we selected all or not
+        if (checkbox.classList.contains("selectAll")) {
+            // we can now turn off/on all the checkboxes
+            let state = checkbox.checked;
+            if (state) {
+                document.querySelectorAll(".filesTableCheckbox").forEach( (inp) => {
+                    inp.checked = true;
+                });
+            } else {
+                document.querySelectorAll(".filesTableCheckbox").forEach( (inp) => {
+                    inp.checked = false;
+                });
+            }
+        }
+        // get all of the currently selected rows (may be more than just the one that
+        // was most recently clicked)
+        let selected = document.querySelectorAll(".filesTableCheckbox:checked");
+        selected.forEach((inp, ix) => {
+            if (inp.classList.contains("selectAll")) {
+                return;
+            }
+            data[ix] = table.row(inp.closest("tr")).data();
+        });
+        updateSelectedFileDiv(data);
+    }
+
     function dataTablePrintSize(data, type, row, meta) {
         return prettyFileSize(data);
     }
@@ -157,23 +316,6 @@ var hubCreate = (function() {
         row.remove().draw();
     }
 
-    function deleteFile(fname, fileType, hubNameList) {
-        // Send an async request to hgHubConnect to delete the file
-        // Note that repeated requests, like from a bot, will return 404 as a correct response
-        console.log(`sending delete req for ${fname}`);
-        cart.setCgi("hgHubConnect");
-        // a little complex, but the format is:
-        // {commandToCgi: {arg: val, ...}
-        // but we make val an object as well, becoming:
-        // {commandToCgi: {fileList: [{propertyName1: propertyVal1, ...}, {propertName2: ...}]}}
-        cart.send({deleteFile: {fileList: [{fileName: fname, fileType: fileType, hubNameList: hubNameList}]}});
-        cart.flush();
-        deleteFileFromTable(fname);
-    }
-
-    function deleteFileList() {
-    }
-
     function addFileToHub(rowData) {
         // a file has been uploaded and a hub has been created, present a modal
         // to choose which hub to associate this track to
@@ -186,19 +328,6 @@ var hubCreate = (function() {
         cart.flush();
     }
 
-    function viewInGenomeBrowser(fname, ftype, genome, hubName) {
-        // redirect to hgTracks with this track open in the hub
-        if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
-            if (ftype in extensionMap) {
-                // TODO: tusd should return this location in it's response after
-                // uploading a file and then we can look it up somehow, the cgi can
-                // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt";
-                window.location.assign(url);
-                return false;
-            }
-        }
-    }
 
     function addNewUploadedFileToTable(req) {
         // req is an object with properties of an uploaded file, make a new row
@@ -234,6 +363,9 @@ var hubCreate = (function() {
     }
 
     let tableInitOptions = {
+        pageLength: 25,
+        scrollY: 600,
+        scrollCollapse: true, // when less than scrollY height is needed, make the table shorter
         layout: {
             topStart: {
                 buttons: [
@@ -250,26 +382,23 @@ var hubCreate = (function() {
         columnDefs: [
             {
                 orderable: false, targets: 0,
-                title: "<input type=\"checkbox\"></input>",
+                // have to add the event handler for the selectAll later
+                title: "<input id=\"filesTableSelectAll\" class=\"selectAll filesTableCheckbox\" type=\"checkbox\"></input>",
                 render: function(data, type, row) {
-                    return "<input type=\"checkbox\"></input>";
+                    let ret = document.createElement("input");
+                    ret.classList.add("filesTableCheckbox");
+                    ret.type = "checkbox";
+                    ret.addEventListener("click", handleCheckboxSelect);
+                    return ret;
                 }
             },
             {
                 orderable: false, targets: 1,
-                data: "action", title: "Action",
+                data: "action", title: "",
                 render: function(data, type, row) {
                     /* Return a node for rendering the actions column */
                     // all of our actions will be buttons in this div:
                     let container = document.createElement("div");
-
-                    // click to call hgHubDelete file
-                    let delBtn = document.createElement("button");
-                    delBtn.textContent = "Delete";
-                    delBtn.type = 'button';
-                    delBtn.addEventListener("click", function() {
-                        deleteFile(row.fileName, row.fileType, row.parentDir);
-                    });
 
                     // click to view hub/file in gb:
                     let viewBtn = document.createElement("button");
@@ -279,7 +408,6 @@ var hubCreate = (function() {
                         viewInGenomeBrowser(row.fileName, row.fileType, row.genome, row.parentDir);
                     });
 
-                    container.appendChild(delBtn);
                     container.appendChild(viewBtn);
 
                     return container;
@@ -443,6 +571,8 @@ var hubCreate = (function() {
                 uiState.userUrl = userFiles.userUrl;
             }
             showExistingFiles(uiState.fileList.filter((row) => row.fileType !== "hub"));
+            // initialize the selectAll handler here, because above we defined it as a string
+            document.getElementById("filesTableSelectAll").addEventListener("click", handleCheckboxSelect);
             // TODO: add event handlers for editing defaults, grouping into hub
             // TODO: display quota somewhere
         }
