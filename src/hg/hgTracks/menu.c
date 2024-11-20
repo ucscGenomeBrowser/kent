@@ -424,7 +424,7 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgTracksConfigPage=configure", u
 appendLinkWithShortcut(&links, buf, "Configure Browser", "configureMenuLink", "Open configuration menu", "c f", FALSE, FALSE);
 
 // multi-region
-appendLinkWithOnclick(&links, "#", "Multi-Region", "multiRegionLink", "Show multi-region options", "popUpHgt.hgTracks('multi-region config'); return false;", "e v", FALSE, FALSE);
+appendLinkWithOnclick(&links, "#", "Multi-Region", "multiRegionLink", "Show multi-region options", "popUpHgt.hgTracks('multi-region config'); return false;", "", FALSE, FALSE);
 
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Tracks", "defaultTracksMenuLink", "Show only default tracks", "d t", FALSE, FALSE);

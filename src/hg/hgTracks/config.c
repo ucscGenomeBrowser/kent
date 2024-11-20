@@ -851,7 +851,7 @@ hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
 hPrintf("</TD>");
 hPrintf("<TD id='virtModeTypeDefaultLabel'>");
-hPrintf("Exit multi-region mode");
+hPrintf("Exit multi-region mode &nbsp; (d then v)");
 hPrintf("</TD></TR>\n");
 
 struct sqlConnection *conn = NULL;
@@ -865,7 +865,7 @@ if (emGeneTable)
     hPrintf("<TR><TD>");
     cgiMakeRadioButton("virtModeType", "exonMostly", sameWord("exonMostly", virtModeType));
     hPrintf("</TD><TD>");
-    hPrintf("Show exons using %s. &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
+    hPrintf("Show exons using %s &nbsp; (e then v). &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
     hIntVar("emPadding", cartUsualInt(cart, "emPadding", emPadding), 3);
     hPrintf(" bases.");
     hPrintf("</TD></TR>\n");
