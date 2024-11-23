@@ -349,7 +349,7 @@ itemRgb on
 urlLabel KOMP Data Coordination Center:
 url http://www.mousephenotype.org/data/genes/$$
 mgiUrlLabel MGI Report:
-mgiUrl http://www.informatics.jax.org/marker/$$
+mgiUrl https://www.informatics.jax.org//marker/$$
 exonNumbers off
 
 track acembly
@@ -2470,7 +2470,7 @@ visibility hide
 type bed 4 .
 otherDb mm8
 otherDbTable jaxQtl
-url http://www.informatics.jax.org/marker/$$
+url https://www.informatics.jax.org//marker/$$
 urlLabel MGI QTL Detail:
 
     track jaxQtlAsIs
