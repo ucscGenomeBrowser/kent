@@ -3030,7 +3030,7 @@ var rightClick = {
 
             menu.push($.contextMenu.separator);
             o = {};
-            o[" Hide all other tracks "] = {
+            o[rightClick.makeImgTag("hiddenIcon.png") + " Hide all other tracks "] = {
                 onclick: function(menuItemClicked, menuObject) {
                     rightClick.hit(menuItemClicked, menuObject, "hideOthers");
                     return true; }
@@ -3046,7 +3046,7 @@ var rightClick = {
             //menu.push(o);
 
             o = {};
-            o[" Move to top "] = {
+            o[rightClick.makeImgTag("ab_up.gif") + " Move to top "] = {
                 onclick: function(menuItemClicked, menuObject) {
                     rightClick.hit(menuItemClicked, menuObject, "moveTop");
                     return true; }
@@ -3054,7 +3054,7 @@ var rightClick = {
             menu.push(o);
 
             o = {};
-            o[" Move to bottom "] = {
+            o[rightClick.makeImgTag("ab_down.gif") + " Move to bottom "] = {
                 onclick: function(menuItemClicked, menuObject) {
                     rightClick.hit(menuItemClicked, menuObject, "moveBottom");
                     return true; }
