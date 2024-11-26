@@ -228,13 +228,15 @@ endif
 
 # on hgwdev, use the static libraries
 ifeq (${IS_HGWDEV},yes)
+   HG_INC += -I/cluster/software/include
+   HG_INC += -I/cluster/software/include/mariadb 
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
-   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
+   L+=/cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl
    PNGLIB=/usr/lib64/libpng.a
    PNGINCL=-I/usr/include/libpng15
    MYSQLINC=/usr/include/mysql
-   MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
+   MYSQLLIBS=/cluster/software/lib64/libmariadbclient.a /cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl -lz
    MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a
 else
    ifeq (${CONDA_BUILD},1)

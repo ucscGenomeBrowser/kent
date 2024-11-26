@@ -3,11 +3,11 @@
 /* Copyright (C) 2012 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
-#include "openssl/ssl.h"
-#include "openssl/err.h"
+#include <openssl/ssl.h>
+#include <openssl/err.h>
 
-#include "openssl/x509v3.h"
-#include "openssl/x509_vfy.h"
+#include <openssl/x509v3.h>
+#include <openssl/x509_vfy.h>
 
 #include <sys/socket.h>
 #include <unistd.h>
@@ -41,12 +41,12 @@ int myDataIndex = -1;
 
 static pthread_mutex_t *mutexes = NULL;
  
-static unsigned long openssl_id_callback(void)
+unsigned long openssl_id_callback(void)
 {
 return ((unsigned long)pthread_self());
 }
  
-static void openssl_locking_callback(int mode, int n, const char * file, int line)
+void openssl_locking_callback(int mode, int n, const char * file, int line)
 {
 if (mode & CRYPTO_LOCK)
     pthread_mutex_lock(&mutexes[n]);
@@ -54,7 +54,7 @@ else
     pthread_mutex_unlock(&mutexes[n]);
 }
  
-void openssl_pthread_setup(void)
+static void openssl_pthread_setup(void)
 {
 int i;
 int numLocks = CRYPTO_num_locks();
@@ -114,7 +114,7 @@ if (!done)
 
     SSL_library_init();
     ERR_load_crypto_strings();
-    ERR_load_SSL_strings();
+    SSL_load_error_strings();   // ERR_load_SSL_strings(); deprecated.
     OpenSSL_add_all_algorithms();
     openssl_pthread_setup();
     myDataIndex = SSL_get_ex_new_index(0, "myDataIndex", NULL, NULL, NULL);
@@ -601,7 +601,14 @@ char *proxyUrl = https_proxy;
 if (noProxy)
     proxyUrl = NULL;
 
-ctx = SSL_CTX_new(SSLv23_client_method());
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L   // # 1.1
+ctx = SSL_CTX_new(TLSv1_2_client_method()); // OLD SSLv23_client_method());
+#else
+ctx = SSL_CTX_new(TLS_client_method());
+SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+SSL_CTX_set_max_proto_version(ctx, TLS1_3_VERSION);
+#endif
 
 fd_set readfds;
 fd_set writefds;
