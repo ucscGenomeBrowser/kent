@@ -122,6 +122,7 @@ the decorated item).
 
 <a id="examples"></a>
 <h2>Examples</h2>
+<a id="example1"></a>
 <h3>Example &num;1: Building a decorator bigBed</h3>
 <p>
 Here is an example of how to use this format. Consider the item in BED format as a &quot;feature&quot;:
@@ -169,13 +170,34 @@ chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:featu
 </ul>
 </pre>
 <p>
-Both of these bed decorations can be stored in a file named <a href="examples/decorator/decoratorsEx.bed">decoratorsEx.bed</a>
-and then built as a <a href="examples/decorator/decoratorsEx1.bb">decoratorsEx.bb</a> from it with the following command:</p>
+Both of these bed decorations can be stored in a file named
+<a href="examples/decorator/decoratorsEx.bed">decoratorsEx.bed</a> and then built as a 
+<a href="examples/decorator/decoratorsEx.bb">decoratorsEx.bb</a> using the
+<a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em></a> and the
+<a href="examples/decorator/decoration.as">decoration.as</a> files and running the following
+command:</p>
 <pre>bedToBigBed -type=bed12+ -as=decoration.as decoratorsEx.bed hg38.chrom.sizes decoratorsEx.bb
 </pre>
 
+<h6>Debugging the decorator bigBed</h6>
+
+<p>
+The resulting <a href="examples/decorator/decoratorsEx.bb">decoratorsEx.bb</a> file can be
+displayed as a stand-alone custom track for debugging purposes. This process allows verification
+that the decorations are correctly applied. To display the decorator bigBed, navigate to the
+<a href="https://genome.ucsc.edu/cgi-bin/hgCustom"
+target="_blank">UCSC Genome Browser Custom Tracks page</a> and paste the URL into the designated
+text field:</p>
+<pre>browser position chr1:1000-2000
+https://genome.ucsc.edu/goldenPath/help/examples/decorator/decoratorsEx.bb
+</pre>
+
+<p>Once the decorator bigBed is loaded, the decorations will be rendered on the UCSC Genome
+Browser, allowing for verification of the correct display.</p>
+
+<a id="example2"></a>
 <a name="Example2"></a>
-<h3>Example &num;2: Create a Custom Track </h3>
+<h3>Example &num;2: Create a custom track </h3>
 <p>Create a decorator bigBed custom track using the decorator bigBed file from Example #1.</p>
  <ol>
    <li>
@@ -196,26 +218,44 @@ and sets additional parameters in the URL:</p>
 target="_blank"><pre>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;hgct_customText=track%20type=bigBed%20bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/mainEx.bb%20decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decoratorsEx.bb&amp;position=chr1:1000-2000
 </pre></a>
 
+<a id="example3"></a>
 <a name="Example3"></a>
 <h3>Example &num;3: Create a decorator bigBed with extra (custom) fields</h3>
 
-<p>Additional fields can also be added onto the end of the .as file if you desire, though they will not
-be used at all by default.  Adding fields allows you to set up custom filtering of which decorations are
-displayed.  For example, to include a "keywords" field you could add the following to the end of
-the decoration.as file:</p>
+<p>Additional fields can also be added onto the end of the .as file, though they will not be used by
+default. The additional fields can be used for custom feature filters and mouseOvers options. For
+example, to set up a
+<a href="hubQuickStartFilter.html#filterValues">filterValues filter</a>, you would add the
+following two fields to the decoration.as file:</p>
 <pre>
     int numKeywords;  "Number of keywords"
     string[numKeywords] keywords;  "Keywords for this decorator"
 </pre>
-<p>
-You would then modify your decoratorsEx.bed file to include an additional fields at the end of each line, detailing which keywords
-apply to each of the decorations.</p>
+<p>The <code>numKeywords</code> field specifies the number of keywords and the <code>keywords</code> field specifies the
+keywords. You would then modify your decoratorsEx.bed file to include an additional fields at the
+end of each line, detailing which keywords apply to each of the decorations:</p>
 <pre>
-chr1 1200 1800 highlight 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored 1 Type1
-chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 0 1 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle 2 Type2,Type3
+chr1 1200 1800 highlight 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:feature block 255,0,0,128 Ignored 1 Type1
+chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:feature glyph 0,255,0,255 Circle 2 Type2,Type3
 </pre>
-<p>After rebuilding the decorations.bb file, you could then use the filterValues version of the trackDb
-entry from the Hub trackDb settings section to create your track.</p>
+<p>The first bed entry filters for one class &quot;Type1&quot; and the second bed entry filters for
+two classes &quot;Type2,Type3&quot;.</p> 
+<p>You can also add a <a href="trackDb/trackDbDoc.html#mouseOverField">mouseOverField</a> 
+which will allow you to mouse over text that is different from the &quot;name&quot; of the
+decorator bigBed. You would add the following field to the decoration.as file:</p>
+<pre>
+    string mouseOverField;  "Mouse over text"
+</pre>
+<p>Then modify your decoratorsEx.bed file to include the additional field.
+<pre>
+chr1 1200 1800 highlight 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:feature block 255,0,0,128 Ignored 1 Type1 alternate_highlight_name
+chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:feature glyph 0,255,0,255 Circle 2 Type2,Type3 alternate_green_circle_name
+</pre>
+<p>You would then rebuild the decorations.bb file using the
+<a href="examples/decorator/decoration.as">decorationEx_fields.as</a> with extra fields:
+</p>
+<pre>bedToBigBed -type=bed12+ -as=decorationEx_fields.as decoratorsEx.bed hg38.chrom.sizes decoratorsEx.bb
+</pre>
 
 <a id="hub"></a>
 <h2>Hub TrackDb Settings</h2>
@@ -240,7 +280,7 @@ decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/de
 <p>
 Other settings are available to further configure decorators. Each may be applied to the decorator
 instead of the primary track by prepending "decorator.default." to the setting. For example, to set
-up a <a href="hubQuickStartFilter.html#filterValues">filterValues filter</a>  on the
+up a <a href="hubQuickStartFilter.html#filterValues">filterValues filter</a> on the
 &quot;keywords&quot; field of the decorator, allowing the user to filter to any combination of
 three classes &quot;Type1&quot;, &quot;Type2&quot;, and &quot;Type3&quot;, the following trackDb
 entry could be used were the <b>multipleListOr</b> setting splits the three classes list values by
@@ -251,10 +291,32 @@ decorator.default.filterType.keywords multipleListOr
 </pre>
 <p>
 Please note that this would also require building an extra <code>keywords</code> field into the decorator
-bigBed to hold those values, see Example #3 for more details. A full list of supported decorator
+bigBed to hold those values, see Example #3 for more details.</p>
+<p>Decorators also support the <a href="trackDb/trackDbDoc.html#mouseOver">mouseOver</a> and
+<a href="trackDb/trackDbDoc.html#mouseOverField">mouseOverField</a> settings that can be applied to
+bigBed tracks:</p>
+<pre>
+decorator.default.mouseOver decorator $name mouseOver
+decorator.default.mouseOver $mouseOver
+</pre>
+<p>
+You can configure the block decoration placement visibility to &quot;overlay&quot;,
+&quot;adjacent&quot;, or &quot;hide&quot; using the <b>blockMode</b>
+setting:</p>
+<pre>
+decorator.default.blockMode adjacent
+</pre>
+<p>
+You can use the <b>maxLabelBases</b> setting to set a maximum window size (in bases) for which labels
+will be drawn. If not set, the value will default to 200kb. This can be useful to deactivate
+decoration labels when there are too many track items and too many decoration labels to process
+visually.</p> 
+<pre>
+decorator.default.maxLabelBases 100000
+</pre>
+<p> A full list of supported decorator
 settings is available in the
-<a href="trackDb/trackDbDoc.html#decorator">trackDb documentation</a>.
-</p>
+<a href="trackDb/trackDbDoc.html#decorator">trackDb documentation</a>.</p>
 
 <a id="troubleshooting"></a>
 <h2>Troubleshooting</h2>

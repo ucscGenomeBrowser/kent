@@ -833,7 +833,10 @@ int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
 int maxItems = maximumTrackItems(tg);
-return maxItems * tl.fontHeight;
+int height = maxItems * tl.fontHeight;
+if (height > 31000)
+    height = 31000;
+return height;
 }
 
 static int maxItemsToOverflow(struct track *tg)
@@ -852,23 +855,9 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
-
-boolean doWiggle = checkIfWiggling(cart, tg);
-if (doWiggle)
-    {
-    struct wigCartOptions *wigCart = tg->wigCartData;
-    if (tg->wigCartData == NULL)
-	{
-        // fake the trackDb range for this auto-wiggle
-        int wordCount = 3;
-        char *words[3];
-        words[0] = "bedGraph";
-	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
-        wigCart->windowingFunction = wiggleWindowingMean;
-	tg->wigCartData = (void *) wigCart;
-	}
-    return wigTotalHeight(tg, vis);
-    }
+int height;
+if ((height = setupForWiggle(tg, vis)) != 0)
+    return height;
 
 int rows;
 double maxHeight = maximumTrackHeight(tg);
@@ -1207,7 +1196,7 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
-char buf[256];
+char buf[4096];
 if (tdbIsCompositeChild(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks",
           curGroup->shortLabel);
@@ -1739,7 +1728,7 @@ static struct glyphShape glyphShapes[] = {
 
 
 
-void drawScalledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor)
 /* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
  * which may have transparency.
@@ -1897,6 +1886,8 @@ if (color)
        newList = slCat(newList, oldList);
    }
 tg->items = newList;
+
+filterItemsOnNames(tg);
 }
 
 int getFilterColor(char *type, int colorIx)
@@ -2974,7 +2965,7 @@ for (ref = exonList; TRUE; )
 	    sx = (sx < picStart) ? picStart : sx;
     	    ex = (ex > picEnd)   ? picEnd   : ex;
 
-	    int w = ex - sx;
+	    int w = ex - sx; // w could be negative, but we'll skip drawing if it is
 
 	    int exonIntronNumber;
 	    char *exonIntronText;
@@ -3029,14 +3020,16 @@ for (ref = exonList; TRUE; )
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
                 // draw mapBoxes for the codons if we are zoomed in far enough
-                struct simpleFeature *codon;
-                struct dyString *codonDy = dyStringNew(0);
-                int codonS, codonE;
                 if (isExon && lf->codons && zoomedToCdsColorLevel)
                     {
+                    struct simpleFeature *codon;
+                    struct dyString *codonDy = dyStringNew(0);
+                    int codonS, codonE;
                     for (codon = lf->codons; codon != NULL; codon = codon->next)
                         {
                         codonS = codon->start; codonE = codon->end;
+                        if (codonS > e || codonE < s)
+                            continue; // only write out mouseovers for codons in the current exon
                         if (codonS <= winEnd && codonE >= winStart)
                             {
                             int codonSClp = (codonS < winStart) ? winStart : codonS;
@@ -3077,45 +3070,28 @@ for (ref = exonList; TRUE; )
                             }
                         }
                     }
-                }
-                else
+                else // either an intron, or else an exon zoomed out too far for codons (or no codons)
                     {
+                    char *sep = "";
+                    if (!isEmpty(existingText))
+                        sep = ", ";
+
+                    safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s",
+                            existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
-                    if (!isEmpty(existingText))
-                        safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s",
-                                existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-                    else
-                        safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s",
-                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                     char *oldMouseOver = lf->mouseOver;
                     lf->mouseOver = NULL;
                     tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
                         sItem, eItem, sx, y, w, heightPer);
-                    // and restore the mouseOver
+                    // and restore the old mouseOver
                     lf->mouseOver = oldMouseOver;
+
+                    picStart = ex;  // prevent pileups. is this right? add 1? does it work?
+                                    // JC: Why do we care about pileups?  First mapbox drawn wins.
                     }
-
-	    if (w > 0) // draw exon or intron if width is greater than 0
-		{
-                char *sep = "";
-                if (!isEmpty(existingText))
-                    sep = ", ";
-
-                safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s", 
-                        existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-
-                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                // prefer a lf->mouseOver over the itemName
-                char *oldMouseOver = lf->mouseOver;
-                lf->mouseOver = NULL;
-		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-		    sItem, eItem, sx, y, w, heightPer);
-                // and restore the old mouseOver
-                lf->mouseOver = oldMouseOver;
-
-		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
-		}
+                }
 	    }
 	}
 
@@ -5335,6 +5311,7 @@ else
     }
 
 // put up the color key for the gnomAD pLI track
+// If you change this code below, you must also change hgTracks.js:hideLegends
 if (startsWith("pliBy", tg->track))
     doPliColors = TRUE;
 }
@@ -6956,8 +6933,6 @@ else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
-
-filterItemsOnNames(tg);
 
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
@@ -11523,7 +11498,11 @@ return ct;
 static boolean canWiggle(struct track *tg)
 /* Is this a track type that can wiggle. */
 {
-return tg->isBigBed || startsWith("vcfTabix", tg->tdb->type);
+return (tg->isBigBed && 
+            !startsWith("bigInteract",tg->tdb->type) &&
+            !startsWith("bigMaf",tg->tdb->type) &&
+            !startsWith("bigLolly",tg->tdb->type))
+        || startsWith("vcfTabix", tg->tdb->type);
 }
 
 enum trackVisibility limitVisibility(struct track *tg)
@@ -11531,6 +11510,11 @@ enum trackVisibility limitVisibility(struct track *tg)
  * by parent visibility if part of a coposite track.
  * This also sets tg->height. */
 {
+if (forceWiggle && canWiggle(tg))
+    {
+    tg->limitWiggle = TRUE;
+    }
+
 if (!tg->limitedVisSet)
     {
     tg->limitedVisSet = TRUE;  // Prevents recursive loop!
@@ -11575,6 +11559,7 @@ if (!tg->limitedVisSet)
         if ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
             {
             tg->limitWiggle = TRUE;
+            tg->tdb->type = cloneString("wig");
             }
         if ( tg->limitWiggle)   // auto-density coverage is alway tvFull
             {

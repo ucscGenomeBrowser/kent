@@ -29,6 +29,7 @@
 #include "pthreadWrap.h"
 #include "ra.h"
 #include "regexHelper.h"
+#include "sessionData.h"
 #include "trackHub.h"
 #include "trashDir.h"
 #include "vcf.h"
@@ -1469,6 +1470,11 @@ static char *nextstrainUrlFromTn(struct tempName *jsonTn)
 /* Return a link to Nextstrain to view an annotated subtree. */
 {
 char *jsonUrlForNextstrain = urlFromTn(jsonTn);
+// Nextstrain doesn't accept .json.gz files -- only .json, optionally compressed in HTTPS with
+// Content-Encoding: gzip in the headers.  Apache can be config'd to serve that up from .json.gz
+// files on disk, see https://github.com/nextstrain/nextstrain.org/issues/1058
+if (endsWith(jsonUrlForNextstrain, ".json.gz"))
+    chopSuffix(jsonUrlForNextstrain);
 char *urlBase = nextstrainUrlBase();
 struct dyString *dy = dyStringCreate("%s%s%s", urlBase, skipProtocol(jsonUrlForNextstrain),
                                      NEXTSTRAIN_URL_PARAMS);
@@ -1566,7 +1572,7 @@ return cloneString(subtreeDropdownName);
 }
 
 static void makeSubtreeJumpButton(char *subtreeDropdownName, char *dest, char *destUrlBase,
-                                  char *destUrlParams, boolean skipProtocol)
+                                  char *destUrlParams, boolean skipProtocol, boolean skipGz)
 /* Make a button with javascript to get a JSON filename from a dropdown element, format a link
  * to dest, and jump to that dest when clicked. */
 {
@@ -1576,8 +1582,10 @@ char *mouseover = "view selected subtree with your sequences and other sequences
 struct dyString *js = dyStringCreate("jsonUrl = document.querySelector('select[name=\"%s\"]').value;"
                                      "if (%d) { ix = jsonUrl.indexOf('://');"
                                      "          if (ix >= 0) { jsonUrl = jsonUrl.substr(ix+3); } }"
+                                     "if (%d) { ix = jsonUrl.indexOf('.gz');"
+                                     "          if (ix >= 0) { jsonUrl = jsonUrl.substr(0, ix); } }"
                                      "window.open('%s' + jsonUrl + '%s');",
-                                     subtreeDropdownName, skipProtocol, destUrlBase, destUrlParams);
+                                     subtreeDropdownName, skipProtocol, skipGz, destUrlBase, destUrlParams);
 struct dyString *id = dyStringCreate("jumpTo%s_%d", dest, serial++);
 printf("<input type='button' id='%s' value='%s' title='%s' class='fullwidth'>",
        id->string, dest, mouseover);
@@ -1617,12 +1625,12 @@ if (nextstrainHost() && microbeTraceHost())
     char *subtreeDropdownName = makeSubtreeDropdown(subtreeInfoList, jsonTns);
     puts("</td><td>in</td><td>");
     makeSubtreeJumpButton(subtreeDropdownName, "Nextstrain", nextstrainUrlBase(),
-                          NEXTSTRAIN_URL_PARAMS, TRUE);
+                          NEXTSTRAIN_URL_PARAMS, TRUE, TRUE);
     puts("<br>");
     if (subtreeSize <= MAX_MICROBETRACE_SUBTREE_SIZE)
         {
         makeSubtreeJumpButton(subtreeDropdownName, "MicrobeTrace", microbeTraceUrlBase(),
-                              MICROBETRACE_URL_PARAMS, FALSE);
+                              MICROBETRACE_URL_PARAMS, FALSE, TRUE);
         }
     else
         {
@@ -3302,6 +3310,19 @@ if (slCount(sampleIds) >= minSamplesForOwnTree)
 return tree;
 }
 
+static void saveTrashFile(struct tempName *tn)
+/* If hg.conf specifies a long-term storage place for user data, then save tn there and make its
+ * original location a symbolic link to the new location.  Note: tn has "hgPhyloPlace" in the path
+ * already, and we're not associating these with hgLogin user IDs, so there's no need to build
+ * the path up past sessionDataDir (unlike in hgSession). */
+{
+char *sessionDataDir = cfgOption("sessionDataDir");
+if (isNotEmpty(sessionDataDir))
+    {
+    sessionDataSaveTrashFile(tn->forCgi, sessionDataDir);
+    }
+}
+
 static void phyloPlaceSamplesOneRef(struct lineFile *lf, char *db, char *org,
                                     char *refName, char *defaultProtobuf,
                                     boolean doMeasureTiming, int subtreeSize,
@@ -3446,6 +3467,7 @@ if (results && results->singleSubtreeInfo)
     char *bigGenePredFile = phyloPlaceRefSettingPath(org, refName, "bigGenePredFile");
     struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
     struct seqWindow *gSeqWin = memSeqWindowNew(refGenome->name, refGenome->dna);
+    boolean subtreePersist = cartUsualBoolean(cart, "subtreePersist", FALSE);
     struct hash *sampleUrls = hashNew(0);
     struct tempName *jsonTns[subtreeCount];
     struct subtreeInfo *ti;
@@ -3455,9 +3477,11 @@ if (results && results->singleSubtreeInfo)
         AllocVar(jsonTns[ix]);
         char subtreeName[512];
         safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
-        trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
+        trashDirFile(jsonTns[ix], "hgPhyloPlace", subtreeName, ".json.gz");
         treeToAuspiceJson(ti, org, refName, geneInfoList, gSeqWin, sampleMetadata, NULL,
                           results->samplePlacements, jsonTns[ix]->forCgi, source);
+        if (subtreePersist)
+            saveTrashFile(jsonTns[ix]);
         // Add a link for every sample to this subtree, so the single-subtree JSON can
         // link to subtree JSONs
         char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
@@ -3467,9 +3491,11 @@ if (results && results->singleSubtreeInfo)
         }
     struct tempName *singleSubtreeJsonTn;
     AllocVar(singleSubtreeJsonTn);
-    trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
+    trashDirFile(singleSubtreeJsonTn, "hgPhyloPlace", "singleSubtreeAuspice", ".json.gz");
     treeToAuspiceJson(results->singleSubtreeInfo, org, refName, geneInfoList, gSeqWin, sampleMetadata,
                       sampleUrls, results->samplePlacements, singleSubtreeJsonTn->forCgi, source);
+    if (subtreePersist)
+        saveTrashFile(singleSubtreeJsonTn);
     reportTiming(&startTime, "make Auspice JSON");
     char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
     if (dbSetting)
@@ -3656,7 +3682,7 @@ struct tempName tnNextcladeOut;
 trashDirFile(&tnNextcladeOut, "ct", "usher_nextclade_sort", ".tsv");
 #define NEXTCLADE_NUM_THREADS "4"
 char *cmd[] = { nextcladePath, "sort", seqFile, "-m", nextcladeIndex,
-                "-j", NEXTCLADE_NUM_THREADS, "-r", tnNextcladeOut.forCgi, NULL };
+                "-j", NEXTCLADE_NUM_THREADS, "-r", tnNextcladeOut.forCgi, "--all-matches", NULL };
 char **cmds[] = { cmd, NULL };
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL, 0);
 pipelineClose(&pl);
@@ -3714,6 +3740,26 @@ else
     }
 }
 
+static void storeRefMatch(char *org, char *sample, char *ref, struct hash *sampleRef,
+                          struct hash *refOpenFileHandles, struct dyString *dyRefDesc,
+                          struct refMatch **pRefFiles)
+/* sample has been matched to ref -- save the mapping in sampleRef, build up refOpenFileHandles
+ * for writing per-ref fasta files, and add new struct refMatch to head of *pRefFiles. */
+{
+if (! hashFindVal(sampleRef, sample))
+    {
+    hashAdd(sampleRef, sample, cloneString(ref));
+    if (! hashFindVal(refOpenFileHandles, ref))
+        {
+        struct tempName tnRefSamples;
+        trashDirFile(&tnRefSamples, "ct", "usher_ref_samples", ".txt");
+        hashAdd(refOpenFileHandles, ref, mustOpen(tnRefSamples.forCgi, "w"));
+        describeRef(org, ref, dyRefDesc);
+        slAddHead(pRefFiles, refMatchNew(ref, dyRefDesc->string, tnRefSamples.forCgi));
+        }
+    }
+}
+
 static struct refMatch *matchSamplesWithReferences(char *org, char *nextcladeIndex,
                                                    struct lineFile *lf,
                                                    struct slName **retNoMatches, int *pStartTime)
@@ -3735,7 +3781,8 @@ char *row[5];
 // Check header line... the nextclade guys change output columns frequently
 if (lineFileRow(nlf, row))
     {
-    if (differentString(row[1], "seqName") || differentString(row[2], "dataset"))
+    if (differentString(row[1], "seqName") || differentString(row[2], "dataset") ||
+        differentString(row[3], "score") || differentString(row[4], "numHits"))
         errAbort("nextclade sort output header format has changed");
     }
 else
@@ -3747,25 +3794,43 @@ struct slName *noMatches = NULL;
 struct hash *sampleRef = hashNew(0);
 struct hash *refOpenFileHandles = hashNew(0);
 struct dyString *dyRefDesc = dyStringNew(0);
+char *prevSample = NULL, *bestRef = NULL;
+double maxAdjustedScore = 0.0;
 while (lineFileRowTab(nlf, row))
     {
     char *sample = row[1];
     char *ref = row[2];
+    double score = atof(row[3]);
+    int numHits = atol(row[4]);
     if (isEmpty(ref))
         slNameAddHead(&noMatches, sample);
-    else if (! hashFindVal(sampleRef, sample))
+    else
         {
-        hashAdd(sampleRef, sample, cloneString(ref));
-        if (! hashFindVal(refOpenFileHandles, ref))
+        double adjustedScore = score * numHits;
+        if (prevSample == NULL || differentString(sample, prevSample))
             {
-            struct tempName tnRefSamples;
-            trashDirFile(&tnRefSamples, "ct", "usher_ref_samples", ".txt");
-            hashAdd(refOpenFileHandles, ref, mustOpen(tnRefSamples.forCgi, "w"));
-            describeRef(org, ref, dyRefDesc);
-            slAddHead(&refFiles, refMatchNew(ref, dyRefDesc->string, tnRefSamples.forCgi));
+            if (prevSample != NULL)
+                storeRefMatch(org, prevSample, bestRef, sampleRef, refOpenFileHandles, dyRefDesc,
+                              &refFiles);
+            freez(&bestRef);
+            bestRef = cloneString(ref);
+            maxAdjustedScore = adjustedScore;
+            freez(&prevSample);
+            prevSample = cloneString(sample);
+            }
+        else
+            {
+            if (adjustedScore > maxAdjustedScore)
+                {
+                maxAdjustedScore = adjustedScore;
+                freez(&bestRef);
+                bestRef = cloneString(ref);
+                }
             }
         }
     }
+if (prevSample)
+    storeRefMatch(org, prevSample, bestRef, sampleRef, refOpenFileHandles, dyRefDesc, &refFiles);
 dyStringFree(&dyRefDesc);
 lineFileClose(&nlf);
 // Sort refFiles alphabetically by description

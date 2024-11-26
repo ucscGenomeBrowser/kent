@@ -316,6 +316,7 @@ struct track
     double squishyPackPoint;    /* the value at which we switch to squish mode. */
     char * originalTrack;       /* the name of the original track if this a pseduo-duplicate track used for squishyPack */
     boolean limitWiggle;       /* TRUE if this track is drawing in coverage mode because of limited visibility */
+    boolean isColorBigBed;      /* True if this track is a fake track used for wiggle coloring. */
     };
 
 struct window  // window in multiwindow image
@@ -339,6 +340,7 @@ struct window  // window in multiwindow image
     struct track *trackList;   // track list for window
     };
 
+extern boolean forceWiggle; // we've run out of space so all tracks become coverage tracks
 
 typedef void (*TrackHandler)(struct track *tg);
 
@@ -765,7 +767,7 @@ typedef enum {
     GLYPH_PENTAGRAM
     } glyphType;
 
-void drawScalledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
 /* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
  * which may have transparency.
@@ -1842,5 +1844,8 @@ void maybeNewFonts(struct hvGfx *hvg);
 
 Color colorFromCart(struct track *tg, Color color);
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
+
+unsigned getParaLoadTimeout();
+// get the parallel load timeout in seconds (defaults to 90)
 #endif /* HGTRACKS_H */
 

@@ -247,13 +247,10 @@ for(row = aliasTable->rowList; row; row = row->next)
 static char * gbdbBbExists(char *database)
 /* use a gbdb bigBed as our alias file. */
 {
-// not supported at the moment
-/*
 char buffer[4096];
-safef(buffer, sizeof buffer, "/gbdb/%s/chromAlias.bb", database);
+safef(buffer, sizeof buffer, "/gbdb/%s/%s.chromAlias.bb", database,database);
 if (fileExists(buffer))
     return cloneString(buffer);
-    */
 return NULL;
 }
 
@@ -276,13 +273,13 @@ chromAliasGlobals.lm = lmInit(0);
 static void chromAliasSetupHub(char *database)
 /* Look for a chromAlias text table and load the hashes with its contents. */
 {
-char *aliasBbFile = trackHubAliasBbFile(database);
+char *aliasBbFile = hReplaceGbdb(trackHubAliasBbFile(database));
 if (aliasBbFile != NULL)
     {
     chromAliasSetupBb(database, aliasBbFile);
     return;
     }
-char *aliasFile = trackHubAliasFile(database);
+char *aliasFile = hReplaceGbdb(trackHubAliasFile(database));
 if (aliasFile == NULL)
     return;
 

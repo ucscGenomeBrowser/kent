@@ -678,6 +678,13 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
         );
     }
 
+hPrintf("<TR><TD>Maximum track load time: ");
+printInfoIcon("Maximum time in seconds the Genome Browser will wait for any individual track to "
+"load. This limit can be hit by slower network connections, or densely populated tracks, especially in large regions.");
+hPrintf("<TD style=\"text-align: right\">");
+hIntVar("parallelFetch.timeout", getParaLoadTimeout(), 3);
+hPrintf("<TD>seconds<TD></TR>");
+
 themeDropDown(cart);
 
 hTableStart();
@@ -732,11 +739,28 @@ hPrintf("Show exon numbers");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
+hCheckBox("showDinkButtons", cartUsualBoolean(cart, "showDinkButtons", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Show move left/right limit buttons under image");
+hPrintf("</TD></TR>\n");
+
+hPrintf("<TR><TD>");
 hCheckBox("enableHighlightingDialog", cartUsualBoolean(cart, "enableHighlightingDialog", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Enable highlight with drag-and-select "
         "(if unchecked, drag-and-select always zooms to selection)");
 hPrintf("</TD></TR>\n");
+
+// check if we can do hgc pages in a pop up before putting up the user control
+if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
+    {
+    // put a checkbox, on by default, to control whether item clicks stay on hgTracks or
+    // go to hgTracks
+    hPrintf("<tr><td>");
+    hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
+    hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
+    }
+
 hTableEnd();
 
 
@@ -827,7 +851,7 @@ hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
 hPrintf("</TD>");
 hPrintf("<TD id='virtModeTypeDefaultLabel'>");
-hPrintf("Exit multi-region mode");
+hPrintf("Exit multi-region mode &nbsp; (d then v)");
 hPrintf("</TD></TR>\n");
 
 struct sqlConnection *conn = NULL;
@@ -841,7 +865,7 @@ if (emGeneTable)
     hPrintf("<TR><TD>");
     cgiMakeRadioButton("virtModeType", "exonMostly", sameWord("exonMostly", virtModeType));
     hPrintf("</TD><TD>");
-    hPrintf("Show exons using %s. &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
+    hPrintf("Show exons using %s &nbsp; (e then v). &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
     hIntVar("emPadding", cartUsualInt(cart, "emPadding", emPadding), 3);
     hPrintf(" bases.");
     hPrintf("</TD></TR>\n");
@@ -1062,5 +1086,14 @@ cgiDown(0.9);
 freez(&groupTarget);
 webEndSectionTables();
 hPrintf("</FORM>");
+
+// The previous version of the hgTracks js object will get over-written by this page,
+// so add all the variables needed htere. So any new hgTracks.somefield references
+// added to hgTracks.js may need to be put here.
+
+if (differentString(virtModeType, "default"))
+    jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
+
+
 }
 

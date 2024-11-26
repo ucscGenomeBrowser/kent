@@ -8,6 +8,9 @@
 #include "psl.h"
 #include "bed.h"
 
+#undef BIGNUM
+#define BIGNUM 0x7fffffff	/* larger than the standard size BIGNUM */
+
 /* strand to us for target */
 char* targetStrand = "+";
 boolean bed = FALSE;

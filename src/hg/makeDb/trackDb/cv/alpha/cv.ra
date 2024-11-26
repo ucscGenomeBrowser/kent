@@ -6384,7 +6384,7 @@ protocol Wold:10ToneHalf_Wold_protocol.pdf
 sex U
 strain C3H
 termId 96
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=96
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=96
 tissue embryonic
 vendorId CCL-226
 vendorName ATCC
@@ -6402,7 +6402,7 @@ protocol Stam:3134_Stam_protocol.pdf
 sex M
 strain RIII
 termId 7035
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7035
 tissue mammary
 vendorId 3134
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -6420,7 +6420,7 @@ protocol Stam:416B_Stam_protocol.pdf
 sex M
 strain B6D2F1/J
 termId 7043
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7043
 tissue blood
 vendorId 416B
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -6438,7 +6438,7 @@ protocol Stam:A20_Stam_protocol.pdf
 sex M
 strain BALB/cAnN
 termId 7069
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7069
 tissue blood
 vendorId TIB-208
 vendorName ATCC
@@ -6456,7 +6456,7 @@ protocol Gingeras:Adrenal_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7097
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7097
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7097
 tissue adrenal gland
 vendorId Adrenal
 vendorName CSHL lab
@@ -6475,7 +6475,7 @@ protocol Ren:BAT_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 7188
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7118
 tissue adipose
 vendorName Dr. Jerrold M. Olefsky Lab at UCSD
 
@@ -6493,7 +6493,7 @@ protocol Stam:bCellCd19_Stam_protocol.pdf
 sex M
 strain C57BL/6
 termId 7069
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7069
 tissue blood
 vendorId B-cell_(CD19+)
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -6512,7 +6512,7 @@ protocol Stam:bCellCd43_Stam_protocol.pdf
 sex M
 strain C57BL/6
 termId 7069
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7069
 tissue blood
 vendorId B-cell_(CD43-)
 vendorName M. Bender (FHCRC)
@@ -6530,7 +6530,7 @@ protocol Gingeras:Bladder_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 6961
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6961
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6961
 tissue urinary bladder
 vendorId Bladder
 vendorName CSHL lab
@@ -6549,7 +6549,7 @@ protocol Ren:BMDM_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 7058
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7058
 tissue blood
 vendorId BMDM
 vendorName Dr. Genhong Cheng Lab at UCLA
@@ -6568,7 +6568,7 @@ protocol Ren:BoneMarrow_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 6943
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6943
 tissue bone
 vendorId BoneMarrow
 vendorName LICR lab
@@ -6586,7 +6586,7 @@ protocol Wold:C2C12_Wold_protocol.pdf
 sex F
 strain C3H
 termId 7125
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7125
 tissue skeletal muscle
 vendorId C2C12
 vendorName Dr. Barbara Wold at Caltech
@@ -6604,7 +6604,7 @@ protocol Ren:Cerebellum_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf Gingeras:
 sex U
 strain Unknown
 termId 7012
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7012
 tissue cerebellum
 vendorId Cerebellum; Cerebellum
 vendorName 1)LICR lab; 2)CSHL lab
@@ -6622,7 +6622,7 @@ protocol Stam:Tissue_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7014
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7014
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7014
 tissue cerebrum
 vendorId Cerebrum
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -6640,7 +6640,7 @@ protocol Weissman:CH12_Weissman_protocol.pdf
 sex F
 strain B10.H-2aH-4bp/Wts
 termId 7069
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7069
 tissue blood
 vendorId CH12
 vendorName Weissman lab
@@ -6658,7 +6658,7 @@ protocol Ren:Colon_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 6984
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6984
 tissue colon
 vendorId Colon; Colon
 vendorName 1)LICR lab; 2)CSHL lab
@@ -6676,7 +6676,7 @@ protocol Gingeras:CNS_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7003
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7003
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7003
 tissue central nervous system
 vendorId CNS
 vendorName CSHL lab
@@ -6694,7 +6694,7 @@ protocol Ren:Cortex_Ren_protocol.pdf Gingeras:Cortex_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 4465
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=4465
 tissue cortex
 vendorId Cortex;Cortex
 vendorName 1)LICR lab; 2)CSHL lab
@@ -6712,7 +6712,7 @@ protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 6977
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6977
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6977
 tissue duodenum
 vendorId Duodenum
 vendorName CSHL lab
@@ -6731,7 +6731,7 @@ protocol UW:EPC_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7040
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7040
 tissue blood
 vendorId CD117+,CD71-,TER119-
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
@@ -6750,7 +6750,7 @@ protocol UW:EPC_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7040
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7040
 tissue blood
 vendorId CD117+,CD71+,TER119-
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
@@ -6769,7 +6769,7 @@ protocol UW:EPC_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7040
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7040
 tissue blood
 vendorId CD117-,CD71+,TER119+
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
@@ -6788,7 +6788,7 @@ protocol UW:EPC_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7040
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7040
 tissue blood
 vendorId CD117-,CD71-,TER119+
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
@@ -6807,7 +6807,7 @@ protocol UW:EPC_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7040
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7040
 tissue blood
 vendorId CD117+,CD71+,TER119+
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
@@ -6825,7 +6825,7 @@ protocol Gilbert:EpiSC-5_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 233
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=233
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=233
 vendorId EpiSC5
 vendorName Gilbert lab
 
@@ -6842,7 +6842,7 @@ protocol Gilbert:EpiSC-7_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 50
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=50
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=50
 vendorId EpiSC7
 vendorName Gilbert lab
 
@@ -6859,7 +6859,7 @@ protocol missing
 sex M
 strain 129
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId ES-46C
 vendorName Smith lab
 
@@ -6876,7 +6876,7 @@ protocol Ren:ES-Bruce4_Ren_protocol.pdf
 sex M
 strain C57BL/6
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId ES-Bruce4
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 
@@ -6893,7 +6893,7 @@ protocol Stam:ES-CJ7_Stam_protocol.pdf
 sex U
 strain 129S1/SV1mj
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId ES-CJ7
 vendorName Dr. John Stamatoyannopoulos at UW
 
@@ -6910,7 +6910,7 @@ protocol missing
 sex M
 strain 129S2/SvPas
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId CRL-1934
 vendorName ATCC
 
@@ -6927,7 +6927,7 @@ protocol Stam:ES-E14_Stam_protocol.pdf
 sex M
 strain 129/Ola
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId E14
 vendorName Santos lab
 
@@ -6960,7 +6960,7 @@ protocol Ren:ES-neurons_Ren_protocol.pdf
 sex M
 strain 129S4/SvJae
 termId 15148
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15148
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=15148
 tissue nerve
 vendorId mESC-neurons
 vendorName LICR lab
@@ -6978,7 +6978,7 @@ protocol missing
 sex M
 strain B6CBAF1/J
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId ES-TT2
 vendorName Shinkai lab
 
@@ -6995,7 +6995,7 @@ protocol Stam:ES-WW6_Stam_protocol.pdf
 sex M
 strain Unknown
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId WW6_F4WT
 vendorName A. Skoultchi Lab
 
@@ -7012,7 +7012,7 @@ protocol Stam:ES-WW6_F1K0_Stam_protocol.pdf
 sex M
 strain Unknown
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId WW6_F1KO
 vendorName A. Skoultchi Lab
 
@@ -7030,7 +7030,7 @@ protocol Hardison:Erythroblast__Hardison_protocol.pdf
 sex U
 strain Unknown
 termId 7079
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7079
 tissue blood
 vendorId Erythroblast
 vendorName Mitch Weiss lab
@@ -7049,7 +7049,7 @@ protocol Stam:Tissue_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7108
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7108
 tissue adipose
 vendorId FatPad
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7066,7 +7066,7 @@ protocol Stam:Fibroblast_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 6948
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 tissue lung
 vendorId Fibroblast
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7085,7 +7085,7 @@ protocol Stam:ForelimbBuds_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 3883
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3883
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=3883
 tissue limb
 vendorId ForelimbBud
 vendorName Selleri lab, Cornell
@@ -7104,7 +7104,7 @@ protocol Gingeras:FrontalLobe_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7003
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7003
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7003
 tissue frontal lobe
 vendorId Frontal Lobe
 vendorName CSHL lab
@@ -7123,7 +7123,7 @@ protocol Hardison:FVLstem_Hardison_protocol.pdf
 sex U
 strain Unknown
 termId 15212
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15212
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=15212
 tissue spleen
 vendorId FVLstem
 vendorName Paulson Lab
@@ -7142,7 +7142,7 @@ protocol Hardison:FVprogenitor_Hardison_protocol.pdf
 sex U
 strain Unknown
 termId 15212
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15212
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=15212
 tissue spleen
 vendorId FVprogenitor
 vendorName Paulson Lab
@@ -7160,7 +7160,7 @@ protocol Hardison:G1E_Hardison_protocol.pdf
 sex M
 strain 129
 termId 7079
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7079
 tissue blood
 vendorName Mitch Weiss lab
 
@@ -7177,7 +7177,7 @@ protocol Hardison:G1E_ER4_E2_Hardison_protocol.pdf
 sex M
 strain 129
 termId 7079
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7079
 tissue blood
 vendorName Mitch Weiss lab
 
@@ -7195,7 +7195,7 @@ protocol Stam:GenitalFatPad_Stam_protocol.pdf Gingeras:GenitalFatPad_Gingeras_pr
 sex U
 strain Unknown
 termId 16230
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=16230
 tissue adipose
 vendorId Genital Fat Pad; Gonadal Adipose Tissue
 vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
@@ -7213,7 +7213,7 @@ protocol Ren:Heart_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7103
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7103
 tissue heart
 vendorId Heart; Heart
 vendorName 1)LICR lab; 2)CSHL lab
@@ -7248,7 +7248,7 @@ protocol Stam:HeadlessEmbryo_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 3341
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3341
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=3341
 tissue embryo
 vendorId HeadlessEmbryo
 vendorName Selleri lab, Cornell
@@ -7267,7 +7267,7 @@ protocol Stam:HindlimbBuds_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 3891
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3891
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=3891
 tissue limb
 vendorId HindlimbBud
 vendorName Selleri lab, Cornell
@@ -7284,7 +7284,7 @@ organism mouse
 sex U
 strain Unknown
 termId 174
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=174
 vendorId J185a
 vendorName Gilbert lab
 protocol missing 
@@ -7302,7 +7302,7 @@ protocol Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 6960
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6960
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6960
 tissue kidney
 vendorId Kidney; Kidney
 vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
@@ -7320,7 +7320,7 @@ protocol Gilbert:L1210_Gilbert_protocol.pdf
 sex F
 strain DBA/2
 termId 7077
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7077
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7077
 tissue blood
 vendorId CCL-219
 vendorName ATCC
@@ -7339,7 +7339,7 @@ protocol Stam:LargeIntestine_Stam_protocol.pdf Gingeras:LargeIntestine_Gingeras_
 sex U
 strain Unknown
 termId 6982
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6982
 tissue large intestine
 vendorId Large Intestine; Large Intestine
 vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
@@ -7357,7 +7357,7 @@ protocol Ren:Limb_Ren_protocol.pdf Gingeras:Limb_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7127
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7127
 tissue limb
 vendorId Limb; Limb
 vendorName 1)LICR lab; 2)CSHL lab
@@ -7375,7 +7375,7 @@ protocol Ren:Liver_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf Gingeras:Tissu
 sex U
 strain Unknown
 termId 6963
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6963
 tissue liver
 vendorId Liver; Liver
 vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
@@ -7392,7 +7392,7 @@ protocol Ren:Lung_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 6948
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 tissue lung
 vendorId Lung; Lung
 vendorName 1)LICR lab; 2)CSHL lab
@@ -7411,7 +7411,7 @@ protocol Gingeras:MammaryGland_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7035
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7035
 tissue mammary
 vendorId Mammary Gland
 vendorName CSHL lab
@@ -7429,7 +7429,7 @@ protocol Hardison:MEP_Hardison_protocol.pdf
 sex U
 strain Unknown
 termId 7040
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7040
 tissue blood
 vendorId MEP
 vendorName Bodine lab
@@ -7447,7 +7447,7 @@ protocol Ren:MEF_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 6948
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 tissue embryonic fibroblast
 vendorId MEF
 vendorName LICR lab
@@ -7466,7 +7466,7 @@ protocol Hardison:Megakaryocyte_Hardison_protocol.pdf
 sex U
 strain Unknown
 termId 7054
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7054
 tissue blood
 vendorName Mitch Weiss lab
 
@@ -7483,7 +7483,7 @@ protocol Weissman:MEL_Weissman_protocol.pdf Stam:MEL_Stam_protocol.pdf
 sex M
 strain Unknown
 termId MP:0002026
-termUrl http://www.informatics.jax.org/searches/Phat.cgi?id=MP:0002026
+termUrl https://www.informatics.jax.org//searches/Phat.cgi?id=MP:0002026
 tissue blood
 vendorId MEL
 vendorName Weissman lab
@@ -7501,7 +7501,7 @@ protocol Stam:Mesoderm_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 3342
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3342
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=3342
 tissue mesoderm
 vendorId Mesoderm
 vendorName Selleri lab, Cornell
@@ -7519,7 +7519,7 @@ protocol Stam:mG-ER_Stam_protocol.pdf
 sex M
 strain Unknown
 termId GO:0030218
-termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0030218
+termUrl https://www.informatics.jax.org//searches/GO.cgi?id=GO:0030218
 tissue blood
 vendorId mG/ER
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7537,7 +7537,7 @@ protocol Stam:NIH-3T3_Stam_protocol.pdf
 sex M
 strain NIH/Swiss
 termId 7146
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7146
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7146
 tissue blood
 vendorId CRL-1658
 vendorName ATCC
@@ -7556,7 +7556,7 @@ protocol Ren:OlfactoryBulb_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 7015
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7015
 tissue olfactory bulb
 vendorId Olfactory Bulb
 vendorName LICR lab
@@ -7574,7 +7574,7 @@ protocol Gingeras:Ovary_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 6958
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6958
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6958
 tissue ovary
 vendorId Ovary
 vendorName CSHL lab
@@ -7593,7 +7593,7 @@ protocol Ren:Pancreas_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 7015
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7015
 tissue pancreas
 vendorId Pancreas
 vendorName LICR lab
@@ -7611,7 +7611,7 @@ protocol Stam:Patski_Stam_protocol.pdf
 sex F
 strain C57BL/6J
 termId 6948
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 tissue kidney
 vendorId Patski
 vendorName Dr. Christine Disteche at University of Washington
@@ -7629,7 +7629,7 @@ protocol Ren:Placenta_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 6957
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6957
 tissue placenta
 vendorId Placenta
 vendorName LICR lab
@@ -7647,7 +7647,7 @@ protocol Stam:Retina_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 6944
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6944
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6944
 tissue brain
 vendorId Retina
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7665,7 +7665,7 @@ protocol Ren:Tissue_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 4556
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4556
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=4556
 tissue skin
 vendorId Skin
 vendorName LICR lab
@@ -7684,7 +7684,7 @@ protocol Stam:SkeletalMuscle_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7125
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7125
 tissue skeletal muscle
 vendorId Skeletal Muscle
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7703,7 +7703,7 @@ protocol Ren:SmallIntestine_Ren_protocol.pdf Gingeras:SmallIntestine_Gingeras_pr
 sex U
 strain Unknown
 termId 6978
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6978
 tissue small intestine
 vendorId Small Intestine; Small Intestine
 vendorName 1)LICR lab; 2)CSHL lab
@@ -7721,7 +7721,7 @@ protocol Ren:Tissue_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 4521
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4521
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=4521
 tissue spinal cord
 vendorId Spinal Cord
 vendorName LICR lab
@@ -7739,7 +7739,7 @@ protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf Gingeras:Tiss
 sex U
 strain Unknown
 termId 7038
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7038
 tissue spleen
 vendorId Spleen; Spleen; Spleen
 vendorName 1) LICR lab; 2)Dr. John Stamatoyannopoulos at UW; 3)CSHL lab
@@ -7757,7 +7757,7 @@ protocol Gingeras:Stomach_Gingeras_protocol.pdf Ren:Tissue_Ren_protocol.pdf
 sex U
 strain Unknown
 termId 6966
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6966
 tissue stomach
 vendorId Stomach; Stomach
 vendorName 1) CSHL lab; 2) LICR lab
@@ -7776,7 +7776,7 @@ protocol Gingeras:SubcutaneousFatPad_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 17477
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=17477
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=17477
 tissue adipose
 vendorId Subcutaneous Adipose tissue
 vendorName CSHL lab
@@ -7794,7 +7794,7 @@ protocol Ren:Testis_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 9201
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=9201
 tissue testis
 vendorId Testis; Testis
 vendorName 1)LICR lab; 2)CSHL lab
@@ -7812,7 +7812,7 @@ protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf Gingeras:Tiss
 sex U
 strain Unknown
 termId 7037
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7037
 tissue thymus
 vendorId Thymus; Thymus
 vendorName 1)LICR lab; 2)CSHL lab
@@ -7830,7 +7830,7 @@ protocol Stam:THelper-Activated_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7060
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7060
 tissue blood
 vendorId THelper-Activated
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7848,7 +7848,7 @@ protocol Stam:Tissue_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7060
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7060
 tissue blood
 vendorId T-Naive
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7866,7 +7866,7 @@ protocol Stam:TReg-Activated_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7060
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7060
 tissue blood
 vendorId TReg-Activated
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7884,7 +7884,7 @@ protocol Stam:TReg_Stam_protocol.pdf
 sex U
 strain Unknown
 termId 7060
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7060
 tissue blood
 vendorId TReg
 vendorName Dr. John Stamatoyannopoulos at UW
@@ -7902,7 +7902,7 @@ protocol Ren:Tissue_Ren_protocol.pdf
 sex U
 strain Unkown
 termId 11033
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=11033
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=11033
 tissue muscle
 vendorId Thigh Muscle
 vendorName LICR lab
@@ -7921,7 +7921,7 @@ protocol Stam:Tissue_Stam_protocol.pdf Gingeras:WholeBrain_Gingeras_protocol.pdf
 sex U
 strain Unknown
 termId 7005
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7005
 tissue brain
 vendorId Whole Brain; Whole Brain
 vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
@@ -7939,7 +7939,7 @@ protocol Stam:ZhBTc4_Stam_protocol.pdf
 sex M
 strain 129/Ola
 termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=29
 vendorId ZhBTc4
 vendorName Dr. Levasseur at University of Iowa
 

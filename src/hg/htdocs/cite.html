@@ -7,46 +7,55 @@
 
 <h1>Citing the UCSC Browser in a Publication or Web Page</h1>
 <p>
-You are free to use all graphics produced by this website in your published work or on other websites, there
-is no need to contact us to request permission, see the <a href="/license/">license page</a> for details.
-</p>
+<b>You are free to use all graphics produced by this website in your published work or on other websites</b>, 
+there is no need to contact us to request permission. See the <a href="/license/">license page</a> for details.</p>
+
+<h2>How to cite the UCSC Genome Browser</h2>
 <p>
-But the UCSC Genome Browser is exclusively funded by NIH and if research articles do 
-not cite or mention us, we cannot report the citations and it is harder for NIH to justify funding one of the 
-few stable resources in genomics that you can rely on.
-</p>
-
+The UCSC Genome Browser is exclusively funded by the NIH, please consider citing us properly 
+so that we may report usage and continue to develop this resource.</p>
+<h3>What manuscript to cite?</h3>
 <p>
-At the moment, the most recent UCSC Genome Browser paper has the <a target=_blank href="https://pubmed.ncbi.nlm.nih.gov/36420891/">PMID 36420891</a>,
- DOI 10.1093/nar/gkac1072</a>.  In addition, you can include a reference to the Genome 
-Browser website in your manuscript: <a href="index.html" 
-target="_blank">http://genome.ucsc.edu</a> or mention in the text that you used the "UCSC Genome Browser". 
-To cite just one of our computational tools, see the <a href="#ref">reference section</a> below.
-</p>
+Please cite our latest paper, currently <a target=_blank 
+href="https://pubmed.ncbi.nlm.nih.gov/39460617/">PMID 39460617</a>,
+DOI 10.1093/nar/gkae974. In addition, you can reference the Genome Browser website
+in your manuscript: <a href="index.html" target="_blank">http://genome.ucsc.edu</a> or 
+mention in the text that you used the "UCSC Genome Browser". To cite one of our 
+computational tools, see the <a href="#ref">reference section</a> below.</p>
 
-<p>While doing this, you can check if the genome coordinates in your paper are
-clear to the readers and if you specified the genome assembly that you used.
-One cannot mention the genome assembly too often. Computational
-biologists will appreciate if your supplemental files with genome annotations
-include the genome assembly identifier directly in the file name. We keep these 
-identifiers short, currently they are "hg19" and "hg38" for the most common
-human assemblies. In a similar vein, references to nucleotides ideally have the
-full chromosome position in your publication text somewhere or in a
-supplemental table, and not only the position on the transcript and or coding
-sequence, as transcript models can change a lot.
-</p>
-
-<p>To make this even easier, when refering to a gene or genomic location, you can 
-use the menu <a href="../cgi-bin/hgSession">"My Data &gt; My Sessions"</a>, to
-generate a short, stable link to your current genome browser view for your
-publication. In this way, readers can jump from your publication to this
-genome location and get their view configured for your particular message.
-You can even add your own annotations to the UCSC Genome Browser, either as
-very simple text labels, by pasting a line like "chr1 1 1000 my_annotation"
-into the box found under <a href="../cgi-bin/hgCustom">"My Data &gt; Custom
-    Tracks"</a> or by loading all your genomics results into the browser with 
-<a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">Track Hubs</a>.
-</p>
+<h3>General best practices for publications</h3>
+<p>
+The following are recommendations to improve communication in your
+scientific manuscript and ensure readers in 10 years can still find the
+DNA sequence that you analyzed. This requires mention of the assembly, 
+chromosome position, any transcripts, and ideally also a 
+Genome Browser stable link:</p>
+<ol>
+<li><b>Assembly:</b> Provide a clear mention of which genome assembly you are working with, e.g. 
+"hg19" or "hg38". It is often helpful to place the assembly name directly on 
+any supplemental file names if they contain annotations. E.g. "promoters.hg38.bed".</li>
+<li><b>Chromosome Position:</b> References to nucleotides should have full chromosome positions in the 
+publication text or a supplemental table, whenever possible. Including only the position on the 
+transcript or coding sequence can be confusing later as transcript models change.
+E.g. mention "NC_000023.11:g.32389644G&gt;A", in addition to the transcript-based
+description "NM_004006.2:c.4375C&gt;T". Or, in the manuscript, you can add the chromosome
+location in brackets, such as "(hg38,chr11:32389644)", when nucleotide 4375 of
+NM_004006.2 is discussed.</li>
+<li><b>Transcript:</b> Transcripts change. Always mention the accession of a transcript, not only the gene name. E.g. "NM_004006.2", not just 
+"the longest transcript of the gene DMD". Gene symbols and transcripts change over time, so any sort of accession is helpful.
+<li><b>Stable links:</b> A UCSC Genome Browser link is a great way to
+share results or regions of 
+interest in a way readers and reviewers can explore. It includes the assembly, position, all transcripts, 
+any tracks visible, all filter settings that you made and any other settings in the browser. 
+If you would like to include 
+a link, do not copy the URL directly from the address bar, the one with
+"hgsid=xxx". These links are long and expire after a few days.
+Instead, use the menu option <a href="../cgi-bin/hgSession">"My Data &gt; My
+Sessions"</a>, to generate a short, 
+stable link to your current genome browser view. For more information on how to add your 
+own annotations to share this way see <a href="../cgi-bin/hgCustom">Custom Tracks</a> 
+and <a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">Track Hubs</a>.</li>
+</ol>
 
 <a name="ref"></a>
 <h2>Genome Browser software and website references</h2>

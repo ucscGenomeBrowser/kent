@@ -1,0 +1,5 @@
+chr1	hg38_knownCanonical:chr1:11106535-11262507	exon	9812933	9969997	0.000000	.	.   gene_id "gene1"; transcript_id "tx1"; 
+chr1	hg38_knownCanonical:chr1:11143898-11149537	exon	9851009	9856662	0.000000	.	.   gene_id "gene2"; transcript_id "tx2"; 
+chr1	hg38_knownCanonical:chr1:11152350-11152452	exon	9859476	9859578	0.000000	.	.   gene_id "gene3"; transcript_id "tx3"; 
+chr1	hg38_knownCanonical:chr1:11189341-11195981	exon	9896420	9903061	0.000000	.	.   gene_id "gene4"; transcript_id "tx4"; 
+chr1	hg38_knownCanonical:chr1:11226254-11226360	exon	9933405	9933511	0.000000	.	.   gene_id "gene5"; transcript_id "tx5"; 

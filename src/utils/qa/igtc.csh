@@ -21,7 +21,7 @@ set extFileId=( $init )
 set extFileIdOld=( $init )
 
 set urlbeta="http://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
-set urldev="http://hgwdev.soe.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
+set urldev="http://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 
 if ($#argv != 1 ) then
   echo

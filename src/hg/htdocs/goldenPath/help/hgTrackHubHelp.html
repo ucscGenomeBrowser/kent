@@ -14,6 +14,7 @@
 <h6><a href="#View">Viewing Track Hubs</a></h6>
 <h6><a href="#Sharing">Sharing Track Hubs</a></h6>
 <h6><a href="#Setup">Setting up a Track Hub</a></h6>
+<h6><a href="#Group">Adding Groups to a Track hub</a></h6>
 <h6><a href="#Debug">Debugging Track Hubs</a></h6>
 <h6><a href="#Search">Setting up item search</a></h6>
 <h6><a href="#Filters">Adding filters to your Track Hub</a></h6>
@@ -202,7 +203,7 @@ non-natively supported genomes such as assembly hubs or GenArk hubs use the <cod
 parameter. URL parameters can be combined by using <code>&amp;</code>.
 </p>
 <p>The following example links to the hg19 genome database and an example track hub using the <code>db=</code> and the <code>hubUrl=</code> parameters:</p>
-<pre><a href=../cgi-bin/hgTracks?db=hg19&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</a></pre>
+<pre><a href=../../cgi-bin/hgTracks?db=hg19&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</a></pre>
 
 <p>Track hubs' track visibility can also be changed from the URL parameters. As an example, the
 following link specifies:
@@ -214,7 +215,7 @@ following link specifies:
 <li> sets a specific subtrack to be displayed (gtexRnaSignalSRR1311243=full)</li>
 <li> ignores user settings (ignoreCookie=1).</p></li>
 </ul>
-<pre><a href="../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt&hideTracks=1&gtexRnaSignalMaleYoung_hideKids=1&gtexRnaSignalMaleYoung=full&gtexRnaSignalSRR1311243=full&ignoreCookie=1">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt&hideTracks=1&amp;gtexRnaSignalMaleYoung_hideKids=1&amp;gtexRnaSignalMaleYoung=full&amp;gtexRnaSignalSRR1311243=full&ignoreCookie=1</a></pre>
+<pre><a href="../../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt&hideTracks=1&gtexRnaSignalMaleYoung_hideKids=1&gtexRnaSignalMaleYoung=full&gtexRnaSignalSRR1311243=full&ignoreCookie=1">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt&hideTracks=1&amp;gtexRnaSignalMaleYoung_hideKids=1&amp;gtexRnaSignalMaleYoung=full&amp;gtexRnaSignalSRR1311243=full&ignoreCookie=1</a></pre>
 
 
 
@@ -823,6 +824,101 @@ Both parent and child tracks within a super-track can have their own description
 description file is not present, the corresponding sections of the track settings and details pages 
 are left blank. Only one description page can be associated with composite and multiWig tracks; the 
 file name should correspond to the symbolic name of the top-level track in the composite.</p>
+
+<!-- ========== Adding Groups to a Track hub ==================== -->
+<a name="Group"></a>
+<h2>Adding groups to a Track Hub</h2>
+<p>
+To organize tracks within your track hub, you can utilize the <b>groups</b> setting, which references a
+separate text file that defines track groups for display under the genome browser graphic.</p>
+<div class="text-center">
+        <img class='text-center' width="95%" src="../../images/groupsEx.png">
+</div>
+<p>
+The <b>groups</b> setting can be applied to a UCSC genome, a GenArk assembly, or an assembly hub.
+These track hub groups are kept separate from other track hubs and the native UCSC Genome Browser
+track groups, allowing for greater organizational flexibility. For instance, you can add a 
+&quot;genes&quot; group without causing conflicts or confusion.</p>
+<p>
+You can define groups with names like  &quot;Category 1&quot;,  &quot;Category 2&quot;, and
+&quot;Category 3&quot;. These group names are specified in the  &quot;groups.txt file &quot;, which
+defines the track groups. Below is an example stanza demonstrating how to define these groups:</p>
+
+<pre><code>name category1
+label Category 1</code></pre>
+
+<pre><code>name category2
+label Category 2
+priority 1</code></pre>
+
+<pre><code>name category3
+label Category 3
+defaultIsClosed 1</code></pre>
+
+
+<p>
+You can access the complete  &quot;groups.txt &quot; file containing these group definitions here:
+<a href="/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/groups.txt" 
+target="_blank">groups.txt</a>.</p>
+
+<p>
+Within this file:</p>
+
+<ul>
+   <li>The <b>name</b> setting is used in the trackDb.txt file to associate specific tracks with a
+       group.</li>
+   <li>The <b>label</b> setting specifies the title of the group in the genome browser. By default,
+       groups are sorted alphabetically based on the label.</li>
+   <li>The <b>priority</b> setting dictates the display order of the track groups, with lower
+       numbers shown first.</li>
+   <li>The <b>defaultIsClosed</b> setting controls whether the group is initially expanded or
+       collapsed (0 for expanded, 1 for collapsed).</li>
+</ul>
+
+<p>
+After defining the &quot;groups.txt&quot; file, tracks can be assigned to a specific group
+within the &quot;trackDb.txt&quot; file using the <b>group</b> setting. For example, to assign the
+&quot;bigBed1&quot; track to the &quot;category1&quot; group, you could use the following stanza:
+</p>
+
+<pre><code>track bigBed1
+bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
+shortLabel bigBed example 1
+longLabel This bigBed file is an example from the NCBI RefSeq Diffs Track
+type bigBed
+<strong>group</strong> category1
+visibility dense</code></pre>
+
+<p>
+The full &quot;trackDb.txt&quot; file, which includes the &quot;bigBed1&quot; track and additional examples, can be viewed here:
+<a href="/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hg38/trackDb.txt" 
+target="_blank">trackDb.txt</a>.</p>
+
+<p>
+Next, incorporate the &quot;groups.txt&quot; file with the <b>groups</b> setting into the genome stanza. This can be for a UCSC
+genome, a GenArk assembly, or an assembly hub. Below is an example using the hg38 genome:</p>
+
+<pre><code>genome hg38
+trackDb hg38/trackDb.txt
+<strong>groups</strong> groups.txt</code></pre>
+
+<p>
+An example &quot;genomes.txt&quot; file, which includes the hg38 genome, a GenArk assembly, and an
+assembly hub, is available here:
+<a href="/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/genomes.txt" 
+target="_blank">genomes.txt</a>.</p>
+
+<p>
+By attaching the hub with these group settings, the tracks will be displayed within the specified groups. Below are URLs showing the group settings for the hg38 genome, a GenArk assembly, and an assembly hub:</p>
+<ul>
+   <li><b>hg38</b>: <a href="../../cgi-bin/hgTracks?hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hub.txt&db=hg38" 
+target="_blank">hg38 Genome</a>.</p></li>
+   <li><b>GCF_000951035.1</b>: <a href="../../cgi-bin/hgTracks?hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hub.txt&genome=GCF_000951035.1" 
+target="_blank">GenArk Assembly</a>.</p></li>
+   <li><b>Arabidopsis thaliana Assembly Hub</b>: <a href="../../cgi-bin/hgTracks?hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/groupsExample/hub.txt&genome=araTha1" 
+target="_blank">Assembly Hub</a>.</p></li>
+</ul>
+
 
 <!-- ========== Debugging and Updating Track Hubs ============================== -->
 <a name="Debug"></a>

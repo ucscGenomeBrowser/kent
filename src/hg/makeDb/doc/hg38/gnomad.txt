@@ -396,102 +396,88 @@ done > convertBed.jobList
 for c in {1..22} X Y; do
     echo "./convertBeds.genomes.sh $WORKDIR/$db/genomes/gnomad.v4.1.chr$c.bed $WORKDIR/$db/genomes/chr$c.bed"
 done >> convertBed.jobList
+
+# convert the beds into a smaller bed file + a tab sep file with everything else
 time (parallel --joblog convertBed.run.log --jobs 25 :::: convertBed.jobList) &> convertBed.log &
+# real    178m32.563s
+# user    2843m21.030s
+# sys     134m13.788s
 
 # Now we have one bed file and one external file per chromosome, use bgzip and
 # bedJoinTabOffset to combine them together:
 # Merge all the tab files together:
-mkdir -p joined/{exomes,genomes}
 # First exomes:
 time sort --merge ${WORKDIR}/hg38/exomes/gnomad.*.tab > gnomad.v4.1.exomes.details.pre.tab
-# real    14m24.203s
-# user    2m17.384s
-# sys     10m16.118s
+# real    15m11.762s
+# user    2m11.927s
+# sys     11m1.171s
 
 time bgzip -iI gnomad.v4.1.exomes.details.tab.gz.gzi -c gnomad.v4.1.exomes.details.pre.tab > gnomad.v4.1.exomes.details.tab.gz
-# real    62m28.397s
-# user    58m29.676s
-# sys     3m31.012s
+# real    159m17.597s
+# user    79m31.099s
+# sys     5m1.504s
 
 # The parallel command changes {} into the input file (example: hg38/exomes/chr1.bed), and
 # {/} to the basename (example: chr1.bed)
 time (ls -1S hg38/exomes/chr*.bed |
     parallel --joblog join.run.log --max-procs 12 \\
         bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.exomes.details.pre.tab {} joined/exomes/{/}) &> bedJoinTabOffset.log
-# real    155m42.266s
-# user    381m15.009s
-# sys     50m29.407s
+# real    129m2.819s
+# user    379m29.001s
+# sys     58m4.237s
+
 time sort -S 40G --merge joined/exomes/*.bed | grep -v "^#" > gnomad.v4.1.exomes.joined.bed
-# real    6m38.608s
-# user    3m49.595s
-# sys     2m43.676s
+# real    7m43.575s
+# user    83m46.236s
+# sys     9m1.771s
 
 # Then genomes:
 time sort --merge ${WORKDIR}/hg38/genomes/gnomad.*.tab > gnomad.v4.1.genomes.details.pre.tab
-# real    48m36.383s
-# user    7m40.632s
-# sys     34m7.595s
+# real    55m0.135s
+# user    8m46.206s
+# sys     41m47.511s
 
-# FIELD_FIX_RESTART_MARK
 time bgzip -iI gnomad.v4.1.genomes.details.tab.gz.gzi -c gnomad.v4.1.genomes.details.pre.tab > gnomad.v4.1.genomes.details.tab.gz
-# real    230m19.470s
-# user    216m16.280s
-# sys     11m28.438s
+# real    245m46.743s
+# user    232m29.072s
+# sys     11m57.409s
 
 # The parallel command changes {} into the input file (example: hg38/genomes/chr1.bed), and
 # {/} to the basename (example: chr1.bed)
 time (ls -1S hg38/genomes/chr*.bed |
     parallel --joblog join.run.log --max-procs 12 \\
-        bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.genomes.details.pre.tab {} joined/genomes/{/}) &> bedJoinTabOffset.log
-# real    430m5.112s
-# user    1505m15.341s
-# sys     286m35.990s
+        bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.genomes.details.pre.tab {} joined/genomes/{/}) &> bedJoinTabOffset.genomes.log
+# real    373m33.753s
+# user    1643m28.197s
+# sys     275m53.429s
 
 time sort -S 40G --merge joined/genomes/*.bed | grep -v "^#" > gnomad.v4.1.genomes.joined.bed
-# real    26m31.856s
-# user    14m24.696s
-# sys     9m57.459s
+# real    27m20.072s
+# user    16m46.584s
+# sys     12m3.441s
 
 # and lastly turn the merged beds into bigBeds:
-time (bedToBigBed -type=bed9+16 -tab -as=exomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.exomes.joined.bed /hive/data/genomes/hg38/chrom.sizes exomes.bb) &> bigBed.exomeslog &
-# pass1 - making usageList (24 chroms): 239308 millis
-# pass2 - checking and writing primary data (183717261 records, 25 fields): 1695174 millis
-# Sorting and writing extra index 0: 258529 millis
-# Sorting and writing extra index 1: 172276 millis
-# Sorting and writing extra index 2: 73698 millis
+time (bedToBigBed -type=bed9+21 -tab -as=exomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.exomes.joined.bed /hive/data/genomes/hg38/chrom.sizes exomes.bb) &> bigBed.exomeslog &
+# pass1 - making usageList (24 chroms): 172816 millis
+# pass2 - checking and writing primary data (183717261 records, 31 fields): 1872918 millis
+# Sorting and writing extra index 0: 248199 millis
+# Sorting and writing extra index 1: 206027 millis
+# Sorting and writing extra index 2: 99569 millis
 
-# real    43m44.216s
-# user    40m4.371s
-# sys     1m54.306s
+# real    46m32.224s
+# user    43m8.900s
+# sys     2m32.009s
 
-time (bedToBigBed -maxAlloc=250000000000 -type=bed9+16 -tab -as=genomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.genomes.joined.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb) &> bigBed.genomeslog &
-# pass1 - making usageList (24 chroms): 720685 millis
-# pass2 - checking and writing primary data (759336320 records, 25 fields): 8127679 millis
-# Sorting and writing extra index 0: 1711243 millis
-# Sorting and writing extra index 1: 1627587 millis
-# Sorting and writing extra index 2: 436891 millis
-# 
-# real    227m12.682s
-# user    204m24.791s
-# sys     20m16.421s 
+time (bedToBigBed -maxAlloc=250000000000 -type=bed9+21 -tab -as=genomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.genomes.joined.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb) &> bigBed.genomeslog &
+# pass1 - making usageList (24 chroms): 776401 millis
+# pass2 - checking and writing primary data (759336320 records, 31 fields): 10139390 millis
+# Sorting and writing extra index 0: 1502079 millis
+# Sorting and writing extra index 1: 1460242 millis
+# Sorting and writing extra index 2: 433804 millis
 
-# Make symlinks to /gbdb:
-cd /gbdb/hg38/gnomAD/
-mkdir v4.1
-cd v4.1
-mkdir exomes
-mkdir genomes
-cd $WORKDIR
-ln -s `pwd`/genomes.bb /gbdb/hg38/gnomAD/v4.1/genomes/
-ln -s `pwd`/gnomad.v4.1.genomes.details.tab.gz /gbdb/hg38/gnomAD/v4.1/genomes/
-ln -s `pwd`/gnomad.v4.1.genomes.details.tab.gz.gzi /gbdb/hg38/gnomAD/v4.1/genomes/
-ln -s `pwd`/exomes.bb /gbdb/hg38/gnomAD/v4.1/exomes/
-ln -s `pwd`/gnomad.v4.1.exomes.details.tab.gz /gbdb/hg38/gnomAD/v4.1/exomes/
-ln -s `pwd`/gnomad.v4.1.exomes.details.tab.gz.gzi /gbdb/hg38/gnomAD/v4.1/exomes/
-
-# Woops the conversion script had the wrong header listing, change it up:
-sed -i -e '1,24s/segdup/segdup\tvariant_type\tallele_type/' gnomad.v4.1.genomes.details.pre.tab
-# and then re-do the genomes steps from the FIELD_FIX_RESTART_MARK mark
+# real    254m58.161s
+# user    230m40.491s
+# sys     21m41.152s
 
 ##############################################################################
 # gnomAD v4.1 Missense and pli by transcript tracks- June 03, 2024 - ChrisL
@@ -538,3 +524,122 @@ pass1 - making usageList (376 chroms): 505 millis
 pass2 - checking and writing primary data (168326 records, 17 fields): 2841 millis
 Sorting and writing extra index 0: 171 millis
 Sorting and writing extra index 1: 89 millis
+##############################################################################
+# gnomAD Structural Variants v4 - Gerardo
+# Redmine #33823
+
+    cd /hive/data/outside/gnomAD.4/sv
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/genome_sv/gnomad.v4.1.sv.sites.bed.gz
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/genome_sv/gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz
+    #Used the gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz file to build the track since it has
+    #additional annotations of frequencies among non_neuro samples, and non_control samples and the
+    #two bed files have the same records.
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | tawk '{print $1, $2, $3, $4, $26, $29, $27, $28, $30, $31, $32, $33, $34, $39, $41, $44, $45, $47, $48, $49, $52, $53}'  > $out.bed4Plus; done
+    # variant types:
+
+    zcat  gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz | cut -f45 | sort | uniq -c
+     356035 BND
+        721 CNV
+      15189 CPX
+         99 CTX
+    1206278 DEL
+     269326 DUP
+     304645 INS
+       2193 INV
+          1 SVTYPE
+
+    # add colors based on gnomad website and get in to proper bed9+
+    cp /hive/data/outside/gnomAD.2/structuralVariants/gnomadSvToUcsc.awk .
+    #Modified the gnomadSvToUcsc.awk script and named it gnomadSvToUcsc_mod.awk to get the following
+    #fields:
+      #Allele Count for Non-neuro (field #627)
+      #Allele Number for Non-neuro (field #626)
+      #Allele Frequency for Non-neuro (field #628)
+      #Number of heterozygous variant carriers for Non-neuro (field #631)
+      #Number of homozygous alternate variant carriers for Non-neuro fiedl (field #632)
+      #Allele Count Controls (field #803)
+      #Allele Number Controls (field #802)
+      #Allele Frequency Controls (field #804)
+      #Number of heterozygous variant carriers for Controls (field #807)
+      #Number of homozygous alternate variant carriers for Controls (fiedl #808)
+
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed4Plus; do out=${f/.bed4Plus/}; bedClip -truncate $f /hive/data/genomes/hg38/chrom.sizes stdout | ./gnomadSvToUcsc_mod.awk | sort -k1,1 -k2,2n > $out.bed9Plus; done
+
+    cp /hive/data/outside/gnomAD.2/structuralVariants/gnomadSv.as .
+    #Modified the gnomadSv.as file to include the non_neuro samples, and the control samples, and
+    #named the file gnomadSvMod.as 
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSvMod.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
+    cd /gbdb/hg38/gnomAD/v4
+    mkdir structuralVariants; cd structuralVariants
+    cp -s /hive/data/outside/gnomAD.4/sv/gnomad.v4.1.sv.non_neuro_controls.sites.bb .
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+    cp gnomad.alpha.ra gnomadSV.alpha.ra
+    #Copied the gnomadSvFull track stanza from ~/kent/src/hg/makeDb/trackDb/human/hg19/trackDb.gnomad.ra
+    # Added filters for non-neurological and control Allele Frequencies  
+    cp ../hg19/gnomadSv.html .
+    #Updated the gnomadSv.html
+    
+##############################################################################
+# gnomAD CNVs v4.1 - Gerardo
+# Redmine #34253
+
+
+    cd /hive/data/outside/gnomAD.4
+    mkdir cnv; cd cnv
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/exome_cnv/gnomad.v4.1.cnv.non_neuro_controls.bed
+
+    #Looked at the bed file and decided to get the following columns
+    #chrom	chromStart	chromEnd	name	score	strand	thickStart	thickEnd	itemRgb	SVLEN	SVTYPE	Genes	SC	SN	SF	SC_XX	SN_XX	SF_XX	SC_XY	SN_XY	SF_XY
+    #Need to remove the "variant_is_80_" substring from the 4th column string to make the values into gnomAD variant IDs.    
+    #Need to add colors to the 9th column. Variant Types. Deletion (DEL):"255,0,0" and Duplication (DUP):"0,0,255"
+    
+    #Loop through each file matching the pattern (in this case, only gnomad.v4.1.cnv.non_neuro_controls.bed).
+    for f in gnomad.v4.1.cnv.non_neuro_controls.bed; do 
+    
+        #Create an output filename by replacing the ".bed" extension with nothing.
+        #This will be used later to save the modified file with a new suffix.
+        out=${f/.bed/}
+    
+        #Process the file:
+        # Skip the first 100 lines using `tail -n +101`.
+        # Use `awk` to modify and print the desired columns.
+        cat $f | tail -n +101 | \
+    
+        #First awk block to make a bed9plus:
+        # Set both the input and output field separators to tabs (FS=OFS="\t").
+        # Use gsub() to remove the "variant_is_80_" prefix from column 4.
+        # Print specific columns:
+        #  Columns 1, 2, 3, 4.  A zero constant for column 5. A period constant for column 6. Columns 2 and 3 again for columns 7 and 8. Columns 9, 13, 14, 19, 22, 32, 42, 52, 62, 72, 82, 92, and 102.
+        awk 'BEGIN {FS=OFS="\t"} {gsub("variant_is_80_", "", $4); print $1, $2, $3, $4, 0, ".", $2, $3, $9, $13, $14, $19, $22, $32, $42, $52, $62, $72, $82, $92, $102}' | \
+    
+        #Second awk block to add colors to column 9:
+        # Set both the input and output field separators to tabs (FS=OFS="\t").
+        # Check the value of column 11:
+        #  If column 11 contains "DEL", set column 9 to "255,0,0" (red color).
+        #  If column 11 contains "DUP", set column 9 to "0,0,255" (blue color).
+        # Print the modified line with the updated values.
+        awk 'BEGIN {FS=OFS="\t"} {if ($11 == "DEL") $9="255,0,0"; else if ($11 == "DUP") $9="0,0,255"; print}' \
+    
+        #Redirect the output to a new file, appending the suffix ".bed9Plus" to the original filename.
+        > $out.bed9Plus
+
+    # End of the loop.
+    done
+    
+    cat gnomad.v4.1.cnv.non_neuro_controls.bed9Plus | cut -f11 | sort | uniq -c
+     20989 DEL
+     25026 DUP
+
+    #Made the as file and the file is located in the following directory: /hive/data/outside/gnomAD.4/cnv/gnomadCNV.as
+    
+    #Made a bigBed9plus
+    for f in gnomad.v4.1.cnv.non_neuro_controls.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+12 -as=gnomadCNV.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
+    
+    cd /gbdb/hg38/gnomAD/v4
+    mkdir cnv; cd cnv
+    ln -s /hive/data/outside/gnomAD.4/cnv/gnomad.v4.1.cnv.non_neuro_controls.bb
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+    #Edited the gnomad.alpha.ra file
+    cp gnomadSv.html gnomadCNV.html
+    #Updated the gnomadCNV.html
+##############################################################################

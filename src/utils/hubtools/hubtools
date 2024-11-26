@@ -1,0 +1,1245 @@
+#!/usr/bin/env python3
+
+import logging, sys, optparse, os, json, subprocess, shutil, string, glob, tempfile, re
+import shlex
+from pathlib import Path
+from collections import defaultdict, OrderedDict
+from os.path import join, basename, dirname, isfile, relpath, abspath, splitext, isdir
+#import pyyaml   # not loaded here, so it's not a hard requirement, is lazy loaded in parseMetaYaml()
+
+# ==== functions =====
+# allowed file types by hubtools up
+fileTypes = {
+    "bb" : "bigBed",
+    "bigBed" : "bigBed",
+    "bam" : "bam",
+    "vcf.gz" : "vcf",
+    "bigWig" : "bigWig",
+    "bw" : "bigWig",
+    "hic" : "hic",
+    "cram" : "cram",
+    "txt" : "text",
+}
+
+asHead = """table bed
+"Browser extensible data (<=12 fields) "
+    (
+"""
+
+asLines = """
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+""".split("\n")
+
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] <cmd> - create and edit UCSC track hubs
+            
+    hubtools make <assemblyCode>: create a track hub for all bigBed/bigWig files under a directory. Creates single-file hub.txt
+    - bigBed/bigWig files in the current directory will be top level tracks
+    - big* files in subdirectories become composites
+    - for every filename, the part before the first dot becomes the track base name
+    - if a directory has more than 80% of track base names with both a bigBed
+      and bigWig file, views are activated for this composite
+    - track attributes can be changed using tracks.ra, tracks.tsv, tracks.json or tracks.yaml files, in
+      each top or subdirectory
+    - The first column of tracks.tsv must be 'track'.
+    - tracks.json and tracks.yaml must be object at the top level, the attributes are <trackName> or
+      the special attribute "hub".
+
+    hubtools up: upload files to hubSpace
+    - needs ~/.hubt.conf with username and password. Create one with 'hubt conf'
+    - uploads all files from the -i directory or the current dir if not specified.
+
+    hubtools jbrowse <url> <db> : convert Jbrowse trackList.json files to hub.txt.
+    - <url> is the URL to the Jbrowse2 installation, e.g. http://furlonglab.embl.de/FurlongBrowser/
+    - <db> is assembly identifier
+
+    hubtools tab <fname>: convert a hub.txt or trackDb.txt to tab-sep format, easier to bulk-edit with sed/cut/etc.
+    - <fname> is the input filename. "hub" and "genome" stanzas are skipped.
+    - output goes to stdout
+
+    hubtools conv -i myTsvDir
+    - convert .tsv files in inDir to .bigBed files in current directory
+
+    hubtools archive -i xxx/archive -o outDir
+    - Create a hub from an extracted xxx.tar.gz file "archive" directory. You can download a .tar.gz from
+      in the Genome Browser under My Data > My Session. The archive contains all your custom tracks.
+
+    hubtools ct <hgTracksUrl>
+
+    Examples:
+    hubtools conv -i myTsvs/
+    hubtools make hg38
+    hubtools jbrowse http://furlonglab.embl.de/FurlongBrowser/ dm3
+    hubtools tab hub.txt > tracks.tsv
+    hubtools session
+
+    tar xvfz SC_20230723_backup.tar.gz
+    hubtools archive -i archive -o hub
+    hubtools ct 'https://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr7%3A155798978%2D155810671&hgsid=345826202_8d3Mpumjaw9IXYI2RDaSt5xMoUhH'
+
+
+    For the "make" step:
+
+    tracks.json can look like this, can have more keys, one per track, or the special key "hub":
+    {
+        "hub" :      { "hub": "mouse_motor_atac", "shortLabel":"scATAC-seq Developing Cranial Motor Neurons" },
+        "myTrack" :  { "shortLabel" : "My nice track" }
+    }
+
+    tracks.tsv should look like this, but can have any number of columns:
+    #track<tab>shortLabel
+    myTrack<tab>My nice track
+    """)
+
+
+    parser.add_option("-i", "--inDir", dest="inDir", action="store", help="Input directory where files are stored. Default is current directory")
+    parser.add_option("-o", "--outDir", dest="outDir", action="store", help="Input directory where hub.txt file is created. Default is same as input directory.")
+
+    #parser.add_option("", "--igv", dest="igv", action="store", help="import an igv.js trackList.json file hierarchy")
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show verbose debug messages")
+    parser.add_option("-u", "--upload", dest="upload", action="store_true", help="upload all files from outDir to hubSpace")
+    (options, args) = parser.parse_args()
+
+    if len(args)==0:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+def errAbort(msg):
+    " print and abort) "
+    logging.error(msg)
+    sys.exit(1)
+
+def makedirs(d):
+    if not isdir(d):
+        os.makedirs(d)
+
+def parseConf(fname):
+    " parse a hg.conf style file, return as dict key -> value (all strings) "
+    logging.debug("Parsing "+fname)
+    conf = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        elif line.startswith("include "):
+            inclFname = line.split()[1]
+            absFname = normpath(join(dirname(fname), inclFname))
+            if os.path.isfile(absFname):
+                inclDict = parseConf(absFname)
+                conf.update(inclDict)
+        elif "=" in line: # string search for "="
+            key, value = line.split("=",1)
+            conf[key] = value
+    return conf
+
+# cache of hg.conf contents
+hgConf = None
+
+def parseHgConf():
+    """ return hg.conf as dict key:value. """
+    global hgConf
+    if hgConf is not None:
+        return hgConf
+
+    hgConf = dict() # python dict = hash table
+
+    fname = os.path.expanduser("~/.hubtools.conf")
+    if isfile(fname):
+        hgConf = parseConf(fname)
+    else:
+        fname = os.path.expanduser("~/.hg.conf")
+        if isfile(fname):
+            hgConf = parseConf(fname)
+
+def cfgOption(name, default=None):
+    " return hg.conf option or default "
+    global hgConf
+
+    if not hgConf:
+        parseHgConf()
+
+    return hgConf.get(name, default)
+
+def parseMetaRa(fname):
+    """parse tracks.ra or tracks.txt and return as a dict of trackName -> dict of key->val """
+    logging.debug("Reading %s as .ra" % fname)
+    trackName = None
+    stanzaData = {}
+    ret = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        if line=="":
+            if len(stanzaData)==0:
+                # double newline
+                continue
+            if trackName is None:
+                errAbort("File %s has a stanza without a track name" % fname)
+            if trackName in ret:
+                errAbort("File %s contains two stanzas with the same track name '%s' " % trackName)
+
+            ret[trackName] = stanzaData
+            stanzaData = {}
+            trackName = None
+            continue
+
+        key, val = line.split(" ", maxsplit=1)
+        if key == "track":
+            trackName = val
+            continue
+        else:
+            stanzaData[key] = val
+
+    if len(stanzaData)!=0:
+        ret[trackName] = stanzaData
+    logging.debug("Got %s from .ra" % str(ret))
+    return ret
+
+def parseMetaTsv(fname):
+    " parse a tracks.tsv file and return as a dict of trackName -> dict of key->val "
+    headers = None
+    meta = {}
+    logging.debug("Parsing track meta data from %s in tsv format" % fname)
+    for line in open(fname):
+        row = line.rstrip("\r\n").split("\t")
+        if headers is None:
+            assert(line.startswith("track\t") or line.startswith("#track"))
+            row[0] = row[0].lstrip("#")
+            headers = row
+            continue
+
+        assert(len(row)==len(headers))
+        key = row[0]
+
+        rowDict = {}
+        for header, val in zip(headers[1:], row[1:]):
+            rowDict[header] = val
+        #row = {k:v for k,v in zip(headers, fs)}
+        meta[key] = rowDict
+    return meta
+
+def parseMetaJson(fname):
+    " parse a json file and merge it into meta and return "
+    logging.debug("Reading %s as json" % fname)
+    newMeta = json.load(open(fname))
+    return newMeta
+
+def parseMetaYaml(fname):
+    " parse yaml file "
+    import yaml # if this doesn't work, run 'pip install pyyaml'
+    with open(fname) as stream:
+        try:
+            return yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            logging.error(exc)
+
+def parseMeta(inDir):
+    " parse a tab-sep file with headers and return an ordered dict firstField -> dictionary "
+    fname = join(inDir, "tracks.tsv")
+    meta = OrderedDict()
+    if isfile(fname):
+        tsvMeta = parseMetaTsv(fname)
+        meta = allMetaOverride(meta, tsvMeta)
+
+    fname = join(inDir, "tracks.json")
+    if isfile(fname):
+        jsonMeta = parseMetaJson(fname)
+        meta = allMetaOverride(meta, jsonMeta)
+
+    fname = join(inDir, "tracks.ra")
+    if isfile(fname):
+        raMeta = parseMetaRa(fname)
+        meta = allMetaOverride(meta, raMeta)
+
+    fname = join(inDir, "tracks.yaml")
+    if isfile(fname):
+        yamlMeta = parseMetaYaml(fname)
+        meta = allMetaOverride(meta, yamlMeta)
+
+    logging.debug("Got meta from %s: %s" % (inDir, str(meta)))
+    return meta
+
+def writeHubGenome(ofh, db, inMeta):
+    " create a hub.txt and genomes.txt file, hub.txt is just a template "
+    meta = inMeta.get("hub", {})
+    ofh.write("hub autoHub\n")
+    ofh.write("shortLabel %s\n" % meta.get("shortLabel", "Auto-generated hub"))
+    ofh.write("longLabel %s\n" % meta.get("longLabel", "Auto-generated hub"))
+    #ofh.write("genomesFile genomes.txt\n")
+    if "descriptionUrl" in meta:
+        ofh.write("descriptionUrl %s\n" % meta["descriptionUrl"])
+    ofh.write("email %s\n" % meta.get("email", "yourEmail@example.com"))
+    ofh.write("useOneFile on\n\n")
+
+    ofh.write("genome %s\n\n" % db)
+    return ofh
+
+def readSubdirs(inDir, subDirs):
+    " given a list of dirs, find those that are composite dirs (not supporting supertracks for now) "
+    compDicts, superDicts = {}, {}
+    for subDir in subDirs:
+        subPath = join(inDir, subDir)
+        subSubDirs, subDict = readFnames(subPath)
+        if len(subDict)==0:
+            # no files in this dir
+            continue
+        if len(subSubDirs)==0:
+            compDicts[subDir] = subDict
+        #else:
+            #superDicts[subDir] = subDict
+
+    return compDicts, superDicts
+
+def reorderDirs(compDirs, meta):
+    " order the directories in compDirs in the order that they appear in the meta data -> will mean that composites have the right order "
+    if len(meta)==0:
+        logging.debug("Not reordering these subdirectories: %s" % compDirs.keys())
+        return compDirs
+
+    # first use the names in the meta data, and put in the right order
+    newCompDirs = OrderedDict()
+    for dirName in meta.keys():
+        if dirName in compDirs:
+            newCompDirs[dirName] = compDirs[dirName]
+
+    # then add everything else at the end
+    for dirName in compDirs:
+        if dirName not in newCompDirs:
+            newCompDirs[dirName] = compDirs[dirName]
+
+    logging.debug("Reordered input directories based on meta data. New order is: %s" % newCompDirs.keys())
+    return newCompDirs
+
+
+def readDirs(inDir, meta):
+    " recurse down into directories and return containerType -> parentName -> fileBase -> type -> list of absPath "
+    ret = {}
+    subDirs, topFiles = readFnames(inDir)
+    ret["top"] = { None : topFiles } # top-level track files have None as the parent
+
+    compDirs, superDirs = readSubdirs(inDir, subDirs)
+    compDirs = reorderDirs(compDirs, meta)
+    # superDirs not used yet, no time
+
+    ret["comps"] = compDirs
+    ret["supers"] = superDirs
+
+    return ret
+
+def readFnames(inDir):
+    " return dict with basename -> fileType -> filePath "
+    fnameDict = defaultdict(dict)
+    #tdbDir = abspath(dirname(trackDbPath))
+    subDirs = []
+    for fname in os.listdir(inDir):
+        filePath = join(inDir, fname)
+        if isdir(filePath):
+            subDirs.append(fname)
+            continue
+        baseName, ext = splitext(basename(fname))
+        ext = ext.lower()
+
+        # actually, use the part before the first dot, not the one before the extension, as the track name
+        # this means that a.scaled.bigBed and a.raw.bigWig get paired correctly
+        fileBase = basename(fname).split(".")[0]
+
+        if ext==".bw" or ext==".bigwig":
+            fileType = "bigWig"
+        elif ext==".bb" or ext==".bigbed":
+            fileType = "bigBed"
+        else:
+            logging.debug("file %s is not bigBed nor bigWig, skipping" % fname)
+            continue
+
+        absFname = abspath(filePath)
+        #relFname = relFname(absFname, tdbDir)
+        fnameDict[fileBase].setdefault(fileType, [])
+        #fnameDict[baseName][fileType].setdefault([])
+        fnameDict[fileBase][fileType].append(absFname)
+    return subDirs, fnameDict
+
+def mostFilesArePaired(fnameDict):
+    " check if 80% of the tracks have a pair bigBed+bigWig"
+    pairCount = 0
+    for baseName, typeDict in fnameDict.items():
+        if "bigBed" in typeDict and "bigWig" in typeDict:
+            pairCount += 1
+
+    pairShare = pairCount / len(fnameDict)
+    return ( pairShare > 0.8 )
+
+def writeLn(ofh, spaceCount, line):
+    "write line to ofh, with spaceCount before it "
+    ofh.write("".join([" "]*spaceCount))
+    ofh.write(line)
+    ofh.write("\n")
+
+def writeStanza(ofh, indent, tdb):
+    " write a stanza given a tdb key-val dict "
+    track = tdb["track"]
+
+    shortLabel = tdb.get("shortLabel", track.replace("_", " "))
+    visibility = tdb.get("visibility", "pack")
+    longLabel  = tdb.get("longLabel", shortLabel)
+
+    if not "type" in tdb:
+        errAbort("Track info has no type attribute: %s" % tdb)
+    trackType = tdb["type"]
+
+    writeLn(ofh, indent, "track %s" % track)
+    writeLn(ofh, indent, "shortLabel %s" % shortLabel)
+    if longLabel:
+        writeLn(ofh, indent, "longLabel %s" % longLabel)
+    if "parent" in tdb:
+        writeLn(ofh, indent, "parent %s" % tdb["parent"])
+    writeLn(ofh, indent, "type %s" % trackType)
+    writeLn(ofh, indent, "visibility %s" % visibility)
+    if "bigDataUrl" in tdb:
+        writeLn(ofh, indent, "bigDataUrl %s" % tdb["bigDataUrl"])
+
+    for key, val in tdb.items():
+        if key in ["track", "shortLabel", "longLabel", "type", "bigDataUrl", "visibility", "parent"]:
+            continue
+        writeLn(ofh, indent, "%s %s" % (key, val))
+
+    ofh.write("\n")
+
+def metaOverride(tdb, meta):
+    " override track info for one single track, from meta into tdb "
+    trackName = tdb["track"]
+
+    if trackName not in meta and "__" in trackName:
+        logging.debug("Using only basename of track %s" % trackName)
+        trackName = trackName.split("__")[1]
+
+    if trackName not in meta:
+        logging.debug("No meta info for track %s" % tdb["track"])
+        return
+
+    trackMeta = meta[trackName]
+
+    for key, val in trackMeta.items():
+        if val!="":
+            tdb[key] = trackMeta[key]
+
+def allMetaOverride(tdb, meta):
+    " override track info for all tracks, from meta into tdb "
+    if meta is None:
+        return tdb
+
+    for trackName in meta:
+        trackMeta = meta[trackName]
+        if trackName not in tdb:
+            tdb[trackName] = {}
+
+        trackTdb = tdb[trackName]
+
+        for key, val in trackMeta.items():
+            trackTdb[key] = val
+
+    return tdb
+
+def reorderTracks(fileDict, meta):
+    " given an unsorted dictionary of files and ordered metadata, try to sort the files according to the metadata"
+    if len(meta)==0:
+        return fileDict # no meta data -> no ordering necessary
+
+    trackOrder = []
+    # meta is an OrderedDict, so the keys are also ordered
+    for trackName in meta.keys():
+        if "__" in trackName: # in composite mode, the tracknames contain the parent and the track type
+            trackName = trackName.split("__")[1]
+        trackOrder.append( trackName )
+
+    trackOrder = list(meta.keys())
+
+    newFiles = OrderedDict()
+    doneTracks = set()
+    # first add the tracks in the order of the meta data
+    for trackBase in trackOrder:
+        # the tsv file can have the track names either as basenames or as full tracknames
+        if trackBase not in fileDict and "__" in trackBase:
+            trackBase = trackBase.split("__")[1]
+
+        if trackBase in fileDict:
+            newFiles[trackBase] = fileDict[trackBase]
+            doneTracks.add(trackBase)
+
+    logging.debug("Track ordering from meta data used: %s" % newFiles.keys())
+
+    # then add all other tracks
+    for trackBase, fileData in fileDict.items():
+        if trackBase not in doneTracks:
+            newFiles[trackBase] = fileDict[trackBase]
+            logging.debug("Not specified in meta, so adding at the end: %s" % trackBase)
+
+    logging.debug("Final track order is: %s" % newFiles.keys())
+
+    assert(len(newFiles)==len(fileDict))
+    return newFiles
+
+def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
+    " given a dict with basename -> type -> filenames, write track entries to ofh "
+    # this code is getting increasingly complex because it supports composites/views and pairing of bigBed/bigWig files
+    # either this needs better comments or maybe a separate code path for this rare use case
+    global compCount
+
+    fnameDict = dirDict[dirType]
+
+    for parentName, typeDict in fnameDict.items():
+        if parentName is None: # top level tracks: use top tracks.tsv
+            subDir = inDir
+        else: # container tracks -> use tracks.tsv in the subdirectory
+            subDir = join(inDir, parentName)
+
+        parentMeta = parseMeta(subDir)
+
+        indent = 0
+        parentHasViews = False
+
+        groupMeta = {}
+
+        if dirType=="comps":
+            tdb = {
+                    "track" : parentName,
+                    "shortLabel": parentName,
+                    "visibility" : "dense",
+                    "compositeTrack" : "on",
+                    "autoScale" : "group",
+                    "type" : "bed 4"
+                  }
+            metaOverride(tdb, parentMeta)
+            groupMeta = parentMeta
+
+            parentHasViews = mostFilesArePaired(typeDict)
+
+            if parentHasViews:
+                tdb["subGroup1"] = "view Views PK=Peaks SIG=Signals"
+                logging.info("Container track %s has >80%% of paired files, activating views" % parentName)
+
+            writeStanza(ofh, indent, tdb)
+            indent = 4
+
+            if parentHasViews:
+                # we have composites with paired files? -> write the track stanzas for the two views
+                groupMeta = parseMeta(subDir)
+                tdbViewPeaks = {
+                        "track" : parentName+"ViewPeaks",
+                        "shortLabel" : parentName+" Peaks",
+                        "parent" : parentName,
+                        "view" : "PK",
+                        "visibility" : "dense",
+                        "type" : "bigBed",
+                        "scoreFilter" : "off",
+                        "viewUi" : "on"
+                        }
+                metaOverride(tdbViewPeaks, parentMeta)
+                writeStanza(ofh, indent, tdbViewPeaks)
+
+                tdbViewSig = {
+                        "track" : parentName+"ViewSignal",
+                        "shortLabel" : parentName+" Signal",
+                        "parent" : parentName,
+                        "view" : "SIG",
+                        "visibility" : "dense",
+                        "type" : "bigWig",
+                        "viewUi" : "on"
+                        }
+                metaOverride(tdbViewSig, parentMeta)
+                writeStanza(ofh, indent, tdbViewSig)
+        else:
+            # no composites
+            groupMeta = parseMeta(subDir)
+
+        typeDict = reorderTracks(typeDict, groupMeta)
+
+        for trackBase, typeFnames in typeDict.items():
+            for fileType, absFnames in typeFnames.items():
+                assert(len(absFnames)==1) # for now, not sure what to do when we get multiple basenames of the same file type
+                absFname = absFnames[0]
+                fileBase = basename(absFname)
+                relFname = relpath(absFname, tdbDir)
+
+                labelSuff = ""
+                if parentHasViews:
+                    if fileType=="bigWig":
+                        labelSuff = " Signal"
+                    elif fileType=="bigBed":
+                        labelSuff = " Peaks"
+                    else:
+                        assert(False) # views and non-bigWig/Bed are not supported yet?
+
+                if parentName is not None:
+                    parentPrefix = parentName+"__"
+                else:
+                    parentPrefix = ""
+
+                trackName = parentPrefix+trackBase+"__"+fileType
+                tdb = {
+                        "track"      :  trackName,
+                        "shortLabel" :  trackBase+labelSuff,
+                        "longLabel"  :  trackBase+labelSuff,
+                        "visibility" :  "dense",
+                        "type"       :  fileType,
+                        "bigDataUrl" :  relFname,
+                      }
+
+                if parentName:
+                    tdb["parent"] = parentName
+
+                if parentHasViews:
+                    onOff = "on"
+                    if trackName in groupMeta and "visibility" in groupMeta[trackName]:
+                        vis = groupMeta[trackName]["visibility"]
+                        if vis=="hide":
+                            onOff = "off"
+                        del tdb["visibility"]
+
+                    if fileType=="bigBed":
+                        tdb["parent"] = parentName+"ViewPeaks"+" "+onOff
+                        tdb["subGroups"] = "view=PK"
+                    else:
+                        tdb["parent"] = parentName+"ViewSignal"+" "+onOff
+                        tdb["subGroups"] = "view=SIG"
+
+                metaOverride(tdb, groupMeta)
+
+                if trackName in groupMeta and "visibility" in groupMeta[trackName]:
+                    del tdb["visibility"]
+
+                writeStanza(ofh, indent, tdb)
+
+def importJbrowse(baseUrl, db, outDir):
+    " import an IGV trackList.json hierarchy "
+    import requests
+    outFn = join(outDir, "hub.txt")
+    ofh = open(outFn, "w")
+    writeHubGenome(ofh, db, {})
+
+    trackListUrl = baseUrl+"/data/trackList.json"
+    logging.info("Loading %s" % trackListUrl)
+    trackList = requests.get(trackListUrl).json()
+    tdbs = []
+    for tl in trackList["tracks"]:
+        if "type" in tl and tl["type"]=="SequenceTrack":
+            logging.info("Genome is: "+tl["label"])
+            continue
+        if tl["storeClass"]=="JBrowse/Store/SeqFeature/NCList":
+            logging.info("NCList found: ",tl)
+            continue
+        tdb = {}
+        tdb["track"] = tl["label"]
+        tdb["shortLabel"] = tl["key"]
+        if "data_file" in tl:
+            tdb["bigDataUrl"] = baseUrl+"/data/"+tl["data_file"]
+        else:
+            tdb["bigDataUrl"] = baseUrl+"/data/"+tl["urlTemplate"]
+        if tl["storeClass"] == "JBrowse/Store/SeqFeature/BigWig":
+            tdb["type"] = "bigWig"
+
+        dispMode = tl.get("display_mode")
+        if dispMode:
+            if dispMode=="normal":
+                tdb["visibility"] = "pack"
+            elif dispMode=="compact":
+                tdb["visibility"] = "dense"
+            else:
+                tdb["visibility"] = "pack"
+        else:
+            tdb["visibility"] = "pack"
+    
+        writeStanza(ofh, 0, tdb)
+
+def installModule(package):
+    " install a package "
+    logging.info("Could not find Python module '%s', trying to install with pip" % package)
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+def cacheLoad(fname):
+    " load file cache from json file "
+    if not isfile(fname):
+        logging.debug("No upload cache present")
+        return {}
+
+    logging.debug("Loading "+fname)
+    return json.load(open(fname))
+
+def cacheWrite(uploadCache, fname):
+    logging.debug("Writing "+fname)
+    json.dump(uploadCache, open(fname, "w"), indent=4)
+
+def uploadFiles(tdbDir, hubName):
+    "upload files to hubspace. Server name and token can come from ~/.hubtools.conf "
+    try:
+        from tusclient import client
+    except ModuleNotFoundError:
+        installModule("tuspy")
+        from tusclient import client
+
+    serverUrl = cfgOption("tusUrl", "https://hubspace.gi.ucsc.edu/files")
+
+    cookies = {}
+    cookieNameUser = cfgOption("wiki.userNameCookie", "wikidb_mw1_UserName")
+    cookieNameId = cfgOption("wiki.loggedInCookie", "wikidb_mw1_UserID")
+
+    apiKey = cfgOption("apiKey")
+    if apiKey is None:
+        errAbort("To upload files, the file ~/.hubtools.conf must contain a line like apiKey='xxx@yyy').\n"
+                "Go to https://genome.ucsc.edu/cgi-bin/hgHubConnect#dev to get your apiKey value.")
+
+    if not "@" in apiKey:
+        errAbort("The apiKey value in ~/.hubtools.conf must contain an @ character.")
+
+    cookieUser, cookieId = apiKey.split("@")
+
+    cookies = {}
+    cookies[cookieNameUser] = cookieUser
+    cookies[cookieNameId] = cookieId
+    cookie_header = "; ".join(f"{key}={value}" for key, value in cookies.items())
+
+    headers = {"Cookie" : cookie_header}
+
+    logging.info(f"TUS server URL: {serverUrl}")
+    logging.debug("HTTP headers: "+repr(headers))
+    my_client = client.TusClient(serverUrl, headers=headers)
+
+    cacheFname = join(tdbDir, ".hubtools.json")
+    uploadCache = cacheLoad(cacheFname)
+
+    for rootDir, dirs, files in os.walk(tdbDir):
+        for fbase in files:
+            if fbase.startswith("."):
+                continue
+            fpath = join(rootDir, fbase)
+            fullPath = join(tdbDir, fpath)
+
+            # skip files that have not changed their mtime since last upload
+            if fpath in uploadCache:
+                if os.stat(fullPath).st_mtime == uploadCache[fpath]["mtime"]:
+                    logging.info("%s: file mtime unchanged, not uploading again" % fullPath)
+                    continue
+
+            cache = {}
+            mtime = os.stat(fullPath).st_mtime
+            cache["mtime"] = mtime
+            cache["size"] = os.stat(fullPath).st_size
+            uploadCache[fpath] = cache
+
+            #timestamp = datetime.fromtimestamp(mtime, tz=timezone.utc).timestamp() # seconds since 1970
+
+            parentDir = join(hubName, rootDir)
+            meta = {
+                    "parentDir" : parentDir,
+                    "genome":"NA",
+                    "fileName" : fbase,
+                    "hubName" : hubName,
+                    "fileType":"NA",
+                    "lastModified" : str(int(mtime)),
+                }
+
+            logging.info(f"Uploading {fpath}, meta {meta}")
+            uploader = my_client.uploader(fullPath, metadata=meta)
+            uploader.upload()
+
+    cacheWrite(uploadCache, cacheFname)
+
+def iterRaStanzas(fname):
+    " parse an ra-style (trackDb) file and yield dictionaries "
+    data = dict()
+    logging.debug("Parsing %s in trackDb format" % fname)
+    with open(fname, "rt") as ifh:
+        for l in ifh:
+            l = l.lstrip(" ").rstrip("\r\n")
+            if len(l)==0:
+                yield data
+                data = dict()
+            else:
+                if " " not in l:
+                    continue
+                key, val = l.split(" ", maxsplit=1)
+                data[key] = val
+
+    if len(data)!=0:
+        yield data
+
+def raToTab(fname):
+    " convert .ra file to .tsv "
+    stanzas = []
+    allFields = set()
+    for stanza in iterRaStanzas(fname):
+        if "hub" in stanza or "genome" in stanza:
+            continue
+        allFields.update(stanza.keys())
+        stanzas.append(stanza)
+
+    if "track" in allFields:
+        allFields.remove("track")
+    if "shortLabel" in allFields:
+        allFields.remove("shortLabel")
+
+    hasLongLabel = False
+    if "longLabel" in allFields:
+        allFields.remove("longLabel")
+        hasLongLabel = True
+
+    sortedFields = sorted(list(allFields))
+    # make sure that track shortLabel and longLabel come first and always there, handy for manual edits
+    if hasLongLabel:
+        sortedFields.insert(0, "longLabel")
+    sortedFields.insert(0, "shortLabel")
+    sortedFields.insert(0, "track")
+
+    ofh = sys.stdout
+    ofh.write("#")
+    ofh.write("\t".join(sortedFields))
+    ofh.write("\n")
+
+    for s in stanzas:
+        row = []
+        for fieldName in sortedFields:
+            row.append(s.get(fieldName, ""))
+        ofh.write("\t".join(row))
+        ofh.write("\n")
+
+def guessFieldDesc(fieldNames):
+    "given a list of field names, try to guess to which fields in bed12 they correspond "
+    logging.info("No field description specified, guessing fields from TSV headers: %s" % fieldNames)
+    fieldDesc = {}
+    skipFields = set()
+
+    for fieldIdx, fieldName in enumerate(fieldNames):
+        caseField = fieldName.lower()
+        if caseField in ["chrom", "chromosome"]:
+            name = "chrom"
+        elif caseField.endswith(" id") or caseField.endswith("accession"):
+            name = "name"
+        elif caseField in ["start", "chromstart", "position"]:
+            name = "start"
+        elif caseField in ["Reference"]:
+            name = "refAllele"
+        elif caseField in ["strand"]:
+            name = "strand"
+        elif caseField in ["score"]:
+            name = "score"
+        else:
+            continue
+        fieldDesc[name] = fieldIdx
+        skipFields.add(fieldIdx)
+    logging.info("TSV <-> BED correspondance: %s" % fieldDesc)
+    return fieldDesc, skipFields
+
+def parseFieldDesc(fieldDescStr, fieldNames):
+    " given a string chrom=1,start=2,end=3,... return dict {chrom:1,...} "
+    if not fieldDescStr:
+        return guessFieldDesc(fieldNames)
+
+    fieldDesc, skipFields = guessFieldDesc(fieldNames)
+
+    if fieldDescStr:
+        for part in fieldDescStr.split(","):
+            fieldName, fieldIdx = part.split("=")
+            fieldIdx = int(fieldIdx)
+            fieldDesc[fieldName] = fieldIdx
+            skipFields.add(fieldIdx)
+
+    return fieldDesc, skipFields
+
+def makeBedRow(row, fieldDesc, skipFields, isOneBased):
+    " given a row of a tsv file and a fieldDesc with BedFieldName -> field-index, return a bed12+ row with extra fields "
+    bedRow = []
+
+    # first construct the bed 12 fields
+    for fieldName in ["chrom", "start", "end", "name", "score", "strand",
+            "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "chromStarts"]:
+
+        fieldIdx = fieldDesc.get(fieldName)
+        if fieldIdx is not None:
+            if fieldName=="start":
+                chromStart = int(row[fieldDesc["start"]])
+                if isOneBased:
+                    chromStart = chromStart-1
+                val = str(chromStart)
+            elif fieldName=="end":
+                chromEnd = int(val)
+            else:
+                val = row[fieldIdx]
+        else:
+            if fieldName=="end":
+                chromEnd = chromStart+1
+                val = str(chromEnd)
+            elif fieldName=="score":
+                val = "0"
+            elif fieldName=="strand":
+                val = "."
+            elif fieldName=="thickStart":
+                val = str(chromStart)
+            elif fieldName=="thickEnd":
+                val = str(chromEnd)
+            elif fieldName=="itemRgb":
+                val = "0,0,0"
+            elif fieldName=="blockCount":
+                val = "1"
+            elif fieldName=="blockSizes":
+                val = str(chromEnd-chromStart)
+            elif fieldName=="chromStarts":
+                #val = str(chromStart)
+                val = "0"
+            else:
+                logging.error("Cannot find a field for %s" % fieldName)
+                sys.exit(1)
+
+        bedRow.append(val)
+
+    # now handle all other fields
+    for fieldIdx, val in enumerate(row):
+        if not fieldIdx in skipFields:
+            bedRow.append( row[fieldIdx] )
+
+    return bedRow
+
+def fetchChromSizes(db, outputFileName):
+    " find on local disk or download a <db>.sizes text file "
+    # Construct the URL based on the database name
+    url = f"https://hgdownload.cse.ucsc.edu/goldenPath/{db}/database/chromInfo.txt.gz"
+    # Send a request to download the file
+    response = requests.get(url, stream=True)
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Open the output gzip file for writing
+        with gzip.open(outputFileName, 'wt') as outFile:
+            # Open the response content as a gzip file in text mode
+            with gzip.GzipFile(fileobj=response.raw, mode='r') as inFile:
+                # Read the content using csv reader to handle tab-separated values
+                reader = csv.reader(inFile, delimiter='\t')
+                writer = csv.writer(outFile, delimiter='\t', lineterminator='\n')
+                # Iterate through each row, and retain only the first two fields
+                for row in reader:
+                    writer.writerow(row[:2])  # Write only the first two fields
+    else:
+        raise Exception(f"Failed to download file from {url}, status code: {response.status_code}")
+    logging.info("Downloaded %s to %s" % (db, outputFileName))
+
+def getChromSizesFname(db):
+    " return fname of chrom sizes, download into ~/.local/ucscData/ if not found "
+    fname = "/hive/data/genomes/%s/chrom.sizes" % db
+    if isfile(fname):
+        return fname
+
+    dataDir = "~/.local/hubtools"
+    fname = join(dataDir, "%s.sizes" % db)
+    fname = os.path.expanduser(fname)
+    if not isfile(fname):
+        makedirs(dataDir)
+        fetchChromSizes(db, fname)
+    return fname
+
+def convTsv(db, tsvFname, outBedFname, outAsFname, outBbFname):
+    " convert tsv files in inDir to outDir, assume that they all have one column for chrom, start and end. Try to guess these or fail. "
+    #tsvFname, outBedFname, outAsFname = args
+
+    # join and output merged bed
+    bigCols = set() # col names of columns with > 255 chars
+
+    #bedFh = open(bedFname, "w")
+    unsortedBedFh = tempfile.NamedTemporaryFile(suffix=".bed", dir=dirname(outBedFname), mode="wt")
+    fieldNames = None
+    #isOneBased = options.oneBased
+    isOneBased = True
+    bedFieldsDesc = None # in the future, the user may want to input a string like name=0,start=1, but switch this off for now
+
+    for line in open(tsvFname):
+        row = line.rstrip("\r\n").split("\t")
+        if fieldNames is None:
+            fieldNames = row
+            fieldDesc, notExtraFields = parseFieldDesc(bedFieldsDesc, fieldNames)
+            continue
+
+        # note fields with data > 255 chars.
+        for colName, colData in zip(fieldNames, row):
+            if len(colData)>255:
+                bigCols.add(colName)
+
+        bedRow = makeBedRow(row, fieldDesc, notExtraFields, isOneBased)
+
+        chrom = bedRow[0]
+        if chrom.isdigit() or chrom in ["X", "Y"]:
+            bedRow[0] = "chr"+bedRow[0]
+
+        unsortedBedFh.write( ("\t".join(bedRow)))
+        unsortedBedFh.write("\n")
+    unsortedBedFh.flush()
+
+    cmd = "sort -k1,1 -k2,2n %s > %s" % (unsortedBedFh.name, outBedFname)
+    assert(os.system(cmd)==0)
+    unsortedBedFh.close() # removes the temp file
+
+    # generate autosql
+    # BED fields
+    #bedColCount = int(options.type.replace("bed", "").replace("+" , ""))
+    bedColCount = 12
+    asFh = open(outAsFname, "w")
+    asFh.write(asHead)
+    asFh.write("\n".join(asLines[:bedColCount+1]))
+    asFh.write("\n")
+
+    # extra fields
+    #fieldNames = fieldNames[bedColCount:]
+    for fieldIdx, field in enumerate(fieldNames):
+        if fieldIdx in notExtraFields:
+            continue
+        name = field.replace(" ","")
+        name = field.replace("%","perc_")
+        name = re.sub("[^a-zA-Z0-9]", "", name)
+        name = name[0].lower()+name[1:]
+        fType = "string"
+        if field in bigCols:
+            fType = "lstring"
+        asFh.write('      %s %s; "%s" \n' % (fType, name, field))
+    asFh.write(")\n")
+    asFh.close()
+
+    chromSizesFname = getChromSizesFname(db)
+
+    cmd = ["bedToBigBed", outBedFname, chromSizesFname, outBbFname, "-tab", "-type=bed%d+" % bedColCount, "-as=%s" % outAsFname]
+    subprocess.check_call(cmd)
+
+def convTsvDir(inDir, db, outDir):
+    " find tsv files under inDir and convert them all to .bb "
+    ext = "tsv"
+    pat = join(inDir, '**/*.'+ext)
+    logging.debug("Finding files under %s (%s), writing output to %s" % (inDir, pat, outDir))
+
+    for fname in glob.glob(pat, recursive=True):
+        logging.debug("Found %s" % fname)
+        absFname = abspath(fname)
+        relFname = relpath(absFname, inDir)
+        outPath = Path(join(outDir, relFname))
+
+        if not outPath.parents[0].is_dir():
+            logging.debug("mkdir -p %s" % outPath.parents[0])
+            makedirs(outPath.parents[0])
+
+        bedFname = outPath.with_suffix(".bed")
+        asFname = outPath.with_suffix(".as")
+        bbFname = outPath.with_suffix(".bb")
+
+        convTsv(db, fname, bedFname, asFname, bbFname)
+
+def parseTrackLine(s):
+    " Use shlex to split the string respecting quotes, written by chatGPT "
+    lexer = shlex.shlex(s, posix=True)
+    lexer.whitespace_split = True
+    lexer.wordchars += '='  # Allow '=' as part of words
+
+    tokens = list(lexer)
+
+    # Convert the tokens into a dictionary
+    it = iter(tokens)
+    result = {}
+    for token in it:
+        if '=' in token:
+            key, value = token.split('=', 1)
+            result[key] = value.strip('"')  # Remove surrounding quotes if present
+        else:
+            result[token] = next(it).strip('"')  # Handle cases like name="...".
+
+    return result
+
+def readTrackLines(fnames):
+    " read the first line and convert to a dict of all fnames. "
+    logging.debug("Reading track lines from %s" % fnames)
+    ret = {}
+    for fn in fnames:
+        line1 = open(fn).readline().rstrip("\n")
+        notTrack = line1.replace("track ", "", 1)
+        tdb = parseTrackLine(notTrack)
+        ret[fn] = tdb
+    return ret
+
+def stripFirstLine(inputFilename, outputFilename):
+    " written by chatGpt: copies all lines to output, except the first line "
+    with open(inputFilename, 'r') as infile, open(outputFilename, 'w') as outfile:
+        # Skip the first line
+        next(infile)
+        # Write the rest of the lines to the output file
+        for line in infile:
+            outfile.write(line)
+
+def bedToBigBed(inFname, db, outFname):
+    " convert bed to bigbed file, handles chrom.sizes download "
+    chromSizesFname = getChromSizesFname(db)
+    cmd = ["bedToBigBed", inFname, chromSizesFname, outFname]
+    logging.debug("Running %s" % cmd)
+    logging.info(f'Converting {inFname} to {outFname}. (chromSizes: {chromSizesFname}')
+    subprocess.check_call(cmd)
+
+def convCtDb(db, inDir, outDir):
+    " convert one db part of a track archive to an output directory "
+    findGlob = join(inDir, "*.ct")
+    inFnames = glob.glob(findGlob)
+    if len(inFnames)==0:
+        logging.info("No *.ct files found in %s" % findGlob)
+        return
+
+    tdbData = readTrackLines(inFnames)
+
+    makedirs(outDir)
+    hubTxtFname = join(outDir, "hub.txt")
+    ofh = open(hubTxtFname, "wt")
+
+    meta = parseMeta(inDir)
+    writeHubGenome(ofh, db, meta)
+
+    tdbIdx = 0
+    for fname, tdb in tdbData.items():
+        tdbIdx += 1
+        # custom track names can include spaces, spec characters, etc. Strip all those
+        # append a number to make sure that the result is unique
+        track = tdb["name"]
+        track = re.sub('[^A-Za-z0-9]+', '', track)+"_"+str(tdbIdx)
+        tdb["track"] = track
+
+        tdb["shortLabel"] = tdb["name"]
+        del tdb["name"]
+        tdb["longLabel"] = tdb["description"]
+        del tdb["description"]
+
+        if "bigDataUrl" not in tdb:
+            bedFname = join(outDir, tdb["track"]+".bed")
+            bbFname = join(outDir, tdb["track"]+".bb")
+            stripFirstLine(fname, bedFname)
+            bedToBigBed(bedFname, db, bbFname)
+            os.remove(bedFname)
+            tdb["bigDataUrl"] = tdb["track"]+".bb"
+            tdb["type"] = "bigBed"
+
+        writeStanza(ofh, 0, tdb)
+
+    logging.info("Wrote %s" % hubTxtFname)
+    ofh.close()
+
+def convArchDir(inDir, outDir):
+    " convert a directory created from the .tar.gz file downloaded via our track archive feature "
+    dbContent = os.listdir(inDir)
+    dbDirs = []
+    for db in dbContent:
+        subDir = join(inDir, db)
+        if isdir(subDir):
+            dbDirs.append((db, subDir))
+
+    if len(dbDirs)==0:
+        errAbort("No directories found under %s. Extract the tarfile and point this program at the 'archive' directory." % inDir)
+
+    for db, inSubDir in dbDirs:
+        logging.debug("Processing %s, db=%s" % (inSubDir, db))
+        outSubDir = join(outDir, db)
+        convCtDb(db, inSubDir, outSubDir)
+
+def hgsidFromUrl(url):
+    " return hgsid given a URL. written by chatGPT "
+    # Parse the URL
+    parsed_url = urllib.parse.urlparse(url)
+    server_name = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    query_params = urllib.parse.parse_qs(parsed_url.query)
+    hgsid = query_params.get('hgsid')
+    # Return the hgsid value if it exists
+    if hgsid:
+        return server_name, hgsid[0]  # Extracting the first value from the list
+    errAbort("hgsid parameter not found in "+url)
+
+def convCtUrl(url, outDir):
+    " given an hgTracks URL with an hgsid on it, get all custom track lines and create a hub file for it. Does not download custom tracks. "
+    serverUrl, hgsid = hgsidFromUrl(url)
+    cartDumpUrl = serverUrl+"/cgi-bin/cartDump?hgsid="+hgsid
+
+
+def hubtools(args, options):
+    """ find files under dirName and create a trackDb.txt for them"""
+
+    cmd = args[0]
+
+    inDir = "."
+    if options.inDir:
+        inDir = options.inDir
+
+    outDir = "."
+    if options.outDir:
+        outDir = options.outDir
+
+    if cmd=="up":
+        if len(args)<2:
+            errAbort("The 'up' command requires one argument, the name of the hub. You can specify any name, "
+                "ideally a short, meaningful string, e.g. atacseq, muscle-rna or yamamoto2022.")
+        hubName = args[1]
+        uploadFiles(inDir, hubName)
+        return
+
+    tdbDir = inDir
+    if options.outDir:
+        tdbDir = options.outDir
+
+    if cmd=="jbrowse":
+        importJbrowse(args[1], args[2], tdbDir)
+    elif cmd == "tab":
+        raToTab(args[1])
+    elif cmd == "make":
+        db = args[1]
+
+        meta = parseMeta(inDir)
+        dirFiles = readDirs(inDir, meta)
+
+        hubFname = join(tdbDir, "hub.txt")
+        logging.info("Writing %s" % hubFname)
+        ofh = open(hubFname, "w")
+
+        meta = parseMeta(inDir)
+        writeHubGenome(ofh, db, meta)
+
+        writeTdb(inDir, dirFiles, "top", tdbDir, ofh)
+        writeTdb(inDir, dirFiles, "comps", tdbDir, ofh)
+
+        ofh.close()
+
+    elif cmd=="conv":
+        db = args[1]
+
+        convTsvDir(inDir, db, outDir)
+
+    elif cmd=="archive":
+        convArchDir(inDir, outDir)
+
+    elif cmd=="ct":
+        url = args[1]
+        convCtUrl(url, outDir)
+
+    else:
+        logging.error("Unknown command: '%s'" % args[1])
+
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    hubtools(args, options)
+
+
+main()

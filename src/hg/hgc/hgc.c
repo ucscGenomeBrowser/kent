@@ -3764,7 +3764,7 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
                        char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
-boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
+boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", TRUE);
 
 if (doSnake)
     return doSnakeChainClick(tdb, item, otherDb);
@@ -4989,12 +4989,12 @@ else
 
 hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
-cgiMakeButton("submit", "get DNA");
+cgiMakeButton("submit", "Get DNA");
 if (dbIsFound)
     cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
 if (dbIsFound)
-    puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
+    puts("Note: The \"Mask repeats\" option applies only to \"Get DNA\", not to \"Extended case/color options\". <P>");
 }
 
 boolean dnaIgnoreTrack(char *track)
@@ -5170,13 +5170,26 @@ boolean forestHasUnderstandableTrack(char *db, struct trackDb *tdb)
 return (rFindUnderstandableTrack(db, tdb) != NULL);
 }
 
+struct trackDb* loadTracks()
+/* load native tracks, cts, userPsl and track Hubs and return tdbList */
+{
+struct trackDb *tdbList = hTrackDb(database);
+struct trackDb *ctdbList = tdbForCustomTracks();
+struct trackDb *utdbList = tdbForUserPsl();
+
+struct grp *pGrpList = NULL;
+struct trackDb *hubList = hubCollectTracks(database, &pGrpList);
+
+ctdbList = slCat(ctdbList, tdbList);
+ctdbList = slCat(ctdbList, hubList);
+tdbList = slCat(utdbList, ctdbList);
+return tdbList;
+}
+
 
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
-struct trackDb *tdbList = hTrackDb(database), *tdb;
-struct trackDb *ctdbList = tdbForCustomTracks();
-struct trackDb *utdbList = tdbForUserPsl();
 boolean revComp  = cartUsualBoolean(cart, "hgSeq.revComp", FALSE);
 boolean maskRep  = cartUsualBoolean(cart, "hgSeq.maskRepeats", FALSE);
 int padding5     = cartUsualInt(cart, "hgSeq.padding5", 0);
@@ -5187,9 +5200,7 @@ char *repMasking = cartUsualString(cart, "hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
 char *pos = NULL;
 
-
-ctdbList = slCat(ctdbList, tdbList);
-tdbList = slCat(utdbList, ctdbList);
+struct trackDb *tdbList = loadTracks();
 
 cartWebStart(cart, database, "Extended DNA Case/Color");
 
@@ -5256,10 +5267,11 @@ cgiMakeRadioButton("hgSeq.casing", "upper", caseUpper);
 printf(" Upper ");
 cgiMakeRadioButton("hgSeq.casing", "lower", !caseUpper);
 printf(" Lower ");
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
 printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
+struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *table = tdb->table;
@@ -5811,9 +5823,9 @@ boolean defaultUpper = sameString(cartString(cart, "hgSeq.casing"), "upper");
 int winSize;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
-struct trackDb *tdbList = hTrackDb(database), *tdb;
-struct trackDb *ctdbList = tdbForCustomTracks();
-struct trackDb *utdbList = tdbForUserPsl();
+
+struct trackDb *tdbList = loadTracks();
+
 char *pos = NULL;
 Bits *uBits;	/* Underline bits. */
 Bits *iBits;    /* Italic bits. */
@@ -5827,9 +5839,6 @@ uBits = bitAlloc(winSize);	/* Underline bits. */
 iBits = bitAlloc(winSize);	/* Italic bits. */
 bBits = bitAlloc(winSize);	/* Bold bits. */
 
-ctdbList = slCat(ctdbList, tdbList);
-tdbList = slCat(utdbList, ctdbList);
-
 cartWebStart(cart, database, "Extended DNA Output");
 printf("<PRE><TT>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
@@ -5841,6 +5850,8 @@ if (defaultUpper)
     touppers(seq->dna);
 
 AllocArray(colors, winSize);
+
+struct trackDb* tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->track;
@@ -6516,10 +6527,11 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE) // Only anchor if small enough 
 		hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd, otherString, psl->tName);
+            char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-		   skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
+		   skipChr(displayChromName), psl->strand, psl->tStart + 1, psl->tEnd,
 		   psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 	        printf("</A>");
@@ -7794,14 +7806,15 @@ if (restrictToWindow)
     }
 
 /* Write body heading info. */
+char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
-	psl->qName, psl->tName, partTStart+1, partTEnd);
+	psl->qName, displayChromName, partTStart+1, partTEnd);
 fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
 blockCount = ffShAliPart(body, ffAli, wholePsl->qName,
                          rna + rnaStart, rnaEnd - rnaStart, rnaStart,
-			 dnaSeq->name, dnaSeq->dna, dnaSeq->size,
+			 displayChromName, dnaSeq->dna, dnaSeq->size,
 			 wholeTStart, 8, FALSE, isRc,
 			 FALSE, TRUE, TRUE, TRUE, TRUE,
                          cdsS, cdsE, partTStart, partTEnd);
@@ -7838,7 +7851,8 @@ if (qName == NULL)
 htmStartDirDepth(index, qName, 2);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
-fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), psl->tName);
+char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), displayChromName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",

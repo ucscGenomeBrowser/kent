@@ -26,6 +26,7 @@ install:
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
 	cp -p --remove-destination checkCoverage.csh       ${SCRIPTS}
 	cp -p --remove-destination checkEncodeRegions.csh  ${SCRIPTS}
+	cp -p --remove-destination checkErrorLogsAreUpToDate.py ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
 	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
@@ -66,8 +67,10 @@ install:
 	cp -p --remove-destination databaseAday.csh        ${SCRIPTS}
 	cp -p --remove-destination dbUpdateTimes.csh       ${SCRIPTS}
 	cp -p --remove-destination doGenbankTests          ${SCRIPTS}
+	cp -p --remove-destination doPublicCrawl           ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
+	cp -p --remove-destination errorLogKeywordSearch.py ${SCRIPTS}
 	cp -p --remove-destination filterCartDumps.sh      ${SCRIPTS}
 	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}

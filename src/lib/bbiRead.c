@@ -23,17 +23,23 @@ if (desiredReduction < 0)
    errAbort("bad value %d for desiredReduction in bbiBestZoom", desiredReduction);
 if (desiredReduction <= 1)
     return NULL;
-int closestDiff = BIGNUM;
+unsigned closestDiff = ~0;
 struct bbiZoomLevel *closestLevel = NULL;
 struct bbiZoomLevel *level;
 
 for (level = levelList; level != NULL; level = level->next)
     {
-    int diff = desiredReduction - level->reductionLevel;
-    if (diff >= 0 && diff < closestDiff)
+    if (desiredReduction > level->reductionLevel)
         {
-	closestDiff = diff;
-	closestLevel = level;
+        // I think we could just break here since levels
+        // are sorted in increasing order, but.. maybe they
+        // aren't always, so let's go ahead and look at the other levels
+        unsigned diff = desiredReduction - level->reductionLevel;
+        if (diff < closestDiff)
+            {
+            closestDiff = diff;
+            closestLevel = level;
+            }
 	}
     }
 return closestLevel;
@@ -639,28 +645,59 @@ intervalList = (*fetchIntervals)(bbi, chrom, start, end, lm);
 boolean result = FALSE;
 if (intervalList != NULL)
     {
-    int i;
-    bits32 baseStart = start, baseEnd;
     bits32 baseCount = end - start;
-    interval = intervalList;
-    for (i=0; i<summarySize; ++i)
+    if (baseCount > summarySize)  // more bases than pixels
         {
-	/* Calculate end of this part of summary */
-	baseEnd = start + (bits64)baseCount*(i+1)/summarySize;
-	int end1 = baseEnd;
-	if (end1 == baseStart)
-	    end1 = baseStart+1;
+        int i;
+        bits32 baseStart = start, baseEnd;
+        interval = intervalList;
+        for (i=0; i<summarySize; ++i)
+            {
+            /* Calculate end of this part of summary */
+            baseEnd = start + (bits64)baseCount*(i+1)/summarySize;
+            int end1 = baseEnd;
+            if (end1 == baseStart)
+                end1 = baseStart+1;
 
-        /* Advance interval to skip over parts we are no longer interested in. */
-	while (interval != NULL && interval->end <= baseStart)
-	    interval = interval->next;
+            /* Advance interval to skip over parts we are no longer interested in. */
+            while (interval != NULL && interval->end <= baseStart)
+                interval = interval->next;
 
-	if (bbiIntervalSlice(bbi, baseStart, end1, interval, &summary[i]))
-	    result = TRUE;
+            if (bbiIntervalSlice(bbi, baseStart, end1, interval, &summary[i]))
+                result = TRUE;
 
-	/* Next time round start where we left off. */
-	baseStart = baseEnd;
-	}
+            /* Next time round start where we left off. */
+            baseStart = baseEnd;
+            }
+        }
+    else  // more pixels than bases
+        {
+        double pixelsPerBase = (double)summarySize / baseCount;
+        for (interval = intervalList; interval != NULL; interval = interval->next)
+            {
+            bits32 base;
+            for(base = interval->start; base < end && base < interval->end; base++)
+                {
+                unsigned offset = base - start;
+                unsigned startPos = round(offset * pixelsPerBase);
+                unsigned endPos = round((offset + 1) * pixelsPerBase);
+                struct bbiSummaryElement summaryForBase;
+
+                // the whole range will have the same value, so only ask once
+                if (bbiIntervalSlice(bbi, base, base + 1, interval, &summaryForBase))
+                    result = TRUE;
+
+                for(;startPos < endPos; startPos++)
+                    {
+                    if (startPos >= summarySize)
+                       break;
+                    
+                    // copy structure
+                    summary[startPos] = summaryForBase; 
+                    }
+                }
+            }
+        }
     }
 lmCleanup(&lm);
 return result;

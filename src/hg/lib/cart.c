@@ -901,12 +901,11 @@ if (stats && dyMessage)
                        atLeast, stats->binaryCount);
     if (stats->weirdCharsCount)
         dyStringPrintf(dyMessage,
-                       "%s%d setting names contained unexpected characters, for example '%s'.  ",
-                       atLeast, stats->weirdCharsCount, htmlEncode(stats->weirdCharsExample));
+                       "%s%d setting names contained unexpected characters.  ",
+                       atLeast, stats->weirdCharsCount);
     if (stats->dataCount)
-        dyStringPrintf(dyMessage, "%s%d lines appeared to be custom track data, for example "
-                       "a line begins with '%s'.  ",
-                       atLeast, stats->dataCount, stats->dataExample);
+        dyStringPrintf(dyMessage, "%s%d lines appeared to be custom track data.",
+                       atLeast, stats->dataCount);
     if (stats->varTooLongCount)
         dyStringPrintf(dyMessage, "%s%d setting names were too long (up to %d).  ",
                        atLeast, stats->varTooLongCount, stats->varTooLongLength);
@@ -1403,19 +1402,19 @@ char *db = cartOptionalString(cart,"db");
 
 if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
-else if (startsWith("GCA_", db) || startsWith("GCF_", db))
+else
     {
     char *url = genarkUrl(db);
 
     if (url != NULL)
         {
         cartSetString(cart, "genome", db);
-        cartSetString(cart, "hubUrl", url);
+        cartAddString(cart, "hubUrl", url);
         cartRemove(cart, "db");
         }
+    else if (!hDbIsActive(db))
+	errAbort("Can not find database '%s'", db);
     }
-else if (!hDbIsActive(db))
-    errAbort("Can not find database '%s'", db);
 }
 
 struct cart *cartNew(char *userId, char *sessionId,
@@ -1424,7 +1423,7 @@ struct cart *cartNew(char *userId, char *sessionId,
  * strings to not include */
 {
 cgiApoptosisSetup();
-if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
+if (cfgOptionBooleanDefault("showEarlyErrors", TRUE))
     errAbortSetDoContentType(TRUE);
 
 if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))

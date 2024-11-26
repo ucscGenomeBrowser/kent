@@ -1,0 +1,84 @@
+<h2>Description and display conventions</h2>
+
+<p>
+Nuclear mitochondrial DNA segments (NUMTs) are a kind of insertion from the mitochondrion to the
+nucleus, which is an ongoing and frequent process that happens in all eukaryotes. In previous
+studies, NUMTs have been reported to increase genetic diversity, promote gene and genome evolution,
+and generate novel nuclear exons. NUMTs can also affect the accuracy when nuclear genomes are
+assembled.</p>
+<p>
+This track is a collection of Nuclear mitochondrial DNA segments, provided in BED format.</p>
+<p><em>Notice: Alignments to incompletely assembled or unmapped chromosome locations are omitted
+in this track.</em></p>
+<p>
+In this track, the BED score is calculated by -10log10(E-value), representing the alignment
+confidence and is reflected in the level of gray. Scores &gt;=100 (E-values &lt;= 1e-10) are
+colored black. It is important to note that when a NUMT is a merged result, the score is taken as the
+highest score among all results.</p>
+
+
+<h2>Methods</h2>
+
+<p>
+This dataset identifies nuclear mitochondrial genome segments (NUMTs) by comparing nuclear and
+mitochondrial genomes and proteins using LAST alignment tools. The method involves several steps:
+nuclear genome-mitochondrial genome comparison, nuclear genome-mitochondrial protein comparison,
+and exclusion of overlapping nuclear ribosomal RNA regions using maf-Bed and seg-suite tools.
+Results are merged if alignments are consistent across both comparisons, with sequences under 30bp
+excluded. Bedtools and LAST are used throughout the process for efficient alignment and merging.
+</p>
+<p>
+For more detailed information on the methods used for detecting NUMTs, please visit the following
+webpage:</p>
+<a href="https://github.com/Koumokuyou/NUMTs">https://github.com/Koumokuyou/NUMTs</a>
+
+<h2>Contact</h2>
+<p>If you have questions or comments, please write to:
+<p>Huang Muyao, 
+<A HREF="mailto:&#50;&#49;&#55;&#49;27&#50;&#57;&#48;&#51;&#64;&#101;&#100;&#117;.
+&#107;.
+&#117;&#45;&#116;&#111;k&#121;&#111;.
+ac.
+&#106;&#112;">
+&#50;&#49;&#55;&#49;27&#50;&#57;&#48;&#51;&#64;&#101;&#100;&#117;.&#107;.&#117;&#45;&#116;&#111;k&#121;&#111;.ac.&#106;&#112;</A>
+<!-- above address is 2171272903 at edu.k.u-tokyo.ac.jp -->
+</p>
+
+<h2>References</h2>
+
+<p>
+Kleine T, Maier UG, Leister D.
+<a href="https://www.annualreviews.org/content/journals/10.1146/annurev.arplant.043008.092119?crawle
+r=true&amp;mimetype=application/pdf" target="_blank">
+DNA transfer from organelles to the nucleus: the idiosyncratic genetics of endosymbiosis</a>.
+<em>Annu Rev Plant Biol</em>. 2009;60:115-38.
+DOI: <a href="https://doi.org/10.1146/annurev.arplant.043008.092119"
+target="_blank">10.1146/annurev.arplant.043008.092119</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/19014347" target="_blank">19014347</a>
+</p>
+<p>
+Zhang GJ, Dong R, Lan LN, Li SF, Gao WJ, Niu HX.
+<a href="https://www.mdpi.com/resolver?pii=ijms21030707" target="_blank">
+Nuclear Integrants of Organellar DNA Contribute to Genome Structure and Evolution in Plants</a>.
+<em>Int J Mol Sci</em>. 2020 Jan 21;21(3).
+DOI: <a href="https://doi.org/10.3390/ijms21030707" target="_blank">10.3390/ijms21030707</a>; PMID:
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31973163" target="_blank">31973163</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7037861/" target="_blank">PMC7037861</a>
+</p>
+<p>
+Yao Y, Frith MC.
+<a href="https://doi.org/10.1109/TCBB.2022.3177855" target="_blank">
+Improved DNA-Versus-Protein Homology Search for Protein Fossils</a>.
+<em>IEEE/ACM Trans Comput Biol Bioinform</em>. 2023 May-Jun;20(3):1691-1699.
+DOI: <a href="https://doi.org/10.1109/TCBB.2022.3177855"
+target="_blank">10.1109/TCBB.2022.3177855</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/35617174" target="_blank">35617174</a>
+</p>
+<p>
+Frith MC.
+<a href="https://genome.cshlp.org/cgi/content/long/" target="_blank">
+A simple method for finding related sequences by adding probabilities of alternative alignments</a>.
+<em>Genome Res</em>. 2024 Sep 13;.
+DOI: <a href="https://doi.org/10.1101/gr.279464.124" target="_blank">10.1101/gr.279464.124</a>;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39152037" target="_blank">39152037</a>
+</p>

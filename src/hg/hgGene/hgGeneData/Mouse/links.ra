@@ -41,10 +41,10 @@ idSql select Id from geneNetworkId, knownToRefSeq where Id = value and name='%s'
 url http://www.genenetwork.org/webqtl/WebQTL.py?cmd=sch&refseq=%s&species=mouse
 priority 10
 
-name stanfordSource
-shortLabel SOURCE
-tables kgXref
-idSql select mRNA from kgXref where kgID = '%s'
-url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Mm&option=Number&criteria=%s&choice=Gene
-priority 10
+#name stanfordSource
+#shortLabel SOURCE
+#tables kgXref
+#idSql select mRNA from kgXref where kgID = '%s'
+#url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Mm&option=Number&criteria=%s&choice=Gene
+#priority 10
 

@@ -124,7 +124,7 @@ def modDicts(db, year, month, hgsid, tracks, toProcess, perMonth=False):
             if track == "":
                 continue
             # Remove trailing characters
-            track = track[:-2]
+            track = track.split(":")[0]
 
             # Record track user
             if hgsid not in trackUsers[db][track]:
@@ -143,7 +143,7 @@ def modDicts(db, year, month, hgsid, tracks, toProcess, perMonth=False):
             ##### Process public hub tracks
             if processTrackHubUsers == True:
                 if track.startswith("hub_"):
-                    track = track[:-2]
+                    track = track.split(":")[0]
                     splitTrack = track.split("_", 2)
                     if len(splitTrack) > 2:
                         hubId = splitTrack[1]
@@ -633,7 +633,7 @@ help='output a file containing info on default track usage for top 15 most used 
                     continue
 
                 # Remove trailing characters
-                track = track[:-2]
+                track = track.split(":")[0]
                
                 try: 
                     trackUse = trackCounts[db][track]

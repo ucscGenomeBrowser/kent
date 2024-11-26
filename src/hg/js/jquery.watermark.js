@@ -382,71 +382,49 @@ $.fn.watermark = $.fn.watermark || function ( text, options ) {
 					$wm.data( dataFlag, 1 );
 					$wm.attr( "maxLength", text.length );
 					
-					$wm.focus(
-						function () {
+					$wm.on("focus", function () {
 							$.watermark._hide( $wm, true );
-						}
-					).bind( "dragenter",
-						function () {
+                    }).on("dragenter", function () {
 							$.watermark._hide( $wm );
-						}
-					).bind( "dragend",
-						function () {
+                    }).on("dragend", function () {
 							window.setTimeout( function () { $wm.blur(); }, 1 );
-						}
-					);
+                    });
 					
-					$input.blur(
-						function () {
-							$.watermark._show( $input );
-						}
-					).bind( "dragleave",
-						function () {
-							$.watermark._show( $input );
-						}
-					);
+					$input.on("blur", function () {
+                        $.watermark._show( $input );
+                    }).on("dragleave", function () {
+                        $.watermark._show( $input );
+                    });
 					
 					$wm.data( dataPassword, $input );
 					$input.data( dataPassword, $wm );
 				}
 				else {
 					
-					$input.focus(
-						function () {
-							$input.data( dataFocus, 1 );
-							$.watermark._hide( $input, true );
-						}
-					).blur(
-						function () {
-							$input.data( dataFocus, 0 );
-							$.watermark._show( $input );
-						}
-					).bind( "dragenter",
-						function () {
+					$input.on("focus", function () {
+                        $input.data( dataFocus, 1 );
+                        $.watermark._hide( $input, true );
+                    }).on("blur", function () {
+                        $input.data( dataFocus, 0 );
+                        $.watermark._show( $input );
+                    }).on( "dragenter", function () {
 							$.watermark._hide( $input );
-						}
-					).bind( "dragleave",
-						function () {
-							$.watermark._show( $input );
-						}
-					).bind( "dragend",
-						function () {
-							window.setTimeout( function () { $.watermark._show($input); }, 1 );
-						}
-					).bind( "drop",
-						// Firefox makes this lovely function necessary because the dropped text
-						// is merged with the watermark before the drop event is called.
-						function ( evt ) {
-							var elem = $input[ 0 ],
-								dropText = evt.originalEvent.dataTransfer.getData( "Text" );
-							
-							if ( ( elem.value || "" ).replace( rreturn, "" ).replace( dropText, "" ) === $input.data( dataText ) ) {
-								elem.value = dropText;
-							}
-							
-							$input.focus();
-						}
-					);
+                    }).on( "dragleave", function () {
+                        $.watermark._show( $input );
+                    }).on( "dragend", function () {
+                        window.setTimeout( function () { $.watermark._show($input); }, 1 );
+                    }).on( "drop", function ( evt ) {
+                        // Firefox makes this lovely function necessary because the dropped text
+                        // is merged with the watermark before the drop event is called.
+                        var elem = $input[ 0 ],
+                            dropText = evt.originalEvent.dataTransfer.getData( "Text" );
+                        
+                        if ( ( elem.value || "" ).replace( rreturn, "" ).replace( dropText, "" ) === $input.data( dataText ) ) {
+                            elem.value = dropText;
+                        }
+                        
+                        $input.trigger("focus");
+                    });
 				}
 				
 				// In order to reliably clear all watermarks before form submission,

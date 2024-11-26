@@ -1,0 +1,77 @@
+track decipherContainer
+superTrack on
+shortLabel DECIPHER
+longLabel DECIPHER
+cartVersion 7
+group phenDis
+
+    track decipher
+    shortLabel DECIPHER CNVs
+    longLabel DECIPHER CNVs
+    group phenDis
+    visibility pack
+    type bigBed 9 +
+    itemRgb on
+    tableBrowser off knownCanonToDecipher knownToDecipher decipherRaw
+    bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
+    url https://www.deciphergenomics.org/patient/$$
+    urlLabel Decipher Patient View:
+    filter.size 0
+    filterByRange.size on
+    filterLimits.size 2:170487333
+    filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Trip
+    filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
+    mergeSpannedItems on
+    searchIndex name
+    mouseOverField _mouseOvera
+    html decipherContainer.html
+    parent decipherContainer
+
+    track decipherSnvs
+    shortLabel DECIPHER SNVs
+    longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
+    group phenDis
+    visibility pack
+    color 0,0,0
+    type bed 4
+    tableBrowser off decipherSnvsRaw
+    prevExonText Left edge
+    nextExonText Right edge
+    html decipherContainer.html
+    parent decipherContainer
+
+    track decipherDDG2P
+    parent decipherContainer
+    type bigBed 9 +
+    shortLabel DECIPHER DDG2P
+    longLabel DECIPHER: Developmental Disorders panel in the Gene2Phenotype database (DDG2P)
+    bigDataUrl /gbdb/$D/decipher/ddg2pSyndromes.bb
+    group phenDis
+    visibility pack
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Type of CNV</b>: $type<br> <b>Frequency of CNV</b>: $frequency<br> <b>Number of Observations</b>: $observations<br> <b>Sample Size of Study</b>: $sample_size<br>
+    html decipherContainer.html
+    searchIndex name
+    noScoreFilter on
+    filterValues.type loss,gain,del/dup
+    filter.sample_size 0
+
+
+searchTable decipher
+searchMethod exact
+searchType bigBed
+
+searchTable decipherDDG2P
+searchMethod exact
+searchType bigBed
+
+searchName decipherId
+searchTable decipher
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
+searchName decipherSnvsId
+searchTable decipherSnvs
+termRegex [0-9]+
+searchType bed
+searchPriority 50

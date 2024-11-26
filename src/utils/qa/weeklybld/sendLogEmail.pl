@@ -12,15 +12,19 @@ if ($argc != 2) {
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',clayfischer@ucsc.edu,lrnassar@ucsc.edu';
+my $buildMeisterOnly = $ENV{'BUILDMEISTEREMAIL'};
+my $buildMeisterEtc =  $buildMeisterOnly . ',clayfischer@ucsc.edu,lrnassar@ucsc.edu';
+# the bounceEmail address needs to be in the ucsc.edu domain to work correctly
+my $bounceEmail = $buildMeisterOnly;
 my $returnEmail = ' lrnassar@ucsc.edu';
 
 my @victims;
 my %victimEmail;
 
-my $authorFilter = `getent group kentcommit | cut -d':' -f4 | sed -e 's/^\\|,/ --author=/g'`;
+my $authorFilter = `getent group kentcommit | cut -d':' -f4 | tr ',' '|'`;
 chomp $authorFilter;
-open (FH, "git log v${lastNN}_base..v${branchNN}_base --name-status ${authorFilter} | grep Author | sort | uniq|") or die "can not git log v${lastNN}_base..v${branchNN}_base --name-status";
+
+open (FH, "git log v${lastNN}_base..v${branchNN}_base --name-status | grep Author | egrep -i \"${authorFilter}\" | sort -u |") or die "can not git log v${lastNN}_base..v${branchNN}_base --name-status";
 while (my $line = <FH>) {
   chomp $line;
   if ($line =~ m/^Author:/) {
@@ -39,7 +43,7 @@ while (my $line = <FH>) {
 close (FH);
 
 my $victimList = join(' ', sort @victims);
-open (FH, "|mail -r $returnEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEmail") or die "can not run mail command";
+open (FH, "|mail -r $returnEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEtc") or die "can not run mail command";
 printf FH "%s\n", $victimList;
 close (FH);
 foreach my $victim (sort keys %victimEmail) {
@@ -53,7 +57,7 @@ foreach my $victim (sort keys %victimEmail) {
   if (length($logData) > 1) {
        my $toAddr = $victimEmail{$victim};
        printf STDERR "# sending email to $toAddr\n";
-       open (SH, "| /usr/sbin/sendmail -t -oi") or die "can not run sendmail";
+       open (SH, "| /usr/sbin/sendmail -f $bounceEmail -t -oi") or die "can not run sendmail";
        printf SH "To: %s\n", $toAddr;
        printf SH "From: \"Lou Nassar\" <lrnassar\@ucsc.edu>\n";
        printf SH "Subject: Code summaries are due for %s\n", $victim;

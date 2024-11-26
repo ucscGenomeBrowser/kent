@@ -19,6 +19,8 @@ int nRes;
 char **resolutions;
 int nAttributes;
 char **attributes;
+int nNormOptions;
+char **normOptions;
 char *ucscAssembly;
 struct hash *ucscToAlias; // Takes UCSC chrom names to names the underlying file recognizes
 };

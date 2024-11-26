@@ -1008,8 +1008,10 @@
     <P>For bigBed files with more than 8 fields (not counting any extra bigBed fields), 
     this adds mouse over text 
     from a pattern based on the values
-    of fields in the file.  The pattern is constructed with fieldnames from the .as file, preceded
-    by the dollar sign ($), and can include arbitrary text between the fieldnames.</P>
+    of fields in the file.  The pattern is constructed with fieldnames from the .as file, 
+    preceded by the dollar sign ($) and optional curly braces ({}), and can include arbitrary 
+    text between the field names. When field names may be prefixes or overlap with one another, 
+    as in the below example, curly braces can be used to more clearly define the field name to be used.</P>
 
     <P><B>Example:</B></P>
     <pre>
@@ -1657,8 +1659,8 @@ There are no extra options that can appear on the type hic line.
     <li>If a column/fieldName contains negative values, be sure to specify a default value
     at or below the lowest negative value in order to avoid actively filtering items by
     default (unless that is the intended behavior)</li>
-    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
-    <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
+    <li>In order for filters to work, the track must be &quot;<code>type bigBed N +</code>&quot; or
+    &quot;<code>type bigBed N .</code>&quot;. Including the &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
     at least a bed5</li>
@@ -1742,8 +1744,8 @@ There are no extra options that can appear on the type hic line.
     <li><code>filterText.&lt;fieldName&gt;</code> will treat all fields as strings. That is to say,
     it can be enabled on entirely numerical fields, such as <code>chromStart</code>, if one is 
     looking to filter numerical values <strong>as text</strong></li>
-    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
-    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
+    <li>In order for filters to work, the track must be &quot;<code>type bigBed N +</code>&quot; or
+    &quot;<code>type bigBed N .</code>&quot;. Including the &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
     at least a bed5</li>
@@ -1844,8 +1846,8 @@ There are no extra options that can appear on the type hic line.
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any 
     of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable that default 
     filter</li>
-    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
-    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
+    <li>In order for filters to work, the track must be &quot;<code>type bigBed N +</code>&quot; or
+    &quot;<code>type bigBed N .</code>&quot;. Including the &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be
     at least a bed5</li>
@@ -1911,6 +1913,139 @@ There are no extra options that can appear on the type hic line.
     <P>In this example, we have a standard &quot;strand&quot; BED field with the default 
     description &quot;+ or - for strand&quot;. We have enabled a filter and simplified
     the label to just "Strand (Orientation)".</P>
+</DIV>
+
+<DIV class="highlight"><span class="types bed bigBed"></span>
+<div class="format">
+    <code>highlight.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
+    <code>highlightByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
+    <code>highlightLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    </div>
+    <P>Similar to filters, There are a number of different highlights available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more information on setting up filters. Note: for configurable features, like highlights, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
+
+    <p>All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained above, except instead of items being excluded from the display, they are striped with a colored background to appear &quot;highlighted&quot; compared to the other items in the display. You can control the default highlight color with the highlightColor setting, or with the color picker on the configuration page when interacting with the track. Please note that at this time only one higlight color is available per track, and if multiple highlight settings are present on the same track, only items that pass ALL highlight settings will highlighted.</p>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    highlight.blockCount 4</pre>
+    <p>
+    In this example, highlighting is enabled for the <code>blockCount</code> field. We are passing
+    a default value of 4, which will highlight items where the blockCount is 4 or above.</p>
+    <pre>
+    highlight.score 300</pre>
+    <p>
+    In this example, highlighting is enabled for the <code>score</code> field. We are passing a
+    default value of 300, which will highlight all items with a score of 300 or above.</p>
+    <pre>
+    highlight.score 300:400
+    highlightByRange.score on
+    highlightLimits.score 200:500</pre>
+    <p>
+    In this example, we are enabling highlights for a range on the <code>score</code> field. The
+    <code>highlightByRange</code> setting is also enabled, allowing for highlighting between
+    interval values. Lastly, the <code>highlightLimits</code> are being used to modify the
+    accepted values between 200 and 500 as opposed to the default 0 to 1000.</p>
+</DIV>
+
+<DIV class="highlightText"><span class="types bigBed"></span>
+<div class="format">
+    <code>highlightText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
+    <code>highlightType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
+    </div>
+    <P>Similar to filters, There are a number of different highlights available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more information on setting up filters. Note: for configurable features, like highlights, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
+
+    <p>All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained above, except instead of items being excluded from the display, they are striped with a colored background to appear &quot;highlighted&quot; compared to the other items in the display. You can control the default highlight color with the highlightColor setting, or with the color picker on the configuration page when interacting with the track. Please note that at this time only one higlight color is available per track, and if multiple highlight settings are present on the same track, only items that pass ALL highlight settings will highlighted.</p>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    highlightText.name NM*</pre>
+    <p>
+    In this example, we are applying a highlight on the field <code>name</code> so any items that
+    start with <code>NM</code> are highlighted.</p>
+    <pre>
+    highlightText.name \.1$
+    highlightType.name regexp</pre>
+    <p>
+    In this example, we are enabling highlighting on the same name field, <code>name</code>
+    but declaring the search parameter with the <code>highlightType</code>. In this case, we are
+    using regular expression to highlight all items in the <code>name</code> field that are
+    version 1.</p>
+</DIV>
+
+<DIV class="highlightValues"><span class="types bigBed"></span>
+<div class="format">
+    <code>highlightValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+    <code>highlightValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+    <code>highlightType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
+    </div>
+    <P>Similar to filters, There are a number of different highlights available for bigBed data. See the 
+    <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
+    more information on setting up filters. Note: for configurable features, like highlights, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
+
+    <p>All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained above, except instead of items being excluded from the display, they are striped with a colored background to appear &quot;highlighted&quot; compared to the other items in the display. You can control the default highlight color with the highlightColor setting, or with the color picker on the configuration page when interacting with the track. Please note that at this time only one higlight color is available per track, and if multiple highlight settings are present on the same track, only items that pass ALL highlight settings will highlighted.</p>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    highlightValues.OddEven Odd</pre>
+    <p>
+    In this example, we are applying <code>highlightValues.<fieldname></code> to the
+    <code>OddEven</code> field, which designates either &quot;Even&quot; or &quot;Odd&quot;. We
+    can then highlight the OddEven field with a drop-down menu displayed on the track controls page
+    to highlight the even or odd items. Since there is no <code>highlightType</code> setting, the
+    user can highlight both even and odd items at the same time.</p>
+    <pre>
+    highlightValues.OddEven Odd,Even
+    highlightType.OddEven singleList</pre>
+    <p>
+    In this example, we are passing the <code>highlightType.<fieldname> singleList</code> parameter,
+    which means only one options can be chosen -- &quot;Even&quot; or &quot;Odd&quot;. This setting
+    removed the default setting that allows multiple selections.</p>
+    <pre>
+    highlighValuesDefault.OddEven Odd</pre>
+    <p>
+    In this third example, we are using the <code>highlightValuesDefault.<fieldname></code> setting
+    to set a default value for the highlight setting. Now the default will be to highlight items
+    with an Odd value when the hub is loaded on the Genome Browser.</p>
+    <pre>
+    highlightValues.annotationType DNA-BR,AS,BS,BSi</pre>
+    <p>
+    In this fourth example, we are applying a highlight to multiple values in the
+    <code>annotationType</code> field. We can select from these values in the
+    <code>annotationType</code> field with a drop-down menu displayed on the track settings
+    page, and highlight only items that match our selections. The selection choices will let
+    us match one, all or any combination of the supplied values.</p>
+    <pre>
+    highlightValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
+    <p>
+    Similar to the last example, but we have changed the name of the items that show up in the
+    drop-down menu to be more descriptive than the dense file format values. For example, if we
+    wanted to highlight only items with <code>annotationType</code> of <code>DNA-BR</code>, on
+    the track settings page, we would select <code>DNA-binding region</code>.</p>
+</DIV>
+
+<DIV class="highlightColor"><span class="types bigBed"></span>
+<div class="format">
+    <code>highlightColor &lt;hexcolor&gt;</code><BR>
+</div>
+    <P>Sets the default color for all of the various highlights defined in this stanza</P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    highlightColor #ff0000</pre>
+    <p>
+    In this example, we are using the <code>highlightColor <hex_color></code> to set the default
+    highlight color. With this setting, all highlight stripes will use the color red,
+    <code>#ff0000</code>.</p>
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
@@ -5204,6 +5339,12 @@ For the complete bigInteract format definitions please see the
 <DIV class="interactMultiRegion"><span class="types bigInteract"></span>
 <div class="format"><code>interactMultiRegion &lt;true|padding&gt;</code></div>
     <P>This setting causes a link to appear on the details page that appears when an interaction is clicked on. This link will generate a &quot;multi-region&quot; Genome Browser view of the interaction (or interaction cluster) endpoints. Use padding to specify non-default padding at the edges of each region.  The default value is 200 base pairs.
+    </P>
+</DIV>
+
+<DIV class="endsVisible"><span class="types bigInteract"></span>
+<div class="format"><code>endsVisible two</code></div>
+    <P>This setting makes the default behavior for the track show only interactions with both ends in the window.
     </P>
 </DIV>
 

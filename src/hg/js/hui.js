@@ -92,9 +92,9 @@ function exposeAll()
     // Make main display dropdown show full if currently hide
     var visDD = normed($("select.visDD")); // limit to hidden
     if (visDD) {
-        if ($(visDD).attr('selectedIndex') === 0) {
-            $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
-	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
+        if ($(visDD).prop('selectedIndex') === 0) {
+            $(visDD).prop('selectedIndex',$(visDD).children('option').length - 1);
+	        $(visDD).trigger("change");// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
 
         // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
@@ -194,7 +194,7 @@ function _matSetMatrixCheckBoxes(state)
         if (this.checked !== state) {
             this.checked = state;
             matSubCBsetShadow(this,false);
-            $(this).change();  // NOTE: if "subCfg" then 'change' event will update it
+            $(this).trigger("change");  // NOTE: if "subCfg" then 'change' event will update it
         }
     });
     if (state)
@@ -309,7 +309,7 @@ function matSubCBcheckOne(subCB,state)
     if (subCB.checked !== state) {
         subCB.checked = state;
         matSubCBsetShadow(subCB,false);
-        $(subCB).change();  // NOTE: if "subCfg" then 'change' event will update it
+        $(subCB).trigger("change");  // NOTE: if "subCfg" then 'change' event will update it
         hideOrShowSubtrack(subCB);
     }
 }
@@ -334,7 +334,7 @@ function matSubCBsetShadow(subCB,triggerChange)
         if (typeof(subCfg) === "object") { // Is subCfg.js file included
             subCfg.enableCfg(subCB,(shadowState === 1));
             if (triggerChange)
-                $(subCB).change(); // 'change' event will update "subCfg"
+                $(subCB).trigger("change"); // 'change' event will update "subCfg"
         }
     }
 }
@@ -404,6 +404,11 @@ function matCbFindFromSubCb(subCB)
     // (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
     classList = aryRemove(classList,["subCB","changed","disabled"]);
     var classes = classList.slice(0,2).join('.');   // Assume X and Y they are the first 2
+    if (classes==="")
+        // no hit, so this must be a 1D matrix. 
+        // New jquery does not accept selectors that end with . anymore, so return right away
+        return undefined;
+
     var matCB = $("input.matCB."+classes).not(".abc"); // Note, this works for filtering because we want 'AND'
     if (matCB.length === 1)
         return matCB;
@@ -595,10 +600,10 @@ function compositeCfgRegisterOnchangeAction(prefix)    // FIXME: OBSOLETE when s
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
     var list = $("input[name^='"+prefix+".']").not("[name$='.vis']");
-    $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
+    $(list).on("change", function(){compositeCfgUpdateSubtrackCfgs(this);});
 
     list = $("select[name^='"+prefix+".']").not("[name$='.vis']");
-    $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
+    $(list).on("change", function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
 function subtrackCfgHideAll(table)
@@ -719,7 +724,7 @@ function showOrHideSelectedSubtracks(inp)
     if (arguments.length > 0)
         showHide=inp;
     else {
-        var onlySelected = $("input.allOrOnly'");
+        var onlySelected = $("input.allOrOnly");
         if (onlySelected.length > 0)
             showHide = onlySelected[0].checked;
         else
@@ -1203,7 +1208,7 @@ var superT = {
         if (thisForm && $(thisForm).length === 1) {
            thisForm = thisForm[0];
            $(thisForm).attr('action',obj.href); // just attach the straight href
-           $(thisForm).submit();
+           $(thisForm).trigger("submit");
            return false;  // should not get here!
         }
         return true;
@@ -1216,10 +1221,10 @@ var superT = {
             superSel = superSel[0];
             if (show) {
                 $(superSel).addClass('normalText');
-                $(superSel).attr('selectedIndex',1);
+                $(superSel).prop('selectedIndex',1);
                 $(superSel).removeClass('hiddenText');
             } else {
-                $(superSel).attr('selectedIndex',0);
+                $(superSel).prop('selectedIndex',0);
                 $(superSel).removeClass('normalText');
                 $(superSel).addClass('hiddenText');
             }
@@ -1229,7 +1234,7 @@ var superT = {
     plusMinus: function (check)
     {
         $("input:checkbox").each(function (i) {
-            $(this).attr("checked",check);
+            $(this).prop("checked",check);
             superT.childChecked(this,1);
             if (!check) // all are unchecked so we can hide this whole thing.
                 superT.topVis(check);
@@ -1238,12 +1243,12 @@ var superT = {
 
     childChecked: function (cb,defaultVis)
     {
-	var name = cb.id;
-	name = name.substring(0, name.length - "_check".length); 
+        var name = cb.id;
+        name = name.substring(0, name.length - "_check".length);
         var sel = $('select[name="' + name + '"]');
         if (sel && sel.length === 1) {
             sel = sel[0];
-            var selIx = parseInt($(sel).attr('selectedIndex'));
+            var selIx = sel.selectedIndex;
             if (cb.checked && selIx === 0) {
                 // What can be done to more intelligently default this?
                 // All to dense?  Probably the best idea
@@ -1262,9 +1267,9 @@ var superT = {
     {
         var selIx = val;
         if (val === undefined || val === null) // onchange event
-            selIx = $(sel).attr('selectedIndex');
+            selIx = sel.selectedIndex;
         else // called from childChecked() so set value
-            $(sel).attr('selectedIndex',val);
+            $(sel).prop('selectedIndex',val);
 
         if (selIx === 0) {
             $(sel).removeClass('normalText');
@@ -1278,7 +1283,7 @@ var superT = {
             var cb = $('input#'+sel.name+'_check');
             if (cb && cb.length === 1) {
                 cb = cb[0];
-                $(cb).attr('checked',(selIx > 0));
+                $(cb).prop('checked', (selIx > 0));
             }
         }
     }
@@ -1372,8 +1377,8 @@ var mat = { // Beginings of matrix object
                             function (e) {mat.cellHover(this,false);}
                         );
                         // blur doesn't work because the screen isn't repainted
-                        $(mat.matrix).blur(mat.clearGhostHilites());
-                        $(window).bind('focus',function (e) {mat.clearGhostHilites();});
+                        $(mat.matrix).on("blur", mat.clearGhostHilites());
+                        $(window).on('focus',function (e) {mat.clearGhostHilites();});
                     }
                 }
             }
@@ -1422,10 +1427,10 @@ function selectLinkChanges($changed, $affected, mapping) {
 // is disabled.  If $changed doesn't have a pickySetting, then all options
 // are enabled.
     var $affectedOptions = $affected.children('option');
-    $changed.bind("change", function () {
+    $changed.on("change", function () {
         var changedVal = $changed.val();
         var subst = mapping[changedVal];
-        $affectedOptions.removeAttr('disabled');
+        $affectedOptions.prop('disabled', false);
         if (subst) {
             var affectedVal = $affected.val();
             if (subst[affectedVal]) {
@@ -1456,7 +1461,7 @@ function multiWigSetupOnChange(track) {
 
 // toggle the visibility of advanced controls in the filters
 function advancedSearchOnChange(controlName) {
-        $(document.getElementById(controlName)).click(function() {
+        $(document.getElementById(controlName)).on("click", function() {
             // get the list of advanced controls 
             advancedControls = document.getElementsByClassName('advanced'); 
 
@@ -1471,8 +1476,7 @@ function advancedSearchOnChange(controlName) {
 
             for (var control in advancedControls ) 
                 advancedControls[control].style = newStyle;
-            }
-        );
+        });
 }
 
 
@@ -1507,13 +1511,15 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         } else if (typeof cartHighlightColor !== "undefined" && cartHighlightColor.length > 0) {
             hlColor = cartHighlightColor;
         } else {
-            hlColor = hlColorDefault;
+            hlColor = cartColor;
         }
         return hlColor;
     };
 
-    let colorPickerContainer = document.createElement("p");
-    colorPickerContainer.textContent = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color:";
+    let colorPickerContainer = document.createElement("div");
+    colorPickerContainer.innerHTML = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color: ";
+    // display: inline means if there is an info icon it will show up in line with the color picker
+    colorPickerContainer.style = "display: inline";
     let inpText = document.createElement("input");
     // special case the drag select highlight feature because it has special code:
     if (cartVar === "hlColor") {
@@ -1536,7 +1542,9 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     inpResetLink.id = cartVar + "Reset";
     inpResetLink.textContent = "Reset";
     colorPickerContainer.appendChild(inpText);
+    colorPickerContainer.append(" ");
     colorPickerContainer.appendChild(inpSpec);
+    colorPickerContainer.append(" ");
     colorPickerContainer.appendChild(inpResetLink);
 
     if (typeof parentEl !== undefined) {
@@ -1563,12 +1571,12 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     $(inpSpec).spectrum(opt);
 
     // update the color picker if you change the input box
-    $(inpText).change(function() {
+    $(inpText).on("change", function() {
         $(inpSpec).spectrum("set", $(inpText).val());
         saveHlColor($(inpText).val(), trackName);
     });
     // Restore the default on Reset link click
-    $(inpResetLink).click(function() {
+    $(inpResetLink).on("click", function() {
         let hlDefault = hlColorDefault;
         $(inpText).val(hlDefault);
         $(inpSpec).spectrum("set", hlDefault);

@@ -2,17 +2,13 @@
 
 <p>
 This container track helps call out sections of the genome that often cause problems or
-confusion when working with the genome. There are three subtracks for now, Anshul Kundaje's
-<a href="https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg19-blacklist-README.pdf"
-target="_blank">ENCODE Blacklist</a>, GRC (Genome Reference Consortium) Exclusions, and the UCSC
-Unusual Regions track.
-</p>
-
-<p>The hg19 genome has a track with the same name, but with many more
-subtracks, as the GeT-RM and Genome-in-a-Bottle artifact variants do not exist yet
+confusion when working with the genome. The hg19 genome has a track with the same name, but with
+many more subtracks, as the GeT-RM and Genome-in-a-Bottle artifact variants do not exist yet
 for hg38, to our knowledge. If you are missing a track here that you know from
 hg19 and have an idea how to add it hg38, do not hesitate to contact us.</p>
 
+
+<h3>Problematic Regions</h3>
 <p>
 The <b>Problematic Regions</b> track contains the following subtracks:
 <ul>
@@ -49,6 +45,7 @@ target="_blank">GenBank FTP site</a>.
 </li>
 </ul>
 
+<h3>Highly Reproducible Regions</h3>
 <p>
 The <b>Highly Reproducible Regions</b> track highlights regions and variants
 from eight samples that can be used to assess variant detection pipelines. The
@@ -65,6 +62,31 @@ variants from each assayed sample. Both tracks contain data from the following s
 Please refer to the <em>Pan et al</em> reference for more information on how
 these regions were defined.
 </p>
+
+<h3>GIAB Problematic Regions</h3>
+<p>The <b>Genome in a Bottle (GIAB) Problematic Regions</b> tracks provide stratifications of the
+genome to evaluate variant calls in complex regions. It is designed for use with Global Alliance
+for Genomic Health (GA4GH) benchmarking tools like
+<a href="https://github.com/Illumina/hap.py" target="_blank">hap.py</a>
+and includes regions with low complexity, segmental duplications, functional regions,
+and difficult-to-sequence areas. Developed in collaboration with GA4GH, the
+<a href="https://www.nist.gov/programs-projects/genome-bottle"
+target="_blank">Genome in a Bottle (GIAB) consortium</a>, and the
+<a href="https://sites.google.com/ucsc.edu/t2tworkinggroup"
+target="_blank">Telomere-to-Telomere Consortium (T2T)</a>, the dataset aims to standardize the
+analysis of genetic variation by offering pre-defined BED files for stratifying true and false
+positives in genomic studies, facilitating accurate assessments in complex areas of the genome.</p>
+
+<p>
+The creation of the GIAB Problematic Regions tracks involves using a pipeline and configuration to
+generate stratification BED files that categorize genomic regions based on specific challenges,
+such as low complexity or difficult mapping, to facilitate accurate benchmarking of variant calls.
+For more information on the pipeline and configuration used, please visit the following webpage:
+<a href="https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/README.md">
+https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/README.md</a>.
+If you have questions or comments, please write to Justin Zook (jzook@nist.gov).</p>
+
+
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -128,6 +150,26 @@ The ENCODE Blacklist: Identification of Problematic Regions of the Genome</a>.
 <em>Sci Rep</em>. 2019 Jun 27;9(1):9354.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31249361" target="_blank">31249361</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6597582/" target="_blank">PMC6597582</a>
+</p>
+
+<p>
+Dwarshuis N, Kalra D, McDaniel J, Sanio P, Alvarez Jerez P, Jadhav B, Huang WE, Mondal R, Busby B,
+Olson ND <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-024-53260-y" target="_blank">
+The GIAB genomic stratifications resource for human reference genomes</a>.
+<em>Nat Commun</em>. 2024 Oct 19;15(1):9029.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39424793" target="_blank">39424793</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11489684/" target="_blank">PMC11489684</a>
+</p>
+
+<p>
+Krusche P, Trigg L, Boutros PC, Mason CE, De La Vega FM, Moore BL, Gonzalez-Porta M, Eberle MA,
+Tezak Z, Lababidi S <em>et al</em>.
+<a href="https://doi.org/10.1038/s41587-019-0054-x" target="_blank">
+Best practices for benchmarking germline small-variant calls in human genomes</a>.
+<em>Nat Biotechnol</em>. 2019 May;37(5):555-560.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30858580" target="_blank">30858580</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6699627/" target="_blank">PMC6699627</a>
 </p>
 
 <p>

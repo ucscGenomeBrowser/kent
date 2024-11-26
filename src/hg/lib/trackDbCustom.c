@@ -1595,6 +1595,7 @@ return endsWith(setting, "Url") ||
     sameString(setting, "bigDataIndex") ||
     sameString(setting, "quickLiftUrl") ||
     sameString(setting, "frames") ||
+    sameString(setting, "setColorWith") ||
     sameString(setting, "summary") ||
     sameString(setting, "searchTrix") ||
     (startsWith("decorator.", setting) && endsWith(setting, ".url"));

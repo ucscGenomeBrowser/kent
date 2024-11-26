@@ -9,6 +9,8 @@
 #include "dnautil.h"
 #include "axt.h"
 
+#undef BIGNUM
+#define BIGNUM 0x7fffffff	/* larger than the standard size BIGNUM */
 
 void usage()
 /* Explain usage and exit. */

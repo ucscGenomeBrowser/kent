@@ -33,6 +33,7 @@
 #include "chromInfo.h"
 #include "net.h"
 #include "fuzzyFind.h"
+#include "chromAlias.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -718,8 +719,9 @@ else  // hyperlink
 	printf(" %5d %5d %5d %5d   %5.1f%%  ",
 	    pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
-	printf("%s",psl->tName);
-	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
+        char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+	printf("%s",displayChromName);
+	spaceOut(stdout, maxTChromNameSize - strlen(displayChromName));
 	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
@@ -1361,8 +1363,8 @@ double expected = genomeSize;
 for (k=1; k<36; k++)
     {
     expected /= alphaBetSize;
-    // set this to .05 to allow 18bp searches on hg38.
-    if (expected < .19)
+    // Set this to .19 to allow 18bp searches on hg18 (no effect on hg38?).
+    if (expected < .004)
 	break;
     }
 return k;
@@ -1507,68 +1509,76 @@ boolean isPslRaw= sameWordOk(output, "pslRaw");
 if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
+seqList = faSeqListFromMemTextRaw(seqLetters);
+
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
-    seqList = faSeqListFromMemText(seqLetters, TRUE);
-    uToT(seqList);
     isTx = FALSE;
     xType = "dna"; 
     }
-else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
+else if (sameWord(type, "translated RNA"))
     {
-    seqList = faSeqListFromMemText(seqLetters, TRUE);
-    uToT(seqList);
     isTx = TRUE;
     isTxTx = TRUE;
     xType = "rnax"; 
-    txTxBoth = sameWord(type, "translated DNA");
-    if (txTxBoth)
-	xType = "dnax"; 
+    }
+else if (sameWord(type, "translated DNA"))
+    {
+    isTx = TRUE;
+    isTxTx = TRUE;
+    txTxBoth = TRUE;
+    xType = "dnax"; 
     }
 else if (sameWord(type, "protein"))
     {
-    seqList = faSeqListFromMemText(seqLetters, FALSE);
     isTx = TRUE;
     qIsProt = TRUE;
     xType = "prot"; 
     }
 else  // BLAT's Guess
     {
-    seqList = faSeqListFromMemTextRaw(seqLetters);
     if (seqList)
 	{
 	isTx = !seqIsDna(seqList); // only tests first element, assumes the rest are the same type.
-	if (!isTx)
+	if (isTx)
 	    {
-	    xType = "dna"; 
-	    for (seq = seqList; seq != NULL; seq = seq->next)
-		{
-		seq->size = dnaFilteredSize(seq->dna);
-		dnaFilter(seq->dna, seq->dna);
-		toLowerN(seq->dna, seq->size);
-		subChar(seq->dna, 'u', 't');
-		}
-	    }
-	else
-	    {
-	    for (seq = seqList; seq != NULL; seq = seq->next)
-		{
-		seq->size = aaFilteredSize(seq->dna);
-		aaFilter(seq->dna, seq->dna);
-		toUpperN(seq->dna, seq->size);
-		}
 	    qIsProt = TRUE;
 	    xType = "prot"; 
 	    }
+	else
+	    {
+	    xType = "dna"; 
+	    }
 	}
     }
+if (isTx && !isTxTx)
+    {
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	{
+	seq->size = aaFilteredSize(seq->dna);
+	aaFilter(seq->dna, seq->dna);
+	toUpperN(seq->dna, seq->size);
+	}
+    }
+else
+    {
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	{
+	seq->size = dnaFilteredSize(seq->dna);
+	dnaFilter(seq->dna, seq->dna);
+	toLowerN(seq->dna, seq->size);
+	subChar(seq->dna, 'u', 't');
+	}
+    }
+
 if (seqList != NULL && seqList->name[0] == 0)
     {
     freeMem(seqList->name);
     seqList->name = cloneString("YourSeq");
     }
 trimUniq(seqList);
+
 
 /* If feeling lucky only do the first one. */
 if(feelingLucky && seqList != NULL)
@@ -1709,12 +1719,14 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     if (oneSize < minSuggested)
         {
-	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br>"
-                "To search for short sequences in the current browser window, use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
-                "or, if you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
-                "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.<br>"
-                "For primers, you can use our tool <a href='hgPcr?%s=%s'>In-silico PCR</a>. In-silico PCR searches the entire genome or a set of transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
-                "Contact us if none of these options solve the problem: genome@soe.ucsc.edu",
+	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br><br>"
+                "To search for short sequences in the browser window, use the <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
+                "You can also use our commandline tool <tt>findMotifs</tt> "
+                "(see the <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>) to "
+                "search for sequences on the entire genome.<br><br>"
+                "For primers, you can use the <a href='hgPcr?%s=%s'>In-silico PCR</a> tool. In-silico PCR can search the entire genome or a set of "
+                "transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
+                "<a href='../contacts.html'>Contact us</a> for additional help using BLAT or its related tools.",
 		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
@@ -1897,7 +1909,7 @@ puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
-puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"submit file\"><P>\n");
+puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit file\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
@@ -2157,6 +2169,7 @@ orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
     cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 char *oldDb = cloneString(db);
 
 // n.b. this changes to default db if db doesn't have BLAT

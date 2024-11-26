@@ -1,0 +1,9 @@
+#!/bin/tcsh -x
+
+echo Rsyncing bowtie indexes to /dev/shm
+rsync -apv /data/cirm/valData/ramdisk/ /dev/shm/btData/
+
+# kill any existing daemons, restart
+killall cdwRunDaemon
+cdwRunDaemon cdw cdwJob 30 -log=cdwQa.log
+

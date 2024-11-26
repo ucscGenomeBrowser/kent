@@ -1,0 +1,105 @@
+track caddSuper1_7
+shortLabel CADD 1.7
+longLabel CADD 1.7 Score for all single-basepair mutations and selected insertions/deletions
+superTrack on hide
+type bed
+visibility hide
+group phenDis
+color 100,130,160
+html caddSuper1_7
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
+
+track cadd1_7
+shortLabel CADD 1.7
+longLabel CADD 1.7 Score for all possible single-basepair mutations (zoom in for scores)
+type bigWig
+compositeTrack on
+parent caddSuper1_7
+visibility dense
+#maxWindowToQuery 500000
+group phenDis
+color 100,130,160
+html caddSuper1_7
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
+
+        track cadd1_7_A
+        shortLabel Mutation: A
+        longLabel CADD 1.7 Score: Mutation is A
+        type bigWig
+        parent cadd1_7 on
+        visibility dense
+        bigDataUrl /gbdb/$D/cadd1.7/a.bw
+        maxHeightPixels 128:20:8
+        viewLimits 10:50
+        viewLimitsMax 0:100
+
+        track cadd1_7_C
+        shortLabel Mutation: C
+        longLabel CADD 1.7 Score: Mutation is C
+        type bigWig
+        parent cadd1_7 on
+        visibility dense
+        bigDataUrl /gbdb/$D/cadd1.7/c.bw
+        maxHeightPixels 128:20:8
+        viewLimits 10:50
+        viewLimitsMax 0:100
+
+        track cadd1_7_G
+        shortLabel Mutation: G
+        longLabel CADD 1.7 Score: Mutation is G
+        type bigWig
+        parent cadd1_7 on
+        visibility dense
+        bigDataUrl /gbdb/$D/cadd1.7/g.bw
+        maxHeightPixels 128:20:8
+        viewLimits 10:50
+        viewLimitsMax 0:100
+
+        track cadd1_7_T
+        shortLabel Mutation: T
+        longLabel CADD 1.7 Score: Mutation is T
+        type bigWig
+        parent cadd1_7 on
+        visibility dense
+        bigDataUrl /gbdb/$D/cadd1.7/t.bw
+        maxHeightPixels 128:20:8
+        viewLimits 10:50
+        viewLimitsMax 0:100
+
+track cadd1_7_Ins
+shortLabel CADD 1.7 Ins
+longLabel CADD 1.7 Score: Insertions - label is length of insertion
+type bigBed 9 +
+parent caddSuper1_7 on
+visibility dense
+bigDataUrl /gbdb/$D/cadd1.7/ins.bb
+mouseOver Mutation: $change CADD Phred score: $phred
+html caddSuper1_7
+filter.score 10:100
+filterByRange.score on
+filterLabel.score Show only items with PHRED scale score of
+filterLimits.score 0:100
+#maxWindowCoverage 40000
+#maxItems 100000
+#maxWindowToDraw 9000000
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
+
+track cadd1_7_Del
+shortLabel CADD 1.7 Del
+longLabel CADD 1.7 Score: Deletions - label is length of deletion
+type bigBed 9 +
+parent caddSuper1_7 on
+visibility dense
+bigDataUrl /gbdb/$D/cadd1.7/del.bb
+mouseOver Mutation: $change CADD Phred score: $phred
+html caddSuper1_7
+filter.score 10:100
+filterByRange.score on
+filterLabel.score Show only items with PHRED scale score of
+filterLimits.score 0:100
+#maxWindowCoverage 40000
+#maxItems 100000
+#maxWindowToDraw 9000000
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"

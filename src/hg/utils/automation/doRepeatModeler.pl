@@ -168,7 +168,7 @@ sub doCluster {
 
   # First, make sure previous step has completed:
   if ( ! $opt_debug ) {
-    if ( ! -s "$runDir/$db.nsq" ) {
+    if ( ! (-s "$runDir/$db.nsq" || -s "$runDir/$db.00.nsq") ) {
       die "doCluster: previous 'blastDb' step has not completed, $db.nsq not present\n";
     }
     # And, verify this step has not run before
@@ -191,7 +191,18 @@ printf '#!/bin/bash
 
 set -beEu -o pipefail
 
-export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+elif [ -d "/dev/shm" ]; then
+  export TMPDIR="/dev/shm"
+else
+  export TMPDIR="/tmp"
+fi
+
+export tmpDir=`mktemp -d -p \$TMPDIR rModeler.XXXXXX`
 
 # working directory
 cd "\${tmpDir}"
@@ -217,6 +228,7 @@ cat run.time
 
 _EOF_
   );
+  `touch "$runDir/para_hub_$paraHub"`;
   $bossScript->execute() if (! $opt_debug);
 } # doCluster
 

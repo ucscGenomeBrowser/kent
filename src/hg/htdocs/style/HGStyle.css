@@ -44,7 +44,7 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
 
 #trackCtrlTable {
         width: 95%;
-
+        margin-top: 6px;
 }
 
 .moveButtonText {
@@ -67,11 +67,26 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
     margin-left: 3em;
 }
 
+/* Word wrap if possible staying in width. this allows easy-to-read labels
+ * .trackLabelTdBreakAll is added to when any one word is too long to
+ * work break and stay in width (RM #34299).
+ */
 .trackLabelTd {
-        max-width: 14em;
+        /* WARNING: min-width must match hgTracks/hgTracks.c MAX_WIDTH_CHARS */
+        min-width: 16ch
+        max-width: 22ch;
         vertical-align: top;
-        word-break: break-all;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: break-word;
+
 }
+
+/* For words that exceed max-width */
+.trackLabelTdBreakAll {
+    word-break: break-all;
+}
+
 
 .trackDeleteIcon {
         margin-right: 4px;
@@ -859,6 +874,7 @@ div.warnDialog .ui-dialog-title { font-weight: bold; color: #000000; }
 div.warnDialog .ui-dialog-content { background-color: #FFFEE8; font-size: 1em; }
 div.warnDialog .ui-dialog-buttonpane { border-width: 0; text-align: center; }
 div.warnDialog .ui-dialog-buttonset { width: 100%; display: inline-block; }
+body > div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable * { font-size: 14px; }
 
 .centeredImage
 {
@@ -1172,3 +1188,13 @@ span.gbSessionChanged {
     grid-template-columns: max-content max-content;
     row-gap: 10px;
 }  
+
+.dialogNewWindowIcon {
+    position: absolute;
+    right: 1.5em;
+    top: 50%;
+    width: 19px;
+    margin: -10px 0 0 0;
+    padding: 1px;
+    height: 18px;
+}

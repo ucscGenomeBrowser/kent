@@ -10,10 +10,9 @@
 
 typedef enum {DECORATOR_MODE_HIDE,DECORATOR_MODE_OVERLAY,DECORATOR_MODE_ADJACENT} decoratorMode;
 
-struct trackDb *getTdbForDecorator(struct trackDb *tdb);
-/* Gin up a fake tdb structure to pretend decorator settings are for
- * their own track.  This makes processing filter options much
- * easier. */
+struct trackDb *getTdbsForDecorators(struct trackDb *tdb);
+/* Gin up a list of fake tdb structure to pretend decorator settings are for
+ * their own tracks.  This makes processing filter options much easier. */
 
 void decoratorUi(struct trackDb *tdb, struct cart *cart, struct slName *decoratorSettings);
 /* decoratorSettings is a list of the decorator-relevant trackDb settings for this track.

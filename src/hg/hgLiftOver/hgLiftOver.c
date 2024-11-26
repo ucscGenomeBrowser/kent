@@ -32,6 +32,7 @@
 #define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
 #define HGLFT_REFRESHONLY_VAR "hglft_doRefreshOnly"      /* Just refresh drop-down lists */
 #define HGLFT_LAST_CHAIN "hglft_lastChain"
+#define HGLFT_EXTRA_NAME_INFO "hglft_extranameinfo" /* Include input position in output item names */
 
 /* liftOver options: */
 #define HGLFT_MINMATCH "hglft_minMatch"          
@@ -66,7 +67,7 @@ return cloneString(chainS);
 }
 
 void webMain(struct liftOverChain *chain, boolean multiple, boolean keepSettings, int minSizeQ, 
-	     int minChainT, float minBlocks, float minMatch, boolean fudgeThick)
+	     int minChainT, float minBlocks, float minMatch, boolean fudgeThick, boolean extraNameInfo)
 /* set up page for entering data */
 {
 struct dbDb *dbList;
@@ -94,10 +95,10 @@ puts("\n<TABLE WIDTH=\"100%\">\n");
 
 /* top two rows -- genome and assembly menus */
 cgiSimpleTableRowStart();
-cgiTableField("Original Genome: ");
-cgiTableField("Original Assembly: ");
-cgiTableField("New Genome: ");
-cgiTableField("New Assembly: ");
+cgiTableField("Original genome: ");
+cgiTableField("Original assembly: ");
+cgiTableField("New genome: ");
+cgiTableField("New assembly: ");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
@@ -147,6 +148,15 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("<B>Regions defined by chrom:start-end (BED 4 to BED 6)</B>");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableField("Keep original positions in output:");
+cgiSimpleTableFieldStart();
+cgiMakeCheckBox(HGLFT_EXTRA_NAME_INFO,extraNameInfo);
+puts("&nbsp;");
+printInfoIcon("Lifted items for BED4 and up will include their original positions as part of their output names to assist in determining what got mapped where (in case multiple items have the same name in the input).  Coordinates are 1-based fully closed, so the BED entry &quot;chr1 100 150 item1&quot; will be labeled &quot;chr1:101-150:item1&quot;.");
+cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
@@ -207,12 +217,14 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-puts("<p style='margin-left:3px'>Paste in data below, one position per line. You can use the "
-        "<a href='../../FAQ/FAQformat.html#format1'>BED format</a> (e.g. \"chr4 100000 100001\", "
-        "0-based) or the format of the position box (\"chr4:100,001-100,001\", 1-based). "
-        "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n"
-        "We do not recommend liftOver for SNPs that have rsIDs. See our "
-        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for more information.</p>\n");
+puts("<p style='margin-left:3px'>Paste your data below, using one position per line. Supported formats include "
+        "<a href='../../FAQ/FAQformat.html#format1'>BED </a> (e.g. \"chr4 100000 100001\", "
+        "0-based) and position box (\"chr4:100,001-100,001\", 1-based). "
+        "Refer to the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a> "
+        "for detailed information. LiftOver is not recommended for SNPs with rsIDs; refer to our "
+        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for additional information. For "
+        "information on errors in the LiftOver output, see our "
+        "<a href='/FAQ/FAQdisplay.html#display4'>FAQ</a>.\n");
 
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
@@ -249,7 +261,7 @@ cgiParagraph("&nbsp;Or upload data from a file (<a href=\"../FAQ/FAQformat.html#
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
-puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
+puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit file\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
 printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",
@@ -437,6 +449,7 @@ for (this = chainList; this != NULL; this = this->next)
 return choice;
 }
 
+
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
@@ -448,6 +461,7 @@ boolean multiple, fudgeThick;
 int minSizeQ, minChainT;
 boolean refreshOnly = FALSE;
 boolean keepSettings = FALSE;
+boolean extraNameInfo = FALSE;
 char *thisChain = NULL;
 char *lastChain = NULL;
 
@@ -491,8 +505,9 @@ refreshOnly = cartCgiUsualInt(cart, HGLFT_REFRESHONLY_VAR, 0);
 lastChain = cartCgiUsualString(cart, HGLFT_LAST_CHAIN, NULL);
 if (lastChain && thisChain && sameString(lastChain, thisChain))
     keepSettings = TRUE;
+extraNameInfo = cartCgiUsualBoolean(cart, HGLFT_EXTRA_NAME_INFO, FALSE);
 
-webMain(choice, multiple, keepSettings, minSizeQ, minChainT, minBlocks, minMatch, fudgeThick);
+webMain(choice, multiple, keepSettings, minSizeQ, minChainT, minBlocks, minMatch, fudgeThick, extraNameInfo);
 liftOverChainFreeList(&chainList);
 
 struct errCatch *errCatch = errCatchNew();
@@ -512,6 +527,7 @@ if (errCatchStart(errCatch))
         /* read in user data and save to file */
         makeTempName(&oldTn, HGLFT, ".user");
         old = mustOpen(oldTn.forCgi, "w");
+
         fputs(userData, old);
         fputs("\n", old);           /* in case user doesn't end last line */
         carefulClose(&old);
@@ -539,7 +555,7 @@ if (errCatchStart(errCatch))
         ct = liftOverBed(oldTn.forCgi, chainHash, 
                 minMatch, minBlocks, 0, minSizeQ,
                 minChainT, 0,
-                            fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
+                            fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt, extraNameInfo);
         else if (lft == positions)
         ct = liftOverPositions(oldTn.forCgi, chainHash, 
                 minMatch, minBlocks, 0, minSizeQ,

@@ -41,6 +41,8 @@ include reMap.ra
 include recombRate.ra
 include fantom5.ra
 
+include nuMtSeq.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -177,6 +179,7 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
 type bigBed 9 +
+mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
@@ -198,10 +201,6 @@ include nonCodingRNAs.ra
 track hgIkmc override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
-
-track fishClones override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track fosEndPairs override
 origAssembly hg18
@@ -231,9 +230,6 @@ group rep
 priority 4
 visibility hide
 
-track stsMap override
-visibility hide
-
 searchName assemblyAcc
 searchTable gold
 searchMethod prefix
@@ -248,37 +244,6 @@ html gap
 visibility hide
 
 include rmskTracks.ra
-
-track ctgPos2
-shortLabel GRC Contigs
-longLabel Genome Reference Consortium Contigs
-group map
-visibility hide
-type ctgPos
-url https://www.ncbi.nlm.nih.gov/nuccore/$$
-chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
-
-searchTable ctgPos2
-searchMethod prefix
-shortCircuit 1
-termRegex [GK][LI][028][0-9]+(\.[0-9]+)?
-query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
-searchPriority 5
-
-track scaffolds
-shortLabel Scaffolds
-longLabel GRCh38 Defined Scaffold Identifiers
-group map
-visibility hide
-color 0,0,0
-type bed 4 .
-
-searchTable scaffolds
-searchMethod prefix
-searchType bed
-shortCircuit 1
-termRegex [1-9HMXY][0-9A-Z_]*
-searchPriority 18
 
 track analysisGap
 shortLabel Analysis Gap
@@ -368,7 +333,7 @@ visibility hide
 shortLabel Big Alt Map
 longLabel Big GRCh38 Alignments to the Alternate Sequences/Haplotypes
 type bigPsl
-bigDataUrl http://hgwdev.soe.ucsc.edu/~braney/altSeqLiftOverPsl.bb
+bigDataUrl http://hgwdev.gi.ucsc.edu/~braney/altSeqLiftOverPsl.bb
 html altSequence
 indelDoubleInsert on
 indelQueryInsert on
@@ -441,7 +406,7 @@ xrefQuery select ucscRetroInfo8.name, hgFixed.refLink.name from %s where hgFixed
 searchPriority 3.52
 
 track mrnaBig
-bigDataUrl http://hgwdev.soe.ucsc.edu/~braney/bigMrna.bb
+bigDataUrl http://hgwdev.gi.ucsc.edu/~braney/bigMrna.bb
 shortLabel Big $Organism mRNAs
 longLabel Big $Organism mRNAs from GenBank 
 group x
@@ -557,13 +522,12 @@ include trackDb.cloneEnd.ra
 include hg38Patch11.ra alpha
 
 include knownGene.ra
-include knownGeneArchive.ra alpha
-include knownGene.alpha.ra alpha
+include knownGeneArchive.ra
+include knownGene.nmd_deco.ra alpha
 
 include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
-include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
 include trackDb.447way.ra
 
@@ -703,8 +667,8 @@ include encode3.ra
 
 include hic.ra
 
-include gnomad.ra beta,public
-include gnomad.alpha.ra alpha
+include gnomad.ra
+
 
 include platinumGenomes.ra
 
@@ -771,7 +735,6 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
-pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on
@@ -904,3 +867,7 @@ track ncbiRefSeq override
 parent refSeqComposite off
 
 include ../../trackDb.mgc-orfeome.ra
+
+include assemblyTracks.ra
+
+include primates11way.ra alpha

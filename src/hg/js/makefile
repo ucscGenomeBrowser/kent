@@ -2,11 +2,12 @@ kentSrc = ../..
 include ../../inc/common.mk
 include install.mk
 
-SUBDIRS= external model react
+SUBDIRS= external model react tutorials
 include subdirs.mk
 
 # UCSC js files must pass jshint
-UCSC_JS_FILES=ajax.js alleles.js autocomplete.js autocompleteCat.js edwPersona.js \
+UCSC_JS_FILES=ajax.js alleles.js assemblySearch.js autocomplete.js \
+    autocompleteCat.js edwPersona.js \
     gar.js hgCustom.js hgCollection.js  hgGateway.js hgGtexTrackSettings.js \
     hgHubConnect.js hgTracks.js hgc.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
@@ -31,7 +32,7 @@ JQUERY_FILES=${JQUERY_FILES_UNTOUCHED} ${JQUERY_FILES_MODIFIED}
 
 # SYMLINKED files are include in CGIs via a version or timestamped symlink
 #           to force client side updates
-SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES} tutorial.js
+SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES}
 
 ifdef LOWELAB
     # LOWE lab files should be forced through jshint (but currently aren't)

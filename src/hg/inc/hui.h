@@ -112,6 +112,7 @@ char *hTrackUiForTrack(char *trackName);
 #define BASE_SHOWPOS	"hgt.baseShowPos"
 #define BASE_SHOWASM	"hgt.baseShowAsm"
 #define BASE_SHOWASM_SCALEBAR	"hgt.baseShowAsmScaleBar"
+#define BASE_SHOWCODONS	"hgt.baseShowCodons"
 #define BASE_TITLE	"hgt.baseTitle"
 #define REV_CMPL_DISP   "hgt.revCmplDisp"
 
@@ -130,7 +131,7 @@ char *hTrackUiForTrack(char *trackName);
 #define PSL_SEQUENCE_DEFAULT	"no"
 
 /******  Some stuff for tables of controls ******/
-#define EXTENDED_DNA_BUTTON "extended case/color options"
+#define EXTENDED_DNA_BUTTON "Extended case/color options"
 
 /* Net track option */
 #define NET_OPT_TOP_ONLY  "netTopOnly"
@@ -1570,6 +1571,9 @@ void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *
 int defaultFieldLocation(char *field);
 /* Sometimes we get bigBed filters with field names that are not in the AS file.  
  * Try to guess what the user means. */
+
+void printInfoIconSvg();
+/* Print just info icon (i) as svg to stdout */
 
 void printInfoIcon(char *mouseover);
 /* Print info icon (i) with explanatory text on mouseover

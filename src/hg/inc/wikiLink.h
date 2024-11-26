@@ -60,11 +60,18 @@ char *wikiLinkUserName();
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */
 
+char *wikiLinkUserId();
+/* Return the user ID specified in cookies from the browser. Does not check if user is logged in.
+ * To make sure that the ID is valid, call this only after you have checked with wikiLinkUserName() that the user is logged in. */
+
 char *wikiLinkUserLoginUrl(char *hgsid);
 /* Return the URL for the wiki user login page. */
 
 char *wikiLinkUserLoginUrlReturning(char *hgsid, char *returnUrl);
 /* Return the URL for the wiki user login page. */
+
+char *wikiLinkEncodeReturnUrl(char *hgsid, char *cgiName, char* urlSuffix);
+/* Return a CGI-encoded URL with hgsid to a CGI.  Free when done. */
 
 char *wikiLinkUserLogoutUrl(char *hgsid);
 /* Return the URL for the wiki user logout page. */

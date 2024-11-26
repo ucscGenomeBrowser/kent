@@ -45,4 +45,5 @@ table clinVarBed
     uint _starCount;         "Number of stars"
     int _variantId;           "ClinVar variant ID"
     string _dbVarSsvId;           "dbVar SSV ID"
+    string vcvId;            "ClinVar VCV Accession"
     )

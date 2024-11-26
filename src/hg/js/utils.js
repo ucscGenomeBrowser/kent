@@ -204,7 +204,7 @@ function normed(thing)
     ||  (thing.length !== undefined && thing.length === 0)  // Empty array (or 'array like object')
     ||  ($.isPlainObject(thing) && $.isEmptyObject(thing))) // Empty simple object
         return undefined;
-    if (thing.length && thing.length === 1 && jQuery.type(thing) !== 'string') // string is overkill
+    if (thing.length && thing.length === 1 && typeof thing !== 'string') // string is overkill
         return thing[0]; // Container of one item should return the item itself.
     return thing;
 }
@@ -468,6 +468,87 @@ function tdbIsCompositeSubtrack(tdb)  { return (tdb.kindOfChild  === 2); }
 function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  === 3); }
 function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  === 2 || tdb.kindOfChild === 3); }
 function tdbHasParent(tdb)            { return (tdb.kindOfChild  !== 0 && tdb.parentTrack); }
+
+function cartHideAnyTrack (id, cartVars, cartVals) {
+    /* set the right cart variables to hide a track, changes cartVars and cartVals */
+    var rec = hgTracks.trackDb[id];
+    if (tdbIsSubtrack(rec)) {
+        cartVars.push(id);
+        cartVals.push('[]');
+
+        cartVars.push(id+"_sel");
+        cartVals.push(0);
+    } else if (tdbIsFolderContent(rec)) {
+        // supertrack children need to have _sel set to trigger superttrack reshaping
+        cartVars.push(id);
+        cartVals.push('hide');
+
+        cartVars.push(id+"_sel");
+        cartVals.push(0);
+    } else {
+        // normal, top-level track
+        cartVars.push(id);
+        cartVals.push('hide');
+    }
+}
+
+function tdbFindChildless(trackDb, delTracks) {
+    /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
+     * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks*/
+    others = [];
+
+    var familySize = {};
+    var families = {};
+    // sort trackDb into object topParent -> count of children
+    for (var trackName of Object.keys(hgTracks.trackDb)) {
+        var rec = hgTracks.trackDb[trackName];
+        if (rec.topParent===undefined) {
+            //others.push(trackName);
+            continue; // ignore top-level tracks
+        }
+
+        var topParent = rec.topParent;
+        if (!familySize.hasOwnProperty(topParent)) {
+            familySize[topParent] = 0;
+            families[topParent] = [];
+        }
+        familySize[topParent]++;
+        families[topParent].push(trackName);
+    }
+
+    // decrease the parent's count for each track to delete
+    for (var delTrack of delTracks) {
+        var tdbRec = hgTracks.trackDb[delTrack];
+        if (tdbRec.topParent)
+            familySize[tdbRec.topParent]--;
+    }
+
+    // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
+    var loneParents = [];
+    var doneParents = [];
+    for (delTrack of delTracks) {
+        var parentName = hgTracks.trackDb[delTrack].topParent;
+        if (parentName) {
+            if (familySize[parentName]===0) {
+                if (!doneParents.includes(parentName)) {
+                    loneParents.push([parentName, families[parentName]]);
+                    doneParents.push(parentName);
+                }
+            } else
+                for (var child of families[parentName])
+                    // but do not hide tracks of lone parents that are not in delTracks
+                    if (delTracks.includes(child))
+                        others.push(child);
+        } else {
+            others.push(delTrack);
+        }
+    }
+
+    o = {};
+    o.loneParents = loneParents;
+    o.others = others;
+    return o;
+}
 
 function aryFind(ary,val)
 {// returns the index of a value on the array or -1;
@@ -824,7 +905,7 @@ function notifBoxShow(cgiName, keyName) {
     }
 }
 
-function notifBoxSetup(cgiName, keyName, msg) {
+function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
 /* Create a notification box if one hasn't been created, and
  * add msg to the list of shown notifications.
  * cgiName.keyName will be saved to localStorage in order to show
@@ -851,8 +932,16 @@ function notifBoxSetup(cgiName, keyName, msg) {
             notifBox.innerHTML = msg;
         }
     }
-    notifBox.innerHTML += "<div style='text-align:center'>"+
-        "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+    var closeHtml = "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;";
+    var buttonStyles = "text-align: center";
+    // XX code review: The close button does not sense at all, why not just always remove it?
+    if (skipCloseButton===true) {
+        closeHtml = "";
+        buttonStyles += "; display: inline; margin-left: 20px";
+    }
+
+    notifBox.innerHTML += "<div style='"+buttonStyles+"'>"+
+        closeHtml +
         "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
         "</div>";
     if (!alreadyPresent) {
@@ -965,14 +1054,14 @@ function getAllVars(obj,subtrackName)
     var inp = $(obj).find('input');
     var sel = $(obj).find('select');
     //warn("obj:"+$(obj).attr('id') + " inputs:"+$(inp).length+ " selects:"+$(sel).length);
-    $(inp).filter('[name]:enabled').each(function (i) {
+    $(inp).filter(':not([name^="boolshad"]):enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
-        if ($(this).attr('type') === 'checkbox') {
+        if ($(this).attr('type') === 'checkbox' || $(this).attr('type') === "CHECKBOX") {
             name = cgiBooleanShadowPrefix() + name;
-            val = $(this).attr('checked') ? 1 : 0;
+            val = $(this).prop('checked') ? 1 : 0;
         } else if ($(this).attr('type') === 'radio') {
-            if (!$(this).attr('checked')) {
+            if (!$(this).prop('checked')) {
                 name = undefined;
             }
         }
@@ -1010,7 +1099,7 @@ function getAllVars(obj,subtrackName)
                     urlData[name]        = val;
                 }
             } else {
-                if ($.isArray( val) && val.length > 1) {
+                if (Array.isArray( val) && val.length > 1) {
                     urlData[name] = "[" + val.toString() + "]";
                 } else
                     urlData[name] = val;
@@ -1650,11 +1739,11 @@ var bindings = {
             ixEnd = someString.length;
         var insideBeg = ixBeg;
         var insideEnd = ixEnd;
-        if (jQuery.type(begToken) === "regexp")
+        if (begToken.constructor.name === "RegExp")
             insideBeg = someString.search(begToken);
         else if (begToken.length > 0)
             insideBeg = someString.indexOf(begToken,ixBeg);
-        if (jQuery.type(endToken) === "regexp")
+        if (endToken.constructor.name === "RegExp")
             insideEnd = someString.search(endToken);
         else if (endToken.length > 0)
             insideEnd = someString.indexOf(endToken,ixBeg);
@@ -1670,7 +1759,7 @@ var bindings = {
     // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
         var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
         if (bounds.start > -1) {
-            if (jQuery.type(begToken) === "regexp")
+            if (begToken.constructor.name === "RegExp")
                 bounds.start += someString.match(begToken)[0].length;
             else
                 bounds.start += begToken.length;
@@ -1684,7 +1773,7 @@ var bindings = {
     // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
         var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
         if (bounds.start > -1) {
-            if (jQuery.type(endToken) === "regexp") 
+            if (endToken.constructor.name === "RegExp") 
                 bounds.stop  += someString.match(endToken)[0].length;
             else
                 bounds.stop  += endToken.length;
@@ -2783,7 +2872,7 @@ var sortTable = {
                     function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
                 );
             }
-            if ( $(this).attr('title').length === 0) {
+            if ( $(this).attr('title') && $(this).attr('title').length === 0) {
                 var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');
                 if (title.length > 0 && $(this).find('sup'))
                     title = title.replace(/[0-9]$/g,'');
@@ -3352,12 +3441,13 @@ var findTracks = {
     switchTabs: function (ui)
     {   // switching tabs on findTracks page
 
-        if (ui.panel.id === 'simpleTab' && $('div#found').length < 1) {
+        id = ui.newPanel[0].id;
+        if (id === 'simpleTab' && $('div#found').length < 1) {
             // delay necessary, since select event not afterSelect event
             setTimeout(function() { 
                             $('input#simpleSearch').focus(); 
                         },20); 
-        } else if (ui.panel.id === 'advancedTab') {
+        } else if (id === 'advancedTab') {
             // Advanced tab has DDCL wigets which were sized badly because the hidden width
             // was unknown delay necessary, since select event not afterSelect event
             setTimeout(function() { 
@@ -3365,17 +3455,20 @@ var findTracks = {
                         },20);
         }
         if ($('div#filesFound').length === 1) {
-            if (ui.panel.id === 'filesTab')
+            if (id === 'filesTab')
                 $('div#filesFound').show();
             else
                 $('div#filesFound').hide();
         }
         if ($('div#found').length === 1) {
-            if (ui.panel.id !== 'filesTab')
+            if (id !== 'filesTab')
                 $('div#found').show();
             else
                 $('div#found').hide();
         }
+        // explicitly set the hidden form input for the current tab because jquery-ui won't do
+        // it for us anymore
+        $("#currentTab").val(id);
     }
 };
 
@@ -3439,8 +3532,8 @@ var dragReorder = {
     {   // Sets the 'order' value for the image table after a drag reorder
         var varsToUpdate = {};
         $("tr.imgOrd").each(function (i) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
-                $(this).attr('abbr',$(this).attr('rowIndex').toString());
+            if ($(this).prop('abbr') !== $(this).prop('rowIndex').toString()) {
+                $(this).attr('abbr', $(this).prop('rowIndex').toString());
                 var name = this.id.substring('tr_'.length) + '_imgOrd';
                 varsToUpdate[name] = $(this).attr('abbr');
             }
@@ -3462,7 +3555,7 @@ var dragReorder = {
         var trs = tbody.rows;
         var needToSort = false;
         $(trs).each(function(ix) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
+            if (this.getAttribute('abbr') !== this.getAttribute('rowIndex')) {
                 needToSort = true;
                 return false;  // break for each() loops
             }
@@ -3536,7 +3629,7 @@ var dragReorder = {
         var rows = $(table).find('tr');
 
         // Find start index
-        var startIndex = $(row).attr('rowIndex');
+        var startIndex = $(row).prop('rowIndex');
         var endIndex = startIndex;
         for (var ix=startIndex-1; ix >= 0; ix--) {
             btn = $( rows[ix] ).find("p.btn");
@@ -3776,18 +3869,18 @@ var dragReorder = {
         var btns = $("p.btn");
         if (btns.length > 0) {
             dragReorder.zipButtons($('#imgTbl'));
-            $(btns).mouseenter( dragReorder.buttonMouseOver );
-            $(btns).mouseleave( dragReorder.buttonMouseOut  );
+            $(btns).on("mouseenter", dragReorder.buttonMouseOver );
+            $(btns).on("mouseleave", dragReorder.buttonMouseOut  );
             $(btns).show();
         }
         var handle = $("td.dragHandle");
         if (handle.length > 0) {
-            $(handle).mouseenter( dragReorder.dragHandleMouseOver );
-            $(handle).mouseleave( dragReorder.dragHandleMouseOut  );
+            $(handle).on("mouseenter", dragReorder.dragHandleMouseOver );
+            $(handle).on("mouseleave", dragReorder.dragHandleMouseOut  );
         }
 
         // setup mouse callbacks for the area tags
-        $("#imgTbl").find("tr").mouseover( dragReorder.trMouseOver );
+        $("#imgTbl").find("tr").on("mouseover", dragReorder.trMouseOver );
         $("#imgTbl").find("tr").each( function (i, row) {
             // save the original y positions of each row
             //if (row.id in dragReorder.originalHeights === false) {
@@ -3844,12 +3937,12 @@ function boundingRect(refEl) {
         // if we are dealing with an <area> element, the refEl width and height
         // are for the whole image and not for just the area, so
         // getBoundingClientRect() will return nothing, sad!
-        let refImg = $("[usemap=#" + refEl.parentNode.name + "]")[0];
+        let refImg = document.querySelector("[usemap='#" + refEl.parentNode.name + "']");
+        if (refImg === null) {return;}
         let refImgRect = refImg.getBoundingClientRect();
         let refImgWidth = refImgRect.width;
-        let refImgHeight = refImgRect.height;
-        let label = $("[id^=td_side]")[0];
-        let btn = $("[id^=td_btn]")[0];
+        let label = document.querySelector("[id^=td_side]");
+        let btn = document.querySelector("[id^=td_btn]");
         let labelWidth = 0, btnWidth = 0;
         if (label && btn) {
             labelWidth = label.getBoundingClientRect().width;
@@ -3859,32 +3952,17 @@ function boundingRect(refEl) {
         if (refEl.parentNode.name !== "ideoMap") {
             imgWidth -= labelWidth - btnWidth;
         }
-        let refImgOffset = refImgRect.y + window.scrollY; // distance from start of image to top of viewport;
+        let refImgOffsetY = refImgRect.y; // distance from start of image to top of viewport, includes any scroll;
         [x1,y1,x2,y2] = refEl.coords.split(",").map(x => parseInt(x));
-        refX = x1; refY = y1;
-        refWidth = x2 - x1; refHeight = y2 - y1;
-        refRight = x2; refLeft = x1;
-        refTop = y1; refBottom = y2;
+        refX = x1 + refImgRect.x;
+        refY = y1 + refImgRect.y;
+        refRight = x2 + refImgRect.left;
+        refLeft = x1 + refImgRect.left;
+        refTop = y1 + refImgOffsetY;
+        refBottom = y2 + refImgOffsetY;
+        refWidth = x2 - x1;
+        refHeight = y2 - y1;
 
-        // now we need to offset our coordinates to the track tr, to account for dragReorder
-        let parent = refEl.closest(".trDraggable");
-        let currParentOffset = 0, yDiff = 0;
-        if (refEl.parentNode.name === "ideoMap") {
-            parent = refImg.closest("tr");
-            currParentOffset = parent.getBoundingClientRect().y;
-            yDiff = y1;
-        } else if (parent) {
-            // how far in y direction we are from the tr start in the original image from the server:
-            currParentOffset = parent.getBoundingClientRect().y;
-            yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
-            // if track labels are on, then the imgOffsetY will be off by the track label amount
-            if (typeof hgTracks.centerLabelHeight !== 'undefined') {
-                yDiff += hgTracks.centerLabelHeight;
-            }
-        }
-        // account for dragReorder and track labels
-        refTop = currParentOffset + yDiff;
-        refBottom = currParentOffset + yDiff + refHeight;
     } else {
         rect = refEl.getBoundingClientRect();
         refX = rect.x; refY = rect.y;
@@ -4002,6 +4080,7 @@ function mouseIsOverPopup(ev, ele, fudgeFactor=25) {
 function mouseIsOverItem(ev, ele, fudgeFactor=25) {
     /* Is the mouse positioned over the item that triggered the popup? */
     let origName = ele.getAttribute("origItemMouseoverId");
+    if (origName === null) {origName = ele.getAttribute("mouseoverid");}
     let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
     let mouseX = ev.clientX;
     let mouseY = ev.clientY;
@@ -4025,21 +4104,51 @@ function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
 
 function mousemoveHelper(e) {
     /* Helper function for deciding whether to keep a tooltip visible upon a mousemove event */
+
+    // if a tooltip is not visible and we are not currently over the item that triggered
+    // the mouseover, then we want to stop the mouseover event and wait for a new mouseover
+    // event
+    if (!tooltipIsVisible()) {
+        if (!(mouseIsOverItem(e, lastMouseoverEle, 0))) {
+            // we have left the item boundaries, cancel any timers
+            rect = boundingRect(lastMouseoverEle);
+            clearTimeout(mouseoverTimer);
+            clearTimeout(mousemoveTimer);
+            // we can safely stop listening for mousemove now, because we need a new mouseover event
+            // to start a new mousemove event:
+            mousemoveController.abort();
+        }
+        return;
+    }
+
+    // otherwise, a tooltip is visible or we are over the item that triggered the mouseover
+    // but we have just moved the mouse a little, reset the timer
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
+    // for the currently shown tooltip if any:
+    let currTooltipItem = this.getAttribute("origItemMouseoverId");
+    let currTooltipDelayedSetting = this.getAttribute("isDelayedTooltip");
+    let currTooltipIsDelayed = currTooltipDelayedSetting === "delayed";
+
+    // the tooltip that just triggered a mouseover event (not mousemove!)
     let isDelayedTooltip = lastMouseoverEle.getAttribute("tooltipDelay");
-    if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
-        mousemoveTimer = setTimeout(mousemoveTimerHelper, 1500, e, this);
-        mousedNewItem = true;
+
+    // if the currently shown tooltip is a delayed one, hide the tooltip because,
+    // the mouse has moved, regardless how much time has passed
+    if (currTooltipIsDelayed || !(mouseIsOverItem(e, this) || mouseIsOverPopup(e, this))) {
         mousemoveController.abort();
         hideMouseoverText(this);
+        return;
+    }
+
+    // wait for the mouse to stop moving:
+    if (currTooltipIsDelayed) {
+        mousemoveTimer = setTimeout(mousemoveTimerHelper, 1500, e, this);
+        mousedNewItem = true;
     } else {
         mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
-        // we are moving the mouse away, hide the tooltip regardless how much time has passed
         if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
-            mousemoveController.abort();
-            hideMouseoverText(this);
             return;
         }
     }
@@ -4083,15 +4192,10 @@ function showMouseoverText(ev) {
         // want to remove one. We can use the AbortController interface to let the
         // web browser automatically raise a signal when the event is fired and remove
         // appropriate event
-        mousemoveController = new AbortController();
         let callback = mousemoveHelper.bind(mouseoverContainer);
-
         mousedNewItem = false;
         clearTimeout(mouseoverTimer);
         mouseoverTimer = undefined;
-        // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
-        document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
-        document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
     }
 }
 
@@ -4144,13 +4248,30 @@ function showMouseover(e) {
         clearTimeout(mouseoverTimer);
     }
     if (mousemoveTimer) {
-        // user is moving their mouse around and has triggered a potentially triggered
+        // user is moving their mouse around and has potentially triggered
         // a new pop up, clear the move timeout
         clearTimeout(mousemoveTimer);
     }
     // If there is no tooltip present, we want a small but noticeable delay
     // before showing a tooltip
     if (canShowNewMouseover) {
+        // set up the mousemove handlers to prevent showing a tooltip if we have
+        // already moved on from this item by the time the below delay passes:
+        if (mousemoveController) {
+            // a previous mouseover event has fired and it waiting, clear it before
+            // setting up this one
+            mousemoveController.abort();
+        }
+        mousemoveController = new AbortController();
+        let callback = mousemoveHelper.bind(mouseoverContainer);
+        document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
+        document.addEventListener("scroll", function(e) {
+            hideMouseoverText(mouseoverContainer);
+            clearTimeout(mousemoveTimer);
+            mousemoveController.abort();
+            canShowNewMouseover = true;
+        });
+
         // some tooltips are special and have a longer delay
         let isDelayedTooltip = ele1.getAttribute("tooltipDelay");
         if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
@@ -4191,7 +4312,11 @@ function titleTagToMouseover(mapEl) {
 
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
-    $("[title]").each(function(i, a) {
+    document.querySelectorAll("[title]").forEach(function(a, i) {
+        if (a.id !== "" && (a.id === "hotkeyHelp" || a.id.endsWith("Dialog") || a.id.endsWith("Popup"))) {
+            // these divs are populated by ui-dialog, they should not have tooltips
+            return;
+        }
         if (a.title !== undefined &&
                 (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";

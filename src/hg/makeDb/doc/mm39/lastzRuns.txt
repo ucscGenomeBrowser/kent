@@ -3506,3 +3506,485 @@ real	2852m3.826s
 user	0m2.832s
 sys	0m2.990s
 ##############################################################################
+
+# LASTZ Mouse Mm39 vs. house mouse GCA_921999865.2
+#    (DONE - 2024-06-24 - mspeir)
+
+    mkdir /hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24
+    cd /hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24
+
+    printf '# house mouse GCA_921999865.2 vs. Mouse Mm39
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Mouse  mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: house mouse 2022-07-01 GCA_921999865.2_C57BL_6NJ_v3
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCA_921999865.2_C57BL_6NJ_v3 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	836m4.496s
+
+    sed -e 's/^/    # /;' fb.mm39.chainGCA_921999865.2Link.txt
+    # 2617230462 bases of 2728222451 (95.932%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynGCA_921999865.2Link.txt
+    # 2559197304 bases of 2728222451 (93.805%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.chrom.sizes.txt" \
+        mm39 GCA_921999865.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	94m40.087s
+
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.GCA_921999865.2.txt
+    # 2496889698 bases of 2728222451 (91.521%) in intersection
+
+    ### and for the swap
+# swap into: /hive/data/genomes/asmHubs/allBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/blastz.mm39.swap
+# running /hive/data/genomes/asmHubs/allBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/blastz.mm39.swap/runSwap.sh
++ cd /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
++ export defaultName=GCA_921999865.2_C57BL_6NJ_v3
++ defaultName=GCA_921999865.2_C57BL_6NJ_v3
++ export asmId=GCA_921999865.2_C57BL_6NJ_v3
++ asmId=GCA_921999865.2_C57BL_6NJ_v3
++ export buildDir=/hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
++ buildDir=/hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
++ rm -f GCA_921999865.2_C57BL_6NJ_v3.chromAlias.txt
++ ln -s trackData/chromAlias/GCA_921999865.2_C57BL_6NJ_v3.chromAlias.txt .
++ '[' -s trackData/chromAlias/GCA_921999865.2_C57BL_6NJ_v3.chromAlias.bb ']'
++ rm -f GCA_921999865.2_C57BL_6NJ_v3.chromAlias.bb
++ ln -s trackData/chromAlias/GCA_921999865.2_C57BL_6NJ_v3.chromAlias.bb .
++ /cluster/home/mspeir/kent/src/hg/utils/automation/asmHubTrackDb.sh GCA_921999865.2_C57BL_6NJ_v3 GCA_921999865.2_C57BL_6NJ_v3 /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
+# no ensGene found
+single chainNet
++ '[' 2 -ne 2 ']'
++ export asmId=GCA_921999865.2_C57BL_6NJ_v3
++ asmId=GCA_921999865.2_C57BL_6NJ_v3
++ export buildDir=/hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
++ buildDir=/hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
++ export hubLinks=/hive/data/genomes/asmHubs/hubLinks
++ hubLinks=/hive/data/genomes/asmHubs/hubLinks
++ export accessionId=GCA_921999865.2_C57BL_6NJ_v3
++ accessionId=GCA_921999865.2_C57BL_6NJ_v3
++ case ${asmId} in
+++ echo GCA_921999865.2_C57BL_6NJ_v3
+++ awk -F_ '{printf "%s_%s", $1, $2}'
++ accessionId=GCA_921999865.2
++ export scriptDir=/cluster/home/mspeir/kent/src/hg/utils/automation
++ scriptDir=/cluster/home/mspeir/kent/src/hg/utils/automation
++ mkdir -p /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi
++ mkdir -p /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/liftOver
++ export chainNetPriority=1
++ chainNetPriority=1
++ printf '# asmHubChainNetTrackDb.pl GCA_921999865.2_C57BL_6NJ_v3 /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3\n'
+# asmHubChainNetTrackDb.pl GCA_921999865.2_C57BL_6NJ_v3 /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3
++ for D in '${buildDir}/trackData/lastz.*'
++ targetDb=GCA_921999865.2
+++ basename /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39
++ lastzDir=lastz.mm39
+++ echo lastz.mm39
+++ sed -e 's/lastz.//;'
++ otherDb=mm39
++ OtherDb=Mm39
+++ ls -d /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/download/GCA_921999865.2_C57BL_6NJ_v3_assembly_report.txt
++ asmReport=/hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/download/GCA_921999865.2_C57BL_6NJ_v3_assembly_report.txt
++ overChain=GCA_921999865.2.mm39.over.chain.gz
++ overToChain=GCA_921999865.2ToMm39.over.chain.gz
++ printf 'asmReport: %s\n' /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/download/GCA_921999865.2_C57BL_6NJ_v3_assembly_report.txt
+asmReport: /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/download/GCA_921999865.2_C57BL_6NJ_v3_assembly_report.txt
++ '[' '!' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/download/GCA_921999865.2_C57BL_6NJ_v3_assembly_report.txt ']'
++ '[' '!' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/axtChain/chainMm39.bb ']'
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainMm39.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainMm39Link.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39Link.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39Link.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39Link.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.net.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.net.summary.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.summary.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.summary.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.liftOverNet.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.liftOverNet.summary.bb
++ rm -f /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/liftOver/GCA_921999865.2ToMm39.over.chain.gz
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/axtChain/GCA_921999865.2.mm39.over.chain.gz ']'
++ ln -s ../trackData/lastz.mm39/axtChain/GCA_921999865.2.mm39.over.chain.gz /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/liftOver/GCA_921999865.2ToMm39.over.chain.gz
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/axtChain/chainMm39.bb ']'
++ ln -s ../trackData/lastz.mm39/axtChain/chainMm39.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainMm39.bb
++ ln -s ../trackData/lastz.mm39/axtChain/chainMm39Link.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainMm39Link.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.net.bb ']'
++ ln -s ../trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.net.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.net.bb
++ ln -s ../trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.net.summary.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.net.summary.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/axtChain/chainSynMm39.bb ']'
++ ln -s ../trackData/lastz.mm39/axtChain/chainSynMm39.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39.bb
++ ln -s ../trackData/lastz.mm39/axtChain/chainSynMm39Link.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39Link.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.synNet.bb ']'
++ ln -s ../trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.synNet.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.bb
++ ln -s ../trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.synNet.summary.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.summary.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/axtChain/chainRBestMm39.bb ']'
++ ln -s ../trackData/lastz.mm39/axtChain/chainRBestMm39.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39.bb
++ ln -s ../trackData/lastz.mm39/axtChain/chainRBestMm39Link.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39Link.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.rbestNet.bb ']'
++ ln -s ../trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.rbestNet.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.bb
++ ln -s ../trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.rbestNet.summary.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.summary.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/axtChain/chainLiftOverMm39.bb ']'
++ printf '# making chainLiftOverMm39.bb\n'
+# making chainLiftOverMm39.bb
++ ln -s ../trackData/lastz.mm39/axtChain/chainLiftOverMm39.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39.bb
++ ln -s ../trackData/lastz.mm39/axtChain/chainLiftOverMm39Link.bb /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39Link.bb
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/lastz.mm39/bigMaf/GCA_921999865.2.mm39.liftOverNet.bb ']'
+++ echo mm39
+++ cut -c1-2
++ otherPrefix=mm
++ '[' mm = GC ']'
+++ hgsql -N -e 'select organism from dbDb where name="mm39"' hgcentraltest
++ organism=Mouse
+++ hgsql -N -e 'select scientificName from dbDb where name="mm39"' hgcentraltest
++ sciName='Mus musculus'
+++ hgsql -N -e 'select taxId from dbDb where name="mm39"' hgcentraltest
++ taxId=10090
+++ hgsql -N -e 'select description from dbDb where name="mm39"' hgcentraltest
++ o_date='Jun. 2020 (GRCm39/mm39)'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl mm39 GCA_921999865.2
+++ grep matrix
++ matrix='matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91'
+++ echo mm39
+++ cut -c1-2
++ otherPrefix=mm
++ '[' mm = GC ']'
+++ hgsql -N -e 'select organism from dbDb where name="mm39"' hgcentraltest
++ organism=Mouse
+++ hgsql -N -e 'select scientificName from dbDb where name="mm39"' hgcentraltest
++ sciName='Mus musculus'
+++ hgsql -N -e 'select taxId from dbDb where name="mm39"' hgcentraltest
++ taxId=10090
+++ hgsql -N -e 'select description from dbDb where name="mm39"' hgcentraltest
++ o_date='Jun. 2020 (GRCm39/mm39)'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl mm39 GCA_921999865.2
+++ grep matrix
++ matrix='matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl mm39 GCA_921999865.2
+++ grep MinScore
++ minScore='chainMinScore 3000'
+++ grep LinearGap
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl mm39 GCA_921999865.2
++ linGap='chainLinearGap medium'
++ printf '##############################################################################
+# mm39 - Mouse - Mus musculus - taxId: 10090
+##############################################################################
+'
++ printf 'track chainNetMm39
+compositeTrack on
+shortLabel Mouse Chain/Net
+longLabel Mouse (Jun. 2020 (GRCm39/mm39)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+'
++ printf 'priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+'
++ '[' 'xmatrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91y' = xy ']'
++ printf 'matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb mm39
+html html/GCA_921999865.2_C57BL_6NJ_v3.chainNet
+
+'
++ printf '    track chainNetMm39Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMm39
+    spectrum on
+
+        track chainMm39
+        parent chainNetMm39Viewchain
+        subGroups view=chain
+        shortLabel Mouse Chain
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Chained Alignments
+        type bigChain mm39
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainMm39.bb
+        linkDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainMm39Link.bb
+        priority %d
+
+' 1
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39.bb ']'
++ printf '        track chainSynMm39
+        parent chainNetMm39Viewchain
+        subGroups view=chain
+        shortLabel Mouse synChain
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Syntenic Chained Alignments
+        type bigChain mm39
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39.bb
+        linkDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainSynMm39Link.bb
+        priority %d
+
+' 2
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39.bb ']'
++ printf '        track chainRBestMm39
+        parent chainNetMm39Viewchain
+        subGroups view=chain
+        shortLabel Mouse rbChain
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Reciprocal Best Chained Alignments
+        type bigChain mm39
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39.bb
+        linkDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainRBestMm39Link.bb
+        priority %d
+
+' 3
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39.bb ']'
++ printf '        track chainLiftOverMm39
+        parent chainNetMm39Viewchain
+        subGroups view=chain
+        shortLabel Mouse loChain
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Lift Over Chained Alignments
+        type bigChain mm39
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39.bb
+        linkDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.chainLiftOverMm39Link.bb
+        priority %d
+
+' 4
++ printf '    track mafNetMm39Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetMm39
+
+        track netMm39
+        parent mafNetMm39Viewnet
+        subGroups view=net
+        shortLabel Mouse net
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.net.bb
+        summary bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.net.summary.bb
+        speciesOrder mm39
+        priority %d
+
+' 5
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.summary.bb ']'
++ printf '        track synNetMm39
+        parent mafNetMm39Viewnet
+        subGroups view=net
+        shortLabel Mouse synNet
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.bb
+        summary bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.synNet.summary.bb
+        speciesOrder mm39
+        priority %d
+
+' 6
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.summary.bb ']'
++ printf '        track rbestNetMm39
+        parent mafNetMm39Viewnet
+        subGroups view=net
+        shortLabel Mouse rbestNet
+        longLabel Mouse (Jun. 2020 (GRCm39/mm39)) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.bb
+        summary bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.rbestNet.summary.bb
+        speciesOrder mm39
+        priority %d
+
+' 7
++ '[' -s /hive/data/genomes/asmHubs/genbankBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/bbi/GCA_921999865.2_C57BL_6NJ_v3.mm39.liftOverNet.summary.bb ']'
+
+##############################################################################
+# LASTZ Mouse Mm39 vs. house mouse GCA_921999865.2
+#    (DONE - 2024-06-24 - mspeir)
+
+    mkdir /hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24
+    cd /hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24
+
+    printf '# house mouse GCA_921999865.2 vs. Mouse Mm39
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Mouse  mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: house mouse 2022-07-01 GCA_921999865.2_C57BL_6NJ_v3
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCA_921999865.2_C57BL_6NJ_v3 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	836m4.496s
+
+    sed -e 's/^/    # /;' fb.mm39.chainGCA_921999865.2Link.txt
+    # 2617230462 bases of 2728222451 (95.932%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynGCA_921999865.2Link.txt
+    # 2559197304 bases of 2728222451 (93.805%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.chrom.sizes.txt" \
+        mm39 GCA_921999865.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	94m40.087s
+
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.GCA_921999865.2.txt
+    # 2496889698 bases of 2728222451 (91.521%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/trackData/blastz.mm39.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCA_921999865.2_C57BL_6NJ_v3 /hive/data/genomes/mm39/bed/lastzGCA_921999865.2.2024-06-24/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	320m49.857s
+
+    sed -e 's/^/    # /;' fb.GCA_921999865.2.chainMm39Link.txt
+    # 2503336620 bases of 2514593528 (99.552%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_921999865.2.chainSynMm39Link.txt
+    # 2500544042 bases of 2514593528 (99.441%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.chrom.sizes.txt" \
+   GCA_921999865.2 mm39) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	67m13.662s
+
+    sed -e 's/^/    # /;' fb.GCA_921999865.2.chainRBest.Mm39.txt
+    # 2497498017 bases of 2514593528 (99.320%) in intersection
+
+real	1318m52.288s
+user	0m2.240s
+sys	0m2.560s
+
+##############################################################################
+# LASTZ Mouse Mm39 vs. rabbit GCF_009806435.1
+#    (DONE - 2024-06-28 - Gerardo)
+
+    mkdir /hive/data/genomes/mm39/bed/lastzGCF_009806435.1.2024-06-28
+    cd /hive/data/genomes/mm39/bed/lastzGCF_009806435.1.2024-06-28
+
+    printf '# rabbit GCF_009806435.1 vs. Mouse Mm39
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Mouse  mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: rabbit 2021-02-04 GCF_009806435.1_UM_NZW_1.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/009/806/435/GCF_009806435.1/GCF_009806435.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/009/806/435/GCF_009806435.1/GCF_009806435.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm39/bed/lastzGCF_009806435.1.2024-06-28
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_009806435.1_UM_NZW_1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	354m26.805s
+
+    sed -e 's/^/    # /;' fb.mm39.chainGCF_009806435.1Link.txt
+    # 668346839 bases of 2728222451 (24.498%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynGCF_009806435.1Link.txt
+    # 614245411 bases of 2728222451 (22.514%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/009/806/435/GCF_009806435.1/GCF_009806435.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/009/806/435/GCF_009806435.1/GCF_009806435.1.chrom.sizes.txt" \
+        mm39 GCF_009806435.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	270m13.288s
+
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.GCF_009806435.1.txt
+    # 632080850 bases of 2728222451 (23.168%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/009/806/435/GCF_009806435.1_UM_NZW_1.0/trackData/blastz.mm39.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_009806435.1_UM_NZW_1.0 /hive/data/genomes/mm39/bed/lastzGCF_009806435.1.2024-06-28/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	44m16.282s
+
+    sed -e 's/^/    # /;' fb.GCF_009806435.1.chainMm39Link.txt
+    # 700149744 bases of 2841507030 (24.640%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_009806435.1.chainSynMm39Link.txt
+    # 622621309 bases of 2841507030 (21.912%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/009/806/435/GCF_009806435.1/GCF_009806435.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/009/806/435/GCF_009806435.1/GCF_009806435.1.chrom.sizes.txt" \
+   GCF_009806435.1 mm39) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	288m41.391s
+
+    sed -e 's/^/    # /;' fb.GCF_009806435.1.chainRBest.Mm39.txt
+    # 632186963 bases of 2841507030 (22.248%) in intersection
+
+real	957m44.686s
+user	0m3.153s
+sys	0m3.273s
+##############################################################################

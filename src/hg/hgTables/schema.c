@@ -414,7 +414,7 @@ else
     if (sameString(table, "knownGene") && bigDataUrl!=NULL)
         {
         hPrintf("This track is available both in ASCII MariaDB table dump format and bigGenePred (bigBed) format.<br>");
-        printDownloadLink("bigBed", bigDataUrl);
+        printDownloadLink("bigBed", tdb, bigDataUrl);
         }
     }
 

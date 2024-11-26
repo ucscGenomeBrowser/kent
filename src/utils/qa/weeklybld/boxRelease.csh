@@ -61,8 +61,8 @@ if ( "$1" == "beta" ) then
     mv /usr/local/apache/htdocs/gbib/gbibBeta.zip /usr/local/apache/htdocs/gbib/gbibBeta.bak.zip
     mv gbib.zip /usr/local/apache/htdocs/gbib/gbibBeta.zip
     ls -lah /usr/local/apache/htdocs/gbib/gbibBeta.zip
-    echo Gbib beta can be downloaded now for testing from http://hgwdev.soe.ucsc.edu/gbib/gbibBeta.zip
+    echo Gbib beta can be downloaded now for testing from http://hgwdev.gi.ucsc.edu/gbib/gbibBeta.zip
 else
     mv gbib.zip /usr/local/apache/htdocs/gbib/gbibAlpha.zip
-    echo Gbib alpha can be downloaded now for testing from http://hgwdev.soe.ucsc.edu/gbib/gbibAlpha.zip
+    echo Gbib alpha can be downloaded now for testing from http://hgwdev.gi.ucsc.edu/gbib/gbibAlpha.zip
 endif

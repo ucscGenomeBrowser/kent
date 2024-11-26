@@ -33,7 +33,7 @@ include trackDb.syntenicNet.ra alpha
 include trackDb.rbestNet.ra alpha
 include trackDb.gencode.ra
 include knownGene.ra
-include knownGeneArchive.ra alpha
+include knownGeneArchive.ra
 include reMap.ra
 
 include liftOverMm10.ra
@@ -48,5 +48,4 @@ urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm39/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
 
-track ncbiRefSeq override
-parent refSeqComposite off
+include ../refSeqComposite.mm10.mm39.ra

@@ -25,11 +25,19 @@ boolean bedItemRgb(struct trackDb *tdb)
 char *Default="Off";	/* anything different than this will turn it on */
 char *tdbDefault = (char *)NULL;
 
-if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE))
-    return TRUE;
-
 if (tdb)
+    {
     tdbDefault = trackDbSettingClosestToHome(tdb, OPT_ITEM_RGB);
+
+    // If the hg.conf statement is set on this server to activate the new behavior:
+    // only default to "on" if:
+    // - "color" is not present at all
+    // - itemRgb=off is not set
+    if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE) && 
+            (trackDbSettingClosestToHome(tdb, "color")==NULL) && 
+            !sameWordOk(Default,tdbDefault))
+        return TRUE;
+    }
 
 if (tdbDefault)
     {

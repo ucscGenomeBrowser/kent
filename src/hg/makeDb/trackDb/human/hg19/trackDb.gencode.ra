@@ -3,8 +3,8 @@ superTrack on
 group genes
 shortLabel GENCODE Versions
 longLabel Container of all new and previous GENCODE releases
-pennantIcon New red ../goldenPath/newsarch.html#060724 "June 7, 2024"
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
+pennantIcon Updated red ../goldenPath/newsarch.html#110824 "Updated Nov. 8, 2024"
 
 # GENCODE genes on alpha only (wrangler: markd)
 include wgEncodeGencodeV3.ra alpha
@@ -45,3 +45,4 @@ include wgEncodeGencodeV43lift37.ra
 include wgEncodeGencodeV44lift37.ra
 include wgEncodeGencodeV45lift37.ra
 include wgEncodeGencodeV46lift37.ra
+include wgEncodeGencodeV47lift37.ra

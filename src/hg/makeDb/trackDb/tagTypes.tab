@@ -380,6 +380,7 @@ vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
+setColorWith bigWig
 sGroup_Afrotheria wigMaf bigMaf
 sGroup_African wigMaf bigMaf
 sGroup_Afr_Carib_Barabdos wigMaf

@@ -280,6 +280,14 @@ else
     hPrintf("(data track %s is not composed of gene records.  Specialized intersection operations are not available.)<P>\n", name);
     }
 
+char *hgsid = cartSessionId(cart);
+hPrintf("<b>More options:</b><UL><LI>The intersection configured on this page only outputs fields from the track selected under \"Select Dataset\" on the previous page, limited to features that overlap with the second track selected on this page.</LI>");
+hPrintf("<LI>For intersecting two datasets and outputting fields from both (e.g., identifying which ChIP-seq peak overlaps with an enhancer, or determining which dbSNP variant overlaps with a ClinVar CNV), use the  <a href='hgIntegrator?hgsid=%s'>Data Integrator</a>.</LI>", hgsid);
+hPrintf("<LI>To annotate a track with variants in VCF format with the transcript positions, use the <a href='hgVai?hgsid=%s'>Variant Annotation Integrator</a>.</LI>", hgsid);
+hPrintf("<LI>For more complex operations, command-line tools may be required. We provide <a target=_blank href='https://hgdownload.soe.ucsc.edu/admin/exe/'>several hundred command line tools</a>, including overlapSelect, featureBits, pslMap, and others, for handling overlaps and intersections.</UL>");
+hPrintf("</P>");
+
+
 cgiMakeButton(hgtaDoIntersectSubmit, "Submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");

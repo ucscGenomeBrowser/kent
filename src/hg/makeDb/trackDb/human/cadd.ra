@@ -1,14 +1,15 @@
 track caddSuper
-shortLabel CADD
+shortLabel CADD 1.6
 longLabel CADD 1.6 Score for all single-basepair mutations and selected insertions/deletions
 superTrack on hide
 type bed
 visibility hide
 group phenDis
 color 100,130,160
+html caddSuper.html
 
 track cadd
-shortLabel CADD
+shortLabel CADD 1.6
 longLabel CADD 1.6 Score for all possible single-basepair mutations (zoom in for scores)
 type bigWig
 compositeTrack on
@@ -66,7 +67,7 @@ mouseOverFunction noAverage
         viewLimitsMax 0:100
 
 track caddIns
-shortLabel Insertions
+shortLabel CADD 1.6 Ins
 longLabel CADD 1.6 Score: Insertions - label is length of insertion
 type bigBed 9 +
 parent caddSuper
@@ -83,7 +84,7 @@ filterLimits.score 0:100
 #maxWindowToDraw 9000000
 
 track caddDel
-shortLabel Deletions
+shortLabel CADD 1.6 Del
 longLabel CADD 1.6 Score: Deletions - label is length of deletion
 type bigBed 9 +
 parent caddSuper

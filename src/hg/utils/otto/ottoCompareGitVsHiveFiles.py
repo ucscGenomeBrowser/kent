@@ -16,6 +16,8 @@ directories it looks at in git, these can be controlled in the function findGitF
 """
 
 import subprocess
+import getpass
+import filecmp
 
 def bash(cmd):
     """Input bash cmd and return stdout"""
@@ -57,12 +59,39 @@ def compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches):
 
 def findGitFilesBuildDics():
     """Find all files in git minus exceptions and get md5sums, build dics"""
-    fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -v 'uniprot\|ncbiRefSeq\|crontab\|README*\|clinvarSubLolly\|makefile\|.c$\|sarscov2phylo\|nextstrainNcov\|knownGene\|rsv/exclude.ids' | xargs md5sum")
+    fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -v 'uniprot\|ncbiRefSeq\|crontab\|README*\|clinvarSubLolly\|makefile\|.c$\|sarscov2phylo\|nextstrainNcov\|knownGene\|rsv/exclude.ids\|mask.bed' | xargs md5sum")
     fileNameDic = {}
     fileNameHiveMatches = {}
     fileListWithMd5sum[0].split("  ")
     return(fileListWithMd5sum,fileNameDic,fileNameHiveMatches)
     
+def checkCrontabDifferences():
+    """Looks for differences between the committed otto crontab and the one running"""
+    user = getpass.getuser()
+
+    if user != "otto":
+        crontab = bash("ssh otto@hgwdev crontab -l")
+    else:
+        crontab = bash("crontab -l")
+    
+    liveCrontab = open("/cluster/home/"+user+"/ottoCrontab.tmp",'w')
+    for line in crontab:
+        liveCrontab.write(line+"\n")
+    liveCrontab.close()
+
+    file1 = "/cluster/home/"+user+"/ottoCrontab.tmp"
+    file2 = "/cluster/home/"+user+"/kent/src/hg/utils/otto/otto.crontab"
+    comparison = filecmp.cmp(file1, file2)
+
+    if not comparison:
+        print("Differences found between running crontab and git crontab.")
+        print("Showing: diff liveCrontab gitCrontab\n")
+        diffs = bash("diff "+file1+" "+file2+" || :")
+        for l in diffs:
+            print(l)
+        
+    bash("rm /cluster/home/"+user+"/ottoCrontab.tmp")
+
 def main():
     """
     Initialized options and calls other functions.
@@ -71,5 +100,6 @@ def main():
     parseGitFilesAndMd5sums(fileListWithMd5sum,fileNameDic,fileNameHiveMatches)
     searchHiveFiles(fileNameDic,fileNameHiveMatches)
     compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches)
-    
+    checkCrontabDifferences()
+
 main()

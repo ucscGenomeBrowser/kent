@@ -569,7 +569,7 @@ shortLabel Validated epitopes from IEDB
 longLabel Validated epitopes from IEDB
 visibility hide
 group immu
-urls epitopeID="http://www.iedb.org/epitope/$$"
+urls epitopeID="https://www.iedb.org/epitope/$$"
 type bigBed
 bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
 

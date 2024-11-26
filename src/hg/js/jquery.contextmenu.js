@@ -95,7 +95,7 @@
 				cmenu.createShadow(cmenu); // Extracted to method for extensibility
 				if (cmenu.shadowOffset) { cmenu.shadowOffsetX = cmenu.shadowOffsetY = cmenu.shadowOffset; }
 			}
-			$('body').bind('contextmenu',function(){cmenu.hide();}); // If right-clicked somewhere else in the document, hide this menu
+			$('body').on('contextmenu',function(){cmenu.hide();}); // If right-clicked somewhere else in the document, hide this menu
 			return cmenu;
 		},
 		
@@ -285,7 +285,7 @@
 	$.fn.contextMenu = function(menu,options) {
 		var cmenu = $.contextMenu.create(menu,options);
 		this.each(function(){
-			$(this).bind('contextmenu',function(e){cmenu.show(this,e);return false;});
+			$(this).on('contextmenu',function(e){cmenu.show(this,e);return false;});
 		});
 		return cmenu;
 	};

@@ -409,7 +409,6 @@ if (ajaxSection != NULL)
 
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(malaCardsSection(conn, sectionRa), conn, &sectionList);
     addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
 /*if (isRgdGene(conn))
@@ -536,7 +535,10 @@ for (section = sectionList; section != NULL; section = section->next)
     dyStringFree(&header);
     }
 // add some simple javascript that can do the collapse/expand section buttons
+// this code needs to be wrapped in an immediately executable function so that
+// re-clicks don't complain about previously declared variables
 jsInlineF(""
+"(function() {\n"
 "function collapseSection() {\n"
 "    let toCollapse = this.parentNode.nextElementSibling;\n"
 "    let isHidden = toCollapse.style.display === \"none\";\n"
@@ -557,6 +559,7 @@ jsInlineF(""
 "    btn = btns[i];\n"
 "    btn.addEventListener('click', collapseSection);\n"
 "}\n"
+"})();\n"
 );
 }
 

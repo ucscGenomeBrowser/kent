@@ -1,0 +1,30 @@
+#############################################################################
+# Creating the NuMTs track for hg38 (Done ogress 2014-09-03 Megna Chalamala
+
+cd public_html
+mkdir tracks
+cd tracks
+mkdir hub (renaming to NUMTs soon)
+cd hub
+wget https://raw.githubusercontent.com/Koumokuyou/NUMTs/main/genomes.txt
+wget https://raw.githubusercontent.com/Koumokuyou/NUMTs/main/hub.txt
+mkdir hg38
+cd hg38
+wget https://raw.githubusercontent.com/Koumokuyou/NUMTs/main/hg38/NUmts.html
+wget https://raw.githubusercontent.com/Koumokuyou/NUMTs/main/hg38/trackDb.txt
+# download NUMTs_hg38.bb into local computer
+# open new terminal window
+# log in to sftp
+put /Users/megnachalamala/NUMTs_hg38.bb /cluster/home/mchalama/public_html/tracks/NUMTs/hg38
+# open genome browser
+# navigate to custom hub and paste the following URL
+https://hgwdev.gi.ucsc.edu/~mchalama/tracks/NUMTs/hub.txt
+
+# Create into a UCSC track from the hub
+cd /hive/data/genomes/hg38/bed/
+mkdir nuMtSeq
+# Grab the bigBed file
+wget https://hgwdev.gi.ucsc.edu/~mchalama/tracks/NUMTs/hg38/NUMTs_hg38.bb
+mv NUMTs_hg38.bb nuMtSeq/nuMtSeq_hg38.bb
+# Place in the proper location
+ln -s /hive/data/genomes/hg38/bed/nuMtSeq/nuMtSeq_hg38.bb /gbdb/hg38/bbi/nuMtSeq/nuMtSeq_hg38.bb

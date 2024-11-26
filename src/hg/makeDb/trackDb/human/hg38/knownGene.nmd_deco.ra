@@ -1,0 +1,50 @@
+track knownGeneAlpha
+table knownGene
+shortLabel GENCODE V46 NMD
+longLabel GENCODE V46 with NMD Decorator
+#parent knownGeneArchive
+priority 1
+#priority 5
+visibility pack
+type bigGenePred knownGenePep knownGeneMrna
+bigDataUrl /gbdb/hg38/gencode/gencodeV46.bb
+downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
+baseColorDefault genomicCodons
+group genes
+isGencode3 on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+labelFields geneName,name,geneName2,name2
+defaultLabelFields geneName
+itemRgb on
+#externalDb knownGeneV46
+maxItems 50000
+html knownGeneV46
+searchIndex name
+idXref kgAlias kgID alias
+intronGap 12
+defaultLinkedTables kgXref
+squishyPackPoint 1
+squishyPackField rank
+squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
+decorator.default.blockMode Hide
+decorator.default.bigDataUrl /gbdb/hg38/knownGeneNmdProtV46.bb
+decorator.default.mouseOver ${mouseover}
+
+searchName knownGeneAccAlpha
+searchTable knownGeneAlpha
+searchMethod exact
+searchType knownGene
+shortCircuit 1
+semiShortCircuit 1
+termRegex ENST[0-9.]+
+searchPriority 9
+
+searchName knownGeneFastAlpha
+searchTable knownGeneAlpha
+searchType knownGeneFast
+shortCircuit 1
+searchPriority 1001
+searchTrix /gbdb/hg38/knownGeneFastV46.ix
+searchTrixContext on
+doPage 1
+

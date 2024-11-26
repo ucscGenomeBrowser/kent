@@ -4,7 +4,7 @@ include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
 O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
-  asmAlias.o asmEquivalent.o asmSummary.o autoUpgrade.o axtInfo.o \
+  asmAlias.o asmEquivalent.o asmSummary.o assemblyList.o autoUpgrade.o axtInfo.o \
   barChartBed.o barChartCategory.o barChartUi.o bed.o bed12Source.o \
   bedDetail.o bigBedFind.o bigBedLabel.o bigChain.o bigDbSnp.o bigGenePred.o bigLink.o \
   bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
@@ -21,6 +21,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   encode/wgEncodeGencodeTranscriptSource.o encode/wgEncodeGencodeTranscriptSupport.o \
   encode/wgEncodeGencodeTranscriptionSupportLevel.o encode/wgEncodeGencodeUniProt.o encode3/encode3Valid.o \
   estOrientInfo.o expData.o exportedDataHubs.o expRecord.o facetField.o facetedTable.o featureBits.o findKGAlias.o \
+  fakeCurl.o \
   findKGProtAlias.o gbSeq.o gbExtFile.o gcPercent.o genark.o genbank.o genbankBlackList.o gencodeTracksCommon.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
   genePred.o genePredReader.o geoMirror.o ggCluster.o ggDump.o ggGraph.o ggMrnaAli.o ggTypes.o glDbRep.o \
   googleAnalytics.o gpFx.o grp.o gtexAse.o gtexDonor.o gtexGeneBed.o gtexInfo.o gtexSample.o \
@@ -32,7 +33,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o makeItemsItem.o mdb.o \
   microarray.o minChromSize.o namedSessionDb.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \
   quickLift.o quickLiftChain.o rankProp.o refLink.o refSeqStatus.o rikenCluster.o rmskAlign.o rmskJoined.o rmskOut.o rmskOut2.o rnaGene.o sage.o sageCounts.o samAlignment.o \
-  sample.o sanger22extra.o scoredRef.o seqWindow.o snakeUi.o snp.o snpExceptions.o soTerm.o spDb.o sqlProg.o \
+  sample.o sanger22extra.o scoredRef.o sessionData.o seqWindow.o snakeUi.o snp.o snpExceptions.o soTerm.o spDb.o sqlProg.o \
   sqlSanity.o stanMad.o stsAlias.o stsInfo2.o stsMap.o stsMarker.o tableStatus.o tablesTables.o \
   tagRepo.o tfbsCons.o tigrCmrGene.o traceInfo.o trackDb.o trackDbCache.o trackDbCustom.o trackHub.o \
   trackVersion.o trashDir.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o txGraph.o txInfo.o txRnaAccs.o \

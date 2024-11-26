@@ -151,16 +151,16 @@ struct genePredReader *genePredReaderQuery(struct sqlConnection* conn,
  * extended genePred columns are in the table.
  */
 {
-char query[1024];
+struct dyString *query = dyStringNew(0);
 struct genePredReader* gpr;
 AllocVar(gpr);
 gpr->table = cloneString(table);
 
 if (where != NULL)
-    sqlSafef(query, sizeof(query), "select * from %s where %-s", table, where);
+    sqlDyStringPrintf(query, "select * from %s where %-s", table, where);
 else
-    sqlSafef(query, sizeof(query), "select * from %s", table);
-gpr->sr = sqlGetResult(conn, query);
+    sqlDyStringPrintf(query, "select * from %s", table);
+gpr->sr = sqlGetResult(conn, dyStringCannibalize(&query));
 buildResultFieldMap(gpr);
 
 return gpr;

@@ -279,6 +279,14 @@ else
     dyStringAppend(dy, ")");
 cgiMakeIntVarWithLimits("subtreeSize", subtreeSize, dy->string, 5, 10, MAX_SUBTREE_SIZE);
 puts("</p><p>");
+char *sessionDataDir = cfgOption("sessionDataDir");
+if (isNotEmpty(sessionDataDir))
+    {
+    puts("Prevent subtree Auspice JSON files from expiring after two days: ");
+    boolean subtreePersist = cartUsualBoolean(cart, "subtreePersist", FALSE);
+    cgiMakeCheckBox("subtreePersist", subtreePersist);
+    puts("</p><p>");
+    }
 cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
                            "submit", "Upload");
 char *exampleFile = phyloPlaceOrgSettingPath(org, "exampleFile");

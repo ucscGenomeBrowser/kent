@@ -2,7 +2,7 @@
 
 <p>
 This track was created by using Arian Smit's
-<a href="http://www.repeatmasker.org/" target="_blank">RepeatMasker</a>
+<a href="https://www.repeatmasker.org/" target="_blank">RepeatMasker</a>
 program, which screens DNA sequences
 for interspersed repeats and low complexity DNA sequences. The program
 outputs a detailed annotation of the repeats that are present in the
@@ -20,6 +20,19 @@ Some newer assemblies have been made with Dfam, not Repbase. You can
 find the details for how we make our database data here in our &quot;makeDb/doc/&quot;
 <a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/tree/master/src/hg/makeDb/doc/"
 target="_blank">directory</a>.</p>
+
+<p>
+When analyzing the data tables of this track, keep in mind that Repbase is not the same 
+as the Repeatmasker sequence database and that the repeat names in the
+Repeatmasker output are not the same as the sequence names in the Repeatmasker
+database.  Concretely, you can find a name such as "L1PA4" in the Repeatmasker
+output and this track, but there is not necessarily a single sequence "L1PA4"
+in the Repeatmasker database. This is because Repeatmasker creates annotations
+by joining matches to partial pieces of the database together so there is no
+1:1 relationship between its sequence database and the annotations. To learn
+more, you can read the Repeatmasker paper, its source code or reach out to the
+Repeatmasker authors, your local expert on transposable elements or us.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -70,8 +83,8 @@ repeat libraries used to generate this track.
 
 <p>
 Smit AFA, Hubley R, Green P. <em>RepeatMasker Open-3.0</em>.
-<a href="http://www.repeatmasker.org" target="_blank">
-http://www.repeatmasker.org</a>. 1996-2010.
+<a href="https://www.repeatmasker.org/" target="_blank">
+https://www.repeatmasker.org/</a>. 1996-2010.
 </p>
 
 <p>

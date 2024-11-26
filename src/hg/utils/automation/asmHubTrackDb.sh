@@ -517,9 +517,9 @@ priority 2
         track ncbiRefSeq
         parent refSeqComposite on
         color 12,12,120
-        altColor 120,12,12
         shortLabel RefSeq All
         type bigGenePred
+        urls geneName=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$?report=genbank\" geneName2=\"https://www.ncbi.nlm.nih.gov/datasets/gene/\$D/?search=\$\$\"
         labelFields name,geneName,geneName2
         defaultLabelFields geneName2
         searchIndex name
@@ -545,6 +545,7 @@ priority 2
         shortLabel RefSeq Curated
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
+        urls geneName=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$?report=genbank\" geneName2=\"https://www.ncbi.nlm.nih.gov/datasets/gene/\$D/?search=\$\$\"
         labelFields name,geneName,geneName2
         defaultLabelFields geneName2
         searchIndex name
@@ -570,6 +571,7 @@ priority 2
         shortLabel RefSeq Predicted
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
+        urls geneName=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$?report=genbank\" geneName2=\"https://www.ncbi.nlm.nih.gov/datasets/gene/\$D/?search=\$\$\"
         labelFields name,geneName,geneName2
         defaultLabelFields geneName2
         searchIndex name

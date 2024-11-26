@@ -1,5 +1,6 @@
 
 #include "freeType.h"
+#include "iconv.h"
 
 #ifndef USE_FREETYPE
 int ftInitialize()
@@ -35,6 +36,10 @@ if (error !=0)
 error = FT_New_Face( library, fontFile, 0, &face );
 if ((error !=0) || (face == NULL))
     errAbort("Cannot open font file '%s'.  Does it exist?", fontFile);
+
+error = FT_Select_Charmap(face, FT_ENCODING_UNICODE);
+if ((error !=0) || (face == NULL))
+    errAbort("Cannot select Unicode character map");
 
 return 0;
 }
@@ -115,22 +120,64 @@ switch(requestSize)
     }
 }
 
+static iconv_t ourIconv; // convert context UTF-8 > UNICOD
 
+static size_t utf8ToUnicode(char *text, unsigned short *buffer, size_t nLength)
+/* Convert UTF-8 string to Unicode string. */
+{
+if (ourIconv == NULL)
+    {
+    ourIconv = iconv_open("UNICODE", "UTF-8");
+    if (ourIconv == NULL)
+        errAbort("iconv problem errno %d\n",errno);
+    }
+
+size_t length = strlen(text);
+char *newText = (char *)buffer;
+
+int ret = iconv(ourIconv, &text, &length, &newText,  &nLength);
+while((ret = iconv(ourIconv, &text, &length, &newText,  &nLength)) < 0)
+    {
+    if (errno == EILSEQ)  // this means we hit an illegal character.  Skip it and put a '?' there, then go back into iconv
+        {
+        text++;
+        
+        // stash the Unicode question mark in the translated string
+        *newText++ = '?';
+        *newText++ = 0;
+        }
+    else
+        errAbort("iconv problem errno %d\n",errno);
+    }
+
+return (newText - (char *)buffer) / sizeof(unsigned short);
+}
 
 void ftTextHelper(struct memGfx *mg, int x, int y, int baseline, Color color,
         MgFont *font, char *text)
 {
-int length = strlen(text);
+size_t length = strlen(text);
 int n;
 FT_Error error;
 unsigned long offset = 0;
 y +=  baseline;
 
+unsigned short buff[length * 4];
+length = utf8ToUnicode(text, buff, length * 4);
+unsigned short *sBuf = (unsigned short *)buff;
+
+// account for strange short at front of string that tells us byte order
+if (*sBuf == 0xfeff)
+    {
+    length--;
+    sBuf++;
+    }
+
 for(n = 0; n < length; n++)
     {
     int dx;
     dx = x + offset / 64;
-    error = FT_Load_Char( face, text[n], FT_LOAD_RENDER );
+    error = FT_Load_Char( face, sBuf[n], FT_LOAD_RENDER );
     FT_GlyphSlot  slot;
     slot = face->glyph;
     if (!error)

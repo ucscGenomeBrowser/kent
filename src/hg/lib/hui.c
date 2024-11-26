@@ -672,10 +672,11 @@ void setUdcOptions(struct cart *cart)
 setUdcTimeout(cart);
 
 char *prots = cfgOption("resolvProts");
+char *prefix = cfgOption("resolvPrefix");
 char *cmd = cfgOption("resolvCmd");
 
-if (prots && cmd)
-        udcSetResolver(prots, cmd);
+if ((prots && cmd) || (prefix && cmd))
+        udcSetResolver(prots, prefix, cmd);
 }
 
 
@@ -3979,7 +3980,7 @@ static filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct 
 boolean isHighlight = startsWith("highlightValues.", tdbFilter->name);
 char *field = tdbFilter->fieldName;
 if (isEmpty(tdbFilter->setting))
-    errAbort("FilterValues setting of field '%s' must have a value.", tdbFilter->fieldName);
+    errAbort("track %s: FilterValues setting of field '%s' must have a value.", tdb->track, tdbFilter->fieldName);
 
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, tdbFilter->name, tdbFilter->setting);
 
@@ -3991,7 +3992,7 @@ struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
 else
-    errAbort("Building filter on field %s which is not in AS file.", field);
+    errAbort("Track %s: Building filter on field %s which is not in AS file.", tdb->track, field);
 char *trackDbLabel = getLabelSetting(cart, tdb, field);
 if (trackDbLabel)
     filterBy->title = trackDbLabel;
@@ -4028,7 +4029,7 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 {
 struct asObject *as = asForTdb(NULL, tdb);
 if (as == NULL)
-    errAbort("Unable to get autoSql for %s", name);
+    errAbort("Track %s: Unable to get autoSql for %s", tdb->track, name);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -4473,14 +4474,22 @@ void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
 		  filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the filter UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All", prefix, FALSE);
+char selectIdPrefix[4096];
+safef(selectIdPrefix, sizeof(selectIdPrefix), "fbc_%s", prefix);
+// Our checklists use ddcl.js, which doesn't seem to play nicely when elements have id strings that include '.'
+replaceChar(selectIdPrefix, '.', '_');
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", selectIdPrefix, "All", prefix, FALSE);
 }
 
 void highlightBySetCfgUi(struct cart *cart, struct trackDb *tdb,
 		     filterBy_t *filterBySet, boolean onOneLine, char *prefix, boolean isHighlight)
 /* Does the highlight UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None", prefix, TRUE);
+char selectIdPrefix[4096];
+safef(selectIdPrefix, sizeof(selectIdPrefix), "hbc_%s", prefix);
+// Our checklists use ddcl.js, which doesn't seem to play nicely when elements have id strings that include '.'
+replaceChar(selectIdPrefix, '.', '_');
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", selectIdPrefix, "None", prefix, TRUE);
 }
 
 #define COLOR_BG_DEFAULT_IX     0
@@ -4974,6 +4983,12 @@ switch(cType)
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
 			break;
     case cfgGenePred:   genePredCfgUi(db, cart,tdb,prefix,title,boxed);
+                        if(startsWith("bigGenePred", tdb->type))
+                            {
+                            char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+                            int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+                            scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+                            }
 			break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
 			break;
@@ -5931,7 +5946,7 @@ if (boxed)
 void snakeOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in snake mode */
 {
-if (!cfgOptionBooleanDefault("canSnake", FALSE))
+if (!cfgOptionBooleanDefault("canSnake", TRUE))
     return;
 
 printf("<BR><B>Display data as a rearrangement graph:</B> ");
@@ -5983,7 +5998,7 @@ safef(varName, sizeof(varName), "%s.doWiggle", name);
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 char *style = option ? "display:block" : "display:none";
-printf("<DIV ID=\"densGraphOptions\" STYLE=\"%s\">\n", style);
+printf("<DIV id=\"densGraphOptions%s\" STYLE=\"%s\">\n", name, style);
 
 // we need to fool the wiggle dialog into defaulting to autoscale and maximum
 char *origType = tdb->type;
@@ -5995,8 +6010,8 @@ if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
 wigCfgUi(cart,tdb,name,title,TRUE);
 tdb->type = origType;
 printf("</DIV>\n\n");
-jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n"
-    , varName); // XSS FILTER?
+jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions%s').toggle();} );\n"
+    , varName, name); // XSS FILTER?
 }
 
 void filterNameOption(struct cart *cart, char *name, struct trackDb *tdb)
@@ -6009,7 +6024,7 @@ safef(varName, sizeof(varName), "%s.nameFilter", name);
 char *onlyTransStr = cartUsualString(cart, varName, "");
 
 cgiMakeTextVar(varName, onlyTransStr, 60);
-printf("&nbsp;<small>Separate multiple accessions with commas</small>");
+printInfoIcon("Enter the primary accession of the track, so RefSeq IDs for the RefSeq track, Gencode IDs for the Gencode track, etc. Separate multiple accessions with commas.");
 puts("</DIV>\n\n");
 }
 
@@ -6021,8 +6036,9 @@ safef(varName, sizeof(varName), "%s.colorOverride", name);
 
 char *colorValue = cartUsualString(cart, varName, "");
 
-puts("&nbsp;<div id='colorPicker'>");
-jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker'), '%s', 'Color for all features:', '%s');", varName, name, colorValue); // id="xx" is necessary as id contains a dot
+printf("&nbsp;<div id='colorPicker_%s'>", name);
+jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', '<b>Change track color: </b>&nbsp;', '%s');",
+        varName, name, name, colorValue); // id="xx" is necessary as id contains a dot
 puts("</div>\n\n");
 }
 
@@ -6785,12 +6801,17 @@ char *prevHighlightColor(struct cart *cart, struct trackDb *tdb)
 return cartOrTdbString(cart, tdb, HIGHLIGHT_COLOR_CART_VAR, HIGHLIGHT_COLOR_DEFAULT);
 }
 
+static boolean didHighlightSelector = FALSE;
 void printHighlightColorPicker(struct cart *cart, struct trackDb *tdb)
 {
+if (didHighlightSelector)
+    return;
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hui.js", NULL);
-puts("<br>");
-puts("Choose highlight color:");
+puts("<div id='hgTrackUiColorPicker' style=\"padding-top: 2px; padding-bottom: 2px;\">");
+char *text = "Note that multiple highlight selections use the same color, and are applied successively. So any item that meets at least one criteria will be highlighted.";
+printInfoIcon(text);
+puts("</div>");
 puts("<div id='hgTrackUiColorPicker'></div>");
 jsInlineF("var cartHighlightColor = \"%s\"\n;", prevHighlightColor(cart, tdb));
 jsInlineF("makeHighlightPicker(\"%s.highlightColor\", document.getElementById(\"hgTrackUiColorPicker\"), \"%s\");\n", tdb->track, tdb->track);
@@ -6858,7 +6879,12 @@ if (trackDbFilters)
         if (trackDbLabel)
             label = trackDbLabel;
         else
-            safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
+            {
+            if (isHighlight)
+                safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Highlight items with Minimum ", field );
+            else
+                safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
+            }
 
         if (isHighlight && count == 0)
             printHighlightColorPicker(cart, tdb);
@@ -7059,7 +7085,6 @@ if (filterBySet != NULL)
 
 // add any highlights:
 // Numeric highlights are first
-boolean didHighlightSelector = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title, TRUE) > 0)
     {
     didHighlightSelector = TRUE;
@@ -9459,16 +9484,22 @@ return TRUE;
 
 static bool mouseOverJsDone = FALSE;
 
-void printInfoIcon(char *mouseover)
-/* Print info icon (i) with explanatory text on mouseover */
+void printInfoIconSvg()
+/* Print just info icon (i) as svg tag to stdout */
 {
-// see https://www.svgrepo.com/svg/524660/info-circle
-printf("<span title=\"%s\">", mouseover);
 puts("<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>");
 puts("<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>");
 puts("<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>");
 puts("<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/>");
 puts("</svg>");
+}
+
+void printInfoIcon(char *mouseover)
+/* Print info icon (i) with explanatory text on mouseover */
+{
+// see https://www.svgrepo.com/svg/524660/info-circle
+printf("<span title=\"%s\">", mouseover);
+printInfoIconSvg();
 puts("</span>");
 if (!mouseOverJsDone)
     {
@@ -9495,6 +9526,9 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     jsIncludeFile("ajax.js",NULL);
     jsIncludeFile("hui.js",NULL);
     jsIncludeFile("subCfg.js",NULL);
+    jsIncludeFile("ddcl.js", NULL);
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
     }
 cgiDown(0.3);
 
@@ -10324,7 +10358,7 @@ outs[4] = endString;
 ins[5] = "$s";
 outs[5] = skipChr(seqName);
 ins[6] = "$D";
-outs[6] = db;
+outs[6] = trackHubSkipHubName(db);
 ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
 ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
 if (stringIn(":", idInUrl)) {

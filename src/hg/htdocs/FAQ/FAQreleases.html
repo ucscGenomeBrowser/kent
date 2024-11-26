@@ -22,6 +22,11 @@
 <li><a href="#release7">Coordinate changes between assemblies</a></li>
 <li><a href="#release8">Converting positions between assembly versions</a></li>
 <li><a href="#snpConversion">Converting SNPs between assembly versions</a></li>
+  <ul>
+    <li><a href="#snpConversion">How can I convert SNP annotation coordinates between assembly versions?</a></li>
+    <li><a href="#snpLarge">How can I convert a large set of SNP annotations?</a></li>
+    <li><a href="#snpExtract">How can I extract a list of rsIDs using chrom:start-end or vise versa?</a></li>
+  </ul>
 <li><a href="#release9">Missing annotation tracks</a></li>
 <li><a href="#release10">What next with the human genome?</a></li>
 <li><a href="#release11">Mouse strain used for mouse genome sequence</a></li>
@@ -576,6 +581,8 @@ assemblies (i.e. mm10 or mm39) to perform the conversion.</p>
       Beware duplicates that will cause downstream problems. You will need to decide whether to
       remove duplicates as unreliable or resolve duplicates</li>
 </ol>
+
+<a name="snpLarge"></a>
 <h6>How can I convert a large set of SNP annotations?</h6>
 <p>
 For bulk conversions, the <a href="/cgi-bin/hgTables">Table Browser</a> can be used to extract the
@@ -593,11 +600,45 @@ being stored as a MariaDb table. For very large queries, this may cause the Tabl
 before the query finishes as dbSNP has grown to include over 700 million variants. If you find that
 your Table Browser query timesout for your list of rsIDs, you can use the
 <code>bigBedNamedItems</code> command-line tool to extract the rsID coordinates directly from the
-bigBed file instead of using the Table Browser. More information and examples using the
+bigBed file instead of using the Table Browser.</p>
+<p>More information and examples using the
 <code>bigBedNamedItems</code> utility can be found on the following
 <a href="FAQdownloads.html#snp">FAQ entry</a>. As a reminder, you can run any Kent command-line tool
 without arguments to get the usage statement.
 </p>
+
+<a name="snpExtract"></a>
+<h6>How can I extract a list of rsIDs using chrom:start-end or vice versa?</h6>
+<p>
+Several utilities for working with bigBed-formatted binary files can be downloaded
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+Run a utility with no arguments to see a brief description of the utility and its options.
+</p>
+<ul>
+  <li><b>bigBedInfo</b> provides summary statistics about a bigBed file including the number of
+    items in the file.  With the <b>-as</b> option, the output includes an
+    autoSql definition of data columns, useful for interpreting the column values.</li>
+  <li><b>bigBedToBed</b> converts the binary bigBed data to tab-separated text.
+    Output can be restricted to a particular region by using the -chrom, -start
+    and -end options.
+  </li>
+  <li><b>bigBedNamedItems</b> extracts rows for one or more rs# IDs.</li>
+</ul>
+
+<a name="snpExamples"></a>
+<h6>Examples:</h6>
+<ol>
+  <li>Retrieve all variants in the region chr1:200001-200400
+  <pre><tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
+  </li>
+  <li>Retrieve variant rs6657048
+  <pre><tt>bigBedNamedItems dbSnp155.bb rs6657048 stdout</tt></pre>
+  </li>
+  <li>Retrieve all variants with rs# IDs in a file (myIds.txt)
+      and output to another file (dbSnp155.myIds.bed)
+  <pre><tt>bigBedNamedItems -nameFile dbSnp155.bb myIds.txt dbSnp155.myIds.bed</tt></pre>
+  </li>
+</ol>
 
 <a name="release9"></a>
 <h2>Missing annotation tracks</h2>

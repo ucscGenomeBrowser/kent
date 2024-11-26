@@ -27,6 +27,10 @@ export downloadDest2="hgdownload2.soe.ucsc.edu"
 
 ## verify no broken symlinks
 export srcDir="/hive/data/genomes/asmHubs/${dirPath}"
+if [ ! -d "${srcDir}" ]; then
+   printf "# WARNING: no srcDir: '%s'\n" "${srcDir}" 1>&2
+   exit 0
+fi
 
 badLinks=`(find "${srcDir}" -type l -lname \* \
   | xargs --no-run-if-empty ls -lL > /dev/null || true) 2>&1 | wc -l`

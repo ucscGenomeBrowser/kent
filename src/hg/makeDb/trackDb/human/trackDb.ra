@@ -1,9 +1,6 @@
 #PanelApp
 include panelApp.ra
 
-#ENIGMA tracks
-include trackDb.enigmaTracks.ra
-
 # ENCODE tracks
 include trackDb.encode.ra
 
@@ -43,6 +40,7 @@ include trackDb.giab.ra
 
 # CADD scores
 include cadd.ra
+include cadd1_7.ra
 
 # Revel scores
 include revel.ra
@@ -137,43 +135,6 @@ color 200,0,0
 type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
-track decipher
-shortLabel DECIPHER CNVs
-longLabel DECIPHER CNVs
-group phenDis
-visibility hide
-type bigBed 9 +
-itemRgb on
-tableBrowser off knownCanonToDecipher knownToDecipher decipherRaw
-bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
-url https://www.deciphergenomics.org/patient/$$
-urlLabel Decipher Patient View:
-filter.size 0
-filterByRange.size on
-filterLimits.size 2:170487333
-filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Trip
-filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
-mergeSpannedItems on
-searchIndex name
-mouseOverField _mouseOver
-
-searchTable decipher
-searchMethod exact
-searchType bigBed
-release alpha,beta
-
-track decipherSnvs
-shortLabel DECIPHER SNVs
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
-group phenDis
-visibility hide
-color 0,0,0
-type bed 4
-tableBrowser off decipherSnvsRaw
-prevExonText Left edge
-nextExonText Right edge
-html decipher
-
 track phegeni
 shortLabel PheGenI SNPs
 longLabel NCBI Phenotype-Genotype Integrator SNPs
@@ -225,6 +186,19 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
+
+        track pubtator
+        shortLabel PubTator rsIDs
+        longLabel dbSNP Variants extracted by PubTator3
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/pubs2/pubtatorDbSnp.bb
+        noScoreFilter on
+        exonNumbers off
+        itemRgb on
+        parent varsInPubs pack
+        urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
 
 track caseControl
 compositeTrack on
@@ -375,7 +349,7 @@ itemRgb on
 urlLabel KOMP Data Coordination Center:
 url http://www.mousephenotype.org/data/genes/$$
 mgiUrlLabel MGI Report:
-mgiUrl http://www.informatics.jax.org/marker/$$
+mgiUrl https://www.informatics.jax.org//marker/$$
 exonNumbers off
 
 track acembly
@@ -2496,7 +2470,7 @@ visibility hide
 type bed 4 .
 otherDb mm8
 otherDbTable jaxQtl
-url http://www.informatics.jax.org/marker/$$
+url https://www.informatics.jax.org//marker/$$
 urlLabel MGI QTL Detail:
 
     track jaxQtlAsIs
@@ -2782,8 +2756,8 @@ otherDb hg38
 chainNormScoreAvailable on
 
 track chainSelf
-shortLabel Self Chain
-longLabel Chained Self-Alignments
+shortLabel Self Alignment
+longLabel Self-Alignment: Chained alignment of the human genome to itself
 group rep
 visibility hide
 color 100,50,0
@@ -3694,42 +3668,6 @@ group expression
 
 track eponine override
 
-track omimLocation
-shortLabel OMIM Cyto Loci
-longLabel OMIM Cytogenetic Loci Phenotypes - Gene Unknown
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser noGenome
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-
-track omimGene2
-shortLabel OMIM Genes
-longLabel OMIM Gene Phenotypes - Dark Green Can Be Disease-causing
-group phenDis
-visibility dense
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-
-track omimAvSnp
-shortLabel OMIM Alleles
-longLabel OMIM Allelic Variant Phenotypes
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser noGenome omimAv omimAvRepl
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-
 track cosmic
 shortLabel COSMIC
 longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
@@ -4357,44 +4295,6 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
-searchName omimAvSnpAcc
-searchTable omimAvSnp
-searchMethod exact
-searchType bed
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]{6})\.([0-9]{4})
-searchPriority 10
-padding 50
-
-searchName omimGene2Acc
-searchTable omimGene2
-searchMethod exact
-searchType bed
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]{6})
-searchPriority 10
-#release beta,public
-
-#searchName omimGene2AccBb
-#searchTable omimGene2bb
-#searchMethod exact
-#searchType bigBed
-#shortCircuit 1
-#semiShortCircuit 1
-#termRegex ([0-9]{6})
-#searchPriority 10
-#release alpha
-
-searchName omimGeneLocAcc
-searchTable omimLocation
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]{6})
-searchPriority 10
-
 track fox2ClipSeqComp
 compositeTrack on
 shortLabel FOX2 CLIP-seq
@@ -4934,18 +4834,12 @@ pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data ar
 
 include phastBias.ra
 
-searchName decipherId
-searchTable decipher
-termRegex [0-9]+
-searchType bed
-searchPriority 50
-release public
+include omim.ra
 
-searchName decipherSnvsId
-searchTable decipherSnvs
-termRegex [0-9]+
-searchType bed
-searchPriority 50
+include decipher.alpha.ra alpha,beta
+include decipher.ra public
+
+include ../refSeqComposite.ra
 
 searchTable ensGene
 searchType genePred
@@ -5600,10 +5494,8 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-include covidHgiGwas.ra beta,public
-include covidHgiGwas.alpha.ra alpha
-include covidTracks.ra beta,public
-include covidTracks.alpha.ra alpha
+include covidHgiGwas.ra
+include covidTracks.ra
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
@@ -5643,8 +5535,7 @@ searchTable hgnc
 searchMethod exact
 searchType bigBed
 searchPriority 1.02
-
-include ../refSeqComposite.ra
+shortCircuit 1
 
 track ncbiRefSeqSelect
 parent refSeqComposite off

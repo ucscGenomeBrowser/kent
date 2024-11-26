@@ -6,7 +6,7 @@
 #define GENARK_H
 
 #include "jksql.h"
-#define GENARK_NUM_COLS 6
+#define GENARK_NUM_COLS 8
 
 #define defaultGenarkTableName "genark"
 /* Name of table that maintains the names of hubs we'll automatically attach if referenced. */
@@ -27,6 +27,8 @@ struct genark
     char *scientificName;	/* scientific name: Homo sapiens */
     char *commonName;	/* common name: human */
     int taxId;	/* taxon id: 9606 */
+    int priority;	/* search priority to order hgGateway results */
+    char *clade;	/* clade group in the GenArk system */
     };
 
 void genarkStaticLoad(char **row, struct genark *ret);
@@ -94,11 +96,31 @@ char *genarkUrl(char *accession);
  * otherwise return NULL
  * */
 
-char *genArkHubTxt(char *gcX);
-/* given a GC[AF]_012345678.9 name, return hub.txt URL */
+char *genArkPath(char *genome);
+/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
+ *               GCA/021/951/015
+ * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
+ *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
+ *   The path returned does not depend upon this GCx_ naming scheme,
+ *   it simply uses the hub URL as returned from genarkUrl(genome) and
+ *   returns the middle part without the https://... prefix
+ */
 
 char *genarkTableName();
 /* return the genark table name from the environment, 
  * or hg.conf, or use the default.  Cache the result */
+
+/* temporary function while the genark table is in transistion with
+ * new coluns being added, July 2024.  Allows compatibility with existing
+ * genark table.
+ */
+int genArkColumnCount();
+/* return number of columns in genark table */
+
+boolean isGenArk(char *genome);
+/* given a genome name, see if it is in the genark table to determine
+ *  yes/no this is a genark genome assembly
+ */
+
 #endif /* GENARK_H */
 

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export PYTHONNOUSERSITE="True"
+export listFile=$1
+export output=$2
+export stdErr="${output%.txt}.err"
+/hive/data/outside/ncbi/genomes/reports/allCommonNames/commonNames.py $listFile > "${output}" 2> "${stdErr}"

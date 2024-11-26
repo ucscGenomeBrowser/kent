@@ -11,7 +11,7 @@ noInherit on
 allButtonPair on
 dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
-dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="http://www.informatics.jax.org/marker/$$" xenTro="https://www.xenbase.org/gene/showgene.do?method=display&geneId=$$"
+dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="https://www.informatics.jax.org//marker/$$" xenTro="https://www.xenbase.org/gene/showgene.do?method=display&geneId=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
 
         track ncbiRefSeq
@@ -56,7 +56,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         type bigBed 12 +
         labelFields gene
         skipEmptyFields on
-        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="https://www.informatics.jax.org//marker/$$"
 
         track ncbiRefSeqPsl
         priority 5

@@ -79,7 +79,19 @@
         <em>http://<!--#echo var="HTTP_HOST" --></em> with any questions.</strong></p>
       <!--#endif -->
 
-  <p style="text-align: center;">
+<div style="display: flex; align-items: center; justify-content: center; text-align: center;margin-top: 10px;">
+  <a href="/cgi-bin/hgTracks?db=hg38&startClinical=true" style="margin-right: 20px; text-align: center;"
+  title="Interactive hg38 tutorial covering features that may help in clinical genomics">
+    <div style="border: 2px solid red; padding: 5px; display: flex; align-items: center;">
+      <p style="margin: 0; padding-right: 0px;">Try our new<br>clinical tutorial!</p>
+      <img src="/images/clinicalTutorialIcon.png" style="height: 47px; width: 47px; margin-top: 0px; margin-left: 5px;">
+    </div>
+  </a>
+<!--
+  <span>right text</span>
+</div>
+-->
+
     <input size=50 name="searchString" id="searchBarSearchString" type="text" 
         placeholder="Search genes, data, help docs and more..."></input>
     <input name="searchButton" id="searchBarSearchButton" type="submit" value="Search"></input>
@@ -139,7 +151,8 @@
         }
     });
     </script>
-  </p>
+</span></div>
+
 
   <div class="row">
     <!-- Tools -->

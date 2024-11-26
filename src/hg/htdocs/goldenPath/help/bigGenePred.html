@@ -54,21 +54,23 @@ is pulled in when the <code>bedToBigBed</code> utility is run with the
     string name2;       	"Alternative/human readable name"
     string cdsStartStat; 	"Status of CDS start annotation (none, unknown, incomplete, or complete)"
     string cdsEndStat;   	"Status of CDS end annotation (none, unknown, incomplete, or complete)"
-    int[blockCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
+    int[blockCount] exonFrames; "Reading frame of the start of the CDS region of the exon, in the direction of transcription (0,1,2), or -1 if there is no CDS region."
     string type;        	"Transcript type"
     string geneName;    	"Primary identifier for gene"
     string geneName2;   	"Alternative/human-readable gene name"
     string geneType;    	"Gene type"
     )  </code></pre>
 
-<p>The field <pre>exonFrames</pre> is a comma-separated list of the numbers 0, 1, 2 or -1, one per exon, in order of transcription.
-This order means that the first value for a transcript on the - strand is the exon most on the right of the screen 
-on the Genome Browser. A value of zero means that the first codon of the exon starts at the first nucleotide of the
-exon. A value of one means that the first codon starts after the first nucleotide and a value of two means
-that it starts after the second nucleotide. UTRs are non-coding and their exonFrame value is -1.
-</p>
+<p>
+The field <code>exonFrames</code> is a comma-separated list of the numbers
+with the possible values 0, 1, 2 or -1, one per exon, in order of transcription.
+This order means that the first value for a transcript on the minus (-) strand is
+the exon on the right of the screen on the Genome Browser.
+A value of zero means that the first codon of the exon starts at the first nucleotide of the
+exon. A value of one means that the first codon starts after the first
+nucleotide and a value of two means that it starts after the second nucleotide.
+UTRs are non-coding and their exonFrame value is -1.</p>
 
-values indicate the offset of the first codon in nucleotides at the start of the exon. 
 <p>The fields cdsStartStat and cdsEndStat have the following values: 'none' = none,
 'unk' = unknown, 'incmpl' = incomplete, and 'cmpl' = complete. The
 values, however, are not used for our display and cannot be used to identify coding or non-coding genes.

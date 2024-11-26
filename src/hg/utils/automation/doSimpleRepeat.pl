@@ -42,6 +42,8 @@ my $stepper = new HgStepManager(
 my $defaultSmallClusterHub = 'most available';
 my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
+my $ram = '4g';
+my $cpu = 1;
 my $unmaskedSeq = "\$db.unmasked.2bit";
 my $trf409 = "";
 
@@ -71,6 +73,8 @@ _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
+						'ram' => $ram,
+						'cpu' => $cpu,
 						'smallClusterHub' => '');
   my ($sizeM, $chunkM) = ($singleRunSize, $chunkSize);
   $sizeM =~ s/000000$/Mb/;  $chunkM =~ s/000000$/Mb/;
@@ -171,11 +175,27 @@ set finalOut = \$1
 set inLst = \$finalOut:r
 set inLft = \$inLst:r.lft
 
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  set tmpSz = `df --output=avail -k /tmp | tail -1`
+  set shmSz = `df --output=avail -k /dev/shm | tail -1`
+  if ( "\${shmSz}" > "\${tmpSz}" ) then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     setenv TMPDIR "/dev/shm/tmp"
+  else
+     setenv TMPDIR "/tmp"
+  endif
+endif
 $HgAutomate::setMachtype
 
 # Use local disk for output, and move the final result to \$finalOut
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p /scratch/tmp doSimpleRepeat.cluster.XXXXXX`
+set tmpDir = `mktemp -d -p \$TMPDIR doSimpleRepeat.cluster.XXXXXX`
 pushd \$tmpDir
 
 foreach spec (`cat \$inLst`)
@@ -188,7 +208,7 @@ foreach spec (`cat \$inLst`)
   twoBitToFa \$spec stdout \\
   | sed -e "s/^>.*/>\$base/" \\
   | $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
-      stdin /dev/null -bedAt=\$base.bed -tempDir=/scratch/tmp
+      stdin /dev/null -bedAt=\$base.bed -tempDir=\$tmpDir
 end
 
 # Due to the large chunk size, .lft files can have thousands of lines.
@@ -242,7 +262,7 @@ _EOF_
     );
   }
 
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   if ($opt_unmaskedSeq) {
     $bossScript->add(<<_EOF_
@@ -256,7 +276,7 @@ $paraRun
 _EOF_
     );
   } else {
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x TrfRun.csh
@@ -296,11 +316,28 @@ sub doSingle {
      $trf409Option = "-l=$trf409";
      $trfCmd = "trf.4.09";
   }
+  my $tmpDir = &HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
 $HgAutomate::setMachtype
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  set tmpSz = `df --output=avail -k /tmp | tail -1`
+  set shmSz = `df --output=avail -k /dev/shm | tail -1`
+  if ( "\${shmSz}" > "\${tmpSz}" ) then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     setenv TMPDIR "/dev/shm/tmp"
+  else
+     setenv TMPDIR "/tmp"
+  endif
+endif
 twoBitToFa $unmaskedSeq stdout \\
 | $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
-      stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+      stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=\$TMPDIR
 _EOF_
   );
   $bossScript->execute();

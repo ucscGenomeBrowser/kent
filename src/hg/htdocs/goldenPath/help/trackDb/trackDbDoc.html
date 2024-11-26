@@ -38,6 +38,16 @@
     <div class="lightBlueBarTitle">&nbsp;&nbsp;Track Database Definition</div>
 </div>
 
+<div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
+  <p><span style="font-weight: bold; color: #c70000;">NOTE:</span>
+  This document has been deprecated. For the latest TrackDb settings see the
+  <a href="trackDbHub.html">Track Hub definition doc</a>.<br><br> 
+  This change was done to remove redundancy.
+  This page existed to document all trackDb settings including internal ones whereas the
+  Track Hub document covered only settings compatible with hubs. However, all new
+  settings developed are now hub-compatible.</p>
+</div>
+
 <!-- Finally to the content -->
 <div class="borderGuard">
 
@@ -429,6 +439,36 @@ are described below along with the settings specific to their types.</P>
         <div class="format">
             <code>filterLabel.&lt;fieldName&gt; &lt;label&gt;</code><BR>
             </div>
+    </TD></TR>
+    
+    <TR VALIGN=TOP><TD class="highlight"><A name="highlight">
+            <A name="highlight.fieldName"></A>
+            <A name="highlightLimits.fieldName"></A>
+            <A name="highlightByRange.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>highlight.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
+            <code>highlightByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
+            <code>highlightLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="highlightText"><A name="highlightText">
+            <A name="FilterText.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>highlightText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
+            <code>highlightType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
+            </div>
+    <TR VALIGN=TOP><TD class="highlightValues"><A name="highlightValues">
+            <A name="highlightValues.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>highlightValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <code>highlightValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <code>highlightType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
+            </div>
+    <TR VALIGN=TOP><TD class="highlightColor"><A name="highlightColor"></A>
+            <A name="highlightColor"</A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">highlightColor &lt;#hexcolor&gt;</code><BR>
+        </div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterBy"><A name="filterBy"></A><IMG class='toggle detail'>
         <div class="format"><code>filterBy &lt;field1:title=[+]opt1a...&gt;

@@ -42,3 +42,12 @@ type bigBed 6 %
 longLabel Bad Type Setting, Bogus character after numFields
 bigDataUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/bbi/ricCom1.assembly.bb
 shortLabel Bad Type Setting
+
+track invalidType
+type wig
+longLabel Early Bengalese finch TE development, snATAC
+autoScale group
+priority 2
+compositeTrack on
+shortLabel Early finch dev snATAC wiggles
+visibility hide

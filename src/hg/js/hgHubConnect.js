@@ -66,11 +66,17 @@ $(function() {
 // cookie option requires jquery.cookie.js
 $(function() {
   $("#tabs").tabs({
-      cookie: {
-          name: 'hubTab_cookie',
-          expires: 30
-      }
+      active: localStorage.getItem("hubTab") !== null ? localStorage.getItem("hubTab") : 0,
+      activate: function(event, ui) {
+          localStorage.setItem("hubTab", ui.newTab.index());
+      },
   });
+  // activate tabs if the current URL ends with #dev or #conn
+  var tabName = window.location.hash;
+  if (tabName==="#dev")
+      $("#tabs").tabs("option", "active", 2);
+  if (tabName==="#conn")
+      $("#tabs").tabs("option", "active", 1);
 });
 
 // creates keyup event; listening for return key press

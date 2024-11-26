@@ -537,7 +537,7 @@ hPrintf("<B>Database:</B> %s", trackHubSkipHubName(database));
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
 printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", firstWordInLine(sqlUnixTimeToDate(&timep, FALSE)));
 
-printDownloadLink("Big Bed", fileName);
+printDownloadLink("Big Bed", tdb, fileName);
 
 if (bbi->version >= 2)
     {

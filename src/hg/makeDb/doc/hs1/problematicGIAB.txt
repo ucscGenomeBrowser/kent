@@ -1,0 +1,49 @@
+#############################################################################
+# problematicGIAB: Difficult regions from GIAB via NCBI - Megna/Gerardo
+# Redmine #34253
+
+# Megna workflow:
+cd /cluster/home/mchalama/public_html/tracks/
+mkdir T2Tdiff
+cd T2Tdiff
+mkdir hs1
+cd hs1
+cp -r /cluster/home/mchalama/public_html/tracks/difficult /cluster/home/mchalama/public_html/tracks/T2Tdiff
+mv /cluster/home/mchalama/public_html/tracks/difficult/genomes.txt /cluster/home/mchalama/public_html/tracks/T2Tdiff
+mv /cluster/home/mchalama/public_html/tracks/difficult/hub.txt /cluster/home/mchalama/public_html/tracks/T2Tdiff
+mv /cluster/home/mchalama/public_html/tracks/difficult/drfGvN.html  /cluster/home/mchalama/public_html/tracks/T2Tdiff/hs1
+mv /cluster/home/mchalama/public_html/tracks/difficult/trackDb.txt /cluster/home/mchalama/public_html/tracks/T2Tdiff/hs1
+nano /cluster/home/mchalama/public_html/tracks/T2Tdiff/genomes.txt
+nano /cluster/home/mchalama/public_html/tracks/T2Tdiff/hub.txt
+nano /cluster/home/mchalama/public_html/tracks/T2Tdiff/hs1/trackDb.txt
+cd /cluster/home/mchalama/public_html/tracks/T2Tdiff/hs1
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_alldifficultregions.bb
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_alllowmapandsegdupregions.bb
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_notinalldifficultregions.bb
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_notinalllowmapandsegdupregions.bb
+open genome browser
+
+# Gerardo workflow
+cd /hive/data/genomes/hs1/bed/
+mkdir problematic; cd problematic
+mkdir GIAB; cd GIAB
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_alldifficultregions.bb 
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_alllowmapandsegdupregions.bb
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_notinalldifficultregions.bb
+wget https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/genome-stratifications/v3.5/CHM13@all/Union/CHM13_notinalllowmapandsegdupregions.bb
+mv CHM13_notinalllowmapandsegdupregions.bb notinalllowmapandsegdupregions.bb
+mv CHM13_alllowmapandsegdupregions.bb alllowmapandsegdupregions.bb
+mv CHM13_alldifficultregions.bb alldifficultregions.bb
+mv CHM13_notinalldifficultregions.bb notinalldifficultregions.bb
+cd /gbdb/hs1/
+mkdir problematic; cd problematic
+mkdir GIAB; cd GIAB
+# Made symlinks
+ln -s /hive/data/genomes/hs1/bed/problematic/GIAB/notinalllowmapandsegdupregions.bb
+ln -s /hive/data/genomes/hs1/bed/problematic/GIAB/alllowmapandsegdupregions.bb
+ln -s /hive/data/genomes/hs1/bed/problematic/GIAB/alldifficultregions.bb
+ln -s /hive/data/genomes/hs1/bed/problematic/GIAB/notinalldifficultregions.bb
+cd /cluster/home/gperez2/kent/src/hg/makeDb/trackDb/human/hs1
+cp /cluster/home/mchalama/public_html/tracks/T2Tdiff/hs1/trackDb.txt problematic.ra
+cp /cluster/home/mchalama/public_html/tracks/T2Tdiff/hs1/drfGvN.html problematic.html
+# Updated the problematic.ra, problematic.html, and human/hs1/trackDb.ra

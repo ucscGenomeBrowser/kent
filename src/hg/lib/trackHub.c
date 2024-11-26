@@ -504,18 +504,27 @@ struct grp *list = NULL;
 struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, MAX_HUB_GROUP_FILE_SIZE);
 while ((ra = raNextRecord(lf)) != NULL)
     {
+    char *str;
     struct grp *grp;
     AllocVar(grp);
     slAddHead(&list, grp);
 
     grp->name = cloneString(getRequiredGrpSetting(ra, "name", lf));
     grp->label = cloneString(getRequiredGrpSetting(ra, "label", lf));
-    grp->priority = atof(getRequiredGrpSetting(ra, "priority", lf));
-    grp->defaultIsClosed = sqlUnsigned(getRequiredGrpSetting(ra,"defaultIsClosed",lf));
+
+    grp->priority = BIGDOUBLE;
+    str = hashFindVal(ra, "priority");
+    if (str != NULL)
+        grp->priority = atof(str);
+
+    str = hashFindVal(ra, "defaultIsClosed");
+    if ((str != NULL) && (sameString("on",str) || sameString("1", str)))
+        grp->defaultIsClosed = 1;
     hashFree(&ra);
     }
 if (list)
-    slReverse(&list);
+    slSort(&list, grpCmpPriorityLabel);
+
 lineFileClose(&lf);
 
 return list;
@@ -646,8 +655,8 @@ while ((ra = raNextRecord(lf)) != NULL)
     if (hashFindVal(ra, "track"))
         break;
 
-    char *twoBitPath = hashFindVal(ra, "twoBitPath");
-    char *twoBitBptUrl = hashFindVal(ra, "twoBitBptUrl");
+    char *twoBitPath = hReplaceGbdb(hashFindVal(ra, "twoBitPath"));
+    char *twoBitBptUrl = hReplaceGbdb(hashFindVal(ra, "twoBitBptUrl"));
     char *genome, *trackDb;
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
@@ -1191,6 +1200,24 @@ void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList)
 char namePrefix[PATH_LEN];
 safef(namePrefix, sizeof(namePrefix), "%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
+}
+
+char *trackHubGetHubName(char *name)
+/* Get the hub_#_ prefix in a hub name. */
+{
+if ((name == NULL) || !startsWith("hub_", name))
+    return NULL;
+
+char *ret = cloneString(name);
+char *under = strchr(&ret[4], '_');
+
+if (under)
+    {
+    *under = 0;
+    return ret;
+    }
+
+return NULL;
 }
 
 char *trackHubSkipHubName(char *name)

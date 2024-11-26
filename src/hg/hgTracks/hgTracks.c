@@ -825,7 +825,7 @@ if(doIdeo)
     if (!psOutput)
 	{
         hPrintf("</MAP>\n");
-	jsInline("$('area.cytoBand').click(function(){return false;});\n");
+	jsInline("$('area.cytoBand').on(\"click\", function(){return false;});\n");
 	}
     }
 
@@ -4872,6 +4872,16 @@ for (track = trackList; track != NULL; track = nextTrack)
     }
 }
 
+boolean forceWiggle; // we've run out of space so all tracks become coverage tracks
+
+static void addPreFlatTrack(struct trackRef **list, struct track *track)
+{
+struct trackRef *trackRef;
+AllocVar(trackRef);
+trackRef->track = track;
+slAddHead(list, trackRef);
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -4957,10 +4967,18 @@ if (theImgBox)
 struct flatTracks *flatTracks = NULL;
 struct flatTracks *flatTrack = NULL;
 
+// There are two ways to get the amino acids to show up:
+// 1) either by setting the ruler track viz to full
+// 2) or by checking the box on the ruler track's trackUi page.
+// Any selection on the trackUi page takes precedence. 
 if (rulerMode != tvFull)
     {
     rulerCds = FALSE;
     }
+
+// the code below will only use the checkbox on trackUi if a setting on the trackUi page has been made. 
+if (cartVarExists(cart, BASE_SHOWCODONS) && zoomedToCdsColorLevel)
+    rulerCds = cartUsualBoolean(cart, BASE_SHOWCODONS, TRUE);
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
@@ -5021,6 +5039,9 @@ expandSquishyPackTracks(trackList);
 
 // set heights and visibilities.
 struct window *window = NULL;
+
+// we may come through this way twice if we exceed the 32k limit for screen image
+retry:
 for(window=windows;window;window=window->next)
     {
     setGlobalsFromWindow(window);
@@ -5089,7 +5110,8 @@ if (wigOrder != NULL)
         }
     }
 
-// Construct flatTracks
+// Construct pre-flatTracks 
+struct trackRef *preFlatTracks = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (isLimitedVisHiddenForAllWindows(track))
@@ -5099,7 +5121,7 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks, track, cart, orderedWiggles);
+            addPreFlatTrack(&preFlatTracks, track);
         else
             {
             boolean doHideEmpties = doHideEmptySubtracksNoMultiBed(cart, track);
@@ -5114,16 +5136,62 @@ for (track = trackList; track != NULL; track = track->next)
                         !(doHideEmpties && slCount(subtrack->items) == 0))
                         // Ignore subtracks with no items in window
                     {
-                    flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
+                    addPreFlatTrack(&preFlatTracks, subtrack);
                     }
                 }
             }
         }
     else
 	{	
-        flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
+        addPreFlatTrack(&preFlatTracks, track);
 	}
     }
+slReverse(&preFlatTracks);
+
+// check total height
+#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
+int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
+boolean safeHeight = TRUE;
+struct trackRef *pfRef;
+int tmpPixHeight = pixHeight;
+for(pfRef = preFlatTracks; pfRef; pfRef = pfRef->next)
+    {
+    struct track *pf = pfRef->track;
+    int totalHeight = tmpPixHeight+trackPlusLabelHeight(pf,fontHeight);
+    if (totalHeight > maxSafeHeight)
+        {
+        if (!forceWiggle)
+            {
+            char buffer[1024];
+            sprintLongWithCommas(buffer, totalHeight);
+            warn("Image was over 32,000 pixels high (%s pix). All bed tracks are now displayed as density graphs. Zoom in to restore previous display modes.", buffer);
+            forceWiggle = TRUE;
+            goto retry;
+            }
+        char numBuf[SMALLBUF];
+        sprintLongWithCommas(numBuf, maxSafeHeight);
+        if (safeHeight)  // Only one message
+            warn("Image is over %s pixels high (%d pix) at the following track which is now "
+                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, pf->tdb->longLabel,
+                 (pf->next != NULL ?
+                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
+        safeHeight = FALSE;
+	struct track *winTrack;
+	for(winTrack=pf;winTrack;winTrack=winTrack->nextWindow)
+	    {
+	    pf->limitedVis = tvHide;
+	    pf->limitedVisSet = TRUE;
+	    }
+        }
+    if (!isLimitedVisHiddenForAllWindows(pf))
+        tmpPixHeight += trackPlusLabelHeight(pf, fontHeight);
+    }
+pixHeight = tmpPixHeight;
+
+// Construct flatTracks
+for(; preFlatTracks; preFlatTracks = preFlatTracks->next)
+    flatTracksAdd(&flatTracks,preFlatTracks->track,cart, orderedWiggles);
+
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
 
 if (orderedWiggles)
@@ -5155,33 +5223,12 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 
 
 // fill out track->prevTrack, and check for maxSafeHeight
-boolean safeHeight = TRUE;
-/* firefox on Linux worked almost up to 34,000 at the default 620 width */
-#define maxSafeHeight   32000
 struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
-    assert(track->limitedVis != tvHide);
-    // ORIG int totalHeight = pixHeight+trackPlusLabelHeight(track,fontHeight);
-    int totalHeight = pixHeight+flatTrack->maxHeight;
-    if (totalHeight > maxSafeHeight)
-        {
-        char numBuf[SMALLBUF];
-        sprintLongWithCommas(numBuf, maxSafeHeight);
-        if (safeHeight)  // Only one message
-            warn("Image is over %s pixels high (%d pix) at the following track which is now "
-                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
-                 (flatTrack->next != NULL ?
-                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
-        safeHeight = FALSE;
-	struct track *winTrack;
-	for(winTrack=track;winTrack;winTrack=winTrack->nextWindow)
-	    {
-	    track->limitedVis = tvHide;
-	    track->limitedVisSet = TRUE;
-	    }
-        }
+    if (track->limitedVis == tvHide)
+        continue;
     if (!isLimitedVisHiddenForAllWindows(track))
         {
 	struct track *winTrack;
@@ -5192,7 +5239,6 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         // ORIG pixHeight += trackPlusLabelHeight(track, fontHeight);
 	if (!theImgBox) // prevTrack may have altered the height, so recalc height
 	    setFlatTrackMaxHeight(flatTrack, fontHeight);
-	pixHeight += flatTrack->maxHeight;
         prevTrack = track;
         }
     }
@@ -6964,6 +7010,7 @@ for(; grpList; grpList = grpList->next)
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
     group->errMessage = grpList->errMessage;
+    group->defaultIsClosed = grpList->defaultIsClosed;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
@@ -7044,6 +7091,12 @@ for (track = *pTrackList; track != NULL; track = track->next)
         group = NULL;
     else
 	group = hashFindVal(hash, track->groupName);
+    if ((group == NULL) && (track->groupName != NULL))
+        {
+        char *hubName = trackHubGetHubName(track->groupName);
+        if (hubName != NULL)
+            group = hashFindVal(hash, hubName);
+        }
     if (group == NULL)
         {
 	if (unknown == NULL)
@@ -7480,9 +7533,37 @@ void collapseGroup(char *name, boolean doCollapse)
 cartSetBoolean(cart, collapseGroupVar(name), doCollapse);
 }
 
-void myControlGridStartCell(struct controlGrid *cg, boolean isOpen, char *id)
+static boolean shouldBreakAll(char *text)
+/* Check if any word in the label exceeds the cell width and should
+ * be broken. */
+{
+/* Must match htdocs/style/HGStyle.css .trackListId between min and max width
+ * it CSS to allow room for different character width calculations in web
+ * browser. */
+static const int MAX_WIDTH_CHARS = 20;
+int wordLen = 0;
+for (char *textPtr = text; *textPtr != '\0'; textPtr++)
+    {
+    if (isspace(*textPtr))
+        {
+        if (wordLen > MAX_WIDTH_CHARS)
+            return TRUE;  // early exit
+        wordLen = 0;
+        }
+    else
+        {
+        wordLen++;
+        }
+    }
+// check gain if there are no spaces.
+return (wordLen > MAX_WIDTH_CHARS);
+}
+
+void myControlGridStartCell(struct controlGrid *cg, boolean isOpen, char *id, boolean breakAll)
 /* Start a new cell in control grid; support Javascript open/collapsing by including id's in tr's.
-   id is used as id prefix (a counter is added to make id's unique). */
+   id is used as id prefix (a counter is added to make id's unique). The breakAll arguments
+   indicates if breaking anywhere to prevent cell overflow is allowed vs only word-break.
+*/
 {
 static int counter = 1;
 if (cg->columnIx == cg->columns)
@@ -7493,10 +7574,11 @@ if (!cg->rowOpen)
     printf("<tr %sid='%s-%d'>", isOpen ? "" : "style='display: none' ", id, counter++);
     cg->rowOpen = TRUE;
     }
+char *cls = breakAll ? "trackLabelTd trackLabelTdBreakAll" : "trackLabelTd";
 if (cg->align)
-    printf("<td class='trackLabelTd' align=%s>", cg->align);
+    printf("<td class='%s' align=%s>", cls, cg->align);
 else
-    printf("<td class='trackLabelTd'>");
+    printf("<td class='%s'>", cls);
 }
 
 static void pruneRedundantCartVis(struct track *trackList)
@@ -7743,65 +7825,67 @@ return 0;
 
 
 void loadDecorators(struct track *track)
-/* Load decorations from a source (file) and put them in a decorator, then add that
- * decorator to the list of the track's decorators.  Within the new decorator, each
+/* Load decorations from a source (file) and put them into decorators, then add those
+ * decorators to the list of the track's decorators.  Within the new decorators, each
  * of the decorations should have been entered into a hash table that is indexed by the
  * name of the linked feature.  That way when we're drawing the linked feature, we'll
  * be able to quickly locate the associated decorations.
- *
- * Note that this will need amendment when multiple decoration sources are possible.
  */
 {
-char *decoratorUrl = trackDbSetting(track->tdb, "decorator.default.bigDataUrl");
-if (!decoratorUrl)
+struct trackDb *decoratorTdbs = getTdbsForDecorators(track->tdb);
+for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
+        decoratorTdb = decoratorTdb->next)
     {
-    errAbort ("Decorator tags are present in track %s, but no decorator file specified (decorator.default.bigDataUrl is missing)",
-            track->track);
-    return;
+    char *decoratorUrl = trackDbSetting(decoratorTdb, "bigDataUrl");
+    if (!decoratorUrl)
+        {
+        warn ("Decorator tags are present as %s, but no decorator file specified (bigDataUrl is missing)",
+                decoratorTdb->track);
+        continue;
+        }
+
+    struct bbiFile *bbi = NULL;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        if (isValidBigDataUrl(decoratorUrl,TRUE))
+            bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        warn ("Network error while attempting to retrieve decorations from %s (track %s) - %s",
+                decoratorUrl, track->track, dyStringContents(errCatch->message));
+        continue;
+        }
+    errCatchFree(&errCatch);
+
+    struct asObject *decoratorFileAsObj = asParseText(bigBedAutoSqlText(bbi));
+    if (!asColumnNamesMatchFirstN(decoratorFileAsObj, decorationAsObj(), DECORATION_NUM_COLS))
+        {
+        warn ("Decoration file associated with track %s (%s) does not match the expected format - see decoration.as",
+                track->track, decoratorUrl);
+        continue;
+        }
+
+    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, decoratorTdb);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *result = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+
+    struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
+
+    // insert resulting entries into track->decorators, leaving room for having multiple sources applied
+    // to the same track in the future.
+    if (track->decoratorGroup == NULL)
+        track->decoratorGroup = newDecoratorGroup();
+
+    struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
+    track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
+    for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
+        d->group = track->decoratorGroup;
+    lmCleanup(&lm);
+    bigBedFileClose(&bbi);
     }
-
-struct bbiFile *bbi = NULL;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    if (isValidBigDataUrl(decoratorUrl,TRUE))
-        bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    errAbort ("Network error while attempting to retrieve decorations from %s (track %s) - %s",
-            decoratorUrl, track->track, dyStringContents(errCatch->message));
-    return;
-    }
-errCatchFree(&errCatch);
-
-struct asObject *decoratorFileAsObj = asParseText(bigBedAutoSqlText(bbi));
-if (!asColumnNamesMatchFirstN(decoratorFileAsObj, decorationAsObj(), DECORATION_NUM_COLS))
-    {
-    errAbort ("Decoration file associated with track %s (%s) does not match the expected format - see decoration.as",
-            track->track, decoratorUrl);
-    return;
-    }
-
-struct trackDb *decoratorTdb = getTdbForDecorator(track->tdb);
-struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, decoratorTdb);
-struct lm *lm = lmInit(0);
-struct bigBedInterval *result = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
-
-struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
-
-// insert resulting entries into track->decorators, leaving room for having multiple sources applied
-// to the same track in the future.
-if (track->decoratorGroup == NULL)
-    track->decoratorGroup = newDecoratorGroup();
-
-struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
-track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
-for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
-    d->group = track->decoratorGroup;
-lmCleanup(&lm);
-bigBedFileClose(&bbi);
 }
 
 static void *remoteParallelLoad(void *threadParam)
@@ -7914,7 +7998,7 @@ for (pfd = pfdRunning; pfd; pfd = pfd->next)
     {
     // unfinished track
     char temp[256];
-    safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s", maxTimeInMilliseconds, pfd->track->track);
+    safef(temp, sizeof temp, "Track timed out: %s took more than %d milliseconds to load. Zoom in or increase max load time via menu 'Genome Browser > Configure'", pfd->track->track, maxTimeInMilliseconds);
     pfd->track->networkErrMsg = cloneString(temp);
     ++errCount;
     }
@@ -8484,7 +8568,7 @@ hPrintf("&nbsp;");
 // Not a submit button, because this is not a CGI function, it only calls Javascript function
 hPrintf("<button id='highlightThis' title='Add a highlight that covers the entire region shown<br><i>Keyboard shortcut:</i> h, "
         "then m'>Highlight</button>");
-jsInlineF("$('#highlightThis').click( function(ev) { highlightCurrentPosition('add'); return false; } );");
+jsInlineF("$('#highlightThis').on(\"click\", function(ev) { highlightCurrentPosition('add'); return false; } );");
 
 hPrintf("&nbsp;");
 hButtonWithMsg("hgt.hideAll", "Hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
@@ -8513,10 +8597,36 @@ hPrintf(" ");
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put the track download interface behind hg.conf control
-if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
+if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
 }
 
+
+#ifdef NOTNOW
+static void printAliases(char *name)
+/* Print out the aliases for this sequence. */
+{
+struct slName *names = chromAliasFindAliases(name);
+
+printf("<div id='aliases'><a title='");
+for(;names; names = names->next)
+    printf("%s;",names->name);
+printf("'>Aliases</a></div>");
+}
+#endif
+
+
+unsigned getParaLoadTimeout()
+// get the parallel load timeout in seconds (defaults to 90)
+{
+char *paraLoadTimeoutStr = cartOptionalString(cart, "parallelFetch.timeout");
+if (paraLoadTimeoutStr == NULL)
+    paraLoadTimeoutStr = cfgOptionDefault("parallelFetch.timeout", "90");  // wait up to default 90 seconds.
+
+unsigned paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
+
+return paraLoadTimeout;
+}
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -8842,7 +8952,7 @@ for (window=windows; window; window=window->next)
     if (ptMax > 0)
 	{
 	/* wait for remote parallel load to finish */
-	remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+	remoteParallelLoadWait(getParaLoadTimeout());  // wait up to default 90 seconds.
 	if (measureTiming)
 	    measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
 	}
@@ -9230,6 +9340,7 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
+        // printAliases(displayChromName);
 
         printPatchNote();
 
@@ -9375,42 +9486,31 @@ if (!hideControls)
 
     /* note a trick of WIDTH=27 going on here.  The 6,15,6 widths following
      * go along with this trick */
-    hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
-            tl.picWidth, 27);
-#ifndef USE_NAVIGATION_LINKS
-    hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
-    hPrintf("<span class='moveButtonText'>Move start</span><br>");
-    hButtonWithOnClick("hgt.dinkLL", " < ", "Move start position to the left",
-                       "return imageV2.navigateButtonClick(this);");
-    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkLR", " > ", "Move start position to the right",
-                       "return imageV2.navigateButtonClick(this);");
-    hPrintf("</TD>");
-    hPrintf("<td width='30'>&nbsp;</td>\n");
-#endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
-    hWrites("Click on a feature for details. ");
-    hWrites("Shift+click+drag to zoom in. ");
-    hWrites("Click grey side bars for track options. ");
-    hWrites("Drag side bars or labels up or down to reorder tracks. ");
-    hWrites("Drag tracks left or right to new position. ");
-    hWrites("Press \"?\" for keyboard shortcuts. ");
-    hWrites("Use drop-down controls below and press refresh to alter tracks displayed. ");
+    if (cartUsualBoolean(cart, "showDinkButtons", FALSE))
+        {
+        hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
+                tl.picWidth, 27);
 
-    hPrintf("</TD>");
-#ifndef USE_NAVIGATION_LINKS
-    hPrintf("<td width='30'>&nbsp;</td>\n");
-    hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
-    hPrintf("<span class='moveButtonText'>Move end</span><br>");
-    hButtonWithOnClick("hgt.dinkRL", " < ", "Move end position to the left",
-                       "return imageV2.navigateButtonClick(this);");
-    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkRR", " > ", "Move end position to the right",
-                       "return imageV2.navigateButtonClick(this);");
-    hPrintf("</TD>");
-#endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("</TR></TABLE>\n");
+        hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
+        hPrintf("<span class='moveButtonText'>Move start</span><br>");
+        hButtonWithOnClick("hgt.dinkLL", " < ", "Move start position to the left",
+                           "return imageV2.navigateButtonClick(this);");
+        hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+        hButtonWithOnClick("hgt.dinkLR", " > ", "Move start position to the right",
+                           "return imageV2.navigateButtonClick(this);");
+        hPrintf("</TD>");
+        hPrintf("<td width='30'>&nbsp;</td>\n");
 
+        hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
+        hPrintf("<span class='moveButtonText'>Move end</span><br>");
+        hButtonWithOnClick("hgt.dinkRL", " < ", "Move end position to the left",
+                                  "return imageV2.navigateButtonClick(this);");
+        hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+        hButtonWithOnClick("hgt.dinkRR", " > ", "Move end position to the right",
+                                  "return imageV2.navigateButtonClick(this);");
+        hPrintf("</TD>");
+        hPrintf("</TR></TABLE>\n");
+        }
 
     if( chromosomeColorsMade )
         {
@@ -9419,6 +9519,7 @@ if (!hideControls)
         }
     if (doPliColors)
         {
+        hPrintf("<div id='gnomadColorKeyLegend'>");
         hPrintf("<B>gnomAD Loss-of-Function Constraint (LOEUF) Color Key:</B><BR> ");
         hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
         hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 0.1</td>\n");
@@ -9433,6 +9534,7 @@ if (!hideControls)
         hPrintf("<td style=\"background-color:rgb(0,244,153)\">&ge; 0.9</td>\n");
         hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No LOEUF score</td>\n");
         hPrintf("</tr></table>\n");
+        hPrintf("</div>"); // gnomadColorKeyLegend
         }
 
     if (showTrackControls)
@@ -9441,6 +9543,11 @@ if (!hideControls)
         /* Chuck: This is going to be wrapped in a table so that
          * the controls don't wrap around randomly */
         hPrintf("<table id='trackCtrlTable' border=0 cellspacing=1 cellpadding=1>\n");
+
+        // since this is all a huge table (which it shouldn't be), the only way to add whitespace between two rows is to add an empty row
+        // since padding and margin are not allowed on table rows. (One day, we will remove this table)
+        hPrintf("<tr style='height:5px'><td></td></tr>\n");
+
         hPrintf("<tr><td align='left'>\n");
 
         hButtonWithOnClick("hgt.collapseGroups", "Collapse all", "Collapse all track groups",
@@ -9516,18 +9623,30 @@ if (!hideControls)
                 if (hub != NULL)
                     {
                     if (hub->descriptionUrl == NULL)
-                        hPrintf("<span title='The track hub authors have not provided a descriptionUrl with background "
-                                "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
-                                "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
+                        {
+                        hPrintf("<a title='The track hub authors have not provided a descriptionUrl with background "
+                                "information about this track hub. ");
+                        if (hub->email)
+                            hPrintf("The authors can be reached at %s. ", hub->email);
+                        hPrintf("This link leads to our documentation page about the descriptionUrl statement in hub.txt. ");
+                        hPrintf("' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
+                                "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>");
+                        }
                     else
-                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC)' href='%s' "
-                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
+                        {
+                        hPrintf("<a title='Link to documentation about this track hub, provided by the track hub authors (not UCSC). ");
+                        if (hub->email)
+                            hPrintf("The authors can be reached at %s", hub->email);
+                        hPrintf("' href='%s' "
+                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>", hub->descriptionUrl);
+                        }
+                    hPrintf("&nbsp;&nbsp;");
                     }
 
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
-                    " type=\"button\" value=\"disconnect\">\n", idText);
+                    " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
@@ -9544,7 +9663,7 @@ if (!hideControls)
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
 		showedRuler = TRUE;
-		myControlGridStartCell(cg, isOpen, group->name);
+		myControlGridStartCell(cg, isOpen, group->name, FALSE);
 		hPrintf("<A HREF=\"%s\">", url);
 		hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
 		hPrintf("</A>");
@@ -9563,7 +9682,8 @@ if (!hideControls)
 	    /* Display track controls */
             if (group->errMessage)
                 {
-		myControlGridStartCell(cg, isOpen, group->name);
+		myControlGridStartCell(cg, isOpen, group->name,
+                                       shouldBreakAll(group->errMessage));
                 hPrintf("%s", group->errMessage);
 		controlGridEndCell(cg);
                 }
@@ -9574,7 +9694,8 @@ if (!hideControls)
 		if (tdbIsSuperTrackChild(track->tdb))
 		    /* don't display supertrack members */
 		    continue;
-		myControlGridStartCell(cg, isOpen, group->name);
+		myControlGridStartCell(cg, isOpen, group->name,
+                                       shouldBreakAll(track->shortLabel));
 
                 printTrackLink(track);
 
@@ -9688,7 +9809,8 @@ puts("</FORM>");
 if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     jsInline("var showMouseovers = true;\n");
 
-if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+// if the configure page allows hgc popups tell the javascript about it
+if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE) && cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
     jsInline("var doHgcInPopUp = true;\n");
 
 // TODO GALT nothing to do here.
@@ -10074,8 +10196,15 @@ if (!maxTimeStr)
 
 double maxTime = atof(maxTimeStr);
 struct dyString *dy = dyStringNew(150);
-dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(0)}, %f);\n", maxTime);
+
+// The idea of the timer below is that if the page takes a ton of time to load, the message will come up while the page still builds
+// However, due to gzip compression of the page and also most of the time spent in the CGI itself, the timer only starts
+// when most of the work has been completed. So the timer is only useful if what takes long is our own hgTracks javascript
+dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(%f)}, %f);\n", maxTime, maxTime*1000);
+// In most cases, since the timer does not work well in practice, the following will always work: 
+// once the page is ready, we check how long it took to load.
 dyStringPrintf(dy, "$(document).ready( function() { clearTimeout(warnTimingTimer); hgtWarnTiming(%f)});\n", maxTime);
+
 jsInline(dy->string);
 dyStringFree(&dy);
 }
@@ -10974,9 +11103,9 @@ cartSaveSession(cart);
 
 puts("Enter a position, or click on a sequence name to view the entire "
      "sequence in the genome browser.<P>");
-puts("position ");
+puts("Position ");
 hTextVar("position", addCommasToPos(database, position), 30);
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 puts("<P>");
 
 chromSizesDownloadLinks(hasAlias, aliasFile, chromSizesFile);
@@ -11214,6 +11343,12 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
+
+if (measureTiming)
+    measureTime("Got cart: %d elements, userId=%s (=cookie), sessionId=%s", theCart->hash->elCount,
+	    theCart->userId, theCart->sessionId);
+
 if (noPixVariableSetAndInteractive())
 {
     jsIncludeFile("jquery.js", NULL);
@@ -11222,7 +11357,6 @@ if (noPixVariableSetAndInteractive())
     return;
 }
 
-measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
@@ -11260,10 +11394,6 @@ jsInline("$('#backToBrowserLi').remove();");
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
 /* struct dyString *state = NULL; */
-/* Initialize layout and database. */
-if (measureTiming)
-    measureTime("Get cart of %d for user:%s session:%s", theCart->hash->elCount,
-	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
@@ -11369,6 +11499,7 @@ if(!trackImgOnly)
             puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
             puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
             jsIncludeFile("tutorial.js",NULL);
+            jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification
             // that a tutorial is available, just leave the link in the
             // blue bar under "Help"
@@ -11383,12 +11514,16 @@ if(!trackImgOnly)
                 {
                 jsInline("var startTutorialOnLoad = true;");
                 }
+            if (sameOk(cgiOptionalString("startClinical"), "true"))
+                {
+                jsInline("var startClinicalOnLoad = true;");
+                }
             }
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
-    if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+    if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
         {
         jsIncludeFile("hgc.js", NULL);
         hPrintf("<div id='hgcDialog' style='display: none'></div>\n");

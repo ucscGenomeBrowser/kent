@@ -554,7 +554,7 @@ var subCfg = { // subtrack config module.
         if (ix > 0)
             cleanHtml = cleanHtml.substring(0,ix - 1);
 
-        cleanHtml = "<div class='blueBox' style='background-color:#FFF9D2; padding:0.5em 1em 1em;'>"
+        cleanHtml = "<div class='blueBox' style='background-color:#FFF9D2; padding:0.5em 1em 1em; overflow: scroll'>"
                     + cleanHtml + "</div>";
 
         $(cfg).html(cleanHtml);
@@ -587,7 +587,9 @@ var subCfg = { // subtrack config module.
         $(cfg).show();
         // Tricks to get this in the size and position I want
         $(cfg).css({ position: 'absolute'});
-        var myWidth = $(cfg).width();
+        var maxWidth = $(cfg).parents('table').first()[0].clientWidth;
+        var schemaLink = $(cfg).parents('td').first().next();
+        var schemaLinkWidth = schemaLink !== null ? schemaLink[0].clientWidth : 0;
         var shiftLeft = -1;
         if (subCfg.visIndependent) {
             shiftLeft *= ($(cfg).position().left - 125);
@@ -597,38 +599,16 @@ var subCfg = { // subtrack config module.
         }
         else
             shiftLeft *= ($(cfg).position().left - 40);
-        $(cfg).css({ width: myWidth+'px',position: 'relative', left: shiftLeft + 'px' });
+        // width: set to the config box size - (but shiftLeft is negative so +) the left shift
+        // margin-right: the negative number forces the schema links to stay near where they
+        //     are when the sub-config isn't open
+        $(cfg).css({ width: (maxWidth + shiftLeft) +'px',position: 'relative', left: shiftLeft + 'px', "margin-right": shiftLeft + 'px'});
 
         // Setting up filterBys must follow show because sizing requires visibility
         $(cfg).find('.filterBy').each( function(i) { // Should never be filterComp
             this.id = this.name.replace(/\./g,'_-'); // Must have id unique to page!
             ddcl.setup(this, 'noneIsAll');
         });
-
-        // Adjust cfg box size?
-        // Especially needed for filterBys, but generic in case some other overrun occurs
-        var curRight = $(cfg).offset().left + $(cfg).width();
-        var calcRight = curRight;
-        $(cfg).find(':visible').each( function(i) { // All visible, including labels, etc.
-            var childRight = $(this).offset().left + $(this).width();
-            if (calcRight < childRight)
-                calcRight = childRight;
-        });
-        if (curRight < calcRight) {                       // clip offset but add some for border
-            var cfgWidth = calcRight - $(cfg).offset().left + 16;
-            $(cfg).css({ width: cfgWidth + 'px' });
-
-            // Now containing tables may need adjustment
-            var tables = $(cfg).parents('table');
-            var maxWidth = 0;
-            $(tables).each(function(i) {
-                var myWidth = $(this).width();
-                if (maxWidth < myWidth)
-                    maxWidth = myWidth;
-                else if (maxWidth > myWidth)
-                    $(this).css('width',maxWidth + 'px');
-            });
-        }
     },
 
     cfgPopulate: function (cfg,subtrack)
@@ -760,8 +740,9 @@ var subCfg = { // subtrack config module.
         }
 
         if ($(cfg).css('display') === 'none') {
-            if ($(wrench).hasClass('disabled'))
+            if ($(wrench).hasClass('disabled')) {
                 return;
+            }
             // Don't allow if this composite is not enabled!
             // find the cb
             var tr = $(cfg).parents('tr').first();

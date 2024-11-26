@@ -616,8 +616,8 @@ _EOF_
 export target2bit=$dbTwoBit
 
 twoBitInfo \$target2bit stdout | sort -k2,2nr > \$db.chrom.sizes
-wget -O bigGenePred.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigGenePred.as'
-wget -O bigPsl.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigPsl.as'
+wget -O bigGenePred.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigGenePred.as'
+wget -O bigPsl.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigPsl.as'
 
 ### overall gene track with both predicted and curated
 genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeq.bigGp
@@ -788,7 +788,7 @@ if [ -s process/\$asmId.rna.cds ]; then
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
 
   if [ -s ncbiRefSeqGenomicDiff.bed ]; then
-    wget -O txAliDiff.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/txAliDiff.as'
+    wget -O txAliDiff.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/txAliDiff.as'
     bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
       ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
   else
@@ -930,7 +930,7 @@ export here=`pwd`
 if [ -s "\$md5Sum" ]; then
   origSum=`realpath \$md5Sum`
   bakFile="\${origSum}.\$DS"
-  if [! -s "\$bakFIle" ]; then
+  if [! -s "\$bakFile" ]; then
     mv \$origSum \$bakFile
     cd \$gpDir
     md5sum *gz > \$origSum

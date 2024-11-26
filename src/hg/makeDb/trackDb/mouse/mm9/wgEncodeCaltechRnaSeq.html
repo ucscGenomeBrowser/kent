@@ -74,10 +74,10 @@ Libraries were sequenced with the Illumina HiSeq according to the manufacturer's
 <H3>Data Processing and Analysis</H3>
  
 <P>Reads were mapped to the reference mouse genome (version mm9 with or without the Y chromosome, depending on the sex of the cell line, 
-and without the random chromosomes in all cases)  using <A href="http://tophat.cbcb.umd.edu/"" target="_BLANK">TopHat</A> (version 1.3.1). 
+and without the random chromosomes in all cases)  using <A href="https://tophat.cbcb.umd.edu/"" target="_BLANK">TopHat</A> (version 1.3.1). 
 TopHat was used with default settings with the exception of specifying an empirically determined mean inner-mate distance and that known ENSEMBL version 63 splice junctions were supplied. 
 After mapping reads to the genome and identifying splice junctions, the data was further analyzed using 
-the transcript assembly and quantification software <A href="http://cufflinks.cbcb.umd.edu/"" target="_BLANK">Cufflinks</A> (version 1.0.3). 
+the transcript assembly and quantification software <A href="https://cufflinks.cbcb.umd.edu/"" target="_BLANK">Cufflinks</A> (version 1.0.3). 
 Cufflinks was run in quantification mode on the ENSEMBL version 63 mouse genome annotation to obtain expression estimates on the gene and transcript levle, and in Reference Annotation Based Transcript (RABT) assembly and quantification mode to obtain both candidate novel transcript 
 models and expression estimates for them and the already annotated ones. </P>
 
@@ -91,7 +91,7 @@ models and expression estimates for them and the already annotated ones. </P>
 <DD><b>*.fastq</b> - raw sequence files in fastq format with phred33 quality scores<br></DD>
 <DD><b>*.unique.BigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; "plus" and "minus" versions provided for stranded data) with only uniquely mappable reads represented<br></DD>
 <DD><b>*.BigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; "plus" and "minus" versions provided for stranded data) with multi-reads included (with weight scaled according to the number of locations they map to)<br></DD>
-<DD><b>*.bam</b> - all alignments in <A target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf">SAM/BAM format</A> (<I>Alignments</I> view)<br></DD>
+<DD><b>*.bam</b> - all alignments in <A target="_BLANK" href="https://samtools.sourceforge.net/SAM1.pdf">SAM/BAM format</A> (<I>Alignments</I> view)<br></DD>
 <DD><b>*.bam.bai</b> bam file index<br></DD>
 
 <H3>Expression Estimates and Transcript Models (Cufflinks): </H3>

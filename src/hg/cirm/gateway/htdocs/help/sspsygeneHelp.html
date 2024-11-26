@@ -1,0 +1,398 @@
+<!DOCTYPE html> 
+<!--#set var="TITLE" value="CIRM CESCG People and Labs" -->
+
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
+
+<div class="cirm-page-body">
+  <div class="cirm-page-title back-dark-blue">
+    <h5 class="cirm-page-title-text">How to use the SSPsyGene Staging Portal</h5>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-light-green">
+        <h5 class="cirm-page-title-text">Table of Contents</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        <ul style="list-style: none">
+          <li><h6><a href="#about">SSPsyGene Staging Portal</a></h6></li>
+          <ul style="list-style: none">
+            <li><h6><a href="#what">What is the SSPsyGene Staging Portal?</a></h6></li>
+            <li><h6><a href="#account">Creating an account</a></h6></li>
+            <li><h6><a href="#privacy">Data Privacy</a></h6></li>
+          </ul>
+          <li><h6><a href="#find_download">Finding and downloading data on the Staging Portal</a></h6></li>
+          <ul style="list-style: none">
+            <li><h6><a href="#find">Finding data</a></h6></li>
+            <li><h6><a href="#download">Downloading data</a></h6></li>
+            <li><h6><a href="#metadata">Downloading and exploring metadata</a></h6></li>
+            <li><h6><a href="#query">Using the &quot;Metadata Query&quot; tool to cut and slice metadata</a></h6></li>
+          </ul>
+          <li><h6><a href="#contact">Contact us</a></h6></li>
+          <li><h6><a href="#resources">Other SSPsyGene resources</a></h6></li>
+        </ul>
+      </p>
+    </div>
+  </div>
+        
+  <a name="about"></a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-light-green">
+        <h5 class="cirm-page-title-text">The SSPsyGene Staging Portal</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group list-group-flush text-left">
+        <li class="list-group-item">
+        <a name="what"></a>
+        <h5><b>What is the SSPsyGene Staging Portal?</b></h5>
+        <p>
+        The SSPsyGene Staging Portal is a data warehouse for files produced
+        through the <a href="https://grants.nih.gov/grants/guide/rfa-files/RFA-MH-25-145.html"
+        target="_blank">SSPsyGene Project</a>. It houses primary data files such as
+        DNA sequencing reads in fastq format, as well as many other file types derived from
+        read mapping and analysis of the primary data, and PDF and other document files
+        describing protocols. Files will be stored to labs are ready to submit them to a public archive for publication.
+	A small but flexible system,
+        <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+        target="_blank">tag storm</a>is used for associating metadata information with a file.</p>
+        <p>
+        Any SSPsyGene Consortium associated lab can submit data to the Staging Portal. Once
+        submitted, data is treated as prepublication data, with access only allowed to
+        authorized users (data privacy is described in more detail in the
+        <a href="#privacy">Privacy</a> section below). <a href="#contact">Contact us</a>
+        if you are a SSPsyGene Consortium lab and would like to submit data.</p>
+        </li>
+
+        <li class="list-group-item">
+        <a name="account"></a>
+        <h5><b>Accounts on the SSPsyGene Staging Portal</b></h5>
+        <p>
+        An account is needed to access data stored on our <a href="https://sspsygene.gi.ucsc.edu"
+        target="_blank">private server</a>, which is intended for SSPsyGene contributing labs to
+        access their prepublication data. If you are associated with a contributing lab, please
+        <a href="#contact">contact us</a> for an account to access your data.</p>
+        </li>
+
+        <li class="list-group-item">
+        <a name="privacy"></a>
+        <h5><b>Data privacy in the SSPsyGene Staging Portal</b></h5>
+        <p>
+        Once data is submitted to the Stem Cell Hub, access is only allowed to members of that
+        lab. If you are part of a SSPsyGene Consortium lab and would like access to
+        your data, please <a href="#contact">contact us</a>.</p>
+
+        <p>
+        Once notified by the lab, the data will be released to the whoel consortium so that anyone
+        can download and access the data. If there are files that you are interested in,
+	but don't have access to you can <a href="#contact">request access</a> to them.</p>
+        </li>
+    </div>
+  </div>
+
+  <a name="find_download"></a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-light-green">
+        <h5 class="cirm-page-title-text">Finding and downloading data in the Staging Portal</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group list-group-flush text-left">
+        <li class="list-group-item">
+        <a name="find"></a>
+        <h5><b>Finding data</b></h5>
+        <p>
+        The primary method for finding your data is through the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles" target="_blank">File Search</a>
+        page, which can be found through &quot;Browse &gt; Files&quot; in the menu at
+        the top of the page.
+
+        <p>
+        The &quot;Files&quot; page by default displays a list of all available files in the
+        Staging Portal.
+        The list of files can be filtered using the metadata facets on the left-hand side of the
+        page.</p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsFacets.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        These metadata facets include the submitting lab, species (e.g. human, mouse), file format (e.g. fastq, csv),
+	data_set_id, and assay type (e.g. ATAC-seq, RRBS). By default, all of these facets are unselected and
+        all available data in the Staging Portal is displayed. To show data that matches only a
+        specific metadata value, check the box next to that value. The list of files will
+        automatically be filtered to show only the matching files. Multiple facets can be combined
+        to further filter the list of files.</p>
+
+        <p>
+        The &quot;Files&quot; page also supports free-text search of metadata through the search box
+        at the top:</p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsSearchBox.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        Once you've filtered your files to the list of those you're interested in, you can
+        <a href="#download">download</a> them.</p>
+        </li>
+
+        <li class="list-group-item">
+        <a name="download"></a>
+        <h5><b>Downloading data</b></h5>
+        <p>
+        Once you've filtered down the list of files to those that you are interested in, you can
+        download them in one of two ways:</p>
+        <ol>
+          <li>
+            <p>
+            If you have only a few files to download, you can download them one-by-one. First,
+            click the file name in the first column to be taken to the file details page.</p>
+	        <p>
+	        <img src="<!--#echo var='ROOT'-->images/cirmBasicsNameCol.png"
+            class="border border-dark rounded"></p>
+
+            <p>
+	        From there click the &quot;download&quot; link next to the name in the &quot;accession&quot;
+            row to start the download. Files will be named after the SSPsyGene Staging Portal applied accession.</p>
+	        <p>
+	        <img src="<!--#echo var='ROOT'-->images/cirmBasicsSingleFileDetails.png"
+            class="border border-dark rounded"></p>
+          </li>
+          <li>
+            <p>
+            If you have many files to download, or a few large files that may take hours to download,
+            you can use a variety of methods to download the files.</p>
+
+            <p>
+            First, click the &quot;Download All&quot; link at the top of the page, from there
+            you will be taken a page that lists the total number of files and their combined size
+            as well as a few different download options:</p>
+
+            <p>
+            <img src="<!--#echo var='ROOT'-->images/cirmBasicsDownload.png"
+            class="border border-dark rounded"></p>
+
+            <p>
+            Follow the instructions on that page to download the files. There are options for
+            downloading your files using the command-line or web browser extensions. The URLs
+            provided to you are valid for a week.</p>
+          </li>
+        </ol>
+        </li>
+
+        <li class="list-group-item">
+        <a name="metadata"></a>
+        <h5><b>Downloading and exploring metadata</b></h5>
+        <p>
+        There are multiple ways to download and explore the metadata available on the Staging Portal.
+        These include the html/text/tsv/csv links on the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets"
+        target="_blank">datasets page</a>:</p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataLinks.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        And the <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery"
+        target="_blank">Metadata Query</a> tool.
+        The Metadata Query tool is discussed in more detail in the <a href="#query">next help
+        section</a>. In this section we will discuss accessing metadata through the datasets page.
+        </p>
+
+        <p>
+        On the datasets page, there are four links that offer up metadata in a variety of formats.
+        The first link (html) allows you explore the heirarchical
+        <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+        target="_blank">tag storm
+        format</a> and collapse various sections of the metadata:</p>
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataHtmlViewer.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        The next three links are all to view or download the metadata in plain text formats:
+        <ul>
+          <li>text (or tag storm)</li>
+          <li>comma-separated value (csv)</li>
+          <li>tab-separated value (tsv)</li>
+        </ul>
+        <br>
+        <p>
+        Clicking these links should display the metadata in your web browser window. To download the
+        metadata in one of these formats, you can right-click the link and select &quot;Save Link
+        As&quot;.</p>
+        </li>
+
+        <li class="list-group-item">
+        <a name="query"></a>
+        <h5><b>Using the &quot;Metadata Query&quot; tool to cut and slice metadata</b></h5>
+        <p>
+        The <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery"
+        target="_blank">Metadata Query</a> tool allows to search across the metadata, quality metrics,
+        and more for all of the datasets contained on the Staging Portal. This information can be
+        filtered and sliced using a SQL-like query interface. The output of your queries can be
+        displayed in three different formats: (1) UCSC's heirachical <a
+        href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+        target="_blank">tag storm</a> (ra)
+        format, (2) tab-separated value (tsv) format, or (3) comma-separated value (csv) format.</p>
+
+        <p>
+        The interface has three boxes at the top. The first, after &quot;select&quot;, is where you
+        enter a comma-separated list of the metadata fields you want, e.g. lab, data_set_id,
+        accession. Second, after &quot;from files where&quot; is where you put your conditionals,
+        e.g. if you only wanted data from the Hoffman lab, you would enter lab=&quot;hoffman&quot;.
+        Third, and last after &quot;limit&quot;, you can enter how many records matching your
+        query you want to display.
+        </p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataQuery.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        <h6>Example 1:</h6>
+        <p>
+        One example query might be pulling out some of the quality control (QC) information
+        (<tt>enriched_in</tt>, <tt>fastq_qual_mean</tt>, <tt>fastq_qual_type</tt>,
+        <tt>map_ratio</tt>, <tt>map_to_mouse</tt>, <tt>map_to_repeat</tt>, and
+        <tt>map_to_ribosome</tt> fields) for the fastq files in the hoffmanAutismZebrafish dataset in
+        addition to basic information such as <tt>accession</tt>, <tt>data_set_id</tt>,
+        <tt>lab</tt>, and <tt>assay</tt> in the <tt>tsv</tt> format.
+        This would allow us to discern the relative quality of each of these files and decide which
+        of them meet our standards to download. The query to obtain this information would look
+        like this:</p>
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataQueryExample1.png"
+        class="border border-dark rounded"></p>
+
+        As you can see, the comma-separated list of fields we want in the output is put in the
+        first box and our conditional filters are placed in the second box.
+        <a href="https://sspsygene.gi.ucsc.edu/cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery&cdwQueryFields=accession%2C+lab%2C+data_set_id%2C+assay%2C+enriched_in%2C+fastq_qual_mean%2C+fastq_qual_type%2C+map_ratio%2C+map_to_mouse%2C+map_to_repeat%2C+map_to_ribosome&cdwQueryWhere=data_set_id%3D%22hoffmanAutismZebrafish%22+and+format%3D%22fastq%22&cdwQueryLimit=10&cdwQueryFormat=tsv&View=View"
+        target="_blank">Through this link you can view the query results yourself and play with
+        the query settings</a>.
+
+        <li class="list-group-item">
+        <a name="example1"></a>
+        <h5><b>Example: Download an expression matrix and metadata</b></h5>
+        <p>
+        This example will guide you through the process of finding and downloading the cell
+        by gene expression matrix and the cell-level metadata for the dataset hoffmanAutismZebrafish.
+        It also describes some basic analysis options after you have dowloaded an expression matrix and metadata.
+        </p>
+
+        <h6><b>Step 1: Use the File Browser to find the gene-level expression matrix</b></h6>
+        <p>
+        For this step, we will start at the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles"
+        target="_blank">File Browser</a>
+        and use the metadata facets to filter the visible files to display only the
+        <b>gene-level expression matrix</b> for the <b>hoffmanAutismZebrafish</b> dataset:
+        <ol>
+          <li>Under <b>format</b>, check the box for <b>expression_matrix</b></li>
+          <li>Under <b>data_set_id</b>, check the box for <b>hoffmanAutismZebrafish</b></li>
+        </ol>
+        <br>
+        <p>
+        As you check the boxes for these filters, you should see the files on the right-hand
+        side of the screen slowly disappear until you see only 19 left. This files should be,
+	the gene-level expression matrix for the <tt>hoffmanAutismZebrafish</tt> dataset.
+        </p>
+
+        <p>
+        More details about using the metadata facets for filtering can be found in the
+        <a href="#find">Finding data</a> section above.
+
+        <h6><b>Step 2: Download the expression matrix</b></h6>
+        <p>
+        After filtering files down to just the gene-level expression matrix,
+        on the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles"
+        target="_blank">File Browser</a>
+        for the <tt>hoffmanAutismZebrafish</tt>, we will now download these files:
+        <br>
+        <p>
+        See the <a href="#download">Downloading data</a> section for information on downloading
+        multiple files at once.
+        </p>
+
+        <h6><b>Step 3: Download cell-level metadata</b></h6>
+        <p>
+        Now that you've downloaded the gene-level expression matrix, you can download the
+        cell-level metadata for this dataset. The easiest way to this is though the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets"
+        target="_blank">Dataset Browser</a>:
+        <ol>
+          <li>Find the <tt>hoffmanAutismZebrafish</tt> dataset in the alpphabetical list.</li>
+          <li>Choose your downloadable metadata format (text/tagStorm, tsv, or csv), and
+          right-click the file type link. In the right-click menu, choose &quot;Save Link As&quot;
+          and enter a file name.
+        </ol>
+        <br>
+        <p>
+        The <a href="#metadata">Downloading and exploring metadata</a> section has more information
+        on the different ways you can download metadata.
+        </p>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <a name="contact"></a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-light-green">
+        <h5 class="cirm-page-title-text">Contact us</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group list-group-flush text-left">
+        <li class="list-group-item">
+        <p>
+        Questions? Comments? Feel free to contact our
+        <a href="mailto:wranglers@ucsc.edu">wrangler team</a>.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <a name="resources"></a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-light-green">
+        <h5 class="cirm-page-title-text">Other SSPsyGene resources</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group list-group-flush text-left">
+        <li class="list-group-item">
+        <p> Additional resources from the SSPsyGene DRACC
+        <ul>
+          <li><a href="https://sspsygene.ucsc.edu/" target="_blank">SSPsyGene Homepage</a></li>
+        </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--#include virtual="${ROOT}inc/footer.html" -->

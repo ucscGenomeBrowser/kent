@@ -87,6 +87,8 @@ my $bigClusterHub = 'ku';
 # my $smallClusterHub = 'encodek';
 my $smallClusterHub = 'ku';
 my $dbHost = 'hgwdev';
+my $ram = '3g';
+my $cpu = 1;
 my $workhorse = 'hgwdev';
 my $defaultChainLinearGap = "loose";
 my $defaultChainMinScore = "1000";	# from axtChain itself
@@ -143,6 +145,8 @@ print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 				      'workhorse' => $workhorse,
 				      'fileServer' => '',
 				      'bigClusterHub' => $bigClusterHub,
+				      'ram' => $ram,
+				      'cpu' => $cpu,
 				      'smallClusterHub' => $smallClusterHub);
 print STDERR "
 Automates UCSC's blastz/chain/net pipeline:
@@ -457,7 +461,7 @@ sub getDbFromPath {
   my $dbFromName = basename($val);
   $dbFromName =~ s/.2bit//;
   if (! $opt_noDbNameCheck) {
-    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat|$patchDbFormat)((\.2bit)|(/(\S+)?))?$@) {
+    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat|$patchDbFormat)((\.2bit)|(/(\S+)?))?$@ ) {
       $db = $1;
     } else {
       die "Error: $DEF variable $var=$val must be a full path with " .
@@ -644,7 +648,7 @@ sub doBlastzClusterRun {
   my $whatItDoes = "It sets up and performs the big cluster blastz run.";
   my $bossScript = new HgRemoteScript("$runDir/doClusterRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 $gensub2 $targetList $queryList gsub jobList
@@ -697,7 +701,7 @@ _EOF_
 each subdirectory of $outRoot into a per-target-chunk file.";
   my $bossScript = new HgRemoteScript("$runDir/doCatRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 (cd $outRoot; find . -maxdepth 1 -type d | grep '^./') \\
@@ -997,8 +1001,8 @@ netChainSubset -verbose=0 noClass.net $chain stdout \\
 | chainStitchId stdin stdout | gzip -c > $tDb.$qDb.over.chain.gz
 
 hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $tDb.$qDb.over.chain.gz
-wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
-wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
 sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainLiftOver${QDb}.tab
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
@@ -1074,8 +1078,8 @@ _EOF_
   if ($opt_trackHub) {
     $bossScript->add(<<_EOF_
 cd $buildDir/bigMaf
-wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
-wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
+wget --no-check-certificate -O bigMaf.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigMaf.as'
+wget --no-check-certificate -O mafSummary.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
 bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab \\
@@ -1156,8 +1160,8 @@ _EOF_
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -test -noBin -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
-wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
-wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
 sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $defVars{SEQ1_LEN} chain${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
@@ -1218,7 +1222,7 @@ mv align.tab net$QDb.tab
 _EOF_
       );
       # target may be database assembly, special set of gbdb symLinks
-      if ($dbExists && $tChromInfoExists) {
+      if ( $dbExists && $tChromInfoExists && $tDb !~ m/^GC/ ) {
       $bossScript->add(<<_EOF_
 if ( -s "\$buildDir/axtChain/chain${QDb}.bb" ) then
   mkdir -p /gbdb/$tDb/chainNet
@@ -1615,7 +1619,6 @@ sub installDownloads {
   if ($tDb =~ m/^GC/) {
      $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
   }
-printf STDERR "# DBG: tDb '%s' have liftOverDir: '%s'\n", $tDb, $liftOverDir;
   my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
   my $andNets = $isSelf ? "." :
@@ -1639,7 +1642,7 @@ _EOF_
     my $axt = ($splitRef ?
 	       "mkdir -p axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
 	       "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
-    if ( -s "$runDir/$tDb.$qDb.net.gz") {
+    if ( -s "$runDir/$tDb.$qDb.net.gz" ) {
     $bossScript->add(<<_EOF_
 ln -s $runDir/$tDb.$qDb.net.gz .
 _EOF_
@@ -1666,6 +1669,14 @@ _EOF_
     }
 
     $bossScript->add(<<_EOF_
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  setenv TMPDIR "/tmp"
+endif
 # Update (or create) liftOver/md5sum.txt with the new .over.chain.gz.
 if (-e $gpLiftOverDir/md5sum.txt) then
   set tmpFile = `mktemp -t tmpMd5.XXXXXX`
@@ -1837,8 +1848,8 @@ _EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
   hgLoadChain -test -noBin -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
-  wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
-  wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+  wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
+  wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
   sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainSyn${QDb}.tab
   bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
   awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
@@ -1850,12 +1861,14 @@ if (\$lineCount > 0) then
 netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
   | hgLoadNet -test -noBin -warn -verbose=0 $tDb netSyn$QDb stdin
 mv align.tab netSyn$QDb.tab
-if ( -s "$buildDir/axtChain/chainSyn${QDb}.bb" ) then
-  mkdir -p /gbdb/$tDb/chainNet
-  rm -f "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
-  ln -s "$buildDir/axtChain/chainSyn${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb"
-  ln -s "$buildDir/axtChain/chainSyn${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
-endif
+  if ( -s "$buildDir/axtChain/chainSyn${QDb}.bb" ) then
+    if ( "$tDb" !~ "GC*" ) then
+      mkdir -p /gbdb/$tDb/chainNet
+      rm -f "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
+      ln -s "$buildDir/axtChain/chainSyn${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb"
+      ln -s "$buildDir/axtChain/chainSyn${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
+    endif
+  endif
 endif
 rm -f link.tab
 rm -f chain.tab
@@ -1881,8 +1894,8 @@ _EOF_
 if (\$lineCount > 0) then
   mkdir -p ../bigMaf
   cd ../bigMaf
-  wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
-  wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
+  wget --no-check-certificate -O bigMaf.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigMaf.as'
+  wget --no-check-certificate -O mafSummary.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/mafSummary.as'
   mafToBigMaf $tDb ../axtChain/$tDb.$qDb.synNet.maf.gz stdout \\
     | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
   bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\
@@ -1897,10 +1910,12 @@ if (\$lineCount > 0) then
   rm -f $tDb.$qDb.synNet.txt $tDb.$qDb.synNet.summary.tab \\
         $tDb.$qDb.synNet.summary.bed
   if ( -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" ) then
-    mkdir -p /gbdb/$tDb/chainNet
-    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
-    ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
-    ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+    if ( "$tDb" !~ "GC*" ) then
+      mkdir -p /gbdb/$tDb/chainNet
+      rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+      ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
+      ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+    endif
   endif
 endif
 _EOF_

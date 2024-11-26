@@ -358,6 +358,7 @@ sub compositeFasta($$$) {
   }
   close(FH);
   close(FA);
+  `rm -f $tmpFile`;
 }	# sub compositeFasta($$$)
 
 #########################################################################
@@ -458,6 +459,7 @@ sub unlocalizedFasta($$$) {
   }
   close(FH);
   close(FA);
+  `rm -f $tmpFile`;
 }	# sub unlocalizedFasta($$$)
 
 #########################################################################
@@ -690,6 +692,7 @@ sub unplacedFasta($$$$$$$) {
     close (FH);
     close (NAMES);
   }
+  `rm -f $tmpFile`;
 }	# sub unplacedFasta($$$$)
 
 #########################################################################
@@ -1503,25 +1506,26 @@ _EOF_
 sub doAddMask {
   my $runDir = "$buildDir/trackData/addMask";
 
+  my $atLeast1 = 0;
   my $goNoGo = 0;
   if (! $noRmsk) {
     if ( ! -s "$buildDir/trackData/repeatMasker/$defaultName.rmsk.2bit" ) {
        printf STDERR "ERROR: repeatMasker step not completed\n";
        printf STDERR "can not find: $buildDir/trackData/repeatMasker/$defaultName.rmsk.2bit\n";
-       $goNoGo = 1;
+       $atLeast1 += 1;
     }
   }
   if ( ! -s "$buildDir/trackData/windowMasker/$defaultName.cleanWMSdust.2bit" ) {
       printf STDERR "ERROR: windowMasker step not completed\n";
       printf STDERR "can not find: $buildDir/trackData/windowMasker/$defaultName.cleanWMSdust.2bit\n";
-      $goNoGo = 1;
+      $atLeast1 += 1;
   }
   if ( ! -s "$buildDir/trackData/simpleRepeat/doCleanup.csh" ) {
       printf STDERR "ERROR: simpleRepeat step not completed\n";
       printf STDERR "can not find: $buildDir/trackData/simpleRepeat/doCleanup.csh\n";
       $goNoGo = 1;
   }
-  if ($goNoGo) {
+  if ($atLeast1 && $goNoGo) {
       printf STDERR "ERROR: must complete repeatMasker, windowMasker and simpleRepeat before addMask\n";
       exit 255;
   }
@@ -1536,7 +1540,9 @@ sub doAddMask {
   $wmMasked = 0 if ($wmMasked > 98);
   my $rmMasked = 0;
   if (! $noRmsk) {
-    $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+    if ( -s "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" ) {
+      $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+    }
   }
 
   my $src2BitToMask = "../repeatMasker/$defaultName.rmsk.2bit";

@@ -1,5 +1,6 @@
 Here lies code to implement the CIRM Data Warehouse (CDW).  The CDW is designed to track 
 a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts:
+
 1) A Linux file system with a fairly large block size.
 2) A MySQL database with tables tracking
     a) Users (by their email name)
@@ -7,6 +8,10 @@ a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts
     c) Files (by hub file name and CDW license plate).
     d) Groups and file permissions
     e) Results of automatic quality assurance results on files.
+3) A bunch of command line programs, some of which are run by a daemon, that load
+   the database and run quality assurance on it's contents.
+
+Please seed the install/README file for how to set up the CDW
 
 The schema for the database is in lib/*.as, with most of the information in cdw.as. 
 There is also a script lib/resetCdw that will delete the existing database and create 
@@ -81,6 +86,35 @@ o - Run cdwTextForIndex in /gbdb/cdw to create full text for free index search
 o - Run ixIxx to make the full text index in /gbdb
 o - You *might* need to run cdwChangeAccess to update the accessibility to make things
     group readable, (or if the access all tag is intended but left off, world readable)
+
+TROUBLE_SHOOTING SETTING UP LOGIN
+---------------------------------
+The site requires HTTP login to access, and the first step is to put the same type
+of basicAuth apache config statements for a new server as the last server. In
+the apache config on the previous server there is a user/password file. An easy approach
+is to copy the existing username/password file to the new server. A script called
+cdwWebsiteAcess, a wrapper around htpasswd, can be used with the user/password file.
+
+Or you can use these commands to add a user to the file  /etc/httpd/passwords on the new machine.
+
+htpasswd passwordfile username
+
+         htpasswd /etc/httpd/passwords -n bob
+         New password:
+         Re-type new password:
+
+A line like this will be added to /etc/httpd/passwords where that password is encrypted.
+bob:$apr1$Xd2b1SuY$T17QLQnFyaH1fQrcVjDjg0
+
+Once the user exists the Apache settings also have to be enabled feeding the
+authorization back into the site. Request the following edit to httpd.conf:
+
+        SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
+There will be a File Download problem if the mod_xsendfile module is missing and not
+activated in Apache. Once installed mod_xsendfile will enable logged-in users
+to download files.
+
 
 
 COMMAND LINE USAGE
@@ -312,12 +346,11 @@ a combination of infrequent polling of the database, and a unix fifo which can b
 sent a signal (anything ending with a newline actually) that tells it to go look
 at database now.
 usage:
-   cdwRunDaemon database table count fifo
+   cdwRunDaemon database table count 
 where:
    database - mySQL database where cdwRun table lives
    table - table with same six fields as cdwRun table
    count - number of simultanious jobs to run
-   fifo - named pipe used to notify daemon of new data
 options:
    -debug - don't fork, close stdout, and daemonize self
    -log=logFile - send error messages and warnings of daemon itself to logFile

@@ -39,9 +39,30 @@ from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re, sys, argparse
 import getpass
 import os
+import psutil
 
 user = getpass.getuser()
 
+def kill_user_processes(proc_names_to_check):
+    """
+    Kills processes with names in the specified list that belong to the user.
+
+    Parameters:
+    proc_names_to_check (list): A list of process names to check.
+    """
+    # Iterate over all running processes
+    for proc in psutil.process_iter():
+        # Check if the process name matches any in the list
+        if proc.name() in proc_names_to_check:
+            # Check if the process belongs to the user
+            if proc.username() == user:
+                # Kill the process
+                proc.kill()
+
+# List of process names to check
+proc_names_to_check = ["chrome", "chromedriver", "google-chrome", "chrome_crashpad_handler"]
+# Call the function to kill processes matching the names in the list for the user
+kill_user_processes(proc_names_to_check)
 
 #Make tmpdir for the cron
 try:
@@ -125,12 +146,24 @@ driver.find_element_by_xpath("//td[@id='td_data_knownGene']/div[2]/map/area[5]")
 driver.get(machine + "/cgi-bin/hgTracks?db=mm10")
 driver.find_element_by_xpath("//td[@id='td_data_knownGene']/div[2]/map/area[5]").click()
 
-# Tests multi-region for hg38
+# Tests if click_and_drag opens a second window
 cartReset()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("chr7 192500 727300")
 driver.find_element_by_id("goButton").click()
+element_to_click_and_drag = driver.find_element_by_xpath('//table[2]/tbody')
+actions = ActionChains(driver)
+actions.key_down(Keys.SHIFT).click_and_hold(element_to_click_and_drag).move_by_offset(100, 0).release().key_up(Keys.SHIFT).perform()
+time.sleep(3)
+if len(driver.window_handles) > 1:
+    print("A second window has opened.")
+    driver.quit()
+    sys.exit()
+driver.find_element_by_xpath("//*/text()[normalize-space(.)='Cancel']/parent::*").click()
+time.sleep(3)
+
+# Tests multi-region for hg38
 driver.find_element_by_name("hgTracksConfigMultiRegionPage").click()
 driver.find_element_by_xpath("(//input[@id='virtModeType'])[4]").click()
 driver.find_element_by_id("multiRegionsBedInput").send_keys("chr7    192570  260772  NM_020223.4\nchr7    290169  291488  NM_001374838.1\nchr7    497257  519846  NM_033023.5\nchr7    549197  727281  NM_001164760.2")
@@ -278,7 +311,7 @@ n = driver.find_element_by_id("customTracksMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_name("hgct_customText").clear()
-driver.find_element_by_name("hgct_customText").send_keys("https://hgwdev-gperez2.gi.ucsc.edu/~gperez2/testing/selenium/chrmAliasTestHg38_track")
+driver.find_element_by_name("hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/chrmAliasTestHg38_track")
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 # click into hgTrackUi of customTrack
@@ -565,6 +598,11 @@ elif 'hub_24302' in driver.page_source:
 else:
      driver.find_element_by_xpath("//td[@id='td_data_hub_37972_multiWig4']/div[2]/map/area").click()
 
+# Tests hub with HAL tracks
+cartReset()
+driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://genecats.gi.ucsc.edu/qa/hubTesting/CICHLID2023/myHub/hub.txt&genome=hub_68124_Anc0&position=lastDbPos")
+driver.get(machine + "/cgi-bin/hgTracks")
+driver.find_element_by_id("positionInput").clear()
 
 # Tests hgBlat All and Monk Seal/Human MYLK Protein
 cartReset()
@@ -591,4 +629,5 @@ driver.get(machine + "/cgi-bin/hgTracks?position=chr2:25,485,759-25,487,667&igno
 driver.find_element_by_id("goButton").click()
 
 # Closes the current window on which Selenium is running
-driver.close()
+driver.quit()
+sys.exit()

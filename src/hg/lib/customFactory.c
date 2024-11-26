@@ -184,7 +184,9 @@ char *prefix = cfgOption("udc.localDir");
 if (prefix == NULL)
     {
     if (doAbort)
-        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s', unless " \
+                "the udc.localDir variable is set to a prefix of the file's path in the " \
+                "cgi-bin/hg.conf of this UCSC Genome Browser", url);
     return FALSE;
     }
 else if (!startsWith(prefix, url))
@@ -2848,6 +2850,20 @@ static boolean bigBedRecognizer(struct customFactory *fac,
 return (sameType(type, "bigBed"));
 }
 
+static void addSpecialSettings(struct hash *hash)
+/* Add special settings to bigPsl custom track if none of them
+ * are already set. */
+{
+if (!(hashLookup(hash, "showDiffBasesAllScales") ||
+      hashLookup(hash, "baseColorUseSequence") ||
+      hashLookup(hash, "baseColorDefault")))
+    {
+    hashAdd(hash, "showDiffBasesAllScales", ".");
+    hashAdd(hash, "baseColorUseSequence", "lfExtra");
+    hashAdd(hash, "baseColorDefault", "diffBases");
+    }
+}
+
 static struct customTrack *bigBedLoader(struct customFactory *fac,
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -2855,6 +2871,8 @@ static struct customTrack *bigBedLoader(struct customFactory *fac,
 {
 /* Not much to this.  A bigBed has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
+if (sameString(track->tdb->type, "bigPsl"))
+    addSpecialSettings(settings);
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
@@ -4134,7 +4152,7 @@ for (pfd = pfdRunning; pfd; pfd = pfd->next)
     {
     // unfinished track
     char temp[256];
-    safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s", maxTimeInMilliseconds, pfd->track->tdb->track);
+    safef(temp, sizeof temp, "Track timed out: %s took more than %d milliseconds to load. Zoom in or increase max load time via menu 'Genome Browser > Configure'", pfd->track->tdb->track, maxTimeInMilliseconds);
     pfd->track->networkErrMsg = cloneString(temp);
     ++errCount;
     }

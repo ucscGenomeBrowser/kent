@@ -105,6 +105,7 @@ while (my $asmId = <FH>) {
   $orgName =~ s/\?/ /g;
   $orgName =~ s/\+//g;
   $orgName =~ s/\*//g;
+  $orgName =~ s/.*ism name:\s+//i;
   chomp $orgName;
   if ($orgName =~ m/kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
     $orgName = $sciName;

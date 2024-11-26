@@ -57,6 +57,9 @@ void grpOutput(struct grp *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int grpCmpPriorityLabel(const void *va, const void *vb);
+/* Compare to sort based on priority and label. */
+
 int grpCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority. */
 

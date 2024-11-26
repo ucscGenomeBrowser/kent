@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-
-<body>
+<br><br>
+<b>Important</b>: The SpliceAI data on the UCSC Genome Browser is directly from 
+Illumina (See <a href="#dataAccess">Data Access</a> below). However, since SpliceAI refers to the
+algorithm, and not the computed dataset, the data on the Broad server or other sources may have
+some differences between them.
+</p>
 <h2>Description</h2>
 <p>
 SpliceAI is an <a href="https://github.com/Illumina/SpliceAI" target="_blank">open-source</a> deep
@@ -11,30 +11,74 @@ learning splicing prediction algorithm that can predict splicing alterations cau
 Such variants may activate nearby cryptic splice sites, leading to abnormal transcript isoforms.
 SpliceAI was developed at Illumina; a 
 <a href="https://spliceailookup.broadinstitute.org" target="_blank">lookup tool</a> 
-is provided by the Broad institute.<br><br>
-<b>Important</b>: The SpliceAI data on the UCSC Genome Browser is directly from 
-Illumina (See Data Access below). However, since SpliceAI refers to the algorithm, and not the computed dataset, 
-the data on the BROAD server or other sources may have some differences between them.
+is provided by the Broad institute.
+</p>
+<h3>Why are some variants not scored by SpliceAI?</h3>
+<p>
+SpliceAI only annotates variants within genes defined by the gene
+annotation file. Additionally, SpliceAI does not annotate variants if they are close to chromosome
+ends (5kb on either side), deletions of length greater than twice the input parameter -D, or
+inconsistent with the reference fasta file.
+</p>
+
+<h3>What are the differeneces between masked and unmasked tracks?</h3>
+<p>
+The unmasked tracks include splicing changes corresponding to strengthening annotated splice sites
+and weakening unannotated splice sites, which are typically much less pathogenic than weakening
+annotated splice sites and strengthening unannotated splice sites. The delta scores of such splicing
+changes are set to 0 in the masked files. We recommend using the unmasked tracks for alternative
+splicing analysis and masked tracks for variant interpretation.
 </p>
 
 <h2>Display Conventions and Interpretation</h2>
 <p>
-Variants are colored by their predicted effects:
+Variants are colored according to Walker et al. 2023 splicing imact:
+</p>
 <ul>
-<li><b><font color="#FF0000">Acceptor gain (red)</font></b> </li>
-<li><b><font color="#FF8000">Acceptor loss (orange)</font></b> </li>
-<li><b><font color="#0000FF">Donor gain (blue)</font></b> </li>
-<li><b><font color="#D400FF">Donor loss (violet)</font></b> </li>
+<li><b><font color="#FF8000">Predicted impact on splicing: Score &gt;&#61; 0.2 </font></b> </li>
+<li><b><font color="#808080">Not informative: Score &lt; 0.2 and &gt; 0.1 </font></b> </li>
+<li><b><font color="#0000FF">No impact on splicing: Score &lt;&#61; 0.1 </font></b> </li>
 </ul>
-Mouseover on items shows the variant, gene name, type of change (donor gain/loss, acceptor gain/loss), 
-location of affected cryptic splice, and spliceAI score. Clicking on any item brings up a table with this
-information.
+</p>
+Mouseover on items shows the variant, gene name, type of change (donor gain/loss, acceptor
+gain/loss), location of affected cryptic splice, and spliceAI score. Clicking on any item brings up
+a table with this information.
 </p>
 <p>
 The scores range from 0 to 1 and can be interpreted as the 
 probability of the variant being splice-altering. In the paper, a detailed characterization is 
 provided for 0.2 (high recall), 0.5 (recommended), and 0.8 (high precision) cutoffs.</p>
 
+<h2>Methods</h2>
+<p>
+The data were downloaded from <a 
+target="_blank" href="https://basespace.illumina.com/s/otSPW8hnhaZR">Illumina</a>. 
+The spliceAI scores are represented in the VCF INFO field as 
+<code style="background-color: lightgray;">SpliceAI=G|OR4F5|0.01|0.00|0.00|0.00|-32|49|-40|-31</code> <br><br>
+Here, the pipe-separated fields contain 
+<ul>
+  <li>ALT allele</li>
+  <li>Gene name</li>
+  <li>Acceptor gain score</li>
+  <li>Acceptor loss score</li>
+  <li>Donor gain score</li>
+  <li>Donor loss score</li>
+  <li>Relative location of affected cryptic acceptor</li>
+  <li>Relative location of affected acceptor</li>
+  <li>Relative location of affected cryptic donor</li>
+  <li>Relative location of affected donor</li>
+</ul>
+<p>
+Since most of the values are 0 or almost 0, we selected only those variants 
+with a score equal to or greater than 0.02.
+</p>
+<p>
+The complete processing of this track can be found in the <a target="_blank" 
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/spliceAI/spliceAI.py">
+makedoc</a>.
+</p>
+
+<a name="dataAccess"></a>
 <h2>Data Access</h2>
 These data are not available for download from the Genome Browser. 
 The raw data can be found directly on
@@ -53,32 +97,6 @@ clinical, or other commercial purpose without obtaining a commercial license
 from Illumina, Inc.
 </p>
 
-<h2>Methods</h2>
-<p>
-The data were downloaded from <a 
-target="_blank" href="https://basespace.illumina.com/s/otSPW8hnhaZR">Illumina</a>. 
-The spliceAI scores are represented in the VCF INFO field as 
-<code style="background-color: lightgray;">SpliceAI=G|OR4F5|0.01|0.00|0.00|0.00|-32|49|-40|-31</code> <br><br>
-Here, the pipe-separated fields contain 
-<ul>
-<li>ALT allele</li>
-<li>Gene name</li>
-<li>Acceptor gain score</li>
-<li>Acceptor loss score</li>
-<li>Donor gain score</li>
-<li>Donor loss score</li>
-<li>Relative location of affected cryptic acceptor</li>
-<li>Relative location of affected acceptor</li>
-<li>Relative location of affected cryptic donor</li>
-<li>Relative location of affected donor</li>
-</ul>
-Since most of the values are 0 or almost 0, we selected only those variants 
-with a score equal to or greater than 0.02.<br><br>
-The complete processing of this track can be found in the <a target="_blank" 
-href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/spliceAI/spliceAI.py">
-makedoc</a>.
-</p>
-
 <h2>References</h2>
 <p>
 Jaganathan K, Kyriazopoulou Panagiotopoulou S, McRae JF, Darbandi SF, Knowles D, Li YI, Kosmicki JA,
@@ -88,5 +106,14 @@ Predicting Splicing from Primary Sequence with Deep Learning</a>.
 <em>Cell</em>. 2019 Jan 24;176(3):535-548.e24.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30661751" target="_blank">30661751</a>
 </p>
-</body>
-</html>
+
+<p>
+Walker LC, Hoya M, Wiggins GAR, Lindy A, Vincent LM, Parsons MT, Canson DM, Bis-Brewer D, Cass A,
+Tchourbanov A <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(23)00203-3" target="_blank">
+Using the ACMG/AMP framework to capture evidence related to predicted and observed impact on
+splicing: Recommendations from the ClinGen SVI Splicing Subgroup</a>.
+<em>Am J Hum Genet</em>. 2023 Jul 6;110(7):1046-1067.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37352859" target="_blank">37352859</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10357475/" target="_blank">PMC10357475</a>
+</p>

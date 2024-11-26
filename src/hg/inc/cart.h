@@ -687,6 +687,9 @@ void cartTurnOnSuper(struct cart *cart, char **trackNames, unsigned numTracks, c
  * by default.
  */
 
+void cartMatchValue(struct cart *cart, char *oldTrackName,  char *newTrackName);
+/* Make new track have the same visibility as an old track */
+
 char *cartNamedSessionDbTable();
 /* Get the name of the table that lists named sessions.  Don't free the result. */
 #endif /* CART_H */

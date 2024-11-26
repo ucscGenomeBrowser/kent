@@ -31,7 +31,7 @@ use File::Spec;
 	chooseFilesystemsForCluster checkClusterPath
       ),
     # General-purpose utility routines:
-    qw( checkCleanSlate checkExistsUnlessDebug closeStdin
+    qw( tmpDir checkCleanSlate checkExistsUnlessDebug closeStdin
 	getAssemblyInfo getSpecies hubDateName gensub2 machineHasFile
 	databaseExists dbTableExists makeGsub mustMkdir asmHubBuildDir
 	asmHubDownloadDir mustOpen nfsNoodge paraRun run verbose
@@ -567,6 +567,19 @@ $setMachtype = "setenv MACHTYPE `uname -m | sed -e 's/i686/i386/;'`";
 
 #########################################################################
 # General utility subroutines:
+
+### decide on an appropriate temporary directory
+sub tmpDir {
+  my $tDir="/tmp";	# default, most likely overridden
+  if (defined($ENV{'TMPDIR'}) && -d $ENV{'TMPDIR'} && -w "$ENV{'TMPDIR'}") {	# TMPDIR above all else
+    $tDir = $ENV{'TMPDIR'};
+  } elsif ( -d "/data/tmp" && -w "/data/tmp" ) {	# UCSC local file system
+    $tDir = "/data/tmp";
+  } elsif ( -d "/scratch/tmp" && -w "/scratch/tmp" ) {	# UCSC cluster node local file system
+    $tDir = "/scratch/tmp";
+  }
+return $tDir;
+}
 
 sub checkCleanSlate {
   # Exit with an error message if it looks like this step has already been run

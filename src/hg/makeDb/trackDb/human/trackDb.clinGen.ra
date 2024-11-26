@@ -8,6 +8,7 @@ itemRgb on
 compositeTrack on
 noParentConfig on
 html clinGen
+pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
     track clinGenHaplo
     showCfg on
@@ -58,3 +59,14 @@ html clinGen
     filterValues.Classification Definitive,Strong,Moderate,Limited,Animal Model Only,No Reported Evidence,Disputed,Refuted
     filterLabel.Classification ClinGen Gene-Disease Validity Classification
     bedNameLabel Associated Disease
+
+    track clinGenCspec
+    shortLabel ClinGen VCEP Specifications
+    longLabel Clingen CSpec Variant Interpretation VCEP Specifications
+    parent clinGenComp on
+    noScoreFilter on
+    type bigBed 9 +
+    bigDataUrl /gbdb/$D/bbi/clinGen/clinGenCspec.bb
+    visibility pack
+    mouseOver <b>Disease:</b> $disease <br><b>Panel:</b> $panel <br><b>Status:</b> $status
+    pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"

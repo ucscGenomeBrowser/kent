@@ -1,0 +1,194 @@
+<h2>Description</h2>
+
+<p> This track collection shows <a href="https://cadd.gs.washington.edu/"
+target="_blank">Combined Annotation Dependent Depletion</a> scores.
+CADD is a tool for scoring the deleteriousness of single nucleotide variants as
+well as insertion/deletion variants in the human genome.</p>
+
+<p>
+Some mutation annotations
+tend to exploit a single information type (e.g., phastCons or phyloP for
+conservation) and/or are restricted in scope (e.g., to missense changes). Thus,
+a broadly applicable metric that objectively weights and integrates diverse
+information is needed.  Combined Annotation Dependent Depletion (CADD) is a
+framework that integrates multiple annotations into one metric by contrasting
+variants that survived natural selection with simulated mutations.
+</p>
+
+<p>
+CADD scores strongly correlate with allelic diversity, pathogenicity of both
+coding and non-coding variants, experimentally measured regulatory effects,
+and also rank causal variants within individual genome sequences with a higher
+value than non-causal variants. 
+Finally, CADD scores of complex trait-associated variants from genome-wide
+association studies (GWAS) are significantly higher than matched controls and
+correlate with study sample size, likely reflecting the increased accuracy of
+larger GWAS.
+</p>
+
+<p>
+A CADD score represents a ranking not a prediction, and no threshold is defined
+for a specific purpose.  Higher scores are more likely to be deleterious: 
+Scores are 
+
+<pre>  10 * -log of the rank</pre>
+
+so that variants with scores above 20 are 
+predicted to be among the 1.0% most deleterious possible substitutions in 
+the human genome. We recommend thinking carefully about what threshold is 
+appropriate for your application.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+There are six subtracks of this track: four for single-nucleotide mutations,
+one for each base, showing all possible substitutions, 
+one for insertions and one for deletions. All subtracks show the CADD Phred
+score on mouseover. Zooming in shows the exact score on mouseover, same
+basepair = score 0.0.</p>
+<p>
+PHRED-scaled scores are normalized to all potential &#126;9 billion SNVs, and
+thereby provide an externally comparable unit for analysis. For example, a
+scaled score of 10 or greater indicates a raw score in the top 10% of all
+possible reference genome SNVs, and a score of 20 or greater indicates a raw
+score in the top 1%, regardless of the details of the annotation set, model
+parameters, etc.
+</p>
+<p>
+The four single-nucleotide mutation tracks have a default viewing range of
+score 10 to 50. As explained in the paragraph above, that results in
+slightly less than 10% of the data displayed. The 
+deletion and insertion tracks have a default filter of 10-100, because they
+display discrete items and not graphical data.
+</p>
+
+<p>
+<b>Single nucleotide variants (SNV):</b> For SNVs, at every
+genome position, there are three values per position, one for every possible
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
+the reference allele, e.g., A to A, is always set to zero.
+</p>
+<p>
+When using this track, zoom in until you can see every basepair at the
+top of the display. Otherwise, there are several nucleotides per pixel under 
+your mouse cursor and instead of an actual score, the tooltip text will show
+the average score of all nucleotides under the cursor. This is indicated by
+the prefix &quot;~&quot; in the mouseover. Averages of scores are not useful for any
+application of CADD.
+</p>
+
+<p><b>Insertions and deletions:</b> Scores are also shown on mouseover for a
+set of insertions and deletions. On hg38, the set has been obtained from
+gnomAD3. On hg19, the set of indels has been obtained from various sources
+(gnomAD2, ExAC, 1000 Genomes, ESP). If your insertion or deleletion of interest
+is not in the track, you will need to use CADD's
+<a target="_blank" href="https://cadd.gs.washington.edu/score">online scoring tool</a>
+to obtain them.</p>
+
+<h2>Methods</h2>
+
+<p>
+In CADD version 1.7, new features have been added to improve CADD scores for certain variant
+effects, boosting the overall performance of CADD and bringing new developments to the community.
+CADD v1.7 integrates annotations from recent efforts to assess variant effects, along with new
+conservation and mutation scores.</p>
+<p>
+CADD v1.7 supports only the major chromosomes of the hg38/GRCh38 reference genome (chromosomes 1-22,
+X, and Y) and may be the last version to support the hg19/GRCh37 human reference genome.</p>
+<p>
+This version includes scores derived from Evolutionary Scale Modeling (ESM) for assessing variants
+in protein-coding regions, along with scores from a convolutional neural network (CNN) trained on
+open chromatin sequences, used as a proxy for regulatory regions in the genome. The previously
+included conservation scores have been updated with data from the Zoonomia project. New annotations
+have also been added for 3' Untranslated Regions (3' UTRs), along with models of genome-wide
+mutational rates. The gene and transcript models have been updated by advancing from Ensembl version
+95 to version 110, and the Ensembl Variant Effect Predictor (VEP) has been upgraded accordingly.</p>
+<p>
+The models in CADD v1.7 have been trained similarly to the version 1.6 release. The logistic
+regression uses an L2 penalty with C = 1, and training was completed after thirteen L-BFGS
+iterations using the sklearn library The new models exhibit a high degree of similarity to the
+previous release, with a Spearman correlation of 0.946 for CADD scores calculated for 100,000
+randomly selected variants between CADD GRCh38-v1.6 and CADD GRCh38-v1.7. The v1.7 models perform
+comparably to earlier versions in distinguishing known pathogenic variants (ClinVar) from common
+variants (gnomAD) across the genome. Improvements in CADD v1.7 are particularly evident when
+focusing on specific variant categories, such as missense or 3' UTR variants, where the latest
+release includes updated annotations.</p>
+<p>
+More information can be found at the
+<a href="https://cadd.bihealth.org/download" target="_blank">CADD site</a>
+and the Schubach et al., Nucleic Acids Res, 2024 publication.
+
+
+Data were converted from the files provided on
+<a href="https://cadd.bihealth.org/download" target="_blank">the CADD Downloads website</a>,
+provided by the Kircher lab, using
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/cadd" target="_blank">
+custom Python scripts</a>,
+documented in our <a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cadd.txt">
+makeDoc</a> files.
+</p>
+
+
+<h2>Data access</h2>
+<p>
+CADD scores are freely available for all non-commercial applications from
+<a target="_blank" href="https://cadd.gs.washington.edu/download">the CADD website</a>.
+For commercial applications, see
+<a target="_blank" href="https://cadd.gs.washington.edu/contact">the license instructions</a> there.
+</p>
+
+<p>
+The CADD data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd1.7/" target="_blank">our download server</a>.
+The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw, ins.bb and del.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
+or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd1.7/a.bw stdout</tt>
+<br>
+or
+<br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd1.7/ins.bb stdout</tt></p>
+
+
+<h2>Credits</h2>
+<p>
+Thanks to the CADD development team for providing precomputed data as simple tab-separated files.
+</p>
+
+<h2>References</h2>
+<p>
+Kircher M, Witten DM, Jain P, O'Roak BJ, Cooper GM, Shendure J.
+<a href="https://www.nature.com/articles/ng.2892" target="_blank">
+A general framework for estimating the relative pathogenicity of human genetic variants</a>.
+<em>Nat Genet</em>. 2014 Mar;46(3):310-5.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24487276" target="_blank">24487276</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3992975/" target="_blank">PMC3992975</a>
+</p>
+
+<p>
+Rentzsch P, Witten D, Cooper GM, Shendure J, Kircher M.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gky1016" target="_blank">
+CADD: predicting the deleteriousness of variants throughout the human genome</a>.
+<em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D886-D894.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30371827" target="_blank">30371827</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323892/" target="_blank">PMC6323892</a>
+</p>
+
+<p>
+Schubach M, Maass T, Nazaretyan L, R&#246;ner S, Kircher M.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad989" target="_blank">
+CADD v1.7: using protein language models, regulatory CNNs and other nucleotide-level scores to
+improve genome-wide variant predictions</a>.
+<em>Nucleic Acids Res</em>. 2024 Jan 5;52(D1):D1143-D1154.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38183205" target="_blank">38183205</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10767851/" target="_blank">PMC10767851</a>
+</p>

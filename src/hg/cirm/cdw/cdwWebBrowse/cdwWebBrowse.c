@@ -1452,7 +1452,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	}
     else // Otherwise print a label and description. 
 	{
-	printf("<li class='list-group-item'><B>%s (%s)</B><BR>\n", label, datasetId);
+        printf("<li class='list-group-item'><b><a href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</a></b><br>\n", datasetId, label, datasetId);
 	printf("%s\n", desc);
 	}
     printf("</li>\n");
@@ -2015,9 +2015,9 @@ char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...",
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
-printf("<table><tr><td>");
-printf("<img src=\"../images/sspsygene_data_portal_data_img.jpg\" width=%d height=%d>\n", 200, 275);
-printf("</td><td>");
+/* printf("<table><tr><td>"); */
+/* printf("<img src=\"../images/sspsygene_data_portal_data_img.jpg\" width=%d height=%d>\n", 200, 275); */
+/* printf("</td><td>"); */
 
 /* Print sentence with summary of bytes, files, and labs */
 char query[256];

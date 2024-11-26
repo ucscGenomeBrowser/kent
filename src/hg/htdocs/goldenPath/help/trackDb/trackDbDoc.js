@@ -107,7 +107,7 @@ var tdbDoc = {
                 return blurb;
             }
             var level = $(code).attr('class');
-            if (level.length !== 0) {
+            if (level && level.length !== 0) {
                 var start = $(blurb).find('p').first();
                 if ($(start).attr('class') !== 'level') {
                     $(start).before('<p class="level">Support level: ' + '<span class=' + 
@@ -138,11 +138,12 @@ var tdbDoc = {
             // converts objs array to classes array.  Warns if obj does not have exactly 1 class
             var allClasses = [];
             $(objs).each(function (ix) {
-                var classes = $(this).attr("class").split(" ");
+                var classesTemp = this.getAttribute("class");
+                var classes = classesTemp !== null ? classesTemp.split(" ") : [""];
                 if (classes.length > 1 && onlyOne)
                     warn('obj with more than one class: '+ classes);
                 else if (classes.length === 0 && onlyOne)
-                    warn('obj with no classes.');
+                    warn('obj ' + this.name + ' with no classes.');
                 else
                     allClasses.push( classes );   // classes string array is [ [ str1], [str2] ]
             });
@@ -190,7 +191,7 @@ var tdbDoc = {
             var div = tdbDoc.library.lookup(aClass,false);
             if (div.length === 1) {
                 level = $(div).find('code').attr('class');
-                if (level.length === 0) {
+                if (!level) {
                     level = 'level-new';
                 }
             }
@@ -206,7 +207,7 @@ var tdbDoc = {
             var level = null;
             if (div.length === 1) {
                 level = $(div).find('code').attr('class');
-                if (level.length === 0) {
+                if (!level) {
                     level = null;
                 }
                 var spanner = $(div).find('span.types');
@@ -291,6 +292,7 @@ var tdbDoc = {
                     $(tocTable).prepend( "<THEAD><TR><TD colspan='" + cols + "'>"+
                                "<H3>Table of Contents</H3></TD></TR></THEAD>" );
                 }
+                $(tocTable).append("<tbody>");
                 if ($(tocTable).find('th').length === 0) {
                     var th = "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH>";
                     if (tdbDoc.isHubDoc()) {
@@ -307,6 +309,7 @@ var tdbDoc = {
                         $(plainTable).append(tdbDoc.toc.makePlainRow(this));
                     }
                 });
+                $(tocTable).append("</tbody>");
                 // TODO: Nice to do: allow for seeding toc with user defined rows.
                 // Currently they would be before the rows assembled, but we would want to sort!
             }

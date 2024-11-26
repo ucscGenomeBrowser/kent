@@ -38,6 +38,28 @@ else
     return c;
 }
 
+
+char *extendNameWithPosition(char *name, char *chrom, int s, int e, bool prepend)
+/* Extend an item's name with a position, intended for allowing liftOver to preserve a
+ * sign of where a lifted item was mapped from.  If prepend is set, the position is placed
+ * before the name.  Otherwise after.  Input coordinates are expected to be BED (0-based),
+ * and the written position is 1-based (chr:s-e).
+ * The old name can then be freed (if appropriate - some loader routines just split a
+ * string with \0s and use the pieces in place).
+ */
+{
+char pos[2048], *new = NULL;
+safef(pos, sizeof(pos), "%s:%d-%d", chrom, s+1, e);
+if (name == NULL)
+    new = cloneString(pos);
+else if (prepend)
+    new = catThreeStrings(pos, ":", name);
+else
+    new = catThreeStrings(name, ":", pos);
+return new;
+}
+
+
 // The maximum number of words per line that can be lifted:
 #define LIFTOVER_MAX_WORDS 2048
 
@@ -408,7 +430,7 @@ static int bedOverSmallEnds(struct lineFile *lf, int refCount,
                         int minSizeQ, int minChainT, int minChainQ, 
                         FILE *mapped, FILE *unmapped, bool multiple, bool noSerial,
                         char *chainTable, int bedPlus, bool hasBin, 
-			bool tabSep, int ends, int *errCt)
+			bool tabSep, int ends, int *errCt, bool preserveInput)
 /* Do a bed without a block-list.
  * NOTE: it would be preferable to have all of the lift
  * functions work at the line level, rather than the file level.
@@ -465,6 +487,9 @@ while ((wordCount =
 	errAbort(
 	"ERROR: start coordinate is after end coordinate (chromStart > chromEnd) on line %d of bed file %s\nERROR: %s %d %d", 
 	    lf->lineIx, lf->fileName, chrom, s, e);
+    if (wordCount > 3 && preserveInput)
+        // Extend item names, if present, with chrom:(start+1)-end
+        words[3] = extendNameWithPosition(words[3], chrom, s, e, TRUE);
     if (multiple)
         {
         if (wordCount > 3)
@@ -645,8 +670,9 @@ return 0;
 
 void liftOverGff(char *fileName, struct hash *chainHash, 
                                 double minMatch, double minBlocks, 
-                                FILE *mapped, FILE *unmapped)
-/* Lift over GFF file */
+                                FILE *mapped, FILE *unmapped, bool preserveInput)
+/* Lift over GFF file, with an option to preserve the input position by
+ * appending it to the source */
 {
 char *error = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -683,6 +709,9 @@ while (lineFileNext(lf, &line, NULL))
     if ((strand = nextWord(&s)) == NULL)
 	shortGffLine(lf);
     s = skipLeadingSpaces(s);
+
+    if (preserveInput)
+        source = extendNameWithPosition(source, seq, start, end, FALSE);
 
     /* Convert seq/start/end/strand. */
     error = liftOverRemapRange(chainHash, minMatch, seq, start, end, *strand,
@@ -1181,7 +1210,7 @@ return error;
 static int bedOverBig(struct lineFile *lf, int refCount, 
                     struct hash *chainHash, double minMatch, double minBlocks,
                     bool fudgeThick, FILE *mapped, FILE *unmapped, bool multiple, char *chainTable,
-                    int bedPlus, bool hasBin, bool tabSep, int *errCt)
+                    int bedPlus, bool hasBin, bool tabSep, int *errCt, bool preserveInput)
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
@@ -1212,6 +1241,14 @@ while (lineFileNextReal(lf, &line))
         bedPlus = 0;    /* no extra fields */
     bedCount = (bedPlus ? bedPlus : wordCount);
     bed = bedLoadN(words, bedCount);
+
+    if (wordCount > 3 && preserveInput)
+        {
+        char *old = bed->name;
+        bed->name = extendNameWithPosition(old, bed->chrom, bed->chromStart, bed->chromEnd, TRUE);
+        free(old); // bedLoadN uses cloneString to copy the name
+        }
+
     whyNot = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick,
                              multiple, db, chainTableName);
     if (whyNot == NULL)
@@ -1255,7 +1292,7 @@ int liftOverBedPlusEnds(char *fileName, struct hash *chainHash, double minMatch,
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
                     bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
-                    bool tabSep, int ends, int *errCt)
+                    bool tabSep, int ends, int *errCt, bool preserveInput)
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
 {
@@ -1290,14 +1327,15 @@ if (lineFileNextReal(lf, &line))
 	{
         ct = bedOverSmallEnds(lf, wordCount, chainHash, minMatch,
                               minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
-                              multiple, noSerial, chainTable, bedPlus, hasBin, tabSep, ends, errCt);
+                              multiple, noSerial, chainTable, bedPlus, hasBin, tabSep, ends, errCt,
+                              preserveInput);
 	}
     else if (ends)
 	errAbort("Cannot use -ends with blocked BED\n");
     else
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
                          fudgeThick, f, unmapped, multiple, chainTable,
-                         bedPlus, hasBin, tabSep, errCt);
+                         bedPlus, hasBin, tabSep, errCt, preserveInput);
     }
 lineFileClose(&lf);
 return ct;
@@ -1307,14 +1345,14 @@ int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
                     bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
-                    bool tabSep, int *errCt)
+                    bool tabSep, int *errCt, bool preserveInput)
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
 {
 return liftOverBedPlusEnds(fileName, chainHash, minMatch, minBlocks,
                         minSizeT, minSizeQ, minChainT, minChainQ,
                         fudgeThick, f, unmapped, multiple, noSerial, chainTable,
-			bedPlus, hasBin, tabSep, 0, errCt);
+			bedPlus, hasBin, tabSep, 0, errCt, preserveInput);
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 
@@ -1322,14 +1360,15 @@ int liftOverBed(char *fileName, struct hash *chainHash,
                         int minSizeT, int minSizeQ,
                         int minChainT, int minChainQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
-                        bool multiple, bool noSerial, char *chainTable, int *errCt)
+                        bool multiple, bool noSerial, char *chainTable, int *errCt,
+                        bool preserveInput)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 {
 return liftOverBedPlus(fileName, chainHash, minMatch, minBlocks,
                         minSizeT, minSizeQ, minChainT, minChainQ,
                         fudgeThick, f, unmapped, multiple, noSerial, chainTable,
-                        0, FALSE, FALSE, errCt);
+                        0, FALSE, FALSE, errCt, preserveInput);
 }
 
 #define LIFTOVER_FILE_PREFIX    "liftOver"
@@ -1385,7 +1424,7 @@ mappedBed = mustOpen(mappedBedTn.forCgi, "w");
 unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
 ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, minBlocks,
                  minSizeT, minSizeQ, minChainT, minChainQ, fudgeThick,
-                 mappedBed, unmappedBed, multiple, TRUE, chainTable, errCt);
+                 mappedBed, unmappedBed, multiple, TRUE, chainTable, errCt, FALSE);
 carefulClose(&mappedBed);
 chmod(mappedBedTn.forCgi, 0666);
 carefulClose(&unmappedBed);
@@ -1419,6 +1458,11 @@ while (lineFileNext(lf, &line, NULL))
         }
     }
 lineFileClose(&lf);
+
+// Now to clean up the temp files: bedTn, mappedBedTn, and unmappedBedTn
+unlink(bedTn.forCgi);
+unlink(mappedBedTn.forCgi);
+unlink(unmappedBedTn.forCgi);
 return ct;
 }
 
@@ -1482,7 +1526,7 @@ if (lft == positions)
 if (lft == bed)
     return liftOverBed(fileName, chainHash, minMatch, minBlocks, minSizeT, 
 			     minSizeQ, minChainT, minChainQ, fudgeThick, mapped, unmapped,
-                             multiple, noSerial, chainTable, errCt);
+                             multiple, noSerial, chainTable, errCt, FALSE);
 return -1;
 }
 
@@ -1633,7 +1677,7 @@ return bed;
 
 void liftOverGenePred(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                      FILE *mapped, FILE *unmapped, boolean multiple)
+                      FILE *mapped, FILE *unmapped, boolean multiple, bool preserveInput)
 /* Lift over file in genePred format. */
 {
 char *db = NULL, *chainTable = NULL;
@@ -1645,6 +1689,12 @@ struct genePred *gpList = genePredExtLoadAll(fileName);
 for (gp = gpList ; gp != NULL ; gp = gp->next)
     {
     // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
+    if (preserveInput)
+        {
+        char *old = gp->name;
+        gp->name = extendNameWithPosition(gp->name, gp->chrom, gp->txStart, gp->txEnd, TRUE);
+        free(old); // genePredExtLoadAll uses cloneString to populate this
+        }
     bed = genePredToBed(gp);
     error = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick,
                             multiple, db, chainTable);
@@ -1783,7 +1833,7 @@ slFreeList(&binList);
 
 void liftOverSample(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                        FILE *mapped, FILE *unmapped)
+                        FILE *mapped, FILE *unmapped, bool preserveInput)
 /* Open up file, decide what type of bed it is, and lift it. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -1793,6 +1843,13 @@ struct sample *sample;
 while (lineFileRow(lf, row))
     {
     sample = sampleLoad(row);
+    if (preserveInput)
+        {
+        char *old = sample->name;
+        sample->name = extendNameWithPosition(sample->name, sample->chrom,
+                sample->chromStart, sample->chromEnd, TRUE);
+        free(old);
+        }
     remapSample(chainHash, sample, minBlocks, fudgeThick, mapped, unmapped);
     sampleFree(&sample);
     }

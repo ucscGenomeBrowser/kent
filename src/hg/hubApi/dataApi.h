@@ -40,9 +40,6 @@
 #include "halBlockViz.h"
 #endif
 
-/* test name for matching a GenArk hub genome name */
-#define isGenArk(name) (startsWith("GCA_", name) || startsWith("GCF_", name))
-
 /* reference for these error codes:
  * https://www.restapitutorial.com/httpstatuscodes.html
  */
@@ -78,9 +75,14 @@
 #define argJsonOutputArrays	"jsonOutputArrays"
 #define argCategories "categories"
 #define argSearchTerm "search"
-#define argGenomeSearchTerm "genomeSearch"
-#define argAllowAll "allowAll"
+/* used in findGenome, 'q' is for the query search term */
+#define argQ "q"
 #define argStatsOnly "statsOnly"
+#define argBrowser "browser"
+#define argYear "year"
+#define argCategory "category"
+#define argStatus "status"
+#define argLevel "level"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
@@ -255,15 +257,6 @@ char *chrOrAlias(char *db, char *hubUrl);
 
 void hubAliasSetup(struct trackHubGenome *hubGenome);
 /* see if this hub has an alias file and run chromAliasSetupBb() for it */
-
-char *genArkPath(char *genome);
-/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
- *               GCA/021/951/015/GCA_021951015.1
- * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
- *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
- *
- *   already been proven that genome is a GCx_ name prefix before calling
- */
 
 void textLineOut(char *lineOut);
 /* accumulate text lines for output in the dyString textOutput */

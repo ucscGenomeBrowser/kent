@@ -575,6 +575,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	if (thisCount != fieldCount)
 	    errAbort("Line #%d of csv %s has %d columns. Previous rows had %d columns.", 
 		lineNumber, ef->submitFileName, thisCount, fieldCount);
+	vf->itemCount += 1;
 	}
     slFreeList(list);
     }

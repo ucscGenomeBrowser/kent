@@ -293,7 +293,7 @@
                         callback.call(self,aCheckBox);
                     } catch (ex) {
                         // reject the change on any error
-                        aCheckBox.attr("checked",!aCheckBox.attr("checked"));
+                        aCheckBox.prop("checked",!aCheckBox.prop("checked"));
                         return;
                     }
 	                self._syncSelected(aCheckBox);
@@ -332,15 +332,15 @@
 				if (!anItem.hasClass("ui-state-disabled") ) {
 					// check/uncheck the underlying control
 					var aCheckBox = anItem.find("input");
-	                var checked = aCheckBox.attr("checked");
-	                aCheckBox.attr("checked", !checked);
+	                var checked = aCheckBox.prop("checked");
+	                aCheckBox.prop("checked", !checked);
 
 	                var callback = self.options.onItemClick;
 	                if ($.isFunction(callback)) try {
                         callback.call(self,aCheckBox);
                     } catch (ex) {
                         // reject the change on any error
-                        aCheckBox.attr("checked",checked);
+                        aCheckBox.prop("checked",checked);
                         return;
                     }
 	                self._syncSelected(aCheckBox);
@@ -481,31 +481,31 @@
             if (options.firstItemChecksAll) {
             	if ((senderCheckbox == null) && $(selectOptions[0]).attr("selected") ) {
             		// Initialization call with first item active so force all to be active
-                    allCheckboxes.attr("checked", true);
+                    allCheckboxes.prop("checked", true);
                 } else if ((senderCheckbox != null) && (senderCheckbox.attr("index") == 0)) {
                 	// Check all checkboxes if the first one is checked
-                    allCheckboxes.attr("checked", senderCheckbox.attr("checked"));
+                    allCheckboxes.prop("checked", senderCheckbox.prop("checked"));
                 } else  {
                     // check the first checkbox if all the other checkboxes are checked
                     var allChecked = true;
                     var firstCheckbox = null;
                     allCheckboxes.each(function(index) {
                         if (index > 0) {
-                            var checked = $(this).attr("checked");
+                            var checked = $(this).prop("checked");
                             if (!checked) { allChecked = false; }
                         } else {
                         	firstCheckbox = $(this);
                         }
                     });
                     if ( firstCheckbox != null ) {
-                    	firstCheckbox.attr("checked", allChecked );
+                    	firstCheckbox.prop("checked", allChecked );
                     }
                 }
             }
             // do the actual synch with the source select
             allCheckboxes = dropWrapper.find("input");
             allCheckboxes.each(function(index) {
-                $(selectOptions[index]).attr("selected", $(this).attr("checked"));
+                $(selectOptions[index]).attr("selected", $(this).prop("checked"));
             });
             // update the text shown in the control
             self._updateControlText();
@@ -613,6 +613,7 @@
 	                $.ui.dropdownchecklist.gLastOpened = instance;
 
 	            	var config = instance.options;
+                    config.positionHow = $.ui.dropdownchecklist.defaults.positionHow;
 /**** Issue127 (and the like) to correct positioning when parent element is relative
  ****	This positioning only worked with simple, non-relative parent position
 	                instance.dropWrapper.css({
@@ -624,8 +625,8 @@
              			/** Floats above subsequent content, but does NOT scroll */
 		                instance.dropWrapper.css({
 		                    position: 'absolute'
-		                ,   top: instance.controlWrapper.position().top + instance.controlWrapper.outerHeight() + "px"
-		                ,   left: instance.controlWrapper.position().left + "px"
+		                ,   top: instance.controlWrapper.offset().top + instance.controlWrapper.outerHeight() + "px"
+		                ,   left: instance.controlWrapper.offset().left + "px"
 		                });
 		            } else if (config.positionHow == 'relative') {
 		            	/** Scrolls with the parent but does NOT float above subsequent content */
@@ -802,7 +803,7 @@
             	aParent.removeClass("ui-state-disabled");
             }
             // adjust the checkbox state
-            item.attr("checked",selected);
+            item.prop("checked",selected);
         },
         _refreshGroup: function(group,disabled) {
             if ( disabled ) {
@@ -879,7 +880,7 @@
         ,   firstItemChecksAll: false
         ,   closeRadioOnClick: false
         ,   minWidth: 50
-        ,   positionHow: 'absolute'
+        ,   positionHow: 'relative'
         ,   bgiframe: false
         ,	explicitClose: null
         }

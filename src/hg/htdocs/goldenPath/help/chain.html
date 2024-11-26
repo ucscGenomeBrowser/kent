@@ -65,8 +65,46 @@ The initial header line starts with the keyword <strong><code>chain</code></stro
 The alignment start and end positions are represented as zero-based half-open intervals. For 
 example, the first 100 bases of a sequence would be represented with start position = 0 and end 
 position = 100, and the next 100 bases would be represented as start position = 100 and end 
-position = 200. When the strand value is &quot;-&quot;, position coordinates are listed in terms of 
-the reverse-complemented sequence.</p> 
+position = 200.</p>
+
+<p>
+<b>NOTE</b>: When the strand value is &quot;-&quot;,the query coordinates (qStart and qEnd) are on
+the reverse strand and must be subtracted from the chromosome size to obtain the correct position
+on the forward strand in the other genome. The reverse coordinates are subtracted as follows to get
+forward strand coordinates:</p>
+<pre><code>    qStartForward = qSize - qEnd 
+    qEndForward   = qSize - qStart</code></pre>
+
+<p>
+For example, using the query coordinates from chain 5 in
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
+target="_blank">hg38ToMm10.over.chain.gz</a>:
+<pre><code>    chain score tName tSize tStrand tStart tEnd qName qSize qStrand qStart qEnd id
+    chain 442878230 chr1 248956422 + 158547112 207360161 chr1 195471971 - 21022354 65032227 5</code></pre>
+<p>
+The reverse strand coordinates are subtracted from the chromosome size:</p>
+<pre><code>    mm10Start = 195471971 - 65032227 = 130439744
+    mm10End   = 195471971 - 21022354 = 174449617</code></pre>
+<p>The forward strand coordinates for chain 5 on mm10 are
+<code>chr1 130439744 174449617</code>, or with 1-based coordinates for a position range,
+chr1:130,439,745-174,449,617.</p>
+
+<p>
+To reverse the calculation and derive the corresponding hg38 coordinates using chain 5 in
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg38.over.chain.gz"
+target="_blank">mm10ToHg38.over.chain.gz</a>, note that the derived mm10 coordinates match the
+<code>tStart</code> and <code>tEnd</code> values:</p>
+<pre><code>    chain 442878230 chr1 195471971 + 130439744 174449617 chr1 248956422 - 41596261 90409310 5</code></pre>
+
+<p>
+The hg38 coordinates are subtracted as follows:</p>
+<pre><code>    hg38Start = 248956422 - 90409310 = 158547112
+    hg38End   = 248956422 - 41596261 = 207360161</code></pre>
+
+<p>These coordinates match the target coordinates in
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
+target="_blank">hg38ToMm10.over.chain.gz</a>.</p>
+
 <p>
 <strong>Alignment Data Lines</strong></p> 
 <p> 
@@ -89,7 +127,7 @@ of the last block.</p>
 <a name="rearrangement"></a> 
 <h3>&quot;Snake&quot; rearrangement display</h3>
 <p>
-Rearrangement display, sometimes called snakes display, is an alternative way to view pairwise alignemnts.
+Rearrangement display, sometimes called snakes display, is an alternative way to view pairwise alignments.
 It is available for PSL and chain format tracks.</p>
 <p>
 Rearrangement display is a representation of the path that the sequence follows in the &quot;other&quot; sequence. 

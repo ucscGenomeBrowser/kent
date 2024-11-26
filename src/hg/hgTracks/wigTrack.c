@@ -28,6 +28,7 @@
 #include "maf.h"
 #include "hgMaf.h"
 #include "chromAlias.h"
+#include "hubConnect.h"
 
 struct wigItem
 /* A wig track item. */
@@ -69,18 +70,31 @@ int x1 = 0, x2 = 0;
 int i = 0;
 for(lf = lfList; lf != NULL; lf = lf->next)
     {
+    unsigned color;
+    if (colorTrack->isColorBigBed)
+        color = bedColorToGfxColor(lf->filterColor);
+    else
+        color = colorTrack->ixAltColor;
+
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	x1 = round((double)((int)sf->start-winStart)*scale);
 	x2 = round((double)((int)sf->end-winStart)*scale);
+
+        // make sure x1 is at least zero and not greater than the array size
 	if(x1 < 0)
 	    x1 = 0;
-	if(x2 > colSize)
-	    x2 = colSize;
+        else if (x1 >= colSize) 
+            break;
+
+        // make sure x2 is at least one bigger than x1 and that it's not bigger than the array size + 1
 	if(x1 == x2)
 	    x2++;
+	if(x2 > colSize)
+	    x2 = colSize;
+
 	for(i = x1; i < x2; i++)
-	    colArray[i] = colorTrack->ixAltColor;
+            colArray[i] = color;
 	}
     }
 }
@@ -767,12 +781,42 @@ double graphRange = *graphUpperLimit - *graphLowerLimit;
 *epsilon = graphRange / lineHeight;
 return(graphRange);
 }
+        
+static struct track *makeFakeColorTrack(char *bb)
+/* make a fake track to color a wig. */
+{
+struct trackDb *tdb;
+
+AllocVar(tdb);
+tdb->grp = "other";
+tdb->track = "fakeTrackForColorBy";
+tdb->type = "bigBed 9";
+tdb->settingsHash = newHash(5);
+hashAdd(tdb->settingsHash, "bigDataUrl", hubConnectSkipHubPrefix(bb));
+
+struct track *cTrack =  trackFromTrackDb(tdb);
+cTrack->isColorBigBed = TRUE;
+
+return cTrack;
+}
+
+struct track *colorTrackIsBigBed(char *colorTrack)
+{
+//                cTrack = trackFromTrackDb(tdb);
+struct track *cTrack = NULL;
+
+if (endsWith(colorTrack, ".bb") || endsWith(colorTrack, ".bigBed"))
+    cTrack = makeFakeColorTrack(colorTrack);
+
+return cTrack;
+}
 
 static Color * makeColorArray(struct preDrawElement *preDraw, int width,
     int preDrawZero, struct wigCartOptions *wigCart, struct track *tg, struct hvGfx *hvg)
 /*	allocate and fill in a coloring array based on another track */
 {
 char *colorTrack = wigCart->colorTrack;
+char *colorBigBed = wigCart->colorBigBed;
 int x1;
 Color *colorArray = NULL;       /*      Array of pixels to be drawn.    */
 
@@ -797,8 +841,14 @@ for(x1 = 0; x1 < width; ++x1)
 	}
     }
 
-/* Fill in colors from alternate track if necessary. */
-if (colorTrack != NULL)
+/* Fill in colors from alternate track or bigBed if necessary. */
+struct track *cTrack = NULL;
+
+if (colorBigBed != NULL)
+    {
+    cTrack = makeFakeColorTrack(colorBigBed);
+    }
+else if (colorTrack != NULL)
     {
     struct track *cTrack = hashFindVal(trackHash, colorTrack);
     if (cTrack == NULL) // rightClick update of wigColorBy track may not have colorTrack in hash
@@ -807,9 +857,10 @@ if (colorTrack != NULL)
         if (tdb != NULL)
             cTrack = trackFromTrackDb(tdb);
         }
-    if (cTrack != NULL)
-        wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
     }
+
+if (cTrack != NULL)
+    wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
 
 return colorArray;
 }
@@ -2231,6 +2282,7 @@ wigCart->minHeight = minHeight;
 wigFetchMinMaxYWithCart(cart,tdb,tdb->track, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
 
 wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
+wigCart->colorBigBed = trackDbSetting(tdb, "setColorWith");
 
 char *containerType = trackDbSetting(tdb, "container");
 if (containerType != NULL && sameString(containerType, "multiWig"))
@@ -2283,3 +2335,30 @@ track->loadPreDraw = wigLoadPreDraw;
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 
 }	/*	wigMethods()	*/
+
+
+int setupForWiggle(struct track *tg, enum trackVisibility vis)
+/* Check to see if this track should show density coverage and if so
+ * make sure it has the cart data to support it.
+ */
+{
+boolean doWiggle = checkIfWiggling(cart, tg);
+int height = 0;
+if (doWiggle)
+    {
+    struct wigCartOptions *wigCart = tg->wigCartData;
+    if (tg->wigCartData == NULL)
+	{
+        // fake the trackDb range for this auto-wiggle
+        int wordCount = 3;
+        char *words[3];
+        words[0] = "bedGraph";
+	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
+        wigCart->windowingFunction = wiggleWindowingMean;
+	tg->wigCartData = (void *) wigCart;
+	}
+    height = wigTotalHeight(tg, vis);
+    }
+return height;
+}
+

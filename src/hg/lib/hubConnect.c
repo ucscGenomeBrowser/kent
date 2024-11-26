@@ -418,13 +418,20 @@ assert(trackName != NULL);
 return trackName + 1;
 }
 
-struct hubConnectStatus *hubFromId(unsigned hubId)
-/* Given a hub ID number, return corresponding trackHub structure. 
- * ErrAbort if there's a problem. */
+struct hubConnectStatus *hubFromIdNoAbort(unsigned hubId)
+/* Given a hub ID number, return corresponding trackHub structure. */
 {
 struct sqlConnection *conn = hConnectCentral();
 struct hubConnectStatus *status = hubConnectStatusForId(conn, hubId);
 hDisconnectCentral(&conn);
+return status;
+}
+
+struct hubConnectStatus *hubFromId(unsigned hubId)
+/* Given a hub ID number, return corresponding trackHub structure. 
+ * ErrAbort if there's a problem. */
+{
+struct hubConnectStatus *status = hubFromIdNoAbort(hubId);
 if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
 if (!isEmpty(status->errorMessage))
@@ -867,7 +874,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[64 * 1024];
+char query[1024 * 1024];
 struct trackHub *tHub = NULL;
 
 if (hub != NULL)
@@ -1242,8 +1249,9 @@ hDisconnectCentral(&conn);
 if (!isEmpty(dir))
     {
     char *path = &dir[sizeof hubCuratedPrefix - 1];
-    char url[4096];
-    safef(url, sizeof url, "%s/%s/hub.txt", path, curatedHubPrefix);
+    char urlBuf[4096];
+    safef(urlBuf, sizeof urlBuf, "%s/%s/hub.txt", path, curatedHubPrefix);
+    char *url = hReplaceGbdb(urlBuf);
 
     struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
 

@@ -955,7 +955,7 @@ while ((colCount = lineFileChopTab(lf, row)) > 0)
     parseNextcladeDeletions(row[delIx], si, ref);
     parseNextcladeInsertions(row[insIx], si, ref);
     addRefCalls(snvsByPos, positionsCalled, ref, gtIx, gtCount);
-    si->basesAligned = tEnd - tStart - si->delBases - si->insBases;
+    si->basesAligned = tEnd - tStart - si->delBases;
     si->tStart = tStart;
     si->tEnd = tEnd;
     }

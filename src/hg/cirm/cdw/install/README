@@ -1,0 +1,84 @@
+Installation overview for Cell Data Warehouse (CDW).
+
+1) First bring up a recent linux distribution.
+2) Run a Genome Browser Install script that should include mysql/mariaDb install.
+3) Add in (with dnf install) libpng-devel, libuuid-devel, mariadb-devel, nodejs
+4) Create a cdw user at the Unix level that will be the one to run the daemons.
+5) Create the following directories and make them writable and executable by
+   the cdw user.
+   	$HOME/cdw/bin/scripts
+	$HOME/cdw/bin/x86_64
+	$HOME/cdw/backups
+	/usr/local/apache/cgi-bin-cdw
+   Also set up the environmental variable CIRM to point to $HOME/cdw
+6) Log in as the cdw user
+7) Get the Kent UCSC source and execute the following makes from the 
+   src directory:
+       cd ~/kent/src
+       make -j 16 libs
+       cd ~/kent/src/hg/cirm/cdw
+       make -j 16
+       cd ~/kent/src/tagStorm
+       make -j 16
+       cd ~/kent/src/hg/hgsql
+       make
+       cd ~/kent/src/hg/encode3/encodeDataWarehouse/utils/edwSamPairedEndStats
+       make
+       cd ~/kent/src/hg/encode3/encodeDataWarehouse/utils/edwBamStats
+       make
+       cd ~/kent/src/hg/encode3/encodeDataWarehouse/utils/edwSamRepeatAnalysis
+       make
+       cd ~/kent/src/utils/fastqStatsAndSubsample
+       make
+       cd ~/kent/src/utils/bigBedToBed
+       make
+       cd ~/kent/src/utils/bigWigAverageOverBed
+       make
+8) Make up a configuration file for accessing the database in ~/.hg.conf
+    with the following six lines:
+       db.host=localhost
+       db.user=cdw
+       db.password=
+       cdw.host=localhost
+       cdw.user=cdw
+       cdw.password=
+    where you get the password values from the system admins or Jim.
+    (The db.password and cdw.password can be the same.)
+    Do
+       chmod 600 .hg.conf
+    to make it private
+9) Create a cdw user for the mariaSql database and also a cdw database that
+   the cdw user has full authorities for.
+10) Copy over the validation data from hgwdev
+       cd /data/cirm
+       scp -rp hgwdev:/data/cirm/valData .
+11) Create the table structure for the cdw database by logging into mysql,
+    doing
+       hgsqladmin create cdw
+       hgsql cdw < ~/kent/src/hg/cirm/cdw/lib/cdw.sql;
+12) Populate the settings table by doing
+       insert into cdwSettings set name='prefix',val='SSPG';
+       insert into cdwSettings set name='schema',val='/data/cirm/valData/tags.schema';
+    Note these lines control the prefix to the accession numbers for the files,
+    and the tagStorm schema respectively.
+13) Set up users and groups for cdw system, people who can submit files and groups they
+    belong to.  You'll need to edit this script for different installations.
+       ~/kent/src/hg/cirm/cdw/install/initUsersGroups
+14) Run script to load up validation and quality assurance files
+        ~/kent/src/hg/cirm/cdw/install/initQa
+15) Find the following bioinformatics programs and make them accessible to the cdw user.
+	 tabix (version 0.2.5 is what we use)
+	 bgzip (part of Heng Li's tabix kit)
+	 bowtie (we use version 1.3.1)
+16) Set up the bowtie indexes in ramdisk.  (redo on reboot)
+	rsync -apv /data/cirm/valData/ramdisk/ /dev/shm/btData/
+17) Start up the daemons (redo on reboot)
+	cd /data/cirm/cdw
+	cdwRunDaemon cdw cdwJob 30 -log=cdwQa.log
+    Sometimes the daemons will crash out.  Usually it's on a new data type. Do a
+        ps -u cdw
+    to see if this has happened.  If so then do
+        killall cdwRunDaemon
+    have a look at the cdwJob.log,  and possibly the latest entries in the cdwJob
+    database table, and then do cdwRunDaemon again as above to restart.
+

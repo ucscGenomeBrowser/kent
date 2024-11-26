@@ -9,7 +9,6 @@
     <LINK REL="STYLESHEET" HREF="trackDbDoc.css">
     <script type="text/javascript" src="/js/jquery.js"></script>
     <script type="text/javascript" src="/js/staticDoc.js"></script>
-    <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="trackDbDoc.js"></script>
 
     <script type="text/javascript">
@@ -689,6 +688,34 @@ are described below along with settings specific to their types.</P>
         <div class="format">
             <code class="level-full">filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="highlight"><A name="highlight"></A>
+            <A name="highlight.fieldName"></A>
+            <A name="highlightLimits.fieldName"></A>
+            <A name="highlightByRange.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">highlight.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
+            <span class="highlightByRange"><code class="level-new">highlightByRange.&lt;fieldName&gt; &lt;off/on&gt;</code></span><BR>
+            <span class="highlightLimits"><code class="level-new">highlightLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="highlightText"><A name="highlightText"></A>
+            <A name="highlightText.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">highlightText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
+            <span class="highlightType"><code class="level-new">highlightType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="highlightValues"><A name="highlightValues"></A>
+            <A name="highlightValues.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">highlightValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <span class="highlightValuesDefault"><code class="level-new">highlightValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code></span><BR>
+            <span class="highlightType"><code class="level-new">highlightType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="highlightColor"><A name="highlightColor"></A>
+            <A name="highlightColor"</A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">highlightColor &lt;#hexcolor&gt;</code><BR>
+        </div>
+    </TD></TR>
 </TABLE>
 
 <TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
@@ -831,6 +858,10 @@ are described below along with settings specific to their types.</P>
 </td></tr>
 <tr valign=top><td class="interactMultiRegion"><a name="interactMultiRegion"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">interactMultiRegion &lt;true/padding&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="endsVisible"><a name="endsVisible"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">endsVisible two</code>
     </div>
 </td></tr>
 

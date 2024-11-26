@@ -4202,6 +4202,27 @@ struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)
 {
 if (trackHubDatabase(db))
     return NULL;
+
+if (isHubTrack(db))
+    {
+    // this means the db has a hub_#_ prefix but didn't get loaded at init time
+    unsigned hubId = hubIdFromTrackName(db);
+    struct hubConnectStatus *status = hubFromIdNoAbort(hubId);
+
+    if (status == NULL)
+        errAbort("Error: The database in the hub (%s) that is saved in your session is no longer accessible."
+                 " This may be due because the hub ID (%d) in your session cannot be transferred across"
+                 " different Genome Browser machines.\n",hubConnectSkipHubPrefix(db), hubId);
+    else if (status->errorMessage)
+        errAbort("Error: The database %s in the hub %s that is saved in your session encountered an error:\n"
+                 "%s.\n"
+                 " This may be due to the hub moving to a new hosting location. We recommend contacting"
+                 " the hub authors for assistance.",hubConnectSkipHubPrefix(db), status->hubUrl, status->errorMessage); 
+    else
+        errAbort("Error: The genome %s in in the hub is no longer available. Please reach out to the hub authors"
+                 " for further information: %s\n", hubConnectSkipHubPrefix(db), status->hubUrl);
+    }
+
 struct trackDb *tdbList = NULL;
 
 boolean doCache = trackDbCacheOn();

@@ -172,7 +172,15 @@ _EOF_
     print $fh <<_EOF_
 #!/bin/bash
 set -beEu -o pipefail
-export tmpFile=`mktemp -p /dev/shm doCpg.\$\$.XXXXX`
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  export TMPDIR="/tmp"
+fi
+
+export tmpFile=`mktemp -p \$TMPDIR doCpg.\$\$.XXXXX`
 export chromSizes=$chromSizes
 export fileSpec="\${1}"
 export file=`echo \$fileSpec | cut -d':' -f1`
@@ -218,7 +226,7 @@ do
 done
 mkdir -p results
 chmod a+x runCpg.bash oneSplit.bash
-grep -v "parts/part" part.list | xargs -L 1 --no-run-if-empty ./oneSplit.bash
+(grep -v "parts/part" part.list || true) | xargs -L 1 --no-run-if-empty ./oneSplit.bash
 rm -f file.list
 find ./partFa -type f > file.list
 $gensub2 file.list single gsub jobList
@@ -349,7 +357,7 @@ $maxSplitSize = $maxSeqSize;
 $splitRun = 0;
 #   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
 #   or if maxSeqSize over 1Gb
-if ( ($maxSeqSize > 4*1024**3) || ($maxSeqSize > 1024**3) ) {
+if ( ($totalSeqSize > 4*1024**3) || ($maxSeqSize > 1024**3) ) {
    $splitRun = 1;
    $maxSplitSize = 1000000000;
 }

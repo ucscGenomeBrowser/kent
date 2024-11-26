@@ -70,7 +70,7 @@ Download these autoSql files needed by <code>bedToBigBed</code>:
 <em><a href="examples/bigLink.as">bigLink.as</a></em>.</p>
 <p>
 <strong>Step 3.</strong> 
-Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> programs from the UCSC
+Download the <code>bedToBigBed</code> and <code>chainToBigChain</code> programs from the UCSC
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <p>
 <strong>Step 4.</strong> 
@@ -91,35 +91,29 @@ wget https://genome.ucsc.edu/goldenPath/help/examples/bigLink.as
 wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
 wget https://genome.ucsc.edu/goldenPath/help/examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain
 </code></pre></p>
-<strong>Step 5.</strong> 
-Use the <code>hgLoadChain</code> utility to generate the <em>chain.tab</em> and <em>link.tab</em> 
-files needed to create the bigChain file:</p> 
-<pre><code>hgLoadChain -noBin -test hg38 bigChain chr22_KI270731v1_random.hg38.mm10.rbest.chain</code></pre>
+<p>
+<strong>Step 5.</strong>
+Use the <code>chainToBigChain</code> utility to generate the pre-bigChain and pre-bigLink files:</p>
+<pre><code>chainToBigChain chr22_KI270731v1_random.hg38.mm10.rbest.chain bigChain.pre bigChain.link.pre</code></pre>
 <p>
 <strong>Step 6.</strong> 
-Create the bigChain file from your input chain file using a combination of <code>sed</code>, 
-<code>awk</code> and the <code>bedToBigBed</code> utility: 
-<pre><code>sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' &gt; chr22_KI270731v1_random.hg38.mm10.rbest.bigChain
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab chr22_KI270731v1_random.hg38.mm10.rbest.bigChain hg38.chrom.sizes bigChain.bb</code></pre></p> 
+Create the bigChain and bigLink files using the <code>bedToBigBed</code> utility:
+<pre><code>bedToBigBed -type=bed6+6 -as=bigChain.as -tab bigChain.pre hg38.chrom.sizes bigChain.bb
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab bigChain.link.pre hg38.chrom.sizes bigChain.link.bb
+</code></pre></p>
 <p>
 <strong>Step 7.</strong> 
-To display your date in the Genome Browser, you must also create a binary indexed link file to 
-accompany your bigChain file:</p> 
-<pre><code>awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n &gt; bigChain.bigLink
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab bigChain.bigLink hg38.chrom.sizes bigChain.link.bb </code></pre>
-<p>
-<strong>Step 8.</strong> 
 Move the newly created bigChain (<em>bigChain.bb</em>) and bigLink (<em>bigChain.link.bb</em>)
 files to a web-accessible http, https or ftp location.</p>
 <p>
-<strong>Step 9.</strong> 
+<strong>Step 8.</strong>
 Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
 <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
 <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic
 version of the track line will look something like this:</p>
 <pre><code>track type=bigChain name="My Big Chain" bigDataUrl=http://myorg.edu/mylab/bigChain.bb linkDataUrl=http://myorg.edu/mylab/bigChain.link.bb </code></pre>
 <p>
-<strong>Step 10.</strong> 
+<strong>Step 9.</strong>
 Paste the custom track line into the text box on the 
 <a href="../../cgi-bin/hgCustom">custom track management page</a>.</p>
 <p>
@@ -168,7 +162,7 @@ In this example, you will create your own bigChain file from an existing chain i
   <a href="examples/bigLink.as"><em>bigLink.as</em></a> to your computer (<em>Step 2</em>, 
   above).</li>
   <li>
-  Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> 
+  Download the <code>bedToBigBed</code> and <code>chainToBigChain</code>
   <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities</a> (<em>Step 3</em>, above).</li>
   <li>
   Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. This

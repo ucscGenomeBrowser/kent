@@ -71,7 +71,7 @@ if (optionExists("zooms"))
     {
     struct bbiZoomLevel *zoom;
     for (zoom = bwf->levelList; zoom != NULL; zoom = zoom->next)
-	printf("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
+	printf("\t%u\t%u\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
     }
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 printf("chromCount: %d\n", slCount(chromList));

@@ -1,0 +1,469 @@
+panTro6	0.011908	9598	Pan troglodytes	chimpanzee	Primates
+panPan3	0.011944	9597	Pan paniscus	pygmy chimpanzee	Primates
+gorGor6	0.017625	9595	Gorilla gorilla gorilla	western lowland gorilla	Primates
+ponAbe3	0.034005	9601	Pongo abelii	Sumatran orangutan	Primates
+HLnomLeu4	0.040196	61853	Nomascus leucogenys	northern white-cheeked gibbon	Primates
+HLhylMol2	0.040428	81572	Hylobates moloch	silvery gibbon	Primates
+macNem1	0.066302	9545	Macaca nemestrina	pig-tailed macaque	Primates
+HLtheGel1	0.066537	9565	Theropithecus gelada	gelada	Primates
+HLmacFas6	0.066886	9541	Macaca fascicularis	crab-eating macaque	Primates
+HLcerMon1	0.067960	36226	Cercopithecus mona	Mona monkey	Primates
+HLpilTep2	0.068039	591936	Piliocolobus tephrosceles	Ugandan red Colobus	Primates
+colAng1	0.068108	336983	Colobus angolensis palliatus	Angolan colobus	Primates
+manLeu1	0.068119	9568	Mandrillus leucophaeus	drill	Primates
+cerAty1	0.068126	9531	Cercocebus atys	sooty mangabey	Primates
+HLpapAnu5	0.068211	9555	Papio anubis	olive baboon	Primates
+HLmanSph1	0.068284	9561	Mandrillus sphinx	mandrill	Primates
+HLsemEnt1	0.068418	88029	Semnopithecus entellus	Hanuman langur	Primates
+rheMac10	0.068471	9544	Macaca mulatta	Rhesus monkey	Primates
+HLmacFus1	0.068645	9542	Macaca fuscata	Japanese macaque	Primates
+HLtraFra1	0.069874	54180	Trachypithecus francoisi	Francois's langur	Primates
+rhiBie1	0.070006	61621	Rhinopithecus bieti	black snub-nosed monkey	Primates
+HLrhiRox2	0.070126	61622	Rhinopithecus roxellana	golden snub-nosed monkey	Primates
+HLpygNem1	0.070134	54133	Pygathrix nemaeus	Red shanked douc langur	Primates
+HLcerNeg1	0.070753	36227	Cercopithecus neglectus	De Brazza's monkey	Primates
+nasLar1	0.071163	43780	Nasalis larvatus	proboscis monkey	Primates
+HLallNig1	0.071412	54135	Allenopithecus nigroviridis	Allen's swamp monkey	Primates
+chlSab2	0.071454	60711	Chlorocebus sabaeus	green monkey	Primates
+HLeryPat1	0.071506	9538	Erythrocebus patas	red guenon	Primates
+HLpitPit1	0.108056	43777	Pithecia pithecia	white-faced saki	Primates
+HLateGeo1	0.108556	9509	Ateles geoffroyi	black-handed spider monkey	Primates
+aotNan1	0.110563	37293	Aotus nancymaae	Ma's night monkey	Primates
+HLpleDon1	0.112154	230833	Plecturocebus donacophilus	Bolivian titi	Primates
+HLaloPal1	0.112962	30589	Alouatta palliata	mantled howler monkey	Primates
+HLsaiBol1	0.118425	27679	Saimiri boliviensis	Bolivian squirrel monkey	Primates
+HLsagImp1	0.120002	9491	Saguinus imperator	tamarin	Primates
+saiBol1	0.120341	39432	Saimiri boliviensis boliviensis	Bolivian squirrel monkey	Primates
+HLcalJac4	0.121733	9483	Callithrix jacchus	white-tufted-ear marmoset	Primates
+HLcalPym1	0.122627	9493	Callithrix pygmaea	pygmy marmoset	Primates
+HLsapApe1	0.168914	9515	Sapajus apella	tufted capuchin	Primates
+cebCap1	0.169897	2715852	Cebus capucinus imitator	Panamanian white-faced capuchin	Primates
+HLcebAlb1	0.169903	9514	Cebus albifrons	white-fronted capuchin	Primates
+HLdauMad1	0.208434	31869	Daubentonia madagascariensis	aye-aye	Primates
+proCoq1	0.233883	379532	Propithecus coquereli	Coquerel's sifaka	Primates
+HLgalVar2	0.235527	482537	Galeopterus variegatus	Sunda flying lemur	Euarchontoglires
+HLindInd1	0.235695	34827	Indri indri	babakoto	Primates
+HLeulFul1	0.235732	13515	Eulemur fulvus	brown lemur	Primates
+eulFla1	0.236625	87288	Eulemur flavifrons	Sclater's lemur	Primates
+HLlemCat1	0.236681	9447	Lemur catta	Ring-tailed lemur	Primates
+HLproSim1	0.237274	1328070	Prolemur simus	greater bamboo lemur	Primates
+HLeulMon1	0.237415	34828	Eulemur mongoz	mongoose lemur	Primates
+HLeulFla1	0.238454	87288	Eulemur flavifrons	Sclater's lemur	Primates
+HLcheMed1	0.239289	9460	Cheirogaleus medius	Lesser dwarf lemur	Primates
+eulMac1	0.241035	30602	Eulemur macaco	black lemur	Primates
+tarSyr2	0.244144	1868482	Carlito syrichta	Philippine tarsier	Primates
+micMur3	0.255265	30608	Microcebus murinus	gray mouse lemur	Primates
+HLmirZaz1	0.255536	339999	Mirza zaza	Northern giant mouse lemur	Primates
+HLmirCoq1	0.255561	47180	Mirza coquereli	Coquerel's mouse lemur	Primates
+HLmicSpe31	0.256754	2508170	Microcebus sp. 3 GT-2019	mouse lemur	Primates
+HLmicTav1	0.257398	143351	Microcebus tavaratra	Northern rufous mouse lemur	Primates
+HLnycCou1	0.277023	9470	Nycticebus coucang	slow loris	Primates
+otoGar3	0.279617	30611	Otolemur garnettii	small-eared galago	Primates
+HLtapTer1	0.294617	9801	Tapirus terrestris	Brazilian tapir	Laurasiatheria
+HLrhiUni1	0.294698	9809	Rhinoceros unicornis	greater Indian rhinoceros	Laurasiatheria
+HLtapInd1	0.295156	9802	Tapirus indicus	Asiatic tapir	Laurasiatheria
+HLtapInd2	0.295258	9802	Tapirus indicus	Asiatic tapir	Laurasiatheria
+HLdicBic1	0.297641	9805	Diceros bicornis	black rhinoceros	Laurasiatheria
+HLdicSum1	0.298388	310712	Dicerorhinus sumatrensis sumatrensis	Sumatran rhinoceros	Laurasiatheria
+HLcerSimCot1	0.298569	310713	Ceratotherium simum cottoni	northern white rhinoceros	Laurasiatheria
+cerSim1	0.298570	73337	Ceratotherium simum simum	southern white rhinoceros	Laurasiatheria
+HLequQuaBoe1	0.306645	89250	Equus burchellii boehmi	Equus burchelli boehmi	Laurasiatheria
+equCab3	0.306994	9796	Equus caballus	horse	Laurasiatheria
+equPrz1	0.307043	9798	Equus przewalskii	Przewalski's horse	Laurasiatheria
+HLequAsi1	0.307529	9793	Equus asinus	ass	Laurasiatheria
+HLequAsiAsi2	0.307667	83772	Equus asinus asinus	donkey	Laurasiatheria
+HLeubGla1	0.323159	27606	Eubalaena glacialis	North Atlantic right whale	Artiodactyla
+HLsciCar1	0.324555	30640	Sciurus carolinensis	gray squirrel	Glires
+HLeubJap1	0.325011	302098	Eubalaena japonica	North Pacific right whale	Artiodactyla
+HLsciVul1	0.326279	55149	Sciurus vulgaris	Eurasian red squirrel	Glires
+balAcu1	0.326848	310752	Balaenoptera acutorostrata scammoni	minke whale	Artiodactyla
+HLbalBon1	0.327039	33556	Balaenoptera bonaerensis	Antarctic minke whale	Cetartiodactyla
+HLxerIna1	0.327371	234690	Xerus inauris	South African ground squirrel	Glires
+HLmegNov1	0.327520	9773	Megaptera novaeangliae	humpback whale	Artiodactyla
+HLbalPhy1	0.327765	9770	Balaenoptera physalus	Fin whale	Artiodactyla
+HLbalMys1	0.327819	27602	Balaena mysticetus	bowhead whale	Artiodactyla
+HLbalMus1	0.328055	9771	Balaenoptera musculus	Blue whale	Artiodactyla
+tupChi1	0.328363	246437	Tupaia chinensis	Chinese tree shrew	Euarchontoglires
+HLbalEde1	0.329773	9769	Balaenoptera edeni	pygmy Bryde's whale	Artiodactyla
+HLaplRuf1	0.330581	51342	Aplodontia rufa	mountain beaver	Glires
+HLescRob1	0.330851	9764	Eschrichtius robustus	grey whale	Cetartiodactyla
+HLmarFla1	0.330852	93162	Marmota flaviventris	yellow-bellied marmot	Glires
+phyCat1	0.331283	9755	Physeter catodon	sperm whale	Cetartiodactyla
+HLphyCat2	0.331305	9755	Physeter catodon	sperm whale	Cetartiodactyla
+HLmarMar1	0.333436	9994	Marmota marmota marmota	Alpine marmot	Glires
+HLmesBid1	0.333969	48745	Mesoplodon bidens	Sowerby's beaked whale	Artiodactyla
+HLchoHof3	0.334208	9358	Choloepus hoffmanni	Hoffmann's two-fingered sloth	Xenarthra
+HLchoDid2	0.334786	27675	Choloepus didactylus	southern two-toed sloth	Xenarthra
+HLmarVan1	0.335194	93167	Marmota vancouverensis	Vancouver Island marmot	Glires
+HLplaMin1	0.335264	48752	Platanista minor	Indus River dolphin	Artiodactyla
+HLmarHim1	0.335283	93163	Marmota himalayana	Himalayan marmot	Glires
+HLspeDau1	0.335780	99837	Spermophilus dauricus	Daurian ground squirrel	Glires
+HLmarMon1	0.336288	9995	Marmota monax	woodchuck	Glires
+HLmarMon2	0.336359	9995	Marmota monax	woodchuck	Glires
+HLzipCav1	0.336385	9760	Ziphius cavirostris	Cuvier's beaked whale	Artiodactyla
+HLuroPar1	0.336615	9999	Urocitellus parryii	Arctic ground squirrel	Glires
+lipVex1	0.336862	118797	Lipotes vexillifer	Yangtze River dolphin	Cetartiodactyla
+HLdelLeu2	0.337044	9749	Delphinapterus leucas	beluga whale	Cetartiodactyla
+HLlniGeo1	0.337330	9725	Inia geoffrensis	boutu	Artiodactyla
+HLcynGun1	0.337536	45479	Cynomys gunnisoni	Gunnison's prairie dog	Glires
+HLmonMon1	0.338216	40151	Monodon monoceros	narwhal	Artiodactyla
+HLhipAmp3	0.338242	9833	Hippopotamus amphibius	hippopotamus	Cetartiodactyla
+HLhipAmp1	0.338266	9833	Hippopotamus amphibius	hippopotamus	Cetartiodactyla
+speTri2	0.338870	43179	Ictidomys tridecemlineatus	thirteen-lined ground squirrel	Glires
+HLneoAsi1	0.339010	1706337	Neophocaena asiaeorientalis asiaeorientalis	Yangtze finless porpoise	Artiodactyla
+HLpumCon1	0.339239	9696	Puma concolor	puma	Carnivora
+panTig1	0.339370	74533	Panthera tigris altaica	Amur tiger	Carnivora
+HLkogBre1	0.339461	27615	Kogia breviceps	pygmy sperm whale	Artiodactyla
+HLneoNeb1	0.339913	61452	Neofelis nebulosa	Clouded leopard	Carnivora
+HLpanPar1	0.340237	9691	Panthera pardus	leopard	Carnivora
+HLphoSin1	0.340304	42100	Phocoena sinus	vaquita	Artiodactyla
+HLeriBar1	0.340896	39304	Erignathus barbatus	bearded seal	Carnivora
+HLmanTri1	0.340991	358128	Manis tricuspis	Tree pangolin	Laurasiatheria
+HLgliGli1	0.341021	41261	Glis glis	Fat dormouse	Glires
+HLdugDug1	0.341028	29137	Dugong dugon	dugong	Afrotheria
+HLphaTri2	0.341217	358128	Manis tricuspis	Tree pangolin	Laurasiatheria
+HLpanOnc1	0.341223	9690	Panthera onca	jaguar	Carnivora
+HLphoVit1	0.341302	9720	Phoca vitulina	harbor seal	Carnivora
+HLaciJub2	0.341318	32536	Acinonyx jubatus	cheetah	Carnivora
+HLhalGry1	0.341448	9711	Halichoerus grypus	gray seal	Carnivora
+HLchoDid1	0.341677	27675	Choloepus didactylus	southern two-toed sloth	Xenarthra
+HLpedCap1	0.341798	10023	Pedetes capensis	springhare	Glires
+HLphoPho2	0.341871	9742	Phocoena phocoena	harbor porpoise	Cetartiodactyla
+HLphoPho1	0.341938	9742	Phocoena phocoena	harbor porpoise	Cetartiodactyla
+neoSch1	0.342568	29088	Neomonachus schauinslandi	Hawaiian monk seal	Carnivora
+lepWed1	0.342964	9713	Leptonychotes weddellii	Weddell seal	Carnivora
+HLpanOnc2	0.343003	9690	Panthera onca	jaguar	Carnivora
+HLponBla1	0.343225	48723	Pontoporia blainvillei	franciscana	Artiodactyla
+HLpriBen1	0.343801	300877	Prionailurus bengalensis euptilurus	Amur leopard cat	Carnivora
+HLcamFer3	0.343844	419612	Camelus ferus	Wild Bactrian camel	Cetartiodactyla
+orcOrc1	0.344242	9733	Orcinus orca	killer whale	Cetartiodactyla
+HLmanPen2	0.344696	143292	Manis pentadactyla	Chinese pangolin	Laurasiatheria
+HLcasCan3	0.344757	51338	Castor canadensis	American beaver	Glires
+HLursThi1	0.345126	441215	Ursus thibetanus thibetanus	Asian black bear	Carnivora
+HLrhiSin1	0.345169	89399	Rhinolophus sinicus	Chinese rufous horseshoe bat	Chiroptera
+HLlynPar1	0.345196	191816	Lynx pardinus	Spanish lynx	Carnivora
+HLmirLeo1	0.345225	9715	Mirounga leonina	Southern elephant seal	Carnivora
+HLlynCan1	0.345230	61383	Lynx canadensis	Canada lynx	Carnivora
+HLmirAng2	0.345262	9716	Mirounga angustirostris	Northern elephant seal	Carnivora
+HLpanLeo1	0.345450	9689	Panthera leo	lion	Carnivora
+HLcamBac1	0.345692	9837	Camelus bactrianus	Bactrian camel	Cetartiodactyla
+HLsouChi1	0.345797	103600	Sousa chinensis	Indo-pacific humpbacked dolphin	Cetartiodactyla
+manPen1	0.345872	143292	Manis pentadactyla	Chinese pangolin	Laurasiatheria
+HLodoRos1	0.346087	9707	Odobenus rosmarus	walrus	Carnivora
+HLcalUrs1	0.346088	34884	Callorhinus ursinus	northern fur seal	Carnivora
+odoRosDiv1	0.346165	9708	Odobenus rosmarus divergens	Pacific walrus	Carnivora
+HLvicPacHua3	0.346491	273913	Vicugna pacos huacaya	Lama pacos huacaya	Artiodactyla
+HLhipArm1	0.346510	186990	Hipposideros armiger	great roundleaf bat	Chiroptera
+HLlamGla1	0.346526	9844	Lama glama	llama	Artiodactyla
+HLailMel2	0.346676	9646	Ailuropoda melanoleuca	giant panda	Carnivora
+HLzalCal1	0.346763	9704	Zalophus californianus	California sea lion	Carnivora
+HLeumJub1	0.346895	34886	Eumetopias jubatus	Steller sea lion	Carnivora
+felCat9	0.347177	9685	Felis catus	domestic cat	Carnivora
+HLpumYag1	0.347459	1608482	Puma yagouaroundi	jaguarundi	Carnivora
+pteAle1	0.347504	9402	Pteropus alecto	black flying fox	Chiroptera
+HLursArc1	0.347623	116960	Ursus arctos horribilis	grizzly bear	Carnivora
+ursMar1	0.347725	29073	Ursus maritimus	polar bear	Carnivora
+HLpepEle1	0.347870	103596	Peponocephala electra	melon-headed whale	Artiodactyla
+HLgloMel1	0.347877	9731	Globicephala melas	long-finned pilot whale	Artiodactyla
+HLrhiFer5	0.347931	59479	Rhinolophus ferrumequinum	greater horseshoe bat	Chiroptera
+HLarcGaz2	0.347951	37190	Arctocephalus gazella	antarctic fur seal	Carnivora
+HLcamDro2	0.348024	9838	Camelus dromedarius	Arabian camel	Cetartiodactyla
+HLlagObl1	0.348125	90247	Lagenorhynchus obliquidens	Pacific white-sided dolphin	Artiodactyla
+HLptePse1	0.348247	1496133	Pteropus pselaphon	Bonin flying fox	Chiroptera
+HLmanJav1	0.348254	9974	Manis javanica	Malayan pangolin	Laurasiatheria
+HLmanJav2	0.348323	9974	Manis javanica	Malayan pangolin	Laurasiatheria
+vicPac2	0.348331	30538	Vicugna pacos	alpaca	Cetartiodactyla
+HLvicVicMen1	0.348383	273917	Vicugna vicugna mensalis	Vicugna mensalis	Artiodactyla
+HLlamGuaCac1	0.348389	273908	Lama guanicoe cacsilensis	guanaco	Artiodactyla
+HLlamGlaCha1	0.348398	273914	Lama glama chaku	llama	Artiodactyla
+HLturTru4	0.348538	9739	Tursiops truncatus	common bottlenose dolphin	Cetartiodactyla
+dasNov3	0.348744	9361	Dasypus novemcinctus	nine-banded armadillo	Xenarthra
+HLturAdu1	0.348808	79784	Tursiops aduncus	Indo-pacific bottlenose dolphin	Cetartiodactyla
+HLturAdu2	0.348844	79784	Tursiops aduncus	Indo-pacific bottlenose dolphin	Cetartiodactyla
+HLursAme1	0.348888	9643	Ursus americanus	American black bear	Carnivora
+HLursAme2	0.348941	9643	Ursus americanus	American black bear	Carnivora
+triMan1	0.348958	127582	Trichechus manatus latirostris	Florida manatee	Afrotheria
+HLtadBra1	0.349800	9438	Tadarida brasiliensis	Brazilian free-tailed bat	Chiroptera
+HLpteVam2	0.349942	132908	Pteropus vampyrus	large flying fox	Chiroptera
+turTru2	0.350401	9739	Tursiops truncatus	common bottlenose dolphin	Cetartiodactyla
+HLpteRuf1	0.350677	196297	Pteropus rufus	Malagasy flying fox	Chiroptera
+HLpteGig1	0.350706	143291	Pteropus giganteus	Indian flying fox	Chiroptera
+HLturTru3	0.350927	9739	Tursiops truncatus	common bottlenose dolphin	Cetartiodactyla
+HLfelNig1	0.351933	61379	Felis nigripes	black-footed cat	Carnivora
+HLeidDup1	0.352420	58063	Eidolon dupreanum	Malagasy straw-colored fruit bat	Chiroptera
+HLeidHel2	0.353393	77214	Eidolon helvum	straw-colored fruit bat	Chiroptera
+HLeleMax1	0.353947	9783	Elephas maximus	Asiatic elephant	Afrotheria
+HLhipGal1	0.354266	58069	Hipposideros galeritus	Cantor's roundleaf bat	Chiroptera
+HLloxAfr4	0.354544	9785	Loxodonta africana	African savanna elephant	Afrotheria
+tupBel1	0.355609	37347	Tupaia belangeri	northern tree shrew	Euarchontoglires
+HLcynBra1	0.357249	58060	Cynopterus brachyotis	lesser short-nosed fruit bat	Chiroptera
+HLeonSpe1	0.357521	58065	Eonycteris spelaea	lesser dawn bat	Chiroptera
+HLcryFer2	0.357597	94188	Cryptoprocta ferox	fossa	Carnivora
+HLgraMur1	0.358933	51346	Graphiurus murinus	woodland dormouse	Glires
+HLmyrTri1	0.359230	71006	Myrmecophaga tridactyla	giant anteater	Xenarthra
+oryAfe1	0.360861	1230840	Orycteropus afer afer	aardvark	Afrotheria
+HLrouLes1	0.360863	9408	Rousettus leschenaultii	Leschenault's rousette	Chiroptera
+HLrouAeg4	0.361617	9407	Rousettus aegyptiacus	Egyptian rousette	Chiroptera
+HLrouMad1	0.362453	77223	Rousettus madagascariensis	Madagascan rousette	Chiroptera
+HLvulVul1	0.362863	9627	Vulpes vulpes	red fox	Carnivora
+canFam4	0.362969	9615	Canis lupus familiaris	dog	Carnivora
+HLvulLag1	0.363132	494514	Vulpes lagopus	Arctic fox	Carnivora
+HLlycPic3	0.363823	9622	Lycaon pictus	African hunting dog	Carnivora
+HLtamTet1	0.364048	48850	Tamandua tetradactyla	southern tamandua	Xenarthra
+HLcanLupDin1	0.364766	286419	Canis lupus dingo	dingo	Carnivora
+canFam5	0.364791	9615	Canis lupus familiaris	dog	Carnivora
+HLpotFla1	0.365078	29067	Potos flavus	kinkajou	Carnivora
+HLhydGig1	0.365552	63631	Hydrodamalis gigas	Steller's sea cow	Afrotheria
+HLmegLyr2	0.366251	9413	Megaderma lyra	Indian false vampire	Chiroptera
+HLlycPic2	0.366759	9622	Lycaon pictus	African hunting dog	Carnivora
+HLailFul2	0.367304	9649	Ailurus fulgens	lesser panda	Carnivora
+HLmolMol2	0.367775	27622	Molossus molossus	Pallas's mastiff bat	Chiroptera
+HLcroCro1	0.369067	9678	Crocuta crocuta	spotted hyena	Carnivora
+HLmacSob1	0.369118	326083	Macroglossus sobrinus	long-tongued fruit bat	Chiroptera
+HLhyaHya1	0.369845	95912	Hyaena hyaena	striped hyena	Carnivora
+HLlepTim1	0.370373	62621	Lepus timidus	Mountain hare	Glires
+susScr11	0.370719	9823	Sus scrofa	pig	Cetartiodactyla
+HLminSch1	0.371911	9433	Miniopterus schreibersii	Schreibers' long-fingered bat	Chiroptera
+HLparHer1	0.372271	71117	Paradoxurus hermaphroditus	Asian palm civet	Carnivora
+HLminNat1	0.372645	291302	Miniopterus natalensis	Miniopterus schreibersii natalensis	Chiroptera
+HLlepAme1	0.372707	48086	Lepus americanus	snowshoe hare	Glires
+HLcraTho1	0.373227	208972	Craseonycteris thonglongyai	hog-nosed bat	Chiroptera
+HLcatWag1	0.373482	51154	Catagonus wagneri	Chacoan peccary	Artiodactyla
+HLmorBla1	0.374125	118852	Mormoops blainvillei	Antillean ghost-faced bat	Chiroptera
+HLoryCunCun4	0.374216	568996	Oryctolagus cuniculus cuniculus	European rabbit	Glires
+ptePar1	0.374218	59476	Pteronotus parnellii	Parnell's mustached bat	Chiroptera
+oryCun2	0.376811	9986	Oryctolagus cuniculus	rabbit	Glires
+HLoryCun3	0.377134	9986	Oryctolagus cuniculus	rabbit	Glires
+HLsylBac1	0.379399	365149	Sylvilagus bachmani	brush rabbit	Glires
+HLnasNar1	0.381349	352831	Nasua narica	White-nosed coati	Carnivora
+HLhysCri1	0.382631	10137	Hystrix cristata	crested porcupine	Glires
+HLereDor1	0.382715	34844	Erethizon dorsatum	North American porcupine	Glires
+HLcoePre1	0.383154	187985	Coendou prehensilis	Brazilian porcupine	Glires
+HLmarZib1	0.383914	36722	Martes zibellina	sable	Carnivora
+HLsolPar1	0.384060	79805	Solenodon paradoxus	Hispaniolan solenodon	Laurasiatheria
+HLgulGul1	0.384147	48420	Gulo gulo	wolverine	Carnivora
+HLproLot1	0.384241	9654	Procyon lotor	raccoon	Carnivora
+HLbasSum1	0.384321	392507	Bassariscus sumichrasti	Cacomistle	Carnivora
+HLspiGra1	0.385131	30551	Spilogale gracilis	western spotted skunk	Carnivora
+HLtaxTax1	0.385512	2282171	Taxidea taxus jeffersonii	North American badger	Carnivora
+HLmelCap1	0.385798	9664	Mellivora capensis	ratel	Carnivora
+HLmusAve1	0.385917	39082	Muscardinus avellanarius	hazel dormouse	Glires
+HLsurSur2	0.389282	37032	Suricata suricatta	meerkat	Carnivora
+HLsurSur1	0.389391	37032	Suricata suricatta	meerkat	Carnivora
+HLmunMug1	0.390161	210652	Mungos mungo	banded mongoose	Carnivora
+HLhelPar1	0.390164	210647	Helogale parvula	dwarf mongoose	Carnivora
+HLscaAqu1	0.391572	71119	Scalopus aquaticus	eastern mole	Laurasiatheria
+HLlonCan1	0.391601	76717	Lontra canadensis	Northern American river otter	Carnivora
+eptFus1	0.391778	29078	Eptesicus fuscus	big brown bat	Chiroptera
+HLpteBra2	0.392205	9672	Pteronura brasiliensis	giant otter	Carnivora
+HLpteBra1	0.392229	9672	Pteronura brasiliensis	giant otter	Carnivora
+enhLutNer1	0.392294	1049777	Enhydra lutris nereis	Southern sea otter	Carnivora
+enhLutKen1	0.392299	391180	Enhydra lutris kenyoni	Northern sea otter	Carnivora
+HLlutLut1	0.392449	9657	Lutra lutra	Eurasian river otter	Carnivora
+HLmyoMyo6	0.393058	51298	Myotis myotis	greater mouse-eared bat	Chiroptera
+hetGla2	0.393161	10181	Heterocephalus glaber	naked mole-rat	Glires
+myoBra1	0.393718	109478	Myotis brandtii	Brandt's bat	Chiroptera
+HLdesRot2	0.394347	9430	Desmodus rotundus	common vampire bat	Chiroptera
+HLtalOcc1	0.394519	50954	Talpa occidentalis	Iberian mole	Laurasiatheria
+HLgirCam1	0.394943	9894	Giraffa camelopardalis	giraffe	Artiodactyla
+HLokaJoh2	0.394976	86973	Okapia johnstoni	okapi	Cetartiodactyla
+HLmacCal1	0.395886	9419	Macrotus californicus	California big-eared bat	Chiroptera
+HLmusErm1	0.396141	36723	Mustela erminea	ermine	Carnivora
+HLmyoSep1	0.396151	258941	Myotis septentrionalis	Northern long-eared myotis	Chiroptera
+HLneoVis1	0.396579	452646	Neovison vison	American mink	Carnivora
+HLgirCam2	0.396778	9894	Giraffa camelopardalis	giraffe	Artiodactyla
+HLgirTip1	0.396815	439328	Giraffa tippelskirchi	Masai giraffe	Cetartiodactyla
+HLmyoLuc1	0.398705	59463	Myotis lucifugus	little brown bat	Chiroptera
+myoLuc2	0.398721	59463	Myotis lucifugus	little brown bat	Chiroptera
+HLmusPut1	0.399615	9668	Mustela putorius	European polecat	Carnivora
+HLmusFur2	0.399646	9669	Mustela putorius furo	domestic ferret	Carnivora
+HLlepYer1	0.399780	700936	Leptonycteris yerbabuenae	Lesser long-nosed bat	Chiroptera
+myoDav1	0.400989	225400	Myotis davidii	Vespertilio Davidii	Chiroptera
+HLsynCaf1	0.403428	9970	Syncerus caffer	African buffalo	Artiodactyla
+HLbubBub2	0.403635	89462	Bubalus bubalis	water buffalo	Cetartiodactyla
+bisBis1	0.403737	43346	Bison bison bison	Bos bison bison	Artiodactyla
+HLmosBer1	0.403945	68408	Moschus berezovskii	Chinese forest musk deer	Artiodactyla
+HLmosMos1	0.404092	68415	Moschus moschiferus	Siberian musk deer	Artiodactyla
+HLmosChr1	0.404719	68412	Moschus chrysogaster	alpine musk deer	Artiodactyla
+HLcerHanYar1	0.404806	84702	Cervus hanglu yarkandensis	Yarkand deer	Artiodactyla
+HLmicHir1	0.405742	148065	Micronycteris hirsuta	Schizostoma hirsutum	Chiroptera
+HLbosInd2	0.406067	9915	Bos indicus	zebu cattle	Cetartiodactyla
+bosTau9	0.406192	9913	Bos taurus	cattle	Cetartiodactyla
+chrAsi1	0.406806	185453	Chrysochloris asiatica	Cape golden mole	Afrotheria
+HLbosGau1	0.407099	9904	Bos gaurus	gaur	Artiodactyla
+HLanoCau1	0.407151	27642	Anoura caudifer	tailed tailless bat	Chiroptera
+HLbosFro1	0.407403	30520	Bos frontalis	gayal	Artiodactyla
+HLbosMut2	0.408133	72004	Bos mutus	wild yak	Cetartiodactyla
+HLprzAlb1	0.408191	1088058	Przewalskium albirostris	white-lipped deer	Artiodactyla
+HLmurAurFea1	0.408939	1453894	Murina aurata feae	Murina feae	Chiroptera
+HLnocLep1	0.408992	94963	Noctilio leporinus	greater bulldog bat	Chiroptera
+HLhipEqu1	0.409127	37186	Hippotragus equinus	roan antelope	Artiodactyla
+HLcepHar1	0.409191	129224	Cephalophus harveyi	Harvey's duiker	Artiodactyla
+HLhipNig1	0.409215	82127	Hippotragus niger niger	sable antelope	Artiodactyla
+HLbosGru1	0.409708	30521	Bos grunniens	domestic yak	Artiodactyla
+HLoryDam1	0.409721	59534	Oryx dammah	scimitar-horned oryx	Artiodactyla
+HLsylGri1	0.409734	119562	Sylvicapra grimmia	bush duiker	Artiodactyla
+HLphiMax1	0.409791	907741	Philantomba maxwellii	Maxwell's duiker	Artiodactyla
+HLoryGaz1	0.409963	9958	Oryx gazella	gemsbok	Artiodactyla
+HLtraStr1	0.409974	9946	Tragelaphus strepsiceros	greater kudu	Cetartiodactyla
+HLantAme1	0.409988	9891	Antilocapra americana	pronghorn	Artiodactyla
+HLmunRee1	0.410003	9886	Muntiacus reevesi	Reeves' muntjac	Artiodactyla
+HLmunCri1	0.410124	71854	Muntiacus crinifrons	black muntjac	Artiodactyla
+HLcerEla1	0.410153	46360	Cervus elaphus hippelaphus	Central European red deer	Artiodactyla
+HLtraImb1	0.410155	9947	Tragelaphus imberbis	lesser kudu	Artiodactyla
+HLconTau2	0.410181	9927	Connochaetes taurinus	brindled gnu	Artiodactyla
+HLtraScr1	0.410496	66440	Tragelaphus scriptus	bushbuck	Artiodactyla
+HLkobEll1	0.410568	9962	Kobus ellipsiprymnus	waterbuck	Artiodactyla
+HLmunMun1	0.410603	9888	Muntiacus muntjak	muntjak	Artiodactyla
+HLammLer1	0.410685	9899	Ammotragus lervia	aoudad	Cetartiodactyla
+HLdamLun1	0.410786	9929	Damaliscus lunatus	topi	Artiodactyla
+HLoviCan1	0.410969	112262	Ovis canadensis canadensis	bighorn sheep	Artiodactyla
+HLkobLecLec1	0.411051	91880	Kobus leche leche	lechwe	Artiodactyla
+HLcapPyg1	0.411242	48560	Capreolus pygargus	Eastern roe deer	Artiodactyla
+HLcapHir2	0.411284	9925	Capra hircus	goat	Cetartiodactyla
+HLcapAeg1	0.411288	9923	Capra aegagrus	wild goat	Cetartiodactyla
+panHod1	0.411335	59538	Pantholops hodgsonii	chiru	Cetartiodactyla
+HLalcAlc1	0.411428	9852	Alces alces	Eurasian elk	Artiodactyla
+HLbeaHun1	0.411482	59527	Beatragus hunteri	Cobus hunteri	Artiodactyla
+HLaepMel1	0.411674	9897	Aepyceros melampus	impala	Artiodactyla
+HLodoHem1	0.412261	9877	Odocoileus hemionus hemionus	mule deer	Artiodactyla
+HLredRed1	0.412271	59556	Redunca redunca	Bohar reedbuck	Artiodactyla
+HLfukDam2	0.412622	885580	Fukomys damarensis	Damara mole-rat	Glires
+HLcapSib1	0.413124	72544	Capra sibirica	Siberian ibex	Artiodactyla
+HLodoVir3	0.413236	9874	Odocoileus virginianus	white-tailed deer	Cetartiodactyla
+HLranTarGra2	0.414425	191431	Rangifer tarandus granti	porcupine caribou	Artiodactyla
+HLranTar1	0.414504	9870	Rangifer tarandus	reindeer	Artiodactyla
+HLoreOre1	0.414734	66444	Oreotragus oreotragus	klipspringer	Artiodactyla
+HLhydIne1	0.414761	9883	Hydropotes inermis	Chinese water deer	Artiodactyla
+HLoviCan2	0.414879	37174	Ovis canadensis	bighorn sheep	Cetartiodactyla
+HLoviNivLyd1	0.414880	1867112	Ovis nivicola lydekkeri	snow sheep	Artiodactyla
+HLneoMos1	0.414997	66442	Neotragus moschatus	suni	Artiodactyla
+HLodoVir2	0.415212	9874	Odocoileus virginianus	white-tailed deer	Cetartiodactyla
+HLodoVir1	0.415224	9880	Odocoileus virginianus texanus	white-tailed deer	Artiodactyla
+HLhemHyl1	0.415561	330464	Hemitragus hylocrius	Nilgiri tahr	Artiodactyla
+HLoviOri1	0.416059	469796	Ovis orientalis	Asiatic mouflon	Artiodactyla
+HLoviAri5	0.416083	9940	Ovis aries	sheep	Cetartiodactyla
+HLneoPyg1	0.416405	1027985	Neotragus pygmaeus	royal antelope	Artiodactyla
+nanGal1	0.416727	1026970	Nannospalax galili	Upper Galilee mountains blind mole rat	Glires
+HLnanGra1	0.417051	27591	Nanger granti	Grant's gazelle	Artiodactyla
+HLproPrz1	0.417078	157668	Procapra przewalskii	Przewalski's gazelle	Artiodactyla
+HLrapCam1	0.417682	59544	Raphicerus campestris	steenbok	Artiodactyla
+HLeudTho1	0.417834	69308	Eudorcas thomsonii	Thomson's gazelle	Artiodactyla
+HLantMar1	0.418211	59523	Antidorcas marsupialis	springbok	Artiodactyla
+chiLan1	0.418224	34839	Chinchilla lanigera	long-tailed chinchilla	Glires
+HLdasPun1	0.418393	34846	Dasyprocta punctata	punctate agouti	Glires
+HLcteGun1	0.419079	10166	Ctenodactylus gundi	northern gundi	Glires
+HLlitWal1	0.419108	69311	Litocranius walleri	gerenuk	Artiodactyla
+HLmadKir1	0.420149	66434	Madoqua kirkii	Kirk's dik-dik	Artiodactyla
+HLcarPer3	0.421753	40233	Carollia perspicillata	Seba's short-tailed bat	Chiroptera
+HLaxiPor1	0.423309	57737	Axis porcinus	Hog deer	Artiodactyla
+HLphyDis3	0.423566	89673	Phyllostomus discolor	pale spear-nosed bat	Chiroptera
+HLtonSau1	0.423625	171122	Tonatia saurophila	stripe-headed round-eared bat	Chiroptera
+HLtraJav1	0.425259	9849	Tragulus javanicus	Java mouse-deer	Artiodactyla
+HLartJam1	0.425352	9417	Artibeus jamaicensis	Jamaican fruit-eating bat	Chiroptera
+HLartJam2	0.425393	9417	Artibeus jamaicensis	Jamaican fruit-eating bat	Chiroptera
+HLhetBru1	0.425445	77598	Heterohyrax brucei	yellow-spotted hyrax	Afrotheria
+HLproCap3	0.425798	9813	Procavia capensis	Cape rock hyrax	Afrotheria
+HLuroGra1	0.425815	182669	Uropsilus gracilis	gracile shrew mole	Laurasiatheria
+HLtraKan1	0.426243	1088131	Tragulus kanchil	lesser mouse-deer	Artiodactyla
+conCri1	0.427953	143302	Condylura cristata	star-nosed mole	Laurasiatheria
+HLstuHon1	0.428694	192404	Sturnira hondurensis	Honduran yellow-shouldered bat	Chiroptera
+HLoreAme1	0.428825	34873	Oreamnos americanus	mountain goat	Artiodactyla
+HLallBul1	0.430119	1041416	Allactaga bullata	Gobi jerboa	Glires
+HLelaDav1	0.430512	43332	Elaphurus davidianus	Pere David's deer	Cetartiodactyla
+HLsaiTat1	0.431477	34875	Saiga tatarica	saiga antelope	Artiodactyla
+HLaeoCin1	0.433978	257879	Aeorestes cinereus	hoary bat	Chiroptera
+HLdipSte1	0.434067	323379	Dipodomys stephensi	Stephens's kangaroo rat	Glires
+dipOrd2	0.434195	10020	Dipodomys ordii	Ord's kangaroo rat	Glires
+HLtolMat1	0.436442	183749	Tolypeutes matacus	Southern three-banded armadillo	Xenarthra
+HLantPal1	0.436636	9440	Antrozous pallidus	pallid bat	Chiroptera
+HLrhiPru1	0.436654	53275	Rhizomys pruinosus	hoary bamboo rat	Glires
+HLnycHum2	0.438471	27670	Nycticeius humeralis	evening bat	Chiroptera
+HLoviAmm1	0.440101	30527	Ovis ammon	argali	Cetartiodactyla
+HLcapIbe1	0.441984	72542	Capra ibex	Alpine ibex	Artiodactyla
+HLdinBra1	0.444069	108858	Dinomys branickii	pacarana	Glires
+jacJac1	0.444257	51337	Jaculus jaculus	lesser Egyptian jerboa	Glires
+HLzapHud1	0.444913	160400	Zapus hudsonius	meadow jumping mouse	Glires
+HLdolPat1	0.444933	29091	Dolichotis patagonum	Patagonian cavy	Glires
+HLlasBor1	0.447573	258930	Lasiurus borealis	red bat	Chiroptera
+HLpipKuh2	0.447861	59472	Pipistrellus kuhlii	Kuhl's pipistrelle	Chiroptera
+HLperLonPac1	0.447969	214514	Perognathus longimembris pacificus	Pacific pocket mouse	Glires
+HLhydHyd1	0.449740	10149	Hydrochoerus hydrochaeris	capybara	Glires
+HLpipPip1	0.450239	59474	Pipistrellus pipistrellus	common pipistrelle	Chiroptera
+HLpipPip2	0.450446	59474	Pipistrellus pipistrellus	common pipistrelle	Chiroptera
+ochPri3	0.451248	9978	Ochotona princeps	American pika	Glires
+eleEdw1	0.453051	28737	Elephantulus edwardii	Cape elephant shrew	Afrotheria
+cavApe1	0.457739	37548	Cavia aperea	Brazilian guinea pig	Glires
+HLpetTyp1	0.457868	10183	Petromus typicus	dassie-rat	Glires
+HLcavTsc1	0.458119	143287	Cavia tschudii	Montane guinea pig	Glires
+cavPor3	0.458133	10141	Cavia porcellus	domestic guinea pig	Glires
+HLthrSwi1	0.458632	10169	Thryonomys swinderianus	Greater cane rat	Glires
+octDeg1	0.466882	10160	Octodon degus	degu	Glires
+HLcriGam1	0.469263	10085	Cricetomys gambianus	Gambian giant pouched rat	Glires
+HLneoLep1	0.470153	56216	Neotoma lepida	desert woodrat	Glires
+HLcteSoc1	0.478016	43321	Ctenomys sociabilis	social tuco-tuco	Glires
+HLmyoCoy1	0.480342	10157	Myocastor coypus	nutria	Glires
+echTel2	0.484161	9371	Echinops telfairi	small Madagascar hedgehog	Afrotheria
+eriEur2	0.489540	9365	Erinaceus europaeus	western European hedgehog	Laurasiatheria
+HLperNas1	0.490994	97212	Peromyscus nasutus	northern rock mouse	Glires
+HLcriGri3	0.492353	10029	Cricetulus griseus	Chinese hamster	Glires
+HLperCri1	0.494108	144753	Peromyscus crinitus	Hesperomys crinitus	Glires
+HLondZib1	0.496004	10060	Ondatra zibethicus	muskrat	Glires
+HLperCal2	0.497025	564181	Peromyscus californicus insignis	Peromyscus californicus subsp. insignis	Glires
+HLperEre1	0.498468	42410	Peromyscus eremicus	cactus mouse	Glires
+HLonyTor1	0.502244	38674	Onychomys torridus	southern grasshopper mouse	Glires
+mesAur1	0.507084	10036	Mesocricetus auratus	golden hamster	Glires
+HLperLeu1	0.511089	10041	Peromyscus leucopus	white-footed mouse	Glires
+HLellTal1	0.511446	329620	Ellobius talpinus	Northern mole vole	Glires
+HLperPol1	0.512070	369710	Peromyscus polionotus subgriseus	oldfield mouse	Glires
+HLperManBai2	0.512556	230844	Peromyscus maniculatus bairdii	prairie deer mouse	Glires
+HLsigHis1	0.513730	42415	Sigmodon hispidus	hispid cotton rat	Glires
+HLellLut1	0.514611	39086	Ellobius lutescens	Transcaucasian mole vole	Glires
+HLmyoGla2	0.516316	447135	Myodes glareolus	Bank vole	Glires
+HLarvAmp1	0.519082	1047088	Arvicola amphibius	Eurasian water vole	Glires
+HLpsaObe1	0.520332	48139	Psammomys obesus	fat sand rat	Glires
+HLacoRus1	0.520670	60746	Acomys russatus	golden spiny mouse	Glires
+HLgraSur1	0.520912	491861	Grammomys surdaster	African woodland thicket rat	Glires
+HLarvNil1	0.521113	61156	Arvicanthis niloticus	African grass rat	Glires
+HLmicOec1	0.521470	64717	Microtus oeconomus	root vole	Glires
+HLmicTal1	0.522101	176115	Microgale talazaci	Talazac's shrew tenrec	Afrotheria
+HLmicAgr2	0.522481	29092	Microtus agrestis	short-tailed field vole	Glires
+HLmicFor1	0.522774	100897	Microtus fortis	reed vole	Glires
+HLacoCah1	0.523139	10068	Acomys cahirinus	Egyptian spiny mouse	Glires
+HLmicArv1	0.523600	47230	Microtus arvalis	Common vole	Glires
+micOch1	0.524272	79684	Microtus ochrogaster	prairie vole	Glires
+HLrhoOpi1	0.525316	186474	Rhombomys opimus	great gerbil	Glires
+HLmasCou1	0.526985	35658	Mastomys coucha	southern multimammate mouse	Glires
+HLmerUng1	0.527955	10047	Meriones unguiculatus	Mongolian gerbil	Glires
+HLratRat7	0.534506	10117	Rattus rattus	black rat	Glires
+HLratNor7	0.535603	10116	Rattus norvegicus	Norway rat	Glires
+rn6	0.535757	10116	Rattus norvegicus	Norway rat	Glires
+HLmusPah1	0.537652	10093	Mus pahari	shrew mouse	Glires
+HLmusCar1	0.538248	10089	Mus caroli	Ryukyu mouse	Glires
+HLmusSpi1	0.539372	10103	Mus spicilegus	steppe mouse	Glires
+mm39	0.540756	10090	Mus musculus	house mouse	Glires
+mm10	0.540840	10090	Mus musculus	house mouse	Glires
+HLmusSpr1	0.540932	10096	Mus spretus	western wild mouse	Glires
+HLapoSyl1	0.544407	10129	Apodemus sylvaticus	European woodmouse	Glires
+sorAra2	0.551764	42254	Sorex araneus	European shrew	Laurasiatheria
+HLvomUrs1	0.784357	29139	Vombatus ursinus	common wombat	Metatheria
+HLphaCin1	0.787517	38626	Phascolarctos cinereus	koala	Metatheria
+HLgraAgi1	0.791517	191870	Gracilinanus agilis	Agile Gracile Mouse Opossum	Metatheria
+HLtriVul1	0.792699	9337	Trichosurus vulpecula	common brushtail	Metatheria
+HLdidVir1	0.797806	9267	Didelphis virginiana	North American opossum	Metatheria
+HLphaGym1	0.800329	65615	Phalanger gymnotis	ground cuscus	Metatheria
+monDom5	0.804177	13616	Monodelphis domestica	gray short-tailed opossum	Metatheria
+HLgymLea1	0.806508	38618	Gymnobelideus leadbeateri	Leadbeater's possum	Metatheria
+HLthyCyn1	0.807947	9275	Thylacinus cynocephalus	Tasmanian wolf	Metatheria
+HLpseCup1	0.810622	37702	Pseudochirops cupreus	coppery ringtail possum	Metatheria
+HLmacGig1	0.811596	9317	Macropus giganteus	eastern gray kangaroo	Metatheria
+HLpseCor1	0.811597	65629	Pseudochirops corinnae	golden ringtail possum	Metatheria
+HLmacFul1	0.812234	9316	Macropus fuliginosus	western gray kangaroo	Metatheria
+HLnotEug3	0.815561	9315	Macropus eugenii	tammar wallaby	Metatheria
+HLospRuf1	0.815802	9321	Osphranter rufus	red kangaroo	Metatheria
+HLpseOcc1	0.819866	656515	Pseudocheirus occidentalis	Western ringtail oppossum	Metatheria
+macEug2	0.821901	9315	Macropus eugenii	tammar wallaby	Metatheria
+HLantFla1	0.825093	38775	Antechinus flavipes	yellow-footed antechinus	Metatheria
+HLsarHar2	0.826368	9305	Sarcophilus harrisii	Tasmanian devil	Metatheria
+HLornAna3	1.011442	9258	Ornithorhynchus anatinus	platypus	Monotremata
+HLtacAcu1	1.023432	9261	Tachyglossus aculeatus	Australian echidna	Monotremata

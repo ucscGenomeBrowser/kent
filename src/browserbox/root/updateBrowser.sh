@@ -350,10 +350,10 @@ if [ "$1" == "hgwdev" ] ; then
       RSYNCAPACHE="$RSYNCAPACHE --exclude favicon*.ico --exclude hg.conf* --exclude ENCODE --exclude *.gz --exclude *.bw --exclude *.bb --exclude *.bam --exclude goldenPath/**.pdf --exclude admin --exclude goldenPath/customTracks --exclude pubs --exclude ancestors --exclude training --exclude trash --exclude .htaccess --exclude htdocs --exclude Neandertal --exclude RNA-img --exclude ebola --exclude encodeDCC --exclude evoFold --exclude geneExtra --exclude js-public --exclude style-public --exclude hgNearData --exclude visiGeneData --exclude visiGene"
     fi
 
-    rsync $RSYNCAPACHE $user@hgwdev.soe.ucsc.edu:/usr/local/apache/htdocs${htmlExt}/ /usr/local/apache/htdocs/
-    rsync $RSYNCAPACHE $user@hgwdev.soe.ucsc.edu:/usr/local/apache/cgi-bin${cgiExt}/ /usr/local/apache/cgi-bin/
+    rsync $RSYNCAPACHE $user@hgwdev.gi.ucsc.edu:/usr/local/apache/htdocs${htmlExt}/ /usr/local/apache/htdocs/
+    rsync $RSYNCAPACHE $user@hgwdev.gi.ucsc.edu:/usr/local/apache/cgi-bin${cgiExt}/ /usr/local/apache/cgi-bin/
 
-    PUSHLOC=$user@hgwdev.soe.ucsc.edu:/usr/local/apache/htdocs/gbib/push/
+    PUSHLOC=$user@hgwdev.gi.ucsc.edu:/usr/local/apache/htdocs/gbib/push/
 
 # normal public updates from hgdownload are easier, not many excludes necessary
 else
@@ -525,6 +525,11 @@ sudo ln -sfT /data/trash /usr/local/apache/htdocs/trash
 # hgcentral on hgdownload has tables missing: those with users and passwords
 mysql hgcentral -e 'drop table if exists tableList'
 
+# rsync tables on hgdownload are sometimes in a crashed state
+echo checking mysql tables
+#sudo myisamchk --force --silent --fast /data/mysql/hg19/*.MYI /data/mysql/hgcentral/*.MYI /data/mysql/hgFixed/*.MYI 2> /dev/null
+mysqlcheck --all-databases --auto-repair --quick --fast --silent
+
 # hide the really big tracks
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
@@ -535,11 +540,6 @@ mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
 
 # temporary fix for hgdownload problem, Oct 2014
 ls /data/mysql/eboVir3 > /dev/null 2> /dev/null && mysql eboVir3 -e 'drop table if exists history'
-
-# rsync tables on hgdownload are sometimes in a crashed state
-echo checking mysql tables
-#sudo myisamchk --force --silent --fast /data/mysql/hg19/*.MYI /data/mysql/hgcentral/*.MYI /data/mysql/hgFixed/*.MYI 2> /dev/null
-mysqlcheck --all-databases --auto-repair --quick --fast --silent
 
 #LATENCY=`ping genome.ucsc.edu -n -c1 -q | grep rtt | cut -d' ' -f4 | cut -d/ -f2 | cut -d. -f1`
 #if [ "$LATENCY" -gt "90" ]; then

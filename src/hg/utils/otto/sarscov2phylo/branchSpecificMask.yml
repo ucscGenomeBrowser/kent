@@ -137,6 +137,8 @@ JN.1:
     ranges: [ [ 23008, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
             ]
     sites: [ 1871,          # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1466
+             1368,          # GBW artifact, email from FedeGueli
+             6569,          # ''
              17562,         # very homoplasic (or systematic error?) in JN.1, email from FedeGueli
            ]
 
@@ -144,6 +146,15 @@ KP.1:
     # Inherits from JN.1
     representative: England/CLIMB-CM7YEN1U/2024
     reversions: [ T17334G        # Reversion of JN.1.11.1 mutation, email from FedeGueli
+                ]
+
+KP.3.1.1:
+    # Inherits from JN.1
+    representative: England/CLIMB-CM7YJCHG/2024
+    reversions: [ C22926T,  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1914
+                  C22928T,  # ''
+                  # Others I noticed while looking at the above:
+                  G7842A, T23948G, C3565T, T17334G, G19722A, G23055A, T28271A, T23063A, G22910A
                 ]
 
 BA.4:

@@ -1358,6 +1358,55 @@ One thing that does not work with GET is "upload file" inputs.
         httpsCertCheckDomainExceptions=somedomain1.com somedomain2.edu
 
 
+# Notes on security
+
+The Genome Browser is a complicated piece of software of more than 2 million lines of
+code that have been developed over 20 years. There is a risk of bugs and security issues,
+and we take that seriously. At UCSC, we run a security scan on the Genome Browser once a
+month and pay close attention to the results. Frequently, however, the scanners complain
+about things in the Genome Browser that are not actually problems. The Browser is designed
+for significant flexibility when accessing and sharing data. As a result, security
+scanners often complain about potential vulnerabilities that are actually intentional
+features:
+
+* The Genome Browser draws remote genome annotation files that are streamed on
+  the fly through https.
+  This means that parts of these files appear in our user interface. Various
+  features of custom tracks and track hubs specifically reference external 
+  file via URLs that the user can define, and we place no restrictions on these URLs
+  for various reasons. These features
+  predate the introduction of CORS to the internet protocols by at least five
+  years, and the servers from where these files are loaded by the Genome Browser
+  do not need to specifically allow the requests. As a result, this is not a security
+  exploit but an intentional feature, similar to a webservice that checks files entered via a
+  URL (e.g. a robots.txt analyzer) and then shows the content of the URLs on their web pages. 
+  Security scanners will find these features and flag them as SSRF exploits 
+  (Server-side request forgery), but they are a result of our features, not
+  a problem in our software, and not a problem in the context of our public web servers.
+* Conversely, when running a local Genome Browser at your institution, do not assume that the
+  Genome Browser web server can be granted access to internal files that should not be shared
+  with the outside world. The Genome Browser is not a secure gateway, 
+  and anything that the Genome Browser can access may be displayable by any 
+  Genome Browser user. For example, if you restrict internal files to access from only the
+  Genome Browser IP address, as with most other servers without dedicated security layers,
+  assume that these can be accessed by anyone who is using the Browser. We strongly advise
+  you to constrain access to and from your local mirror of the Browser if this is a concern
+  for you.
+* On our webservers at UCSC and your own internal mirror, even though the
+  data from external URLs is shown, and even though the HTML tags are interpreted, Javascript in these pages is not executed,
+  so an XSS exploit is not possible through these. 
+  We use CSP and a nonce to block Javascript injection in these pages. CSP/nonce is a system that many
+  security scanners do not recognize. You can disregard XSS warnings from the
+  security scanners and refer your IT department to our CSP declarations in
+  the HTML headers unless you think that you found a case where it is possible to get
+  through the CSP/nonce system. Feel free to send us the security report from
+  your scanner when in doubt.
+* Our CSP/nonce system also secures the Javascript libraries. We use customized jquery libraries 
+  from the mid-2000s. Some of these are outdated, so some security scanners deem
+  them unsafe, but our use of CSP and a nonce means that possible XSS problems cannot be exploited. The 
+  security scanners also cannot detect that. To reduce these warnings, we are in the process of upgrading our 
+  Javascript dependencies where possible.
+
 # Proxy support
 
 net.c now has support for http(s) proxy servers
@@ -1900,3 +1949,4 @@ Output is:
     insert into hubPublic (hubUrl,descriptionUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values ("https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt","", "My Hub's Name", "Name up to 80 characters versus shortLabel limited to 17 characters", now(),1, "hg19,"); 
 
 Then we run hubCrawl to get the searches to work (most mirrors do not need this). See <https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA> for more details.
+

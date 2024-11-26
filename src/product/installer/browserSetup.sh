@@ -98,11 +98,11 @@ BUILDEXT=${BUILDEXT:-0}
 BUILDKENT=${BUILDKENT:-0}
 
 # URL of a tarball with a the binaries of Apache/Mysql/Openssl
-BINPKGURL=http://hgwdev.soe.ucsc.edu/~max/gbInstall/mysqlApacheOSX_10.7.tgz
+BINPKGURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/mysqlApacheOSX_10.7.tgz
 # URL of tarball with the OSX CGI binaries
-CGIBINURL=http://hgwdev.soe.ucsc.edu/~max/gbInstall/kentCgi_OSX_10.7.tgz 
+CGIBINURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/kentCgi_OSX_10.7.tgz 
 # URL of tarball with a minimal Mysql data directory
-MYSQLDBURL=http://hgwdev.soe.ucsc.edu/~max/gbInstall/mysql56Data.tgz
+MYSQLDBURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/mysql56Data.tgz
 # mysql/apache startup script URL, currently only for OSX
 STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserStartup.sh
 
@@ -1871,9 +1871,9 @@ function downloadMinimal
 
     startMysql
 
-    hideSomeTracks
-
     mysqlCheck
+
+    hideSomeTracks
 
     echo2 
     echo2 The mirror should be functional now. It contains some basic assembly tables 
@@ -1954,6 +1954,8 @@ function updateBrowser {
        $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done
    startMysql
+
+   mysqlCheck
 
    hideSomeTracks
 

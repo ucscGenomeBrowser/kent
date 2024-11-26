@@ -762,6 +762,9 @@ for line in ifh:
     # in allToVar
     if varId=="":
         logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
+        vcvId = ""
+    else:
+        vcvId = "VCV%08d.1" % int(varId)
 
     if chrom=="" or assembly=="" or assembly=="NCBI36" or assembly=="na":
         noAssCount += 1
@@ -966,7 +969,7 @@ for line in ifh:
         # these fields are the for the filters, not for the display
         pathoCode, originCode, allTypeCode, str(varLen), str(starCount),
         # the variant ID got forgotten in the original bigBed schema, it was only part of the origName field
-        varId, dbVarSsvAcc]
+        varId, dbVarSsvAcc, vcvId]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []
@@ -1030,7 +1033,7 @@ for fname in fnames:
         
     tmpFname = "%s.%s.temp.bb" % (base, db)
 
-    cmd = "bedToBigBed -extraIndex=_dbVarSsvId -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
+    cmd = "bedToBigBed -extraIndex=_dbVarSsvId,snpId -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
     mustRun(cmd)
 
     finalFname = "%s/%s.%s.bb" % (bigBedDir, base, db)

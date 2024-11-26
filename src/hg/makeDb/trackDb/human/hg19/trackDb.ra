@@ -1343,7 +1343,7 @@ visibility hide
     scoreFilterMax 100
     type bed 6 .
     urlLabel TargetScan link:
-    url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    url https://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
     track targetScanMiRnaSitesV72
     parent targetScanMiRnaSites
@@ -1355,7 +1355,7 @@ visibility hide
     filter.targetScanScore -1
     filterLimits.targetScanScore -1:99
     urlLabel View miRNA target at TargetScan
-    url http://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+    url https://www.targetscan.org/cgi-bin/targetscan/vert_72/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
     bigDataUrl /gbdb/hg19/targetScan/targetScanSitesV72.bb
 
 track ntHumChimpCodingDiff override
@@ -2019,26 +2019,6 @@ track decodeRmap override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
-track knownGene
-shortLabel UCSC Genes
-longLabel UCSC Genes (RefSeq, GenBank, CCDS, Rfam, tRNAs & Comparative Genomics)
-group genes
-visibility pack
-priority 1
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-exonNumbers on
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-defaultLinkedTables kgXref
-intronGap 12
-bigGeneDataUrl /gbdb/hg19/knownGene.bb
-release public
-
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA
 # UCSC Genes (rev 13).  Once UCSC Genes is released, this track can go away.
@@ -2083,7 +2063,7 @@ searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
-include knownGene.alpha.ra alpha,beta
+include knownGene.ra
 include lincRNAs.ra
 
 track sibTxGraph override

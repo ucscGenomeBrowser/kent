@@ -454,7 +454,7 @@ void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb)
 {
 struct trackDb *tableTdb = hashFindVal(fullTableToTdbHash, table);
 hPrintf("<B>Database:</B> %s<br>", db);
-printDownloadLink("BigWig", trackDbSetting(tableTdb, "bigDataUrl"));
+printDownloadLink("BigWig", tdb, trackDbSetting(tableTdb, "bigDataUrl"));
 printTypeHelpDesc(tableTdb->type);
 printTrackHtml(tableTdb);
 }

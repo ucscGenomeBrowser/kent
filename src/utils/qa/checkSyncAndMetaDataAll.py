@@ -17,7 +17,7 @@ for db in allDbs:
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
     elif db == 'mm39':
-        if '  2 hgw1.only' not in str(checkSyncResults) and '  2 hgwbeta.only' not in str(checkSyncResults):
+        if '  1 hgw1.only' not in str(checkSyncResults) and '  3 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
     elif db == 'hg18':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults):
@@ -39,6 +39,12 @@ for db in allDbs:
         continue
     if db == 'mm9':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults)             and db not in troubleDbs:
+            get_ipython().system(u" echo There looks to be a discrepancy between hgw1 and hgw2 checkSync for: '$db'")
+            get_ipython().system(u" echo Follow up with checkSync.csh '$db' hgw1 hgw2")
+            get_ipython().system(u' echo')
+            troubleDbs.append(db)
+    elif db == 'mm39':
+        if '  1 hgw1.only' not in str(checkSyncResults) and '  3 hgwbeta.only' not in str(checkSyncResults)             and db not in troubleDbs:
             get_ipython().system(u" echo There looks to be a discrepancy between hgw1 and hgw2 checkSync for: '$db'")
             get_ipython().system(u" echo Follow up with checkSync.csh '$db' hgw1 hgw2")
             get_ipython().system(u' echo')

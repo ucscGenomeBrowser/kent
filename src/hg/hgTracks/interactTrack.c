@@ -71,7 +71,7 @@ struct interact *inter, *next, *filteredItems = NULL;
 int count = slCount(tg->items);
 
 // exclude if missing endpoint(s) in window
-char *endsVisible = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+char *endsVisible = cartOrTdbString(cart, tg->tdb,
                             INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
 char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
 int minScore = 0;

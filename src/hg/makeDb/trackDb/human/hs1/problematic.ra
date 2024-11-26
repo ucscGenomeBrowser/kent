@@ -1,0 +1,42 @@
+track problematic
+compositeTrack on
+type bigBed 3
+shortLabel Problematic Regions
+longLabel Difficult regions from GIAB via NCBI
+hideEmptySubtracks off
+group map
+visibility hide
+html problematic
+pennantIcon New red ../goldenPath/newsarch.html#110424 "November 4, 2024"
+
+    track alldifficultregions
+    parent problematic on
+    bigDataUrl /gbdb/hs1/problematic/GIAB/alldifficultregions.bb
+    shortLabel All difficult regions
+    longLabel Genome In a Bottle: all difficult regions
+    type bigBed 3
+    visibility dense
+
+    track alllowmapandsegdupregions
+    parent problematic on
+    bigDataUrl /gbdb/hs1/problematic/GIAB/alllowmapandsegdupregions.bb
+    shortLabel LowMap+SegDup
+    longLabel Genome In a Bottle: lowMap+SegDup regions
+    type bigBed 3
+    visibility dense
+
+    track notinalldifficultregions
+    parent problematic on
+    bigDataUrl /gbdb/hs1/problematic/GIAB/notinalldifficultregions.bb
+    shortLabel Not difficult regions
+    longLabel Genome In a Bottle: not difficult regions
+    type bigBed 3
+    visibility dense
+
+    track notinalllowmapandsegdupregions
+    parent problematic on
+    bigDataUrl /gbdb/hs1/problematic/GIAB/notinalllowmapandsegdupregions.bb
+    shortLabel Not lowMap+SegDup
+    longLabel Genome In a Bottle: not lowMap+SegDup mapping regions
+    type bigBed 3
+    visibility dense

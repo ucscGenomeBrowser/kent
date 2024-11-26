@@ -126,8 +126,10 @@ def checkSession(session):
     check_hgTracks='// END hgTracks'
     check_error='<!-- ERROR -->'
     check_warning="id='warnBox'"
-    hubid_error="Couldn't connect to database hub_"
+    hubid_error="Couldn't connect to database"
     hubid_error_dev="can not find any trackDb tables for hub_"
+    hubCollection_error= r'doesn\\x27t\\x20exist\\x20in\\x20customTrash\\x20database\\x2C\\x20or\\x20hFindTableInfoWithConn\\x20failed'
+    buffer_error= r'buffer\\x20overflow\\x2C\\x20size\\x204096\\x2C\\x20format\\x3A\\x20Click\\x20to\\x20alter\\x20the\\x20display'
     # List to append session load error
     error_list=[]
     try:
@@ -148,6 +150,12 @@ def checkSession(session):
        #Pass if session load error is can not find any trackDb tables for hub_ ((hub id issue))
         elif hubid_error_dev in checkLoad:
             pass
+        # Check for the hubCollection error by matching the exact string pattern
+        elif re.search(re.escape(hubCollection_error), checkLoad):
+            pass
+        # Check for buffer overflow error by matching the exact string pattern
+        elif re.search(re.escape(buffer_error), checkLoad):
+            pass
         else: #If session does not contains strings to check, add error to list 
              error_list.append('error')
     except subprocess.CalledProcessError as e:
@@ -160,8 +168,6 @@ def checkSession(session):
         sessionLoad='loads'
         session_dir=session.split('genecats.gi.ucsc.edu')[1]
         session_path=myDir+session_dir
-        #Uncomment the line below to actually remove the session files
-        os.system('rm '+session_path)
    
     return sessionLoad
 
@@ -181,12 +187,48 @@ def output_if_file_exists(file_path):
             print(file.read())
         print("\nErrors that output 'hui::wiggleScaleStringToEnum() - Unknown option' can be ignored.")
 
-year=datetime.now().strftime("%Y-%m-"+"01")
 
 server='https://genecats.gi.ucsc.edu/qa/qaCrons'
 
-#Saves the montly hgcentral session dump to a varaiable
-monthly_hgcentral_dump="/usr/local/apache/htdocs-genecats/qa/test-results/hgcentral/"+year+"/rr.namedSessionDb"
+
+num_lines=10000 # Number of random lines to select
+
+# Get the current date and format it as 'YYYY-MM-01'
+current_year_month = datetime.now().strftime("%Y-%m-"+"01")
+
+# Construct the path for the current month's file
+monthly_hgcentral_dump = f"/usr/local/apache/htdocs-genecats/qa/test-results/hgcentral/{current_year_month}/rr.namedSessionDb"
+
+# Check if the file exists for the current month
+if not os.path.exists(monthly_hgcentral_dump):
+    # If the file doesn't exist, calculate the previous month
+    current_year = int(datetime.now().strftime("%Y"))
+    current_month = int(datetime.now().strftime("%m"))
+
+    # Handle previous month calculation manually
+    if current_month == 1:
+        previous_year = current_year - 1
+        previous_month = 12
+    else:
+        previous_year = current_year
+        previous_month = current_month - 1
+
+    # Format the previous month as 'YYYY-MM-01'
+    previous_year_month = f"{previous_year:04d}-{previous_month:02d}-01"
+
+    # Construct the path for the previous month's file
+    monthly_hgcentral_dump = f"/usr/local/apache/htdocs-genecats/qa/test-results/hgcentral/{previous_year_month}/rr.namedSessionDb"
+
+    # Check if the file exists for the previous month
+    if not os.path.exists(monthly_hgcentral_dump):
+        print(f"Error: rr.namedSessionDb monthly hgcentral dump file not found for both current and previous month.")
+    else:
+        # File for the previous month found, proceed to get random lines
+        random_lines = random_session_lines(monthly_hgcentral_dump, num_lines)
+else:
+    # File for the current month found, proceed to get random lines
+    random_lines = random_session_lines(monthly_hgcentral_dump, num_lines)
+
 
 
 count=0
@@ -201,12 +243,6 @@ url_txt='/usr/local/apache/htdocs-genecats/qa/qaCrons/sessionsFromRR/crashedSess
 
 #Directory to save files for the script 
 myDir='/usr/local/apache/htdocs-genecats'
-
-num_lines=10000 # Number of random lines to select
-
-
-#Gets a number of random of sessions from the monthly_hgcentral_dump
-random_lines = random_session_lines(monthly_hgcentral_dump, num_lines)
 
 
 def main(random_lines, server, count, hgw0, hgwbeta, hgwdev, url_txt, myDir):

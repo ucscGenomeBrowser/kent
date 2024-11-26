@@ -1,0 +1,6 @@
+hub BRC
+shortLabel BRC
+longLabel Bioinformatics Research Center / VEuPathDB
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

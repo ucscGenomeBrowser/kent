@@ -191,10 +191,10 @@ if (!isUpdateForm)
     puts("<TABLE BORDER=0>\n");
     if (gotClade)
         {
-        puts("<TR><TD>clade\n");
+        puts("<TR><TD>Clade\n");
         printCladeListHtml(hOrganism(database), "change", onChangeClade);
         puts("&nbsp;&nbsp;&nbsp;");
-        puts("genome\n");
+        puts("Genome\n");
         printGenomeListForCladeHtml(database, "change", onChangeOrg);
         }
     else
@@ -203,7 +203,7 @@ if (!isUpdateForm)
         printGenomeListHtml(database, "change", onChangeOrg);
         }
     puts("&nbsp;&nbsp;&nbsp;");
-    puts("assembly\n");
+    puts("Assembly\n");
     printAssemblyListHtml(database, "change", onChangeDb);
     char *description = hFreezeFromDb(database);
     if ((description != NULL) && ! stringIn(database, description))
@@ -362,7 +362,7 @@ puts("<TD COLSPAN=2>");
 if (dataUrl)
     {
     /* can't update via pasting if loaded from URL */
-    safef(buf, sizeof buf, "Replace data at URL: %s", ctDataUrl(ct));
+    safef(buf, sizeof buf, "Data was uploaded from URL: %s\nTo see changes made to the data at the URL, re-load the URL on the \"Add custom tracks\" page.", ctDataUrl(ct));
     cgiMakeTextAreaDisableable(hgCtDataText, buf,
                                 TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
     }
@@ -469,7 +469,7 @@ else
     printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
     cartSaveSession(cart);
     if (gotClade)
-        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"\">\n");
+        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"Clade\" VALUE=\"\">\n");
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
@@ -550,14 +550,14 @@ if (numCts > 3)
     showAllButtons = TRUE;
 
 tableHeaderFieldStart(showAllButtons ? 2 : 1);
-cgiMakeButtonWithMsg(hgCtDoDelete, "delete", "Remove custom track");
+cgiMakeButtonWithMsg(hgCtDoDelete, "Delete", "Remove custom track");
 cgiTableFieldEnd();
 
 /* add column with Update button if any custom tracks are updateable */
 if (updateCt)
     {
     tableHeaderFieldStart(showAllButtons ? 2 : 1);
-    cgiMakeButtonWithMsg(hgCtDoRefresh, "update", "Refresh from data URL");
+    cgiMakeButtonWithMsg(hgCtDoRefresh, "Update", "Refresh from data URL");
     cgiTableFieldEnd();
     }
 
@@ -728,8 +728,8 @@ printf("view in ");
 // Construct a menu of destination CGIs
 puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL,
  "change", "var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);", NULL, "navSelect"));
-cgiMakeButton("submit", "go to first annotation");
-puts("&nbsp;<input type='submit' name='submit' id='submitGoBack' value='return to current position'>");
+cgiMakeButton("submit", "Go to first annotation");
+puts("&nbsp;<input type='submit' name='submit' id='submitGoBack' value='Return to current position'>");
 jsOnEventByIdF("click", "submitGoBack", "$('#navForm > [name=position]').remove()");
 puts("</FORM>");
 }
@@ -790,7 +790,7 @@ else
     if (assemblyName == NULL)
 	assemblyName = "default";
 
-    printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n",
+    printf("<B>Genome:</B> %s &nbsp;&nbsp;&nbsp;<B>Assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n",
             organism, assemblyName, database);
 	}
 
@@ -842,7 +842,7 @@ puts("</TD></TR>");
 puts("<TR><TD>");
 printf("<INPUT TYPE=SUBMIT NAME=\"addTracksButton\" ID=\"addTracksButton\" VALUE=\"%s\" "
        "STYLE=\"margin-top: 5px\" >\n",
-       "add custom tracks");
+       "Add custom tracks");
 // This submits mainForm with a hidden input that tells hgCustom to show add tracks page:
 jsOnEventByIdF("click", "addTracksButton", 
 	"var $form = $(\"form[name='mainForm']\"); "

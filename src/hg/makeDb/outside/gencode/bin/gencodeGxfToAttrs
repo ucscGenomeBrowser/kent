@@ -7,7 +7,10 @@ myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(os.path.join(myBinDir, "../lib"))
 sys.path.append(os.path.expanduser("/hive/groups/browser/pycbio/lib"))
 from collections import defaultdict
-from dataclasses import dataclass
+try:
+    from dataclasses import dataclass, field
+except ModuleNotFoundError as ex:
+    raise Exception(f"requires at least Python 3.7 for dataclasses: {sys.version}") from ex
 from pycbio.sys import fileOps
 from pycbio.tsv import TsvReader
 from gencode import gencodeGxfParserFactory
@@ -61,7 +64,8 @@ class Transcript:
     proteinId: str
     transcriptSupportLevel: str
     transcriptRank: int
-    tags: set
+    geneTags: set = field(default_factory=set, init=False)
+    transcriptTags: set = field(default_factory=set, init=False)
 
 class GencodeGxfToAttrs(object):
     def __init__(self, gxfParser, dropIds, transcriptRanks=None):
@@ -72,7 +76,7 @@ class GencodeGxfToAttrs(object):
         self.errorCnt = 0
         self.unknownGeneTypes = set()
         self.unknownTranscriptTypes = set()
-        self.geneTags = defaultdict(set)  # collect gene tags
+        self.geneTags = defaultdict(set)
         self.transcripts = {}
 
     def _processGeneRec(self, rec):
@@ -91,8 +95,9 @@ class GencodeGxfToAttrs(object):
     def _processTransRec(self, rec):
         attrs = rec.attributes
         trans = self.transcripts.get(attrs.transcript_id)
+        # older GENCODEs had transcript id twice because of PAR,
+        # so check for existing
         if trans is None:
-            # older GENCODEs had transcript id twice because of PAR
             trans = Transcript(transcriptId=attrs.transcript_id,
                                transcriptName=attrs.transcript_name,
                                transcriptType=attrs.transcript_type,
@@ -106,14 +111,15 @@ class GencodeGxfToAttrs(object):
                                level=attrs.level,
                                transcriptSupportLevel=attrs.transcript_support_level,
                                proteinId=attrs.protein_id,
-                               transcriptRank=self._getTranscriptRank(attrs.transcript_id),
-                               tags=set())
+                               transcriptRank=self._getTranscriptRank(attrs.transcript_id))
             self.transcripts[attrs.transcript_id] = trans
         # due to PAR naming on older GENCODES, we have to handle multiple
         # tags for the same transcript_id, which might be different (mainly
-        # the PAR tag), so always add they now have modified ids
+        # the PAR tag), so always add they now have modified the ids to remove
+        # the _PAR_Y extensions.  In retrospect, GENCODE having the _PAR_Y extensions
+        # and us remove it were both bad ideas.
         for tag in attrs.tags:
-            trans.tags.add(tag)
+            trans.transcriptTags.add(tag)
 
     def _processRec(self, rec):
         try:
@@ -129,7 +135,7 @@ class GencodeGxfToAttrs(object):
 
     def _mergeGeneTags(self):
         for trans in self.transcripts.values():
-            trans.tags |= self.geneTags[trans.geneId]
+            trans.geneTags = self.geneTags[trans.geneId]
 
     def _assignFunction(self, trans):
         trans.transcriptClass = getTranscriptFunction(BioType(trans.geneType),
@@ -158,14 +164,15 @@ class GencodeGxfToAttrs(object):
                        emptyIfNone(tr.ccdsId), tr.level,
                        tr.transcriptClass, emptyIfNone(tr.proteinId),
                        tr.transcriptRank, tr.transcriptSupportLevel,
-                       ",".join(map(str, sorted(tr.tags))))
+                       ",".join(map(str, sorted(tr.geneTags))),
+                       ",".join(map(str, sorted(tr.transcriptTags))))
 
     def writeAttrsTsv(self, fh):
         fileOps.prRowv(fh, "geneId", "geneName", "geneType",
                        "transcriptId", "transcriptName", "transcriptType",
                        "source", "havanaGeneId", "havanaTranscriptId",
                        "ccdsId", "level", "transcriptClass", "proteinId",
-                       "transcriptRank", "tsl", "tags")
+                       "transcriptRank", "tsl", "geneTags", "transcriptTags")
         for transcript in sorted(self.transcripts.values(),
                                  key=lambda t: (t.geneId, t.transcriptId)):
             self._writeAttrsTsvRow(transcript, fh)
