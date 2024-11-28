@@ -1140,7 +1140,7 @@ if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0")) // TURN VERIF
     }
 else   // TURN VERIFICATION OFF
     {
-    #if !defined(MARIADB_VERSION_ID) && MYSQL_VERSION_ID >= 80000 // OVER-RIDE DEFAULT COMPILED IN.
+    #if !defined(MARIADB_BASE_VERSION) && defined(MYSQL_VERSION_ID) && (MYSQL_VERSION_ID >= 80000) // OVER-RIDE DEFAULT COMPILED IN.
     mysql_options(conn, MYSQL_OPT_SSL_MODE, SSL_MODE_PREFERRED);
     #else
     my_bool flag = FALSE;
