@@ -3,7 +3,7 @@
 /* Copyright (C) 2013 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include <openssl/md5.h>
-#include <openssl/macros.h>
+#include <openssl/opensslv.h>
 #include <openssl/evp.h>
 
 #include "common.h"

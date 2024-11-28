@@ -4,7 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include <openssl/evp.h>
-#include <openssl/macros.h>
+#include <openssl/opensslv.h>
 #include <openssl/md5.h>
 
 #include "common.h"
