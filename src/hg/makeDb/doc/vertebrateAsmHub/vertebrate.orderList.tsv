@@ -1,4 +1,6 @@
 GCF_003597395.1_ASM359739v1	Abingdon island giant tortoise
+GCA_964194405.1_rVipBer3.hap2.1	adder (hap2 2024)
+GCA_964194415.1_rVipBer3.hap1.1	adder (hap1 2024)
 GCA_027172095.1_rPodRaf1.alt	Aeolian wall lizard (La Canna islet alternate hap 2022)
 GCF_027172205.1_rPodRaf1.pri	Aeolian wall lizard (La Canna islet primary hap 2022 refseq)
 GCA_004786255.1_Pads_1.0	African bullfrog (1538 2019)
@@ -31,7 +33,7 @@ GCF_001527695.2_P.Mucros_1.0	brown spotted pit viper
 GCF_000186305.1_Python_molurus_bivittatus-5.0.2	Burmese python
 GCA_022578425.1_rAriEle1.0.a	California glossy snake (A.elegans occidentalis HBS 135684 alternate hap 2022)
 GCA_022577455.1_rAriEle1.0.p	California glossy snake (A.elegans occidentalis HBS 135684 primary hap 2022)
-GCA_036971445.1_sNarBan1.hap1	Caribbean electric ray (hap1 2024)
+GCF_036971445.1_sNarBan1.hap1	Caribbean electric ray (hap1 2024 refseq)
 GCA_036971175.1_sNarBan1.hap2	Caribbean electric ray (hap2 2024)
 GCF_900067755.1_pvi1.1	central bearded dragon
 GCF_000455745.1_ASM45574v1	Chinese alligator
@@ -112,8 +114,8 @@ GCF_000935625.1_ASM93562v1	High Himalaya frog
 GCA_036365525.1_sHetFra1.hap1	horn shark (hap1 2024)
 GCA_036365495.1_sHetFra1.hap2	horn shark (hap2 2024)
 GCF_036365525.1_sHetFra1.hap1	horn shark (sHetFra1hap1 2024)
-GCA_027789725.1_aDenEbr1.mat	hourglass treefrog (maternal 2023)
-GCA_027789765.1_aDenEbr1.pat	hourglass treefrog (paternal 2023)
+GCA_027789725.1_aDenEbr1.mat	hourglass treefrog (maternal 2023 genbank)
+GCF_027789765.1_aDenEbr1.pat	hourglass treefrog (paternal 2023 refseq)
 GCA_036172795.1_aPelIbe1.pri	Iberian parsley frog (aPelIbe1 2024)
 GCA_026652325.1_ASM2665232v1	Iberian ribbed newt (20211129_DDA 2022)
 GCA_009733165.1_Nana_v5	Indian cobra (NN01 2019)
@@ -248,7 +250,8 @@ GCA_901001135.2_aRhiBiv1.2	two-lined caecilian (v1.2 2021 genbank)
 GCA_029207655.1_rThaSir1.0.hap2	valley gartersnake (HBS 135685 alternate hap 2023)
 GCA_029207665.1_rThaSir1.0.hap1	valley gartersnake (HBS 135685 primary hap 2023)
 GCF_011800845.1_UG_Zviv_1	viviparous/common lizard
-GCF_019279795.1_PAN1.0	West African lungfish
+GCA_040939525.1_ASM4093952v1	West African lungfish (Aquariam Glaser DD20220218a primary hap 2024)
+GCF_019279795.1_PAN1.0	West African lungfish (FY-2018-M 2021)
 GCA_023333635.1_rSceOcc1.0.a	western fence lizard (IW3139 2022)
 GCA_023333645.1_rSceOcc1.0.p	western fence lizard (IW3139 primary hap 2022)
 GCF_011386835.1_ASM1138683v2	western painted turtle (R12L10 2023)
