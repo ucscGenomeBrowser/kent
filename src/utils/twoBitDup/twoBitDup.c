@@ -81,10 +81,10 @@ for (index = tbf->indexList; index != NULL; index = index->next)
  */
 	unsigned char md5Result[MD5_DIGEST_LENGTH];
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L   // # 1.1
-	MD5((unsigned char *)seq->dna, strlen(seq->dna), md5Result);
-#else
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L   // > #3.0
         EVP_Q_digest(NULL, "MD5", NULL, seq->dna, strlen(seq->dna), md5Result, NULL);
+#else
+	MD5((unsigned char *)seq->dna, strlen(seq->dna), md5Result);
 #endif  
 
 	int i;
