@@ -1,6 +1,6 @@
 GCF_003597395.1_ASM359739v1	Abingdon island giant tortoise
-GCA_964194405.1_rVipBer3.hap2.1	adder (hap2 2024)
 GCA_964194415.1_rVipBer3.hap1.1	adder (hap1 2024)
+GCA_964194405.1_rVipBer3.hap2.1	adder (hap2 2024)
 GCA_027172095.1_rPodRaf1.alt	Aeolian wall lizard (La Canna islet alternate hap 2022)
 GCF_027172205.1_rPodRaf1.pri	Aeolian wall lizard (La Canna islet primary hap 2022 refseq)
 GCA_004786255.1_Pads_1.0	African bullfrog (1538 2019)
@@ -46,6 +46,7 @@ GCA_035046505.1_rTilSci1.hap2	common blue-tongued skink (hap2 2024)
 GCA_905171725.1_aRanTem1.1_alternate_haplotype	common frog (alternate hap 2021)
 GCF_001077635.1_Thamnophis_sirtalis-6.0	common garter snake
 GCF_963506605.1_rZooViv1.1	common lizard Z.vivipara (primary hap 2023)
+GCA_964263255.1_aLisVul1.1	common newt (primary hap 2024)
 GCA_036172605.1_aPelFus1.pri	common spadefoot toad (aPelFus1 2024)
 GCF_036172605.1_aPelFus1.pri	common spadefoot toad (aPelFus1 2024)
 GCA_905171715.1_aBufBuf1.1_alternate_haplotype	common toad (alternate hap 2021)
@@ -156,6 +157,7 @@ GCA_037306005.1_aRhiDor1.hap1	Mexican burrowing toad (hap1 2024)
 GCA_037306015.1_aRhiDor1.hap2	Mexican burrowing toad (hap2 2024)
 GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022)
 GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022)
+GCF_032444005.1_aRanImi1.pri	mimic poison frog (aRanImi1 primary hap 2023)
 GCA_032444005.1_aRanImi1.pri	mimic poison frog (primary hap 2023)
 GCF_017654505.1_ASM1765450v1	Mississippi paddlefish
 GCF_026122565.2_CSIRO-AGI_Emac_v2	Murray river turtle (Brisbane River MOO-44397 2024)
