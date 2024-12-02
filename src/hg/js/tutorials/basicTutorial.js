@@ -6,7 +6,7 @@
 // Create an IIFE to prevent global variable conflicts
 (function () {
 
-    const tour = new Shepherd.Tour({
+    const basicTour = new Shepherd.Tour({
       defaultStepOptions: {
         cancelIcon: {
           enabled: true
@@ -18,7 +18,7 @@
     });
     
     // log when a tutorial is started
-    tour.on('start', function() {
+    basicTour.on('start', function() {
         writeToApacheLog("tutorial start " + getHgsid());
     });
     
@@ -61,7 +61,7 @@
     // wrap setup in a function to be called only after  document is ready
     function setupSteps() {
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Welcome to the UCSC Genome Browser Tutorial',
             text: 'The navigation bar at the top of the page will allow you to access the ' +
                   'tools, downloads, and help pages. There are four main drop-downs that are useful ' +
@@ -91,7 +91,7 @@
         });
     
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Browsing the Genome',
             text: 'The search bar allows you to navigate to a region on the genome using ' +
                   '<a href="https://genome-blog.soe.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"' +
@@ -123,7 +123,7 @@
             id: 'search'
         });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Drag-and-Select the Genome Browser Image',
             text: 'Dragging the Genome Browser image performs different tasks depeneding on where and ' +
                   'how you click the image. <br><br> '+
@@ -144,7 +144,7 @@
             id: 'highlight'
         });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Quick Link to Change Track Settings',
             text: 'Clicking on the rectangle box next to a track is an easy way to quickly ' +
                   'go to the track settings page for that track.' +
@@ -163,7 +163,7 @@
             id: 'hgTrackUiLink'
         });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Changing the Display Mode of a Track',
             text: 'Annotation tracks can be entirely hidden or shown in four different ways that take ' +
                   'an increasing amount of vertical space: ' +
@@ -185,7 +185,7 @@
             id: 'refresh'
         });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Searching for Tracks on the Genome Browser',
             text: 'Having trouble finding a dataset for your genome assembly? The ' +
                 '<a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track Search</a> ' +
@@ -203,7 +203,7 @@
             id: 'shortCuts',
         });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Configure the Genome Browser Image',
             text: 'Use the <button>configure</button> button to customize graphic font, size, gridlines, ' +
                   'and more. This can be helpful when exporting an image for publication. ' +
@@ -218,7 +218,7 @@
             id: 'configure'
         });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Flip the Strand Orientation',
             text: 'By default, the UCSC Genome Browser displays the forward strand (5\' to 3\'), but ' +
                   'it can be configured to display the negative strand (3\' to 5\'). <br><br>' +
@@ -232,7 +232,7 @@
                 id: 'reverse'
             });
     
-        tour.addStep({
+        basicTour.addStep({
             title: 'Further Training and Contact Information',
             text: 'You can find other guides and training videos on the ' +
                   '<a href="../training/" target="_blank">training page</a>. ' +
@@ -265,6 +265,6 @@
         setupSteps();
 
         //Export the basicTour globally
-        window.basicTour = tour;
+        window.basicTour = basicTour;
     }    
 })();
