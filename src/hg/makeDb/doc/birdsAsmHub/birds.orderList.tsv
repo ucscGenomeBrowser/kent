@@ -261,6 +261,8 @@ GCA_000332375.2_ASM33237v2	Puerto Rican parrot (LU 182127 2020)
 GCA_008658365.1_bAlcTor1_primary	razorbill (2006_11_07_Graehlm_vinge_78 2019)
 GCA_008658355.1_bAlcTor1_alternate	razorbill (alternate hap 2006_11_07_Graehlm_vinge_78 2019)
 GCF_030028575.1_MMel_1.1	red-backed fairy wren (Western Australia 2023)
+GCA_964289735.1_bPhaAeh10.maternal.1	red-billed tropicbird (maternal hap 2024)
+GCA_964289755.1_bPhaAeh10.paternal.1	red-billed tropicbird (paternal hap 2024)
 GCA_964035555.1_bNetRuf1.1	red-crested pochard (primary hap 2024)
 GCA_009769465.1_bTauEry1.pri	red-crested turaco (2019)
 GCA_009764505.1_bTauEry1.alt	red-crested turaco (alternate hap 2019)
@@ -363,7 +365,7 @@ GCA_036250135.1_bDixPip1.hap2	white-crowned manakin (hap2 2024)
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
 GCF_017590055.1_ASM1759005v1	white-rumped snowfinch
 GCF_000691405.1_ASM69140v1	white-tailed eagle (BGI_N329 2014)
-GCA_947461875.1_bHalAlb1.1	white-tailed eagle (bHalAlb1.1 2022)
+GCF_947461875.1_bHalAlb1.1	white-tailed eagle (primary hap 2022 refseq)
 GCA_947461935.1_bHalAlb1.1_alternate_haplotype	white-tailed eagle (bHalAlb1.1 alternate hap 2022)
 GCF_019238085.1_USGS_WTPT01	white-tailed ptarmigan
 GCF_000687285.1_ASM68728v1	white-tailed tropicbird
