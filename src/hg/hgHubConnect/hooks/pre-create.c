@@ -16,6 +16,7 @@
 #include "errCatch.h"
 #include "obscure.h"
 #include "hooklib.h"
+#include "hubSpaceKeys.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -68,32 +69,33 @@ else
             }
         fprintf(stderr, "reqCookie='%s'\n", reqCookie);
         char *userName = getUserName();
-        fprintf(stderr, "userName='%s'\n'", userName);
         if (!userName)
             {
-            errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
+            // maybe an apiKey was provided, use that instead to look up the userName
+            char *apiKey = jsonQueryString(req, "", "Event.Upload.MetaData.apiKey", NULL);
+            userName = userNameForApiKey(apiKey);
+            if (!userName)
+                errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
             }
-        else
+        fprintf(stderr, "userName='%s'\n'", userName);
+        long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
+        char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
+        long currQuota = checkUserQuota(userName);
+        long newQuota = currQuota + reqFileSize;
+        long maxQuota = getMaxUserQuota(userName);
+        if (newQuota > maxQuota)
             {
-            long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
-            char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
-            long currQuota = checkUserQuota(userName);
-            long newQuota = currQuota + reqFileSize;
-            long maxQuota = getMaxUserQuota(userName);
-            if (newQuota > maxQuota)
-                {
-                errAbort("File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(maxQuota));
-                }
-            char *reqFileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
-            if (!isFileTypeRecognized(reqFileType))
-                {
-                errAbort("File type '%s' for file '%s' is not accepted at this time", reqFileType, reqFileName);
-                }
-            char *reqGenome = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
-            if (!reqGenome)
-                {
-                errAbort("Genome selection '%s' for file '%s' is invalid. Please choose the correct genome", reqGenome, reqFileName);
-                }
+            errAbort("File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(maxQuota));
+            }
+        char *reqFileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
+        if (!isFileTypeRecognized(reqFileType))
+            {
+            errAbort("File type '%s' for file '%s' is not accepted at this time", reqFileType, reqFileName);
+            }
+        char *reqGenome = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
+        if (!reqGenome)
+            {
+            errAbort("Genome selection '%s' for file '%s' is invalid. Please choose the correct genome", reqGenome, reqFileName);
             }
 
         // we've passed all the checks so we can return that we are good to upload the file

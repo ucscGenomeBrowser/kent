@@ -17,6 +17,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hubSpace.h"
+#include "hubSpaceKeys.h"
 #include "md5.h"
 #include "cheapcgi.h"
 
@@ -79,82 +80,82 @@ else
             setenv("HTTP_COOKIE", reqCookie, 0);
             }
         fprintf(stderr, "reqCookie='%s'\n", reqCookie);
-        userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-        fprintf(stderr, "userName='%s'\n'", userName);
+        userName = getUserName();
         if (!userName)
             {
+            // maybe an apiKey was provided, use that instead to look up the userName
+            char *apiKey = jsonQueryString(req, "", "Event.Upload.MetaData.apiKey", NULL);
+            userName = userNameForApiKey(apiKey);
             errAbort("not logged in");
+            }
+        fprintf(stderr, "userName='%s'\n'", userName);
+        // NOTE: All Upload.MetaData values are strings
+        fileName = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL));
+        fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
+        fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
+        db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
+        reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
+        lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
+        parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        fprintf(stderr, "parentDir = '%s'\n", parentDir);
+        fflush(stderr);
+        // strip out plain leading '.' and '/' components
+        // middle '.' components are dealt with later
+        if (startsWith("./", parentDir) || startsWith("/", parentDir))
+            parentDir = skipBeyondDelimit(parentDir, '/');
+        fprintf(stderr, "parentDir = '%s'\n", parentDir);
+        fflush(stderr);
+        char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
+        if (fileName == NULL)
+            {
+            errAbort("No Event.Upload.fileName setting");
+            }
+        else if (tusFile == NULL)
+            {
+            errAbort("No Event.Path setting");
             }
         else
             {
-            // NOTE: All Upload.MetaData values are strings
-            fileName = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL));
-            fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
-            fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
-            db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
-            reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
-            lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
-            parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
-            fprintf(stderr, "parentDir = '%s'\n", parentDir);
-            fflush(stderr);
-            // strip out plain leading '.' and '/' components
-            // middle '.' components are dealt with later
-            if (startsWith("./", parentDir) || startsWith("/", parentDir))
-                parentDir = skipBeyondDelimit(parentDir, '/');
-            fprintf(stderr, "parentDir = '%s'\n", parentDir);
-            fflush(stderr);
-            char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
-            if (fileName == NULL)
+            char *tusInfo = catTwoStrings(tusFile, ".info");
+            char *dataDir = getDataDir(userName);
+            struct dyString *newFile = dyStringNew(0);
+            // if parentDir provided we are throwing the files in there
+            if (parentDir)
                 {
-                errAbort("No Event.Upload.fileName setting");
+                if (!endsWith(parentDir, "/"))
+                    parentDir = catTwoStrings(parentDir, "/");
+                dataDir = catTwoStrings(dataDir, parentDir);
                 }
-            else if (tusFile == NULL)
+            dyStringPrintf(newFile, "%s%s", dataDir, fileName);
+
+            fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
+            // TODO: check if file exists or not and let user choose to overwrite
+            // and re-call this hook, for now just exit if the file exists
+            if (fileExists(dyStringContents(newFile)))
                 {
-                errAbort("No Event.Path setting");
+                errAbort("file '%s' exists already, not overwriting", dyStringContents(newFile));
                 }
             else
                 {
-                char *tusInfo = catTwoStrings(tusFile, ".info");
-                char *dataDir = getDataDir(userName);
-                struct dyString *newFile = dyStringNew(0);
-                // if parentDir provided we are throwing the files in there
-                if (parentDir)
+                // set our mysql table location:
+                location = dyStringContents(newFile);
+                // the directory may not exist yet
+                int oldUmask = 00;
+                if (!isDirectory(dataDir))
                     {
-                    if (!endsWith(parentDir, "/"))
-                        parentDir = catTwoStrings(parentDir, "/");
-                    dataDir = catTwoStrings(dataDir, parentDir);
+                    fprintf(stderr, "making directory '%s'\n", dataDir);
+                    // the directory needs to be 777, so ignore umask for now
+                    oldUmask = umask(0);
+                    makeDirsOnPath(dataDir);
+                    // restore umask
+                    umask(oldUmask);
                     }
-                dyStringPrintf(newFile, "%s%s", dataDir, fileName);
-
-                fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
-                // TODO: check if file exists or not and let user choose to overwrite
-                // and re-call this hook, for now just exit if the file exists
-                if (fileExists(dyStringContents(newFile)))
-                    {
-                    errAbort("file '%s' exists already, not overwriting", dyStringContents(newFile));
-                    }
-                else
-                    {
-                    // set our mysql table location:
-                    location = dyStringContents(newFile);
-                    // the directory may not exist yet
-                    int oldUmask = 00;
-                    if (!isDirectory(dataDir))
-                        {
-                        fprintf(stderr, "making directory '%s'\n", dataDir);
-                        // the directory needs to be 777, so ignore umask for now
-                        oldUmask = umask(0);
-                        makeDirsOnPath(dataDir);
-                        // restore umask
-                        umask(oldUmask);
-                        }
-                    copyFile(tusFile, dyStringContents(newFile));
-                    // the files definitely should not be executable!
-                    chmod(dyStringContents(newFile), 0666);
-                    mustRemove(tusFile);
-                    mustRemove(tusInfo);
-                    dyStringCannibalize(&newFile);
-                    }
+                copyFile(tusFile, dyStringContents(newFile));
+                // the files definitely should not be executable!
+                chmod(dyStringContents(newFile), 0666);
+                mustRemove(tusFile);
+                mustRemove(tusInfo);
+                dyStringCannibalize(&newFile);
                 }
             }
 

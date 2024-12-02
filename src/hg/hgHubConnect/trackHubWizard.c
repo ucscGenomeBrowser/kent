@@ -19,13 +19,15 @@
 #include "jsonWrite.h"
 #include "cartJson.h"
 #include "hubSpace.h"
+#include "hubSpaceKeys.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "htmshell.h"
 
 void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
 {
-char *fileName = prefixUserFile(userName, cgiEncodeFull(fullPath), NULL);
+char *fileName = prefixUserFile(userName, fullPath, NULL);
 if (fileExists(fileName))
     {
     fprintf(stderr, "deleting file: '%s'\n", fileName);
@@ -197,4 +199,30 @@ outFilesForUser();
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
+}
+
+void revokeApiKey(struct cartJson *cj, struct hash *paramHash)
+/* Remove any api keys for the user */
+{
+char *userName = getUserName();
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *query = sqlDyStringCreate("delete from %s where userName='%s'", HUBSPACE_AUTH_TABLE, userName);
+sqlUpdate(conn, dyStringCannibalize(&query));
+hDisconnectCentral(&conn);
+jsonWriteString(cj->jw, "revoke", "true");
+}
+
+void generateApiKey(struct cartJson *cj, struct hash *paramHash)
+/* Make a random (but not crypto-secure api key for use of hubtools to upload to hubspace */
+{
+char *userName = getUserName();
+if (!userName)
+    return;
+char *apiKey = makeRandomKey(256); // just needs some arbitrary length
+// save this key to the database for this user, the 'on duplicate' part automatically revokes old keys
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *query = sqlDyStringCreate("insert into %s values ('%s', '%s') on duplicate key update apiKey='%s'", HUBSPACE_AUTH_TABLE, userName, apiKey, apiKey);
+sqlUpdate(conn, dyStringCannibalize(&query));
+jsonWriteString(cj->jw, "apiKey", apiKey);
+hDisconnectCentral(&conn);
 }

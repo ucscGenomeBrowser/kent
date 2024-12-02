@@ -16,6 +16,14 @@
 #define hgHubCreateHub "createHub"
 #define hgHubEditHub "editHub"
 #define hgHubMoveFile "moveFile"
+#define hgHubGenerateApiKey "generateApiKey"
+#define hgHubRevokeApiKey "revokeApiKey"
+
+void revokeApiKey(struct cartJson *cj, struct hash *paramHash);
+/* Remove any api keys for the user */
+
+void generateApiKey(struct cartJson *cj, struct hash *paramHash);
+/* Make a random (but not crypto-secure api key for use of hubtools to upload to hubspace */
 
 void doRemoveFile(struct cartJson *cj, struct hash *paramHash);
 /* Process the request to remove a file */

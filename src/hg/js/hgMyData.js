@@ -12,6 +12,63 @@ function prettyFileSize(num) {
     }
 }
 
+function generateApiKey() {
+    let apiKeyInstr = document.getElementById("apiKeyInstructions");
+    let apiKeyDiv = document.getElementById("apiKey");
+
+    if (!document.getElementById("spinner")) {
+        let spinner = document.createElement("i");
+        spinner.id = "spinner";
+        spinner.classList.add("fa", "fa-spinner", "fa-spin");
+        document.getElementById("generateApiKey").after(spinner);
+    }
+
+    let handleSuccess = function(reqObj) {
+        apiKeyDiv.textContent = reqObj.apiKey;
+        apiKeyInstr.style.display = "block";
+        let revokeDiv= document.getElementById("revokeDiv");
+        revokeDiv.style.display = "block";
+        document.getElementById("spinner").remove();
+
+        // remove the word 'already' from the message if we have just re-generated a key
+        let refreshSpan = document.getElementById("removeOnGenerate");
+        if (refreshSpan) {
+            refreshSpan.style.display = "none";
+        }
+    };
+
+    let cartData = {generateApiKey: {}};
+    cart.setCgi("hgHubConnect");
+    cart.send(cartData, handleSuccess);
+    cart.flush();
+}
+
+function revokeApiKeys() {
+    let apiKeyInstr = document.getElementById("apiKeyInstructions");
+    let apiKeyDiv = document.getElementById("apiKey");
+
+    if (!document.getElementById("spinner")) {
+        let spinner = document.createElement("i");
+        spinner.id = "spinner";
+        spinner.classList.add("fa", "fa-spinner", "fa-spin");
+        document.getElementById("revokeApiKeys").after(spinner);
+    }
+
+    let handleSuccess = function(req) {
+        apiKeyInstr.style.display = "none";
+        document.getElementById("spinner").remove();
+        let generateDiv = document.getElementById("generateDiv");
+        generateDiv.style.display = "block";
+        let revokeDiv = document.getElementById("revokeDiv");
+        revokeDiv.style.display = "none";
+    };
+
+    let cartData = {revokeApiKey: {}};
+    cart.setCgi("hgHubConnect");
+    cart.send(cartData, handleSuccess);
+    cart.flush();
+}
+
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
