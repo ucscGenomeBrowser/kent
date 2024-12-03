@@ -69,6 +69,7 @@ GCA_006130075.1_GSC_cangoose_1.0	Canada goose (SJ_97 2019)
 GCA_009819595.1_bMerNub1.pri	carmine bee-eater (2019)
 GCA_009819585.1_bMerNub1.alt	carmine bee-eater alternate hap pseudohaplotype 2019)
 GCA_963513975.1_bFriCoe1.1	chaffinch (primary hap 2023)
+GCF_032191515.1_BPBGC_Pcur_1.0	chestnut-breasted malkoha (KB17595 2023)
 GCA_027408205.1_bGalGal5.alt	chicken (Cobb bGalGal5 alternate hap 2022)
 GCA_027408225.1_bGalGal5.pri	chicken (Cobb bGalGal5 primary hap 2022)
 GCF_000002315.6_GRCg6a	chicken (GRCg6a 2018)
@@ -303,6 +304,7 @@ GCF_027887145.1_bAmmCau1.pri	saltmarsh sparrow (bAmmCau1 primary hap 2023 refseq
 GCA_022578375.1_bPasSan1.0.a	Savannah sparrow (FMNH 499929 alternate hap 2022)
 GCA_022577445.1_bPasSan1.0.p	Savannah sparrow (FMNH 499929 primary hap 2022)
 GCA_031885435.1_bPasSan2.pri	Savannah sparrow (primary hap 2023)
+GCF_041296385.1_UR_Acoe_1.0	scrub jay (FSJ_1873_10779 2024)
 GCA_036010785.1_bAmmMar1.pri	seaside sparrow (bAmmMar1 primary hap 2024)
 GCF_901933205.1_STF_HiC	small tree finch (2019)
 GCA_902806625.1_Camarhynchus_parvulus_V1.1	small tree finch (2020)
@@ -365,8 +367,8 @@ GCA_036250135.1_bDixPip1.hap2	white-crowned manakin (hap2 2024)
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
 GCF_017590055.1_ASM1759005v1	white-rumped snowfinch
 GCF_000691405.1_ASM69140v1	white-tailed eagle (BGI_N329 2014)
-GCF_947461875.1_bHalAlb1.1	white-tailed eagle (primary hap 2022 refseq)
 GCA_947461935.1_bHalAlb1.1_alternate_haplotype	white-tailed eagle (bHalAlb1.1 alternate hap 2022)
+GCF_947461875.1_bHalAlb1.1	white-tailed eagle (primary hap 2022 refseq)
 GCF_019238085.1_USGS_WTPT01	white-tailed ptarmigan
 GCF_000687285.1_ASM68728v1	white-tailed tropicbird
 GCA_963662255.1_bCinCin1.1	white-throated dipper (primary hap 2023)
