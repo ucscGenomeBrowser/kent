@@ -1,4 +1,5 @@
 GCA_009769595.1_bBucAby1.alt	Abyssinian ground-hornbill
+GCA_964194405.1_rVipBer3.hap2.1	adder (hap2 2024)
 GCA_027172095.1_rPodRaf1.alt	Aeolian wall lizard (La Canna islet rPodRaf1 alternate hap 2022)
 GCA_040955645.1_LycPic1.final.hap1	African hunting dog (LycPic1hap1 2024)
 GCA_040807015.1_bStrCam1.hap2	African ostrich (bStrCam1hap2 2024)
@@ -66,7 +67,7 @@ GCA_900634435.1_fCotGob3.1_alternate_haplotype	channel bull blenny
 GCA_039877575.1_fChaTrf1.hap2	chevron butterflyfish (hap2 2024)
 GCA_027408205.1_bGalGal5.alt	chicken (Cobb bGalGal5 alternate hap 2022)
 GCA_027408225.1_bGalGal5.pri	chicken (Cobb bGalGal5 primary hap 2022)
-GCA_024206055.2_ASM2420605v2	chicken (Huxu 2023)
+GCA_024206055.2_GGswu	chicken (Huxu 2023)
 GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b	chicken (matHap)
 GCA_027408255.1_bGalGal4.alt	chicken (Ross bGalGal4 alternate hap 2022)
 GCA_027557775.1_bGalGal4.pri	chicken (Ross bGalGal4 primary hap 2023)
@@ -191,6 +192,7 @@ GCA_003369685.2_UOA_Angus_1	hybrid cattle (Angus x Brahman F1 Angus haplotype 20
 GCA_900651595.1_fParRan2.1_alternate_haplotype	Indian glassy fish
 GCA_013368575.1_fMegCyp1.alt	Indo-Pacific tarpon (alternate hap 2020)
 GCA_964188395.1_rPodSic1.hap2.1	Italian wall lizard (rPodSic1.hap2.1 2024)
+GCA_044704965.1_sPriJap1.hap2	Japanese sawshark (hap2 2024)
 GCA_902148835.1_fSalaFa1.1_alternate_haplotype	jewelled blenny
 GCA_960530785.1_fZeuFab8.1_alternate_haplotype	John dory (alternate hap 2023)
 GCA_027595965.1_bRhyJub1.alt	kagu (bRhyJub1 alternate hap 2023)
@@ -283,6 +285,7 @@ GCA_008658355.1_bAlcTor1_alternate	razorbill
 GCA_910593805.1_mCerEla1.1_alternate_haplotype	red deer (alternate hap 2021)
 GCA_964106925.2_mVulVul1.hap2.2	red fox (hap2 2024)
 GCA_015220065.1_fPygNat1.alt	red-bellied piranha (fPygNat1 alternate hap 2020)
+GCA_964289755.1_bPhaAeh10.paternal.1	red-billed tropicbird (paternal hap 2024)
 GCA_009764505.1_bTauEry1.alt	red-crested turaco
 GCA_015220175.1_bPogPus1.alt	Red-fronted tinkerbird (bPogPus1 alternate hap 2020)
 GCA_009819485.1_bCarCri1.alt	red-legged seriema
@@ -349,6 +352,7 @@ GCA_028389975.1_mMacEug1.alt	tammar wallaby (mMacEug1 alternate hap 2023)
 GCA_028020675.1_bPodStr1.alt	tawny frogmouth (bPodStr1 alternate hap 2023)
 GCA_031877785.1_bStrAlu1.hap2	tawny owl (hap2 2023)
 GCA_010909745.1_sAmbRad1.alt	thorny skate
+GCA_964276385.1_fGasAcu3.hap2.1	three-spined stickleback (hap2 2024)
 GCA_030684295.1_sSteTig4.hap2	tiger shark (hap2 2023)
 GCA_901765105.1_aMicUni1.1_alternate_haplotype	tiny Cayenne caecilian
 GCA_901000745.3_fTakRub1.2_alternate_haplotype	torafugu
