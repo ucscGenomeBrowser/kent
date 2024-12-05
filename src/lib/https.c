@@ -163,6 +163,11 @@ while (1)
 	goto cleanup;
 	}
 
+    // The earlier call to BIO_set_nbio() should have turned non-blocking io on already.
+    if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1) {
+        xerr("Could not switch to non-blocking.\n");
+	goto cleanup;
+    }
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
@@ -210,23 +215,26 @@ while (1)
 
 	if (FD_ISSET(fd, &writefds))
 	    {
-	    int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
-	    if (swtx <= 0)
+            if (swt < srd) 
 		{
-		if (!BIO_should_write(params->sbio))
+		int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
+		if (swtx <= 0)
 		    {
-		    ERR_print_errors_fp(stderr);
-		    xerr("Error writing SSL connection");
-		    goto cleanup;
+		    if (!BIO_should_write(params->sbio))
+			{
+			ERR_print_errors_fp(stderr);
+			xerr("Error writing SSL connection");
+			goto cleanup;
+			}
 		    }
-		}
-	    else
-		{
-		swt += swtx;
-		if (swt >= srd)
+		else
 		    {
-		    swt = 0;
-		    srd = 0;
+		    swt += swtx;
+		    if (swt >= srd)
+			{
+			swt = 0;
+			srd = 0;
+			}
 		    }
 		}
 	    }
@@ -677,8 +685,7 @@ if (!sameString(https_cert_check, "none"))
 
 // Don't want any retries since we are non-blocking bio now
 // This is available on newer versions of openssl
-//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-
+//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);  // this has become the default, but only matters for blocking mode which we are not using.
 
 // Support for Http Proxy
 struct netParsedUrl pxy;
