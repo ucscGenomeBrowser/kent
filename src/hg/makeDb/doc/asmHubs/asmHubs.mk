@@ -47,7 +47,11 @@ sshKeyCheck: sshKeyDownload sshKeyDynablat
 	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
 
 mkJson::
-	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt
+	if [ "$(name)" = "VGP" ]; then \
+	cat *.orderList.tsv | ${toolsDir}/tsvToJson.py stdin > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
+	else \
+	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
+        fi
 
 # mkGenomes needs symLinks to run before mkGenomes runs, and then
 # the second symLinks after mkGenomes uses business created by mkGenomes
@@ -134,7 +138,7 @@ clean::
 
 sendDownload:: sshKeyCheck
 	${toolsDir}/mkSendList.pl ${orderList} | while read F; do \
-	  ${toolsDir}/sendToHgdownload.sh $$F < /dev/null; done
+	  ((N=N+1)); printf "### count %5d\t%s\t%s\n" $${N} $${F} "`date '+%F %T %s'`"; ${toolsDir}/sendToHgdownload.sh $$F < /dev/null; done
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/

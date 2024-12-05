@@ -26,6 +26,7 @@ GCA_000150785.1_g4	African malaria mosquito (S 2008)
 GCA_002216045.1_PinMar1.0	Akoya pearl oyster (pearl oyster-OUG 2017)
 GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee
 GCF_003710045.2_USU_Nmel_1.3	alkali bee (v1.3 Touchet_males 2018)
+GCF_040183065.1_P.americana_PAMFEO1_priV1	American cockroach (PAMFEO1 primary hap 2024)
 GCF_021461395.2_iqSchAmer2.1	American grasshopper (TAMUIC-IGC-003095 2022)
 GCF_020809275.1_ASM2080927v1	American house dust mite (JKM2019 2021)
 GCF_018991925.1_GMGI_Hamer_2.0	American lobster
@@ -122,6 +123,7 @@ GCF_900002375.2_GCA_900002375	apicomplexans P.berghei (ANKA 2019)
 GCF_023973825.1_ASM2397382v1	apicomplexans P.brasilianum (Bolivian I 2022)
 GCF_019968955.1_MNHN_PgigA_v1	apicomplexans P.cf. gigantea (A 2021)
 GCA_019968985.2_MNHN_PgigB_v1.1	apicomplexans P.cf. gigantea (B 2021)
+GCF_019968985.1_MNHN_PgigB_v1.1	apicomplexans P.cf. gigantea (B 2021)
 GCF_900002335.3_GCA_900002335	apicomplexans P.chabaudi chabaudi (AS 2019)
 GCF_001680005.1_ASM168000v1	apicomplexans P.coatneyi (Hackeri 2016)
 GCA_900180395.1_PcyM	apicomplexans P.cynomolgi (M 2017)
@@ -219,6 +221,7 @@ GCF_015706575.1_ASM1570657v1	bat star
 GCF_000648675.2_Clec_2.1	bed bug
 GCF_024516045.1_iyBomAffi1.2	bee B.affinis (iyBomAffi1 2022)
 GCF_011952205.1_Bbif_JDL3187	bee B.bifarius
+GCF_040668555.1_iyBomFlav1_principal	bee B.flavifrons (JBK064 primary hap 2024)
 GCF_024542735.1_iyBomHunt1.1	bee B.huntii (Logan2020A 2022)
 GCF_905332965.1_iyBomPasc1.1	bee B.pascuorum (primary hap 2021)
 GCF_014825855.1_ASM1482585v1	bee B.pyrosoma
@@ -894,6 +897,7 @@ GCA_907269075.1_ilIdaAver1.1	Riband wave
 GCF_910592395.1_tnLinLong1.2	ribbon worms (primary hap 2022)
 GCF_002938485.1_Soryzae_2.0	rice weevil
 GCF_902806685.1_iAphHyp1.1	ringlet
+GCF_902806685.2_iAphHyp1.2	ringlet (primary hap 2024)
 GCF_963678635.1_txSymRosc1.1	Roscoff worm S.roscoffensis (primary hap 2023)
 GCA_016617965.1_ASM1661796v1	rose aphid (ROC1 2021)
 GCF_019925205.1_ASM1992520v1	rose-grain aphid (CAU 2021 refseq)
@@ -957,6 +961,8 @@ GCF_000222465.1_Adig_1.1	stony coral A.digitifera
 GCF_013753865.1_Amil_v2.1	stony coral A.millepora (JS-1 2020)
 GCF_004143615.1_amil_sf_1.1	stony coral A.millepora (SF001 2019)
 GCF_036669905.1_ASM3666990v1	stony coral A.muricata (sample 2 2024)
+GCF_036669925.1_ASM3666992v2	stony coral M.capricornis (CH-2021 2024)
+GCF_036669935.1_ASM3666993v2	stony coral M.foliosa (CH-2021 2024)
 GCF_002042975.1_ofav_dov_v1	stony coral O.faveolata
 GCF_003704095.1_ASM370409v1	stony coral P.damicornis
 GCF_002571385.2_Stylophora_pistillata_v1.1	stony coral S.pistillata (v1.1 CSM Monaco 2017)
@@ -1093,11 +1099,13 @@ GCF_000255335.2_Mocc_1.1	western predatory mite (v1.1 2012)
 GCF_014466175.1_ASM1446617v1	western yellowjacket
 GCF_000341935.2_Ccin1v2	wheat stem sawfly (v2 2014)
 GCF_021155775.1_iyNeoPine1.1	white pine sawfly (iyNeoPine1 2021)
+GCF_021155775.2_iyNeoPine1.2	white pine sawfly (iyNeoPine1 2024)
 GCA_014356515.1_ASM1435651v1	white-backed planthopper (WBPH 2020)
 GCF_003987935.1_ASM398793v1	wild silkworm
 GCA_013282895.1_WAA_JIC_1.0	woolly apple aphid (AA05 2020)
 GCA_021653915.1_ASM2165391v1	yellow fever mosquito (Aag2 2022)
 GCF_002204515.2_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 refseq)
+GCF_963966145.1_icTenMoli1.1	yellow mealworm (2024)
 GCF_003268045.1_YSA_version1	yellow sugarcane aphid
 GCF_002113885.1_ASM211388v2	Yesso scallop
 GCF_020536995.1_UMN_Dpol_1.0	zebra mussel (Duluth1 2021)

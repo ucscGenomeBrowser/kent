@@ -219,6 +219,7 @@ GCA_021462225.2_DD_fGirMul_XY1	fish
 GCA_021950905.1_HG002.pat.cur.20211005	primates
 GCA_021951015.1_HG002.mat.cur.20211005	primates
 GCA_022059095.1_T.mel.1	invertebrate
+GCA_022577435.1_fEmbJac1.0.p	fish
 GCA_022682495.1_HLdesRot8A	mammals
 GCA_023343835.1_bLagMut1_primary	birds
 GCA_023634085.1_bFalChe1.pri	birds
@@ -253,6 +254,7 @@ GCA_028858805.1_NHGRI_mPanTro3-v1.1-hic.freeze_alt	primates
 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri	primates
 GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt	primates
 GCA_029207755.1_bChaFas1.0.hap1	birds
+GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri	primates
 GCA_029499605.1_aHylSar1.hap1	vertebrate
 GCA_029633855.1_fHopMal1.hap1	fish
 GCA_029633865.1_fLamInc1.hap2	fish

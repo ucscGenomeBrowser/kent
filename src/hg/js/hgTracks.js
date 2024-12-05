@@ -5842,24 +5842,24 @@ $(document).ready(function()
                     basicTour.start();
                 });
             }
-            // allow the user to bring the tutorials popup via a new help menu button
-            let tutorialLinks = document.createElement("li");
-            tutorialLinks.id = "hgTracksHelpTutorialLinks";
-            tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
-                "Interactive Tutorials</a>";
-            $("#help > ul")[0].appendChild(tutorialLinks);
-            $("#hgTracksHelpTutorialLinks").on("click", function () {
-                // Check to see if the tutorial popup has been generated already
-                let tutorialPopupExists = document.getElementById ("tutorialContainer");
-                if (!tutorialPopupExists) {
-                    // Create the tutorial popup if it doesn't exist
-                    createTutorialPopup();
-                } else {
-                    //otherwise use jquery-ui to open the popup
-                    $("#tutorialContainer").dialog("open");
-                }
-            });
         }
+        // allow the user to bring the tutorials popup via a new help menu button
+        let tutorialLinks = document.createElement("li");
+        tutorialLinks.id = "hgTracksHelpTutorialLinks";
+        tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
+            "Interactive Tutorials</a>";
+        $("#help > ul")[0].appendChild(tutorialLinks);
+        $("#hgTracksHelpTutorialLinks").on("click", function () {
+            // Check to see if the tutorial popup has been generated already
+            let tutorialPopupExists = document.getElementById ("tutorialContainer");
+            if (!tutorialPopupExists) {
+                // Create the tutorial popup if it doesn't exist
+                createTutorialPopup();
+            } else {
+                //otherwise use jquery-ui to open the popup
+                $("#tutorialContainer").dialog("open");
+            }
+        });
         
         // Any highlighted region must be shown and warnBox must play nice with it.
         imageV2.drawHighlights();

@@ -20,6 +20,7 @@
 #include "hubConnect.h"
 #include "fileUi.h"
 #include "trackHub.h"
+#include "versionInfo.h"
 
 static void themeDropDown(struct cart* cart)
 /* Create drop down for UI themes. 
@@ -576,7 +577,7 @@ configInitTrackList(vis, &groupTarget, &trackList, &ideoTrack, &groupList);
 
 struct dyString *title = dyStringNew(0);
 
-dyStringPrintf(title, "Configure Image");
+dyStringPrintf(title, "Configure Image - Genome Browser V%s", CGI_VERSION);
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n", hgTracksName(),
 	cartUsualString(cart, "formMethod", "POST"));
