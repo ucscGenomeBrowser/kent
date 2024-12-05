@@ -57,16 +57,24 @@ char *prefixUserFile(char *userName, char *fname, char *parentDir);
 /* Allocate a new string that contains the full per-user path to fname, NULL otherwise.
  * parentDir is optional and will go in between the per-user dir and the fname */
 
-char *writeHubText(char *path, char *userName, char *hubName, char *db);
+char *hubNameFromPath(char *path);
+/* Return the last directory component of path. Assume that a '.' char in the last component
+ * means that component is a filename and go back further */
+
+char *writeHubText(char *path, char *userName, char *db);
 /* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
  * the file name of the created hub, which can be freed. */
 
-void createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *parentDir);
-/* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
- * for convenience. */
+void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir, char *parentDir);
+/* Creates a hub.txt for this upload, and updates the hubSpace table for the
+ * hub.txt and any parentDirs we need to create. */
 
 void addHubSpaceRowForFile(struct hubSpace *row);
 /* We created a file for a user, now add an entry to the hubSpace table for it */
+
+void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir);
+/* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
+ * final subdirectory component of parentDirStr */
 
 void removeFileForUser(char *fname, char *userName);
 /* Remove a file for this user if it exists */

@@ -31,9 +31,6 @@ void doRemoveFile(struct cartJson *cj, struct hash *paramHash);
 void doMoveFile(struct cartJson *cj, struct hash *paramHash);
 /* Move a file to a new hub */
 
-void doCreateHub(struct cartJson *cj, struct hash *paramHash);
-/* Make a new hub.txt with the parameters from the JSON request */
-
 void doEditHub(struct cartJson *cj, struct hash *paramHash);
 /* Edit the hub.txt for a hub */
 

@@ -60,6 +60,7 @@ else
         {
         // the variables for the row entry for this file, some can be NULL
         char *userName = NULL;
+        char *dataDir = NULL, *userDataDir = NULL;
         char *fileName = NULL;
         long long fileSize = 0;
         char *fileType = NULL;
@@ -67,6 +68,7 @@ else
         char *location = NULL;
         char *reqLm = NULL;
         time_t lastModified = 0;
+        boolean isHubToolsUpload = FALSE;
         char *parentDir = NULL;
 
         struct lineFile *lf = lineFileStdin(FALSE);
@@ -86,7 +88,8 @@ else
             // maybe an apiKey was provided, use that instead to look up the userName
             char *apiKey = jsonQueryString(req, "", "Event.Upload.MetaData.apiKey", NULL);
             userName = userNameForApiKey(apiKey);
-            errAbort("not logged in");
+            if (!userName)
+                errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
             }
         fprintf(stderr, "userName='%s'\n'", userName);
         // NOTE: All Upload.MetaData values are strings
@@ -96,6 +99,9 @@ else
         db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
         reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
         lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
+        char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
+        if (hubtoolsStr)
+            isHubToolsUpload = sameString(hubtoolsStr, "TRUE") || sameString(hubtoolsStr, "true");
         parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
         fprintf(stderr, "parentDir = '%s'\n", parentDir);
         fflush(stderr);
@@ -117,7 +123,7 @@ else
         else
             {
             char *tusInfo = catTwoStrings(tusFile, ".info");
-            char *dataDir = getDataDir(userName);
+            userDataDir = dataDir = getDataDir(userName);
             struct dyString *newFile = dyStringNew(0);
             // if parentDir provided we are throwing the files in there
             if (parentDir)
@@ -164,9 +170,6 @@ else
         if (exitStatus == 0)
             {
             // create a hub for this upload, which can be edited later
-            createNewTempHubForUpload(reqId, userName, db, fileName, fileType, parentDir);
-            fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
-            fflush(stderr);
             struct hubSpace *row = NULL;
             AllocVar(row);
             row->userName = userName;
@@ -175,11 +178,19 @@ else
             row->fileType = fileType;
             row->creationTime = NULL; // automatically handled by mysql
             row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
-            row->parentDir = parentDir;
             row->db = db;
             row->location = location;
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = parentDir ? parentDir : "";
+            if (!isHubToolsUpload)
+                {
+                createNewTempHubForUpload(reqId, row, userDataDir, parentDir);
+                fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
+                fflush(stderr);
+                }
+            // first make the parentDir rows
+            makeParentDirRows(row->userName, sqlDateToUnixTime(row->lastModified), row->db, row->parentDir, userDataDir);
+            row->parentDir = hubNameFromPath(parentDir);
             addHubSpaceRowForFile(row);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
             fflush(stderr);

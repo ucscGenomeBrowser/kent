@@ -38,8 +38,8 @@ return email;
 
 char *getDataDir(char *userName)
 /* Return the full path to the user specific data directory, can be configured via hg.conf
- * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
- * on the RR, this is /userdata/userStore/hash/userName/ */
+ * on hgwdev, this is /data/apache/userdata/hubspace/hash/userName/
+ * on the RR, this is /userdata/hubspace/hash/userName/ */
 {
 char *userDataBaseDir = cfgOption("userDataDir");
 if (!userDataBaseDir  || isEmpty(userDataBaseDir))
@@ -55,7 +55,6 @@ struct dyString *newDataDir = dyStringNew(0);
 dyStringPrintf(newDataDir, "%s/%s/%s/", 
     userDataBaseDir, userPrefix, encUserName);
 
-fprintf(stderr, "userDataDir = '%s'\n", newDataDir->string);
 return dyStringCannibalize(&newDataDir);
 }
 
@@ -113,6 +112,45 @@ else
     return NULL;
 }
 
+static boolean checkHubSpaceRowExists(struct hubSpace *row)
+/* Return TRUE if row already exists */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace where userName='%s' and fileName='%s' and parentDir='%s'", row->userName, row->fileName, row->parentDir);
+int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
+hDisconnectCentral(&conn);
+return ret > 0;
+}
+
+char *hubNameFromPath(char *path)
+/* Return the last directory component of path. Assume that a '.' char in the last component
+ * means that component is a filename and go back further */
+{
+fprintf(stderr, "hubNameFromPath('%s')\n", path);
+fflush(stderr);
+char *copy = cloneString(path);
+if (endsWith(copy, "/"))
+    trimLastChar(copy);
+char *ptr = strrchr(copy, '/');
+// check to see if we're in a file name, like /blah/blah/name/hub.txt
+if (ptr)
+    {
+    if (strchr(ptr, '.'))
+        {
+        *ptr = 0;
+        ptr = strrchr(copy, '/');
+        }
+    if (ptr)
+        {
+        ++ptr;
+        fprintf(stderr, "ptr= '%s'\n", ptr);
+        fflush(stderr);
+        return cloneString(ptr);
+        }
+    }
+return copy;
+}
+
 void addHubSpaceRowForFile(struct hubSpace *row)
 /* We created a file for a user, now add an entry to the hubSpace table for it */
 {
@@ -127,23 +165,13 @@ hubSpaceSaveToDb(conn, row, "hubSpace", 0);
 hDisconnectCentral(&conn);
 }
 
-static boolean checkHubSpaceRowExists(struct hubSpace *row)
-/* Return TRUE if row already exists */
-{
-struct sqlConnection *conn = hConnectCentral();
-struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace where userName='%s' and fileName='%s' and parentDir='%s'", row->userName, row->fileName, row->parentDir);
-int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
-hDisconnectCentral(&conn);
-return ret > 0;
-}
-
-static void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr)
+void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir)
 /* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
  * final subdirectory component of parentDirStr */
 {
 int i, slashCount = countChars(parentDirStr, '/');
 char *components[256];
-struct dyString *currLocation = dyStringNew(0);
+struct dyString *currLocation = dyStringCreate("%s", userDataDir);
 int foundSlashes = chopByChar(cloneString(parentDirStr), '/', components, slashCount);
 if (foundSlashes > 256)
     errAbort("parentDir setting '%s' too long", parentDirStr);
@@ -155,6 +183,8 @@ for (i = 0; i < foundSlashes; i++)
     fprintf(stderr, "making row for parent dir: '%s'\n", subdir);
     if (!subdir)
         errAbort("error: empty subdirectory components for parentDir string '%s'", parentDirStr);
+    dyStringAppend(currLocation, components[i]);
+    dyStringAppendC(currLocation, '/');
     struct hubSpace *row = NULL;
     AllocVar(row);
     row->userName = userName;
@@ -170,12 +200,10 @@ for (i = 0; i < foundSlashes; i++)
     // only insert a row for this parentDir if it's unique to the table
     if (!checkHubSpaceRowExists(row))
         addHubSpaceRowForFile(row);
-    dyStringAppendC(currLocation, '/');
-    dyStringAppend(currLocation, components[i]);
     }
 }
 
-char *writeHubText(char *path, char *userName, char *hubName, char *db)
+char *writeHubText(char *path, char *userName, char *db)
 /* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
  * the file name of the created hub, which can be freed. */
 {
@@ -191,8 +219,8 @@ hubFile = dyStringCannibalize(&hubFileDy);
 if (fileExists(hubFile))
     return hubFile;
 
+char *hubName = hubNameFromPath(path);
 FILE *f = mustOpen(hubFile, "w");
-//fprintf(stderr, "would write \"hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n\" to %s", hubName, emailForUserName(userName), hubName, hubName, db, hubFile);
 fprintf(f, "hub %s\n"
     "email %s\n"
     "shortLabel %s\n"
@@ -206,8 +234,9 @@ carefulClose(&f);
 return hubFile;
 }
 
-char *hubNameFromParentDir(char *parentDir)
-/* Assume parentDir does not have leading '/' or '.', parse out the first dir component */
+static char *hubPathFromParentDir(char *parentDir, char *userDataDir)
+/* Assume parentDir does not have leading '/' or '.', parse out the first dir component
+ * and add it to the users directory*/
 {
 char *copy = cloneString(parentDir);
 char *firstSlash = strchr(copy, '/');
@@ -216,22 +245,11 @@ if (!firstSlash)
     return copy;
     }
 firstSlash = 0;
-return copy;
+return catTwoStrings(userDataDir, copy);
 }
 
-void createNewTempHubForUpload(char *requestId, char *userName, char *db, char *trackFileName, char *trackType, char *parentDir)
-/* Creates a hub.txt for this upload with a random hub name. Returns the full path to the hub
- * for convenience.  */
+static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label)
 {
-char *hubFileName = NULL;
-char *path = NULL;
-struct dyString *hubPath = dyStringNew(0);
-char *hubName = hubNameFromParentDir(parentDir);
-dyStringPrintf(hubPath, "%s%s", getDataDir(userName), hubName);
-fprintf(stderr, "hubPath: %s\n", hubPath->string);
-path = hubFileName = writeHubText(dyStringCannibalize(&hubPath), userName, hubName, db);
-char *encodedTrack = cgiEncodeFull(trackFileName);
-struct dyString *trackFilePath = dyStringCreate("%s%s%s", parentDir != NULL ? parentDir : "", parentDir != NULL ? "/" : "", encodedTrack);
 FILE *f = mustOpen(hubFileName, "a");
 fprintf(f, "track %s\n"
     "bigDataUrl %s\n"
@@ -239,32 +257,47 @@ fprintf(f, "track %s\n"
     "shortLabel %s\n"
     "longLabel %s\n"
     "\n",
-    encodedTrack, dyStringCannibalize(&trackFilePath),
-    trackType, trackFileName, trackFileName);
+    track, bigDataUrl, type, label, label);
 carefulClose(&f);
+}
 
-// we should update the mysql table now with a record of the hub.txt
-struct hubSpace *row = NULL;
-AllocVar(row);
-row->userName = userName;
-row->fileName = "hub.txt";
-row->fileSize = fileSize(hubFileName);
-row->fileType = "hub";
-row->creationTime = NULL;
-time_t lastModTime = fileModTime(hubFileName);
-row->lastModified = sqlUnixTimeToDate(&lastModTime, TRUE);
-row->db = db;
-row->location = path;
-row->md5sum = md5HexForFile(hubFileName);
-fprintf(stderr, "making parent dir rows\n");
-fflush(stderr);
-makeParentDirRows(userName, lastModTime, db, parentDir);
-row->parentDir = hubName;
-struct dyString *parentsPath = dyStringCreate("%s%s", getDataDir(userName), parentDir);
-fprintf(stderr, "parentDir of hub.txt: '%s'\n", parentsPath->string);
-fflush(stderr);
-if (!checkHubSpaceRowExists(row))
-    addHubSpaceRowForFile(row);
+static char *writeHubStanzasForFile(struct hubSpace *rowForFile, char *userDataDir, char *parentDir)
+/* Create a hub.txt (if necessary) and add track stanzas for the file described by rowForFile.
+ * Returns the path to the hub.txt */
+{
+char *hubFileName = NULL;
+char *hubDir = hubPathFromParentDir(rowForFile->parentDir, userDataDir);
+fprintf(stderr, "hubDir: %s\n", hubDir);
+hubFileName = writeHubText(hubDir, rowForFile->userName, rowForFile->db);
+
+char *encodedTrack = cgiEncodeFull(rowForFile->fileName);
+writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack);
+return hubFileName;
+}
+
+void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir, char *parentDir)
+/* Creates a hub.txt for this upload, and updates the hubSpace table for the
+ * hub.txt and any parentDirs we need to create. */
+{
+// first create the hub.txt if necessary and write the stanza for this track
+char *hubPath = writeHubStanzasForFile(rowForFile, userDataDir, parentDir);
+
+// update the mysql table with a record of the hub.txt:
+struct hubSpace *hubTextRow = NULL;
+AllocVar(hubTextRow);
+hubTextRow->userName = rowForFile->userName;
+hubTextRow->fileName = "hub.txt";
+hubTextRow->fileSize = fileSize(hubPath);
+hubTextRow->fileType = "hub.txt";
+hubTextRow->creationTime = NULL;
+time_t lastModTime = fileModTime(hubPath);
+hubTextRow->lastModified = sqlUnixTimeToDate(&lastModTime, TRUE);
+hubTextRow->db = rowForFile->db;
+hubTextRow->location = hubPath;
+hubTextRow->md5sum = md5HexForFile(hubPath);
+hubTextRow->parentDir = hubNameFromPath(hubPath);
+if (!checkHubSpaceRowExists(hubTextRow))
+    addHubSpaceRowForFile(hubTextRow);
 }
 
 static void deleteHubSpaceRow(char *fname, char *userName)
@@ -378,7 +411,7 @@ struct hubSpace *listFilesForUser(char *userName)
 /* Return the files the user has uploaded */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by creationTime, fileName", userName);
+struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by creationTime, location", userName);
 struct hubSpace *fileList = hubSpaceLoadByQuery(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 return fileList;

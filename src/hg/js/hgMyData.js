@@ -2,7 +2,7 @@
 var debugCartJson = true;
 
 function prettyFileSize(num) {
-    if (!num) {return "n/a";}
+    if (!num) {return "0B";}
     if (num < (1000 * 1024)) {
         return `${(num/1000).toFixed(1)}KB`;
     } else if (num < (1000 * 1000 * 1024)) {
@@ -100,9 +100,6 @@ var hubCreate = (function() {
     let uiState = { // our object for keeping track of the current UI and what to do
         userUrl: "", // the web accesible path where the uploads are stored for this user
     };
-
-    // We can use XMLHttpRequest if necessary or a mirror can't use tus
-    var useTus = tus.isSupported && true;
 
     function getTusdEndpoint() {
         // return the port and basepath of the tusd server
@@ -203,7 +200,7 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + fname + "=pack";
                 window.location.assign(url);
                 return false;
             }
@@ -241,39 +238,19 @@ var hubCreate = (function() {
                         // turn the track on if its for this db
                         url += "&" + d.fileName + "=pack";
                     }
-                }
+                } else if (d.fileType === "hub.txt") {
+                    url += "&hubUrl=" + uiState.userUrl + d.fullPath;
+                } 
             });
             window.location.assign(url);
             return false;
         }
     }
 
-    /*
-    function deleteFile(fname, fileType, parentDir, db) {
-        // Send an async request to hgHubConnect to delete the file
-        // Note that repeated requests, like from a bot, will return 404 as a correct response
-        console.log(`sending delete req for ${fname}`);
-        cart.setCgi("hgHubConnect");
-        // a little complex, but the format is:
-        // {commandToCgi: {arg: val, ...}}
-        // but we make val an object as well, becoming:
-        // {commandToCgi: {fileList: [{propertyName1: propertyVal1, ...}, {propertName2: ...}]}}
-        cart.send({
-            deleteFile: {
-                fileList: [
-                    {
-                        fileName: fname,
-                        fileType: fileType,
-                        parentDir: parentDir,
-                        db: db,
-                    }
-                ]
-            }
-        });
-        cart.flush();
-        deleteFileFromTable(fname);
+    function deleteFileSuccess(jqXhr, textStatus) {
+        deleteFileFromTable(jqXhr.deletedList);
+        updateSelectedFileDiv(null);
     }
-    */
 
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
@@ -289,14 +266,13 @@ var hubCreate = (function() {
                 fullPath: d.fullPath,
             });
         });
-        cart.send(cartData);
+        cart.send(cartData, deleteFileSuccess);
         cart.flush();
-        
     }
 
     function updateSelectedFileDiv(data) {
         // update the div that shows how many files are selected
-        let numSelected = Object.entries(data).length;
+        let numSelected = data !== null ? Object.entries(data).length : 0;
         let infoDiv = document.getElementById("selectedFileInfo");
         let span = document.getElementById("numberSelectedFiles");
         let spanParentDiv = span.parentElement;
@@ -304,7 +280,7 @@ var hubCreate = (function() {
         if (numSelected > 0) {
             // (re) set up the handlers for the selected file info div:
             let viewBtn = document.getElementById("viewSelectedFiles");
-            selectedData= data;
+            selectedData = data;
             viewBtn.addEventListener("click", viewAllInGenomeBrowser);
             viewBtn.textContent = numSelected === 1 ? "View selected file in Genome Browser" : "View all selected files in Genome Browser";
             let deleteBtn = document.getElementById("deleteSelectedFiles");
@@ -319,38 +295,17 @@ var hubCreate = (function() {
         placeholder.style.display = numSelected === 0 ? "block" : "none";
     }
 
-    function handleCheckboxSelect(ev) {
-        let checkbox = ev.target;
-        let table = $("#filesTable").DataTable();
-
+    function handleCheckboxSelect(ev, table, row) {
         // depending on the state of the checkbox, we will be adding information
         // to the div, or removing information. We will also be potentially checking/unchecking
         // all of the checkboxes if the selectAll box was clicked. The data variable
         // will hold all the information we want to keep visible in the info div
         let data = {};
 
-        // first check if we selected all or not
-        if (checkbox.classList.contains("selectAll")) {
-            // we can now turn off/on all the checkboxes
-            let state = checkbox.checked;
-            if (state) {
-                document.querySelectorAll(".filesTableCheckbox").forEach( (inp) => {
-                    inp.checked = true;
-                });
-            } else {
-                document.querySelectorAll(".filesTableCheckbox").forEach( (inp) => {
-                    inp.checked = false;
-                });
-            }
-        }
         // get all of the currently selected rows (may be more than just the one that
         // was most recently clicked)
-        let selected = document.querySelectorAll(".filesTableCheckbox:checked");
-        selected.forEach((inp, ix) => {
-            if (inp.classList.contains("selectAll")) {
-                return;
-            }
-            data[ix] = table.row(inp.closest("tr")).data();
+        table.rows({selected: true}).data().each(function(row, ix) {
+            data[ix] = row;
         });
         updateSelectedFileDiv(data);
     }
@@ -365,12 +320,54 @@ var hubCreate = (function() {
         return data;
     }
 
-    function deleteFileFromTable(fname) {
+    function dataTablePrintAction(rowData) {
+        /* Return a node for rendering the actions column */
+        if (rowData.fileType === "dir") {
+            let folderIcon = document.createElement("i");
+            folderIcon.style.display = "inline-block";
+            folderIcon.style.backgroundImage = "url(\"../images/folderC.png\")";
+            folderIcon.style.backgroundPosition = "left center";
+            folderIcon.style.backgroundRepeat = "no-repeat";
+            folderIcon.style.width = "24px";
+            folderIcon.style.height = "24px";
+            folderIcon.classList.add("folderIcon");
+            folderIcon.addEventListener("dblclick", function(e) {
+                e.stopPropagation();
+                console.log("dblclick");
+                let table = $("#filesTable").DataTable();
+                let trow = $(e.target).closest("tr");
+                let row = table.row(trow);
+                if (row.child.isShown()) {
+                    row.child.hide();
+                } else {
+                    row.child.show();
+                }
+            });
+            folderIcon.addEventListener("click", (e) => {
+                e.stopPropagation();
+                console.log("click");
+            });
+            return folderIcon;
+        } else {
+            let container = document.createElement("div");
+            // click to view hub.txt or track file in gb:
+            let viewBtn = document.createElement("button");
+            viewBtn.textContent = "View in Genome Browser";
+            viewBtn.type = 'button';
+            viewBtn.addEventListener("click", function() {
+                viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
+            });
+            container.appendChild(viewBtn);
+            return container;
+        }
+    }
+
+    function deleteFileFromTable(pathList) {
         // req is an object with properties of an uploaded file, make a new row
         // for it in the filesTable
         let table = $("#filesTable").DataTable();
-        let row = table.row((idx, data) => data.fileName === fname);
-        row.remove().draw();
+        let rows = table.rows((idx, data) => pathList.includes(data.fullPath));
+        rows.remove().draw();
     }
 
     function addFileToHub(rowData) {
@@ -386,40 +383,88 @@ var hubCreate = (function() {
     }
 
 
+    // hash of file paths to their objects, starts as userFiles
+    let filesHash = {};
     function addNewUploadedFileToTable(req) {
         // req is an object with properties of an uploaded file, make a new row
         // for it in the filesTable
-        let table = null;
-        if ($.fn.dataTable.isDataTable("#filesTable")) {
-            table = $("#filesTable").DataTable();
-            let newRow = table.row.add(req).order([8, 'asc']).draw().node();
-            $(newRow).css('color','red').animate({color: 'black'}, 1000);
-        } else {
-            showExistingFiles([req]);
+        if (!(req.fullPath in filesHash)) {
+            if ($.fn.dataTable.isDataTable("#filesTable")) {
+                let table = $("#filesTable").DataTable();
+                table.row.add(req).order([{name: "uploadTime"}, {name: "fullpath"}]);
+                rowVis[req.fullPath] = true;
+                table.search.fixed("defaultView", function(searchStr, data, rowIx) {
+                    return rowVis[data.fileName] || rowVis[data.fullPath];
+                }).draw();
+                let newRowObj = table.row((idx,rowData) => rowData.fullPath === req.fullPath);
+                indentActionButton(newRowObj);
+                let newRow = newRowObj.node();
+                $(newRow).css('color','red').animate({color: 'black'}, 1500);
+            } else {
+                showExistingFiles([req]);
+            }
+            filesHash[req.fullPath] = req;
         }
     }
 
-    function createHubSuccess(jqXhr, textStatus) {
-        console.log(jqXhr);
-        $("#newTrackHubDialog").dialog("close");
-        addNewUploadedFileToTable({
-            createTime: jqXhr.creationTime,
-            fileType: "hub",
-            fileName: jqXhr.hubName,
-            genome: jqXhr.db,
-            fileSize: null,
-            hub: jqXhr.hubName
+    function doRowSelect(ev, table, indexes) {
+        let row = table.row(indexes);
+        let rowTr = row.node();
+        let rowCheckbox = rowTr.childNodes[0].firstChild;
+        if (rowTr.classList.contains("parentRow")) {
+            // we need to manually check the children
+            table.rows((idx,rowData) => rowData.fullPath.startsWith(row.data().fullPath) && rowData.parentDir === row.data().fileName).every(function(rowIdx, tableLoop, rowLoop) {
+                if (ev.type === "select") {
+                    this.select();
+                } else {
+                    this.deselect();
+                }
+            });
+        }
+        rowCheckbox.checked = ev.type === "select";
+        handleCheckboxSelect(ev, table, rowTr);
+    }
+
+    let rowVis = {}; // heirarchy of files and their row visibility
+    function makeFileHeirarchy(table) {
+        function rowHeirarchy(data) {
+            if (rowVis[data.fullPath]) {return;}
+
+            // first check for the top levels which are always open by default
+            if (!data.parentDir) {
+                rowVis[data.fileName] = true;
+                return;
+            }
+
+            // get the parent row and check it's status:
+            let parentName = data.parentDir[-1] === "/" ? data.parentDir.slice(0,-1) : data.parentDir;
+            let parentData = table.row((idx, rowData) => rowData.fileName === parentName).data();
+            if (!(parentName in rowVis) && !(parentData.fullPath in rowVis)) {
+                // get the data for the parent and recurse "up":
+                rowHeirarchy(parentData);
+            }
+            parentVis = rowVis[parentName] || rowVis[parentData.fullPath];
+            rowVis[data.fullPath] = parentVis;
+        }
+
+        table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+            let data = this.data();
+            rowHeirarchy(data);
         });
     }
 
-    function createHub(db, hubName) {
-        // send a request to hgHubConnect to create a hub for this user
-        cart.setCgi("hgHubConnect");
-        cart.send({createHub: {db: db, name: hubName}}, createHubSuccess, null);
-        cart.flush();
+    function indentActionButton(rowObj) {
+        let data = rowObj.data();
+        let numIndents = data.parentDir !== "" ? data.fullPath.split('/').length - 1: 0;
+        rowObj.node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
+        //table.row(rowIdx).node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
     }
 
     let tableInitOptions = {
+        select: {
+            items: 'row',
+            style: 'multi', // default to a single click is all that's needed
+        },
         pageLength: 25,
         scrollY: 600,
         scrollCollapse: true, // when less than scrollY height is needed, make the table shorter
@@ -439,47 +484,34 @@ var hubCreate = (function() {
         columnDefs: [
             {
                 orderable: false, targets: 0,
-                // have to add the event handler for the selectAll later
-                title: "<input id=\"filesTableSelectAll\" class=\"selectAll filesTableCheckbox\" type=\"checkbox\"></input>",
-                render: function(data, type, row) {
-                    let ret = document.createElement("input");
-                    ret.classList.add("filesTableCheckbox");
-                    ret.type = "checkbox";
-                    ret.addEventListener("click", handleCheckboxSelect);
-                    return ret;
-                }
+                render: DataTable.render.select(),
             },
             {
                 orderable: false, targets: 1,
                 data: "action", title: "",
                 render: function(data, type, row) {
-                    /* Return a node for rendering the actions column */
-                    // all of our actions will be buttons in this div:
-                    let container = document.createElement("div");
-
-                    // click to view hub/file in gb:
-                    let viewBtn = document.createElement("button");
-                    viewBtn.textContent = "View in Genome Browser";
-                    viewBtn.type = 'button';
-                    viewBtn.addEventListener("click", function() {
-                        viewInGenomeBrowser(row.fileName, row.fileType, row.genome, row.parentDir);
-                    });
-
-                    container.appendChild(viewBtn);
-
-                    return container;
+                    if (type === "display") {
+                        return dataTablePrintAction(row);
+                    }
+                    return '';
                 }
             },
             {
                 targets: 3,
                 render: function(data, type, row) {
-                    return dataTablePrintSize(data);
+                    if (type === "display") {
+                         dataTablePrintSize(data);
+                    }
+                    return data;
                 }
             },
             {
                 targets: 5,
                 render: function(data, type, row) {
-                    return dataTablePrintGenome(data);
+                    if (type === "display") {
+                        return dataTablePrintGenome(data);
+                    }
+                    return data;
                 }
             },
             {
@@ -487,24 +519,59 @@ var hubCreate = (function() {
                 targets: 8,
                 visible: false,
                 searchable: false
+            },
+            {
+                targets: 9,
+                visible: false,
+                searchable: false,
             }
         ],
         columns: [
             {data: "", },
             {data: "", },
             {data: "fileName", title: "File name"},
-            {data: "fileSize", title: "File size", render: dataTablePrintSize},
+            {data: "fileSize", title: "File size"},
             {data: "fileType", title: "File type"},
-            {data: "genome", title: "Genome", render: dataTablePrintGenome},
+            {data: "genome", title: "Genome"},
             {data: "parentDir", title: "Hubs"},
             {data: "lastModified", title: "File Last Modified"},
             {data: "uploadTime", title: "Upload Time"},
+            {data: "fullPath", title: "fullPath"},
         ],
-        order: [[6, 'desc']],
+        order: [{name: "uploadTime"}, {name: "fullpath"}],
         drawCallback: function(settings) {
+            console.log("table draw");
             if (isLoggedIn) {
                 settings.api.buttons(0).enable();
             }
+        },
+        rowCallback: function(row, data, displayNum, displayIndex, dataIndex) {
+            // a row can represent one of three things:
+            // a 'folder', with no parents, but with children
+            // a folder with parents and children (can only come from hubtools
+            // a 'file' with no children, but with parentDir
+            // we assign the appropriate classes which are used later to
+            // collapse/expand and select rows for viewing or deletion
+            if (!data.parentDir) {
+                row.className = "topLevelRow";
+            } else {
+                row.className = "childRow";
+            }
+            if (data.fileType === "dir") {
+                row.className += " parentRow";
+            }
+        },
+        initComplete: function(settings, json) {
+            console.log("data loaded, hiding directories");
+            let table = new $.fn.dataTable.Api(settings);
+            makeFileHeirarchy(table);
+            table.rows().every(function(rowIdx, rowLoop, tableLoop) {
+                indentActionButton(this);
+            });
+            // only show the top level and one layer of children by default
+            table.search.fixed("defaultView", function(searchStr, data, rowIx) {
+                return rowVis[data.fileName] || rowVis[data.fullPath];
+            }).draw();
         }
     };
 
@@ -527,25 +594,16 @@ var hubCreate = (function() {
             return container;
         });
         let table = new DataTable("#filesTable", tableInitOptions);
-    }
-
-    function showExistingHubs(d) {
-        // Add the hubs to the files table
-        if (!d) {return;}
-        let table = $("#filesTable").DataTable();
-        d.forEach((hub) => {
-            let hubName = hub.hubName;
-            let db = hub.genome;
-            let data = {
-                fileName: hubName,
-                fileSize: null,
-                fileType: "hub",
-                genome: db,
-                hub: hubName,
-                createTime: null,
-            };
-            table.row.add(data).draw();
+        table.on("select", function(e, dt, type, indexes) {
+            doRowSelect(e, dt, indexes);
         });
+        table.on("deselect", function(e, dt, type, indexes) {
+            doRowSelect(e, dt, indexes);
+        });
+        _.each(d, function(f) {
+            filesHash[f.fullPath] = f;
+        });
+        return table;
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -583,23 +641,6 @@ var hubCreate = (function() {
     function init() {
         cart.setCgi('hgMyData');
         cart.debug(debugCartJson);
-        if (!useTus) {
-            console.log("tus is not supported, falling back to XMLHttpRequest");
-        }
-        let pickedFiles = document.getElementById("fileList");
-        let inputBtn = document.getElementById("btnForInput");
-        if (pickedFiles !== null) {
-            // this element should be an empty div upon loading the page
-            uiState.pickedList = pickedFiles;
-            if (pickedFiles.children.length === 0) {
-                let para = document.createElement("p");
-                para.textContent = "No files chosen yet";
-                para.classList.add("noFiles");
-                pickedFiles.parentNode.appendChild(para);
-            }
-        } else {
-            // TODO: graceful handle of leaving the page and coming back?
-        }
 
         if (typeof cartJson !== "undefined") {
             if (typeof cartJson.warning !== "undefined") {
@@ -627,9 +668,11 @@ var hubCreate = (function() {
                 uiState.hubList = userFiles.hubList;
                 uiState.userUrl = userFiles.userUrl;
             }
-            showExistingFiles(uiState.fileList.filter((row) => row.fileType !== "hub"));
-            // initialize the selectAll handler here, because above we defined it as a string
-            document.getElementById("filesTableSelectAll").addEventListener("click", handleCheckboxSelect);
+            // first add the top level directories/files
+            //let table = showExistingFiles(uiState.fileList.filter((row) => row.parentDir === ""));
+            let table = showExistingFiles(uiState.fileList);
+            // now add any subdirs and files
+            //addChildRows(table, uiState.fileList.filter((row) => row.parentDir !== ""));
             // TODO: add event handlers for editing defaults, grouping into hub
             // TODO: display quota somewhere
         }
@@ -888,7 +931,34 @@ var hubCreate = (function() {
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
                 "parentDir": metadata.parentDir,
+                "fullPath": metadata.parentDir + "/" + metadata.fileName,
             };
+            // from what I can tell, any response we would create in the pre-finish hook
+            // is completely ignored for some reason, so we have to fake the other files
+            // we would have created with this one file and add them to the table if they
+            // weren't already there:
+            hubTxtObj = {
+                "uploadTime": Date.now(),
+                "lastModified": d.toLocaleString(),
+                "fileName": "hub.txt",
+                "fileSize": 0,
+                "fileType": "hub.txt",
+                "genome": metadata.genome,
+                "parentDir": metadata.parentDir,
+                "fullPath": metadata.parentDir + "/hub.txt",
+            };
+            parentDirObj = {
+                "uploadTime": Date.now(),
+                "lastModified": d.toLocaleString(),
+                "fileName": metadata.parentDir,
+                "fileSize": 0,
+                "fileType": "dir",
+                "genome": metadata.genome,
+                "parentDir": "",
+                "fullPath": metadata.parentDir + "/",
+            };
+            addNewUploadedFileToTable(parentDirObj);
+            addNewUploadedFileToTable(hubTxtObj);
             addNewUploadedFileToTable(newReqObj);
         });
     }

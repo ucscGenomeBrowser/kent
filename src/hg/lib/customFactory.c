@@ -3492,66 +3492,44 @@ if (line == NULL)
 if (hasUnprintable(line, 6))
     {
     char *fileName = customPpFileName(cpp);
-    dumpStack("bigDataOoops: fileName = '%s'\n", fileName);
-    errAbort("bigDataOops: fileName = '%s'\n", fileName);
     if (type == NULL &&isNotEmpty(fileName))
-        {
-        if (endsWith(fileName, ".bam"))
-            type = "bam";
-        else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
-            type = "bigBed";
-        else if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
-            type = "bigInteract";
-        else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
-            type = "bigWig";
-        }
+	{
+	if (endsWith(fileName, ".bam"))
+	    type = "bam";
+	else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
+	    type = "bigBed";
+	else if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+	    type = "bigInteract";
+	else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
+	    type = "bigWig";
+	}
     char *docUrl = NULL;
     if (isNotEmpty(type))
-        docUrl = bigDataDocPath(type);
+	docUrl = bigDataDocPath(type);
     struct dyString *dataName = dyStringNew(0);
     if (isNotEmpty(fileName) && !sameString(fileName, CT_NO_FILE_NAME)
-            && !startsWith("memory://", fileName))
-        dyStringPrintf(dataName, " (%s)", fileName);
+	&& !startsWith("memory://", fileName))
+	dyStringPrintf(dataName, " (%s)", fileName);
     else if (track->tdb && track->tdb->shortLabel
-             && differentString(track->tdb->shortLabel, CT_DEFAULT_TRACK_NAME))
-        dyStringPrintf(dataName, " (%s)", track->tdb->shortLabel);
-    if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
-        {
-        // figure out if user is logged in:
-        //   1. if so, save 'line', which is really a binary data, to username encoded directory
-        //   2. if not, do regular oops recognizer
-        // TODO: make sure the correct loader is called after this
-        // essential that the struct customTrack * track structure
-        // gets filled in correctly for the loader to work because the
-        // 'line' will not exist at that point
-        // For now I think the best thing is to store the file and construct
-        // a bigDataUrl to it, then re do the custom track load
-        // so the right factory is called
-        //char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-        //if (userName)
-        //    {
-        //    storeUserFiles(fileName, line);
-        //    customPpReuse(cpp, line);
-        //    return TRUE;
-        //    }
-        }
+	     && differentString(track->tdb->shortLabel, CT_DEFAULT_TRACK_NAME))
+	dyStringPrintf(dataName, " (%s)", track->tdb->shortLabel);
     if (docUrl)
-        errAbort("It appears that you are directly uploading binary data of type %s%s.  "
-             "Custom tracks of this type require the files to be accessible by "
-             "public http/https/ftp. Our <a href='../goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>track hub documentation</a> "
-                     "lists third-party services where you can "
-                     "store custom track or track hub files. "
-                     "Once the files are available on the internet, file URLs can be entered as-is, one per line, "
-                     "or via the bigDataUrl "
-             "setting on a &quot;track&quot; line.  "
-             "See <A HREF='%s' TARGET=_BLANK>%s custom track documentation</A> for "
-             "more information and examples.",
-             type, dataName->string, docUrl, type);
+	errAbort("It appears that you are directly uploading binary data of type %s%s.  "
+		 "Custom tracks of this type require the files to be accessible by "
+		 "public http/https/ftp. Our <a href='../goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>track hub documentation</a> "
+                 "lists third-party services where you can "
+                 "store custom track or track hub files. "
+                 "Once the files are available on the internet, file URLs can be entered as-is, one per line, "
+                 "or via the bigDataUrl "
+		 "setting on a &quot;track&quot; line.  "
+		 "See <A HREF='%s' TARGET=_BLANK>%s custom track documentation</A> for "
+		 "more information and examples.",
+		 type, dataName->string, docUrl, type);
     else
-        errAbort("It appears that you are directly uploading binary data in an unrecognized "
-             "format%s.  For custom track formatting information, please see "
-             "<A HREF='../goldenPath/help/customTrack.html' "
-             "TARGET=_BLANK>custom track documentation</A>.", dataName->string);
+	errAbort("It appears that you are directly uploading binary data in an unrecognized "
+		 "format%s.  For custom track formatting information, please see "
+		 "<A HREF='../goldenPath/help/customTrack.html' "
+		 "TARGET=_BLANK>custom track documentation</A>.", dataName->string);
     }
 customPpReuse(cpp, line);
 return FALSE;

@@ -1717,7 +1717,7 @@ printf("<div id=\"tabs\">"
        "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">Connected Hubs</a></li> ");
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
-if (cfgOptionBooleanDefault("storeUserFiles", TRUE))
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
     printf("<li><a class=\"hubUpload\" href=\"#hubUpload\">Hub Upload</a></li>");
 printf("</ul> ");
 
@@ -1735,7 +1735,7 @@ hgHubConnectUnlisted(hubList, publicHash);
 
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     hgHubConnectDeveloperMode();
-if (cfgOptionBooleanDefault("storeUserFiles", TRUE))
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
     hgHubConnectOfferUpload(database);
 
 printf("</div>"); // #tabs
@@ -1750,7 +1750,6 @@ void doAsync(struct cart *theCart)
 cart = theCart;
 struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
-cartJsonRegisterHandler(cj, hgHubCreateHub, doCreateHub);
 cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
 cartJsonRegisterHandler(cj, hgHubGenerateApiKey, generateApiKey);
 cartJsonRegisterHandler(cj, hgHubRevokeApiKey, revokeApiKey);
