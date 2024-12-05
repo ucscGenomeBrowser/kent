@@ -2,7 +2,7 @@
 
 /* jshint esnext: true */
 
-var debug = true;
+var debug = false;
 var measureTiming = true;
 var urlParams;
 var query = "";

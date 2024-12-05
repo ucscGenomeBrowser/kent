@@ -47,7 +47,11 @@ sshKeyCheck: sshKeyDownload sshKeyDynablat
 	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
 
 mkJson::
-	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt
+	if [ "$(name)" = "VGP" ]; then \
+	cat *.orderList.tsv | ${toolsDir}/tsvToJson.py stdin > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
+	else \
+	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
+        fi
 
 # mkGenomes needs symLinks to run before mkGenomes runs, and then
 # the second symLinks after mkGenomes uses business created by mkGenomes
