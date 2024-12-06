@@ -221,7 +221,8 @@ genePredCheck -db=hg38 ncbiRefSeqOther
 # updated Dec 2020
 # updated Aug 2023
 # updated May 2024
-year=2023
+# updated Dec 2024
+year=2024
 cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2023-11-23/
 # change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019?
 # adding "." so NM_123 doesn't match NM_123123                                                                             
@@ -231,6 +232,7 @@ hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
 # wc -l says:
 10772 hgmd.curated.gp for the 2021 version
 12602 hgmd.curated.gp for the 2023 version
+15167 hgmd.curated.gp for the 2024 version
 #############################################################################
 # ncbiRefSeq.p13 update (DONE - 2019-12-06 - Hiram)
 
