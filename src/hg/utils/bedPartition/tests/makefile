@@ -14,7 +14,7 @@ test1:
 # merge partitions
 test2:
 	@${MKDIR} -p output
-	${BPART} -parallel=2 -partSize=2 input/mrna1.bed output/$@.ranges.bed
+	${BPART} -parallel=2 -partMergeSize=10000 input/mrna1.bed output/$@.ranges.bed
 	${DIFF} expected/$@.ranges.bed output/$@.ranges.bed
 
 

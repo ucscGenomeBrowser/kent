@@ -152,22 +152,24 @@ int brd = 0;
 int bwt = 0;
 int fd = 0;
 
-/* Get underlying file descriptor, needed for select call */
-fd = BIO_get_fd(params->sbio, NULL);
-if (fd == -1) 
-    {
-    xerr("BIO doesn't seem to be initialized in https, unable to get descriptor.");
-    goto cleanup;
-    }
-
-// The earlier call to BIO_set_nbio() should have turned non-blocking io on already.
-if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1) {
-    xerr("Could not switch to non-blocking.\n");
-    goto cleanup;
-}
-
 while (1) 
     {
+    // Do not move this to before the loop.
+    /* Get underlying file descriptor, needed for select call */
+    fd = BIO_get_fd(params->sbio, NULL);
+    if (fd == -1) 
+	{
+	xerr("BIO doesn't seem to be initialized in https, unable to get descriptor.");
+	goto cleanup;
+	}
+
+    // The earlier call to BIO_set_nbio() should have turned non-blocking io on already.
+    if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1) 
+        {
+	xerr("Could not switch to non-blocking.\n");
+	goto cleanup;
+	}
+
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
 
