@@ -48,7 +48,11 @@ while (my $line = <FH>) {
 }
 close (FH);
 
+# top level global declaration for these two, they will be specifically
+#   set later.  The destDir is for hgdownload staging, the dynaDir is
+#   for a set of backUp links for the dynamic blat machine
 my $destDir = "/hive/data/genomes/asmHubs";
+my $dynaDir = "/hive/data/inside/dynaBlat/backUpLinks";
 
 my $buildDone = 0;
 my $orderIndex = 0;
@@ -65,6 +69,7 @@ foreach my $asmId (@orderList) {
   $accessionDir .= "/" . substr($asmId, 7 ,3);
   $accessionDir .= "/" . substr($asmId, 10 ,3);
   $destDir = "/hive/data/genomes/asmHubs/$accessionDir/$accessionId";
+  $dynaDir = "/hive/data/inside/dynaBlat/backUpLinks/$accessionDir/$accessionId";
   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
   if ($gcPrefix eq "GCA") {
      $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
@@ -82,6 +87,9 @@ foreach my $asmId (@orderList) {
   if ( ! -d "${destDir}" ) {
     `mkdir -p "${destDir}"`;
   }
+  if ( ! -d "${dynaDir}" ) {
+    `mkdir -p "${dynaDir}"`;
+  }
   `rm -f "${destDir}/bbi"`;
   `rm -f "${destDir}/genes"`;
   `rm -f "${destDir}/ixIxx"`;
@@ -91,12 +99,15 @@ foreach my $asmId (@orderList) {
   `rm -fr "${destDir}/html"`;
   `mkdir -p "${destDir}/html"`;
   `rm -f "${destDir}/${accessionId}.2bit"`;
+  `rm -f "${dynaDir}/${accessionId}.2bit"`;
   `rm -f "${destDir}/${accessionId}.chrNames.2bit"`;
   `rm -f "${destDir}/${accessionId}.fa.gz"`;
   `rm -f "${destDir}/${accessionId}.chrNames.fa.gz"`;
   `rm -f "${destDir}/${accessionId}.2bit.bpt"`;
   `rm -f "${destDir}/${accessionId}.untrans.gfidx"`;
   `rm -f "${destDir}/${accessionId}.trans.gfidx"`;
+  `rm -f "${dynaDir}/${accessionId}.untrans.gfidx"`;
+  `rm -f "${dynaDir}/${accessionId}.trans.gfidx"`;
   `rm -f "${destDir}/${accessionId}.agp.gz"`;
   `rm -f "${destDir}/${accessionId}.chrom.sizes"`;
   `rm -f "${destDir}/${accessionId}.chrom.sizes.txt"`;
@@ -133,7 +144,10 @@ foreach my $asmId (@orderList) {
     `ln -s ${buildDir}/html/*.jpg "${destDir}/html/"`;
    }
 #  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
-  `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit" "${destDir}/${accessionId}.2bit"` if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit");
+   if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit") {
+     `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit" "${destDir}/${accessionId}.2bit"`;
+     `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit" "${dynaDir}/${accessionId}.2bit"`;
+   }
    if (-s "${buildDir}/${asmId}.fa.gz") {
       `ln -s "${buildDir}/${asmId}.fa.gz" "${destDir}/${accessionId}.fa.gz"`;
    } else {
@@ -150,6 +164,8 @@ foreach my $asmId (@orderList) {
       if (-s "${buildDir}/${accessionId}.trans.gfidx") {
         `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
         `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
+        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${dynaDir}/${accessionId}.untrans.gfidx"`;
+        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${dynaDir}/${accessionId}.trans.gfidx"`;
       }
    }
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
