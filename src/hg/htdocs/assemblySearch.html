@@ -22,16 +22,16 @@
         <button type="button" id="advancedSearchButton">Show search options</button>
            <!-- mouse over this text to see pop-up help message -->
            <span class="searchTip" style="float: right;">Advanced search help&nbsp;&#9432;<span class="searchTiptext"> <!-- hidden span for pop-up help message -->
-<ol id="searchTipList" class="noBullets">
-<li> + (plus) sign before <b>+word</b> to force included in result</li>
-<li> - (minus) sign before <b>-word</b> to exclude word from result</li>
-<li> * (asterisk) character at end of <b>word*</b> to make the word be a prefix search</li>
-<li> enclose "words in quotes" to form a phrase for the search</li>
-<li> all searches are case insensitive</li>
-<li> single word searches become prefix searches if the word does not match by itself </li>
+<p>All searches are case-insensitive.  Single-word searches default to prefix
+matching if an exact match is not found.</p>
+<ul id="searchTipList" class="noBullets">
+<li> Force inclusion: Use a + sign before <b>+word</b> to ensure it appears in result.</li>
+<li> Exclude words: Use a - sign before <b>-word</b> to exclude it from the search result.</li>
+<li> Wildcard search: Add an * (asterisk) at end of <b>word*</b> to search for all terms starting with that prefix.</li>
+<li> Phrase search: Enclose "words in quotes" to search for the exact phrase.</li>
 <!-- javaScript will add an extra element in debug mode
      to show the API reference -->
-</ol>
+</ul>
 </span> <!-- a hidden span for a pop-up help message -->
            </span>
         <!-- URL argument maxItemsOutput to html page can change this -->
@@ -40,7 +40,7 @@
         <div id="advancedSearchOptions" class="radioGroupContainer">
            <div class="radioGroup">
              <fieldset class="colVertical" onchange="optionsChange(event)">
-             <legend><span class="searchTip">Assembly view/request&nbsp;&#9432;<span class="searchTiptext" style="width:500px; left:160px;"><ol class="noBullets">
+             <legend><span class="searchTip">Assembly View/Request&nbsp;&#9432;<span class="searchTiptext" style="width:500px; left:160px;"><ol class="noBullets">
 <li><b>In available browsers</b> - the assembly exists in the UCSC browser system, the <b>view</b> link will lead to the browser</li>
 <li><b>Can be requested</b> - assembly is not yet in the UCSC browser system, the <b>request</b> link will open a request form to ask for the assembly to be added to the UCSC browser system</li>
 </ol></span></span></legend>
@@ -96,7 +96,7 @@
            </div>
            <div class="radioGroup">
               <fieldset class="colVertical" onchange="optionsChange(event)">
-              <legend class="searchTip"><span>word match control&nbsp;&#9432;<span class="searchTiptext" style="width:400px; left:-410px">For multiple word search, <b>May match</b> will allow any combination of word matches, where <b>Must match</b> will force all words to be in the search result.</span></span></legend>
+              <legend class="searchTip"><span>Word match control&nbsp;&#9432;<span class="searchTiptext" style="width:400px; left:-410px">For multiple word search, <b>May match</b> will allow any combination of word matches, where <b>Must match</b> will force all words to be in the search result.</span></span></legend>
               <label><input type="radio" name="wordMatch" value="anyWord" id="anyWord"> May match any word</label>
               <label><input type="radio" name="wordMatch" value="allWords" id="allWords" checked> Must match all words</label>
               </fieldset>
