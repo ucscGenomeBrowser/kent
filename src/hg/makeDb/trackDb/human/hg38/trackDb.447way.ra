@@ -1,7 +1,7 @@
 track cons447way
 compositeTrack on
-shortLabel Cactus 447-way
-longLabel Cactus Alignment & Conservation on 447 mammal species, including Zoonomia genomes
+shortLabel Zoonomia+Primates 447
+longLabel Zoonomia+Primates 447 - 447 mammals, including 233 primates, aligned with Cactus, for Kuderna et al. 2023
 subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP)
 dragAndDrop subTracks
 visibility hide
