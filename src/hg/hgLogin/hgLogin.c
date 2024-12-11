@@ -99,10 +99,10 @@ else
 void md5It(unsigned char *input, int inputSize, unsigned char *output)
 /* handle function deprecated by newer versions of openssl */
 { 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L   // # 1.1
-MD5(input, inputSize, output);
-#else
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L   // > #3.0
 EVP_Q_digest(NULL, "MD5", NULL, input, inputSize, output, NULL);
+#else
+MD5(input, inputSize, output);
 #endif  
 }
 

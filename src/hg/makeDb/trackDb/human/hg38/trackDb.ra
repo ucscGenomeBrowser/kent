@@ -43,6 +43,13 @@ include fantom5.ra
 
 include nuMtSeq.ra
 
+track civic
+shortLabel CIVIC
+longLabel CIVIC - Crowd-sourced Cancer Mutations
+type bigBed 4 +
+group phenDis
+bigDataUrl /gbdb/hg38/civic/civic.bb
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas

@@ -4756,6 +4756,7 @@ var imageV2 = {
         // if possible, re-use the color that the user picked last time
         if (hgTracks.prevHlColor)
             hexColor = hgTracks.prevHlColor;
+        var defHexColor = hexColor;
 
         $('.highlightItem').remove();
         if (hgTracks.highlight) {
@@ -4765,14 +4766,12 @@ var imageV2 = {
                 pos = parsePositionWithDb(hlString);
                 // UN-DISGUISE
                 imageV2.undisguiseHighlight(pos);
-                if (pos) {
-                    pos.start--;  // make start 0-based to match hgTracks.winStart
-                    if (pos.color)
-                        hexColor = pos.color;
-                }
 
-                if (pos && pos.chrom === hgTracks.chromName && pos.db === getDb() 
-                &&  pos.start <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
+                var db = getDb();
+
+                if (pos && pos.db===db && pos.chrom === hgTracks.chromName
+                &&  (pos.start-1) <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
+                    pos.start--;  // make start 0-based to match hgTracks.winStart
                     var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
                     var portal = $('#imgTbl td.tdData')[0];
                     var leftPixels = $(portal).offset().left + imageV2.LEFTADD;
@@ -4793,7 +4792,12 @@ var imageV2 = {
                     }
     
                     var area = jQuery("<div id='highlightItem' class='highlightItem'></div>");
-                    $(area).css({ backgroundColor: hexColor, // display: 'none'
+                    if (pos.color)
+                        hexColor = pos.color;
+                    else
+                        hexColor = defHexColor;
+
+                    $(area).css({ backgroundColor: hexColor,
                                 left: leftPixels + 'px', top: $('#imgTbl').offset().top + 1 + 'px',
                                 width: widthPixels + 'px',
                                 height: $('#imgTbl').css('height') });
@@ -5842,24 +5846,24 @@ $(document).ready(function()
                     basicTour.start();
                 });
             }
-            // allow the user to bring the tutorials popup via a new help menu button
-            let tutorialLinks = document.createElement("li");
-            tutorialLinks.id = "hgTracksHelpTutorialLinks";
-            tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
-                "Interactive Tutorials</a>";
-            $("#help > ul")[0].appendChild(tutorialLinks);
-            $("#hgTracksHelpTutorialLinks").on("click", function () {
-                // Check to see if the tutorial popup has been generated already
-                let tutorialPopupExists = document.getElementById ("tutorialContainer");
-                if (!tutorialPopupExists) {
-                    // Create the tutorial popup if it doesn't exist
-                    createTutorialPopup();
-                } else {
-                    //otherwise use jquery-ui to open the popup
-                    $("#tutorialContainer").dialog("open");
-                }
-            });
         }
+        // allow the user to bring the tutorials popup via a new help menu button
+        let tutorialLinks = document.createElement("li");
+        tutorialLinks.id = "hgTracksHelpTutorialLinks";
+        tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
+            "Interactive Tutorials</a>";
+        $("#help > ul")[0].appendChild(tutorialLinks);
+        $("#hgTracksHelpTutorialLinks").on("click", function () {
+            // Check to see if the tutorial popup has been generated already
+            let tutorialPopupExists = document.getElementById ("tutorialContainer");
+            if (!tutorialPopupExists) {
+                // Create the tutorial popup if it doesn't exist
+                createTutorialPopup();
+            } else {
+                //otherwise use jquery-ui to open the popup
+                $("#tutorialContainer").dialog("open");
+            }
+        });
         
         // Any highlighted region must be shown and warnBox must play nice with it.
         imageV2.drawHighlights();

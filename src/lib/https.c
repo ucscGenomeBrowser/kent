@@ -151,10 +151,10 @@ int swt = 0;
 int brd = 0;
 int bwt = 0;
 int fd = 0;
+
 while (1) 
     {
-
-    // Do NOT move this outside the while loop. 
+    // Do not move this to before the loop.
     /* Get underlying file descriptor, needed for select call */
     fd = BIO_get_fd(params->sbio, NULL);
     if (fd == -1) 
@@ -163,6 +163,12 @@ while (1)
 	goto cleanup;
 	}
 
+    // The earlier call to BIO_set_nbio() should have turned non-blocking io on already.
+    if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1) 
+        {
+	xerr("Could not switch to non-blocking.\n");
+	goto cleanup;
+	}
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
@@ -210,23 +216,26 @@ while (1)
 
 	if (FD_ISSET(fd, &writefds))
 	    {
-	    int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
-	    if (swtx <= 0)
+            if (swt < srd) 
 		{
-		if (!BIO_should_write(params->sbio))
+		int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
+		if (swtx <= 0)
 		    {
-		    ERR_print_errors_fp(stderr);
-		    xerr("Error writing SSL connection");
-		    goto cleanup;
+		    if (!BIO_should_write(params->sbio))
+			{
+			ERR_print_errors_fp(stderr);
+			xerr("Error writing SSL connection");
+			goto cleanup;
+			}
 		    }
-		}
-	    else
-		{
-		swt += swtx;
-		if (swt >= srd)
+		else
 		    {
-		    swt = 0;
-		    srd = 0;
+		    swt += swtx;
+		    if (swt >= srd)
+			{
+			swt = 0;
+			srd = 0;
+			}
 		    }
 		}
 	    }
@@ -663,7 +672,21 @@ if (!sameString(https_cert_check, "none"))
 	SSL_CTX_set_verify_depth(ctx, atoi(https_cert_check_depth) + 1);
 
 	// VITAL FOR PROPER VERIFICATION OF CERTS
-	if (!SSL_CTX_set_default_verify_paths(ctx)) 
+        if (fileExists("/etc/pki/tls/cert.pem"))
+	    {
+	    if (!SSL_CTX_load_verify_file(ctx, "/etc/pki/tls/cert.pem"))
+		{
+		warn("SSL set load_verify_file /etc/pki/tls/cert.pem failed");
+		}
+	    }
+        else if (fileExists("/etc/ssl/certs"))
+	    {
+	    if (!SSL_CTX_load_verify_dir(ctx, "/etc/ssl/certs"))
+		{
+		warn("SSL set load_verify_dir /etc/ssl/certs failed");
+		}
+	    }
+        else if (!SSL_CTX_set_default_verify_paths(ctx)) 
 	    {
 	    warn("SSL set default verify paths failed");
 	    }
@@ -677,8 +700,7 @@ if (!sameString(https_cert_check, "none"))
 
 // Don't want any retries since we are non-blocking bio now
 // This is available on newer versions of openssl
-//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-
+//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);  // this has become the default, but only matters for blocking mode which we are not using.
 
 // Support for Http Proxy
 struct netParsedUrl pxy;
