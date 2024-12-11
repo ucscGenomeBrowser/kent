@@ -70,6 +70,39 @@ ifeq ($(UNAME_S),Darwin)
   endif
 endif
 
+ifeq (${HOSTNAME},cirm-01)
+  FULLWARN = yes
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /data/home/galt/lib64/libmariadb.a),)
+      MYSQLLIBS = /data/home/galt/lib64/libmariadb.a
+    endif
+  endif
+  ifeq (${SSLLIB},)
+    ifneq ($(wildcard /data/home/galt/lib64/libssl.a),)
+      SSLLIB = /data/home/galt/lib64/libssl.a
+    endif
+  endif
+  ifeq (${CRYPTOLIB},)
+    ifneq ($(wildcard /data/home/galt//lib64/libcrypto.a),)
+      CRYPTOLIB = /data/home/galt/lib64/libcrypto.a
+    endif
+  endif
+  HG_INC += -I/data/home/galt/include
+  HG_INC += -I/data/home/galt/include/mariadb
+endif
+
+ifeq (${SSLLIB},)
+  ifneq ($(wildcard /usr/lib64/libssl.a),)
+    SSLLIB = /usr/lib64/libssl.a
+  endif
+endif
+ifeq (${CRYPTOLIB},)
+  ifneq ($(wildcard /usr/lib64/libcrypto.a),)
+    CRYPTOLIB = /usr/lib64/libcrypto.a
+  endif
+endif
+
+
 # Skip freetype for conda build; not needed for utils, and the Mac build environment has
 # freetype installed but we don't want to use the system libraries because they can be
 # for a newer OSX version than the conda build target, and can be incompatible.
@@ -101,10 +134,6 @@ ifneq (${CONDA_BUILD},1)
 
   HG_INC += ${FREETYPECFLAGS}
   L += ${FREETYPELIBS}
-endif
-
-ifeq (${HOSTNAME},cirm-01)
-  FULLWARN = yes
 endif
 
 ifeq (${PTHREADLIB},)
@@ -201,6 +230,11 @@ ifneq ($(MAKECMDGOALS),clean)
   ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
     ifeq (${MYSQLINC},)
         $(error can not find installed mysql development system)
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/lib64/libmysqlclient.a),)
+      MYSQLLIBS = /usr/lib64/libmysqlclient.a
     endif
   endif
     # last resort, hoping the compiler can find it in standard locations
