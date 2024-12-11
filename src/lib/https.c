@@ -674,14 +674,14 @@ if (!sameString(https_cert_check, "none"))
 	// VITAL FOR PROPER VERIFICATION OF CERTS
         if (fileExists("/etc/pki/tls/cert.pem"))
 	    {
-	    if (!SSL_CTX_load_verify_file(ctx, "/etc/pki/tls/cert.pem"))
+	    if (!SSL_CTX_load_verify_locations(ctx, "/etc/pki/tls/cert.pem", NULL))
 		{
 		warn("SSL set load_verify_file /etc/pki/tls/cert.pem failed");
 		}
 	    }
         else if (fileExists("/etc/ssl/certs"))
 	    {
-	    if (!SSL_CTX_load_verify_dir(ctx, "/etc/ssl/certs"))
+	    if (!SSL_CTX_load_verify_locations(ctx, NULL, "/etc/ssl/certs"))
 		{
 		warn("SSL set load_verify_dir /etc/ssl/certs failed");
 		}
