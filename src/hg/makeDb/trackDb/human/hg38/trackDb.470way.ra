@@ -1,7 +1,7 @@
 track cons470way
 compositeTrack on
-shortLabel Multiz 470-way
-longLabel Multiz Alignment & Conservation (470 mammals)
+shortLabel Hiller Lab 470 Mammals
+longLabel Hiller Lab 470 Mammals - 470 mammalian genomes aligned with Multiz by Michael Hiller's Group, 
 subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
 dragAndDrop subTracks
 visibility hide

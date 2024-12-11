@@ -1,7 +1,7 @@
 track cons100way
 compositeTrack on
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation (100 Species)
+shortLabel UCSC 100 Vertebrates
+longLabel UCSC 100 Vertebrates - 100 vertebrate genomes aligned with MultiZ by the UCSC Browser Group
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full

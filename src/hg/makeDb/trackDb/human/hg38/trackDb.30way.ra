@@ -1,7 +1,7 @@
 track cons30way
 compositeTrack on
-shortLabel Cons 30 Primates
-longLabel Mammals Multiz Alignment & Conservation (27 primates)
+shortLabel UCSC 30 Primates
+longLabel UCSC 30 Primates - 30 primate genomes aligned with MultiZ by the UCSC Browser Group
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide

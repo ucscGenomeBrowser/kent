@@ -1,7 +1,7 @@
 track cons241way
 compositeTrack on
-shortLabel Cactus 241-way
-longLabel Cactus Alignment & Conservation of Zoonomia Placental Mammals (241 Species)
+shortLabel Zoonomia 241 Placent
+longLabel Zoonomia Alignment - 241 Placental Mammal Genomes aligned by the Zoonomia Project with Cactus
 subGroup1 view Views align=Cactus_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
 subGroup2 clade Clade primate=Primate carnivore=Carnivore cetartiodactyla=Cetartiodactyla chiroptera=Chiroptera rodents=Rodents mammals=Mammals all=All_species
 dragAndDrop subTracks

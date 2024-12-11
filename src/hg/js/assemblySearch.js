@@ -3,7 +3,7 @@
 /* jshint esnext: true */
 
 var debug = false;
-var measureTiming = true;
+var measureTiming = false;
 var urlParams;
 var query = "";
 var maxItemsOutput = 500;
@@ -265,9 +265,9 @@ function headerRefresh(tableHead) {
   var headerRow = '<tr>';
   let circleQuestion = '<svg width="24" height="24"> <circle cx="12" cy="12" r="10" fill="#4444ff" /> <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="13px" font-family="Verdana" dy=".3em">?</text>?</svg>';
   headerRow += '<th><div class=tooltip>view/<br>request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>view</b> opens the genome browser for an existing assembly, <b>request</b> opens an assembly request form.</span></div></th>';
-  headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name</span></div></th>';
-  headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Binomial scientific name</span></div></th>';
-  headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">Links to NCBI resource record<br>or UCSC downloads for local UCSC assemblies</span></div></th>';
+  headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name.  This field may also include a unique identifier and the year the assembly was released.</span></div></th>';
+  headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">The Scientific name is the standardized, Latin-based designation used in biological taxonomy to formally classify and identify a species.  Obtained from NCBI taxonomy.</span></div></th>';
+  headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">The GC accession number for the assembly, if available, links to the corresponding NCBI resource record or UCSC download options for local UCSC assemblies.</span></div></th>';
   headerRow += '<th><div class="tooltip">Year&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Year assembly was released.</span></div></th>';
   headerRow += '<th><div class="tooltip"><em>GenArk</em> clade&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Clade specification as found in the <a href="https://hgdownload.soe.ucsc.edu/hubs/index.html" target=_blank>GenArk</a> system, this is not a strict taxonomy category, merely a division of assemblies into several categories.</span></div></th>';
   headerRow += '<th><div class="tooltip">Description&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptextright">Description may include other names, the <b>taxId</b>, year of assembly release and assembly center.</span></div></th>';
@@ -428,21 +428,19 @@ function populateTableAndInfo(jsonData) {
         dataRow += "<td>" + genomicEntries[id].clade + "</td>";
         dataRow += "<td>" + genomicEntries[id].description + "</td>";
         var status =  "<td>";
-        var hardSpace = "&nbsp;";
+        var breakSpace = "";	// first one does not need the break
         if (genomicEntries[id].versionStatus) {
-           status += " " + genomicEntries[id].versionStatus;
-           hardSpace = "";
+           status += breakSpace + genomicEntries[id].versionStatus;
+           breakSpace = "<br>";	// subsequent words will have the break
         }
         if (genomicEntries[id].refSeqCategory) {
-           status += " " + genomicEntries[id].refSeqCategory;
-           hardSpace = "";
+           status += breakSpace + genomicEntries[id].refSeqCategory;
+           breakSpace = "<br>";	// subsequent words will have the break
         }
         if (genomicEntries[id].assemblyLevel) {
-           status += " " + genomicEntries[id].assemblyLevel;
-           hardSpace = "";
+           status += breakSpace + genomicEntries[id].assemblyLevel;
         }
         status += "</td>";
-//        status += hardSpace + "</td>";
         dataRow += status;
         dataRow += '</tr>';
         tableBody.innerHTML += dataRow;
@@ -454,14 +452,14 @@ function populateTableAndInfo(jsonData) {
     var totalMatchCount = parseInt(extraInfo.totalMatchCount, 10);
     var availableAssemblies = parseInt(extraInfo.availableAssemblies, 10);
 
-    var resultCounts = "<em>results for search string: </em><b>'" + extraInfo.q.trim() + "'</b>, ";
+    var resultCounts = "<em>Query: </em><b>'" + extraInfo.q.trim() + "'</b>, ";
     if ( itemCount === totalMatchCount ) {
-      resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em>, ";
+      resultCounts += "<em>Matches </em><b>" + itemCount.toLocaleString() + "</b> <em>assemblies, </em>";
     } else {
-      resultCounts += "<em>showing </em><b>" + itemCount.toLocaleString() + "</b> <em>match results</em> ";
-      resultCounts += "<em>from </em><b>" + totalMatchCount.toLocaleString() + "</b> <em>total matches,</em> ";
+      resultCounts += "<em>Matches </em><b>" + totalMatchCount.toLocaleString() + "</b> <em>assemblies, </em> ";
+      resultCounts += "<em>limited display here of </em><b>" + itemCount.toLocaleString() + "</b> <em>matching assemblies, </em> ";
     }
-    resultCounts += "<em>out of </em><b>" + availableAssemblies.toLocaleString() + "</b> <em>total number of assemblies</em>";
+    resultCounts += "<em>from a total of </em><b>" + availableAssemblies.toLocaleString() + "</b>.";
     document.getElementById('resultCounts').innerHTML = resultCounts;
     if (measureTiming) {
       var etMs = extraInfo.elapsedTimeMs;
