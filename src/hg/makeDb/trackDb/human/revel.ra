@@ -71,20 +71,5 @@ dataVersion /gbdb/$D/revel/version.txt
         parent revel on
         visibility dense
         bigDataUrl /gbdb/$D/revel/overlap.bb
-        url https://www.ensembl.org/homo_sapiens/Transcript/Summary?t=$<transcriptId>&db=core
-        urlLabel Link to Ensembl Transcript View
-        mouseOver REVEL score=${revelScore} for transcript(s): ${transcriptId}
-        mouseOverField mouseOver
+        mouseOverField _mouseOver
         extraTableFields _jsonTable|Title
-        release beta,public
-
-        track revelOverlaps
-        shortLabel REVEL overlaps
-        longLabel REVEL: Positions with >1 score due to overlapping transcripts (mouseover for details)
-        type bigBed 9 +
-        parent revel on
-        visibility dense
-        bigDataUrl /gbdb/$D/revel/overlap.bb
-        mouseOverField mouseOver
-        extraTableFields _jsonTable|Title
-        release alpha

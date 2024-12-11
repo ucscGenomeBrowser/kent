@@ -1126,13 +1126,24 @@ mysql_options(conn, MYSQL_OPT_LOCAL_INFILE, NULL);
 
 // Boolean option to tell client to verify that the host server certificate Subject CN equals the hostname.
 // If turned on this can defeat Man-In-The-Middle attacks.
-if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
+
+if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0")) // TURN VERIFICATION ON
     {
     #if !defined(MARIADB_BASE_VERSION) && defined(MYSQL_VERSION_ID) && (MYSQL_VERSION_ID >= 80000)
     int ssl_mode = SSL_MODE_REQUIRED;
     mysql_options(conn, MYSQL_OPT_SSL_MODE, &ssl_mode);
     #else
     my_bool flag = TRUE;
+    mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
+    #endif
+
+    }
+else   // TURN VERIFICATION OFF
+    {
+    #if !defined(MARIADB_BASE_VERSION) && defined(MYSQL_VERSION_ID) && (MYSQL_VERSION_ID >= 80000) // OVER-RIDE DEFAULT COMPILED IN.
+    mysql_options(conn, MYSQL_OPT_SSL_MODE, SSL_MODE_PREFERRED);
+    #else
+    my_bool flag = FALSE;
     mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
     #endif
     }

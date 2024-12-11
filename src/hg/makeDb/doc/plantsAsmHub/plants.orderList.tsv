@@ -38,6 +38,7 @@ GCA_907166925.1_wheat_cv_fielder_v1_assembly	bread wheat (Fielder 2021)
 GCF_000208745.1_Criollo_cocoa_genome_V2	cacao
 GCA_023349545.1_dhJugClai1.0.a	California black walnut (Jcal.S.LA.6 alternate hap 2022)
 GCA_023349395.1_dhJugCali1.0.p	California black walnut (Jcal.S.LA.6 primary hap 2022)
+GCF_029961685.1_dmAriCali1.0.hap1	California pipevine (CCGP_79_NKW_82.1479hap1 2023)
 GCA_028535905.1_dhQueBerb1.0.hap2	California scrub oak (Qber.S.LA.60 alternate hap 2023)
 GCA_028535815.1_dhQueBerb1.0.hap1	California scrub oak (Qber.S.LA.60 primary hap 2023)
 GCA_016165845.1_Cannbio-2	Cannabis sativa ( 2020)
@@ -264,6 +265,7 @@ GCF_000001735.4_TAIR10.1	thale cress (tair10.1 Columbia 2018)
 GCF_013401445.1_ASM1340144v1	thunder duke vine
 GCF_001879085.1_NIATTr2	tobacco N.attenuata
 GCF_000390325.2_Ntom_v01	tobacco N.tomentosiformis
+GCF_036512215.1_SLM_r2.1	tomato (2024)
 GCF_000188115.5_SL3.1	tomato (v3.1 Heinz 1706 2018)
 GCA_024363235.1_drHetArbu1.0.a	toyon (HeAr 88 alternate hap 2022)
 GCA_024362995.1_drHetArbu1.0.p	toyon (HeAr 88 primary hap 2022)

@@ -31,6 +31,7 @@ genes</a></li>
 <li><a href="#tracks20">Locating centromeres and telomeres</a></li>
 <li><a href="#tracks21">Determining the table name for an annotation track</a></li>
 <li><a href="#tracks22">Unexpected results in UCSC RefSeq track</a></li>
+<li><a href="#tracks23">What is the difference between super tracks and composite tracks?</a></li>
 </ul>
 <hr>
 <p>
@@ -430,4 +431,68 @@ other assemblies, please see the
 <a href="https://genome-blog.gi.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/" 
 target="_blank">NCBI RefSeq track blog post</a>.</p>
 
+<a name="tracks23"></a>
+<h2>SuperTracks vs composite tracks</h2>
+<h6>What is the difference between superTracks and composite tracks?</h6>
+<p><b>Composite Tracks</b>:</p>
+<ul>
+ <li>Group related tracks (subtracks) under a single parent, typically of similar data type but they can
+     have <a href="../goldenPath/help/trackDb/trackDbHub.html#subGroups" target="_blank">subGroups</a>
+     and <a href="../goldenPath/help/trackDb/trackDbHub.html#view" target="_blank">views</a>.
+     Views allow mixing different data types (bigBeds and bigWigs).</li>
+ <li>Use <code>compositeTrack on</code> to define the parent track. Subtracks reference the parent using
+    <code>parent compositeTrackName [on/off]</code> to control their default visibility.</li>
+ <li>Certain configuration settings can be applied across all subtracks within a composite, such as
+     color schemes, visibility, and labels can be defined at the composite track (parent) level
+     and inherited by all its subtracks (children). This ensures consistency and simplifies
+     management by reducing redundancy, as you don't need to define the same settings repeatedly
+     for each subtrack.</li>
+</ul>
+<p>Basic Structure:
+<pre><code>track compositeTrackName
+compositeTrack on
+...
+    track subTrack_1_Name
+    parent compositeTrackName on
+    ...
+    track subTrack_2_Name
+    parent compositeTrackName off
+</code></pre></p>
+<p><b>Supertracks</b>:</p>
+<p>
+<ul>
+ <li>Organize diverse tracks, including composite tracks, into a high-level hierarchy.
+    Supertracks offer flexibility to group a variety of track types, not limited to similar data
+    types, and support two levels of hierarchy for complex nesting (e.g., supertrack  &rarr; composite &rarr; subtrack).</li>
+ <li>Declared with <code>superTrack on show</code>, where <code>show</code> is optional and determines default visibility.</li>
+ <li>Subtracks reference the parent supertrack using <code>parent superTrackName</code> and do not follow the parent
+     line directly, as composite tracks do (e.g., <code>parent superTrackName <s>[on/off]</s></code>). Subtrack
+     (children) must explicitly define their visibility settings (dense, hide, etc.) unless the default hide is
+     acceptable.</li>
+</ul>
+<p>Basic Structure:
+<pre><code>track superTrackName
+superTrack on show
+...
+    track subTrackNameInSuperTrack
+    parent superTrackName
+    ...
+    track compositeTrackNameInSuperTrack
+    compositeTrack on
+    parent superTrackName
+    ...
+       track subTrack_1_NameIncomposite
+       parent compositeTrackNameInSuperTrack on
+       ...
+       track subTrack_2_NameIncomposite
+       parent compositeTrackNameInSuperTrack off
+</code></pre></p>
+<p><b>Key Differences</b>:</p>
+<ul>
+ <li>Composite Tracks: Group similar subtracks in a single level with visibility set per track using [on/off].</li>
+ <li>Supertracks: Group diverse tracks (including composite tracks) in a two level of hierarchy with visibility set
+     separately for each subtrack.</li>
+</ul>
+<p>For more information about superTracks and composite tracks, refer to the
+<a href="../goldenPath/help/hubQuickStartGroups" target="_blank">Organizing Track Hubs into Groupings help page</a>.</p> 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

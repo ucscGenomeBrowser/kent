@@ -198,7 +198,7 @@ spectrum on
 type bed 6 .
 scoreMin 900
 scoreMax 1000
-url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
+url https://esefinder.ahc.umn.edu/cgi-bin/tools/ESE3/esefinder.cgiReadme/README.html
 
 track regPotential5X
 shortLabel 5x Reg Potential

@@ -177,7 +177,7 @@ if (! hDbExists(db))
             regexSubstringCopy(db, substrs[2], first3, sizeof first3);
             regexSubstringCopy(db, substrs[3], mid3, sizeof mid3);
             regexSubstringCopy(db, substrs[4], last3, sizeof last3);
-            struct dyString *dy = dyStringCreate("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/"
+            struct dyString *dy = dyStringCreate("https://hgdownload.gi.ucsc.edu/hubs/%s/%s/%s/"
                                                  "%s/%s/hub.txt",
                                                  gcPrefix, first3, mid3, last3, db);
             // Use cart variables to pretend user clicked to connect to this hub.

@@ -2,6 +2,10 @@
 
 /* Copyright (C) 2013 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
+#include <openssl/md5.h>
+#include <openssl/opensslv.h>
+#include <openssl/evp.h>
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,7 +14,6 @@
 #include "dnaseq.h"
 #include "math.h"
 #include "udc.h"
-#include <openssl/md5.h>
 
 // static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -77,7 +80,13 @@ for (index = tbf->indexList; index != NULL; index = index->next)
  * changed to use MD5() in openssl 2020-12-04:
  */
 	unsigned char md5Result[MD5_DIGEST_LENGTH];
+
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L   // > #3.0
+        EVP_Q_digest(NULL, "MD5", NULL, seq->dna, strlen(seq->dna), md5Result, NULL);
+#else
 	MD5((unsigned char *)seq->dna, strlen(seq->dna), md5Result);
+#endif  
+
 	int i;
 	struct dyString *ds = dyStringNew(MD5_DIGEST_LENGTH);
 	for(i = 0; i < MD5_DIGEST_LENGTH; i++)

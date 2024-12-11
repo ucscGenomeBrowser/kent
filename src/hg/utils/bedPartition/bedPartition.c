@@ -14,11 +14,11 @@
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
-    {"partSize", OPTION_INT},
+    {"partMergeSize", OPTION_INT},
     {"parallel", OPTION_INT},
     {NULL, 0}
 };
-static int gPartSize = 1;
+static int gPartMergeSize = 0;
 static int gParallel = 0;
 
 static void usage()
@@ -29,14 +29,16 @@ errAbort("bedPartition - split BED ranges into non-overlapping ranges\n"
   "   bedPartition [options] bedFile rangesBed\n"
   "\n"
   "Split ranges in a BED into non-overlapping sets for use in cluster jobs.\n"
-  "Output is a BED 3 of the ranges.\n"
+  "Output is a BED 4 of the ranges and a generated name.\n"
   "The bedFile maybe compressed and no ordering is assumed.\n"
   "\n"
   "options:\n"
-  "   -partSize=1 - will combine non-overlapping partitions, up to\n"
-  "    this number of ranges.\n"
+  "   -partMergeSize=0 - will combine adjacent non-overlapping partitions, that are\n"
+  "    separated by no more that this number of bases.\n"
   "    per set of overlapping records.\n"
-  "   -parallel=n - use this many cores for parallel sorting\n");
+  "   -parallel=n - use this many cores for parallel sorting\n"
+  "notes:\n"
+  "   - Generate name is useful for testing if two ranges are in the same partition\n");
 }
 
 struct bedInput
@@ -76,7 +78,11 @@ static struct bed3 *bed3Next(struct lineFile *lf)
 char *row[3];
 if (!lineFileRow(lf, row))
     return NULL;
-return bed3New(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]));
+// adjust start to allow for merge padding
+unsigned start = sqlUnsigned(row[1]);
+if (start > gPartMergeSize)  // don't underflow
+    start -= gPartMergeSize;
+return bed3New(row[0], start, sqlUnsigned(row[2]));
 }
 
 
@@ -124,17 +130,13 @@ if (bedPart == NULL)
 /* add more beds while they overlap, due to way input is sorted
  * with by start and then reverse end */
 
-int partCnt = 1; // already have one
 while ((bed = bedInputNext(bi)) != NULL)
     {
-    boolean samePart = isOverlapped(bed, bedPart);
-    if (samePart || ((partCnt < gPartSize) && sameChrom(bed, bedPart)))
+    if (isOverlapped(bed, bedPart))
         {
         bedPart->chromStart = min(bedPart->chromStart, bed->chromStart);
         bedPart->chromEnd = max(bedPart->chromEnd, bed->chromEnd);
         bed3Free(&bed);
-        if (!samePart)
-            partCnt++;
         }
     else
         {
@@ -151,10 +153,11 @@ static void bedPartition(char *bedFile, char *rangesBed)
 struct bedInput *bi = bedInputNew(bedFile);
 struct bed3 *bedPart;
 FILE *outFh = mustOpen(rangesBed, "w");
-
+int ibed = 0;
 while ((bedPart = readPartition(bi)) != NULL)
     {
-    fprintf(outFh, "%s\t%d\t%d\n", bedPart->chrom, bedPart->chromStart, bedPart->chromEnd);
+    fprintf(outFh, "%s\t%d\t%d\tP%d\n", bedPart->chrom, bedPart->chromStart, bedPart->chromEnd, ibed);
+    ibed++;
     bed3Free(&bedPart);
     }
 carefulClose(&outFh);
@@ -167,7 +170,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
-gPartSize = optionInt("partSize", gPartSize);
+gPartMergeSize = optionInt("partMergeSize", gPartMergeSize);
 gParallel = optionInt("parallel", gParallel);
 bedPartition(argv[1], argv[2]);
 return 0;

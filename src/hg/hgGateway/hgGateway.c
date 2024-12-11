@@ -596,10 +596,16 @@ else if (match->type == ddmtGenome)
 else if (match->type == ddmtDb)
     {
     safecpy(value, sizeof(value), dbDb->name);
-    char *bolded = boldTerm(dbDb->name, term, match->offset, match->type);
+    // label just in case the bolded doesn't work
     safef(label, sizeof(label), "%s (%s %s)",
+          dbDb->name, dbDb->genome, dbDb->description);
+    if (sameWord(dbDb->name, term))	// when genArk match, not the same word
+        {
+        char *bolded = boldTerm(dbDb->name, term, match->offset, match->type);
+        safef(label, sizeof(label), "%s (%s %s)",
           bolded, dbDb->genome, dbDb->description);
-    freeMem(bolded);
+        freeMem(bolded);
+        }
     jsonWriteString(jw, "db", dbDb->name);
     }
 else if (match->type == ddmtDescription)
@@ -615,6 +621,7 @@ else if (match->type == ddmtDescription)
 else
     errAbort("writeDbDbMatch: unrecognized dbDbMatchType value %d (db %s, term %s)",
              match->type, dbDb->name, term);
+
 jsonWriteString(jw, "label", label);
 jsonWriteString(jw, "value", value);
 jsonWriteString(jw, "org", dbDb->organism);
@@ -1040,7 +1047,7 @@ return ret;
 }
 
 static struct gHubMatch *filterAssemblyListMatches(struct sqlConnection *conn,
-   char *asmListTable, char *term, char *genarkPrefix, boolean wildCard)
+   struct dbDb *dbDbList, struct dbDbMatch **dbDbMatchList, char *asmListTable, char *term, char *genarkPrefix, boolean wildCard)
 {
 struct gHubMatch *ret = NULL;
 struct dyString *query = dyStringNew(64);
@@ -1064,6 +1071,34 @@ while ((row = sqlNextRow(sr)) != NULL)
 	safef(genarkUrl, sizeof(genarkUrl), "%s/%s", genarkPrefix, el->hubUrl);
 	slAddHead(&ret, gHubMatchNew(el->name, genarkUrl, NULL, el->scientificName, el->commonName, *el->priority));
 	}
+	else
+	{
+        struct dbDb *dbDb;
+        for (dbDb = dbDbList;  dbDb != NULL; dbDb = dbDb->next)
+	    {
+            if (sameWord(dbDb->name, el->name))
+		{
+		// Make uppercase version of target for case-insensitive matching.
+		int targetLen = strlen(el->name);
+		char targetUpcase[targetLen + 1];
+		safencpy(targetUpcase, sizeof(targetUpcase), el->name, targetLen);
+		touppers(targetUpcase);
+                struct dbDbMatch *extraList = searchDbDb(dbDbList, targetUpcase);
+		struct dbDbMatch *match;
+		boolean canAdd = TRUE;
+                for (match = *dbDbMatchList;  match != NULL;  match = match->next)
+		    {
+		    if (sameWord(match->dbDb->name, el->name))
+			{
+			canAdd = FALSE;
+			break;
+			}
+		    }
+		if (canAdd)
+		    slAddHead(dbDbMatchList, extraList);
+		}
+	    }
+	}
     if ( c > GENARK_LIMIT)	/* limit genArk returns */
 	break;
     }
@@ -1072,9 +1107,9 @@ sqlFreeResult(&sr);
 if (ret)
     slReverse(&ret);
 return ret;
-}	/*	static struct gHubMatch *filterAssemblyListMatche	*/
+}	/*	static struct gHubMatch *filterAssemblyListMatches	*/
 
-static struct gHubMatch *searchGenark(char *term)
+static struct gHubMatch *searchGenark(struct dbDb *dbDbList, struct dbDbMatch **dbDbMatchList, char *term)
 /* Search through the genark table (or assemblyList table) for hubs
    matches term */
 {
@@ -1115,12 +1150,12 @@ if ((termLength > 2) && sqlTableExists(conn, asmListTable))
 		wildCard = TRUE;
 	    }
         if (matchCount > 0)
-            gHubMatchList = filterAssemblyListMatches(conn, asmListTable, termCopy, genarkPrefix, wildCard);
+            gHubMatchList = filterAssemblyListMatches(conn, dbDbList, dbDbMatchList, asmListTable, termCopy, genarkPrefix, wildCard);
 	}	/* 1 == wordCout single word search  */
     else
 	{	/* multiple word search */
         char *matchAllWords = asmListMatchAllWords(termCopy);
-        gHubMatchList = filterAssemblyListMatches(conn, asmListTable, matchAllWords, genarkPrefix, FALSE);
+        gHubMatchList = filterAssemblyListMatches(conn, dbDbList, dbDbMatchList, asmListTable, matchAllWords, genarkPrefix, FALSE);
 	}	/* multiple word search */
     }	/* termLength > 2	*/
 else if (sqlTableExists(conn, genarkTbl))
@@ -1138,8 +1173,8 @@ else if (sqlTableExists(conn, genarkTbl))
              "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by taxId ASC, commonName DESC",
              genarkTbl, term, term, term, term);
 	}
-    struct genark *matchList = genarkLoadByQuery(conn, query);
-    gHubMatchList = filterGenarkMatches(genarkPrefix, matchList);
+    struct genark *genArkMatch = genarkLoadByQuery(conn, query);
+    gHubMatchList = filterGenarkMatches(genarkPrefix, genArkMatch);
     }
 hDisconnectCentral(&conn);
 return gHubMatchList;
@@ -1174,7 +1209,7 @@ puts("Content-Type:text/javascript\n");
 setUdcCacheDir();
 struct dbDb *dbDbList = hDbDbList();
 struct dbDbMatch *matchList = searchDbDb(dbDbList, term);
-struct gHubMatch *gHubMatchList = searchGenark(term);
+struct gHubMatch *gHubMatchList = searchGenark(dbDbList, &matchList, term);
 struct aHubMatch *aHubMatchList = searchPublicHubs(dbDbList, term);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
@@ -1183,10 +1218,13 @@ char *category = aHubMatchList ? "UCSC Genome Browser assemblies - annotation tr
 struct dbDbMatch *match;
 for (match = matchList;  match != NULL;  match = match->next)
     writeDbDbMatch(jw, match, term, category);
+
 // Write out genark matches, if any, pass term so the matches can be highlighted
-writeGenarkMatches(jw, gHubMatchList, term);
+if (slCount(gHubMatchList))
+    writeGenarkMatches(jw, gHubMatchList, term);
 // Write out assembly hub matches, if any.
-writeAssemblyHubMatches(jw, aHubMatchList);
+if (slCount(aHubMatchList))
+    writeAssemblyHubMatches(jw, aHubMatchList);
 jsonWriteListEnd(jw);
 puts(jw->dy->string);
 jsonWriteFree(&jw);

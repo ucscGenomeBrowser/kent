@@ -3,6 +3,10 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
+#include <openssl/evp.h>
+#include <openssl/opensslv.h>
+#include <openssl/md5.h>
+
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
@@ -88,8 +92,19 @@ else
     return cloneString(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR));
 }
 
-/* ---- password functions depend on optionally installed openssl lib ---- */
-#include <openssl/md5.h>
+/* ---- password functions depend on installed openssl lib ---- */
+
+
+
+void md5It(unsigned char *input, int inputSize, unsigned char *output)
+/* handle function deprecated by newer versions of openssl */
+{ 
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L   // > #3.0
+EVP_Q_digest(NULL, "MD5", NULL, input, inputSize, output, NULL);
+#else
+MD5(input, inputSize, output);
+#endif  
+}
 
 void cryptWikiWay(char *password, char *salt, char* result)
 /* encrypt password in mediawiki format - 
@@ -101,7 +116,7 @@ unsigned char result2[MD5_DIGEST_LENGTH];
 char firstMD5[MD5_DIGEST_LENGTH*2 + 1];
 char secondMD5[MD5_DIGEST_LENGTH*2 + 1];
 i = MD5_DIGEST_LENGTH;
-MD5((unsigned char *)password, strlen(password), result1);
+md5It((unsigned char *)password, strlen(password), result1);
 for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&firstMD5[i*2], "%02x", result1[i]);
@@ -111,7 +126,7 @@ char saltDashMD5[256];
 strcpy(saltDashMD5,salt);
 strcat(saltDashMD5,"-");
 strcat(saltDashMD5,firstMD5);
-MD5((unsigned char *) saltDashMD5, strlen(saltDashMD5), result2);
+md5It((unsigned char *) saltDashMD5, strlen(saltDashMD5), result2);
 for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&secondMD5[i*2], "%02x", result2[i]);
@@ -154,7 +169,7 @@ char *generateTokenMD5(char *token)
 unsigned char result[MD5_DIGEST_LENGTH];
 char tokenMD5[MD5_DIGEST_LENGTH*2 + 1];
 int i = MD5_DIGEST_LENGTH;
-MD5((unsigned char *) token, strlen(token), result);
+md5It((unsigned char *) token, strlen(token), result);
 // Convert the tokenMD5 value to string
 for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {

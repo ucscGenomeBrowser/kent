@@ -98,16 +98,12 @@
     
     // Function to show the popup
     function showPopup() {
-        const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
-        rtsMenuItem.click();
-        const titleSpan = document.querySelector('#ui-id-2');
-        titleSpan.textContent = 'Recommended Track Sets';
+        showRecTrackSetsPopup(); // Call the function that generates the popup
     }
     
     // Function to close the popup
     function closePopup() {
-        const rtsMenuClose = document.querySelector('.ui-dialog-titlebar-close');
-        rtsMenuClose.click();
+        $("#recTrackSetsPopup").dialog("close");
     }
     
     // Function to log finishing the clinical tutorial
@@ -396,8 +392,10 @@
         });
     }
 
-    clinicalSteps();
+    if (typeof window.clinicalTour === 'undefined') {
+        clinicalSteps();
 
-    //Export the clinicalTour globalally
-    window.clinicalTour = clinicalTour;
+        //Export the clinicalTour globalally
+        window.clinicalTour = clinicalTour;
+    }
 })();

@@ -2357,7 +2357,7 @@ e6a7edca (Venkat Malladi  2010-08-02 15:40:33 -0700 2352) tag 3134
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2357) description Mammary
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2358) vendorName
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2359) termId 7035
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2360) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2360) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7035
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2361) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2362) sex M
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2363) protocol
@@ -2371,7 +2371,7 @@ e6a7edca (Venkat Malladi  2010-08-02 15:40:33 -0700 2352) tag 3134
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2371) description myeloid progenitor cells, CD34+
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2372) vendorName
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2373) termId 7043
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2374) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2374) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7043
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2375) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2376) sex M
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2377) protocol
@@ -2385,7 +2385,7 @@ e6a7edca (Venkat Malladi  2010-08-02 15:40:33 -0700 2352) tag 3134
 320e2ba2 (Tim Dreszer     2010-10-07 12:43:05 -0700 2385) description Pituitary tumor LAF1
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2386) vendorName ATCC
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2387) termId 7087
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2388) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2388) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7087
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2389) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2390) sex M
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2391) protocol
@@ -2399,7 +2399,7 @@ e6a7edca (Venkat Malladi  2010-08-02 15:40:33 -0700 2352) tag 3134
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2399) description B Cell , CD19+
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2400) vendorName
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2401) termId 7069
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2402) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2402) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7069
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2403) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2404) sex M
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2405) protocol
@@ -2413,7 +2413,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2411) tissue Bone
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2413) description Bone Marrow
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2414) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2415) termId 6943
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2416) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2416) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6943
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2417) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2418) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2419) protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
@@ -2427,7 +2427,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2425) tissue Cerebellum
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2427) description Cerebellum
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2428) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2429) termId 7012
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2430) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2430) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7012
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2431) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2432) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2433) protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
@@ -2459,7 +2459,7 @@ aa751f5d (Venkat Malladi  2010-07-20 15:05:14 -0700 2455) description B-cell lym
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2459) # Not an OrderUrl need to talk to confirm what goes here.
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2460) #orderUrl (Contact Sherman Weissman)
 2b446481 (Melissa Cline   2010-06-14 12:24:56 -0700 2461) termId 7069
-2b446481 (Melissa Cline   2010-06-14 12:24:56 -0700 2462) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+2b446481 (Melissa Cline   2010-06-14 12:24:56 -0700 2462) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7069
 45ddc822 (cline           2010-03-25 00:02:35 +0000 2463) color 153,38,0
 416af925 (Venkat Malladi  2010-09-29 10:55:45 -0700 2464) sex F
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2465) protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
@@ -2492,7 +2492,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2490) tissue Colon
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2492) description Colon
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2493) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2494) termId 6984
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2495) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2495) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6984
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2496) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2497) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2498) protocol LICR(Ren):Colon_Ren_protocol.pdf
@@ -2506,7 +2506,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2504) tissue Cortex
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2506) description Cortex
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2507) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2508) termId 4465
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2509) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2509) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=4465
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2510) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2511) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2512) protocol LICR(Ren):Cortex_Ren_protocol.pdf
@@ -2520,7 +2520,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2513)
 2173d335 (Venkat Malladi  2010-08-04 18:04:33 -0700 2520) description Fibroblast
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2521) vendorName UW lab
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2522) termId 6948
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2523) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2523) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2524) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2525) sex U
 320e2ba2 (Tim Dreszer     2010-10-07 12:43:05 -0700 2526) protocol
@@ -2538,7 +2538,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2536) vendorName Mitch Weiss
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2538) # This is an email address how do we want these links displayed
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2539) #orderUrl weissmi@email.chop.edu
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2540) termId 7079
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2541) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2541) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7079
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2542) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2543) sex U
 31eab8db (Melissa Cline   2010-09-13 18:39:13 -0700 2544) protocol PSU(Hardison):G1E_Hardison_protocol.pdf
@@ -2555,7 +2555,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2553) vendorName Mitch Weiss
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2555) # This is an email address how do we want these links displayed
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2556) #orderUrl weissmi@email.chop.edu
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2557) termId 7079
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2558) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2558) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7079
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2559) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2560) sex U
 abd0ac2d (Melissa Cline   2010-09-22 15:13:52 -0700 2561) protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
@@ -2569,7 +2569,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2567) tissue Heart
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2569) description Heart
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2570) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2571) termId 7103
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2572) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2572) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7103
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2573) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2574) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2575) protocol LICR(Ren):Heart_Ren_protocol.pdf
@@ -2597,7 +2597,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2595) tissue Limb
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2597) description Limb
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2598) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2599) termId 7127
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2600) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2600) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7127
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2601) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2602) sex U
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2603) # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
@@ -2612,7 +2612,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2610) tissue Liver
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2612) description Liver
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2613) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2614) termId 6963
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2615) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2615) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6963
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2616) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2617) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2618) protocol LICR(Ren):Liver_Ren_protocol.pdf
@@ -2626,7 +2626,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2624) tissue Lung
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2626) description Lung
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2627) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2628) termId 6948
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2629) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2629) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2630) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2631) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2632) protocol LICR(Ren):Lung_Ren_protocol.pdf
@@ -2641,7 +2641,7 @@ aa751f5d (Venkat Malladi  2010-07-20 15:05:14 -0700 2640) category Primary Cells
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2641) description Mouse Embryonic Fibroblast
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2642) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2643) termId 6948
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2644) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2644) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6948
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2645) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2646) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2647) protocol LICR(Ren):MEF_Ren_protocol.pdf
@@ -2659,7 +2659,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2657) vendorName Mitch Weiss
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2659) # This is an email address how do we want these links displayed
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2660) #orderUrl weissmi@email.chop.edu
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2661) termId 7054
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2662) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2662) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7054
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2663) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2664) sex U
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2665) # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
@@ -2703,7 +2703,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2702) description Muscle
 cc675c7d (Tim Dreszer     2010-07-13 14:13:40 -0700 2703) vendorName
 cc675c7d (Tim Dreszer     2010-07-13 14:13:40 -0700 2704) orderUrl
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2705) termId 7054
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2706) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2706) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7054
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2707) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2708) sex U
 aa751f5d (Venkat Malladi  2010-07-20 15:05:14 -0700 2709) #protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
@@ -2718,7 +2718,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2716) tissue OlfactoryBulb
 aa751f5d (Venkat Malladi  2010-07-20 15:05:14 -0700 2718) description Olfactory Bulb
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2719) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2720) termId 7015
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2721) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2721) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7015
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2722) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2723) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2724) protocol LICR(Ren):OlfactoryBulb_Ren_protocol.pdf
@@ -2732,7 +2732,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2730) tissue Pancreas
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2732) description Pancreas
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2733) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2734) termId 7015
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2735) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2735) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7015
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2736) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2737) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2738) protocol LICR(Ren):Pancreas_Ren_protocol.pdf
@@ -2746,7 +2746,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2744) tissue Placenta
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2746) description Placenta
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2747) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2748) termId 6957
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2749) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2749) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6957
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2750) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2751) sex U
 489f78ad (Venkat Malladi  2010-07-13 16:33:02 -0700 2752) # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
@@ -2762,7 +2762,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2760) tissue SmallIntestine
 aa751f5d (Venkat Malladi  2010-07-20 15:05:14 -0700 2762) description Small Intestine
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2763) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2764) termId 6978
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2765) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2765) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=6978
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2766) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2767) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2768) protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
@@ -2776,7 +2776,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2774) tissue Spleen
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2776) description Spleen
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2777) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2778) termId 7038
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2779) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2779) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7038
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2780) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2781) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2782) protocol LICR(Ren):Spleen_Ren_protocol.pdf
@@ -2790,7 +2790,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2788) tissue Testis
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2790) description Testis
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2791) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2792) termId 9201
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2793) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2793) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=9201
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2794) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2795) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2796) protocol LICR(Ren):Testis_Ren_protocol.pdf
@@ -2804,7 +2804,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2802) tissue Thymus
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2804) description Thymus
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2805) vendorName LICR lab
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2806) termId 7037
-c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2807) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
+c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2807) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7037
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2808) color 153,38,0
 c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2809) sex U
 ba920729 (Melissa Cline   2010-09-22 15:11:09 -0700 2810) protocol LICR(Ren):Thymus_Ren_protocol.pdf
@@ -2818,7 +2818,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2811)
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2818) description Naive T cells: CD4+, CD25-
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2819) vendorName UW lab
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2820) termId 7060
-3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2821) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2821) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7060
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2822) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2823) sex U
 320e2ba2 (Tim Dreszer     2010-10-07 12:43:05 -0700 2824) protocol
@@ -2832,7 +2832,7 @@ c522511d (Melissa Cline   2010-06-21 17:12:20 -0700 2811)
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2832) description Whole Brain
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2833) vendorName UW lab
 2173d335 (Venkat Malladi  2010-08-04 18:04:33 -0700 2834) termId 7005
-2173d335 (Venkat Malladi  2010-08-04 18:04:33 -0700 2835) termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
+2173d335 (Venkat Malladi  2010-08-04 18:04:33 -0700 2835) termUrl https://www.informatics.jax.org//searches/anatdict.cgi?id=7005
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2836) color 153,38,0
 3905606c (Venkat Malladi  2010-07-28 15:25:01 -0700 2837) sex U
 320e2ba2 (Tim Dreszer     2010-10-07 12:43:05 -0700 2838) protocol

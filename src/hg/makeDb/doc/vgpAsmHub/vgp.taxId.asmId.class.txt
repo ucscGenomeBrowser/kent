@@ -90,6 +90,7 @@
 9337	GCA_011100645.1_mTriVul1.alt	mammals
 61156	GCA_011750645.1_mArvNil1.mat	mammals
 61156	GCA_011762505.1_mArvNil1.pat.X	mammals
+61156	GCA_011762505.2_mArvNil1.pat.X	mammals
 9739	GCA_011762515.1_mTurTru1.pat	mammals
 9739	GCA_011762535.1_mTurTru1.mat	mammals
 61156	GCA_011762545.1_mArvNil1.pat	mammals
@@ -173,6 +174,7 @@
 9430	GCA_022682395.1_HLdesRot8B	mammals
 9430	GCA_022682395.2_HLdesRot8B.1	mammals
 9430	GCA_022682495.1_HLdesRot8A	mammals
+9430	GCA_022682495.2_HLdesRot8A.1	mammals
 159646	GCA_023053635.1_rElgMul1.0.p	reptiles
 159646	GCA_023053635.2_rElgMul1.1.pri	reptiles
 2917703	GCA_023333525.1_rAspTig1.0.p	reptiles
@@ -189,6 +191,7 @@
 48850	GCA_023853755.1_mTamTet1.alt	mammals
 109475	GCA_024140225.1_mSunEtr1.alt.cur	mammals
 99487	GCA_024166345.1_mEleMax1_alternate_haplotype	mammals
+9031	GCA_024206055.2_GGswu	birds
 9031	GCA_024206055.2_ASM2420605v2	birds
 246179	GCA_024294585.1_rVipLat1.pri	reptiles
 246179	GCA_024294605.1_rVipLat1.alt	reptiles
@@ -291,6 +294,7 @@
 9601	GCA_028885685.2_NHGRI_mPonAbe1-v2.0_alt	primates
 2202111	GCA_029215775.1_rAnnSte1.0.hap1	reptiles
 2202111	GCA_029215795.1_rAnnSte1.0.hap2	reptiles
+9595	GCA_029281585.3_NHGRI_mGorGor1-v2.1_pri	primates
 327740	GCA_029493135.1_aHylSar1.hap2	amphibians
 2546036	GCA_029633845.1_fLamInc1.hap1	fish
 27720	GCA_029633855.1_fHopMal1.hap1	fish
@@ -436,6 +440,7 @@
 27634	GCA_038363095.1_mArtLit.hap1	mammals
 27634	GCA_038363095.2_mArtLit.hap1	mammals
 51014	GCA_038363145.1_mArtInt1.hap1	mammals
+27634	GCA_038363175.2_mArtLit1.hap2	mammals
 51014	GCA_038363225.1_mArtInt1.hap2	mammals
 288555	GCA_038501915.1_aXenPet1.maternal.cur	amphibians
 288555	GCA_038501925.1_aXenPet1.paternal.cur	amphibians
@@ -460,6 +465,8 @@
 76066	GCA_040894015.1_aEngPut4.paternal	amphibians
 1041117	GCA_040894355.1_rMyuGeo1.pri.20230808	reptiles
 752182	GCA_040937895.1_aHypRig1.alt	amphibians
+8296	GCA_040938575.1_UKY_AmexF1_1	amphibians
+7888	GCA_040939525.1_ASM4093952v1	fish
 3154068	GCA_040954595.1_ASM4095459v1	invertebrate
 3154068	GCA_040954625.1_ASM4095462v1	invertebrate
 7918	GCA_040954845.1_fLepOcu1.hap1	fish
@@ -468,7 +475,13 @@
 9773	GCA_041834305.1_ASM4183430v1	mammals
 3127111	GCA_042242105.1_fPemKlu1.hap1	fish
 3127111	GCA_042242125.1_fPemKlu1.hap2	fish
+9545	GCA_043159975.1_mMacNem.hap1	mammals
+9545	GCA_043161795.1_mMacNem.hap2	mammals
 394691	GCA_043250625.1_fSebFas1.pri	fish
+320637	GCA_043290065.1_mRhyPet1.hap2	mammals
+320637	GCA_043290085.1_mRhyPet1.hap1	mammals
+55135	GCA_044704955.1_sPriJap1.hap1	sharks
+55135	GCA_044704965.1_sPriJap1.hap2	sharks
 8154	GCA_900246225.5_fAstCal1.3	fish
 64144	GCA_900324465.2_fAnaTes1.2	fish
 64144	GCA_900324465.3_fAnaTes1.3	fish
@@ -730,15 +743,20 @@
 77218	GCA_964194185.1_mRhiHip2.hap1.1	mammals
 9375	GCA_964194205.1_mTalEur1.hap2.1	mammals
 77218	GCA_964194215.1_mRhiHip2.hap2.1	mammals
+31155	GCA_964194405.1_rVipBer3.hap2.1	reptiles
+31155	GCA_964194415.1_rVipBer3.hap1.1	reptiles
 1323832	GCA_964195595.1_bCalBor7.hap1.1	birds
 109479	GCA_964195625.1_mMyoMys1.hap2.1	mammals
 1323832	GCA_964196065.1_bCalBor7.hap2.1	birds
 58319	GCA_964197995.1_fScaEry2.hap1.1	fish
 7748	GCA_964198595.1_kcLamFluv1.1	otherChordates
 119627	GCA_964199725.1_bLarMic1.1_alternate_haplotype	birds
+119627	GCA_964199755.1_bLarMic1.1	birds
 7725	GCA_964204865.1_kaStyClav1.hap1.1	otherChordates
 7725	GCA_964204955.1_kaStyClav1.hap2.1	otherChordates
+8348	GCA_964205295.1_aBomVar4.maternal.1	amphibians
 8348	GCA_964205305.1_aBomVar4.paternal.1	amphibians
+8843	GCA_964211785.1_bAnsAns1.hap2.1	birds
 219593	GCA_964211795.1_bAytFer1.hap2.1	birds
 219593	GCA_964211825.1_bAytFer1.hap1.1	birds
 8843	GCA_964211835.1_bAnsAns1.hap1.1	birds
@@ -753,6 +771,8 @@
 9123	GCA_964237585.1_bGalChl1.hap1.1	birds
 140042	GCA_964251985.1_rPodErh1.hap2.1	reptiles
 140042	GCA_964252035.1_rPodErh1.hap1.1	reptiles
+256425	GCA_964261635.1_aLisHel1.1	amphibians
+8324	GCA_964263255.1_aLisVul1.1	amphibians
 59291	GCA_964263835.1_fCorLav1.hap2.1	fish
 59291	GCA_964263955.1_fCorLav1.hap1.1	fish
 59465	GCA_964264875.1_mNycLei1.hap1.1	mammals
@@ -766,6 +786,10 @@
 177147	GCA_964273585.1_bStrDea1.hap2.1	birds
 2025560	GCA_964273705.1_rNatHel1.hap1.1	reptiles
 2025560	GCA_964273795.1_rNatHel1.hap2.1	reptiles
+69293	GCA_964276385.1_fGasAcu3.hap2.1	fish
+69293	GCA_964276395.1_fGasAcu3.hap1.1	fish
+37045	GCA_964289735.1_bPhaAeh10.maternal.1	birds
+37045	GCA_964289755.1_bPhaAeh10.paternal.1	birds
 30522	GCF_003369695.1_UOA_Brahman_1	mammals
 9244	GCF_003957555.1_bCalAnn1_v1.p	birds
 59729	GCF_003957565.1_bTaeGut1_v1.p	birds
@@ -879,6 +903,7 @@
 443677	GCF_027579695.1_fNeoGra1.pri	fish
 8345	GCF_027579735.1_aBomBom1.pri	amphibians
 42254	GCF_027595985.1_mSorAra2.pri	mammals
+150705	GCF_027789765.1_aDenEbr1.pat	amphibians
 2857398	GCF_027887145.1_bAmmCau1.pri	birds
 2991368	GCF_027887155.1_rMalTer1.hap1	reptiles
 13616	GCF_027887165.1_mMonDom1.pri	mammals
@@ -908,6 +933,7 @@
 9597	GCF_029289425.2_NHGRI_mPanPan1-v2.0_pri	primates
 327740	GCF_029499605.1_aHylSar1.hap1	amphibians
 2939378	GCF_029582105.1_OMel1.0	birds
+27720	GCF_029633855.1_fHopMal1.hap1	fish
 2546036	GCF_029633865.1_fLamInc1.hap2	fish
 460621	GCF_029931775.1_rEulEur1.hap1	reptiles
 9785	GCF_030014295.1_mLoxAfr1.hap2	mammals
@@ -923,6 +949,7 @@
 3053191	GCF_030684315.1_sSteTig4.hap1	sharks
 8496	GCF_030867095.1_rAllMis1	reptiles
 37040	GCF_030936135.1_bGavSte3.hap2	birds
+111125	GCF_032444005.1_aRanImi1.pri	amphibians
 212740	GCF_035084215.1_sHepPer1.hap1	sharks
 51853	GCF_035149785.1_rCanAsp1.hap2	reptiles
 1914991	GCF_035770615.1_bMelMel2.pri	birds
@@ -938,6 +965,7 @@
 2696672	GCF_036417845.1_bAptMan1.hap1	birds
 59482	GCF_036850765.1_mSacBil1_pri_phased_curated	mammals
 249018	GCF_036850995.1_mSacLep1_pri_phased_curated	mammals
+1343680	GCF_036971445.1_sNarBan1.hap1	sharks
 372321	GCF_036971685.1_bPatFas1.hap2	birds
 678569	GCF_037157495.1_bLatDis1.hap1	birds
 38937	GCF_037176765.1_rAnoSag1.mat	reptiles
@@ -946,6 +974,7 @@
 8801	GCF_040807025.1_bStrCam1.hap1	birds
 7769	GCF_040869285.1_UKY_Mglu_1.0	otherChordates
 752182	GCF_040937935.1_aHypRig1.pri	amphibians
+8296	GCF_040938575.1_UKY_AmexF1_1	amphibians
 7918	GCF_040954835.1_fLepOcu1.hap2	fish
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
@@ -1001,10 +1030,12 @@
 9733	GCF_937001465.1_mOrcOrc1.1	mammals
 10129	GCF_947179515.1_mApoSyl1.1	mammals
 8262	GCF_947347685.1_fPlePla1.1	fish
+8969	GCF_947461875.1_bHalAlb1.1	birds
 8260	GCF_949316205.1_fPlaFle2.1	fish
 134920	GCF_949316345.1_fPunPun2.1	fish
 27610	GCF_949774975.1_mLagAlb1.1	mammals
 9728	GCF_949987515.1_mDelDel1.1	mammals
+9728	GCF_949987515.2_mDelDel1.2	mammals
 9767	GCF_949987535.1_mBalAcu1.1	mammals
 269649	GCF_950005125.1_mChiNiv1.1	mammals
 9365	GCF_950295315.1_mEriEur2.1	mammals

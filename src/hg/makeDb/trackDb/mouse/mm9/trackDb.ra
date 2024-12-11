@@ -13,7 +13,7 @@ visibility hide
 color 200,100,0
 type bed 6 +
 noScoreFilter .
-url http://www.informatics.jax.org/marker/$$
+url https://www.informatics.jax.org//marker/$$
 urlLabel MGI QTL Detail:
 release alpha
 
@@ -26,7 +26,7 @@ visibility hide
 color 200,100,0
 type bed 6 +
 noScoreFilter .
-url http://www.informatics.jax.org/marker/$$
+url https://www.informatics.jax.org//marker/$$
 urlLabel MGI QTL Detail:
 release beta,public
 
@@ -140,7 +140,7 @@ group phenoAllele
 visibility hide
 color 0,0,150
 type genePred
-url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
+url https://www.informatics.jax.org//javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail:
 baseColorUseCds none
 release alpha
@@ -152,7 +152,7 @@ group phenoAllele
 visibility hide
 color 0,0,150
 type genePred
-url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
+url https://www.informatics.jax.org//javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail:
 baseColorUseCds none
 release beta,public
@@ -165,7 +165,7 @@ visibility hide
 color 190,110,0
 type bed 12 +
 noScoreFilter .
-url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
+url https://www.informatics.jax.org//searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s):
 release alpha
 
@@ -177,7 +177,7 @@ visibility hide
 color 190,110,0
 type bed 12 +
 noScoreFilter .
-url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
+url https://www.informatics.jax.org//searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s):
 release beta,public
 
@@ -190,7 +190,7 @@ color 200, 0, 110
 altColor 200, 0, 110
 type bed 12 +
 noScoreFilter .
-url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
+url https://www.informatics.jax.org//javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele:
 release alpha
 
@@ -203,7 +203,7 @@ color 200, 0, 110
 altColor 200, 0, 110
 type bed 12 +
 noScoreFilter .
-url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
+url https://www.informatics.jax.org//javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele:
 release beta,public
 

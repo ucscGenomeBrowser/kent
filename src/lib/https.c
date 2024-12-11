@@ -3,11 +3,11 @@
 /* Copyright (C) 2012 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
-#include "openssl/ssl.h"
-#include "openssl/err.h"
+#include <openssl/ssl.h>
+#include <openssl/err.h>
 
-#include "openssl/x509v3.h"
-#include "openssl/x509_vfy.h"
+#include <openssl/x509v3.h>
+#include <openssl/x509_vfy.h>
 
 #include <sys/socket.h>
 #include <unistd.h>
@@ -41,12 +41,12 @@ int myDataIndex = -1;
 
 static pthread_mutex_t *mutexes = NULL;
  
-static unsigned long openssl_id_callback(void)
+unsigned long openssl_id_callback(void)
 {
 return ((unsigned long)pthread_self());
 }
  
-static void openssl_locking_callback(int mode, int n, const char * file, int line)
+void openssl_locking_callback(int mode, int n, const char * file, int line)
 {
 if (mode & CRYPTO_LOCK)
     pthread_mutex_lock(&mutexes[n]);
@@ -54,7 +54,7 @@ else
     pthread_mutex_unlock(&mutexes[n]);
 }
  
-void openssl_pthread_setup(void)
+static void openssl_pthread_setup(void)
 {
 int i;
 int numLocks = CRYPTO_num_locks();
@@ -114,7 +114,7 @@ if (!done)
 
     SSL_library_init();
     ERR_load_crypto_strings();
-    ERR_load_SSL_strings();
+    SSL_load_error_strings();   // ERR_load_SSL_strings(); deprecated.
     OpenSSL_add_all_algorithms();
     openssl_pthread_setup();
     myDataIndex = SSL_get_ex_new_index(0, "myDataIndex", NULL, NULL, NULL);
@@ -151,10 +151,10 @@ int swt = 0;
 int brd = 0;
 int bwt = 0;
 int fd = 0;
+
 while (1) 
     {
-
-    // Do NOT move this outside the while loop. 
+    // Do not move this to before the loop.
     /* Get underlying file descriptor, needed for select call */
     fd = BIO_get_fd(params->sbio, NULL);
     if (fd == -1) 
@@ -163,6 +163,12 @@ while (1)
 	goto cleanup;
 	}
 
+    // The earlier call to BIO_set_nbio() should have turned non-blocking io on already.
+    if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1) 
+        {
+	xerr("Could not switch to non-blocking.\n");
+	goto cleanup;
+	}
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
@@ -210,23 +216,26 @@ while (1)
 
 	if (FD_ISSET(fd, &writefds))
 	    {
-	    int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
-	    if (swtx <= 0)
+            if (swt < srd) 
 		{
-		if (!BIO_should_write(params->sbio))
+		int swtx = BIO_write(params->sbio, sbuf+swt, srd-swt);
+		if (swtx <= 0)
 		    {
-		    ERR_print_errors_fp(stderr);
-		    xerr("Error writing SSL connection");
-		    goto cleanup;
+		    if (!BIO_should_write(params->sbio))
+			{
+			ERR_print_errors_fp(stderr);
+			xerr("Error writing SSL connection");
+			goto cleanup;
+			}
 		    }
-		}
-	    else
-		{
-		swt += swtx;
-		if (swt >= srd)
+		else
 		    {
-		    swt = 0;
-		    srd = 0;
+		    swt += swtx;
+		    if (swt >= srd)
+			{
+			swt = 0;
+			srd = 0;
+			}
 		    }
 		}
 	    }
@@ -601,7 +610,14 @@ char *proxyUrl = https_proxy;
 if (noProxy)
     proxyUrl = NULL;
 
-ctx = SSL_CTX_new(SSLv23_client_method());
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L   // # 1.1
+ctx = SSL_CTX_new(TLSv1_2_client_method()); // OLD SSLv23_client_method());
+#else
+ctx = SSL_CTX_new(TLS_client_method());
+SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+SSL_CTX_set_max_proto_version(ctx, TLS1_3_VERSION);
+#endif
 
 fd_set readfds;
 fd_set writefds;
@@ -656,7 +672,21 @@ if (!sameString(https_cert_check, "none"))
 	SSL_CTX_set_verify_depth(ctx, atoi(https_cert_check_depth) + 1);
 
 	// VITAL FOR PROPER VERIFICATION OF CERTS
-	if (!SSL_CTX_set_default_verify_paths(ctx)) 
+        if (fileExists("/etc/pki/tls/cert.pem"))
+	    {
+	    if (!SSL_CTX_load_verify_locations(ctx, "/etc/pki/tls/cert.pem", NULL))
+		{
+		warn("SSL set load_verify_file /etc/pki/tls/cert.pem failed");
+		}
+	    }
+        else if (fileExists("/etc/ssl/certs"))
+	    {
+	    if (!SSL_CTX_load_verify_locations(ctx, NULL, "/etc/ssl/certs"))
+		{
+		warn("SSL set load_verify_dir /etc/ssl/certs failed");
+		}
+	    }
+        else if (!SSL_CTX_set_default_verify_paths(ctx)) 
 	    {
 	    warn("SSL set default verify paths failed");
 	    }
@@ -670,8 +700,7 @@ if (!sameString(https_cert_check, "none"))
 
 // Don't want any retries since we are non-blocking bio now
 // This is available on newer versions of openssl
-//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-
+//SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);  // this has become the default, but only matters for blocking mode which we are not using.
 
 // Support for Http Proxy
 struct netParsedUrl pxy;
