@@ -194,8 +194,8 @@ function setCartVars(names, values, errFunc, async)
         type = "GET";
     }
 
-
-    if (!async || (typeof navigator.sendBeacon == 'undefined')) {
+    // on Safari and Edge, sendBeacon() has a limit of 32k, so fall back to ajax if the cart is very big
+    if (!async || (typeof navigator.sendBeacon == 'undefined' || data.length > 30000)) {
         // XmlHttpRequest is used for all synchronous updates and for async updates in IE,
         // because IE doesn't support sendBeacon.  If access to bowser is blocked, the default
         // is to assume the browser is not IE.
