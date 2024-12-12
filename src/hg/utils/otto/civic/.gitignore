@@ -1,0 +1,5 @@
+downloads
+gene_features/
+*.bb
+.ipynb_checkpoints
+*.bed

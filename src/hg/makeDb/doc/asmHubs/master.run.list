@@ -1,3 +1,4 @@
+./runBuild GCA_000091205.1_ASM9120v1 invertebrate Cyanidioschyzon_merolae_strain_10D
 ./runBuild GCA_000001905.1_Loxafr3.0 mammals Loxodonta_africana
 ./runBuild GCA_000001985.1_JCVI-PMFA1-2.0 fungi Talaromyces_marneffei_ATCC_18224
 ./runBuild GCA_000002305.1_EquCab2.0 mammals Equus_caballus
