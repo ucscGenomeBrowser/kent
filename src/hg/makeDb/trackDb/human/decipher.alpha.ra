@@ -4,6 +4,7 @@ shortLabel DECIPHER
 longLabel DECIPHER
 cartVersion 7
 group phenDis
+pennantIcon New red ../goldenPath/newsarch.html#121024 "DDG2P released December 10, 2024"
 
     track decipher
     shortLabel DECIPHER CNVs
@@ -24,7 +25,7 @@ group phenDis
     mergeSpannedItems on
     searchIndex name
     mouseOverField _mouseOvera
-    html decipherContainer.html
+    html decipherContainer
     parent decipherContainer
 
     track decipherSnvs
@@ -37,7 +38,7 @@ group phenDis
     tableBrowser off decipherSnvsRaw
     prevExonText Left edge
     nextExonText Right edge
-    html decipherContainer.html
+    html decipherContainer
     parent decipherContainer
 
     track decipherDDG2P
@@ -49,11 +50,12 @@ group phenDis
     group phenDis
     visibility pack
     mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Type of CNV</b>: $type<br> <b>Frequency of CNV</b>: $frequency<br> <b>Number of Observations</b>: $observations<br> <b>Sample Size of Study</b>: $sample_size<br>
-    html decipherContainer.html
+    html decipherContainer
     searchIndex name
     noScoreFilter on
     filterValues.type loss,gain,del/dup
     filter.sample_size 0
+    pennantIcon New red ../goldenPath/newsarch.html#121024 "Released December 10, 2024"
 
 
 searchTable decipher
