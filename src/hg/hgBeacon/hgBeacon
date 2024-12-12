@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # A beacon allows very limited queries against a set of variants without allowing someone
 # to download the list of variants
 # see ga4gh.org/#/beacon (UCSC redmine 14393)
 
-import cgi, subprocess, sys, cgitb, os, socket, time, json, glob, urlparse, time
+import cgi, subprocess, sys, cgitb, os, socket, time, json, glob, urllib.parse, time
 import sqlite3, gzip, optparse, gc, string, re, socket
 from os.path import join, isfile, dirname, isdir, basename, exists
 
@@ -47,8 +47,8 @@ def queryBottleneck(host, port, ip):
     # send ip address
     s =  socket.socket()
     s.connect((host, int(port)))
-    msg = ip
-    d = chr(len(msg))+msg
+    msg = ip.encode("latin1")
+    d = chr(len(msg)).encode("latin1")+msg
     s.send(d)
 
     # read delay time
@@ -61,7 +61,7 @@ def queryBottleneck(host, port, ip):
         totalLen+= len(resp)
         if totalLen==expLen:
             break
-    return int("".join(buf))
+    return int(b"".join(buf))
 
 def parseConf(fname):
     " parse a hg.conf style file, return as dict key -> value (both are strings) "
@@ -113,8 +113,8 @@ def errAbort(errMsg=None):
 
 def printHelp():
     " print help text to stdout and exit "
-    print "Content-Type: text/html\n"
-    print "<html><body>"
+    print("Content-Type: text/html\n")
+    print("<html><body>")
     host = hostName # convert from global to local var
     if host.endswith(".ucsc.edu"):
         helpDir = "/gbdb/hg19/beacon"
@@ -126,8 +126,8 @@ def printHelp():
         errAbort("no file %s found. The beacon is not activated on this machine" % helpPath)
 
     helpText = open(helpPath).read()
-    print helpText % locals()
-    print "</body></html>"
+    print(helpText % locals())
+    print("</body></html>")
     sys.exit(0)
 
 def dataSetResources():
@@ -158,8 +158,8 @@ def beaconInfo():
         }
 
 def printJson(data):
-    print "Content-Type: application/json\n"
-    print json.dumps(data, indent=4, sort_keys=True,separators=(',', ': '))
+    print("Content-Type: application/json\n")
+    print(json.dumps(data, indent=4, sort_keys=True,separators=(',', ': ')))
 
 def hgBotDelay():
     " implement bottleneck delay, get bottleneck server from hg.conf "
@@ -374,11 +374,11 @@ def readAllelesVcf(ifh):
         elif not refIsOne and not altIsOne:
             skipCount +=1
         else:
-            print "Error: invalid VCF fields:", fields
+            print("Error: invalid VCF fields:", fields)
             sys.exit(1)
 
         if len(rows) % 500000 == 0:
-            print "Read %d rows..." % len(rows)
+            print("Read %d rows..." % len(rows))
 
         dataRow = (chrom, pos, beaconAllele)
         if dataRow in doneData:
@@ -387,8 +387,8 @@ def readAllelesVcf(ifh):
         rows.append( dataRow )
         doneData.add( dataRow )
 
-    print "skipped %d VCF lines with empty ALT alleles" % emptyCount
-    print "skipped %d VCF lines with both ALT and REF alleles len!=1, cannot encode as beacon queries" % skipCount
+    print("skipped %d VCF lines with empty ALT alleles" % emptyCount)
+    print("skipped %d VCF lines with both ALT and REF alleles len!=1, cannot encode as beacon queries" % skipCount)
     return rows
 
 def readAllelesLovd(ifh):
@@ -417,7 +417,7 @@ def readAllelesLovd(ifh):
         start = int(start)
         alleles.append( (chrom, start, alt) )
 
-    print "read %d alleles, skipped %d non-SNV or del alleles" % (len(alleles), skipCount)
+    print("read %d alleles, skipped %d non-SNV or del alleles" % (len(alleles), skipCount))
     return list(set(alleles))
 
 def readAllelesHgmd(ifh):
@@ -445,7 +445,7 @@ def readAllelesHgmd(ifh):
         chrom = chrom.replace("chr", "")
         alleles.append( (chrom, start, alt) )
 
-    print "read %d alleles, skipped %d non-SNV alleles" % (len(alleles), skipCount)
+    print("read %d alleles, skipped %d non-SNV alleles" % (len(alleles), skipCount))
     return list(set(alleles))
 
 def iterChunks(seq, size):
@@ -455,7 +455,7 @@ def iterChunks(seq, size):
 
 def printTime(time1, time2, rowCount):
     timeDiff = time2 - time1
-    print "Time: %f secs for %d rows, %d rows/sec" % (timeDiff, rowCount, rowCount/timeDiff)
+    print("Time: %f secs for %d rows, %d rows/sec" % (timeDiff, rowCount, rowCount/timeDiff))
 
 def importFile(fileName, datasetName, format):
     """ open the sqlite db, create a table datasetName and write the data in fileName into it """
@@ -477,7 +477,7 @@ def importFile(fileName, datasetName, format):
 
     # see http://stackoverflow.com/questions/1711631/improve-insert-per-second-performance-of-sqlite
     # for background why I do it like this
-    print "Reading %s into database table %s" % (fileName, datasetName)
+    print("Reading %s into database table %s" % (fileName, datasetName))
     rowCount = 0
     startTime = time.time()
 
@@ -493,7 +493,7 @@ def importFile(fileName, datasetName, format):
 
     printTime(startTime, loadTime, len(alleles))
 
-    print "Loading alleles into database"
+    print("Loading alleles into database")
     for rows in iterChunks(alleles, 50000):
         sql = "INSERT INTO %s (chrom, pos, allele) VALUES (?,?,?)" % datasetName
         conn.executemany(sql, rows)
@@ -502,7 +502,7 @@ def importFile(fileName, datasetName, format):
     insertTime = time.time()
     printTime(loadTime, insertTime, len(alleles))
 
-    print "Indexing database table"
+    print("Indexing database table")
     conn.execute("CREATE UNIQUE INDEX '%s_index' ON '%s' ('chrom', 'pos', 'allele')" % \
         (datasetName, datasetName))
     indexTime = time.time()
@@ -523,7 +523,7 @@ def mainCommandLine():
 def mainCgi():
 
     url = os.environ["REQUEST_URI"]
-    parsedUrl = urlparse.urlparse(url)
+    parsedUrl = urllib.parse.urlparse(url)
 
     # get CGI parameters
     form = cgi.FieldStorage()
@@ -550,8 +550,8 @@ def mainCgi():
 
     ret = lookupAlleleJson(chrom, pos, altBases, refBases, reference, dataset)
     if format=="text":
-        print "Content-Type: text/html\n"
-        print ret["response"]["exists"]
+        print("Content-Type: text/html\n")
+        print(ret["response"]["exists"])
     else:
         printJson(ret)
 
