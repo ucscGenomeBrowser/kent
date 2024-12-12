@@ -129,3 +129,7 @@ MAILTO=mhaeussl@ucsc.edu
 MAILTO=jbirgmei@ucsc.edu
 # PubTator3 dbSNP track update
 28 08 * * * /bin/zsh -c 'cd /hive/data/outside/otto/pubtatorDbSnp && ./BUILD'
+
+MAILTO=cvaske@ucsc.edu
+# CIViC update. Releases are typically on the 1st of the month
+12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh

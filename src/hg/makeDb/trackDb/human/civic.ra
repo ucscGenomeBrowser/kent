@@ -4,4 +4,5 @@ longLabel CIViC - Expert & crowd-sourced cancer variant interpretation
 type bigBed 12 +
 group phenDis
 bigDataUrl /gbdb/$D/civic/civic.bb
-urls origVariant="https://civicdb.org/variants/$$/summary" clinGenAC="https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=$$" clinVar="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" diseaseLink="https://www.disease-ontology.org/?id=DOID:$$"
+mouseOverField mouseOverHTML
+urls origVariant="https://civicdb.org/variants/$$/summary" alleleRgistryId="https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=$$" clinVar="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" diseaseLink="https://www.disease-ontology.org/?id=DOID:$$"
