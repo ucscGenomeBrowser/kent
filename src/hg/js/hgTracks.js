@@ -4759,6 +4759,8 @@ var imageV2 = {
         var defHexColor = hexColor;
 
         $('.highlightItem').remove();
+        var db = getDb();
+
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
             for (var i = 0; i < hlArray.length; i++) {
@@ -4766,8 +4768,6 @@ var imageV2 = {
                 pos = parsePositionWithDb(hlString);
                 // UN-DISGUISE
                 imageV2.undisguiseHighlight(pos);
-
-                var db = getDb();
 
                 if (pos && pos.db===db && pos.chrom === hgTracks.chromName
                 &&  (pos.start-1) <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
