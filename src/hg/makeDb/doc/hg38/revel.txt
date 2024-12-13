@@ -9,3 +9,6 @@ wigToBigWig g.wig ../../chrom.sizes g.bw &
 bedSort overlap.bed overlap.bed
 bedToBigBed overlap.bed -as=~/kent/src/hg/makeDb/revel/revel.as ../../../chrom.sizes overlap.bb -tab -type=bed8+
 rm *.wig -f
+
+#Colors were added using the script
+~/kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py

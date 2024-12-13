@@ -33,3 +33,6 @@ wigToBigWig a.wig ../../../chrom.sizes a.bw &
 wigToBigWig c.wig ../../../chrom.sizes c.bw &
 wigToBigWig g.wig ../../../chrom.sizes g.bw &
 wigToBigWig t.wig ../../../chrom.sizes t.bw &
+
+#Colors were added using the script
+~/kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py
