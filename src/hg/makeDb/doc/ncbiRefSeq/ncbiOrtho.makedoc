@@ -1,0 +1,89 @@
+#! /bin/bash
+
+# these NCBI files get replaced daily
+#wget https://ftp.ncbi.nih.gov/gene/DATA/gene2accession.gz
+#gunzip gene2accession.gz &
+#wget https://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz
+#gunzip gene_orthologs.gz
+#wait
+
+## Note: the annotated cat genes in the ncbi set appear to be on a different genome
+## than the one used at UCSC, e.g. chrB4 is NC_018729.3 but NC_058374.1 is used in gene2accession
+#
+#printf "7955\tzebrafish\tdanRer11\n" > species.txt
+#printf "9606\thuman\thg38\n" >> species.txt
+#printf "9913\tcow\tbosTau9\n" >> species.txt
+#printf "10090\tmouse\tmm39\n" >> species.txt
+##printf "9031\tchicken\tgalGal6\n" >> species.txt
+#printf "9615\tdog\tcanFam6\n" >> species.txt
+##printf "10116\trat\trn6\n" >> species.txt # rat is different version: ucsc chr1 is NC_005100.4 instead of NC_086019
+## this is because rn8 is stuck on hgwdev
+## the same is true-ish for chicken: UCSC lists NC_006088.5 for chr1 but NCBI uses NC_052573.1, which is weirdly titled 
+## 'alternate assembly' 
+#
+## Other orthologs listed in first column of gene_ortholog file (fly doesn't have matches with human)
+##7227 fly 7460 honeybee 36329 plasmodium
+#
+#rm *.chrom.bed
+#for species in $(cut -f3 species.txt); do
+#	bigBedToBed /gbdb/$species/$species.chromAlias.bb $species.chrom.bed
+## 	head -n2 $species.chrom.bed # mm39 and hg38 have 8 fields instead of 7
+#	tawk '{print $NF}' $species.chrom.bed >> field1
+#	tawk '{print $1}' $species.chrom.bed >> field2
+##      rm $species.chrom.bed
+#done
+## remove a few chroms without NCBI IDs
+#paste field1 field2 | grep -vP '\t$' > want.chroms
+#rm field1 field2
+#
+## get all gene info for genes on NCBI chromosomes for our species
+#selectById 1 want.chroms 8 gene2accession > accession.info # 5 minutes
+# sanity check, do we get all 6 species:
+#cut -f1 accession.info | uniq -c
+#  82307 7955
+# 352450 9606
+#  99190 9615
+#  84338 9913
+# 187233 10090
+
+
+## replace with UCSC IDs
+#subColumn -skipMiss -miss=idMiss.txt 8 accession.info want.chroms accToLoc.txt
+##missed 0
+#head -n1 gene2accession > gene2ucscAccession.txt
+#cat accToLoc.txt >> gene2ucscAccession.txt
+#
+## and create tracks
+#./ortho.py --ortho gene_orthologs --species species.txt --coords gene2ucscAccession.txt 
+##There are 297 genes without genome info
+## this creates <ucsc species ID>.bed files
+#
+#cat << '_EOF_' > ncbiOrtho.as
+#table orthologs
+#"Bed 9+2 file for NCBI orthologs"
+#    (
+#    string chrom;      "Reference sequence chromosome or scaffold"
+#    uint   chromStart; "Start position in chromosome"
+#    uint   chromEnd;   "End position in chromosome"
+#    string name;       "Short Name of item"
+#    uint   score;      "Score from 0-1000"
+#    char[1] strand;    "+ or -"
+#    uint thickStart;   "Start of where display should be thick (start codon)"
+#    uint thickEnd;     "End of where display should be thick (stop codon)"
+#    uint reserved;     "Used as itemRgb as of 2004-11-22"
+#    string hugo;       "gene symbol"
+#    lstring url;       "urls to orthologs"
+#    )
+#_EOF_
+#
+outdir=/cluster/home/jeltje/public_html/brwsr/ncbiOrtho_hub/
+for species in $(cut -f3 species.txt); do
+#    bedSort $species.bed $species.bed
+    # trix index (make search case insensitive) for hugo IDs
+
+    tawk '{print $4,$10,$4}' $species.bed > name.table
+    ixIxx name.table $outdir/$species/ncbiOrtho.ix $outdir/$species/ncbiOrtho.ixx
+    #bedToBigBed -type=bed9+3 -tab -as=ncbiOrtho.as -extraIndex=hugo,name $species.bed -sizesIsChromAliasBb /gbdb/$species/$species.chromAlias.bb $outdir/$species/ncbiOrtho.bb
+done
+#rm gene2accession species.txt want.chroms accession.info idMiss.txt accToLoc.txt gene2ucscAccession.txt *.bed
+

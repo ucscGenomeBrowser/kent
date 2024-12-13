@@ -5553,7 +5553,7 @@ baseColorDefault genomicCodons
 
 track ncbiRefSeqHistorical
 parent refSeqComposite off
-priority 10000
+priority 9
 type genePred
 shortLabel RefSeq Historical
 longLabel NCBI RefSeq Historical Transcript Versions
