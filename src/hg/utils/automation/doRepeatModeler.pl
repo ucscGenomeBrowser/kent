@@ -194,10 +194,10 @@ set -beEu -o pipefail
 unset TMPDIR
 if [ -d "/data/tmp" ]; then
   export TMPDIR="/data/tmp"
-elif [ -d "/scratch/tmp" ]; then
-  export TMPDIR="/scratch/tmp"
 elif [ -d "/dev/shm" ]; then
   export TMPDIR="/dev/shm"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
 else
   export TMPDIR="/tmp"
 fi

@@ -121,7 +121,7 @@ DATA_TABLES: Final = [
 
 ## Maximum lengeth of a string (e.g. insAGCATGACCAG...) before
 ## being truncated and appended with an ellipsis
-MAX_VARIANT_LENGTH: Final = 15
+MAX_VARIANT_LENGTH: Final = 20
 MAX_LONG_BED_FIELD_LENGTH: Final = 5000
 
 ## Default color for items in output bed
@@ -256,8 +256,14 @@ def annotate_bed12(bed12df: pd.DataFrame, sourcedf: pd.DataFrame) -> pd.DataFram
         .assign(allele_registry_id=sourcedf["allele_registry_id"].fillna(""))
         .assign(clinvar_id=cvids)
         .assign(last_review_date=sourcedf["last_review_date"].fillna(""))
-        .assign(disease_link=sourcedf["diseases"])
+        .assign(disease_link=sourcedf["disease_links"])
         .assign(therapies=sourcedf["therapies"])
+        .assign(
+            mouseOverHTML="<b>Associated therapies:</b> "
+            + sourcedf["therapies"].str.replace(",", ", ")
+            + "<br><b>Associated diseases:</b> "
+            + sourcedf["disease_html"]
+        )
     )
     ## These are includde sometimes for debugging purposes...
     # "variant_id": gdf.variant_id,
@@ -276,15 +282,17 @@ def extract_variant_name(gdf: pd.DataFrame) -> pd.Series:
         np.where(
             gdf.feature_type == "Fusion",
             gdf.feature_name,  # fusions have very descriptive names.
-            np.where(  # these are the gene type variants (TODO: consider adding the gene)
+            np.where(  # these are the gene type variants
                 gdf.reference_bases.isnull(),
                 np.where(  # empty variant bases --> variant descrption or an insertion
-                    gdf.variant_bases.isnull(), gdf.variant, "ins" + gdf.variant_bases
+                    gdf.variant_bases.isnull(),
+                    gdf.gene + " " + gdf.variant,
+                    gdf.gene + " ins" + gdf.variant_bases,
                 ),
                 np.where(  # specified variant bases --> deleteion or variant
                     gdf.variant_bases.isnull(),
-                    "del" + gdf.reference_bases,
-                    gdf.reference_bases + ">" + gdf.variant_bases,
+                    gdf.gene + " " + "del" + gdf.reference_bases,
+                    gdf.gene + " " + gdf.reference_bases + ">" + gdf.variant_bases,
                 ),
             ),
         )
@@ -570,15 +578,8 @@ def transform_assertion_summaries(df: pd.DataFrame, mpdf: pd.DataFrame) -> pd.Da
         message="At least 95% of Assertions should have an existing MolecularProfile",
     )
 
+    df["disease_html"] = "<i>" + df["disease"] + "</i>"
     doid = df["doid"].astype("Int64").astype("str")
-    df["disease_html"] = doid.where(doid != "<NA>", df["disease"]).where(
-        doid == "<NA>",
-        "<a href='https://www.disease-ontology.org/?id=DOID:"
-        + doid
-        + "'>"
-        + df["disease"]
-        + "</a>",
-    )
     df["disease_link"] = doid.where(doid != "<NA>", df["disease"]).where(
         doid == "<NA>", doid + "|" + df["disease"]
     )
@@ -597,15 +598,8 @@ def transform_clinical_evidence(df: pd.DataFrame, mpdf: pd.DataFrame):
         message="At least 95% of Evidence should have an existing MolecularProfile",
     )
 
+    df["disease_html"] = "<i>" + df["disease"] + "</i>"
     doid = df["doid"].astype("Int64").astype("str")
-    df["disease_html"] = doid.where(doid != "<NA>", df["disease"]).where(
-        doid == "<NA>",
-        "<a href='https://www.disease-ontology.org/?id=DOID:"
-        + doid
-        + "'>"
-        + df["disease"]
-        + "</a>",
-    )
     df["disease_link"] = doid.where(doid != "<NA>", df["disease"]).where(
         doid == "<NA>", doid + "|" + df["disease"]
     )
@@ -792,7 +786,7 @@ def filter_augment_variant_summaries(orig_vs_df: pd.DataFrame) -> pd.DataFrame:
 
 def join_set(
     sep: str,
-    values: Sequence[str],
+    values: set[str],
     max_length: int = MAX_LONG_BED_FIELD_LENGTH,
     ellipses: str = "...",
 ) -> str:
@@ -819,54 +813,63 @@ def add_variant_diseases_therapies(
     variant_df: pd.DataFrame,
     mid2vids: dict[int, list[int]],
 ) -> pd.DataFrame:
-    vid2diseases = defaultdict(set)
-    vid2therapies = defaultdict(set)
+    vid2diseases: dict[int, set[str]] = defaultdict(set)
+    vid2dis_html: dict[int, set[str]] = defaultdict(set)
+    vid2therapies: dict[int, set[str]] = defaultdict(set)
     missing_mps = []
 
-    columns = ["molecular_profile_id", "disease_link", "therapies"]
+    columns = ["molecular_profile_id", "disease_link", "disease_html", "therapies"]
 
-    for _, mpid, disease, therapies in assertion_df[columns].itertuples():
+    # Gather all the associations from the Assertion table
+    for _, mpid, disease, disease_html, therapies in assertion_df[columns].itertuples():
+        # tests for self-equality will remove NaNs
         tset = set(therapies.split(",")) if therapies == therapies else set()
         dset = set([disease]) if disease == disease else set()
+        dhset = set([disease_html]) if disease_html == disease_html else set()
 
         if mpid in mid2vids:
             for vid in mid2vids[mpid]:
                 vid2diseases[vid] |= dset
+                vid2dis_html[vid] |= dhset
                 vid2therapies[vid] |= tset
         else:
             missing_mps.append(mpid)
 
-    for _, mpid, disease, therapies in evidence_df[columns].itertuples():
+    # Gather all the associations from the Evidence table
+    for _, mpid, disease, disease_html, therapies in evidence_df[columns].itertuples():
         tset = set(therapies.split(",")) if therapies == therapies else set()
         dset = set([disease]) if disease == disease else set()
+        dhset = set([disease_html]) if disease_html == disease_html else set()
 
         if mpid in mid2vids:
             for vid in mid2vids[mpid]:
                 vid2diseases[vid] |= dset
+                vid2dis_html[vid] |= dhset
                 vid2therapies[vid] |= tset
         else:
             missing_mps.append(mpid)
 
-    disease_df = pd.DataFrame(
+    variant_id = []
+    dhtml_col = []
+    dlink_col = []
+    therapy_col = []
+
+    for vid in set(vid2diseases.keys()) | set(vid2therapies.keys()):
+        variant_id.append(vid)
+        dhtml_col.append(join_set(", ", vid2dis_html.get(vid, set())))
+        dlink_col.append(join_set(",", vid2diseases.get(vid, set()), ellipses="|..."))
+        therapy_col.append(join_set(", ", vid2therapies.get(vid, set())))
+
+    dt_df = pd.DataFrame(
         {
-            "diseases": [
-                join_set(",", d, ellipses="|...") for d in vid2diseases.values()
-            ]
-        },
-        index=vid2diseases.keys(),
-    )
+            "variant_id": variant_id,
+            "disease_html": dhtml_col,
+            "disease_links": dlink_col,
+            "therapies": therapy_col,
+        }
+    ).set_index("variant_id")
 
-    therapy_df = pd.DataFrame(
-        {"therapies": [join_set(", ", t) for t in vid2therapies.values()]},
-        index=vid2therapies.keys(),
-    )
-
-    return (
-        variant_df.set_index("variant_id")
-        .join(disease_df)
-        .join(therapy_df)
-        .reset_index()
-    )
+    return variant_df.set_index("variant_id").join(dt_df).reset_index()
 
 
 def transform_dfs(dfs: dict[str, pd.DataFrame]) -> dict[str, str]:

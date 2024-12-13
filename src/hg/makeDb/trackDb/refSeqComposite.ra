@@ -111,6 +111,21 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         baseColorUseCds given
         baseColorDefault genomicCodons
 
+        track ncbiOrtho
+        parent refSeqComposite off
+        shortLabel NCBI Orthologs
+        longLabel NCBI Gene Orthologs
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/ncbiOrtho/ncbiOrtho.bb
+        visibility hide
+        labelFields hugo,name
+        searchIndex hugo,name
+        searchTrix /gbdb/$D/ncbiOrtho/ncbiOrtho.ix
+        defaultLabelFields hugo
+        color 136,0,204
+        priority 10
+        mouseOver $url
+
 searchName ncbiRefSeqCuratedName2
 searchTable ncbiRefSeqCurated
 searchMethod prefix
@@ -192,3 +207,8 @@ searchPriority 2.07204
 searchTable ncbiRefSeqOther
 searchPriority 2.07207
 searchType bigBed
+
+searchName ncbiOrtho
+searchTable ncbiOrtho
+searchType bigBed
+searchPriority 21

@@ -21,7 +21,7 @@ href="/FAQ/FAQgenes.html">Genes FAQ</a>.</p>
 <p>
 This track is a composite track that contains differing data sets.
 To show only a selected set of subtracks, uncheck the boxes next to the tracks that you wish to 
-hide. <b>Note:</b> Not all subtracts are available on all assemblies. </p>
+hide. <b>Note:</b> Not all subtracks are available on all assemblies. </p>
 
 The possible subtracks include:
 <dl>
@@ -74,6 +74,17 @@ The possible subtracks include:
    <em>RefSeq HGMD (subset)</em> &ndash; Subset of RefSeq Curated, transcripts annotated by the Human
    Gene Mutation Database. This track is only available on the human genomes hg19 and hg38.
    It is the most restricted RefSeq subset, targeting clinical diagnostics.
+   </li>
+   <li>
+   <em>NCBI Orthologs</em> &ndash; Orthologous genes were identified by
+   <a target="_blank" href="https://www.ncbi.nlm.nih.gov/refseq/annotation_euk/process/">
+    NCBI's Eukaryotic Genome Annotation Pipeline</a>
+    for the NCBI Gene dataset using a combination of protein sequence similarity
+    and local synteny analysis. Orthology is determined between the genome being annotated and a
+    reference genome, such as human or zebrafish, and pairs of orthologs are grouped together.
+    Transitive relationships are inferred within each group, for example, zebrafish &lt;-&gt;
+    human &lt;-&gt; mouse. This track is available for the following assemblies: hg38, mm39, 
+    danRer11, canFam6, and bosTau9.
    </li>
   </ul>
 </dl>
@@ -186,6 +197,18 @@ less than 15% were discarded. When a single RNA aligned in multiple places, the 
 having the highest base identity was identified. Only alignments having a base identity
 level within 0.1% of the best and at least 96% base identity with the genomic sequence were
 kept.</p>
+<p>
+The NCBI Orthologs track was generated using the latest
+<a href="https://ftp.ncbi.nih.gov/gene/DATA/" target="_blank">NCBI files</a> (gene2accession and
+gene_orthologs). NCBI chromosome identifiers were mapped to UCSC-compatible IDs using
+species-specific chromosome alias files, and genes were filtered to include only those located on
+valid NCBI chromosomes. A custom <a
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/ncbiRefSeq/ortho.py"
+target="_blank">Python script</a> processed the ortholog relationships and created bed files for
+each species. The bed files were then converted to BigBed format, with indexing for search
+functionality. The procedure is documented in the <a href=
+"https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/ncbiRefSeq/ncbiOrtho.makedoc"
+target="_blank">makeDoc</a> from our GitHub repository.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -203,7 +226,7 @@ target="_blank">archives</a> of our downloads server. You can also access any Re
 entries in JSON format through our <a href="http://genome.ucsc.edu/goldenPath/help/api.html">
 JSON API</a>.</p>
 <p>
-The data in the <em>RefSeq Other</em> and <em>RefSeq Diffs</em> tracks are organized in 
+The data in the <em>RefSeq Other</em>, <em>RefSeq Diffs</em>, and <em>NCBI Orthologs</em> tracks are organized in
 <a href="../../FAQ/FAQformat.html#format1.5" target="_blank">bigBed</a> file format; more
 information about accessing the information in this bigBed file can be found
 below. The other subtracks are associated with database tables as follows:</p>
@@ -226,12 +249,14 @@ to speed up access for display in the Genome Browser, but can be safely ignored 
 analysis. You can read more about the bin indexing system
 <a href="http://genomewiki.ucsc.edu/index.php/Bin_indexing_system" target="_blank">here</a>.</p>
 <p>
-The annotations in the <em>RefSeqOther</em> and <em>RefSeqDiffs</em> tracks are stored in bigBed 
+The annotations in the <em>RefSeqOther</em>, <em>RefSeqDiffs</em>, and <em>NCBI Orthologs</em> tracks are stored in bigBed
 files, which can be obtained from our downloads server here,
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqOther.bb"
-target="_blank"><tt>ncbiRefSeqOther.bb</tt></a> and 
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb" 
-target="_blank"><tt>ncbiRefSeqDiffs.bb</tt></a>.
+target="_blank"><tt>ncbiRefSeqOther.bb</tt></a>,
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb"
+target="_blank"><tt>ncbiRefSeqDiffs.bb</tt></a>, and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiOrtho/ncbiOrtho.bb"
+target="_blank"><tt>ncbiOrtho.bb</tt></a>.
 Individual regions or the whole set of genome-wide annotations can be obtained using our tool
 <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system from the utilities directory linked below. For example, to extract only
