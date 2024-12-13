@@ -9,7 +9,7 @@ table revelOverlaps
     char[1] strand;    "+, - or . for unknown"
     uint thickStart;   "Start of where display should be thick"
     uint thickEnd;     "End of where display should be thick"
-    uint itemRgb;     "End of where display should be thick"
+    #uint itemRgb;     "End of where display should be thick"
     lstring   _jsonTable;      "Scores for transcript ID"
     lstring   _mouseOver;      "Mouse over text"
     )
