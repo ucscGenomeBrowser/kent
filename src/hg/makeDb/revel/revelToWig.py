@@ -52,7 +52,7 @@ def outTransIds(chrom, pos, ref, prevTransIds, bedFh):
         # ONLY output the line if we have different scores = there is no need to output a feature if all the scores are the same
         if len(allScores)>1:
             #bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, ";".join(tableLines), ", ".join(mouseOvers))
-            bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, json.dumps(tableDict), ", ".join(mouseOvers))
+            bed = (chrom, start, start+1, ref+">"+alt, "0", ".", start, start+1, "0,0,0", json.dumps(tableDict), ", ".join(mouseOvers))
             bed = [str(x) for x in bed]
             bedFh.write("\t".join(bed))
             bedFh.write("\n")
