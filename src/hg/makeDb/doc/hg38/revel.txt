@@ -1,10 +1,7 @@
 cd /hive/data/genomes/hg38/bed/revel
 wget https://rothsj06.u.hpc.mssm.edu/revel-v1.3_all_chromosomes.zip
 unzip revel-v1.3_all_chromosomes.zip
-# there are two different revel scripts using entirely different strategies
-# they should have been merged, but once the hg19 one was working and tested, I didn't
-# want to mess with the hg19 script, and instead hacked it into an hg38 version.
-time python ~/kent/src/hg/makeDb/revel/revelToWig-hg38.py ../../chrom.sizes revel_with_transcript_ids 
+time python ~/kent/src/hg/makeDb/revel/revelToWig.py ../../chrom.sizes revel_with_transcript_ids hg38
 wigToBigWig a.wig ../../chrom.sizes a.bw &
 wigToBigWig t.wig ../../chrom.sizes t.bw &
 wigToBigWig c.wig ../../chrom.sizes c.bw  &
@@ -12,3 +9,6 @@ wigToBigWig g.wig ../../chrom.sizes g.bw &
 bedSort overlap.bed overlap.bed
 bedToBigBed overlap.bed -as=~/kent/src/hg/makeDb/revel/revel.as ../../../chrom.sizes overlap.bb -tab -type=bed8+
 rm *.wig -f
+
+#Colors were added using the script
+~/kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py

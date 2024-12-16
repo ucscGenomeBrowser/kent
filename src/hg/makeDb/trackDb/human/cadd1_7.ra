@@ -34,6 +34,7 @@ pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
+	setColorWith /gbdb/$D/cadd1.7/a.color.bb
 
         track cadd1_7_C
         shortLabel Mutation: C
@@ -45,6 +46,7 @@ pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
+	setColorWith /gbdb/$D/cadd1.7/c.color.bb
 
         track cadd1_7_G
         shortLabel Mutation: G
@@ -56,6 +58,7 @@ pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
+	setColorWith /gbdb/$D/cadd1.7/g.color.bb
 
         track cadd1_7_T
         shortLabel Mutation: T
@@ -67,6 +70,7 @@ pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
         maxHeightPixels 128:20:8
         viewLimits 10:50
         viewLimitsMax 0:100
+	setColorWith /gbdb/$D/cadd1.7/t.color.bb
 
 track cadd1_7_Ins
 shortLabel CADD 1.7 Ins

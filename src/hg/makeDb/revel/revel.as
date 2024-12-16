@@ -1,5 +1,5 @@
 table revelOverlaps
-"a BED8 with two additional fields"
+"a BED9 with two additional fields"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
