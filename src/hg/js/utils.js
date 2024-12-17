@@ -4522,6 +4522,8 @@ function addRecentSearch(db, searchTerm, extra={}) {
             searchObj[db].results[searchTerm] = extra;
         }
         window.localStorage.setItem("searchStack", JSON.stringify(searchObj));
+    }
+}
 
 // variables to parse url arguments correctly
 var digitTest = /^\d+$/,
