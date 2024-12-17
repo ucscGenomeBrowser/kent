@@ -1,6 +1,6 @@
 track predictionScoresSuper
-shortLabel Prediction Scores
-longLabel Human Prediction Scores
+shortLabel Deleteriousness Predictions
+longLabel Variant Deleteriousness / Variant Impact Prediction Scores
 superTrack on hide
 visibility hide
 group phenDis
