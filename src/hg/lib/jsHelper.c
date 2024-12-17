@@ -277,9 +277,9 @@ void jsIncludeDataTablesLibs()
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
     "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
 puts("<script type=\"text/javascript\" "
-    "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"\"></script>");
+    "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"></script>");
 puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"\"></script>");
+    "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>");
 }
 
 char *jsDataTableStateSave (char *cartPrefix)

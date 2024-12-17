@@ -4239,6 +4239,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * First time through make up track var from thin air
      * if no track line. Find out explicit type setting if any.
      * Also make sure settingsHash is set up. */
+    // NOTE: line is binary data if a file upload
     lf = cpp->fileStack;
     char *dataUrl = NULL;
     if (lf->fileName && (

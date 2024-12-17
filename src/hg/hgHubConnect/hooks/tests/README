@@ -1,0 +1,3 @@
+# Example command, the id, offset and size are environment variables set by the daemon
+# so we re-create them here
+TUS_ID=123 TUS_OFFSET=0 TUS_SIZE=2816 ./pre-create < testInputNoComments

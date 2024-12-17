@@ -29,6 +29,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 #include "botDelay.h"
+#include "wikiLink.h"
 
 static boolean printSaveList = FALSE; // if this is true, we print to stderr the number of custom tracks saved
 
@@ -703,14 +704,17 @@ if (!customTrackIsBigData(fileName))
     return NULL;
 char buf[1024];
 char *cFBin = cartOptionalString(cart, binVar);
+char *cF = cartOptionalString(cart, fileVar);
 if (cFBin)
     {
     // cFBin already contains memory offset and size (search for __binary in cheapcgi.c)
     safef(buf,sizeof(buf),"memory://%s %s", fileName, cFBin);
+    char *split[3];
+    int splitCount = chopByWhite(cloneString(cFBin), split, sizeof(split));
+    if (splitCount > 2) {errAbort("hgCustom: extra garbage in %s", binVar);}
     }
 else
     {
-    char *cF = cartOptionalString(cart, fileVar);
     safef(buf, sizeof(buf),"memory://%s %lu %lu",
 	  fileName, (unsigned long) cF, (unsigned long) strlen(cF));
     }
