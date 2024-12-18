@@ -18,6 +18,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hubSpace.h"
+#include "hubSpaceQuotas.h"
 
 char *getUserName()
 /* Query the right system for the users name */
@@ -452,7 +453,8 @@ else
 long long getMaxUserQuota(char *userName)
 /* Return how much space is allocated for this user or the default */
 {
-return HUB_SPACE_DEFAULT_QUOTA;
+long long specialQuota = quotaForUserName(userName);
+return specialQuota == 0 ? HUB_SPACE_DEFAULT_QUOTA : specialQuota;
 }
 
 long long checkUserQuota(char *userName)

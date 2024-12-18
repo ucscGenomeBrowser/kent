@@ -34,13 +34,10 @@ char *emailForUserName(char *userName);
 #define HUB_SPACE_URL "https://hgwdev.gi.ucsc.edu/hubspace"
 
 // the various quota helper variables:
-#define HUB_SPACE_DEFAULT_QUOTA_BYTES 1000000000
+#define HUB_SPACE_DEFAULT_QUOTA_BYTES 10000000000
 #define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 
 // for defining the quota in hg.conf
 #define HUB_SPACE_CONF_QUOTA_VAR "hubspace.quota"
-// path to hg.conf file that has a list of hubspace.quota.userName entries
-// for special per user quotas:
-#define HUB_SPACE_QUOTA_LIST_VAR "hubspace.quotaList"
 
 char *webDataDir(char *userName);
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
