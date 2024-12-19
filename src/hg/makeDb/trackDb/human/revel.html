@@ -83,6 +83,33 @@ top of the display. Otherwise, there are several nucleotides per pixel under
 your mouse cursor and no score will be shown on the mouseover tooltip.
 </p>
 
+<p><b>Track colors</b></p>
+<p>
+This track is colored according to <a target="_blank" href="https://www.sciencedirect.com/science/article/pii/S000292972200461X">Table 2 in Vikas et al</a>. The colors represent the recommended ACMG/AMP score cutoffs.
+
+<table style="text-align: left;">
+  <thead>
+    <tr>
+      <th>Range</th>
+      <th>Classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&ge; .773</td>
+      <td style="color: rgb(255,0,0);">Pathogenic</td>
+    </tr>
+    <tr>
+      <td>.772 - .184</td>
+      <td style="color: rgb(192,192,192);">Neutral</td>
+    </tr>
+    <tr>
+      <td>&le; .183</td>
+      <td style="color: rgb(80,166,230);">Benign</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>For hg38, note that the data was converted from the hg19 data using the UCSC
 liftOver program, by the REVEL authors. This can lead to missing values or
 duplicated values. When a hg38 position is annotated with two scores due to the

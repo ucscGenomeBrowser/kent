@@ -21,6 +21,7 @@ dataVersion /gbdb/$D/revel/version.txt
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        setColorWith /gbdb/$D/revel/a.color.bb
 
         track revelC
         shortLabel Mutation: C
@@ -35,6 +36,7 @@ dataVersion /gbdb/$D/revel/version.txt
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        setColorWith /gbdb/$D/revel/c.color.bb
 
         track revelG
         shortLabel Mutation: G
@@ -49,6 +51,7 @@ dataVersion /gbdb/$D/revel/version.txt
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        setColorWith /gbdb/$D/revel/g.color.bb
 
         track revelT
         shortLabel Mutation: T
@@ -63,6 +66,7 @@ dataVersion /gbdb/$D/revel/version.txt
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        setColorWith /gbdb/$D/revel/t.color.bb
 
         track revelOverlaps
         shortLabel REVEL overlaps

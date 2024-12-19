@@ -492,51 +492,75 @@ function cartHideAnyTrack (id, cartVars, cartVals) {
     }
 }
 
-function tdbFindChildless(trackDb, delTracks) {
-    /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
-     * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks*/
-    others = [];
-
+function tdbCountChildren(trackDb, parentType) {
+    /* return dicts with count of children, uses either the .parentTrack or .topParent trackDb attributes */
     var familySize = {};
     var families = {};
     // sort trackDb into object topParent -> count of children
     for (var trackName of Object.keys(hgTracks.trackDb)) {
         var rec = hgTracks.trackDb[trackName];
-        if (rec.topParent===undefined) {
-            //others.push(trackName);
-            continue; // ignore top-level tracks
+        // when looking at superTracks, only look at those children that are in superTracks
+        if (rec[parentType]===undefined) {
+            continue; // ignore tracks without parents
         }
 
-        var topParent = rec.topParent;
-        if (!familySize.hasOwnProperty(topParent)) {
-            familySize[topParent] = 0;
-            families[topParent] = [];
+        var parentTrack = rec[parentType];
+        if (!familySize.hasOwnProperty(parentTrack)) {
+            familySize[parentTrack] = 0;
+            families[parentTrack] = [];
         }
-        familySize[topParent]++;
-        families[topParent].push(trackName);
+        familySize[parentTrack]++;
+        families[parentTrack].push(trackName);
     }
+
+    var ret = {};
+    ret.familySize = familySize;
+    ret.families = families;
+    return ret;
+}
+
+function tdbFindChildless(trackDb, delTracks) {
+    /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
+     * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks
+     * The caller needs the children names, as we want to hide the children with Javascript right away */
+
+    // This functions uses a somewhat weird strategy: it counts the children of the composites, also counts the children of superTracks,
+    // and compares both at the end. There may be a better strategy but our data structures are so strange that I didn't know what
+    // else to do.
+    var parentType = "parentTrack";
+    others = [];
+
+    var compLinks = tdbCountChildren(trackDb, "parentTrack"); // look only at direct parents: superTracks and composites
+    var topLinks = tdbCountChildren(trackDb, "topParent");  // look at top parents, so only superTracks
 
     // decrease the parent's count for each track to delete
     for (var delTrack of delTracks) {
         var tdbRec = hgTracks.trackDb[delTrack];
-        if (tdbRec.topParent)
-            familySize[tdbRec.topParent]--;
+        let parentName = tdbRec.parentTrack;
+        if (parentName)
+            compLinks.familySize[parentName]--;
+
+        parentName = tdbRec.topParent;
+        if (parentName)
+            topLinks.familySize[parentName]--;
     }
 
     // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
     var loneParents = [];
     var doneParents = [];
     for (delTrack of delTracks) {
-        var parentName = hgTracks.trackDb[delTrack].topParent;
+        var parentName = hgTracks.trackDb[delTrack].parentTrack;
+        var topParentName = hgTracks.trackDb[delTrack].topParent;
         if (parentName) {
-            if (familySize[parentName]===0) {
+            // hide a superTrack parent only if that superTrack does not have any other tracks open
+            if (compLinks.familySize[parentName]===0 && topLinks.familySize[topParentName]===0) {
                 if (!doneParents.includes(parentName)) {
-                    loneParents.push([parentName, families[parentName]]);
+                    loneParents.push([parentName, compLinks.families[parentName]]);
                     doneParents.push(parentName);
                 }
             } else
-                for (var child of families[parentName])
-                    // but do not hide tracks of lone parents that are not in delTracks
+                for (var child of compLinks.families[parentName])
+                    // do not hide tracks of lone parents that are not in delTracks
                     if (delTracks.includes(child))
                         others.push(child);
         } else {
@@ -4498,5 +4522,102 @@ function addRecentSearch(db, searchTerm, extra={}) {
             searchObj[db].results[searchTerm] = extra;
         }
         window.localStorage.setItem("searchStack", JSON.stringify(searchObj));
+    }
+}
+
+// variables to parse url arguments correctly
+var digitTest = /^\d+$/,
+    keyBreaker = /([^\[\]]+)|(\[\])/g,
+    plus = /\+/g,
+    paramTest = /([^?#]*)(#.*)?$/;
+
+function deparam(params) {
+    /* From https://github.com/jupiterjs/jquerymx/blob/master/lang/string/deparam/deparam.js
+     * Used by the cell browser */
+    if(! params || ! paramTest.test(params) ) {
+        return {};
+    }
+
+    var data = {},
+        pairs = params.split('&'),
+        current;
+
+    for (var i=0; i < pairs.length; i++){
+        current = data;
+        var pair = pairs[i].split('=');
+
+        // if we find foo=1+1=2
+        if(pair.length !== 2) {
+            pair = [pair[0], pair.slice(1).join("=")];
+        }
+
+        var key = decodeURIComponent(pair[0].replace(plus, " ")),
+        value = decodeURIComponent(pair[1].replace(plus, " ")),
+        parts = key.match(keyBreaker);
+
+        for ( var j = 0; j < parts.length - 1; j++ ) {
+            var part = parts[j];
+            if (!current[part] ) {
+                //if what we are pointing to looks like an array
+                current[part] = digitTest.test(parts[j+1]) || parts[j+1] === "[]" ? [] : {};
+            }
+            current = current[part];
+            }
+        var lastPart = parts[parts.length - 1];
+        if (lastPart === "[]"){
+            current.push(value);
+        } else{
+            current[lastPart] = value;
+        }
+    }
+    return data;
+}
+
+function changeUrl(vars, oldVars) {
+    /* Save the users search string to the url so web browser can easily
+     * cache search results into the browser history
+     * vars: object of new key: val pairs like CGI arguments
+     * oldVars: arguments we want to keep between calls */
+    var myUrl = window.location.href;
+    myUrl = myUrl.replace('#','');
+    var urlParts = myUrl.split("?");
+    var baseUrl;
+    if (urlParts.length > 1)
+        baseUrl = urlParts[0];
+    else
+        baseUrl = myUrl;
+
+    var urlVars;
+    if (oldVars === undefined) {
+        var queryStr = urlParts[1];
+        urlVars = deparam(queryStr);
+    } else {
+        urlVars = oldVars;
+    }
+
+    for (var key in vars) {
+        var val = vars[key];
+        if (val === null || val === "") {
+            if (key in urlVars) {
+                delete urlVars[key];
+            }
+        } else {
+            urlVars[key] = val;
+        }
+    }
+
+    var argStr = jQuery.param(urlVars);
+    argStr = argStr.replace(/%20/g, "+");
+
+    return {"baseUrl": baseUrl, "args": argStr, "urlVars": urlVars};
+}
+
+function saveHistory(obj, urlParts, replace) {
+    /* Save an object to the web browser's history stack. When we visit the page for the
+     * first time, we replace the basic state after we are done making the initial UI */
+    if (replace) {
+        history.replaceState(obj, "", urlParts.baseUrl + (urlParts.args.length !== 0 ? "?" + urlParts.args : ""));
+    } else {
+        history.pushState(obj, "", urlParts.baseUrl + (urlParts.args.length !== 0 ? "?" + urlParts.args : ""));
     }
 }

@@ -264,7 +264,7 @@ function headerRefresh(tableHead) {
   //  header back to pristine condition for the next sort
   var headerRow = '<tr>';
   let circleQuestion = '<svg width="24" height="24"> <circle cx="12" cy="12" r="10" fill="#4444ff" /> <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="13px" font-family="Verdana" dy=".3em">?</text>?</svg>';
-  headerRow += '<th><div class=tooltip>view/<br>request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>view</b> opens the genome browser for an existing assembly, <b>request</b> opens an assembly request form.</span></div></th>';
+  headerRow += '<th><div class=tooltip>View/<br>request&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext"><b>view</b> opens the genome browser for an existing assembly, <b>request</b> opens an assembly request form.</span></div></th>';
   headerRow += '<th><div class="tooltip">English common name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">English common name.  This field may also include a unique identifier and the year the assembly was released.</span></div></th>';
   headerRow += '<th><div class="tooltip">Scientific name&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">The Scientific name is the standardized, Latin-based designation used in biological taxonomy to formally classify and identify a species.  Obtained from NCBI taxonomy.</span></div></th>';
   headerRow += '<th><div class="tooltip">NCBI Assembly&nbsp;&#9432;<span onclick="event.stopPropagation()" class="tooltiptext">The GC accession number for the assembly, if available, links to the corresponding NCBI resource record or UCSC download options for local UCSC assemblies.</span></div></th>';

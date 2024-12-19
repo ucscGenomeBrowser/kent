@@ -190,8 +190,10 @@ if (! hDbExists(db))
                 hubDb = hubConnectLoadHubs(cart);
                 }
             errCatchEnd(errCatch);
-            if (hubDb != NULL)
-                maybeHubDb = hubDb;
+
+            maybeHubDb = hubDb;
+            if (errCatch->gotError)
+                warn("%s", errCatch->message->string);
             }
         }
     }
@@ -272,6 +274,8 @@ for (path = dataDirPaths;  path != NULL;  path = path->next)
             }
         // If it's a hub, use its full hub_... name:
         char *maybeHubDb = connectIfHub(cart, db);
+        if (maybeHubDb == NULL)
+            maybeHubDb = db;
         slAddHead(&orgList, slPairNew(maybeHubDb, label));
         }
     }
@@ -3497,15 +3501,17 @@ if (results && results->singleSubtreeInfo)
     if (subtreePersist)
         saveTrashFile(singleSubtreeJsonTn);
     reportTiming(&startTime, "make Auspice JSON");
+    char *ctDb = db;
     char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
     if (dbSetting)
-        db = connectIfHub(cart, dbSetting);
-    boolean canDoCustomTracks = (!subtreesOnly &&
-                                 (sameString(db, refName) || isNotEmpty(dbSetting)));
+        {
+        ctDb = connectIfHub(cart, dbSetting);
+        }
+    boolean canDoCustomTracks = (!subtreesOnly && ctDb != NULL);
     if (canDoCustomTracks)
         // Form submits subtree custom tracks to hgTracks
         printf("<form action='%s' name='resultsForm_%s' method=%s>\n\n",
-               hgTracksName(), db, cartUsualString(cart, "formMethod", "POST"));
+               hgTracksName(), ctDb, cartUsualString(cart, "formMethod", "POST"));
 
     makeButtonRow(singleSubtreeJsonTn, jsonTns, results->subtreeInfoList, subtreeSize, isFasta,
                   canDoCustomTracks);
@@ -3540,7 +3546,7 @@ if (results && results->singleSubtreeInfo)
         if (canDoCustomTracks)
             {
             // Make custom tracks for uploaded samples and subtree(s).
-            ctTn = writeCustomTracks(org, refName, db, vcfTn, results, sampleIds, source,
+            ctTn = writeCustomTracks(org, refName, ctDb, vcfTn, results, sampleIds, source,
                                      tl->fontHeight, sampleTree, &startTime);
             }
 
@@ -3647,7 +3653,7 @@ if (results && results->singleSubtreeInfo)
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
         cartSaveSession(cart);
-        cgiMakeHiddenVar("db", db);
+        cgiMakeHiddenVar("db", ctDb);
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
         if (tl->leftLabelWidthChars < 0 || tl->leftLabelWidthChars == leftLabelWidthDefaultChars)
             cgiMakeHiddenVar(leftLabelWidthVar, leftLabelWidthForLongNames);

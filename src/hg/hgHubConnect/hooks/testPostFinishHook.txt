@@ -1,0 +1,74 @@
+{
+"Event": {
+"HTTPRequest": {
+"Header": {
+"Accept": [
+"*\/*"
+],
+"Accept-Encoding": [
+"gzip, deflate"
+],
+"Connection": [
+"Keep-Alive"
+],
+"Content-Length": [
+"0"
+],
+"Cookie": [
+"DEVwikidb_mw1_UserName=chmalee; DEVwikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2"
+],
+"Host": [
+"hgwdev-hubspace.gi.ucsc.edu"
+],
+"Tus-Resumable": [
+"1.0.0"
+],
+"Upload-Length": [
+"0"
+],
+"Upload-Metadata": [
+"parentDir Li90ZXN0Mg==,genome TkE=,hubName dGVtcA=="
+],
+"User-Agent": [
+"python-requests\/2.27.1"
+],
+"X-Forwarded-For": [
+"2607:f5f0:136:1::26"
+],
+"X-Forwarded-Host": [
+"hgwdev-hubspace.gi.ucsc.edu"
+],
+"X-Forwarded-Proto": [
+"https"
+],
+"X-Forwarded-Server": [
+"hgwdev-hubspace.gi.ucsc.edu"
+]
+},
+"Method": "POST",
+"RemoteAddr": "127.0.0.1:59194",
+"URI": "/files"
+},
+"Upload": {
+"ID": "5bf1d5070510430e06cb580a50bc3b71",
+"IsFinal": false,
+"IsPartial": false,
+"MetaData": {
+"genome": "NA",
+"hubName": "temp",
+"lastModified": "1731021410",
+"parentDir": "./test2"
+},
+"Offset": 0,
+"PartialUploads": null,
+"Size": 0,
+"SizeIsDeferred": false,
+"Storage": {
+"Path": "/hive/users/chmalee/tmp/userDataDir/5bf1d5070510430e06cb580a50bc3b71",
+"Type": "filestore"
+}
+}
+},
+"Type": "post-finish"
+}
+

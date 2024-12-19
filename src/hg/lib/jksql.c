@@ -810,7 +810,7 @@ return databases;
 }
 
 
-static bool sqlTableExistsOnMain(struct sqlConnection *sc, char *tableName)
+bool sqlTableExistsOnMain(struct sqlConnection *sc, char *tableName)
 /* Return TRUE if the table can be queried using sc's main conn;
  * don't check failoverConn or the table cache (showTableCache in hg.conf). */
 {

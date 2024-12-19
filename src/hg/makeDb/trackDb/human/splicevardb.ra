@@ -1,0 +1,20 @@
+track spliceVarDb
+shortLabel SpliceVarDB
+longLabel SpliceVarD: Experimentally validated splicing variants
+visibility full
+group phenDis
+parent spliceImpactSuper on
+type bigLolly
+itemRgb on
+viewLimits 0:3
+bigDataUrl /gbdb/$D/splicevardb/SVDB.bb
+lollySizeField lollySize
+yAxisLabel.0 0 on 140,140,140 Confl
+yAxisLabel.1 1 on 140,140,140 Normal
+yAxisLabel.2 2 on 140,140,140 Low
+yAxisLabel.3 3 on 140,140,140 Splice
+yAxisNumLabels off
+lollyMaxSize 5
+lollyNoStems on
+dataVersion Nov 2024
+html spliceImpactSuper

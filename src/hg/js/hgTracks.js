@@ -2176,10 +2176,10 @@ var rightClick = {
                 // current selection easily back, since we always hide them all, instead of just hiding the parent.
                 // The problem is that it's not easy to find out if there is an easier way to hide them, the code
                 // would have to go over all possible parents, not just topParents. Maybe one day.
-                if (tdbIsSubtrack(rec)) {
-                    cartVars.push(childName+"_sel");
-                    cartVals.push('0');
-                }
+                //if (tdbIsSubtrack(rec)) {
+                 //  cartVars.push(childName+"_sel");
+                 //   cartVals.push('0');
+                //}
             }
 
             // and set the lone parent to hide in the cart
