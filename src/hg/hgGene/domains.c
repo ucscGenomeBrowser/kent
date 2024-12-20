@@ -11,7 +11,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 #include "hdb.h"
-#include "lsSnpPdbChimera.h"
+#include "lsSnpPdbChimera.h"  // only used for MuPIT, lsSNP/PDB is deceased
 
 
 static boolean domainsExists(struct section *section, 

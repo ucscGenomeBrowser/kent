@@ -235,7 +235,6 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 #include "gbWarn.h"
-#include "lsSnpPdbChimera.h"
 #include "mammalPsg.h"
 #include "net.h"
 #include "jsHelper.h"
