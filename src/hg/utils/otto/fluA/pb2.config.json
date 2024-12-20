@@ -1,0 +1,15 @@
+{ "colorRamps": {
+    "meta_mutdiffsel": { "scale": [ [0, "#D8D8D8"], [4.872, "#5050F8"] ] }
+  },
+  "customNames": {
+    "meta_mutdiffsel": "Differential selection in human vs. avian cells",
+    "meta_mutdiffsel_mutations": "Differential selection mutations"
+  },
+  "colorBy": {
+      "colorByOptions": [ "meta_host", "meta_country", "meta_location",
+                          "meta_serotype", "meta_segment",
+                          "meta_mutdiffsel",
+                          "genotype",
+                          "None" ]
+  }
+}

@@ -1,0 +1,31 @@
+{ "colorRamps": {
+    "meta_mouse_escape": { "scale": [ [0, "#D8D8D8"], [2.14938, "#5050F8"] ] },
+    "meta_ferret_escape": { "scale": [ [0, "#D8D8D8"], [2.6474, "#5050F8"] ] },
+    "meta_cell_entry": { "scale": [ [ -5.82, "#FF3B2D"], [0, "#D8D8D8"], [1.2696, "#5050F8"] ] },
+    "meta_stability": { "scale": [ [ -0.55916, "#FF3B2D"], [0, "#D8D8D8"], [0.80034, "#5050F8"] ] },
+    "meta_sa26_increase": { "scale": [ [0, "#D8D8D8"], [1.9567, "#5050F8"] ] },
+    "meta_mutdiffsel": { "scale": [ [0, "#D8D8D8"], [4.872, "#5050F8"] ] }
+  },
+  "customNames": {
+    "meta_mouse_escape": "HA Mouse sera escape relative to AmWigeon/SC/2021",
+    "meta_ferret_escape": "HA Ferret sera escape relative to AmWigeon/SC/2021",
+    "meta_cell_entry": "HA Cell entry",
+    "meta_stability": "HA Stability",
+    "meta_sa26_increase": "HA Increase in a2,6 sialic acid usage",
+    "meta_mouse_escape_mutations": "HA Mouse sera escape mutations",
+    "meta_ferret_escape_mutations": "HA Ferret sera escape mutations",
+    "meta_cell_entry_mutations": "HA Cell entry mutations",
+    "meta_stability_mutations": "HA Stability mutations",
+    "meta_sa26_increase_mutations": "HA a2,6 sialic acid increase mutations",
+    "meta_mutdiffsel": "PB2 Differential selection in human vs. avian cells",
+    "meta_mutdiffsel_mutations": "PB2 Differential selection mutations"
+  },
+  "colorBy": {
+      "colorByOptions": [ "meta_host", "meta_country", "meta_location",
+                          "meta_mouse_escape", "meta_ferret_escape", "meta_cell_entry",
+                          "meta_stability", "meta_sa26_increase",
+                          "meta_mutdiffsel",
+                          "genotype",
+                          "None" ]
+  }
+}
