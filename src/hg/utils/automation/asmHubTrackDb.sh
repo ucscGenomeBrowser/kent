@@ -936,7 +936,7 @@ labelFields name,name2
 defaultLabelFields name2
 baseColorUseCds given
 baseColorDefault genomicCodons
-labelSeperator \" \"
+labelSeparator \" \"
 html html/%s.ensGene\n\n" "${ensVersion}" "${asmId}" "${searchTrix}" "${indexList}" "${asmId}"
 fi
 
@@ -985,7 +985,7 @@ bigDataUrl bbi/%s.ebiGene.bb%s
 searchIndex name,name2
 labelFields name,name2
 defaultLabelFields name2
-labelSeperator \" \"
+labelSeparator \" \"
 html html/%s.ebiGene\n\n" "${ebiVersion}" "${ebiVersion}" "${asmId}" "${searchTrix}" "${asmId}"
 
 $scriptDir/asmHubEbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ebiGene.html "${ebiVersion}"
