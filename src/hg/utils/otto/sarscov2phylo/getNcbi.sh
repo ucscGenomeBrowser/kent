@@ -164,4 +164,4 @@ rm -f ~angie/public_html/sarscov2phylo/ncbi.$today
 ln -s $ottoDir/ncbi.$today ~angie/public_html/sarscov2phylo/ncbi.$today
 
 # Clean up
-rm -r ncbi_dataset genbank.maybeDups.fa
+rm -rf ncbi_dataset genbank.maybeDups.fa

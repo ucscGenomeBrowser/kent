@@ -34,6 +34,8 @@ BA.1:
               [ 22194, 22217 ],   # deletion 22194-22196, insertion after 22204, big mess after that
               [ 28362, 28370 ] ]
     sites: [ 203, 22813, 22898, 22882, 23854 ]
+    # Adding this 2024-09-26 because it keeps splitting BA.1.18 and causing trouble for pangolin-data
+    reversions: [ G26530A ]
 
 BA.1.1:
     # On the BA.1 branch, so it inherits BA.1 masking.
@@ -110,7 +112,8 @@ BA.2.86:
     representative: Denmark/DCGC-661170/2023
     ranges: [ [ 21294, 21296 ],  # run of muts, makes a mini-JN.1
               [ 21539, 21542 ],  # run of muts, France/...-HCL, makes a mini-JN.1
-              [ 21765, 21770 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
+              [ 21765, 21769 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
+                                 # https://github.com/sars-cov-2-variants/lineage-proposals/issues/2194#issuecomment-2456087552
               [ 21610, 21624 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1347
               [ 21625, 21626 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
                                  # 21627 taken back out 2024-05-26 by email request from FedeGueli

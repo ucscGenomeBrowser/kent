@@ -29,8 +29,10 @@ usherSampled=$usherDir/build/usher-sampled
 usher=$usherDir/build/usher
 matUtils=$usherDir/build/matUtils
 
-mkdir -p $mpxvDir/ncbi/ncbi.$today
-$mpxvScriptDir/getNcbiMpxv.sh >& $mpxvDir/ncbi/ncbi.$today/getNcbiMpxv.log
+if [[ ! -d $mpxvDir/ncbi/ncbi.$today || ! -s $mpxvDir/ncbi/ncbi.$today/genbank.fa.xz ]]; then
+    mkdir -p $mpxvDir/ncbi/ncbi.$today
+    $mpxvScriptDir/getNcbiMpxv.sh >& $mpxvDir/ncbi/ncbi.$today/getNcbiMpxv.log
+fi
 
 buildDir=$mpxvDir/build/$today
 mkdir -p $buildDir
@@ -46,12 +48,13 @@ perl -wne 'chomp; @w=split(/\t/);
     if ($iso !~ /$country/ && $iso !~ /\b$COU\b/) { $iso = "$country/$iso"; }
     my $year = $date;  $year =~ s/-.*//;
     if ($iso !~ /$year/) { $iso = "$iso/$year"; }
-    my $fullName = "$iso|$acc|$date";  $fullName =~ s/ /_/g;
+    my $fullName = $name ? "$name|$acc|$date" : "$acc|$date";
+    $fullName =~ s/[ ,:()]/_/g;
     print "$acc\t$fullName\n";' \
     $mpxvNcbiDir/metadata.2017outbreak.tsv > renaming.tsv
 
 # Use Nextstrain's exclusion list too.
-awk '{print $1;}' ~angie/github/monkeypox/config/exclude_accessions_mpxv.txt \
+awk '{print $1;}' ~angie/github/monkeypox/phylogenetic/defaults/exclude_accessions.txt \
 | grep -Fwf - <(cut -f 1 $mpxvNcbiDir/metadata.2017outbreak.tsv) \
     > exclude.ids
 
@@ -83,7 +86,7 @@ time ~angie/github/usher_branch/build/matOptimize \
 # -- bug Cheng later.
 
 # Annotate root nodes for Nextstrain lineages.
-join -t$'\t' <(sort renaming.tsv) <(cut -f 1,4 $mpxvNcbiDir/nextclade.tsv | sort) \
+join -t$'\t' <(sort renaming.tsv) <(cut -f 2,5 $mpxvNcbiDir/nextclade.tsv | sort) \
 | tawk '{print $3, $2;}' | sort > lineageToName
 $matUtils annotate -T 30 -i mpxv.$today.masked.opt.pb -c lineageToName \
     -o mpxv.$today.masked.pb \
@@ -92,7 +95,7 @@ $matUtils annotate -T 30 -i mpxv.$today.masked.opt.pb -c lineageToName \
 # Make metadata that uses same names as tree and includes nextclade lineage assignments.
 echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tNextstrain_lineage" \
     > mpxv.$today.metadata.tsv
-join -t$'\t' <(sort renaming.tsv) <(cut -f 1,4 $mpxvNcbiDir/nextclade.tsv | sort) \
+join -t$'\t' <(sort renaming.tsv) <(cut -f 2,5 $mpxvNcbiDir/nextclade.tsv | sort) \
 | join -t$'\t' -o 1.2,2.1,2.6,2.4,2.5,2.8,2.9,2.10,2.11,2.13,2.14,2.15,1.3 \
     - <(sort $mpxvNcbiDir/metadata.2017outbreak.tsv \
         | perl -F'/\t/' -walne '$F[3] =~ s/(: ?|$)/\t/;  print join("\t", @F);') \
@@ -153,8 +156,10 @@ done
 mkdir -p /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_hMPXV/$y/$m
 ln -sf $archive /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_hMPXV/$y/$m
 # rsync to hgdownload hubs dir
-rsync -v -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_hMPXV/* \
-    qateam@hgdownload.soe.ucsc.edu:/mirrordata/hubs/$asmDir/UShER_hMPXV/
+for h in hgdownload1 hgdownload2; do
+    rsync -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_hMPXV/* \
+        qateam@$h:/mirrordata/hubs/$asmDir/UShER_hMPXV/
+done
 
 set +o pipefail
 grep 'Could not' annotate.log | cat

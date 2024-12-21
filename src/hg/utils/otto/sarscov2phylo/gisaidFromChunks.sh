@@ -51,13 +51,13 @@ xzcat chunks/gisaid_epi_isl_*.fa.xz \
 | sort -u \
     > tmp.country &
 
-wait
-
 # Make fasta with strain-name headers a la nextfasta.
 xzcat gisaid_fullNames_$today.fa.xz \
 | sed -re '/^>/ s/\|.*//' \
 | xz -T 20 \
     > sequences_batch_$today.fa.xz &
+
+wait
 
 # Join locally computed fields and sort by EPI ID for joining with latest real nextmeta
 join -t$'\t' -a 1 tmp.first3 tmp.lengths \

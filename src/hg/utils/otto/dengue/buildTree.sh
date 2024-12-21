@@ -82,7 +82,7 @@ join -t$'\t' <(sort tweakedMetadata.tsv) accToIdFromTitle.tsv \
     if ($name ne "" && $name !~ /$year/ && $name !~ /\/$year2$/) { $name = "$name/$year"; }
     if ($date eq "") { $date = "?"; }
     my $fullName = $name ? "$name|$acc|$date" : "$acc|$date";
-    $fullName =~ s/ /_/g;
+    $fullName =~ s/[ ,:()]/_/g;
     print "$acc\t$fullName\n";' \
 | sed -re 's/[():'"'"']/_/g; s/\[/_/g; s/\]/_/g;' \
 | sed -re 's/_+\|/|/;' \
@@ -121,13 +121,19 @@ for subtype in 1 2 3 4; do
         ;;
     esac
 
-    # Run nextalign with RefSeq.
-    nextalign run --input-ref $refFa \
+    # Run nextclade -- fortunately they used RefSeqs.
+    nextclade dataset get --name community/v-gen-lab/dengue/denv$subtype \
+        --output-zip denv$subtype.zip
+    time nextclade run \
+        -D denv$subtype.zip \
+        -j 32 \
         --include-reference \
-        --jobs 32 \
+        --retry-reverse-complement true \
         --output-fasta aligned.$subtype.fa.xz \
+        --output-columns-selection seqName,clade,totalSubstitutions,totalDeletions,totalInsertions,totalMissing,totalNonACGTNs,alignmentStart,alignmentEnd,substitutions,deletions,insertions,aaSubstitutions,aaDeletions,aaInsertions,missing,unknownAaRanges,nonACGTNs \
+        --output-tsv nextclade.denv$subtype.tsv \
         $dengueDir/ncbi/ncbi.$today/genbank.fa.xz \
-        >& nextalign.log
+        >& nextclade.denv$subtype.log
 
 # If it becomes necessary, add -excludeFile=$dengueScriptDir/exclude.ids
     time faToVcf -verbose=2 -includeRef -includeNoAltN \
@@ -157,11 +163,13 @@ for subtype in 1 2 3 4; do
     chmod 664 denv$subtype.$today.pb
 
     # Make metadata that uses same names as tree
-    echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications" \
+    echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tNextclade_lineage" \
         > denv$subtype.$today.metadata.tsv
     sort $dengueNcbiDir/metadata.tsv \
     | perl -F'/\t/' -walne '$F[3] =~ s/(: ?|$)/\t/;  print join("\t", @F);' \
-    | join -t$'\t' -o 1.2,2.1,2.6,2.4,2.5,2.8,2.9,2.10,2.11,2.12,2.14,2.15 \
+    | join -t$'\t' -o 1.1,1.1,1.6,1.4,1.5,1.8,1.9,1.10,1.11,1.12,1.14,1.15,2.2 \
+        - <(cut -f 1,2 nextclade.denv$subtype.tsv | sort) \
+    | join -t$'\t' -o 1.2,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13 \
         <(sort renaming.tsv) \
         - \
     | sort \
@@ -178,20 +186,21 @@ for subtype in 1 2 3 4; do
     # Make a taxonium view
     usher_to_taxonium --input denv$subtype.$today.pb \
         --metadata denv$subtype.$today.metadata.tsv.gz \
-        --columns genbank_accession,country,location,date,authors \
+        --columns genbank_accession,country,location,date,authors,Nextclade_lineage \
         --genbank $gbff \
         --name_internal_nodes \
         --title "Dengue subtype "$subtype" $today tree with $sampleCountComma genomes from INSDC" \
         --output denv$subtype.$today.taxonium.jsonl.gz \
         >& usher_to_taxonium.$subtype.log
 
-    # Update links to latest protobuf and metadata in hgwdev cgi-bin directories
-#***    for dir in /usr/local/apache/cgi-bin{-angie,,-beta}/hgPhyloPlaceData/$asmAcc; do
-    for dir in /usr/local/apache/cgi-bin-angie/hgPhyloPlaceData/$asmAcc; do
-        ln -sf $(pwd)/denv$subtype.$today.pb $dir/denv$subtype.latest.pb
-        ln -sf $(pwd)/denv$subtype.$today.metadata.tsv.gz $dir/denv$subtype.latest.metadata.tsv.gz
-        ln -sf $(pwd)/hgPhyloPlace.description.$subtype.txt $dir/denv$subtype.latest.version.txt
-    done
+    # Update links in /gbdb
+    nc=$(basename $gbff .gbff)
+    dir=/gbdb/wuhCor1/hgPhyloPlaceData/dengue/$nc
+    mkdir -p $dir
+    ln -sf $(pwd)/denv$subtype.$today.pb $dir/denv$subtype.latest.pb
+    ln -sf $(pwd)/denv$subtype.$today.metadata.tsv.gz $dir/denv$subtype.latest.metadata.tsv.gz
+    ln -sf $(pwd)/hgPhyloPlace.description.$subtype.txt $dir/denv$subtype.latest.version.txt
+
 
     # Extract Newick and VCF for anyone who wants to download those instead of protobuf
     $matUtils extract -i denv$subtype.$today.pb \
@@ -216,11 +225,13 @@ for subtype in 1 2 3 4; do
     # Update hgdownload-test link for archive
     asmDir=$(echo $asmAcc \
         | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
-    mkdir -p /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
-    ln -sf $archive /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
+    mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
+    ln -sf $archive /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
     # rsync to hgdownload hubs dir
-    rsync -v -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/* \
-        qateam@hgdownload.soe.ucsc.edu:/mirrordata/hubs/$asmDir/UShER_DENV-$subtype/
+    for h in hgdownload1 hgdownload2; do
+        rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/* \
+            qateam@$h:/mirrordata/hubs/$asmDir/UShER_DENV-$subtype/
+    done
 done
 
 rm -f mutation-paths.txt *.pre*.pb final-tree.nh
