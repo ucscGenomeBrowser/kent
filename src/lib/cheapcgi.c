@@ -1009,7 +1009,7 @@ static boolean dumpStackOnSignal = FALSE;  // should a stack dump be generated?
 static void catchSignal(int sigNum)
 /* handler for various terminal signals for logging purposes */
 {
-char *sig = NULL;
+char *sig = "unknown";
 switch (sigNum)
     {
     case SIGTERM:  // after timing out for not producing any stdout or stderr output for too long,
