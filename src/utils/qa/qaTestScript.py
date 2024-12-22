@@ -164,6 +164,8 @@ driver.find_element_by_xpath("//*/text()[normalize-space(.)='Cancel']/parent::*"
 time.sleep(3)
 
 # Tests multi-region for hg38
+if machine == 'https://hgwdev.gi.ucsc.edu/':
+   driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=QAtester&hgS_otherUserSessionName=multi_region")
 driver.find_element_by_name("hgTracksConfigMultiRegionPage").click()
 driver.find_element_by_xpath("(//input[@id='virtModeType'])[4]").click()
 driver.find_element_by_id("multiRegionsBedInput").send_keys("chr7    192570  260772  NM_020223.4\nchr7    290169  291488  NM_001374838.1\nchr7    497257  519846  NM_033023.5\nchr7    549197  727281  NM_001164760.2")
