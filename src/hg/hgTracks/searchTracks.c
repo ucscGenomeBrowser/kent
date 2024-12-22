@@ -253,7 +253,6 @@ struct paraFetchData
     char *hubName; // the name of the hub for measureTiming results
     struct hubSearchTracks *hst; // the tracks we are adding to the search results
     struct track *tlist; // the resulting tracks to add to the global trackList
-    pthread_t *threadId; // so we can stop the thread if it has been taking too long
     long searchTime; // how many milliseconds did it take to search this hub
     boolean done;
     };
@@ -265,14 +264,10 @@ struct paraFetchData *pfdList = NULL;
 struct paraFetchData *pfdRunning = NULL;
 struct paraFetchData *pfdDone = NULL;
 
-void *addUnconnectedHubSearchResults(void *threadParam)
+void *addUnconnectedHubSearchResults()
 /* Add a not yet connected hub to the search results */
 {
-pthread_t *thread = threadParam;
 struct paraFetchData *pfd = NULL;
-// this thread will just happily keep working until waitForSearchResults() finishes,
-// moving it's completed work onto pfdDone, so we can safely detach
-pthread_detach(*thread);
 boolean allDone = FALSE;
 while(1)
     {
@@ -284,7 +279,6 @@ while(1)
     else
         {
         pfd = slPopHead(&pfdList);
-        pfd->threadId = threadParam;
         slAddHead(&pfdRunning, pfd);
         }
     pthread_mutex_unlock(&pfdMutex);
@@ -445,12 +439,6 @@ if (lockStatus == 0)
         if (measureTiming)
             measureTime("'%s' search times", pfd->hubName);
         }
-    for (pfd = pfdRunning; pfd != NULL; pfd = pfd->next)
-        {
-        pthread_cancel(*pfd->threadId);
-        if (measureTiming)
-            measureTime("'%s' search times: timed out", pfd->hubName);
-        }
     for (pfd = neverRan; pfd != NULL; pfd = pfd->next)
         if (measureTiming)
             measureTime("'%s' search times: never ran", pfd->hubName);
@@ -514,10 +502,13 @@ if (sqlTableExists(conn, hubSearchTableName))
             AllocArray(threads, ptMax);
             for (pt = 0; pt < ptMax; pt++)
                 {
-                int rc = pthread_create(&threads[pt], NULL, addUnconnectedHubSearchResults, &threads[pt]);
+                int rc = pthread_create(&threads[pt], NULL, addUnconnectedHubSearchResults, NULL);
                 if (rc )
                     errAbort("Unexpected error in pthread_create");
                 }
+	    pthread_detach(threads[pt]);
+		// this thread will just happily keep working until waitForSearchResults() finishes,
+		// moving it's completed work onto pfdDone, so we can safely detach
             }
         waitForSearchResults(ptMax, threads);
         }
