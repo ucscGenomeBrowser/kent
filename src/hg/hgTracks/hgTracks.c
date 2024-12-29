@@ -7888,14 +7888,10 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     }
 }
 
-static void *remoteParallelLoad(void *threadParam)
+static void *remoteParallelLoad()
 /* Each thread loads tracks in parallel until all work is done. */
 {
-pthread_t *pthread = threadParam;
 struct paraFetchData *pfd = NULL;
-pthread_detach(*pthread);  // this thread will never join back with it's progenitor
-    // Canceled threads that might leave locks behind,
-    // so the theads are detached and will be neither joined nor canceled.
 boolean allDone = FALSE;
 while(1)
     {
@@ -8884,11 +8880,14 @@ for (window=windows; window; window=window->next)
 	    int pt;
 	    for (pt = 0; pt < ptMax; ++pt)
 		{
-		int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+		int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, NULL);
 		if (rc)
 		    {
 		    errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
 		    }
+		pthread_detach(threads[pt]);  // this thread will never join back with it's progenitor
+		    // Canceled threads that might leave locks behind,
+		    // so the theads are detached and will be neither joined nor canceled.
 		}
 	    }
 	}
