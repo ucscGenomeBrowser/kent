@@ -1,0 +1,7 @@
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+visibility dense
+type bigBed 4 +
+bigDataUrl  /gbdb/mm39/bbi/cytoBand/mm39.cytoBand.bb
