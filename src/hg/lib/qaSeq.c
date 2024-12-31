@@ -486,7 +486,7 @@ else
 return f;
 }
 
-void upOneDirFromFile(char *path, char dir[256], char name[128], 
+void upOneDirFromFile(char *path, char dir[512], char name[128], 
      char ext[64])
 /* Return parent directory given pathName.  Given
  * /usr/include/sys/io.h return /usr/include/   Given
@@ -531,7 +531,7 @@ char *qacPathFromFaPath(char *faName)
  * longer than the next call to qacPathFromFaPath. */
 {
 static char qacPath[512];
-char dir[256], name[128], ext[64];
+char dir[512], name[128], ext[64];
 
 upOneDirFromFile(faName, dir, name, ext);
 safef(qacPath, sizeof(qacPath), "%sqac/%s.qac", dir, name);
