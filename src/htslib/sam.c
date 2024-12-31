@@ -226,10 +226,10 @@ bam_hdr_t *bam_hdr_read(BGZF *fp)
 
 int bam_hdr_write(BGZF *fp, const bam_hdr_t *h)
 {
-    char buf[4];
+    char buf[4+1];
     int32_t i, name_len, x;
     // write "BAM1"
-    strncpy(buf, "BAM\1", 4);
+    strncpy(buf, "BAM\1", 4+1);
     bgzf_write(fp, buf, 4);
     // write plain text and the number of reference sequences
     if (fp->is_be) {
@@ -1602,7 +1602,7 @@ typedef khash_t(olap_hash) olap_hash_t;
 struct __bam_plp_t {
     mempool_t *mp;
     lbnode_t *head, *tail, *dummy;
-    int32_t tid, pos, max_tid, max_pos;
+    uint32_t tid, pos, max_tid, max_pos;
     int is_eof, max_plp, error, maxcnt;
     uint64_t id;
     bam_pileup1_t *plp;
