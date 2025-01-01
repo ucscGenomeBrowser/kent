@@ -99,8 +99,8 @@ struct trackRef *tr;
 struct group *group, *groups = NULL;
 
 cart = theCart;
-cartWebStart(cart, NULL, "ENCODE Track Data Versions (%s)", db);
 getDbAndGenome(cart, &db, &ignored, NULL);
+cartWebStart(cart, NULL, "ENCODE Track Data Versions (%s)", db);
 tracks = hTrackDb(db);
 groups = groupTracks(db, tracks);
 for (group = groups; group != NULL; group = group->next)
