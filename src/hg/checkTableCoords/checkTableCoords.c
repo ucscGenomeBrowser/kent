@@ -457,7 +457,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
     struct hTableInfo *hti = NULL;
     struct slName *chromList = NULL, *chromPtr = NULL;
     char *table = curTable->name;
-    char tableChrom[32], trackName[128], tableChromPrefix[33];
+    char tableChrom[HDB_MAX_CHROM_STRING], trackName[HDB_MAX_TABLE_STRING], tableChromPrefix[33];
     hParseTableName(db, table, trackName, tableChrom);
     hti = hFindTableInfo(db, tableChrom, trackName);
     if (hti != NULL && hti->isPos)

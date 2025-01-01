@@ -475,7 +475,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 {
     struct tableStatus *status;
     if ((majorVersion > 4) || ((4 == majorVersion) && (minorVersion > 0)))
-	memcpy(row+2, row+3, (TABLESTATUS_NUM_COLS-2)*sizeof(char*));
+	memmove(row+2, row+3, (TABLESTATUS_NUM_COLS-2)*sizeof(char*));
     if (row[3])
 	{
 	status = tableStatusLoad(row);

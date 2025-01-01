@@ -165,7 +165,9 @@ struct hash *allChromHash = newHash(0);	/* Chromosome hash. */
 struct chrom *chromList = NULL, *chrom;	/* Chromosome list. */
 struct hash *runHash = newHash(0);	/* Which run this is in. */
 struct run *runList = NULL, *run;		/* Info about a run. */
-char runNameBuf[64], *runName;
+char *runName;
+char ext[FILEEXT_LEN];
+char fileName[FILENAME_LEN];
 FILE *f = mustOpen(outName, "w");
 
 /* Read input files into a bunch of hashes. */
@@ -173,13 +175,18 @@ for (i=0; i<inCount; ++i)
     {
     char *inName = inNames[i];
     /* Figure out name of run from fileName - prefer suffix. */
-    runName = runNameBuf;
-    runName[0] = 0;
-    splitPath(inName, NULL, NULL, runNameBuf);
-    if (runNameBuf[0] == 0)
-	splitPath(inName, NULL, runNameBuf, NULL);
+    ext[0] = 0;
+    splitPath(inName, NULL, NULL, ext);
+    if (ext[0] == 0)
+	{
+	splitPath(inName, NULL, fileName, NULL);
+	runName = fileName;
+	}
     else
+	{
+	runName = ext;
 	runName += 1;
+	}
     AllocVar(run);
     slAddHead(&runList, run);
     hashAddSaveName(runHash, runName, run, &run->name);

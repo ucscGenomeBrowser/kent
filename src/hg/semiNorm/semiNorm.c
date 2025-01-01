@@ -39,9 +39,9 @@ bgPoint* findUpperBound(long position, bgPoint* first, long length) {
 
 /* print a simple usage message */
 void usage(char* programName) {
-    char dir[256];
-    char name[128];
-    char extension[64];
+    char dir[PATH_LEN];
+    char name[FILENAME_LEN];
+    char extension[FILEEXT_LEN];
     
     splitPath(programName, dir, name, extension);
     fprintf(stderr, "usage: %s backgroundFile windowsFile defaultBackgroundSize defaultBackgroundPercentID [semi]\n", name);

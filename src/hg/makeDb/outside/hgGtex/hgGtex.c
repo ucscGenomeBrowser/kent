@@ -748,8 +748,8 @@ if (!exon)
         verbose(2, "Creating tissue table\n");
         safef(tissueTable, sizeof(tissueTable), "%sTissue", tableRoot);
         gtexTissueCreateTable(conn, tissueTable);
-        char dir[128];
-        char fileName[64];
+        char dir[PATH_LEN];
+        char fileName[FILENAME_LEN];
         splitPath(tissuesFile, dir, fileName, NULL);
         if (dir[0] == 0)
             dir[0]= '.';

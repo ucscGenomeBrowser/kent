@@ -349,7 +349,7 @@ void phToPsl(char *inName, char *qSizes, char *tSizes, char *outName)
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
-char dir[256], root[128], ext[64];
+char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN];
 struct hash *qSizeHash = readSizes(qSizes);
 struct hash *tSizeHash = readSizes(tSizes);
 

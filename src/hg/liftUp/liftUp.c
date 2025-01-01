@@ -1141,7 +1141,7 @@ void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     int start = 0;
     int end = 0;
     int ix = 0;
-    char newDir[256], newName[128], newExt[64];
+    char newDir[PATH_LEN], newName[FILENAME_LEN], newExt[FILEEXT_LEN];
     struct bigInsert *bi;
     struct chromInserts *chromInserts;
     struct hash *insertHash = newHash(8);
@@ -1252,7 +1252,7 @@ void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     int start = 0;
     int end = 0;
     int ix = 0;
-    char newDir[256], newName[128], newExt[64];
+    char newDir[PATH_LEN], newName[FILENAME_LEN], newExt[FILEEXT_LEN];
     char lastContig[256];
     char *contig;
     int lastEnd = 0;
@@ -1637,11 +1637,11 @@ liftTabbed(destFile, liftHash, sourceCount, sources, 1, 8, 9, FALSE, 0, 0, 0, 1,
 }
 
 
-char *contigInDir(char *name, char dirBuf[256])
+char *contigInDir(char *name, char dirBuf[PATH_LEN])
 /* Figure out which contig we're in by the file name. It should be the directory
  * before us. */
 {
-char root[128], ext[64];
+char root[FILENAME_LEN], ext[FILEEXT_LEN];
 char *s, *contig;
 int len;
 
@@ -1664,7 +1664,7 @@ return contig;
 void liftGl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
 /* Lift up coordinates in .gl file. */
 {
-char dirBuf[256], chromName[256];
+char dirBuf[PATH_LEN], chromName[256];
 int i;
 char *source;
 char *contig;

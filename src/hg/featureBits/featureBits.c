@@ -298,7 +298,7 @@ if (fileExists(track))
     }
 else
     {
-    char dir[256], root[128], ext[65];
+    char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN];
     int len;
     splitPath(track, dir, root, ext);
     /* Chop trailing / off of dir. */
@@ -991,7 +991,7 @@ else
     {
     int totalItems = 0;
     double totalBases = 0;
-    int itemCount, baseCount;
+    int itemCount, baseCount = 0;
     for (cInfo = chromInfoList; cInfo != NULL; cInfo = cInfo->next)
         {
 	if (inclChrom(cInfo->chrom))

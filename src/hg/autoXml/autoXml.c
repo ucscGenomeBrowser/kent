@@ -15,7 +15,7 @@ char *fileComment = "autoXml generated file";
 boolean picky;	/* Generate a parser that is afraid of the unknown. */
 boolean makeMain;	/* Generate main() routine as test shell. */
 boolean positiveOnly;	/* Don't write out negative numbers. */
-char prefix[128];	/* Added to start of output file and structure names. */
+char prefix[FILENAME_LEN];	/* Added to start of output file and structure names. */
 
 void usage()
 /* Explain usage and exit. */
@@ -692,7 +692,7 @@ void autoXml(char *dtdxFile, char *outRoot)
 struct dtdElement *elList = NULL;
 struct hash *elHash = NULL;
 char hName[512], cName[512];
-char outDir[256];
+char outDir[PATH_LEN];
 
 splitPath(outRoot, outDir, prefix, NULL);
 if (cgiVarExists("prefix"))
