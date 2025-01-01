@@ -547,7 +547,7 @@ struct asColumn *asFindColByIx(struct asObject *as, int ix)
 struct asColumn *asCol;
 int i;
 for (i=0, asCol = as->columnList; asCol != NULL && i<ix; asCol = asCol->next, i++);
-    return asCol;
+return asCol;
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)

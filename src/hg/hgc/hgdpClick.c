@@ -345,7 +345,7 @@ static void getTrashFileNames(char *rsId, char epsFile[PATH_LEN], char pdfFile[P
 {
 struct tempName tn;
 trashDirFile(&tn, "hgc", "", "");
-char trashDir[FILENAME_LEN];
+char trashDir[PATH_LEN];
 splitPath(tn.forCgi, trashDir, NULL, NULL);
 safef(epsFile, PATH_LEN, "%shgdpGeo_%s.eps", trashDir, rsId);
 safef(pdfFile, PATH_LEN, "%shgdpGeo_%s.pdf", trashDir, rsId);
