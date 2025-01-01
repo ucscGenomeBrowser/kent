@@ -738,7 +738,7 @@ if (s == NULL)
     }
 s = strstr(s, "preserved");
 if (s == NULL)
-    errAbort("Can't find preserved marker in %s\n%s\n", accession, s);
+    errAbort("Can't find preserved marker in %s\n", accession);
 for (;;)
     {
     int start, end;
@@ -941,7 +941,7 @@ else if ((s = strstr(comLine, ": contig")) != NULL || (s = strstr(comLine, "cont
     }
 else if ((s = strstr(comLine, "contig 1:")) != NULL)
     {
-    char sbuf[16];
+    char sbuf[32];
     int slen;
     int cix = 1;
     int start, end;
