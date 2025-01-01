@@ -3539,7 +3539,7 @@ void safecpy(char *buf, size_t bufSize, const char *src)
 /* copy a string to a buffer, with bounds checking.*/
 {
 size_t slen = strlen(src);
-if (slen > bufSize-1)
+if ((slen + 1) > bufSize)
     errAbort("buffer overflow, size %lld, string size: %lld", (long long)bufSize, (long long)slen);
 strcpy(buf, src);
 }
