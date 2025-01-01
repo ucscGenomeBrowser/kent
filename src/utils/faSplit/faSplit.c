@@ -281,7 +281,7 @@ void splitByName(char *inName, char *outRoot)
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = NULL;
-char outDir[256], outFile[128], ext[64], outPath[512];
+char outDir[PATH_LEN], outFile[FILENAME_LEN], ext[FILEEXT_LEN], outPath[1024];
 ZeroVar(&seq);
 
 splitPath(outRoot, outDir, outFile, ext);
@@ -318,7 +318,7 @@ void splitByNamePrefix(char *inName, char *outRoot, int preFixCount)
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = NULL;
-char outDir[256], outFile[128], ext[64], outPath[512], preFix[512];
+char outDir[PATH_LEN], outFile[FILENAME_LEN], ext[FILEEXT_LEN], outPath[2048], preFix[512];
 ZeroVar(&seq);
 
 splitPath(outRoot, outDir, outFile, ext);
@@ -459,7 +459,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	}
     for (pos = 0; pos < seq.size; pos += pieceSize)
         {
-	char numOut[128];
+	char numOut[512];
 	int thisSize = seq.size - pos;
 	if (thisSize > (pieceSize + extra)) 
 	    thisSize = pieceSize + extra;
@@ -551,7 +551,7 @@ return(gotGap);
 }
 
 static void writeOneByGap(boolean oneFile, char *outRoot,
-    int digits, int *pieceIx, FILE *f, char noPath[256], int pos, int thisSize,
+    int digits, int *pieceIx, FILE *f, char noPath[FILENAME_LEN], int pos, int thisSize,
 	struct dnaSeq *seq, FILE *lift, int *writeCount, char *outPath)
 {
 char numOut[128];
@@ -586,8 +586,8 @@ int minGapSize = optionInt("minGapSize", 1000);
 boolean noGapDrops = optionExists("noGapDrops");
 int maxN = optionInt("maxN", pieceSize-1);
 boolean oneFile = optionExists("oneFile");
-char fileName[512];
-char dirOnly[256], noPath[128];
+char fileName[FILENAME_LEN];
+char dirOnly[PATH_LEN], noPath[FILENAME_LEN];
 int pos, pieceIx = 0, writeCount = 0;
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
