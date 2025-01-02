@@ -95,7 +95,7 @@ else
         char *reqGenome = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
         if (!reqGenome)
             {
-            errAbort("Genome selection '%s' for file '%s' is invalid. Please choose the correct genome", reqGenome, reqFileName);
+            errAbort("Genome selection is NULL for file '%s' is invalid. Please choose the correct genome", reqFileName);
             }
 
         // we've passed all the checks so we can return that we are good to upload the file

@@ -6,7 +6,6 @@
 #ifndef PARACOMMON_H
 #define PARACOMMON_H
 
-#define _REENTRANT
 #include <sys/types.h>
 #include <pwd.h>
 #include <signal.h>

@@ -18,6 +18,8 @@
 #include "hgSeq.h"
 #include "trackHub.h"
 #include "hubConnect.h"
+#include "hdb.h"
+
 
 // primer3 can design primers around exons like exonprimer, but needs some flanking
 // sequence around the transcript for the first and the last primer
@@ -233,8 +235,8 @@ void hgSeqOptions(struct cart *cart, char *db, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
 struct hTableInfo *hti;
-char chrom[32];
-char rootName[256];
+char chrom[HDB_MAX_CHROM_STRING];
+char rootName[HDB_MAX_TABLE_STRING];
 
 if (isCustomTrack(table) || startsWith("hub_", table))
     {
@@ -892,8 +894,8 @@ int hgSeqItemsInRange(char *db, char *table, char *chrom, int chromStart,
 {
 struct hTableInfo *hti;
 struct bed *bedList = NULL;
-char rootName[256];
-char parsedChrom[32];
+char rootName[HDB_MAX_TABLE_STRING];
+char parsedChrom[HDB_MAX_CHROM_STRING];
 int itemCount;
 
 hParseTableName(db, table, rootName, parsedChrom);

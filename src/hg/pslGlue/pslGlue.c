@@ -74,7 +74,7 @@ char **faFiles;
 char *faBuf;
 int faCount;
 int i;
-char path[512], dir[256], name[128], extension[64];
+char path[512], dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
 struct slName *list = NULL, *el;
 
 readAllWords(listFile, &faFiles, &faCount, &faBuf);

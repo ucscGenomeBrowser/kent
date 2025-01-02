@@ -169,6 +169,9 @@
  * warning with gcc */
 #define ptrToLL(p) ((long long)((size_t)p))
 
+// TODO GALT This is a temporary work around.
+#pragma GCC diagnostic ignored "-Wsizeof-pointer-div"
+
 /* How big is this array? */
 #define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
 

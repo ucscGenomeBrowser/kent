@@ -128,7 +128,7 @@ if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(subs
 else
     errAbort("printTabularHeaderRow: code bug, if looksTabular returns true then "
              "regex should work here");
-    return -1;
+return -1;
 }
 
 static void printTabularData(struct vcfInfoElement *el, int headerCount)

@@ -121,7 +121,7 @@ char *fullPathName(char *relName)
 /* Return full version of path name. */
 {
 char firstChar = relName[0];
-char fullPath[512];
+char fullPath[1024];
 char dir[512];
 
 if (firstChar == '/' || firstChar == '~')

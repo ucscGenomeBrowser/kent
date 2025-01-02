@@ -69,7 +69,7 @@ struct agpFrag frag;
 struct agpGap scaffoldGap, fragGap;
 
 struct lineFile *lf = lineFileOpen(scaffoldFile, TRUE);
-char outDir[256], outFile[128], ext[64], outPath[512];
+char outDir[PATH_LEN], outFile[FILENAME_LEN], ext[FILEEXT_LEN], outPath[1024];
 FILE *agpFile = NULL, *gapFile = NULL, *liftFile = NULL;
 
 int fileNumber = 1;      /* sequence number in AGP file */

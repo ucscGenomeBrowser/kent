@@ -215,8 +215,8 @@ int keepCount = 0; // count of comma-sep tagsToKeep
 char *keepFields[MAX_BED_EXTRA]; // Max 1000 extra fields to put into bigBed, also needed for
                                  // comment string header
 char *tempKeepFields[MAX_BED_EXTRA]; // allow requesting fields that don't exist, just don't output
-memset(keepFields, 0, MAX_BED_EXTRA);
-memset(tempKeepFields, 0, MAX_BED_EXTRA);
+memset(keepFields, 0, MAX_BED_EXTRA * sizeof(char*));
+memset(tempKeepFields, 0, MAX_BED_EXTRA * sizeof(char*));
 
 // open up VCF for reading
 safef(tbiFile, sizeof(tbiFile), "%s.tbi", vcfFileName);
