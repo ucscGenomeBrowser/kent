@@ -28,10 +28,14 @@ UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
 HOSTNAME = $(shell uname -n)
 
-ifeq (${HOSTNAME},hgwdev)
+ifeq (${HOSTNAME},hgwdev-new)
   IS_HGWDEV = yes
 else
-  IS_HGWDEV = no
+  ifeq (${HOSTNAME},hgwdev)
+    IS_HGWDEV = yes
+  else
+     IS_HGWDEV = no
+  endif
 endif
 
 # for Darwin (Mac OSX), use static libs when they can be found
@@ -166,7 +170,16 @@ ifeq (${USE_HAL},1)
     HDF5DIR=/hive/groups/browser/hal/build/hdf5-1.12.0
     HDF5LIBDIR=${HDF5DIR}/local/lib
     HDF5LIBS=${HDF5LIBDIR}/libhdf5_cpp.a ${HDF5LIBDIR}/libhdf5.a ${HDF5LIBDIR}/libhdf5_hl.a
-    HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lcurl -lstdc++
+    HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lz
+    ifeq (${HOSTNAME},hgwdev-new)
+        HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
+    else
+      ifeq (${HOSTNAME},hgwdev)
+          HALLIBS += -lcurl /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
+      else
+          HALLIBS += -lcurl -lstdc++
+      endif
+    endif
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/inc -I${HALDIR}/hal/blockViz/inc
 endif
@@ -267,11 +280,24 @@ ifeq (${IS_HGWDEV},yes)
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
    L+=/cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl
-   PNGLIB=/usr/lib64/libpng.a
-   PNGINCL=-I/usr/include/libpng15
+
+   ifeq (${HOSTNAME},hgwdev-new)
+       PNGLIB=/cluster/software/lib/libpng.a
+       PNGINCL=-I/cluster/software/include/libpng16
+   else
+       PNGLIB=/usr/lib64/libpng.a
+       PNGINCL=-I/usr/include/libpng15
+   endif
+
    MYSQLINC=/usr/include/mysql
    MYSQLLIBS=/cluster/software/lib64/libmariadbclient.a /cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl -lz
-   MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a
+
+   ifeq (${HOSTNAME},hgwdev-new)
+       MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a /usr/lib64/librt.a
+   else
+       MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a
+   endif
+
 else
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl

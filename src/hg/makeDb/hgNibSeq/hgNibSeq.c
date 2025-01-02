@@ -56,7 +56,7 @@ dyStringFree(&dy);
 void hgNibSeq(char *database, char *destDir, int faCount, char *faNames[])
 /* hgNibSeq - convert DNA to nibble-a-base and store location in database. */
 {
-char dir[256], name[128], chromName[128], ext[64];
+char dir[PATH_LEN], name[FILENAME_LEN], chromName[128], ext[FILEEXT_LEN];
 char nibName[512];
 struct sqlConnection *conn = sqlConnect(database);
 char query[512];

@@ -1458,3 +1458,70 @@ CREATE TABLE ucscToEnsembl (
     # see if the liftOver menus function in the browser from mm39 to mm9
 
 ##############################################################################
+##  CYTOBAND - ideogram track (DONE - 2024-12-30 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm39/bed/cytoBand.2024-12-30
+    cd /hive/data/genomes/mm39/bed/cytoBand.2024-12-30
+    wget --timestamping \
+     https://ftp.ncbi.nlm.nih.gov/pub/gdp/ideogram_10090_GCF_000000055.20_NA_V2
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl ideogram_10090_GCF_000000055.20_NA_V2
+# -rw-rw-r-- 1 13823 Dec 30 05:40 cytoBand.bed
+
+    ## can now verify before load:
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #	everything checks out OK on 21 chroms
+    # the script complains about the randoms, chrUn and chrM having
+    # no coordinates.  They are not defined in the NCBI file.
+    # make up cytoBands for navigation on those missing sequences:
+    egrep "chrM|random|chrUn" ../../chrom.sizes \
+      | awk '{printf "%s\t0\t%s\t\tgneg\n", $1,$2}' > mm39.cytoBandExtra
+
+    # verify count, how many expected:
+    wc -l ../../chrom.sizes
+#    61 ../../chrom.sizes
+    # should be same number defined here:
+    cut -f1 cytoBand.bed mm39.cytoBandExtra | sort | uniq -c | wc -l
+#    61
+
+    sort -k1,1 -k2,2n cytoBand.bed mm39.cytoBandExtra > mm39.cytoBand.bed
+    bedToBigBed -tab -type=bed3+2 -as=$HOME/kent/src/hg/lib/cytoBand.as \
+       mm39.cytoBand.bed ../../chrom.sizes mm39.cytoBand.bb
+    bigBedInfo mm39.cytoBand.bb | sed -e 's/^/    # /;'
+    # version: 4
+    # fieldCount: 5
+    # hasHeaderExtension: yes
+    # isCompressed: yes
+    # isSwapped: 0
+    # extraIndexCount: 0
+    # itemCount: 444
+    # primaryDataSize: 5,626
+    # primaryIndexSize: 6,684
+    # zoomLevels: 3
+    # chromCount: 61
+    # basesCovered: 2,728,222,451
+    # meanDepth (of bases covered): 1.000000
+    # minDepth: 1.000000
+    # maxDepth: 1.000000
+    # std of depth: 0.000000
+    # definedFieldCount: 3
+    # extraFieldCount: 2
+
+    # symlink into gbdb
+    mkdir /gbdb/mm39/bbi/cytoBand
+    ln -s `pwd`/mm39.cytoBand.bb /gbdb/mm39/bbi/cytoBand
+
+    # trackDb entry in mouse/mm39/cytoBand.ra:
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+visibility dense
+type bigBed 4 +
+bigDataUrl  /gbdb/mm39/bbi/cytoBand/mm39.cytoBand.bb
+
+    # included from mouse/mm39/trackDb.ra
+include cytoBand.ra alpha
+
+##############################################################################

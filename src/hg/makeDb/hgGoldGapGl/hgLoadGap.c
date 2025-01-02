@@ -150,7 +150,7 @@ struct fileInfo *fiList, *fi;
 fiList = listDirX(chromDir, "*.gap", TRUE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
-    char dir[256], chrom[128], ext[64];
+    char dir[PATH_LEN], chrom[FILENAME_LEN], ext[FILEEXT_LEN];
     char *ptr;
     char  gapName[128];
     char *gapFileName = fi->name;

@@ -45,7 +45,7 @@ struct lineFile *lf = lineFileOpen(agpName, TRUE);
 char *line, *words[16];
 int lineSize, wordCount;
 int contigIx = 0;
-char liftDir[512], contigDir[512], path[512];
+char liftDir[512], contigDir[512], path[1024];
 char chrom[128];
 FILE *f;
 struct dnaSeq *seq;

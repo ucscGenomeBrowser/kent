@@ -452,15 +452,15 @@ do
     prevAgpData = endAgpData;
 
     sequenceNum++;
-    sprintf(contigDir, "%s/%s_%d", destDir, startAgpData->data.pGap->chrom, sequenceNum);
+    safef(contigDir, sizeof contigDir, "%s/%s_%d", destDir, startAgpData->data.pGap->chrom, sequenceNum);
     makeDir(contigDir);
 
     sprintf(startAgpData->contigName, "%s_%d", startAgpData->data.pGap->chrom, sequenceNum);
 
-    sprintf(filename, "%s/%s_%d.fa", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
+    safef(filename, sizeof filename, "%s/%s_%d.fa", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
     writeSuperContigFaFile(dna, startAgpData, endAgpData, filename, sequenceNum);
 
-    sprintf(filename, "%s/%s_%d.agp", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
+    safef(filename, sizeof filename, "%s/%s_%d.agp", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
     writeSuperContigAgpFile(startAgpData, endAgpData, filename, sequenceNum);
 
     /* Save the start of the whole chromosome */
@@ -507,7 +507,7 @@ while (faMixedSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
      */
 
 
-    sprintf(destDir, "%s/%s", outputDir, &chromName[3]);
+    safef(destDir, sizeof destDir, "%s/%s", outputDir, &chromName[3]);
     makeDir(destDir);
 
     startAgpData = makeSuperContigs(lfAgp, dna, dnaSize, destDir);

@@ -228,7 +228,9 @@ if (facetCount <= 0)
 // See if somebody is already running this utility. Should only happen rarely.
 struct sqlConnection *conn = cdwConnect(database);
 if (sqlIsLocked(conn, "makeFileTags"))
-    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found."); sqlGetLockWithTimeout(conn, "makeFileTags", 1);
+    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found.");
+
+sqlGetLockWithTimeout(conn, "makeFileTags", 1);
 
 removeUnusedMetaTags(conn);
 

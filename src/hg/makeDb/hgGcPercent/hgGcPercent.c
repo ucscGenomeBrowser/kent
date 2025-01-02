@@ -353,7 +353,7 @@ else
     nibList = listDirX(nibDir, "*.nib", TRUE);
     for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
         {
-	char dir[256], chrom[128], ext[64];
+	char dir[PATH_LEN], chrom[FILENAME_LEN], ext[FILEEXT_LEN];
         splitPath(nibEl->name, dir, chrom, ext);
 	if (noRandom && endsWith(chrom,"random"))
 	    continue;

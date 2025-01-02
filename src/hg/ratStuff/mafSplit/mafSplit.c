@@ -318,7 +318,7 @@ mafFileFree(&mf);
 void mafSplit(char *splitFile, char *outRoot, int mafCount, char *mafFiles[])
 /* Split MAF files at breaks in split file */
 {
-char dir[256], file[128];
+char dir[PATH_LEN], file[FILENAME_LEN];
 int i = 0;
 
 if (byTarget)

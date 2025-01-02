@@ -100,7 +100,7 @@ lineFileClose(&lf);
 void removeWild(char *pat)
 /* Remove all files matching wildcard. */
 {
-char dir[256], fn[128], ext[64];
+char dir[PATH_LEN], fn[FILENAME_LEN], ext[FILEEXT_LEN];
 char wild[256];
 struct fileInfo *list, *el;
 
@@ -177,8 +177,8 @@ int maxSize = 5000000;
 int overlapSize = 10000;
 int start, end, s, e;
 int halfOverlapSize = overlapSize/2;
-char tempFile[512], trfRootName[512], trfTemp[512], bedFileName[512];
-char dir[256], seqName[128], ext[64];
+char tempFile[512], trfRootName[512], trfTemp[1024], bedFileName[1024];
+char dir[PATH_LEN], seqName[FILENAME_LEN], ext[FILEEXT_LEN];
 FILE *bedFile = NULL;
 struct dnaSeq  *maskedSeq = NULL;
 

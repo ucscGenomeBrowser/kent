@@ -270,7 +270,7 @@ struct hash *mSizeHash = loadSizeHash(mSizeFile);
 struct hash *rSizeHash = loadSizeHash(rSizeFile);
 struct hash *dupeHash = newHash(16);
 int hStart;
-char humanChromName[256];
+char humanChromName[FILENAME_LEN];
 
 makeDir(outputDir);
 splitPath(humanAxtFile, NULL, humanChromName, NULL);
@@ -282,7 +282,7 @@ for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
     int hEnd = hStart + winSize;
     struct binElement *humanList = binKeeperFindSorted(humanBk, hStart, hEnd);
     struct binElement *humanEl;
-    char dirName[512], hmName[512], mrName[512];
+    char dirName[PATH_LEN], hmName[1024], mrName[1024];
     FILE *f;
 
     if (humanList != NULL)

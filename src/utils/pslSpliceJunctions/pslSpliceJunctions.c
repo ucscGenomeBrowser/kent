@@ -61,8 +61,8 @@ if (pslTStrand(transPsl) == '-')
     reverseComplement(juncB->dna, 2);
     }
 
-safecpy(junc5p, sizeof(junc5p), juncA->dna);
-safecpy(junc3p, sizeof(junc3p), juncB->dna);
+safecpy(junc5p, 3, juncA->dna);
+safecpy(junc3p, 3, juncB->dna);
 freeDnaSeq(&juncA);
 freeDnaSeq(&juncB);
 

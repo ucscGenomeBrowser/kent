@@ -190,8 +190,8 @@ void makeGoldAndGap(struct sqlConnection *conn, char *chromDir)
 {
 struct dyString *ds = dyStringNew(2048);
 struct fileInfo *fiList, *fi;
-char dir[256], chrom[128], ext[64];
-char goldName[128], gapName[128];
+char dir[PATH_LEN], chrom[FILENAME_LEN], ext[FILEEXT_LEN];
+char goldName[256], gapName[256];
 char *agpName;
 char *ptr;
 char goldFileName[128];
@@ -294,9 +294,9 @@ void makeGl(struct sqlConnection *conn, char *chromDir,
 {
 struct dyString *ds = dyStringNew(2048);
 struct fileInfo *fiList, *fi;
-char dir[256], chrom[128], ext[64];
+char dir[PATH_LEN], chrom[FILENAME_LEN], ext[FILEEXT_LEN];
 char *glFileName;
-char glTable[128];
+char glTable[256];
 char *tab = "gl.tab";
 
 fiList = listDirX(chromDir, "*.gl", TRUE);
@@ -351,7 +351,7 @@ void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir, boolean doGl, char
 struct fileInfo *chrFiList, *chrFi; 
 struct sqlConnection *conn = NULL;
 char ooDir[512];
-char pathName[512];
+char pathName[1024];
 struct hash *cloneVerHash = newHash(0);
 boolean gotAny = FALSE;
 struct hash *chromDirHash = newHash(4);

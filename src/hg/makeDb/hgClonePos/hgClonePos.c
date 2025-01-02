@@ -39,7 +39,7 @@ int maxWarn = 10;
 void addCloneInfo(char *glFileName, struct hash *cloneHash, struct clonePos **pCloneList)
 /* Add in clone info from one .gl file. */
 {
-char dir[256], chrom[128], ext[64];
+char dir[PATH_LEN], chrom[FILENAME_LEN], ext[FILEEXT_LEN];
 struct gl gl;
 struct lineFile *lf = lineFileOpen(glFileName, TRUE);
 struct clonePos *clone;

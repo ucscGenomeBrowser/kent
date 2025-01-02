@@ -778,7 +778,8 @@ freez(pNt4Seq);
 int wormChromSize(char *chrom)
 /* Return size of worm chromosome. */
 {
-static int sizes[ArraySize(chromIds)];
+static int sizes[sizeof chromIds/sizeof *chromIds];
+
 int ix;
 int size;
 

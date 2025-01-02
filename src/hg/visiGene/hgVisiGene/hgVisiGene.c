@@ -318,9 +318,9 @@ char *sidUrl = cartSidUrlString(cart);
 char buf[1024];
 char url[1024];
 char *p = NULL;
-char dir[256];
-char name[128];
-char extension[64];
+char dir[PATH_LEN];
+char name[FILENAME_LEN];
+char extension[FILEEXT_LEN];
 int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
@@ -784,9 +784,9 @@ static void doDownload(struct sqlConnection *conn)
 int imageId = cartUsualInt(cart, hgpId, 0);
 char url[1024];
 char *p = NULL;
-char dir[256];
-char name[128];
-char extension[64];
+char dir[PATH_LEN];
+char name[FILENAME_LEN];
+char extension[FILEEXT_LEN];
 int w = 0, h = 0;
 int sd = -1;
 

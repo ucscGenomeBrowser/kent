@@ -192,7 +192,7 @@ struct lineFile *lf = lineFileOpen(transFile, TRUE);
 char *row[3];
 char *parts[3], *subParts[2];
 int partCount, subCount;
-char faName[512];
+char faName[1024];
 struct clone *clone;
 struct frag *frag;
 

@@ -360,7 +360,7 @@ for (chromEl = chromDirs; chromEl != NULL; chromEl = chromEl->next)
 		{
 		int nSize, uSize;
 		char *contigName = contigEl->name;
-		char fileName[512];
+		char fileName[1024];
 		sprintf(fileName, "%s/%s/%s", subDir, contigName, agpFile);
 		if (!fileExists(fileName) && altFile != NULL)
 		    sprintf(fileName, "%s/%s/%s", subDir, contigName, altFile);

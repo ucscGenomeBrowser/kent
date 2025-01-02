@@ -49,3 +49,5 @@ bigDataUrl /gbdb/mm39/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
 
 include ../refSeqComposite.mm10.mm39.ra
+
+include cytoBand.ra alpha

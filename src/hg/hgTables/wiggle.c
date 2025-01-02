@@ -296,7 +296,7 @@ else
 static unsigned long long getWigglePossibleIntersection(
     struct wiggleDataStream *wds, struct region *region, char *db,
 	char *table2, struct bed **intersectBedList,
-	    char splitTableOrFileName[256], int operations)
+	    char splitTableOrFileName[HDB_MAX_TABLE_STRING], int operations)
 {
 unsigned long long valuesMatched = 0;
 
