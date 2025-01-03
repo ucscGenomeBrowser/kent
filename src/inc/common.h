@@ -169,11 +169,18 @@
  * warning with gcc */
 #define ptrToLL(p) ((long long)((size_t)p))
 
+/* older compiler on hgwdev can use this macro without checking */
+#if defined(__STDC__) && (__STDC__ == 1) && (__STDC_ISO_10646__ == 201103L)
+#define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
+#else
+
+// for newer compilers, use this format to avoid the error exit on warning
 // TODO GALT This is a temporary work around.
-#pragma GCC diagnostic ignored "-Wsizeof-pointer-div"
+// #pragma GCC diagnostic ignored "-Wsizeof-pointer-div"
 
 /* How big is this array? */
 #define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
+#endif
 
 #define uglyf printf  /* debugging printf */
 #define uglyAbort errAbort /* debugging error abort. */
