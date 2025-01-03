@@ -176,7 +176,7 @@
 
 // for newer compilers, use this format to avoid the error exit on warning
 // TODO GALT This is a temporary work around.
-// #pragma GCC diagnostic ignored "-Wsizeof-pointer-div"
+#pragma GCC diagnostic ignored "-Wsizeof-pointer-div"
 
 /* How big is this array? */
 #define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
