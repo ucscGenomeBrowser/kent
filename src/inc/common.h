@@ -169,11 +169,42 @@
  * warning with gcc */
 #define ptrToLL(p) ((long long)((size_t)p))
 
-// TODO GALT This is a temporary work around.
-#pragma GCC diagnostic ignored "-Wsizeof-pointer-div"
+#define _CAT(a, b) a ## b
 
-/* How big is this array? */
-#define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
+#define _CHECK_N(x, n, ...) n
+#define _CHECK(...) _CHECK_N(__VA_ARGS__, 0,)
+#define _PROBE() ~, 1,
+
+#define _NOT(x) _CHECK(_CAT(_NOT_, x))
+#define _NOT_0 _PROBE()
+
+#define _BOOL(x) _NOT(_NOT(x))
+
+#define _IIF(c) _CAT(_IIF_, c)
+#define _IIF_0(t, ...) __VA_ARGS__
+#define _IIF_1(t, ...) t
+
+#define _IF(c) _IIF(_BOOL(c))
+
+/*
+_IF(0)(it was not 0, it was 0)
+ Should be "it was 0" 
+
+_IF(1)(it was 1, it was not 1)
+ Should be "it was 1" 
+
+_IF(123)(it was 123)(it was not 123)
+ Should be "it was 123" 
+
+// Could not get NULL to work as it gets replaced by ((void *)0) and then ## makes a invalid token created error.
+_IF(NULL)(it was not null,it was null)
+ Should be "it was null" but does not work
+*/
+
+/* How big is this array? 
+ *  Parameter a must not be NULL. Use 0 instead, or just the array name. 
+ *  Do not use an expression for parameter a, it is not supported. */
+#define ArraySize(a) (_IF(a)((sizeof(a) / sizeof((a)[0])),(size_t)0))
 
 #define uglyf printf  /* debugging printf */
 #define uglyAbort errAbort /* debugging error abort. */
