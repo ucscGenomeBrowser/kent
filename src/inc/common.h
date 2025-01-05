@@ -201,7 +201,8 @@ _IF(NULL)(it was not null,it was null)
  Should be "it was null" but does not work
 */
 
-/* How big is this array? */
+/* How big is this array? 
+ *  Parameter a must not be NULL. Use 0 instead, or just the array name. */
 #define ArraySize(a) (_IF(a)((sizeof(a) / sizeof((a)[0])),(size_t)0))
 
 #define uglyf printf  /* debugging printf */
