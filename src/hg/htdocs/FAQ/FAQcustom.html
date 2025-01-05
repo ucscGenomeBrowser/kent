@@ -21,7 +21,7 @@
 <li><a href="#custom9">Error 500: Internal server error</a></li>
 <li><a href="#custom10">Byte-range request error</a></li>
 <li><a href="#custom11">BedToBigBed and other utilities fail because of custom track header 
-lines</a></li>
+<li><a href="#custom12">Non-UCSC chromosome names</a></li>
 </ul>
 <hr>
 <p>
@@ -159,5 +159,23 @@ cause raw data files to fail validation by other tools, such as <code>bedToBigBe
 <code>bedToBigBed</code> with correct input data types, follow this 
 <a href="../goldenPath/help/bigBed.html#Ex3" target="_blank">link</a>. More information about track 
 lines can be found <a href="../goldenPath/help/customTrack.html#TRACK" target="_blank">here</a>.</p>
+
+<a name="custom12"></a>
+<h2>Non-UCSC style chromosome names</h2>
+<h6>Can I upload a custom track with chromosome names (e.g. '1' or 'NC_000001.11') that don't
+match the UCSC-style chromosome names (e.g. 'chr1', 'chrX')?</h6>
+<p>
+As of 2018, you can upload a custom track that contains either
+UCSC-style chromosome names (e.g. 'chr1', 'chrX') or one of several supported
+aliases, typically from Ensembl (e.g. '1' or 'X'), Genbank (e.g. 'CM000663.2'
+or 'CM000685.2'), or RefSeq (e.g. 'NC_000001.11' or 'NC_000023.11'). Many
+different custom track types support this, including BED, BAM, and any of
+our big* formats like bigBed or bigWig. You can view the list of supported
+aliases by clicking on the &quot;View sequences&quot; link for your assembly assembly of
+interest from the <a href="../cgi-bin/hgGateway">Assembly Gateway page</a> or
+as a &quot;chromAlias.txt&quot; file from <a
+href="https://hgdownload.soe.ucsc.edu/downloads.html" >our downloads server</a>
+under the link &quot;Genome sequence files and select annotations&quot; for that assembly.
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
