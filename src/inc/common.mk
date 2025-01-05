@@ -157,6 +157,7 @@ ifeq (${HALDIR},)
     # ONLY on hgwdev, not any other machine here (i.e. hgcompute-01)
     ifeq (${IS_HGWDEV},yes)
       HALDIR = /hive/groups/browser/hal/build/hal.2024-12-12
+      #HALDIR = /hive/users/markd/browser/rocky9/hal/build/hal.2024-12-12
       ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1
