@@ -45,12 +45,7 @@
   line-height:1em
 }
 
-/*
-.topLevelRow {
-    text-align: left;
+/* make the search bar and table have rows have a normal white background */
+#filesDiv input.dt-input,#filesDiv .dt-scroll-body {
+    background-color: #f9f9f9;
 }
-
-.childRow {
-    text-indent: 10px;
-}
-*/
