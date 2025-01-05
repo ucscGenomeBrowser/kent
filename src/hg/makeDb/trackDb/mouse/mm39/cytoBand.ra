@@ -5,3 +5,12 @@ group map
 visibility dense
 type bigBed 4 +
 bigDataUrl  /gbdb/mm39/bbi/cytoBand/mm39.cytoBand.bb
+
+track cytoBandBW
+shortLabel Chromosome Band
+longLabel Chromosome Bands Localized by FISH Mapping Clones
+group map
+visibility dense
+type bigBed 4 +
+searchIndex name
+bigDataUrl  /gbdb/mm39/bbi/cytoBand/mm39.cytoBandTrack.bb
