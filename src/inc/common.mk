@@ -175,7 +175,7 @@ ifeq (${USE_HAL},1)
         HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
     else
       ifeq (${HOSTNAME},hgwdev)
-          HALLIBS += -lcurl /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
+          HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
       else
           HALLIBS += -lcurl -lstdc++
       endif
