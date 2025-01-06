@@ -704,30 +704,36 @@ function setupCgiOsx ()
 # anyways, as it should not hurt and some mirrors may have old Python2 code or old CGIs around. 
 # We can remove this section in around 1-2 years when we are sure that no one needs Python2 anymore
 function installPy2MysqlRedhat () {
-    yum install -y python2 mysql-devel python2-devel wget gcc
-    if [ -f /usr/include/mysql/my_config.h ]; then
-	    echo my_config.h found
+
+    # Rocky 9
+    if yum list python3-mysqlclient 2> /dev/null ; then
+        yum install -y python3-mysqlclient python3 python3-devel mariadb-connector-c mariadb-common mariadb-connector-c-devel wget gcc
     else
-	wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
-    fi
+	yum install -y python2 mysql-devel python2-devel wget gcc
+	if [ -f /usr/include/mysql/my_config.h ]; then
+		echo my_config.h found
+	else
+	    wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+	fi
 
-    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
-    # somehow the mysql.h does not have the "reconnect" field anymore in Fedora
-    if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
-	echo /usr/include/mysql/mysql.h already has reconnect attribute
-    else
-	sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
-    fi
+	# this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
+	# somehow the mysql.h does not have the "reconnect" field anymore in Fedora
+	if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
+	    echo /usr/include/mysql/mysql.h already has reconnect attribute
+	else
+	    sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
+	fi
 
-    # fedora > 34 doesn't have any pip2 package anymore so install it now
-    if ! type "pip2" > /dev/null; then
-	 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-	 python2 get-pip.py
-	 mv /usr/bin/pip /usr/bin/pip2
+	# fedora > 34 doesn't have any pip2 package anymore so install it now
+	if ! type "pip2" > /dev/null; then
+	     wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+	     python2 get-pip.py
+	     mv /usr/bin/pip /usr/bin/pip2
 
+	fi
+	pip2 install MySQL-python
     fi
-    pip2 install MySQL-python
-   }
+    }
 
 # little function that compares two floating point numbers
 # see https://stackoverflow.com/questions/8654051/how-can-i-compare-two-floating-point-numbers-in-bash
@@ -745,7 +751,7 @@ function installRedhat () {
     yum -y update
 
     # Fedora doesn't have or need EPEL, however, it does not include chkconfig by default
-    if cat /etc/redhat-release | grep edora > /dev/null; then
+    if cat /etc/redhat-release | egrep '(edora|ocky)' > /dev/null; then
 	yum -y install chkconfig
     else
         yum -y install epel-release

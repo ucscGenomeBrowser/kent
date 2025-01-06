@@ -639,7 +639,7 @@ else
     {
     struct dyString *dy = dyStringNew(1024);
     char tempFa[512], tempGs[512];
-    char dir1[256], root1[128], ext1[64];
+    char dir1[PATH_LEN], root1[FILENAME_LEN], ext1[FILEEXT_LEN];
     int myPid = (int)getpid();
 
     splitPath(faName, dir1, root1, ext1);

@@ -117,6 +117,10 @@ char* sqlGetHost(struct sqlConnection *sc);
 struct slName *sqlGetAllDatabase(struct sqlConnection *sc);
 /* Get a list of all database on the server */
 
+bool sqlTableExistsOnMain(struct sqlConnection *sc, char *tableName);
+/* Return TRUE if the table can be queried using sc's main conn;
+ * don't check failoverConn or the table cache (showTableCache in hg.conf). */
+
 struct slName *sqlListTablesLike(struct sqlConnection *conn, char *likeExpr);
 /* Return list of tables in database associated with conn. Optionally filter list with
  * given LIKE expression that can be NULL or string e.g. "LIKE 'snp%'". */

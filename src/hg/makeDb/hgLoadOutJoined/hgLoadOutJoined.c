@@ -261,7 +261,7 @@ readOneOut(rmskFile);
 /* Create database table (if not -tabFile). */
 if (tabFileName == NULL)
     {
-    char dir[256], base[128], extension[64];
+    char dir[PATH_LEN], base[FILENAME_LEN], extension[FILEEXT_LEN];
     char tableName[256];
     splitPath(rmskFile, dir, base, extension);
     chopSuffix(base);

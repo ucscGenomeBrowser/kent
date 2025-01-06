@@ -28,7 +28,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   gtexSampleData.o gtexTissue.o gtexTissueMedian.o gtexUi.o hCommon.o hPrint.o hVarSubst.o \
   hapmapAllelesOrtho.o hapmapPhaseIIISummary.o hapmapSnps.o hdb.o hgColors.o hgConfig.o hgFind.o \
   hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o hgMaf.o hgRelate.o hic.o hicUi.o hubConnect.o hubPublic.o \
-  hubSearchText.o hui.o imageClone.o indelShift.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
+  hubSearchText.o hubSpace.o hubSpaceKeys.o hubSpaceQuotas.o hui.o imageClone.o indelShift.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
   jsHelper.o kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o lav.o lfs.o liftOver.o liftOverChain.o \
   liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o makeItemsItem.o mdb.o \
   microarray.o minChromSize.o namedSessionDb.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \
@@ -37,7 +37,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   sqlSanity.o stanMad.o stsAlias.o stsInfo2.o stsMap.o stsMarker.o tableStatus.o tablesTables.o \
   tagRepo.o tfbsCons.o tigrCmrGene.o traceInfo.o trackDb.o trackDbCache.o trackDbCustom.o trackHub.o \
   trackVersion.o trashDir.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o txGraph.o txInfo.o txRnaAccs.o \
-  variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
+  userdata.o variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
   wiggleUtils.o wikiLink.o bigRmskAlignBed.o bigRmskBed.o
 
 ifeq (${USE_HIC}, 1)

@@ -7,6 +7,7 @@ group phenDis
 pennantIcon New red ../goldenPath/newsarch.html#121024 "DDG2P released December 10, 2024"
 
     track decipher
+    priority 1
     shortLabel DECIPHER CNVs
     longLabel DECIPHER CNVs
     group phenDis
@@ -29,6 +30,7 @@ pennantIcon New red ../goldenPath/newsarch.html#121024 "DDG2P released December 
     parent decipherContainer
 
     track decipherSnvs
+    priority 2
     shortLabel DECIPHER SNVs
     longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
     group phenDis
@@ -42,12 +44,12 @@ pennantIcon New red ../goldenPath/newsarch.html#121024 "DDG2P released December 
     parent decipherContainer
 
     track decipherDDG2P
+    priority 3
     parent decipherContainer
     type bigBed 9 +
     shortLabel DECIPHER DDG2P
     longLabel DECIPHER: Developmental Disorders panel in the Gene2Phenotype database (DDG2P)
     bigDataUrl /gbdb/$D/decipher/ddg2pSyndromes.bb
-    group phenDis
     visibility pack
     mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Type of CNV</b>: $type<br> <b>Frequency of CNV</b>: $frequency<br> <b>Number of Observations</b>: $observations<br> <b>Sample Size of Study</b>: $sample_size<br>
     html decipherContainer

@@ -43,7 +43,7 @@ The typical workflow for generating a BAM custom track is this:</p>
   <code>samtools view</code> with no other arguments.</li> 
   <li>
   Sort and create an index for the BAM: 
-  <pre><code>    samtools sort my.bam my.sorted 
+  <pre><code>    samtools sort -o my.sorted.bam my.bam
     samtools index my.sorted.bam</code></pre> 
   The sort command appends <code>.bam</code> to <code>my.sorted</code>, creating a BAM file of 
   alignments ordered by leftmost position on the reference assembly. The index command generates a 

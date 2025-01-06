@@ -31,6 +31,10 @@ nextcladeNameB=rsv_b
 refFaB=$rsvDir/NC_001781.1.fa
 archiveRootB=/hive/users/angie/publicTreesRsvB
 
+# Filter out branches longer than this so we don't get RSV-A and RSV-B in same final tree
+maxSubs=1500
+maxBranchLen=500
+
 if [[ ! -d $rsvDir/ncbi/ncbi.$today || ! -s $rsvDir/ncbi/ncbi.$today/genbank.fa.xz ]]; then
     mkdir -p $rsvDir/ncbi/ncbi.$today
     $rsvScriptDir/getNcbiRsv.sh >& $rsvDir/ncbi/ncbi.$today/getNcbiRsv.log
@@ -42,7 +46,7 @@ cd $buildDir
 
 # Make sure the download wasn't truncated without reporting an error:
 count=$(wc -l < $rsvNcbiDir/metadata.tsv)
-minSamples=4500
+minSamples=5600
 if (( $count < $minSamples )); then
     echo "*** Too few samples ($count)!  Expected at least $minSamples.  Halting. ***"
     exit 1
@@ -74,7 +78,7 @@ join -t$'\t' <(sort tweakedMetadata.tsv) accToIdFromTitle.tsv \
     if ($name ne "" && $name !~ /$year/ && $name !~ /\/$year2$/) { $name = "$name/$year"; }
     if ($date eq "") { $date = "?"; }
     my $fullName = $name ? "$name|$acc|$date" : "$acc|$date";
-    $fullName =~ s/ /_/g;
+    $fullName =~ s/[ ,:()]/_/g;
     print "$acc\t$fullName\n";' \
     > renaming.tsv
 
@@ -117,9 +121,15 @@ for aOrB in A B; do
         $rsvDir/ncbi/ncbi.$today/genbank.fa.xz \
         >& nextalign.log
 
+    if [[ -s $rsvScriptDir/mask.$aOrB.vcf ]]; then
+        maskCmd="vcfFilter -excludeVcf=$rsvScriptDir/mask.$aOrB.vcf stdin "
+    else
+        maskCmd="cat"
+    fi
     time faToVcf -verbose=2 -includeRef -includeNoAltN -excludeFile=$rsvScriptDir/exclude.ids \
         <(xzcat aligned.$aOrB.fa.xz) stdout \
         | vcfRenameAndPrune stdin renaming.tsv stdout \
+        | $maskCmd \
         | pigz -p 8 \
         > all.$aOrB.vcf.gz
 
@@ -132,7 +142,7 @@ for aOrB in A B; do
 
     # Filter out branches that are so long they must lead to the other subspecies (B or A)
     $matUtils extract -i rsv$aOrB.$today.preFilter.pb \
-        --max-branch-length 1000 \
+        --max-branch-length $maxBranchLen \
         -O -o rsv$aOrB.$today.preOpt.pb >& tmp.log
 
     # Optimize:
@@ -141,16 +151,16 @@ for aOrB in A B; do
         -o rsv$aOrB.$today.opt.pb \
         >& matOptimize.$aOrB.log
 
-    # Annotate Ramaekers et al., Goya et al. and consortium clades using nextclade assignments and
+    # Annotate consortium clades and Goya et al. clades using nextclade assignments and
     # other sources (nextstrain.org, supplemental table...).
     function tl {
         perl -wne 'chomp; @w = split(/\t/, $_, -1); $i = 1; foreach $w (@w) { print "$i\t$w[$i-1]\n"; $i++; }'
     }
-    rCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w clade | cut -f 1)
+    cCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w clade | cut -f 1)
     gCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w G_clade | cut -f 1)
     subsCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w totalSubstitutions | cut -f 1)
     tail -n+2 nextclade.rsv$aOrB.tsv \
-    | tawk '$'$subsCol' < 1000 && $'$gCol' != "" {print $1, $'$gCol';}' \
+    | tawk '$'$subsCol' < '$maxSubs' && $'$gCol' != "" {print $2, $'$gCol';}' \
     | sed -re 's/unassigned/Unassigned/;' \
     | sort > accToGClade
     join -t$'\t' accToGClade renaming.tsv | grep -v Unassigned | cut -f 2,3 | sort \
@@ -191,34 +201,24 @@ for aOrB in A B; do
         -l -c gCladeToName.$aOrB $cladeMuts -o rsv$aOrB.$today.gClade.pb \
         >& annotate.$aOrB.gClade.log
     tail -n+2 nextclade.rsv$aOrB.tsv \
-    | tawk '$'$subsCol' < 1000 && $'$rCol' != "" {print $1, $'$rCol';}' \
+    | tawk '$'$subsCol' < '$maxSubs' && $'$cCol' != "" {print $2, $'$cCol';}' \
     | sed -re 's/unassigned/Unassigned/;' \
-    | sort > accToRClade
-    # As of 2023-01-24, nextclade doesn't call all of the Ramaekers clades, but Table S1 from the
-    # publication (https://academic.oup.com/ve/article/6/2/veaa052/5876035) lists INSDC accessions
-    # and assignments.  Use those when available, and fall back on nextclade for other sequences.
-    # Exclude nextclade A17 because it messes up A18.
-    join -a 1 -o 1.1,1.2,2.2 -t$'\t' \
-        <(sed -re 's/\.[0-9]+\t/\t/;' accToRClade ) \
-        $rsvDir/Ramaekers_TableS1_accTo$aOrB.tsv \
-    | tawk '{ if ($3 != "" || $2 == "A17") { print $1, $3; } else { print $1, $2; } }' \
-    | sort \
-        > accToRCladeCombined
-    join -t$'\t' accToRCladeCombined <(sed -re 's/\.[0-9]+\t/\t/;' renaming.tsv) \
+    | sort > accToCClade
+    join -t$'\t' accToCClade renaming.tsv \
     | grep -v Unassigned | cut -f 2,3 | sort \
-        > rCladeToName.$aOrB
-    if [[ -s $rsvScriptDir/ramaekers.$aOrB.clade-mutations.tsv ]]; then
-        cladeMuts="-M $rsvScriptDir/ramaekers.$aOrB.clade-mutations.tsv"
+        > cCladeToName.$aOrB
+    if [[ -s $rsvScriptDir/gcc.$aOrB.clade-mutations.tsv ]]; then
+        cladeMuts="-M $rsvScriptDir/gcc.$aOrB.clade-mutations.tsv"
     else
         cladeMuts=""
     fi
     $matUtils annotate -T 64 -f 0.9 -m 0.1 -i rsv$aOrB.$today.gClade.pb \
-        -c rCladeToName.$aOrB $cladeMuts -o rsv$aOrB.$today.pb \
-        >& annotate.$aOrB.rClade.log
+        -c cCladeToName.$aOrB $cladeMuts -o rsv$aOrB.$today.pb \
+        >& annotate.$aOrB.cClade.log
     $matUtils summary -i rsv$aOrB.$today.pb -C sample-clades.$aOrB >& tmp.log
 
     # Make metadata that uses same names as tree
-    echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tgoya_nextclade\tramaekers_nextclade\tgoya_usher\tramaekers_usher\tramaekers_tableS1\tgcc_lineage" \
+    echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tgoya_nextclade\tGCC_nextclade\tgoya_usher\tGCC_usher\tGCC_assigned_2023-11" \
         > rsv$aOrB.$today.metadata.tsv
     join -t$'\t' -o 1.2,2.1,2.6,2.4,2.5,2.8,2.9,2.10,2.11,2.13,2.14,2.15 \
         <(sort renaming.tsv) \
@@ -226,15 +226,11 @@ for aOrB in A B; do
           | perl -F'/\t/' -walne '$F[3] =~ s/(: ?|$)/\t/;  print join("\t", @F);') \
     | sort \
     | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' renaming.tsv accToGClade | sort) \
-    | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' renaming.tsv accToRClade | sort) \
+    | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' renaming.tsv accToCClade | sort) \
     | join -t$'\t' - <(sort sample-clades.$aOrB | sed -re 's/None/Unassigned/g') \
     | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' \
                            <(sed -re 's/\.[0-9]+\t/\t/;' renaming.tsv) \
-                           $rsvDir/Ramaekers_TableS1_accTo$aOrB.tsv \
-                       | sort) \
-    | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' \
-                           <(sed -re 's/\.[0-9]+\t/\t/;' renaming.tsv) \
-                           <(tawk '{print $2, $1;}' $rsvDir/RSV${aOrB}_GCC_2023-05-16.tsv | sort) \
+                           $rsvDir/RSV${aOrB}_GCC_2023-11-06.tsv \
                        | sort) \
         >> rsv$aOrB.$today.metadata.tsv
     pigz -f -p 8 rsv$aOrB.$today.metadata.tsv
@@ -249,20 +245,21 @@ for aOrB in A B; do
     # Make a taxonium view
     usher_to_taxonium --input rsv$aOrB.$today.pb \
         --metadata rsv$aOrB.$today.metadata.tsv.gz \
-        --columns genbank_accession,country,location,date,authors,ramaekers_nextclade,goya_nextclade,ramaekers_usher,goya_usher,ramaekers_tableS1,gcc_lineage \
-        --clade_types=pango,placeholder \
+        --columns genbank_accession,country,location,date,authors,GCC_nextclade,goya_nextclade,GCC_usher,goya_usher,GCC_assigned_2023-11 \
+        --clade_types=placeholder,pango \
         --genbank $gbff \
         --name_internal_nodes \
         --title "RSV-"$aOrB" $today tree with $sampleCountComma genomes from INSDC" \
         --output rsv$aOrB.$today.taxonium.jsonl.gz \
         >& usher_to_taxonium.$aOrB.log
 
-    # Update links to latest protobuf and metadata in hgwdev cgi-bin directories
-    for dir in /usr/local/apache/cgi-bin{-angie,,-beta}/hgPhyloPlaceData/$asmAcc; do
-        ln -sf $(pwd)/rsv$aOrB.$today.pb $dir/rsv$aOrB.latest.pb
-        ln -sf $(pwd)/rsv$aOrB.$today.metadata.tsv.gz $dir/rsv$aOrB.latest.metadata.tsv.gz
-        ln -sf $(pwd)/hgPhyloPlace.description.$aOrB.txt $dir/rsv$aOrB.latest.version.txt
-    done
+    # Update links to latest protobuf and metadata in /gbdb directories
+    nc=$(basename $gbff .gbff)
+    dir=/gbdb/wuhCor1/hgPhyloPlaceData/rsv/$nc
+    mkdir -p $dir
+    ln -sf $(pwd)/rsv$aOrB.$today.pb $dir/rsv$aOrB.latest.pb
+    ln -sf $(pwd)/rsv$aOrB.$today.metadata.tsv.gz $dir/rsv$aOrB.latest.metadata.tsv.gz
+    ln -sf $(pwd)/hgPhyloPlace.description.$aOrB.txt $dir/rsv$aOrB.latest.version.txt
 
     # Extract Newick and VCF for anyone who wants to download those instead of protobuf
     $matUtils extract -i rsv$aOrB.$today.pb \
@@ -287,11 +284,13 @@ for aOrB in A B; do
     # Update hgdownload-test link for archive
     asmDir=$(echo $asmAcc \
         | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
-    mkdir -p /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
-    ln -sf $archive /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
-    # rsync to hgdownload hubs dir
-    rsync -v -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/* \
-        qateam@hgdownload.soe.ucsc.edu:/mirrordata/hubs/$asmDir/UShER_RSV-$aOrB/
+    mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
+    ln -sf $archive /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
+    # rsync to hgdownload{1,2} hubs dir
+    for h in hgdownload1 hgdownload2; do
+        rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/* \
+            qateam@$h:/mirrordata/hubs/$asmDir/UShER_RSV-$aOrB/
+    done
 done
 
 set +o pipefail
@@ -305,7 +304,7 @@ echo ""
 cat hgPhyloPlace.description.B.txt
 zcat rsvB.$today.metadata.tsv.gz | tail -n+2 | cut -f 13,15 | sort | uniq -c
 echo ""
-echo "Ramaekers clades:"
+echo "RSV GCC clades:"
 zcat rsvA.$today.metadata.tsv.gz | tail -n+2 | cut -f 14,16,17 | sort | uniq -c
 echo ""
 zcat rsvB.$today.metadata.tsv.gz | tail -n+2 | cut -f 14,16,17 | sort | uniq -c

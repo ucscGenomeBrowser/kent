@@ -1824,7 +1824,7 @@ FILE *cFile;
 FILE *hFile;
 FILE *sqlFile;
 FILE *djangoFile = NULL;
-char defineName[256];
+char defineName[512];
 boolean doDbLoadAndSave = FALSE;
 
 optionInit(&argc, argv, optionSpecs);

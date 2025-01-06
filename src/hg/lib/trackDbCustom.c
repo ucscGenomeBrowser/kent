@@ -286,7 +286,7 @@ char *trackDbInclude(char *raFile, char *line, char **releaseTag)
 /* Get include filename from trackDb line.
    Return NULL if line doesn't contain include */
 {
-static char incFile[256];
+static char incFile[512];
 char *file;
 
 if (startsWith("include", line))

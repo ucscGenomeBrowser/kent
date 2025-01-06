@@ -284,7 +284,7 @@ if (sameString(table, "mrna") || sameString(table, "est"))
     if (sizeofTable > tableLen + prefixLen + 1)
         {
         memmove(table+prefixLen, table, tableLen+1);
-        strncpy(table, "all_", prefixLen);
+        strncpy(table, "all_", prefixLen+1);
         }
     }
 }

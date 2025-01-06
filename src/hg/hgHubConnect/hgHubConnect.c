@@ -30,7 +30,10 @@
 #include "hubSearchText.h"
 #include "pipeline.h"
 #include "hubPublic.h"
+#include "hgHubConnect.h"
+#include "cartJson.h"
 #include "wikiLink.h"
+#include "hubSpaceKeys.h"
 
 static boolean measureTiming;
 
@@ -415,9 +418,19 @@ errCatchFree(&errCatch);
 return ret;
 }
 
+static char *getApiKey(char *userName)
+/* Grab the already created api key if it exists */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *query = sqlDyStringCreate("select apiKey from %s where userName='%s'", HUBSPACE_AUTH_TABLE, userName);
+char *apiKey = sqlQuickString(conn, dyStringCannibalize(&query));
+hDisconnectCentral(&conn);
+return apiKey;
+}
+
 void printApiKeySection()
 {
-puts("<div id='apiKey' class='tabSection'>");
+puts("<div id='apiKeySection' class='tabSection'>");
 puts("<h4>Hubtools API key</h4>");
 char *userName = wikiLinkUserName();
 char *userId = wikiLinkUserId();
@@ -429,10 +442,30 @@ if (userName==NULL || userId==NULL)
     }
 else
     {
-    puts("<div class='help'>To use the <tt>hubtools up</tt> command, create a file ~/.hubtools.conf and add this line:</div>");
-    puts("<div style='margin-left: 15px; font-family: monospace'>");
-    printf("apiKey=%s@%s", userName, userId);
-    puts("</div>");
+    char *existingKey = getApiKey(userName);
+    if (existingKey)
+        {
+        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an api key for use in hubtools. If you would like to generate a new key (which automatically revokes old keys), please click 'generate key'. Otherwise, you can copy and paste the below key to your ~/.hubtools.conf file:<br>");
+        puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
+        printf("%s\n", existingKey);
+        puts("</div>");
+        puts("</div>");
+        puts("<div id='generateDiv' class='help'>Generate an api key <button id='generateApiKey'>generate key</button></div>");
+        }
+    else
+        {
+        puts("<div id='generateDiv' class='help'>To use the <tt>hubtools up</tt> command, click 'generate key'");
+        puts("<button id='generateApiKey'>generate key</button></div>");
+        printf("<div id='apiKeyInstructions' style='display: %s'>Now, create a file ~/.hubtools.conf and add the key:<br>\n", existingKey != NULL ? "block" : "none");
+        puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
+        puts("</div></div>");
+        }
+    printf("<div id='revokeDiv' class='help' style='display: %s'>\nTo revoke any apiKeys associated with your account, click the revoke button: <button id='revokeApiKeys'>revoke</button>\n</div>", existingKey != NULL ? "block" : "none");
+    // add the event handlers for clicking the generate/revoke buttons
+    jsInlineF(""
+    "document.getElementById('generateApiKey').addEventListener('click', generateApiKey);\n"
+    "document.getElementById('revokeApiKeys').addEventListener('click', revokeApiKeys);\n"
+    );
     }
 
 puts("</div>"); // tabSection apiKey
@@ -1509,7 +1542,6 @@ void printIncludes()
 {
 printf(
 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
 "<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
 );
@@ -1526,6 +1558,12 @@ jsIncludeFile("spectrum.min.js", NULL); // there is no color picker used anywher
 void blankWarn()
 /* Dummy warn handler used in the iframe for returning hubCheck output */
 {
+}
+
+void hgHubConnectOfferUpload(char *db)
+/* Make the tab that allows users to upload data files and create a hub on the fly */
+{
+doTrackHubWizard(db);
 }
 
 void doMiddle(struct cart *theCart)
@@ -1615,6 +1653,9 @@ cartWebStart(cart, NULL, "%s", pageTitle);
 
 printIncludes();
 
+// need the hgsid:
+//jsInlineF("var hgsid = \"%s\";\n", cartSessionId(cart));
+
 // this variable is used by hub search and hub validate, initialize here so we don't
 // overwrite it unintentionally depending on which path the CGI takes
 jsInline("trackData = [];\n");
@@ -1676,6 +1717,8 @@ printf("<div id=\"tabs\">"
        "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">Connected Hubs</a></li> ");
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
+    printf("<li><a class=\"hubUpload\" href=\"#hubUpload\">Hub Upload</a></li>");
 printf("</ul> ");
 
 // The public hubs table is getting big and takes a while to download.
@@ -1692,11 +1735,25 @@ hgHubConnectUnlisted(hubList, publicHash);
 
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     hgHubConnectDeveloperMode();
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
+    hgHubConnectOfferUpload(database);
 
 printf("</div>"); // #tabs
 
 
 cartWebEnd();
+}
+
+void doAsync(struct cart *theCart)
+/* Execute the async request */
+{
+cart = theCart;
+struct cartJson *cj = cartJsonNew(cart);
+cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
+cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
+cartJsonRegisterHandler(cj, hgHubGenerateApiKey, generateApiKey);
+cartJsonRegisterHandler(cj, hgHubRevokeApiKey, revokeApiKey);
+cartJsonExecute(cj);
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
@@ -1710,7 +1767,10 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+if (cgiOptionalString(CARTJSON_COMMAND))
+    cartEmptyShellNoContent(doAsync, hUserCookie(), excludeVars, oldVars);
+else
+    cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);
 return 0;
 }

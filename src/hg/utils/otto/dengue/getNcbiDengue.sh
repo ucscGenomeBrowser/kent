@@ -50,7 +50,7 @@ maxAttempts=5
 retryDelay=300
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "fasta attempt $attempt"
-    if datasets download virus genome taxon $taxId --include genome,biosample; then
+    if datasets download virus --no-progressbar genome taxon $taxId --include genome,biosample; then
         break;
     else
         echo "FAILED fasta; will try again after $retryDelay seconds"
@@ -76,6 +76,8 @@ if (( $count < $minSamples )); then
     echo "*** Too few samples ($count)!  Expected at least $minSamples.  Halting. ***"
     exit 1
 fi
+
+rm -rf ncbi_dataset ncbi_dataset.zip
 
 rm -f $dengueDir/ncbi/ncbi.latest
 ln -s ncbi.$today $dengueDir/ncbi/ncbi.latest

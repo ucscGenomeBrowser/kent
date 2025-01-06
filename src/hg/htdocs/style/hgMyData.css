@@ -1,0 +1,51 @@
+#fileList {
+    display: grid;
+    grid-template-columns: 20px 2fr 1fr 1fr 1fr;
+    column-gap: 2px;
+}
+
+.fileListHeader {
+    display: none;
+}
+
+.batchTypeSelect {
+    grid-column-start: 3;
+}
+
+.batchDbSelect {
+    grid-column-start: 4;
+}
+
+.button {
+    background-color: #E8E8E8;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px ridge black;
+    font-size: 0.8rem;
+}
+
+.pickedFiles {
+}
+.pickedFile {
+    font-size: smaller;
+}
+
+#filesDiv table.dataTable input.dt-select-checkbox {
+  appearance: auto;
+  position:relative;
+  display:inline-block;
+  width:12px;
+  height:12px;
+  border:1px solid;
+  border-radius:3px;
+  vertical-align:middle;
+  margin-top:1px;
+  color:inherit;
+  font-size:20px;
+  line-height:1em
+}
+
+/* make the search bar and table have rows have a normal white background */
+#filesDiv input.dt-input,#filesDiv .dt-scroll-body {
+    background-color: #f9f9f9;
+}

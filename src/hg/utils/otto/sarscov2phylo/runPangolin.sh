@@ -3,6 +3,8 @@ source ~/.bashrc
 conda activate pangolin
 set -beEu -x -o pipefail
 
+export TMPDIR=/dev/shm
+
 # Run pangolin/pangoLEARN on a file (not pipe) and output full CSV
 # (suitable for cluster run on faSplit sequence chunks)
 

@@ -7378,3 +7378,13 @@ bigBedToBed hg38.chromAlias.noindexes.bb  hg38.chromAlias.bed
 bedToBigBed -tab -type=bed3+ -as=hg38.chromAlias.as hg38.chromAlias.bed -sizesIs2Bit  -extraIndex=ucsc,assembly,ensembl,genbank,refseq hg38.2bit hg38.chromAlias.bb
 
 ##############################################################################
+
+# ENCODE 4 TF rPeak Clusters - RM #34930 - Lou 12/19/24
+
+mkdir /hive/data/genomes/hg38/bed/ENCODEv4TFrPeaks
+cd /hive/data/genomes/hg38/bed/ENCODEv4TFrPeaks
+hubClone -download https://users.wenglab.org/gaomingshi/TF.rpeak.test.txt
+ln -s /hive/data/genomes/hg38/bed/ENCODEv4TFrPeaks/no_trim.TF_name.rPeaks.bb /gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
+ln -s /hive/data/genomes/hg38/bed/ENCODEv4TFrPeaks/no_trim.TF_name.decorator.bb /gbdb/hg38/bbi/ENCODE4/TFrPeakClustersDecorator.bb
+# Then just moved the files to the ENCODEv4TFrPeaks dir, moved/tweaked HTML and trackDb
+

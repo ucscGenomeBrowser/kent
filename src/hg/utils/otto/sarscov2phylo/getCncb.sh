@@ -55,6 +55,7 @@ fi
 tail -n+2 cncb.metadata.tsv \
 | cut -f 1,10 \
 | cleanCncb \
+| sort -u \
 | sed -re 's/ //;' \
     > cncbToDate
 
@@ -65,20 +66,22 @@ tail -n+2 cncb.metadata.tsv \
 | grep -vE '[,'$'\t''][A-Z]{2}[0-9]{6}\.[0-9]+['$'\t'',]' \
 | tawk '{ if ($4 == "null") { $4 = ""; } if ($2 ~ /^EPI_ISL/) { tmp = $2; $2 = $4; $4 = tmp; } print $1, $2; }' \
 | cleanCncb \
+| sort -u \
 | sed -re 's/ //;' \
 | tawk '{print $2, $1 " | " $2;}' \
 | sort \
     > accToNameBarAcc.tsv
 
 # See what sequences are in metadata but that we haven't already downloaded.
-fastaNames ../cncb.latest/cncb.nonGenBank.acc.fasta.xz | sort > prevAccs
-comm -23 <(cut -f 1 accToNameBarAcc.tsv) prevAccs | sort > missingIDs
+fastaNames ../cncb.latest/cncb.nonGenBank.acc.fasta.xz | sort -u > prevAccs
+comm -23 <(cut -f 1 accToNameBarAcc.tsv) prevAccs | sort -u > missingIDs
 
 # Use the GenBase API to download missing GenBase sequences, unfortunately only one sequence
 # at a time.
 tail -n+2 cncb.metadata.tsv \
 | grep -vE '[,'$'\t''][A-Z]{2}[0-9]{6}\.[0-9]+['$'\t'',]' \
 | tawk '{ if ($4 == "null") { $4 = ""; } if ($2 ~ /^EPI_ISL/) { tmp = $2; $2 = $4; $4 = tmp; } print $2; }' \
+| sort -u \
     > nonGenBankIds
 set +o pipefail
 grep ^C_ missingIDs \

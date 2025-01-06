@@ -793,7 +793,7 @@ else if (labelOpt)
 if (requestVal)
     {
     (void)stripChar(requestVal,'\"');
-    requestCount = chopCommas(requestVal,NULL);
+    requestCount = chopCommas(requestVal,0);
     requested = needMem(requestCount * sizeof(char *));
     chopByChar(requestVal,',',requested,requestCount);
     }

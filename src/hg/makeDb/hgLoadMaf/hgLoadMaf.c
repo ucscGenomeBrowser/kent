@@ -102,9 +102,9 @@ struct fileInfo *fileList = NULL, *fileEl;
 struct sqlConnection *conn;
 long mafCount = 0;
 FILE *f = NULL;
-char extFileDir[512];
-char ext[10];
-char file[100];
+char extFileDir[PATH_LEN];
+char ext[FILEEXT_LEN];
+char file[FILENAME_LEN];
 int indexLen;
 
 if (refDb == NULL)

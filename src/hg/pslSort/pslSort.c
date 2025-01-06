@@ -256,7 +256,7 @@ return p;
 boolean selfFile(char *path)
 /* Return TRUE if of form XX_XX.psl */
 {
-char dir[256], root[128], ext[128];
+char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN];
 char *a, *b;
 
 splitPath(path, dir, root, ext);

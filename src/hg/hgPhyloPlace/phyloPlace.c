@@ -177,7 +177,7 @@ if (! hDbExists(db))
             regexSubstringCopy(db, substrs[2], first3, sizeof first3);
             regexSubstringCopy(db, substrs[3], mid3, sizeof mid3);
             regexSubstringCopy(db, substrs[4], last3, sizeof last3);
-            struct dyString *dy = dyStringCreate("https://hgdownload.gi.ucsc.edu/hubs/%s/%s/%s/"
+            struct dyString *dy = dyStringCreate("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/"
                                                  "%s/%s/hub.txt",
                                                  gcPrefix, first3, mid3, last3, db);
             // Use cart variables to pretend user clicked to connect to this hub.
@@ -190,8 +190,10 @@ if (! hDbExists(db))
                 hubDb = hubConnectLoadHubs(cart);
                 }
             errCatchEnd(errCatch);
-            if (hubDb != NULL)
-                maybeHubDb = hubDb;
+
+            maybeHubDb = hubDb;
+            if (errCatch->gotError)
+                warn("%s", errCatch->message->string);
             }
         }
     }
@@ -272,6 +274,8 @@ for (path = dataDirPaths;  path != NULL;  path = path->next)
             }
         // If it's a hub, use its full hub_... name:
         char *maybeHubDb = connectIfHub(cart, db);
+        if (maybeHubDb == NULL)
+            maybeHubDb = db;
         slAddHead(&orgList, slPairNew(maybeHubDb, label));
         }
     }
@@ -524,7 +528,7 @@ if (errCatchStart(errCatch))
             //#*** TODO: if the user uploads a sample with the same ID as one already in the
             //#*** saved assignment file, then usher will ignore it!
             //#*** Better check for that and warn the user.
-            int colCount = chopTabs(line, NULL);
+            int colCount = chopTabs(line, 0);
             if (colCount == 1)
                 {
                 lineFileAbort(lf, "VCF requires tab-separated columns, but no tabs found");
@@ -578,7 +582,7 @@ if (errCatchStart(errCatch))
                 lineFileAbort(lf, "VCF header did not include #CHROM line defining sample IDs for "
                               "genotype columns");
                 }
-            int colCount = chopTabs(line, NULL);
+            int colCount = chopTabs(line, 0);
             int genotypeCount = colCount - VCF_NUM_COLS_BEFORE_GENOTYPES;
             if (genotypeCount != sampleCount)
                 {
@@ -3497,15 +3501,17 @@ if (results && results->singleSubtreeInfo)
     if (subtreePersist)
         saveTrashFile(singleSubtreeJsonTn);
     reportTiming(&startTime, "make Auspice JSON");
+    char *ctDb = db;
     char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
     if (dbSetting)
-        db = connectIfHub(cart, dbSetting);
-    boolean canDoCustomTracks = (!subtreesOnly &&
-                                 (sameString(db, refName) || isNotEmpty(dbSetting)));
+        {
+        ctDb = connectIfHub(cart, dbSetting);
+        }
+    boolean canDoCustomTracks = (!subtreesOnly && ctDb != NULL);
     if (canDoCustomTracks)
         // Form submits subtree custom tracks to hgTracks
         printf("<form action='%s' name='resultsForm_%s' method=%s>\n\n",
-               hgTracksName(), db, cartUsualString(cart, "formMethod", "POST"));
+               hgTracksName(), ctDb, cartUsualString(cart, "formMethod", "POST"));
 
     makeButtonRow(singleSubtreeJsonTn, jsonTns, results->subtreeInfoList, subtreeSize, isFasta,
                   canDoCustomTracks);
@@ -3540,7 +3546,7 @@ if (results && results->singleSubtreeInfo)
         if (canDoCustomTracks)
             {
             // Make custom tracks for uploaded samples and subtree(s).
-            ctTn = writeCustomTracks(org, refName, db, vcfTn, results, sampleIds, source,
+            ctTn = writeCustomTracks(org, refName, ctDb, vcfTn, results, sampleIds, source,
                                      tl->fontHeight, sampleTree, &startTime);
             }
 
@@ -3647,7 +3653,7 @@ if (results && results->singleSubtreeInfo)
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
         cartSaveSession(cart);
-        cgiMakeHiddenVar("db", db);
+        cgiMakeHiddenVar("db", ctDb);
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
         if (tl->leftLabelWidthChars < 0 || tl->leftLabelWidthChars == leftLabelWidthDefaultChars)
             cgiMakeHiddenVar(leftLabelWidthVar, leftLabelWidthForLongNames);

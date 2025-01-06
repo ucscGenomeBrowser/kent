@@ -235,7 +235,6 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 #include "gbWarn.h"
-#include "lsSnpPdbChimera.h"
 #include "mammalPsg.h"
 #include "net.h"
 #include "jsHelper.h"
@@ -692,7 +691,7 @@ void printBand(char *chrom, int start, int end, boolean tableFormat)
 /* Print all matching chromosome bands.  */
 /* Ignore end if it is zero. */
 {
-char sband[32], eband[32];
+char sband[HDB_MAX_BAND_STRING], eband[HDB_MAX_BAND_STRING];
 boolean gotS = FALSE;
 boolean gotE = FALSE;
 
@@ -4945,8 +4944,8 @@ struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
 if (dbIsFound && tbl[0] != 0)
     {
-    char rootName[256];
-    char parsedChrom[32];
+    char rootName[HDB_MAX_TABLE_STRING];
+    char parsedChrom[HDB_MAX_CHROM_STRING];
     hParseTableName(database, tbl, rootName, parsedChrom);
     if (!trackHubDatabase(database))
 	hti = hFindTableInfo(database, seqName, rootName);
@@ -5500,8 +5499,8 @@ if (tbl[0] == 0)
 else
     {
     struct hTableInfo *hti = NULL;
-    char rootName[256];
-    char parsedChrom[32];
+    char rootName[HDB_MAX_TABLE_STRING];
+    char parsedChrom[HDB_MAX_CHROM_STRING];
 
     /* use the values from the dnaPos dialog box */
     if (!( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
@@ -11669,7 +11668,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
-char *kgId= NULL;
+char *kgId = cartString(cart, "i");
 char *title1 = NULL;
 char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
@@ -11928,10 +11927,13 @@ if (url != NULL && url[0] != 0)
         }
     sqlFreeResult(&sr);
 
-    printf("<B>OMIM Allelic Variant: ");
-    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
-    printf("%s</A></B>", avId);
-    printf(" %s", avDesc);
+    if (avDesc)
+	{ 
+	printf("<B>OMIM Allelic Variant: ");
+	printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
+	printf("%s</A></B>", avId);
+	printf(" %s", avDesc);
+	}
 
     printf("<BR><B>OMIM: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);

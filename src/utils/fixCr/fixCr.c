@@ -5,8 +5,8 @@
 int main(int argc, char *argv[])
 /* Fix carraige returns. */
 {
-char dir[256], name[128], extension[64];
-char bakName[512];
+char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+char bakName[1024];
 char *fileName;
 int i;
 FILE *out;

@@ -34,6 +34,7 @@ while [[ $((++attempt)) -le $maxAttempts ]]; do
         | sed -re 's/\tMPXV[_-]/\t/g;' \
         | sed -re 's@\t(hMPX|hMPXV|hMpxV|MpxV|MPxV|MPXV|MpxV|MPX|Monkeypox|MPXV22)/@\t@g;' \
         | sed -re 's@\t[Hh]uman/@\t@g;' \
+        | sed -re 's@RNA genome assembly, complete genome: monopartite@@;' \
         > metadata.tsv; then
         break;
     else
@@ -45,10 +46,15 @@ while [[ $((++attempt)) -le $maxAttempts ]]; do
     fi
 done
 if [[ ! -f metadata.tsv ]]; then
-    echo "datasets command failed $maxAttempts times; quitting."
-#    exit 1
+    echo "metadata query failed $maxAttempts times; quitting."
+    exit 1
 fi
 wc -l metadata.tsv
+
+if [[ ! -s metadata.tsv ]]; then
+    echo "metadata query appeared to succeed but gave 0-length output"
+    exit 1
+fi
 
 attempt=0
 maxAttempts=5

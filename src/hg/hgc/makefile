@@ -28,16 +28,16 @@ compile: $O
 	mv ${AOUT} $A${EXE}
 
 my::
-	rm -rf ${CGI_BIN}-${USER}/hgcData ${CGI_BIN}-${USER}/lsSnpPdbChimera.py
-	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}-${USER}/
-	chmod -R a+rX ${CGI_BIN}-${USER}/hgcData ${CGI_BIN}-${USER}/lsSnpPdbChimera.py
+	rm -rf ${CGI_BIN}-${USER}/hgcData
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ${CGI_BIN}-${USER}/
+	chmod -R a+rX ${CGI_BIN}-${USER}/hgcData
 
 alpha::
-	rm -fr ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
-	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}/
-	chmod -R a+rX,g+w ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
+	rm -fr ${CGI_BIN}/hgcData
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ${CGI_BIN}/
+	chmod -R a+rX,g+w ${CGI_BIN}/hgcData
 
 beta::
-	rm -fr ${CGI_BIN}-beta/hgcData ${CGI_BIN}-beta/lsSnpPdbChimera.py
-	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}-beta/
-	chmod -R a+rX,g+w ${CGI_BIN}-beta/hgcData ${CGI_BIN}-beta/lsSnpPdbChimera.py
+	rm -fr ${CGI_BIN}-beta/hgcData
+	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ${CGI_BIN}-beta/
+	chmod -R a+rX,g+w ${CGI_BIN}-beta/hgcData

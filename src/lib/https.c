@@ -164,7 +164,11 @@ while (1)
 	}
 
     // The earlier call to BIO_set_nbio() should have turned non-blocking io on already.
-    if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1) 
+#if defined(__APPLE__) && defined(__clang__)
+    if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1)
+#else
+    if (fcntl(fd, F_SETFL, SOCK_NONBLOCK) == -1)
+#endif
         {
 	xerr("Could not switch to non-blocking.\n");
 	goto cleanup;
