@@ -1001,7 +1001,7 @@ options:
    -noTracks             - don't check remote files for tracks, just trackDb (faster)
    -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs </code></pre></p>
 <p>
-Note that you will have to use the udcDir if /tmp/udcCache is not writable on your machine.</p>
+Note that you will have to use the -udcDir option if /tmp/udcCache is not writable on your machine.</p>
 <p>
 The hubCheck program is available from the UCSC downloads server at 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">http://hgdownload.soe.ucsc.edu/admin/exe/</a>.</p>
@@ -1015,6 +1015,34 @@ or errors in the track hub configuration files. Occasionally, remote track
 hubs may be missing, off-line, or otherwise unavailable. If a user is
 already browsing data from the remote hub when it disconnects, a yellow error message will be
 displayed instead of the expected data.</p>
+
+<a name="hubClone"></a>
+<h3>Download all files in a hub using hubClone utility</h3>
+<p>
+You can use the command-line utility <em>hubClone</em> to download all of the
+data and configuration files for a hub onto your local machine. To do so, use
+the utility with the &quot;-download&quot; option and it will download any
+files specified by bigDataUrls (e.g. bigBed, bigWig, etc). By default, it only copies the
+configuration files and changes any local bigDataUrls into remote URLs. Beyond
+that, you may also find it useful to make a copy of a public hub's configuration
+files in order to imitate various settings, such as filters, search options,
+or track groupings.
+
+<p>
+Here is the usage message for the hubClone utility:
+<pre><code>hubClone - Clone the remote hub text files to a local copy in newDirectoryName, fixing up bigDataUrls to remote location if necessary
+usage:
+   hubClone http://url/to/hub.txt
+options:
+   -udcDir=/dir/to/udcCache   Path to udc directory
+   -download                  Download data files in addition to the hub configuration files
+</code></pre></p>
+
+<p>
+Note that you will have to use the -udcDir option if /tmp/udcCache is not writable on your machine.</p>
+<p>
+The hubClone program is available from the UCSC downloads server at
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">http://hgdownload.soe.ucsc.edu/admin/exe/</a>.</p>
 
 <!-- ========== Setting Up Track Item Search ============================== -->
 <a name="Search"></a>
