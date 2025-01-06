@@ -425,6 +425,9 @@ setMaxAlloc(maxAlloc);
 
 dnaUtilOpen();
 
+if (! optionExists("motif"))
+    errAbort("ERROR: Missing required -motif=<sequence> argument");
+
 motif = optionVal("motif", NULL);
 chr = optionVal("chr", NULL);
 strand = optionVal("strand", NULL);
