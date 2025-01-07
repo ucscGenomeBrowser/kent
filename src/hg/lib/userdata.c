@@ -412,7 +412,7 @@ struct hubSpace *listFilesForUser(char *userName)
 /* Return the files the user has uploaded */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by creationTime, location", userName);
+struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by location,creationTime", userName);
 struct hubSpace *fileList = hubSpaceLoadByQuery(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 return fileList;

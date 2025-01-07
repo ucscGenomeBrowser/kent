@@ -231,7 +231,12 @@ var hubCreate = (function() {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
-                        url += "&hubUrl=" + uiState.userUrl + d.parentDir + "hub.txt";
+                        url += "&hubUrl=" + uiState.userUrl + d.parentDir;
+                        if (d.parentDir.endsWith("/")) {
+                            url += "hub.txt";
+                        } else {
+                            url += "/hub.txt";
+                        }
                     }
                     hubsAdded[d.parentDir] = true;
                     if (d.genome == genome) {
@@ -391,14 +396,13 @@ var hubCreate = (function() {
         if (!(req.fullPath in filesHash)) {
             if ($.fn.dataTable.isDataTable("#filesTable")) {
                 let table = $("#filesTable").DataTable();
-                table.row.add(req).order([{name: "uploadTime"}, {name: "fullpath"}]);
+                let rowObj = table.row.add(req);
                 rowVis[req.fullPath] = true;
                 table.search.fixed("defaultView", function(searchStr, data, rowIx) {
                     return rowVis[data.fileName] || rowVis[data.fullPath];
-                }).draw();
-                let newRowObj = table.row((idx,rowData) => rowData.fullPath === req.fullPath);
-                indentActionButton(newRowObj);
-                let newRow = newRowObj.node();
+                }).order([{name: "fileName", dir: 'desc'}]).draw(false);
+                indentActionButton(rowObj);
+                let newRow = rowObj.node();
                 $(newRow).css('color','red').animate({color: 'black'}, 1500);
             } else {
                 showExistingFiles([req]);
@@ -518,12 +522,14 @@ var hubCreate = (function() {
                 // The upload time column, not visible but we use it to sort on new uploads
                 targets: 8,
                 visible: false,
-                searchable: false
+                searchable: false,
+                orderable: true,
             },
             {
                 targets: 9,
                 visible: false,
                 searchable: false,
+                orderable: true,
             }
         ],
         columns: [
@@ -538,7 +544,7 @@ var hubCreate = (function() {
             {data: "uploadTime", title: "Upload Time"},
             {data: "fullPath", title: "fullPath"},
         ],
-        order: [{name: "uploadTime"}, {name: "fullpath"}],
+        order: [{name: "fullPath"},{name: "uploadTime"}],
         drawCallback: function(settings) {
             console.log("table draw");
             if (isLoggedIn) {
@@ -599,6 +605,12 @@ var hubCreate = (function() {
         });
         table.on("deselect", function(e, dt, type, indexes) {
             doRowSelect(e, dt, indexes);
+        });
+        table.on('order', function() {
+            let order = table.order();
+            if (order.length > 0) {
+                console.log(`ordering table on column ${order[0].name}`);
+            }
         });
         _.each(d, function(f) {
             filesHash[f.fullPath] = f;
@@ -923,14 +935,15 @@ var hubCreate = (function() {
         uppy.on('upload-success', (file, response) => {
             const metadata = file.meta;
             const d = new Date(metadata.lastModified);
+            const now = new Date(Date.now());
             newReqObj = {
-                "uploadTime": Date.now(),
-                "lastModified": d.toLocaleString(),
                 "fileName": metadata.fileName,
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
                 "parentDir": metadata.parentDir,
+                "lastModified": d.toLocaleString(),
+                "uploadTime": now.toLocaleString(),
                 "fullPath": metadata.parentDir + "/" + metadata.fileName,
             };
             // from what I can tell, any response we would create in the pre-finish hook
@@ -938,7 +951,7 @@ var hubCreate = (function() {
             // we would have created with this one file and add them to the table if they
             // weren't already there:
             hubTxtObj = {
-                "uploadTime": Date.now(),
+                "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
                 "fileName": "hub.txt",
                 "fileSize": 0,
@@ -948,7 +961,7 @@ var hubCreate = (function() {
                 "fullPath": metadata.parentDir + "/hub.txt",
             };
             parentDirObj = {
-                "uploadTime": Date.now(),
+                "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
                 "fileName": metadata.parentDir,
                 "fileSize": 0,
