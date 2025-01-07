@@ -400,7 +400,7 @@ var hubCreate = (function() {
                 rowVis[req.fullPath] = true;
                 table.search.fixed("defaultView", function(searchStr, data, rowIx) {
                     return rowVis[data.fileName] || rowVis[data.fullPath];
-                }).order([{name: "fileName", dir: 'desc'}]).draw(false);
+                }).draw();
                 indentActionButton(rowObj);
                 let newRow = rowObj.node();
                 $(newRow).css('color','red').animate({color: 'black'}, 1500);
@@ -461,7 +461,6 @@ var hubCreate = (function() {
         let data = rowObj.data();
         let numIndents = data.parentDir !== "" ? data.fullPath.split('/').length - 1: 0;
         rowObj.node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
-        //table.row(rowIdx).node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
     }
 
     let tableInitOptions = {
@@ -541,10 +540,10 @@ var hubCreate = (function() {
             {data: "genome", title: "Genome"},
             {data: "parentDir", title: "Hubs"},
             {data: "lastModified", title: "File Last Modified"},
-            {data: "uploadTime", title: "Upload Time"},
-            {data: "fullPath", title: "fullPath"},
+            {data: "uploadTime", title: "Upload Time", name: "uploadTime"},
+            {data: "fullPath", title: "fullPath", name: "fullPath"},
         ],
-        order: [{name: "fullPath"},{name: "uploadTime"}],
+        order: [{name: "fullPath", dir: "asc"},{name: "uploadTime", dir: "asc"}],
         drawCallback: function(settings) {
             console.log("table draw");
             if (isLoggedIn) {
@@ -574,6 +573,7 @@ var hubCreate = (function() {
             table.rows().every(function(rowIdx, rowLoop, tableLoop) {
                 indentActionButton(this);
             });
+            table.order.fixed({pre: [{name: "fullPath", dir: "asc"}, {name: "uploadTime", dir: "asc"}]});
             // only show the top level and one layer of children by default
             table.search.fixed("defaultView", function(searchStr, data, rowIx) {
                 return rowVis[data.fileName] || rowVis[data.fullPath];
