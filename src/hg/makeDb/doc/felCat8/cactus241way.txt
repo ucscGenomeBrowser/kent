@@ -1,0 +1,154 @@
+############################################################################
+### phyloP scores from the Zoonomia 241-way alignment
+### DONE 2025-01-07 - hiram
+############################################################################
+
+# files were obtained by dropbox passage from:
+#   Kerstin Lindblad-Toh <kersli@broadinstitute.org>
+#   Michaël Dong <michael.dong@imbim.uu.se>
+# 20935274303 Dec 19 14:26 cat_241M_PhyloP.onlychr.allBED.split10Mb.tar.gz
+
+mkdir /hive/data/genomes/felCat8/bed/cactus241way
+cd /hive/data/genomes/felCat8/bed/cactus241way
+
+#  files were unpacked into BED_scores/
+#  oddly in a bed format instead of wiggle fixed
+#  converted them to wigFix format with the perl script in
+#  this working directory: bedToWig.pl via this shell script:
+
+mkdir -p wigFix
+
+for GZ in BED_scores/*.gz
+do
+    B=`basename ${GZ} | sed -e 's/_scoresPhyloP_250.wig_scores.bed/.wigFix/;'`
+    printf "./bedToWig.pl \"${GZ}\" | gzip -c > \"wigFix/${B}\"\n"
+    ./bedToWig.pl "${GZ}" | gzip -c > "wigFix/${B}"
+done
+
+############################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chrNames;   # key is genbank name, value is UCSC name
+
+open (my $fh, "<", "../chromAlias/ucsc.genbank.tab") or die "can not read ../chromAlias/ucsc.genbank.tab";
+while (my $line = <$fh>) {
+  chomp $line;
+  my @a = split('\s+', $line);
+  $chrNames{$a[1]} = $a[0];
+}
+close ($fh);
+
+# chrA1   CM001378.2
+# chrA1_AANG03039881v1_random     AANG03039881.1
+# chrA1_AANG03039919v1_random     AANG03039919.1
+# chrA1_AANG03039923v1_random     AANG03039923.1
+# chrA1_AANG03039971v1_random     AANG03039971.1
+# chrA1_AANG03040085v1_random     AANG03040085.1
+
+my $chr = "";
+my $ucscName = "";
+my $start = -1;
+
+while (my $file = shift) {
+  if ($file =~ m/.gz$/) {
+     printf STDERR "### process: %s\n", $file;
+     open (my $fh, "-|", "zcat $file") or die "can not zcat $file";
+     while (my $line = <$fh>) {
+        chomp $line;
+        my @a = split('\s+', $line);
+        if ($a[0] ne $chr) {
+           $chr = $a[0];
+           $ucscName = $chrNames{$chr};
+        }
+        my $size = $a[2] - $a[1];
+        if ($size != 1) {
+           printf STDERR "ERROR: size not 1 ? %d\n%s\n", $size, $line;
+           exit 255;
+        }
+        if ($start > -1) {
+           if ($a[1] != ($start + 1)) {
+             $start = $a[1];
+             printf "fixedStep chrom=%s start=%d step=1\n", $ucscName, $start;
+           } else {
+             $start += 1;
+           }
+        } else {
+           $start = $a[1];
+           printf "fixedStep chrom=%s start=%d step=1\n", $ucscName, $start;
+        }
+        printf "%s\n", $a[4];
+     }
+     close ($fh);
+  } else {
+     printf STDERR "### process: %s\n", $file;
+     open (my $fh, "<", $file) or die "can read $file";
+     close ($fh);
+  }
+}
+############################################################################
+### construct a single wigFix file from the multiple wigFix files:
+
+#  this will order the files correctly by start position so everything
+#  is in sequence
+
+ls wigFix/*.gz | tr '.' ' ' | sort -k1,1 -k3,3n | tr ' ' '.' \
+   | xargs zcat | gzip -c > felCat8.241way.phyloP.wigFix.gz
+
+### wigEncode that:
+
+    time wigEncode felCat8.241way.phyloP.wigFix.gz \
+         felCat8.241way.phyloP.wig felCat8.241way.phyloP.wib
+Converted felCat8.241way.phyloP.wigFix.gz, upper limit 8.90, lower limit -20.00
+
+real    7m26.821s
+user    9m42.530s
+sys     0m19.790s
+
+### and bigWig that:
+
+time wigToBigWig felCat8.241way.phyloP.wigFix.gz ../../chrom.sizes \
+  felCat8.241way.phyloP.bw
+
+real    19m52.299s
+user    18m51.434s
+sys     0m46.904s
+
+ bigWigInfo felCat8.241way.phyloP.bw | sed -e 's/^/#    /;'
+#    version: 4
+#    isCompressed: yes
+#    isSwapped: 0
+#    primaryDataSize: 6,509,062,068
+#    primaryIndexSize: 74,686,640
+#    zoomLevels: 10
+#    chromCount: 19
+#    basesCovered: 2,374,219,390
+#    mean: 0.164832
+#    min: -20.000000
+#    max: 8.903000
+#    std: 1.301299
+
+### link the bigWig file into gbdb
+
+mkdir /gbdb/felCat8/bbi/cactus241way
+ln -s `pwd`/felCat8.241way.phyloP.bw /gbdb/felCat8/bbi/cactus241way/
+
+### trackDb entry
+
+track phyloP241wayBW
+shortLabel 241-way phyloP
+longLabel Basewise Conservation by PhyloP from the Zoonomia 241-way alignment
+configurable on
+noInherit on
+group compGeno
+type bigWig -20 8.903
+bigDataUrl /gbdb/felCat8/bbi/cactus241way/felCat8.241way.phyloP.bw
+maxHeightPixels 100:50:11
+viewLimits -4.5:7.5
+autoScale off
+spanList 1
+windowingFunction mean+whiskers
+color 60,60,140
+altColor 140,60,60

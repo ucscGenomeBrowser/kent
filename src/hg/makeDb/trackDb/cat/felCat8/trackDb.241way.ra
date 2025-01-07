@@ -1,0 +1,15 @@
+track phyloP241wayBW
+shortLabel 241-way phyloP
+longLabel Basewise Conservation by PhyloP from the Zoonomia 241-way alignment
+configurable on
+noInherit on
+group compGeno
+type bigWig -20 8.903
+bigDataUrl /gbdb/felCat8/bbi/cactus241way/felCat8.241way.phyloP.bw
+maxHeightPixels 100:50:11
+viewLimits -4.5:7.5
+autoScale off
+spanList 1
+windowingFunction mean+whiskers
+color 60,60,140
+altColor 140,60,60
