@@ -871,3 +871,5 @@ include ../../trackDb.mgc-orfeome.ra
 include assemblyTracks.ra
 
 include primates11way.ra alpha
+
+include pseudogenes.ra

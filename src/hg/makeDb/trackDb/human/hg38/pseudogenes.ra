@@ -1,0 +1,52 @@
+# pseudogene and parent tracks from Yale PseudoPipe (Jeltje, Jan 2025)
+
+track pseudogenes
+shortLabel pseudogenes
+longLabel pseudogenes and parents
+group genes
+visibility hide
+type bigbed
+compositeTrack on
+
+        track yale_pseudogenes
+        shortLabel pseudogenes
+        longLabel Yale pseudogenes
+        type bigBed 12 +
+	bigDataUrl /gbdb/hg38/pseudogenes/pseudoPipePgenes.bb
+        visibility pack
+        itemRgb on
+        labelFields hugo
+        defaultLabelFields hugo
+        searchIndex hugo,name,ppgene
+	searchTrix /gbdb/hg38/pseudogenes/pseudoPipePgenes.ix
+        labelSeparator " "
+        html pseudogenes.html
+        mouseOver PseudoPipe ID: ${ppgene} <br> parent Ensembl gene ID: ${geneParent}
+        parent pseudogenes
+        priority 1
+
+        track yale_parents
+        shortLabel pseudogene parents
+        longLabel Yale pseudogene parents
+        type bigBed 9 +
+	bigDataUrl /gbdb/hg38/pseudogenes/pseudoPipeParents.bb
+        visibility pack
+        itemRgb on
+        labelFields hugo
+        searchIndex hugo,name
+	searchTrix /gbdb/hg38/pseudogenes/pseudoPipeParents.ix
+        labelSeparator " "
+        html pseudogenes.html
+        mouseOver ${url}
+        parent pseudogenes
+        priority 2
+
+searchName yale_pseudogenes
+searchTable yale_pseudogenes
+searchType bigBed
+searchPriority 27.01
+
+searchName yale_parents 
+searchTable yale_parents 
+searchType bigBed
+searchPriority 27.02

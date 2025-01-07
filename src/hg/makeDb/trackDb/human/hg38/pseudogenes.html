@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+<h2>Description</h2>
+<p>
+These tracks contain pseudogene predictions and their parents as identified by PseudoPipe.
+</p>
+<h2>Display Conventions</h2>
+<p>
+<h3> Pseudogene track </h3>
+By default pseudogenes are labeled by parent Hugo ID and type of pseudogene. The Hugo IDs are
+based on the Ensembl gene IDs provided by the Gerstein lab after dataset creation; 
+not all PseudoPipe IDs could be mapped back to their original Ensembl
+IDs. In these cases the gene ID is listed as NA.
+<br>
+Pseudogenes are colored by type.
+<ul>
+<li><b><font color="#FF8C00">orange</font></b> - <b> unspecified pseudogene </b></li>
+<li><b><font color="#0000FF">blue</font></b> - <b> processed pseudogene </b></li>
+<li><b><font color="#556B2F">olive green</font></b> - <b> unprocessed pseudogene </b></li>
+</ul>
+<p>
+Mouseover on items shows the PseudoPipe ID and Ensembl gene ID. Clicking on the gene ID
+opens the parent track in that location.
+</p>
+
+<h3> Parent track </h3>
+Each parent gene is shown with their pseudogenes represented as grey blocks. Each block
+has a mouseover with a link to the pseudogene track.
+<ul>
+<li><b><font color="#800080">purple</font></b> - parent gene </b></li>
+<li><b><font color="#A9A9A9">grey</font></b> - <b> pseudogene indicators </b></li>
+</ul>
+
+
+<h2>Data Access</h2>
+The raw data can be explored interactively with the
+<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
+<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated analysis, the data may be queried from our
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>. <br>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a> 
+for questions, or our
+<a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> 
+for more information.
+</p>
+
+<h2>Methods</h2>
+<p>Annotations were filtered to remove duplicates and non standard chromosomes,
+and overlapping exons merged if they belonged to the same transcript.</p>
+
+<h2>Credits</h2>
+<p> Thanks to Cristina Sisu for providing data in GTF format with parents annotated. Track 
+created by Jeltje van Baren.</p>
+
+<h2>References</h2>
+<p>
+Zhang Z, Carriero N, Zheng D, Karro J, Harrison PM, Gerstein M.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btl116"
+target="_blank">
+PseudoPipe: an automated pseudogene identification pipeline</a>.
+<em>Bioinformatics</em>. 2006 Jun 15;22(12):1437-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16574694" target="_blank">16574694</a>
+</p>
+</body>
+</html>
