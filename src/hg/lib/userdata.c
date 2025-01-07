@@ -249,16 +249,26 @@ firstSlash = 0;
 return catTwoStrings(userDataDir, copy);
 }
 
-static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label)
+static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label, char *bigFileLocation)
 {
 FILE *f = mustOpen(hubFileName, "a");
+char *trackDbType = type;
+if (sameString(type, "bigBed"))
+    {
+    // figure out the type based on the bbiFile header
+    struct bbiFile *bbi = bigBedFileOpen(bigFileLocation);
+    char tdbType[32];
+    safef(tdbType, sizeof(tdbType), "bigBed %d%s", bbi->definedFieldCount, bbi->fieldCount > bbi->definedFieldCount ? " +" : "");
+    trackDbType = tdbType;
+    bigBedFileClose(&bbi);
+    }
 fprintf(f, "track %s\n"
     "bigDataUrl %s\n"
     "type %s\n"
     "shortLabel %s\n"
     "longLabel %s\n"
     "\n",
-    track, bigDataUrl, type, label, label);
+    track, bigDataUrl, trackDbType, label, label);
 carefulClose(&f);
 }
 
@@ -272,7 +282,7 @@ fprintf(stderr, "hubDir: %s\n", hubDir);
 hubFileName = writeHubText(hubDir, rowForFile->userName, rowForFile->db);
 
 char *encodedTrack = cgiEncodeFull(rowForFile->fileName);
-writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack);
+writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack, rowForFile->location);
 return hubFileName;
 }
 
