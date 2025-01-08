@@ -331,7 +331,7 @@ if (colon)
     *colon = '\0';
     vpn->nodeName = cloneString(nodeName);
     char *mutString = trimSpaces(colon+1);
-    int mutCount = chopCommas(mutString, 0);
+    int mutCount = chopCommas(mutString, NULL);
     char *mutWords[mutCount];
     chopCommas(mutString, mutWords);
     int i;
