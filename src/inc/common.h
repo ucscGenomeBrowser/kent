@@ -1002,6 +1002,9 @@ int chopByWhite(char *in, char *outArray[], int outSize);
 #define chopLine(line, words) chopByWhite(line, words, ArraySize(words))
 /* Chop line by white space. */
 
+#define chopLineLen(line) chopByWhite(line, NULL, 0)
+/* Return the number of elements if you were to chop line by white space. */
+
 int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize);
 /* Like chopString, but specialized for white space separators.
  * Further, any doubleQuotes (") are respected.
@@ -1020,9 +1023,14 @@ int chopByChar(char *in, char chopper, char *outArray[], int outSize);
 #define chopTabs(string, words) chopByChar(string, '\t', words, ArraySize(words))
 /* Chop string by tabs. */
 
+#define chopTabsLen(string) chopByChar(string, '\t', NULL, 0)
+/* Return the number of elements if you were to chop string by tab. */
+
 #define chopCommas(string, words) chopByChar(string, ',', words, ArraySize(words))
 /* Chop string by commas. */
 
+#define chopCommasLen(string) chopByChar(string, ',', NULL, 0)
+/* Return the number of elements if you were to chop string by comma. */
 
 char *skipBeyondDelimit(char *s,char delimit);
 /* Returns NULL or pointer to first char beyond one (or more contiguous) delimit char.

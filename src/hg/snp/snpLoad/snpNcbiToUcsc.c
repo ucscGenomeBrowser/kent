@@ -1734,7 +1734,7 @@ if (*pSubmitterCount < 0)
     return;
     }
 // subtract one because of comma at end:
-int checkCount = chopCommas(submitters, NULL) - 1;
+int checkCount = chopCommasLen(submitters) - 1;
 if (checkCount != *pSubmitterCount)
     lineFileAbort(lf, "submitterCount %d does not match number of comma-separated "
 		  "strings %d in submitters (%s) for rs%d.  Check doDbSnp.pl's code that "
@@ -1754,7 +1754,7 @@ if (*pAlleleFreqCount < 0)
     alleles[0] = '\0';
     return;
     }
-int checkCount = chopCommas(alleles, NULL) - 1;
+int checkCount = chopCommasLen(alleles) - 1;
 if (checkCount != *pAlleleFreqCount)
     lineFileAbort(lf, "alleleFreqCount %d does not match number of comma-separated "
 		  "strings %d in alleles (%s)", *pAlleleFreqCount, checkCount, alleles);

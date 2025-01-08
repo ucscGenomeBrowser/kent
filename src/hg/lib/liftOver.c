@@ -1310,7 +1310,7 @@ if (lineFileNextReal(lf, &line))
         wordCount = chopByChar(line, '\t', NULL, LIFTOVER_MAX_WORDS);
 	}
     else
-        wordCount = chopLine(line, NULL);
+        wordCount = chopLineLen(line);
 
     if (wordCount > LIFTOVER_MAX_WORDS)
 	errAbort("Too many fields. Fieldcount %d > maximum fields %d in file %s", wordCount, LIFTOVER_MAX_WORDS, fileName);

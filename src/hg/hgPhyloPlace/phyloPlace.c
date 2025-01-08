@@ -528,7 +528,7 @@ if (errCatchStart(errCatch))
             //#*** TODO: if the user uploads a sample with the same ID as one already in the
             //#*** saved assignment file, then usher will ignore it!
             //#*** Better check for that and warn the user.
-            int colCount = chopTabs(line, NULL);
+            int colCount = chopTabsLen(line);
             if (colCount == 1)
                 {
                 lineFileAbort(lf, "VCF requires tab-separated columns, but no tabs found");
@@ -582,7 +582,7 @@ if (errCatchStart(errCatch))
                 lineFileAbort(lf, "VCF header did not include #CHROM line defining sample IDs for "
                               "genotype columns");
                 }
-            int colCount = chopTabs(line, NULL);
+            int colCount = chopTabsLen(line);
             int genotypeCount = colCount - VCF_NUM_COLS_BEFORE_GENOTYPES;
             if (genotypeCount != sampleCount)
                 {

@@ -411,7 +411,7 @@ char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
 static void parseColumnHeaderRow(struct vcfFile *vcff, char *line)
 /* Make sure column names are as we expect, and store genotype sample IDs if any are given. */
 {
-int wordCount = chopTabs(line+1, NULL);
+int wordCount = chopTabsLen(line+1);
 char *words[wordCount];
 chopTabs(line+1, words);
 if (wordCount < VCF_MIN_COLUMNS)
