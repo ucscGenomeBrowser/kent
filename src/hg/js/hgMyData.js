@@ -606,48 +606,10 @@ var hubCreate = (function() {
         table.on("deselect", function(e, dt, type, indexes) {
             doRowSelect(e, dt, indexes);
         });
-        table.on('order', function() {
-            let order = table.order();
-            if (order.length > 0) {
-                console.log(`ordering table on column ${order[0].name}`);
-            }
-        });
         _.each(d, function(f) {
             filesHash[f.fullPath] = f;
         });
         return table;
-    }
-
-    function checkJsonData(jsonData, callerName) {
-        // Return true if jsonData isn't empty and doesn't contain an error;
-        // otherwise complain on behalf of caller.
-        if (! jsonData) {
-            alert(callerName + ': empty response from server');
-        } else if (jsonData.error) {
-            console.error(jsonData.error);
-            alert(callerName + ': error from server: ' + jsonData.error);
-        } else if (jsonData.warning) {
-            alert("Warning: " + jsonData.warning);
-            return true;
-        } else {
-            if (debugCartJson) {
-                console.log('from server:\n', jsonData);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    function updateStateAndPage(jsonData, doSaveHistory) {
-        // Update uiState with new values and update the page.
-        _.assign(uiState, jsonData);
-    }
-
-    function handleRefreshState(jsonData) {
-        if (checkJsonData(jsonData, 'handleRefreshState')) {
-            updateStateAndPage(jsonData, true);
-        }
-        $("#spinner").remove();
     }
 
     function init() {
@@ -666,12 +628,7 @@ var hubCreate = (function() {
             saveHistory(cartJson, urlParts, true);
         } else {
             // no cartJson object means we are coming to the page for the first time:
-            //cart.send({ getUiState: {} }, handleRefreshState);
-            //cart.flush();
-            // TODO: initialize buttons, check if there are already files
             // TODO: write functions for
-            //     after picking files
-            //     choosing file types
             //     creating default trackDbs
             //     editing trackDbs
             let fileDiv = document.getElementById('filesDiv');
@@ -681,12 +638,8 @@ var hubCreate = (function() {
                 uiState.userUrl = userFiles.userUrl;
             }
             // first add the top level directories/files
-            //let table = showExistingFiles(uiState.fileList.filter((row) => row.parentDir === ""));
             let table = showExistingFiles(uiState.fileList);
-            // now add any subdirs and files
-            //addChildRows(table, uiState.fileList.filter((row) => row.parentDir !== ""));
             // TODO: add event handlers for editing defaults, grouping into hub
-            // TODO: display quota somewhere
         }
         $("#newTrackHubDialog").dialog({
             modal: true,
@@ -979,12 +932,3 @@ var hubCreate = (function() {
              uiState: uiState,
            };
 }());
-
-
-
-// when a user reaches this page from the back button we can display our saved state
-// instead of sending another network request
-window.onpopstate = function(event) {
-    event.preventDefault();
-    hubCreate.updateStateAndPage(event.state, false);
-};
