@@ -408,6 +408,7 @@ var hubCreate = (function() {
                 showExistingFiles([req]);
             }
             filesHash[req.fullPath] = req;
+            uiState.fileList.push(req);
         }
     }
 
@@ -615,32 +616,21 @@ var hubCreate = (function() {
     function init() {
         cart.setCgi('hgMyData');
         cart.debug(debugCartJson);
-
-        if (typeof cartJson !== "undefined") {
-            if (typeof cartJson.warning !== "undefined") {
-                alert("Warning: " + cartJson.warning);
-            }
-            var urlParts = {};
-            if (debugCartJson) {
-                console.log('from server:\n', cartJson);
-            }
-            _.assign(uiState,cartJson);
-            saveHistory(cartJson, urlParts, true);
-        } else {
-            // no cartJson object means we are coming to the page for the first time:
-            // TODO: write functions for
-            //     creating default trackDbs
-            //     editing trackDbs
-            let fileDiv = document.getElementById('filesDiv');
-            if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
-                uiState.fileList = userFiles.fileList;
-                uiState.hubList = userFiles.hubList;
-                uiState.userUrl = userFiles.userUrl;
-            }
-            // first add the top level directories/files
-            let table = showExistingFiles(uiState.fileList);
-            // TODO: add event handlers for editing defaults, grouping into hub
+        // TODO: write functions for
+        //     creating default trackDbs
+        //     editing trackDbs
+        let fileDiv = document.getElementById('filesDiv');
+        // get the state from the history stack if it exists
+        if (history.state) {
+            uiState = history.state;
+        } else if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
+            uiState.fileList = userFiles.fileList;
+            uiState.hubList = userFiles.hubList;
+            uiState.userUrl = userFiles.userUrl;
         }
+        // first add the top level directories/files
+        let table = showExistingFiles(uiState.fileList);
+        // TODO: add event handlers for editing defaults, grouping into hub
         $("#newTrackHubDialog").dialog({
             modal: true,
             autoOpen: false,
@@ -649,6 +639,7 @@ var hubCreate = (function() {
             minWidth: 400,
             minHeight: 120
         });
+
         // create a custom uppy plugin to batch change the type and db fields
         class BatchChangePlugin extends Uppy.BasePlugin {
             constructor(uppy, opts) {
@@ -926,6 +917,10 @@ var hubCreate = (function() {
             addNewUploadedFileToTable(parentDirObj);
             addNewUploadedFileToTable(hubTxtObj);
             addNewUploadedFileToTable(newReqObj);
+        });
+        uppy.on('complete', (result) => {
+            history.replaceState(uiState, "", document.location.href);
+            console.log("replace history with uiState");
         });
     }
     return { init: init,
