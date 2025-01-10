@@ -1541,6 +1541,7 @@ return strcasecmp(tb->shortLabel, ta->shortLabel);
 void printIncludes() 
 /* print the CSS and javascript include lines */
 {
+jsIncludeFile("jquery.js", NULL);
 printf(
 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
