@@ -2154,7 +2154,15 @@ var rightClick = {
             $("#gnomadColorKeyLegend").hide();
     },
     hideTracks: function (ids)
-        /* hide specified list of tracks, take care to hide parents rather than children, whenever possible */
+        /* hide specified list of tracks, take care to hide parents rather than children, whenever possible. This is
+         * addressing a basic problem of how we handle container tracks: if you right-click hide the last child, the container is still 
+         * in the track list on the screen as not-hidden, but there are no
+         * tracks shown of this container. This is confusing for the user. The
+         * code below analyzes the track hierarchy and finds out if hiding a
+         * track would lead to a container becoming empty and instead of hiding
+         * just this track, will hide the container. It does this does both on
+         * screen and in the cart. This means that you cannot end up with a container that is
+         * not hidden but no tracks shown of this container, at least not with right-click. */
     {
         var cartVars = [];
         var cartVals = [];
