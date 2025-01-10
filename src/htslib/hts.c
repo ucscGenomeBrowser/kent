@@ -1121,7 +1121,7 @@ struct __hts_idx_t {
     uint8_t *meta;
     struct {
         uint32_t last_bin, save_bin;
-        uint last_coor, last_tid, save_tid, finished;
+        int last_coor, last_tid, save_tid, finished;
         uint64_t last_off, save_off;
         uint64_t off_beg, off_end;
         uint64_t n_mapped, n_unmapped;
