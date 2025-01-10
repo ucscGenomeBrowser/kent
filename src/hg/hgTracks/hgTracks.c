@@ -7888,7 +7888,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     }
 }
 
-static void *remoteParallelLoad()
+static void *remoteParallelLoad(void *)
 /* Each thread loads tracks in parallel until all work is done. */
 {
 struct paraFetchData *pfd = NULL;
