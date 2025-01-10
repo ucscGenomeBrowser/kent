@@ -180,7 +180,7 @@ ifeq (${USE_HAL},1)
         #HALLIBS += -lcurl -lstdc++
     else
       ifeq (${HOSTNAME},hgwdev)
-        HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib .a ${HDF5LIBS} -lcurl -lstdc++
+        HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lcurl -lstdc++
       endif
     endif
     HG_DEFS+=-DUSE_HAL
