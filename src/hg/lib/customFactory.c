@@ -465,7 +465,7 @@ if (dbRequested)
 return track;
 }
 
-static struct bed *customTrackBed(char *row[64], int wordCount, int chromSize, struct lineFile *lf)
+static struct bed *customTrackBed(char **row, int wordCount, int chromSize, struct lineFile *lf)
 /* Convert a row of strings to a bed.
  * Intended to replace old customTrackBed,
  * currently new code is activated by hg.conf switch */
@@ -479,7 +479,7 @@ if (bed->chromEnd > chromSize)
 return bed;
 }
 
-static struct bed *customTrackBedOld(char *db, char *row[13], int wordCount,
+static struct bed *customTrackBedOld(char *db, char **row, int wordCount,
 	struct hash *chromHash, struct lineFile *lf, char *aliasName)
 /* Convert a row of strings to a bed. */
 {
@@ -4065,7 +4065,7 @@ struct paraFetchData
 static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
 static struct paraFetchData *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
 
-static void *remoteParallelLoad()
+static void *remoteParallelLoad(void *)
 /* Each thread loads tracks in parallel until all work is done. */
 {
 struct paraFetchData *pfd = NULL;

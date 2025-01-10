@@ -1397,7 +1397,7 @@ function undecoratedTrack(track)
 {
 var retTrack = track;
 if (track.startsWith("hub_")) {
-    retTrack = track.split('_', 3)[2];
+    retTrack = track.split('_').slice(2).join("_");
 }
 return retTrack;
 }

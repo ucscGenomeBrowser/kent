@@ -171,14 +171,16 @@ ifeq (${USE_HAL},1)
     HDF5DIR=/hive/groups/browser/hal/build/hdf5-1.12.0
     HDF5LIBDIR=${HDF5DIR}/local/lib
     HDF5LIBS=${HDF5LIBDIR}/libhdf5_cpp.a ${HDF5LIBDIR}/libhdf5.a ${HDF5LIBDIR}/libhdf5_hl.a
-    HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lz
+
     ifeq (${HOSTNAME},hgwdev-new)
+        HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lz
         HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
+        #HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
+        #HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib .a ${HDF5LIBS}
+        #HALLIBS += -lcurl -lstdc++
     else
       ifeq (${HOSTNAME},hgwdev)
-          HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
-      else
-          HALLIBS += -lcurl -lstdc++
+        HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib .a ${HDF5LIBS} -lcurl -lstdc++
       endif
     endif
     HG_DEFS+=-DUSE_HAL
@@ -279,15 +281,17 @@ ifeq (${IS_HGWDEV},yes)
    HG_INC += -I/cluster/software/include
    HG_INC += -I/cluster/software/include/mariadb 
    FULLWARN = yes
-   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
    L+=/cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl
 
    ifeq (${HOSTNAME},hgwdev-new)
        PNGLIB=/cluster/software/lib/libpng.a
        PNGINCL=-I/cluster/software/include/libpng16
+       L += /lib64/libbz2.a
    else
        PNGLIB=/usr/lib64/libpng.a
        PNGINCL=-I/usr/include/libpng15
+       L += -lbz2
    endif
 
    MYSQLINC=/usr/include/mysql

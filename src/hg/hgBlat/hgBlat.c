@@ -178,7 +178,7 @@ void queryServerFinish(struct genomeHits *gH);   // Forward declaration
 static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
 static struct genomeHits *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
 
-static void *remoteParallelLoad()
+static void *remoteParallelLoad(void *)
 /* Each thread loads tracks in parallel until all work is done. */
 {
 struct genomeHits *pfd = NULL;

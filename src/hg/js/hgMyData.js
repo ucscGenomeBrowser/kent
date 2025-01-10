@@ -200,11 +200,17 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + fname + "=pack";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
         }
+    }
+
+    const regex = /[^A-Za-z0-9_-]+/g;
+    function trackHubFixName(trackName) {
+        // replace everything but alphanumeric, underscore and dash with underscore
+        return trackName.replaceAll(regex, "_");
     }
 
     // helper object so we don't need to use an AbortController to update
@@ -241,7 +247,7 @@ var hubCreate = (function() {
                     hubsAdded[d.parentDir] = true;
                     if (d.genome == genome) {
                         // turn the track on if its for this db
-                        url += "&" + d.fileName + "=pack";
+                        url += "&" + trackHubFixName(d.fileName) + "=pack";
                     }
                 } else if (d.fileType === "hub.txt") {
                     url += "&hubUrl=" + uiState.userUrl + d.fullPath;
@@ -408,6 +414,7 @@ var hubCreate = (function() {
                 showExistingFiles([req]);
             }
             filesHash[req.fullPath] = req;
+            uiState.fileList.push(req);
         }
     }
 
@@ -606,88 +613,30 @@ var hubCreate = (function() {
         table.on("deselect", function(e, dt, type, indexes) {
             doRowSelect(e, dt, indexes);
         });
-        table.on('order', function() {
-            let order = table.order();
-            if (order.length > 0) {
-                console.log(`ordering table on column ${order[0].name}`);
-            }
-        });
         _.each(d, function(f) {
             filesHash[f.fullPath] = f;
         });
         return table;
     }
 
-    function checkJsonData(jsonData, callerName) {
-        // Return true if jsonData isn't empty and doesn't contain an error;
-        // otherwise complain on behalf of caller.
-        if (! jsonData) {
-            alert(callerName + ': empty response from server');
-        } else if (jsonData.error) {
-            console.error(jsonData.error);
-            alert(callerName + ': error from server: ' + jsonData.error);
-        } else if (jsonData.warning) {
-            alert("Warning: " + jsonData.warning);
-            return true;
-        } else {
-            if (debugCartJson) {
-                console.log('from server:\n', jsonData);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    function updateStateAndPage(jsonData, doSaveHistory) {
-        // Update uiState with new values and update the page.
-        _.assign(uiState, jsonData);
-    }
-
-    function handleRefreshState(jsonData) {
-        if (checkJsonData(jsonData, 'handleRefreshState')) {
-            updateStateAndPage(jsonData, true);
-        }
-        $("#spinner").remove();
-    }
-
     function init() {
         cart.setCgi('hgMyData');
         cart.debug(debugCartJson);
-
-        if (typeof cartJson !== "undefined") {
-            if (typeof cartJson.warning !== "undefined") {
-                alert("Warning: " + cartJson.warning);
-            }
-            var urlParts = {};
-            if (debugCartJson) {
-                console.log('from server:\n', cartJson);
-            }
-            _.assign(uiState,cartJson);
-            saveHistory(cartJson, urlParts, true);
-        } else {
-            // no cartJson object means we are coming to the page for the first time:
-            //cart.send({ getUiState: {} }, handleRefreshState);
-            //cart.flush();
-            // TODO: initialize buttons, check if there are already files
-            // TODO: write functions for
-            //     after picking files
-            //     choosing file types
-            //     creating default trackDbs
-            //     editing trackDbs
-            let fileDiv = document.getElementById('filesDiv');
-            if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
-                uiState.fileList = userFiles.fileList;
-                uiState.hubList = userFiles.hubList;
-                uiState.userUrl = userFiles.userUrl;
-            }
-            // first add the top level directories/files
-            //let table = showExistingFiles(uiState.fileList.filter((row) => row.parentDir === ""));
-            let table = showExistingFiles(uiState.fileList);
-            // now add any subdirs and files
-            //addChildRows(table, uiState.fileList.filter((row) => row.parentDir !== ""));
-            // TODO: add event handlers for editing defaults, grouping into hub
-            // TODO: display quota somewhere
+        // TODO: write functions for
+        //     creating default trackDbs
+        //     editing trackDbs
+        let fileDiv = document.getElementById('filesDiv');
+        // get the state from the history stack if it exists
+        if (history.state) {
+            uiState = history.state;
+        } else if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
+            uiState.fileList = userFiles.fileList;
+            uiState.hubList = userFiles.hubList;
+            uiState.userUrl = userFiles.userUrl;
         }
+        // first add the top level directories/files
+        let table = showExistingFiles(uiState.fileList);
+        // TODO: add event handlers for editing defaults, grouping into hub
         $("#newTrackHubDialog").dialog({
             modal: true,
             autoOpen: false,
@@ -696,6 +645,7 @@ var hubCreate = (function() {
             minWidth: 400,
             minHeight: 120
         });
+
         // create a custom uppy plugin to batch change the type and db fields
         class BatchChangePlugin extends Uppy.BasePlugin {
             constructor(uppy, opts) {
@@ -974,17 +924,12 @@ var hubCreate = (function() {
             addNewUploadedFileToTable(hubTxtObj);
             addNewUploadedFileToTable(newReqObj);
         });
+        uppy.on('complete', (result) => {
+            history.replaceState(uiState, "", document.location.href);
+            console.log("replace history with uiState");
+        });
     }
     return { init: init,
              uiState: uiState,
            };
 }());
-
-
-
-// when a user reaches this page from the back button we can display our saved state
-// instead of sending another network request
-window.onpopstate = function(event) {
-    event.preventDefault();
-    hubCreate.updateStateAndPage(event.state, false);
-};
