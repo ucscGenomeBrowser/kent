@@ -2189,6 +2189,7 @@ var rightClick = {
             // update the track list below the image
             vis.update(loneParent, 'hide');
             rightClick.hideLegends();
+            delete hgTracks.trackDb[loneParent]; // for the next right-click
         }
 
         // handle all other tracks, they are either not parents or parents with at least one child left
@@ -2197,6 +2198,7 @@ var rightClick = {
             var id = delIds[i];
             cartHideAnyTrack(id, cartVars, cartVals);
             $(document.getElementById('tr_' + id)).remove();
+            delete hgTracks.trackDb[id]; // for the next right-click
         }
         imageV2.afterImgChange(true);
         cart.setVars( cartVars, cartVals );
