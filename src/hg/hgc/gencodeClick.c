@@ -70,12 +70,20 @@ static char* UNKNOWN = "unknown";
 static boolean isGrcHuman()
 /* is this a GRC human assembly? */
 {
-bool result = FALSE;
+//bool result = FALSE;
+//if (startsWith("hg", database))
+//    result = TRUE;
+//else if (!startsWith("mm", database))
+//    warn("BUG: gencodeClick on wrong database: %s", database);
+//return result;
+
 if (startsWith("hg", database))
-    result = TRUE;
-else if (!startsWith("mm", database))
-    warn("BUG: gencodeClick on wrong database: %s", database);
-return result;
+    return TRUE;
+else if (startsWith("mm", database))
+    return FALSE;
+else
+    errAbort("BUG: gencodeClick on wrong database: %s", database);
+return FALSE;  // make compiler happy. errAbort should never return.
 }
 
 static bool haveGencodeTable(struct sqlConnection *conn, struct trackDb *tdb, char *tableBase)
