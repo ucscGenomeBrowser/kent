@@ -200,11 +200,17 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + fname + "=pack";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
         }
+    }
+
+    const regex = /[^A-Za-z0-9_-]+/g;
+    function trackHubFixName(trackName) {
+        // replace everything but alphanumeric, underscore and dash with underscore
+        return trackName.replaceAll(regex, "_");
     }
 
     // helper object so we don't need to use an AbortController to update
@@ -241,7 +247,7 @@ var hubCreate = (function() {
                     hubsAdded[d.parentDir] = true;
                     if (d.genome == genome) {
                         // turn the track on if its for this db
-                        url += "&" + d.fileName + "=pack";
+                        url += "&" + trackHubFixName(d.fileName) + "=pack";
                     }
                 } else if (d.fileType === "hub.txt") {
                     url += "&hubUrl=" + uiState.userUrl + d.fullPath;
