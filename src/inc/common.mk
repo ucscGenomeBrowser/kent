@@ -279,15 +279,17 @@ ifeq (${IS_HGWDEV},yes)
    HG_INC += -I/cluster/software/include
    HG_INC += -I/cluster/software/include/mariadb 
    FULLWARN = yes
-   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
    L+=/cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl
 
    ifeq (${HOSTNAME},hgwdev-new)
        PNGLIB=/cluster/software/lib/libpng.a
        PNGINCL=-I/cluster/software/include/libpng16
+       L += /lib64/libbz2.a
    else
        PNGLIB=/usr/lib64/libpng.a
        PNGINCL=-I/usr/include/libpng15
+       L += -lbz2
    endif
 
    MYSQLINC=/usr/include/mysql
