@@ -394,8 +394,8 @@ else
   DESTBINDIR=${DESTDIR}/${BINDIR}
 endif
 
-# location of stringify program
-STRINGIFY = ${DESTBINDIR}/stringify
+# location of interperted version of stringify program
+STRINGIFY = ${kentSrc}/utils/stringify/stringifyEz
 
 MKDIR=mkdir -p
 ifeq (${STRIP},)
