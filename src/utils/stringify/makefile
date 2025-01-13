@@ -10,4 +10,4 @@ install:: ${installedStringifyEz}
 
 ${installedStringifyEz}: stringifyEz
 	@mkdir -p $(dir $@)
-	cp -p stringify $@
+	cp -p $< $@

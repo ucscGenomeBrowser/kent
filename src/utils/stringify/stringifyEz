@@ -62,7 +62,7 @@ fi
 awk '{
     gsub(/\\/, "\\\\");
     gsub(/"/, "\\\"");
-    print "\"" $0 "\"";
+    print "\"" $0 "\\n\"";
 }' ${inputFile}
 
 echo ';'
