@@ -18,5 +18,5 @@ compile: $O
 $O: tagDescriptions.h cdwHelp.h
 
 cdwHelp.h: cdwHelp.html
-	stringify cdwHelp.html > cdwHelp.h
+	${STRINGIFY} cdwHelp.html > cdwHelp.h
 
