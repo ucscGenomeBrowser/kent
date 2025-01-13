@@ -1440,6 +1440,7 @@ switch (vis)
 	y += tHeight;
         break;
     case tvFull:
+    case tvShow:
         if (isCenterLabelIncluded(track))
             y += fontHeight;
 

@@ -160,6 +160,7 @@ static int cloneTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 switch (vis)
     {
+    case tvShow:
     case tvFull:
 	{
 	int total = 0;
