@@ -9,7 +9,7 @@ include ../../../inc/common.mk
 
 COPT = -O
 
-L += ${MYSQLLIBS} -lm -lz
+L += ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceGraph.a 
 

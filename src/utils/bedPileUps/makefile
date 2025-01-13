@@ -1,7 +1,7 @@
 kentSrc = ../..
 A = bedPileUps
 include $(kentSrc)/inc/userApp.mk
-L += -lm -lz ${SOCKETLIB}
+L += ${SOCKETLIB}
 
 clean::
 	rm -f ${O} ${A}
