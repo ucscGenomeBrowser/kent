@@ -567,7 +567,8 @@ puts("</div>"); // tabSection
 jsOnEventById("click", "hubValidateButton", "makeIframe(event)");
 
 // API Key section 
-if (cfgOptionBooleanDefault("showHubApiKey", FALSE)) // This should probably not be shown on mirrors, so default to FALSE
+
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE) && cfgOptionBooleanDefault("showHubApiKey", FALSE)) // This should probably not be shown on mirrors, so default to FALSE
     printApiKeySection();
 puts("</div>"); // hub developement tab
 
@@ -1540,6 +1541,7 @@ return strcasecmp(tb->shortLabel, ta->shortLabel);
 void printIncludes() 
 /* print the CSS and javascript include lines */
 {
+jsIncludeFile("jquery.js", NULL);
 printf(
 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
@@ -1767,7 +1769,7 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-if (cgiOptionalString(CARTJSON_COMMAND))
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE) && cgiOptionalString(CARTJSON_COMMAND))
     cartEmptyShellNoContent(doAsync, hUserCookie(), excludeVars, oldVars);
 else
     cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
