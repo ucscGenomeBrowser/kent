@@ -2,7 +2,7 @@ kentSrc = ../../..
 include ${kentSrc}/inc/localEnvironment.mk
 include ${kentSrc}/inc/common.mk
 
-L += ${MYSQLLIBS} -lm
+L += ${MYSQLLIBS}
 MYLIBDIR = ${kentSrc}/lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
