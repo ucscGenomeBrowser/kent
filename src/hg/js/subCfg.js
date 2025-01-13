@@ -48,6 +48,18 @@ var subCfg = { // subtrack config module.
 
         $(obj).addClass('changed');
 
+        // if the user checked a child checkbox that used to be unchecked, and the parent composite is on hide,
+        // then set the parent composite to pack
+        var compEl = $("[name='"+this.compositeName+"'");
+        if (compEl.length!==0 && obj.type==="checkbox" && obj.checked && compEl.val()==="hide")
+            compEl.val("pack");
+
+        // if the user unchecked a child checkbox that used to be checked, and the parent composite is on pack,
+        // and no more child is checked, then set the parent composite to hide.
+        var subCfgs = $(".subCB:checked");
+        if (subCfgs.length===0)
+            compEl.val("hide");
+        
         // checkboxes have hidden boolshads which should be marked when unchecked
         if (obj.type === "checkbox") {
             var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
@@ -443,7 +455,14 @@ var subCfg = { // subtrack config module.
                 else if (parentVis === 4)
                     visText = 'full';
                 var children = subCfg.visChildrenFind(parentObj);
+
+                var checkedCount = 0;
                 $(children).each(function (i) {
+                    // the checkbox is in the <td> right before the one of $(this)
+                    if ($(this).parent().prev().find("[type='checkbox']")[0].checked)
+                        checkedCount++;
+
+                    // apply the visibility to the subtrack
                     if ($(this).hasClass('fauxInput')) {
                         $(this).text(visText);
                     } else {
@@ -451,6 +470,12 @@ var subCfg = { // subtrack config module.
                         subCfg.clearChange(this);
                     }
                 });
+
+                // when nothing is checked, the visibility has been applied but everything is still hidden. 
+                // This is probably not what the user wanted, so in lack of a better idea, we select all checkboxes
+                if (checkedCount === 0)
+                    // check all checkboxes
+                    $(".subCB[type='checkbox']").prop("checked", true);
             }
         } else {
             // First get composite vis to limit with
