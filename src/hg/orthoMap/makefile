@@ -2,7 +2,7 @@ kentSrc = ../..
 
 include ../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm 
+L += $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
@@ -11,7 +11,7 @@ E = mgcFastaForBed agxToIntronBeds bedToFrames orthoMap orthoEvaluate orthoPickI
 O = orthoEval.o
 
 ${DESTDIR}${BINDIR}/%: %.c $(O)
-	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $< $(O) $(MYLIBS) $L -lm -lz
+	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $< $(O) $(MYLIBS) $L
 
 %Test: %Test.c 
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)

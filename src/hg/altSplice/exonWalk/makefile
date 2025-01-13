@@ -3,12 +3,12 @@ include ../../../inc/common.mk
 #OPT= -O2
 #OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
 OPT= -ggdb 
-L += $(MYSQLLIBS) -lm 
+L += $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceGraph.a 
 
 % : %.c
-	${CC} ${COPT} ${CFLAGS} $(OPT) -Wformat -Wimplicit -I../inc -I../../inc  -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) ${L} $(MYSQLLIBS) -lm
+	${CC} ${COPT} ${CFLAGS} $(OPT) -Wformat -Wimplicit -I../inc -I../../inc  -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) ${L} $(MYSQLLIBS)
 	cp $@ ${BINDIR}
 
 %Test: %Test.c 

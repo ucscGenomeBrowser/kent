@@ -372,6 +372,29 @@ if (sameString(org, "wuhCor1"))
     }
 puts("</div>");
 puts("</div>");
+// If org directory includes non-empty download.html file then make a Download section
+char *orgSkipHub = trackHubSkipHubName(org);
+char downloadHtmlFile[1024];
+safef(downloadHtmlFile, sizeof downloadHtmlFile, PHYLOPLACE_DATA_DIR "/%s/download.html", orgSkipHub);
+struct lineFile *lf = lineFileMayOpen(downloadHtmlFile, TRUE);
+if (lf != NULL)
+    {
+    char *line = NULL;
+    int size;
+    lineFileNext(lf, &line, &size);
+    if (isNotEmpty(line))
+        {
+        puts("<div class='readableWidth'>");
+        puts("  <div class='gbControl col-md-12'>");
+        puts("<h2>Download public tree files</h2>");
+        puts(line);
+        while (lineFileNext(lf, &line, &size))
+            puts(line);
+        puts("  </div>");
+        puts("</div>");
+        }
+    lineFileClose(&lf);
+    }
 puts("<div class='readableWidth'>");
 puts("  <div class='gbControl col-md-12'>");
 puts("<h2>Privacy and sharing</h2>");

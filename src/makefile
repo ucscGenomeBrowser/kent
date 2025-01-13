@@ -85,7 +85,6 @@ blatSuite: topLibs hgLib
 BLAT_APPLIST = blat gfClient gfServer isPcr
 
 userApps: topLibs hgLib destBin
-	cd utils/stringify && echo utils/stringify && ${MAKE}
 	cd utils && echo utils && ${MAKE} userAppsB
 	cd parasol && echo parasol && ${MAKE} userApps
 	cd hg && echo hg && ${MAKE} userApps

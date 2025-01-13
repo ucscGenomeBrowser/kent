@@ -1,0 +1,68 @@
+#!/bin/bash -e
+# implementation of stringify in bash
+
+set -beEu -o pipefail
+staticPrefix=""
+variableName=""
+inputFile=""
+
+# Print usage
+usage() {
+    echo "Usage:" >&2
+    echo "  stringify [options] in.txt" >&2
+    echo "" >&2
+    echo "Options:" >&2
+    echo "  -var=varname   - Create a variable with the specified name containing the string." >&2
+    echo "  -static        - Create the variable but put static in front of it." >&2
+    exit 1
+}
+
+# Check if no arguments are passed
+if [[ "$#" -lt 1 ]]; then
+    usage
+fi
+
+# Parse command-line arguments
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -var=*) # Match -var=<varname>
+            variableName="${1#-var=}" # Extract the variable name
+            ;;
+        -static) # Match -static
+            staticPrefix="static "
+            ;;
+        -*)
+            echo "Unknown option: $1"
+            usage
+            ;;
+        *)
+            inputFile="$1"
+            ;;
+    esac
+    shift
+done
+
+if [[ -z "$inputFile" ]]; then
+    echo "Error: Input file is required."  >&2
+    usage
+fi
+
+if [[ -z "$variableName" && -n "$staticPrefix" ]]; then
+    echo "Error: -static requires -var=" >&2
+    usage
+fi
+
+# Output the C string
+if [[ -n "$variableName" ]]; then
+    echo "${staticPrefix}char *${variableName} ="
+fi
+
+
+# escal \ and "
+awk '{
+    gsub(/\\/, "\\\\");
+    gsub(/"/, "\\\"");
+    print "\"" $0 "\\n\"";
+}' ${inputFile}
+
+echo ';'

@@ -66,6 +66,9 @@ sub readMainCluster(); # forward declaration to keep code order
       'hgwdev' =>
         { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
 	  'hostCount' => 64, },
+      'hgwdev-new' =>
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 64, },
     );
 
 my %obsoleteCluster =
@@ -250,7 +253,7 @@ sub getWorkhorseLoads {
   # a valid workhorse needs to have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('ku', 'hgwdev') {
+  foreach my $machLine ('ku', 'hgwdev', 'hgwdev-new') {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
@@ -300,7 +303,7 @@ sub getFileServer {
     return $1;
   } else {
     my $localhost = `uname -n`;	# HOST not always present
-    if ($localhost =~ s/^(\w+)(\..*)?$/$1/) {
+    if ($localhost =~ s/^([\w-]+)(\..*)?$/$1/) {
       return $localhost;
     }
   }
