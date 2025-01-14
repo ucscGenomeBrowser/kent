@@ -3,12 +3,12 @@ var debugCartJson = true;
 
 function prettyFileSize(num) {
     if (!num) {return "0B";}
-    if (num < (1000 * 1024)) {
-        return `${(num/1000).toFixed(1)}KB`;
-    } else if (num < (1000 * 1000 * 1024)) {
-        return `${((num/1000)/1000).toFixed(1)}MB`;
+    if (num < (1024 * 1024)) {
+        return `${(num/1024).toFixed(1)}KB`;
+    } else if (num < (1024 * 1024 * 1024)) {
+        return `${((num/1024)/1024).toFixed(1)}MB`;
     } else {
-        return `${(((num/1000)/1000)/1000).toFixed(1)}GB`;
+        return `${(((num/1024)/1024)/1024).toFixed(1)}GB`;
     }
 }
 
@@ -379,6 +379,9 @@ var hubCreate = (function() {
         let table = $("#filesTable").DataTable();
         let rows = table.rows((idx, data) => pathList.includes(data.fullPath));
         rows.remove().draw();
+        let toKeep = (elem) => !pathList.includes(elem.fullPath);
+        uiState.fileList = uiState.fileList.filter(toKeep);
+        history.replaceState(uiState, "", document.location.href);
     }
 
     function addFileToHub(rowData) {
