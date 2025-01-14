@@ -104,7 +104,7 @@ printf FH "To: %s
 Reply-to: %s
 Return-path: %s
 Cc: %s
-Subject: asr request: %s
+Subject: assembly request: %s
 
 name: '%s'
 email: '%s'
@@ -123,7 +123,7 @@ open (FH, "|/usr/sbin/sendmail -f \"${bounceAddr}\" -t -oi");
 printf FH "To: %s
 Reply-to: %s
 Return-path: %s
-Subject: asr request: %s
+Subject: assembly request: %s
 
 name: '%s'
 email: '%s'
