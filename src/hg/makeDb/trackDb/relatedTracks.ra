@@ -1,4 +1,4 @@
-# A space delimited file of track relatedness, format:
+# A space delimited file of track relatedness. All entries must be reciprocal. Format:
 # ucscDb track trackLinkingTo reason
 
 # hg38:
@@ -10,6 +10,9 @@ hg38 nonCodingRNAs miRnaAtlas View expression of cleaved miRnas
 
 hg38 caddSuper gnomad View associated variants
 hg38 gnomad caddSuper View CADD scores for this variant and region
+
+hg38 constraintSuper gnomadPLI Predicted constraint metrics from gnomAD
+hg38 gnomadPLI constraintSuper Container track of various constraint scores
 
 hg38 revel liftHg38 Revel is based on hg19 and lifted to hg38. liftOver "chain" alignment from hg19 to hg38
 hg38 liftHg38 revel Revel scores were lifted using UCSC liftOver chains from hg38
@@ -59,6 +62,9 @@ hg19 liftHg38 ReMap ReMap, even though it has the same name, is a database of tr
 
 hg19 refSeqComposite pseudoYale60 NCBI RefSeq Curated and RefSeq Other contains pseudogenes, but the Yale annotation should be more comprehensive for this transcript type
 hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also contain some transcribed and untranscribed pseudogenes, respectively.
+
+hg19 constraintSuper gnomadPLI Predicted constraint metrics from gnomAD
+hg19 gnomadPLI constraintSuper Container track of various constraint scores
 
 # mm39:
 
