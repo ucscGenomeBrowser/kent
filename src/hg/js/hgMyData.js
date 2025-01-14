@@ -141,10 +141,6 @@ var hubCreate = (function() {
         return null;
     }
 
-    function defaultFileType(file) {
-        return detectFileType(file);
-    }
-
     function defaultDb() {
         return cartDb.split(" ").slice(-1)[0];
     }
@@ -771,7 +767,7 @@ var hubCreate = (function() {
                 this.uppy.on("file-added", (file) => {
                     // add default meta data for genome and fileType
                     console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "parentDir": hubNameDefault});
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": detectFileType(file.name), "parentDir": hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
                     } else {
