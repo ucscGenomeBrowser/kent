@@ -19,6 +19,7 @@
 #include "hdb.h"
 #include "hubSpace.h"
 #include "hubSpaceQuotas.h"
+#include <limits.h>
 
 char *getUserName()
 /* Query the right system for the users name */
@@ -99,18 +100,24 @@ char *prefixUserFile(char *userName, char *fname, char *parentDir)
  * parentDir is optional and will go in between the per-user dir and the fname */
 {
 char *pathPrefix = getDataDir(userName);
+char *path = NULL;
 if (pathPrefix)
     {
     if (parentDir)
         {
         struct dyString *ret = dyStringCreate("%s%s%s%s", pathPrefix, parentDir, lastChar(parentDir) == '/' ? "" : "/", fname);
-        return dyStringCannibalize(&ret);
+        path = dyStringCannibalize(&ret);
         }
     else
-        return catTwoStrings(pathPrefix, fname);
+        path = catTwoStrings(pathPrefix, fname);
+    char canonicalPath[PATH_MAX];
+    realpath(path, canonicalPath);
+    // after canonicalizing the path, make sure it starts with the userDataDir, to prevent
+    // deleting files like blah/../../../../systemFile.text
+    if (startsWith(pathPrefix, canonicalPath))
+        return cloneString(canonicalPath);
     }
-else
-    return NULL;
+return NULL;
 }
 
 static boolean checkHubSpaceRowExists(struct hubSpace *row)
