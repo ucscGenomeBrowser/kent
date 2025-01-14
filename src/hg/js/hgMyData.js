@@ -102,10 +102,8 @@ var hubCreate = (function() {
     };
 
     function getTusdEndpoint() {
-        // return the port and basepath of the tusd server
-        // NOTE: the port and basepath are specified in hg.conf
-        //let currUrl = parseUrl(window.location.href);
-        return "https://hgwdev-hubspace.gi.ucsc.edu/files";
+        // this variable is set by hgHubConnect and comes from hg.conf value
+        return tusdEndpoint;
     }
 
     let extensionMap = {
