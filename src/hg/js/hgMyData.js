@@ -127,8 +127,7 @@ var hubCreate = (function() {
     function detectFileType(fileName) {
         let fileLower = fileName.toLowerCase();
         for (let fileType in extensionMap) {
-            for (let extIx in extensionMap[fileType]) {
-                let ext = extensionMap[fileType][extIx];
+            for (let ext of extensionMap[fileType]) {
                 if (fileLower.endsWith(ext)) {
                     return fileType;
                 }
