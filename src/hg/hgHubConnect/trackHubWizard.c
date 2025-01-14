@@ -27,17 +27,26 @@
 void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
 {
+// prefixUserFile returns a canonicalized path, or NULL if the
+// canonicalized path does not begin with the hg.conf specified userDataDir
+// TODO: make the debug information from stderr go to stdout so the user
+// can know there is a mistake somewhere, and only print the debug
+// information in the event that the filename actually begins with the
+// userDataDir so we don't tell hackers what files do and do not exist
 char *fileName = prefixUserFile(userName, fullPath, NULL);
-if (fileExists(fileName))
+if (fileName)
     {
-    fprintf(stderr, "deleting file: '%s'\n", fileName);
-    removeFileForUser(fileName, userName);
-    fflush(stderr);
-    }
-else
-    {
-    fprintf(stderr, "file '%s' does not exist\n", fileName);
-    fflush(stderr);
+    if (fileExists(fileName))
+        {
+        fprintf(stderr, "deleting file: '%s'\n", fileName);
+        removeFileForUser(fileName, userName);
+        fflush(stderr);
+        }
+    else
+        {
+        fprintf(stderr, "file '%s' does not exist\n", fileName);
+        fflush(stderr);
+        }
     }
 }
 
