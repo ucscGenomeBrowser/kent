@@ -1095,6 +1095,8 @@ return NULL;
 struct trackHub *hubConnectGetHubForDb(char *db)
 /* Return the connected hub for db, or NULL if not found.  Do not free result. */
 {
+if (!startsWith("hub_", db))
+    return NULL;
 unsigned hubId = hubIdFromTrackName(db);
 struct hubConnectStatus *status;
 for (status = globalHubList;  status != NULL;  status = status->next)
