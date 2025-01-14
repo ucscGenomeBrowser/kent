@@ -379,6 +379,9 @@ var hubCreate = (function() {
         let table = $("#filesTable").DataTable();
         let rows = table.rows((idx, data) => pathList.includes(data.fullPath));
         rows.remove().draw();
+        let toKeep = (elem) => !pathList.includes(elem.fullPath);
+        uiState.fileList = uiState.fileList.filter(toKeep);
+        history.replaceState(uiState, "", document.location.href);
     }
 
     function addFileToHub(rowData) {
