@@ -798,9 +798,14 @@ var hubCreate = (function() {
                         this.removeBatchSelectsFromDashboard();
                     }
                 });
-                this.uppy.on("dashboard:modal-close", () => {
+                this.uppy.on("dashboard:modal-closed", () => {
                     if (this.uppy.getFiles().length < 2) {
                         this.removeBatchSelectsFromDashboard();
+                    }
+                    let allFiles = this.uppy.getFiles();
+                    let completeFiles = this.uppy.getFiles().filter((f) => f.progress.uploadComplete === true);
+                    if (allFiles.length === completeFiles.length) {
+                        this.uppy.clear();
                     }
                 });
             }
@@ -816,6 +821,10 @@ var hubCreate = (function() {
             showProgressDetails: true,
             note: "Example text in the note field",
             meta: {"genome": null, "fileType": null},
+            restricted: {requiredMetaFields: ["genome"]},
+            closeModalOnClickOutside: true,
+            closeAfterFinish: true,
+            theme: 'auto',
             metaFields: (file) => {
                 const fields = [{
                     id: 'name',
@@ -872,10 +881,9 @@ var hubCreate = (function() {
                 }];
                 return fields;
             },
-            restricted: {requiredMetaFields: ["genome"]},
-            closeModalOnClickOutside: true,
-            closeAfterFinish: true,
-            theme: 'auto',
+            doneButtonHandler: function() {
+                uppy.clear();
+            },
         };
         let tusOptions = {
             endpoint: getTusdEndpoint(),
