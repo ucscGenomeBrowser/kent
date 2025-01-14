@@ -358,7 +358,8 @@ var hubCreate = (function() {
             let viewBtn = document.createElement("button");
             viewBtn.textContent = "View in Genome Browser";
             viewBtn.type = 'button';
-            viewBtn.addEventListener("click", function() {
+            viewBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
                 viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
             });
             container.appendChild(viewBtn);
