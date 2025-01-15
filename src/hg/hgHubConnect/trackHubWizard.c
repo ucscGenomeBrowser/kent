@@ -185,6 +185,7 @@ webIncludeResourceFile("hgMyData.css");
 // get the current files stored for this user
 outFilesForUser();
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
+jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }
@@ -205,7 +206,10 @@ void generateApiKey(struct cartJson *cj, struct hash *paramHash)
 {
 char *userName = getUserName();
 if (!userName)
+    {
+    jsonWriteString(cj->jw, "error", "generateApiKey: not logged in");
     return;
+    }
 char *apiKey = makeRandomKey(256); // just needs some arbitrary length
 // save this key to the database for this user, the 'on duplicate' part automatically revokes old keys
 struct sqlConnection *conn = hConnectCentral();
