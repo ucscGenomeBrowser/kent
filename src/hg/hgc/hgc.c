@@ -11659,7 +11659,7 @@ if (url != NULL && url[0] != 0)
 printf("</div>"); // #omimText
 }
 
-void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
+static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM Class 3 Gene entry. */
 {
 struct sqlConnection *conn  = hAllocConn(database);
@@ -11669,7 +11669,6 @@ struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
 char *kgId = NULL;
-// GALT RESTORE? cartString(cart, "i");
 char *title1 = NULL;
 char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
