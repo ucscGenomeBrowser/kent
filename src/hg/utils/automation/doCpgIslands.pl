@@ -168,7 +168,7 @@ _EOF_
     ;
     close($fh);
 
-    my $fh = &HgAutomate::mustOpen(">$runDir/oneSplit.bash");
+    $fh = &HgAutomate::mustOpen(">$runDir/oneSplit.bash");
     print $fh <<_EOF_
 #!/bin/bash
 set -beEu -o pipefail
