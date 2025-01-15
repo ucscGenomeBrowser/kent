@@ -79,6 +79,14 @@ char *dataDir = getDataDir(userName);
 return catTwoStrings(dataDir, hub);
 }
 
+char *hubSpaceUrl = NULL;
+static char *getHubSpaceUrl()
+{
+if (!hubSpaceUrl)
+    hubSpaceUrl = cfgOption("hubSpaceUrl");
+return hubSpaceUrl;
+}
+
 char *webDataDir(char *userName)
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
 {
@@ -89,7 +97,7 @@ if (userName)
     char *userPrefix = md5HexForString(encUserName);
     userPrefix[2] = '\0';
     struct dyString *userDirDy = dyStringNew(0);
-    dyStringPrintf(userDirDy, "%s/%s/%s/", HUB_SPACE_URL, userPrefix, encUserName);
+    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix, encUserName);
     retUrl = dyStringCannibalize(&userDirDy);
     }
 return retUrl;
