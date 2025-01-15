@@ -8118,7 +8118,7 @@ else if (sameString(words[0], "db"))
     }
 else
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
-return NULL; // make compiler happy
+return NULL;
 }
 
 void htcCdnaAli(char *acc)
