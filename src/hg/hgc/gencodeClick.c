@@ -83,7 +83,7 @@ else if (startsWith("mm", database))
     return FALSE;
 else
     errAbort("BUG: gencodeClick on wrong database: %s", database);
-return FALSE;  // make compiler happy. errAbort should never return.
+return FALSE;
 }
 
 static bool haveGencodeTable(struct sqlConnection *conn, struct trackDb *tdb, char *tableBase)
