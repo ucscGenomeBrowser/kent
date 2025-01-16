@@ -30,9 +30,6 @@ char *getUserName();
 char *emailForUserName(char *userName);
 /* Fetch the email for this user from gbMembers hgcentral table */
 
-//TODO: this should probably come from hg.conf:
-#define HUB_SPACE_URL "https://hgwdev.gi.ucsc.edu/hubspace"
-
 // the various quota helper variables:
 #define HUB_SPACE_DEFAULT_QUOTA_BYTES 10000000000
 #define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 

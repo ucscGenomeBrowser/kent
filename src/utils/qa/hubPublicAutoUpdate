@@ -86,7 +86,7 @@ def escapeDoubleQuotesOnLabels(label):
 
 def curl(url):
     """Run curl command on URL - for http + ftp support"""
-    rawCurlOutput = subprocess.run("/cluster/software/bin/curl.bad --user-agent \"genome.ucsc.edu/net.c\" -skL --fail --connect-timeout 10.0 "+url,\
+    rawCurlOutput = subprocess.run("curl --user-agent \"genome.ucsc.edu/net.c\" -skL --fail --connect-timeout 10 "+url,\
                          check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     curlStdout = rawCurlOutput.stdout
     return(curlStdout)

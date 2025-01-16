@@ -55,7 +55,7 @@ $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 psGfx.o:      reEncodeFont.c
 
 reEncodeFont.c:   reEncodeFont.ps
-	stringify -static -var=encodeFont reEncodeFont.ps > reEncodeFont.c || rm reEncodeFont.c
+	${STRINGIFY} -static -var=encodeFont reEncodeFont.ps > reEncodeFont.c || rm reEncodeFont.c
 
 $(MACHTYPE):
 	mkdir -p $(MACHTYPE)

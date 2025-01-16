@@ -75,6 +75,7 @@ GCA_000767585.1_PRJNA234474_Ca_dromedarius_V1.0	mammals
 GCA_000767855.1_Ca_bactrianus_MBC_1.0	mammals
 GCA_000769185.1_Rrox_v1	primates
 GCA_000772875.3_Mmul_8.0.1	primates
+GCA_000837645.1_ViralProj14024	viral
 GCA_000845685.2_ViralProj14462	viral
 GCA_000952055.2_Anan_2.0	primates
 GCA_000956105.1_Pcoq_1.0	primates

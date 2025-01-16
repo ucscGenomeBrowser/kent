@@ -19,6 +19,7 @@
 #include "hdb.h"
 #include "hubSpace.h"
 #include "hubSpaceQuotas.h"
+#include <limits.h>
 
 char *getUserName()
 /* Query the right system for the users name */
@@ -78,6 +79,14 @@ char *dataDir = getDataDir(userName);
 return catTwoStrings(dataDir, hub);
 }
 
+char *hubSpaceUrl = NULL;
+static char *getHubSpaceUrl()
+{
+if (!hubSpaceUrl)
+    hubSpaceUrl = cfgOption("hubSpaceUrl");
+return hubSpaceUrl;
+}
+
 char *webDataDir(char *userName)
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
 {
@@ -88,7 +97,7 @@ if (userName)
     char *userPrefix = md5HexForString(encUserName);
     userPrefix[2] = '\0';
     struct dyString *userDirDy = dyStringNew(0);
-    dyStringPrintf(userDirDy, "%s/%s/%s/", HUB_SPACE_URL, userPrefix, encUserName);
+    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix, encUserName);
     retUrl = dyStringCannibalize(&userDirDy);
     }
 return retUrl;
@@ -99,18 +108,24 @@ char *prefixUserFile(char *userName, char *fname, char *parentDir)
  * parentDir is optional and will go in between the per-user dir and the fname */
 {
 char *pathPrefix = getDataDir(userName);
+char *path = NULL;
 if (pathPrefix)
     {
     if (parentDir)
         {
         struct dyString *ret = dyStringCreate("%s%s%s%s", pathPrefix, parentDir, lastChar(parentDir) == '/' ? "" : "/", fname);
-        return dyStringCannibalize(&ret);
+        path = dyStringCannibalize(&ret);
         }
     else
-        return catTwoStrings(pathPrefix, fname);
+        path = catTwoStrings(pathPrefix, fname);
+    char canonicalPath[PATH_MAX];
+    realpath(path, canonicalPath);
+    // after canonicalizing the path, make sure it starts with the userDataDir, to prevent
+    // deleting files like blah/../../../../systemFile.text
+    if (startsWith(pathPrefix, canonicalPath))
+        return cloneString(canonicalPath);
     }
-else
-    return NULL;
+return NULL;
 }
 
 static boolean checkHubSpaceRowExists(struct hubSpace *row)
@@ -249,16 +264,26 @@ firstSlash = 0;
 return catTwoStrings(userDataDir, copy);
 }
 
-static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label)
+static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label, char *bigFileLocation)
 {
 FILE *f = mustOpen(hubFileName, "a");
+char *trackDbType = type;
+if (sameString(type, "bigBed"))
+    {
+    // figure out the type based on the bbiFile header
+    struct bbiFile *bbi = bigBedFileOpen(bigFileLocation);
+    char tdbType[32];
+    safef(tdbType, sizeof(tdbType), "bigBed %d%s", bbi->definedFieldCount, bbi->fieldCount > bbi->definedFieldCount ? " +" : "");
+    trackDbType = tdbType;
+    bigBedFileClose(&bbi);
+    }
 fprintf(f, "track %s\n"
     "bigDataUrl %s\n"
     "type %s\n"
     "shortLabel %s\n"
     "longLabel %s\n"
     "\n",
-    track, bigDataUrl, type, label, label);
+    track, bigDataUrl, trackDbType, label, label);
 carefulClose(&f);
 }
 
@@ -272,7 +297,7 @@ fprintf(stderr, "hubDir: %s\n", hubDir);
 hubFileName = writeHubText(hubDir, rowForFile->userName, rowForFile->db);
 
 char *encodedTrack = cgiEncodeFull(rowForFile->fileName);
-writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack);
+writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack, rowForFile->location);
 return hubFileName;
 }
 
@@ -412,7 +437,7 @@ struct hubSpace *listFilesForUser(char *userName)
 /* Return the files the user has uploaded */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by creationTime, location", userName);
+struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir from hubSpace where userName='%s' order by location,creationTime", userName);
 struct hubSpace *fileList = hubSpaceLoadByQuery(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 return fileList;

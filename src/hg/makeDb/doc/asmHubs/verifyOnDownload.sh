@@ -29,7 +29,7 @@ elif [ "${subset}" == "brc" ]; then
 elif [ "${subset}" == "bacteria" ]; then
   minTrackCount=8
 elif [ "${subset}" == "legacy" ]; then
-  minTrackCount=9
+  minTrackCount=8
 elif [ "${subset}" == "plants" ]; then
   minTrackCount=10
 elif [ "${subset}" == "birds" ]; then

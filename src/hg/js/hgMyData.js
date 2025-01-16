@@ -3,12 +3,12 @@ var debugCartJson = true;
 
 function prettyFileSize(num) {
     if (!num) {return "0B";}
-    if (num < (1000 * 1024)) {
-        return `${(num/1000).toFixed(1)}KB`;
-    } else if (num < (1000 * 1000 * 1024)) {
-        return `${((num/1000)/1000).toFixed(1)}MB`;
+    if (num < (1024 * 1024)) {
+        return `${(num/1024).toFixed(1)}KB`;
+    } else if (num < (1024 * 1024 * 1024)) {
+        return `${((num/1024)/1024).toFixed(1)}MB`;
     } else {
-        return `${(((num/1000)/1000)/1000).toFixed(1)}GB`;
+        return `${(((num/1024)/1024)/1024).toFixed(1)}GB`;
     }
 }
 
@@ -102,10 +102,8 @@ var hubCreate = (function() {
     };
 
     function getTusdEndpoint() {
-        // return the port and basepath of the tusd server
-        // NOTE: the port and basepath are specified in hg.conf
-        //let currUrl = parseUrl(window.location.href);
-        return "https://hgwdev-hubspace.gi.ucsc.edu/files";
+        // this variable is set by hgHubConnect and comes from hg.conf value
+        return tusdEndpoint;
     }
 
     let extensionMap = {
@@ -129,8 +127,7 @@ var hubCreate = (function() {
     function detectFileType(fileName) {
         let fileLower = fileName.toLowerCase();
         for (let fileType in extensionMap) {
-            for (let extIx in extensionMap[fileType]) {
-                let ext = extensionMap[fileType][extIx];
+            for (let ext of extensionMap[fileType]) {
                 if (fileLower.endsWith(ext)) {
                     return fileType;
                 }
@@ -141,10 +138,6 @@ var hubCreate = (function() {
         //file
         //alert(`file extension for ${fileName} not found, please explicitly select it`);
         return null;
-    }
-
-    function defaultFileType(file) {
-        return detectFileType(file);
     }
 
     function defaultDb() {
@@ -200,11 +193,17 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + fname + "=pack";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
         }
+    }
+
+    const regex = /[^A-Za-z0-9_-]+/g;
+    function trackHubFixName(trackName) {
+        // replace everything but alphanumeric, underscore and dash with underscore
+        return trackName.replaceAll(regex, "_");
     }
 
     // helper object so we don't need to use an AbortController to update
@@ -231,12 +230,17 @@ var hubCreate = (function() {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
-                        url += "&hubUrl=" + uiState.userUrl + d.parentDir + "hub.txt";
+                        url += "&hubUrl=" + uiState.userUrl + d.parentDir;
+                        if (d.parentDir.endsWith("/")) {
+                            url += "hub.txt";
+                        } else {
+                            url += "/hub.txt";
+                        }
                     }
                     hubsAdded[d.parentDir] = true;
                     if (d.genome == genome) {
                         // turn the track on if its for this db
-                        url += "&" + d.fileName + "=pack";
+                        url += "&" + trackHubFixName(d.fileName) + "=pack";
                     }
                 } else if (d.fileType === "hub.txt") {
                     url += "&hubUrl=" + uiState.userUrl + d.fullPath;
@@ -354,7 +358,8 @@ var hubCreate = (function() {
             let viewBtn = document.createElement("button");
             viewBtn.textContent = "View in Genome Browser";
             viewBtn.type = 'button';
-            viewBtn.addEventListener("click", function() {
+            viewBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
                 viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
             });
             container.appendChild(viewBtn);
@@ -368,6 +373,9 @@ var hubCreate = (function() {
         let table = $("#filesTable").DataTable();
         let rows = table.rows((idx, data) => pathList.includes(data.fullPath));
         rows.remove().draw();
+        let toKeep = (elem) => !pathList.includes(elem.fullPath);
+        uiState.fileList = uiState.fileList.filter(toKeep);
+        history.replaceState(uiState, "", document.location.href);
     }
 
     function addFileToHub(rowData) {
@@ -391,19 +399,19 @@ var hubCreate = (function() {
         if (!(req.fullPath in filesHash)) {
             if ($.fn.dataTable.isDataTable("#filesTable")) {
                 let table = $("#filesTable").DataTable();
-                table.row.add(req).order([{name: "uploadTime"}, {name: "fullpath"}]);
+                let rowObj = table.row.add(req);
                 rowVis[req.fullPath] = true;
                 table.search.fixed("defaultView", function(searchStr, data, rowIx) {
                     return rowVis[data.fileName] || rowVis[data.fullPath];
                 }).draw();
-                let newRowObj = table.row((idx,rowData) => rowData.fullPath === req.fullPath);
-                indentActionButton(newRowObj);
-                let newRow = newRowObj.node();
+                indentActionButton(rowObj);
+                let newRow = rowObj.node();
                 $(newRow).css('color','red').animate({color: 'black'}, 1500);
             } else {
                 showExistingFiles([req]);
             }
             filesHash[req.fullPath] = req;
+            uiState.fileList.push(req);
         }
     }
 
@@ -457,7 +465,6 @@ var hubCreate = (function() {
         let data = rowObj.data();
         let numIndents = data.parentDir !== "" ? data.fullPath.split('/').length - 1: 0;
         rowObj.node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
-        //table.row(rowIdx).node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
     }
 
     let tableInitOptions = {
@@ -518,12 +525,14 @@ var hubCreate = (function() {
                 // The upload time column, not visible but we use it to sort on new uploads
                 targets: 8,
                 visible: false,
-                searchable: false
+                searchable: false,
+                orderable: true,
             },
             {
                 targets: 9,
                 visible: false,
                 searchable: false,
+                orderable: true,
             }
         ],
         columns: [
@@ -535,10 +544,10 @@ var hubCreate = (function() {
             {data: "genome", title: "Genome"},
             {data: "parentDir", title: "Hubs"},
             {data: "lastModified", title: "File Last Modified"},
-            {data: "uploadTime", title: "Upload Time"},
-            {data: "fullPath", title: "fullPath"},
+            {data: "uploadTime", title: "Upload Time", name: "uploadTime"},
+            {data: "fullPath", title: "fullPath", name: "fullPath"},
         ],
-        order: [{name: "uploadTime"}, {name: "fullpath"}],
+        order: [{name: "fullPath", dir: "asc"},{name: "uploadTime", dir: "asc"}],
         drawCallback: function(settings) {
             console.log("table draw");
             if (isLoggedIn) {
@@ -568,6 +577,7 @@ var hubCreate = (function() {
             table.rows().every(function(rowIdx, rowLoop, tableLoop) {
                 indentActionButton(this);
             });
+            table.order.fixed({pre: [{name: "fullPath", dir: "asc"}, {name: "uploadTime", dir: "asc"}]});
             // only show the top level and one layer of children by default
             table.search.fixed("defaultView", function(searchStr, data, rowIx) {
                 return rowVis[data.fileName] || rowVis[data.fullPath];
@@ -606,76 +616,24 @@ var hubCreate = (function() {
         return table;
     }
 
-    function checkJsonData(jsonData, callerName) {
-        // Return true if jsonData isn't empty and doesn't contain an error;
-        // otherwise complain on behalf of caller.
-        if (! jsonData) {
-            alert(callerName + ': empty response from server');
-        } else if (jsonData.error) {
-            console.error(jsonData.error);
-            alert(callerName + ': error from server: ' + jsonData.error);
-        } else if (jsonData.warning) {
-            alert("Warning: " + jsonData.warning);
-            return true;
-        } else {
-            if (debugCartJson) {
-                console.log('from server:\n', jsonData);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    function updateStateAndPage(jsonData, doSaveHistory) {
-        // Update uiState with new values and update the page.
-        _.assign(uiState, jsonData);
-    }
-
-    function handleRefreshState(jsonData) {
-        if (checkJsonData(jsonData, 'handleRefreshState')) {
-            updateStateAndPage(jsonData, true);
-        }
-        $("#spinner").remove();
-    }
-
     function init() {
         cart.setCgi('hgMyData');
         cart.debug(debugCartJson);
-
-        if (typeof cartJson !== "undefined") {
-            if (typeof cartJson.warning !== "undefined") {
-                alert("Warning: " + cartJson.warning);
-            }
-            var urlParts = {};
-            if (debugCartJson) {
-                console.log('from server:\n', cartJson);
-            }
-            _.assign(uiState,cartJson);
-            saveHistory(cartJson, urlParts, true);
-        } else {
-            // no cartJson object means we are coming to the page for the first time:
-            //cart.send({ getUiState: {} }, handleRefreshState);
-            //cart.flush();
-            // TODO: initialize buttons, check if there are already files
-            // TODO: write functions for
-            //     after picking files
-            //     choosing file types
-            //     creating default trackDbs
-            //     editing trackDbs
-            let fileDiv = document.getElementById('filesDiv');
-            if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
-                uiState.fileList = userFiles.fileList;
-                uiState.hubList = userFiles.hubList;
-                uiState.userUrl = userFiles.userUrl;
-            }
-            // first add the top level directories/files
-            //let table = showExistingFiles(uiState.fileList.filter((row) => row.parentDir === ""));
-            let table = showExistingFiles(uiState.fileList);
-            // now add any subdirs and files
-            //addChildRows(table, uiState.fileList.filter((row) => row.parentDir !== ""));
-            // TODO: add event handlers for editing defaults, grouping into hub
-            // TODO: display quota somewhere
+        // TODO: write functions for
+        //     creating default trackDbs
+        //     editing trackDbs
+        let fileDiv = document.getElementById('filesDiv');
+        // get the state from the history stack if it exists
+        if (history.state) {
+            uiState = history.state;
+        } else if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
+            uiState.fileList = userFiles.fileList;
+            uiState.hubList = userFiles.hubList;
+            uiState.userUrl = userFiles.userUrl;
         }
+        // first add the top level directories/files
+        let table = showExistingFiles(uiState.fileList);
+        // TODO: add event handlers for editing defaults, grouping into hub
         $("#newTrackHubDialog").dialog({
             modal: true,
             autoOpen: false,
@@ -684,6 +642,7 @@ var hubCreate = (function() {
             minWidth: 400,
             minHeight: 120
         });
+
         // create a custom uppy plugin to batch change the type and db fields
         class BatchChangePlugin extends Uppy.BasePlugin {
             constructor(uppy, opts) {
@@ -808,7 +767,7 @@ var hubCreate = (function() {
                 this.uppy.on("file-added", (file) => {
                     // add default meta data for genome and fileType
                     console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "parentDir": hubNameDefault});
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": detectFileType(file.name), "parentDir": hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
                     } else {
@@ -833,9 +792,14 @@ var hubCreate = (function() {
                         this.removeBatchSelectsFromDashboard();
                     }
                 });
-                this.uppy.on("dashboard:modal-close", () => {
+                this.uppy.on("dashboard:modal-closed", () => {
                     if (this.uppy.getFiles().length < 2) {
                         this.removeBatchSelectsFromDashboard();
+                    }
+                    let allFiles = this.uppy.getFiles();
+                    let completeFiles = this.uppy.getFiles().filter((f) => f.progress.uploadComplete === true);
+                    if (allFiles.length === completeFiles.length) {
+                        this.uppy.clear();
                     }
                 });
             }
@@ -851,6 +815,10 @@ var hubCreate = (function() {
             showProgressDetails: true,
             note: "Example text in the note field",
             meta: {"genome": null, "fileType": null},
+            restricted: {requiredMetaFields: ["genome"]},
+            closeModalOnClickOutside: true,
+            closeAfterFinish: true,
+            theme: 'auto',
             metaFields: (file) => {
                 const fields = [{
                     id: 'name',
@@ -907,10 +875,9 @@ var hubCreate = (function() {
                 }];
                 return fields;
             },
-            restricted: {requiredMetaFields: ["genome"]},
-            closeModalOnClickOutside: true,
-            closeAfterFinish: true,
-            theme: 'auto',
+            doneButtonHandler: function() {
+                uppy.clear();
+            },
         };
         let tusOptions = {
             endpoint: getTusdEndpoint(),
@@ -923,14 +890,15 @@ var hubCreate = (function() {
         uppy.on('upload-success', (file, response) => {
             const metadata = file.meta;
             const d = new Date(metadata.lastModified);
+            const now = new Date(Date.now());
             newReqObj = {
-                "uploadTime": Date.now(),
-                "lastModified": d.toLocaleString(),
                 "fileName": metadata.fileName,
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
                 "parentDir": metadata.parentDir,
+                "lastModified": d.toLocaleString(),
+                "uploadTime": now.toLocaleString(),
                 "fullPath": metadata.parentDir + "/" + metadata.fileName,
             };
             // from what I can tell, any response we would create in the pre-finish hook
@@ -938,7 +906,7 @@ var hubCreate = (function() {
             // we would have created with this one file and add them to the table if they
             // weren't already there:
             hubTxtObj = {
-                "uploadTime": Date.now(),
+                "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
                 "fileName": "hub.txt",
                 "fileSize": 0,
@@ -948,7 +916,7 @@ var hubCreate = (function() {
                 "fullPath": metadata.parentDir + "/hub.txt",
             };
             parentDirObj = {
-                "uploadTime": Date.now(),
+                "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
                 "fileName": metadata.parentDir,
                 "fileSize": 0,
@@ -961,17 +929,12 @@ var hubCreate = (function() {
             addNewUploadedFileToTable(hubTxtObj);
             addNewUploadedFileToTable(newReqObj);
         });
+        uppy.on('complete', (result) => {
+            history.replaceState(uiState, "", document.location.href);
+            console.log("replace history with uiState");
+        });
     }
     return { init: init,
              uiState: uiState,
            };
 }());
-
-
-
-// when a user reaches this page from the back button we can display our saved state
-// instead of sending another network request
-window.onpopstate = function(event) {
-    event.preventDefault();
-    hubCreate.updateStateAndPage(event.state, false);
-};

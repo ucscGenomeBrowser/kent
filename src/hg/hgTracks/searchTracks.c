@@ -264,7 +264,7 @@ struct paraFetchData *pfdList = NULL;
 struct paraFetchData *pfdRunning = NULL;
 struct paraFetchData *pfdDone = NULL;
 
-void *addUnconnectedHubSearchResults()
+void *addUnconnectedHubSearchResults(void *x)
 /* Add a not yet connected hub to the search results */
 {
 struct paraFetchData *pfd = NULL;

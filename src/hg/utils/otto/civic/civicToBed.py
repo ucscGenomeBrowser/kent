@@ -2,7 +2,6 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "pandas",
-#     "certifi",
 # ]
 # [tool.uv]
 # exclude-newer = "2024-11-20T00:00:00Z"
@@ -76,7 +75,6 @@ import subprocess
 from typing import Callable, Final, Generator, Sequence
 import urllib.request
 
-import certifi
 import numpy as np
 import pandas as pd
 
@@ -102,10 +100,6 @@ CHROM_SIZES: Final = {
     "hg38": "/hive/data/genomes/hg38/chrom.sizes",
     "hg19": "/hive/data/genomes/hg19/chrom.sizes",
 }
-
-## hgwdev has trouble with SSL without using certifi, so this ensures
-## that certificates from PyPI are used
-ssl_ctx = ssl.create_default_context(cafile=certifi.where())
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -616,7 +610,7 @@ def load_dataframes(table_dict: dict[str, str]) -> dict[str, pd.DataFrame]:
 
 def urlretrieve(url, filename):
     with closing(open(filename, "wb")) as outfile:
-        with closing(urllib.request.urlopen(url, context=ssl_ctx)) as instream:
+        with closing(urllib.request.urlopen(url)) as instream:
             outfile.write(instream.read())
 
 

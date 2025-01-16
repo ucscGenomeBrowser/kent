@@ -35583,3 +35583,40 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/1.7
 cd /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg19/cadd/1.7
 cp /hive/data/genomes/hg19/bed/cadd/v1.7/*.b[bw] .
 ##############################################################################
+# Renaming/updating DDG2P track to DECIPHER Population CNVs  #35053
+# Januarary 14, 2025 - Gerardo Perez
+
+# Downloaded files
+wget https://www.deciphergenomics.org/files/downloads/population_cnv_grch37.txt.gz
+zcat population_cnv_grch37.txt.gz | cut -f1-15 > population_cnv_grch37.bed
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes
+cp /cluster/home/yepuga/public_html/trackHubs/ddg2p_syndromes/hg38/bedExample2.as /hive/users/gperez2/tracks/decipher/hg19
+cp /cluster/home/yepuga/public_html/trackHubs/ddg2p_syndromes/hg38/assign_rgb_to_bed.py /hive/users/gperez2/tracks/decipher/hg19
+
+# Working directory
+cd /hive/users/gperez2/tracks/decipher/hg19
+
+# Commands
+zcat population_cnv_grch37.txt.gz | cut -f1-15 > population_cnv_grch37.bed
+
+# reorders columns to fit BED format
+awk 'BEGIN {OFS="\t"} {print $2, $3, $4, $1, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15}' population_cnv_grch37.bed > population_cnv_grch37_reordered.bed
+
+# removes the header line
+tail -n +2 population_cnv_grch37_reordered.bed > population_cnv_grch37_final.bed
+
+# Adjust the BED file for bigBed conversion:
+# prepends 'chr' to chromosome numbers, subtracts 1 from the start position, and adjusts fields for bigBed
+awk 'BEGIN{OFS="\t"} {print "chr"$1, $2-1, $3, $4, 0, ".", $2, $3, 0, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15}' population_cnv_grch37_final.bed > population_cnv_grch37_final_chr.bed
+
+bedSort population_cnv_grch37_final_chr.bed population_cnv_grch37_sorted.bed
+
+# Add RGB colors to the BED file using a Python script:
+python3  assign_rgb_to_bed.py population_cnv_grch37_sorted.bed output_population_cnv_grch37.bed
+
+bedToBigBed -type=bed9+ -as=bedExample2.as -tab -extraIndex=name output_population_cnv_grch37.bed hg19.chrom.sizes population_cnv_grch37.bb
+
+# Moving files
+cp /hive/users/gperez2/tracks/decipher/hg19/population_cnv_grch37.bb /hive/data/genomes/hg19/bed/decipher/population_cnv.bb
+
+ln -s /hive/data/genomes/hg19/bed/decipher/population_cnv.bb /gbdb/hg19/decipher/population_cnv.bb

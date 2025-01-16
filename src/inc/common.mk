@@ -30,11 +30,21 @@ HOSTNAME = $(shell uname -n)
 
 ifeq (${HOSTNAME},hgwdev-new)
   IS_HGWDEV = yes
+  OURSTUFF = /cluster/software/r9
 else
   ifeq (${HOSTNAME},hgwdev)
     IS_HGWDEV = yes
+    OURSTUFF = /cluster/software
   else
      IS_HGWDEV = no
+  endif
+endif
+
+ifeq (${ZLIB},)
+  ifneq ($(wildcard /lib64/libz.a),)
+    ZLIB=/lib64/libz.a
+  else
+    ZLIB=-lz
   endif
 endif
 
@@ -171,12 +181,12 @@ ifeq (${USE_HAL},1)
     HDF5DIR=/hive/groups/browser/hal/build/hdf5-1.12.0
     HDF5LIBDIR=${HDF5DIR}/local/lib
     HDF5LIBS=${HDF5LIBDIR}/libhdf5_cpp.a ${HDF5LIBDIR}/libhdf5.a ${HDF5LIBDIR}/libhdf5_hl.a
-    HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} -lz
+    HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} ${ZLIB}
     ifeq (${HOSTNAME},hgwdev-new)
-        HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
+        HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
     else
       ifeq (${HOSTNAME},hgwdev)
-          HALLIBS += /cluster/software/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
+          HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
       else
           HALLIBS += -lcurl -lstdc++
       endif
@@ -270,28 +280,32 @@ ifeq (${IS_HGWDEV},no)
   endif
 endif
 
-ifeq (${ZLIB},)
-  ZLIB=-lz
+ifeq (${BZ2LIB},)
+  ifneq ($(wildcard /lib64/libbz2.a),)
+    BZ2LIB=/lib64/libbz2.a
+  else
+    BZ2LIB=-lbz2
+  endif
 endif
 
 # on hgwdev, use the static libraries
 ifeq (${IS_HGWDEV},yes)
-   HG_INC += -I/cluster/software/include
-   HG_INC += -I/cluster/software/include/mariadb 
+   HG_INC += -I${OURSTUFF}/include
+   HG_INC += -I${OURSTUFF}/include/mariadb 
    FULLWARN = yes
-   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
-   L+=/cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
+   L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a -ldl
 
    ifeq (${HOSTNAME},hgwdev-new)
-       PNGLIB=/cluster/software/lib/libpng.a
-       PNGINCL=-I/cluster/software/include/libpng16
+       PNGLIB=${OURSTUFF}/lib/libpng.a
+       PNGINCL=-I${OURSTUFF}/include/libpng16
    else
        PNGLIB=/usr/lib64/libpng.a
        PNGINCL=-I/usr/include/libpng15
    endif
 
    MYSQLINC=/usr/include/mysql
-   MYSQLLIBS=/cluster/software/lib64/libmariadbclient.a /cluster/software/lib64/libssl.a /cluster/software/lib64/libcrypto.a -ldl -lz
+   MYSQLLIBS=${OURSTUFF}/lib64/libmariadbclient.a ${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a -ldl ${ZLIB}
 
    ifeq (${HOSTNAME},hgwdev-new)
        MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a /usr/lib64/librt.a
@@ -322,7 +336,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
@@ -390,8 +404,8 @@ else
   DESTBINDIR=${DESTDIR}/${BINDIR}
 endif
 
-# location of stringify program
-STRINGIFY = ${DESTBINDIR}/stringify
+# location of interperted version of stringify program
+STRINGIFY = ${kentSrc}/utils/stringify/stringifyEz
 
 MKDIR=mkdir -p
 ifeq (${STRIP},)

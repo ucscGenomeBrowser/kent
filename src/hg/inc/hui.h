@@ -200,8 +200,8 @@ enum trackVisibility
     tvFull=2,           /* Expand it out. */
     tvPack=3,           /* Zig zag it up and down. */
     tvSquish=4,         /* Pack with thin boxes and no labels. */
+    tvShow=5,           /* show supertrack */
     };
-#define tvShow tvFull
 
 enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as

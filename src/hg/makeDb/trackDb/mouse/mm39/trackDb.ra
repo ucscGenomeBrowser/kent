@@ -50,4 +50,4 @@ itemRgb on
 
 include ../refSeqComposite.mm10.mm39.ra
 
-include cytoBand.ra alpha
+include cytoBand.ra

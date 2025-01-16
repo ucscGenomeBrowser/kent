@@ -8118,7 +8118,7 @@ else if (sameString(words[0], "db"))
     }
 else
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
-return NULL; // make compiler happy
+return NULL;
 }
 
 void htcCdnaAli(char *acc)
@@ -11659,7 +11659,7 @@ if (url != NULL && url[0] != 0)
 printf("</div>"); // #omimText
 }
 
-void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
+static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM Class 3 Gene entry. */
 {
 struct sqlConnection *conn  = hAllocConn(database);
@@ -11668,7 +11668,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
-char *kgId = cartString(cart, "i");
+char *kgId = NULL;
 char *title1 = NULL;
 char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
@@ -11701,6 +11701,18 @@ if (url != NULL && url[0] != 0)
         }
     sqlFreeResult(&sr);
     printf("<BR>");
+
+    /* get corresponding KG ID */
+    sqlSafef(query, sizeof(query),
+          "select k.transcript from knownCanonical k where k.chrom='%s' and k.chromStart=%s and k.chromEnd=%s",
+          chrom, chromStart, chromEnd);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        kgId = cloneString(row[0]);
+        }
+    sqlFreeResult(&sr);
 
     // disable NCBI link until they work it out with OMIM
     /*
@@ -11927,13 +11939,10 @@ if (url != NULL && url[0] != 0)
         }
     sqlFreeResult(&sr);
 
-    if (avDesc)
-	{ 
-	printf("<B>OMIM Allelic Variant: ");
-	printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
-	printf("%s</A></B>", avId);
-	printf(" %s", avDesc);
-	}
+    printf("<B>OMIM Allelic Variant: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
+    printf("%s</A></B>", avId);
+    printf(" %s", avDesc ? avDesc : "");
 
     printf("<BR><B>OMIM: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);

@@ -2,13 +2,13 @@ kentSrc = ../../..
 
 include ../../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm 
+L += $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  ../lib/$(MACHTYPE)/libSpliceGraph.a  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 GNUSL = /cluster/home/sugnet/local
 
 % : %.c
-	$(CC) $(COPT) -I../inc -I../../inc  -I../../../inc -I$(GNUSL)/include -L$(GNUSL)/lib -o $@ $(addsuffix .c,$@) $(MYLIBS) ${L} $(MYSQLLIBS) $(GNUSL)/lib/libgsl.a $(GNUSL)/lib/libgslcblas.a -lm -lz 
+	$(CC) $(COPT) -I../inc -I../../inc  -I../../../inc -I$(GNUSL)/include -L$(GNUSL)/lib -o $@ $(addsuffix .c,$@) $(MYLIBS) ${L} $(MYSQLLIBS) $(GNUSL)/lib/libgsl.a $(GNUSL)/lib/libgslcblas.a
 	cp $@ ${BINDIR}
 
 O =  altHtmlPages bedOverlap gcPresAbs junctionSets agxStartsEnds \

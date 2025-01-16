@@ -553,10 +553,12 @@ function tdbFindChildless(trackDb, delTracks) {
         var topParentName = hgTracks.trackDb[delTrack].topParent;
         if (parentName) {
             // hide a superTrack parent only if that superTrack does not have any other tracks open
+            // This addresses the case where you hide the last child of a composite under a superTrack
+            // E.g. All Gencode / Gencode V46 or FANTOM5/Max count 
             if (compLinks.familySize[parentName]===0 && topLinks.familySize[topParentName]===0) {
                 if (!doneParents.includes(parentName)) {
-                    loneParents.push([parentName, compLinks.families[parentName]]);
-                    doneParents.push(parentName);
+                    loneParents.push([topParentName, compLinks.families[parentName]]);
+                    doneParents.push(topParentName);
                 }
             } else
                 for (var child of compLinks.families[parentName])
@@ -1395,7 +1397,7 @@ function undecoratedTrack(track)
 {
 var retTrack = track;
 if (track.startsWith("hub_")) {
-    retTrack = track.split('_', 3)[2];
+    retTrack = track.split('_').slice(2).join("_");
 }
 return retTrack;
 }

@@ -1440,6 +1440,7 @@ switch (vis)
 	y += tHeight;
         break;
     case tvFull:
+    case tvShow:
         if (isCenterLabelIncluded(track))
             y += fontHeight;
 
@@ -7888,7 +7889,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     }
 }
 
-static void *remoteParallelLoad()
+static void *remoteParallelLoad(void *x)
 /* Each thread loads tracks in parallel until all work is done. */
 {
 struct paraFetchData *pfd = NULL;

@@ -29,6 +29,7 @@ SCRIPT_FILES = \
 	asmHubHtml.pl \
 	asmHubRepeatMasker.sh \
 	asmHubRmsk.pl \
+	asmHubRmskJoinAlign.pl \
 	asmHubSimpleRepeat.pl \
 	asmHubTrackDb.sh \
 	asmHubWindowMasker.pl \
@@ -47,6 +48,7 @@ SCRIPT_FILES = \
 	synBlastp.csh \
 	doRecipBest.pl \
 	doRepeatMasker.pl \
+	doRepeatModeler.pl \
 	doWindowMasker.pl \
 	doSimpleRepeat.pl \
 	doSameSpeciesLiftOver.pl \
@@ -56,6 +58,7 @@ SCRIPT_FILES = \
 	kmerPairs.pl \
 	kmerCollapsePairedEnds.pl \
 	kmerPrint.pl \
+	kmerPrint.py \
 	liftRMAlign.pl \
 	makeDownloads.pl \
 	makeGenomeDb.pl \
