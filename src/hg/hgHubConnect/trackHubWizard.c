@@ -50,18 +50,6 @@ if (fileName)
     }
 }
 
-void removeHubDir(char *userName, char *cgiFileName)
-/* Remove one single hub for userName */
-{
-char *hubDir = prefixUserFile(userName, cgiEncodeFull(cgiFileName), NULL);
-if (isDirectory(hubDir))
-    {
-    fprintf(stderr, "deleting directory: '%s'\n", hubDir);
-    removeHubForUser(hubDir, userName);
-    fflush(stderr);
-    }
-}
-
 void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 /* Process the request to remove a file */
 {
