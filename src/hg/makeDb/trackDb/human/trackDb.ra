@@ -207,6 +207,7 @@ type bed 3
         mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
 
         track varaico
+        release alpha
         shortLabel Varaico Variants
         longLabel Varaico Variants extracted from full text publications
         visibility dense
