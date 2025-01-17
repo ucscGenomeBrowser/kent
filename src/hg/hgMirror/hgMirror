@@ -1657,7 +1657,7 @@ def getCgiVar(args, name, default=None):
 def addTableList(db, conn):
     " add a local file with rows to add to tableList for hg19 "
     if db=="hg19" and isfile(TABLELISTADD):
-        query = 'LOAD DATA INFILE "%s" INTO TABLE tableList' % (TABLELISTADD)
+        query = 'LOAD DATA LOCAL INFILE "%s" INTO TABLE tableList' % (TABLELISTADD)
         cur = conn.cursor()
         cur.execute(query)
         cur.close()
