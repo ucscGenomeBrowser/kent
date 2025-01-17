@@ -19,6 +19,28 @@
 // Optional CGI param type can specify what kind of thing to suggest (default: gene)
 #define ALT_OR_PATCH "altOrPatch"
 #define HELP_DOCS "helpDocs"
+#define TRACK "track"
+
+void suggestTrack(char *database,  char *prefix)
+{
+char query[4096];
+sqlSafef(query, sizeof query,
+    "select tableName, shortLabel from trackDb where shortLabel like '%%%s%%'", prefix);
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteListStart(jw, NULL);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "label", row[1]);
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
 
 void suggestGene(char *database, char *table, char *prefix)
 /* Print out a Javascript list of objects describing genes that start with prefix. */
@@ -261,7 +283,7 @@ if(prefix == NULL || database == NULL)
     errAbort("%s", "Missing prefix and/or db CGI parameter");
 if (! hDbIsActive(database))
     errAbort("'%s' is not a valid, active database", htmlEncode(database));
-if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH) && differentString(type, HELP_DOCS))
+if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH) && differentString(type, HELP_DOCS) && differentString(type, TRACK))
     errAbort("'%s' is not a valid type", type);
 char *table = NULL;
 if (! sameOk(type, ALT_OR_PATCH) && !sameOk(type, HELP_DOCS))
@@ -295,6 +317,8 @@ if (sameOk(type, ALT_OR_PATCH))
     suggestAltOrPatch(database, prefix);
 else if (sameOk(type, HELP_DOCS))
     suggestHelpPage(prefix);
+else if (sameOk(type, TRACK))
+    suggestTrack(database, prefix);
 else
     suggestGene(database, table, prefix);
 
