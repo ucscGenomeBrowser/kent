@@ -19,6 +19,7 @@
 #include "hdb.h"
 #include "hubSpace.h"
 #include "hubSpaceQuotas.h"
+#include "errCatch.h"
 #include <limits.h>
 
 char *getUserName()
@@ -269,12 +270,22 @@ FILE *f = mustOpen(hubFileName, "a");
 char *trackDbType = type;
 if (sameString(type, "bigBed"))
     {
-    // figure out the type based on the bbiFile header
-    struct bbiFile *bbi = bigBedFileOpen(bigFileLocation);
-    char tdbType[32];
-    safef(tdbType, sizeof(tdbType), "bigBed %d%s", bbi->definedFieldCount, bbi->fieldCount > bbi->definedFieldCount ? " +" : "");
-    trackDbType = tdbType;
-    bigBedFileClose(&bbi);
+    // don't errAbort if the file is actually not a bigBed
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        // figure out the type based on the bbiFile header
+        struct bbiFile *bbi = bigBedFileOpen(bigFileLocation);
+        char tdbType[32];
+        safef(tdbType, sizeof(tdbType), "bigBed %d%s", bbi->definedFieldCount, bbi->fieldCount > bbi->definedFieldCount ? " +" : "");
+        trackDbType = tdbType;
+        bigBedFileClose(&bbi);
+        }
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    // NOTE: if the file was not actually a bigBed (and so bigBedFileOpen errAborted), we
+    // just want to prevent the errAbort, not prevent creating the stanza itself, as that
+    // would be majorly confusing to the user, so just continue on here
     }
 fprintf(f, "track %s\n"
     "bigDataUrl %s\n"
