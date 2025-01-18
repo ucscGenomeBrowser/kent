@@ -177,7 +177,7 @@ track vistaEnhancersBb
 shortLabel VISTA Enhancers
 longLabel VISTA Enhancers
 group regulation
-url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
+url https://enhancer.lbl.gov/vista/browse?filter=$$
 type bigBed 9 +
 mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
