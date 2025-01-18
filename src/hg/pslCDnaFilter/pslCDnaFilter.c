@@ -19,9 +19,7 @@ static void usage()
 /* usage msg and exit */
 {
 /* message got huge, so it's in a generate file */
-static char *usageMsg =
-#include "usage.msg"
-    ;
+#include "usage.h"
 errAbort("%s", usageMsg);
 }
 
@@ -29,10 +27,8 @@ static void prAlgo()
 /* print algorithm description and exit */
 {
 /* message got huge, so it's in a generate file */
-static char *algoMsg =
-#include "algo.msg"
-    ;
-fprintf(stderr, "%s", algoMsg);
+#include "algo.h"
+fprintf(stderr, "%s", usageMsg);
 exit(0);
 }
 

@@ -28,6 +28,19 @@ UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
 HOSTNAME = $(shell uname -n)
 
+# Semi-static builds, normally done in Docker
+#
+# set SEMI_STATIC=yes to enable
+#  
+# These use static libraries except for -ldl, -lm, and -lc
+# which must be dynamic.
+#
+ifeq (${SEMI_STATIC},yes)
+    # switch to static libraries
+    STATIC_PRE = -Wl,-Bstatic
+endif
+L = ${STATIC_PRE}
+
 ifeq (${HOSTNAME},hgwdev)
   IS_HGWDEV = yes
   OURSTUFF = /cluster/software/r9
@@ -207,11 +220,6 @@ ifeq (${USE_HIC},1)
     HG_DEFS+=-DUSE_HIC
 endif
 
-# autodetect where libm is installed
-ifeq (${MLIB},)
-  MLIB=-lm
-endif
-
 # autodetect where png is installed
 ifeq (${PNGLIB},)
       PNGLIB := $(shell libpng-config --ldflags  || true)
@@ -247,7 +255,9 @@ ifneq ($(MAKECMDGOALS),clean)
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
     ifeq (${MYSQLLIBS},)
-      MYSQLLIBS := $(shell mysql_config --libs || true)
+      # mysql_config --libs includes -lm, however libm must be a dynamic library
+      # so to handle SEMI_STATIC it is removed here and will be added at the end
+      MYSQLLIBS := $(shell mysql_config --libs | sed 's/-lm$$//' || true)
 #        $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
     endif
   endif
@@ -294,7 +304,7 @@ ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include/mariadb 
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
-   L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a -ldl
+   L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a
 
    ifeq (${HOSTNAME},hgwdev)
        PNGLIB=${OURSTUFF}/lib/libpng.a
@@ -305,7 +315,7 @@ ifeq (${IS_HGWDEV},yes)
    endif
 
    MYSQLINC=/usr/include/mysql
-   MYSQLLIBS=${OURSTUFF}/lib64/libmariadbclient.a ${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a -ldl ${ZLIB}
+   MYSQLLIBS=${OURSTUFF}/lib64/libmariadbclient.a ${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a ${ZLIB}
 
    ifeq (${HOSTNAME},hgwdev)
        MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a /usr/lib64/librt.a
@@ -315,7 +325,7 @@ ifeq (${IS_HGWDEV},yes)
 
 else
    ifeq (${CONDA_BUILD},1)
-       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
+       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a
    else
        ifneq (${SSLLIB},)
           L+=${SSLLIB}
@@ -325,19 +335,26 @@ else
        ifneq (${CRYPTOLIB},)
           L+=${CRYPTOLIB}
        else
-          L+=-lcrypto -ldl
-       endif
-       ifeq (${DLLIB},)
-          L+=-ldl
+          L+=-lcrypto
        endif
    endif
 endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
-
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
+
+# NOTE: these must be last libraries and must be dynamic.
+# We switched by to dynamic with SEMI_STATIC
+ifeq (${SEMI_STATIC},yes)
+    # switch back to dynamic libraries
+    DYNAMIC_PRE = -Wl,-Bdynamic
+endif
+DYNAMIC_LIBS =  ${DYNAMIC_PRE} -ldl -lm -lc
+
+L+= ${DYNAMIC_LIBS}
+
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)
@@ -462,7 +479,7 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
 CC_PROG_OPTS = ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC}
 %.o: %.c
-	${CC} ${CC_PROG_OPTS}  -o $@ -c $<
+	${CC} ${CC_PROG_OPTS} -o $@ -c $<
 
 # autodetect UCSC installation of node.js:
 ifeq (${NODEBIN},)

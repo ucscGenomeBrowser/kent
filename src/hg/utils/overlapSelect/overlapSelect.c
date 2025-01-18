@@ -374,9 +374,7 @@ selectTableFree();
 void usage()
 /* usage message and abort */
 {
-static char *usageMsg =
-#include "usage.msg"
-    ;
+#include "usage.h"
 errAbort("%s", usageMsg);
 }
 
