@@ -35,7 +35,9 @@ objects = ${extraObjects} ${externObjects}
 
 default:: ${A:%=${DESTDIR}${BINDIR}/%${EXE}}
 
-${DESTDIR}${BINDIR}/%${EXE}: ${DEPLIBS} %.o ${objects}
+${extraObjects}: ${extraHeaders}
+
+${DESTDIR}${BINDIR}/%${EXE}: %.o ${objects} ${DEPLIBS}
 	@mkdir -p $(dir $@)
 	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}

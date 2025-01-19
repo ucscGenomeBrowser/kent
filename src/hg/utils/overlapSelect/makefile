@@ -1,7 +1,7 @@
 kentSrc = ../../..
 A = overlapSelect
 extraHeaders = rowReader.h chromAnn.h chromAnnMap.h selectTable.h coordCols.h \
-	usage.h 
+	usage.h
 extraObjects = rowReader.o chromAnn.o chromAnnMap.o selectTable.o coordCols.o
 include ${kentSrc}/inc/userApp.mk
 

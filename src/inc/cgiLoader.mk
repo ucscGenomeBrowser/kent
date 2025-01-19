@@ -15,28 +15,13 @@ cgi:: compile
 	chmod a+rx ${A:%=%${EXE}}
 	${MKDIR} ${CGI_BIN}-${USER}/loader; \
 	mv -f ${A:%=%${EXE}} ${CGI_BIN}-${USER}/loader/
-	for F in ${SQL_FILES}; do \
-	    B=`basename $$F` ; \
-	    rm -f ${DESTDIR}${CGI_BIN}-${USER}/loader/$$B ; \
-	    cp -p $$F ${DESTDIR}${CGI_BIN}-${USER}/loader/$$B ; \
-	done
 
-alpha:: strip
+alpha:: compile
 	${MKDIR} ${CGI_BIN}/loader; \
-	mv -f ${A:%=%${EXE}} ${CGI_BIN}/loader/
-	for F in ${SQL_FILES}; do \
-	    B=`basename $$F` ; \
-	    rm -f ${DESTDIR}${CGI_BIN}/loader/$$B ; \
-	    cp -p $$F ${DESTDIR}${CGI_BIN}/loader/$$B ; \
-	done
+	${STRIP} ${A:%=%${EXE}}
+	cp -f ${A:%=%${EXE}} ${CGI_BIN}/loader/
 
-beta:: strip
+beta:: compile
 	${MKDIR} ${CGI_BIN}-beta/loader; \
-	mv -f ${A:%=%${EXE}} ${CGI_BIN}-beta/loader/
-	for F in ${SQL_FILES}; do \
-	    B=`basename $$F` ; \
-	    rm -f ${DESTDIR}${CGI_BIN}-beta/loader/$$B ; \
-	    cp -p $$F ${DESTDIR}${CGI_BIN}-beta/loader/$$B ; \
-	done
-
-
+	${STRIP} ${A:%=%${EXE}}
+	cp -f ${A:%=%${EXE}} ${CGI_BIN}-beta/loader/

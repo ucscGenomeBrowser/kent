@@ -3,6 +3,13 @@ CC?=gcc
 # allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
 CFLAGS += -std=c99
 
+# This is required to get the cgiLoader.mk compile target to work.  for some
+# reason, make's %.o: %.c overrides the rule below, cause the compiles to fail
+# due to lack of -I flags in rule.  Running with make -r to not use built-in
+# rules fixes, however MAKEFLAGS += -r doesn't do the trick, this does.
+# make is a very mysterious fellow traveler.
+GNUMAKEFLAGS += -r
+
 # add additional library paths
 L += ${LDFLAGS}
 
@@ -25,6 +32,8 @@ HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../i
 
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
+# to check for differences in Linux OS version
+KERNEL_REL := $(shell uname -r)
 # to check for builds on hgwdev
 HOSTNAME = $(shell uname -n)
 
@@ -169,6 +178,10 @@ endif
 
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
+  ifneq ($(filter 3.%, ${KERNEL_REL}),)
+     # older linux needed libconv
+    XXXICONVLIB=-liconv
+  endif
 else
   ifeq (${ICONVLIB},)
     ICONVLIB=-liconv
@@ -475,7 +488,6 @@ CVDIR=${HOME}/kent/src/hg/makeDb/trackDb/cv/alpha
 PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
-
 
 CC_PROG_OPTS = ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC}
 %.o: %.c
