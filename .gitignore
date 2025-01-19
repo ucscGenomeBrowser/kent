@@ -14,8 +14,8 @@ src/htslib/version.h
 *.gcno
 
 .emacs.bak/
-src/hg/pslCDnaFilter/algo.msg
-src/hg/pslCDnaFilter/usage.msg
+src/hg/pslCDnaFilter/algo.h
+src/hg/pslCDnaFilter/usage.h
 
 compiled/
 
@@ -26,7 +26,7 @@ compiled/
 src/hg/hgGateway/hgGateway.html.h
 src/hg/hgPhyloPlace/phyloPlace
 src/isPcr/webPcr/webPcr
-src/utils/pslMap/usage.msg
+src/utils/pslMap/usage.h
 src/webBlat/webBlat
 
 # test results
@@ -54,7 +54,7 @@ src/hg/liftAcross/tests/testOut.bed
 src/hg/liftAcross/tests/testOutput.gp
 src/hg/sqlToXml/test/visiGeneXml/out.xml
 src/hg/utils/bedMergeAdjacent/tests/output.bed
-src/hg/utils/overlapSelect/usage.msg
+src/hg/utils/overlapSelect/usage.h
 src/utils/bedGeneParts/firstCodingSplice.out
 src/utils/bedGeneParts/firstExon.out
 src/utils/bedGeneParts/introns.out

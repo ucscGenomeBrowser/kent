@@ -10,18 +10,19 @@
 ########################################################################
 
 include ${kentSrc}/inc/userApp.mk
+include ${kentSrc}/inc/cgiVars.mk
 
-cgi:: compile
+# this target uses CGI_BIN_DEST set in cgiVars.mk to do any of the CGI targers
+cgi_any:: compile
 	chmod a+rx ${A:%=%${EXE}}
-	${MKDIR} ${CGI_BIN}-${USER}/loader; \
-	mv -f ${A:%=%${EXE}} ${CGI_BIN}-${USER}/loader/
+	${MKDIR} ${CGI_BIN_DEST}/loader
+	chmod a+rx ${A:%=%${EXE}}
+	mv -f ${A:%=%${EXE}} ${CGI_BIN_DEST}/loader/
+	for F in ${SQL_FILES}; do \
+	    B=`basename $$F` ; \
+	    cp -fp $$F ${CGI_BIN_DEST}/loader/$$B ; \
+	done
 
-alpha:: compile
-	${MKDIR} ${CGI_BIN}/loader; \
-	${STRIP} ${A:%=%${EXE}}
-	cp -f ${A:%=%${EXE}} ${CGI_BIN}/loader/
-
-beta:: compile
-	${MKDIR} ${CGI_BIN}-beta/loader; \
-	${STRIP} ${A:%=%${EXE}}
-	cp -f ${A:%=%${EXE}} ${CGI_BIN}-beta/loader/
+cgi:: cgi_any
+alpha:: cgi_any
+beta:: cgi_any
