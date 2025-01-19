@@ -1,3 +1,3 @@
 kentSrc = ../../..
 A = pslToBigPsl
-include $(kentSrc)/inc/userApp.mk
+include $(kentSrc)/inc/cgiLoader.mk

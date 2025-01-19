@@ -1,5 +1,5 @@
 kentSrc = ../../..
 A = hgLoadMaf hgLoadMafSummary
-include ${kentSrc}/inc/userApp.mk
+include ${kentSrc}/inc/cgiLoader.mk
 
 

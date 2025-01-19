@@ -1,5 +1,5 @@
 kentSrc = ../../..
-A = hgGoldGapGl hgLoadGap
+iA = hgGoldGapGl hgLoadGap
 extraHeaders = ntContig.h
 extraObjects = ntContig.o
 include ${kentSrc}/inc/userApp.mk
