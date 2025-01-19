@@ -20,7 +20,7 @@ cgi_any:: compile
 	mv -f ${A:%=%${EXE}} ${CGI_BIN_DEST}/loader/
 	for F in ${SQL_FILES}; do \
 	    B=`basename $$F` ; \
-	    cp -fp $$F ${CGI_BIN_DEST}/loader/$$B ; \
+	    cp -fp --remove-destination $$F ${CGI_BIN_DEST}/loader/$$B ; \
 	done
 
 cgi:: cgi_any
