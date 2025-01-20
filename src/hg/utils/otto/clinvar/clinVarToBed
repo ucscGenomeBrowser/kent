@@ -182,7 +182,9 @@ def shortenName(name):
             shortName = name
         else:
             # strip away the final description like " (p.Ala184del)"
-            name = name.split(" ")[0].split("[")[0].split("(")[0]
+            if not name.startswith("g.("):
+                # do not strip anything anymore is all we have the g. notation as we would end up with just g.
+                name = name.split(" ")[0].split("[")[0].split("(")[0]
             shortName = name
 
         if name.endswith("del"):
