@@ -224,7 +224,7 @@ if (hash->elCount)
     boolean isSplit = TRUE;
     /* Make up range query. */
     safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
-    if (isHubTrack(tg->table) || !hTableExists(database, fullName))
+    if (tg->isBigBed || !hTableExists(database, fullName))
 	{
 	strcpy(fullName, tg->table);
 	isSplit = FALSE;

@@ -3,12 +3,12 @@ var debugCartJson = true;
 
 function prettyFileSize(num) {
     if (!num) {return "0B";}
-    if (num < (1000 * 1024)) {
-        return `${(num/1000).toFixed(1)}KB`;
-    } else if (num < (1000 * 1000 * 1024)) {
-        return `${((num/1000)/1000).toFixed(1)}MB`;
+    if (num < (1024 * 1024)) {
+        return `${(num/1024).toFixed(1)}KB`;
+    } else if (num < (1024 * 1024 * 1024)) {
+        return `${((num/1024)/1024).toFixed(1)}MB`;
     } else {
-        return `${(((num/1000)/1000)/1000).toFixed(1)}GB`;
+        return `${(((num/1024)/1024)/1024).toFixed(1)}GB`;
     }
 }
 
@@ -102,10 +102,8 @@ var hubCreate = (function() {
     };
 
     function getTusdEndpoint() {
-        // return the port and basepath of the tusd server
-        // NOTE: the port and basepath are specified in hg.conf
-        //let currUrl = parseUrl(window.location.href);
-        return "https://hgwdev-hubspace.gi.ucsc.edu/files";
+        // this variable is set by hgHubConnect and comes from hg.conf value
+        return tusdEndpoint;
     }
 
     let extensionMap = {
@@ -129,8 +127,7 @@ var hubCreate = (function() {
     function detectFileType(fileName) {
         let fileLower = fileName.toLowerCase();
         for (let fileType in extensionMap) {
-            for (let extIx in extensionMap[fileType]) {
-                let ext = extensionMap[fileType][extIx];
+            for (let ext of extensionMap[fileType]) {
                 if (fileLower.endsWith(ext)) {
                     return fileType;
                 }
@@ -141,10 +138,6 @@ var hubCreate = (function() {
         //file
         //alert(`file extension for ${fileName} not found, please explicitly select it`);
         return null;
-    }
-
-    function defaultFileType(file) {
-        return detectFileType(file);
     }
 
     function defaultDb() {
@@ -365,7 +358,8 @@ var hubCreate = (function() {
             let viewBtn = document.createElement("button");
             viewBtn.textContent = "View in Genome Browser";
             viewBtn.type = 'button';
-            viewBtn.addEventListener("click", function() {
+            viewBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
                 viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
             });
             container.appendChild(viewBtn);
@@ -379,6 +373,9 @@ var hubCreate = (function() {
         let table = $("#filesTable").DataTable();
         let rows = table.rows((idx, data) => pathList.includes(data.fullPath));
         rows.remove().draw();
+        let toKeep = (elem) => !pathList.includes(elem.fullPath);
+        uiState.fileList = uiState.fileList.filter(toKeep);
+        history.replaceState(uiState, "", document.location.href);
     }
 
     function addFileToHub(rowData) {
@@ -770,7 +767,7 @@ var hubCreate = (function() {
                 this.uppy.on("file-added", (file) => {
                     // add default meta data for genome and fileType
                     console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": defaultFileType(file.name), "parentDir": hubNameDefault});
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": detectFileType(file.name), "parentDir": hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
                     } else {
@@ -795,9 +792,14 @@ var hubCreate = (function() {
                         this.removeBatchSelectsFromDashboard();
                     }
                 });
-                this.uppy.on("dashboard:modal-close", () => {
+                this.uppy.on("dashboard:modal-closed", () => {
                     if (this.uppy.getFiles().length < 2) {
                         this.removeBatchSelectsFromDashboard();
+                    }
+                    let allFiles = this.uppy.getFiles();
+                    let completeFiles = this.uppy.getFiles().filter((f) => f.progress.uploadComplete === true);
+                    if (allFiles.length === completeFiles.length) {
+                        this.uppy.clear();
                     }
                 });
             }
@@ -813,6 +815,10 @@ var hubCreate = (function() {
             showProgressDetails: true,
             note: "Example text in the note field",
             meta: {"genome": null, "fileType": null},
+            restricted: {requiredMetaFields: ["genome"]},
+            closeModalOnClickOutside: true,
+            closeAfterFinish: true,
+            theme: 'auto',
             metaFields: (file) => {
                 const fields = [{
                     id: 'name',
@@ -869,10 +875,9 @@ var hubCreate = (function() {
                 }];
                 return fields;
             },
-            restricted: {requiredMetaFields: ["genome"]},
-            closeModalOnClickOutside: true,
-            closeAfterFinish: true,
-            theme: 'auto',
+            doneButtonHandler: function() {
+                uppy.clear();
+            },
         };
         let tusOptions = {
             endpoint: getTusdEndpoint(),

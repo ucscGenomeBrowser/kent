@@ -844,9 +844,9 @@ static char *hTvStrings[] =
     "dense",
     "full",
     "pack",
-    "squish"
+    "squish",
+    "show"
     };
-#define hTvStringShowSameAsFull "show"
 
 enum trackVisibility hTvFromStringNoAbort(char *s)
 // Given a string representation of track visibility, return as equivalent enum.
@@ -854,8 +854,6 @@ enum trackVisibility hTvFromStringNoAbort(char *s)
 int vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
 if (vis < 0)
     {
-    if (sameString(hTvStringShowSameAsFull,s))
-	return tvShow;  // Show is the same as full!
     vis = 0;  // don't generate bogus value on invalid input
     }
 return vis;

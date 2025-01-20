@@ -30,9 +30,6 @@ char *getUserName();
 char *emailForUserName(char *userName);
 /* Fetch the email for this user from gbMembers hgcentral table */
 
-//TODO: this should probably come from hg.conf:
-#define HUB_SPACE_URL "https://hgwdev.gi.ucsc.edu/hubspace"
-
 // the various quota helper variables:
 #define HUB_SPACE_DEFAULT_QUOTA_BYTES 10000000000
 #define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 
@@ -51,7 +48,8 @@ char *stripDataDir(char *fname, char *userName);
 /* Strips the getDataDir(userName) off of fname */
 
 char *prefixUserFile(char *userName, char *fname, char *parentDir);
-/* Allocate a new string that contains the full per-user path to fname, NULL otherwise.
+/* Allocate a new string that contains the full per-user path to fname. return NULL if
+ * we cannot construct a full path because of a realpath(3) failure.
  * parentDir is optional and will go in between the per-user dir and the fname */
 
 char *hubNameFromPath(char *path);
@@ -76,22 +74,6 @@ void makeParentDirRows(char *userName, time_t lastModified, char *db, char *pare
 void removeFileForUser(char *fname, char *userName);
 /* Remove a file for this user if it exists */
 
-void removeHubForUser(char *path, char *userName);
-/* Remove a hub directory for this user (and all files in the directory), if it exists */
-
-struct userHubs *listHubsForUser(char *userName);
-/* Lists the directories for a particular user */
-
-time_t getHubLatestTime(struct userHubs *hub);
-/* Return the latest access time of the files in a hub */
-
-struct userFiles *listFilesForUserHub(char *userName, char *hubName);
-/* Get all the files for a particular hub for a particular user */
-
-char *findParentDirs(char *parentDir, char *userName, char *fname);
-/* For a given file with parentDir, go up the tree and find the full path back to
- * the rootmost parentDir */
-
 struct hubSpace *listFilesForUser(char *userName);
 /* Return the files the user has uploaded */
 
@@ -103,14 +85,5 @@ long long getMaxUserQuota(char *userName);
 
 long long checkUserQuota(char *userName);
 /* Return the amount of space a user is currently using */
-
-char *storeUserFile(char *userName, char *fileName, void *data, size_t dataSize);
-/* Give a fileName and a data stream, write the data to:
- * userdata/userStore/hashedUserName/userName/fileName
- * where hashedUserName is based on the md5sum of the userName
- * to prevent proliferation of too many directories. 
- *
- * After sucessfully saving the file, return a web accessible url
- * to the file. */
 
 #endif /* USERDATA_H */

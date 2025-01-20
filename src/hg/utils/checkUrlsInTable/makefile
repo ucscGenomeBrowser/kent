@@ -1,4 +1,4 @@
 kentSrc = ../../..
 A = checkUrlsInTable
-L += -lm ${SOCKETLIB}
+L += ${SOCKETLIB}
 include ${kentSrc}/inc/userApp.mk

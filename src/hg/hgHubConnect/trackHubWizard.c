@@ -27,29 +27,26 @@
 void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
 {
+// prefixUserFile returns a canonicalized path, or NULL if the
+// canonicalized path does not begin with the hg.conf specified userDataDir
+// TODO: make the debug information from stderr go to stdout so the user
+// can know there is a mistake somewhere, and only print the debug
+// information in the event that the filename actually begins with the
+// userDataDir so we don't tell hackers what files do and do not exist
 char *fileName = prefixUserFile(userName, fullPath, NULL);
-if (fileExists(fileName))
+if (fileName)
     {
-    fprintf(stderr, "deleting file: '%s'\n", fileName);
-    removeFileForUser(fileName, userName);
-    fflush(stderr);
-    }
-else
-    {
-    fprintf(stderr, "file '%s' does not exist\n", fileName);
-    fflush(stderr);
-    }
-}
-
-void removeHubDir(char *userName, char *cgiFileName)
-/* Remove one single hub for userName */
-{
-char *hubDir = prefixUserFile(userName, cgiEncodeFull(cgiFileName), NULL);
-if (isDirectory(hubDir))
-    {
-    fprintf(stderr, "deleting directory: '%s'\n", hubDir);
-    removeHubForUser(hubDir, userName);
-    fflush(stderr);
+    if (fileExists(fileName))
+        {
+        fprintf(stderr, "deleting file: '%s'\n", fileName);
+        removeFileForUser(fileName, userName);
+        fflush(stderr);
+        }
+    else
+        {
+        fprintf(stderr, "file '%s' does not exist\n", fileName);
+        fflush(stderr);
+        }
     }
 }
 
@@ -176,6 +173,7 @@ webIncludeResourceFile("hgMyData.css");
 // get the current files stored for this user
 outFilesForUser();
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
+jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }
@@ -196,7 +194,10 @@ void generateApiKey(struct cartJson *cj, struct hash *paramHash)
 {
 char *userName = getUserName();
 if (!userName)
+    {
+    jsonWriteString(cj->jw, "error", "generateApiKey: not logged in");
     return;
+    }
 char *apiKey = makeRandomKey(256); // just needs some arbitrary length
 // save this key to the database for this user, the 'on duplicate' part automatically revokes old keys
 struct sqlConnection *conn = hConnectCentral();

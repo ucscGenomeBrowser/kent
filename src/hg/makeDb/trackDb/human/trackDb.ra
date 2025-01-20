@@ -206,6 +206,20 @@ type bed 3
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
 
+        track varaico
+        release alpha
+        shortLabel Varaico Variants
+        longLabel Varaico Variants extracted from full text publications
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/bbi/varaico.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$"
+
 track caseControl
 compositeTrack on
 shortLabel Case Control

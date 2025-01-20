@@ -19,6 +19,8 @@
 #include "hdb.h"
 #include "hubSpace.h"
 #include "hubSpaceQuotas.h"
+#include "errCatch.h"
+#include <limits.h>
 
 char *getUserName()
 /* Query the right system for the users name */
@@ -75,7 +77,15 @@ return NULL;
 char *getHubDataDir(char *userName, char *hub)
 {
 char *dataDir = getDataDir(userName);
-return catTwoStrings(dataDir, hub);
+return catTwoStrings(dataDir, cgiEncode(hub));
+}
+
+char *hubSpaceUrl = NULL;
+static char *getHubSpaceUrl()
+{
+if (!hubSpaceUrl)
+    hubSpaceUrl = cfgOption("hubSpaceUrl");
+return hubSpaceUrl;
 }
 
 char *webDataDir(char *userName)
@@ -88,29 +98,36 @@ if (userName)
     char *userPrefix = md5HexForString(encUserName);
     userPrefix[2] = '\0';
     struct dyString *userDirDy = dyStringNew(0);
-    dyStringPrintf(userDirDy, "%s/%s/%s/", HUB_SPACE_URL, userPrefix, encUserName);
+    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix, encUserName);
     retUrl = dyStringCannibalize(&userDirDy);
     }
 return retUrl;
 }
 
 char *prefixUserFile(char *userName, char *fname, char *parentDir)
-/* Allocate a new string that contains the full per-user path to fname, NULL otherwise.
+/* Allocate a new string that contains the full per-user path to fname. return NULL if
+ * we cannot construct a full path because of a realpath(3) failure.
  * parentDir is optional and will go in between the per-user dir and the fname */
 {
 char *pathPrefix = getDataDir(userName);
+char *path = NULL;
 if (pathPrefix)
     {
     if (parentDir)
         {
         struct dyString *ret = dyStringCreate("%s%s%s%s", pathPrefix, parentDir, lastChar(parentDir) == '/' ? "" : "/", fname);
-        return dyStringCannibalize(&ret);
+        path = dyStringCannibalize(&ret);
         }
     else
-        return catTwoStrings(pathPrefix, fname);
+        path = catTwoStrings(pathPrefix, fname);
+    char canonicalPath[PATH_MAX];
+    realpath(path, canonicalPath);
+    // after canonicalizing the path, make sure it starts with the userDataDir, to prevent
+    // deleting files like blah/../../../../systemFile.text
+    if (startsWith(pathPrefix, canonicalPath))
+        return cloneString(canonicalPath);
     }
-else
-    return NULL;
+return NULL;
 }
 
 static boolean checkHubSpaceRowExists(struct hubSpace *row)
@@ -127,8 +144,6 @@ char *hubNameFromPath(char *path)
 /* Return the last directory component of path. Assume that a '.' char in the last component
  * means that component is a filename and go back further */
 {
-fprintf(stderr, "hubNameFromPath('%s')\n", path);
-fflush(stderr);
 char *copy = cloneString(path);
 if (endsWith(copy, "/"))
     trimLastChar(copy);
@@ -255,12 +270,22 @@ FILE *f = mustOpen(hubFileName, "a");
 char *trackDbType = type;
 if (sameString(type, "bigBed"))
     {
-    // figure out the type based on the bbiFile header
-    struct bbiFile *bbi = bigBedFileOpen(bigFileLocation);
-    char tdbType[32];
-    safef(tdbType, sizeof(tdbType), "bigBed %d%s", bbi->definedFieldCount, bbi->fieldCount > bbi->definedFieldCount ? " +" : "");
-    trackDbType = tdbType;
-    bigBedFileClose(&bbi);
+    // don't errAbort if the file is actually not a bigBed
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        // figure out the type based on the bbiFile header
+        struct bbiFile *bbi = bigBedFileOpen(bigFileLocation);
+        char tdbType[32];
+        safef(tdbType, sizeof(tdbType), "bigBed %d%s", bbi->definedFieldCount, bbi->fieldCount > bbi->definedFieldCount ? " +" : "");
+        trackDbType = tdbType;
+        bigBedFileClose(&bbi);
+        }
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    // NOTE: if the file was not actually a bigBed (and so bigBedFileOpen errAborted), we
+    // just want to prevent the errAbort, not prevent creating the stanza itself, as that
+    // would be majorly confusing to the user, so just continue on here
     }
 fprintf(f, "track %s\n"
     "bigDataUrl %s\n"
@@ -332,90 +357,7 @@ if (fileExists(fname))
     // delete the table row
     deleteHubSpaceRow(fname, userName);
     }
-}
-
-void removeHubForUser(char *path, char *userName)
-/* Remove a hub directory for this user (and all files in the directory), if it exists */
-{
-if (!startsWith(getDataDir(userName), path))
-    return;
-if (isDirectory(path))
-    {
-    struct fileInfo *f, *flist = listDirX(path, NULL, TRUE);
-    for (f = flist; f != NULL; f = f->next)
-        mustRemove(f->name);
-    // now we have deleted all the files in the dir we can safely rmdir
-    mustRemove(path);
-    deleteHubSpaceRow(path, userName);
-    }
-}
-
-static time_t getFileListLatestTime(struct userFiles *userFiles)
-/* Return the greatest last access time of the files in userFiles->fileList */
-{
-if (!userFiles->fileList)
-    errAbort("no files in userFiles->fileList");
-time_t modTime = 0;
-struct fileInfo *f;
-for (f = userFiles->fileList; f != NULL; f = f->next)
-    {
-    if (f->lastAccess > modTime)
-        {
-        modTime = f->lastAccess;
-        }
-    }
-return modTime;
-}
-
-time_t getHubLatestTime(struct userHubs *hub)
-/* Return the latest access time of the files in a hub */
-{
-// NOTE: every hub is guaranteed to have at least one file
-return getFileListLatestTime(hub->fileList);
-}
-
-char *findParentDirs(char *parentDir, char *userName, char *fname)
-/* For a given file with parentDir, go up the tree and find the full path back to
- * the rootmost parentDir */
-{
-return NULL;
-}
-
-struct userFiles *listFilesForUserHub(char *userName, char *hubName)
-/* Get all the files for a particular hub for a particular user */
-{
-struct userFiles *userListing;
-AllocVar(userListing);
-char *path = getHubDataDir(userName, hubName);
-struct fileInfo *fiList = listDirX(path,NULL,FALSE);
-userListing->userName = userName;
-userListing->fileList = fiList;
-return userListing;
-}
-
-struct userHubs *listHubsForUser(char *userName)
-/* Lists the directories for a particular user */
-{
-struct userHubs *userHubs = NULL;
-char *path = getDataDir(userName);
-struct fileInfo *fi, *fiList = listDirX(path,NULL,FALSE);
-for (fi = fiList; fi != NULL; fi = fi->next)
-    {
-    if (fi->isDir)
-        {
-        struct userHubs *hub;
-        AllocVar(hub);
-        hub->hubName = cloneString(fi->name);
-        hub->userName = cloneString(userName);
-        char hubPath[PATH_LEN];
-        safef(hubPath, sizeof(hubPath), "%s%s", path, fi->name);
-        struct userFiles *hubFileList = listFilesForUserHub(userName, hub->hubName);
-        hub->lastModified = getFileListLatestTime(hubFileList);
-        hub->fileList = hubFileList;
-        slAddHead(&userHubs, hub);
-        }
-    }
-return userHubs;
+// TODO: we should also modify the hub.txt associated with this file
 }
 
 struct hubSpace *listFilesForUser(char *userName)
@@ -477,25 +419,4 @@ for (hubSpace = hubSpaceList; hubSpace != NULL; hubSpace = hubSpace->next)
     quota += hubSpace->fileSize;
     }
 return quota;
-}
-
-char *storeUserFile(char *userName, char *newFileName, void *data, size_t dataSize)
-/* Give a fileName and a data stream, write the data to:
- * userDataDir/hashedUserName/userName/fileName
- * where userDataDir comes from hg.conf and
- * hashedUserName is based on the md5sum of the userName
- * to prevent proliferation of too many directories.
- *
- * After sucessfully saving the file, return a web accessible url
- * to the file. */
-{
-char *userDir = getDataDir(userName);
-makeDirsOnPath(userDir);
-char *pathToFile = catTwoStrings(userDir, newFileName);
-FILE *newFile = mustOpen(pathToFile, "wb");
-// the data will start with a line feed so get rid of that
-mustWrite(newFile, data, dataSize);
-// missing an EOF?
-carefulClose(&newFile);
-return pathToFile;
 }

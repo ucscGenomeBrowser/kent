@@ -117,12 +117,24 @@ function Doc(body, metadata, variables)
 
 
   if metadata["title"] then
+    add("<!DOCTYPE HTML>")
+    add("<!-- DO NOT EDIT THE HTDOCS VERSION OF THIS FILE. THIS FILE IS AUTOMATICALLY")
+    add("     GENERATED FROM A MARKDOWN FILE IN kent/src/product. MAKE ANY EDITS TO")
+    add("     THIS PAGE THERE, THEN RUN MAKE in kent/src/product/mirrorDocs, AND FOLLOW THE")
+    add("     INSTRUCTIONS TO COMMIT THIS PAGE INTO git.")
+    add("     Please read the file kent/src/product/Note-To-QA.txt for details.")
+    add("     -->")
+    add("<!--#set var=\"TITLE\" value=\"" .. metadata["title"] .. "\" -->")
+    add("<!--#set var=\"ROOT\" value=\"..\" -->")
+    add("")
+    add("<!-- Relative paths to support mirror sites with non-standard GB docs install -->")
+    add("<!--#include virtual=\"$ROOT/inc/gbPageStart.html\" -->")
+    add("")
     add("<h1>" .. metadata["title"] .. "</h1>")
   else
     add("<h1>No title defined in document, first line must be % mytitle </h1>")
   end
 
-  add("<h2>Contents</h2>")
   for i, h in ipairs(headers) do
     idStr = simplifyId(h)
     add("<h6><a href='#" .. idStr .. "'>" .. h .. "</a></h6>")
@@ -219,9 +231,6 @@ function Image(s, src, tit, attr)
          escape(tit,true) .. "'/>"
 end
 
-function RawInline(s)
-  return "<code>" .. escape(s) .. "</code>"
-end
 
 function Code(s, attr)
   return "<code" .. attributes(attr) .. ">" .. escape(s) .. "</code>"
@@ -410,6 +419,10 @@ function Table(caption, aligns, widths, headers, rows)
   end
   add('</table')
   return table.concat(buffer,'\n')
+end
+
+function RawInline(s)
+  return "<code>" .. escape(s) .. "</code>"
 end
 
 function RawBlock(format, str)
