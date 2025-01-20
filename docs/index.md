@@ -1,18 +1,16 @@
-% Genome Browser Tutorials
-
-# UCSC Genome Browser Help
+---
+title: "Genome Browser Tutorials"
+---
 
 The UCSC Genome Browser allows scientists to visualize genomic data from a wide variety of sources,
-including BLAH BLAH BLAH, on the genome of their choice. Alongside publicly available data, the
-Genome Browser allows for the visualization of one's own data and BLAH. 
+on the genome of their choice. It supports custom annotations, remote-hosted data, and various data
+formats. Additional tools include tools to create and share permanent links of Browser snapshots, BLAT
+to quickly align genomic sequences, and the Table Browser to interatively extract and browse all hosted data.
 
 ## Tutorials
 
-
-Here are some tutorials on the UCSC Genome Browser and some of our most popular
-tools to get you started. Each tutorial includes annotated screenshots, a step-by-step walkthrough
-of a basic query, and BLAH.
-
+The tutorials below cover some of our most popular tools. Each tutorial includes annotated 
+screenshots, a step-by-step walkthrough, and an interactive tutorial.
 
 <div class="row" style="padding-top: 15px">
 <div class="col-md-6">
@@ -20,22 +18,30 @@ of a basic query, and BLAH.
 <h3 class="panel-title" style="width: -webkit-fill-available;"
 >Genome Browser 101</h3>
 
-Learn how to use the UCSC Genome Browser! (15 min)
+A basic introduction of the most common UCSC Genome Browser usage. This includes 
+the navigation menu, configuration of the tracks display, and where to find additional resources. (15 min)
 
 <p style="text-align: end">
 <button>[View Tutorial](gb101.html)</button>
 </p>
 </div>
 </div>
+
 <div class="col-md-6">
 <div class="panel panel-default" style="padding-bottom: 10px">
-<h3 class="panel-title" style="width: -webkit-fill-available;"
->Table Browser Tutorial</h3>
+<h3 class="panel-title" style="width: -webkit-fill-available;">
+    Gateway Page
+    <span 
+        style="color: red; font-size: smaller; margin-left: 10px; cursor: pointer;" 
+        title="Subscribe to our news mailing list to be the first to learn about new tutorials.">
+        Coming soon!
+    </span>
+</h3>
 
-Learn the basics of querying the UCSC Table Browser! (15 min)
+Learn how best to use the Gateway page to find assemblies and download shortcuts.
 
 <p style="text-align: end">
-<button>[View Tutorial](tb101.html)</button>
+<button>Coming soon!</button>
 </p>
 </div>
 </div>
@@ -44,26 +50,23 @@ Learn the basics of querying the UCSC Table Browser! (15 min)
 <div class="row" style="padding-top: 15px">
 <div class="col-md-6">
 <div class="panel panel-default" style="padding-bottom: 10px">
-<h3 class="panel-title" style="width: -webkit-fill-available;"
->Configuring the Genome Browser Display</h3>
+<h3 class="panel-title" style="width: -webkit-fill-available;">
+    Advanced Tracks Tutorial
+    <span
+        style="color: red; font-size: smaller; margin-left: 10px; cursor: pointer;"
+        title="Subscribe to our news mailing list to be the first to learn about new tutorials.">
+        Coming soon!
+    </span>
+</h3>
 
-Learn the ins and outs of configurng the Genome Browser display (15 min)
+Learn how to configure different track types and visibilities while exploring our most popular datasets.
+
 
 <p style="text-align: end">
-<button>[View Tutorial](gbConfig.html)</button>
+<button>Coming soon!</button>
 </p>
 </div>
 </div>
-<div class="col-md-6">
-<div class="panel panel-default" style="padding-bottom: 10px">
-<h3 class="panel-title" style="width: -webkit-fill-available;"
->Custom Track Basics</h3>
 
-Learn how to load, update, and manage your custom tracks! (15 min)
 
-<p style="text-align: end">
-<button>[View Tutorial](ctBasics.html)</button>
-</p>
-</div>
-</div>
 </div>
