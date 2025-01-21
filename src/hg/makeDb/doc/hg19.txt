@@ -35620,3 +35620,20 @@ bedToBigBed -type=bed9+ -as=bedExample2.as -tab -extraIndex=name output_populati
 cp /hive/users/gperez2/tracks/decipher/hg19/population_cnv_grch37.bb /hive/data/genomes/hg19/bed/decipher/population_cnv.bb
 
 ln -s /hive/data/genomes/hg19/bed/decipher/population_cnv.bb /gbdb/hg19/decipher/population_cnv.bb
+
+##############################################################################
+# alphaMissense ticket #32269 (Jeltje, Jan 2025)
+# based on REVEL and CADD
+mkdir -p /hive/data/genomes/hg19/bed/alphaMissense/
+cd /hive/data/genomes/hg19/bed/alphaMissense
+wget https://storage.googleapis.com/dm_alphamissense/AlphaMissense_hg19.tsv.gz
+time python ~/kent/src/hg/makeDb/outside/alphaMissense/alphaMissenseToWig.py AlphaMissense_hg19.tsv.gz
+wigToBigWig a.wig ../../chrom.sizes a.bw &
+wigToBigWig c.wig ../../chrom.sizes c.bw &
+wigToBigWig g.wig ../../chrom.sizes g.bw &
+wigToBigWig t.wig ../../chrom.sizes t.bw &
+wait
+
+# #Colors were added using the script
+kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py
+

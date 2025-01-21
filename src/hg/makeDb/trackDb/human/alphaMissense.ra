@@ -1,0 +1,56 @@
+track alphaMissense
+shortLabel alphaMissense
+longLabel alphaMissense Score for all possible single-basepair mutations (zoom in for scores)
+type bigWig
+compositeTrack on
+visibility dense
+group phenDis
+color 100,130,160
+html alphaMissense.html
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+
+        track alphaMissense_A
+        shortLabel Mutation: A
+        longLabel alphaMissense Score: Mutation is A
+        type bigWig
+        parent alphaMissense on
+        visibility dense
+        bigDataUrl /gbdb/$D/alphaMissense/a.bw
+        maxHeightPixels 128:20:8
+	viewLimits 0:1
+	setColorWith /gbdb/$D/alphaMissense/a.color.bb
+
+        track alphaMissense_C
+        shortLabel Mutation: C
+        longLabel alphaMissense Score: Mutation is C
+        type bigWig
+        parent alphaMissense on
+        visibility dense
+        bigDataUrl /gbdb/$D/alphaMissense/c.bw
+        maxHeightPixels 128:20:8
+	viewLimits 0:1
+	setColorWith /gbdb/$D/alphaMissense/c.color.bb
+
+        track alphaMissense_G
+        shortLabel Mutation: G
+        longLabel alphaMissense Score: Mutation is G
+        type bigWig
+        parent alphaMissense on
+        visibility dense
+        bigDataUrl /gbdb/$D/alphaMissense/g.bw
+        maxHeightPixels 128:20:8
+	viewLimits 0:1
+	setColorWith /gbdb/$D/alphaMissense/g.color.bb
+
+        track alphaMissense_T
+        shortLabel Mutation: T
+        longLabel alphaMissense Score: Mutation is T
+        type bigWig
+        parent alphaMissense on
+        visibility dense
+        bigDataUrl /gbdb/$D/alphaMissense/t.bw
+        maxHeightPixels 128:20:8
+	viewLimits 0:1
+	setColorWith /gbdb/$D/alphaMissense/t.color.bb
+
