@@ -1,0 +1,172 @@
+<h2>Description</h2>
+
+<p> This track collection shows <a href="https://sites.google.com/site/revelgenomics/"
+target="_blank">Rare Exome Variant Ensemble Learner</a> (alphaMissense) scores for predicting
+the deleteriousness of each nucleotide change in the genome.
+</p>
+
+<p>
+alphaMissense is an ensemble method for predicting the pathogenicity of missense variants 
+based on a combination of scores from 13 individual tools: MutPred, FATHMM v2.3, 
+VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, 
+SiPhy, phyloP, and phastCons. alphaMissense was trained using recently discovered pathogenic 
+and rare neutral missense variants, excluding those previously used to train its 
+constituent tools. The alphaMissense score for an individual missense variant can range 
+from 0 to 1, with higher scores reflecting greater likelihood that the variant is 
+disease-causing. 
+</p>
+
+<p>Most authors of deleteriousness scores argue against using fixed cutoffs in
+diagnostics. But to give an idea of the meaning of the score value, the alphaMissense
+authors note: "For example, 75.4% of disease mutations but only 10.9% of
+neutral variants (and 12.4% of all ESVs) have a alphaMissense score above 0.5,
+corresponding to a sensitivity of 0.754 and specificity of 0.891. Selecting a
+more stringent alphaMissense score threshold of 0.75 would result in higher specificity
+but lower sensitivity, with 52.1% of disease mutations, 3.3% of neutral
+variants, and 4.1% of all ESVs being classified as pathogenic". (Figure S1 of
+the reference below)
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+There are five subtracks for this track:
+<ul>
+<li>
+<p>Four lettered subtracks, one for every nucleotide, showing
+scores for mutation from the reference to that
+nucleotide. All subtracks show the alphaMissense ensemble score on mouseover. Across the exome, 
+there are three values per position, one for every possible
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing
+the reference allele, e.g. A to A, is always set to zero, "0.0". alphaMissense only
+takes into account amino acid changes, so a nucleotide change that results in no
+amino acid change (synonymous) also receives the score "0.0". 
+</p><p>
+In rare cases, two scores are output for the same variant at a 
+genome position. This happens when there are two transcripts with
+different splicing patterns and since some input scores for alphaMissense take into account
+the sequence context, the same mutation can get two different scores. In these cases,
+only the maximum score is shown in the four per-nucleotide subtracks. The complete set of 
+scores are shown in the Overlaps track.
+</p>
+
+<li>
+<p>One subtrack, Overlaps, shows alternate alphaMissense scores when applicable. 
+In rare cases (0.05% of genome positions), multiple scores exist with a single variant, 
+due to multiple, overlapping transcripts. For example, if there are 
+two transcripts and one covers only half of an exon, then the amino acids
+that overlap both transcripts will get two different alphaMissense scores, since some of the underlying 
+scores (polyPhen for example) take into account the amino acid sequence context and 
+this context is different depending on the transcript.
+For these cases, this subtrack contains at least two
+graphical features, for each affected genome position. Each feature is labeled
+with the mutation (A, C, T or G). The transcript IDs and resulting score is 
+shown when hovering over the feature or clicking
+it. For the large majority of the genome, this subtrack has no features.
+This is because alphaMissense usually outputs only a single score per nucleotide and 
+most transcript-derived amino acid sequence contexts are identical.
+</p>
+<p>
+Note that in most diagnostic assays, variants are called using WGS
+pipelines, not RNA-seq. As a result, variants are originally located on the
+genome, not on transcripts, and the choice of transcript is made by
+a variant calling software using a heuristic. In addition, clinically, in the
+field, some transcripts have been agreed-on as more relevant for a disease, e.g.
+because only certain transcripts may be expressed in the relevant tissue. So
+the choice of the most relevant transcript, and as such the alphaMissense score, may be
+a question of manual curation standards rather than a result of the variant itself.
+</p>
+</ul>
+
+<p>
+When using this track, zoom in until you can see every basepair at the
+top of the display. Otherwise, there are several nucleotides per pixel under 
+your mouse cursor and no score will be shown on the mouseover tooltip.
+</p>
+
+<p><b>Track colors</b></p>
+<p>
+This track is colored according to <a target="_blank" href="https://www.sciencedirect.com/science/article/pii/S000292972200461X">Table 2 in Vikas et al</a>. The colors represent the recommended ACMG/AMP score cutoffs.
+
+<table style="text-align: left;">
+  <thead>
+    <tr>
+      <th>Range</th>
+      <th>Classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&ge; .773</td>
+      <td style="color: rgb(255,0,0);">Pathogenic</td>
+    </tr>
+    <tr>
+      <td>.772 - .184</td>
+      <td style="color: rgb(192,192,192);">Neutral</td>
+    </tr>
+    <tr>
+      <td>&le; .183</td>
+      <td style="color: rgb(80,166,230);">Benign</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For hg38, note that the data was converted from the hg19 data using the UCSC
+liftOver program, by the alphaMissense authors. This can lead to missing values or
+duplicated values. When a hg38 position is annotated with two scores due to the
+lifting, the authors removed all the scores for this position. They did the same when
+the reference allele has changed from hg19 to hg38.  Also, on hg38, the track has
+the "lifted" icon to indicate
+this. You can double-check if a nucleotide
+position is possibly affected by the lifting procedure by activating the track
+"Hg19 Mapping" under "Mapping and Sequencing".
+</p>
+
+<h2>Data access</h2>
+<p>
+alphaMissense scores are available at the 
+<a href="https://sites.google.com/site/revelgenomics/" target="_blank">
+alphaMissense website</a>.  
+The site provides precomputed alphaMissense scores for all possible human missense variants 
+to facilitate the identification of pathogenic variants among the large number of 
+rare variants discovered in sequencing studies.
+
+</p>
+
+<p>
+The alphaMissense data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. 
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/" target="_blank">our download server</a>.
+The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to given range, e.g.
+<br>&nbsp;
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/a.bw stdout</tt>
+<br>
+
+<h2>Methods</h2>
+
+<p>
+Data were converted from the files provided on
+<a href="https://storage.cloud.google.com/dm_alphamissense"
+target = "_blank">the alphaMissense Downloads website</a>. As with all other tracks,
+a full log of all commands used for the conversion is available in our 
+<a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source repository</a>, for <a target=_blank href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a> and <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/alphaMissense.txt">hg38</a>. The release used for each assembly is shown on the track description page.
+
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the alphaMissense development team for providing precomputed data and fixing duplicated values in the hg38 files.
+</p>
+
+<h2>References</h2>
+<p>
+</p>
+
