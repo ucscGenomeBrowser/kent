@@ -13,12 +13,13 @@ as likely benign using a cutoff yielding 90% precision on the ClinVar dataset.
 <h2>Display Conventions and Configuration</h2>
 <p>There are four lettered subtracks, one for every nucleotide, showing
 scores for mutation from the reference to that
-nucleotide. All subtracks show the AlphaMissense ensemble score on mouseover. Across the exome, 
+nucleotide. All subtracks show the AlphaMissense score on mouseover. Across the exome, 
 there are three values per position, one for every possible
 nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing
 the reference allele, e.g. A to A, is always set to zero, "0.0". AlphaMissense only
 takes into account amino acid changes, so a nucleotide change that results in no
-amino acid change (synonymous) also receives the score "0.0". 
+amino acid change (synonymous) is not scored. These are shown in the tracks
+with score "0.0". 
 
 <p>
 When using this track, zoom in until you can see every basepair at the
