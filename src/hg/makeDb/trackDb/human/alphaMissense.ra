@@ -1,5 +1,5 @@
 track alphaMissense
-shortLabel alphaMissense
+shortLabel AlphaMissense
 longLabel AlphaMissense Score for all possible single-basepair mutations (zoom in for scores)
 type bigWig
 compositeTrack on
