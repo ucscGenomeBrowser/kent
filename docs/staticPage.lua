@@ -421,8 +421,13 @@ function Table(caption, aligns, widths, headers, rows)
   return table.concat(buffer,'\n')
 end
 
-function RawInline(s)
-  return "<code>" .. escape(s) .. "</code>"
+function RawInline(format, str)
+  if format == "html" then
+    return str
+  else
+    --- not sure what to do here for PDF or ebook output... ---
+    return str
+  end
 end
 
 function RawBlock(format, str)
