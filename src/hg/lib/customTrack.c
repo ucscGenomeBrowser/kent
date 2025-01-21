@@ -847,7 +847,7 @@ if (isNotEmpty(customText))
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        newCts = customFactoryParse(genomeDb, customText, FALSE, &browserLines);
+        newCts = customFactoryParse(genomeDb, customText, FALSE, fileName, &browserLines);
         if (html)
             {
             for (ct = newCts; ct != NULL; ct = ct->next)
@@ -906,7 +906,7 @@ if (customTracksExist(cart, &ctFileName))
         if (cartOptionalString(cart, "ctTest") != NULL)
             errAbort("ctTest set");
         ctList =
-            customFactoryParse(genomeDb, ctFileName, TRUE, retBrowserLines);
+            customFactoryParse(genomeDb, ctFileName, TRUE, fileName, retBrowserLines);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)

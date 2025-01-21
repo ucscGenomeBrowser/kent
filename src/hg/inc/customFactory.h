@@ -77,11 +77,11 @@ void customFactoryAdd(struct customFactory *fac);
 /* Add factory to global custom track factory list. */
 
 struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
-	struct slName **retBrowserLines);
+	char* fileName, struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 
-struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
+struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile, char* fileName,
 					    struct slName **retBrowserLines, boolean doParallelLoad);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). 

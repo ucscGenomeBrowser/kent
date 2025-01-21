@@ -4183,7 +4183,7 @@ return (startsWith("big", type)
 }
 
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
-	boolean isFile, struct slName **retBrowserLines,
+	boolean isFile, char *fileName, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb, boolean doParallelLoad)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track
@@ -4254,9 +4254,12 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * and no track line. */
         {
         char defaultLine[256];
+        char *trackDesc = CT_DEFAULT_TRACK_DESCR;
+        if (fileName)
+            trackDesc = fileName;
         safef(defaultLine, sizeof defaultLine,
                         "track name='%s' description='%s'",
-                        CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
+                        CT_DEFAULT_TRACK_NAME, trackDesc);
         track = trackLineToTrack(genomeDb, defaultLine, 1);
         customPpReuse(cpp, line);
 	}
@@ -4487,20 +4490,20 @@ return trackList;
 }
 
 struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
-	struct slName **retBrowserLines)
+	char* fileName, struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 {
-return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE, TRUE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, fileName, retBrowserLines, TRUE, TRUE);
 }
 
-struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
+struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile, char* fileName,
 					    struct slName **retBrowserLines, boolean doParallelLoad)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). 
  * If doParallelLoad is true, load the big tracks */
 {
-return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE, doParallelLoad);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, fileName, retBrowserLines, FALSE, doParallelLoad);
 }
 
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
