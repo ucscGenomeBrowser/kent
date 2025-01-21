@@ -4254,12 +4254,18 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * and no track line. */
         {
         char defaultLine[256];
+
         char *trackDesc = CT_DEFAULT_TRACK_DESCR;
+        char *trackName = CT_DEFAULT_TRACK_NAME;
         if (fileName)
+            {
+            trackName = fileName;
             trackDesc = fileName;
+            }
+
         safef(defaultLine, sizeof defaultLine,
                         "track name='%s' description='%s'",
-                        CT_DEFAULT_TRACK_NAME, trackDesc);
+                        trackName, trackDesc);
         track = trackLineToTrack(genomeDb, defaultLine, 1);
         customPpReuse(cpp, line);
 	}
