@@ -1,6 +1,6 @@
 track alphaMissense
 shortLabel alphaMissense
-longLabel alphaMissense Score for all possible single-basepair mutations (zoom in for scores)
+longLabel AlphaMissense Score for all possible single-basepair mutations (zoom in for scores)
 type bigWig
 compositeTrack on
 visibility dense
@@ -12,7 +12,7 @@ mouseOverFunction noAverage
 
         track alphaMissense_A
         shortLabel Mutation: A
-        longLabel alphaMissense Score: Mutation is A
+        longLabel AlphaMissense Score: Mutation is A
         type bigWig
         parent alphaMissense on
         visibility dense
@@ -23,7 +23,7 @@ mouseOverFunction noAverage
 
         track alphaMissense_C
         shortLabel Mutation: C
-        longLabel alphaMissense Score: Mutation is C
+        longLabel AlphaMissense Score: Mutation is C
         type bigWig
         parent alphaMissense on
         visibility dense
@@ -34,7 +34,7 @@ mouseOverFunction noAverage
 
         track alphaMissense_G
         shortLabel Mutation: G
-        longLabel alphaMissense Score: Mutation is G
+        longLabel AlphaMissense Score: Mutation is G
         type bigWig
         parent alphaMissense on
         visibility dense
@@ -45,7 +45,7 @@ mouseOverFunction noAverage
 
         track alphaMissense_T
         shortLabel Mutation: T
-        longLabel alphaMissense Score: Mutation is T
+        longLabel AlphaMissense Score: Mutation is T
         type bigWig
         parent alphaMissense on
         visibility dense
