@@ -297,7 +297,7 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("</td><td style='text-align:right;'>\n");
     safef(idText, sizeof idText, "%s_hideAllBut", group->name);
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
-            "title='Hide all tracks in this groups'>",
+            "title='Hide all tracks in this group'>",
 	    configHideAll, idText, "Hide all");
     // TODO XSS filter configGroupTarget
     char jsText[256]; 
