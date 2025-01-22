@@ -1,30 +1,36 @@
 #!/bin/bash -e
-##
-# Compile userApps in Docker
 ###
-usage="compileUserAppsInDocker [--shell] DESTDIR BINDIR kentdir
+# Compile userApps in Docker.
+###
+usage="compileUserAppsInDocker [--shell] builddir
+
+Runs as current and tree should be checked out by that user.
+The following directories are expected:
+  builddir/kent/ - clean checkout of tree
+  builddir/userApps/ - compiled output to this directory
 
 Options
-  --shell - start bash shell rather than start the build
+  --shell - start bash shell rather than runb the build, for debugging
 "
 
-##
 set -beEu -o pipefail
-username=qateam
-groupname=genecats
 
 shell="no"
 if [[ $# -ge 1 && "$1" = "--shell" ]]; then
     shell=yes
     shift
 fi
-if [[ $# -ne 3 ]]; then
+if [[ $# -ne 1 ]]; then
     echo "Wrong # of args: ${usage}" >&2
     exit 1
 fi
-DESTDIR="$1" ; shift
-BINDIR="$1"  ; shift
-kentdir="$1" ; shift
+builddir="$1"
+
+# location in VM
+MACHTYPE=$(uname -m)
+vmbuilddir=/home/builddir
+DESTDIR=${vmbuilddir}/userApps/  # must end in slash
+BINDIR=linux.$MACHTYPE
 
 makecmd="make -O -j 64 userApps SEMI_STATIC=yes DESTDIR=${DESTDIR} BINDIR=${BINDIR}"
 if [[ ${shell} = "yes" ]] ; then
@@ -37,12 +43,8 @@ else
     args=""
 fi
 
-# SEMI_STATIC=yes enables linking as many libraries as possible as static
 
-docker run --user=${username}:${groupname} \
-       --volume=$(realpath ${kentdir}):/home/kent \
-       --workdir=/home/kent/src --rm=true ${args} \
+docker run --user=$(id -u):$(id --g) \
+       --volume=$(realpath ${builddir}):${vmbuilddir} \
+       --workdir=/home/builddir/kent/src --rm=true ${args} \
        user-apps-build ${cmd}
-
-
-#       --env="SEMI_STATIC=yes" --env="DESTDIR=${DESTDIR}" --env="BINDIR=${BINDIR}"

@@ -4,9 +4,6 @@
 ##
 set -beEu -o pipefail
 
-username=qateam
-groupname=genecats
-
 dockerfile=userApps.dockerfile
 if [ ! -e ${dockerfile} ] ; then
     echo "Error: must be run in directory containing '${dockerfile}'" >&2
@@ -14,8 +11,4 @@ if [ ! -e ${dockerfile} ] ; then
 fi
 
 set -x
-docker build --build-arg USERNAME=${username} \
-             --build-arg GROUPNAME=${groupname} \
-             --build-arg UID=$(id -u ${username}) \
-             --build-arg GID=$(id -g ${username}) \
-             --file=${dockerfile} --tag=user-apps-build .
+docker build --file=${dockerfile} --tag=user-apps-build .
