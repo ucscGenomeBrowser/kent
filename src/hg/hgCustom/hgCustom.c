@@ -1085,7 +1085,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	{
 	struct customTrack *nextCt = NULL, *urlCt = NULL;
 	struct customTrack *urlCts =
-	    customFactoryParse(database, ctDataUrl(ct), FALSE, NULL);
+	    customFactoryParse(database, ctDataUrl(ct), FALSE, NULL, NULL);
 	for (urlCt = urlCts; urlCt != NULL; urlCt = nextCt)
 	    {
 	    nextCt = urlCt->next;
