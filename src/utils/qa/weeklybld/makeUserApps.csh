@@ -37,8 +37,16 @@ mkdir $DESTDIR$BINDIR
 echo "Configuring settings on userApp sandbox $BRANCHNN $HOST [${0}: `date`]"
 $WEEKLYBLD/configureSandbox.csh . $WEEKLYBLD/downloadBuildSettings.mk
 
-cd kent/src 
-make -j 12 BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
+# change this to false to use local make rather than Docker
+set useDocker=true
+
+cd kent/src
+if ("$useDocker" == "true") then
+   $WEEKLYBLD/userAppsCompileInDocker $BUILDDIR > make.log
+else
+   make -j 12 BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
+endif
+  
 ./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER.txt
 cd ../..
 
