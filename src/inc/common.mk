@@ -39,7 +39,7 @@ HOSTNAME = $(shell uname -n)
 
 # Semi-static builds, normally done in Docker
 #
-# set SEMI_STATIC=yes to enable
+# use make SEMI_STATIC=yes to enable
 #  
 # These use static libraries except for -ldl, -lm, and -lc
 # which must be dynamic.

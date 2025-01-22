@@ -1,0 +1,48 @@
+#!/bin/bash -e
+##
+# Compile userApps in Docker
+###
+usage="compileUserAppsInDocker [--shell] DESTDIR BINDIR kentdir
+
+Options
+  --shell - start bash shell rather than start the build
+"
+
+##
+set -beEu -o pipefail
+username=qateam
+groupname=genecats
+
+shell="no"
+if [[ $# -ge 1 && "$1" = "--shell" ]]; then
+    shell=yes
+    shift
+fi
+if [[ $# -ne 3 ]]; then
+    echo "Wrong # of args: ${usage}" >&2
+    exit 1
+fi
+DESTDIR="$1" ; shift
+BINDIR="$1"  ; shift
+kentdir="$1" ; shift
+
+makecmd="make -O -j 64 userApps SEMI_STATIC=yes DESTDIR=${DESTDIR} BINDIR=${BINDIR}"
+if [[ ${shell} = "yes" ]] ; then
+    cmd='bash'
+    args="-it"
+    echo "Starting shell for debugging" >&2
+    echo "   make command that would be run is: ${makecmd}" >&2
+else
+    cmd=${makecmd}
+    args=""
+fi
+
+# SEMI_STATIC=yes enables linking as many libraries as possible as static
+
+docker run --user=${username}:${groupname} \
+       --volume=$(realpath ${kentdir}):/home/kent \
+       --workdir=/home/kent/src --rm=true ${args} \
+       user-apps-build ${cmd}
+
+
+#       --env="SEMI_STATIC=yes" --env="DESTDIR=${DESTDIR}" --env="BINDIR=${BINDIR}"
