@@ -26370,7 +26370,7 @@ char buffer[4096];
 safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
 struct customTrack *ctList = getCtList();
-struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL);
+struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);
 theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);
