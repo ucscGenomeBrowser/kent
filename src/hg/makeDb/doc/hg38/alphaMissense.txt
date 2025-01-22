@@ -1,0 +1,11 @@
+
+    # alphaMissense ticket #32269 (Jeltje, Jan 2025)
+    mkdir -p /hive/data/genomes/hg38/bed/alphaMissense/
+    cd /hive/data/genomes/hg38/bed/alphaMissense
+    wget https://storage.googleapis.com/dm_alphamissense/AlphaMissense_hg38.tsv.gz
+    time python ~/kent/src/hg/makeDb/outside/alphaMissense/alphaMissenseToWig.py AlphaMissense_hg38.tsv.gz
+    wigToBigWig a.wig ../../chrom.sizes a.bw &
+    wigToBigWig c.wig ../../chrom.sizes c.bw &
+    wigToBigWig g.wig ../../chrom.sizes g.bw &
+    wigToBigWig t.wig ../../chrom.sizes t.bw &
+    wait

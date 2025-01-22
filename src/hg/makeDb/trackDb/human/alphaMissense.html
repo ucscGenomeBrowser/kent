@@ -1,0 +1,116 @@
+<h2>Description</h2>
+<p>
+This track shows AlphaMissense predictions for all possible single amino acid substitutions in 
+the human proteome.
+</p>
+<p>
+AlphaMissense is a deep learning method for predicting the pathogenicity of missense variants
+in human proteins. It classifies 32% of all missense variants as likely pathogenic and 57% 
+as likely benign using a cutoff yielding 90% precision on the ClinVar dataset.
+</p>
+
+
+<h2>Display Conventions and Configuration</h2>
+<p>There are four lettered subtracks, one for every nucleotide, showing
+scores for mutation from the reference to that
+nucleotide. All subtracks show the AlphaMissense score on mouseover. Across the exome, 
+there are three values per position, one for every possible
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing
+the reference allele, e.g. A to A, is always set to zero, "0.0". AlphaMissense only
+takes into account amino acid changes, so a nucleotide change that results in no
+amino acid change (synonymous) is not scored. These are shown in the tracks
+with score "0.0". 
+
+<p>
+When using this track, zoom in until you can see every basepair at the
+top of the display. Otherwise, there are several nucleotides per pixel under 
+your mouse cursor and no score will be shown on the mouseover tooltip.
+</p>
+
+<p><b>Track colors</b></p>
+<p>
+This track is colored according to the am_class column in the AlphaMissense_$db.tsv file.
+
+<table style="text-align: left;">
+  <thead>
+    <tr>
+      <th>Range</th>
+      <th>Classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&ge; .564</td>
+      <td style="color: rgb(255,0,0);">Likely Pathogenic</td>
+    </tr>
+    <tr>
+      <td>.565 - .340</td>
+      <td style="color: rgb(192,192,192);">Likely Neutral</td>
+    </tr>
+    <tr>
+      <td>&le; .340</td>
+      <td style="color: rgb(80,166,230);">Likely Benign</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h2>Data access</h2>
+<p>
+AlphaMissense scores are available at the 
+<a href="https://sites.google.com/site/revelgenomics/" target="_blank">
+AlphaMissense cloud storage site</a>.  
+The site provides precomputed AlphaMissense scores for all possible human missense variants 
+to facilitate the identification of pathogenic variants among the large number of 
+rare variants discovered in sequencing studies.
+
+</p>
+
+<p>
+The AlphaMissense data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. <br>
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/" target="_blank">our download server</a>.
+<br>
+The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. <br>
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<br>
+The tools can also be used to obtain features confined to given range, e.g.
+<br>&nbsp;
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/a.bw stdout</tt>
+<br>
+
+<h2>Methods</h2>
+
+<p>
+Data were converted from the files provided on
+<a href="https://storage.cloud.google.com/dm_alphamissense"
+target = "_blank">the AlphaMissense Downloads website</a>. As with all other tracks,
+a full log of all commands used for the conversion is available in our 
+<a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source repository</a>, for <a target=_blank href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a> and <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/alphaMissense.txt">hg38</a>. The release used for each assembly is shown on the track description page.
+
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to 
+</p>
+
+<h2>References</h2>
+<p>
+Cheng J, Novati G, Pan J, Bycroft C, &#381;emgulyt&#279; A, Applebaum T, Pritzel A, Wong LH,
+Zielinski M, Sargeant T <em>et al</em>.
+<a href="https://www.science.org/doi/abs/10.1126/science.adg7492?url_ver=Z39.88-2003&amp;rfr_id=ori:
+rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+Accurate proteome-wide missense variant effect prediction with AlphaMissense</a>.
+<em>Science</em>. 2023 Sep 22;381(6664):eadg7492.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37733863" target="_blank">37733863</a>
+</p>
+
