@@ -1,0 +1,21 @@
+#!/bin/bash -e
+##
+# Build Docker image to use to compile userApps
+##
+set -beEu -o pipefail
+
+username=qateam
+groupname=genecats
+
+dockerfile=userApps.dockerfile
+if [ ! -e ${dockerfile} ] ; then
+    echo "Error: must be run in directory containing '${dockerfile}'" >&2
+    exit 1
+fi
+
+set -x
+docker build --build-arg USERNAME=${username} \
+             --build-arg GROUPNAME=${groupname} \
+             --build-arg UID=$(id -u ${username}) \
+             --build-arg GID=$(id -g ${username}) \
+             --file=${dockerfile} --tag=user-apps-build .
