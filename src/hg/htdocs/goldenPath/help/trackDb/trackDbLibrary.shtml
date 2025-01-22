@@ -2227,7 +2227,6 @@ There are no extra options that can appear on the type hic line.
     <pre>   searchTrix url or relative path </pre>
 </DIV>
 
-
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>
 <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
     <P>In bed tracks that
@@ -2823,6 +2822,23 @@ that identifies the reference sequence.
     spans into the table for special purposes.</P>
     <P><B>Example:</B></P>
     <pre>   spanList 1</pre>
+</DIV>
+
+<DIV class="setColorWith"><span class="types bigWig"></span>
+<div class="format"><code>setColorWith &lt;url/relativePath&gt;</code></div>
+    <P> Specifies the URL to a bed 9 bigBed file. Notably, this file contains
+    regions (chr + chromStart + chromEnd) in the first three fields, and then
+    an RGB value in the 9th field. The associated bigWig track will then be
+    colored regionally to reflect this bigBed file.</p>
+    <p>An example of this in use can be seen with <a
+    href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/makeDb/trackDb/human/cadd1_7.ra"
+    target="_blank">CADD 1.7</a>. It may also be helpful to reference our
+    <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py"
+    target="_blank">previously used script</a> for a method on how to
+    generate this file based on score threshholds, colors, and an
+    input bigWig track.</p>
+    <P><B>Example:</B></P>
+    <pre>   setColorWith url or relative path </pre>
 </DIV>
 
 <DIV class="smoothingWindow"><span class="types wig bigWig bedGraph"></span>
