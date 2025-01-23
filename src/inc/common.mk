@@ -28,11 +28,11 @@ UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
 HOSTNAME = $(shell uname -n)
 
-ifeq (${HOSTNAME},hgwdev-new)
+ifeq (${HOSTNAME},hgwdev)
   IS_HGWDEV = yes
   OURSTUFF = /cluster/software/r9
 else
-  ifeq (${HOSTNAME},hgwdev)
+  ifeq (${HOSTNAME},hgwdev-old.gi.ucsc.edu)
     IS_HGWDEV = yes
     OURSTUFF = /cluster/software
   else
@@ -182,10 +182,10 @@ ifeq (${USE_HAL},1)
     HDF5LIBDIR=${HDF5DIR}/local/lib
     HDF5LIBS=${HDF5LIBDIR}/libhdf5_cpp.a ${HDF5LIBDIR}/libhdf5.a ${HDF5LIBDIR}/libhdf5_hl.a
     HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} ${ZLIB}
-    ifeq (${HOSTNAME},hgwdev-new)
+    ifeq (${HOSTNAME},hgwdev)
         HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
     else
-      ifeq (${HOSTNAME},hgwdev)
+      ifeq (${HOSTNAME},hgwdev-old.gi.ucsc.edu)
           HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
       else
           HALLIBS += -lcurl -lstdc++
@@ -296,7 +296,7 @@ ifeq (${IS_HGWDEV},yes)
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
    L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a -ldl
 
-   ifeq (${HOSTNAME},hgwdev-new)
+   ifeq (${HOSTNAME},hgwdev)
        PNGLIB=${OURSTUFF}/lib/libpng.a
        PNGINCL=-I${OURSTUFF}/include/libpng16
    else
@@ -307,7 +307,7 @@ ifeq (${IS_HGWDEV},yes)
    MYSQLINC=/usr/include/mysql
    MYSQLLIBS=${OURSTUFF}/lib64/libmariadbclient.a ${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a -ldl ${ZLIB}
 
-   ifeq (${HOSTNAME},hgwdev-new)
+   ifeq (${HOSTNAME},hgwdev)
        MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a /usr/lib64/librt.a
    else
        MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a

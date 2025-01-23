@@ -82,7 +82,7 @@ else
 /* Construct JSON result */
 struct dyString *dy = dyStringNew(0);
 dyStringPrintf(dy, "{\n");
-dyStringPrintf(dy, "    \"status\": \"%s\"", status);
+dyStringPrintf(dy, "    \"status\": \"%s\"", status == NULL ? "<NULL>" : status);
 if (sameString(status, "error"))
     {
     dyStringPrintf(dy, ",\n");
