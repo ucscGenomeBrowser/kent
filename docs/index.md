@@ -5,7 +5,7 @@ title: "Genome Browser Tutorials"
 The UCSC Genome Browser allows scientists to visualize genomic data from a wide variety of sources,
 on the genome of their choice. It supports custom annotations, remote-hosted data, and various data
 formats. Additional tools include tools to create and share permanent links of Browser snapshots, BLAT
-to quickly align genomic sequences, and the Table Browser to interatively extract and browse all hosted data.
+to quickly align genomic sequences, and the Table Browser to interactively extract and browse all hosted data.
 
 ## Tutorials
 

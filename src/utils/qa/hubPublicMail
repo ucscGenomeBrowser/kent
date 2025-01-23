@@ -98,11 +98,11 @@ def downloadUrls(urls, emails):
         if url.startswith("http"):
             try:
                 f = requests.get(url, verify=False, timeout=5)
+                text = f.text
             except KeyboardInterrupt: # handle ctrl-c for debugging
                 sys.exit(1)
             except:
                 reqFailed = True
-            text = f.text
         else:
             # FTP
             try:
