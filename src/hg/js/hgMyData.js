@@ -69,6 +69,7 @@ function revokeApiKeys() {
     cart.flush();
 }
 
+const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
@@ -77,12 +78,18 @@ const uppy = new Uppy.Uppy({
         // set all the fileTypes and genomes from their selects
         let doUpload = true;
         for (let [key, file] of Object.entries(files)) {
+            let fileNameMatch = file.meta.name.match(fileNameRegex);
+            if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
+                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 2000);
+                doUpload = false;
+                continue;
+            }
             if (!file.meta.genome) {
-                uppy.info(`Error: No genome selected for file ${file.name}!`, 'error', 2000);
+                uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 2000);
                 doUpload = false;
                 continue;
             } else if  (!file.meta.fileType) {
-                uppy.info(`Error: File type not supported, please rename file: ${file.name}!`, 'error', 2000);
+                uppy.info(`Error: File type not supported, file: ${file.meta.name}!`, 'error', 2000);
                 doUpload = false;
                 continue;
             }
@@ -200,10 +207,10 @@ var hubCreate = (function() {
         }
     }
 
-    const regex = /[^A-Za-z0-9_-]+/g;
+    const regex = /[^A-Za-z0-9_-]/g;
     function trackHubFixName(trackName) {
         // replace everything but alphanumeric, underscore and dash with underscore
-        return trackName.replaceAll(regex, "_");
+        return encodeURIComponent(trackName).replaceAll(regex, "_");
     }
 
     // helper object so we don't need to use an AbortController to update

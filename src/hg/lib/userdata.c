@@ -303,11 +303,15 @@ static char *writeHubStanzasForFile(struct hubSpace *rowForFile, char *userDataD
 {
 char *hubFileName = NULL;
 char *hubDir = hubPathFromParentDir(rowForFile->parentDir, userDataDir);
-fprintf(stderr, "hubDir: %s\n", hubDir);
 hubFileName = writeHubText(hubDir, rowForFile->userName, rowForFile->db);
 
-char *encodedTrack = cgiEncodeFull(rowForFile->fileName);
-writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack, rowForFile->location);
+// NOTE: even though rowForFile->fileName was already cgiEncoded by the pre-finish hook,
+// we still must cgiEncode again to make the bigDataUrl setting work, as apache needs
+// to look for a literal '%' in a filename if there was a character encoded. For example,
+// if the filename from tus was &.bb, tus encodes this to "\u0026.bb", which we write to
+// disk as %5Cu0026.bb, and apache needs to find at:
+// https://url/hash/userName/%25Cu0026.bb in order to work in hgTracks
+writeTrackStanza(hubFileName, rowForFile->fileName, cgiEncodeFull(rowForFile->fileName), rowForFile->fileType, rowForFile->fileName, rowForFile->location);
 return hubFileName;
 }
 
