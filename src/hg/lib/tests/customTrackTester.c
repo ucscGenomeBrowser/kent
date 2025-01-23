@@ -40,12 +40,12 @@ struct customTrack *ctList = NULL, *oldCts = NULL;
 
 readInGulp(inFile, &text, NULL);
 /* read new CT's from input */
-ctList = customFactoryParse(db, text, FALSE, NULL);
+ctList = customFactoryParse(db, text, FALSE, NULL, NULL);
 verbose(3, "parsed %d tracks from %s\n", slCount(ctList), inFile);
 if (trashFile)
     {
     /* read old CT's from trash file */
-    oldCts = customFactoryParse(db, trashFile, TRUE, NULL);
+    oldCts = customFactoryParse(db, trashFile, TRUE, NULL, NULL);
     /* merge old and new */
     ctList = customTrackAddToList(ctList, oldCts, NULL, TRUE);
     }
@@ -56,7 +56,7 @@ customTracksSaveFile(db, ctList, tn.forCgi);
 
 /* reload from new trash file */
 ctList = NULL;
-ctList = customFactoryParse(db, tn.forCgi, TRUE, NULL);
+ctList = customFactoryParse(db, tn.forCgi, TRUE, NULL, NULL);
 customTracksSaveFile(db, ctList, "stdout");
 
 /* cleanup */
@@ -69,8 +69,8 @@ static void checkCustomTracks(char *db, char *outFile, char *expectedFile)
 {
 struct hash *expHash = hashNew(0);
 struct customTrack *ct = NULL, *expCt = NULL;
-struct customTrack *newCts = customFactoryParse(db, outFile, TRUE, NULL);
-struct customTrack *expCts = customFactoryParse(db, expectedFile, TRUE, NULL);
+struct customTrack *newCts = customFactoryParse(db, outFile, TRUE, NULL, NULL);
+struct customTrack *expCts = customFactoryParse(db, expectedFile, TRUE, NULL, NULL);
 verbose(3, "found %d tracks in output file %s, %d tracks in expected file %s\n",
                 slCount(newCts), outFile, slCount(expCts), expectedFile);
 for (ct = expCts; ct != NULL; ct = ct->next)
