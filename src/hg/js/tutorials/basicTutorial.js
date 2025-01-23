@@ -225,7 +225,7 @@
                   'To reverse the genome orientation, click the <button>reverse</button> button and the Genome Browser image '+
                   'will flip to show either the negative or positive strand.',
                 attachTo: {
-                    element: document.getElementById('hgt.toggleRevCmplDisp'),
+                    element: '[name="hgt.toggleRevCmplDisp"]',
                     on: 'bottom'
                 },
                 buttons: [tutorialButtons['back'], tutorialButtons['next']],
