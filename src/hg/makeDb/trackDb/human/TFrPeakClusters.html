@@ -1,0 +1,90 @@
+<h2>Description</h2>
+
+<p>This track displays regulatory regions in the human genome identified using ENCODE 
+data, specifically spanning ENCODE phases 2 through 4. It highlights genomic 
+regions bound by DNA-associated proteins involved in transcriptional regulation, 
+such as RNA polymerase, transcription factors (TFs), and chromatin remodeling 
+proteins. Sequence-specific TFs bind directly to short DNA motifs via their 
+DNA-binding domains, while other DNA-associated proteins interact with DNA 
+indirectly through protein-protein interactions with sequence-specific TFs. Chromatin 
+immunoprecipitation followed by sequencing (ChIP-seq) is a high-throughput method 
+for mapping genome-wide protein-DNA interactions. Regions of high ChIP signal, 
+commonly referred to as ChIP-seq peaks, indicate protein binding sites. For each DNA
+-associated protein, all ENCODE ChIP-seq peaks across biosamples were integrated to generate 
+a set of representative peaks (rPeaks). This track displays these rPeaks alongside 
+detected DNA motif sites.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>Each rPeak is represented as a gray box, with the shade of gray corresponding 
+to the maximum ChIP-seq signal observed across contributing biosamples. The HGNC 
+gene name of the associated protein is displayed to the left of the box. If the 
+rPeak overlaps a cognate TF motif site in the collection built previously (PMID: 
+37104580 DOI: <a target="_blank" href="https://www.science.org/doi/10.1126/science.abn7930">10.1126/science.abn7930</a>), 
+the motif site is highlighted in green.</p>
+
+<p>Clicking on an rPeak provides detailed information about the biosamples where the 
+rPeak was detected, including the count of biosamples with contributing ChIP-seq peaks 
+and the total number of biosamples assayed for the protein. Links to relevant ENCODE 
+ChIP-seq experiments and overlapping ENCODE candidate cis-regulatory elements (cCREs) 
+are also provided.</p>
+
+<p>By default, rPeaks for all 912 DNA-associated proteins with ENCODE ChIP-seq data 
+are displayed. Users can customize the display by selecting specific DNA-associated 
+proteins in the track settings.</p>
+
+<h2>Methods</h2>
+
+<p>2,509 ENCODE ChIP-seq experiments were integrated from 912 DNA-associated 
+proteins across 1,152 unique biosamples to produce representative peaks (rPeaks) 
+for each protein. The processing steps were as follows:</p>
+
+<ol>
+<li>ChIP-seq peaks for each protein were downloaded from the <a target="_blank" href="http://encodeproject.org">ENCODE Portal</a>, 
+generated using the <a target="_blank" href="https://www.encodeproject.org/chip-seq/transcription_factor/">
+ENCODE Transcription Factor ChIP-seq Processing Pipeline</a>.</li>
+<li>Using bedtools merge, ChIP-seq peaks were clustered from the protein&rsquo;s experiments across all biosamples.</li>
+<li>In each cluster, the peak with the highest ChIP signal (normalized by sequencing depth) was selected as the rPeak.</li>
+<li>All ChIP-seq peaks overlapping this rPeak by at least one nucleotide were marked as represented and removed from subsequent clustering rounds.</li>
+<li>Steps 2-4 were repeated until a final list of non-overlapping rPeaks was generated, representing all ChIP-seq peaks for the protein.</li>
+</ol>
+
+<h2>Data Access</h2>
+
+<p>The raw data for the ENCODE TF rPeak track will soon be available.</p>
+
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>,
+for download, intersection or correlations with other tracks. To join this track with others
+based on the chromosome positions, use the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+
+<p>
+Regarding access to this data track in the Genome Browser, for automated download 
+and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
+The file for this track is called <tt>TFrPeakClusters.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<p> For automated access, this track like all others, is also available via our
+<a href="../goldenPath/help/api.html">API</a>.  However, for bulk processing in
+pipelines, downloading the data and/or using bigBed files as described above is
+usually faster.  </p>
+
+<h2>Credits</h2>
+<p>This track was made possible thanks to the efforts of the ENCODE Consortium, 
+ENCODE ChIP-seq production laboratories, and the ENCODE Data Coordination Center 
+for generating and processing the ChIP-seq datasets. The ENCODE accession numbers 
+for the constituent datasets are accessible from the peak details page. Special thanks 
+to Drs. Mingshi Gao, Greg Andrews, Jill Moore, and Zhiping Weng at UMass Chan Medical 
+School, who were members of the ENCODE Data Analysis Center, for developing this track, 
+including providing the rPeak and motif datasets and associated metadata and building the 
+track. We also extend our gratitude to Max Haeussler and Jonathan Casper from the UCSC 
+Genome Browser Project Team for their assistance in developing this track. For updates 
+on the track, please contact the Weng lab.</p>
