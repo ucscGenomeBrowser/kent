@@ -35637,3 +35637,6 @@ wait
 # #Colors were added using the script
 kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py
 
+##############################################################################
+# VarChat ticket #35081 (Lou, Jan 2025)
+# See makedoc in makeDb/doc/hg38/varChat.txt

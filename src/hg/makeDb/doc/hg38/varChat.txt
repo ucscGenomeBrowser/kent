@@ -1,0 +1,6 @@
+mkdir /hive/data/outside/varChat
+cd /hive/data/outside/varChat
+wget https://ucsc-engenome-varchat.s3.eu-west-1.amazonaws.com/20241125_VarChat_GRCh37.sorted.bb
+wget https://ucsc-engenome-varchat.s3.eu-west-1.amazonaws.com/20241125_VarChat_GRCh38.sorted.bb
+ln -s /hive/data/outside/varChat/20241125_VarChat_GRCh38.sorted.bb /gbdb/hg38/bbi/varChat.bb
+ln -s /hive/data/outside/varChat/20241125_VarChat_GRCh37.sorted.bb /gbdb/hg19/bbi/varChat.bb
