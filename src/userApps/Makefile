@@ -30,6 +30,7 @@ fetchSource:
 	@du -hs kent
 	@printf "number of files in kent source tree: "
 	@find ./kent -type f | wc -l
+	@grep CGI_VERSION ./kent/src/hg/inc/versionInfo.h
 
 # this installEnvironment will add all the shell environment variables
 # to the kent/src/inc/localEnvironment.mk file which is included
