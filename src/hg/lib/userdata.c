@@ -352,14 +352,16 @@ void removeFileForUser(char *fname, char *userName)
 /* Remove a file for this user if it exists */
 {
 // The file to remove must be prefixed by the hg.conf userDataDir
-if (!startsWith(getDataDir(userName), fname))
+char canonicalPath[PATH_MAX];
+realpath(fname, canonicalPath);
+if (!startsWith(getDataDir(userName), canonicalPath))
     return;
-if (fileExists(fname))
+if (fileExists(canonicalPath))
     {
     // delete the actual file
-    mustRemove(fname);
+    mustRemove(canonicalPath);
     // delete the table row
-    deleteHubSpaceRow(fname, userName);
+    deleteHubSpaceRow(canonicalPath, userName);
     }
 // TODO: we should also modify the hub.txt associated with this file
 }
