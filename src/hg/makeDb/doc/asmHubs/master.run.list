@@ -1630,6 +1630,7 @@
 ./runBuild GCA_029633865.1_fLamInc1.hap2 fish Lampris_incognitus
 ./runBuild GCA_029633875.1_fHopMal1.hap2 fish Hoplias_malabaricus
 ./runBuild GCA_029931755.1_rEulEur1.hap2 vertebrate Euleptes_europaea
+./runBuild GCA_030012505.1_ASM3001250v1 vertebrate Eretmochelys_imbricata
 ./runBuild GCA_030013775.1_ASM3001377v1 mammals Trichechus_manatus_latirostris
 ./runBuild GCA_030014295.1_mLoxAfr1.hap2 mammals Loxodonta_africana
 ./runBuild GCA_030014385.1_fTriRos1.hap1 fish Trichomycterus_rosablanca
