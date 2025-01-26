@@ -9648,7 +9648,8 @@ return TRUE;
 
 int tvConvertToNumericOrder(enum trackVisibility v)
 {
-return ((v) == tvFull   ? 4 : \
+return ((v) == tvShow   ? 5 : \
+        (v) == tvFull   ? 4 : \
         (v) == tvPack   ? 3 : \
         (v) == tvSquish ? 2 : \
         (v) == tvDense  ? 1 : 0);
