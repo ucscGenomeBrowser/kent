@@ -129,6 +129,7 @@ function Doc(body, metadata, variables)
     add("")
     add("<!-- Relative paths to support mirror sites with non-standard GB docs install -->")
     add("<!--#include virtual=\"$ROOT/inc/gbPageStart.html\" -->")
+    add("<link rel=\"stylesheet\" href=\"<!--#echo var=\"ROOT\" -->/style/bootstrap-3-3-7.min.css\">")
     add("")
     add("<h1>" .. metadata["title"] .. "</h1>")
   else
