@@ -36,7 +36,7 @@ url https://cancer.sanger.ac.uk/cosmic/search?q=$$
 urlLabel Genomic Mutation ID:
 noScoreFilter on
 dataVersion COSMIC v101
-pennantIcon Updated red ../goldenPath/newsarch.html#000025 "Updated xxx. x, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html013025 "Updated January 30, 2025"
 
 # knownGene archive
 include knownGeneArchive.ra
