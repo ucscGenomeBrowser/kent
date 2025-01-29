@@ -26,13 +26,15 @@ if [[ $# -ne 1 ]]; then
 fi
 builddir="$1"
 
-# location in VM
 MACHTYPE=$(uname -m)
-vmbuilddir=/home/builddir
-DESTDIR=${vmbuilddir}/userApps/  # must end in slash
-BINDIR=linux.$MACHTYPE
+BINDIR=linux.${MACHTYPE}
+DESTDIR=${builddir}/userApps/  # must end in slash
 
-makecmd="make -O -j 64 userApps SEMI_STATIC=yes DESTDIR=${DESTDIR} BINDIR=${BINDIR}"
+# location in VM
+VM_BUILDDIR=/home/builddir
+VM_DESTDIR=${VM_BUILDDIR}/userApps/  # must end in slash
+
+makecmd="make -O -j 64 userApps SEMI_STATIC=yes DESTDIR=${VM_DESTDIR} BINDIR=${BINDIR}"
 if [[ ${shell} = "yes" ]] ; then
     cmd='bash'
     args="-it"
@@ -44,7 +46,8 @@ else
 fi
 
 
-docker run --user=$(id -u):$(id --g) \
-       --volume=$(realpath ${builddir}):${vmbuilddir} \
+docker run --user=$(id -u):$(id -g) \
+       --volume=$(realpath ${builddir}):${VM_BUILDDIR} \
        --workdir=/home/builddir/kent/src --rm=true ${args} \
        user-apps-build ${cmd}
+

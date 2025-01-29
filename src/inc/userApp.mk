@@ -24,6 +24,9 @@
 include ${kentSrc}/inc/localEnvironment.mk
 include ${kentSrc}/inc/common.mk
 
+# with SEMI_STATIC, this makes sure only allow shared lirbaries are used
+userAppsCheckLinking=${kentSrc}/utils/qa/weeklybld/userAppsCheckLinking
+
 DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
 ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
   DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a
@@ -41,6 +44,9 @@ ${DESTDIR}${BINDIR}/%${EXE}: %.o ${objects} ${DEPLIBS}
 	@mkdir -p $(dir $@)
 	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+ifeq (${SEMI_STATIC},yes)
+	${userAppsCheckLinking} $@
+endif
 
 compile:: ${A:%=%${EXE}}
 
