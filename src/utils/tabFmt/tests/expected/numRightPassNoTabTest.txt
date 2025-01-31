@@ -1,0 +1,15 @@
+# results.1.basic/gencode.v22.liftover.pri.map-cmp.sum
+# results.2.targets/gencode.v22.liftover.pri.map-cmp.sum
+# results.3.srcspan/gencode.v22.liftover.pri.map-cmp.sum
+# results.4.srcspanRev/gencode.v22.liftover.pri.map-cmp.sum
+# results.5.recip3/gencode.v22.liftover.pri.map-cmp.sum
+type       status      count freq  count freq  count freq  count freq  count freq
+status     changed      1821 0.01   1764 0.01   1666 0.01   1751 0.01   1751 0.01
+status     notMapped     725 0.00    806 0.00    922 0.00    825 0.00    825 0.00
+status     same       195896 0.99 195872 0.99 195854 0.99 195866 0.99 195866 0.99
+status     total      198442 1.00 198442 1.00 198442 1.00 198442 1.00 198442 1.00
+prevChange lost          725 0.00    806 0.00    922 0.00    825 0.00    825 0.00
+prevChange new         13565 0.07  13535 0.07  13420 0.07  13517 0.07  13517 0.07
+prevChange nonOverlap    467 0.00    441 0.00    440 0.00    440 0.00    440 0.00
+prevChange overlap    183685 0.93 183660 0.93 183660 0.93 183660 0.93 183660 0.93
+prevChange total      198442 1.00 198442 1.00 198442 1.00 198442 1.00 198442 1.00

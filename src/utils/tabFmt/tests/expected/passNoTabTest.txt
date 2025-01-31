@@ -1,0 +1,13 @@
+Amount aligned:
+added     224   1.4%
+better    546   3.5%
+similar 13188  84.2%
+worse    1622  10.4%
+missing    77   0.5%
+total   15657 100.0%
+
+Multiple aligned:
+more       13  16.7%
+same       63  80.8%
+less        2   2.6%
+total      78 100.0%
