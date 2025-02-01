@@ -44,10 +44,11 @@ else
     cmd=${makecmd}
     args=""
 fi
+builddir=$(realpath ${builddir})
 
-
+set -x
 docker run --user=$(id -u):$(id -g) \
-       --volume=$(realpath ${builddir}):${VM_BUILDDIR} \
+       --volume=${builddir}:${VM_BUILDDIR} \
        --workdir=/home/builddir/kent/src --rm=true ${args} \
        user-apps-build ${cmd}
 
