@@ -1689,6 +1689,7 @@
 ./runBuild GCA_031021085.1_rEryReg1.hap2 vertebrate Erythrolamprus_reginae
 ./runBuild GCA_031021105.1_rEryReg1.hap1 vertebrate Erythrolamprus_reginae
 ./runBuild GCA_031165255.1_Yella_v2 mammals Canis_lupus_familiaris
+./runBuild GCA_031190585.1_ASM3119058v1 viral Carnivore_chapparvovirus_1
 ./runBuild GCA_031213475.1_uoNerLuet1.0 invertebrate Saccharina_latissima
 ./runBuild GCA_031468805.1_bMorBas2.hap1 birds Morus_bassanus
 ./runBuild GCA_031468815.1_bMorBas2.hap2 birds Morus_bassanus
