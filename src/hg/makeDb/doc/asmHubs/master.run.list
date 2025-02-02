@@ -1749,6 +1749,7 @@
 ./runBuild GCA_036321535.1_mCamDro1.pat mammals Camelus_dromedarius
 ./runBuild GCA_036321565.1_mCamDro1.hap2 mammals Camelus_dromedarius
 ./runBuild GCA_036323735.1_GRCr8 mammals Rattus_norvegicus
+./runBuild GCA_036325905.1_CXZ mammals Lepus_oiostolus
 ./runBuild GCA_036365475.1_fAmiCal2.hap2 vertebrate Amia_calva
 ./runBuild GCA_036365495.1_sHetFra1.hap2 vertebrate Heterodontus_francisci
 ./runBuild GCA_036365525.1_sHetFra1.hap1 vertebrate Heterodontus_francisci
