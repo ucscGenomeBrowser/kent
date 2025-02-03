@@ -1018,7 +1018,7 @@ boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *chil
  * Return TRUE if we should hide empties
  */
 
-char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
+char *wgEncodeVocabLink(char *term,char *value,char *title, char *label,char *suffix);
 // returns allocated string of HTML link to ENCODE controlled vocabulary term
 
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
