@@ -978,7 +978,8 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (! isCustomComposite(tdb))
+    char *quickLifted = trackDbSetting(tdb, "quickLifted");
+    if (! ( isCustomComposite(tdb) || (quickLifted != NULL)))
         {
         if (startsWithWord("mathWig", type) )
             {
@@ -1606,8 +1607,10 @@ hel = hashLookup(tdb->settingsHash, "track");
 if (hel == NULL)
     errAbort("can't find track variable in tdb");
 
+// add a prefix to the track name so the special cased loaders aren't used
+// add a note that this is a quickLifted track so the browser will accept tracks that aren't big*
 dy = dyStringNew(200);
-dyStringPrintf(dy, "track %s\n", trackHubSkipHubName((char *)hel->val));
+dyStringPrintf(dy, "track qlft%s\nquickLifted on\n", trackHubSkipHubName((char *)hel->val));
 hashStore(existHash, "track");
     
 dumpTdbAndParents(dy, tdb, existHash, NULL);
@@ -1624,7 +1627,7 @@ for(; tdb; tdb = tdb->next)
         walkTree(f, cart, tdb->subtracks, visDy);
     else 
         {
-        if (!startsWith("big", tdb->type))
+        if (!( startsWith("big", tdb->type) || startsWith("bed ", tdb->type)))
             continue;
         boolean isVisible = FALSE;
         if (tdb->parent == NULL)
@@ -1639,6 +1642,8 @@ for(; tdb; tdb = tdb->next)
         else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
             {
             char *cartVis = cartOptionalString(cart, tdb->parent->track);
+            if ((cartVis == NULL) && tdb->parent->parent)
+                cartVis = cartOptionalString(cart, tdb->parent->parent->track);
             tdb->visibility = hTvFromString(cartVis);
             isVisible = TRUE;
             }
