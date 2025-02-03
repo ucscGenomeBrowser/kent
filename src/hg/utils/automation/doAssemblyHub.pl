@@ -1840,6 +1840,7 @@ function cleanUp() {
 }
 
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
+  ln -s \$gffFile ./
   (gff3ToGenePred -warnAndContinue -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
       2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
