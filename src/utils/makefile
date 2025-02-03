@@ -103,6 +103,7 @@ UTILS_APPLIST = \
 	stringify \
 	subChar \
 	subColumn \
+	tabFmt \
 	tailLines \
 	textHistogram \
 	tickToDate \

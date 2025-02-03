@@ -16,7 +16,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/hive/data/staging/data/RepeatMasker221107";
+my $RepeatMaskerPath = "/hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
 # default engine changed from crossmatch to rmblast as of 2022-12
 # with RM version 4.1.4
@@ -229,7 +229,6 @@ sub doCluster {
   print $fh <<_EOF_
 #!/bin/csh -ef
 
-set path = (/cluster/software/bin \$path)
 $RepeatMasker $RepeatMaskerEngine $repeatLib /dev/null
 _EOF_
   ;
@@ -248,7 +247,6 @@ else if ( -d "/scratch/tmp" ) then
 else
   setenv TMPDIR "/tmp"
 endif
-set path = (/cluster/software/bin \$path)
 
 set finalOut = \$1
 
@@ -331,8 +329,6 @@ and runs it on the cluster with the most available bandwidth.";
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-
-set path = (/cluster/software/bin \$path)
 
 chmod a+x dummyRun.csh
 chmod a+x RMRun.csh

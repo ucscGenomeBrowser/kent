@@ -46,6 +46,7 @@ GCA_014523465.1_CAU_Oori_1.0	Asiatic mouflon (Amuf_v1 2020)
 GCA_031878655.1_mTapInd1.hap1	Asiatic tapir (hap1 2023)
 GCA_031878705.1_mTapInd1.hap2	Asiatic tapir (hap2 2023)
 GCF_016077325.2_ASM1607732v2	ass (Dezhou 2021)
+GCF_041296235.1_EquAss-T2T_v2	ass (Donkey D_3611 2024)
 GCF_001305755.1_ASM130575v1	ass (Maral har 2015 refseq)
 GCA_964270905.1_mLagAcu1.hap1.1	Atlantic white-sided dolphin (mLagAcu1.hap1.1 2024)
 GCA_964270935.1_mLagAcu1.hap2.1	Atlantic white-sided dolphin (mLagAcu1.hap2.1 2024)
@@ -479,6 +480,7 @@ GCA_004363705.1_KogBre_v1_BIUU	pygmy sperm whale
 GCF_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (haplotype 1 2022 refseq)
 GCA_026419985.1_mKogBre1_haplotype_2	pygmy sperm whale (mKogBre1 haplotype 2 2022)
 GCA_019455555.1_Gpyr_1.0	Pyrenean desman (IBE-C5619 2021)
+GCA_013371645.1_OryCun3.0	rabbit (A946 2020)
 GCF_009806435.1_UM_NZW_1.0	rabbit (New Zealand White DNA-2018 2021 refseq)
 GCA_964237555.1_mOryCun1.1	rabbit (primary hap 2024)
 GCF_964237555.1_mOryCun1.1	rabbit (primary hap 2024)
@@ -599,6 +601,7 @@ GCF_000298355.1_BosGru_v2.0	wild yak
 GCF_021218885.2_Marmota_monax_Labrador192_F-V1.1	woodchuck (v1.1 L192 2022)
 GCA_004027655.1_GraMur_v1_BIUU	woodland dormouse
 GCF_004785775.1_NIH_TR_1.0	woodland thicket rat
+GCA_036325905.1_CXZ	woolly hare (The Qinghai-Tibet Plateau SH-2023 2024)
 GCF_003031525.2_Neophocaena_asiaeorientalis_V1.1	Yangtze finless porpoise (v2 wild 2018 refseq)
 GCF_000442215.2_Lipotes_vexillifer_v1.1	Yangtze River dolphin (v1.1 BGI 2013 refseq)
 GCF_003676075.3_GSC_YBM_2.1	yellow-bellied marmot (SJ_83 v2.1 2019)

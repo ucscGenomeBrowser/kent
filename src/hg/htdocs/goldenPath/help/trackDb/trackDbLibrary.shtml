@@ -2835,7 +2835,7 @@ that identifies the reference sequence.
     target="_blank">CADD 1.7</a>. It may also be helpful to reference our
     <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py"
     target="_blank">previously used script</a> for a method on how to
-    generate this file based on score threshholds, colors, and an
+    generate this file based on score thresholds, colors, and an
     input bigWig track.</p>
     <P><B>Example:</B></P>
     <pre>   setColorWith url or relative path </pre>
