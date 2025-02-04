@@ -30,7 +30,7 @@
  *                     corresponding targets will be looked up and used
  *    label=a[,b,c]  : Display row for a single term with the specific label.
  *                     Must use with 'type' or terms must have same type.
- *    deprecated=y   : Include deprecated terms.  Usually these are excluded unless the term
+ *    deprectate=y   : Include deprecated terms.  Usually these are excluded unles the term
  *                     is reqested by name.
  * Hint: try  "hgEncodeVocab type=typeOfTerm" for a complete list of types with links to
  *       each specific type.
@@ -762,10 +762,6 @@ return normalizeType(type);
 
 void doMiddle()
 {
-// The location of encode/cv.ra is no longer passed as an option from trackDb cgi option via raReadAll(cgiUsualString("ra", cv_file()), "term");
-// Thus the original ra CGI variable is no longer a potential security concern.  
-// Note that Larry added it in 2010, but Tim D removed it by putting in the library for cvFile() by 2011, but somebody flagged it as a potential security concern in 2014.
-// and so the cgi variable "ra" is not used and can be ignored as it has not been used since 2011.
 struct hash *cvHash = raReadAll((char *)cvFile(), CV_TERM);
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
