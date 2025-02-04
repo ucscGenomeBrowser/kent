@@ -146,10 +146,18 @@ else
 
     if (liftDb != NULL)
         {
+        char *table;
+        if (isCustomTrack(tg->table))
+            {
+            liftDb = CUSTOM_TRASH;
+            table = trackDbSetting(tg->tdb, "dbTableName");
+            }
+        else
+            table = tg->table;
         struct hash *chainHash = newHash(8);
         struct sqlConnection *conn = hAllocConn(liftDb);
         char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, &tg->table[4], chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader)loader, chainHash);
+        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader)loader, chainHash);
 
         list = quickLiftBeds(bed, chainHash, FALSE);
         hFreeConn(&conn);
@@ -573,10 +581,18 @@ else
         }
     else
         {
+        char *table;
+        if (isCustomTrack(tg->table))
+            {
+            liftDb = CUSTOM_TRASH;
+            table = trackDbSetting(tg->tdb, "dbTableName");
+            }
+        else
+            table = tg->table;
         struct hash *chainHash = newHash(8);
         struct sqlConnection *conn = hAllocConn(liftDb);
         char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, &tg->table[4], chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader)bedLoad12, chainHash);
+        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader)bedLoad12, chainHash);
 
         struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
         for(bed = liftedBeds; bed; bed = bed->next)
