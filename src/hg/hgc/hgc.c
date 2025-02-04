@@ -26393,6 +26393,8 @@ jsIncludeFile("hgc.js", NULL);
 jsInlineF("var doHPRCTable = true;\n");
 }
 
+boolean findNameBasedHandler(struct trackDb *tdb, char *track, char *item);
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -26548,9 +26550,31 @@ if (isDup)
 	}
     }
 
+// do we want to avoid named based handling on this track?
+boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
+boolean calledHandler = FALSE;
+
+if (!avoidHandler)
+    calledHandler = findNameBasedHandler(tdb, track, item);
+
+if ((tdb != NULL) && !calledHandler)
+    {
+    genericClickHandler(tdb, item, NULL);
+    }
+else
+    {
+    cartWebStart(cart, database, "%s", track);
+    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
+    }
+
+cartHtmlEnd();
+}
+
+boolean findNameBasedHandler(struct trackDb *tdb, char *track, char *item)
+// call hander routine based on name.  Return TRUE if we called a handler
+{
 char* handler = trackDbSetting(tdb, "trackHandler");
 
-/* Start of 1000+ line dispatch on table involving 100+ if/elses. */
 char *table = (tdb ? tdb->table : track);
 if (sameWord(table, "getDna"))
     {
@@ -27782,18 +27806,10 @@ else if (startsWith("hprcDeletions", table) || startsWith("hprcInserts", table) 
     {
     doHPRCTable(tdb, item);
     }
-else if (tdb != NULL)
-    {
-    genericClickHandler(tdb, item, NULL);
-    }
 else
-    {
-    cartWebStart(cart, database, "%s", track);
-    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
-    }
-/* End of 1000+ line dispatch on table involving 100+ if/elses. */
+    return FALSE;
 
-cartHtmlEnd();
+return TRUE;
 }
 
 struct hash *orgDbHash = NULL;
