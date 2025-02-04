@@ -675,6 +675,7 @@ export haveNcbiGene="no"
 ## setup ncbiGene only if ncbiRefSeq is not present
 if [ "${haveNcbiRefSeq}" = "no" ]; then
 
+
 # may or may not have a searchTrix for ncbiGene, assume none
 searchTrix=""
 # check to see if there is a index for ncbiGene
@@ -688,11 +689,16 @@ if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+rm -f ${buildDir}/genes/${asmId}.ncbiGene.gtf.gz
 export longLabel="Gene models submitted to NCBI"
 export shortLabel="Gene models"
 if [ "$asmType" = "refseq" ]; then
   longLabel="NCBI gene predictions"
   shortLabel="NCBI Genes"
+fi
+if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
+  mkdir -p $buildDir/genes
+  ln -s ../trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz $buildDir/genes/${asmId}.ncbiGene.gtf.gz
 fi
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix

@@ -1833,6 +1833,7 @@ sub doNcbiGene {
   $bossScript->add(<<_EOF_
 export asmId=$defaultName
 export gffFile=$gffFile
+export DS=`date "+%F"`
 
 function cleanUp() {
   rm -f \$asmId.ncbiGene.genePred.gz \$asmId.ncbiGene.genePred
@@ -1840,12 +1841,16 @@ function cleanUp() {
 }
 
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
+  ln -s \$gffFile ./
   (gff3ToGenePred -warnAndContinue -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
       2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
          -chromSizes=../../\$asmId.chrom.sizes stdin stdout \\
         $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
+  zcat \$asmId.ncbiGene.genePred.gz > ncbiGene.\$DS
+  genePredToGtf -utr file ncbiGene.\$DS  stdout | gzip -c > \$asmId.ncbiGene.gtf.gz
+  rm -f ncbiGene.\$DS
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
   if [ "\${howMany}" -eq 0 ]; then
      printf "# ncbiGene: no gene definitions found in \$gffFile\n";

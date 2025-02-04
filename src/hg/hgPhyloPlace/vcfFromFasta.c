@@ -1039,12 +1039,12 @@ else
 struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, minSeqSize, maxSeqSize,
                                               retFailedSeqs);
 reportTiming(pStartTime, "read and check uploaded FASTA");
+*retFailedPsls = NULL;
 if (filteredSeqs)
     {
     char *nextcladeDataset = phyloPlaceRefSettingPath(org, db, "nextcladeDataset");
     if (nextcladeDataset)
         {
-        *retFailedPsls = NULL;
         tn = alignWithNextclade(filteredSeqs, nextcladeDataset, refGenome, maskSites, retSampleIds,
                                 retSeqInfo, retFailedSeqs, pStartTime);
         }
