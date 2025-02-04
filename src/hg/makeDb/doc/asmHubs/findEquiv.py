@@ -144,7 +144,8 @@ if __name__ == "__main__":
     dataDict = readGrepData()
     identEquiv = relateData(identifierDict, genArkDict, dataDict)
 
-    # write results
+    # write results, sorted
     with open(resultFile, "w", newline="\n") as file:
         writer = csv.writer(file, delimiter="\t", lineterminator="\n")
-        writer.writerows(identEquiv.items())
+        for key, value in sorted(identEquiv.items()):
+            writer.writerow([key, value])
