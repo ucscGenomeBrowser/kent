@@ -3501,7 +3501,9 @@ if (results && results->singleSubtreeInfo)
     if (subtreePersist)
         saveTrashFile(singleSubtreeJsonTn);
     reportTiming(&startTime, "make Auspice JSON");
-    char *ctDb = db;
+    char *ctDb = NULL;
+    if (sameString(db, org))
+        ctDb = db;
     char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
     if (dbSetting)
         {

@@ -24,9 +24,9 @@ set x=`git branch | grep "^. v${BRANCHNN}_branch"`
 if ("$x" == "") then
     # branch does not exist, create it
     echo "v${BRANCHNN}_branch does not exist, creating as a tracking branch."
-    git checkout -tb v${BRANCHNN}_branch origin/v${BRANCHNN}_branch
+    git checkout --track=direct -b v${BRANCHNN}_branch origin/v${BRANCHNN}_branch
     if ($status) then
-	echo "error running: git checkout -tb v${BRANCHNN}_branch origin/v${BRANCHNN}_branch"
+	echo "error running: git checkout --track=direct -b v${BRANCHNN}_branch origin/v${BRANCHNN}_branch"
 	exit 1
     endif	
 else

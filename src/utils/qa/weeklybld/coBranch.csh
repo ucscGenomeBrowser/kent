@@ -25,7 +25,7 @@ echo "Checking out branch $BRANCHNN. [${0}: `date`]"
 git clone -q $GITSHAREDREPO kent
 chmod g+w kent
 cd kent
-git checkout -tb $branch origin/$branch
+git checkout --track=direct -b $branch origin/$branch
 set err = $status
 if ( $err ) then
  echo "error running git clone and checkout of kent in $BUILDDIR/$branch : $err [${0}: `date`]" 
