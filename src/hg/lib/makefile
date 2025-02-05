@@ -7,7 +7,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   asmAlias.o asmEquivalent.o asmSummary.o assemblyList.o autoUpgrade.o axtInfo.o \
   barChartBed.o barChartCategory.o barChartUi.o bed.o bed12Source.o \
   bedDetail.o bigBedFind.o bigBedLabel.o bigChain.o bigDbSnp.o bigGenePred.o bigLink.o \
-  bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
+  bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
   cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
   chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
   chromKeeper.o clonePos.o cpgIsland.o ctgPos.o customAdjacency.o customComposite.o customFactory.o \
@@ -38,7 +38,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   tagRepo.o tfbsCons.o tigrCmrGene.o traceInfo.o trackDb.o trackDbCache.o trackDbCustom.o trackHub.o \
   trackVersion.o trashDir.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o txGraph.o txInfo.o txRnaAccs.o \
   userdata.o variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
-  wiggleUtils.o wikiLink.o bigRmskAlignBed.o bigRmskBed.o
+  wiggleUtils.o wikiLink.o wikiTrack.o bigRmskAlignBed.o bigRmskBed.o
 
 ifeq (${USE_HIC}, 1)
   O += straw.o
