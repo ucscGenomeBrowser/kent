@@ -1,6 +1,6 @@
 Tue Dec 17 03:26:20 PST 2024 - Max
 # there is almost nothing to do here, Patricia Sullivan did everything for us! PSullivan@ccia.org.au
-mkdir /hive/data/genomes/hg19/bed/splicevardb/
-cd /hive/data/genomes/hg19/bed/splicevardb/
+mkdir /hive/data/genomes/hg38/bed/splicevardb/
+cd /hive/data/genomes/hg38/bed/splicevardb/
 wget https://compbio.ccia.org.au/splicevardb/SVDB.bb
-# and copied her trackDb into hg19/splicevardb.ra
+# and copied her trackDb into hg38/splicevardb.ra
