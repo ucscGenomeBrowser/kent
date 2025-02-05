@@ -7,7 +7,7 @@ O=HInv.o affy10KDetails.o affy120KDetails.o ancientRref.o annoFormatVep.o annoGr
   annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o api.o atomDb.o axtLib.o \
   bactigPos.o barChartData.o barChartSample.o bdgpExprLink.o bdgpGeneInfo.o bed5FloatScore.o \
   bed6FloatScore.o bed8Attrs.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigTransMap.o borkPseudoHom.o \
-  cartEdit0.o cartEdit1.o cartEdit2.o cartEdit3.o cartEdit4.o cartEdit5.o cartEdit6.o cartJson.o cartRewrite.o cartTrackDb.o ccdsGeneMap.o ccdsInfo.o ccdsNotes.o \
+  cartEdit0.o cartEdit1.o cartEdit2.o cartEdit3.o cartEdit4.o cartEdit5.o cartEdit6.o cartJson.o cartRewrite.o ccdsGeneMap.o ccdsInfo.o ccdsNotes.o \
   cdsSpec.o celeraCoverage.o celeraDupPositive.o cgh.o chicken13kInfo.o chr18deletions.o cnpIafrate.o \
   cnpIafrate2.o cnpLocke.o cnpSebat.o cnpSebat2.o cnpSharp.o cnpSharp2.o codeBlast.o cogs.o contigAcc.o \
   cpgIslandExt.o ctgPos2.o cutter.o dbRIP.o dbSnpDetails.o dbSnpRs.o delConrad2.o delHinds2.o dgv.o \
@@ -31,7 +31,7 @@ O=HInv.o affy10KDetails.o affy120KDetails.o ancientRref.o annoFormatVep.o annoGr
   switchDbTss.o synteny100000.o tRNAs.o targetDb.o tfbsConsFactors.o tfbsConsMap.o tfbsConsSites.o \
   trackLayout.o trackTable.o transMapGene.o transMapInfo.o transMapSrc.o transMapStuff.o transRegCode.o \
   transRegCodeProbe.o ucscRetroInfo.o ucscRetroOrtho.o userRegions.o variant.o variome.o vegaInfoZfish.o \
-  visiGene.o vntr.o wabAli.o wgRna.o wikiTrack.o yaleGencodeAssoc.o zdobnovSynt.o
+  visiGene.o vntr.o wabAli.o wgRna.o yaleGencodeAssoc.o zdobnovSynt.o
 
 ifeq (${GBROWSE}, 1)
   GBROWSE_D=-DGBROWSE
