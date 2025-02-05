@@ -26557,14 +26557,17 @@ boolean calledHandler = FALSE;
 if (!avoidHandler)
     calledHandler = findNameBasedHandler(tdb, track, item);
 
-if ((tdb != NULL) && !calledHandler)
+if (!calledHandler)
     {
-    genericClickHandler(tdb, item, NULL);
-    }
-else
-    {
-    cartWebStart(cart, database, "%s", track);
-    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
+    if (tdb != NULL)
+        {
+        genericClickHandler(tdb, item, NULL);
+        }
+    else
+        {
+        cartWebStart(cart, database, "%s", track);
+        warn("Sorry, clicking there doesn't do anything yet (%s).", track);
+        }
     }
 
 cartHtmlEnd();
