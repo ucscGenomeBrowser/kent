@@ -1766,6 +1766,7 @@ priority 1
         maxWindowToDraw 1000000
         defaultGeneTracks knownGene
         priority 4
+        tableBrowser noGenome
 
     track dbSnp153ViewErrs
     parent dbSnp153Composite
@@ -1893,6 +1894,7 @@ priority 0.8
         bigDataUrl /gbdb/$D/snp/dbSnp155.bb
         maxWindowToDraw 1000000
         priority 4
+        tableBrowser noGenome
 
     track dbSnp155ViewErrs
     parent dbSnp155Composite

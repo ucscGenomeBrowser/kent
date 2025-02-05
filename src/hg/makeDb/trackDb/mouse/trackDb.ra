@@ -829,6 +829,7 @@ urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+tableBrowser noGenome
 codingAnnotations snp142CodingDbSnp,
 html snp142
 

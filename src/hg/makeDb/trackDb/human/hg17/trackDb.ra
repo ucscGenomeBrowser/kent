@@ -747,6 +747,7 @@ priority 109.22
 track snp override
 shortLabel snp124
 longLabel Simple Nucleotide Polymorphisms (dbSNP Build 124)
+tableBrowser noGenome
 visibility hide 
 
 track snpArray

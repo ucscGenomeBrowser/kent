@@ -82,6 +82,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 type bed 6 +
+tableBrowser noGenome
 
 track canHg4Maf
 shortLabel Ancestor Maf

@@ -12,6 +12,7 @@ track snp138Common override
 visibility hide
 
 track snp138 override
+tableBrowser noGenome
 visibility dense
 
 track refGene override
