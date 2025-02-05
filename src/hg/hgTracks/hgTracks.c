@@ -6098,8 +6098,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
-        handler = lookupTrackHandlerClosestToHome(tdb);
-        if (handler != NULL)
+        boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
+        if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(tdb)) != NULL)
             handler(track);
         }
     if (cgiVarExists("hgGenomeClick"))

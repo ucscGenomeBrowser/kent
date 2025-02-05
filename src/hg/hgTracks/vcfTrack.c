@@ -2530,12 +2530,12 @@ else
     }
 }
 
-static void assignHapArrayIx(int *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild)
+static void assignHapArrayIx(int *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild, int hapArrayLen)
 {
 int i;
 struct vcfRecord *rec = vcff->records;
 int ix = 0; // index into ret
-for (i = 0; i < slCount(hapArray); i++)
+for (i = 0; i < hapArrayLen; i++)
     {
     struct hapCluster *hc = hapArray[i];
     struct vcfGenotype *gt = &(rec->genotypes[hc->gtHapIx >> 1]);
@@ -2556,8 +2556,8 @@ struct vcfRecord *rec = vcff->records;
 struct hapDistanceMatrix *matrix = NULL;
 int childHapArrayIndices[2];
 int parentHapArrayIndices[parGtCount];
-assignHapArrayIx(childHapArrayIndices, hapArray, vcff, sample, TRUE);
-assignHapArrayIx(parentHapArrayIndices, hapArray, vcff, sample, FALSE);
+assignHapArrayIx(childHapArrayIndices, hapArray, vcff, sample, TRUE, gtCount * 2);
+assignHapArrayIx(parentHapArrayIndices, hapArray, vcff, sample, FALSE, gtCount * 2);
 for (i = 0; i < 2; i++)
     {
     struct hapDistanceMatrix *row = needMem(sizeof(struct hapDistanceMatrix));

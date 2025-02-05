@@ -1,19 +1,6 @@
 kentSrc = ../../..
-include ../../../inc/common.mk
-
-L += $(MYSQLLIBS)
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
 A = tdbQuery
-O = tdbQuery.o tdbRecord.o
+extraObjects = tdbRecord.o
+extraHeaders = tdbRecord.h
+include ${kentSrc}/inc/userApp.mk
 
-tdbQuery: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-#	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O}
-	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
-
-clean::
-	rm -f ${A} ${O}

@@ -1,12 +1,19 @@
 ########################################################################
 # user App rules, typical three-line makefile to use this rule set,
-#   the binary program file name is specified by the 'A' variable:
+#
+#   the one or more program file name is specified by the 'A' variable:
 #	kentSrc = ../..
 #	A = aveCols
 #	include ${kentSrc}/inc/userApp.mk
 #
+# Other variables that can be defined, which needs to be done
+# before including userApp.mk
+#
 # for more than one object file for the resulting 'A' program, use
 #       extraObjects = second.o third.o fourth.o etc.o
+#
+# and for extra header files for depenencies
+#       extraHeaders = second.h third.h fourth.h etc.h
 #
 # to use object files built elsewhere:
 #       externObjects = ../path/other.o
@@ -17,34 +24,43 @@
 include ${kentSrc}/inc/localEnvironment.mk
 include ${kentSrc}/inc/common.mk
 
+# with SEMI_STATIC, this makes sure only allow shared lirbaries are used
+userAppsCheckLinking=${kentSrc}/utils/qa/weeklybld/userAppsCheckLinking
+
 DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
 ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
   DEPLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a
 endif
 
-LINKLIBS = ${DEPLIBS} ${MYSQLLIBS}
+LINKLIBS = ${STATIC_PRE} ${DEPLIBS} ${MYSQLLIBS}
 
-O = ${A}.o
-objects = ${O} ${extraObjects} ${externObjects}
+objects = ${extraObjects} ${externObjects}
 
-${DESTDIR}${BINDIR}/${A}${EXE}: ${DEPLIBS} ${O} ${extraObjects}
+default:: ${A:%=${DESTDIR}${BINDIR}/%${EXE}}
+
+${extraObjects}: ${extraHeaders}
+
+${DESTDIR}${BINDIR}/%${EXE}: %.o ${objects} ${DEPLIBS}
 	@mkdir -p $(dir $@)
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} ${objects} ${LINKLIBS} ${L}
+	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+ifeq (${SEMI_STATIC},yes)
+	${userAppsCheckLinking} $@
+endif
 
-compile:: ${DEPLIBS} ${O} ${extraObjects}
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${objects} ${LINKLIBS} ${L}
+compile:: ${A:%=%${EXE}}
 
-install:: compile
-	rm -f ${DESTDIR}${BINDIR}/${A}${EXE}
-	cp -p ${A}${EXE} ${DESTDIR}${BINDIR}/${A}${EXE}
-	${STRIP} ${A}${EXE} ${DESTDIR}${BINDIR}/${A}${EXE}
-	rm -f ${O} ${A}${EXE}
+%${EXE}: ${DEPLIBS} %.o ${objects}
+	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
+
+install:: ${A:%=${DESTDIR}${BINDIR}/%${EXE}}
 
 clean::
-	rm -f ${O} ${extraObjects} ${A}${EXE}
+	rm -f ${O} ${extraObjects} ${A:%=%${EXE}}
 	@if test -d tests -a -s tests/makefile; then cd tests && ${MAKE} clean; fi
 
 test::
 	@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \
 	else echo "# no tests directory (or perhaps no tests/makefile) in $(CURDIR)"; fi
+
+${extraObjects}: ${extraHeaders}

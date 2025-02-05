@@ -30,8 +30,6 @@ import random # Module to generate random numbers and select random items
 import subprocess # Module to run subprocesses
 from datetime import datetime # Module to handle dates and times
 from urllib.parse import unquote # Module to decode URL-encoded strings
-from selenium import webdriver # Module for web browser automation
-from selenium.webdriver.chrome.options import Options # Module to set Chrome options for Selenium
 
 # Get the username of the person running the script
 user = getpass.getuser()
@@ -130,6 +128,8 @@ def checkSession(session):
     hubid_error_dev="can not find any trackDb tables for hub_"
     hubCollection_error= r'doesn\\x27t\\x20exist\\x20in\\x20customTrash\\x20database\\x2C\\x20or\\x20hFindTableInfoWithConn\\x20failed'
     buffer_error= r'buffer\\x20overflow\\x2C\\x20size\\x204096\\x2C\\x20format\\x3A\\x20Click\\x20to\\x20alter\\x20the\\x20display'
+    hub_error="Error: The database"
+    genomeName_error="Error: The genome"
     # List to append session load error
     error_list=[]
     try:
@@ -155,6 +155,15 @@ def checkSession(session):
             pass
         # Check for buffer overflow error by matching the exact string pattern
         elif re.search(re.escape(buffer_error), checkLoad):
+            pass
+       #Pass if session load error is Error: The database...
+       #The hubId is not in hubStatus at all, that is, it's never been connected.
+       #The hub has an error in the hubStatus table.
+        elif hub_error in checkLoad:
+            pass
+       #Pass if session load error is Error: The genome
+       #This would most likely happen if the hub used to have that genome but doesn't anymore.
+        elif genomeName_error in checkLoad:
             pass
         else: #If session does not contains strings to check, add error to list 
              error_list.append('error')

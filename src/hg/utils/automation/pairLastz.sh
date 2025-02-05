@@ -281,7 +281,7 @@ if [ "${working}" -gt 0 ]; then
     printf "# " 1>&2
     ls -ogd ${targetExists}/lastz${Query}.* 1>&2
   fi
-  buildDir=`ls -d ${targetExists}/lastz${Query}.*`
+  buildDir=`ls -d ${targetExists}/lastz${Query}.* | tail -1`
   printf "# continuing: %s\n" "${buildDir}" 1>&2
 fi
 export primaryPartsDone=`ls $buildDir/fb.* 2> /dev/null | wc -l`

@@ -110,7 +110,7 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 
 #Index page public session thumbnails update
 MAILTO=otto-group@ucsc.edu
-11 1 * * 4 /cluster/software/bin/python3.6 /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
+11 1 * * 4 /cluster/software/bin/python /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
 
 #OMIM Upload
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta

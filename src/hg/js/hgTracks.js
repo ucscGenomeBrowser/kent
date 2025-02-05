@@ -2634,7 +2634,8 @@ var rightClick = {
         } else if (cmd === 'hideComposite') {
             rec = hgTracks.trackDb[id];
             if (tdbIsSubtrack(rec)) {
-                row = $( 'tr#tr_' + id );
+                let trid = id.replaceAll(".","\\.");
+                row = $( 'tr#tr_' + trid );
                 rows = dragReorder.getCompositeSet(row);
                 // from bottom up, just in case remove screws with us
                 if (rows && rows.length > 0) {
@@ -2771,7 +2772,8 @@ var rightClick = {
                 var offerHideSubset    = false;
                 var offerHideComposite = false;
                 var offerSingles       = true;
-                var row = $( 'tr#tr_' + id );
+                let trid = id.replaceAll(".","\\.");
+                var row = $( 'tr#tr_' + trid );
                 if (row) {
                     var btn = $(row).find('p.btnBlue'); // btnBlue means cursor over left button
                     if (btn.length === 1) {

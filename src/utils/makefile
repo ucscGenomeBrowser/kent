@@ -103,6 +103,7 @@ UTILS_APPLIST = \
 	stringify \
 	subChar \
 	subColumn \
+	tabFmt \
 	tailLines \
 	textHistogram \
 	tickToDate \
@@ -226,12 +227,9 @@ all: $(ALL_APPS:%=%.all) $(USER_APP_SCRIPTS:%=%.userAppScript)
 %.all:
 	cd $* && echo $* && $(MAKE)
 
-# userAppsB: builds the user application specific programs
-# it would have been nice to be able to use the target name 'userApps'
-# here, but there is a directory by that name, and thus it always exists
-# and so the target does nothing.
-
-userAppsB: $(UTILS_APPLIST:%=%.userApp) $(USER_APP_SCRIPTS:%=%.userAppScript)
+# userApps: builds the user application specific programs
+.PHONY: userApps
+userApps: $(UTILS_APPLIST:%=%.userApp) $(USER_APP_SCRIPTS:%=%.userAppScript)
 
 %.userApp:
 	cd $* && echo $* && $(MAKE)

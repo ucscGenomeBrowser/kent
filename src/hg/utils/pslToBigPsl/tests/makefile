@@ -1,5 +1,5 @@
 kentSrc = ../../../..
-include ../../../../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
 pslToBigPsl = ${DESTBINDIR}/pslToBigPsl
 bigPslToPsl = ${DESTBINDIR}/bigPslToPsl

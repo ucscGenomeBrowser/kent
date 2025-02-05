@@ -303,11 +303,15 @@ static char *writeHubStanzasForFile(struct hubSpace *rowForFile, char *userDataD
 {
 char *hubFileName = NULL;
 char *hubDir = hubPathFromParentDir(rowForFile->parentDir, userDataDir);
-fprintf(stderr, "hubDir: %s\n", hubDir);
 hubFileName = writeHubText(hubDir, rowForFile->userName, rowForFile->db);
 
-char *encodedTrack = cgiEncodeFull(rowForFile->fileName);
-writeTrackStanza(hubFileName, encodedTrack, encodedTrack, rowForFile->fileType, encodedTrack, rowForFile->location);
+// NOTE: even though rowForFile->fileName was already cgiEncoded by the pre-finish hook,
+// we still must cgiEncode again to make the bigDataUrl setting work, as apache needs
+// to look for a literal '%' in a filename if there was a character encoded. For example,
+// if the filename from tus was &.bb, tus encodes this to "\u0026.bb", which we write to
+// disk as %5Cu0026.bb, and apache needs to find at:
+// https://url/hash/userName/%25Cu0026.bb in order to work in hgTracks
+writeTrackStanza(hubFileName, rowForFile->fileName, cgiEncodeFull(rowForFile->fileName), rowForFile->fileType, rowForFile->fileName, rowForFile->location);
 return hubFileName;
 }
 
@@ -348,14 +352,16 @@ void removeFileForUser(char *fname, char *userName)
 /* Remove a file for this user if it exists */
 {
 // The file to remove must be prefixed by the hg.conf userDataDir
-if (!startsWith(getDataDir(userName), fname))
+char canonicalPath[PATH_MAX];
+realpath(fname, canonicalPath);
+if (!startsWith(getDataDir(userName), canonicalPath))
     return;
-if (fileExists(fname))
+if (fileExists(canonicalPath))
     {
     // delete the actual file
-    mustRemove(fname);
+    mustRemove(canonicalPath);
     // delete the table row
-    deleteHubSpaceRow(fname, userName);
+    deleteHubSpaceRow(canonicalPath, userName);
     }
 // TODO: we should also modify the hub.txt associated with this file
 }

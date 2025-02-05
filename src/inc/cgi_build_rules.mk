@@ -1,27 +1,5 @@
 #	Common set of build rules for CGI binaries
-
-ifeq (${CGI_BIN_USER},)
-    CGI_BIN_USER=${CGI_BIN}-${USER}
-endif
-
-ifeq (${CGI_BIN_BETA},)
-    CGI_BIN_BETA=${CGI_BIN}-beta
-endif
-
-# these rules set CGI_BIN_DEST to the right cgi-bin directory depending 
-# on the main goal (my (default), alpha or beta)
-# this won't work if you supply multiple goals "(make my alpha beta")
-# but we do not seem to do that
-CGI_BIN_DEST=${CGI_BIN}
-ifeq ($(MAKECMDGOALS),my)
-    CGI_BIN_DEST=${CGI_BIN}-${USER}
-endif
-ifeq ($(MAKECMDGOALS),)
-    CGI_BIN_DEST=${CGI_BIN}-${USER}
-endif
-ifeq ($(MAKECMDGOALS),beta) 
-    CGI_BIN_DEST=${CGI_BIN}-beta
-endif
+include ${kentSrc}/inc/cgiVars.mk
 
 my:: compile
 	chmod a+rx $A${EXE}

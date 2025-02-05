@@ -35637,3 +35637,26 @@ wait
 # #Colors were added using the script
 kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py
 
+##############################################################################
+# VarChat ticket #35081 (Lou, Jan 2025)
+# See makedoc in makeDb/doc/hg38/varChat.txt
+#########################################################################
+# COSMIC v101 (01-24-2025) Gerardo
+# RM 34904
+
+# Karen from COSMIC emailed data files links to Max. Max renamed the files to make it clear which db they belong to.
+## $ ll /hive/data/outside/cosmic/ucsc_export*.bed.gz
+## rw-rw-r- 1 max protein 198M Jan 14 16:15
+## /hive/data/outside/cosmic/ucsc_export.v101.hg19.bed.gz
+## rw-rw-r- 1 max protein 198M Jan 14 13:35
+## /hive/data/outside/cosmic/ucsc_export.v101.hg38.bed.gz
+
+mkdir -p /hive/data/outside/cosmic/{hg19,hg38}/v101
+
+cd /hive/data/outside/cosmic/hg19/v101
+zcat /hive/data/outside/cosmic/ucsc_export.v101.hg19.bed.gz  | awk -F'\t' -v OFS="\t" '{ print $1, $2, $3, $7, 0, $6, $4, $5, $8 }' | sort -k1,1 -k2,2n > cosmic.bed
+bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as cosmic.bed /hive/data/genomes/hg19/chrom.sizes cosmic.bb -tab
+cd /gbdb/hg19/cosmic/  
+ln -s /hive/data/outside/cosmic/hg19/v101/cosmic.bb 
+#Updated human/hg19/trackDb.ra and copied human/hg38/cosmicMuts.html to human/hg19
+#########################################################################

@@ -206,7 +206,8 @@ GCF_033439665.1_Achstr1	ascomycetes C.strumarium (CBS 333.67 2023)
 GCF_030869305.1_CTAM01	ascomycetes C.tamarilloi (Tom-12  2023)
 GCF_020726465.1_Chagl1	ascomycetes C.tenue (MPI-SDFR-AT-0079 2021)
 GCF_000221225.1_CTHT_3.0	ascomycetes C.thermophilum var. thermophilum DSM 1495
-GCF_014235925.1_CTRU02	ascomycetes C.truncatum
+GCF_014235925.2_CTRU02v2	ascomycetes C.truncatum (v2 CMES1059 2024)
+GCF_014235925.1_CTRU02	ascomycetes C.truncatum (v1 WU-2223L 2020)
 GCF_000585515.1_Clad_yegr_CBS_114405_V1	ascomycetes C.yegresii CBS 114405
 GCF_010015565.1_Disac1	ascomycetes D.aciculare CBS 342.82
 GCF_026229845.1_ASM2622984v1	ascomycetes D.amygdali (CAA958 2022)
@@ -603,7 +604,7 @@ GCA_000507425.3_Cryp_heve_CBS569_V2	basidiomycetes K.heveanensis (CBS 569 2016)
 GCF_002102565.1_Kocim1	basidiomycetes K.imperatae
 GCF_000507465.2_ASM50746v4	basidiomycetes K.mangroviensis (v2 CBS 8507 2024 refseq)
 GCF_039105145.1_ASM3910514v1	basidiomycetes K.newhampshirensis (CBS 13917 2024)
-GCF_000512605.1_Cryp_pinu_CBS10737_V1	basidiomycetes K.pini CBS 10737
+GCF_000512605.2_ASM51260v3	basidiomycetes K.pini (v2 CBS 10737 2024)
 GCF_008629635.2_ASM862963v2	basidiomycetes K.shandongensis (v2 CBS 12478 2024)
 GCF_035658355.1_ASM3565835v1	basidiomycetes K.shivajii (CBS 11374 2024)
 GCF_000143565.1_V1.0	basidiomycetes L.bicolor S238N-H82

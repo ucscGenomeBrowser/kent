@@ -81,7 +81,6 @@ src/hg/ctgToChromFa \
 src/hg/dbTrash \
 src/hg/embossToPsl \
 src/hg/estOrient \
-src/hg/encode/validateFiles \
 src/hg/fakeFinContigs \
 src/hg/fakeOut \
 src/hg/featureBits \
@@ -188,7 +187,6 @@ src/hg/qacToQa \
 src/hg/qacToWig \
 src/hg/recycleDb \
 src/hg/relPairs \
-src/hg/reviewSanity \
 src/hg/rnaStructure \
 src/hg/scanRa \
 src/hg/semiNorm \

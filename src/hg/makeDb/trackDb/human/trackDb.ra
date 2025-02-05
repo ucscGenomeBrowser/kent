@@ -159,6 +159,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
+pennantIcon Updated red ../goldenPath/newsarch.html#XXXXXX "Updated January XX, 2025"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -192,6 +193,25 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
+
+        track varChat
+        shortLabel enGenome VarChat
+        longLabel enGenome VarChat: Literature match and variant's summary
+        visibility dense
+        type bigBed 9 + 4
+        bigDataUrl /gbdb/$D/bbi/varChat.bb
+        noScoreFilter on
+        exonNumbers off
+        parent varsInPubs pack
+        maxWindowCoverage 40000
+        maxItems 1000000
+        mouseOverField _mouseOver
+        url https://varchat.engenome.com/search?source=ucsc&text=$<VariantUrl>
+        urlLabel Open Variant on VarChat
+        bedNameLabel Nucleotide Change
+        skipFields Variant,VariantUrl,score
+        detailsDynamicTable VariantDetails|Variant Details
+        pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released January XX, 2025"
 
         track pubtator
         shortLabel PubTator rsIDs

@@ -1,0 +1,54 @@
+#!/bin/bash -e
+###
+# Compile userApps in Docker.
+###
+usage="compileUserAppsInDocker [--shell] builddir
+
+Runs as current and tree should be checked out by that user.
+The following directories are expected:
+  builddir/kent/ - clean checkout of tree
+  builddir/userApps/ - compiled output to this directory
+
+Options
+  --shell - start bash shell rather than runb the build, for debugging
+"
+
+set -beEu -o pipefail
+
+shell="no"
+if [[ $# -ge 1 && "$1" = "--shell" ]]; then
+    shell=yes
+    shift
+fi
+if [[ $# -ne 1 ]]; then
+    echo "Wrong # of args: ${usage}" >&2
+    exit 1
+fi
+builddir="$1"
+
+MACHTYPE=$(uname -m)
+BINDIR=linux.${MACHTYPE}
+DESTDIR=${builddir}/userApps/  # must end in slash
+
+# location in VM
+VM_BUILDDIR=/home/builddir
+VM_DESTDIR=${VM_BUILDDIR}/userApps/  # must end in slash
+
+makecmd="make -O -j 64 userApps SEMI_STATIC=yes DESTDIR=${VM_DESTDIR} BINDIR=${BINDIR}"
+if [[ ${shell} = "yes" ]] ; then
+    cmd='bash'
+    args="-it"
+    echo "Starting shell for debugging" >&2
+    echo "   make command that would be run is: ${makecmd}" >&2
+else
+    cmd=${makecmd}
+    args=""
+fi
+builddir=$(realpath ${builddir})
+
+set -x
+docker run --user=$(id -u):$(id -g) \
+       --volume=${builddir}:${VM_BUILDDIR} \
+       --workdir=/home/builddir/kent/src --rm=true ${args} \
+       user-apps-build ${cmd}
+

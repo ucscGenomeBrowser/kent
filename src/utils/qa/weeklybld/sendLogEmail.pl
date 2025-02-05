@@ -13,7 +13,7 @@ my $lastNN = shift;
 my $branchNN = shift;
 
 my $buildMeisterOnly = $ENV{'BUILDMEISTEREMAIL'};
-my $buildMeisterEtc =  $buildMeisterOnly . ',clayfischer@ucsc.edu,lrnassar@ucsc.edu';
+my $buildMeisterEtc =  $buildMeisterOnly . ' clayfischer@ucsc.edu lrnassar@ucsc.edu';
 # the bounceEmail address needs to be in the ucsc.edu domain to work correctly
 my $bounceEmail = $buildMeisterOnly;
 my $returnEmail = ' lrnassar@ucsc.edu';

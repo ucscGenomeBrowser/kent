@@ -25,13 +25,15 @@ use vars qw/
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
     [ { name => 'count',   func => \&doCount },
-      { name => 'mask', func => \&doMask },
       { name => 'sdust', func => \&doSdust },
       { name => 'twobit', func => \&doTwoBit },
       { name => 'load', func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
+
+### new version of windowmasker 2025-01-29
+my $wmDir = "/hive/data/outside/ncbiToolKit/v28.0.11/build.v28.0.11/GCC1150-DebugMT64/bin";
 
 # Option defaults:
 my $defaultWorkhorse = 'least loaded';
@@ -113,42 +115,39 @@ sub doCount {
 
   my $whatItDoes = "It does WindowMasker counts step.";
   my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doCount.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCount.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   my $tmpDir = &HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
-if ( -d "/data/tmp" ) then
-  setenv TMPDIR "/data/tmp"
-else if ( -d "/scratch/tmp" ) then
-  setenv TMPDIR "/scratch/tmp"
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/dev/shm" ]; then
+  export TMPDIR="/dev/shm"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
 else
-  setenv TMPDIR "/tmp"
-endif
-set windowMaskerDir = /cluster/bin/\$MACHTYPE
-set windowMasker = \$windowMaskerDir/windowmasker
-set fa = $db.fa
-set tmpDir = `mktemp -d -p \$TMPDIR doWindowMasker.XXXXXX`
-chmod 775 \$tmpDir
-set inputTwoBit = $unmaskedSeq
-pushd \$tmpDir
+  export TMPDIR="/tmp"
+fi
+
+export windowMaskerDir="$wmDir"
+export windowMasker="\$windowMaskerDir/windowmasker"
+
+export fa="$db.fa"
+export tmpDir=`mktemp -d -p \$TMPDIR doWindowMasker.XXXXXX`
+chmod 777 \$tmpDir
+export inputTwoBit="$unmaskedSeq"
+cd \$tmpDir
 twoBitToFa \$inputTwoBit \$fa
-\$windowMasker -mk_counts true -input \$fa -output windowmasker.counts
-popd
+\$windowMasker -mem 32768 -mk_counts -in \$fa -out windowmasker.counts
+cd $runDir
 cp \$tmpDir/windowmasker.counts .
 rm -rf \$tmpDir
 _EOF_
   );
   $bossScript->execute();
 } # doCount
-
-
-#########################################################################
-# * step: mask [workhorse]
-sub doMask {
-  printf STDERR "# doMask: obsolete step, no longer needed\n";
-  return 0;
-} # doMask
 
 #########################################################################
 # * step: sdust [workhorse]
@@ -157,32 +156,38 @@ sub doSdust {
   &HgAutomate::checkExistsUnlessDebug('mask', 'sdust', "$runDir/windowmasker.counts");
   my $whatItDoes = "It does WindowMasker masking step with -sdust true.";
   my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doSdust.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doSdust.bash", $workhorse,
 				      $runDir, $whatItDoes);
   my $tmpDir = &HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
-if ( -d "/data/tmp" ) then
-  setenv TMPDIR "/data/tmp"
-else if ( -d "/scratch/tmp" ) then
-  setenv TMPDIR "/scratch/tmp"
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/dev/shm" ]; then
+  export TMPDIR="/dev/shm"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
 else
-  setenv TMPDIR "/tmp"
-endif
-set windowMaskerDir = /cluster/bin/\$MACHTYPE
-set windowMasker = \$windowMaskerDir/windowmasker
-set fa = $db.fa
-set tmpDir = `mktemp -d -p \$TMPDIR doWindowMasker.XXXXXX`
-chmod 775 \$tmpDir
-set inputTwoBit = $unmaskedSeq
+  export TMPDIR="/tmp"
+fi
+export windowMaskerDir="$wmDir"
+export windowMasker="\$windowMaskerDir/windowmasker"
+export fa="$db.fa"
+export tmpDir=`mktemp -d -p \$TMPDIR doWindowMasker.XXXXXX`
+chmod 777 \$tmpDir
+export inputTwoBit="$unmaskedSeq"
 cp windowmasker.counts \$tmpDir
-pushd \$tmpDir
+cd \$tmpDir
 twoBitToFa \$inputTwoBit \$fa
-\$windowMasker -ustat windowmasker.counts -sdust true -input \$fa -output windowmasker.intervals
-perl -wpe \'if \(s\/^\>lcl\\\|\(\.\*\)\\n\$\/\/\) { \$chr = \$1\; } \\
-   if \(\/^\(\\d+\) \- \(\\d+\)\/\) { \\
-   \$s=\$1\; \$e=\$2+1\; s\/\(\\d+\) \- \(\\d+\)\/\$chr\\t\$s\\t\$e\/\; \\
-   }\' windowmasker.intervals > windowmasker.sdust.bed
-popd
+\$windowMasker -ustat windowmasker.counts -dust T -in \$fa \\
+  | awk \'
+/^>/ { sub(/^>/, "", \$0); chr = \$0; next; }
+
+/^[0-9]+ - [0-9]+/ { split(\$0, arr, " - "); start = arr[1]; end = arr[2] + 1;
+    printf "%s\\t%d\\t%d\\n",  chr, start, end;
+}
+\' > windowmasker.sdust.bed
+cd $runDir
 cp \$tmpDir/windowmasker.sdust.bed .
 rm -rf \$tmpDir
 _EOF_
@@ -200,11 +205,11 @@ sub doTwoBit {
   &HgAutomate::checkExistsUnlessDebug('sdust', 'twobit', ("$runDir/windowmasker.counts",
            "$runDir/windowmasker.sdust.bed"));
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doTwoBit.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doTwoBit.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 twoBitMask $unmaskedSeq windowmasker.sdust.bed $db.wmsk.sdust.2bit
-twoBitToFa $db.wmsk.sdust.2bit stdout | faSize stdin >&faSize.$db.wmsk.sdust.txt
+twoBitToFa $db.wmsk.sdust.2bit stdout | faSize stdin > faSize.$db.wmsk.sdust.txt 2>&1
 _EOF_
   );
   $bossScript->execute();
@@ -217,18 +222,19 @@ sub doLoad {
   my $whatItDoes = "load sdust.bed and filter with gaps to clean";
   &HgAutomate::checkExistsUnlessDebug('twobit', 'load', ("$runDir/$db.wmsk.sdust.2bit",
            "$runDir/faSize.$db.wmsk.sdust.txt"));
-  my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
+  my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-hgLoadBed $db windowmaskerSdust windowmasker.sdust.bed
-featureBits -countGaps $db windowmaskerSdust >&fb.$db.windowmaskerSdust.beforeClean.txt
-featureBits $db -not gap -bed=notGap.bed
-featureBits $db windowmaskerSdust notGap.bed -bed=stdout | gzip -c > cleanWMask.bed.gz
-hgLoadBed $db windowmaskerSdust cleanWMask.bed.gz
-featureBits -countGaps $db windowmaskerSdust >&fb.$db.windowmaskerSdust.clean.txt
-zcat cleanWMask.bed.gz | twoBitMask ../../$db.unmasked.2bit stdin -type=.bed $db.cleanWMSdust.2bit
-twoBitToFa $db.cleanWMSdust.2bit stdout | faSize stdin >& faSize.$db.cleanWMSdust.txt
-featureBits -countGaps $db rmsk windowmaskerSdust >&fb.$db.rmsk.windowmaskerSdust.txt
+export db="$db"
+hgLoadBed \$db windowmaskerSdust windowmasker.sdust.bed
+featureBits -countGaps \$db windowmaskerSdust > fb.\$db.windowmaskerSdust.beforeClean.txt 2>&1
+featureBits \$db -not gap -bed=notGap.bed
+featureBits \$db windowmaskerSdust notGap.bed -bed=stdout | gzip -c > cleanWMask.bed.gz
+hgLoadBed \$db windowmaskerSdust cleanWMask.bed.gz
+featureBits -countGaps \$db windowmaskerSdust > fb.\$db.windowmaskerSdust.clean.txt 2>&1
+zcat cleanWMask.bed.gz | twoBitMask ../../\$db.unmasked.2bit stdin -type=.bed \$db.cleanWMSdust.2bit
+twoBitToFa \$db.cleanWMSdust.2bit stdout | faSize stdin >& faSize.\$db.cleanWMSdust.txt
+featureBits -countGaps \$db rmsk windowmaskerSdust > fb.\$db.rmsk.windowmaskerSdust.txt 2>&1
 _EOF_
   );
   $bossScript->execute();
@@ -240,11 +246,12 @@ sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-gzip $runDir/windowmasker.counts
+gzip $runDir/windowmasker.counts &
 gzip $runDir/windowmasker.sdust.bed
+wait
 _EOF_
   );
   $bossScript->execute();

@@ -1,0 +1,36 @@
+#!/bin/bash -e
+##
+# Check linking of a user app to check only allowed shared libraries are referenced.
+##
+set -beEu -o pipefail
+
+if [[ $# = 0 ]] ; then
+    echo "Wrong # args $0 prog [...]"
+    exit 1
+fi
+
+function checkProg() {
+    local prog="$1"
+
+    ldd $prog | awk -v prog=pro '
+         /^\\t/ {
+             next;  # not a library line
+         }
+         /linux-vdso\.so|libc\.so|libgcc_s\.so|libdl\.so|libm\.so|ld-linux-x86-64\.so/ {
+             next;
+         }
+         {
+            print prog, "found unallowed dynamic library:", $0 > "/dev/stderr";
+            errcnt += 1
+         }
+         END {
+             if (errcnt) {
+                exit 1;
+             }
+         }'
+}
+
+
+for p in "$@" ; do
+    checkProg "$p"
+done

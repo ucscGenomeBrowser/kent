@@ -1,0 +1,647 @@
+############################################################################
+New version installed 2025-11-29
+############################################################################
+
+cd /hive/data/outside/RepeatMasker
+
+wget --timestamping \
+  https://www.repeatmasker.org/RepeatMasker/RepeatMasker-4.1.7-p1.tar.gz
+
+# -rw-rw-r-- 1  45757841 Jan  9 08:56 RepeatMasker-4.1.7-p1.tar.gz
+
+tar xvzf RepeatMasker-4.1.7-p1.tar.gz
+
+### unpacks into /hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1
+
+### copy over cross_match binary from previous RM:
+
+cp -p \
+/hive/data/staging/data/RepeatMasker221107/cross_match \
+  /hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1
+
+### Verify it will function on the new hgwdev:
+
+ldd ./cross_match
+        linux-vdso.so.1 (0x00007ffd49b6b000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007f938e903000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f938e600000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f938e9ee000)
+
+####### I don't think this Dfam.hmm file is necessary
+### download Dfam library, took a long time,
+wget --timestamping \
+https://www.dfam.org/releases/Dfam_3.8/families/Dfam.hmm.gz
+real    448m55.460s
+
+### took an hour to gunzip:  time gunzip Dfam.hmm.gz
+real    55m47.295s
+user    50m42.646s
+sys     4m9.112s
+
+
+result here:
+-rw-rw-r-- 1  92142601810 Nov 15  2023 Dfam.hmm.gz
+
+moved to RepeatMasker-4.1.7-p1/Library/ and gunzip
+to get Dfam.hmm:
+
+-rw-rw-r-- 1 818448373587 Nov 15  2023 Dfam.hmm
+
+du -hsc Libraries/Dfam.hmm
+763G    Libraries/Dfam.hmm
+
+### pick the partitioned dfam library files
+# check for latest dfam library in:
+https://www.dfam.org/releases/Dfam_3.8/families/FamDB/
+
+### Downloading partition 9:
+https://www.dfam.org/releases/Dfam_3.8/families/FamDB/dfam38-1_full.8.h5.gz
+
+# and the other 8 partitions:
+
+for I in `seq 0 7`
+do
+printf "wget --timestamping https://www.dfam.org/releases/Dfam_3.8/families/FamDB/dfam38-1_full.${I}.h5.gz) > wget.${I}.log 2>&1\n" 1>&2
+time (wget --timestamping https://www.dfam.org/releases/Dfam_3.8/families/FamDB/dfam38-1_full.${I}.h5.gz) > wget.${I}.log 2>&1
+done
+
+Unpacked all those into Libraries/famdb/
+
+ls -ogrt Libraries/famdb
+total 1621230144
+-rw-rw-r-- 1 127407996360 Nov 12 18:06 dfam38-1_full.8.h5
+-rw-rw-r-- 1  63916952120 Nov 12 18:06 dfam38-1_full.7.h5
+-rw-rw-r-- 1  69738994608 Nov 12 18:06 dfam38-1_full.6.h5
+-rw-rw-r-- 1  72138843520 Nov 12 18:06 dfam38-1_full.5.h5
+-rw-rw-r-- 1  88179255072 Nov 12 18:06 dfam38-1_full.4.h5
+-rw-rw-r-- 1  91034940616 Nov 12 18:06 dfam38-1_full.3.h5
+-rw-rw-r-- 1 119488176888 Nov 12 18:06 dfam38-1_full.2.h5
+-rw-rw-r-- 1 126569122792 Nov 12 18:06 dfam38-1_full.1.h5
+-rw-rw-r-- 1  71595401776 Nov 12 18:06 dfam38-1_full.0.h5
+
+####
+https://www.repeatmasker.org/rmblast/
+
+downloaded rmblast binaries built by RepeatMasker:
+
+wget --timestamping https://www.repeatmasker.org/rmblast/rmblast-2.14.1+-x64-linux.tar.gz
+
+Unpacked into /hive/data/outside/rmblast-2.14.1
+
+tar xvzf rmblast-2.14.1+-x64-linux.tar.gz
+
+Verify all the binaries will function with the dynamic libraries
+on the new hgwdev machine
+
+cd /hive/data/outside/rmblast-2.14.1/bin
+
+for F in *; do echo "#### $F ####"; ldd ./${F} 2>&1; done > ../ldd.all
+sed -e 's/^    //;' ldd.all | cut -d' ' -f1 | sort | uniq -c
+     24 ####
+     21 /lib64/ld-linux-x86-64.so.2
+     21 libc.so.6
+     21 libgcc_s.so.1
+     19 libgomp.so.1
+     21 libm.so.6
+     13 libz.so.1
+     11 libzstd.so.1
+     21 linux-vdso.so.1
+      3 not
+
+The 'not' is 'not a dynamic executable':
+
+#### get_species_taxids.sh ####
+        not a dynamic executable
+#### legacy_blast.pl ####
+        not a dynamic executable
+#### update_blastdb.pl ####
+        not a dynamic executable
+
+####  Picked up new version of hmmer
+cd /hive/data/outside
+ wget --timestamping http://eddylab.org/software/hmmer/hmmer.tar.gz
+-rw-rw-r-- 1 19669667 Nov  4 04:37 hmmer.tar.gz
+
+tar xvzf hmmer.tar.gz
+Unpacks into:
+drwxr-xr-x 10     4096 Aug 15  2023 hmmer-3.4
+
+mv hmmer.tar.gz hmmer-3.4
+[hiram@hgwdev /hive/data/outside/hmmer-3.4] mkdir ../hmmer
+./configure --prefix=/hive/data/outside/hmmer
+
+HMMER configuration:
+   compiler:             gcc -O3    -pthread 
+   host:                 x86_64-pc-linux-gnu
+   linker:               
+   libraries:              -lpthread
+   DP implementation:    sse
+
+Now do 'make'  to build HMMER, and optionally:
+       'make check'  to run self tests,
+       'make install'  to install programs and man pages,
+       '(cd easel; make install)'  to install Easel tools.
+
+time (make) > mout.log 2>&1
+
+time (make install) > mout.install.log 2>&1
+
+[hiram@hgwdev /hive/data/outside/hmmer-3.4] ls -ogrt ../hmmer/bin
+total 30464
+-rwxr-xr-x 1  454192 Jan 29 15:19 alimask
+-rwxr-xr-x 1  802704 Jan 29 15:19 hmmalign
+-rwxr-xr-x 1  926904 Jan 29 15:19 hmmbuild
+-rwxr-xr-x 1  508000 Jan 29 15:19 hmmconvert
+-rwxr-xr-x 1  803176 Jan 29 15:19 hmmemit
+-rwxr-xr-x 1  516904 Jan 29 15:19 hmmfetch
+-rwxr-xr-x 1  508128 Jan 29 15:19 hmmlogo
+-rwxr-xr-x 1 1180104 Jan 29 15:19 hmmpgmd
+-rwxr-xr-x 1 1188584 Jan 29 15:19 hmmpgmd_shard
+-rwxr-xr-x 1  520520 Jan 29 15:19 hmmpress
+-rwxr-xr-x 1  965448 Jan 29 15:19 hmmscan
+-rwxr-xr-x 1  965768 Jan 29 15:19 hmmsearch
+-rwxr-xr-x 1  549984 Jan 29 15:19 hmmsim
+-rwxr-xr-x 1  503432 Jan 29 15:19 hmmstat
+-rwxr-xr-x 1 1148768 Jan 29 15:19 jackhmmer
+-rwxr-xr-x 1 1096904 Jan 29 15:19 phmmer
+-rwxr-xr-x 1 1156968 Jan 29 15:19 nhmmer
+-rwxr-xr-x 1  966008 Jan 29 15:19 nhmmscan
+-rwxr-xr-x 1  511520 Jan 29 15:19 makehmmerdb
+
+
+### running configure: it starts up saying:
+
+RepeatMasker Configuration Program
+
+Checking for libraries...
+
+ - Found a FamDB root partition
+
+<PRESS ENTER TO CONTINUE>
+
+Add a Search Engine:
+   1. Crossmatch: [ Configured, Default ]
+   2. RMBlast: [ Un-configured ]
+   3. HMMER3.1 & DFAM: [ Un-configured ]
+   4. ABBlast: [ Un-configured ]
+
+   5. Done
+
+Enter Selection:
+
+For #1 it requires the path to the directory where cross_match exists
+
+The path Phil Green's cross_match program ( phrap program suite ).
+CROSSMATCH_DIR [/hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1]:
+
+Do you want Crossmatch to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]: 
+
+For #2:
+The path to the installation of the RMBLAST sequence alignment program.
+RMBLAST_DIR: /hive/data/outside/rmblast-2.14.1/bin
+
+For #3:
+The path to the HMMER profile HMM search software.
+HMMER_DIR: /hive/data/outside/hmmer/bin
+
+Do you want HMMER3.1 & DFAM to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]: N
+
+Add a Search Engine:
+   1. Crossmatch: [ Configured, Default ]
+   2. RMBlast: [ Configured ]
+   3. HMMER3.1 & DFAM: [ Configured ]
+   4. ABBlast: [ Un-configured ]
+
+   5. Done
+
+Enter Selection: 5
+Building RMBlast frozen libraries..
+The program is installed with a the following repeat libraries:
+
+FamDB Directory     : /hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/Libraries/famdb
+FamDB Generator     : famdb.py v1.0
+FamDB Format Version: 1.0
+FamDB Creation Date : 2023-11-15 11:30:15.311827
+
+Database: Dfam
+Version : 3.8
+Date    : 2023-11-14
+
+Dfam - A database of transposable element (TE) sequence alignments and HMMs.
+
+9 Partitions Present
+Total consensus sequences present: 3574116
+Total HMMs present               : 3574078
+
+... and a lot of printout about the libraries 
+
+### test the installation:
+
+cd /dev/shm
+
+/hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/RepeatMasker \
+   -engine crossmatch -s -species "Homo sapiens" /dev/null
+
+RepeatMasker version 4.1.7-p1
+Search Engine: Crossmatch [ 1.090518 ]
+
+Using Master RepeatMasker Database: /hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/Libraries/famdb
+  Title    : Dfam
+  Version  : 3.8
+  Date     : 2023-11-14
+  Families : 3,574,116
+
+Species/Taxa Search:
+  Homo sapiens [NCBI Taxonomy ID: 9606]
+  Lineage: root;cellular organisms;Eukaryota;Opisthokonta;Metazoa;
+           Eumetazoa;Bilateria;Deuterostomia;Chordata;
+           Craniata <chordates>;Vertebrata <vertebrates>;
+           Gnathostomata <vertebrates>;Teleostomi;Euteleostomi;
+           Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;
+           Mammalia;Theria <mammals>;Eutheria;Boreoeutheria;
+           Euarchontoglires;Primates;Haplorrhini;Simiiformes
+Including only curated families:
+  1380 families in ancestor taxa; 52 lineage-specific families
+
+Building general libraries in: /hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/Libraries/CONS-Dfam_3.8/general
+Building species libraries in: /hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/Libraries/CONS-Dfam_3.8/Homo_sapiens
+File /dev/null appears to be empty.
+
+### also tested:
+
+/hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/RepeatMasker \
+  -engine hmmer -pa 4 -s -species "Homo sapiens" /dev/null
+
+/hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1/RepeatMasker \
+  -engine rmblast -pa 1 -s -species "Homo sapiens" /dev/null
+
+############################################################################
+New version installed 2022-12-07
+############################################################################
+
+mkdir /hive/data/staging/data/RepeatMasker221107
+cd /hive/data/staging/data/RepeatMasker221107
+
+wget --timestamping \
+http://www.repeatmasker.org/RepeatMasker/RepeatMasker-4.1.4.tar.gz
+
+That unpacks to make a directory: ./RepeatMasker/
+move it up into this directory:
+mv RepeatMasker RepeatMasker.d
+cd RepeatMasker.d
+mv * ..
+mv ./github ..
+cd ..
+rmdir RepeatMasker.d
+
+Obtain full Dfam.h5 to replace minimal library in this distribution:
+cd  /hive/data/staging/data/RepeatMasker221107/Libraries
+wget --timestamping \
+   https://www.dfam.org/releases/Dfam_3.6/families/Dfam.h5.gz
+# that takes 30 to 40 minutes
+
+Much larger than the default one here:
+
+-rw-rw-r-- 1 26381535800 Jul 21 01:02 Dfam.h5.gz
+-rw-r--r-- 1  5474183168 Jul 20 13:53 Dfam.h5
+
+mv Dfam.h5 Dfam.h5.orig
+gunzip DFam.hg5.gz
+
+-rw-rw-r-- 1 171010916736 Jul 21 01:02 Dfam.h5
+
+# copy cross_match from previous install
+cd /hive/data/staging/data/RepeatMasker210401
+cp -p cross_match ../RepeatMasker221107/
+
+When all external software is installed,
+  try running the configure script, it now requires
+  the python3 install from /cluster/software/bin
+
+export PATH=/cluster/software/bin:$PATH
+now configure will run:
+  ./configure
+
+Answering the questions:
+The full path including the name for the TRF program.
+TRF_PRGM: /cluster/bin/x86_64/trf.4.09
+
+Add a Search Engine:
+   1. Crossmatch: [ Un-configured ]
+   2. RMBlast: [ Un-configured ]
+   3. HMMER3.1 & DFAM: [ Un-configured ]
+   4. ABBlast: [ Un-configured ]
+
+   5. Done
+
+
+The path Phil Green's cross_match program ( phrap program suite ).
+CROSSMATCH_DIR: /hive/data/staging/data/RepeatMasker221107
+
+
+ you want Crossmatch to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]:
+
+Add a Search Engine:
+   1. Crossmatch: [ Configured, Default ]
+   2. RMBlast: [ Un-configured ]
+   3. HMMER3.1 & DFAM: [ Un-configured ]
+   4. ABBlast: [ Un-configured ]
+
+   5. Done
+
+The path to the installation of the RMBLAST sequence alignment program.
+RMBLAST_DIR: /hive/data/outside/rmblast-2.11.0/bin
+
+Do you want RMBlast to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]: N
+
+The path to the HMMER profile HMM search software.
+HMMER_DIR: /hive/data/outside/hmmer-3.3.2/src
+
+Do you want HMMER3.1 & DFAM to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]: N
+
+Leaving ABBlast unconfigured
+
+Add a Search Engine:
+   1. Crossmatch: [ Configured, Default ]
+   2. RMBlast: [ Configured ]
+   3. HMMER3.1 & DFAM: [ Configured ]
+   4. ABBlast: [ Un-configured ]
+
+   5. Done
+
+Enter Selection: 5
+Building FASTA version of RepeatMasker.lib ....
+
+This takes a long time since it is processing this
+file into fasta:
+-rw-rw-r-- 1 171010916736 Jul 21 01:02 Dfam.h5
+That is 160 Gb
+After about an hour, finished:
+
+............................................
+Building RMBlast frozen libraries..
+The program is installed with a the following repeat libraries:
+File: /hive/data/staging/data/RepeatMasker221107/Libraries/Dfam.h5
+Database: Dfam
+Version: 3.6
+Date: 2022-04-12
+
+Dfam - A database of transposable element (TE) sequence alignments and HMMs.
+
+Total consensus sequences: 733031
+Total HMMs: 732993
+
+
+Further documentation on the program may be found here:
+  /hive/data/staging/data/RepeatMasker221107/repeatmasker.help
+
+############################################################################
+Thu Dec  8 09:07:57 PST 2022
+
+Configure new install of RepeatModeler:
+
+cd /hive/data/outside/RepeatModeler-2.0.4
+perl configure
+# answering questions for that:
+The path to the installation of RepeatMasker (RM 4.1.4 or higher)
+REPEATMASKER_DIR: /hive/data/staging/data/RepeatMasker221107
+
+The path to the installation of the RECON de-novo repeatfinding program.
+RECON_DIR: /hive/data/outside/RECON-1.08/bin
+
+The path to the installation of the RepeatScout ( 1.0.6 or higher ) de-novo repeatfinding program.
+RSCOUT_DIR: /hive/data/outside/RepeatScout-1.0.6
+
+The full path to TRF program.  TRF must be named "trf". ( 4.0.9 or higher )
+TRF_DIR [/cluster/bin/x86_64]: /cluster/bin/x86_64
+
+[hiram@hgwdev /cluster/bin/x86_64] ls -l trf*
+-rwxr-xr-x 1 hiram protein   111112 Mar  4  2016 trf
+-rwxr-xr-x 1 hiram protein   111112 Mar  4  2016 trf.4.09
+-rwxrwxr-x 1 hiram genecats  111670 Nov 26  2012 trf.407b
+-rwxrwxr-x 1 build genecats 5516672 Nov 21 10:14 trfBig
+
+The path to the installation of the CD-Hit sequence clustering package.
+CDHIT_DIR: /hive/data/outside/cdhit-master
+
+The path to the installation directory of the UCSC TwoBit Tools (twoBitToFa, faToTwoBit, twoBitInfo etc).
+UCSCTOOLS_DIR [/cluster/bin/x86_64]: 
+
+The path to the installation of the RMBLAST (2.13.0 or higher)
+RMBLAST_DIR: /hive/data/outside/rmblast-2.13.0/bin
+
+LTR Structural Identication Pipeline [optional]
+
+In addition to RECON/RepeatScout this version of RepeatModeler
+has the option of running an additional analysis to identify
+structural features of LTR sequences.
+
+Do you wish to configure RepeatModeler for this type
+of analysis [y] or n?: y
+
+The path to the installation of the GenomeTools package.
+GENOMETOOLS_DIR: /hive/data/outside/genometools-1.6.2/bin
+
+The path to the installation of the LTR_Retriever (v2.9.0 and higher) structural LTR analysis package.
+LTR_RETRIEVER_DIR: /hive/data/outside/LTR_retriever-2.9.0
+
+The path to the installation of the MAFFT multiple alignment program.',
+MAFFT_DIR: /hive/data/outside/mafft-7.505-with-extensions/bin
+
+The path to the installation of the Ninja phylogenetic analysis package.
+NINJA_DIR: /hive/data/outside/NINJA-0.95-cluster_only/NINJA
+ -- Setting perl interpreter and version...
+
+Congratulations!  RepeatModeler is now ready to use.
+[hiram@hgwdev /hive/data/outside/RepeatModeler-2.0.4]
+
+############################################################################
+
+To find new versions of RepeatMasker software:
+
+   http://www.repeatmasker.org/RMDownload.html
+
+Example version 01 Feb 2017, you want a new directory here::
+
+  mkdir /hive/data/staging/data/RepeatMasker170201
+  cd /hive/data/staging/data/RepeatMasker170201
+
+  wget --timestamping http://www.repeatmasker.org/RepeatMasker-open-4-0-7.tar.gz
+  tar -xvzf RepeatMasker-open-4-0-7.tar.gz
+
+Creates the directory ./RepeatMasker/
+Probably could some a tar argument to override that and make it be .
+ 
+  mv RepeatMasker RepeatMasker.download
+  cd RepeatMasker.download
+  mv * ..
+  cd
+  rmdir RepeatMasker.download
+
+Pick up the full libraries from www.girinst.org
+Requires an account and a login there.  It asks for user name/password
+when you click on the download link:
+   http://www.girinst.org/server/RepBase/protected/repeatmaskerlibraries/RepBaseRepeatMaskerEdition-20170127.tar.gz
+from this menu page:
+   http://www.girinst.org/server/RepBase/index.php
+
+-rw-rw-rw- 1   51207503 Mar 16 22:01  RepBaseRepeatMaskerEdition-20170127.tar.gz
+
+It unpacks into ./Libraies:
+
+   tar xvzf RepBaseRepeatMaskerEdition-20170127.tar.gz
+Libraries/README
+Libraries/RMRBSeqs.embl
+
+-rw-r--r-- 1       3721 Jan 28  2017 README
+-rw-r--r-- 1  166648733 Jan 28  2017 RMRBSeqs.embl
+
+Find Dfam file: Dfam.hmm.gz
+at:  http://www.dfam.org/web_download/Release/Dfam_2.0/
+
+wget --timestamping 'http://www.dfam.org/web_download/Release/Dfam_2.0/Dfam.hmm.gz'
+
+-rw-rw-r-- 1 239726414 Sep 22  2015 Dfam.hmm.gz
+
+In this case, it is identical to what is already in RepeatMasker:
+
+md5sum */Dfam.hmm*
+c8dbc5c353a60c97e5c9870483314ab9  Libraries/Dfam.hmm
+zcat Dfam.hmm.gz | md5sum
+c8dbc5c353a60c97e5c9870483314ab9  -
+
+Copy cross_match binary from previous version:
+
+cp -p ../RepeatMasker151029/cross_match .
+
+And the hmmer/ binaries:
+
+rsync -a -P ../RepeatMasker151029/hmmer/ ./hmmer/
+
+Answering questions during the ./configure:
+
+path to cross_match: /scratch/data/RepeatMasker170201
+path to hmmer: /scratch/data/RepeatMasker170201/hmmer
+rmblast dir: /hive/data/outside/rmblastn-2.2.28/bin
+default search engine crossmatch
+trf program: /cluster/bin/x86_64/trf.4.09
+
+Must work in the path desired for the path on the ku nodes:
+
+cd /scratch/data/RepeatMasker170201
+./configure
+
+**PERL PROGRAM**
+
+  This is the full path to the Perl interpreter.
+  e.g. /usr/local/bin/perl or enter "env" if you prefer to use
+  the "/usr/bin/env perl" mechanism to locate perl.
+
+Enter path [ /usr/bin/perl ]: env
+
+  This is the path to the directory where
+  the RepeatMasker program has been installed.
+
+Enter path [ /hive/data/staging/data/RepeatMasker170201 ]: /scratch/data/RepeatMasker170201
+
+Rebuilding RepeatMaskerLib.embl library
+  - Read in 216 sequences from /scratch/data/RepeatMasker170201/Libraries/DfamConsensus.embl
+  - Read in 44968 sequences from /scratch/data/RepeatMasker170201/Libraries/RMRBSeqs.embl
+  - Read in 44968 annotations from /scratch/data/RepeatMasker170201/Libraries/RMRBMeta.embl
+  Saving RepeatMaskerLib.embl library...
+RepeatMaskerLib.embl: 45184 total sequences.
+  -- Building FASTA database...
+
+  This is the full path to the TRF program.
+ This is now used by RepeatMasker to mask simple repeats.
+
+Enter path [ /cluster/bin/x86_64/trf ]: /cluster/bin/x86_64/trf.4.09
+
+Add a Search Engine:
+   1. CrossMatch: [ Un-configured ]
+   2. RMBlast - NCBI Blast with RepeatMasker extensions: [ Un-configured ]
+   3. WUBlast/ABBlast (required by DupMasker): [ Un-configured ]
+   4. HMMER3.1 & DFAM: [ Un-configured ]
+
+   5. Done
+
+
+Enter Selection:  1
+
+  This is the path to the location where
+  the cross_match program has been installed.
+
+Enter path [  ]: /scratch/data/RepeatMasker170201
+
+Do you want CrossMatch to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]: 
+
+
+And again:
+
+Add a Search Engine:
+   1. CrossMatch: [ Configured, Default ]
+   2. RMBlast - NCBI Blast with RepeatMasker extensions: [ Un-configured ]
+   3. WUBlast/ABBlast (required by DupMasker): [ Un-configured ]
+   4. HMMER3.1 & DFAM: [ Un-configured ]
+
+   5. Done
+
+
+Enter Selection: 2
+
+  This is the path to the location where
+  the rmblastn and makeblastdb programs can be found.
+
+Enter path [  ]: /hive/data/outside/rmblastn-2.2.28/bin
+
+Building RMBlast frozen libraries..
+
+
+Do you want RMBlast to be your default
+search engine for Repeatmasker? (Y/N)  [ Y ]: N
+
+And again:
+
+Add a Search Engine:
+   1. CrossMatch: [ Configured, Default ]
+   2. RMBlast - NCBI Blast with RepeatMasker extensions: [ Configured ]
+   3. WUBlast/ABBlast (required by DupMasker): [ Un-configured ]
+   4. HMMER3.1 & DFAM: [ Un-configured ]
+
+   5. Done
+
+
+Enter Selection: 4
+
+  This is the path to the location where
+  the nhmmer program can be found.
+
+Enter path [  ]: /scratch/data/RepeatMasker170201/hmmer
+
+ERROR: Could not identify version of the nhmmer program.
+       Most likely this is older than 3.1.  Please
+       ensure you have at least 3.1 installed and then
+       rerun configure.
+       Data returned from nhmmer exec:
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER hmmer3.1-snap20121016 (October 2012); http://hmmer.org/
+# Copyright (C) 2011 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: nhmmscan [-options] <hmmdb> <seqfile>
+
+
+HMMER not configured!
+<PRESS ENTER TO CONTINUE>
+
+
+And that is finished.  Despite that error about hmmer, it is correct,
+edit the RepeatMaskerConfig.pm file and set:
+
+   $HMMER_DIR   = "/scratch/data/RepeatMasker170201/hmmer"
