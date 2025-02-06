@@ -5996,3 +5996,21 @@ checkedDb = cloneString(db);
 
 return knownDb;
 }
+
+boolean isCuratedHubUrl(char *hubUrl)
+/* check if the given hubUrl is pointing to a curated hub */
+{
+boolean isCurated = TRUE;
+
+if (isEmpty(hubUrl))
+    return isCurated;	// this is not a hub, it is a database assembly
+
+isCurated = FALSE;	// only 1 hub is curated: /gbdb/hs1
+if (startsWith("/gbdb", hubUrl))	// might be /gbdb/hs1
+    {
+    if (! startsWith("/gbdb/genark", hubUrl))	// genark hubs == not curated
+        isCurated = TRUE;
+    }
+
+return isCurated;
+}

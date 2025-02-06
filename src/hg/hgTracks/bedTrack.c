@@ -157,7 +157,7 @@ else
         struct hash *chainHash = newHash(8);
         struct sqlConnection *conn = hAllocConn(liftDb);
         char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader)loader, chainHash);
+        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)loader, 0, chainHash);
 
         list = quickLiftBeds(bed, chainHash, FALSE);
         hFreeConn(&conn);
@@ -592,7 +592,7 @@ else
         struct hash *chainHash = newHash(8);
         struct sqlConnection *conn = hAllocConn(liftDb);
         char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader)bedLoad12, chainHash);
+        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoad12, 0, chainHash);
 
         struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
         for(bed = liftedBeds; bed; bed = bed->next)
