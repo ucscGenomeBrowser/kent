@@ -67,3 +67,7 @@ Thu Oct  9 10:50:55 GMT 2014
 - https://www.virtualbox.org/ticket/12441, set natdnshostresolver1 to on
 - allowing browser to do more sudo work, in /etc/sudoers.d/browserbox
 - adding more convenience aliases to /home/browser/.bashrc
+
+Thu Feb  6 10:50:05 AM PST 2025
+- Pause CGI updates until we are able to ensure our latest compiled versions work on GBiB
+

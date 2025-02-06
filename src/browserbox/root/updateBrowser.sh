@@ -196,7 +196,11 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     echo a hgMirror job is running right now, not updating
     exit 4
 fi
-	
+
+# Avoid updating GBiB binaries while we work through some OS upgrades and changes to our
+# development environment.
+exit 0
+
 # --- now do the update ---
 
 # keep a log of all output of this script and the date
