@@ -140,7 +140,7 @@ else
     jsonWriteString(jw, "genome", genome);
     struct slPair *dbOptions = NULL;
     char genomeLabel[PATH_LEN*4];
-    if (isNotEmpty(hubUrl) && !startsWith("/gbdb", hubUrl))
+    if (! isCuratedHubUrl(hubUrl))
         {
         struct trackHub *hub = hubConnectGetHub(hubUrl);
         if (hub == NULL)
