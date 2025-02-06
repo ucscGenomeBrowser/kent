@@ -102,7 +102,7 @@ else
         char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
         if (hubtoolsStr)
             isHubToolsUpload = sameString(hubtoolsStr, "TRUE") || sameString(hubtoolsStr, "true");
-        parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        parentDir = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL));
         fprintf(stderr, "parentDir = '%s'\n", parentDir);
         fflush(stderr);
         // strip out plain leading '.' and '/' components
