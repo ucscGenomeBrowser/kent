@@ -186,24 +186,15 @@ if (trackDataAccessible(db, tdb) && differentString("longTabix", tdb->type))
 return FALSE;
 }
 
-char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
+char *wgEncodeVocabLink(char *term,char *value,char *title, char *label,char *suffix)
 // returns allocated string of HTML link to controlled vocabulary term
 {
-#define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' " \
-			 "class='cv' TARGET=ucscVocab>%s</A>"
 #define VOCAB_LINK "<A HREF='hgEncodeVocab?%s=\"%s\"' title='%s details' class='cv' " \
 	       "TARGET=ucscVocab>%s</A>"
 struct dyString *dyLink = NULL;
 char *encTerm = cgiEncode(term);
 char *encValue = cgiEncode(value);
-if (file != NULL)
-    {
-    char *encFile = cgiEncode(file);
-    dyLink = dyStringCreate(VOCAB_LINK_WITH_FILE,encFile,encTerm,encValue,title,label);
-    freeMem(encFile);
-    }
-else
-    dyLink = dyStringCreate(VOCAB_LINK,encTerm,encValue,title,label);
+dyLink = dyStringCreate(VOCAB_LINK,encTerm,encValue,title,label);
 if (suffix != NULL)
     dyStringAppend(dyLink,suffix);  // Don't encode since this may contain HTML
 
@@ -295,12 +286,12 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
 		if (!cvTermIsHidden(mdbVar->var))
 		    {
 		    char *label = (char *)cvLabel(NULL,mdbVar->var);
-		    char *linkOfType = wgEncodeVocabLink(NULL,CV_TYPE,mdbVar->var,label,
+		    char *linkOfType = wgEncodeVocabLink(CV_TYPE,mdbVar->var,label,
 							   label,NULL);
 		    if (cvTermIsCvDefined(mdbVar->var))
 			{
 			label = (char *)cvLabel(mdbVar->var,mdbVar->val);
-			char *linkOfTerm = wgEncodeVocabLink(NULL,CV_TERM,mdbVar->val,label,
+			char *linkOfTerm = wgEncodeVocabLink(CV_TERM,mdbVar->val,label,
 							       label,NULL);
 			dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap>"
 					       "<i>%s:</i></td><td nowrap>%s</td></tr>",
@@ -8584,7 +8575,7 @@ for (ix=1;ix<count && !found;ix++)
     {
     if (sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag
         {                               // so all labels are linked
-        char *link = wgEncodeVocabLink(words[0],"term",words[ix],rootLabel,rootLabel,suffix);
+        char *link = wgEncodeVocabLink("term",words[ix],rootLabel,rootLabel,suffix);
         return link;
         }
     else if (countChars(words[ix],'=') == 1 && childTdb != NULL)
@@ -8597,7 +8588,7 @@ for (ix=1;ix<count && !found;ix++)
             const char * cvTerm = metadataFindValue(childTdb,cvSetting);
             if (cvTerm != NULL)
                 {
-                char *link = wgEncodeVocabLink(words[0],
+                char *link = wgEncodeVocabLink(
                                     (sameWord(cvSetting,"antibody") ?  "target" : "term"),
                                     (char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
                 return link;
@@ -8951,9 +8942,9 @@ if (mdbVar == NULL)
     return cloneString(members->groupTitle);
     }
 
-#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=%s&%s=\""
+#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?%s=\""
 #define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
-struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab,
+struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,
                                          (sameWord(mdbVar,"antibody")?"target":"term"));
 
 // Now build the comma delimited string of mdb vals (all have same mdb var)

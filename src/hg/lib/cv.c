@@ -152,7 +152,7 @@ static char *cvFileRequested = NULL;
 
 void cvFileDeclare(const char *filePath)
 // Declare an altername cv.ra file to use
-// (The cv.ra file is normally discovered based upon CGI/Tool and envirnment)
+// (The cv.ra file is normally discovered based upon CGI/Tool and environment)
 {
 cvFileRequested = cloneString(filePath);
 }
