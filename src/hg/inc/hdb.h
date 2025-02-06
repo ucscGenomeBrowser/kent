@@ -1092,4 +1092,8 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
 
 unsigned hdbGetTrackCartVersion();
 /* Get the cart version that our current trackDb wants to use. */
+
+boolean isCuratedHubUrl(char *hubUrl);
+/* check if the given hubUrl is pointing to a curated hub */
+
 #endif /* HDB_H */
