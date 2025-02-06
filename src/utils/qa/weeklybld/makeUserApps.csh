@@ -20,7 +20,7 @@ set branch = "v"$BRANCHNN"_branch"
 git clone -q $GITSHAREDREPO kent
 chmod g+w kent
 cd kent
-git checkout -tb $branch origin/$branch
+git checkout --track=direct -b $branch origin/$branch
 set err = $status
 if ( $err ) then
  echo "error running git clone and checkout of kent in $BUILDDIR/userApps : $err [${0}: `date`]" 

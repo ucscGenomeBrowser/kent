@@ -1615,6 +1615,7 @@ hapmapPhase III
 codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
 configureByPopup off
+tableBrowser noGenome
 priority 2
 
 track snp129 override
@@ -1624,6 +1625,7 @@ chimpDb panTro2
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
+tableBrowser noGenome
 configureByPopup off
 
 track snp128 override
@@ -1631,11 +1633,13 @@ visibility hide
 chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
+tableBrowser noGenome
 configureByPopup off
 
 track snp127 override
 visibility hide
 snpSeq snp127Seq
+tableBrowser noGenome
 configureByPopup off
 
 track snp126 override
@@ -1643,6 +1647,7 @@ visibility hide
 chimpMacaqueOrthoTable snp126orthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
+tableBrowser noGenome
 configureByPopup off
 
 track divMKAR

@@ -26,6 +26,7 @@ priority 2
 # Variation and Repeats
 
 track snp125 override
+tableBrowser noGenome
 priority 1
 
 # Repeats

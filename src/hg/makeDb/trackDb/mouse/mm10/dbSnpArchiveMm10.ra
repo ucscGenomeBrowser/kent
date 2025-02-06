@@ -19,6 +19,7 @@ html ../../dbSnpArchive
 	parent dbSnpArchive
         visibility dense
 	priority 1
+        tableBrowser noGenome
         html ../snp142
 
 	track snp142Mult override
@@ -31,6 +32,7 @@ html ../../dbSnpArchive
 	group varRep
 	parent dbSnpArchive 
 	priority 2
+        tableBrowser noGenome
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
         html ../../snp138
 
@@ -73,3 +75,4 @@ html ../../dbSnpArchive
 	url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 	parent dbSnpArchive 
         html ../../snp137
+        tableBrowser noGenome

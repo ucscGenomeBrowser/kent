@@ -6,6 +6,9 @@
 #ifndef QUICKLIFT_H      
 #define QUICKLIFT_H      
 
+typedef struct slList *(*ItemLoader2)(char **row, int numFields);
+/* Load a bed file from an SQL query result. */
+
 struct bigBedInterval *quickLiftIntervals(char *instaPortFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash);
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
@@ -16,6 +19,12 @@ struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct big
  * on the reference.
  */
 
+struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chromName, int winStart, int winEnd,  char *query, char *extraWhere, ItemLoader2 loader, int numFields, struct hash *chainHash);
+/* Load a list of items (usually beds) from another database in a region that corresponds to chromName:winStart-winEnd in the reference database.
+ * Fill a hash with the chains that were used to map the desired range.  These chains will be used to map the query side items back to the reference. */
+
 unsigned quickLiftGetChain(char *fromDb, char *toDb);
 /* Return the id from the quickLiftChain table for given assemblies. */
+
+struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
 #endif

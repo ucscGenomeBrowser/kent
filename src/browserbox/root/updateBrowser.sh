@@ -45,7 +45,7 @@
 RSYNCOPTS="-ltrvh"
 # rsync server for CGIs and html files
 RSYNCSRC="rsync://hgdownload.soe.ucsc.edu"
-RSYNCCGIBIN=cgi-bin
+RSYNCCGIBIN=cgi-bin.v476
 RSYNCHTDOCS=htdocs
 UPDATEFLAG=http://hgdownload.soe.ucsc.edu/gbib/lastUpdate
 LOGFILE=/var/log/gbibUpdates.log
@@ -196,7 +196,7 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     echo a hgMirror job is running right now, not updating
     exit 4
 fi
-	
+
 # --- now do the update ---
 
 # keep a log of all output of this script and the date

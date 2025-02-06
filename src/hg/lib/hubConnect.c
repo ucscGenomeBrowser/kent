@@ -475,7 +475,7 @@ trackHubPolishTrackNames(hub->trackHub, tdb);
 trackHubAddDescription(hubGenome->trackDbFile, tdb);
 }
 
-static void assignQuickLift(struct trackDb *tdbList, char *quickLiftChain)
+static void assignQuickLift(struct trackDb *tdbList, char *quickLiftChain, char *db)
 /* step through a trackDb list and assign a quickLift chain to each track */
 {
 if (tdbList == NULL)
@@ -484,9 +484,10 @@ if (tdbList == NULL)
 struct trackDb *tdb;
 for(tdb = tdbList; tdb; tdb = tdb->next)
     {
-    assignQuickLift(tdb->subtracks, quickLiftChain);
+    assignQuickLift(tdb->subtracks, quickLiftChain, db);
 
     hashAdd(tdb->settingsHash, "quickLiftUrl", quickLiftChain);
+    hashAdd(tdb->settingsHash, "quickLiftDb", db);
     }
 }
 
@@ -520,7 +521,7 @@ return tdb;
 static struct trackDb *fixForQuickLift(struct trackDb *tdbList, struct trackHubGenome *hubGenome, struct hubConnectStatus *hub)
 // assign a quickLift chain to the tdbList and make a trackDb entry for the chain. 
 {
-assignQuickLift(tdbList, hubGenome->quickLiftChain);
+assignQuickLift(tdbList, hubGenome->quickLiftChain, hub->trackHub->defaultDb);
 
 struct trackDb *quickLiftTdb = makeQuickLiftChainTdb(hubGenome, hub);
 quickLiftTdb->grp = tdbList->grp;

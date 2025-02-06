@@ -341,7 +341,7 @@ var speciesTree = (function() {
             for (i = 0;  i < hubList.length;  i++) {
                 hub = hubList[i];
                 // is this a curated assembly hub? If so, don't list it
-                if (!hub.hubUrl.startsWith("/gbdb")) {
+                if (!(hub.hubUrl.startsWith("/gbdb") && ! hub.hubUrl.startsWith("/gbdb/genark"))) {
                     addHubLabel(svg, hub, y);
                     y += cfg.labelLineHeight;
                     countNonCurated++;

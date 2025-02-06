@@ -56,6 +56,7 @@
 #include "chromAlias.h"
 #include "trashDir.h"
 #include "hgConfig.h"
+#include "cartTrackDb.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -978,7 +979,8 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (! isCustomComposite(tdb))
+    char *quickLifted = trackDbSetting(tdb, "quickLifted");
+    if (! ( isCustomComposite(tdb) || (quickLifted != NULL)))
         {
         if (startsWithWord("mathWig", type) )
             {
@@ -1600,14 +1602,11 @@ struct dyString *trackDbString(struct trackDb *tdb)
 {
 struct dyString *dy;
 struct hash *existHash = newHash(5);
-struct hashEl *hel;
 
-hel = hashLookup(tdb->settingsHash, "track");
-if (hel == NULL)
-    errAbort("can't find track variable in tdb");
-
+// add a note that the name based handler shouldn't be used on this track
+// add a note that this is a quickLifted track so the browser will accept tracks that aren't big*
 dy = dyStringNew(200);
-dyStringPrintf(dy, "track %s\n", trackHubSkipHubName((char *)hel->val));
+dyStringPrintf(dy, "track %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
 hashStore(existHash, "track");
     
 dumpTdbAndParents(dy, tdb, existHash, NULL);
@@ -1624,7 +1623,7 @@ for(; tdb; tdb = tdb->next)
         walkTree(f, cart, tdb->subtracks, visDy);
     else 
         {
-        if (!startsWith("big", tdb->type))
+        if (!( startsWith("big", tdb->type) || startsWith("bed ", tdb->type)))
             continue;
         boolean isVisible = FALSE;
         if (tdb->parent == NULL)
@@ -1639,6 +1638,8 @@ for(; tdb; tdb = tdb->next)
         else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
             {
             char *cartVis = cartOptionalString(cart, tdb->parent->track);
+            if ((cartVis == NULL) && tdb->parent->parent)
+                cartVis = cartOptionalString(cart, tdb->parent->parent->track);
             tdb->visibility = hTvFromString(cartVis);
             isVisible = TRUE;
             }
@@ -1659,6 +1660,15 @@ for(; tdb; tdb = tdb->next)
 
             //hashReplace(tdb->settingsHash, "customized", "on");
 
+            // is this a custom track?
+            char *tdbType = trackDbSetting(tdb, "tdbType");
+            if (tdbType != NULL)
+                {
+                hashReplace(tdb->settingsHash, "type", tdbType);
+                hashReplace(tdb->settingsHash, "shortLabel", trackDbSetting(tdb, "name"));
+                hashReplace(tdb->settingsHash, "longLabel", trackDbSetting(tdb, "description"));
+                }
+
             struct dyString *dy = trackDbString(tdb);
 
             fprintf(f, "%s\n", dy->string);
@@ -1670,14 +1680,16 @@ for(; tdb; tdb = tdb->next)
 char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy)
 /* Build a track hub using trackDb and the cart. */
 {
-struct trackDb *tdb = hTrackDb(db);
-slSort(&tdb,trackDbCmp);
+struct  trackDb *tdbList;
+struct grp *grpList;
+cartTrackDbInit(cart, &tdbList, &grpList, FALSE);
+
 char *filename = getHubName(cart, db);
 
 FILE *f = mustOpen(filename, "a");
 chmod(filename, 0666);
 
-walkTree(f, cart, tdb, visDy);
+walkTree(f, cart, tdbList, visDy);
 fclose(f);
 
 return cloneString(filename);

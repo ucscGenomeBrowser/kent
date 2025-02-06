@@ -35660,3 +35660,23 @@ cd /gbdb/hg19/cosmic/
 ln -s /hive/data/outside/cosmic/hg19/v101/cosmic.bb 
 #Updated human/hg19/trackDb.ra and copied human/hg38/cosmicMuts.html to human/hg19
 #########################################################################
+
+# quickLift from hg19 to hg38
+mkdir -p /hive/data/genomes/hg19/bed/quickLiftChain
+cd  /hive/data/genomes/hg19/bed/quickLiftChain
+
+mkdir tmp
+cd tmp
+
+chainSwap ../../liftOver/hg19ToHg38.over.chain.gz hg19ToHg38.over.swap.chain
+
+awk '/chain/ {print $3, $4}' hg19ToHg38.over.swap.chain | sort | uniq > hg19ToHg38.over.swap.sizes
+chainToBigChain hg19ToHg38.over.swap.chain bigChainOut bigLinkOut
+bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab bigChainOut hg19ToHg38.over.swap.sizes hg19ToHg38.bb
+bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab bigLinkOut  hg19ToHg38.over.swap.sizes hg19ToHg38.link.bb
+
+ln -s `pwd`/hg19ToHg38.bb /gbdb/hg19/quickLift/hg38.bb
+ln -s `pwd`/hg19ToHg38.link.bb /gbdb/hg19/quickLift/hg38.link.bb
+hgsql hgcentraltest -Ne 'insert into quickLiftChain values (0, "hg19", "hg38", "/gbdb/hg19/quickLift/hg38.bb")'
+
+###

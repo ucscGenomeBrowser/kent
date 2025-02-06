@@ -206,7 +206,8 @@ GCF_033439665.1_Achstr1	ascomycetes C.strumarium (CBS 333.67 2023)
 GCF_030869305.1_CTAM01	ascomycetes C.tamarilloi (Tom-12  2023)
 GCF_020726465.1_Chagl1	ascomycetes C.tenue (MPI-SDFR-AT-0079 2021)
 GCF_000221225.1_CTHT_3.0	ascomycetes C.thermophilum var. thermophilum DSM 1495
-GCF_014235925.1_CTRU02	ascomycetes C.truncatum
+GCF_014235925.2_CTRU02v2	ascomycetes C.truncatum (v2 CMES1059 2024)
+GCF_014235925.1_CTRU02	ascomycetes C.truncatum (v1 WU-2223L 2020)
 GCF_000585515.1_Clad_yegr_CBS_114405_V1	ascomycetes C.yegresii CBS 114405
 GCF_010015565.1_Disac1	ascomycetes D.aciculare CBS 342.82
 GCF_026229845.1_ASM2622984v1	ascomycetes D.amygdali (CAA958 2022)

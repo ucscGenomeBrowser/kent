@@ -13,4 +13,5 @@ track snp148Mult override
 defaultGeneTracks refSeqComposite
 
 track snp148 override
+tableBrowser noGenome
 defaultGeneTracks refSeqComposite
