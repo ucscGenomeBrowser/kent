@@ -30,6 +30,7 @@
 #include "ra.h"
 #include "jsHelper.h"
 #include "factorSource.h"
+#include "cv.h"
 
 static void printClusterTableHeader(struct slName *otherCols, 
 	boolean withAbbreviation, boolean withDescription, boolean withSignal)
@@ -85,6 +86,7 @@ static void printControlledVocabFields(char **row, int fieldCount,
 {
 int i;
 struct slName *field;
+
 for (i=0, field = fieldList; i<fieldCount; ++i, field = field->next)
     {
     char *link = NULL;
@@ -92,7 +94,7 @@ for (i=0, field = fieldList; i<fieldCount; ++i, field = field->next)
     if (vocabFile && hashLookup(vocabHash, field->name))
         {
         // controlled vocabulary
-        link = wgEncodeVocabLink(vocabFile, "term", fieldVal, fieldVal, fieldVal, "");
+        link = wgEncodeVocabLink("term", fieldVal, fieldVal, fieldVal, "");
         }
     else if (!vocabFile && vocabHash != NULL)
         {
@@ -167,6 +169,9 @@ char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 if (vocabSettingIsEncode(vocab))
     {
     file = cloneFirstWord(vocab);
+    if (!sameString(file, "encode/cv.ra"))
+	errAbort("expected encode/cv.ra in trackDb settings for controlledVocabulary.");
+    file = (char *)cvFile();  // use the library location
     hash = getVocabHash(file);
     }
 else
@@ -220,13 +225,13 @@ freez(&vocabFile);
 dyStringFree(&query);
 }
 
-static char *factorSourceVocabLink(char *vocabFile, char *fieldName, char *fieldVal)
+static char *factorSourceVocabLink(char *fieldName, char *fieldVal)
 /* Add link to show controlled vocabulary entry for term.
  * Handles 'target' (factor) which is a special case, derived from Antibody entries */
 {
 char *vocabType = (sameString(fieldName, "target") || sameString(fieldName, "factor")) ?
                     "target" : "term";
-return wgEncodeVocabLink(vocabFile, vocabType, fieldVal, fieldVal, fieldVal, "");
+return wgEncodeVocabLink(vocabType, fieldVal, fieldVal, fieldVal, "");
 }
 
 static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlConnection *conn,
@@ -235,11 +240,6 @@ static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlC
 /* Put out a lines in an html table that shows assayed sources that have hits in this
  * cluster, or if invert is set, that have misses. */
 {
-char *vocabFile = NULL;
-if (vocab)
-    {
-    vocabFile = cloneFirstWord(vocab);
-    }
 
 /* Make the monster SQL query to get all assays*/
 struct dyString *query = dyStringNew(0);
@@ -292,7 +292,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             char *link = NULL;
 	    if (vocab)
 	        {
-                link = cloneString(factorSourceVocabLink(vocabFile, field->name, fieldVal));
+                link = cloneString(factorSourceVocabLink(field->name, fieldVal));
 		}
             else if (fieldToUrl != NULL)
                 {
@@ -331,7 +331,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
-freez(&vocabFile);
 dyStringFree(&query);
 }
 
@@ -524,9 +523,9 @@ char *factorLink = cluster->name;
 char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 if (vocab != NULL)
     {
-    char *file = cloneFirstWord(vocab);
-    factorLink = wgEncodeVocabLink(file, "term", factorLink, factorLink, factorLink, "");
+    factorLink = wgEncodeVocabLink("term", factorLink, factorLink, factorLink, "");
     }
+
 printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, item);
