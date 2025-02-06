@@ -56,6 +56,7 @@
 #include "chromAlias.h"
 #include "trashDir.h"
 #include "hgConfig.h"
+#include "cartTrackDb.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -1679,15 +1680,10 @@ for(; tdb; tdb = tdb->next)
 char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy)
 /* Build a track hub using trackDb and the cart. */
 {
-struct trackDb *tdbList = hTrackDb(db);
+struct  trackDb *tdbList;
+struct grp *grpList;
+cartTrackDbInit(cart, &tdbList, &grpList, FALSE);
 
-// add custom tracks
-struct customTrack *ctList, *ct;
-ctList = customTracksParseCart(db, cart, NULL, NULL);
-for (ct = ctList; ct != NULL; ct = ct->next)
-    slAddHead(&tdbList, ct->tdb);
-
-slSort(&tdbList,trackDbCmp);
 char *filename = getHubName(cart, db);
 
 FILE *f = mustOpen(filename, "a");
