@@ -5541,7 +5541,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                         {
                         struct hash *colHash = hashFindVal(vocabHash, col);
                         if (colHash)
-                        link = vocabLink(colHash, term, titleRoot);
+			    link = vocabLink(colHash, term, titleRoot);
                         }
                     printf("%s", link ? link : titleRoot);
                     puts("</TD>");
