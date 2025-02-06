@@ -140,23 +140,23 @@ else
     jsonWriteString(jw, "genome", genome);
     struct slPair *dbOptions = NULL;
     char genomeLabel[PATH_LEN*4];
-    if (! isCuratedHubUrl(hubUrl))
+    if (isCuratedHubUrl(hubUrl))
+        {
+        dbOptions = hGetDbOptionsForGenome(trackHubSkipHubName(genome));
+        safecpy(genomeLabel, sizeof(genomeLabel), genome);
+        }
+    else
         {
         struct trackHub *hub = hubConnectGetHub(hubUrl);
         if (hub == NULL)
             {
-            jsonWriteStringf(jw, "error", "Can't connect to hub at '%s'", hubUrl);
+            jsonWriteStringf(jw, "error", "YOWSA ! Can't connect to hub at '%s'", hubUrl);
             return;
             }
         struct dbDb *dbDbList = trackHubGetDbDbs(hub->name);
         dbOptions = trackHubDbDbToValueLabel(dbDbList);
         safecpy(genomeLabel, sizeof(genomeLabel), hub->shortLabel);
         jsonWriteString(jw, "hubUrl", hubUrl);
-        }
-    else
-        {
-        dbOptions = hGetDbOptionsForGenome(trackHubSkipHubName(genome));
-        safecpy(genomeLabel, sizeof(genomeLabel), genome);
         }
     jsonWriteValueLabelList(jw, "dbOptions", dbOptions);
     jsonWriteString(jw, "genomeLabel", genomeLabel);
