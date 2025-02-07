@@ -211,6 +211,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#XXXXXX "Updated January XX, 
         bedNameLabel Nucleotide Change
         skipFields Variant,VariantUrl,score
         detailsDynamicTable VariantDetails|Variant Details
+        dataVersion /gbdb/$D/bbi/varChatVersion.txt
         pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released January XX, 2025"
 
         track pubtator
