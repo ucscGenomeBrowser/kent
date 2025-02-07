@@ -70,6 +70,7 @@ function revokeApiKeys() {
 }
 
 const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
+const parentDirRegex = /[0-9a-zA-Z._\-+ ]+/g; // allowed characters in hub names, spaces allowed
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
@@ -79,14 +80,14 @@ const uppy = new Uppy.Uppy({
         let doUpload = true;
         for (let [key, file] of Object.entries(files)) {
             let fileNameMatch = file.meta.name.match(fileNameRegex);
-            let parentDirMatch = file.meta.parentDir.match(fileNameRegex);
+            let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
                 uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 2000);
                 doUpload = false;
                 continue;
             }
             if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 2000);
+                uppy.info(`Error: Hub name has special characters, please rename file: ${file.meta.parentDir} to only include alpha-numeric characters, period, dash, underscore, plus or space.`, 'error', 2000);
                 doUpload = false;
                 continue;
             }
