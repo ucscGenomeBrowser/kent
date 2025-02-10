@@ -58,34 +58,34 @@ This track is colored according to the am_class column in the AlphaMissense_$db.
 <h2>Data access</h2>
 <p>
 AlphaMissense scores are available at the 
-<a href="https://sites.google.com/site/revelgenomics/" target="_blank">
+<a href="https://console.cloud.google.com/storage/browser/dm_alphamissense"
+target="_blank">
 AlphaMissense cloud storage site</a>.  
 The site provides precomputed AlphaMissense scores for all possible human missense variants 
 to facilitate the identification of pathogenic variants among the large number of 
 rare variants discovered in sequencing studies.
-
 </p>
 
 <p>
 The AlphaMissense data on the UCSC Genome Browser can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. <br>
-For automated download and analysis, the genome annotation is stored at UCSC in bigWig
-files that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/" target="_blank">our download server</a>.
-<br>
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored at UCSC in
+<a href="../goldenPath/help/bigWig.html">bigWig</a> format that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/"
+target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
 which can be compiled from the source code or downloaded as a precompiled
-binary for your system. <br>
-Instructions for downloading source code and binaries can be found
+binary for your system.  Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-<br>
-The tools can also be used to obtain features confined to given range, e.g.
-<br>&nbsp;
-<br>
+For example, to extract only annotations in a given region, you could use the following command:
+<p>
 <tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/a.bw stdout</tt>
-<br>
+</p>
 
 <h2>Methods</h2>
 
