@@ -7,7 +7,7 @@
 set -beEu -o pipefail
 
 WORKDIR="/hive/users/chmalee/logs/trimmedLogs"
-EMAIL="chmalee@ucsc.edu"
+EMAIL="browserqa-group@ucsc.edu"
 GENSUB="/cluster/bin/x86_64/gensub2"
 
 # work dir
@@ -15,9 +15,6 @@ today=`date +%F`
 
 # which step of the script are we at
 trimStep=1
-
-# which cluster to use, default to ku but can use hgwdev in a pinch
-cluster="ku"
 
 # force a re-run on all files, not just the new ones
 force=1
@@ -31,7 +28,6 @@ Optional Arguments:
 -h                  Show this help
 -t                  Trim error logs. Smart enough to only run on most recent additions.
 -f                  Force a re-run on all files, not just the newest ones
--c                  Use hgwdev instead of ku for cluster run
 
 This script is meant to be run via cronjob to check for new error logs and trim them
 down via parasol (the -t option). Checks /hive/data/inside/wwwstats/RR/ for new error_log files
@@ -95,13 +91,8 @@ function runPara()
         for f in $(cat jobFileList); do
             makeJobList $f
         done
-        if [[ "${cluster}" == "ku" ]]
-        then
-            ssh ku "cd ${WORKDIR}/${today}; para create jobList; para push; exit"
-        else
-            para create -ram=10g jobList
-            para push -maxJob=10
-        fi
+        para create -ram=10g jobList
+        para push -maxJob=10
     fi
 }
 
@@ -187,9 +178,6 @@ do
             ;;
         t)
             trimStep=0
-            ;;
-        c)
-            cluster="hgwdev"
             ;;
         f)
             force=0
