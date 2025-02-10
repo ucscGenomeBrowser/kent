@@ -6,7 +6,7 @@ perl_progs = fixStepToBedGraph varStepToBedGraph
 default:: ${perl_progs:%=${DESTDIR}${BINDIR}/%.pl}
 
 ${DESTDIR}${BINDIR}/%.pl: %.pl
-	@mkdir -p $(dir $@)
+	${MKDIR} $(dir $@)
 	cp -f $< $@
 
 clean::
