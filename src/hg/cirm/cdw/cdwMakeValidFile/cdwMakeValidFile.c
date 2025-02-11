@@ -909,10 +909,18 @@ if (vf->format)	// We only can validate if we have something for format
         {
 	makeValidHtml(conn, path, ef, vf);
 	}
+    else if (sameString(format, "raw"))
+        {
+	/* No specific validation needed for raw format. */
+	}
+    else if (sameString(format, "xls"))
+        {
+        /* No specific validation needed for xls format. */
+        }
     else if (sameString(format, "unknown"))
         {
-	/* No specific validation needed for unknown format. */
-	}
+        /* No specific validation needed for unknown format. */
+        }
     else
         {
 	errAbort("Unrecognized format %s for %s\n", format, ef->cdwFileName);
