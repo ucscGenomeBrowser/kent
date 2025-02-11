@@ -574,8 +574,8 @@ def transform_assertion_summaries(df: pd.DataFrame, mpdf: pd.DataFrame) -> pd.Da
 
     df["disease_html"] = "<i>" + df["disease"] + "</i>"
     doid = df["doid"].astype("Int64").astype("str")
-    df["disease_link"] = doid.where(doid != "<NA>", df["disease"]).where(
-        doid == "<NA>", doid + "|" + df["disease"]
+    df["disease_link"] = doid.where(doid.notnull(), df["disease"]).where(
+        doid.isnull(), doid + "|" + df["disease"]
     )
     return df
 
@@ -593,9 +593,9 @@ def transform_clinical_evidence(df: pd.DataFrame, mpdf: pd.DataFrame):
     )
 
     df["disease_html"] = "<i>" + df["disease"] + "</i>"
-    doid = df["doid"].astype("Int64").astype("str")
-    df["disease_link"] = doid.where(doid != "<NA>", df["disease"]).where(
-        doid == "<NA>", doid + "|" + df["disease"]
+    doid = df["doid"]
+    df["disease_link"] = doid.where(doid.notnull(), df["disease"]).where(
+        doid.isnull(), doid + "|" + df["disease"]
     )
     return df
 
@@ -605,7 +605,7 @@ def load_dataframes(table_dict: dict[str, str]) -> dict[str, pd.DataFrame]:
     Input is a dict from name to the source path.
     Output is a dict from name to a Pandas DataFrame"""
 
-    return {name: pd.read_csv(path, sep="\t") for name, path in table_dict.items()}
+    return {name: pd.read_csv(path, sep="\t", dtype={"doid": str}) for name, path in table_dict.items()}
 
 
 def urlretrieve(url, filename):
