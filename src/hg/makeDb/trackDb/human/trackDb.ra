@@ -58,7 +58,7 @@ include genCC.ra
 include abSplice.ra
 
 # Splice Impact super track: spliceVarDb, spliceAi, etc
-include spliceImpactSuper.ra alpha
+include spliceImpactSuper.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
