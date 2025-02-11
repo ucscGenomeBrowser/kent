@@ -198,6 +198,13 @@ while (lineFileNext(lf, &line, &lineSize))
                 continue;
 	    AllocVar(f);
 	    f->type = w[0];
+            /* Changes of type C and R (copy and rename) have two filenames - the old and the new.
+             * We need f->path to reflect the new filename so that the HTML filename is constructed
+             * appropriately and git-reports can easily find the relevant diff.txt file (which is also
+             * constructed using the new filename).  So if there are two filenames, skip to the second here.
+             */
+            if (strrchr(line, '\t') != NULL)
+                line = strrchr(line, '\t')+1;
 	    f->path = cloneString(line);
 	    slAddHead(&files, f);
 	    }
