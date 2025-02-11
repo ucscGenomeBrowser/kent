@@ -216,8 +216,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#XXXXXX "Updated January XX, 
         pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released January XX, 2025"
 
         track pubtator
-        shortLabel PubTator rsIDs
-        longLabel dbSNP Variants extracted by PubTator3
+        shortLabel PubTator variants
+        longLabel dbSNP variants and other genetic variants grounded to dbSNP by tmVar; collected by PubTator3
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/pubs2/pubtatorDbSnp.bb
@@ -226,7 +226,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#XXXXXX "Updated January XX, 
         itemRgb on
         parent varsInPubs pack
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
+        mouseOver $name found in ${numPubmedIds} PubMed articles
 
         track varaico
         release alpha
