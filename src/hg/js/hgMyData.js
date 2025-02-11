@@ -642,7 +642,7 @@ var hubCreate = (function() {
                 targets: 3,
                 render: function(data, type, row) {
                     if (type === "display") {
-                         dataTablePrintSize(data);
+                         return dataTablePrintSize(data);
                     }
                     return data;
                 }
