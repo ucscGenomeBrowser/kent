@@ -1,6 +1,6 @@
 track spliceVarDb
 shortLabel SpliceVarDB
-longLabel SpliceVarD: Experimentally validated splicing variants
+longLabel SpliceVarDB: Experimentally validated splicing variants
 visibility full
 group phenDis
 parent spliceImpactSuper on
