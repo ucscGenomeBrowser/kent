@@ -78,6 +78,7 @@ const uppy = new Uppy.Uppy({
     onBeforeUpload: (files) => {
         // set all the fileTypes and genomes from their selects
         let doUpload = true;
+        let thisQuota = 0;
         for (let [key, file] of Object.entries(files)) {
             let fileNameMatch = file.meta.name.match(fileNameRegex);
             let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
@@ -105,6 +106,11 @@ const uppy = new Uppy.Uppy({
                 fileSize: file.size,
                 lastModified: file.data.lastModified,
             });
+            thisQuota += file.size;
+        }
+        if (thisQuota + hubCreate.uiState.userQuota > hubCreate.uiState.maxQuota) {
+            uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
+            doUpload = false;
         }
         return doUpload;
     },
