@@ -259,6 +259,7 @@ GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri	primates
 GCA_029499605.1_aHylSar1.hap1	vertebrate
 GCA_029633855.1_fHopMal1.hap1	fish
 GCA_029633865.1_fLamInc1.hap2	fish
+GCA_029633875.1_fHopMal1.hap2	fish
 GCA_030028045.1_mHipAmp2.hap2	mammals
 GCA_030144855.1_sHypSab1.hap1	vertebrate
 GCA_030435805.1_mMusLut2.pri	mammals
@@ -266,11 +267,14 @@ GCA_030684315.1_sSteTig4.hap1	vertebrate
 GCA_030867065.1_rAllMis1	vertebrate
 GCA_030867095.1_rAllMis1	vertebrate
 GCA_030936135.1_bGavSte3.hap2	birds
+GCA_031021105.1_rEryReg1.hap1	vertebrate
 GCA_035083965.1_klBraLanc5.hap2	invertebrate
 GCA_036850765.1_mSacBil1_pri_phased_curated	mammals
 GCA_036850995.1_mSacLep1_pri_phased_curated	mammals
 GCA_036971445.1_sNarBan1.hap1	vertebrate
 GCA_038363095.1_mArtLit.hap1	mammals
+GCA_042242105.1_fPemKlu1.hap1	fish
+GCA_044704955.1_sPriJap1.hap1	vertebrate
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish
