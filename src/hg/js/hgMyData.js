@@ -70,6 +70,7 @@ function revokeApiKeys() {
 }
 
 const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
+const parentDirRegex = /[0-9a-zA-Z._\-+ ]+/g; // allowed characters in hub names, spaces allowed
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
@@ -77,10 +78,17 @@ const uppy = new Uppy.Uppy({
     onBeforeUpload: (files) => {
         // set all the fileTypes and genomes from their selects
         let doUpload = true;
+        let thisQuota = 0;
         for (let [key, file] of Object.entries(files)) {
             let fileNameMatch = file.meta.name.match(fileNameRegex);
+            let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
                 uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 2000);
+                doUpload = false;
+                continue;
+            }
+            if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
+                uppy.info(`Error: Hub name has special characters, please rename file: ${file.meta.parentDir} to only include alpha-numeric characters, period, dash, underscore, plus or space.`, 'error', 2000);
                 doUpload = false;
                 continue;
             }
@@ -98,6 +106,11 @@ const uppy = new Uppy.Uppy({
                 fileSize: file.size,
                 lastModified: file.data.lastModified,
             });
+            thisQuota += file.size;
+        }
+        if (thisQuota + hubCreate.uiState.userQuota > hubCreate.uiState.maxQuota) {
+            uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
+            doUpload = false;
         }
         return doUpload;
     },
@@ -106,6 +119,11 @@ const uppy = new Uppy.Uppy({
 var hubCreate = (function() {
     let uiState = { // our object for keeping track of the current UI and what to do
         userUrl: "", // the web accesible path where the uploads are stored for this user
+        hubNameDefault: "",
+        isLoggedIn: "",
+        maxQuota: 0,
+        userQuota: 0,
+        userFiles: {},
     };
 
     function getTusdEndpoint() {
@@ -129,6 +147,8 @@ var hubCreate = (function() {
         "bigChain": [".bigchain"],
         "bamIndex": [".bam.bai", ".bai"],
         "tabixIndex": [".vcf.gz.tbi", "vcf.bgz.tbi"],
+        "hub.txt": ["hub.txt"],
+        "text": [".txt", ".text"],
     };
 
     function detectFileType(fileName) {
@@ -251,7 +271,7 @@ var hubCreate = (function() {
                     }
                 } else if (d.fileType === "hub.txt") {
                     url += "&hubUrl=" + uiState.userUrl + d.fullPath;
-                } 
+                }
             });
             window.location.assign(url);
             return false;
@@ -297,7 +317,6 @@ var hubCreate = (function() {
             let deleteBtn = document.getElementById("deleteSelectedFiles");
             deleteBtn.addEventListener("click", deleteFileList);
             deleteBtn.textContent = numSelected === 1 ? "Delete selected file" : "Delete selected files";
-            
         }
 
         // set the visibility of the placeholder text and info text
@@ -321,6 +340,129 @@ var hubCreate = (function() {
         updateSelectedFileDiv(data);
     }
 
+    function createOneCrumb(table, dirName, dirFullPath) {
+        // make a new span that can be clicked to nav through the table
+        let newSpan = document.createElement("span");
+        newSpan.id = dirName;
+        newSpan.textContent = dirName;
+        newSpan.classList.add("breadcrumb");
+        newSpan.addEventListener("click", function(e) {
+            dataTableShowDir(table, dirName, dirFullPath);
+            dataTableCustomOrder(table, {"fullPath": dirFullPath});
+            table.draw();
+        });
+        return newSpan;
+    }
+
+    function dataTableEmptyBreadcrumb(table) {
+        let currBreadcrumb = document.getElementById("breadcrumb");
+        currBreadcrumb.replaceChildren(currBreadcrumb.firstChild);
+        currBreadcrumb.firstChild.style.cursor = "unset";
+        currBreadcrumb.firstChild.style.textDecoration = "unset";
+    }
+
+    function dataTableCreateBreadcrumb(table, dirName, dirFullPath) {
+        // Re-create the breadcrumb nav to move back through directories
+        let currBreadcrumb = document.getElementById("breadcrumb");
+        // empty the node but leave the first "My Data" span
+        if (currBreadcrumb.children.length > 1) {
+            currBreadcrumb.replaceChildren(currBreadcrumb.firstChild);
+        }
+        currBreadcrumb.firstChild.style.cursor = "pointer";
+        currBreadcrumb.firstChild.style.textDecoration = "underline";
+        let components = dirFullPath.split("/");
+        components.forEach(function(dirName, dirNameIx) {
+            if (!dirName) {
+                return;
+            }
+            let path = components.slice(0, dirNameIx+1);
+            componentFullPath = path.join('/');
+            componentFullPath += "/"; // need a final '/' on there
+            let newSpan = createOneCrumb(table, dirName, componentFullPath);
+            currBreadcrumb.appendChild(document.createTextNode(" > "));
+            currBreadcrumb.appendChild(newSpan);
+        });
+    }
+
+    // search related functions:
+    function clearSearch(table) {
+        // clear any fixed searches so we can apply a new one
+        let currSearches = table.search.fixed().toArray();
+        currSearches.forEach((name) => table.search.fixed(name, null));
+    }
+
+    function dataTableShowTopLevel(table) {
+        // show all the "root" files, which are files (probably mostly directories)
+        // with no parentDir
+        clearSearch(table);
+        table.search.fixed("showRoot", function(searchStr, rowData, rowIx) {
+            return !rowData.parentDir;
+        });
+    }
+
+    function dataTableShowDir(table, dirName, dirFullPath) {
+        // show the directory and all immediate children of the directory
+        clearSearch(table);
+        table.search.fixed("oneHub", function(searchStr, rowData, rowIx) {
+            return rowData.parentDir === dirName ||  rowData.fullPath === dirFullPath;
+        });
+        dataTableCreateBreadcrumb(table, dirName, dirFullPath);
+    }
+
+    // when we move into a new directory, we remove the row from the table
+    // and add it's html into the header, keep the row object around so
+    // we can add it back in later
+    let oldRowData = null;
+    function dataTableCustomOrder(table, dirData) {
+        // figure out the order the rows of the table should be in
+        // if dirData is null, sort on  uploadTime first
+        // if dirData exists, that is the first row, followed by everything else
+        // in uploadTime order
+        if (!dirData) {
+            // make sure the old row can show up again in the table
+            let thead = document.querySelector(".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
+            if (thead.childNodes.length > 1) {
+                let old = thead.removeChild(thead.lastChild);
+                if (oldRowData) {
+                    table.row.add(oldRowData);
+                    oldRowData = null;
+                }
+            }
+            table.order([{name: "uploadTime", dir: "desc"}]);
+        } else {
+            // move the dirName row into the header, then the other files can
+            // sort normally
+            let row = table.row((idx,data) => data.fullPath === dirData.fullPath);
+            let rowNode = row.node();
+            if (oldRowData) {
+                // restore the previous row, which will be not displayed by the search anyways:
+                table.row.add(oldRowData);
+                oldRowData = null;
+            }
+            if (!rowNode) {
+                // if we are using the breadcrumb to jump back 2 directories, we won't
+                // have a rowNode because the row will not have been rendered yet
+                table.draw();
+                rowNode = row.node();
+            }
+            oldRowData = row.data();
+            // put the data in the header:
+            let rowClone = rowNode.cloneNode(true);
+            // match the background color of the normal rows:
+            rowNode.style.backgroundColor = "#f9f9f9";
+            let thead = document.querySelector(".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
+            if (thead.childNodes.length === 1) {
+                thead.appendChild(rowClone);
+            } else {
+                thead.replaceChild(rowClone, thead.lastChild);
+            }
+            // remove the row
+            row.remove();
+            // now do a regular order
+            table.order([{name: "uploadTime", dir: "desc"}]);
+        }
+    }
+
     function dataTablePrintSize(data, type, row, meta) {
         return prettyFileSize(data);
     }
@@ -342,35 +484,33 @@ var hubCreate = (function() {
             folderIcon.style.width = "24px";
             folderIcon.style.height = "24px";
             folderIcon.classList.add("folderIcon");
-            folderIcon.addEventListener("dblclick", function(e) {
+            folderIcon.addEventListener("click", function(e) {
                 e.stopPropagation();
-                console.log("dblclick");
+                console.log("folder click");
                 let table = $("#filesTable").DataTable();
                 let trow = $(e.target).closest("tr");
                 let row = table.row(trow);
-                if (row.child.isShown()) {
-                    row.child.hide();
-                } else {
-                    row.child.show();
-                }
-            });
-            folderIcon.addEventListener("click", (e) => {
-                e.stopPropagation();
-                console.log("click");
+                dataTableShowDir(table, rowData.fileName, rowData.fullPath);
+                dataTableCustomOrder(table, rowData);
+                table.draw();
             });
             return folderIcon;
         } else {
-            let container = document.createElement("div");
-            // click to view hub.txt or track file in gb:
-            let viewBtn = document.createElement("button");
-            viewBtn.textContent = "View in Genome Browser";
-            viewBtn.type = 'button';
-            viewBtn.addEventListener("click", function(e) {
-                e.stopPropagation();
-                viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
-            });
-            container.appendChild(viewBtn);
-            return container;
+            // only offer the button if this is a track file
+            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType in extensionMap) {
+                let container = document.createElement("div");
+                let viewBtn = document.createElement("button");
+                viewBtn.textContent = "View in Genome Browser";
+                viewBtn.type = 'button';
+                viewBtn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
+                });
+                container.appendChild(viewBtn);
+                return container;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -398,91 +538,85 @@ var hubCreate = (function() {
     }
 
 
-    // hash of file paths to their objects, starts as userFiles
+    // hash of file paths to their objects, starts as uiState.userFiles
     let filesHash = {};
-    function addNewUploadedFileToTable(req) {
-        // req is an object with properties of an uploaded file, make a new row
-        // for it in the filesTable
-        if (!(req.fullPath in filesHash)) {
-            if ($.fn.dataTable.isDataTable("#filesTable")) {
-                let table = $("#filesTable").DataTable();
-                let rowObj = table.row.add(req);
-                rowVis[req.fullPath] = true;
-                table.search.fixed("defaultView", function(searchStr, data, rowIx) {
-                    return rowVis[data.fileName] || rowVis[data.fullPath];
-                }).draw();
-                indentActionButton(rowObj);
-                let newRow = rowObj.node();
-                $(newRow).css('color','red').animate({color: 'black'}, 1500);
-            } else {
-                showExistingFiles([req]);
+    function addNewUploadedHubToTable(hub) {
+        // hub is a list of objects representing the file just uploaded, the associated
+        // hub.txt, and directory. Make a new row for each in the filesTable, except for
+        // maybe the hub directory row and hub.txt which we may have already seen before
+        let table = $("#filesTable").DataTable();
+        let justUploaded = {}; // hash of contents of hub but keyed by fullPath
+        let hubDirData = {}; // the data for the parentDir of the uploaded file
+        for (let obj of hub) {
+            if (!obj.parentDir) {
+                hubDirData = obj;
             }
-            filesHash[req.fullPath] = req;
-            uiState.fileList.push(req);
+            let rowObj;
+            if (!(obj.fullPath in filesHash)) {
+                justUploaded[obj.fullPath] = obj;
+                rowObj = table.row.add(obj);
+                filesHash[obj.fullPath] = obj;
+                uiState.fileList.push(obj);
+            }
         }
+
+        // show all the new rows we just added, note the double draw, we need
+        // to have the new rows rendered to do the order because the order
+        // will copy the actual DOM node
+        dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
+        table.draw();
+        dataTableCustomOrder(table, hubDirData);
+        table.draw();
     }
 
     function doRowSelect(ev, table, indexes) {
         let row = table.row(indexes);
         let rowTr = row.node();
-        let rowCheckbox = rowTr.childNodes[0].firstChild;
-        if (rowTr.classList.contains("parentRow")) {
-            // we need to manually check the children
-            table.rows((idx,rowData) => rowData.fullPath.startsWith(row.data().fullPath) && rowData.parentDir === row.data().fileName).every(function(rowIdx, tableLoop, rowLoop) {
-                if (ev.type === "select") {
-                    this.select();
-                } else {
-                    this.deselect();
-                }
-            });
+        if (rowTr) {
+            let rowCheckbox = rowTr.childNodes[0].firstChild;
+            if (rowTr.classList.contains("parentRow")) {
+                // we need to manually check the children
+                table.rows((idx,rowData) => rowData.fullPath.startsWith(row.data().fullPath) && rowData.parentDir === row.data().fileName).every(function(rowIdx, tableLoop, rowLoop) {
+                    if (ev.type === "select") {
+                        this.select();
+                    } else {
+                        this.deselect();
+                    }
+                });
+            }
+            rowCheckbox.checked = ev.type === "select";
+            handleCheckboxSelect(ev, table, rowTr);
         }
-        rowCheckbox.checked = ev.type === "select";
-        handleCheckboxSelect(ev, table, rowTr);
     }
 
-    let rowVis = {}; // heirarchy of files and their row visibility
-    function makeFileHeirarchy(table) {
-        function rowHeirarchy(data) {
-            if (rowVis[data.fullPath]) {return;}
-
-            // first check for the top levels which are always open by default
-            if (!data.parentDir) {
-                rowVis[data.fileName] = true;
-                return;
-            }
-
-            // get the parent row and check it's status:
-            let parentName = data.parentDir[-1] === "/" ? data.parentDir.slice(0,-1) : data.parentDir;
-            let parentData = table.row((idx, rowData) => rowData.fileName === parentName).data();
-            if (!(parentName in rowVis) && !(parentData.fullPath in rowVis)) {
-                // get the data for the parent and recurse "up":
-                rowHeirarchy(parentData);
-            }
-            parentVis = rowVis[parentName] || rowVis[parentData.fullPath];
-            rowVis[data.fullPath] = parentVis;
+    function indentActionButton(rowTr, rowData) {
+        let numIndents = "0px"; //data.parentDir !== "" ? data.fullPath.split('/').length - 1: 0;
+        if (rowData.fileType !== "dir") {
+            numIndents = "10px";
         }
-
-        table.rows().every(function(rowIdx, tableLoop, rowLoop) {
-            let data = this.data();
-            rowHeirarchy(data);
-        });
-    }
-
-    function indentActionButton(rowObj) {
-        let data = rowObj.data();
-        let numIndents = data.parentDir !== "" ? data.fullPath.split('/').length - 1: 0;
-        rowObj.node().childNodes[1].style.textIndent = (numIndents * 10) + "px";
+        rowTr.childNodes[1].style.textIndent = numIndents;
     }
 
     let tableInitOptions = {
         select: {
             items: 'row',
-            style: 'multi', // default to a single click is all that's needed
+            style: 'multi+shift', // default to a single click is all that's needed
         },
         pageLength: 25,
         scrollY: 600,
         scrollCollapse: true, // when less than scrollY height is needed, make the table shorter
+        deferRender: true, // only draw into the DOM the nodes we need for each page
+        orderCellsTop: true, // when viewing a subdirectory, the directory becomes a part of
+                             // the header, this option prevents those cells from being used to
+                             // sort the table
         layout: {
+            top2Start: {
+                div: {
+                    className: "",
+                    id: "breadcrumb",
+                    html: "<span id=\"rootBreadcrumb\">My Data</span>",
+                }
+            },
             topStart: {
                 buttons: [
                     {
@@ -493,7 +627,7 @@ var hubCreate = (function() {
                     },
                 ],
                 quota: null,
-            }
+            },
         },
         columnDefs: [
             {
@@ -514,7 +648,7 @@ var hubCreate = (function() {
                 targets: 3,
                 render: function(data, type, row) {
                     if (type === "display") {
-                         dataTablePrintSize(data);
+                         return dataTablePrintSize(data);
                     }
                     return data;
                 }
@@ -529,9 +663,9 @@ var hubCreate = (function() {
                 }
             },
             {
-                // The upload time column, not visible but we use it to sort on new uploads
+                // The upload time column
                 targets: 8,
-                visible: false,
+                visible: true,
                 searchable: false,
                 orderable: true,
             },
@@ -554,14 +688,11 @@ var hubCreate = (function() {
             {data: "uploadTime", title: "Upload Time", name: "uploadTime"},
             {data: "fullPath", title: "fullPath", name: "fullPath"},
         ],
-        order: [{name: "fullPath", dir: "asc"},{name: "uploadTime", dir: "asc"}],
         drawCallback: function(settings) {
             console.log("table draw");
-            if (isLoggedIn) {
-                settings.api.buttons(0).enable();
-            }
         },
         rowCallback: function(row, data, displayNum, displayIndex, dataIndex) {
+            // row is a tr element, data is the td values
             // a row can represent one of three things:
             // a 'folder', with no parents, but with children
             // a folder with parents and children (can only come from hubtools
@@ -576,19 +707,14 @@ var hubCreate = (function() {
             if (data.fileType === "dir") {
                 row.className += " parentRow";
             }
+            indentActionButton(row, data);
         },
         initComplete: function(settings, json) {
-            console.log("data loaded, hiding directories");
+            console.log("data loaded, only showing directories");
             let table = new $.fn.dataTable.Api(settings);
-            makeFileHeirarchy(table);
-            table.rows().every(function(rowIdx, rowLoop, tableLoop) {
-                indentActionButton(this);
-            });
-            table.order.fixed({pre: [{name: "fullPath", dir: "asc"}, {name: "uploadTime", dir: "asc"}]});
-            // only show the top level and one layer of children by default
-            table.search.fixed("defaultView", function(searchStr, data, rowIx) {
-                return rowVis[data.fileName] || rowVis[data.fullPath];
-            }).draw();
+            dataTableShowTopLevel(table);
+            dataTableCustomOrder(table);
+            table.draw();
         }
     };
 
@@ -597,7 +723,7 @@ var hubCreate = (function() {
         // make buttons have the same style as other buttons
         $.fn.dataTable.Buttons.defaults.dom.button.className = 'button';
         tableInitOptions.data = d;
-        if (isLoggedIn) {
+        if (uiState.isLoggedIn) {
             tableInitOptions.language = {emptyTable: "Uploaded files will appear here. Click \"Upload\" to get started"};
         } else {
             tableInitOptions.language = {emptyTable: "You are not logged in, please navigate to \"My Data\" > \"My Sessions\" and log in or create an account to begin uploading files"};
@@ -605,12 +731,23 @@ var hubCreate = (function() {
         DataTable.feature.register('quota', function(settings, opts) {
             let options = Object.assign({option1: false, option2: false}, opts);
             let container = document.createElement("div");
-            if (isLoggedIn) {
-                container.textContent = `Using ${prettyFileSize(userQuota)} of ${prettyFileSize(maxQuota)}`;
+            if (uiState.isLoggedIn) {
+                container.textContent = `Using ${prettyFileSize(uiState.userQuota)} of ${prettyFileSize(uiState.maxQuota)}`;
             }
             return container;
         });
         let table = new DataTable("#filesTable", tableInitOptions);
+        if (uiState.isLoggedIn) {
+            table.buttons(".uploadButton").enable();
+            document.getElementById("rootBreadcrumb").addEventListener("click", function(e) {
+                dataTableShowTopLevel(table);
+                dataTableCustomOrder(table);
+                dataTableEmptyBreadcrumb(table);
+                table.draw();
+            });
+        } else {
+            table.buttons(".uploadButton").disable();
+        }
         table.on("select", function(e, dt, type, indexes) {
             doRowSelect(e, dt, indexes);
         });
@@ -629,14 +766,9 @@ var hubCreate = (function() {
         // TODO: write functions for
         //     creating default trackDbs
         //     editing trackDbs
-        let fileDiv = document.getElementById('filesDiv');
         // get the state from the history stack if it exists
-        if (history.state) {
-            uiState = history.state;
-        } else if (typeof userFiles !== 'undefined' && Object.keys(userFiles).length > 0) {
-            uiState.fileList = userFiles.fileList;
-            uiState.hubList = userFiles.hubList;
-            uiState.userUrl = userFiles.userUrl;
+        if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
+            _.assign(uiState, uiData.userFiles);
         }
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
@@ -728,7 +860,7 @@ var hubCreate = (function() {
                     // the batch change hub name
                     let batchParentDirInput = document.createElement("input");
                     batchParentDirInput.id = "batchParentDir";
-                    batchParentDirInput.value = hubNameDefault;
+                    batchParentDirInput.value = uiState.hubNameDefault;
                     batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
                     batchParentDirInput.style.margin= "1px 1px auto";
                     let batchParentDirLabel = document.createElement("label");
@@ -774,7 +906,7 @@ var hubCreate = (function() {
                 this.uppy.on("file-added", (file) => {
                     // add default meta data for genome and fileType
                     console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": detectFileType(file.name), "parentDir": hubNameDefault});
+                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": detectFileType(file.name), "parentDir": uiState.hubNameDefault});
                     if (this.uppy.getFiles().length > 1) {
                         this.addBatchSelectsToDashboard();
                     } else {
@@ -816,11 +948,9 @@ var hubCreate = (function() {
             }
         }
         let uppyOptions = {
-            //target: "#filePickerModal", // this seems nice but then the jquery css interferes with
-                                          // the uppy css
             trigger: ".uploadButton",
             showProgressDetails: true,
-            note: "Example text in the note field",
+            note: "The UCSC Genome Browser is not a HIPAA compliant data store. Do not upload patient information or other sensitive data files here, as anyone with the URL can view them.",
             meta: {"genome": null, "fileType": null},
             restricted: {requiredMetaFields: ["genome"]},
             closeModalOnClickOutside: true,
@@ -932,9 +1062,9 @@ var hubCreate = (function() {
                 "parentDir": "",
                 "fullPath": metadata.parentDir + "/",
             };
-            addNewUploadedFileToTable(parentDirObj);
-            addNewUploadedFileToTable(hubTxtObj);
-            addNewUploadedFileToTable(newReqObj);
+            // package the three objects together as one "hub" and display it
+            let hub = [parentDirObj, hubTxtObj, newReqObj];
+            addNewUploadedHubToTable(hub);
         });
         uppy.on('complete', (result) => {
             history.replaceState(uiState, "", document.location.href);

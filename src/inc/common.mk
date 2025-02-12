@@ -180,7 +180,7 @@ ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
   ifneq ($(filter 3.%, ${KERNEL_REL}),)
      # older linux needed libconv
-    XXXICONVLIB=-liconv
+    ICONVLIB=-liconv
   endif
 else
   ifeq (${ICONVLIB},)
@@ -355,7 +355,7 @@ endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
-L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
+L+=${PNGLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # NOTE: these must be last libraries and must be dynamic.

@@ -6000,14 +6000,15 @@ return knownDb;
 boolean isCuratedHubUrl(char *hubUrl)
 /* check if the given hubUrl is pointing to a curated hub */
 {
-boolean isCurated = FALSE;
+boolean isCurated = TRUE;
 
 if (isEmpty(hubUrl))
-    return isCurated;
+    return isCurated;	// this is not a hub, it is a database assembly
 
-if (startsWith("/gbdb", hubUrl))
+isCurated = FALSE;	// only 1 hub is curated: /gbdb/hs1
+if (startsWith("/gbdb", hubUrl))	// might be /gbdb/hs1
     {
-    if (! startsWith("/gbdb/genark", hubUrl))
+    if (! startsWith("/gbdb/genark", hubUrl))	// genark hubs == not curated
         isCurated = TRUE;
     }
 

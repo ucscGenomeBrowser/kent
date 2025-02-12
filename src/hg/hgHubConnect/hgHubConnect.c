@@ -1751,6 +1751,7 @@ void doAsync(struct cart *theCart)
 {
 cart = theCart;
 struct cartJson *cj = cartJsonNew(cart);
+cartJsonRegisterHandler(cj, hgHubGetHubSpaceUIState, getHubSpaceUIState);
 cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
 cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
 cartJsonRegisterHandler(cj, hgHubGenerateApiKey, generateApiKey);

@@ -103,12 +103,12 @@ void doMoveFile(struct cartJson *cj, struct hash *paramHash)
 {
 }
 
-static void outFilesForUser()
-/* List out the currently stored files for the user and their sizes */
+static void outUiDataForUser(struct jsonWrite *jw)
+/* List out the currently stored files for the user as well as other data
+ * needed to create the hubSpace table */
 {
 char *userName = getUserName();
-struct jsonWrite *jw = jsonWriteNew(); // the JSON to return for the client javascript
-jsonWriteObjectStart(jw, NULL);
+jsonWriteObjectStart(jw, "userFiles");
 if (userName)
     {
     // the url for this user:
@@ -132,14 +132,19 @@ if (userName)
         }
     jsonWriteListEnd(jw);
     }
-jsonWriteObjectEnd(jw);
-jsInlineF("var isLoggedIn = %s\n", getUserName() ? "true" : "false");
-jsInlineF("var userFiles = %s;\n", dyStringCannibalize(&jw->dy));
-jsInlineF("var hubNameDefault = \"%s\";\n", defaultHubNameForUser(getUserName()));
+jsonWriteBoolean(jw, "isLoggedIn", getUserName() ? TRUE : FALSE);
+jsonWriteString(jw, "hubNameDefault", defaultHubNameForUser(getUserName()));
 // if the user is not logged, the 0 for the quota is ignored
-jsInlineF("var userQuota = %llu\n", getUserName() ? checkUserQuota(getUserName()) : 0);
-jsInlineF("var maxQuota = %llu\n", getUserName() ? getMaxUserQuota(getUserName()) : HUB_SPACE_DEFAULT_QUOTA);
-jsonWriteFree(&jw);
+jsonWriteNumber(jw, "userQuota", getUserName() ? checkUserQuota(getUserName()) : 0);
+jsonWriteNumber(jw, "maxQuota", getUserName() ? getMaxUserQuota(getUserName()) : HUB_SPACE_DEFAULT_QUOTA);
+jsonWriteObjectEnd(jw);
+}
+
+void getHubSpaceUIState(struct cartJson *cj, struct hash *paramHash)
+/* Get all the data we need to make a users hubSpace UI table. The cartJson library
+ * deals with printing the json */
+{
+outUiDataForUser(cj->jw);
 }
 
 void doTrackHubWizard(char *database)
@@ -170,8 +175,11 @@ jsIncludeFile("hgMyData.js", NULL);
 webIncludeFile("inc/hgMyData.html");
 webIncludeResourceFile("hgMyData.css");
 
-// get the current files stored for this user
-outFilesForUser();
+// get the current files and vars stored for this user
+struct jsonWrite *jw = jsonWriteNew();
+outUiDataForUser(jw);
+jsInlineF("\nvar uiData = {%s}\n", jw->dy->string);
+jsonWriteFree(&jw);
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");

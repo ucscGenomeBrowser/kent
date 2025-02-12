@@ -200,7 +200,6 @@ for (i = 0; i < foundSlashes; i++)
     if (!subdir)
         errAbort("error: empty subdirectory components for parentDir string '%s'", parentDirStr);
     dyStringAppend(currLocation, components[i]);
-    dyStringAppendC(currLocation, '/');
     struct hubSpace *row = NULL;
     AllocVar(row);
     row->userName = userName;

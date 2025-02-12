@@ -13,7 +13,11 @@ include ../../inc/cgi_build_rules.mk
  
 compile: $O
 	${CC} -o $A${EXE} -g $O ${MYLIBS} ${L}
+ifeq (${IS_HGWDEV},yes)
 	cd hooks && ${MAKE}
+endif
 
 alpha:: compile
+ifeq (${IS_HGWDEV},yes)
 	cd hooks && ${MAKE} alpha
+endif

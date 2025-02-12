@@ -12,6 +12,7 @@
 //extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
 
 // the variables for various track hub wizard methods:
+#define hgHubGetHubSpaceUIState "getHubSpaceUIState"
 #define hgHubDeleteFile "deleteFile"
 #define hgHubCreateHub "createHub"
 #define hgHubEditHub "editHub"
@@ -30,6 +31,10 @@ void doRemoveFile(struct cartJson *cj, struct hash *paramHash);
 
 void doMoveFile(struct cartJson *cj, struct hash *paramHash);
 /* Move a file to a new hub */
+
+void getHubSpaceUIState(struct cartJson *cj, struct hash *paramHash);
+/* Get all the data we need to make a users hubSpace UI table. The cartJson library
+ * deals with printing the json */
 
 void doEditHub(struct cartJson *cj, struct hash *paramHash);
 /* Edit the hub.txt for a hub */
