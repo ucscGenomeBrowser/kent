@@ -572,6 +572,7 @@ def transform_assertion_summaries(df: pd.DataFrame, mpdf: pd.DataFrame) -> pd.Da
         message="At least 95% of Assertions should have an existing MolecularProfile",
     )
 
+    df["disease"] = df["disease"].where(df["disease"].isnull(), df["disease"].str.replace(',', '&#44'))
     df["disease_html"] = "<i>" + df["disease"] + "</i>"
     doid = df["doid"].astype("Int64").astype("str")
     df["disease_link"] = doid.where(doid.notnull(), df["disease"]).where(
@@ -592,6 +593,7 @@ def transform_clinical_evidence(df: pd.DataFrame, mpdf: pd.DataFrame):
         message="At least 95% of Evidence should have an existing MolecularProfile",
     )
 
+    df["disease"] = df["disease"].where(df["disease"].isnull(), df["disease"].str.replace(',', '&#44'))
     df["disease_html"] = "<i>" + df["disease"] + "</i>"
     doid = df["doid"]
     df["disease_link"] = doid.where(doid.notnull(), df["disease"]).where(
