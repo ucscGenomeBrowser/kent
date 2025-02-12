@@ -1,0 +1,35 @@
+track mitoMap
+shortLabel MITOMAP
+longLabel MITOMAP: A human mitochondrial genome database
+type bigBed 9 +
+visibility hide
+group phenDis
+noScoreFilter on
+compositeTrack on
+pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released February XX, 2025"
+
+track mitoMapVars
+shortLabel MITOMAP Variants
+longLabel MITOMAP Control and Coding Variants
+priority 1
+parent mitoMap on
+type bigBed 9 + 11
+group phenDis
+bigDataUrl /gbdb/$D/bbi/mitoMapVars.bb
+exonNumbers off
+url https://www.mitomap.org/foswiki/bin/view/MITOMAP/$<_varType>
+urlLabel MITOMAP link
+mouseOverField _mouseOver
+
+track mitoMapDiseaseMuts
+shortLabel MITOMAP Disease Muts
+longLabel MITOMAP Disease Mutations
+priority 2
+parent mitoMap on
+type bigBed 9 + 14
+group phenDis
+bigDataUrl /gbdb/$D/bbi/mitoMapDiseaseMuts.bb
+exonNumbers off
+url https://www.mitomap.org/foswiki/bin/view/MITOMAP/$<_mutsCodingOrRNA>
+urlLabel MITOMAP link
+mouseOverField _mouseOver

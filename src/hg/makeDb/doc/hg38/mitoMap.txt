@@ -1,0 +1,24 @@
+mkdir /hive/data/genomes/hg38/bed/mitomap
+cd /hive/data/genomes/hg38/bed/mitomap
+
+#CSV files were manually downloaded as CSV then uploaded to the GB from the following mitomap sources:
+# https://www.mitomap.org/foswiki/bin/view/MITOMAP/VariantsControl
+# https://www.mitomap.org/foswiki/bin/view/MITOMAP/VariantsCoding
+# https://www.mitomap.org/foswiki/bin/view/MITOMAP/MutationsRNA
+# https://www.mitomap.org/foswiki/bin/view/MITOMAP/MutationsCodingControl
+
+# Cleaned up all the csv files that also had excel quotes:
+for file in *.csv; do csvToTab < "$file" > "${file%.csv}.tsv"; done
+
+$ head VariantsControlMITOMAPFoswiki.tsv
+Position        Locus   Nucleotide Change       GB FreqFL (CR)*‡        GB Seqstotal (FL/CR)*   Curated References
+3       Control Region  T-C     0.000%(0.000%)  0       2
+
+# Run python script that builds both of the tracks
+python ~/kent/src/hg/makeDb/scripts/buildMitoMap.py
+
+ln -s /hive/data/genomes/hg38/bed/mitomap/mitoMapVars.bb /gbdb/hg38/bbi/mitoMapVars.bb
+ln -s /hive/data/genomes/hg38/bed/mitomap/mitoMapVars.bb /gbdb/hg19/bbi/mitoMapVars.bb
+
+ln -s /hive/data/genomes/hg38/bed/mitomap/mitoMapDiseaseMuts.bb /gbdb/hg38/bbi/mitoMapDiseaseMuts.bb
+ln -s /hive/data/genomes/hg38/bed/mitomap/mitoMapDiseaseMuts.bb /gbdb/hg19/bbi/mitoMapDiseaseMuts.bb
