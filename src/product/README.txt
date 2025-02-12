@@ -136,8 +136,10 @@ Genome Browser in the Cloud (GBiC)
 that sets up a fully functional mirror on all major Linux
 distributions.  
 
-It has been tested on Ubuntu 18 and 20, RedHat/CentOS 7 and 8,
-and Fedora 20. Preferably, the installation should be performed on a fresh Linux
+The GBiC program has been tested and confirmed to work with Ubuntu 18/20/22/24 LTS,
+Rocky 9.5, and Fedora 30/35/41.
+
+Preferably, the installation should be performed on a fresh Linux
 installation, as it deactivates the default site config file in Apache
 and fills the MariaDB directory with numerous databases. The easiest way to accomplish this is to
 run the Genome Browser in the Cloud program in a new virtual machine. The program also works on

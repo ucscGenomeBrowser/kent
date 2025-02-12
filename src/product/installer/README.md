@@ -17,7 +17,8 @@ default Apache htdocs/cgi folders, it is best run on a new machine, or at least 
 already used as a web server. The tool can also download full or partial assembly databases,
 update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning").
 
-The GBiC program has been tested with Ubuntu 18/20 LTS, Centos 7.2/8, and Fedora 20.
+The GBiC program has been tested and confirmed to work with Ubuntu 18/20/22/24 LTS,
+Rocky 9.5, and Fedora 30/35/41.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos) and Microsoft Azure (Ubuntu).
 
