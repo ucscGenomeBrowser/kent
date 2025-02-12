@@ -5612,3 +5612,5 @@ searchPriority 20
 include spliceAI.ra
 
 include alphaMissense.ra
+
+include mitoMap.ra
