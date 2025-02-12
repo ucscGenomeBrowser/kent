@@ -55,10 +55,11 @@ include constraintSuper.ra
 include genCC.ra
 
 # AbSplice Scores
-include abSplice.ra
+include abSplice.ra beta,public
 
 # Splice Impact super track: spliceVarDb, spliceAi, etc
-include spliceImpactSuper.ra alpha
+include spliceImpactSuper.ra beta,public
+include spliceImpactSuper.alpha.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -211,11 +212,12 @@ pennantIcon Updated red ../goldenPath/newsarch.html#XXXXXX "Updated January XX, 
         bedNameLabel Nucleotide Change
         skipFields Variant,VariantUrl,score
         detailsDynamicTable VariantDetails|Variant Details
+        dataVersion /gbdb/$D/bbi/varChatVersion.txt
         pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released January XX, 2025"
 
         track pubtator
-        shortLabel PubTator rsIDs
-        longLabel dbSNP Variants extracted by PubTator3
+        shortLabel PubTator variants
+        longLabel dbSNP variants and other genetic variants grounded to dbSNP by tmVar; collected by PubTator3
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/pubs2/pubtatorDbSnp.bb
@@ -224,7 +226,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#XXXXXX "Updated January XX, 
         itemRgb on
         parent varsInPubs pack
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
+        mouseOver $name found in ${numPubmedIds} PubMed articles
 
         track varaico
         release alpha
@@ -1766,6 +1768,7 @@ priority 1
         maxWindowToDraw 1000000
         defaultGeneTracks knownGene
         priority 4
+        tableBrowser noGenome
 
     track dbSnp153ViewErrs
     parent dbSnp153Composite
@@ -1893,6 +1896,7 @@ priority 0.8
         bigDataUrl /gbdb/$D/snp/dbSnp155.bb
         maxWindowToDraw 1000000
         priority 4
+        tableBrowser noGenome
 
     track dbSnp155ViewErrs
     parent dbSnp155Composite
@@ -5606,6 +5610,6 @@ semiShortCircuit 1
 termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
 searchPriority 20
 
-include spliceAI.ra
+include spliceAI.ra beta,public
 
 include alphaMissense.ra

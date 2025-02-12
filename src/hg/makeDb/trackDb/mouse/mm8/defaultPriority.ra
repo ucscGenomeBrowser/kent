@@ -45,4 +45,5 @@ priority 2
 
 track snp126 override
 priority 1
+tableBrowser noGenome
 url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$

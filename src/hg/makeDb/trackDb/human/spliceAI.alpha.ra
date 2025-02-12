@@ -3,10 +3,11 @@ compositeTrack on
 shortLabel SpliceAI
 longLabel SpliceAI: Splice Variant Prediction Score
 group phenDis
+parent spliceImpactSuper on
 type bigBed 9 +
+visibility dense
 tableBrowser off
 dataVersion Illumina SpliceAI Score v1.3
-pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
 
     track spliceAIsnvs
     type bigBed 9 +

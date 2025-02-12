@@ -36,12 +36,12 @@ LINKLIBS = ${STATIC_PRE} ${DEPLIBS} ${MYSQLLIBS}
 
 objects = ${extraObjects} ${externObjects}
 
-default:: ${A:%=${DESTDIR}${BINDIR}/%${EXE}}
+default:: ${A:%=${DESTBINDIR}/%${EXE}}
 
 ${extraObjects}: ${extraHeaders}
 
-${DESTDIR}${BINDIR}/%${EXE}: %.o ${objects} ${DEPLIBS}
-	@mkdir -p $(dir $@)
+${DESTBINDIR}/%${EXE}: %.o ${objects} ${DEPLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 ifeq (${SEMI_STATIC},yes)
@@ -53,7 +53,7 @@ compile:: ${A:%=%${EXE}}
 %${EXE}: ${DEPLIBS} %.o ${objects}
 	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
 
-install:: ${A:%=${DESTDIR}${BINDIR}/%${EXE}}
+install:: ${A:%=${DESTBINDIR}/%${EXE}}
 
 clean::
 	rm -f ${O} ${extraObjects} ${A:%=%${EXE}}

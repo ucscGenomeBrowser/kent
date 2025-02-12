@@ -32,6 +32,7 @@ html ../../dbSnpArchive
         priority 0.1
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../snp151
 
         track snp151Flagged override
@@ -67,6 +68,7 @@ html ../../dbSnpArchive
         priority 0.2
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../snp150
 
         track snp150Common override
@@ -95,6 +97,7 @@ html ../../dbSnpArchive
         priority 0.3
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../snp149
 
         track snp149Common override
@@ -130,6 +133,7 @@ html ../../dbSnpArchive
         priority 0.4
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../snp147
 
         track snp146Mult override
@@ -149,6 +153,7 @@ html ../../dbSnpArchive
         track snp146 override
         parent dbSnpArchive 
         priority 0.5
+        tableBrowser noGenome
         defaultGeneTracks knownGene
         type bed 6 +
         html ../snp146
@@ -188,6 +193,7 @@ html ../../dbSnpArchive
         parent dbSnpArchive 
         snpSeqFile /gbdb/hg19/snp/snp144.fa
         priority 0.6
+        tableBrowser noGenome
         defaultGeneTracks knownGene
         type bed 6 +
         html ../snp144
@@ -222,6 +228,7 @@ html ../../dbSnpArchive
         priority 0.7
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../snp142
 
         track snp141Flagged override
@@ -246,6 +253,7 @@ html ../../dbSnpArchive
         priority 0.8
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../snp141
 
         track snp138Flagged
@@ -294,6 +302,7 @@ html ../../dbSnpArchive
         priority 0.9
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html snp138
 
         track snp138Common override
@@ -369,6 +378,7 @@ html ../../dbSnpArchive
         priority 1.0
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html snp137
 
         track snp135Common override
@@ -424,6 +434,7 @@ html ../../dbSnpArchive
         priority 1.1
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../../snp135
 
         track snp132Common override
@@ -483,6 +494,7 @@ html ../../dbSnpArchive
         priority 1.2
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../../snp132
 
         track snp131 override
@@ -497,6 +509,7 @@ html ../../dbSnpArchive
         priority 1.3
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html ../../snp131
 
         track snp130 override
@@ -516,6 +529,7 @@ html ../../dbSnpArchive
         priority 1.4
         defaultGeneTracks knownGene
         type bed 6 +
+        tableBrowser noGenome
         html snp130
 
 #END OF SNP ARCHIVE

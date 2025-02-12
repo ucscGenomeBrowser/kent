@@ -148,7 +148,7 @@ if (geneId)
 return ret;
 }
 
-struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader loader, struct hash *chainHash)
+struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader2 loader, int numFields,struct hash *chainHash)
 // retrieve items for which we have a loader from a SQL database for which we have a set quickLift chains.  
 // Save the chains we used to map the item back to the current reference.
 {
@@ -197,7 +197,7 @@ for(chain = chainList; chain; chain = chain->next)
 
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        item = loader(row + rowOffset);
+        item = loader(row + rowOffset, numFields);
         slAddHead(&itemList, item);
         }
 

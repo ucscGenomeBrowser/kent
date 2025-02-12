@@ -42,10 +42,20 @@
   margin-top:1px;
   color:inherit;
   font-size:20px;
-  line-height:1em
+  line-height:1em;
+}
+
+table.dataTable input.dt-select-checkbox:checked:after,
+table.dataTable input.dt-select-checkbox:indeterminate:after {
+  content: none;
 }
 
 /* make the search bar and table have rows have a normal white background */
 #filesDiv input.dt-input,#filesDiv .dt-scroll-body {
     background-color: #f9f9f9;
+}
+
+.breadcrumb {
+    text-decoration: underline;
+    cursor: pointer;
 }

@@ -56,4 +56,5 @@ priority 1
 # If this priority changes, please change it here and there as well
 
 track snp130 override
+tableBrowser noGenome
 priority 3

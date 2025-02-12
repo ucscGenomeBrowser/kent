@@ -38,4 +38,5 @@ track rmsk override
 priority 1
 
 track snp127 override
+tableBrowser noGenome
 priority 2

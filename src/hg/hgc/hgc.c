@@ -2000,40 +2000,67 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
-    errAbort("genericBedClick track %s not found", tdb->table);
-if (bedSize <= 3)
-    sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
-else
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+
+char *db = database;
+char *sqlTable = tdb->table;
+if (liftDb != NULL)
     {
-    struct hTableInfo *hti = hFindTableInfoWithConn(conn, seqName, tdb->table);
-    if (hti && *hti->nameField && differentString("name", hti->nameField))
-	sqlSafef(query, sizeof query, "select * from %s where %s = '%s' and chrom = '%s' and chromStart = %d",
-	    table, hti->nameField, item, seqName, start);
-    else
-	sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-	    table, item, seqName, start);
+    if (isCustomTrack(trackHubSkipHubName(tdb->track)))
+        {
+        liftDb = CUSTOM_TRASH;
+        sqlTable = trackDbSetting(tdb, "dbTableName");
+        }
+    db = liftDb;
     }
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+
+if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("genericBedClick track %s not found", tdb->table);
+
+if (liftDb)
     {
-    if (firstTime)
-	firstTime = FALSE;
-    else
-	htmlHorizontalLine();
-    bed = bedLoadN(row+hasBin, bedSize);
+    struct hash *chainHash = newHash(10);
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    bed = (struct bed *)quickLiftSql(conn, quickLiftFile, sqlTable, seqName, winStart, winEnd,  NULL, NULL, (ItemLoader2)bedLoadN, bedSize, chainHash);
     bedPrintPos(bed, bedSize, tdb);
 
-    extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
-
-    // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
-    char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
-    if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
-	printf("<br><B>Sequence 1:</B> %s<br><B>Sequence 2:</B> %s<br>\n",row[hasBin+6], row[hasBin+7]);
-    printCompareGenomeLinks(tdb,bed->name);
+    //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
-sqlFreeResult(&sr);
-getBedTopScorers(conn, tdb, table, item, start, bedSize);
+else 
+    {
+    if (bedSize <= 3)
+        sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
+    else
+        {
+        struct hTableInfo *hti = hFindTableInfoWithConn(conn, seqName, tdb->table);
+        if (hti && *hti->nameField && differentString("name", hti->nameField))
+            sqlSafef(query, sizeof query, "select * from %s where %s = '%s' and chrom = '%s' and chromStart = %d",
+                table, hti->nameField, item, seqName, start);
+        else
+            sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+                table, item, seqName, start);
+        }
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        if (firstTime)
+            firstTime = FALSE;
+        else
+            htmlHorizontalLine();
+        bed = bedLoadN(row+hasBin, bedSize);
+        bedPrintPos(bed, bedSize, tdb);
+
+        extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
+
+        // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
+        char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+        if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
+            printf("<br><B>Sequence 1:</B> %s<br><B>Sequence 2:</B> %s<br>\n",row[hasBin+6], row[hasBin+7]);
+        printCompareGenomeLinks(tdb,bed->name);
+        }
+    sqlFreeResult(&sr);
+    getBedTopScorers(conn, tdb, table, item, start, bedSize);
+    }
 printItemDetailsHtml(tdb, item);
 }
 
@@ -4641,7 +4668,18 @@ struct sqlConnection *conn = NULL;
 char *imagePath = trackDbSetting(tdb, ITEM_IMAGE_PATH);
 char *container = trackDbSetting(tdb, "container");
 
-if (!trackHubDatabase(database))
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+
+if (liftDb)
+    {
+    if (isCustomTrack(trackHubSkipHubName(tdb->track)))
+        {
+        liftDb = CUSTOM_TRASH;
+        tdb->table = trackDbSetting(tdb, "dbTableName");
+        }
+    conn = hAllocConnTrack(liftDb, tdb);
+    }
+else if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -26557,14 +26595,17 @@ boolean calledHandler = FALSE;
 if (!avoidHandler)
     calledHandler = findNameBasedHandler(tdb, track, item);
 
-if ((tdb != NULL) && !calledHandler)
+if (!calledHandler)
     {
-    genericClickHandler(tdb, item, NULL);
-    }
-else
-    {
-    cartWebStart(cart, database, "%s", track);
-    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
+    if (tdb != NULL)
+        {
+        genericClickHandler(tdb, item, NULL);
+        }
+    else
+        {
+        cartWebStart(cart, database, "%s", track);
+        warn("Sorry, clicking there doesn't do anything yet (%s).", track);
+        }
     }
 
 cartHtmlEnd();
