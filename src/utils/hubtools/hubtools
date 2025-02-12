@@ -9,16 +9,23 @@ from os.path import join, basename, dirname, isfile, relpath, abspath, splitext,
 
 # ==== functions =====
 # allowed file types by hubtools up
-fileTypes = {
-    "bb" : "bigBed",
-    "bigBed" : "bigBed",
-    "bam" : "bam",
-    "vcf.gz" : "vcf",
-    "bigWig" : "bigWig",
-    "bw" : "bigWig",
-    "hic" : "hic",
-    "cram" : "cram",
-    "txt" : "text",
+# copied from the javascript file hgHubConnect.js
+fileTypeExtensions = {
+    "bigBed": [ ".bb", ".bigbed" ],
+    "bam": [ ".bam" ],
+    "vcf": [ ".vcf" ],
+    "vcfTabix": [ ".vcf.gz", "vcf.bgz" ],
+    "bigWig": [ ".bw", ".bigwig" ],
+    "hic": [ ".hic" ],
+    "cram": [ ".cram" ],
+    "bigBarChart": [ ".bigbarchart" ],
+    "bigGenePred": [ ".bgp", ".biggenepred" ],
+    "bigMaf": [ ".bigmaf" ],
+    "bigInteract": [ ".biginteract" ],
+    "bigPsl": [ ".bigpsl" ],
+    "bigChain": [ ".bigchain" ],
+    "bamIndex": [ ".bam.bai", ".bai" ],
+    "tabixIndex": [ ".vcf.gz.tbi", "vcf.bgz.tbi" ]
 }
 
 asHead = """table bed
@@ -44,8 +51,9 @@ asLines = """
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] <cmd> - create and edit UCSC track hubs
-            
-    hubtools make <assemblyCode>: create a track hub for all bigBed/bigWig files under a directory. Creates single-file hub.txt
+
+    hubtools make <assemblyCode e.g. hg38>: create a track hub for all bigBed/bigWig files under a directory.
+    Creates single-file hub.txt, and tries to guess reasonable settings from the file names:
     - bigBed/bigWig files in the current directory will be top level tracks
     - big* files in subdirectories become composites
     - for every filename, the part before the first dot becomes the track base name
@@ -54,11 +62,12 @@ def parseArgs():
     - track attributes can be changed using tracks.ra, tracks.tsv, tracks.json or tracks.yaml files, in
       each top or subdirectory
     - The first column of tracks.tsv must be 'track'.
-    - tracks.json and tracks.yaml must be object at the top level, the attributes are <trackName> or
+    - tracks.json and tracks.yaml must have objects at the top level, the attributes are <trackName> or
       the special attribute "hub".
 
-    hubtools up: upload files to hubSpace
-    - needs ~/.hubt.conf with username and password. Create one with 'hubt conf'
+    hubtools up <hubName>: upload files to hubSpace
+    - needs ~/.hubtools.conf with a line apiKey="xxxx". Create a key by going to
+      My Data > Track Hubs > Track Development on https://genome.ucsc.edu
     - uploads all files from the -i directory or the current dir if not specified.
 
     hubtools jbrowse <url> <db> : convert Jbrowse trackList.json files to hub.txt.
@@ -75,8 +84,12 @@ def parseArgs():
     hubtools archive -i xxx/archive -o outDir
     - Create a hub from an extracted xxx.tar.gz file "archive" directory. You can download a .tar.gz from
       in the Genome Browser under My Data > My Session. The archive contains all your custom tracks.
+      It is usually easier to use the 'ct' command, as this will automatically download an archive
+      an convert it, given a full genome browser URL with an "hgsid" parameter on the URL.
 
     hubtools ct <hgTracksUrl>
+    - Download all custom tracks from a Genome Browser URL, either as a /s/ stable shortlink or 
+      the temporary hgsid=xxxx URL
 
     Examples:
     hubtools conv -i myTsvs/
@@ -89,18 +102,19 @@ def parseArgs():
     hubtools archive -i archive -o hub
     hubtools ct 'https://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr7%3A155798978%2D155810671&hgsid=345826202_8d3Mpumjaw9IXYI2RDaSt5xMoUhH'
 
-
-    For the "make" step:
+    For the "hubtools make" step, you can specify additional options for your tracks via tracks.json/.yaml or tracks.tsv:
 
     tracks.json can look like this, can have more keys, one per track, or the special key "hub":
     {
         "hub" :      { "hub": "mouse_motor_atac", "shortLabel":"scATAC-seq Developing Cranial Motor Neurons" },
         "myTrack" :  { "shortLabel" : "My nice track" }
     }
+    tracks.tsv should look like this, other columns can be added:
 
-    tracks.tsv should look like this, but can have any number of columns:
-    #track<tab>shortLabel
-    myTrack<tab>My nice track
+        #track<tab>shortLabel
+        myTrack<tab>My nice track
+
+    For a list of all possible fields/columns see https://genome.ucsc.edu/goldenpath/help/trackDb/trackDbHub.html:
     """)
 
 
@@ -687,6 +701,20 @@ def cacheWrite(uploadCache, fname):
     logging.debug("Writing "+fname)
     json.dump(uploadCache, open(fname, "w"), indent=4)
 
+def getFileType(fbase):
+    " return the file type defined in the hubspace system, given a base file name "
+    ret = "NA"
+    for fileType, fileExts in fileTypeExtensions.items():
+        for fileExt in fileExts:
+            if fbase.endswith(fileExt):
+                ret = fileType
+                break
+        if ret!="NA":
+            break
+
+    logging.debug("file type for %s is %s" % (fbase, fileType))
+    return ret
+
 def uploadFiles(tdbDir, hubName):
     "upload files to hubspace. Server name and token can come from ~/.hubtools.conf "
     try:
@@ -703,26 +731,15 @@ def uploadFiles(tdbDir, hubName):
 
     apiKey = cfgOption("apiKey")
     if apiKey is None:
-        errAbort("To upload files, the file ~/.hubtools.conf must contain a line like apiKey='xxx@yyy').\n"
-                "Go to https://genome.ucsc.edu/cgi-bin/hgHubConnect#dev to get your apiKey value.")
-
-    if not "@" in apiKey:
-        errAbort("The apiKey value in ~/.hubtools.conf must contain an @ character.")
-
-    cookieUser, cookieId = apiKey.split("@")
-
-    cookies = {}
-    cookies[cookieNameUser] = cookieUser
-    cookies[cookieNameId] = cookieId
-    cookie_header = "; ".join(f"{key}={value}" for key, value in cookies.items())
-
-    headers = {"Cookie" : cookie_header}
+        errAbort("To upload files, the file ~/.hubtools.conf must contain a line like apiKey='xxx').\n"
+                "Go to https://genome.ucsc.edu/cgi-bin/hgHubConnect#dev to create a new  apiKey. Then run \n"
+                "   echo 'apiKey=\"xxxx\"' >> ~/.hubtools.conf \n"
+                "and run the 'hubtools up' command again.")
 
     logging.info(f"TUS server URL: {serverUrl}")
-    logging.debug("HTTP headers: "+repr(headers))
-    my_client = client.TusClient(serverUrl, headers=headers)
+    my_client = client.TusClient(serverUrl)
 
-    cacheFname = join(tdbDir, ".hubtools.json")
+    cacheFname = join(tdbDir, ".hubtools.files.json")
     uploadCache = cacheLoad(cacheFname)
 
     for rootDir, dirs, files in os.walk(tdbDir):
@@ -730,35 +747,45 @@ def uploadFiles(tdbDir, hubName):
             if fbase.startswith("."):
                 continue
             fpath = join(rootDir, fbase)
-            fullPath = join(tdbDir, fpath)
+            localPath = join(tdbDir, fpath)
+            localMtime = os.stat(localPath).st_mtime
 
             # skip files that have not changed their mtime since last upload
             if fpath in uploadCache:
-                if os.stat(fullPath).st_mtime == uploadCache[fpath]["mtime"]:
-                    logging.info("%s: file mtime unchanged, not uploading again" % fullPath)
+                cacheMtime = uploadCache[fpath]["mtime"]
+                if localMtime == cacheMtime:
+                    logging.info("%s: file mtime unchanged, not uploading again" % localPath)
                     continue
+                else:
+                    logging.debug("file %s: mtime is %f, cache mtime is %f, need to re-upload" %
+                            (fpath, localMtime, cacheMtime))
+            else:
+                logging.debug("file %s not in upload cache" % fpath)
 
-            cache = {}
-            mtime = os.stat(fullPath).st_mtime
-            cache["mtime"] = mtime
-            cache["size"] = os.stat(fullPath).st_size
-            uploadCache[fpath] = cache
-
-            #timestamp = datetime.fromtimestamp(mtime, tz=timezone.utc).timestamp() # seconds since 1970
+            fileType = getFileType(fbase)
 
             parentDir = join(hubName, rootDir)
             meta = {
+                    "apiKey" : apiKey,
                     "parentDir" : parentDir,
                     "genome":"NA",
                     "fileName" : fbase,
                     "hubName" : hubName,
-                    "fileType":"NA",
-                    "lastModified" : str(int(mtime)),
-                }
+                    "hubtools" : "true",
+                    "fileType": fileType,
+                    "lastModified" : str(int(localMtime)),
+            }
 
             logging.info(f"Uploading {fpath}, meta {meta}")
-            uploader = my_client.uploader(fullPath, metadata=meta)
+            uploader = my_client.uploader(localPath, metadata=meta)
             uploader.upload()
+
+            # note that this file was uploaded
+            cache = {}
+            mtime = os.stat(localPath).st_mtime
+            cache["mtime"] = mtime
+            cache["size"] = os.stat(localPath).st_size
+            uploadCache[fpath] = cache
 
     cacheWrite(uploadCache, cacheFname)
 
