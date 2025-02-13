@@ -86,6 +86,7 @@ for panel in data:
                 seen.append(name)
                 if not name in mane:
                     print('WARNING, cannot find', name, file=sys.stderr)
+                    continue
                 disease = 'no MONDO ID specified'
                 if "diseases" in gene:
                     try:
@@ -192,6 +193,7 @@ for panel in data:
                 seen.append(name)
                 if not name in mane:
                     print('WARNING, cannot find', name, file=sys.stderr)
+                    continue
                 disease = 'no MONDO ID specified'
                 if "diseases" in gene:
                     try:

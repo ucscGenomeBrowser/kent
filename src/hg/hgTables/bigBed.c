@@ -545,6 +545,8 @@ if (bbi->version >= 2)
     printLongWithCommas(stdout, bigBedItemCount(bbi));
     }
 printTypeHelpDesc(tdb->type);
+printTableBrowserLink(tdb, table);
+
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 
@@ -584,7 +586,6 @@ for ( ; colCount < bbi->fieldCount; ++colCount)
     }
 hTableEnd();
 
-
 if (ivList != NULL)
     {
     /* Put up another section with sample rows. */
@@ -617,6 +618,8 @@ if (ivList != NULL)
 	}
     hTableEnd();
     }
+explainCoordSystem();
+
 printTrackHtml(tdb);
 /* Clean up and go home. */
 lmCleanup(&lm);

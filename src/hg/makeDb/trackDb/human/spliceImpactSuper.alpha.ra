@@ -1,9 +1,12 @@
 track spliceImpactSuper
 shortLabel Splicing Impact
 longLabel Splicing Impact Prediction Scores and Databases
-superTrack on hide # one of these two is not necessary...
-#visibility hide
+superTrack on hide
 group phenDis
 pennantIcon New red ../goldenPath/newsarch.html "New"
 
-include splicevardb.ra beta,public
+include splicevardb.ra alpha
+
+include abSplice.alpha.ra alpha
+
+include spliceAI.alpha.ra alpha

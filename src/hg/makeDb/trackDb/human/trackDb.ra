@@ -55,10 +55,11 @@ include constraintSuper.ra
 include genCC.ra
 
 # AbSplice Scores
-include abSplice.ra
+include abSplice.ra beta,public
 
 # Splice Impact super track: spliceVarDb, spliceAi, etc
-include spliceImpactSuper.ra
+include spliceImpactSuper.ra beta,public
+include spliceImpactSuper.alpha.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -5609,7 +5610,7 @@ semiShortCircuit 1
 termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
 searchPriority 20
 
-include spliceAI.ra
+include spliceAI.ra beta,public
 
 include alphaMissense.ra
 

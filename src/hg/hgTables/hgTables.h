@@ -1258,4 +1258,11 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 int bigFileMaxOutput();
 /*	return maxOut value (cart variable defined on curTable)	*/
 
+void explainCoordSystem();
+/* Our coord system is counter-intuitive to users.  Warn them in advance to
+ * reduce the frequency with which they find this "bug" on their own and
+ * we have to explain it on the genome list. */
+
+void printTableBrowserLink(struct trackDb *tdb, char* table);
+/* print link to table browser that opens this table */
 #endif /* HGTABLES_H */

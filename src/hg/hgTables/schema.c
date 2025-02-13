@@ -190,7 +190,7 @@ hTableEnd();
 sqlFreeResult(&sr);
 }
 
-static void explainCoordSystem()
+void explainCoordSystem()
 /* Our coord system is counter-intuitive to users.  Warn them in advance to
  * reduce the frequency with which they find this "bug" on their own and
  * we have to explain it on the genome list. */
@@ -201,6 +201,13 @@ printf("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
      "here</A>.</I>", cgiAppendSForHttps());
 }
 
+void printTableBrowserLink(struct trackDb *tdb, char* table)
+/* print link to table browser that opens this table */
+{
+printf("To download this table in various text formats, and intersect or correlate with other tables, use our "
+        "<a href='hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s'>Table Browser</a>.<br>",
+        database, tdb->grp, tdb->track, table);
+}
 
 static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table)
 /* Put up sample values. */
@@ -424,6 +431,7 @@ if (tdbForConn && sameString(tdbForConn->track, table))
     {
     struct trackDb *childTdb = tdbForTrack(db, table, NULL);
     addNotesForBbiTables(childTdb, conn);
+    printTableBrowserLink(tdbForConn, table);
     }
 
 jpList = joinerRelate(joiner, db, table, NULL);
