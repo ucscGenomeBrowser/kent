@@ -250,7 +250,7 @@ else
     if (startsWith("/gbdb", fileName))
         downPrefix = "https://hgdownload.soe.ucsc.edu";
 
-    hPrintf("<B>%s File Download:</B> <A HREF='%s%s'>%s</A>", typeLabel, downPrefix, fileName, fileName);
+    hPrintf("<B>%s File Download:</B> <A HREF='%s%s'>%s%s</A>", typeLabel, downPrefix, fileName, downPrefix, fileName);
     }
 }
 
@@ -268,14 +268,14 @@ else if (startsWithWord("bigWig", type))
     {
     printf("<BR>The data is stored in the binary "
            "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
-           "BigWig</A> format.\n");
+           "BigWig</A> format. Our tools <tt>bigWigToBedGraph</tt> or <tt>bigWigToWig</tt> accept a file or the URL above and output text.\n");
     isBig = TRUE;
     }
 else if (startsWith("big", type))
     {
     printf("<BR>The data is stored in the binary "
            "<A HREF=\"/goldenPath/help/bigBed.html\" TARGET=_BLANK>"
-           "BigBed</A> format.<BR>\n");
+           "BigBed</A> format. Our tool <tt>bigBedToBed</tt> accepts a file or the URL above as the input and outputs text.<BR>\n");
     isBig = TRUE;
     }
 
