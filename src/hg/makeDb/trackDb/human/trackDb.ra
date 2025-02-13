@@ -36,7 +36,7 @@ include trackDb.dbVar.ra
 include trackDb.clinGen.ra
 
 # CIViC cancer variant interpretation
-include civic.ra alpha,beta
+include civic.ra
 
 # Genome In a Bottle
 include trackDb.giab.ra
