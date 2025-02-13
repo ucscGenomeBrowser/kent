@@ -18,10 +18,11 @@ directories it looks at in git, these can be controlled in the function findGitF
 import subprocess
 import getpass
 import filecmp
+import os
 
 def bash(cmd):
     """Input bash cmd and return stdout"""
-    rawOutput = subprocess.run(cmd,check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+    rawOutput = subprocess.run(cmd,check=False, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     return(rawOutput.stdout.split('\n')[0:-1])
 
 
@@ -37,11 +38,14 @@ def parseGitFilesAndMd5sums(fileListWithMd5sum,fileNameDic,fileNameHiveMatches):
 def searchHiveFiles(fileNameDic,fileNameHiveMatches):
     """Find git otto files in the hive otto dir and get md5sums"""
     for fileName in fileNameDic.keys():   
-        hiveSearchMd5sum = bash("find /hive/data/outside/otto/ -maxdepth 3 -name "+fileName)
+        hiveSearchMd5sum = bash(f"find /hive/data/outside/otto/ -maxdepth 3 -name '{fileName}' 2>/dev/null")
         if hiveSearchMd5sum != []:
             for fileHit in hiveSearchMd5sum:
-                fileHitMd5Sum = bash('md5sum '+fileHit)
-                fileNameHiveMatches[fileName].append(fileHitMd5Sum[0].split("  ")[0])
+                fileHit = fileHit.strip()
+                if os.path.isfile(fileHit):
+                    if os.access(fileHit, os.R_OK):
+                        fileHitMd5Sum = bash('md5sum '+fileHit)
+                        fileNameHiveMatches[fileName].append(fileHitMd5Sum[0].split("  ")[0])
     return(fileNameHiveMatches)
     
 def compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches):
@@ -59,7 +63,7 @@ def compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches):
 
 def findGitFilesBuildDics():
     """Find all files in git minus exceptions and get md5sums, build dics"""
-    fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -v 'uniprot\|ncbiRefSeq\|crontab\|README*\|clinvarSubLolly\|makefile\|.c$\|sarscov2phylo\|nextstrainNcov\|knownGene\|rsv/exclude.ids\|mask.bed\|.gitignore\|R00000039_repregions.bed' | xargs md5sum")
+    fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -Ev 'uniprot|ncbiRefSeq|crontab|README*|clinvarSubLolly|makefile|.c$|sarscov2phylo|nextstrainNcov|knownGene|rsv/exclude.ids|mask.bed|.gitignore|R00000039_repregions.bed' | xargs md5sum")
     fileNameDic = {}
     fileNameHiveMatches = {}
     fileListWithMd5sum[0].split("  ")
