@@ -26,11 +26,11 @@ def bashNoErrorCatch(cmd):
         bashStdoutt = []
     return(bashStdoutt)
 
+user = getpass.getuser()
+
 #Clean out any previous unfinished run
 bash("rm -f /hive/users/"+user+"/ErrorLogs/*")
 bash("rm -f /hive/users/"+user+"/ErrorLogsOutput/*")
-
-user = getpass.getuser()
 
 # Get the year to query proper wwwstats directory
 today = datetime.datetime.today()
