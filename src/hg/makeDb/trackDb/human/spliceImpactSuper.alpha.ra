@@ -4,6 +4,7 @@ longLabel Splicing Impact Prediction Scores and Databases
 superTrack on hide
 group phenDis
 pennantIcon New red ../goldenPath/newsarch.html "New"
+cartVersion 8
 
 include splicevardb.ra alpha
 
