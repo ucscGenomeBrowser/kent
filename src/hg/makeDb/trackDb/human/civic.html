@@ -1,18 +1,21 @@
 <h2>Description</h2>
 
 <p>
-This track shows genomic locations for variants in the CIViC (Clinical
-Interpretation of Variants in Cancer) database. These clinically
+This track shows genomic locations for variants in the
+<a href="https://civicdb.org/welcome" target="_blank">CIViC (Clinical
+Interpretation of Variants in Cancer) database</a>. These clinically
 relevant variant interpretations are expert- and crowd-sourced from
-peer-revied literature, clinical trials, and some conference
+peer-reviewed literature, clinical trials, and some conference
 abstracts.
+</p>
 
 <p>
-Each variant's interpretation is in the context of a broder molecular
+Each variant's interpretation is in the context of a broader molecular
 profile: one or more variants grouped together. For example, clinical
 evidence may be relevant to a KRAS G12 mutation on its own, but other
 clinical evidence may relevant for cases with either a mutation in
 KRAS G12 or G13.
+</p>
 
 <p>
 The primary points of data from the scientific literature are curated
@@ -20,25 +23,29 @@ as Clinical Evidence, which connects to a molecular profile, which in
 turn connects to the variants shown in this track. Groups of evidence
 can become curator Assertions about the relevence of a molecular
 profile.
+</p>
 
 <p>
 The detail for a feature will list diseases and therapies that have
 been associated with a genomic variant. Visiting the CIViC page for a
 variant will allow browsing the Molecular Profiles associated with
 that variant, and in turn each Molecular Profile shows the Clinical
-Evidence and Assertions for variou diseases and therapies.
+Evidence and Assertions for various diseases and therapies.
+</p>
 
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
 There are three types of variant feature types in CIViC: gene, fusion, and
-factor, of which onlyt he gene and fusion fetaures have a genomic location.
+factor, of which only the gene and fusion fetaures have a genomic location.
+</p>
 
 <p>
 Gene variants are shown as a single item, with a name indicating the
 variant's mode: sequence change, gene expression, gene deletion,
 etc.
+</p>
 
 <p>
 Fusion variants connect two genes via a structural DNA rearrangement,
@@ -46,20 +53,25 @@ typically in the introns or promotors of genes. For CIViC fusions that
 have an annotated transcript and exon, the exon will be shown as a
 thick bar. If there is an intron associated with the fusion, it will
 be annotated as a thin bar on the feature.
+</p>
 
 <h2>Data updates</h2>
 
 <p>
 This track reflects the monthly data summaries published by CIViC. The
-latest information is always available directly on the CIViC website
-or by its API.
+latest information is always available directly on the <a href="https://civicdb.org/welcome"
+target="_blank">CIViC website</a>
+or by its <a href="https://civicdb.org/api/graphiql" target="_blank">API</a>.
+</p>
 
-<H2>Data access</H2>
+<h2>Data access</h2>
 
 <p>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
-accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>, via the track name "civic".
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>, via the track name
+&quot;civic&quot;.
+</p>
 
 <h2>Methods</h2>
 
@@ -70,18 +82,22 @@ data is updated every month, the week after CIViC data summary
 release. The diseases and therapies associated with a variant are
 collected from the corresponding TSV files from CIViC, using the
 molecular profile summaries as a mapping.
+</p>
 
 <h2>Credits</h2>
 
 <p>
 Thanks to the CIViC contributers and organizers for curating the
 database and making the data available for download.
-
+</p>
 
 <h2>Reference</h2>
-
 <p>
-  Malachi Griffith, Nicholas C Spies, Kilannin Krysiak, Joshua F McMichael, Adam C Coffman, Arpad M Danos, Benjamin J Ainscough, Cody A Ramirez, Damian T Rieke, Lynzey Kujan, Erica K Barnell, Alex H Wagner, Zachary L Skidmore, Amber Wollam, Connor J Liu, Martin R Jones, Rachel L Bilski, Robert Lesurf, Yan-Yang Feng, Nakul M Shah, Melika Bonakdar, Lee Trani, Matthew Matlock, Avinash Ramu, Katie M Campbell, Gregory C Spies, Aaron P Graubert, Karthik Gangavarapu, James M Eldred, David E Larson, Jason R Walker, Benjamin M Good, Chunlei Wu, Andrew I Su, Rodrigo Dienstmann, Adam A Margolin, David Tamborero, Nuria Lopez-Bigas, Steven J M Jones, Ron Bose, David H Spencer, Lukas D Wartman, Richard K Wilson, Elaine R Mardis & Obi L Griffith.
-  <a href="https://www.nature.com/articles/ng.3774">CIViC is a community knowledgebase for expert crowdsourcing the clinical interpretation of variants in cancer</a>. <em>Nature Genetics</em>. 2017 Jan 31; 49, 170-174.
-  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/28138153/">28138153</a>;
-  PMCID: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5367263/">PMC5367263</a>
+Griffith M, Spies NC, Krysiak K, McMichael JF, Coffman AC, Danos AM, Ainscough BJ, Ramirez CA,
+Rieke DT, Kujan L <em>et al</em>. <a href="https://www.ncbi.nlm.nih.gov/pubmed/28138153"
+target="_blank">CIViC is a community knowledgebase for expert crowdsourcing the clinical
+interpretation of variants in cancer</a>. <em>Nat Genet</em>. 2017Jan31;49(2):170-174. PMID:
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28138153" target="_blank">28138153</a>; PMC:
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5367263/" target="_blank">PMC5367263</a>
+</p>
+

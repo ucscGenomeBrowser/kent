@@ -1,16 +1,16 @@
 <H2>Description</H2>
 <div class="warn-note" style="border: 2px solid #c70039; padding: 5px 20px; background-color: #fadbd8;">
 <p><span style="font-weight: bold; color: #c70000;">NOTE:</span><br>VarChat is an open platform 
-powered by enGenome and the registration is free of charge. VarChat is intended for research 
+powered by enGenome, and registration is free of charge. VarChat is intended for research
 use and may provide inaccurate answers. It is advisable to verify critical information independently. </p>
 </div>
 
 <p>
 <a href="https://varchat.engenome.com/" target="_blank">VarChat</a> is an open platform that leverages 
 the power of generative artificial intelligence to support the genomic variant interpretation process 
-by searching and condensing the scientific literature available for each variant into a brief yet 
-informative text. Each query quickly scans the latest research to provide up-to-date variant
-information.
+by searching the available scientific literature for each variant and condensing it into a brief
+yet informative text. Each query quickly scans the latest scientific literature to provide
+up-to-date variant information.
 </p>
 
 <p>
@@ -21,7 +21,7 @@ identified publications will be shown. Only a subset of them will be reported an
 
 <p>
 If you would like to stay updated on the latest developments, you may register for updates on the
-<a target="_blank" href="https://varchat.engenome.com">VarChat website</a>. For data question, VarChat
+<a target="_blank" href="https://varchat.engenome.com">VarChat website</a>. For data questions, VarChat
 can be contacted at varchat@engenome.com.</p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -29,7 +29,7 @@ can be contacted at varchat@engenome.com.</p>
 <p>
 Genomic locations of variants are labeled with the nucleotide change.
 Mousing over the items will show how many papers the variant was observed in, its gene,
-its HGVS nomenclature and dbSNP rsID.
+its HGVS nomenclature, and dbSNP rsID.
 Clicking on any item will provide a link directly to VarChat with additional information.</p>
 
 <p>
@@ -59,11 +59,23 @@ The items are colored based on the amount of literature support as described on 
 </table>
 </p>
 
+<H2>Methods</H2>
+<p>
+<b>VarChat software is powered by enGenome.</b><br>
+<a href="https://www.engenome.com/" target="_blank">enGenome</a>, an accredited spin-off from the University of Pavia founded in 2016, combines bioinformatics, biotechnology, and software development expertise to enhance genetic disease diagnosis and treatment through advanced AI and bioinformatics tools, supported by a multidisciplinary team of engineers, biotechnologists, and developers.
+</p>
+
+<p>
+For every queried variant, VarChat produces concise and coherent summaries through an LLM model.
+Relevant references are identified through a modified BM25 ranking algorithm. More weight is
+given to papers that cite the variant in the abstract and were published in the last two years,
+while papers that report the variant only in the supplementary are penalized. </p>
+
 <H2>Data access</H2>
 <p>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from scripts through our
-<a href="https://api.genome.ucsc.edu">API</a>, the track name is "varChat".
+<a href="https://api.genome.ucsc.edu">API</a>, the track name is "varChat". </p>
 
 <p>
 For automated download and analysis, the genome annotation is stored in a bigBed file that
@@ -79,17 +91,14 @@ Instructions for downloading source code and binaries can be found
 The tool
 can also be used to obtain only features within a given range, e.g.
 <br><br>
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/varChat.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/varChat.bb -chrom=chr21 -start=0 -end=10000000 stdout</tt></p>
 </p>
 
 <H2>References</H2>
-
 <p>
-<b>VarChat software is powered by enGenome.</b><br>
-<a href="https://www.engenome.com/" target="_blank">enGenome</a>, an accredited spin-off from the University of Pavia founded in 2016, combines bioinformatics, biotechnology, and software development expertise to enhance genetic disease diagnosis and treatment through advanced AI and bioinformatics tools, supported by a multidisciplinary team of engineers, biotechnologists, and developers.
-</p>
-
-<p>
-De Paoli F, Berardelli S, Limongelli I, Rizzo E, Zucca S, VarChat: the generative AI assistant for the interpretation of human genomic variations, Bioinformatics, Volume 40, Issue 4, April 2024, btae183, <a href="https://doi.org/10.1093/bioinformatics/btae183" target="_blank">https://doi.org/10.1093/bioinformatics/btae183</a>
-or supporting information about the data.
-</p>
+De Paoli F, Berardelli S, Limongelli I, Rizzo E, Zucca S. <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/38579245" target="_blank">VarChat: the generative AI
+assistant for the interpretation of human genomic variations</a>. <em>Bioinformatics</em>.
+2024Mar29;40(4). PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38579245"
+target="_blank">38579245</a>; PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11055464/"
+target="_blank">PMC11055464</a></p>

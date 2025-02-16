@@ -456,5 +456,6 @@ struct trackDb *tableTdb = hashFindVal(fullTableToTdbHash, table);
 hPrintf("<B>Database:</B> %s<br>", db);
 printDownloadLink("BigWig", tdb, trackDbSetting(tableTdb, "bigDataUrl"));
 printTypeHelpDesc(tableTdb->type);
+printTableBrowserLink(tableTdb, table);
 printTrackHtml(tableTdb);
 }

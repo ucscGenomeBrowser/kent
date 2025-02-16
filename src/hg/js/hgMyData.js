@@ -123,7 +123,8 @@ var hubCreate = (function() {
         isLoggedIn: "",
         maxQuota: 0,
         userQuota: 0,
-        userFiles: {},
+        userFiles: {}, // same as uiData.userFiles on page load
+        filesHash: {}, // for each file, userFiles.fullPath is the key, and then the userFiles.fileList data as the value, with an extra key for the child fullPaths if the file is a directory
     };
 
     function getTusdEndpoint() {
@@ -463,8 +464,54 @@ var hubCreate = (function() {
         }
     }
 
+    function parseFileListIntoHash(fileList) {
+        // Hash the uiState fileList by the fullPath, and also store the children
+        // for each directory
+        // first go through and copy all of the data and make the empty
+        // children array for each directory
+        fileList.forEach(function(fileData) {
+            uiState.filesHash[fileData.fullPath] = fileData;
+            if (fileData.fileType === "dir") {
+                uiState.filesHash[fileData.fullPath].children = [];
+            }
+        });
+        // use a second pass to go through and set the children
+        // since we may not have encountered them yet in the above loop
+        fileList.forEach(function(fileData) {
+            if (fileData.fileType !== "dir" || fileData.parentDir !== "") {
+                // compute the key from the fullPath:
+                let parts = fileData.fullPath.split("/");
+                let keyName = parts.slice(0,-1).join("/");
+                if (keyName in uiState.filesHash) {
+                    uiState.filesHash[keyName].children.push(fileData);
+                }
+            }
+        });
+    }
+
+    function getChildRows(dirFullPath, childRowArray) {
+        // Recursively return all of the child rows for a given path
+        let childRows = uiState.filesHash[dirFullPath].children;
+        childRows.forEach(function(rowData) {
+            if (rowData.fileType !== "dir") {
+                childRowArray.push(rowData);
+            } else {
+                childRowArray.concat(getChildRows(rowData.fullPath, childRowArray));
+            }
+        });
+    }
+
     function dataTablePrintSize(data, type, row, meta) {
-        return prettyFileSize(data);
+        if (row.fileType !== "dir") {
+            return prettyFileSize(data);
+        } else {
+            let childRows = [];
+            getChildRows(row.fullPath, childRows);
+            let sum = childRows.reduce( (accumulator, currentValue) => {
+                return accumulator + currentValue.fileSize;
+            }, 0);
+            return prettyFileSize(sum);
+        }
     }
 
     function dataTablePrintGenome(data, type, row, meta) {
@@ -538,8 +585,6 @@ var hubCreate = (function() {
     }
 
 
-    // hash of file paths to their objects, starts as uiState.userFiles
-    let filesHash = {};
     function addNewUploadedHubToTable(hub) {
         // hub is a list of objects representing the file just uploaded, the associated
         // hub.txt, and directory. Make a new row for each in the filesTable, except for
@@ -552,17 +597,19 @@ var hubCreate = (function() {
                 hubDirData = obj;
             }
             let rowObj;
-            if (!(obj.fullPath in filesHash)) {
+            if (!(obj.fullPath in uiState.filesHash)) {
                 justUploaded[obj.fullPath] = obj;
                 rowObj = table.row.add(obj);
-                filesHash[obj.fullPath] = obj;
                 uiState.fileList.push(obj);
+                // NOTE: we don't add the obj to the filesHash until after we're done
+                // so we don't need to reparse all files each time we add one
             }
         }
 
         // show all the new rows we just added, note the double draw, we need
         // to have the new rows rendered to do the order because the order
         // will copy the actual DOM node
+        parseFileListIntoHash(uiState.fileList);
         dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
         table.draw();
         dataTableCustomOrder(table, hubDirData);
@@ -646,9 +693,9 @@ var hubCreate = (function() {
             },
             {
                 targets: 3,
-                render: function(data, type, row) {
+                render: function(data, type, row, meta) {
                     if (type === "display") {
-                         return dataTablePrintSize(data);
+                         return dataTablePrintSize(data, type, row, meta);
                     }
                     return data;
                 }
@@ -754,9 +801,6 @@ var hubCreate = (function() {
         table.on("deselect", function(e, dt, type, indexes) {
             doRowSelect(e, dt, indexes);
         });
-        _.each(d, function(f) {
-            filesHash[f.fullPath] = f;
-        });
         return table;
     }
 
@@ -769,6 +813,7 @@ var hubCreate = (function() {
         // get the state from the history stack if it exists
         if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
             _.assign(uiState, uiData.userFiles);
+            parseFileListIntoHash(uiState.fileList);
         }
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
@@ -1060,7 +1105,7 @@ var hubCreate = (function() {
                 "fileType": "dir",
                 "genome": metadata.genome,
                 "parentDir": "",
-                "fullPath": metadata.parentDir + "/",
+                "fullPath": metadata.parentDir,
             };
             // package the three objects together as one "hub" and display it
             let hub = [parentDirObj, hubTxtObj, newReqObj];

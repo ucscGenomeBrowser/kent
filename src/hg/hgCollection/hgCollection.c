@@ -200,14 +200,17 @@ fprintf(f,"genome %s\n\n", db);
 }
 
 
-static char *getHubName(struct cart *cart, char *db)
-// get the name of the hub to use for user collections
+static char *getHubName(struct cart *cart, char *db, boolean doCreate)
+// get the name of the hub to use for user collections.  Create the hub if doCreate is TRUE
 {
 struct tempName hubTn;
 char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, db);
 char *hubName = cartOptionalString(cart, buffer);
 int fd = -1;
+
+if (!doCreate && (hubName == NULL))
+    return NULL;
 
 if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
     {
@@ -413,7 +416,7 @@ for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
 static void doTable(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
 // output the tree table
 {
-char *hubName = hubNameFromUrl(getHubName(cart, db));
+char *hubName = hubNameFromUrl(getHubName(cart, db, FALSE));
 struct grp *curGroup;
 struct hash *groupHash = newHash(10);
 int count = 0;
@@ -697,7 +700,7 @@ if ((tdb->grp == NULL) || (hubName == NULL) || differentString(tdb->grp, hubName
 static void updateHub(struct cart *cart, char *db, struct track *collectionList, struct hash *nameHash)
 // save our state to the track hub
 {
-char *filename = getHubName(cart, db);
+char *filename = getHubName(cart, db, TRUE);
 char *hubName = hubNameFromUrl(filename);
 
 FILE *f = mustOpen(filename, "w");
@@ -818,7 +821,8 @@ cgiDecodeFull(jsonText, jsonText, strlen(jsonText));
 struct jsonElement *collectionElements = jsonParse(jsonText);
 struct track *collectionList = parseJsonElements(collectionElements);
 
-updateHub(cart, db, collectionList, nameHash);
+if (slCount(collectionList))
+    updateHub(cart, db, collectionList, nameHash);
 }
 
 static void buildNameHash(struct hash *nameHash, struct hash *labelHash, struct trackDb *list)
@@ -956,7 +960,7 @@ for(tdb = list; tdb; tdb = tdb->next)
 static void doAddTrack(struct cart *cart, char *db, struct trackDb *trackList,  char *trackName, char *collectionName, struct hash *nameHash)
 /* Add a track to a collection in a hub. */
 {
-char *fileName = getHubName(cart, db);
+char *fileName = getHubName(cart, db, TRUE);
 char *hubName = hubNameFromUrl(fileName);
 FILE *f = fopen(fileName, "w");
 struct trackDb *newTdb = hashMustFindVal(nameHash, trackHubSkipHubName(trackName));

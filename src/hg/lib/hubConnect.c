@@ -1365,6 +1365,9 @@ return newDatabase;
 char *hubNameFromUrl(char *hubUrl)
 /* Given the URL for a hub, return its hub_# name. */
 {
+if (hubUrl == NULL)
+    return NULL;
+
 char query[PATH_LEN*4];
 sqlSafef(query, sizeof(query), "select concat('hub_', id) from %s where hubUrl = '%s'",
          getHubStatusTableName(), hubUrl);
