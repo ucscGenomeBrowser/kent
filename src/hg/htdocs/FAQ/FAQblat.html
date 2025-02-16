@@ -28,7 +28,7 @@ results</a></li>
 <li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
 <li><a href="#blat13">Protein-translated BLAT having different results</a></li>
 <li><a href="#blat14">Querying BLAT programmatically using URLs</a></li>
-
+<li><a href="#blat15">Running BLAT locally</a></li>
 </ul>
 <hr>
 <p>
@@ -497,6 +497,38 @@ Query types include DNA, protein, translated RNA and translated DNA:</p>
 <a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=UUUCCCUUCCCCACUGUAGUGGGAGAGAAGGGAGUGGCCAUACCAUAUUUUUCUCGUGGGCCGUUGUAGUCAUAAGGCCUUCCUUUGCGGAAAAUUUUCAGGGUGGGAUA&amp;type=translated%20RNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=UUUCCCUUCCCCACUGUAGUGGGAGAGAAGGGAGUGGCCAUACCAUAUUUUUCUCGUGGGCCGUUGUAGUCAUAAGGCCUUCCUUUGCGGAAAAUUUUCAGGGUGGGAUA&type=translated%20RNA&db=hg38&output=json</a>
 <a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20DNA&amp;db=hg38&amp;output=json</a>
 </pre>
+
+<a name="blat15"></a>
+<h2>Running BLAT Locally</h2>
+<h6>How do I run BLAT locally if I'm running into limitations with the web-based version?</h6>
+<p>
+If you have access to a Linux or Mac OSX command-line you can run <code>blat</code> locally.
+The blat binary is available under the directory for your system type under the
+<a href="https://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a> on our download server.
+<p>
+Once you have the downloaded the <code>blat</code> program to your computer, ensure the 'execute' bit is
+on for permissions:
+<pre><code>$ ls -og blat
+-rwxrwxr-x 1 5528712 Nov  7 04:03 blat
+</code></pre>
+<p>
+If the permissions indicate something like: <code>-rw-rw-r--</code>, then
+you will need to enable the ability to execute the program:
+<pre><code>$ chmod +x blat</code></pre>
+<p>
+To confirm that it works, run the program without arguments. This will also
+display the help message.
+<pre><code>$ ./blat</code></pre>
+<p>
+You can now use this program locally on your sequences. For example, given a
+sample.fa, to find that sequence in the human/hg38 genome, you would run:
+<pre><code>$ ./blat hg38.2bit sample.fa output.psl</code></pre>
+<p>
+You can download the 2bit file for your assembly of interest from the
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html">download server</a>
+under the "Genome sequence files and select annotations (2bit, GTF, GC-content, etc)" link.
+For example, the hg38.2bit sequence can be found <a
+href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/">here</a>.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>
