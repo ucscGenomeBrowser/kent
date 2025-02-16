@@ -17,6 +17,7 @@
 #include "chainNetDbLoad.h"
 #include "hdb.h"
 #include "jksql.h"
+#include "hgConfig.h"
 #include "quickLift.h"
 
 char *getLinkFile(char *quickLiftFile)
@@ -41,7 +42,7 @@ strcpy(insert, ".link.bb");
 return cloneString(linkBuffer);
 }
 
-struct bigBedInterval *quickLiftIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
+struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
  */
@@ -94,7 +95,8 @@ for(chain = chainList; chain; chain = chain->next)
 return bbList;
 }
 
-void make12(struct bed *bed)
+static void make12(struct bed *bed)
+/* Make a bed12 out of something less than that. */
 {
 bed->blockCount = 1;
 bed->blockSizes = needMem(sizeof(int));
@@ -103,7 +105,7 @@ bed->chromStarts = needMem(sizeof(int));
 bed->chromStarts[0] = 0;
 }
 
-struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
+struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
  * on the reference.
  */
@@ -210,7 +212,7 @@ return itemList;
 }
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked)
-// Map a bed in query coordinates to our current reference
+// Map a list of bedd in query coordinates to our current reference
 {
 struct bed *liftedBedList = NULL;
 struct bed *nextBed;
@@ -239,3 +241,9 @@ for(bed = bedList; bed; bed = nextBed)
 return liftedBedList;
 }
 
+boolean quickLiftEnabled()
+/* Return TRUE if feature is available */
+{
+char *cfgEnabled = cfgOption("browser.quickLift");
+return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
+}

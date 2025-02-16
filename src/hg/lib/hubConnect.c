@@ -137,7 +137,7 @@ if (cartVarExists(cart, hgHubConnectRemakeTrackHub))
     for (hubVar = hubVarList; hubVar != NULL; hubVar = hubVar->next)
         {
         unsigned hubNumber = atoi(hubVar->name + sizeof("quickLift"));
-        sqlSafef(query, sizeof(query), "select path from exportedDataHubs where id='%d'", hubNumber);
+        sqlSafef(query, sizeof(query), "select hubUrl from hubStatus where id='%d'", hubNumber);
         char *hubUrl = sqlQuickString(conn, query);
         char *errorMessage;
         unsigned hubId = hubFindOrAddUrlInStatusTable(cart, hubUrl, &errorMessage);
@@ -307,16 +307,17 @@ slReverse(&hubList);
 return hubList;
 }
 
-struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart)
+struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart, char *db)
 /* Return list of track hubs that are turned on by user in cart. */
 {
-struct hubConnectStatus *hubList = NULL, *hub = NULL;
+struct hubConnectStatus *hubList = NULL;
 struct slName *name, *nameList = hubConnectHubsInCart(cart);
 struct sqlConnection *conn = hConnectCentral();
 for (name = nameList; name != NULL; name = name->next)
     {
     // items in trackHub statement may need to be quickLifted.  This is implied
     // by the hubStatus id followed by a colon and then a index into the quickLiftChain table
+    struct hubConnectStatus *hub = NULL;
     char *copy = cloneString(name->name);
     char *colon = strchr(copy, ':');
     if (colon)
@@ -341,7 +342,8 @@ for (name = nameList; name != NULL; name = name->next)
             break; // there's only one
             }
         sqlFreeResult(&sr);
-        hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
+        if (sameOk(toDb, hubConnectSkipHubPrefix(db)))
+            hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
         }
     if (hub != NULL)
 	{
@@ -1351,11 +1353,11 @@ cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 
 portHubStatus(cart);
 
-struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
+struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart, dbSpec);
 
 char *genarkPrefix = cfgOption("genarkHubPrefix");
 if (genarkPrefix && lookForLonelyHubs(cart, hubList, &newDatabase, genarkPrefix))
-    hubList = hubConnectStatusListFromCart(cart);
+    hubList = hubConnectStatusListFromCart(cart, dbSpec);
 
 globalHubList = hubList;
 

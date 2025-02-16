@@ -9,12 +9,12 @@
 typedef struct slList *(*ItemLoader2)(char **row, int numFields);
 /* Load a bed file from an SQL query result. */
 
-struct bigBedInterval *quickLiftIntervals(char *instaPortFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash);
+struct bigBedInterval *quickLiftGetIntervals(char *instaPortFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash);
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
  */
 
-struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb);
+struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb);
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
  * on the reference.
  */
@@ -27,4 +27,8 @@ unsigned quickLiftGetChain(char *fromDb, char *toDb);
 /* Return the id from the quickLiftChain table for given assemblies. */
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
+// Map a list of bedd in query coordinates to our current reference
+
+boolean quickLiftEnabled();
+/* Return TRUE if feature is available */
 #endif

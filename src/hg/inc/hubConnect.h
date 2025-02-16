@@ -91,8 +91,8 @@ struct hubConnectStatus *hubConnectStatusForId( struct sqlConnection *conn,
     int id);
 /* Given a hub ID return associated status. */
 
-struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart);
-/* Return list of track hubs that are turned on by user in cart. */
+struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart, char *db);
+/* Return list of track hubs that are turned on by user in cart. If there are quickLifted hubs, make sure the toDb is db */
 
 struct hubConnectStatus *hubConnectStatusListFromCartAll(struct cart *cart);
 /* Return list of all track hubs that are referenced by cart. */

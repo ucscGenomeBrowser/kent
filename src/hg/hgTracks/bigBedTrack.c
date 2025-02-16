@@ -628,7 +628,7 @@ struct bigBedInterval *bb, *bbList;
 char *quickLiftFile = cloneString(trackDbSetting(track->tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
 if (quickLiftFile)
-    bbList = quickLiftIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
 else
     bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
 
@@ -712,7 +712,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             {
             if (quickLiftFile)
                 {
-                if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
+                if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
                     {
                     bedCopy = cloneBed(bed);
                     lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,

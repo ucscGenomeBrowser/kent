@@ -796,7 +796,7 @@ if (cartVis == NULL)
 static void outAttachedHubUrls(struct cart *cart, struct dyString *dy)
 /* output the hubUrls for all attached hubs in the cart. */
 {
-struct hubConnectStatus *statusList = hubConnectStatusListFromCart(cart);
+struct hubConnectStatus *statusList = hubConnectStatusListFromCart(cart, NULL);
 
 if (statusList == NULL)
     return;
