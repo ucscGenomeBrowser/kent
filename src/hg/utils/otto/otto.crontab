@@ -83,6 +83,9 @@ MAILTO=otto-group@ucsc.edu
 #Mastermind
 05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
 
+#MitoMap
+55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
+
 # UniProt massive 110+ database update, takes 3-4 days.
 #Format: Minute - Hour - DayofMonth month Day-of-week
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
