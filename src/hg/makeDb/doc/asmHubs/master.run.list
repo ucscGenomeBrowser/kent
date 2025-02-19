@@ -1717,6 +1717,7 @@
 ./runBuild GCA_033349115.1_rMacSuw1.hap2 vertebrate Macrochelys_suwanniensis
 ./runBuild GCA_033958435.1_ASM3395843v1 vertebrate Carettochelys_insculpta
 ./runBuild GCA_034376525.1_ASM3437652v1 plants Nicotiana_benthamiana
+./runBuild GCA_034509865.1_ASM3450986v1 birds Gallus_gallus
 ./runBuild GCA_034619455.1_bLepDis1.hap1 birds Leptosomus_discolor
 ./runBuild GCA_034619465.1_bLepDis1.hap2 birds Leptosomus_discolor
 ./runBuild GCA_034620425.1_Cla-1 mammals Canis_latrans
