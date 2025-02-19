@@ -13,7 +13,7 @@ run_script=false
 # Function to check if two files are the same
 check_files() {
   if ! cmp -s "$1" "$2"; then
-    echo "Updating MitoMap track..."
+    echo "Update needed for $2. Updating MitoMap track..."
     run_script=true
   fi
 }
