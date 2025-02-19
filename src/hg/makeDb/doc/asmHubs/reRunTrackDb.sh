@@ -44,7 +44,7 @@ for asmIdFile in $*
 do
   export asmId="${asmIdFile}"
   if [ -s "${asmIdFile}" ]; then
-     for asmId in `cat ${asmIdFile}`
+     for asmId in `cut -f1 ${asmIdFile}`
      do
         runOne "${asmId}"
      done
