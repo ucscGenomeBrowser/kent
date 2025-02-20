@@ -293,7 +293,7 @@ bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column);
 boolean sqlColumnExistsInTablesList(struct sqlConnection *conn, char *tables, char *field);
 /* check if column exists in a list of tables */
 
-int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
+long sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 /* Return row count if a table exists, -1 if it doesn't. */
 
 boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
@@ -434,7 +434,7 @@ int sqlFieldColumn(struct sqlResult *sr, char *colName);
 /* get the column number of the specified field in the result, or
  * -1 if the result doesn't contain the field.*/
 
-int sqlTableSize(struct sqlConnection *conn, char *table);
+long sqlTableSize(struct sqlConnection *conn, char *table);
 /* Find number of rows in table. */
 
 int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field);

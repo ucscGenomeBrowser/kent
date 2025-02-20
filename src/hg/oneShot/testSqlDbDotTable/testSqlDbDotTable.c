@@ -54,8 +54,8 @@ printf("%s %s a row where %s = 'chr1'\n", dbDotTable,
 
 printf("%s has %d columns.\n", dbDotTable, sqlCountColumnsInTable(conn, dbDotTable));
 
-printf("%s has %d rows IfExists.\n", dbDotTable, sqlTableSizeIfExists(conn, dbDotTable));
-printf("%s has %d rows.\n", dbDotTable, sqlTableSize(conn, dbDotTable));
+printf("%s has %ld rows IfExists.\n", dbDotTable, sqlTableSizeIfExists(conn, dbDotTable));
+printf("%s has %ld rows.\n", dbDotTable, sqlTableSize(conn, dbDotTable));
 
 printf("%s data size is %lu.\n", dbDotTable, sqlTableDataSizeFromSchema(conn, db, dbDotTable));
 
