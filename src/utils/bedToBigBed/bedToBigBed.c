@@ -20,6 +20,7 @@
 #include "bbiAlias.h"
 #include "twoBit.h"
 #include "portable.h"
+#include "errCatch.h"
 
 char *version = "2.10";   // when changing, consider changing in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
@@ -78,11 +79,13 @@ errAbort(
   "For a description of generating chromAlias files for your own assembly hub, see:\n"
   "      http://genomewiki.ucsc.edu/index.php/Chrom_Alias\n"
   "\n"
-  "The in.bed file must be sorted by chromosome,start,\n"
+  "Without the -sort option the in.bed file must be sorted by chromosome,start,\n"
   "  to sort a bed file, use the unix sort command:\n"
   "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"
   "Sequences must be sorted by name so all sequences with the same name\n"
   "are collected together, but they don't need to be in any particular order.\n"
+  "If the -sort=tempName option is specified then the input file will be sorted using\n"
+  "using a file called tempName, which will be removed after use.\n"
   "\n"
   "options:\n"
   "   -type=bedN[+[P]] : \n"
@@ -107,6 +110,7 @@ errAbort(
   "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
   "   -allow1bpOverlap  -- allow exons to overlap by at most one base pair\n"
   "   -maxAlloc=N -- Set the maximum memory allocation size to N bytes\n"
+  "   -sort=tempFile -- sort the input file using tempFile.  Removes tempFile afterwards.  Use something like $TMPDIR/fileName\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -125,6 +129,7 @@ static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"allow1bpOverlap", OPTION_BOOLEAN},
    {"maxAlloc", OPTION_LONG_LONG},
+   {"sort", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -953,7 +958,31 @@ if (asFile)
 else
     asText = bedAsDef(bedN,  bedN + bedP);
 
-bedToBigBed(bedFileName, argv[2], argv[3]);
+char *sortFile = optionVal("sort", NULL);
+if (sortFile)
+    {
+    char sysBuf[4096];
+
+    safef(sysBuf, sizeof sysBuf, "sort -k1,1 -k2,2n %s > %s", bedFileName, sortFile);
+    if (system(sysBuf) != 0)
+        errAbort("Couldn't sort %s into %s.  Error code %d\n", bedFileName, sortFile, errno);
+
+    bedFileName = sortFile;
+    }
+
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    bedToBigBed(bedFileName, argv[2], argv[3]);
+    }
+if (errCatch->gotError || errCatch->gotWarning)
+    {
+    fprintf(stderr, "%s",errCatch->message->string);
+    }
+errCatchEnd(errCatch);
+
+if (sortFile)
+    unlink(sortFile);
 optionFree();
 if (verboseLevel() > 1)
     printVmPeak();
