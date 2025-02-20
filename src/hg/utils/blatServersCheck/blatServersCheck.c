@@ -292,7 +292,7 @@ verbose(1, "Reading table %s\n", blatServersTableName);
 
 
 totalRows = sqlTableSize(conn, blatServersTableName);
-verbose(1,"totalRows=%d\n", totalRows);
+verbose(1,"totalRows=%ld\n", totalRows);
 
 verbose(1,"\n");
 
