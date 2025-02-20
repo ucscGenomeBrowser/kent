@@ -10,7 +10,7 @@ char *database = NULL;
 struct table
 {
     struct table *next;
-    int rowCount;
+    long rowCount;
     char *name;
 };
 		

@@ -335,7 +335,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 unsigned int *ids;
-int totalRows = 0;
+long totalRows = 0;
 boolean squealed = FALSE;
 time_t cleanStart = time(NULL);
 

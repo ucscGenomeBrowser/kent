@@ -24,6 +24,15 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
+#define TOO_BIG_FOR_HISTO 500000
+boolean tooBig = (sqlTableSize(conn, table) > TOO_BIG_FOR_HISTO);
+if (tooBig)
+    {
+    hPrintf("This table has too many rows for histogram view");
+    hFreeConn(&conn);
+    return;
+    }
+
 sqlSafef(query, sizeof(query),
    "select %s, count(*) as count from %s group by %s order by count desc",
    field, table, field);

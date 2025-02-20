@@ -408,7 +408,7 @@ struct ctExtra
     char *name;  // important to identity of the track in hgCustom
     char *browserLines;
     char *trackLine;
-    int tableRows;
+    long tableRows;
     unsigned long tableDataLength;
     char *bigDataUrl;
     };

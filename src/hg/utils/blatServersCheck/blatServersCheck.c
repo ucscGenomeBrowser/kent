@@ -285,7 +285,7 @@ getTargetDb(conn, targetDbHash);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int totalRows = 0;
+long totalRows = 0;
 
 verbose(1, "-------------------\n");
 verbose(1, "Reading table %s\n", blatServersTableName);

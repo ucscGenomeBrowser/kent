@@ -71,7 +71,7 @@ while ((list = raNextRecordAsSlPairList(lf)) != NULL)
     assert(sqlFieldIndex(conn, track, field) >= 0);
 
     /* Print reassuring status message */
-    verbose(1, "%s.%s has %d elements.  Data field is %s\n", db, track, sqlTableSize(conn, track), field);
+    verbose(1, "%s.%s has %ld elements.  Data field is %s\n", db, track, sqlTableSize(conn, track), field);
          
     /* Get min/max dataValues in fields.  Do it ourselves rather than using SQL min/max because sometimes
      * the data field is a name column.... */

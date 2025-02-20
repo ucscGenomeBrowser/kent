@@ -875,7 +875,7 @@ boolean hCanHaveSplitTables(char *db)
 /* Return TRUE if split tables are allowed in database. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-int count = sqlTableSizeIfExists(conn, "chromInfo");
+long count = sqlTableSizeIfExists(conn, "chromInfo");
 hFreeConn(&conn);
 return (count >= 0 && count <= HDB_MAX_SEQS_FOR_SPLIT);
 }
@@ -5547,7 +5547,7 @@ int getTableSize(char *db, char *table)
 /* Get count of rows in a table in the primary database */
 {
 struct sqlConnection *conn = hAllocConn(db);
-int ct = sqlTableSize(conn, table);
+long ct = sqlTableSize(conn, table);
 hFreeConn(&conn);
 return ct;
 }
