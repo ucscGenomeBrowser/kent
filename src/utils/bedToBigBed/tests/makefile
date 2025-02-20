@@ -40,7 +40,7 @@ testOddSorted: outputDir
 	diff output/oddSorted.bed output/searchNames.bed
 
 testSortNotSorted: outputDir
-	-${BINDIR}/${A} -tab -type=bed9+3 -sort=${TMPDIR}/notSorted.bed input/notSorted.bed input/notSorted.chrom.sizes output/notSorted.bb 
+	-${BINDIR}/${A} -tab -type=bed9+3 -sort input/notSorted.bed input/notSorted.chrom.sizes output/notSorted.bb 
 	bigBedToBed output/notSorted.bb output/notSorted.bed
 	diff expected/notSorted.bed output/notSorted.bed
 
