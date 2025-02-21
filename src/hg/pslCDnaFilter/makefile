@@ -13,4 +13,4 @@ include ${kentSrc}/inc/userApp.mk
 	mv -f $@.tmp $@
 
 clean::
-	rm -f pslCDnaFilter usage.msg algo.msg
+	rm -f pslCDnaFilter usage.h algo.h

@@ -52,7 +52,7 @@ compile:: ${A}
 
 objects = ${A}.o ${extraObjects} ${externObjects}
 
-${extraObjects}: ${extraHeaders}
+${extraObjects} ${A}.o: ${extraHeaders}
 
 ${DESTBINDIR}/${A}${EXE}: ${objects} ${DEPLIBS}
 	@${MKDIR} $(dir $@)
