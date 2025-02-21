@@ -204,7 +204,7 @@ printf("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
 void printTableBrowserLink(struct trackDb *tdb, char* table)
 /* print link to table browser that opens this table */
 {
-printf("To download this table in various text formats, and intersect or correlate with other tables, use our "
+printf("<br>\nTo download this table in different text formats or to intersect or correlate it with other tables, use the "
         "<a href='hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s'>Table Browser</a>.<br>",
         database, tdb->grp, tdb->track, table);
 }
