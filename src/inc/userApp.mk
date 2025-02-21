@@ -50,7 +50,7 @@ LINKLIBS = ${STATIC_PRE} ${DEPLIBS} ${MYSQLLIBS}
 default:: ${DESTBINDIR}/${A}${EXE}
 compile:: ${A}
 
-objects = ${A}.o ${extraObjects} ${externObjects}
+objects = ${extraObjects} ${A}.o ${externObjects}
 
 ${extraObjects}: ${extraHeaders}
 
