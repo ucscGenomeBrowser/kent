@@ -59,10 +59,12 @@ hgsqldump ${IGNORE_TABLES} --skip-lock-tables --skip-add-drop-table --skip-exten
         "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/; s/INSERT/REPLACE/" \
     >> /tmp/hgcentraltemp.sql
 
-# get rid of some mysql5 trash in the output we don't want.
+# get rid of some mysql5 trash in the output we don't want, as well as
+# the mariadbdump "sandbox mode" lines.
 # also need to break data values at rows so the diff and cvs 
 # which are line-oriented work better.
 grep -v "Dump completed on" /tmp/hgcentraltemp.sql | \
+grep -v '999999.*enable the sandbox mode' | \
 sed -e "s/AUTO_INCREMENT=[0-9]* //" > \
 /tmp/hgcentral.sql
 
