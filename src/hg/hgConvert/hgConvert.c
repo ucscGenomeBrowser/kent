@@ -279,7 +279,16 @@ static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
 struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+if (!fromDb || !toDb)
+    errAbort("Early error - unable to find matching database records in dbDb - please contact support");
+
+cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
+	fromPos, toDb->organism, toDb->description);
+
 char *fileName = liftOverChainFile(fromDb->name, toDb->name);
+if (isEmpty(fileName))
+    errAbort("Unable to find a chain file from %s to %s - please contact support", fromDb->name, toDb->name);
+
 fileName = hReplaceGbdbMustDownload(fileName);
 char *chrom;
 int start, end;
@@ -287,8 +296,6 @@ int origSize;
 struct chain *chainList, *chain;
 struct dyString *visDy = NULL;
 
-cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
-	fromPos, toDb->organism, toDb->description);
 if (!hgParseChromRange(database, fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
