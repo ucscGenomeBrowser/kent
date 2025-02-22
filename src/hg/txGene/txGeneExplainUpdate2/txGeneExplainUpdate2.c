@@ -61,7 +61,7 @@ struct bed *findCompatible(struct bed *oldBed, struct hash *newAccHash)
 /* Find bed in newHash with same accession (but maybe different version) */
 {
 char accOnly[64];
-safef(accOnly, sizeof(accOnly), oldBed->name);
+safef(accOnly, sizeof(accOnly), "%s", oldBed->name);
 chopSuffix(accOnly);
 return hashFindVal(newAccHash, accOnly);
 }
@@ -194,7 +194,7 @@ struct hash *hash = hashNew(16);
 for (bed = list; bed != NULL; bed = bed->next)
     {
     char accOnly[64];
-    safef(accOnly, sizeof(accOnly), bed->name);
+    safef(accOnly, sizeof(accOnly), "%s", bed->name);
     chopSuffix(accOnly);
     hashAdd(hash, accOnly, bed);
     }
