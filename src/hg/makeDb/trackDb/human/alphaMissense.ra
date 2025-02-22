@@ -3,7 +3,7 @@ shortLabel AlphaMissense
 longLabel AlphaMissense Score for all possible single-basepair mutations (zoom in for scores)
 type bigWig
 compositeTrack on
-visibility dense
+visibility hide
 group phenDis
 color 100,130,160
 html alphaMissense.html
