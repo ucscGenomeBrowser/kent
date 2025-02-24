@@ -9206,7 +9206,7 @@ char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
 struct bigBedInterval *bb, *bbList = NULL;
 struct hash *chainHash = NULL;
 if (quickLiftFile)
-    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
 else
     bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct genePred *gpList = NULL;
@@ -9216,7 +9216,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (quickLiftFile)
         {
         struct bed *bed;
-        if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
+        if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
             {
             struct bed *bedCopy = cloneBed(bed);
             gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
@@ -9688,7 +9688,7 @@ char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
 struct bigBedInterval *bb, *bbList = NULL;
 if (quickLiftFile)
-    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
 else
     bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 
@@ -9701,7 +9701,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct bed *bed = NULL;
     if (quickLiftFile)
         {
-        if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+        if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
             errAbort("can't port %s",bedRow[3]);
         }
     else

@@ -253,7 +253,7 @@ var hgCollection = (function() {
         }
         json += JSON.stringify(v);
         json += ']';
-        var requestData = 'jsonp=' + json;
+        var requestData = 'jsonp=' + json + '&hgsid=' + getHgsid();
         $.ajax({
             data:  requestData ,
             async: doAjaxAsync,

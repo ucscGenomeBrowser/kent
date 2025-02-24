@@ -5796,7 +5796,13 @@ $(document).ready(function()
                     var compositeSet = dragReorder.getCompositeSet(row);
                     if (compositeSet && compositeSet.length > 0)
                         $( compositeSet ).find('p.btn').removeClass('blueButtons');// blue persists
-                    if ($(row).attr('rowIndex') !== dragStartIndex) {
+                     // NOTE: As of jquery 1.6, attr() can no longer be used to get/set values
+                     // that are not explicitly attributes, instead prop() should be used instead.
+                     // However this can cause problems in our legacy code because prop() returns
+                     // undefined if the property was not set! rowIndex is a property set by
+                     // tableDnd so we must use prop() to check for it's value, not attr()
+                    let rowIndex = $(row).prop('rowIndex');
+                    if (typeof rowIndex !== "undefined" && rowIndex !== dragStartIndex) {
                         // NOTE Even if dragging a contiguous set of rows,
                         // still only need to check the one under the cursor.
                         if (dragReorder.setOrder) {

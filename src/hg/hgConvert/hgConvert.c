@@ -23,8 +23,8 @@
 #include "net.h"
 #include "genark.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 #include "quickLift.h"
-#include "exportedDataHubs.h"
 
 
 /* CGI Variables */
@@ -62,7 +62,7 @@ static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 struct dbDb *dbList;
 boolean askAboutQuickLift = FALSE;
 
-if (exportedDataHubsEnabled())
+if (quickLiftEnabled())
     askAboutQuickLift = TRUE;
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
@@ -279,7 +279,16 @@ static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
 struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+if (!fromDb || !toDb)
+    errAbort("Early error - unable to find matching database records in dbDb - please contact support");
+
+cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
+	fromPos, toDb->organism, toDb->description);
+
 char *fileName = liftOverChainFile(fromDb->name, toDb->name);
+if (isEmpty(fileName))
+    errAbort("Unable to find a chain file from %s to %s - please contact support", fromDb->name, toDb->name);
+
 fileName = hReplaceGbdbMustDownload(fileName);
 char *chrom;
 int start, end;
@@ -287,13 +296,12 @@ int origSize;
 struct chain *chainList, *chain;
 struct dyString *visDy = NULL;
 
-cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
-	fromPos, toDb->organism, toDb->description);
 if (!hgParseChromRange(database, fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
 
 boolean doQuickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
+cartRemove(cart, "doQuickLift");
 
 unsigned quickChain = 0;
 unsigned quickHub = 0;
@@ -307,8 +315,10 @@ if (doQuickLift)
 
     visDy = newDyString(1024);
     char *newHub = trackHubBuild(fromDb->name, cart, visDy);
-    if ((quickHub = registerExportedDataHub(fromDb->name, newHub)) == 0)
-        errAbort("can't register exportedDataHub %s\n", newHub);
+    char *error;
+    quickHub = hubFindOrAddUrlInStatusTable(cart, newHub, &error);
+    if (error != NULL)
+        errAbort("can't add quickLift hub");
     }
 
 chainList = chainLoadAndTrimIntersecting(fileName, chrom, start, end);

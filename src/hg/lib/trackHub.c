@@ -1516,14 +1516,20 @@ if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
 if (fd >= 0)
     close(fd);
 
-cartSetString(cart, "hubUrl", hubName);
-cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
 return hubName;
 }
 
 static void dumpTdbAndParents(struct dyString *dy, struct trackDb *tdb, struct hash *existHash, struct hash *wantHash)
 /* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
 {
+#ifdef NOTNOW  // don't dump the parents of tracks yet
+if (tdb->parent)
+    {
+    dumpTdbAndParents(dy, tdb->parent, existHash, NULL);
+    }
+
+hashStore(existHash, "track");
+#endif
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)

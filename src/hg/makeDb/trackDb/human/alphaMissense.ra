@@ -18,8 +18,8 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/alphaMissense/a.bw
         maxHeightPixels 128:20:8
-	viewLimits 0:1
-	setColorWith /gbdb/$D/alphaMissense/a.color.bb
+        viewLimits 0:1
+        setColorWith /gbdb/$D/alphaMissense/a.color.bb
 
         track alphaMissense_C
         shortLabel Mutation: C
@@ -29,8 +29,8 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/alphaMissense/c.bw
         maxHeightPixels 128:20:8
-	viewLimits 0:1
-	setColorWith /gbdb/$D/alphaMissense/c.color.bb
+        viewLimits 0:1
+        setColorWith /gbdb/$D/alphaMissense/c.color.bb
 
         track alphaMissense_G
         shortLabel Mutation: G
@@ -40,8 +40,8 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/alphaMissense/g.bw
         maxHeightPixels 128:20:8
-	viewLimits 0:1
-	setColorWith /gbdb/$D/alphaMissense/g.color.bb
+        viewLimits 0:1
+        setColorWith /gbdb/$D/alphaMissense/g.color.bb
 
         track alphaMissense_T
         shortLabel Mutation: T
@@ -51,6 +51,6 @@ mouseOverFunction noAverage
         visibility dense
         bigDataUrl /gbdb/$D/alphaMissense/t.bw
         maxHeightPixels 128:20:8
-	viewLimits 0:1
-	setColorWith /gbdb/$D/alphaMissense/t.color.bb
+        viewLimits 0:1
+        setColorWith /gbdb/$D/alphaMissense/t.color.bb
 

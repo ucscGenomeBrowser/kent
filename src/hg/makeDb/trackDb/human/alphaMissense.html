@@ -83,6 +83,8 @@ which can be compiled from the source code or downloaded as a precompiled
 binary for your system.  Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 For example, to extract only annotations in a given region, you could use the following command:
+</p>
+
 <p>
 <tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/alphaMissense/a.bw stdout</tt>
 </p>
@@ -94,8 +96,13 @@ Data were converted from the files provided on
 <a href="https://storage.cloud.google.com/dm_alphamissense"
 target = "_blank">the AlphaMissense Downloads website</a>. As with all other tracks,
 a full log of all commands used for the conversion is available in our 
-<a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source repository</a>, for <a target=_blank href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a> and <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/alphaMissense.txt">hg38</a>. The release used for each assembly is shown on the track description page.
-
+<a target=_blank
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source
+repository</a>, for <a target=_blank
+href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a>
+and <a target=_blank
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/alphaMissense.txt">hg38</a>.
+The release used for each assembly is shown on the track description page.
 </p>
 
 <h2>Credits</h2>
@@ -107,9 +114,9 @@ Thanks to
 <p>
 Cheng J, Novati G, Pan J, Bycroft C, &#381;emgulyt&#279; A, Applebaum T, Pritzel A, Wong LH,
 Zielinski M, Sargeant T <em>et al</em>.
-<a href="https://www.science.org/doi/abs/10.1126/science.adg7492?url_ver=Z39.88-2003&amp;rfr_id=ori:
-rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
-Accurate proteome-wide missense variant effect prediction with AlphaMissense</a>.
+<a href="https://www.science.org/doi/abs/10.1126/science.adg7492"
+target="_blank">Accurate proteome-wide missense variant effect prediction with
+AlphaMissense</a>.
 <em>Science</em>. 2023 Sep 22;381(6664):eadg7492.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37733863" target="_blank">37733863</a>
 </p>

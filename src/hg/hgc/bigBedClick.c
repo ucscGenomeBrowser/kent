@@ -383,7 +383,7 @@ char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
 struct bigBedInterval *bbList = NULL;
 if (quickLiftFile)
-    bbList = quickLiftIntervals(quickLiftFile, bbi, chrom, ivStart, ivEnd, &chainHash);
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, ivStart, ivEnd, &chainHash);
 else
     bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
@@ -451,7 +451,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct bed *bed = NULL;
     if (quickLiftFile)
         {
-        if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+        if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
             errAbort("can't port %s",fields[3]);
         }
     else

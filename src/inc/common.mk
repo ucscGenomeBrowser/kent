@@ -81,8 +81,20 @@ ifeq ($(UNAME_S),Darwin)
   ifneq ($(wildcard /opt/local/lib/libpng.a),)
     PNGLIB = /opt/local/lib/libpng.a
   endif
+  ifeq (${BZ2LIB},)
+    ifneq ($(wildcard /opt/local/lib/libbz2.a),)
+      BZ2LIB=/opt/local/lib/libbz2.a
+    endif
+  endif
   ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
-    FREETYPELIBS = /opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec.a /opt/local/lib/libbrotlicommon.a
+    FREETYPELIBS = /opt/local/lib/libfreetype.a
+  endif
+  ifneq ($(wildcard /opt/local/lib/libbrotlidec.a),)
+    FREETYPELIBS += /opt/local/lib/libbrotlidec.a /opt/local/lib/libbrotlicommon.a
+  else
+    ifneq ($(wildcard /usr/local/Cellar/brotli/1.1.0/lib/libbrotlidec.a),)
+      FREETYPELIBS += /usr/local/Cellar/brotli/1.1.0/lib/libbrotlidec.a /usr/local/Cellar/brotli/1.1.0/lib/libbrotlicommon.a
+    endif
   endif
   ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libssl.a),)
     SSLLIB = /usr/local/opt/openssl@3/lib/libssl.a
@@ -101,8 +113,12 @@ ifeq ($(UNAME_S),Darwin)
   ifneq ($(wildcard /opt/local/lib/libiconv.a),)
     ICONVLIB = /opt/local/lib/libiconv.a
   endif
-  ifneq ($(wildcard /opt/homebrew/lib/libmysqlclient.a),)
-    MYSQLLIBS = /opt/homebrew/lib/libmysqlclient.a
+  ifneq ($(wildcard /usr/local/Cellar/mariadb/11.6.2/lib/libmariadbclient.a),)
+      MYSQLLIBS = /usr/local/Cellar/mariadb/11.6.2/lib/libmariadbclient.a
+  else
+    ifneq ($(wildcard /opt/homebrew/lib/libmysqlclient.a),)
+      MYSQLLIBS = /opt/homebrew/lib/libmysqlclient.a
+    endif
   endif
 endif
 
@@ -180,7 +196,7 @@ ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
   ifneq ($(filter 3.%, ${KERNEL_REL}),)
      # older linux needed libconv
-    ICONVLIB=-liconv
+    XXXICONVLIB=-liconv
   endif
 else
   ifeq (${ICONVLIB},)
@@ -306,9 +322,9 @@ endif
 ifeq (${BZ2LIB},)
   ifneq ($(wildcard /lib64/libbz2.a),)
     BZ2LIB=/lib64/libbz2.a
-  else
+   else
     BZ2LIB=-lbz2
-  endif
+   endif
 endif
 
 # on hgwdev, use the static libraries
@@ -355,7 +371,7 @@ endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
-L+=${PNGLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # NOTE: these must be last libraries and must be dynamic.

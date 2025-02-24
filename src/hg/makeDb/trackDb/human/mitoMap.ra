@@ -7,6 +7,7 @@ group phenDis
 noScoreFilter on
 compositeTrack on
 pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released February XX, 2025"
+dataVersion /gbdb/$D/bbi/mitoMapVersion.txt
 
 track mitoMapVars
 shortLabel MITOMAP Variants

@@ -1,10 +1,13 @@
 ########################################################################
 # user App rules, typical three-line makefile to use this rule set,
 #
-#   the one or more program file name is specified by the 'A' variable:
+#   the one program file name is specified by the 'A' variable:
 #	kentSrc = ../..
 #	A = aveCols
 #	include ${kentSrc}/inc/userApp.mk
+#
+# If multiple programs are required, recursive make is needed,  see
+# hg/makeDb/hgLoadWiggle/makefile for an example.
 #
 # Other variables that can be defined, which needs to be done
 # before including userApp.mk
@@ -21,6 +24,16 @@
 # use other libraries BEFORE jkweb.a
 #     preMyLibs += path/to/lib/other.a
 #
+# Note: Reason for restriction on compiling one program.:
+#   Due to the non-standard use of make, the expected behavor is that the
+#   program gets rebuilt if the .o is missing (after make clean), even if the
+#   program in the destination is current with the C file.  This doesn't work
+#   with make pattern rules, as it will not rebuild the target in this case.
+# 
+ifneq ($(words ${A}),1)
+   $(error The A variable should contain only one word, found '${A}')
+endif
+
 include ${kentSrc}/inc/localEnvironment.mk
 include ${kentSrc}/inc/common.mk
 
@@ -34,29 +47,28 @@ endif
 
 LINKLIBS = ${STATIC_PRE} ${DEPLIBS} ${MYSQLLIBS}
 
-objects = ${extraObjects} ${externObjects}
+default:: ${DESTBINDIR}/${A}${EXE}
+compile:: ${A}
 
-default:: ${A:%=${DESTBINDIR}/%${EXE}}
+objects = ${A}.o ${extraObjects} ${externObjects}
 
-${extraObjects}: ${extraHeaders}
+${extraObjects} ${A}.o: ${extraHeaders}
 
-${DESTBINDIR}/%${EXE}: %.o ${objects} ${DEPLIBS}
+${DESTBINDIR}/${A}${EXE}: ${objects} ${DEPLIBS}
 	@${MKDIR} $(dir $@)
-	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	${CC} ${COPT} -o $@ ${objects} ${LINKLIBS} ${L}
+	${STRIP} $@
 ifeq (${SEMI_STATIC},yes)
 	${userAppsCheckLinking} $@
 endif
 
-compile:: ${A:%=%${EXE}}
-
-%${EXE}: ${DEPLIBS} %.o ${objects}
-	${CC} ${COPT} -o $@ $*.o ${objects} ${LINKLIBS} ${L}
+${A}${EXE}: ${objects} ${DEPLIBS}
+	${CC} ${COPT} -o $@ ${objects} ${LINKLIBS} ${L}
 
 install:: ${A:%=${DESTBINDIR}/%${EXE}}
 
 clean::
-	rm -f ${O} ${extraObjects} ${A:%=%${EXE}}
+	rm -f ${A}.o ${extraObjects} ${A:%=%${EXE}}
 	@if test -d tests -a -s tests/makefile; then cd tests && ${MAKE} clean; fi
 
 test::

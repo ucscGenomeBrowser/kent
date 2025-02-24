@@ -23,11 +23,6 @@ my $bbiPrefix = shift;
 my $unmaskedBbi = "$bbiPrefix.cpgIslandExtUnmasked.bb";
 my $maskedBbi = "$bbiPrefix.cpgIslandExt.bb";
 
-if ( ! -s $maskedBbi ) {
-  printf STDERR "ERROR: can not find CpG masked file:\n\t'%s'\n", $maskedBbi;
-  exit 255;
-}
-
 my $em = "<em>";
 my $noEm = "</em>";
 my $assemblyDate = `grep -v "^#" $namesFile | cut -f9`;
@@ -101,14 +96,18 @@ where N = length of sequence.</p>
 _EOF_
    ;
 
-my $maskedCount = `bigBedInfo $maskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
-chomp $maskedCount;
-printf "<li>masked sequence: %s</li>\n", $maskedCount;
 
-my $unmaskedCount = `bigBedInfo $unmaskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
-chomp $unmaskedCount;
+if ( -s $maskedBbi ) {
+  my $maskedCount = `bigBedInfo $maskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
+  chomp $maskedCount;
+  printf "<li>masked sequence: %s</li>\n", $maskedCount;
+}
 
-printf "<li>unmasked sequence: %s</li>\n", $unmaskedCount;
+if ( -s $unmaskedBbi ) {
+  my $unmaskedCount = `bigBedInfo $unmaskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
+  chomp $unmaskedCount;
+  printf "<li>unmasked sequence: %s</li>\n", $unmaskedCount;
+}
 
 print <<_EOF_
 </ul>

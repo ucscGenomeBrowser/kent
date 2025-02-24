@@ -172,11 +172,11 @@ def parseDicsAndCreateFinalLLRdic(caputoVarsDic,parsonsVarsDic,liVarsDic,eastonV
                 finalCombinedLRdic[variant][dic] = {}
                 for LR in allLRsPossible:
                     if LR in combinedDic[dic][variant]:
-                        if LR in finalCombinedLRdic[variant][dic].keys(): #Look for familyLR in parsonsXXX
+                        if LR+"combined" in finalCombinedLRdic[variant].keys(): #Look for familyLR in parsonsXXX
                             #Assign the combined value
                             finalCombinedLRdic[variant][LR+"combined"] = finalCombinedLRdic[variant][LR+"combined"] * float(combinedDic[dic][variant][LR])
                             #Assign individual value
-                            finalCombinedLRdic[variant][dic][LR] = varsDicAllValues[variant][LR]
+                            finalCombinedLRdic[variant][dic][LR] = float(combinedDic[dic][variant][LR])
                         else:
                             finalCombinedLRdic[variant][dic][LR] = float(combinedDic[dic][variant][LR])
                             #First value for the combined

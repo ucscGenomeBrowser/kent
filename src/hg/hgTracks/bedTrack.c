@@ -91,7 +91,7 @@ else if (tg->isBigBed)
     struct hash *chainHash = NULL;
     struct bigBedInterval *bb, *bbList = NULL;
     if (quickLiftFile)
-        bbList = quickLiftIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
+        bbList = quickLiftGetIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
     else
         bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
 
@@ -117,7 +117,7 @@ else if (tg->isBigBed)
             }
         if (quickLiftFile)
             {
-            if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+            if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
                 continue;
             }
         else

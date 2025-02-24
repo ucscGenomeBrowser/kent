@@ -10,6 +10,7 @@ GCA_040807015.1_bStrCam1.hap2	African ostrich (bStrCam1hap2 2024)
 GCF_000691975.1_ASM69197v1	American crow
 GCA_009819805.1_bPhoRub2.alt	American flamingo (alternate hap 2019)
 GCA_009819775.1_bPhoRub2.pri	American flamingo (primary hap 2019)
+GCA_034782035.1_ASM3478203v1	American kestrel (FMNH 100283 2023)
 GCA_003957575.1_bCalAnn1_v1.h	Anna's hummingbird (alternate hap BGI_N300 2018)
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird (BGI_N300 2019 refseq)
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
@@ -75,6 +76,7 @@ GCF_000002315.6_GRCg6a	chicken (GRCg6a 2018)
 GCA_024206055.2_GGswu	chicken (Huxu 2023)
 GCA_027408255.1_bGalGal4.alt	chicken (Ross bGalGal4 alternate hap 2022)
 GCA_027557775.1_bGalGal4.pri	chicken (Ross bGalGal4 primary hap 2023)
+GCA_034509865.1_ASM3450986v1	chicken (Silkie 2023)
 GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b	chicken white leghorn layer X broiler (v2 broiler haplotype 2021 2021)
 GCF_003342845.1_notPer1	Chilean tinamou
 GCF_000747805.2_ChaPel_1.1	chimney swift (M959 v1.1 2014)
@@ -346,6 +348,7 @@ GCF_021018805.1_Cam_Psub_1.2	tawny-flanked prinia (Zambia CZ2003 2024)
 GCF_000331425.1_PseHum1.0	Tibetan ground-tit
 GCA_036169615.1_bHelExo1.hap1	tourmaline sunangel (hap1 2024)
 GCA_036172335.1_bHelExo1.hap2	tourmaline sunangel (hap2 2024)
+GCA_007636935.2_TRES_AUg29_2020	tree swallow (Ithaca 2401-50270 2024)
 GCA_023055385.1_bAgeTri1.0.a	tricolored blackbird (1412-34295 alternate hap 2022)
 GCA_023055355.1_bAgeTri1.0.p	tricolored blackbird (1412-34295 primary hap 2022)
 GCF_009819795.1_bAytFul2.pri	tufted duck (2019)

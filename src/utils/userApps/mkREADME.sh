@@ -48,13 +48,13 @@ do
 	echo "================================================================"
         case "${F}" in
            ucscApiClient|trackDbIndexBb|chromToUcsc|tdbRename|tdbSort)
-	     ./${F} -h
+	     ./${F} -h < /dev/null
              ;;
-           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac|bedJoinTabOffset|expMatrixToBarchartBed|webSync|vai.pl)
-	     ./${F}
+           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac|bedJoinTabOffset|expMatrixToBarchartBed|webSync|vai.pl|tabFmt)
+	     ./${F} < /dev/null
              ;;
            *)
-	     ./${F} -verbose=2
+	     ./${F} -verbose=2 < /dev/null
         esac
 	echo "================================================================"
 	fi

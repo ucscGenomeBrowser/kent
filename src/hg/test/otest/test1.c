@@ -218,7 +218,7 @@ char **loadWords()
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
-int wordCount;
+long wordCount;
 char **words = NULL;
 int i = 0;
 char **row;
@@ -299,7 +299,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
 char **row;
 FILE *f = mustOpen(fileName, "w");
-int lineCount;
+long lineCount;
 int i;
 char query[256];
 

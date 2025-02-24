@@ -1913,7 +1913,7 @@ slFreeList(&tablesList);
 return result;
 }
 
-int sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
+long sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
 /* Return row count if a table exists, -1 if it doesn't. */
 {
 char query[256];
@@ -1926,7 +1926,7 @@ if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
     return -1;
 row = sqlNextRow(sr);
 if (row != NULL && row[0] != NULL)
-    ret = atoi(row[0]);
+    ret = atol(row[0]);
 sqlFreeResult(&sr);
 return ret;
 }
@@ -2593,12 +2593,12 @@ return pairList;
 }
 
 
-int sqlTableSize(struct sqlConnection *conn, char *table)
+long sqlTableSize(struct sqlConnection *conn, char *table)
 /* Find number of rows in table. */
 {
 char query[128];
 sqlSafef(query, sizeof(query), "SELECT COUNT(*) FROM %s", table);
-return sqlQuickNum(conn, query);
+return (long) sqlQuickLongLong(conn, query);
 }
 
 int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field)
