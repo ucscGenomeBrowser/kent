@@ -104,6 +104,17 @@ if (userName)
 return retUrl;
 }
 
+char *urlForFile(char *userName, char *filePath)
+/* Return a web accessible URL to filePath */
+{
+char *webDataUrl = webDataDir(userName);
+if (webDataUrl)
+    {
+    return catTwoStrings(webDataUrl, filePath);
+    }
+return NULL;
+}
+
 char *prefixUserFile(char *userName, char *fname, char *parentDir)
 /* Allocate a new string that contains the full per-user path to fname. return NULL if
  * we cannot construct a full path because of a realpath(3) failure.

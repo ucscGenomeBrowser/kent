@@ -102,6 +102,20 @@ if (userName)
             }
         else
             {
+            if (sameString(fileType, "hub.txt"))
+                {
+                // disconnect this hub from the cart if it exists
+                char *hubUrl = urlForFile(userName, fullPath);
+                char *hubId = hubNameFromUrl(hubUrl);
+                if (hubId)
+                    {
+                    /* remove the cart variable */
+                    hubId += 4; // skip past the hub_ part
+                    char buffer[1024];
+                    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", hubId);
+                    cartRemove(cj->cart, buffer);
+                    }
+                }
             removeOneFile(userName, fileName, fullPath, db, fileType);
             // write out the fullPath so the DataTable can remove the correct row:
             jsonWriteString(cj->jw, NULL, fullPath);
