@@ -215,11 +215,21 @@ or the <a href="https://www.gencodegenes.org/pages/contact.html" target=_blank>G
 <p>This is related to the question <a href="#ncbiRefSeq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a>
 below. Briefly, the UCSC refGene track aligns the RefSeq transcripts to the genome with BLAT, with no special filtering but a
 95% identity, the NCBI RefSeq track is NCBI's mapping and the NCBI alignments were filtered using manual annotations
-to make sure that a transcript is mapped only once, even if it is perfectly aligning twice. NCBI uses manual curation
-to decide on the best placement, for example, if a gene is annotated on chr4, any alignments, even 100% identical,
-from other chromosomes are removed. As a result, the UCSC RefSeq track contains duplicates if the transcripts align
-very well to both loci and alerts the user to this fact, where as the NCBI alignments were filtered manually
-to make sure that every transcript maps only once.
+to make sure that a transcript is mapped only once, even if it is perfectly
+aligning twice (there is one exception, genes in the PAR regions, see the
+paragraph below). NCBI uses manual curation to decide on the best placement,
+for example, if a gene is annotated on chr4, any alignments, even 100%
+identical, from other chromosomes are removed. As a result, the UCSC RefSeq
+track contains duplicates if the transcripts align very well to both loci and
+alerts the user to this fact, where as the NCBI alignments were filtered
+manually to make sure that every transcript maps only once.
+</p>
+<p>
+NCBI's transcript mapping which we provide in our NCBI RefSeq track, does
+contain a few duplicates, but these have a biological explanation: They are
+transcripts in the <a target=_blank href='https://en.wikipedia.org/wiki/Pseudoautosomal_region'>pseudoautosomal regions</a> 
+(PARs), so they have identical sequences and by NCBI rules this means identical
+accessions. See the section below for how Ensembl/Gencode handle these cases.
 </p>
 
 <a name="duplicatesEns"></a>
@@ -230,7 +240,7 @@ href='https://en.wikipedia.org/wiki/Pseudoautosomal_region'>pseudoautosomal regi
 which have identical sequences on both chrX and chrY. The Ensembl team assigned these genes
 identical accessions due to their identical sequences. Since Ensembl release 110 (identical to
 Gencode release 44), these genes now receive distinct accessions. If you encounter duplicates in
-Ensembl/Gencode files, they likely originate from versions predating this update at the EBI.
+Ensembl/Gencode files, they likely originate from file versions predating this update at the EBI.
 </p>
 
 
