@@ -50,6 +50,32 @@ if (fileName)
     }
 }
 
+int pathDepth(char *path)
+{
+return countChars(path, '/');
+}
+
+int sortByFullPathCmp(const void *va, const void *vb)
+/* Compare two fullPaths */
+{
+struct jsonElement *a = (struct jsonElement *)(*(struct slRef **)va)->val;
+struct jsonElement *b = (struct jsonElement *)(*(struct slRef **)vb)->val;
+char *aFullpath = jsonStringField(a, "fullPath");
+char *bFullpath = jsonStringField(b, "fullPath");
+int aDepth = pathDepth(aFullpath);
+int bDepth = pathDepth(bFullpath);
+// ensure subdirectories order before their parents:
+if (aDepth != bDepth)
+    return bDepth - aDepth;
+// if equal depth than lexicographic sort is fine
+return strcmp(jsonStringField(a,"fullPath"), jsonStringField(b, "fullPath"));
+}
+
+void sortByFullPath(struct jsonElement *listJson)
+{
+slSort(&(listJson->val.jeList), sortByFullPathCmp);
+}
+
 void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 /* Process the request to remove a file */
 {
@@ -59,7 +85,7 @@ if (userName)
     // our array of objects, each object represents a track file
     struct jsonElement *deleteJson = hashFindVal(paramHash, "fileList");
     struct slRef *copy, *f, *fileList = deleteJson->val.jeList;
-    struct slRef *dirList = NULL;
+    struct jsonElement *dirListJsonEle = newJsonList(NULL);
     jsonWriteListStart(cj->jw, "deletedList");
     for (f = fileList; f != NULL; )
         {
@@ -72,7 +98,7 @@ if (userName)
         if (sameString(fileType, "dir"))
             {
             f->next = NULL;
-            slAddHead(&dirList, f);
+            jsonListAdd(dirListJsonEle, fileObj);
             }
         else
             {
@@ -83,9 +109,11 @@ if (userName)
         f = copy;
         }
     // now attempt to delete any requested directories, but don't die if they still have contents
-    for (f = dirList; f != NULL; f = f->next)
+    sortByFullPath(dirListJsonEle);
+    struct slRef *dir = NULL;
+    for (dir = dirListJsonEle->val.jeList; dir != NULL; dir = dir->next)
         {
-        struct jsonElement *fileObj = (struct jsonElement *)f->val;
+        struct jsonElement *fileObj = (struct jsonElement *)dir->val;
         char *fileName = jsonStringField(fileObj, "fileName");
         char *fileType = jsonStringField(fileObj, "fileType");
         char *db = jsonStringField(fileObj, "genome");
@@ -118,7 +146,6 @@ if (userName)
     for (file = fileList; file != NULL; file = file->next)
         {
         jsonWriteObjectStart(jw, NULL);
-        cgiDecodeFull(file->fileName, file->fileName, strlen(file->fileName));
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
         jsonWriteString(jw, "fileType", file->fileType);

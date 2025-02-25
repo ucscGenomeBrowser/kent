@@ -345,10 +345,11 @@ var hubCreate = (function() {
         // make a new span that can be clicked to nav through the table
         let newSpan = document.createElement("span");
         newSpan.id = dirName;
-        newSpan.textContent = dirName;
+        newSpan.textContent = decodeURIComponent(dirName);
         newSpan.classList.add("breadcrumb");
         newSpan.addEventListener("click", function(e) {
             dataTableShowDir(table, dirName, dirFullPath);
+            table.draw();
             dataTableCustomOrder(table, {"fullPath": dirFullPath});
             table.draw();
         });
@@ -378,7 +379,6 @@ var hubCreate = (function() {
             }
             let path = components.slice(0, dirNameIx+1);
             componentFullPath = path.join('/');
-            componentFullPath += "/"; // need a final '/' on there
             let newSpan = createOneCrumb(table, dirName, componentFullPath);
             currBreadcrumb.appendChild(document.createTextNode(" > "));
             currBreadcrumb.appendChild(newSpan);
@@ -404,8 +404,21 @@ var hubCreate = (function() {
     function dataTableShowDir(table, dirName, dirFullPath) {
         // show the directory and all immediate children of the directory
         clearSearch(table);
+        table.draw();
         table.search.fixed("oneHub", function(searchStr, rowData, rowIx) {
-            return rowData.parentDir === dirName ||  rowData.fullPath === dirFullPath;
+            // calculate the fullPath of this rows parentDir in case the dirName passed
+            // to this function has the same name as a parentDir further up in the
+            // listing. For example, consider a test/test/tmp.txt layout, where "test"
+            // is the parentDir of tmp.txt and the test subdirectory
+            let parentDirFull = rowData.fullPath.split("/").slice(0,-1).join("/");
+            if (rowData.parentDir === dirName && parentDirFull === dirFullPath) {
+                return true;
+            } else if (rowData.fullPath === dirFullPath) {
+                // also return the directory itself
+                return true;
+            } else {
+                return false;
+            }
         });
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
     }
@@ -617,20 +630,22 @@ var hubCreate = (function() {
     }
 
     function doRowSelect(ev, table, indexes) {
-        let row = table.row(indexes);
-        let rowTr = row.node();
+        let selectedRow = table.row(indexes);
+        let rowTr = selectedRow.node();
         if (rowTr) {
             let rowCheckbox = rowTr.childNodes[0].firstChild;
-            if (rowTr.classList.contains("parentRow")) {
-                // we need to manually check the children
-                table.rows((idx,rowData) => rowData.fullPath.startsWith(row.data().fullPath) && rowData.parentDir === row.data().fileName).every(function(rowIdx, tableLoop, rowLoop) {
+            let rowChildren = uiState.filesHash[selectedRow.data().fullPath].children;
+            // we need to manually check the children
+            if (rowChildren) {
+                for (let child of rowChildren) {
                     if (ev.type === "select") {
-                        this.select();
+                        table.row((idx,data) => data.fullPath === child.fullPath).select();
                     } else {
-                        this.deselect();
+                        table.row((idx,data) => data.fullPath === child.fullPath).deselect();
                     }
-                });
+                }
             }
+            // lastly check the row itself
             rowCheckbox.checked = ev.type === "select";
             handleCheckboxSelect(ev, table, rowTr);
         }
@@ -689,6 +704,12 @@ var hubCreate = (function() {
                         return dataTablePrintAction(row);
                     }
                     return '';
+                }
+            },
+            {
+                targets: 2,
+                render: function(data, type, row, meta) {
+                    return decodeURIComponent(data);
                 }
             },
             {
@@ -1105,7 +1126,7 @@ var hubCreate = (function() {
                 "fileType": "dir",
                 "genome": metadata.genome,
                 "parentDir": "",
-                "fullPath": metadata.parentDir,
+                "fullPath": metadata.parentDir + "/",
             };
             // package the three objects together as one "hub" and display it
             let hub = [parentDirObj, hubTxtObj, newReqObj];
