@@ -16,6 +16,7 @@
 <li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#wrong">I think this transcript looks strange, what shall I do?</a></li>
 <li><a href="#duplicates">Why does the UCSC RefSeq track ("refGene") include duplicates, and some transcripts map to two loci?</a></li>
+<li><a href="#duplicatesEns">Why does the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
@@ -219,6 +220,17 @@ to decide on the best placement, for example, if a gene is annotated on chr4, an
 from other chromosomes are removed. As a result, the UCSC RefSeq track contains duplicates if the transcripts align
 very well to both loci and alerts the user to this fact, where as the NCBI alignments were filtered manually
 to make sure that every transcript maps only once.
+</p>
+
+<a name="duplicatesEns"></a>
+<h6>Why does the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</h6>
+
+<p>The human genome has seven genes located in the <a target=_blank
+href='https://en.wikipedia.org/wiki/Pseudoautosomal_region'>pseudoautosomal regions</a> (PARs),
+which have identical sequences on both chrX and chrY. The Ensembl team assigned these genes
+identical accessions due to their identical sequences. Since Ensembl release 110 (identical to
+Gencode release 44), these genes now receive distinct accessions. If you encounter duplicates in
+Ensembl/Gencode files, they likely originate from versions predating this update at the EBI.
 </p>
 
 
