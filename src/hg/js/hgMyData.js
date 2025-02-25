@@ -341,26 +341,29 @@ var hubCreate = (function() {
         updateSelectedFileDiv(data);
     }
 
-    function createOneCrumb(table, dirName, dirFullPath) {
+    function createOneCrumb(table, dirName, dirFullPath, doAddEvent) {
         // make a new span that can be clicked to nav through the table
         let newSpan = document.createElement("span");
         newSpan.id = dirName;
         newSpan.textContent = decodeURIComponent(dirName);
         newSpan.classList.add("breadcrumb");
-        newSpan.addEventListener("click", function(e) {
-            dataTableShowDir(table, dirName, dirFullPath);
-            table.draw();
-            dataTableCustomOrder(table, {"fullPath": dirFullPath});
-            table.draw();
-        });
+        if (doAddEvent) {
+            newSpan.addEventListener("click", function(e) {
+                dataTableShowDir(table, dirName, dirFullPath);
+                table.draw();
+                dataTableCustomOrder(table, {"fullPath": dirFullPath});
+                table.draw();
+            });
+        } else {
+            // can't click the final crumb so don't underline it
+            newSpan.style.textDecoration = "unset";
+        }
         return newSpan;
     }
 
     function dataTableEmptyBreadcrumb(table) {
         let currBreadcrumb = document.getElementById("breadcrumb");
         currBreadcrumb.replaceChildren(currBreadcrumb.firstChild);
-        currBreadcrumb.firstChild.style.cursor = "unset";
-        currBreadcrumb.firstChild.style.textDecoration = "unset";
     }
 
     function dataTableCreateBreadcrumb(table, dirName, dirFullPath) {
@@ -370,16 +373,16 @@ var hubCreate = (function() {
         if (currBreadcrumb.children.length > 1) {
             currBreadcrumb.replaceChildren(currBreadcrumb.firstChild);
         }
-        currBreadcrumb.firstChild.style.cursor = "pointer";
-        currBreadcrumb.firstChild.style.textDecoration = "underline";
         let components = dirFullPath.split("/");
+        let numComponents = components.length;
         components.forEach(function(dirName, dirNameIx) {
             if (!dirName) {
                 return;
             }
+            let doAddEvent = dirNameIx !== (numComponents - 1);
             let path = components.slice(0, dirNameIx+1);
             componentFullPath = path.join('/');
-            let newSpan = createOneCrumb(table, dirName, componentFullPath);
+            let newSpan = createOneCrumb(table, dirName, componentFullPath, doAddEvent);
             currBreadcrumb.appendChild(document.createTextNode(" > "));
             currBreadcrumb.appendChild(newSpan);
         });
@@ -676,7 +679,7 @@ var hubCreate = (function() {
                 div: {
                     className: "",
                     id: "breadcrumb",
-                    html: "<span id=\"rootBreadcrumb\">My Data</span>",
+                    html: "<span id=\"rootBreadcrumb\" class=\"breadcrumb\">My Data</span>",
                 }
             },
             topStart: {
