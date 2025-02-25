@@ -41,7 +41,7 @@ clean:: $(UTIL_DIRS:%=%.clean)
 
 # have to include down here or it will mess up the default target
 kentSrc = ..
-include $(kentSrc)/inc/userApp.mk
+include ../inc/common.mk
 cgi:: $(CGI_DIRS:%=%.cgi)
 %.cgi: 
 	(cd $* && ${MAKE} compile)

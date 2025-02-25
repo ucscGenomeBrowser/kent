@@ -251,7 +251,7 @@ for (;;)
 	if (diff < minDiff)
 	    {
 	    if (diff < 0)
-		errAbort("%s is not sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" or bedSort and try again.",
+		errAbort("%s is not sorted at line %d. Please use the -sort option to sort the input file.",
 		    lf->fileName, lf->lineIx);
 	    minDiff = diff;
 	    }

@@ -268,14 +268,14 @@ else if (startsWithWord("bigWig", type))
     {
     printf("<BR>The data is stored in the binary "
            "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
-           "BigWig</A> format. Our tools <tt>bigWigToBedGraph</tt> or <tt>bigWigToWig</tt> accept a file or the URL above and output text.\n");
+           "BigWig</A> format. Our <tt>bigWigToBedGraph</tt> and <tt>bigWigToWig</tt> tools accept a file or the URL above as the input and convert it to text.\n");
     isBig = TRUE;
     }
 else if (startsWith("big", type))
     {
     printf("<BR>The data is stored in the binary "
            "<A HREF=\"/goldenPath/help/bigBed.html\" TARGET=_BLANK>"
-           "BigBed</A> format. Our tool <tt>bigBedToBed</tt> accepts a file or the URL above as the input and outputs text.<BR>\n");
+           "BigBed</A> format. Our <tt>bigBedToBed</tt> tool accepts a file or the URL above as the input and converts it to text.<BR>\n");
     isBig = TRUE;
     }
 
