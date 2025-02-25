@@ -103,7 +103,7 @@ time (./runBuild GCF_002776525.5_ASM277652v5 primates Piliocolobus_tephrosceles)
 5. Prepare the build for the push.  In this primatesAsmHub directory:
      time (make) > dbg 2>&1
      This could stop prematurely if errors are encountered, to verify
-     when done, check for errors: grep -i err dbg
+     when done, check for errors: egrep -i "error|fail|missing|cannot" dbg
      should be nothing significant
 
 6. Verify the browser is correct on hgwdev:
@@ -113,7 +113,8 @@ time (./runBuild GCF_002776525.5_ASM277652v5 primates Piliocolobus_tephrosceles)
 
 7. Push the hub to hgdownload (and dynamic blat server):
      time (make sendDownload) >> send.down.log 2>&1
-     should stop if there are errors.  Can verify: grep -i error send.down.log
+     should stop if there are errors.  Can verify:
+         egrep -i "error|fail|missing|cannot" send.down.log
 
 8. Verify the hub is correctly on hgdownload:
      time (make verifyDownload) >> verify.down.log 2>&1
