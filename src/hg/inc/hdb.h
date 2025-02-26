@@ -40,7 +40,7 @@
 struct chromInfo;
 
 /* At or below this number of sequences, allow split tables: */
-#define HDB_MAX_SEQS_FOR_SPLIT 100
+#define HDB_MAX_SEQS_FOR_SPLIT 400
 
 /* Statically-allocated string lengths (max supported len incl. final \0): */
 #define HDB_MAX_CHROM_STRING 255

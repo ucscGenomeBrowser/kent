@@ -19,6 +19,10 @@
 char *prettyFileSize(long size);
 /* Return a string representing the size of a file */
 
+char *encodePath(char *path);
+/* Return a string where each individual component of a '/' separated
+ * string has been cgiEncoded, but not the '/' chars themselves */
+
 void fillOutHttpResponseError();
 
 void fillOutHttpResponseSuccess();
