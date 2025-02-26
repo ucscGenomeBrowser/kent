@@ -789,7 +789,7 @@ def uploadFiles(tdbDir, hubName):
             mtime = os.stat(localPath).st_mtime
             cache["mtime"] = mtime
             cache["size"] = os.stat(localPath).st_size
-            uploadCache[fpath] = cache
+            uploadCache[localPath] = cache
 
     cacheWrite(uploadCache, cacheFname)
 
