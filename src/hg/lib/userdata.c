@@ -104,6 +104,17 @@ if (userName)
 return retUrl;
 }
 
+char *urlForFile(char *userName, char *filePath)
+/* Return a web accessible URL to filePath */
+{
+char *webDataUrl = webDataDir(userName);
+if (webDataUrl)
+    {
+    return catTwoStrings(webDataUrl, filePath);
+    }
+return NULL;
+}
+
 char *prefixUserFile(char *userName, char *fname, char *parentDir)
 /* Allocate a new string that contains the full per-user path to fname. return NULL if
  * we cannot construct a full path because of a realpath(3) failure.
@@ -159,8 +170,6 @@ if (ptr)
     if (ptr)
         {
         ++ptr;
-        fprintf(stderr, "ptr= '%s'\n", ptr);
-        fflush(stderr);
         return cloneString(ptr);
         }
     }
@@ -196,10 +205,11 @@ for (i = 0; i < foundSlashes; i++)
     char *subdir = components[i];
     if (sameString(subdir, "."))
         continue;
-    fprintf(stderr, "making row for parent dir: '%s'\n", subdir);
     if (!subdir)
         errAbort("error: empty subdirectory components for parentDir string '%s'", parentDirStr);
-    dyStringAppend(currLocation, components[i]);
+    if (lastChar(dyStringContents(currLocation)) != '/')
+        dyStringAppendC(currLocation, '/');
+    dyStringAppend(currLocation, subdir);
     struct hubSpace *row = NULL;
     AllocVar(row);
     row->userName = userName;
@@ -345,6 +355,7 @@ static void deleteHubSpaceRow(char *fname, char *userName)
 struct sqlConnection *conn = hConnectCentral();
 struct dyString *deleteQuery = sqlDyStringCreate("delete from hubSpace where location='%s' and userName='%s'", fname, userName);
 sqlUpdate(conn, dyStringCannibalize(&deleteQuery));
+hDisconnectCentral(&conn);
 }
 
 void removeFileForUser(char *fname, char *userName)

@@ -6,8 +6,8 @@ group phenDis
 pennantIcon New red ../goldenPath/newsarch.html "New"
 cartVersion 8
 
-include splicevardb.ra alpha
+include splicevardb.ra alpha,beta
 
-include abSplice.alpha.ra alpha
+include abSplice.alpha.ra alpha,beta
 
-include spliceAI.alpha.ra alpha
+include spliceAI.alpha.ra alpha,beta

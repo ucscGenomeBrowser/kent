@@ -58,4 +58,5 @@ table.dataTable input.dt-select-checkbox:indeterminate:after {
 .breadcrumb {
     text-decoration: underline;
     cursor: pointer;
+    font-size: larger;
 }
