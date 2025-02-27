@@ -63,12 +63,19 @@ To create a bigBed track, follow these steps (for concrete Unix commands, see th
 Create a BED format file following the directions 
 <a href="../../FAQ/FAQformat.html#format1">here</a>. When converting a BED file to a bigBed file, 
 you are limited to one track of data in your input file; therefore, you must create a separate BED 
-file for each data track. Your BED file must be sorted.
+file for each data track.</p>
 <p>
 If your BED file was originally a custom track, remove any existing
 &quot;track&quot; or &quot;browser&quot; lines from your BED file so that it
-contains only data. Also the input BED must be sorted, performed with this command:
-<code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code>
+contains only data.
+<p>
+Your file does not need to be sorted by chromosome name, but all entries for a
+single chromosome must be together and sorted by chromosome start position. If you're not
+sure if this is true for your BED file, it may be easiest to sort the file
+using the &quot;-sort&quot; option for <code>bedToBigBed</code>.</p>
+<p>
+Finally, if your BED files are large, they can be compressed using gzip (e.g. <code>myTrack.bed.gz</code>) and still read
+by <code>bedToBigBed</code>.
 </p>
 
 <p> 
