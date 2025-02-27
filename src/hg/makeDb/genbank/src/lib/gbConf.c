@@ -17,7 +17,7 @@ static char *findVarEnd(struct lineFile* lf, char *vstart)
 /* find the end of a variable reference, returning char after close '}' */
 {
 char *vend = NULL;
-assert(*vstart = '$');
+assert(*vstart == '$');
 if (vstart[1] == '{')
     {
     char *sep = strchr(vstart, '}');
