@@ -358,6 +358,7 @@ char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "getSearchResults");
 cartSetString(cj->cart, "db", db);
 initGenbankTableNames(db);
 hashTracksAndGroups(cj->cart, db);
+chromAliasSetup(db);
 char *searchTerms = cartJsonRequiredParam(paramHash, SEARCH_TERM_VAR, cj->jw, "getSearchResults");
 measureTiming = cartUsualBoolean(cj->cart, "measureTiming", FALSE);
 struct jsonElement *searchCategs = hashFindVal(paramHash, "categs");
@@ -374,6 +375,7 @@ char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "getUiState");
 cartSetString(cj->cart, "db", db);
 initGenbankTableNames(db);
 hashTracksAndGroups(cj->cart, db);
+chromAliasSetup(db);
 writeDefaultForDb(cj->jw, db);
 }
 
@@ -534,6 +536,7 @@ if (userSearch == NULL || isEmpty(userSearch))
     }
 initGenbankTableNames(db);
 hashTracksAndGroups(cart, db);
+chromAliasSetup(db);
 struct searchCategory *allCategories = getAllCategories(cart, db, hgFindGroupHash);
 struct jsonElement *categsJsonElement = jsonElementFromSearchCategory(allCategories, db);
 

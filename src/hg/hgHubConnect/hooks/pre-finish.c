@@ -138,7 +138,9 @@ else
             fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
             // TODO: check if file exists or not and let user choose to overwrite
             // and re-call this hook, for now just exit if the file exists
-            if (fileExists(dyStringContents(newFile)))
+            // hubtools uploads always overwrite because we assume those users
+            // know what they are doing
+            if (fileExists(dyStringContents(newFile)) && !isHubToolsUpload)
                 {
                 errAbort("file '%s' exists already, not overwriting", dyStringContents(newFile));
                 }
