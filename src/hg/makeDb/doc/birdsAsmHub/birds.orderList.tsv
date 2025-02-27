@@ -161,6 +161,8 @@ GCF_013368605.1_bNycGra1.pri	great potoo (primary hap 2020 refseq)
 GCF_001522545.3_Parus_major1.1	great tit
 GCF_027791375.1_UM_Iind_1.1	greater honeyguide (239-I01 2023)
 GCA_001870855.1_T_cupido_pinnatus_GPC_3440_v1	greater prairie chicken
+GCA_965140915.1_bAytMar2.hap1.1	greater scaup (hap1 2025)
+GCA_965140925.1_bAytMar2.hap2.1	greater scaup (hap2 2025)
 GCA_003343005.1_rheAme1	greater rhea
 GCF_019232065.1_USGS_Curo_1.0	greater sage-grouse
 GCA_016647715.1_ASM1664771v1	green peafowl
@@ -173,7 +175,8 @@ GCF_026419915.1_bHarHar1_primary_haplotype	Harpy eagle (primary hap 2022 refseq)
 GCA_020740675.1_bCorHaw1.alt.cur	Hawaiian crow (bCorHaw1 alternate hap 2021)
 GCF_020740725.1_bCorHaw1.pri.cur	Hawaiian crow (primary hap 2021 refseq)
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
-GCA_964417125.1_bLarArg3.hap2.1	herring gull (bLarArg3.hap2.1 2024)
+GCA_964417175.1_bLarArg3.hap1.1	herring gull (hap1 2024)
+GCA_964417125.1_bLarArg3.hap2.1	herring gull (hap2 2024)
 GCF_000692075.1_ASM69207v1	hoatzin (BGI_N306 2014)
 GCA_030867145.1_bOpiHoa1.hap1	hoatzin (hap1 2023)
 GCA_030867165.1_bOpiHoa1.hap2	hoatzin (hap2 2023)
