@@ -4,7 +4,7 @@ import logging, sys, optparse, os, json, subprocess, shutil, string, glob, tempf
 import shlex
 from pathlib import Path
 from collections import defaultdict, OrderedDict
-from os.path import join, basename, dirname, isfile, relpath, abspath, splitext, isdir
+from os.path import join, basename, dirname, isfile, relpath, abspath, splitext, isdir, normpath
 #import pyyaml   # not loaded here, so it's not a hard requirement, is lazy loaded in parseMetaYaml()
 
 # ==== functions =====
@@ -712,7 +712,7 @@ def getFileType(fbase):
         if ret!="NA":
             break
 
-    logging.debug("file type for %s is %s" % (fbase, fileType))
+    logging.debug("file type for %s is %s" % (fbase, ret))
     return ret
 
 def uploadFiles(tdbDir, hubName):
@@ -742,32 +742,36 @@ def uploadFiles(tdbDir, hubName):
     cacheFname = join(tdbDir, ".hubtools.files.json")
     uploadCache = cacheLoad(cacheFname)
 
-    for rootDir, dirs, files in os.walk(tdbDir):
+    logging.debug("trackDb directory is %s" % tdbDir)
+    for rootDir, _, files in os.walk(tdbDir):
         for fbase in files:
             if fbase.startswith("."):
                 continue
-            fpath = join(rootDir, fbase)
-            localPath = join(tdbDir, fpath)
+            localPath = normpath(join(rootDir, fbase))
+            logging.debug("localPath: %s" % localPath)
             localMtime = os.stat(localPath).st_mtime
 
             # skip files that have not changed their mtime since last upload
-            if fpath in uploadCache:
+            if localPath in uploadCache:
                 cacheMtime = uploadCache[fpath]["mtime"]
                 if localMtime == cacheMtime:
                     logging.info("%s: file mtime unchanged, not uploading again" % localPath)
                     continue
                 else:
                     logging.debug("file %s: mtime is %f, cache mtime is %f, need to re-upload" %
-                            (fpath, localMtime, cacheMtime))
+                            (localPath, localMtime, cacheMtime))
             else:
-                logging.debug("file %s not in upload cache" % fpath)
+                logging.debug("file %s not in upload cache" % localPath)
 
             fileType = getFileType(fbase)
 
-            parentDir = join(hubName, rootDir)
+            fileAbsPath = abspath(localPath)
+            remoteRelPath = relpath(fileAbsPath, tdbDir)
+            remoteDir = dirname(remoteRelPath)
+
             meta = {
                     "apiKey" : apiKey,
-                    "parentDir" : parentDir,
+                    "parentDir" : remoteDir,
                     "genome":"NA",
                     "fileName" : fbase,
                     "hubName" : hubName,
@@ -776,7 +780,7 @@ def uploadFiles(tdbDir, hubName):
                     "lastModified" : str(int(localMtime)),
             }
 
-            logging.info(f"Uploading {fpath}, meta {meta}")
+            logging.info(f"Uploading {localPath}, meta {meta}")
             uploader = my_client.uploader(localPath, metadata=meta)
             uploader.upload()
 
@@ -785,7 +789,7 @@ def uploadFiles(tdbDir, hubName):
             mtime = os.stat(localPath).st_mtime
             cache["mtime"] = mtime
             cache["size"] = os.stat(localPath).st_size
-            uploadCache[fpath] = cache
+            uploadCache[localPath] = cache
 
     cacheWrite(uploadCache, cacheFname)
 
@@ -1215,7 +1219,7 @@ def hubtools(args, options):
     if cmd=="up":
         if len(args)<2:
             errAbort("The 'up' command requires one argument, the name of the hub. You can specify any name, "
-                "ideally a short, meaningful string, e.g. atacseq, muscle-rna or yamamoto2022.")
+                "ideally a short, meaningful string, e.g. atacseq, muscle-rna or yamamoto2022. Avoid special characters.")
         hubName = args[1]
         uploadFiles(inDir, hubName)
         return

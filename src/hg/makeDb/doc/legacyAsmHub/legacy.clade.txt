@@ -208,6 +208,7 @@ GCA_017976375.1_bCucCan1.pri	birds
 GCA_017976425.1_fToxJac2.pri	fish
 GCA_018139145.1_ASM1813914v1	birds
 GCA_018296145.1_Otsh_v2.0	fish
+GCA_018691715.1_ASM1869171v1	invertebrate
 GCA_018852605.1_HG002.alt.pat.f1_v2	primates
 GCA_018852615.1_HG002.pri.mat.f1_v2	primates
 GCA_019393635.1_mDroGli1.pri	mammals
@@ -225,6 +226,7 @@ GCA_022682495.1_HLdesRot8A	mammals
 GCA_023343835.1_bLagMut1_primary	birds
 GCA_023634085.1_bFalChe1.pri	birds
 GCA_023634155.1_bFalPer1.pri	birds
+GCA_023637945.1_DD_ASM_B1	birds
 GCA_023638135.1_bFalBia1.pri	birds
 GCA_025091365.1_ASM2509136v1	invertebrate
 GCA_025265405.1_mMesDen1_primary_haplotype	mammals
@@ -233,7 +235,7 @@ GCA_026419915.1_bHarHar1_primary_haplotype	birds
 GCA_026419965.1_mKogBre1_haplotype_1	mammals
 GCA_027172205.1_rPodRaf1.pri	vertebrate
 GCA_027358585.1_fPanHyp1.pri	fish
-GCA_027406575.1_mNycCou1.pri	mammals
+GCA_027406575.1_mNycCou1.pri	primates
 GCA_027409825.1_fScoJap1.pri	fish
 GCA_027477595.1_bHaeMex1.pri	birds
 GCA_027579445.1_bAmmNel1.pri	birds
@@ -243,6 +245,7 @@ GCA_027789765.1_aDenEbr1.pat	vertebrate
 GCA_027887145.1_bAmmCau1.pri	birds
 GCA_027887155.1_rMalTer1.hap1	vertebrate
 GCA_027887165.1_mMonDom1.pri	mammals
+GCA_020800215.1_PR-102_v3_p	invertebrate
 GCA_028018385.1_mNeoNeb1.pri	mammals
 GCA_028018845.1_bMelGeo1.pri	birds
 GCA_028023285.1_mBalRic1.hap2	mammals
@@ -269,10 +272,14 @@ GCA_030867095.1_rAllMis1	vertebrate
 GCA_030936135.1_bGavSte3.hap2	birds
 GCA_031021105.1_rEryReg1.hap1	vertebrate
 GCA_035083965.1_klBraLanc5.hap2	invertebrate
+GCA_036373705.1_fAmiCal2.hap1	fish
 GCA_036850765.1_mSacBil1_pri_phased_curated	mammals
 GCA_036850995.1_mSacLep1_pri_phased_curated	mammals
 GCA_036971445.1_sNarBan1.hap1	vertebrate
+GCA_036971685.1_bPatFas1.hap2	birds
 GCA_038363095.1_mArtLit.hap1	mammals
+GCA_039877785.1_fChaTrf1.hap1	fish
+GCA_040894355.1_rMyuGeo1.pri.20230808	vertebrate
 GCA_042242105.1_fPemKlu1.hap1	fish
 GCA_044704955.1_sPriJap1.hap1	vertebrate
 GCA_900006655.3_Susie3	primates
@@ -288,7 +295,9 @@ GCA_902153765.1_bAquChr1.2_alternate_haplotype	birds
 GCA_902459505.1_aGeoSer1.1	vertebrate
 GCA_902500255.1_fThaAma1.1	fish
 GCA_902686455.1_mSciVul1.1	mammals
+GCA_902713425.1_fAciRut3.1_maternal_haplotype	fish
 GCA_902713425.2_fAciRut3.2_maternal_haplotype	fish
+GCA_902713435.1_fAciRut3.1_paternal_haplotype	fish
 GCA_904849725.1_MorexV3_pseudomolecules_assembly	plants
 GCA_905147045.1_ilAglIoxx1.1	invertebrate
 GCA_905147105.1_ilPieBrab1.1	invertebrate
@@ -523,7 +532,7 @@ GCF_900634795.2_fBetSpl5.2	fish
 GCF_900634795.3_fBetSpl5.3	fish
 GCF_900700375.1_fDenClu1.1	fish
 GCF_900700415.1_Ch_v2.0.2	fish
-GCF_900747795.1_fErpCal1.1	vertebrate
+GCF_900747795.1_fErpCal1.1	fish
 GCF_900880675.1_fSpaAur1.1	fish
 GCF_900963305.1_fEcheNa1.1	fish
 GCF_901001135.1_aRhiBiv1.1	vertebrate

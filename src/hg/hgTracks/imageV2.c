@@ -1950,7 +1950,7 @@ if (slice->parentImg)
         }
 
     // this makes it look like view image theImgBox==NULL
-    if ((slice->type==stData) && !sameString(name,"side_ruler"))   // data not high enough by 1 pixel GALT
+    if ((slice->type==stData) && !sameString(name,"side_ruler") && cartUsualBoolean(cart, "centerLabels", TRUE))   // data not high enough by 1 pixel GALT
 	height += 1; 
 
     // Adjustment for portal

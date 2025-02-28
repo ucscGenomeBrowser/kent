@@ -40,26 +40,34 @@ def copyLatestLogs():
     year = str(today).split('-')[0]
 
     # Get latest error logs from the RR
-    latestLogs = bash('ls /hive/data/inside/wwwstats/RR/2024/hgw1').rstrip().split("\n")
-    latestLogs = latestLogs[len(latestLogs)-11:len(latestLogs)-1]
-
     nodes = ['RR', 'asiaNode', 'euroNode'] #Add nodes with error logs, nodes can be added or removed
     machines = ['hgw1','hgw2'] #Add hgw machines to check
 
+    latestLogs = bash('ls /hive/data/inside/wwwstats/RR/'+year+'/hgw1/ | grep error').rstrip().split("\n")
+    latestLogs = latestLogs[max(0, len(latestLogs) - 13) : len(latestLogs) - 1]
+    
     for node in nodes:
         if node == 'RR':
             for machine in machines:
-                for log in latestLogs: 
-                    bash("ln -sf /hive/data/inside/wwwstats/RR/"+year+"/"+machine+"/"+log+' /hive/users/'+user+'/ErrorLogs/'+node+machine+log)
+                for log in latestLogs:
+                    if machine == "hgw1":
+                        bash("cp /hive/data/inside/wwwstats/RR/"+year+"/"+machine+"/"+log+' /hive/users/'+user+'/ErrorLogs/'+log)
+                    else:
+                        bash("cat /hive/data/inside/wwwstats/RR/"+year+"/"+machine+"/"+log+' >> /hive/users/'+user+'/ErrorLogs/'+log)
         else:
             for log in latestLogs:
-                bash("ln -sf /hive/data/inside/wwwstats/"+node+"/"+year+"/"+log+' /hive/users/'+user+'/ErrorLogs/'+node+log)
+                try:
+                    bash("cat /hive/data/inside/wwwstats/"+node+"/"+year+"/"+log+' >> /hive/users/'+user+'/ErrorLogs/'+log)
+                except:
+                    continue
+
     return(user,latestLogs)
+
 
 def createDicOfSearchTerms():
     totalLinesInLog = dict(label='Total lines in logs', description='Total number of lines seen in the logs', value=[], searchKeyWord="wc -l")
-    totalUniqueIPs = dict(label='Total unique IPs', description='Total number of unique IPs without port number, e.g. N.N.N and not N.N.N:NNN', value=[], searchKeyWord='grep "\[client" | cut -f4 -d "]" | cut -f3 -d " " | cut -f1 -d ":" | sort | uniq | wc -l')
-    totalUniqueIPsSubnets = dict(label='Total unique IP subnets', description='Total number of unique IPs with only partial subnet, e.g. NNN.NNN and not NNN.NNN.N.NN', value=[], searchKeyWord='grep "\[client" | cut -f4 -d "]" | cut -f3 -d " " | cut -f1 -d ":" | cut -f1-2 -d "." | sort | uniq | wc -l')
+    totalUniqueIPs = dict(label='Total unique IPs', description='Total number of unique IPs without port number, e.g. N.N.N and not N.N.N:NNN', value=[], searchKeyWord=r'grep "\[client" | cut -f4 -d "]" | cut -f3 -d " " | cut -f1 -d ":" | sort | uniq | wc -l')
+    totalUniqueIPsSubnets = dict(label='Total unique IP subnets', description='Total number of unique IPs with only partial subnet, e.g. NNN.NNN and not NNN.NNN.N.NN', value=[], searchKeyWord=r'grep "\[client" | cut -f4 -d "]" | cut -f3 -d " " | cut -f1 -d ":" | cut -f1-2 -d "." | sort | uniq | wc -l')
     totalUniqueHgsids = dict(label='Total unique hgsIDs', description='Total number of unique hgsIDs', value=[], searchKeyWord=r"grep 'hgsid' | sed -n 's/.*[?&]hgsid=\([0-9A-Za-z_]*\).*/\1/p' | sort | uniq | wc -l")
     totalLoadedSessions = dict(label='Total loaded sessions', description='Total number of loaded sessions', value=[], searchKeyWord=' grep "CGI_TIME: hgTracks" | grep "/cgi-bin/hgSession?" | wc -l')
     totalSavedCTs = dict(label='Total saved CTs', description='Total number of saved custom tracks', value=[], searchKeyWord='grep "customTrack: saved" | wc -l')
@@ -78,13 +86,13 @@ def searchForTermsInLogs():
     user,latestLogs = copyLatestLogs()
     itemsToFind = createDicOfSearchTerms()
 
-    # n=0 Uncomment these lines to see progress
+    #n=0 ##### Uncomment these lines to see progress
     for log in latestLogs:
-#         n+=1
+        #n+=1 ### Progress
         logPath = "zcat /hive/users/"+user+"/ErrorLogs/*"+log+" | "
         for searchTerm in itemsToFind:
             searchTerm['value'].append(int(bash(logPath+searchTerm['searchKeyWord'])))
-#         print("Current progress:", n/len(latestLogs))
+        #print("Current progress:", n/len(latestLogs)) ### Progress
 
     bash("rm /hive/users/"+user+"/ErrorLogs/*")
     return(user,latestLogs,itemsToFind)
@@ -140,12 +148,12 @@ def generateGraphs(user,latestLogs,itemsToFind):
     if user == 'qateam':
         bash("mkdir -p /usr/local/apache/htdocs-genecats/qa/test-results/errorLogSearchResults/"+dateRange)
         bash("ln -sf "+saveDir+"/* /usr/local/apache/htdocs-genecats/qa/test-results/errorLogSearchResults/"+dateRange+"/")
-        print("See the latest error log search results over the last 10 weeks:\n")
+        print("See the latest error log search results over the last 12 weeks:\n")
         print("https://genecats.gi.ucsc.edu/qa/test-results/errorLogSearchResults/")
     else:
         bash("mkdir -p /cluster/home/"+user+"/public_html/cronResults/errorLogSearchResults/"+dateRange)
         bash("ln -sf "+saveDir+"/* /cluster/home/"+user+"/public_html/cronResults/errorLogSearchResults/"+dateRange+"/")
-        print("See the latest error log search results over the last 10 weeks:\n")
+        print("See the latest error log search results over the last 12 weeks:\n")
         print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/errorLogSearchResults/"+dateRange+"/")    
     
 def main():

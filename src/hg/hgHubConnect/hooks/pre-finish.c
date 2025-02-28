@@ -69,7 +69,7 @@ else
         char *reqLm = NULL;
         time_t lastModified = 0;
         boolean isHubToolsUpload = FALSE;
-        char *parentDir = NULL;
+        char *parentDir = NULL, *encodedParentDir = NULL;
 
         struct lineFile *lf = lineFileStdin(FALSE);
         char *request = lineFileReadAll(lf);
@@ -102,7 +102,7 @@ else
         char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
         if (hubtoolsStr)
             isHubToolsUpload = sameString(hubtoolsStr, "TRUE") || sameString(hubtoolsStr, "true");
-        parentDir = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL));
+        parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
         fprintf(stderr, "parentDir = '%s'\n", parentDir);
         fflush(stderr);
         // strip out plain leading '.' and '/' components
@@ -128,16 +128,19 @@ else
             // if parentDir provided we are throwing the files in there
             if (parentDir)
                 {
-                if (!endsWith(parentDir, "/"))
-                    parentDir = catTwoStrings(parentDir, "/");
-                dataDir = catTwoStrings(dataDir, parentDir);
+                encodedParentDir = encodePath(parentDir);
+                if (!endsWith(encodedParentDir, "/"))
+                    encodedParentDir = catTwoStrings(encodedParentDir, "/");
+                dataDir = catTwoStrings(dataDir, encodedParentDir);
                 }
             dyStringPrintf(newFile, "%s%s", dataDir, fileName);
 
             fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
             // TODO: check if file exists or not and let user choose to overwrite
             // and re-call this hook, for now just exit if the file exists
-            if (fileExists(dyStringContents(newFile)))
+            // hubtools uploads always overwrite because we assume those users
+            // know what they are doing
+            if (fileExists(dyStringContents(newFile)) && !isHubToolsUpload)
                 {
                 errAbort("file '%s' exists already, not overwriting", dyStringContents(newFile));
                 }
@@ -181,16 +184,16 @@ else
             row->db = db;
             row->location = location;
             row->md5sum = md5HexForFile(row->location);
-            row->parentDir = parentDir ? parentDir : "";
+            row->parentDir = encodedParentDir ? encodedParentDir : "";
             if (!isHubToolsUpload)
                 {
-                createNewTempHubForUpload(reqId, row, userDataDir, parentDir);
+                createNewTempHubForUpload(reqId, row, userDataDir, encodedParentDir);
                 fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
                 fflush(stderr);
                 }
             // first make the parentDir rows
             makeParentDirRows(row->userName, sqlDateToUnixTime(row->lastModified), row->db, row->parentDir, userDataDir);
-            row->parentDir = hubNameFromPath(parentDir);
+            row->parentDir = hubNameFromPath(encodedParentDir);
             addHubSpaceRowForFile(row);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
             fflush(stderr);

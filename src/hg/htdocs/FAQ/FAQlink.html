@@ -94,11 +94,19 @@ characters separating different parameters like so: </p>
 <p><code><a href=http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18>http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18</a></code></p>
 <p>Both formats require an ampersand between each additional parameter, seen in the longer format like so:</p>
 <p><code><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18</a></code></p>
+<h6>Building URLs to specify settings</h6>
 <p>
-Another option for sessions is to download the file and host it in an external location and load it with
+Another option is to host, modify, or create your own session/settings file and then host it in an 
+external location. Nearly every track parameter on the genome browser can be specified in a session
+file, as described on our <a href="/goldenPath/help/customTrack.html#optParams" target="_blank">
+custom tracks page</a>. This also allows you to circumvent URL character limits.</p>
+<p>
+Once the file is prepared and hosted, you can load it with the
 <code id="hgS_doLoadUrl">hgS_doLoadUrl=submit</code> and
-<code id="hgS_loadUrlName">hgS_loadUrlName=&lt;URL&gt;</code> allowing you to externally maintain your session,
-or update it as you wish. Here is an example:</p>
+<code id="hgS_loadUrlName">hgS_loadUrlName=&lt;URL&gt;</code> variables, this also has the added
+benefit that you can
+externally maintain your session,
+and update it as you wish. Here is an example:</p>
 <p><code><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons">
 https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons</a></code></p>
 

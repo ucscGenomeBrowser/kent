@@ -14,6 +14,7 @@
 #include "jsHelper.h"
 #include "errCatch.h"
 #include "obscure.h"
+#include "cheapcgi.h"
 #include "hooklib.h"
 
 char *prettyFileSize(long size)
@@ -22,6 +23,31 @@ char *prettyFileSize(long size)
 char buf[32];
 sprintWithGreekByte(buf, sizeof(buf), size);
 return cloneString(buf);
+}
+
+char *encodePath(char *path)
+/* Return a string where each individual component of a '/' separated
+ * string has been cgiEncoded, but not the '/' chars themselves */
+{
+int maxSeps = 256;
+char *pathArr[maxSeps]; // errAbort if more than maxSeps subdirs
+int numChops = chopString(path, "/", pathArr, maxSeps);
+if (numChops > maxSeps)
+    errAbort("Too many subdirectories. Fix filesystem layout of upload and try again");
+struct dyString *ret = dyStringNew(0);
+int i = 0;
+for (; i < numChops; i++)
+    {
+    // we can ignore .. and . in paths, it is an error if hubtools is creating these names
+    // don't errAbort right now because hubtools does send things like 'hubName/.'
+    // as a parentDir, but that should be fixed soon
+    if (sameString(pathArr[i], ".") || sameString(pathArr[i], ".."))
+        {
+        continue;
+        }
+    dyStringPrintf(ret, "%s/", cgiEncodeFull(pathArr[i]));
+    }
+return dyStringCannibalize(&ret);
 }
 
 void fillOutHttpResponseError()

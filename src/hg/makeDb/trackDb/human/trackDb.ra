@@ -55,11 +55,11 @@ include constraintSuper.ra
 include genCC.ra
 
 # AbSplice Scores
-include abSplice.ra beta,public
+include abSplice.ra public
 
 # Splice Impact super track: spliceVarDb, spliceAi, etc
-include spliceImpactSuper.ra beta,public
-include spliceImpactSuper.alpha.ra alpha
+include spliceImpactSuper.ra public
+include spliceImpactSuper.alpha.ra alpha,beta
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -160,7 +160,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated February, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 2025"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -213,7 +213,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Updated February, 2025"
         skipFields Variant,VariantUrl,score
         detailsDynamicTable VariantDetails|Variant Details
         dataVersion /gbdb/$D/bbi/varChatVersion.txt
-        pennantIcon New red ../goldenPath/newsarch.html "Released February, 2025"
+        pennantIcon New red ../goldenPath/newsarch.html#022425 "Released Feb. 24, 2025"
 
         track pubtator
         shortLabel PubTator variants
@@ -5610,7 +5610,7 @@ semiShortCircuit 1
 termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
 searchPriority 20
 
-include spliceAI.ra beta,public
+include spliceAI.ra public
 
 include alphaMissense.ra
 

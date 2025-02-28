@@ -2961,7 +2961,7 @@ struct sqlResult *sr = NULL;
 struct dyString *query = dyStringNew(256);
 char **row = NULL;
 char *table = getTableName();
-int count = 0;
+long count = 0;
 int numberColumns = 0;
 int i = 0;
 
@@ -2979,7 +2979,7 @@ for (tPtr=tableList;  tPtr != NULL;  tPtr=tPtr->next)
     {
     count += sqlTableSize(conn, tPtr->name);
     }
-printf("<P>Table %s has %d rows total.<BR>\n", table, count);
+printf("<P>Table %s has %ld rows total.<BR>\n", table, count);
 if (count > 0)
     {
     sqlDyStringPrintf(query, "select * from %s limit %d", tableList->name, n);

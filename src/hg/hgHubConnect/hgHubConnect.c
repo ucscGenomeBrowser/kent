@@ -1656,7 +1656,7 @@ cartWebStart(cart, NULL, "%s", pageTitle);
 printIncludes();
 
 // need the hgsid:
-//jsInlineF("var hgsid = \"%s\";\n", cartSessionId(cart));
+jsInlineF("var hgsid = \"%s\";\n", cartSessionId(cart));
 
 // this variable is used by hub search and hub validate, initialize here so we don't
 // overwrite it unintentionally depending on which path the CGI takes

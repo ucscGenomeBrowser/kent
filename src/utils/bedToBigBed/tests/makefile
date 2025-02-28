@@ -39,6 +39,11 @@ testOddSorted: outputDir
 	bigBedNamedItems output/oddSorted.bb output/oddSorted.names -nameFile stdout | LC_ALL=C sort -k1,1 -k2,2n >  output/searchNames.bed
 	diff output/oddSorted.bed output/searchNames.bed
 
+testSortNotSorted: outputDir
+	-${BINDIR}/${A} -tab -type=bed9+3 -sort input/notSorted.bed input/notSorted.chrom.sizes output/notSorted.bb 
+	bigBedToBed output/notSorted.bb output/notSorted.bed
+	diff expected/notSorted.bed output/notSorted.bed
+
 testNotSorted: outputDir
 	-${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err || true
 	diff expected/notSorted.err output/notSorted.err

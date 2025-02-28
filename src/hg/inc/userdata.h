@@ -39,6 +39,9 @@ char *emailForUserName(char *userName);
 char *webDataDir(char *userName);
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
 
+char *urlForFile(char *userName, char *filePath);
+/* Return a web accessible URL to filePath */
+
 char *getDataDir(char *userName);
 /* Return the full path to the user specific data directory, can be configured via hg.conf
  * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/

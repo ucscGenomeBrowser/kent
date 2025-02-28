@@ -355,7 +355,7 @@ char query[256];
 track->sourceCount = sqlTableSizeIfExists(conn, track->expTable);
 sqlSafef(query, sizeof(query), "select * from %s order by id", track->expTable);
 struct expRecord *exp, *expList = expRecordLoadByQuery(conn, query);
-int expIx;
+long expIx;
 AllocArray(track->sources, track->sourceCount);
 for (exp=expList, expIx=0; exp != NULL; exp = exp->next, expIx += 1)
     track->sources[expIx] = exp;
