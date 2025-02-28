@@ -63,7 +63,8 @@ else
     struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
     assert(tdb != NULL);
     settingVal = cloneString(trackDbSetting(tdb, settingName));
-    if (mustBeInHub && isHubTrack(table))   // if it's a native track, we'll assume it has a table with the name
+    // if it's a native track, we'll assume it has a table with the name
+    if (mustBeInHub && isHubTrack(table) && (settingVal == NULL))
         errAbort("BUG: hub track '%s' must have setting '%s'", table, settingName);
     }
 return settingVal;
