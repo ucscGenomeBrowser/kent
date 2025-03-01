@@ -73,5 +73,9 @@ void bigChainOutput(struct bigChain *el, FILE *f, char sep, char lastSep);
 int bigChainCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target position. */
 
+char *bigChainGetLinkFile(char *chainBigBedName);
+/* Construct the file name of the chain link file from the name of a chain file. 
+ * That is, change file.bb to file.link.bb */
+
 #endif /* BIGCHAIN_H */
 
