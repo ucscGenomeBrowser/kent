@@ -61,6 +61,8 @@ fi
 # If the difference is within the 20%, proceed
 mv mitoMapDiseaseMuts.new.bb mitoMapDiseaseMuts.bb
 mv mitoMapVars.new.bb mitoMapVars.bb
+mv mitoMapDiseaseMuts.hg19.new.bb mitoMapDiseaseMuts.hg19.bb
+mv mitoMapVars.hg19.new.bb mitoMapVars.hg19.bb
 
 mv mutationsCodingControl.latest.tsv mutationsCodingControl.tsv
 mv mutationsRNA.latest.tsv mutationsRNA.tsv

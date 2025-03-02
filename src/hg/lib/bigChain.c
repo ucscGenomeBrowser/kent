@@ -191,3 +191,24 @@ if (dif == 0)
 return dif;
 }
 
+char *bigChainGetLinkFile(char *chainBigBedName)
+/* Construct the file name of the chain link file from the name of a chain file. 
+ * That is, change file.bb to file.link.bb */
+{
+char linkBuffer[4096];
+
+if (!endsWith(chainBigBedName, ".bb"))
+    errAbort("chain bigBed file (%s) must end in .bb", chainBigBedName);
+
+safef(linkBuffer, sizeof linkBuffer, "%s", chainBigBedName);
+
+// truncate string at ending ".bb"
+int insertOffset = strlen(linkBuffer) - sizeof ".bb" + 1;
+char *insert = &linkBuffer[insertOffset];
+*insert = 0;
+
+// add .link.bb
+strcpy(insert, ".link.bb");
+
+return cloneString(linkBuffer);
+}

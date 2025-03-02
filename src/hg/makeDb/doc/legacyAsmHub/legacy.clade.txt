@@ -278,8 +278,10 @@ GCA_036850995.1_mSacLep1_pri_phased_curated	mammals
 GCA_036971445.1_sNarBan1.hap1	vertebrate
 GCA_036971685.1_bPatFas1.hap2	birds
 GCA_038363095.1_mArtLit.hap1	mammals
+GCA_039877785.1_fChaTrf1.hap1	fish
 GCA_040894355.1_rMyuGeo1.pri.20230808	vertebrate
 GCA_042242105.1_fPemKlu1.hap1	fish
+GCA_043159975.1_mMacNem.hap1	primates
 GCA_044704955.1_sPriJap1.hap1	vertebrate
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals

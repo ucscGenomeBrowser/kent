@@ -19,35 +19,14 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "quickLift.h"
-
-char *getLinkFile(char *quickLiftFile)
-/* Construct the file name of the chain link file from the name of a chain file. 
- * That is, change file.bb to file.link.bb */
-{
-char linkBuffer[4096];
-
-if (!endsWith(quickLiftFile, ".bb"))
-    errAbort("quickLift file (%s) must end in .bb", quickLiftFile);
-
-safef(linkBuffer, sizeof linkBuffer, "%s", quickLiftFile);
-
-// truncate string at ending ".bb"
-int insertOffset = strlen(linkBuffer) - sizeof ".bb" + 1;
-char *insert = &linkBuffer[insertOffset];
-*insert = 0;
-
-// add .link.bb
-strcpy(insert, ".link.bb");
-
-return cloneString(linkBuffer);
-}
+#include "bigChain.h"
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
  */
 {
-char *linkFileName = getLinkFile(quickLiftFile);
+char *linkFileName = bigChainGetLinkFile(quickLiftFile);
 // need to add some padding to these coordinates
 int padStart = start - 100000;
 if (padStart < 0)
@@ -159,7 +138,7 @@ int padStart = start - 100000;
 if (padStart < 0)
     padStart = 0;
 
-char *linkFileName = getLinkFile(quickLiftFile);
+char *linkFileName = bigChainGetLinkFile(quickLiftFile);
 struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
 
 struct slList *item, *itemList = NULL;
