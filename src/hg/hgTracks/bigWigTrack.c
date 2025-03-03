@@ -21,6 +21,30 @@
 #include "hubConnect.h"
 #include "chromAlias.h"
 #include "hgMaf.h"
+#include "quickLift.h"
+#include "chainNetDbLoad.h"
+#include "chain.h"
+#include "bigChain.h"
+
+static void summaryToPreDraw( struct bbiFile *bbiFile, char *chrom, int start, int end, int summarySize, struct bbiSummaryElement *summary, struct preDrawElement *preDraw, int preDrawZero)
+/* Calculate summary and fill in predraw with results. */
+{
+if (bigWigSummaryArrayExtended(bbiFile, chrom, start, end, summarySize, summary))
+    {
+    /* Convert format to predraw */
+    int i;
+    for (i=0; i<summarySize; ++i)
+        {
+        struct preDrawElement *pe = &preDraw[i + preDrawZero];
+        struct bbiSummaryElement *be = &summary[i];
+        pe->count = be->validCount;
+        pe->min = be->minVal;
+        pe->max = be->maxVal;
+        pe->sumData = be->sumData;
+        pe->sumSquares = be->sumSquares;
+        }
+    }
+}
 
 struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -29,6 +53,7 @@ struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int s
 if (tg->preDrawContainer != NULL)
     return tg->preDrawContainer;
 
+char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
 struct preDrawContainer *preDrawList = NULL;
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
@@ -47,24 +72,44 @@ if (errCatchStart(errCatch))
 	struct preDrawContainer *pre = initPreDrawContainer(width);
 	slAddHead(&preDrawList, pre);
 
-	if (bigWigSummaryArrayExtended(bbiFile, chromName, winStart, winEnd, summarySize, summary))
-	    {
-	    /* Convert format to predraw */
-	    int i;
-	    int preDrawZero = pre->preDrawZero;
-	    struct preDrawElement *preDraw = pre->preDraw;
-	    for (i=0; i<summarySize; ++i)
-		{
-		struct preDrawElement *pe = &preDraw[i + preDrawZero];
-		struct bbiSummaryElement *be = &summary[i];
-		pe->count = be->validCount;
-		pe->min = be->minVal;
-		pe->max = be->maxVal;
-		pe->sumData = be->sumData;
-		pe->sumSquares = be->sumSquares;
-		}
-	    }
+        if (quickLiftFile != NULL)
+            {
+            char *linkFileName = bigChainGetLinkFile(quickLiftFile);
+
+            // get the chain that maps to our window coordinates
+            struct chain  *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chromName, winStart, winEnd, -1);
+
+            // go through each block of each chain and grab a summary from the query coordinates
+            for(chain = chainList; chain; chain = chain->next)
+                {
+                struct chain *retChain, *retChainToFree;
+                char *chrom = chain->qName;
+                chainSubsetOnT(chain, winStart, winEnd, &retChain, &retChainToFree);
+                struct cBlock *cb;
+                for(cb = retChain->blockList; cb; cb = cb->next)
+                    {
+                    // figure out where in the summary array the target coordinates put us
+                    int tSize = retChain->tEnd - retChain->tStart;
+                    int summaryOffset = (((double)cb->tStart - retChain->tStart) / tSize ) * summarySize;
+                    int summarySizeBlock = (((double)cb->tEnd - cb->tStart) / tSize ) * summarySize;
+
+                    // grab the data using query coordinates
+                    if (summarySizeBlock != 0)
+                        summaryToPreDraw(bbiFile, chrom, cb->qStart, cb->qEnd, summarySizeBlock, &summary[summaryOffset], &pre->preDraw[summaryOffset], pre->preDrawZero);
+                    }
+                }
+            }
+        else
+            {
+            // if we're not quicklifting we can grab the whole summary from the window coordinates
+            summaryToPreDraw(bbiFile, chromName, winStart, winEnd, summarySize, summary, pre->preDraw, pre->preDrawZero);
+            }
+
+        // I don't think tg->bbiFile is ever a list of more than one.  Verify this
 	bbiNext = bbiFile->next;
+        if (bbiNext != NULL)
+            errAbort("multiple bbiFiles found");
+
 	bigWigFileClose(&bbiFile);
 	}
     tg->bbiFile = NULL;

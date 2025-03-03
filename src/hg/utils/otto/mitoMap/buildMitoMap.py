@@ -24,7 +24,7 @@ fh = open(mitoMapControlRegionVarsFileInputFile,"r", encoding="utf-8", errors="r
 fh2 = open(mitoMapVarsOutputFile,"w")
 
 # $ head VariantsControlMITOMAPFoswiki.tsv
-# Position        Locus   Nucleotide Change       GB FreqFL (CR)*‡        GB Seqstotal (FL/CR)*   Curated References
+# Position        Locus   Nucleotide Change       GB FreqFL (CR)*‡        GB Seqstotal (FL/CR)*   Curated References
 # 3       Control Region  T-C     0.000%(0.000%)  0       2
 
 # I want the output to be bed9 for itemRgb and mouseover with 10 additional fields. The 6 original, plus 3 more from the coding file plus mouseOver:
@@ -75,6 +75,8 @@ fh.close()
 
 mitoMapCodingRegionVarsFileInputFile = pwd+"variantsCoding.latest.tsv"
 mitoMapVarsOutputFile = pwd+"mitoMapVars.bed"
+mitoMapVarsOutputFileHg19 = mitoMapVarsOutputFile.split(".")[0]+".hg19.bed"
+
 fh = open(mitoMapCodingRegionVarsFileInputFile,"r", encoding="utf-8", errors="replace")
 fh2 = open(mitoMapVarsOutputFile,"a")
 
@@ -131,6 +133,8 @@ fh.close()
 
 bash("bedSort "+mitoMapVarsOutputFile+" "+mitoMapVarsOutputFile)
 bash("bedToBigBed -as="+pwd+"mitoMapVars.as -type=bed9+11 -tab "+mitoMapVarsOutputFile+" /cluster/data/hg38/chrom.sizes "+mitoMapVarsOutputFile.split(".")[0]+".new.bb")
+bash("sed 's/chrM/chrMT/g' "+mitoMapVarsOutputFile+" > "+mitoMapVarsOutputFileHg19)
+bash("bedToBigBed -as="+pwd+"mitoMapVars.as -type=bed9+11 -tab "+mitoMapVarsOutputFileHg19+" /cluster/data/hg19/chrom.sizes "+mitoMapVarsOutputFileHg19.split(".")[0]+".hg19.new.bb")
 print("Final file created: "+mitoMapVarsOutputFile.split(".")[0]+".new.bb")
 
 ######
@@ -142,11 +146,13 @@ print("Final file created: "+mitoMapVarsOutputFile.split(".")[0]+".new.bb")
 
 mitoMapRNAmutsFileInputFile = pwd+"mutationsRNA.latest.tsv"
 mitoMapDiseaseMutsOutputFile = pwd+"mitoMapDiseaseMuts.bed"
+mitoMapDiseaseMutOutputFileHg19 = mitoMapDiseaseMutsOutputFile.split(".")[0]+".hg19.bed"
+
 fh = open(mitoMapRNAmutsFileInputFile,"r", encoding="utf-8", errors="replace")
 fh2 = open(mitoMapDiseaseMutsOutputFile,"w")
 
 # $ head -2 MutationsRNAMITOMAPFoswiki.tsv
-#Position        Locus   Disease Allele  RNA     Homoplasmy      Heteroplasmy    Status  MitoTIP†        GB Freq  FL (CR)*‡      GB Seqs FL (CR)*        References
+#Position        Locus   Disease Allele  RNA     Homoplasmy      Heteroplasmy    Status  MitoTIP†        GB Freq  FL (CR)*‡      GB Seqs FL (CR)*        References
 #576     MT-CR   Hearing loss patient    A576G   noncoding MT-TF precursor       nr      nr      Reported        N/A     0.005%(0.012%)  3 (10)  1
 
 # I want the output to be bed9 for itemRgb and mouseover with 14 additional fields. 
@@ -196,7 +202,7 @@ fh = open(mitoMapDiseaseMutsFileInputFile,"r", encoding="utf-8", errors="replace
 fh2 = open(mitoMapDiseaseMutsOutputFile,"a")
 
 # $ head -2 MutationsCodingControlMITOMAPFoswiki.tsv
-#Locus   Allele  Position        NucleotideChange        Amino AcidChange        Plasmy Reports(Homo/Hetero)     Disease Status  GB Freq  FL (CR)*‡      GB Seqs FL (CR)*        References
+#Locus   Allele  Position        NucleotideChange        Amino AcidChange        Plasmy Reports(Homo/Hetero)     Disease Status  GB Freq  FL (CR)*‡      GB Seqs FL (CR)*        References
 #MT-ATP6 m.8573G>A       8573    G-A     G16D    +/-     Patient with suspected mitochondrial disease    Reported by paper as Benign     0.107%(0.000%)  66 (0)  1
 
 # I want the output to be bed9 for itemRgb and mouseover with 14 additional fields. 
@@ -255,4 +261,8 @@ fh.close()
 
 bash("bedSort "+mitoMapDiseaseMutsOutputFile+" "+mitoMapDiseaseMutsOutputFile)
 bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/mitomap/mitoMapDiseaseMuts.as -type=bed9+14 -tab "+mitoMapDiseaseMutsOutputFile+" /cluster/data/hg38/chrom.sizes "+mitoMapDiseaseMutsOutputFile.split(".")[0]+".new.bb")
+
+bash("sed 's/chrM/chrMT/g' "+mitoMapDiseaseMutsOutputFile+" > "+mitoMapDiseaseMutOutputFileHg19)
+bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/mitomap/mitoMapDiseaseMuts.as -type=bed9+14 -tab "+mitoMapDiseaseMutOutputFileHg19+" /cluster/data/hg19/chrom.sizes "+mitoMapDiseaseMutOutputFileHg19.split(".")[0]+".hg19.new.bb")
+
 print("Final file created: "+mitoMapDiseaseMutsOutputFile.split(".")[0]+".new.bb")
