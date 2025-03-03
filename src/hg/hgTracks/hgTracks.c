@@ -2612,8 +2612,8 @@ dyStringPrintf(dy, "expTable: %s\n", track->expTable);
     //char *expTable;	/* Expression table in hgFixed. */
 
     // factorSource
-dyStringPrintf(dy, "sourceCount: %d\n", track->sourceCount);
-    //int sourceCount;	/* Number of sources for factorSource tracks. */
+dyStringPrintf(dy, "sourceCount: %ld\n", track->sourceCount);
+    //long sourceCount;	/* Number of sources for factorSource tracks. */
 dyStringPrintf(dy, "sources: %lu\n", (unsigned long)track->sources);
     //struct expRecord **sources;  /* Array of sources */
 dyStringPrintf(dy, "sourceRightPixels: %d\n", track->sourceRightPixels);

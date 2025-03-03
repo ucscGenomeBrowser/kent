@@ -723,6 +723,9 @@ int expandPack = 0;  // deactivating item boundary extention for now - working o
                 rangeWidth += (range->end - range->start);
 
                 range->height = 1;
+                if (tg->itemHeightRowsForPack != NULL)
+                    range->height = tg->itemHeightRowsForPack(tg, item);
+
                 if (hasDecorators(tg))
                     {
                     char itemString[2048];
@@ -1707,9 +1710,16 @@ struct glyphShape {
     struct xyPair* points;
 };
 
-/* An obtuse representation, but this is a list of the glyphs we know how to draw along with coordinates for
- * the sequential points of each glyph on the unit square.  Those will then be scaled by whatever the current
- * track height is for actual drawing. */
+/* Glyph definitions
+ *
+ * An obtuse representation, but this is a list of the glyphs we know how to draw as polygons along with
+ * coordinates for the sequence of points for each glyph on the unit square.  Those will then be scaled
+ * by whatever the current track height is for actual drawing.
+ * There's one glyph that's special-cased - GLYPH_CIRCLE is drawn with a separate routine.
+ *
+ * Each glyph is expected to be defined on the unit square with 0,0 at the top left and 1,1 at the bottom right.
+ * Note that triangle and inverse triangle subvert this a little by extending just outside those bounds.
+ */
 static struct glyphShape glyphShapes[] = {
     [GLYPH_CIRCLE] = (struct glyphShape) {0, NULL},
 
@@ -1725,7 +1735,6 @@ static struct glyphShape glyphShapes[] = {
             {0.700811,0.618034},{0.824920,1.000000},{0.500000,0.763932},{0.175080,1.000000},{0.299189,0.618034},
             {-0.025731,0.381966},{0.375892,0.381966}}}
 };
-
 
 
 void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
@@ -14732,7 +14741,7 @@ else if (sameWord(type, "bigPsl"))
     tdb->canPack = TRUE;
     wordCount++;
     words[1] = "12";
-    bigBedMethods(track, tdb, wordCount, words);
+    commonBigBedMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigChain"))
     {
@@ -14747,7 +14756,7 @@ else if (sameWord(type, "bigGenePred"))
     tdb->canPack = TRUE;
     wordCount++;
     words[1] = "12";
-    bigBedMethods(track, tdb, wordCount, words);
+    commonBigBedMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigDbSnp"))
     {
