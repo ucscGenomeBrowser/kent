@@ -1,5 +1,12 @@
 <h2>Description</h2>
 
+<div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
+<p><span style="font-weight: bold; color: #c70000;">NOTE:</span> <b>MITOMAP data is available for
+	chrM on hg38 and chrMT on hg19.<br>
+</p>
+</b>
+</div>
+
 <p>
 This track shows annotations from <a target="_blank"
 href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/WebHome">MITOMAP</a>.
@@ -31,31 +38,79 @@ variant nucleotide change, and mousing over features displays all available
 metadata for MITOMAP. Linkouts to the specific MITOMAP datasets are available from
 the item description pages, however, you must input the variant on MITOMAP.</p>
 
-<h2>Data Access</h2>
-<p>
-All source data can be found on the <a target="_blank" href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/WebHome">
-MITOMAP site</a>.
-<p>
-The MITOMAP data on the UCSC Genome Browser can be explored interactively with the
-<a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-For automated download and analysis, the genome annotation is stored at UCSC in bigBed
-files that can be downloaded from the respective file, e.g. 
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/mitoMapVars.bb" 
-target="_blank">MITOMAP Variants</a>, on our download server.
-The data may also be explored interactively using our
-<a href="../goldenPath/help/api.html" target="_blank">REST API</a>.</p>
+<b>Abbreviations and Definitions</b>
+    <ul>
+        <li><b>FL</b>: Full-length sequences</li>
+        <li><b>CR</b>: Control region sequences</li>
+    </ul>
 
-<p>
-The file for this track may also be locally explored using our tools <tt>bigBedToBed</tt> 
-which can be compiled from the source code or downloaded as a precompiled
-binary for your system. Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tools can also be used to obtain features confined to a given range, e.g.,
-<br><br>
-<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/mitoMapVars.bb stdout</tt></p>
+    <p>Nucleotide changes are indicated as L-strand substitutions.</p>
+    <ul>
+        <li><b>MT-NC</b>: Non-coding locus</li>
+        <li><b>syn</b>: Synonymous mutation</li>
+    </ul>
+
+    <p>Variant Classification:</p>
+    <ul>
+        <li><b>B</b>: Benign</li>
+        <li><b>LB</b>: Likely Benign</li>
+        <li><b>VUS</b>: Variant of Uncertain Significance</li>
+        <li><b>LP</b>: Likely Pathogenic</li>
+        <li><b>P</b>: Pathogenic</li>
+    </ul>
+
+    <p>Disease Associations:</p>
+    <ul>
+        <li><b>LHON</b>: Leber Hereditary Optic Neuropathy</li>
+        <li><b>MM</b>: Mitochondrial Myopathy</li>
+        <li><b>AD</b>: Alzheimer's Disease</li>
+        <li><b>LIMM</b>: Lethal Infantile Mitochondrial Myopathy</li>
+        <li><b>ADPD</b>: Alzheimer's Disease and Parkinson's Disease</li>
+        <li><b>MMC</b>: Maternal Myopathy and Cardiomyopathy</li>
+        <li><b>NARP</b>: Neurogenic muscle weakness, Ataxia, and Retinitis Pigmentosa (alternate phenotype: Leigh Disease)</li>
+        <li><b>FICP</b>: Fatal Infantile Cardiomyopathy Plus, a MELAS-associated cardiomyopathy</li>
+        <li><b>MELAS</b>: Mitochondrial Encephalomyopathy, Lactic Acidosis, and Stroke-like episodes</li>
+        <li><b>LDYT</b>: Leber's Hereditary Optic Neuropathy and Dystonia</li>
+        <li><b>MERRF</b>: Myoclonic Epilepsy and Ragged Red Muscle Fibers</li>
+        <li><b>MHCM</b>: Maternally Inherited Hypertrophic Cardiomyopathy</li>
+        <li><b>CPEO</b>: Chronic Progressive External Ophthalmoplegia</li>
+        <li><b>KSS</b>: Kearns-Sayre Syndrome</li>
+        <li><b>DM</b>: Diabetes Mellitus</li>
+        <li><b>DMDF</b>: Diabetes Mellitus with Deafness</li>
+        <li><b>CIPO</b>: Chronic Intestinal Pseudoobstruction with Myopathy and Ophthalmoplegia</li>
+        <li><b>DEAF</b>: Maternally Inherited Deafness or Aminoglycoside-Induced Deafness</li>
+        <li><b>PEM</b>: Progressive Encephalopathy</li>
+        <li><b>SNHL</b>: Sensorineural Hearing Loss</li>
+    </ul>
+
+    <p>Mutation Terminology:</p>
+    <ul>
+        <li><b>Homoplasmy</b>: Pure mutant mtDNAs</li>
+        <li><b>Heteroplasmy</b>: Mixture of mutant and normal mtDNAs</li>
+        <li><b>nd</b>: Not determined</li>
+    </ul>
+
+    <p>Mutation Status Definitions:</p>
+    <ul>
+        <li><b>Reported</b>: Indicates that one or more publications suggest the mutation may be
+		pathogenic. This is not an assignment of pathogenicity by MITOMAP but is a report
+		of literature. Previously, mutations with this status were termed &quot;Prov&quot;
+		(provisional).</li>
+        <li><b>Cfrm (Confirmed)</b>: Indicates that at least two or more independent
+		laboratories have published reports on the pathogenicity of a specific mutation.
+		These mutations are generally accepted by the mitochondrial research community as
+		being pathogenic. A status of &quot;Cfrm&quot; is not an assignment of pathogenicity by
+		MITOMAP but is a report of published literature. Researchers and clinicians are
+		cautioned that additional data and/or analysis may still be necessary to confirm
+		the pathological significance of some of these mutations.</li> 
+        <li><b>P.M. (Point Mutation/Polymorphism)</b>: Indicates that some published reports have
+		determined the mutation to be a non-pathogenic polymorphism.</li>
+    </ul>
 
 <h2>Methods</h2>
+<p>
+MITOMAP collected the sequences from GenBank, aligned them to the rCRS using BLASTn, and
+haplotyped them with Haplogrep via the Mitomaster web service.</p>
 <p>
 The data were originally downloaded from the <a target="_blank" href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/WebHome">
 MITOMAP resource</a>. For the <b>Control and Coding Variants track</b>, the following
@@ -79,19 +134,39 @@ href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/otto/mi
 MITOMAP makedoc</a>.
 </p>
 
+<h2>Data Access</h2>
+<p>
+All source data can be found on the <a target="_blank" href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/WebHome">
+MITOMAP site</a>.
+<p>
+The MITOMAP data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigBed
+files that can be downloaded from the respective file, e.g.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/mitoMapVars.bb"
+target="_blank">MITOMAP Variants</a>, on our download server.
+The data may also be explored interactively using our
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>.</p>
+
+<p>
+The file for this track may also be locally explored using our tools <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br><br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/mitoMapVars.bb stdout</tt></p>
+
 <h2>Credits</h2>
 <p>
 Thanks to Shiping Zhang and the entire <a target="_blank" href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/WebHome">MITOMAP resource</a>
 for making these annotations available.</p>
 
 <h2>References</h2>
-<p>
-MITOMAP: A Human Mitochondrial Genome Database. http://www.mitomap.org, 2023
 </p>
-<p>
-Lott, M.T., Leipzig, J.N., Derbeneva, O., Xie, H.M., Chalkia, D., Sarmady, M., Procaccio, V., 
-and Wallace, D.C. 2013. mtDNA variation and analysis using MITOMAP and MITOMASTER. Current 
-Protocols in Bioinformatics 1(123):1.23.1-26. PMID: <a target="_blank" 
-href="http://www.ncbi.nlm.nih.gov/pubmed?term=25489354">25489354</a> URL: <a 
-target="_blank" href="http://www.mitomap.org/">http://www.mitomap.org</a>
-</p>
+<p>Lott MT, Leipzig JN, Derbeneva O, Xie HM, Chalkia D, Sarmady M, Procaccio V, Wallace DC. <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/25489354" target="_blank">mtDNA Variation and Analysis
+Using Mitomap and Mitomaster</a>. <em>Curr Protoc Bioinformatics</em>. 2013Dec;44(123):1.23.1-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25489354" target="_blank">25489354</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4257604/" target="_blank">PMC4257604</a></p>
