@@ -5600,7 +5600,7 @@ var downloadCurrentTrackData = {
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
-        db = undecoratedDb(getDb());
+        db = getDb();
         apiUrl = "../cgi-bin/hubApi/getData/track?";
         apiUrl += "chrom=" + chrom;
         apiUrl += ";start=" + start;
