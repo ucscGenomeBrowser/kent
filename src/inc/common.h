@@ -1017,6 +1017,10 @@ int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize);
 int chopByCharRespectDoubleQuotes(char *in, char sep, char *outArray[], int outSize);
 /* Chop a string into sep delimited strings but honor double quotes */
 
+int chopByCharRespectDoubleQuotesKeepEmpty(char *in, char sep, char *outArray[], int outSize);
+/* Chop a string into sep delimited strings but honor double quotes.  Keep empty entries (",,")
+ * in the list instead of skipping over them. */
+
 int chopByChar(char *in, char chopper, char *outArray[], int outSize);
 /* Chop based on a single character. */
 
