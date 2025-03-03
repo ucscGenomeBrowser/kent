@@ -5590,7 +5590,12 @@ var downloadCurrentTrackData = {
     startDownload: function() {
         trackList = [];
         $(".downloadTrackName:checked").each(function(i, elem) {
-            trackList.push(undecoratedTrack(elem.id));
+            trackName = elem.id;
+            if (getDb().startsWith("hub_")) {
+                // when we are working with assembly hubs, we undecorate the name
+                trackName = undecoratedTrack(elem.id);
+            }
+            trackList.push(trackName);
         });
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
