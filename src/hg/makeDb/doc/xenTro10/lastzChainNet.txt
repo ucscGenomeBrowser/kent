@@ -1,0 +1,504 @@
+##############################################################################
+# LASTZ Peter's clawed frog GCA_038501915.1 vs. X. tropicalis XenTro10
+#    (DONE - 2025-02-13 - hiram)
+
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCA/038/501/915/GCA_038501915.1_aXenPet1.maternal.cur/trackData/lastzXenTro10.2025-02-13
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/038/501/915/GCA_038501915.1_aXenPet1.maternal.cur/trackData/lastzXenTro10.2025-02-13
+
+    printf '# X. tropicalis XenTro10 vs. Peter's clawed frog GCA_038501915.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Peter's clawed frog 2024-04-29 GCA_038501915.1_aXenPet1.maternal.cur
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCA/038/501/915/GCA_038501915.1/GCA_038501915.1.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCA/038/501/915/GCA_038501915.1/GCA_038501915.1.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: X. tropicalis  xenTro10
+SEQ2_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCA/038/501/915/GCA_038501915.1_aXenPet1.maternal.cur/trackData/lastzXenTro10.2025-02-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCA_038501915.1_aXenPet1.maternal.cur  -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	1480m29.005s
+
+    sed -e 's/^/    # /;' fb.GCA_038501915.1.chainXenTro10Link.txt
+    # 1083830546 bases of 2613116200 (41.477%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_038501915.1.chainSynXenTro10Link.txt
+    # 765321850 bases of 2613116200 (29.288%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCA/038/501/915/GCA_038501915.1/GCA_038501915.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/038/501/915/GCA_038501915.1/GCA_038501915.1.chrom.sizes.txt" \
+       \
+        GCA_038501915.1 xenTro10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	1606m26.757s
+
+    sed -e 's/^/    # /;' fb.GCA_038501915.1.chainRBest.XenTro10.txt
+    # 576881473 bases of 2613116200 (22.076%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/xenTro10/bed/blastz.GCA_038501915.1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCA_038501915.1_aXenPet1.maternal.cur  /hive/data/genomes/asmHubs/allBuild/GCA/038/501/915/GCA_038501915.1_aXenPet1.maternal.cur/trackData/lastzXenTro10.2025-02-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	395m19.938s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainGCA_038501915.1Link.txt
+    # 764127358 bases of 1451301209 (52.651%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynGCA_038501915.1Link.txt
+    # 440012956 bases of 1451301209 (30.319%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCA/038/501/915/GCA_038501915.1/GCA_038501915.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/038/501/915/GCA_038501915.1/GCA_038501915.1.chrom.sizes.txt" \
+    \
+   xenTro10 GCA_038501915.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	1205m48.958s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.GCA_038501915.1.txt
+    # 560732929 bases of 1451301209 (38.637%) in intersection
+
+##############################################################################
+
+real	4688m8.748s
+user	0m4.677s
+sys	0m1.347s
+##############################################################################
+# LASTZ Tungara frog GCA_040894015.1 vs. X. tropicalis XenTro10
+#    (DONE - 2025-02-13 - hiram)
+
+    mkdir /hive/data/genomes/asmHubs/allBuild/GCA/040/894/015/GCA_040894015.1_aEngPut4.paternal/trackData/lastzXenTro10.2025-02-13
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/040/894/015/GCA_040894015.1_aEngPut4.paternal/trackData/lastzXenTro10.2025-02-13
+
+    printf '# X. tropicalis XenTro10 vs. Tungara frog GCA_040894015.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Tungara frog 2024-07-30 GCA_040894015.1_aEngPut4.paternal
+SEQ1_DIR=/hive/data/genomes/asmHubs/GCA/040/894/015/GCA_040894015.1/GCA_040894015.1.2bit
+SEQ1_LEN=/hive/data/genomes/asmHubs/GCA/040/894/015/GCA_040894015.1/GCA_040894015.1.chrom.sizes.txt
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: X. tropicalis  xenTro10
+SEQ2_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/asmHubs/allBuild/GCA/040/894/015/GCA_040894015.1_aEngPut4.paternal/trackData/lastzXenTro10.2025-02-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+      -tAsmId GCA_040894015.1_aEngPut4.paternal  -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	999m15.041s
+
+    sed -e 's/^/    # /;' fb.GCA_040894015.1.chainXenTro10Link.txt
+    # 133488473 bases of 2081032022 (6.415%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_040894015.1.chainSynXenTro10Link.txt
+    # 68568592 bases of 2081032022 (3.295%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+      -target2Bit="/hive/data/genomes/asmHubs/GCA/040/894/015/GCA_040894015.1/GCA_040894015.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/040/894/015/GCA_040894015.1/GCA_040894015.1.chrom.sizes.txt" \
+       \
+        GCA_040894015.1 xenTro10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	160m38.277s
+
+    sed -e 's/^/    # /;' fb.GCA_040894015.1.chainRBest.XenTro10.txt
+    # 87644098 bases of 2081032022 (4.212%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/xenTro10/bed/blastz.GCA_040894015.1.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+  -tAsmId GCA_040894015.1_aEngPut4.paternal  /hive/data/genomes/asmHubs/allBuild/GCA/040/894/015/GCA_040894015.1_aEngPut4.paternal/trackData/lastzXenTro10.2025-02-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	11m31.922s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainGCA_040894015.1Link.txt
+    # 127498005 bases of 1451301209 (8.785%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynGCA_040894015.1Link.txt
+    # 68364702 bases of 1451301209 (4.711%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+   -query2bit="/hive/data/genomes/asmHubs/GCA/040/894/015/GCA_040894015.1/GCA_040894015.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/040/894/015/GCA_040894015.1/GCA_040894015.1.chrom.sizes.txt" \
+    \
+   xenTro10 GCA_040894015.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	130m14.716s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.GCA_040894015.1.txt
+    # 86980009 bases of 1451301209 (5.993%) in intersection
+
+##############################################################################
+
+real	1301m43.127s
+user	0m4.023s
+sys	0m1.174s
+##############################################################################
+# LASTZ X. tropicalis XenTro10 vs. zebrafish GCF_000002035.6
+#    (DONE - 2025-02-13 - hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/lastzGCF_000002035.6.2025-02-13
+    cd /hive/data/genomes/xenTro10/bed/lastzGCF_000002035.6.2025-02-13
+
+    printf '# zebrafish GCF_000002035.6 vs. X. tropicalis XenTro10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: X. tropicalis  xenTro10
+SEQ1_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: zebrafish 2017-05-09 GCF_000002035.6_GRCz11
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/000/002/035/GCF_000002035.6/GCF_000002035.6.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/000/002/035/GCF_000002035.6/GCF_000002035.6.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/xenTro10/bed/lastzGCF_000002035.6.2025-02-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_000002035.6_GRCz11 -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	997m10.494s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainGCF_000002035.6Link.txt
+    # 49497650 bases of 1451301209 (3.411%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynGCF_000002035.6Link.txt
+    # 6978571 bases of 1451301209 (0.481%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/000/002/035/GCF_000002035.6/GCF_000002035.6.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/000/002/035/GCF_000002035.6/GCF_000002035.6.chrom.sizes.txt" \
+        xenTro10 GCF_000002035.6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	63m43.386s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.GCF_000002035.6.txt
+    # 28398632 bases of 1451301209 (1.957%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/000/002/035/GCF_000002035.6_GRCz11/trackData/blastz.xenTro10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_000002035.6_GRCz11 /hive/data/genomes/xenTro10/bed/lastzGCF_000002035.6.2025-02-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	4m7.885s
+
+    sed -e 's/^/    # /;' fb.GCF_000002035.6.chainXenTro10Link.txt
+    # 49866746 bases of 1679203469 (2.970%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_000002035.6.chainSynXenTro10Link.txt
+    # 8305312 bases of 1679203469 (0.495%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/000/002/035/GCF_000002035.6/GCF_000002035.6.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/000/002/035/GCF_000002035.6/GCF_000002035.6.chrom.sizes.txt" \
+   GCF_000002035.6 xenTro10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	68m54.720s
+
+    sed -e 's/^/    # /;' fb.GCF_000002035.6.chainRBest.XenTro10.txt
+    # 28571626 bases of 1679203469 (1.701%) in intersection
+
+##############################################################################
+
+real	1133m59.601s
+user	0m3.890s
+sys	0m1.493s
+##############################################################################
+# LASTZ X. tropicalis XenTro10 vs. African clawed frog GCF_017654675.1
+#    (DONE - 2025-02-26 - hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/lastzGCF_017654675.1.2025-02-13
+    cd /hive/data/genomes/xenTro10/bed/lastzGCF_017654675.1.2025-02-13
+
+    printf '# African clawed frog GCF_017654675.1 vs. X. tropicalis XenTro10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: X. tropicalis  xenTro10
+SEQ1_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: African clawed frog 2021-04-12 GCF_017654675.1_Xenopus_laevis_v10.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/017/654/675/GCF_017654675.1/GCF_017654675.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/017/654/675/GCF_017654675.1/GCF_017654675.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/xenTro10/bed/lastzGCF_017654675.1.2025-02-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_017654675.1_Xenopus_laevis_v10.1 -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	1107m12.745s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainGCF_017654675.1Link.txt
+    # 787548572 bases of 1451301209 (54.265%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynGCF_017654675.1Link.txt
+    # 453079461 bases of 1451301209 (31.219%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/017/654/675/GCF_017654675.1/GCF_017654675.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/017/654/675/GCF_017654675.1/GCF_017654675.1.chrom.sizes.txt" \
+        xenTro10 GCF_017654675.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.GCF_017654675.1.txt
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/017/654/675/GCF_017654675.1_Xenopus_laevis_v10.1/trackData/blastz.xenTro10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_017654675.1_Xenopus_laevis_v10.1 /hive/data/genomes/xenTro10/bed/lastzGCF_017654675.1.2025-02-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	627m20.150s
+
+    sed -e 's/^/    # /;' fb.GCF_017654675.1.chainXenTro10Link.txt
+    # 1159922816 bases of 2742469346 (42.295%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_017654675.1.chainSynXenTro10Link.txt
+    # 831958092 bases of 2742469346 (30.336%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/017/654/675/GCF_017654675.1/GCF_017654675.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/017/654/675/GCF_017654675.1/GCF_017654675.1.chrom.sizes.txt" \
+   GCF_017654675.1 xenTro10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	2253m11.082s
+
+    sed -e 's/^/    # /;' fb.GCF_017654675.1.chainRBest.XenTro10.txt
+    # 604418262 bases of 2742469346 (22.039%) in intersection
+
+##############################################################################
+
+real	2880m34.676s
+user	0m2.816s
+sys	0m0.974s
+##############################################################################
+# LASTZ X. tropicalis XenTro10 vs. Lizard AnoCar2
+#    (DONE - 2025-02-13 - hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/lastzAnoCar2.2025-02-13
+    cd /hive/data/genomes/xenTro10/bed/lastzAnoCar2.2025-02-13
+
+    printf '# Lizard AnoCar2 vs. X. tropicalis XenTro10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: X. tropicalis  xenTro10
+SEQ1_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Lizard  anoCar2
+SEQ2_DIR=/hive/data/genomes/anoCar2/anoCar2.2bit
+SEQ2_LEN=/hive/data/genomes/anoCar2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/xenTro10/bed/lastzAnoCar2.2025-02-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	1001m2.254s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainAnoCar2Link.txt
+    # 46493232 bases of 1448461978 (3.210%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynAnoCar2Link.txt
+    # 23478176 bases of 1448461978 (1.621%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        xenTro10 anoCar2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	54m20.733s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.AnoCar2.txt
+    # 34957007 bases of 1448461978 (2.413%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/anoCar2/bed/blastz.xenTro10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/xenTro10/bed/lastzAnoCar2.2025-02-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	4m41.713s
+
+    sed -e 's/^/    # /;' fb.anoCar2.chainXenTro10Link.txt
+    # 40831822 bases of 1701353770 (2.400%) in intersection
+    sed -e 's/^/    # /;' fb.anoCar2.chainSynXenTro10Link.txt
+    # 22681746 bases of 1701353770 (1.333%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   anoCar2 xenTro10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	51m45.564s
+
+    sed -e 's/^/    # /;' fb.anoCar2.chainRBest.XenTro10.txt
+    # 34961125 bases of 1701353770 (2.055%) in intersection
+
+##############################################################################
+
+real	1111m50.936s
+user	0m3.159s
+sys	0m0.749s
+##############################################################################
+# LASTZ X. tropicalis XenTro10 vs. Chicken GalGal6
+#    (DONE - 2025-02-13 - hiram)
+
+    mkdir /hive/data/genomes/xenTro10/bed/lastzGalGal6.2025-02-13
+    cd /hive/data/genomes/xenTro10/bed/lastzGalGal6.2025-02-13
+
+    printf '# Chicken GalGal6 vs. X. tropicalis XenTro10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: X. tropicalis  xenTro10
+SEQ1_DIR=/hive/data/genomes/xenTro10/xenTro10.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Chicken  galGal6
+SEQ2_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ2_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/xenTro10/bed/lastzGalGal6.2025-02-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	1000m18.466s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainGalGal6Link.txt
+    # 50287701 bases of 1448461978 (3.472%) in intersection
+    sed -e 's/^/    # /;' fb.xenTro10.chainSynGalGal6Link.txt
+    # 31107843 bases of 1448461978 (2.148%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        xenTro10 galGal6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	40m0.991s
+
+    sed -e 's/^/    # /;' fb.xenTro10.chainRBest.GalGal6.txt
+    # 37686782 bases of 1448461978 (2.602%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/galGal6/bed/blastz.xenTro10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/xenTro10/bed/lastzGalGal6.2025-02-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	3m47.069s
+
+    sed -e 's/^/    # /;' fb.galGal6.chainXenTro10Link.txt
+    # 40888835 bases of 1055588482 (3.874%) in intersection
+    sed -e 's/^/    # /;' fb.galGal6.chainSynXenTro10Link.txt
+    # 30606958 bases of 1055588482 (2.900%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   galGal6 xenTro10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	29m33.510s
+
+    sed -e 's/^/    # /;' fb.galGal6.chainRBest.XenTro10.txt
+    # 37557937 bases of 1055588482 (3.558%) in intersection
+
+##############################################################################
+
+real	1073m40.468s
+user	0m3.180s
+sys	0m0.639s
