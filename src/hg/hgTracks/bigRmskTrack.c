@@ -1801,7 +1801,7 @@ if ( cr->layoutLevel > highestLevel )
 void bigRmskMethods(struct track *track, struct trackDb *tdb,
                   int wordCount, char *words[])
 {
-bigBedMethods(track, tdb, wordCount, words);
+commonBigBedMethods(track, tdb, wordCount, words);
 track->loadItems = bigRmskLoadItems;
 track->totalHeight = bigRmskTotalHeight;
 track->drawItems = bigRmskDrawItems;

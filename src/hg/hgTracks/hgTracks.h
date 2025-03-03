@@ -117,7 +117,11 @@ struct track
     int heightPer;             /* Height per item line minus border. */
 
     int (*itemHeight)(struct track *tg, void *item);
-    /* Return height of one item. */
+    /* Return height of one item in pixels. */
+
+    int (*itemHeightRowsForPack)(struct track *tg, void *item);
+    /* If set, allows items to claim they a particular number of rows while being packed.
+     * Useful for tracks with variable-height items.  */
 
     int (*itemRightPixels)(struct track *tg, void *item);
     /* Return number of pixels needed to right of item for additional labeling. (Optional) */
@@ -229,7 +233,7 @@ struct track
     float expScale;	/* What to scale expression tracks by. */
     char *expTable;	/* Expression table in hgFixed. */
 
-    int sourceCount;	/* Number of sources for factorSource tracks. */
+    long sourceCount;	/* Number of sources for factorSource tracks. */
     struct expRecord **sources;  /* Array of sources */
     int sourceRightPixels;	/* Number of pixels to right we'll need. */
 
@@ -1193,9 +1197,13 @@ void bigRmskMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up bigRmsk methods. */
 
+void commonBigBedMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Set up common bigBed methods used by several track types that depend on the bigBed format. */
+
 void bigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
-/* Set up bigBed methods. */
+/* Set up bigBed methods for tracks that are type bigBed. */
 
 void chromGraphMethods(struct track *tg);
 /* Fill in chromGraph methods for built in track. */
