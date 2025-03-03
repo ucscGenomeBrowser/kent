@@ -607,6 +607,7 @@ cartTrackDbInitForApi(NULL, db, &tdbList, NULL, TRUE);
 char *tracks[100];
 int numTracks = chopByChar(trackArg, ',', tracks, sizeof(tracks));
 int i = 0;
+struct hash *trackHash = hashNew(0); // let hub tracks work
 for (i = 0; i < numTracks; i++)
     {
     char *track = cloneString(tracks[i]);
@@ -618,7 +619,12 @@ for (i = 0; i < numTracks; i++)
     struct trackDb *thisTrack = tdbForTrack(db, track, &tdbList);
     if (NULL == thisTrack)
         {
-        if (! sqlTableExists(conn, track))
+        // maybe we have a hub track, try to look it up
+        if (startsWith("hub_", track))
+            {
+            thisTrack = hubConnectAddHubForTrackAndFindTdb(db, track, &tdbList, trackHash);
+            }
+        if (!thisTrack && ! sqlTableExists(conn, track))
             apiErrAbort(err400, err400Msg, "can not find track=%s name for endpoint '/getData/track", track);
         }
     if (thisTrack && ! isSupportedType(thisTrack->type))
