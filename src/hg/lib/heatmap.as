@@ -1,5 +1,5 @@
-table bed12Source
-"Browser extensible data (12 fields) plus the source of this item."
+table bedHeatmap
+"Browser extensible data (12 fields) plus extensions for heatmap data."
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.)"
     uint   chromStart; "Start position in chromosome"
