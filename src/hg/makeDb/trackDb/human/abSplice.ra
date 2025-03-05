@@ -3,10 +3,11 @@ shortLabel AbSplice Scores
 longLabel Aberrant Splicing Prediction Scores
 type bigBed 9 +
 bigDataUrl /gbdb/$D/abSplice/AbSplice.bb
-visibility hide
+visibility dense
 itemRgb on
 noScoreFilter on
 group phenDis
+parent spliceImpactSuper on
 filterText.maxScore *
 filter.spliceABscore 0.01
 filterLimits.spliceABscore 0.01:1
