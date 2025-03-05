@@ -2,10 +2,6 @@ kentSrc = ..
 include ${kentSrc}/inc/common.mk
 
 
-compile::
-	${MAKE} build
-	${MAKE} build IDXSIZE=huge
-
 ifeq (${IDXSIZE},huge)
 A = blatHuge
 CFLAGS += -DGFSERVER_HUGE
@@ -15,12 +11,15 @@ A = blat
 preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
 endif
 
+build_both:
+	${MAKE} do_build
+	${MAKE} do_build IDXSIZE=huge
+
+
+do_build: default
+
 # this must be include here, after the above setup but before the build target
 include $(kentSrc)/inc/userApp.mk
-
-build: ${DESTDIR}${BINDIR}/${A}${EXE}
-
-L += -lm $(SOCKETLIB)
 
 blatHuge.c: blat.c
 	ln -sf $< $@
