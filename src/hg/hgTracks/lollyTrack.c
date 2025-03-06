@@ -500,7 +500,7 @@ void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[])
 /* bigLolly track type methods */
 {
-bigBedMethods(track, tdb, wordCount, words);
+commonBigBedMethods(track, tdb, wordCount, words);
 
 struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, track, wordCount, words);
 

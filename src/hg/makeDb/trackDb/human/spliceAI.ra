@@ -1,19 +1,20 @@
 track spliceAI
-superTrack on
+compositeTrack on
 shortLabel SpliceAI
 longLabel SpliceAI: Splice Variant Prediction Score
 group phenDis
+parent spliceImpactSuper on
 type bigBed 9 +
+visibility dense
 tableBrowser off
 dataVersion Illumina SpliceAI Score v1.3
-pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
 
     track spliceAIsnvs
     type bigBed 9 +
     priority 1
     shortLabel SpliceAI SNVs
     longLabel SpliceAI SNVs (unmasked)
-    superTrack spliceAI pack
+    parent spliceAI on
     tableBrowser off
     bigDataUrl /gbdb/$D/bbi/spliceAIsnvs.bb
     itemRgb on
@@ -30,7 +31,7 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     type bigBed 9 +
     shortLabel SpliceAI indels
     longLabel SpliceAI Indels (unmasked)
-    superTrack spliceAI dense
+    parent spliceAI on
     tableBrowser off
     bigDataUrl /gbdb/$D/bbi/spliceAIindels.bb
     itemRgb on
@@ -47,7 +48,7 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     type bigBed 9 +
     shortLabel SpliceAI SNVs (masked)
     longLabel SpliceAI SNVs (masked)
-    superTrack spliceAI hide
+    parent spliceAI off
     tableBrowser off
     bigDataUrl /gbdb/$D/bbi/spliceAIsnvsMasked.bb
     itemRgb on
@@ -64,7 +65,7 @@ pennantIcon New red ../goldenPath/newsarch.html#081224 "Aug. 12, 2024"
     type bigBed 9 +
     shortLabel SpliceAI indels (masked)
     longLabel SpliceAI Indels (masked)
-    superTrack spliceAI hide
+    parent spliceAI off
     tableBrowser off
     bigDataUrl /gbdb/$D/bbi/spliceAIindelsMasked.bb
     itemRgb on

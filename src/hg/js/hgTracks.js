@@ -1246,7 +1246,7 @@ var dragSelect = {
                             if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                                 newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
                             }
-                            var params = "position=" + newPosition;
+                            var params = "db=" + getDb() + "&position=" + newPosition;
                             if (!hgTracks.enableHighlightingDialog)
                                 params += "&enableHighlightingDialog=0";
                             imageV2.navigateInPlace(params, null, true);
@@ -1346,7 +1346,7 @@ var dragSelect = {
                             if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                                 newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
                             }
-                            imageV2.navigateInPlace("position=" + newPosition, null, true);
+                            imageV2.navigateInPlace("db=" + getDb() + "&position=" + newPosition, null, true);
                         } else {
                             jQuery('body').css('cursor', 'wait');
                             document.TrackHeaderForm.submit();
@@ -1553,7 +1553,7 @@ this.each(function(){
                         // Stop the presses :0)
                         $('area.cytoBand').on("mousedown",  function(e) { return false; });
                         if (imageV2.backSupport) {
-                            imageV2.navigateInPlace("position=" +  
+                            imageV2.navigateInPlace("db=" + getDb() + "&position=" +
                                     encodeURIComponent(genomePos.get().replace(/,/g,'')) + 
                                     "&findNearest=1",null,true);
                             hiliteCancel();
@@ -1912,7 +1912,7 @@ jQuery.fn.panImages = function(){
             if (beyondImage) {
                 if (imageV2.inPlaceUpdate) {
                     var pos = parsePosition(genomePos.get());
-                    imageV2.navigateInPlace("position=" +
+                    imageV2.navigateInPlace("db=" + getDb() + "&position=" +
                             encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end),
                             null, true);
                 } else {
@@ -2273,7 +2273,7 @@ var rightClick = {
     {
         var json = JSON.parse(response);
         if (json.pos) {
-            imageV2.navigateInPlace("position="+json.pos);
+            imageV2.navigateInPlace("db=" + getDb() + "&position="+json.pos);
         } else {
             alert(json.error);
         }
@@ -2660,7 +2660,7 @@ var rightClick = {
                         }
                     }
                     if (imageV2.inPlaceUpdate) {
-                        var params = "position=" + newPos.chrom+':'+newPos.start+'-'+newPos.end;
+                        var params = "db=" + getDb() + "&position=" + newPos.chrom+':'+newPos.start+'-'+newPos.end;
                         imageV2.navigateInPlace(params, null, true);
                     } else {
                         genomePos.setByCoordinates(newPos.chrom, newPos.start, newPos.end);
@@ -3807,7 +3807,7 @@ function zoomTo(zoomSize) {
     var newPos = genomePos.setByCoordinates(pos.chrom, newStart, newEnd);
     if (hgTracks.virtualSingleChrom && (newPos.search("multi:")===0))
         newPos = genomePos.disguisePosition(newPosition); // DISGUISE?
-    imageV2.navigateInPlace("position="+newPos, null, true);
+    imageV2.navigateInPlace("db=" + getDb() + "&position="+newPos, null, true);
 }
 
 // A function for the keyboard shortcuts "highlight add/clear/new"
@@ -4644,6 +4644,9 @@ var imageV2 = {
             } else if (ele.name === "hgt.dinkRL" || ele.name === "hgt.dinkRR") {
                 params += "&dinkR=" + $("input[name='dinkR']").val();
             }
+            if (ele.name !== "db") {
+                params += "&db=" + getDb();
+            }
             imageV2.navigateInPlace(params, $(ele), false);
             return false;
         } else {
@@ -4673,7 +4676,7 @@ var imageV2 = {
             }
             });
             if (data.length > 0) {
-                imageV2.navigateInPlace(data, null, false);
+                imageV2.navigateInPlace("db=" + getDb() + "&" + data, null, false);
             }
             return false;
         } else {
@@ -4858,7 +4861,7 @@ var imageV2 = {
             if (prevDbPos && prevDbPos !== curDbPos) {
                 // NOTE: this function is NOT called when backing past a full retrieval boundary
                 genomePos.set(decodeURIComponent(prevPos));
-                imageV2.navigateInPlace("" + prevDbPos, null, false);
+                imageV2.navigateInPlace("db=" + getDb() + "&" + prevDbPos, null, false);
             }
         });
         
@@ -4878,7 +4881,7 @@ var imageV2 = {
                 var oldChrom  = genomePos.getOriginalPos().split(':')[0];
                 if (newChrom === oldChrom) {
                     imageV2.markAsDirtyPage();
-                    imageV2.navigateInPlace("position=" + encodeURIComponent(newPos), null, false);
+                    imageV2.navigateInPlace("db=" + getDb() + "&position=" + encodeURIComponent(newPos), null, false);
                     window.scrollTo(0,0);
                     return false;
                 }
@@ -4906,7 +4909,7 @@ var imageV2 = {
             function onSuccess(jqXHR, textStatus) {
                 if (jqXHR.chromName !== null) {
                     imageV2.markAsDirtyPage();
-                    imageV2.navigateInPlace("position=" + encodeURIComponent(newPos), null, false);
+                    imageV2.navigateInPlace("db=" + getDb() + "&position=" + encodeURIComponent(newPos), null, false);
                     window.scrollTo(0,0);
                 } else  {
                     window.location.assign("../cgi-bin/hgSearch?search=" + term  + "&hgsid="+ getHgsid());
@@ -5590,12 +5593,17 @@ var downloadCurrentTrackData = {
     startDownload: function() {
         trackList = [];
         $(".downloadTrackName:checked").each(function(i, elem) {
-            trackList.push(undecoratedTrack(elem.id));
+            trackName = elem.id;
+            if (getDb().startsWith("hub_")) {
+                // when we are working with assembly hubs, we undecorate the name
+                trackName = undecoratedTrack(elem.id);
+            }
+            trackList.push(trackName);
         });
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
-        db = undecoratedDb(getDb());
+        db = getDb();
         apiUrl = "../cgi-bin/hubApi/getData/track?";
         apiUrl += "chrom=" + chrom;
         apiUrl += ";start=" + start;

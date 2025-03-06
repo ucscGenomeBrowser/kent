@@ -16,6 +16,7 @@
 <li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#wrong">I think this transcript looks strange, what shall I do?</a></li>
 <li><a href="#duplicates">Why does the UCSC RefSeq track ("refGene") include duplicates, and some transcripts map to two loci?</a></li>
+<li><a href="#duplicatesEns">Why does the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
@@ -214,11 +215,36 @@ or the <a href="https://www.gencodegenes.org/pages/contact.html" target=_blank>G
 <p>This is related to the question <a href="#ncbiRefSeq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a>
 below. Briefly, the UCSC refGene track aligns the RefSeq transcripts to the genome with BLAT, with no special filtering but a
 95% identity, the NCBI RefSeq track is NCBI's mapping and the NCBI alignments were filtered using manual annotations
-to make sure that a transcript is mapped only once, even if it is perfectly aligning twice. NCBI uses manual curation
-to decide on the best placement, for example, if a gene is annotated on chr4, any alignments, even 100% identical,
-from other chromosomes are removed. As a result, the UCSC RefSeq track contains duplicates if the transcripts align
-very well to both loci and alerts the user to this fact, where as the NCBI alignments were filtered manually
-to make sure that every transcript maps only once.
+to make sure that a transcript is mapped only once, even if it is perfectly
+aligning twice (there is one exception, genes in the PAR regions, see the
+paragraph below). NCBI uses manual curation to decide on the best placement,
+for example, if a gene is annotated on chr4, any alignments, even 100%
+identical, from other chromosomes are removed. As a result, the UCSC RefSeq
+track contains duplicates if the transcripts align very well to both loci and
+alerts the user to this fact, where as the NCBI alignments were filtered
+manually to make sure that every transcript maps only once.
+</p>
+<p>
+NCBI's transcript mapping, which we provide in our NCBI RefSeq track, does
+contain a few duplicates, but these have a biological explanation: they are
+transcripts in the <a target=_blank href='https://en.wikipedia.org/wiki/Pseudoautosomal_region'>pseudoautosomal regions</a>
+(PARs). Because they have identical sequences, NCBI rules assign them identical
+accessions. See the section below for how Ensembl/Gencode handle these cases.
+</p>
+<p>If you compare NCBI's RefSeq GFF files with the Genome Browser ones, note that the NCBI files
+contain non-gene annotations, without an accession, e.g. TCR or BCR locus names. We put these into the "NCBI Other" track,
+so "RefSeq curated" contains only transcripts.
+</p>
+
+<a name="duplicatesEns"></a>
+<h6>Why does the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</h6>
+
+<p>The human genome has seven genes located in the <a target=_blank
+href='https://en.wikipedia.org/wiki/Pseudoautosomal_region'>pseudoautosomal regions</a> (PARs),
+which have identical sequences on both chrX and chrY. The Ensembl team assigned these genes
+identical accessions due to their identical sequences. Since Ensembl release 110 (identical to
+Gencode release 44), these genes now receive distinct accessions. If you encounter duplicates in
+Ensembl/Gencode files, they likely originate from file versions predating this update at the EBI.
 </p>
 
 
@@ -406,13 +432,29 @@ For hg19, you may prefer UCSC RefSeq for now.</p>
 <a name="mito"></a>
 <h2>What is the best gene track for mitochondrial gene annotations</h2>
 <p>
-The mitochondrial sequence included in assembly sequence files is very
-special and most of what has been explained on this page does not apply
+The mitochondrial sequence included in assembly sequence files is 
+a special case and most of what has been explained on this page does not apply
 to the mitochondrial gene annotations. For most assemblies in the Genome
-Browser, the sequence name of the mitochondrial genome is "chrM".<p>
+Browser, the sequence name of the mitochondrial genome is "chrM".</p>
+
+<p>Both GENCODE and RefSeq databases
+import their mitochondrial gene annotation directly from the rCRS 
+RefSeq record 
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. 
+RefSeq does not assign NM_ transcript accessions for mitochondrial genes, only NP_
+protein accessions, as there is no splicing.
+The mitochondrial annotation for both databases was provided by 
+<a target=_blank href="https://www.mitomap.org/MITOMAP">Mitomap.org</a>, which contains detailed
+documentation about the 
+<a href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/MitoSeqs" 
+target=_blank>the history of this sequence</a>. We also have a Mitomap track with
+gene annotations and variant information on both hg19 (chrMT) and hg38 (chrM).
+</p>
+
 <p>
-For hg19, no mitochondrial genome was originally published.
-The UCSC Genome Browser added a chrM sequence
+Why chrMT? The assembly hg19 has two mitochondrial genomes, chrM (old) and chrMT (current).
+The reason is that for hg19, no mitochondrial sequence was in the GRCh37 sequence file.
+The UCSC Genome Browser originally added a chrM sequence when making hg19 
 that was not the mitochondrial genome sequence later selected by NCBI for GRCh37. This
 is why <strong>the current hg19 version contains two mitochondrial sequences,
 the old one called &quot;chrM&quot; and the current GRCh37 reference, 
@@ -420,21 +462,15 @@ called &quot;chrMT&quot;</strong>. The issue is described in detail in our
 <a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
 hg19 sequence download instructions</a>. If you use hg19 today, chrMT should be
 considered the current mitochondrial sequence, chrM is only supported for backwards
-compatibility and legacy annotation files. 
-<p>
-For hg38, the GENCODE and ClinVar variants annotations are all present on chrM. The RefSeq Other
-Annotations data is not made by the RefSeq group and annotations are on chrM. For hg19, legacy
-annotations such as the UCSC Genes are on chrM. All more recent annotations, the RefSeq Other
-Annotations and NCBI ClinVar variants are on chrMT. Both GENCODE and RefSeq databases
-import their mitochondrial gene annotation directly from the rCRS 
-RefSeq record 
-<a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. 
-The annotation was provided by 
-<a target=_blank href="https://www.mitomap.org/MITOMAP">Mitomap.org</a>, which provides detailed
-documentation about the 
-<a href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/MitoSeqs" 
-target=_blank>the history of this sequence</a>.
+compatibility and legacy annotation files. Our hg19.fa.gz in the "current" download directory
+contains both sequences, the old hg19.fa.gz in the top level download directory has only chrM,
+for backwards compatibility for old pipelines and our analysisSet fasta file for aligners contains only chrMT.
+For most purposes when using hg19, we recommend using the analysis set fasta file.
+</p>
 
+<p>
+For hg38, there is no issue, it has only chrM, and all mitochondrial annotations are present on chrM.
+</p>
 
 <a name="report"></a>
 <h2>How shall I report a gene transcript in a manuscript?</h2>

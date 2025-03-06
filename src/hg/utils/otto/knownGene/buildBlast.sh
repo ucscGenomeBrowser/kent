@@ -39,7 +39,7 @@ ThisEnd
 ) > config.ra
 
 rm -rf  $scratchDir/brHgNearBlastp
-doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra 
+doHgNearBlastp.pl -noLoad -clusterHub=hgwdev -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra
 
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb

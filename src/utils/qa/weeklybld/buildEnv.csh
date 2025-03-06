@@ -1,6 +1,6 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2025-02-10                 # v478 preview
-setenv LASTREVIEWDAY 2025-01-21             # v477 preview
+setenv REVIEWDAY 2025-03-03                 # v479 preview
+setenv LASTREVIEWDAY 2025-02-10             # v478 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
@@ -9,9 +9,9 @@ setenv LASTREVIEW2DAY  2025-01-27           # v477 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 477                    # increment for new build
-setenv TODAY 2025-02-03                     # v477 final
-setenv LASTWEEK 2025-01-13                  # v476 final
+setenv BRANCHNN 478                    # increment for new build
+setenv TODAY 2025-02-24                     # v478 final
+setenv LASTWEEK 2025-02-03                  # v477 final
 
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 

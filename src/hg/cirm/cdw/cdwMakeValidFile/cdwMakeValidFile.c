@@ -909,6 +909,14 @@ if (vf->format)	// We only can validate if we have something for format
         {
 	makeValidHtml(conn, path, ef, vf);
 	}
+    else if (sameString(format, "tiff"))
+        {
+	/* No specific validation needed for raw format. */
+	}
+    else if (sameString(format, "avi"))
+        {
+        /* No specific validation needed for xls format. */
+        }
     else if (sameString(format, "raw"))
         {
 	/* No specific validation needed for raw format. */

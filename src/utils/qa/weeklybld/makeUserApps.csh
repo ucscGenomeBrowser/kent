@@ -58,8 +58,10 @@ if ("$HOST" == "hgwdev") then
     switch ($f)
 	# these three go in the blat subdirectory
 	case ${DESTDIR}${BINDIR}/blat:
+	case ${DESTDIR}${BINDIR}/blatHuge:
 	case ${DESTDIR}${BINDIR}/gfClient:
 	case ${DESTDIR}${BINDIR}/gfServer:
+	case ${DESTDIR}${BINDIR}/gfServerHuge:
 	case ${DESTDIR}${BINDIR}/gfPcr:
 	case ${DESTDIR}${BINDIR}/isPcr:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"

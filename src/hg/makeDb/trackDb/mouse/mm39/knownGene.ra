@@ -1,7 +1,9 @@
 track knownGene
 shortLabel GENCODE VM36
 longLabel GENCODE VM36
+#parent knownGeneArchive
 priority 1
+#priority 5
 visibility pack
 type bigGenePred
 bigDataUrl /gbdb/mm39/gencode/gencodeVM36.bb
