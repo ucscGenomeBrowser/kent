@@ -573,7 +573,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "rcc", "idat", "fasta", "customTrack", "pdf", "png", "vcf", "cram", "jpg", "text", "html",
     "tsv", "csv",
     "raw", "xls",
-    "tiff", "avi",
+    "tif", "avi",
     "kallisto_abundance", "expression_matrix",
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
