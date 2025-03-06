@@ -55,11 +55,15 @@ while (my $line = <$fh>) {
   ++$totalItems;
   # the -1 keeps the trailing empty field at the end of the line
   my @a = split(/\t/, $line, -1);
-  # if name is equal to name2 see if name2 can be improved
+  # if name is equal to geneName see if geneName can be improved
   if ($a[3] eq $a[17]) {
      if (defined($geneId{$a[3]})) {
         $a[17] = $geneId{$a[3]};
         ++$updatedNames;
+        # if name2 is equal to geneName2 reproduce name in geneName2
+        if ($a[12] eq $a[18]) {
+             $a[18] = $a[3];
+        }
      }
   }
   printf "%s\n", join("\t", @a);
