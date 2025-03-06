@@ -397,8 +397,9 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
-    vcfTabix.  Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly,
+    bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig, vcfTabix, or hic.
+    Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
     <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
@@ -5398,7 +5399,8 @@ maps.  Currently this track type supports one file format: the .hic file format 
 by the <a href="https://www.aidenlab.org" target="_blank">Aiden Lab</a> at <a target="_blank"
 href="https://www.bcm.edu">Baylor College of Medicine</a>.  This is an indexed
 binary format that supports remote access, so the file can be hosted on any web accessible
-server and displayed at UCSC.
+server and displayed at UCSC.  More details on .hic display at UCSC can be found at the
+<a href="../hic.html">hic help page</a>.
 For more information on the .hic file format and the Juicer tool that generates these files,
 see the documentation on <a target="_blank"
 href="https://github.com/aidenlab/juicer/wiki/Data">github</a>.</p>
