@@ -1271,6 +1271,9 @@ research data and configuration files for free:
   <li><a href="https://figshare.com/" target="_blank">Figshare</a> - not limited and fast, but
       every file needs to be uploaded individually and cannot be changed. Optimal for very stable
       links, e.g. in publications.</li>
+  <li><a href="https://dropbox.com/" target="_blank">DropBox</a> - 2 GB free on their BasicFree plan. 
+       Many other paid dropbox plans are available with much more space.
+      </li>
 </ul>
 <p>
 Each of the providers above has a slightly different approach to hosting data for
@@ -1279,6 +1282,13 @@ such as size limitations, usage statistics, and version control integration. Add
 previously mentioned, any provider that supports byte-range access will work for hub hosting, 
 and you are not limited to the above sites. Below is a summarized guide for
 each of the providers mentioned above.</p>
+
+
+<h6><a href="#galaxyHosting">Galaxy Hosting</a></h6> 
+<h6><a href="#cyverseHosting">Cyverse Hosting</a></h6> 
+<h6><a href="#githubHosting">GitHub Hosting</a></h6> 
+<h6><a href="#figshareHosting">Figshare Hosting</a></h6> 
+<h6><a href="#dropboxHosting">DropBox Hosting</a></h6> 
 
 <a name="galaxyHosting"></a>
 <h3>Hosting Files on Galaxy</h3>
@@ -1390,6 +1400,7 @@ bigDataUrl https://usegalaxy.org/api/datasets/f9cad7b01a4721358405ebd3fc34f65a/d
   </li>
 </ol>
 
+<a name="cyverseHosting"></a>
 <h3>Hosting Hubs on CyVerse</h3>
 <p>
 <a href="http://www.cyverse.org/" target="_blank">CyVerse</a>, previously known as the iPlant Collaborative, is 
@@ -1462,6 +1473,8 @@ in your browser to force reload the file or by sending Cache-Control: no-cache h
 Galaxy is 
 </p>
 -->
+
+<a name="githubHosting"></a>
 <h3>Hosting Hubs on Github</h3>
 <p>
 <a href="https://github.com" target="_blank">Github</a> supports byte-range access to files when they are accessed
@@ -1503,6 +1516,7 @@ For more information about moving files to Github, please see Github's
 to their <a href="https://github.com/contact" target="_blank">help desk</a>.
 </p>
 
+<a name="figshareHosting"></a>
 <h3>Hosting hubs on figshare</h3>
 <p>
 <a href="https://figshare.com/" target="_blank">Figshare</a> is a site for researchers and institutions to upload
@@ -1530,10 +1544,67 @@ a bigBed custom track on hg38:</p>
 track type=bigBed name="figshare example" bigDataUrl=https://figshare.com/ndownloader/files/38068053
 </pre>
 
+<a name="dropboxHosting"></a>
+<h3>Hosting hubs on DropBox</h3>
 <p>
-For more information on using Figshare, please see their 
-<a href="https://support.figshare.com/support/home" target="_blank">Support Portal</a>.</p>
+<a href="https://dropbox.com/" target="_blank">DropBox</a> is a site for users to share data files.
+DropBox has recently added support byteranges, a feature we need for hubs and custom tracks.
+DropBox has 2 GB in their BasicFree plan for free.
+Dropbox Plus for $10 a month -- $120 per year, and you must pay the full year to get the lowest price -- 
+1 user with 2 TB files up to 50GB maximum individual file size.
+They have lots of other plans available to for users, businesses, and schools.
+One must first create a DropBox account, 
+upload the <em>bigDataUrl</em> files, or drag-and-drop from local disk.
+DropBox also has an app. They provide support for MacOS and Android too.
+Copy the share URL provided.
 
+Edit your <em>hub.txt</em> appropriately. 
+Use <code>useOneFile on</code> hub setting that allows the hub
+properties to be specified in a single file. More information about this setting can be found on the
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>. If you would
+like to add metadata to your track hub, the following <a href="./metadata.html">metadata guide</a>
+contains examples of how to include the information in your tracks.</p>
+
+<p>
+Click share on each data file, choose copy link, Ctrl-C
+and paste the dropbox URL into the hub oneFile the bigDataUrl field in the trackDb section of your useOneFile hub txt.
+It will look somehting like this:
+</p>
+<pre>
+ bigDataUrl https://www.dropbox.com/scl/fi/8t785o3sqidp0tmar91bf/dnaseRep3.bw?rlkey=37wucbhdvwqntw4ejvig4kg7c&st=11v8l216&dl=0
+</pre>
+
+<p>
+Click the share button over your hub .txt file and Copy Link, Ctrl-C.
+Paste that dropbox hub url into the hgHubConnect CGI tab.
+</p>
+<pre>
+ https://www.dropbox.com/scl/fi/6wrobg6wqcgtm7khew4qo/hub1.txt?rlkey=vi32q9tb68kjpn2xhy0qjuqkf&st=nldzp2tw&dl=0
+</pre>
+
+<p>
+Note that DropBox does not use pathnames as part of the URLs, therefore bigDataUrl files 
+that require a separate index file, like VCFs and BAM files, must have their index file
+location specified with a <em>bigDataIndex</em>. This keyword is relevant for Custom Tracks
+and Track Hubs. You can read more about <em>bigDataIndex</em> in 
+<a href="trackDb/trackDbHub.html#bigDataIndex">the TrackDb Database Definition page</a>.
+</p>
+
+<p>
+For custom tracks you will need to declare a track line with track type and bigDataUrl.
+ Below is a simple example of a bigBed custom track on hg38:</p>
+<pre>
+track type=bigWig name="dropbox example" bigDataUrl=https://www.dropbox.com/scl/fi/8t785o3sqidp0tmar91bf/dnaseRep3.bw?rlkey=37wucbhdvwqntw4ejvig4kg7c&st=1z1jce0t&dl=0
+</pre>
+
+<p>
+For more information on using DropBox, please see their 
+<a href="https://www.dropbox.com/support" target="_blank">DropBox Support</a>.</p>
+
+<p>
+DropBox also provides a folder feature to help organize and group related data.
+<p>
+<p>
 
 <h3>Troubleshooting your own HTTPS server configuration</h3>
 <p>

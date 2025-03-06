@@ -1377,7 +1377,10 @@ if (proxyUrl)
     }
 dyStringPrintf(dy, "%s %s %s\r\n", method, proxyUrl ? urlForProxy : npu.file, protocol);
 freeMem(urlForProxy);
-dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
+if (sameString(npu.host, "www.dropbox.com") || endsWith(npu.host, ".dl.dropboxusercontent.com"))
+    dyStringPrintf(dy, "User-Agent: %s\r\n", "curl/8");
+else 
+    dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
 
 dyStringPrintf(dy, "Host: ");
 netHandleHostForIpv6(&npu, dy);
@@ -1811,6 +1814,17 @@ while (TRUE)
     /* url needed for err msgs, and to return redirect location */
     char *newUrl = NULL;
     boolean success = netSkipHttpHeaderLinesWithRedirect(sd, url, &newUrl);
+
+    // removing any hashkey from redirect location
+    if (newUrl)
+	{
+	char *hashKey = strchr(newUrl, '#');  // truncate at hashkey
+	if (hashKey)
+	    {
+	    *hashKey = 0;
+	    }
+	}
+
     if (success && !newUrl) /* success after 0 to 5 redirects */
         {
 	if (redirectCount > 0)
