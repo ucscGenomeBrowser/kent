@@ -1,0 +1,2 @@
+Found 1 problem:
+warning: missing hub overview description page (descriptionUrl setting)

@@ -1,0 +1,4 @@
+group test
+label TEST
+defaultIsClosed 1
+priority 1

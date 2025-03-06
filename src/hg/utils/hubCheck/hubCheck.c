@@ -619,7 +619,8 @@ return FALSE;
 }
 
 int hubCheckSubtrackSettings(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
-/* Check that 'subgroups' are consistent with what is defined at the parent level */
+/* Check subtrack specific settings, for example that 'subgroups' are consistent with what
+ * is defined at the parent level */
 {
 int retVal = 0;
 if (!tdbIsSubtrack(tdb))
@@ -634,6 +635,15 @@ struct errCatch *errCatch = errCatchNew();
 
 if (errCatchStart(errCatch))
     {
+    // check that subtrack group is the same as the parent group:
+    char *subTrackGroup = tdb->grp;
+    char *parentGroup = tdb->parent->grp;
+    if (!sameString(subTrackGroup, parentGroup))
+        {
+        errAbort("assembly %s: track %s has a different group (%s) than parent %s (group %s). Please specify the group setting in both the parent and the subtrack stanzas", trackHubSkipHubName(genome->name), subtrackName, subTrackGroup, trackHubSkipHubName(tdb->parent->track), parentGroup);
+        }
+
+    // check subgroups settings
     membersForAll = membersForAllSubGroupsGet(tdb->parent, NULL);
 
     // membersForAllSubGroupsGet() warns about the parent stanza, turn it into an errAbort
