@@ -1,0 +1,45 @@
+hub groupsTest
+shortLabel groupsTest
+longLabel groupsTest
+genomesFile badGroups.txt
+email email@email.email
+
+genome hs1
+trackDb badGroups.txt
+useOneFile on
+groups groupSpec.txt
+
+track badGroupsComposite
+group test
+visibility dense
+compositeTrack on
+type bigBed 9
+shortLabel badGroupsComposite
+longLabel badGroupsComposite
+html https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/browser/CHM13/html/censat.html
+mouseOverField name
+priority 20
+
+    track badGroupsGoodChild
+    parent badGroupsComposite
+    shortLabel badGroupsGoodChild
+    longLabel badGroupsGoodChild
+    group test
+    type bigBed 9
+    visibility dense
+    itemRgb on
+    bigDataUrl https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/browser/CHM13/bbi/censat_v2.1.bb
+    html https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/browser/CHM13/html/censat.html
+    priority 20.1
+
+    track badGroupsBadChild
+    parent badGroupsComposite
+    shortLabel badGroupsBadChild
+    longLabel badGroupsBadChild
+    group MISSINGFROMGROUPSPEC
+    type bigBed 9
+    visibility dense
+    itemRgb on
+    bigDataUrl https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/browser/CHM13/bbi/censatStrand_v2.1.bb
+    html https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/browser/CHM13/html/censat.html
+    priority 20.2
