@@ -230,4 +230,45 @@
       </pre>
     </div>
   </div>
-<!--#include virtual="${ROOT}inc/footer.html" -->
+    <!-- Start of ADGC5 Henry Gantt Chart-->
+  <div class="cirm-page-title back-light-blue"><h5 class="cirm-page-title-text">ADGC5 Scripps timeline</h5></div>
+  <div class="row">
+    <div class="col-md-12">
+      <pre class="mermaid">
+        gantt
+        dateFormat  YYYY-MM-DD
+        axisFormat  %Y-Q%q
+        title       ADGC5  Scripps
+
+        section Grant Year
+        Start Grant Year 2     :milestone, m1, 2024-03-31, 0d
+        Start Grant Year 3     :milestone, m1, 2025-03-31, 0d
+        Start Grant Year 4     :milestone, m1, 2026-03-31, 0d
+        Start Grant Year 5     :milestone, m1, 2027-04-01, 0d
+
+        section Aim 1
+        Refine AAV-based Perturb-seq, test v1 and v2, assess data quality, finalize method :  Vt1, 2024-09-01,2025-04-01
+        Design gRNAs and generate vectors for Perturb-seq :  Vt2, 2024-09-01,2025-04-01
+        Choose single cell technology; test, validate with finalized Perturb-seq method :  Vt3, 2024-09-01,2025-04-01
+        Test gRNA efficacy in vitro; nominate final perturbation vectors to be used :  Vt4, 2024-09-01,2025-04-01
+        Discuss within and across ADGC groups to choose genes to target among list of 259 genes; finalize gene selection for this project :  Vt5, 2024-09-01,2025-04-01
+
+        Generate multiomics data for 50 genes in 1 brain region at 1 time point :  V_Y2t1, 2025-04-01,52w
+        Submit L0/L1 data to DRACC (Restricted) ~175 FASTQ for ~75TB overall : crit, V_Y2t2, 2025-04-01,52w
+
+        section Aim 2
+        Refine brain clearing experiments (1) test CUBIC method and assess data quality :  Vt6, 2024-09-01,2025-04-01
+        Refine brain clearing experiments (2) test LifeCanvas (CLARITY) method and assess data quality :  Vt7, 2024-09-01,2025-04-01
+        Establish data analysis pipeline through semi-automatic image tracing and segmentation :  Vt8, 2024-09-01,2025-04-01
+        Establish approaches to integrate single-cell omic data with spatial morphometric data :  Vt9, 2024-09-01,2025-04-01
+        Select first 5 ASD risk genes to be included in the study :  Vt10, 2024-09-01,2025-04-01
+
+        Test gRNA efficacy in vitro, nominate final vectors, collect brain samples :  V_Y2t3, 2025-04-01,52w
+        Implement functional pipeline for analyzing Perturb-seq multiomics data :  V_Y2t4,2025-04-01,52w
+        Develop methods for GRN analysis of multiomics data :  V_Y2t5, 2025-04-01,52w
+        Identify datasets to be used to build GRNs from developing human brains :  V_Y2t6, 2025-04-01,52w
+        Generate raw TIFF format and 3D swc files for 100 neurons on 3 genes  :  V_Y2t7, 2025-04-01,52w
+      </pre>
+    </div>
+  </div>
+  <!--#include virtual="${ROOT}inc/footer.html" -->
