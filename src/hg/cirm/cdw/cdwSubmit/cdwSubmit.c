@@ -573,6 +573,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "rcc", "idat", "fasta", "customTrack", "pdf", "png", "vcf", "cram", "jpg", "text", "html",
     "tsv", "csv",
     "raw", "xls",
+    "h5ad", "rds",
     "tif", "avi",
     "kallisto_abundance", "expression_matrix",
     };
