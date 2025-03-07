@@ -573,6 +573,8 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "rcc", "idat", "fasta", "customTrack", "pdf", "png", "vcf", "cram", "jpg", "text", "html",
     "tsv", "csv",
     "raw", "xls",
+    "h5ad", "rds",
+    "tif", "avi",
     "kallisto_abundance", "expression_matrix",
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
@@ -1086,9 +1088,12 @@ int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
 if (!noBackup)
     {
     char cmd[PATH_LEN];
-    if (getenv("CIRM") == NULL) errAbort("Please set up your CIRM environment variable."); 
-    safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
-    mustSystem(cmd); 
+    char *backupDir = cdwSetting(conn, "backup");
+    if (backupDir != NULL)
+	{
+	safef(cmd, sizeof(cmd), "cdwBackup %s/cdwSubmit.%i", backupDir, submitId -1);  
+	mustSystem(cmd); 
+	}
     }
 
 /* Put our manifest and metadata files */

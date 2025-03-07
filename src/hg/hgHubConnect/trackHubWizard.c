@@ -197,17 +197,17 @@ jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css\">\n");
+    "href=\"https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css\">\n");
 puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/2.1.3/js/dataTables.min.js\"></script>");
+    "src=\"https://cdn.datatables.net/2.2.2/js/dataTables.min.js\"></script>");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/buttons/3.1.1/css/buttons.dataTables.min.css\">\n");
+    "href=\"https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.min.css\">\n");
 puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.min.js\"></script>");
+    "src=\"https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.min.js\"></script>");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/select/2.1.0/css/select.dataTables.min.css\">\n");
+    "href=\"https://cdn.datatables.net/select/3.0.0/css/select.dataTables.min.css\">\n");
 puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/select/2.1.0/js/dataTables.select.min.js\"></script>");
+    "src=\"https://cdn.datatables.net/select/3.0.0/js/dataTables.select.min.js\"></script>");
 puts("<link href=\"https://releases.transloadit.com/uppy/v4.5.0/uppy.min.css\" rel=\"stylesheet\">");
 puts("<script type=\"text/javascript\" src=\"https://releases.transloadit.com/uppy/v4.5.0/uppy.min.js\"></script>");
 jsIncludeFile("hgMyData.js", NULL);

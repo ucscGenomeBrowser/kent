@@ -1,0 +1,3 @@
+Found 2 problems:
+assembly hs1: track badGroupsBadChild has a different group (_MISSINGFROMGROUPSPEC) than parent badGroupsComposite (group _test). Please specify the group setting in both the parent and the subtrack stanzas
+warning: missing hub overview description page (descriptionUrl setting)

@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel
+test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup
 	${MAKE} clean
 
 one:	mkout
@@ -41,6 +41,18 @@ autoScale: mkout
 noLongLabel:	mkout
 	-${hubCheck} input/noLongLabel.txt > output/noLongLabel.txt
 	diff expected/noLongLabel.txt output/noLongLabel.txt
+
+badGroups: mkout
+	-${hubCheck} input/badGroups.txt > output/badGroups.output.txt 2>/dev/null
+	diff expected/badGroups.output.txt output/badGroups.output.txt
+
+goodGroups: mkout
+	-${hubCheck} input/goodGroups.txt > output/goodGroups.output.txt
+	diff expected/goodGroups.output.txt output/goodGroups.output.txt
+
+noCompositeGroup: mkout
+	-${hubCheck} input/noCompositeGroup.txt > output/noCompositeGroup.ouptut.txt 2>/dev/null
+	diff expected/noCompositeGroup.output.txt output/noCompositeGroup.txt
 
 mkout::
 	@mkdir -p output

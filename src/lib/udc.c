@@ -742,6 +742,13 @@ while (TRUE)
 	return FALSE;
 	}
 
+    // removing any hashkey from redirect location
+    char *hashKey = strchr(newUrl, '#');  // truncate at hashkey
+    if (hashKey)
+	{
+	*hashKey = 0;
+	}
+
     // path may be relative
     if (hasProtocol(newUrl))
 	{

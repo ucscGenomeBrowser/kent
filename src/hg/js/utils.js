@@ -1359,7 +1359,7 @@ function undecoratedDb(db)
 {
 var retDb = db;
 if (db.startsWith("hub_")) {
-    retDb = db.split('_', 3)[2];
+    retDb = db.split('_').slice(2).join('_');
 }
 return retDb;
 }

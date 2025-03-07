@@ -1280,6 +1280,19 @@ if (isEmpty(hubUrl) && isNotEmpty(db))
         hubUrl = newHubUrl;  // use curated hub hubUrl
         cgiVarSet("hubUrl", hubUrl);   // subsequent code grabs hubUrl from env
         }
+    if (startsWith("hub_", db))
+        {
+        unsigned hubId = hubIdFromTrackName(db);
+        struct hubConnectStatus *hub = hubFromId(hubId);
+        if (hub)
+            {
+            // change up the arguments so it appears an assembly hub had been requested correctly
+            db = trackHubSkipHubName(db);
+            cgiVarSet("genome", db);
+            hubUrl = hub->hubUrl;
+            cgiVarSet("hubUrl", hubUrl);
+            }
+        }
     }
 
 if (isEmpty(hubUrl) && isNotEmpty(db))

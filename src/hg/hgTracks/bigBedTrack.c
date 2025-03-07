@@ -30,6 +30,7 @@
 #include "chromAlias.h"
 #include "quickLift.h"
 #include "hgConfig.h"
+#include "heatmap.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -789,6 +790,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         lf->original = genePredFromBedBigGenePred(chromName, bedCopy, bb); 
         }
 
+    if (startsWith("bigBed", track->tdb->type))
+        {
+        // Clone bb so that we'll have access the to extra fields contents.  This is used in
+        // alternate display modes for bigBeds (so far just "heatmap", but more are likely to come).
+        struct bigBedInterval *bbCopy = CloneVar(bb);
+        bbCopy->rest = cloneMem(bbCopy->rest, strlen(bbCopy->rest)+1);
+        bbCopy->next = NULL;
+        lf->original = bbCopy;
+        }
+
     if (lf->mouseOver == NULL)
         {
         if (mouseOverIdx > 0)
@@ -924,9 +935,9 @@ return 3; // if we can't get the bbi, use the minimum
 }
 #endif
 
-void bigBedMethods(struct track *track, struct trackDb *tdb, 
+void commonBigBedMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[])
-/* Set up bigBed methods. */
+/* Set up common bigBed methods used by several track types that depend on the bigBed format. */
 {
 char *newWords[wordCount];
 
@@ -949,4 +960,17 @@ if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 
     }
 #endif
 complexBedMethods(track, tdb, TRUE, wordCount, newWords);
+}
+
+void bigBedMethods(struct track *track, struct trackDb *tdb, 
+                                int wordCount, char *words[])
+/* Set up bigBed methods for tracks that are type bigBed. */
+{
+commonBigBedMethods(track, tdb, wordCount, words);
+if (sameWordOk(trackDbSetting(tdb, "style"), "heatmap"))
+    {
+    // Might want to check here if required heatmap settings/fields are in place,
+    // maybe some combo of row count and labels.
+    heatmapMethods(track);
+    }
 }
