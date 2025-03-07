@@ -9,7 +9,7 @@ void usage()
 errAbort(
   "tabFmt - Format a tab-seperated file for human readability\n"
   "Usage:\n"
-  "   tabFmt [options] [inFile] [outFile]\n"
+  "   tabFmt [options] inFile [outFile]\n"
   "\n"
   "Options:\n"
     "  -right - right-justify\n"
@@ -262,13 +262,12 @@ optionInit(&argc, argv, optionSpecs);
 if (optionExists("h") || optionExists("help"))
     usage();
 
-if (argc > 3)
+if ((argc < 2) || (argc > 3))
     usage();
 clRight = optionExists("right");
 clNumRight = optionExists("numRight");
 clPassNoTab = optionExists("passNoTab");
 
-tabFmt(((argc >= 2) ? argv[1] : "stdin"),
-       ((argc >= 3) ? argv[2] : "stdout"));
+tabFmt(argv[1], ((argc >= 3) ? argv[2] : "stdout"));
 return 0;
 }
