@@ -572,8 +572,14 @@ if (errCatchStart(errCatch))
             cgiParagraph("");
             printf("Successfully converted %d record", ct);
             printf("%s: ", ct > 1 ? "s" : "");
-            printf("<A HREF=%s TARGET=_blank>View Conversions</A>\n", mappedTn.forCgi);
+            printf("<A HREF=%s TARGET=_blank>Download Conversions</A>\n", mappedTn.forCgi);
+            printf("<a href='#' data-url='%s' class='link' id='viewLink'>View Conversions</a>\n", mappedTn.forCgi);
+            jsInlineF("document.getElementById('viewLink').addEventListener('click', function(ev) { "
+                "ev.preventDefault();"
+                "forceDisplayBedFile(ev.currentTarget.getAttribute('data-url'));"
+                "});");
             }
+
         if (errCt)
             {
             /* some records not converted */

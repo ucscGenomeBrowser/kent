@@ -4623,3 +4623,23 @@ function saveHistory(obj, urlParts, replace) {
         history.pushState(obj, "", urlParts.baseUrl + (urlParts.args.length !== 0 ? "?" + urlParts.args : ""));
     }
 }
+
+function forceDisplayBedFile(url) {
+    var w = window.open('');
+    w.document.write('<a class="button" HREF="'+url+'" TARGET=_blank><button>Download File</button></a>&nbsp;');
+    w.document.write('<button id="closeWindowLink" HREF="#">Close Tab</button>');
+    w.onload = () => {
+      // Attach event listeners after the new window is loaded
+      w.document.getElementById('closeWindowLink').addEventListener('click', () => {
+        // Handle click event
+        w.close();
+      });
+    };
+    fetch(url).then(response => response.text()) // Read the response as text
+    .then(text => {
+       w.document.write('<pre>' + text + '</pre>'); // Display the content
+       w.document.close(); // Close the document to finish rendering
+    })
+    .catch(error => console.error('Error fetching BED file:', error));
+}
+
