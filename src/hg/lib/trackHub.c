@@ -1519,34 +1519,24 @@ if (fd >= 0)
 return hubName;
 }
 
-static void dumpTdbAndParents(struct dyString *dy, struct trackDb *tdb, struct hash *existHash, struct hash *wantHash)
+static void dumpTdbAndChildren(struct dyString *dy, struct trackDb *tdb)
 /* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
 {
-#ifdef NOTNOW  // don't dump the parents of tracks yet
-if (tdb->parent)
-    {
-    dumpTdbAndParents(dy, tdb->parent, existHash, NULL);
-    }
-
-hashStore(existHash, "track");
-#endif
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {   
-    if (!hashLookup(existHash, hel->name) && ((wantHash == NULL) || hashLookup(wantHash, hel->name)))    
-        {
-        dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
-        hashStore(existHash, hel->name);
-        }
+    dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
     }
 
-if (tdb->parent)
-    {
-    struct hash *newWantHash = newHash(4);
-    hashStore(newWantHash, "type"); // right now we only want type from parents
-    dumpTdbAndParents(dy, tdb->parent, existHash, newWantHash);
-    }
+if (tdb->subtracks)
+        {
+        for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
+            {
+            dyStringPrintf(dy, "\ntrack %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
+            dumpTdbAndChildren(dy, tdb);
+            }
+        }
 }
 
 static bool subtrackEnabledInTdb(struct trackDb *subTdb)
@@ -1607,78 +1597,150 @@ struct dyString *trackDbString(struct trackDb *tdb)
 /* Convert a trackDb entry into a dyString. */
 {
 struct dyString *dy;
-struct hash *existHash = newHash(5);
 
 // add a note that the name based handler shouldn't be used on this track
 // add a note that this is a quickLifted track so the browser will accept tracks that aren't big*
 dy = dyStringNew(200);
 dyStringPrintf(dy, "track %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
-hashStore(existHash, "track");
     
-dumpTdbAndParents(dy, tdb, existHash, NULL);
+dumpTdbAndChildren(dy, tdb);
 
 return dy;
 }
 
-static void walkTree(FILE *f, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy)
+static boolean validateOneTdb(char *db, struct trackDb *tdb)
+{
+if (!( startsWith("bigBed", tdb->type) || \
+       startsWith("bigWig", tdb->type) || \
+       startsWith("bed ", tdb->type)))
+    {
+    return FALSE;
+    }
+
+// make sure we have a bigDataUrl
+if (startsWith("bigBed", tdb->type) || \
+       startsWith("bigWig", tdb->type))
+    {
+    char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+
+    if (fileName == NULL)
+        {
+        struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+        fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+        hashAdd(tdb->settingsHash, "bigDataUrl", fileName);
+        }
+    }
+
+return TRUE;
+}
+
+static struct trackDb * validateTdbChildren(char *db, struct trackDb *tdb)
+/* return a list of the children that can be quick lifted */
+{
+struct trackDb *validTdbs = NULL;
+struct trackDb *nextTdb;
+unsigned count = 0;
+
+if (tdb->subtracks)  // this is a view, descend again
+    {
+    tdb->subtracks = validateTdbChildren(db, tdb->subtracks);
+
+    if (tdb->subtracks != NULL)
+        {
+        slAddHead(&validTdbs, tdb);
+        if (tdb->visibility)
+            count++;
+        }
+    }
+else
+    {
+    for(; tdb; tdb = nextTdb)
+        {
+        nextTdb = tdb->next;
+        if (validateOneTdb(db, tdb))
+            {
+            slAddHead(&validTdbs, tdb);
+            if (tdb->visibility)
+                count++;
+            }
+        }
+    }
+if (count)
+    return validTdbs;
+
+return NULL;
+}
+
+static boolean validateTdb(char *db, struct trackDb *tdb)
+// make sure we only output track types that can
+// be quickLifted.  Return true if we any tracks survive
+{
+if (tdb->subtracks)
+    {
+    tdb->subtracks = validateTdbChildren(db, tdb->subtracks);
+
+    if (tdb->subtracks == NULL)
+        return FALSE;
+    return TRUE;
+    }
+
+return validateOneTdb(db, tdb);
+}
+
+static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy)
 /* walk tree looking for visible tracks. */
 {
 for(; tdb; tdb = tdb->next)
     {
-    if (tdb->subtracks)
-        walkTree(f, cart, tdb->subtracks, visDy);
-    else 
+    boolean isVisible = FALSE;
+
+    if (tdb->parent == NULL)  // not in super track
         {
-        if (!( startsWith("big", tdb->type) || startsWith("bed ", tdb->type)))
-            continue;
-        boolean isVisible = FALSE;
-        if (tdb->parent == NULL)
+        char *cartVis = cartOptionalString(cart, tdb->track);
+        if (cartVis != NULL)
             {
-            char *cartVis = cartOptionalString(cart, tdb->track);
-            if (cartVis != NULL)
-                {
-                tdb->visibility = hTvFromString(cartVis);
-                }
-            isVisible =  tdb->visibility != tvHide;
-            }
-        else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
-            {
-            char *cartVis = cartOptionalString(cart, tdb->parent->track);
-            if ((cartVis == NULL) && tdb->parent->parent)
-                cartVis = cartOptionalString(cart, tdb->parent->parent->track);
             tdb->visibility = hTvFromString(cartVis);
-            isVisible = TRUE;
             }
+        isVisible =  tdb->visibility != tvHide;
+        }
+    else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb)) // child of supertrack
+        {
+        char *cartVis = cartOptionalString(cart, tdb->parent->track);
+        if (cartVis != NULL)
+            tdb->visibility = hTvFromString(cartVis);
+        else if (tdbIsSuperTrack(tdb->parent))
+            tdb->visibility = tdb->parent->isShow;
+        isVisible = TRUE;
+        }
 
-        if (isVisible)
+    if (isVisible && validateTdb(db, tdb))
+        {
+        dyStringPrintf(visDy, "&%s=%s", tdb->track,hStringFromTv(tdb->visibility));
+        //if (hashLookup(tdb->settingsHash, "customized") == NULL)
             {
-            dyStringPrintf(visDy, "&%s=%s", tdb->track,hStringFromTv(tdb->visibility));
-            //if (hashLookup(tdb->settingsHash, "customized") == NULL)
-                {
-                hashRemove(tdb->settingsHash, "maxHeightPixels");
-                hashRemove(tdb->settingsHash, "superTrack");
-                hashRemove(tdb->settingsHash, "subGroups");
-                hashRemove(tdb->settingsHash, "polished");
-                hashRemove(tdb->settingsHash, "noInherit");
-                hashRemove(tdb->settingsHash, "group");
-                hashRemove(tdb->settingsHash, "parent");
-                }
-
-            //hashReplace(tdb->settingsHash, "customized", "on");
-
-            // is this a custom track?
-            char *tdbType = trackDbSetting(tdb, "tdbType");
-            if (tdbType != NULL)
-                {
-                hashReplace(tdb->settingsHash, "type", tdbType);
-                hashReplace(tdb->settingsHash, "shortLabel", trackDbSetting(tdb, "name"));
-                hashReplace(tdb->settingsHash, "longLabel", trackDbSetting(tdb, "description"));
-                }
-
-            struct dyString *dy = trackDbString(tdb);
-
-            fprintf(f, "%s\n", dy->string);
+            hashRemove(tdb->settingsHash, "maxHeightPixels");
+            hashRemove(tdb->settingsHash, "superTrack");
+            hashRemove(tdb->settingsHash, "subGroups");
+            hashRemove(tdb->settingsHash, "polished");
+            hashRemove(tdb->settingsHash, "noInherit");
+            hashRemove(tdb->settingsHash, "group");
+            hashRemove(tdb->settingsHash, "parent");
             }
+
+        //hashReplace(tdb->settingsHash, "customized", "on");
+
+        // is this a custom track?
+        char *tdbType = trackDbSetting(tdb, "tdbType");
+        if (tdbType != NULL)
+            {
+            hashReplace(tdb->settingsHash, "type", tdbType);
+            hashReplace(tdb->settingsHash, "shortLabel", trackDbSetting(tdb, "name"));
+            hashReplace(tdb->settingsHash, "longLabel", trackDbSetting(tdb, "description"));
+            }
+
+        struct dyString *dy = trackDbString(tdb);
+
+        fprintf(f, "%s\n", dy->string);
         }
     }
 }
@@ -1695,7 +1757,7 @@ char *filename = getHubName(cart, db);
 FILE *f = mustOpen(filename, "a");
 chmod(filename, 0666);
 
-walkTree(f, cart, tdbList, visDy);
+walkTree(f, db, cart, tdbList, visDy);
 fclose(f);
 
 return cloneString(filename);
