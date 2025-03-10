@@ -1508,10 +1508,11 @@ if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
     trashDirDateFile(&hubTn, "quickLift", "hub", ".txt");
     hubName = cloneString(hubTn.forCgi);
     cartSetString(cart, buffer, hubName);
-    FILE *f = mustOpen(hubName, "a");
-    outHubHeader(f, db);
-    fclose(f);
     }
+
+FILE *f = mustOpen(hubName, "w");
+outHubHeader(f, db);
+fclose(f);
 
 if (fd >= 0)
     close(fd);
@@ -1526,7 +1527,8 @@ struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {   
-    dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
+    if (differentString(hel->name, "track"))
+        dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
     }
 
 if (tdb->subtracks)

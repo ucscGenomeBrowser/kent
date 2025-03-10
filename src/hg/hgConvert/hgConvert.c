@@ -315,10 +315,10 @@ if (doQuickLift)
 
     visDy = newDyString(1024);
     char *newHub = trackHubBuild(fromDb->name, cart, visDy);
-    char *error;
+    char *error = NULL;
     quickHub = hubFindOrAddUrlInStatusTable(cart, newHub, &error);
     if (error != NULL)
-        errAbort("can't add quickLift hub");
+        errAbort("can't add quickLift hub (error %s)",error);
     }
 
 chainList = chainLoadAndTrimIntersecting(fileName, chrom, start, end);
