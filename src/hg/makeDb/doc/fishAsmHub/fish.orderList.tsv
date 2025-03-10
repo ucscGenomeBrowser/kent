@@ -12,8 +12,9 @@ GCA_963971535.1_fNotCoa1.1	Antarctic jonasfish (primary hap 2024)
 GCA_951214905.1_fEleAnt2.1_alternate_haplotype	Antarctic lanternfish (alternate hap 2023)
 GCA_951216825.1_fEleAnt2.1	Antarctic lanternfish (primary hap 2023)
 GCA_902827135.1_fHarAnt1.1	Antarctic spiny plunderfish (primary hap 2020)
-GCF_002910315.2_ASM291031v2	Arctic char
+GCF_045679555.1_SLU_Salpinus.1	Arctic char (2024)
 GCA_036784965.1_fSalAlp2_p1.0	Arctic char (CBP00131 primary hap 2024)
+GCF_002910315.2_ASM291031v2	Arctic char (IW2-2015 2018)
 GCA_946807865.1_fSilAri3.1_alternate_haplotype	Aristotle's catfish (alternate hap 2022)
 GCA_946808225.1_fSilAri3.1	Aristotle's catfish (primary hap 2022)
 GCF_013103735.1_CSU_Ecrag_1.0	Arkansas darter
@@ -293,6 +294,7 @@ GCF_008692095.1_UIUC_Espe_1.0	orangethroat darter
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish (2019)
 GCA_902148825.1_fSphaOr1.1_alternate_haplotype	orbiculate cardinalfish (alternate hap 2019)
 GCF_027580225.1_HAU_Mang_1.0	oriental weatherfish (BS_2022a 2023)
+GCF_046630095.1_CSIRO_AGI_Tana_v1	oyster pompano (Australia AG129_WGS33_773 2025)
 GCF_000239375.1_PunNye1.0	P.nyererei 1_Seehausen
 GCF_031168955.1_ASM3116895v1	Pacific cod (2023)
 GCF_013339905.1_IPHC_HiSten_1.0	Pacific halibut (PH-IPHC-18 2020)
@@ -368,7 +370,7 @@ GCF_021292245.1_ASM2129224v1	smallmouth bass
 GCF_033978785.1_RoL_Eaeq_v1.1	snake pipefish (RoL-2023_Sb 2023)
 GCF_006149115.2_Oner_1.1	sockeye salmon (On170113-E2 v2 2019)
 GCF_034236695.1_Oner_Uvic_2.0	sockeye salmon (Pitt River 2024)
-GCF_902827115.1_fPseGeo1.1	South Georgia icefish
+GCF_902827115.2_fPseGeo1.2	South Georgia icefish (v2 primary hap 2022)
 GCA_910596085.1_fThuMac1.1_alternate_haplotype	southern bluefin tuna (alternate hap 2021)
 GCF_910596095.1_fThuMac1.1	southern bluefin tuna (primary hap 2021 refseq)
 GCF_002775205.1_X_maculatus-5.0-male	southern platyfish
@@ -422,6 +424,7 @@ GCA_013347815.1_fAntMac1.alt	warty frogfish (fAntMac1 alternate hap 2020)
 GCA_013358685.1_fAntMac1.pri	warty frogfish (primary hap 2020)
 GCF_019740435.1_SWU_Gaff_1.0	western mosquitofish
 GCF_029890125.1_OSU_Roscu_1.1	western speckled dace (OS25496 2023)
+GCF_045791955.1_UVic_Ocla_1.0	westslope cutthroat trout (Uvic-CL-2024 2024)
 GCF_016077235.1_ASM1607723v1	White Sands pupfish
 GCF_004355925.1_GSC_Weel_1.0	wolf-eel
 GCA_023055415.1_fCliAna1.0.a	woolly sculpin (alternate hap CAN_PGR_092001 2022)

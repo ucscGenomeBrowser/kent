@@ -44,12 +44,14 @@ GCF_000143395.1_Attacep1.0	ant A.cephalotes
 GCF_001594045.1_Acol1.0	ant A.colombica
 GCF_001594065.2_Ccosl1.0	ant C.costatus (v2 MS0001 2016)
 GCF_021464435.1_ULB_Chis1_1.0	ant C.hispanica (Lineage 1 2022)
+GCF_019399895.1_Cobs3.1	ant C.obscurior (alpha-2009 2024)
 GCA_025532165.1_iyCamVici1.0	ant C.vicinus (PSW18456_S1 2022)
 GCF_001313825.1_ASM131382v1	ant D.quadriceps
 GCF_003651465.1_ASM365146v1	ant F.exsecta
 GCF_005281655.2_TAMU_Nfulva_1.1	ant N.fulva (TAMU-Nful-2015 v1.1 2019)
 GCF_010583005.1_Obru_v1	ant O.brunneus
 GCF_002006095.1_ASM200609v1	ant P.gracilis
+GCF_030449975.1_iyPolMexi1.0	ant P.mexicanus (NDT 795.1 2023)
 GCF_001594075.2_Tcor1.1	ant T.cornetzi (Tcor2-1 v1.1 2016 BGI)
 GCF_003070985.1_ASM307098v1	ant T.curvispinosus
 GCF_001594115.1_Tsep1.0	ant T.septentrionalis
@@ -207,6 +209,7 @@ GCF_029169275.1_AcerK_1.0	Asiatic honeybee (GH-2021 2023)
 GCF_028750875.1_UCM_ALF_1.0	aster leafhopper (MER2022 2023)
 GCF_000517525.1_Limulus_polyphemus-2.1.2	Atlantic horseshoe crab
 GCF_026875155.1_ASM2687515v2	Australian red claw crayfish (HC-2022 2022)
+GCF_038502225.1_ASM3850222v1	Australian red claw crayfish (ZL_2023a 2024)
 GCF_009602425.1_ASM960242v1	Australian red waratah sea anemone
 GCF_000699065.1_Lcup_2.0	Australian sheep blowfly
 GCF_022045245.1_ASM2204524v1	Australian sheep blowfly (Lc7/37 2022)
@@ -245,14 +248,17 @@ GCF_039881205.1_ESF131.1	beetle E.similis (ESF13 2024)
 GCF_914767665.1_icHarAxyr1.1	beetle H.axyridis
 GCF_001412225.1_Nicve_v1.0	beetle N.vespilloides
 GCF_000648695.1_Otau_2.0	beetle O.taurus
+GCF_036711975.1_IU_Otau_3.0	beetle O.taurus (NC 2024)
 GCF_036711695.1_CSIRO_AGI_Zmor_V1	beetle Z.morio (UQ-CSIRO AGI-343-1 2024)
 GCF_001625305.1_Haploidv18h27	Belcher's lancelet
 GCA_019425515.1_ASM1942551v1	bird cherry-oat aphid (Rp-YL-2016 2021)
 GCF_020882245.1_ASM2088224v1	bird cherry-oat aphid (XX-2018 2021)
+GCF_963676685.1_xbMytEdul2.2	bivalve M.edulis (primary hap 2024)
 GCF_033153115.1_CSIRO_AGI_Sech_v1	bivalve S.echinata (Australia AGI-Se365-2 2023)
 GCF_023158985.2_OEROSLIN_1.1	bivalves O.edulis (OE_ROSLIN_2020 2022)
 GCA_022045225.1_xgHalCrac1.a	black abalone (W230 alternate hap 2022)
 GCA_022045235.1_xgHalCrac1.p	black abalone (W230 primary hap 2022)
+GCF_022045235.1_xgHalCrac1.p	black abalone (W230 primary hap 2022)
 GCA_001735545.1_ASM173554v1	black blowfly (Indy2012f 2016)
 GCF_015345945.1_Tmad_KSU_1.1	black flour beetle
 GCF_000247585.1_PP_INRA-310_V2	black shank of tobacco agent (INRA-310 2013)
@@ -345,6 +351,7 @@ GCF_008802855.1_Ppyr1.3	common eastern firefly
 GCF_015586225.1_ASM1558622v1	common green bottle fly
 GCF_905475395.1_inChrCarn1.1	common green lacewing
 GCF_000365465.3_Ptep_3.0	common house spider (v3 Goettingen 2019 refseq)
+GCF_043381705.1_CAS_Ptep_4.0	common house spider (YZ-2023 2024)
 GCF_932274485.2_xgPatVulg1.2	common limpet (v2 primary hap 2022)
 GCF_000836215.1_Ppol_1.0	common Mormon
 GCF_010416935.1_CU_Pfus_HIC	common paper wasp
@@ -472,6 +479,7 @@ GCF_036172545.1_AGI_CSIRO_Cbre_v1	fly C.brevitarsis (CSIRO-B50_1 2024)
 GCF_949628265.1_ieCloDipt1.1	fly C.dipterum (primary hap 2023)
 GCF_029603195.1_ASM2960319v2	fly C.longicornis (FDR11 2023)
 GCA_900258525.3_C_sonorensis_v2_redundans	fly C.sonorensis (2021)
+GCF_022539635.2_CSIRO-AGI_Ctep_v1	fly C.tepperi (1889 2024)
 GCF_009650485.2_ASM965048v2	fly D.albomicans (v2 15112-1751.03 2022)
 GCF_017639315.1_ASM1763931v2	fly D.ananassae (14024-0371.13 U. Maryland 2021)
 GCF_003285975.2_DanaRS2.1	fly D.ananassae (14024-0371.16-18 U. Chicago 2018)
@@ -480,6 +488,7 @@ GCA_005876895.1_DaztRS1	fly D.azteca (UCSD 14012-1071.03 2019)
 GCF_000233415.1_Dbia_2.0	fly D.biarmipes (BCM 2013)
 GCF_025231255.1_RU_DBia_V1.1	fly D.biarmipes (raj3 2022)
 GCF_018148935.1_ASM1814893v1	fly D.biarmipes (Stanford 2021)
+GCF_030179905.1_DbipHiC1v2	fly D.bipectinata (14024-0381.07 2023)
 GCF_000236285.1_Dbip_2.0	fly D.bipectinata (BCM 2013)
 GCF_018153845.1_ASM1815384v1	fly D.bipectinata (Stanford 2021)
 GCF_011750605.1_ASM1175060v1	fly D.busckii
@@ -496,6 +505,7 @@ GCF_900245975.1_DGUA_6	fly D.guanche
 GCF_003285905.1_DhydRS2	fly D.hydei
 GCF_004354385.1_UK_Dinn_1.0	fly D.innubila (TH190305 2019 refseq)
 GCA_004354385.2_ASM435438v2	fly D.innubila (TH190305 2020 genbank)
+GCF_030179895.1_DkikHiC1v2	fly D.kikkawai (14028-0561.14 2023)
 GCF_000224215.1_Dkik_2.0	fly D.kikkawai (Baylor 2013)
 GCF_018152535.1_ASM1815253v1	fly D.kikkawai (Stanford 2021)
 GCA_008042735.1_UCB_Dleo_1.0	fly D.leontia (RGN 210-13 2019)
@@ -526,12 +536,15 @@ GCF_014743375.2_RU_Dsub_v1.1	fly D.subpulchrella
 GCA_018150745.1_ASM1815074v1	fly D.sucinea (14030-0791.01 2021)
 GCF_023558435.1_ASM2355843v2	fly D.sulfurigaster albostrigata (15112-1811.04 2022)
 GCF_013340165.1_LBDM_Dsuz_2.1.pri	fly D.suzukii
+GCF_043229965.1_CBGP_Dsuzu_IsoJpt1.0	fly D.suzukii (2024)
 GCF_037355615.1_Dsuz_RU_1.0	fly D.suzukii (WT10 2024)
 GCF_000224235.1_Dtak_2.0	fly D.takahashii (BCM 2013)
+GCF_030179915.1_DtakHiC1v2	fly D.takahashii (IR98-3 E-12201 2023)
 GCF_018152695.1_ASM1815269v1	fly D.takahashii (Stanford 2021)
 GCF_016746235.2_Prin_Dtei_1.1	fly D.teissieri
 GCF_018151085.1_ASM1815108v1	fly D.tropicalis (14030-0801.00 2023)
 GCF_003285735.1_DvirRS2	fly D.virilis
+GCF_030788295.1_Dvir_AGI_RSII-ME	fly D.virilis (15010-1051.87 2023)
 GCA_007989325.2_ASM798932v2	fly D.virilis (160 2020)
 GCF_018902025.1_UCI_dwil_1.1	fly D.willistoni (14030-0811.24 2021)
 GCF_000005925.1_dwil_caf1	fly D.willistoni (TSC 14030-0811.24 2006)
@@ -550,6 +563,7 @@ GCA_002600895.1_ASM260089v1	freshwater planarian (S2 2017)
 GCF_025200985.1_Dgunungcola_SK_2	fruit fly (Sukarami 2022)
 GCF_016097555.1_Gae_host_genome	gastropods G.aegis
 GCF_037392515.1_JCU_Hal_asi_v2	gastropods H.asinina (JCU_RB_2024 2024)
+GCF_037325665.1_US_GU_Lsax_2.0	gastropods L.saxatilis (snail1 2024)
 GCF_028476545.1_ASM2847654v2	gastropods P.acuta (Inbredline_101_S28  2023)
 GCF_028476545.2_ASM2847654v3	gastropods P.acuta (Inbredline_101_S28 2023)
 GCF_003073045.1_ASM307304v1	gastropods P.canaliculata
@@ -574,9 +588,11 @@ GCA_905404095.1_ilGlaAlex1.1	green-underside blue
 GCA_023969395.1_ASM2396939v1	Gulf Coast tick (SK-2019 2022)
 GCA_002082055.1_nHd_3.1	H.dujardini (Z151 2017 tardigrades)
 GCA_020186115.1_ASM2018611v1	H.meleagridis (2922-C6/04-10x 2021)
+GCF_020186115.1_ASM2018611v1	H.meleagridis (2922-C6/04-10x 2021)
 GCA_020184695.1_ASM2018469v1	H.meleagridis (2922-C6/04-290x 2021)
 GCF_029227915.1_HSymV2.1	H.symbiolongicarpus hydrozoans (clone_291-10 2023)
 GCA_014858695.1_ASM1485869v1	hairy maggot blowfly (CPM2020 2020)
+GCF_041260155.1_AS_Pfla_20210202	hemichordates P.flava (L36383 2024)
 GCF_000003605.2_Skow_1.1	hemichordates S.kowalevskii
 GCA_040954625.1_ASM4095462v1	hemichordates Saccoglossus (HW-2024a hap1 2024)
 GCA_040954595.1_ASM4095459v1	hemichordates Saccoglossus (HW-2024a hap2 2024)
@@ -698,6 +714,7 @@ GCF_028554725.1_idZeuCucr1.2	melon fly (PBARC_wt_2022May primary hap 2023)
 GCF_000806345.2_ASM80634v2	melon fly (v2 USDA-PBARC White Pupae T1 2014)
 GCF_028408465.1_idAnaLude1.1	Mexican fruit fly (Willacy primary hap 2023)
 GCF_038994185.1_USDA_Dalb1.pri	mite/tick D.albipictus (Rhodes 1998 colony primary hap 2024)
+GCF_038994185.2_USDA_Dalb.pri_finalv2	mite/tick D.albipictus (Rhodes 1998 colony primary hap 2024)
 GCA_023375915.1_qqDerAnde1.1_alternate_haplotype	mite/tick D.andersoni (qqDerAnde1 alternate hap 2022)
 GCA_013339685.2_BIME_Hyas_1.3	mite/tick H.asiaticum (Hyas-2018 2020)
 GCF_037126465.1_ASM3712646v1	mite/tick O.turicata (Travis 2024)
@@ -835,6 +852,7 @@ GCF_014805675.1_ASM1480567v1.1	northern quahog (YKG-2019 2020)
 GCA_000172435.1_Freeze_1	northern root-knot nematode M.hapla (VW9 2008)
 GCF_026250575.1_icDioCari1.1	northern tamarisk beetle (Delta primary hap 2022)
 GCF_001188975.3_MU_Boleae_v2	olive fruit fly
+GCF_042242935.1_idBacOlea1	olive fruit fly (primary hap 2024)
 GCF_000520075.1_Apha_asta_APO3_V1	oomycetes (APO3 2014)
 GCA_000387505.2_par_scaffolds_v1	oomycetes (ATCC 12531 2013)
 GCF_000151545.1_ASM15154v2	oomycetes (CBS 223.65 2014)
