@@ -1528,17 +1528,22 @@ struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {   
     if (differentString(hel->name, "track"))
-        dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
+        {
+        if (sameString(hel->name, "parent") || sameString(hel->name, "html"))
+            dyStringPrintf(dy, "%s %s\n", hel->name, trackHubSkipHubName((char *)hel->val));
+        else
+            dyStringPrintf(dy, "%s %s\n", hel->name, ((char *)hel->val));
+        }
     }
 
 if (tdb->subtracks)
+    {
+    for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
         {
-        for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
-            {
-            dyStringPrintf(dy, "\ntrack %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
-            dumpTdbAndChildren(dy, tdb);
-            }
+        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
+        dumpTdbAndChildren(dy, tdb);
         }
+    }
 }
 
 static bool subtrackEnabledInTdb(struct trackDb *subTdb)
@@ -1645,13 +1650,18 @@ unsigned count = 0;
 
 if (tdb->subtracks)  // this is a view, descend again
     {
-    tdb->subtracks = validateTdbChildren(db, tdb->subtracks);
-
-    if (tdb->subtracks != NULL)
+    struct trackDb *view = tdb;
+    for (; view; view = nextTdb)
         {
-        slAddHead(&validTdbs, tdb);
-        if (tdb->visibility)
-            count++;
+        nextTdb = view->next;
+        view->subtracks = validateTdbChildren(db,view->subtracks);
+
+        if (view->subtracks != NULL)
+            {
+            slAddHead(&validTdbs, view);
+            if (view->visibility)
+                count++;
+            }
         }
     }
 else
@@ -1717,7 +1727,7 @@ for(; tdb; tdb = tdb->next)
 
     if (isVisible && validateTdb(db, tdb))
         {
-        dyStringPrintf(visDy, "&%s=%s", tdb->track,hStringFromTv(tdb->visibility));
+        dyStringPrintf(visDy, "&%s=%s", trackHubSkipHubName(tdb->track),hStringFromTv(tdb->visibility));
         //if (hashLookup(tdb->settingsHash, "customized") == NULL)
             {
             hashRemove(tdb->settingsHash, "maxHeightPixels");
