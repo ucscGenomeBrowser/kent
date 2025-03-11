@@ -616,7 +616,7 @@ _EOF_
 export target2bit=$dbTwoBit
 
 twoBitInfo \$target2bit stdout | sort -k2,2nr > \$db.chrom.sizes
-wget -O bigGenePred.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigGenePred.as'
+wget -O bigGenePredRefSeq.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigGenePredRefSeq.as'
 wget -O bigPsl.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigPsl.as'
 
 ### overall gene track with both predicted and curated
@@ -627,7 +627,7 @@ genePredToBed -tab -fillSpace process/\$db.ncbiRefSeq.gp stdout \\
 export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
 export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
 export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+bedToBigBed -type=bed12+8 -tab -as=bigGenePredRefSeq.as -extraIndex=name \\
   \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeq.bb
 bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
@@ -642,7 +642,7 @@ rm -f \$db.ncbiRefSeq.ix.txt
 if [ -s process/\$db.curated.gp ]; then
   \$HOME/kent/src/hg/utils/automation/updateName2.pl process/\$db.attrs.txt \\
      process/\$db.curated.gp | sort -k1,1 -k2,2n > \$db.ncbiRefSeqCurated.bigGp
-  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePredRefSeq.as -extraIndex=name \\
   \$db.ncbiRefSeqCurated.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqCurated.bb
   rm -f \$db.ncbiRefSeqCurated.bigGp
@@ -658,7 +658,7 @@ if [ -s process/\$db.curated.gp ]; then
     \$HOME/kent/src/hg/utils/automation/updateName2.pl process/\$db.attrs.txt \\
       process/\$db.refseqSelect.curated.gp | sort -k1,1 -k2,2n \\
          > \$db.ncbiRefSeqSelectCurated.bigGp
-    bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+    bedToBigBed -type=bed12+8 -tab -as=bigGenePredRefSeq.as -extraIndex=name \\
     \$db.ncbiRefSeqSelectCurated.bigGp \$db.chrom.sizes \\
       \$db.ncbiRefSeqSelectCurated.bb
     rm -f \$db.ncbiRefSeqSelectCurated.bigGp
@@ -674,7 +674,7 @@ if [ -s process/\$db.curated.gp ]; then
   if [ -s process/hgmd.curated.gp ]; then
     \$HOME/kent/src/hg/utils/automation/updateName2.pl process/\$db.attrs.txt \\
       process/hgmd.curated.gp | sort -k1,1 -k2,2n > \$db.ncbiRefSeqHgmd.bigGp
-    bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+    bedToBigBed -type=bed12+8 -tab -as=bigGenePredRefSeq.as -extraIndex=name \\
     \$db.ncbiRefSeqHgmd.bigGp \$db.chrom.sizes \\
       \$db.ncbiRefSeqHgmd.bb
     rm -f \$db.ncbiRefSeqHgmd.bigGp
@@ -693,7 +693,7 @@ if [ -s process/\$db.predicted.gp ]; then
   \$HOME/kent/src/hg/utils/automation/updateName2.pl process/\$db.attrs.txt \\
       process/\$db.predicted.gp | sort -k1,1 -k2,2n \\
         > \$db.ncbiRefSeqPredicted.bigGp
-  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePredRefSeq.as -extraIndex=name \\
   \$db.ncbiRefSeqPredicted.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqPredicted.bb
   rm -f \$db.ncbiRefSeqPredicted.bigGp
