@@ -558,6 +558,13 @@ dyStringPrintf(dy, "%s/%s", dir, file);
 return dy->string;
 }
 
+static boolean isDevHost()
+/* Return TRUE if it looks like we're running on hgwdev (or command line). */
+{
+char *httpHost = getenv("HTTP_HOST");
+return (httpHost == NULL || startsWith("hgwdev", httpHost) || startsWith("genome-test", httpHost));
+}
+
 #define USHER_SAMPLED_TREE_PREFIX "tree-0-"
 
 static int processOutDirFiles(struct usherResults *results, char *outDir,
@@ -573,10 +580,11 @@ memset(subtreeTns, 0, maxSubtrees * sizeof(*subtreeTns));
 memset(subtreeMuts, 0, maxSubtrees * sizeof(*subtreeMuts));
 struct dyString *dyScratch = dyStringNew(0);
 struct slName *outDirFiles = listDir(outDir, "*"), *file;
+boolean isDev = isDevHost();
 for (file = outDirFiles;  file != NULL;  file = file->next)
     {
     char *path = dirPlusFile(dyScratch, outDir, file->name);
-    if (sameString(file->name, "uncondensed-final-tree.nh"))
+    if (sameString(file->name, "uncondensed-final-tree.nh") || sameString(file->name, "uncondensed-final-tree1.nh"))
         {
         mustRename(path, results->bigTreePlusTn->forCgi);
         }
@@ -616,7 +624,7 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
                 trashDirFile(subtreeTns[subtreeIx], "ct", sname, ".nwk");
                 mustRename(path, subtreeTns[subtreeIx]->forCgi);
                 }
-            else
+            else if (isDev)
                 warn("Unexpected filename '%s' from usher, ignoring", file->name);
             }
         else if (partCount == 3)
@@ -638,10 +646,10 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
                 {
                 // Don't need this, just remove it
                 }
-            else
+            else if (isDev)
                 warn("Unexpected filename '%s' from usher, ignoring", file->name);
             }
-        else
+        else if (isDev)
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
         }
     else if (startsWith("single-subtree", file->name) ||
@@ -681,10 +689,10 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
                 {
                 // Don't need this, just remove it
                 }
-            else
+            else if (isDev)
                 warn("Unexpected filename '%s' from usher, ignoring", file->name);
             }
-        else
+        else if (isDev)
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
         }
     else if (sameString(file->name, "clades.txt"))
@@ -697,7 +705,7 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         {
         // Don't need this (or already parsed it elsewhere not here), just remove it.
         }
-    else
+    else if (isDev)
         warn("Unexpected filename '%s' from usher, ignoring", file->name);
     }
 dyStringFree(&dyScratch);
