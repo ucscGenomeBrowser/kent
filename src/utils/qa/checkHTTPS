@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eEu -o pipefail
 
-recipients="cluster-admin@soe.ucsc.edu,browser-qa@soe.ucsc.edu,mhaeussl@ucsc.edu"
+recipients=("cluster-admin@soe.ucsc.edu" "browser-qa@soe.ucsc.edu" "mhaeussl@ucsc.edu")
 wiggleRoom=$(date +%s -d"30 days");  # Flag for renewal within 30 days of expiry, sec past epoch
 
 output=""
@@ -46,5 +46,5 @@ done
 
 if [ -n "$output" ]
 then
-    echo -e "$output" | mail -s "Site Certificates expiring in < 30 days" -S 'from=Reply All Includes All QA <browser-qa@soe.ucsc.edu>' "$recipients"
+    echo -e "$output" | mail -s "Site Certificates expiring in < 30 days" -S 'from=Reply All Includes All QA <browser-qa@soe.ucsc.edu>' "${recipients[@]}"
 fi
