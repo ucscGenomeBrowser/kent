@@ -31,8 +31,9 @@ char *encodePath(char *path)
 {
 int maxSeps = 256;
 char *pathArr[maxSeps]; // errAbort if more than maxSeps subdirs
-int numChops = chopString(path, "/", pathArr, maxSeps);
-if (numChops > maxSeps)
+char *copy = cloneString(path);
+int numChops = chopString(copy, "/", pathArr, maxSeps);
+if (numChops >= maxSeps)
     errAbort("Too many subdirectories. Fix filesystem layout of upload and try again");
 struct dyString *ret = dyStringNew(0);
 int i = 0;
