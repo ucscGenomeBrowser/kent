@@ -11,7 +11,7 @@ noScoreFilter on
     track denovoDbssc
     parent denovoDbComposite on
     type bigBed 9 +
-    longLabel Simons Simplex Collection samples
+    longLabel Simons Simplex Collection samples from denovo-db
     bigDataUrl /gbdb/hg19/denovoDb/ssc_variants.bb 
     labelFields variant
     shortLabel ssc samples
@@ -22,7 +22,7 @@ noScoreFilter on
     track denovoDbnon-ssc
     parent denovoDbComposite
     type bigBed 9 +
-    longLabel Non-Simons Simplex Collection samples
+    longLabel Non-Simons Simplex Collection samples from denovo-db
     bigDataUrl /gbdb/hg19/denovoDb/non_ssc_variants.bb 
     labelFields variant
     shortLabel non-ssc samples
