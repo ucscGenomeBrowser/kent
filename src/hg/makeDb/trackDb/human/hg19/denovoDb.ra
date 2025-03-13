@@ -16,7 +16,7 @@ noScoreFilter on
     labelFields variant
     shortLabel ssc samples
     visibility dense
-    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}<br> <b>Transcript</b>: ${transcript}
     urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="http://www.genecards.org/cgi-bin/cardsearch.pl?search=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"
     
     track denovoDbnon-ssc
@@ -27,5 +27,5 @@ noScoreFilter on
     labelFields variant
     shortLabel non-ssc samples
     visibility dense
-    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}<br> <b>Transcript</b>: ${transcript}
     urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="http://www.genecards.org/cgi-bin/cardsearch.pl?search=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"
