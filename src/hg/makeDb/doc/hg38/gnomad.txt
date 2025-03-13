@@ -643,3 +643,44 @@ Sorting and writing extra index 1: 89 millis
     cp gnomadSv.html gnomadCNV.html
     #Updated the gnomadCNV.html
 ##############################################################################
+# Update gnomAD Structural Variants v4 - Gerardo
+# Redmine #35295
+# Adding a filter to show only the PASS variants and updating the mouseOver per Anna's request.
+
+# The gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz file has a FILTER field (978) that consists of the following:
+    zcat /hive/data/outside/gnomAD.4/sv/gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz | cut -f978 | sort | uniq -c | sort -nr
+    1199117 PASS
+     278316 UNRESOLVED
+     186815 LOWQUAL_WHAM_SR_DEL,OUTLIER_SAMPLE_ENRICHED
+     131479 LOWQUAL_WHAM_SR_DEL
+     109905 OUTLIER_SAMPLE_ENRICHED
+      82853 HIGH_NCR
+      79159 HIGH_NCR,UNRESOLVED
+      70291 HIGH_NCR,LOWQUAL_WHAM_SR_DEL
+       7280 IGH_MHC_OVERLAP,UNRESOLVED
+       5424 IGH_MHC_OVERLAP
+       1624 HIGH_NCR,IGH_MHC_OVERLAP,UNRESOLVED
+        882 IGH_MHC_OVERLAP,LOWQUAL_WHAM_SR_DEL
+        514 HIGH_NCR,IGH_MHC_OVERLAP
+        493 HIGH_NCR,IGH_MHC_OVERLAP,LOWQUAL_WHAM_SR_DEL
+        254 FAIL_MANUAL_REVIEW
+         57 REFERENCE_ARTIFACT
+         23 FAIL_MANUAL_REVIEW,HIGH_NCR
+          1 FILTER
+
+# Remade the bed4Plus file to include the FILTER field (978):
+    cd /hive/data/outside/gnomAD.4/sv
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | tawk '{print $1, $2, $3, $4, $26, $29, $27, $28, $30, $31, $32, $33, $34, $39, $41, $44, $45, $47, $48, $49, $52, $53, $627,  $626, $628, $631, $632, $803, $802, $804, $807, $808, $978}' > $out.bed4Plus_FILTER; done
+
+# Remade the bed9Plus using the updated awk file gnomadSvToUcsc_mod.FILTER.awk to add the FILTER field and update the mouseOver:
+   for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed4Plus_FILTER; do out=${f/.bed4Plus_FILTER/}; bedClip -truncate $f /hive/data/genomes/hg38/chrom.sizes stdout | ./gnomadSvToUcsc_mod.FILTER.awk | sort -k1,1 -k2,2n > $out.bed9Plus_FILTER; done
+
+# Added the FILTER field to the as file and named it gnomadSvMod_FILTER.as
+# Changed the name of the previous bigBed and Remade the bigBed with the FILTER:
+    mv gnomad.v4.1.sv.non_neuro_controls.sites.bb gnomad.v4.1.sv.non_neuro_controls.sites_old_Aug_1_2024_.bb
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed9Plus_FILTER; do out=${f/.bed9Plus_FILTER/}; bedToBigBed -tab -type=bed9+30 -as=gnomadSvMod_FILTER.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
+
+# Added the filter trackDb setting to the gnomadStructuralVariants stanza in human/hg38/gnomad.ra:
+filterValues.FILTER PASS,HIGH_NCR,IGH_MHC_OVERLAP,UNRESOLVED,REFERENCE_ARTIFACT
+filterValuesDefault.FILTER PASS
+filterType.FILTER multipleListAnd
