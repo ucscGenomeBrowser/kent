@@ -35680,3 +35680,37 @@ ln -s `pwd`/hg19ToHg38.link.bb /gbdb/hg19/quickLift/hg38.link.bb
 hgsql hgcentraltest -Ne 'insert into quickLiftChain values (0, "hg19", "hg38", "/gbdb/hg19/quickLift/hg38.bb")'
 
 ###
+
+#########################################################################
+# denovo-db v.1.6.1 (03-13-2025) Megna Chalamala
+
+wget http://denovo-db.gs.washington.edu/denovo-db.non-ssc-samples.variants.tsv.gz
+wget http://denovo-db.gs.washington.edu/denovo-db.ssc-samples.variants.tsv.gz
+wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes
+
+zcat /cluster/home/mchalama/public_html/tracks/denovo/hg19/denovo-db.ssc-samples.variants.tsv | \
+awk 'BEGIN {OFS="\t"} NR > 1 {
+    print $9, $10, $10, $12, "0", ".", $10, $10, "0", $1, $2, $3, $4, $5, $6, $7, $8, $11, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, "0"
+}' > output_fixed.bed
+nano bedExample2.as
+tail -n +2 output_fixed.bed > output_no_header.bed
+awk '{if($1 !~ /^chr/) $1 = "chr"$1; print}' OFS="\t" output_no_header.bed > output_standard.bed
+awk '{if ($2 != "chromStart") $2 = $2 - 1; print}' OFS="\t" output_no_header.bed > output_adjusted.bed
+awk 'NR==FNR {valid[$1]; next} $1 in valid' valid_chromosomes.txt output_standard.bed > filtered_output.bed
+awk -F'\t' 'BEGIN {OFS="\t"} {if (NF < 36) {for (i=NF+1; i<=36; i++) $i="0"}; print}' filtered_output.bed > filtered_output_fixed.bed
+awk -F'\t' 'BEGIN {OFS="\t"} {$26=($26 == "-1") ? "0" : $26; print}' filtered_output_fixed.bed > filtered_output_uint_fixed.bed
+bedToBigBed -as=bedExample2.as -type=bed9+27 -tab filtered_output_uint_fixed.bed hg19.chrom.sizes output.bb
+zcat denovo-db.non-ssc-samples.variants.tsv.gz | \
+awk 'BEGIN {OFS="\t"} NR > 1 {
+    print $9, $10, $10, $12, "0", ".", $10, $10, "0", $1, $2, $3, $4, $5, $6, $7, $8, $11, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, "0"
+}'  > output_non_ssc.bed
+awk '{if ($2 != "chromStart") $2 = $2 - 1; print}' OFS="\t" output_non_ssc.bed > output_non_ssc_adjusted.bed
+tail -n +2 output_non_ssc_adjusted.bed > output_non_ssc_no_header.bed
+awk '{if($1 !~ /^chr/) $1 = "chr"$1; print}' OFS="\t" output_non_ssc_no_header.bed > output_non_ssc_standard.bed
+awk -F'\t' 'BEGIN {OFS="\t"} {if (NF < 36) {for (i=NF+1; i<=36; i++) $i="0"}; print}' output_non_ssc_standard.bed > filtered_output_fixed_non_ssc.bed
+awk -F'\t' 'BEGIN {OFS="\t"} {$26=($26 == "-1") ? "0" : $26; print}' filtered_output_fixed_non_ssc.bed > output_non_ssc_final_fixed.bed
+awk -F'\t' '{if (length($10) > 255) print "Line " NR " has length " length($10)}' output_non_ssc_final_fixed.bed
+awk -F'\t' -v OFS='\t' '{if (length($18) > 255) $18 = substr($18, 1, 255); print}' output_non_ssc_final_fixed.bed > output_non_ssc_final_fixed_truncated.bed
+bedToBigBed -as=bedExample2.as -type=bed9+27 -tab output_non_ssc_final_fixed_truncated.bed hg19.chrom.sizes output_non_ssc.bb
+
+##
