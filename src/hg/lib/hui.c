@@ -7885,7 +7885,7 @@ char *speciesGroup   = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *speciesOrder   = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 #define MAX_SP_SIZE 2000
-#define MAX_GROUPS 20
+#define MAX_GROUPS 1000
 char sGroup[MAX_SP_SIZE];
 //Ochar *groups[20];
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
