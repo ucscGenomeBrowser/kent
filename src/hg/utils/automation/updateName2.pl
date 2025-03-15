@@ -6,43 +6,89 @@ use warnings;
 my $argc = scalar(@ARGV);
 if ($argc != 2) {
   printf STDERR "usage: updateName2.pl <file.attrs.txt> <file.gp>\n";
-  printf STDERR "will read the file.gp converting it to a bigGenePred\n";
-  printf STDERR "with column 18 of the bigGenePred outputting the\n";
-  printf STDERR "GeneID identifier when found in the file.attrs.txt\n";
-  printf STDERR "output of the revised bigBigGenePred will be to stdout.\n";
+  printf STDERR "Will read the file.gp converting it to a bigGenePred\n";
+  printf STDERR "    with column 18 of the bigGenePred outputting the\n";
+  printf STDERR "    GeneID identifier when found in the file.attrs.txt\n";
+  printf STDERR "Also fills in 'type' and 'geneType' columns when available. \n";
+  printf STDERR "Output of the revised bigBigGenePred will be to stdout.\n";
   printf STDERR "This function is used in the doNcbiRefSeq.pl script.\n";
   exit 255;
 }
 my $attrs = shift;
 my $gpFile = shift;
 
+my %parent;	# key is gene name, value is parent name
 my %dupList;	# key is gene name, placed on this list when duplicate IDs found
 		# for the same named gene, avoid these.
 my %geneId;	# key is gene name from colunn 1, value is GeneID number
+my %bioType;	# key is gene name from column 1, value is
+		#    the string associated with gene_biotype when found
+my %Type;	# key is gene name from column 1, value is
+		#    the string associated with Type when found
+my %descr;	# key is gene name, value is description string
 
-open (my $fh, "-|", "grep GeneID $attrs") or die "can not grep $attrs";
+open (my $fh, "-|", "egrep -w 'Parent|GeneID|Type|gene_biotype|description' $attrs") or die "can not grep $attrs";
 while (my $line = <$fh>) {
   chomp $line;
-  my @a = split(/\s+/, $line);
+  my @a = split(/\s+/, $line, 3);
   my $geneName = $a[0];
   next if (defined($dupList{$geneName}));
-  my $geneId = $a[-1];
-  my @b = split(/,/, $geneId);
+  if ($a[1] =~ /Dbxref/i) {
+      my $geneId = $a[-1];
+      my @b = split(/,/, $geneId);
   # could be csv list of gene IDs here, looking for the 'GeneID'
-  for my $maybeGeneId (@b) {
-     if ($maybeGeneId =~ m/^GeneID/i) {
-         $maybeGeneId =~ s/GeneID://i;
-         if (defined($geneId{$geneName})) {
-             if ($geneId{$geneName} ne $maybeGeneId) {
-                $dupList{$geneName} = "$geneId{$geneName},${maybeGeneId}";
-                delete $geneId{$geneName};
-                next;
+      for my $maybeGeneId (@b) {
+         if ($maybeGeneId =~ m/^GeneID/i) {
+             $maybeGeneId =~ s/GeneID://i;
+             if (defined($geneId{$geneName})) {
+                 if ($geneId{$geneName} ne $maybeGeneId) {
+                    $dupList{$geneName} = "$geneId{$geneName},${maybeGeneId}";
+                    delete $geneId{$geneName};
+                    next;
+                 }
+             } else {
+                 $geneId{$geneName} = $maybeGeneId;
              }
-         } else {
-             $geneId{$geneName} = $maybeGeneId;
+             last;
          }
-         last;
-     }
+      }
+  } elsif ($a[1] =~ /description/i) {
+      if (defined($descr{$geneName})) {
+         if ($a[2] ne $descr{$geneName}) {
+            $dupList{$geneName} = "$geneName,$descr{$geneName}.$a[2]";
+            delete $descr{$geneName};
+         }
+      } else {
+         $descr{$geneName} = $a[2];
+      }
+  } elsif ($a[1] =~ /Parent/i) {
+      if (defined($parent{$geneName})) {
+         if ($a[2] ne $parent{$geneName}) {
+            $dupList{$geneName} = "$geneName,$parent{$geneName}.$a[2]";
+            delete $parent{$geneName};
+         }
+      } else {
+         $parent{$geneName} = $a[2];
+      }
+
+  } elsif ($a[1] =~ /gene_biotype/i) {
+      if (defined($bioType{$geneName})) {
+         if ($a[2] ne $bioType{$geneName}) {
+            $dupList{$geneName} = "$geneName,$bioType{$geneName}.$a[2]";
+            delete $bioType{$geneName};
+         }
+      } else {
+         $bioType{$geneName} = $a[2];
+      }
+  } elsif ($a[1] =~ /^Type$/i) {
+      if (defined($Type{$geneName})) {
+         if ($a[2] ne $Type{$geneName}) {
+            $dupList{$geneName} = "$geneName,$Type{$geneName}.$a[2]";
+            delete $Type{$geneName};
+         }
+      } else {
+         $Type{$geneName} = $a[2];
+      }
   }
 }
 close ($fh);
@@ -55,6 +101,7 @@ while (my $line = <$fh>) {
   ++$totalItems;
   # the -1 keeps the trailing empty field at the end of the line
   my @a = split(/\t/, $line, -1);
+  my $sizeA = scalar(@a);
   # if name is equal to geneName see if geneName can be improved
   if ($a[3] eq $a[17]) {
      if (defined($geneId{$a[3]})) {
@@ -65,6 +112,38 @@ while (my $line = <$fh>) {
              $a[18] = $a[3];
         }
      }
+  }
+  #  "Transcript type"
+  if (length($a[16]) < 1) {
+     if (defined($bioType{$a[3]})) {
+         $a[16] = $bioType{$a[3]};
+     } elsif (defined($parent{$a[3]})) {
+        my $parent = $parent{$a[3]};
+        if (defined($bioType{$parent})) {
+           $a[16] = $bioType{$parent};
+        }
+     }
+  }
+  #  "Gene type"
+  if (length($a[19]) < 1) {
+     if (defined($Type{$a[3]})) {
+         $a[19] = $Type{$a[3]};
+     } elsif (defined($parent{$a[3]})) {
+        my $parent = $parent{$a[3]};
+        if (defined($Type{$parent})) {
+           $a[19] = $Type{$parent};
+        }
+     }
+  }
+  if (defined($descr{$a[3]})) {
+     $a[$sizeA] = $descr{$a[3]};
+  } elsif (defined($parent{$a[3]})) {
+     my $parent = $parent{$a[3]};
+     if (defined($descr{$parent})) {
+        $a[$sizeA] = $descr{$parent};
+     }
+  } else {
+     $a[$sizeA] = "";
   }
   printf "%s\n", join("\t", @a);
 }

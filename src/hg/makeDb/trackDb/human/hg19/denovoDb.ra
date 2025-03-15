@@ -1,0 +1,31 @@
+track denovoDbComposite
+compositeTrack on
+shortLabel denovo-db
+longLabel denovo-db v.1.6.1
+group varRep
+html denovoDb.html
+visibility hide
+type bigBed 9 +
+noScoreFilter on
+
+    track denovoDbssc
+    parent denovoDbComposite on
+    type bigBed 9 +
+    longLabel Simons Simplex Collection samples from denovo-db
+    bigDataUrl /gbdb/hg19/denovoDb/ssc_variants.bb 
+    labelFields variant
+    shortLabel ssc samples
+    visibility dense
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}<br> <b>Transcript</b>: ${transcript}
+    urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="http://www.genecards.org/cgi-bin/cardsearch.pl?search=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"
+    
+    track denovoDbnon-ssc
+    parent denovoDbComposite
+    type bigBed 9 +
+    longLabel Non-Simons Simplex Collection samples from denovo-db
+    bigDataUrl /gbdb/hg19/denovoDb/non_ssc_variants.bb 
+    labelFields variant
+    shortLabel non-ssc samples
+    visibility dense
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}<br> <b>Transcript</b>: ${transcript}
+    urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="http://www.genecards.org/cgi-bin/cardsearch.pl?search=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"

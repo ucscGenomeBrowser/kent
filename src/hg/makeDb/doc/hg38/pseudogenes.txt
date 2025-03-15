@@ -1,0 +1,118 @@
+#! /bin/bash
+
+# file (received by MarkD through email 12 May 2024):
+# /hive/data/genomes/hg38/bed/pseudoPipe/Homo_sapiens.GRCh38.103.pseudogene.pseudopipe.wparent.gtf
+# This is incorrectly formatted gtf because it has overlapping exons. The python code converts
+# the gtf to bed using MarkD's pycbio code, which can be pip installed:
+#python3 -m venv mytestvenv
+#source mytestvenv/bin/activate
+#pip install /hive/groups/browser/pycbio
+# the program also merges overlapping exons when they're in the same transcript because
+# the gtf we received contains those.
+
+# Adding HUGO ids using gencode tables.
+# gene IDs come from v37 and v38 (both are needed to find all)
+rm -rf all.ids
+for i in 37 38; do
+       echo "select geneId, geneName, transcriptId, proteinId from hg38.wgEncodeGencodeAttrsV$i" | \
+          hgsql -N >> all.ids
+done
+
+annotationFile='/hive/data/genomes/hg38/bed/pseudoPipe/Homo_sapiens.GRCh38.103.pseudogene.pseudopipe.wparent.gtf'
+
+# file has duplicate lines. Remove without sorting
+awk '!seen[$0]++' $annotationFile > uniq.gtf
+./pseudoPipeToBed.py --genes all.ids --gtf uniq.gtf --bed pgene.bed
+
+# change the chromosome IDs (they need to  match the parents)
+bigBedToBed /gbdb/hg38/hg38.chromAlias.bb chromAlias.bed
+tawk '{print $6, $1}' chromAlias.bed > sub.list
+subColumn 1 pgene.bed sub.list pgene2.bed
+
+bedSort pgene2.bed pgene.bed
+
+
+
+########## PARENT TRACK ######################
+# Create a parent track and add parent info to the children
+
+### V37
+# we only need the chrom coords, not the blocks
+zcat /hive/data/genomes/hg38/bed/gencodeV37/build/gencodeV37.bed.gz | cut -f1-6 > v37.tsv
+
+# these have ENST IDs but not gene IDs
+# replace with gene IDs (note that this creates duplicate IDs in the file)
+paste <(cut -f3 all.ids) <(cut -f1 all.ids | cut -f1 -d'.') > sub.me
+subColumn -miss=idMiss.txt 4 v37.tsv sub.me v37.sub
+#grep -c ENST v37.sub # 0
+
+### V38
+bigBedToBed /hive/data/genomes/hg38/bed/gencodeV38/build/hg38.gencodeV38.bb V38.bed
+subColumn -miss=idMiss.txt 4 <(cut -f1-6 V38.bed) sub.me v38.sub
+#grep -c ENST v38.sub # 0
+
+# we really only want v37 genes if they are not in v38
+selectById -not 4 v38.sub 4 v37.sub > addMe
+# sort by gene ID, then chr
+cat v38.sub addMe  | sort -k4 -k1 > annot.bed
+
+./pseudoPipeParents.py --pgenebed pgene.bed --annotbed annot.bed --pgeneout pseudopipePgenes.bed --parentout parents.bed
+
+### convert to bigbed ###
+cat << '_EOF_' > pseudoPipePgenes.as
+table yale_pseudogenes
+"Bed 12+6 file with pseudogenes and their (gene, transcript, and protein) parents."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes;  "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    string hugo;                "Pseudogene of"
+    string pgeneType;           "pseudogene, processed_pseudogene, unprocessed_pseudogene"
+    string ppgene;              "Pseudopipe pseudogene ID"
+    string gene;                "Ensembl pseudogene ID"
+    string geneParent;          "Ensembl gene parent ID (url)"
+    string proteinParent;       "Ensembl protein parent ID"
+    )
+_EOF_
+bedToBigBed -type=bed12+8 -tab -as=pseudoPipePgenes.as -extraIndex=hugo,name,ppgene pseudopipePgenes.bed /hive/data/genomes/hg38/chrom.sizes pseudoPipePgenes.bb
+# trix index (make search case insensitive) for hugo and ENSG parent IDs
+cut -f4,14,18 pseudopipePgenes.bed > name.table
+ixIxx name.table pseudoPipePgenes.ix pseudoPipePgenes.ixx
+
+cat << '_EOF_' > pseudoPipeParents.as
+table yale_parents
+"Bed 9+2 file with parents and and their pseudogenes."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    string hugo;       "Gene symbol"
+    string url;        "Link to pseudogene"
+    )
+_EOF_
+
+# sort so that ENSG comes before PGO Ids, putting the parent at the top
+sort -k1,1 -k2,2n -k4 parents.bed > pseudopipeParents.bed 
+bedToBigBed -type=bed9+2 -tab -as=pseudoPipeParents.as pseudopipeParents.bed /hive/data/genomes/hg38/chrom.sizes pseudoPipeParents.bb
+cut -f4,10 pseudopipeParents.bed > name.table
+ixIxx name.table pseudoPipeParents.ix pseudoPipeParents.ixx
+
+rm addMe v37.tsv v38.sub V38.bed v37.sub sub.me sub.list idMiss.txt
+rm *.bed
+rm name.table uniq.gtf all.ids
+

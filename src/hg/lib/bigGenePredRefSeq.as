@@ -17,9 +17,9 @@ table bigGenePredNcbiRefSeq
    string _cdsStartStat; "Status of CDS start annotation (none, unknown, incomplete, or complete)"
    string _cdsEndStat;   "Status of CDS end annotation (none, unknown, incomplete, or complete)"
    int[blockCount] _exonFrames; "Reading frame of the start of the CDS region of the exon, in the direction of transcription (0,1,2), or -1 if there is no CDS region."
-   string type;        "Transcript biotype: protein_coding, pseudogene, lncRNA, etc . . ."
+   string type;        "Transcript biotype"
    string geneName;    "NCBI Gene ID"
    string geneName2;   "Transcript accession"
-   string geneType;    "Gene type: mRNA, gene, lnc_RNA, pseudogene, transcript, etc . . ."
+   string geneType;    "Gene type"
+   string description; "Brief description"
    )
-

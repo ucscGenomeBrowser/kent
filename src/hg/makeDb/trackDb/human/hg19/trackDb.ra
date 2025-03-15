@@ -2419,3 +2419,4 @@ track ncbiRefSeq override
 parent refSeqComposite off
 
 include ../../trackDb.mgc-orfeome.ra
+include denovoDb.ra
