@@ -447,6 +447,8 @@ char *ignoredFormats[] = {
 	"pdf",
 	"png",
 	"fasta",
+        "rds",
+        "h5ad",
 	"unknown",
 	};
 

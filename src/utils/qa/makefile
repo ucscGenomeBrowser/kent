@@ -49,6 +49,7 @@ install:
 	cp -p --remove-destination checkTableStatusDump.sh ${SCRIPTS}
 	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
 	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}
+	cp -p --remove-destination check_Tables_Metadata.py       ${SCRIPTS}
 	cp -p --remove-destination commTrio.csh            ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
 	cp -p --remove-destination comparePublic.csh       ${SCRIPTS}
