@@ -84,7 +84,7 @@ function revokeApiKeys() {
 }
 
 const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
-const parentDirRegex = /[0-9a-zA-Z._\-+ ]+/g; // allowed characters in hub names, spaces allowed
+const parentDirRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in hub names
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
@@ -97,21 +97,21 @@ const uppy = new Uppy.Uppy({
             let fileNameMatch = file.meta.name.match(fileNameRegex);
             let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 2000);
+                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
             if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: Hub name has special characters, please rename file: ${file.meta.parentDir} to only include alpha-numeric characters, period, dash, underscore, plus or space.`, 'error', 2000);
+                uppy.info(`Error: Hub name has special characters, please rename file: ${file.meta.parentDir} to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
             if (!file.meta.genome) {
-                uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 2000);
+                uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
             } else if  (!file.meta.fileType) {
-                uppy.info(`Error: File type not supported, file: ${file.meta.name}!`, 'error', 2000);
+                uppy.info(`Error: File type not supported, file: ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
@@ -235,7 +235,7 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + trackHubFixName(fname) + "=pack";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + cgiEncode(hubName) + "/hub.txt&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
@@ -272,7 +272,7 @@ var hubCreate = (function() {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
-                        url += "&hubUrl=" + uiState.userUrl + d.parentDir;
+                        url += "&hubUrl=" + uiState.userUrl + cgiEncode(d.parentDir);
                         if (d.parentDir.endsWith("/")) {
                             url += "hub.txt";
                         } else {
@@ -750,6 +750,15 @@ var hubCreate = (function() {
                 render: function(data, type, row) {
                     if (type === "display") {
                         return dataTablePrintGenome(data);
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 6,
+                render: function(data, type, row) {
+                    if (type === "display") {
+                        return cgiDecode(data);
                     }
                     return data;
                 }
