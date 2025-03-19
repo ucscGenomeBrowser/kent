@@ -239,6 +239,9 @@ filter.svlen 50:199840172
 filterByRange.svlen on
 filterLabel.svlen Filter by Variant Size
 mouseOverField _mouseOver
+filterValues.FILTER PASS,HIGH_NCR,IGH_MHC_OVERLAP,UNRESOLVED,REFERENCE_ARTIFACT
+filterValuesDefault.FILTER PASS
+filterType.FILTER multipleListAnd
 html gnomadSv.html
 pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 

@@ -572,8 +572,8 @@ if (errCatchStart(errCatch))
             cgiParagraph("");
             printf("Successfully converted %d record", ct);
             printf("%s: ", ct > 1 ? "s" : "");
-            printf("<A HREF=%s TARGET=_blank>Download Conversions</A>\n", mappedTn.forCgi);
-            printf("<a href='#' data-url='%s' class='link' id='viewLink'>View Conversions</a>\n", mappedTn.forCgi);
+	    printf("<a href='#' data-url='%s' class='link' id='viewLink'><BR>View conversions</a>\n", mappedTn.forCgi);
+            printf("<A HREF=%s TARGET=_blank><BR>Download conversions</A>\n", mappedTn.forCgi);
             jsInlineF("document.getElementById('viewLink').addEventListener('click', function(ev) { "
                 "ev.preventDefault();"
                 "forceDisplayBedFile(ev.currentTarget.getAttribute('data-url'));"
@@ -586,9 +586,9 @@ if (errCatchStart(errCatch))
             cgiParagraph("");
             printf("Conversion failed on %d record", errCt);
             printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
-            printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
+            printf("<A HREF=%s TARGET=_blank><BR>Display failure file</A>&nbsp; &nbsp;\n",
                              unmappedTn.forCgi);
-            printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
+            printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank><BR>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
             puts("<P>Failed input regions:\n");
             struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
             puts("<BLOCKQUOTE><PRE>\n");

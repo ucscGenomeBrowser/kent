@@ -12,10 +12,10 @@ def bash(cmd):
 
 def assignScoreValue(score,trackName):
     if trackName == "revel":
-        if score >= .773:
+        if score >= .644:
             prediction = "pathogenic"
             color = "255,0,0"
-        elif score <= .183:
+        elif score <= .290:
             prediction = "benign"
             color = "80,166,230"
         else:
@@ -84,7 +84,7 @@ def makeBigBedFileAndSymLink(bedFileName,fileName,workDir,assembly,outputColorFi
         bbSaveFile = "/hive/data/genomes/"+assembly+"/bed/revel/"+fileName+".color.bb"
     elif trackName == "cadd1.7":
         bbSaveFile = "/hive/data/genomes/"+assembly+"/bed/cadd/v1.7/"+fileName+".color.bb"
-    if trackName == "alphaMissense":
+    elif trackName == "alphaMissense":
         bbSaveFile = "/hive/data/genomes/"+assembly+"/bed/alphaMissense/"+fileName+".color.bb"
     else:
         print("No track name found.")

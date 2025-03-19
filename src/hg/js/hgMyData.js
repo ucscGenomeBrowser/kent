@@ -12,6 +12,20 @@ function prettyFileSize(num) {
     }
 }
 
+function cgiEncode(value) {
+    // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters:
+    let splitVal = value.split('/');
+    splitVal.forEach((ele, ix) => {
+        splitVal[ix] = encodeURIComponent(ele);
+    });
+    return splitVal.join('/');
+}
+
+function cgiDecode(value) {
+    // decode an encoded value
+    return decodeURIComponent(value);
+}
+
 function generateApiKey() {
     let apiKeyInstr = document.getElementById("apiKeyInstructions");
     let apiKeyDiv = document.getElementById("apiKey");
@@ -326,7 +340,7 @@ var hubCreate = (function() {
         placeholder.style.display = numSelected === 0 ? "block" : "none";
     }
 
-    function handleCheckboxSelect(ev, table, row) {
+    function handleCheckboxSelect(evtype, table, row) {
         // depending on the state of the checkbox, we will be adding information
         // to the div, or removing information. We will also be potentially checking/unchecking
         // all of the checkboxes if the selectAll box was clicked. The data variable
@@ -399,6 +413,8 @@ var hubCreate = (function() {
         // show all the "root" files, which are files (probably mostly directories)
         // with no parentDir
         clearSearch(table);
+        // deselect any selected rows like Finder et al when moving into/upto a directory
+        table.rows({selected: true}).deselect();
         table.search.fixed("showRoot", function(searchStr, rowData, rowIx) {
             return !rowData.parentDir;
         });
@@ -407,7 +423,10 @@ var hubCreate = (function() {
     function dataTableShowDir(table, dirName, dirFullPath) {
         // show the directory and all immediate children of the directory
         clearSearch(table);
+        // deselect any selected rows like Finder et al when moving into/upto a directory
+        table.rows({selected: true}).deselect();
         table.draw();
+        // NOTE that the below does not actually render until the next table.draw() call
         table.search.fixed("oneHub", function(searchStr, rowData, rowIx) {
             // calculate the fullPath of this rows parentDir in case the dirName passed
             // to this function has the same name as a parentDir further up in the
@@ -457,9 +476,12 @@ var hubCreate = (function() {
                 oldRowData = null;
             }
             if (!rowNode) {
-                // if we are using the breadcrumb to jump back 2 directories, we won't
-                // have a rowNode because the row will not have been rendered yet
+                // if we are using the breadcrumb to jump back 2 directories or doing an upload
+                // while a subdirectory is opened, we won't have a rowNode because the row will
+                // not have been rendered yet. So draw the table with the oldRowData restored
                 table.draw();
+                // and now we can try again
+                row = table.row((idx,data) => data.fullPath === dirData.fullPath);
                 rowNode = row.node();
             }
             oldRowData = row.data();
@@ -632,7 +654,7 @@ var hubCreate = (function() {
         table.draw();
     }
 
-    function doRowSelect(ev, table, indexes) {
+    function doRowSelect(evtype, table, indexes) {
         let selectedRow = table.row(indexes);
         let rowTr = selectedRow.node();
         if (rowTr) {
@@ -641,16 +663,14 @@ var hubCreate = (function() {
             // we need to manually check the children
             if (rowChildren) {
                 for (let child of rowChildren) {
-                    if (ev.type === "select") {
+                    if (evtype === "select") {
                         table.row((idx,data) => data.fullPath === child.fullPath).select();
                     } else {
                         table.row((idx,data) => data.fullPath === child.fullPath).deselect();
                     }
                 }
             }
-            // lastly check the row itself
-            rowCheckbox.checked = ev.type === "select";
-            handleCheckboxSelect(ev, table, rowTr);
+            handleCheckboxSelect(evtype, table, rowTr);
         }
     }
 
@@ -665,6 +685,7 @@ var hubCreate = (function() {
     let tableInitOptions = {
         select: {
             items: 'row',
+            selector: 'td:first-child',
             style: 'multi+shift', // default to a single click is all that's needed
         },
         pageLength: 25,
@@ -820,10 +841,35 @@ var hubCreate = (function() {
             table.buttons(".uploadButton").disable();
         }
         table.on("select", function(e, dt, type, indexes) {
-            doRowSelect(e, dt, indexes);
+            indexes.forEach(function(i) {
+                doRowSelect(e.type, dt, i);
+            });
         });
         table.on("deselect", function(e, dt, type, indexes) {
-            doRowSelect(e, dt, indexes);
+            doRowSelect(e.type, dt, indexes);
+        });
+        table.on("click", function(e) {
+            if (e.target.className !== "dt-select-checkbox") {
+                e.stopPropagation();
+                // we've clicked somewhere not on the checkbox itself, we need to:
+                // 1. open the directory if the clicked row is a directory
+                // 2. select the file if the clicked row is a regular file
+                let row = table.row(e.target);
+                let data = row.data();
+                if (data.children && data.children.length > 0) {
+                    dataTableShowDir(table, data.fileName, data.fullPath);
+                    dataTableCustomOrder(table, {"fullPath": data.fullPath});
+                    table.draw();
+                } else {
+                    if (row.selected()) {
+                        row.deselect();
+                        doRowSelect("deselect", table, row.index());
+                    } else {
+                        row.select();
+                        doRowSelect("select", table, row.index());
+                    }
+                }
+            }
         });
         return table;
     }
@@ -1098,14 +1144,14 @@ var hubCreate = (function() {
             const d = new Date(metadata.lastModified);
             const now = new Date(Date.now());
             newReqObj = {
-                "fileName": metadata.fileName,
+                "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
-                "parentDir": metadata.parentDir,
+                "parentDir": cgiEncode(metadata.parentDir),
                 "lastModified": d.toLocaleString(),
                 "uploadTime": now.toLocaleString(),
-                "fullPath": metadata.parentDir + "/" + metadata.fileName,
+                "fullPath": cgiEncode(metadata.parentDir) + "/" + cgiEncode(metadata.fileName),
             };
             // from what I can tell, any response we would create in the pre-finish hook
             // is completely ignored for some reason, so we have to fake the other files
@@ -1118,18 +1164,18 @@ var hubCreate = (function() {
                 "fileSize": 0,
                 "fileType": "hub.txt",
                 "genome": metadata.genome,
-                "parentDir": metadata.parentDir,
-                "fullPath": metadata.parentDir + "/hub.txt",
+                "parentDir": cgiEncode(metadata.parentDir),
+                "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
             };
             parentDirObj = {
                 "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
-                "fileName": metadata.parentDir,
+                "fileName": cgiEncode(metadata.parentDir),
                 "fileSize": 0,
                 "fileType": "dir",
                 "genome": metadata.genome,
                 "parentDir": "",
-                "fullPath": metadata.parentDir + "/",
+                "fullPath": cgiEncode(metadata.parentDir),
             };
             // package the three objects together as one "hub" and display it
             let hub = [parentDirObj, hubTxtObj, newReqObj];

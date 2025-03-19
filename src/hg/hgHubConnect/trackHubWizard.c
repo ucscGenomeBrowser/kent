@@ -52,7 +52,10 @@ if (fileName)
 
 int pathDepth(char *path)
 {
-return countChars(path, '/');
+// replace multiple occurences of '/' with just a single one to get a canonical path
+// as path///to/file and path/to/file are the same path on Linux
+char *deduped = replaceChars(path, "//", "/");
+return countChars(deduped, '/');
 }
 
 int sortByFullPathCmp(const void *va, const void *vb)
