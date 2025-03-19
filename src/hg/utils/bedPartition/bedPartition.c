@@ -2,8 +2,10 @@
 
 /* Copyright (C) 2019 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
+#include <limits.h>
 #include "common.h"
 #include "options.h"
+#include "verbose.h"
 #include "partitionSort.h"
 #include "basicBed.h"
 #include "sqlNum.h"
@@ -14,11 +16,14 @@
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
-    {"partMergeSize", OPTION_INT},
+    {"minPartitionItems", OPTION_INT},
+    {"partMergeDist", OPTION_INT},
+    {"partMergeSize", OPTION_INT},   // obsolete
     {"parallel", OPTION_INT},
     {NULL, 0}
 };
-static int gPartMergeSize = 0;
+static int gMinPartitionItems = 0;
+static int gPartMergeDist = 0;
 static int gParallel = 0;
 
 static void usage()
@@ -33,12 +38,15 @@ errAbort("bedPartition - split BED ranges into non-overlapping ranges\n"
   "The bedFile maybe compressed and no ordering is assumed.\n"
   "\n"
   "options:\n"
-  "   -partMergeSize=0 - will combine adjacent non-overlapping partitions, that are\n"
-  "    separated by no more that this number of bases.\n"
-  "    per set of overlapping records.\n"
+  "   -verbose=1 - print statistics if >= 1\n"
+  "   -minPartitionItems=0 - minimum number of input items in a partition. Partitions with\n"
+  "    fewer items will merged with into subsequent partitions\n"
+  "   -partMergeDist=0 - will combine adjacent non-overlapping partitions that are\n"
+  "    separated by no more that this number of bases. -partMergeSize is an obsolete\n"
+  "    name for this option.\n"
   "   -parallel=n - use this many cores for parallel sorting\n"
   "notes:\n"
-  "   - Generate name is useful for testing if two ranges are in the same partition\n");
+  "   - Generate name is useful for identifying partition\n");
 }
 
 struct bedInput
@@ -78,11 +86,7 @@ static struct bed3 *bed3Next(struct lineFile *lf)
 char *row[3];
 if (!lineFileRow(lf, row))
     return NULL;
-// adjust start to allow for merge padding
-unsigned start = sqlUnsigned(row[1]);
-if (start > gPartMergeSize)  // don't underflow
-    start -= gPartMergeSize;
-return bed3New(row[0], start, sqlUnsigned(row[2]));
+return bed3New(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]));
 }
 
 
@@ -118,25 +122,44 @@ return (bed->chromStart < bedPart->chromEnd) && (bed->chromEnd > bedPart->chromS
     && sameChrom(bed, bedPart);
 }
 
+static boolean shouldMergeAdjacent(struct bed3 *bed, struct bed3 *bedPart)
+/* should this be merged with adjacent due to distance */
+{
+return (bedPart->chromEnd < bed->chromStart) &&
+    ((bed->chromStart - bedPart->chromEnd) < gPartMergeDist);
+}
 
-static struct bed3 *readPartition(struct bedInput *bi)
+static boolean inclInPartation(struct bed3 *bed, struct bed3 *bedPart,
+                               int currentItemCnt)
+/* should this BED be included in the current partition? */
+{
+return sameChrom(bed, bedPart) &&
+    ((isOverlapped(bed, bedPart) || (currentItemCnt < gMinPartitionItems) ||
+      shouldMergeAdjacent(bed, bedPart)));
+}
+
+static struct bed3 *readPartition(struct bedInput *bi, int *itemCntP, int *minPartItemsP,
+                                  int *maxPartItemsP)
 /* read next set of overlapping beds */
 {
 struct bed3 *bedPart = bedInputNext(bi);
 struct bed3 *bed;
+int currentItemCnt = 0;
 
 if (bedPart == NULL)
     return NULL;  /* no more */
+currentItemCnt++;
+
 /* add more beds while they overlap, due to way input is sorted
  * with by start and then reverse end */
-
 while ((bed = bedInputNext(bi)) != NULL)
     {
-    if (isOverlapped(bed, bedPart))
+    if (inclInPartation(bed, bedPart, currentItemCnt))
         {
         bedPart->chromStart = min(bedPart->chromStart, bed->chromStart);
         bedPart->chromEnd = max(bedPart->chromEnd, bed->chromEnd);
         bed3Free(&bed);
+        currentItemCnt++;
         }
     else
         {
@@ -144,6 +167,10 @@ while ((bed = bedInputNext(bi)) != NULL)
         break;
         }
     }
+
+(*itemCntP) += currentItemCnt;
+*minPartItemsP = min(*minPartItemsP, currentItemCnt);
+*maxPartItemsP = max(*maxPartItemsP, currentItemCnt);
 return bedPart;
 }
 
@@ -153,15 +180,24 @@ static void bedPartition(char *bedFile, char *rangesBed)
 struct bedInput *bi = bedInputNew(bedFile);
 struct bed3 *bedPart;
 FILE *outFh = mustOpen(rangesBed, "w");
-int ibed = 0;
-while ((bedPart = readPartition(bi)) != NULL)
+int partCnt = 0;
+int itemCnt = 0;
+int minPartItems = INT_MAX;
+int maxPartItems = 0;
+while ((bedPart = readPartition(bi, &itemCnt, &minPartItems, &maxPartItems)) != NULL)
     {
-    fprintf(outFh, "%s\t%d\t%d\tP%d\n", bedPart->chrom, bedPart->chromStart, bedPart->chromEnd, ibed);
-    ibed++;
+    fprintf(outFh, "%s\t%d\t%d\tP%d\n", bedPart->chrom, bedPart->chromStart, bedPart->chromEnd, partCnt);
+    partCnt++;
     bed3Free(&bedPart);
     }
 carefulClose(&outFh);
 bedInputFree(&bi);
+verbose(1, "Number of items: %d\n", itemCnt);
+verbose(1, "Number of partitions: %d\n", partCnt);
+verbose(1, "Min items per partition: %d\n", minPartItems);
+verbose(1, "Max items per partition: %d\n", maxPartItems);
+if (partCnt > 0)
+    verbose(1, "Mean items per partition: %0.1f\n", (double)itemCnt / (double)partCnt);
 }
 
 int main(int argc, char *argv[])
@@ -170,7 +206,13 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
-gPartMergeSize = optionInt("partMergeSize", gPartMergeSize);
+verboseSetLevel(1);
+gMinPartitionItems = optionInt("minPartitionItems", gMinPartitionItems);
+if (optionExists("partMergeSize"))
+    fprintf(stderr, "Note: -partMergeSize is an obsolete name, use -partMergeDist\n");
+// if both are specified, partMergeDist wins
+gPartMergeDist = optionInt("partMergeSize", gPartMergeDist);
+gPartMergeDist = optionInt("partMergeDist", gPartMergeDist);
 gParallel = optionInt("parallel", gParallel);
 bedPartition(argv[1], argv[2]);
 return 0;

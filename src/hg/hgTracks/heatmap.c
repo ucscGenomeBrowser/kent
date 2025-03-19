@@ -124,6 +124,9 @@ if (bbi == NULL)
     return NULL;
     }
 
+if (lf->extra != NULL)
+    return (struct heatmap*) lf->extra;
+
 #define HEATMAP_COUNT 17
 char *bedRow[HEATMAP_COUNT]; // hard-coded for now, should change this to accommodate extra .as fields
 char startBuf[16], endBuf[16];
@@ -234,6 +237,7 @@ h->midPoint = (max+min)/2.0;
 // The label for this heatmap
 h->label = cloneString(bedRow[3]);
 
+lf->extra = h;
 return h;
 }
 

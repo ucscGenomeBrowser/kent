@@ -528,7 +528,7 @@ driver.find_element(By.NAME, "hglft_userData").clear()
 driver.find_element(By.NAME, "hglft_userData").send_keys("chr11:101,379,590-101,442,705")
 driver.find_element(By.NAME, "Submit").click()
 time.sleep(3)
-driver.find_element(By.LINK_TEXT, "View Conversions")
+driver.find_element(By.LINK_TEXT, "View conversions")
 
 # Tests hgPcr target Genes Track (data changes with data pushes)
 cartReset()
