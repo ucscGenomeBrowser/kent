@@ -3,7 +3,7 @@
 # as well as their status code, if they took too long to load, or if hgTracks display did not
 # fully load. Alerts with a printed error when a negative condition is encountered.
 # Each run it reads the list of all observed times and regenerates a table and graphs displaying
-# the change of server load times over time. Once per month is reports as a reminder to check for abnormalities
+# the change of server load times over time. Once per month it reports as a reminder to check for abnormalities
 # If running on a new user, you will need to copy the index.html page from qateam and run the function here once: makeSymLinks(user,save_dir)
 
 import requests, subprocess, time, datetime, getpass, os, urllib3, matplotlib
