@@ -112,6 +112,7 @@ install:
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination graph.csh               ${SCRIPTS}
+	cp -p --remove-destination hgTracksTiming.py       ${SCRIPTS}
 	cp -p --remove-destination hubCheckDraftEmails.py  ${SCRIPTS}
 	cp -p --remove-destination hubCheckPublicHubs.sh   ${SCRIPTS}
 	cp -p --remove-destination hubPublicMail           ${SCRIPTS}
