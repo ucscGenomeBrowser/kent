@@ -316,22 +316,27 @@ var hubCreate = (function() {
         cart.flush();
     }
 
-    function updateSelectedFileDiv(data) {
+    function updateSelectedFileDiv(data, isFolderSelect = false) {
         // update the div that shows how many files are selected
         let numSelected = data !== null ? Object.entries(data).length : 0;
         let infoDiv = document.getElementById("selectedFileInfo");
         let span = document.getElementById("numberSelectedFiles");
         let spanParentDiv = span.parentElement;
-        span.textContent = `${numSelected} ${numSelected > 1 ? "files" : "file"}`;
         if (numSelected > 0) {
+            if (isFolderSelect || span.textContent.endsWith("hub") || span.textContent.endsWith("hubs")) {
+                span.textContent = `${numSelected} ${numSelected > 1 ? "hubs" : "hub"}`;
+            } else {
+                span.textContent = `${numSelected} ${numSelected > 1 ? "files" : "file"}`;
+            }
             // (re) set up the handlers for the selected file info div:
             let viewBtn = document.getElementById("viewSelectedFiles");
-            selectedData = data;
             viewBtn.addEventListener("click", viewAllInGenomeBrowser);
-            viewBtn.textContent = numSelected === 1 ? "View selected file in Genome Browser" : "View all selected files in Genome Browser";
+            viewBtn.textContent = "View selected";
             let deleteBtn = document.getElementById("deleteSelectedFiles");
             deleteBtn.addEventListener("click", deleteFileList);
-            deleteBtn.textContent = numSelected === 1 ? "Delete selected file" : "Delete selected files";
+            deleteBtn.textContent = "Delete selected";
+        } else {
+            span.textContent = "";
         }
 
         // set the visibility of the placeholder text and info text
@@ -340,19 +345,32 @@ var hubCreate = (function() {
         placeholder.style.display = numSelected === 0 ? "block" : "none";
     }
 
-    function handleCheckboxSelect(evtype, table, row) {
+    function handleCheckboxSelect(evtype, table, selectedRow) {
         // depending on the state of the checkbox, we will be adding information
-        // to the div, or removing information. We will also be potentially checking/unchecking
-        // all of the checkboxes if the selectAll box was clicked. The data variable
-        // will hold all the information we want to keep visible in the info div
-        let data = {};
+        // to the div, or removing information. We also potentially checked/unchecked
+        // all of the checkboxes if the selectAll box was clicked. If isFolderSelect
+        // is true, then in the info div, display that a hub was selected and not just
+        // a file(s)
+
+        // The data variable will hold all the information we want to keep visible in the info div
+        let data = [];
+        // The selectedData global holds the actual information needed for the view/delete buttons
+        // to work, so data plus any child rows
+        selectedData = {};
 
         // get all of the currently selected rows (may be more than just the one that
         // was most recently clicked)
         table.rows({selected: true}).data().each(function(row, ix) {
-            data[ix] = row;
+            data.push(row);
+            selectedData[row.fullPath] = row;
+            // add any newly checked rows children to the selectedData structure for the view/delete
+            if (row.children) {
+                row.children.forEach(function(child) {
+                    selectedData[child.fullPath] = child;
+                });
+            }
         });
-        updateSelectedFileDiv(data);
+        updateSelectedFileDiv(data, selectedRow.data().fileType === "dir");
     }
 
     function createOneCrumb(table, dirName, dirFullPath, doAddEvent) {
@@ -658,19 +676,7 @@ var hubCreate = (function() {
         let selectedRow = table.row(indexes);
         let rowTr = selectedRow.node();
         if (rowTr) {
-            let rowCheckbox = rowTr.childNodes[0].firstChild;
-            let rowChildren = uiState.filesHash[selectedRow.data().fullPath].children;
-            // we need to manually check the children
-            if (rowChildren) {
-                for (let child of rowChildren) {
-                    if (evtype === "select") {
-                        table.row((idx,data) => data.fullPath === child.fullPath).select();
-                    } else {
-                        table.row((idx,data) => data.fullPath === child.fullPath).deselect();
-                    }
-                }
-            }
-            handleCheckboxSelect(evtype, table, rowTr);
+            handleCheckboxSelect(evtype, table, selectedRow);
         }
     }
 
@@ -855,7 +861,9 @@ var hubCreate = (function() {
             });
         });
         table.on("deselect", function(e, dt, type, indexes) {
-            doRowSelect(e.type, dt, indexes);
+            indexes.forEach(function(i) {
+                doRowSelect(e.type, dt, i);
+            });
         });
         table.on("click", function(e) {
             if (e.target.className !== "dt-select-checkbox") {
