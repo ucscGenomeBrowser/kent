@@ -1322,6 +1322,7 @@
 ./runBuild GCA_022605925.1_bLatJam1.0.a birds Laterallus_jamaicensis_coturniculus
 ./runBuild GCA_022605955.1_bRalLim1.0.p birds Rallus_limicola
 ./runBuild GCA_022627015.2_ASM2262701v2 fungi Podosphaera_aphanis
+./runBuild GCA_022644695.1_ASM2264469v1 plants Cenchrus_purpureus
 ./runBuild GCA_022674325.1_ASM2267432v1 invertebrate Grapholita_molesta
 ./runBuild GCA_022682395.1_HLdesRot8B mammals Desmodus_rotundus
 ./runBuild GCA_022682395.2_HLdesRot8B.1 mammals Desmodus_rotundus
