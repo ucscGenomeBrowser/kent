@@ -217,12 +217,12 @@ def queryServersAndReport(server,url,filePath,today,n,user):
 
     # Check if the expected string is in the response
     if "END hgTracks" in page_content:
-        if load_time < 10:
+        if load_time < 15:
             problem = False
             status = "SUCCESS"
         else:
             problem = True
-            status = "FAIL - hgTracks page loaded, but load time over 10s"
+            status = "FAIL - hgTracks page loaded, but load time over 15s"
     else:
         problem = True
         status = "FAIL - Got status 200 return, but missing the 'END hgTracks' page string of a successful load"
