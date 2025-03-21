@@ -1619,6 +1619,8 @@ static boolean validateOneTdb(char *db, struct trackDb *tdb)
 {
 if (!( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
+       startsWith("bigDbSnp", tdb->type) || \
+       startsWith("bigGenePred", tdb->type) || \
        startsWith("bed ", tdb->type)))
     {
     return FALSE;
