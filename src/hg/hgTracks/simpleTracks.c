@@ -6007,29 +6007,56 @@ struct bedPlusLabel
     char *label;
 };
 
-typedef char *labelFromNameFunction(char *name);
+typedef char *labelFromNameFunction(char *db, char *name);
 
 static void bedPlusLabelLoad(struct track *tg, labelFromNameFunction func)
 /* Load items from a bed table; if vis is pack or full, add extra label derived from item name. */
 {
-struct bedPlusLabel *itemList = NULL;
-struct sqlConnection *conn = hAllocConn(database);
-int rowOffset = 0;
-struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
-char **row = NULL;
-while ((row = sqlNextRow(sr)) != NULL)
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+
+if (liftDb == NULL)
     {
-    struct bed *bed = bedLoad(row+rowOffset);
-    struct bedPlusLabel *item = needMoreMem(bed, sizeof(struct bed), sizeof(struct bedPlusLabel));
-    if (tg->visibility == tvPack || tg->visibility == tvFull)
-	item->label = cloneString(func(item->bed.name));
-    slAddHead(&itemList, item);
+    struct bedPlusLabel *itemList = NULL;
+    struct sqlConnection *conn = hAllocConn(database);
+    int rowOffset = 0;
+    struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+    char **row = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct bed *bed = bedLoad(row+rowOffset);
+        struct bedPlusLabel *item = needMoreMem(bed, sizeof(struct bed), sizeof(struct bedPlusLabel));
+        if (tg->visibility == tvPack || tg->visibility == tvFull)
+            item->label = cloneString(func(database, item->bed.name));
+        slAddHead(&itemList, item);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    slReverse(&itemList);
+    slSort(&itemList, bedCmp);
+    tg->items = itemList;
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&itemList);
-slSort(&itemList, bedCmp);
-tg->items = itemList;
+else
+    {
+    /* if we're quicklifting get normal beds then add label */
+    loadSimpleBedWithLoader(tg, bedLoad);
+    struct bed *beds = tg->items;
+    struct bedPlusLabel *bedLabels = NULL;
+
+    struct bed *nextBed;
+    for(; beds; beds = nextBed)
+        {
+        nextBed = beds->next;
+
+        struct bedPlusLabel *bedLabel;
+        AllocVar(bedLabel);
+
+        bedLabel->bed = *beds;
+        bedLabel->label = cloneString(func(liftDb, bedLabel->bed.name));
+        slAddHead(&bedLabels, bedLabel);
+        }
+    slSort(&bedLabels, bedCmp);
+    tg->items = bedLabels;
+    }
 }
 
 void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
@@ -6076,7 +6103,7 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
-static char *collapseRowsFromQuery(char *query, char *sep, int limit)
+static char *collapseRowsFromQuery(char *db, char *query, char *sep, int limit)
 /* Return a string that is the concatenation of (up to limit) row[0]'s returned from query,
  * separated by sep.  Don't free the return value! */
 {
@@ -6084,7 +6111,7 @@ static struct dyString *dy = NULL;
 if (dy == NULL)
     dy = dyStringNew(0);
 dyStringClear(dy);
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = sqlMustGetResult(conn, query);
 int i = 0;
 char **row = NULL;
@@ -7194,14 +7221,14 @@ hFreeConn(&conn);
 return(name);
 }
 
-static char *superfamilyNameLong(char *name)
+static char *superfamilyNameLong(char *db, char *name)
 /* Return domain names of an entry of a Superfamily track item,
    each item may have multiple names
    due to possibility of multiple domains. */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select description from sfDescription where name='%s';", name);
-return collapseRowsFromQuery(query, "; ", 100);
+return collapseRowsFromQuery(db, query, "; ", 100);
 }
 
 static void superfamilyLoad(struct track *tg)
@@ -7221,7 +7248,7 @@ tg->mapItemName = superfamilyName;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
-static char *gadDiseaseClassList(char *name)
+static char *gadDiseaseClassList(char *db, char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
@@ -7229,17 +7256,17 @@ sqlSafef(query, sizeof(query),
       "select distinct diseaseClassCode from gadAll "
       "where geneSymbol='%s' and association = 'Y' order by diseaseClassCode",
       name);
-return collapseRowsFromQuery(query, ",", 20);
+return collapseRowsFromQuery(db, query, ",", 20);
 }
 
-static char *gadDiseaseList(char *name)
+static char *gadDiseaseList(char *db, char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
 sqlSafef(query, sizeof(query),
       "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' "
       "order by broadPhen", name);
-return collapseRowsFromQuery(query, "; ", 20);
+return collapseRowsFromQuery(db, query, "; ", 20);
 }
 
 static void gadLoad(struct track *tg)
@@ -7269,13 +7296,15 @@ hvGfxBox(hvg, x1, y, w, heightPer, color);
 if (vis == tvFull)
     {
     // New text for label in full mode:
-    char *sDiseaseClasses = gadDiseaseClassList(bed->name);
+    char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+    char *db = (liftDb == NULL) ? database : liftDb;
+    char *sDiseaseClasses = gadDiseaseClassList(db, bed->name);
     int textWidth = mgFontStringWidth(font, sDiseaseClasses);
     hvGfxTextRight(hvg, x1-textWidth-2, y, textWidth, heightPer, MG_BLACK, font, sDiseaseClasses);
     }
 }
 
-static char *decipherCnvsPhenotypeList(char *name)
+static char *decipherCnvsPhenotypeList(char *db, char *name)
 /* Return list of diseases associated with a DECIPHER CNVs entry */
 {
 char query[256];
@@ -7301,7 +7330,7 @@ else
     sqlSafef(query, sizeof(query),
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", name);
     hFreeConn(&conn);
-    return collapseRowsFromQuery(query, "; ", 20);
+    return collapseRowsFromQuery(db, query, "; ", 20);
     }
 hFreeConn(&conn);
 return list;
@@ -7368,12 +7397,12 @@ hFreeConn(&conn);
 return(col);
 }
 
-static char *decipherSnvsPhenotypeList(char *name)
+static char *decipherSnvsPhenotypeList(char *db, char *name)
 /* Return list of diseases associated with a DECIPHER SNVs entry */
 {
 char query[256];
 static char list[4096];
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(db);
 if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
     {
     list[0] = '\0';
@@ -7394,7 +7423,7 @@ else
     sqlSafef(query, sizeof(query),
         "select distinct phenotype from decipherSnvsRaw where id='%s' order by phenotype", name);
     hFreeConn(&conn);
-    return collapseRowsFromQuery(query, "; ", 20);
+    return collapseRowsFromQuery(db, query, "; ", 20);
     }
 hFreeConn(&conn);
 return list;
@@ -7411,7 +7440,11 @@ Color decipherSnvsColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct bed *bed = item;
 int col = tg->ixColor;
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -7430,11 +7463,11 @@ if (startsWithNoCase("chr", bed->chrom))
 */
 
 sqlSafef(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
-decipherId = sqlGetField(database, "decipherSnvs", "name", cond_str);
+decipherId = sqlGetField(db, "decipherSnvs", "name", cond_str);
 
 if (decipherId != NULL)
     {
-    if (hTableExists(database, "decipherSnvsRaw"))
+    if (hTableExists(db, "decipherSnvsRaw"))
         {
         sqlSafef(query, sizeof(query), "select pathogenicity from decipherSnvsRaw where "
             "id = '%s' and chr = '%s' and start = '%d' and end = '%d'",
@@ -13302,7 +13335,7 @@ for(; modes; modes = modes->next)
 return dy->string;
 }
 
-static char *omimGene2DisorderList(char *name)
+static char *omimGene2DisorderList(char *db, char *name)
 /* Return list of disorders associated with a OMIM entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
@@ -13711,7 +13744,7 @@ hFreeConn(&conn);
 return(name->string);
 }
 
-static char *cosmicTissueList(char *name)
+static char *cosmicTissueList(char *db, char *name)
 /* Return list of tumor tissues associated with a COSMIC entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
@@ -13774,7 +13807,7 @@ if (isNotEmpty(ret))
 
 sqlSafef(query,sizeof(query),
         "select tumour_site from cosmicRaw where cosmic_mutation_id ='%s' order by tumour_site", name);
-char *disorders = collapseRowsFromQuery(query, ",", 4);
+char *disorders = collapseRowsFromQuery(db, query, ",", 4);
 if (isNotEmpty(disorders))
     {
     dyStringAppend(dy, " ");
@@ -13811,7 +13844,7 @@ tg->mapItem       = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
-static char *omimAvSnpAaReplacement(char *name)
+static char *omimAvSnpAaReplacement(char *db, char *name)
 /* Return replacement string associated with a OMIM AV (Allelic Variant) entry */
 {
 static char omimAvSnpBuffer[256];
@@ -13854,7 +13887,7 @@ tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
 
-static char *omimLocationDescription(char *name)
+static char *omimLocationDescription(char *db, char *name)
 /* Return description of an OMIM entry */
 {
 static char omimLocationBuffer[512];
@@ -14078,14 +14111,14 @@ else
     }
 }
 
-static char *omimGeneDiseaseList(char *name)
+static char *omimGeneDiseaseList(char *db, char *name)
 /* Return list of diseases associated with a OMIM entry */
 {
 char query[256];
 sqlSafef(query,sizeof(query),
       "select distinct description from omimMorbidMap, omimGene "
       "where name='%s' and name=cast(omimId as char) order by description", name);
-return collapseRowsFromQuery(query, "; ", 20);
+return collapseRowsFromQuery(db, query, "; ", 20);
 }
 
 static void omimGeneLoad(struct track *tg)
