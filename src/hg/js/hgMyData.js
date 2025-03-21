@@ -318,7 +318,9 @@ var hubCreate = (function() {
 
     function updateSelectedFileDiv(data, isFolderSelect = false) {
         // update the div that shows how many files are selected
-        let numSelected = data !== null ? Object.entries(data).length : 0;
+        let numSelected = data !== null ? data.length : 0;
+        // if a hub.txt file is in data, disable the delete button
+        let disableDelete = data.filter((obj) => obj.fileType === "hub.txt").length > 0;
         let infoDiv = document.getElementById("selectedFileInfo");
         let span = document.getElementById("numberSelectedFiles");
         let spanParentDiv = span.parentElement;
@@ -332,9 +334,16 @@ var hubCreate = (function() {
             let viewBtn = document.getElementById("viewSelectedFiles");
             viewBtn.addEventListener("click", viewAllInGenomeBrowser);
             viewBtn.textContent = "View selected";
-            let deleteBtn = document.getElementById("deleteSelectedFiles");
-            deleteBtn.addEventListener("click", deleteFileList);
-            deleteBtn.textContent = "Delete selected";
+            if (!disableDelete) {
+                let deleteBtn = document.getElementById("deleteSelectedFiles");
+                deleteBtn.style.display = "inline-block";
+                deleteBtn.addEventListener("click", deleteFileList);
+                deleteBtn.textContent = "Delete selected";
+            } else {
+                // delete the old button:
+                let deleteBtn = document.getElementById("deleteSelectedFiles");
+                deleteBtn.style.display = "none";
+            }
         } else {
             span.textContent = "";
         }
@@ -348,9 +357,7 @@ var hubCreate = (function() {
     function handleCheckboxSelect(evtype, table, selectedRow) {
         // depending on the state of the checkbox, we will be adding information
         // to the div, or removing information. We also potentially checked/unchecked
-        // all of the checkboxes if the selectAll box was clicked. If isFolderSelect
-        // is true, then in the info div, display that a hub was selected and not just
-        // a file(s)
+        // all of the checkboxes if the selectAll box was clicked.
 
         // The data variable will hold all the information we want to keep visible in the info div
         let data = [];
