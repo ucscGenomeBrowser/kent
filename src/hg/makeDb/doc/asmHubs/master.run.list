@@ -2159,6 +2159,7 @@
 ./runBuild GCA_905475405.1_ilSchCost1.1 invertebrate Schrankia_costaestrigalis
 ./runBuild GCA_905475445.1_ilOchPlec1.1 invertebrate Ochropleura_plecta
 ./runBuild GCA_905475465.1_ilPieNapi1.1 invertebrate Pieris_napi
+./runBuild GCA_907164435.1_mAcoDim1_REL_1905 mammals Acomys_dimidiatus
 ./runBuild GCA_907164795.1_iHemFuc1.1 invertebrate Hemaris_fuciformis
 ./runBuild GCA_907165065.1_bCapEur3.1 birds Caprimulgus_europaeus
 ./runBuild GCA_907165095.1_bCapEur3.1_alternate_haplotype birds Caprimulgus_europaeus
