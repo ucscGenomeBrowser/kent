@@ -1,28 +1,35 @@
 kentSrc = ../../..
-include ../../../inc/common.mk
+extraObjects = hooklib.o
+extraHeaders = hooklib.h
+CGI_LOADER_SUBDIR = hooks
 
-L += -lm ${MYSQLLIBS}
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+ifeq (${PROG},)
+PROGS = pre-create pre-finish
 
-COMMONO = hooklib.o
-HOOKEXE = pre-create pre-finish
+default:: ${PROGS:%=%_default}
+%_default:
+	${MAKE} default PROG=$*
+compile:: ${PROGS:%=%_compile}
+%_compile:
+	${MAKE} compile PROG=$*
+clean:: ${PROGS:%=%_clean}
+%_clean:
+	${MAKE} clean PROG=$*
+install:: ${PROGS:%=%_install}
+%_install:
+	${MAKE} install PROG=$*
 
-all: install
+cgi:: cgi_any
+alpha:: cgi_any
+beta:: cgi_any
+cgi_any:: ${PROGS:%=%_cgi_any}
+%_cgi_any:
+	${MAKE} cgi_any PROG=$*
 
-pre-create: ${COMMONO}  pre-create.o
-	${CC} -o pre-create -g pre-create.o ${MYLIBS} ${L} ${COMMONO}
+test::
+	${MAKE} test PROG=testing
+else
+A = ${PROG}
+include ${kentSrc}/inc/cgiLoader.mk
 
-pre-finish: ${COMMONO} pre-finish.o
-	${CC} -o pre-finish -g pre-finish.o ${MYLIBS} ${L} ${COMMONO}
-
-compile: pre-create pre-finish
-
-install:: compile
-	mv ${HOOKEXE} /cluster/home/chmalee/tusd/tusd_linux_amd64/hooks/
-
-alpha::
-	@echo 'would run make alpha'
-
-clean:
-	rm -f *.o ${HOOKEXE}
+endif
