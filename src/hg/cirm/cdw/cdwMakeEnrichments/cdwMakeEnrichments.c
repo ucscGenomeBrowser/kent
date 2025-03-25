@@ -444,6 +444,7 @@ char *ignoredFormats[] = {
 	"html",
 	"csv",
 	"tsv",
+        "txt",
 	"pdf",
 	"png",
 	"fasta",
