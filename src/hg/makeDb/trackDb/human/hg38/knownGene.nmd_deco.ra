@@ -5,7 +5,7 @@ longLabel GENCODE V46 with NMD Decorator
 #parent knownGeneArchive
 priority 1
 #priority 5
-visibility pack
+visibility hide
 type bigGenePred knownGenePep knownGeneMrna
 bigDataUrl /gbdb/hg38/gencode/gencodeV46.bb
 downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
