@@ -925,6 +925,10 @@ if (vf->format)	// We only can validate if we have something for format
         {
         /* No specific validation needed for xls format. */
         }
+    else if (sameString(format, "xlsx"))
+        {
+        /* No specific validation needed for xlsx format. */
+        }
     else if (sameString(format, "h5ad"))
         {
         /* No specific validation needed for h5ad format. */

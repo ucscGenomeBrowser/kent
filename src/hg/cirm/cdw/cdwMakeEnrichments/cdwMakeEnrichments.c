@@ -449,6 +449,7 @@ char *ignoredFormats[] = {
 	"fasta",
         "rds",
         "h5ad",
+        "xlsx",
 	"unknown",
 	};
 
