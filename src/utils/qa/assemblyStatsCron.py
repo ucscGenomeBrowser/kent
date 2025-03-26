@@ -102,13 +102,14 @@ bash('echo This cronjob pulls out GB stats over the last month, across all RR ma
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo List of db usage, hubs are aggregated across mirrors to a single count: >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
-bash("echo db$'\\t'dbUse >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
+bash("echo db$'\\t'dbUse$'\\t'percentUse >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 dbCountsRaw = open('/hive/users/'+user+'/ErrorLogsOutput/dbCounts.tsv','r')
 dbCountsCombined = open('/hive/users/'+user+'/ErrorLogsOutput/dbCountsCombinedWithCuratedHubs.tsv','w')
 
 dbsCounts = {}
+totalCount = 0
 for line in dbCountsRaw:
     line = line.rstrip().split("\t")
     if line[0].startswith("hub"):
@@ -116,13 +117,14 @@ for line in dbCountsRaw:
     else:
         db = line[0]
     count = int(line[1])
+    totalCount = totalCount + count
     if db not in dbsCounts:
         dbsCounts[db] = count
     else:
         dbsCounts[db] = dbsCounts[db] + count
 
 for key in dbsCounts:
-    dbCountsCombined.write(key+"\t"+str(dbsCounts[key])+"\n")
+    dbCountsCombined.write(key+"\t"+str(dbsCounts[key])+"\t"+str(round(dbsCounts[key]/totalCount,3))+"\n")
 
 dbCountsCombined.close()
 dbCountsRaw.close()
