@@ -7,20 +7,22 @@ sequences in a comprehensive and consistent manner.
 </p>
 <p>
 Pseudogenes are genomic sequences that bear similarity to specific protein-coding genes, but  are
-unable to produce functional proteins due to existence of frameshifts, premature stop codons or
+unable to produce functional proteins due to the existence of frameshifts, premature stop codons, or
 other deleterious mutations. They arise from gene duplication or retrotransposition events and are
 important resources in understanding the evolutionary history of genes and genomes.</p>
 
 <h2>Display Conventions</h2>
 
-<p>This composite track consists of two tracks: the <b>Pseudogenes</b> track and the <b>Pseudogene
-Parents</b>. The <b>Pseudogene Parents</b> track displays parent genes labeled with their HUGO IDs,
-which were derived from Ensembl gene IDs provided by the Gerstein lab after dataset creation. It
+<p>This composite track consists of two subtracks: the <b>Pseudogenes</b> track and the <b>Pseudogene
+Parents</b> track. The <b>Pseudogene Parents</b> track displays parent genes labeled with their
+<a href="https://www.hugo-international.org/standards/" target="_blank">HUGO</a> IDs,
+which were derived from Ensembl gene IDs provided by the
+<a href="https://www.gersteinlab.org/" target="_blank">Gerstein lab</a> after dataset creation. It
 includes indicators for pseudogenes, each linked to its corresponding entry in the Pseudogenes
 track. The <b>Pseudogenes</b> track shows pseudogenes labeled with their parent HUGO ID and colored
 according to pseudogene type. The authors assigned PGOHUMG IDs to genes and PGOHUMT IDs
 to transcripts. <b>Note</b>: Not all PseudoPipe IDs could be mapped back to their original Ensembl
-IDs. In these cases the gene ID is listed as NA.</p>
+IDs. In these cases, the gene ID is listed as NA.</p>
 
 <b>Pseudogene types:</b>
 <ul>
@@ -40,13 +42,13 @@ IDs. In these cases the gene ID is listed as NA.</p>
 <h3>Pseudogene Parents track</h3>
 <p>Each parent gene is shown with their pseudogenes represented as grey blocks.</p>
 <ul>
-<li><b><font color="#800080">purple</font></b> - parent gene </b></li>
+<li><b><font color="#800080">purple</font></b> - <b> parent gene </b></li>
 <li><b><font color="#A9A9A9">grey</font></b> - <b> pseudogene indicators </b></li>
 </ul>
 
 <p>
-<b>Mouseover</b> on an item will display the pseudogene type, the PGOHUMT ID with a link to its
-corresponding entry in the Pseudogenes track, and the position.</p>
+Mouse over on a grey block will display the pseudogene type and the PGOHUMT ID with a
+link to its corresponding entry in the Pseudogenes track and its position.</p>
 
 <h3>Pseudogenes track</h3>
 <p>Pseudogenes are colored by type.</p>
@@ -57,22 +59,9 @@ corresponding entry in the Pseudogenes track, and the position.</p>
 </ul>
 
 <p>
-<b>Mouseover</b> on an item will display the PseudoPipe ID (PGOHUMG), the Parent Ensembl gene ID
+Mouse over on an item will display the PseudoPipe ID (PGOHUMG), the Parent Ensembl gene ID
 with a link to the corresponding parent gene location in the Pseudogenes track, and the pseudogene
 type.</p>
-
-<h2>Data Access</h2>
-The raw data can be explored interactively with the
-<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
-<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
-For automated analysis, the data may be queried from our
-<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>. <br>
-Please refer to our
-<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a> 
-for questions, or our
-<a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> 
-for more information.
-</p>
 
 <h2>Methods</h2>
 <p>
@@ -89,18 +78,36 @@ annotations by removing duplicates, correcting overlapping exons, and converting
 format with pseudoPipeToBed.py. This script extracts gene and transcript IDs, merges overlapping
 exons, assigns colors based on pseudogene type, and outputs a BED file with gene and parent
 annotations. PseudoPipeParents.py then links pseudogenes to their functional genes by determining
-parent gene coordinates, updating pseudogene entries with interactive browser links and generates a
-parent BED file. The final data is formatted into pseudoPipePgenes.bb and pseudoPipeParents.bb BigBed
+parent gene coordinates, updating pseudogene entries with interactive browser links and generating a
+parent BED file. The final data are formatted into pseudoPipePgenes.bb and pseudoPipeParents.bb BigBed
 files. The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/pseudogenes.txt"
 target="_blank">detailed documentation (makeDoc)</a> and 
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/pseudogenes"
 target="_blank">Python scripts</a> are available in our GitHub repository.
 </p>
 
+<h2>Data Access</h2>
+<p>The raw data can be explored interactively with the
+<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
+<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
+The data may also be explored interactively using our
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.</p>
+<p>For automated download and analysis, the genome annotation is stored at UCSC in bigBed files
+that can be downloaded from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/pseudogenes/" target="_blank">download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system.</p>
+<p>
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/$db/pseudogenes/pseudoPipePgenes.bb -chrom=chr21 -start=0 -end=10000000 stdout</tt>
+</p>
 
 <h2>Credits</h2>
-<p>Thanks to the Gerstein lab at Yale University for making this data available and Cristina Sisu
-for providing data in GTF format with parents annotated.</p>
+<p>Thanks to the Gerstein lab at Yale University for making this data available, and to Cristina
+Sisu for providing data in GTF format with parent annotations.</p>
 
 <h2>References</h2>
 <p>
