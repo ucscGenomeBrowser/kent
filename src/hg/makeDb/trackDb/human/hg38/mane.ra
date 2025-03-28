@@ -5,7 +5,7 @@ longLabel MANE Select Plus Clinical: Representative transcript from RefSeq & GEN
 searchIndex name
 searchTrix /gbdb/hg38/mane/mane.ix
 type bigGenePred
-visibility hide
+visibility pack
 group genes
 labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
 defaultLabelFields geneName2
