@@ -933,6 +933,7 @@ struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boole
  * trackDb is only read once even if referenced from more than one hub.  */
 {
 struct trackDb *tdbList = NULL;
+/* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackHub *trackHub = hub->trackHub;
 
 if (trackHub != NULL)
@@ -955,39 +956,7 @@ if (trackHub != NULL)
                 *hubGroups = slCat(*hubGroups, list);
             }
 
-        // now grab tracks
-        boolean doCache = trackDbCacheOn();
-
-        if (doCache)
-            {
-            // we have to open the trackDb file to get the udc cache to check for an update
-            struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
-            if (checkCache != NULL)
-                {
-                time_t time = udcUpdateTime(checkCache);
-                udcFileClose(&checkCache);
-
-                struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
-
-                if (cacheTdb && hubGenome->quickLiftChain)
-                    cacheTdb = fixForQuickLift(cacheTdb, hubGenome, hub);
-
-                if (cacheTdb != NULL)
-                    return cacheTdb;
-                }
-
-            memCheckPoint(); // we want to know how much memory is used to build the tdbList
-            }
-
-        struct dyString *incFiles = dyStringNew(4096);
-        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles, foundFirstGenome);
-        tdbList = trackDbLinkUpGenerations(tdbList);
-        tdbList = trackDbPolishAfterLinkup(tdbList, database);
-        trackDbPrioritizeContainerItems(tdbList);
-        trackHubPolishTrackNames(trackHub, tdbList);
-
-        if (doCache)
-            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
+        tdbList = trackHubAddTracksGenome(hubGenome);
 
         if (tdbList && hubGenome->quickLiftChain)
             tdbList = fixForQuickLift(tdbList, hubGenome, hub);

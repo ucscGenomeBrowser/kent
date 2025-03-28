@@ -549,12 +549,6 @@ if (trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_NO_HGC))
 
 if (drawUp)
     y = flipY(tg, y);
-/*
-hvGfxBox(hvg, x-1, y-1, 3, 3, peakColor);
-hvGfxBox(hvg, x, y, 1, 1, highlightColor);
-mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
-                   tg->track, item, status, NULL, TRUE, NULL);
-*/
 hvGfxBox(hvg, x-3, y-3, 7, 7, peakColor);
 hvGfxBox(hvg, x-2, y-2, 5, 5, highlightColor);
 mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-3, y-3, 7, 7,
