@@ -1780,3 +1780,45 @@ struct grp *trackHubGetGrps()
 {
 return trackHubGrps;
 }
+
+struct trackDb *trackHubAddTracksGenome(struct trackHubGenome *hubGenome)
+/* Load up stuff from data hub and return list. */
+{
+/* Load trackDb.ra file and make it into proper trackDb tree */
+struct trackDb *tdbList = NULL;
+
+if (hubGenome != NULL)
+    {
+    boolean doCache = trackDbCacheOn();
+
+    if (doCache)
+        {
+        // we have to open the trackDb file to get the udc cache to check for an update
+        struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
+        if (checkCache != NULL)
+            {
+            time_t time = udcUpdateTime(checkCache);
+            udcFileClose(&checkCache);
+
+            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
+
+            if (cacheTdb != NULL)
+                return cacheTdb;
+            }
+
+        memCheckPoint(); // we want to know how much memory is used to build the tdbList
+        }
+
+    struct dyString *incFiles = newDyString(4096);
+    boolean foundFirstGenome = FALSE;
+    tdbList = trackHubTracksForGenome(hubGenome->trackHub, hubGenome, incFiles, &foundFirstGenome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, hubGenome->name);
+    trackDbPrioritizeContainerItems(tdbList);
+    trackHubPolishTrackNames(hubGenome->trackHub, tdbList);
+
+    if (doCache)
+        trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
+    }
+return tdbList;
+}

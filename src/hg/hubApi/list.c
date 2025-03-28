@@ -1059,6 +1059,21 @@ jsonWriteObjectEnd(jw);
 apiFinishOutput(0, NULL, jw);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
+int trackHubGenomeNameCmp(const void *va, const void *vb)
+/* Compare two slNames. */
+{
+const struct trackHubGenome *a = *((struct trackHubGenome **)va);
+const struct trackHubGenome *b = *((struct trackHubGenome **)vb);
+
+return strcmp(a->name, b->name);
+}
+
+void trackHubGenomeNameSort(struct trackHubGenome **pList)
+/* Sort slName list. */
+{
+slSort(pList, trackHubGenomeNameCmp);
+}
+
 void apiList(char *words[MAX_PATH_INFO])
 /* 'list' function words[1] is the subCommand */
 {
@@ -1081,7 +1096,7 @@ else if (sameWord("hubGenomes", words[1]))
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
-	slNameSort((struct slName **)&hub->genomeList);
+	trackHubGenomeNameSort(&hub->genomeList);
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
         jsonWriteObjectStart(jw, "genomes");
