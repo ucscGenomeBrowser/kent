@@ -154,6 +154,7 @@ if (tg->networkErrMsg == NULL)
     }
 else
     bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 static void bigWigOpenCatch(struct track *tg, char *fileName)
