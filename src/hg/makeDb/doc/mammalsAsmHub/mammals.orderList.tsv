@@ -203,9 +203,10 @@ GCA_949820135.1_mSylFlo1.10	eastern cottontail (primary hap 2023)
 GCA_921998335.2_PWK_PhJ_v3	eastern European house mouse (PWK_PhJ v2 2022)
 GCA_004024925.1_ScaAqu_v1_BIUU	eastern mole
 GCA_020854095.1_UniMelb_DasViv_v1.0	eastern quoll
+GCA_907164435.1_mAcoDim1_REL_1905	eastern spiny mouse (2021)
 GCF_001466805.2_Raegyp2.0	Egyptian rousette (1219 2016 Boston U)
 GCF_014176215.1_mRouAeg1.p	Egyptian rousette (v1 2020 refseq)
-GCA_004027535.1_AcoCah_v1_BIUU	Egyptian spiny mouse
+GCA_004027535.1_AcoCah_v1_BIUU	Egyptian spiny mouse (US019 2019)
 GCF_019320065.1_ASM1932006v1	elk (wapiti)
 GCF_009829155.1_mMusErm1.Pri	ermine (2020)
 GCA_009829165.1_mMusErm1.alt	ermine (alternate hap 2020)
@@ -644,7 +645,7 @@ GCA_036325905.1_CXZ	woolly hare (The Qinghai-Tibet Plateau SH-2023 2024)
 GCF_003031525.2_Neophocaena_asiaeorientalis_V1.1	Yangtze finless porpoise (v2 wild 2018 refseq)
 GCF_000442215.2_Lipotes_vexillifer_v1.1	Yangtze River dolphin (v1.1 BGI 2013 refseq)
 GCF_003676075.3_GSC_YBM_2.1	yellow-bellied marmot (SJ_83 v2.1 2019)
-GCA_047511675.1_mMarFla1.hap1	yellow-bellied marmot (hap1 2025)
+GCF_047511675.1_mMarFla1.hap1	yellow-bellied marmot (hap1 2025 refseq)
 GCA_047512175.1_mMarFla1.hap2	yellow-bellied marmot (hap2 2025)
 GCF_016432865.1_AdamAnt_v2	yellow-footed antechinus (v2 Samford, QLD, Australia AdamAnt 2021)
 GCA_004026845.1_HetBruBak_v1_BIUU	yellow-spotted hyrax

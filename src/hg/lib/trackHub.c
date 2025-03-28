@@ -1608,7 +1608,11 @@ struct dyString *dy;
 // add a note that the name based handler shouldn't be used on this track
 // add a note that this is a quickLifted track so the browser will accept tracks that aren't big*
 dy = dyStringNew(200);
-dyStringPrintf(dy, "track %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
+char *track =  trackHubSkipHubName(tdb->track);
+dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
+
+if (!(sameString(track, "decipherSnvs")))
+    dyStringPrintf(dy, "avoidHandler on\n");
     
 dumpTdbAndChildren(dy, tdb);
 
@@ -1616,11 +1620,15 @@ return dy;
 }
 
 static boolean validateOneTdb(char *db, struct trackDb *tdb)
+/* Make sure the tdb is a track type we grok. */
 {
 if (!( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
+       startsWith("bigDbSnp", tdb->type) || \
+       startsWith("bigGenePred", tdb->type) || \
        startsWith("bed ", tdb->type)))
     {
+    //printf("%s not included: bad type %s\n",tdb->track,tdb->type);
     return FALSE;
     }
 

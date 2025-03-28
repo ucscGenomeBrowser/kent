@@ -913,6 +913,10 @@ if (vf->format)	// We only can validate if we have something for format
         {
 	/* No specific validation needed for tif format. */
 	}
+    else if (sameString(format, "txt"))
+        {
+        /* No specific validation needed for txt format. */
+        }
     else if (sameString(format, "avi"))
         {
         /* No specific validation needed for avi format. */
@@ -924,6 +928,10 @@ if (vf->format)	// We only can validate if we have something for format
     else if (sameString(format, "xls"))
         {
         /* No specific validation needed for xls format. */
+        }
+    else if (sameString(format, "xlsx"))
+        {
+        /* No specific validation needed for xlsx format. */
         }
     else if (sameString(format, "h5ad"))
         {

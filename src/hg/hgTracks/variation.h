@@ -280,7 +280,7 @@ void delHindsMethods(struct track *tg);
 /***** bigDbSnp *****/
 
 struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
-                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi);
+                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi, struct hash *hash);
 /* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
 
 void bigDbSnpMethods(struct track *track);

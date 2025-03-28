@@ -1,13 +1,9 @@
-#!rusr/bin/env python3
+#!/usr/bin/env python3
 
 # Program Header
 # Name:   Gerardo Perez
 # Description: A program that compares hg38, hg19, mm39, and mm10 tables and metadata tables for hgw1 and hgwbeta discrepancies 
-#
-#
-#
-# checkSessionsFromRR.py
-#
+# check_Tables_Metadata.py
 #
 # Development Environment: VIM - Vi IMproved version 7.4.629
 

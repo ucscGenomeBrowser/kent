@@ -34,7 +34,7 @@ def makeSymLinks(user,save_dir):
 
 def getLastLinesAndMakeList(file_path, num_lines=20):
     with open(file_path, "r") as file:
-        if num_lines == 'all':
+        if num_lines == 'All':
             all_lines = file.readlines()  # Read all lines in the file
         else:
             last_lines = deque(file, maxlen=num_lines)  # Read only the last 'num_lines' lines
@@ -50,26 +50,40 @@ def getLastLinesAndMakeList(file_path, num_lines=20):
             times.append(float(parts[1].split("s")[0]))  # Second part is the time, removing the 's'
 
     elif num_lines == 80:
+        timeToWrite = []
         for i, line in enumerate(last_lines):
+            parts = line.rstrip().split("\t")
+            time = float(parts[1].split("s")[0])
         # Apply logic to every 4th line (0, 4, 8, ...)
             if i % 4 == 0:
-                
-                parts = line.rstrip().split("\t")
+                timeToWrite.append(time)
+                averageTime = round(sum(timeToWrite)/len(timeToWrite),1)
                 dates.append(parts[0])  # First part is the date
-                times.append(float(parts[1].split("s")[0]))  # Second part is the time, removing the 's'
+                times.append(averageTime)
+                timeToWrite = []
+            else:
+                timeToWrite.append(time)
 
-    elif num_lines == 'AllTime/20':
+    elif num_lines == 'All': #Calculate average times of all lines / 20 
         total_lines = len(all_lines)
 
         # Determine 20 evenly spaced line indices
         indices = [int(i * total_lines / 20) for i in range(20)]
-
-        for i in indices:
-            line = all_lines[i]
+        timeToWrite = []
+        
+        for i, line in enumerate(all_lines):
             parts = line.rstrip().split("\t")
-            dates.append(parts[0])  # First part is the date
-            times.append(float(parts[1].split("s")[0]))  # Second part is the time, removing the 's'
+            time = float(parts[1].split("s")[0])
             
+            if i in indices:
+                timeToWrite.append(time)
+                averageTime = round(sum(timeToWrite)/len(timeToWrite),1)
+                dates.append(parts[0])  # First part is the date
+                times.append(averageTime)
+                timeToWrite = []
+            else:
+                timeToWrite.append(time)
+                
     return(dates,times)
 
 def generateGraphs(user,save_dir,filePath,server):
@@ -85,8 +99,8 @@ def generateGraphs(user,save_dir,filePath,server):
             dates,times = getLastLinesAndMakeList(filePath, num_lines=20)
         elif report == "Last 20h":
             dates,times = getLastLinesAndMakeList(filePath, num_lines=80)
-        elif report == "All":
-            dates,times = getLastLinesAndMakeList(filePath, num_lines='all')
+        elif report == "AllTime/20":
+            dates,times = getLastLinesAndMakeList(filePath, num_lines='All')
         
         x_dates = dates
         y = times

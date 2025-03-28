@@ -1,0 +1,6 @@
+ hgsql hgcentraltest -Ne "select taxId, gcAccession from genark"  | sort > /tmp/1
+ hgsql hgcentraltest -Ne "select taxId, genome from dbDb group by taxId"  | sort > /tmp/2
+ hgsql hgcentraltest -Ne "create table genarkOrg (gcAccession varchar(255), genome varchar(255))"
+ join -t $'\t' /tmp/1 /tmp/2 | cut -f 2- > /tmp/3
+ hgsql hgcentraltest -Ne "load data local infile '/tmp/3' into table genarkOrg"
+

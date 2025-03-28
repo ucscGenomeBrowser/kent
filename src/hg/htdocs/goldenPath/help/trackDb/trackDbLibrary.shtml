@@ -5359,6 +5359,13 @@ For the complete bigInteract format definitions please see the
     </P>
 </DIV>
 
+<DIV class="noDetailsPage"><span class="types bigInteract"></span>
+<div class="format"><code>noDetailsPage &lt;true|false&gt;</code></div>
+    <P>This setting suppresses the normal "box" links to hgc details pages that appear on the lines that connect
+interacting regions.  Useful for generating figures without those markers.
+    </P>
+</DIV>
+
 <DIV class="endsVisible"><span class="types bigInteract"></span>
 <div class="format"><code>endsVisible two</code></div>
     <P>This setting makes the default behavior for the track show only interactions with both ends in the window.
