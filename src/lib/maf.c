@@ -192,12 +192,26 @@ for (;;)
 			    textSize, ali->textSize, lf->lineIx, lf->fileName);
 		    }
 
-		/* Do some sanity checking. */
+		/* Do some sanity checking. */ 
 		if (comp->srcSize < 0 || comp->size < 0)
-		     errAbort("Got a negative size line %d of %s", lf->lineIx, lf->fileName);
-		if (comp->start < 0 || comp->start + comp->size > comp->srcSize)
-		     errAbort("Coordinates out of range line %d of %s", lf->lineIx, lf->fileName);
-		  
+		    errAbort("Got a negative size line %d of %s", lf->lineIx, lf->fileName);
+		if (comp->start < 0)
+		    errAbort("Negative start position at line %d of %s", lf->lineIx, lf->fileName);
+		if (comp->strand == '+')
+		    {
+		    if (comp->start + comp->size > comp->srcSize)
+			errAbort("Coordinates out of range for positive strand at line %d of %s", lf->lineIx, lf->fileName);
+		    }
+		else if (comp->strand == '-')
+		    {
+		    if (comp->start > comp->srcSize)
+			errAbort("Start coordinate out of range for negative strand at line %d of %s", lf->lineIx, lf->fileName);
+		    }
+		else
+		    {
+		    errAbort("Invalid strand '%c' at line %d of %s", lf->lineIx, lf->fileName);
+		    }
+
 		/* Add component to head of list. */
 		slAddHead(&ali->components, comp);
 		}
