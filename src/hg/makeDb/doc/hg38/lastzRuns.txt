@@ -15276,3 +15276,328 @@ real	2300m12.938s
 user	0m2.731s
 sys	0m12.713s
 ##############################################################################
+# LASTZ Human Hg38 vs. white-tufted-ear marmoset GCA_011100555.2
+#    (DONE - 2024-11-22 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCA_011100555.2.2024-11-22
+    cd /hive/data/genomes/hg38/bed/lastzGCA_011100555.2.2024-11-22
+
+    printf '# white-tufted-ear marmoset GCA_011100555.2 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: white-tufted-ear marmoset 2021-04-28 GCA_011100555.2_mCalJa1.2.pat.X
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/011/100/555/GCA_011100555.2/GCA_011100555.2.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/011/100/555/GCA_011100555.2/GCA_011100555.2.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCA_011100555.2.2024-11-22
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCA_011100555.2_mCalJa1.2.pat.X -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	118m17.235s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCA_011100555.2Link.txt
+    # 2189250745 bases of 3299210039 (66.357%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCA_011100555.2Link.txt
+    # 2148028479 bases of 3299210039 (65.107%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/011/100/555/GCA_011100555.2/GCA_011100555.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/011/100/555/GCA_011100555.2/GCA_011100555.2.chrom.sizes.txt" \
+        hg38 GCA_011100555.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	149m56.908s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCA_011100555.2.txt
+    # 1999972943 bases of 3299210039 (60.620%) in intersection
+
+real	562m50.862s
+user	0m6.353s
+sys	0m4.283s
+
+##############################################################################
+# LASTZ Human Hg38 vs. olive baboon GCF_008728515.1
+#    (DONE - 2024-11-22 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_008728515.1.2023-08-31
+    cd /hive/data/genomes/hg38/bed/lastzGCF_008728515.1.2023-08-31
+
+    printf '# olive baboon GCF_008728515.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: olive baboon 2019-10-02 GCF_008728515.1_Panubis1.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/008/728/515/GCF_008728515.1/GCF_008728515.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/008/728/515/GCF_008728515.1/GCF_008728515.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCF_008728515.1.2023-08-31
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_008728515.1_Panubis1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	111m16.100s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCF_008728515.1Link.txt
+    # 2638181355 bases of 3299210039 (79.964%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCF_008728515.1Link.txt
+    # 2586288619 bases of 3299210039 (78.391%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/008/728/515/GCF_008728515.1/GCF_008728515.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/008/728/515/GCF_008728515.1/GCF_008728515.1.chrom.sizes.txt" \
+        hg38 GCF_008728515.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	109m19.490s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCF_008728515.1.txt
+    # 2400768727 bases of 3299210039 (72.768%) in intersection
+
+real	0m0.402s
+user	0m0.087s
+sys	0m0.154s
+
+##############################################################################
+# LASTZ Human Hg38 vs. sooty mangabey GCF_000955945.1
+#    (DONE - 2024-11-24 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_000955945.1.2024-11-24
+    cd /hive/data/genomes/hg38/bed/lastzGCF_000955945.1.2024-11-24
+
+    printf '# sooty mangabey GCF_000955945.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: sooty mangabey 2015-03-19 GCF_000955945.1_Caty_1.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/000/955/945/GCF_000955945.1/GCF_000955945.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/000/955/945/GCF_000955945.1/GCF_000955945.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCF_000955945.1.2024-11-24
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_000955945.1_Caty_1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	140m41.682s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCF_000955945.1Link.txt
+    # 2627114328 bases of 3299210039 (79.629%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCF_000955945.1Link.txt
+    # 2580198826 bases of 3299210039 (78.207%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/000/955/945/GCF_000955945.1/GCF_000955945.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/000/955/945/GCF_000955945.1/GCF_000955945.1.chrom.sizes.txt" \
+        hg38 GCF_000955945.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	104m0.149s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCF_000955945.1.txt
+    # 2383807464 bases of 3299210039 (72.254%) in intersection
+
+real	467m35.051s
+user	0m6.086s
+sys	0m4.122s
+
+##############################################################################
+# LASTZ Human Hg38 vs. pig-tailed macaque GCF_000956065.1
+#    (DONE - 2024-11-24 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_000956065.1.2024-11-24
+    cd /hive/data/genomes/hg38/bed/lastzGCF_000956065.1.2024-11-24
+
+    printf '# pig-tailed macaque GCF_000956065.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pig-tailed macaque 2015-03-19 GCF_000956065.1_Mnem_1.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/000/956/065/GCF_000956065.1/GCF_000956065.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/000/956/065/GCF_000956065.1/GCF_000956065.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCF_000956065.1.2024-11-24
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_000956065.1_Mnem_1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	140m45.442s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCF_000956065.1Link.txt
+    # 2617335207 bases of 3299210039 (79.332%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCF_000956065.1Link.txt
+    # 2559419006 bases of 3299210039 (77.577%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/000/956/065/GCF_000956065.1/GCF_000956065.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/000/956/065/GCF_000956065.1/GCF_000956065.1.chrom.sizes.txt" \
+        hg38 GCF_000956065.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	102m13.608s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCF_000956065.1.txt
+    # 2376330049 bases of 3299210039 (72.027%) in intersection
+
+real	471m16.938s
+user	0m6.847s
+sys	0m3.999s
+
+##############################################################################
+# LASTZ Human Hg38 vs. dog GCF_014441545.1
+#    (DONE - 2024-11-24 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_014441545.1.2024-11-24
+    cd /hive/data/genomes/hg38/bed/lastzGCF_014441545.1.2024-11-24
+
+    printf '# dog GCF_014441545.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: dog 2020-09-03 GCF_014441545.1_ROS_Cfam_1.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCF_014441545.1.2024-11-24
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_014441545.1_ROS_Cfam_1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	518m26.232s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCF_014441545.1Link.txt
+    # 1585328629 bases of 3299210039 (48.052%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCF_014441545.1Link.txt
+    # 1518416772 bases of 3299210039 (46.024%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.chrom.sizes.txt" \
+        hg38 GCF_014441545.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	252m7.964s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCF_014441545.1.txt
+
+real	1208m0.275s
+user	0m2.919s
+sys	0m3.733s
