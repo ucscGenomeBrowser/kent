@@ -251,7 +251,9 @@ Ensembl/Gencode files, they likely originate from file versions predating this u
 <a name="ens"></a>
 <h2>The differences</h2>
 
+<p>
 Some of our gene tracks look similar and contain very similar information which can be confusing.
+</p>
 
 <h6>What are Ensembl and GENCODE and is there a difference?</h6>
 
@@ -420,11 +422,15 @@ The <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">RefSe
 subtrack makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
-<b>Data format:</b> <p>A small difference is the data format, which matters if you integrate our files into pipelines:
+<p>
+<b>Data format:</b>
+A small difference is the data format, which matters if you integrate our files into pipelines:
 The refGene table qName field stores the RefSeq accession but without the version number. The
 ncbiRefSeq tables show the full accession, with the version number. To add the version number 
 to the refGene table, use a MySQL command like this: <pre>
-SELECT matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,concat(qName, '.', gbSeq.version),qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts from refSeqAli, hgFixed.gbSeq WHERE refSeqAli.qname=gbSeq.acc</pre>. To remove the transcripts on haplotypes, add this condition at the end: <pre>and tName NOT LIKE '%_hap%' AND tName not like '%_alt%' AND tNAME NOT LIKE '%_fix%'</pre>.
+SELECT matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,concat(qName, '.', gbSeq.version),qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts from refSeqAli, hgFixed.gbSeq WHERE refSeqAli.qname=gbSeq.acc</pre>
+<p>To remove the transcripts on haplotypes, add this condition at the end:</p>
+<pre>and tName NOT LIKE '%_hap%' AND tName not like '%_alt%' AND tNAME NOT LIKE '%_fix%'</pre>
 
 <p>A word of caution on the NCBI RefSeq track on hg19: NCBI is not fully supporting hg19 anymore. As a result, 
 some genes are not located on the main chromosomes in anymore. An example is NM_001129826/CSAG3.
