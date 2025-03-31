@@ -35681,6 +35681,62 @@ hgsql hgcentraltest -Ne 'insert into quickLiftChain values (0, "hg19", "hg38", "
 
 ###
 
+##############################################################################
+# LASTZ Human Hg19 vs. Norway rat GCF_036323735.1
+#    (DONE - 2025-02-26 - mspeir)
+
+    mkdir /hive/data/genomes/hg19/bed/lastzGCF_036323735.1.2025-02-26
+    cd /hive/data/genomes/hg19/bed/lastzGCF_036323735.1.2025-02-26
+
+    printf '# Norway rat GCF_036323735.1 vs. Human Hg19
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human  hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Norway rat 2024-01-31 GCF_036323735.1_GRCr8
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/036/323/735/GCF_036323735.1/GCF_036323735.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/036/323/735/GCF_036323735.1/GCF_036323735.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzGCF_036323735.1.2025-02-26
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_036323735.1_GRCr8 -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	1575m43.169s
+
+    sed -e 's/^/    # /;' fb.hg19.chainGCF_036323735.1Link.txt
+    # 959321585 bases of 3234851260 (29.656%) in intersection
+    sed -e 's/^/    # /;' fb.hg19.chainSynGCF_036323735.1Link.txt
+    # 911355050 bases of 3234851260 (28.173%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/036/323/735/GCF_036323735.1/GCF_036323735.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/036/323/735/GCF_036323735.1/GCF_036323735.1.chrom.sizes.txt" \
+        hg19 GCF_036323735.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	178m3.528s
+
+    sed -e 's/^/    # /;' fb.hg19.chainRBest.GCF_036323735.1.txt
+    # 884610372 bases of 3234851260 (27.346%) in intersection
+
+real	2120m31.673s
+user	0m2.938s
+sys	0m1.827s
+
 #########################################################################
 # denovo-db v.1.6.1 (03-13-2025) Megna Chalamala
 

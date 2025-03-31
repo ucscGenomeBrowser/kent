@@ -1855,5 +1855,10 @@ Color colorFromCart(struct track *tg, Color color);
 
 unsigned getParaLoadTimeout();
 // get the parallel load timeout in seconds (defaults to 90)
+
+void maybeDrawQuickLiftLines( struct track *tg, int seqStart, int seqEnd,
+                      struct hvGfx *hvg, int xOff, int yOff, int width,
+                      MgFont *font, Color color, enum trackVisibility vis);
+/* Draw the indel regions as a highlight. */
 #endif /* HGTRACKS_H */
 
