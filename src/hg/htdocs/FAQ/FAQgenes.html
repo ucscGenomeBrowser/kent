@@ -420,7 +420,9 @@ The <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">RefSe
 subtrack makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
-<b>Data format:</b> <p>A small difference is the data format, which matters if you integrate our files into pipelines:
+<p>
+<b>Data format:</b>
+A small difference is the data format, which matters if you integrate our files into pipelines:
 The refGene table qName field stores the RefSeq accession but without the version number. The
 ncbiRefSeq tables show the full accession, with the version number. To add the version number 
 to the refGene table, use a MySQL command like this: <pre>
