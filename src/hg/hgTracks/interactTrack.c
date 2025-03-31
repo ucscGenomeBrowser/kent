@@ -520,9 +520,9 @@ static void drawFootMapbox(struct track *tg, struct hvGfx *hvg, int start, int e
                         int x, int y, int width, Color peakColor, Color highlightColor, boolean drawUp)
 /* Draw grab box and add map box */
 {
-if (trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_NO_HGC))
+if (!interactUiShowHgcBoxes(tg->tdb, cart))
     return;
-// Add var to identify endpoint ('foot'), or NULL if no name for endpoint */
+// Add var to identify endpoint ('foot'), or NULL if no name for endpoint
 char *clickArg = NULL;
 if (!isEmptyTextField(item))
     {
@@ -544,7 +544,7 @@ void drawPeakMapbox(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEn
                         Color peakColor, Color highlightColor, boolean drawUp)
 /* Draw grab box and add map box */
 {
-if (trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_NO_HGC))
+if (!interactUiShowHgcBoxes(tg->tdb, cart))
     return;
 
 if (drawUp)

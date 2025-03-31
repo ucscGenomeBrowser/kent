@@ -1,0 +1,57 @@
+<h2>Description</h2>
+<p>
+These tracks show the two types of patch sequences from the <a 
+href="https://www.ncbi.nlm.nih.gov/grc" target=_blank>Genome Reference Consortium
+(GRC)</a> patch releases:</p>
+
+<h3>Fix Patches</h3>
+<p>
+This track shows alignments of fix patch sequences to
+main chromosome sequences in the reference genome assembly.
+When errors are corrected in the reference genome assembly, the
+<a href="https://www.ncbi.nlm.nih.gov/grc" target=_blank>Genome Reference Consortium
+(GRC)</a> adds fix patch sequences containing the corrected regions.
+This strikes a balance between providing the most complete and correct genome
+sequence, while maintaining stable chromosome coordinates for the original assembly
+sequences.
+</p>
+<p>
+Fix patches are often associated with incident reports displayed in the GRC Incidents
+track.
+</p>
+
+<h3>Alt Haplotypes</h3>
+<p>
+This track shows alignments of alternate locus (also known as &quot;alternate haplotype&quot;)
+reference sequences to main chromosome sequences in the reference genome assembly.
+Some loci in the genome are highly variable, with sets of variants that tend
+to segregate into distinct haplotypes.
+Only one haplotype can be included in a reference assembly chromosome sequence.
+Instead of providing a separate complete chromosome sequence for each haplotype,
+which could cause confusion with divergent chromosome coordinates and
+ambiguity about which sequence is the official reference, the
+<a href="https://www.ncbi.nlm.nih.gov/grc" target=_blank>Genome Reference Consortium
+(GRC)</a> adds alternate locus sequences, ranging from tens of thousands of bases
+up to low millions of bases in size, to represent the distinct haplotypes.  
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Both tracks follow the display conventions for
+<a href="../goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">
+PSL alignment tracks</a>.
+Mismatching bases are highlighted in red.
+Several types of alignment gap may also be colored;
+for more information, see
+<a href="../goldenPath/help/hgIndelDisplay.html" target="_blank">
+Alignment Insertion/Deletion Display Options</a>.
+</p>
+<p>
+By default, the tracks are only visible when there are items in the view window.
+This can be disabled by the checkbox <b>Hide empty subtracks</b>.</p>
+
+<h2>Credits</h2>
+<p>
+The alignments were provided by NCBI as GFF files and translated into the PSL
+representation for browser display by UCSC.
+</p>

@@ -5359,10 +5359,11 @@ For the complete bigInteract format definitions please see the
     </P>
 </DIV>
 
-<DIV class="noDetailsPage"><span class="types bigInteract"></span>
-<div class="format"><code>noDetailsPage &lt;true|false&gt;</code></div>
-    <P>This setting suppresses the normal "box" links to hgc details pages that appear on the lines that connect
-interacting regions.  Useful for generating figures without those markers.
+<DIV class="detailsBoxesEnabled"><span class="types bigInteract"></span>
+<div class="format"><code>detailsBoxesEnabled &lt;true|false&gt;</code></div>
+    <P>This setting controls the default behavior for suppressing the "box" links to hgc details pages that
+appear on the lines connecting interacting regions.  Useful for generating figures without those markers.
+The default value is true - set it to false to hide the boxes.  It can still be overridden in the UI for the track.
     </P>
 </DIV>
 
