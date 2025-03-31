@@ -28,7 +28,7 @@
 #define INTERACT_UP             "interactUp"
 
 /* setting to suppress the hgc link boxes */
-#define INTERACT_NO_HGC         "noDetailsPage"
+#define INTERACT_NO_HGC_VAR     "detailsBoxesEnabled"
 
 /* Cart variables */
 
@@ -64,5 +64,8 @@ char *interactUiOffset(struct trackDb *tdb);
 
 char *interactUiClusterMode(struct cart *cart, char *track, struct trackDb *tdb);
 /* Get cluster mode from trackDb and cart */
+
+boolean interactUiShowHgcBoxes(struct trackDb *tdb, struct cart *cart);
+/* Determine whether hgc link boxes should be shown in the image */
 
 #endif
