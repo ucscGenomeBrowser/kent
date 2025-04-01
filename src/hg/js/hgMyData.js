@@ -907,7 +907,9 @@ var hubCreate = (function() {
         // get the state from the history stack if it exists
         if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
             _.assign(uiState, uiData.userFiles);
-            parseFileListIntoHash(uiState.fileList);
+            if (uiState.fileList) {
+                parseFileListIntoHash(uiState.fileList);
+            }
         }
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
@@ -1078,6 +1080,21 @@ var hubCreate = (function() {
                     let completeFiles = this.uppy.getFiles().filter((f) => f.progress.uploadComplete === true);
                     if (allFiles.length === completeFiles.length) {
                         this.uppy.clear();
+                    }
+                });
+                this.uppy.on("dashboard:file-edit-complete", (file) => {
+                    // check the filename and hubname metadata and warn the user
+                    // to edit them if they are wrong. unfortunately I cannot
+                    // figure out how to force the file card to re-toggle
+                    // and jump back into the editor from here
+                    let fileNameMatch = file.meta.name.match(fileNameRegex);
+                    let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
+                    const dash = uppy.getPlugin("Dashboard");
+                    if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
+                        uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                    }
+                    if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
+                        uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
                     }
                 });
             }
