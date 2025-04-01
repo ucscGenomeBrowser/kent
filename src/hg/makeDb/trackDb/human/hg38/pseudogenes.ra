@@ -8,6 +8,7 @@ visibility hide
 type bigbed
 compositeTrack on
 noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html#033125 "Released Mar. 31, 2025"
 
         track yale_pseudogenes
         shortLabel Pseudogenes
