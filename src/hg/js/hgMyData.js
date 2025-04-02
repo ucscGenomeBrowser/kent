@@ -1087,14 +1087,16 @@ var hubCreate = (function() {
                     // to edit them if they are wrong. unfortunately I cannot
                     // figure out how to force the file card to re-toggle
                     // and jump back into the editor from here
-                    let fileNameMatch = file.meta.name.match(fileNameRegex);
-                    let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
-                    const dash = uppy.getPlugin("Dashboard");
-                    if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                        uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
-                    }
-                    if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                        uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                    if (file) {
+                        let fileNameMatch = file.meta.name.match(fileNameRegex);
+                        let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
+                        const dash = uppy.getPlugin("Dashboard");
+                        if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
+                            uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                        }
+                        if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
+                            uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                        }
                     }
                 });
             }
@@ -1198,16 +1200,19 @@ var hubCreate = (function() {
             // is completely ignored for some reason, so we have to fake the other files
             // we would have created with this one file and add them to the table if they
             // weren't already there:
-            hubTxtObj = {
-                "uploadTime": now.toLocaleString(),
-                "lastModified": d.toLocaleString(),
-                "fileName": "hub.txt",
-                "fileSize": 0,
-                "fileType": "hub.txt",
-                "genome": metadata.genome,
-                "parentDir": cgiEncode(metadata.parentDir),
-                "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
-            };
+            if (metadata.fileName !== "hub.txt") {
+                // if the user uploaded a hub.txt don't make a second fake object for it
+                hubTxtObj = {
+                    "uploadTime": now.toLocaleString(),
+                    "lastModified": d.toLocaleString(),
+                    "fileName": "hub.txt",
+                    "fileSize": 0,
+                    "fileType": "hub.txt",
+                    "genome": metadata.genome,
+                    "parentDir": cgiEncode(metadata.parentDir),
+                    "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
+                };
+            }
             parentDirObj = {
                 "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
