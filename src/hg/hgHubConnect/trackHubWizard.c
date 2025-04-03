@@ -205,6 +205,7 @@ jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
+jsIncludeFile("autocompleteCat.js",NULL);
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
     "href=\"https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css\">\n");

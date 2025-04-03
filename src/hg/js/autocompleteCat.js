@@ -86,7 +86,11 @@ var autocompleteCat = (function() {
         var doSearch = function(term, acCallback) {
             // Look up term in searchObj and by sending an ajax request
             var timestamp = new Date().getTime();
-            var url = options.baseUrl + encodeURIComponent(term) + '&_=' + timestamp;
+            var url = options.baseUrl + encodeURIComponent(term);
+            if (!options.baseUrl.startsWith("hubApi")) {
+                // hubApi doesn't tolerate extra arguments
+                url += '&_=' + timestamp;
+            }
             // put up a loading icon so users know something is happening
             toggleSpinner(true, options);
             $.getJSON(url)
