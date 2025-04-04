@@ -1,0 +1,47 @@
+##################################
+# ENCODE4 triplets - Jeltje April 2025
+
+# Fairlie put all files in a single location https://zenodo.org/records/15116042
+mkdir -p april2025
+#wget -O april2025/human_ucsc_transcripts.gtf "https://zenodo.org/records/15116042/files/human_ucsc_transcripts.gtf?download=1"
+#wget -O  april2025/filt_ab_tpm_human.tsv "https://zenodo.org/records/15116042/files/filt_ab_tpm_human.tsv?download=1"
+#wget -O  april2025/human_protein_summary.tsv "https://zenodo.org/records/15116042/files/human_protein_summary.tsv?download=1"
+#wget -O  april2025/human_sample_info.tsv https://zenodo.org/records/15116042/files/lr_human_library_data_summary.tsv?download=1
+
+gtfFile='april2025/human_ucsc_transcripts.gtf'
+quantFile='april2025/filt_ab_tpm_human.tsv'  # really counts per million since every read is full length
+protFile='april2025/human_protein_summary.tsv'
+sampleFile='april2025/human_sample_info.tsv'
+# this outputs bed12 + extra ID fields, topval expressions for mouseover and an expression html table
+./gtfToBed.py $gtfFile $quantFile $protFile $sampleFile transcripts.bed > missing.ids
+bedSort transcripts.bed transcripts.bed 
+
+cat << '_EOF_' > encode4.as
+table encode4
+"Bed 12+8 file with annotation source and values per sample in a html table."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    string source;      "Annotation source"
+    string gene_id;     "gene ID"	
+    string gene_name;   "gene name"	
+    string transcript_id;   "transcript ID"	
+    string transcript_name;   "transcript name"	
+    float maxScore;   "Highest expression score (counts per million)"
+    lstring maxScoreHtml;   "Highest expression score and sample(s)"
+    lstring expr_table; "Expression values per sample in TPM"
+    )
+_EOF_
+
+bedToBigBed -type=bed12+8 -as=encode4.as -tab transcripts.bed /hive/data/genomes/hg38/chrom.sizes encode4.bb
+
