@@ -20,17 +20,19 @@ if ($argc != 1) {
 my $goForIt = shift;
 die "ERROR: need to have argument: goForIt in order to operate." if ($goForIt ne "goForIt");
 
-my $thisMachine = `uname -n`;
+my $thisMachine = `hostname -s`;
 chomp $thisMachine;
 
 if ($thisMachine eq "hgwdev") {
   chdir ("/hive/data/genomes/asmHubs");
-} elsif ($thisMachine eq "hgdownload1.soe.ucsc.edu") {
+} elsif ($thisMachine eq "hgdownload1") {
   chdir ("/mirrordata/hubs");
 } elsif ($thisMachine eq "hgdownload2") {
   chdir ("/mirrordata/hubs");
+} elsif ($thisMachine eq "hgdownload3") {
+  chdir ("/mirrordata/hubs");
 } else {
-  die "ERROR: not running on hgdownload ?  Good for only hgwdev and hgdownload";
+  die "ERROR: not running on hgdownload ?  Good for only hgwdev and hgdownload[123]";
 }
 
 my %cladeListings;	# key is assemblyName GCA/GCF identifier, value is clade
