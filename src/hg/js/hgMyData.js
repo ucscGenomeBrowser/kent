@@ -60,51 +60,59 @@ function processFindGenome(result, term) {
     return data;
 }
 
+let autocompletes = {};
 function initAutocompleteForInput(inpIdStr, selectEle) {
-    // we must set this up for each input created, once per file chosen
+    // we must set up the autocompleteCat for each input created, once per file chosen
     // override the autocompleteCat.js _renderMenu to get the menu on top
-    // of the uppy widget
-    $.widget("custom.autocompleteCat",
-             $.ui.autocomplete,
-             {
-               _renderMenu: function(ul, items) {
-                   var that = this;
-                   var currentCategory = "";
-                   // There's no this._super as shown in the doc, so I can't override
-                   // _create as shown in the doc -- just do this every time we render...
-                   this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
-                   $(ul).css("z-index", "99999999");
-                   $.each(items,
-                          function(index, item) {
-                              // Add a heading each time we see a new category:
-                              if (item.category && item.category !== currentCategory) {
-                                  ul.append("<li class='ui-autocomplete-category'>" +
-                                            item.category + "</li>" );
-                                  currentCategory = item.category;
-                              }
-                              that._renderItem( ul, item );
-                          });
-               },
-               _renderItem: function(ul, item) {
-                 // In order to use HTML markup in the autocomplete, one has to overwrite
-                 // autocomplete's _renderItem method using .html instead of .text.
-                 // http://forum.jquery.com/topic/using-html-in-autocomplete
-                   // Hits to assembly hub top level (not individial db names) have no item label,
-                   // so use the value instead
-                   return $("<li></li>")
-                       .data("ui-autocomplete-item", item)
-                       .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
-                       .appendTo(ul);
-               }
-             });
-    let selectFunction = setDbSelectFromAutocomplete.bind(null, selectEle);
-    autocompleteCat.init($("[id='"+inpIdStr+"']"), {
-        baseUrl: "hubApi/findGenome?browser=mustExist&q=",
-        //watermark: "Enter species name, common name, etc",
-        onSelect: selectFunction,
-        onServerReply: processFindGenome,
-        enterSelectsIdentical: false
-    });
+    // of the uppy widget.
+    // Return true if we actually set up the autocomplete, false if we have already
+    // set it up previously
+    if ( !(inpIdStr in autocompletes) || autocompletes[inpIdStr] === false) {
+        $.widget("custom.autocompleteCat",
+                 $.ui.autocomplete,
+                 {
+                   _renderMenu: function(ul, items) {
+                       var that = this;
+                       var currentCategory = "";
+                       // There's no this._super as shown in the doc, so I can't override
+                       // _create as shown in the doc -- just do this every time we render...
+                       this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                       $(ul).css("z-index", "99999999");
+                       $.each(items,
+                              function(index, item) {
+                                  // Add a heading each time we see a new category:
+                                  if (item.category && item.category !== currentCategory) {
+                                      ul.append("<li class='ui-autocomplete-category'>" +
+                                                item.category + "</li>" );
+                                      currentCategory = item.category;
+                                  }
+                                  that._renderItem( ul, item );
+                              });
+                   },
+                   _renderItem: function(ul, item) {
+                     // In order to use HTML markup in the autocomplete, one has to overwrite
+                     // autocomplete's _renderItem method using .html instead of .text.
+                     // http://forum.jquery.com/topic/using-html-in-autocomplete
+                       // Hits to assembly hub top level (not individial db names) have no item label,
+                       // so use the value instead
+                       return $("<li></li>")
+                           .data("ui-autocomplete-item", item)
+                           .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
+                           .appendTo(ul);
+                   }
+                 });
+        let selectFunction = setDbSelectFromAutocomplete.bind(null, selectEle);
+        autocompleteCat.init($("[id='"+inpIdStr+"']"), {
+            baseUrl: "hubApi/findGenome?browser=mustExist&q=",
+            //watermark: "Enter species name, common name, etc",
+            onSelect: selectFunction,
+            onServerReply: processFindGenome,
+            enterSelectsIdentical: false
+        });
+        autocompletes[inpIdStr] = true;
+        return true;
+    }
+    return false;
 }
 
 function generateApiKey() {
@@ -267,10 +275,18 @@ var hubCreate = (function() {
         return cartDb.split(" ").slice(-1)[0];
     }
 
-    function makeGenomeSelectOptions() {
-        // Returns an array of options for genomes
+    let defaultGenomeChoices = {
+        "Human hg38": {value: "hg38", label: "Human hg38"},
+        "Human T2T": {value: "T2T", label: "Human T2T"},
+        "Human hg19": {value: "hg19", label: "Human hg19"},
+        "Mouse mm39": {value: "mm39", label: "Mouse mm39"},
+        "Mouse mm10": {value: "mm10", label: "Mouse mm10"}
+    };
+
+    function makeGenomeSelectOptions(value, label) {
+        // Returns an array of options for genomes, if value and label exist, add that
+        // as an additional option
         let ret = [];
-        let choices = ["Human hg38", "Human T2T", "Human hg19", "Mouse mm39", "Mouse mm10"];
         let cartChoice = {};
         cartChoice.id = cartDb;
         cartChoice.label = cartDb;
@@ -278,16 +294,15 @@ var hubCreate = (function() {
         if (cartChoice.value.startsWith("hub_")) {
             cartChoice.label = cartDb.split(" ").slice(0,-1).join(" "); // take off the actual db value
         }
-        cartChoice.selected = true;
-        ret.push(cartChoice);
-        choices.forEach( (e) =>  {
-            if (e === cartDb) {return;} // don't print the cart database twice
-            let choice = {};
-            choice.id = e;
-            choice.label = e;
-            choice.value = e.split(" ")[1];
-            ret.push(choice);
-        });
+        cartChoice.selected = value && label ? false: true;
+        defaultGenomeChoices[cartChoice.label] = cartChoice;
+
+        // next time around our value/label pair will be a default. this time around we
+        // want it selected because it was explicitly asked for, but it may not be next time
+        ret = Object.values(defaultGenomeChoices);
+        if (value && label && !(label in defaultGenomeChoices)) {
+            defaultGenomeChoices[label] = {value: value, label: label, selected: true};
+        }
         return ret;
     }
 
@@ -979,7 +994,6 @@ var hubCreate = (function() {
         return table;
     }
 
-    let autocompleteInitComplete = false;
     function init() {
         cart.setCgi('hgMyData');
         cart.debug(debugCartJson);
@@ -1056,9 +1070,11 @@ var hubCreate = (function() {
                     batchSelectDiv.style.display = "grid";
                     batchSelectDiv.style.width = "80%";
                     // the grid syntax is 2 columns, 3 rows
-                    batchSelectDiv.style.gridTemplateColumns = "50% 50%";
-                    batchSelectDiv.style.gridTemplateRows = "25px 25px 25px";
+                    batchSelectDiv.style.gridTemplateColumns = "max-content minmax(0, 200px) max-content 1fr min-content";
+                    batchSelectDiv.style.gridTemplateRows = "repest(3, auto)";
                     batchSelectDiv.style.margin = "10px auto"; // centers this div
+                    batchSelectDiv.style.fontSize = "14px";
+                    batchSelectDiv.style.gap = "8px";
                     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
                         batchSelectDiv.style.color = "#eaeaea";
                     }
@@ -1074,22 +1090,41 @@ var hubCreate = (function() {
                     this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
                     batchDbSelect.id = "batchDbSelect";
                     batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
-                    batchDbSelect.style.margin = "1px 1px auto";
+                    batchDbSelect.style.margin = "2px";
                     let batchDbLabel = document.createElement("label");
                     batchDbLabel.textContent = "Genome";
                     batchDbLabel.for = "batchDbSelect";
                     batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
 
+                    // the search bar for db selection
+                    let batchDbSearchBarLabel= document.createElement("label");
+                    batchDbSearchBarLabel.textContent = "or search for your genome:";
+                    batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
+                    batchDbSearchBarLabel.style.margin = "auto";
+
+                    let batchDbGenomeSearchBar = document.createElement("input");
+                    batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
+                    batchDbGenomeSearchBar.type = "text";
+                    batchDbGenomeSearchBar.id = "batchDbSearchBar";
+                    batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
+                    let batchDbGenomeSearchButton = document.createElement("input");
+                    batchDbGenomeSearchButton.type = "button";
+                    batchDbGenomeSearchButton.value = "search";
+                    batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
+                    batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
+
                     // the batch change hub name
+                    let batchParentDirLabel = document.createElement("label");
+                    batchParentDirLabel.textContent = "Hub Name";
+                    batchParentDirLabel.for = "batchParentDir";
+                    batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+
                     let batchParentDirInput = document.createElement("input");
                     batchParentDirInput.id = "batchParentDir";
                     batchParentDirInput.value = uiState.hubNameDefault;
                     batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
                     batchParentDirInput.style.margin= "1px 1px auto";
-                    let batchParentDirLabel = document.createElement("label");
-                    batchParentDirLabel.textContent = "Hub Name";
-                    batchParentDirLabel.for = "batchParentDir";
-                    batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+                    batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
 
                     // add event handlers to change metadata, use an arrow function
                     // because otherwise 'this' keyword will be the element instead of
@@ -1099,6 +1134,7 @@ var hubCreate = (function() {
                         let val = ev.target.value;
                         for (let [key, file] of Object.entries(files)) {
                             this.uppy.setFileMeta(file.id, {genome: val});
+                            this.uppy.setFileMeta(file.id, {genomeLabel: ev.target.selectedOptions[0].label});
                         }
                     });
                     batchParentDirInput.addEventListener("change", (ev) => {
@@ -1109,9 +1145,13 @@ var hubCreate = (function() {
                         }
                     });
 
+
                     batchSelectDiv.appendChild(batchSelectText);
                     batchSelectDiv.appendChild(batchDbLabel);
                     batchSelectDiv.appendChild(batchDbSelect);
+                    batchSelectDiv.appendChild(batchDbSearchBarLabel);
+                    batchSelectDiv.appendChild(batchDbGenomeSearchBar);
+                    batchSelectDiv.appendChild(batchDbGenomeSearchButton);
                     batchSelectDiv.appendChild(batchParentDirLabel);
                     batchSelectDiv.appendChild(batchParentDirInput);
 
@@ -1121,6 +1161,17 @@ var hubCreate = (function() {
                     let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
                     if (uppyFilesDiv) {
                         uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
+                    }
+
+                    // everything has to exist already for autocompleteCat to initialize
+                    let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
+                    if (justInitted) {
+                        // only do this once per batch setup
+                        batchDbGenomeSearchButton.addEventListener("click", (e) => {
+                            let inp = document.getElementById(batchDbSearchBar.id).value;
+                            let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
+                            $(selector).autocompleteCat("search", inp);
+                        });
                     }
                 }
             }
@@ -1165,7 +1216,7 @@ var hubCreate = (function() {
                     }
                 });
                 this.uppy.on("dashboard:file-edit-start", (file) => {
-                    autocompleteInitComplete = false;
+                    autocompletes[`${file.name}DbInput`] = false;
                 });
 
                 this.uppy.on("dashboard:file-edit-complete", (file) => {
@@ -1241,9 +1292,10 @@ var hubCreate = (function() {
                                 onChange: e => {
                                     onChange(e.target.value);
                                     file.meta.genome = e.target.value;
+                                    file.meta.genomeLabel = e.target.selectedOptions[0].label;
                                 }
                                 },
-                                makeGenomeSelectOptions().map( (genomeObj) => {
+                                makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
                                     return h('option', {
                                         value: genomeObj.value,
                                         label: genomeObj.label,
@@ -1269,16 +1321,17 @@ var hubCreate = (function() {
                             })
                         );
                     let selectToChange = document.getElementById(`${file.meta.name}DbSelect`);
-                    if (selectToChange && !autocompleteInitComplete ) {
-                        initAutocompleteForInput(`${file.meta.name}DbInput`, selectToChange);
-                        // only do this once per file
-                        autocompleteInitComplete = true;
-                        document.getElementById(`${file.meta.name}DbSearchButton`)
-                                .addEventListener("click", (e) => {
-                                    let inp = document.getElementById(`${file.meta.name}DbInput`).value;
-                                    let selector = `[id='${file.meta.name}DbInput']`;
-                                    $(selector).autocompleteCat("search",inp);
-                                });
+                    if (selectToChange) {
+                        let justInitted = initAutocompleteForInput(`${file.meta.name}DbInput`, selectToChange);
+                        if (justInitted) {
+                            // only do this once per file
+                            document.getElementById(`${file.meta.name}DbSearchButton`)
+                                    .addEventListener("click", (e) => {
+                                        let inp = document.getElementById(`${file.meta.name}DbInput`).value;
+                                        let selector = `[id='${file.meta.name}DbInput']`;
+                                        $(selector).autocompleteCat("search", inp);
+                                    });
+                        }
                     }
                     return ret;
                     }
