@@ -21,11 +21,18 @@ scp -p userApps.src.tgz qateam@hgdownload:$downloadDir/
 ssh -n qateam@hgdownload "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
 
 # hgwdownload2
-#ssh -n qateam@hgdownload2 "rm -f $downloadDir/userApps.src.tgz"
+ssh -n qateam@hgdownload2 "rm -f $downloadDir/userApps.src.tgz"
 # in case the script was already run before:
-#ssh -n qateam@hgdownload2 "rm -f $downloadDir/userApps.archive/$versionedTgz"
-#scp -p userApps.src.tgz qateam@hgdownload2:$downloadDir/
-#ssh -n qateam@hgdownload2 "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
+ssh -n qateam@hgdownload2 "rm -f $downloadDir/userApps.archive/$versionedTgz"
+scp -p userApps.src.tgz qateam@hgdownload2:$downloadDir/
+ssh -n qateam@hgdownload2 "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
+
+# hgwdownload3
+ssh -n qateam@hgdownload3 "rm -f $downloadDir/userApps.src.tgz"
+# in case the script was already run before:
+ssh -n qateam@hgdownload3 "rm -f $downloadDir/userApps.archive/$versionedTgz"
+scp -p userApps.src.tgz qateam@hgdownload3:$downloadDir/
+ssh -n qateam@hgdownload3 "cd $downloadDir/userApps.archive/; ln ../userApps.src.tgz $versionedTgz"
 
 # genome-euro
 ssh -n qateam@genome-euro "rm -f $downloadDir/userApps.src.tgz"

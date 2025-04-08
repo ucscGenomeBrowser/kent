@@ -64,6 +64,47 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
 
+<a name="033125"></a>
+<h2>Mar. 31, 2025 &nbsp;&nbsp; New Pseudogenes track for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=pseudogenes&position=default">Pseudogenes</a>
+track for the hg38 (GRCh38) genome assembly. The composite track contains pseudogene predictions and
+their corresponding parent genes, as identified by <a href="http://pseudogene.org/pseudopipe/"
+target="_blank">PseudoPipe</a>, a homology-based computational pipeline that searches a mammalian
+genome and identifies pseudogene sequences.</p>
+<p>
+This composite track consists of two subtracks: the <b>Pseudogene Parents</b> track and the
+<b>Pseudogenes</b> track.</p>
+<ul>
+  <li><b>Pseudogene Parents</b> &ndash; This track displays parent genes labeled with their HUGO
+	  IDs, which were derived from Ensembl gene IDs provided by the Gerstein lab after dataset
+	  creation. It includes indicators for pseudogenes, each linked to its corresponding entry
+	  in the Pseudogenes track. <b><font color="#800080">Parent genes</font></b> are shown with
+	  their associated pseudogenes represented as <b><font color="#A9A9A9">grey</font></b>
+	  blocks.
+  <li><b>Pseudogenes</b> &ndash; This track displays pseudogenes labeled with their parent HUGO ID
+	  and the pseudogenes are color-coded by pseudogene type:
+	  <b><font color="#FF8C00">unspecified pseudogene</font></b>, <b><font
+	  color="#0000FF">unprocessed pseudogene</font></b>, and
+	  <b><font color="#556B2F">processed pseudogene</font></b>.
+</ul>
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/gperez2/Pseudogenes" target="_blank">
+  <img src="../images/newsArchImages/PseudogenesTrack.jpg" alt="hg38 session
+  visualizing the Pseudogenes track" width='80%'></a>
+</div>
+<p>
+More information on this composite track can be found on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=pseudogenes&position=default#TRACK_HTML" target="_blank">track description</a>
+page.
+</p>
+<p>
+We would like to thank the Gerstein lab at Yale University for making this data available, and
+Cristina Sisu for providing data in GTF format with parent annotations. We would also like to
+thank Jeltje van Baren, Mark Diekhans, and Gerardo Perez for their efforts on this release.
+</p>
+
 <a name="031425"></a>
 <h2>Mar. 14, 2025 &nbsp;&nbsp; denovo-db tracks for hg19 now available</h2>
 <p>

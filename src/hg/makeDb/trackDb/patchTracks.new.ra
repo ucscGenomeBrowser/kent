@@ -5,6 +5,8 @@ compositeTrack on
 hideEmptySubtracks on
 group map
 visibility pack
+indelDoubleInsert on
+indelQueryInsert on
 type psl
 html patchesPsl
 

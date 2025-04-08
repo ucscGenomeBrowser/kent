@@ -109,6 +109,25 @@ cgiMakeCheckBox(cartVar, doDashes);
 printf("Draw reverse direction interactions with dashed lines");
 }
 
+boolean interactUiShowHgcBoxes(struct trackDb *tdb, struct cart *cart)
+/* Determine whether hgc link boxes should be shown in the image */
+{
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, INTERACT_NO_HGC_VAR);
+boolean doDashes = cartOrTdbBoolean(cart, tdb, INTERACT_NO_HGC_VAR, TRUE);
+return doDashes;
+}
+
+void interactUiDetailsPageEnabled(struct cart *cart, char *track, struct trackDb *tdb)
+/* UI checkbox for whether hgc links should be provided in boxes on interaction segments */
+{
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, INTERACT_NO_HGC_VAR);
+boolean doDashes = interactUiShowHgcBoxes(tdb, cart);
+cgiMakeCheckBox(cartVar, doDashes);
+printf("Include details page links (boxes) on interaction lines");
+}
+
 static char *interactClusterDefault(struct trackDb *tdb)
 /* Determine whether to cluster by source or target (or neither if NULL) */
 {
@@ -181,6 +200,8 @@ else
     interactUiDrawMode(cart, track, tdb);
     puts("</p><p>");
     interactUiDashedLines(cart, track, tdb);
+    puts("</p><p>");
+    interactUiDetailsPageEnabled(cart, track, tdb);
     puts("</p>");
     }
 scoreCfgUi(database, cart,tdb,track,NULL,1000,FALSE);

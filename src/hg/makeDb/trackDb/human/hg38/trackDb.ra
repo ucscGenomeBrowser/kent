@@ -874,3 +874,6 @@ include assemblyTracks.ra
 include primates11way.ra alpha
 
 include pseudogenes.ra
+
+include encode4.ra
+

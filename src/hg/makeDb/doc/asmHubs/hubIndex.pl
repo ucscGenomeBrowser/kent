@@ -4,15 +4,13 @@ use strict;
 use warnings;
 use File::Basename;
 
-my $thisMachine = `uname -n`;
+my $thisMachine = `hostname -s`;
 chomp $thisMachine;
 
 if ($thisMachine ne "hgdownload") {
-  if ($thisMachine ne "hgdownload1" && $thisMachine ne "hgdownload2") {
-    if ($thisMachine ne "hgdownload1.soe.ucsc.edu") {
-     printf STDERR "# NOTE: This script is only used on hgdownload\n";
+  if ($thisMachine ne "hgdownload1" && $thisMachine ne "hgdownload2" && $thisMachine ne "hgdownload3") {
+     printf STDERR "# NOTE: This script is only used on hgdownload[123]\n";
      exit 255;
-    }
   }
 }
 
@@ -221,7 +219,7 @@ printf "Please note, the <em>invertebrate</em> category contains more than just 
 printf "</p>\n";
 
 printf "<p>\n";
-printf "Please use the <a href='https://genome.ucsc.edu/assemblyRequest.html?all' target=_blank>Assembly Request</a> page to find and request GenBank assemblies that have not yet been included in the collections here.\n";
+printf "Please use the <a href='https://genome.ucsc.edu/assemblySearch.html' target=_blank>Assembly Search</a> page to find and request GenBank assemblies that have not yet been included in the collections here.\n";
 printf "</p>\n";
 
 printf "<p>\n";

@@ -23,6 +23,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "htmshell.h"
+#include <limits.h>
 
 void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
@@ -160,8 +161,14 @@ if (userName)
     jsonWriteString(jw, "userUrl", webDataDir(userName));
     jsonWriteListStart(jw, "fileList");
     struct hubSpace *file, *fileList = listFilesForUser(userName);
+    char fullPath[PATH_MAX];
     for (file = fileList; file != NULL; file = file->next)
         {
+        // enforce realpath here in case of a trailing '/' on the hg.conf variable
+        // during a previous upload step
+        char *fpath = realpath(file->location, fullPath);
+        if (!fpath)
+            errAbort("Error listing user files for file '%s'", file->location);
         jsonWriteObjectStart(jw, NULL);
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
@@ -170,7 +177,7 @@ if (userName)
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "lastModified", file->lastModified);
         jsonWriteString(jw, "uploadTime", file->creationTime);
-        jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
+        jsonWriteString(jw, "fullPath", stripDataDir(fullPath, userName));
         jsonWriteString(jw, "md5sum", file->md5sum);
         jsonWriteObjectEnd(jw);
         }
@@ -198,6 +205,7 @@ jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
+jsIncludeFile("autocompleteCat.js",NULL);
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
 puts("<link rel=\"stylesheet\" type=\"text/css\" "
     "href=\"https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css\">\n");

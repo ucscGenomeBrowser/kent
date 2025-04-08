@@ -403,18 +403,27 @@ slSort(&hubNames,slNameCmpStringsWithEmbeddedNumbers);
 slReverse(&hubNames);
 // now the first element of the list has the most recent integer to use (or no integer)
 char *currHubName = cloneString(hubNames->name);
-int currHubStrLen = strlen(currHubName);
 int defaultLen = strlen(defaultHubName);
-if (currHubStrLen == defaultLen)
+if (sameString(currHubName,defaultHubName))
     // probably a common case
     return "defaultHub2";
 else
     {
     currHubName[defaultLen-1] = 0;
     currHubName += strlen(defaultHubName);
-    int hubNum = sqlUnsigned(currHubName) + 1;
-    struct dyString *hubName = dyStringCreate("%s%d", defaultHubName, hubNum);
-    return dyStringCannibalize(&hubName);
+    eraseNonDigits(currHubName);
+    if (strlen(currHubName) == 0)
+        {
+        // user has a hub like defaultHubblah, just assume defaultHub2 is ok instead of
+        // going further and trying to figure out the next hub number
+        return "defaultHub2";
+        }
+    else
+        {
+        int hubNum = sqlUnsigned(currHubName) + 1;
+        struct dyString *hubName = dyStringCreate("%s%d", defaultHubName, hubNum);
+        return dyStringCannibalize(&hubName);
+        }
     }
 }
 

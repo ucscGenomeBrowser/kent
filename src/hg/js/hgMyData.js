@@ -26,6 +26,87 @@ function cgiDecode(value) {
     return decodeURIComponent(value);
 }
 
+function setDbSelectFromAutocomplete(selectEle, item) {
+    // this has been bound to the <select> we are going to add
+    // a new child option to
+    let newOpt = document.createElement("option");
+    newOpt.value = item.genome;
+    newOpt.label = item.label;
+    newOpt.selected = true;
+    selectEle.appendChild(newOpt);
+    const event = new Event("change");
+    selectEle.dispatchEvent(event);
+}
+
+function processFindGenome(result, term) {
+    // process the hubApi/findGenome?q= result set into somthing
+    // jquery-ui autocomplete can use
+    let data = [];
+    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount"]);
+    _.forEach(result, function(val, key) {
+        if (!(apiSkipList.has(key))) {
+            let d = {
+                "genome": key,
+                "label": `${val.commonName} (${key})`,
+            };
+            if (val.hubUrl !== null) {
+                d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
+            } else {
+                d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
+            }
+            data.push(d);
+        }
+    });
+    return data;
+}
+
+function initAutocompleteForInput(inpIdStr, selectEle) {
+    // we must set this up for each input created, once per file chosen
+    // override the autocompleteCat.js _renderMenu to get the menu on top
+    // of the uppy widget
+    $.widget("custom.autocompleteCat",
+             $.ui.autocomplete,
+             {
+               _renderMenu: function(ul, items) {
+                   var that = this;
+                   var currentCategory = "";
+                   // There's no this._super as shown in the doc, so I can't override
+                   // _create as shown in the doc -- just do this every time we render...
+                   this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                   $(ul).css("z-index", "99999999");
+                   $.each(items,
+                          function(index, item) {
+                              // Add a heading each time we see a new category:
+                              if (item.category && item.category !== currentCategory) {
+                                  ul.append("<li class='ui-autocomplete-category'>" +
+                                            item.category + "</li>" );
+                                  currentCategory = item.category;
+                              }
+                              that._renderItem( ul, item );
+                          });
+               },
+               _renderItem: function(ul, item) {
+                 // In order to use HTML markup in the autocomplete, one has to overwrite
+                 // autocomplete's _renderItem method using .html instead of .text.
+                 // http://forum.jquery.com/topic/using-html-in-autocomplete
+                   // Hits to assembly hub top level (not individial db names) have no item label,
+                   // so use the value instead
+                   return $("<li></li>")
+                       .data("ui-autocomplete-item", item)
+                       .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
+                       .appendTo(ul);
+               }
+             });
+    let selectFunction = setDbSelectFromAutocomplete.bind(null, selectEle);
+    autocompleteCat.init($("[id='"+inpIdStr+"']"), {
+        baseUrl: "hubApi/findGenome?browser=mustExist&q=",
+        //watermark: "Enter species name, common name, etc",
+        onSelect: selectFunction,
+        onServerReply: processFindGenome,
+        enterSelectsIdentical: false
+    });
+}
+
 function generateApiKey() {
     let apiKeyInstr = document.getElementById("apiKeyInstructions");
     let apiKeyDiv = document.getElementById("apiKey");
@@ -898,6 +979,7 @@ var hubCreate = (function() {
         return table;
     }
 
+    let autocompleteInitComplete = false;
     function init() {
         cart.setCgi('hgMyData');
         cart.debug(debugCartJson);
@@ -907,7 +989,9 @@ var hubCreate = (function() {
         // get the state from the history stack if it exists
         if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
             _.assign(uiState, uiData.userFiles);
-            parseFileListIntoHash(uiState.fileList);
+            if (uiState.fileList) {
+                parseFileListIntoHash(uiState.fileList);
+            }
         }
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
@@ -1080,6 +1164,27 @@ var hubCreate = (function() {
                         this.uppy.clear();
                     }
                 });
+                this.uppy.on("dashboard:file-edit-start", (file) => {
+                    autocompleteInitComplete = false;
+                });
+
+                this.uppy.on("dashboard:file-edit-complete", (file) => {
+                    // check the filename and hubname metadata and warn the user
+                    // to edit them if they are wrong. unfortunately I cannot
+                    // figure out how to force the file card to re-toggle
+                    // and jump back into the editor from here
+                    if (file) {
+                        let fileNameMatch = file.meta.name.match(fileNameRegex);
+                        let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
+                        const dash = uppy.getPlugin("Dashboard");
+                        if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
+                            uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                        }
+                        if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
+                            uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                        }
+                    }
+                });
             }
             uninstall() {
                 // not really used because we aren't ever uninstalling the uppy instance
@@ -1103,9 +1208,11 @@ var hubCreate = (function() {
                         return h('input',
                             {type: "text",
                             value: value,
+                            class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
                             onChange: e => {
                                 onChange(e.target.value);
                                 file.meta.fileType = detectFileType(e.target.value);
+                                file.meta.name = e.target.value;
                             },
                             required: required,
                             form: form,
@@ -1117,37 +1224,68 @@ var hubCreate = (function() {
                     id: 'genome',
                     name: 'Genome',
                     render: ({value, onChange}, h) => {
-                        return h('select', {
-                            onChange: e => {
-                                onChange(e.target.value);
-                                file.meta.genome = e.target.value;
-                            }
-                            },
-                            makeGenomeSelectOptions().map( (genomeObj) => {
-                                return h('option', {
-                                    value: genomeObj.value,
-                                    label: genomeObj.label,
-                                    selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === defaultDb()
-                                });
+                        // keep these as a variable so we can init the autocompleteCat
+                        // code only after the elements have actually been rendered
+                        // there are multiple rendering passes and only eventually
+                        // do the elements actually make it into the DOM
+                        let ret = h('div', {
+                                class: "uppy-Dashboard-FileCard-label",
+                                style: "display: inline-block; width: 78%"
+                                },
+                            // first child of div
+                            "Select from popular assemblies:",
+                            // second div child
+                            h('select', {
+                                id: `${file.meta.name}DbSelect`,
+                                style: "margin-left: 5px",
+                                onChange: e => {
+                                    onChange(e.target.value);
+                                    file.meta.genome = e.target.value;
+                                }
+                                },
+                                makeGenomeSelectOptions().map( (genomeObj) => {
+                                    return h('option', {
+                                        value: genomeObj.value,
+                                        label: genomeObj.label,
+                                        selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === defaultDb()
+                                    });
+                                })
+                            ),
+                            h('p', {
+                                class: "uppy-Dashboard-FileCard-label",
+                                style: "display: block; width: 78%",
+                                }, "or search for your genome:"),
+                            // third div child
+                            h('input', {
+                                id: `${file.meta.name}DbInput`,
+                                type: 'text',
+                                class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
+                            }),
+                            h('input', {
+                                id: `${file.meta.name}DbSearchButton`,
+                                type: 'button',
+                                value: 'search',
+                                style: "margin-left: 5px",
                             })
                         );
-                    },
+                    let selectToChange = document.getElementById(`${file.meta.name}DbSelect`);
+                    if (selectToChange && !autocompleteInitComplete ) {
+                        initAutocompleteForInput(`${file.meta.name}DbInput`, selectToChange);
+                        // only do this once per file
+                        autocompleteInitComplete = true;
+                        document.getElementById(`${file.meta.name}DbSearchButton`)
+                                .addEventListener("click", (e) => {
+                                    let inp = document.getElementById(`${file.meta.name}DbInput`).value;
+                                    let selector = `[id='${file.meta.name}DbInput']`;
+                                    $(selector).autocompleteCat("search",inp);
+                                });
+                    }
+                    return ret;
+                    }
                 },
                 {
                     id: 'parentDir',
                     name: 'Hub Name',
-                    render: ({value, onChange, required, form}, h) => {
-                        return h('input',
-                            {type: 'text',
-                             value: value,
-                             onChange: e => {
-                                onChange(e.target.value);
-                             },
-                             required: required,
-                             form: form,
-                            }
-                        );
-                    },
                 }];
                 return fields;
             },
@@ -1181,16 +1319,19 @@ var hubCreate = (function() {
             // is completely ignored for some reason, so we have to fake the other files
             // we would have created with this one file and add them to the table if they
             // weren't already there:
-            hubTxtObj = {
-                "uploadTime": now.toLocaleString(),
-                "lastModified": d.toLocaleString(),
-                "fileName": "hub.txt",
-                "fileSize": 0,
-                "fileType": "hub.txt",
-                "genome": metadata.genome,
-                "parentDir": cgiEncode(metadata.parentDir),
-                "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
-            };
+            if (metadata.fileName !== "hub.txt") {
+                // if the user uploaded a hub.txt don't make a second fake object for it
+                hubTxtObj = {
+                    "uploadTime": now.toLocaleString(),
+                    "lastModified": d.toLocaleString(),
+                    "fileName": "hub.txt",
+                    "fileSize": 0,
+                    "fileType": "hub.txt",
+                    "genome": metadata.genome,
+                    "parentDir": cgiEncode(metadata.parentDir),
+                    "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
+                };
+            }
             parentDirObj = {
                 "uploadTime": now.toLocaleString(),
                 "lastModified": d.toLocaleString(),
