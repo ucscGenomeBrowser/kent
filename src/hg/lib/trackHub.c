@@ -1611,7 +1611,7 @@ dy = dyStringNew(200);
 char *track =  trackHubSkipHubName(tdb->track);
 dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
 
-if (!(sameString(track, "decipherSnvs")))
+if (!(sameString(track, "decipherSnvs")|| sameString(track, "omimLocation") || sameString(track, "omimAvSnp")|| sameString(track, "ncbiRefSeq")))
     dyStringPrintf(dy, "avoidHandler on\n");
     
 dumpTdbAndChildren(dy, tdb);
@@ -1626,6 +1626,7 @@ if (!( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
        startsWith("bigDbSnp", tdb->type) || \
        startsWith("bigGenePred", tdb->type) || \
+       startsWith("genePred", tdb->type) || \
        startsWith("bed ", tdb->type)))
     {
     //printf("%s not included: bad type %s\n",tdb->track,tdb->type);

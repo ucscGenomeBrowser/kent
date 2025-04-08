@@ -1675,17 +1675,16 @@ for (i=0; i<count; ++i)
 return bed;
 }
 
-void liftOverGenePred(char *fileName, struct hash *chainHash, 
+void calcLiftOverGenePreds( struct genePred *gpList, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
                       FILE *mapped, FILE *unmapped, boolean multiple, bool preserveInput)
-/* Lift over file in genePred format. */
+/* worker function for liftOverGenePred. */
 {
 char *db = NULL, *chainTable = NULL;
 
 struct bed *bed;
 struct genePred *gp = NULL;
 char *error;
-struct genePred *gpList = genePredExtLoadAll(fileName);
 for (gp = gpList ; gp != NULL ; gp = gp->next)
     {
     // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
@@ -1700,9 +1699,12 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
                             multiple, db, chainTable);
     if (error)
 	{
-	fprintf(unmapped, "# %s\n", error);
         bedFree(&bed);
-        genePredTabOut(gp, unmapped);
+        if (unmapped)
+            {
+            fprintf(unmapped, "# %s\n", error);
+            genePredTabOut(gp, unmapped);
+            }
 	}
    else
 	{
@@ -1728,12 +1730,19 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
                 gp->exonStarts[i] = s;
                 gp->exonEnds[i] = e;
                 }
-            genePredTabOut(gp, mapped);
+            if (mapped)
+                genePredTabOut(gp, mapped);
 	    }
         bedFreeList(&bedList);
 	}
-//    genePredFree(&gp);
     }
+}
+
+void liftOverGenePred(char *fileName, struct hash *chainHash, 
+                        double minMatch, double minBlocks, bool fudgeThick,
+                      FILE *mapped, FILE *unmapped, boolean multiple, bool preserveInput)
+{
+calcLiftOverGenePreds(genePredExtLoadAll(fileName), chainHash, minMatch, minBlocks, fudgeThick, mapped, unmapped, multiple, preserveInput);
 }
 
 static struct liftRange *sampleToRangeList(struct sample *sample, int sizeOne)

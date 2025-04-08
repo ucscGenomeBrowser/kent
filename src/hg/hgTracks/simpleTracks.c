@@ -147,6 +147,8 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "bigWarn.h"
+#include "quickLift.h"
+#include "liftOver.h"
 
 #define CHROM_COLORS 26
 
@@ -6259,15 +6261,55 @@ return connectedLfFromGenePredInRangeExtra(tg, conn, table, chrom,
                                                 start, end, FALSE);
 }
 
+static void maybeLiftGenePred(struct track *tg, char *table, char *chrom, int start, int end, boolean extra)
+/* Load a bunch of genePreds, perhaps quickLifting them. */
+{
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+
+if (liftDb != NULL)
+    {
+    char *table;
+    if (isCustomTrack(tg->table))
+        {
+        liftDb = CUSTOM_TRASH;
+        table = trackDbSetting(tg->tdb, "dbTableName");
+        }
+    else
+        table = tg->table;
+    struct hash *chainHash = newHash(8);
+    struct sqlConnection *conn = hAllocConn(liftDb);
+    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+
+// using this loader on genePred tables with less than 15 fields may be a problem.
+extern struct genePred *genePredExtLoad15(char **row);
+
+    struct genePred *gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    hFreeConn(&conn);
+
+    calcLiftOverGenePreds( gpList, chainHash, 0.0, 1.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    struct genePred *gp = gpList;
+
+    struct linkedFeatures *lfList = NULL;
+    for(;gp; gp = gp->next)
+        slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, TRUE));
+    slReverse(&lfList);
+    tg->items = lfList;
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
+                                            chromName, winStart, winEnd, extra);
+    hFreeConn(&conn);
+    }
+}
+
 struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
                                              char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table. */
 {
-struct linkedFeatures *lfList = NULL;
-struct sqlConnection *conn = hAllocConn(database);
-lfList = connectedLfFromGenePredInRange(tg, conn, table, chrom, start, end);
-hFreeConn(&conn);
-return lfList;
+maybeLiftGenePred(tg, tg->tdb->table, chrom, start, end, FALSE);
+return tg->items;
 }
 
 void abbr(char *s, char *fluff)
@@ -6464,14 +6506,13 @@ if (zoomedToCdsColorLevel)
 hFreeConn(&conn);
 }
 
+
 void loadGenePredWithName2(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name) */
 {
-struct sqlConnection *conn = hAllocConn(database);
-tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
-                                        chromName, winStart, winEnd, TRUE);
-hFreeConn(&conn);
+maybeLiftGenePred(tg, tg->tdb->table, chromName, winStart, winEnd, TRUE);
+
 /* filter items on selected criteria if filter is available */
 filterItems(tg, genePredClassFilter, "include");
 }
@@ -7811,7 +7852,11 @@ void lookupRefNames(struct track *tg)
 /* This converts the refSeq accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = database;
+if (liftDb)
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 boolean isNative = !sameString(tg->table, "xenoRefGene");
 boolean labelStarted = FALSE;
 boolean useGeneName = FALSE;
@@ -8140,12 +8185,14 @@ Color refGeneColorByStatus(struct track *tg, char *name, struct hvGfx *hvg)
 int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter, lightest;
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[256];
 
-if (startsWith("ncbiRefSeq", tg->table))
+if (startsWith("ncbiRefSeq", trackHubSkipHubName(tg->table)))
     {
     sqlSafef(query, sizeof query, "select status from ncbiRefSeqLink where id = '%s'", name);
     }
@@ -8195,9 +8242,11 @@ if (lf->itemAttr != NULL)
  * Predicted, Inferred(other) -> lightest
  * If no refSeqStatus, color it normally.
  */
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 Color color = tg->ixColor;
-if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(database,  "ncbiRefSeqLink"))
+if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(db,  "ncbiRefSeqLink"))
     color = refGeneColorByStatus(tg, lf->name, hvg);
 hFreeConn(&conn);
 return color;
@@ -13857,7 +13906,7 @@ char **row;
 
 omimAvSnpBuffer[0] = '\0';
 
-conn = hAllocConn(database);
+conn = hAllocConn(db);
 sqlSafef(query,sizeof(query),
         "select repl2, dbSnpId, description from omimAv where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
@@ -13898,7 +13947,7 @@ char query[256];
 
 omimLocationBuffer[0] = '\0';
 
-conn = hAllocConn(database);
+conn = hAllocConn(db);
 sqlSafef(query,sizeof(query),
         "select geneName from omimGeneMap2 where omimId=%s", name);
 (void)sqlQuickQuery(conn, query, omimLocationBuffer, sizeof(omimLocationBuffer));
@@ -13951,7 +14000,9 @@ class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 
 sqlSafef(query, sizeof(query),
       "select omimId, %s from omimPhenotype where omimId=%s", omimPhenotypeClassColName, el->name);
@@ -15218,8 +15269,8 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    handler = lookupTrackHandlerClosestToHome(subTdb);
-    if (handler != NULL)
+    boolean avoidHandler = FALSE;// trackDbSettingOn(tdb, "avoidHandler");
+    if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
         handler(subtrack);
 
     /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
