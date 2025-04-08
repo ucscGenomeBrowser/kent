@@ -414,4 +414,7 @@ struct psl *genePredToPsl(struct genePred *gp, int chromSize, int qSize);
 
 struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb);
 /* build a genePred from a bigGenePred and a bed file */
+
+struct genePred *genePredExtLoad15(char **row);
+/* Load a genePred record assumed to be 15 fields. */
 #endif /* GENEPRED_H */
