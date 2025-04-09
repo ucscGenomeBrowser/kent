@@ -416,7 +416,10 @@ var hubCreate = (function() {
         // update the div that shows how many files are selected
         let numSelected = data !== null ? data.length : 0;
         // if a hub.txt file is in data, disable the delete button
-        let disableDelete = data.filter((obj) => obj.fileType === "hub.txt").length > 0;
+        let disableDelete = false;
+        if (data) {
+            disableDelete = data.filter((obj) => obj.fileType === "hub.txt").length > 0;
+        }
         let infoDiv = document.getElementById("selectedFileInfo");
         let span = document.getElementById("numberSelectedFiles");
         let spanParentDiv = span.parentElement;
@@ -609,8 +612,10 @@ var hubCreate = (function() {
             // put the data in the header:
             let rowClone = rowNode.cloneNode(true);
             // match the background color of the normal rows:
-            rowNode.style.backgroundColor = "#f9f9f9";
+            rowClone.style.backgroundColor = "#fff9d2";
             let thead = document.querySelector(".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
+            // remove the checkbox because it doesn't do anything:
+            rowClone.replaceChild(document.createElement("td"), rowClone.childNodes[0]);
             if (thead.childNodes.length === 1) {
                 thead.appendChild(rowClone);
             } else {
@@ -1357,15 +1362,18 @@ var hubCreate = (function() {
         uppy.on('upload-success', (file, response) => {
             const metadata = file.meta;
             const d = new Date(metadata.lastModified);
+            const pad = (num) => String(num).padStart(2, '0');
+            const dFormatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
             const now = new Date(Date.now());
+            const nowFormatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
             newReqObj = {
                 "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
                 "parentDir": cgiEncode(metadata.parentDir),
-                "lastModified": d.toLocaleString(),
-                "uploadTime": now.toLocaleString(),
+                "lastModified": dFormatted,
+                "uploadTime": nowFormatted,
                 "fullPath": cgiEncode(metadata.parentDir) + "/" + cgiEncode(metadata.fileName),
             };
             // from what I can tell, any response we would create in the pre-finish hook
@@ -1375,8 +1383,8 @@ var hubCreate = (function() {
             if (metadata.fileName !== "hub.txt") {
                 // if the user uploaded a hub.txt don't make a second fake object for it
                 hubTxtObj = {
-                    "uploadTime": now.toLocaleString(),
-                    "lastModified": d.toLocaleString(),
+                    "uploadTime": nowFormatted,
+                    "lastModified": dFormatted,
                     "fileName": "hub.txt",
                     "fileSize": 0,
                     "fileType": "hub.txt",
@@ -1386,8 +1394,8 @@ var hubCreate = (function() {
                 };
             }
             parentDirObj = {
-                "uploadTime": now.toLocaleString(),
-                "lastModified": d.toLocaleString(),
+                "uploadTime": nowFormatted,
+                "lastModified": dFormatted,
                 "fileName": cgiEncode(metadata.parentDir),
                 "fileSize": 0,
                 "fileType": "dir",
