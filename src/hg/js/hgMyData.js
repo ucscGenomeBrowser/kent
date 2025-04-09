@@ -614,8 +614,26 @@ var hubCreate = (function() {
             // match the background color of the normal rows:
             rowClone.style.backgroundColor = "#fff9d2";
             let thead = document.querySelector(".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
-            // remove the checkbox because it doesn't do anything:
-            rowClone.replaceChild(document.createElement("td"), rowClone.childNodes[0]);
+            // remove the checkbox because it doesn't do anything, and replace it
+            // with a back arrow 'button'
+            let btn = document.createElement("button");
+            btn.id = "backButton";
+            $(btn).button({icon: "ui-icon-triangle-1-w"});
+            btn.addEventListener("click", (e) => {
+                let parentDir = dirData.parentDir;
+                let parentDirPath = dirData.fullPath.slice(0,-dirData.fullPath.length);
+                if (parentDirPath.length) {
+                    dataTableShowDir(table, parentDir, parentDirPath);
+                } else {
+                    dataTableShowTopLevel(table);
+                    dataTableCustomOrder(table);
+                    dataTableEmptyBreadcrumb(table);
+                }
+                table.draw();
+            });
+            let tdBtn = document.createElement("td");
+            tdBtn.appendChild(btn);
+            rowClone.replaceChild(tdBtn, rowClone.childNodes[0]);
             if (thead.childNodes.length === 1) {
                 thead.appendChild(rowClone);
             } else {
