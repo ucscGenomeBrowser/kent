@@ -278,6 +278,7 @@ GCA_030867095.1_rAllMis1	vertebrate
 GCA_030936135.1_bGavSte3.hap2	birds
 GCA_031021105.1_rEryReg1.hap1	vertebrate
 GCA_035083965.1_klBraLanc5.hap2	invertebrate
+GCA_036169615.1_bHelExo1.hap1	birds
 GCA_036373705.1_fAmiCal2.hap1	fish
 GCA_036850765.1_mSacBil1_pri_phased_curated	mammals
 GCA_036850995.1_mSacLep1_pri_phased_curated	mammals

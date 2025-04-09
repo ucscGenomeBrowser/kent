@@ -14,6 +14,7 @@ GCA_034782035.1_ASM3478203v1	American kestrel (FMNH 100283 2023)
 GCA_003957575.1_bCalAnn1_v1.h	Anna's hummingbird (alternate hap BGI_N300 2018)
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird (BGI_N300 2019 refseq)
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
+GCF_037038585.1_bPatFas1.hap1	band-tailed pigeon (hap1 2025)
 GCF_036971685.1_bPatFas1.hap2	band-tailed pigeon (v1 hap2 2024 refseq)
 GCA_036971685.2_bPatFas1.hap2	band-tailed pigeon (v2 hap2 2025)
 GCF_000703405.1_ASM70340v1	bar-tailed trogon
@@ -360,7 +361,7 @@ GCA_031877795.1_bStrAlu1.hap1	tawny owl (hap1 2023)
 GCA_031877785.1_bStrAlu1.hap2	tawny owl (hap2 2023)
 GCF_021018805.1_Cam_Psub_1.2	tawny-flanked prinia (Zambia CZ2003 2024)
 GCF_000331425.1_PseHum1.0	Tibetan ground-tit
-GCA_036169615.1_bHelExo1.hap1	tourmaline sunangel (hap1 2024)
+GCF_036169615.1_bHelExo1.hap1	tourmaline sunangel (hap1 2024 refseq)
 GCA_036172335.1_bHelExo1.hap2	tourmaline sunangel (hap2 2024)
 GCA_007636935.2_TRES_AUg29_2020	tree swallow (Ithaca 2401-50270 2024)
 GCA_023055385.1_bAgeTri1.0.a	tricolored blackbird (1412-34295 alternate hap 2022)
