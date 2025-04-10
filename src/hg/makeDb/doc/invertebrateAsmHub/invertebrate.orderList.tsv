@@ -595,6 +595,8 @@ GCF_029227915.1_HSymV2.1	H.symbiolongicarpus hydrozoans (clone_291-10 2023)
 GCA_014858695.1_ASM1485869v1	hairy maggot blowfly (CPM2020 2020)
 GCF_041260155.1_AS_Pfla_20210202	hemichordates P.flava (L36383 2024)
 GCF_000003605.2_Skow_1.1	hemichordates S.kowalevskii
+GCA_040954625.2_keBalMisa1.hap1	hemichordates S.sp. HW-2024a (hap1 2025)
+GCA_040954595.2_keBalMisa1.hap2	hemichordates S.sp. HW-2024a (hap2 2025)
 GCA_040954625.1_ASM4095462v1	hemichordates Saccoglossus (HW-2024a hap1 2024)
 GCA_040954595.1_ASM4095459v1	hemichordates Saccoglossus (HW-2024a hap2 2024)
 GCA_905404265.1_ilFabAdip1.1	high brown fritillary
@@ -1100,7 +1102,8 @@ GCA_004367855.1_ASM436785v1	tunicate O.vanhoeffeni (WitlessB-2012 2019)
 GCA_964204865.1_kaStyClav1.hap1.1	tunicate S.clava (kaStyClav1.hap1.1 2024)
 GCA_964204955.1_kaStyClav1.hap2.1	tunicate S.clava (kaStyClav1.hap2.1 2024)
 GCA_963675345.1_kaTriClin1.1	tunicate T.clinides (primary hap 2023)
-GCA_965202585.1_ktThaDemo2.hap1.1	tunicate T.democratica (ktThaDemo2.hap1.1 2025)
+GCA_965202585.1_ktThaDemo2.hap1.1	tunicate T.democratica (hap1.1 2025)
+GCA_965202575.1_ktThaDemo2.hap2.1	tunicate T.democratica (hap2.1 2025)
 GCA_017312745.1_Gbim_1.0	two-spotted cricket (white eyes 2021)
 GCF_000239435.1_ASM23943v1	two-spotted spider mite
 GCF_958450345.1_idCalVici1.1	urban bluebottle blowfly (primary hap 2023)
