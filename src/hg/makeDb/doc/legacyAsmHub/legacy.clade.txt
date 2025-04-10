@@ -266,7 +266,6 @@ GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt	primates
 GCA_029207755.1_bChaFas1.0.hap1	birds
 GCA_029215685.1_rPitCat1.0.hap2	vertebrate
 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri	primates
-GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri	primates
 GCA_029499605.1_aHylSar1.hap1	vertebrate
 GCA_029633855.1_fHopMal1.hap1	fish
 GCA_029633865.1_fLamInc1.hap2	fish
