@@ -1766,6 +1766,7 @@
 ./runBuild GCA_035046505.1_rTilSci1.hap2 vertebrate Tiliqua_scincoides
 ./runBuild GCA_035047305.1_BraPum1.0 vertebrate Bradypodion_pumilum
 ./runBuild GCA_035047345.1_BraVen1.1 vertebrate Bradypodion_ventrale
+./runBuild GCA_035048815.1_WUR_AEscu_1 plants Abelmoschus_esculentus
 ./runBuild GCA_035083965.1_klBraLanc5.hap2 invertebrate Branchiostoma_lanceolatum
 ./runBuild GCA_035084065.1_sHydCol1.hap1 vertebrate Hydrolagus_colliei
 ./runBuild GCA_035084135.1_sHepPer1.hap2 vertebrate Heptranchias_perlo

@@ -66,3 +66,8 @@ table.dataTable input.dt-select-checkbox:indeterminate:after {
 #selectedFileInfo {
     height: 1.2em;
 }
+
+.uppy-Dashboard-inner {
+    width: 85% !important;
+    height: 75% !important;
+}
