@@ -8,6 +8,7 @@
 #include "imageV2.h"
 #include "hdb.h"
 #include "bed8Attrs.h"
+#include "quickLift.h"
 
 static Color gvfColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Color item by var_type attribute, according to Deanna Church's document
@@ -98,22 +99,47 @@ else
 static void gvfLoad(struct track *tg)
 /* Load GVF items from a bed8Attrs database table. */
 {
-struct sqlConnection *conn = hAllocConn(database);
-int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
-char **row;
-struct bed8Attrs *list = NULL;
-// if we someday get dense GVF tracks, might consider upping the default hash size:
+struct bed8Attrs *list = NULL,  *bed;
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
 if (nameHash == NULL)
     nameHash= hashNew(0);
-while ((row = sqlNextRow(sr)) != NULL)
+
+if (liftDb != NULL)
     {
-    struct bed8Attrs *gvf = bed8AttrsLoad(row+rowOffset);
-    slAddHead(&list, gvf);
-    hashAdd(nameHash, gvf->name, gvf);
+    char *table;
+    if (isCustomTrack(tg->table))
+        {
+        liftDb = CUSTOM_TRASH;
+        table = trackDbSetting(tg->tdb, "dbTableName");
+        }
+    else
+        table = tg->table;
+    struct hash *chainHash = newHash(8);
+    struct sqlConnection *conn = hAllocConn(liftDb);
+    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+    bed= (struct bed8Attrs *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)bed8AttrsLoad, 0, chainHash);
+
+    list = (struct bed8Attrs *)quickLiftBeds((struct bed *)bed, chainHash, FALSE);
+    for(bed=list; bed; bed = bed->next)
+        hashAdd(nameHash, bed->name, bed);
+    hFreeConn(&conn);
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+else
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    int rowOffset;
+    struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+    char **row;
+    // if we someday get dense GVF tracks, might consider upping the default hash size:
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct bed8Attrs *gvf = bed8AttrsLoad(row+rowOffset);
+        slAddHead(&list, gvf);
+        hashAdd(nameHash, gvf->name, gvf);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
 slSort(&list, gvfHierCmp);
 tg->items = list;
 }

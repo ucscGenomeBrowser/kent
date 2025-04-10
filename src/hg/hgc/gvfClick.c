@@ -7,6 +7,7 @@
 #include "htmshell.h"
 #include "hgc.h"
 #include "bed8Attrs.h"
+#include "quickLift.h"
 
 static boolean isInteger(char *word)
 /* Return TRUE if all characters of word are numeric. */
@@ -23,18 +24,41 @@ return TRUE;
 void doGvf(struct trackDb *tdb, char *item)
 /* Show details for variants represented as GVF, stored in a bed8Attrs table */
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 int start = cartInt(cart, "o");
-char query[1024];
-sqlSafef(query, sizeof(query),
-      "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-      tdb->table, item, seqName, start);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("doGvfDetails: can't find item '%s' in %s at %s:%d", item, database, seqName, start);
-int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-struct bed8Attrs *ba = bed8AttrsLoad(row+rowOffset);
+struct bed8Attrs *ba = NULL;
+
+if (liftDb == NULL)
+    {
+    char query[1024];
+    sqlSafef(query, sizeof(query),
+          "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+          tdb->table, item, seqName, start);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) == NULL)
+        errAbort("doGvfDetails: can't find item '%s' in %s at %s:%d", item, database, seqName, start);
+    int rowOffset = hOffsetPastBin(db, seqName, tdb->table);
+    ba = bed8AttrsLoad(row+rowOffset);
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    struct hash *chainHash = newHash(8);
+    struct bed8Attrs *bed= (struct bed8Attrs *)quickLiftSql(conn, quickLiftFile, tdb->table, seqName, winStart, winEnd,  NULL, NULL, (ItemLoader2)bed8AttrsLoad, 0, chainHash);
+
+    ba = (struct bed8Attrs *)quickLiftBeds((struct bed *)bed, chainHash, FALSE);
+
+    for(; ba; ba = ba->next)
+        if (sameString(ba->name, item) && (ba->chromStart == start))
+            break;
+
+    if (ba == NULL)
+        errAbort("doGvfDetails: can't find item '%s' in %s at %s:%d", item, liftDb, seqName, start);
+    }
 bedPrintPos((struct bed *)ba, 3, tdb);
 int i = 0;
 // Note: this loop modifies ba->attrVals[i], assuming we won't use them again:
@@ -110,7 +134,6 @@ for (i = 0;  i < ba->attrCount;  i++)
 	printf("<B>%s</B>: %s<BR>\n", tag, htmlEncode(ba->attrVals[i]));
 	}
     }
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 /* printTrackHtml is done in genericClickHandlerPlus. */
 }

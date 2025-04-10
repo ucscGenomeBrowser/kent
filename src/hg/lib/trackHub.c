@@ -1626,6 +1626,7 @@ if (!( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
        startsWith("bigDbSnp", tdb->type) || \
        startsWith("bigGenePred", tdb->type) || \
+       startsWith("gvf", tdb->type) || \
        startsWith("genePred", tdb->type) || \
        startsWith("bed ", tdb->type)))
     {
@@ -1650,7 +1651,7 @@ if (startsWith("bigBed", tdb->type) || \
 return TRUE;
 }
 
-static struct trackDb * validateTdbChildren(char *db, struct trackDb *tdb)
+static struct trackDb * validateTdbChildren(struct cart *cart, char *db, struct trackDb *tdb)
 /* return a list of the children that can be quick lifted */
 {
 struct trackDb *validTdbs = NULL;
@@ -1663,7 +1664,7 @@ if (tdb->subtracks)  // this is a view, descend again
     for (; view; view = nextTdb)
         {
         nextTdb = view->next;
-        view->subtracks = validateTdbChildren(db,view->subtracks);
+        view->subtracks = validateTdbChildren(cart, db,view->subtracks);
 
         if (view->subtracks != NULL)
             {
@@ -1681,7 +1682,7 @@ else
         if (validateOneTdb(db, tdb))
             {
             slAddHead(&validTdbs, tdb);
-            if (tdb->visibility)
+            if (isSubtrackVisible(cart, tdb))
                 count++;
             }
         }
@@ -1692,13 +1693,13 @@ if (count)
 return NULL;
 }
 
-static boolean validateTdb(char *db, struct trackDb *tdb)
+static boolean validateTdb(struct cart *cart, char *db, struct trackDb *tdb)
 // make sure we only output track types that can
 // be quickLifted.  Return true if we any tracks survive
 {
 if (tdb->subtracks)
     {
-    tdb->subtracks = validateTdbChildren(db, tdb->subtracks);
+    tdb->subtracks = validateTdbChildren(cart, db, tdb->subtracks);
 
     if (tdb->subtracks == NULL)
         return FALSE;
@@ -1734,7 +1735,7 @@ for(; tdb; tdb = tdb->next)
         isVisible = TRUE;
         }
 
-    if (isVisible && validateTdb(db, tdb))
+    if (isVisible && validateTdb(cart, db, tdb))
         {
         dyStringPrintf(visDy, "&%s=%s", trackHubSkipHubName(tdb->track),hStringFromTv(tdb->visibility));
         //if (hashLookup(tdb->settingsHash, "customized") == NULL)
