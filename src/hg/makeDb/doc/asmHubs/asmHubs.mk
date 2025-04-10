@@ -52,7 +52,7 @@ sshKeyCheck: sshKeyDownload sshKeyDynablat
 
 mkJson::
 	if [ "$(name)" = "VGP" ]; then \
-	cat *.orderList.tsv | ${toolsDir}/tsvToJson.py stdin > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
+	sort -u *.orderList.tsv | ${toolsDir}/tsvToJson.py stdin > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
 	else \
 	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
         fi
