@@ -13,6 +13,7 @@
 #include "float.h"
 #include "bigBedFilter.h"
 #include "asParse.h"
+#include "quickLift.h"
 
 #define LOLLY_DIAMETER    2 * (lollyCart->radius + 2)
 
@@ -328,7 +329,13 @@ else if (tg->visibility == tvPack)
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
 struct asObject *as = bigBedAsOrDefault(bbi);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+struct bigBedInterval *bb, *bbList; 
+char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+if (quickLiftFile)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
+else
+    bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 struct lolly *popList = NULL, *pop;
@@ -377,15 +384,34 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (!((lollyCart->autoScale == wiggleScaleAuto) ||  ((val >= lollyCart->minY) && (val <= lollyCart->maxY) )))
         continue;
 
-    // don't draw lollies off the screen
-    if (atoi(bedRow[1]) < winStart)
-        continue;
+    if (quickLiftFile)
+        {
+        struct bed *bed;
+        if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
+            {
+            // don't draw lollies off the screen
+            if (bed->chromStart < winStart)
+                continue;
 
-    AllocVar(pop);
-    slAddHead(&popList, pop);
-    pop->val = val;
-    pop->start = atoi(bedRow[1]);
-    pop->end = atoi(bedRow[2]);
+            AllocVar(pop);
+            slAddHead(&popList, pop);
+            pop->val = val;
+            pop->start = bed->chromStart;
+            pop->end = bed->chromEnd;
+            }
+        }
+    else
+        {
+        // don't draw lollies off the screen
+        if (atoi(bedRow[1]) < winStart)
+            continue;
+
+        AllocVar(pop);
+        slAddHead(&popList, pop);
+        pop->val = val;
+        pop->start = atoi(bedRow[1]);
+        pop->end = atoi(bedRow[2]);
+        }
     pop->name = cloneString(bedRow[3]);
     pop->radius = -1;
     if (lollySizeField > 0)

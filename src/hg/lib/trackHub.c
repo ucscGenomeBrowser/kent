@@ -1520,6 +1520,12 @@ if (fd >= 0)
 return hubName;
 }
 
+static boolean isVetted(char *track)
+/* Is this a track that's been tested with quickLift?  If not we don't want to do the special name handling on the track. */
+{
+return sameString(track, "decipherSnvs")|| sameString(track, "omimLocation") || sameString(track, "omimAvSnp")|| sameString(track, "ncbiRefSeq")|| sameString(track, "clinvar")|| sameString(track, "clinvarSubLolly");
+}
+
 static void dumpTdbAndChildren(struct dyString *dy, struct trackDb *tdb)
 /* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
 {
@@ -1540,7 +1546,10 @@ if (tdb->subtracks)
     {
     for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
         {
-        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
+        char *track =  trackHubSkipHubName(tdb->track);
+        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\n", track);
+        if (!isVetted(track))
+            dyStringPrintf(dy, "avoidHandler on\n");
         dumpTdbAndChildren(dy, tdb);
         }
     }
@@ -1611,7 +1620,7 @@ dy = dyStringNew(200);
 char *track =  trackHubSkipHubName(tdb->track);
 dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
 
-if (!(sameString(track, "decipherSnvs")|| sameString(track, "omimLocation") || sameString(track, "omimAvSnp")|| sameString(track, "ncbiRefSeq")))
+if (!isVetted(track))
     dyStringPrintf(dy, "avoidHandler on\n");
     
 dumpTdbAndChildren(dy, tdb);
@@ -1628,6 +1637,7 @@ if (!( startsWith("bigBed", tdb->type) || \
        startsWith("bigGenePred", tdb->type) || \
        startsWith("gvf", tdb->type) || \
        startsWith("genePred", tdb->type) || \
+       startsWith("bigLolly", tdb->type) || \
        startsWith("bed ", tdb->type)))
     {
     //printf("%s not included: bad type %s\n",tdb->track,tdb->type);
