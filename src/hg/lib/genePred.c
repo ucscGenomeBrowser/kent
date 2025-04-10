@@ -353,6 +353,12 @@ if (iCol < numCols)
 return ret;
 }
 
+struct genePred *genePredExtLoad15(char **row)
+/* Load a genePred record assumed to be 15 fields. */
+{
+return  genePredExtLoad(row, 15);
+}
+
 struct genePred *genePredKnownLoadAll(char *fileName)
 /* Load all genePreds with from tab-separated file in knownGene format */
 {

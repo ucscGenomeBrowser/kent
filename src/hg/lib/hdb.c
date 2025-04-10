@@ -50,6 +50,7 @@
 #include "cheapcgi.h"
 #include "chromAlias.h"
 #include "asmEquivalent.h"
+#include "genark.h"
 
 
 #ifdef LOWELAB
@@ -1405,7 +1406,7 @@ return hDnaFromSeq(db, chromName, 0, size, dnaLower);
 struct slName *hAllChromNames(char *db)
 /* Get list of all chromosome names in database. */
 {
-if (trackHubDatabase(db) || hubConnectIsCurated(trackHubSkipHubName(db)))
+if (trackHubDatabase(db) || hubConnectIsCurated(trackHubSkipHubName(db)) || isGenArk(db))
     return trackHubAllChromNames(db);
 struct slName *list = NULL;
 struct sqlConnection *conn = hAllocConn(db);

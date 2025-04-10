@@ -7,6 +7,7 @@
 #define LIFTOVER_H
 
 #include "chain.h"
+#include "genePred.h"
 
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
@@ -108,6 +109,11 @@ void liftOverGenePred(char *fileName, struct hash *chainHash,
                         double minMatch, double minBlocks, bool fudgeThick,
                       FILE *mapped, FILE *unmapped, boolean multiple, bool preserveInput);
 /* Lift over file in genePred format. */
+
+void calcLiftOverGenePreds( struct genePred *gpList, struct hash *chainHash, 
+                        double minMatch, double minBlocks, bool fudgeThick,
+                      FILE *mapped, FILE *unmapped, boolean multiple, bool preserveInput);
+/* worker function for liftOverGenePred. */
 
 void liftOverSample(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,

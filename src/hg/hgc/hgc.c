@@ -2905,7 +2905,9 @@ void showGenePos(char *name, struct trackDb *tdb)
 {
 char *rootTable = tdb->table;
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct genePred *gpList = NULL, *gp = NULL;
 char table[HDB_MAX_TABLE_STRING];
 struct sqlResult *sr = NULL;
@@ -2913,7 +2915,7 @@ char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
 
-if (!hFindSplitTable(database, seqName, rootTable, table, sizeof table, NULL))
+if (!hFindSplitTable(db, seqName, rootTable, table, sizeof table, NULL))
     errAbort("showGenePos track %s not found", rootTable);
 sqlSafef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
@@ -2946,7 +2948,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     char *ensemblSource = NULL;
     if (sameString("ensGene", table))
 	{
-	if (hTableExists(database, "ensemblSource"))
+	if (hTableExists(db, "ensemblSource"))
 	    {
 	    sqlSafef(query, sizeof(query),
 		"select source from ensemblSource where name='%s'", name);
@@ -2971,7 +2973,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     /* if a gene class table exists, get gene class and print */
     if (classTable != NULL)
         {
-        if (hTableExists(database, classTable))
+        if (hTableExists(db, classTable))
            {
            sqlSafef(query, sizeof(query),
                 "select class from %s where name = \"%s\"", classTable, name);
@@ -11708,8 +11710,10 @@ printf("</div>"); // #omimText
 static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM Class 3 Gene entry. */
 {
-struct sqlConnection *conn  = hAllocConn(database);
-struct sqlConnection *conn2 = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn  = hAllocConn(db);
+struct sqlConnection *conn2 = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -11935,7 +11939,9 @@ printTrackHtml(tdb);
 void printOmimAvSnpDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM AvSnp entry. */
 {
-struct sqlConnection *conn  = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn  = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
 char **row;
