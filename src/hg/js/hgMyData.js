@@ -1384,6 +1384,7 @@ var hubCreate = (function() {
             const dFormatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
             const now = new Date(Date.now());
             const nowFormatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            let newReqObj, hubTxtObj, parentDirObj;
             newReqObj = {
                 "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
@@ -1422,7 +1423,10 @@ var hubCreate = (function() {
                 "fullPath": cgiEncode(metadata.parentDir),
             };
             // package the three objects together as one "hub" and display it
-            let hub = [parentDirObj, hubTxtObj, newReqObj];
+            let hub = [parentDirObj, newReqObj];
+            if (hubTxtObj) {
+                hub.push(hubTxtObj);
+            }
             addNewUploadedHubToTable(hub);
         });
         uppy.on('complete', (result) => {
