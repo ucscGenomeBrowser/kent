@@ -276,6 +276,7 @@ GCA_030028105.1_sMobBir1.hap1	vertebrate
 GCA_030144855.1_sHypSab1.hap1	vertebrate
 GCA_030435805.1_mMusLut2.pri	mammals
 GCA_030445055.1_mDasNov1.hap1	mammals
+GCA_030463535.1_fSalBra1.hap2	fish
 GCA_030684315.1_sSteTig4.hap1	vertebrate
 GCA_030867065.1_rAllMis1	vertebrate
 GCA_030867095.1_rAllMis1	vertebrate

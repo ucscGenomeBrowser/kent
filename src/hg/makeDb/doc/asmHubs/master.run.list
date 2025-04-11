@@ -5172,6 +5172,7 @@
 ./runBuild GCF_030445035.1_mDasNov1.hap2 mammals Dasypus_novemcinctus
 ./runBuild GCF_030445035.2_mDasNov1.1.hap2 mammals Dasypus_novemcinctus
 ./runBuild GCF_030449975.1_iyPolMexi1.0 invertebrate Polyergus_mexicanus
+./runBuild GCF_030463535.1_fSalBra1.hap2 fish Salminus_brasiliensis
 ./runBuild GCF_030490865.1_bPoeAtr1.hap1 birds Poecile_atricapillus
 ./runBuild GCF_030504385.1_Musca_domestica.polishedcontigs.V.1.1 invertebrate Musca_domestica
 ./runBuild GCF_030506205.1_PD_contigs_1.0 fish Paramisgurnus_dabryanus
