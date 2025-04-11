@@ -276,6 +276,7 @@ GCA_030028105.1_sMobBir1.hap1	vertebrate
 GCA_030144855.1_sHypSab1.hap1	vertebrate
 GCA_030435805.1_mMusLut2.pri	mammals
 GCA_030445055.1_mDasNov1.hap1	mammals
+GCA_030463535.1_fSalBra1.hap2	fish
 GCA_030684315.1_sSteTig4.hap1	vertebrate
 GCA_030867065.1_rAllMis1	vertebrate
 GCA_030867095.1_rAllMis1	vertebrate
@@ -348,6 +349,8 @@ GCA_963455315.2_mGloMel1.2	mammals
 GCA_963514075.1_fConCon1.1	fish
 GCA_964195595.1_bCalBor7.hap1.1	birds
 GCA_964196065.1_bCalBor7.hap2.1	birds
+GCA_964212025.1_mMyoNat1.hap2.1	mammals
+GCA_964212035.1_mMyoNat1.hap1.1	mammals
 GCA_964237555.1_mOryCun1.1	mammals
 GCF_000001405.39_GRCh38.p13	primates
 GCF_000001405.40_GRCh38.p14	primates
