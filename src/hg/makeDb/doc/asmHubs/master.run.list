@@ -2022,6 +2022,7 @@
 ./runBuild GCA_049190655.1_fLepSal2.hap2 fish Lepidogalaxias_salamandroides
 ./runBuild GCA_049190665.1_fLepSal2.hap1 fish Lepidogalaxias_salamandroides
 ./runBuild GCA_049354655.1_calJac240_alt primates Callithrix_jacchus
+./runBuild GCA_049354715.1_calJac240_pri primates Callithrix_jacchus
 ./runBuild GCA_900002395.1_PYYM01 invertebrate Plasmodium_yoelii
 ./runBuild GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900011295.1_ATCC19606_assembly bacteria Acinetobacter_baumannii
