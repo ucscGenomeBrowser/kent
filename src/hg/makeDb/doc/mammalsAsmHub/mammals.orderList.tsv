@@ -380,8 +380,8 @@ GCF_000280705.1_JacJac1.0	lesser Egyptian jerboa (JJ0015 2012 refseq)
 GCA_043880595.1_ASM4388059v1	lesser false vampire bat (Vietnam 20211001_DDb primary hap 2024)
 GCA_964194185.1_mRhiHip2.hap1.1	lesser horseshoe bat (hap1 2024)
 GCA_964194215.1_mRhiHip2.hap2.1	lesser horseshoe bat (hap2 2024)
-GCA_964264875.1_mNycLei1.hap1.1	lesser noctule (hap1 2024)
-GCA_964264895.1_mNycLei1.hap2.1	lesser noctule (hap2 2024)
+GCA_964264875.2_mNycLei1.hap1.2	lesser noctule (v2 hap1 2025)
+GCA_964264895.2_mNycLei1.hap2.2	lesser noctule (v2 hap2 2025)
 GCA_002007465.1_ASM200746v1	lesser panda (RP43 2017)
 GCF_036850995.1_mSacLep1_pri_phased_curated	lesser sac-winged bat (primary hap 2024 refseq)
 GCF_018350215.1_P.leo_Ple1_pat1.1	lion
@@ -552,8 +552,8 @@ GCA_949987525.1_mDelDel1.1_alternate_haplotype	saddleback dolphin (alternate hap
 GCF_949987515.1_mDelDel1.1	saddleback dolphin (v1 primary hap 2023 refseq)
 GCF_949987515.2_mDelDel1.2	saddleback dolphin (v2 primary hap 2024 refseq)
 GCA_004024985.1_SaiTat_v1_BIUU	saiga antelope
-GCA_964146895.1_mMinSch1.hap1.1	Schreibers' long-fingered bat (hap1 2024)
-GCA_964145185.1_mMinSch1.hap2.1	Schreibers' long-fingered bat (hap2 2024)
+GCA_964146895.2_mMinSch1.hap1.2	Schreibers' long-fingered bat (v2 hap1 2025)
+GCA_964145185.2_mMinSch1.hap2.2	Schreibers' long-fingered bat (v2 hap2 2025)
 GCA_004026525.1_MinSch_v1_BIUU	Schreibers' long-fingered bat (US075 2019)
 GCF_014754425.2_SCBI_Odam_1.1	scimitar-horned oryx
 GCA_004027955.1_ChaVel_v1_BIUU	Screaming hairy armadillo
@@ -614,7 +614,7 @@ GCA_004027475.1_AnoCau_v1_BIUU	tailed tailless bat
 GCF_023091745.1_Takin1.1	takin (Tak-1 2022)
 GCA_004026705.1_MicTal_v1_BIUU	Talazac's shrew tenrec
 GCA_028389975.1_mMacEug1.alt	tammar wallaby (alternate hap 2023)
-GCA_028372415.1_mMacEug1.pri	tammar wallaby (primary hap 2023)
+GCA_028372415.2_mMacEug1.pri_v2	tammar wallaby (v2 primary hap 2023)
 GCA_048593335.1_ASM4859333v1	tammar wallaby (Barry hap1 2025)
 GCA_048593345.1_ASM4859334v1	tammar wallaby (Barry hap2 2025)
 GCA_048593225.1_ASM4859322v1	Tasmanian devil (McLovin hap1 2025)
