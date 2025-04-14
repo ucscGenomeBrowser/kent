@@ -3269,8 +3269,8 @@ if (tdbIsContainer(tdb))
 
 /* track configuration form */
 
-printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
-       hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
+printf("<FORM ACTION=\"%s?hgsid=%s&db=%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
+       hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 if (sameWord(tdb->track,"ensGene"))
     {
