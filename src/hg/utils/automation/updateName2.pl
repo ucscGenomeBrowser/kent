@@ -145,6 +145,13 @@ while (my $line = <$fh>) {
   } else {
      $a[$sizeA] = "";
   }
+  if (scalar(@a) == 20) {
+    $a[20] = "n/a";
+  }
+  if (scalar(@a) != 21) {
+    printf STDERR "incorred # of entries %d != 21 for %s\n", scalar(@a), $a[3];
+    exit 255;
+  }
   printf "%s\n", join("\t", @a);
 }
 close ($fh);
