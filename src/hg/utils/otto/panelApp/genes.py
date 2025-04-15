@@ -94,7 +94,7 @@ def getGenesLocations(jsonFh):
     syms = getGeneSymbols()
 
     for sym in syms:
-        url = "https://panelapp.genomicsengland.co.uk/api/v1/genes/entity_name={}&format=json".format(sym)
+        url = "https://panelapp.genomicsengland.co.uk/api/v1/genes/?entity_name={}&format=json".format(sym)
 
         count = 0
         while True:
