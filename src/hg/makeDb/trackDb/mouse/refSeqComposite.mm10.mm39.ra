@@ -13,7 +13,6 @@ dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
 dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="https://www.informatics.jax.org//marker/$$" xenTro="https://www.xenbase.org/gene/showgene.do?method=display&geneId=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
-pennantIcon Updated red ../goldenPath/newsarch.html#122024 "December 20, 2024"
 
         track ncbiRefSeq
         parent refSeqComposite off

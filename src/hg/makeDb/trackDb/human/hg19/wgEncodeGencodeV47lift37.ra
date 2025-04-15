@@ -15,7 +15,6 @@ fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred
 configurable off
 wgEncodeGencodeVersion 47lift37
-pennantIcon New red ../goldenPath/newsarch.html#110824 "Updated Nov. 8, 2024"
 
     track wgEncodeGencodeV47lift37ViewGenes
     shortLabel Genes
