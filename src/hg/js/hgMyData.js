@@ -191,7 +191,7 @@ const uppy = new Uppy.Uppy({
                 continue;
             }
             if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: Hub name has special characters, please rename file: ${file.meta.parentDir} to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
