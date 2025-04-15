@@ -34,6 +34,7 @@ GCF_030435755.1_mOchPri1.hap1	American pika (hap1 2023)
 GCA_030435715.1_mOchPri1.hap2	American pika (hap2 2023)
 GCF_000292845.1_OchPri3.0	American pika 3.0 (2012 Broad refseq)
 GCF_014633375.1_OchPri4.0	American pika 4.0 (UAM:Mamm:113957 2020)
+GCA_024509225.1_Gulo_gulo_luscus_F-V1.0	American wolverine (FN33715 2022)
 GCF_000464555.1_PanTig1.0	Amur tiger (TaeGuk 2013 refseq)
 GCA_043748645.1_ASM4374864v1	Angolan free-tailed bat (Cote d'Ivoire 20210831_DDa 2024)
 GCA_000978805.1_ASM97880v1	Antarctic minke whale
@@ -614,9 +615,9 @@ GCA_004027475.1_AnoCau_v1_BIUU	tailed tailless bat
 GCF_023091745.1_Takin1.1	takin (Tak-1 2022)
 GCA_004026705.1_MicTal_v1_BIUU	Talazac's shrew tenrec
 GCA_028389975.1_mMacEug1.alt	tammar wallaby (alternate hap 2023)
-GCA_028372415.2_mMacEug1.pri_v2	tammar wallaby (v2 primary hap 2023)
 GCA_048593335.1_ASM4859333v1	tammar wallaby (Barry hap1 2025)
 GCA_048593345.1_ASM4859334v1	tammar wallaby (Barry hap2 2025)
+GCF_028372415.1_mMacEug1.pri_v2	tammar wallaby (v2 primary hap 2023 refseq)
 GCA_048593225.1_ASM4859322v1	Tasmanian devil (McLovin hap1 2025)
 GCA_048593325.1_ASM4859332v1	Tasmanian devil (McLovin hap2 2025)
 GCF_902635505.1_mSarHar1.11	Tasmanian devil (primary hap 2019)
