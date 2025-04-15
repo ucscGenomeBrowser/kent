@@ -94,7 +94,7 @@ def getGenesLocations(jsonFh):
     syms = getGeneSymbols()
 
     for sym in syms:
-        url = "https://panelapp.genomicsengland.co.uk/api/v1/genes/{}?format=json".format(sym)
+        url = "https://panelapp.genomicsengland.co.uk/api/v1/genes/?entity_name={}&format=json".format(sym)
 
         count = 0
         while True:
@@ -104,14 +104,13 @@ def getGenesLocations(jsonFh):
                     break
                 else:
                     logging.error("Some error on %s, retrying after 1 minute (trial %d)" % (url, count))
-                    time.sleep(60)
-
-            except:
+            except Exception:
                 logging.error("HTTP error on %s, retrying after 1 minute (trial %d)" % (url, count))
-                time.sleep(60)
-                count += 1
-                if count > 10:
-                    assert(False) # cannot get URL
+
+            time.sleep(60)    # Wait 1 minute before trying again
+            count += 1        # Count the number of tries before failing
+            if count > 10:    # Quit afer 10 failed attempts
+                assert False, "Cannot get URL after 10 attempts"
 
         jsonData = myResponse.content
         #jData = myResponse.json()
