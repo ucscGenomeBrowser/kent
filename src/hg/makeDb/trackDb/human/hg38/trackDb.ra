@@ -140,6 +140,29 @@ searchDescription miRNA Tissue Atlas Sample 2
 searchMethod exact
 semiShortCircuit 1
 
+track har
+compositeTrack on
+shortLabel Human Accelerated Regions
+longLabel Human Accelerated Regions
+type bed
+group compGeno
+release alpha
+
+    #track har721
+    #shortLabel 721 HARs
+    #longLabel 721 HARs from UCSC MultiZ alignments
+    #parent har on
+    #type bigBed 9 +
+    #bigDataUrl /gbdb/hg38/har/harMultiz.bb
+
+    track hars312
+    shortLabel 312 HARs
+    longLabel 312 HARs from Zoonomia alignments
+    parent har on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/hars/hars312.bb
+    release alpha
+
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
