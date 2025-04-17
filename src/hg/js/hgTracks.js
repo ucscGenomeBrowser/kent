@@ -638,33 +638,22 @@ var genomePos = {
 };
 
   /////////////////////////////////////
- //// Creating items by dragging /////
+ //// Creating items             /////
 /////////////////////////////////////
-var makeItemsByDrag = {
+var makeItems = {
 
-    end: function (img, selection)
+    init: function ()
     {
-        var image = $(img);
-        var imageId = image.attr('id');
-        var trackName = imageId.substring('img_data_'.length);
-        var pos = genomePos.selectionPixelsToBases(image, selection);
-        var command = document.getElementById('hgt_doJsCommand');
-        command.value  = "makeItems " + trackName + " " + hgTracks.chromName;
-        command.value +=  " " + pos.chromStart + " " + pos.chromEnd;
-        document.TrackHeaderForm.submit();
-        return true;
+    // show a jquery-ui dialog when a user clicks on the 'make item' button
+    let dialog = document.getElementById('makeItemsDialog');
+    if (!dialog) {return;}
+    this.showDialog(dialog);
     },
 
-    init: function (trackName)
-    {
-    // Set up so that they can drag out to define a new item on a makeItems track.
-    var img = $("#img_data_" + trackName);
-    if (img && img.length !== 0) {
-        var imgHeight = imageV2.imgTbl.height();
-        jQuery(img.imgAreaSelect( { selectionColor: 'green', outerColor: '',
-            minHeight: imgHeight, maxHeight: imgHeight, onSelectEnd: makeItemsByDrag.end,
-            autoHide: true, movable: false}));
-        }
+    createItem: function() {
+    },
+
+    showDialog: function(dialogHtml) {
     },
 
     load: function ()
@@ -5840,7 +5829,7 @@ $(document).ready(function()
             });
         }
         imageV2.loadRemoteTracks();
-        makeItemsByDrag.load();
+        makeItems.load();
 
         if (typeof clinicalTour !== 'undefined') {
             if (typeof startClinicalOnLoad !== 'undefined' && startClinicalOnLoad){

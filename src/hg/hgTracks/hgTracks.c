@@ -8593,6 +8593,13 @@ hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
+// put up the makeItems (My Variants) dialog if the hg.conf statement is present
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    jsInline("var dialogHtml = \"<div id='makeItemsDialog' style='display:none'></div>\";");
+    hButtonWithOnClick("hgt.makeItem", "Make Item", "Add an item to the my variants track", "makeItems.init()");
+    }
+
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
