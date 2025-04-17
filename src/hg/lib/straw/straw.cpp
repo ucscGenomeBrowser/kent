@@ -31,6 +31,7 @@
 #include <utility>
 #include <vector>
 #include <streambuf>
+#include <cstdint>
 //#include <curl/curl.h>
 #include <iterator>
 #include <algorithm>
