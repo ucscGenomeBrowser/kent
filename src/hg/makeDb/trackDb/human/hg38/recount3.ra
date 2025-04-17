@@ -1,0 +1,76 @@
+track recount3
+shortLabel recount3
+longLabel Recount 3 introns
+group rna
+type bigBed 9 +
+visibility pack
+spectrum on
+scoreMax 225
+html recount3.html
+compositeTrack on
+
+    track gtex
+    shortLabel GTEX
+    longLabel Recount 3 GTEX introns
+    bigDataUrl /gbdb/$D/recount3/gtexv2.bb
+    filter.readcount 10000:2000000000
+    filterByRange.readcount on
+    filterLimits.readcount 0:2000000000
+    filterLabel.readcount Filter by supporting split reads
+    labelFields none
+    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=gtexv2&jid=$$&coords=$S:${-$}
+    iframeOptions height='300' width='1000' scrolling='yes'
+    decorator.default.bigDataUrl /gbdb/$D/recount3/decgtexv2.bb
+    parent recount3
+    priority 1
+
+    track tcga
+    shortLabel TCGA
+    longLabel Recount 3 TCGA introns
+    bigDataUrl /gbdb/$D/recount3/tcgav2.bb
+    filter.readcount 10000:2000000000
+    filterByRange.readcount on
+    filterLimits.readcount 0:2000000000
+    filterLabel.readcount Filter by supporting split reads
+    labelFields none
+    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=tcgav2&jid=$$&coords=$S:${-$}
+    iframeOptions height='300' width='1000' scrolling='yes'
+    decorator.default.bigDataUrl /gbdb/$D/recount3/dectcgav2.bb
+    parent recount3
+    priority 2
+
+    track srav3h
+    shortLabel SRA
+    longLabel Recount 3 SRA introns
+    bigDataUrl /gbdb/$D/recount3/srav3h.bb
+    filter.readcount 10000:2000000000
+    filterByRange.readcount on
+    filterLimits.readcount 0:2000000000
+    filterLabel.readcount Filter by supporting split reads
+    labelFields none
+    maxWindowToDraw 10000000
+    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav3h&jid=$$&coords=$S:${-$}
+    iframeOptions height='300' width='1000' scrolling='yes'
+    decorator.default.bigDataUrl /gbdb/$D/recount3/decsrav3h.bb
+    parent recount3
+    priority 3
+
+    track ccle
+    shortLabel CCLE
+    longLabel Recount 3 CCLE introns
+    bigDataUrl /gbdb/$D/recount3/ccle.bb
+    filter.readcount 10000:2000000000
+    filterByRange.readcount on
+    filterLimits.readcount 0:2000000000
+    filterLabel.readcount Filter by supporting split reads
+    labelFields none
+    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=ccle&jid=$$&coords=$S:${-$}
+    iframeOptions height='300' width='1000' scrolling='yes'
+    decorator.default.bigDataUrl /gbdb/$D/recount3/decccle.bb
+    parent recount3
+    priority 4
+

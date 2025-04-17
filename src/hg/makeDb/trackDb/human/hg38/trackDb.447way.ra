@@ -19,7 +19,7 @@ html cactus447way
         track cactus447way
         subTrack cons447wayViewalign
         shortLabel Cactus 447-way
-        longLabel Cactus alignment on 447 mammal species, including Zoonomia genomes
+        longLabel Cactus alignment on 447 mammal species, including Zoonomia genomes and 233 primates
         subGroups view=align
         noInherit on
         type bigMaf
@@ -62,7 +62,7 @@ html cactus447way
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
         shortLabel 447 phyloP REV
-        longLabel 447 mammals Basewise Conservation by PhyloP phyloFit REV model
+        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP phyloFit REV model
         configurable on
         noInherit on
         type bigWig -20 11.936
@@ -81,7 +81,7 @@ html cactus447way
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
         shortLabel 447 phyloP SSREF
-        longLabel 447 mammals Basewise Conservation by PhyloP phyloFit SSREV model
+        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP phyloFit SSREV model
         configurable on
         noInherit on
         type wig -20 8.123
@@ -99,7 +99,7 @@ html cactus447way
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
         shortLabel 447 phyloP primates
-        longLabel 447 mammals Basewise Conservation by PhyloP phyloFit SSREV model, primates subset
+        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP phyloFit SSREV model, primates subset
         configurable on
         noInherit on
         type wig -20 1.587
@@ -117,7 +117,7 @@ html cactus447way
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
         shortLabel 447 phyloP primates LRT
-        longLabel 447 mammals Basewise Conservation by PhyloP, primates subset LRT
+        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP, primates subset LRT
         configurable on
         noInherit on
         type bigWig -20 1.951

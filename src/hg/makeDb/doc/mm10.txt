@@ -19530,3 +19530,105 @@ _EOF_
 
 bedToBigBed -type=bed12+8 -as=encode4.as -tab transcripts.bed /hive/data/genomes/mm10/chrom.sizes encode4.bb
 
+
+##############################################################################
+# Recount3 - Jeltje April 2025
+
+####################################
+# recount3 intron tracks ticket 34886
+# Jeltje January 2025
+# NOTE: The sra files are so large that the trackDb.ra file needs a maxWindowToDraw limit
+# or else the browser window won't load within the set time
+
+cat << _TOEND_ > recount3.as
+table recount3
+"Bed 9+6 file for NCBI orthologs"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Short Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick"
+    uint thickEnd;     "End of where display should be thick"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    bigint readcount;  "Read count"
+    uint samplecount;  "Sample count"
+    string donor;      "Splice donor"
+    string acceptor;   "Splice acceptor"
+    string url;        "URL"
+    )
+_TOEND_
+
+
+process_dataset() {
+	local dset=$1
+	if [ ! -f "$dset.tsv" ]; then
+	    wget -O $dset.tsv.bgz https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
+	    bgzip -d $dset.tsv.bgz
+	fi
+	./junctionsToBed.py --junctions $dset.tsv --bed $dset.bed --decorator dec$dset.bed --compilation $dset
+#	bedSort $dset.bed $dset.bed
+	bedSort dec$dset.bed dec$dset.bed
+}
+
+dset=srav1m
+#wget https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
+#zcat junctions.bgz > $dset.tsv
+#process_dataset $dset &
+#wait
+
+
+bedToBigBed -type=bed9+6 -tab -as=recount3.as $dset.bed /hive/data/genomes/mm10/chrom.sizes $dset.bb &
+bedToBigBed -type=bed12+ -as=/cluster/home/jeltje/kent/src/hg/lib/decoration.as dec$dset.bed /hive/data/genomes/mm10/chrom.sizes dec$dset.bb &
+wait
+
+#rm srav1m.bed srav1m.tsv junctions.bgz
+
+##############################################################################
+# ENCODE4 triplets - Jeltje April 2025
+
+mkdir -p april2025
+#wget -O april2025/mouse_ucsc_transcripts.gtf "https://zenodo.org/records/15116042/files/mouse_ucsc_transcripts.gtf?download=1"
+#wget -O  april2025/filt_ab_tpm_mouse.tsv "https://zenodo.org/records/15116042/files/filt_ab_tpm_mouse.tsv?download=1"
+#wget -O  april2025/mouse_protein_summary.tsv "https://zenodo.org/records/15116042/files/mouse_protein_summary.tsv?download=1"
+#wget -O  april2025/mouse_sample_info.tsv https://zenodo.org/records/15116042/files/lr_mouse_library_data_summary.tsv?download=1
+
+gtfFile='april2025/mouse_ucsc_transcripts.gtf'
+quantFile='april2025/filt_ab_tpm_mouse.tsv'  # really counts per million since every read is full length
+protFile='april2025/mouse_protein_summary.tsv'
+sampleFile='april2025/mouse_sample_info.tsv'
+# this outputs bed12 + extra ID fields, topval expressions for mouseover and an expression html table
+./gtfToBed.py $gtfFile $quantFile $protFile $sampleFile transcripts.bed > missing.ids
+bedSort transcripts.bed transcripts.bed 
+
+cat << '_EOF_' > encode4.as
+table encode4
+"Bed 12+8 file with annotation source and values per sample in a html table."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    string source;      "Annotation source"
+    string gene_id;     "gene ID"	
+    string gene_name;   "gene name"	
+    string transcript_id;   "transcript ID"	
+    string transcript_name;   "transcript name"	
+    float maxScore;   "Highest expression score (counts per million)"
+    lstring maxScoreHtml;   "Highest expression score and sample(s)"
+    lstring expr_table; "Expression values per sample in TPM"
+    )
+_EOF_
+
+bedToBigBed -type=bed12+8 -as=encode4.as -tab transcripts.bed /hive/data/genomes/mm10/chrom.sizes encode4.bb
+

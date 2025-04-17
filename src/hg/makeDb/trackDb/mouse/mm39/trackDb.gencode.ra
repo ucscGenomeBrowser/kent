@@ -6,7 +6,6 @@ shortLabel GENCODE Versions
 longLabel Container of all new and previous GENCODE releases
 priority 2.1
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
-pennantIcon Updated red ../goldenPath/newsarch.html#110824 "Updated Nov. 8, 2024"
 
 include wgEncodeGencodeVM26.ra
 include wgEncodeGencodeVM27.ra
