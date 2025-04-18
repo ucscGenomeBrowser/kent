@@ -23,54 +23,46 @@ Maybe update pgenes bed with parent links.
 	parser.add_argument('--parentout', type=str, required=True, default=None,  help="output parent bedfile")
 	args = parser.parse_args()
 
-	ensg = namedtuple('ensg', ['chrom', 'start', 'end', 'strand'])
+	enst = namedtuple('enst', ['chrom', 'start', 'end', 'strand'])
+    # First read the annotation file
+    # we will be representing the parent genes as blocks, determining the start and end based on 
+    # the gene's transcripts in the annotation file
 	# gene ID dict keeping track of starts and ends
-	ensgDict = dict()
+	enstDict = dict()
 	curGene, start, end, curChr, strand = 'NA', 'NA', 'NA', 'NA', 'NA'
 	parentlink = '<a href="hgTracks?db=hg38&position={chrom}:{start}-{end}&parents=pack">{geneID}</a>'
 	with open(args.annotbed, 'r') as INF:
-		for bedObj in BedReader(INF, numStdCols=6):
-			if bedObj.name == curGene:
-				if(bedObj.chrom) == curChr:  # skip chrY pseudoautosomal (for now?)
-					start = min(bedObj.start, int(start))
-					end = max(bedObj.end, int(end))
-				#else:
-				#	print('skipping', bedObj, file=sys.stderr)
-			else:
-				ensgDict[curGene] = ensg(curChr, start, end, strand)
-				start = int(bedObj.start)
-				end = int(bedObj.end)
-				strand = bedObj.strand
-				curChr = bedObj.chrom
-				curGene = bedObj.name
-		# final one
-		ensgDict[curGene] = ensg(curChr, start, end, strand)
-
-	# if a gene has a pseudogene, put it in the parent set
+		for bedObj in BedReader(INF):
+			name = bedObj.name.split('.')[0]
+			enstDict[name] = bedObj
+    # We will create a bed file with parents and one overlapping block per child
+	# based on the pseudogene file: if a transcript has a pseudogene, get its information
+    # from enstDict and print a bed line for it, and one per child
+    # First we gather the information from the pseudogene file and output a
+    # new pseudogene file with a link to the parent transcript (where possible)
 	parentDict = dict()
 	with open(args.pgenebed, 'r') as INF, open(args.pgeneout, 'w') as OUTF:
 		for bedObj in BedReader(INF, numStdCols=12):
-			# parent ENSG
-			parent = bedObj.extraCols[4]
+			# parent ENST
+			parent = bedObj.extraCols[8].split('.')[0]
 			if parent == 'NA':
-				bedObj.extraCols[4] = 'parent not listed'
+				bedObj.extraCols.append('parent not listed')
 				bedObj.write(OUTF)
 				continue
-			if not parent in ensgDict:
+			if not parent in enstDict:
 				print('ERROR, missing', parent)
 				sys.exit()
 			# if we find a parent it's time to create a proper object and collect the children
-			parentTuple = ensgDict[parent]
+			parentObj = enstDict[parent]
 			if parent in parentDict:
 				parentDict[parent].add(bedObj)
 			else:
-				parentDict[parent] = Gene(parent, parentTuple, bedObj)
+				parentDict[parent] = Gene(parent, parentObj, bedObj)
 			# add a link to the parent in the child bedObj
 
-			url = parentlink.format(chrom=parentTuple.chrom, start=parentTuple.start,
-				end=parentTuple.end, geneID=parent) 
-			# replace the parent ID with the URL to it
-			bedObj.extraCols[4] = url
+			url = parentlink.format(chrom=parentObj.chrom, start=parentObj.start,
+				end=parentObj.end, geneID=parent) 
+			bedObj.extraCols.append(url)
 			bedObj.write(OUTF)
 	# now print parent track, adding one block per child for each parent
 	with open(args.parentout, 'w') as OUTF2:
@@ -80,36 +72,48 @@ Maybe update pgenes bed with parent links.
 
 
 class Gene(object):
-	def __init__(self, parent, parentTuple, childObj):
+	'''Parent object'''
+	def __init__(self, parent, parentObj, childObj):
 		self.name = parent
-		self.chrom = parentTuple.chrom
-		self.geneStart = parentTuple.start
-		self.geneEnd = parentTuple.end
-		self.strand = parentTuple.strand
+		self.parentBedObj = parentObj
 		self.children = [childObj]
-		self.symbol = childObj.extraCols[0]
+		self.symbol = childObj.extraCols[1]
 	def add(self, childObj):
 		self.children.append(childObj)
 	def write(self, FH):
 		'''Create parent and children Bed objects, and print them'''
 		parentColor = "128,0,128"   # Dark Purple
 		childColor = "192,192,192"  # Gray
-		# mouseover link for children
-		baselink = '{pgenetype} <a href="hgTracks?db=hg38&position={chrom}:{start}-{end}&pseudogenes=pack">'
-		baselink += '{geneID}</a> ({chrom}:{start}-{end})'
-		# let's make the parent wide and the children narrow
-		bedObj = Bed(self.chrom, self.geneStart, self.geneEnd, name=self.name, strand=self.strand, 
-		thickStart=self.geneStart, thickEnd=self.geneEnd, itemRgb=parentColor, numStdCols=9, 
-		extraCols=[self.symbol, 'N/A'])
-		bedObj.write(FH)
+		# extrafields are gene(symbol), gene type, and coordinates
+		# for the parent, this is a series of coordinates, one per child
+
+		# The children (blocks below the parent) get a mouseover pointing to their location 
+		coordURL = '<a href="hgTracks?db=hg38&position={chrom}:{start}-{end}&pseudogenes=pack">'
+		coordURL += '{chrom}:{start}-{end}</a>'
+		# mouseover in the parent gives the children's IDs with links to their locations
+		idURL = '<a href="hgTracks?db=hg38&position={chrom}:{start}-{end}&pseudogenes=pack">'
+		idURL += '{childId}</a> '
+		# print the children as blocks (we don't know how much they overlap)
+		childObjects = []
+		coordString = ''
 		for childObj in self.children:
-			url = baselink.format(pgenetype=childObj.extraCols[1], chrom=childObj.chrom, start=childObj.start, 
-				end=childObj.end, geneID=childObj.name)
-			bedObj = Bed(self.chrom, self.geneStart, self.geneEnd, name=childObj.name, strand=self.strand, 
-			itemRgb=childColor, numStdCols=9, extraCols=['', url])
-			bedObj.write(FH)
+			coords_html = coordURL.format(chrom=childObj.chrom, start=childObj.start, end=childObj.end)
+			# create bedObject to write
+			bedObj = Bed(self.parentBedObj.chrom, self.parentBedObj.chromStart, self.parentBedObj.chromEnd, 
+			name=childObj.name, strand=self.parentBedObj.strand, 
+			itemRgb=childColor, numStdCols=12, extraCols=[childObj.name, childObj.extraCols[4], coords_html])
+			childObjects.append(bedObj)
+			# append child coordinate link to string (for adding to the parent)
+			coordString += idURL.format(chrom=childObj.chrom, start=childObj.start,
+				end=childObj.end, childId=childObj.name)
+		# update the parent with children links and print
+		self.parentBedObj.extraCols=[self.symbol, 'gene', coordString]
+		self.parentBedObj.itemRgb = parentColor
+		self.parentBedObj.write(FH)
+		# now print children
+		[bedObj.write(FH) for bedObj in childObjects]
 
 
 
 if __name__ == "__main__":
-    main()
+	main()
