@@ -140,10 +140,10 @@ searchDescription miRNA Tissue Atlas Sample 2
 searchMethod exact
 semiShortCircuit 1
 
-track har
+track unusualcons
 compositeTrack on
-shortLabel Human Accelerated Regions
-longLabel Human Accelerated Regions
+shortLabel Unusually Conserved
+longLabel Unusually Conserved Regions - Ultrasconserved, Human Accelerated
 type bed
 group compGeno
 release alpha
@@ -151,16 +151,24 @@ release alpha
     #track har721
     #shortLabel 721 HARs
     #longLabel 721 HARs from UCSC MultiZ alignments
-    #parent har on
+    #parent unusualcons on
     #type bigBed 9 +
-    #bigDataUrl /gbdb/hg38/har/harMultiz.bb
+    #bigDataUrl /gbdb/hg38/unusualcons/harMultiz.bb
 
     track hars312
     shortLabel 312 HARs
     longLabel 312 HARs from Zoonomia alignments
-    parent har on
+    parent unusualcons on
     type bigBed 4
-    bigDataUrl /gbdb/hg38/hars/hars312.bb
+    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
+    release alpha
+
+    track ultras
+    shortLabel Ultracons.
+    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
     release alpha
 
 track cosmicRegions
