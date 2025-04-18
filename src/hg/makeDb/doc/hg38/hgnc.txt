@@ -1,3 +1,6 @@
+##### BRANEY ###########
+# 2022
+
 mkdir -p /cluster/data/hg38/bed/hgnc
 cd /cluster/data/hg38/bed/hgnc
 
@@ -62,4 +65,97 @@ ln -s `pwd`/hgnc.hg38.bb /gbdb/hg38/hgnc/hgnc.bb
 rm -rf /gbdb/hg38/hgnc/search.ix /gbdb/hg38/hgnc/search.ixx
 ln -s `pwd`/search.hg38.ix /gbdb/hg38/hgnc/search.ix
 ln -s `pwd`/search.hg38.ixx /gbdb/hg38/hgnc/search.ixx
+
+##################################
+
+
+
+##### GALT ###########
+# 2025-04-17
+
+#mkdir -p /cluster/data/hg38/bed/hgnc
+cd /cluster/data/hg38/bed/hgnc
+mkdir old3
+mv * old3/
+
+# get the HGNC data
+wget https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt
+
+# get the Entrez data
+wget "https://ftp.ncbi.nih.gov/gene/DATA/gene2accession.gz"
+gunzip gene2accession.gz
+
+# separate human accessions in the Entrez data
+grep "^9606" gene2accession >  human.gene2accession
+
+# collect all the mappings to hg38 (these have NCBI chromosome names)
+# TODO GALT add the strand here.
+grep GRCh38 human.gene2accession  | tawk '{print $2, $8,$10,$11,$12}' | sort | uniq > entrezToLocNcbi.txt
+
+# substitute UCSC names
+tawk '{print $1,$2}' /cluster/data/hg38/hg38.chromAlias.tsv > ncbiToUcsc.map
+subColumn -skipMiss -miss=idMiss.txt 2 entrezToLocNcbi.txt ncbiToUcsc.map entrezToLoc.txt
+#missed 3468
+
+
+# generate trix file with symbol, alias, and previous values
+tail -n +2 hgnc_complete_set.txt | tawk '{print $1, $2 " " $9 " " $11;}' | tr -d '"' | tr '|' ' ' > trixInput.txt
+ixIxx -maxWordLength=32 trixInput.txt search.hg38.ix search.hg38.ixx
+
+
+# look at field names and create proto AS file (just done the first time)
+#tawk '{for(ii=1;  ii <= NF; ii++) print ii, $ii; exit}' hgnc_complete_set.txt
+#tawk '{for(ii=1;  ii <= NF; ii++) printf "\tstring %s; \"%s\"\n", $ii,$ii; exit}' *comple* > asSkeleton.as
+# I looked at this and it is correct, the hgnc_id is in the name and 53 more fields is 54 found in the hgncBig62.as
+
+# create input file without header and sorted by first field ( HGNC:### )
+tail -n +2 hgnc_complete_set.txt | sort -k 1b,1 > input.txt
+
+# put black for every type for the moment.  This should be based on GENCODE colors
+tawk '{print $5}' input.txt | sort -u | awk '{printf "s/%s/0,0,0/\n", $0}' > color.sed.txt
+
+#manually fixed colors for coding, pseudogene, and non-coding
+tawk '{print $1,$5}' input.txt | sed -f color.sed.txt | sort -k 1b,1 > id.color.txt
+
+
+# build hgnc file with assigned colors as the 58th field
+# BASH run this command in bash to escape the tab with $
+join -j 1 -t $'\t' input.txt id.color.txt > inputColor.txt
+
+# put entrez ID as first field for joins
+tawk '{if ($19 != "")  print $19,$0}' inputColor.txt | sort -k 1b,1 > entrez.hgnc.txt
+
+# add position information to HGNC information
+# BASH run this command in bash to escape the tab with $
+join -j 1 -t $'\t'  entrezToLoc.txt  entrez.hgnc.txt | cut -f 2- > positioned.hg38.txt
+
+TODO GALT fix this
+# build first nine fields of bigbed
+#orig tawk '{print $1, $2, $3, $4, 0, "+", 0,0, $58}' positioned.hg38.txt > tmp1
+      tawk '{print $1, $2, $3, $5, 0, $4, 0,0, $59}' positioned.hg38.txt > tmp1
+
+# add the rest of the HGNC fields as extra fields except the id and color which are in the first nine
+#ORIG tawk '{for(ii=5; ii <= 56; ii++) printf("%s\t", $ii); print $ii}' positioned.hg38.txt > tmp2
+      tawk '{for(ii=6; ii <= 57; ii++) printf("%s\t", $ii); print $ii}' positioned.hg38.txt > tmp2
+paste tmp1 tmp2 | sort -k1,1 -k2,2n > input.bed
+
+
+vi $HOME/kent/src/hg/lib/hgncBig62.as
+# modified mgd_id to be lstring instead of string since it was 493 chars that overflowed string which takes 255 char max.
+# changed strand description to "+ or - for strand"
+
+# let's do this thing!
+bedToBigBed -extraIndex=name -tab -type=bed9+53 input.bed /cluster/data/hg38/chrom.sizes hgnc.hg38.bb -as=$HOME/kent/src/hg/lib/hgncBig62.as
+
+# put the files into /gbdb
+mkdir -p /gbdb/hg38/hgnc
+rm -rf /gbdb/hg38/hgnc/hgnc.bb
+ln -s `pwd`/hgnc.hg38.bb /gbdb/hg38/hgnc/hgnc.bb 
+
+rm -rf /gbdb/hg38/hgnc/search.ix /gbdb/hg38/hgnc/search.ixx
+ln -s `pwd`/search.hg38.ix /gbdb/hg38/hgnc/search.ix
+ln -s `pwd`/search.hg38.ixx /gbdb/hg38/hgnc/search.ixx
+
+##################################
+
 
