@@ -991,6 +991,8 @@ boolean isBigWig = tdb ? tdbIsBigWig(tdb) : isBigWigTable(table);
 boolean isWig = isSmallWig || isBigWig;
 boolean isBedGr = tdb ? tdbIsBedGraph(tdb) : isBedGraph(rootTable);
 boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLookupName);
+// if "table" is explicitly listed, we're going to use that instead of any bigDataUrl
+if (isBb && tdb && hashLookup(tdb->settingsHash, "table")) isBb = FALSE;
 boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
 boolean isLongTabix = tdb ? tdbIsLongTabix(tdb) : isLongTabixTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
