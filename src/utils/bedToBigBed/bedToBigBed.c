@@ -990,6 +990,7 @@ if (errCatchStart(errCatch))
 if (errCatch->gotError || errCatch->gotWarning)
     {
     fprintf(stderr, "%s",errCatch->message->string);
+    exit(1);
     }
 errCatchEnd(errCatch);
 

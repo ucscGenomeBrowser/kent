@@ -4,11 +4,16 @@ include ../../../inc/common.mk
 
 test: testOddSorted testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin testCompress testNotSorted
 
+# use ! cmd 2> output/$@.err || (${shouldHaveFailed})
+shouldHaveFailed = echo "Error: command should have failed" >&2 && false
+
+fakeGenomeTwoBit = output/fakeGenome.2bit
+
 testBadChrom1:  outputDir
-	-${BINDIR}/${A} input/colored.genbank.bed input/human.chrom.sizes.txt output/noFile.chromAlias.bb   -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/testBadChrom1.err
+	! ${BINDIR}/${A} input/colored.genbank.bed input/human.chrom.sizes.txt output/noFile.chromAlias.bb -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/testBadChrom1.err || (${shouldHaveFailed})
 	diff expected/testBadChrom1.err output/testBadChrom1.err
 
-output/human.chromAlias.bb:  outputDir
+output/human.chromAlias.bb: outputDir
 	${BINDIR}/${A} input/human.chromAlias.bed input/human.chrom.sizes.txt output/human.chromAlias.bb   -tab -type=bed3+4 -as=input/chromAliasIndex.as -extraIndex=genbank,ensembl,ncbi,ucsc
 
 testBbSize1: outputDir output/human.chromAlias.bb
@@ -17,7 +22,7 @@ testBbSize1: outputDir output/human.chromAlias.bb
 	diff input/colored.genbank.bed output/colored.genbank.bed
 
 testBbSize2: outputDir output/human.chromAlias.bb
-	-${BINDIR}/${A} input/mixed.bed output/human.chromAlias.bb output/noFile.chromAlias.bb -sizesIsChromAliasBb -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/mixed.err
+	! ${BINDIR}/${A} input/mixed.bed output/human.chromAlias.bb output/noFile.chromAlias.bb -sizesIsChromAliasBb -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/mixed.err || (${shouldHaveFailed})
 	diff expected/mixed.err output/mixed.err
 
 testRgb: outputDir
@@ -31,7 +36,7 @@ testCompress: outputDir
 	diff input/itemRgb.bed output/test_itemRgbGz.bed
 
 testOddSorted: outputDir
-	-${BINDIR}/${A} -extraIndex=name -type=bed12+16 -tab -as=../../..//hg/lib/gencodeBGP.as input/oddSorted.bed input/hg38.chrom.sizes output/oddSorted.bb
+	${BINDIR}/${A} -extraIndex=name -type=bed12+16 -tab -as=../../..//hg/lib/gencodeBGP.as input/oddSorted.bed input/hg38.chrom.sizes output/oddSorted.bb
 	bigBedToBed output/oddSorted.bb output/oddSorted.bed
 	LC_ALL=C sort -k1,1 -k2,2n  input/oddSorted.bed > output/oddSorted.check.bed
 	diff output/oddSorted.check.bed output/oddSorted.bed
@@ -40,12 +45,12 @@ testOddSorted: outputDir
 	diff output/oddSorted.bed output/searchNames.bed
 
 testSortNotSorted: outputDir
-	-${BINDIR}/${A} -tab -type=bed9+3 -sort input/notSorted.bed input/notSorted.chrom.sizes output/notSorted.bb 
+	${BINDIR}/${A} -tab -type=bed9+3 -sort input/notSorted.bed input/notSorted.chrom.sizes output/notSorted.bb 
 	bigBedToBed output/notSorted.bb output/notSorted.bed
 	diff expected/notSorted.bed output/notSorted.bed
 
 testNotSorted: outputDir
-	-${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err || true
+	! ${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err || (${shouldHaveFailed})
 	diff expected/notSorted.err output/notSorted.err
 
 testMultiInsAtEnd: outputDir
@@ -85,14 +90,19 @@ tabSep: outputDir
 	diff input/tabSep.bed output/test_tabSep.bed
 
 testDevStdin: outputDir
-	-cat input/itemRgb.bed | ${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as /dev/stdin input/chrom.sizes output/$@.bb 2> output/$@.err
+	cat  input/itemRgb.bed | (! ${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as /dev/stdin input/chrom.sizes output/$@.bb 2> output/$@.err) || (${shouldHaveFailed})
 	diff expected/$@.err output/$@.err
 
 testStdin: outputDir
-	-cat input/itemRgb.bed | ${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as stdin input/chrom.sizes output/$@.bb 2> output/$@.err
+	cat input/itemRgb.bed | (! ${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as stdin input/chrom.sizes output/$@.bb 2> output/$@.err) || (${shouldHaveFailed})
 	diff expected/$@.err output/$@.err
 
+test2bitMissingSeq: outputDir ${fakeGenomeTwoBit}
+	! ${BINDIR}/${A} -tab -type=bed4 -as=input/tabSep.as -sizesIs2Bit input/tabSep.bed ${fakeGenomeTwoBit} output/tabSep.bb 2> output/$@.err || (${shouldHaveFailed})
+	diff expected/$@.err output/$@.err
 
+${fakeGenomeTwoBit}: outputDir input/fakeGenome.fa
+	faToTwoBit input/fakeGenome.fa $@ 
 
 clean::
 	@rm -rf output
