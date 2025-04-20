@@ -795,7 +795,7 @@ var hubCreate = (function() {
         dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
         table.draw();
         dataTableCustomOrder(table, hubDirData);
-        table.draw();
+        table.columns.adjust().draw();
     }
 
     function doRowSelect(evtype, table, indexes) {
@@ -1032,6 +1032,7 @@ var hubCreate = (function() {
         }
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
+        table.columns.adjust().draw();
         // TODO: add event handlers for editing defaults, grouping into hub
         $("#newTrackHubDialog").dialog({
             modal: true,

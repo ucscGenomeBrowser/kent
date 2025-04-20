@@ -773,7 +773,13 @@ else
     if (externalDb != NULL)
         conn = hAllocConn(externalDb);
     else
+        {
+        char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+        if (liftDb)
+            database = liftDb;
         conn = hAllocConn(database);
+        }
+
     curGeneId = findGeneId(conn, geneName);
     getGenePosition(conn);
     curGenePred = getCurGenePred(conn);

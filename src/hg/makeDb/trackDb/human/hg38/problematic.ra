@@ -4,7 +4,6 @@ longLabel Problematic/special genomic regions for sequencing or very variable re
 superTrack on
 html problematic
 group map
-pennantIcon Updated red ../goldenPath/newsarch.html#110424 "Updated Nov. 4, 2024"
 
     track problematic
     parent problematicSuper
@@ -151,7 +150,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110424 "Updated Nov. 4, 2024
     visibility dense
     priority 3
     html problematic
-    pennantIcon New red ../goldenPath/newsarch.html#110424 "November 4, 2024"
     
         track alldifficultregions
         parent problematicGIAB on
