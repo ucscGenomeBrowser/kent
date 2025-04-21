@@ -345,7 +345,7 @@ verbose(1, "%s\n", ctime(&cleanStart));
 
 
 totalRows = sqlTableSize(conn, table);
-verbose(1,"totalRows=%d\n", totalRows);
+verbose(1,"totalRows=%ld\n", totalRows);
 
 if (totalRows==0)
     {
