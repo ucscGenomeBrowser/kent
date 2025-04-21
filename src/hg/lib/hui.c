@@ -4410,9 +4410,9 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++
     // value is always "All", even if label is different, to simplify javascript code
     int valIx = 1;
     if (filterByColumnIsMultiple(cart, tdb, setting))
-        printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
+        printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'>\n", selectIdPrefix,ix,filterBy->htmlName);
     else
-        printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'<BR>\n", selectIdPrefix,ix,filterBy->htmlName);
+        printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'>\n", selectIdPrefix,ix,filterBy->htmlName);
 
     printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
     struct slName *slValue;
