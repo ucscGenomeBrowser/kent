@@ -13,6 +13,7 @@
 #include "md5.h"
 #include "trashDir.h"
 #include "sessionData.h"
+#include "quickLift.h"
 
 INLINE boolean isTrashPath(char *path)
 /* Return TRUE if path starts with trashDir. */
@@ -447,10 +448,10 @@ if (isNotEmpty(sessionDataDir))
 return dir;
 }
 
-INLINE boolean cartVarIsCustomComposite(char *cartVar)
-/* Return TRUE if cartVar starts with "customComposite-". */
+INLINE boolean cartVarIsLocalHub(char *cartVar)
+/* Return TRUE if cartVar starts with "customComposite-" or "hubQuickLift-". */
 {
-return startsWith(customCompositeCartName "-", cartVar);
+return startsWith(quickLiftCartName "-", cartVar) || startsWith(customCompositeCartName "-", cartVar);
 }
 
 static char *dayOfMonthString()
@@ -483,14 +484,14 @@ if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
     for (var = allVars;  var != NULL;  var = var->next)
         {
         if (startsWith(CT_FILE_VAR_PREFIX, var->name) ||
-            cartVarIsCustomComposite(var->name))
+            cartVarIsLocalHub(var->name) )
             {
             // val is file that contains references to trash files and customTrash db tables;
             // replace with new file containing references to saved files and tables.
             char *oldTrackFile = cloneString(var->val);
             char *newTrackFile = saveTrackFile(cart, var->name, var->val,
                                                sessionDataDbPrefix, dbSuffix, sessionDir);
-            if (newTrackFile && cartVarIsCustomComposite(var->name))
+            if (newTrackFile && cartVarIsLocalHub(var->name))
                 cartReplaceHubVars(cart, var->name, oldTrackFile, newTrackFile);
             freeMem(oldTrackFile);
             freeMem(newTrackFile);
