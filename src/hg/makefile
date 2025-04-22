@@ -284,28 +284,26 @@ install: ${BROWSER_BINS:%=%.install} ${BROWSER_LOADERS:%=%.install}
 %.install: hgLib
 	cd $* && echo $* && $(MAKE) install
 
-clean::
+clean_browser:: ${BROWSER_BINS:%=%_clean_browser} ${BROWSER_LOADERS:%=%_clean_browser}
 	cd lib && ${MAKE} clean
-	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} clean;) \
-	done
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 
-clean_utils::
-	@for D in ${UTIL_DIRS}; do \
-		if test ! -s $${D} ; then continue ; fi; \
-		(cd $${D} && ${MAKE} clean;) \
-	done
+%_clean_browser:
+	${MAKE} -C $* clean
 
-clean::	${TEST_DIRS:%=%.clean} ${TEST_EXTRA:%=%.cleanExtra}
+clean_utils:: ${UTIL_DIRS:%=%_clean_utils}
+%_clean_utils:
+	if test -s $* ; then ${MAKE} -C $* clean ; fi
+
+clean:: clean_browser clean_utils ${TEST_DIRS:%=%.clean} ${TEST_EXTRA:%=%.cleanExtra}
 
 %.clean:
-	cd $* && ${MAKE} clean
+	${MAKE} -C $* clean
 
 # these directories are absent in the kent-core repo due to license issues
 %.cleanExtra:
-	@test -s $*/makefile && (cd $* && ${MAKE} clean) || true
+	@test -s $*/makefile && (${MAKE} -C $* clean) || true
 
 
 # tests tests all use test.chromInfo
@@ -320,5 +318,5 @@ testAll: $(APPS:%=%.testAll)
 test::	${TEST_DIRS:%=%.test} ${TEST_EXTRA:%=%.test} testAll
 
 %.test: hgLib
-	cd $* && ${MAKE} test
+	${MAKE} -C $* test
 

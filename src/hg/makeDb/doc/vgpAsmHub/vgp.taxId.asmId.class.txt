@@ -896,10 +896,8 @@
 8323	GCA_964204655.1_aTriCri1.1	amphibians
 7725	GCA_964204865.1_kaStyClav1.hap1.1	otherChordates
 7725	GCA_964204955.1_kaStyClav1.hap2.1	otherChordates
-8348	GCA_964205295.1_aBomVar4.maternal.1	amphibians
 8348	GCA_964205295.1_aBomVar4.paternal.1	amphibians
 8348	GCA_964205305.1_aBomVar4.maternal.1	amphibians
-8348	GCA_964205305.1_aBomVar4.paternal.1	amphibians
 8843	GCA_964211785.1_bAnsAns1.hap2.1	birds
 219593	GCA_964211795.1_bAytFer1.hap2.1	birds
 219593	GCA_964211825.1_bAytFer1.hap1.1	birds

@@ -624,6 +624,108 @@ the transcript is the one to which all reported HGMD clinical variants can be ma
 This transcript set is also a good choice for variant reporting.
 </ul>
 
+<a name="bioTypeFilter"></a>
+<h2>How can I filter by bioType from GENCODE/RefSeq/Ensembl?</h2>
+<p>
+A common request is to be able to filter by the bioType information from the GENCODE, NCBI
+RefSeq, or ENSEMBL gene tracks and download the data.
+The Table Browser is a powerful tool that can be used to filter for these bioTypes. If you are
+unfamiliar with creating filters using the Table Browser, please refer to the following
+<a href="/goldenPath/help/hgTablesHelp.html#Filter" target="_blank">help page</a>. 
+A few examples of bioType information available in the UCSC Genome Browser include:
+<em>protein-coding</em>, <em>non-coding</em>, <em>lncRNA</em>, <em>miRNA</em>, <em>piRNA</em>,
+<em>pseudogene</em>, etc.
+</p>
+<p>
+When using the <b>GENCODE</b> track, you can query the
+<a href="/cgi-bin/hgTables?hgta_doSchemaDb=hg38&hgta_doSchemaTable=knownAttrs"
+target="_blank">knownAttrs</a> table to get bioType
+information. Specifically, the fields <code>geneType</code> and <code>transcriptType</code> contain
+the biotype information for the GENCODE track. The following output is a
+query of the hg38.knownAttrs table, selecting the <code>kgID</code>, <code>geneType</code>, and
+<code>transcriptType</code> fields:
+</p>
+<pre>
+#hg38.knownAttrs.kgID	hg38.knownAttrs.geneType	hg38.knownAttrs.transcriptType
+ENST00000622482.1	miRNA				miRNA
+ENST00000612139.1	misc_RNA			misc_RNA
+ENST00000625598.1	lncRNA				lncRNA
+ENST00000613359.1	rRNA				rRNA
+ENST00000780342.1	lncRNA				lncRNA
+ENST00000650962.1	TEC				TEC
+ENST00000625020.1	processed_pseudogene		processed_pseudogene
+ENST00000559466.1	transcribed_unprocessed_pseudogene	transcribed_unprocessed_pseudogene
+ENST00000495055.1	protein_coding			protein_coding_CDS_not_defined
+ENST00000461088.1	protein_coding			retained_intron
+ENST00000467409.7	lncRNA				retained_intron
+ENST00000362728.1	snRNA				snRNA
+</pre>
+<p>
+The <b>NCBI RefSeq</b> track uses the
+<a href="/cgi-bin/hgTables?hgta_doSchemaDb=hg38&hgta_doSchemaTable=ncbiRefSeqLink"
+target="_blank">ncbiRefSeqLink</a> table to get the biotype for its entries. The field
+<code>gene_biotype</code> contains biotype information. The following output is from the
+hg38.ncbiRefSeqLink table, selecting the <code>mrnaAcc</code> and <code>gene_biotype</code> fields:
+</p>
+<pre>
+#hg38.ncbiRefSeqLink.mrnaAcc	hg38.ncbiRefSeqLink.gene_biotype
+NM_145005.7			protein_coding
+NR_030618.1			miRNA
+XR_929535.2			lncRNA
+XR_007061920.1			snoRNA
+NR_023917.1			transcribed_pseudogene
+NR_003051.4			RNase_MRP_RNA
+XR_007061908.1			snRNA
+XR_007061868.1			misc_RNA
+</pre>
+<p>
+For both the <b>GENCODE</b> and <b>NCBI RefSeq</b> tracks, you can query the
+<a href="/cgi-bin/hgTables?hgta_doSchemaDb=hg38&hgta_doSchemaTable=kgXref"
+target="_blank">kgXref</a>
+table to extract bioType information. The <code>description</code> field in the kgXref table can be
+used to filter entries when using the GENCODE and NCBI RefSeq tables. However, the biotype
+information may be in the form of a paragraph, which might require extra parsing or scripting to
+produce a tab-separated file.
+</p>
+<p>
+<em>Since the primary table is from GENCODE, there may not be a NCBI RefSeq identifier listed in
+the output.</em> The following output is from the hg38.kgXref table, selecting the
+<code>kgID</code>, <code>refseq</code>, and <code>description</code> fields:
+</p>
+<pre>
+#hg38.kgXref.kgID	hg38.kgXref.refseq	hg38.kgXref.description
+ENST00000622482.1	NR_128716		microRNA 6724-3 (from RefSeq NR_128716.1)
+ENST00000612139.1				ENSG00000274868 (from geneSymbol)
+ENST00000625598.1				ENSG00000280614 (from geneSymbol)
+ENST00000613359.1	NR_146153		RNA, 5.8S ribosomal RNA N3 (from RefSeq NR_146153.1)
+ENST00000780342.1				ENSG00000280441 (from geneSymbol)
+ENST00000650962.1				ENSG00000286267 (from geneSymbol)
+ENST00000625020.1				ribosomal protein SA pseudogene 68 (from HGNC RPSAP68)
+ENST00000559466.1				tektin 4 pseudogene 2 (from HGNC TEKT4P2)
+ENST00000495055.1	NR_135309		RNA binding motif protein 11, transcript variant 4 (from RefSeq NR_135309.2)
+ENST00000461088.1				RNA binding motif protein 11 (from HGNC RBM11)
+ENST00000467409.7	NR_003087		ATP binding cassette subfamily C member 13 (pseudogene), transcript variant A (from RefSeq NR_003087.1)
+ENST00000362728.1				RNA, U6 small nuclear 859, pseudogene (from HGNC RNU6-859P)</pre>
+<p>
+When using the <b>ENSEMBL track</b>, you can use the <code>source</code> field from the
+<a href="/cgi-bin/hgTables?hgta_doSchemaDb=hg19&hgta_doSchemaTable=ensemblSource"
+target="_blank">ensemblSource</a> table. The following is output from the hg19.ensemblSource table,
+selecting the <code>name</code> and <code>source</code> fields:
+</p>
+<pre>
+#hg19.ensemblSource.name	hg19.ensemblSource.source
+ENST00000596669			retained_intron
+ENST00000516163			snRNA
+ENST00000448850			protein_coding
+ENST00000463070			processed_transcript
+ENST00000455275			antisense
+ENST00000608591			lincRNA
+ENST00000384075			snRNA
+ENST00000460212			nonsense_mediated_decay
+ENST00000450472			processed_pseudogene
+ENST00000581654			miRNA
+</pre>
+
 <a name="whatdo"></a>
 <h2>This is rather complicated. Can you tell me which gene transcript track I should use?</h2>
 <p> 
