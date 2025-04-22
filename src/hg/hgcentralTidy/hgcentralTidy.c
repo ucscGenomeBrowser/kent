@@ -53,6 +53,7 @@ errAbort(
   "   -purgeEnd=N - purge range end N days ago'\n"
   "   -purgeTable=tableName - optional purge table must be userDb or sessionDb. If not specified, both tables are purged.'\n"
   "   -dryRun - option that causes it to skip the call to cleanTableSection.'\n"
+  "   -skipDel - option that causes it to skip the delete returning counts from skipped deletes.'\n"
   , chunkSize
   , chunkWait
   , squealSize
@@ -68,6 +69,7 @@ static struct optionSpec options[] = {
    {"purgeEnd", OPTION_INT},
    {"purgeTable", OPTION_STRING},
    {"dryRun", OPTION_STRING},
+   {"skipDel", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -256,9 +258,19 @@ while(TRUE)
 	struct slUnsigned *i;
 	for (i=delList;i;i=i->next)
 	    {
-	    dyStringClear(dy);
-	    sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
-	    sqlUpdate(conn,dy->string);
+            if (!optionExists("skipDel"))
+		{
+		dyStringClear(dy); 
+	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
+		sqlUpdate(conn,dy->string);
+		}
+	    else  // GALT DEBUG REMOVE
+		{
+		dyStringClear(dy); 
+	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
+		verbose(4,"GALT DEBUG del dystring = [%s]\n", dy->string);
+		}
+
 	    }
 	slFreeList(&delList);
 	}
@@ -277,7 +289,8 @@ while(TRUE)
 
     }
 
-    verbose(1, "old recs deleted %d, robot recs deleted %d\n", oldRecCount, delRobotCount);fflush(stderr);
+    verbose(1, "old recs %s deleted %d, robot recs %s deleted %d\n", optionExists("skipDel")?"would have been":"", oldRecCount,
+         optionExists("skipDel")?"would have been":"", delRobotCount);fflush(stderr);
 
     time_t cleanEnd = time(NULL);
     int minutes = difftime(cleanEnd, cleanSectionStart) / 60; 

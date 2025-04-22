@@ -621,8 +621,8 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 
-void cartCopyCustomComposites(struct cart *cart);
-/* Find any custom composite hubs and copy them so they can be modified. */
+void cartCopyLocalHubs(struct cart *cart);
+/* Find any custom composite and quickLift hubs and copy them so they can be modified. */
 
 void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl);
 /* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
