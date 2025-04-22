@@ -527,13 +527,19 @@ void doVcfDetailsCore(struct trackDb *tdb, char *fileOrUrl, boolean isTabix, str
 {
 if (!pFbList)
     genericHeader(tdb, NULL);
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
+int start;
+int end;
 if (pFbList)
     {
     start = rgnStart;
     end = rgnEnd;
     }
+else
+    {
+    start = cartInt(cart, "o");
+    end = cartInt(cart, "t");
+    }
+
 
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
