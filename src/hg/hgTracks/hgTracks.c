@@ -8596,8 +8596,12 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 // put up the makeItems (My Variants) dialog if the hg.conf statement is present
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
-    jsInline("var dialogHtml = \"<div id='makeItemsDialog' style='display:none'></div>\";");
-    hButtonWithOnClick("hgt.makeItem", "Make Item", "Add an item to the my variants track", "makeItems.init()");
+    hPrintf("<button id=\"makeItemsButton\" title=\"Add an item to the my variants track\">Make Item</button>");
+    hPrintf("<div id='makeItemsDialog' style='display:none'></div>");
+    jsInline("document.getElementById(\"makeItemsButton\").addEventListener(\"click\", (e) => {\n"
+        "e.preventDefault();"
+        "makeItems.init();\n"
+    "});");
     }
 
 // put the track download interface behind hg.conf control

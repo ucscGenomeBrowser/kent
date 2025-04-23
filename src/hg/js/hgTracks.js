@@ -654,6 +654,23 @@ var makeItems = {
     },
 
     showDialog: function(dialogHtml) {
+        let windowWidth = window.innerWidth;
+        let windowHeight = window.innerHeight;
+        $(dialogHtml).dialog({
+            width: windowWidth * 0.8,
+            height: windowHeight * 0.8,
+            modal: true,
+        });
+        // if we clicked outside of the pop up, close the popup:
+        document.addEventListener('click', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            popUpBox = document.getElementById("makeItemsDialog").parentElement.getBoundingClientRect();
+            if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
+                    mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
+                $("#makeItemsDialog").dialog("close");
+            }
+        });
     },
 
     load: function ()
