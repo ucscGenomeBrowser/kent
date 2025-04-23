@@ -4428,6 +4428,13 @@ function convertTitleTagsToMouseovers() {
             canShowNewMouseover = true;
         }
     });
+
+    /* Make jquery-ui dialogs hide tooltips */
+    $(document).on("dialogopen", (ev) => {
+        clearTimeout(mouseoverTimer);
+        hideMouseoverText(mouseoverContainer);
+        canShowNewMouseover = true;
+    });
 }
 
 function parseUrl(url) {
