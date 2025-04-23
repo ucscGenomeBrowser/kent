@@ -91,13 +91,18 @@ blatSuite: ${BLAT_SUITE_DIRS:%=%.blatSuite}
 STD_DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm \
 	tabFile parasol blat
 
-USER_APP_DIRS = blat gfClient gfServer isPcr utils parasol hg hg/utils \
-	hg/makeDb ameme index/ixIxx tabFile utils/userApps
+USER_APP_DIRS = utils parasol hg hg/utils \
+	hg/makeDb tabFile
+ALMOST_USER_APP_DIRS = blat gfClient gfServer isPcr ameme index/ixIxx utils/userApps
 
-userApps: ${USER_APP_DIRS:%=%.userApps}
+userApps: ${USER_APP_DIRS:%=%.userApps} ${ALMOST_USER_APP_DIRS:%=%.almostUserApps}
 
 %.userApps: topLibs hgLib destBin
 	${MAKE} -C $* userApps
+
+# these dont have userApps targets
+%.almostUserApps: topLibs hgLib destBin
+	${MAKE} -C $*
 
 destBin:
 	${MKDIR} ${DESTBINDIR}
