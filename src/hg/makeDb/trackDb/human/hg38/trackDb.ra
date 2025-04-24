@@ -905,8 +905,8 @@ include assemblyTracks.ra
 
 include primates11way.ra alpha
 
-include pseudogenes.ra
+include pseudogenes.ra alpha
 
-include recount3.ra
+include recount3.ra alpha
 
-include long_read_transcripts.ra
+include long_read_transcripts.ra alpha
