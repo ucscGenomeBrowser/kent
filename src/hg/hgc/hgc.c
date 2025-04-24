@@ -27854,7 +27854,7 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (startsWith("pubs", table))
+else if (startsWith("pubs", trackHubSkipHubName(table)))
     {
     doPubsDetails(tdb, item);
     }
