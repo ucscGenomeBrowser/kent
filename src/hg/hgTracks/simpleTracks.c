@@ -14740,9 +14740,9 @@ if (sameWord(type, "bed"))
         pubsMarkerMethods(track);
     if (startsWith("pubs", trackName) && stringIn("Blat", trackName))
         pubsBlatMethods(track);
-    if (startsWith("gtexEqtlCluster", trackName)
+    if (startsWith("gtexEqtlCluster", trackName))
         gtexEqtlClusterMethods(track);
-    if (startsWith("gtexEqtlTissue", trackName)
+    if (startsWith("gtexEqtlTissue", trackName))
         gtexEqtlTissueMethods(track);
     }
 /*
