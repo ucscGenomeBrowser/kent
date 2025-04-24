@@ -917,8 +917,7 @@ if (errCatchStart(errCatch))
         {
         trackHubAddDescription(genome->trackDbFile, tdb);
         if (!tdb->html)
-            warn("warning: missing description page for track. Add 'html %s.html' line to the '%s' track stanza. "
-                 "To learn more about adding description pages, see our documentation: http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#html",
+            warn("warning: missing description page for track. Add 'html %s.html' line to the '%s' track stanza. ",
                  tdb->track, tdb->track);
         }
 

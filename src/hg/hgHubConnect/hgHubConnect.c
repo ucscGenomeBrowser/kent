@@ -1635,6 +1635,8 @@ if (cartVarExists(cart, hgHubDoHubCheck))
         if (retVal == 0)
             printf("<div>Finished checking %s</div>", hubUrl);
         puts("<hr>");
+        puts("<p>More information about <b>hub settings</b> can be found on the "
+               "<a target=_blank href='https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html'>Hub Track Database Definition</a> page.");
         puts("<p>Our command line tool <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>hubCheck</a> "
                 "can be used to obtain the same output from a Unix command line.</p>");
         puts("<p>To download the hubCheck tool for Linux, run these commands"
