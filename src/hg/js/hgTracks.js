@@ -642,35 +642,48 @@ var genomePos = {
 /////////////////////////////////////
 var makeItems = {
 
-    init: function ()
-    {
-    // show a jquery-ui dialog when a user clicks on the 'make item' button
-    let dialog = document.getElementById('makeItemsDialog');
-    if (!dialog) {return;}
-    this.showDialog(dialog);
+    init: function () {
+        // show a jquery-ui dialog when a user clicks on the 'make item' button
+        let dialog = document.getElementById('myVariantsDialog');
+        if (!dialog) {
+            dialog = document.createElement("div");
+            dialog.id = "myVariantsDialog";
+            dialog.style = "display: none";
+            document.body.append(dialog);
+            dialogButtons = {};
+            dialogButtons.Submit = makeItems.createItem();
+            dialogButtons.Cancel = function(){
+                $(this).dialog("close");
+            };
+            $(dialog).dialog({
+                title: "My Variants",
+                resizable: false,
+                height: window.innerHeight * 0.8,
+                width: window.innerWidth * 0.8,
+                modal: true,
+                closeOnEscape: true,
+                autoOpen: false,
+                buttons: dialogButtons
+            });
+            // if we clicked outside of the pop up, close the popup:
+            document.addEventListener('click', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                popUpBox = document.getElementById("myVariantsDialog").parentElement.getBoundingClientRect();
+                if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
+                        mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
+                    $("#myVariantsDialog").dialog("close");
+                }
+            });
+        }
     },
 
     createItem: function() {
     },
 
-    showDialog: function(dialogHtml) {
-        let windowWidth = window.innerWidth;
-        let windowHeight = window.innerHeight;
-        $(dialogHtml).dialog({
-            width: windowWidth * 0.8,
-            height: windowHeight * 0.8,
-            modal: true,
-        });
-        // if we clicked outside of the pop up, close the popup:
-        document.addEventListener('click', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            popUpBox = document.getElementById("makeItemsDialog").parentElement.getBoundingClientRect();
-            if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
-                    mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
-                $("#makeItemsDialog").dialog("close");
-            }
-        });
+    showDialog: function() {
+        let dialog = document.getElementById('myVariantsDialog');
+        $(dialog).dialog("open");
     },
 
     load: function ()
@@ -5972,6 +5985,14 @@ $(document).ready(function()
             opt.appendChild(newListEl);
             $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
         }
+    }
+
+    if (typeof doMakeItems !== 'undefined' && doMakeItems) {
+        makeItems.init();
+        document.getElementById("makeItemsButton").addEventListener("click", (e) => {
+            e.preventDefault();
+            makeItems.showDialog();
+        });
     }
 
     if (typeof showMouseovers !== 'undefined' && showMouseovers) {

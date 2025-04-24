@@ -8597,11 +8597,7 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     hPrintf("<button id=\"makeItemsButton\" title=\"Add an item to the my variants track\">Make Item</button>");
-    hPrintf("<div id='makeItemsDialog' style='display:none'></div>");
-    jsInline("document.getElementById(\"makeItemsButton\").addEventListener(\"click\", (e) => {\n"
-        "e.preventDefault();"
-        "makeItems.init();\n"
-    "});");
+    jsInline("var doMakeItems = true;\n");
     }
 
 // put the track download interface behind hg.conf control
