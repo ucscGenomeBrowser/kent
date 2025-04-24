@@ -305,6 +305,7 @@ cartRemove(cart, "doQuickLift");
 
 unsigned quickChain = 0;
 unsigned quickHub = 0;
+struct trackDb *badList = NULL;
 
 if (doQuickLift)
     {
@@ -314,7 +315,7 @@ if (doQuickLift)
         errAbort("can't find quickChain from %s to %s", fromDb->name, toDb->name);
 
     visDy = newDyString(1024);
-    char *newHub = trackHubBuild(fromDb->name, cart, visDy);
+    char *newHub = trackHubBuild(fromDb->name, cart, visDy, &badList);
     char *error = NULL;
     quickHub = hubFindOrAddUrlInStatusTable(cart, newHub, &error);
     if (error != NULL)
