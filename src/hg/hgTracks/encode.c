@@ -13,6 +13,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 #include "bigBedFilter.h"
+#include "quickLift.h"
 
 extern struct trackLayout tl;
 
@@ -242,6 +243,7 @@ struct linkedFeatures *lfList = NULL;
 enum encodePeakType pt = 0;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
 if (ct)
     {
     db = CUSTOM_TRASH;
@@ -249,23 +251,65 @@ if (ct)
     }
 else
     {
+
     db = database;
+    if (liftDb != NULL)
+        db = liftDb;
     table = tg->tdb->table;
     }
 conn = hAllocConn(db);
 pt = encodePeakInferTypeFromTable(db, table, tg->tdb->type);
 tg->customInt = pt;
 filterConstraints = encodePeakFilter(tg->tdb->track, tg->tdb, (ct!=NULL));
-sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
+if (liftDb == NULL)
     {
-    struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
+    sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
+        struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
 
-    if (lf)
-        slAddHead(&lfList, lf);
+        if (lf)
+            slAddHead(&lfList, lf);
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+else
+    {
+    struct hash *chainHash = newHash(12);
+    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+
+    ItemLoader2 loader;
+    switch(pt)
+    {
+    case narrowPeak:
+        loader = (ItemLoader2)narrowPeakLoad;
+        break;
+    case broadPeak:
+        loader = (ItemLoader2)broadPeakLoad;
+        break;
+    case gappedPeak:
+        loader = (ItemLoader2)gappedPeakLoad;
+        break;
+    case encodePeak:
+        loader =  (ItemLoader2)encodePeakLoad;
+        break;
+    default:
+        errAbort("bad value for peak type %d\n", pt);
+        break;
+    }
+
+    struct encodePeak *peakList = (struct encodePeak *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)loader, 0, chainHash);
+    struct encodePeak *liftedPeaks = (struct encodePeak *)quickLiftBeds((struct bed *)peakList, chainHash, FALSE);
+
+    for(; liftedPeaks; liftedPeaks = liftedPeaks->next)
+        {
+        struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)liftedPeaks, tg->tdb, scoreMin, scoreMax);
+
+        if (lf)
+            slAddHead(&lfList, lf);
+        }
+    }
 hFreeConn(&conn);
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
