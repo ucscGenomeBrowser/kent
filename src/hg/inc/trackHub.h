@@ -237,7 +237,7 @@ boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **
 struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
 /* Get the genome structure for an undecorated genome name. */
 
-char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy);
+char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy, struct trackDb **badList);
 /* Build a track hub using trackDb and the cart. */
 
 struct grp *readGroupRa(char *groupFileName);

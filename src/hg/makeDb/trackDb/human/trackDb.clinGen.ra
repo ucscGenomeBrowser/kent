@@ -8,7 +8,6 @@ itemRgb on
 compositeTrack on
 noParentConfig on
 html clinGen
-pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
 
     track clinGenHaplo
     showCfg on
@@ -69,4 +68,3 @@ pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"
     bigDataUrl /gbdb/$D/bbi/clinGen/clinGenCspec.bb
     visibility pack
     mouseOver <b>Disease:</b> $disease <br><b>Panel:</b> $panel <br><b>Status:</b> $status
-    pennantIcon New red ../goldenPath/newsarch.html#100924 "October 9, 2024"

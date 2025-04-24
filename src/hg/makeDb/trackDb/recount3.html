@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+<h2>Description</h2>
+<p>
+Recount3 is a comprehensive resource for re-analyzing RNA-seq data. It provides uniformly processed 
+RNA-seq data and associated metadata from a wide range of studies, enabling researchers to access 
+and analyze gene expression data in a consistent manner. Recount3 aggregates data from multiple 
+sources, including the Sequence Read Archive (SRA) and the Genotype-Tissue Expression (GTEx) project, 
+and reprocesses it using a standardized pipeline. This allows for cross-study comparisons and 
+meta-analyses, facilitating discoveries in genomics and transcriptomics.
+</p><p>
+These tracks display the recount3 intron data including split read counts.
+</p>
+
+
+<h2>Display Conventions</h2>
+<p>
+Intron blocks are grayscale colored based on read support (darker tones indicate higher coverage). <br>
+Split read counts and splice motifs are shown on mouseover. <br>
+By default only introns with a minimum read count of 10,000 are shown. This setting can be changed
+on the track configuration page. <br>
+The intron ends are color coded: 
+<ul>
+<li><b><font color="#2E2585">Dark blue</font></b> GT donors and AG acceptors (CT and AC on 
+the minus strand) </li>
+<li><b><font color="#5DA899">Teal</font></b> GC donors (GT on the minus strand) </li>
+<li><b><font color="#C26A77">Faded red</font></b> AT donors and AC acceptors (GT and GT on the 
+minus strand) </li>
+</ul>
+Introns with non standard ends do not have colored tags.
+<br>
+The SRA track is only visible when zoomed in within 10 million bases because of its data density.
+</p>
+
+<h2>Data Access</h2>
+The raw data can be explored interactively with the
+<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
+<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated analysis, the data may be queried from our
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.<br>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a>
+for more information.
+<p>
+The original junction files can be found at <br>
+<a href="https://snaptron.cs.jhu.edu/data/gtexv2/junctions.bgz" target="_blank">
+https://snaptron.cs.jhu.edu/data/gtexv2/junctions.bgz</a><br>
+<a href="https://snaptron.cs.jhu.edu/data/tcgav2/junctions.bgz" target="_blank">
+https://snaptron.cs.jhu.edu/data/tcgav2/junctions.bgz</a><br>
+<a href="https://snaptron.cs.jhu.edu/data/srav3h/junctions.bgz" target="_blank">
+https://snaptron.cs.jhu.edu/data/srav3h/junctions.bgz</a><br>
+<a href="https://snaptron.cs.jhu.edu/data/ccle/junctions.bgz" target="_blank">
+https://snaptron.cs.jhu.edu/data/ccle/junctions.bgz</a><br>
+<a href="https://snaptron.cs.jhu.edu/data/srav1m/junctions.bgz" target="_blank">
+https://snaptron.cs.jhu.edu/data/srav1m/junctions.bgz (mouse)</a><br>
+</p>
+
+<h2>Methods</h2>
+<p>
+Junction files were converted to bed format. For grayscaling total read count was log10
+transformed and multiplied by 10 to get a score between 0 and 225, which can be found
+in the bed score field.
+</p>
+
+<h2>References</h2>
+<p>
+Wilks C, Zheng SC, Chen FY, Charles R, Solomon B, Ling JP, Imada EL, Zhang D, Joseph L, Leek JT
+<em>et al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6"
+target="_blank">
+recount3: summaries and queries for large-scale RNA-seq expression and splicing</a>.
+<em>Genome Biol</em>. 2021 Nov 29;22(1):323.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34844637" target="_blank">34844637</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8628444/" target="_blank">PMC8628444</a>
+</p>

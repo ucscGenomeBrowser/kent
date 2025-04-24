@@ -1,7 +1,8 @@
 # Encode4 triplet annotations (Jeltje, April 2025)
 track encode4
 shortLabel ENCODE4 transcripts
-longLabel ENCODE4 Long read transcripts
+longLabel ENCODE4 Long read transcripts [start site, exon junction chain, end site] - Blue = not in Gencode V29/V40
+superTrack long_read_transcripts
 type bigBed 12 +
 bigDataUrl /gbdb/$D/encode4/encode4.bb
 visibility pack
@@ -10,7 +11,6 @@ filter.maxScore 0:93180.9
 filterByRange.maxScore on
 filterLimits.maxScore 0:93180.9
 filterLabel.maxScore Filter by counts per million
-group genes
 html encode4.html
 mouseOver $name <br> ${maxScoreHtml}
 

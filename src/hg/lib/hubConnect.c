@@ -136,7 +136,7 @@ if (cartVarExists(cart, hgHubConnectRemakeTrackHub))
     hubVarList = cartVarsWithPrefix(cart, "quickLift");
     for (hubVar = hubVarList; hubVar != NULL; hubVar = hubVar->next)
         {
-        unsigned hubNumber = atoi(hubVar->name + sizeof("quickLift"));
+        unsigned hubNumber = atoi(hubVar->name + strlen("quickLift."));
         sqlSafef(query, sizeof(query), "select hubUrl from hubStatus where id='%d'", hubNumber);
         char *hubUrl = sqlQuickString(conn, query);
         char *errorMessage;
@@ -342,7 +342,10 @@ for (name = nameList; name != NULL; name = name->next)
             break; // there's only one
             }
         sqlFreeResult(&sr);
-        if (sameOk(toDb, hubConnectSkipHubPrefix(db)))
+
+//   this line needs to be reintroduced somehow to prevent quickLift hubs from
+//   being loaded on the wrong database, but it depends on db being set, which it isn't always at this point
+//        if (sameOk(toDb, hubConnectSkipHubPrefix(db)))
             hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
         }
     if (hub != NULL)

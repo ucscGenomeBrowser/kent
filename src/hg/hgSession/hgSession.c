@@ -944,8 +944,8 @@ sqlDyStringPrintf(dy, ")");
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 
-/* Prevent modification of custom track collections just saved to namedSessionDb: */
-cartCopyCustomComposites(cart);
+/* Prevent modification of custom track collections or quickLifts just saved to namedSessionDb: */
+cartCopyLocalHubs(cart);
 return useCount;
 }
 
@@ -1348,7 +1348,7 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
-    cartCopyCustomComposites(cart);
+    cartCopyLocalHubs(cart);
     hubConnectLoadHubs(cart);
     cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
@@ -1403,7 +1403,7 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(otherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
-cartCopyCustomComposites(cart);
+cartCopyLocalHubs(cart);
 hubConnectLoadHubs(cart);
 cartHideDefaultTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
@@ -1518,7 +1518,7 @@ if (lf != NULL)
     if (ok)
         {
         dyStringAppend(dyMessage, dyLoadMessage->string);
-        cartCopyCustomComposites(cart);
+        cartCopyLocalHubs(cart);
         hubConnectLoadHubs(cart);
         cartHideDefaultTracks(cart);
         cartCheckForCustomTracks(cart, dyMessage);
@@ -1748,7 +1748,7 @@ char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);
 cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
-// Don't cartCopyCustomComposites because we're not going to make any track collection changes
+// Don't cartCopyLocalHubs because we're not going to make any track collection changes
 hubConnectLoadHubs(cart);
 // Some old sessions reference databases that are no longer present, and that triggers an errAbort
 // when cartHideDefaultTracks calls hgTrackDb.  Don't let that stop the process of updating other

@@ -17,6 +17,7 @@
 #include "string.h"
 #include "dystring.h"
 #include "dnautil.h"
+#include "trackHub.h"
 //#include "ctype.h"
 
 // cgi var to activate debug output
@@ -1167,10 +1168,14 @@ void doPubsDetails(struct trackDb *tdb, char *item)
 
 int start        = cgiOptionalInt("o", -1);
 int end          = cgiOptionalInt("t", -1);
-char *trackTable = cgiString("g");
+char *trackTable = trackHubSkipHubName(cgiString("g"));
 char *aliTable   = cgiOptionalString("aliTable");
 int fasta        = cgiOptionalInt("fasta", 0);
 pubsDebug        = cgiOptionalInt("debug", 0);
+
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    database = liftDb;
 
 struct sqlConnection *conn = hAllocConn(database);
 

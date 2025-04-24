@@ -917,7 +917,8 @@ if (errCatchStart(errCatch))
         {
         trackHubAddDescription(genome->trackDbFile, tdb);
         if (!tdb->html)
-            warn("warning: missing description page for track: '%s'", tdb->track);
+            warn("warning: missing description page for track. Add 'html %s.html' line to the '%s' track stanza. ",
+                 tdb->track, tdb->track);
         }
 
     if (!trackIsContainer && sameString(trackDbRequiredSetting(tdb, "type"), "bigWig"))

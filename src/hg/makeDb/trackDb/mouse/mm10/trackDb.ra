@@ -427,4 +427,6 @@ itemRgb on
 include ../../trackDb.mgc-orfeome.ra
 include ../refSeqComposite.mm10.mm39.ra
 
-include encode4.ra
+include recount3.ra alpha
+
+include encode4.ra alpha

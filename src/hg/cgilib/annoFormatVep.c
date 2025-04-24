@@ -405,7 +405,7 @@ if (len > 2*baseCount + elipsLen + strlen(lengthNote))
     safecpy(seq+offset, len+1-offset, "...");
     offset += elipsLen;
     // then last baseCount bases:
-    safecpy(seq+offset, len+1-offset, seq+len-baseCount);
+    memmove(seq+offset, seq+len-baseCount, baseCount);
     offset += baseCount;
     // then lengthNote:
     safecpy(seq+offset, len+1-offset, lengthNote);
@@ -498,6 +498,15 @@ if (gpFx->detailType == codingChange)
         alleleLength = upLen;
     else if (startsWith("<", change->txAlt))
         alleleLength = 0;
+    int codonNewLen = strlen(change->codonNew);
+    if (codonNewLen < variantFrame + alleleLength)
+        {
+        // This can happen when an insertion introduces a stop codon -- codonNew is shorter than
+        // we would otherwise expect.
+        alleleLength = codonNewLen - variantFrame;
+        if (alleleLength < 0)
+            alleleLength = 0;
+        }
     toUpperN(change->codonNew+variantFrame, alleleLength);
     tweakStopCodonAndLimitLength(change->aaOld, change->codonOld);
     tweakStopCodonAndLimitLength(change->aaNew, change->codonNew);
