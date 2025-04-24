@@ -1,3 +1,4 @@
+
 8296	GCA_002915635.3_AmbMex60DD	amphibians
 38626	GCA_003287225.2_phaCin_HiC	mammals
 30522	GCA_003369685.2_UOA_Angus_1	mammals
@@ -566,6 +567,7 @@
 30532	GCA_048126745.1_DamDam1_v1.mat	mammals
 30532	GCA_048127045.1_DamDam1_v1.pat	mammals
 206126	GCA_048127205.1_SpiSpi1_v1.hap2	fish
+396798	GCA_048128715.1_fSymNem1.1_haplotype_2	fish
 396798	GCA_048128725.1_fSymNem1.1_haplotype_1	fish
 166262	GCA_048128805.1_fCenGer3.hap1.cur.20231027	fish
 1311420	GCA_048129025.1_fCaeTer1.1_haplotype_2	fish
@@ -894,10 +896,8 @@
 8323	GCA_964204655.1_aTriCri1.1	amphibians
 7725	GCA_964204865.1_kaStyClav1.hap1.1	otherChordates
 7725	GCA_964204955.1_kaStyClav1.hap2.1	otherChordates
-8348	GCA_964205295.1_aBomVar4.maternal.1	amphibians
 8348	GCA_964205295.1_aBomVar4.paternal.1	amphibians
 8348	GCA_964205305.1_aBomVar4.maternal.1	amphibians
-8348	GCA_964205305.1_aBomVar4.paternal.1	amphibians
 8843	GCA_964211785.1_bAnsAns1.hap2.1	birds
 219593	GCA_964211795.1_bAytFer1.hap2.1	birds
 219593	GCA_964211825.1_bAytFer1.hap1.1	birds

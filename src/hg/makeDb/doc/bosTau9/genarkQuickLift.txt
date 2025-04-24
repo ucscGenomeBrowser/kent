@@ -1,0 +1,26 @@
+mkdir -p /hive/data/genomes/bosTau9/bed/quickLift
+cd /hive/data/genomes/bosTau9/bed/quickLift
+
+zcat /gbdb/bosTau9/liftOver/bosTau9ToGCF_002263795.3.over.chain.gz | chainSwap stdin over.swap.chain
+
+ awk '/chain/ {print $3, $4}' over.swap.chain | sort | uniq  > size.txt
+
+i=GCF_002263795.3
+hgLoadChain -noBin -test bosTau9 bigChain  over.swap.chain
+sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > tmp.bigChain
+bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab tmp.bigChain size.txt $i.bb
+awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n > tmp.bigChain.bigLink
+bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab tmp.bigChain.bigLink size.txt  $i.link.bb
+
+i=GCF_002263795.3.link.bb
+mkdir -p /gbdb/bosTau9/quickLift
+rm tableData.txt
+s=`basename $i .link.bb`.bb
+db=`basename $s .bb`
+f=/gbdb/bosTau9/quickLift/$s
+g=/gbdb/bosTau9/quickLift/$i
+echo ln -s `pwd`/$s $f
+echo ln -s `pwd`/$i $g
+echo "0 bosTau9 $db $f" | tr ' ' '\t' >> tableData.txt
+
+hgLoadSqlTab -append hgcentraltest quickLiftChain $HOME/kent/src/hg/lib/quickLiftChain.sql tableData.txt

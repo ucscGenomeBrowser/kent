@@ -1,20 +1,14 @@
 
 SNP_DIRS=snpLoad snpMask snpValid dbSnpJsonToTab checkBigDbSnp
 
-all::
-	@for D in ${SNP_DIRS} x; do \
-	    if test "$$D" != "x" ; then \
-		( cd $$D && echo $$D && ${MAKE} ) ;\
-		x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
+all:: ${SNP_DIRS:%=%_all}
+%_all:
+	${MAKE} -C $*
 
-clean::
-	@for D in ${SNP_DIRS} ; do \
-	    ( cd "$$D" && echo cleaning $$D && ${MAKE} clean ) ; \
-	done
+clean:: ${SNP_DIRS:%=%_clean}
+%_clean:
+	${MAKE} -C $* clean
 
-compile::
-	@for D in ${SNP_DIRS} ; do \
-	    ( cd "$$D" && echo compile $$D && ${MAKE} compile ) ; \
-	done
+compile:: ${SNP_DIRS:%=%_compile}
+%_compile:
+	${MAKE} -C $* compile

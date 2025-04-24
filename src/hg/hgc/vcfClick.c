@@ -19,6 +19,7 @@
 #include "vcf.h"
 #include "vcfUi.h"
 #include "trackHub.h"
+#include "featureBits.h"
 
 #define NA "<em>n/a</em>"
 
@@ -521,12 +522,25 @@ makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb, displayAls);
 }
 
-void doVcfDetailsCore(struct trackDb *tdb, char *fileOrUrl, boolean isTabix)
+void doVcfDetailsCore(struct trackDb *tdb, char *fileOrUrl, boolean isTabix, struct featureBits **pFbList, int rgnStart, int rgnEnd)
 /* Show item details using fileOrUrl. */
 {
-genericHeader(tdb, NULL);
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
+if (!pFbList)
+    genericHeader(tdb, NULL);
+int start;
+int end;
+if (pFbList)
+    {
+    start = rgnStart;
+    end = rgnEnd;
+    }
+else
+    {
+    start = cartInt(cart, "o");
+    end = cartInt(cart, "t");
+    }
+
+
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 /* protect against temporary network or parsing error */
@@ -548,6 +562,8 @@ if (errCatch->gotError)
 	warn("%s", errCatch->message->string);
     }
 errCatchFree(&errCatch);
+
+struct featureBits *fbList = NULL, *fb;
 if (vcff != NULL)
     {
     struct vcfRecord *rec;
@@ -555,36 +571,67 @@ if (vcff != NULL)
     int recordCount = 0;
     for (rec = vcff->records;  rec != NULL;  rec = rec->next)
         {
-        if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
-            vcfRecordDetails(tdb, rec, recordCount);
-        recordCount++;
+        if (pFbList)
+	    {
+            AllocVar(fb);
+            fb->chrom = rec->chrom;
+            fb->start = rec->chromStart;
+            fb->end = rec->chromEnd;
+            fb->strand = '+';
+            slAddHead(&fbList, fb);
+	    }
+	else
+	    {
+	    if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
+		vcfRecordDetails(tdb, rec, recordCount);
+	    }
+	recordCount++;
         }
     }
 else
-    printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
-printTrackHtml(tdb);
+    {
+    if (!pFbList)
+        printf("Sorry, unable to open %s<BR>\n", fileOrUrl);
+    }
+if (pFbList)
+    {
+    slReverse(&fbList); 
+    *pFbList = fbList;
+    }
+else
+    {
+    printTrackHtml(tdb);
+    }
 }
 
 
 
-void doVcfTabixDetails(struct trackDb *tdb, char *item)
+void doVcfTabixDetailsExt(struct trackDb *tdb, char *item, struct featureBits **pFbList, int start, int end)
 /* Show details of an alignment from a VCF file compressed and indexed by tabix. */
 {
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
 struct sqlConnection *conn = NULL;
+
 if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);
+
 char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
 hFreeConn(&conn);
-doVcfDetailsCore(tdb, fileOrUrl, TRUE);
+doVcfDetailsCore(tdb, fileOrUrl, TRUE, pFbList, start, end);
+}
+
+void doVcfTabixDetails(struct trackDb *tdb, char *item)
+/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
+{
+doVcfTabixDetailsExt(tdb, item, NULL, 0, 0);
 }
 
 
 
 
-void doVcfDetails(struct trackDb *tdb, char *item)
+void doVcfDetailsExt(struct trackDb *tdb, char *item, struct featureBits **pFbList, int start, int end)
 /* Show details of an alignment from an uncompressed VCF file. */
 {
 struct customTrack *ct = lookupCt(tdb->track);
@@ -599,5 +646,12 @@ else
     conn = hAllocConnTrack(database, tdb);
 char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, seqName);
 hFreeConn(&conn);
-doVcfDetailsCore(tdb, fileOrUrl, FALSE);
+doVcfDetailsCore(tdb, fileOrUrl, FALSE, pFbList, start, end);
 }
+
+void doVcfDetails(struct trackDb *tdb, char *item)
+/* Show details of an alignment from an uncompressed VCF file. */
+{
+doVcfDetailsExt(tdb, item, NULL, 0, 0);
+}
+

@@ -5,14 +5,6 @@ L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-all:
-	@for D in ${DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE}  ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
-
 DIRS = \
 	txGenbankData \
 	txGeneAccession \
@@ -28,18 +20,14 @@ DIRS = \
 	txGeneValidation \
 	txGeneXref
 
-clean::
-	@for D in ${DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} clean ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
+all: ${DIRS:%=%_all}
+%_all:
+	${MAKE} -C $*
 
-compile:
-	@for D in ${DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} compile ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
+clean:: ${DIRS:%=%_clean}
+%_clean:
+	${MAKE} -C $* clean
+
+compile: ${DIRS:%=%_compile}
+%_compile:
+	${MAKE} -C $* compile

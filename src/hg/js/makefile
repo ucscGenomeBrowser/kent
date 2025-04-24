@@ -46,9 +46,7 @@ doInstallTop: jshintTop
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' \
 			-versionFile=../inc/versionInfo.h -destDir=${DEST} ${SYMLINKED_FILES}
-	for file in ${STATIC_FILES}; do \
-	    rsync -a $$file ${DEST}/; \
-	done
+	rsync -a ${STATIC_FILES} ${DEST}/
 
 tags:
 	ctags ${UCSC_JS_FILES} model/*/*.js

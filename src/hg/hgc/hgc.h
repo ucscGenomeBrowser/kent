@@ -47,6 +47,8 @@
 #include "dnaMotif.h"
 #include "togaClick.h"
 
+#include "featureBits.h"
+
 #include "snp125.h"
 
 
@@ -466,7 +468,13 @@ void doBamDetails(struct trackDb *tdb, char *item);
 void doVcfTabixDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from a VCF file compressed and indexed by tabix. */
 
+void doVcfTabixDetailsExt(struct trackDb *tdb, char *item, struct featureBits **pFbList, int start, int end);
+/* Show details of an alignment from a VCF file compressed and indexed by tabix. */
+
 void doVcfDetails(struct trackDb *tdb, char *item);
+/* Show details of an alignment from an uncompressed VCF file. */
+
+void doVcfDetailsExt(struct trackDb *tdb, char *item, struct featureBits **pFbList, int start, int end);
 /* Show details of an alignment from an uncompressed VCF file. */
 
 void doBarChartDetails(struct trackDb *tdb, char *item);

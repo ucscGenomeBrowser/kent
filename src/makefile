@@ -12,28 +12,40 @@ beta: check-beta clean cgi-beta
 update:
 	git pull
 	${MAKE} clean
+##
+# topLibs
+##
+TOP_LIBS = lib parasol/lib htslib
+ifneq ($(wildcard jkOwnLib/*),)
+  TOP_LIBS += jkOwnLib
+endif
+topLibs: topChecks | ${TOP_LIBS:%=%.topLibs}
+%.topLibs:
+	${MAKE} -C $*
 
-topLibs:
+topChecks:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
-	cd lib && ${MAKE}
-ifneq ($(wildcard jkOwnLib/*),)
-	cd jkOwnLib && ${MAKE}
-endif
-	cd parasol/lib && ${MAKE}
-	cd htslib && ${MAKE}
 
 optLib:
 	cd optimalLeaf && ${MAKE}
 
-hgLib:
+##
+# hgLib
+##
 ifneq ($(wildcard hg/makefile),)
-	@./hg/sqlEnvTest.sh
-	cd hg/lib && ${MAKE}
+   HGLIB_DIRS += hg/lib
+   HGLIB_CHECK = hgLibChecks
+endif
 ifneq ($(wildcard hg/cgilib/makefile),)
-	cd hg/cgilib && ${MAKE}
+   HGLIB_DIRS += hg/cgilib
 endif
-endif
+
+hgLib: ${HGLIB_CHECK} | ${HGLIB_DIRS:%=%.hgLib}
+%.hgLib:
+	${MAKE} -C $*
+hgLibChecks:
+	@./hg/sqlEnvTest.sh
 
 libs: topLibs hgLib optLib
 
@@ -63,71 +75,53 @@ check-beta:
 	# this will fail if we are not in a beta checkout:
 	git branch | egrep '\* v[0-9]+_branch' > /dev/null	
 
-blatSuite: topLibs hgLib
-	cd blat && ${MAKE}
-	cd gfClient && ${MAKE}
-	cd gfServer && ${MAKE}
-	cd webBlat && ${MAKE}
-	cd hg/pslPretty && ${MAKE}
-	cd hg/pslReps && ${MAKE}
-	cd hg/pslSort && ${MAKE}
-	cd utils/nibFrag && ${MAKE}
-	cd utils/faToNib && ${MAKE}
-	cd utils/faToTwoBit && ${MAKE}
-	cd utils/twoBitToFa && ${MAKE}
-	cd utils/twoBitInfo && ${MAKE}
-	cd isPcr && ${MAKE}
-	cd blatz && ${MAKE}
+BLAT_SUITE_DIRS = blat gfClient gfServer webBlat hg/pslPretty hg/pslReps \
+	hg/pslSort utils/nibFrag utils/faToNib utils/faToTwoBit utils/twoBitToFa \
+	utils/twoBitInfo isPcr blatz
+
+blatSuite: ${BLAT_SUITE_DIRS:%=%.blatSuite}
+
+%.blatSuite: topLibs hgLib
+	 ${MAKE} -C $*
 
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-BLAT_APPLIST = blat gfClient gfServer isPcr
+# common subdirs uses by multiple targets
+STD_DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm \
+	tabFile parasol blat
 
-userApps: topLibs hgLib destBin
-	cd utils && echo utils && ${MAKE} userApps
-	cd parasol && echo parasol && ${MAKE} userApps
-	cd hg && echo hg && ${MAKE} userApps
-	cd hg/utils && echo hg/utils && ${MAKE} userApps
-	cd hg/makeDb && echo hg/makeDb && ${MAKE} userApps
-	cd ameme && echo ameme && ${MAKE}
-	cd index/ixIxx && echo index/ixIxx && ${MAKE}
-	@for P in ${BLAT_APPLIST}; do \
-	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
-	done
-	cd tabFile && echo tabFile && ${MAKE} userApps
-	cd utils/userApps && echo utils/userApps && ${MAKE}
+USER_APP_DIRS = utils parasol hg hg/utils \
+	hg/makeDb tabFile
+ALMOST_USER_APP_DIRS = blat gfClient gfServer isPcr ameme index/ixIxx utils/userApps
+
+userApps: ${USER_APP_DIRS:%=%.userApps} ${ALMOST_USER_APP_DIRS:%=%.almostUserApps}
+
+%.userApps: topLibs hgLib destBin
+	${MAKE} -C $* userApps
+
+# these dont have userApps targets
+%.almostUserApps: topLibs hgLib destBin
+	${MAKE} -C $*
 
 destBin:
 	${MKDIR} ${DESTBINDIR}
 
-clean:
-	@for D in ${DIRS} x; do \
-            if test "$$D" != "x" && test -d "$$D" ; then \
-                ( cd $$D && echo $$D && ${MAKE} clean ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
-	cd parasol && ${MAKE} clean
-	cd lib && ${MAKE} clean 
-	cd hg && ${MAKE} clean
-	cd hg && ${MAKE} clean_utils
-ifneq ($(wildcard jkOwnLib/*),)
-	cd jkOwnLib && ${MAKE} clean
-endif
-	cd htslib && ${MAKE} clean
-	cd utils && ${MAKE} clean
-	if test -d webBlat ; then cd webBlat && ${MAKE} clean ; fi
-	if test -d isPcr ; then cd isPcr && ${MAKE} clean ; fi
-	touch non-empty-rm.o
-	- find . -name \*.o -print | xargs rm
+CLEAN_DIRS = ${STD_DIRS} lib hg jkOwnLib htslib utils webBat isPcr
+
+clean: ${CLEAN_DIRS:%=%.clean}
+	find . -name \*.o -print | xargs --no-run-if-empty rm
 	rm -f tags TAGS
 	rm -f cscope.out cscope.files cscope.po.out
 
-testDirs = blat gfServer hg lib utils
-test:: $(testDirs:%=%.test)
+%.clean:
+	if [ -e "$*/makefile" ] ; then ${MAKE} -C $* clean ; fi
+
+
+TEST_DIRS = blat gfServer hg lib utils
+test:: $(TEST_DIRS:%=%.test)
 %.test:
-	if test -d $* ; then cd $* && ${MAKE} test; fi
+	if test -d $* ; then ${MAKE} -C $* test; fi
 
 LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] */*/*/lib/*.[hc] jkOwnLib/*.c \
 	inc/*.h */inc/*.h */*/inc/*.h */*/*/inc/*.h */cgilib/*.[hc]
@@ -158,37 +152,21 @@ tags-all:
 etags-all:
 	find . -name '*.[ch]' | etags -
 
-utils: libs destBin
-	${MKDIR} ${SCRIPTS}
-	cd parasol && ${MAKE}
-	@for D in ${DIRS} x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && ${MAKE} ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
-	cd utils && ${MAKE}
+UTILS_DIRS = ${DIRS} utils
+.PHONY: utils
+utils: ${UTILS_DIRS:%=%.utils} ${STD_DIRS:%=%.utils}
+
+%.utils: libs destBin hgutils
+	@${MKDIR} ${SCRIPTS}
+	${MAKE} -C $*
+
+utils-alpha: ${UTILS_DIRS:%=%.utils-alpha}
+
+%.utils-alpha: check-alpha libs destBin hgutils
+	if [ -e "$*/makefile" ] ; then ${MAKE} -C $* ; fi
+
+hgutils: libs destBin
 	cd hg && ${MAKE} utils
-
-utils-alpha: check-alpha libs destBin
-	${MKDIR} ${SCRIPTS}
-	cd parasol && ${MAKE}
-	@for D in ${DIRS} x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && ${MAKE} ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
-	cd utils && ${MAKE}
-	cd hg && ${MAKE} utils
-
-
-ifneq ($(wildcard jkOwnLib/*),)
-DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
-else
-DIRS = ameme index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
-endif
-
 
 ##  cellar archive for obsolete programs
 

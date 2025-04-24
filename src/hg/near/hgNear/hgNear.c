@@ -22,6 +22,11 @@
 #include "hgColors.h"
 #include "hgNear.h"
 #include "versionInfo.h"
+#include "botDelay.h"
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
+static boolean issueBotWarning = FALSE;
 
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL };
@@ -1882,6 +1887,13 @@ void doMiddle(struct cart *theCart)
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
+/* Using earlyBotCheck() at the beginning of main() to output message here if in delay time */
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
+
 if (hIsBrowserbox())
     {
     printf("The Gene Sorter is not supported on the Genome Browser in a Box Virtual Machine.<p>");
@@ -2007,6 +2019,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 // pushCarefulMemHandler(100000000);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgNear", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
