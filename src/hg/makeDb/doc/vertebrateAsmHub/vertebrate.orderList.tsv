@@ -4,6 +4,7 @@ GCA_964194405.1_rVipBer3.hap2.1	adder (hap2 2024)
 GCA_027172095.1_rPodRaf1.alt	Aeolian wall lizard (La Canna islet alternate hap 2022)
 GCF_027172205.1_rPodRaf1.pri	Aeolian wall lizard (La Canna islet primary hap 2022 refseq)
 GCA_004786255.1_Pads_1.0	African bullfrog (1538 2019)
+GCF_032062135.1_UCB_Pads_2.0	African bullfrog (2023)
 GCF_017654675.1_Xenopus_laevis_v10.1	African clawed frog (2021)
 GCF_030867095.1_rAllMis1	American alligator (2023 refseq)
 GCF_000281125.3_ASM28112v4	American alligator (KSC_2009_1 2016)
@@ -32,6 +33,7 @@ GCF_037176765.1_rAnoSag1.mat	Brown anole (maternal hap 2024 refseq)
 GCA_037176775.1_rAnoSag1.pat	Brown anole (rAnoSag1 2024)
 GCA_027560395.1_ASM2756039v1	brown house snake (FMNH 251328 2023)
 GCF_001527695.2_P.Mucros_1.0	brown spotted pit viper
+GCF_047496795.1_sChiPun1.3	brownbanded bambooshark (Juve2018m 2025)
 GCF_000186305.1_Python_molurus_bivittatus-5.0.2	Burmese python
 GCA_022578425.1_rAriEle1.0.a	California glossy snake (A.elegans occidentalis HBS 135684 alternate hap 2022)
 GCA_022577455.1_rAriEle1.0.p	California glossy snake (A.elegans occidentalis HBS 135684 primary hap 2022)
@@ -41,6 +43,7 @@ GCF_900067755.1_pvi1.1	central bearded dragon
 GCF_000455745.1_ASM45574v1	Chinese alligator
 GCA_021292165.1_IOZ_Scro_1.0	Chinese crocodile lizard (Guangxi GXDGS128 2021)
 GCF_000230535.1_PelSin_1.0	Chinese soft-shelled turtle
+GCF_047496885.1_sScyTor2.1	cloudy catshark (Kashiwa2021f 2025)
 GCF_000225785.1_LatCha1	coelacanth
 GCF_037176945.1_fLatCha1.pri	coelacanth (fLatCha1 primary hap 2024)
 GCA_965112155.1_rPodLio1.hap1.1	Columbretes wall lizard (hap1.1 2025)
@@ -303,8 +306,8 @@ GCF_009769535.1_rThaEle1.pri	western terrestrial garter snake (primary hap 2019)
 GCF_021869965.1_sRhiTyp1.1	whale shark (14 2022 Squalomix)
 GCF_001642345.1_ASM164234v2	whale shark (Ralph 2017 Emory U)
 GCF_004010195.1_ASM401019v2	whitespotted bambooshark
-GCA_964205295.1_aBomVar4.maternal.1	yellow-bellied toad (maternal hap 2024)
-GCA_964205305.1_aBomVar4.paternal.1	yellow-bellied toad (paternal hap 2024)
+GCA_964205305.1_aBomVar4.maternal.1	yellow-bellied toad (maternal hap 2024)
+GCA_964205295.1_aBomVar4.paternal.1	yellow-bellied toad (paternal hap 2024)
 GCF_020497125.1_ASM2049712v1	yellowpond turtle (Southern MM-2020 2021)
 GCF_022316705.1_sSteFas1.1	zebra shark (6-17 2022 Squalomix)
 GCF_030684315.1_sSteTig4.hap1	zebra shark (hap1 2023 refseq)

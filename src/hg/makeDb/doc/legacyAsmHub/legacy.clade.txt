@@ -240,6 +240,7 @@ GCA_025265405.1_mMesDen1_primary_haplotype	mammals
 GCA_025583915.1_AnoSag2.1	vertebrate
 GCA_026419915.1_bHarHar1_primary_haplotype	birds
 GCA_026419965.1_mKogBre1_haplotype_1	mammals
+GCA_026437365.1_fEucNew1.0.hap1	fish
 GCA_027172205.1_rPodRaf1.pri	vertebrate
 GCA_027358585.1_fPanHyp1.pri	fish
 GCA_027406575.1_mNycCou1.pri	primates
@@ -256,18 +257,22 @@ GCA_028018385.1_mNeoNeb1.pri	mammals
 GCA_028018845.1_bMelGeo1.pri	birds
 GCA_028023285.1_mBalRic1.hap2	mammals
 GCA_028372415.1_mMacEug1.pri	mammals
+GCA_028372415.2_mMacEug1.pri_v2	mammals
 GCA_028389875.1_bPtePen1.pri	birds
 GCA_028390025.1_aPseCor3.hap2	vertebrate
 GCA_028500815.1_bRisTri1.patW.cur.20221130	birds
 GCA_028538775.1_mMyoYum1.0.hap1	mammals
 GCA_028564815.1_mEubGla1.hap2	mammals
+GCA_028858625.1_bColStr4.hap2	birds
 GCA_028858705.1_bGruAme1.mat	birds
+GCA_028858725.1_bColStr4.hap1	birds
 GCA_028858805.1_NHGRI_mPanTro3-v1.1-hic.freeze_alt	primates
 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri	primates
 GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt	primates
 GCA_029207755.1_bChaFas1.0.hap1	birds
 GCA_029215685.1_rPitCat1.0.hap2	vertebrate
 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri	primates
+GCA_029281585.3_NHGRI_mGorGor1-v2.1_pri	primates
 GCA_029499605.1_aHylSar1.hap1	vertebrate
 GCA_029633855.1_fHopMal1.hap1	fish
 GCA_029633865.1_fLamInc1.hap2	fish
@@ -298,6 +303,8 @@ GCA_038363095.1_mArtLit.hap1	mammals
 GCA_039877785.1_fChaTrf1.hap1	fish
 GCA_040894005.1_aEngPut4.maternal	vertebrate
 GCA_040894355.1_rMyuGeo1.pri.20230808	vertebrate
+GCA_040954595.1_ASM4095459v1	invertebrate
+GCA_040954625.1_ASM4095462v1	invertebrate
 GCA_042242105.1_fPemKlu1.hap1	fish
 GCA_043159975.1_mMacNem.hap1	primates
 GCA_044704955.1_sPriJap1.hap1	vertebrate
@@ -549,6 +556,7 @@ GCF_028885655.1_NHGRI_mPonAbe1-v1.1-hic.freeze_pri	primates
 GCF_029281585.1_NHGRI_mGorGor1-v1.1-0.2.freeze_pri	primates
 GCF_029289425.1_NHGRI_mPanPan1-v1.1-0.1.freeze_pri	primates
 GCF_030445035.1_mDasNov1.hap2	mammals
+GCF_033978685.1_RoL_Nlum_1.0	fish
 GCF_042477335.1_ARS-UI_OviCan_v1	mammals
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish
