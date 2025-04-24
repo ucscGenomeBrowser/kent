@@ -37,7 +37,6 @@ char *purgeTable = NULL;  /* optionally specify one table to purge */
 char *sessionDbTableName = "sessionDb";
 char *userDbTableName = "userDb";
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -428,6 +427,7 @@ else  // figure out purge-ranges automatically
     int oldRangeSize = (firstUseIndex - 0) / 7;
     int oldRangeStart = oldRangeSize * (day-1);
     int oldRangeEnd = oldRangeStart + oldRangeSize;
+
     verbose(1, "old cleaner: firstUseAge=%d firstUseIndex = %d day %d: rangeStart %d rangeEnd %d rangeSize=%d ids[oldRangeStart]=%u\n", 
         firstUseAge, firstUseIndex, day, oldRangeStart, oldRangeEnd, oldRangeEnd-oldRangeStart, ids[oldRangeStart]);
     //int oldRangeStart = 0;
@@ -445,7 +445,7 @@ else  // figure out purge-ranges automatically
 
     // this is the main delete action of cleaning out new robots (20k to 50k or more)
     int robo1RangeStart = binaryIdSearch(ids, totalRows, table, 2);
-    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 1);
+    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 0);
     verbose(1, "robot cleaner1: twoDayIndex = %d oneDayIndex %d rangeSize=%d ids[rs]=%u\n", 
       robo1RangeStart, robo1RangeEnd, robo1RangeEnd-robo1RangeStart, ids[robo1RangeStart]);
 
@@ -552,10 +552,6 @@ conn = sqlConnectRemote(host, user, password, database);
 verbose(1, "Cleaning database %s.%s\n", host, database);
 verbose(1, "chunkWait=%d chunkSize=%d\n", chunkWait, chunkSize);
 
-//sessionDbTableName = "sessionDbGalt";
-
-//userDbTableName = "userDbGalt";
-
 if (!purgeTable || sameString(purgeTable,sessionDbTableName))
     {
     if (cleanTable(sessionDbTableName))
@@ -585,7 +581,7 @@ squealSize = optionInt("squealSize", squealSize);
 if (optionExists("purgeTable"))
     {
     purgeTable = optionVal("purgeTable", NULL);
-    if (!sameString(purgeTable,"sessionDb") && !sameString(purgeTable,"userDb"))
+    if (!sameString(purgeTable,userDbTableName) && !sameString(purgeTable,sessionDbTableName))
 	errAbort("Invalid value for purgeTable option, must be userDb or sessionDb or leave option off for both.");
     }
 if (argc != 2)
