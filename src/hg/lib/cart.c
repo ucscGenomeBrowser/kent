@@ -1445,12 +1445,18 @@ cart->userId = userId;
 cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
+
+if (isEmpty(userId))
+    fprintf(stderr, "CART userId not sent");
+
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 else
     {
+    if (isNotEmpty(userId))
+        fprintf(stderr, "CART userId sent but not in userDb");
     char *defaultCartContents = getDefaultCart(conn);
     cartParseOverHash(cart, defaultCartContents);
     }

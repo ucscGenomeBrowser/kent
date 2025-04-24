@@ -170,7 +170,9 @@ while(TRUE)
 
     sqlSafef(query,sizeof(query),
 	"select id, firstUse, lastUse, useCount from %s"
-	" where id > %u order by id limit %d"
+	" where id > %u "
+        " AND lastUse < NOW() - INTERVAL 1 HOUR"
+        " order by id limit %d;"
 	, table
 	, maxId
         , chunkSize
@@ -220,7 +222,10 @@ while(TRUE)
                 deleteThis = TRUE;
                 ++delRobotCount;
                 }
-            else if ((daysAgoFirstUse >= 2) && useCount <= 1)
+            /* some botnets have hgsid but do not store cookies -> useCount is always 1 */
+            /* Since we excluded rows that are from the last 1 hour, this will not delete anything */
+            /* from human users who just came to the site before this program ran */
+            else if (useCount <= 1)
                 {
                 deleteThis = TRUE;
                 ++delRobotCount;
