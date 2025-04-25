@@ -445,8 +445,11 @@ else  // figure out purge-ranges automatically
 
     // this is the main delete action of cleaning out new robots (20k to 50k or more)
     int robo1RangeStart = binaryIdSearch(ids, totalRows, table, 2);
-    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 0);
-    verbose(1, "robot cleaner1: twoDayIndex = %d oneDayIndex %d rangeSize=%d ids[rs]=%u\n", 
+    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, -1);
+    // Because the end is not actually included in the cleaning range, so to get all rows, need -1 so 0 is fully included.
+    if (robo1RangeEnd > totalRows - 1)  // do not go off the end of the array.
+         robo1RangeEnd = totalRows - 1;
+    verbose(1, "robot cleaner1: twoDayIndex = %d minusOneDayIndex %d rangeSize=%d ids[rs]=%u\n", 
       robo1RangeStart, robo1RangeEnd, robo1RangeEnd-robo1RangeStart, ids[robo1RangeStart]);
 
     int robo2RangeStart = -1;
