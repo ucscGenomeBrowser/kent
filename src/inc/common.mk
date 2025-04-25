@@ -75,6 +75,11 @@ ifeq ($(UNAME_S),Darwin)
   ifneq ($(wildcard /opt/local/include/openssl/ssl.h),)
     HG_INC += -I/opt/local/include
   endif
+  # on M1, the directory changed
+  ifneq ($(wildcard /opt/homebrew/include/openssl/ssl.h),)
+    HG_INC += -I/opt/homebrew/include
+    L += -L/opt/homebrew/lib/
+  endif
   ifneq ($(wildcard /opt/local/lib/libz.a),)
     ZLIB = /opt/local/lib/libz.a
   endif
@@ -541,4 +546,13 @@ ifeq (${UGLIFYJS},)
     ifeq ($(wildcard ${UGLIFYJS}),)
         UGLIFYJS=true
     endif
+endif
+
+# OSX does not have the --remove-destination option. 
+# We use this option to make sure that the username and date of files lets us figure out
+# who was the one that built the current version of a file
+ifeq ($(UNAME_S),Darwin)
+    CPREMDESTOPT=-f
+else
+    CPREMDESTOPT=--remove-destination
 endif

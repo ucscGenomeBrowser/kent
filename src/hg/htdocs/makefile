@@ -46,7 +46,7 @@ alpha:
 beta:
 	@if [ "${FIND}" = "find" ] ; then echo Error: FIND=find not allowed with make beta >& 2 ; exit 1 ; fi
 	${GITUP}
-	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
+	cp -p ${CPREMDESTOPT} ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
 	rsync --chmod=Fu=rwx,Fg=rwx,Fo=rx --whole-file --times -a ${DOCUMENTROOT}-beta/assemblyRequest.html qateam@hgwbeta:${DOCUMENTROOT}/
