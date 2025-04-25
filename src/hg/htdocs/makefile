@@ -6,10 +6,15 @@ GITUP = ${GIT} pull
 
 ifeq (${FIND},)
     INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
+    HASGITFILES := $(shell which gitFiles && echo true)
+
+    # Default to using find: Mirrors do not have the program 'gitFiles'. Also gitFiles is not needed anyways.
+    # Also, when gitFiles is not present, the make target would silently fail and do nothing.
+    FIND = find
     ifeq (${INSIDEGIT},true)
-	FIND = gitFiles
-    else
-	FIND = find
+        ifeq (${HASGITFILES},true)
+    	    FIND = gitFiles
+        endif
     endif
 endif
 
@@ -41,7 +46,7 @@ alpha:
 beta:
 	@if [ "${FIND}" = "find" ] ; then echo Error: FIND=find not allowed with make beta >& 2 ; exit 1 ; fi
 	${GITUP}
-	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
+	cp -p ${CPREMDESTOPT} ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
 	rsync --chmod=Fu=rwx,Fg=rwx,Fo=rx --whole-file --times -a ${DOCUMENTROOT}-beta/assemblyRequest.html qateam@hgwbeta:${DOCUMENTROOT}/

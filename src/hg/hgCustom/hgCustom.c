@@ -246,12 +246,12 @@ if (isUpdateForm)
         {
       printf(
      "<span style='color:RED'>"
-     "To update this data which was loaded via URL, <br>"
-     " press submit to go to \"Manage Custom Tracks\" page, <br>"
-     "select the checkbox box in the update column beside this custom track, <br>"
-     "and press the update button at the top of the column.\n</span><p><p> ");
+     "To update this data, which was loaded via a URL:<br>"
+     "1. Click Submit on this page to navigate to the <i>Manage Custom Tracks</i> page.<br>"
+     "2. In the <b>Update</b> column, select the checkbox next to the corresponding custom track.<br>"
+     "3. Click the <b>Update</b> button at the top of the column to apply the changes.\n</span><p><p> ");
 
-        puts("Current Loaded Configuration (do not update here):");
+        puts("Current loaded configuration (do not update here):");
         }
     else
         {
