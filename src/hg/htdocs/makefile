@@ -6,10 +6,15 @@ GITUP = ${GIT} pull
 
 ifeq (${FIND},)
     INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
+    HASGITFILES := $(shell which gitFiles && echo true)
+
+    # Default to using find: Mirrors do not have the program 'gitFiles'. Also gitFiles is not needed anyways.
+    # Also, when gitFiles is not present, the make target would silently fail and do nothing.
+    FIND = find
     ifeq (${INSIDEGIT},true)
-	FIND = gitFiles
-    else
-	FIND = find
+        ifeq (${HASGITFILES},true)
+    	    FIND = gitFiles
+        endif
     endif
 endif
 
