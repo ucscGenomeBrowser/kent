@@ -1199,3 +1199,31 @@ span.gbSessionChanged {
     padding: 1px;
     height: 18px;
 }
+
+.bed-form {
+display: grid;
+grid-template-columns: 1fr 2fr;
+gap: 0.5rem 1rem;
+max-width: 500px;
+margin: 2rem auto;
+font-family: sans-serif;
+}
+
+.bed-form label {
+text-align: right;
+padding-right: 0.5rem;
+}
+
+.bed-form input[type="text"],
+.bed-form input[type="number"],
+.bed-form input[type="color"] {
+width: 100%;
+padding: 0.4rem;
+}
+
+.bed-form button {
+grid-column: span 2;
+padding: 0.6rem;
+font-size: 1rem;
+}
+

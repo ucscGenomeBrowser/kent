@@ -641,6 +641,44 @@ var genomePos = {
  //// Creating items             /////
 /////////////////////////////////////
 var makeItems = {
+    createBedForm: function(dialogEle) {
+        const fields = [
+            { label: "Chromosome", id: "chrom", type: "text" },
+            { label: "Chromosome Start", id: "start", type: "number" },
+            { label: "Chromosome End", id: "end", type: "number" },
+            { label: "Name", id: "name", type: "text" },
+            { label: "Score", id: "score", type: "number" },
+            { label: "Strand", id: "strand", type: "text" },
+            { label: "Thick Start", id: "thickStart", type: "number" },
+            { label: "Thick End", id: "thickEnd", type: "number" },
+            { label: "Color", id: "color", type: "color" },
+            { label: "Description", id: "description", type: "text", placeholder: "Optional mouseover text"}
+        ];
+        const form = document.createElement("form");
+        form.className = "bed-form";
+        form.action = "/submit";
+        form.method = "post";
+
+        fields.forEach(field => {
+            const label = document.createElement("label");
+            label.htmlFor = field.id;
+            label.textContent = field.label;
+
+            const input = document.createElement("input");
+            input.type = field.type;
+            input.id = field.id;
+            input.name = field.id;
+            if (field.id === "description") {
+                input.placeholder = field.placeholder; 
+                input.placeholder = field.placeholder;
+            }
+
+            form.appendChild(label);
+            form.appendChild(input);
+        });
+
+        dialogEle.appendChild(form);
+    },
 
     init: function () {
         // show a jquery-ui dialog when a user clicks on the 'make item' button
@@ -649,9 +687,13 @@ var makeItems = {
             dialog = document.createElement("div");
             dialog.id = "myVariantsDialog";
             dialog.style = "display: none";
+
+            // Call the function to build the form
+            this.createBedForm(dialog);
+
             document.body.append(dialog);
             dialogButtons = {};
-            dialogButtons.Submit = makeItems.createItem();
+            dialogButtons.Submit = makeItems.createItem;
             dialogButtons.Cancel = function(){
                 $(this).dialog("close");
             };
@@ -665,20 +707,22 @@ var makeItems = {
                 autoOpen: false,
                 buttons: dialogButtons
             });
-            // if we clicked outside of the pop up, close the popup:
-            document.addEventListener('click', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                popUpBox = document.getElementById("myVariantsDialog").parentElement.getBoundingClientRect();
-                if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
-                        mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
-                    $("#myVariantsDialog").dialog("close");
-                }
-            });
         }
+        // if we clicked outside of the pop up, close the popup:
+        document.addEventListener('click', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            popUpBox = document.getElementById("myVariantsDialog").parentElement.getBoundingClientRect();
+            if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
+                    mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
+                $("#myVariantsDialog").dialog("close");
+            }
+        });
     },
 
     createItem: function() {
+        // sends a post to hgTracks that adds a new item to the users custom track
+        // and updates the image to include this track if it wasn't already there
     },
 
     showDialog: function() {
@@ -4262,7 +4306,6 @@ var imageV2 = {
         }
         
         imageV2.loadRemoteTracks();
-        makeItemsByDrag.load();
         imageV2.loadSuggestBox();
         imageV2.drawHighlights();
 
