@@ -3,7 +3,7 @@
 # script to install/setup dependencies for the UCSC genome browser CGIs
 # call it like this as root from a command line: bash browserSetup.sh
 
-# you can easily debug this script with 'bash -x browserSetup.sh', it 
+# You can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
 exec > >(tee -a "${HOME}/browserSetup.log") 2>&1
@@ -46,10 +46,10 @@ CGIBINDIR=$APACHEDIR/cgi-bin
 # directory for temporary files
 TRASHDIR=$APACHEDIR/trash
 
-# Mysql data directory 
+# Mysql data directory for most genome annotation data
 # Yes we only support mariaDB anymore, but the variables will keep their names
 # Below please assume that mariadb is meant when mysql is written.
-# For most genome annotation data
+# All user progress messages mention MariaDB, and no MySQL anymore.
 # (all non-mysql data is stored in /gbdb)
 MYSQLDIR=/var/lib/mysql
 
@@ -109,6 +109,9 @@ STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/mast
 # the -t option allows to download only the genome databases, not hgFixed/proteome/go/uniProt
 # by default, this is off, so we download hgFixed and Co. 
 ONLYGENOMES=0
+
+# make apt-get fail on warnings
+APTERR="-o APT::Update::Error-Mode=any"
 # ---- END GLOBAL DEFAULT SETTINGS ----
 
 # ---- DEFAULT CONFIG FILES ------------------
@@ -573,7 +576,7 @@ echo2 'Checking for Mysql version >= 8 (not officially supported by our software
 MYSQLMAJ=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d. -f1`
 setMYCNF
 if [ "$MYSQLMAJ" -ge 8 ] ; then
-    echo2 'Mysql >= 8 found, checking if default-authentication allows native passwords'
+    echo2 'Mysql/MariaDB >= 8 found, checking if default-authentication allows native passwords'
     if grep -q default-authentication $MYCNF; then
         echo2 "default-authentication already set in $MYCNF"
     else
@@ -956,7 +959,7 @@ function installOsx ()
    # configure apache and mysql 
    if [ ! -f $APACHEDIR/ext/configOk.flag ]; then
        cd $APACHEDIR/ext
-       echo2 Creating mysql config in $APACHEDIR/ext/my.cnf
+       echo2 Creating MariaDb config in $APACHEDIR/ext/my.cnf
        # avoid any write-protection issues
        if [ -f $APACHEDIR/ext/my.cnf ]; then
            chmod u+w $APACHEDIR/ext/my.cnf 
@@ -971,11 +974,6 @@ function installOsx ()
        echo '[client]' >> my.cnf
        echo "socket = $APACHEDIR/ext/mysql.socket" >> my.cnf
 
-       # configure mysql
-       #echo2 Creating Mysql system databases
-       #mkdir -p $MYSQLDIR
-       #scripts/mysql_install_db --datadir=$MYSQLDIR
-       #SET_MYSQL_ROOT=1 # not needed with skip-networking
        cd $APACHEDIR
        # download minimal mysql db
        downloadFile $MYSQLDBURL | tar xz
@@ -1019,9 +1017,9 @@ function installOsx ()
        touch $APACHEDIR/ext/configOk.flag 
    fi
 
-   echo2 Running $APACHEDIR/browserStartup.sh to start mysql and apache
+   echo2 Running $APACHEDIR/browserStartup.sh to start MariaDB and apache
    $APACHEDIR/browserStartup.sh
-   echo2 Waiting for mysql to start
+   echo2 Waiting for MariaDB to start
    sleep 5
 }
 
@@ -1031,8 +1029,7 @@ function installDebian ()
     # update repos
     if [ ! -f /tmp/browserSetup.aptGetUpdateDone ]; then
        echo2 Running apt-get update
-       apt-get update
-       touch /tmp/browserSetup.aptGetUpdateDone
+       apt-get update $APTERR && touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
     # the new tzdata package comes up interactive questions, suppress these
@@ -1044,8 +1041,9 @@ function installDebian ()
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
+    apt-get $APTERR --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
     # python-mysqldb has been removed in almost all distros as of 2021
+    # There is no need to install Python2 anymore. Remove the following?
     if apt-cache policy python-mysqldb | grep "Candidate: .none." > /dev/null; then 
 	    echo2 The package python-mysqldb is not available anymore. Working around it
 	    echo2 by installing python2 and MySQL-python with pip2
@@ -1054,7 +1052,7 @@ function installDebian ()
    	       echo2 Python2 package is not available either for this distro, so not installing Python2 at all.
 	    else
                # workaround for Ubuntu 16-20 - keeping this section for a few years, just in case
-               apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+               apt-get install $APTERR --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
     	       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
     	       python2 /tmp/get-pip.py
                if [ -f /usr/include/mysql/my_config.h ]; then
@@ -1078,12 +1076,12 @@ function installDebian ()
 
         # apache and mysql are absolutely required
         # ghostscript is required for PDF output
-        apt-get --assume-yes install apache2 ghostscript
+        apt-get $APTERR --assume-yes install apache2 ghostscript
     
         # gmt is not required. install fails if /etc/apt/sources.list does not contain
         # a 'universe' repository mirror. Can be safely commented out. Only used
         # for world maps of alleles on the dbSNP page.
-        # apt-get install gmt
+        # apt-get $APTERR install gmt
         
         # activate required apache2 modules
         a2enmod include # we need SSI and CGIs
@@ -1114,8 +1112,7 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
 	# Debian / Ubuntu 20 defaults to Mysql 8 and Mysql 8 does not allow rsync of myisam anymore
 	# -> we require mariaDb now
-        # apt-get --assume-yes install mysql-server
-        apt-get --assume-yes install mariadb-server
+        apt-get $APTERR --assume-yes install mariadb-server
 
         mysqlStrictModeOff
         startMysql
@@ -1479,7 +1476,7 @@ function setupBuildLinux ()
    echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
-      apt-get install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev libbz2-dev
    elif [[ "$DIST" == "redhat" ]]; then
       yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
    else 
@@ -1505,10 +1502,11 @@ function buildTree ()
    fi
 
    echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
-   echo2 Installing JS/HTML/CSS to /usr/local/apache/htdocs
+   echo2 Copying JS/HTML/CSS to /usr/local/apache/htdocs
    waitKey
    cd ~/kent/src
    make -j8 cgi-alpha
+   make -j8 htdocs
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
@@ -1524,16 +1522,17 @@ function installBrowser ()
     echo '--------------------------------'
     echo UCSC Genome Browser installation
     echo '--------------------------------'
-    echo Detected OS: $OS/$DIST, Version $VERNUM, Release: $VER
+    echo CPU type: $MACH, detected OS: $OS/$DIST, Version: $VERNUM, Release: $VER
     echo 
     echo This script will go through three steps:
     echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
     echo "2 - copy CGI binaries into $CGIBINDIR, html files into $HTDOCDIR"
     echo "3 - optional: download genome assembly databases into mysql and /gbdb"
     echo
-    echo This script will now install and configure Mysql and Apache if they are not yet installed. 
+    echo This script will now install and configure MariaDB and Apache if they are not yet installed. 
     echo "Your distribution's package manager will be used for this."
-    echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
+    echo If MariaDB is not installed yet, it will be installed, secured and a root password defined.
+    echo The MariaDB root password will be written into root\'s \~/.my.cnf
     echo
     echo This script will also deactivate SELinux if active and open port 80/http.
     waitKey
@@ -1541,7 +1540,7 @@ function installBrowser ()
     # -----  OS - SPECIFIC part -----
     if [ ! -f $COMPLETEFLAG ]; then
        if [[ "$DIST" == "OSX" ]]; then
-          #installOsx
+          #installOsx <- not used anymore, but maybe one day
  	  # on OSX, install clang, brew, kent and build the CGIs from scratch
           buildTree
        elif [[ "$DIST" == "debian" ]]; then
@@ -1614,7 +1613,7 @@ function installBrowser ()
         ln -fs $TRASHDIR
     fi
     
-    # write the sample hg.conf ti the cgi-bin directory
+    # write the sample hg.conf to the cgi-bin directory
     echo2 Creating Genome Browser config file $CGIBINDIR/hg.conf
     echo "$HG_CONF_STR" > $CGIBINDIR/hg.conf
     
@@ -1630,7 +1629,6 @@ function installBrowser ()
        # in OSX adapt the sockets
        # note that the sed -i syntax is different from linux
        echo2 Adapting mysql socket locations in $CGIBINDIR/hg.conf
-       #sockFile=$APACHEDIR/ext/mysql.socket
        sockFile=`mysql -NBe 'show variables like "socket"' | cut -f2`
        $SEDINPLACE "s|^#?socket=.*|socket=$sockFile|" $CGIBINDIR/hg.conf
        $SEDINPLACE "s|^#?customTracks.socket.*|customTracks.socket=$sockFile|" $CGIBINDIR/hg.conf
@@ -1656,6 +1654,9 @@ function installBrowser ()
     if [[ "$OS" == "OSX" ]]; then
         #setupCgiOsx
         echo2 Running on OSX, assuming that CGIs are already built into /usr/local/apache/cgi-bin
+    elif [[ "$MACH" == "aarch64" ]]; then
+        echo2 Running on an ARM CPU: need to build CGIs and htdocs locally from source
+        buildTree
     else
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
@@ -1667,7 +1668,7 @@ function installBrowser ()
 
     # download the html docs, exclude some big files on OSX
     # try to minimize storage for OSX, mostly laptops
-    if [ "$OS" == "OSX" ]; then
+    if [ "$OS" == "OSX" -o "$MACH" == "aarch64" ]; then
             #$RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
             echo2 Not syncing htdocs folder, assuming that these were built from source.
             echo2 PDF and other large files only present at UCSC will be missing from htdocs.
@@ -1683,6 +1684,7 @@ function installBrowser ()
         echo2 OSX: Not chowning /usr/local/apache subdirectories
     else
         chown -R $APACHEUSER:$APACHEUSER $CGIBINDIR $HTDOCDIR $TRASHDIR
+    fi
     
     touch $COMPLETEFLAG
 
@@ -1974,6 +1976,9 @@ function checkDownloadUdr ()
     if [[ "$OS" == "OSX" ]]; then 
         return
     fi
+    if [[ "$MACH" == "aarch64" ]]; then 
+        return
+    fi
 
     RSYNC="/usr/local/bin/udr rsync"
 
@@ -2151,6 +2156,7 @@ shift $(($OPTIND - 1))
 # detect the OS version, linux distribution
 unameStr=`uname`
 DIST=none
+MACH=`uname -m`
 
 if [[ "$unameStr" == MINGW32_NT* ]] ; then
     echo Sorry Windows/CYGWIN is not supported
@@ -2219,12 +2225,6 @@ if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; 
   echo "Error: The options have to be specified before the command, not after it."
   echo
   echo "$HELP_STR"
-  exit 100
-fi
-
-UNAMEM=`uname -m`
-if [[ ! "$UNAMEM" == *_64 && ! "$OS" == "OSX" ]]; then
-  echo "Sorry, the Genome Browser requires a 64bit linux or OSX."
   exit 100
 fi
 
