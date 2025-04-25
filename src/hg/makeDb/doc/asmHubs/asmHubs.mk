@@ -20,7 +20,10 @@ hubsDownload=${htdocsHgDownload}/hubs/${name}
 asmHubSrc=/hive/data/genomes/asmHubs/${name}
 downloadDest1=hgdownload1.soe.ucsc.edu
 downloadDest2=hgdownload2.soe.ucsc.edu
+downloadDest3=hgdownload3.gi.ucsc.edu
+# 2025-04-06 hgdownload1.soe.ucsc.edu has address 128.114.119.163
 # 2024-02-06 hgdownload2.gi.ucsc.edu has address 128.114.198.53
+# 2025-04-06 hgdownload3.gi.ucsc.edu has address 169.233.10.12
 
 all:: sanityCheck makeDirs mkJson mkGenomes symLinks hubIndex asmStats trackData groupsTxt
 
@@ -39,6 +42,7 @@ sanityCheck:
 sshKeyDownload:
 	ssh -o PasswordAuthentication=no qateam@${downloadDest1} date
 	ssh -o PasswordAuthentication=no qateam@${downloadDest2} date
+	ssh -o PasswordAuthentication=no qateam@${downloadDest3} date
 
 sshKeyDynablat:
 	ssh -o PasswordAuthentication=no qateam@dynablat-01 date
@@ -48,7 +52,7 @@ sshKeyCheck: sshKeyDownload sshKeyDynablat
 
 mkJson::
 	if [ "$(name)" = "VGP" ]; then \
-	cat *.orderList.tsv | ${toolsDir}/tsvToJson.py stdin > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
+	sort -u *.orderList.tsv | ${toolsDir}/tsvToJson.py stdin > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
 	else \
 	${toolsDir}/tsvToJson.py ${orderList} > ${destDir}/assemblyList.json 2> ${name}.jsonData.txt; \
         fi
@@ -112,7 +116,7 @@ trackData::
 	chmod +x ${destDir}/${dataName}.html
 	chmod +x ${destDir}/download.${dataName}.html
 
-indexPages: hubIndex asmStats trackData
+indexPages: mkJson hubIndex asmStats trackData
 	echo indexPages done
 
 ### obsolete, these hub.txt files are now static 2024-10-23
@@ -146,17 +150,26 @@ sendDownload:: sshKeyCheck
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/${hubFile}.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/${hubFile}.txt \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/${hubFile}.txt \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${indexName}.html
@@ -164,17 +177,26 @@ sendDownload:: sshKeyCheck
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${indexName}.html
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${indexName}.html
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${statsName}.html
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${dataName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${dataName}.html
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${dataName}.html
 
 # no longer sending genomes.txt file 2024-10-23 - becomes static
 obsolete:
@@ -184,6 +206,9 @@ obsolete:
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${genomesTxt}.txt
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${genomesTxt}.txt
 
 verifyTestDownload:
 	${toolsDir}/verifyOnDownload.sh api-test.gi.ucsc.edu ${orderList}
@@ -203,11 +228,17 @@ sendIndexes::
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${indexName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${indexName}.html
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${indexName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${statsName}.html
@@ -215,8 +246,14 @@ sendIndexes::
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${statsName}.html
+	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${dataName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${dataName}.html
+	rsync -L -a -P \
+  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
+		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${dataName}.html

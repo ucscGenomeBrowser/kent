@@ -168,7 +168,7 @@ struct wigMafItem *newSpeciesItems(struct track *track, int height)
 /* Make up item list for all species configured in track settings */
 {
 char *species[MAX_SP_SIZE];
-char *groups[20];
+char *groups[1000];
 char *defaultOff[MAX_SP_SIZE];
 char sGroup[MAX_SP_SIZE];
 int group;

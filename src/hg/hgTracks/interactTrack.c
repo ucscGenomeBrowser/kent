@@ -491,12 +491,11 @@ static void drawFoot(struct track *tg, struct hvGfx *hvg, char *seq, int seqStar
 {
 char buf[256];
 safef(buf, sizeof(buf), "%s:%d-%d", seq, seqStart, seqEnd);
-char *pos = cloneString(buf);
 Color footColor = color;
-if (hashLookup(footHash, pos))
+if (hashLookup(footHash, buf))
     footColor = MG_BLACK;
 else
-    hashStore(footHash, pos);
+    hashStore(footHash, buf);
 if (drawUp)
     y = flipY(tg, y) - 2;
 hvGfxBox(hvg, x, y, width, 2, footColor);
@@ -521,7 +520,9 @@ static void drawFootMapbox(struct track *tg, struct hvGfx *hvg, int start, int e
                         int x, int y, int width, Color peakColor, Color highlightColor, boolean drawUp)
 /* Draw grab box and add map box */
 {
-// Add var to identify endpoint ('foot'), or NULL if no name for endpoint */
+if (!interactUiShowHgcBoxes(tg->tdb, cart))
+    return;
+// Add var to identify endpoint ('foot'), or NULL if no name for endpoint
 char *clickArg = NULL;
 if (!isEmptyTextField(item))
     {
@@ -543,13 +544,86 @@ void drawPeakMapbox(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEn
                         Color peakColor, Color highlightColor, boolean drawUp)
 /* Draw grab box and add map box */
 {
+if (!interactUiShowHgcBoxes(tg->tdb, cart))
+    return;
+
 if (drawUp)
     y = flipY(tg, y);
-hvGfxBox(hvg, x-1, y-1, 3, 3, peakColor);
-hvGfxBox(hvg, x, y, 1, 1, highlightColor);
-mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
+hvGfxBox(hvg, x-3, y-3, 7, 7, peakColor);
+hvGfxBox(hvg, x-2, y-2, 5, 5, highlightColor);
+mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-3, y-3, 7, 7,
                    tg->track, item, status, NULL, TRUE, NULL);
 }
+
+static void drawOtherChromItem(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis,
+        int draw, struct interact *inter, struct interactTrackInfo *tInfo,
+        char *statusBuf, int peakColor, int highlightColor, boolean drawUp,
+        boolean doDashes, char *itemBuf, struct hash *footHashOther)
+/* Breaking out the draw code for interactions between chromosomes into its
+ * own function to give things a bit more compartmentalization.  This is
+ * called by drawInteractItems */
+{
+char buffer[1024];
+int height = 0;
+int yOffOther = yOff;
+
+double scale = scaleForWindow(width, seqStart, seqEnd);
+
+if (vis == tvDense)
+    {
+    height = tg->height;
+    }
+else
+    {
+    height = tInfo->otherHeight/2;
+    yOffOther = yOff + tInfo->sameHeight;
+    }
+unsigned r = interactRegionCenter(inter->chromStart, inter->chromEnd);
+int x = getX(r, seqStart, scale, xOff);
+int footWidth = regionFootWidth(inter->chromStart, inter->chromEnd, scale);
+unsigned yPos = yOffOther + height;
+
+// draw the foot (2 pixels high)
+drawFoot(tg, hvg, inter->chrom, inter->chromStart, inter->chromEnd,
+        x - footWidth, yOffOther, footWidth + footWidth + 1, color, drawUp, footHashOther);
+
+// draw the vertical
+boolean isReversed = tInfo->isDirectional &&
+        differentString(inter->chrom, inter->sourceChrom);
+drawLine(tg, hvg, x, yOffOther, x, yPos, color, isReversed && doDashes, drawUp);
+
+if (vis == tvDense)
+    return;
+
+// add map box to foot
+
+char *nameBuf = (inter->chromStart == inter->sourceStart ?  inter->sourceName : inter->targetName);
+drawFootMapbox(tg, hvg, inter->chromStart, inter->chromEnd, nameBuf, statusBuf,
+        x - footWidth, yOffOther, footWidth, peakColor, highlightColor, drawUp);
+
+// add map box to vertical
+mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - 2, yOffOther, 4,
+        height, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+if (tInfo->doOtherLabels)
+    {
+    // draw label
+    safef(buffer, sizeof buffer, "%s", sameString(inter->chrom, inter->sourceChrom) ?
+                                inter->targetChrom : inter->sourceChrom);
+    yPos += 3;
+    if (drawUp)
+        yPos = flipY(tg, yPos + 6);
+    hvGfxTextCentered(hvg, x, yPos, 4, 4, MG_BLUE, font, buffer);
+    int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
+
+    // add map box to label
+    mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - labelWidth/2,
+            yPos, labelWidth, tInfo->fontHeight, tg->track, itemBuf, statusBuf,
+            NULL, TRUE, NULL);
+    }
+}
+
 
 static void drawInteractItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -572,7 +646,6 @@ if (vis != tvDense)
     }
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct interact *inter = NULL;
-char buffer[1024];
 char itemBuf[2048];
 
 // Gather info for layout
@@ -609,64 +682,12 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         // different chromosomes
         //      draw below same chrom items, if any
-        int height = 0;
-        int yOffOther = yOff;
-        if (vis == tvDense)
-            {
-            height = tg->height;
-            }
-        else
-            {
-            height = tInfo->otherHeight/2;
-            yOffOther = yOff + tInfo->sameHeight;
-            }
-        unsigned r = interactRegionCenter(inter->chromStart, inter->chromEnd);
-        int x = getX(r, seqStart, scale, xOff); 
-        int footWidth = regionFootWidth(inter->chromStart, inter->chromEnd, scale);
-        unsigned yPos = yOffOther + height;
-
-        // draw the foot (2 pixels high)
-        drawFoot(tg, hvg, inter->chrom, inter->chromStart, inter->chromEnd, 
-                x - footWidth, yOffOther, footWidth + footWidth + 1, color, drawUp, footHashOther);
-
-        // draw the vertical
-        boolean isReversed = tInfo->isDirectional && 
-                                differentString(inter->chrom, inter->sourceChrom);
-        drawLine(tg, hvg, x, yOffOther, x, yPos, color, isReversed && doDashes, drawUp);
-        
-        if (vis == tvDense)
-            continue;
-
-        // add map box to foot
-
-        char *nameBuf = (inter->chromStart == inter->sourceStart ?      
-                        inter->sourceName : inter->targetName);
-        drawFootMapbox(tg, hvg, inter->chromStart, inter->chromEnd, nameBuf, statusBuf, 
-                        x - footWidth, yOffOther, footWidth, peakColor, highlightColor, drawUp);
-
-        // add map box to vertical
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - 2, yOffOther, 4, 
-                            height, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
-        if (tInfo->doOtherLabels)
-            {
-            // draw label
-            safef(buffer, sizeof buffer, "%s", sameString(inter->chrom, inter->sourceChrom) ?
-                                        inter->targetChrom : inter->sourceChrom);
-            yPos += 3;
-            if (drawUp)
-                yPos = flipY(tg, yPos + 6);
-            hvGfxTextCentered(hvg, x, yPos, 4, 4, MG_BLUE, font, buffer);
-            int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
-
-            // add map box to label
-            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - labelWidth/2, 
-                    yPos, labelWidth, tInfo->fontHeight, tg->track, itemBuf, statusBuf, 
-                    NULL, TRUE, NULL);
-            }
+        drawOtherChromItem(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis, draw, inter,
+                tInfo, statusBuf, peakColor, highlightColor, drawUp, doDashes, itemBuf, footHashOther);
         continue;
         }
 
-    // Draw same chromosome interaction
+    // Else, draw same chromosome interaction
 
     // source region
     unsigned s = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
@@ -680,14 +701,14 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     int tWidth = regionFootWidth(inter->targetStart,inter->targetEnd, scale);
     boolean tOnScreen = (t >= seqStart) && (t< seqEnd);
 
+    // Reminder - isReversed just means source is downstream of target on the forward strand
+    // of the chromosome.  It has nothing to do with the "reverse" view in the browser.
     boolean isReversed = (tInfo->isDirectional && t < s);
     int interSize = abs(t - s);
     int peakHeight = (tInfo->sameHeight - 15) * ((double)interSize / tInfo->maxSize) + 10;
     int peak = yOff + peakHeight;
     if (vis == tvDense)
         peak = yOff + tg->height;
-
-    // NOTE: until time permits, force to rectangle when in reversed strand mode.
 
     int yTarget = yOff;
     int ySource = yOff;
@@ -700,13 +721,14 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         else if (sameString(tInfo->offset, INTERACT_OFFSET_SOURCE))
             ySource = yOff + yOffset;
         }
-    unsigned footColor = color;
 
+    // Start with drawing the feet if they're on-screen
+    unsigned footColor = color;
     if (sOnScreen)
         {
         drawFoot(tg, hvg, inter->sourceChrom, inter->sourceStart, inter->sourceEnd,
                             sX - sWidth, ySource, sWidth + sWidth + 1, footColor, drawUp, footHash);
-        if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
+        if (vis == tvDense || (draw == DRAW_LINE))
             {
             // draw vertical from foot to peak
             drawLine(tg, hvg, sX, ySource, sX, peak, color, isReversed && doDashes, drawUp);
@@ -716,7 +738,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         drawFoot(tg, hvg, inter->targetChrom, inter->targetStart, inter->targetEnd,
                             tX - tWidth, yTarget, tWidth + tWidth + 1, footColor, drawUp, footHash);
-        if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
+        if (vis == tvDense || (draw == DRAW_LINE))
             {
             // draw vertical from foot to peak
             drawLine(tg, hvg, tX, yTarget, tX, peak, color, isReversed && doDashes, drawUp);
@@ -729,7 +751,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
     if (sOnScreen)
         {
-        // draw grab box and map box to source region
+        // draw grab box and map box to source region.  These are still practically invisible.
         drawFootMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->sourceName, 
                             statusBuf, sX, ySource, sWidth, peakColor, highlightColor, drawUp);
         }
@@ -745,7 +767,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
     // Draw interaction and map boxes
     int lowerX = 0, upperX = 0;
-    if (s < t)
+    if (s < t && !(hvg->rc))
         {
         lowerX = sOnScreen ? sX : xOff;
         upperX = tOnScreen ? tX : xOff + width;
@@ -755,7 +777,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         lowerX = tOnScreen ? tX : xOff;
         upperX = sOnScreen ? sX : xOff + width;
         }
-    if (draw == DRAW_LINE || !sOnScreen || !tOnScreen || hvg->rc)
+
+    if (draw == DRAW_LINE || (!sOnScreen && !tOnScreen))
         {
         // draw horizontal line between region centers at 'peak' height
         drawLine(tg, hvg, lowerX, peak, upperX, peak, color, isReversed && doDashes, drawUp);
@@ -766,7 +789,52 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                             xMap, peak, peakColor, highlightColor, drawUp);
         continue;
         }
-    // Draw curves
+
+    if (!tOnScreen || !sOnScreen)
+        {
+        // Only one endpoint is on the screen, and we're in curve or ellipse mode.
+        // Draw a curve that reaches to the appropriate screen edge.
+        int baseY, peakY = peak;
+        int startX, endX; // The start- and end-points for this curve
+        boolean offscreenLowerX = FALSE; // true if the off-screen side of the interaction has a lower X value
+        if (sOnScreen)
+            {
+            startX = sX;
+            baseY = ySource;
+            offscreenLowerX = (t < s);
+            }
+        else
+            {
+            startX = tX;
+            baseY = yTarget;
+            offscreenLowerX = (t > s);
+            }
+
+        // Now we know whether the endpoint is on the left or right edge of the screen
+        if (offscreenLowerX)
+            endX = xOff;
+        else
+            endX = xOff+width;
+
+        if (drawUp)
+            {
+            baseY = flipY(tg, baseY);
+            peakY = flipY(tg, peakY);
+            }
+        hvGfxCurve(hvg, startX, baseY, startX, peakY, endX, peakY, color, isReversed && doDashes);
+
+        // place a mapbox at the end of the off-screen end of the curve
+        int mapBoxX = endX;
+        if (endX == xOff)
+            mapBoxX += 3;
+        else
+            mapBoxX -= 3;
+        drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
+                            mapBoxX, peakY, peakColor, highlightColor, drawUp);
+        continue;
+        }
+
+    // Draw curves with both ends on-screen
     if (draw == DRAW_CURVE)
         {
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;

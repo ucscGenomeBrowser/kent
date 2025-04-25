@@ -12,6 +12,7 @@
 #include "bigWarn.h"
 #include "hvGfx.h"
 #include "soTerm.h"
+#include "quickLift.h"
 
 static double snp125AvHetCutoff = SNP125_DEFAULT_MIN_AVHET;
 static int snp125WeightCutoff = SNP125_DEFAULT_MAX_WEIGHT;
@@ -2796,7 +2797,7 @@ return FALSE;
 }
 
 struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
-                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi)
+                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi, struct hash *chainHash)
 /* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
 {
 struct linkedFeatures *lf = NULL;
@@ -2806,6 +2807,17 @@ bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 if (bigBedFilterInterval(bbi, bedRow, filters))
     {
     struct bigDbSnp *bds = bigDbSnpLoad(bedRow);
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    if (quickLiftFile)
+        {
+        struct bed *bed;
+        if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
+            {
+            bds->chrom = bed->chrom;
+            bds->chromStart = bed->chromStart;
+            bds->chromEnd = bed->chromEnd;
+            }
+        }
     double minMaf = cartUsualDoubleClosestToHome(cart, tdb, FALSE, "minMaf", 0.0);
     if (! filterMaf(bds, freqSourceIx, minMaf))
         return NULL;

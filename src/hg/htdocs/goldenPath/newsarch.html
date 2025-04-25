@@ -64,6 +64,73 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
 
+<a name="033125"></a>
+<h2>Mar. 31, 2025 &nbsp;&nbsp; New Pseudogenes track for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=pseudogenes&position=default">Pseudogenes</a>
+track for the hg38 (GRCh38) genome assembly. The composite track contains pseudogene predictions and
+their corresponding parent genes, as identified by <a href="http://pseudogene.org/pseudopipe/"
+target="_blank">PseudoPipe</a>, a homology-based computational pipeline that searches a mammalian
+genome and identifies pseudogene sequences.</p>
+<p>
+This composite track consists of two subtracks: the <b>Pseudogene Parents</b> track and the
+<b>Pseudogenes</b> track.</p>
+<ul>
+  <li><b>Pseudogene Parents</b> &ndash; This track displays parent genes labeled with their HUGO
+	  IDs, which were derived from Ensembl gene IDs provided by the Gerstein lab after dataset
+	  creation. It includes indicators for pseudogenes, each linked to its corresponding entry
+	  in the Pseudogenes track. <b><font color="#800080">Parent genes</font></b> are shown with
+	  their associated pseudogenes represented as <b><font color="#A9A9A9">grey</font></b>
+	  blocks.
+  <li><b>Pseudogenes</b> &ndash; This track displays pseudogenes labeled with their parent HUGO ID
+	  and the pseudogenes are color-coded by pseudogene type:
+	  <b><font color="#FF8C00">unspecified pseudogene</font></b>, <b><font
+	  color="#0000FF">unprocessed pseudogene</font></b>, and
+	  <b><font color="#556B2F">processed pseudogene</font></b>.
+</ul>
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/gperez2/Pseudogenes" target="_blank">
+  <img src="../images/newsArchImages/PseudogenesTrack.jpg" alt="hg38 session
+  visualizing the Pseudogenes track" width='80%'></a>
+</div>
+<p>
+More information on this composite track can be found on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=pseudogenes&position=default#TRACK_HTML" target="_blank">track description</a>
+page.
+</p>
+<p>
+We would like to thank the Gerstein lab at Yale University for making this data available, and
+Cristina Sisu for providing data in GTF format with parent annotations. We would also like to
+thank Jeltje van Baren, Mark Diekhans, and Gerardo Perez for their efforts on this release.
+</p>
+
+<a name="031425"></a>
+<h2>Mar. 14, 2025 &nbsp;&nbsp; denovo-db tracks for hg19 now available</h2>
+<p>
+We are excited to announce the release of two
+<a href="/cgi-bin/hgTrackUi?db=hg19&c=chr7&g=denovoDbComposite" target="_blank">denovo-db V.1.6.1</a>
+tracks for the hg19/GRCh37 genome assembly. The
+<a href="https://denovo-db.gs.washington.edu/denovo-db/index.jsp" target="_blank">denovo-db
+(version 1.6.1)</a> is a curated database of germline de novo variants in the human genome, defined
+as variants present in children but absent in their parents. With advancements in whole-exome and
+whole-genome sequencing, denovo-db consolidates data from extensive genetic studies, including those
+on neurodevelopmental disorders, but is not restricted to specific phenotypes. This database
+provides essential resources for researchers investigating variant characteristics, mutability, and
+associated phenotypes.</p>
+<p>
+The denovo-db V.1.6.1 composite track contains <a href="https://www.sfari.org/resource/simons-simplex-collection/"
+target="_blank">Simons Simplex Collection (SSC)</a> samples and non-ssc samples. The use of Simons
+Simplex Collection (SSC) is limited to projects related to advancing the field of autism and related
+developmental disorder research. Questions on SSC consents should be directed to
+collections@sfari.org. If you have questions or comments about the denovo-db, please write to
+denovo-db@uw.edu.</p>
+<p>
+We would like to thank denovo-db and the Simons Simplex Collection for making this data available.
+We would also like to thank Megna Chalamala, Gerardo Perez, Ana Benet-Pag&#232;s, and Jairo
+Navarro for the creation and release of these tracks on the UCSC Genome Browser.</p>
+
+
 <a name="030625"></a>
 <h2>Mar. 06, 2025 &nbsp;&nbsp; New MITOMAP track for hg38 and hg19</h2>
 <p>
@@ -173,7 +240,7 @@ all items with a score of 300 or above.</p>
 highlightText.name NM*
 </pre>
 <p>
-The example above uses the <code>highlightText</code> setting which, will apply a highlight on the
+The example above uses the <code>highlightText</code> setting, which will apply a highlight on the
 field <code>name</code>. Using this setting, any items that begin with <i>NM</i> are
 highlighted.</p>
 <pre>

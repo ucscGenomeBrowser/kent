@@ -12,16 +12,17 @@
 include ${kentSrc}/inc/userApp.mk
 include ${kentSrc}/inc/cgiVars.mk
 
+
 # this target uses CGI_BIN_DEST set in cgiVars.mk to do any of the CGI targers
-cgi_any:: compile
+cgi_any:: compile ${SQL_FILES:%=%_sql_install}
 	chmod a+rx ${A}${EXE}
-	${MKDIR} ${CGI_BIN_DEST}/loader
+	${MKDIR} ${CGI_LOADER_DEST}
 	chmod a+rx ${A}${EXE}
-	mv -f ${A}${EXE} ${CGI_BIN_DEST}/loader/
-	for F in ${SQL_FILES}; do \
-	    B=`basename $$F` ; \
-	    cp -fp ${CPREMDESTOPT} $$F ${CGI_BIN_DEST}/loader/$$B ; \
-	done
+	mv -f ${A}${EXE} ${CGI_LOADER_DEST}/
+
+%_sql_install:
+	@${MKDIR} ${CGI_LOADER_DEST}
+	cp -fp --remove-destination $* ${CGI_LOADER_DEST}/
 
 cgi:: cgi_any
 alpha:: cgi_any

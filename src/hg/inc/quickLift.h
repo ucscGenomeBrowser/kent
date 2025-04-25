@@ -6,6 +6,8 @@
 #ifndef QUICKLIFT_H      
 #define QUICKLIFT_H      
 
+#define quickLiftCartName     "hubQuickLift"
+
 typedef struct slList *(*ItemLoader2)(char **row, int numFields);
 /* Load a bed file from an SQL query result. */
 

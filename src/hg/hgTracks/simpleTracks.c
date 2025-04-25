@@ -147,6 +147,8 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "bigWarn.h"
+#include "quickLift.h"
+#include "liftOver.h"
 
 #define CHROM_COLORS 26
 
@@ -5162,6 +5164,7 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
                         scale, withLeftLabels);
     }
 
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 hvGfxUnclip(hvg);
 }
 
@@ -5319,6 +5322,7 @@ else
 	    font, color, vis);
     }
 
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 // put up the color key for the gnomAD pLI track
 // If you change this code below, you must also change hgTracks.js:hideLegends
 if (startsWith("pliBy", tg->track))
@@ -6007,29 +6011,56 @@ struct bedPlusLabel
     char *label;
 };
 
-typedef char *labelFromNameFunction(char *name);
+typedef char *labelFromNameFunction(char *db, char *name);
 
 static void bedPlusLabelLoad(struct track *tg, labelFromNameFunction func)
 /* Load items from a bed table; if vis is pack or full, add extra label derived from item name. */
 {
-struct bedPlusLabel *itemList = NULL;
-struct sqlConnection *conn = hAllocConn(database);
-int rowOffset = 0;
-struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
-char **row = NULL;
-while ((row = sqlNextRow(sr)) != NULL)
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+
+if (liftDb == NULL)
     {
-    struct bed *bed = bedLoad(row+rowOffset);
-    struct bedPlusLabel *item = needMoreMem(bed, sizeof(struct bed), sizeof(struct bedPlusLabel));
-    if (tg->visibility == tvPack || tg->visibility == tvFull)
-	item->label = cloneString(func(item->bed.name));
-    slAddHead(&itemList, item);
+    struct bedPlusLabel *itemList = NULL;
+    struct sqlConnection *conn = hAllocConn(database);
+    int rowOffset = 0;
+    struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+    char **row = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct bed *bed = bedLoad(row+rowOffset);
+        struct bedPlusLabel *item = needMoreMem(bed, sizeof(struct bed), sizeof(struct bedPlusLabel));
+        if (tg->visibility == tvPack || tg->visibility == tvFull)
+            item->label = cloneString(func(database, item->bed.name));
+        slAddHead(&itemList, item);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    slReverse(&itemList);
+    slSort(&itemList, bedCmp);
+    tg->items = itemList;
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&itemList);
-slSort(&itemList, bedCmp);
-tg->items = itemList;
+else
+    {
+    /* if we're quicklifting get normal beds then add label */
+    loadSimpleBedWithLoader(tg, bedLoad);
+    struct bed *beds = tg->items;
+    struct bedPlusLabel *bedLabels = NULL;
+
+    struct bed *nextBed;
+    for(; beds; beds = nextBed)
+        {
+        nextBed = beds->next;
+
+        struct bedPlusLabel *bedLabel;
+        AllocVar(bedLabel);
+
+        bedLabel->bed = *beds;
+        bedLabel->label = cloneString(func(liftDb, bedLabel->bed.name));
+        slAddHead(&bedLabels, bedLabel);
+        }
+    slSort(&bedLabels, bedCmp);
+    tg->items = bedLabels;
+    }
 }
 
 void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
@@ -6076,7 +6107,7 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
-static char *collapseRowsFromQuery(char *query, char *sep, int limit)
+static char *collapseRowsFromQuery(char *db, char *query, char *sep, int limit)
 /* Return a string that is the concatenation of (up to limit) row[0]'s returned from query,
  * separated by sep.  Don't free the return value! */
 {
@@ -6084,7 +6115,7 @@ static struct dyString *dy = NULL;
 if (dy == NULL)
     dy = dyStringNew(0);
 dyStringClear(dy);
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = sqlMustGetResult(conn, query);
 int i = 0;
 char **row = NULL;
@@ -6230,15 +6261,55 @@ return connectedLfFromGenePredInRangeExtra(tg, conn, table, chrom,
                                                 start, end, FALSE);
 }
 
+static void maybeLiftGenePred(struct track *tg, char *table, char *chrom, int start, int end, boolean extra)
+/* Load a bunch of genePreds, perhaps quickLifting them. */
+{
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+
+if (liftDb != NULL)
+    {
+    char *table;
+    if (isCustomTrack(tg->table))
+        {
+        liftDb = CUSTOM_TRASH;
+        table = trackDbSetting(tg->tdb, "dbTableName");
+        }
+    else
+        table = tg->table;
+    struct hash *chainHash = newHash(8);
+    struct sqlConnection *conn = hAllocConn(liftDb);
+    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+
+// using this loader on genePred tables with less than 15 fields may be a problem.
+extern struct genePred *genePredExtLoad15(char **row);
+
+    struct genePred *gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    hFreeConn(&conn);
+
+    calcLiftOverGenePreds( gpList, chainHash, 0.0, 1.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    struct genePred *gp = gpList;
+
+    struct linkedFeatures *lfList = NULL;
+    for(;gp; gp = gp->next)
+        slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, TRUE));
+    slReverse(&lfList);
+    tg->items = lfList;
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
+                                            chromName, winStart, winEnd, extra);
+    hFreeConn(&conn);
+    }
+}
+
 struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
                                              char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table. */
 {
-struct linkedFeatures *lfList = NULL;
-struct sqlConnection *conn = hAllocConn(database);
-lfList = connectedLfFromGenePredInRange(tg, conn, table, chrom, start, end);
-hFreeConn(&conn);
-return lfList;
+maybeLiftGenePred(tg, tg->tdb->table, chrom, start, end, FALSE);
+return tg->items;
 }
 
 void abbr(char *s, char *fluff)
@@ -6435,14 +6506,13 @@ if (zoomedToCdsColorLevel)
 hFreeConn(&conn);
 }
 
+
 void loadGenePredWithName2(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name) */
 {
-struct sqlConnection *conn = hAllocConn(database);
-tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
-                                        chromName, winStart, winEnd, TRUE);
-hFreeConn(&conn);
+maybeLiftGenePred(tg, tg->tdb->table, chromName, winStart, winEnd, TRUE);
+
 /* filter items on selected criteria if filter is available */
 filterItems(tg, genePredClassFilter, "include");
 }
@@ -7194,14 +7264,14 @@ hFreeConn(&conn);
 return(name);
 }
 
-static char *superfamilyNameLong(char *name)
+static char *superfamilyNameLong(char *db, char *name)
 /* Return domain names of an entry of a Superfamily track item,
    each item may have multiple names
    due to possibility of multiple domains. */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select description from sfDescription where name='%s';", name);
-return collapseRowsFromQuery(query, "; ", 100);
+return collapseRowsFromQuery(db, query, "; ", 100);
 }
 
 static void superfamilyLoad(struct track *tg)
@@ -7221,7 +7291,7 @@ tg->mapItemName = superfamilyName;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
-static char *gadDiseaseClassList(char *name)
+static char *gadDiseaseClassList(char *db, char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
@@ -7229,17 +7299,17 @@ sqlSafef(query, sizeof(query),
       "select distinct diseaseClassCode from gadAll "
       "where geneSymbol='%s' and association = 'Y' order by diseaseClassCode",
       name);
-return collapseRowsFromQuery(query, ",", 20);
+return collapseRowsFromQuery(db, query, ",", 20);
 }
 
-static char *gadDiseaseList(char *name)
+static char *gadDiseaseList(char *db, char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
 sqlSafef(query, sizeof(query),
       "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' "
       "order by broadPhen", name);
-return collapseRowsFromQuery(query, "; ", 20);
+return collapseRowsFromQuery(db, query, "; ", 20);
 }
 
 static void gadLoad(struct track *tg)
@@ -7269,13 +7339,15 @@ hvGfxBox(hvg, x1, y, w, heightPer, color);
 if (vis == tvFull)
     {
     // New text for label in full mode:
-    char *sDiseaseClasses = gadDiseaseClassList(bed->name);
+    char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+    char *db = (liftDb == NULL) ? database : liftDb;
+    char *sDiseaseClasses = gadDiseaseClassList(db, bed->name);
     int textWidth = mgFontStringWidth(font, sDiseaseClasses);
     hvGfxTextRight(hvg, x1-textWidth-2, y, textWidth, heightPer, MG_BLACK, font, sDiseaseClasses);
     }
 }
 
-static char *decipherCnvsPhenotypeList(char *name)
+static char *decipherCnvsPhenotypeList(char *db, char *name)
 /* Return list of diseases associated with a DECIPHER CNVs entry */
 {
 char query[256];
@@ -7301,7 +7373,7 @@ else
     sqlSafef(query, sizeof(query),
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", name);
     hFreeConn(&conn);
-    return collapseRowsFromQuery(query, "; ", 20);
+    return collapseRowsFromQuery(db, query, "; ", 20);
     }
 hFreeConn(&conn);
 return list;
@@ -7368,12 +7440,12 @@ hFreeConn(&conn);
 return(col);
 }
 
-static char *decipherSnvsPhenotypeList(char *name)
+static char *decipherSnvsPhenotypeList(char *db, char *name)
 /* Return list of diseases associated with a DECIPHER SNVs entry */
 {
 char query[256];
 static char list[4096];
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(db);
 if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
     {
     list[0] = '\0';
@@ -7394,7 +7466,7 @@ else
     sqlSafef(query, sizeof(query),
         "select distinct phenotype from decipherSnvsRaw where id='%s' order by phenotype", name);
     hFreeConn(&conn);
-    return collapseRowsFromQuery(query, "; ", 20);
+    return collapseRowsFromQuery(db, query, "; ", 20);
     }
 hFreeConn(&conn);
 return list;
@@ -7411,7 +7483,11 @@ Color decipherSnvsColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct bed *bed = item;
 int col = tg->ixColor;
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -7430,11 +7506,11 @@ if (startsWithNoCase("chr", bed->chrom))
 */
 
 sqlSafef(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
-decipherId = sqlGetField(database, "decipherSnvs", "name", cond_str);
+decipherId = sqlGetField(db, "decipherSnvs", "name", cond_str);
 
 if (decipherId != NULL)
     {
-    if (hTableExists(database, "decipherSnvsRaw"))
+    if (hTableExists(db, "decipherSnvsRaw"))
         {
         sqlSafef(query, sizeof(query), "select pathogenicity from decipherSnvsRaw where "
             "id = '%s' and chr = '%s' and start = '%d' and end = '%d'",
@@ -7776,7 +7852,11 @@ void lookupRefNames(struct track *tg)
 /* This converts the refSeq accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = database;
+if (liftDb)
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 boolean isNative = !sameString(tg->table, "xenoRefGene");
 boolean labelStarted = FALSE;
 boolean useGeneName = FALSE;
@@ -8105,12 +8185,14 @@ Color refGeneColorByStatus(struct track *tg, char *name, struct hvGfx *hvg)
 int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter, lightest;
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[256];
 
-if (startsWith("ncbiRefSeq", tg->table))
+if (startsWith("ncbiRefSeq", trackHubSkipHubName(tg->table)))
     {
     sqlSafef(query, sizeof query, "select status from ncbiRefSeqLink where id = '%s'", name);
     }
@@ -8160,9 +8242,11 @@ if (lf->itemAttr != NULL)
  * Predicted, Inferred(other) -> lightest
  * If no refSeqStatus, color it normally.
  */
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 Color color = tg->ixColor;
-if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(database,  "ncbiRefSeqLink"))
+if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(db,  "ncbiRefSeqLink"))
     color = refGeneColorByStatus(tg, lf->name, hvg);
 hFreeConn(&conn);
 return color;
@@ -13302,7 +13386,7 @@ for(; modes; modes = modes->next)
 return dy->string;
 }
 
-static char *omimGene2DisorderList(char *name)
+static char *omimGene2DisorderList(char *db, char *name)
 /* Return list of disorders associated with a OMIM entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
@@ -13711,7 +13795,7 @@ hFreeConn(&conn);
 return(name->string);
 }
 
-static char *cosmicTissueList(char *name)
+static char *cosmicTissueList(char *db, char *name)
 /* Return list of tumor tissues associated with a COSMIC entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
@@ -13774,7 +13858,7 @@ if (isNotEmpty(ret))
 
 sqlSafef(query,sizeof(query),
         "select tumour_site from cosmicRaw where cosmic_mutation_id ='%s' order by tumour_site", name);
-char *disorders = collapseRowsFromQuery(query, ",", 4);
+char *disorders = collapseRowsFromQuery(db, query, ",", 4);
 if (isNotEmpty(disorders))
     {
     dyStringAppend(dy, " ");
@@ -13811,7 +13895,7 @@ tg->mapItem       = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
-static char *omimAvSnpAaReplacement(char *name)
+static char *omimAvSnpAaReplacement(char *db, char *name)
 /* Return replacement string associated with a OMIM AV (Allelic Variant) entry */
 {
 static char omimAvSnpBuffer[256];
@@ -13822,7 +13906,7 @@ char **row;
 
 omimAvSnpBuffer[0] = '\0';
 
-conn = hAllocConn(database);
+conn = hAllocConn(db);
 sqlSafef(query,sizeof(query),
         "select repl2, dbSnpId, description from omimAv where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
@@ -13854,7 +13938,7 @@ tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
 
-static char *omimLocationDescription(char *name)
+static char *omimLocationDescription(char *db, char *name)
 /* Return description of an OMIM entry */
 {
 static char omimLocationBuffer[512];
@@ -13863,7 +13947,7 @@ char query[256];
 
 omimLocationBuffer[0] = '\0';
 
-conn = hAllocConn(database);
+conn = hAllocConn(db);
 sqlSafef(query,sizeof(query),
         "select geneName from omimGeneMap2 where omimId=%s", name);
 (void)sqlQuickQuery(conn, query, omimLocationBuffer, sizeof(omimLocationBuffer));
@@ -13916,7 +14000,9 @@ class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
 classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 
 sqlSafef(query, sizeof(query),
       "select omimId, %s from omimPhenotype where omimId=%s", omimPhenotypeClassColName, el->name);
@@ -14078,14 +14164,14 @@ else
     }
 }
 
-static char *omimGeneDiseaseList(char *name)
+static char *omimGeneDiseaseList(char *db, char *name)
 /* Return list of diseases associated with a OMIM entry */
 {
 char query[256];
 sqlSafef(query,sizeof(query),
       "select distinct description from omimMorbidMap, omimGene "
       "where name='%s' and name=cast(omimId as char) order by description", name);
-return collapseRowsFromQuery(query, "; ", 20);
+return collapseRowsFromQuery(db, query, "; ", 20);
 }
 
 static void omimGeneLoad(struct track *tg)
@@ -14640,6 +14726,8 @@ track->doItemMapAndArrows = genericItemMapAndArrows;
 #ifndef GBROWSE
 if (sameWord(type, "bed"))
     {
+    char *trackName = trackHubSkipHubName(track->track);
+
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb
        settings. */
@@ -14648,13 +14736,13 @@ if (sameWord(type, "bed"))
 
     // FIXME: as long as registerTrackHandler doesn't accept wildcards,
     // this probably needs to stay here (it's in the wrong function)
-    if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
+    if (startsWith("pubs", trackName) && stringIn("Marker", trackName))
         pubsMarkerMethods(track);
-    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
+    if (startsWith("pubs", trackName) && stringIn("Blat", trackName))
         pubsBlatMethods(track);
-    if (startsWith("gtexEqtlCluster", track->track))
+    if (startsWith("gtexEqtlCluster", trackName))
         gtexEqtlClusterMethods(track);
-    if (startsWith("gtexEqtlTissue", track->track))
+    if (startsWith("gtexEqtlTissue", trackName))
         gtexEqtlTissueMethods(track);
     }
 /*
@@ -15183,8 +15271,8 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    handler = lookupTrackHandlerClosestToHome(subTdb);
-    if (handler != NULL)
+    boolean avoidHandler = FALSE;// trackDbSettingOn(tdb, "avoidHandler");
+    if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
         handler(subtrack);
 
     /* Add subtrack settings (table, colors, labels, vis & pri).  This is only

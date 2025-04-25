@@ -60,3 +60,14 @@ table.dataTable input.dt-select-checkbox:indeterminate:after {
     cursor: pointer;
     font-size: larger;
 }
+
+/* Prevent the page from jumping around slightly when a button gets added
+ * into this div */
+#selectedFileInfo {
+    height: 1.2em;
+}
+
+.uppy-Dashboard-inner {
+    width: 85% !important;
+    height: 75% !important;
+}

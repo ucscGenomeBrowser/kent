@@ -4,7 +4,6 @@ shortLabel DECIPHER
 longLabel DECIPHER
 cartVersion 7
 group phenDis
-pennantIcon New red ../goldenPath/newsarch.html#121024 "DDG2P released December 10, 2024"
 
     track decipher
     shortLabel DECIPHER CNVs
@@ -55,7 +54,6 @@ pennantIcon New red ../goldenPath/newsarch.html#121024 "DDG2P released December 
     noScoreFilter on
     filterValues.type loss,gain,del/dup
     filter.sample_size 0
-    pennantIcon New red ../goldenPath/newsarch.html#121024 "Released December 10, 2024"
 
 
 searchTable decipher

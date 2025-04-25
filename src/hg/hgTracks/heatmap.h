@@ -18,12 +18,14 @@ struct heatmap
     char *special;
     char **itemLabels;
     boolean *isNA; // override for the scores table when a value was set to NA.  Consider defaulting to True
-    double highCap; // scores at or above this level are saturated in the heatmap
-    double lowCap; // scores at or below this level are saturated in the heatmap
-    double midPoint; // the score where we transition from the low spectrum to the high spectrum
-    struct rgbColor *lowColor, *midColor, *highColor;
-    Color *lowSpectrum;
-    Color *highSpectrum;
+    // Heatmap coloring is done by setting an ascending series of score thresholds, each with an associated color.
+    // The color for any given score is found by finding which pair of thresholds the score lies between, and
+    // then using a color spectrum that lies between the associated colors for those two thresholds.
+    int thresholdCount;
+    double *scoreThresholds;
+    struct rgbColor *thresholdColors;
+    Color **spectra;
+    char *legend;
     };
 
 
@@ -39,7 +41,7 @@ void heatmapAssignRowLabels(struct heatmap *h, char **rowLabels);
 void heatmapAssignColumnLabels(struct heatmap *h, char **rowLabels);
 /* Planned abstraction for assigning column labels in a heatmap */
 
-struct heatmap *heatmapFromLF(struct track *tg, struct linkedFeatures *lf);
+struct heatmap *heatmapForLF(struct track *tg, struct linkedFeatures *lf);
 /* This takes a linkedFeatures structure from a bigBed and builds a heatmap out
  * of it.  In the current setup, the heatmap values and labels are each stored
  * in a 1-D comma-separated matrix that we convert to a 2-D matrix using
@@ -52,9 +54,8 @@ void heatmapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg,
                          int x, int y, double scale, MgFont *font,
                          Color color, enum trackVisibility vis);
 
-void heatmapMakeSpectrum(struct heatmap *h, struct hvGfx *hvg, double lowScore, struct rgbColor *lowColor,
-        double midPoint, struct rgbColor *midColor, double highScore, struct rgbColor *highColor);
-/* Take high, low, and midpoints and associated colors, and create two spectrums (one for low scores, one for high)
+void heatmapMakeSpectrum(struct heatmap *h, struct hvGfx *hvg);
+/* Take the thresholds and associated colors, and create a spectrum for each pair of adjacent thresholds
  * that can be used to shade cells in the heatmap.
  */
 

@@ -80,6 +80,12 @@ char *freeTypeFontNames[] = {
 "Courier-Oblique",
 "Courier-BoldOblique",
 "ZapfChancery-MediumItalic",
+"Atkinson",
+"Atkinson-Bold",
+"Atkinson-Oblique",
+"Atkinson-BoldOblique",
+"Lexend",
+"Lexend-Bold",
 };
 
 char *freeTypeFontFiles[] = {
@@ -104,6 +110,12 @@ char *freeTypeFontFiles[] = {
 "n022023l.pfb",
 "n022024l.pfb",
 "z003034l.pfb",
+"AtkinsonHyperlegible-Regular.ttf",
+"AtkinsonHyperlegible-Bold.ttf",
+"AtkinsonHyperlegible-Italic.ttf",
+"AtkinsonHyperlegible-BoldItalic.ttf",
+"Lexend-Regular.ttf",
+"Lexend-Bold.ttf",
 };
 
 char *emptyStyles[] = {

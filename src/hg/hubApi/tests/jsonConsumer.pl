@@ -136,7 +136,7 @@ sub performRestAction($$$) {
 
   if(%{$parameters}) {
     my @params;
-    foreach my $key (keys %{$parameters}) {
+    foreach my $key (sort {$a cmp $b} keys %{$parameters}) {
       my $value = $parameters->{$key};
       push(@params, "$key=$value");
     }
@@ -220,15 +220,15 @@ sub topLevelKeys($) {
 sub checkError($$$) {
   my ($json, $endpoint, $expect) = @_;
   my $jsonReturn = performJsonAction($endpoint, "");
-#   printf "%s", $json->pretty->encode( $jsonReturn );
+#   printf "%s", $json->canonical()->pretty->encode( $jsonReturn );
   if (! defined($jsonReturn->{'error'}) ) {
      printf "ERROR: no error received from endpoint: '%s', received:\n", $endpoint;
-     printf "%s", $json->pretty->encode( $jsonReturn );
+     printf "%s", $json->canonical()->pretty->encode( $jsonReturn );
   } else {
      if ($jsonReturn->{'error'} ne "$expect '$endpoint'") {
 	printf "incorrect error received from endpoint '%s':\n\t'%s'\n", $endpoint, $jsonReturn->{'error'};
      }
-     printf "%s", $json->pretty->encode( $jsonReturn );
+     printf "%s", $json->canonical()->pretty->encode( $jsonReturn );
   }
 }
 
@@ -364,7 +364,7 @@ sub processEndPoint() {
      } else {
         $jsonReturn = performJsonAction($endpoint, \%parameters);
         $errReturn = 1 if (defined ($jsonReturn->{'error'}));
-        printf "%s", $json->pretty->encode( $jsonReturn );
+        printf "%s", $json->canonical()->pretty->encode( $jsonReturn );
      }
   } else {
     printf STDERR "ERROR: no endpoint given ?\n";
@@ -381,12 +381,14 @@ sub test0() {
 my $json = JSON->new;
 my $jsonReturn = {};
 
+# verify command processing can detected bad input
+# /list/noSubCommand
 verifyCommandProcessing();	# check 'command' and 'subCommand'
 
 $jsonReturn = performJsonAction("/list/publicHubs", "");
 
 # this prints everything out indented nicely:
-# printf "%s", $json->pretty->encode( $jsonReturn );
+# printf "%s", $json->canonical()->pretty->encode( $jsonReturn );
 
 # exit 255;
 # __END__

@@ -52,16 +52,13 @@ static boolean inited = FALSE;
 if (inited)
     return;
 
-if (trackHubDatabase(database))   // don't remap the names on assembly hubs
-    return;
-
 char *genbankDb = cfgOptionEnv("GENBANKDB", "genbankDb");
 char buffer[MYBUFSIZE];
 
 if (genbankDb == NULL)
     {
     // if there's no genbankDb specified, check to see if hgFixed has the table, else use the database
-    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlConnection *conn = hAllocConn("hgFixed");
     if (sqlTableExists(conn, "hgFixed.gbCdnaInfo"))
         genbankDb = "hgFixed";
     else 

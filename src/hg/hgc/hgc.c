@@ -2905,7 +2905,9 @@ void showGenePos(char *name, struct trackDb *tdb)
 {
 char *rootTable = tdb->table;
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct genePred *gpList = NULL, *gp = NULL;
 char table[HDB_MAX_TABLE_STRING];
 struct sqlResult *sr = NULL;
@@ -2913,7 +2915,7 @@ char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
 
-if (!hFindSplitTable(database, seqName, rootTable, table, sizeof table, NULL))
+if (!hFindSplitTable(db, seqName, rootTable, table, sizeof table, NULL))
     errAbort("showGenePos track %s not found", rootTable);
 sqlSafef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
@@ -2946,7 +2948,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     char *ensemblSource = NULL;
     if (sameString("ensGene", table))
 	{
-	if (hTableExists(database, "ensemblSource"))
+	if (hTableExists(db, "ensemblSource"))
 	    {
 	    sqlSafef(query, sizeof(query),
 		"select source from ensemblSource where name='%s'", name);
@@ -2971,7 +2973,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     /* if a gene class table exists, get gene class and print */
     if (classTable != NULL)
         {
-        if (hTableExists(database, classTable))
+        if (hTableExists(db, classTable))
            {
            sqlSafef(query, sizeof(query),
                 "select class from %s where name = \"%s\"", classTable, name);
@@ -3574,6 +3576,30 @@ for (;tdb != NULL; tdb = tdb->parent)
 return NULL;
 }
 
+static char *getTrackHtml(char *db, char *trackName)
+/* Grab HTML from trackDb in native database for quickLift tracks. */
+{
+char query[4096];
+
+sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
+struct trackDb *loadTrackDb(char *db, char *where);
+struct trackDb *tdb = loadTrackDb(db, query);
+
+char *html = tdb->html;
+if (isEmpty(tdb->html))
+    {
+    char *parent = trackDbSetting(tdb, "parent");
+    char *words[10];
+
+    chopLine(parent,words);
+    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
+    struct trackDb *tdb = loadTrackDb(db, query);
+
+    html = tdb->html;
+    }
+return html;
+}
+
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link
@@ -3581,6 +3607,11 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
+    char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+
+    if (liftDb)
+        tdb->html = getTrackHtml(liftDb, tdb->table);
+
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);
     printTrackUiLink(tdb);
@@ -5849,6 +5880,17 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 return fbList;
 }
 
+static struct featureBits *vcfLoadInterval(struct trackDb *tdb, int start, int end)
+{
+struct featureBits *fbList = NULL;
+if (sameString(tdb->type, "vcf") || sameString(tdb->type, "vcfPhasedTrio"))
+   doVcfDetailsExt(tdb, NULL, &fbList, start, end);
+else if (sameString(tdb->type, "vcfTabix"))
+   doVcfTabixDetailsExt(tdb, NULL, &fbList, start, end);
+return fbList;
+}
+
+
 void doGetDna3()
 /* Fetch DNA in extended color format */
 {
@@ -5899,6 +5941,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     ||  ct != NULL
     ||  (   tdbVisLimitedByAncestors(cart,tdb,TRUE,TRUE) != tvHide
         && forestHasUnderstandableTrack(database, tdb) ) )
+        
         {
         char buf[256];
         int r,g,b;
@@ -5942,7 +5985,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    struct bedFilter *bf;
 	    struct bed *bedList2, *ctBedList = NULL;
 	    AllocVar(bf);
-            if (ct->dbTrack)
+            if (ct->dbTrack && (!sameString(tdb->type, "vcf")))
                 {
                 struct bed *bed;
                 int fieldCount = ct->fieldCount;
@@ -5986,11 +6029,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 {
                 ctBedList = ct->bedList;
                 }
-	    bedList2 = bedFilterListInRange(ctBedList, bf, seqName, winStart,
+	    if (startsWith("vcf", tdb->type))
+                {
+		fbList = vcfLoadInterval(ct->tdb, winStart, winEnd);
+                }
+            else
+		{
+		bedList2 = bedFilterListInRange(ctBedList, bf, seqName, winStart,
 					    winEnd);
-	    fbList = fbFromBed(database, track, hti, bedList2, winStart, winEnd,
+		fbList = fbFromBed(database, track, hti, bedList2, winStart, winEnd,
 			       TRUE, FALSE);
-	    bedFreeList(&bedList2);
+		bedFreeList(&bedList2);
+		}
             if (!ct->bedList)
                 bedFreeList(&ctBedList);
 	    }
@@ -6008,7 +6058,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     && !dnaIgnoreTrack(tdbLeaf->table))
                         {
                         struct featureBits *fbLeafList;
-                        if (startsWith("big", tdbLeaf->type))
+			if (startsWith("vcf", tdbLeaf->type))
+			    fbLeafList = vcfLoadInterval(tdbLeaf, winStart, winEnd);
+                        else if (startsWith("big", tdbLeaf->type))
                             fbLeafList = getBigBedFbList(tdbLeaf, seqName, winStart, winEnd);
                         else
                             fbLeafList = fbGetRange(database, tdbLeaf->table, seqName, winStart, winEnd);
@@ -6020,7 +6072,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 }
             else
                 {
-                if (startsWith("big", tdb->type))
+                if (startsWith("vcf", tdb->type))
+                    fbList = vcfLoadInterval(tdb, winStart, winEnd);
+                else if (startsWith("big", tdb->type))
                     fbList = getBigBedFbList(tdb, seqName, winStart, winEnd);
                 else
                     fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
@@ -11016,7 +11070,11 @@ printTrackHtml(tdb);
 void printDecipherSnvsDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a DECIPHER entry. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL) 
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -11134,11 +11192,15 @@ printTrackHtml(tdb);
 void printDecipherCnvsDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a DECIPHER entry. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL) 
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn2 = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(db);
 char query2[256];
 struct sqlResult *sr2;
 char **row2;
@@ -11700,8 +11762,10 @@ printf("</div>"); // #omimText
 static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM Class 3 Gene entry. */
 {
-struct sqlConnection *conn  = hAllocConn(database);
-struct sqlConnection *conn2 = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn  = hAllocConn(db);
+struct sqlConnection *conn2 = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -11927,7 +11991,9 @@ printTrackHtml(tdb);
 void printOmimAvSnpDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM AvSnp entry. */
 {
-struct sqlConnection *conn  = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn  = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -18632,7 +18698,7 @@ if (! ranOffEnd)
 return base;
 }
 
-char *getSymbolForGeneName(char *geneTable, char *geneId)
+char *getSymbolForGeneName(char *db, char *geneTable, char *geneId)
 /* Given a gene track and gene accession, look up the symbol if we know where to look
  * and if we find it, return a string with both symbol and acc. */
 {
@@ -18641,7 +18707,7 @@ char buf[256];
 char *sym = NULL;
 if (sameString(geneTable, "knownGene") || sameString(geneTable, "refGene"))
     {
-    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlConnection *conn = hAllocConn(db);
     char query[256];
     query[0] = '\0';
     if (sameString(geneTable, "knownGene"))
@@ -18812,7 +18878,7 @@ for (j = 0;  j < alleleCount;  j++)
     }
 }
 
-void printSnp125FunctionInGene(struct snp125 *snp, char *geneTable, char *geneTrack,
+void printSnp125FunctionInGene(char *db, struct snp125 *snp, char *geneTable, char *geneTrack,
 			       struct genePred *gene)
 /* Given a SNP and a gene that overlaps it, say where in the gene it overlaps
  * and if in CDS, say what effect the coding alleles have. */
@@ -18820,7 +18886,7 @@ void printSnp125FunctionInGene(struct snp125 *snp, char *geneTable, char *geneTr
 int snpStart = snp->chromStart, snpEnd = snp->chromEnd;
 int cdsStart = gene->cdsStart, cdsEnd = gene->cdsEnd;
 boolean geneIsRc = sameString(gene->strand, "-");
-char *geneName = getSymbolForGeneName(geneTable, gene->name);
+char *geneName = getSymbolForGeneName(db, geneTable, gene->name);
 int i, iStart = 0, iEnd = gene->exonCount, iIncr = 1;
 if (geneIsRc)
     { iStart = gene->exonCount - 1;  iEnd = -1;  iIncr = -1; }
@@ -18892,7 +18958,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
-    char *geneName = getSymbolForGeneName(geneTable, gene);
+    char *geneName = getSymbolForGeneName(sqlGetDatabase(conn), geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
     boolean isRc = strand[0] == '-';
@@ -18910,7 +18976,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
-    char *geneName = getSymbolForGeneName(geneTable, gene);
+    char *geneName = getSymbolForGeneName(sqlGetDatabase(conn), geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
     boolean isRc = strand[0] == '-';
@@ -18933,7 +18999,7 @@ static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneT
 struct genePred *gpList = NULL;
 boolean hasBin;
 struct sqlResult *sr = hRangeQuery(conn, geneTable, chrom, start, end, NULL, &hasBin);
-struct sqlConnection *conn2 = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(sqlGetDatabase(conn));
 boolean hasFrames = (sqlFieldIndex(conn2, geneTable, "exonFrames") == hasBin + 14);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -18959,9 +19025,9 @@ hFreeConn(&conn2);
 return gpList;
 }
 
-void printSnp125FunctionShared(struct snp125 *snp, struct slName *geneTracks)
+void printSnp125FunctionShared(char *db, struct snp125 *snp, struct slName *geneTracks)
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *gt;
 boolean first = TRUE;
 for (gt = geneTracks;  gt != NULL;  gt = gt->next)
@@ -18982,7 +19048,7 @@ for (gt = geneTracks;  gt != NULL;  gt = gt->next)
 	char *shortLabel = sqlQuickQuery(conn, query, buf, sizeof(buf)-1);
 	if (shortLabel == NULL) shortLabel = gt->name;
 	for (gene = geneList;  gene != NULL;  gene = gene->next)
-	    printSnp125FunctionInGene(snp, gt->name, shortLabel, gene);
+	    printSnp125FunctionInGene(db, snp, gt->name, shortLabel, gene);
 	if (geneList == NULL)
 	    printSnp125NearGenes(conn, snp, gt->name, shortLabel);
 	first = FALSE;
@@ -19008,7 +19074,11 @@ if (geneTracks == NULL && !cartListVarExists(cart, varName))
 	return;
     }
 
-printSnp125FunctionShared(snp, geneTracks);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    db = liftDb;
+printSnp125FunctionShared(db, snp, geneTracks);
 }
 
 void printSnp153Function(struct trackDb *tdb, struct snp125 *snp)
@@ -19022,7 +19092,11 @@ struct trackDb *correctTdb = tdbOrAncestorByName(tdb, tdb->track);
 
 struct slName *defaultGeneTracks = slNameListFromComma(trackDbSetting(tdb, "defaultGeneTracks"));
 
-struct trackDb *geneTdbList = snp125FetchGeneTracks(database, cart);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    db = liftDb;
+struct trackDb *geneTdbList = snp125FetchGeneTracks(db, cart);
 struct trackDb *gTdb;
 for (gTdb = geneTdbList; gTdb; gTdb=gTdb->next)
     {
@@ -19037,7 +19111,7 @@ for (gTdb = geneTdbList; gTdb; gTdb=gTdb->next)
     }
 
 if (geneTracks)
-    printSnp125FunctionShared(snp, geneTracks);
+    printSnp125FunctionShared(db, snp, geneTracks);
 }
 
 char *dbSnpFuncFromInt(unsigned char funcCode)
@@ -19072,14 +19146,14 @@ switch (funcCode)
 
 }
 
-void printSnp125CodingAnnotations(struct trackDb *tdb, struct snp125 *snp)
+void printSnp125CodingAnnotations(char *db, struct trackDb *tdb, struct snp125 *snp)
 /* If tdb specifies extra table(s) that contain protein-coding annotations,
  * show the effects of SNP on transcript coding sequences. */
 {
 char *tables = trackDbSetting(tdb, "codingAnnotations");
 if (isEmpty(tables))
     return;
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *tbl, *tableList = slNameListFromString(tables, ',');
 struct dyString *query = dyStringNew(0);
 for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
@@ -19120,7 +19194,7 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 		continue;
 	    char *txName = anno->transcript;
 	    if (startsWith("NM_", anno->transcript))
-		txName = getSymbolForGeneName("refGene", anno->transcript);
+		txName = getSymbolForGeneName(db, "refGene", anno->transcript);
 	    char *func = dbSnpFuncFromInt(anno->funcCodes[i]);
 	    printf("%s: %s ", txName, snpMisoLinkFromFunc(func));
 	    if (sameString(func, "frameshift") || sameString(func, "cds-indel"))
@@ -19252,7 +19326,11 @@ if (version >= 132)
     printSnp132ExtraColumns(tdb, snp);
 else
     printf("</TABLE>\n");
-printSnp125CodingAnnotations(tdb, snp125);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    db = liftDb;
+printSnp125CodingAnnotations(db, tdb, snp125);
 writeSnpExceptionWithVersion(tdb, snp, version);
 printSnp125Function(tdb, snp125);
 }
@@ -27776,7 +27854,7 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (startsWith("pubs", table))
+else if (startsWith("pubs", trackHubSkipHubName(table)))
     {
     doPubsDetails(tdb, item);
     }

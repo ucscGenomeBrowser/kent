@@ -16,7 +16,7 @@ shortLabel Multiz 11-way
 longLabel Multiz Alignment on 11 primate species
 subGroup1 view Views align=Multiz_Alignments
 dragAndDrop subTracks
-visibility full
+visibility hide
 type bed 4
 group compGeno
 html primates11way
@@ -57,7 +57,7 @@ shortLabel Cactus 11-way
 longLabel Cactus Alignment on 11 primate species
 subGroup1 view Views align=Cactus_Alignments
 dragAndDrop subTracks
-visibility full
+visibility hide
 type bed 4
 group compGeno
 html primates11way
@@ -95,7 +95,7 @@ compositeTrack on
 shortLabel fastGa 11-way
 longLabel fastGa pair-wise alignments on 11 primate species
 dragAndDrop subTracks
-visibility full
+visibility hide
 type bed 4
 group compGeno
 html primates11way

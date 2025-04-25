@@ -11,6 +11,7 @@
 #include "htslib/bgzf.h"
 #include "soTerm.h"
 #include "chromAlias.h"
+#include "quickLift.h"
 
 static struct dbSnpDetails *getDetails(struct bigDbSnp *bds, char *detailsFileOrUrl)
 /* Seek to the offset for this variant in detailsFileOrUrl, read the line and load as
@@ -381,7 +382,13 @@ if (start == end)
     ivEnd++;
     }
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bbList = NULL;
+if (quickLiftFile)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, ivStart, ivEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 struct bigBedInterval *bb;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {

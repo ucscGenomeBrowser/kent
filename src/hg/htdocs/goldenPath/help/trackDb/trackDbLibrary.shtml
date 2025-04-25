@@ -235,8 +235,9 @@
     <P>Specifies the track's "short label", which is used in a
     number of places in the Browser to identify the track.  For
     example, the short label is displayed alongside the track in the Browser image.
-    This label must be brief and
-    is limited to 17 printable characters.</P>
+    This label must be brief and is limited to 17 printable characters.
+    Some <a href="../../../FAQ/FAQcustom.html#custom13">special characters</a>
+    are allowed in the shortLabel.</P>
     <P><B>Example:</B>
     </P>
     <pre>   shortLabel Human mRNAs</pre>
@@ -250,7 +251,9 @@
     the long label is displayed above the track's data in the Browser image.
     This label should be descriptive enough to
     allow users to uniquely identify the track within the Browser.  It
-    is limited to 76 printable characters.</P>
+    is limited to 76 printable characters.
+    Some <a href="../../../FAQ/FAQcustom.html#custom13">special characters</a>
+    are allowed in the longLabel.</P>
     <P><B>Example:</B></P>
     <pre>   longLabel Human mRNAs from GenBank</pre>
 </DIV>
@@ -2097,7 +2100,7 @@ There are no extra options that can appear on the type hic line.
     <P><B>Example:</B></P>
     <pre>   maxWindowCoverage 10000000</pre>
     <p>Browser images that show more than 10,000,000 bases will result in the track data
-    being displayed as a density coverage graph</code>.</p>
+    being displayed as a density coverage graph.</p>
 </DIV>
 
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
@@ -5356,6 +5359,14 @@ For the complete bigInteract format definitions please see the
 <DIV class="interactMultiRegion"><span class="types bigInteract"></span>
 <div class="format"><code>interactMultiRegion &lt;true|padding&gt;</code></div>
     <P>This setting causes a link to appear on the details page that appears when an interaction is clicked on. This link will generate a &quot;multi-region&quot; Genome Browser view of the interaction (or interaction cluster) endpoints. Use padding to specify non-default padding at the edges of each region.  The default value is 200 base pairs.
+    </P>
+</DIV>
+
+<DIV class="detailsBoxesEnabled"><span class="types bigInteract"></span>
+<div class="format"><code>detailsBoxesEnabled &lt;true|false&gt;</code></div>
+    <P>This setting controls the default behavior for suppressing the "box" links to hgc details pages that
+appear on the lines connecting interacting regions.  Useful for generating figures without those markers.
+The default value is true - set it to false to hide the boxes.  It can still be overridden in the UI for the track.
     </P>
 </DIV>
 

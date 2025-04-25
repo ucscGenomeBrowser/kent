@@ -331,6 +331,7 @@ negateValues wigMaf bigWig bedGraph wig
 nextExonText *
 nextItemButton *
 noColorTag bam
+noDetailsPage interact bigInteract
 noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract

@@ -22,6 +22,7 @@
 #define TRACKHUB_H
 
 #include "dystring.h"
+#include "hgFind.h"
 
 #define MAX_HUB_TRACKDB_FILE_SIZE    256*1024*1024
 #define MAX_HUB_GROUP_FILE_SIZE     16*1024*1024
@@ -236,10 +237,13 @@ boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **
 struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
 /* Get the genome structure for an undecorated genome name. */
 
-char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy);
+char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy, struct trackDb **badList);
 /* Build a track hub using trackDb and the cart. */
 
 struct grp *readGroupRa(char *groupFileName);
 /* Read in the ra file that describes the groups in an assembly hub. */
+
+struct trackDb *trackHubAddTracksGenome(struct trackHubGenome *hubGenome);
+/* Load up stuff from data hub and return list. */
 #endif /* TRACKHUB_H */
 

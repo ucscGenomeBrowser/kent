@@ -444,11 +444,13 @@ char *ignoredFormats[] = {
 	"html",
 	"csv",
 	"tsv",
+        "txt",
 	"pdf",
 	"png",
 	"fasta",
         "rds",
         "h5ad",
+        "xlsx",
 	"unknown",
 	};
 

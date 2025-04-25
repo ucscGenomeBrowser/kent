@@ -265,3 +265,105 @@ TMPDIR=/dev/shm
     # 2607952215 bases of 2893250291 (90.139%) in intersection
 
 ##############################################################################
+# LASTZ Rhesus RheMac10 vs. Cow BosTau9
+#    (DONE - 2025-03-23 - mspeir)
+
+    mkdir /hive/data/genomes/rheMac10/bed/lastzBosTau9.2025-03-23
+    cd /hive/data/genomes/rheMac10/bed/lastzBosTau9.2025-03-23
+
+    printf '# Cow BosTau9 vs. Rhesus RheMac10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Rhesus  rheMac10
+SEQ1_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ1_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Cow  bosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/rheMac10/bed/lastzBosTau9.2025-03-23
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	796m10.530s
+
+    sed -e 's/^/    # /;' fb.rheMac10.chainBosTau9Link.txt
+    # 1345771048 bases of 2936892733 (45.823%) in intersection
+    sed -e 's/^/    # /;' fb.rheMac10.chainSynBosTau9Link.txt
+    # 1293982344 bases of 2936892733 (44.060%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        rheMac10 bosTau9) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	229m21.039s
+
+    sed -e 's/^/    # /;' fb.rheMac10.chainRBest.BosTau9.txt
+    # 1282431413 bases of 2936892733 (43.666%) in intersection
+
+##############################################################################
+# LASTZ Rhesus RheMac10 vs. Horse EquCab3
+#    (DONE - 2025-03-23 - mspeir)
+
+    mkdir /hive/data/genomes/rheMac10/bed/lastzEquCab3.2025-03-23
+    cd /hive/data/genomes/rheMac10/bed/lastzEquCab3.2025-03-23
+
+    printf '# Horse EquCab3 vs. Rhesus RheMac10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Rhesus  rheMac10
+SEQ1_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ1_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Horse  equCab3
+SEQ2_DIR=/hive/data/genomes/equCab3/equCab3.2bit
+SEQ2_LEN=/hive/data/genomes/equCab3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/rheMac10/bed/lastzEquCab3.2025-03-23
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	757m43.917s
+
+    sed -e 's/^/    # /;' fb.rheMac10.chainEquCab3Link.txt
+    # 1631389178 bases of 2936892733 (55.548%) in intersection
+    sed -e 's/^/    # /;' fb.rheMac10.chainSynEquCab3Link.txt
+    # 1576810063 bases of 2936892733 (53.690%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        rheMac10 equCab3) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	230m53.590s
+
+    sed -e 's/^/    # /;' fb.rheMac10.chainRBest.EquCab3.txt
+    # 1553000153 bases of 2936892733 (52.879%) in intersection
+
+##############################################################################

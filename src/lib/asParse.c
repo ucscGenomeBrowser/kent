@@ -202,7 +202,9 @@ if (isdigit(tkz->string[0]))
     col->fixedSize = atoi(tkz->string);
     tokenizerMustHaveNext(tkz);
     }
-else if (isalpha(tkz->string[0]))
+else if (isalpha(tkz->string[0]) ||
+        (strlen(tkz->string)>1 && tkz->string[0] == '_' && isalpha(tkz->string[1])))
+        // variable names may start with an underscore now
     {
 #ifdef OLD
     if (obj->isSimple)

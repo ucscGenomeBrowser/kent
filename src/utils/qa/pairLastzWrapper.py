@@ -101,9 +101,9 @@ def getClade(assembly):
         if db_edit in primates:
             clade='primate'
         else:
-            db = bash("hgsql -e \"select genome from dbDb where name='"+assembly+"'\G\" hgcentraltest | grep  genome | cut -c 9-")
+            db = bash("hgsql -e \"select genome from dbDb where name='"+assembly+"'\\G\" hgcentraltest | grep  genome | cut -c 9-")
             db = str(db)[1:-1]
-            db = bash("hgsql -e \"select clade from genomeClade where genome="+db+"\G\" hgcentraltest | grep  clade | cut -c 8-")
+            db = bash("hgsql -e \"select clade from genomeClade where genome="+db+"\\G\" hgcentraltest | grep  clade | cut -c 8-")
             db = str(db)[2:-2]
             if db in validClades:
                 clade=db

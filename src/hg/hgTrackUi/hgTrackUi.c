@@ -2849,6 +2849,10 @@ void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack
 /* Draw track specific parts of UI. */
 {
 char *track = tdb->track;
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL) 
+    db = liftDb;
 // Ideally check cfgTypeFromTdb()/cfgByCfgType() first, but with all these special cases already in
 //    place, lets be cautious at this time.
 // NOTE: Developer, please try to use cfgTypeFromTdb()/cfgByCfgType().
@@ -3014,7 +3018,7 @@ else if (tdb->type != NULL)
     eCfgType cType = cfgTypeFromTdb(tdb,FALSE);
     if (cType != cfgNone)
         {
-        cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
+        cfgByCfgType(cType,db, cart, tdb,tdb->track, NULL, boxed);
         if (startsWith("gtexGene", track))
             gtexGeneUi(cart, tdb, tdb->track, NULL, TRUE);
         else if (startsWith("gtexEqtlCluster", track))
@@ -3034,9 +3038,9 @@ else if (tdb->type != NULL)
     else if (startsWithWord("array",tdb->type)) // not quite the same as "expRatio" (custom tracks)
         expRatioCtUi(tdb);
     else if (startsWithWord("factorSource",tdb->type))
-        factorSourceUi(database,tdb);
+        factorSourceUi(db,tdb);
     else if (startsWithWord("bigBed",tdb->type))
-        labelCfgUi(database, cart, tdb, tdb->track);
+        labelCfgUi(db, cart, tdb, tdb->track);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
@@ -3045,10 +3049,10 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     // but almost certainly have additional controls
     boolean isLogo = (trackDbSetting(tdb, "logo") != NULL);
     if (tdbIsComposite(tdb) && !isLogo)  // for the moment generalizing this to include other containers...
-        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
+        hCompositeUi(db, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
-    extraUiLinks(database, tdb, cart);
+    extraUiLinks(db, tdb, cart);
     }
 }
 
@@ -3265,8 +3269,8 @@ if (tdbIsContainer(tdb))
 
 /* track configuration form */
 
-printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
-       hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
+printf("<FORM ACTION=\"%s?hgsid=%s&db=%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
+       hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 if (sameWord(tdb->track,"ensGene"))
     {

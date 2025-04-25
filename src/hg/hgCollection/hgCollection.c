@@ -19,6 +19,7 @@
 #include "jsonParse.h"
 #include "customComposite.h"
 #include "stdlib.h"
+#include "wikiLink.h"
 
 /* Tool tips */
 #define COLLECTION_TITLE  "Double-click to edit name and color"
@@ -1001,6 +1002,11 @@ fclose(f);
 static void doMiddle(struct cart *cart)
 /* Set up globals and make web page */
 {
+char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+
+if (userName == NULL)
+    errAbort("You must be logged in to edit collections. Visit our <A HREF=\"hgLogin?hgLogin.do.displayLoginPage=1\">login page.</A?");
+
 char *db;
 char *genome;
 getDbAndGenome(cart, &db, &genome, oldVars);

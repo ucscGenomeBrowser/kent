@@ -1520,6 +1520,41 @@ if (fd >= 0)
 return hubName;
 }
 
+static char *vettedTracks[] =
+/* tracks that have been tested with quickLift */
+{
+"decipherSnvs",
+"omimLocation",
+"omimAvSnp",
+"ncbiRefSeq",
+"clinvar",
+"clinvarSubLolly",
+"pubsBlat",
+"pubsMarkerBand",
+"pubsMarkerSnp",
+"pubsMarkerGene",
+};
+
+static boolean isVetted(char *track)
+/* Is this a track that's been tested with quickLift?  If not we don't want to do the special name handling on the track. */
+{
+static bool inited = FALSE;
+static struct hash *vettedHash = NULL;
+
+if (!inited)
+    {
+    vettedHash = newHash(10);
+
+    int ii;
+    int len = sizeof(vettedTracks) / sizeof(char *);
+
+    for(ii = 0; ii < len; ii++)
+        hashStore(vettedHash, vettedTracks[ii]);
+    }
+
+return hashLookup(vettedHash, track) != NULL;
+}
+
 static void dumpTdbAndChildren(struct dyString *dy, struct trackDb *tdb)
 /* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
 {
@@ -1540,7 +1575,10 @@ if (tdb->subtracks)
     {
     for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
         {
-        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
+        char *track =  trackHubSkipHubName(tdb->track);
+        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\n", track);
+        if (!isVetted(track))
+            dyStringPrintf(dy, "avoidHandler on\n");
         dumpTdbAndChildren(dy, tdb);
         }
     }
@@ -1608,19 +1646,31 @@ struct dyString *dy;
 // add a note that the name based handler shouldn't be used on this track
 // add a note that this is a quickLifted track so the browser will accept tracks that aren't big*
 dy = dyStringNew(200);
-dyStringPrintf(dy, "track %s\nquickLifted on\navoidHandler on\n", trackHubSkipHubName(tdb->track));
+char *track =  trackHubSkipHubName(tdb->track);
+dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
+
+if (!isVetted(track))
+    dyStringPrintf(dy, "avoidHandler on\n");
     
 dumpTdbAndChildren(dy, tdb);
 
 return dy;
 }
 
-static boolean validateOneTdb(char *db, struct trackDb *tdb)
+static boolean validateOneTdb(char *db, struct trackDb *tdb, struct trackDb **badList)
+/* Make sure the tdb is a track type we grok. */
 {
 if (!( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
+       startsWith("bigDbSnp", tdb->type) || \
+       startsWith("bigGenePred", tdb->type) || \
+       startsWith("gvf", tdb->type) || \
+       startsWith("genePred", tdb->type) || \
+       startsWith("narrowPeak", tdb->type) || \
+       startsWith("bigLolly", tdb->type) || \
        startsWith("bed ", tdb->type)))
     {
+    printf("%s %s<BR>\n",tdb->track,tdb->type);
     return FALSE;
     }
 
@@ -1641,7 +1691,7 @@ if (startsWith("bigBed", tdb->type) || \
 return TRUE;
 }
 
-static struct trackDb * validateTdbChildren(char *db, struct trackDb *tdb)
+static struct trackDb * validateTdbChildren(struct cart *cart, char *db, struct trackDb *tdb, struct trackDb **badList)
 /* return a list of the children that can be quick lifted */
 {
 struct trackDb *validTdbs = NULL;
@@ -1654,7 +1704,7 @@ if (tdb->subtracks)  // this is a view, descend again
     for (; view; view = nextTdb)
         {
         nextTdb = view->next;
-        view->subtracks = validateTdbChildren(db,view->subtracks);
+        view->subtracks = validateTdbChildren(cart, db,view->subtracks, badList);
 
         if (view->subtracks != NULL)
             {
@@ -1669,10 +1719,10 @@ else
     for(; tdb; tdb = nextTdb)
         {
         nextTdb = tdb->next;
-        if (validateOneTdb(db, tdb))
+        if (validateOneTdb(db, tdb, badList))
             {
             slAddHead(&validTdbs, tdb);
-            if (tdb->visibility)
+            if (isSubtrackVisible(cart, tdb))
                 count++;
             }
         }
@@ -1683,23 +1733,23 @@ if (count)
 return NULL;
 }
 
-static boolean validateTdb(char *db, struct trackDb *tdb)
+static boolean validateTdb(struct cart *cart, char *db, struct trackDb *tdb, struct trackDb **badList)
 // make sure we only output track types that can
 // be quickLifted.  Return true if we any tracks survive
 {
 if (tdb->subtracks)
     {
-    tdb->subtracks = validateTdbChildren(db, tdb->subtracks);
+    tdb->subtracks = validateTdbChildren(cart, db, tdb->subtracks, badList);
 
     if (tdb->subtracks == NULL)
         return FALSE;
     return TRUE;
     }
 
-return validateOneTdb(db, tdb);
+return validateOneTdb(db, tdb, badList);
 }
 
-static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy)
+static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList)
 /* walk tree looking for visible tracks. */
 {
 for(; tdb; tdb = tdb->next)
@@ -1725,7 +1775,7 @@ for(; tdb; tdb = tdb->next)
         isVisible = TRUE;
         }
 
-    if (isVisible && validateTdb(db, tdb))
+    if (isVisible && validateTdb(cart, db, tdb, badList))
         {
         dyStringPrintf(visDy, "&%s=%s", trackHubSkipHubName(tdb->track),hStringFromTv(tdb->visibility));
         //if (hashLookup(tdb->settingsHash, "customized") == NULL)
@@ -1757,7 +1807,7 @@ for(; tdb; tdb = tdb->next)
     }
 }
 
-char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy)
+char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy, struct trackDb **badList)
 /* Build a track hub using trackDb and the cart. */
 {
 struct  trackDb *tdbList;
@@ -1769,7 +1819,7 @@ char *filename = getHubName(cart, db);
 FILE *f = mustOpen(filename, "a");
 chmod(filename, 0666);
 
-walkTree(f, db, cart, tdbList, visDy);
+walkTree(f, db, cart, tdbList, visDy, badList);
 fclose(f);
 
 return cloneString(filename);
@@ -1779,4 +1829,46 @@ struct grp *trackHubGetGrps()
 /* Get the groups defined by attached track hubs. */
 {
 return trackHubGrps;
+}
+
+struct trackDb *trackHubAddTracksGenome(struct trackHubGenome *hubGenome)
+/* Load up stuff from data hub and return list. */
+{
+/* Load trackDb.ra file and make it into proper trackDb tree */
+struct trackDb *tdbList = NULL;
+
+if (hubGenome != NULL)
+    {
+    boolean doCache = trackDbCacheOn();
+
+    if (doCache)
+        {
+        // we have to open the trackDb file to get the udc cache to check for an update
+        struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
+        if (checkCache != NULL)
+            {
+            time_t time = udcUpdateTime(checkCache);
+            udcFileClose(&checkCache);
+
+            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
+
+            if (cacheTdb != NULL)
+                return cacheTdb;
+            }
+
+        memCheckPoint(); // we want to know how much memory is used to build the tdbList
+        }
+
+    struct dyString *incFiles = newDyString(4096);
+    boolean foundFirstGenome = FALSE;
+    tdbList = trackHubTracksForGenome(hubGenome->trackHub, hubGenome, incFiles, &foundFirstGenome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, hubGenome->name);
+    trackDbPrioritizeContainerItems(tdbList);
+    trackHubPolishTrackNames(hubGenome->trackHub, tdbList);
+
+    if (doCache)
+        trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
+    }
+return tdbList;
 }

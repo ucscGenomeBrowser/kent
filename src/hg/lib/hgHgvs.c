@@ -362,6 +362,29 @@ if (pHgvs && *pHgvs)
 //                                                  9...        1-based end position
 //                                                      10....  change description
 
+// Sometimes users give an ENST_ accession, but a protein change.
+#define pseudoHgvsENSPDotSubstExp "^" ensTranscriptExp maybePDot hgvsAminoAcidSubstExp "\\)?"
+// substring numbering:
+//      0.....................................  whole matching string
+//      1.....................................  ENS transcript ID including optional lift suffix
+//         2...                                 optional non-human species code e.g. MUS for mouse
+//                                   3.....                     original sequence
+//                                           4......            1-based position
+//                                                     5......  replacement sequence
+
+#define pseudoHgvsENSPDotRangeExp "^" ensTranscriptExp maybePDot hgvsAaRangeExp "\\)?"
+
+// substring numbering:
+//      0.....................................  whole matching string
+//      1.....................................  ENS transcript ID including optional lift suffix
+//         2...                                 optional non-human species code e.g. MUS for mouse
+//                 3...                         original start AA
+//                       4...                   1-based start position
+//                           5..........        optional range sep and AA+pos
+//                             6...             original end AA
+//                                  7...        1-based end position
+//                                       8....  change description
+
 // Common: gene symbol followed by space and/or punctuation followed by protein change
 #define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 //      0.....................................................  whole matching string
@@ -756,6 +779,25 @@ hFreeConn(&conn);
 return npAcc;
 }
 
+static char *enspForEnst(char *db, char *enstAcc)
+/* Given an ENST_ accession, look up and return its ENSP_ accession; if not found return NULL. */
+{
+if (trackHubDatabase(db))
+    return NULL;
+char *txAcc = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *attrsTable = hFindLatestGencodeTableConn(conn, "Attrs");
+if (attrsTable && hHasField(db, attrsTable, "proteinId"))
+    {
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select proteinId from %s where transcriptId = '%s'",
+             attrsTable, enstAcc);
+    txAcc = sqlQuickString(conn, query);
+    }
+hFreeConn(&conn);
+return txAcc;
+}
+
 static char *lrgProteinToTx(char *db, char *protAcc)
 /* Return the LRG_ transcript accession for protAcc.  Each LRG_NpM has a corresponding LRG_NtM. */
 {
@@ -928,7 +970,29 @@ struct hgvsVariant *hgvs = NULL;
 regmatch_t substrs[11];
 int geneSymbolIx = 1;
 boolean isSubst;
-if ((isSubst = regexMatchSubstr(term, pseudoHgvsNMPDotSubstExp,
+if ((isSubst = regexMatchSubstr(term, pseudoHgvsENSPDotSubstExp,
+                                     substrs, ArraySize(substrs))) ||
+         regexMatchSubstr(term, pseudoHgvsENSPDotRangeExp, substrs, ArraySize(substrs)))
+    {
+    // User gave an ENST_ accession but a protein change -- swap in the right ENSP_.
+    int ensAccIx = 1;
+    int len = substrs[ensAccIx].rm_eo - substrs[ensAccIx].rm_so;
+    char ensAcc[len+1];
+    safencpy(ensAcc, sizeof(ensAcc), term, len);
+    char *enspAcc = enspForEnst(db, ensAcc);
+    if (isNotEmpty(enspAcc))
+        {
+        // Make it a real HGVS term with the ENSP and pass that on to the usual parser.
+        int descStartIx = 3;
+        char *description = term + substrs[descStartIx].rm_so;
+        struct dyString *enspTerm;
+        enspTerm = dyStringCreate("%s:p.%s", enspAcc, description);
+        hgvs = hgvsParseTerm(enspTerm->string);
+        dyStringFree(&enspTerm);
+        freeMem(enspAcc);
+        }
+    }
+else if ((isSubst = regexMatchSubstr(term, pseudoHgvsNMPDotSubstExp,
                                      substrs, ArraySize(substrs))) ||
          regexMatchSubstr(term, pseudoHgvsNMPDotRangeExp, substrs, ArraySize(substrs)))
     {

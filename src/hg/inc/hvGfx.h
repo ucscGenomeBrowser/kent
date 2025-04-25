@@ -269,7 +269,12 @@ INLINE int hvGfxCurve(struct hvGfx *hvg, int x1, int y1, int x2, int y2, int x3,
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  * Author: Zingl Alois, 8/22/2016 */
 {
-x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
+x1 = hvGfxAdjXX(hvg, x1, &x3, &y1, &y3);
+
+// also have to manually adjust the x value of the middle coordinate
+// This is just like the transformation being done in reverseIntRange for x1 and x3
+if (hvg->rc)
+    x2 = hvg->width - x2;
 return vgCurve(hvg->vg, x1, y1, x2, y2, x3, y3, color, isDashed);
 }
 

@@ -730,7 +730,6 @@ if (issueBotWarning)
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
-getGenomeSettings();
 if (cartVarExists(cart, hggDoKgMethod))
     doKgMethod();
 else if (cartVarExists(cart, hggDoTxInfoDescription))
@@ -770,10 +769,20 @@ else
 
     globalTdb = tdb;
     char *externalDb = trackDbSetting(tdb, "externalDb");
+    char *liftDb = trackDbSetting(tdb, "quickLiftDb");
     if (externalDb != NULL)
         conn = hAllocConn(externalDb);
     else
+        {
+        if (liftDb)
+            {
+            database = liftDb;
+            genome = hGenome(database);
+            }
         conn = hAllocConn(database);
+        }
+    getGenomeSettings();
+
     curGeneId = findGeneId(conn, geneName);
     getGenePosition(conn);
     curGenePred = getCurGenePred(conn);

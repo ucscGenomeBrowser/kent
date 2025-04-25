@@ -10,6 +10,7 @@
 #include "trackHub.h"   
 #include "clinvarSubLolly.h"   
 #include "chromAlias.h"
+#include "quickLift.h"
 
 char *statusByScore[] =
 {
@@ -83,32 +84,53 @@ char *chrom = cartString(cart, "c");
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+struct bigBedInterval *bb, *bbList; 
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+if (quickLiftFile)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, start, end, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
-struct bigBedInterval *bb;
 char *fields[bbi->fieldCount];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    if (!(bb->start == start && bb->end == end))
+    struct bed *bed = NULL;;
+    char startBuf[16], endBuf[16];
+    struct bed tempBed;
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields, bbi->fieldCount);
+    if (quickLiftFile)
+        bed = quickLiftIntervalsToBed(bbi, chainHash, bb);
+    else
+        {
+        tempBed.chrom = chrom;
+        tempBed.chromStart = bb->start;
+        tempBed.chromEnd = bb->end;
+        tempBed.name = fields[3];
+        bed = &tempBed;
+        }
+
+    if (!(bed->chromStart == start && bed->chromEnd == end))
 	continue;
 
     // our names are unique
-    char *name = cloneFirstWordByDelimiterNoSkip(bb->rest, '\t');
+    char *name = bed->name;
     boolean match = (isEmpty(name) && isEmpty(item)) || sameOk(name, item);
     if (!match)
         continue;
 
-    char startBuf[16], endBuf[16];
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields, bbi->fieldCount);
     int numSubs = chopString(fields[12], ",", NULL, 0);
 
-    printPos(chrom, bb->start, bb->end, NULL, FALSE, name);
+    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, FALSE, name);
+    
+    char chromBuf[2048];
+    bbiCachedChromLookup(bbi, bb->chromId, 0, chromBuf, sizeof chromBuf);
     // print all the submissions that match the clinical significance of the
     // bead that the user clicked on.
-    printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, FALSE);
+    printSubmissions(tdb,  chromBuf, bb->start, bb->end, atoi(fields[4]), numSubs, FALSE);
 
-    // no print the ones with a different clinical status
-    printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, TRUE);
+    // now print the ones with a different clinical status
+    printSubmissions(tdb,  chromBuf, bb->start, bb->end, atoi(fields[4]), numSubs, TRUE);
 
     // we found what we wanted
     break;

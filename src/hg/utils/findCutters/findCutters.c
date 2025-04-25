@@ -101,7 +101,7 @@ void writeHashToFile(struct hash *countHash, char *outputFile)
 {
 FILE *f = mustOpen(outputFile, "w");
 struct hashEl *el, *list = hashElListHash(countHash);
-slNameSort((struct slName **)&list);
+slSort(&list, hashElCmp);
 for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s\t%d\n", el->name, ptToInt(el->val));
 carefulClose(&f);

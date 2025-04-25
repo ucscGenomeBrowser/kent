@@ -102,13 +102,14 @@ bash('echo This cronjob pulls out GB stats over the last month, across all RR ma
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo List of db usage, hubs are aggregated across mirrors to a single count: >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
-bash("echo db$'\\t'dbUse >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
+bash("echo db$'\\t'dbUse$'\\t'percentUse >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 dbCountsRaw = open('/hive/users/'+user+'/ErrorLogsOutput/dbCounts.tsv','r')
 dbCountsCombined = open('/hive/users/'+user+'/ErrorLogsOutput/dbCountsCombinedWithCuratedHubs.tsv','w')
 
 dbsCounts = {}
+totalCount = 0
 for line in dbCountsRaw:
     line = line.rstrip().split("\t")
     if line[0].startswith("hub"):
@@ -116,19 +117,20 @@ for line in dbCountsRaw:
     else:
         db = line[0]
     count = int(line[1])
+    totalCount = totalCount + count
     if db not in dbsCounts:
         dbsCounts[db] = count
     else:
         dbsCounts[db] = dbsCounts[db] + count
 
 for key in dbsCounts:
-    dbCountsCombined.write(key+"\t"+str(dbsCounts[key])+"\n")
+    dbCountsCombined.write(key+"\t"+str(dbsCounts[key])+"\t"+str(round(dbsCounts[key]/totalCount,3))+"\n")
 
 dbCountsCombined.close()
 dbCountsRaw.close()
 
 bash('sort /hive/users/'+user+'/ErrorLogsOutput/dbCountsCombinedWithCuratedHubs.tsv -rnk2 > /hive/users/'+user+'/ErrorLogsOutput/dbCountsCombinedWithCuratedHubs.tsv.sorted')
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/dbCountsCombinedWithCuratedHubs.tsv.sorted | /cluster/bin/x86_64/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/dbCountsCombinedWithCuratedHubs.tsv.sorted | /cluster/bin/x86_64/tabFmt stdin >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 ##### Report default track usage for hg38 and hg19 ######
 
@@ -137,14 +139,14 @@ bash('echo "List of default track usage for hg38, sorted by how many users are t
 bash("echo db$'\\t'trackUse$'\\t'% using$'\\t'% turning off$'\\t'trackName >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
-bash('grep ^hg38 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15 | /cluster/bin/x86_64/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('grep ^hg38 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15 | /cluster/bin/x86_64/tabFmt stdin >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo "List of default track usage for hg19, sorted by how many users are turning off the track:" >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash("echo db$'\\t'trackUse$'\\t'% using$'\\t'% turning off$'\\t'trackName >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
-bash('grep ^hg19 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15| /cluster/bin/x86_64/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('grep ^hg19 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15| /cluster/bin/x86_64/tabFmt stdin >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo List of non-default track usage: >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
@@ -153,11 +155,11 @@ bash('echo ---------------------------------------------------------------------
 
 bash('sort /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv -rnk3 > /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted')
 bash('cat /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted | grep -v -f /hive/users/'+user+'/ErrorLogsOutput/defaults.txt > /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted.noDefaults')
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted.noDefaults | awk -v OFS="\\t" \'{ print $1,$3,$2 }\' | /cluster/bin/x86_64/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted.noDefaults | awk -v OFS="\\t" \'{ print $1,$3,$2 }\' | /cluster/bin/x86_64/tabFmt stdin >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 ##### Report public hub usage and non-public hub usage ######
 
-pubHubFile = open("/hive/users/"+user+"/ErrorLogsOutput/pubHubs.txt", "w") #Using a file to be able to use the same ~markd/bin/tabFmt format
+pubHubFile = open("/hive/users/"+user+"/ErrorLogsOutput/pubHubs.txt", "w") #Using a file to be able to use the same ~markd/bin/tabFmt stdin format
 bash("sort /hive/users/"+user+"/ErrorLogsOutput/trackCountsHubs.tsv -rnk4 -t $\'\\t\' > /hive/users/"+user+"/ErrorLogsOutput/trackCountsHubs.tsv.sorted")
 allPubHubs = bash('cat /hive/users/'+user+'/ErrorLogsOutput/trackCountsHubs.tsv.sorted').rstrip().split("\n")
 
@@ -344,7 +346,7 @@ bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo "List of public hub usage (only most used track represented). Counts added across all mirrors:" >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash("echo db$'\\t'trackUse$'\\t'track$'\\t'pubHub >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/allPubHubsCombinedWithMirrorsCounts.sorted.txt | /cluster/bin/x86_64/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/allPubHubsCombinedWithMirrorsCounts.sorted.txt | /cluster/bin/x86_64/tabFmt stdin >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 #Then do the same for non-public hubs
 for hub in hubsDic:
     if "hub" in hubsDic[hub]['hubDb']: #check for database like hub_164399_GCA_004023905.1
@@ -387,7 +389,7 @@ bash('echo "List of hub usage that are not public hubs. Counts are added across 
 bash("echo db$'\\t'useCount$'\\t'shortLabel$'\\t'hubUrl$'\\t'mostPopularMachine >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('sort -rnk2 /hive/users/'+user+'/ErrorLogsOutput/allRegularHubsCombinedWithMirrorsCounts.txt > /hive/users/'+user+'/ErrorLogsOutput/allRegularHubsCombinedWithMirrorsCounts.sorted.txt')
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/allRegularHubsCombinedWithMirrorsCounts.sorted.txt | /cluster/bin/x86_64/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/allRegularHubsCombinedWithMirrorsCounts.sorted.txt | /cluster/bin/x86_64/tabFmt stdin >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')

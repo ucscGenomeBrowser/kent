@@ -68,6 +68,8 @@ if ("$HOST" == "hgwdev") then
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+	    ssh -n qateam@hgdownload3 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    scp -p $f qateam@hgdownload3:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    breaksw
@@ -76,6 +78,8 @@ if ("$HOST" == "hgwdev") then
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+	    ssh -n qateam@hgdownload3 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    scp -p $f qateam@hgdownload3:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    breaksw

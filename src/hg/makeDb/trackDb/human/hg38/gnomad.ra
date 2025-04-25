@@ -8,7 +8,6 @@ longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 cartVersion 6
 html gnomadV4.1
-pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -132,7 +131,6 @@ pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
     html gnomadV4.1
     priority 1
     visibility squish
-    pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
         track gnomadExomesVariantsV4_1
         parent gnomadVariantsV4.1 on
@@ -243,7 +241,6 @@ filterValues.FILTER PASS,HIGH_NCR,IGH_MHC_OVERLAP,UNRESOLVED,REFERENCE_ARTIFACT
 filterValuesDefault.FILTER PASS
 filterType.FILTER multipleListAnd
 html gnomadSv.html
-pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
 
 track gnomadCopyNumberVariants
@@ -262,7 +259,6 @@ filterValues.svtype DEL|Deletion,DUP|Duplication
 searchIndex name
 mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}<br> <b>Site frequency (non-neuro control samples)</b>: ${sf}
 html gnomadCNV
-pennantIcon New red ../goldenPath/newsarch.html#093024 "September 30, 2024"
 
 
 searchTable pliByTranscript

@@ -243,7 +243,16 @@ if (isUpdateForm)
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     if (dataUrl)
-        puts("Configuration:");
+        {
+      printf(
+     "<span style='color:RED'>"
+     "To update this data, which was loaded via a URL:<br>"
+     "1. Click Submit on this page to navigate to the <i>Manage Custom Tracks</i> page.<br>"
+     "2. In the <b>Update</b> column, select the checkbox next to the corresponding custom track.<br>"
+     "3. Click the <b>Update</b> button at the top of the column to apply the changes.\n</span><p><p> ");
+
+        puts("Current loaded configuration (do not update here):");
+        }
     else
         {
         puts("Edit configuration:");
@@ -362,7 +371,9 @@ puts("<TD COLSPAN=2>");
 if (dataUrl)
     {
     /* can't update via pasting if loaded from URL */
-    safef(buf, sizeof buf, "Data was uploaded from URL: %s\nTo see changes made to the data at the URL, re-load the URL on the \"Add custom tracks\" page.", ctDataUrl(ct));
+ safef(buf, sizeof buf, "Data was uploaded from URL: %s\n"
+     , ctDataUrl(ct));
+
     cgiMakeTextAreaDisableable(hgCtDataText, buf,
                                 TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
     }

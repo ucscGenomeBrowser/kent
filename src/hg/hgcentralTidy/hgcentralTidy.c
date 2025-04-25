@@ -37,7 +37,6 @@ char *purgeTable = NULL;  /* optionally specify one table to purge */
 char *sessionDbTableName = "sessionDb";
 char *userDbTableName = "userDb";
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -53,6 +52,7 @@ errAbort(
   "   -purgeEnd=N - purge range end N days ago'\n"
   "   -purgeTable=tableName - optional purge table must be userDb or sessionDb. If not specified, both tables are purged.'\n"
   "   -dryRun - option that causes it to skip the call to cleanTableSection.'\n"
+  "   -skipDel - option that causes it to skip the delete returning counts from skipped deletes.'\n"
   , chunkSize
   , chunkWait
   , squealSize
@@ -68,6 +68,7 @@ static struct optionSpec options[] = {
    {"purgeEnd", OPTION_INT},
    {"purgeTable", OPTION_STRING},
    {"dryRun", OPTION_STRING},
+   {"skipDel", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -170,7 +171,9 @@ while(TRUE)
 
     sqlSafef(query,sizeof(query),
 	"select id, firstUse, lastUse, useCount from %s"
-	" where id > %u order by id limit %d"
+	" where id > %u "
+        " AND lastUse < NOW() - INTERVAL 1 HOUR"
+        " order by id limit %d;"
 	, table
 	, maxId
         , chunkSize
@@ -220,7 +223,10 @@ while(TRUE)
                 deleteThis = TRUE;
                 ++delRobotCount;
                 }
-            else if ((daysAgoFirstUse >= 2) && useCount <= 1)
+            /* some botnets have hgsid but do not store cookies -> useCount is always 1 */
+            /* Since we excluded rows that are from the last 1 hour, this will not delete anything */
+            /* from human users who just came to the site before this program ran */
+            else if (useCount <= 1)
                 {
                 deleteThis = TRUE;
                 ++delRobotCount;
@@ -256,9 +262,19 @@ while(TRUE)
 	struct slUnsigned *i;
 	for (i=delList;i;i=i->next)
 	    {
-	    dyStringClear(dy);
-	    sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
-	    sqlUpdate(conn,dy->string);
+            if (!optionExists("skipDel"))
+		{
+		dyStringClear(dy); 
+	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
+		sqlUpdate(conn,dy->string);
+		}
+	    else  // GALT DEBUG REMOVE
+		{
+		dyStringClear(dy); 
+	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
+		verbose(4,"GALT DEBUG del dystring = [%s]\n", dy->string);
+		}
+
 	    }
 	slFreeList(&delList);
 	}
@@ -277,7 +293,8 @@ while(TRUE)
 
     }
 
-    verbose(1, "old recs deleted %d, robot recs deleted %d\n", oldRecCount, delRobotCount);fflush(stderr);
+    verbose(1, "old recs %s deleted %d, robot recs %s deleted %d\n", optionExists("skipDel")?"would have been":"", oldRecCount,
+         optionExists("skipDel")?"would have been":"", delRobotCount);fflush(stderr);
 
     time_t cleanEnd = time(NULL);
     int minutes = difftime(cleanEnd, cleanSectionStart) / 60; 
@@ -345,7 +362,7 @@ verbose(1, "%s\n", ctime(&cleanStart));
 
 
 totalRows = sqlTableSize(conn, table);
-verbose(1,"totalRows=%d\n", totalRows);
+verbose(1,"totalRows=%ld\n", totalRows);
 
 if (totalRows==0)
     {
@@ -410,6 +427,7 @@ else  // figure out purge-ranges automatically
     int oldRangeSize = (firstUseIndex - 0) / 7;
     int oldRangeStart = oldRangeSize * (day-1);
     int oldRangeEnd = oldRangeStart + oldRangeSize;
+
     verbose(1, "old cleaner: firstUseAge=%d firstUseIndex = %d day %d: rangeStart %d rangeEnd %d rangeSize=%d ids[oldRangeStart]=%u\n", 
         firstUseAge, firstUseIndex, day, oldRangeStart, oldRangeEnd, oldRangeEnd-oldRangeStart, ids[oldRangeStart]);
     //int oldRangeStart = 0;
@@ -427,7 +445,7 @@ else  // figure out purge-ranges automatically
 
     // this is the main delete action of cleaning out new robots (20k to 50k or more)
     int robo1RangeStart = binaryIdSearch(ids, totalRows, table, 2);
-    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 1);
+    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 0);
     verbose(1, "robot cleaner1: twoDayIndex = %d oneDayIndex %d rangeSize=%d ids[rs]=%u\n", 
       robo1RangeStart, robo1RangeEnd, robo1RangeEnd-robo1RangeStart, ids[robo1RangeStart]);
 
@@ -534,10 +552,6 @@ conn = sqlConnectRemote(host, user, password, database);
 verbose(1, "Cleaning database %s.%s\n", host, database);
 verbose(1, "chunkWait=%d chunkSize=%d\n", chunkWait, chunkSize);
 
-//sessionDbTableName = "sessionDbGalt";
-
-//userDbTableName = "userDbGalt";
-
 if (!purgeTable || sameString(purgeTable,sessionDbTableName))
     {
     if (cleanTable(sessionDbTableName))
@@ -567,7 +581,7 @@ squealSize = optionInt("squealSize", squealSize);
 if (optionExists("purgeTable"))
     {
     purgeTable = optionVal("purgeTable", NULL);
-    if (!sameString(purgeTable,"sessionDb") && !sameString(purgeTable,"userDb"))
+    if (!sameString(purgeTable,userDbTableName) && !sameString(purgeTable,sessionDbTableName))
 	errAbort("Invalid value for purgeTable option, must be userDb or sessionDb or leave option off for both.");
     }
 if (argc != 2)

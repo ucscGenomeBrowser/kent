@@ -14,6 +14,9 @@ include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
 include trackDb.chainNet.asmHub.ra
 
+include patchTracks.ra beta,public
+include patchTracks.new.ra alpha
+
 include trackDb.encode3.ra
 
 include trackDb.transMap.ra
@@ -248,42 +251,6 @@ longLabel Duplications of >98% Identity >1kb
 group map
 visibility dense
 type bed 6 .
-
-track altSeqLiftOverPsl
-shortLabel Alt Haplotypes
-longLabel Reference Assembly Alternate Haplotype Sequence Alignments
-group map
-type psl
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsMaxZoom 10000.0
-showCdsAllScales .
-baseColorDefault diffBases
-baseColorUseSequence db
-color 0,0,100
-visibility pack
-pennantIcon p14 black https://genome-blog.gi.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p14 patch sequences"
-
-track fixSeqLiftOverPsl
-shortLabel Fix Patches
-longLabel Reference Assembly Fix Patch Sequence Alignments
-group map
-type psl
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsMaxZoom 10000.0
-showCdsAllScales .
-baseColorDefault diffBases
-baseColorUseSequence db
-color 231,203,21
-darkerLabels on
-priority 1
-visibility pack
-pennantIcon p14 black https://genome-blog.gi.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p14 patch sequences"
 
 track knownAlt
 shortLabel UCSC Alt Events

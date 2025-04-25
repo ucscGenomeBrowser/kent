@@ -54,7 +54,7 @@ For this reason, we also provide alternative methods to access our data:
 All these options offer faster bulk downloads and are often easier to parse from scripting
 languages. If, however, you write Javascript clients or need only a few features within a given
 range, then the endpoints documented on this page may address your needs. If you require an
-option or endpoint not listed below for your specific use case, <a href="/contact.html"
+option or endpoint not listed below for your specific use case, <a href="/contacts.html"
 target="_blank">contact us</a> and we can try and implement the feature.
 </p>
 <h3>Conditions of use</h3>
@@ -73,7 +73,7 @@ target="_blank">contact us</a> and we can try and implement the feature.
 <p>
 For more details about the Conditions of Use, please refer to the following page,
 <a href="/conditions.html" target="_blank">Genome Browser Conditions of Use</a>.
-If you plan to execute a query that you think may be excessive, <a href="/contact.html"
+If you plan to execute a query that you think may be excessive, <a href="/contacts.html"
 target="_blank">contact UCSC</a> first to avoid the possibility of temporarily restricting your
 access to the REST API.
 </p>
@@ -211,9 +211,7 @@ https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM
 <tr><th>Endpoint function</th><th>Required</th><th>Optional</th></tr>
 <tr><th>/list/publicHubs</th><td>(none)</td><td>(none)</td></tr>
 <tr><th>/list/ucscGenomes</th><td>(none)</td><td>(none)</td></tr>
-<!-- not yet
-<tr><th>/list/genarkGenomes</th><td>(none)</td><td>genome</td></tr>
--->
+<tr><th>/list/genarkGenomes</th><td>(none)</td><td>genome, maxItemsOutput</td></tr>
 <tr><th>/list/hubGenomes</th><td>hubUrl</td><td>(none)</td></tr>
 <tr><th>/list/files</th><td>genome</td><td>format=text, maxItemsOutput</td></tr>
 <tr><th>/list/tracks</th><td>genome or (hubUrl and genome)</td><td>trackLeavesOnly=1</td></tr>
@@ -239,14 +237,12 @@ to the single specified chromosome.  To limit the request to a specific
 position, both <b>start=4321</b> and <b>end=5678</b> must be given together.
 Using the <b>revComp=1</b> parameter returns the reverse complement.
 </p>
-<!-- not yet
 <p>
 Use the <b>genome</b> argument with the <b>/list/genarkGenomes</b> function
 to test for the existence of a specific genome assembly in the
 <a href='https://hgdownload.soe.ucsc.edu/hubs/' target=_blank>Genark</a> set
 of assembly hubs.
 </p>
--->
 <p>
 The <b>/list/files</b> endpoint only works for UCSC hosted genome assemblies,
 not for external hosted assembly hubs.
@@ -339,12 +335,10 @@ the functions of the API interface.
 <b>api.genome.ucsc.edu/list/publicHubs</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/ucscGenomes' target=_blank>list UCSC database genomes</a> -
 <b>api.genome.ucsc.edu/list/ucscGenomes</b></li>
-<!-- not yet
-<li><a href='https://api.genome.ucsc.edu/list/genarkGenomes;maxItemsOutput=5' target=_blank>list GenArk assembly hub genomes</a> -
-<b>api.genome.ucsc.edu/list/genarkGenomes;maxItemsOutput=5</b></li>
-<li><a href='https://api.genome.ucsc.edu/list/genarkGenomes;genome=GCF_028858775.2' target=_blank>test if genome GCF_028858775.2 exists in the GenArk assembly hub genomes</a> -
-<b>api.genome.ucsc.edu/list/genarkGenomes;genome=GCF_028858775.2</b></li>
--->
+<li><a href='https://api.genome.ucsc.edu/list/genarkGenomes?maxItemsOutput=5' target=_blank>list GenArk assembly hub genomes</a> -
+<b>api.genome.ucsc.edu/list/genarkGenomes?maxItemsOutput=5</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/genarkGenomes?genome=GCF_028858775.2' target=_blank>test if genome GCF_028858775.2 exists in the GenArk assembly hub genomes</a> -
+<b>api.genome.ucsc.edu/list/genarkGenomes?genome=GCF_028858775.2</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt'
 target=_blank>list genomes from specified hub</a> -
 <b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt</b></li>

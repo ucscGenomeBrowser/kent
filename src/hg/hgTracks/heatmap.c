@@ -8,17 +8,14 @@
 
 #include "heatmap.h"
 
+// Need a bedRow with enough fields to accommodate the extra 7 fields, plus one more for any additional
+// stuff (like extra fields) that we're not going to make use of here.
+#define HEATMAP_EXTRA_FIELD_COUNT 7
+#define HEATMAP_FIELD_COUNT 12 + HEATMAP_EXTRA_FIELD_COUNT + 1
+
 #define HEATMAP_COLOR_STEPS 20
 
 #define BG_COLOR_TDB_SETTING "heatmap.background"
-#define LOW_COLOR_TDB_SETTING "heatmap.lowColor"
-#define MID_COLOR_TDB_SETTING "heatmap.midColor"
-#define HIGH_COLOR_TDB_SETTING "heatmap.highColor"
-
-#define LOW_SCORE_TDB_SETTING "heatmap.lowScore"
-#define MID_SCORE_TDB_SETTING "heatmap.midScore"
-#define HIGH_SCORE_TDB_SETTING "heatmap.highScore"
-
 
 struct heatmap *heatmapNew(int rows, int cols)
 /* Allocate a new heatmap structure and return it */
@@ -39,6 +36,7 @@ AllocArray(h->colSizes, cols);
 return h;
 }
 
+// should really add a destructor too
 
 void heatmapSetDrawSizes(struct heatmap *h, double rowHeight, double colWidth)
 /* Update the expected cell height and width in pixels for the heatmap */
@@ -108,7 +106,7 @@ void heatmapAssignColumnLabels(struct heatmap *h, char **rowLabels)
 }
 
 
-struct heatmap *heatmapFromLF(struct track *tg, struct linkedFeatures *lf)
+struct heatmap *heatmapForLF(struct track *tg, struct linkedFeatures *lf)
 /* This takes a linkedFeatures structure from a bigBed and builds a heatmap out
  * of it.  In the current setup, the heatmap values and labels are each stored
  * in a 1-D comma-separated matrix that we convert to a 2-D matrix using
@@ -117,6 +115,7 @@ struct heatmap *heatmapFromLF(struct track *tg, struct linkedFeatures *lf)
  * rows is in an extra field.  The full type definition is in hg/lib/heatmap.as.
  */
 {
+int i;
 struct bigBedInterval *bbi = lf->original;
 if (bbi == NULL)
     {
@@ -124,15 +123,17 @@ if (bbi == NULL)
     return NULL;
     }
 
-#define HEATMAP_COUNT 17
-char *bedRow[HEATMAP_COUNT]; // hard-coded for now, should change this to accommodate extra .as fields
+if (lf->extra != NULL)
+    return (struct heatmap*) lf->extra;
+
+char *bedRow[HEATMAP_FIELD_COUNT];
 char startBuf[16], endBuf[16];
 bigBedIntervalToRow(bbi, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
-// Use this to figure out which field to pull.  For now, we're just doing 12, 13, 14, 15
-// (right after the exons)
-// 9: exonCount, 10: sizes, 11: starts, 12: rowcount, 13: rowlabels, 14: scores, 15: itemLabels
-// 16: link to maveDb
+// Use this to figure out which field to pull.  Should probabably replace some of this in the
+// future with a more proper autoSql-generated code block.
+// 9: exonCount, 10: sizes, 11: starts, 12: rowcount (first heatmap-specific field), 13: rowlabels,
+// 14: scoreThresholds, 15: thresholdColors, 16:scores, 17: itemLabels, 18: legend
 
 struct heatmap *h = NULL;
 
@@ -148,15 +149,55 @@ if (labelsFound != rowCount)
     errAbort("Field containing heatmap row labels had %d values, but %d were expected", labelsFound, rowCount);
     }
 
+// Read in the score thresholds and colors
+// First, need to know how many (how many commas) so we can allocate scoreThresholds and scoreColors.
+// Then we need to split the strings (and make sure the counts match), atof the scores, and
+// bedColorToRgb(bedParseColor(color string))
+h->thresholdCount = chopString(bedRow[14], ",", NULL, 0);
+if (h->thresholdCount < 2)
+    errAbort("A heatmap needs at least two score thresholds to set up a color spectrum (%s)", bedRow[14]);
+AllocArray(h->scoreThresholds, h->thresholdCount);
+AllocArray(h->thresholdColors, h->thresholdCount);
+
+char *tmpString, **tmpArray;
+    {
+    // Parse the threshold scores
+    tmpString = cloneString(bedRow[14]);
+    AllocArray(tmpArray, h->thresholdCount);
+    chopString(tmpString, ",", tmpArray, h->thresholdCount);
+
+    for (i=0; i < h->thresholdCount; i++)
+        {
+        h->scoreThresholds[i] = atof(tmpArray[i]);
+        if (i > 0 && h->scoreThresholds[i] <= h->scoreThresholds[i-1])
+            errAbort("Score thresholds for a heatmap file must be sorted in ascending order (%s)", bedRow[14]);
+        }
+    freez(&tmpString);
+    freez(&tmpArray);
+    }
+    {
+    // Parse the colors for those thresholds
+    tmpString = cloneString(bedRow[15]);
+    AllocArray(tmpArray, h->thresholdCount);
+    int colorsFound = chopString(tmpString, ",", tmpArray, h->thresholdCount);
+    if (colorsFound != h->thresholdCount)
+        errAbort("Inconsistent number of score thresholds and colors in heatmap (%s vs %s)", bedRow[14], bedRow[15]);
+    for (i=0; i < h->thresholdCount; i++)
+        {
+        h->thresholdColors[i] = bedColorToRgb(bedParseColor(tmpArray[i]));
+        }
+    freez(&tmpString);
+    freez(&tmpArray);
+    }
+
 // Read in the scores
 char *tmpScore[h->rows*h->cols];
-int scoresFound = chopCommas(cloneString(bedRow[14]), tmpScore);
+int scoresFound = chopCommas(cloneString(bedRow[16]), tmpScore);
 if (scoresFound != h->rows*h->cols)
     {
     errAbort("Field containing heatmap scores had %d values, but %d were expected", scoresFound, h->rows*h->cols);
     }
 
-int i;
 double max=atof(tmpScore[0]), min=atof(tmpScore[0]);
 for (i=0; i<scoresFound; i++)
     {
@@ -211,7 +252,7 @@ for (i=0; i<scoresFound; i++)
 
 // These are the mouseover texts for each cell of the heatmap
 // Note that we're re-using tmpScore for convenience!
-int itemLabelsFound = chopByCharRespectDoubleQuotesKeepEmpty(cloneString(bedRow[15]), ',', tmpScore, h->rows*h->cols);
+int itemLabelsFound = chopByCharRespectDoubleQuotesKeepEmpty(cloneString(bedRow[17]), ',', tmpScore, h->rows*h->cols);
 if (itemLabelsFound != h->rows*h->cols)
     {
     errAbort("Field containing heatmap mouseover labels had %d values, but %d were expected", itemLabelsFound, h->rows*h->cols);
@@ -226,14 +267,12 @@ for (i=0; i<itemLabelsFound; i++)
     // else, the itemLabels[i] pointer was already zeroed by AllocArray
     }
 
-// Keep track of the min, max, and midpoint of the scores we've read
-h->highCap = max;
-h->lowCap = min;
-h->midPoint = (max+min)/2.0;
+h->legend = cloneString(bedRow[18]);
 
 // The label for this heatmap
 h->label = cloneString(bedRow[3]);
 
+lf->extra = h;
 return h;
 }
 
@@ -272,7 +311,7 @@ int heatmapItemRowCount(struct track *tg, void *item)
 // We're doing that last right now, but because we're not freeing or storing it for later use,
 // it's quite wasteful.  Still seems to be pretty fast though.
 struct linkedFeatures *lf = (struct linkedFeatures *) item;
-struct heatmap *h = heatmapFromLF(tg, lf);
+struct heatmap *h = heatmapForLF(tg, lf);
 if (h)
     return h->rows+1;  // +1 to allow for a title row.  column labels would be a further complication
 
@@ -335,25 +374,12 @@ void heatmapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg,
 {
 struct linkedFeatures *lf = (struct linkedFeatures *) item;
 
-struct heatmap *h = heatmapFromLF(tg, lf);
+struct heatmap *h = heatmapForLF(tg, lf);
 
 /* Set the height and width of heatmap cells in pixels */
 heatmapSetDrawSizes(h, tg->heightPer, (lf->end - lf->start)*scale/2.0); // 2.0 for now b/c hard-coded 2 columns
 
-// Retrieve the colors that will be used in the heatmap
-char *lowColorString = trackDbSettingClosestToHomeOrDefault(tg->tdb, LOW_COLOR_TDB_SETTING, "green");
-char *midColorString = trackDbSettingClosestToHomeOrDefault(tg->tdb, MID_COLOR_TDB_SETTING, "black");
-char *highColorString = trackDbSettingClosestToHomeOrDefault(tg->tdb, HIGH_COLOR_TDB_SETTING, "red");
-struct rgbColor lowColor = bedColorToRgb(bedParseColor(lowColorString));
-struct rgbColor midColor = bedColorToRgb(bedParseColor(midColorString));
-struct rgbColor highColor = bedColorToRgb(bedParseColor(highColorString));
-
-// Get heatmap value bounds, maybe from trackDb
-double low = trackDbFloatSettingOrDefault(tg->tdb, LOW_SCORE_TDB_SETTING, h->lowCap);
-double mid = trackDbFloatSettingOrDefault(tg->tdb, MID_SCORE_TDB_SETTING, 0);
-double high = trackDbFloatSettingOrDefault(tg->tdb, HIGH_SCORE_TDB_SETTING, h->highCap);
-
-heatmapMakeSpectrum(h, hvg, low, &lowColor, mid, &midColor, high, &highColor);
+heatmapMakeSpectrum(h, hvg);
 
 struct simpleFeature *exon = NULL;
 int i = 0;
@@ -397,31 +423,31 @@ for (row_i = 0; row_i < h->rows; row_i++)
         Color color = MG_BLACK;
         char *scoreStr = getScore(h, row_i, column_j);
         if (scoreStr[0] == '#')
-        {
+            {
             htmlColorForCode(scoreStr, &color);
             color = bedColorToGfxColor(color);
-        }
+            }
         else
-        {
+            {
             double score = atof(scoreStr);
-
-            if (score > h->midPoint)
-                {
-                double cappedScore = score > h->highCap ? h->highCap : score;
-                double fraction = 0;
-                if (h->highCap > h->midPoint)
-                    fraction = (cappedScore - h->midPoint)/(h->highCap - h->midPoint);
-                int index = (int) (HEATMAP_COLOR_STEPS-1)*fraction;
-                color = h->highSpectrum[index];
-                }
+            if (score < h->scoreThresholds[0])
+                color = h->spectra[0][0]; // saturate at the bottom
             else
                 {
-                double cappedScore = score < h->lowCap ? h->lowCap : score;
-                double fraction = 0;
-                if (h->midPoint > h->lowCap)
-                    fraction = (h->midPoint - cappedScore)/(h->midPoint - h->lowCap);
-                int index = (int) (HEATMAP_COLOR_STEPS-1)*fraction;
-                color = h->lowSpectrum[index];
+                if (score >= h->scoreThresholds[h->thresholdCount-1])
+                    color = h->spectra[h->thresholdCount-2][HEATMAP_COLOR_STEPS-1]; // saturate at the top
+                else
+                    {
+                    int i;
+                    for (i=0; i < h->thresholdCount-1; i++)
+                        {
+                        if (score < h->scoreThresholds[i+1])
+                            break;
+                        }
+                    double fraction = (score - h->scoreThresholds[i])/(h->scoreThresholds[i+1]-h->scoreThresholds[i]);
+                    int index = (int) (HEATMAP_COLOR_STEPS-1)*fraction;
+                    color = h->spectra[i][index];
+                    }
                 }
             }
 
@@ -483,21 +509,21 @@ if (lowScore > midScore || midScore > highScore)
 
 }
 
-void heatmapMakeSpectrum(struct heatmap *h, struct hvGfx *hvg, double lowScore, struct rgbColor *lowColor,
-        double midPoint, struct rgbColor *midColor, double highScore, struct rgbColor *highColor)
+void heatmapMakeSpectrum(struct heatmap *h, struct hvGfx *hvg)
 /* Take high, low, and midpoints and associated colors, and create two spectrums (one for low scores, one for high)
  * that can be used to shade cells in the heatmap.
  */
 {
-if (h->lowSpectrum)
-    freeMem(h->lowSpectrum);
-AllocArray(h->lowSpectrum, HEATMAP_COLOR_STEPS);
-if (h->highSpectrum)
-    freeMem(h->highSpectrum);
-AllocArray(h->highSpectrum, HEATMAP_COLOR_STEPS);
-
-hvGfxMakeColorGradient(hvg, midColor, lowColor, HEATMAP_COLOR_STEPS, h->lowSpectrum);
-hvGfxMakeColorGradient(hvg, midColor, highColor, HEATMAP_COLOR_STEPS, h->highSpectrum);
+int i;
+AllocArray(h->spectra, h->thresholdCount-1);
+for (i=0; i < h->thresholdCount - 1; i++)
+    {
+    AllocArray(h->spectra[i], HEATMAP_COLOR_STEPS);
+    struct rgbColor low = h->thresholdColors[i];
+    struct rgbColor high = h->thresholdColors[i+1];
+    hvGfxMakeColorGradient(hvg, &low, &high,
+            HEATMAP_COLOR_STEPS, h->spectra[i]);
+    }
 }
 
 
@@ -543,7 +569,7 @@ boolean withLabels = (withLeftLabels && ((vis == tvPack) || (vis == tvFull && is
 if (withLabels)
     {
     struct linkedFeatures *lf = (struct linkedFeatures *) item;
-    struct heatmap *h = heatmapFromLF(tg, lf);
+    struct heatmap *h = heatmapForLF(tg, lf);
     heatmapSetDrawSizes(h, tg->heightPer, (lf->end - lf->start)*scale/2.0); // 2.0 for now b/c hard-coded 2 columns
 
     // heatmap title
@@ -565,7 +591,7 @@ if (withLabels)
             if (snapLeft)        /* Snap label to the left. */
         #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
                 {
-                textX = leftLabelX;
+                textX = fullInsideX - nameWidth - dotWidth;
                 assert(hvgSide != NULL);
                 int prevX, prevY, prevWidth, prevHeight;
                 hvGfxGetClip(hvgSide, &prevX, &prevY, &prevWidth, &prevHeight);
@@ -603,16 +629,59 @@ if (withLabels)
                 hvGfxUnclip(hvg);
                 hvGfxSetClip(hvgSide, prevX, prevY, prevWidth, prevHeight);
                 }
-            y += h->rowHeight;
-            
+
+                mapBoxHgcOrHgGene(hvg, lf->start, lf->end, textX, y, nameWidth, tg->heightPer,
+                       tg->track, lf->name, isNotEmpty(h->legend)?h->legend:lf->name, NULL, TRUE,
+                       NULL);
         }
+
+    if (isNotEmpty(h->legend))
+        {
+        int e = tg->itemEnd(tg, item);
+        int eClp = (e > winEnd) ? winEnd : e;
+        int x2 = round((eClp - winStart)*scale) + xOff; // rightmost edge of text box for legend
+        int legendWidth = mgFontStringWidth(font, h->legend);
+        if (legendWidth > x2 - x1)
+            {
+            // The full legend won't fit - we have to try cropping it
+            char cropLegend[strlen(h->legend)+4];
+            safef(cropLegend, sizeof(cropLegend), "%c...", h->legend[0]);
+            if ((legendWidth = mgFontStringWidth(font, cropLegend)) <= x2-x1)
+                {
+                // We can at least display _something_.  Binary search to work out how much.
+                int min = 1, max=strlen(h->legend);
+                while (min < max-1)
+                    {
+                    int midpoint = (min + max)/2;
+                    safef(cropLegend, sizeof(cropLegend), "%.*s...", midpoint, h->legend);
+                    if (mgFontStringWidth(font, cropLegend) > x2 - x1)
+                        max = midpoint;
+                    else
+                        min = midpoint;
+                    }
+                safef(cropLegend, sizeof(cropLegend), "%.*s...", min, h->legend);
+                legendWidth = mgFontStringWidth(font, cropLegend);
+                hvGfxText(hvg, x1, y, labelColor, font, cropLegend);
+                mapBoxHgcOrHgGene(hvg, lf->start, lf->end, x1, y, legendWidth, tg->heightPer,
+                       tg->track, lf->name, h->legend, NULL, TRUE,
+                       NULL);
+                }
+            }
+        else
+            {
+            hvGfxText(hvg, x1, y, labelColor, font, h->legend);
+            mapBoxHgcOrHgGene(hvg, lf->start, lf->end, x1, y, legendWidth, tg->heightPer,
+                   tg->track, lf->name, h->legend, NULL, TRUE,
+                   NULL);
+            }
+        }
+    y += h->rowHeight;
 
     int i = 0;
     for (i=0; i < h->rows; i++)
         {
         char *name = h->rowLabels[i];
         textX = x1;
-//        char *name = tg->itemName(tg, item);
         int nameWidth = mgFontStringWidth(font, name);
         int dotWidth = tl.nWidth/2;
         boolean snapLeft = FALSE;
@@ -688,8 +757,7 @@ void heatmapMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 double scale = (double)currentWindow->insideWidth/(currentWindow->winEnd - currentWindow->winStart);
 struct linkedFeatures *lf = (struct linkedFeatures *) item;
 
-// Yet another reallocation of a heatmap structure
-struct heatmap *h = heatmapFromLF(tg, lf);
+struct heatmap *h = heatmapForLF(tg, lf);
 
 heatmapSetDrawSizes(h, tg->heightPer, (lf->end - lf->start)*scale/2.0); // 2.0 for now b/c hard-coded 2 columns
 
@@ -704,10 +772,18 @@ for (exon = lf->components; exon != NULL; exon = exon->next)
     i++;
     }
 
+// Filter out columns outside the draw window and truncate the first and last
+// if they're partially outside the window.
+int startCol = 0, endCol = h->cols-1;
+while (startCol < h->cols && (h->colStarts[startCol] + h->colSizes[startCol] < insideX))
+    startCol++;
+while (endCol > 0 && (h->colStarts[endCol] > insideX + insideWidth))
+    endCol--;
+
 int row_i, column_j;
 for (row_i = 0; row_i < h->rows; row_i++)
     {
-    for (column_j = 0; column_j < h->cols; column_j++)
+    for (column_j = startCol; column_j <= endCol; column_j++)
         {
         char *label = getItemLabel(h, row_i, column_j);
         if (isNotEmpty(label))
@@ -718,8 +794,14 @@ for (row_i = 0; row_i < h->rows; row_i++)
                 yEnd = yOffset;
             int height = yEnd - yOffset;
             int xOffset = (int)(h->colStarts[column_j]);
-
             int width = h->colSizes[column_j];
+            if (xOffset < insideX)
+                {
+                // Truncate the first mapbox drawn to the image so it doesn't overlap with the label space
+                // The last is automatically truncated by the edge of the image.
+                width -= (insideX-xOffset);
+                xOffset = insideX;
+                }
 
             mapBoxHgcOrHgGene(hvg, lf->start, lf->end, xOffset, y+yOffset, width, height,
                        tg->track, lf->name, label, NULL, TRUE,

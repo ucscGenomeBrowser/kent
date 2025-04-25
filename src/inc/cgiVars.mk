@@ -22,3 +22,7 @@ endif
 ifeq ($(MAKECMDGOALS),beta) 
     CGI_BIN_DEST=${DESTDIR}${CGI_BIN}-beta
 endif
+
+# set CGI_LOADER_SUBDIR in makefile before this file if you want
+# to install in a sub-directory of cgi-bin/loader
+CGI_LOADER_DEST = ${CGI_BIN_DEST}/loader/${CGI_LOADER_SUBDIR}

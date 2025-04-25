@@ -12,6 +12,109 @@ function prettyFileSize(num) {
     }
 }
 
+function cgiEncode(value) {
+    // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters:
+    let splitVal = value.split('/');
+    splitVal.forEach((ele, ix) => {
+        splitVal[ix] = encodeURIComponent(ele);
+    });
+    return splitVal.join('/');
+}
+
+function cgiDecode(value) {
+    // decode an encoded value
+    return decodeURIComponent(value);
+}
+
+function setDbSelectFromAutocomplete(selectEle, item) {
+    // this has been bound to the <select> we are going to add
+    // a new child option to
+    let newOpt = document.createElement("option");
+    newOpt.value = item.genome;
+    newOpt.label = item.label;
+    newOpt.selected = true;
+    selectEle.appendChild(newOpt);
+    const event = new Event("change");
+    selectEle.dispatchEvent(event);
+}
+
+function processFindGenome(result, term) {
+    // process the hubApi/findGenome?q= result set into somthing
+    // jquery-ui autocomplete can use
+    let data = [];
+    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount"]);
+    _.forEach(result, function(val, key) {
+        if (!(apiSkipList.has(key))) {
+            let d = {
+                "genome": key,
+                "label": `${val.commonName} (${key})`,
+            };
+            if (val.hubUrl !== null) {
+                d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
+            } else {
+                d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
+            }
+            data.push(d);
+        }
+    });
+    return data;
+}
+
+let autocompletes = {};
+function initAutocompleteForInput(inpIdStr, selectEle) {
+    // we must set up the autocompleteCat for each input created, once per file chosen
+    // override the autocompleteCat.js _renderMenu to get the menu on top
+    // of the uppy widget.
+    // Return true if we actually set up the autocomplete, false if we have already
+    // set it up previously
+    if ( !(inpIdStr in autocompletes) || autocompletes[inpIdStr] === false) {
+        $.widget("custom.autocompleteCat",
+                 $.ui.autocomplete,
+                 {
+                   _renderMenu: function(ul, items) {
+                       var that = this;
+                       var currentCategory = "";
+                       // There's no this._super as shown in the doc, so I can't override
+                       // _create as shown in the doc -- just do this every time we render...
+                       this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                       $(ul).css("z-index", "99999999");
+                       $.each(items,
+                              function(index, item) {
+                                  // Add a heading each time we see a new category:
+                                  if (item.category && item.category !== currentCategory) {
+                                      ul.append("<li class='ui-autocomplete-category'>" +
+                                                item.category + "</li>" );
+                                      currentCategory = item.category;
+                                  }
+                                  that._renderItem( ul, item );
+                              });
+                   },
+                   _renderItem: function(ul, item) {
+                     // In order to use HTML markup in the autocomplete, one has to overwrite
+                     // autocomplete's _renderItem method using .html instead of .text.
+                     // http://forum.jquery.com/topic/using-html-in-autocomplete
+                       // Hits to assembly hub top level (not individial db names) have no item label,
+                       // so use the value instead
+                       return $("<li></li>")
+                           .data("ui-autocomplete-item", item)
+                           .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
+                           .appendTo(ul);
+                   }
+                 });
+        let selectFunction = setDbSelectFromAutocomplete.bind(null, selectEle);
+        autocompleteCat.init($("[id='"+inpIdStr+"']"), {
+            baseUrl: "hubApi/findGenome?browser=mustExist&q=",
+            //watermark: "Enter species name, common name, etc",
+            onSelect: selectFunction,
+            onServerReply: processFindGenome,
+            enterSelectsIdentical: false
+        });
+        autocompletes[inpIdStr] = true;
+        return true;
+    }
+    return false;
+}
+
 function generateApiKey() {
     let apiKeyInstr = document.getElementById("apiKeyInstructions");
     let apiKeyDiv = document.getElementById("apiKey");
@@ -70,7 +173,7 @@ function revokeApiKeys() {
 }
 
 const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
-const parentDirRegex = /[0-9a-zA-Z._\-+ ]+/g; // allowed characters in hub names, spaces allowed
+const parentDirRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in hub names
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
@@ -83,21 +186,21 @@ const uppy = new Uppy.Uppy({
             let fileNameMatch = file.meta.name.match(fileNameRegex);
             let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 2000);
+                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
             if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: Hub name has special characters, please rename file: ${file.meta.parentDir} to only include alpha-numeric characters, period, dash, underscore, plus or space.`, 'error', 2000);
+                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
             if (!file.meta.genome) {
-                uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 2000);
+                uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
             } else if  (!file.meta.fileType) {
-                uppy.info(`Error: File type not supported, file: ${file.meta.name}!`, 'error', 2000);
+                uppy.info(`Error: File type not supported, file: ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
@@ -172,10 +275,18 @@ var hubCreate = (function() {
         return cartDb.split(" ").slice(-1)[0];
     }
 
-    function makeGenomeSelectOptions() {
-        // Returns an array of options for genomes
+    let defaultGenomeChoices = {
+        "Human hg38": {value: "hg38", label: "Human hg38"},
+        "Human T2T": {value: "T2T", label: "Human T2T"},
+        "Human hg19": {value: "hg19", label: "Human hg19"},
+        "Mouse mm39": {value: "mm39", label: "Mouse mm39"},
+        "Mouse mm10": {value: "mm10", label: "Mouse mm10"}
+    };
+
+    function makeGenomeSelectOptions(value, label) {
+        // Returns an array of options for genomes, if value and label exist, add that
+        // as an additional option
         let ret = [];
-        let choices = ["Human hg38", "Human T2T", "Human hg19", "Mouse mm39", "Mouse mm10"];
         let cartChoice = {};
         cartChoice.id = cartDb;
         cartChoice.label = cartDb;
@@ -183,16 +294,15 @@ var hubCreate = (function() {
         if (cartChoice.value.startsWith("hub_")) {
             cartChoice.label = cartDb.split(" ").slice(0,-1).join(" "); // take off the actual db value
         }
-        cartChoice.selected = true;
-        ret.push(cartChoice);
-        choices.forEach( (e) =>  {
-            if (e === cartDb) {return;} // don't print the cart database twice
-            let choice = {};
-            choice.id = e;
-            choice.label = e;
-            choice.value = e.split(" ")[1];
-            ret.push(choice);
-        });
+        cartChoice.selected = value && label ? false: true;
+        defaultGenomeChoices[cartChoice.label] = cartChoice;
+
+        // next time around our value/label pair will be a default. this time around we
+        // want it selected because it was explicitly asked for, but it may not be next time
+        ret = Object.values(defaultGenomeChoices);
+        if (value && label && !(label in defaultGenomeChoices)) {
+            defaultGenomeChoices[label] = {value: value, label: label, selected: true};
+        }
         return ret;
     }
 
@@ -221,7 +331,7 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + hubName + "/hub.txt&" + trackHubFixName(fname) + "=pack";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + cgiEncode(hubName) + "/hub.txt&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
@@ -258,7 +368,7 @@ var hubCreate = (function() {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
-                        url += "&hubUrl=" + uiState.userUrl + d.parentDir;
+                        url += "&hubUrl=" + uiState.userUrl + cgiEncode(d.parentDir);
                         if (d.parentDir.endsWith("/")) {
                             url += "hub.txt";
                         } else {
@@ -302,22 +412,39 @@ var hubCreate = (function() {
         cart.flush();
     }
 
-    function updateSelectedFileDiv(data) {
+    function updateSelectedFileDiv(data, isFolderSelect = false) {
         // update the div that shows how many files are selected
-        let numSelected = data !== null ? Object.entries(data).length : 0;
+        let numSelected = data !== null ? data.length : 0;
+        // if a hub.txt file is in data, disable the delete button
+        let disableDelete = false;
+        if (data) {
+            disableDelete = data.filter((obj) => obj.fileType === "hub.txt").length > 0;
+        }
         let infoDiv = document.getElementById("selectedFileInfo");
         let span = document.getElementById("numberSelectedFiles");
         let spanParentDiv = span.parentElement;
-        span.textContent = `${numSelected} ${numSelected > 1 ? "files" : "file"}`;
         if (numSelected > 0) {
+            if (isFolderSelect || span.textContent.endsWith("hub") || span.textContent.endsWith("hubs")) {
+                span.textContent = `${numSelected} ${numSelected > 1 ? "hubs" : "hub"}`;
+            } else {
+                span.textContent = `${numSelected} ${numSelected > 1 ? "files" : "file"}`;
+            }
             // (re) set up the handlers for the selected file info div:
             let viewBtn = document.getElementById("viewSelectedFiles");
-            selectedData = data;
             viewBtn.addEventListener("click", viewAllInGenomeBrowser);
-            viewBtn.textContent = numSelected === 1 ? "View selected file in Genome Browser" : "View all selected files in Genome Browser";
-            let deleteBtn = document.getElementById("deleteSelectedFiles");
-            deleteBtn.addEventListener("click", deleteFileList);
-            deleteBtn.textContent = numSelected === 1 ? "Delete selected file" : "Delete selected files";
+            viewBtn.textContent = "View selected";
+            if (!disableDelete) {
+                let deleteBtn = document.getElementById("deleteSelectedFiles");
+                deleteBtn.style.display = "inline-block";
+                deleteBtn.addEventListener("click", deleteFileList);
+                deleteBtn.textContent = "Delete selected";
+            } else {
+                // delete the old button:
+                let deleteBtn = document.getElementById("deleteSelectedFiles");
+                deleteBtn.style.display = "none";
+            }
+        } else {
+            span.textContent = "";
         }
 
         // set the visibility of the placeholder text and info text
@@ -326,19 +453,30 @@ var hubCreate = (function() {
         placeholder.style.display = numSelected === 0 ? "block" : "none";
     }
 
-    function handleCheckboxSelect(ev, table, row) {
+    function handleCheckboxSelect(evtype, table, selectedRow) {
         // depending on the state of the checkbox, we will be adding information
-        // to the div, or removing information. We will also be potentially checking/unchecking
-        // all of the checkboxes if the selectAll box was clicked. The data variable
-        // will hold all the information we want to keep visible in the info div
-        let data = {};
+        // to the div, or removing information. We also potentially checked/unchecked
+        // all of the checkboxes if the selectAll box was clicked.
+
+        // The data variable will hold all the information we want to keep visible in the info div
+        let data = [];
+        // The selectedData global holds the actual information needed for the view/delete buttons
+        // to work, so data plus any child rows
+        selectedData = {};
 
         // get all of the currently selected rows (may be more than just the one that
         // was most recently clicked)
         table.rows({selected: true}).data().each(function(row, ix) {
-            data[ix] = row;
+            data.push(row);
+            selectedData[row.fullPath] = row;
+            // add any newly checked rows children to the selectedData structure for the view/delete
+            if (row.children) {
+                row.children.forEach(function(child) {
+                    selectedData[child.fullPath] = child;
+                });
+            }
         });
-        updateSelectedFileDiv(data);
+        updateSelectedFileDiv(data, selectedRow.data().fileType === "dir");
     }
 
     function createOneCrumb(table, dirName, dirFullPath, doAddEvent) {
@@ -399,6 +537,8 @@ var hubCreate = (function() {
         // show all the "root" files, which are files (probably mostly directories)
         // with no parentDir
         clearSearch(table);
+        // deselect any selected rows like Finder et al when moving into/upto a directory
+        table.rows({selected: true}).deselect();
         table.search.fixed("showRoot", function(searchStr, rowData, rowIx) {
             return !rowData.parentDir;
         });
@@ -407,7 +547,10 @@ var hubCreate = (function() {
     function dataTableShowDir(table, dirName, dirFullPath) {
         // show the directory and all immediate children of the directory
         clearSearch(table);
+        // deselect any selected rows like Finder et al when moving into/upto a directory
+        table.rows({selected: true}).deselect();
         table.draw();
+        // NOTE that the below does not actually render until the next table.draw() call
         table.search.fixed("oneHub", function(searchStr, rowData, rowIx) {
             // calculate the fullPath of this rows parentDir in case the dirName passed
             // to this function has the same name as a parentDir further up in the
@@ -457,17 +600,40 @@ var hubCreate = (function() {
                 oldRowData = null;
             }
             if (!rowNode) {
-                // if we are using the breadcrumb to jump back 2 directories, we won't
-                // have a rowNode because the row will not have been rendered yet
+                // if we are using the breadcrumb to jump back 2 directories or doing an upload
+                // while a subdirectory is opened, we won't have a rowNode because the row will
+                // not have been rendered yet. So draw the table with the oldRowData restored
                 table.draw();
+                // and now we can try again
+                row = table.row((idx,data) => data.fullPath === dirData.fullPath);
                 rowNode = row.node();
             }
             oldRowData = row.data();
             // put the data in the header:
             let rowClone = rowNode.cloneNode(true);
             // match the background color of the normal rows:
-            rowNode.style.backgroundColor = "#f9f9f9";
+            rowClone.style.backgroundColor = "#fff9d2";
             let thead = document.querySelector(".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
+            // remove the checkbox because it doesn't do anything, and replace it
+            // with a back arrow 'button'
+            let btn = document.createElement("button");
+            btn.id = "backButton";
+            $(btn).button({icon: "ui-icon-triangle-1-w"});
+            btn.addEventListener("click", (e) => {
+                let parentDir = dirData.parentDir;
+                let parentDirPath = dirData.fullPath.slice(0,-dirData.fullPath.length);
+                if (parentDirPath.length) {
+                    dataTableShowDir(table, parentDir, parentDirPath);
+                } else {
+                    dataTableShowTopLevel(table);
+                    dataTableCustomOrder(table);
+                    dataTableEmptyBreadcrumb(table);
+                }
+                table.draw();
+            });
+            let tdBtn = document.createElement("td");
+            tdBtn.appendChild(btn);
+            rowClone.replaceChild(tdBtn, rowClone.childNodes[0]);
             if (thead.childNodes.length === 1) {
                 thead.appendChild(rowClone);
             } else {
@@ -629,28 +795,14 @@ var hubCreate = (function() {
         dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
         table.draw();
         dataTableCustomOrder(table, hubDirData);
-        table.draw();
+        table.columns.adjust().draw();
     }
 
-    function doRowSelect(ev, table, indexes) {
+    function doRowSelect(evtype, table, indexes) {
         let selectedRow = table.row(indexes);
         let rowTr = selectedRow.node();
         if (rowTr) {
-            let rowCheckbox = rowTr.childNodes[0].firstChild;
-            let rowChildren = uiState.filesHash[selectedRow.data().fullPath].children;
-            // we need to manually check the children
-            if (rowChildren) {
-                for (let child of rowChildren) {
-                    if (ev.type === "select") {
-                        table.row((idx,data) => data.fullPath === child.fullPath).select();
-                    } else {
-                        table.row((idx,data) => data.fullPath === child.fullPath).deselect();
-                    }
-                }
-            }
-            // lastly check the row itself
-            rowCheckbox.checked = ev.type === "select";
-            handleCheckboxSelect(ev, table, rowTr);
+            handleCheckboxSelect(evtype, table, selectedRow);
         }
     }
 
@@ -665,6 +817,7 @@ var hubCreate = (function() {
     let tableInitOptions = {
         select: {
             items: 'row',
+            selector: 'td:first-child',
             style: 'multi+shift', // default to a single click is all that's needed
         },
         pageLength: 25,
@@ -729,6 +882,15 @@ var hubCreate = (function() {
                 render: function(data, type, row) {
                     if (type === "display") {
                         return dataTablePrintGenome(data);
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 6,
+                render: function(data, type, row) {
+                    if (type === "display") {
+                        return cgiDecode(data);
                     }
                     return data;
                 }
@@ -820,10 +982,37 @@ var hubCreate = (function() {
             table.buttons(".uploadButton").disable();
         }
         table.on("select", function(e, dt, type, indexes) {
-            doRowSelect(e, dt, indexes);
+            indexes.forEach(function(i) {
+                doRowSelect(e.type, dt, i);
+            });
         });
         table.on("deselect", function(e, dt, type, indexes) {
-            doRowSelect(e, dt, indexes);
+            indexes.forEach(function(i) {
+                doRowSelect(e.type, dt, i);
+            });
+        });
+        table.on("click", function(e) {
+            if (e.target.className !== "dt-select-checkbox") {
+                e.stopPropagation();
+                // we've clicked somewhere not on the checkbox itself, we need to:
+                // 1. open the directory if the clicked row is a directory
+                // 2. select the file if the clicked row is a regular file
+                let row = table.row(e.target);
+                let data = row.data();
+                if (data.children && data.children.length > 0) {
+                    dataTableShowDir(table, data.fileName, data.fullPath);
+                    dataTableCustomOrder(table, {"fullPath": data.fullPath});
+                    table.draw();
+                } else {
+                    if (row.selected()) {
+                        row.deselect();
+                        doRowSelect("deselect", table, row.index());
+                    } else {
+                        row.select();
+                        doRowSelect("select", table, row.index());
+                    }
+                }
+            }
         });
         return table;
     }
@@ -837,10 +1026,13 @@ var hubCreate = (function() {
         // get the state from the history stack if it exists
         if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
             _.assign(uiState, uiData.userFiles);
-            parseFileListIntoHash(uiState.fileList);
+            if (uiState.fileList) {
+                parseFileListIntoHash(uiState.fileList);
+            }
         }
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
+        table.columns.adjust().draw();
         // TODO: add event handlers for editing defaults, grouping into hub
         $("#newTrackHubDialog").dialog({
             modal: true,
@@ -902,9 +1094,11 @@ var hubCreate = (function() {
                     batchSelectDiv.style.display = "grid";
                     batchSelectDiv.style.width = "80%";
                     // the grid syntax is 2 columns, 3 rows
-                    batchSelectDiv.style.gridTemplateColumns = "50% 50%";
-                    batchSelectDiv.style.gridTemplateRows = "25px 25px 25px";
+                    batchSelectDiv.style.gridTemplateColumns = "max-content minmax(0, 200px) max-content 1fr min-content";
+                    batchSelectDiv.style.gridTemplateRows = "repest(3, auto)";
                     batchSelectDiv.style.margin = "10px auto"; // centers this div
+                    batchSelectDiv.style.fontSize = "14px";
+                    batchSelectDiv.style.gap = "8px";
                     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
                         batchSelectDiv.style.color = "#eaeaea";
                     }
@@ -920,22 +1114,41 @@ var hubCreate = (function() {
                     this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
                     batchDbSelect.id = "batchDbSelect";
                     batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
-                    batchDbSelect.style.margin = "1px 1px auto";
+                    batchDbSelect.style.margin = "2px";
                     let batchDbLabel = document.createElement("label");
                     batchDbLabel.textContent = "Genome";
                     batchDbLabel.for = "batchDbSelect";
                     batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
 
+                    // the search bar for db selection
+                    let batchDbSearchBarLabel= document.createElement("label");
+                    batchDbSearchBarLabel.textContent = "or search for your genome:";
+                    batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
+                    batchDbSearchBarLabel.style.margin = "auto";
+
+                    let batchDbGenomeSearchBar = document.createElement("input");
+                    batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
+                    batchDbGenomeSearchBar.type = "text";
+                    batchDbGenomeSearchBar.id = "batchDbSearchBar";
+                    batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
+                    let batchDbGenomeSearchButton = document.createElement("input");
+                    batchDbGenomeSearchButton.type = "button";
+                    batchDbGenomeSearchButton.value = "search";
+                    batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
+                    batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
+
                     // the batch change hub name
+                    let batchParentDirLabel = document.createElement("label");
+                    batchParentDirLabel.textContent = "Hub Name";
+                    batchParentDirLabel.for = "batchParentDir";
+                    batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+
                     let batchParentDirInput = document.createElement("input");
                     batchParentDirInput.id = "batchParentDir";
                     batchParentDirInput.value = uiState.hubNameDefault;
                     batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
                     batchParentDirInput.style.margin= "1px 1px auto";
-                    let batchParentDirLabel = document.createElement("label");
-                    batchParentDirLabel.textContent = "Hub Name";
-                    batchParentDirLabel.for = "batchParentDir";
-                    batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+                    batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
 
                     // add event handlers to change metadata, use an arrow function
                     // because otherwise 'this' keyword will be the element instead of
@@ -945,6 +1158,7 @@ var hubCreate = (function() {
                         let val = ev.target.value;
                         for (let [key, file] of Object.entries(files)) {
                             this.uppy.setFileMeta(file.id, {genome: val});
+                            this.uppy.setFileMeta(file.id, {genomeLabel: ev.target.selectedOptions[0].label});
                         }
                     });
                     batchParentDirInput.addEventListener("change", (ev) => {
@@ -955,9 +1169,13 @@ var hubCreate = (function() {
                         }
                     });
 
+
                     batchSelectDiv.appendChild(batchSelectText);
                     batchSelectDiv.appendChild(batchDbLabel);
                     batchSelectDiv.appendChild(batchDbSelect);
+                    batchSelectDiv.appendChild(batchDbSearchBarLabel);
+                    batchSelectDiv.appendChild(batchDbGenomeSearchBar);
+                    batchSelectDiv.appendChild(batchDbGenomeSearchButton);
                     batchSelectDiv.appendChild(batchParentDirLabel);
                     batchSelectDiv.appendChild(batchParentDirInput);
 
@@ -967,6 +1185,17 @@ var hubCreate = (function() {
                     let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
                     if (uppyFilesDiv) {
                         uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
+                    }
+
+                    // everything has to exist already for autocompleteCat to initialize
+                    let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
+                    if (justInitted) {
+                        // only do this once per batch setup
+                        batchDbGenomeSearchButton.addEventListener("click", (e) => {
+                            let inp = document.getElementById(batchDbSearchBar.id).value;
+                            let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
+                            $(selector).autocompleteCat("search", inp);
+                        });
                     }
                 }
             }
@@ -1010,6 +1239,27 @@ var hubCreate = (function() {
                         this.uppy.clear();
                     }
                 });
+                this.uppy.on("dashboard:file-edit-start", (file) => {
+                    autocompletes[`${file.name}DbInput`] = false;
+                });
+
+                this.uppy.on("dashboard:file-edit-complete", (file) => {
+                    // check the filename and hubname metadata and warn the user
+                    // to edit them if they are wrong. unfortunately I cannot
+                    // figure out how to force the file card to re-toggle
+                    // and jump back into the editor from here
+                    if (file) {
+                        let fileNameMatch = file.meta.name.match(fileNameRegex);
+                        let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
+                        const dash = uppy.getPlugin("Dashboard");
+                        if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
+                            uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                        }
+                        if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
+                            uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                        }
+                    }
+                });
             }
             uninstall() {
                 // not really used because we aren't ever uninstalling the uppy instance
@@ -1033,9 +1283,11 @@ var hubCreate = (function() {
                         return h('input',
                             {type: "text",
                             value: value,
+                            class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
                             onChange: e => {
                                 onChange(e.target.value);
                                 file.meta.fileType = detectFileType(e.target.value);
+                                file.meta.name = e.target.value;
                             },
                             required: required,
                             form: form,
@@ -1047,37 +1299,70 @@ var hubCreate = (function() {
                     id: 'genome',
                     name: 'Genome',
                     render: ({value, onChange}, h) => {
-                        return h('select', {
-                            onChange: e => {
-                                onChange(e.target.value);
-                                file.meta.genome = e.target.value;
-                            }
-                            },
-                            makeGenomeSelectOptions().map( (genomeObj) => {
-                                return h('option', {
-                                    value: genomeObj.value,
-                                    label: genomeObj.label,
-                                    selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === defaultDb()
-                                });
+                        // keep these as a variable so we can init the autocompleteCat
+                        // code only after the elements have actually been rendered
+                        // there are multiple rendering passes and only eventually
+                        // do the elements actually make it into the DOM
+                        let ret = h('div', {
+                                class: "uppy-Dashboard-FileCard-label",
+                                style: "display: inline-block; width: 78%"
+                                },
+                            // first child of div
+                            "Select from popular assemblies:",
+                            // second div child
+                            h('select', {
+                                id: `${file.meta.name}DbSelect`,
+                                style: "margin-left: 5px",
+                                onChange: e => {
+                                    onChange(e.target.value);
+                                    file.meta.genome = e.target.value;
+                                    file.meta.genomeLabel = e.target.selectedOptions[0].label;
+                                }
+                                },
+                                makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
+                                    return h('option', {
+                                        value: genomeObj.value,
+                                        label: genomeObj.label,
+                                        selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === defaultDb()
+                                    });
+                                })
+                            ),
+                            h('p', {
+                                class: "uppy-Dashboard-FileCard-label",
+                                style: "display: block; width: 78%",
+                                }, "or search for your genome:"),
+                            // third div child
+                            h('input', {
+                                id: `${file.meta.name}DbInput`,
+                                type: 'text',
+                                class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
+                            }),
+                            h('input', {
+                                id: `${file.meta.name}DbSearchButton`,
+                                type: 'button',
+                                value: 'search',
+                                style: "margin-left: 5px",
                             })
                         );
-                    },
+                    let selectToChange = document.getElementById(`${file.meta.name}DbSelect`);
+                    if (selectToChange) {
+                        let justInitted = initAutocompleteForInput(`${file.meta.name}DbInput`, selectToChange);
+                        if (justInitted) {
+                            // only do this once per file
+                            document.getElementById(`${file.meta.name}DbSearchButton`)
+                                    .addEventListener("click", (e) => {
+                                        let inp = document.getElementById(`${file.meta.name}DbInput`).value;
+                                        let selector = `[id='${file.meta.name}DbInput']`;
+                                        $(selector).autocompleteCat("search", inp);
+                                    });
+                        }
+                    }
+                    return ret;
+                    }
                 },
                 {
                     id: 'parentDir',
                     name: 'Hub Name',
-                    render: ({value, onChange, required, form}, h) => {
-                        return h('input',
-                            {type: 'text',
-                             value: value,
-                             onChange: e => {
-                                onChange(e.target.value);
-                             },
-                             required: required,
-                             form: form,
-                            }
-                        );
-                    },
                 }];
                 return fields;
             },
@@ -1096,43 +1381,53 @@ var hubCreate = (function() {
         uppy.on('upload-success', (file, response) => {
             const metadata = file.meta;
             const d = new Date(metadata.lastModified);
+            const pad = (num) => String(num).padStart(2, '0');
+            const dFormatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
             const now = new Date(Date.now());
+            const nowFormatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            let newReqObj, hubTxtObj, parentDirObj;
             newReqObj = {
-                "fileName": metadata.fileName,
+                "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
-                "parentDir": metadata.parentDir,
-                "lastModified": d.toLocaleString(),
-                "uploadTime": now.toLocaleString(),
-                "fullPath": metadata.parentDir + "/" + metadata.fileName,
+                "parentDir": cgiEncode(metadata.parentDir),
+                "lastModified": dFormatted,
+                "uploadTime": nowFormatted,
+                "fullPath": cgiEncode(metadata.parentDir) + "/" + cgiEncode(metadata.fileName),
             };
             // from what I can tell, any response we would create in the pre-finish hook
             // is completely ignored for some reason, so we have to fake the other files
             // we would have created with this one file and add them to the table if they
             // weren't already there:
-            hubTxtObj = {
-                "uploadTime": now.toLocaleString(),
-                "lastModified": d.toLocaleString(),
-                "fileName": "hub.txt",
-                "fileSize": 0,
-                "fileType": "hub.txt",
-                "genome": metadata.genome,
-                "parentDir": metadata.parentDir,
-                "fullPath": metadata.parentDir + "/hub.txt",
-            };
+            if (metadata.fileName !== "hub.txt") {
+                // if the user uploaded a hub.txt don't make a second fake object for it
+                hubTxtObj = {
+                    "uploadTime": nowFormatted,
+                    "lastModified": dFormatted,
+                    "fileName": "hub.txt",
+                    "fileSize": 0,
+                    "fileType": "hub.txt",
+                    "genome": metadata.genome,
+                    "parentDir": cgiEncode(metadata.parentDir),
+                    "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
+                };
+            }
             parentDirObj = {
-                "uploadTime": now.toLocaleString(),
-                "lastModified": d.toLocaleString(),
-                "fileName": metadata.parentDir,
+                "uploadTime": nowFormatted,
+                "lastModified": dFormatted,
+                "fileName": cgiEncode(metadata.parentDir),
                 "fileSize": 0,
                 "fileType": "dir",
                 "genome": metadata.genome,
                 "parentDir": "",
-                "fullPath": metadata.parentDir + "/",
+                "fullPath": cgiEncode(metadata.parentDir),
             };
             // package the three objects together as one "hub" and display it
-            let hub = [parentDirObj, hubTxtObj, newReqObj];
+            let hub = [parentDirObj, newReqObj];
+            if (hubTxtObj) {
+                hub.push(hubTxtObj);
+            }
             addNewUploadedHubToTable(hub);
         });
         uppy.on('complete', (result) => {

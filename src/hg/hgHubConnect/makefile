@@ -21,3 +21,8 @@ alpha:: compile
 ifeq (${IS_HGWDEV},yes)
 	cd hooks && ${MAKE} alpha
 endif
+
+beta:: compile
+ifeq (${IS_HGWDEV},yes)
+	cd hooks && ${MAKE} beta
+endif

@@ -27,13 +27,11 @@ struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile
  */
 {
 char *linkFileName = bigChainGetLinkFile(quickLiftFile);
-// need to add some padding to these coordinates
-int padStart = start - 100000;
-if (padStart < 0)
-    padStart = 0;
-struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
+int maxGapBefore = 0;
+int maxGapAfter = 0;
+struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, start, end, -1);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = NULL;
+struct bigBedInterval *bbList = NULL, *bb;
 
 for(chain = chainList; chain; chain = chain->next)
     {
@@ -55,15 +53,41 @@ for(chain = chainList; chain; chain = chain->next)
             qEnd = cb->qEnd;
         }
 
-    // now grab the items 
+    // now grab the items , probably we should parameterize the max number of items, but to what?
     struct bigBedInterval *thisInterval = NULL;
     if (chain->qStrand == '-')
-        thisInterval = bigBedIntervalQuery(bbi, chain->qName, chain->qSize - qEnd, chain->qSize - qStart,  10000, lm);
+        thisInterval = bigBedIntervalQuery(bbi, chain->qName, chain->qSize - qEnd, chain->qSize - qStart,  1000000, lm);
     else
-        thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd, 10000, lm);
+        thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd, 1000000, lm);
+
+    // find how much of the items are beyond the viewport
+    for(bb=thisInterval; bb; bb = bb->next)
+        {
+        if (bb->start < qStart)
+            {
+            int gap = qStart - bb->start;
+            if (gap > maxGapBefore)
+                maxGapBefore = gap;
+            }
+        if (bb->end > qEnd)
+            {
+            int gap = bb->end - qEnd;
+            if (gap > maxGapAfter)
+                maxGapAfter = gap;
+            }
+        }
     bbList = slCat(thisInterval, bbList);
-    
-    // for the mapping we're going to use the same chain we queried on to map the items, but we need to swap it
+    }
+
+// now we need to grab the links outside of our viewport so we can map long items
+// probably we could reuse the chains from above but for the moment this is easier
+int newStart = start - maxGapBefore * 2;
+if (newStart < 0)
+    newStart = 0;
+int newEnd = end + maxGapAfter * 2;
+chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, newStart, newEnd, -1);
+for(chain = chainList; chain; chain = chain->next)
+    {
     chainSwap(chain);
 
     if (*pChainHash == NULL)
@@ -95,7 +119,6 @@ char chromName[256];
 static int lastChromId = -1;
 
 bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
-//lastChromId=bb->chromId;
 
 bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
@@ -207,7 +230,7 @@ for(bed = bedList; bed; bed = nextBed)
         {
         error = liftOverRemapRange(chainHash, 0.0, bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
                              
-                            0.1, &bed->chrom, (int *)&bed->chromStart, (int *)&bed->chromEnd, &bed->strand[0]);
+                            0.001, &bed->chrom, (int *)&bed->chromStart, (int *)&bed->chromEnd, &bed->strand[0]);
         }
     else
         error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL);

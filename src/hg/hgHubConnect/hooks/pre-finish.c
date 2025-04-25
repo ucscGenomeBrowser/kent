@@ -55,6 +55,7 @@ if (!(reqId))
     }
 else
     {
+    char *tusFile = NULL, *tusInfo = NULL;
     struct errCatch *errCatch = errCatchNew(0);
     if (errCatchStart(errCatch))
         {
@@ -111,7 +112,7 @@ else
             parentDir = skipBeyondDelimit(parentDir, '/');
         fprintf(stderr, "parentDir = '%s'\n", parentDir);
         fflush(stderr);
-        char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
+        tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
         if (fileName == NULL)
             {
             errAbort("No Event.Upload.fileName setting");
@@ -122,7 +123,7 @@ else
             }
         else
             {
-            char *tusInfo = catTwoStrings(tusFile, ".info");
+            tusInfo = catTwoStrings(tusFile, ".info");
             userDataDir = dataDir = getDataDir(userName);
             struct dyString *newFile = dyStringNew(0);
             // if parentDir provided we are throwing the files in there
@@ -185,7 +186,7 @@ else
             row->location = location;
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = encodedParentDir ? encodedParentDir : "";
-            if (!isHubToolsUpload)
+            if (!isHubToolsUpload && !(sameString(fileName, "hub.txt")))
                 {
                 createNewTempHubForUpload(reqId, row, userDataDir, encodedParentDir);
                 fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
@@ -202,6 +203,16 @@ else
     if (errCatch->gotError)
         {
         rejectUpload(response, errCatch->message->string);
+        // must remove the tusd temp files so if the users tries again after a temp error
+        // the upload will work
+        if (tusFile)
+            {
+            mustRemove(tusFile);
+            mustRemove(tusInfo);
+            }
+        // TODO: if the first mysql request in createNewTempHubForUpload() works but then
+        // either of makeParentDirRows() or addHubSpaceRowForFile() fails, we need to also
+        // drop any rows we may have added because the upload didn't full go through
         exitStatus = 1;
         }
     errCatchEnd(errCatch);

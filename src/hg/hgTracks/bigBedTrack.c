@@ -703,7 +703,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         // bigDbSnp does not have a score field, but I want to compute the freqSourceIx from
         // trackDb and settings one time instead of for each item, so I'm overloading scoreMin.
         int freqSourceIx = scoreMin;
-        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx, bbi);
+        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx, bbi, chainHash);
         }
     else
 	{

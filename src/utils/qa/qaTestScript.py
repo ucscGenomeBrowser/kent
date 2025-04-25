@@ -221,6 +221,12 @@ driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table
 driver.get(machine + "/cgi-bin/hgTables?db=oviAri4")
 driver.find_element(By.NAME, "hgta_doSummaryStats").click()
 
+# Tests a split table (mm10 intronEst table) on the Table Browser
+cartReset()
+driver.get(machine +"cgi-bin/hgTables?clade=mammal&org=Mouse&db=mm10&hgta_group=allTables&hgta_track=mm10&hgta_table=intronEst")
+driver.find_element(By.NAME, "hgta_doSummaryStats").click()
+time.sleep(3)
+
 # Tests a session with custom tracks, multiRegion, and assembly hub
 cartReset()
 driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=QAtester&hgS_otherUserSessionName=Custom_Tracks_AssemblyHub_MultiRegion_TrackCollection_BigWigs")
@@ -528,7 +534,7 @@ driver.find_element(By.NAME, "hglft_userData").clear()
 driver.find_element(By.NAME, "hglft_userData").send_keys("chr11:101,379,590-101,442,705")
 driver.find_element(By.NAME, "Submit").click()
 time.sleep(3)
-driver.find_element(By.LINK_TEXT, "View Conversions")
+driver.find_element(By.LINK_TEXT, "View conversions")
 
 # Tests hgPcr target Genes Track (data changes with data pushes)
 cartReset()

@@ -16,7 +16,6 @@ type genePred
 configurable off
 wgEncodeGencodeVersion 47
 maxTransEnabled on
-pennantIcon New red ../goldenPath/newsarch.html#110824 "Updated Nov. 8, 2024"
 
     track wgEncodeGencodeV47ViewGenes
     shortLabel Genes

@@ -140,6 +140,37 @@ searchDescription miRNA Tissue Atlas Sample 2
 searchMethod exact
 semiShortCircuit 1
 
+track unusualcons
+compositeTrack on
+shortLabel Unusually Conserved
+longLabel Unusually Conserved Regions - Ultrasconserved, Human Accelerated
+type bed
+group compGeno
+release alpha
+
+    #track har721
+    #shortLabel 721 HARs
+    #longLabel 721 HARs from UCSC MultiZ alignments
+    #parent unusualcons on
+    #type bigBed 9 +
+    #bigDataUrl /gbdb/hg38/unusualcons/harMultiz.bb
+
+    track hars312
+    shortLabel 312 HARs
+    longLabel 312 HARs from Zoonomia alignments
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
+    release alpha
+
+    track ultras
+    shortLabel Ultracons.
+    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
+    release alpha
+
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
@@ -522,7 +553,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra
+include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
@@ -873,4 +905,8 @@ include assemblyTracks.ra
 
 include primates11way.ra alpha
 
-include pseudogenes.ra
+include pseudogenes.ra alpha
+
+include recount3.ra alpha
+
+include long_read_transcripts.ra alpha

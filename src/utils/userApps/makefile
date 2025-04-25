@@ -6,21 +6,20 @@ include ${kentSrc}/inc/common.mk
 CMD_LIST = fetchChromSizes
 DOC_LIST = 
 
-all::
+all:: cmd_all doc_all
+
+cmd_all: ${CMD_LIST:%_cmd_all}
+%_cmp_all:
 	@${MKDIR} "${DESTDIR}${BINDIR}"
-	@for P in ${CMD_LIST}; do \
-	    ( rm -f "${DESTDIR}${BINDIR}/$${P}" && \
-		cp $${P} "${DESTDIR}${BINDIR}" && \
-		chmod +x "${DESTDIR}${BINDIR}/$${P}" && \
-		echo "installed ${DESTDIR}${BINDIR}/$${P}" ) ; \
-	done
-	@for P in ${DOC_LIST}; do \
-	    ( rm -f "${DESTDIR}${BINDIR}/$${P}" && \
-		cp -p $${P} "${DESTDIR}${BINDIR}" && \
-		echo "installed ${DESTDIR}${BINDIR}/$${P}" ) ; \
-	done
+	rm -f "${DESTDIR}${BINDIR}/$*"
+	cp $* "${DESTDIR}${BINDIR}/"
+	chmod +x "${DESTDIR}${BINDIR}/$*"
+
+doc_all: ${DOC_LIST:%=%_doc_all}
+%_doc_all:
+	rm -f "${DESTDIR}${BINDIR}/$*"
+	cp -p $* "${DESTDIR}${BINDIR}/"
 
 clean::
 	@echo "nothing to clean in userApps"
 
-# "$Id: makefile,v 1.5 2009/10/07 18:18:38 galt Exp $"

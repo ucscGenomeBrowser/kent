@@ -221,7 +221,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printMetadataForTable(row[0]);
     }
 sqlFreeResult(&sr);
-freez(&vocabFile);
 dyStringFree(&query);
 }
 

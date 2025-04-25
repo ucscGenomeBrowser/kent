@@ -101,6 +101,9 @@ scp -p hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
 ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@hgdownload2:/mirrordata/apache/htdocs/admin/
 
+ssh -n qateam@hgdownload3 "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
+scp -p hgcentral.sql qateam@hgdownload3:/mirrordata/apache/htdocs/admin/
+
 ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@genome-euro:/mirrordata/apache/htdocs/admin/
 

@@ -253,6 +253,7 @@ var hgCollection = (function() {
         }
         json += JSON.stringify(v);
         json += ']';
+        json = encodeURIComponent(json);  // encodes , / ? : @ & = + $ # and special characters.
         var requestData = 'jsonp=' + json + '&hgsid=' + getHgsid();
         $.ajax({
             data:  requestData ,
