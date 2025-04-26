@@ -11,6 +11,7 @@ ifeq (${FIND},)
     # Default to using find: Mirrors do not have the program 'gitFiles'. Also gitFiles is not needed anyways.
     # Also, when gitFiles is not present, the make target would silently fail and do nothing.
     FIND = find
+
     ifeq (${INSIDEGIT},true)
         ifeq (${HASGITFILES},true)
     	    FIND = gitFiles
@@ -58,7 +59,11 @@ beta:
 # use care in changing
 rsyncOpts = --whole-file --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
 doInstall:
+    ifeq ($(UNAME_S),Darwin) 
+	rsync ${rsyncOpts} ${excl} ${incl} ./ ${destDir}
+    else
 	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
+    endif
 
 # Other targets that may be invoked by ../makefile:
 compile:
