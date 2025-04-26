@@ -3,7 +3,7 @@
 # script to install/setup dependencies for the UCSC genome browser CGIs
 # call it like this as root from a command line: bash browserSetup.sh
 
-# you can easily debug this script with 'bash -x browserSetup.sh', it 
+# You can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
 exec > >(tee -a "${HOME}/browserSetup.log") 2>&1
@@ -46,10 +46,10 @@ CGIBINDIR=$APACHEDIR/cgi-bin
 # directory for temporary files
 TRASHDIR=$APACHEDIR/trash
 
-# Mysql data directory 
+# Mysql data directory for most genome annotation data
 # Yes we only support mariaDB anymore, but the variables will keep their names
 # Below please assume that mariadb is meant when mysql is written.
-# For most genome annotation data
+# All user progress messages mention MariaDB, and no MySQL anymore.
 # (all non-mysql data is stored in /gbdb)
 MYSQLDIR=/var/lib/mysql
 
@@ -109,6 +109,9 @@ STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/mast
 # the -t option allows to download only the genome databases, not hgFixed/proteome/go/uniProt
 # by default, this is off, so we download hgFixed and Co. 
 ONLYGENOMES=0
+
+# make apt-get fail on warnings
+APTERR="-o APT::Update::Error-Mode=any"
 # ---- END GLOBAL DEFAULT SETTINGS ----
 
 # ---- DEFAULT CONFIG FILES ------------------
@@ -389,7 +392,7 @@ command is one of:
   dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
                ~/kent and build the CGIs into /usr/local/apache so you can try
                them right away. Useful if you want to develop your own track 
-               types.
+               type. (OSX OK)
   mysql      - Patch my.cnf and recreate Mysql users. This can fix
                a broken Mysql server after an update to Mysql 8. 
                
@@ -544,6 +547,9 @@ function setMYCNF ()
     elif [ -f /etc/mysql/my.cnf ] ; then
         # generic Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
+    elif [ -f /opt/homebrew/etc/my.cnf ]; then
+        # homebrew on ARMs
+    	MYCNF=/opt/homebrew/etc/my.cnf
     else
     	echo Could not find my.cnf. Adapt 'setMYCNF()' in browserSetup.sh and/or contact us.
     	exit 1
@@ -563,14 +569,14 @@ sed -Ei '/^.(mysqld|server).$/a sql_mode='  $MYCNF
 function mysqlAllowOldPasswords
 # mysql >= 8 does not allow the old passwords anymore. But our client is still compiled
 # with the old, non-SHA256 encryption. So we must deactivate this new feature.
-# What will MariaDB do?
+# We do not support MySQL anymore, so this function could be removed
 {
-echo2 'Checking for Mysql version >= 8'
+echo2 'Checking for Mysql version >= 8 (not officially supported by our software)'
 
 MYSQLMAJ=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d. -f1`
 setMYCNF
 if [ "$MYSQLMAJ" -ge 8 ] ; then
-    echo2 'Mysql >= 8 found, checking if default-authentication allows native passwords'
+    echo2 'Mysql/MariaDB >= 8 found, checking if default-authentication allows native passwords'
     if grep -q default-authentication $MYCNF; then
         echo2 "default-authentication already set in $MYCNF"
     else
@@ -634,6 +640,7 @@ echo2
 }
 
 # On OSX, we have to compile everything locally
+# DEPRECATED. This can be used to build a native OSX app. But not supported right now.
 function setupCgiOsx () 
 {
     if [[ "$BUILDKENT" == "0" ]]; then
@@ -890,24 +897,23 @@ function installRedhat () {
     fi
 }
 
-# OSX specific setup of the installation
-function installOsx () 
+function installOsxDevTools () 
+# make sure that the xcode command line tools are installed
 {
    # check for xcode
    if [ -f /usr/bin/xcode-select 2> /dev/null > /dev/null ]; then
        echo2 Found XCode
    else
        echo2
-       echo2 'This installer has to compile the UCSC tools locally on OSX.'
-       echo2 'Please install XCode from https://developer.apple.com/xcode/downloads/'
-       echo2 'Start XCode once and accept the Apple license.'
-       echo2 'Then run this script again.'
-       exit 100
+       echo2 'This installer has to compile the UCSC tools locally on OSX. We need clang. Starting installation.'
+       xcode-select --install 2> /dev/null >/dev/null
    fi
+}
 
-   # make sure that the xcode command line tools are installed
-   echo2 Checking/Installing Xcode Command line tools
-   xcode-select --install 2> /dev/null >/dev/null  || true
+# OSX specific setup of the installation
+function installOsx () 
+{
+   installOsxDevTools
 
    # in case that it is running, try to stop Apple's personal web server, we need access to port 80
    # ignore any error messages
@@ -953,7 +959,7 @@ function installOsx ()
    # configure apache and mysql 
    if [ ! -f $APACHEDIR/ext/configOk.flag ]; then
        cd $APACHEDIR/ext
-       echo2 Creating mysql config in $APACHEDIR/ext/my.cnf
+       echo2 Creating MariaDb config in $APACHEDIR/ext/my.cnf
        # avoid any write-protection issues
        if [ -f $APACHEDIR/ext/my.cnf ]; then
            chmod u+w $APACHEDIR/ext/my.cnf 
@@ -968,11 +974,6 @@ function installOsx ()
        echo '[client]' >> my.cnf
        echo "socket = $APACHEDIR/ext/mysql.socket" >> my.cnf
 
-       # configure mysql
-       #echo2 Creating Mysql system databases
-       #mkdir -p $MYSQLDIR
-       #scripts/mysql_install_db --datadir=$MYSQLDIR
-       #SET_MYSQL_ROOT=1 # not needed with skip-networking
        cd $APACHEDIR
        # download minimal mysql db
        downloadFile $MYSQLDBURL | tar xz
@@ -1016,9 +1017,9 @@ function installOsx ()
        touch $APACHEDIR/ext/configOk.flag 
    fi
 
-   echo2 Running $APACHEDIR/browserStartup.sh to start mysql and apache
+   echo2 Running $APACHEDIR/browserStartup.sh to start MariaDB and apache
    $APACHEDIR/browserStartup.sh
-   echo2 Waiting for mysql to start
+   echo2 Waiting for MariaDB to start
    sleep 5
 }
 
@@ -1028,8 +1029,7 @@ function installDebian ()
     # update repos
     if [ ! -f /tmp/browserSetup.aptGetUpdateDone ]; then
        echo2 Running apt-get update
-       apt-get update
-       touch /tmp/browserSetup.aptGetUpdateDone
+       apt-get update $APTERR && touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
     # the new tzdata package comes up interactive questions, suppress these
@@ -1041,8 +1041,9 @@ function installDebian ()
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
+    apt-get $APTERR --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
     # python-mysqldb has been removed in almost all distros as of 2021
+    # There is no need to install Python2 anymore. Remove the following?
     if apt-cache policy python-mysqldb | grep "Candidate: .none." > /dev/null; then 
 	    echo2 The package python-mysqldb is not available anymore. Working around it
 	    echo2 by installing python2 and MySQL-python with pip2
@@ -1051,7 +1052,7 @@ function installDebian ()
    	       echo2 Python2 package is not available either for this distro, so not installing Python2 at all.
 	    else
                # workaround for Ubuntu 16-20 - keeping this section for a few years, just in case
-               apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+               apt-get install $APTERR --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
     	       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
     	       python2 /tmp/get-pip.py
                if [ -f /usr/include/mysql/my_config.h ]; then
@@ -1075,12 +1076,12 @@ function installDebian ()
 
         # apache and mysql are absolutely required
         # ghostscript is required for PDF output
-        apt-get --assume-yes install apache2 ghostscript
+        apt-get $APTERR --assume-yes install apache2 ghostscript
     
         # gmt is not required. install fails if /etc/apt/sources.list does not contain
         # a 'universe' repository mirror. Can be safely commented out. Only used
         # for world maps of alleles on the dbSNP page.
-        # apt-get install gmt
+        # apt-get $APTERR install gmt
         
         # activate required apache2 modules
         a2enmod include # we need SSI and CGIs
@@ -1111,8 +1112,7 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
 	# Debian / Ubuntu 20 defaults to Mysql 8 and Mysql 8 does not allow rsync of myisam anymore
 	# -> we require mariaDb now
-        # apt-get --assume-yes install mysql-server
-        apt-get --assume-yes install mariadb-server
+        apt-get $APTERR --assume-yes install mariadb-server
 
         mysqlStrictModeOff
         startMysql
@@ -1422,30 +1422,91 @@ function mysqlDbSetup ()
     $MYSQL -e "FLUSH PRIVILEGES;"
 }
 
-# set this machine for browser development: install required tools, clone the tree, build it
-function buildTree () 
+
+# install clang, brew and configure Apple's Apache, so we can build the tree on OSX
+function setupBuildOsx ()
+{
+   # install clang
+   installOsxDevTools
+
+   which -s brew > /dev/null
+   if [[ $? != 0 ]] ; then
+       echo2 Homebrew not found. Installing now.
+       ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+   else
+       brew update
+   fi
+   echo2 Installing homebrew packages libpng, openssl, mariadb, git
+   brew install libpng openssl mariadb git
+   
+   #if ! libpng-config --version > /dev/null 2>&1; then
+   #if ! mariadb --version > /dev/null 2>&1; then
+   #if ! git --version > /dev/null 2>&1; then
+   #if ! openssl --version > /dev/null 2>&1; then
+
+   echo2 Allowing write for all on Apple's Apache htdocs/cgi-bin directories
+   echo2 This requires sudo, so please enter the admin password now
+   sudo chmod a+rw /Library/WebServer/CGI-Executables
+   sudo chmod a+rw /Library/WebServer/Documents
+
+   # create symlinks to Apple's paths so all our normal makefiles work
+   if [ ! -e /usr/local/apache ]; then
+      echo2 Creating /usr/local/apache to fill with symlinks later
+      sudo mkdir -p /usr/local/apache
+      sudo chmod a+rw /usr/local/apache
+   fi
+
+   if [ ! -e /usr/local/apache/cgi-bin ]; then
+      echo2 Creating symlink /usr/local/apache/cgi-bin to /Library/WebServer/CGI-Executables
+      sudo ln -s /Library/WebServer/CGI-Executables /usr/local/apache/cgi-bin
+   fi
+   if [ ! -e /usr/local/apache/htdocs ]; then
+      echo2 Creating symlink /usr/local/apache/htdocs to /Library/WebServer/Documents
+      sudo ln -s /Library/WebServer/Documents/ /usr/local/apache/htdocs 
+   fi
+
+   # switch on CGIs in Apple's Apache and restart it
+   sudo sed -i '' -E 's/^\s*#(LoadModule cgid_module)/\1/; s/^\s*#(LoadModule cgi_module)/\1/' /etc/apache2/httpd.conf
+   sudo /usr/sbin/apachectl restart
+}
+
+# install gcc, make etc so we can build the tree on linux
+function setupBuildLinux ()
 {
    echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
-      apt-get install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev libbz2-dev
    elif [[ "$DIST" == "redhat" ]]; then
       yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
    else 
       echo Error: Cannot identify linux distribution
       exit 100
    fi
+}
 
-   echo2 Cloning kent repo into ~/kent using git with --depth=1
-   waitKey
-   cd ~
-   git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
+# set this machine for browser development: install required tools, clone the tree, build it
+function buildTree () 
+{
+   if [[ "$DIST" == "OSX" ]]; then
+       setupBuildOsx
+   else
+       setupBuildLinux
+   fi
+
+   if [ ! -e ~/kent ]; then
+      echo2 Cloning kent repo into ~/kent using git with --depth=1
+      waitKey
+      cd ~
+      git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
+   fi
 
    echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
    echo2 Copying JS/HTML/CSS to /usr/local/apache/htdocs
    waitKey
    cd ~/kent/src
    make -j8 cgi-alpha
+   make -j8 htdocs
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
@@ -1461,16 +1522,17 @@ function installBrowser ()
     echo '--------------------------------'
     echo UCSC Genome Browser installation
     echo '--------------------------------'
-    echo Detected OS: $OS/$DIST, Version $VERNUM, Release: $VER
+    echo CPU type: $MACH, detected OS: $OS/$DIST, Version: $VERNUM, Release: $VER
     echo 
     echo This script will go through three steps:
     echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
     echo "2 - copy CGI binaries into $CGIBINDIR, html files into $HTDOCDIR"
     echo "3 - optional: download genome assembly databases into mysql and /gbdb"
     echo
-    echo This script will now install and configure Mysql and Apache if they are not yet installed. 
+    echo This script will now install and configure MariaDB and Apache if they are not yet installed. 
     echo "Your distribution's package manager will be used for this."
-    echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
+    echo If MariaDB is not installed yet, it will be installed, secured and a root password defined.
+    echo The MariaDB root password will be written into root\'s \~/.my.cnf
     echo
     echo This script will also deactivate SELinux if active and open port 80/http.
     waitKey
@@ -1478,7 +1540,9 @@ function installBrowser ()
     # -----  OS - SPECIFIC part -----
     if [ ! -f $COMPLETEFLAG ]; then
        if [[ "$DIST" == "OSX" ]]; then
-          installOsx
+          #installOsx <- not used anymore, but maybe one day
+ 	  # on OSX, install clang, brew, kent and build the CGIs from scratch
+          buildTree
        elif [[ "$DIST" == "debian" ]]; then
           installDebian
        elif [[ "$DIST" == "redhat" ]]; then
@@ -1545,9 +1609,11 @@ function installBrowser ()
     
     # the CGIs create links to images in /trash which need to be accessible from htdocs
     cd $HTDOCDIR
-    ln -fs $TRASHDIR
+    if [ ! -e $TRASHDIR ]; then
+        ln -fs $TRASHDIR
+    fi
     
-    # write the sample hg.conf ti the cgi-bin directory
+    # write the sample hg.conf to the cgi-bin directory
     echo2 Creating Genome Browser config file $CGIBINDIR/hg.conf
     echo "$HG_CONF_STR" > $CGIBINDIR/hg.conf
     
@@ -1563,7 +1629,7 @@ function installBrowser ()
        # in OSX adapt the sockets
        # note that the sed -i syntax is different from linux
        echo2 Adapting mysql socket locations in $CGIBINDIR/hg.conf
-       sockFile=$APACHEDIR/ext/mysql.socket
+       sockFile=`mysql -NBe 'show variables like "socket"' | cut -f2`
        $SEDINPLACE "s|^#?socket=.*|socket=$sockFile|" $CGIBINDIR/hg.conf
        $SEDINPLACE "s|^#?customTracks.socket.*|customTracks.socket=$sockFile|" $CGIBINDIR/hg.conf
        $SEDINPLACE "s|^#?db.socket.*|db.socket=$sockFile|" $CGIBINDIR/hg.conf
@@ -1584,10 +1650,13 @@ function installBrowser ()
        echo not modifying $CGIBINDIR/hg.conf
     fi
 
-
     # download the CGIs
     if [[ "$OS" == "OSX" ]]; then
-        setupCgiOsx
+        #setupCgiOsx
+        echo2 Running on OSX, assuming that CGIs are already built into /usr/local/apache/cgi-bin
+    elif [[ "$MACH" == "aarch64" ]]; then
+        echo2 Running on an ARM CPU: need to build CGIs and htdocs locally from source
+        buildTree
     else
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
@@ -1598,17 +1667,24 @@ function installBrowser ()
     fi
 
     # download the html docs, exclude some big files on OSX
-    rm -rf $APACHEDIR/htdocs/goldenpath
     # try to minimize storage for OSX, mostly laptops
-    if [ "$OS" == "OSX" ]; then
-            $RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
+    if [ "$OS" == "OSX" -o "$MACH" == "aarch64" ]; then
+            #$RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
+            echo2 Not syncing htdocs folder, assuming that these were built from source.
+            echo2 PDF and other large files only present at UCSC will be missing from htdocs.
+            waitKey
     else
+            rm -rf $APACHEDIR/htdocs/goldenpath
             $RSYNC -avzP --exclude ENCODE/**.pdf $HGDOWNLOAD::htdocs/ $HTDOCDIR/
     fi
     
     # assign all files just downloaded to a valid user. 
     # This also allows apache to write into the trash dir
-    chown -R $APACHEUSER:$APACHEUSER $CGIBINDIR $HTDOCDIR $TRASHDIR
+    if [ "$OS" == "OSX" ]; then
+        echo2 OSX: Not chowning /usr/local/apache subdirectories
+    else
+        chown -R $APACHEUSER:$APACHEUSER $CGIBINDIR $HTDOCDIR $TRASHDIR
+    fi
     
     touch $COMPLETEFLAG
 
@@ -1895,7 +1971,17 @@ function downloadMinimal
 }
 
 function checkDownloadUdr () 
+# download the faster downloader udr that is compatible with rsync and change the global variable RSYNC
 {
+    if [[ "$OS" == "OSX" ]]; then 
+        return
+    fi
+    if [[ "$MACH" == "aarch64" ]]; then 
+        return
+    fi
+
+    RSYNC="/usr/local/bin/udr rsync"
+
     # Download my own statically compiled udr binary
     if [[ ! -f /usr/local/bin/udr ]]; then
       echo2 'Downloading download-tool udr (UDP-based rsync with multiple streams) to /usr/local/bin/udr'
@@ -2034,7 +2120,6 @@ while getopts ":baeut:hof" opt; do
       fi
       ;;
     u)
-      RSYNC="/usr/local/bin/udr rsync"
       checkDownloadUdr
       ;;
     o)
@@ -2071,6 +2156,7 @@ shift $(($OPTIND - 1))
 # detect the OS version, linux distribution
 unameStr=`uname`
 DIST=none
+MACH=`uname -m`
 
 if [[ "$unameStr" == MINGW32_NT* ]] ; then
     echo Sorry Windows/CYGWIN is not supported
@@ -2142,16 +2228,18 @@ if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; 
   exit 100
 fi
 
-if uname -m | grep -vq _64; then
-  echo "Your machine does not seem to be a 64bit system"
-  echo "Sorry, the Genome Browser requires a 64bit linux."
-  exit 100
-fi
-
-if [[ "$EUID" != "0" ]]; then
-  echo "This script must be run as root or with sudo like this:"
-  echo "sudo -H $0"
-  exit 100
+if [[ "$EUID" == "0" ]]; then
+  if [[ "$OS" == "OSX" ]]; then
+     echo "On OSX, this script must not be run with sudo, so we can install brew."
+     echo "sudo -H $0"
+     exit 100
+  fi
+else
+  if [[ "$OS" != "OSX" ]]; then
+     echo "On Linux, this script must be run as root or with sudo like below, so we can run apt/yum:"
+     echo "sudo -H $0"
+     exit 100
+  fi
 fi
 
 if [ "${1:-}" == "install" ]; then

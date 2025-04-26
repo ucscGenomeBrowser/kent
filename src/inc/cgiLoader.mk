@@ -20,10 +20,9 @@ cgi_any:: compile ${SQL_FILES:%=%_sql_install}
 	chmod a+rx ${A}${EXE}
 	mv -f ${A}${EXE} ${CGI_LOADER_DEST}/
 
-
 %_sql_install:
 	@${MKDIR} ${CGI_LOADER_DEST}
-	cp -fp --remove-destination $* ${CGI_LOADER_DEST}/
+	cp -fp ${CPREMDESTOPT} $* ${CGI_LOADER_DEST}/
 
 cgi:: cgi_any
 alpha:: cgi_any

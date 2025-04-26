@@ -1,7 +1,7 @@
 kentSrc = ../../../../..
 include ../../../../../inc/common.mk
 
-CPFLAGS = -p --remove-destination
+CPFLAGS = -p ${CPREMDESTOPT}
 
 # copies files to hgwdev or sandbox
 
