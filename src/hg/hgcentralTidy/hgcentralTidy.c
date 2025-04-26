@@ -302,7 +302,7 @@ while(TRUE)
     verbose(1, "%d minutes\n\n", minutes);
 }
 
-int binaryIdSearch(unsigned int *ids, int numIds, char *table, int daysAgo)
+int binaryIdSearch(unsigned int *ids, int numIds, char *table, int daysAgo, boolean endSearch)
 /* Find the array index in ids which holds the id that contains
  * the oldest record satisfying the daysAgo criterion. 
  * If not found, return -1 */
@@ -314,7 +314,12 @@ int m = 0;
 while (TRUE)
     {
     if (a > b)
-	return a;   // is this right?
+	{
+	if (endSearch)
+	    return b;
+	else
+	    return a;
+	}
     m = (b + a) / 2;
     //verbose(1,"bin a=%d, b=%d, m=%d\n", a, b, m);
     while (TRUE)
@@ -329,7 +334,14 @@ while (TRUE)
 		{
 		a = m + 1;
 		}
-	    else 
+	    else if (daysAgoFirstUse == daysAgo)
+		{
+                if (endSearch)
+		    a = m + 1;
+		else
+		    b = m - 1;
+		}
+	    else
 		{
 		b = m - 1;
 		}
@@ -397,8 +409,8 @@ if (optionExists("purgeStart"))   // manual purge range specified
 	purgeEnd = 0;
     if (purgeStart < purgeEnd)
 	errAbort("purgeStart should be greater than purgeEnd (in days ago)");
-    purgeRangeStart = binaryIdSearch(ids, totalRows, table, purgeStart);
-    purgeRangeEnd   = binaryIdSearch(ids, totalRows, table, purgeEnd);
+    purgeRangeStart = binaryIdSearch(ids, totalRows, table, purgeStart, FALSE);
+    purgeRangeEnd   = binaryIdSearch(ids, totalRows, table, purgeEnd, TRUE);
     verbose(1, "manual purge range: purgeStart %d purgeEnd %d rangeStart %d rangeEnd %d rangeSize=%d ids[rs]=%u\n", 
                                     purgeStart,   purgeEnd, purgeRangeStart, purgeRangeEnd, purgeRangeEnd-purgeRangeStart, ids[purgeRangeStart]);
     if (!optionExists("dryRun"))
@@ -423,41 +435,34 @@ else  // figure out purge-ranges automatically
     // Also don't need to worry much about the 
     //  borders of the split-over-7-days divisions shifting much because the set is so nearly static.  YAWN.
 
-    int firstUseIndex = binaryIdSearch(ids, totalRows, table, firstUseAge);
+    int firstUseIndex = binaryIdSearch(ids, totalRows, table, firstUseAge, FALSE);
     int oldRangeSize = (firstUseIndex - 0) / 7;
     int oldRangeStart = oldRangeSize * (day-1);
     int oldRangeEnd = oldRangeStart + oldRangeSize;
 
     verbose(1, "old cleaner: firstUseAge=%d firstUseIndex = %d day %d: rangeStart %d rangeEnd %d rangeSize=%d ids[oldRangeStart]=%u\n", 
         firstUseAge, firstUseIndex, day, oldRangeStart, oldRangeEnd, oldRangeEnd-oldRangeStart, ids[oldRangeStart]);
-    //int oldRangeStart = 0;
-    //int oldRangeEnd = firstUseIndex;
-    //verbose(1, "old cleaner: firstUseAge=%d firstUseIndex = %d rangeStart %d rangeEnd %d rangeSize=%d ids[firstUseIndex]=%u\n", 
-	//firstUseAge, firstUseIndex, oldRangeStart, oldRangeEnd, oldRangeEnd-oldRangeStart, ids[firstUseIndex]);
 
     // newly old can be expected to have some delete action
     //  these records have newly crossed the threshold into being old enough to have possibly expired.
     int newOldRangeStart = firstUseIndex;
-    int newOldRangeEnd = binaryIdSearch(ids, totalRows, table, firstUseAge - 1);
+    int newOldRangeEnd = binaryIdSearch(ids, totalRows, table, firstUseAge - 1, TRUE);
     verbose(1, "newOld cleaner: firstUseAge=%d rangeStart %d rangeEnd %d rangeSize=%d ids[newOldRangeStart]=%u\n", 
 	firstUseAge, newOldRangeStart, newOldRangeEnd, newOldRangeEnd-newOldRangeStart, ids[newOldRangeStart]);
    
 
     // this is the main delete action of cleaning out new robots (20k to 50k or more)
-    int robo1RangeStart = binaryIdSearch(ids, totalRows, table, 2);
-    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, -1);
-    // Because the end is not actually included in the cleaning range, so to get all rows, need -1 so 0 is fully included.
-    if (robo1RangeEnd > totalRows - 1)  // do not go off the end of the array.
-         robo1RangeEnd = totalRows - 1;
-    verbose(1, "robot cleaner1: twoDayIndex = %d minusOneDayIndex %d rangeSize=%d ids[rs]=%u\n", 
+    int robo1RangeStart = binaryIdSearch(ids, totalRows, table, 2, FALSE);
+    int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 0, TRUE);
+    verbose(1, "robot cleaner1: twoDayIndex = %d zeroDayIndex %d rangeSize=%d ids[rs]=%u\n", 
       robo1RangeStart, robo1RangeEnd, robo1RangeEnd-robo1RangeStart, ids[robo1RangeStart]);
 
     int robo2RangeStart = -1;
     int robo2RangeEnd = -1;
     if (sameString(table, userDbTableName))
 	{  // secondary robot cleaning only for userDb., produces a somewhat lesser, perhaps 3 to 5k deletions
-	robo2RangeStart = binaryIdSearch(ids, totalRows, table, 7);
-	robo2RangeEnd   = binaryIdSearch(ids, totalRows, table, 6);
+	robo2RangeStart = binaryIdSearch(ids, totalRows, table, 7, FALSE);
+	robo2RangeEnd   = binaryIdSearch(ids, totalRows, table, 6, TRUE);
 	verbose(1, "robot cleaner2: sevenDayIndex = %d sixDayIndex %d rangeSize=%d ids[rs]=%u\n", 
 	  robo2RangeStart, robo2RangeEnd, robo2RangeEnd-robo2RangeStart, ids[robo2RangeStart]);
 	}
@@ -493,15 +498,15 @@ else  // figure out purge-ranges automatically
     }
 
 /*
-int found = binaryIdSearch(ids, totalRows, table, 1);
+int found = binaryIdSearch(ids, totalRows, table, 1, FALSE);
 if ((found >= 0) && (found < totalRows))
     verbose(1, "1 days ago found = %d, id == ids[found] = %u \n", found, ids[found]);
 
-found = binaryIdSearch(ids, totalRows, table, 2);
+found = binaryIdSearch(ids, totalRows, table, 2, FALSE);
 if ((found >= 0) && (found < totalRows))
     verbose(1, "2 days ago found = %d, id == ids[found] = %u \n", found, ids[found]);
 
-found = binaryIdSearch(ids, totalRows, table, 30);
+found = binaryIdSearch(ids, totalRows, table, 30, FALSE);
 if ((found >= 0) && (found < totalRows))
     verbose(1, "30 days ago found = %d, id == ids[found] = %u \n", found, ids[found]);
 
