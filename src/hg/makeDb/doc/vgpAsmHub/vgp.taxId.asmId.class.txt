@@ -1161,6 +1161,7 @@
 9978	GCF_030435755.1_mOchPri1.hap1	mammals
 9666	GCF_030435805.1_mMusLut2.pri	mammals
 9361	GCF_030445035.1_mDasNov1.hap2	mammals
+9361	GCF_030445035.2_mDasNov1.1.hap2	mammals
 930266	GCF_030463535.1_fSalBra1.hap2	fish
 48891	GCF_030490865.1_bPoeAtr1.hap1	birds
 3053191	GCF_030684315.1_sSteTig4.hap1	sharks
