@@ -668,6 +668,25 @@ var makeItems = {
             input.type = field.type;
             input.id = field.id;
             input.name = field.id;
+            if (field.id === "chrom") {
+                input.value = hgTracks.chromName;
+            }
+            if (field.type === "number") {
+                input.min = 0;
+                if (field.id === "start" || field.id === "thickStart") {
+                    input.value = hgTracks.winStart;
+                }
+                if (field.id === "end" || field.id === "thickEnd") {
+                    input.value = hgTracks.winEnd;
+                }
+                if (field.id === "score") {
+                    input.value = 0;
+                    input.max = 1000;
+                }
+            }
+            if (field.id === "strand") {
+                input.value = ".";
+            }
             if (field.id === "description") {
                 input.placeholder = field.placeholder; 
                 input.placeholder = field.placeholder;
@@ -693,7 +712,10 @@ var makeItems = {
 
             document.body.append(dialog);
             dialogButtons = {};
-            dialogButtons.Submit = makeItems.createItem;
+            dialogButtons.Submit = function() {
+                // extract the form elements and check
+                this.creatItem();
+            };
             dialogButtons.Cancel = function(){
                 $(this).dialog("close");
             };
