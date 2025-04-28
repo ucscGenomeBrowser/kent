@@ -1405,8 +1405,8 @@ function mysqlDbSetup ()
     # create /gbdb and let the apache user write to it
     # hgConvert will download missing liftOver files on the fly and needs write
     # write access
-    mkdir -p $GBDBDIR
-    chown $APACHEUSER:$APACHEUSER $GBDBDIR
+    sudo mkdir -p $GBDBDIR
+    sudo chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
     $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
@@ -1438,14 +1438,9 @@ function setupBuildOsx ()
    fi
    echo2 Installing homebrew packages libpng, openssl, mariadb, git
    brew install libpng openssl mariadb git
-   
-   #if ! libpng-config --version > /dev/null 2>&1; then
-   #if ! mariadb --version > /dev/null 2>&1; then
-   #if ! git --version > /dev/null 2>&1; then
-   #if ! openssl --version > /dev/null 2>&1; then
 
-   echo2 Allowing write for all on Apple's Apache htdocs/cgi-bin directories
-   echo2 This requires sudo, so please enter the admin password now
+   echo2 Allowing write access for all on Apple\'s Apache htdocs/cgi-bin directories.
+   echo2 The chmod command requires sudo - please enter the admin password now:
    sudo chmod a+rw /Library/WebServer/CGI-Executables
    sudo chmod a+rw /Library/WebServer/Documents
 
@@ -1506,7 +1501,7 @@ function buildTree ()
    waitKey
    cd ~/kent/src
    make -j8 cgi-alpha
-   make -j8 htdocs
+   make -j8 doc-alpha
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
@@ -1855,6 +1850,9 @@ function stopMysql
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl stop mariadb
+    elif [ which brew > /dev/null ]; then
+            # homebrew on ARMs or X86
+    	    brew services stop mariadb  
     elif [ -f /usr/lib/systemd/system/mysql.service ]; then
             # at least seen in Fedora 17
             systemctl stop mysql
@@ -2167,18 +2165,21 @@ fi
 if [[ "$unameStr" == Darwin* ]]; then
     OS=OSX
     DIST=OSX
-    VER=`sw_vers -productVersion`
-    APACHECONFDIR=$APACHEDIR/ext/conf # only used by the OSX-spec part
-    APACHECONF=$APACHECONFDIR/001-browser.conf
-    APACHEUSER=_www # predefined by Apple
-    MYSQLDIR=$APACHEDIR/mysqlData
-    MYSQLUSER=_mysql # predefined by Apple
-    MYSQL="$APACHEDIR/ext/bin/mysql --socket=$APACHEDIR/ext/mysql.socket"
-    MYSQLADMIN="$APACHEDIR/ext/bin/mysqladmin --socket=$APACHEDIR/ext/mysql.socket"
+    VERNUM=`sw_vers -productVersion`
+    VER=$VERNUM
     SEDINPLACE="sed -Ei .bak" # difference BSD vs Linux
+
+    # Not used anymore, but good to know that these are possible:
+    #APACHECONFDIR=$APACHEDIR/ext/conf # only used by the OSX-spec part
+    #APACHECONF=$APACHECONFDIR/001-browser.conf
+    #APACHEUSER=_www # predefined by Apple
+    #MYSQLDIR=$APACHEDIR/mysqlData
+    #MYSQLUSER=_mysql # predefined by Apple
+    #MYSQL="$APACHEDIR/ext/bin/mysql --socket=$APACHEDIR/ext/mysql.socket"
+    #MYSQLADMIN="$APACHEDIR/ext/bin/mysqladmin --socket=$APACHEDIR/ext/mysql.socket"
     # make sure resulting binaries can be run on OSX 10.7
     # this is a gcc option, not a global variable for this script
-    export MACOSX_DEPLOYMENT_TARGET=10.7
+    #export MACOSX_DEPLOYMENT_TARGET=10.7
 
 elif [[ $unameStr == Linux* ]] ; then
     OS=linux
