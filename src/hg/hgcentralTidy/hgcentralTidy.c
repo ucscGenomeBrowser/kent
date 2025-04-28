@@ -403,7 +403,7 @@ if (optionExists("purgeStart"))   // manual purge range specified
     {
     purgeStart = optionInt("purgeStart", -1);
     purgeEnd = optionInt("purgeEnd", -1);
-    if (purgeStart < 1 || purgeStart > 720)
+    if (purgeStart < 1 || purgeStart > 8000) // up to 20 years ago
 	errAbort("Invalid purgeStart");
     if (purgeEnd < 0)
 	purgeEnd = 0;
