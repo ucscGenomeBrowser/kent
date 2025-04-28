@@ -390,6 +390,7 @@
 ./runBuild GCA_001599035.1_JCM_9410_assembly_v001 fungi Trichoderma_atroviride
 ./runBuild GCA_001599735.1_JCM_2334_assembly_v001 fungi Naganishia_albida
 ./runBuild GCA_001602275.1_ASM160227v1 plants Zoysia_japonica
+./runBuild GCA_001623345.3_ZS97RS3 plants Oryza_sativa_Indica_Group
 ./runBuild GCA_001624185.1_129S1_SvImJ_v1 mammals Mus_musculus
 ./runBuild GCA_001624215.1_A_J_v1 mammals Mus_musculus
 ./runBuild GCA_001624295.1_AKR_J_v1 mammals Mus_musculus
