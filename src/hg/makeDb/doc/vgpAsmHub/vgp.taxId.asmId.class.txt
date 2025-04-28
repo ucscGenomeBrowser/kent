@@ -299,6 +299,7 @@
 9590	GCA_028878085.2_NHGRI_mSymSyn1-v2.0_alt	primates
 9590	GCA_028878085.3_NHGRI_mSymSyn1-v2.0_alt	primates
 9595	GCA_028885475.2_NHGRI_mGorGor1-v2.0_pat	primates
+9595	GCF_029281585.2_NHGRI_mGorGor1-v2.1_pri	primates
 9600	GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt	primates
 9600	GCA_028885525.2_NHGRI_mPonPyg2-v2.0_alt	primates
 9601	GCA_028885685.2_NHGRI_mPonAbe1-v2.0_alt	primates
