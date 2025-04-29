@@ -818,23 +818,18 @@ for (ix = 0;  ix < txAli->blockCount - 1;  ix++)
         else
             safencpy(txCpyL, sizeof(txCpyL), txSeq->dna+txAli->qStarts[ix+1]-qLen, qLen);
         safencpy(txCpyR, sizeof(txCpyR), txCpyL, qLen);
-        uint shiftL = indelShift(gSeqWin, &gStartL, &gEndL, txCpyL, INDEL_SHIFT_NO_MAX, isdLeft);
+        // Don't slide left past the start of the exon -- we could collide with a previously extended
+        // double-sided gap (#34135 notes 9 & 14).  But allow sliding right into the next gap.
+        uint shiftL = indelShift(gSeqWin, &gStartL, &gEndL, txCpyL, txAli->blockSizes[ix], isdLeft);
         uint shiftR = indelShift(gSeqWin, &gStartR, &gEndR, txCpyR, INDEL_SHIFT_NO_MAX, isdRight);
         if (shiftL)
             {
             // Expand gap to the left -- decrease blockSizes[ix].
             if (txAli->blockSizes[ix] < shiftL)
                 {
-                if (ix == 0)
-                    warn("vpExpandIndelGaps: %s gapIx %d slides left past start of first block.  "
-                         "Skipping.  (Should we make a 0-length block at beginning?)",
-                         txAli->qName, ix);
-                else
-                    warn("vpExpandIndelGaps: %s gapIx %d slides left past the start of block %d, "
-                         "but this should have already been taken care of when pslExpandGapRight "
-                         "was called for gapIx %d.  Investigate...",
-                         txAli->qName, ix, ix, ix-1);
-                continue;
+                errAbort("vpExpandIndelGaps: %s gapIx %d slides left past the start of block %d, "
+                         "but use of maxShift should have prevented that.",
+                         txAli->qName, ix, ix);
                 }
             else
                 {
