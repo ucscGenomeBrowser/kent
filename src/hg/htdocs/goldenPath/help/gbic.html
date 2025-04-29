@@ -29,8 +29,8 @@ UCSC Genome Browser on their server/cloud instance, rather than using
 or our public website. Please see the
 <a href='mirror.html#considerations-before-installing-a-genome-browser' title=''>Installation of a UCSC Genome Browser on a local machine (mirror)</a>
 page for a summary of installation options, including the pros and cons of using a mirror
-installation via the GBiC program vs. using GBiB. GBiC can also be used as a Docker container. See
-the <a href='docker.html' title=''>Docker help page</a> for more information.
+installation via the GBiC program vs. using GBiB. GBiC can also be used as a Docker container.
+See our <a href='docker.html' title=''>Docker help page</a> for more information.
 </p>
 
 <p>
@@ -87,25 +87,16 @@ For mirror-specific help, please contact the Mirror Forum as listed on our <a hr
 
 <p>
 For an installation demonstration, see the <a href='https://www.youtube.com/watch?v=dcJERBVnjio' title=''>Genome Browser in the Cloud (GBiC) Introduction</a>
-video:<br>
-
-<!--#if expr="${SERVER_NAME} = /-china/" -->
-    <a href='../../../videos/dcJERBVnjio.mp4'>
-    <img src=../../images/videoIcon.png></a>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    Visit our <a href="/videos/" target="_blank">Video Page</a>.
-<!--#else -->
-<iframe width="560" height="350" src="https://www.youtube.com/embed/dcJERBVnjio?rel=0" 
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe> </p>
-
-<p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
-target="_blank">YouTube channel</a> for more videos.
-</p>
-<!--#endif -->
+video:
 </p>
 
 <p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dcJERBVnjio?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+</p>
 
 <a name='how-does-the-gbic-program-work'></a>
 <h2>How does the GBiC program work?</h2>
@@ -258,6 +249,13 @@ tool with the <code>update</code> parameter like this:
 </p>
 
 <pre><code>sudo bash browserSetup.sh update</code></pre>
+
+<p>
+The <code>update</code> parameter can also be used to update the data for a single assembly by providing the
+UCSC assembly name (e.g. rn6, bosTau6, equCab3):
+</p>
+
+<pre><code>sudo bash browserSetup.sh update bosTau9</code></pre>
 
 <p>
 Minimal mirror sites (those that have partially mirrored an assembly) should not

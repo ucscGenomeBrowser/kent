@@ -21,14 +21,15 @@ Converts gtf to bed format.
 	args = parser.parse_args()
 
 	gdict = dict()
+	# get HUGO IDs
 	with open(args.genes, 'r') as g:
 		for line in g:
 			ensg, gene, enst, ensp = line.split("\t")
-			ensg = ensg.split('.')[0]
+			ensg = enst.split('.')[0]
 			gdict[ensg] = gene
 			ensp = ensp.strip()
 			if ensp != '':
-				gdict[ensp.split('.')[0]] = [gene, ensg]
+				gdict[ensp.split('.')[0]] = [gene, enst]
                     
 	g.close()
 	gtf_to_bed(args.bed, args.gtf, gdict)
@@ -77,30 +78,41 @@ def ids_from_gtf(descrField, gdict):
 	pairs = descrField.split("; ")
 	data_dict = {pair.split(" ", 1)[0].strip(): pair.split(" ", 1)[1].strip('"') for pair in pairs}
 	# gene_id, transcript_id, gene_type, transcript_type, gene_ens_id, transcript_ens_id, gene_ens_id, gene_parent_id, transcript_parent_id, protein_parent_id
-	# note: data_dict['gene_type'] is always identical data_dict['transcript_type'], I checked.
-	#del data_dict['transcript_parent_id']
-	hugo = 'NA'
-	if data_dict['gene_parent_id'] in gdict:
-		hugo = gdict[data_dict['gene_parent_id']]
+	del data_dict['transcript_type']
+	del data_dict['exon']
+	# as BED item name we will use the Yale ID (PGOHUMG0000290588) unless there's a HUGO ID
+	pgeneName = data_dict['transcript_id']
+	# We want the HUGO ID for the pseudogene itself, if present, and for the parent.
+	pgeneHugo = 'NA'
+	parentHugo = 'NA'
+	if data_dict['transcript_ens_id'] in gdict:
+		pgeneHugo = gdict[data_dict['transcript_ens_id']]
+		pgeneName = pgeneHugo
+	elif data_dict['transcript_ens_id'] != 'NA':
+		print("WARNING, CANNOT FIND", data_dict['transcript_ens_id']) # doesn't happen
+	if data_dict['transcript_parent_id'] in gdict:
+		parentHugo = gdict[data_dict['transcript_parent_id']]
 	# in some cases the transcript and gene parents are NA
 	elif data_dict['protein_parent_id'] in gdict:
-		[hugo, ensg]  = gdict[data_dict['protein_parent_id']]
+		[parentHugo, ensg]  = gdict[data_dict['protein_parent_id']]
 		# replace ensg parent with current
-		data_dict['gene_parent_id'] = ensg
+		data_dict['transcript_parent_id'] = ensg
 
 	#if hugo == 'NA':
 	#	print(data_dict['gene_parent_id'], data_dict['protein_parent_id'])
 	# 535 transcripts truly don't have parents so some remain NA
-	itemRgb = '255,140,0' # dark orange (pseudogene)
-	if data_dict['gene_type'] == 'unprocessed_pseudogene':
+	if data_dict['gene_type'] == 'pseudogene':
+		itemRgb = '255,140,0' # dark orange 
+		data_dict['gene_type'] = 'unspecified_pseudogene' # clarify
+	elif data_dict['gene_type'] == 'unprocessed_pseudogene':
 		itemRgb = '0,0,255' # blue
 	elif data_dict['gene_type'] == 'processed_pseudogene':
 		itemRgb = '85,107,47' # dark olive green 
-	# drop transcript parent because we might have changed the gene parent
-	extrafields = tuple([hugo, data_dict['gene_type'], data_dict['gene_id'],  
-		data_dict['gene_ens_id'], data_dict['gene_parent_id'], 
-		data_dict['protein_parent_id']])
-	return itemRgb, data_dict['transcript_id'], extrafields
+	extrafields = [pgeneHugo, parentHugo] + list(data_dict.values())
+	#extrafields = tuple([hugo, data_dict['gene_type'], data_dict['gene_id'],  
+	#	data_dict['gene_ens_id'], data_dict['gene_parent_id'], 
+	#	data_dict['protein_parent_id']])
+	return itemRgb, pgeneName, extrafields
 
 
 def gtf_to_bed(outputfile, gtf, gdict):

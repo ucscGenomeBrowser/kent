@@ -36,6 +36,7 @@
 #include "jsonWrite.h"
 #include "verbose.h"
 #include "genark.h"
+#include "quickLift.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -397,14 +398,17 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-static void copyCustomComposites(struct cart *cart, struct hashEl *el)
+static void copyLocalHubs(struct cart *cart, struct hashEl *el)
 /* Copy a set of custom composites to a new hub file. Update the 
  * relevant cart variables. */
 {
 struct tempName hubTn;
 char *hubFileVar = el->name;
 char *oldHubFileName = el->val;
-trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
+if (startsWith(customCompositeCartName, el->name))
+    trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
+else if (startsWith(quickLiftCartName, el->name))
+    trashDirDateFile(&hubTn, "quickLift", "hub", ".txt");
 char *newHubFileName = cloneString(hubTn.forCgi);
 
 // let's make sure the hub hasn't been cleaned up
@@ -424,8 +428,9 @@ void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, ch
 /* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
  * equivalents for newHubUrl. */
 {
-if (! startsWith(customCompositeCartName, hubFileVar))
+if (! (startsWith(customCompositeCartName, hubFileVar) || startsWith(quickLiftCartName, hubFileVar) ))
     errAbort("cartReplaceHubVars: expected hubFileVar to begin with '"customCompositeCartName"' "
+             "or '"quickLiftCartName";"
              "but got '%s'", hubFileVar);
 char *errorMessage;
 unsigned oldHubId =  hubFindOrAddUrlInStatusTable(cart, oldHubUrl, &errorMessage);
@@ -443,6 +448,24 @@ for(hv = hubVarList; hv; hv = hv->next)
         cartRemove(cart, hv->name);
         safef(buffer, sizeof buffer, "%s%d", hgHubConnectHubVarPrefix, newHubId);
         cartSetString(cart, buffer, "1");
+        }
+    }
+
+// need to change "quickLift.#hubNumber#.#db# #quickLiftChainId#
+hubVarList = cartVarsWithPrefix(cart, "quickLift.");
+for(hv = hubVarList; hv; hv = hv->next)
+    {
+    char *hubPtr = cloneString(hv->name) + strlen("quickLift.");
+    char *db = strchr(hubPtr, '.'); 
+    *db++ = 0;
+    unsigned hubId = sqlUnsigned(hubPtr);
+    char *quickLiftChainId = cloneString(hv->val);
+    
+    if (hubId == oldHubId)
+        {
+        cartRemove(cart, hv->name);
+        safef(buffer, sizeof buffer, "%s%d.%s", "quickLift.", newHubId,db);
+        cartSetString(cart, buffer, quickLiftChainId);
         }
     }
 
@@ -466,15 +489,15 @@ cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 cartSetString(cart, hubFileVar, newHubUrl);
 }
 
-void cartCopyCustomComposites(struct cart *cart)
+void cartCopyLocalHubs(struct cart *cart)
 /* Find any custom composite hubs and copy them so they can be modified. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    if (startsWith(customCompositeCartName, el->name))
-        copyCustomComposites(cart, el);
+    if (startsWith(customCompositeCartName, el->name) || startsWith(quickLiftCartName, el->name))
+        copyLocalHubs(cart, el);
     }
 }
 
@@ -1445,12 +1468,18 @@ cart->userId = userId;
 cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
+
+if (isEmpty(userId))
+    fprintf(stderr, "CART userId not sent");
+
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 else
     {
+    if (isNotEmpty(userId))
+        fprintf(stderr, "CART userId sent but not in userDb");
     char *defaultCartContents = getDefaultCart(conn);
     cartParseOverHash(cart, defaultCartContents);
     }
@@ -1508,7 +1537,7 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
 if (didSessionLoad)
-    cartCopyCustomComposites(cart);
+    cartCopyLocalHubs(cart);
 
 char *newDatabase = hubConnectLoadHubs(cart);
 

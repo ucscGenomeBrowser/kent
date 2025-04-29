@@ -1,6 +1,6 @@
 track recount3
 shortLabel recount3
-longLabel Recount 3 introns
+longLabel recount 3 introns
 group rna
 type bigBed 9 +
 visibility pack
@@ -11,7 +11,7 @@ compositeTrack on
 
     track gtex
     shortLabel GTEX
-    longLabel Recount 3 GTEX introns
+    longLabel recount 3 GTEX introns
     bigDataUrl /gbdb/$D/recount3/gtexv2.bb
     filter.readcount 10000:2000000000
     filterByRange.readcount on
@@ -27,7 +27,7 @@ compositeTrack on
 
     track tcga
     shortLabel TCGA
-    longLabel Recount 3 TCGA introns
+    longLabel recount 3 TCGA introns
     bigDataUrl /gbdb/$D/recount3/tcgav2.bb
     filter.readcount 10000:2000000000
     filterByRange.readcount on
@@ -43,7 +43,7 @@ compositeTrack on
 
     track srav3h
     shortLabel SRA
-    longLabel Recount 3 SRA introns
+    longLabel recount 3 SRA introns
     bigDataUrl /gbdb/$D/recount3/srav3h.bb
     filter.readcount 10000:2000000000
     filterByRange.readcount on
@@ -60,7 +60,7 @@ compositeTrack on
 
     track ccle
     shortLabel CCLE
-    longLabel Recount 3 CCLE introns
+    longLabel recount 3 CCLE introns
     bigDataUrl /gbdb/$D/recount3/ccle.bb
     filter.readcount 10000:2000000000
     filterByRange.readcount on

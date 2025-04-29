@@ -24,6 +24,7 @@
 #include "hgConfig.h"
 #include "chromAlias.h"
 
+#define TOOMANYITEMSERROR "Maximum number of BAM items exceeded. Perhaps zooming in a bit will help?"
 
 struct bamTrackData
     {
@@ -37,8 +38,27 @@ struct bamTrackData
     int aliQualShadeMax;
     int baseQualShadeMin;
     int baseQualShadeMax;
+    int count;
+    int maxItems;
     };
 
+
+static unsigned BAMMaxItems()
+/* Get the maximum number of items to grab from a BAM file.  Defaults to ten thousand . */
+{
+static boolean set = FALSE;
+static unsigned maxItems = 0;
+
+if (!set)
+    {
+    char *maxItemsStr = cfgOptionDefault("BAMMaxItems", "10000");
+
+    maxItems = sqlUnsigned(maxItemsStr);
+    set = TRUE;
+    }
+
+return maxItems;
+}
 
 static struct psl *pslFromBam(const bam1_t *bam)
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
@@ -303,7 +323,7 @@ if (core->qual < btd->minAliQual)
 return TRUE;
 }
 
-int addBam(const bam1_t *bam, void *data, bam_hdr_t *hdr)
+static int addBam(const bam1_t *bam, void *data, bam_hdr_t *hdr)
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeatures item, and add it to tg->items. */
 {
@@ -315,6 +335,9 @@ if (lf)
     {
     struct track *tg = btd->tg;
     slAddHead(&(tg->items), lf);
+    btd->count++;
+    if (btd->count > btd->maxItems)
+        errAbort(TOOMANYITEMSERROR);
     }
 return 0;
 }
@@ -352,7 +375,7 @@ lfs->features = lf;
 return lfs;
 }
 
-int addBamPaired(const bam1_t *bam, void *data, bam_hdr_t *header)
+static int addBamPaired(const bam1_t *bam, void *data, bam_hdr_t *header)
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeaturesSeries item, and either store it until we find its mate
  * or add it to tg->items. */
@@ -415,6 +438,9 @@ else
 	hashRemove(btd->pairHash, lf->name);
 	}
     }
+btd->count++;
+if (btd->count > btd->maxItems)
+    errAbort(TOOMANYITEMSERROR);
 return 0;
 }
 
@@ -492,7 +518,7 @@ if (errCatchStart(errCatch))
     parseIntRangeSetting(tg->tdb, "aliQualRange", &aliQualShadeMin, &aliQualShadeMax);
     parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
     struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
-			       aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
+			       aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax, 0, BAMMaxItems()};
 
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
@@ -571,7 +597,8 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    tg->networkErrMsg = cloneString(errCatch->message->string);
+    tg->items = NULL;
+    tg->networkErrMsg = cloneString("Maximum number of BAM items exceeded. Perhaps zooming in a bit will help?");
     tg->drawItems = bigDrawWarning;
     tg->totalHeight = bigWarnTotalHeight;
     }

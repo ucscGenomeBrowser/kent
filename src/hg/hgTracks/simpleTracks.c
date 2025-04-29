@@ -11595,7 +11595,8 @@ return (tg->isBigBed &&
             !startsWith("bigInteract",tg->tdb->type) &&
             !startsWith("bigMaf",tg->tdb->type) &&
             !startsWith("bigLolly",tg->tdb->type))
-        || startsWith("vcfTabix", tg->tdb->type);
+        || startsWith("vcfTabix", tg->tdb->type)
+        || startsWith("bam", tg->tdb->type);
 }
 
 enum trackVisibility limitVisibility(struct track *tg)
@@ -14726,6 +14727,8 @@ track->doItemMapAndArrows = genericItemMapAndArrows;
 #ifndef GBROWSE
 if (sameWord(type, "bed"))
     {
+    char *trackName = trackHubSkipHubName(track->track);
+
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb
        settings. */
@@ -14734,13 +14737,13 @@ if (sameWord(type, "bed"))
 
     // FIXME: as long as registerTrackHandler doesn't accept wildcards,
     // this probably needs to stay here (it's in the wrong function)
-    if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
+    if (startsWith("pubs", trackName) && stringIn("Marker", trackName))
         pubsMarkerMethods(track);
-    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
+    if (startsWith("pubs", trackName) && stringIn("Blat", trackName))
         pubsBlatMethods(track);
-    if (startsWith("gtexEqtlCluster", track->track))
+    if (startsWith("gtexEqtlCluster", trackName))
         gtexEqtlClusterMethods(track);
-    if (startsWith("gtexEqtlTissue", track->track))
+    if (startsWith("gtexEqtlTissue", trackName))
         gtexEqtlTissueMethods(track);
     }
 /*

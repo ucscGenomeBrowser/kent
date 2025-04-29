@@ -130,6 +130,19 @@ static boolean utr5Qualifier(char *qualifier, char *extra, int *retSize)
 return fetchQualifiers("utr5", qualifier, extra, retSize);
 }
 
+static struct hTableInfo *vcfToHti(char *table, boolean isTabix)
+/* Get standard fields of VCF into hti structure. */
+{
+struct hTableInfo *hti;
+AllocVar(hti);
+hti->rootName = cloneString(table);
+hti->isPos= TRUE;
+strcpy(hti->chromField, "chrom");
+strcpy(hti->startField, "pos");
+strcpy(hti->nameField, "id");
+hti->type = cloneString(isTabix ? "vcfTabix" : "vcf");
+return hti;
+}
 
 
 boolean fbUnderstandTrack(char *db, struct trackDb *tdb)
@@ -138,10 +151,19 @@ boolean fbUnderstandTrack(char *db, struct trackDb *tdb)
 if (startsWith("bigWig", tdb->type)) 
     return FALSE;
 
+
 if ((tdb != NULL) && startsWith("big", tdb->type) && !startsWith("bigWig", tdb->type)) 
 	return TRUE;
 
-struct hTableInfo *hti = hFindTableInfo(db, NULL, tdb->table);
+struct hTableInfo *hti = NULL;
+
+
+if (sameString("vcfTabix", tdb->type) || sameString("vcfPhasedTrio", tdb->type))
+    hti = vcfToHti(tdb->table, TRUE);
+else if (sameString("vcf", tdb->type))
+    hti = vcfToHti(tdb->table, FALSE);
+else
+    hti = hFindTableInfo(db, NULL, tdb->table);
 
 if (hti == NULL)
     return FALSE;

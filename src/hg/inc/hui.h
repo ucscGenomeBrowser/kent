@@ -1274,6 +1274,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
                      boolean boxed);
 // Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
+void bedScoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up bed-specific score controls */
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 // Put up genePred-specific controls
 

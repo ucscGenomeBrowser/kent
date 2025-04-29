@@ -5880,6 +5880,17 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 return fbList;
 }
 
+static struct featureBits *vcfLoadInterval(struct trackDb *tdb, int start, int end)
+{
+struct featureBits *fbList = NULL;
+if (sameString(tdb->type, "vcf") || sameString(tdb->type, "vcfPhasedTrio"))
+   doVcfDetailsExt(tdb, NULL, &fbList, start, end);
+else if (sameString(tdb->type, "vcfTabix"))
+   doVcfTabixDetailsExt(tdb, NULL, &fbList, start, end);
+return fbList;
+}
+
+
 void doGetDna3()
 /* Fetch DNA in extended color format */
 {
@@ -5930,6 +5941,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     ||  ct != NULL
     ||  (   tdbVisLimitedByAncestors(cart,tdb,TRUE,TRUE) != tvHide
         && forestHasUnderstandableTrack(database, tdb) ) )
+        
         {
         char buf[256];
         int r,g,b;
@@ -5973,7 +5985,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    struct bedFilter *bf;
 	    struct bed *bedList2, *ctBedList = NULL;
 	    AllocVar(bf);
-            if (ct->dbTrack)
+            if (ct->dbTrack && (!sameString(tdb->type, "vcf")))
                 {
                 struct bed *bed;
                 int fieldCount = ct->fieldCount;
@@ -6017,11 +6029,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 {
                 ctBedList = ct->bedList;
                 }
-	    bedList2 = bedFilterListInRange(ctBedList, bf, seqName, winStart,
+	    if (startsWith("vcf", tdb->type))
+                {
+		fbList = vcfLoadInterval(ct->tdb, winStart, winEnd);
+                }
+            else
+		{
+		bedList2 = bedFilterListInRange(ctBedList, bf, seqName, winStart,
 					    winEnd);
-	    fbList = fbFromBed(database, track, hti, bedList2, winStart, winEnd,
+		fbList = fbFromBed(database, track, hti, bedList2, winStart, winEnd,
 			       TRUE, FALSE);
-	    bedFreeList(&bedList2);
+		bedFreeList(&bedList2);
+		}
             if (!ct->bedList)
                 bedFreeList(&ctBedList);
 	    }
@@ -6039,7 +6058,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     && !dnaIgnoreTrack(tdbLeaf->table))
                         {
                         struct featureBits *fbLeafList;
-                        if (startsWith("big", tdbLeaf->type))
+			if (startsWith("vcf", tdbLeaf->type))
+			    fbLeafList = vcfLoadInterval(tdbLeaf, winStart, winEnd);
+                        else if (startsWith("big", tdbLeaf->type))
                             fbLeafList = getBigBedFbList(tdbLeaf, seqName, winStart, winEnd);
                         else
                             fbLeafList = fbGetRange(database, tdbLeaf->table, seqName, winStart, winEnd);
@@ -6051,7 +6072,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 }
             else
                 {
-                if (startsWith("big", tdb->type))
+                if (startsWith("vcf", tdb->type))
+                    fbList = vcfLoadInterval(tdb, winStart, winEnd);
+                else if (startsWith("big", tdb->type))
                     fbList = getBigBedFbList(tdb, seqName, winStart, winEnd);
                 else
                     fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
@@ -27831,7 +27854,7 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (startsWith("pubs", table))
+else if (startsWith("pubs", trackHubSkipHubName(table)))
     {
     doPubsDetails(tdb, item);
     }
