@@ -244,7 +244,7 @@ else
            "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
            ,hogHost, asctime(localtime(&now)), botDelayMillis);
     puts("</body></html>");
-    sleep(15);
+    sleep(10);
     }
 cgiExitTime(cgiExitName, enteredMainTime);
 exit(0);
