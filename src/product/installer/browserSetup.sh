@@ -531,6 +531,9 @@ function setMYCNF ()
     elif [ -f /etc/mysql/my.cnf ] ; then
         # generic Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
+    elif [ -f /usr/local/etc/my.cnf ]; then
+        # brew on x86
+    	MYCNF=/usr/local/etc/my.cnf
     elif [ -f /opt/homebrew/etc/my.cnf ]; then
         # homebrew on ARMs
     	MYCNF=/opt/homebrew/etc/my.cnf
@@ -612,8 +615,8 @@ function showMyAddress ()
 {
 echo2
 if [[ "$DIST" == "OSX" ]]; then
-   echo2 You can browse the genome at http://127.0.0.1:8080
-   #/usr/bin/open http://127.0.0.1:8080
+   echo2 You can browse the genome at http://localhost
+   #/usr/bin/open http://localhost
 else
    echo2 You can now access this server under one of these IP addresses: 
    echo2 From same host:    http://127.0.0.1
@@ -1403,12 +1406,6 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
 "DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
     
-    # create /gbdb and let the apache user write to it
-    # hgConvert will download missing liftOver files on the fly and needs write
-    # write access
-    sudo mkdir -p $GBDBDIR
-    sudo chown $APACHEUSER:$APACHEUSER $GBDBDIR
-    
     # the custom track database needs it own user and permissions
     $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
@@ -1461,8 +1458,28 @@ function setupBuildOsx ()
       sudo ln -s /Library/WebServer/Documents/ /usr/local/apache/htdocs 
    fi
 
-   # switch on CGIs in Apple's Apache and restart it
-   sudo sed -i '' -E 's/^\s*#(LoadModule cgid_module)/\1/; s/^\s*#(LoadModule cgi_module)/\1/' /etc/apache2/httpd.conf
+    if [[ ! -d /usr/local/apache/trash ]]; then
+        mkdir -p /usr/local/apache/trash
+        sudo chmod a+rwx /usr/local/apache/trash
+        # cgis use ../trash to find the trash directory, but we have a symlink here
+        sudo ln -fs /usr/local/apache/trash /Library/WebServer/Documents/trash
+        sudo ln -fs /usr/local/apache/trash /Library/WebServer/trash
+        # cgis use ../htdocs to find the htdocs directory, but we have a symlink here
+        sudo ln -fs /Library/WebServer/Documents /Library/WebServer/htdocs
+    fi
+    
+   # switch on CGIs in Apple's Apache and restart it (OSX as a BSD does not understand \s, so need to use [[:space:]])
+   sudo sed -Ei '' 's/^[[:space:]]*#(LoadModule cgid_module)/\1/; s/^[[:space:]]*#(LoadModule cgi_module)/\1/' /etc/apache2/httpd.conf
+   # allow server side includes
+   sudo sed -Ei '' 's/^[[:space:]]*#(LoadModule include_module)/\1/' /etc/apache2/httpd.conf
+   # activate server side includes and make them depend on the X flag
+   sudo sed -Ei '' 's/Options FollowSymLinks Multiviews/Options FollowSymLinks Includes Multiviews/' /etc/apache2/httpd.conf
+   if grep -qv XBitHack /etc/apache2/httpd.conf ; then
+     sudo sed -Ei '' '/Options FollowSymLinks Includes Multiviews/ a\
+XBitHack on\
+SSILegacyExprParser on
+' /etc/apache2/httpd.conf
+   fi
    sudo /usr/sbin/apachectl restart
 }
 
@@ -1611,7 +1628,7 @@ function installBrowser ()
     if [ ! -e $TRASHDIR ]; then
         ln -fs $TRASHDIR
     fi
-    
+
     # write the sample hg.conf to the cgi-bin directory
     echo2 Creating Genome Browser config file $CGIBINDIR/hg.conf
     echo "$HG_CONF_STR" > $CGIBINDIR/hg.conf
@@ -1641,8 +1658,8 @@ function installBrowser ()
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
        echo modifying hg.conf to pull data from genome-euro instead of genome
-       sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
-       sed -i "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
+       $SEDINPLACE s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
+       $SEDINPLACE "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
        HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
     else
        echo genome.ucsc.edu seems to be closer
@@ -1665,10 +1682,11 @@ function installBrowser ()
     fi
 
     # download the html docs, exclude some big files on OSX
-    # try to minimize storage for OSX, mostly laptops
+    # cannot do this when we built the tree outselves, as the .js versions will not match the C code
     if [ "$OS" == "OSX" -o "$MACH" == "aarch64" ]; then
-            #$RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
-            echo2 Not syncing htdocs folder, assuming that these were built from source.
+            # but we need the new font files
+            $RSYNC -azP hgdownload.soe.ucsc.edu::htdocs/urw-fonts/ /usr/local/apache/htdocs/urw-fonts/
+            echo2 Not syncing most of htdocs folder, assuming that these were built from source.
             echo2 PDF and other large files only present at UCSC will be missing from htdocs.
             waitKey
     else
@@ -1706,7 +1724,11 @@ function installBrowser ()
 function mkdirGbdb 
 {
     if [[ "$OS" != "OSX" ]]; then 
+       # On Linux, create /gbdb and let the apache user write to it
        mkdir -p $GBDBDIR
+       # Why? hgConvert will download missing liftOver files on the fly and needs write
+       # write access
+       chown $APACHEUSER:$APACHEUSER $GBDBDIR
        return
     fi
 
@@ -1718,7 +1740,10 @@ function mkdirGbdb
          sudo /bin/sh -c 'echo "gbdb\tusr/local/gbdb" >> /etc/synthetic.conf'
     fi
     chmod 644  /etc/synthetic.conf
-    /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
+    /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t || true
+    if ! test -L /gbdb; then
+     echo "warning: apfs.util failed to create /gbdb"
+    fi
     echo 'This directory is /usr/local/gbdb, see /etc/synthetic.conf' >> /gbdb/README.txt
 }
 
@@ -1804,7 +1829,6 @@ function downloadGenomes
     for db in $MYSQLDBS; do
        echo2 Downloading Mysql files for mysql database $db
        $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
-       chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
     if [ ! -z "$GENBANKTBLS" ]; then
@@ -1812,12 +1836,10 @@ function downloadGenomes
         for tbl in $GENBANKTBLS; do
             $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
         done
-        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
     fi
 
     echo2 Downloading hgFixed.refLink, required for all RefSeq tracks
     $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
-    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
 
     mkdirGbdb
 
@@ -1825,13 +1847,15 @@ function downloadGenomes
     for db in $DBS; do
        echo2 Downloading $GBDBDIR files for assembly $db
        $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/
-       chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
     done
 
     set +f
 
     # Alexander Stuy reported that at FSU they had a few mysql databases with incorrect users on them
-    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+    if [[ "$OS" != "OSX" ]]; then 
+        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+        chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
+    fi
     
     startMysql
 
@@ -1880,7 +1904,7 @@ function stopMysql
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl stop mariadb
-    elif [ which brew > /dev/null ]; then
+    elif which brew > /dev/null ; then
             # homebrew on ARMs or X86
     	    brew services stop mariadb  
     elif [ -f /usr/lib/systemd/system/mysql.service ]; then
@@ -1903,6 +1927,9 @@ function startMysql
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl start mariadb
+    elif which brew > /dev/null ; then
+            echo2 Starting Mariadb using brew
+            brew services start mariadb
     elif [ -f /usr/lib/systemd/system/mysql.service ]; then
             # at least seen in Fedora 17
             systemctl start mysql
