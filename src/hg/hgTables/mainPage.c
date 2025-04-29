@@ -458,6 +458,19 @@ jsInlineF("function checkForCsv(event) {\n"
     , hgtaOutSep, hgtaOutSep);
 jsAddEventForId("change", "outputTypeDropdown", "checkForCsv");
 
+/*
+ * Code to add in the interactive tutorial*/
+if (cfgOptionBooleanDefault("showTutorial", TRUE))
+    {
+    puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
+    puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+    jsIncludeFile("tableBrowserTutorial.js",NULL);
+    if (sameOk(cgiOptionalString("startTutorial"), "true"))
+        {
+        jsInline("tableBrowserTour.start();");
+        }
+    }
+
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
     hPrintf(" Send output to ");
@@ -487,7 +500,7 @@ if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
 	}
     }
 
-hPrintf("</TD></TR>\n");
+hPrintf("</DIV></TD></TR>\n");
 }
 
 struct outputType otAllFields = { NULL,	outPrimaryTable,"All fields from selected table", };
@@ -515,7 +528,7 @@ static void showOutputTypeRow(boolean isWig, boolean isBedGr,
 struct outputType *otList = NULL, *otDefault = NULL;
 boolean bedifiedOnly = (anySubtrackMerge(database, curTable) || anyIntersection());
 
-hPrintf("<TR><TD><B>Output format:</B>\n");
+hPrintf("<TR><TD><DIV ID=\"output-select\"><B>Output format:</B>\n");
 
 if (isBedGr)
     {
@@ -674,7 +687,7 @@ printStep(stepNumber++);
 
     if (gotClade)
         {
-        hPrintf("<TR><TD><B>Clade:</B>\n");
+        hPrintf("<TR><TD><DIV ID=\"genome-select\"><B>Clade:</B>\n");
         printCladeListHtml(hGenome(database), "change", onChangeClade());
         nbSpaces(3);
         hPrintf("<B>Genome:</B>\n");
@@ -682,28 +695,28 @@ printStep(stepNumber++);
         }
     else
         {
-        hPrintf("<TR><TD><B>Genome:</B>\n");
+        hPrintf("<TR><TD><DIV ID=\"genome-select\"><B>Genome:</B>\n");
         printGenomeListHtml(database, "change", onChangeOrg());
         }
     nbSpaces(3);
     hPrintf("<B>Assembly:</B>\n");
     printAssemblyListHtml(database, "change", onChangeDb());
-    hPrintf("</TD></TR>\n");
+    hPrintf("</DIV></TD></TR>\n");
     }
 
 /* Print group and track line. */
     {
-    hPrintf("<TR><TD>");
+    hPrintf("<TR><TD><DIV ID=\"track-select\">");
     selGroup = showGroupField(hgtaGroup, "change", onChangeGroupOrTrack(), conn, hAllowAllTables());
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, "change", onChangeGroupOrTrack(), FALSE);
     nbSpaces(3);
-    hPrintf("</TD></TR>\n");
+    hPrintf("</DIV></TD></TR>\n");
     }
 
 /* Print table line. */
     {
-    hPrintf("<TR><TD>");
+    hPrintf("<TR><TD><DIV ID=\"table-select\">");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (isHubTrack(curTable) || hashFindVal(fullTableToTdbHash, curTable) != NULL)  /* In same database */
         {
@@ -732,7 +745,7 @@ printStep(stepNumber++);
         isChromGraphCt = isChromGraph(tdb);
         }
     cgiMakeButton(hgtaDoSchema, "Data format description");
-    hPrintf("</TD></TR>\n");
+    hPrintf("</DIV></TD></TR>\n");
     }
 
 if (curTrack == NULL)
@@ -775,7 +788,7 @@ if (isPositional)
     if (!trackHubDatabase(database))
 	doEncode = sqlTableExists(conn, "encodeRegions");
 
-    hPrintf("<TR><TD><B>Region:</B>\n");
+    hPrintf("<TR><TD><DIV ID=\"position-controls\"><B>Region:</B>\n");
 
     /* If regionType not allowed force it to "genome". */
     if ((sameString(regionType, hgtaRegionTypeUserRegions) &&
@@ -823,6 +836,7 @@ if (isPositional)
 	}
     else
 	cgiMakeButton(hgtaDoSetUserRegions, "Define regions");
+    hPrintf("</DIV>");
     hPrintf("</TD></TR>\n");
 
     if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
@@ -843,7 +857,7 @@ else
 /* Select identifiers line (if applicable). */
 if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     {
-    hPrintf("<TR><TD><B>Identifiers (names/accessions):</B>\n");
+    hPrintf("<TR><TD><DIV ID=\"identifiers-controls\"><B>Identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "Paste list");
     hPrintf(" ");
     cgiMakeButton(hgtaDoUploadIdentifiers, "Upload list");
@@ -852,7 +866,7 @@ if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
 	hPrintf("&nbsp;");
 	cgiMakeButton(hgtaDoClearIdentifiers, "Clear list");
 	}
-    hPrintf("</TD></TR>\n");
+    hPrintf("</DIV></TD></TR>\n");
     }
 }
 
@@ -975,9 +989,9 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
     char *fieldSep = cartUsualString(cart, hgtaOutSep, outTab);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>Output filename:</B>&nbsp;");
+    hPrintf("<DIV ID=\"filename-select\"><B>Output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
-    hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</DIV></TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>Output field separator:&nbsp;</B>");
 
@@ -1005,7 +1019,7 @@ hPrintf("</TABLE>\n");
 
 /* Submit buttons. */
     {
-    hPrintf("<BR>\n");
+    hPrintf("<BR><DIV ID=\"submit-select\">\n");
     if (isWig || isBam || isVcf || isLongTabix || isHic)
 	{
 	char *name;
@@ -1045,6 +1059,7 @@ hPrintf("</TABLE>\n");
 	cgiMakeButton(hgtaDoSummaryStats, "Summary/statistics");
 	hPrintf(" ");
 	}
+    hPrintf("</DIV>");
 
 #ifdef SOMETIMES
     hPrintf(" ");
