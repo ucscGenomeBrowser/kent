@@ -1720,6 +1720,17 @@ else
 int gAltLen = strlen(vpTxIn->gAlt);
 if (gAltLen <= gSeqOffset)
     vpTxEx->gAlt = cloneString("");
+else if (gAltLen < gRefLen)
+    {
+    // If it's a deletion then we can't just apply the same -gSeqTrim adjustment to alt as to ref
+    // or else we could underflow.  Clip to the in-exon length that we used for vpTxEx->gRef.
+    // In real life, who knows what would happen to the exon boundary, but at least this is
+    // consistent with txAlt length.  VAI calls this complex_transcript_variant. #35577 note 14
+    int exonAltLen = gAltLen - gSeqOffset;
+    if (exonAltLen > gRefLen - gSeqOffset - gSeqTrim)
+        exonAltLen = gRefLen - gSeqOffset - gSeqTrim;
+    vpTxEx->gAlt = cloneStringZ(vpTxIn->gAlt + gSeqOffset, exonAltLen);
+    }
 else
     vpTxEx->gAlt = cloneStringZ(vpTxIn->gAlt + gSeqOffset, gAltLen - gSeqOffset - gSeqTrim);
 vpTxEx->txRef = cloneString(vpTxIn->txRef);

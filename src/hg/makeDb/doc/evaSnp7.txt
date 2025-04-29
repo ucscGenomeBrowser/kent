@@ -1,0 +1,21 @@
+# Track for EVA snp release 7  - https://www.ebi.ac.uk/eva/?RS-Release&releaseVersion=7
+# Tracks built by Lou on 4/28/2025
+
+# Track was built for the following 40 assemblies
+
+# The GCA accession on the eva release by accession list (https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_7/by_assembly/)
+# were compared to all native assemblies we have. In total there are 909,269,967 variants
+
+# All assemblies were passed by the python pipeline described below
+# Some assemblies had errors and were skipped, more info in RM #34119
+
+# All files were created with the following python3 script:
+
+~/kent/src/hg/makeDb/scripts/evaSnp/evaSnp7.py
+
+#Then symlinks were made for all databases
+
+for dbs in $(cat /hive/data/outside/eva7/assemblyReleaseList.txt);
+do
+ln -s /hive/data/outside/eva7/$dbs/evaSnp7.bb /gbdb/$dbs/bbi/;
+done
