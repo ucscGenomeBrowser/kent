@@ -41,14 +41,13 @@ return email;
 
 char *getDataDir(char *userName)
 /* Return the full path to the user specific data directory, can be configured via hg.conf
- * on hgwdev, this is /data/apache/userdata/hubspace/hash/userName/
- * on the RR, this is /userdata/hubspace/hash/userName/ */
+ * on hgwdev, this is /data/tusd */
 {
-char *userDataBaseDir = cfgOption("userDataDir");
-if (!userDataBaseDir  || isEmpty(userDataBaseDir))
-    errAbort("trying to save user file but no userDataDir defined in hg.conf");
-if (userDataBaseDir[0] != '/')
-    errAbort("config setting userDataDir must be an absolute path (starting with '/')");
+char *tusdDataBaseDir = cfgOption("tusdDataDir");
+if (!tusdDataBaseDir  || isEmpty(tusdDataBaseDir))
+    errAbort("trying to save user file but no tusdDataDir defined in hg.conf");
+if (tusdDataBaseDir[0] != '/')
+    errAbort("config setting tusdDataDir must be an absolute path (starting with '/')");
 
 char *encUserName = cgiEncode(userName);
 char *userPrefix = md5HexForString(encUserName);
@@ -56,15 +55,22 @@ userPrefix[2] = '\0';
 
 struct dyString *newDataDir = dyStringNew(0);
 dyStringPrintf(newDataDir, "%s/%s/%s/", 
-    userDataBaseDir, userPrefix, encUserName);
+    tusdDataBaseDir, userPrefix, encUserName);
 
 return dyStringCannibalize(&newDataDir);
 }
 
 char *stripDataDir(char *fname, char *userName)
-/* Strips the getDataDir(userName) off of fname */
+/* Strips the getDataDir(userName) off of fname. The dataDir may be a symbolic
+ * link, we will resolve it here. NOTE that this relies on
+ * calling realpath(3) on the fname argument prior to calling stripDataDir() */
 {
-char *dataDir = getDataDir(userName);
+char *dataDir = realpath(getDataDir(userName), NULL);
+if (!dataDir)
+    {
+    // catch a realpath error
+    return NULL;
+    }
 int prefixSize = strlen(dataDir);
 if (startsWith(dataDir, fname))
     {
