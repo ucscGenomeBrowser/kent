@@ -73,7 +73,7 @@ check-alpha:
 
 check-beta:
 	# this will fail if we are not in a beta checkout:
-	git branch | egrep '\* v[0-9]+_branch' > /dev/null	
+	git branch | egrep '\* v[0-9]+_branch|beta' > /dev/null	
 
 BLAT_SUITE_DIRS = blat gfClient gfServer webBlat hg/pslPretty hg/pslReps \
 	hg/pslSort utils/nibFrag utils/faToNib utils/faToTwoBit utils/twoBitToFa \
