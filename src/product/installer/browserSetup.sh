@@ -1447,6 +1447,7 @@ function setupBuildOsx ()
       echo2 Creating /usr/local/apache to fill with symlinks later
       sudo mkdir -p /usr/local/apache
       sudo chmod a+rw /usr/local/apache
+      touch "$APACHEDIR"/.madeByBrowserBuild
    fi
 
    if [ ! -e /usr/local/apache/cgi-bin ]; then
@@ -1496,6 +1497,11 @@ function setupBuildLinux ()
       echo Error: Cannot identify linux distribution
       exit 100
    fi
+   # the build target cgi-bin requires that these directories exist
+   mkdir -p $HTDOCDIR $CGIBINDIR
+   # leave a flag file so the script knows later that this directory did not exist and we made it
+   # and it is safe to write into it
+   touch "$APACHEDIR"/.madeByBrowserBuild
 }
 
 # set this machine for browser development: install required tools, clone the tree, build it
@@ -1559,11 +1565,15 @@ function installBrowser ()
        elif [[ "$MACH" == "aarch64" ]]; then
           echo2 Linux, but ARM CPU: Need to build CGIs and htdocs locally from source using gcc, make and git
           buildTree
-       elif [[ "$DIST" == "debian" ]]; then
+       fi
+
+       # (For OSX, the buildTree step above includes the installation of Apache/MariaDB)
+       if [[ "$DIST" == "debian" ]]; then
           installDebian
        elif [[ "$DIST" == "redhat" ]]; then
           installRedhat
        fi
+
     fi
     # OS-specific mysql/apache installers can SET_MYSQL_ROOT to 1 to request that the root
     # mysql user password be changed
@@ -1600,11 +1610,17 @@ function installBrowser ()
 
     # check if /usr/local/apache is empty
     # on OSX, we had to create an empty htdocs, so skip this check there
-    if [ -d "$APACHEDIR" -a "$OS" != "OSX" ]; then
-        echo2 error: the directory $APACHEDIR already exists.
-        echo2 This installer has to overwrite it, so please move it to a different name
-        echo2 or remove it. Then start the installer again with "bash $0 install"
-        exit 100
+    if [ -d "$APACHEDIR" ] ; then
+        if [ -f "$APACHEDIR"/.madeByBrowserBuild ] ; then
+            # leave a flag file so the script knows later that this directory did not exist and we made it
+            # and it is safe to write into it
+            rm -f "$APACHEDIR"/.madeByBrowserBuild
+        else
+            echo2 error: the directory $APACHEDIR already exists.
+            echo2 This installer has to overwrite it, so please move it to a different name
+            echo2 or remove it. Then start the installer again with "bash $0 install"
+            exit 100
+        fi
     fi
 
     mysqlDbSetup
