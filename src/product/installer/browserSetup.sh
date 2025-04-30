@@ -1435,7 +1435,7 @@ function setupBuildOsx ()
        brew update
    fi
    echo2 Installing homebrew packages libpng, openssl, mariadb, git
-   brew install libpng openssl mariadb git
+   brew install libpng openssl mariadb git freetype
 
    echo2 Allowing write access for all on Apple\'s Apache htdocs/cgi-bin directories.
    echo2 The chmod command requires sudo - please enter the admin password now:
