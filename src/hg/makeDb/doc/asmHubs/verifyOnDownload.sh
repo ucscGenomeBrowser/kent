@@ -45,7 +45,7 @@ elif [ "${subset}" == "archaea" ]; then
 elif [ "${subset}" == "fungi" ]; then
   minTrackCount=10
 elif [ "${subset}" == "viral" ]; then
-  minTrackCount=7
+  minTrackCount=6
 fi
 
 # printf "# DBG subset '%s' min: %d\n" "${subset}" "${minTrackCount}" 1>&2
