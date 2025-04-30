@@ -2,7 +2,7 @@ kentSrc = ../../..
 include ../../../inc/common.mk
 include ../install.mk
 
-SYMLINKED_FILES=basicTutorial.js clinicalTutorial.js hgTracksPopup.js gatewayTutorial.js
+SYMLINKED_FILES=basicTutorial.js clinicalTutorial.js hgTracksPopup.js tableBrowserTutorial.js gatewayTutorial.js
 
 doInstall:
 	@mkdir -p ${DEST}/
