@@ -90,22 +90,6 @@ RSYNCOPTS=""
 # a flagfile to indicate that the cgis were installed successfully
 COMPLETEFLAG=/usr/local/apache/cgiInstallComplete.flag
 
-# on OSX by default we download a pre-compiled package that includes Apache/Mysql/OpenSSL
-# change this to 1 to rebuild all of these locally from tarballs
-BUILDEXT=${BUILDEXT:-0}
-# On OSX, by default download the CGIs as a binary package
-# change this to 1 to rebuild CGIs locally from tarball
-BUILDKENT=${BUILDKENT:-0}
-
-# URL of a tarball with a the binaries of Apache/Mysql/Openssl
-BINPKGURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/mysqlApacheOSX_10.7.tgz
-# URL of tarball with the OSX CGI binaries
-CGIBINURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/kentCgi_OSX_10.7.tgz 
-# URL of tarball with a minimal Mysql data directory
-MYSQLDBURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/mysql56Data.tgz
-# mysql/apache startup script URL, currently only for OSX
-STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserStartup.sh
-
 # the -t option allows to download only the genome databases, not hgFixed/proteome/go/uniProt
 # by default, this is off, so we download hgFixed and Co. 
 ONLYGENOMES=0
@@ -547,6 +531,9 @@ function setMYCNF ()
     elif [ -f /etc/mysql/my.cnf ] ; then
         # generic Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
+    elif [ -f /usr/local/etc/my.cnf ]; then
+        # brew on x86
+    	MYCNF=/usr/local/etc/my.cnf
     elif [ -f /opt/homebrew/etc/my.cnf ]; then
         # homebrew on ARMs
     	MYCNF=/opt/homebrew/etc/my.cnf
@@ -628,8 +615,8 @@ function showMyAddress ()
 {
 echo2
 if [[ "$DIST" == "OSX" ]]; then
-   echo2 You can browse the genome at http://127.0.0.1:8080
-   #/usr/bin/open http://127.0.0.1:8080
+   echo2 You can browse the genome at http://localhost
+   #/usr/bin/open http://localhost
 else
    echo2 You can now access this server under one of these IP addresses: 
    echo2 From same host:    http://127.0.0.1
@@ -911,9 +898,26 @@ function installOsxDevTools ()
 }
 
 # OSX specific setup of the installation
+# NOT USED ANYMORE, but kept here for reference and for future use one day
 function installOsx () 
 {
    installOsxDevTools
+
+   # on OSX by default we download a pre-compiled package that includes Apache/Mysql/OpenSSL
+   # change this to 1 to rebuild all of these locally from tarballs
+   BUILDEXT=${BUILDEXT:-0}
+   # On OSX, by default download the CGIs as a binary package
+   # change this to 1 to rebuild CGIs locally from tarball
+   BUILDKENT=${BUILDKENT:-0}
+   
+   # URL of a tarball with a the binaries of Apache/Mysql/Openssl
+   BINPKGURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/mysqlApacheOSX_10.7.tgz
+   # URL of tarball with the OSX CGI binaries
+   CGIBINURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/kentCgi_OSX_10.7.tgz 
+   # URL of tarball with a minimal Mysql data directory
+   MYSQLDBURL=http://hgwdev.gi.ucsc.edu/~max/gbInstall/mysql56Data.tgz
+   # mysql/apache startup script URL, currently only for OSX
+   STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserStartup.sh
 
    # in case that it is running, try to stop Apple's personal web server, we need access to port 80
    # ignore any error messages
@@ -1402,12 +1406,6 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
 "DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
     
-    # create /gbdb and let the apache user write to it
-    # hgConvert will download missing liftOver files on the fly and needs write
-    # write access
-    mkdir -p $GBDBDIR
-    chown $APACHEUSER:$APACHEUSER $GBDBDIR
-    
     # the custom track database needs it own user and permissions
     $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
@@ -1437,15 +1435,10 @@ function setupBuildOsx ()
        brew update
    fi
    echo2 Installing homebrew packages libpng, openssl, mariadb, git
-   brew install libpng openssl mariadb git
-   
-   #if ! libpng-config --version > /dev/null 2>&1; then
-   #if ! mariadb --version > /dev/null 2>&1; then
-   #if ! git --version > /dev/null 2>&1; then
-   #if ! openssl --version > /dev/null 2>&1; then
+   brew install libpng openssl mariadb git freetype
 
-   echo2 Allowing write for all on Apple's Apache htdocs/cgi-bin directories
-   echo2 This requires sudo, so please enter the admin password now
+   echo2 Allowing write access for all on Apple\'s Apache htdocs/cgi-bin directories.
+   echo2 The chmod command requires sudo - please enter the admin password now:
    sudo chmod a+rw /Library/WebServer/CGI-Executables
    sudo chmod a+rw /Library/WebServer/Documents
 
@@ -1454,6 +1447,7 @@ function setupBuildOsx ()
       echo2 Creating /usr/local/apache to fill with symlinks later
       sudo mkdir -p /usr/local/apache
       sudo chmod a+rw /usr/local/apache
+      touch "$APACHEDIR"/.madeByBrowserBuild
    fi
 
    if [ ! -e /usr/local/apache/cgi-bin ]; then
@@ -1465,8 +1459,28 @@ function setupBuildOsx ()
       sudo ln -s /Library/WebServer/Documents/ /usr/local/apache/htdocs 
    fi
 
-   # switch on CGIs in Apple's Apache and restart it
-   sudo sed -i '' -E 's/^\s*#(LoadModule cgid_module)/\1/; s/^\s*#(LoadModule cgi_module)/\1/' /etc/apache2/httpd.conf
+    if [[ ! -d /usr/local/apache/trash ]]; then
+        mkdir -p /usr/local/apache/trash
+        sudo chmod a+rwx /usr/local/apache/trash
+        # cgis use ../trash to find the trash directory, but we have a symlink here
+        sudo ln -fs /usr/local/apache/trash /Library/WebServer/Documents/trash
+        sudo ln -fs /usr/local/apache/trash /Library/WebServer/trash
+        # cgis use ../htdocs to find the htdocs directory, but we have a symlink here
+        sudo ln -fs /Library/WebServer/Documents /Library/WebServer/htdocs
+    fi
+    
+   # switch on CGIs in Apple's Apache and restart it (OSX as a BSD does not understand \s, so need to use [[:space:]])
+   sudo sed -Ei '' 's/^[[:space:]]*#(LoadModule cgid_module)/\1/; s/^[[:space:]]*#(LoadModule cgi_module)/\1/' /etc/apache2/httpd.conf
+   # allow server side includes
+   sudo sed -Ei '' 's/^[[:space:]]*#(LoadModule include_module)/\1/' /etc/apache2/httpd.conf
+   # activate server side includes and make them depend on the X flag
+   sudo sed -Ei '' 's/Options FollowSymLinks Multiviews/Options FollowSymLinks Includes Multiviews/' /etc/apache2/httpd.conf
+   if grep -qv XBitHack /etc/apache2/httpd.conf ; then
+     sudo sed -Ei '' '/Options FollowSymLinks Includes Multiviews/ a\
+XBitHack on\
+SSILegacyExprParser on
+' /etc/apache2/httpd.conf
+   fi
    sudo /usr/sbin/apachectl restart
 }
 
@@ -1483,6 +1497,11 @@ function setupBuildLinux ()
       echo Error: Cannot identify linux distribution
       exit 100
    fi
+   # the build target cgi-bin requires that these directories exist
+   mkdir -p $HTDOCDIR $CGIBINDIR
+   # leave a flag file so the script knows later that this directory did not exist and we made it
+   # and it is safe to write into it
+   touch "$APACHEDIR"/.madeByBrowserBuild
 }
 
 # set this machine for browser development: install required tools, clone the tree, build it
@@ -1496,9 +1515,10 @@ function buildTree ()
 
    if [ ! -e ~/kent ]; then
       echo2 Cloning kent repo into ~/kent using git with --depth=1
+      echo2 Branch is: \"beta\" = our current release, beta = testing
       waitKey
       cd ~
-      git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
+      git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
    fi
 
    echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
@@ -1506,7 +1526,7 @@ function buildTree ()
    waitKey
    cd ~/kent/src
    make -j8 cgi-alpha
-   make -j8 htdocs
+   make -j8 doc-alpha
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
@@ -1522,7 +1542,7 @@ function installBrowser ()
     echo '--------------------------------'
     echo UCSC Genome Browser installation
     echo '--------------------------------'
-    echo CPU type: $MACH, detected OS: $OS/$DIST, Version: $VERNUM, Release: $VER
+    echo CPU type: $MACH, detected OS: $OS/$DIST, Release: $VER, Version: $VERNUM 
     echo 
     echo This script will go through three steps:
     echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
@@ -1540,14 +1560,20 @@ function installBrowser ()
     # -----  OS - SPECIFIC part -----
     if [ ! -f $COMPLETEFLAG ]; then
        if [[ "$DIST" == "OSX" ]]; then
-          #installOsx <- not used anymore, but maybe one day
- 	  # on OSX, install clang, brew, kent and build the CGIs from scratch
+ 	  echo2 OSX: build the CGIs from scratch using clang, brew and git
           buildTree
-       elif [[ "$DIST" == "debian" ]]; then
+       elif [[ "$MACH" == "aarch64" ]]; then
+          echo2 Linux, but ARM CPU: Need to build CGIs and htdocs locally from source using gcc, make and git
+          buildTree
+       fi
+
+       # (For OSX, the buildTree step above includes the installation of Apache/MariaDB)
+       if [[ "$DIST" == "debian" ]]; then
           installDebian
        elif [[ "$DIST" == "redhat" ]]; then
           installRedhat
        fi
+
     fi
     # OS-specific mysql/apache installers can SET_MYSQL_ROOT to 1 to request that the root
     # mysql user password be changed
@@ -1584,11 +1610,17 @@ function installBrowser ()
 
     # check if /usr/local/apache is empty
     # on OSX, we had to create an empty htdocs, so skip this check there
-    if [ -d "$APACHEDIR" -a "$OS" != "OSX" ]; then
-        echo2 error: the directory $APACHEDIR already exists.
-        echo2 This installer has to overwrite it, so please move it to a different name
-        echo2 or remove it. Then start the installer again with "bash $0 install"
-        exit 100
+    if [ -d "$APACHEDIR" ] ; then
+        if [ -f "$APACHEDIR"/.madeByBrowserBuild ] ; then
+            # leave a flag file so the script knows later that this directory did not exist and we made it
+            # and it is safe to write into it
+            rm -f "$APACHEDIR"/.madeByBrowserBuild
+        else
+            echo2 error: the directory $APACHEDIR already exists.
+            echo2 This installer has to overwrite it, so please move it to a different name
+            echo2 or remove it. Then start the installer again with "bash $0 install"
+            exit 100
+        fi
     fi
 
     mysqlDbSetup
@@ -1612,7 +1644,7 @@ function installBrowser ()
     if [ ! -e $TRASHDIR ]; then
         ln -fs $TRASHDIR
     fi
-    
+
     # write the sample hg.conf to the cgi-bin directory
     echo2 Creating Genome Browser config file $CGIBINDIR/hg.conf
     echo "$HG_CONF_STR" > $CGIBINDIR/hg.conf
@@ -1642,8 +1674,8 @@ function installBrowser ()
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
        echo modifying hg.conf to pull data from genome-euro instead of genome
-       sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
-       sed -i "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
+       $SEDINPLACE s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
+       $SEDINPLACE "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
        HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
     else
        echo genome.ucsc.edu seems to be closer
@@ -1655,8 +1687,7 @@ function installBrowser ()
         #setupCgiOsx
         echo2 Running on OSX, assuming that CGIs are already built into /usr/local/apache/cgi-bin
     elif [[ "$MACH" == "aarch64" ]]; then
-        echo2 Running on an ARM CPU: need to build CGIs and htdocs locally from source
-        buildTree
+        echo2 Running on an ARM CPU, assuming that CGIs are already built into /usr/local/apache/cgi-bin
     else
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
@@ -1667,10 +1698,11 @@ function installBrowser ()
     fi
 
     # download the html docs, exclude some big files on OSX
-    # try to minimize storage for OSX, mostly laptops
+    # cannot do this when we built the tree outselves, as the .js versions will not match the C code
     if [ "$OS" == "OSX" -o "$MACH" == "aarch64" ]; then
-            #$RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
-            echo2 Not syncing htdocs folder, assuming that these were built from source.
+            # but we need the new font files
+            $RSYNC -azP hgdownload.soe.ucsc.edu::htdocs/urw-fonts/ /usr/local/apache/htdocs/urw-fonts/
+            echo2 Not syncing most of htdocs folder, assuming that these were built from source.
             echo2 PDF and other large files only present at UCSC will be missing from htdocs.
             waitKey
     else
@@ -1681,7 +1713,7 @@ function installBrowser ()
     # assign all files just downloaded to a valid user. 
     # This also allows apache to write into the trash dir
     if [ "$OS" == "OSX" ]; then
-        echo2 OSX: Not chowning /usr/local/apache subdirectories
+        echo2 OSX: Not chowning /usr/local/apache subdirectories, as not running as root
     else
         chown -R $APACHEUSER:$APACHEUSER $CGIBINDIR $HTDOCDIR $TRASHDIR
     fi
@@ -1702,6 +1734,33 @@ function installBrowser ()
     echo2 
     showMyAddress
     exit 0
+}
+
+# mkdir /gbdb or do the weird things one has to do on OSX to make this directory
+function mkdirGbdb 
+{
+    if [[ "$OS" != "OSX" ]]; then 
+       # On Linux, create /gbdb and let the apache user write to it
+       mkdir -p $GBDBDIR
+       # Why? hgConvert will download missing liftOver files on the fly and needs write
+       # write access
+       chown $APACHEUSER:$APACHEUSER $GBDBDIR
+       return
+    fi
+
+    sudo mkdir -p /usr/local/gbdb
+    sudo chmod a+rwx /usr/local/gbdb
+
+    # see https://apple.stackexchange.com/questions/388236/unable-to-create-folder-in-root-of-macintosh-hd
+    if [[ ! -f /etc/synthetic.conf ]] || grep -vq gbdb /etc/synthetic.conf; then
+         sudo /bin/sh -c 'echo "gbdb\tusr/local/gbdb" >> /etc/synthetic.conf'
+    fi
+    chmod 644  /etc/synthetic.conf
+    /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t || true
+    if ! test -L /gbdb; then
+     echo "warning: apfs.util failed to create /gbdb"
+    fi
+    echo 'This directory is /usr/local/gbdb, see /etc/synthetic.conf' >> /gbdb/README.txt
 }
 
 # GENOME DOWNLOAD: mysql and /gbdb
@@ -1737,6 +1796,12 @@ function downloadGenomes
 
     # rsync is doing globbing itself, so switch it off temporarily
     set -f
+
+    # On OSX the MariaDB datadir is not under /var. On Linux distros, the MariaDB directory may have been moved.
+    if [ ! -d $MYSQLDIR ]; then 
+        MYSQLDIR=`mysql -NBe 'SHOW Variables WHERE Variable_Name="datadir"' | cut -f2`
+    fi
+
     # use rsync to get total size of files in directories and sum the numbers up with awk
     for db in $MYSQLDBS; do
         rsync -avn $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ $RSYNCOPTS | grep ^'total size' | cut -d' ' -f4 | tr -d ', ' 
@@ -1780,7 +1845,6 @@ function downloadGenomes
     for db in $MYSQLDBS; do
        echo2 Downloading Mysql files for mysql database $db
        $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
-       chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
     if [ ! -z "$GENBANKTBLS" ]; then
@@ -1788,25 +1852,26 @@ function downloadGenomes
         for tbl in $GENBANKTBLS; do
             $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
         done
-        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
     fi
 
     echo2 Downloading hgFixed.refLink, required for all RefSeq tracks
     $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
-    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
+
+    mkdirGbdb
 
     # download /gbdb files
     for db in $DBS; do
        echo2 Downloading $GBDBDIR files for assembly $db
-       mkdir -p $GBDBDIR
        $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/
-       chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
     done
 
     set +f
 
     # Alexander Stuy reported that at FSU they had a few mysql databases with incorrect users on them
-    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+    if [[ "$OS" != "OSX" ]]; then 
+        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+        chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
+    fi
     
     startMysql
 
@@ -1855,6 +1920,9 @@ function stopMysql
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl stop mariadb
+    elif which brew > /dev/null ; then
+            # homebrew on ARMs or X86
+    	    brew services stop mariadb  
     elif [ -f /usr/lib/systemd/system/mysql.service ]; then
             # at least seen in Fedora 17
             systemctl stop mysql
@@ -1875,6 +1943,9 @@ function startMysql
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl start mariadb
+    elif which brew > /dev/null ; then
+            echo2 Starting Mariadb using brew
+            brew services start mariadb
     elif [ -f /usr/lib/systemd/system/mysql.service ]; then
             # at least seen in Fedora 17
             systemctl start mysql
@@ -2167,18 +2238,21 @@ fi
 if [[ "$unameStr" == Darwin* ]]; then
     OS=OSX
     DIST=OSX
-    VER=`sw_vers -productVersion`
-    APACHECONFDIR=$APACHEDIR/ext/conf # only used by the OSX-spec part
-    APACHECONF=$APACHECONFDIR/001-browser.conf
-    APACHEUSER=_www # predefined by Apple
-    MYSQLDIR=$APACHEDIR/mysqlData
-    MYSQLUSER=_mysql # predefined by Apple
-    MYSQL="$APACHEDIR/ext/bin/mysql --socket=$APACHEDIR/ext/mysql.socket"
-    MYSQLADMIN="$APACHEDIR/ext/bin/mysqladmin --socket=$APACHEDIR/ext/mysql.socket"
+    VERNUM=`sw_vers -productVersion`
+    VER=$VERNUM
     SEDINPLACE="sed -Ei .bak" # difference BSD vs Linux
+
+    # Not used anymore, but good to know that these are possible:
+    #APACHECONFDIR=$APACHEDIR/ext/conf # only used by the OSX-spec part
+    #APACHECONF=$APACHECONFDIR/001-browser.conf
+    #APACHEUSER=_www # predefined by Apple
+    #MYSQLDIR=$APACHEDIR/mysqlData
+    #MYSQLUSER=_mysql # predefined by Apple
+    #MYSQL="$APACHEDIR/ext/bin/mysql --socket=$APACHEDIR/ext/mysql.socket"
+    #MYSQLADMIN="$APACHEDIR/ext/bin/mysqladmin --socket=$APACHEDIR/ext/mysql.socket"
     # make sure resulting binaries can be run on OSX 10.7
     # this is a gcc option, not a global variable for this script
-    export MACOSX_DEPLOYMENT_TARGET=10.7
+    #export MACOSX_DEPLOYMENT_TARGET=10.7
 
 elif [[ $unameStr == Linux* ]] ; then
     OS=linux

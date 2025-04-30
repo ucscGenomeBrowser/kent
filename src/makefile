@@ -68,8 +68,8 @@ ifeq (${IS_HGWDEV},yes)
 endif
 
 check-alpha:
-	# this will fail if we are not on master branch:
-	git branch | egrep '\* master' > /dev/null
+	# this will fail if we are not on master or beta branch:
+	git branch | egrep '\* master|beta' > /dev/null
 
 check-beta:
 	# this will fail if we are not in a beta checkout:

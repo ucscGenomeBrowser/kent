@@ -14,8 +14,8 @@ include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
 include trackDb.chainNet.asmHub.ra
 
-include patchTracks.ra beta,public
-include patchTracks.new.ra alpha
+include patchTracks.ra public
+include patchTracks.new.ra alpha,beta
 
 include trackDb.encode3.ra
 
@@ -27,7 +27,8 @@ include uniprot.ra
 
 include jaspar.ra
 
-include evaSnp.ra
+include evaSnp.ra beta,public
+include evaSnp.alpha.ra alpha
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something

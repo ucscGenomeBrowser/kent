@@ -9,7 +9,8 @@ UCSC Genome Browser on their server/cloud instance, rather than using
 or our public website. Please see the 
 [Installation of a UCSC Genome Browser on a local machine (mirror)](mirror.html#considerations-before-installing-a-genome-browser)
 page for a summary of installation options, including the pros and cons of using a mirror
-installation via the GBiC program vs&period; using GBiB.
+installation via the GBiC program vs&period; using GBiB. GBiC can also be used as a Docker container.
+See our [Docker help page](docker.html) for more information.
 
 The program works by setting up MySQL (MariaDB), Apache, and Ghostscript, and then copying the
 Genome Browser CGIs onto the machine under `/usr/local/apache/`. Because it also deactivates the
@@ -162,6 +163,11 @@ To update all CGIs and fully mirrored assemblies, call the
 tool with the `update` parameter like this: 
 
     sudo bash browserSetup.sh update
+
+The `update` parameter can also be used to update the data for a single assembly by providing the
+UCSC assembly name (e.g. rn6, bosTau6, equCab3):
+
+    sudo bash browserSetup.sh update bosTau9
 
 Minimal mirror sites (those that have partially mirrored an assembly) should not 
 use the `update` command, but rather just rerun the `minimal` command, so that only the minimal
