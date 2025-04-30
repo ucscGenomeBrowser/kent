@@ -14,8 +14,8 @@ include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
 include trackDb.chainNet.asmHub.ra
 
-include patchTracks.ra beta,public
-include patchTracks.new.ra alpha
+include patchTracks.ra public
+include patchTracks.new.ra alpha,beta
 
 include trackDb.encode3.ra
 
