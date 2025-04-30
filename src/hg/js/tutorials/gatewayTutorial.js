@@ -18,6 +18,7 @@
 	defaultStepOptions: {
 	    cancelIcon: { enabled: true },
 	    classes: 'class-1 class-2',
+	    classes: 'dark-background large-popup',
 	    scrollTo: { behavior: 'smooth', block: 'center' }
 	},
       useModalOverlay: true
@@ -117,7 +118,6 @@
                   '</ul>',
             buttons: [tutorialButtons.next, tutorialButtons.end],
             id: 'intro',
-            classes: 'dark-background large-popup'
         });
 
         gatewayTour.addStep({
@@ -133,7 +133,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'PopularSpecies1',
-            classes: 'dark-background large-popup'
         });
 
         gatewayTour.addStep({
@@ -147,7 +146,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'selectAssemblyVersion',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -165,7 +163,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'speciesSearchBox',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -183,7 +180,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'speciesTree',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -204,7 +200,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'requestingAssembly',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -228,7 +223,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'viewSequences',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -257,7 +251,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'assemblyDetails',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -277,7 +270,6 @@
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'searchLocations',
-            classes: 'dark-background large-popup',
         });
 
         gatewayTour.addStep({
@@ -300,7 +292,6 @@
                     keepMenuVisible('#help > ul');
                     // log when the tutorial is finished (commented out for now)
                     writeToApacheLog("gatewayTutorial finish " + getHgsid());
-                    listenForBasicTutorial(); // listener to log if the basic tutorial was started
                 },
                 hide: () => hideMenu('#help > ul')
             }
@@ -312,15 +303,7 @@
 	    
             if (typeof window.gatewayTour === 'undefined') {
                 gatewaySteps();
-        window.gatewayTour = gatewayTour;    
+            window.gatewayTour = gatewayTour;    
     }
 })();
 
-window.addEventListener('load', function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const shouldStart = urlParams.get('startGateway') === 'true';
-
-    if (shouldStart && typeof window.gatewayTour !== 'undefined') {
-        window.gatewayTour.start();
-    }
-});
