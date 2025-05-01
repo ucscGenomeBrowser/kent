@@ -268,7 +268,7 @@ while(TRUE)
 	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
 		sqlUpdate(conn,dy->string);
 		}
-	    else  // GALT DEBUG REMOVE
+	    else
 		{
 		dyStringClear(dy); 
 	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
