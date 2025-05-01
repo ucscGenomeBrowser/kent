@@ -88,3 +88,97 @@ cp cytoSnp.bb /hive/data/genomes/hg38/bed/cytoSnp/cytoSnp850k.bb
 ln -s /hive/data/genomes/hg38/bed/cytoSnp/cytoSnp850k.bb /gbdb/hg38/bbi/cytoSnp/cytoSnp850k.bb
 
 #############################################################################
+
+# Illumina Methylation EPICv2 - May 2025 - Lou
+
+#EPIC2 files downloaded from https://support.illumina.com/array/array_kits/infinium-methylationepic-beadchip-kit/downloads.html
+#.as file details: https://hgwdev.gi.ucsc.edu/~lrnassar/temp/methylationepic%20v2-manifest-column-headings%20A2.pdf
+
+#e.g of line 1:
+#cg25324105_BC11,cg25324105,1754126,ATTTATAAACTAATAACCCAAAATACATTTCCCAAAAACCTTCACAACCA,99753217,GTTTATAAACTAATAACCCGAAATACATTTCCCAAAAACCTTCGCGACCG,A,Red,R,cg,F,B,C,1,I,19,37692358,Human,GRCh
+
+#The coordinate, 37692358, needs to be come -1 and +1: chr19 37692357 37692359
+
+#For hg19, same thing. e.g. 38183259 should be:
+#chr19 38183258 38183260
+
+#The plan for how to make the file:
+#add chr to the start all strings in field 16 and field 50
+
+#Make a new field 52 called hg38chromStart that is field 17-1 and field 53 called hg38chromEnd that is field 17+1
+#Make a new field 54 called hg38chromStart that is field 51-1 and field 55 called hg38chromEnd that is field 51+1
+
+################# USED PYTHON SCRIPT BELOW TO CREATE FIXED FILE #############
+
+EPIC2File = open('/hive/data/outside/illuminaEPIC2/EPIC-8v2-0_A2.csv','r')
+fixedFile = open('/hive/data/outside/illuminaEPIC2/fixedFile.tsv','w')
+
+for line in EPIC2File:
+    if line.startswith("IlmnID"):
+        line = line.rstrip().replace(',', '\t')
+        line = line+"\thg38chromStart\thg38chromEnd\thg19chromStart\thg19chromEnd\tscore\n"
+        fixedFile.write(line)
+    elif line.startswith("cg"):
+        line = line.rstrip().replace(',', '\t').split("\t")
+        hg38chromStart = str(int(line[16])-1)
+        hg38chromEnd = str(int(line[16])+1)
+        hg38chrom = 'chr'+line[15]
+        if hg38chrom == 'chr0':
+            continue
+        else:
+            if line[10] == "F":
+                strand = "+"
+            elif line[10] == "R":
+                strand = "-"
+            elif line[10] == "0":
+                strand = "."
+            if line[50] != '':
+                hg19chromStart = str(int(line[50])-1)
+                hg19chromEnd = str(int(line[50])+1)
+                hg19chrom = 'chr'+line[49]
+            else:
+                hg19chromStart = line[50]
+                hg19chromEnd = line[50]
+                hg19chrom = line[49]
+    
+            newLine = "\t".join(line[0:10])+"\t"+strand+"\t"+"\t".join(line[11:15])+"\t"+hg38chrom+"\t"+"\t".join(line[16:49])+"\t"+hg19chrom+"\t"+line[50]+"\t"+hg38chromStart+"\t"+hg38chromEnd+"\t"+hg19chromStart+"\t"+hg19chromEnd+"\t0\n"
+            fixedFile.write(newLine)
+
+EPIC2File.close()
+fixedFile.close()
+
+################ SCRIPT DONE ##############
+
+#hg38
+~max/usr/scripts/tabToBed --bedFields=chrom=15,start=51,end=52,strand=10,name=0,score=55 /hive/data/outside/illuminaEPIC2/fixedFile.tsv /hive/data/outside/illuminaEPIC2/outputFile.bed /hive/data/outside/illuminaEPIC2/outputFile.as
+
+#Had to remove the following bad IDs that were bigger than the chromosome
+
+cg07146279_TC21
+cg11930929_TC21
+cg18295427_TC21
+cg01734724_TC21
+
+bedToBigBed -sort -as=backup.as -type=bed12+ -tab outputFile.bed http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes illuminaEpicMethylationV2.bb
+
+ln -s /hive/data/outside/illuminaEPIC2/illuminaEpicMethylationV2.bb /gbdb/hg38/bbi/illumina/illuminaEPICv2.bb
+
+#hg19
+
+awk -F'\t' 'NF >= 54 && $54 == ""' fixedFile.tsv | cut -f1 > toSkipInHg19.txt
+
+$ wc -l toSkipInHg19.txt
+301 toSkipInHg19.txt
+
+grep -vf toSkipInHg19.txt fixedFile.tsv > hg19.fixedFile.tsv
+
+~max/usr/scripts/tabToBed --bedFields=chrom=49,start=53,end=54,strand=10,name=0,score=55 /hive/data/outside/illuminaEPIC2/hg19.fixedFile.tsv /hive/data/outside/illuminaEPIC2/hg19File.bed /hive/data/outside/illuminaEPIC2/outputFile.as
+
+#Manual tweaks to .as file resulting in hg19IlluminaEPIC.as
+#Manually deleted 2 items that are "chr0" - that means they are unmapped
+
+bedToBigBed -sort -as=hg19IlluminaEPIC.as -type=bed12+ -tab /hive/data/outside/illuminaEPIC2/hg19File.bed http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes illuminaEpicMethylationV2Hg19.bb
+
+ln -s /hive/data/outside/illuminaEPIC2/illuminaEpicMethylationV2Hg19.bb /gbdb/hg19/bbi/illumina/illuminaEPICv2.bb
+
+######################################
