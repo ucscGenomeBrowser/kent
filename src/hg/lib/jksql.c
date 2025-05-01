@@ -1177,7 +1177,7 @@ if (mysql_real_connect(
     char *extraMsg = "";
     if (sqlIsUcscServer())
         extraMsg = "We hate this error more than any other and may be already looking into it."
-            "If there is no message on https://twitter.com/GenomeBrowser with the time when we expect it to be back: "
+            "If there is no message on https://bsky.app/profile/genomebrowser.bsky.social with the time when we expect it to be back: "
             "You can help us by telling us about the error, "
             "our email is genome-www@soe.ucsc.edu. We will fix it ASAP."
             "And even if this server is failing for a few more hours today, usually, one of our other three "
