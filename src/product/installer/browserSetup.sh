@@ -372,7 +372,7 @@ command is one of:
                bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
-               wise these packages may be missing: libpng zlib libmysqlclient
+               wise these packages may be missing: libpng zlib mariadb-client
   dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
                ~/kent and build the CGIs into /usr/local/apache so you can try
                them right away. Useful if you want to develop your own track 
@@ -1116,7 +1116,7 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
 	# Debian / Ubuntu 20 defaults to Mysql 8 and Mysql 8 does not allow rsync of myisam anymore
 	# -> we require mariaDb now
-        apt-get $APTERR --assume-yes install mariadb-server libmariadb-dev
+        apt-get $APTERR --assume-yes install mariadb-server mariadb-client
 
         mysqlStrictModeOff
         startMysql
@@ -1487,10 +1487,10 @@ SSILegacyExprParser on
 # install gcc, make etc so we can build the tree on linux
 function setupBuildLinux ()
 {
-   echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
+   echo2 Installing required linux packages from repositories: Git, GCC, G++, MariaDB-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
-      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev libbz2-dev pkg-config
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev pkg-config
    elif [[ "$DIST" == "redhat" ]]; then
       yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
    else 
@@ -1643,7 +1643,7 @@ function installBrowser ()
     
     # the CGIs create links to images in /trash which need to be accessible from htdocs
     cd $HTDOCDIR
-    if [ ! -e $TRASHDIR ]; then
+    if [ ! -e trash ]; then
         ln -fs $TRASHDIR
     fi
 
