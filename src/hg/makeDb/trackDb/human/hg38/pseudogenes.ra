@@ -39,7 +39,7 @@ pennantIcon New red ../goldenPath/newsarch.html#033125 "Released Mar. 31, 2025"
 	searchTrix /gbdb/hg38/pseudogenes/pseudoPipeParents.ix
         labelSeparator " "
         html pseudogenes.html
-        mouseOver <b>Gene type</b>: ${geneType} <br> <b>Pseudogene position</b>: ${url}
+        mouseOver <b>Gene type</b>: ${geneType} <br> <b> ID</b>: ${name} <br> <b>Pseudogene position</b>: ${url}
         parent pseudogenes
         skipEmptyFields on
         priority 1
