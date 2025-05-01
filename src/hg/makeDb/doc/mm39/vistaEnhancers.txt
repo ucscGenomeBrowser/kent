@@ -11,3 +11,16 @@ ln -s /hive/data/outside/vistaEnhancers/mm39/vistaEnhancers.bb
 cd ~/kent/src/hg/makeDb/trackDb/mouse/mm39
 vi trackDb.ra
 #############################################################################
+# VISTA Enhancers update 2025 #35531 (2025-04-30 Gerardo)
+
+cd /hive/data/outside/otto/vista
+wget -q  https://gitlab.com/egsb-mfgl/vista-data/-/raw/main/locus_ucsc_mm10.bed  -O vista.mm10.latest.bed
+
+liftOver -tab  -bedPlus=9 vista.mm10.latest.bed /hive/data/gbdb/mm10/liftOver/mm10ToMm39.over.chain.gz vista.mm39.bed unMapped 
+bedToBigBed -tab -sort -type=bed9+1 -as=vista.as vista.mm39.bed  https://hgdownload.soe.ucsc.edu/goldenPath/mm39/bigZips/mm39.chrom.sizes vista.mm39.bb
+
+cd /gbdb/mm39/vistaEnhancers/
+# Making symlink for bigBed files
+ln -s /hive/data/outside/otto/vista/vista.mm39.bb vistaEnhancers.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/mm39
+vi trackDb.ra

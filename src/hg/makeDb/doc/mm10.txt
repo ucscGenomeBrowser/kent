@@ -19631,4 +19631,19 @@ table encode4
 _EOF_
 
 bedToBigBed -type=bed12+8 -as=encode4.as -tab transcripts.bed /hive/data/genomes/mm10/chrom.sizes encode4.bb
+#############################################################################
+# VISTA Enhancers update 2025 #35531 (2025-04-30 Gerardo)
 
+cd /hive/data/outside/otto/vista
+wget -q  https://gitlab.com/egsb-mfgl/vista-data/-/raw/main/locus_ucsc_mm10.bed  -O vista.mm10.latest.bed
+
+bedToBigBed -tab -sort -type=bed9+1 -as=vista.as vista.mm10.latest.bed \
+  https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.chrom.sizes vista.mm10.latest.bb \
+  > /dev/null 2>&1
+
+mv vista.mm10.latest.bb vista.mm10.bb
+cd /gbdb/mm10/vistaEnhancers/
+# Making symlink for bigBed files
+ln -s /hive/data/outside/otto/vista/vista.mm10.bb vistaEnhancers.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/mm10
+vi trackDb.ra

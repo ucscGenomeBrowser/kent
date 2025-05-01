@@ -35847,3 +35847,16 @@ rm -rf /gbdb/hg19/hgnc/search.ix /gbdb/hg19/hgnc/search.ixx
 ln -s `pwd`/search.hg19.ix /gbdb/hg19/hgnc/search.ix
 ln -s `pwd`/search.hg19.ixx /gbdb/hg19/hgnc/search.ixx
 #############################################################################
+# VISTA Enhancers update 2025 #35531 (2025-04-30 Gerardo)
+
+cd /hive/data/outside/otto/vista
+wget -q  https://gitlab.com/egsb-mfgl/vista-data/-/raw/main/locus_ucsc_hg38.bed  -O vista.hg38.latest.bed
+
+liftOver -tab  -bedPlus=9 vista.hg38.latest.bed /hive/data/gbdb/hg38/liftOver/hg38ToHg19.over.chain.gz vista.hg19.bed unMapped 
+bedToBigBed -tab -sort -type=bed9+1 -as=vista.as vista.hg19.bed  https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes vista.hg19.bb
+
+cd /gbdb/hg19/vistaEnhancers/
+# Making symlink for bigBed file
+ln -s /hive/data/outside/otto/vista/vista.hg19.bb vistaEnhancers.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+vi trackDb.ra

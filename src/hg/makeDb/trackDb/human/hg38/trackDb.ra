@@ -209,12 +209,13 @@ track vistaEnhancersBb
 shortLabel VISTA Enhancers
 longLabel VISTA Enhancers
 group regulation
-url https://enhancer.lbl.gov/vista/browse?filter=$$
+url https://enhancer.lbl.gov/vista/element?vistaId=$$
 type bigBed 9 +
 mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
+pennantIcon Updated red ../goldenPath/newsarch.html ""
 
 track coriellDelDup override
 origAssembly hg19 
