@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# script to install/setup dependencies for the UCSC genome browser CGIs
+# Script to install/setup dependencies for the UCSC genome browser CGIs 
 # call it like this as root from a command line: bash browserSetup.sh
 
 # You can easily debug this script with 'bash -x browserSetup.sh', it 
@@ -1056,7 +1056,7 @@ function installDebian ()
    	       echo2 Python2 package is not available either for this distro, so not installing Python2 at all.
 	    else
                # workaround for Ubuntu 16-20 - keeping this section for a few years, just in case
-               apt-get install $APTERR --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+               apt-get install $APTERR --assume-yes python2 libmariadb-dev python2-dev wget gcc
     	       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
     	       python2 /tmp/get-pip.py
                if [ -f /usr/include/mysql/my_config.h ]; then
@@ -1116,7 +1116,7 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
 	# Debian / Ubuntu 20 defaults to Mysql 8 and Mysql 8 does not allow rsync of myisam anymore
 	# -> we require mariaDb now
-        apt-get $APTERR --assume-yes install mariadb-server
+        apt-get $APTERR --assume-yes install mariadb-server libmariadb-dev
 
         mysqlStrictModeOff
         startMysql
@@ -1490,7 +1490,7 @@ function setupBuildLinux ()
    echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
-      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev libbz2-dev
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev libbz2-dev pkg-config
    elif [[ "$DIST" == "redhat" ]]; then
       yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
    else 
@@ -1518,15 +1518,16 @@ function buildTree ()
       echo2 Branch is: \"beta\" = our current release, beta = testing
       waitKey
       cd ~
-      git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
+      #git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
+      git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
    fi
 
    echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
    echo2 Copying JS/HTML/CSS to /usr/local/apache/htdocs
    waitKey
    cd ~/kent/src
-   make -j8 cgi-alpha
-   make -j8 doc-alpha
+   make cgi-alpha
+   make doc-alpha
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
