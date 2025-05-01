@@ -272,9 +272,17 @@ ifneq ($(MAKECMDGOALS),clean)
 
   # set MYSQL include path
   ifeq (${MYSQLINC},)
-    MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
-#        $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
+    # newer distros do not have the mysql_config symlink anymore
+    ifeq (, $(shell which mysql_config))
+        MYSQLCONFIG := mariadb_config
+    else
+        MYSQLCONFIG := mysql_config
+    endif
+	
+    MYSQLINC := $(shell ${MYSQLCONFIG} --include | sed -e 's/-I//' || true)
+        # $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
   endif
+
   ifeq (${MYSQLINC},)
     ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
 	  MYSQLINC=/usr/local/mysql/include
@@ -291,7 +299,7 @@ ifneq ($(MAKECMDGOALS),clean)
     ifeq (${MYSQLLIBS},)
       # mysql_config --libs includes -lm, however libm must be a dynamic library
       # so to handle SEMI_STATIC it is removed here and will be added at the end
-      MYSQLLIBS := $(shell mysql_config --libs | sed 's/-lm$$//' || true)
+      MYSQLLIBS := $(shell ${MYSQLCONFIG} --libs | sed 's/-lm$$//' || true)
 #        $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
     endif
   endif
