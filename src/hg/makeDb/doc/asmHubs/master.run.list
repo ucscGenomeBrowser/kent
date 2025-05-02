@@ -1129,6 +1129,7 @@
 ./runBuild GCA_018139145.1_ASM1813914v1 birds Gymnogyps_californianus
 ./runBuild GCA_018150745.1_ASM1815074v1 invertebrate Drosophila_sucinea
 ./runBuild GCA_018296145.1_Otsh_v2.0 fish Oncorhynchus_tshawytscha
+./runBuild GCA_018340775.1_ASM1834077v1 plants Taxus_wallichiana_var._yunnanensis
 ./runBuild GCA_018342045.1_Swiss_hellem_version_1 fungi Encephalitozoon_hellem
 ./runBuild GCA_018398725.1_ASM1839872v1 invertebrate Babesia_divergens
 ./runBuild GCA_018398765.1_ASM1839876v1 invertebrate Chromera_velia_CCMP2878
