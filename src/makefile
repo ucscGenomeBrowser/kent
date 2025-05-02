@@ -6,11 +6,12 @@ all: utils cgi blatSuite
 alpha: check-alpha clean
 	${MAKE} utils-alpha cgi-alpha blatSuite
 
-beta: check-beta clean cgi-beta
+beta: check-beta clean
+	${MAKE} cgi-beta
 
 # do a git update and clean
 update:
-	git pull
+	${GIT} pull
 	${MAKE} clean
 ##
 # topLibs
@@ -69,11 +70,11 @@ endif
 
 check-alpha:
 	# this will fail if we are not on master branch:
-	git branch | egrep '\* master' > /dev/null
+	${GIT} branch | egrep '\* master' > /dev/null
 
 check-beta:
 	# this will fail if we are not in a beta checkout:
-	git branch | egrep '\* v[0-9]+_branch' > /dev/null	
+	${GIT} branch | egrep '\* v[0-9]+_branch' > /dev/null	
 
 BLAT_SUITE_DIRS = blat gfClient gfServer webBlat hg/pslPretty hg/pslReps \
 	hg/pslSort utils/nibFrag utils/faToNib utils/faToTwoBit utils/twoBitToFa \
