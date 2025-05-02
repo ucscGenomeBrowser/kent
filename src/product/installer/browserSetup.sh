@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# script to install/setup dependencies for the UCSC genome browser CGIs
+# Script to install/setup dependencies for the UCSC genome browser CGIs 
 # call it like this as root from a command line: bash browserSetup.sh
 
 # You can easily debug this script with 'bash -x browserSetup.sh', it 
@@ -372,7 +372,7 @@ command is one of:
                bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
-               wise these packages may be missing: libpng zlib libmysqlclient
+               wise these packages may be missing: libpng zlib mariadb-client
   dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
                ~/kent and build the CGIs into /usr/local/apache so you can try
                them right away. Useful if you want to develop your own track 
@@ -1056,7 +1056,7 @@ function installDebian ()
    	       echo2 Python2 package is not available either for this distro, so not installing Python2 at all.
 	    else
                # workaround for Ubuntu 16-20 - keeping this section for a few years, just in case
-               apt-get install $APTERR --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+               apt-get install $APTERR --assume-yes python2 libmariadb-dev python2-dev wget gcc
     	       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
     	       python2 /tmp/get-pip.py
                if [ -f /usr/include/mysql/my_config.h ]; then
@@ -1116,7 +1116,7 @@ function installDebian ()
         export DEBIAN_FRONTEND=noninteractive
 	# Debian / Ubuntu 20 defaults to Mysql 8 and Mysql 8 does not allow rsync of myisam anymore
 	# -> we require mariaDb now
-        apt-get $APTERR --assume-yes install mariadb-server
+        apt-get $APTERR --assume-yes install mariadb-server mariadb-client
 
         mysqlStrictModeOff
         startMysql
@@ -1435,7 +1435,7 @@ function setupBuildOsx ()
        brew update
    fi
    echo2 Installing homebrew packages libpng, openssl, mariadb, git
-   brew install libpng openssl mariadb git
+   brew install libpng openssl mariadb git freetype
 
    echo2 Allowing write access for all on Apple\'s Apache htdocs/cgi-bin directories.
    echo2 The chmod command requires sudo - please enter the admin password now:
@@ -1447,6 +1447,7 @@ function setupBuildOsx ()
       echo2 Creating /usr/local/apache to fill with symlinks later
       sudo mkdir -p /usr/local/apache
       sudo chmod a+rw /usr/local/apache
+      touch "$APACHEDIR"/.madeByBrowserBuild
    fi
 
    if [ ! -e /usr/local/apache/cgi-bin ]; then
@@ -1486,16 +1487,21 @@ SSILegacyExprParser on
 # install gcc, make etc so we can build the tree on linux
 function setupBuildLinux ()
 {
-   echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
+   echo2 Installing required linux packages from repositories: Git, GCC, G++, MariaDB-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
-      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev libbz2-dev
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev pkg-config
    elif [[ "$DIST" == "redhat" ]]; then
       yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
    else 
       echo Error: Cannot identify linux distribution
       exit 100
    fi
+   # the build target cgi-bin requires that these directories exist
+   mkdir -p $HTDOCDIR $CGIBINDIR
+   # leave a flag file so the script knows later that this directory did not exist and we made it
+   # and it is safe to write into it
+   touch "$APACHEDIR"/.madeByBrowserBuild
 }
 
 # set this machine for browser development: install required tools, clone the tree, build it
@@ -1509,18 +1515,20 @@ function buildTree ()
 
    if [ ! -e ~/kent ]; then
       echo2 Cloning kent repo into ~/kent using git with --depth=1
-      echo2 Branch is: \"beta\" = our current release, beta = testing
+      #echo2 Branch is: \"beta\" = our current release, beta = testing
       waitKey
       cd ~
-      git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
+      #git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
+      # cannot checkout the beta branch, leads to a ton of problems, sticking with master for now
+      git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
    fi
 
    echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
    echo2 Copying JS/HTML/CSS to /usr/local/apache/htdocs
    waitKey
    cd ~/kent/src
-   make -j8 cgi-alpha
-   make -j8 doc-alpha
+   make cgi-alpha
+   make doc-alpha
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
@@ -1559,11 +1567,15 @@ function installBrowser ()
        elif [[ "$MACH" == "aarch64" ]]; then
           echo2 Linux, but ARM CPU: Need to build CGIs and htdocs locally from source using gcc, make and git
           buildTree
-       elif [[ "$DIST" == "debian" ]]; then
+       fi
+
+       # (For OSX, the buildTree step above includes the installation of Apache/MariaDB)
+       if [[ "$DIST" == "debian" ]]; then
           installDebian
        elif [[ "$DIST" == "redhat" ]]; then
           installRedhat
        fi
+
     fi
     # OS-specific mysql/apache installers can SET_MYSQL_ROOT to 1 to request that the root
     # mysql user password be changed
@@ -1600,11 +1612,17 @@ function installBrowser ()
 
     # check if /usr/local/apache is empty
     # on OSX, we had to create an empty htdocs, so skip this check there
-    if [ -d "$APACHEDIR" -a "$OS" != "OSX" ]; then
-        echo2 error: the directory $APACHEDIR already exists.
-        echo2 This installer has to overwrite it, so please move it to a different name
-        echo2 or remove it. Then start the installer again with "bash $0 install"
-        exit 100
+    if [ -d "$APACHEDIR" ] ; then
+        if [ -f "$APACHEDIR"/.madeByBrowserBuild ] ; then
+            # leave a flag file so the script knows later that this directory did not exist and we made it
+            # and it is safe to write into it
+            rm -f "$APACHEDIR"/.madeByBrowserBuild
+        else
+            echo2 error: the directory $APACHEDIR already exists.
+            echo2 This installer has to overwrite it, so please move it to a different name
+            echo2 or remove it. Then start the installer again with "bash $0 install"
+            exit 100
+        fi
     fi
 
     mysqlDbSetup
@@ -1625,7 +1643,7 @@ function installBrowser ()
     
     # the CGIs create links to images in /trash which need to be accessible from htdocs
     cd $HTDOCDIR
-    if [ ! -e $TRASHDIR ]; then
+    if [ ! -e trash ]; then
         ln -fs $TRASHDIR
     fi
 

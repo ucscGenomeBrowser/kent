@@ -1873,6 +1873,18 @@ configurable off
     priority 25
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
 
+    track epicV2illuminaMethylation
+    parent genotypeArrays on
+    shortLabel Illumina EPIC v2
+    longLabel Illumina EPIC v2 Methylation Array
+    type bigBed 12 +
+    visibility pack
+    bigDataUrl /gbdb/hg19/bbi/illumina/illuminaEPICv2.bb
+    colorByStrand 255,0,0 0,0,255
+    html genotypeArrays
+    priority 25.5
+    noScoreFilter on
+
     track snpArrayCytoSnp850k
     parent genotypeArrays on
     shortLabel CytoSNP 850k
@@ -2410,11 +2422,12 @@ track vistaEnhancersBb
 shortLabel VISTA Enhancers
 longLabel VISTA Enhancers
 group regulation
-url https://enhancer.lbl.gov/vista/browse?filter=$$
+url https://enhancer.lbl.gov/vista/element?vistaId=$$
 type bigBed 9 +
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg19/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
+pennantIcon Updated red ../goldenPath/newsarch.html ""
 
 track ncbiRefSeq override
 parent refSeqComposite off

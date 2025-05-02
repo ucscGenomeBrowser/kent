@@ -268,7 +268,7 @@ while(TRUE)
 	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
 		sqlUpdate(conn,dy->string);
 		}
-	    else  // GALT DEBUG REMOVE
+	    else
 		{
 		dyStringClear(dy); 
 	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
@@ -403,7 +403,7 @@ if (optionExists("purgeStart"))   // manual purge range specified
     {
     purgeStart = optionInt("purgeStart", -1);
     purgeEnd = optionInt("purgeEnd", -1);
-    if (purgeStart < 1 || purgeStart > 720)
+    if (purgeStart < 1 || purgeStart > 8000) // up to 20 years ago
 	errAbort("Invalid purgeStart");
     if (purgeEnd < 0)
 	purgeEnd = 0;

@@ -964,6 +964,9 @@ if (cds == NULL || cds->start == -1 || cds->end == -1)
     return NULL;
 if (txSeq == NULL)
     errAbort("vpTranscriptToProtein: txSeq must not be NULL");
+if (protSeq == NULL)
+    // This can happen when none of the CDS is aligned to the genome.
+    return NULL;
 struct vpPep *vpPep = NULL;
 AllocVar(vpPep);
 vpPep->name = cloneString(protSeq->name);
