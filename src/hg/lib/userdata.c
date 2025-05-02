@@ -54,9 +54,16 @@ char *userPrefix = md5HexForString(encUserName);
 userPrefix[2] = '\0';
 
 struct dyString *newDataDir = dyStringNew(0);
-dyStringPrintf(newDataDir, "%s/%s/%s/", 
+dyStringPrintf(newDataDir, "%s/%s/%s",
     tusdDataBaseDir, userPrefix, encUserName);
 
+char *canonicalPath = needMem(PATH_MAX);
+realpath(dyStringContents(newDataDir), canonicalPath);
+// now that we have canonicalized the path we need to add a '/' back on
+// so the rest of the routines can append to this result
+
+dyStringClear(newDataDir);
+dyStringPrintf(newDataDir, "%s/", canonicalPath);
 return dyStringCannibalize(&newDataDir);
 }
 
@@ -65,7 +72,7 @@ char *stripDataDir(char *fname, char *userName)
  * link, we will resolve it here. NOTE that this relies on
  * calling realpath(3) on the fname argument prior to calling stripDataDir() */
 {
-char *dataDir = realpath(getDataDir(userName), NULL);
+char *dataDir = getDataDir(userName);
 if (!dataDir)
     {
     // catch a realpath error

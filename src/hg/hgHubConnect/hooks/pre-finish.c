@@ -186,7 +186,7 @@ else
             row->location = location;
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = encodedParentDir ? encodedParentDir : "";
-            if (!isHubToolsUpload && !(sameString(fileName, "hub.txt")))
+            if (!isHubToolsUpload && !(sameString(fileType, "hub.txt")))
                 {
                 createNewTempHubForUpload(reqId, row, userDataDir, encodedParentDir);
                 fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
