@@ -536,16 +536,22 @@ if (dy == NULL)
 return dy->string;
 }
 
+static void hgcAnchorSomewhereExt(char *group, char *item, char *other, char *chrom, int start, int end, char *tbl)
+/* Generate an anchor that calls click processing program with item
+ * and other parameters. */
+{
+char *itemSafe = cgiEncode(item);
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), group, itemSafe, chrom, start, end, other, tbl);
+freeMem(itemSafe);
+}
+
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item
  * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-char *itemSafe = cgiEncode(item);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, itemSafe, chrom, winStart, winEnd, other,
-       tbl);
-freeMem(itemSafe);
+hgcAnchorSomewhereExt(group, item, other, chrom, winStart, winEnd, tbl);
 }
 
 void hgcAnchorPosition(char *group, char *item)
@@ -3450,7 +3456,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             if (!isEmpty(cdsStr))  // if we have CDS 
                 {
                 puts("<LI>\n");
-                hgcAnchorSomewhere("htcTranslatedBigPsl", bedRow[3], "translate", seqName);
+                hgcAnchorSomewhereExt("htcTranslatedBigPsl", bedRow[3], "translate", bedRow[0], sqlUnsigned(bedRow[1]), sqlUnsigned(bedRow[2]), tdb->track);
 		if (showEvery)
 		    printf("Translated Amino Acid Sequence</A> from Query Sequence %s\n", bedRow[3]);
 		else
@@ -3461,7 +3467,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 		{
 		puts("<LI>\n");
-		hgcAnchorSomewhere("htcBigPslSequence", bedRow[3], tdb->track, seqName);
+		hgcAnchorSomewhereExt("htcBigPslSequence", bedRow[3], tdb->track, bedRow[0], sqlUnsigned(bedRow[1]), sqlUnsigned(bedRow[2]), tdb->track);
 		if (showEvery)
 		    printf("Query Sequence %s</A> \n", bedRow[3]);
 		else
