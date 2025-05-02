@@ -11,4 +11,18 @@ ln -s /hive/data/outside/vistaEnhancers/hg38/vistaEnhancers.bb
 cd ~/kent/src/hg/makeDb/trackDb/human/hg38
 vi trackDb.ra
 #############################################################################
+# VISTA Enhancers update 2025 #35531 (2025-04-30 Gerardo)
 
+cd /hive/data/outside/otto/vista
+wget -q  https://gitlab.com/egsb-mfgl/vista-data/-/raw/main/locus_ucsc_hg38.bed  -O vista.hg38.latest.bed
+
+bedToBigBed -tab -sort -type=bed9+1 -as=vista.as vista.hg38.latest.bed \
+  https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes vista.hg38.latest.bb \
+  > /dev/null 2>&1
+
+mv vista.hg38.latest.bb vista.hg38.bb
+cd /gbdb/hg38/vistaEnhancers/
+# Making symlink for bigBed files
+ln -s /hive/data/outside/otto/vista/vista.hg38.bb vistaEnhancers.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+vi trackDb.ra

@@ -1469,7 +1469,7 @@ cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
-if (isEmpty(userId))
+if (isEmpty(userId) && !cgiWasSpoofed())
     fprintf(stderr, "CART userId not sent");
 
 if (sessionIdFound)

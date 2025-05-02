@@ -413,10 +413,6 @@ options:
          bestEncode = our ENCODE recommendation, all summary tracks, saves
                     2TB/6TB for hg19
          main = only Gencode genes and common SNPs, 5GB for hg19
-  -u   - use UDR (fast UDP) file transfers for the download.
-         Requires at least one open UDP incoming port 9000-9100.
-         (UDR is not available for Mac OSX)
-         This option will download a udr binary to /usr/local/bin
   -o   - switch to offline-mode. Remove all statements from hg.conf that allow
          loading data on-the-fly from the UCSC download server. Requires that
          you have downloaded at least one assembly, using the '"download"' 
@@ -426,6 +422,11 @@ options:
          unless an assembly has been provided during install
   -h   - this help message
 EOF_HELP
+
+#  -u   - use UDR (fast UDP) file transfers for the download.
+#         Requires at least one open UDP incoming port 9000-9100.
+#         (UDR is not available for Mac OSX)
+#         This option will download a udr binary to /usr/local/bin
 
 set -e
 
@@ -1027,17 +1028,24 @@ function installOsx ()
    sleep 5
 }
 
-# function for Debian-specific installation of mysql and apache
-function installDebian ()
+function debianInitApt ()
+# configure apt and update the APT package lists, run this before any apt-install
 {
+    # some packages, e.g. the new tzdata package asks interactive questions, suppress these
+    export DEBIAN_FRONTEND=noninteractive
+
     # update repos
     if [ ! -f /tmp/browserSetup.aptGetUpdateDone ]; then
        echo2 Running apt-get update
        apt-get update $APTERR && touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
-    # the new tzdata package comes up interactive questions, suppress these
-    export DEBIAN_FRONTEND=noninteractive
+}
+
+# function for Debian-specific installation of mysql and apache
+function installDebian ()
+{
+    debianInitApt
 
     echo2 Installing ghostscript and imagemagick
     waitKey
@@ -1045,7 +1053,7 @@ function installDebian ()
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
-    apt-get $APTERR --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
+    apt-get $APTERR --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts curl
     # python-mysqldb has been removed in almost all distros as of 2021
     # There is no need to install Python2 anymore. Remove the following?
     if apt-cache policy python-mysqldb | grep "Candidate: .none." > /dev/null; then 
@@ -1490,6 +1498,7 @@ function setupBuildLinux ()
    echo2 Installing required linux packages from repositories: Git, GCC, G++, MariaDB-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
+      debianInitApt
       apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev pkg-config
    elif [[ "$DIST" == "redhat" ]]; then
       yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
@@ -1598,7 +1607,10 @@ function installBrowser ()
 
     disableSelinux
 
-    checkDownloadUdr
+    # May 2025: our udr binaries do not seem to work on some recent distros anymore (ubuntu22+24). Segfault at start.
+    # For now, switching off udr downloads. When you change this, also add back the -u flag documentation
+    # in the HELP_STR. Uncomment the following line to reactivate udr support.
+    # checkDownloadUdr
 
     # CGI DOWNLOAD AND HGCENTRAL MYSQL DB SETUP
 

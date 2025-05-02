@@ -3,7 +3,7 @@ shortLabel recount3
 longLabel recount 3 introns
 group rna
 type bigBed 9 +
-visibility pack
+visibility hide
 spectrum on
 scoreMax 225
 html recount3.html

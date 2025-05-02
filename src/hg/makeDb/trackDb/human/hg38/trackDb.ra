@@ -209,12 +209,13 @@ track vistaEnhancersBb
 shortLabel VISTA Enhancers
 longLabel VISTA Enhancers
 group regulation
-url https://enhancer.lbl.gov/vista/browse?filter=$$
+url https://enhancer.lbl.gov/vista/element?vistaId=$$
 type bigBed 9 +
 mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
+pennantIcon Updated red ../goldenPath/newsarch.html ""
 
 track coriellDelDup override
 origAssembly hg19 
@@ -795,6 +796,18 @@ compositeTrack on
     visibility pack
     bigDataUrl /gbdb/hg38/snpCnvArrays/agilent/hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
     priority 3
+
+    track epicV2illuminaMethylation
+    parent genotypeArrays on
+    shortLabel Illumina EPIC v2
+    longLabel Illumina EPIC v2 Methylation Array
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/bbi/illumina/illuminaEPICv2.bb
+    visibility pack
+    colorByStrand 255,0,0 0,0,255
+    html genotypeArrays
+    priority 3.5
+    noScoreFilter on
 
     track snpArrayIllumina850k
     parent genotypeArrays on
