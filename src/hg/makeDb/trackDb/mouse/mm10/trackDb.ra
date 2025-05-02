@@ -420,6 +420,7 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/vista/element?vistaId=$$
 type bigBed 9 +
+mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm10/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
