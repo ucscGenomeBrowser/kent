@@ -19,6 +19,9 @@ endif
 ifneq ($(filter $(MAKECMDGOALS),my cgi),)
     CGI_BIN_DEST=${DESTDIR}${CGI_BIN}-${USER}
 endif
+ifeq ($(MAKECMDGOALS),alpha)
+    CGI_BIN_DEST=${DESTDIR}${CGI_BIN}
+endif
 ifeq ($(MAKECMDGOALS),beta)
     CGI_BIN_DEST=${DESTDIR}${CGI_BIN}-beta
 endif
