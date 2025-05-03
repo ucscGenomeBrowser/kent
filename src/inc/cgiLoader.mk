@@ -17,7 +17,12 @@ include ${kentSrc}/inc/cgiVars.mk
 
 
 # this target uses CGI_BIN_DEST set in cgiVars.mk to do any of the CGI targers
-default cgi alpha beta:: compile ${SQL_FILES:%=%_sql_install}
+default::
+cgi:: cgi_install
+alpha:: cgi_install
+beta:: cgi_install
+
+cgi_install:: compile ${SQL_FILES:%=%_sql_install}
 	chmod a+rx ${A}${EXE}
 	${MKDIR} ${CGI_LOADER_DEST}
 	chmod a+rx ${A}${EXE}
