@@ -492,6 +492,7 @@
 ./runBuild GCA_002174835.2_ASM217483v2 plants Cenchrus_americanus
 ./runBuild GCA_002180455.1_ASM218045v1 plants Eleusine_coracana_subsp._coracana
 ./runBuild GCA_002201575.1_ASM220157v1 mammals Neomonachus_schauinslandi
+./runBuild GCA_002201625.1_Edil_v1.0 invertebrate Euglossa_dilemma
 ./runBuild GCA_002201775.1_ALER1.0 mammals Ammotragus_lervia
 ./runBuild GCA_002204515.1_AaegL5.0 invertebrate Aedes_aegypti
 ./runBuild GCA_002205965.3_ASM220596v3 invertebrate Saccharina_latissima
