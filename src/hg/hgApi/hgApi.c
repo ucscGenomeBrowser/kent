@@ -192,7 +192,7 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     char query[256];
     struct sqlResult *sr;
     char **row;
-    struct genePred *gp;
+    struct genePred *gp = NULL;
     char *name = cgiString("name");
     char *table = cgiString("table");
     char *chrom = cgiString("chrom");
