@@ -2468,7 +2468,7 @@ var rightClick = {
                         type: "GET",
                         url: "../cgi-bin/hgApi",
                         data: cart.varsToUrlData({ 'db': getDb(), 'cmd': ajaxCmd, 'num': results,
-                              'table': args.table, 'name': args.name }),
+                              'table': args.table, 'name': args.name, 'chrom': hgTracks.chromName}),
                         trueSuccess: rightClick.handleZoomCodon,
                         success: catchErrorOrDispatch,
                         error: errorHandler,
@@ -2970,7 +2970,7 @@ var rightClick = {
                                                         url: "../cgi-bin/hgApi",
                                                         data: cart.varsToUrlData({ 'db': getDb(),
                                                                 'cmd': "exonToPos", 'num': exonNum,
-                                                                'table': table, 'name': name}),
+                                                                'table': table, 'name': name, 'chrom': hgTracks.chromName}),
                                                         trueSuccess: rightClick.handleZoomCodon,
                                                         success: catchErrorOrDispatch,
                                                         error: errorHandler,
@@ -2982,14 +2982,14 @@ var rightClick = {
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                         "zoomCodon",
-                                                        {name: name, table: table});
+                                                        {name: name, table: table, 'chrom': hgTracks.chromName});
                                             return true;}
                                     };
                                         o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom to..."] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
-                                                            {name: name, table: table});
+                                                            {name: name, table: table, 'chrom': hgTracks.chromName});
                                                 return true;}
                                         };
                                     }
