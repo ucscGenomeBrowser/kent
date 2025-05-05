@@ -8,11 +8,12 @@ CMD ["/sbin/my_init"]
 # Upgrade the base image using the Ubuntu repos and add wget,rsync
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get install -yq wget rsync
 
-# Run mysqld and apache via initd, the Ubuntu startup system does not work in containers
+# Run mariadb and apache via initd, the Ubuntu startup system does not work in containers
 ADD https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/apache.service /etc/service/apache/run
 # actually mariadb, but the distros have mysqld symlinks, no need to rename
-ADD https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/mysql.service /etc/service/mysqld/run
-RUN chmod a+x /etc/service/mysqld/run /etc/service/apache/run 
+ADD https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/mariadb.service /etc/service/mariadb/run
+#ADD mariadb.service /etc/service/mariadb/run
+RUN chmod a+x /etc/service/mariadb/run /etc/service/apache/run 
 
 # Install the genome browser
 ADD http://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh /root/browserSetup.sh
