@@ -361,7 +361,7 @@ var hubCreate = (function() {
                     url += "&db=" + genome;
                 }
                 if (d.fileType === "hub.txt") {
-                    url += "&hubUrl=" + uiState.userUrl + encodeURIComponent(d.fullPath);
+                    url += "&hubUrl=" + uiState.userUrl + cgiEncode(d.fullPath);
                 }
                 else if (d.fileType in extensionMap) {
                     // TODO: tusd should return this location in it's response after
