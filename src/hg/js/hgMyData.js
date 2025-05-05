@@ -360,7 +360,10 @@ var hubCreate = (function() {
                     genome = d.genome;
                     url += "&db=" + genome;
                 }
-                if (d.fileType in extensionMap) {
+                if (d.fileType === "hub.txt") {
+                    url += "&hubUrl=" + uiState.userUrl + encodeURIComponent(d.fullPath);
+                }
+                else if (d.fileType in extensionMap) {
                     // TODO: tusd should return this location in it's response after
                     // uploading a file and then we can look it up somehow, the cgi can
                     // write the links directly into the html directly for prev uploaded files maybe?
@@ -380,8 +383,6 @@ var hubCreate = (function() {
                         // turn the track on if its for this db
                         url += "&" + trackHubFixName(d.fileName) + "=pack";
                     }
-                } else if (d.fileType === "hub.txt") {
-                    url += "&hubUrl=" + uiState.userUrl + d.fullPath;
                 }
             });
             window.location.assign(url);
@@ -1400,7 +1401,7 @@ var hubCreate = (function() {
             // is completely ignored for some reason, so we have to fake the other files
             // we would have created with this one file and add them to the table if they
             // weren't already there:
-            if (metadata.fileName !== "hub.txt") {
+            if (metadata.fileType !== "hub.txt") {
                 // if the user uploaded a hub.txt don't make a second fake object for it
                 hubTxtObj = {
                     "uploadTime": nowFormatted,
