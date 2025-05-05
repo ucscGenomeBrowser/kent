@@ -1721,7 +1721,7 @@ function installBrowser ()
             waitKey
     else
             rm -rf $APACHEDIR/htdocs/goldenpath
-            $RSYNC -avzP --exclude ENCODE/**.pdf $HGDOWNLOAD::htdocs/ $HTDOCDIR/
+            $RSYNC -avzP --exclude goldenPath/help/examples/hubExamples/ --exclude ENCODE/**.pdf $HGDOWNLOAD::htdocs/ $HTDOCDIR/
     fi
     
     # assign all files just downloaded to a valid user. 
