@@ -17,13 +17,13 @@ pennantIcon New red ../goldenPath/newsarch.html#033125 "Released Mar. 31, 2025"
 	bigDataUrl /gbdb/hg38/pseudogenes/pseudoPipePgenes.bb
         visibility pack
         itemRgb on
-        labelFields pgenehugo
-        defaultLabelFields pgenehugo
-        searchIndex pgenehugo,name,parenthugo,ppgene,pptx,pensgene,penstx,ensgene,_enstx,ensprot
+        labelFields hugo
+        defaultLabelFields hugo
+        searchIndex hugo,name,ppgene
 	searchTrix /gbdb/hg38/pseudogenes/pseudoPipePgenes.ix
         labelSeparator " "
         html pseudogenes.html
-        mouseOver  <b>Pseudogene type</b>: ${pgeneType} <br> <b>Parent gene ID</b>: ${parenthugo} <br> <b>Parent transcript ID</b>: ${enstxurl}
+        mouseOver <b>PseudoPipe ID</b>: ${ppgene} <br> <b>Parent Ensembl gene ID</b>: ${geneParent} <br>  <b>Pseudogene type</b>: ${pgeneType}
         parent pseudogenes
         priority 2
 
@@ -39,7 +39,7 @@ pennantIcon New red ../goldenPath/newsarch.html#033125 "Released Mar. 31, 2025"
 	searchTrix /gbdb/hg38/pseudogenes/pseudoPipeParents.ix
         labelSeparator " "
         html pseudogenes.html
-        mouseOver <b>Gene type</b>: ${geneType} <br> <b> ID</b>: ${name} <br> <b>Pseudogene position</b>: ${url}
+        mouseOver ${url}
         parent pseudogenes
         skipEmptyFields on
         priority 1
