@@ -33,7 +33,6 @@
 #include "assemblyList.h"
 #include <limits.h>
 
-
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
@@ -412,14 +411,15 @@ if (isNotEmpty(dbDbTree))
 // Main JS for hgGateway:
 jsIncludeFile("hgGateway.js", NULL);
 
-// Shepherd.js CSS - fine to load this synchronously
-puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+if (cfgOptionBooleanDefault("showTutorial", TRUE))
+    {
+    puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\" />");
+    puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
+    jsIncludeFile("gatewayTutorial.js", NULL);
 
-// Shepherd.js script (load async + defer)
-puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\" defer></script>");
-
-// Load Gateway tutorial
-puts("<script src=\"../js/gatewayTutorial.js\" defer></script>");
+    if (sameOk(cgiOptionalString("startTutorial"), "true"))
+        jsInline("var startTutorialOnLoad = true;");
+    }
 
 #define TIMING_WARNING_BOX_START "<div id='hogWarningRow' class='jwRow'>" \
          "<div id='hogWarningBox' class='jwWarningBox'>"

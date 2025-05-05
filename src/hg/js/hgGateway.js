@@ -1677,6 +1677,14 @@ var hgGateway = (function() {
             replaceHgsidInLinks();
             // Fill in searchObj here once everything is displayed.
             autocompleteFromTree(prunedDbDbTree, searchObj);
+
+	    // Gateway tutorial
+            if (typeof gatewayTour !== 'undefined') {
+                if (typeof startTutorialOnLoad !== 'undefined' && startTutorialOnLoad) {
+                    gatewayTour.start();
+                }
+            }
+
         });
     }
 
