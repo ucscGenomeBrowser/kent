@@ -1,0 +1,56 @@
+# pseudogene and parent tracks from Yale PseudoPipe (Jeltje, Jan 2025)
+
+track pseudogenes
+shortLabel Pseudogenes
+longLabel Pseudogenes and Parents
+group genes
+visibility hide
+type bigbed
+compositeTrack on
+noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html#033125 "Released Mar. 31, 2025"
+html pseudogenes.new.html
+
+        track yale_pseudogenes
+        shortLabel Pseudogenes
+        longLabel Yale Pseudogenes
+        type bigBed 12 +
+	bigDataUrl /gbdb/hg38/pseudogenes/pseudoPipePgenes.bb
+        visibility pack
+        itemRgb on
+        labelFields pgenehugo
+        defaultLabelFields pgenehugo
+        searchIndex pgenehugo,name,parenthugo,ppgene,pptx,pensgene,penstx,ensgene,_enstx,ensprot
+	searchTrix /gbdb/hg38/pseudogenes/pseudoPipePgenes.ix
+        labelSeparator " "
+        html pseudogenes.html
+        mouseOver  <b>Pseudogene type</b>: ${pgeneType} <br> <b>Parent gene ID</b>: ${parenthugo} <br> <b>Parent transcript ID</b>: ${enstxurl}
+        parent pseudogenes
+        priority 2
+
+        track yale_parents
+        shortLabel Pseudogene Parents
+        longLabel Yale Pseudogene Parents
+        type bigBed 9 +
+	bigDataUrl /gbdb/hg38/pseudogenes/pseudoPipeParents.bb
+        visibility pack
+        itemRgb on
+        labelFields hugo
+        searchIndex hugo,name
+	searchTrix /gbdb/hg38/pseudogenes/pseudoPipeParents.ix
+        labelSeparator " "
+        html pseudogenes.html
+        mouseOver <b>Gene type</b>: ${geneType} <br> <b> ID</b>: ${name} <br> <b>Pseudogene position</b>: ${url}
+        parent pseudogenes
+        skipEmptyFields on
+        priority 1
+
+searchName yale_pseudogenes
+searchTable yale_pseudogenes
+searchType bigBed
+searchPriority 27.01
+
+searchName yale_parents 
+searchTable yale_parents 
+searchType bigBed
+searchPriority 27.02
