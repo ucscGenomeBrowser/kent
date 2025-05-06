@@ -933,7 +933,7 @@ include assemblyTracks.ra
 include primates11way.ra alpha
 
 include pseudogenes.ra beta,public
-include pseudogenes.new.ra alpha
+#include pseudogenes.new.ra alpha
 
 include recount3.ra alpha
 
