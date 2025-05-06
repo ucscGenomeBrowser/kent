@@ -17,10 +17,11 @@ important resources in understanding the evolutionary history of genes and genom
 Parents</b> track. The <b>Pseudogene Parents</b> track displays parent genes and pseudogenes
 labeled with their <a href="https://www.hugo-international.org/standards/" target="_blank">HUGO</a>
 IDs, which were derived from Ensembl gene IDs provided by the <a href="https://www.gersteinlab.org/"
-target="_blank">Gerstein lab</a> after dataset creation. It includes indicators for pseudogenes,
-each linked to its corresponding entry in the Pseudogenes track. The <b>Pseudogenes</b> track shows
-pseudogenes labeled with their parent HUGO ID and colored according to pseudogene type. The authors
-assigned PGOHUMG IDs to genes and PGOHUMT IDs to transcripts.
+target="_blank">Gerstein lab</a> after dataset creation. It includes indicators for pseudogenes. 
+These indicators do not show pseudogene locations directly but instead indicate how many pseudogenes
+are associated with each gene and link to their genomic regions in the Pseudogenes track. The
+<b>Pseudogenes</b> track shows pseudogenes labeled with their parent HUGO ID and colored according
+to pseudogene type. The authors assigned PGOHUMG IDs to genes and PGOHUMT IDs to transcripts.
 <b>Note</b>: Not all PseudoPipe IDs could be mapped back to their original Ensembl IDs. In these
 cases, the gene ID is listed as NA.</p>
 
@@ -40,7 +41,10 @@ cases, the gene ID is listed as NA.</p>
 </ul>
 
 <h3>Pseudogene Parents track</h3>
-<p>Each parent gene is shown with their pseudogenes represented as grey blocks.</p>
+<p>Each parent gene is shown with associated pseudogenes represented as grey blocks. These blocks
+do not reflect actual pseudogene locations but rather indicate the count of pseudogenes linked to
+the gene.
+</p>
 <ul>
 <li><b><font color="#800080">purple</font></b> - <b> parent gene </b></li>
 <li><b><font color="#A9A9A9">grey</font></b> - <b> pseudogene indicators </b></li>
@@ -48,9 +52,9 @@ cases, the gene ID is listed as NA.</p>
 
 <p>
 If a parent gene has four grey blocks beneath it, this indicates the presence of four pseudogenes
-elsewhere in the genome. Hovering over a grey block displays the pseudogene type and its PGOHUMT
-ID, along with a link to its corresponding entry in the Pseudogenes track and its genomic position.
-Clicking the PGOHUMT ID redirects the genome browser to the pseudogene&apos;s locus.
+elsewhere in the genome. Hovering over an item displays the gene type, ID (Ensembl transcript ID
+or PseudoPipe transcript ID), and the genome position of the gene or pseudogene, with a link to
+that genomic region.
 </p>
 
 <h3>Pseudogenes track</h3>
@@ -62,9 +66,8 @@ Clicking the PGOHUMT ID redirects the genome browser to the pseudogene&apos;s lo
 </ul>
 
 <p>
-Mouse over on an item will display the PseudoPipe ID (PGOHUMG), the Parent Ensembl gene ID
-with a link to the corresponding parent gene location in the Pseudogenes track, and the pseudogene
-type.</p>
+Hovering over a pseudogene item shows the pseudogene type, parent HUGO gene symbol, and the Ensembl
+parent transcript ID, which links to the genome position of the parent gene.</p>
 
 <h2>Methods</h2>
 <p>
