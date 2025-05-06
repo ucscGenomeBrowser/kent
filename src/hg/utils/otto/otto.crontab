@@ -103,6 +103,9 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 #VarChat
 22 22 * * 4 /hive/data/outside/otto/varChat/varChatOtto.sh
 
+#vista
+0 9 1 * * /hive/data/outside/otto/varChat/varChatOtto.sh
+
 #GRC Incident
 MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
