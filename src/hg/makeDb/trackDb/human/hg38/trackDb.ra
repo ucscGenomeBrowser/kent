@@ -148,12 +148,20 @@ type bed
 group compGeno
 release alpha
 
-    #track har721
-    #shortLabel 721 HARs
-    #longLabel 721 HARs from UCSC MultiZ alignments
-    #parent unusualcons on
-    #type bigBed 9 +
-    #bigDataUrl /gbdb/hg38/unusualcons/harMultiz.bb
+    track ultras
+    shortLabel Ultracons.
+    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
+    release alpha
+
+    track ultraZoo
+    shortLabel UltraZoo
+    longLabel Ultraconserved in Zoonomia alignment
+    parent unusualcons on
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/unusualcons/zooUCEs.bigBed
 
     track hars312
     shortLabel 312 HARs
@@ -163,13 +171,19 @@ release alpha
     bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
     release alpha
 
-    track ultras
-    shortLabel Ultracons.
-    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
+    track har721
+    shortLabel 721 HARs
+    longLabel 721 Human Accelerated Regions from UCSC MultiZ alignments
     parent unusualcons on
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
-    release alpha
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS2.bb
+
+    track hcondels
+    shortLabel hCondels
+    longLabel hCondels - Human Conserved Deletions
+    parent unusualcons on
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/unusualcons/hcondels.bb
 
 track cosmicRegions
 shortLabel COSMIC Regions
