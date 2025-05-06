@@ -7,8 +7,7 @@
 #	A = aveCols
 #	include ${kentSrc}/inc/cgiLoader.mk
 #
-# For multiple programs use USER_APP_RECURSE_TARGETS from userApps.mk, only
-# including this file instead of userApps.mk
+# See userAppMulti.mk if multiple programs are required in a single directory.
 #
 ########################################################################
 
