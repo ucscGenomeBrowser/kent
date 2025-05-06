@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+
+import logging, sys, optparse, re, os
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("""usage: %prog [options] inTsv outBed outAs - convert tab-sep to BED and create an auto-Sql file for it.
+
+You can throw very wide tsv files on this script and it can pick out the chrom, start, end and other fields and make extra
+fields for all the other columns.
+Uses the header line of a tab-sep (tsv) file to guess where the chrom, start and end fields are.
+Searches for these field names in the header line, but you can replace names with --bedFields:
+  chrom, start, end, name, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, chromStarts
+Always makes a BED12 file.
+""")
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+#parser.add_option("-t", "--type", dest="type", action="store", help="number of BED columns, default %default", default=12)
+parser.add_option("", "--bedFields", dest="bedFields", action="store", help="in which columns to find the chrom-start-end-strand-name-score fields, can use 1-based indexes or field names e.g. chrom=1,start=START,end=posEnd,strand=8,name=12,score=10. First column is '1', like cut.")
+parser.add_option("-o", "--oneBased", dest="oneBased", action="store_true", help="Input coordinates are 1-based, so subtract 1 from all start positions. Default is 0-based.")
+#parser.add_option("-t", "--addTab", dest="addTab", action="store", help="add an additional tab file, first column is index field")
+#parser.add_option("-f", "--fields", dest="fields", action="store", help="read the field names and descriptions from this file, one per line, space-separated")
+#parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+#parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+# ==== FUNCTIONs =====
+asHead = """table bed
+"Browser extensible data (<=12 fields) "
+    (
+"""
+
+asLines = """
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+""".split("\n")
+
+def guessFieldDesc(fieldNames):
+    "given a list of field names, try to guess to which fields in bed12 they correspond "
+    logging.info("Guessing fields from TSV headers: %s" % fieldNames)
+    fieldDesc = {}
+    skipFields = set()
+
+    for fieldIdx, fieldName in enumerate(fieldNames):
+        caseField = fieldName.lower()
+        if caseField in ["chrom", "chromosome"]:
+            name = "chrom"
+        elif caseField in ["start", "chromstart", "position"]:
+            name = "start"
+        elif caseField in ["Reference"]:
+            name = "refAllele"
+        elif caseField in ["strand"]:
+            name = "strand"
+        elif caseField in ["score"]:
+            name = "score"
+        else:
+            continue
+        fieldDesc[name] = fieldIdx
+        skipFields.add(fieldIdx)
+    logging.info("TSV <-> BED correspondance: %s" % fieldDesc)
+    return fieldDesc, skipFields
+
+def parseFieldDesc(fieldDescStr, fieldNames):
+    " given a string chrom=1,start=2,end=3,... return dict {chrom:1,...} "
+    #if not fieldDesc:
+        #return guessFieldDesc(fieldNames)
+    fieldDesc, skipFields = guessFieldDesc(fieldNames)
+
+    if fieldDescStr:
+        for part in fieldDescStr.split(","):
+            bedFieldName, fieldIdxOrName = part.split("=")
+
+            if fieldIdxOrName.isdigit():
+                fieldIdx = int(filedIdxOrName)-1
+            else:
+                fieldIdx = fieldNames.index(fieldIdxOrName)
+            fieldDesc[bedFieldName] = fieldIdx
+            skipFields.add(fieldIdx)
+
+    logging.info("TSV to BED assignment: %s" % fieldDesc)
+    return fieldDesc, skipFields
+
+def makeBedRow(row, fieldDesc, skipFields, isOneBased):
+    " given a row of a tsv file and a fieldDesc with BedFieldName -> field-index, return a bed12+ row with extra fields "
+    bedRow = []
+
+    # first construct the bed 12 fields
+    for fieldName in ["chrom", "start", "end", "name", "score", "strand",
+            "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "chromStarts"]:
+
+        fieldIdx = fieldDesc.get(fieldName)
+        if fieldIdx is not None:
+            if fieldName=="start":
+                chromStart = int(row[fieldDesc["start"]])
+                if isOneBased:
+                    chromStart = chromStart-1
+                val = str(chromStart)
+            elif fieldName=="end":
+                val = row[fieldIdx]
+                chromEnd = int(val)
+            else:
+                val = row[fieldIdx]
+        else:
+            if fieldName=="end":
+                chromEnd = chromStart+1
+                val = str(chromEnd)
+            elif fieldName=="score":
+                val = "0"
+            elif fieldName=="strand":
+                val = "."
+            elif fieldName=="thickStart":
+                val = str(chromStart)
+            elif fieldName=="thickEnd":
+                val = str(chromEnd)
+            elif fieldName=="itemRgb":
+                val = "0,0,0"
+            elif fieldName=="blockCount":
+                val = "1"
+            elif fieldName=="blockSizes":
+                val = str(chromEnd-chromStart)
+            elif fieldName=="chromStarts":
+                #val = str(chromStart)
+                val = "0"
+            else:
+                logging.error("Cannot find a field for %s" % fieldName)
+                sys.exit(1)
+
+        bedRow.append(val)
+
+    # now handle all other fields
+    for fieldIdx, val in enumerate(row):
+        if not fieldIdx in skipFields:
+            bedRow.append( row[fieldIdx] )
+
+    return bedRow
+
+# ----------- MAIN --------------
+if args==[]:
+    parser.print_help()
+    exit(1)
+
+tsvFname, outBedFname, outAsFname = args
+
+# join and output merged bed
+bigCols = set() # col names of columns with > 255 chars
+
+fh = open("temp.tabToBed.bed", "w")
+fieldNames = None
+isOneBased = options.oneBased
+
+for line in open(tsvFname):
+    row = line.rstrip("\r\n").split("\t")
+    if fieldNames is None:
+        fieldNames = row
+        fieldDesc, notExtraFields = parseFieldDesc(options.bedFields, fieldNames)
+        continue
+
+    # note fields with data > 255 chars.
+    for colName, colData in zip(fieldNames, row):
+        if len(colData)>255:
+            bigCols.add(colName)
+
+    bedRow = makeBedRow(row, fieldDesc, notExtraFields, isOneBased)
+
+    chrom = bedRow[0]
+    if chrom.isdigit() or chrom in ["X", "Y"]:
+        bedRow[0] = "chr"+bedRow[0]
+
+    fh.write( ("\t".join(bedRow)))
+    fh.write("\n")
+fh.close()
+
+cmd = "sort -k1,1 -k2,2n temp.tabToBed.bed > %s" % outBedFname
+assert(os.system(cmd)==0)
+os.remove("temp.tabToBed.bed")
+
+# generate autosql
+# BED fields
+#bedColCount = int(options.type.replace("bed", "").replace("+" , ""))
+bedColCount = 12
+fh = open(outAsFname, "w")
+fh.write(asHead)
+fh.write("\n".join(asLines[:bedColCount+1]))
+fh.write("\n")
+
+# extra fields
+#fieldNames = fieldNames[bedColCount:]
+for fieldIdx, field in enumerate(fieldNames):
+    if fieldIdx in notExtraFields:
+        continue
+    name = field.replace(" ","")
+    name = field.replace("%","perc_")
+    name = re.sub("[^a-zA-Z0-9]", "", name)
+    name = name[0].lower()+name[1:]
+    fType = "string"
+    if field in bigCols:
+        fType = "lstring"
+    fh.write('      %s %s; "%s" \n' % (fType, name, field))
+fh.write(")\n")
+fh.close()
+
+print ("run this command to convert BED file to bigBed:")
+print ("bedToBigBed %s /hive/data/genomes/DB/chrom.sizes %s -tab -type=bed%d+ -as=%s" % (outBedFname, outBedFname.replace(".bed", ".bb"), bedColCount, outAsFname))
