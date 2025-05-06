@@ -153,6 +153,8 @@ GCA_023053635.2_rElgMul1.1.pri	San Diego alligator lizard (v1.1 HBS135686 primar
 GCA_963854185.1_fSarPil1.1	sardine (primary hap 2023 genbank)
 GCA_964146895.1_mMinSch1.hap1.1	Schreibers' long-fingered bat (v1 hap1 2024)
 GCA_964145185.1_mMinSch1.hap2.1	Schreibers' long-fingered bat (v1 hap2 2024)
+GCA_010993595.1_kPetMar1.alt	sea lamprey (alternate hap 2020)
+GCF_010993605.1_kPetMar1.pri	sea lamprey (primary hap 2020)
 GCF_035084215.1_sHepPer1.hap1	sharpnose sevengill shark (hap1 2024 genbank)
 GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri	siamang (v1 Jambi primary hap 2023)
 GCF_028878055.2_NHGRI_mSymSyn1-v2.0_pri	siamang (v2 Jambi primary hap 2024 refseq)
