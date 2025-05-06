@@ -5287,6 +5287,9 @@ static void printSubtrackTableBody(struct trackDb *parentTdb, struct slRef *subt
 				struct subtrackConfigSettings *settings, struct cart *cart)
 /* Print list of subtracks */
 {
+printf("<button id='showAllSubtracksButton'>Show all subtracks</button>");
+sInlineF("$('#showAllSubtracksButton').on('click', onClickShowAllSubtracks);");
+
 sortOrder_t *sortOrder = settings->sortOrder;
 boolean useDragAndDrop = settings->useDragAndDrop;
 boolean restrictions = settings->restrictions;
