@@ -1,0 +1,62 @@
+track unusualcons
+compositeTrack on
+shortLabel Unusually Conserved
+longLabel Unusually Conserved Regions - Ultrasconserved, Human Accelerated
+type bed
+group compGeno
+
+    track ultras
+    shortLabel Ultracons
+    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
+
+    track ultraZoo
+    shortLabel UltraZoos
+    longLabel Ultraconserved in Zoonomia alignment
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/zooUCEs.bigBed
+
+    track hars312
+    shortLabel 312 ZooHARs
+    longLabel 312 Human Accelerated Regions (HARs) from Zoonomia alignments
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
+
+    track har2649
+    shortLabel 2649 HARs
+    longLabel 2649 Human Accelerated Regions (HARs) merged from various publications by the Pollard Lab
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/nchaes_merged_hg38.bb
+
+    track hcondels
+    shortLabel hConDels
+    longLabel 583 Human Conserved Deletions - present in chimp and macaque but deleted in humans
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/hcondels583.bb
+
+    track zooHcondels
+    shortLabel ZooHCondels
+    longLabel Zoonomia hCondels - Human Conserved Deletions < 40bp
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/hcondels.bb
+
+    track zooRoccs
+    shortLabel ZooRoCCs
+    longLabel Zoonomia RoCCs: Runs of contiguous constraint
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/RoCCs.bigBed
+
+    track zooUnicorns
+    shortLabel ZooUNICORNs
+    longLabel Zoonomia UNICORNs: Unannotated Intergenic Constrained Regions
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/UNICORNs.bigBed
