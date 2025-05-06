@@ -1,0 +1,47 @@
+mkdir /hive/data/genomes/hg38/bed/unusualcons/
+
+mkdir /hive/data/genomes/hg38/bed/unusualcons/hars/
+mkdir hg19
+cd hg19
+wget https://docpollard.org/wordpress/wp-content/research/nchaes_merged_hg19.bed
+cd ../
+mkdir hg38
+cd hg38
+liftOver ../hg19/nchaes_merged_hg19.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz  ../hg38/nchaes_merged_hg38.bed unmapped.txt
+bedSort nchaes_merged_hg38.bed  nchaes_merged_hg38.bed
+bedToBigBed nchaes_merged_hg38.bed ../../../../chrom.sizes nchaes_merged_hg38.bb
+# downloaded Excel table from pollard lab homepage and converted to text using Excel
+cut -f1,2,3,4 -d'	' KeoughTableS1.txt | grep -v ^chrom | grep -v ^positive > KeoughTableS1.bed
+bedSort KeoughTableS1.bed KeoughTableS1.bed
+bedToBigBed KeoughTableS1.bed ../../../chrom.sizes KeoughTableS1.bb
+
+mkdir /hive/data/genomes/hg38/bed/unusualcons/hcondels/
+cd /hive/data/genomes/hg38/bed/unusualcons/hcondels/
+# from science.abn2253_tables_s1_to_s4.xls created three text files
+paste meta.txt mpradeseq.txt > both.txt
+~/kent/src/utils/tabToBed/tabToBed both.txt hcondels.bed hcondels.as --bedFields=chrom=hg38_mpra_chr,start=hg38_mpra_start_pos,end=hg38_mpra_end_pos,name=hCONDEL_ID
+bedToBigBed hcondels.bed /hive/data/genomes/hg38/chrom.sizes hcondels.bb -tab -type=bed12+ -as=hcondels.as
+
+mkdir /hive/data/genomes/hg38/bed/unusualcons/longhcondels/
+cd /hive/data/genomes/hg38/bed/unusualcons/longhcondels/
+# converted manually excel Excel in supp2 in https://pmc.ncbi.nlm.nih.gov/articles/PMC3071156/#S2
+# fix position mistakes
+cat supp2.hg18.bed | tawk '{if ($3<$2) { t=$2; $2=$3; $3=t }; print } ' | less > supp2.hg18.fixed.bed
+# lift to hg38
+liftOver supp2.hg18.fixed.bed /hive/data/genomes/hg18/bed/liftOver/hg18ToHg38.over.chain.gz supp2.hg38.bed unmapped.txt
+# convert
+bedSort supp2.hg38.bed supp2.hg38.bed
+bedToBigBed supp2.hg38.bed ../../../chrom.sizes hcondels583.bb
+
+mkdir /hive/data/genomes/hg38/bed/unusualcons/ultras/
+cd /hive/data/genomes/hg38/bed/unusualcons/ultras/
+wget http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hg19/hg19.ultraConserved.bb
+bigBedToBed hg19.ultraConserved.bb hg19.ultraConserved.bed
+liftOver hg19.ultraConserved.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz hg38.ultraConserved.bed unmapped.txt
+bedToBigBed hg38.ultraConserved.bed ../../../chrom.sizes hg38.ultraConserved.bb
+
+mkdir /hive/data/genomes/hg38/bed/unusualcons/zooUces/
+cd /hive/data/genomes/hg38/bed/unusualcons/zooUces/
+wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/zooUCEs.bed.gz
+wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/RoCCs.bigBed
+wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/UNICORNs.bigBed
