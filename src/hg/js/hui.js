@@ -1584,8 +1584,3 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     });
     $(inpSpec).spectrum("set", $(inpText).val());
 }
-
-function onClickShowAllSubtracks(ev) {
-    /* user clicked the 'show all tracks' button */
-    $(".subCB").prop("checked", true);
-}
