@@ -107,7 +107,7 @@ char *getBotCheckString(char *ip, double fraction)
 {
 char *user = getCookieUser();
 char *botCheckString = needMem(256);
-boolean useNew = cfgOptionBooleanDefault("newBotDelay", false);
+boolean useNew = cfgOptionBooleanDefault("newBotDelay", FALSE);
 if (useNew)
     {
         char *hgsid = cgiOptionalString("hgsid");
