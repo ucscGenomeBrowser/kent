@@ -2671,9 +2671,11 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
    if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
 {
 
+static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Phase?</a><br>";
+
 if (startPhase==-1) // UTRs don't have a frame at all
     {
-    safef(buf, EXONTEXTLEN, ", untranslated region");
+    safef(buf, EXONTEXTLEN, "<b>No Codon:</b> Untranslated region<br>");
     }
 else
     {
@@ -2685,7 +2687,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
+        safef(buf, EXONTEXTLEN, "<b>Codon phase:</b> start %d, end %d%s<br>%s", startPhase, endPhase, exonNote, phaseHelp);
         } 
     else
         {
@@ -2693,7 +2695,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, ", start codon phase %d%s", startPhase, exonNote);
+        safef(buf, EXONTEXTLEN, "<b>Codon phase:</b> start %d%s<br>%s", startPhase, exonNote, phaseHelp);
         }
     }
 }
@@ -3010,7 +3012,7 @@ for (ref = exonList; TRUE; )
             // char *frameText = "";
             // for coding exons, determine the start and end phase of the exon and an English text describing both:
             // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
-            // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
+            // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame
             int startPhase = -1;
             int endPhase = -1;
             char phaseText[EXONTEXTLEN];
@@ -3018,7 +3020,6 @@ for (ref = exonList; TRUE; )
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
                 startPhase = gp->exonFrames[exonIx-1];
-                //printf("start phase is set<br>");
                 if (!revStrand) 
                     endPhase = gp->exonFrames[exonIx];
                 else 
@@ -3066,11 +3067,11 @@ for (ref = exonList; TRUE; )
                                     lf->mouseOver = NULL;
                                     dyStringClear(codonDy);
                                     if (!isEmpty(existingText))
-                                        dyStringPrintf(codonDy, "%s, ", existingText);
+                                        dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
-                                        dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
-                                    dyStringPrintf(codonDy, "strand %c, %s %d of %d%s",
+                                        dyStringPrintf(codonDy, "<b>cDNA: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
@@ -3085,9 +3086,9 @@ for (ref = exonList; TRUE; )
                     {
                     char *sep = "";
                     if (!isEmpty(existingText))
-                        sep = ", ";
+                        sep = "<br>";
 
-                    safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s",
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
                             existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 

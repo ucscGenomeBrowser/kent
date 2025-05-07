@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Codon Phase Display" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Codon phases shown on the Genome Browser</h1>
+<p>
+Gene transcript tracks, for example NCBI RefSeq and Gencode, show the codon phase of exons on mouse 
+over. The text looks like this:<p>
+
+<div style='border: 1px solid black; width:400px; background-color:#EEE; padding:3px'>
+<b>Transcript:</b> ENST00000297261.7<br>
+<b>Strand:</b> -<br>
+<b>Exon:</b> Exon 2 of 3<br>
+<b>Codon phase:</b> start 0, end 1: out-of-frame exon<br>
+</div>
+
+<p>
+The codon phase specifies where in the coding sequence the intron falls in the codon that separates two exons: 
+<p>
+<ul>
+    <li>Phase 0: before the first nucleotide, cleanly between two codons.
+    <li>Phase 1: between the first and the second nucleotide
+    <li>Phase 2: between the second and third nucleotide
+</ul>
+</p>
+
+<p>This means that:
+<ul>
+    <li>The start phase of an exon is always the same as the end phase of the previous exon.
+    <li>An exon where the end and start phases are identical can be removed without destroying the reading frame: in-frame exon.
+    <li>An exon where start and end phases differ cannot be removed without destroying the reading frame: out-of-frame exon.
+</ul>
+</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
