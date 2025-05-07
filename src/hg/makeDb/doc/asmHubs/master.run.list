@@ -1790,6 +1790,7 @@
 ./runBuild GCA_035609135.1_aEleCoq1.hap2 vertebrate Eleutherodactylus_coqui
 ./runBuild GCA_035609145.1_aEleCoq1.hap1 vertebrate Eleutherodactylus_coqui
 ./runBuild GCA_035770615.1_bMelMel2.pri birds Melospiza_melodia_melodia
+./runBuild GCA_035921845.1_ASM3592184v1 bacteria Rhizobium_ruizarguesonis
 ./runBuild GCA_036010255.1_ASM3601025v1 mammals Myotis_ricketti
 ./runBuild GCA_036010745.1_bCalNic1.hap2 birds Caloenas_nicobarica
 ./runBuild GCA_036010775.1_bColLiv1.mat birds Columba_livia
