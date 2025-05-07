@@ -608,6 +608,8 @@
 59729	GCA_048772025.1_bTaeGut7.pat	birds
 76772	GCA_048772815.1_mCalLat2.hap1	mammals
 76772	GCA_048772825.1_mCalLat2.hap2	mammals
+7757	GCA_048934315.1_UKy_Petmar_22M1.pri1.0	otherChordates
+7757	GCA_048941845.1_UKy_Petmar_22M1.alt1.0	otherChordates
 879810	GCA_049082045.1_fCriAus1.1_haplotype_2	fish
 879810	GCA_049082185.1_fCriAus1.1_haplotype_1	fish
 89578	GCA_049190655.1_fLepSal2.hap2	fish

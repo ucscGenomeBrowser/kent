@@ -107,10 +107,27 @@ char *getBotCheckString(char *ip, double fraction)
 {
 char *user = getCookieUser();
 char *botCheckString = needMem(256);
-if (user)
-  safef(botCheckString, 256, "%s.%s %f", user, ip, fraction);
+boolean useNew = cfgOptionBooleanDefault("newBotDelay", FALSE);
+if (useNew)
+    {
+        char *hgsid = cgiOptionalString("hgsid");
+        if (user)
+            safef(botCheckString, 256, "uid%s %f", user, fraction);
+        else
+            {
+            if (hgsid)
+                safef(botCheckString, 256, "sid%s %f", hgsid, fraction);
+            else
+                safef(botCheckString, 256, "%s %f", ip, fraction);
+            }
+    }
 else
-  safef(botCheckString, 256, "%s %f", ip, fraction);
+    {
+    if (user)
+      safef(botCheckString, 256, "%s.%s %f", user, ip, fraction);
+    else
+      safef(botCheckString, 256, "%s %f", ip, fraction);
+    }
 return botCheckString;
 }
 

@@ -4180,6 +4180,13 @@ function mousemoveHelper(e) {
     }
 }
 
+function getRandomInt() {
+    // get a random integer between 1 and 1000000
+    let min = 1;
+    let max = 1000000;
+    return Math.floor(Math.random() * (max + min) + min);
+}
+
 function showMouseoverText(ev) {
     /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
      * is visble, do nothing as the mousemove event helper will re-call us
@@ -4244,14 +4251,11 @@ function showMouseover(e) {
             newDiv.style.position = "fixed";
             newDiv.style.display = "inline-block";
             if (ele1.title) {
-                newDiv.id = replaceReserved(ele1.title);
+                newDiv.id = getRandomInt();
                 ele1.setAttribute("originalTitle", ele1.title);
                 ele1.title = "";
             } else {
-                newDiv.id = replaceReserved(text);
-            }
-            if (ele1.coords) {
-                newDiv.id += "_" + ele1.coords.replaceAll(",","_");
+                newDiv.id = getRandomInt();
             }
             ele1.setAttribute("mouseoverid", newDiv.id);
             newDiv.append(newEl);

@@ -32,6 +32,7 @@ var autocompleteCat = (function() {
                               }
                               that._renderItem( ul, item );
                           });
+                   ul.append("<div class='autoCompleteInfo' style='color:grey'>Unable to find a genome? <a target=_blank href='../assemblySearch.html'>Send us a request</a></div>");
                },
                _renderItem: function(ul, item) {
                  // In order to use HTML markup in the autocomplete, one has to overwrite
