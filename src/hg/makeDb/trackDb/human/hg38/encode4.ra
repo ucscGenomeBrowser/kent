@@ -1,7 +1,7 @@
 # Encode4 triplet annotations (Jeltje, April 2025)
 track encode4
 shortLabel ENCODE4 transcripts
-longLabel ENCODE4 Long read transcripts [start site, exon junction chain, end site] - Blue = not in Gencode V29/V40
+longLabel ENCODE4 Long read transcripts
 superTrack long_read_transcripts
 type bigBed 12 +
 bigDataUrl /gbdb/$D/encode4/encode4.bb
