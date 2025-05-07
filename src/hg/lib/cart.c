@@ -1469,8 +1469,8 @@ cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
-if (isEmpty(userId) && !cgiWasSpoofed())
-    fprintf(stderr, "CART userId not sent");
+if (sessionIdFound && !userIdFound && !cgiWasSpoofed() && cfgOptionBooleanDefault("noCookieTrace", FALSE))
+    fprintf(stderr, "HGSID_WITHOUT_COOKIE");
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
@@ -1478,8 +1478,6 @@ else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 else
     {
-    if (isNotEmpty(userId))
-        fprintf(stderr, "CART userId sent but not in userDb");
     char *defaultCartContents = getDefaultCart(conn);
     cartParseOverHash(cart, defaultCartContents);
     }
