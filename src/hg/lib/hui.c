@@ -65,8 +65,8 @@
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
-#define ADD_BUTTON_LABEL        "add"
-#define CLEAR_BUTTON_LABEL      "clear"
+#define ADD_BUTTON_LABEL        "Show All"
+#define CLEAR_BUTTON_LABEL      "Hide All"
 #define JBUFSIZE 2048
 
 
