@@ -4475,7 +4475,7 @@ var imageV2 = {
         if (!newJson) {
             stripJsEmbedded(response, true, stripped);
             if ( ! stripped.warnMsg )
-                warn("An unexpected error has occurred. Please consider letting us know by emailing genome-www@soe.ucsc.edu with the steps you took that resulted in this state and any info on how we can reproduce it. For that, consider creating a session via My Data > My Sessions.");
+                warn("An unexpected error has occurred. Please consider letting us know by emailing genome-www@soe.ucsc.edu with the steps that resulted in this state and any info on how we could reproduce it. Using the sessions (My Data > My Sessions) tool can simplify the process by saving all configuration settings.");
         } else {
             if (this.id) {
                 if (newJson.trackDb[this.id]) {
