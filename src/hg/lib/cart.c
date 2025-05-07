@@ -1470,7 +1470,7 @@ cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
 if (sessionIdFound && !userIdFound && !cgiWasSpoofed() && cfgOptionBooleanDefault("noCookieTrace", FALSE))
-    fprintf(stderr, "HGSID_WITHOUT_COOKIE");
+    fprintf(stderr, "HGSID_WITHOUT_COOKIE\n");
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
