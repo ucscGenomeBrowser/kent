@@ -1,7 +1,7 @@
 track unusualcons
 compositeTrack on
 shortLabel Unusually Conserved
-longLabel Unusually Conserved Regions - Ultrasconserved, Human Accelerated
+longLabel Unusually Conserved Regions - Ultracons, HARs, etc.
 type bed
 group compGeno
 
