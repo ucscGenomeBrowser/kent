@@ -299,7 +299,7 @@
 	    
     if (typeof window.gatewayTour === 'undefined') {
         gatewaySteps();
-    window.gatewayTour = gatewayTour;
+        window.gatewayTour = gatewayTour;
     }
 })();
 
