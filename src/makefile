@@ -96,6 +96,7 @@ USER_APP_DIRS = utils parasol hg hg/utils \
 	hg/makeDb tabFile
 ALMOST_USER_APP_DIRS = blat gfClient gfServer isPcr ameme index/ixIxx utils/userApps
 
+.PHONY: userApps
 userApps: ${USER_APP_DIRS:%=%.userApps} ${ALMOST_USER_APP_DIRS:%=%.almostUserApps}
 
 %.userApps: topLibs hgLib destBin
