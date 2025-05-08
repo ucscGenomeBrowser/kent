@@ -17,8 +17,7 @@
     const gatewayTour = new Shepherd.Tour({
 	defaultStepOptions: {
 	    cancelIcon: { enabled: true },
-	    classes: 'class-1 class-2',
-	    classes: 'dark-background large-popup',
+            classes: 'class-1 class-2 dark-background large-popup',
 	    scrollTo: { behavior: 'smooth', block: 'center' }
 	},
       useModalOverlay: true
@@ -296,14 +295,11 @@
                 hide: () => hideMenu('#help > ul')
             }
         });
-
-
-
-                }
+    }
 	    
-            if (typeof window.gatewayTour === 'undefined') {
-                gatewaySteps();
-            window.gatewayTour = gatewayTour;    
+    if (typeof window.gatewayTour === 'undefined') {
+        gatewaySteps();
+    window.gatewayTour = gatewayTour;
     }
 })();
 
