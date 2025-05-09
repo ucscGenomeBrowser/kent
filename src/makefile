@@ -3,7 +3,7 @@ include inc/common.mk
 
 all: utils cgi blatSuite
 
-alpha: check-alpha clean
+alpha: clean
 	${MAKE} utils-alpha cgi-alpha blatSuite
 
 beta: check-beta clean
@@ -54,7 +54,7 @@ cgi: libs
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: check-alpha libs logUser
+cgi-alpha: libs logUser
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
@@ -67,10 +67,6 @@ logUser:
 ifeq (${IS_HGWDEV},yes)
 	echo ${USER}, $(MAKECMDGOALS), `date` >> ${CGI_BIN}/buildLog.txt
 endif
-
-check-alpha:
-	# this will fail if we are not on master or beta branch:
-	${GIT} branch | egrep '\* master|beta' > /dev/null
 
 check-beta:
 	# this will fail if we are not in a beta checkout:
@@ -164,7 +160,7 @@ utils: ${UTILS_DIRS:%=%.utils} ${STD_DIRS:%=%.utils}
 
 utils-alpha: ${UTILS_DIRS:%=%.utils-alpha}
 
-%.utils-alpha: check-alpha libs destBin hgutils
+%.utils-alpha: libs destBin hgutils
 	if [ -e "$*/makefile" ] ; then ${MAKE} -C $* ; fi
 
 hgutils: libs destBin
