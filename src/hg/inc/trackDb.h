@@ -402,6 +402,9 @@ void trackDbAddSetting(struct trackDb *bt, char *name, char *val);
 boolean trackDbSettingOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting is "on" "true" or "enabled". */
 
+boolean trackDbSettingOff(struct trackDb *tdb, char *name);
+/* Return true if a tdb setting is "off", "Off",  "false" or "disabled". */
+
 char *trackDbRequiredSetting(struct trackDb *tdb, char *name);
 /* Return setting string or squawk and die. */
 
