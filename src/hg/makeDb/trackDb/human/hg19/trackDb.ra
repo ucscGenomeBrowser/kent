@@ -1951,6 +1951,7 @@ visibility hide
 type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
+logo on
 
 track multizBasal
 #subTrack consDinoViewalign on

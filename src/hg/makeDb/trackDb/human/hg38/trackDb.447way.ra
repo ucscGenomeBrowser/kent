@@ -75,6 +75,7 @@ html cactus447way
         color 60,60,140
         altColor 140,60,60
         priority 1
+        logo on
 #        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz447way/multiz447way.bigMaf
 
         track phyloP447way
@@ -130,4 +131,5 @@ html cactus447way
         color 60,60,140
         altColor 140,60,60
         priority 4
+        logo on
 #        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz447way/multiz447way.bigMaf
