@@ -7,24 +7,17 @@ group compGeno
 
     track ultras
     shortLabel Ultracons
-    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
+    longLabel 481 Ultraconserved regions - 100% identical in human, mouse and rat, > 200bp
     parent unusualcons on
     type bigBed 4
     bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
 
     track ultraZoo
     shortLabel UltraZoos
-    longLabel Ultraconserved in Zoonomia alignment
+    longLabel 4552 Ultraconserved regions in Zoonomia alignment - 100% identical in 235 species, >20bp
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/zooUCEs.bigBed
-
-    track hars312
-    shortLabel 312 ZooHARs
-    longLabel 312 Human Accelerated Regions (HARs) from Zoonomia alignments
-    parent unusualcons on
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
 
     track har2649
     shortLabel 2649 HARs
@@ -32,6 +25,13 @@ group compGeno
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/nchaes_merged_hg38.bb
+
+    track hars312
+    shortLabel 312 ZooHARs
+    longLabel 312 Human Accelerated Regions (HARs) from Zoonomia alignments
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
 
     track hcondels
     shortLabel hConDels
@@ -42,14 +42,14 @@ group compGeno
 
     track zooHcondels
     shortLabel ZooHCondels
-    longLabel Zoonomia hCondels - Human Conserved Deletions < 40bp
+    longLabel 10032 Zoonomia hCondels - Human Conserved Deletions < 40bp
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/hcondels.bb
 
     track zooRoccs
     shortLabel ZooRoCCs
-    longLabel Zoonomia RoCCs: Runs of contiguous constraint
+    longLabel Zoonomia RoCCs: Runs of contiguous phyloP constraint
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/RoCCs.bigBed

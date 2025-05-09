@@ -8,13 +8,16 @@
   <li>Human Accelerated Regions (HARs):
       2649 regions conserved throughout vertebrate evolution but strikingly different in humans (Pollard et al, Nature 2006).
       This extended list was collected by the Katie Pollard lab from various publications (Capra et al. PTRSB 2013).
-  <li>High-confidence Human Accelerated Regions (HARs):
+  <li>High-confidence Zoonomia Human Accelerated Regions (HARs):
       312 HARs from the Zoonomia Alignments (Keough et al. Science, 2023)
   <li>Human-specific long deletions (hCondels) between human, macaque and chimpanzee:
       583 regions (one not lifted) present in macaque and chimp, but no in humans. (McLean et al Nature 2011)
-  <li>Zoonomia short hCondels &lt; 40bp:
+      Since these are sequences absent from the human genome, we show the 2bp around the deletion.
+  <li>Short hCondels &lt; 40bp in primates and up to 11 vertebrates:
     43588 regions deleted in human but present in 11 vertebrates or primates from (Xue et al, Science 2023). These regions were tested 
-    in an MPRA screen, the MPRA results are in the track and shown when clicking an element.
+    in an MPRA screen, the MPRA results are in the track and shown when clicking an element. Since the track is showing MPRA results
+    and the position of deletions, what is shown in the track are regions +-100bp around the deletion site on the human genome, 
+    not just the two basepairs flanking the site of the deletion.
   <li>Zoonomia Ultraconserved elements (zooUCEs):
     4552 Ultraconserved elements identified from the 241-mammals genome alignment. All regions >=20bp where
     at least 235 species aligned and all aligning species are fixed for the same base at every position. 20-190 bp.
@@ -26,8 +29,55 @@
     Positions with phyloP > 2.270 (5% FDR) within 5bp of each other are grouped into UNICORNs. N = 424,180; 11 - 1,325 bp.
 </ul>
      
+<table class="stdTbl">
+    <tr>
+        <th>Track</th>
+        <th>Count</th>
+        <th>Coverage in bp</th>
+    </tr>
+    <tr>
+        <td>Ultraconserved</td>
+        <td>481</td>
+        <td>126,007</td>
+    </tr>
+    <tr>
+        <td>Zoo Ultracons.</td>
+        <td>4552</td>
+        <td>131,661</td>
+    </tr>
+    <tr>
+        <td>HARs</td>
+        <td>2647</td>
+        <td>681,420</td>
+    </tr>
+    <tr>
+        <td>ZooHARs</td>
+        <td>312</td>
+        <td>49,173</td>
+    </tr>
+    <tr>
+        <td>Long hCondels</td>
+        <td>583</td>
+        <td>293,809</td>
+    </tr>
+    <tr>
+        <td>Short hCondels</td>
+        <td>10,032</td>
+        <td>1,968,123</td>
+    </tr>
+    <tr>
+        <td>Zoo ROCCs</td>
+        <td>595,536</td>
+        <td>26,995,284</td>
+    <tr>
+        <td>Zoo UNICORNs</td>
+        <td>423,586</td>
+        <td>16,155,520</td>
+    </tr>
+</table>
+
 <h2>Display Conventions and Configuration</h2>
-<p>All tracks show the locations and name for the features. Only one, Zoo hCondels, has MPRA test results in the track itself.
+<p>All tracks show the locations and name for the features. Only one, Short hCondels, has MPRA test results in the track itself.
 </p>
 
 <h2>Methods</h2>
@@ -36,12 +86,14 @@
 </p>
 
 <p>
-hCondels from McLean: Excel file converted manually as supplement 2 from https://pmc.ncbi.nlm.nih.gov/articles/PMC3071156/ and lifted to hg38 from hg18.
+Long hCondels from McLean: Excel file converted manually as supplement 2 from https://pmc.ncbi.nlm.nih.gov/articles/PMC3071156/ and lifted to hg38 from hg18.
 </p>
 
 <p>
-Zoonomia hCondels: "We constructed a chimpanzee-anchored multiple sequence alignment across 11 vertebrate species to detect statistically significant conserved sequences (1,371,766). These elements ranged from being deeply conserved throughout vertebrates to being conserved only through primates. We then intersected our conserved elements with called deletions (2,042,706) between the human (hg38) and chimpanzee (panTro4) genomes to yield 43,588 putative hCONDELs." Data received from the authors.
+Short hCondels from Xue et al: Excel file converted manually from supplemental file 1.
+From the paper: "We constructed a chimpanzee-anchored multiple sequence alignment across 11 vertebrate species to detect statistically significant conserved sequences (1,371,766). These elements ranged from being deeply conserved throughout vertebrates to being conserved only through primates. We then intersected our conserved elements with called deletions (2,042,706) between the human (hg38) and chimpanzee (panTro4) genomes to yield 43,588 putative hCONDELs."
 </p>
+
 
 <p>
 Zoonomia UNICORNs, ZooUCEs and RoCCs: Downloaded from https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/

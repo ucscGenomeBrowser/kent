@@ -526,7 +526,7 @@ else if (isFileType(track, "chain"))
     {
     fbOrChain(acc, track, chrom, chromSize);
     }
-else if (isFileType(track, "bb"))
+else if (isFileType(track, "bb") || isFileType(track, "bigBed") || isFileType(track, "bigbed"))
     {
     fbOrBigBed(acc, track, chrom, chromSize);
     }
