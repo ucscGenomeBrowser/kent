@@ -186,7 +186,7 @@ mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon Updated red ../goldenPath/newsarch.html ""
+pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 track coriellDelDup override
 origAssembly hg19 
