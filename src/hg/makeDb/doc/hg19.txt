@@ -35790,8 +35790,7 @@ zcat GRCh37_latest_genomic.gff.gz | grep "GeneID:" | tawk '{print $1, $4, $5, $7
 
 zcat GRCh37_latest_genomic.gff.gz |  grep "GeneID:" | sed 's/.*GeneID://' | sed 's/,.*//' | sed 's/;.*//' > geneIds.txt
 
-#ORIG paste positions.txt geneIds.txt | tawk '{print $4, $1,$2,$3, $3 - $2}' | sort -k 1,1 -k 5,5nr | tawk '{if (seen[$1] != 1) print $1, $2, $3,$4; seen[$1] = 1}' > entrezToLocNcbi.txt
-      paste positions.txt geneIds.txt | tawk '{print $5, $1,$2,$3,$4, $3 - $2}' | sort -k 1,1 -k 6,6nr | tawk '{if (seen[$1] != 1) print $1, $2, $3, $4, $5; seen[$1] = 1}' > entrezToLocNcbi.txt
+paste positions.txt geneIds.txt | tawk '{print $5, $1,$2,$3,$4, $3 - $2}' | sort -k 1,1 -k 6,6nr | tawk '{if (seen[$1] != 1) print $1, $2, $3, $4, $5; seen[$1] = 1}' > entrezToLocNcbi.txt
 
 # substitute UCSC names
 tawk '{print $2,$1}' /cluster/data/hg19/bed/chromAlias/ucsc.refseq.p13.plusMT.tab > ncbiToUcsc.map
@@ -35808,18 +35807,14 @@ ixIxx -maxWordLength=32 trixInput.txt search.hg19.ix search.hg19.ixx
 # create input file without header and sorted by first field ( HGNC:### )
 tail -n +2 hgnc_complete_set.txt | sort -k 1b,1 > input.txt
 
-# put black for every type for the moment.  This should be based on GENCODE colors
-tawk '{print $5}' input.txt | sort -u | awk '{printf "s/%s/0,0,0/\n", $0}' > color.sed.txt
-
-#manually fixed colors for coding, pseudogene, and non-coding
-
+#copy manually fixed colors for coding, pseudogene, and non-coding from Brian's earlier run.
 cp /cluster/data/hg38/bed/hgnc/color.sed.txt .
+
 tawk '{print $1,$5}' input.txt | sed -f color.sed.txt | sort -k 1b,1 > id.color.txt
 
 # build hgnc file with assigned colors as the 58th field
 BASH needs tab escape
 join -j 1 -t $'\t' input.txt id.color.txt > inputColor.txt
-
 
 # put entrez ID as first field for joins
 tawk '{if ($19 != "")  print $19,$0}' inputColor.txt | sort -k 1b,1 > entrez.hgnc.txt

@@ -502,25 +502,6 @@ return TRUE;
 
 
 
-void printLuckyRedirect(char *browserUrl, struct psl *psl, char *database, char *pslName, 
-			char *faName, char *uiState, char *unhideTrack)
-/* Print out a very short page that redirects us. */
-{
-char url[1024];
-safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
-      browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-      pslName, faName, uiState, unhideTrack);
-/* htmlStart("Redirecting"); */
-/* Odd it appears that we've already printed the Content-Typ:text/html line
-   but I can't figure out where... */
-htmStart(stdout, "Redirecting"); 
-jsInlineF("location.replace('%s');\n", url);
-printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
-htmlEnd();
-
-}
-
-
 /* forward declaration to reduce churn */
 static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription);
 
@@ -529,10 +510,8 @@ void showAliPlaces(char *pslName, char *faName, char *customText, char *database
            char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
-boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", TRUE);
 struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
-char *browserUrl = hgTracksName();
 char *hgcUrl = hgcName();
 char uiState[64];
 char *vis;
@@ -570,21 +549,7 @@ if (pslList == NULL && !jsonOut)
 
 pslSortListByVar(&pslList, sort);
 
-if(feelingLucky)
-    {
-    /* If we found something jump browser to there. */
-    if(slCount(pslList) > 0)
-	printLuckyRedirect(browserUrl, pslList, database, pslName, faName, uiState, unhideTrack);
-    /* Otherwise call ourselves again not feeling lucky to print empty 
-       results. */
-    else 
-	{
-	cartWebStart(cart, trackHubSkipHubName(database), "%s (%s) BLAT Results", trackHubSkipHubName(organism), trackHubSkipHubName(database));
-	showAliPlaces(pslName, faName, customText, database, qType, tType, organism, FALSE);
-	cartWebEnd();
-	}
-    }
-else if (pslOut)
+if (pslOut)
     {
     if (!pslRawOut)
         printf("<TT><PRE>");
@@ -607,138 +572,37 @@ else if (jsonOut)
     }
 else  // hyperlink
     {
-    printf("<H2>BLAT Search Results</H2>");
-    char* posStr = cartOptionalString(cart, "position");
-    if (posStr != NULL)
-        printf("<P>Go back to <A HREF=\"%s\">%s</A> on the Genome Browser.</P>\n", browserUrl, posStr);
 
-    if (useBigPsl)
-        {
-        char *trackName = NULL;
-        char *trackDescription = NULL;
-        getCustomName(database, cart, pslList, &trackName, &trackDescription);
-        psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
-        printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
-        printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
-        printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
-        printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s %s %s\" />\n",pslName,faName,psl->qName);
-        printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",psl->tName);
-        printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",psl->tStart);
-        printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",psl->tEnd);
-        printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
-        if (pslIsProtein(psl))
-            printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
+    char *trackName = NULL;
+    char *trackDescription = NULL;
+    getCustomName(database, cart, pslList, &trackName, &trackDescription);
+    psl = pslList;
+    printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
+    printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
+    printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
+    printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
+    printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s %s %s\" />\n",pslName,faName,psl->qName);
+    printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",psl->tName);
+    printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",psl->tStart);
+    printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",psl->tEnd);
+    printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
+    if (pslIsProtein(psl))
+	printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
 
-        printf("<TABLE><TR><TD>Custom track name: ");
-        cgiMakeTextVar( "trackName", trackName, 30);
-        printf("</TD></TR>");
+    if (feelingLucky)
+	printf("<INPUT TYPE=\"hidden\" name=\"feelingLucky\" value=\"on\" />\n");
 
-        printf("<TR><TD> Custom track description: ");
-        cgiMakeTextVar( "trackDescription", trackDescription,50);
-        printf("</TD></TR>");
-        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Create a stable custom track with these results\">\n");
-        printInfoIcon("The BLAT results below are temporary and will be replaced by your next BLAT search. "
-                "However, when saved as a custom track with the button on the left, BLAT results are stored on our "
-                "servers and can be saved as stable session (View &gt; My Sessions) links that can be shared via email or in manuscripts. "
-                "\n<p>We have never cleaned up the data under stable session links so far. "
-                "To reduce track clutter in your own sessions, you can delete BLAT custom tracks from the main Genome Browser "
-                "view using the little trash icon next to each custom track.</p>");
-        puts("</TD></TR>");
-        printf("</TABLE></FORM></DIV>");
-        }
+    printf("<INPUT TYPE=\"hidden\" name=\"trackName\" value=\"%s\" />\n", trackName);
 
-    printf("<DIV STYLE=\"display:block;\"><PRE>");
+    printf("<INPUT TYPE=\"hidden\" name=\"trackDescription\" value=\"%s\" />\n", trackDescription);
 
-    // find maximum query name size for padding calculations and
-    // find maximum target chrom name size for padding calculations
-    int maxQChromNameSize = 0;
-    int maxTChromNameSize = 0;
-    for (psl = pslList; psl != NULL; psl = psl->next)
-	{
-	int qLen = strlen(psl->qName);
-	maxQChromNameSize = max(maxQChromNameSize,qLen);
-	int tLen = strlen(psl->tName);
-	maxTChromNameSize = max(maxTChromNameSize,tLen);
-	}
-    maxQChromNameSize = max(maxQChromNameSize,5);
-    maxTChromNameSize = max(maxTChromNameSize,5);
+    printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Create custom track\">\n");
+    puts("</TD></TR>");
+    printf("</TABLE></FORM></DIV>");
+    jsInline("$(document).ready(function() {\n"
+	    "$(\"input[value='Create custom track']\").trigger('click');\n"
+	    "});\n");
 
-    printf("   ACTIONS                 QUERY ");
-    
-    spaceOut(stdout, maxQChromNameSize - 5);
-
-    printf("SCORE START   END QSIZE IDENTITY  CHROM ");
-    spaceOut(stdout, maxTChromNameSize - 5);
-
-    printf(" STRAND  START       END   SPAN\n");
-
-    printf("----------------------------------------------------------------------------------------------------------");
-    repeatCharOut(stdout, '-', maxQChromNameSize - 5);
-    repeatCharOut(stdout, '-', maxTChromNameSize - 5);
-
-    printf("\n");
-
-    for (psl = pslList; psl != NULL; psl = psl->next)
-	{
-        char *browserHelp = "Open a Genome Browser showing this match";
-        char *helpText = "Open a Genome Browser with the BLAT results, but in a new internet browser tab";
-        // XX putting SVG into C code like this is ugly. define somewhere? maybe have globals for these?
-        char *icon = "<svg style='height:10px; padding-left:2px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg>";
-
-        if (customText)
-            {
-            printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">browser</A>&nbsp;",
-                browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                customText, uiState, unhideTrack);
-            printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s\">new tab%s</A>&nbsp;",
-                helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                customText, unhideTrack, icon);
-            } 
-            else 
-            {
-            printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">browser</A>&nbsp;",
-                browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                pslName, faName, uiState, unhideTrack);
-            printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">new tab%s</A>&nbsp;",
-                helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                pslName, faName, unhideTrack, icon);
-            }
-	printf("<A title='Show query sequence, genome hit and sequence alignment' "
-                "HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
-	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
-	    psl->tStart, psl->tEnd, database, uiState);
-	printf("details</A> ");
-
-	printf("%s",psl->qName);
-	spaceOut(stdout, maxQChromNameSize - strlen(psl->qName));
-	printf(" %5d %5d %5d %5d   %5.1f%%  ",
-	    pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
-	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
-        char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
-	printf("%s",displayChromName);
-	spaceOut(stdout, maxTChromNameSize - strlen(displayChromName));
-	printf("  %-2s  %9d %9d %6d",
-	    psl->strand, psl->tStart+1, psl->tEnd,
-	    psl->tEnd - psl->tStart);
-
-        // if you modify this, also modify hgPcr.c:doQuery, which implements a similar feature
-        char *seq = psl->tName;
-        if (endsWith(seq, "_fix"))
-            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadFix\">What is chrom_fix?</A>");
-        else if (endsWith(seq, "_alt"))
-            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadAlt\">What is chrom_alt?</A>");
-        else if (endsWith(seq, "_random"))
-            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download10\">What is chrom_random?</A>");
-        else if (startsWith(seq, "chrUn"))
-            printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download11\">What is a chrUn sequence?</A>");
-        printf("\n");
-	}
-    printf("</PRE>\n");
-    webNewSection("Help");
-    puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
-    puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
-    puts("</DIV>\n");
     }
 pslFreeList(&pslList);
 
@@ -915,6 +779,7 @@ char shortName[4096];
 char description[4096];
 
 unsigned count = slCount(names);
+
 if (count == 1)
     {
     safef(shortName, sizeof shortName, "blat %s", names->name);
@@ -933,6 +798,7 @@ else
 
 *pName = makeNameUnique(shortName, database, cart);
 *pDescription = cloneString(description);
+
 }
 
 void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *type, char *xType,
@@ -1502,7 +1368,7 @@ char *output = cgiOptionalString("output");
 boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 
-if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
+if (!allGenomes && !isJson && !isPslRaw)
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
 seqList = faSeqListFromMemTextRaw(seqLetters);
@@ -1802,7 +1668,7 @@ if (!allGenomes)
               organism, feelingLucky);
     }
 
-if(!feelingLucky && !allGenomes)
+if(!allGenomes)
     cartWebEnd();
 
 gfFileCacheFree(&tFileCache);

@@ -69,7 +69,7 @@ def extractNames(asmRpt, hapX):
             if re.search(pat, orgName):
               orgName = sciName
             else:
-              pat = r'apicomplexans|bryozoans|bugs|ciliates|crustaceans|diatoms|hydrozoans|gastropods|nematodes|flatworm|pelagophytes|scorpions|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats|tunicates|tsetse fly|cellular slime molds|stony corals'
+              pat = r'apicomplexans|ants|bacteria|bryozoans|bugs|ciliates|crustaceans|diatoms|hydrozoans|dinoflagellates|gastropods|hemichordates|nematodes|flatworm|pelagophytes|scorpions|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats|tunicates|tsetse fly|cellular slime molds|stony corals'
               if re.search(pat, orgName):
                 order = orgName.split()[0]
                 if re.search('budding', order):
@@ -122,6 +122,14 @@ def extractNames(asmRpt, hapX):
                   orgName = words[0][0].upper() + "." + restWords
                 elif re.search("apicomplexans", orgName):
                   orgName = "apicomplexans " + words[0][0].upper() + "." + restWords
+                elif re.search("ants", orgName):
+                  orgName = "ant " + words[0][0].upper() + "." + restWords
+                elif re.search("dinoflagellates", orgName):
+                  orgName = "dinoflagellates " + words[0][0].upper() + "." + restWords
+                elif re.search("bacteria", orgName):
+                  orgName = "bacteria " + words[0][0].upper() + "." + restWords
+                elif re.search("hemichordates", orgName):
+                  orgName = "hemichordates " + words[0][0].upper() + "." + restWords
                 elif re.search("bryozoans", orgName):
                   orgName = "bryozoans " + words[0][0].upper() + "." + restWords
                 elif re.search("ciliates", orgName):

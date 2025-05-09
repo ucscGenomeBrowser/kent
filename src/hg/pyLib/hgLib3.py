@@ -481,10 +481,20 @@ def getCookieUser():
 def getBotCheckString(ip, fraction):
     " port of lib/botDelay.c:getBotCheckString: compose user.ip fraction for bot check  "
     user = getCookieUser()
-    if user:
-        botCheckString = "%s.%s %f" % (user, ip, fraction)
+    useNew = cfgOptionBoolean("newBotDelay")
+    if (useNew):
+        hgsid = cgiString("hgsid")
+        if user:
+            botCheckString = "uid%s %f" % (user, fraction)
+        elif hgsid:
+            botCheckString = "sid%s %f" % (hgsid, fraction)
+        else:
+            botCheckString = "%s %f" % (ip, fraction)
     else:
-        botCheckString = "%s %f" % (ip, fraction)
+        if user:
+            botCheckString = "%s.%s %f" % (user, ip, fraction)
+        else:
+            botCheckString = "%s %f" % (ip, fraction)
     return botCheckString
 
 def hgBotDelay(fraction=1.0, useBytes=None):

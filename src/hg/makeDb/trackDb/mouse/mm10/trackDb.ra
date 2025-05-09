@@ -424,11 +424,11 @@ mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm10/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon Updated red ../goldenPath/newsarch.html ""
+pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 include ../../trackDb.mgc-orfeome.ra
 include ../refSeqComposite.mm10.mm39.ra
 
 include recount3.ra alpha
 
-include encode4.ra alpha
+include long_read_transcripts.ra alpha

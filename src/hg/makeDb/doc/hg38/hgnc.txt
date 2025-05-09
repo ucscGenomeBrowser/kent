@@ -111,10 +111,10 @@ ixIxx -maxWordLength=32 trixInput.txt search.hg38.ix search.hg38.ixx
 # create input file without header and sorted by first field ( HGNC:### )
 tail -n +2 hgnc_complete_set.txt | sort -k 1b,1 > input.txt
 
-# put black for every type for the moment.  This should be based on GENCODE colors
-tawk '{print $5}' input.txt | sort -u | awk '{printf "s/%s/0,0,0/\n", $0}' > color.sed.txt
 
-#manually fixed colors for coding, pseudogene, and non-coding
+#Braney manually created colors for coding, pseudogene, and non-coding. I am just copying.
+cp old3/color.sed.txt .
+
 tawk '{print $1,$5}' input.txt | sed -f color.sed.txt | sort -k 1b,1 > id.color.txt
 
 
@@ -129,14 +129,12 @@ tawk '{if ($19 != "")  print $19,$0}' inputColor.txt | sort -k 1b,1 > entrez.hgn
 # BASH run this command in bash to escape the tab with $
 join -j 1 -t $'\t'  entrezToLoc.txt  entrez.hgnc.txt | cut -f 2- > positioned.hg38.txt
 
-TODO GALT fix this
 # build first nine fields of bigbed
-#orig tawk '{print $1, $2, $3, $4, 0, "+", 0,0, $58}' positioned.hg38.txt > tmp1
       tawk '{print $1, $2, $3, $5, 0, $4, 0,0, $59}' positioned.hg38.txt > tmp1
 
 # add the rest of the HGNC fields as extra fields except the id and color which are in the first nine
-#ORIG tawk '{for(ii=5; ii <= 56; ii++) printf("%s\t", $ii); print $ii}' positioned.hg38.txt > tmp2
       tawk '{for(ii=6; ii <= 57; ii++) printf("%s\t", $ii); print $ii}' positioned.hg38.txt > tmp2
+
 paste tmp1 tmp2 | sort -k1,1 -k2,2n > input.bed
 
 

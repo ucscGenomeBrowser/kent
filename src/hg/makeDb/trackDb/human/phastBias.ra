@@ -45,6 +45,7 @@ allButtonPair on
     longLabel phastBias gBGC posterior probability on human branch
     priority 2
     subGroups view=POST
+    logo on
 
     track phastBiasChimpPosteriors3
     parent phastBiasPosteriors
@@ -52,4 +53,4 @@ allButtonPair on
     longLabel phastBias gBGC posterior probability on chimp branch
     priority 8
     subGroups view=POST
-
+    logo on
