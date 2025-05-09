@@ -3447,7 +3447,7 @@ if (buildBigPsl)
 
     cartSaveSession(cart);
 
-    cgiMakeButton(CT_DO_REMOVE_VAR, "Remove Custom Track");
+    cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     printf("</FORM>\n");
 
@@ -3467,7 +3467,7 @@ if (buildBigPsl)
     printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",cgiInt("t"));
     printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
     printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s\" />\n",cgiString("i"));
-    printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",cgiString("c"));
+    printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",cgiString("c")); // orig psl->tName);
     printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",cgiInt("l"));
     printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",cgiInt("r"));
     printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
@@ -3584,7 +3584,7 @@ if (showEvery && sequencesFound > 0)
     {  
     printf("<BR>\n");
     printf("Input Sequences:<BR>\n");
-    printf("<textarea rows='8' cols='60' readonly>\n");
+    printf("<textarea rows='8' cols='60'>\n");
     printf("%s", sequencesText->string);
     printf("</textarea>\n");
     dyStringFree(&sequencesText);
@@ -7596,7 +7596,7 @@ pslFreeList(&pslList);
 
 printf("<BR>\n");
 printf("Input Sequences:<BR>\n");
-printf("<textarea rows='8' cols='60' readonly>\n");
+printf("<textarea rows='8' cols='60'>\n");
 struct dnaSeq *oSeq, *oSeqList = faReadAllSeq(faName, !isProt);
 for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
     {
