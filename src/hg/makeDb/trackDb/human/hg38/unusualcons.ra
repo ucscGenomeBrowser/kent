@@ -7,42 +7,49 @@ group compGeno
 
     track ultras
     shortLabel Ultracons
-    longLabel 481 Ultraconserved regions - 100% identical in human, mouse and rat, > 200bp
+    longLabel Ultracons: 481 Ultraconserved regions - 100% identical in human, mouse and rat, > 200bp
     parent unusualcons on
     type bigBed 4
     bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
 
     track ultraZoo
     shortLabel UltraZoos
-    longLabel 4552 Ultraconserved regions in Zoonomia alignment - 100% identical in 235 species, >20bp
+    longLabel UltraZoos: 4552 Ultraconserved regions in Zoonomia alignment - 100% identical in 235 species, >20bp
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/zooUCEs.bigBed
 
     track har2649
-    shortLabel 2649 HARs
-    longLabel 2649 Human Accelerated Regions (HARs) merged from various publications by the Pollard Lab
+    shortLabel HARs
+    longLabel HARs: 2649 Human Accelerated Regions (HARs) merged from various publications by the Pollard Lab
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/nchaes_merged_hg38.bb
 
     track hars312
-    shortLabel 312 ZooHARs
-    longLabel 312 Human Accelerated Regions (HARs) from Zoonomia alignments
+    shortLabel ZooHARs
+    longLabel ZooHARs: 312 Human Accelerated Regions (HARs) from Zoonomia alignments
     parent unusualcons on
     type bigBed 4
     bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
 
+    track haqers
+    shortLabel HAQERS
+    longLabel HAQERS: 1580 Human Ancestor Quickly Evolved Regions
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/haqers.bb
+
     track hcondels
-    shortLabel hConDels
-    longLabel 583 Human Conserved Deletions - present in chimp and macaque but deleted in humans
+    shortLabel Long hConDels
+    longLabel long hConDels: 583 Long Human Conserved Deletions - present in chimp and macaque but deleted in humans
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/hcondels583.bb
 
-    track zooHcondels
-    shortLabel ZooHCondels
-    longLabel 10032 Zoonomia hCondels - Human Conserved Deletions < 40bp
+    track shorthcondels
+    shortLabel Short hConDels
+    longLabel short hConDels: 10032 Short Human hCondels - Human Conserved Deletions < 40bp
     parent unusualcons on
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/unusualcons/hcondels.bb
