@@ -10,7 +10,7 @@ table lovd
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
     uint reserved;     "Used as itemRgb as of 2004-11-22"
-    string id;           "Link to LOVD"
+    lstring id;           "Link to LOVD"
     string variantEffect; "Variant Effect"
     string lovdInstalls; "Number of LOVD installations reporting this variant"
     )
