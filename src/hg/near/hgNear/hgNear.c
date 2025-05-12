@@ -171,7 +171,7 @@ char buf[1024];
 if(!helpName)
     helpName = "hgNearHelp.html";
 safef(buf, sizeof(buf), "../goldenPath/help/%s", helpName);
-setContextSpecificHelp(buf, NULL);
+setContextSpecificHelp(buf, NULL, NULL);
 cartWebStart(cart, database, "%s", title);
 }
 
