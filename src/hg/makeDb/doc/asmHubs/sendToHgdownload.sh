@@ -87,14 +87,14 @@ fi
 
 # the single file hub genome trackDb file:
 
-printf "rsync --delete --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
-printf "rsync --delete --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest2}:${destDir}/\"\n" 1>&2
-printf "rsync --delete --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest3}:${destDir}/\"\n" 1>&2
-rsync --delete --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
+printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
+printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\"  --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest2}:${destDir}/\"\n" 1>&2
+printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest3}:${destDir}/\"\n" 1>&2
+rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt"   --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request" &
-rsync --delete --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest2}:${destDir}/" \
+rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest2}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request"
-rsync --delete --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest3}:${destDir}/" \
+rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest3}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request"
 wait
 
