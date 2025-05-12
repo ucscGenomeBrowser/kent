@@ -2869,7 +2869,7 @@ that identifies the reference sequence.
 <DIV class="logo"><span class="types bigWig"></span>
 <div class="format"><code>logo on</code></div>
     <P>Enables <a target="_blank" href="https://kundajelab.github.io/dynseq-pages/">
-    dynseq display</a> which graphs the signal as reference base nucleotide letters 
+    dynseq display</a>, which graphs the signal as reference base nucleotide letters 
     with their heights equal to the
     signal value within the bigWig track. If not sufficiently zoomed in, the bigWig will
     revert to bars instead of letters by default. See a working example of the <code>logo</code>
