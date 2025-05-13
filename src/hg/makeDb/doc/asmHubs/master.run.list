@@ -4210,6 +4210,7 @@
 ./runBuild GCF_003676075.3_GSC_YBM_2.1 mammals Marmota_flaviventris
 ./runBuild GCF_003676215.2_ASM367621v3 invertebrate Rhopalosiphum_maidis
 ./runBuild GCF_003676395.1_ASM367639v1 mammals Lagenorhynchus_obliquidens
+./runBuild GCF_003692095.1_ASM369209v1 viral Arthrobacter_phage_Corgi
 ./runBuild GCF_003704035.1_HU_Pman_2.1.3 mammals Peromyscus_maniculatus_bairdii
 ./runBuild GCF_003704095.1_ASM370409v1 invertebrate Pocillopora_damicornis
 ./runBuild GCF_003709585.1_Aci_jub_2 mammals Acinonyx_jubatus

@@ -371,7 +371,7 @@ boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
 void lazarusLives(unsigned long newExpireSeconds);
 /* Long running process requests more time */
 
-void setContextSpecificHelp(char *link, char *label);
+void setContextSpecificHelp(char *link, char *label, char *id);
 // Override default behavior for the context specific help link
 
 char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars);

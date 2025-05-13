@@ -1426,14 +1426,17 @@ return FALSE;
 // overrides for default context specific help link.
 char *contextSpecificHelpLink = NULL;
 char *contextSpecificHelpLabel = NULL;
+char *contextSpecificHelpId = NULL;
 
-void setContextSpecificHelp(char *link, char *label)
+void setContextSpecificHelp(char *link, char *label, char *id)
 // Override default behavior for the context specific help link
 {
 if(link)
     contextSpecificHelpLink = cloneString(link);
 if(label)
     contextSpecificHelpLabel = cloneString(label);
+if(id)
+    contextSpecificHelpId = cloneString(id);
 }
 
 char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars)
@@ -1601,61 +1604,73 @@ if(scriptName)
     // Provide context sensitive help links for some CGIs.
     char *link = NULL;
     char *label = NULL;
+    char *id = NULL;
     if (endsWith(scriptName, "hgBlat"))
         {
         link = "../goldenPath/help/hgTracksHelp.html#BLATAlign";
         label = "Help on Blat";
+        id = "hgBlatHelp";
         }
     else if (endsWith(scriptName, "hgHubConnect"))
         {
         link = "../goldenPath/help/hgTrackHubHelp.html";
         label = "Help on Track Hubs";
+        id = "hgHubConnectHelp";
         }
     else if (endsWith(scriptName, "hgNear"))
         {
         link = "../goldenPath/help/hgNearHelp.html";
         label = "Help on Gene Sorter";
+        id = "hgNearHelp";
         }
     else if (endsWith(scriptName, "hgTables"))
         {
         link = "../goldenPath/help/hgTablesHelp.html";
         label = "Help on Table Browser";
+        id = "hgTablesHelp";
         }
     else if (endsWith(scriptName, "hgIntegrator"))
         {
         link = "../goldenPath/help/hgIntegratorHelp.html";
         label = "Help on Data Integrator";
+        id = "hgIntegratorHelp";
         }
     else if (endsWith(scriptName, "hgGenome"))
         {
         link = "../goldenPath/help/hgGenomeHelp.html";
         label = "Help on Genome Graphs";
+        id = "hgGenomeHelp";
         }
     else if (endsWith(scriptName, "hgSession"))
         {
         link = "../goldenPath/help/hgSessionHelp.html";
         label = "Help on Sessions";
+        id = "hgSessionHelp";
         }
     else if (endsWith(scriptName, "hgVisiGene"))
         {
         link = "../goldenPath/help/hgTracksHelp.html#VisiGeneHelp";
         label = "Help on VisiGene";
+        id = "hgVisiGeneHelp";
         }
     else if (endsWith(scriptName, "hgCustom"))
         {
         link = "../goldenPath/help/customTrack.html";
         label = "Help on Custom Tracks";
+        id = "hgCustomHelp";
         }
     // Don't overwrite any previously set defaults
     if(!contextSpecificHelpLink && link)
         contextSpecificHelpLink = link;
     if(!contextSpecificHelpLabel && label)
         contextSpecificHelpLabel = label;
+    if(!contextSpecificHelpId && id)
+        contextSpecificHelpId = id;
     }
 if(contextSpecificHelpLink)
     {
     char buf[1024];
-    safef(buf, sizeof(buf), "<li><a href='%s'>%s</a></li>", contextSpecificHelpLink, contextSpecificHelpLabel);
+    safef(buf, sizeof(buf), "<li><a id='%s' href='%s'>%s</a></li>", contextSpecificHelpId, contextSpecificHelpLink, contextSpecificHelpLabel);
     menuStr = replaceChars(menuStr, "<!-- CONTEXT_SPECIFIC_HELP -->", buf);
     }
 

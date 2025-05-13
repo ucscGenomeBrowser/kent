@@ -45,3 +45,7 @@ cd /hive/data/genomes/hg38/bed/unusualcons/zooUces/
 wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/zooUCEs.bed.gz
 wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/RoCCs.bigBed
 wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/UNICORNs.bigBed
+
+cd /hive/data/genomes/hg38/bed/unusualcons/haqers/
+bedSort haqers.bed haqers.bed 
+bedToBigBed haqers.bed ../../../chrom.sizes haqers.bb

@@ -12,13 +12,7 @@ endif
 # on the main goal (my (default), alpha or beta)
 # this won't work if you supply multiple goals "(make my alpha beta")
 # but we do not seem to do that
-CGI_BIN_DEST=${DESTDIR}${CGI_BIN}
-ifeq ($(MAKECMDGOALS),)
-    CGI_BIN_DEST=${DESTDIR}${CGI_BIN}-${USER}
-endif
-ifneq ($(filter $(MAKECMDGOALS),my cgi),)
-    CGI_BIN_DEST=${DESTDIR}${CGI_BIN}-${USER}
-endif
+CGI_BIN_DEST=${DESTDIR}${CGI_BIN}-${USER}
 ifeq ($(MAKECMDGOALS),alpha)
     CGI_BIN_DEST=${DESTDIR}${CGI_BIN}
 endif
