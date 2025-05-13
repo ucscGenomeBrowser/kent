@@ -1,3 +1,10 @@
 
 Also using the assemblyList.py script
 from kent/src/hg/hubApi/assemblyList.py
+
+# scripts used to push out the /gbdb/genark/ hierarchy
+# from hgwdev to our RR sites, and the pullHgwdev.sh is
+# running in qateam cron job on the Asia node
+
+pullHgwdev.sh
+pushRR.sh

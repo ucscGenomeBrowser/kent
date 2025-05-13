@@ -26,6 +26,8 @@ if ( ! -s "$orderList" ) {
   $orderList = $toolsDir/$inputList;
 }
 
+my @stageHub = qw( alpha beta public );
+
 my %commonName;	# key is asmId, value is common name
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
@@ -99,6 +101,8 @@ foreach my $asmId (@orderList) {
   }
   `rm -f "${destDir}/bbi"`;
   `rm -fr "${gbdbDir}/bbi"`;
+  `rm -f "${destDir}/contrib"`;
+  `rm -f "${gbdbDir}/contrib"`;
   `rm -f "${destDir}/genes"`;
   `rm -f "${destDir}/ixIxx"`;
   `rm -f "${destDir}/genesGtf"`;
@@ -144,6 +148,10 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/download.genomes.txt"`;
   `rm -f "${destDir}/hub.txt"`;
   `rm -f "${gbdbDir}/hub.txt"`;
+  foreach my $hubTxt (@stageHub) {
+    `rm -f "${destDir}/$hubTxt.hub.txt"`;
+    `rm -f "${gbdbDir}/$hubTxt.hub.txt"`;
+  }
   # it used to be standard practice to have a different hub.txt on genome-test
   #   vs. the hub.txt on hgdownload.  They evolved into being identical, but
   #   there may be a case in the future where this function may be required.
@@ -154,6 +162,10 @@ foreach my $asmId (@orderList) {
    if (-d "${buildDir}/bbi") {
      `ln -s "${buildDir}/bbi" "${destDir}/bbi"`;
      `ln -s "${buildDir}/bbi" "${gbdbDir}/bbi"`
+   }
+   if (-d "${buildDir}/contrib") {
+    `ln -s "${buildDir}/contrib" "${destDir}/contrib"`;
+    `ln -s "${buildDir}/contrib" "${gbdbDir}/contrib"`;
    }
   `ln -s "${buildDir}/genes" "${destDir}/genes"` if (-d "${buildDir}/genes");
    if (-d "${buildDir}/ixIxx") {
@@ -230,6 +242,12 @@ foreach my $asmId (@orderList) {
   # genomes.txt obsolete now with single file
 #   `ln -s "${buildDir}/${asmId}.genomes.txt" "${destDir}/genomes.txt"` if (-s "${buildDir}/${asmId}.genomes.txt");
   `ln -s "${buildDir}/${asmId}.download.genomes.txt" "${destDir}/download.genomes.txt"` if (-s "${buildDir}/${asmId}.download.genomes.txt");
+   foreach my $hubTxt (@stageHub) {
+     if (-s "${buildDir}/${hubTxt}.hub.txt") {
+       `ln -s "${buildDir}/${hubTxt}.hub.txt" "${destDir}/${hubTxt}.hub.txt"`;
+       `ln -s "${buildDir}/${hubTxt}.hub.txt" "${gbdbDir}/${hubTxt}.hub.txt"`;
+     }
+   }
    if (-s "${buildDir}/${asmId}.singleFile.hub.txt") {
     `ln -s "${buildDir}/${asmId}.singleFile.hub.txt" "${destDir}/hub.txt"`;
     `ln -s "${buildDir}/${asmId}.singleFile.hub.txt" "${gbdbDir}/hub.txt"`;

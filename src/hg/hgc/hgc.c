@@ -3364,14 +3364,6 @@ if (cfgOptionBooleanDefault("drawDot", FALSE))
     bigPslDotPlot(tdb, bbi, seqName, winStart, winEnd);
 
 boolean showEvery = sameString(item, "PrintAllSequences");
-boolean buildBigPsl = FALSE;
-if (sameString(item, "buildBigPsl"))
-    {
-    buildBigPsl = TRUE;
-    showEvery = TRUE;
-    item = cloneString("PrintAllSequences");
-    }
-
 boolean showAll = trackDbSettingOn(tdb, "showAll");
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
 struct bigBedInterval *bb, *bbList = NULL;
@@ -3433,75 +3425,6 @@ char startBuf[16], endBuf[16];
 
 int lastChromId = -1;
 char chromName[bbi->chromBpt->keySize+1];
-
-if (buildBigPsl)
-    {
-
-    char *browserUrl = hgTracksName();
-    char* posStr = cartOptionalString(cart, "position");
-    if (posStr != NULL)
-        printf("<P>Go back to <A HREF=\"%s\">%s</A> on the Genome Browser.</P>\n", browserUrl, posStr);
-    
-    printf("<FORM ACTION=\"%s?hgsid=%s&db=%s\" NAME=\"MAIN_FORM\" METHOD=%s>\n\n",
-	hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
-
-    cartSaveSession(cart);
-
-    cgiMakeButton(CT_DO_REMOVE_VAR, "Remove Custom Track");
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
-    printf("</FORM>\n");
-
-
-    // new re-submit code with new trackname and decription
-
-    printf("<div id=renameFormItem style='display: block'>\n");
-    printf("<FORM ACTION=>\n");
-    printf("<INPUT TYPE=SUBMIT NAME=Submit id='showRenameForm' VALUE=\"Rename Custom Track\">\n");
-    printf("</FORM>\n");
-    printf("</div>\n");
-
-    printf("<div id=renameForm style='display: none'>\n");
-    char *hgcUrl = hgcName();
-    printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
-    printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",cgiInt("o"));
-    printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",cgiInt("t"));
-    printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
-    printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s\" />\n",cgiString("i"));
-    printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",cgiString("c"));
-    printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",cgiInt("l"));
-    printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",cgiInt("r"));
-    printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
-    if (cgiOptionalString("isProt"))
-	printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
-
-    printf("<TABLE><TR><TD>Custom track name: ");
-    cgiMakeTextVar( "trackName", tdb->shortLabel, 30);
-    printf("</TD></TR>");
-
-
-    printf("<TR><TD> Custom track description: ");
-    cgiMakeTextVar( "trackDescription", tdb->longLabel,50);
-    printf("</TD></TR>");
-
-    // remove the current blat ct so we can create a new one.
-    cgiMakeHiddenVar(CT_DO_REMOVE_VAR, "Remove custom track");
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
-
-    printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Submit\">\n");
-    puts("</TD></TR>");
-    printf("</TABLE></FORM></DIV>");
-
-
-    printf("</div>\n");
-
-    jsInline("$('#showRenameForm').click(function(){\n"
-	    "  $('#renameForm')[0].style.display = 'block';\n"
-	    "  $('#renameFormItem')[0].style.display = 'none';\n"
-	    "  $('#showRenameForm')[0].style.display = 'none';\n"
-	    "return false;\n"
-	    "});\n");
-
-    }
 
 boolean firstTime = TRUE;
 struct hash *seqHash = hashNew(0);
@@ -3584,7 +3507,7 @@ if (showEvery && sequencesFound > 0)
     {  
     printf("<BR>\n");
     printf("Input Sequences:<BR>\n");
-    printf("<textarea rows='8' cols='60' readonly>\n");
+    printf("<textarea rows='8' cols='60'>\n");
     printf("%s", sequencesText->string);
     printf("</textarea>\n");
     dyStringFree(&sequencesText);
@@ -6690,31 +6613,6 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
-
-void printLuckyRedirect(char *browserUrl, struct psl *psl, char *database, boolean empty)
-/* Print out a very short page that redirects us. */
-{
-
-char url[1024];
-
-if (empty)
-    safef(url, sizeof(url), "%s?db=%s",
-      browserUrl, database); 
-else
-    safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s",
-      browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database); 
-
-/* htmlStart("Redirecting"); */
-/* Odd it appears that we've already printed the Content-Typ:text/html line
-   but I can't figure out where... */
-htmStart(stdout, "Redirecting"); 
-jsInlineF("location.replace('%s');\n", url);
-printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
-htmlEnd();
-
-}
-
-
 static boolean isPslToPrintByClick(struct psl *psl, int startFirst, boolean isClicked)
 /* Determine if a psl should be printed based on if it was or was not the one that was clicked
  * on.
@@ -6735,70 +6633,15 @@ if (pslList == NULL || tableName == NULL)
     return;
 boolean showEvery = sameString(itemIn, "PrintAllSequences");
 
-
-boolean feelingLucky = cgiOptionalString("feelingLucky") != NULL;
-if (feelingLucky)
-    {
-    // If we found something jump browser to there. 
-    if(slCount(pslList) > 0)
-	printLuckyRedirect(hgTracksPathAndSettings(), pslList, database, FALSE);
-    // Otherwise call ourselves again not feeling lucky to print empty results. 
-    else 
-	{ 
-	printLuckyRedirect(hgTracksPathAndSettings(), pslList, database, TRUE);
-	}
-    }
-
 if (!showEvery && (aliCount > 1))
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
-char *browserHelp = "Open a Genome Browser showing this match";
-char *helpText = "Open a Genome Browser with the BLAT results, but in a new internet browser tab";
-// XX putting SVG into C code like this is ugly. define somewhere? maybe have globals for these?
-char *icon = "<svg style='height:10px; padding-left:2px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg>";
 printf("<PRE><TT>");
-
-
-// find maximum query name size for padding calculations and
-// find maximum target chrom name size for padding calculations
-int maxQChromNameSize = 0;
-int maxTChromNameSize = 0;
-for (psl = pslList; psl != NULL; psl = psl->next)
-    {
-    int qLen = strlen(psl->qName);
-    maxQChromNameSize = max(maxQChromNameSize,qLen);
-    int tLen = strlen(psl->tName);
-    maxTChromNameSize = max(maxTChromNameSize,tLen);
-    }
-maxQChromNameSize = max(maxQChromNameSize, strlen("QUERY"));
-
-printf("BROWSER           |");
-printf(" SIZE IDENTITY  ");
 if (startsWith("chr", pslList->tName))
-    {
-    maxTChromNameSize = max(maxTChromNameSize, strlen("CHROMOSOME"));
-    spaceOut(stdout, maxTChromNameSize - strlen("CHROMOSOME"));
-    printf("CHROMOSOME");
-    }
+    printf("BROWSER | SIZE IDENTITY CHROMOSOME  STRAND    START     END              QUERY      START  END  TOTAL\n");
 else
-    {
-    maxTChromNameSize = max(maxTChromNameSize, strlen("SCAFFOLD"));
-    spaceOut(stdout, maxTChromNameSize - strlen("SCAFFOLD"));
-    printf("SCAFFOLD");
-    }
-printf(" STRAND     START      END   ");
-spaceOut(stdout, maxQChromNameSize - strlen("QUERY"));
-printf("QUERY");
-printf(" START  END  TOTAL\n");
-
-printf("--------------------------------------------------------------------------------------------");
-repeatCharOut(stdout, '-', maxQChromNameSize - 5);
-repeatCharOut(stdout, '-', maxTChromNameSize - 5);
-printf("\n");
-
-char fmt[256];
-safef(fmt, sizeof fmt, "%%5d  %%5.1f%%%%  %%%ds     %%s %%9d %%9d  %%%ds %%5d %%5d %%5d", maxTChromNameSize, maxQChromNameSize);
-
+    printf("BROWSER | SIZE IDENTITY  SCAFFOLD   STRAND    START     END              QUERY      START  END  TOTAL\n");
+printf("-----------------------------------------------------------------------------------------------------\n");
 for (isClicked = 1; isClicked >= 0; isClicked -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -6810,34 +6653,18 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
             if (sameString(itemIn, "PrintAllSequences"))
                 qName = psl->qName;
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
-            printf("<A TITLE='%s' HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> ",
-                   browserHelp, hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
-
-            printf("<A TITLE='%s' HREF=\"%s&db=%s&position=%s%%3A%d-%d\" TARGET=_BLANK>new tab%s</A> | ",
-                   helpText, hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd, icon);
-
+            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+                   hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE) // Only anchor if small enough 
 		hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd, otherString, psl->tName);
             char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
-	    printf(fmt,
+	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 		   skipChr(displayChromName), psl->strand, psl->tStart + 1, psl->tEnd,
 		   psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 	        printf("</A>");
-	    
-	    // if you modify this, also modify hgPcr.c:doQuery, which implements a similar feature
-	    char *seq = psl->tName;
-	    if (endsWith(seq, "_fix"))
-		printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadFix\">What is chrom_fix?</A>");
-	    else if (endsWith(seq, "_alt"))
-		printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadAlt\">What is chrom_alt?</A>");
-	    else if (endsWith(seq, "_random"))
-		printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download10\">What is chrom_random?</A>");
-	    else if (startsWith(seq, "chrUn"))
-		printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download11\">What is a chrUn sequence?</A>");
-
 	    printf("\n");
 	    }
 	}
@@ -7596,7 +7423,7 @@ pslFreeList(&pslList);
 
 printf("<BR>\n");
 printf("Input Sequences:<BR>\n");
-printf("<textarea rows='8' cols='60' readonly>\n");
+printf("<textarea rows='8' cols='60'>\n");
 struct dnaSeq *oSeq, *oSeqList = faReadAllSeq(faName, !isProt);
 for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
     {
@@ -22619,14 +22446,14 @@ void bigPslHandlingCtAndGeneric(struct sqlConnection *conn, struct trackDb *tdb,
 /* Special option to show all alignments for blat ct psl */
 {
 
-if (startsWith("ct_blat", tdb->track) && (!(sameString(item,"PrintAllSequences") || sameString(item,"buildBigPsl"))))
+if (startsWith("ct_blat", tdb->track) && !sameString(item,"PrintAllSequences"))
     printf("<A href id='genericPslShowAllLink'>Show All</A>\n");
 
 printf("<div id=genericPslShowItem style='display: block'>\n");
 genericBigPslClick(NULL, tdb, item, start, end);
 printf("</div>\n");
 
-if (startsWith("ct_blat", tdb->track) && (!(sameString(item,"PrintAllSequences") || sameString(item,"buildBigPsl"))))
+if (startsWith("ct_blat", tdb->track) && !sameString(item,"PrintAllSequences"))
     {
     printf("<div id=genericPslShowAll style='display: none'>\n");
     genericBigPslClick(NULL, tdb, "PrintAllSequences", start, end);
@@ -22660,7 +22487,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
 type = ct->tdb->type;
-cartWebStart(cart, database, "Custom Track: %s (%s) %s ",  trackHubSkipHubName(organism), trackHubSkipHubName(database), ct->tdb->shortLabel);
+cartWebStart(cart, database, "Custom Track: %s", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
@@ -26773,7 +26600,7 @@ theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);
 
-cartSetString(cart, "i", "buildBigPsl");
+cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
 }
 

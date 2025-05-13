@@ -41,7 +41,7 @@
         },
         'end': {
             action() {
-                writeToApacheLog("tableBrowserTutorial finish " + getHgsid());
+                hideMenu('#help > ul');
                 return this.complete();
             },
             //classes: 'shepherd-button-secondary',
@@ -69,6 +69,54 @@
         });
 
     }
+
+    // Function to keep menus visible using a selector
+    function keepMenuVisible(selector) {
+        const menu = document.querySelector(selector);
+        //Make sure the drop-down is visibile
+        menu.style.display = 'block';
+        menu.style.visibility = 'visible';
+        // function to keep the menu visibile
+        const makeVisible = () => {
+            menu.style.display = 'block';
+            menu.style.visibility = 'visible';
+        };
+        const events = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
+        // Add event listeners to keep the menu open
+        events.forEach(event => {
+            menu.addEventListener(event, makeVisible);
+        });
+        // Add event listeners to the elements of the menu list
+        menu.querySelectorAll('li').forEach(function(item) {
+            events.forEach(event => {
+                item.addEventListener(event, makeVisible);
+            });
+        });
+    }
+    
+    // Function to hide the menu
+    function hideMenu(selector) {
+        const menu = document.querySelector(selector);
+        menu.style.display = 'none';
+        menu.style.visibility = 'hidden';
+
+        const hideVisible = () => {
+            menu.style.display = 'none';
+            menu.style.visibility = 'hidden';
+        };
+
+        const events = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'];
+        // Remove event listeners to keep the menu open
+        events.forEach(event => {
+             menu.removeEventListener(event, hideVisible);
+        });
+        menu.querySelectorAll('li').forEach(function(item) {
+            events.forEach(event => {
+                item.removeEventListener(event, hideVisible);
+            });
+        });
+    }
+
     
     // Function to add steps to the tableBrowserTour
     function tableBrowserSteps() {
@@ -88,11 +136,12 @@
             text: 'To begin, select the genome you want to use on the Table Browser. By default, '+
                   'your most recently used assembly will be selected.'+
                   '<br><br>'+
-                  'If you wish to change '+
-                  'the assembly, start by altering the <b>Clade</b> drop-down menu. Next, '+
-                  'change the organism using the <b>Genome</b> drop-down. '+
-                  'Finally, select the assembly version by altering the <b>Assembly</b> '+
-                  'drop-down menu.',
+                  'If you wish to change the assembly, start by altering the:'+
+                  '<ul>'+
+                  '<li><b>Clade</b> to select another domain of life</li>'+
+                  '<li><b>Genome</b> to change the organism</li>'+
+                  '<li><b>Assembly</b> to specify the assembly version</li>'+
+                  '</ul>',
             attachTo: {
                 element: '#genome-select',
                 on: 'bottom'
@@ -155,6 +204,8 @@
                   '<br><br>'+
                   'When entering a position in the text box, you can use coordinates or an '+
                   'identifier (i.e. gene symbol) to select your region.'+
+                  'If you are using an identifier, use the <button>Lookup</button> to update the ' +
+                  'position.'+
                   '<br><br>'+
                   'The <button>Define regions</button> button allows you to paste/upload a set '+
                   'of coordinates or BED lines.',
@@ -171,7 +222,7 @@
         });
 
         tableBrowserTour.addStep({
-            title: '<b>Optional:</b> &nbsp; Filter for items using identifiers',
+            title: '<b>Optional step:</b> &nbsp; Filter for items using identifiers',
             text: 'Use this setting if you have a set of IDs, such as gene symbols, that you ' +
                   'want to extract from a dataset. These IDs <b>must</b> match the <em>name</em> '+
                   'field in the selected table.'+
@@ -199,6 +250,8 @@
                   'interested in a few columns, converting to a file format, or creating a '+
                   'custom track from the data, alter this drop-down option.'+
                   '<br><br>'+
+                  '<img src="/images/tutorialImages/tableBrowserOutputDropDown.png" width="350">' +
+                  '<br>'+
                   'Alternatively, you can also send the Table Browser output to Galaxy or GREAT. ',
             attachTo: {
                 element: '#output-select',
@@ -213,7 +266,7 @@
         });
 
         tableBrowserTour.addStep({
-            title: '<b>Optional:</b> &nbsp; Save output to a file',
+            title: '<b>Optional step:</b> &nbsp; Save output to a file',
             text: 'By default, output is printed to the screen in your web browser. Enter a '+
                   'filename to this dialogue box to have the output save to a '+
                   'file.',
@@ -241,11 +294,36 @@
                 element: '#submit-select',
                 on: 'bottom-start'
             },
-            buttons: [ tutorialButtons.back, tutorialButtons.end ],
+            buttons: [ tutorialButtons.back, tutorialButtons.next ],
             id: 'get_output',
             when: {
                 show: () => toggleSelects('submit-select', false),
                 hide: () => toggleSelects('submit-select', true)
+            }
+        });
+
+        tableBrowserTour.addStep({
+            title: 'Additional resources and documentation',
+            text: 'For further examples of using the ' +
+                  'Table Browser, please read the <a href="/goldenPath/help/hgTablesHelp.html" '+
+                  'target="_blank">Table Browser user guide</a>. You can find examples of batch '+
+                  'queries, filtering on fields from tables, video examples, and more. '+
+                  '<br><br>'+
+                  'You can also <a href="/contacts.html" target="_blank">contact us</a> if you '+
+                  'have any questions or issues using a dataset '+
+                  'on the Table Browser.',
+            attachTo: {
+                element: '#hgTablesHelp',
+                on: 'left-start'
+            },
+            buttons: [ tutorialButtons.back, tutorialButtons.end ],
+            id: 'additionalHelp',
+            when: {
+                show: () => {
+                    keepMenuVisible('#help > ul');
+                    writeToApacheLog("tableBrowserTutorial finish " + getHgsid());
+                },
+                hide: () => hideMenu('#help > ul')
             }
         });
     }
