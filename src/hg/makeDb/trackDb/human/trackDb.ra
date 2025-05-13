@@ -227,7 +227,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         track varaico
         release alpha
         shortLabel Varaico Variants
-        longLabel Varaico Variants extracted from full text publications
+        longLabel Varaico Variants extracted from full text publications, titles, and abstracts
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaico.bb
@@ -236,7 +236,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         # itemRgb on
         dataVersion release 1
         parent varsInPubs pack
-        urls outlink="$$"
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver $variantOrigStrs in: $author ($journal, $year) - $title
 
 track caseControl
 compositeTrack on
