@@ -35855,3 +35855,11 @@ cd /gbdb/hg19/vistaEnhancers/
 ln -s /hive/data/outside/otto/vista/vista.hg19.bb vistaEnhancers.bb
 cd ~/kent/src/hg/makeDb/trackDb/human/hg19
 vi trackDb.ra
+
+#############################################################################
+# LINSIGHT scores, max, Tue May 13 03:18:39 AM PDT 2025
+# (almost nothing to do here)
+cd /hive/data/genomes/hg19/bed/linsight/
+wget http://compgen.cshl.edu/LINSIGHT/LINSIGHT.bw
+# 
+

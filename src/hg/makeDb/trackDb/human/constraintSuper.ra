@@ -16,3 +16,5 @@ include metaDome.ra
 include mtr.ra
 # UKB Depletion rank score
 include ukbDepletion.ra
+# LINSIGHT
+include linsight.ra alpha
