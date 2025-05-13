@@ -1712,6 +1712,7 @@
 ./runBuild GCA_030710495.1_ASM3071049v1 fish Labroides_dimidiatus
 ./runBuild GCA_030820635.1_KIZ_Lrid_1.0 birds Chroicocephalus_ridibundus
 ./runBuild GCA_030848825.1_DD_mTadBra1_pri mammals Tadarida_brasiliensis
+./runBuild GCA_030864155.1_ASM3086415v1 plants Glycine_max
 ./runBuild GCA_030867065.1_rAllMis1 vertebrate Alligator_mississippiensis
 ./runBuild GCA_030867085.1_rLiaOli1.hap2 vertebrate Liasis_olivaceus
 ./runBuild GCA_030867095.1_rAllMis1 vertebrate Alligator_mississippiensis

@@ -1,0 +1,15 @@
+track linsight
+shortLabel LINSIGHT
+longLabel LINSIGHT - Probability of deleterious fitness and negative selection on noncoding sites
+type bigWig
+parent constraintSuper
+visibility full
+color 0,145,105
+html constraintSuper
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+bigDataUrl /gbdb/$D/linsight/LINSIGHT.bw
+maxHeightPixels 128:40:8
+viewLimits 0:1
+viewLimitsMax 0:2
+priority 10
