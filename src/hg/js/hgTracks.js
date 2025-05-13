@@ -5876,7 +5876,7 @@ $(document).ready(function()
         // allow the user to bring the tutorials popup via a new help menu button
         let tutorialLinks = document.createElement("li");
         tutorialLinks.id = "hgTracksHelpTutorialLinks";
-        tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
+        tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutorialPopup'>" +
             "Interactive Tutorials</a>";
         $("#help > ul")[0].appendChild(tutorialLinks);
         $("#hgTracksHelpTutorialLinks").on("click", function () {
