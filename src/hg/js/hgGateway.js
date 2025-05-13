@@ -1635,6 +1635,25 @@ var hgGateway = (function() {
                                        label + '</a>');
         }
     }
+    function createTutorialLink() {
+        // allow the user to bring the tutorials popup via a new help menu button
+        var tutorialLinks = document.createElement("li");
+        tutorialLinks.id = "hgGatewayHelpTutorialLinks";
+        tutorialLinks.innerHTML = "<a id='hgGatewayHelpTutorialLinks' href='#showTutorialPopup'>" +
+            "Interactive Tutorials</a>";
+        $("#help > ul")[0].appendChild(tutorialLinks);
+        $("#hgGatewayHelpTutorialLinks").on("click", function () {
+            // Check to see if the tutorial popup has been generated already
+            var tutorialPopupExists = document.getElementById ("tutorialContainer");
+            if (!tutorialPopupExists) {
+                // Create the tutorial popup if it doesn't exist
+                createTutorialPopup();
+            } else {
+                //otherwise use jquery-ui to open the popup
+                $("#tutorialContainer").dialog("open");
+            }
+        });
+    }
 
     function init() {
         // Boot up the page; initialize elements and install event handlers.
@@ -1678,14 +1697,16 @@ var hgGateway = (function() {
             // Fill in searchObj here once everything is displayed.
             autocompleteFromTree(prunedDbDbTree, searchObj);
 
+
 	    // Gateway tutorial
             if (typeof gatewayTour !== 'undefined') {
-                if (typeof startTutorialOnLoad !== 'undefined' && startTutorialOnLoad) {
+                if (typeof startGatewayOnLoad !== 'undefined' && startGatewayOnLoad) {
                     gatewayTour.start();
                 }
             }
 
         });
+        createTutorialLink();
     }
 
     return { init: init,

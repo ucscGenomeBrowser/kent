@@ -415,10 +415,12 @@ if (cfgOptionBooleanDefault("showTutorial", TRUE))
     {
     puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\" />");
     puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
+    jsIncludeFile("tutorialPopup.js", NULL);
     jsIncludeFile("gatewayTutorial.js", NULL);
-
     if (sameOk(cgiOptionalString("startTutorial"), "true"))
-        jsInline("var startTutorialOnLoad = true;");
+        {
+        jsInline("var startGatewayOnLoad = true;");
+        }
     }
 
 #define TIMING_WARNING_BOX_START "<div id='hogWarningRow' class='jwRow'>" \

@@ -464,12 +464,20 @@ if (cfgOptionBooleanDefault("showTutorial", TRUE))
     {
     puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
     puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery-ui.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+
+    jsIncludeFile("tutorialPopup.js", NULL);
     jsIncludeFile("tableBrowserTutorial.js",NULL);
     if (sameOk(cgiOptionalString("startTutorial"), "true"))
         {
+        jsInline("var startTableBrowserOnLoad = true;");
         jsInline("tableBrowserTour.start();");
         }
     }
+
+
 
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
@@ -1133,6 +1141,7 @@ safef(jsText, sizeof jsText,
         );
 jsOnEventById("click", "tbHelpLess", jsText);
 
+
 // When GREAT is selected, disable the other checkboxes and force output to BED
 jsInline(
     "function onSelectGreat() {\n"
@@ -1159,6 +1168,28 @@ jsInline(
     "    maybeDisableNoGenome();\n"
     "    $('input[name=\"hgta_regionType\"]').change(maybeDisableNoGenome);\n"
     "});\n");
+
+jsInline(
+  "function createTutorialLink() {\n"
+  "  // allow the user to bring the tutorials popup via a new help menu button\n"
+  "  var tutorialLinks = document.createElement('li');\n"
+  "  tutorialLinks.id = 'hgGatewayHelpTutorialLinks';\n"
+  "  tutorialLinks.innerHTML = \"<a id='hgGatewayHelpTutorialLinks' href='#showTutorialPopup'>Interactive Tutorials</a>\";\n"
+  "  $(\"#help > ul\")[0].appendChild(tutorialLinks);\n"
+  "  $(\"#hgGatewayHelpTutorialLinks\").on(\"click\", function () {\n"
+  "    // Check to see if the tutorial popup has been generated already\n"
+  "    var tutorialPopupExists = document.getElementById(\"tutorialContainer\");\n"
+  "    if (!tutorialPopupExists) {\n"
+  "      // Create the tutorial popup if it doesn't exist\n"
+  "      createTutorialPopup();\n"
+  "    } else {\n"
+  "      // Otherwise use jQuery UI to open the popup\n"
+  "      $(\"#tutorialContainer\").dialog(\"open\");\n"
+  "    }\n"
+  "  });\n"
+  "}\n"
+  "$(document).ready(createTutorialLink);\n"
+);
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
