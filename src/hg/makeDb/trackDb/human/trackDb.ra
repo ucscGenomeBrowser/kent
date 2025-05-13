@@ -5591,3 +5591,4 @@ searchPriority 20
 include alphaMissense.ra
 
 include mitoMap.ra
+include nmdEscape.ra alpha
