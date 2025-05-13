@@ -8,6 +8,7 @@ longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 cartVersion 6
 html gnomadV4.1
+pennantIcon Updated red ../goldenPath/newsarch.html#051425 "Updated May 14, 2025"
 
     track gnomadVariantsV2
     parent gnomadVariants
