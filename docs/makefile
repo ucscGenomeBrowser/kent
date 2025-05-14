@@ -7,6 +7,12 @@ GITUP = ${GIT} pull
 user:
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER}
 
+alpha:
+	${MAKE} doInstall destDir=${DOCUMENTROOT}
+
+beta:
+	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
+
 doInstall:
 	mkdir -p ${destDir}/docs/
 	pandoc --ascii -f markdown-smart -t html5 -o ${destDir}/docs/index.html index.md --template staticPage.html -t staticPage.lua --lua-filter GBpandocHTMLrules.lua
