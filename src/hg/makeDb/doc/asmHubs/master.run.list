@@ -2004,6 +2004,7 @@
 ./runBuild GCA_048544195.1_ASM4854419v1 fish Menidia_menidia
 ./runBuild GCA_048544215.1_fCoiMys1.hap1 fish Coilia_mystus
 ./runBuild GCA_048544225.1_fCoiMys1.hap2 fish Coilia_mystus
+./runBuild GCA_048544405.1_UofC_Mab_1 invertebrate Megaselia_abdita
 ./runBuild GCA_048565335.1_aManAur1.hap2 vertebrate Mantella_aurantiaca
 ./runBuild GCA_048565345.1_aManAur1.hap1 vertebrate Mantella_aurantiaca
 ./runBuild GCA_048565385.1_mSaiBol1.pri primates Saimiri_boliviensis
