@@ -36,12 +36,15 @@ sub singleFileHub($$$$$$$$$$$$$$) {
   push @fhN, $fh1;
   push @fhN, $fh2;
 
+
   my %liftOverChain;	# key is 'otherDb' name, value is bbi path
   my %liftOverGz;	# key is 'otherDb' name, value is lift.over.gz file path
   my $hasChainNets = `ls -d $buildDir/trackData/lastz.* 2> /dev/null | wc -l`;
   chomp $hasChainNets;
   if ($hasChainNets) {
     printf STDERR "# hasChainNets: %d\t%s\n", $hasChainNets, $asmId;
+    open (my $CN, ">>", "hasChainNets.txt") or die "can not write to hasChainNets.txt";
+    printf $CN "%s\t%d\n", $asmId, $hasChainNets;
     open (CH, "ls -d $buildDir/trackData/lastz.*|") or die "can not ls -d $buildDir/trackData/lastz.*";
     while (my $line = <CH>) {
       chomp $line;
@@ -54,10 +57,12 @@ sub singleFileHub($$$$$$$$$$$$$$) {
       }
      my $loPath = "$buildDir/liftOver/${accessionId}To${OtherDb}.over.chain.gz";
       if (-s "${loPath}") {
+        printf $CN "\t%s\n", "${accessionId}To${OtherDb}.over.chain.gz";
     $liftOverGz{$otherDb} = "liftOver/${accessionId}To${OtherDb}.over.chain.gz";
       }
     }
     close (CH);
+    close ($CN);
   }
   my $fileCount = 0;
   my @tdbLines;
