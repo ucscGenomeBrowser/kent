@@ -33,6 +33,8 @@ User-agent: scoop.it
 User-agent: Seekr
 User-agent: YandexBot
 User-agent: YouBot
+User-agent: Bytespider
+User-agent: Bytedance
 Disallow: /
 
 User-agent: *
