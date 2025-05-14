@@ -237,7 +237,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         dataVersion release 1
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
-        mouseOver $variantOrigStrs in: $author ($journal, $year) - $title
+        mouseOver $hgncSymbol $variantOrigStrs in: $author ($journal, $year) - $title
 
 track caseControl
 compositeTrack on
