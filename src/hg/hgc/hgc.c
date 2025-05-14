@@ -3507,7 +3507,7 @@ if (showEvery && sequencesFound > 0)
     {  
     printf("<BR>\n");
     printf("Input Sequences:<BR>\n");
-    printf("<textarea rows='8' cols='60'>\n");
+    printf("<textarea rows='8' cols='60' readonly>\n");
     printf("%s", sequencesText->string);
     printf("</textarea>\n");
     dyStringFree(&sequencesText);
@@ -7423,7 +7423,7 @@ pslFreeList(&pslList);
 
 printf("<BR>\n");
 printf("Input Sequences:<BR>\n");
-printf("<textarea rows='8' cols='60'>\n");
+printf("<textarea rows='8' cols='60' readonly>\n");
 struct dnaSeq *oSeq, *oSeqList = faReadAllSeq(faName, !isProt);
 for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
     {
