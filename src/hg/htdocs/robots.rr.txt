@@ -5,6 +5,7 @@ User-agent: anthropic-ai
 User-agent: Applebot
 User-agent: AwarioRssBot
 User-agent: AwarioSmartBot
+User-agent: Bytedance
 User-agent: Bytespider
 User-agent: CCBot
 User-agent: ChatGPT-User
@@ -33,8 +34,6 @@ User-agent: scoop.it
 User-agent: Seekr
 User-agent: YandexBot
 User-agent: YouBot
-User-agent: Bytespider
-User-agent: Bytedance
 Disallow: /
 
 User-agent: *
