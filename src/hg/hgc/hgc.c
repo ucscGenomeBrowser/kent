@@ -7418,7 +7418,7 @@ while ((psl = pslNext(lf)) != NULL)
     }
 slSort(&pslList, pslCmpQueryScore);
 lineFileClose(&lf);
-printAlignments(pslList, start, "htcUserAli", "user", "");
+printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
 
 printf("<BR>\n");
