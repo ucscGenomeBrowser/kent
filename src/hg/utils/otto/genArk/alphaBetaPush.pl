@@ -112,23 +112,25 @@ if ($betaCount > 0) {
      my $pathDir = $betaList{$accession};
      printf $lf "# %s %s\n", $accession, $pathDir;
      foreach my $betaTrack (keys %betaContrib) {
-        $cmd = qq(ssh qateam\@hgwbeta mkdir -p "$pathDir/contrib/$betaTrack" 2>&1);
-        printf $lf "%s\n", $cmd;
-        $cmdOut = `$cmd`;
-        if (length($cmdOut) > 1) {
-           printf $lf "%s\n", $cmdOut;
-        } else {
-           printf $lf "# ssh mkdir $pathDir/contrib/$betaTrack successfull\n";
-        }
-        $cmd = qq(rsync --stats -a -L --itemize-changes "$pathDir/contrib/$betaTrack/" "qateam\@hgwbeta:$pathDir/contrib/$betaTrack/" 2>&1);
-        printf $lf "%s\n", $cmd;
-        $cmdOut = `$cmd`;
-        if (length($cmdOut) > 1) {
-           printf $lf "%s\n", $cmdOut;
-        } else {
-           printf $lf "# rsync output mysteriously empty ?\n";
-        }
-     }
+        if ( -d "$pathDir/contrib/$betaTrack" ) {
+          $cmd = qq(ssh qateam\@hgwbeta mkdir -p "$pathDir/contrib/$betaTrack" 2>&1);
+          printf $lf "%s\n", $cmd;
+          $cmdOut = `$cmd`;
+          if (length($cmdOut) > 1) {
+             printf $lf "%s\n", $cmdOut;
+          } else {
+             printf $lf "# ssh mkdir $pathDir/contrib/$betaTrack successfull\n";
+          }
+          $cmd = qq(rsync --stats -a -L --itemize-changes "$pathDir/contrib/$betaTrack/" "qateam\@hgwbeta:$pathDir/contrib/$betaTrack/" 2>&1);
+          printf $lf "%s\n", $cmd;
+          $cmdOut = `$cmd`;
+          if (length($cmdOut) > 1) {
+             printf $lf "%s\n", $cmdOut;
+          } else {
+             printf $lf "# rsync output mysteriously empty ?\n";
+          }
+        }	#	if ( -d "$pathDir/contrib/$betaTrack" )
+     }		#	foreach my $betaTrack (keys %betaContrib)
      $cmd = qq(rsync --stats -a -L --itemize-changes "$pathDir/beta.hub.txt" "qateam\@hgwbeta:$pathDir/hub.txt" 2>&1);
      printf $lf "%s\n", $cmd;
      $cmdOut = `$cmd`;
@@ -138,8 +140,8 @@ if ($betaCount > 0) {
         printf $lf "# rsync output mysteriously empty ? '%s'\n", $cmdOut;
      }
      printf $lf "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?genome=%s&hubUrl=%s/hub.txt\n", $accession, $pathDir;
-  }
-}
+  }	#	foreach my $accession (keys %betaList)
+}	#	if ($betaCount > 0)
 
 if ($publicCount > 0) {
   printf $lf "# found %d public hub.txt files\n", $publicCount;
@@ -149,23 +151,25 @@ if ($publicCount > 0) {
        printf $lf "push %s public to %s\n", $accession, $machName;
        my $pathDir = $publicList{$accession};
        foreach my $publicTrack (keys %publicContrib) {
-          $cmd = qq(ssh qateam\@$machName mkdir -p "$pathDir/contrib/$publicTrack" 2>&1);
-          printf $lf "%s\n", $cmd;
-          $cmdOut = `$cmd`;
-          if (length($cmdOut) > 1) {
-             printf $lf "%s\n", $cmdOut;
-          } else {
-             printf $lf "# ssh mkdir $machName $pathDir/contrib/$publicTrack successfull\n";
-          }
-          $cmd = qq(rsync --stats -a -L --itemize-changes "$pathDir/contrib/$publicTrack/" "qateam\@$machName:$pathDir/contrib/$publicTrack/" 2>&1);
-          printf $lf "%s\n", $cmd;
-          $cmdOut = `$cmd`;
-          if (length($cmdOut) > 1) {
-             printf $lf "%s\n", $cmdOut;
-          } else {
-             printf $lf "# rsync output mysteriously empty ?\n";
-          }
-       }
+          if ( -d "$pathDir/contrib/$publicTrack" ) {
+            $cmd = qq(ssh qateam\@$machName mkdir -p "$pathDir/contrib/$publicTrack" 2>&1);
+            printf $lf "%s\n", $cmd;
+            $cmdOut = `$cmd`;
+            if (length($cmdOut) > 1) {
+               printf $lf "%s\n", $cmdOut;
+            } else {
+               printf $lf "# ssh mkdir $machName $pathDir/contrib/$publicTrack successfull\n";
+            }
+            $cmd = qq(rsync --stats -a -L --itemize-changes "$pathDir/contrib/$publicTrack/" "qateam\@$machName:$pathDir/contrib/$publicTrack/" 2>&1);
+            printf $lf "%s\n", $cmd;
+            $cmdOut = `$cmd`;
+            if (length($cmdOut) > 1) {
+               printf $lf "%s\n", $cmdOut;
+            } else {
+               printf $lf "# rsync output mysteriously empty ?\n";
+            }
+          }	#	if ( -d "$pathDir/contrib/$publicTrack" )
+       }	#	foreach my $publicTrack (keys %publicContrib)
        $cmd = qq(rsync --stats -a -L --itemize-changes "$pathDir/public.hub.txt" "qateam\@$machName:$pathDir/hub.txt" 2>&1);
        printf $lf "%s\n", $cmd;
        $cmdOut = `$cmd`;
@@ -181,6 +185,6 @@ if ($publicCount > 0) {
        }
      }	#	foreach my $machName ( @machList )
   }	#	foreach my $accession (keys %publicList)
-}
+}	#	if ($publicCount > 0)
 
 close ($lf);
