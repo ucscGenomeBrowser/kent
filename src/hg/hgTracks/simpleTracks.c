@@ -2939,7 +2939,7 @@ boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
 int e = -1;
-char mouseOverText[256];
+char mouseOverText[4096];
 boolean isExon = TRUE;
 int picStart = insideX;
 int picEnd = picStart + insideWidth;
