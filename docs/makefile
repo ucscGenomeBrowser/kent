@@ -17,7 +17,9 @@ doInstall: ${DOCS:%=%_install}
 
 %_install: 
 	${MKDIR} ${destDir}/docs/
-	pandoc --ascii -f markdown-smart -t html5 -o ${destDir}/docs/$*.html $*.md --template staticPage.html -t staticPage.lua --lua-filter GBpandocHTMLrules.lua
+	rm -f  ${destDir}/docs/$*.tmp.html
+	pandoc --ascii -f markdown-smart -t html5 -o ${destDir}/docs/$*.tmp.html $*.md --template staticPage.html -t staticPage.lua --lua-filter GBpandocHTMLrules.lua
+	mv -f  ${destDir}/docs/$*.tmp.html ${destDir}/docs/$*.html
 	chmod a+x ${destDir}/docs/$*.html
 
 testPandoc:
