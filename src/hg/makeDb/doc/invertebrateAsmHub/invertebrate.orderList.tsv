@@ -258,7 +258,8 @@ GCF_001412225.1_Nicve_v1.0	beetle N.vespilloides
 GCF_000648695.1_Otau_2.0	beetle O.taurus
 GCF_036711975.1_IU_Otau_3.0	beetle O.taurus (NC 2024)
 GCF_036711695.1_CSIRO_AGI_Zmor_V1	beetle Z.morio (UQ-CSIRO AGI-343-1 2024)
-GCF_001625305.1_Haploidv18h27	Belcher's lancelet
+GCA_019207075.1_Bb-hap	Belcher's lancelet (bbbf 2021)
+GCF_001625305.1_Haploidv18h27	Belcher's lancelet (outbred BF01 2016)
 GCA_019425515.1_ASM1942551v1	bird cherry-oat aphid (Rp-YL-2016 2021)
 GCF_020882245.1_ASM2088224v1	bird cherry-oat aphid (XX-2018 2021)
 GCF_963676685.1_xbMytEdul2.2	bivalve M.edulis (primary hap 2024)
@@ -481,8 +482,9 @@ GCA_021461655.1_ASM2146165v1	flatworm S.japonicum (SjaV3_Hu 2022)
 GCF_000237925.1_ASM23792v2	flatworm S.mansoni
 GCF_019202785.1_ASM1920278v2	fleshy prawn (Huanghai No. 1 2021)
 GCF_024586455.1_APGP_CSIRO_Bneo_wtdbg2-racon-allhic-juicebox.fasta_v2	flies B.neohumeralis (Rockhampton 2022)
+GCA_015852565.1_bf_hap-2	Florida amphioxus (bjbf hap2 2020)
 GCF_003227725.1_Cflo_v7.5	Florida carpenter ant
-GCF_000003815.2_Bfl_VNyyK	Florida lancelet
+GCF_000003815.2_Bfl_VNyyK	Florida lancelet (S238N-H82 2020)
 GCF_027943255.1_idAnaObli1_1.0	fly A.obliqua (idAnaObli1 2023)
 GCF_014529535.1_BU_Bcop_v1	fly B.coprophila (v1 Holo2 2020 refseq)
 GCA_014529535.2_BU_Bcop_v2	fly B.coprophila (v2 Holo2 2023 genbank)
@@ -635,8 +637,6 @@ GCF_009193385.2_Nvit_psr_1.1	jewel wasp
 GCA_019049465.1_Diul.assembly.v1.1	julia butterfly
 GCA_002205965.3_ASM220596v3	K.alvarezzi red algae (kp 2020)
 GCA_001663935.1_Asyluc0.1	lancelets A.lucayanum (AD20110701 2016)
-GCA_019207075.1_Bb-hap	lancelets B.floridae x B.belcheri (bbbf 2021)
-GCA_015852565.1_bf_hap-2	lancelets B.floridae x B.japonicum (bjbf 2020)
 GCF_905147105.1_ilPieBrab1.1	large cabbage white (refseq 2021)
 GCA_905220335.1_ilNocPron1.1	large yellow underwing
 GCA_029229535.1_icDioCarn1.1	larger tamarisk beetle (Uzbek primary hap 2023)
