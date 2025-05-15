@@ -187,12 +187,14 @@ sub writeHubTxtFiles($$$$$$$$$$$$$$) {
     if (3 == $fileCount) {	# writing to beta.hub.txt
       if (%betaTrackDb) {
          foreach my $contribTrack (sort keys %betaTrackDb) {
+           printf $fh "\n";	# ensure there is a blank line between entries
            printf $fh "%s\n", $betaTrackDb{$contribTrack};
          }
       }
     } else {			# the other 3 get the public tracks
       if (%publicTrackDb) {
          foreach my $contribTrack (sort keys %publicTrackDb) {
+           printf $fh "\n";	# ensure there is a blank line between entries
            printf $fh "%s\n", $publicTrackDb{$contribTrack};
          }
       }
