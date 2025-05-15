@@ -28,6 +28,9 @@ if (tdb == NULL)
 if ((trackDbSettingClosestToHome(tdb, "color") != NULL) || trackDbSettingOff(tdb, OPT_ITEM_RGB))
     return FALSE;
 
+if (trackDbSettingOn(tdb, OPT_ITEM_RGB))
+    return TRUE;
+
 if ((cfgOptionBooleanDefault("alwaysItemRgb", TRUE) == FALSE))
     return FALSE;
 
