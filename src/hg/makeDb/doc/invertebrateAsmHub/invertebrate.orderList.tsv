@@ -17,6 +17,8 @@ GCA_000826365.1_Acanthamoeba_royreba	A.royreba (2015)
 GCA_027943295.1_ASM2794329v1	A.sp. (SK_2022a 2023)
 GCA_027943245.1_ASM2794324v1	A.sp. (SK_2022b 2023)
 GCA_027944975.1_ASM2794497v1	A.sp. (SK_2022c 2023)
+GCA_040954625.2_keBalMisa1.hap1	acorn worm (v2 HW-2024a hap1 2025)
+GCA_040954595.2_keBalMisa1.hap2	acorn worm (v2 HW-2024a hap2 2025)
 GCA_905333045.1_ilLysBell1.1	Adonis blue
 GCA_003951495.1_AfunF3	African malaria mosquito (FUMOZ 2018)
 GCF_000005575.2_AgamP3	African malaria mosquito (PEST 2006)
@@ -36,9 +38,6 @@ GCA_022747625.1_ioHetAmer1.0.a	American ruby spot damselfly (1083.01 alternate h
 GCA_022747635.1_ioHetAmer1.0.p	American ruby spot damselfly (1083.01 primary hap 2022)
 GCF_022747635.1_ioHetAmer1.1.p	American ruby spot damselfly (primary hap 2022)
 GCA_900088365.1_Bl71nemr	amphioxus (2018)
-GCA_035149815.1_klBraLanc5.hap1	amphioxus (hap1 2024)
-GCA_964187965.1_klBraLanc2.hap1.1	amphioxus (hap1.1 2024)
-GCF_035083965.1_klBraLanc5.hap2	amphioxus (hap2 2024 refseq)
 GCF_000764305.2_Hazt_2.0.2	amphipods H.azteca (HAZT.00-mixed v2.0.2 2019)
 GCA_001587735.2_Phaw_5.0	amphipods P.hawaiensis (Chicago-F 2018)
 GCA_903995115.1_Adeanei_nanopore_chromosomes	Angomonas (Crithidia deanei Carvalho ATCC PRA-265 2020)
@@ -468,6 +467,9 @@ GCF_963855985.1_ilOstNubi1.1	European corn borer (primary hap 2023)
 GCF_947568905.1_xbOstEdul1.1	European flat oyster (primary hap 2022)
 GCF_910589235.1_iyVesCrab1.2	European hornet
 GCF_001901225.1_ASM190122v2	European house dust mite
+GCA_035149815.1_klBraLanc5.hap1	European lancelet (hap1 2024)
+GCA_964187965.1_klBraLanc2.hap1.1	European lancelet (hap1.1 2024)
+GCF_035083965.1_klBraLanc5.hap2	European lancelet (hap2 2024 refseq)
 GCF_001465965.1_Pdom_r1.2	European paper wasp
 GCF_905147045.1_ilAglIoxx1.1	European peacock (2021 refseq)
 GCF_902459465.1_eAstRub1.3	European starfish (2020)
@@ -609,8 +611,6 @@ GCF_029227915.1_HSymV2.1	H.symbiolongicarpus hydrozoans (clone_291-10 2023)
 GCA_014858695.1_ASM1485869v1	hairy maggot blowfly (CPM2020 2020)
 GCF_041260155.1_AS_Pfla_20210202	hemichordates P.flava (L36383 2024)
 GCF_000003605.2_Skow_1.1	hemichordates S.kowalevskii
-GCA_040954625.2_keBalMisa1.hap1	hemichordates Saccoglossus HW-2024a (v2 hap1 2025)
-GCA_040954595.2_keBalMisa1.hap2	hemichordates Saccoglossus HW-2024a (v2 hap2 2025)
 GCA_905404265.1_ilFabAdip1.1	high brown fritillary
 GCF_014066325.1_ASM1406632v1	Himalayan honeybee
 GCA_905187575.1_ilCelArgi3.1	holly blue
