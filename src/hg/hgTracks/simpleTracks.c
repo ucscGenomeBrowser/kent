@@ -2661,7 +2661,7 @@ if (*pNewWinEnd > virtSeqBaseCount)
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
-#define EXONTEXTLEN 256
+#define EXONTEXTLEN 4096
 
 static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase, int endPhase, char *buf) 
 /* Write mouseover text that describes the exon's phase into buf[EXONTEXTLEN].

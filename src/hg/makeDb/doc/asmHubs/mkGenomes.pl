@@ -23,18 +23,89 @@ if ($argc != 3) {
   exit 255;
 }
 
+my $home = $ENV{'HOME'};
+my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
+my @stageRelease = qw( beta public );
+my %publicContrib;	# key is contrib directory name, value is 1
+my %betaContrib;	# key is contrib directory name, value is 1
+## instead of value 1, maybe should be a listing of assemblies with this
+##  track.  Will see if that is needed later.
+
+my $srcTrackDb = "$home/kent/src/hg/makeDb/trackDb";
+
+if ( -s "$srcTrackDb/betaGenArk.txt" ) {
+
+  open (my $fh, "<", "$srcTrackDb/betaGenArk.txt") or die "can not read $srcTrackDb/betaGenArk.txt";
+  while (my $contribName = <$fh>) {
+     next if ($contribName =~ m/^#/);
+     chomp $contribName;
+     $betaContrib{$contribName} = 1;
+  }
+  close ($fh);
+}
+if ( -s "$srcTrackDb/publicGenArk.txt" ) {
+
+  open (my $fh, "<", "$srcTrackDb/publicGenArk.txt") or die "can not read $srcTrackDb/publicGenArk.txt";
+  while (my $contribName = <$fh>) {
+     next if ($contribName =~ m/^#/);
+     chomp $contribName;
+     $publicContrib{$contribName} = 1;
+  }
+  close ($fh);
+}
+
 my $downloadHost = "hgwdev";
-my @blatHosts = qw( dynablat-01 dynablat-01 );
-my @blatPorts = qw( 4040 4040 );
+my @blatHosts = qw( dynablat-01 dynablat-01 dynablat-01 dynablat-01 );
+my @blatPorts = qw( 4040 4040 4040 4040 );
 my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
-################### writing out hub.txt file, twice ##########################
-sub singleFileHub($$$$$$$$$$$$$$) {
+################### writing out hub.txt file, four times ##########################
+sub writeHubTxtFiles($$$$$$$$$$$$$$) {
   my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority, $hugeGenome) = @_;
   my @fhN;
-  push @fhN, $fh1;
-  push @fhN, $fh2;
+  push @fhN, $fh1;      # file 1
+  push @fhN, $fh2;      # file 2
+  # the order of these file handles is important since different contents
+  # will be output to the 4th one (beta.hub.txt)
+  # the first three will have identical contents, representing the 'public'
+  # version of hub.txt.  The fourth will be the beta.hub.txt which could have
+  # a different set of contrib tracks.
+
+  # check for contrib tracks that are to go public
+  my %publicTrackDb;	# key is track name, value is trackDb.txt content
+  my $publicCount = 0;
+  foreach my $contribTrack (keys %publicContrib) {
+     my $contribDir = "$buildDir/contrib/$contribTrack";
+     if ( -d "${contribDir}" ) {
+         my $contribTdb = "$contribDir/${contribTrack}.trackDb.txt";
+         if ( -s "${contribTdb}" ) {
+            my $tdb = `cat "${contribTdb}"`;
+            chomp $tdb;
+            $publicTrackDb{$contribTrack} .= $tdb;
+            ++$publicCount;
+         }
+     }
+  }
+  # check for contrib tracks that are to go beta
+  my %betaTrackDb;	# key is track name, value is trackDb.txt content
+  my $betaCount = 0;
+  foreach my $contribTrack (keys %betaContrib) {
+     my $contribDir = "$buildDir/contrib/$contribTrack";
+     if ( -d "${contribDir}" ) {
+         my $contribTdb = "$contribDir/${contribTrack}.trackDb.txt";
+         if ( -s "${contribTdb}" ) {
+            my $tdb = `cat "${contribTdb}"`;
+            chomp $tdb;
+            $betaTrackDb{$contribTrack} .= $tdb;
+            ++$betaCount;
+         }
+     }
+  }
+  open (my $ph, ">", "$buildDir/public.hub.txt") or die "can not write to $buildDir/public.hub.txt";
+  push @fhN, $ph;	# file 3
+  open (my $bh, ">", "$buildDir/beta.hub.txt") or die "can not write to $buildDir/beta.hub.txt";
+  push @fhN, $bh;	# file 4
 
   my %liftOverChain;	# key is 'otherDb' name, value is bbi path
   my %liftOverGz;	# key is 'otherDb' name, value is lift.over.gz file path
@@ -42,6 +113,8 @@ sub singleFileHub($$$$$$$$$$$$$$) {
   chomp $hasChainNets;
   if ($hasChainNets) {
     printf STDERR "# hasChainNets: %d\t%s\n", $hasChainNets, $asmId;
+    open (my $CN, ">>", "hasChainNets.txt") or die "can not write to hasChainNets.txt";
+    printf $CN "%s\t%d\n", $asmId, $hasChainNets;
     open (CH, "ls -d $buildDir/trackData/lastz.*|") or die "can not ls -d $buildDir/trackData/lastz.*";
     while (my $line = <CH>) {
       chomp $line;
@@ -54,10 +127,12 @@ sub singleFileHub($$$$$$$$$$$$$$) {
       }
      my $loPath = "$buildDir/liftOver/${accessionId}To${OtherDb}.over.chain.gz";
       if (-s "${loPath}") {
+        printf $CN "\t%s\n", "${accessionId}To${OtherDb}.over.chain.gz";
     $liftOverGz{$otherDb} = "liftOver/${accessionId}To${OtherDb}.over.chain.gz";
       }
     }
     close (CH);
+    close ($CN);
   }
   my $fileCount = 0;
   my @tdbLines;
@@ -109,13 +184,28 @@ sub singleFileHub($$$$$$$$$$$$$$) {
     foreach my $tdbLine (@tdbLines) {
       printf $fh "%s\n", $tdbLine;
     }
+    if (3 == $fileCount) {	# writing to beta.hub.txt
+      if (%betaTrackDb) {
+         foreach my $contribTrack (sort keys %betaTrackDb) {
+           printf $fh "%s\n", $betaTrackDb{$contribTrack};
+         }
+      }
+    } else {			# the other 3 get the public tracks
+      if (%publicTrackDb) {
+         foreach my $contribTrack (sort keys %publicTrackDb) {
+           printf $fh "%s\n", $publicTrackDb{$contribTrack};
+         }
+      }
+    }
     ++$fileCount;
   }
-}	#	sub singleFileHub($$$$$$$$$$$$$$)
+  foreach my $fh (@fhN) {
+    close ($fh);
+  }
+  close ($bh);
+}	#	sub writeHubTxtFiles($$$$$$$$$$$$$$)
 
 ##############################################################################
-my $home = $ENV{'HOME'};
-my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 
 my $blatHost = shift;
 my $blatPort = shift;
@@ -287,7 +377,7 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   $localHubTxt = "$buildDir/${asmId}.singleFile.hub.txt";
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
 
-  singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId, $asmDate,
+  writeHubTxtFiles(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId, $asmDate,
 	$defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority,
            $hugeGenome);
 

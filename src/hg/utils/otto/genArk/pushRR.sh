@@ -3,11 +3,11 @@
 # exit on any error
 set -beEu -o pipefail
 
-export expectName="hgwdev"
+export expectHost="hgwdev"
 
-export uName=$(hostname -s)
-if [[ "${uName}" != "${expectName}" ]]; then
-  printf "ERROR: must run this on %s !  This is: %s\n" "${expectName}" "${uName}" 1>&2
+export hostName=$(hostname -s)
+if [[ "${hostName}" != "${expectHost}" ]]; then
+  printf "ERROR: must run this on %s !  This is: %s\n" "${expectHost}" "${hostName}" 1>&2
   exit 255
 fi
 
@@ -18,11 +18,16 @@ export logDir="/hive/data/inside/genArk/logs/${Y}/${M}"
 
 mkdir -p "${logDir}"
 
-
+logFile="${logDir}/rsync.${DS}"
 for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
 do
-  logFile="${logDir}/rsync.GCA.${M}.${DS}.gz"
-  rsync --delete --stats -a -L --itemize-changes --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" "/gbdb/genark/GCA/" "qateam@${M}:/gbdb/genark/GCA/" 2>&1 | gzip -c > "${logFile}" 2>&1
-  logFile="${logDir}/rsync.GCF.${M}.${DS}.gz"
-  rsync --delete --stats -a -L --itemize-changes --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" "/gbdb/genark/GCF/" "qateam@${M}:/gbdb/genark/GCF/" 2>&1 | gzip -c > "${logFile}" 2>&1
+  printf "### sending to machine %s\n" "${M}" >> "${logFile}"
+  time (rsync --delete --stats -a -L --itemize-changes --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="contrib/" "/gbdb/genark/GCA/" "qateam@${M}:/gbdb/genark/GCA/") >> "${logFile}" 2>&1
+  time (rsync --delete --stats -a -L --itemize-changes --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="contrib/" "/gbdb/genark/GCF/" "qateam@${M}:/gbdb/genark/GCF/") >> "${logFile}" 2>&1
 done
+
+cd /hive/data/inside/genArk
+
+printf "### running alphaBetaPush \n" >> "${logFile}"
+time (./alphaBetaPush.pl)  >> "${logFile}" 2>&1
+gzip "${logFile}"
