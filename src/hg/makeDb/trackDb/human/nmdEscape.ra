@@ -1,0 +1,22 @@
+track nmdEsc
+shortLabel NMD Escape
+longLabel NMD Escape: Nonsense mediated decay Escape regions
+superTrack on
+group phenDis
+type bed 3
+
+        track nmdEscGencode
+        shortLabel NMD Escape Gencode
+        longLabel NMD Escape regions for Gencode transcripts
+        visibility dense
+        type bigBed 12 +
+        #urls url=$$
+        bigDataUrl /gbdb/$D/nmdEsc/nmdEscGencode.bb
+        noScoreFilter on
+        #exonNumbers off
+        mouseOverField _mouseOver
+        itemRgb on
+        dataVersion /gbdb/$D/nmdEsc/nmdEscGencode.version.txt
+        parent nmdEsc pack
+
+
