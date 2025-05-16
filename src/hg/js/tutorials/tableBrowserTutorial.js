@@ -250,9 +250,7 @@
                   'interested in a few columns, converting to a file format, or creating a '+
                   'custom track from the data, alter this drop-down option.'+
                   '<br><br>'+
-                  '<img src="/images/tutorialImages/tableBrowserOutputDropDown.png" width="350">' +
-                  '<br>'+
-                  'Alternatively, you can also send the Table Browser output to Galaxy or GREAT. ',
+                  '<img src="/images/tutorialImages/tableBrowserOutputDropDown.png" width="350">',
             attachTo: {
                 element: '#output-select',
                 on: 'bottom-start'
