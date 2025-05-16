@@ -3072,6 +3072,7 @@ for (ref = exonList; TRUE; )
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
                                         dyStringPrintf(codonDy, "<b>cDNA: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    // if you change the text below, also change hgTracks:mouseOverToExon
                                     dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
@@ -3090,6 +3091,7 @@ for (ref = exonList; TRUE; )
                         sep = "<br>";
 
                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
+                // if you change the text below, also change hgTracks:mouseOverToExon
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
                             existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
 

@@ -2749,10 +2749,23 @@ var rightClick = {
     // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
     mouseOverToLabel: function(title)
     {
-        if (title.search(/<b>Transcript:<[/]b>/) !== -1) {
+        if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
             title = title.split("<br>")[0].split("</b>")[1];
         }
         return title;
+    },
+
+    // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
+    // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
+    // We don't have the value of the tdb variable "exonNumbers" here, so just use a heuristic to see if it's on
+    mouseOverToExon: function(title)
+    {
+        var exonNum = 0;
+        var exonRe = /(Exon) ([1-9]+) /;
+        var matches = exonRe.exec(title);
+        if (matches !== null && matches[2].length > 0)
+            exonNum = matches[2];
+        return exonNum;
     },
 
     load: function (img)
@@ -2877,11 +2890,7 @@ var rightClick = {
                     o = {};
                     var any = false;
                     var title = rightClick.selectedMenuItem.title || "feature";
-                    var exonNum = 0;
                     var maxLength = 60;
-                    if (title.length > maxLength) {
-                        title = title.substring(0, maxLength) + "...";
-                    }
 
                     if ((isGene || isHgc || id === "wikiTrack") && href.indexOf("i=mergedItem") === -1) {
                         // Add "Open details..." item
@@ -2907,12 +2916,17 @@ var rightClick = {
                             }
                         }
 
-                        // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
-                        // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
-                        // We don't have the value of the tdb variable "exonNumbers" here, so just use a heuristic to see if it's on
-                        
+                        // pick out the exon number from the mouseover text
+                        // Probably should be a data-exonNum tag on the DOM element
+                        var exonNum = rightClick.mouseOverToExon(title);
+
+                        // remove special genePred exon mouseover html text
                         // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
                         title = rightClick.mouseOverToLabel(title);
+
+                        if (title.length > maxLength) {
+                            title = title.substring(0, maxLength) + "...";
+                        }
 
                         if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
                                             || href.indexOf('g=unip') !== -1 
