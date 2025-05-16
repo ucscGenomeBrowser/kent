@@ -2671,7 +2671,7 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
    if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
 {
 
-static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Phase?</a><br>";
+static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Help</a><br>";
 
 if (startPhase==-1) // UTRs don't have a frame at all
     {
