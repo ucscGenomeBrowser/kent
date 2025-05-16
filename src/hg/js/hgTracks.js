@@ -2480,6 +2480,12 @@ var rightClick = {
             // Launches the popup but shields the ajax with a waitOnFunction
             popUp.hgTrackUi( rightClick.selectedMenuItem.id, false );  
 
+        } else if (cmd === 'hgTrackUi_popup_description') {
+
+            // Launches the popup but shields the ajax with a waitOnFunction
+	    warn("DEBUG cmd === 'hgTrackUi_popup_description'");
+            popUp.hgTrackUi( rightClick.selectedMenuItem.id, true );  
+
         } else if (cmd === 'hgTrackUi_follow') {
 
             url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
@@ -3105,6 +3111,13 @@ var rightClick = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");
                                 return true; }
+                        };
+
+                        o[rightClick.makeImgTag("wrench.png")+" Track Description "+rec.shortLabel] = {
+                            onclick: function(menuItemClicked, menuObject) {
+                                rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
+                                return true; }
+
                         };
                     }
                     if (rec.parentTrack) {
