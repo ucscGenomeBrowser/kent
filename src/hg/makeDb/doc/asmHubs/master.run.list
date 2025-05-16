@@ -1585,6 +1585,7 @@
 ./runBuild GCA_028022725.1_fLycPai1.hap2 fish Lycodopsis_pacificus
 ./runBuild GCA_028022735.1_bGypBar2.pri birds Gypaetus_barbatus
 ./runBuild GCA_028023285.1_mBalRic1.hap2 mammals Balaenoptera_ricei
+./runBuild GCA_028142955.1_Pfu_4.1A invertebrate Pinctada_fucata
 ./runBuild GCA_028372415.1_mMacEug1.pri mammals Notamacropus_eugenii
 ./runBuild GCA_028372415.2_mMacEug1.pri_v2 mammals Notamacropus_eugenii
 ./runBuild GCA_028389875.1_bPtePen1.pri birds Rhea_pennata

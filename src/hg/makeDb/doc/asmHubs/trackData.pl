@@ -20,6 +20,26 @@ if ($argc < 3) {
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
+my $sciNameOverrideFile = "$toolsDir/sciNameOverride.txt";
+my %sciNameOverride;	# key is accession, value is corrected scientific name
+my %taxIdOverride;	# key is accession, value is corrected taxId
+			# keys for both of those can also be the asmId
+
+if ( -s "${sciNameOverrideFile}" ) {
+  open (my $sn, "<", "${sciNameOverrideFile}") or die "can not read ${sciNameOverrideFile}";
+  while (my $line = <$sn>) {
+    next if ($line =~ m/^#/);
+    next if (length($line) < 2);
+    chomp $line;
+    my ($accO, $asmIdO, $sciNameO, $taxIdO) = split('\t', $line);
+    $sciNameOverride{$accO} = $sciNameO;
+    $sciNameOverride{$asmIdO} = $sciNameO;
+    $taxIdOverride{$accO} = $taxIdO;
+    $taxIdOverride{$asmIdO} = $taxIdO;
+  }
+  close ($sn);
+}
+
 
 my $testOutput = 0;
 my $spliceOut = -1;
@@ -482,6 +502,7 @@ sub tableContents() {
     my $gapCount = gapStats($buildDir, $asmId);
     $overallGapCount += $gapCount;
     my $sciName = "notFound";
+    $sciName = $sciNameOverride{$accessionId} if (defined($sciNameOverride{$accessionId}));
     my $commonName = "notFound";
     my $asmDate = "notFound";
     my $itemsFound = 0;

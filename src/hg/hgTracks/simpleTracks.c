@@ -2671,7 +2671,7 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
    if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
 {
 
-static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Phase?</a><br>";
+static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Help</a><br>";
 
 if (startPhase==-1) // UTRs don't have a frame at all
     {
@@ -2939,7 +2939,7 @@ boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
 int e = -1;
-char mouseOverText[256];
+char mouseOverText[4096];
 boolean isExon = TRUE;
 int picStart = insideX;
 int picEnd = picStart + insideWidth;
@@ -3066,11 +3066,13 @@ for (ref = exonList; TRUE; )
                                     char *oldMouseOver = lf->mouseOver;
                                     lf->mouseOver = NULL;
                                     dyStringClear(codonDy);
+                                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
                                         dyStringPrintf(codonDy, "<b>cDNA: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    // if you change the text below, also change hgTracks:mouseOverToExon
                                     dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
@@ -3088,6 +3090,8 @@ for (ref = exonList; TRUE; )
                     if (!isEmpty(existingText))
                         sep = "<br>";
 
+                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
+                // if you change the text below, also change hgTracks:mouseOverToExon
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
                             existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
 
