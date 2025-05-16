@@ -2483,7 +2483,6 @@ var rightClick = {
         } else if (cmd === 'hgTrackUi_popup_description') {
 
             // Launches the popup but shields the ajax with a waitOnFunction
-	    warn("DEBUG cmd === 'hgTrackUi_popup_description'");
             popUp.hgTrackUi( rightClick.selectedMenuItem.id, true );  
 
         } else if (cmd === 'hgTrackUi_follow') {
