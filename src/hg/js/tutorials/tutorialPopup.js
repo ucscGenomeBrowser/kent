@@ -43,9 +43,10 @@ window.createTutorialPopup = function() {
           <a href="#" id="gatewayTutorial">Gateway tutorial</a></td>
           <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
           <small>
-          An introductory tutorial to navigate the UCSC Gateway page.
-          Learn how to switch between assemblies, search for a GenArk hub, view chromosome
-          sequences, and more.</small>
+          An introductory tutorial covering key features of the UCSC Gateway page.
+          Learn how to locate and search genome assemblies, view the assembly
+          browser sequences page, examine detailed assembly information, and more.
+          </small>
           </td></tr>
     </table>`;
 

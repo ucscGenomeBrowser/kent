@@ -1,0 +1,11 @@
+<h2 id="description">UCSC Tiberius Track</h2>
+<p>The protein-coding genes were predicted with Tiberius in <i>ab initio</i> mode. The soft-masked genome was input only. The command was:</p>
+<code>tiberius.py --genome genome.fa --out tiberius.gtf</code>
+<p><a href="https://bioinf.uni-greifswald.de/bioinf/tiberius/genes/tib-tbl.html">Table with predicted coordinates, protein sequences and coding sequences of all mammals.</a></p>
+<p>Download code and see accuracy statistics on the <a href="https://github.com/Gaius-Augustus/Tiberius">Tiberius GitHub page</a>.</p>
+<p>Tiberius is a deep learning model that combines a HMM layer with other sequence-to-sequence models (convolutional neural networks, LSTM).</p>
+<p>Tiberius was trained on 32 mammalian genomes that did not include any <i>Hominidae</i> (see supplements of below preprint).</p>
+<h2 id="credits">Contact</h2>
+<p>Questions should be directed to <a href="mailto:lars.gabriel@uni-greifswald.de">Lars Gabriel</a> or <a href="mailto:mario.stanke@uni-greifswald.de">Mario Stanke</a>.</p>
+<h2 id="reference">Reference</h2>
+<a href="https://academic.oup.com/bioinformatics/article/40/12/btae685/7903281">Tiberius: End-to-End Deep Learning with an HMM for Gene Prediction. Lars Gabriel, Felix Becker, Katharina J. Hoff and Mario Stanke, <i>Bioinformatics</i> 2024;</a>, https://doi.org/10.1093/bioinformatics/btae685
