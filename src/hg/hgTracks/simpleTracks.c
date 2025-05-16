@@ -3066,6 +3066,7 @@ for (ref = exonList; TRUE; )
                                     char *oldMouseOver = lf->mouseOver;
                                     lf->mouseOver = NULL;
                                     dyStringClear(codonDy);
+                                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
@@ -3088,6 +3089,7 @@ for (ref = exonList; TRUE; )
                     if (!isEmpty(existingText))
                         sep = "<br>";
 
+                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
                             existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
 
