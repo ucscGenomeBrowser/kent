@@ -753,7 +753,7 @@ def uploadFiles(tdbDir, hubName):
 
             # skip files that have not changed their mtime since last upload
             if localPath in uploadCache:
-                cacheMtime = uploadCache[fpath]["mtime"]
+                cacheMtime = uploadCache[localPath]["mtime"]
                 if localMtime == cacheMtime:
                     logging.info("%s: file mtime unchanged, not uploading again" % localPath)
                     continue
@@ -777,7 +777,7 @@ def uploadFiles(tdbDir, hubName):
                     "hubName" : hubName,
                     "hubtools" : "true",
                     "fileType": fileType,
-                    "lastModified" : str(int(localMtime)),
+                    "lastModified" : str(int(localMtime)*1000),
             }
 
             logging.info(f"Uploading {localPath}, meta {meta}")
