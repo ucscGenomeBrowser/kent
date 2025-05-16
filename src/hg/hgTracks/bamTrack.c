@@ -24,7 +24,7 @@
 #include "hgConfig.h"
 #include "chromAlias.h"
 
-#define TOOMANYITEMSERROR "Maximum number of BAM items exceeded. Perhaps zooming in a bit will help?"
+#define TOOMANYITEMSERROR "Too many items in display (zoom in)"
 
 struct bamTrackData
     {
@@ -598,7 +598,7 @@ errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     tg->items = NULL;
-    tg->networkErrMsg = cloneString("Maximum number of BAM items exceeded. Perhaps zooming in a bit will help?");
+    tg->networkErrMsg = cloneString("Too many items in display (zoom in)");
     tg->drawItems = bigDrawWarning;
     tg->totalHeight = bigWarnTotalHeight;
     }
