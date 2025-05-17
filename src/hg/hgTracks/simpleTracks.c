@@ -11668,7 +11668,7 @@ if (!tg->limitedVisSet)
                 tg->visibility = tg->limitedVis = tvFull;
             }
         else
-            tg->limitedVis = vis;
+            tg->limitedVis = (vis == tvShow) ? tvFull : vis;
         }
     else
         {
