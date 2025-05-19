@@ -5,41 +5,36 @@ import sys
 import argparse
 import re
 
-def get_url(url):
-    page_count = 1
-    jData = dict()
-    while True:
-        try:
-            new_url = "{}{}".format(url, page_count)
-            myResponse = requests.get(new_url)
-            if (myResponse.ok):
-                jData = json.loads(myResponse.content.decode())
+def getAllPages(url, results=[]):
+    " recursively download all pages. Stack should be big enough "
+    try:
+        myResponse = requests.get(url)
+        if (myResponse.ok):
+            jData = json.loads(myResponse.content.decode())
+            # If jData is empty create, else append
+            if "error" in jData.keys() or not "results" in jData.keys():
+                raise Exception("Error in keys when downloading %s" % url)
 
-                # If jData is empty create, else append
-                if "error" in jData.keys():
-                    raise Exception("{} page count is missing.".format(page_count))
-            else:
-                print('Json data retrieved')
-                break
-        except:
-            if page_count > 1:
-                print('Json data retrieved')
-            else:
-                print("Unable to request URL")
-                sys.exit()
-            break
-        print(page_count)
-        page_count += 1
-    return jData
+            if "count" in jData and not "page" in url:
+                print("API says that there are %d results for url %s" % (jData["count"], url))
+            results.extend(jData["results"])
+
+            if "next" in jData and jData["next"] is not None: # need to get next URL
+                return getAllPages(jData["next"], results)
+        else:
+            raise Exception("Error in object when downloading %s" % url)
+    except:
+        raise Exception("HTTP Error when downloading %s" % url)
+    return results
 
 def downloadCnvs():
     Error = True
     continuous_count=0
-    url = "https://panelapp.genomicsengland.co.uk/api/v1/regions/?page="
-    jData = get_url(url)
+    url = "https://panelapp.genomicsengland.co.uk/api/v1/regions/?format=json"
+    res = getAllPages(url)
 
-    res = jData['results']
     num_gene_data = len(res)
+    print("Got %d CNVs" % num_gene_data)
     count = 0
     continuous_count = 0
     hg19_dict = dict()
@@ -65,55 +60,56 @@ def downloadCnvs():
         
         confidence_level = res[count]['confidence_level']
 
-        rgb_dict = {'3': '0,255,0', '2': '255,191,0', '1':'255,0,0'}
+        rgb_dict = {'0' : '100,100,100', '3': '0,255,0', '2': '255,191,0', '1':'255,0,0'}
         itemRgb = rgb_dict[confidence_level]
         
         entity_name = res[count]['entity_name']
         entity_type = res[count]['entity_type']
         evidence = ' '.join(res[count]['evidence'])
 
-        haploinsufficiency_score = res[count]['haploinsufficiency_score']
+        haploinsufficiency_score = res[count].get('haploinsufficiency_score')
         if not haploinsufficiency_score:
             haploinsufficiency_score = ''
 
-        moi = res[count]['mode_of_inheritance']
+        moi = res[count].get('mode_of_inheritance')
         if not moi:
             moi = ''
 
-        disease_group = res[count]['panel']['disease_group']
+        disease_group = res[count]['panel'].get('disease_group')
         if not disease_group:
             disease_group = ''
 
-        disease_sub_group = res[count]['panel']['disease_sub_group']
+        disease_sub_group = res[count]['panel'].get('disease_sub_group')
         if not disease_sub_group:
             disease_sub_group = ''
 
         # idd = Panel ID
-        idd = res[count]['panel']['id']
+        idd = res[count]['panel'].get('id')
         if not idd:
             idd = ''
 
-        panel_name = res[count]['panel']['name']
+        panel_name = res[count]['panel'].get('name')
         if not panel_name:
             panel_name = ''
         
-        relevant_disorders = ' '.join(res[count]['panel']['relevant_disorders'])
+        relevant_disorders = ' '.join(res[count]['panel'].get('relevant_disorders', []))
         if not relevant_disorders:
             relevant_disorders = ''
 
-        status = res[count]['panel']['status']
+        status = res[count]['panel'].get('status')
         if not status:
             status = ''
         
         '''
-        types = res[count]['panel']['types']
-        types = str(types).replace("{","").replace("}", "").replace("'", "")
+        types = res[count]['panel'].get['types')
         if not types:
             types = ''
-        types = types[1:-1]
+        else:
+            types = str(types).replace("{","").replace("}", "").replace("'", "")
+            types = types[1:-1]
         '''
 
-        types = res[count]['panel']['types'][0]['name']
+        types = res[count]['panel']['types'][0].get('name')
 
         version = res[count]['panel']['version']
         if float(version) < 0.99:
@@ -121,11 +117,11 @@ def downloadCnvs():
         if not version:
             version = ''
 
-        penetrance = res[count]['penetrance']
+        penetrance = res[count].get('penetrance')
         if not penetrance:
             penetrance = ''
 
-        phenotypes = ' '.join(res[count]['phenotypes'])
+        phenotypes = ' '.join(res[count].get('phenotypes', []))
         if not phenotypes:
             phenotypes = ''
 
@@ -138,15 +134,17 @@ def downloadCnvs():
         if not tags:
             tags = ''
     
-        triplosensitivity_score = res[count]['triplosensitivity_score']
+        triplosensitivity_score = res[count].get('triplosensitivity_score')
         if not triplosensitivity_score:
             triplosensitivity_score = ''
     
-        type_of_variants = res[count]['type_of_variants']
+        type_of_variants = None
+        if "type_of_variants" in res[count]:
+            type_of_variants = res[count]['type_of_variants']
         if not type_of_variants:
             type_of_variants = ''
 
-        verbose_name = res[count]['verbose_name']            
+        verbose_name = res[count].get('verbose_name')
         if not verbose_name:
             verbose_name = ''    
 
@@ -195,6 +193,4 @@ def downloadCnvs():
     #pd_38_table.to_csv('hg38_region_header_sorted.tsv', sep='\t', index=False) 
     return pd_38_table
 
-
-#if __name__ == "__main__":
-    #main()
+#print(len(downloadCnvs()))

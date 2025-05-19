@@ -2671,8 +2671,6 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
    if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
 {
 
-static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Help</a><br>";
-
 if (startPhase==-1) // UTRs don't have a frame at all
     {
     safef(buf, EXONTEXTLEN, "<b>No Codon:</b> Untranslated region<br>");
@@ -2681,13 +2679,17 @@ else
     {
     char *exonNote = "";
     boolean isNotLastExon = (exonIntronNumber<numExons);
+
+    static const char *phasePrefix  = 
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'>Codon phase: <i class='fa fa-question-circle-o'></i></a></b>";
+
     if (isNotLastExon)
         {
         if (startPhase==endPhase)
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "<b>Codon phase:</b> start %d, end %d%s<br>%s", startPhase, endPhase, exonNote, phaseHelp);
+        safef(buf, EXONTEXTLEN, "%s start %d, end %d%s<br>", phasePrefix, startPhase, endPhase, exonNote);
         } 
     else
         {
@@ -2695,7 +2697,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "<b>Codon phase:</b> start %d%s<br>%s", startPhase, exonNote, phaseHelp);
+        safef(buf, EXONTEXTLEN, "%s start %d%s<br>", phasePrefix, startPhase, exonNote);
         }
     }
 }
@@ -3092,7 +3094,7 @@ for (ref = exonList; TRUE; )
 
                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                 // if you change the text below, also change hgTracks:mouseOverToExon
-                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>cDNA:</b> Zoom in to show position<br><b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
                             existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
