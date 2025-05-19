@@ -7407,4 +7407,42 @@ cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v98/cosmic.bb cosmicv98.bb
 ln -sf /hive/data/outside/cosmic/hg38/v101/cosmic.bb
 #Updated human/hg38/trackDb.ra and human/hg38/cosmicMuts.html
+
+#########################################################################
+# MaveDB (04-14-2025) Jonathan
+
+# MaveDB data for this track was taken from mappings they created and linked to
+# from https://github.com/VariantEffect/dcd_mapping2.  More specifically, from
+# https://mavedb-mapping.s3.us-east-2.amazonaws.com/mappings.tar.gz.
+
+mkdir -p /hive/data/outside/mavedb/dcd_mappings
+cd /hive/data/outside/mavedb/dcd_mappings
+wget https://mavedb-mapping.s3.us-east-2.amazonaws.com/mappings.tar.gz
+tar xzvf mappings.tar.gz
+
+mkdir -p /hive/data/genomes/hg38/bed/mavedb/2025_04_12
+cd /hive/data/genomes/hg38/bed/mavedb/2025_04_12
+
+# We skip 00000053-a-1.json because it's a very large dataset that also only
+# contains haplotype data, which we don't have a display for.
+time for fil in `grep -l hgvs.p /hive/data/outside/mavedb/dcd_mappings/mappings/*.json`;
+    do if [[ "$fil" == *"00000053-a-1.json" ]]; then continue; fi
+    echo $fil
+    perl ~/kent/src/oneShot/parseMave/parseMave.pl < $fil >> combined.bed;
+    done
+
+bedSort combined.bed combined.bed
+cp $HOME/kent/src/hg/lib/heatmap.as .
+# edit heatmap.as to add these fields to the end
+#    lstring maveLink; "Link to MaveDB"
+#    lstring abstractText; "Abstract"
+#    lstring methodText; "Methods"
+
+bedToBigBed -type=bed12+ -tab -as=heatmap.as combined.bed /hive/data/genomes/hg38/chrom.sizes all_mave.bb
+
+mkdir -p /gbdb/hg38/maveDB
+cd /gbdb/hg38/maveDB
+ln -s /hive/data/genomes/hg38/bed/mavedb/2025_04_12/all_mave.bb
+
+
 #########################################################################
