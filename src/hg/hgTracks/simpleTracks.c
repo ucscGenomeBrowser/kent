@@ -3092,7 +3092,7 @@ for (ref = exonList; TRUE; )
 
                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                 // if you change the text below, also change hgTracks:mouseOverToExon
-                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>cDNA:</b> Zoom in to show position<br><b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
                             existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
