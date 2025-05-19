@@ -1,6 +1,7 @@
 track knownGene
 shortLabel GENCODE VM37
 longLabel GENCODE VM37
+pennantIcon Updated red ../goldenPath/newsarch.html#051925 "Released May 19, 2025"
 #parent knownGeneArchive
 priority 1
 #priority 5
