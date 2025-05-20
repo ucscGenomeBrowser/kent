@@ -208,6 +208,18 @@ printf ". . . exit\n"
 exit $?
 
 #############################################################################
+### viewing the 'alpha' release version on genome-test
+#############################################################################
+
+### it is possible to view the 'alpha' release version on genome-test
+### the linkOne.sh script above created this alpha.hub.txt file:
+
+  https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?genome=GCA_000001905.1&hubUrl=/gbdb/genark/GCA/000/001/905/GCA_000001905.1/alpha.hub.txt
+
+### perhaps a ReWrite rule on the apache on hgwdev could make this viewing
+### easier than this complicated path.
+
+#############################################################################
 ### beta and public release control
 #############################################################################
 
