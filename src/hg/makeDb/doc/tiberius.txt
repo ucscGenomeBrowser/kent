@@ -1,0 +1,220 @@
+#############################################################################
+#  procedure for adding 'tiberius' gene prediction tracks to genark
+#############################################################################
+
+#############################################################################
+### fetch tiberius predictions - (DONE - Hiram - 2025-02-01)
+#############################################################################
+
+mkdir -p /hive/data/outside/genark/tiberius
+cd /hive/data/outside/genark/tiberius
+
+### credential file obtained from Mario Stanke in email
+
+rsync --password-file=.tiberius.credential -av -P \
+   rsync://hiram@bioinf.uni-greifswald.de/tiberius/ ./2025-02-01/
+
+#############################################################################
+### add html and trackDb definitions as obtained from Mario
+###     (DONE - Hiram - 2025-05-09)
+#############################################################################
+
+cat << '__EOF__' > 2025-02-01/Tiberius.html
+<h2 id="description">UCSC Tiberius Track</h2>
+<p>The protein-coding genes were predicted with Tiberius in <i>ab initio</i> mode. The soft-masked genome was input only. The command was:</p>
+<code>tiberius.py --genome genome.fa --out tiberius.gtf</code>
+<p><a href="https://bioinf.uni-greifswald.de/bioinf/tiberius/genes/tib-tbl.html">Table with predicted coordinates, protein sequences and coding sequences of all mammals.</a></p>
+<p>Download code and see accuracy statistics on the <a href="https://github.com/Gaius-Augustus/Tiberius">Tiberius GitHub page</a>.</p>
+<p>Tiberius is a deep learning model that combines a HMM layer with other sequence-to-sequence models (convolutional neural networks, LSTM).</p>
+<p>Tiberius was trained on 32 mammalian genomes that did not include any <i>Hominidae</i> (see supplements of below preprint).</p>
+<h2 id="credits">Contact</h2>
+<p>Questions should be directed to <a href="mailto:lars.gabriel@uni-greifswald.de">Lars Gabriel</a> or <a href="mailto:mario.stanke@uni-greifswald.de">Mario Stanke</a>.</p>
+<h2 id="reference">Reference</h2>
+<a href="https://academic.oup.com/bioinformatics/article/40/12/btae685/7903281">Tiberius: End-to-End Deep Learning with an HMM for Gene Prediction. Lars Gabriel, Felix Becker, Katharina J. Hoff and Mario Stanke, <i>Bioinformatics</i> 2024;</a>, https://doi.org/10.1093/bioinformatics/btae685
+__EOF__
+
+cat << '__EOF__' > 2025-02-01/Tiberius.html
+track Tiberius
+bigDataUrl contrib/tiberius/tiberius.bigGenePred.bb
+shortLabel Tiberius genes
+longLabel Tiberius ab initio gene prediction
+type bigGenePred
+visibility pack
+color 0,102,204
+type bigGenePred
+html contrib/tiberius/Tiberius.html
+group genes
+dataVersion Tiberius version 2025-01-07
+baseColorDefault genomicCodons
+__EOF__
+
+#############################################################################
+### identify corresponding assemblies
+#############################################################################
+
+find ./2025-02-01 -type f | grep '/bb/' | awk -F$'/' '{print $NF}' \
+   | sed -e 's/.bb//;' | sort -u > tiberius.2025-02-01.accession.list
+
+grep -F -f tiberius.2025-02-01.accession.list \
+   $HOME/kent/src/hg/makeDb/doc/asmHubs/master.run.list \
+     | cut -d' ' -f2 | sort -u > to.link.list
+
+### looks like 701 of them match:
+
+wc -l tiberius.2025-02-01.accession.list to.link.list
+ 1317 tiberius.2025-02-01.accession.list
+  701 to.link.list
+
+#############################################################################
+### setup the link script to get these files into the genark build hierarchy
+#############################################################################
+
+cat << '__EOF__' > linkOne.sh
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export TOP="/hive/data/outside/genark/tiberius"
+
+export asmId="${1}"
+export acc=`echo $asmId | cut -d'_' -f1-2`
+export gcX="${asmId:0:3}"
+export d0="${asmId:4:3}"
+export d1="${asmId:7:3}"
+export d2="${asmId:10:3}"
+
+export gbkRef="genbankBuild"
+
+if [[ "$gcX" == GCF ]]; then
+    gbkRef="refseqBuild"
+fi
+
+export buildDir="/hive/data/genomes/asmHubs/${gbkRef}/${gcX}/${d0}/${d1}/${d2}/${asmId}"
+if [ ! -d "${buildDir}" ]; then
+  printf "ERROR: can not find build directory:\n%s\n" "${buildDir}" 1>&2
+  exit 255
+fi
+export buildTrackDb="${buildDir}/${asmId}.trackDb.txt"
+if [ ! -s "${buildTrackDb}" ]; then
+  printf "ERROR: can not find build trackDb:\n%s\n" "${buildTrackDb}" 1>&2
+  exit 255
+fi
+
+export destDir="${buildDir}/contrib/tiberius"
+
+export destDir="${buildDir}/contrib/tiberius"
+if [ -d "${destDir}" ]; then
+   printf "DONE: %s\n" "${asmId}"
+   exit 0
+fi
+
+mkdir -p "${destDir}"
+
+export tiberiusVer="/gbdb/genark/contribTracks/tiberius/2025-02-01"
+export destLink="${destDir}/tiberius.bigGenePred.bb"
+export destTrackDb="${destDir}/tiberius.trackDb.txt"
+export destHtml="${destDir}/Tiberius.html"
+
+export srcHtml="${TOP}/2025-02-01/Tiberius.html"
+export srcTrackDb="${TOP}/2025-02-01/tiberius.trackDb.txt"
+export srcCount=`ls  ${TOP}/2025-02-01/*/bb/${acc}.bb | wc -l`
+if [ "${srcCount}" -eq 1 ]; then
+  export srcFile=`ls  ${TOP}/2025-02-01/*/bb/${acc}.bb`
+  rm -f "${destLink}" "${destTrackDb}" "${destHtml}"
+  printf "ln -s $srcFile $destLink\n"
+  ln -s $srcFile $destLink
+  ln -s $srcHtml $destHtml
+  ln -s $srcTrackDb $destDir
+  cat "${buildTrackDb}" ${buildDir}/contrib/*/*.trackDb.txt \
+    > "${buildDir}/alpha.trackDb.txt"
+  sed -e 's/genomesFile genomes.txt/useOneFile on/; /trackDb trackDb.txt/d; s/^genome /\ngenome /;' \
+    ${buildDir}/$asmId.hub.txt \
+    ${buildDir}/$asmId.genomes.txt > "${buildDir}/alpha.hub.txt"
+  printf "\n" >> "${buildDir}/alpha.hub.txt"
+  cat "${buildTrackDb}" >> "${buildDir}/alpha.hub.txt"
+  cat ${buildDir}/contrib/*/*.trackDb.txt >> "${buildDir}/alpha.hub.txt"
+else
+  printf "ERROR: can not find source file at\n" 1>&2
+  printf "%s\n" "${TOP}/2025-02-01/*/bb/${acc}.bb"
+  exit 255
+fi
+
+exit $?
+__EOF__
+
+chmod +x linkOne.sh
+
+#############################################################################
+### make all the symlinks
+#############################################################################
+
+for S in `cat to.link.list`
+do
+  ./linkOne.sh "${S}" 2>&1
+done > link.log
+
+#############################################################################
+### with the links in place, the tracks will get into the genark
+### assemblies with the usual GenArk build procedure
+#############################################################################
+### for example, the 'primates':
+
+cd ~kent/src/hg/makeDb/doc/primatesAsmHub
+
+time (make) > dbg 2>&1
+### verify no errors:
+    egrep -i "fail|error|missing|cannot|clade|class|real" dbg
+### if good, verify on download:
+time (make verifyTestDownload) >> test.down.log 2>&1
+### verify no errors:
+    egrep -i "fail|error|missing|cannot|clade|class|real|check" test.down.log
+time (make sendDownload) >> send.down.log 2>&1
+### verify no errors:
+    egrep -i "fail|error|missing|cannot|clade|class|real" send.down.log
+time (make verifyDownload) >> verify.down.log 2>&1
+### verify no errors:
+    egrep -i "fail|error|missing|cannot|clade|class|real|check" send.down.log
+
+### all of the genark 'clades' can be done in one go:
+
+#!/bin/bash
+
+runOne() {
+  clade="${1}"
+  cd "../${clade}AsmHub"
+  printf "%s sleep %d\n" "${clade}" "${rand}"
+  time (make) > dbg 2>&1
+  time (make verifyTestDownload) >> test.down.log 2>&1
+  printf "# from the make in ../${clade}AsmHub\n"
+  egrep -w -i "fail|error|missing|cannot|clade|class|real" dbg | egrep -v "unclassified"
+  grep check test.down.log | tail -3
+  printf "#### done with ${clade}\n"
+}
+
+for C in primates plants invertebrate legacy \
+ birds fish fungi mammals vertebrate viral bacteria
+do
+  runOne "${C}" &
+done
+
+printf "waiting . . .\n"
+wait
+printf ". . . exit\n"
+exit $?
+
+#############################################################################
+### the daily cron jobs will correctly get all the files out to our
+### mirror sites into the /gbdb/genark/ hierarchy
+#############################################################################
+
+### current cron job is in Hiram's hgwdev account, this should be moved
+### to the 'otto' user.
+
+# push out the /gbdb/hubs/GC[AF]/ hierarchy to:
+03 01 * * * /hive/data/inside/genArk/pushRR.sh
+
+### on the Asia node, it is a pull script in the qateam account:
+#  pull down the /gbdb/hubs/GC[AF]/ files from hgwdev daily
+02 16 * * * ~/cronScripts/pullHgwdev.sh
+
+#############################################################################
