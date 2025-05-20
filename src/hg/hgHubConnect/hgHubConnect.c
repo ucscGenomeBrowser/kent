@@ -1438,14 +1438,18 @@ cartWebStart(cart, NULL, "%s", headerText);
 
 struct trackHub *tHub = hub->trackHub;
 
-hPrintf("<P><B style='color: red;'>Note:</B> As of May 27 this page <B>no longer redirects</B> to the gateway. Make a genome selection below to go directly to the tracks display. This message will be removed July 8th.</P>");
+hPrintf("<P><i><B style='color: red;'>Note:</B> As of May 27 this page <B>no longer redirects</B> to our Genome Gateway page. Make a genome selection below to go directly to the tracks display. This message will be removed July 8th.</i></P>");
 
-hPrintf("<P><B>%s</B> now connected. Select a genome below to see the tracks display, or <A href=\"./hgHubConnect#unlistedHubs\">connect another hub</A>.</P>", tHub->shortLabel);
+hPrintf("<P><B>Connected Hub: </B>%s</P>", tHub->shortLabel);
+
 hPrintf("<P><B>Hub Description:</B> %s</P>", tHub->longLabel);
 hPrintf("<P><B>Contact email:</B> <A HREF=\"mailto:%s\">%s</A>.</B> Use this contact for all data questions.</P>", tHub->email, tHub->email);
 struct trackHubGenome *genomeList = tHub->genomeList;
 
+hPrintf("<P><B>Assemblies:</B> Select an assembly below to starting browsing the tracks of this hub:<P>");
+
 hPrintf("<ul>");
+
 for(; genomeList; genomeList = genomeList->next)
     {
     char *desc = genomeList->description;
@@ -1456,10 +1460,12 @@ for(; genomeList; genomeList = genomeList->next)
     if (org==NULL)
         org = hOrganism(genomeList->name);
 
-    hPrintf("<li><A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s: %s</A></li>",genomeList->name, 
+    hPrintf("<li>Open: <A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s: %s</A></li>",genomeList->name, 
         cartSidUrlString(cart), org, desc);
     }
 hPrintf("</ul>");
+
+hPrintf("<P><A href=\"./hgHubConnect#unlistedHubs\">Connect another hub</A> to add even more tracks.</P>");
 
 hPrintf("<P><I>Hubs are created and maintained by external sources. UCSC is not responsible for their content and status.</I></P>");
 

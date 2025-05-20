@@ -541,6 +541,7 @@ squishyPackField  bigBed bigGenePred
 squishyPackPoint bigBed bigGenePred
 squishyPackLabel bigBed bigGenePred
 stripPrefix bam
+style bigBed
 subGroup1 *
 subGroup2 *
 subGroup3 *

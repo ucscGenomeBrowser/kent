@@ -49,7 +49,7 @@ assembly identifiers, view sequences, and use search terms to jump to genome loc
 An interactive tutorial that covers the basic Browser introduction on the Gateway page.
 
 <p style="text-align: end">
-<button>[View](../cgi-bin/hgGateway?db=hg38&startGateway=true)</button>
+<button>[View](../cgi-bin/hgGateway?db=hg38&startTutorial=true)</button>
 </p>
 </div>
 </div>
@@ -58,7 +58,7 @@ An interactive tutorial that covers the basic Browser introduction on the Gatewa
 ## Gateway page screenshot
 
 ```image
-src=../images/gatewayPageAnnotated.jpg
+src=../images/tutorialImages/gatewayPageAnnotated.jpg
 width=90%
 ```
 
@@ -70,7 +70,7 @@ width=90%
 <div class="col-md-6">
 
 ```image
-src=../images/popular_species.png
+src=../images/tutorialImages/popularSpecies.png
 width=70%
 ```
 
@@ -111,7 +111,7 @@ To change the assembly version, click the **Assembly** option under **Find Posit
 
 
 ```image
-src=../images/assembly_version.png
+src=../images/tutorialImages/assemblyVersion.png
 width=90%
 ```
 
@@ -137,7 +137,7 @@ Searching by  **GC accession number**: GCF_016699485.2
 <div class="col-md-6">
 
 ```image
-src=../images/Search_GCF_016699485_2.gif
+src=../images/tutorialImages/searchByGCFid.gif
 width=100%
 ```
 
@@ -152,7 +152,7 @@ width=100%
 <div class="col-md-6">
 
 ```image
-src=../images/species_tree.png
+src=../images/tutorialImages/speciesTree.png
 width=60%
 ```
 
@@ -189,12 +189,12 @@ Steps to request an assembly:
 <div class="col-md-6">
 
 ```image
-src=../images/assembly_request.png
+src=../images/tutorialImages/assemblyRequest.png
 width=130%
 ```
 
 ```image
-src=../images/request_page.png
+src=../images/tutorialImages/requestPage.png
 width=40%
 ```
 
@@ -208,12 +208,12 @@ width=40%
 <div class="col-md-6">
 
 ```image
-src=../images/view_sequence.png
+src=../images/tutorialImages/viewSequence.png
 width=30%
 ```
 
 ```image
-src=../images/sequences_list.png
+src=../images/tutorialImages/sequencesList.png
 width=70%
 ```
 
@@ -260,7 +260,7 @@ The Gateway page also offers  **download links** for data files related to the g
 <div class="col-md-6">
 
 ```image
-src=../images/assembly_details.png
+src=../images/tutorialImages/assemblyDetails.png
 width=90%
 ```
 </div>
@@ -279,7 +279,7 @@ width=90%
 <div class="col-md-6">
 
 ```image
-src=../images/Search_box.png
+src=../images/tutorialImages/searchBox.png
 width=70%
 ```
 

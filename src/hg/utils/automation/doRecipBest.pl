@@ -43,7 +43,9 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $dbHost = 'hgwdev';
 
-my ($dbExists, $qDbExists, $tChromInfoExists, $qChromInfoExists);
+my ($dbExists, $qDbExists, $tChromInfoExists, $qChromInfoExists, $tTrackHub, $qTrackHub);
+$tTrackHub = 0;	# will become true if database is hs1
+$qTrackHub = 0;	# will become true if database is hs1
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -233,7 +235,7 @@ foreach f (axtRBestNet/*.$tDb.$qDb.net.axt.gz)
 end
 _EOF_
     );
-    if ($opt_trackHub) {
+    if ($tTrackHub) {
       $bossScript->add(<<_EOF_
 mkdir -p bigMaf
 echo "##maf version=1 scoring=blastz" > bigMaf/$tDb.$qDb.rbestNet.maf
@@ -263,7 +265,7 @@ cd ../axtRBestNet
 md5sum *.axt.gz > md5sum.txt
 _EOF_
     );
-    if ($opt_trackHub) {
+    if ($tTrackHub) {
       $bossScript->add(<<_EOF_
 mkdir -p ../bigMaf
 cd ../bigMaf
@@ -272,7 +274,7 @@ _EOF_
       );
     }
   }
-  if ($opt_trackHub) {
+  if ($tTrackHub) {
       $bossScript->add(<<_EOF_
 cd $buildDir/bigMaf
 wget --no-check-certificate -O bigMaf.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigMaf.as'
@@ -397,7 +399,7 @@ and loads the recip net table.";
 # Load reciprocal best chains:
 _EOF_
   );
-  if (! $opt_trackHub && $dbExists) {
+  if (! $tTrackHub && $dbExists) {
     $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
@@ -455,7 +457,7 @@ if ( -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" ) then
 endif
 _EOF_
       );
-  }	# else if (! $opt_trackHub && $dbExists)
+  }	# else if (! $tTrackHub && $dbExists)
 
   $bossScript->execute();
 }	#	sub loadRBest {}
@@ -494,24 +496,29 @@ _EOF_
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
 $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
+$tTrackHub = $opt_trackHub ? 1 : 0;
 # db might exist, but it may not have chromInfo table (promoted hub)
 $tChromInfoExists = 0;
 if ($dbExists) {
   $tChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $tDb, "chromInfo"));
+  $tTrackHub = 1 if ($tTrackHub || (0 == $tChromInfoExists));
 }
 # may be working with a query that has no database
 $qDbExists = 0;
 $qDbExists = 1 if (&HgAutomate::databaseExists($dbHost, $qDb));
 $qChromInfoExists = 0;
+$qTrackHub = 0;
 if ($qDbExists) {
   $qChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $qDb, "chromInfo"));
+  $qTrackHub = 1 if (0 == $qChromInfoExists);
 }
 
 printf STDERR "# target db exists: %s\n", $dbExists ? "TRUE" : "FALSE";
 printf STDERR "# target chromInfo exists: %s\n", $tChromInfoExists ? "TRUE" : "FALSE";
 printf STDERR "# query db exists: %s\n", $qDbExists ? "TRUE" : "FALSE";
 printf STDERR "# query chromInfo exists: %s\n", $qChromInfoExists ? "TRUE" : "FALSE";
-printf STDERR "# trackHub: %s\n", $opt_trackHub ? "TRUE" : "FALSE";
+printf STDERR "# target trackHub: %s\n", $tTrackHub  ? "TRUE" : "FALSE";
+printf STDERR "# query trackHub: %s\n", $qTrackHub  ? "TRUE" : "FALSE";
 
 $QDb = ucfirst($qDb);
 

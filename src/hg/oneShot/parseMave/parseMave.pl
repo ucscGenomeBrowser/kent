@@ -35,6 +35,8 @@ if ($jsonBlob !~ m/hgvs\.p/)
 
 $jsonObj = decode_json($jsonBlob);
 
+# Start indexing into the json object to find all of the mapped scores
+#
 $mapped_scores_ref = $$jsonObj{"mapped_scores"};
 
 $itemStart = -1;
@@ -42,7 +44,10 @@ $itemEnd = -1;
 $chrom = "";
 $urnID = "";
 
-%exonList = ();
+%exonList = ();   # key: "A,B,C", where A and B are the start and end coordinates of the exon in BED coordinates.
+                  #      C is the HGVS-like p string for the variant
+                  # value: "$thisID $pString: $scoreTrunc", being the id, HGVS-like p. string, and score
+                  # The %exonDups list is keyed the same way, containing overflow items for each exon (if any)
 %txStarts = ();
 %txSizes = ();
 
@@ -188,7 +193,6 @@ foreach $record_ref (@$mapped_scores_ref)
     for ($k=0; $k<@thisStarts; $k++)
     {
         next if $thisStarts[$k] == -1;
-        #$posString = $f[1] . "," . $f[2];
         $posString = $thisStarts[$k] . "," . ($thisStarts[$k]+$thisSizes[$k]);
         if ($hgvs =~ m/:(.*)/)
         {
@@ -237,13 +241,10 @@ if (scalar(keys %exonList) == 0)
 # from the keys of %exonList instead.  
 # I WAS using coords because it imposed uniqueness on the exon coordinates.  So I have to reimplement that.
 
-#foreach $key (keys %coords)
 %uniquify = ();
 foreach $key (keys %exonList)
 {
-#    $bedStr = $coords{$key};
-#    $bedStr =~ m/^\S+\s+(\d+)\s+(\d+)/;
-    $bedStr = $key; # $exonList{$key};
+    $bedStr = $key;
     $bedStr =~ m/^(\d+),(\d+),/;
     $st_en = "$1,$2";
     if (!defined $uniquify{$st_en})
@@ -271,7 +272,6 @@ for ($i=0; $i<@sorted_pos; $i++)
         foreach $key (keys %uniquify)
         {
             $bedStr = $uniquify{$key};
-            #$bedStr =~ m/^\S+\s+(\d+)\s+(\d+)/;
             $bedStr =~ m/^(\d+),(\d+)/;
             $st_en = "$1,$2";
             if ($st_en eq "$lastst,$lasten")
@@ -429,7 +429,10 @@ foreach $exon (keys %exonList)
         {
             $hasDupe = 1;
             if ($exonScores[$ix] !~ m/\|/)
-                { $exonScores[$ix] .= "|"; }
+                {
+                $exonCount = 1 + scalar(() = $exonDups{$exon} =~ m/<br>/g);  # awkward, but gives the right count
+                $exonScores[$ix] .= "|$exonCount";
+                }
             $exonLabels[$ix] .= $exonDups{$exon};
         }
     }
@@ -498,7 +501,8 @@ $outstring .= "\t$rowCount\t$rowLabels\t";
 # now write out the lower bound, midpoint, and upper bound for the track
 # These should be in ascending order
 
-$outstring .= join ",", (min(@exonScores), (min(@exonScores)+max(@exonScores))/2, max(@exonScores));
+@justScores = grep (/^[^#]/, @exonScores);  # if all positive or negative, the #color values and "" would screw this up
+$outstring .= join ",", (min(@justScores), (min(@justScores)+max(@justScores))/2, max(@justScores));
 $outstring .= ",\t";
 
 # now the colors for each block
@@ -519,7 +523,6 @@ $shortDescription =~ s/\\u(.{4})/chr(hex($1))/ge;  # thanks to https://www.perlm
                                                    # this deals with unicode characters.
 $shortDescription = encode_entities($shortDescription);  # this HTML-encodes everything
 $shortDescription = cleanWhitespace($shortDescription);
-#$shortDescription =~ s/\s+/ /g;
 $outstring .= "$shortDescription";
 
 # everything above was mandatory fields for a heatmap (including a string for the heatmap title area)
@@ -533,7 +536,6 @@ $abstract = $$metadata_ref{"abstractText"};
 $abstract =~ s/\\u(.{4})/chr(hex($1))/ge;
 $abstract = encode_entities($abstract);  # this HTML-encodes everything
 $abstract = cleanWhitespace($abstract);
-#$abstract =~ s/\s+/ /g;
 $outstring .= "\t$abstract";
 
 
@@ -559,14 +561,13 @@ $outstring .= "\n";
 print "$outstring";
 
 open($seqFile, ">>", "MaveDBSeqFile.fa");
-#metadata ->  targetGenes (array) -> name, targetSequence -> sequence
 $targetGenesRef = $$metadata_ref{"targetGenes"};
 foreach $targetGene_ref (@$targetGenesRef)
 {
     $targetGene_name = $$targetGene_ref{"name"};
     $targetSeq_ref = $$targetGene_ref{"targetSequence"};
     $sequence = $$targetSeq_ref{"sequence"};
-    print $seqFile ">$targetGene_name $urnID\n";
+    print $seqFile ">$urnID $targetGene_name\n";
     print $seqFile "$sequence\n";
 }
 close($seqFile);
