@@ -656,14 +656,6 @@ else  // hyperlink
         if (pslIsProtein(psl))
             dyStringPrintf(url, "&isProt=on");
 
-        // We will add them to the url later at runtime in js and ajax.
-        //dyStringPrintf(url, "&trackName=%s", cgiEncode(trackName));
-        //dyStringPrintf(url, "&trackDescription=%s", cgiEncode(trackDescription));
-
-        //warn("GALT DEBUG hgsid = [%s]", cartSessionId(cart));
-
-        //warn("GALT DEBUG url = [%s]", url->string);
-
         jsInlineF(
 	    "var luckyLocation = '';\n"
         );
@@ -676,7 +668,7 @@ else  // hyperlink
 
 	//  RENAME BLAT CT FORM
 	// new re-submit code with new trackname and decription
-        if (!feelingLucky)  // TODO GALT may revisit this condition
+        if (!feelingLucky)
 	    {
 	    printf("<div id=renameFormItem style='display: none'>\n");
 	    printf("<FORM ACTION=>\n");
@@ -689,7 +681,7 @@ else  // hyperlink
 	    printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
 
 	    printf("<TABLE><TR><TD>Custom track name: ");
-	    cgiMakeTextVar( "trackName", "FAKETRACKNAME", 30);  // TODO GALT track name or shortLabel
+	    cgiMakeTextVar( "trackName", "FAKETRACKNAME", 30); 
 	    printf("</TD></TR>");
 
 	    printf("<TR><TD> Custom track description: ");
@@ -707,7 +699,7 @@ else  // hyperlink
 	    printf("</div>\n");
 	    }
 
-        if (!feelingLucky)  // TODO GALT may revisit this condition
+        if (!feelingLucky)
 	    {
 	    // REMOVE CT BUTTON FORM.
 	    printf("<div id=deleteCtForm style='display: none'>\n");
@@ -715,17 +707,11 @@ else  // hyperlink
 		hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
 	    cartSaveSession(cart);
 	    cgiMakeButton(CT_DO_REMOVE_VAR, "Delete Custom Track");
-	    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, "FAKETRACKNAME");  // TODO update js to populate this with the current ct ct_blat variable.
+	    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, "FAKETRACKNAME");
 	    printf("</FORM>\n");
 	    printf("</div>\n");
 	    }
 
-
-
-        //if (feelingLucky)
-	    //warn("GALT DEBUG feelingLucky and autoBigPsl");  // REMOVE
-
- 
         jsInlineF(
 	    
 	    "var ct_blat = '';\n"
@@ -733,8 +719,6 @@ else  // hyperlink
 	    "function buildBigPslCtSuccess (content, status)\n"
 	    "{ // Finishes the succesful creation of blat ct bigPsl.  Called by ajax return.\n"
 	    "  // saves the ct name so it can be used later for rename or delete.\n"
-	    "//window.alert('status='+status);    // debug remove\n"
-	    "//window.alert('content='+content);  // debug remove\n"
 	    "\n"
 	    "var matchWord = '&table=';\n"
 	    "var ct_blatPos = content.indexOf(matchWord) + matchWord.length;\n"
@@ -743,7 +727,6 @@ else  // hyperlink
 	    "    {\n"
 	    "    var ct_blatPosEnd = content.indexOf('\"', ct_blatPos);\n"
 	    "    ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
-	    "    //window.alert('DEBUG GALT TEST ajax success hgc buildBigPsl called. ct_blat='+ct_blat);\n"
 	    "    if (luckyLocation == '')\n"
 	    "        {\n"
 	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[0].value = ct_blat;\n"
@@ -779,14 +762,10 @@ else  // hyperlink
 	    "var trackName='%s';\n"
 	    "var trackDescription='%s';\n"
             "$(document).ready(function() {\n"
-	    "//window.alert('DEBUG GALT TEST');\n"
-	    "//window.alert('url='+url+' trackName='+trackName+' trackDescription='+trackDescription);\n"
 	    "\n"
 	    "buildBigPslCt(url, trackName, trackDescription);\n"
-	    "//window.alert('result ct_blat = '+ ct_blat);\n"
 	    "if (luckyLocation !== '')\n"
 	    "    {\n"
-	    "    //window.alert('luckyLocation = ' + luckyLocation);\n"
             "    location.replace(luckyLocation);\n"
 	    "    }\n"
 	    "else\n"
@@ -811,7 +790,6 @@ else  // hyperlink
             // RENAME CT JS CODE
 	    if (!feelingLucky)
 		jsInline("$('#submitTrackNameDescr').click(function(){\n"
-		    "//window.alert('DEBUG GALT TEST');\n"
 		    "  $('#renameForm')[0].style.display = 'none';\n"
 		    "  $('#renameFormItem')[0].style.display = 'block';\n"
 		    "  $('#showRenameForm')[0].style.display = 'block';\n"
