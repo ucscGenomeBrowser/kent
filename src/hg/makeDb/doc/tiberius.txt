@@ -48,6 +48,11 @@ dataVersion Tiberius version 2025-01-07
 baseColorDefault genomicCodons
 __EOF__
 
+### And these two files are checked into the source tree in:
+
+    makeDb/trackDb/contrib/tiberius/Tiberius.html
+    makeDb/trackDb/contrib/tiberius/tiverius.trackDb.txt
+
 #############################################################################
 ### identify corresponding assemblies
 #############################################################################
@@ -201,6 +206,25 @@ printf "waiting . . .\n"
 wait
 printf ". . . exit\n"
 exit $?
+
+#############################################################################
+### beta and public release control
+#############################################################################
+
+### the release of this track is controlled by two files in trackDb:
+
+   makeDb/trackDb/betaGenArk.txt
+   makeDb/trackDb/publicGenArk.txt
+
+### cat publicGenArk.txt betaGenArk.txt
+# the listing in this file triggers the building of the public.hub.txt
+# file in the genark system.  Any contrib project listed here will be included
+# contrib track name: tracks found in <buildDir>/contrib/<thisName>/
+tiberius
+# the listing in this file triggers the building of the beta.hub.txt
+# file in the genark system.  Any contrib project listed here will be included
+# contrib track name: tracks found in <buildDir>/contrib/<thisName>/
+tiberius
 
 #############################################################################
 ### the daily cron jobs will correctly get all the files out to our
