@@ -1,5 +1,6 @@
 #PanelApp
-include panelApp.ra
+include panelApp.ra beta,public
+include panelApp.alpha.ra alpha
 
 # ENCODE tracks
 include trackDb.encode.ra
