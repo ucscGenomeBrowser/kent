@@ -43,6 +43,9 @@ boolean allGenomes = FALSE;
 boolean allResults = FALSE;
 static long enteredMainTime = 0;
 
+
+boolean autoBigPsl = FALSE;  // DEFAULT VALUE change to TRUE in future
+
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
                                 /* this one is 0.5 */
@@ -501,23 +504,32 @@ return TRUE;
 }
 
 
-
 void printLuckyRedirect(char *browserUrl, struct psl *psl, char *database, char *pslName, 
 			char *faName, char *uiState, char *unhideTrack)
 /* Print out a very short page that redirects us. */
 {
 char url[1024];
-safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
-      browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-      pslName, faName, uiState, unhideTrack);
 /* htmlStart("Redirecting"); */
 /* Odd it appears that we've already printed the Content-Typ:text/html line
    but I can't figure out where... */
-htmStart(stdout, "Redirecting"); 
-jsInlineF("location.replace('%s');\n", url);
-printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
-htmlEnd();
-
+if (autoBigPsl)
+    {
+    // skip ss variable
+    safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&%s%s",
+      browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+      uiState, unhideTrack);
+    jsInlineF("luckyLocation = '%s';\n", url);
+   }
+else
+    {
+    safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
+      browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+      pslName, faName, uiState, unhideTrack);
+    htmStart(stdout, "Redirecting"); 
+    jsInlineF("location.replace('%s');\n", url);
+    printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
+    htmlEnd();
+    }
 }
 
 
@@ -570,7 +582,14 @@ if (pslList == NULL && !jsonOut)
 
 pslSortListByVar(&pslList, sort);
 
-if(feelingLucky)
+if (feelingLucky && autoBigPsl)
+    {  // ignore and pass-through to hyperlink.
+    pslOut = FALSE;
+    jsonOut = FALSE;    
+    }
+
+
+if(feelingLucky && ! autoBigPsl)  // IDEA test pslOut and jsonOut
     {
     /* If we found something jump browser to there. */
     if(slCount(pslList) > 0)
@@ -612,7 +631,201 @@ else  // hyperlink
     if (posStr != NULL)
         printf("<P>Go back to <A HREF=\"%s\">%s</A> on the Genome Browser.</P>\n", browserUrl, posStr);
 
-    if (useBigPsl)
+    if (autoBigPsl)
+	{
+        char *trackName = NULL;
+        char *trackDescription = NULL;
+        getCustomName(database, cart, pslList, &trackName, &trackDescription);
+
+        psl = pslList;
+        char item[1024];
+        safef(item, sizeof item, "%s %s %s", pslName,faName,psl->qName);
+
+        struct dyString *url = dyStringNew(256);
+        dyStringPrintf(url, "http%s://%s", sameString(getenv("HTTPS"), "on") ? "s" : "", getenv("HTTP_HOST"));
+        dyStringPrintf(url, "%s",    hgcUrl+2);
+        dyStringPrintf(url, "?o=%d", psl->tStart);
+        dyStringPrintf(url, "&t=%d", psl->tEnd);
+        dyStringPrintf(url, "&g=%s", "buildBigPsl");
+        dyStringPrintf(url, "&i=%s", cgiEncode(item));
+        dyStringPrintf(url, "&c=%s", cgiEncode(psl->tName));
+        dyStringPrintf(url, "&l=%d", psl->tStart);
+        dyStringPrintf(url, "&r=%d", psl->tEnd);
+        dyStringPrintf(url, "&%s=%s",  cartSessionVarName(), cartSessionId(cart));
+        dyStringPrintf(url, "&Submit=%s", cgiEncode("Create a stable custom track with these results"));
+        if (pslIsProtein(psl))
+            dyStringPrintf(url, "&isProt=on");
+
+        // We will add them to the url later at runtime in js and ajax.
+        //dyStringPrintf(url, "&trackName=%s", cgiEncode(trackName));
+        //dyStringPrintf(url, "&trackDescription=%s", cgiEncode(trackDescription));
+
+        //warn("GALT DEBUG hgsid = [%s]", cartSessionId(cart));
+
+        //warn("GALT DEBUG url = [%s]", url->string);
+
+        jsInlineF(
+	    "var luckyLocation = '';\n"
+        );
+	if(feelingLucky)
+	    {
+	    /* If we found something jump browser to there. */
+	    if(slCount(pslList) > 0)
+	    printLuckyRedirect(browserUrl, pslList, database, pslName, faName, uiState, unhideTrack);
+            }
+
+	//  RENAME BLAT CT FORM
+	// new re-submit code with new trackname and decription
+        if (!feelingLucky)  // TODO GALT may revisit this condition
+	    {
+	    printf("<div id=renameFormItem style='display: none'>\n");
+	    printf("<FORM ACTION=>\n");
+	    printf("<INPUT TYPE=SUBMIT NAME=Submit id='showRenameForm' VALUE=\"Rename Custom Track\">\n");
+	    printf("</FORM>\n");
+	    printf("</div>\n");
+
+	    printf("<div id=renameForm style='display: none'>\n");
+	    char *hgcUrl = hgcName();
+	    printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
+
+	    printf("<TABLE><TR><TD>Custom track name: ");
+	    cgiMakeTextVar( "trackName", "FAKETRACKNAME", 30);  // TODO GALT track name or shortLabel
+	    printf("</TD></TR>");
+
+	    printf("<TR><TD> Custom track description: ");
+	    cgiMakeTextVar( "trackDescription", "FAKETRACKDESCRIPTION",50);  // track description or longLabel
+	    printf("</TD></TR>");
+
+	    // remove the current blat ct so we can create a new one.
+	    cgiMakeHiddenVar(CT_DO_REMOVE_VAR, "Remove Custom track");
+	    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, "FAKETRACKNAME");
+
+	    printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit id=submitTrackNameDescr VALUE=\"Submit\">\n");
+	    puts("</TD></TR>");
+	    printf("</TABLE></FORM></DIV>");
+
+	    printf("</div>\n");
+	    }
+
+        if (!feelingLucky)  // TODO GALT may revisit this condition
+	    {
+	    // REMOVE CT BUTTON FORM.
+	    printf("<div id=deleteCtForm style='display: none'>\n");
+	    printf("<FORM ACTION=\"%s?hgsid=%s&db=%s\" NAME=\"MAIN_FORM\" METHOD=%s>\n\n",
+		hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
+	    cartSaveSession(cart);
+	    cgiMakeButton(CT_DO_REMOVE_VAR, "Delete Custom Track");
+	    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, "FAKETRACKNAME");  // TODO update js to populate this with the current ct ct_blat variable.
+	    printf("</FORM>\n");
+	    printf("</div>\n");
+	    }
+
+
+
+        //if (feelingLucky)
+	    //warn("GALT DEBUG feelingLucky and autoBigPsl");  // REMOVE
+
+ 
+        jsInlineF(
+	    
+	    "var ct_blat = '';\n"
+	    "\n"
+	    "function buildBigPslCtSuccess (content, status)\n"
+	    "{ // Finishes the succesful creation of blat ct bigPsl.  Called by ajax return.\n"
+	    "  // saves the ct name so it can be used later for rename or delete.\n"
+	    "//window.alert('status='+status);    // debug remove\n"
+	    "//window.alert('content='+content);  // debug remove\n"
+	    "\n"
+	    "var matchWord = '&table=';\n"
+	    "var ct_blatPos = content.indexOf(matchWord) + matchWord.length;\n"
+	    "\n"
+	    "if (ct_blatPos >= 0)\n"
+	    "    {\n"
+	    "    var ct_blatPosEnd = content.indexOf('\"', ct_blatPos);\n"
+	    "    ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
+	    "    //window.alert('DEBUG GALT TEST ajax success hgc buildBigPsl called. ct_blat='+ct_blat);\n"
+	    "    if (luckyLocation == '')\n"
+	    "        {\n"
+	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[0].value = ct_blat;\n"
+	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[1].value = ct_blat;\n"
+	    "        }\n"
+	    "    }\n"
+	    "}\n"
+	    "\n"
+	    "function buildBigPslCt (url, trackName, trackDescription)\n"
+	    "{ // call hgc to buildBigPsl from blat result.\n"
+	    "\n"
+	    "var cgiVars = 'trackName='+encodeURIComponent(trackName)+'&trackDescription='+encodeURIComponent(trackDescription);\n"
+	    "if (!ct_blat !== '')\n"
+	    "    {\n"  	
+	    "    cgiVars += '&"CT_DO_REMOVE_VAR"='+encodeURIComponent('Remove Custom Track');\n"
+	    "    cgiVars += '&"CT_SELECTED_TABLE_VAR"='+encodeURIComponent(ct_blat);\n"
+	    "    }\n"  	
+	    "\n"
+	    "$.ajax({\n"
+	    "    type: 'GET',\n"
+	    "    url: url,\n"
+	    "    data: cgiVars,\n"
+	    "    dataType: 'html',\n"
+	    "    trueSuccess: buildBigPslCtSuccess,\n"
+	    "    success: catchErrorOrDispatch,\n"
+	    "    error: errorHandler,\n"
+	    "    cache: false,\n"
+	    "    async: false\n"
+	    "    });\n"
+	    "}\n"
+	    "\n"
+	    "var url='%s';\n"
+	    "var trackName='%s';\n"
+	    "var trackDescription='%s';\n"
+            "$(document).ready(function() {\n"
+	    "//window.alert('DEBUG GALT TEST');\n"
+	    "//window.alert('url='+url+' trackName='+trackName+' trackDescription='+trackDescription);\n"
+	    "\n"
+	    "buildBigPslCt(url, trackName, trackDescription);\n"
+	    "//window.alert('result ct_blat = '+ ct_blat);\n"
+	    "if (luckyLocation !== '')\n"
+	    "    {\n"
+	    "    //window.alert('luckyLocation = ' + luckyLocation);\n"
+            "    location.replace(luckyLocation);\n"
+	    "    }\n"
+	    "else\n"
+	    "    {\n"
+	    "    $('#renameFormItem')[0].style.display = 'block';\n"   
+	    "    $('#deleteCtForm')[0].style.display = 'block';\n"   
+	    "    }\n"
+            "});\n", url->string, trackName, trackDescription);
+ 
+
+            // RENAME CT JS CODE
+	    if (!feelingLucky)
+		jsInline("$('#showRenameForm').click(function(){\n"
+		    "  $('#renameForm')[0].style.display = 'block';\n"
+		    "  $('#renameFormItem')[0].style.display = 'none';\n"
+		    "  $('#showRenameForm')[0].style.display = 'none';\n"
+		    "  $('input[name=\"trackName\"]')[0].value = trackName;\n"
+		    "  $('input[name=\"trackDescription\"]')[0].value = trackDescription;\n"
+		    "return false;\n"
+		    "});\n");
+
+            // RENAME CT JS CODE
+	    if (!feelingLucky)
+		jsInline("$('#submitTrackNameDescr').click(function(){\n"
+		    "//window.alert('DEBUG GALT TEST');\n"
+		    "  $('#renameForm')[0].style.display = 'none';\n"
+		    "  $('#renameFormItem')[0].style.display = 'block';\n"
+		    "  $('#showRenameForm')[0].style.display = 'block';\n"
+		    "  trackName = $('input[name=\"trackName\"]')[0].value;\n"
+		    "  trackDescription = $('input[name=\"trackDescription\"]')[0].value;\n"
+		    "buildBigPslCt(url, trackName, trackDescription);\n"
+		    "return false;\n"
+		    "});\n");
+
+        dyStringFree(&url);
+
+       
+        }
+    else if (useBigPsl)
         {
         char *trackName = NULL;
         char *trackDescription = NULL;
@@ -686,24 +899,38 @@ else  // hyperlink
         // XX putting SVG into C code like this is ugly. define somewhere? maybe have globals for these?
         char *icon = "<svg style='height:10px; padding-left:2px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg>";
 
-        if (customText)
-            {
-            printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">browser</A>&nbsp;",
-                browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                customText, uiState, unhideTrack);
-            printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s\">new tab%s</A>&nbsp;",
-                helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                customText, unhideTrack, icon);
-            } 
-            else 
-            {
-            printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">browser</A>&nbsp;",
-                browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                pslName, faName, uiState, unhideTrack);
-            printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">new tab%s</A>&nbsp;",
-                helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-                pslName, faName, unhideTrack, icon);
-            }
+
+	if (customText)
+	    {
+	    printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">browser</A>&nbsp;",
+		browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		customText, uiState, unhideTrack);
+	    printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s\">new tab%s</A>&nbsp;",
+		helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		customText, unhideTrack, icon);
+	    } 
+	else 
+	    {
+	    if (autoBigPsl)
+		{
+		// skip ss variable
+		printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&%s%s\">browser</A>&nbsp;",
+		    browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		    uiState, unhideTrack);
+		printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&%s\">new tab%s</A>&nbsp;",
+		    helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		    unhideTrack, icon);
+		}
+	    else 
+		{
+		printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">browser</A>&nbsp;",
+		    browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		    pslName, faName, uiState, unhideTrack);
+		printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">new tab%s</A>&nbsp;",
+		    helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		    pslName, faName, unhideTrack, icon);
+		}
+	    }
 	printf("<A title='Show query sequence, genome hit and sequence alignment' "
                 "HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
 	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
@@ -1488,6 +1715,7 @@ enum gfType qType, tType;
 struct hash *tFileCache = gfFileCacheNew();
 // allGenomes ignores I'm Feeling Lucky for simplicity
 boolean feelingLucky = cgiBoolean("Lucky") && !allGenomes;
+
 char *xType = NULL; 
 
 if (allGenomes)
@@ -1502,7 +1730,8 @@ char *output = cgiOptionalString("output");
 boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 
-if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
+
+if ((!feelingLucky && !allGenomes && !isJson && !isPslRaw) || (autoBigPsl && feelingLucky))
     cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
 seqList = faSeqListFromMemTextRaw(seqLetters);
@@ -1802,7 +2031,7 @@ if (!allGenomes)
               organism, feelingLucky);
     }
 
-if(!feelingLucky && !allGenomes)
+if ((!feelingLucky && !allGenomes) || (autoBigPsl && feelingLucky))
     cartWebEnd();
 
 gfFileCacheFree(&tFileCache);
@@ -2421,6 +2650,8 @@ enteredMainTime = clock1000();
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgBlat", delayFraction, 0, 0, "html");
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+
+autoBigPsl = cfgOptionBooleanDefault("autoBlatBigPsl", autoBigPsl); 
 
 /* org has precedence over db when changeInfo='orgChange' */
 
