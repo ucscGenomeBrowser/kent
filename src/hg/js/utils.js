@@ -572,7 +572,7 @@ function tdbFindChildless(trackDb, delTracks) {
 
     o = {};
     o.loneParents = loneParents;
-    o.others = others;
+    o.others = Array.from(new Set(others)); // remove duplicates (rare bug in the above)
     return o;
 }
 
