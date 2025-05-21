@@ -33075,6 +33075,10 @@ cd /gbdb/hg19/bbi
 ln -s /hive/data/genomes/hg19/bed/avada/avada.bb
 
 #########################################################################
+# 2025-05-21: Varaico fulltext variants, Johannes
+# The hg19 track is created simultaneously with the hg38 track, see kent/src/hg/makeDb/doc/hg38/varaico.txt
+
+#########################################################################
 # Hi-C example track drawing from Rao 2014 - (DONE - 2019-10-07 - Jonathan)
 mkdir -p /hive/data/genomes/hg19/bed/hic
 cd /hive/data/genomes/hg19/bed/hic

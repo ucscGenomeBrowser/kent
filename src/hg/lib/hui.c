@@ -7092,6 +7092,8 @@ if (! (scoreFilterOk || glvlScoreMin))
    {
    if (isBoxOpened)
       cfgEndBox(boxed);
+   else 
+      printf("<BR>"); 
    return;
    }
 
