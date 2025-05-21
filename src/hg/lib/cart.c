@@ -655,6 +655,16 @@ sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
       "WHERE userName = '%s' AND sessionName = '%s';",
       namedSessionTable, encSessionOwner, encSessionName);
 sr = sqlGetResult(conn, query);
+
+if (sqlCountRows(sr)==0 && cfgOption("namedSessionAlt"))
+    {
+    sqlFreeResult(&sr);
+    sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
+          "WHERE userName = '%s' AND sessionName = '%s';",
+          cfgOption("namedSessionAlt"), encSessionOwner, encSessionName);
+    sr = sqlGetResult(conn, query);
+    }
+
 if ((row = sqlNextRow(sr)) != NULL)
     {
     boolean shared = atoi(row[0]);
@@ -1471,6 +1481,13 @@ cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
 if (sessionIdFound && !userIdFound && !cgiWasSpoofed() && cfgOptionBooleanDefault("noCookieTrace", FALSE))
     fprintf(stderr, "HGSID_WITHOUT_COOKIE\n");
+
+if (sessionId && !sessionIdFound && (!userId || !userIdFound) && cfgOptionBooleanDefault("punishInvalidHgsid", FALSE))
+    {
+    fprintf(stderr, "HGSID_WAIT hgsid but no cookies: 10 seconds penalty");
+    sleep(10);
+    }
+
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
@@ -2553,11 +2570,10 @@ struct cart *cart = cartForSession(cookieName, exclude, oldVars);
 popWarnHandler();
 popAbortHandler();
 
-cartWriteCookie(cart, cookieName);
-
 if (doContentType && !cartDidContentType)
     {
     addHttpHeaders();
+    cartWriteCookie(cart, cookieName);
     puts("Content-Type:text/html");
     puts("\n");
     cartDidContentType = TRUE;
