@@ -3073,7 +3073,7 @@ for (ref = exonList; TRUE; )
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
-                                        dyStringPrintf(codonDy, "<b>cDNA: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
                                     // if you change the text below, also change hgTracks:mouseOverToExon
                                     dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
@@ -3088,14 +3088,21 @@ for (ref = exonList; TRUE; )
                     }
                 else // either an intron, or else an exon zoomed out too far for codons (or no codons)
                     {
-                    char *sep = "";
-                    if (!isEmpty(existingText))
-                        sep = "<br>";
-
                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
-                // if you change the text below, also change hgTracks:mouseOverToExon
-                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>cDNA:</b> Zoom in to show position<br><b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
-                            existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                    // if you change the text below, also change hgTracks:mouseOverToExon
+                    char *posNote = "";
+                    char *exonOrIntron = "Intron";
+                    if (isExon) 
+                        {
+                        posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
+                        exonOrIntron = "Exon";
+                        }
+
+
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
+                            "<b>Strand:</b> %c<br><b>%s:</b> %s %d of %d<br>%s",
+                        existingText, posNote, strandChar, exonOrIntron, exonIntronText, 
+                        exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
