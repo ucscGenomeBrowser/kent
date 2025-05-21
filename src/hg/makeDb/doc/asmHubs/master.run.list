@@ -2786,6 +2786,7 @@
 ./runBuild GCF_000021325.1_ASM2132v1 bacteria Gluconacetobacter_diazotrophicus_PA1_5
 ./runBuild GCF_000021865.1_ASM2186v1 bacteria Rhodobacter_capsulatus_SB_1003
 ./runBuild GCF_000022745.1_ASM2274v1 bacteria Brucella_microti_CCM_4915
+./runBuild GCF_000024185.1_ASM2418v1 archaea Methanobrevibacter_ruminantium_M1
 ./runBuild GCF_000024505.1_ASM2450v1 bacteria Anaplasma_centrale_str._Israel
 ./runBuild GCF_000026005.1_ASM2600v1 bacteria Ehrlichia_ruminantium_str._Welgevonden
 ./runBuild GCF_000026365.1_ASM2636v1 fungi Zygosaccharomyces_rouxii
