@@ -157,7 +157,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -242,6 +242,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $pmidCount <br> <b>Variant Effect:</b> $variantEffect
+        pennantIcon New red ../goldenPath/newsarch.html#052125 "Released May 21, 2025"
         html varsInPubs.html
 
 track caseControl
