@@ -701,8 +701,10 @@ if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
   ln -s ../trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz $buildDir/genes/${asmId}.ncbiGene.gtf.gz
 fi
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+if [ -s  $buildDir/ixIxx/${asmId}.ncbiGene.ix ]; then
+  ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
+  ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+fi
   printf "track ncbiGene
 longLabel $longLabel
 shortLabel $shortLabel

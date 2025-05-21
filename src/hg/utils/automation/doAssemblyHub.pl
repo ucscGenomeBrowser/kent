@@ -1879,7 +1879,9 @@ _EOF_
   rm -f \$asmId.exons.bed
   ~/kent/src/hg/utils/automation/gpToIx.pl \$ncbiGenePred \\
     | sort -u > \$asmId.ncbiGene.ix.txt
-  ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
+  if [ -s \$asmId.ncbiGene.ix.txt ]; then
+    ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
+  fi
   rm -f \$asmId.ncbiGene.ix.txt
   genePredToBigGenePred \$ncbiGenePred stdout \\
       | sort -k1,1 -k2,2n > \$asmId.ncbiGene.bed
