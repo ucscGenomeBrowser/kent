@@ -230,7 +230,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         html varsInPubs.html
 
         track varaico
-        release alpha
+        release alpha,beta
         shortLabel Varaico Variants
         longLabel Varaico Variants extracted from full text publications, titles, and abstracts
         visibility dense
