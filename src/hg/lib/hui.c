@@ -56,6 +56,7 @@
 #include "trackVersion.h"
 #include "hubConnect.h"
 #include "bigBedFilter.h"
+#include "bedMethyl.h"
 
 // TODO: these should go away after refactoring of multi-region link
 #include "hex.h"
@@ -10178,6 +10179,8 @@ else if (sameWord("interact", tdb->type))
 else if (sameWord("hic", tdb->type))
     // HI-C data are stored in .hic files, but parsed into interact objects
     asObj = interactAsObj();
+else if (sameWord("bedMethyl", tdb->type))
+    asObj = bedMethylAsObj();
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;
