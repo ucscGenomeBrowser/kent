@@ -13,8 +13,8 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
         track clinvarMainAlpha
         parent clinvarAlpha
-        shortLabel ClinVar SNVs
-        longLabel ClinVar Short Variants < 50bp
+        shortLabel ClinVar SNVs ALPHA
+        longLabel ClinVar ALPHA Short Nucleotide Variants < 50bp
         visibility hide
         group phenDis
         itemRgb on
@@ -41,12 +41,11 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         noScoreFilter on
         searchIndex _dbVarSsvId
         maxWindowCoverage 10000000
-        decorator.default.bigDataUrl /gbdb/$D/bbi/clinvarAlpha/clinvarMainDecor.bb
 
         track clinvarCnvAlpha
         parent clinvarAlpha
-        shortLabel ClinVar CNVs
-        longLabel ClinVar Copy Number Variants >= 50bp
+        shortLabel ClinVar CNVs ALPHA
+        longLabel ClinVar ALPHA Copy Number Variants >= 50bp
         visibility hide
         type bigBed 12 +
         itemRgb on
@@ -74,8 +73,8 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
         track clinvarSubLollyAlpha
         parent clinvarAlpha
-        shortLabel ClinVar interp
-        longLabel ClinVar SNVs submitted interpretations and evidence
+        shortLabel ClinVar interp ALPHA
+        longLabel ClinVar SNVs ALPHA submitted interpretations and evidence
         bigDataUrl /gbdb/$D/clinvarSubLollyAlpha/clinvarSubLolly.bb
         xrefDataUrl /gbdb/$D/clinvarSubLollyAlph/clinvarSub.bb
         type bigLolly
