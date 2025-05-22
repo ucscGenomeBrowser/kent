@@ -1555,6 +1555,9 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 {
 int start = 0;
 char *type = cloneString(tdb->type);
+
+if (sameString(type, "bedMethyl"))
+    return 9;
 char *word = nextWord(&type);
 if (word && (sameWord(word,"bed") || startsWith("big", word)))
     {
@@ -4804,6 +4807,10 @@ else if (wordCount > 0)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
         genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (sameString(type, "bedMethyl"))
+	{
+        genericBedClick(conn, tdb, item, start, 9);
 	}
     else if (sameString(type, "bigGenePred"))
         {
@@ -22492,6 +22499,10 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
+#ifdef NOTNOW
+else if ( startsWith( "bedMethyl", type))
+    genericBedClick(conn, tdb, item, start, 9);
+#endif
 else if ( startsWith( "longTabix", type))
     doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))

@@ -6,7 +6,7 @@ XINC = -I$(MYSQLINC)
 O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   asmAlias.o asmEquivalent.o asmSummary.o assemblyList.o autoUpgrade.o axtInfo.o \
   barChartBed.o barChartCategory.o barChartUi.o bed.o bed12Source.o \
-  bedDetail.o bigBedFind.o bigBedLabel.o bigChain.o bigDbSnp.o bigGenePred.o bigLink.o \
+  bedDetail.o bedMethyl.o bigBedFind.o bigBedLabel.o bigChain.o bigDbSnp.o bigGenePred.o bigLink.o \
   bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
   cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
   chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
