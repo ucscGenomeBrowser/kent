@@ -149,6 +149,7 @@
 #include "bigWarn.h"
 #include "quickLift.h"
 #include "liftOver.h"
+#include "bedMethyl.h"
 
 #define CHROM_COLORS 26
 
@@ -12101,6 +12102,28 @@ void freePgSnp(struct track *tg)
 pgSnpFreeList(((struct pgSnp **)(&tg->items)));
 }
 
+void loadBedMethyl(struct track *tg)
+/* Load up bedMethyl type tracks */
+{
+struct customTrack *ct = tg->customPt;
+char *table = tg->table;
+struct sqlConnection *conn;
+if (ct == NULL)
+    conn = hAllocConn(database);
+else
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+struct dyString *query = sqlDyStringCreate("select * from %s where ", table);
+hAddBinToQuery(winStart, winEnd, query);
+sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
+	       chromName, winEnd, winStart);
+tg->items = bedMethylLoadByQuery(conn, query->string);
+
+hFreeConn(&conn);
+}
+
 void loadPgSnp(struct track *tg)
 /* Load up pgSnp (personal genome SNP) type tracks */
 {
@@ -12171,6 +12194,14 @@ if (vis == tvDense)
     }
 }
 
+void bedMethylMethods (struct track *tg)
+/* bedMethyl track methods */
+{
+bedMethods(tg);
+tg->loadItems = loadBedMethyl;
+tg->canPack = TRUE;
+}
+
 void pgSnpMethods (struct track *tg)
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
@@ -12185,6 +12216,7 @@ tg->mapItem = pgSnpMapItem;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->drawLeftLabels = pgSnpLeftLabels;
+tg->canPack = TRUE;
 }
 
 void loadBlatz(struct track *tg)
@@ -13294,6 +13326,13 @@ else  /* when in doubt set up as simple bed */
     }
 tg->nextItemButtonable = TRUE;
 tg->customPt = ct;
+tg->canPack = TRUE;
+}
+
+void bedMethylCtMethods (struct track *tg)
+/* Load pgSnp track from custom tracks */
+{
+bedMethylMethods(tg);
 tg->canPack = TRUE;
 }
 
@@ -15046,6 +15085,10 @@ else if (sameWord(type, "barChart"))
 else if (sameWord(type, "interact"))
     {
     interactMethods(track);
+    }
+else if (sameWord(type, "bedMethyl"))
+    {
+    bedMethylMethods(track);
     }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))

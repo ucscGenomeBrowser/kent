@@ -1700,6 +1700,9 @@ void hicMethods(struct track *tg);
 void hicCtMethods(struct track *tg);
 /* Hi-C track methods for custom track */
 
+void bedMethylCtMethods(struct track *tg);
+/* bedMethyl track methods for custom track */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */

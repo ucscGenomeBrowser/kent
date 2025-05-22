@@ -4668,6 +4668,7 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "bedMethyl")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
 || sameWord(type, "bigRmsk")
@@ -6658,6 +6659,12 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
+    }
+else if (sameString(type, "bedMethyl"))
+    {
+    tg = trackFromTrackDb(tdb);
+    bedMethylCtMethods(tg);
+    tg->customPt = ct;
     }
 else
     {
