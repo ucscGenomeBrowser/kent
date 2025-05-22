@@ -540,7 +540,6 @@ boolean trackDbSettingOff(struct trackDb *tdb, char *name)
 {
 char *setting = trackDbSetting(tdb,name);
 return  (setting && (   sameWord(setting,"off")
-                     || sameWord(setting,"Off")
                      || sameWord(setting,"false")
                      || sameWord(setting,"disabled")));
 }

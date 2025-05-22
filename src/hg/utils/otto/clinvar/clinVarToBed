@@ -18,8 +18,14 @@ dbToUrl = {
 }
 
 # since we're filtering on it, we make sure that we have all molecular consequences in the tdb file
-# if they add a new one, this script must fail and tdb must be updated.
-possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiatior codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", "initiator codon variant", ""])
+# if Clinvar ever adds a new value, this script must fail and tdb must be updated.
+possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiator codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
+
+# these consequences are highlighted using a triangle decorator. Similar to Decipher and Gnomad browsers
+truncConseqs = set(["nonsense", "frameshift variant", "splice acceptor variant", "splice donor variant"])
+
+# make sure that if the second list is edited, it is never out of sync with the first list
+assert(len(set(truncConseqs - possMolConseqs))==0)
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed.
@@ -48,7 +54,7 @@ if not options.isAlpha and os.getlogin()!="otto":
     sys.exit(1)
 
 #clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
-clinvarExpectHeaders = "#AlleleID|Type|Name|GeneID|GeneSymbol|HGNC_ID|ClinicalSignificance|ClinSigSimple|LastEvaluated|RS# (dbSNP)|nsv/esv (dbVar)|RCVaccession|PhenotypeIDS|PhenotypeList|Origin|OriginSimple|Assembly|ChromosomeAccession|Chromosome|Start|Stop|ReferenceAllele|AlternateAllele|Cytogenetic|ReviewStatus|NumberSubmitters|Guidelines|TestedInGTR|OtherIDs|SubmitterCategories|VariationID|PositionVCF|ReferenceAlleleVCF|AlternateAlleleVCF|SomaticClinicalImpact|SomaticClinicalImpactLastEvaluated|ReviewStatusClinicalImpact|Oncogenicity|OncogenicityLastEvaluated|ReviewStatusOncogenicity".split("|")
+clinvarExpectHeaders = "#AlleleID|Type|Name|GeneID|GeneSymbol|HGNC_ID|ClinicalSignificance|ClinSigSimple|LastEvaluated|RS# (dbSNP)|nsv/esv (dbVar)|RCVaccession|PhenotypeIDS|PhenotypeList|Origin|OriginSimple|Assembly|ChromosomeAccession|Chromosome|Start|Stop|ReferenceAllele|AlternateAllele|Cytogenetic|ReviewStatus|NumberSubmitters|Guidelines|TestedInGTR|OtherIDs|SubmitterCategories|VariationID|PositionVCF|ReferenceAlleleVCF|AlternateAlleleVCF|SomaticClinicalImpact|SomaticClinicalImpactLastEvaluated|ReviewStatusClinicalImpact|Oncogenicity|OncogenicityLastEvaluated|ReviewStatusOncogenicity|SCVsForAggregateGermlineClassification|SCVsForAggregateSomaticClinicalImpact|SCVsForAggregateOncogenicityClassification".split("|")
 
 # ==== FUNCTIONs =====
 
@@ -398,7 +404,7 @@ def compareWithLastMonth(fname, maxDiff):
         raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % (previousCount, todayCount))
     # see RM 14350 do more than just linecount
     # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
-    cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)
+    cmd = "diff %s %s --speed-large-files | grep '^[><]'  | wc -l" % (fname, previousFname)
     diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
     logging.info("%s: %d lines changed" % (fname, diffCount))
     percDiff = float(diffCount)/todayCount
@@ -592,6 +598,7 @@ def loadSubmissions(summFname):
     assert(os.system(cmd)==0)
 
     cmd = "hgLoadSqlTab hg19 clinvarSub clinvarSub.sql %s" % (tmpFname)
+    print(cmd)
     assert(os.system(cmd)==0)
 
     cmd = "hgLoadSqlTab hg38 clinvarSub clinvarSub.sql %s" % (tmpFname)
@@ -739,8 +746,13 @@ if (fileHeaders != clinvarExpectHeaders): # test if clinvar has changed their he
 # open out files
 hg19Bed = open("bed/clinvarMain.hg19.%sbed" % outSuffix, "w", encoding="latin1")
 hg38Bed = open("bed/clinvarMain.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+
+hg19DecorBed = open("bed/clinvarMainDecor.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38DecorBed = open("bed/clinvarMainDecor.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+
 hg19BedCnv = open("bed/clinvarCnv.hg19.%sbed" % outSuffix, "w", encoding="latin1")
 hg38BedCnv = open("bed/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+
 
 longCount = 0
 noAssCount = 0
@@ -757,16 +769,16 @@ for line in ifh:
     alleleId, allType, name, geneId, geneSymbol, hgncId, clinSign, clinSignSimple, lastEval, snpAcc, dbVarAcc, \
       irvcAcc, phenotypeIds, phenotypeList, origin, originSimple, assembly, chromAcc, chrom, start, end, \
       refAll, varAll, cytogenetic, reviewStatus, numberSubmitters, guidelines, inGtr, otherIds, \
-      submCategories, varId, posVcf, refAllVcf, altAllVcf, somClinImpact, somClinLastEval, revStatusClinImpact, oncogen, oncogenLastEval, revStatusOncogen = row
+      submCategories, varId, posVcf, refAllVcf, altAllVcf, somClinImpact, somClinLastEval, revStatusClinImpact, oncogen, oncogenLastEval, revStatusOncogen, aggrGermClass, aggrSomClassImpact, aggrSomOnc = row
    # SomaticClinicalImpact|SomaticClinicalImpactLastEvaluated|ReviewStatusClinicalImpact|Oncogenicity|OncogenicityLastEvaluated|ReviewStatusOncogenicity
 
     # changed in July 2018 when the "varId" was merged into this table. It used to be 
     # in allToVar
-    if varId=="":
-        logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
-        vcvId = ""
-    else:
-        vcvId = "VCV%08d.1" % int(varId)
+    #if varId=="":
+        #logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
+        #vcvId = ""
+    #else:
+        #vcvId = "VCV%09d.1" % int(varId)
 
     if chrom=="" or assembly=="" or assembly=="NCBI36" or assembly=="na":
         noAssCount += 1
@@ -784,10 +796,13 @@ for line in ifh:
     hgvsTable =  json.dumps(hgvs[alleleId])
 
     molConseq = allToVcf.get(int(alleleId))
+    isTrunc = False
     if molConseq is None:
-        #logging.debug("%s has no molConseq" % alleleId)
         noMcCount += 1
         molConseq = ""
+    else:
+        if molConseq in truncConseqs:
+            isTrunc = True
 
     if chromAcc=="NT_187513.1":
         chrom = "chrUn_KI270742v1"
@@ -841,7 +856,9 @@ for line in ifh:
     if int(start)>int(end):
         start, end = end, start
 
-    if chrom=="chr17" and (end=="217748468" or end=="84062405"):
+    if (chrom=="chr17" and end=="217748468" or end=="84062405") or  \
+        (chrom=="chr9" and end=="140730116" and assembly=="GRCh38"): # VCV003340459.2 reported to clinvar May 2025
+
         print("blacklisted feature")
         continue
 
@@ -916,6 +933,7 @@ for line in ifh:
         name = name[:90]+"..."
 
     vcvId = "VCV%09d" % int(varId)
+    vcvIdVersion = "VCV%09d" % int(varId)
     name = varId+"|"+vcvId+" : "+name
 
     if len(mouseOverName)>80:
@@ -944,7 +962,10 @@ for line in ifh:
     # removed Apr 2020: numberSubmitters+" submitters", "Level: "+asciiStars
     mouseOver = "<br>".join(mouseOverParts)
 
-    snpAcc = "rs"+snpAcc # dbSnp links changed in mid/late 2022
+    if snpAcc=="-1":
+        snpAcc=""
+    else:
+        snpAcc = "rs"+snpAcc # dbSnp links changed in mid/late 2022
 
     vcfDesc = chrom+":"+posVcf+":"+refAllVcf+">"+altAllVcf
     if len(vcfDesc)>=255:
@@ -960,18 +981,23 @@ for line in ifh:
     if oncogen!="" and oncogen!="-":
 	    oncogenDesc = "%s (%s, %s)" % (oncogen, oncogenLastEval, revStatusOncogen)
 
+    mouseOverIdx = 33 # if you ever change the field order below, make sure that you adapt this number!
+
     row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, starRatingHtml, allType, geneStr, molConseq,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
         hgvsTable, "", numberSubmitters, lastEval, guidelines, otherIds, mouseOver,
-	vcfDesc, 
-	somImpactDesc, 
-	oncogenDesc,
+	    vcfDesc,
+	    somImpactDesc,
+	    oncogenDesc,
+        # the new classes
+        aggrGermClass, aggrSomClassImpact, aggrSomOnc,
         # these fields are the for the filters, not for the display
         pathoCode, originCode, allTypeCode, str(varLen), str(starCount),
         # the variant ID got forgotten in the original bigBed schema, it was only part of the origName field
-        varId, dbVarSsvAcc, vcvId]
+        varId, dbVarSsvAcc, vcvId, vcvIdVersion
+        ]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []
@@ -979,15 +1005,17 @@ for line in ifh:
         if x in ["-1", "-"]:
             newRow.append("")
         else:
-             newRow.append(x)
+            newRow.append(x)
     row = newRow
 
     if assembly=="GRCh37":
         ofh = hg19Bed
+        decorOfh = hg19DecorBed
         if isCnv:
             ofh = hg19BedCnv
     elif assembly=="GRCh38":
         ofh = hg38Bed
+        decorOfh = hg38DecorBed
         if isCnv:
             ofh = hg38BedCnv
     else:
@@ -996,8 +1024,30 @@ for line in ifh:
     ofh.write("\t".join(row))
     ofh.write("\n")
 
+    if isTrunc:
+        # truncating mutations get a special symbol written into another BED file, for decorators
+        decorRow = list(row[:12])
+        rgbColor = row[8]
+        mouseOverText = row[mouseOverIdx]
+
+        decorRef = row[0]+":"+row[1]+"-"+row[2]+":"+row[3]
+        decorRow[3] = "" # delete mouseover
+
+        decorRow.append(decorRef)
+        decorRow.append("glyph")
+        decorRow.append(rgbColor)
+        decorRow.append("Triangle")
+        decorRow.append(mouseOverText)
+
+        decorOfh.write("\t".join(decorRow))
+        decorOfh.write("\n")
+
 hg19Bed.close()
 hg38Bed.close()
+
+hg19DecorBed.close()
+hg38DecorBed.close()
+
 hg19BedCnv.close()
 hg38BedCnv.close()
 
@@ -1005,7 +1055,7 @@ logging.info("%d lines with feature name that was too long, shortened them" % lo
 logging.info("%d lines without, with old assembly or no chrom, skipped" % noAssCount)
 logging.info("%d lines with -1/-1 start/end positions skipped. Examples: %s" % (len(minusAccs), minusAccs[:3]))
 
-fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
+fnames = [hg19Bed.name, hg38Bed.name, hg19DecorBed.name, hg38DecorBed.name, hg19BedCnv.name, hg38BedCnv.name]
 
 # sort the files
 for fname in fnames:
@@ -1014,7 +1064,7 @@ for fname in fnames:
     assert(os.system(cmd)==0)
 
 # check new bed files against last months's bed files
-if options.maxDiff:
+if options.maxDiff and not options.isAlpha:
     for fname in fnames:
         compareWithLastMonth(fname, options.maxDiff)
 
@@ -1035,7 +1085,13 @@ for fname in fnames:
         
     tmpFname = "%s.%s.temp.bb" % (base, db)
 
-    cmd = "bedToBigBed -extraIndex=_dbVarSsvId,snpId -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
+    asFname = "clinvar.as"
+    extraOptions = "-extraIndex=_dbVarSsvId,snpId,vcvId,_vcvIdVersion "
+    if "Decor" in fname:
+        asFname = "clinvarDecoration.as"
+        extraOptions = ""
+
+    cmd = "bedToBigBed %s -tab -type=bed9+ -as=%s %s /hive/data/genomes/%s/chrom.sizes %s" % (extraOptions, asFname, fname, db, tmpFname)
     mustRun(cmd)
 
     finalFname = "%s/%s.%s.bb" % (bigBedDir, base, db)

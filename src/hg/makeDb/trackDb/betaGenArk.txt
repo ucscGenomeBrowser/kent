@@ -1,0 +1,4 @@
+# the listing in this file triggers the building of the beta.hub.txt
+# file in the genark system.  Any contrib project listed here will be included
+# contrib track name: tracks found in <buildDir>/contrib/<thisName>/
+tiberius

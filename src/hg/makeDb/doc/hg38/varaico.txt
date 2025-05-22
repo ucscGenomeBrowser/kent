@@ -1,0 +1,10 @@
+# May 21 2025 - Johannes
+# have a look at this config file and edit paths/API keys if necessary:
+export AMELIE2_CONFIG_JSON=/hive/users/jbirgmei/amelie2/src/scripts/config.json
+
+# then run the pipeline to create hg19 and hg38 bigbeds:
+/cluster/home/jbirgmei/opt_rocky9/miniconda3/envs/amelie2/bin/amelie2 workflow final_out --partition hg19,hg38
+
+# copy bigbeds:
+cp /hive/users/jbirgmei/amelie2/data/out/full/hg19/normalized_variants.hg19.bb /gbdb/hg19/bbi/varaico.bb
+cp /hive/users/jbirgmei/amelie2/data/out/full/hg38/normalized_variants.hg19.bb /gbdb/hg38/bbi/varaico.bb

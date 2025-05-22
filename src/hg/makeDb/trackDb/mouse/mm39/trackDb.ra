@@ -32,8 +32,8 @@ include trackDb.chainNet.ra
 include trackDb.syntenicNet.ra alpha
 include trackDb.rbestNet.ra alpha
 include trackDb.gencode.ra
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
+#include knownGene.alpha.ra alpha
 include knownGeneArchive.ra
 include reMap.ra
 

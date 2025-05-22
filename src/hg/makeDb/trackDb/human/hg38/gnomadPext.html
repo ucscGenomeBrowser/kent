@@ -1,0 +1,139 @@
+<h2>Description</h2>
+<p>
+The <b>${longLabel}</b> track set displays isoform expression levels across 50
+tissues from the Genotype Tissue Expression (GTEx) v10 dataset; tissues with fewer than 50 samples
+were excluded (Fallopian Tube, Endocervix, Ectocervix, Kidney, Medulla).
+</p>
+
+<p>
+The <b>gnomAD pext tracks</b> provide a comprehensive view of the expression of exons across a 
+gene using the <em>proportion expression across transcripts</em>, or <em>pext metric</em>, a 
+transcript-level annotation metric that quantifies isoform expression for variants. This metric 
+was calculated by annotating each variant with the expression of all possible consequences across 
+all transcripts for each tissue and normalizing the expression of the annotation to the total 
+expression of the gene, which can be interpreted as a measure of the proportion of the total 
+transcriptional output from a gene that would be affected by the variant annotation in question.
+More information can be found on the Broad institute's <a target="_blank"
+href="https://gnomad.broadinstitute.org/help/pext"> pext help page </a> 
+</p>
+
+<p>
+Each of the subtracks shows the pext metric for a specific tissue, except the <b>gnomAD 
+pext Mean Proportion</b> subtrack that shows the average pext metrics calculated from the 50 GTEx 
+tissues.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The pext graphs display the mean expression at each base position for protein-coding (CDS) regions.
+While UTRs do have expression in transcriptome datasets, this information is not included
+for the visualization. The details page shows calculated sample percentages for the range of
+sequence within the browser window.
+</p>
+
+
+<H2>Methods</H2>
+<p>
+The pext values are derived from isoform quantifications using the <a target="_blank"
+href="https://deweylab.biostat.wisc.edu/rsem/">RSEM tool</a>. Detailed information about
+development and commands to create these files can be found <a target="_blank"
+href="https://github.com/macarthur-lab/tx_annotation/">here</a>. Pext values were downloaded
+from the <a target="_blank" href="https://gnomad.broadinstitute.org/downloads#v2-pext">gnomAD website</a> 
+and transformed into bigWigs, one per tissue. For the full list of UCSC specific steps, please
+see the &quot;gnomAD PEXT scores&quot; section of the
+<a target="_blank" 
+href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt">
+hg38 makedoc</a> from our GitHub repository.
+</p>
+
+<p>
+Note that isoform quantification tools can be imprecise, especially for longer genes with many
+annotated isoforms. Regions with low pext values might be enriched for annotation errors (ie. there
+may be edge cases for which an exon that is established to be critical for gene function may appear
+unexpressed with pext). Also note that the GTEx dataset is postmortem adult tissue, and thus
+the possibility that an exon may be development-specific or may be expressed in tissues not
+represented in GTEx can not be dismissed.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.
+The data can also be found directly from the gnomAD <a target="_blank"
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>.
+</p>
+
+<p>
+Please refer to our
+<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/gnomAD"
+target="_blank">mailing list archives</a>
+for questions and example queries, or our
+<a HREF="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a>
+for more information.</p>
+
+<p>
+More information about using and understanding the gnomAD data can be found in the
+<a target="_blank" href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a> site.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(ODbL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alf&#246;ldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
+</p>
+
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O&#x27;Donnell-Luria AH <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2329-2" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
+</p>

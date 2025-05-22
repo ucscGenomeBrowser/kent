@@ -38,6 +38,9 @@ table clinVarBed
     string vcfDesc;            "VCF position|Can differ from ClinVar position due to left/right shifting rules"
     string somImpactDesc;       "Somatic Impact"
     string oncogenDesc;       "Oncogen"
+    lstring aggrGermClass;      "Aggregrate Germline Classification"
+    string aggrSomClassImpact;      "Aggregrate Somatic Classification of Clinical Impact"
+    string aggrSomClassOnc;      "Aggregate Somatic Classification of Oncogenicity"
     string _clinSignCode;        "Clinical Significance"
     string _originCode;        "Allele Origin Code"
     string _allTypeCode;        "Variation Type"
@@ -46,4 +49,5 @@ table clinVarBed
     int _variantId;           "ClinVar variant ID"
     string _dbVarSsvId;           "dbVar SSV ID"
     string vcvId;            "ClinVar VCV Accession"
+    string _vcvIdVersion;            "ClinVar VCV with version"
     )

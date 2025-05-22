@@ -43,6 +43,8 @@ include fantom5.ra
 
 include nuMtSeq.ra
 
+include gnomad.pext.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -525,8 +527,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
+#include knownGene.alpha.ra alpha
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
@@ -889,9 +891,10 @@ include assemblyTracks.ra
 
 include primates11way.ra alpha
 
-include pseudogenes.ra beta,public
-include pseudogenes.new.ra alpha
+include pseudogenes.ra
 
 include recount3.ra alpha
 
 include long_read_transcripts.ra alpha
+
+include mavedb.ra alpha

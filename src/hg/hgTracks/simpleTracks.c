@@ -2662,7 +2662,7 @@ if (*pNewWinEnd > virtSeqBaseCount)
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
-#define EXONTEXTLEN 256
+#define EXONTEXTLEN 4096
 
 static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase, int endPhase, char *buf) 
 /* Write mouseover text that describes the exon's phase into buf[EXONTEXTLEN].
@@ -2672,8 +2672,6 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
    if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
 {
 
-static const char *phaseHelp = "<a style='float:right' target=_blank href='../goldenPath/help/codonPhase.html'>Phase?</a><br>";
-
 if (startPhase==-1) // UTRs don't have a frame at all
     {
     safef(buf, EXONTEXTLEN, "<b>No Codon:</b> Untranslated region<br>");
@@ -2682,13 +2680,17 @@ else
     {
     char *exonNote = "";
     boolean isNotLastExon = (exonIntronNumber<numExons);
+
+    static const char *phasePrefix  = 
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'>Codon phase: <i class='fa fa-question-circle-o'></i></a></b>";
+
     if (isNotLastExon)
         {
         if (startPhase==endPhase)
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "<b>Codon phase:</b> start %d, end %d%s<br>%s", startPhase, endPhase, exonNote, phaseHelp);
+        safef(buf, EXONTEXTLEN, "%s start %d, end %d%s<br>", phasePrefix, startPhase, endPhase, exonNote);
         } 
     else
         {
@@ -2696,7 +2698,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "<b>Codon phase:</b> start %d%s<br>%s", startPhase, exonNote, phaseHelp);
+        safef(buf, EXONTEXTLEN, "%s start %d%s<br>", phasePrefix, startPhase, exonNote);
         }
     }
 }
@@ -2940,7 +2942,7 @@ boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
 int e = -1;
-char mouseOverText[256];
+char mouseOverText[4096];
 boolean isExon = TRUE;
 int picStart = insideX;
 int picEnd = picStart + insideWidth;
@@ -3067,11 +3069,13 @@ for (ref = exonList; TRUE; )
                                     char *oldMouseOver = lf->mouseOver;
                                     lf->mouseOver = NULL;
                                     dyStringClear(codonDy);
+                                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
-                                        dyStringPrintf(codonDy, "<b>cDNA: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    // if you change the text below, also change hgTracks:mouseOverToExon
                                     dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
@@ -3085,12 +3089,21 @@ for (ref = exonList; TRUE; )
                     }
                 else // either an intron, or else an exon zoomed out too far for codons (or no codons)
                     {
-                    char *sep = "";
-                    if (!isEmpty(existingText))
-                        sep = "<br>";
+                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
+                    // if you change the text below, also change hgTracks:mouseOverToExon
+                    char *posNote = "";
+                    char *exonOrIntron = "Intron";
+                    if (isExon) 
+                        {
+                        posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
+                        exonOrIntron = "Exon";
+                        }
 
-                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s%s<b>Strand:</b> %c<br><b>Exon:</b> %s %d of %d<br>%s",
-                            existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
+                            "<b>Strand:</b> %c<br><b>%s:</b> %s %d of %d<br>%s",
+                        existingText, posNote, strandChar, exonOrIntron, exonIntronText, 
+                        exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
@@ -11665,7 +11678,7 @@ if (!tg->limitedVisSet)
                 tg->visibility = tg->limitedVis = tvFull;
             }
         else
-            tg->limitedVis = vis;
+            tg->limitedVis = (vis == tvShow) ? tvFull : vis;
         }
     else
         {

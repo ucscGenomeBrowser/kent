@@ -2480,6 +2480,11 @@ var rightClick = {
             // Launches the popup but shields the ajax with a waitOnFunction
             popUp.hgTrackUi( rightClick.selectedMenuItem.id, false );  
 
+        } else if (cmd === 'hgTrackUi_popup_description') {
+
+            // Launches the popup but shields the ajax with a waitOnFunction
+            popUp.hgTrackUi( rightClick.selectedMenuItem.id, true );  
+
         } else if (cmd === 'hgTrackUi_follow') {
 
             url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
@@ -2746,6 +2751,28 @@ var rightClick = {
     },
 
 
+    // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
+    mouseOverToLabel: function(title)
+    {
+        if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
+            title = title.split("<br>")[0].split("</b>")[1];
+        }
+        return title;
+    },
+
+    // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
+    // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
+    // We don't have the value of the tdb variable "exonNumbers" here, so just use a heuristic to see if it's on
+    mouseOverToExon: function(title)
+    {
+        var exonNum = 0;
+        var exonRe = /(Exon) ([1-9]+) /;
+        var matches = exonRe.exec(title);
+        if (matches !== null && matches[2].length > 0)
+            exonNum = matches[2];
+        return exonNum;
+    },
+
     load: function (img)
     {
         rightClick.menu = img.contextMenu(function() {
@@ -2868,11 +2895,7 @@ var rightClick = {
                     o = {};
                     var any = false;
                     var title = rightClick.selectedMenuItem.title || "feature";
-                    var exonNum = 0;
                     var maxLength = 60;
-                    if (title.length > maxLength) {
-                        title = title.substring(0, maxLength) + "...";
-                    }
 
                     if ((isGene || isHgc || id === "wikiTrack") && href.indexOf("i=mergedItem") === -1) {
                         // Add "Open details..." item
@@ -2898,18 +2921,19 @@ var rightClick = {
                             }
                         }
 
-                        // when "exonNumbers on", the mouse over text is not a good item description for the right-click menu
-                        // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
-                        // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
-                        if (title.search(/, strand [+-], (Intron|Exon) /)!==-1) {
-                            re = /(Exon) ([1-9]+) of/;
-                            matches = re.exec(title);
-                            if (matches !== null && matches[2].length > 0)
-                                exonNum = matches[2];
-                            title = title.split(",")[0];
+                        // pick out the exon number from the mouseover text
+                        // Probably should be a data-exonNum tag on the DOM element
+                        var exonNum = rightClick.mouseOverToExon(title);
+
+                        // remove special genePred exon mouseover html text
+                        // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
+                        title = rightClick.mouseOverToLabel(title);
+
+                        if (title.length > maxLength) {
+                            title = title.substring(0, maxLength) + "...";
                         }
 
-                        else if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
+                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
                                             || href.indexOf('g=unip') !== -1 
                                             || href.indexOf('g=knownGene') !== -1 )) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
@@ -3086,6 +3110,13 @@ var rightClick = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");
                                 return true; }
+                        };
+
+                        o[rightClick.makeImgTag("wrench.png")+" Track Description "+rec.shortLabel] = {
+                            onclick: function(menuItemClicked, menuObject) {
+                                rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
+                                return true; }
+
                         };
                     }
                     if (rec.parentTrack) {
@@ -4475,7 +4506,11 @@ var imageV2 = {
         if (!newJson) {
             stripJsEmbedded(response, true, stripped);
             if ( ! stripped.warnMsg )
-                warn("An unexpected error has occurred. Please consider letting us know by emailing genome-www@soe.ucsc.edu with the steps that resulted in this state and any info on how we could reproduce it. Using the sessions (My Data > My Sessions) tool can simplify the process by saving all configuration settings.");
+                warn("An unexpected error has occurred. Please consider letting us know " +
+                     "by emailing genome-www@soe.ucsc.edu with the steps that resulted in " +
+                     "this state and any info on how we could reproduce it. Using the " +
+                     "sessions (My Data > My Sessions) tool can simplify the process by " +
+                     "saving all configuration settings.");
         } else {
             if (this.id) {
                 if (newJson.trackDb[this.id]) {
@@ -5876,7 +5911,7 @@ $(document).ready(function()
         // allow the user to bring the tutorials popup via a new help menu button
         let tutorialLinks = document.createElement("li");
         tutorialLinks.id = "hgTracksHelpTutorialLinks";
-        tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutuorialPopup'>" +
+        tutorialLinks.innerHTML = "<a id='hgTracksHelpTutorialLinks' href='#showTutorialPopup'>" +
             "Interactive Tutorials</a>";
         $("#help > ul")[0].appendChild(tutorialLinks);
         $("#hgTracksHelpTutorialLinks").on("click", function () {

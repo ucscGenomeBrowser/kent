@@ -123,7 +123,7 @@
             title: 'Using the Popular Species Option',
             text: 'The <b>Popular Species</b> section lists commonly used model organisms, allowing '+
 		  'for quick selection of their genome browsers.<br><br>'+
-                  '<img src="/images/popular_species.png" width="350"><br>'+
+                  '<img src="/images/tutorialImages/popularSpecies.png" width="350"><br>'+
 		  'Clicking on a species will display '+
 		  'the default assembly version for that organism.',
             attachTo: {
@@ -138,7 +138,7 @@
             title: 'Using the Popular Species Option',
             text: 'To change the assembly version, click the <b>Assembly</b> option under '+
 		  '<b>Find Position</b>.<br><br>'+
-                  '<img src="/images/assembly_version.png" width="350">',
+                  '<img src="/images/tutorialImages/assemblyVersion.png" width="350">',
             attachTo: {
                 element: '#selectAssembly',
                 on: 'bottom'
@@ -189,10 +189,10 @@
 		  'page</b>.<br><br>Steps to request an assembly: '+
 		  '<ol>'+
 		  '<li>Enter the <b>species name, common name,</b> or <b>GC accession number</b> of the assembly.</li>'+
-		  '<img src="/images/assembly_request.png" height="200" width="500">'+
+		  '<img src="/images/tutorialImages/assemblyRequest.png" height="200" width="500">'+
 		  '<li>Click <button>request</button>.</li>'+
 		  '<li>Fill out the required information on the submission page.</li>'+
-	  	  '<img src="/images/request_page.png" width="200">',
+	  	  '<img src="/images/tutorialImages/requestPage.png" width="200">',
             attachTo: {
                 element: '#assemblySearchLink',
                 on: 'right'
@@ -205,7 +205,7 @@
             title: 'Using View sequences',
             text: 'Clicking the <b>View sequences</b> link directs users to the '+
 		  '<b>Assembly Browser Sequences</b> page.'+
-                  '<img src="/images/sequences_list.png" width="575">'+
+                  '<img src="/images/tutorialImages/sequencesList.png" width="575">'+
                   'This page displays information about chromosomes, sequences, and '+
 		  'contigs for the selected assembly.<br><br>'+
 		  'The third column displays alias sequence names, while subsequent columns show '+

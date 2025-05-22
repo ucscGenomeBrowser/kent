@@ -5,6 +5,7 @@ User-agent: anthropic-ai
 User-agent: Applebot
 User-agent: AwarioRssBot
 User-agent: AwarioSmartBot
+User-agent: Bytedance
 User-agent: Bytespider
 User-agent: CCBot
 User-agent: ChatGPT-User
