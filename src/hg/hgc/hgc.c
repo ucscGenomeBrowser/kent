@@ -4626,6 +4626,18 @@ else
     }
 }
 
+static void doBedMethyl(struct trackDb *tdb, char *item)
+/* Handle a click on a bedMethyl custom track */
+{
+int start = cartInt(cart, "o");
+
+struct sqlConnection *conn = hAllocConnTrack(CUSTOM_TRASH, tdb);
+database=CUSTOM_TRASH;
+tdb->table = trackDbSetting(tdb, "dbTableName");
+
+genericBedClick(conn, tdb, item, start, 9);
+}
+
 static void doLongTabix(struct trackDb *tdb, char *item)
 /* Handle a click on a long range interaction */
 {
@@ -22499,10 +22511,8 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
-#ifdef NOTNOW
 else if ( startsWith( "bedMethyl", type))
-    genericBedClick(conn, tdb, item, start, 9);
-#endif
+    doBedMethyl(ct->tdb, item);
 else if ( startsWith( "longTabix", type))
     doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))
