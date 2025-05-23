@@ -1479,10 +1479,15 @@ cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
-if (sessionIdFound && !userIdFound && !cgiWasSpoofed() && cfgOptionBooleanDefault("cartTrace", FALSE))
+boolean fromCli = cgiWasSpoofed();
+
+if (sessionIdFound && !userIdFound && !fromCli && cfgOptionBooleanDefault("cartTrace", FALSE))
     fprintf(stderr, "HGSID_WITHOUT_COOKIE\n");
 
-if (((sessionId && !sessionIdFound) || !sessionId) && (!userId || !userIdFound) && cfgOptionBooleanDefault("punishInvalidHgsid", FALSE))
+if (!fromCli && 
+    ((sessionId && !sessionIdFound) || !sessionId) && 
+    (!userId || !userIdFound) && 
+    cfgOptionBooleanDefault("punishInvalidHgsid", FALSE))
     {
     fprintf(stderr, "HGSID_WAIT no sessionId and no cookie: 5 seconds penalty");
     sleep(5);
@@ -1492,7 +1497,6 @@ if (((sessionId && !sessionIdFound) || !sessionId) && (!userId || !userIdFound) 
         sleep(10);
         }
     }
-
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
