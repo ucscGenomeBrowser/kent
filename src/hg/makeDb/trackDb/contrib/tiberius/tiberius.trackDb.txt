@@ -5,6 +5,7 @@ longLabel Tiberius ab initio gene prediction
 type bigGenePred
 visibility pack
 color 0,102,204
+noScoreFilter on
 type bigGenePred
 html contrib/tiberius/Tiberius.html
 group genes

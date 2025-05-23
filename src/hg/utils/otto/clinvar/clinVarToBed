@@ -18,13 +18,12 @@ dbToUrl = {
 }
 
 # since we're filtering on it, we make sure that we have all molecular consequences in the tdb file
-# if Clinvar ever adds a new value, this script must fail and tdb must be updated.
+# if they add a new one, this script must fail and tdb must be updated.
 possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiator codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
 
 # these consequences are highlighted using a triangle decorator. Similar to Decipher and Gnomad browsers
 truncConseqs = set(["nonsense", "frameshift variant", "splice acceptor variant", "splice donor variant"])
 
-# make sure that if the second list is edited, it is never out of sync with the first list
 assert(len(set(truncConseqs - possMolConseqs))==0)
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
@@ -1027,7 +1026,7 @@ for line in ifh:
     if isTrunc:
         # truncating mutations get a special symbol written into another BED file, for decorators
         decorRow = list(row[:12])
-        rgbColor = row[8]
+        rgbColor = row[10]
         mouseOverText = row[mouseOverIdx]
 
         decorRef = row[0]+":"+row[1]+"-"+row[2]+":"+row[3]
