@@ -35,6 +35,7 @@ compositeTrack on
     urls omimGene="https://www.omim.org/entry/$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" entityName="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
     labelFields entityName
     skipEmptyFields on
+    mouseOverField mouseOverField
     skipFields chrom,chromStart,blockStarts,blockSizes
     filterValues.confidenceLevel 3,2,1,0
     priority 2
@@ -48,11 +49,11 @@ compositeTrack on
     bigDataUrl /gbdb/$D/panelApp/tandRep.bb
     itemRgb on
     urls omimGene="https://www.omim.org/entry/$$" ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
-    mouseOverField mouseOverField
     labelFields hgncSymbol
     skipEmptyFields on
     skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
     filterValues.confidenceLevel 3,2,1,0
+    mouseOver <b>Gene name:</b> $geneName<br><b>Panel:</b> $name<br><b>MOI:</b> $modeOfInheritance<br><b>Phenotypes: </b><br> $phenotypes<br><b>Confidence level:</b> $confidenceLevel
     priority 3
 
     track panelAppAusGenes
@@ -84,6 +85,7 @@ compositeTrack on
     labelFields entityName
     skipEmptyFields on
     skipFields chrom,chromStart,blockStarts,blockSizes
+    mouseOverField mouseOverField
     filterValues.confidenceLevel 3,2,1,0
     priority 5
 
@@ -96,7 +98,7 @@ compositeTrack on
     bigDataUrl /gbdb/$D/panelApp/tandRepAus.bb
     itemRgb on
     urls omimGene="https://www.omim.org/entry/$$" ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp-aus.org/panels/$$/" geneSymbol="https://panelapp-aus.org/panels/entities/$$"
-    mouseOverField mouseOverField
+    mouseOver <b>Gene name:</b> $geneName<br><b>Panel:</b> $name<br><b>MOI:</b> $modeOfInheritance<br><b>Phenotypes: </b><br> $phenotypes<br><b>Confidence level:</b> $confidenceLevel
     labelFields hgncSymbol
     skipEmptyFields on
     skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
