@@ -2034,6 +2034,7 @@
 ./runBuild GCA_049082185.1_fCriAus1.1_haplotype_1 fish Cristiceps_australis
 ./runBuild GCA_049190655.1_fLepSal2.hap2 fish Lepidogalaxias_salamandroides
 ./runBuild GCA_049190665.1_fLepSal2.hap1 fish Lepidogalaxias_salamandroides
+./runBuild GCA_049350105.1_T2T-MMU8v1.0 primates Macaca_mulatta
 ./runBuild GCA_049354655.1_calJac240_alt primates Callithrix_jacchus
 ./runBuild GCA_049354665.1_calJac220_pri primates Callithrix_jacchus
 ./runBuild GCA_049354675.1_calJac220_alt primates Callithrix_jacchus
