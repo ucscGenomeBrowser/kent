@@ -49,3 +49,15 @@ wget https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/UNICORNs.b
 cd /hive/data/genomes/hg38/bed/unusualcons/haqers/
 bedSort haqers.bed haqers.bed 
 bedToBigBed haqers.bed ../../../chrom.sizes haqers.bb
+
+# UCNEbase
+mkdir /hive/data/genomes/hg38/bed/unusualcons/ucnebase/hg19
+cd /hive/data/genomes/hg38/bed/unusualcons/ucnebase/hg19
+wget https://epd.expasy.org/ucnebase/data/UCNEs_hg19.bed
+# split file manually in vim
+mkdir /hive/data/genomes/hg38/bed/unusualcons/ucnebase/hg38
+cd /hive/data/genomes/hg38/bed/unusualcons/ucnebase/hg38
+liftOver ../hg19/chicken.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz  chicken.hg38.bed unmapped.txt
+liftOver ../hg19/clusters.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz  clusters.bed unmapped.txt
+liftOver ../hg19/paralogs.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz  paralogs.bed unmapped.txt
+for i in *.bed; do bedSort $i $i; bedToBigBed $i ../../../../chrom.sizes `basename $i .bed`.bb; done
