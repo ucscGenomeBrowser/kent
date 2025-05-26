@@ -2771,6 +2771,7 @@
 ./runBuild GCF_000012385.1_ASM1238v1 bacteria Rickettsia_bellii_RML369-C
 ./runBuild GCF_000012525.1_ASM1252v1 bacteria Synechococcus_elongatus_PCC_7942__FACHB-805
 ./runBuild GCF_000012565.1_ASM1256v1 bacteria Ehrlichia_canis_str._Jake
+./runBuild GCF_000012925.1_ASM1292v1 bacteria Geobacter_metallireducens_GS-15
 ./runBuild GCF_000013145.1_ASM1314v1 bacteria Ehrlichia_chaffeensis
 ./runBuild GCF_000013165.1_ASM1316v1 bacteria Neorickettsia_sennetsu_str._Miyayama
 ./runBuild GCF_000014805.1_ASM1480v1 bacteria Aeromonas_hydrophila_subsp._hydrophila_ATCC_7966
