@@ -12,6 +12,30 @@ group compGeno
     type bigBed 4
     bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
 
+    track ucneClusters
+    shortLabel UCNE Clusters
+    longLabel UCNEBase: 239 Cluster of UCNE elements
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/clusters.bb
+    url https://epd.expasy.org/ucnebase/view.php?data=cluster&entry=$$
+
+    track ucneChicken
+    shortLabel UCNE Chicken
+    longLabel UCNEBase: 4351 Chicken-conserved elements
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/chicken.bb
+    url https://epd.expasy.org/ucnebase/view.php?data=ucne&entry=$$
+
+    track ucneParalogs
+    shortLabel UCNE Paralogs
+    longLabel UCNEBase: 987 Paralogous elements
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/paralogs.bb
+    url url="https://epd.expasy.org/ucnebase/view.php?data=ucne&entry=$$"
+
     track ultraZoo
     shortLabel UltraZoos
     longLabel UltraZoos: 4552 Ultraconserved regions in Zoonomia alignment - 100% identical in 235 species, >20bp
