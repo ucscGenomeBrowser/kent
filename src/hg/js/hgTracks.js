@@ -523,7 +523,7 @@ var genomePos = {
         $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgApi",
-                data: cart.varsToUrlData({ 'cmd': 'defaultPos', 'db': getDb() }),
+                data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'cmd': 'defaultPos', 'db': getDb() }),
                 dataType: "html",
                 trueSuccess: genomePos.handleChange,
                 success: catchErrorOrDispatch,
@@ -2467,7 +2467,7 @@ var rightClick = {
                 $.ajax({
                         type: "GET",
                         url: "../cgi-bin/hgApi",
-                        data: cart.varsToUrlData({ 'db': getDb(), 'cmd': ajaxCmd, 'num': results,
+                        data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(), 'cmd': ajaxCmd, 'num': results,
                               'table': args.table, 'name': args.name, 'chrom': hgTracks.chromName}),
                         trueSuccess: rightClick.handleZoomCodon,
                         success: catchErrorOrDispatch,
@@ -2992,7 +2992,7 @@ var rightClick = {
                                                 $.ajax({
                                                         type: "GET",
                                                         url: "../cgi-bin/hgApi",
-                                                        data: cart.varsToUrlData({ 'db': getDb(),
+                                                        data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
                                                                 'cmd': "exonToPos", 'num': exonNum,
                                                                 'table': table, 'name': name, 'chrom': hgTracks.chromName}),
                                                         trueSuccess: rightClick.handleZoomCodon,
