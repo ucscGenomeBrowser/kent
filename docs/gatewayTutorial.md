@@ -1,4 +1,4 @@
-% UCSC Genome Browser Gateway tutorial
+% UCSC Genome Browser Gateway Tutorial
 
 The [UCSC Genome Browser Gateway](../cgi-bin/hgGateway) page is a tool for finding and accessing
 genome assemblies.  It features two search boxes: one for selecting an assembly and another for

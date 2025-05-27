@@ -413,8 +413,8 @@ jsIncludeFile("hgGateway.js", NULL);
 
 if (cfgOptionBooleanDefault("showTutorial", TRUE))
     {
-    puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\" />");
-    puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
+    jsIncludeFile("shepherd.min.js", NULL);
+    webIncludeResourceFile("shepherd.css");
     jsIncludeFile("tutorialPopup.js", NULL);
     jsIncludeFile("gatewayTutorial.js", NULL);
     if (sameOk(cgiOptionalString("startTutorial"), "true"))

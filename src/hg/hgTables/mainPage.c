@@ -462,8 +462,8 @@ jsAddEventForId("change", "outputTypeDropdown", "checkForCsv");
  * Code to add in the interactive tutorial*/
 if (cfgOptionBooleanDefault("showTutorial", TRUE))
     {
-    puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
-    puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+    jsIncludeFile("shepherd.min.js", NULL);
+    webIncludeResourceFile("shepherd.css");
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
     webIncludeResourceFile("jquery-ui.css");

@@ -42,14 +42,16 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 #include "chromAlias.h"
 #include "bigBed.h"
 #include "trackHub.h"
+#include "cart.h"
 
-int main(int argc, char *argv[])
+struct hash *oldVars = NULL;
+
+void doMiddle(struct cart *cart)
 {
 long enteredMainTime = clock1000();
 struct dyString *output = dyStringNew(10000);
 
 setUdcCacheDir();
-cgiSpoof(&argc, argv);
 pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
 
@@ -197,7 +199,7 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     char *table = cgiString("table");
     char *chrom = cgiString("chrom");
     int num = cgiInt("num");
-    struct sqlConnection *conn;
+    struct sqlConnection *conn = NULL;
     if (!trackHubDatabase(database))
         conn = hAllocConn(database);
     struct trackDb *tdb = tdbForTrack(database, table, NULL);
@@ -245,5 +247,16 @@ else
 
 apiOut(dyStringContents(output), jsonp);
 cgiExitTime("hgApi", enteredMainTime);
+}
+
+/* Null terminated list of CGI Variables we don't want to save
+ * permanently. */
+char *excludeVars[] = {"fileSearch", "var", "showShortLabel", "showLongLabel", "track", "table", "name", "chrom", "cmd", "num",  NULL,};
+
+int main(int argc, char *argv[])
+/* Process command line. */
+{
+cgiSpoof(&argc, argv);
+cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
