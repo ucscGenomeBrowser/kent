@@ -1465,7 +1465,7 @@ for(; genomeList; genomeList = genomeList->next)
     }
 hPrintf("</ul>");
 
-hPrintf("<P><A href=\"./hgHubConnect#unlistedHubs\">Connect another hub</A> to add even more tracks.</P>");
+hPrintf("<P><A href=\"./hgHubConnect#unlistedHubs\">Connect another hub</A> to add more tracks.</P>");
 
 hPrintf("<P><I>Hubs are created and maintained by external sources. UCSC is not responsible for their content and status.</I></P>");
 

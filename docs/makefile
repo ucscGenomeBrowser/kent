@@ -1,6 +1,8 @@
 kentSrc = ..
 include ../src/inc/common.mk
 
+rsyncOpts = --whole-file --times --recursive --omit-dir-times --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
+
 user:
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER}
 
@@ -9,9 +11,9 @@ alpha:
 
 beta:
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
+	rsync ${rsyncOpts} ${DOCUMENTROOT}-beta/docs/ qateam@hgwbeta:${DOCUMENTROOT}/docs/
 
 DOCS = index gb101 gatewayTutorial page_template
-
 
 doInstall: ${DOCS:%=%_install}
 
