@@ -3006,7 +3006,7 @@ var findTracks = {
             if ($('#advancedTab').length === 1 && $('#filesTab').length === 1) {
                 $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
             }
-            var cgiVars = "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
+            var cgiVars = "hgsid=" + getHgsid() + "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
             if (document.URL.search('hgFileSearch') !== -1)
                 cgiVars += "&fileSearch=1";
             else

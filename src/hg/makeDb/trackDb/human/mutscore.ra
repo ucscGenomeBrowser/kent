@@ -1,0 +1,65 @@
+track mutScore
+shortLabel MutScore
+longLabel MutScore: Variant clustering in 3D protein structures
+type bigWig
+compositeTrack on
+visibility full
+group phenDis
+color 50,80,200
+
+        track mutScoreA
+        shortLabel Mutation: A
+        longLabel MutScore: Mutation is A
+        type bigWig
+        parent mutScore on
+        visibility full
+        bigDataUrl /gbdb/$D/mutscore/mutscoreA.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+
+        track mutScoreC
+        shortLabel Mutation: C
+        longLabel MutScore: Mutation is C
+        type bigWig
+        parent mutScore on
+        visibility full
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        bigDataUrl /gbdb/$D/mutscore/mutscoreC.bw
+
+        track mutScoreG
+        shortLabel Mutation: G
+        longLabel MutScore: Mutation is G
+        type bigWig
+        parent mutScore on
+        visibility full
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        bigDataUrl /gbdb/$D/mutscore/mutscoreG.bw
+
+        track mutScoreT
+        shortLabel Mutation: T
+        longLabel mutScore: Mutation is T
+        type bigWig
+        parent mutScore on
+        visibility full
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        bigDataUrl /gbdb/$D/mutscore/mutscoreT.bw
+        

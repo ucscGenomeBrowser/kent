@@ -14,7 +14,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (MaxAF): Mutation is A
         color 140, 202, 203
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutA.bw
+        bigDataUrl /gbdb/$D/bayesDel/MaxAFBayesDelMutA.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
@@ -27,7 +27,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (MaxAF): Mutation is C
         color 120, 193, 194
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutC.bw
+        bigDataUrl /gbdb/$D/bayesDel/MaxAFBayesDelMutC.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
@@ -40,7 +40,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (MaxAF): Mutation is G
         color 96, 182, 183
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutG.bw
+        bigDataUrl /gbdb/$D/bayesDel/MaxAFBayesDelMutG.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
@@ -53,7 +53,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (MaxAF): Mutation is T
         color 68, 169, 170
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutT.bw
+        bigDataUrl /gbdb/$D/bayesDel/MaxAFBayesDelMutT.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
@@ -66,7 +66,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (without MaxAF): Mutation is A
         color 240, 191, 112
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutA.bw
+        bigDataUrl /gbdb/$D/bayesDel/NoAFBayesDelMutA.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
@@ -79,7 +79,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (without MaxAF): Mutation is C
         color 237, 180, 87
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutC.bw
+        bigDataUrl /gbdb/$D/bayesDel/NoAFBayesDelMutC.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
@@ -92,7 +92,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (without MaxAF): Mutation is G
         color 234, 167, 57
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutG.bw
+        bigDataUrl /gbdb/$D/bayesDel/NoAFBayesDelMutG.bw
         #yLineOnOff on
         visibility hide
         maxHeightPixels 128:20:8
@@ -105,7 +105,7 @@ html predictionScoresSuper
         longLabel BayesDel v1 Score (without MaxAF): Mutation is T
         color 230, 152, 22
         parent bayesDel on
-        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutT.bw
+        bigDataUrl /gbdb/$D/bayesDel/NoAFBayesDelMutT.bw
         #yLineOnOff on
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
