@@ -7,3 +7,4 @@ group phenDis
 
 # bayesDel track
 include bayesDel.ra
+include mutscore.ra alpha

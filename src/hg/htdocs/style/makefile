@@ -24,7 +24,7 @@ CSS_FILES=HGStyle.css assemblySearch.css autocomplete.css blueStyle.css \
     gbStatic.css gb.css gbAfterMenu.css hgGtexTrackSettings.css \
     spectrum.min.css font-awesome.min.css \
     theme-classic.css theme-dark.css theme-modern.css \
-    bootstrap-3-3-7.min.css
+    bootstrap-3-3-7.min.css shepherd.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
