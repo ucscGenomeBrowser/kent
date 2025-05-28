@@ -12724,7 +12724,9 @@ char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 char *nameCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_NAME_COLUMN, GENEPRED_CLASS_NAME_COLUMN_DEFAULT);
 char *classCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_CLASS_COLUMN, GENEPRED_CLASS_CLASS_COLUMN_DEFAULT);
 struct linkedFeatures *lf = item;
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row = NULL;
 char query[256];
@@ -15329,7 +15331,7 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    boolean avoidHandler = FALSE;// trackDbSettingOn(tdb, "avoidHandler");
+    boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
     if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
         handler(subtrack);
 

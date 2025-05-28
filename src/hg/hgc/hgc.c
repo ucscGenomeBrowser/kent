@@ -3618,30 +3618,6 @@ for (;tdb != NULL; tdb = tdb->parent)
 return NULL;
 }
 
-static char *getTrackHtml(char *db, char *trackName)
-/* Grab HTML from trackDb in native database for quickLift tracks. */
-{
-char query[4096];
-
-sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
-struct trackDb *loadTrackDb(char *db, char *where);
-struct trackDb *tdb = loadTrackDb(db, query);
-
-char *html = tdb->html;
-if (isEmpty(tdb->html))
-    {
-    char *parent = trackDbSetting(tdb, "parent");
-    char *words[10];
-
-    chopLine(parent,words);
-    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
-    struct trackDb *tdb = loadTrackDb(db, query);
-
-    html = tdb->html;
-    }
-return html;
-}
-
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link
