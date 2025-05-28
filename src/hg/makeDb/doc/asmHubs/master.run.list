@@ -376,6 +376,7 @@
 ./runBuild GCA_001460835.1_BSAL invertebrate Bodo_saltans
 ./runBuild GCA_001465515.1_DiuNox1.0 invertebrate Diuraphis_noxia
 ./runBuild GCA_001483515.1_ASM148351v1 invertebrate Cryptosporidium_hominis
+./runBuild GCA_001485885.1_Heliconius_melpomene_aglaope.09-246 invertebrate Heliconius_melpomene_aglaope
 ./runBuild GCA_001493575.1_GIAS175 invertebrate Giardia_intestinalis_assemblage_A
 ./runBuild GCA_001543975.1_G_duodenalis_AssB_BAH15c1 invertebrate Giardia_intestinalis_assemblage_B
 ./runBuild GCA_001580405.1_ASM158040v1 bacteria Mycolicibacterium_neoaurum
