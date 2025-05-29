@@ -1602,4 +1602,6 @@ struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name);
  * we need to walk back up comparing name like isNameAtParentLevel does.
  * If name doesn't match tdb or any of its ancestors then this returns NULL. */
 
+char *getTrackHtml(char *db, char *trackName);
+/* Grab HTML from trackDb in native database for quickLift tracks. */
 #endif /* HUI_H */

@@ -21,6 +21,7 @@ GCF_000008445.1_ASM844v1	Bacillus anthracis str. 'Ames Ancestor' (Ames Ancestor;
 GCA_016413745.1_ASM1641374v1	Bacillus mojavensis (PS17 2020)
 GCA_002556525.1_ASM255652v1	Bacillus subtilis (NCD-2 2017)
 GCF_000009045.1_ASM904v1	Bacillus subtilis strain 168
+GCF_000012925.1_ASM1292v1	bacteria G.metallireducens (GS-15 2005)
 GCF_016918735.1_ASM1691873v1	bacteria L.abararensis (201903074 2021)
 GCF_002811985.1_ASM281198v1	bacteria L.adleri (FH2-B-D1 2017)
 GCF_016918785.1_ASM1691878v1	bacteria L.ainazelensis (201903071 2021)
@@ -195,7 +196,9 @@ GCF_011032765.1_ASM1103276v1	Limosilactobacillus fermentum AGR1485
 GCF_011032745.1_ASM1103274v1	Limosilactobacillus fermentum AGR1487
 GCF_004063635.1_ASM406363v1	Limosilactobacillus fermentum SRCM 103290
 GCF_003860425.1_ASM386042v1	Limosilactobacillus fermentum YL-11
+GCF_000241405.1_ASM24140v1	Listeria innocua (ATCC 33091 2012)
 GCF_000196035.1_ASM19603v1	Listeria monocytogenes (EGD-e 2003)
+GCF_001564855.1_LM07-00948_assembly	Listeria monocytogenes (LM07-00948 2016)
 GCF_000181575.2_ASM18157v2	Lyme disease spirochete (Bol26 2009)
 GCA_000017965.1_ASM1796v1	Lysinibacillus sphaericus (C3-41 2008)
 GCF_000008325.1_ASM832v1	Methylococcus capsulatus str. (Bath 2005)

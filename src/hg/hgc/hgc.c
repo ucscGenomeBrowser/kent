@@ -1555,6 +1555,9 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 {
 int start = 0;
 char *type = cloneString(tdb->type);
+
+if (sameString(type, "bedMethyl"))
+    return 9;
 char *word = nextWord(&type);
 if (word && (sameWord(word,"bed") || startsWith("big", word)))
     {
@@ -3615,30 +3618,6 @@ for (;tdb != NULL; tdb = tdb->parent)
 return NULL;
 }
 
-static char *getTrackHtml(char *db, char *trackName)
-/* Grab HTML from trackDb in native database for quickLift tracks. */
-{
-char query[4096];
-
-sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
-struct trackDb *loadTrackDb(char *db, char *where);
-struct trackDb *tdb = loadTrackDb(db, query);
-
-char *html = tdb->html;
-if (isEmpty(tdb->html))
-    {
-    char *parent = trackDbSetting(tdb, "parent");
-    char *words[10];
-
-    chopLine(parent,words);
-    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
-    struct trackDb *tdb = loadTrackDb(db, query);
-
-    html = tdb->html;
-    }
-return html;
-}
-
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link
@@ -4623,6 +4602,18 @@ else
     }
 }
 
+static void doBedMethyl(struct trackDb *tdb, char *item)
+/* Handle a click on a bedMethyl custom track */
+{
+int start = cartInt(cart, "o");
+
+struct sqlConnection *conn = hAllocConnTrack(CUSTOM_TRASH, tdb);
+database=CUSTOM_TRASH;
+tdb->table = trackDbSetting(tdb, "dbTableName");
+
+genericBedClick(conn, tdb, item, start, 9);
+}
+
 static void doLongTabix(struct trackDb *tdb, char *item)
 /* Handle a click on a long range interaction */
 {
@@ -4804,6 +4795,10 @@ else if (wordCount > 0)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
         genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (sameString(type, "bedMethyl"))
+	{
+        genericBedClick(conn, tdb, item, start, 9);
 	}
     else if (sameString(type, "bigGenePred"))
         {
@@ -22504,6 +22499,8 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
+else if ( startsWith( "bedMethyl", type))
+    doBedMethyl(ct->tdb, item);
 else if ( startsWith( "longTabix", type))
     doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))

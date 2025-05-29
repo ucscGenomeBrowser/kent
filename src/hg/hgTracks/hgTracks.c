@@ -4668,6 +4668,7 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "bedMethyl")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
 || sameWord(type, "bigRmsk")
@@ -6658,6 +6659,12 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
+    }
+else if (sameString(type, "bedMethyl"))
+    {
+    tg = trackFromTrackDb(tdb);
+    bedMethylCtMethods(tg);
+    tg->customPt = ct;
     }
 else
     {
@@ -11496,9 +11503,9 @@ if(!trackImgOnly)
         jsIncludeFile("ddcl.js", NULL);
         if (cfgOptionBooleanDefault("showTutorial", TRUE))
             {
-            puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
-            puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
-            jsIncludeFile("hgTracksPopup.js", NULL);
+            jsIncludeFile("shepherd.min.js", NULL);
+            webIncludeResourceFile("shepherd.css");
+            jsIncludeFile("tutorialPopup.js", NULL);
             jsIncludeFile("basicTutorial.js",NULL);
             jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification

@@ -1,0 +1,106 @@
+track panelApp
+shortLabel PanelApp
+longLabel Genomics England and Australia PanelApp Diagnostics
+type bigBed 9 +
+visibility hide
+group phenDis
+compositeTrack on
+
+    track panelAppGenes
+    parent panelApp on
+    shortLabel PanelApp GE Genes
+    longLabel Genomics England PanelApp Genes
+    type bigBed 9 +
+    visibility pack
+    bigDataUrl /gbdb/$D/panelApp/genes.bb
+    itemRgb on
+    url https://panelapp.genomicsengland.co.uk/panels/$<panelID>/gene/$<geneSymbol>/
+    urlLabel Link to PanelApp
+    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
+    mouseOverField mouseOverField
+    labelFields geneSymbol
+    skipEmptyFields on
+    skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
+    filterValues.confidenceLevel 3,2,1,0
+    priority 1
+
+    track panelAppCNVs
+    parent panelApp on
+    shortLabel PanelApp GE CNVs
+    longLabel Genomics England PanelApp CNV Regions
+    type bigBed 9 +
+    visibility pack
+    bigDataUrl /gbdb/$D/panelApp/cnv.bb
+    itemRgb on
+    urls omimGene="https://www.omim.org/entry/$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" entityName="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
+    labelFields entityName
+    skipEmptyFields on
+    mouseOverField mouseOverField
+    skipFields chrom,chromStart,blockStarts,blockSizes
+    filterValues.confidenceLevel 3,2,1,0
+    priority 2
+
+    track panelAppTandRep
+    parent panelApp on
+    shortLabel PanelApp GE STRs
+    longLabel Genomics England PanelApp Short Tandem Repeats
+    type bigBed 9 +
+    visibility pack
+    bigDataUrl /gbdb/$D/panelApp/tandRep.bb
+    itemRgb on
+    urls omimGene="https://www.omim.org/entry/$$" ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
+    labelFields hgncSymbol
+    skipEmptyFields on
+    skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
+    filterValues.confidenceLevel 3,2,1,0
+    mouseOver <b>Gene name:</b> $geneName<br><b>Panel:</b> $name<br><b>MOI:</b> $modeOfInheritance<br><b>Phenotypes: </b><br> $phenotypes<br><b>Confidence level:</b> $confidenceLevel
+    priority 3
+
+    track panelAppAusGenes
+    parent panelApp on
+    shortLabel PanelApp Australia Genes
+    longLabel PanelApp Australia Genes Panels
+    type bigBed 9 +
+    visibility pack
+    bigDataUrl /gbdb/$D/panelApp/genesAus.bb
+    url https://panelapp-aus.org//panels/$<panelID>/gene/$<geneSymbol>/
+    urlLabel Link to PanelApp Australia
+    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp-aus.org/panels/$$/" geneSymbol="https://panelapp-aus.org/panels/entities/$$"
+    mouseOverField mouseOverField
+    labelFields geneSymbol
+    skipEmptyFields on
+    skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
+    filterValues.confidenceLevel 3,2,1,0
+    priority 4
+
+    track panelAppAusCNVs
+    parent panelApp on
+    shortLabel PanelApp Australia CNVs
+    longLabel PanelApp Australia CNV Regions
+    type bigBed 9 +
+    visibility pack
+    bigDataUrl /gbdb/$D/panelApp/cnvAus.bb
+    itemRgb on
+    urls omimGene="https://www.omim.org/entry/$$" panelID="https://panelapp-aus.org/panels/$$/" entityName="https://panelapp-aus.org/panels/entities/$$"
+    labelFields entityName
+    skipEmptyFields on
+    skipFields chrom,chromStart,blockStarts,blockSizes
+    mouseOverField mouseOverField
+    filterValues.confidenceLevel 3,2,1,0
+    priority 5
+
+    track panelAppAusTandRep
+    parent panelApp on
+    shortLabel PanelApp Australia STRs
+    longLabel PanelApp Australia Short Tandem Repeats
+    type bigBed 9 +
+    visibility pack
+    bigDataUrl /gbdb/$D/panelApp/tandRepAus.bb
+    itemRgb on
+    urls omimGene="https://www.omim.org/entry/$$" ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp-aus.org/panels/$$/" geneSymbol="https://panelapp-aus.org/panels/entities/$$"
+    mouseOver <b>Gene name:</b> $geneName<br><b>Panel:</b> $name<br><b>MOI:</b> $modeOfInheritance<br><b>Phenotypes: </b><br> $phenotypes<br><b>Confidence level:</b> $confidenceLevel
+    labelFields hgncSymbol
+    skipEmptyFields on
+    skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
+    filterValues.confidenceLevel 3,2,1,0
+    priority 6

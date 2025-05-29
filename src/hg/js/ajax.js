@@ -307,7 +307,7 @@ function catchErrorOrDispatch(obj, textStatus)
 // Specific calls...
 function lookupMetadata(trackName,showLonglabel,showShortLabel)
 { // Ajax call to repopulate a metadata vals select when mdb var changes
-    var thisData = "db=" + getDb() +  "&cmd=tableMetadata&track=" + trackName;
+    var thisData = "hgsid=" + getHgsid() + "db=" + getDb() +  "&cmd=tableMetadata&track=" + trackName;
     if (showLonglabel)
         thisData += "&showLonglabel=1";
     if (showShortLabel)

@@ -14,7 +14,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         track clinvarMain
         parent clinvar
         shortLabel ClinVar SNVs
-        longLabel ClinVar Short Variants < 50bp
+        longLabel ClinVar Short Nucleotide Variants < 50bp
         visibility hide
         group phenDis
         itemRgb on

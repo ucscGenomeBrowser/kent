@@ -1013,7 +1013,7 @@ char *descSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search")
                    || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
-boolean includeHubResults = cartUsualBoolean(cart, TRACK_SEARCH_ON_HUBS, FALSE);
+boolean includeHubResults = cartUsualBoolean(cart, TRACK_SEARCH_ON_HUBS, TRUE);
 struct sqlConnection *conn = NULL;
 boolean metaDbExists = FALSE;
 if (!isHubTrack(database))

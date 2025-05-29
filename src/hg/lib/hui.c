@@ -56,6 +56,7 @@
 #include "trackVersion.h"
 #include "hubConnect.h"
 #include "bigBedFilter.h"
+#include "bedMethyl.h"
 
 // TODO: these should go away after refactoring of multi-region link
 #include "hex.h"
@@ -7092,6 +7093,8 @@ if (! (scoreFilterOk || glvlScoreMin))
    {
    if (isBoxOpened)
       cfgEndBox(boxed);
+   else 
+      printf("<BR>"); 
    return;
    }
 
@@ -10092,6 +10095,30 @@ if (tableName)
 hFreeConn(&conn);
 }
 
+char *getTrackHtml(char *db, char *trackName)
+/* Grab HTML from trackDb in native database for quickLift tracks. */
+{
+char query[4096];
+
+sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
+struct trackDb *loadTrackDb(char *db, char *where);
+struct trackDb *tdb = loadTrackDb(db, query);
+
+char *html = tdb->html;
+if (isEmpty(tdb->html))
+    {
+    char *parent = trackDbSetting(tdb, "parent");
+    char *words[10];
+
+    chopLine(parent,words);
+    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
+    struct trackDb *tdb = loadTrackDb(db, query);
+
+    html = tdb->html;
+    }
+return html;
+}
+
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
@@ -10176,6 +10203,8 @@ else if (sameWord("interact", tdb->type))
 else if (sameWord("hic", tdb->type))
     // HI-C data are stored in .hic files, but parsed into interact objects
     asObj = interactAsObj();
+else if (sameWord("bedMethyl", tdb->type))
+    asObj = bedMethylAsObj();
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;
