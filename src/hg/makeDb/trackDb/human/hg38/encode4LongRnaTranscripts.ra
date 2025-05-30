@@ -12,6 +12,6 @@ filterByRange.maxScore on
 filterLimits.maxScore 0:93180.9
 filterLabel.maxScore Filter by counts per million
 html encode4LongRnaTranscripts.html
-mouseOver $name <br> ${maxScoreHtml}
+mouseOver $name <br> $gene_name <br> ${maxScoreHtml}
 labelFields name,transcript_name
 defaultLabelFields transcript_name

@@ -13,6 +13,6 @@ filterLimits.maxScore 0:192148.13
 filterLabel.maxScore Filter by counts per million
 group rna
 html encode4LongRnaTranscripts.html
-mouseOver $name <br> ${maxScoreHtml}
+mouseOver $name <br> $gene_name <br> ${maxScoreHtml}
 labelFields name,transcript_name
 defaultLabelFields transcript_name
