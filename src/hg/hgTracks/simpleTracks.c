@@ -2682,7 +2682,7 @@ else
     boolean isNotLastExon = (exonIntronNumber<numExons);
 
     static const char *phasePrefix  = 
-        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'>Codon phase: <i class='fa fa-question-circle-o'></i></a></b>";
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle-o'></i></a></b>";
 
     if (isNotLastExon)
         {
@@ -2690,7 +2690,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "%s start %d, end %d%s<br>", phasePrefix, startPhase, endPhase, exonNote);
+        safef(buf, EXONTEXTLEN, "<b>Codon phase %s :</b> start %d, end %d%s<br>", phasePrefix, startPhase, endPhase, exonNote);
         } 
     else
         {
@@ -2698,7 +2698,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, "%s start %d%s<br>", phasePrefix, startPhase, exonNote);
+        safef(buf, EXONTEXTLEN, "<b>Codon phase %s :</b> start %d%s<br>", phasePrefix, startPhase, exonNote);
         }
     }
 }
