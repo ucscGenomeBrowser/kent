@@ -6626,8 +6626,8 @@ int aliCount = slCount(pslList);
 boolean isClicked;
 if (pslList == NULL || tableName == NULL)
     return;
-boolean showEvery = sameString(itemIn, "PrintAllSequences");
 
+boolean showEvery = (strstr(itemIn, "PrintAllSequences") > 0);
 if (!showEvery && (aliCount > 1))
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
@@ -6645,8 +6645,8 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    {
             char otherString[512];
             char *qName = itemIn;
-            if (sameString(itemIn, "PrintAllSequences"))
-                qName = psl->qName;
+	    if (showEvery)
+		qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
@@ -6661,6 +6661,9 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 	        printf("</A>");
 	    printf("\n");
+
+	    if (showEvery)
+                 freeMem(qName);
 	    }
 	}
     }
@@ -6686,10 +6689,15 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         && sameString(psl->tName, seqName)
 	)
 	{
+        boolean showEvery = (strstr(itemIn, "PrintAllSequences") > 0);
+	char *qName = itemIn;
+	if (showEvery)
+	    qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
+
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere(hgcCommandInWindow, itemIn, otherString, psl->tName);
+	hgcAnchorSomewhere(hgcCommandInWindow, qName, otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
@@ -7413,7 +7421,11 @@ while ((psl = pslNext(lf)) != NULL)
     }
 slSort(&pslList, pslCmpQueryScore);
 lineFileClose(&lf);
-printAlignments(pslList, start, "htcUserAli", "user", item);
+
+char allItems[1024];
+safef(allItems, sizeof allItems, "%s %s %s", pslName, faName, "PrintAllSequences");
+
+printAlignments(pslList, start, "htcUserAli", "user", allItems);
 pslFreeList(&pslList);
 
 printf("<BR>\n");

@@ -11505,7 +11505,7 @@ if(!trackImgOnly)
             {
             jsIncludeFile("shepherd.min.js", NULL);
             webIncludeResourceFile("shepherd.css");
-            jsIncludeFile("hgTracksPopup.js", NULL);
+            jsIncludeFile("tutorialPopup.js", NULL);
             jsIncludeFile("basicTutorial.js",NULL);
             jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification
