@@ -4,7 +4,7 @@ shortLabel ENCODE4 transcripts
 longLabel ENCODE4 Long read transcripts
 superTrack long_read_transcripts
 type bigBed 12 +
-bigDataUrl /gbdb/$D/encode4/encode4.bb
+bigDataUrl /gbdb/$D/encode4/encode4LongRnaTranscripts.bb
 visibility pack
 itemRgb on
 filter.maxScore 0:192148.13
@@ -14,4 +14,5 @@ filterLabel.maxScore Filter by counts per million
 group rna
 html encode4.html
 mouseOver $name <br> ${maxScoreHtml}
-
+labelFields name,transcript_name
+defaultLabelFields transcript_name

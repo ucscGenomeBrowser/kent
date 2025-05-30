@@ -4,5 +4,5 @@ shortLabel Long read transcripts
 longLabel Long read transcripts
 group rna
 
-include encode4.ra
+include encode4LongRnaTranscripts.ra
 
