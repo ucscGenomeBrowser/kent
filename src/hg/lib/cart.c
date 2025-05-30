@@ -1552,7 +1552,7 @@ void printCaptcha()
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
 /* print captcha is user did not sent a valid hguid cookie or a valid cloudflare token. Always allow rtracklayer. */
 {
-if (fromCommandLine || !cfgOption(CLOUDFLARESITEKEY))
+if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
     return;
 
 if (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer"))
