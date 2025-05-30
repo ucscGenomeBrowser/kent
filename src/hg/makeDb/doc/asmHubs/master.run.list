@@ -1849,6 +1849,7 @@
 ./runBuild GCA_036172795.1_aPelIbe1.pri vertebrate Pelodytes_ibericus
 ./runBuild GCA_036250125.1_bDixPip1.hap1 birds Pseudopipra_pipra
 ./runBuild GCA_036250135.1_bDixPip1.hap2 birds Pseudopipra_pipra
+./runBuild GCA_036257755.1_ASM3625775v1 bacteria Halomonas_elongata
 ./runBuild GCA_036321535.1_mCamDro1.pat mammals Camelus_dromedarius
 ./runBuild GCA_036321565.1_mCamDro1.hap2 mammals Camelus_dromedarius
 ./runBuild GCA_036323735.1_GRCr8 mammals Rattus_norvegicus
