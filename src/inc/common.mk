@@ -235,7 +235,7 @@ ifeq (${USE_HAL},1)
       ifeq (${HOSTNAME},hgwdev-old.gi.ucsc.edu)
           HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
       else
-          HALLIBS += -lcurl -lstdc++
+          HALLIBS += -lstdc++
       endif
     endif
     HG_DEFS+=-DUSE_HAL
@@ -384,7 +384,7 @@ endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
-L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB} -lcurl
 HG_INC+=${PNGINCL}
 
 # NOTE: these must be last libraries and must be dynamic.
