@@ -179,7 +179,7 @@ if (spID != NULL)
     "<BR>Protein %s (<A href=\"https://reactome.org/content/query?q=%s\" TARGET=_blank>Reactome details)</A> participates in the following event(s):<BR><BR>" 
     , spID, spID);
 
-    conn2= hAllocConn(database);
+    conn2= hAllocConn(sqlGetDatabase(conn));
     sqlSafef(query2,sizeof(query2), 
     	  "select eventID, eventDesc from proteome.spReactomeEvent where spID='%s'", spID);
     sr2 = sqlMustGetResult(conn2, query2);

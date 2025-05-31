@@ -318,6 +318,7 @@ void doSamT02(char *proteinId, char *database);
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
 extern struct hash *oldCart;	/* Old cart hash. */
 extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
+extern char *liftDb;		/* Name of database we're quickLifting from (NULL if we aren't lifting) */
 extern char *genome;		/* Name of genome - mouse, human, etc. */
 extern char *curGeneId;		/* Current Gene Id. */
 extern char *curAlignId;		/* Current Align Id. */
