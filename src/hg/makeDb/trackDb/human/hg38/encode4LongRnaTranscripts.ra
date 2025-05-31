@@ -1,0 +1,17 @@
+# Encode4 triplet annotations (Jeltje, April 2025)
+track encode4LongRnaTranscripts
+shortLabel ENCODE4 Transcripts
+longLabel ENCODE4 Long Read Transcripts
+superTrack long_read_transcripts
+type bigBed 12 +
+bigDataUrl /gbdb/$D/encode4/encode4LongRnaTranscripts.bb
+visibility pack
+itemRgb on
+filter.maxScore 0:93180.9
+filterByRange.maxScore on
+filterLimits.maxScore 0:93180.9
+filterLabel.maxScore Filter by counts per million
+html encode4LongRnaTranscripts.html
+mouseOver $name <br> $gene_name <br> ${maxScoreHtml}
+labelFields name,transcript_name
+defaultLabelFields transcript_name

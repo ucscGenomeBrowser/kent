@@ -1,8 +1,8 @@
 track long_read_transcripts
 superTrack on 
-shortLabel Long read transcripts
-longLabel Long read transcripts
+shortLabel Long-read Transcripts
+longLabel Transcripts and other data generated using long-read seqeuncing technology (PacBio and Oxford Nanopore)
 group rna
 
-include encode4.ra
+include encode4LongRnaTranscripts.ra
 
