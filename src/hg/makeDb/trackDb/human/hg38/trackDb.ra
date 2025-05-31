@@ -899,4 +899,4 @@ include long_read_transcripts.ra alpha
 
 include mavedb.ra alpha
 
-include vgpLiftOver.ra
+include vgpLiftOver.ra alpha
