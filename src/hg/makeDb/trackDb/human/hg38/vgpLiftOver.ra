@@ -2,7 +2,6 @@ track vgpLiftOver
 compositeTrack on
 shortLabel VGP liftOver
 longLabel LiftOver chain alignments for VGP assemblies from the Hiller Lab
-subGroup1 query Query s001=GCA_048565385.1 s002=GCA_031878705.1 s003=GCA_964656455.1 s004=GCA_041834305.1 s005=GCA_965194825.1 s006=GCA_963455335.1 s007=GCA_036417435.1 s008=GCA_964374135.1 s009=GCA_964194105.1 s010=GCF_011762595.1 s011=GCA_964341445.1 s012=GCA_040955705.1 s013=GCA_964270905.1 s014=GCA_045843805.1 s015=GCA_951394435.1 s016=GCA_964662115.1 s017=GCA_964165515.1 s018=GCA_949752795.1 s019=GCA_047511655.1 s020=GCA_043880545.1 s021=GCA_028451465.1 s022=GCA_043728065.1 s023=GCA_031876335.1 s024=GCA_043727835.1 s025=GCA_964194185.1 s026=GCA_043880425.1 s027=GCA_043748575.1 s028=GCA_023851605.1 s029=GCA_043728145.1 s030=GCA_030035585.1 s031=GCA_043880285.1 s032=GCA_026018925.1 s033=GCA_041735815.1 s034=GCA_030848825.1 s035=GCA_037157525.1 s036=GCA_039880945.1 s037=GCA_043748645.1 s038=GCA_039655065.1 s039=GCA_043880595.1 s040=GCA_038363095.2 s041=GCA_038363145.1 s042=GCA_963383645.1 s043=GCA_037038545.1 s044=GCA_048771875.1 s045=GCA_028571685.1 s046=GCA_964194135.1 s047=GCA_964094495.2 s048=GCA_951640355.1 s049=GCA_963455305.1 s050=GCA_026230055.1 s051=GCA_965115925.1 s052=GCA_964212035.2 s053=GCA_027563665.1 s054=GCA_026229955.1 s055=GCA_949987585.1 s056=GCA_964339955.1 s057=GCA_963924515.1 s058=GCA_903992545.1 s059=GCA_011762505.3 s060=GCA_964271855.1 s061=GCA_037038515.1 s062=GCA_963924665.1 s063=GCA_031878675.1 s064=GCA_043290085.1
 visibility hide
 group compGeno
 noInherit on
@@ -14,640 +13,576 @@ html vgpLiftOver
 
     track chainLiftOverGCA_048565385.1
     parent vgpLiftOver
-    subGroups query=s001
     priority 26.558
     shortLabel Bolivian squirrel monkey 
-    longLabel LiftOver chain Bolivian squirrel monkey (mSaiBol1 primary hap 2025) (GCA_048565385.1_mSaiBol1.pri 2025-03-12)
+    longLabel Bolivian squirrel monkey (mSaiBol1 primary hap 2025) (% 73.44 coverage) (GCA_048565385.1_mSaiBol1.pri 2025-03-12)
     type bigChain GCA_048565385.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_048565385.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_048565385.1Link.bb
 
     track chainLiftOverGCA_031878705.1
     parent vgpLiftOver
-    subGroups query=s002
     priority 43.805
     shortLabel Asiatic tapir 
-    longLabel LiftOver chain Asiatic tapir (hap2 2023) (GCA_031878705.1_mTapInd1.hap2 2023-09-25)
+    longLabel Asiatic tapir (hap2 2023) (% 56.20 coverage) (GCA_031878705.1_mTapInd1.hap2 2023-09-25)
     type bigChain GCA_031878705.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_031878705.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_031878705.1Link.bb
 
     track chainLiftOverGCA_964656455.1
     parent vgpLiftOver
-    subGroups query=s003
     priority 48.022
     shortLabel gray seal 
-    longLabel LiftOver chain gray seal (hap1.1 2025) (GCA_964656455.1_mHalGry1.hap1.1 2025-01-02)
+    longLabel gray seal (hap1.1 2025) (% 51.98 coverage) (GCA_964656455.1_mHalGry1.hap1.1 2025-01-02)
     type bigChain GCA_964656455.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964656455.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964656455.1Link.bb
 
     track chainLiftOverGCA_041834305.1
     parent vgpLiftOver
-    subGroups query=s004
     priority 48.341
     shortLabel humpback whale 
-    longLabel LiftOver chain humpback whale (KW2013002 2024) (GCA_041834305.1_ASM4183430v1 2024-09-09)
+    longLabel humpback whale (KW2013002 2024) (% 51.66 coverage) (GCA_041834305.1_ASM4183430v1 2024-09-09)
     type bigChain GCA_041834305.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_041834305.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_041834305.1Link.bb
 
     track chainLiftOverGCA_965194825.1
     parent vgpLiftOver
-    subGroups query=s005
     priority 48.348
     shortLabel fin whale 
-    longLabel LiftOver chain fin whale (hap1.1 2025) (GCA_965194825.1_mBalPhy2.hap1.1 2025-03-10)
+    longLabel fin whale (hap1.1 2025) (% 51.65 coverage) (GCA_965194825.1_mBalPhy2.hap1.1 2025-03-10)
     type bigChain GCA_965194825.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_965194825.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_965194825.1Link.bb
 
     track chainLiftOverGCA_963455335.1
     parent vgpLiftOver
-    subGroups query=s006
     priority 48.748
     shortLabel European pine marten 
-    longLabel LiftOver chain European pine marten (primary hap 2023) (GCA_963455335.1_mMarMar1.1 2023-09-20)
+    longLabel European pine marten (primary hap 2023) (% 51.25 coverage) (GCA_963455335.1_mMarMar1.1 2023-09-20)
     type bigChain GCA_963455335.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963455335.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963455335.1Link.bb
 
     track chainLiftOverGCA_036417435.1
     parent vgpLiftOver
-    subGroups query=s007
     priority 49.153
     shortLabel boutu 
-    longLabel LiftOver chain boutu (hap1 2024) (GCA_036417435.1_mIniGeo1.hap1 2024-02-06)
+    longLabel boutu (hap1 2024) (% 50.85 coverage) (GCA_036417435.1_mIniGeo1.hap1 2024-02-06)
     type bigChain GCA_036417435.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_036417435.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_036417435.1Link.bb
 
     track chainLiftOverGCA_964374135.1
     parent vgpLiftOver
-    subGroups query=s008
     priority 49.301
     shortLabel Risso's dolphin 
-    longLabel LiftOver chain Risso's dolphin (hap1.1 2024) (GCA_964374135.1_mGraGri1.hap1.1 2024-11-29)
+    longLabel Risso's dolphin (hap1.1 2024) (% 50.70 coverage) (GCA_964374135.1_mGraGri1.hap1.1 2024-11-29)
     type bigChain GCA_964374135.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964374135.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964374135.1Link.bb
 
     track chainLiftOverGCA_964194105.1
     parent vgpLiftOver
-    subGroups query=s009
     priority 49.421
     shortLabel European suslik 
-    longLabel LiftOver chain European suslik (primary hap 2024) (GCA_964194105.1_mSpeCit3.1 2024-06-28)
+    longLabel European suslik (primary hap 2024) (% 50.58 coverage) (GCA_964194105.1_mSpeCit3.1 2024-06-28)
     type bigChain GCA_964194105.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964194105.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964194105.1Link.bb
 
     track chainLiftOverGCF_011762595.1
     parent vgpLiftOver
-    subGroups query=s010
     priority 49.509
     shortLabel common bottlenose dolphin 
-    longLabel LiftOver chain common bottlenose dolphin (maternal Y refseq 2020) (GCF_011762595.1_mTurTru1.mat.Y 2020-03-27)
+    longLabel common bottlenose dolphin (maternal Y refseq 2020) (% 50.49 coverage) (GCF_011762595.1_mTurTru1.mat.Y 2020-03-27)
     type bigChain GCF_011762595.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCF_011762595.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCF_011762595.1Link.bb
 
     track chainLiftOverGCA_964341445.1
     parent vgpLiftOver
-    subGroups query=s011
     priority 49.579
     shortLabel True's beaked whale 
-    longLabel LiftOver chain True's beaked whale (hap1.1 2024) (GCA_964341445.1_mMesMir1.hap1.1 2024-11-28)
+    longLabel True's beaked whale (hap1.1 2024) (% 50.42 coverage) (GCA_964341445.1_mMesMir1.hap1.1 2024-11-28)
     type bigChain GCA_964341445.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964341445.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964341445.1Link.bb
 
     track chainLiftOverGCA_040955705.1
     parent vgpLiftOver
-    subGroups query=s012
     priority 49.587
     shortLabel African hunting dog 
-    longLabel LiftOver chain African hunting dog (LycPic1hap2 2024) (GCA_040955705.1_LycPic1.final.hap2 2024-08-01)
+    longLabel African hunting dog (LycPic1hap2 2024) (% 50.41 coverage) (GCA_040955705.1_LycPic1.final.hap2 2024-08-01)
     type bigChain GCA_040955705.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_040955705.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_040955705.1Link.bb
 
     track chainLiftOverGCA_964270905.1
     parent vgpLiftOver
-    subGroups query=s013
     priority 49.599
     shortLabel Atlantic white-sided dolphin 
-    longLabel LiftOver chain Atlantic white-sided dolphin (mLagAcu1.hap1.1 2024) (GCA_964270905.1_mLagAcu1.hap1.1 2024-09-29)
+    longLabel Atlantic white-sided dolphin (mLagAcu1.hap1.1 2024) (% 50.40 coverage) (GCA_964270905.1_mLagAcu1.hap1.1 2024-09-29)
     type bigChain GCA_964270905.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964270905.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964270905.1Link.bb
 
     track chainLiftOverGCA_045843805.1
     parent vgpLiftOver
-    subGroups query=s014
     priority 49.738
     shortLabel Arctic ground squirrel 
-    longLabel LiftOver chain Arctic ground squirrel (hap1 2024) (GCA_045843805.1_mUroPar1.hap1 2024-12-13)
+    longLabel Arctic ground squirrel (hap1 2024) (% 50.26 coverage) (GCA_045843805.1_mUroPar1.hap1 2024-12-13)
     type bigChain GCA_045843805.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_045843805.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_045843805.1Link.bb
 
     track chainLiftOverGCA_951394435.1
     parent vgpLiftOver
-    subGroups query=s015
     priority 49.788
     shortLabel striped dolphin 
-    longLabel LiftOver chain striped dolphin (primary hap 2023) (GCA_951394435.1_mSteCoe1.1 2023-06-16)
+    longLabel striped dolphin (primary hap 2023) (% 50.21 coverage) (GCA_951394435.1_mSteCoe1.1 2023-06-16)
     type bigChain GCA_951394435.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_951394435.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_951394435.1Link.bb
 
     track chainLiftOverGCA_964662115.1
     parent vgpLiftOver
-    subGroups query=s016
     priority 49.845
     shortLabel least weasel 
-    longLabel LiftOver chain least weasel (hap1.1 2025) (GCA_964662115.1_mMusNiv2.hap1.1 2025-01-03)
+    longLabel least weasel (hap1.1 2025) (% 50.16 coverage) (GCA_964662115.1_mMusNiv2.hap1.1 2025-01-03)
     type bigChain GCA_964662115.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964662115.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964662115.1Link.bb
 
     track chainLiftOverGCA_964165515.1
     parent vgpLiftOver
-    subGroups query=s017
     priority 49.899
     shortLabel Sowerby's beaked whale 
-    longLabel LiftOver chain Sowerby's beaked whale (hap1 2024) (GCA_964165515.1_mMesBid2.hap1.1 2024-06-06)
+    longLabel Sowerby's beaked whale (hap1 2024) (% 50.10 coverage) (GCA_964165515.1_mMesBid2.hap1.1 2024-06-06)
     type bigChain GCA_964165515.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964165515.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964165515.1Link.bb
 
     track chainLiftOverGCA_949752795.1
     parent vgpLiftOver
-    subGroups query=s018
     priority 49.918
     shortLabel northern bottlenose whale 
-    longLabel LiftOver chain northern bottlenose whale (primary hap 2023) (GCA_949752795.1_mHypAmp2.1 2023-04-08)
+    longLabel northern bottlenose whale (primary hap 2023) (% 50.08 coverage) (GCA_949752795.1_mHypAmp2.1 2023-04-08)
     type bigChain GCA_949752795.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_949752795.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_949752795.1Link.bb
 
     track chainLiftOverGCA_047511655.1
     parent vgpLiftOver
-    subGroups query=s019
     priority 50.14
     shortLabel American beaver 
-    longLabel LiftOver chain American beaver (hap1 2025) (GCA_047511655.1_mCasCan1.hap1 2025-02-10)
+    longLabel American beaver (hap1 2025) (% 49.86 coverage) (GCA_047511655.1_mCasCan1.hap1 2025-02-10)
     type bigChain GCA_047511655.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_047511655.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_047511655.1Link.bb
 
     track chainLiftOverGCA_043880545.1
     parent vgpLiftOver
-    subGroups query=s020
     priority 50.41
     shortLabel greater mouse-tailed bat 
-    longLabel LiftOver chain greater mouse-tailed bat (20210906_DDa primary hap 2024) (GCA_043880545.1_ASM4388054v1 2024-10-28)
+    longLabel greater mouse-tailed bat (20210906_DDa primary hap 2024) (% 49.59 coverage) (GCA_043880545.1_ASM4388054v1 2024-10-28)
     type bigChain GCA_043880545.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880545.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880545.1Link.bb
 
     track chainLiftOverGCA_028451465.1
     parent vgpLiftOver
-    subGroups query=s021
     priority 51.226
     shortLabel North American porcupine 
-    longLabel LiftOver chain North American porcupine (mEreDor1 primary hap 2023) (GCA_028451465.1_mEreDor1.pri 2023-02-06)
+    longLabel North American porcupine (mEreDor1 primary hap 2023) (% 48.77 coverage) (GCA_028451465.1_mEreDor1.pri 2023-02-06)
     type bigChain GCA_028451465.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_028451465.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_028451465.1Link.bb
 
     track chainLiftOverGCA_043728065.1
     parent vgpLiftOver
-    subGroups query=s022
     priority 51.348
     shortLabel intermediate horseshoe bat 
-    longLabel LiftOver chain intermediate horseshoe bat (China 20211001_DDa primary hap 2024) (GCA_043728065.1_ASM4372806v1 2024-10-24)
+    longLabel intermediate horseshoe bat (China 20211001_DDa primary hap 2024) (% 48.65 coverage) (GCA_043728065.1_ASM4372806v1 2024-10-24)
     type bigChain GCA_043728065.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043728065.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043728065.1Link.bb
 
     track chainLiftOverGCA_031876335.1
     parent vgpLiftOver
-    subGroups query=s023
     priority 51.542
     shortLabel intermediate roundleaf bat 
-    longLabel LiftOver chain intermediate roundleaf bat (primary hap 2023) (GCA_031876335.1_mHipLar1.pri 2023-09-25)
+    longLabel intermediate roundleaf bat (primary hap 2023) (% 48.46 coverage) (GCA_031876335.1_mHipLar1.pri 2023-09-25)
     type bigChain GCA_031876335.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_031876335.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_031876335.1Link.bb
 
     track chainLiftOverGCA_043727835.1
     parent vgpLiftOver
-    subGroups query=s024
     priority 51.977
     shortLabel Stoliczka's trident bat 
-    longLabel LiftOver chain Stoliczka's trident bat (China 2021113_DDA primary hap 2024) (GCA_043727835.1_ASM4372783v1 2024-10-24)
+    longLabel Stoliczka's trident bat (China 2021113_DDA primary hap 2024) (% 48.02 coverage) (GCA_043727835.1_ASM4372783v1 2024-10-24)
     type bigChain GCA_043727835.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043727835.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043727835.1Link.bb
 
     track chainLiftOverGCA_964194185.1
     parent vgpLiftOver
-    subGroups query=s025
     priority 52.1
     shortLabel lesser horseshoe bat 
-    longLabel LiftOver chain lesser horseshoe bat (hap1 2024) (GCA_964194185.1_mRhiHip2.hap1.1 2024-06-28)
+    longLabel lesser horseshoe bat (hap1 2024) (% 47.90 coverage) (GCA_964194185.1_mRhiHip2.hap1.1 2024-06-28)
     type bigChain GCA_964194185.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964194185.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964194185.1Link.bb
 
     track chainLiftOverGCA_043880425.1
     parent vgpLiftOver
-    subGroups query=s026
     priority 52.492
     shortLabel Yong Hoi Sen's woolly horseshoe bat 
-    longLabel LiftOver chain Yong Hoi Sen's woolly horseshoe bat (Malaysia 20210929_DDd primary hap 2024) (GCA_043880425.1_ASM4388042v1 2024-10-28)
+    longLabel Yong Hoi Sen's woolly horseshoe bat (Malaysia 20210929_DDd primary hap 2024) (% 47.51 coverage) (GCA_043880425.1_ASM4388042v1 2024-10-28)
     type bigChain GCA_043880425.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880425.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880425.1Link.bb
 
     track chainLiftOverGCA_043748575.1
     parent vgpLiftOver
-    subGroups query=s027
     priority 52.532
     shortLabel northern woolly horseshoe bat 
-    longLabel LiftOver chain northern woolly horseshoe bat (20210929_DDc primary hap 2024) (GCA_043748575.1_ASM4374857v1 2024-10-24)
+    longLabel northern woolly horseshoe bat (20210929_DDc primary hap 2024) (% 47.47 coverage) (GCA_043748575.1_ASM4374857v1 2024-10-24)
     type bigChain GCA_043748575.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043748575.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043748575.1Link.bb
 
     track chainLiftOverGCA_023851605.1
     parent vgpLiftOver
-    subGroups query=s028
     priority 52.547
     shortLabel southern tamandua 
-    longLabel LiftOver chain southern tamandua (mTamTet1 primary hap 2022) (GCA_023851605.1_mTamTet1.pri 2022-06-22)
+    longLabel southern tamandua (mTamTet1 primary hap 2022) (% 47.45 coverage) (GCA_023851605.1_mTamTet1.pri 2022-06-22)
     type bigChain GCA_023851605.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_023851605.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_023851605.1Link.bb
 
     track chainLiftOverGCA_043728145.1
     parent vgpLiftOver
-    subGroups query=s029
     priority 52.682
     shortLabel trefoil horseshoe bat 
-    longLabel LiftOver chain trefoil horseshoe bat (Malaysia primary hap 2024) (GCA_043728145.1_ASM4372814v1 2024-10-24)
+    longLabel trefoil horseshoe bat (Malaysia primary hap 2024) (% 47.32 coverage) (GCA_043728145.1_ASM4372814v1 2024-10-24)
     type bigChain GCA_043728145.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043728145.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043728145.1Link.bb
 
     track chainLiftOverGCA_030035585.1
     parent vgpLiftOver
-    subGroups query=s030
     priority 52.75
     shortLabel dugong 
-    longLabel LiftOver chain dugong (hap1 mDugDug1 2023) (GCA_030035585.1_mDugDug1.hap1 2023-05-18)
+    longLabel dugong (hap1 mDugDug1 2023) (% 47.25 coverage) (GCA_030035585.1_mDugDug1.hap1 2023-05-18)
     type bigChain GCA_030035585.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_030035585.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_030035585.1Link.bb
 
     track chainLiftOverGCA_043880285.1
     parent vgpLiftOver
-    subGroups query=s031
     priority 52.803
     shortLabel cyclops roundleaf bat 
-    longLabel LiftOver chain cyclops roundleaf bat (Cote d'Ivoire 20210929_DDa primary hap 2024) (GCA_043880285.1_ASM4388028v1 2024-10-28)
+    longLabel cyclops roundleaf bat (Cote d'Ivoire 20210929_DDa primary hap 2024) (% 47.20 coverage) (GCA_043880285.1_ASM4388028v1 2024-10-28)
     type bigChain GCA_043880285.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880285.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880285.1Link.bb
 
     track chainLiftOverGCA_026018925.1
     parent vgpLiftOver
-    subGroups query=s032
     priority 53.231
     shortLabel large tree shrew 
-    longLabel LiftOver chain large tree shrew (BS70 2022) (GCA_026018925.1_mTupTan1 2022-11-07)
+    longLabel large tree shrew (BS70 2022) (% 46.77 coverage) (GCA_026018925.1_mTupTan1 2022-11-07)
     type bigChain GCA_026018925.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_026018925.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_026018925.1Link.bb
 
     track chainLiftOverGCA_041735815.1
     parent vgpLiftOver
-    subGroups query=s033
     priority 53.737
     shortLabel Inner Mongolia cashmere goat 
-    longLabel LiftOver chain Inner Mongolia cashmere goat (2024) (GCA_041735815.1_T2T-goat2.0 2024-09-04)
+    longLabel Inner Mongolia cashmere goat (2024) (% 46.26 coverage) (GCA_041735815.1_T2T-goat2.0 2024-09-04)
     type bigChain GCA_041735815.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_041735815.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_041735815.1Link.bb
 
     track chainLiftOverGCA_030848825.1
     parent vgpLiftOver
-    subGroups query=s034
     priority 53.98
     shortLabel Brazilian free-tailed bat 
-    longLabel LiftOver chain Brazilian free-tailed bat (primary hap 2023) (GCA_030848825.1_DD_mTadBra1_pri 2023-08-22)
+    longLabel Brazilian free-tailed bat (primary hap 2023) (% 46.02 coverage) (GCA_030848825.1_DD_mTadBra1_pri 2023-08-22)
     type bigChain GCA_030848825.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_030848825.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_030848825.1Link.bb
 
     track chainLiftOverGCA_037157525.1
     parent vgpLiftOver
-    subGroups query=s035
     priority 55.144
     shortLabel Alvarez's mastiff bat 
-    longLabel LiftOver chain Alvarez's mastiff bat (hap1 2024) (GCA_037157525.1_mMolAlv2.hap1 2024-03-15)
+    longLabel Alvarez's mastiff bat (hap1 2024) (% 44.86 coverage) (GCA_037157525.1_mMolAlv2.hap1 2024-03-15)
     type bigChain GCA_037157525.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_037157525.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_037157525.1Link.bb
 
     track chainLiftOverGCA_039880945.1
     parent vgpLiftOver
-    subGroups query=s036
     priority 55.485
     shortLabel northern black mastiff bat 
-    longLabel LiftOver chain northern black mastiff bat (mMolNig1hap1 2024) (GCA_039880945.1_mMolNig1.hap1 2024-05-29)
+    longLabel northern black mastiff bat (mMolNig1hap1 2024) (% 44.52 coverage) (GCA_039880945.1_mMolNig1.hap1 2024-05-29)
     type bigChain GCA_039880945.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_039880945.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_039880945.1Link.bb
 
     track chainLiftOverGCA_043748645.1
     parent vgpLiftOver
-    subGroups query=s037
     priority 55.535
     shortLabel Angolan free-tailed bat 
-    longLabel LiftOver chain Angolan free-tailed bat (Cote d'Ivoire 20210831_DDa 2024) (GCA_043748645.1_ASM4374864v1 2024-10-24)
+    longLabel Angolan free-tailed bat (Cote d'Ivoire 20210831_DDa 2024) (% 44.47 coverage) (GCA_043748645.1_ASM4374864v1 2024-10-24)
     type bigChain GCA_043748645.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043748645.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043748645.1Link.bb
 
     track chainLiftOverGCA_039655065.1
     parent vgpLiftOver
-    subGroups query=s038
     priority 55.902
     shortLabel Merriam's long-tongued bat 
-    longLabel LiftOver chain Merriam's long-tongued bat (hap1 2024) (GCA_039655065.1_mGloMut1.hap1 2024-05-17)
+    longLabel Merriam's long-tongued bat (hap1 2024) (% 44.10 coverage) (GCA_039655065.1_mGloMut1.hap1 2024-05-17)
     type bigChain GCA_039655065.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_039655065.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_039655065.1Link.bb
 
     track chainLiftOverGCA_043880595.1
     parent vgpLiftOver
-    subGroups query=s039
     priority 56.164
     shortLabel lesser false vampire bat 
-    longLabel LiftOver chain lesser false vampire bat (Vietnam 20211001_DDb primary hap 2024) (GCA_043880595.1_ASM4388059v1 2024-10-28)
+    longLabel lesser false vampire bat (Vietnam 20211001_DDb primary hap 2024) (% 43.84 coverage) (GCA_043880595.1_ASM4388059v1 2024-10-28)
     type bigChain GCA_043880595.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880595.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043880595.1Link.bb
 
     track chainLiftOverGCA_038363095.2
     parent vgpLiftOver
-    subGroups query=s040
     priority 56.295
     shortLabel great fruit-eating bat 
-    longLabel LiftOver chain great fruit-eating bat (v2 hap1 2024) (GCA_038363095.2_mArtLit.hap1 2024-05-21)
+    longLabel great fruit-eating bat (v2 hap1 2024) (% 43.70 coverage) (GCA_038363095.2_mArtLit.hap1 2024-05-21)
     type bigChain GCA_038363095.2
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_038363095.2.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_038363095.2Link.bb
 
     track chainLiftOverGCA_038363145.1
     parent vgpLiftOver
-    subGroups query=s041
     priority 56.392
     shortLabel great fruit-eating bat 
-    longLabel LiftOver chain great fruit-eating bat (hap1 2024) (GCA_038363145.1_mArtInt1.hap1 2024-04-22)
+    longLabel great fruit-eating bat (hap1 2024) (% 43.61 coverage) (GCA_038363145.1_mArtInt1.hap1 2024-04-22)
     type bigChain GCA_038363145.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_038363145.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_038363145.1Link.bb
 
     track chainLiftOverGCA_963383645.1
     parent vgpLiftOver
-    subGroups query=s042
     priority 56.621
     shortLabel hazel dormouse 
-    longLabel LiftOver chain hazel dormouse (primary hap 2023) (GCA_963383645.1_mMusAve1.1 2023-08-26)
+    longLabel hazel dormouse (primary hap 2023) (% 43.38 coverage) (GCA_963383645.1_mMusAve1.1 2023-08-26)
     type bigChain GCA_963383645.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963383645.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963383645.1Link.bb
 
     track chainLiftOverGCA_037038545.1
     parent vgpLiftOver
-    subGroups query=s043
     priority 56.858
     shortLabel proboscis bat 
-    longLabel LiftOver chain proboscis bat (hap1 2024) (GCA_037038545.1_mRhyNas2.hap1 2024-03-06)
+    longLabel proboscis bat (hap1 2024) (% 43.14 coverage) (GCA_037038545.1_mRhyNas2.hap1 2024-03-06)
     type bigChain GCA_037038545.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_037038545.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_037038545.1Link.bb
 
     track chainLiftOverGCA_048771875.1
     parent vgpLiftOver
-    subGroups query=s044
     priority 58.449
     shortLabel northern gundi 
-    longLabel LiftOver chain northern gundi (hap1 2025) (GCA_048771875.1_mCteGun2.hap1 2025-03-21)
+    longLabel northern gundi (hap1 2025) (% 41.55 coverage) (GCA_048771875.1_mCteGun2.hap1 2025-03-21)
     type bigChain GCA_048771875.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_048771875.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_048771875.1Link.bb
 
     track chainLiftOverGCA_028571685.1
     parent vgpLiftOver
-    subGroups query=s045
     priority 59.163
     shortLabel yellow-spotted hyrax 
-    longLabel LiftOver chain yellow-spotted hyrax (mHetBru1 2023) (GCA_028571685.1_mHetBru1.pri 2023-02-10)
+    longLabel yellow-spotted hyrax (mHetBru1 2023) (% 40.84 coverage) (GCA_028571685.1_mHetBru1.pri 2023-02-10)
     type bigChain GCA_028571685.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_028571685.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_028571685.1Link.bb
 
     track chainLiftOverGCA_964194135.1
     parent vgpLiftOver
-    subGroups query=s046
     priority 59.77
     shortLabel European mole 
-    longLabel LiftOver chain European mole (hap1 2024) (GCA_964194135.1_mTalEur1.hap1.1 2024-06-28)
+    longLabel European mole (hap1 2024) (% 40.23 coverage) (GCA_964194135.1_mTalEur1.hap1.1 2024-06-28)
     type bigChain GCA_964194135.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964194135.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964194135.1Link.bb
 
     track chainLiftOverGCA_964094495.2
     parent vgpLiftOver
-    subGroups query=s047
     priority 59.953
     shortLabel whiskered bat 
-    longLabel LiftOver chain whiskered bat (hap1 2024) (GCA_964094495.2_mMyoMys1.hap1.1 2024-06-12)
+    longLabel whiskered bat (hap1 2024) (% 40.05 coverage) (GCA_964094495.2_mMyoMys1.hap1.1 2024-06-12)
     type bigChain GCA_964094495.2
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964094495.2.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964094495.2Link.bb
 
     track chainLiftOverGCA_951640355.1
     parent vgpLiftOver
-    subGroups query=s048
     priority 59.963
     shortLabel northern bat 
-    longLabel LiftOver chain northern bat (primary hap 2023) (GCA_951640355.1_mEptNil1.1 2023-05-18)
+    longLabel northern bat (primary hap 2023) (% 40.04 coverage) (GCA_951640355.1_mEptNil1.1 2023-05-18)
     type bigChain GCA_951640355.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_951640355.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_951640355.1Link.bb
 
     track chainLiftOverGCA_963455305.1
     parent vgpLiftOver
-    subGroups query=s049
     priority 59.969
     shortLabel brown big-eared bat 
-    longLabel LiftOver chain brown big-eared bat (primary hap 2023) (GCA_963455305.1_mPleAur1.1 2023-09-20)
+    longLabel brown big-eared bat (primary hap 2023) (% 40.03 coverage) (GCA_963455305.1_mPleAur1.1 2023-09-20)
     type bigChain GCA_963455305.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963455305.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963455305.1Link.bb
 
     track chainLiftOverGCA_026230055.1
     parent vgpLiftOver
-    subGroups query=s050
     priority 60.083
     shortLabel Townsend's big-eared bat 
-    longLabel LiftOver chain Townsend's big-eared bat (haplotype 1 of 2 COTO_CA2020_CCGP 2022) (GCA_026230055.1_mCorTow1.0.hap1 2022-11-18)
+    longLabel Townsend's big-eared bat (haplotype 1 of 2 COTO_CA2020_CCGP 2022) (% 39.92 coverage) (GCA_026230055.1_mCorTow1.0.hap1 2022-11-18)
     type bigChain GCA_026230055.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_026230055.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_026230055.1Link.bb
 
     track chainLiftOverGCA_965115925.1
     parent vgpLiftOver
-    subGroups query=s051
     priority 60.182
     shortLabel Geoffroy's bat 
-    longLabel LiftOver chain Geoffroy's bat (hap1.1 2025) (GCA_965115925.1_mMyoEma1.hap1.1 2025-01-24)
+    longLabel Geoffroy's bat (hap1.1 2025) (% 39.82 coverage) (GCA_965115925.1_mMyoEma1.hap1.1 2025-01-24)
     type bigChain GCA_965115925.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_965115925.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_965115925.1Link.bb
 
     track chainLiftOverGCA_964212035.2
     parent vgpLiftOver
-    subGroups query=s052
     priority 60.252
     shortLabel Natterer's bat 
-    longLabel LiftOver chain Natterer's bat (hap1.2 2025) (GCA_964212035.2_mMyoNat1.hap1.2 2025-03-28)
+    longLabel Natterer's bat (hap1.2 2025) (% 39.75 coverage) (GCA_964212035.2_mMyoNat1.hap1.2 2025-03-28)
     type bigChain GCA_964212035.2
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964212035.2.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964212035.2Link.bb
 
     track chainLiftOverGCA_027563665.1
     parent vgpLiftOver
-    subGroups query=s053
     priority 62.46
     shortLabel pallid bat 
-    longLabel LiftOver chain pallid bat (TK200870 primary hap 2023) (GCA_027563665.1_DD_ASM_mAP_20210503 2023-01-09)
+    longLabel pallid bat (TK200870 primary hap 2023) (% 37.54 coverage) (GCA_027563665.1_DD_ASM_mAP_20210503 2023-01-09)
     type bigChain GCA_027563665.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_027563665.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_027563665.1Link.bb
 
     track chainLiftOverGCA_026229955.1
     parent vgpLiftOver
-    subGroups query=s054
     priority 63.652
     shortLabel North American deer mouse 
-    longLabel LiftOver chain North American deer mouse (MVZ:Mamm:240117 primary hap 2022) (GCA_026229955.1_mPerMan1.0.p 2022-11-14)
+    longLabel North American deer mouse (MVZ:Mamm:240117 primary hap 2022) (% 36.35 coverage) (GCA_026229955.1_mPerMan1.0.p 2022-11-14)
     type bigChain GCA_026229955.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_026229955.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_026229955.1Link.bb
 
     track chainLiftOverGCA_949987585.1
     parent vgpLiftOver
-    subGroups query=s055
     priority 63.748
     shortLabel soprano pipistrelle 
-    longLabel LiftOver chain soprano pipistrelle (primary hap 2023) (GCA_949987585.1_mPipPyg2.1 2023-05-01)
+    longLabel soprano pipistrelle (primary hap 2023) (% 36.25 coverage) (GCA_949987585.1_mPipPyg2.1 2023-05-01)
     type bigChain GCA_949987585.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_949987585.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_949987585.1Link.bb
 
     track chainLiftOverGCA_964339955.1
     parent vgpLiftOver
-    subGroups query=s056
     priority 63.876
     shortLabel Hanaki's dwarf bat 
-    longLabel LiftOver chain Hanaki's dwarf bat (2024) (GCA_964339955.1_mPipHan1.1 2024-11-14)
+    longLabel Hanaki's dwarf bat (2024) (% 36.12 coverage) (GCA_964339955.1_mPipHan1.1 2024-11-14)
     type bigChain GCA_964339955.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964339955.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964339955.1Link.bb
 
     track chainLiftOverGCA_963924515.1
     parent vgpLiftOver
-    subGroups query=s057
     priority 63.947
     shortLabel particolored bat 
-    longLabel LiftOver chain particolored bat (primary hap 2024) (GCA_963924515.1_mVesMur1.1 2024-01-29)
+    longLabel particolored bat (primary hap 2024) (% 36.05 coverage) (GCA_963924515.1_mVesMur1.1 2024-01-29)
     type bigChain GCA_963924515.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963924515.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963924515.1Link.bb
 
     track chainLiftOverGCA_903992545.1
     parent vgpLiftOver
-    subGroups query=s058
     priority 64.324
     shortLabel common pipistrelle 
-    longLabel LiftOver chain common pipistrelle (2020) (GCA_903992545.1_mPipPip1.1 2020-08-06)
+    longLabel common pipistrelle (2020) (% 35.68 coverage) (GCA_903992545.1_mPipPip1.1 2020-08-06)
     type bigChain GCA_903992545.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_903992545.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_903992545.1Link.bb
 
     track chainLiftOverGCA_011762505.3
     parent vgpLiftOver
-    subGroups query=s059
     priority 66.554
     shortLabel African grass rat 
-    longLabel LiftOver chain African grass rat (v3 paternal hap 2024) (GCA_011762505.3_mArvNil1.pat.X 2024-10-22)
+    longLabel African grass rat (v3 paternal hap 2024) (% 33.45 coverage) (GCA_011762505.3_mArvNil1.pat.X 2024-10-22)
     type bigChain GCA_011762505.3
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_011762505.3.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_011762505.3Link.bb
 
     track chainLiftOverGCA_964271855.1
     parent vgpLiftOver
-    subGroups query=s060
     priority 66.675
     shortLabel Crete spiny mouse 
-    longLabel LiftOver chain Crete spiny mouse (2024) (GCA_964271855.1_mAcoMin1 2024-10-03)
+    longLabel Crete spiny mouse (2024) (% 33.33 coverage) (GCA_964271855.1_mAcoMin1 2024-10-03)
     type bigChain GCA_964271855.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964271855.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_964271855.1Link.bb
 
     track chainLiftOverGCA_037038515.1
     parent vgpLiftOver
-    subGroups query=s061
     priority 67.03
     shortLabel meadow vole 
-    longLabel LiftOver chain meadow vole (hap1 2024) (GCA_037038515.1_mMicPen1.hap1 2024-03-06)
+    longLabel meadow vole (hap1 2024) (% 32.97 coverage) (GCA_037038515.1_mMicPen1.hap1 2024-03-06)
     type bigChain GCA_037038515.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_037038515.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_037038515.1Link.bb
 
     track chainLiftOverGCA_963924665.1
     parent vgpLiftOver
-    subGroups query=s062
     priority 70.19
     shortLabel European harvest mouse 
-    longLabel LiftOver chain European harvest mouse (primary hap 2024) (GCA_963924665.1_mMicMin1.1 2024-01-29)
+    longLabel European harvest mouse (primary hap 2024) (% 29.81 coverage) (GCA_963924665.1_mMicMin1.1 2024-01-29)
     type bigChain GCA_963924665.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963924665.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_963924665.1Link.bb
 
     track chainLiftOverGCA_031878675.1
     parent vgpLiftOver
-    subGroups query=s063
     priority 70.268
     shortLabel Botta's pocket gopher 
-    longLabel LiftOver chain Botta's pocket gopher (hap1 2023) (GCA_031878675.1_mThoBot2.hap1 2023-09-25)
+    longLabel Botta's pocket gopher (hap1 2023) (% 29.73 coverage) (GCA_031878675.1_mThoBot2.hap1 2023-09-25)
     type bigChain GCA_031878675.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_031878675.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_031878675.1Link.bb
 
     track chainLiftOverGCA_043290085.1
     parent vgpLiftOver
-    subGroups query=s064
     priority 70.925
     shortLabel black and rufous elephant shrew 
-    longLabel LiftOver chain black and rufous elephant shrew (mRhyPet1hap1 2024) (GCA_043290085.1_mRhyPet1.hap1 2024-10-17)
+    longLabel black and rufous elephant shrew (mRhyPet1hap1 2024) (% 29.08 coverage) (GCA_043290085.1_mRhyPet1.hap1 2024-10-17)
     type bigChain GCA_043290085.1
     bigDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043290085.1.bb
     linkDataUrl /gbdb/hg38/bbi/liftOver/hg38.chainLiftOverGCA_043290085.1Link.bb
