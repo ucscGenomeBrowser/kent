@@ -2115,7 +2115,7 @@ if (isCoding != NULL && codingBasesSoFar > 0)
 return -1;  // introns not okay
 }
 
-struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb)
+struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb, boolean changedStrand)
 /* build a genePred from a bigGenePred and a bed file */
 {
 char *extra = cloneString(bb->rest);
@@ -2132,6 +2132,20 @@ gp->name2 = cloneString(row[ 9]);
 int numBlocks;
 sqlSignedDynamicArray(row[ 12],  &gp->exonFrames, &numBlocks);
 gp->optFields |= genePredExonFramesFld;
+
+// exon frames are in transcription strand order so if it's changed during quickLift
+// we need to flip the order in the list
+if (changedStrand && (numBlocks > 1))
+    {
+    int *reorderFrames;
+    AllocArray(reorderFrames, numBlocks);
+
+    int ii;
+    for(ii=0; ii < numBlocks; ii++)
+        reorderFrames[ii] = gp->exonFrames[(numBlocks - 1) - ii];
+
+    gp->exonFrames = reorderFrames;
+    }
 //assert (numBlocks == gp->exonCount);
 
 gp->type = cloneString(row[13]);
