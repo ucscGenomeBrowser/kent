@@ -37,6 +37,7 @@
 #include "verbose.h"
 #include "genark.h"
 #include "quickLift.h"
+#include "botDelay.h"
 
 #include <curl/curl.h>
 
