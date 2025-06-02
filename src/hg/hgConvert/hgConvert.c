@@ -356,8 +356,8 @@ else
         if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath))
             {
             if (quickChain)
-                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&quickLift.%d.%s=%d&hideTracks=1%s\">",
-                   hgTracksName(), toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain, visDy->string);
+                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
+                   hgTracksName(), toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
             else
                 printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
@@ -385,6 +385,9 @@ else
 	    100.0 * (chain->tEnd - chain->tStart) / origSize);
 	}
     }
+if (badList)
+    for(; badList; badList = badList->next)
+        printf("%s %s<BR>", badList->track, badList->type);
 cartWebEnd();
 }
 

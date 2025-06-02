@@ -17,33 +17,50 @@ human tissues.
 Transcript names include a triplet annotation that represents transcript start site, exon junction 
 chain, and transcript end site. For example, if transcript A has the label [1,2,3] and transcript B
 is labeled [1,1,3], then those transcripts share start and end sites but have a different combination
-of exons. 
-<br>
+of exons.</p>
+
+<p>
 GENCODE V29 and V40 were used as reference data; any transcript not present in either of these is
-colored <font color=0000FF>blue</font>.
-<br>
+colored <font color=0000FF>blue</font>.</p>
+<p>
 Mouseover on transcripts shows their ENCODE gene ID and the tissue or cell line where it’s most highly
-expressed, and its TPM in that sample.
+expressed and its TPM in that sample.
 </p>
 
 <h2>Data Access</h2>
 The raw data can be explored interactively with the
-<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
-<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated analysis, the data may be queried from our
-<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.<br>
+<a href="../../goldenPath/help/api.html">REST API</a>.</p>
+
+<p>
+The data underlying this track is available in the file
+<a href="https://hgdownload.gi.ucsc.edu/gbdb/$db/encode4/encode4LongRnaTranscripts.bb">encode4LongRna.bb</a>.
+Individual regions or the whole genome annotation can be obtained using our
+tool <tt>bigBedToBed</tt>, which is available on our
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">download server</a>.
+For example, to extract only annotations in a given region, you could use the following command:
+</p>
+
+<pre>
+bigBedToBed -chrom=chr1 -start=100000 -end=100500 https://hgdownload.gi.ucsc.edu/gbdb/$db/encode4LongRna.bb stdout
+</pre>
+
+<p>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
 for questions, or our
-<a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a>
+<a href="../../FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a>
 for more information.
 </p>
 
 <h2>Methods</h2>
 <p>
-Data were retrieved from https://zenodo.org/records/15116042. The transcript gtf 
-was converted to Bed format, and expression and CDS data added from the relevant files using a 
-custom script.
+Data were retrieved from <a
+href="https://zenodo.org/records/15116042">https://zenodo.org/records/15116042</a>.
+The <tt>human_ucsc_transcripts.gtf</tt> was converted to BED format, and expression and CDS data
+added from the relevant files using a custom script.
 </p>
 
 <h2>Credits</h2>

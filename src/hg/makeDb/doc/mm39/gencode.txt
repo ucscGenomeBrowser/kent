@@ -536,6 +536,7 @@
     jkmake DBS=mm39 alpha
 ##############################################################################
 2025-02-05: import of UCSC GENCODE group processing of GENCODE VM37 pre-release for GENCODE Versions (markd)
+2025-05-31: final release
 
    # set shell variable:
    # pre-release shell variables 
@@ -547,9 +548,9 @@
        ver=M37
        ensver=114
        pre=""
-       ensdate='Mar 2025'
+       ensdate='May 2025'
 
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release
 
     # download, build and load tables
     mkdir -p /hive/data/genomes/mm39/bed/gencodeV${ver}/hgcImport${pre}
@@ -572,11 +573,11 @@
 
     jkmake DBS=mm39
 
-    pushd /hive/data/genomes/mm39/bed/gencodeV${ver}/hgcImport${pre}
+    pushd
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
 
     # check tracks in browser sandbox
     # commit all
+
     jkmake DBS=mm39 alpha
 ##############################################################################

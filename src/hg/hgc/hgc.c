@@ -3618,30 +3618,6 @@ for (;tdb != NULL; tdb = tdb->parent)
 return NULL;
 }
 
-static char *getTrackHtml(char *db, char *trackName)
-/* Grab HTML from trackDb in native database for quickLift tracks. */
-{
-char query[4096];
-
-sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
-struct trackDb *loadTrackDb(char *db, char *where);
-struct trackDb *tdb = loadTrackDb(db, query);
-
-char *html = tdb->html;
-if (isEmpty(tdb->html))
-    {
-    char *parent = trackDbSetting(tdb, "parent");
-    char *words[10];
-
-    chopLine(parent,words);
-    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
-    struct trackDb *tdb = loadTrackDb(db, query);
-
-    html = tdb->html;
-    }
-return html;
-}
-
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link
@@ -6650,8 +6626,8 @@ int aliCount = slCount(pslList);
 boolean isClicked;
 if (pslList == NULL || tableName == NULL)
     return;
-boolean showEvery = sameString(itemIn, "PrintAllSequences");
 
+boolean showEvery = (strstr(itemIn, "PrintAllSequences") > 0);
 if (!showEvery && (aliCount > 1))
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
@@ -6669,8 +6645,8 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    {
             char otherString[512];
             char *qName = itemIn;
-            if (sameString(itemIn, "PrintAllSequences"))
-                qName = psl->qName;
+	    if (showEvery)
+		qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
@@ -6685,6 +6661,9 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 	        printf("</A>");
 	    printf("\n");
+
+	    if (showEvery)
+                 freeMem(qName);
 	    }
 	}
     }
@@ -6710,10 +6689,15 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         && sameString(psl->tName, seqName)
 	)
 	{
+        boolean showEvery = (strstr(itemIn, "PrintAllSequences") > 0);
+	char *qName = itemIn;
+	if (showEvery)
+	    qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
+
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere(hgcCommandInWindow, itemIn, otherString, psl->tName);
+	hgcAnchorSomewhere(hgcCommandInWindow, qName, otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
@@ -7437,7 +7421,11 @@ while ((psl = pslNext(lf)) != NULL)
     }
 slSort(&pslList, pslCmpQueryScore);
 lineFileClose(&lf);
-printAlignments(pslList, start, "htcUserAli", "user", item);
+
+char allItems[1024];
+safef(allItems, sizeof allItems, "%s %s %s", pslName, faName, "PrintAllSequences");
+
+printAlignments(pslList, start, "htcUserAli", "user", allItems);
 pslFreeList(&pslList);
 
 printf("<BR>\n");
@@ -9373,7 +9361,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
             {
             struct bed *bedCopy = cloneBed(bed);
-            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
+            
+            char startBuf[16], endBuf[16];
+            char *bedRow[bbi->fieldCount];
+            bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+            // bedRow[5] has original strand in it, bedCopy has new strand.  If they're different we want to reverse exonFrames
+            boolean changedStrand = FALSE;
+            if (*bedRow[5] != *bedCopy->strand)
+                changedStrand = TRUE;
+            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb, changedStrand);
             }
         }
     else

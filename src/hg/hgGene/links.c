@@ -227,6 +227,15 @@ hPrintf("</TR>\n<TR>");
 
 for (link = linkList; link != NULL; link = link->next)
     {
+    if (liftDb != NULL) // these links don't work under quickLift
+        {
+        if (sameString(link->name, "family") ||
+            sameString(link->name, "palTrack") ||
+            sameString(link->name, "hgGeneGraph") ||
+            sameString(link->name, "genome") ||
+            sameString(link->name, "visiGene"))
+            continue;
+        }
     char *url = linkGetUrl(link, conn, geneId);
     if (url != NULL)
 	{

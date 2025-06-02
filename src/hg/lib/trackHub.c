@@ -1555,68 +1555,6 @@ if (!inited)
 return hashLookup(vettedHash, track) != NULL;
 }
 
-static void dumpTdbAndChildren(struct dyString *dy, struct trackDb *tdb)
-/* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
-{
-struct hashCookie cookie = hashFirst(tdb->settingsHash);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    {   
-    if (differentString(hel->name, "track"))
-        {
-        if (sameString(hel->name, "parent") || sameString(hel->name, "html"))
-            dyStringPrintf(dy, "%s %s\n", hel->name, trackHubSkipHubName((char *)hel->val));
-        else
-            dyStringPrintf(dy, "%s %s\n", hel->name, ((char *)hel->val));
-        }
-    }
-
-if (tdb->subtracks)
-    {
-    for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
-        {
-        char *track =  trackHubSkipHubName(tdb->track);
-        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\n", track);
-        if (!isVetted(track))
-            dyStringPrintf(dy, "avoidHandler on\n");
-        dumpTdbAndChildren(dy, tdb);
-        }
-    }
-}
-
-static bool subtrackEnabledInTdb(struct trackDb *subTdb)
-/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
-{
-bool enabled = TRUE;
-char *words[2];
-char *setting;
-if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
-    {
-    if (chopLine(cloneString(setting), words) >= 2)
-        if (sameString(words[1], "off"))
-            enabled = FALSE;
-    }
-else
-    return subTdb->visibility != tvHide;
-
-return enabled;
-}
-
-static bool isSubtrackVisible(struct cart *cart, struct trackDb *tdb)
-/* Has this subtrack not been deselected in hgTrackUi or declared with
- *  * "subTrack ... off"?  -- assumes composite track is visible. */
-{
-boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
-bool enabledInTdb = subtrackEnabledInTdb(tdb);
-char option[1024];
-safef(option, sizeof(option), "%s_sel", tdb->track);
-boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
-if (overrideComposite)
-    enabled = TRUE;
-return enabled;
-}       
-            
-        
 static bool isParentVisible(struct cart *cart, struct trackDb *tdb)
 // Are this track's parents visible?
 {
@@ -1638,7 +1576,81 @@ else
 return vis;
 }
 
-struct dyString *trackDbString(struct trackDb *tdb)
+static bool subtrackEnabledInTdb(struct trackDb *subTdb)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
+{
+bool enabled = TRUE;
+char *words[2];
+char *setting;
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            enabled = FALSE;
+    }
+else
+    return subTdb->visibility != tvHide;
+
+return enabled;
+}
+static bool isSubtrackVisible(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = subtrackEnabledInTdb(tdb);
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}       
+            
+        
+static void dumpTdbAndChildren(struct cart *cart, struct dyString *dy, struct trackDb *tdb)
+/* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
+{
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+struct hashEl *hel;
+dyStringPrintf(dy, "visibility %s\n", hStringFromTv(tdb->visibility));
+while ((hel = hashNext(&cookie)) != NULL)
+    {   
+    if (differentString(hel->name, "track") && differentString(hel->name, "visibility"))
+        {
+        if (sameString(hel->name, "parent") )
+            dyStringPrintf(dy, "parent %s on\n", tdb->parent->track);
+        else if (sameString(hel->name, "html"))
+            dyStringPrintf(dy, "%s %s\n", hel->name, trackHubSkipHubName((char *)hel->val));
+        else
+            dyStringPrintf(dy, "%s %s\n", hel->name, ((char *)hel->val));
+        }
+    }
+
+if (tdb->subtracks)
+    {
+    for (tdb = tdb->subtracks; tdb; tdb = tdb->next)
+        {
+        char *track =  trackHubSkipHubName(tdb->track);
+        dyStringPrintf(dy, "\ntrack %s\nquickLifted on\n", track);
+        if (!isVetted(track))
+            dyStringPrintf(dy, "avoidHandler on\n");
+        if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb)) // child of supertrack
+            {
+            char *cartVis = cartOptionalString(cart, tdb->parent->track);
+            if (cartVis != NULL)
+                tdb->visibility = hTvFromString(cartVis);
+            //else if (tdbIsSuperTrack(tdb->parent))
+             //   tdb->visibility = tdb->parent->isShow;
+            }
+        dumpTdbAndChildren(cart, dy, tdb);
+        }
+    }
+}
+
+
+
+struct dyString *trackDbString(struct cart *cart, struct trackDb *tdb)
 /* Convert a trackDb entry into a dyString. */
 {
 struct dyString *dy;
@@ -1652,7 +1664,7 @@ dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
 if (!isVetted(track))
     dyStringPrintf(dy, "avoidHandler on\n");
     
-dumpTdbAndChildren(dy, tdb);
+dumpTdbAndChildren(cart, dy, tdb);
 
 return dy;
 }
@@ -1800,7 +1812,7 @@ for(; tdb; tdb = tdb->next)
             hashReplace(tdb->settingsHash, "longLabel", trackDbSetting(tdb, "description"));
             }
 
-        struct dyString *dy = trackDbString(tdb);
+        struct dyString *dy = trackDbString(cart, tdb);
 
         fprintf(f, "%s\n", dy->string);
         }

@@ -1632,6 +1632,7 @@ static int doCenterLabels(struct track *track, struct track *parentTrack,
 {
 if (track->limitedVis != tvHide)
     {
+    MgFont *labelfont;
     if (isCenterLabelIncluded(track))
         {
         int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
@@ -1650,11 +1651,21 @@ if (track->limitedVis != tvHide)
                 label = tdbComposite->longLabel;
                 labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR,
                                                 tdbComposite->colorG, tdbComposite->colorB);
+
+                // under this condition the characters that have descenders end up bleeding
+                // over into tracks that don't actually draw the label which 
+                // results in grek.  In this condition make the center label font smaller
+                int fontsize = findBiggest(fontHeight - 4);
+                char size[1024];
+                safef(size, sizeof size, "%d", fontsize);
+                labelfont = mgFontForSizeAndStyle(size, "medium");
                 }
             }
+        else
+            labelfont = font;
         labelColor = maybeDarkerLabels(track, hvg, labelColor);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
-                          labelColor, font, label);
+                          labelColor, labelfont, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
@@ -11505,7 +11516,7 @@ if(!trackImgOnly)
             {
             jsIncludeFile("shepherd.min.js", NULL);
             webIncludeResourceFile("shepherd.css");
-            jsIncludeFile("hgTracksPopup.js", NULL);
+            jsIncludeFile("tutorialPopup.js", NULL);
             jsIncludeFile("basicTutorial.js",NULL);
             jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification

@@ -190,7 +190,6 @@ html ../../knownGeneArchive
     squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
 
     track knownGeneV47
-    release alpha
     #table knownGene
     shortLabel GENCODE V47
     longLabel GENCODE V47

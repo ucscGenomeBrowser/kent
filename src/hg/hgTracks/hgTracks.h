@@ -1863,5 +1863,8 @@ void maybeDrawQuickLiftLines( struct track *tg, int seqStart, int seqEnd,
                       struct hvGfx *hvg, int xOff, int yOff, int width,
                       MgFont *font, Color color, enum trackVisibility vis);
 /* Draw the indel regions as a highlight. */
+
+unsigned findBiggest(unsigned num);
+/* find biggest font not bigger than num */
 #endif /* HGTRACKS_H */
 
