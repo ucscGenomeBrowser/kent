@@ -94,7 +94,7 @@ printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --
 rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt"   --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request" &
 # rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest2}:${destDir}/" \
-  2>&1 | grep -v "X11 forwarding request"
+#  2>&1 | grep -v "X11 forwarding request"
 rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest3}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request"
 wait
@@ -106,7 +106,7 @@ printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloa
 rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest1}:${destDir}/hub.txt" \
   2>&1 | grep -v "X11 forwarding request" &
 # rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest2}:${destDir}/hub.txt" \
-  2>&1 | grep -v "X11 forwarding request"
+#  2>&1 | grep -v "X11 forwarding request"
 rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest3}:${destDir}/hub.txt" \
   2>&1 | grep -v "X11 forwarding request"
 wait
