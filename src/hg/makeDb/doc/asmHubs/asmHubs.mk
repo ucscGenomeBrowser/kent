@@ -41,7 +41,6 @@ sanityCheck:
 
 sshKeyDownload:
 	ssh -o PasswordAuthentication=no qateam@${downloadDest1} date
-	ssh -o PasswordAuthentication=no qateam@${downloadDest2} date
 	ssh -o PasswordAuthentication=no qateam@${downloadDest3} date
 
 sshKeyDynablat:
@@ -148,25 +147,16 @@ sendDownload:: sshKeyCheck
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/groups.txt \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/${hubFile}.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/${hubFile}.txt \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/${hubFile}.txt \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
@@ -175,25 +165,16 @@ sendDownload:: sshKeyCheck
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${indexName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${indexName}.html
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${indexName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${statsName}.html
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${dataName}.html
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${dataName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${dataName}.html
@@ -203,9 +184,6 @@ obsolete:
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${genomesTxt}.txt
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${genomesTxt}.txt
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${genomesTxt}.txt \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${genomesTxt}.txt
@@ -226,16 +204,10 @@ sendIndexes::
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/assemblyList.json \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${indexName}.html
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${indexName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${indexName}.html \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${indexName}.html
@@ -244,16 +216,10 @@ sendIndexes::
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${statsName}.html
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${statsName}.html \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${statsName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest1}:/mirrordata/hubs/${name}/${dataName}.html
-	rsync -L -a -P \
-  /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
-		qateam@${downloadDest2}:/mirrordata/hubs/${name}/${dataName}.html
 	rsync -L -a -P \
   /usr/local/apache/htdocs-hgdownload/hubs/${name}/download.${dataName}.html \
 		qateam@${downloadDest3}:/mirrordata/hubs/${name}/${dataName}.html
