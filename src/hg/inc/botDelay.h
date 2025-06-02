@@ -39,3 +39,5 @@ boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int
 int hgBotDelayCurrWarnMs();
 /* get number of millis that are tolerated until a warning is shown on the most recent call to earlyBotCheck */
 
+boolean botException();
+/* check if the remote ip address is on the exceptions list */

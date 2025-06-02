@@ -37,6 +37,7 @@
 #include "verbose.h"
 #include "genark.h"
 #include "quickLift.h"
+#include "botDelay.h"
 
 #include <curl/curl.h>
 
@@ -1555,10 +1556,15 @@ void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, 
 if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
     return;
 
+// no captcha for our own QA scripts running on a server with our IP address
+if (botException())
+    return;
+
+// let rtracklayer user agent pass, but allow us to remove this exception in case the bots discover it one day
 if (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer"))
     return;
 
-// so QA can add a user agent after release, in case someone complains
+// QA can add a user agent after release, in case someone complains that their library is blocked
 char *okUserAgent = cfgOption("okUserAgent");
 if (okUserAgent && sameOk(cgiUserAgent(), okUserAgent))
     return;
