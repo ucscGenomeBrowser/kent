@@ -65,7 +65,7 @@ unsigned findBiggest(unsigned num)
 /* find biggest font not bigger than num */
 {
 int ii;
-unsigned prev = 0;
+unsigned prev = 6;
 
 for (ii=0; ii < ArraySize(fontHeights); prev = fontHeights[ii], ii++)
     if (fontHeights[ii] > num)
