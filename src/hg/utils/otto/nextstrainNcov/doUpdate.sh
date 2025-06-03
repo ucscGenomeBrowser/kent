@@ -87,7 +87,9 @@ for i in nextstrainSamples*.vcf.gz; do
                           die "Cant find AC and AN in |$w[7]|";
                  print join("\t", $w[0], $w[1]-1, $w[1], (sprintf "%.06f", $1 / $2)) . "\n";' \
       > $base.bedGraph
-    bedGraphToBigWig $base.bedGraph $chromSizes $base.bigWig
+    if [ -s $base.bedGraph ]; then
+        bedGraphToBigWig $base.bedGraph $chromSizes $base.bigWig
+    fi
 done
 
 # Install public track files
