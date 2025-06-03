@@ -1373,6 +1373,7 @@ to data/release_46lift37/ and rerun the make
     jkmake DBS=hg19 alpha
 #########################################################################
 2025-02-05: import of UCSC GENCODE group processing of GENCODE V48lift38 pre-release for GENCODE Versions (markd)
+2025-05-31: final release
    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release type and versions
 
    # pre-release shell variables 
@@ -1384,7 +1385,7 @@ to data/release_46lift37/ and rerun the make
        ver=48lift37
        ensver=114
        pre=""
-       ensdate='Mar 2025' 
+       ensdate='May 2025' 
     
     # download, build and load tables
     mkdir -p /hive/data/genomes/hg19/bed/gencodeV${ver}/hgcImport${pre}
@@ -1396,7 +1397,7 @@ to data/release_46lift37/ and rerun the make
     # sense.  Results are in gencode-cmp.tsv
 
     # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
+    pushd
     ../outside/gencode/bin/gencodeGenerateTrackDbs hg19 ${ver} ${ensver} "${ensdate}"
 
     # edit human/hg19/trackDb.gencode.ra to add new .ra file include

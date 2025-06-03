@@ -412,7 +412,7 @@ struct psl *genePredToPsl(struct genePred *gp, int chromSize, int qSize);
 /* Convert a genePred to psl, assuming perfect concordance between target & query.
  * If qSize is 0 then the number of aligned bases will be used as qSize. */
 
-struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb);
+struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb, boolean changedStrand);
 /* build a genePred from a bigGenePred and a bed file */
 
 struct genePred *genePredExtLoad15(char **row);

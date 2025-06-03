@@ -85,10 +85,32 @@ if (!gotHyperlink)
 webPrintLinkCellEnd();
 }
 
+char *hgcPathAndSettings()
+/* Return path with hgc and session state variable. */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    {
+    dy = dyStringNew(128);
+    dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart));
+    }
+return dy->string;
+}
 
 void printMrnaSeqLink(struct sqlConnection *conn, char *geneId)
 /* Print out link to fetch mRNA. */
 {
+if (liftDb) // if we're quicklifting go through hgc because local functions assume sequence can come from files
+    {
+    char *command = "htcGeneMrna";
+    webPrintWideCellStart(2, HG_COL_TABLE);
+    printf("<A class=\"toc\" HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), command, geneId, curGenePred->chrom, curGenePred->txStart, curGenePred->txEnd, globalTdb->track,globalTdb->track);
+    printf("Predicted mRNA from genomic DNA</A>\n");
+    webPrintLinkCellEnd();
+    return;
+    }
+
 char *title = "mRNA";
 char *tableId = "knownGene";
 if (genomeOptionalSetting("knownGeneMrna") != NULL)
@@ -102,6 +124,17 @@ printSeqLink(conn, geneId, tableId, hggDoGetMrnaSeq, title, 2);
 void printProteinSeqLink(struct sqlConnection *conn, char *geneId)
 /* Print out link to fetch protein. */
 {
+if (liftDb) // if we're quicklifting go through hgc because local functions assume sequence can come from files
+    {
+    char *command = "htcTranslatedPredMRna";
+    webPrintWideCellStart(3, HG_COL_TABLE);
+    printf("<A class=\"toc\" HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), command, geneId, curGenePred->chrom, curGenePred->txStart, curGenePred->txEnd, "translate", globalTdb->track);
+    printf("Translated Protein from genomic DNA</A>\n");
+    webPrintLinkCellEnd();
+    return;
+    }
+
 char *table = genomeSetting("knownGenePep");
 char query[256];
 char title[128];

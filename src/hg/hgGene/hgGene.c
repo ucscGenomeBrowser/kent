@@ -24,12 +24,18 @@
 #include "hgGene.h"
 #include "obscure.h"
 #include "genbank.h"
+#include "liftOver.h"
+#include "chain.h"
+#include "bigChain.h"
+#include "chainNetDbLoad.h"
+#include "trackHub.h"
 
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldVars;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
+char *liftDb;
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
@@ -74,7 +80,8 @@ static char *rootDir = "hgGeneData";
 struct hash *readRa(char *rootName, struct hash **retHashOfHash)
 /* Read in ra in root, root/org, and root/org/database. */
 {
-return hgReadRa(genome, database, rootDir, rootName, retHashOfHash);
+char *db = (liftDb != NULL) ? liftDb : database;
+return hgReadRa(genome, db, rootDir, rootName, retHashOfHash);
 }
 
 static struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
@@ -277,7 +284,7 @@ safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEn
 commaPos = addCommasToPos(database, buffer);
 
 hPrintf("<B>Transcript (Including UTRs)</B><br>\n");
-hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",database, commaPos);
+hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",trackHubSkipHubName(database), commaPos);
 sprintLongWithCommas(buffer, (long long)curGeneEnd - curGeneStart);
 hPrintf("<B>Size:</B>&nbsp;%s&nbsp;", buffer);
 hPrintf("<B>Total Exon Count:</B>&nbsp;%d&nbsp;", exonCnt);
@@ -298,7 +305,7 @@ if (cdsStart < cdsEnd)
     hPrintf("<B>Coding Region</B><br>\n");
     safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, cdsStart+1, cdsEnd);
     commaPos = addCommasToPos(database, buffer);
-    hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",database, commaPos);
+    hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",trackHubSkipHubName(database), commaPos);
     sprintLongWithCommas(buffer, (long long)cdsEnd - cdsStart);
     hPrintf("<B>Size:</B>&nbsp;%s&nbsp;", buffer);
     hPrintf("<B>Coding Exon Count:</B>&nbsp;%d&nbsp;\n", cdsExonCnt);
@@ -718,6 +725,29 @@ hPrintf("%s", tdb->html);
 cartWebEnd();
 }
 
+static void quickLiftGenePred(struct cart *cart, struct trackDb *tdb)
+// map curGenePred to current db
+{
+char *chrom = cloneString(cartString(cart, hggChrom));
+int start = atoi(cartString(cart, hggStart));
+int end = atoi(cartString(cart, hggEnd));
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+char *linkFileName = bigChainGetLinkFile(quickLiftFile);
+struct hash *chainHash = newHash(8);
+
+struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, start, end, -1);
+for(chain = chainList; chain; chain = chain->next)
+    {
+    chainSwap(chain);
+
+    liftOverAddChainHash(chainHash, chain);
+    }
+calcLiftOverGenePreds( curGenePred, chainHash, 0.0, 1.0, TRUE, NULL, NULL,  TRUE, FALSE);
+curGeneChrom = curGenePred->chrom;
+curGeneStart = curGenePred->txStart;
+curGeneEnd = curGenePred->txEnd;
+}
+
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
@@ -769,23 +799,25 @@ else
 
     globalTdb = tdb;
     char *externalDb = trackDbSetting(tdb, "externalDb");
-    char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+    liftDb = trackDbSetting(tdb, "quickLiftDb");
     if (externalDb != NULL)
         conn = hAllocConn(externalDb);
     else
         {
-        if (liftDb)
-            {
-            database = liftDb;
-            genome = hGenome(database);
-            }
-        conn = hAllocConn(database);
+        char *db = (liftDb != NULL) ? liftDb : database;
+        genome = hGenome(db);
+        conn = hAllocConn(db);
         }
     getGenomeSettings();
 
     curGeneId = findGeneId(conn, geneName);
     getGenePosition(conn);
     curGenePred = getCurGenePred(conn);
+
+    // if we're quickLifting we need to map the liftDb genepred to the one in the quickLift hub
+    if (liftDb != NULL)
+        quickLiftGenePred(cart, tdb); 
+
     curGeneName = getGeneName(curGeneId, conn);
     spConn = hAllocConn(UNIPROT_DB_NAME);
     swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);

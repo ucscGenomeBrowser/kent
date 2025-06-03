@@ -9361,7 +9361,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
             {
             struct bed *bedCopy = cloneBed(bed);
-            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
+            
+            char startBuf[16], endBuf[16];
+            char *bedRow[bbi->fieldCount];
+            bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+            // bedRow[5] has original strand in it, bedCopy has new strand.  If they're different we want to reverse exonFrames
+            boolean changedStrand = FALSE;
+            if (*bedRow[5] != *bedCopy->strand)
+                changedStrand = TRUE;
+            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb, changedStrand);
             }
         }
     else

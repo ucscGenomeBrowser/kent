@@ -23,6 +23,7 @@ html knownGeneV48
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
+hgsid on
 defaultLinkedTables kgXref
 squishyPackPoint 1
 squishyPackField rank
