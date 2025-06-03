@@ -3112,7 +3112,7 @@ var rightClick = {
                                 return true; }
                         };
 
-                        o[rightClick.makeImgTag("wrench.png")+" Track Description "+rec.shortLabel] = {
+                        o[rightClick.makeImgTag("book.png")+" Track Description "+rec.shortLabel] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
                                 return true; }
@@ -3309,7 +3309,6 @@ function showExtToolDialog() {
         title += " on another website";
         $("body").append("<div id='extToolDialog' title='"+title+"'><p>" + content + "</p>");
 
-	// GALT 
 	$('a.extToolLink2').on("click", function(){$('#extToolDialog').dialog('close');});
 
         // copied from the hgTrackUi function below
@@ -4070,7 +4069,11 @@ var popUp = {
                 // fix popup to a location -- near the top and somewhat centered on the browser image
                 $(event.target).parent().css('position', 'fixed');
                 $(event.target).parent().css('top', '18%');
-                $(event.target).parent().css('left', '30%');
+                if (popUp.trackDescriptionOnly) {
+                    $(event.target).parent().css('left', '15%');
+                } else {
+                    $(event.target).parent().css('left', '30%');
+                }
                 var containerHeight = $(event.target).parent().height();
                 var offsetTop = $(event.target).parent()[0].offsetTop;
                 // from popMaxHeight calculation above:
