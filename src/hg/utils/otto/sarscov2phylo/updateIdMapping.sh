@@ -27,7 +27,7 @@ installDir=/hive/users/angie/gisaid
 
 ncbiDir=$ottoDir/ncbi.$today
 cogUkDir=$ottoDir/cogUk.$today
-cncbDir=$ottoDir/cncb.$today
+cncbDir=$ottoDir/cncb.latest
 
 # Set up input files for Chris's scripts to map GISAID <--> public sequences
 cd $mapScriptDir
