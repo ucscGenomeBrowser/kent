@@ -3112,7 +3112,7 @@ var rightClick = {
                                 return true; }
                         };
 
-                        o[rightClick.makeImgTag("wrench.png")+" Track Description "+rec.shortLabel] = {
+                        o[rightClick.makeImgTag("book.png")+" Track Description "+rec.shortLabel] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
                                 return true; }
