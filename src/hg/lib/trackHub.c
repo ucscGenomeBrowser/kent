@@ -1618,9 +1618,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     {   
     if (differentString(hel->name, "track") && differentString(hel->name, "visibility"))
         {
-        if (sameString(hel->name, "parent") )
-            dyStringPrintf(dy, "parent %s on\n", tdb->parent->track);
-        else if (sameString(hel->name, "html"))
+        if (sameString(hel->name, "html"))
             dyStringPrintf(dy, "%s %s\n", hel->name, trackHubSkipHubName((char *)hel->val));
         else
             dyStringPrintf(dy, "%s %s\n", hel->name, ((char *)hel->val));
@@ -1640,8 +1638,6 @@ if (tdb->subtracks)
             char *cartVis = cartOptionalString(cart, tdb->parent->track);
             if (cartVis != NULL)
                 tdb->visibility = hTvFromString(cartVis);
-            //else if (tdbIsSuperTrack(tdb->parent))
-             //   tdb->visibility = tdb->parent->isShow;
             }
         dumpTdbAndChildren(cart, dy, tdb);
         }
@@ -1660,6 +1656,11 @@ struct dyString *dy;
 dy = dyStringNew(200);
 char *track =  trackHubSkipHubName(tdb->track);
 dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
+
+if (tdbIsSuperTrack(tdb))
+    {
+    dyStringPrintf(dy, "superTrack on show\n");
+    }
 
 if (!isVetted(track))
     dyStringPrintf(dy, "avoidHandler on\n");
@@ -1680,6 +1681,7 @@ if (!( startsWith("bigBed", tdb->type) || \
        startsWith("genePred", tdb->type) || \
        startsWith("narrowPeak", tdb->type) || \
        startsWith("bigLolly", tdb->type) || \
+       sameString("bed", tdb->type) ||
        startsWith("bed ", tdb->type)))
     {
     printf("%s %s<BR>\n",tdb->track,tdb->type);
@@ -1764,6 +1766,10 @@ return validateOneTdb(db, tdb, badList);
 static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList)
 /* walk tree looking for visible tracks. */
 {
+unsigned priority = 0;
+struct hash *haveSuper = newHash(0);
+char buffer[1024];
+
 for(; tdb; tdb = tdb->next)
     {
     boolean isVisible = FALSE;
@@ -1779,29 +1785,32 @@ for(; tdb; tdb = tdb->next)
         }
     else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb)) // child of supertrack
         {
-        char *cartVis = cartOptionalString(cart, tdb->parent->track);
+        if (hashLookup(haveSuper, tdb->parent->track) == NULL)  // output yet?
+            {
+            char *cartVis = cartOptionalString(cart, tdb->parent->track);
+            if (cartVis != NULL)
+                {
+                tdb->parent->visibility = hTvFromString(cartVis);
+                }
+            safef(buffer, sizeof buffer, "%d", priority++);
+            hashReplace(tdb->parent->settingsHash, "priority", cloneString(buffer));
+            struct dyString *dy = trackDbString(cart, tdb->parent);
+            fprintf(f, "%s\n", dy->string);
+
+            hashStore(haveSuper, tdb->parent->track);
+            }
+        char *cartVis = cartOptionalString(cart, tdb->track);
         if (cartVis != NULL)
             tdb->visibility = hTvFromString(cartVis);
-        else if (tdbIsSuperTrack(tdb->parent))
-            tdb->visibility = tdb->parent->isShow;
-        isVisible = TRUE;
+        isVisible =  tdb->visibility != tvHide;
         }
 
     if (isVisible && validateTdb(cart, db, tdb, badList))
         {
-        dyStringPrintf(visDy, "&%s=%s", trackHubSkipHubName(tdb->track),hStringFromTv(tdb->visibility));
-        //if (hashLookup(tdb->settingsHash, "customized") == NULL)
-            {
-            hashRemove(tdb->settingsHash, "maxHeightPixels");
-            hashRemove(tdb->settingsHash, "superTrack");
-            hashRemove(tdb->settingsHash, "subGroups");
-            hashRemove(tdb->settingsHash, "polished");
-            hashRemove(tdb->settingsHash, "noInherit");
-            hashRemove(tdb->settingsHash, "group");
-            hashRemove(tdb->settingsHash, "parent");
-            }
+        hashRemove(tdb->settingsHash, "superTrack");   // this gets inherited by subTracks(?)
 
-        //hashReplace(tdb->settingsHash, "customized", "on");
+        safef(buffer, sizeof buffer, "%d", priority++);
+        hashReplace(tdb->settingsHash, "priority", cloneString(buffer));
 
         // is this a custom track?
         char *tdbType = trackDbSetting(tdb, "tdbType");
@@ -1819,12 +1828,43 @@ for(; tdb; tdb = tdb->next)
     }
 }
 
+static int cmpPriority(const void *va, const void *vb)
+/* Compare to sort based on priority; use shortLabel as secondary sort key. */
+{
+const struct trackDb *a = *((struct trackDb **)va);
+const struct trackDb *b = *((struct trackDb **)vb);
+float dif = 0;
+
+dif = a->groupPriority - b->groupPriority;
+if (dif == 0)
+    dif = a->priority - b->priority;
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+    /* secondary sort on label */
+    return strcasecmp(a->shortLabel, b->shortLabel);
+else
+   return 1;
+}
+
 char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy, struct trackDb **badList)
 /* Build a track hub using trackDb and the cart. */
 {
-struct  trackDb *tdbList;
+struct  trackDb *tdbList, *tdb;
 struct grp *grpList;
 cartTrackDbInit(cart, &tdbList, &grpList, FALSE);
+
+struct hash *groupHash = newHash(0);
+struct grp *grp;
+for(grp = grpList; grp; grp = grp->next)
+    hashAdd(groupHash, grp->name, grp);
+
+for(tdb = tdbList; tdb; tdb = tdb->next)
+    {
+    grp = hashFindVal(groupHash, tdb->grp);
+    tdb->groupPriority = grp->priority;
+    }
+slSort(&tdbList, cmpPriority);
 
 char *filename = getHubName(cart, db);
 

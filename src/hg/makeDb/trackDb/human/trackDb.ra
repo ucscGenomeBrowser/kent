@@ -243,7 +243,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $pmidCount <br> <b>Variant Effect:</b> $variantEffect
         pennantIcon New red ../goldenPath/newsarch.html#052125 "Released May 21, 2025"
-        html varsInPubs.html
+        html varaico.html
 
 track caseControl
 compositeTrack on
