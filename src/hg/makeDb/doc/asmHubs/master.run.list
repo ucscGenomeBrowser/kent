@@ -1321,6 +1321,7 @@
 ./runBuild GCA_018852615.2_Q100_hg002v1.0.1.mat primates Homo_sapiens
 ./runBuild GCA_018852615.3_Q100_hg002v1.0.1.mat primates Homo_sapiens
 ./runBuild GCA_018873775.2_hg01243.v3.0 primates Homo_sapiens
+./runBuild GCA_018983045.1_YUN_Tarv_1.0 plants Thlaspi_arvense
 ./runBuild GCA_019022885.1_Schi1.0 invertebrate Schlechtendalia_chinensis
 ./runBuild GCA_019023105.1_LSU_DiBr_2.0 birds Diglossa_brunneiventris
 ./runBuild GCA_019049465.1_Diul.assembly.v1.1 invertebrate Dryas_iulia_moderata
