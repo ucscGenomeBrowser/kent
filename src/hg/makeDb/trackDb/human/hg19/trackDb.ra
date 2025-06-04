@@ -1873,6 +1873,18 @@ configurable off
     priority 25
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
 
+    track epicV2illuminaMethylation
+    parent genotypeArrays on
+    shortLabel Illumina EPIC v2
+    longLabel Illumina EPIC v2 Methylation Array
+    type bigBed 12 +
+    visibility pack
+    bigDataUrl /gbdb/hg19/bbi/illumina/illuminaEPICv2.bb
+    colorByStrand 255,0,0 0,0,255
+    html genotypeArrays
+    priority 25.5
+    noScoreFilter on
+
     track snpArrayCytoSnp850k
     parent genotypeArrays on
     shortLabel CytoSNP 850k
@@ -1939,6 +1951,7 @@ visibility hide
 type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
+logo on
 
 track multizBasal
 #subTrack consDinoViewalign on
@@ -2075,8 +2088,8 @@ baseColorDefault genomicCodons
 #query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 #searchPriority 3.53
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
+#include knownGene.alpha.ra alpha
 include lincRNAs.ra
 
 track sibTxGraph override
@@ -2332,7 +2345,6 @@ include hic.ra
 include exomeProbesets.ra
 include reMap.ra
 include fantom5.ra
-include predictionScoresSuper.ra
 
 track epdNew
 shortLabel EPDnew Promoters
@@ -2410,11 +2422,13 @@ track vistaEnhancersBb
 shortLabel VISTA Enhancers
 longLabel VISTA Enhancers
 group regulation
-url https://enhancer.lbl.gov/vista/browse?filter=$$
+url https://enhancer.lbl.gov/vista/element?vistaId=$$
 type bigBed 9 +
+mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg19/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
+pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 track ncbiRefSeq override
 parent refSeqComposite off

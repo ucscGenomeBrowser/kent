@@ -3,14 +3,15 @@ include inc/common.mk
 
 all: utils cgi blatSuite
 
-alpha: check-alpha clean
+alpha: clean
 	${MAKE} utils-alpha cgi-alpha blatSuite
 
-beta: check-beta clean cgi-beta
+beta: check-beta clean
+	${MAKE} cgi-beta
 
 # do a git update and clean
 update:
-	git pull
+	${GIT} pull
 	${MAKE} clean
 ##
 # topLibs
@@ -53,7 +54,7 @@ cgi: libs
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: check-alpha libs logUser
+cgi-alpha: libs logUser
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
@@ -67,13 +68,9 @@ ifeq (${IS_HGWDEV},yes)
 	echo ${USER}, $(MAKECMDGOALS), `date` >> ${CGI_BIN}/buildLog.txt
 endif
 
-check-alpha:
-	# this will fail if we are not on master branch:
-	git branch | egrep '\* master' > /dev/null
-
 check-beta:
 	# this will fail if we are not in a beta checkout:
-	git branch | egrep '\* v[0-9]+_branch' > /dev/null	
+	${GIT} branch | egrep '\* v[0-9]+_branch' > /dev/null	
 
 BLAT_SUITE_DIRS = blat gfClient gfServer webBlat hg/pslPretty hg/pslReps \
 	hg/pslSort utils/nibFrag utils/faToNib utils/faToTwoBit utils/twoBitToFa \
@@ -95,6 +92,7 @@ USER_APP_DIRS = utils parasol hg hg/utils \
 	hg/makeDb tabFile
 ALMOST_USER_APP_DIRS = blat gfClient gfServer isPcr ameme index/ixIxx utils/userApps
 
+.PHONY: userApps
 userApps: ${USER_APP_DIRS:%=%.userApps} ${ALMOST_USER_APP_DIRS:%=%.almostUserApps}
 
 %.userApps: topLibs hgLib destBin
@@ -162,7 +160,7 @@ utils: ${UTILS_DIRS:%=%.utils} ${STD_DIRS:%=%.utils}
 
 utils-alpha: ${UTILS_DIRS:%=%.utils-alpha}
 
-%.utils-alpha: check-alpha libs destBin hgutils
+%.utils-alpha: libs destBin hgutils
 	if [ -e "$*/makefile" ] ; then ${MAKE} -C $* ; fi
 
 hgutils: libs destBin

@@ -60,10 +60,22 @@ The algorithms included in this track are:
     selection acting specifically on missense variants in a given window of 
     protein-coding sequence. It is estimated across sliding windows of 31 codons 
     (default) and uses observed standing variation data from the WES component of 
-    gnomAD / the Exome Aggregation Consortium Database (ExAC), version 2.0. Scores
+    gnomAD version 2.0. Scores
     were computed using Ensembl v95 release. The number of gnomAD 2 exomes used here
     is higher than the number of gnomAD 3 samples (125 exoms versus 76k full genomes), 
-    but this score only covers coding regions.
+    and this score only covers coding regions so gnomAD 2 was more appropriate.
+
+    <li><b><a href="https://github.com/CshlSiepelLab/LINSIGHT" target="_blank">
+    LINSIGHT</a> (hg19 only)</b>:
+    LINSIGHT is a statistical model for estimating negative selection on
+    noncoding sequences in the human genome. The LINSIGHT score measures the
+    probability of negative selection on non-coding sites which can be used to
+    prioritize SNVs associated with genetic diseases or quantify evolutionary
+    constraint on regulatory sequences, e.g., enhancers or promoters. More
+    specifically, if a non-coding site is under negative selection, it will be
+    less likely to have a substitution or SNV in the human lineage. In
+    addition, even if we see a SNV at the site, it will tend to segregate at
+    low frequency because of selection. See (<a href="#references">Huang et al, Nat Genet 2017</a>).
 
     <li><b><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9329122/" target="_blank">
     UK Biobank depletion rank score</a> (hg38 only)</b>:
@@ -274,6 +286,7 @@ Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the 
 thanks to Laurens van de Wiel for providing the MetaDome data as well as guidance on the track development and interpretation. 
 </p>
 
+<a name="references"></a>
 <h2>References</h2>
 
 <p>
@@ -320,5 +333,16 @@ Hardarson MT, Oddsson A, Jensson BO <em>et al</em>.
 <em>Nature</em>. 2022 Jul;607(7920):732-740.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35859178" target="_blank">35859178</a>; PMC: <a
     href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9329122/" target="_blank">PMC9329122</a>
+</p>
+
+
+<p>
+Huang YF, Gulko B, Siepel A.
+<a href="https://doi.org/10.1038/ng.3810" target="_blank">
+Fast, scalable prediction of deleterious noncoding variants from functional and population genomic
+data</a>.
+<em>Nat Genet</em>. 2017 Apr;49(4):618-624.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28288115" target="_blank">28288115</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5395419/" target="_blank">PMC5395419</a>
 </p>
 

@@ -7,7 +7,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import calendar
 import math
-import subprocess,sys,argparse
+import subprocess,sys,argparse,os
 
 def parseArgs():
     """
@@ -68,13 +68,24 @@ def bash(cmd):
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
     return(bashStdoutt)
 
+def file_exists(filepath):
+    return os.path.isfile(filepath)
+
 def generateTrackCounts(dbs,workDir,startDate,endDate):
     #Generate track usage report binned by month for a specific time frame and dbs
     #Format date format is XXXX-XX-XX, e.g. 2023-11-01
     outputFileName = workDir+dbs+"."+startDate+"to"+endDate+".trackCounts.txt"
     #Run the script and remove the ct line (ct_), hub lines (hub_), dup lines (dup_)
     #And header line (^#), as well as remove the first column of repeating database
-    bash("/hive/users/chmalee/logs/byDate/makeUsageReport -t -db "+dbs+" --bin-months -s "+startDate+" -e "+endDate+" | grep -v \"hub_\|ct_\|dup_\|^#\" | cut -f2- > "+outputFileName)
+    
+    if not file_exists(outputFileName):
+        print("Generating new file")
+        print("/hive/users/chmalee/logs/byDate/makeUsageReport -t -db " + dbs + " --bin-months -s " + startDate + " -e " + endDate + " | grep -v \"hub_\\|ct_\\|dup_\\|^#\" | cut -f2- > " + outputFileName)
+        cmd = ("/hive/users/chmalee/logs/byDate/makeUsageReport -t -db " + dbs + " --bin-months -s " + startDate + " -e " + endDate + " | grep -v \"hub_\\|ct_\\|dup_\\|^#\" | cut -f2- > " + outputFileName)
+        bash(cmd)
+    else:
+        print("File already generated: " + outputFileName)
+        
     return(outputFileName)
 
 def createDicFromTrackCountsFile(trackCountsFilePath):
@@ -237,7 +248,7 @@ def makeOrderedDicForSpecificTime(finalDicOfTopLevelTracksAndCounts,dbs):
             else:
                 n+=1
                 listOfCountsToSort.append({'trackName':key,'shortLabel':key,'trackCounts':int(finalDicOfTopLevelTracksAndCounts[key])})
-    print("Tota number of tracks: "+str(n))
+    print("Total number of tracks: "+str(n))
     
     #Sort the trackCounts list to return in order to find data that meets cutoff threshhold
     listOfCountsToSort.sort(key=get_count, reverse=True)
@@ -373,15 +384,15 @@ def writeFinalTrackListToFile(finalOutputTrackDicToReport,workDir,dbs,cutOffThre
         finalOutputFile.write(track['trackName']+"\t"+track['shortLabel']+"\t"+track['group']+"\t"+str(track['averageTrackCount'])+"\t"+str(track['averageCountComparedToMaxForPeriod'])+"\t"+str(track['averageCountComparedToCutoff'])+"\n")
     finalOutputFile.close()
     print("\nCutoff tracks file complete: "+fileNamePathStartToEndDate)
-    print("\nYou can pipe this output into ~markd/bin/tabFmt removing the first line to get a nicely formatted output.")
+    print("\nYou nicely format the output as such: tail -n +2 outputFilePath.tsv | tabFmt stdin")
 
 def main():
     """Initialize options and call other functions"""
     options = parseArgs()
     dbs,workDir,cutOffThreshhold,numOfMonthsToCompare = options.dbs,options.workDir,options.cutOffThreshhold,options.numOfMonthsToCompare
     #Line below exists only for debugging purposes
-    #dbs,workDir,cutOffThreshhold,numOfMonthsToCompare = 'hg38','/hive/users/lrnassar/temp/tmp/',.3,12
-    if options.singleReport == True:
+    # dbs,workDir,cutOffThreshhold,numOfMonthsToCompare,singleReport = 'hg38','/hive/users/lrnassar/temp/tmp/',.3,6,False
+    if singleReport == True:
         startDate,endDate,parentChildAssociationsDic = options.startDate,options.endDate,{}
         logFile = generateTrackCounts(dbs,workDir,startDate,endDate)
         trackCountsDic,totalCount = createDicFromTrackCountsFile(logFile)

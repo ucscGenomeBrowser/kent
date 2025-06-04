@@ -56,6 +56,7 @@
 #include "trackVersion.h"
 #include "hubConnect.h"
 #include "bigBedFilter.h"
+#include "bedMethyl.h"
 
 // TODO: these should go away after refactoring of multi-region link
 #include "hex.h"
@@ -65,8 +66,8 @@
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
-#define ADD_BUTTON_LABEL        "add"
-#define CLEAR_BUTTON_LABEL      "clear"
+#define ADD_BUTTON_LABEL        "Show All"
+#define CLEAR_BUTTON_LABEL      "Hide All"
 #define JBUFSIZE 2048
 
 
@@ -4676,6 +4677,9 @@ puts("</td></TR>");
 
 printf("</TABLE>");
 cfgEndBox(boxed);
+// N.B. scoreCfgUi maybe creates a box, so this is called after cfgEndBox
+// unclear what the logic is with box creation here
+scoreCfgUi(db, cart,tdb,name,title,1000,boxed);
 }
 
 void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
@@ -4951,18 +4955,7 @@ tdb = tdb->subtracks;
 switch(cType)
     {
     case cfgBedScore:
-			{
-			char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
-			int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-			scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
-
-            if(startsWith("bigBed", tdb->type))
-                {
-                labelCfgUi(db, cart, tdb, prefix);
-                mergeSpanCfgUi(cart, tdb, prefix);
-                wigOption(cart, prefix, title, tdb);
-                }
-			}
+                        bedScoreCfgUi(db,cart,tdb,prefix,title,boxed);
 			break;
     case cfgPeak:
 			encodePeakCfgUi(cart,tdb,prefix,title,boxed);
@@ -4972,12 +4965,6 @@ switch(cType)
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
 			break;
     case cfgGenePred:   genePredCfgUi(db, cart,tdb,prefix,title,boxed);
-                        if(startsWith("bigGenePred", tdb->type))
-                            {
-                            char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
-                            int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-                            scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
-                            }
 			break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
 			break;
@@ -5002,7 +4989,6 @@ switch(cType)
     case cfgBigRmsk:    bigRmskCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgLollipop:   lollyCfgUi(db,cart,tdb,prefix,title,boxed);
-			scoreCfgUi(db, cart,tdb,prefix,title,1000,boxed);
                         break;
     case cfgHic:        hicCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
@@ -7104,10 +7090,13 @@ if (highlightBySet != NULL)
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL) && !skipScoreFilter;
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
 if (! (scoreFilterOk || glvlScoreMin))
-    {
-    cfgEndBox(boxed);
-    return;
-    }
+   {
+   if (isBoxOpened)
+      cfgEndBox(boxed);
+   else 
+      printf("<BR>"); 
+   return;
+   }
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
@@ -7779,6 +7768,21 @@ cgiMakeRadioButton(varName, "all", sameString(setString, "all"));
 printf(" %s&nbsp;&nbsp;&nbsp;", "All");
 }
 
+void bedScoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* Put up bed-specific score controls */
+{
+char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+scoreCfgUi(db, cart,tdb,name,title,maxScore,boxed);
+
+if(startsWith("bigBed", tdb->type))
+    {
+    labelCfgUi(db, cart, tdb, name);
+    mergeSpanCfgUi(cart, tdb, name);
+    wigOption(cart, name, title, tdb);
+    }
+}
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up genePred-specific controls */
 {
@@ -7860,6 +7864,14 @@ filterNameOption(cart, name, tdb);
 colorTrackOption(cart, name, tdb);
 wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
+// N.B. scoreCfgUi maybe creates a box, so this is called after cfgEndBox
+// unclear what the logic is with box creation here
+if (startsWith("bigGenePred", tdb->type))
+    {
+    char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+    int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+    scoreCfgUi(db, cart,tdb,name,title,maxScore,boxed);
+    }
 }
 
 static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species, char *option, int optionSize, boolean defaultState)
@@ -10083,6 +10095,30 @@ if (tableName)
 hFreeConn(&conn);
 }
 
+char *getTrackHtml(char *db, char *trackName)
+/* Grab HTML from trackDb in native database for quickLift tracks. */
+{
+char query[4096];
+
+sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
+struct trackDb *loadTrackDb(char *db, char *where);
+struct trackDb *tdb = loadTrackDb(db, query);
+
+char *html = tdb->html;
+if (isEmpty(tdb->html))
+    {
+    char *parent = trackDbSetting(tdb, "parent");
+    char *words[10];
+
+    chopLine(parent,words);
+    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
+    struct trackDb *tdb = loadTrackDb(db, query);
+
+    html = tdb->html;
+    }
+return html;
+}
+
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
@@ -10167,6 +10203,8 @@ else if (sameWord("interact", tdb->type))
 else if (sameWord("hic", tdb->type))
     // HI-C data are stored in .hic files, but parsed into interact objects
     asObj = interactAsObj();
+else if (sameWord("bedMethyl", tdb->type))
+    asObj = bedMethylAsObj();
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;

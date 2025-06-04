@@ -208,6 +208,8 @@ const uppy = new Uppy.Uppy({
                 fileName: file.meta.name,
                 fileSize: file.size,
                 lastModified: file.data.lastModified,
+                // pass through the window.serverName for the upload subdirectory
+                serverName: uiData.userFiles.serverName,
             });
             thisQuota += file.size;
         }
@@ -215,6 +217,7 @@ const uppy = new Uppy.Uppy({
             uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
             doUpload = false;
         }
+
         return doUpload;
     },
 });
@@ -360,7 +363,10 @@ var hubCreate = (function() {
                     genome = d.genome;
                     url += "&db=" + genome;
                 }
-                if (d.fileType in extensionMap) {
+                if (d.fileType === "hub.txt") {
+                    url += "&hubUrl=" + uiState.userUrl + cgiEncode(d.fullPath);
+                }
+                else if (d.fileType in extensionMap) {
                     // TODO: tusd should return this location in it's response after
                     // uploading a file and then we can look it up somehow, the cgi can
                     // write the links directly into the html directly for prev uploaded files maybe?
@@ -380,8 +386,6 @@ var hubCreate = (function() {
                         // turn the track on if its for this db
                         url += "&" + trackHubFixName(d.fileName) + "=pack";
                     }
-                } else if (d.fileType === "hub.txt") {
-                    url += "&hubUrl=" + uiState.userUrl + d.fullPath;
                 }
             });
             window.location.assign(url);
@@ -397,7 +401,7 @@ var hubCreate = (function() {
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
-        let cartData = {deleteFile: {fileList: []}};
+        let cartData = {deleteFile: {serverName: uiState.serverName, fileList: []}};
         cart.setCgi("hgHubConnect");
         _.forEach(data, (d) => {
             cartData.deleteFile.fileList.push({
@@ -1024,7 +1028,7 @@ var hubCreate = (function() {
         //     creating default trackDbs
         //     editing trackDbs
         // get the state from the history stack if it exists
-        if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
+        if (typeof uiData !== 'undefined' && typeof uiData.userFiles !== 'undefined') {
             _.assign(uiState, uiData.userFiles);
             if (uiState.fileList) {
                 parseFileListIntoHash(uiState.fileList);
@@ -1400,7 +1404,7 @@ var hubCreate = (function() {
             // is completely ignored for some reason, so we have to fake the other files
             // we would have created with this one file and add them to the table if they
             // weren't already there:
-            if (metadata.fileName !== "hub.txt") {
+            if (metadata.fileType !== "hub.txt") {
                 // if the user uploaded a hub.txt don't make a second fake object for it
                 hubTxtObj = {
                     "uploadTime": nowFormatted,

@@ -39,21 +39,26 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 #include "search.h"
 #include "cv.h"
 #include "api.h"
+#include "chromAlias.h"
+#include "bigBed.h"
+#include "trackHub.h"
+#include "cart.h"
 
-int main(int argc, char *argv[])
+struct hash *oldVars = NULL;
+
+void doMiddle(struct cart *cart)
 {
 long enteredMainTime = clock1000();
 struct dyString *output = dyStringNew(10000);
 
 setUdcCacheDir();
-cgiSpoof(&argc, argv);
 pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
 
 char *database = cgiString("db");
 char *cmd = cgiString("cmd");
 char *jsonp = cgiOptionalString("jsonp");
-if (!hDbExists(database))
+if (!trackHubDatabase(database) && !hDbExists(database))
     errAbort("Invalid database '%s'", database);
 
 if (!strcmp(cmd, "defaultPos"))
@@ -189,30 +194,49 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     char query[256];
     struct sqlResult *sr;
     char **row;
-    struct genePred *gp;
+    struct genePred *gp = NULL;
     char *name = cgiString("name");
     char *table = cgiString("table");
+    char *chrom = cgiString("chrom");
     int num = cgiInt("num");
-    struct sqlConnection *conn = hAllocConn(database);
-    sqlSafef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s'", table, name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
+    struct sqlConnection *conn = NULL;
+    if (!trackHubDatabase(database))
+        conn = hAllocConn(database);
+    struct trackDb *tdb = tdbForTrack(database, table, NULL);
+    if (sameString(tdb->type, "genePred"))
         {
+        sqlSafef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s' and chrom='%s'", table, name, chrom);
+        sr = sqlGetResult(conn, query);
+        row = sqlNextRow(sr);
         gp = genePredLoad(row);
-        boolean found;
-        int start, end;
-        if (sameString(cmd, "codonToPos"))
-            found = codonToPos(gp, num, &start, &end);
-        else
-            found = exonToPos(gp, num, &start, &end);
-        if (found)
-            dyStringPrintf(output, "{\"pos\": \"%s:%d-%d\"}", gp->chrom, start + 1, end);
-        else
-            dyStringPrintf(output, "{\"error\": \"%d is an invalid %s for this gene\"}", num, sameString(cmd, "codonToPos") ? "codon" : "exon");
+        sqlFreeResult(&sr);
         }
-    else
+    else if (sameString(tdb->type, "bigGenePred") ||
+            startsWith("bigGenePred", tdb->type)) // makes knownGene work
+        {
+        // TODO: what bigBed types can we even support? bigBed12 at a minimum for the blocks?
+        // bigPsl should work maybe?
+        // for now just support genePred and bigGenePred
+        char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+        struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+        int fieldIx;
+        struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+        struct lm *lm = lmInit(0);
+        struct bigBedInterval *bbList = bigBedNameQuery(bbi, bpt, fieldIx, name, lm);
+        if (bbList)
+            gp = (struct genePred *)genePredFromBigGenePred(chrom, bbList);
+        }
+    if (!gp)
         dyStringPrintf(output, "{\"error\": \"Couldn't find item: %s\"}", name);
-    sqlFreeResult(&sr);
+    boolean found; int start, end;
+    if (sameString(cmd, "codonToPos"))
+        found = codonToPos(gp, num, &start, &end);
+    else
+        found = exonToPos(gp, num, &start, &end);
+    if (found)
+        dyStringPrintf(output, "{\"pos\": \"%s:%d-%d\"}", gp->chrom, start + 1, end);
+    else
+        dyStringPrintf(output, "{\"error\": \"%d is an invalid %s for this gene\"}", num, sameString(cmd, "codonToPos") ? "codon" : "exon");
     hFreeConn(&conn);
     }
 else
@@ -223,5 +247,16 @@ else
 
 apiOut(dyStringContents(output), jsonp);
 cgiExitTime("hgApi", enteredMainTime);
+}
+
+/* Null terminated list of CGI Variables we don't want to save
+ * permanently. */
+char *excludeVars[] = {"fileSearch", "var", "showShortLabel", "showLongLabel", "track", "table", "name", "chrom", "cmd", "num",  NULL,};
+
+int main(int argc, char *argv[])
+/* Process command line. */
+{
+cgiSpoof(&argc, argv);
+cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

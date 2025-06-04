@@ -13,8 +13,8 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
         track clinvarMainAlpha
         parent clinvarAlpha
-        shortLabel ClinVar SNVs
-        longLabel ClinVar Short Variants < 50bp
+        shortLabel ClinVar SNVs ALPHA
+        longLabel ClinVar ALPHA Short Nucleotide Variants < 50bp
         visibility hide
         group phenDis
         itemRgb on
@@ -31,7 +31,8 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
         filterType._allTypeCode multiple
         filter._varLen 0
-        skipFields rcvAcc
+        #skipFields rcvAcc
+        labelFields _label
         filterByRange._varLen on
         filterLimits._varLen 0:49
         filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown,initiator codon variant|initiator codon variant
@@ -41,11 +42,12 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         noScoreFilter on
         searchIndex _dbVarSsvId
         maxWindowCoverage 10000000
+        decorator.default.bigDataUrl /gbdb/$D/bbi/clinvarAlpha/clinvarMainDecor.bb
 
         track clinvarCnvAlpha
         parent clinvarAlpha
-        shortLabel ClinVar CNVs
-        longLabel ClinVar Copy Number Variants >= 50bp
+        shortLabel ClinVar CNVs ALPHA
+        longLabel ClinVar ALPHA Copy Number Variants >= 50bp
         visibility hide
         type bigBed 12 +
         itemRgb on
@@ -73,8 +75,8 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
         track clinvarSubLollyAlpha
         parent clinvarAlpha
-        shortLabel ClinVar interp
-        longLabel ClinVar SNVs submitted interpretations and evidence
+        shortLabel ClinVar interp ALPHA
+        longLabel ClinVar SNVs ALPHA submitted interpretations and evidence
         bigDataUrl /gbdb/$D/clinvarSubLollyAlpha/clinvarSubLolly.bb
         xrefDataUrl /gbdb/$D/clinvarSubLollyAlph/clinvarSub.bb
         type bigLolly

@@ -1632,6 +1632,7 @@ static int doCenterLabels(struct track *track, struct track *parentTrack,
 {
 if (track->limitedVis != tvHide)
     {
+    MgFont *labelfont;
     if (isCenterLabelIncluded(track))
         {
         int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
@@ -1650,11 +1651,21 @@ if (track->limitedVis != tvHide)
                 label = tdbComposite->longLabel;
                 labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR,
                                                 tdbComposite->colorG, tdbComposite->colorB);
+
+                // under this condition the characters that have descenders end up bleeding
+                // over into tracks that don't actually draw the label which 
+                // results in grek.  In this condition make the center label font smaller
+                int fontsize = findBiggest(fontHeight - 4);
+                char size[1024];
+                safef(size, sizeof size, "%d", fontsize);
+                labelfont = mgFontForSizeAndStyle(size, "medium");
                 }
             }
+        else
+            labelfont = font;
         labelColor = maybeDarkerLabels(track, hvg, labelColor);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
-                          labelColor, font, label);
+                          labelColor, labelfont, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
@@ -4668,6 +4679,7 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "bedMethyl")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
 || sameWord(type, "bigRmsk")
@@ -6658,6 +6670,12 @@ else if (sameString(type, "hic"))
     {
     tg = trackFromTrackDb(tdb);
     hicCtMethods(tg);
+    }
+else if (sameString(type, "bedMethyl"))
+    {
+    tg = trackFromTrackDb(tdb);
+    bedMethylCtMethods(tg);
+    tg->customPt = ct;
     }
 else
     {
@@ -11503,9 +11521,9 @@ if(!trackImgOnly)
         jsIncludeFile("ddcl.js", NULL);
         if (cfgOptionBooleanDefault("showTutorial", TRUE))
             {
-            puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
-            puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
-            jsIncludeFile("hgTracksPopup.js", NULL);
+            jsIncludeFile("shepherd.min.js", NULL);
+            webIncludeResourceFile("shepherd.css");
+            jsIncludeFile("tutorialPopup.js", NULL);
             jsIncludeFile("basicTutorial.js",NULL);
             jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification

@@ -481,6 +481,7 @@ if (!set)
     char *maxItemsStr = cfgOptionDefault("bigBedMaxItems", "10000");
 
     maxItems = sqlUnsigned(maxItemsStr);
+    set = TRUE;
     }
 
 return maxItems;
@@ -787,7 +788,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
     if (startsWith("bigGenePred", track->tdb->type) || startsWith("genePred", track->tdb->type))
         {
-        lf->original = genePredFromBedBigGenePred(chromName, bedCopy, bb); 
+        // bedRow[5] has original strand in it, bedCopy has new strand.  If they're different we want to reverse exonFrames
+        boolean changedStrand = FALSE;
+        if (quickLiftFile)
+            {
+            if (*bedRow[5] != *bedCopy->strand)
+                changedStrand = TRUE;
+            }
+        lf->original = genePredFromBedBigGenePred(chromName, bedCopy, bb, changedStrand); 
         }
 
     if (startsWith("bigBed", track->tdb->type))

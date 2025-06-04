@@ -4,43 +4,19 @@ import pandas as pd
 import sys 
 import argparse
 import re
+import cnv
 
-def get_url(url):
-    page_count = 1
-    jData = dict()
-    while True:
-        try:
-            new_url = "{}{}".format(url, page_count)
-            myResponse = requests.get(new_url)
-            if (myResponse.ok):
-                jData = json.loads(myResponse.content.decode())
-
-                # If jData is empty create, else append
-                if "error" in jData.keys():
-                    raise Exception("{} page count is missing.".format(page_count))
-            else:
-                print('Json data retrieved')
-                break
-        except:
-            if page_count > 1:
-                print('Json data retrieved')
-            else:
-                print("Unable to request URL")
-                sys.exit()
-            break
-        print(page_count)
-        page_count += 1
-    return jData
-        
+from cnv import getAllPages
 
 def downloadTandReps():
     Error = True
     continuous_count=0
-    url = "https://panelapp.genomicsengland.co.uk/api/v1/strs/?page="
-    jData = get_url(url)
+    url = "https://panelapp.genomicsengland.co.uk/api/v1/strs/?format=json"
+    res = getAllPages(url)
 
-    res = jData['results']
     num_gene_data = len(res)
+    print("Got %d tandem repeats from API" % num_gene_data)
+
     count = 0
     continuous_count = 0
     hg19_dict = dict()

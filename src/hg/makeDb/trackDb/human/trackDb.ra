@@ -1,5 +1,6 @@
 #PanelApp
-include panelApp.ra
+include panelApp.ra beta,public
+include panelApp.alpha.ra alpha
 
 # ENCODE tracks
 include trackDb.encode.ra
@@ -156,7 +157,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -176,6 +177,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         parent varsInPubs pack
         maxWindowCoverage 40000
         maxItems 1000000
+        html varsInPubs.html
 
         track avada
         shortLabel Avada Variants
@@ -190,6 +192,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
+        html varsInPubs.html
 
         track varChat
         shortLabel enGenome VarChat
@@ -210,6 +213,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         detailsDynamicTable VariantDetails|Variant Details
         dataVersion /gbdb/$D/bbi/varChatVersion.txt
         pennantIcon New red ../goldenPath/newsarch.html#022425 "Released Feb. 24, 2025"
+        html varChat.html
 
         track pubtator
         shortLabel PubTator variants
@@ -223,11 +227,11 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         parent varsInPubs pack
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOver $name found in ${numPubmedIds} PubMed articles
+        html varsInPubs.html
 
         track varaico
-        release alpha
         shortLabel Varaico Variants
-        longLabel Varaico Variants extracted from full text publications
+        longLabel Varaico Variants extracted from full text publications, titles, and abstracts
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaico.bb
@@ -236,7 +240,10 @@ pennantIcon Updated red ../goldenPath/newsarch.html#022425 "Updated Feb. 24, 202
         # itemRgb on
         dataVersion release 1
         parent varsInPubs pack
-        urls outlink="$$"
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $pmidCount <br> <b>Variant Effect:</b> $variantEffect
+        pennantIcon New red ../goldenPath/newsarch.html#052125 "Released May 21, 2025"
+        html varaico.html
 
 track caseControl
 compositeTrack on
@@ -5549,6 +5556,7 @@ searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
 itemRgb on
 noScoreFilter on
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated May 5, 2025"
 
 searchTable hgnc
 searchMethod exact
@@ -5590,3 +5598,5 @@ searchPriority 20
 include alphaMissense.ra
 
 include mitoMap.ra
+
+include nmdEscape.ra alpha

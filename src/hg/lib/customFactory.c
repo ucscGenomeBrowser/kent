@@ -52,6 +52,7 @@
 #include "hic.h"
 #include "cgiApoptosis.h"
 #include "chromAlias.h"
+#include "bedMethyl.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -338,6 +339,47 @@ static boolean coloredExonRecognizer(struct customFactory *fac,
 return bedRecognizer(fac, cpp, type, track) && (track->fieldCount >= 14);
 }
 
+
+static struct pipeline *bedMethylLoaderPipe(struct customTrack *track)
+/* Set up pipeline that will load wig into database. */
+{
+/* running the single command:
+ *	hgLoadBed -customTrackLoader -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
+ * -customTrackLoader turns on options: -noNameIx -noHistory -ignoreEmpty
+ *	-allowStartEqualEnd -allowNegativeScores -verbose=0
+ */
+struct dyString *tmpDy = dyStringNew(0);
+int index = 5; /* verify this references the first NULL as cmd1[index] */
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-sqlTable=loader/bedMethyl.sql",
+                "-renameSqlTable", "-trimSqlTable",
+                NULL, NULL, NULL, NULL, NULL, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
+ */
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
+	"/dev/null", track->dbStderrFile, 0);
+}
+
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
 /* Set up pipeline that will load wig into database. */
 {
@@ -406,6 +448,92 @@ if (i < 1)
     dyStringPrintf(errDy, "unknown failure<BR>\n");
 unlink(track->dbStderrFile);
 errAbort("%s",dyStringCannibalize(&errDy));
+}
+
+static boolean bedMethylRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bedMethyl track */
+{
+if (!sameType(type, "bedMethyl"))
+    return FALSE;
+
+track->dbTrackType = cloneString("bedMethyl");
+return TRUE;
+#ifdef NOTNOW
+char *line = customFactoryNextRealTilTrack(cpp);
+char *dupe = cloneString(line);
+char *row[1024];
+int wordCount = chopLine(dupe, row);
+struct dyString *whyNotBed = dyStringNew(0);
+char *ctDb = ctGenomeOrCurrent(track);
+boolean isBed = rowIsBed(row, 9, ctDb, whyNotBed);
+struct lineFile *lf = cpp->fileStack;
+if (!isBed && type != NULL)
+    lineFileAbort(lf, "%s", whyNotBed->string);
+dyStringFree(&whyNotBed);
+freeMem(dupe);
+lineFileExpectAtLeast(lf, 18, wordCount);
+track->fieldCount = 18;
+track->dbTrackType = cloneString("bedMethyl");
+customPpReuse(cpp, line);
+return TRUE;
+#endif
+}
+
+static struct customTrack *bedMethylFinish(struct customTrack *track,
+	boolean dbRequested)
+/* Finish up bed tracks (and others that create track->bedList). */
+{
+/* If necessary load database */
+if (dbRequested)
+    {
+    if (! fileExists("loader/hgLoadBed") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/hgLoadBed' command\n");
+	}
+    customFactorySetupDbTrack(track);
+//struct pipeline *bedLoaderPipe(struct customTrack *track);
+    struct pipeline *dataPipe = bedMethylLoaderPipe(track);
+    FILE *out = pipelineFile(dataPipe);
+    struct bed *bed;
+    for (bed = track->bedList; bed != NULL; bed = bed->next)
+	{
+	bedMethylOutput((struct bedMethyl *)bed, out, '\t', '\n');
+	}
+    fflush(out);		/* help see error from loader failure */
+    if(ferror(out) || pipelineWait(dataPipe))
+	pipelineFailExit(track);	/* prints error and exits */
+    unlink(track->dbStderrFile);	/* no errors, not used */
+    pipelineFree(&dataPipe);
+    }
+return track;
+}
+
+static struct customTrack *bedMethylLoader(struct customFactory *fac,
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up encodePeak data until get next track line. */
+{
+char *line;
+//char *db = ctGenomeOrCurrent(track);
+struct bedMethylBed *bedList = NULL;
+if (!dbRequested)
+    errAbort("encodePeak custom track type unavailable without custom trash database. Please set that up in your hg.conf");
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[1024];
+    int wordCount = chopLine(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
+    //struct encodePeak *peak = customTrackEncodePeak(db, row, pt, chromHash, lf);
+    struct bedMethyl *bedMethyl = bedMethylLoad(row);
+    slAddHead(&bedList, bedMethyl);
+    }
+slReverse(&bedList);
+track->bedList = (struct bed *)bedList;
+return bedMethylFinish(track, dbRequested);
 }
 
 static struct customTrack *bedFinish(struct customTrack *track,
@@ -728,6 +856,15 @@ static struct customFactory coloredExonFactory =
     "coloredExon",
     coloredExonRecognizer,
     coloredExonLoader,
+    };
+
+static struct customFactory bedMethylFactory =
+/* Factory for bed tracks */
+    {
+    NULL,
+    "bedMethyl",
+    bedMethylRecognizer,
+    bedMethylLoader,
     };
 
 /**** ENCODE PEAK Factory - closely related to BED but not quite ***/
@@ -3601,6 +3738,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &hicFactory);
     slAddTail(&factoryList, &bigRmskFactory);
     slAddTail(&factoryList, &bigLollyFactory);
+    slAddTail(&factoryList, &bedMethylFactory);
     }
 }
 

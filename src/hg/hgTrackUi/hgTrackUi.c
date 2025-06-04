@@ -3560,6 +3560,9 @@ if (!ct)
     printUpdateTime(database, tdb, NULL);
     }
 
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb)
+    tdb->html = getTrackHtml(liftDb, tdb->table);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     char *browserVersion;

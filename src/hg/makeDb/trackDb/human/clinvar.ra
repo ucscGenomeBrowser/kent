@@ -14,7 +14,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         track clinvarMain
         parent clinvar
         shortLabel ClinVar SNVs
-        longLabel ClinVar Short Variants < 50bp
+        longLabel ClinVar Short Nucleotide Variants < 50bp
         visibility hide
         group phenDis
         itemRgb on
@@ -82,7 +82,6 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         lollySizeField 10
         yAxisNumLabels off
         lollyNoStems on
-        configurable off
         skipFields reviewStatus
         yAxisLabel.0 0 on 150,150,150 OTH
         yAxisLabel.1 1 on 150,150,150 B
@@ -93,6 +92,9 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         lollyMaxSize 10
         viewLimits 0:5
         mouseOverField _mouseOver
+        filterValues.score 5|Pathogenic,4|Likely Pathogenic,3|Variant of Unknown Significance,2|Likely Benign,1|Benign,0|Others
+        filterType.score multiple
+        filterLabel.score Filter by variant classification
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 
 searchTable clinvarCnv

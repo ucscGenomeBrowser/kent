@@ -6,8 +6,7 @@
 #	A = aveCols
 #	include ${kentSrc}/inc/userApp.mk
 #
-# If multiple programs are required, recursive make is needed,  see
-# hg/makeDb/hgLoadWiggle/makefile for an example.
+# See userAppMulti.mk if multiple programs are required in a single directory.
 #
 # Other variables that can be defined, which needs to be done
 # before including userApp.mk
@@ -76,3 +75,4 @@ test::
 	else echo "# no tests directory (or perhaps no tests/makefile) in $(CURDIR)"; fi
 
 ${extraObjects}: ${extraHeaders}
+

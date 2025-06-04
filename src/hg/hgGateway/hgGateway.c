@@ -411,6 +411,18 @@ if (isNotEmpty(dbDbTree))
 // Main JS for hgGateway:
 jsIncludeFile("hgGateway.js", NULL);
 
+if (cfgOptionBooleanDefault("showTutorial", TRUE))
+    {
+    jsIncludeFile("shepherd.min.js", NULL);
+    webIncludeResourceFile("shepherd.css");
+    jsIncludeFile("tutorialPopup.js", NULL);
+    jsIncludeFile("gatewayTutorial.js", NULL);
+    if (sameOk(cgiOptionalString("startTutorial"), "true"))
+        {
+        jsInline("var startGatewayOnLoad = true;");
+        }
+    }
+
 #define TIMING_WARNING_BOX_START "<div id='hogWarningRow' class='jwRow'>" \
          "<div id='hogWarningBox' class='jwWarningBox'>"
 #define TIMING_WARNING_BOX_END "</div></div>"

@@ -14,6 +14,7 @@
 #include "hCommon.h"
 #include "botDelay.h"
 #include "jsonWrite.h"
+#include "regexHelper.h"
 
 #define defaultDelayFrac 1.0   /* standard penalty for most CGIs */
 #define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
@@ -102,15 +103,52 @@ if (centralCookie)
 return user;
 }
 
+
+boolean isValidHgsidForEarlyBotCheck(char *raw_hgsid)
+/* We want to use the hgsid from the CGI parameters, but sometimes requests come in with bogus strings that
+ * need to be ignored.  We don't want to run this against the database just yet, but we can at least check
+ * the format. */
+{
+char hgsid[1024];
+// Just in case it's egregiously large, we only need the first part to decide if it's valid.
+safencpy(hgsid, sizeof(hgsid), raw_hgsid, 50);
+if (regexMatch(hgsid, "^[0-9][0-9]*_[a-zA-Z0-9]{28}$"))
+    return TRUE;
+return FALSE;
+}
+
+
 char *getBotCheckString(char *ip, double fraction)
 /* compose "user.ip fraction" string for bot check */
 {
 char *user = getCookieUser();
 char *botCheckString = needMem(256);
-if (user)
-  safef(botCheckString, 256, "%s.%s %f", user, ip, fraction);
+boolean useNew = cfgOptionBooleanDefault("newBotDelay", FALSE);
+if (useNew)
+    {
+        if (user)
+            safef(botCheckString, 256, "uid%s %f", user, fraction);
+        else
+            {
+            char *hgsid = cgiOptionalString("hgsid");
+            if (hgsid && isValidHgsidForEarlyBotCheck(hgsid))
+                safef(botCheckString, 256, "sid%s %f", hgsid, fraction);
+            else
+                {
+                if (hgsid)
+                    // We were given an invalid hgsid - penalize this source in case of abuse
+                    fraction *= 5;
+                safef(botCheckString, 256, "%s %f", ip, fraction);
+                }
+            }
+    }
 else
-  safef(botCheckString, 256, "%s %f", ip, fraction);
+    {
+    if (user)
+      safef(botCheckString, 256, "%s.%s %f", user, ip, fraction);
+    else
+      safef(botCheckString, 256, "%s %f", ip, fraction);
+    }
 return botCheckString;
 }
 
@@ -244,6 +282,8 @@ else
            "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
            ,hogHost, asctime(localtime(&now)), botDelayMillis);
     puts("</body></html>");
+    if (cfgOptionBooleanDefault("sleepOn429", TRUE))
+        sleep(10);
     }
 cgiExitTime(cgiExitName, enteredMainTime);
 exit(0);

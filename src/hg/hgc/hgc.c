@@ -536,16 +536,22 @@ if (dy == NULL)
 return dy->string;
 }
 
+static void hgcAnchorSomewhereExt(char *group, char *item, char *other, char *chrom, int start, int end, char *tbl)
+/* Generate an anchor that calls click processing program with item
+ * and other parameters. */
+{
+char *itemSafe = cgiEncode(item);
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), group, itemSafe, chrom, start, end, other, tbl);
+freeMem(itemSafe);
+}
+
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item
  * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-char *itemSafe = cgiEncode(item);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, itemSafe, chrom, winStart, winEnd, other,
-       tbl);
-freeMem(itemSafe);
+hgcAnchorSomewhereExt(group, item, other, chrom, winStart, winEnd, tbl);
 }
 
 void hgcAnchorPosition(char *group, char *item)
@@ -1549,6 +1555,9 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 {
 int start = 0;
 char *type = cloneString(tdb->type);
+
+if (sameString(type, "bedMethyl"))
+    return 9;
 char *word = nextWord(&type);
 if (word && (sameWord(word,"bed") || startsWith("big", word)))
     {
@@ -3421,6 +3430,9 @@ int lastChromId = -1;
 char chromName[bbi->chromBpt->keySize+1];
 
 boolean firstTime = TRUE;
+struct hash *seqHash = hashNew(0);
+struct dyString *sequencesText = dyStringNew(256);
+int sequencesFound = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
@@ -3435,31 +3447,49 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         // we're assuming that if there are multiple psl's with the same id that
         // they are the same query sequence so we only put out one set of sequences
-        if (differentString(item, "PrintAllSequences") && firstTime && !isEmpty(seq))    // if there is a query sequence
+        if (!hashLookup(seqHash, bedRow[3]) && !isEmpty(seq))    // if there is a query sequence
             {
-            firstTime = FALSE;
-            printf("<H3>Links to sequence:</H3>\n");
-            printf("<UL>\n");
+            if (firstTime)
+		{
+		firstTime = FALSE;
+		printf("<H3>Links to sequence:</H3>\n");
+		printf("<UL>\n");
+		}
 
             if (!isEmpty(cdsStr))  // if we have CDS 
                 {
                 puts("<LI>\n");
-                hgcAnchorSomewhere("htcTranslatedBigPsl", item, "translate", seqName);
-                printf("Translated Amino Acid Sequence</A> from Query Sequence\n");
+                hgcAnchorSomewhereExt("htcTranslatedBigPsl", bedRow[3], "translate", bedRow[0], sqlUnsigned(bedRow[1]), sqlUnsigned(bedRow[2]), tdb->track);
+		if (showEvery)
+		    printf("Translated Amino Acid Sequence</A> from Query Sequence %s\n", bedRow[3]);
+		else
+		    printf("Translated Amino Acid Sequence</A> from Query Sequence\n");
                 puts("</LI>\n");
                 }
 
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 		{
 		puts("<LI>\n");
-		hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
-		printf("Query Sequence</A> \n");
+		hgcAnchorSomewhereExt("htcBigPslSequence", bedRow[3], tdb->track, bedRow[0], sqlUnsigned(bedRow[1]), sqlUnsigned(bedRow[2]), tdb->track);
+		if (showEvery)
+		    printf("Query Sequence %s</A> \n", bedRow[3]);
+		else
+		    printf("Query Sequence</A> \n");
 		puts("</LI>\n");
-		printf("</UL>\n");
 		}
+
+            hashAdd(seqHash, bedRow[3], "");
+	    dyStringPrintf(sequencesText, ">%s\n%s\n\n", bedRow[3], seq);
+	    ++sequencesFound;
+
             }
 	}
+    if (!showEvery && !firstTime)
+	break;
     }
+if (!firstTime)
+    printf("</UL>\n");
+freeHash(&seqHash);
 
 char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 pslSortListByVar(&pslList, sort);
@@ -3474,6 +3504,18 @@ else
     printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
         tdb->table, item);
 pslFreeList(&pslList);
+
+
+if (showEvery && sequencesFound > 0)
+    {  
+    printf("<BR>\n");
+    printf("Input Sequences:<BR>\n");
+    printf("<textarea rows='8' cols='60' readonly>\n");
+    printf("%s", sequencesText->string);
+    printf("</textarea>\n");
+    dyStringFree(&sequencesText);
+    }
+
 printItemDetailsHtml(tdb, item);
 }
 
@@ -3574,30 +3616,6 @@ for (;tdb != NULL; tdb = tdb->parent)
         return tdb->html;
     }
 return NULL;
-}
-
-static char *getTrackHtml(char *db, char *trackName)
-/* Grab HTML from trackDb in native database for quickLift tracks. */
-{
-char query[4096];
-
-sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
-struct trackDb *loadTrackDb(char *db, char *where);
-struct trackDb *tdb = loadTrackDb(db, query);
-
-char *html = tdb->html;
-if (isEmpty(tdb->html))
-    {
-    char *parent = trackDbSetting(tdb, "parent");
-    char *words[10];
-
-    chopLine(parent,words);
-    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
-    struct trackDb *tdb = loadTrackDb(db, query);
-
-    html = tdb->html;
-    }
-return html;
 }
 
 void printTrackHtml(struct trackDb *tdb)
@@ -4584,6 +4602,18 @@ else
     }
 }
 
+static void doBedMethyl(struct trackDb *tdb, char *item)
+/* Handle a click on a bedMethyl custom track */
+{
+int start = cartInt(cart, "o");
+
+struct sqlConnection *conn = hAllocConnTrack(CUSTOM_TRASH, tdb);
+database=CUSTOM_TRASH;
+tdb->table = trackDbSetting(tdb, "dbTableName");
+
+genericBedClick(conn, tdb, item, start, 9);
+}
+
 static void doLongTabix(struct trackDb *tdb, char *item)
 /* Handle a click on a long range interaction */
 {
@@ -4765,6 +4795,10 @@ else if (wordCount > 0)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
         genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (sameString(type, "bedMethyl"))
+	{
+        genericBedClick(conn, tdb, item, start, 9);
 	}
     else if (sameString(type, "bigGenePred"))
         {
@@ -6592,8 +6626,8 @@ int aliCount = slCount(pslList);
 boolean isClicked;
 if (pslList == NULL || tableName == NULL)
     return;
-boolean showEvery = sameString(itemIn, "PrintAllSequences");
 
+boolean showEvery = (strstr(itemIn, "PrintAllSequences") > 0);
 if (!showEvery && (aliCount > 1))
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
@@ -6611,8 +6645,8 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    {
             char otherString[512];
             char *qName = itemIn;
-            if (sameString(itemIn, "PrintAllSequences"))
-                qName = psl->qName;
+	    if (showEvery)
+		qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
@@ -6627,6 +6661,9 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 	        printf("</A>");
 	    printf("\n");
+
+	    if (showEvery)
+                 freeMem(qName);
 	    }
 	}
     }
@@ -6652,10 +6689,15 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         && sameString(psl->tName, seqName)
 	)
 	{
+        boolean showEvery = (strstr(itemIn, "PrintAllSequences") > 0);
+	char *qName = itemIn;
+	if (showEvery)
+	    qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
+
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere(hgcCommandInWindow, itemIn, otherString, psl->tName);
+	hgcAnchorSomewhere(hgcCommandInWindow, qName, otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
@@ -7340,27 +7382,73 @@ struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
 enum gfType qt, tt;
+boolean isProt;
 
 cartWebStart(cart, database, "BLAT Search Alignments");
+
 printf("<H2>BLAT Search Alignments</H2>\n");
-printf("<H3>Click on a line to see detailed letter-by-letter display</H3>");
+printf("<A href id='hgUsualPslShowAllLink'>Show All</A>\n");
+printf("<H3>Click on a line to see detailed letter-by-letter display</H3>\n");
+
+printf("<div id=hgUsualPslShowItem style='display: block'>\n");
 parseSs(item, &pslName, &faName, &qName);
 pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
     {
     if (sameString(psl->qName, qName))
-        {
+	{
 	slAddHead(&pslList, psl);
 	}
     else
-        {
+	{
 	pslFree(&psl);
 	}
     }
-slSort(&pslList, pslCmpScore);
+slSort(&pslList, pslCmpQueryScore);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
+printf("</div>\n");
+
+
+printf("<div id=hgUsualPslShowAll style='display: none'>\n");
+// get hidden rest of alignments.
+pslxFileOpen(pslName, &qt, &tt, &lf);
+isProt = (qt == gftProt);
+while ((psl = pslNext(lf)) != NULL)
+    {
+    slAddHead(&pslList, psl);
+    }
+slSort(&pslList, pslCmpQueryScore);
+lineFileClose(&lf);
+
+char allItems[1024];
+safef(allItems, sizeof allItems, "%s %s %s", pslName, faName, "PrintAllSequences");
+
+printAlignments(pslList, start, "htcUserAli", "user", allItems);
+pslFreeList(&pslList);
+
+printf("<BR>\n");
+printf("Input Sequences:<BR>\n");
+printf("<textarea rows='8' cols='60' readonly>\n");
+struct dnaSeq *oSeq, *oSeqList = faReadAllSeq(faName, !isProt);
+for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
+    {
+    printf(">%s\n",oSeq->name);
+    printf("%s\n",oSeq->dna);
+    printf("\n");
+    }
+printf("</textarea>\n");
+
+printf("</div>\n");
+
+jsInline("$('#hgUsualPslShowAllLink').click(function(){\n"
+	"  $('#hgUsualPslShowItem')[0].style.display = 'none';\n"
+	"  $('#hgUsualPslShowAll')[0].style.display = 'block';\n"
+	"  $('#hgUsualPslShowAllLink')[0].style.display = 'none';\n"
+	"return false;\n"
+	"});\n");
+
 webIncludeHelpFile(USER_PSL_TRACK_NAME, TRUE);
 }
 
@@ -9273,7 +9361,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
             {
             struct bed *bedCopy = cloneBed(bed);
-            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
+            
+            char startBuf[16], endBuf[16];
+            char *bedRow[bbi->fieldCount];
+            bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+            // bedRow[5] has original strand in it, bedCopy has new strand.  If they're different we want to reverse exonFrames
+            boolean changedStrand = FALSE;
+            if (*bedRow[5] != *bedCopy->strand)
+                changedStrand = TRUE;
+            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb, changedStrand);
             }
         }
     else
@@ -22360,6 +22457,34 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
+void bigPslHandlingCtAndGeneric(struct sqlConnection *conn, struct trackDb *tdb,
+                     char *item, int start, int end)
+/* Special option to show all alignments for blat ct psl */
+{
+
+if (startsWith("ct_blat", tdb->track) && !sameString(item,"PrintAllSequences"))
+    printf("<A href id='genericPslShowAllLink'>Show All</A>\n");
+
+printf("<div id=genericPslShowItem style='display: block'>\n");
+genericBigPslClick(NULL, tdb, item, start, end);
+printf("</div>\n");
+
+if (startsWith("ct_blat", tdb->track) && !sameString(item,"PrintAllSequences"))
+    {
+    printf("<div id=genericPslShowAll style='display: none'>\n");
+    genericBigPslClick(NULL, tdb, "PrintAllSequences", start, end);
+
+    printf("</div>\n");
+
+    jsInline("$('#genericPslShowAllLink').click(function(){\n"
+	    "  $('#genericPslShowAll')[0].style.display = 'block';\n"
+	    "  $('#genericPslShowItem')[0].style.display = 'none';\n"
+	    "  $('#genericPslShowAllLink')[0].style.display = 'none';\n"
+	    "return false;\n"
+	    "});\n");
+    }
+}
+
 void hgCustom(char *trackId, char *fileItem)
 /* Process click on custom track. */
 {
@@ -22383,6 +22508,8 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
+else if ( startsWith( "bedMethyl", type))
+    doBedMethyl(ct->tdb, item);
 else if ( startsWith( "longTabix", type))
     doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))
@@ -22394,7 +22521,7 @@ else if (sameWord(type, "bigWig"))
 else if (sameWord(type, "bigChain"))
     genericChainClick(NULL, ct->tdb, item, start, "seq");
 else if (sameWord(type, "bigPsl"))
-    genericBigPslClick(NULL, ct->tdb, item, start, end);
+     bigPslHandlingCtAndGeneric(NULL, ct->tdb, item, start, end);
 else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigDbSnp"))

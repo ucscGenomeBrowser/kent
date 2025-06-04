@@ -75,6 +75,11 @@ ifeq ($(UNAME_S),Darwin)
   ifneq ($(wildcard /opt/local/include/openssl/ssl.h),)
     HG_INC += -I/opt/local/include
   endif
+  # on M1, the directory changed
+  ifneq ($(wildcard /opt/homebrew/include/openssl/ssl.h),)
+    HG_INC += -I/opt/homebrew/include
+    L += -L/opt/homebrew/lib/
+  endif
   ifneq ($(wildcard /opt/local/lib/libz.a),)
     ZLIB = /opt/local/lib/libz.a
   endif
@@ -230,7 +235,7 @@ ifeq (${USE_HAL},1)
       ifeq (${HOSTNAME},hgwdev-old.gi.ucsc.edu)
           HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
       else
-          HALLIBS += -lcurl -lstdc++
+          HALLIBS += -lstdc++
       endif
     endif
     HG_DEFS+=-DUSE_HAL
@@ -267,9 +272,17 @@ ifneq ($(MAKECMDGOALS),clean)
 
   # set MYSQL include path
   ifeq (${MYSQLINC},)
-    MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
-#        $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
+    # newer distros do not have the mysql_config symlink anymore
+    ifeq (, $(shell which mysql_config))
+        MYSQLCONFIG := mariadb_config
+    else
+        MYSQLCONFIG := mysql_config
+    endif
+	
+    MYSQLINC := $(shell ${MYSQLCONFIG} --include | sed -e 's/-I//' || true)
+        # $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
   endif
+
   ifeq (${MYSQLINC},)
     ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
 	  MYSQLINC=/usr/local/mysql/include
@@ -286,7 +299,7 @@ ifneq ($(MAKECMDGOALS),clean)
     ifeq (${MYSQLLIBS},)
       # mysql_config --libs includes -lm, however libm must be a dynamic library
       # so to handle SEMI_STATIC it is removed here and will be added at the end
-      MYSQLLIBS := $(shell mysql_config --libs | sed 's/-lm$$//' || true)
+      MYSQLLIBS := $(shell ${MYSQLCONFIG} --libs | sed 's/-lm$$//' || true)
 #        $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
     endif
   endif
@@ -371,7 +384,7 @@ endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
-L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB} -lcurl
 HG_INC+=${PNGINCL}
 
 # NOTE: these must be last libraries and must be dynamic.
@@ -541,4 +554,13 @@ ifeq (${UGLIFYJS},)
     ifeq ($(wildcard ${UGLIFYJS}),)
         UGLIFYJS=true
     endif
+endif
+
+# OSX does not have the --remove-destination option. 
+# We use this option to make sure that the username and date of files lets us figure out
+# who was the one that built the current version of a file
+ifeq ($(UNAME_S),Darwin)
+    CPREMDESTOPT=-f
+else
+    CPREMDESTOPT=--remove-destination
 endif

@@ -1,0 +1,222 @@
+<h2>Description</h2>
+<p>These tracks show regions of unusual conservation in human relative to other organisms:</p>
+
+<ul>
+  <li>Ultraconserved elements (UCE aka ultras):
+    Elements with 100% identity in human/mouse/rat alignments, from (Bejerano et al, Science 2004). 
+    Many of these were tested in mice, see the VISTA enhancers track in the Regulation track group.
+  <li>Human Accelerated Regions (HARs):
+      2649 regions conserved throughout vertebrate evolution but strikingly different in humans (Pollard et al, Nature 2006).
+      This extended list was collected by the Katie Pollard lab from various publications (Capra et al. PTRSB 2013).
+  <li>High-confidence Zoonomia Human Accelerated Regions (HARs):
+      312 HARs from the Zoonomia Alignments (Keough et al. Science, 2023)
+  <li>Human Ancestor Quickly Evolved Regions (HAQERs):
+      1580 HAQERs from (Mangan Cell 2023)
+  <li>Human-specific long deletions (hCondels) between human, macaque and chimpanzee:
+      583 regions (one not lifted) present in macaque and chimp, but no in humans. (McLean et al Nature 2011)
+      Since these are sequences absent from the human genome, we show the 2bp around the deletion.
+  <li>Short hCondels &lt; 40bp in primates and up to 11 vertebrates:
+    43588 regions deleted in human but present in 11 vertebrates or primates from (Xue et al, Science 2023). These regions were tested 
+    in an MPRA screen, the MPRA results are in the track and shown when clicking an element. Since the track is showing MPRA results
+    and the position of deletions, what is shown in the track are regions +-100bp around the deletion site on the human genome, 
+    not just the two basepairs flanking the site of the deletion.
+  <li>Zoonomia Ultraconserved elements (zooUCEs):
+    4552 Ultraconserved elements identified from the 241-mammals genome alignment. All regions >=20bp where
+    at least 235 species aligned and all aligning species are fixed for the same base at every position. 20-190 bp.
+  <li>Zoonomia: Runs of contiguous constraint (RoCCs):
+    All genomic regions where contiguous bases have phyloP score > 2.270 (5% FDR) and are therefore under high
+    constraint. Regions separated by a single base with phyloP < 2.270 were merged. N = 595,535; 20-1,359 bp. 
+  <li>Zoonomia: Unannotated Intergenic Constrained Regions (UNICORNs):
+    Non-coding regions of the genome that lack annotation in ENCODE3 but show high evolutionary constraint, suggesting function.
+    Positions with phyloP > 2.270 (5% FDR) within 5bp of each other are grouped into UNICORNs. N = 424,180; 11 - 1,325 bp.
+  <li>UCNEBase: Elements conserved with chicken from (Dimitrieva and Bucher, NAR 2013):
+      non-coding elements &gt; 200 bp long and 95% conserved between human and chicken
+  <li>UCNEBase: Elements paralogous to others:
+      alignable with E<10^-4 to other chicken-conserved elements
+  <li>UCNEBase UGRBs: Ultra-conserved genomic regulatory blocks: 
+       chicken-conserved elements within 0.5 Mb in both human and chicken
+</ul>
+     
+<table class="stdTbl">
+    <tr>
+        <th>Track</th>
+        <th>Count</th>
+        <th>Coverage in bp</th>
+    </tr>
+    <tr>
+        <td>Ultraconserved</td>
+        <td>481</td>
+        <td>126,007</td>
+    </tr>
+    <tr>
+        <td>UCNEBase Chicken</td>
+        <td>4351</td>
+        <td>1,415,142</td>
+    </tr>
+    <tr>
+        <td>UCNEBase Paralogs</td>
+        <td>987</td>
+        <td>215,800</td>
+    </tr>
+    <tr>
+        <td>UCNEBase UGRBs</td>
+        <td>239</td>
+        <td>199,269,634</td>
+    </tr>
+    <tr>
+        <td>Zoo Ultracons.</td>
+        <td>4552</td>
+        <td>131,661</td>
+    </tr>
+    <tr>
+        <td>HARs</td>
+        <td>2647</td>
+        <td>681,420</td>
+    </tr>
+    <tr>
+        <td>ZooHARs</td>
+        <td>312</td>
+        <td>49,173</td>
+    </tr>
+    <tr>
+        <td>HAQERs</td>
+        <td>1580</td>
+        <td>1,410,669</td>
+    </tr>
+    <tr>
+        <td>Long hCondels</td>
+        <td>583</td>
+        <td>293,809</td>
+    </tr>
+    <tr>
+        <td>Short hCondels</td>
+        <td>10,032</td>
+        <td>1,968,123</td>
+    </tr>
+    <tr>
+        <td>Zoo ROCCs</td>
+        <td>595,536</td>
+        <td>26,995,284</td>
+    <tr>
+        <td>Zoo UNICORNs</td>
+        <td>423,586</td>
+        <td>16,155,520</td>
+    </tr>
+</table>
+
+<h2>Display Conventions and Configuration</h2>
+<p>All tracks show the locations and name for the features. Only one, Short hCondels, has MPRA test results in the track itself.
+</p>
+
+<h2>Methods</h2>
+
+<p>Ultraconserved sequences: downloaded from our hg19 public track hub and lifted to hg38.
+</p>
+
+<p>
+HARs: Downloaded from <a target=_blank href="https://docpollard.org/research/">https://docpollard.org/research/</a>.
+Converted from Excel. Lifted 2649 HAR file to hg38.
+</p>
+
+<p>
+HAQERs: Converted from supplemental table 1 of (Mangan et al, Cell 2023).
+</p>
+
+<p>
+Long hCondels from McLean: Excel file converted manually as supplement 2 from https://pmc.ncbi.nlm.nih.gov/articles/PMC3071156/ and lifted to hg38 from hg18.
+</p>
+
+<p>
+Short hCondels from Xue et al: Excel file converted manually from supplemental file 1.
+From the paper: "We constructed a chimpanzee-anchored multiple sequence alignment across 11 vertebrate species to detect statistically significant conserved sequences (1,371,766). These elements ranged from being deeply conserved throughout vertebrates to being conserved only through primates. We then intersected our conserved elements with called deletions (2,042,706) between the human (hg38) and chimpanzee (panTro4) genomes to yield 43,588 putative hCONDELs."
+</p>
+
+
+<p>
+Zoonomia UNICORNs, ZooUCEs and RoCCs: Downloaded from https://cgl.gi.ucsc.edu/data/cactus/zoonomia-2021-track-hub/hg38/
+<p>
+
+<h2>Credits</h2>
+<p>Thanks to Katie Pollard, Hiram Clawson, James Xue, Matt Christmas (matthew.christmas@imbim.uu.se), and Mark Diekhans for providing the data.</p>
+
+<h2>References</h2>
+
+<p>
+Bejerano G, Pheasant M, Makunin I, Stephen S, Kent WJ, Mattick JS, Haussler D.
+<a href="https://www.science.org/doi/10.1126/science.1098119?url_ver=Z39.88-2003&amp;rfr_id=ori:rid:
+crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+Ultraconserved elements in the human genome</a>.
+<em>Science</em>. 2004 May 28;304(5675):1321-5.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15131266" target="_blank">15131266</a>
+</p>
+
+
+<p>
+Pollard KS, Salama SR, Lambert N, Lambot MA, Coppens S, Pedersen JS, Katzman S, King B, Onodera C,
+Siepel A <em>et al</em>.
+<a href="https://doi.org/10.1038/nature05113" target="_blank">
+An RNA gene expressed during cortical development evolved rapidly in humans</a>.
+<em>Nature</em>. 2006 Sep 14;443(7108):167-72.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16915236" target="_blank">16915236</a>
+</p>
+
+Capra JA, Erwin GD, McKinsey G, Rubenstein JL, Pollard KS.
+<a href="https://royalsocietypublishing.org/doi/abs/10.1098/rstb.2013.0025?url_ver=Z39.88-2003&amp;r
+fr_id=ori:rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+Many human accelerated regions are developmental enhancers</a>.
+<em>Philos Trans R Soc Lond B Biol Sci</em>. 2013 Dec 19;368(1632):20130025.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24218637" target="_blank">24218637</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3826498/" target="_blank">PMC3826498</a>
+</p>
+
+<p>
+Keough KC, Whalen S, Inoue F, Przytycki PF, Fair T, Deng C, Steyert M, Ryu H, Lindblad-Toh K,
+Karlsson E <em>et al</em>.
+<a href="https://www.science.org/doi/abs/10.1126/science.abm1696?url_ver=Z39.88-2003&amp;rfr_id=ori:
+rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+Three-dimensional genome rewiring in loci with human accelerated regions</a>.
+<em>Science</em>. 2023 Apr 28;380(6643):eabm1696.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104607" target="_blank">37104607</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10999243/" target="_blank">PMC10999243</a>
+</p>
+
+<p>
+Mangan RJ, Alsina FC, Mosti F, Sotelo-Fonseca JE, Snellings DA, Au EH, Carvalho J, Sathyan L,
+Johnson GD, Reddy TE <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)01358-7" target="_blank">
+Adaptive sequence divergence forged new neurodevelopmental enhancers in humans</a>.
+<em>Cell</em>. 2022 Nov 23;185(24):4587-4603.e23.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36423581" target="_blank">36423581</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10013929/" target="_blank">PMC10013929</a>
+</p>
+
+<p>
+McLean CY, Reno PL, Pollen AA, Bassan AI, Capellini TD, Guenther C, Indjeian VB, Lim X, Menke DB,
+Schaar BT <em>et al</em>.
+<a href="https://doi.org/10.1038/nature09774" target="_blank">
+Human-specific loss of regulatory DNA and the evolution of human-specific traits</a>.
+<em>Nature</em>. 2011 Mar 10;471(7337):216-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21390129" target="_blank">21390129</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3071156/" target="_blank">PMC3071156</a>
+</p>
+
+<p>
+Xue JR, Mackay-Smith A, Mouri K, Garcia MF, Dong MX, Akers JF, Noble M, Li X, Zoonomia Consortium†,
+Lindblad-Toh K <em>et al</em>.
+<a href="https://www.science.org/doi/abs/10.1126/science.abn2253?url_ver=Z39.88-2003&amp;rfr_id=ori:
+rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+The functional and evolutionary impacts of human-specific deletions in conserved elements</a>.
+<em>Science</em>. 2023 Apr 28;380(6643):eabn2253.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104592" target="_blank">37104592</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10202372/" target="_blank">PMC10202372</a>
+</p>
+
+<p>
+Dimitrieva S, Bucher P.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gks1092" target="_blank">
+UCNEbase--a database of ultraconserved non-coding elements and genomic regulatory blocks</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D101-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23193254" target="_blank">23193254</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531063/" target="_blank">PMC3531063</a>
+</p>
+

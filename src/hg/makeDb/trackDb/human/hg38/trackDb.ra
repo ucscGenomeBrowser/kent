@@ -43,6 +43,8 @@ include fantom5.ra
 
 include nuMtSeq.ra
 
+include gnomad.pext.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -140,36 +142,7 @@ searchDescription miRNA Tissue Atlas Sample 2
 searchMethod exact
 semiShortCircuit 1
 
-track unusualcons
-compositeTrack on
-shortLabel Unusually Conserved
-longLabel Unusually Conserved Regions - Ultrasconserved, Human Accelerated
-type bed
-group compGeno
-release alpha
-
-    #track har721
-    #shortLabel 721 HARs
-    #longLabel 721 HARs from UCSC MultiZ alignments
-    #parent unusualcons on
-    #type bigBed 9 +
-    #bigDataUrl /gbdb/hg38/unusualcons/harMultiz.bb
-
-    track hars312
-    shortLabel 312 HARs
-    longLabel 312 HARs from Zoonomia alignments
-    parent unusualcons on
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
-    release alpha
-
-    track ultras
-    shortLabel Ultracons.
-    longLabel Ultraconserved regions - 100% identical in human, mouse and rat
-    parent unusualcons on
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
-    release alpha
+include unusualcons.ra alpha
 
 track cosmicRegions
 shortLabel COSMIC Regions
@@ -209,12 +182,13 @@ track vistaEnhancersBb
 shortLabel VISTA Enhancers
 longLabel VISTA Enhancers
 group regulation
-url https://enhancer.lbl.gov/vista/browse?filter=$$
+url https://enhancer.lbl.gov/vista/element?vistaId=$$
 type bigBed 9 +
 mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
+pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 track coriellDelDup override
 origAssembly hg19 
@@ -553,8 +527,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
+#include knownGene.alpha.ra alpha
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
@@ -796,6 +770,18 @@ compositeTrack on
     bigDataUrl /gbdb/hg38/snpCnvArrays/agilent/hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
     priority 3
 
+    track epicV2illuminaMethylation
+    parent genotypeArrays on
+    shortLabel Illumina EPIC v2
+    longLabel Illumina EPIC v2 Methylation Array
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/bbi/illumina/illuminaEPICv2.bb
+    visibility pack
+    colorByStrand 255,0,0 0,0,255
+    html genotypeArrays
+    priority 3.5
+    noScoreFilter on
+
     track snpArrayIllumina850k
     parent genotypeArrays on
     shortLabel Illumina 850k
@@ -905,8 +891,12 @@ include assemblyTracks.ra
 
 include primates11way.ra alpha
 
-include pseudogenes.ra alpha
+include pseudogenes.ra
 
 include recount3.ra alpha
 
 include long_read_transcripts.ra alpha
+
+include mavedb.ra alpha
+
+include vgpLiftOver.ra alpha

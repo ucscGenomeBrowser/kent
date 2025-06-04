@@ -1,0 +1,127 @@
+<h2>Description</h2>
+<p>
+These tracks contain pseudogene predictions and their parents as identified by PseudoPipe.
+<a href="http://pseudogene.org/pseudopipe/" target="_blank">PseudoPipe</a> is a homology-based
+computational pipeline that can search a mammalian genome and identify pseudogene sequences
+comprehensively and consistently.
+</p>
+<p>
+Pseudogenes are genomic sequences that bear similarity to specific protein-coding genes, but  are
+unable to produce functional proteins due to the existence of frameshifts, premature stop codons, or
+other deleterious mutations. They arise from gene duplication or retrotransposition events and are
+important resources in understanding the evolutionary history of genes and genomes.</p>
+
+<h2>Display Conventions</h2>
+
+<p>This composite track consists of two subtracks: the <b>Pseudogenes</b> track and the <b>Pseudogene
+Parents</b> track. The <b>Pseudogene Parents</b> track displays parent genes and pseudogenes
+labeled with their <a href="https://www.hugo-international.org/standards/" target="_blank">HUGO</a>
+IDs, which were derived from Ensembl gene IDs provided by the <a href="https://www.gersteinlab.org/"
+target="_blank">Gerstein lab</a> after dataset creation. It includes indicators for pseudogenes. 
+These indicators do not show pseudogene locations directly but instead indicate how many pseudogenes
+are associated with each gene and link to their genomic regions in the Pseudogenes track.</p>
+<p>
+The <b>Pseudogenes</b> track shows pseudogenes labeled with their parent HUGO ID and colored
+according to pseudogene type. The authors assigned PGOHUMG IDs to genes and PGOHUMT IDs to
+transcripts. <b>Note</b>: Not all PseudoPipe IDs could be mapped back to their original Ensembl
+IDs. In these cases, the gene ID is listed as NA.</p>
+
+<b>Pseudogene types:</b>
+<ul>
+<li><b>Unspecified pseudogenes</b> include pseudogenic fragments and protein/chromosome homologies
+	with high sequence similarity but are too decayed to be reliably classified as processed or
+	duplicated.</li>
+<li><b>Processed pseudogenes</b> (retrotransposed pseudogenes) result from the reverse
+	transcription of mRNA into DNA, which is then inserted into the genome. These pseudogenes
+	lack introns, often have small flanking direct repeats, and may retain a 3' polyadenine
+	tail. PseudoPipe distinguishes them from duplicated pseudogenes by a combination of these
+	features, with the emphasis on the evidence of ancient introns.</li>
+<li><b>Unprocessed pseudogenes</b> (duplicated pseudogenes) arise from genomic DNA duplication or
+	unequal crossing-over. They often retain the original exon-intron structures of the
+	functional genes, although sometimes incompletely.</li>
+</ul>
+
+<h3>Pseudogene Parents track</h3>
+<p>Each parent gene is shown with associated pseudogenes represented as grey blocks. These blocks
+do not reflect actual pseudogene locations but rather indicate the count of pseudogenes linked to
+the gene.
+</p>
+<ul>
+<li><b><font color="#800080">purple</font></b> - <b> parent gene </b></li>
+<li><b><font color="#A9A9A9">grey</font></b> - <b> pseudogene indicators </b></li>
+</ul>
+
+<p>
+If a parent gene has four grey blocks beneath it, this indicates the presence of four pseudogenes
+elsewhere in the genome. Hovering over an item displays the gene type, ID (Ensembl transcript ID
+or PseudoPipe transcript ID), and the genome position of the gene or pseudogene, with a link to
+that genomic region.
+</p>
+
+<h3>Pseudogenes track</h3>
+<p>Pseudogenes are colored by type.</p>
+<ul>
+<li><b><font color="#FF8C00">orange</font></b> - <b> unspecified pseudogene </b></li>
+<li><b><font color="#0000FF">blue</font></b> - <b> unprocessed pseudogene </b></li>
+<li><b><font color="#556B2F">olive green</font></b> - <b> processed pseudogene </b></li>
+</ul>
+
+<p>
+Hovering over a pseudogene item shows the pseudogene type, parent HUGO gene symbol, and the Ensembl
+parent transcript ID, which links to the genome position of the parent gene.</p>
+
+<h2>Methods</h2>
+<p>
+The PseudoPipe pipeline identifies pseudogenes through a series of steps. It first uses BLAST to
+rapidly cross-reference potential parent proteins against the intergenic regions of the genome. The
+resulting raw hits are then processed by removing redundancies, clustering neighboring sequences,
+and aligning each cluster with a unique parent gene. Finally, pseudogenes are classified based on a
+combination of criteria, including homology, intron-exon structure, and the presence of stop codons
+or frameshifts. This method is designed to detect pseudogenes that are unable to be translated into
+proteins.</p> 
+<p>
+These tracks were generated using a Bash script that processes a GTF file with pseudogene
+annotations by removing duplicates, correcting overlapping exons, and converting the data to BED
+format with pseudoPipeToBed.py. This script extracts gene and transcript IDs, merges overlapping
+exons, assigns colors based on pseudogene type, and outputs a BED file with gene and parent
+annotations. PseudoPipeParents.py then links pseudogenes to their functional genes by determining
+parent gene coordinates, updating pseudogene entries with interactive browser links and generating a
+parent BED file. The final data are formatted into pseudoPipePgenes.bb and pseudoPipeParents.bb BigBed
+files. The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/pseudogenes.txt"
+target="_blank">detailed documentation (makeDoc)</a> and 
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/pseudogenes"
+target="_blank">Python scripts</a> are available in our GitHub repository.
+</p>
+
+<h2>Data Access</h2>
+<p>The raw data can be explored interactively with the
+<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
+<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
+The data may also be explored interactively using our
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.</p>
+<p>For automated download and analysis, the genome annotation is stored at UCSC in bigBed files
+that can be downloaded from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/pseudogenes/" target="_blank">download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system.</p>
+<p>
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/$db/pseudogenes/pseudoPipePgenes.bb -chrom=chr21 -start=0 -end=10000000 stdout</tt>
+</p>
+
+<h2>Credits</h2>
+<p>Thanks to the Gerstein lab at Yale University for making this data available, and to Cristina
+Sisu for providing data in GTF format with parent annotations.</p>
+
+<h2>References</h2>
+<p>
+Zhang Z, Carriero N, Zheng D, Karro J, Harrison PM, Gerstein M.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btl116"
+target="_blank">
+PseudoPipe: an automated pseudogene identification pipeline</a>.
+<em>Bioinformatics</em>. 2006 Jun 15;22(12):1437-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16574694" target="_blank">16574694</a>
+</p>

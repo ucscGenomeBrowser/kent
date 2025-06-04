@@ -519,7 +519,7 @@ priority 2
         color 12,12,120
         shortLabel RefSeq All
         type bigGenePred
-        urls name2=\"https://www.ncbi.nlm.nih.gov/gene/\$D/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
+        urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
         labelFields name,geneName,geneName2
         defaultLabelFields geneName2
         searchIndex name
@@ -545,7 +545,7 @@ priority 2
         shortLabel RefSeq Curated
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
-        urls name2=\"https://www.ncbi.nlm.nih.gov/gene/\$D/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
+        urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
         labelFields name,geneName,geneName2
         defaultLabelFields geneName2
         searchIndex name
@@ -571,7 +571,7 @@ priority 2
         shortLabel RefSeq Predicted
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
-        urls name2=\"https://www.ncbi.nlm.nih.gov/gene/\$D/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
+        urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
         labelFields name,geneName,geneName2
         defaultLabelFields geneName2
         searchIndex name
@@ -701,8 +701,10 @@ if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
   ln -s ../trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz $buildDir/genes/${asmId}.ncbiGene.gtf.gz
 fi
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+if [ -s  $buildDir/ixIxx/${asmId}.ncbiGene.ix ]; then
+  ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
+  ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+fi
   printf "track ncbiGene
 longLabel $longLabel
 shortLabel $shortLabel

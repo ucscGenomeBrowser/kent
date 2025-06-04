@@ -149,6 +149,7 @@
 #include "bigWarn.h"
 #include "quickLift.h"
 #include "liftOver.h"
+#include "bedMethyl.h"
 
 #define CHROM_COLORS 26
 
@@ -2661,7 +2662,7 @@ if (*pNewWinEnd > virtSeqBaseCount)
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
-#define EXONTEXTLEN 256
+#define EXONTEXTLEN 4096
 
 static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase, int endPhase, char *buf) 
 /* Write mouseover text that describes the exon's phase into buf[EXONTEXTLEN].
@@ -2673,19 +2674,23 @@ static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase
 
 if (startPhase==-1) // UTRs don't have a frame at all
     {
-    safef(buf, EXONTEXTLEN, ", untranslated region");
+    safef(buf, EXONTEXTLEN, "<b>No Codon:</b> Untranslated region<br>");
     }
 else
     {
     char *exonNote = "";
     boolean isNotLastExon = (exonIntronNumber<numExons);
+
+    static const char *phasePrefix  = 
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle-o'></i></a></b>";
+
     if (isNotLastExon)
         {
         if (startPhase==endPhase)
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
+        safef(buf, EXONTEXTLEN, "<b>Codon phase %s :</b> start %d, end %d%s<br>", phasePrefix, startPhase, endPhase, exonNote);
         } 
     else
         {
@@ -2693,7 +2698,7 @@ else
             exonNote = ": in-frame exon";
         else
             exonNote = ": out-of-frame exon";
-        safef(buf, EXONTEXTLEN, ", start codon phase %d%s", startPhase, exonNote);
+        safef(buf, EXONTEXTLEN, "<b>Codon phase %s :</b> start %d%s<br>", phasePrefix, startPhase, exonNote);
         }
     }
 }
@@ -2937,7 +2942,7 @@ boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
 int e = -1;
-char mouseOverText[256];
+char mouseOverText[4096];
 boolean isExon = TRUE;
 int picStart = insideX;
 int picEnd = picStart + insideWidth;
@@ -3010,7 +3015,7 @@ for (ref = exonList; TRUE; )
             // char *frameText = "";
             // for coding exons, determine the start and end phase of the exon and an English text describing both:
             // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
-            // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
+            // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame
             int startPhase = -1;
             int endPhase = -1;
             char phaseText[EXONTEXTLEN];
@@ -3018,7 +3023,6 @@ for (ref = exonList; TRUE; )
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
                 startPhase = gp->exonFrames[exonIx-1];
-                //printf("start phase is set<br>");
                 if (!revStrand) 
                     endPhase = gp->exonFrames[exonIx];
                 else 
@@ -3065,12 +3069,14 @@ for (ref = exonList; TRUE; )
                                     char *oldMouseOver = lf->mouseOver;
                                     lf->mouseOver = NULL;
                                     dyStringClear(codonDy);
+                                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
-                                        dyStringPrintf(codonDy, "%s, ", existingText);
+                                        dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
-                                        dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
-                                    dyStringPrintf(codonDy, "strand %c, %s %d of %d%s",
+                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    // if you change the text below, also change hgTracks:mouseOverToExon
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
@@ -3083,12 +3089,21 @@ for (ref = exonList; TRUE; )
                     }
                 else // either an intron, or else an exon zoomed out too far for codons (or no codons)
                     {
-                    char *sep = "";
-                    if (!isEmpty(existingText))
-                        sep = ", ";
+                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
+                    // if you change the text below, also change hgTracks:mouseOverToExon
+                    char *posNote = "";
+                    char *exonOrIntron = "Intron";
+                    if (isExon) 
+                        {
+                        posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
+                        exonOrIntron = "Exon";
+                        }
 
-                    safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s",
-                            existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
+                            "<b>Strand:</b> %c<br><b>%s:</b> %s %d of %d<br>%s",
+                        existingText, posNote, strandChar, exonOrIntron, exonIntronText, 
+                        exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
@@ -11595,7 +11610,8 @@ return (tg->isBigBed &&
             !startsWith("bigInteract",tg->tdb->type) &&
             !startsWith("bigMaf",tg->tdb->type) &&
             !startsWith("bigLolly",tg->tdb->type))
-        || startsWith("vcfTabix", tg->tdb->type);
+        || startsWith("vcfTabix", tg->tdb->type)
+        || startsWith("bam", tg->tdb->type);
 }
 
 enum trackVisibility limitVisibility(struct track *tg)
@@ -11662,7 +11678,7 @@ if (!tg->limitedVisSet)
                 tg->visibility = tg->limitedVis = tvFull;
             }
         else
-            tg->limitedVis = vis;
+            tg->limitedVis = (vis == tvShow) ? tvFull : vis;
         }
     else
         {
@@ -12099,6 +12115,28 @@ void freePgSnp(struct track *tg)
 pgSnpFreeList(((struct pgSnp **)(&tg->items)));
 }
 
+void loadBedMethyl(struct track *tg)
+/* Load up bedMethyl type tracks */
+{
+struct customTrack *ct = tg->customPt;
+char *table = tg->table;
+struct sqlConnection *conn;
+if (ct == NULL)
+    conn = hAllocConn(database);
+else
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+struct dyString *query = sqlDyStringCreate("select * from %s where ", table);
+hAddBinToQuery(winStart, winEnd, query);
+sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
+	       chromName, winEnd, winStart);
+tg->items = bedMethylLoadByQuery(conn, query->string);
+
+hFreeConn(&conn);
+}
+
 void loadPgSnp(struct track *tg)
 /* Load up pgSnp (personal genome SNP) type tracks */
 {
@@ -12169,6 +12207,14 @@ if (vis == tvDense)
     }
 }
 
+void bedMethylMethods (struct track *tg)
+/* bedMethyl track methods */
+{
+bedMethods(tg);
+tg->loadItems = loadBedMethyl;
+tg->canPack = TRUE;
+}
+
 void pgSnpMethods (struct track *tg)
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
@@ -12183,6 +12229,7 @@ tg->mapItem = pgSnpMapItem;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->drawLeftLabels = pgSnpLeftLabels;
+tg->canPack = TRUE;
 }
 
 void loadBlatz(struct track *tg)
@@ -12677,7 +12724,9 @@ char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 char *nameCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_NAME_COLUMN, GENEPRED_CLASS_NAME_COLUMN_DEFAULT);
 char *classCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_CLASS_COLUMN, GENEPRED_CLASS_CLASS_COLUMN_DEFAULT);
 struct linkedFeatures *lf = item;
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row = NULL;
 char query[256];
@@ -13292,6 +13341,13 @@ else  /* when in doubt set up as simple bed */
     }
 tg->nextItemButtonable = TRUE;
 tg->customPt = ct;
+tg->canPack = TRUE;
+}
+
+void bedMethylCtMethods (struct track *tg)
+/* Load pgSnp track from custom tracks */
+{
+bedMethylMethods(tg);
 tg->canPack = TRUE;
 }
 
@@ -15045,6 +15101,10 @@ else if (sameWord(type, "interact"))
     {
     interactMethods(track);
     }
+else if (sameWord(type, "bedMethyl"))
+    {
+    bedMethylMethods(track);
+    }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
@@ -15271,7 +15331,7 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    boolean avoidHandler = FALSE;// trackDbSettingOn(tdb, "avoidHandler");
+    boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
     if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
         handler(subtrack);
 

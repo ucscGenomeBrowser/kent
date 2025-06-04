@@ -235,8 +235,9 @@
     <P>Specifies the track's "short label", which is used in a
     number of places in the Browser to identify the track.  For
     example, the short label is displayed alongside the track in the Browser image.
-    This label must be brief and
-    is limited to 17 printable characters.</P>
+    This label must be brief and is limited to 17 printable characters.
+    Some <a href="../../../FAQ/FAQcustom.html#custom13">special characters</a>
+    are allowed in the shortLabel.</P>
     <P><B>Example:</B>
     </P>
     <pre>   shortLabel Human mRNAs</pre>
@@ -250,7 +251,9 @@
     the long label is displayed above the track's data in the Browser image.
     This label should be descriptive enough to
     allow users to uniquely identify the track within the Browser.  It
-    is limited to 76 printable characters.</P>
+    is limited to 76 printable characters.
+    Some <a href="../../../FAQ/FAQcustom.html#custom13">special characters</a>
+    are allowed in the longLabel.</P>
     <P><B>Example:</B></P>
     <pre>   longLabel Human mRNAs from GenBank</pre>
 </DIV>
@@ -2097,7 +2100,7 @@ There are no extra options that can appear on the type hic line.
     <P><B>Example:</B></P>
     <pre>   maxWindowCoverage 10000000</pre>
     <p>Browser images that show more than 10,000,000 bases will result in the track data
-    being displayed as a density coverage graph</code>.</p>
+    being displayed as a density coverage graph.</p>
 </DIV>
 
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
@@ -2865,7 +2868,9 @@ that identifies the reference sequence.
 
 <DIV class="logo"><span class="types bigWig"></span>
 <div class="format"><code>logo on</code></div>
-    <P>The signal can be graphed as reference base nucleotide letters with their heights equal to the
+    <P>Enables <a target="_blank" href="https://kundajelab.github.io/dynseq-pages/">
+    dynseq display</a>, which graphs the signal as reference base nucleotide letters 
+    with their heights equal to the
     signal value within the bigWig track. If not sufficiently zoomed in, the bigWig will
     revert to bars instead of letters by default. See a working example of the <code>logo</code>
     dynseq display on the <a href="../bigWig.html#Ex4" target="_blank">bigWig</a> help page.</p>

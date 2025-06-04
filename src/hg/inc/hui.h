@@ -1274,6 +1274,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
                      boolean boxed);
 // Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
+void bedScoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up bed-specific score controls */
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 // Put up genePred-specific controls
 
@@ -1599,4 +1602,6 @@ struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name);
  * we need to walk back up comparing name like isNameAtParentLevel does.
  * If name doesn't match tdb or any of its ancestors then this returns NULL. */
 
+char *getTrackHtml(char *db, char *trackName);
+/* Grab HTML from trackDb in native database for quickLift tracks. */
 #endif /* HUI_H */

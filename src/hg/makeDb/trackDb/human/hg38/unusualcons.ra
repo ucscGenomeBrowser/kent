@@ -1,0 +1,93 @@
+track unusualcons
+compositeTrack on
+shortLabel Unusually Conserved
+longLabel Unusually Conserved Regions - Ultracons, HARs, etc.
+type bed
+group compGeno
+
+    track ultras
+    shortLabel Ultracons
+    longLabel Ultracons: 481 Ultraconserved regions - 100% identical in human, mouse and rat, > 200bp
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/hg38.ultraConserved.bb
+
+    track ucneClusters
+    shortLabel UCNE Clusters
+    longLabel UCNEBase: 239 Cluster of UCNE elements
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/clusters.bb
+    url https://epd.expasy.org/ucnebase/view.php?data=cluster&entry=$$
+
+    track ucneChicken
+    shortLabel UCNE Chicken
+    longLabel UCNEBase: 4351 Chicken-conserved elements
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/chicken.bb
+    url https://epd.expasy.org/ucnebase/view.php?data=ucne&entry=$$
+
+    track ucneParalogs
+    shortLabel UCNE Paralogs
+    longLabel UCNEBase: 987 Paralogous elements
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/paralogs.bb
+    url url="https://epd.expasy.org/ucnebase/view.php?data=ucne&entry=$$"
+
+    track ultraZoo
+    shortLabel UltraZoos
+    longLabel UltraZoos: 4552 Ultraconserved regions in Zoonomia alignment - 100% identical in 235 species, >20bp
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/zooUCEs.bigBed
+
+    track har2649
+    shortLabel HARs
+    longLabel HARs: 2649 Human Accelerated Regions (HARs) merged from various publications by the Pollard Lab
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/nchaes_merged_hg38.bb
+
+    track hars312
+    shortLabel ZooHARs
+    longLabel ZooHARs: 312 Human Accelerated Regions (HARs) from Zoonomia alignments
+    parent unusualcons on
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/unusualcons/KeoughTableS1.bb
+
+    track haqers
+    shortLabel HAQERS
+    longLabel HAQERS: 1580 Human Ancestor Quickly Evolved Regions
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/haqers.bb
+
+    track hcondels
+    shortLabel Long hConDels
+    longLabel long hConDels: 583 Long Human Conserved Deletions - present in chimp and macaque but deleted in humans
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/hcondels583.bb
+
+    track shorthcondels
+    shortLabel Short hConDels
+    longLabel short hConDels: 10032 Short Human hCondels - Human Conserved Deletions < 40bp
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/hcondels.bb
+
+    track zooRoccs
+    shortLabel ZooRoCCs
+    longLabel Zoonomia RoCCs: Runs of contiguous phyloP constraint
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/RoCCs.bigBed
+
+    track zooUnicorns
+    shortLabel ZooUNICORNs
+    longLabel Zoonomia UNICORNs: Unannotated Intergenic Constrained Regions
+    parent unusualcons on
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/unusualcons/UNICORNs.bigBed

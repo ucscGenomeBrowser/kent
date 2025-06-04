@@ -22,6 +22,7 @@
 <li><a href="#custom10">Byte-range request error</a></li>
 <li><a href="#custom11">BedToBigBed and other utilities fail because of custom track header 
 <li><a href="#custom12">Non-UCSC chromosome names</a></li>
+<li><a href="#custom13">Apostrophes and special characters in track labels</a></li>
 </ul>
 <hr>
 <p>
@@ -177,5 +178,15 @@ as a &quot;chromAlias.txt&quot; file from <a
 href="https://hgdownload.soe.ucsc.edu/downloads.html" >our downloads server</a>
 under the link &quot;Genome sequence files and select annotations&quot; for that assembly.
 
+<a name="custom13"></a>
+<h2>Apostrophes and special characters in track labels</h2>
+<h6>How can I put an apostrophe in my track label?</h6>
+<p>
+The Genome Browser supports a limited set of characters in the track image. In
+addition to the characters <code>a-z</code> and <code>A-Z</code>, it supports
+some accented characters such as <code>&eacute;</code> or <code>&aacute;</code> and apostrophes,
+specifically "<code>&#697;</code>" (which corresponds to Unicode character U+2019).
+If there are characters in your track's short or long label that we don't
+currently support, <a href="../contacts.html">contact us</a>.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

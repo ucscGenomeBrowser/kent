@@ -17,6 +17,8 @@ GCA_000826365.1_Acanthamoeba_royreba	A.royreba (2015)
 GCA_027943295.1_ASM2794329v1	A.sp. (SK_2022a 2023)
 GCA_027943245.1_ASM2794324v1	A.sp. (SK_2022b 2023)
 GCA_027944975.1_ASM2794497v1	A.sp. (SK_2022c 2023)
+GCA_040954625.2_keBalMisa1.hap1	acorn worm (v2 HW-2024a hap1 2025)
+GCA_040954595.2_keBalMisa1.hap2	acorn worm (v2 HW-2024a hap2 2025)
 GCA_905333045.1_ilLysBell1.1	Adonis blue
 GCA_003951495.1_AfunF3	African malaria mosquito (FUMOZ 2018)
 GCF_000005575.2_AgamP3	African malaria mosquito (PEST 2006)
@@ -24,6 +26,7 @@ GCF_943734735.2_idAnoGambNW_F1_1	African malaria mosquito (primary hap 2022)
 GCF_943734845.2_idAnoFuneDA-416_04	African malaria mosquito (primary hap 2022)
 GCA_000150785.1_g4	African malaria mosquito (S 2008)
 GCA_002216045.1_PinMar1.0	Akoya pearl oyster (pearl oyster-OUG 2017)
+GCA_028142955.1_Pfu_4.1A	Akoya pearl oyster (2022)
 GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee
 GCF_003710045.2_USU_Nmel_1.3	alkali bee (v1.3 Touchet_males 2018)
 GCF_040183065.1_P.americana_PAMFEO1_priV1	American cockroach (PAMFEO1 primary hap 2024)
@@ -36,9 +39,6 @@ GCA_022747625.1_ioHetAmer1.0.a	American ruby spot damselfly (1083.01 alternate h
 GCA_022747635.1_ioHetAmer1.0.p	American ruby spot damselfly (1083.01 primary hap 2022)
 GCF_022747635.1_ioHetAmer1.1.p	American ruby spot damselfly (primary hap 2022)
 GCA_900088365.1_Bl71nemr	amphioxus (2018)
-GCA_035149815.1_klBraLanc5.hap1	amphioxus (hap1 2024)
-GCA_964187965.1_klBraLanc2.hap1.1	amphioxus (hap1.1 2024)
-GCF_035083965.1_klBraLanc5.hap2	amphioxus (hap2 2024 refseq)
 GCF_000764305.2_Hazt_2.0.2	amphipods H.azteca (HAZT.00-mixed v2.0.2 2019)
 GCA_001587735.2_Phaw_5.0	amphipods P.hawaiensis (Chicago-F 2018)
 GCA_903995115.1_Adeanei_nanopore_chromosomes	Angomonas (Crithidia deanei Carvalho ATCC PRA-265 2020)
@@ -258,7 +258,8 @@ GCF_001412225.1_Nicve_v1.0	beetle N.vespilloides
 GCF_000648695.1_Otau_2.0	beetle O.taurus
 GCF_036711975.1_IU_Otau_3.0	beetle O.taurus (NC 2024)
 GCF_036711695.1_CSIRO_AGI_Zmor_V1	beetle Z.morio (UQ-CSIRO AGI-343-1 2024)
-GCF_001625305.1_Haploidv18h27	Belcher's lancelet
+GCA_019207075.1_Bb-hap	Belcher's lancelet (bbbf 2021)
+GCF_001625305.1_Haploidv18h27	Belcher's lancelet (outbred BF01 2016)
 GCA_019425515.1_ASM1942551v1	bird cherry-oat aphid (Rp-YL-2016 2021)
 GCF_020882245.1_ASM2088224v1	bird cherry-oat aphid (XX-2018 2021)
 GCF_963676685.1_xbMytEdul2.2	bivalve M.edulis (primary hap 2024)
@@ -403,6 +404,7 @@ GCF_932276165.1_ilPluXylo3.1	diamondback moth (Wellcome Sanger 2022)
 GCA_030295235.1_Fsolaris_ONT_v03	diatoms F.solaris (JPCC DA0580 2022)
 GCF_000150955.2_ASM15095v2	diatoms P.tricornutum (CCAP 1055/1 2008)
 GCF_000149405.2_ASM14940v2	diatoms T.pseudonana (CCMP1335 2009)
+GCA_002201625.1_Edil_v1.0	dilemma orchid bee (1 2017)
 GCA_009767595.1_ASM976759v1	dinoflagellates S.kawagutii (SL-2019 2019)
 GCA_905231925.1_Smic_04-503SCI.03	dinoflagellates S.microadriaticum (2021)
 GCA_905231915.1_Snec_CCMP2469	dinoflagellates S.necroappetens (2021)
@@ -466,6 +468,9 @@ GCF_963855985.1_ilOstNubi1.1	European corn borer (primary hap 2023)
 GCF_947568905.1_xbOstEdul1.1	European flat oyster (primary hap 2022)
 GCF_910589235.1_iyVesCrab1.2	European hornet
 GCF_001901225.1_ASM190122v2	European house dust mite
+GCA_035149815.1_klBraLanc5.hap1	European lancelet (hap1 2024)
+GCA_964187965.1_klBraLanc2.hap1.1	European lancelet (hap1.1 2024)
+GCF_035083965.1_klBraLanc5.hap2	European lancelet (hap2 2024 refseq)
 GCF_001465965.1_Pdom_r1.2	European paper wasp
 GCF_905147045.1_ilAglIoxx1.1	European peacock (2021 refseq)
 GCF_902459465.1_eAstRub1.3	European starfish (2020)
@@ -480,8 +485,9 @@ GCA_021461655.1_ASM2146165v1	flatworm S.japonicum (SjaV3_Hu 2022)
 GCF_000237925.1_ASM23792v2	flatworm S.mansoni
 GCF_019202785.1_ASM1920278v2	fleshy prawn (Huanghai No. 1 2021)
 GCF_024586455.1_APGP_CSIRO_Bneo_wtdbg2-racon-allhic-juicebox.fasta_v2	flies B.neohumeralis (Rockhampton 2022)
+GCA_015852565.1_bf_hap-2	Florida amphioxus (bjbf hap2 2020)
 GCF_003227725.1_Cflo_v7.5	Florida carpenter ant
-GCF_000003815.2_Bfl_VNyyK	Florida lancelet
+GCF_000003815.2_Bfl_VNyyK	Florida lancelet (S238N-H82 2020)
 GCF_027943255.1_idAnaObli1_1.0	fly A.obliqua (idAnaObli1 2023)
 GCF_014529535.1_BU_Bcop_v1	fly B.coprophila (v1 Holo2 2020 refseq)
 GCA_014529535.2_BU_Bcop_v2	fly B.coprophila (v2 Holo2 2023 genbank)
@@ -563,6 +569,7 @@ GCF_016746365.2_Prin_Dyak_Tai18E2_2.1	fly D.yakuba (v2 2021)
 GCF_905115235.1_iHerIll2.2.curated.20191125	fly H.illucens
 GCA_000265325.1_Llon_1.0	fly L.longipalpis (2012)
 GCF_024334085.1_ASM2433408v1	fly L.longipalpis (SR_M1_2022 2022)
+GCA_048544405.1_UofC_Mab_1	fly M.abdita (Sander 2025)
 GCF_032173495.1_APGP_CSIRO_Mvet_v1	fly M.vetustissima (Yass MV318-11 2023)
 GCF_947086385.1_Phlebotomus_argentipes_genome_assembly	fly P.argentipes (2022)
 GCA_000262795.1_Ppap_1.0	fly P.papatasi (2012)
@@ -605,8 +612,6 @@ GCF_029227915.1_HSymV2.1	H.symbiolongicarpus hydrozoans (clone_291-10 2023)
 GCA_014858695.1_ASM1485869v1	hairy maggot blowfly (CPM2020 2020)
 GCF_041260155.1_AS_Pfla_20210202	hemichordates P.flava (L36383 2024)
 GCF_000003605.2_Skow_1.1	hemichordates S.kowalevskii
-GCA_040954625.2_keBalMisa1.hap1	hemichordates Saccoglossus HW-2024a (v2 hap1 2025)
-GCA_040954595.2_keBalMisa1.hap2	hemichordates Saccoglossus HW-2024a (v2 hap2 2025)
 GCA_905404265.1_ilFabAdip1.1	high brown fritillary
 GCF_014066325.1_ASM1406632v1	Himalayan honeybee
 GCA_905187575.1_ilCelArgi3.1	holly blue
@@ -633,8 +638,6 @@ GCF_009193385.2_Nvit_psr_1.1	jewel wasp
 GCA_019049465.1_Diul.assembly.v1.1	julia butterfly
 GCA_002205965.3_ASM220596v3	K.alvarezzi red algae (kp 2020)
 GCA_001663935.1_Asyluc0.1	lancelets A.lucayanum (AD20110701 2016)
-GCA_019207075.1_Bb-hap	lancelets B.floridae x B.belcheri (bbbf 2021)
-GCA_015852565.1_bf_hap-2	lancelets B.floridae x B.japonicum (bjbf 2020)
 GCF_905147105.1_ilPieBrab1.1	large cabbage white (refseq 2021)
 GCA_905220335.1_ilNocPron1.1	large yellow underwing
 GCA_029229535.1_icDioCarn1.1	larger tamarisk beetle (Uzbek primary hap 2023)
@@ -919,6 +922,7 @@ GCA_003344405.1_TrispH2_1.0	placozoans Trichoplax sp. H2 (Panama 2018)
 GCA_017918235.1_LU_Pher_1.0	Porcisia hertigi (C119 2021)
 GCF_017918235.1_LU_Pher_1.0	Porcisia hertigi (C119 2021)
 GCF_025612915.1_ASM2561291v2	Portugese oyster (pt1a10 2022)
+GCA_001485885.1_Heliconius_melpomene_aglaope.09-246	postman butterfly (2015)
 GCA_008528875.1_ASM852887v1	potato aphid (AS-CPRI-2016 2019)
 GCF_000142945.1_ASM14294v1	potato late blight agent (T30-4 2009)
 GCF_000485595.1_Priapulus_caudatus-5.0.1	priapulids P.caudatus

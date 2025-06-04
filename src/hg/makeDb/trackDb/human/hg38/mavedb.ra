@@ -1,0 +1,13 @@
+track mavedb_maps
+shortLabel MaveDB Maps
+longLabel Variant Effect Maps from MaveDB
+group expression
+visibility pack
+type bigBed 12 +
+bigDataUrl /gbdb/hg38/maveDB/all_mave.bb
+style heatmap
+#heatmap.background #FFFFFF
+filterText.name .*
+filterType.name regexp
+filterLabel.name Experiment ID
+maxWindowCoverage 200000

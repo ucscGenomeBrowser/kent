@@ -1437,6 +1437,7 @@ cd kent/src/hg/makeDb/trackDb
     jkmake DBS=hg38 alpha
 #########################################################################
 2025-02-05: import of UCSC GENCODE group processing of GENCODE V48 pre-release for GENCODE Versions (markd)
+2025-05-31: final release
    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release type and versions
 
    # pre-release shell variables 
@@ -1448,7 +1449,7 @@ cd kent/src/hg/makeDb/trackDb
        ver=48
        ensver=114
        pre=""
-       ensdate='Mar 2025'
+       ensdate='May 2025'
     
 
     # download, build and load tables

@@ -36,21 +36,24 @@ char *emailForUserName(char *userName);
 // for defining the quota in hg.conf
 #define HUB_SPACE_CONF_QUOTA_VAR "hubspace.quota"
 
-char *webDataDir(char *userName);
+char *webDataDir(char *userName, char *serverName);
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
 
-char *urlForFile(char *userName, char *filePath);
+char *urlForFile(char *userName, char *filePath, char *serverName);
 /* Return a web accessible URL to filePath */
 
-char *getDataDir(char *userName);
+char *getEncodedUserNamePath(char *userName);
+/* Compute the path for just the userName part of the users upload */
+
+char *getDataDir(char *userName, char *serverName);
 /* Return the full path to the user specific data directory, can be configured via hg.conf
- * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
- * on the RR, this is /userdata/userStore/hash/userName/ */
+ * on hgwdev, this is /data/tusd
+ * serverName is required, that becomes a prefix for separating uploads by machine */
 
-char *stripDataDir(char *fname, char *userName);
-/* Strips the getDataDir(userName) off of fname */
+char *stripDataDir(char *fname, char *userName, char *serverName);
+/* Strips the getDataDir(userName, serverName) off of fname */
 
-char *prefixUserFile(char *userName, char *fname, char *parentDir);
+char *prefixUserFile(char *userName, char *fname, char *parentDir, char *serverName);
 /* Allocate a new string that contains the full per-user path to fname. return NULL if
  * we cannot construct a full path because of a realpath(3) failure.
  * parentDir is optional and will go in between the per-user dir and the fname */
@@ -74,7 +77,7 @@ void makeParentDirRows(char *userName, time_t lastModified, char *db, char *pare
 /* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
  * final subdirectory component of parentDirStr */
 
-void removeFileForUser(char *fname, char *userName);
+void removeFileForUser(char *fname, char *userName, char *serverName);
 /* Remove a file for this user if it exists */
 
 struct hubSpace *listFilesForUser(char *userName);

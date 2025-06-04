@@ -5,7 +5,7 @@ table lovd
     uint   chromStart;   "Start position in chromosome"
     uint   chromEnd;     "End position in chromosome"
     string name;         "Name of item"
-    string id;           "Link to LOVD"
+    lstring id;           "Link to LOVD"
     string variantEffect; "Variant Effect"
     string lovdInstalls; "Number of LOVD installations reporting this variant"
     )

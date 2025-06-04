@@ -37,6 +37,7 @@ GCF_014633375.1_OchPri4.0	American pika 4.0 (UAM:Mamm:113957 2020)
 GCA_024509225.1_Gulo_gulo_luscus_F-V1.0	American wolverine (FN33715 2022)
 GCF_000464555.1_PanTig1.0	Amur tiger (TaeGuk 2013 refseq)
 GCA_043748645.1_ASM4374864v1	Angolan free-tailed bat (Cote d'Ivoire 20210831_DDa 2024)
+GCA_003369685.2_UOA_Angus_1	Angus cow (Angus x Brahman F1 Angus haplotype 2018)
 GCA_000978805.1_ASM97880v1	Antarctic minke whale
 GCA_004026545.1_MorMeg_v1_BIUU	Antillean ghost-faced bat
 GCA_002201775.1_ALER1.0	aoudad
@@ -99,6 +100,7 @@ GCA_031878675.1_mThoBot2.hap1	Botta's pocket gopher (hap1 2023)
 GCA_031878665.1_mThoBot2.hap2	Botta's pocket gopher (hap2 2023)
 GCA_036417435.1_mIniGeo1.hap1	boutu (hap1 2024)
 GCA_036417475.1_mIniGeo1.hap2	boutu (hap2 2024)
+GCF_003369695.1_UOA_Brahman_1	Brahman cow (Angus x Brahman F1 Brahman haplotype 2018)
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCA_030848825.1_DD_mTadBra1_pri	Brazilian free-tailed bat (primary hap 2023)
 GCA_000688575.1_CavAp1.0	Brazilian guinea pig
@@ -341,8 +343,6 @@ GCF_000001635.27_GRCm39	house mouse C57BL/6J 2020 GRC
 GCA_001632555.1_C57BL_6NJ_v1	house mouse C57BL_6NJ (2016)
 GCA_921999865.2_C57BL_6NJ_v3	house mouse C57BL_6NJ (2022)
 GCA_041834305.1_ASM4183430v1	humpback whale (KW2013002 2024)
-GCA_003369685.2_UOA_Angus_1	hybrid cattle (Angus x Brahman F1 Angus haplotype 2018)
-GCF_003369695.1_UOA_Brahman_1	hybrid cattle (Angus x Brahman F1 Brahman haplotype 2018)
 GCF_014898055.3_MPIMG_talOcc4v2.1	Iberian mole (v2.1 TD23 2020)
 GCA_004026885.1_MegLyr_v1_BIUU	Indian false vampire
 GCF_902729225.1_Ma_sr-lr_union100	Indian flying fox

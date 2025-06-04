@@ -535,6 +535,15 @@ if (slFoundVars != NULL)
 return slFoundVars;
 }
 
+boolean trackDbSettingOff(struct trackDb *tdb, char *name)
+/* Return true if a tdb setting is "off", "Off",  "false" or "disabled". */
+{
+char *setting = trackDbSetting(tdb,name);
+return  (setting && (   sameWord(setting,"off")
+                     || sameWord(setting,"false")
+                     || sameWord(setting,"disabled")));
+}
+
 boolean trackDbSettingOn(struct trackDb *tdb, char *name)
 /* Return true if a tdb setting is "on" "true" or "enabled". */
 {

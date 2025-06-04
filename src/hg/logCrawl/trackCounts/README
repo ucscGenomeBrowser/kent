@@ -1,0 +1,11 @@
+This directory is for tallying track counts given a specific date range.
+
+The runCountByDate.sh relies upon pre-trimmed apache logs, and tallies up
+track counts. It should be run as a cronjob, for example:
+43 9 * * tue /path/to/runCountByDate.sh -c 2>/path/to/save/cron.stderr
+
+The trimmed logs are controlled by the scripts in ../trimLogs, and ran by qateam.
+
+The makeUsageReport script is meant to be run manually and can give you track
+or database usage counts over a specific time period. Run with no options for
+a help message.

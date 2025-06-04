@@ -25,7 +25,7 @@ export minTrackCount=11
 if [ "${subset}" == "invertebrate" ]; then
   minTrackCount=9
 elif [ "${subset}" == "brc" ]; then
-  minTrackCount=7
+  minTrackCount=6
 elif [ "${subset}" == "bacteria" ]; then
   minTrackCount=8
 elif [ "${subset}" == "legacy" ]; then
@@ -45,7 +45,7 @@ elif [ "${subset}" == "archaea" ]; then
 elif [ "${subset}" == "fungi" ]; then
   minTrackCount=10
 elif [ "${subset}" == "viral" ]; then
-  minTrackCount=7
+  minTrackCount=6
 fi
 
 # printf "# DBG subset '%s' min: %d\n" "${subset}" "${minTrackCount}" 1>&2

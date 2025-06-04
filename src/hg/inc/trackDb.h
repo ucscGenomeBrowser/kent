@@ -38,7 +38,7 @@ struct minMax
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 /* This number is tacked onto the end of cached trackDb entries to make sure we
  * don't use a cached structure that has different contents. */
-#define TRACKDB_VERSION 7
+#define TRACKDB_VERSION 8
 
 struct trackDb
 /* This describes an annotation track.  */
@@ -70,6 +70,7 @@ struct trackDb
     char *url;	/* URL to link to when they click on an item */
     char *html;	/* Some html to display when they click on an item */
     char *grp;	/* Which group track belongs to */
+    float groupPriority; /* our group's priority */
     unsigned char canPack;	/* 1 if can pack track display, 0 otherwise */
     char *settings;	/* Name/value pairs for track-specific stuff */
     struct hash *viewHash;  /* Hash for settings. Not saved in database.*/
@@ -401,6 +402,9 @@ void trackDbAddSetting(struct trackDb *bt, char *name, char *val);
 
 boolean trackDbSettingOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting is "on" "true" or "enabled". */
+
+boolean trackDbSettingOff(struct trackDb *tdb, char *name);
+/* Return true if a tdb setting is "off", "Off",  "false" or "disabled". */
 
 char *trackDbRequiredSetting(struct trackDb *tdb, char *name);
 /* Return setting string or squawk and die. */

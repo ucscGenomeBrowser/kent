@@ -1,0 +1,91 @@
+<H2>Description</H2>
+
+<p>This track shows potential enhancers whose activity was experimentally validated in transgenic
+mice. Most of these noncoding elements were selected for testing based on their extreme conservation
+in other vertebrates or epigenomic evidence (ChIP-Seq) of putative enhancer marks. More information
+can be found on the <a href="https://enhancer.lbl.gov/" target="_blank">VISTA Enhancer Browser</a>
+page.
+</p>
+
+<h2> Display Conventions and Configuration </h2>
+<p>Items appearing in <b><font color="#2260f2">blue</font></b> (positive) indicate that a
+reproducible pattern was observed in the in vivo enhancer assay under at least one of the
+tested conditions. Items appearing in <b><font color="#646464">gray</font></b> (negative) indicate
+that NO reproducible pattern was observed in the in vivo enhancer assay under any of the tested
+conditions. This does not exclude the possibility that this region is a reproducible enhancer active
+under different conditions, for example at an earlier or later timepoint in development.</p>
+
+<h2>Methods</h2>
+<p> Excerpted from the Vista Enhancer <a HREF="https://enhancer.lbl.gov/vista/manual"
+target="_blank">Mouse Enhancer Screen Handbook and Methods</a> page at the Lawrence Berkeley
+National Laboratory (LBNL) website:
+<h4>Enhancer Candidate Identification</h4>
+<p> Most enhancer candidate sequences are identified by extreme evolutionary sequence conservation or
+by ChIP-seq.  Detailed information related to enhancer identification by extreme evolutionary
+conservation can be found in the following publications:
+</p>
+<ul>
+<li>Pennacchio et al., <a href="https://pubmed.ncbi.nlm.nih.gov/11253049/" target="_blank"
+>Genomic strategies to identify mammalian regulatory sequences.</a> Nature Rev Genet 2001</li>
+<li>Nobrega et al., <a href="https://pubmed.ncbi.nlm.nih.gov/14563999/" target="_blank"
+>Nobrega et al., Scanning human gene deserts for long-range enhancers.</a> Science 2003</li>
+<li>Pennacchio et al., <a href="https://pubmed.ncbi.nlm.nih.gov/17086198/" target="_blank"
+>In vivo enhancer analysis of human conserved non-coding sequences.</a> Nature 2006</li>
+<li>Visel et al., <a href="https://pubmed.ncbi.nlm.nih.gov/17276707/" target="_blank"
+>Enhancer identification through comparative genomics.</a> Semin Cell Dev Biol. 2007</li>
+<li>Visel et al., <a href="https://pubmed.ncbi.nlm.nih.gov/18176564/" target="_blank"
+>Ultraconservation identifies a small subset of extremely constrained developmental enhancers.</a>
+ Nature Genet 2008</li>
+</ul>
+
+<p>Detailed information related to enhancer identification by ChIP-seq can be found in the
+following publications:</p>
+<ul>
+<li>Visel et al., <a href="https://pubmed.ncbi.nlm.nih.gov/19212405/" target="_blank"
+>ChIP-seq accurately predicts tissue-specific activity of enhancers.</a> Nature 2009</li>
+<li>Visel et al., <a href="https://pubmed.ncbi.nlm.nih.gov/19741700/" target="_blank"
+>Genomic views of distant-acting enhancers.</a> Nature 2009</li>
+</ul></p>
+
+<p>See the Transgenic Mouse Assay section for experimental procedures that were used to perform the
+transgenic assays: <a HREF="https://enhancer.lbl.gov/vista/manual"
+target="_blank">Mouse Enhancer Screen Handbook and Methods</a>
+
+<p>UCSC converted the
+<a href="https://gitlab.com/egsb-mfgl/vista-data/" target="_blank">vista-data</a> bed files for
+hg38 and mm10 into bigBed format using the bedToBigBed utility. The data for mm39 was lifted over
+from mm10. The data for hg19 was lifted over from hg38.</p> 
+
+<h2>Data Access</h2>
+<p>
+VISTA Enhancers data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> and cross-referenced with the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For programmatic access, the track can be
+accessed using the Genome Browser's <a href="/goldenPath/help/api.html">REST API</a>. ReMap
+annotations can be downloaded from the Genome Browser's
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/vistaEnhancers">download server</a>
+as a bigBed file. This compressed binary format can be remotely queried through
+command line utilities. Please note that some of the download files can be quite large.</p>
+
+<h2>Credits</h2>
+<p>Thanks to the Lawrence Berkeley National Laboratory for providing this data.</p>
+
+
+<h2>References</h2>
+<p>
+Kosicki M, Baltoumas FA, Kelman G, Boverhof J, Ong Y, Cook LE, Dickel DE, Pavlopoulos GA, Pennacchio
+LA, Visel A.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkae940" target="_blank">
+VISTA Enhancer browser: an updated database of tissue-specific developmental enhancers</a>.
+<em>Nucleic Acids Res</em>. 2025 Jan 6;53(D1):D324-D330.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39470740" target="_blank">39470740</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11701537/" target="_blank">PMC11701537</a>
+</p>
+<p>
+Visel A, Minovitsky S, Dubchak I, Pennacchio LA.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkl822" target="_blank">
+VISTA Enhancer Browser--a database of tissue-specific human enhancers</a>.
+<em>Nucleic Acids Res</em>. 2007 Jan;35(Database issue):D88-92.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/17130149" target="_blank">17130149</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1716724/" target="_blank">PMC1716724</a>
+</p>

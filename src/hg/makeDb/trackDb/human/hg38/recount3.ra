@@ -3,9 +3,12 @@ shortLabel recount3
 longLabel recount 3 introns
 group rna
 type bigBed 9 +
-visibility pack
+visibility hide
 spectrum on
 scoreMax 225
+filterValues.strand +,-,.
+filterType.strand multiple
+filterLabel.strand strand
 html recount3.html
 compositeTrack on
 
@@ -18,7 +21,7 @@ compositeTrack on
     filterLimits.readcount 0:2000000000
     filterLabel.readcount Filter by supporting split reads
     labelFields none
-    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver $readcount supporting split reads<br>Strand $strand<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=gtexv2&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     decorator.default.bigDataUrl /gbdb/$D/recount3/decgtexv2.bb
@@ -34,7 +37,7 @@ compositeTrack on
     filterLimits.readcount 0:2000000000
     filterLabel.readcount Filter by supporting split reads
     labelFields none
-    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver $readcount supporting split reads<br>Strand $strand<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=tcgav2&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     decorator.default.bigDataUrl /gbdb/$D/recount3/dectcgav2.bb
@@ -51,7 +54,7 @@ compositeTrack on
     filterLabel.readcount Filter by supporting split reads
     labelFields none
     maxWindowToDraw 10000000
-    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver $readcount supporting split reads<br>Strand $strand<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav3h&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     decorator.default.bigDataUrl /gbdb/$D/recount3/decsrav3h.bb
@@ -67,7 +70,7 @@ compositeTrack on
     filterLimits.readcount 0:2000000000
     filterLabel.readcount Filter by supporting split reads
     labelFields none
-    mouseOver $readcount supporting split reads<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver $readcount supporting split reads<br>Strand $strand<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=ccle&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     decorator.default.bigDataUrl /gbdb/$D/recount3/decccle.bb

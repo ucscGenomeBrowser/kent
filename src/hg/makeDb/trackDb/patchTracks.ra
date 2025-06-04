@@ -1,4 +1,18 @@
+track patchesPsl
+shortLabel GRC Patches
+longLabel GRC Patches: Alt Haplotypes and Fix Sequences
+compositeTrack on
+hideEmptySubtracks on
+group map
+visibility pack
+indelDoubleInsert on
+indelQueryInsert on
+type psl
+html patchesPsl
+pennantIcon p14 black https://genome-blog.gi.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p14 patch sequences"
+
 track altSeqLiftOverPsl
+parent patchesPsl
 shortLabel Alt Haplotypes
 longLabel Reference Assembly Alternate Haplotype Sequence Alignments
 group map
@@ -16,6 +30,7 @@ visibility pack
 pennantIcon p14 black https://genome-blog.gi.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p14 patch sequences"
 
 track fixSeqLiftOverPsl
+parent patchesPsl
 shortLabel Fix Patches
 longLabel Reference Assembly Fix Patch Sequence Alignments
 group map

@@ -37,6 +37,9 @@
 #include "verbose.h"
 #include "genark.h"
 #include "quickLift.h"
+#include "botDelay.h"
+
+#include <curl/curl.h>
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -655,6 +658,16 @@ sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
       "WHERE userName = '%s' AND sessionName = '%s';",
       namedSessionTable, encSessionOwner, encSessionName);
 sr = sqlGetResult(conn, query);
+
+if (sqlCountRows(sr)==0 && cfgOption("namedSessionAlt"))
+    {
+    sqlFreeResult(&sr);
+    sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
+          "WHERE userName = '%s' AND sessionName = '%s';",
+          cfgOption("namedSessionAlt"), encSessionOwner, encSessionName);
+    sr = sqlGetResult(conn, query);
+    }
+
 if ((row = sqlNextRow(sr)) != NULL)
     {
     boolean shared = atoi(row[0]);
@@ -1440,6 +1453,138 @@ else
     }
 }
 
+// ------ libify this in the next release ----
+//
+struct curlString {
+    char *ptr;
+    size_t len;
+};
+void init_string(struct curlString *s) {
+    s->len = 0;
+    s->ptr = malloc(1);
+    s->ptr[0] = '\0';
+}
+
+size_t writefunc(void *ptr, size_t size, size_t nmemb, void *userData) {
+    struct curlString *s = (struct curlString *)userData;
+    size_t new_len = s->len + size * nmemb;
+    s->ptr = realloc(s->ptr, new_len + 1);
+    memcpy(s->ptr + s->len, ptr, size * nmemb);
+    s->ptr[new_len] = '\0';
+    s->len = new_len;
+    return size * nmemb;
+}
+
+char* curlPostUrl(char *url, char *data)
+/* post data to URL and return as string. Must be freed. */
+{
+CURL *curl = curl_easy_init();
+if (!curl) 
+    errAbort("Cannot init curl library");
+
+struct curlString response;
+init_string(&response);
+
+curl_easy_setopt(curl, CURLOPT_URL, url);
+curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
+curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+curl_easy_perform(curl);
+curl_easy_cleanup(curl);
+
+char *resp = cloneString(response.ptr);
+free(response.ptr);
+return resp;
+}
+
+boolean isValidToken(char *token)
+/* send https req to cloudflare, check if the token that we got from the captcha is really the one made by cloudflare */
+{
+    char *url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+    char *secret = cfgVal("cloudFlareSecretKey");
+    if (!secret)
+        errAbort("'cloudFlareSecretKey' must be set in hg.conf if cloudflare is activated in hg.conf");
+
+    char data[3000]; // cloudflare token is at most 2000 bytes
+    safef(data, sizeof(data), "secret=%s&response=%s", secret, token);
+    char *reply = curlPostUrl(url, data);
+
+    boolean res = startsWith("{\"success\":true", reply);
+    freez(&reply);
+    return res;
+}
+
+#define CLOUDFLARESITEKEY "cloudFlareSiteKey"
+
+void printCaptcha() 
+/* print an html page that shows the captcha and on success, reloads the page with the token added as token=x */
+{
+    char *cfSiteKey = cfgVal(CLOUDFLARESITEKEY);
+    if (!cfSiteKey)
+        return;
+
+    puts("Content-Type:text/html");
+    puts("\n");
+    puts("<html><head>");
+    puts("<script>");
+    printf("function showWidget() { \n"
+       "turnstile.render('#myWidget', {\n"
+         "sitekey: '%s',\n"
+         "theme: 'light',\n"
+         "callback: function (token) {\n"
+         "     const parser = new URL(window.location);\n"
+         "     parser.searchParams.set('token', token);\n"
+         "     window.location = parser.href;\n"
+         "   },\n"
+       "});\n"
+       "}\n", cfSiteKey);
+    puts("</script>");
+    puts("</head><body>");
+    puts("<style>body, h1, h2, h3, h4, h5, h6  { font-family: Helvetica, Arial, sans-serif; }</style>\n");
+    puts("<h4>The Genome Browser is protecting itself from bots. This will just take a few seconds.</h4>");
+    puts("<small>If you are a bot and were made for a research project, please contact us by email.</small>");
+    puts("<script src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=showWidget' async defer></script>");
+    puts("<div id='myWidget'></div>");
+    puts("</body></html>");
+    sqlCleanupAll(); // we are wondering about hanging connections, so just in case, close them.
+    exit(0);
+}
+
+void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
+/* print captcha is user did not sent a valid hguid cookie or a valid cloudflare token. Always allow rtracklayer. */
+{
+if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
+    return;
+
+// no captcha for our own QA scripts running on a server with our IP address
+if (botException())
+    return;
+
+// let rtracklayer user agent pass, but allow us to remove this exception in case the bots discover it one day
+if (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer"))
+    return;
+
+// QA can add a user agent after release, in case someone complains that their library is blocked
+char *okUserAgent = cfgOption("okUserAgent");
+if (okUserAgent && sameOk(cgiUserAgent(), okUserAgent))
+    return;
+
+if (userId && userIdFound)
+    return;
+
+char *token = cgiOptionalString("token");
+
+if (token && isValidToken(token))
+{
+    cartRemove(cart, "token");
+    return;
+}
+
+printCaptcha();
+}
+
+void cartRemove(struct cart *cart, char *var);
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -1455,7 +1600,6 @@ setUdcCacheDir();
 
 netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
 
-
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -1467,10 +1611,31 @@ cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
-if (isEmpty(userId))
-    fprintf(stderr, "CART userId not sent");
+boolean fromCli = cgiWasSpoofed(); // QA runs our CGIs from the command line and we debug from there
+
+forceUserIdOrCaptcha(cart, userId, userIdFound, fromCli);
+
+// we rely on the cookie being validated, so if we reset a cookie, do this after the captcha
+if ( cgiOptionalString("ignoreCookie") != NULL )
+    cart->userInfo = loadDb(conn, userDbTable(), NULL, &userIdFound);
+
+// Leaving this in the code temporarily, until June 2025 release.
+if (!fromCli && 
+    ((sessionId && !sessionIdFound) || !sessionId) && 
+    (!userId || !userIdFound) && 
+    cfgOptionBooleanDefault("punishInvalidHgsid", FALSE))
+    {
+    fprintf(stderr, "HGSID_WAIT no sessionId and no cookie: 5 seconds penalty");
+    sleep(5);
+    if (sessionId && !sessionIdFound)
+        {
+        fprintf(stderr, "HGSID_WAIT2 sessionId sent but invalid: 10 seconds penalty");
+        sleep(10);
+        }
+    }
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
@@ -1478,8 +1643,6 @@ else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 else
     {
-    if (isNotEmpty(userId))
-        fprintf(stderr, "CART userId sent but not in userDb");
     char *defaultCartContents = getDefaultCart(conn);
     cartParseOverHash(cart, defaultCartContents);
     }
@@ -2498,11 +2661,7 @@ char *noSqlInj_dumpStack = cfgOption("noSqlInj.dumpStack");
 if (noSqlInj_dumpStack)
     setenv("noSqlInj_dumpStack", noSqlInj_dumpStack, TRUE);
 
-
-// if ignoreCookie is on the URL, don't check for cookies
-char *hguid = NULL;
-if ( cgiOptionalString("ignoreCookie") == NULL )
-    hguid = getCookieId(cookieName);
+char *hguid = getCookieId(cookieName);
 
 // if _dumpToLog is on the URL, we can exit early with whatever
 // message we are trying to write to the stderr/error_log
@@ -2555,11 +2714,10 @@ struct cart *cart = cartForSession(cookieName, exclude, oldVars);
 popWarnHandler();
 popAbortHandler();
 
-cartWriteCookie(cart, cookieName);
-
 if (doContentType && !cartDidContentType)
     {
     addHttpHeaders();
+    cartWriteCookie(cart, cookieName);
     puts("Content-Type:text/html");
     puts("\n");
     cartDidContentType = TRUE;

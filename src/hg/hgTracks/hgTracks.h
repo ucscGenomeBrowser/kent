@@ -1700,6 +1700,9 @@ void hicMethods(struct track *tg);
 void hicCtMethods(struct track *tg);
 /* Hi-C track methods for custom track */
 
+void bedMethylCtMethods(struct track *tg);
+/* bedMethyl track methods for custom track */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -1860,5 +1863,8 @@ void maybeDrawQuickLiftLines( struct track *tg, int seqStart, int seqEnd,
                       struct hvGfx *hvg, int xOff, int yOff, int width,
                       MgFont *font, Color color, enum trackVisibility vis);
 /* Draw the indel regions as a highlight. */
+
+unsigned findBiggest(unsigned num);
+/* find biggest font not bigger than num */
 #endif /* HGTRACKS_H */
 

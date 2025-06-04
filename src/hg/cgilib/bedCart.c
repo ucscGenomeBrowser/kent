@@ -19,31 +19,20 @@ extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 /*	This option isn't in the cart yet ... maybe later	*/
 #endif
 
-/******	itemRgb - not on by default **************************/
+/******	itemRgb - on by default **************************/
 boolean bedItemRgb(struct trackDb *tdb)
 {
-char *Default="Off";	/* anything different than this will turn it on */
-char *tdbDefault = (char *)NULL;
+if (tdb == NULL)
+   return TRUE;
 
-if (tdb)
-    {
-    tdbDefault = trackDbSettingClosestToHome(tdb, OPT_ITEM_RGB);
+if ((trackDbSettingClosestToHome(tdb, "color") != NULL) || trackDbSettingOff(tdb, OPT_ITEM_RGB))
+    return FALSE;
 
-    // If the hg.conf statement is set on this server to activate the new behavior:
-    // only default to "on" if:
-    // - "color" is not present at all
-    // - itemRgb=off is not set
-    if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE) && 
-            (trackDbSettingClosestToHome(tdb, "color")==NULL) && 
-            !sameWordOk(Default,tdbDefault))
-        return TRUE;
-    }
+if (trackDbSettingOn(tdb, OPT_ITEM_RGB))
+    return TRUE;
 
-if (tdbDefault)
-    {
-    if (differentWord(Default,tdbDefault))
-	return TRUE;
-    }
+if ((cfgOptionBooleanDefault("alwaysItemRgb", TRUE) == FALSE))
+    return FALSE;
 
-return FALSE;
-}	/*	boolean bedItemRgb(struct trackDb *tdb)	*/
+return TRUE;
+}
