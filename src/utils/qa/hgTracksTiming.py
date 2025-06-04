@@ -247,39 +247,44 @@ def checkFileExistsForMonthlyReport(save_dir,user):
             print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/hgTracksTiming/")   
 
 def queryServersAndReport(server,url,filePath,today,n,user):
-    start_time = time.time()
-    response = requests.get(url, verify=False)  # Disable SSL verification
-    end_time = time.time()
-    load_time = end_time - start_time
-    page_content = response.text  # Get the page content
-
-    # Check if the expected string is in the response
-    if "END hgTracks" in page_content:
-        if load_time < 15:
-            problem = False
-            status = "SUCCESS"
+    try:
+        start_time = time.time()
+        response = requests.get(url, verify=False)  # Disable SSL verification
+        end_time = time.time()
+        load_time = end_time - start_time
+        page_content = response.text  # Get the page content
+    
+        # Check if the expected string is in the response
+        if "END hgTracks" in page_content:
+            if load_time < 15:
+                problem = False
+                status = "SUCCESS"
+            else:
+                problem = True
+                status = "FAIL - hgTracks page loaded, but load time over 15s"
         else:
             problem = True
-            status = "FAIL - hgTracks page loaded, but load time over 15s"
-    else:
-        problem = True
-        status = "FAIL - Got status 200 return, but missing the 'END hgTracks' page string of a successful load"
-
-    if problem == True:
+            status = "FAIL - Got status 200 return, but missing the 'END hgTracks' page string of a successful load"
+    
+        if problem == True:
+            print("Potential problem with Genome Browser server.")
+            print(f"URL: {url} | Status: {response.status_code} | Load Time: {load_time:.3f}s | Check: {status}")
+            print("\nSee the latest timing numbers:")
+            if user == 'qateam':
+                print("https://genecats.gi.ucsc.edu/qa/test-results/hgTracksTiming/")
+            else:
+                print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/hgTracksTiming/")
+    
+        # Add a check here to make sure we are not writing out bad 200 or captcha failures, but still 
+        # writing out problematic > 15s load times
+        if load_time > .2:
+            with open(filePath, "a") as file:
+                file.write(f"{today}\t{load_time:.3f}s\t{response.status_code}\n")
+        
+    except:
         print("Potential problem with Genome Browser server.")
-        print(f"URL: {url} | Status: {response.status_code} | Load Time: {load_time:.3f}s | Check: {status}")
-        print("\nSee the latest timing numbers:")
-        if user == 'qateam':
-            print("https://genecats.gi.ucsc.edu/qa/test-results/hgTracksTiming/")
-        else:
-            print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/hgTracksTiming/")
-
-    # Add a check here to make sure we are not writing out bad 200 or captcha failures, but still 
-    # writing out problematic > 15s load times
-    if load_time > .2:
-        with open(filePath, "a") as file:
-            file.write(f"{today}\t{load_time:.3f}s\t{response.status_code}\n")
-
+        print("Failed to connect to server: " + url)
+    
 def main():
     #Don't try to display the plot, this is for jupyter
     matplotlib.use('Agg')
