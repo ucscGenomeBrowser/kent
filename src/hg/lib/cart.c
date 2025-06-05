@@ -1569,7 +1569,17 @@ char *okUserAgent = cfgOption("okUserAgent");
 if (okUserAgent && sameOk(cgiUserAgent(), okUserAgent))
     return;
 
-if (userId && userIdFound)
+// Do not show a captcha if we have a valid cookie 
+// but for debugging, it's nice to be force the captcha to come up
+if (userId && userIdFound && !cgiOptionalString("captcha"))
+    return;
+
+// Do not show a captcha if the request is an AJAX request coming from jQuery
+// This is a hack to work around an error in hgGateway and may soon disappear.
+// It's a hack because the header can be set by any curl script to get around
+// the captcha. Right now, hgGateway is not setting any cookie at all, so the 
+// correct solution would be to change that.
+if (sameOk(getenv("HTTP_X_REQUESTED_WITH"), "XMLHttpRequest"))
     return;
 
 char *token = cgiOptionalString("token");
@@ -2719,9 +2729,9 @@ if (doContentType && !cartDidContentType)
     addHttpHeaders();
     cartWriteCookie(cart, cookieName);
     puts("Content-Type:text/html");
-    puts("\n");
     cartDidContentType = TRUE;
     }
+
 return cart;
 }
 
