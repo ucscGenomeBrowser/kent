@@ -655,8 +655,8 @@ var makeItems = {
             { label: "Description", id: "description", type: "text", placeholder: "Optional mouseover text"}
         ];
         const form = document.createElement("form");
-        form.className = "bed-form";
-        form.action = "/submit";
+        form.className = "makeItems-form";
+        form.action = "hgTracks";
         form.method = "post";
 
         fields.forEach(field => {
@@ -667,7 +667,7 @@ var makeItems = {
             const input = document.createElement("input");
             input.type = field.type;
             input.id = field.id;
-            input.name = field.id;
+            //input.name = field.id;
             if (field.id === "chrom") {
                 input.value = hgTracks.chromName;
             }
@@ -696,7 +696,14 @@ var makeItems = {
             form.appendChild(input);
         });
 
+        // Add hidden field to encode form values as JSON
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'bed_data_json';
+        form.appendChild(hiddenInput);
+
         dialogEle.appendChild(form);
+        return form;
     },
 
     init: function () {
@@ -708,13 +715,13 @@ var makeItems = {
             dialog.style = "display: none";
 
             // Call the function to build the form
-            this.createBedForm(dialog);
+            let form = this.createBedForm(dialog);
 
             document.body.append(dialog);
             dialogButtons = {};
             dialogButtons.Submit = function() {
                 // extract the form elements and check
-                this.creatItem();
+                makeItems.createItem(form);
             };
             dialogButtons.Cancel = function(){
                 $(this).dialog("close");
@@ -742,9 +749,19 @@ var makeItems = {
         });
     },
 
-    createItem: function() {
+    createItem: function(form) {
         // sends a post to hgTracks that adds a new item to the users custom track
         // and updates the image to include this track if it wasn't already there
+        const data = {};
+        Array.from(form.elements).forEach( (ele) => {
+            if (ele.tagName !== "INPUT" || ele.name === "bed_data_json") {return;}
+            const key = ele.id;
+            const value = ele.value;
+            data[key] = value;
+        });
+        let hiddenInput = form.elements.namedItem("bed_data_json");
+        hiddenInput.value = JSON.stringify(data);
+        form.submit();
     },
 
     showDialog: function() {
