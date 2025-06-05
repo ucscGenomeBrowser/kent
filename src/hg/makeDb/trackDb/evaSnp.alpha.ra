@@ -5,6 +5,7 @@ group varRep
 type bigBed 9 +
 compositeTrack on
 visibility dense
+pennantIcon Updated red ../goldenPath/newsarch.html#060625 "Updated June 6, 2025"
 
 track evaSnp
 shortLabel EVA SNP Release 3

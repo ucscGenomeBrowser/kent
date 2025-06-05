@@ -50,7 +50,7 @@ separated by spaces describing all possible AA changes.</p>
 <p>
 Multiple items may appear due to different variant predictions on multiple gene transcripts.
 For all organisms, the gene models used were the NCBI RefSeq curated when available, if not then 
-ensembl genes, or finally UCSC mappings of RefSeq if neither of the previous models was possible.
+ensembl genes, or finally, UCSC mappings of RefSeq if neither of the previous models was possible.
 </p>
 
 <h3>Track colors</h3>
@@ -83,7 +83,7 @@ href="http://www.sequenceontology.org/">sequence ontology</a> terms:
 
 <ul>
   <li> <b>substitution</b> &mdash;
-       A single nucleotide in the reference is replaced by another, alternate allele
+       A single nucleotide in the reference is replaced by another, alternate allele.
   <li> <b>deletion</b> &mdash; 
        One or more nucleotides are deleted.  The representation in the database is to
        display one additional nucleotide in both the Reference field (Ref) and the 
@@ -93,7 +93,7 @@ href="http://www.sequenceontology.org/">sequence ontology</a> terms:
        One or more nucleotides are inserted.  The representation in the database is to
        display one additional nucleotide in both the Reference field (Ref) and the 
        Alternate Allele field (Alt).  E.g. a variant that is an insertion of a T may 
-       be represented as Ref = G and Alt = GT 
+       be represented as Ref = G and Alt = GT.
   <li> <b>delins</b> &mdash; 
        Similar to a tandem repeat, in that the runs of Ref and Alt Alleles are of
        different length, except that there is more than one type of nucleotide,
@@ -152,12 +152,12 @@ on RefSeq alignments of mRNA transcripts, which do not always match the amino ac
 predicted from translating the genomic sequence.  Therefore, in some instances, the
 variant and the genomic nucleotide and associated amino acid may be reversed.
 E.g., a Pro &gt; Arg change from the perspective of the mRNA would be Arg &gt; Pro from
-the persepective the genomic sequence. Also, in  bosTau9, galGal5, rheMac8, 
-danRer10 and danRer11 the mitochondrial sequence was removed or renamed to match UCSC. 
+the perspective of the genomic sequence. Also, in bosTau9, galGal5, rheMac10,
+and danRer11 the mitochondrial sequence was removed or renamed to match UCSC.
 For complete documentation of the processing of these tracks, see the makedoc corresponding
 to the version of interest. For example, the
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp6.txt">
-EVA Release 6 MakeDoc</a>.</p>
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp7.txt">
+EVA Release 7 MakeDoc</a>.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -176,14 +176,14 @@ information.</p>
 For automated download and analysis, this annotation is stored in a bigBed file that
 can be downloaded from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/"
 target="_blank">our download server</a>. Use the corresponding version number for the track
-of interest, e.g. <tt>evaSnp6.bb</tt>.
+of interest, e.g. <tt>evaSnp7.bb</tt>.
 Individual regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.
 <br><br>
-<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp6.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp7.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 
 <h2>Credits</h2>
