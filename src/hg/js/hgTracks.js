@@ -3112,12 +3112,6 @@ var rightClick = {
                                 return true; }
                         };
 
-                        o[rightClick.makeImgTag("book.png")+" Track Description "+rec.shortLabel] = {
-                            onclick: function(menuItemClicked, menuObject) {
-                                rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
-                                return true; }
-
-                        };
                     }
                     if (rec.parentTrack) {
                         o[rightClick.makeImgTag("folderWrench.png")+" Configure "+
@@ -3159,6 +3153,13 @@ var rightClick = {
                         return true; }
                     };
                 }
+
+		o[rightClick.makeImgTag("book.png")+" Track Description "+rec.shortLabel] = {
+		    onclick: function(menuItemClicked, menuObject) {
+			rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
+			return true; }
+		    };
+
                 menu.push($.contextMenu.separator);
                 menu.push(o);
             }
