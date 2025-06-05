@@ -1,6 +1,6 @@
 /* hooklib - Common routines for all the tusd hooks */
 
-/* Copyright (C) 2008 The Regents of the University of California
+/* Copyright (C) 2008 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #ifndef HOOKLIB_H
@@ -23,14 +23,9 @@ char *encodePath(char *path);
 /* Return a string where each individual component of a '/' separated
  * string has been cgiEncoded, but not the '/' chars themselves */
 
-char *setUploadPath(char *userName, char *fileName, char *parentDir, char *serverName, boolean forceOverwrite);
-/* return the path, relative to hg.conf tusdDataDir, where we will store this upload
- * the full path would be /tusdDataDir/machineName/userNamePrefix/userName/parentDir/fileName,
- * where machineName is optional */
+void fillOutHttpResponseError();
 
-void fillOutHttpResponseError(struct jsonElement *response);
-
-void fillOutHttpResponseSuccess(struct jsonElement *response);
+void fillOutHttpResponseSuccess();
 
 struct jsonElement *makeDefaultResponse();
 /* Create the default response json with some fields pre-filled */

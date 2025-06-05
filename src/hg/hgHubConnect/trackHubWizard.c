@@ -25,27 +25,7 @@
 #include "htmshell.h"
 #include <limits.h>
 
-static char *getMachineName()
-/* What is the machine we are running on? */
-{
-// what server are we running on? this becomes a subdirectory for each upload
-if (hIsPrivateHost())
-    return "hgwdev";
-else if (hIsBetaHost())
-    return "hgwbeta";
-else if (hIsPreviewHost())
-    return "preview";
-else
-    {
-    if (hHostHasPrefix("genome"))
-        return hHttpHost();
-    else
-        // RR machines need one name (genome), genome-euro and genome-asia can go through
-        return "genome";
-    }
-}
-
-void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType, char *serverName)
+void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
 {
 // prefixUserFile returns a canonicalized path, or NULL if the
@@ -54,13 +34,13 @@ void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, 
 // can know there is a mistake somewhere, and only print the debug
 // information in the event that the filename actually begins with the
 // userDataDir so we don't tell hackers what files do and do not exist
-char *fileName = prefixUserFile(userName, fullPath, NULL, serverName);
+char *fileName = prefixUserFile(userName, fullPath, NULL);
 if (fileName)
     {
     if (fileExists(fileName))
         {
         fprintf(stderr, "deleting file: '%s'\n", fileName);
-        removeFileForUser(fileName, userName, serverName);
+        removeFileForUser(fileName, userName);
         fflush(stderr);
         }
     else
@@ -104,22 +84,10 @@ void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 /* Process the request to remove a file */
 {
 char *userName = getUserName();
-char *serverName = getMachineName();
-if (!serverName)
-    {
-    char *commandJson = cgiOptionalString(CARTJSON_COMMAND);
-    errAbort("Error: no hostname for request. Please email genome-www@soe.ucsc.edu with your"
-            " username and the following text so we can debug:\n%s", commandJson);
-    }
 if (userName)
     {
     // our array of objects, each object represents a track file
     struct jsonElement *deleteJson = hashFindVal(paramHash, "fileList");
-    char *reqServerName = cartJsonRequiredParam(paramHash, "serverName", cj->jw, NULL);
-    if (!sameString(serverName, reqServerName))
-        {
-        errAbort("doRemoveFile: requested serverName does not match");
-        }
     struct slRef *copy, *f, *fileList = deleteJson->val.jeList;
     struct jsonElement *dirListJsonEle = newJsonList(NULL);
     jsonWriteListStart(cj->jw, "deletedList");
@@ -141,7 +109,7 @@ if (userName)
             if (sameString(fileType, "hub.txt"))
                 {
                 // disconnect this hub from the cart if it exists
-                char *hubUrl = urlForFile(userName, fullPath, serverName);
+                char *hubUrl = urlForFile(userName, fullPath);
                 char *hubId = hubNameFromUrl(hubUrl);
                 if (hubId)
                     {
@@ -152,7 +120,7 @@ if (userName)
                     cartRemove(cj->cart, buffer);
                     }
                 }
-            removeOneFile(userName, fileName, fullPath, db, fileType, serverName);
+            removeOneFile(userName, fileName, fullPath, db, fileType);
             // write out the fullPath so the DataTable can remove the correct row:
             jsonWriteString(cj->jw, NULL, fullPath);
             }
@@ -168,7 +136,7 @@ if (userName)
         char *fileType = jsonStringField(fileObj, "fileType");
         char *db = jsonStringField(fileObj, "genome");
         char *fullPath = jsonStringField(fileObj, "fullPath");
-        removeOneFile(userName, fileName, fullPath, db, fileType, serverName);
+        removeOneFile(userName, fileName, fullPath, db, fileType);
         // write out the fullPath so the DataTable can remove the correct row:
         jsonWriteString(cj->jw, NULL, fullPath);
         }
@@ -186,16 +154,21 @@ static void outUiDataForUser(struct jsonWrite *jw)
  * needed to create the hubSpace table */
 {
 char *userName = getUserName();
-char *machName = getMachineName();
 jsonWriteObjectStart(jw, "userFiles");
 if (userName)
     {
     // the url for this user:
-    jsonWriteString(jw, "userUrl", webDataDir(userName, machName));
+    jsonWriteString(jw, "userUrl", webDataDir(userName));
     jsonWriteListStart(jw, "fileList");
     struct hubSpace *file, *fileList = listFilesForUser(userName);
+    char fullPath[PATH_MAX];
     for (file = fileList; file != NULL; file = file->next)
         {
+        // enforce realpath here in case of a trailing '/' on the hg.conf variable
+        // during a previous upload step
+        char *fpath = realpath(file->location, fullPath);
+        if (!fpath)
+            errAbort("Error listing user files for file '%s'", file->location);
         jsonWriteObjectStart(jw, NULL);
         jsonWriteString(jw, "fileName", file->fileName);
         jsonWriteNumber(jw, "fileSize", file->fileSize);
@@ -204,13 +177,12 @@ if (userName)
         jsonWriteString(jw, "genome", file->db);
         jsonWriteString(jw, "lastModified", file->lastModified);
         jsonWriteString(jw, "uploadTime", file->creationTime);
-        jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName, machName));
+        jsonWriteString(jw, "fullPath", stripDataDir(fullPath, userName));
         jsonWriteString(jw, "md5sum", file->md5sum);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
     }
-jsonWriteString(jw, "serverName", machName);
 jsonWriteBoolean(jw, "isLoggedIn", getUserName() ? TRUE : FALSE);
 jsonWriteString(jw, "hubNameDefault", defaultHubNameForUser(getUserName()));
 // if the user is not logged, the 0 for the quota is ignored
