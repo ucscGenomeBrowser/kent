@@ -208,6 +208,8 @@ const uppy = new Uppy.Uppy({
                 fileName: file.meta.name,
                 fileSize: file.size,
                 lastModified: file.data.lastModified,
+                // pass through the window.serverName for the upload subdirectory
+                serverName: uiData.userFiles.serverName,
             });
             thisQuota += file.size;
         }
@@ -215,6 +217,7 @@ const uppy = new Uppy.Uppy({
             uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
             doUpload = false;
         }
+
         return doUpload;
     },
 });
@@ -398,7 +401,7 @@ var hubCreate = (function() {
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
-        let cartData = {deleteFile: {fileList: []}};
+        let cartData = {deleteFile: {serverName: uiState.serverName, fileList: []}};
         cart.setCgi("hgHubConnect");
         _.forEach(data, (d) => {
             cartData.deleteFile.fileList.push({
@@ -1025,7 +1028,7 @@ var hubCreate = (function() {
         //     creating default trackDbs
         //     editing trackDbs
         // get the state from the history stack if it exists
-        if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
+        if (typeof uiData !== 'undefined' && typeof uiData.userFiles !== 'undefined') {
             _.assign(uiState, uiData.userFiles);
             if (uiState.fileList) {
                 parseFileListIntoHash(uiState.fileList);

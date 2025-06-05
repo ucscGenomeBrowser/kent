@@ -6,13 +6,37 @@
 # the change of server load times over time. Once per month it reports as a reminder to check for abnormalities
 # If running on a new user, you will need to copy the index.html page from qateam and run the function here once: makeSymLinks(user,save_dir)
 
-import requests, subprocess, time, datetime, getpass, os, urllib3, matplotlib
+import requests, subprocess, time, datetime, getpass, os, urllib3, matplotlib, argparse, sys
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib.dates as mdates
-import matplotlib
 from collections import defaultdict
 from collections import deque
+
+def parseArgs():
+    """
+    Parse the command line arguments.
+    """
+    parser = argparse.ArgumentParser(description = __doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    required = parser.add_argument_group('required arguments')
+
+    required.add_argument ("servers",
+        help = "Which servers to query. Options are: 'all', 'RR' for hgw1/2/Euro/Asia, 'dev' for hgwbeta/dev")
+    if (len(sys.argv) == 1):
+        parser.print_usage()
+        print("\nQueries hgTracks on any of the given servers and notes down the response time. Also graphs the response\n" + \
+              "over time. Options are: 'all', 'RR' for hgw1/2/Euro/Asia, 'dev' for hgwbeta/dev\n\n" + \
+
+              "Example runs:\n" + \
+              "    hgTracksTiming.py all\n" + \
+              "    hgTracksTiming.py RR\n" + \
+              "    hgTracksTiming.py dev\n")
+        
+        exit(0)
+    options = parser.parse_args()
+    return  options
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -223,36 +247,44 @@ def checkFileExistsForMonthlyReport(save_dir,user):
             print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/hgTracksTiming/")   
 
 def queryServersAndReport(server,url,filePath,today,n,user):
-    start_time = time.time()
-    response = requests.get(url, verify=False)  # Disable SSL verification
-    end_time = time.time()
-    load_time = end_time - start_time
-    page_content = response.text  # Get the page content
-
-    # Check if the expected string is in the response
-    if "END hgTracks" in page_content:
-        if load_time < 15:
-            problem = False
-            status = "SUCCESS"
+    try:
+        start_time = time.time()
+        response = requests.get(url, verify=False)  # Disable SSL verification
+        end_time = time.time()
+        load_time = end_time - start_time
+        page_content = response.text  # Get the page content
+    
+        # Check if the expected string is in the response
+        if "END hgTracks" in page_content:
+            if load_time < 15:
+                problem = False
+                status = "SUCCESS"
+            else:
+                problem = True
+                status = "FAIL - hgTracks page loaded, but load time over 15s"
         else:
             problem = True
-            status = "FAIL - hgTracks page loaded, but load time over 15s"
-    else:
-        problem = True
-        status = "FAIL - Got status 200 return, but missing the 'END hgTracks' page string of a successful load"
-
-    if problem == True:
-        print("Potential problem with Genome Browser server.")
-        print(f"URL: {url} | Status: {response.status_code} | Load Time: {load_time:.3f}s | Check: {status}")
-        print("\nSee the latest timing numbers:")
-        if user == 'qateam':
-            print("https://genecats.gi.ucsc.edu/qa/test-results/hgTracksTiming/")
-        else:
-            print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/hgTracksTiming/")
+            status = "FAIL - Got status 200 return, but missing the 'END hgTracks' page string of a successful load"
     
-    with open(filePath, "a") as file:
-        file.write(f"{today}\t{load_time:.3f}s\t{response.status_code}\n")
-
+        if problem == True:
+            print("Potential problem with Genome Browser server.")
+            print(f"URL: {url} | Status: {response.status_code} | Load Time: {load_time:.3f}s | Check: {status}")
+            print("\nSee the latest timing numbers:")
+            if user == 'qateam':
+                print("https://genecats.gi.ucsc.edu/qa/test-results/hgTracksTiming/")
+            else:
+                print("https://hgwdev.gi.ucsc.edu/~"+user+"/cronResults/hgTracksTiming/")
+    
+        # Add a check here to make sure we are not writing out bad 200 or captcha failures, but still 
+        # writing out problematic > 15s load times
+        if load_time > .2:
+            with open(filePath, "a") as file:
+                file.write(f"{today}\t{load_time:.3f}s\t{response.status_code}\n")
+        
+    except:
+        print("Potential problem with Genome Browser server.")
+        print("Failed to connect to server: " + url)
+    
 def main():
     #Don't try to display the plot, this is for jupyter
     matplotlib.use('Agg')
@@ -262,17 +294,38 @@ def main():
     user = getpass.getuser()
     save_dir = create_save_dir(user)
     today = datetime.datetime.today().strftime("%Y-%m-%d-%H:%M")
+
+    #Parse which servers to query
+    options = parseArgs()
+    servers = options.servers
+
+    if servers == 'all':
+        # Dic with all the URLs to test. To temporarily pause testing of URLs for maintenance, expected outage, etc.
+        # Remove it from this dictionary
+        urls = {
+            "hgwdev": "https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "hgwbeta": "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "hgw1": "https://hgw1.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "hgw2": "https://hgw2.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "euro": "https://genome-euro.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "asia": "https://genome-asia.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1"
+        }
         
-    # Dic with all the URLs to test. To temporarily pause testing of URLs for maintenance, expected outage, etc.
-    # Remove it from this dictionary
-    urls = {
-        "hgwdev": "https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
-        "hgwbeta": "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
-        "hgw1": "https://hgw1.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
-        "hgw2": "https://hgw2.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
-        "euro": "https://genome-euro.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
-        "asia": "https://genome-asia.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1"
-    }
+    elif servers == 'RR':
+        urls = {
+            "hgw1": "https://hgw1.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "hgw2": "https://hgw2.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "euro": "https://genome-euro.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "asia": "https://genome-asia.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1"
+        }
+        
+    elif servers == 'dev':
+        urls = {
+            "hgwdev": "https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1",
+            "hgwbeta": "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?hgt.trackImgOnly=1&hgt.reset=1"
+        }
+    else:
+        sys.exit("No server specified. Use either 'all', 'RR', or 'dev' to specify which servers to query")
 
     n=0
     for server, url in urls.items():
