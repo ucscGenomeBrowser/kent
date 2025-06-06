@@ -1523,8 +1523,7 @@ void printCaptcha()
     if (!cfSiteKey)
         return;
 
-    puts("Content-Type:text/html");
-    puts("\n");
+    puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
     puts("<html><head>");
     puts("<script>");
     printf("function showWidget() { \n"
@@ -1574,13 +1573,11 @@ if (okUserAgent && sameOk(cgiUserAgent(), okUserAgent))
 if (userId && userIdFound && !cgiOptionalString("captcha"))
     return;
 
-// Do not show a captcha if the request is an AJAX request coming from jQuery
-// This is a hack to work around an error in hgGateway and may soon disappear.
+// This is a hack to let all AJAX requests pass without cookies, no needed anymore.
 // It's a hack because the header can be set by any curl script to get around
-// the captcha. Right now, hgGateway is not setting any cookie at all, so the 
-// correct solution would be to change that.
-if (sameOk(getenv("HTTP_X_REQUESTED_WITH"), "XMLHttpRequest"))
-    return;
+// the captcha. 
+//if (sameOk(getenv("HTTP_X_REQUESTED_WITH"), "XMLHttpRequest"))
+    //return;
 
 char *token = cgiOptionalString("token");
 
@@ -2712,6 +2709,15 @@ for (h = httpHeaders; h != NULL; h = h->next)
     }
 }
 
+void cartWriteHeaderAndCont(struct cart* cart, char *cookieName)
+/* write http headers including cookie and content type line */
+{
+addHttpHeaders();
+cartWriteCookie(cart, cookieName);
+puts("Content-Type: text/html\n"); // puts outputs one newline. Headers requires two.
+cartDidContentType = TRUE;
+}
+
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
                                    struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie
@@ -2725,12 +2731,7 @@ popWarnHandler();
 popAbortHandler();
 
 if (doContentType && !cartDidContentType)
-    {
-    addHttpHeaders();
-    cartWriteCookie(cart, cookieName);
-    puts("Content-Type:text/html");
-    cartDidContentType = TRUE;
-    }
+    cartWriteHeaderAndCont(cart, cookieName);
 
 return cart;
 }
@@ -2776,7 +2777,7 @@ if (!initted && !cgiOptionalString("ajax"))
     {
     if (!cartDidContentType)
         {
-        puts("Content-Type:text/html\n");
+        puts("Content-Type: text/html\n");
         cartDidContentType = TRUE;
         }
     htmStart(stdout, "Early Error");
