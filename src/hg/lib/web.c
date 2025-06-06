@@ -24,6 +24,7 @@
 #include "trackHub.h"
 #include "versionInfo.h"
 #include "asmAlias.h"
+#include "cart.h"
 
 #ifndef GBROWSE
 #include "axtInfo.h"
