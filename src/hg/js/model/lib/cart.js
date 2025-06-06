@@ -218,6 +218,13 @@ var cart = (function() {
             cgiUrl = cgiBinUrl + newCgi;
         },
 
+        setCgiAndUrl: function(newUrl, cgiName) {
+            // Sets the full URL of the CGI (e.g. hgIntegrator, hgChooseDb etc).
+            // This must be called before cart.send.
+            cgiName = cgiName;
+            cgiUrl = newUrl;
+        },
+
         send: function(commandObj, successCallback, errorCallback) {
             // Queue up commandObj and callbacks, merging cgiVars with those of othere queued reqs.
             // successCallback and the optional errorCallback are functions(jqXHR, textStatus)

@@ -24,6 +24,7 @@
 #include "trackHub.h"
 #include "versionInfo.h"
 #include "asmAlias.h"
+#include "cart.h"
 
 #ifndef GBROWSE
 #include "axtInfo.h"
@@ -119,8 +120,6 @@ printf("\t\t<meta charset=\"windows-1252\">\n"   // Be nice to be utf-8, but tha
 void webStartText()
 /* output the head for a text page */
 {
-/*printf("Content-Type: text/plain\n\n");*/
-
 webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
 webPushErrHandlers();
@@ -176,7 +175,10 @@ dnaUtilOpen();
 
 
 if (withHttpHeader)
-    puts("Content-type:text/html\n");
+    {
+    char *cookieName = hUserCookie();
+    cartWriteHeaderAndCont(theCart, cookieName);
+    }
 
 // If the database name is not already in the title string, add it now
 if (endsWith(scriptName, "hgc") && db != NULL && !stringIn(db, textOutBufDb))
@@ -491,7 +493,8 @@ static void webStartGbOptionalBanner(struct cart *cart, char *db, char *title, b
    Optionally display banner above menubar.  Use flag with hgGateway, till that is migrated.
  */
 {
-puts("Content-type:text/html\n");
+char *cookieName = hUserCookie();
+cartWriteHeaderAndCont(cart, cookieName);
 
 char *csp = getCspMetaHeader();
 if (hgGateway)

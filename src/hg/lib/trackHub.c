@@ -151,7 +151,10 @@ struct trackHubGenome *trackHubGetGenome(char *database)
 /* get genome structure for an assembly in a trackHub */
 {
 if (hubAssemblyHash == NULL)
-    errAbort("requesting hub genome with no hubs loaded");
+    errAbort("An error occurred while adding the custom track. This may be due to a mismatch"
+		    " between the db= parameter and the genome selected at the top of the page."
+		    " If you are having trouble resolving this error please contact us at"
+		    " genome-www@soe.ucsc.edu.");
 
 struct hashEl *hel = hashLookup(hubAssemblyHash, database);
 
