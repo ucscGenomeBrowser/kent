@@ -229,6 +229,7 @@ webIncludeResourceFile("hgMyData.css");
 
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
+jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

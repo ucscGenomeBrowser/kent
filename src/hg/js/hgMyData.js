@@ -141,7 +141,7 @@ function generateApiKey() {
     };
 
     let cartData = {generateApiKey: {}};
-    cart.setCgi("hgHubConnect");
+    cart.setCgiAndUrl(fileListEndpoint);
     cart.send(cartData, handleSuccess);
     cart.flush();
 }
@@ -167,7 +167,7 @@ function revokeApiKeys() {
     };
 
     let cartData = {revokeApiKey: {}};
-    cart.setCgi("hgHubConnect");
+    cart.setCgiAndUrl(fileListEndpoint);
     cart.send(cartData, handleSuccess);
     cart.flush();
 }
@@ -729,7 +729,7 @@ var hubCreate = (function() {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
         let cartData = {deleteFile: {fileList: []}};
-        cart.setCgi("hgHubConnect");
+        cart.setCgiAndUrl(fileListEndpoint);
         _.forEach(data, (d) => {
             cartData.deleteFile.fileList.push({
                 fileName: d.fileName,
@@ -1092,7 +1092,7 @@ var hubCreate = (function() {
         //               update the hubSpace row with the hub name
         // frontend wise: move the file row into a 'child' of the hub row
         console.log(`sending addToHub req for ${rowData.fileName} to `);
-        cart.setCgi("hgHubConnect");
+        cart.setCgiAndUrl(fileListEndpoint);
         cart.send({addToHub: {hubName: "", dataFile: ""}});
         cart.flush();
     }
@@ -1457,7 +1457,7 @@ var hubCreate = (function() {
     }
 
     function init() {
-        cart.setCgi('hgHubConnect');
+        cart.setCgiAndUrl(fileListEndpoint);
         cart.debug(debugCartJson);
         // get the file list immediately upon page load
         cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
