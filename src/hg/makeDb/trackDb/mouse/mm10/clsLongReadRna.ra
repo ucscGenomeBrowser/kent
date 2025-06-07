@@ -1,0 +1,911 @@
+track clsLongReadRnaTrack
+parent long_read_transcripts
+compositeTrack on
+shortLabel CLS long-read RNAs
+longLabel Capture long-seq long-read lncRNAs
+type bigBed 12
+visibility pack
+subGroup1 view Views \
+          targets_view=Targets \
+          models_view=Models \
+          sample_models_view=Sample_models \
+          per_expr_models_view=Per-experiment_models \
+          per_expr_reads_view=Per-experiment_reads
+subGroup2 sample Sample \
+          combined=Combined \
+          adult_brain=Adult_Brain \
+          embryo_brain=Embryonic_Brain \
+          embryo_esc=Embryonic_ESC \
+          adult_heart=Adult_Heart \
+          embryo_heart=Embryonic_Heart \
+          adult_liver=Adult_Liver \
+          embryo_liver=Embryonic_Liver \
+          adult_testis=Adult_Testis \
+          adult_tpoola=Tissue_Pool \
+          adult_wblood=Adult_Blood
+subGroup3 type Type \
+          targets=Targets \
+          models=Models \
+          pre_capture_ont_models=Pre-capture_ONT_models \
+          pre_capture_pacbio_models=Pre-capture_PacBio_models \
+          post_capture_ont_models=Post-capture_ONT_models \
+          post_capture_pacbio_models=Post-capture_PacBio_models \
+          pre_capture_ont_reads=Pre-capture_ONT_reads \
+          pre_capture_pacbio_reads=Pre-capture_PacBio_reads \
+          post_capture_ont_reads=Post-capture_ONT_reads \
+          post_capture_pacbio_reads=Post-capture_PacBio_reads
+dimensions dimX=type dimY=sample
+html clsLongReadRna.html
+
+    track targets_view
+    view targets_view
+    parent clsLongReadRnaTrack
+    shortLabel Targets
+    visibility hide
+    type bigBed
+    noScoreFilter on
+
+        track target_regions
+        parent targets_view on
+        subGroups view=targets_view sample=combined type=targets
+        shortLabel CLS targets
+        longLabel CLS target regions
+        labelFields name
+        defaultLabelFields none
+        type bigBed 6 +
+        color 0,100,0
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-targets.bb
+        priority 1
+
+    track models_view
+    view models_view
+    parent clsLongReadRnaTrack
+    shortLabel Models
+    visibility pack
+    type bigBed
+    noScoreFilter on
+
+        track cls_gene_models
+        parent models_view on
+        subGroups view=models_view sample=combined type=models
+        shortLabel CLS transcripts
+        longLabel CLS transcript models
+        type bigBed 12 +
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models.bb
+        color 12,12,120
+        visibility pack
+        priority 2
+
+    track sample_models_view
+    view sample_models_view
+    parent clsLongReadRnaTrack
+    shortLabel Sample models
+    visibility squish
+    type bigBed
+    noScoreFilter on
+
+        track adult_tpoola_models
+        parent sample_models_view on
+        shortLabel adult_tpoola models
+        longLabel adult_tpoola transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-TpoolA.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_tpoola type=models
+
+        track adult_heart_models
+        parent sample_models_view on
+        shortLabel adult_heart models
+        longLabel adult_heart transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-Heart.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_heart type=models
+
+        track embryo_esc_models
+        parent sample_models_view on
+        shortLabel embryo_esc models
+        longLabel embryo_esc transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbESC.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=embryo_esc type=models
+
+        track adult_testis_models
+        parent sample_models_view on
+        shortLabel adult_testis models
+        longLabel adult_testis transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-Testis.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_testis type=models
+
+        track adult_wblood_models
+        parent sample_models_view on
+        shortLabel adult_wblood models
+        longLabel adult_wblood transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-WBlood.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_wblood type=models
+
+        track embryo_liver_models
+        parent sample_models_view on
+        shortLabel embryo_liver models
+        longLabel embryo_liver transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbLiver.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=embryo_liver type=models
+
+        track embryo_heart_models
+        parent sample_models_view on
+        shortLabel embryo_heart models
+        longLabel embryo_heart transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbHeart.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=embryo_heart type=models
+
+        track adult_liver_models
+        parent sample_models_view on
+        shortLabel adult_liver models
+        longLabel adult_liver transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-Liver.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_liver type=models
+
+        track adult_brain_models
+        parent sample_models_view on
+        shortLabel adult_brain models
+        longLabel adult_brain transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-Brain.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_brain type=models
+
+        track embryo_brain_models
+        parent sample_models_view on
+        shortLabel embryo_brain models
+        longLabel embryo_brain transcript models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbBrain.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=embryo_brain type=models
+
+    track per_expr_models_view
+    parent clsLongReadRnaTrack on
+    view per_exp_models_view
+    shortLabel Models
+    visibility hide
+    type bam
+    noScoreFilter on
+
+        track adult_brain_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Brain ONT post models
+        longLabel Adult Brain ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Brain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_brain type=post_capture_ont_models
+
+        track adult_brain_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Brain ONT pre models
+        longLabel Adult Brain ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Brain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_brain type=pre_capture_ont_models
+
+        track adult_brain_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Brain PB post models
+        longLabel Adult Brain PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Brain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_brain type=post_capture_pacbio_models
+
+        track adult_brain_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Brain PB pre models
+        longLabel Adult Brain PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Brain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_brain type=pre_capture_pacbio_models
+
+        track embryo_brain_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Emb Brain ONT post models
+        longLabel Embryonic Brain ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbBrain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_brain type=post_capture_ont_models
+
+        track embryo_brain_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb Brain ONT pre models
+        longLabel Embryonic Brain ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbBrain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_brain type=pre_capture_ont_models
+
+        track embryo_brain_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Emb Brain PB post models
+        longLabel Embryonic Brain PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbBrain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_brain type=post_capture_pacbio_models
+
+        track embryo_brain_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb Brain PB pre models
+        longLabel Embryonic Brain PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbBrain01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_brain type=pre_capture_pacbio_models
+
+        track embryo_esc_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Emb ESC ONT post models
+        longLabel Embryonic ESC ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbSC01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_esc type=post_capture_ont_models
+
+        track embryo_esc_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb ESC ONT pre models
+        longLabel Embryonic ESC ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbSC01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_esc type=pre_capture_ont_models
+
+        track embryo_esc_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Emb ESC PB post models
+        longLabel Embryonic ESC PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbSC01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_esc type=post_capture_pacbio_models
+
+        track embryo_esc_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb ESC PB pre models
+        longLabel Embryonic ESC PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbSC01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_esc type=pre_capture_pacbio_models
+
+        track adult_heart_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Heart ONT post models
+        longLabel Adult Heart ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Heart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_heart type=post_capture_ont_models
+
+        track adult_heart_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Heart ONT pre models
+        longLabel Adult Heart ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Heart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_heart type=pre_capture_ont_models
+
+        track adult_heart_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Heart PB post models
+        longLabel Adult Heart PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Heart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_heart type=post_capture_pacbio_models
+
+        track adult_heart_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Heart PB pre models
+        longLabel Adult Heart PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Heart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_heart type=pre_capture_pacbio_models
+
+        track embryo_heart_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Emb Heart ONT post models
+        longLabel Embryonic Heart ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbHeart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_heart type=post_capture_ont_models
+
+        track embryo_heart_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb Heart ONT pre models
+        longLabel Embryonic Heart ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbHeart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_heart type=pre_capture_ont_models
+
+        track embryo_heart_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Emb Heart PB post models
+        longLabel Embryonic Heart PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbHeart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_heart type=post_capture_pacbio_models
+
+        track embryo_heart_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb Heart PB pre models
+        longLabel Embryonic Heart PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbHeart01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_heart type=pre_capture_pacbio_models
+
+        track adult_liver_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Liver ONT post models
+        longLabel Adult Liver ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Liver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_liver type=post_capture_ont_models
+
+        track adult_liver_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Liver ONT pre models
+        longLabel Adult Liver ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Liver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_liver type=pre_capture_ont_models
+
+        track adult_liver_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Liver PB post models
+        longLabel Adult Liver PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Liver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_liver type=post_capture_pacbio_models
+
+        track adult_liver_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Liver PB pre models
+        longLabel Adult Liver PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Liver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_liver type=pre_capture_pacbio_models
+
+        track embryo_liver_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Emb Liver ONT post models
+        longLabel Embryonic Liver ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbLiver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_liver type=post_capture_ont_models
+
+        track embryo_liver_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb Liver ONT pre models
+        longLabel Embryonic Liver ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbLiver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_liver type=pre_capture_ont_models
+
+        track embryo_liver_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Emb Liver PB post models
+        longLabel Embryonic Liver PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbLiver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_liver type=post_capture_pacbio_models
+
+        track embryo_liver_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Emb Liver PB pre models
+        longLabel Embryonic Liver PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbLiver01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=embryo_liver type=pre_capture_pacbio_models
+
+        track adult_testis_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Testis ONT post models
+        longLabel Adult Testis ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Testis01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_testis type=post_capture_ont_models
+
+        track adult_testis_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Testis ONT pre models
+        longLabel Adult Testis ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Testis01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_testis type=pre_capture_ont_models
+
+        track adult_testis_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Testis PB post models
+        longLabel Adult Testis PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Testis01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_testis type=post_capture_pacbio_models
+
+        track adult_testis_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Testis PB pre models
+        longLabel Adult Testis PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Testis01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_testis type=pre_capture_pacbio_models
+
+        track adult_tpoola_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Tissue Pool ONT post models
+        longLabel Tissue Pool ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_TpoolA01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_tpoola type=post_capture_ont_models
+
+        track adult_tpoola_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Tissue Pool ONT pre models
+        longLabel Tissue Pool ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_TpoolA01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_tpoola type=pre_capture_ont_models
+
+        track adult_tpoola_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Tissue Pool PB post models
+        longLabel Tissue Pool PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_TpoolA01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_tpoola type=post_capture_pacbio_models
+
+        track adult_tpoola_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Tissue Pool PB pre models
+        longLabel Tissue Pool PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_TpoolA01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_tpoola type=pre_capture_pacbio_models
+
+        track adult_wblood_ont_post_models
+        parent per_expr_models_view on
+        shortLabel Blood ONT post models
+        longLabel Adult Blood ONT post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_WBlood01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_wblood type=post_capture_ont_models
+
+        track adult_wblood_ont_pre_models
+        parent per_expr_models_view on
+        shortLabel Blood ONT pre models
+        longLabel Adult Blood ONT pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_WBlood01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_wblood type=pre_capture_ont_models
+
+        track adult_wblood_pacbio_post_models
+        parent per_expr_models_view on
+        shortLabel Blood PB post models
+        longLabel Adult Blood PacBio post-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_WBlood01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_wblood type=post_capture_pacbio_models
+
+        track adult_wblood_pacbio_pre_models
+        parent per_expr_models_view on
+        shortLabel Blood PB pre models
+        longLabel Adult Blood PacBio pre-capture models
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_WBlood01Rep1.bb
+        type bigBed 12 +
+        noScoreFilter on
+        color 100,22,180
+        subGroups view=per_expr_models_view sample=adult_wblood type=pre_capture_pacbio_models
+
+    track per_expr_reads_view
+    parent clsLongReadRnaTrack on
+    view per_expr_reads_view
+    shortLabel Reads
+    visibility hide
+    type bam
+
+        track adult_brain_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Brain ONT post reads
+        longLabel Adult Brain ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Brain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_brain type=post_capture_ont_reads
+
+        track adult_brain_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Brain ONT pre reads
+        longLabel Adult Brain ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Brain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_brain type=pre_capture_ont_reads
+
+        track adult_brain_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Brain PB post reads
+        longLabel Adult Brain PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Brain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_brain type=post_capture_pacbio_reads
+
+        track adult_brain_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Brain PB pre reads
+        longLabel Adult Brain PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Brain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_brain type=pre_capture_pacbio_reads
+
+        track embryo_brain_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Brain ONT post reads
+        longLabel Embryonic Brain ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbBrain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_brain type=post_capture_ont_reads
+
+        track embryo_brain_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Brain ONT pre reads
+        longLabel Embryonic Brain ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbBrain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_brain type=pre_capture_ont_reads
+
+        track embryo_brain_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Brain PB post reads
+        longLabel Embryonic Brain PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbBrain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_brain type=post_capture_pacbio_reads
+
+        track embryo_brain_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Brain PB pre reads
+        longLabel Embryonic Brain PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbBrain01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_brain type=pre_capture_pacbio_reads
+
+        track embryo_esc_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb ESC ONT post reads
+        longLabel Embryonic ESC ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbSC01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_esc type=post_capture_ont_reads
+
+        track embryo_esc_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb ESC ONT pre reads
+        longLabel Embryonic ESC ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbSC01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_esc type=pre_capture_ont_reads
+
+        track embryo_esc_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb ESC PB post reads
+        longLabel Embryonic ESC PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbSC01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_esc type=post_capture_pacbio_reads
+
+        track embryo_esc_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb ESC PB pre reads
+        longLabel Embryonic ESC PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbSC01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_esc type=pre_capture_pacbio_reads
+
+        track adult_heart_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Heart ONT post reads
+        longLabel Adult Heart ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Heart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_heart type=post_capture_ont_reads
+
+        track adult_heart_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Heart ONT pre reads
+        longLabel Adult Heart ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Heart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_heart type=pre_capture_ont_reads
+
+        track adult_heart_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Heart PB post reads
+        longLabel Adult Heart PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Heart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_heart type=post_capture_pacbio_reads
+
+        track adult_heart_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Heart PB pre reads
+        longLabel Adult Heart PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Heart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_heart type=pre_capture_pacbio_reads
+
+        track embryo_heart_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Heart ONT post reads
+        longLabel Embryonic Heart ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbHeart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_heart type=post_capture_ont_reads
+
+        track embryo_heart_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Heart ONT pre reads
+        longLabel Embryonic Heart ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbHeart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_heart type=pre_capture_ont_reads
+
+        track embryo_heart_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Heart PB post reads
+        longLabel Embryonic Heart PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbHeart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_heart type=post_capture_pacbio_reads
+
+        track embryo_heart_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Heart PB pre reads
+        longLabel Embryonic Heart PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbHeart01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_heart type=pre_capture_pacbio_reads
+
+        track adult_liver_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Liver ONT post reads
+        longLabel Adult Liver ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Liver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_liver type=post_capture_ont_reads
+
+        track adult_liver_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Liver ONT pre reads
+        longLabel Adult Liver ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Liver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_liver type=pre_capture_ont_reads
+
+        track adult_liver_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Liver PB post reads
+        longLabel Adult Liver PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Liver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_liver type=post_capture_pacbio_reads
+
+        track adult_liver_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Liver PB pre reads
+        longLabel Adult Liver PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Liver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_liver type=pre_capture_pacbio_reads
+
+        track embryo_liver_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Liver ONT post reads
+        longLabel Embryonic Liver ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_EmbLiver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_liver type=post_capture_ont_reads
+
+        track embryo_liver_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Liver ONT pre reads
+        longLabel Embryonic Liver ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_EmbLiver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_liver type=pre_capture_ont_reads
+
+        track embryo_liver_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Liver PB post reads
+        longLabel Embryonic Liver PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_EmbLiver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_liver type=post_capture_pacbio_reads
+
+        track embryo_liver_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Emb Liver PB pre reads
+        longLabel Embryonic Liver PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_EmbLiver01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=embryo_liver type=pre_capture_pacbio_reads
+
+        track adult_testis_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Testis ONT post reads
+        longLabel Adult Testis ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_Testis01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_testis type=post_capture_ont_reads
+
+        track adult_testis_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Testis ONT pre reads
+        longLabel Adult Testis ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_Testis01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_testis type=pre_capture_ont_reads
+
+        track adult_testis_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Testis PB post reads
+        longLabel Adult Testis PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_Testis01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_testis type=post_capture_pacbio_reads
+
+        track adult_testis_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Testis PB pre reads
+        longLabel Adult Testis PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_Testis01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_testis type=pre_capture_pacbio_reads
+
+        track adult_tpoola_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Tissue Pool ONT post reads
+        longLabel Tissue Pool ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_TpoolA01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_tpoola type=post_capture_ont_reads
+
+        track adult_tpoola_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Tissue Pool ONT pre reads
+        longLabel Tissue Pool ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_TpoolA01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_tpoola type=pre_capture_ont_reads
+
+        track adult_tpoola_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Tissue Pool PB post reads
+        longLabel Tissue Pool PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_TpoolA01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_tpoola type=post_capture_pacbio_reads
+
+        track adult_tpoola_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Tissue Pool PB pre reads
+        longLabel Tissue Pool PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_TpoolA01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_tpoola type=pre_capture_pacbio_reads
+
+        track adult_wblood_ont_post_reads
+        parent per_expr_reads_view on
+        shortLabel Blood ONT post reads
+        longLabel Adult Blood ONT post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/ont-Crg-CapTrap_Mv2_0+_WBlood01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_wblood type=post_capture_ont_reads
+
+        track adult_wblood_ont_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Blood ONT pre reads
+        longLabel Adult Blood ONT pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/ont-Crg-CapTrap_MpreCap_0+_WBlood01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_wblood type=pre_capture_ont_reads
+
+        track adult_wblood_pacbio_post_reads
+        parent per_expr_reads_view on
+        shortLabel Blood PB post reads
+        longLabel Adult Blood PacBio post-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Mv2_0+_WBlood01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_wblood type=post_capture_pacbio_reads
+
+        track adult_wblood_pacbio_pre_reads
+        parent per_expr_reads_view on
+        shortLabel Blood PB pre reads
+        longLabel Adult Blood PacBio pre-capture reads
+        bigDataUrl /gbdb/mm10/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_MpreCap_0+_WBlood01Rep1.bam
+        type bam
+        subGroups view=per_expr_reads_view sample=adult_wblood type=pre_capture_pacbio_reads
+

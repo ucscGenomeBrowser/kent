@@ -5,4 +5,4 @@ longLabel Transcripts and other data generated using long-read sequencing techno
 group rna
 
 include encode4LongRnaTranscripts.ra
-
+include clsLongReadRna.ra alpha
