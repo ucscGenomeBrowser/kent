@@ -95,24 +95,6 @@ html clsLongReadRna.html
         color 100,22,180
         subGroups view=sample_models_view sample=adult_liver type=models
 
-        track embryo_brain_models
-        parent sample_models_view on
-        shortLabel embryo_brain models
-        longLabel embryo_brain transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbBrain.bb
-        type bigBed 12 +
-        color 100,22,180
-        subGroups view=sample_models_view sample=embryo_brain type=models
-
-        track placenta_placenta_models
-        parent sample_models_view on
-        shortLabel placenta_placenta models
-        longLabel placenta_placenta transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Placenta.bb
-        type bigBed 12 +
-        color 100,22,180
-        subGroups view=sample_models_view sample=placenta_placenta type=models
-
         track embryo_heart_models
         parent sample_models_view on
         shortLabel embryo_heart models
@@ -121,6 +103,33 @@ html clsLongReadRna.html
         type bigBed 12 +
         color 100,22,180
         subGroups view=sample_models_view sample=embryo_heart type=models
+
+        track adult_tpoola_models
+        parent sample_models_view on
+        shortLabel adult_tpoola models
+        longLabel adult_tpoola transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-TpoolA.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_tpoola type=models
+
+        track adult_testis_models
+        parent sample_models_view on
+        shortLabel adult_testis models
+        longLabel adult_testis transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Testis.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_testis type=models
+
+        track adult_cpoola_models
+        parent sample_models_view on
+        shortLabel adult_cpoola models
+        longLabel adult_cpoola transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-CpoolA.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=adult_cpoola type=models
 
         track adult_brain_models
         parent sample_models_view on
@@ -131,32 +140,14 @@ html clsLongReadRna.html
         color 100,22,180
         subGroups view=sample_models_view sample=adult_brain type=models
 
-        track adult_heart_models
+        track placenta_placenta_models
         parent sample_models_view on
-        shortLabel adult_heart models
-        longLabel adult_heart transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Heart.bb
+        shortLabel placenta_placenta models
+        longLabel placenta_placenta transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Placenta.bb
         type bigBed 12 +
         color 100,22,180
-        subGroups view=sample_models_view sample=adult_heart type=models
-
-        track embryo_ipsc_models
-        parent sample_models_view on
-        shortLabel embryo_ipsc models
-        longLabel embryo_ipsc transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbiPSC.bb
-        type bigBed 12 +
-        color 100,22,180
-        subGroups view=sample_models_view sample=embryo_ipsc type=models
-
-        track adult_tpoola_models
-        parent sample_models_view on
-        shortLabel adult_tpoola models
-        longLabel adult_tpoola transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-TpoolA.bb
-        type bigBed 12 +
-        color 100,22,180
-        subGroups view=sample_models_view sample=adult_tpoola type=models
+        subGroups view=sample_models_view sample=placenta_placenta type=models
 
         track embryo_liver_models
         parent sample_models_view on
@@ -176,23 +167,32 @@ html clsLongReadRna.html
         color 100,22,180
         subGroups view=sample_models_view sample=adult_wblood type=models
 
-        track adult_testis_models
+        track adult_heart_models
         parent sample_models_view on
-        shortLabel adult_testis models
-        longLabel adult_testis transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Testis.bb
+        shortLabel adult_heart models
+        longLabel adult_heart transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Heart.bb
         type bigBed 12 +
         color 100,22,180
-        subGroups view=sample_models_view sample=adult_testis type=models
+        subGroups view=sample_models_view sample=adult_heart type=models
 
-        track adult_cpoola_models
+        track embryo_ipsc_models
         parent sample_models_view on
-        shortLabel adult_cpoola models
-        longLabel adult_cpoola transcript models
-        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-CpoolA.bb
+        shortLabel embryo_ipsc models
+        longLabel embryo_ipsc transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbiPSC.bb
         type bigBed 12 +
         color 100,22,180
-        subGroups view=sample_models_view sample=adult_cpoola type=models
+        subGroups view=sample_models_view sample=embryo_ipsc type=models
+
+        track embryo_brain_models
+        parent sample_models_view on
+        shortLabel embryo_brain models
+        longLabel embryo_brain transcript models
+        bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbBrain.bb
+        type bigBed 12 +
+        color 100,22,180
+        subGroups view=sample_models_view sample=embryo_brain type=models
 
     track per_expr_models_view
     parent clsLongReadRnaTrack on

@@ -540,7 +540,7 @@ def writeTrackDb(fh, clsMetas, trackDir, parent):
                                 EXPR_READS_TDB)
 
 def metaSortKey(clsMeta):
-    return (clsMeta.tissue, clsMeta.stage)
+    return (clsMeta.tissue, clsMeta.stage, clsMeta.sid)
 
 def makeTrackDb(opts, clsMetadataTab, trackDir, trackDb, parent):
     clsMetas = sorted(loadClsMetadata(clsMetadataTab).values(), key=metaSortKey)
