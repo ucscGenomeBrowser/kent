@@ -6051,6 +6051,7 @@
 ./runBuild GCF_048418805.1_VulVul3 mammals Vulpes_vulpes
 ./runBuild GCF_048594095.1_PKINGS_0.4 fish Paramormyrops_kingsleyae
 ./runBuild GCF_049278075.1_ASM4927807v1 bacteria Rickettsia_endosymbiont_of_Halotydeus_destructor
+./runBuild GCF_049306965.1_GRCz12tu fish Danio_rerio
 ./runBuild GCF_900000015.1_Plasmopara_halstedii_genome invertebrate Plasmopara_halstedii
 ./runBuild GCF_900002335.3_GCA_900002335 invertebrate Plasmodium_chabaudi_chabaudi
 ./runBuild GCF_900002375.2_GCA_900002375 invertebrate Plasmodium_berghei_ANKA
