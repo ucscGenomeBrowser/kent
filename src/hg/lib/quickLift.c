@@ -81,6 +81,12 @@ for(chain = chainList; chain; chain = chain->next)
 
 // now we need to grab the links outside of our viewport so we can map long items
 // probably we could reuse the chains from above but for the moment this is easier
+// For the moment we use the same padding on both sides so we don't have to worry about strand
+if (maxGapBefore > maxGapAfter)
+    maxGapAfter = maxGapBefore;
+else
+    maxGapBefore = maxGapAfter;
+
 int newStart = start - maxGapBefore * 2;
 if (newStart < 0)
     newStart = 0;
