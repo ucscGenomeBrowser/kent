@@ -227,13 +227,9 @@ jsIncludeFile("hgMyData.js", NULL);
 webIncludeFile("inc/hgMyData.html");
 webIncludeResourceFile("hgMyData.css");
 
-// get the current files and vars stored for this user
-struct jsonWrite *jw = jsonWriteNew();
-outUiDataForUser(jw);
-jsInlineF("\nvar uiData = {%s}\n", jw->dy->string);
-jsonWriteFree(&jw);
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
+jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

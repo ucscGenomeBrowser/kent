@@ -141,7 +141,7 @@ function generateApiKey() {
     };
 
     let cartData = {generateApiKey: {}};
-    cart.setCgi("hgHubConnect");
+    cart.setCgiAndUrl(fileListEndpoint);
     cart.send(cartData, handleSuccess);
     cart.flush();
 }
@@ -167,13 +167,124 @@ function revokeApiKeys() {
     };
 
     let cartData = {revokeApiKey: {}};
-    cart.setCgi("hgHubConnect");
+    cart.setCgiAndUrl(fileListEndpoint);
     cart.send(cartData, handleSuccess);
     cart.flush();
 }
 
 const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
 const parentDirRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in hub names
+
+function getTusdEndpoint() {
+    // this variable is set by hgHubConnect and comes from hg.conf value
+    return tusdEndpoint;
+}
+
+let uppyOptions = {
+    trigger: ".uploadButton",
+    showProgressDetails: true,
+    note: "The UCSC Genome Browser is not a HIPAA compliant data store. Do not upload patient information or other sensitive data files here, as anyone with the URL can view them.",
+    meta: {"genome": null, "fileType": null},
+    restricted: {requiredMetaFields: ["genome"]},
+    closeModalOnClickOutside: true,
+    closeAfterFinish: true,
+    theme: 'auto',
+    metaFields: (file) => {
+        const fields = [{
+            id: 'name',
+            name: 'File name',
+            render: ({value, onChange, required, form}, h) => {
+                return h('input',
+                    {type: "text",
+                    value: value,
+                    class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
+                    onChange: e => {
+                        onChange(e.target.value);
+                        file.meta.fileType = hubCreate.detectFileType(e.target.value);
+                        file.meta.name = e.target.value;
+                    },
+                    required: required,
+                    form: form,
+                    }
+                );
+            },
+        },
+        {
+            id: 'genome',
+            name: 'Genome',
+            render: ({value, onChange}, h) => {
+                // keep these as a variable so we can init the autocompleteCat
+                // code only after the elements have actually been rendered
+                // there are multiple rendering passes and only eventually
+                // do the elements actually make it into the DOM
+                let ret = h('div', {
+                        class: "uppy-Dashboard-FileCard-label",
+                        style: "display: inline-block; width: 78%"
+                        },
+                    // first child of div
+                    "Select from popular assemblies:",
+                    // second div child
+                    h('select', {
+                        id: `${file.meta.name}DbSelect`,
+                        style: "margin-left: 5px",
+                        onChange: e => {
+                            onChange(e.target.value);
+                            file.meta.genome = e.target.value;
+                            file.meta.genomeLabel = e.target.selectedOptions[0].label;
+                        }
+                        },
+                        hubCreate.makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
+                            return h('option', {
+                                value: genomeObj.value,
+                                label: genomeObj.label,
+                                selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === hubCreate.defaultDb()
+                            });
+                        })
+                    ),
+                    h('p', {
+                        class: "uppy-Dashboard-FileCard-label",
+                        style: "display: block; width: 78%",
+                        }, "or search for your genome:"),
+                    // third div child
+                    h('input', {
+                        id: `${file.meta.name}DbInput`,
+                        type: 'text',
+                        class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
+                    }),
+                    h('input', {
+                        id: `${file.meta.name}DbSearchButton`,
+                        type: 'button',
+                        value: 'search',
+                        style: "margin-left: 5px",
+                    })
+                );
+            let selectToChange = document.getElementById(`${file.meta.name}DbSelect`);
+            if (selectToChange) {
+                let justInitted = initAutocompleteForInput(`${file.meta.name}DbInput`, selectToChange);
+                if (justInitted) {
+                    // only do this once per file
+                    document.getElementById(`${file.meta.name}DbSearchButton`)
+                            .addEventListener("click", (e) => {
+                                let inp = document.getElementById(`${file.meta.name}DbInput`).value;
+                                let selector = `[id='${file.meta.name}DbInput']`;
+                                $(selector).autocompleteCat("search", inp);
+                            });
+                }
+            }
+            return ret;
+            }
+        },
+        {
+            id: 'parentDir',
+            name: 'Hub Name',
+        }];
+        return fields;
+    },
+    doneButtonHandler: function() {
+        uppy.clear();
+    },
+};
+
 // make our Uppy instance:
 const uppy = new Uppy.Uppy({
     debug: true,
@@ -219,6 +330,230 @@ const uppy = new Uppy.Uppy({
     },
 });
 
+// create a custom uppy plugin to batch change the type and db fields
+class BatchChangePlugin extends Uppy.BasePlugin {
+    constructor(uppy, opts) {
+        super(uppy, opts);
+        this.id = "BatchChangePlugin";
+        this.type = "progressindicator";
+        this.opts = opts;
+    }
+
+    createOptsForSelect(select, opts) {
+        opts.forEach( (opt) => {
+            let option = document.createElement("option");
+            option.value = opt.value;
+            option.label = opt.label;
+            option.id = opt.id;
+            option.selected = typeof opt.selected !== 'undefined' ? opt.selected : false;
+            select.appendChild(option);
+        });
+    }
+
+    addSelectsForFile(file) {
+        /* create two selects for the file object, to include the db and type */
+        const id = "uppy_" + file.id;
+        let fileDiv = document.getElementById(id);
+        // this might not exist yet depending on where we are in the render cycle
+        if (fileDiv) {
+            let dbSelectId = "db_select_" + file.id;
+            if (!document.getElementById(dbSelectId)) {
+                let dbSelect = document.createElement("select");
+                dbSelect.id = dbSelectId;
+                let dbOpts = hubCreate.makeGenomeSelectOptions();
+                this.createOptsForSelect(dbSelect, dbOpts);
+                fileDiv.appendChild(dbSelect);
+            }
+        }
+    }
+
+    removeBatchSelectsFromDashboard() {
+        let batchSelectDiv = document.getElementById("batch-selector-div");
+        if (batchSelectDiv) {
+            batchSelectDiv.remove();
+        }
+    }
+
+    addBatchSelectsToDashboard() {
+        if (!document.getElementById("batch-selector-div")) {
+            let batchSelectDiv = document.createElement("div");
+            batchSelectDiv.id = "batch-selector-div";
+            batchSelectDiv.style.display = "grid";
+            batchSelectDiv.style.width = "80%";
+            // the grid syntax is 2 columns, 3 rows
+            batchSelectDiv.style.gridTemplateColumns = "max-content minmax(0, 200px) max-content 1fr min-content";
+            batchSelectDiv.style.gridTemplateRows = "repest(3, auto)";
+            batchSelectDiv.style.margin = "10px auto"; // centers this div
+            batchSelectDiv.style.fontSize = "14px";
+            batchSelectDiv.style.gap = "8px";
+            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                batchSelectDiv.style.color = "#eaeaea";
+            }
+
+            // first just explanatory text:
+            let batchSelectText = document.createElement("div");
+            batchSelectText.textContent = "Change options for all files:";
+            // syntax here is rowStart / columnStart / rowEnd / columnEnd
+            batchSelectText.style.gridArea = "1 / 1 / 1 / 2";
+
+            // the batch change db select
+            let batchDbSelect = document.createElement("select");
+            this.createOptsForSelect(batchDbSelect, hubCreate.makeGenomeSelectOptions());
+            batchDbSelect.id = "batchDbSelect";
+            batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
+            batchDbSelect.style.margin = "2px";
+            let batchDbLabel = document.createElement("label");
+            batchDbLabel.textContent = "Genome";
+            batchDbLabel.for = "batchDbSelect";
+            batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
+
+            // the search bar for db selection
+            let batchDbSearchBarLabel= document.createElement("label");
+            batchDbSearchBarLabel.textContent = "or search for your genome:";
+            batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
+            batchDbSearchBarLabel.style.margin = "auto";
+
+            let batchDbGenomeSearchBar = document.createElement("input");
+            batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
+            batchDbGenomeSearchBar.type = "text";
+            batchDbGenomeSearchBar.id = "batchDbSearchBar";
+            batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
+            let batchDbGenomeSearchButton = document.createElement("input");
+            batchDbGenomeSearchButton.type = "button";
+            batchDbGenomeSearchButton.value = "search";
+            batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
+            batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
+
+            // the batch change hub name
+            let batchParentDirLabel = document.createElement("label");
+            batchParentDirLabel.textContent = "Hub Name";
+            batchParentDirLabel.for = "batchParentDir";
+            batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+
+            let batchParentDirInput = document.createElement("input");
+            batchParentDirInput.id = "batchParentDir";
+            batchParentDirInput.value = hubCreate.uiState.hubNameDefault;
+            batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
+            batchParentDirInput.style.margin= "1px 1px auto";
+            batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
+
+            // add event handlers to change metadata, use an arrow function
+            // because otherwise 'this' keyword will be the element instead of
+            // our class
+            batchDbSelect.addEventListener("change", (ev) => {
+                let files = this.uppy.getFiles();
+                let val = ev.target.value;
+                for (let [key, file] of Object.entries(files)) {
+                    this.uppy.setFileMeta(file.id, {genome: val});
+                    this.uppy.setFileMeta(file.id, {genomeLabel: ev.target.selectedOptions[0].label});
+                }
+            });
+            batchParentDirInput.addEventListener("change", (ev) => {
+                let files = this.uppy.getFiles();
+                let val = ev.target.value;
+                for (let [key, file] of Object.entries(files)) {
+                    this.uppy.setFileMeta(file.id, {parentDir: val});
+                }
+            });
+
+
+            batchSelectDiv.appendChild(batchSelectText);
+            batchSelectDiv.appendChild(batchDbLabel);
+            batchSelectDiv.appendChild(batchDbSelect);
+            batchSelectDiv.appendChild(batchDbSearchBarLabel);
+            batchSelectDiv.appendChild(batchDbGenomeSearchBar);
+            batchSelectDiv.appendChild(batchDbGenomeSearchButton);
+            batchSelectDiv.appendChild(batchParentDirLabel);
+            batchSelectDiv.appendChild(batchParentDirInput);
+
+            // append the batch changes to the bottom of the file list, for some reason
+            // I can't append to the actual Dashboard-files, it must be getting emptied
+            // and re-rendered or something
+            let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
+            if (uppyFilesDiv) {
+                uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
+            }
+
+            // everything has to exist already for autocompleteCat to initialize
+            let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
+            if (justInitted) {
+                // only do this once per batch setup
+                batchDbGenomeSearchButton.addEventListener("click", (e) => {
+                    let inp = document.getElementById(batchDbSearchBar.id).value;
+                    let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
+                    $(selector).autocompleteCat("search", inp);
+                });
+            }
+        }
+    }
+
+    install() {
+        this.uppy.on("file-added", (file) => {
+            // add default meta data for genome and fileType
+            console.log("file-added");
+            this.uppy.setFileMeta(file.id, {"genome": hubCreate.defaultDb(), "fileType": hubCreate.detectFileType(file.name), "parentDir": hubCreate.uiState.hubNameDefault});
+            if (this.uppy.getFiles().length > 1) {
+                this.addBatchSelectsToDashboard();
+            } else {
+                // only open the file editor when there is one file
+                const dash = uppy.getPlugin("Dashboard");
+                dash.toggleFileCard(true, file.id);
+            }
+        });
+        this.uppy.on("file-removed", (file) => {
+            // remove the batch change selects if now <2 files present
+            if (this.uppy.getFiles().length < 2) {
+                this.removeBatchSelectsFromDashboard();
+            }
+        });
+
+        this.uppy.on("dashboard:modal-open", () => {
+            // check if there were already files chosen from before:
+            if (this.uppy.getFiles().length > 2) {
+                this.addBatchSelectsToDashboard();
+            }
+            if (this.uppy.getFiles().length < 2) {
+                this.removeBatchSelectsFromDashboard();
+            }
+        });
+        this.uppy.on("dashboard:modal-closed", () => {
+            if (this.uppy.getFiles().length < 2) {
+                this.removeBatchSelectsFromDashboard();
+            }
+            let allFiles = this.uppy.getFiles();
+            let completeFiles = this.uppy.getFiles().filter((f) => f.progress.uploadComplete === true);
+            if (allFiles.length === completeFiles.length) {
+                this.uppy.clear();
+            }
+        });
+        this.uppy.on("dashboard:file-edit-start", (file) => {
+            autocompletes[`${file.name}DbInput`] = false;
+        });
+
+        this.uppy.on("dashboard:file-edit-complete", (file) => {
+            // check the filename and hubname metadata and warn the user
+            // to edit them if they are wrong. unfortunately I cannot
+            // figure out how to force the file card to re-toggle
+            // and jump back into the editor from here
+            if (file) {
+                let fileNameMatch = file.meta.name.match(fileNameRegex);
+                let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
+                const dash = uppy.getPlugin("Dashboard");
+                if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
+                    uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                }
+                if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
+                    uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                }
+            }
+        });
+    }
+    uninstall() {
+        // not really used because we aren't ever uninstalling the uppy instance
+        this.uppy.off("file-added");
+    }
+}
+
 var hubCreate = (function() {
     let uiState = { // our object for keeping track of the current UI and what to do
         userUrl: "", // the web accesible path where the uploads are stored for this user
@@ -229,11 +564,6 @@ var hubCreate = (function() {
         userFiles: {}, // same as uiData.userFiles on page load
         filesHash: {}, // for each file, userFiles.fullPath is the key, and then the userFiles.fileList data as the value, with an extra key for the child fullPaths if the file is a directory
     };
-
-    function getTusdEndpoint() {
-        // this variable is set by hgHubConnect and comes from hg.conf value
-        return tusdEndpoint;
-    }
 
     let extensionMap = {
         "bigBed": [".bb", ".bigbed"],
@@ -399,7 +729,7 @@ var hubCreate = (function() {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
         let cartData = {deleteFile: {fileList: []}};
-        cart.setCgi("hgHubConnect");
+        cart.setCgiAndUrl(fileListEndpoint);
         _.forEach(data, (d) => {
             cartData.deleteFile.fileList.push({
                 fileName: d.fileName,
@@ -762,7 +1092,7 @@ var hubCreate = (function() {
         //               update the hubSpace row with the hub name
         // frontend wise: move the file row into a 'child' of the hub row
         console.log(`sending addToHub req for ${rowData.fileName} to `);
-        cart.setCgi("hgHubConnect");
+        cart.setCgiAndUrl(fileListEndpoint);
         cart.send({addToHub: {hubName: "", dataFile: ""}});
         cart.flush();
     }
@@ -1018,365 +1348,24 @@ var hubCreate = (function() {
         return table;
     }
 
-    function init() {
-        cart.setCgi('hgMyData');
-        cart.debug(debugCartJson);
-        // TODO: write functions for
-        //     creating default trackDbs
-        //     editing trackDbs
-        // get the state from the history stack if it exists
-        if (typeof uiData !== 'undefined' && typeof uiState.userFiles !== 'undefined') {
-            _.assign(uiState, uiData.userFiles);
-            if (uiState.fileList) {
-                parseFileListIntoHash(uiState.fileList);
-            }
+    function handleGetFileList(jsonData, textStatus) {
+        _.assign(uiState, jsonData.userFiles);
+        if (uiState.fileList) {
+            parseFileListIntoHash(uiState.fileList);
         }
+
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
         table.columns.adjust().draw();
-        // TODO: add event handlers for editing defaults, grouping into hub
-        $("#newTrackHubDialog").dialog({
-            modal: true,
-            autoOpen: false,
-            title: "Create new track hub",
-            closeOnEscape: true,
-            minWidth: 400,
-            minHeight: 120
-        });
+        uppy.use(Uppy.Dashboard, uppyOptions);
 
-        // create a custom uppy plugin to batch change the type and db fields
-        class BatchChangePlugin extends Uppy.BasePlugin {
-            constructor(uppy, opts) {
-                super(uppy, opts);
-                this.id = "BatchChangePlugin";
-                this.type = "progressindicator";
-                this.opts = opts;
-            }
-
-            createOptsForSelect(select, opts) {
-                opts.forEach( (opt) => {
-                    let option = document.createElement("option");
-                    option.value = opt.value;
-                    option.label = opt.label;
-                    option.id = opt.id;
-                    option.selected = typeof opt.selected !== 'undefined' ? opt.selected : false;
-                    select.appendChild(option);
-                });
-            }
-
-            addSelectsForFile(file) {
-                /* create two selects for the file object, to include the db and type */
-                const id = "uppy_" + file.id;
-                let fileDiv = document.getElementById(id);
-                // this might not exist yet depending on where we are in the render cycle
-                if (fileDiv) {
-                    let dbSelectId = "db_select_" + file.id;
-                    if (!document.getElementById(dbSelectId)) {
-                        let dbSelect = document.createElement("select");
-                        dbSelect.id = dbSelectId;
-                        let dbOpts = makeGenomeSelectOptions();
-                        this.createOptsForSelect(dbSelect, dbOpts);
-                        fileDiv.appendChild(dbSelect);
-                    }
-                }
-            }
-
-            removeBatchSelectsFromDashboard() {
-                let batchSelectDiv = document.getElementById("batch-selector-div");
-                if (batchSelectDiv) {
-                    batchSelectDiv.remove();
-                }
-            }
-
-            addBatchSelectsToDashboard() {
-                if (!document.getElementById("batch-selector-div")) {
-                    let batchSelectDiv = document.createElement("div");
-                    batchSelectDiv.id = "batch-selector-div";
-                    batchSelectDiv.style.display = "grid";
-                    batchSelectDiv.style.width = "80%";
-                    // the grid syntax is 2 columns, 3 rows
-                    batchSelectDiv.style.gridTemplateColumns = "max-content minmax(0, 200px) max-content 1fr min-content";
-                    batchSelectDiv.style.gridTemplateRows = "repest(3, auto)";
-                    batchSelectDiv.style.margin = "10px auto"; // centers this div
-                    batchSelectDiv.style.fontSize = "14px";
-                    batchSelectDiv.style.gap = "8px";
-                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                        batchSelectDiv.style.color = "#eaeaea";
-                    }
-
-                    // first just explanatory text:
-                    let batchSelectText = document.createElement("div");
-                    batchSelectText.textContent = "Change options for all files:";
-                    // syntax here is rowStart / columnStart / rowEnd / columnEnd
-                    batchSelectText.style.gridArea = "1 / 1 / 1 / 2";
-
-                    // the batch change db select
-                    let batchDbSelect = document.createElement("select");
-                    this.createOptsForSelect(batchDbSelect, makeGenomeSelectOptions());
-                    batchDbSelect.id = "batchDbSelect";
-                    batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
-                    batchDbSelect.style.margin = "2px";
-                    let batchDbLabel = document.createElement("label");
-                    batchDbLabel.textContent = "Genome";
-                    batchDbLabel.for = "batchDbSelect";
-                    batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
-
-                    // the search bar for db selection
-                    let batchDbSearchBarLabel= document.createElement("label");
-                    batchDbSearchBarLabel.textContent = "or search for your genome:";
-                    batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
-                    batchDbSearchBarLabel.style.margin = "auto";
-
-                    let batchDbGenomeSearchBar = document.createElement("input");
-                    batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
-                    batchDbGenomeSearchBar.type = "text";
-                    batchDbGenomeSearchBar.id = "batchDbSearchBar";
-                    batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
-                    let batchDbGenomeSearchButton = document.createElement("input");
-                    batchDbGenomeSearchButton.type = "button";
-                    batchDbGenomeSearchButton.value = "search";
-                    batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
-                    batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
-
-                    // the batch change hub name
-                    let batchParentDirLabel = document.createElement("label");
-                    batchParentDirLabel.textContent = "Hub Name";
-                    batchParentDirLabel.for = "batchParentDir";
-                    batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
-
-                    let batchParentDirInput = document.createElement("input");
-                    batchParentDirInput.id = "batchParentDir";
-                    batchParentDirInput.value = uiState.hubNameDefault;
-                    batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
-                    batchParentDirInput.style.margin= "1px 1px auto";
-                    batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
-
-                    // add event handlers to change metadata, use an arrow function
-                    // because otherwise 'this' keyword will be the element instead of
-                    // our class
-                    batchDbSelect.addEventListener("change", (ev) => {
-                        let files = this.uppy.getFiles();
-                        let val = ev.target.value;
-                        for (let [key, file] of Object.entries(files)) {
-                            this.uppy.setFileMeta(file.id, {genome: val});
-                            this.uppy.setFileMeta(file.id, {genomeLabel: ev.target.selectedOptions[0].label});
-                        }
-                    });
-                    batchParentDirInput.addEventListener("change", (ev) => {
-                        let files = this.uppy.getFiles();
-                        let val = ev.target.value;
-                        for (let [key, file] of Object.entries(files)) {
-                            this.uppy.setFileMeta(file.id, {parentDir: val});
-                        }
-                    });
-
-
-                    batchSelectDiv.appendChild(batchSelectText);
-                    batchSelectDiv.appendChild(batchDbLabel);
-                    batchSelectDiv.appendChild(batchDbSelect);
-                    batchSelectDiv.appendChild(batchDbSearchBarLabel);
-                    batchSelectDiv.appendChild(batchDbGenomeSearchBar);
-                    batchSelectDiv.appendChild(batchDbGenomeSearchButton);
-                    batchSelectDiv.appendChild(batchParentDirLabel);
-                    batchSelectDiv.appendChild(batchParentDirInput);
-
-                    // append the batch changes to the bottom of the file list, for some reason
-                    // I can't append to the actual Dashboard-files, it must be getting emptied
-                    // and re-rendered or something
-                    let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
-                    if (uppyFilesDiv) {
-                        uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
-                    }
-
-                    // everything has to exist already for autocompleteCat to initialize
-                    let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
-                    if (justInitted) {
-                        // only do this once per batch setup
-                        batchDbGenomeSearchButton.addEventListener("click", (e) => {
-                            let inp = document.getElementById(batchDbSearchBar.id).value;
-                            let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
-                            $(selector).autocompleteCat("search", inp);
-                        });
-                    }
-                }
-            }
-
-            install() {
-                this.uppy.on("file-added", (file) => {
-                    // add default meta data for genome and fileType
-                    console.log("file-added");
-                    this.uppy.setFileMeta(file.id, {"genome": defaultDb(), "fileType": detectFileType(file.name), "parentDir": uiState.hubNameDefault});
-                    if (this.uppy.getFiles().length > 1) {
-                        this.addBatchSelectsToDashboard();
-                    } else {
-                        // only open the file editor when there is one file
-                        const dash = uppy.getPlugin("Dashboard");
-                        dash.toggleFileCard(true, file.id);
-                    }
-                });
-                this.uppy.on("file-removed", (file) => {
-                    // remove the batch change selects if now <2 files present
-                    if (this.uppy.getFiles().length < 2) {
-                        this.removeBatchSelectsFromDashboard();
-                    }
-                });
-
-                this.uppy.on("dashboard:modal-open", () => {
-                    // check if there were already files chosen from before:
-                    if (this.uppy.getFiles().length > 2) {
-                        this.addBatchSelectsToDashboard();
-                    }
-                    if (this.uppy.getFiles().length < 2) {
-                        this.removeBatchSelectsFromDashboard();
-                    }
-                });
-                this.uppy.on("dashboard:modal-closed", () => {
-                    if (this.uppy.getFiles().length < 2) {
-                        this.removeBatchSelectsFromDashboard();
-                    }
-                    let allFiles = this.uppy.getFiles();
-                    let completeFiles = this.uppy.getFiles().filter((f) => f.progress.uploadComplete === true);
-                    if (allFiles.length === completeFiles.length) {
-                        this.uppy.clear();
-                    }
-                });
-                this.uppy.on("dashboard:file-edit-start", (file) => {
-                    autocompletes[`${file.name}DbInput`] = false;
-                });
-
-                this.uppy.on("dashboard:file-edit-complete", (file) => {
-                    // check the filename and hubname metadata and warn the user
-                    // to edit them if they are wrong. unfortunately I cannot
-                    // figure out how to force the file card to re-toggle
-                    // and jump back into the editor from here
-                    if (file) {
-                        let fileNameMatch = file.meta.name.match(fileNameRegex);
-                        let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
-                        const dash = uppy.getPlugin("Dashboard");
-                        if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                            uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
-                        }
-                        if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                            uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
-                        }
-                    }
-                });
-            }
-            uninstall() {
-                // not really used because we aren't ever uninstalling the uppy instance
-                this.uppy.off("file-added");
-            }
-        }
-        let uppyOptions = {
-            trigger: ".uploadButton",
-            showProgressDetails: true,
-            note: "The UCSC Genome Browser is not a HIPAA compliant data store. Do not upload patient information or other sensitive data files here, as anyone with the URL can view them.",
-            meta: {"genome": null, "fileType": null},
-            restricted: {requiredMetaFields: ["genome"]},
-            closeModalOnClickOutside: true,
-            closeAfterFinish: true,
-            theme: 'auto',
-            metaFields: (file) => {
-                const fields = [{
-                    id: 'name',
-                    name: 'File name',
-                    render: ({value, onChange, required, form}, h) => {
-                        return h('input',
-                            {type: "text",
-                            value: value,
-                            class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
-                            onChange: e => {
-                                onChange(e.target.value);
-                                file.meta.fileType = detectFileType(e.target.value);
-                                file.meta.name = e.target.value;
-                            },
-                            required: required,
-                            form: form,
-                            }
-                        );
-                    },
-                },
-                {
-                    id: 'genome',
-                    name: 'Genome',
-                    render: ({value, onChange}, h) => {
-                        // keep these as a variable so we can init the autocompleteCat
-                        // code only after the elements have actually been rendered
-                        // there are multiple rendering passes and only eventually
-                        // do the elements actually make it into the DOM
-                        let ret = h('div', {
-                                class: "uppy-Dashboard-FileCard-label",
-                                style: "display: inline-block; width: 78%"
-                                },
-                            // first child of div
-                            "Select from popular assemblies:",
-                            // second div child
-                            h('select', {
-                                id: `${file.meta.name}DbSelect`,
-                                style: "margin-left: 5px",
-                                onChange: e => {
-                                    onChange(e.target.value);
-                                    file.meta.genome = e.target.value;
-                                    file.meta.genomeLabel = e.target.selectedOptions[0].label;
-                                }
-                                },
-                                makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
-                                    return h('option', {
-                                        value: genomeObj.value,
-                                        label: genomeObj.label,
-                                        selected: file.meta.genome !== null ? genomeObj.value === file.meta.genome : genomeObj.value === defaultDb()
-                                    });
-                                })
-                            ),
-                            h('p', {
-                                class: "uppy-Dashboard-FileCard-label",
-                                style: "display: block; width: 78%",
-                                }, "or search for your genome:"),
-                            // third div child
-                            h('input', {
-                                id: `${file.meta.name}DbInput`,
-                                type: 'text',
-                                class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
-                            }),
-                            h('input', {
-                                id: `${file.meta.name}DbSearchButton`,
-                                type: 'button',
-                                value: 'search',
-                                style: "margin-left: 5px",
-                            })
-                        );
-                    let selectToChange = document.getElementById(`${file.meta.name}DbSelect`);
-                    if (selectToChange) {
-                        let justInitted = initAutocompleteForInput(`${file.meta.name}DbInput`, selectToChange);
-                        if (justInitted) {
-                            // only do this once per file
-                            document.getElementById(`${file.meta.name}DbSearchButton`)
-                                    .addEventListener("click", (e) => {
-                                        let inp = document.getElementById(`${file.meta.name}DbInput`).value;
-                                        let selector = `[id='${file.meta.name}DbInput']`;
-                                        $(selector).autocompleteCat("search", inp);
-                                    });
-                        }
-                    }
-                    return ret;
-                    }
-                },
-                {
-                    id: 'parentDir',
-                    name: 'Hub Name',
-                }];
-                return fields;
-            },
-            doneButtonHandler: function() {
-                uppy.clear();
-            },
-        };
+        // define this in init so globals are available at runtime
         let tusOptions = {
             endpoint: getTusdEndpoint(),
             withCredentials: true,
             retryDelays: null,
         };
-        uppy.use(Uppy.Dashboard, uppyOptions);
+
         uppy.use(Uppy.Tus, tusOptions);
         uppy.use(BatchChangePlugin, {target: Uppy.Dashboard});
         uppy.on('upload-success', (file, response) => {
@@ -1436,7 +1425,48 @@ var hubCreate = (function() {
             console.log("replace history with uiState");
         });
     }
+
+    function checkJsonData(jsonData, callerName) {
+        // Return true if jsonData isn't empty and doesn't contain an error;
+        // otherwise complain on behalf of caller.
+        if (! jsonData) {
+            alert(callerName + ': empty response from server');
+        } else if (jsonData.error) {
+            console.error(jsonData.error);
+            alert(callerName + ': error from server: ' + jsonData.error);
+        } else if (jsonData.warning) {
+            alert("Warning: " + jsonData.warning);
+            return true;
+        } else {
+            if (debugCartJson) {
+                console.log('from server:\n', jsonData);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    function handleRefreshState(jsonData, textStatus) {
+        if (checkJsonData(jsonData, 'handleRefreshState')) {
+            handleGetFileList(jsonData, true);
+        }
+    }
+
+    function handleErrorState(jqXHR, textStatus) {
+        cart.defaultErrorCallback(jqXHR, textStatus);
+    }
+
+    function init() {
+        cart.setCgiAndUrl(fileListEndpoint);
+        cart.debug(debugCartJson);
+        // get the file list immediately upon page load
+        cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
+        cart.flush();
+    }
     return { init: init,
              uiState: uiState,
+             defaultDb: defaultDb,
+             makeGenomeSelectOptions: makeGenomeSelectOptions,
+             detectFileType: detectFileType,
            };
 }());

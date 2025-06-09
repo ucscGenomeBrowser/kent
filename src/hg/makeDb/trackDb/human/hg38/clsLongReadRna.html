@@ -1,0 +1,82 @@
+<b>Description</b><br>
+These tracks represent the results of targeted long-read RNA sequencing aimed at identifying lowly expressed lncRNAs in adult and embryonic tissues. The track consists of capture target regions, mappings of pre- and post-capture reads, and transcript models built from the data.<br><br>
+
+This dataset supports the lncRNA annotations introduced in GENCODE v47.<br><br>
+
+Detailed descriptions of the data are available at the
+<a href="https://github.com/guigolab/CLS3_GENCODE" target="_blank">GENCODE CLS Project</a> site.<br><br>
+
+<b>Display Conventions and Configuration</b><br>
+This is a multi-view composite track containing multiple data types (views). Each view includes subtracks that are displayed individually in the browser. Instructions for configuring multi-view tracks are 
+<a href="/goldenPath/help/multiView.html" target="_blank">here</a>.<br><br>
+
+<b>Views:</b><br>
+<ul>
+  <li><b>Targets:</b> Capture target regions</li>
+  <li><b>Models:</b> Transcript models generated from reads and merging</li>
+  <li><b>Sample models:</b> Transcript models by sample in which they were observed </li>
+  <li><b>Per-experiment reads:</b> Read mappings per experiment</li>
+  <li><b>Per-experiment Models:</b> Transcript models generated from the experiments</li>
+</ul>
+
+<b>Methods</b><br>
+This project, led by the 
+<a href="https://www.gencodegenes.org/" target="_blank">GENCODE consortium</a>,
+employed the Capture Long-read Sequencing (CLS) protocol to enrich transcripts from targeted genomic regions. It used a large capture array with orthologous probes in human and mouse genomes, targeting non-GENCODE lncRNA annotations and regions suspected of unannotated transcription. CapTrap-Seq, a cDNA library preparation protocol, was used to enrich for full-length RNA molecules (5′ to 3′).<br><br>
+
+Matched adult and embryonic tissues from human and mouse were selected to maximize transcriptome complexity. Libraries were sequenced pre- and post-capture using PacBio and Oxford Nanopore Technologies (ONT) long-read platforms, as well as short-read technologies.<br><br>
+
+Transcript isoform models were built from reads using the LyRic analysis software. These were merged using intron chains, with transcription start and end sites anchored using CAGE and poly(A) data.<br><br>
+
+<b>Credits</b><br>
+This dataset was developed by the 
+<a href="https://www.crg.eu/roderic_guigo" target="_blank">Guigó Lab, Centre for Genomic Regulation (CRG)</a>
+and the <a href="https://www.gencodegenes.org/" target="_blank">GENCODE consortium</a>.<br>
+Track set creation: Sílvia Carbonell-Sala, Andrea Tanzer, and Mark Diekhans.
+
+<h2>References</h2>
+<p>
+Mudge JM, Carbonell-Sala S, Diekhans M, Martinez JG, Hunt T, Jungreis I, Loveland JE, Arnan C,
+Barnes I, Bennett R <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkae1078" target="_blank">
+GENCODE 2025: reference gene annotation for human and mouse</a>.
+<em>Nucleic Acids Res</em>. 2025 Jan 6;53(D1):D966-D975.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39565199" target="_blank">39565199</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11701607/" target="_blank">PMC11701607</a>
+</p>
+
+<p>
+Kaur G, Perteghella T, Carbonell-Sala S, Gonzalez-Martinez J, Hunt T, Mądry T, Jungreis I, Arnan C,
+Lagarde J, Borsari B <em>et al</em>.
+<a href="https://doi.org/10.1101/2024.10.29.620654" target="_blank">
+GENCODE: massively expanding the lncRNA catalog through capture long-read RNA sequencing</a>.
+<em>bioRxiv</em>. 2024 Oct 31;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39554180" target="_blank">39554180</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11565817/" target="_blank">PMC11565817</a>
+</p>
+<p>
+Pardo-Palacios FJ, Wang D, Reese F, Diekhans M, Carbonell-Sala S, Williams B, Loveland JE, De María
+M, Adams MS, Balderrama-Gutierrez G <em>et al</em>.
+<a href="https://doi.org/10.1038/s41592-024-02298-3" target="_blank">
+Systematic assessment of long-read RNA-seq methods for transcript identification and
+quantification</a>.
+<em>Nat Methods</em>. 2024 Jul;21(7):1349-1363.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38849569" target="_blank">38849569</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11543605/" target="_blank">PMC11543605</a>
+</p>
+
+<p>
+Carbonell-Sala S, Perteghella T, Lagarde J, Nishiyori H, Palumbo E, Arnan C, Takahashi H, Carninci
+P, Uszczynska-Ratajczak B, Guigó R.
+<a href="https://doi.org/10.1038/s41467-024-49523-3" target="_blank">
+CapTrap-seq: a platform-agnostic and quantitative approach for high-fidelity full-length RNA
+sequencing</a>.
+<em>Nat Commun</em>. 2024 Jun 27;15(1):5278.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38937428" target="_blank">38937428</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11211341/" target="_blank">PMC11211341</a>
+</p>
+
+<p>
+<em>LyRic</em>: Long RNA-seq analysis workflow 
+<a href="https://github.com/guigolab/LyRic">https://github.com/guigolab/LyRic</a>
+</p>

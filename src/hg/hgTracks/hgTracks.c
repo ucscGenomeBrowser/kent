@@ -11064,18 +11064,39 @@ else if (hubAliasFile)
     puts("Download the table below as a text file: ");
     if (chromSizesFile)
 	{
-        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
+        if (startsWith("/gbdb/genark/", chromSizesFile))
+	    {
+            char *stripped = cloneString(chromSizesFile);
+            stripString(stripped, "/gbdb/genark/");
+            printf("<a href='https://%s/hubs/%s' target=_blank>%s.chrom.sizes.txt</a>", hDownloadsServer(), stripped, trackHubSkipHubName(database));
+	    }
+	    else
+	    {
+	    printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
+	    }
         puts("&nbsp;&nbsp;");
 	}
     else
         puts("&nbsp");
-    char *aliasUrl = cloneString(hubAliasFile);
+
+    char *aliasUrl;
     /* this URL reference needs to be a text file to work as a click in the
      *    html page.  Both files chromAlias.bb and chromAlias.txt exist.
      */
     if (endsWith(hubAliasFile, "chromAlias.bb"))
        aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
-    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
+    else
+        aliasUrl = cloneString(hubAliasFile);
+
+    if (startsWith("/gbdb/genark/", aliasUrl))
+	{
+	stripString(aliasUrl, "/gbdb/genark/");
+	printf("<a href='https://%s/hubs/%s' target=_blank>%s.chromAlias.txt</a>", hDownloadsServer(), aliasUrl, trackHubSkipHubName(database));
+	}
+	else
+	{
+	printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
+	}
     }
 puts("</p>");
 }

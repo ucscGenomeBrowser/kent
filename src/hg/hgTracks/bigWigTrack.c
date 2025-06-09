@@ -26,7 +26,7 @@
 #include "chain.h"
 #include "bigChain.h"
 
-static void summaryToPreDraw( struct bbiFile *bbiFile, char *chrom, int start, int end, int summarySize, struct bbiSummaryElement *summary, struct preDrawElement *preDraw, int preDrawZero)
+static void summaryToPreDraw( struct bbiFile *bbiFile, char *chrom, int start, int end, int summarySize, struct bbiSummaryElement *summary, struct preDrawElement *preDraw, int preDrawZero, boolean flip)
 /* Calculate summary and fill in predraw with results. */
 {
 if (bigWigSummaryArrayExtended(bbiFile, chrom, start, end, summarySize, summary))
@@ -37,6 +37,8 @@ if (bigWigSummaryArrayExtended(bbiFile, chrom, start, end, summarySize, summary)
         {
         struct preDrawElement *pe = &preDraw[i + preDrawZero];
         struct bbiSummaryElement *be = &summary[i];
+        if (flip)
+            be = &summary[(summarySize - 1) - i];
         pe->count = be->validCount;
         pe->min = be->minVal;
         pe->max = be->maxVal;
@@ -95,14 +97,27 @@ if (errCatchStart(errCatch))
 
                     // grab the data using query coordinates
                     if (summarySizeBlock != 0)
-                        summaryToPreDraw(bbiFile, chrom, cb->qStart, cb->qEnd, summarySizeBlock, &summary[summaryOffset], &pre->preDraw[summaryOffset], pre->preDrawZero);
+                        {
+                        int start = cb->qStart;
+                        int end = cb->qEnd;
+                        boolean flip = FALSE;
+                        if (chain->qStrand == '-')
+                            {
+                            start = chain->qSize - cb->qEnd;
+                            end = chain->qSize - cb->qStart;
+                            flip = TRUE;
+                            }
+
+                        summaryToPreDraw(bbiFile, chrom, start, end, summarySizeBlock, &summary[summaryOffset], &pre->preDraw[summaryOffset], pre->preDrawZero, flip);
+                        }
                     }
                 }
+
             }
         else
             {
             // if we're not quicklifting we can grab the whole summary from the window coordinates
-            summaryToPreDraw(bbiFile, chromName, winStart, winEnd, summarySize, summary, pre->preDraw, pre->preDrawZero);
+            summaryToPreDraw(bbiFile, chromName, winStart, winEnd, summarySize, summary, pre->preDraw, pre->preDrawZero, FALSE);
             }
 
         // I don't think tg->bbiFile is ever a list of more than one.  Verify this
