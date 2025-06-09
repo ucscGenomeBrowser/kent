@@ -505,10 +505,10 @@ if (sqlTableExists(conn, hubSearchTableName))
                 int rc = pthread_create(&threads[pt], NULL, addUnconnectedHubSearchResults, NULL);
                 if (rc )
                     errAbort("Unexpected error in pthread_create");
+                pthread_detach(threads[pt]);
+                // this thread will just happily keep working until waitForSearchResults() finishes,
+                // moving it's completed work onto pfdDone, so we can safely detach
                 }
-	    pthread_detach(threads[pt]);
-		// this thread will just happily keep working until waitForSearchResults() finishes,
-		// moving it's completed work onto pfdDone, so we can safely detach
             }
         waitForSearchResults(ptMax, threads);
         }
