@@ -226,7 +226,7 @@ printf(
 "<a target='_blank' href='https://www.ncbi.nlm.nih.gov/tools/primer-blast/'>"
 "primer blast</a>.<br>\n"
 "If you are looking for matches to RT-PCR primers, where primers often straddle intron-exon boundaries, change the <b>Target</b> option and select "
-"a gene transcript set.<br>\n"
+"a gene transcript set. This feature is only available for human and mouse assemblies.<br>\n"
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
 "<B>Target</B> - If available, choose to query transcribed sequences.<BR>\n" 
