@@ -895,7 +895,7 @@ include pseudogenes.ra
 
 include recount3.ra alpha
 
-include long_read_transcripts.ra alpha
+include long_read_transcripts.ra
 
 include mavedb.ra alpha
 
