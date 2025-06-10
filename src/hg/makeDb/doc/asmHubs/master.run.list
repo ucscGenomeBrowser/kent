@@ -945,6 +945,7 @@
 ./runBuild GCA_010367685.1_ASM1036768v1 invertebrate Bursaphelenchus_xylophilus
 ./runBuild GCA_010909745.1_sAmbRad1.alt vertebrate Amblyraja_radiata
 ./runBuild GCA_010909765.1_sAmbRad1.pri vertebrate Amblyraja_radiata
+./runBuild GCA_010978085.1_ASM1097808v1 viral Orthopoxvirus_vaccinia
 ./runBuild GCA_010993595.1_kPetMar1.alt vertebrate Petromyzon_marinus
 ./runBuild GCA_010993605.1_kPetMar1.pri vertebrate Petromyzon_marinus
 ./runBuild GCA_011004835.1_fEsoLuc1.alt fish Esox_lucius
