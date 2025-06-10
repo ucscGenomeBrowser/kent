@@ -1,0 +1,69 @@
+####
+# 2025-06-07 CLS long-read RNA  (Mark Diekhans <markd@ucsc.edu>)
+#
+# See also mm10.clsLongReadRna.txt
+####
+
+clsSrc=$HOME/compbio/browser/dev/kent/src/hg/makeDb/outside/clsLongReadRna
+clsTrackTool=${clsSrc}/clsTrackTool
+clsModelBedAs=${clsSrc}/clsModelBed.as 
+clsTargetBedAs=${clsSrc}/clsTargetBed.as
+gff_attrs_extract=${clsSrc}/gff-attrs-extract.awk
+
+cd /hive/data/genomes/hg38/bed/clsLongReadRna
+
+
+# Obtained human and mouse BAMs and indexes
+  https://public-docs.crg.es/rguigo/Data/scarbonell/gencode_paper2024_figures/browser_tracks/hub/path2LyRicBAMs.tsv 
+
+  copy BAMS directly from CRG via my account, split BAMs into pre-capture and
+  post-capture directories
+
+# download LyRic models and metadata:
+  metadata documented here:
+  https://github.com/guigolab/gencode-cls-master-table
+  cd /hive/data/genomes/mg38/bed/clsLongReadRna/lyric-data
+
+  wget -nv https://github.com/guigolab/gencode-cls-master-table/releases/latest/download/Hv3_masterTable_refined.gtf.gz
+  wget -nv https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v1.0/Hv3_metadata.tsv.gz
+  wget -nv https://github.com/guigolab/gencode-cls-master-table/releases/download/Supplementary/Hv3_CLS3_targetDesign_mergedRegions.gtf.gz
+
+
+# check BAMs vs metadata
+  $clsTrackTool check-bams lyric-data/Hv3_metadata.tsv.gz .
+
+# process GTF
+# convert to BED via GTF -> GFF3 -> genePred -> BED
+# need to go via GFF3 to get attributes in a file
+  cd lyric-data/
+  zcat Hv3_masterTable_refined.gtf.gz | gffread -F | gff3ToGenePred -attrsOut=Hv3_masterTable_refined.attrs.tab stdin stdout |\
+    genePredToBed stdin stdout | tawk '{$7=$2; print}' | sort -k1,1 -k2,2n |gzip -9 > Hv3_masterTable_refined.bed.gz
+
+  # extract tags of interest to  TSV
+  tawk -f $gff_attrs_extract  Hv3_masterTable_refined.attrs.tab |pigz -c >Hv3_transcript-meta.tsv.gz
+  rm Hv3_masterTable_refined.attrs.tab
+
+  # build target BEDs (discards ERCC-0* entries)
+  zcat Hv3_CLS3_targetDesign_mergedRegions.gtf.gz | ../../target-gff-to-bed | pigz -c  >../cls-targets.bed.gz
+
+
+# make model BEDs
+  one for each sample+phase+platform,
+  one for each sample
+  one with all
+
+  $clsTrackTool make-beds lyric-data/Hv3_metadata.tsv.gz lyric-data/Hv3_masterTable_refined.bed.gz lyric-data/Hv3_transcript-meta.tsv.gz .
+  bedToBigBed -tab -type=bed6+2 -as=$clsTargetBedAs -sizesIsChromAliasBb cls-targets.bed.gz /gbdb/hg38/hg38.chromAlias.bb cls-targets.bb
+  for bed in cls-models*.bed.gz *capture/*.bed.gz ; do \
+     bedToBigBed -tab -type=bed12+3 -as=$clsModelBedAs -sizesIsChromAliasBb $bed /gbdb/hg38/hg38.chromAlias.bb $(dirname $bed)/$(basename $bed .bed.gz).bb\
+  done
+
+# make trackDb
+  $clsTrackTool make-trackdb --parent=long_read_transcripts lyric-data/Hv3_metadata.tsv.gz /gbdb/hg38/clsLongReadRna ~/kent/src/hg/makeDb/trackDb/human/hg38/clsLongReadRna.ra
+
+  # edit to make member of long_read_transcripts.ra:
+    include clsLongReadRna.ra alpha
+    
+# link to gbdb
+  mkdir -p /gbdb/hg38/clsLongReadRna/{post-capture,pre-capture}
+  for bb in $(find . -name '*.bb' -o  -name '*.bam*') ; do ln -sf $(realpath $bb) /gbdb/hg38/clsLongReadRna/$bb ; done
