@@ -2878,7 +2878,7 @@ that identifies the reference sequence.
     <pre>   logo on</pre>
 </DIV>
 
-<DIV class="logoMaf"><span class="types bigWig"></span>
+<DIV class="logoMaf"><span class="types bigWig bigMaf"></span>
 <div class="format"><code>logoMaf &lt;url/relativePath&gt;</code></div>
     <P>The argument to logoMaf is the path to a MAF alignment (either a table or bigMaf). 
     If set and zoomed into base level the wiggle will be drawn as a sequence logo calculated 
