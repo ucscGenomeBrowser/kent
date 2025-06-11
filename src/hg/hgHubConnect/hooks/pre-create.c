@@ -17,6 +17,7 @@
 #include "obscure.h"
 #include "hooklib.h"
 #include "hubSpaceKeys.h"
+#include "htmshell.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -80,6 +81,11 @@ else
         fprintf(stderr, "userName='%s'\n'", userName);
         long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
         char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
+        char *reqParentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        boolean isHubToolsUpload = FALSE;
+        char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
+        if (hubtoolsStr)
+            isHubToolsUpload = sameString(hubtoolsStr, "TRUE") || sameString(hubtoolsStr, "true");
         long currQuota = checkUserQuota(userName);
         long newQuota = currQuota + reqFileSize;
         long maxQuota = getMaxUserQuota(userName);
@@ -100,7 +106,26 @@ else
 
         // we've passed all the checks so we can return that we are good to upload the file
         if (exitStatus == 0)
+            {
+            // set the location of the upload to the location it will ultimately live
+            char *location = setUploadPath(userName, reqFileName, reqParentDir, isHubToolsUpload);
+            if (!location)
+                {
+                errAbort("Error setting upload path in pre-create for file '%s'. This is an"
+                        " issue with our server, please email genome-www@soe.ucsc.edu with your"
+                        " userName so we can investigate.", reqFileName);
+                }
+            struct hash *changeObjHash = hashNew(0);
+            struct hash *pathObjHash = hashNew(0);
+            struct jsonElement *changeObj = newJsonObject(changeObjHash);
+            struct jsonElement *pathObj = newJsonObject(pathObjHash);
+
+            jsonObjectAdd(pathObj, "Path", newJsonString(location));
+            jsonObjectAdd(changeObj, "Storage", pathObj);
+            jsonObjectAdd(changeObj, "ID", newJsonString(makeRandomKey(128)));
+            jsonObjectAdd(response, "ChangeFileInfo", changeObj);
             fillOutHttpResponseSuccess(response);
+            }
         }
     if (errCatch->gotError)
         {
