@@ -689,6 +689,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         boolean isXeno = 0;  // just affects grayIx
         boolean nameGetsPos = FALSE; // we want the name to stay the name
 
+        if (sizeMul == 3)
+            {
+            // these tags are not currently supported by the drawing engine for protein psl
+            hashRemove(track->tdb->settingsHash, "showDiffBasesAllScales");
+            hashRemove(track->tdb->settingsHash, "baseColorUseSequence");
+            hashRemove(track->tdb->settingsHash, "baseColorDefault");
+            }
+
         lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
         lf->original = psl;
         if ((seq != NULL) && (lf->orientation == -1))
