@@ -58,6 +58,8 @@ include genCC.ra
 # Splice Impact super track: spliceVarDb, spliceAi, etc
 include spliceImpactSuper.ra
 
+include predictionScoresSuper.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
