@@ -4771,7 +4771,7 @@ if (differentString(type, "bigInteract") && differentString(type, "interact"))
     // skip generic URL code as these may have multiple items returned for a click
     itemForUrl = getIdInUrl(tdb, item);
     if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed")
-            && differentString(type, "bigPsl"))
+            && differentString(type, "bigPsl") && differentString(type, "bigGenePred"))
         {
         printCustomUrl(tdb, itemForUrl, item == itemForUrl);
         printIframe(tdb, itemForUrl);

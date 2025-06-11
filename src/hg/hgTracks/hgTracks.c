@@ -10000,10 +10000,11 @@ if (pdfFile != NULL)
     freez(&pdfFile);
     freez(&ideoPdfFile);
 
-    printf("EPS (PostScript) output has been discontinued in pursuit of additional features\n");
-    printf("that are not PostScript-compatible.  If you require PostScript output for your\n");
-    printf("workflow, please <a href='https://genome.ucsc.edu/contacts.html'>reach out to us</a>\n");
-    printf("and let us know what your needs are - we may be able to help.\n");
+    printf("If you require a bitmap image in PNG or TIFF format, note that the PDF format \n");
+    printf("is vector-based and can be easily opened in any software that opens PDF/SVG vector files. You can use these to edit the screenshot\n");
+    printf("and many publishers accept PDF or SVG files for figures. \n");
+    printf("If you publisher requires bitmap images such as TIFF or PNG, use your vector graphics program to export to these \n");
+    printf("formats. For this export, use the publishers recommended dpi (dots per inch value), usually 300 dpi.\n");
 
     // see redmine #1077
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");

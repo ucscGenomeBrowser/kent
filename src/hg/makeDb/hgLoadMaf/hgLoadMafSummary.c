@@ -117,6 +117,41 @@ if (mcMaster == NULL)
 return mcMaster;
 }
 
+char *mafSplitSrcGetChrom(char *src) 
+/* src can be in format chrom, db|chrom or db.chrom: split string on separator and return pointer to chrom.
+ * Can even handle a db with a single dot in it and the db.chrom format, but only if db has a single dot (=NCBI format)
+ * The side effect of this function is that src contains only the db, not the chrom anymore.
+ * */
+{
+char *pipe = strchr(src, '|');
+// pipe found? It's the new format, db|chrom
+if (pipe) {
+    *pipe = '\0';
+    return pipe+1;
+    }
+
+char *dot1 = strchr(src, '.');
+if (!dot1)
+    return src;  // if there are no dots, assume the name is the chrom
+else
+    {
+    // the most common format: db.chrom
+    char* chrom = dot1 + 1;
+    // look to see if maybe the db part has a dot in it
+    char *dot2 = strchr(chrom, '.'); // look for the next dot
+
+    if (!dot2)
+        *dot1 = '\0';
+    else
+        {
+        *dot2 = '\0';
+        chrom = dot2 + 1;
+        }
+
+    return chrom;
+    }
+}
+
 long processMaf(struct mafAli *maf, struct hash *componentHash, 
                 FILE *f, struct mafFile *mf, char *fileName)
 /* Compute scores for each pairwise component in the maf and output to .tab file */
@@ -127,38 +162,12 @@ struct mafAli pairMaf;
 long componentCount = 0;
 struct mafComp *mcMaster = mafMaster(maf, mf, fileName);
 struct mafComp *oldMasterNext = mcMaster->next; 
-char *e, *chrom;
+char *chrom;
 char src[256];
 
 strcpy(src, mcMaster->src);
 
-char *dot = strchr(src, '.');
-
-if (dot == NULL)
-    // this should never happen since mafMaster above requires the assembly name be in the name
-    chrom = src;  // if there are no dots, assume the name is the chrom and don't worry about matching the assembly name
-else
-    {
-    // now we're thinking maybe there's an assembly name as a prefix to the chrom name
-    *dot = 0;
-    chrom = dot + 1;
-
-    if (differentString(src, database))  
-        {
-        // the database name isn't matching the first part of the component source,
-        // look to see if maybe the database has a dot in it
-        *dot = '.';   // replace the dot
-        dot = strchr(dot + 1, '.'); // look for the next dot
-        if (dot != NULL)
-            {
-            *dot = 0;
-            chrom = dot + 1;
-            }
-
-        if ((dot == NULL) || differentString(src, database))
-            errAbort("expecting first component to have assembly name with no more than one dot");
-        }
-    }
+chrom = mafSplitSrcGetChrom(src);
 
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
@@ -174,9 +183,7 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     /* BED chromEnd is start+size */
     ms->chromEnd = mcMaster->start + mcMaster->size;
     ms->src = cloneString(mc->src);
-    /* remove trailing components (following initial .) to src name */
-    if ((e = strchr(ms->src, '.')) != NULL)
-        *e = 0;
+    mafSplitSrcGetChrom(ms->src);
 
     /* construct pairwise maf for scoring */
     ZeroVar(&pairMaf);

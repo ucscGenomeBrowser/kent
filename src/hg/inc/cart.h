@@ -441,6 +441,9 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
 void cartWriteCookie(struct cart *cart, char *cookieName);
 /* Write out HTTP Set-Cookie statement for cart. */
 
+void cartWriteHeaderAndCont(struct cart* cart, char *cookieName);
+/* write http headers including cookie and content type line */
+
 struct cart *cartAndCookie(char *cookieName, char **exclude,
 	struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write cookie and
