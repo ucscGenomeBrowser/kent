@@ -23,9 +23,13 @@ char *encodePath(char *path);
 /* Return a string where each individual component of a '/' separated
  * string has been cgiEncoded, but not the '/' chars themselves */
 
-void fillOutHttpResponseError();
+char *setUploadPath(char *userName, char *fileName, char *parentDir, boolean forceOverwrite);
+/* return the path, relative to hg.conf tusdDataDir, where we will store this upload
+ * the full path would be /tusdDataDir/userNamePrefix/userName/parentDir/fileName */
 
-void fillOutHttpResponseSuccess();
+void fillOutHttpResponseError(struct jsonElement *response);
+
+void fillOutHttpResponseSuccess(struct jsonElement *response);
 
 struct jsonElement *makeDefaultResponse();
 /* Create the default response json with some fields pre-filled */
