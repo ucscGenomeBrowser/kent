@@ -228,15 +228,18 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         }
     if (!gp)
         dyStringPrintf(output, "{\"error\": \"Couldn't find item: %s\"}", name);
-    boolean found; int start, end;
-    if (sameString(cmd, "codonToPos"))
-        found = codonToPos(gp, num, &start, &end);
     else
-        found = exonToPos(gp, num, &start, &end);
-    if (found)
-        dyStringPrintf(output, "{\"pos\": \"%s:%d-%d\"}", gp->chrom, start + 1, end);
-    else
-        dyStringPrintf(output, "{\"error\": \"%d is an invalid %s for this gene\"}", num, sameString(cmd, "codonToPos") ? "codon" : "exon");
+        {
+        boolean found; int start, end;
+        if (sameString(cmd, "codonToPos"))
+            found = codonToPos(gp, num, &start, &end);
+        else
+            found = exonToPos(gp, num, &start, &end);
+        if (found)
+            dyStringPrintf(output, "{\"pos\": \"%s:%d-%d\"}", gp->chrom, start + 1, end);
+        else
+            dyStringPrintf(output, "{\"error\": \"%d is an invalid %s for this gene\"}", num, sameString(cmd, "codonToPos") ? "codon" : "exon");
+        }
     hFreeConn(&conn);
     }
 else

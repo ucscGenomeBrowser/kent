@@ -574,26 +574,6 @@ if (jobIdString != NULL)
     }
 }
 
-void doResurrectFullCheck(struct paraMessage pm, char *ipStr, struct job *job, boolean *firstTime, int *jobsReported)
-/* Print a job, if overflows packet, send it and start another. */
-{
-if (firstTime)
-  {
-  pmInit(&pm, ipStr, paraHubPortStr);
-  pmPrintf(&pm, "alive %s", hostName);
-  *firstTime = FALSE;
-  }
-pmPrintf(&pm, " %d", job->jobId);
-++jobsReported;
-
-if ((rudpMaxSize - pm.size) < 20)
-    {
-    pmSend(&pm, mainRudp);
-    *firstTime = TRUE;
-    *jobsReported = 0;
-    }
-}
-
 void doResurrect(char *line, struct sockaddr_storage *ipAddress)
 /* Send back I'm alive message */
 {
@@ -602,22 +582,23 @@ struct dlNode *node;
 int jobsReported = 0;
 char     ipStr[NI_MAXHOST];
 getAddrAsString6n4(ipAddress, ipStr, sizeof ipStr);
-boolean firstTime = TRUE;
-struct job *job = NULL;
+pmInit(&pm, ipStr, paraHubPortStr);
+pmPrintf(&pm, "alive %s", hostName);
 for (node = jobsRunning->head; !dlEnd(node); node = node->next)
     {
-    job = node->val;
-    doResurrectFullCheck(pm, ipStr, job, &firstTime, &jobsReported);
+    struct job *job = node->val;
+    pmPrintf(&pm, " %d", job->jobId);
+    ++jobsReported;
     }
 for (node = jobsFinished->head; !dlEnd(node); node = node->next)
     {
-    job = node->val;
-    doResurrectFullCheck(pm, ipStr, job, &firstTime, &jobsReported);
+    struct job *job = node->val;
     if (jobsReported >= maxProcs)
 	break;
+    pmPrintf(&pm, " %d", job->jobId);
+    ++jobsReported;
     }
-if (jobsReported)
-    pmSend(&pm, mainRudp);
+pmSend(&pm, mainRudp);
 }
 
 void doRun(char *line, struct sockaddr_storage *ipAddress)

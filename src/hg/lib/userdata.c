@@ -39,9 +39,27 @@ hDisconnectCentral(&sc);
 return email;
 }
 
-char *getDataDir(char *userName)
-/* Return the full path to the user specific data directory, can be configured via hg.conf
- * on hgwdev, this is /data/tusd */
+char *getEncodedUserNamePath(char *userName)
+/* Compute the path for just the userName part of the users upload */
+{
+struct dyString *ret = dyStringNew(0);
+if (!userName)
+    return NULL;
+char *encUserName = cgiEncode(userName);
+char *userPrefix = md5HexForString(encUserName);
+userPrefix[2] = '\0';
+dyStringPrintf(ret, "%s/%s", userPrefix, encUserName);
+return dyStringCannibalize(&ret);
+}
+
+// make this a global so if we have to repeatedly call stripDataDir()
+// we only need to check the filesystem for path validity once
+static char *dataDir = NULL;
+
+static char *setDataDir(char *userName)
+/* Set the dataDir value based on hg.conf and the userName. Use realpath to make sure
+ * the directory exists and resolve the path if it is a symlink. Return the final
+ * path for convenience */
 {
 char *tusdDataBaseDir = cfgOption("tusdDataDir");
 if (!tusdDataBaseDir  || isEmpty(tusdDataBaseDir))
@@ -64,7 +82,18 @@ realpath(dyStringContents(newDataDir), canonicalPath);
 
 dyStringClear(newDataDir);
 dyStringPrintf(newDataDir, "%s/", canonicalPath);
-return dyStringCannibalize(&newDataDir);
+
+dataDir = dyStringCannibalize(&newDataDir);
+return dataDir;
+}
+
+char *getDataDir(char *userName)
+/* Return the full path to the user specific data directory, can be configured via hg.conf
+ * on hgwdev, this is /data/tusd */
+{
+if (!dataDir)
+    setDataDir(userName);
+return dataDir;
 }
 
 char *stripDataDir(char *fname, char *userName)
@@ -72,7 +101,7 @@ char *stripDataDir(char *fname, char *userName)
  * link, we will resolve it here. NOTE that this relies on
  * calling realpath(3) on the fname argument prior to calling stripDataDir() */
 {
-char *dataDir = getDataDir(userName);
+getDataDir(userName);
 if (!dataDir)
     {
     // catch a realpath error

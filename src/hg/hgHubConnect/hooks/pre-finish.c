@@ -66,7 +66,6 @@ else
         long long fileSize = 0;
         char *fileType = NULL;
         char *db = NULL;
-        char *location = NULL;
         char *reqLm = NULL;
         time_t lastModified = 0;
         boolean isHubToolsUpload = FALSE;
@@ -100,9 +99,6 @@ else
         db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
         reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
         lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
-        char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
-        if (hubtoolsStr)
-            isHubToolsUpload = sameString(hubtoolsStr, "TRUE") || sameString(hubtoolsStr, "true");
         parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
         fprintf(stderr, "parentDir = '%s'\n", parentDir);
         fflush(stderr);
@@ -113,6 +109,7 @@ else
         fprintf(stderr, "parentDir = '%s'\n", parentDir);
         fflush(stderr);
         tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
+        tusInfo = jsonQueryString(req, "", "Event.Upload.Storage.InfoPath", NULL);
         if (fileName == NULL)
             {
             errAbort("No Event.Upload.fileName setting");
@@ -123,9 +120,7 @@ else
             }
         else
             {
-            tusInfo = catTwoStrings(tusFile, ".info");
             userDataDir = dataDir = getDataDir(userName);
-            struct dyString *newFile = dyStringNew(0);
             // if parentDir provided we are throwing the files in there
             if (parentDir)
                 {
@@ -134,39 +129,18 @@ else
                     encodedParentDir = catTwoStrings(encodedParentDir, "/");
                 dataDir = catTwoStrings(dataDir, encodedParentDir);
                 }
-            dyStringPrintf(newFile, "%s%s", dataDir, fileName);
-
-            fprintf(stderr, "moving %s to %s\n", tusFile, dyStringContents(newFile));
-            // TODO: check if file exists or not and let user choose to overwrite
-            // and re-call this hook, for now just exit if the file exists
-            // hubtools uploads always overwrite because we assume those users
-            // know what they are doing
-            if (fileExists(dyStringContents(newFile)) && !isHubToolsUpload)
+            // the directory may not exist yet
+            int oldUmask = 00;
+            if (!isDirectory(dataDir))
                 {
-                errAbort("file '%s' exists already, not overwriting", dyStringContents(newFile));
+                fprintf(stderr, "making directory '%s'\n", dataDir);
+                // the directory needs to be 777, so ignore umask for now
+                oldUmask = umask(0);
+                makeDirsOnPath(dataDir);
+                // restore umask
+                umask(oldUmask);
                 }
-            else
-                {
-                // set our mysql table location:
-                location = dyStringContents(newFile);
-                // the directory may not exist yet
-                int oldUmask = 00;
-                if (!isDirectory(dataDir))
-                    {
-                    fprintf(stderr, "making directory '%s'\n", dataDir);
-                    // the directory needs to be 777, so ignore umask for now
-                    oldUmask = umask(0);
-                    makeDirsOnPath(dataDir);
-                    // restore umask
-                    umask(oldUmask);
-                    }
-                copyFile(tusFile, dyStringContents(newFile));
-                // the files definitely should not be executable!
-                chmod(dyStringContents(newFile), 0666);
-                mustRemove(tusFile);
-                mustRemove(tusInfo);
-                dyStringCannibalize(&newFile);
-                }
+            mustRemove(tusInfo);
             }
 
         // we've passed all the checks so we can write a new or updated row
@@ -183,7 +157,7 @@ else
             row->creationTime = NULL; // automatically handled by mysql
             row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
             row->db = db;
-            row->location = location;
+            row->location = tusFile;
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = encodedParentDir ? encodedParentDir : "";
             if (!isHubToolsUpload && !(sameString(fileType, "hub.txt")))

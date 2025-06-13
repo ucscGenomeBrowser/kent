@@ -1177,7 +1177,13 @@ function varHashToQueryString(varHash)
                 retVal += aVar + "=" + encodeURIComponent(this);
             });
         } else {
-            retVal += aVar + "=" + encodeURIComponent(val);
+            let decoded = decodeURIComponent(val);
+            if (decoded.length < val.length) {
+                // val was already encoded, don't re-encode
+                retVal += aVar + "=" + val;
+            } else {
+                retVal += aVar + "=" + encodeURIComponent(val);
+            }
         }
     }
     return retVal;
