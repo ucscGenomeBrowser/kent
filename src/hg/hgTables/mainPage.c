@@ -435,7 +435,7 @@ jsAddEventForId("change", "outputTypeDropdown", "checkOutputNotes");
 
 jsInline("function checkSnpTablesNote(event) {\n"  
     "var trackName = document.getElementById('hgta_track').value;\n"
-    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp'))\n"
+    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp') || trackName.startsWith('gnomad'))\n"
     "    document.getElementById('snpTablesNote').style.display='';\n"
     "else\n"
     "    document.getElementById('snpTablesNote').style.display='none';\n"
@@ -772,10 +772,10 @@ if (isHicTable(curTable))
     hicMainPageConfig(cart, hTrackDbForTrack(database,curTable));
 
 hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='snpTablesNote'>"
-        "<b>Note:</b> Most dbSNP tables are huge. Trying to download them through the Table Browser "
+        "<b>Note:</b> Most dbSNP and gnomAD variant tables are huge. Trying to download them through the Table Browser "
         "usually leads to a timeout.<br> "
         "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
-        "on how to download dbSNP data.</DIV></td></tr>");
+        "on how to download dbSNP or gnomAD data or the Data Access section of their track documentation pages.</DIV></td></tr>");
 
 /* Region line */
 {
