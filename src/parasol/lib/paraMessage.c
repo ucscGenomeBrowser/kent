@@ -63,8 +63,8 @@ void pmSet(struct paraMessage *pm, char *message)
 int len = strlen(message);
 if (len >= sizeof(pm->data) - 1)
     {
-    errAbort("Message too long in pmSet, ignoring: %.20s...", message);
-    //pmClear(pm);
+    warn("Message too long in pmSet, ignoring: %.20s...", message);
+    pmClear(pm);
     }
 else
     {
@@ -82,8 +82,8 @@ int sz = vsnprintf(pm->data + pm->size, sizeLeft, format, args);
 /* note that some version return -1 if too small */
 if ((sz < 0) || (sz >= sizeLeft))
     {
-    errAbort("pmVaPrintf buffer overflow size %d, format %s", sz, format);
-    //pmClear(pm);
+    warn("pmVaPrintf buffer overflow size %d, format %s", sz, format);
+    pmClear(pm);
     }
 else
     pm->size += sz;
