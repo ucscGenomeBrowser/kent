@@ -242,6 +242,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
                    sameString("bigLolly", s) || 
+                   sameString("bedMethyl", s) || 
                    sameString("bigRmsk", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
                    sameString("interact", s) || sameString("hic", s) ||
