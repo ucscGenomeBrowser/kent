@@ -79,6 +79,23 @@ boolean isRc = useStrand && bamIsRc(bam);
 printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
 if (!skipQualityScore)
     printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
+
+// alignment type
+char *alnType = NULL;
+if (bam->core.flag & BAM_FSECONDARY)
+    alnType = "Secondary";
+else if (bam->core.flag & BAM_FSUPPLEMENTARY)
+    alnType = "Supplementary";
+else
+    alnType = "Primary";
+printf("<B>Alignment type:</B> %s</BR>\n", alnType);
+
+// clipping
+int clippedBases[4];
+getClippedBases(bam, clippedBases);
+printf("<B>Start clipping:</B> hard: %d  soft: %d</BR>\n", clippedBases[0], clippedBases[1]);
+printf("<B>End clipping:</B> hard: %d  soft: %d</BR> \n", clippedBases[3], clippedBases[2]);
+
 if (core->n_cigar > 50)
     printf("<B>CIGAR string: </B> Cannot show long CIGAR string, more than 50 operations. Contact us if you need to see the full CIGAR string here.<BR>\n");
 else
@@ -93,11 +110,6 @@ else
             "<b>=</b> : sequence match, <b>X</b> : sequence mismatch\n");
     printf("</p>\n");
     }
-
-int clippedBases[4];
-getClippedBases(bam, clippedBases);
-printf("<B>Start clipping:</B> hard: %d  soft: %d</BR>\n", clippedBases[0], clippedBases[1]);
-printf("<B>End clipping:</B> hard: %d  soft: %d</BR> \n", clippedBases[3], clippedBases[2]);
 
 printf("<B>Tags:</B>");
 bamShowTags(bam);
