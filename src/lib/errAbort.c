@@ -54,15 +54,52 @@ static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
 {
 if (format != NULL) {
-    // vfprintf() cannot be called twice in a row without a va_end/va_start
-    // so this must be an if/else situation
     if (doContentType)
         {
         puts("Content-type: text/html\n");
         puts("Error: ");
-        vfprintf(stdout, format, args);
+
+        // Need to destroy < and > in format AND args, to make XSS impossible.
+        // and vfprintf() cannot be called twice in a row without a va_copy
+        va_list args_copy;
+        
+        // first output message to stderr, as before
+        va_copy(args_copy, args);
+        vfprintf(stderr, format, args);
+        va_end(args_copy);
+
+        // get size of buffer needed
+        va_copy(args_copy, args);
+        int needed = vsnprintf(NULL, 0, format, args_copy);
+        va_end(args_copy);
+        if (needed < 0)
+            {
+            puts("defaultVaWarn - string format error in errAbort");  // Formatting error
+            return;
+            }
+
+        // allocate buffer
+        char *buffer = malloc(needed + 1);
+        if (!buffer)
+            {
+            puts("defaultVaWarn - cannot allocate memory for errAbort message");  // Formatting error
+            return;
+            }
+
+        // write message to buffer
+        vsprintf(buffer, format, args);
+        
+        // sanitize buffer
+        for (char *p = buffer; *p; ++p) {
+            if (*p == '<') *p = '[';
+            if (*p == '>') *p = ']';
+        }
+
+        // output
+        fputs(buffer, stdout);  // or log it
         fprintf(stdout, "\n");
         fflush(stdout);
+        free(buffer);
         }
     else
         {
