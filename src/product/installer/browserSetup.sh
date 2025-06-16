@@ -1442,6 +1442,16 @@ function setupBuildOsx ()
    else
        brew update
    fi
+
+   if brew list --formula | grep -q "^mysql\$"; then
+       echo "MySQL is already installed via Homebrew. We need mariadb for the browser, but it is not easy to install mariadb ";
+       echo "when MySQL is already installed. Consider running 'brew uninstall mariadb' and then an rm command like this:"
+       echo "rm -rf /opt/homebrew/var/mysql /opt/homebrew/etc/my.cnf /opt/homebrew/etc/my.cnf.d /opt/homebrew/etc/my.cnf.default"
+       echo "Then run 'brew install mariadb' and see if you can connect using the mariadb command."
+       echo "Then restart this program."
+       exit 150
+   fi
+
    echo2 Installing homebrew packages libpng, openssl, mariadb, git
    brew install libpng openssl mariadb git freetype
 
