@@ -56,21 +56,19 @@ static void defaultVaWarn(char *format, va_list args)
 if (format != NULL) {
     if (doContentType)
         {
+        // Need to destroy < and > in format AND args, to make XSS impossible.
         puts("Content-type: text/html\n");
         puts("Error: ");
 
-        // Need to destroy < and > in format AND args, to make XSS impossible.
-        // and vfprintf() cannot be called twice in a row without a va_copy
         va_list args_copy;
         
         // first output message to stderr, as before
-        va_copy(args_copy, args);
+        va_copy(args_copy, args); // vfprintf() & co cannot be called twice in a row without a va_copy
         vfprintf(stderr, format, args);
         va_end(args_copy);
 
-        // get size of buffer needed
         va_copy(args_copy, args);
-        int needed = vsnprintf(NULL, 0, format, args_copy);
+        int needed = vsnprintf(NULL, 0, format, args_copy); // get size of buffer
         va_end(args_copy);
         if (needed < 0)
             {
@@ -78,31 +76,28 @@ if (format != NULL) {
             return;
             }
 
-        // allocate buffer
-        char *buffer = malloc(needed + 1);
+        char *buffer = malloc(needed + 1); // allocate buffer
         if (!buffer)
-            {
-            puts("defaultVaWarn - cannot allocate memory for errAbort message");  // Formatting error
+            { // out of mem error triggers errAbort
+            puts("defaultVaWarn - cannot allocate memory for errAbort message. See stderr or error log for message"); 
             return;
             }
 
-        // write message to buffer
-        vsprintf(buffer, format, args);
+        vsprintf(buffer, format, args); // write message to buffer
         
-        // sanitize buffer
-        for (char *p = buffer; *p; ++p) {
+        for (char *p = buffer; *p; ++p)
+            { // sanitize buffer
             if (*p == '<') *p = '[';
             if (*p == '>') *p = ']';
-        }
+            }
 
-        // output
-        fputs(buffer, stdout);  // or log it
+        fputs(buffer, stdout);  // output buffer
         fprintf(stdout, "\n");
         fflush(stdout);
         free(buffer);
         }
     else
-        {
+        { // normal case, for command line tools or browsers where showEarlyWarnings is not set in hg.conf
         fflush(stdout);
         vfprintf(stderr, format, args);
         fprintf(stderr, "\n");
