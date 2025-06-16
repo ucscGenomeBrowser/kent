@@ -373,10 +373,10 @@ command is one of:
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
                wise these packages may be missing: libpng zlib mariadb-client
-  dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
+  dev        - setup git/gcc/c++/freetype/etc, clone the kent repo into
                ~/kent and build the CGIs into /usr/local/apache so you can try
                them right away. Useful if you want to develop your own track 
-               type. (OSX OK)
+               type. Usually, this is run after 'browserSetup.sh install' (OSX OK)
   mysql      - Patch my.cnf and recreate Mysql users. This can fix
                a broken Mysql server after an update to Mysql 8. 
                
@@ -1442,6 +1442,16 @@ function setupBuildOsx ()
    else
        brew update
    fi
+
+   if brew list --formula | grep -q "^mysql\$"; then
+       echo "MySQL is already installed via Homebrew. We need mariadb for the browser, but it is not easy to install mariadb ";
+       echo "when MySQL is already installed. Consider running 'brew uninstall mariadb' and then an rm command like this:"
+       echo "rm -rf /opt/homebrew/var/mysql /opt/homebrew/etc/my.cnf /opt/homebrew/etc/my.cnf.d /opt/homebrew/etc/my.cnf.default"
+       echo "Then run 'brew install mariadb' and see if you can connect using the mariadb command."
+       echo "Then restart this program."
+       exit 150
+   fi
+
    echo2 Installing homebrew packages libpng, openssl, mariadb, git
    brew install libpng openssl mariadb git freetype
 
