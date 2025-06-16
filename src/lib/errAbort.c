@@ -53,24 +53,57 @@ static struct perThreadAbortVars *getThreadVars();  // forward declaration
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
 {
-if (format != NULL) {
-    // vfprintf() cannot be called twice in a row without a va_end/va_start
-    // so this must be an if/else situation
-    if (doContentType)
+if (format == NULL)
+    return;
+        
+if (doContentType)
+    {
+    puts("Content-type: text/html\n");
+    puts("Error: ");
+        
+    // Need to destroy < and > in format AND args, to make XSS impossible.
+    va_list args_copy;
+    
+    // first output message to stderr, as before
+    va_copy(args_copy, args); // vfprintf() & co cannot be called twice in a row without a va_copy
+    vfprintf(stderr, format, args);
+    va_end(args_copy);
+
+    va_copy(args_copy, args);
+    int needed = vsnprintf(NULL, 0, format, args_copy); // get size of buffer
+    va_end(args_copy);
+    if (needed < 0)
         {
-        puts("Content-type: text/html\n");
-        puts("Error: ");
-        vfprintf(stdout, format, args);
-        fprintf(stdout, "\n");
-        fflush(stdout);
+        puts("defaultVaWarn - string format error in errAbort");  // Formatting error
+        return;
         }
-    else
-        {
-        fflush(stdout);
-        vfprintf(stderr, format, args);
-        fprintf(stderr, "\n");
-        fflush(stderr);
+
+    char *buffer = malloc(needed + 1); // allocate buffer
+    if (!buffer)
+        { // out of mem error triggers errAbort
+        puts("defaultVaWarn - cannot allocate memory for errAbort message. See stderr or error log for message"); 
+        return;
         }
+
+    vsprintf(buffer, format, args); // write message to buffer
+    
+    for (char *p = buffer; *p; ++p)
+        { // sanitize buffer
+        if (*p == '<') *p = '[';
+        if (*p == '>') *p = ']';
+        }
+
+    fputs(buffer, stdout);  // output buffer
+    fprintf(stdout, "\n");
+    fflush(stdout);
+    free(buffer);
+    }
+else
+    { // normal case, for command line tools or browsers where showEarlyWarnings is not set in hg.conf
+    fflush(stdout);
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
     }
 }
 

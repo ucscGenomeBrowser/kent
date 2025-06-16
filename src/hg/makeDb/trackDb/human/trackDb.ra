@@ -1,3 +1,5 @@
+include predictionScoresSuper.ra
+
 #PanelApp
 include panelApp.ra beta,public
 include panelApp.alpha.ra alpha

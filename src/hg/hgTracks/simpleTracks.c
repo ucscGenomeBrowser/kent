@@ -1757,6 +1757,11 @@ centeredEnd = (chromStart + chromEnd+1)/2;
 int ptCount, i, x0, y0;
 if (!scaledBoxToPixelCoords(centeredStart, centeredEnd, scale, xOff, &startX, &endX))
     return;  // apparently we don't intersect the window
+
+// when the annotations are one pixel or less, make the glyph a little smaller to give a visual hint of the zoom
+if (endX-startX<=1)
+    glyphHeight = round(glyphHeight*0.75);
+
 middleX = (startX+endX)/2.0;
 switch (glyph)
     {
@@ -8109,6 +8114,42 @@ if (vis != tvDense)
 vis = limitVisibility(tg);
 }
 
+/* A spectrum from blue to red signifying the percentage of methylation */
+Color bedMethylColorArray[] =
+{
+0xffff0000,  
+0xffff4444,  
+0xffaa4488,  
+0xff884488,
+0xff4444aa,
+0xff0000ff,
+};
+
+void bedMethylMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* Return name of item */
+{
+struct bedMethyl *bed = item;
+struct dyString *mouseOver = newDyString(4096);
+
+dyStringPrintf(mouseOver, "Cov %s, %s %% modified, N_mod %s, N_canon %s, N_other %s, N_delete %s, N_fail %s, N_diff %s, N_nocall %s",
+bed->nValidCov, bed->percMod, bed->nMod, bed->nCanon, bed->nOther, bed->nDelete, bed->nFail, bed->nDiff, bed->nNoCall);
+
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
+                  mapItemName, mouseOver->string, NULL, FALSE, NULL);
+}
+
+Color bedMethylColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw methylated site in. */
+{
+struct bedMethyl *bed = (struct bedMethyl *)item;
+
+double percent = atof(bed->percMod) / 100.0;
+
+unsigned index = percent * (sizeof(bedMethylColorArray) / sizeof(Color) - 1) + 0.5;
+
+return bedMethylColorArray[index];
+}
 
 Color blastColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw protein in. */
@@ -12130,7 +12171,8 @@ else
     }
 struct dyString *query = sqlDyStringCreate("select * from %s where ", table);
 hAddBinToQuery(winStart, winEnd, query);
-sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
+// for the moment we're only loading the 'm's and not the 'h's
+sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d and name = 'm'",
 	       chromName, winEnd, winStart);
 tg->items = bedMethylLoadByQuery(conn, query->string);
 
@@ -12212,6 +12254,8 @@ void bedMethylMethods (struct track *tg)
 {
 bedMethods(tg);
 tg->loadItems = loadBedMethyl;
+tg->itemColor = bedMethylColor;
+tg->mapItem= bedMethylMapItem;
 tg->canPack = TRUE;
 }
 

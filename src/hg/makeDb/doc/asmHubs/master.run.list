@@ -862,6 +862,7 @@
 ./runBuild GCA_008766895.1_ASM876689v1 viral Enterovirus_A71
 ./runBuild GCA_008776015.1_ASM877601v1 viral Hepatovirus_A
 ./runBuild GCA_008791745.1_ASM879174v1 viral Anatid_alphaherpesvirus_1
+./runBuild GCA_008800515.1_ASM880051v1 viral Human_echovirus_1_strain_Bryson
 ./runBuild GCA_008822115.3_bTaeGut2.mat.v3 birds Taeniopygia_guttata
 ./runBuild GCA_008822125.1_bTaeGut2pat birds Taeniopygia_guttata
 ./runBuild GCA_009017415.1_ASM901741v1 fungi Aspergillus_flavus

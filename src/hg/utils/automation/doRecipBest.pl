@@ -444,16 +444,20 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases
 rm -f link.tab
 rm -f chain.tab
 if ( -s "$buildDir/axtChain/chainRBest${QDb}.bb" ) then
-  mkdir -p /gbdb/$tDb/chainNet
-  rm -f "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
-  ln -s "$buildDir/axtChain/chainRBest${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb"
-   ln -s "$buildDir/axtChain/chainRBest${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
+  if ( "$tDb" !~ "GC*" ) then
+    mkdir -p /gbdb/$tDb/chainNet
+    rm -f "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
+    ln -s "$buildDir/axtChain/chainRBest${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb"
+     ln -s "$buildDir/axtChain/chainRBest${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
+  endif
 endif
 if ( -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" ) then
-  mkdir -p /gbdb/$tDb/chainNet
-  rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
-  ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb"
-  ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
+  if ( "$tDb" !~ "GC*" ) then
+    mkdir -p /gbdb/$tDb/chainNet
+    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
+    ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb"
+    ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
+  endif
 endif
 _EOF_
       );
