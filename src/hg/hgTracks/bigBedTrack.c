@@ -848,7 +848,7 @@ if (spannedLf)
     if (mergeCount > 1)
         {
         safef(itemLabelBuf, sizeof(itemLabelBuf), "Merged %d items", mergeCount);
-        safef(mouseOver, sizeof(mouseOver), "Merged %d items. Right-click and select 'show merged items' to expand", mergeCount);
+        safef(mouseOver, sizeof(mouseOver), "Merged %d items. Click to expand or right-click and select 'show merged items'", mergeCount);
         spannedLf->label = cloneString(itemLabelBuf);
         spannedLf->name = "mergedItem"; // always, for correct hgc clicks
         spannedLf->mouseOver = cloneString(mouseOver);

@@ -373,10 +373,10 @@ command is one of:
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
                wise these packages may be missing: libpng zlib mariadb-client
-  dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
+  dev        - setup git/gcc/c++/freetype/etc, clone the kent repo into
                ~/kent and build the CGIs into /usr/local/apache so you can try
                them right away. Useful if you want to develop your own track 
-               type. (OSX OK)
+               type. Usually, this is run after 'browserSetup.sh install' (OSX OK)
   mysql      - Patch my.cnf and recreate Mysql users. This can fix
                a broken Mysql server after an update to Mysql 8. 
                
