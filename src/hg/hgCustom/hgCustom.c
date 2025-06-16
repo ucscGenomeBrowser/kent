@@ -481,7 +481,7 @@ else
     printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
     cartSaveSession(cart);
     if (gotClade)
-        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"Clade\" VALUE=\"\">\n");
+        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"\">\n");
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
