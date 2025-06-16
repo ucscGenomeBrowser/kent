@@ -1757,6 +1757,11 @@ centeredEnd = (chromStart + chromEnd+1)/2;
 int ptCount, i, x0, y0;
 if (!scaledBoxToPixelCoords(centeredStart, centeredEnd, scale, xOff, &startX, &endX))
     return;  // apparently we don't intersect the window
+
+// when the annotations are one pixel or less, make the glyph a little smaller to give a visual hint of the zoom
+if (endX-startX<=1)
+    glyphHeight = round(glyphHeight*0.75);
+
 middleX = (startX+endX)/2.0;
 switch (glyph)
     {
