@@ -1,12 +1,12 @@
 <h2>Description</h2>
 
 <p> This track collection shows <a href="https://sites.google.com/site/revelgenomics/"
-target="_blank">Rare Exome Variant Ensemble Learner</a> (REVEL) scores for predicting
-the deleteriousness of each nucleotide change in the genome.
+target="_blank">Rare Exome Variant Ensemble Learner</a> (REVEL) scores that can be
+used as evidence for pathogenicity annotations.
 </p>
 
 <p>
-REVEL is an ensemble method for predicting the pathogenicity of missense variants 
+REVEL is an ensemble method for predicting a score for missense variants 
 based on a combination of scores from 13 individual tools: MutPred, FATHMM v2.3, 
 VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, 
 SiPhy, phyloP, and phastCons. REVEL was trained using recently discovered pathogenic 
@@ -85,7 +85,7 @@ your mouse cursor and no score will be shown on the mouseover tooltip.
 
 <p><b>Track colors</b></p>
 <p>
-This track is colored according to <a target="_blank" href="https://www.sciencedirect.com/science/article/pii/S000292972200461X">Table 2 in Vikas et al</a>. The colors represent the recommended ACMG/AMP score cutoffs.
+This track is colored according to <a target="_blank" href="https://www.sciencedirect.com/science/article/pii/S000292972200461X">Table 2 in Pejaver et al</a>. The colors represent the recommended ACMG/AMP score cutoffs.
 
 <table style="text-align: left;">
   <thead>
@@ -97,7 +97,7 @@ This track is colored according to <a target="_blank" href="https://www.scienced
   <tbody>
     <tr>
       <td>&ge; .644</td>
-      <td style="color: rgb(255,0,0);">Pathogenic</td>
+      <td style="color: rgb(255,0,0);">Pathogenic_supporting</td>
     </tr>
     <tr>
       <td>.643 - .291</td>
@@ -105,10 +105,15 @@ This track is colored according to <a target="_blank" href="https://www.scienced
     </tr>
     <tr>
       <td>&le; .290</td>
-      <td style="color: rgb(80,166,230);">Benign</td>
+      <td style="color: rgb(80,166,230);">Benign_supporting</td>
     </tr>
   </tbody>
 </table>
+
+<p>
+More details on these scoring ranges can be found in Bergquist et al Genet Med 2025, Table 2:
+<img src="../images/bergquist25.png" alt="Table 2 from Bergquist Genet Med 2025">
+</p>
 
 <p>For hg38, note that the data was converted from the hg19 data using the UCSC
 liftOver program, by the REVEL authors. This can lead to missing values or
@@ -161,7 +166,6 @@ Data were converted from the files provided on
 target = "_blank">the REVEL Downloads website</a>. As with all other tracks,
 a full log of all commands used for the conversion is available in our 
 <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/">source repository</a>, for <a target=_blank href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">hg19</a> and <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/revel.txt">hg38</a>. The release used for each assembly is shown on the track description page.
-
 </p>
 
 <h2>Credits</h2>
@@ -178,5 +182,17 @@ REVEL: An Ensemble Method for Predicting the Pathogenicity of Rare Missense Vari
 <em>Am J Hum Genet</em>. 2016 Oct 6;99(4):877-885.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27666373" target="_blank">27666373</a>;
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5065685/" target="_blank">PMC5065685</a>
+</p>
+
+
+
+<p>
+Bergquist T, Stenton SL, Nadeau EAW, Byrne AB, Greenblatt MS, Harrison SM, Tavtigian SV,
+O&#x27;Donnell-Luria A, Biesecker LG, Radivojac P <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S1098-3600(25)00049-8" target="_blank">
+Calibration of additional computational tools expands ClinGen recommendation options for variant
+classification with PP3/BP4 criteria</a>.
+<em>Genet Med</em>. 2025 Mar 10;27(6):101402.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40084623" target="_blank">40084623</a>
 </p>
 
