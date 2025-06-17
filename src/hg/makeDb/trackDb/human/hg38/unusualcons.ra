@@ -40,7 +40,7 @@ group compGeno
     shortLabel UltraZoos
     longLabel UltraZoos: 4552 Ultraconserved regions in Zoonomia alignment - 100% identical in 235 species, >20bp
     parent unusualcons on
-    type bigBed 4 +
+    type bigBed 3
     bigDataUrl /gbdb/hg38/unusualcons/zooUCEs.bigBed
 
     track har2649
@@ -89,5 +89,5 @@ group compGeno
     shortLabel ZooUNICORNs
     longLabel Zoonomia UNICORNs: Unannotated Intergenic Constrained Regions
     parent unusualcons on
-    type bigBed 4 +
+    type bigBed 3 +
     bigDataUrl /gbdb/hg38/unusualcons/UNICORNs.bigBed
