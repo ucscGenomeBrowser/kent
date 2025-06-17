@@ -128,6 +128,7 @@ foreach my $queryDb (@queryList) {
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}.bb  $buildDir/bbi/$targetDb.chain${QueryDb}.bb`;
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chain${QueryDb}Link.bb`;
   $queryDate = "some date";
+  $queryAsmName = "";
   if ( $queryDb !~ m/^GC/ ) {
     $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
     chomp $queryDate;
@@ -179,6 +180,12 @@ foreach my $queryDb (@queryList) {
     `rm -f $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
+    if ( $queryDb !~ m/^GC/ ) {
+      $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
+      chomp $queryDate;
+    } else {
+      ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
+    }
   if (0 == $headerOut) {
     printf "
     track %sChainNetViewSynTen
@@ -221,6 +228,12 @@ foreach my $queryDb (@queryList) {
     `rm -f $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
+    if ( $queryDb !~ m/^GC/ ) {
+      $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
+      chomp $queryDate;
+    } else {
+      ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
+    }
   if (0 == $headerOut) {
     printf "
     track %sChainNetViewRBest
@@ -264,6 +277,12 @@ foreach my $queryDb (@queryList) {
     `rm -f $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}Link.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}.bb  $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}Link.bb`;
+    if ( $queryDb !~ m/^GC/ ) {
+      $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
+      chomp $queryDate;
+    } else {
+      ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
+    }
 
   if (0 == $headerOut) {
     printf "
