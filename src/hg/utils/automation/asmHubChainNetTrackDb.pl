@@ -103,41 +103,17 @@ sortOrder species=+ view=+ chainType=+
 configurable on\n";
 printf "html html/%s.chainNet\n", $targetDb;
 
-printf "
-    track %sChainNetViewchain
-    shortLabel Chains
-    view chain
-    visibility dense
-    parent %sChainNet
-    spectrum on
-
-    track %sChainNetViewSynTen
-    shortLabel Syntenic
-    view synten
-    visibility hide
-    parent %sChainNet
-    spectrum on
-
-    track %sChainNetViewRBest
-    shortLabel Reciprocal best
-    view rbest
-    visibility hide
-    parent %sChainNet
-    spectrum on
-
-    track %sChainNetViewLiftOver
-    shortLabel Lift over
-    view liftover
-    visibility hide
-    parent %sChainNet
-    spectrum on
-", $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb;
+my $QueryDb = "QDb";
+my $queryDate = "some date";
+my $comName = "some date";
+my $queryAsmName = "qAsmName";
 
 $N = 0;
+my $headerOut = 0;
 foreach my $queryDb (@queryList) {
-  my $comName = $queryDb;
+  $comName = $queryDb;
   $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
-  my $QueryDb = ucfirst($queryDb);
+  $QueryDb = ucfirst($queryDb);
   my $overChain="${targetAccession}.${queryDb}.over.chain.gz";
   my $overToChain="${targetAccession}To${QueryDb}.over.chain.gz";
   my $lastzDir="lastz.$queryDb";
@@ -151,15 +127,24 @@ foreach my $queryDb (@queryList) {
   }
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}.bb  $buildDir/bbi/$targetDb.chain${QueryDb}.bb`;
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chain${QueryDb}Link.bb`;
-  my $queryDate = "some date";
-  my $queryAsmName = "";
+  $queryDate = "some date";
   if ( $queryDb !~ m/^GC/ ) {
     $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
     chomp $queryDate;
   } else {
     ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
   }
-  if (0 == $N) {
+  if (0 == $headerOut) {
+    printf "
+    track %sChainNetViewchain
+    shortLabel Chains
+    view chain
+    visibility dense
+    parent %sChainNet
+    spectrum on
+", $targetDb, $targetDb;
+    $headerOut = 1;
+
     printf "
         track chain%s
         parent %sChainNetViewchain on", $QueryDb, $targetDb;
@@ -180,12 +165,31 @@ foreach my $queryDb (@queryList) {
         priority %s
 ", $N, $comName, $comName, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
      $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $queryPrio{$queryDb};
+  $N++;
+}
 
+$N = 0;
+$headerOut = 0;
+foreach my $queryDb (@queryList) {
+  $comName = $queryDb;
+  $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
+  $QueryDb = ucfirst($queryDb);
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb" ) {
     `rm -f $buildDir/bbi/$targetDb.chainSyn${QueryDb}.bb`;
     `rm -f $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
+  if (0 == $headerOut) {
+    printf "
+    track %sChainNetViewSynTen
+    shortLabel Syntenic
+    view synten
+    visibility hide
+    parent %sChainNet
+    spectrum on
+", $targetDb, $targetDb;
+    $headerOut = 1;
+  }
   printf "
         track chainSyn%s
         parent %sChainNetViewSynTen off
@@ -202,12 +206,33 @@ foreach my $queryDb (@queryList) {
      $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $queryPrio{$queryDb};
 
   }
+  $N++;
+}
+
+$N = 0;
+$headerOut = 0;
+foreach my $queryDb (@queryList) {
+  $comName = $queryDb;
+  $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
+  $QueryDb = ucfirst($queryDb);
 
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}.bb" ) {
     `rm -f $buildDir/bbi/$targetDb.chainRBest${QueryDb}.bb`;
     `rm -f $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
+  if (0 == $headerOut) {
+    printf "
+    track %sChainNetViewRBest
+    shortLabel Reciprocal best
+    view rbest
+    visibility hide
+    parent %sChainNet
+    spectrum on
+", $targetDb, $targetDb;
+    $headerOut = 1;
+  }
+
   printf "
         track chainRBest%s
         parent %sChainNetViewRBest off
@@ -224,12 +249,33 @@ foreach my $queryDb (@queryList) {
      $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $queryPrio{$queryDb};
 
   }
+  $N++;
+}
+
+$N = 0;
+$headerOut = 0;
+foreach my $queryDb (@queryList) {
+  $comName = $queryDb;
+  $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
+  $QueryDb = ucfirst($queryDb);
 
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}.bb" ) {
     `rm -f $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}.bb`;
     `rm -f $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}Link.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}.bb  $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}Link.bb`;
+
+  if (0 == $headerOut) {
+    printf "
+    track %sChainNetViewLiftOver
+    shortLabel Lift over
+    view liftover
+    visibility hide
+    parent %sChainNet
+    spectrum on
+", $targetDb, $targetDb;
+    $headerOut = 1;
+  }
 
   printf "
         track chainLiftOver%s
@@ -260,11 +306,11 @@ printf "
 
 $N = 0;
 foreach my $queryDb (@queryList) {
-  my $comName = $queryDb;
+  $comName = $queryDb;
   $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
+  $QueryDb = ucfirst($queryDb);
   my @targetAccession = split('_', $targetDb);
   my $targetAcc = sprintf("%s_%s", $targetAccession[0], $targetAccession[1]);
-  my $QueryDb = ucfirst($queryDb);
   my $queryDate = "some date";
   my $queryAsmName = "";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
