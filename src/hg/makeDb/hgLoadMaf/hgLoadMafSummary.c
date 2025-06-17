@@ -137,17 +137,7 @@ else
     {
     // the most common format: db.chrom
     char* chrom = dot1 + 1;
-    // look to see if maybe the db part has a dot in it
-    char *dot2 = strchr(chrom, '.'); // look for the next dot
-
-    if (!dot2)
-        *dot1 = '\0';
-    else
-        {
-        *dot2 = '\0';
-        chrom = dot2 + 1;
-        }
-
+    *dot1 = '\0';
     return chrom;
     }
 }
