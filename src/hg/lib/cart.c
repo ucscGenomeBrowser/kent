@@ -1560,7 +1560,8 @@ if (botException())
     return;
 
 // let rtracklayer user agent pass, but allow us to remove this exception in case the bots discover it one day
-if (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer"))
+if ( (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer")) || 
+        (isNotEmpty(cgiUserAgent()) && startsWith("IGV", cgiUserAgent())) )
     return;
 
 // QA can add a user agent after release, in case someone complains that their library is blocked
