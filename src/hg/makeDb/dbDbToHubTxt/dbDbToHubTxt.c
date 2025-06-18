@@ -37,7 +37,7 @@ fprintf(f, "hub %s genome assembly\n", db);
 fprintf(f, "shortLabel %s\n", dbDb->description);
 fprintf(f, "longLabel %s\n", dbDb->sourceName);
 fprintf(f, "email %s\n", email);
-fprintf(f, "desriptionUrl %s\n", dbDb->htmlPath);
+fprintf(f, "descriptionUrl %s\n", dbDb->htmlPath);
 fprintf(f, "useOneFile on\n");
 fprintf(f, "\n");
 
