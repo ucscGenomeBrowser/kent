@@ -583,11 +583,14 @@ int jobsReported = 0;
 char     ipStr[NI_MAXHOST];
 getAddrAsString6n4(ipAddress, ipStr, sizeof ipStr);
 pmInit(&pm, ipStr, paraHubPortStr);
-pmPrintf(&pm, "alive %s", hostName);
+
 for (node = jobsRunning->head; !dlEnd(node); node = node->next)
     {
     struct job *job = node->val;
-    pmPrintf(&pm, " %d", job->jobId);
+    pmClear(&pm);
+    pmPrintf(&pm, "alive %s %d", hostName, job->jobId);
+    if (!pmSend(&pm, mainRudp))
+        return;
     ++jobsReported;
     }
 for (node = jobsFinished->head; !dlEnd(node); node = node->next)
@@ -595,10 +598,16 @@ for (node = jobsFinished->head; !dlEnd(node); node = node->next)
     struct job *job = node->val;
     if (jobsReported >= maxProcs)
 	break;
-    pmPrintf(&pm, " %d", job->jobId);
+    pmClear(&pm);
+    pmPrintf(&pm, "alive %s %d", hostName, job->jobId);
+    if (!pmSend(&pm, mainRudp))
+        return;
     ++jobsReported;
     }
-pmSend(&pm, mainRudp);
+pmClear(&pm);
+pmPrintf(&pm, "alive %s done", hostName);
+if (!pmSend(&pm, mainRudp))
+    return;
 }
 
 void doRun(char *line, struct sockaddr_storage *ipAddress)

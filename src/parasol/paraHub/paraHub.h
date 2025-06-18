@@ -48,6 +48,7 @@ struct machine
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
     struct slInt *deadJobIds;	/* List of job Ids that machine was running when it died. */
+    struct slInt *resurrectJobIds; /* List of job Ids that machine was from resurrected machine. */
     char ipStr[NI_MAXHOST];	/* IP address as a string. */
     struct machSpec *machSpec;  /* Machine spec of resources */
     struct slRef *plannedBatches; /* List of planned batches. */
