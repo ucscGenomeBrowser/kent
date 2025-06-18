@@ -1,5 +1,7 @@
-#!/bin/bash -e
+#!/bin/bash
 
+# exit on any error
+set -beEu -o pipefail
 user=$1
 trackDb=$2
 db=$3
@@ -7,27 +9,97 @@ db=$3
 hubParent=/gbdb/$db/hubs
 hubDir=$hubParent/$user
 
+##############################################################################
+# check if there is an entry in dbDb for name==$db
+function hasDbDb() {
+  local db="$1"
+  local dbDb=$(hgsql hgcentraltest -Ne 'select count(*) from dbDb where name ="'$db'"')
+  if [ "${dbDb}" -eq 1 ]; then
+    return 0	# true: does exist
+  else
+    return 1	# false: does not exist
+  fi
+}
+
+##############################################################################
+# try to get the GCx accession name out of dbDb sourceName
+function acc() {
+  local db="$1"
+  local src=$(hgsql hgcentraltest -Ne 'select sourceName from dbDb where name ="'$db'"')
+  if [[ "$src" == *GC* ]]; then
+    ret=`echo "${src}" | sed -e 's#.*GC#GC#;' | sed -e 's#[^ACGF0-9_.]\+##;'`
+    if [ "x${ret}y" = "xy" ]; then
+       printf "ERROR: can not find GCx_... accession in dbDb name=$db\n" 1>&2
+       exit 255
+    else
+       echo $ret
+    fi
+  else
+    printf "ERROR: can not find GCx_... accession in dbDb name=$db\n" 1>&2
+    exit 255
+  fi
+}
+
+##############################################################################
 # check if a database exists, print note and return non-zero if it doesn't
-dbExists() {
+function dbExists() {
     local db="$1"
     local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
-        echo "Note: database $db does not exist, skipping"
+        printf "Note: database $db does not exist, skipping\n" 1>&2
         return 1
     else
         return 0
     fi
 }
 
-if dbExists $db ; then
-    if test -d $hubParent
-    then
-        #rm -rf $hubDir
-
-        trackDbToTxt $db $trackDb $hubDir
-        # creates $hubDir/hubAndGenome.txt 
-        dbDbToHubTxt $db genome-www@soe.ucsc.edu ../groups.txt $hubDir/hubAndGenome.txt
-        cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
-    fi
+##############################################################################
+### begin main process here
+##############################################################################
+# if the directory /gbdb/<db>/hubs does not exist, we have no business here
+if test ! -d $hubParent ; then
+  exit 0
 fi
 
+# process 'hs1' just like it has always been processed
+if [ "${db}" = "hs1" ]; then
+  if dbExists $db ; then
+     trackDbToTxt $db $trackDb $hubDir
+     # creates $hubDir/hubAndGenome.txt
+     dbDbToHubTxt $db genome-www@soe.ucsc.edu ../groups.txt $hubDir/hubAndGenome.txt
+     cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
+  fi
+  exit 0
+fi
+
+# maybe this is a GenArk hub becoming a curated hub
+if hasDbDb $db ; then
+  gcX=`acc $db`
+  oneOnly=`ls -d */${db} | wc -l`
+  if [ "${oneOnly}" -eq 1 ]; then
+    genArkTdb=`ls -d */${db}/genArk.trackDb.ra`
+    tmpDbTxt="test.$$.trackDb.txt"
+    ./hubTxtFromGenArk.pl $db $gcX "${tmpDbTxt}" > $db.hAndG.txt
+    if cmp -s "${genArkTdb}" "${tmpDbTxt}" ; then
+      :
+    else
+       printf "ERROR: need to update the $genArkTdb file\n" 1>&2
+       printf "note new contents in: $tmpDbTxt\n" 1>&2
+       exit 255
+    fi
+    rm -f "${tmpDbTxt}"
+    mkdir -p $hubDir
+    rm -f $hubDir/hubAndGenome.txt
+    mv $db.hAndG.txt $hubDir/hubAndGenome.txt
+    trackDbToTxt $db $trackDb $hubDir
+    cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
+  else
+     printf "ERROR: finding multiple directories */$db ?\n" 1>&2
+     ls -d */${db} 1>&2
+     exit 255
+  fi
+else
+  exit 0
+fi
+
+exit $?

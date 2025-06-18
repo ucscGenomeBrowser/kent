@@ -1774,6 +1774,25 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
     if (sameString(mach->name, name) && mach->isDead)
         {
 	hostFound = TRUE;
+
+	jobIdString = nextWord(&line);
+	if (!jobIdString)
+	    {
+            logWarn("unexpected blank jobId in nodeAlive");
+	    return; // not expected to happen.
+	    }
+	if (!sameString(jobIdString, "done"))
+	    {
+	    jobId = atoi(jobIdString);
+	    if (!slIntFind(mach->resurrectJobIds, jobId))
+		{ 
+		struct slInt *i = slIntNew(jobId);
+		slAddHead( &mach->resurrectJobIds, i ); 
+		}
+	    break;
+	    }
+	slReverse(&mach->resurrectJobIds); 
+
 	dlRemove(node);
 	dlAddTail(freeMachines, node);
 	needsPlanning = TRUE;
@@ -1789,9 +1808,11 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	    dyStringPrintf(dy, "came back.");
 	    logWarn("%s", dy->string);
 	    dyStringFree(&dy);
-	    while ((jobIdString = nextWord(&line)) != NULL)
+
+            struct slInt *slResJob;
+            for (slResJob = mach->resurrectJobIds; slResJob; slResJob = slResJob->next)
 	        {
-		jobId = atoi(jobIdString);
+		jobId = slResJob->val;
                 if ((i = slIntFind(mach->deadJobIds, jobId)))
 		    {
 		    struct job *job;
@@ -1840,6 +1861,8 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 		}
 	    }
 	slFreeList(&mach->deadJobIds);
+	slFreeList(&mach->resurrectJobIds);
+
 	runner(1);
 	break;
 	}

@@ -1,0 +1,594 @@
+track assembly
+longLabel Assembly
+shortLabel Assembly
+visibility hide
+colorByStrand 150,100,30 230,170,40
+color 150,100,30
+altColor 230,170,40
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.assembly.bb
+type bigBed 6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.assembly
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.assembly.ix
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide database:
+group map
+
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+visibility dense
+type bigBed 4 +
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.cytoBand.bb
+
+track gc5Base
+shortLabel GC Percent
+longLabel GC Percent in 5-Base Windows
+group map
+visibility dense
+autoScale Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 30:70
+type bigWig 0 100
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.gc5Base.bw
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.gc5Base
+
+track tanDups
+shortLabel Tandem Dups
+longLabel Paired identical sequences
+compositeTrack on
+visibility hide
+type bigBed 12
+group map
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.tanDups
+
+track gapOverlap
+parent tanDups on
+shortLabel Gap Overlaps
+longLabel Paired exactly identical sequence on each side of a gap
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.gapOverlap.bb
+type bigBed 12
+
+track tandemDups
+parent tanDups on
+shortLabel Tandem Dups
+longLabel Paired exactly identical sequence survey over entire genome assembly
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.tandemDups.bb
+type bigBed 12
+
+track repeatMasker
+shortLabel RepeatMasker
+longLabel RepeatMasker Repetitive Elements
+type bigRmsk 9 +
+visibility pack
+group varRep
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rmsk.bb
+maxWindowToDraw 5000000
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.repeatMasker
+
+track repeatModeler
+shortLabel RepeatModeler
+longLabel RepeatModeler Repetitive Elements
+type bigRmsk 9 +
+visibility hide
+group varRep
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rModel.bb
+xrefDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rModel.align.bb
+maxWindowToDraw 5000000
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.repeatModeler
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+visibility dense
+type bigBed 4 +
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.simpleRepeat.bb
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.simpleRepeat
+
+track refSeqComposite
+compositeTrack on
+shortLabel NCBI RefSeq
+longLabel RefSeq gene predictions from NCBI
+group genes
+visibility pack
+type bigBed
+dragAndDrop subTracks
+allButtonPair on
+dataVersion NCBI RefSeq GCF_036323735.1-RS_2024_02 (2024-02-24)
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.refSeqComposite
+priority 2
+
+track ncbiRefSeq
+parent refSeqComposite on
+color 12,12,120
+shortLabel RefSeq All
+type bigGenePred
+urls name2="https://www.ncbi.nlm.nih.gov/gene/?term=$$" geneName="https://www.ncbi.nlm.nih.gov/gene/$$" geneName2="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+labelFields name,geneName,geneName2
+defaultLabelFields geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.ncbiRefSeq.ix
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.ncbiRefSeq.bb
+longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+idXref ncbiRefSeqLink mrnaAcc name
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 1
+
+track ncbiRefSeqCurated
+color 12,12,120
+parent refSeqComposite on
+shortLabel RefSeq Curated
+longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
+type bigGenePred
+urls name2="https://www.ncbi.nlm.nih.gov/gene/?term=$$" geneName="https://www.ncbi.nlm.nih.gov/gene/$$" geneName2="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+labelFields name,geneName,geneName2
+defaultLabelFields geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.ncbiRefSeqCurated.ix
+idXref ncbiRefSeqLink mrnaAcc name
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.ncbiRefSeqCurated.bb
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 2
+
+track ncbiRefSeqPredicted
+color 12,12,120
+parent refSeqComposite on
+shortLabel RefSeq Predicted
+longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
+type bigGenePred
+urls name2="https://www.ncbi.nlm.nih.gov/gene/?term=$$" geneName="https://www.ncbi.nlm.nih.gov/gene/$$" geneName2="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+labelFields name,geneName,geneName2
+defaultLabelFields geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.ncbiRefSeqPredicted.ix
+idXref ncbiRefSeqLink mrnaAcc name
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.ncbiRefSeqPredicted.bb
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 3
+
+track ncbiRefSeqOther
+color 32,32,32
+parent refSeqComposite on
+shortLabel RefSeq Other
+longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+priority 4
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.ncbiRefSeqOther.ix
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.ncbiRefSeqOther.bb
+type bigBed 12 +
+labelFields name
+skipEmptyFields on
+urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/$$" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
+
+track ncbiRefSeqPsl
+priority 5
+parent refSeqComposite off
+shortLabel RefSeq Alignments
+longLabel RefSeq Alignments of RNAs
+type bigPsl
+searchIndex name
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.bigPsl.bb
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffCodons
+pslSequence no
+baseColorUseSequence lfExtra
+baseColorUseCds table given
+color 0,0,0
+
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 7
+type bigGenePred
+shortLabel RefSeq Select
+longLabel NCBI RefSeq/MANE Select: one representative transcript per protein-coding gene
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+labelFields name,geneName,geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.ncbiRefSeqSelectCurated.ix
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.ncbiRefSeqSelectCurated.bb
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+track cpgIslands
+compositeTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+visibility dense
+type bigBed 4 +
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.cpgIslands
+
+track cpgIslandExt
+parent cpgIslands off
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+type bigBed 4 +
+priority 1
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.cpgIslandExt.bb
+
+track cpgIslandExtUnmasked
+parent cpgIslands on
+shortLabel Unmasked CpG
+longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+type bigBed 4 +
+priority 2
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.cpgIslandExtUnmasked.bb
+
+track windowMasker
+shortLabel WM + SDust
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+visibility dense
+type bigBed 3
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.windowMasker.bb
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.windowMasker
+
+track allGaps
+shortLabel All Gaps
+longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
+group map
+visibility hide
+type bigBed 3
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.allGaps.bb
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.allGaps
+
+track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
+group genes
+visibility dense
+color 180,0,0
+type bigGenePred
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.augustus.bb
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.augustus
+
+track xenoRefGene
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
+group rna
+visibility pack
+color 180,0,0
+type bigGenePred
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.xenoRefGene.bb
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide database:
+labelFields name,geneName,geneName2
+defaultLabelFields geneName
+searchIndex name
+searchTrix /gbdb/genark/GCF/036/323/735/GCF_036323735.1/ixIxx/GCF_036323735.1_GRCr8.xenoRefGene.ix
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.xenoRefGene
+
+track GCF_036323735.1_GRCr8ChainNet
+compositeTrack on
+shortLabel Chain/Net
+longLabel Chain alignments to target sequence: GCF_036323735.1_GRCr8
+subGroup1 view Views chain=Chains synten=Syntenic rbest=Reciprocal_best liftover=Lift_over align=Alignment
+subGroup2 species Assembly s000=rn6 s001=mm10 s002=hg19
+subGroup3 chainType chain_type c00=chain c01=syntenic c02=reciprocal_best c03=lift_over c04=chain_align c05=syntenic_align c06=reciprocal_align c07=lift_over_align
+dragAndDrop subTracks
+visibility hide
+group compGeno
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=chainType dimensionY=species
+sortOrder species=+ view=+ chainType=+
+configurable on
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+
+track GCF_036323735.1_GRCr8ChainNetViewchain
+shortLabel Chains
+view chain
+visibility dense
+parent GCF_036323735.1_GRCr8ChainNet
+spectrum on
+
+track chainRn6
+parent GCF_036323735.1_GRCr8ChainNetViewchain on
+subGroups view=chain species=s000 chainType=c00
+shortLabel Rat/rn6 Chain
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigChain rn6
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRn6.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRn6Link.bb
+otherDb rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track chainMm10
+parent GCF_036323735.1_GRCr8ChainNetViewchain off
+subGroups view=chain species=s001 chainType=c00
+shortLabel Mouse/mm10 Chain
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainMm10.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track chainHg19
+parent GCF_036323735.1_GRCr8ChainNetViewchain off
+subGroups view=chain species=s002 chainType=c00
+shortLabel Human/hg19 Chain
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigChain hg19
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainHg19.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainHg19Link.bb
+otherDb hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track GCF_036323735.1_GRCr8ChainNetViewSynTen
+shortLabel Syntenic
+view synten
+visibility hide
+parent GCF_036323735.1_GRCr8ChainNet
+spectrum on
+
+track chainSynRn6
+parent GCF_036323735.1_GRCr8ChainNetViewSynTen off
+subGroups view=synten species=s000 chainType=c01
+shortLabel Rat/rn6 synChain
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigChain rn6
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainSynRn6.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainSynRn6Link.bb
+otherDb rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track chainSynMm10
+parent GCF_036323735.1_GRCr8ChainNetViewSynTen off
+subGroups view=synten species=s001 chainType=c01
+shortLabel Mouse/mm10 synChain
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainSynMm10.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainSynMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track chainSynHg19
+parent GCF_036323735.1_GRCr8ChainNetViewSynTen off
+subGroups view=synten species=s002 chainType=c01
+shortLabel Human/hg19 synChain
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigChain hg19
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainSynHg19.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainSynHg19Link.bb
+otherDb hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track GCF_036323735.1_GRCr8ChainNetViewRBest
+shortLabel Reciprocal best
+view rbest
+visibility hide
+parent GCF_036323735.1_GRCr8ChainNet
+spectrum on
+
+track chainRBestRn6
+parent GCF_036323735.1_GRCr8ChainNetViewRBest off
+subGroups view=rbest species=s000 chainType=c02
+shortLabel Rat/rn6 rbChain
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigChain rn6
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRBestRn6.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRBestRn6Link.bb
+otherDb rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track chainRBestMm10
+parent GCF_036323735.1_GRCr8ChainNetViewRBest off
+subGroups view=rbest species=s001 chainType=c02
+shortLabel Mouse/mm10 rbChain
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRBestMm10.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRBestMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track chainRBestHg19
+parent GCF_036323735.1_GRCr8ChainNetViewRBest off
+subGroups view=rbest species=s002 chainType=c02
+shortLabel Human/hg19 rbChain
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigChain hg19
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRBestHg19.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainRBestHg19Link.bb
+otherDb hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track GCF_036323735.1_GRCr8ChainNetViewLiftOver
+shortLabel Lift over
+view liftover
+visibility hide
+parent GCF_036323735.1_GRCr8ChainNet
+spectrum on
+
+track chainLiftOverRn6
+parent GCF_036323735.1_GRCr8ChainNetViewLiftOver off
+subGroups view=liftover species=s000 chainType=c03
+shortLabel Rat/rn6 loChain
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigChain rn6
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainLiftOverRn6.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainLiftOverRn6Link.bb
+otherDb rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track chainLiftOverMm10
+parent GCF_036323735.1_GRCr8ChainNetViewLiftOver off
+subGroups view=liftover species=s001 chainType=c03
+shortLabel Mouse/mm10 loChain
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainLiftOverMm10.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainLiftOverMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track chainLiftOverHg19
+parent GCF_036323735.1_GRCr8ChainNetViewLiftOver off
+subGroups view=liftover species=s002 chainType=c03
+shortLabel Human/hg19 loChain
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigChain hg19
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainLiftOverHg19.bb
+linkDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.chainLiftOverHg19Link.bb
+otherDb hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track GCF_036323735.1_GRCr8MafNetViewnet
+shortLabel Nets
+view align
+visibility hide
+parent GCF_036323735.1_GRCr8ChainNet
+
+track netRn6
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s000 chainType=c04
+shortLabel Rat/rn6 mafNet
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rn6.net.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rn6.net.summary.bb
+speciesOrder rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track synNetRn6
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s000 chainType=c05
+shortLabel Rat/rn6 synNet
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rn6.synNet.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rn6.synNet.summary.bb
+speciesOrder rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track rbestNetRn6
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s000 chainType=c06
+shortLabel Rat/rn6 rbestNet
+longLabel Rat/rn6/rn6 (Jul. 2014) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rn6.rbestNet.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.rn6.rbestNet.summary.bb
+speciesOrder rn6
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 2.543
+
+track netMm10
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s001 chainType=c04
+shortLabel Mouse/mm10 mafNet
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.mm10.net.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.mm10.net.summary.bb
+speciesOrder mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track synNetMm10
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s001 chainType=c05
+shortLabel Mouse/mm10 synNet
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.mm10.synNet.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.mm10.synNet.summary.bb
+speciesOrder mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track rbestNetMm10
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s001 chainType=c06
+shortLabel Mouse/mm10 rbestNet
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.mm10.rbestNet.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.mm10.rbestNet.summary.bb
+speciesOrder mm10
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 30.636
+
+track netHg19
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s002 chainType=c04
+shortLabel Human/hg19 mafNet
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.hg19.net.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.hg19.net.summary.bb
+speciesOrder hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track synNetHg19
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s002 chainType=c05
+shortLabel Human/hg19 synNet
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.hg19.synNet.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.hg19.synNet.summary.bb
+speciesOrder hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track rbestNetHg19
+parent GCF_036323735.1_GRCr8MafNetViewnet off
+subGroups view=align species=s002 chainType=c06
+shortLabel Human/hg19 rbestNet
+longLabel Human/hg19/hg19 (Feb. 2009) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.hg19.rbestNet.bb
+summary /gbdb/genark/GCF/036/323/735/GCF_036323735.1/bbi/GCF_036323735.1_GRCr8.hg19.rbestNet.summary.bb
+speciesOrder hg19
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/html/GCF_036323735.1_GRCr8.chainNet
+priority 66.710
+
+track Tiberius
+bigDataUrl /gbdb/genark/GCF/036/323/735/GCF_036323735.1/contrib/tiberius/tiberius.bigGenePred.bb
+shortLabel Tiberius genes
+longLabel Tiberius ab initio gene prediction
+type bigGenePred
+visibility pack
+color 0,102,204
+noScoreFilter on
+html /gbdb/genark/GCF/036/323/735/GCF_036323735.1/contrib/tiberius/Tiberius.html
+group genes
+dataVersion Tiberius version 2025-01-07
+baseColorDefault genomicCodons

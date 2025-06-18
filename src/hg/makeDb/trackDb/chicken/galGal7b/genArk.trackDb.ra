@@ -1,0 +1,896 @@
+track assembly
+longLabel Assembly
+shortLabel Assembly
+visibility hide
+colorByStrand 150,100,30 230,170,40
+color 150,100,30
+altColor 230,170,40
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.assembly.bb
+type bigBed 6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.assembly
+searchIndex name
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.assembly.ix
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide database:
+group map
+
+track gap
+longLabel AGP gap
+shortLabel Gap (AGP defined)
+visibility hide
+color 0,0,0
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.gap.bb
+type bigBed 4
+group map
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.gap
+
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+visibility dense
+type bigBed 4 +
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.cytoBand.bb
+
+track gc5Base
+shortLabel GC Percent
+longLabel GC Percent in 5-Base Windows
+group map
+visibility dense
+autoScale Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 30:70
+type bigWig 0 100
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.gc5Base.bw
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.gc5Base
+
+track tanDups
+shortLabel Tandem Dups
+longLabel Paired identical sequences
+compositeTrack on
+visibility hide
+type bigBed 12
+group map
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.tanDups
+
+track gapOverlap
+parent tanDups on
+shortLabel Gap Overlaps
+longLabel Paired exactly identical sequence on each side of a gap
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.gapOverlap.bb
+type bigBed 12
+
+track tandemDups
+parent tanDups on
+shortLabel Tandem Dups
+longLabel Paired exactly identical sequence survey over entire genome assembly
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.tandemDups.bb
+type bigBed 12
+
+track repeatMasker
+shortLabel RepeatMasker
+longLabel RepeatMasker Repetitive Elements
+type bigRmsk 9 +
+visibility pack
+group varRep
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.rmsk.bb
+xrefDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.rmsk.align.bb
+maxWindowToDraw 5000000
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.repeatMasker
+
+track repeatModeler
+shortLabel RepeatModeler
+longLabel RepeatModeler Repetitive Elements
+type bigRmsk 9 +
+visibility hide
+group varRep
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.rModel.bb
+xrefDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.rModel.align.bb
+maxWindowToDraw 5000000
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.repeatModeler
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+visibility dense
+type bigBed 4 +
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.simpleRepeat.bb
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.simpleRepeat
+
+track refSeqComposite
+compositeTrack on
+shortLabel NCBI RefSeq
+longLabel RefSeq gene predictions from NCBI
+group genes
+visibility pack
+type bigBed
+dragAndDrop subTracks
+allButtonPair on
+dataVersion NCBI Gallus gallus Annotation Release 106 (2022-03-04)
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.refSeqComposite
+priority 2
+
+track ncbiRefSeq
+parent refSeqComposite on
+color 12,12,120
+shortLabel RefSeq All
+type bigGenePred
+urls name2="https://www.ncbi.nlm.nih.gov/gene/?term=$$" geneName="https://www.ncbi.nlm.nih.gov/gene/$$" geneName2="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+labelFields name,geneName,geneName2
+defaultLabelFields geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeq.ix
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeq.bb
+longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+idXref ncbiRefSeqLink mrnaAcc name
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 1
+
+track ncbiRefSeqCurated
+color 12,12,120
+parent refSeqComposite on
+shortLabel RefSeq Curated
+longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
+type bigGenePred
+urls name2="https://www.ncbi.nlm.nih.gov/gene/?term=$$" geneName="https://www.ncbi.nlm.nih.gov/gene/$$" geneName2="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+labelFields name,geneName,geneName2
+defaultLabelFields geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeqCurated.ix
+idXref ncbiRefSeqLink mrnaAcc name
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeqCurated.bb
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 2
+
+track ncbiRefSeqPredicted
+color 12,12,120
+parent refSeqComposite on
+shortLabel RefSeq Predicted
+longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
+type bigGenePred
+urls name2="https://www.ncbi.nlm.nih.gov/gene/?term=$$" geneName="https://www.ncbi.nlm.nih.gov/gene/$$" geneName2="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+labelFields name,geneName,geneName2
+defaultLabelFields geneName2
+searchIndex name
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeqPredicted.ix
+idXref ncbiRefSeqLink mrnaAcc name
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeqPredicted.bb
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 3
+
+track ncbiRefSeqOther
+color 32,32,32
+parent refSeqComposite on
+shortLabel RefSeq Other
+longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+priority 4
+searchIndex name
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeqOther.ix
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ncbiRefSeqOther.bb
+type bigBed 12 +
+labelFields name
+skipEmptyFields on
+urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/$$" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
+
+track ncbiRefSeqPsl
+priority 5
+parent refSeqComposite off
+shortLabel RefSeq Alignments
+longLabel RefSeq Alignments of RNAs
+type bigPsl
+searchIndex name
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.bigPsl.bb
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffCodons
+pslSequence no
+baseColorUseSequence lfExtra
+baseColorUseCds table given
+color 0,0,0
+
+track cpgIslands
+compositeTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+visibility dense
+type bigBed 4 +
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.cpgIslands
+
+track cpgIslandExt
+parent cpgIslands off
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+type bigBed 4 +
+priority 1
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.cpgIslandExt.bb
+
+track cpgIslandExtUnmasked
+parent cpgIslands on
+shortLabel Unmasked CpG
+longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+type bigBed 4 +
+priority 2
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.cpgIslandExtUnmasked.bb
+
+track windowMasker
+shortLabel WM + SDust
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+visibility dense
+type bigBed 3
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.windowMasker.bb
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.windowMasker
+
+track allGaps
+shortLabel All Gaps
+longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
+group map
+visibility hide
+type bigBed 3
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.allGaps.bb
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.allGaps
+
+track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
+group genes
+visibility dense
+color 180,0,0
+type bigGenePred
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.augustus.bb
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.augustus
+
+track xenoRefGene
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
+group rna
+visibility pack
+color 180,0,0
+type bigGenePred
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.xenoRefGene.bb
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide database:
+labelFields name,geneName,geneName2
+defaultLabelFields geneName
+searchIndex name
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.xenoRefGene.ix
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.xenoRefGene
+
+track ensGene
+shortLabel Ensembl genes
+longLabel Ensembl genes 2022_01
+group genes
+priority 40
+visibility pack
+color 150,0,0
+itemRgb on
+type bigGenePred
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ensGene.bb
+searchTrix /gbdb/genark/GCF/016/699/485/GCF_016699485.2/ixIxx/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ensGene.ix
+searchIndex name
+labelFields name,name2
+defaultLabelFields name2
+baseColorUseCds given
+baseColorDefault genomicCodons
+labelSeparator " "
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.ensGene
+
+track GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNet
+compositeTrack on
+shortLabel Chain/Net
+longLabel Chain alignments to target sequence: GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b
+subGroup1 view Views chain=Chains synten=Syntenic rbest=Reciprocal_best liftover=Lift_over align=Alignment
+subGroup2 species Assembly s000=galGal6 s001=galGal5 s002=GCF_014805655.1 s003=hg38 s004=GCF_002263795.3 s005=mm39 s006=mm10
+subGroup3 chainType chain_type c00=chain c01=syntenic c02=reciprocal_best c03=lift_over c04=chain_align c05=syntenic_align c06=reciprocal_align c07=lift_over_align
+dragAndDrop subTracks
+visibility hide
+group compGeno
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=chainType dimensionY=species
+sortOrder species=+ view=+ chainType=+
+configurable on
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+
+track GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain
+shortLabel Chains
+view chain
+visibility dense
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNet
+spectrum on
+
+track chainGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain on
+subGroups view=chain species=s000 chainType=c00
+shortLabel Chicken/galGal6 Chain
+longLabel Chicken/galGal6/galGal6 (Mar. 2018) Chained Alignments
+type bigChain galGal6
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGalGal6.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGalGal6Link.bb
+otherDb galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track chainGalGal5
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain off
+subGroups view=chain species=s001 chainType=c00
+shortLabel Chicken/galGal5 Chain
+longLabel Chicken/galGal5/galGal5 (Dec 2015) Chained Alignments
+type bigChain galGal5
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGalGal5.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGalGal5Link.bb
+otherDb galGal5
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.573
+
+track chainGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain off
+subGroups view=chain species=s002 chainType=c00
+shortLabel Eurasian tree sparrow Chain
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigChain GCF_014805655.1
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGCF_014805655.1.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGCF_014805655.1Link.bb
+otherDb GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track chainHg38
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain off
+subGroups view=chain species=s003 chainType=c00
+shortLabel Human/hg38 Chain
+longLabel Human/hg38/hg38 (Dec. 2013) Chained Alignments
+type bigChain hg38
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainHg38.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainHg38Link.bb
+otherDb hg38
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 88.635
+
+track chainGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain off
+subGroups view=chain species=s004 chainType=c00
+shortLabel cattle Chain
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigChain GCF_002263795.3
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGCF_002263795.3.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainGCF_002263795.3Link.bb
+otherDb GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track chainMm39
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain off
+subGroups view=chain species=s005 chainType=c00
+shortLabel Mouse/mm39 Chain
+longLabel Mouse/mm39/mm39 (Jun. 2020) Chained Alignments
+type bigChain mm39
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainMm39.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainMm39Link.bb
+otherDb mm39
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.636
+
+track chainMm10
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewchain off
+subGroups view=chain species=s006 chainType=c00
+shortLabel Mouse/mm10 Chain
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainMm10.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.639
+
+track GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen
+shortLabel Syntenic
+view synten
+visibility hide
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNet
+spectrum on
+
+track chainSynGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s000 chainType=c01
+shortLabel Chicken/galGal6 synChain
+longLabel Chicken/galGal6/galGal6 (Mar. 2018) Chained Alignments
+type bigChain galGal6
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGalGal6.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGalGal6Link.bb
+otherDb galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track chainSynGalGal5
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s001 chainType=c01
+shortLabel Chicken/galGal5 synChain
+longLabel Chicken/galGal5/galGal5 (Dec 2015) Chained Alignments
+type bigChain galGal5
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGalGal5.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGalGal5Link.bb
+otherDb galGal5
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.573
+
+track chainSynGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s002 chainType=c01
+shortLabel Eurasian tree sparrow synChain
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigChain GCF_014805655.1
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGCF_014805655.1.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGCF_014805655.1Link.bb
+otherDb GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track chainSynHg38
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s003 chainType=c01
+shortLabel Human/hg38 synChain
+longLabel Human/hg38/hg38_ASM1480565v1 (Dec. 2013) Chained Alignments
+type bigChain hg38
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynHg38.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynHg38Link.bb
+otherDb hg38
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 88.635
+
+track chainSynGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s004 chainType=c01
+shortLabel cattle synChain
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigChain GCF_002263795.3
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGCF_002263795.3.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynGCF_002263795.3Link.bb
+otherDb GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track chainSynMm39
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s005 chainType=c01
+shortLabel Mouse/mm39 synChain
+longLabel Mouse/mm39/mm39_ARS-UCD2.0 (Jun. 2020) Chained Alignments
+type bigChain mm39
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynMm39.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynMm39Link.bb
+otherDb mm39
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.636
+
+track chainSynMm10
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewSynTen off
+subGroups view=synten species=s006 chainType=c01
+shortLabel Mouse/mm10 synChain
+longLabel Mouse/mm10/mm10_ARS-UCD2.0 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynMm10.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainSynMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.639
+
+track GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest
+shortLabel Reciprocal best
+view rbest
+visibility hide
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNet
+spectrum on
+
+track chainRBestGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s000 chainType=c02
+shortLabel Chicken/galGal6 rbChain
+longLabel Chicken/galGal6/galGal6_ARS-UCD2.0 (Mar. 2018) Chained Alignments
+type bigChain galGal6
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGalGal6.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGalGal6Link.bb
+otherDb galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track chainRBestGalGal5
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s001 chainType=c02
+shortLabel Chicken/galGal5 rbChain
+longLabel Chicken/galGal5/galGal5_ARS-UCD2.0 (Dec 2015) Chained Alignments
+type bigChain galGal5
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGalGal5.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGalGal5Link.bb
+otherDb galGal5
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.573
+
+track chainRBestGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s002 chainType=c02
+shortLabel Eurasian tree sparrow rbChain
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigChain GCF_014805655.1
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGCF_014805655.1.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGCF_014805655.1Link.bb
+otherDb GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track chainRBestHg38
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s003 chainType=c02
+shortLabel Human/hg38 rbChain
+longLabel Human/hg38/hg38_ASM1480565v1 (Dec. 2013) Chained Alignments
+type bigChain hg38
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestHg38.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestHg38Link.bb
+otherDb hg38
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 88.635
+
+track chainRBestGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s004 chainType=c02
+shortLabel cattle rbChain
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigChain GCF_002263795.3
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGCF_002263795.3.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestGCF_002263795.3Link.bb
+otherDb GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track chainRBestMm39
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s005 chainType=c02
+shortLabel Mouse/mm39 rbChain
+longLabel Mouse/mm39/mm39_ARS-UCD2.0 (Jun. 2020) Chained Alignments
+type bigChain mm39
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestMm39.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestMm39Link.bb
+otherDb mm39
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.636
+
+track chainRBestMm10
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewRBest off
+subGroups view=rbest species=s006 chainType=c02
+shortLabel Mouse/mm10 rbChain
+longLabel Mouse/mm10/mm10_ARS-UCD2.0 (Dec. 2011) Chained Alignments
+type bigChain mm10
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestMm10.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainRBestMm10Link.bb
+otherDb mm10
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.639
+
+track GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewLiftOver
+shortLabel Lift over
+view liftover
+visibility hide
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNet
+spectrum on
+
+track chainLiftOverGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewLiftOver off
+subGroups view=liftover species=s000 chainType=c03
+shortLabel Chicken/galGal6 loChain
+longLabel Chicken/galGal6/galGal6_ARS-UCD2.0 (Mar. 2018) Chained Alignments
+type bigChain galGal6
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainLiftOverGalGal6.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainLiftOverGalGal6Link.bb
+otherDb galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track chainLiftOverGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewLiftOver off
+subGroups view=liftover species=s002 chainType=c03
+shortLabel Eurasian tree sparrow loChain
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigChain GCF_014805655.1
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainLiftOverGCF_014805655.1.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainLiftOverGCF_014805655.1Link.bb
+otherDb GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track chainLiftOverGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNetViewLiftOver off
+subGroups view=liftover species=s004 chainType=c03
+shortLabel cattle loChain
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigChain GCF_002263795.3
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainLiftOverGCF_002263795.3.bb
+linkDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainLiftOverGCF_002263795.3Link.bb
+otherDb GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet
+shortLabel Nets
+view align
+visibility hide
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bChainNet
+
+track netGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s000 chainType=c04
+shortLabel Chicken/galGal6 mafNet
+longLabel Chicken/galGal6/galGal6 (Mar. 2018) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.net.summary.bb
+speciesOrder galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track synNetGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s000 chainType=c05
+shortLabel Chicken/galGal6 synNet
+longLabel Chicken/galGal6/galGal6 (Mar. 2018) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.synNet.summary.bb
+speciesOrder galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track rbestNetGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s000 chainType=c06
+shortLabel Chicken/galGal6 rbestNet
+longLabel Chicken/galGal6/galGal6 (Mar. 2018) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.rbestNet.summary.bb
+speciesOrder galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track liftOverNetGalGal6
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s000 chainType=c07
+shortLabel Chicken/galGal6 liftOverNet
+longLabel Chicken/galGal6/galGal6 (Mar. 2018) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.liftOverNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal6.liftOverNet.summary.bb
+speciesOrder galGal6
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.479
+
+track netGalGal5
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s001 chainType=c04
+shortLabel Chicken/galGal5 mafNet
+longLabel Chicken/galGal5/galGal5 (Dec 2015) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal5.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal5.net.summary.bb
+speciesOrder galGal5
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.573
+
+track synNetGalGal5
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s001 chainType=c05
+shortLabel Chicken/galGal5 synNet
+longLabel Chicken/galGal5/galGal5 (Dec 2015) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal5.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal5.synNet.summary.bb
+speciesOrder galGal5
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.573
+
+track rbestNetGalGal5
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s001 chainType=c06
+shortLabel Chicken/galGal5 rbestNet
+longLabel Chicken/galGal5/galGal5 (Dec 2015) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal5.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.galGal5.rbestNet.summary.bb
+speciesOrder galGal5
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 1.573
+
+track netGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s002 chainType=c04
+shortLabel Eurasian tree sparrow mafNet
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_014805655.1.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_014805655.1.net.summary.bb
+speciesOrder GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track synNetGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s002 chainType=c05
+shortLabel Eurasian tree sparrow synNet
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_014805655.1.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_014805655.1.synNet.summary.bb
+speciesOrder GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track rbestNetGCF_014805655.1
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s002 chainType=c06
+shortLabel Eurasian tree sparrow rbestNet
+longLabel Eurasian tree sparrow/GCF_014805655.1_ASM1480565v1 (2020-09-30) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_014805655.1.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_014805655.1.rbestNet.summary.bb
+speciesOrder GCF_014805655.1
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 28.668
+
+track netHg38
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s003 chainType=c04
+shortLabel Human/hg38 mafNet
+longLabel Human/hg38/hg38 (Dec. 2013) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.hg38.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.hg38.net.summary.bb
+speciesOrder hg38
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 88.635
+
+track synNetHg38
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s003 chainType=c05
+shortLabel Human/hg38 synNet
+longLabel Human/hg38/hg38 (Dec. 2013) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.hg38.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.hg38.synNet.summary.bb
+speciesOrder hg38
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 88.635
+
+track rbestNetHg38
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s003 chainType=c06
+shortLabel Human/hg38 rbestNet
+longLabel Human/hg38/hg38 (Dec. 2013) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.hg38.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.hg38.rbestNet.summary.bb
+speciesOrder hg38
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 88.635
+
+track netGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s004 chainType=c04
+shortLabel cattle mafNet
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_002263795.3.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_002263795.3.net.summary.bb
+speciesOrder GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track synNetGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s004 chainType=c05
+shortLabel cattle synNet
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_002263795.3.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_002263795.3.synNet.summary.bb
+speciesOrder GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track rbestNetGCF_002263795.3
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s004 chainType=c06
+shortLabel cattle rbestNet
+longLabel cattle/GCF_002263795.3_ARS-UCD2.0 (2023-07-01) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_002263795.3.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.GCF_002263795.3.rbestNet.summary.bb
+speciesOrder GCF_002263795.3
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 93.758
+
+track netMm39
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s005 chainType=c04
+shortLabel Mouse/mm39 mafNet
+longLabel Mouse/mm39/mm39 (Jun. 2020) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm39.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm39.net.summary.bb
+speciesOrder mm39
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.636
+
+track synNetMm39
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s005 chainType=c05
+shortLabel Mouse/mm39 synNet
+longLabel Mouse/mm39/mm39 (Jun. 2020) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm39.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm39.synNet.summary.bb
+speciesOrder mm39
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.636
+
+track rbestNetMm39
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s005 chainType=c06
+shortLabel Mouse/mm39 rbestNet
+longLabel Mouse/mm39/mm39 (Jun. 2020) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm39.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm39.rbestNet.summary.bb
+speciesOrder mm39
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.636
+
+track netMm10
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s006 chainType=c04
+shortLabel Mouse/mm10 mafNet
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm10.net.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm10.net.summary.bb
+speciesOrder mm10
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.639
+
+track synNetMm10
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s006 chainType=c05
+shortLabel Mouse/mm10 synNet
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm10.synNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm10.synNet.summary.bb
+speciesOrder mm10
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.639
+
+track rbestNetMm10
+parent GCF_016699485.2_bGalGal1.mat.broiler.GRCg7bMafNetViewnet off
+subGroups view=align species=s006 chainType=c06
+shortLabel Mouse/mm10 rbestNet
+longLabel Mouse/mm10/mm10 (Dec. 2011) Chained Alignments
+type bigMaf
+bigDataUrl /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm10.rbestNet.bb
+summary /gbdb/genark/GCF/016/699/485/GCF_016699485.2/bbi/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.mm10.rbestNet.summary.bb
+speciesOrder mm10
+html /gbdb/genark/GCF/016/699/485/GCF_016699485.2/html/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chainNet
+priority 94.639
