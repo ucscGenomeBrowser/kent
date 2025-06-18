@@ -97,8 +97,8 @@ def compare_metatables(db_list, metatables, host1, host2, centdb1, centdb2):
             data2 = get_data(host2, query, centdb2)
 
             # Apply filtering to blatServers to remove domain part
-            ## Commenting out these lines due to Hiram updating the blatServers.hgcentral table on
-            ## hgnfs1 for all host names
+            '''Commenting out these lines due to Hiram updating the blatServers.hgcentral table on
+             hgnfs1 for all host names'''
             #if metatable == "blatServers":
                 #data1 = filter_blat_servers(data1)
             
