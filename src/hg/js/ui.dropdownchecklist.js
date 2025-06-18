@@ -512,6 +512,9 @@
 
         	// Ensure the focus stays pointing where the user is working
         	if ( senderCheckbox != null) { senderCheckbox.focus(); }
+
+            // now do all the internals:
+            self.sourceSelect.trigger("change", 'ddcl_internal');
         },
         _sourceSelectChangeHandler: function(event) {
             var self = this, dropWrapper = this.dropWrapper;

@@ -1,0 +1,190 @@
+<h2>Description</h2>
+
+<p>
+The "Prediction Scores" container track contains subtracks showing the results of variant impact prediction
+scores. Usually these are prediction algorithms that use protein features, conservation, nucleotide composition and similar
+signals to determine if a genome variant is pathogenic or not.</p>
+
+<h3>BayesDel</h3>
+<p>BayesDel is a deleteriousness meta-score for coding and non-coding variants, single nucleotide
+variants, and small insertion/deletions. The range of the score is from -1.29334 to 0.75731.
+The higher the score, the more likely the variant is pathogenic.</p>
+<p>
+MaxAF stands for maximum allele frequency. The old ACMG (American College of Medical Genetics and
+Genomics) rules utilize allele frequency to classify variants, so the "BayesDel without MaxAF"
+tracks were created to avoid double-dipping. However, new ACMG rules will not include allele
+frequency, so it is okay to use the "BayesDel with MaxAF" for variant classification in the future.
+For gene discovery research, it is better to use BayesDel with MaxAF.</p>
+<p>
+For gene discovery research, a universal cutoff value (0.0692655 with MaxAF, -0.0570105 without
+MaxAF) was obtained by maximizing sensitivity and specificity in classifying ClinVar variants;
+Version 1 (build date 2017-08-24).</p>
+<p>
+For clinical variant classification, Bayesdel thresholds have been calculated for a variant to
+reach various levels of evidence; please refer to Pejaver et al. 2022 for general application
+of these scores in clinical applications.
+</p>
+
+<h3>M-CAP</h3>
+<p>
+The <a target=_blank href="http://bejerano.stanford.edu/mcap/">Mendelian Clinically Applicable Pathogenicity (M-CAP)</a>
+score (Jagadeesh et al, Nat Genetics 2016) is a
+pathogenicity likelihood score that aims to misclassify no more than 5% of
+pathogenic variants while aggressively reducing the list of variants of
+uncertain significance. Much like allele frequency, M-CAP is readily
+interpreted; if it classifies a variant as benign, then that variant can be
+trusted to be benign with high confidence.</p>
+
+<p>
+At an M-CAP score &gt; 0.025, 5% of pathogenic variants are misclassified as benign.
+The score varies from 0.0 - 1.0, following a geometric distribution with a mean of 0.09.
+</p>
+
+<h3>MutScore</h3>
+<p>
+The within-gene clustering of pathogenic and benign DNA changes is an important
+feature of the human exome.
+<a target=_blank href="https://mutscore.iob.ch/">MutScore</a>
+score (Quinodoz, AJHG 2022) integrates qualitative features of
+DNA substitutions with new additional information derived from 
+positional clustering. Variants of unknown significance that are scored
+as benign by other algorithms but located close to known pathogenic variants
+should be weighted more pathogenic by MutScore. The score ranges from 0.0-1.0, resembles
+a negative binomial distribution with a maximum ~0.05, depending on the nucleotide.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<h3>BayesDel</h3>
+<p>There are eight subtracks for the BayesDel track: four include pre-computed MaxAF-integrated BayesDel
+scores for missense variants, one for each base. The other four are of the same format, but scores
+are not MaxAF-integrated.</p>
+
+<p>For SNVs, at each genome position, there are three values per position, one for every possible
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing the reference allele,
+(e.g. A to A) is always set to zero.</p>
+
+<p><b>Note:</b> There are cases in which a genomic position will have one value missing.
+</p>
+
+<p>When using this track, zoom in until you can see every base pair at the top of the display.
+Otherwise, there are several nucleotides per pixel under your mouse cursor and instead of an actual
+ score, the tooltip text will show the average score of all nucleotides under the cursor. This is
+indicated by the prefix &quot;~&quot; in the mouseover.
+</p>
+
+<p>
+Details on suggested ranges for BayesDel can be found in Bergquist et al Genet Med 2025, Table 2:
+<img src="../images/bergquist25.png" alt="Table 2 from Bergquist Genet Med 2025">
+</p>
+
+<h3>M-CAP and MutScore</h3>
+<p>There are four subtracks: one for each nucleotide.</p>
+
+<h2>Data Access</h2>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>, the track names can
+be found via the table browser or by clicking onto the signal tracks.
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mutscore/" target="_blank">our download server</a>, there is one subdirectory per score.
+The files for this track are called usually called by their alternate allele, e.g. <tt>mcapA.bw</tt> and <tt>mutScoreA.bw</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigWigToBedGraph</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg19/mcap/mcapA.bw -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<p>The original BayesDel files are available at the
+<a target="_blank" href="https://fenglab.chpc.utah.edu/BayesDel/BayesDel.html">BayesDel website</a>.
+<p>The other algorithms also have their own download formats, on the
+<a target="_blank" href="http://bejerano.stanford.edu/mcap/">M-CAP website</a> and the <a href="https://mutscore.iob.ch/" target=_blank>MutScore Website</a>.
+
+<h2>Methods</h2>
+<p>BayesDel data was converted from the files provided on the
+<a target="_blank" href="https://drive.google.com/drive/folders/1K4LI6ZSsUGBhHoChUtegC8bgCt7hbQlA?usp=sharing">BayesDel_170824 Database</a>.
+The number 170824 is the date (2017-08-24) the scores were created. Both sets of BayesDel scores are
+available in this database, one integrated MaxAF (named BayesDel_170824_addAF) and one without
+(named BayesDel_170824_noAF). Data conversion was performed using
+<a target="_blank"  href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/bayesDel/hg19">
+custom Python scripts</a>.
+</p>
+
+<p>M-CAP data was converted using a custom Python script and converted to
+bigWig, as documented in the our <a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg19.txt">makeDoc</a>
+text file. MutScore was already available in bigWig format to download.</p>
+
+<h2>Credits</h2>
+<p>Thanks to the BayesDel, MutScore and M-CAP teams for providing precomputed data, and to Tiana Pereira, Christopher
+Lee, Gerardo Perez, and Anna Benet-Pages of the Genome Browser team.</p>
+
+<h2>References</h2>
+<p>
+Feng BJ.
+<a href="https://doi.org/10.1002/humu.23158" target="_blank">
+PERCH: A Unified Framework for Disease Gene Prioritization</a>.
+<em>Hum Mutat</em>. 2017 Mar;38(3):243-251.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27995669" target="_blank">27995669</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5299048/" target="_blank">PMC5299048</a>
+</p>
+
+<p>
+Pejaver V, Byrne AB, Feng BJ, Pagel KA, Mooney SD, Karchin R, O'Donnell-Luria A, Harrison SM,
+Tavtigian SV, Greenblatt MS <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(22)00461-X" target="_blank">
+Calibration of computational tools for missense variant pathogenicity classification and ClinGen
+recommendations for PP3/BP4 criteria</a>.
+<em>Am J Hum Genet</em>. 2022 Dec 1;109(12):2163-2177.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36413997" target="_blank">36413997</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9748256/" target="_blank">PMC9748256</a>
+</p>
+
+<p>
+Tian Y, Pesaran T, Chamberlin A, Fenwick RB, Li S, Gau CL, Chao EC, Lu HM, Black MH, Qian D.
+<a href="https://doi.org/10.1038/s41598-019-49224-8" target="_blank">
+REVEL and BayesDel outperform other in silico meta-predictors for clinical variant
+classification</a>.
+<em>Sci Rep</em>. 2019 Sep 4;9(1):12752.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31484976" target="_blank">31484976</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6726608/" target="_blank">PMC6726608</a>
+</p>
+
+<p>
+Jagadeesh KA, Wenger AM, Berger MJ, Guturu H, Stenson PD, Cooper DN, Bernstein JA, Bejerano G.
+<a href="https://doi.org/10.1038/ng.3703" target="_blank">
+M-CAP eliminates a majority of variants of uncertain significance in clinical exomes at high
+sensitivity</a>.
+<em>Nat Genet</em>. 2016 Dec;48(12):1581-1586.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27776117" target="_blank">27776117</a>
+</p>
+
+
+
+<p>
+Quinodoz M, Peter VG, Cisarova K, Royer-Bertrand B, Stenson PD, Cooper DN, Unger S, Superti-Furga A,
+Rivolta C.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(22)00006-4" target="_blank">
+Analysis of missense variants in the human genome reveals widespread gene-specific clustering and
+improves prediction of pathogenicity</a>.
+<em>Am J Hum Genet</em>. 2022 Mar 3;109(3):457-470.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35120630" target="_blank">35120630</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8948164/" target="_blank">PMC8948164</a>
+</p>
+
+<p>
+Bergquist T, Stenton SL, Nadeau EAW, Byrne AB, Greenblatt MS, Harrison SM, Tavtigian SV,
+O&#x27;Donnell-Luria A, Biesecker LG, Radivojac P <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S1098-3600(25)00049-8" target="_blank">
+Calibration of additional computational tools expands ClinGen recommendation options for variant
+classification with PP3/BP4 criteria</a>.
+<em>Genet Med</em>. 2025 Mar 10;27(6):101402.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40084623" target="_blank">40084623</a>
+</p>
+

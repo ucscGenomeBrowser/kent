@@ -19647,3 +19647,85 @@ cd /gbdb/mm10/vistaEnhancers/
 ln -s /hive/data/outside/otto/vista/vista.mm10.bb vistaEnhancers.bb
 cd ~/kent/src/hg/makeDb/trackDb/human/mm10
 vi trackDb.ra
+##############################################################################
+# LASTZ Mouse Mm10 vs. Ferret MusFur1
+#    (DONE - 2025-06-16 - Gerardo)
+
+    mkdir /hive/data/genomes/mm10/bed/lastzMusFur1.2025-06-16
+    cd /hive/data/genomes/mm10/bed/lastzMusFur1.2025-06-16
+
+    printf '# Ferret MusFur1 vs. Mouse Mm10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Mouse  mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Ferret  musFur1
+SEQ2_DIR=/hive/data/genomes/musFur1/musFur1.2bit
+SEQ2_LEN=/hive/data/genomes/musFur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm10/bed/lastzMusFur1.2025-06-16
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	254m4.751s
+
+    sed -e 's/^/    # /;' fb.mm10.chainMusFur1Link.txt
+    # 777998409 bases of 2739603606 (28.398%) in intersection
+    sed -e 's/^/    # /;' fb.mm10.chainSynMusFur1Link.txt
+    # 724245099 bases of 2739603606 (26.436%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        mm10 musFur1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	104m2.352s
+
+    sed -e 's/^/    # /;' fb.mm10.chainRBest.MusFur1.txt
+    # 718345345 bases of 2739603606 (26.221%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/musFur1/bed/blastz.mm10.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/mm10/bed/lastzMusFur1.2025-06-16/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	46m56.431s
+
+    sed -e 's/^/    # /;' fb.musFur1.chainMm10Link.txt
+    # 733367553 bases of 2277906570 (32.195%) in intersection
+    sed -e 's/^/    # /;' fb.musFur1.chainSynMm10Link.txt
+    # 700100333 bases of 2277906570 (30.734%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   musFur1 mm10) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	73m47.683s
+
+    sed -e 's/^/    # /;' fb.musFur1.chainRBest.Mm10.txt
+    # 717968097 bases of 2277906570 (31.519%) in intersection
+
+real	478m51.661s
+user	0m1.056s
+sys	0m0.706s
+##############################################################################

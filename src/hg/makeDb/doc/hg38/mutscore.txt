@@ -1,0 +1,4 @@
+# Max, Tue Jun 17 08:18:26 AM PDT 2025
+cd /hive/data/genomes/hg38/bed/mutscore/
+for n in A C T G; do wget https://mutscore-ucsc.iob.ch/MutScore.hg19.$n.bw; done
+for n in A C T G; do mv MutScore.hg19.$n.bw mutscore$n; done

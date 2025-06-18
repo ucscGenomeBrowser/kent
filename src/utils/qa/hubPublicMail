@@ -243,7 +243,8 @@ def hubPublicMail(centralName, statusFname):
     failedUrls, urlEmails = downloadUrls(urls, oldUrlInfo)
 
     if len(failedUrls) > 10:
-        logging.error("More than 10 broken hubs? Something is weird. Please check the network setup.")
+        logging.error(
+            "%d broken hubs, which is more than the 10 allowed. Something is weird. Please check the network setup." % len(failedUrls))
         sys.exit(1)
 
     newUrlInfo = mergeInfo(urls, oldUrlInfo, failedUrls, urlEmails)

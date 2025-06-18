@@ -21,6 +21,7 @@ SCRIPT_FILES = \
 	asmHubAllGaps.pl \
 	asmHubAssembly.pl \
 	asmHubAugustusGene.pl \
+	asmHubChainNetTrackDb.pl \
 	asmHubCpG.pl \
 	asmHubEnsGene.pl \
 	asmHubGap.pl \

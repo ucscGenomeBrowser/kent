@@ -1,20 +1,20 @@
-track mutScore
-shortLabel MutScore
-longLabel MutScore: Variant clustering in 3D protein structures
-type bigWig
+track mcap
+shortLabel M-CAP
+longLabel M-CAP: High sensitivity pathogenicity classifier
 parent predictionScoresSuper
+type bigWig
 compositeTrack on
 visibility full
 group phenDis
-color 50,80,200
+color 50,200,50
 
-        track mutScoreA
-        shortLabel Mutation: A
-        longLabel MutScore: Mutation is A
+        track mcapA
+        shortLabel M-CAP: A
+        longLabel M-CAP: Mutation is A
         type bigWig
-        parent mutScore on
+        parent mcap on
         visibility full
-        bigDataUrl /gbdb/$D/mutscore/mutscoreA.bw
+        bigDataUrl /gbdb/$D/mcap/A.bw
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
         viewLimitsMax 0:1.0
@@ -22,11 +22,11 @@ color 50,80,200
         maxWindowToQuery 500000
         mouseOverFunction noAverage
 
-        track mutScoreC
-        shortLabel Mutation: C
-        longLabel MutScore: Mutation is C
+        track mcapC
+        shortLabel M-CAP: C
+        longLabel M-CAP: Mutation is C
         type bigWig
-        parent mutScore on
+        parent mcap on
         visibility full
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
@@ -34,13 +34,13 @@ color 50,80,200
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
-        bigDataUrl /gbdb/$D/mutscore/mutscoreC.bw
+        bigDataUrl /gbdb/$D/mcap/C.bw
 
-        track mutScoreG
-        shortLabel Mutation: G
-        longLabel MutScore: Mutation is G
+        track mcapG
+        shortLabel M-CAP: G
+        longLabel M-CAP: Mutation is G
         type bigWig
-        parent mutScore on
+        parent mcap on
         visibility full
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
@@ -48,13 +48,13 @@ color 50,80,200
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
-        bigDataUrl /gbdb/$D/mutscore/mutscoreG.bw
+        bigDataUrl /gbdb/$D/mcap/G.bw
 
-        track mutScoreT
-        shortLabel Mutation: T
-        longLabel mutScore: Mutation is T
+        track mcapT
+        shortLabel M-CAP: T
+        longLabel M-CAP: Mutation is T
         type bigWig
-        parent mutScore on
+        parent mcap on
         visibility full
         maxHeightPixels 128:20:8
         viewLimits 0:1.0
@@ -62,5 +62,5 @@ color 50,80,200
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
-        bigDataUrl /gbdb/$D/mutscore/mutscoreT.bw
+        bigDataUrl /gbdb/$D/mcap/T.bw
         

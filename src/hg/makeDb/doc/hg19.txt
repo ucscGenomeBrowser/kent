@@ -35865,5 +35865,21 @@ vi trackDb.ra
 # (almost nothing to do here)
 cd /hive/data/genomes/hg19/bed/linsight/
 wget http://compgen.cshl.edu/LINSIGHT/LINSIGHT.bw
-# 
+#############################################################################
+# MutScore scores, max, Tue Jun 17 08:14:44 AM PDT 2025
+cd /hive/data/genomes/hg38/bed/mutscore/
+wget https://mutscore-ucsc.iob.ch/MutScore.hg38.A.bw
+wget https://mutscore-ucsc.iob.ch/MutScore.hg38.C.bw
+wget https://mutscore-ucsc.iob.ch/MutScore.hg38.T.bw
+wget https://mutscore-ucsc.iob.ch/MutScore.hg38.G.bw
+mv MutScore.hg38.A.bw mutscoreA.bw
+mv MutScore.hg38.C.bw mutscoreC.bw
+mv MutScore.hg38.G.bw mutscoreG.bw
+mv MutScore.hg38.T.bw mutscoreT.bw
 
+#############################################################################
+# MCAP scores, Max, Tue Jun 17 08:14:44 AM PDT 2025
+cd /hive/data/genomes/hg19/bed/mcap/
+wget http://bejerano.stanford.edu/mcap/downloads/dat/mcap_v1_4.txt.gz
+python ~/kent/src/hg/makeDb/scripts/mcap/mcapToBw.py
+rm -f bw/*.bedGraph

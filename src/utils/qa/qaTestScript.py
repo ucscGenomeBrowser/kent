@@ -88,7 +88,8 @@ def initialize_driver(headless):
     else:
         # Asks user for the WebDriver location
         webdriver_location = input("Enter the WebDriver location: ")
-        driver = webdriver.Chrome(executable_path=webdriver_location)
+        service = Service(executable_path=webdriver_location)
+        driver = webdriver.Chrome(service=service)
     return driver
 
 # Creates the command-line argument parser
@@ -121,6 +122,14 @@ def cartReset():
     # hover over element and click
     a.move_to_element(n).click().perform()
     driver.implicitly_wait(2)
+
+def hover_and_click(driver, main_id, submenu_id):
+    """Function that hovers the blue bar menu and clicks a menu item"""
+    a = ActionChains(driver)
+    main = driver.find_element(By.ID, main_id)
+    a.move_to_element(main).perform()
+    submenu = driver.find_element(By.ID, submenu_id)
+    a.move_to_element(submenu).click().perform()
 
 # Tests the Gateway page and home page
 driver.get(machine + "/cgi-bin/hgGateway")
@@ -169,6 +178,7 @@ time.sleep(3)
 if machine == 'https://hgwdev.gi.ucsc.edu/':
    driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=QAtester&hgS_otherUserSessionName=multi_region")
 driver.find_element(By.NAME, "hgTracksConfigMultiRegionPage").click()
+time.sleep(2)
 driver.find_element(By.XPATH, "(//input[@id='virtModeType'])[4]").click()
 driver.find_element(By.ID, "multiRegionsBedInput").send_keys("chr7    192570  260772  NM_020223.4\nchr7    290169  291488  NM_001374838.1\nchr7    497257  519846  NM_033023.5\nchr7    549197  727281  NM_001164760.2")
 driver.find_element(By.NAME, "topSubmit").click()
@@ -176,16 +186,16 @@ driver.find_element(By.XPATH, "//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/
 driver.find_element(By.XPATH, "//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[2]").click()
 
 
-# Tests hgGeneGraph 
-driver.get(machine + "/cgi-bin/hgGeneGraph")
-driver.find_element(By.NAME, "gene").clear()
-driver.find_element(By.NAME, "gene").send_keys("sirt1")
-driver.find_element(By.NAME, "1").click()
-driver.find_element(By.ID, "dropdownMenu1").click()
-driver.find_element(By.LINK_TEXT, "GNF2 Expression").click()
-driver.find_element(By.ID, "edge7").click()
-driver.find_element(By.XPATH, "(.//*[normalize-space(text()) and normalize-space(.)='Gene interactions and pathways from curated databases and text-mining'])[1]/following::a[2]")
-cartReset()
+## Tests hgGeneGraph
+#driver.get(machine + "/cgi-bin/hgGeneGraph")
+#driver.find_element(By.NAME, "gene").clear()
+#driver.find_element(By.NAME, "gene").send_keys("sirt1")
+#driver.find_element(By.NAME, "1").click()
+#driver.find_element(By.ID, "dropdownMenu1").click()
+#driver.find_element(By.LINK_TEXT, "GNF2 Expression").click()
+#driver.find_element(By.ID, "edge7").click()
+#driver.find_element(By.XPATH, "(.//*[normalize-space(text()) and normalize-space(.)='Gene interactions and pathways from curated databases and text-mining'])[1]/following::a[2]")
+#cartReset()
 
 # Tests hgVai
 driver.get(machine + "/cgi-bin/hgVai?hgva_agreedToDisclaimer=1")
@@ -207,15 +217,7 @@ driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://data.broadinstitute.org/v
 # Tests non-human/mouse (oviAri4) on Table Browser
 cartReset()
 driver.get(machine + "/cgi-bin/hgGateway?db=oviAri4")
-a = ActionChains(driver)
-# identify element
-m = driver.find_element(By.ID, "tools3") 
-# hover over element
-a.move_to_element(m).perform()
-# identify sub menu element
-n = driver.find_element(By.ID, "tableBrowserMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "tools3", "tableBrowserMenuLink")
 driver.find_element(By.ID, "hgta_doSchema").click()
 driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/a").click() #schema page check
 driver.get(machine + "/cgi-bin/hgTables?db=oviAri4")
@@ -223,7 +225,7 @@ driver.find_element(By.NAME, "hgta_doSummaryStats").click()
 
 # Tests a split table (mm10 intronEst table) on the Table Browser
 cartReset()
-driver.get(machine +"cgi-bin/hgTables?clade=mammal&org=Mouse&db=mm10&hgta_group=allTables&hgta_track=mm10&hgta_table=intronEst")
+driver.get(machine +"/cgi-bin/hgTables?clade=mammal&org=Mouse&db=mm10&hgta_group=allTables&hgta_track=mm10&hgta_table=intronEst")
 driver.find_element(By.NAME, "hgta_doSummaryStats").click()
 time.sleep(3)
 
@@ -244,31 +246,20 @@ driver.find_element(By.XPATH, "//a[contains(text(),'browser')]").click()
 
 # Tests custom tracks on hg19
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "myData")
-##hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "customTracksMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "myData", "customTracksMenuLink")
 driver.find_element(By.NAME, "hgct_customText").clear()
 driver.find_element(By.NAME, "hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/examples.WITHOUT.FTPS.txt")
 driver.find_element(By.NAME, "Submit").click()
 driver.find_element(By.NAME, "submit").click()
 driver.find_element(By.ID, "p_btn_ct_hicExampleTWO_9382").click()
 driver.find_element(By.NAME, "ct_hicExampleTWO_9382.color").click()
-# Tests hgCollection with custom tracks
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "myData")
-##hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "customCompositeMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "myData", "customCompositeMenuLink")
+driver.find_element(By.LINK_TEXT, "login page.").click()
+driver.find_element(By.ID, "userName").send_keys("QAtester")
+driver.find_element(By.ID, "password").send_keys("sessions")
+driver.find_element(By.NAME, "hgLogin.do.displayLogin").click()
+time.sleep(3)
+hover_and_click(driver, "myData", "customCompositeMenuLink")
 driver.find_element(By.XPATH, "(.//*[normalize-space(text()) and normalize-space(.)='Collected Tracks'])[1]/following::div[2]").click()
 driver.find_element(By.XPATH, "//input[@id='doNewCollection']").click()
 driver.find_element(By.XPATH, "//a[@id='ct_10WigglebedGraphfromzero_9682_anchor']/i").click()
@@ -283,15 +274,7 @@ time.sleep(5)
 # Tests small custom track to click into hgTrackUi
 cartReset()
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "myData")
-##hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "customTracksMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "myData", "customTracksMenuLink")
 driver.find_element(By.NAME, "hgct_customText").clear()
 driver.find_element(By.NAME, "hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/newTypes.txt")
 driver.find_element(By.NAME, "Submit").click()
@@ -311,15 +294,7 @@ driver.find_element(By.XPATH, "//a[contains(text(),'Data schema/format descripti
 ## Tests chromAlias hg38 custom track
 cartReset()
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "myData")
-##hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "customTracksMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "myData", "customTracksMenuLink")
 driver.find_element(By.NAME, "hgct_customText").clear()
 driver.find_element(By.NAME, "hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/chrmAliasTestHg38_track")
 driver.find_element(By.NAME, "Submit").click()
@@ -417,15 +392,7 @@ time.sleep(3)
 # Tests hgBlat
 cartReset()
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "blatMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.NAME, "userSeq").clear()
 driver.find_element(By.NAME, "userSeq").send_keys("AACAAAATCAAACTGTTTTTGTTGGACAATTCTCTGTTAAGCAGCTATAA\\nGCTGAATGACATTAACCGCAAAATGTAACCATAAAGGCCATAAACCCGAC\\nATTGTTAATTAATTAAATGCCTCATTAACTTTTTTAAAAACATGATTTAT\\nTCGATTCATAGAAAACTTAACCATCACTACTAAATGCACACACATGCGGT\\nTCCACATTGGCATCTTAGCCTAAGAACAGACAGGTTCAACTGTAACTGGC\\nCTTTCAGGTGGTCTATTACAGATCTGAAGACAGAGGGTGTTTCTAAACCT\\nCAAGAACCAGATTAACAGAAAACAAAGCTTGAGCAGCCTTTTTATTGCAT\\nGTGGTATCTTTTTAGCTAAGCAGAAGACAATGATAAAGAGGGGTTTTGGG\\nAAACCTCTCCCAAAGCTGTGCATTCATACCGTACCTTATCCTGTTAAGCA\\nAACTGTTCTTTTATTTTAAAGGGTTTACACTGCCACATCTGAATGGACTA")
 driver.find_element(By.NAME, "Submit").click()
@@ -440,15 +407,7 @@ driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
 
 # Tests hgBlat for alt patch sequence
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "blatMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.NAME, "userSeq").clear()
 driver.find_element(By.NAME, "userSeq").send_keys("CACACTGTGGATGACATCCAGCAGATCGCTGCTGCGCTGGCCCAGTGCATGGTAGGATGGCCCCACATGCTCTCCCCGCCCCGCATGCCTGCCAGGGTACTGGGTTCAGCCCCCCAGGGCAGACGGGCAGCTTGGCCGAGGAGCTGAGCCTCCAGCCTGGGC")
 driver.find_element(By.NAME, "Submit").click()
@@ -463,15 +422,7 @@ time.sleep(3)
 # Tests hgBlat for fix patch sequence
 cartReset()
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "blatMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.NAME, "userSeq").clear()
 driver.find_element(By.NAME, "userSeq").send_keys("GTTTTTTCTCCTATGGCATGCAGGCGACATGTTACTTCCTATTCCCATAAACCCTCCACTGTAGGATTAACACCTAAGACACCAACCAAGACAAAAAAGATATGACCCTTGGT")
 driver.find_element(By.NAME, "Submit").click()
@@ -484,15 +435,8 @@ time.sleep(3)
 
 # Tests hgPcr for hg38
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "ispMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+time.sleep(2)
+hover_and_click(driver, "tools3", "ispMenuLink")
 driver.find_element(By.NAME, "wp_f").clear()
 driver.find_element(By.NAME, "wp_f").send_keys("AACAAAATCAAACTGTTTTTGTTGGACAATTCTCTGTTAAGCAGCTATAA")
 driver.find_element(By.NAME, "wp_r").clear()
@@ -505,31 +449,15 @@ time.sleep(3)
 
 # Tests hgConvert
 driver.get(machine + "/cgi-bin/hgTracks")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "view")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "convertMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "view", "convertMenuLink")
 driver.find_element(By.NAME, "hglft_doConvert").click()
 driver.find_element(By.LINK_TEXT, "chrX:39460925-39461424").click()
 driver.find_element(By.CSS_SELECTOR, "#tools3 > span").click()
 
 # Tests hgLiftOver for mm39
 cartReset()
-driver.get(machine + "/cgi-bin/hgTracks?db=mm39")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "liftOverMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+time.sleep(2)
+hover_and_click(driver, "tools3", "liftOverMenuLink")
 driver.find_element(By.NAME, "hglft_userData").clear()
 driver.find_element(By.NAME, "hglft_userData").send_keys("chr11:101,379,590-101,442,705")
 driver.find_element(By.NAME, "Submit").click()
@@ -540,15 +468,7 @@ driver.find_element(By.LINK_TEXT, "View conversions")
 cartReset()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38&hideTracks=1")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38&wp_target=hg38KgSeqV41") #will be hg38KgSeqV41
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "ispMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "tools3", "ispMenuLink")
 driver.find_element(By.NAME, "wp_f").clear()
 driver.find_element(By.NAME, "wp_f").clear()
 driver.find_element(By.NAME, "wp_f").send_keys("TTTTCCTAATAATGCTTGTCTTGGTCTTGTT")
@@ -568,13 +488,13 @@ cartReset()
 
 # Tests GenArk Rabbit Hub
 #cartReset()
-driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/003/625/GCF_000003625.3/hub.txt&genome=GCF_000003625.3")
+driver.get(machine + "/cgi-bin/hgTracks?db=GCF_000003625.3")
 driver.get(machine + "/cgi-bin/hgTracks?hideTracks=1")
 driver.find_element(By.ID, "positionInput").clear()
 driver.find_element(By.ID, "positionInput").send_keys("HOPX")
 driver.find_element(By.ID, "goButton").click()
 time.sleep(3)
-driver.find_element(By.LINK_TEXT, "HOPX").click()
+driver.find_element(By.LINK_TEXT, "XM_008267819.2").click()
 
 # Tests Assembly Hubs at GitHub
 cartReset()
@@ -617,15 +537,7 @@ driver.find_element(By.ID, "positionInput").clear()
 # Tests hgBlat All and Monk Seal/Human MYLK Protein
 cartReset()
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
-a = ActionChains(driver)
-#identify element
-m = driver.find_element(By.ID, "tools3")
-#hover over element
-a.move_to_element(m).perform()
-#identify sub menu element
-n = driver.find_element(By.ID, "blatMenuLink")
-# hover over element and click
-a.move_to_element(n).click().perform()
+hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.ID, "searchAllText").click()
 driver.find_element(By.NAME, "userSeq").clear()
 driver.find_element(By.NAME, "userSeq").send_keys("MIPDTDLQVQLASRNRVGECSCQVSLMLQSSPGRAPLRGREPVSCEGLCS\\nQGAGAHGAGGDCYGTLRPGWPARGQGWPEEEDGEDVRGLLKRRVETRQHT\\nEEAIRQQEVEQLDFRDLLGKKVSTKTVSEEDLKEIPAEQMDFRANLQRQV\\nKPKTVSEEERKVHSPQQVDFRSVLAKKGTPKTPVPEKAPLPKPATPDFRS\\nVLGSKKKLPAENGSNNAEALNAKAAESPKAVSNAQPLGSLKPLGNAKPAE\\nTLRPVGNAKPAEPTKPVDNTKLAETLKPIGNAKPAETPKPMGNA")

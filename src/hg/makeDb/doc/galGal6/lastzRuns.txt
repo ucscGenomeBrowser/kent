@@ -4139,3 +4139,84 @@ TMPDIR=/dev/shm
     # 1017361581 bases of 1053332251 (96.585%) in intersection
 
 ##############################################################################
+# LASTZ Chicken GalGal6 vs. Ferret MusFur1
+#    (DONE - 2025-06-16 - Gerardo)
+
+    mkdir /hive/data/genomes/galGal6/bed/lastzMusFur1.2025-06-16
+    cd /hive/data/genomes/galGal6/bed/lastzMusFur1.2025-06-16
+
+    printf '# Ferret MusFur1 vs. Chicken GalGal6
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Chicken  galGal6
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Ferret  musFur1
+SEQ2_DIR=/hive/data/genomes/musFur1/musFur1.2bit
+SEQ2_LEN=/hive/data/genomes/musFur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/galGal6/bed/lastzMusFur1.2025-06-16
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	211m51.107s
+
+    sed -e 's/^/    # /;' fb.galGal6.chainMusFur1Link.txt
+    # 65632006 bases of 1055588482 (6.218%) in intersection
+    sed -e 's/^/    # /;' fb.galGal6.chainSynMusFur1Link.txt
+    # 56367160 bases of 1055588482 (5.340%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        galGal6 musFur1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	15m23.187s
+
+    sed -e 's/^/    # /;' fb.galGal6.chainRBest.MusFur1.txt
+    # 61859234 bases of 1055588482 (5.860%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/musFur1/bed/blastz.galGal6.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/galGal6/bed/lastzMusFur1.2025-06-16/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -fileServer=hgwdev -bigClusterHub=hgwdev \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	4m33.592s
+
+    sed -e 's/^/    # /;' fb.musFur1.chainGalGal6Link.txt
+    # 70918404 bases of 2277906570 (3.113%) in intersection
+    sed -e 's/^/    # /;' fb.musFur1.chainSynGalGal6Link.txt
+    # 56401202 bases of 2277906570 (2.476%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   musFur1 galGal6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	17m4.241s
+
+    sed -e 's/^/    # /;' fb.musFur1.chainRBest.GalGal6.txt
+    # 61922846 bases of 2277906570 (2.718%) in intersection
+
+real	248m52.641s
+user	0m1.043s
+sys	0m0.649s
+##############################################################################
