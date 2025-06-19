@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Usage: ./bigBedMaxPercDiff <percent_threshold> file1.bb file2.bb
+# Example: ./bigBedMaxPercDiff 5 file1.bb file2.bb
+
+set -euo pipefail
+
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 <percent_threshold> file1.bb/bw file2.bb/bw"
+    echo "Compares two bigWig or bigBed files"
+    echo "Exits with an error message if bigBed/bigWig files differ in more than x% of lines"
+    exit 1
+fi
+
+PERCENT_THRESHOLD="$1"
+FILE1="$2"
+FILE2="$3"
+
+# Validate percentage is a number between 0 and 100
+if ! [[ "$PERCENT_THRESHOLD" =~ ^[0-9]+([.][0-9]+)?$ ]] || (( $(echo "$PERCENT_THRESHOLD < 0 || $PERCENT_THRESHOLD > 100" | bc -l) )); then
+    echo "ERROR: Percentage threshold must be a number between 0 and 100."
+    exit 1
+fi
+
+TMP1=$(mktemp)
+TMP2=$(mktemp)
+
+cleanup() {
+    rm -f "$TMP1" "$TMP2" "${TMP1}.sorted" "${TMP2}.sorted"
+}
+trap cleanup EXIT
+
+if [[ "$FILE1" == *.bb || "$FILE1" == *.bigBed ]]; then
+  TOOL="bigBedToBed"
+elif [[ "$FILE1" == *.bw || "$FILE1" == *.bigWig ]]; then
+  TOOL="bigWigToBedGraph"
+else
+  echo "Error: FILE1 must have extension .bb, .bigBed, .bw, or .bigWig"
+  exit 1
+fi
+
+$TOOL "$FILE1" "$TMP1"
+$TOOL "$FILE2" "$TMP2"
+
+# Sort BED files
+sort -k1,1 -k2,2n "$TMP1" > "${TMP1}.sorted"
+sort -k1,1 -k2,2n "$TMP2" > "${TMP2}.sorted"
+
+# Line counts
+LINES1=$(wc -l < "${TMP1}.sorted")
+LINES2=$(wc -l < "${TMP2}.sorted")
+TOTAL_LINES=$(( (LINES1 + LINES2) / 2 ))
+
+# Diff count
+DIFF_LINES=$(diff "${TMP1}.sorted" "${TMP2}.sorted" | grep -E '^[<>]' | wc -l)
+
+# Compute threshold
+THRESHOLD=$(awk -v total="$TOTAL_LINES" -v pct="$PERCENT_THRESHOLD" 'BEGIN { printf("%.0f", total * pct / 100.0) }')
+
+if [ "$DIFF_LINES" -gt "$THRESHOLD" ]; then
+    echo "ERROR: BED files differ in more than $PERCENT_THRESHOLD% of lines (${DIFF_LINES} differing lines out of ~$TOTAL_LINES)"
+    exit 2
+else
+    echo "SUCCESS: BED files are sufficiently similar (${DIFF_LINES} differing lines out of ~$TOTAL_LINES)"
+    exit 0
+fi
+
