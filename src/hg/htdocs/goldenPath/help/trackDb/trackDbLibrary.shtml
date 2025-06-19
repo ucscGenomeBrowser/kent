@@ -2881,8 +2881,8 @@ that identifies the reference sequence.
 <DIV class="logoMaf"><span class="types bigWig bigMaf"></span>
 <div class="format"><code>logoMaf &lt;url/relativePath&gt;</code></div>
     <P>The argument to logoMaf is the path to a MAF alignment (either a table or bigMaf). 
-    If set and zoomed into base level the wiggle will be drawn as a sequence logo calculated 
-    by counting the number of each nucleotide aligned to that base which will be scaled by 
+    If set and zoomed into base level, the wiggle will be drawn as a sequence logo calculated 
+    by counting the number of each nucleotide aligned to that base, which will be scaled by 
     the value in the wiggle.</p>
     <P><B>Example:</B></P>
     <pre>   logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf</pre>
