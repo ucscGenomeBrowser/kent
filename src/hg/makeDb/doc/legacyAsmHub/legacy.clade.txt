@@ -638,6 +638,7 @@ GCF_029281585.1_NHGRI_mGorGor1-v1.1-0.2.freeze_pri	primates
 GCF_029289425.1_NHGRI_mPanPan1-v1.1-0.1.freeze_pri	primates
 GCF_030445035.1_mDasNov1.hap2	mammals
 GCF_033978685.1_RoL_Nlum_1.0	fish
+GCF_037993035.1_T2T-MFA8v1.0	primates
 GCF_042477335.1_ARS-UI_OviCan_v1	mammals
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish

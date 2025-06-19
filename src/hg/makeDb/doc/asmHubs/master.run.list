@@ -6073,6 +6073,7 @@
 ./runBuild GCF_037950935.1_Myxme1 fungi Myxozyma_melibiosi
 ./runBuild GCF_037975245.1_ASM3797524v1 invertebrate Apostichopus_japonicus
 ./runBuild GCF_037993035.1_T2T-MFA8v1.0 primates Macaca_fascicularis
+./runBuild GCF_037993035.2_T2T-MFA8v1.1 primates Macaca_fascicularis
 ./runBuild GCF_038021145.1_Pcitr2 fungi Phyllosticta_citriasiana
 ./runBuild GCF_038025025.1_Pcit17464 fungi Phyllosticta_citribraziliensis
 ./runBuild GCF_038086725.1_ASM3808672v1 bacteria Photobacterium_damselae_subsp._damselae
