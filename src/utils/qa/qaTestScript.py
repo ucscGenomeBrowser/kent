@@ -88,8 +88,7 @@ def initialize_driver(headless):
     else:
         # Asks user for the WebDriver location
         webdriver_location = input("Enter the WebDriver location: ")
-        service = Service(executable_path=webdriver_location)
-        driver = webdriver.Chrome(service=service)
+        driver = webdriver.Chrome(service=Service(executable_path=webdriver_location))
     return driver
 
 # Creates the command-line argument parser
@@ -125,11 +124,11 @@ def cartReset():
 
 def hover_and_click(driver, main_id, submenu_id):
     """Function that hovers the blue bar menu and clicks a menu item"""
-    a = ActionChains(driver)
+    action = ActionChains(driver)
     main = driver.find_element(By.ID, main_id)
-    a.move_to_element(main).perform()
+    action.move_to_element(main).perform()
     submenu = driver.find_element(By.ID, submenu_id)
-    a.move_to_element(submenu).click().perform()
+    action.move_to_element(submenu).click().perform()
 
 # Tests the Gateway page and home page
 driver.get(machine + "/cgi-bin/hgGateway")
