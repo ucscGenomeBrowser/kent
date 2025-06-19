@@ -20,6 +20,7 @@ CREATE TABLE clinvarSub (
     explOfInterp longblob not null,	# more details if ClinicalSignificance is 'other' or 'drug response'
     somClinImpact longblob not null,    #    the somatic classification of clinical impact on this submitted record
     oncogenicity varchar(255) not null,  #  the somatic classification of oncogenicity on this submitted record
+    contrToAggrClass varchar(255) not null,  #  indicates if the SCV contributes to the aggregate classification
               #Indices
     INDEX(varId)
 );

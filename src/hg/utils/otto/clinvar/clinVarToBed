@@ -18,12 +18,13 @@ dbToUrl = {
 }
 
 # since we're filtering on it, we make sure that we have all molecular consequences in the tdb file
-# if they add a new one, this script must fail and tdb must be updated.
+# if Clinvar ever adds a new value, this script must fail and tdb must be updated.
 possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiator codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
 
 # these consequences are highlighted using a triangle decorator. Similar to Decipher and Gnomad browsers
 truncConseqs = set(["nonsense", "frameshift variant", "splice acceptor variant", "splice donor variant"])
 
+# make sure that if the second list is edited, it is never out of sync with the first list
 assert(len(set(truncConseqs - possMolConseqs))==0)
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
@@ -771,14 +772,6 @@ for line in ifh:
       submCategories, varId, posVcf, refAllVcf, altAllVcf, somClinImpact, somClinLastEval, revStatusClinImpact, oncogen, oncogenLastEval, revStatusOncogen, aggrGermClass, aggrSomClassImpact, aggrSomOnc = row
    # SomaticClinicalImpact|SomaticClinicalImpactLastEvaluated|ReviewStatusClinicalImpact|Oncogenicity|OncogenicityLastEvaluated|ReviewStatusOncogenicity
 
-    # changed in July 2018 when the "varId" was merged into this table. It used to be 
-    # in allToVar
-    #if varId=="":
-        #logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
-        #vcvId = ""
-    #else:
-        #vcvId = "VCV%09d.1" % int(varId)
-
     if chrom=="" or assembly=="" or assembly=="NCBI36" or assembly=="na":
         noAssCount += 1
         continue
@@ -791,7 +784,6 @@ for line in ifh:
         print("Invalid assembly: %s, row %s" % (repr(assembly), repr(row)))
         assert(False)
 
-    #hgvsTable =  ";".join(hgvs[alleleId])
     hgvsTable =  json.dumps(hgvs[alleleId])
 
     molConseq = allToVcf.get(int(alleleId))
@@ -982,7 +974,7 @@ for line in ifh:
 
     mouseOverIdx = 33 # if you ever change the field order below, make sure that you adapt this number!
 
-    row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
+    row = [chrom, start, end, vcvId, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, starRatingHtml, allType, geneStr, molConseq,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
@@ -995,7 +987,9 @@ for line in ifh:
         # these fields are the for the filters, not for the display
         pathoCode, originCode, allTypeCode, str(varLen), str(starCount),
         # the variant ID got forgotten in the original bigBed schema, it was only part of the origName field
-        varId, dbVarSsvAcc, vcvId, vcvIdVersion
+        varId, dbVarSsvAcc, vcvId, vcvIdVersion,
+        # the name was moved to the back of the field list in 2025, as we needed a unique field to link to decorator
+        shortName
         ]
 
     # replace clinvar's placeholders with real empty fields
@@ -1026,7 +1020,9 @@ for line in ifh:
     if isTrunc:
         # truncating mutations get a special symbol written into another BED file, for decorators
         decorRow = list(row[:12])
-        rgbColor = row[10]
+        rgbColor = row[8]
+        #decorRow[8] = "0,0,0" # line color
+        decorRow[8] = "255,255,255" # line color
         mouseOverText = row[mouseOverIdx]
 
         decorRef = row[0]+":"+row[1]+"-"+row[2]+":"+row[3]
@@ -1034,7 +1030,8 @@ for line in ifh:
 
         decorRow.append(decorRef)
         decorRow.append("glyph")
-        decorRow.append(rgbColor)
+        #decorRow.append(rgbColor)
+        decorRow.append(rgbColor) # fill color
         decorRow.append("Triangle")
         decorRow.append(mouseOverText)
 
