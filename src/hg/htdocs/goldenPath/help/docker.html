@@ -227,6 +227,10 @@ mysql hgcentral < defaultCart.sql
 <pre>
 mysql hgcentral -Ne "insert into defaultCart select contents from namedSessionDb where sessionName='nameOfSession' and userName='nameOfUser'"
 </pre></li>
+   <li>Finally, make sure the following line is in your hg.conf file. This file is found in the cgi-bin directory, e.g. cgi-bin/hg.conf.
+<pre>
+defaultCartName=defaultCart
+</pre></li>
 </ul>
 
 
