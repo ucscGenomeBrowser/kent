@@ -149,7 +149,7 @@ sub writeHubTxtFiles($$$$$$$$$$$$$$) {
     printf $fh "shortLabel %s\n", $orgName;
     printf $fh "longLabel %s/%s/%s genome assembly\n", $orgName, $descr, $asmId;
     printf $fh "useOneFile on\n";
-    printf $fh "email hclawson\@ucsc.edu\n";
+    printf $fh "email genome-www\@soe.ucsc.edu\n";
     printf $fh "descriptionUrl html/%s.description.html\n", $asmId;
     printf $fh "\n";
     printf $fh "genome %s\n", $accessionId;
@@ -369,7 +369,7 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   printf HT "shortLabel %s\n", $orgName;
   printf HT "longLabel %s/%s/%s genome assembly\n", $orgName, $descr, $asmId;
   printf HT "genomesFile genomes.txt\n";
-  printf HT "email hclawson\@ucsc.edu\n";
+  printf HT "email genome-www\@soe.ucsc.edu\n";
   printf HT "descriptionUrl html/%s.description.html\n", $asmId;
   close (HT);
 
