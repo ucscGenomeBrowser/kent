@@ -916,6 +916,12 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
     color: gray;
 }
 
+.autoCompleteInfo {
+  color: #EEE;
+  padding-left: 3px;
+  background-color: #666;
+}
+
 /* for autocompleteCat (autocomplete with optional category labels) */
 .ui-autocomplete-category {
     /* Adapted from https://jqueryui.com/autocomplete/#categories */
