@@ -38,8 +38,7 @@
 #include "genark.h"
 #include "quickLift.h"
 #include "botDelay.h"
-
-#include <curl/curl.h>
+#include "curlWrap.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1453,50 +1452,6 @@ else
     }
 }
 
-// ------ libify this in the next release ----
-//
-struct curlString {
-    char *ptr;
-    size_t len;
-};
-void init_string(struct curlString *s) {
-    s->len = 0;
-    s->ptr = malloc(1);
-    s->ptr[0] = '\0';
-}
-
-size_t writefunc(void *ptr, size_t size, size_t nmemb, void *userData) {
-    struct curlString *s = (struct curlString *)userData;
-    size_t new_len = s->len + size * nmemb;
-    s->ptr = realloc(s->ptr, new_len + 1);
-    memcpy(s->ptr + s->len, ptr, size * nmemb);
-    s->ptr[new_len] = '\0';
-    s->len = new_len;
-    return size * nmemb;
-}
-
-char* curlPostUrl(char *url, char *data)
-/* post data to URL and return as string. Must be freed. */
-{
-CURL *curl = curl_easy_init();
-if (!curl) 
-    errAbort("Cannot init curl library");
-
-struct curlString response;
-init_string(&response);
-
-curl_easy_setopt(curl, CURLOPT_URL, url);
-curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
-curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
-curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-curl_easy_perform(curl);
-curl_easy_cleanup(curl);
-
-char *resp = cloneString(response.ptr);
-free(response.ptr);
-return resp;
-}
-
 boolean isValidToken(char *token)
 /* send https req to cloudflare, check if the token that we got from the captcha is really the one made by cloudflare */
 {
@@ -1564,7 +1519,10 @@ struct excReStr;
 for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
     {
     if (regexMatch(agent, sl->name))
+        {
+        fprintf(stderr, "CAPTCHAPASS %s\n", agent);
         return TRUE;
+        }
     }
 
 return FALSE;
@@ -1610,11 +1568,12 @@ struct cart *cartNew(char *userId, char *sessionId,
  * strings to not include */
 {
 cgiApoptosisSetup();
-if (cfgOptionBooleanDefault("showEarlyErrors", TRUE))
+if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
     errAbortSetDoContentType(TRUE);
 
 if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
     htmlSuppressErrors();
+
 setUdcCacheDir();
 
 netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
