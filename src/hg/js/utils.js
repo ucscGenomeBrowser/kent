@@ -1177,13 +1177,18 @@ function varHashToQueryString(varHash)
                 retVal += aVar + "=" + encodeURIComponent(this);
             });
         } else {
-            let decoded = decodeURIComponent(val);
-            if (decoded.length < val.length) {
-                // val was already encoded, don't re-encode
-                retVal += aVar + "=" + val;
-            } else {
-                retVal += aVar + "=" + encodeURIComponent(val);
-            }
+            // sometimes val is already encoded or partially encoded
+            // the CGI cannot know if user input is double encoded
+            // so test for already encoded characters here and only
+            // encode what we need to
+            retVal += aVar + "=" + val.replace(/(%[0-9A-Fa-f]{2})+|[^%]+/g, (match) => {
+                if (/%[0-9A-Fa-f]{2}/.test(match)) {
+                    // Already percent-encoded, leave as-is
+                    return match;
+                }
+                // Encode unencoded parts
+                return encodeURIComponent(match);
+            });
         }
     }
     return retVal;
