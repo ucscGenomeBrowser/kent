@@ -6,7 +6,7 @@ longLabel GENCODE lifted annotations from V47lift37 (Ensembl 113)
 group genes
 dragAndDrop subTracks
 priority 34.158
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes bPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA
 allButtonPair on
