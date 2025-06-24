@@ -61,7 +61,7 @@ Learn how best to use the Gateway page to find assemblies and download shortcuts
 Learn how to extract Genome Browser data sets in various ways.
 
 <p style="text-align: end">
-<button>Coming soon!</button>
+<button>[View Tutorial](tableBrowserTutorial.html)</button>
 </p>
 </div>
 </div>
