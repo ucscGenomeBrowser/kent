@@ -12172,7 +12172,7 @@ else
 struct dyString *query = sqlDyStringCreate("select * from %s where ", table);
 hAddBinToQuery(winStart, winEnd, query);
 // for the moment we're only loading the 'm's and not the 'h's
-sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d and name = 'm'",
+sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
 	       chromName, winEnd, winStart);
 tg->items = bedMethylLoadByQuery(conn, query->string);
 
@@ -12256,7 +12256,7 @@ bedMethods(tg);
 tg->loadItems = loadBedMethyl;
 tg->itemColor = bedMethylColor;
 tg->mapItem= bedMethylMapItem;
-tg->canPack = TRUE;
+tg->tdb->canPack = TRUE;
 }
 
 void pgSnpMethods (struct track *tg)
