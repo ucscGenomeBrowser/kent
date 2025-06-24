@@ -3,7 +3,6 @@
 today=$(date +%Y-%m-%d)
 mkdir -p $today
 
-# Define the log file
 LOG_FILE="${today}/script_output.log"
 
 absolute_log=`readlink -f $LOG_FILE`
