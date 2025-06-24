@@ -4072,6 +4072,8 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
 
 // The div that moves around the users screen with the visible mouseover text
 let  mouseoverContainer;
+// Global needed for contextmenu to disable tooltips
+var suppressTooltips = false;
 
 function addMouseover(ele1, text = null, ele2 = null) {
     /* Adds wrapper elements to control various mouseover events using mouseenter/mouseleave. */
@@ -4150,6 +4152,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
 
 function showTooltipForElement(ele, ev) {
     // Show the tooltip for the given element
+    if (suppressTooltips) {return;}
     let text = ele.getAttribute("mouseoverText");
     if (!text) return;
     mouseoverContainer.replaceChildren();
@@ -4199,12 +4202,6 @@ function convertTitleTagsToMouseovers() {
     /* Mouseover should clear if you leave the document window altogether */
     document.body.addEventListener("mouseleave", (ev) => {
         hideMouseoverText(mouseoverContainer);
-        // let mouseovers show up again upon moving back in to the window
-        // but only need the event once
-        // use capture: true to force this event to happen
-        // before the regular mouseover event
-        document.body.addEventListener("mouseover", (evt) => {
-        }, {capture: true, once: true});
     });
 
     /* make the mouseovers go away if we are in an input */
@@ -4214,8 +4211,6 @@ function convertTitleTagsToMouseovers() {
             if (inp.type !== "submit") {
                 inp.addEventListener("focus", (ev) => {
                     hideMouseoverText(mouseoverContainer);
-                    inp.addEventListener("blur", (evt) => {
-                    }, {once: true});
                 });
             } else {
                 // the buttons are inputs that don't blur right away (or ever? I can't tell), so
