@@ -41,6 +41,9 @@ struct slName *cfgNames();
 struct slName *cfgNamesWithPrefix();
 /* get list of names in config file with prefix. slFreeList when finished */
 
+struct slName *cfgValsWithPrefix(char* prefix);
+/* get list of values in config file with prefix. slFreeList when finished */
+
 unsigned long cfgModTime();
 /* Return modification time of config file */
 

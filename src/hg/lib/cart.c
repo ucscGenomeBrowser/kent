@@ -38,8 +38,7 @@
 #include "genark.h"
 #include "quickLift.h"
 #include "botDelay.h"
-
-#include <curl/curl.h>
+#include "curlWrap.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1453,50 +1452,6 @@ else
     }
 }
 
-// ------ libify this in the next release ----
-//
-struct curlString {
-    char *ptr;
-    size_t len;
-};
-void init_string(struct curlString *s) {
-    s->len = 0;
-    s->ptr = malloc(1);
-    s->ptr[0] = '\0';
-}
-
-size_t writefunc(void *ptr, size_t size, size_t nmemb, void *userData) {
-    struct curlString *s = (struct curlString *)userData;
-    size_t new_len = s->len + size * nmemb;
-    s->ptr = realloc(s->ptr, new_len + 1);
-    memcpy(s->ptr + s->len, ptr, size * nmemb);
-    s->ptr[new_len] = '\0';
-    s->len = new_len;
-    return size * nmemb;
-}
-
-char* curlPostUrl(char *url, char *data)
-/* post data to URL and return as string. Must be freed. */
-{
-CURL *curl = curl_easy_init();
-if (!curl) 
-    errAbort("Cannot init curl library");
-
-struct curlString response;
-init_string(&response);
-
-curl_easy_setopt(curl, CURLOPT_URL, url);
-curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
-curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
-curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-curl_easy_perform(curl);
-curl_easy_cleanup(curl);
-
-char *resp = cloneString(response.ptr);
-free(response.ptr);
-return resp;
-}
-
 boolean isValidToken(char *token)
 /* send https req to cloudflare, check if the token that we got from the captcha is really the one made by cloudflare */
 {
@@ -1549,8 +1504,33 @@ void printCaptcha()
     exit(0);
 }
 
+static boolean isUserAgentException() 
+/* return true if HTTP user-agent is in list of exceptions in hg.conf */
+{
+char *agent = cgiUserAgent();
+if (!agent)
+    return FALSE;
+
+struct slName *excStrs = cfgValsWithPrefix("noCaptchaAgent.");
+if (!excStrs)
+    return FALSE;
+
+struct excReStr;
+for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
+    {
+    if (regexMatch(agent, sl->name))
+        {
+        fprintf(stderr, "CAPTCHAPASS %s\n", agent);
+        return TRUE;
+        }
+    }
+
+return FALSE;
+}
+
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
-/* print captcha is user did not sent a valid hguid cookie or a valid cloudflare token. Always allow rtracklayer. */
+/* print captcha is user did not sent a valid hguid cookie or a valid
+ * cloudflare token. Allow certain IPs and user-agents. */
 {
 if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
     return;
@@ -1559,29 +1539,18 @@ if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
 if (botException())
     return;
 
-// let rtracklayer user agent pass, but allow us to remove this exception in case the bots discover it one day
-if ( (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer")) || 
-        (isNotEmpty(cgiUserAgent()) && startsWith("IGV", cgiUserAgent())) )
-    return;
-
-// QA can add a user agent after release, in case someone complains that their library is blocked
-char *okUserAgent = cfgOption("okUserAgent");
-if (okUserAgent && sameOk(cgiUserAgent(), okUserAgent))
+if (isUserAgentException())
     return;
 
 // Do not show a captcha if we have a valid cookie 
-// but for debugging, it's nice to be force the captcha to come up
+// but for debugging, it's nice to be able to force the captcha
 if (userId && userIdFound && !cgiOptionalString("captcha"))
     return;
 
-// This is a hack to let all AJAX requests pass without cookies, no needed anymore.
-// It's a hack because the header can be set by any curl script to get around
-// the captcha. 
-//if (sameOk(getenv("HTTP_X_REQUESTED_WITH"), "XMLHttpRequest"))
-    //return;
-
+// when the captcha is solved, our JS code does a full page-reload, no AJAX. That saves us one round-trip.
+// After the reload, the new page URL has the captcha token in the URL argument list, so now we need to validate it
+// and remove it from the cart
 char *token = cgiOptionalString("token");
-
 if (token && isValidToken(token))
 {
     cartRemove(cart, "token");
@@ -1599,11 +1568,12 @@ struct cart *cartNew(char *userId, char *sessionId,
  * strings to not include */
 {
 cgiApoptosisSetup();
-if (cfgOptionBooleanDefault("showEarlyErrors", TRUE))
+if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
     errAbortSetDoContentType(TRUE);
 
 if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
     htmlSuppressErrors();
+
 setUdcCacheDir();
 
 netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
