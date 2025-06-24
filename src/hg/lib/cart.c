@@ -1549,8 +1549,30 @@ void printCaptcha()
     exit(0);
 }
 
+static boolean isUserAgentException() 
+/* return true if HTTP user-agent is in list of exceptions in hg.conf */
+{
+char *agent = cgiUserAgent();
+if (!agent)
+    return FALSE;
+
+struct slName *excStrs = cfgValsWithPrefix("noCaptchaAgent.");
+if (!excStrs)
+    return FALSE;
+
+struct excReStr;
+for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
+    {
+    if (regexMatch(agent, sl->name))
+        return TRUE;
+    }
+
+return FALSE;
+}
+
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
-/* print captcha is user did not sent a valid hguid cookie or a valid cloudflare token. Always allow rtracklayer. */
+/* print captcha is user did not sent a valid hguid cookie or a valid
+ * cloudflare token. Allow certain IPs and user-agents. */
 {
 if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
     return;
@@ -1559,29 +1581,18 @@ if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
 if (botException())
     return;
 
-// let rtracklayer user agent pass, but allow us to remove this exception in case the bots discover it one day
-if ( (!cfgOption("blockRtracklayer") && sameOk(cgiUserAgent(), "rtracklayer")) || 
-        (isNotEmpty(cgiUserAgent()) && startsWith("IGV", cgiUserAgent())) )
-    return;
-
-// QA can add a user agent after release, in case someone complains that their library is blocked
-char *okUserAgent = cfgOption("okUserAgent");
-if (okUserAgent && sameOk(cgiUserAgent(), okUserAgent))
+if (isUserAgentException())
     return;
 
 // Do not show a captcha if we have a valid cookie 
-// but for debugging, it's nice to be force the captcha to come up
+// but for debugging, it's nice to be able to force the captcha
 if (userId && userIdFound && !cgiOptionalString("captcha"))
     return;
 
-// This is a hack to let all AJAX requests pass without cookies, no needed anymore.
-// It's a hack because the header can be set by any curl script to get around
-// the captcha. 
-//if (sameOk(getenv("HTTP_X_REQUESTED_WITH"), "XMLHttpRequest"))
-    //return;
-
+// when the captcha is solved, our JS code does a full page-reload, no AJAX. That saves us one round-trip.
+// After the reload, the new page URL has the captcha token in the URL argument list, so now we need to validate it
+// and remove it from the cart
 char *token = cgiOptionalString("token");
-
 if (token && isValidToken(token))
 {
     cartRemove(cart, "token");

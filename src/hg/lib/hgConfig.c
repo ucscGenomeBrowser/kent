@@ -338,6 +338,26 @@ while ((hel = hashNext(&cookie)) != NULL)
 return names;
 }
 
+struct slName *cfgValsWithPrefix(char* prefix)
+/* get list of values in config file with prefix. slFreeList when finished */
+{
+struct slName *prefNames = cfgNamesWithPrefix(prefix);
+if (!prefNames)
+    return NULL;
+
+struct slName *prefVals = NULL;
+
+for (struct slName *sl = prefNames;  sl != NULL;  sl = sl->next)
+    {
+    char * val = cfgVal(sl->name);
+    struct slName *slValName = slNameNew(val); // cannot re-use the val string, must malloc it again, sl->name is char[1]
+    slAddHead(&prefVals, slValName);
+    }
+
+slNameFreeList(&prefNames);
+return prefVals;
+}
+
 unsigned long cfgModTime()
 /* Return modification time of config file */
 {
