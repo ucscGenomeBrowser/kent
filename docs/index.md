@@ -51,10 +51,6 @@ Learn how best to use the Gateway page to find assemblies and download shortcuts
 <div class="panel panel-default" style="padding-bottom: 10px">
 <h3 class="panel-title" style="width: -webkit-fill-available;">
     Table Browser Tutorial
-    <span
-        style="color: red; font-size: smaller; margin-left: 10px; cursor: pointer;"
-        title="Subscribe to our news mailing list to be the first to learn about new tutorials.">
-        Coming soon!
     </span>
 </h3>
 
