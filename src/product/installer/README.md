@@ -5,12 +5,11 @@
 The Genome Browser in the Cloud (GBiC) program is a convenient tool that automates the setup of a
 UCSC Genome Browser mirror. The GBiC program is for users who want to set up a full mirror of the 
 UCSC Genome Browser on their server/cloud instance, rather than using 
-[Genome Browser in a Box](gbib.html) (GBIB) 
+our [dockerfile](docker.html) 
 or our public website. Please see the 
 [Installation of a UCSC Genome Browser on a local machine (mirror)](mirror.html#considerations-before-installing-a-genome-browser)
 page for a summary of installation options, including the pros and cons of using a mirror
-installation via the GBiC program vs&period; using GBiB. GBiC can also be used as a Docker container.
-See our [Docker help page](docker.html) for more information.
+installation via the GBiC program vs&period; using docker.
 
 The program works by setting up MySQL (MariaDB), Apache, and Ghostscript, and then copying the
 Genome Browser CGIs onto the machine under `/usr/local/apache/`. Because it also deactivates the
