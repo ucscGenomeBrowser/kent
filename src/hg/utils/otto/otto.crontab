@@ -44,7 +44,7 @@ MAILTO=otto-group@ucsc.edu
 
 # PanelApp
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
-10 10 * * 2 /hive/data/outside/otto/panelApp/updatePanelApp
+10 10 * * 2 /hive/data/outside/otto/panelApp/doPanelApp.py
 
 #DECIPHER - Reactivated 5/13/2022 by Lou
 11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
@@ -113,6 +113,12 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 # GenArk update hgcentral.genark table, once a week on Tuesday
 # the script itself sends email for notices about activity
 37 10 * * 2 /hive/data/inside/GenArk/updateHgcentral.sh makeItSo
+
+##### see also, in the source tree: src/hg/utils/otto/genArk/pushRR/README.txt
+# push out the /gbdb/hubs/GC[AF]/ hierarchy to:
+#  hgwbeta hgw0 hgw1 hgw2 euroNode
+#   There is an equivalent 'pull' script running on the asiaNode
+03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
 
 #NCBI RefSeq
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh

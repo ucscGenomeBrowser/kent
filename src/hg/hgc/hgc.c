@@ -4924,6 +4924,10 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "bigMethyl") )
+	{
+        genericBigBedClick(conn, tdb, item, start, end, 0);
+	}
     else if (sameString(type, "bigLolly") )
 	{
         genericBigBedClick(conn, tdb, item, start, end, 0);
@@ -22526,7 +22530,7 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigDbSnp"))
     doBigDbSnp(ct->tdb, item);
-else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred") || sameWord(type, "bigLolly"))
+else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred") || sameWord(type, "bigLolly") || sameWord(type, "bigMethyl"))
     bigBedCustomClick(ct->tdb);
 else if (startsWith("bigRmsk", type))
     doBigRmskRepeat(ct->tdb, item);

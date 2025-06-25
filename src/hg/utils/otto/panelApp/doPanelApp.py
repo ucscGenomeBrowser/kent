@@ -1,15 +1,18 @@
 #!/hive/data/outside/otto/panelApp/venv/bin/python3
+
 from datetime import date
-import os
-import shutil
-import requests
-import time
-import json 
 import pandas as pd 
-import sys 
-import re
-import gzip
-import logging
+import gzip, logging, re, sys, json, time, requests, shutil, os, subprocess
+
+def bash(cmd):
+    """Run the cmd in bash subprocess"""
+    try:
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
+        bashStdoutt = rawBashOutput.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    return(bashStdoutt)
 
 def getArchDir(db):
     " return hgwdev archive directory given db "
@@ -64,6 +67,20 @@ def updateGbdbSymlinks(country):
             cmd = "ln -sf `pwd`/current/%s/%s.bb /gbdb/%s/panelApp/%s.bb" % (db, subTrack, db, subTrack)
             assert(os.system(cmd)==0)
 
+def checkIfFilesTooDifferent(oldFname,newFname):
+    # Exit if the difference is more than 10%
+
+    oldItemCount = bash('bigBedInfo '+oldFname+' | grep "itemCount"')
+    oldItemCount = int(oldItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
+    
+    newItemCount = bash('bigBedInfo '+newFname+' | grep "itemCount"')
+    newItemCount = int(newItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
+
+    if abs(newItemCount - oldItemCount) > 0.1 * max(newItemCount, oldItemCount):
+        sys.exit(f"Difference between itemCounts greater than 10%: {newItemCount}, {oldItemCount}")
+    else:
+        print(oldFname+" vs. new count: "+str(oldItemCount)+" - "+str(newItemCount))
+
 def flipFiles(country):
     " rename the .tmp files to the final filenames "
     if country == "Australia":
@@ -78,6 +95,10 @@ def flipFiles(country):
                 continue
             oldFname = "current/%s/%s.bb.tmp" % (db, subTrack)
             newFname = "current/%s/%s.bb" % (db, subTrack)
+
+            #Check if files are more than 10% different
+            checkIfFilesTooDifferent(oldFname,newFname)
+            
             os.replace(oldFname, newFname)
 
 def getAllPages(url, results=[]):
@@ -571,6 +592,11 @@ def getGenesLocations(jsonFh,url,onlyPanels):
         jsonFh.write("\n".encode())
 
         res = jData['results']
+        
+        #filter by onlyPanels early, if specified
+        if onlyPanels is not None:
+            res = [entry for entry in res if entry.get('panel', {}).get('id') in onlyPanels]
+
         num_gene_variant = len(res)
         count = 0
         while count != num_gene_variant:
@@ -772,13 +798,10 @@ def getGenesLocations(jsonFh,url,onlyPanels):
             for attribute in panel_list:
                 try:
                     x = res[count]['panel'][attribute]
-                    if attribute=="id" and onlyPanels is not None:
-                        if int(x) not in onlyPanels:
-                            continue
                     if not x:
                         temp_attribute_dictionary[attribute] = ''
                     else:
-                        temp_attribute_dictionary[attribute] = res[count]['panel'][attribute]
+                        temp_attribute_dictionary[attribute] = x
                 except:
                     temp_attribute_dictionary[attribute] = ''
 
@@ -858,37 +881,35 @@ def getGenesLocations(jsonFh,url,onlyPanels):
                 except:
                     pass
 
-            # Version Threshold = 0.99
-            max_num = float(0.99)
+            if temp_attribute_dictionary['label'] not in repeat19 and gene_range_37 is not None:    # Removes Repeats
+                repeat19.append(temp_attribute_dictionary['label'])
+                blockSizes = int(gene_range_37[1]) - int(gene_range_37[0])
+                hg19_dict[string_dict_key] = [chromo_37, int(gene_range_37[0]), gene_range_37[1], temp_attribute_dictionary['label'], 
+                                        score, strand, gene_range_37[0], gene_range_37[1], rgb, blockCount, blockSizes, blockStarts, 
+                                        temp_attribute_dictionary['gene_symbol'], temp_attribute_dictionary['biotype'], temp_attribute_dictionary['hgnc_id'], 
+                                        temp_attribute_dictionary['gene_name'], temp_attribute_dictionary['omim_gene'], ensembl_genes_GRch38_90_ensembl_id,
+                                        temp_attribute_dictionary['entity_type'], temp_attribute_dictionary['entity_name'], temp_attribute_dictionary['confidence_level'],    
+                                        temp_attribute_dictionary['penetrance'], temp_attribute_dictionary['mode_of_pathogenicity'], temp_attribute_dictionary['publications'], 
+                                        temp_attribute_dictionary['evidence'], temp_attribute_dictionary['phenotypes'], temp_attribute_dictionary['mode_of_inheritance'], 
+                                        temp_attribute_dictionary['tags'], temp_attribute_dictionary['id'], temp_attribute_dictionary['name'],
+                                        temp_attribute_dictionary['disease_group'], temp_attribute_dictionary['disease_sub_group'], temp_attribute_dictionary['status'], 
+                                        temp_attribute_dictionary['version'], temp_attribute_dictionary['version_created'], temp_attribute_dictionary['relevant_disorders'], temp_attribute_dictionary['mouseOverField']]
             
-            if version_num > max_num: 
-                if temp_attribute_dictionary['label'] not in repeat19 and gene_range_37 is not None:    # Removes Repeats
-                    repeat19.append(temp_attribute_dictionary['label'])
-                    blockSizes = int(gene_range_37[1]) - int(gene_range_37[0])
-                    hg19_dict[string_dict_key] = [chromo_37, int(gene_range_37[0]), gene_range_37[1], temp_attribute_dictionary['label'], 
-                                            score, strand, gene_range_37[0], gene_range_37[1], rgb, blockCount, blockSizes, blockStarts, 
-                                            temp_attribute_dictionary['gene_symbol'], temp_attribute_dictionary['biotype'], temp_attribute_dictionary['hgnc_id'], 
-                                            temp_attribute_dictionary['gene_name'], temp_attribute_dictionary['omim_gene'], ensembl_genes_GRch38_90_ensembl_id,
-                                            temp_attribute_dictionary['entity_type'], temp_attribute_dictionary['entity_name'], temp_attribute_dictionary['confidence_level'],    
-                                            temp_attribute_dictionary['penetrance'], temp_attribute_dictionary['mode_of_pathogenicity'], temp_attribute_dictionary['publications'], 
-                                            temp_attribute_dictionary['evidence'], temp_attribute_dictionary['phenotypes'], temp_attribute_dictionary['mode_of_inheritance'], 
-                                            temp_attribute_dictionary['tags'], temp_attribute_dictionary['id'], temp_attribute_dictionary['name'],
-                                            temp_attribute_dictionary['disease_group'], temp_attribute_dictionary['disease_sub_group'], temp_attribute_dictionary['status'], 
-                                            temp_attribute_dictionary['version'], temp_attribute_dictionary['version_created'], temp_attribute_dictionary['relevant_disorders'], temp_attribute_dictionary['mouseOverField']]
-                
-                if temp_attribute_dictionary['label'] not in repeat38 and gene_range_38 is not None:    # Remove Repeats
-                    repeat38.append(temp_attribute_dictionary['label'])
-                    blockSizes = int(gene_range_38[1]) - int(gene_range_38[0])
-                    hg38_dict[string_dict_key] = [chromo_38, int(gene_range_38[0]), gene_range_38[1], temp_attribute_dictionary['label'], 
-                                            score, strand, gene_range_38[0], gene_range_38[1], rgb, blockCount, blockSizes, blockStarts, 
-                                            temp_attribute_dictionary['gene_symbol'], temp_attribute_dictionary['biotype'], temp_attribute_dictionary['hgnc_id'], 
-                                            temp_attribute_dictionary['gene_name'], temp_attribute_dictionary['omim_gene'], ensembl_genes_GRch38_90_ensembl_id,
-                                            temp_attribute_dictionary['entity_type'], temp_attribute_dictionary['entity_name'], temp_attribute_dictionary['confidence_level'],    
-                                            temp_attribute_dictionary['penetrance'], temp_attribute_dictionary['mode_of_pathogenicity'], temp_attribute_dictionary['publications'], 
-                                            temp_attribute_dictionary['evidence'], temp_attribute_dictionary['phenotypes'], temp_attribute_dictionary['mode_of_inheritance'], 
-                                            temp_attribute_dictionary['tags'], temp_attribute_dictionary['id'], temp_attribute_dictionary['name'],
-                                            temp_attribute_dictionary['disease_group'], temp_attribute_dictionary['disease_sub_group'], temp_attribute_dictionary['status'], 
-                                            temp_attribute_dictionary['version'], temp_attribute_dictionary['version_created'], temp_attribute_dictionary['relevant_disorders'], temp_attribute_dictionary['mouseOverField']]
+            if temp_attribute_dictionary['label'] not in repeat38 and gene_range_38 is not None:    # Remove Repeats
+                repeat38.append(temp_attribute_dictionary['label'])
+                blockSizes = int(gene_range_38[1]) - int(gene_range_38[0])
+                hg38_dict[string_dict_key] = [chromo_38, int(gene_range_38[0]), gene_range_38[1], temp_attribute_dictionary['label'], 
+                                        score, strand, gene_range_38[0], gene_range_38[1], rgb, blockCount, blockSizes, blockStarts, 
+                                        temp_attribute_dictionary['gene_symbol'], temp_attribute_dictionary['biotype'], temp_attribute_dictionary['hgnc_id'], 
+                                        temp_attribute_dictionary['gene_name'], temp_attribute_dictionary['omim_gene'], ensembl_genes_GRch38_90_ensembl_id,
+                                        temp_attribute_dictionary['entity_type'], temp_attribute_dictionary['entity_name'], temp_attribute_dictionary['confidence_level'],    
+                                        temp_attribute_dictionary['penetrance'], temp_attribute_dictionary['mode_of_pathogenicity'], temp_attribute_dictionary['publications'], 
+                                        temp_attribute_dictionary['evidence'], temp_attribute_dictionary['phenotypes'], temp_attribute_dictionary['mode_of_inheritance'], 
+                                        temp_attribute_dictionary['tags'], temp_attribute_dictionary['id'], temp_attribute_dictionary['name'],
+                                        temp_attribute_dictionary['disease_group'], temp_attribute_dictionary['disease_sub_group'], temp_attribute_dictionary['status'], 
+                                        temp_attribute_dictionary['version'], temp_attribute_dictionary['version_created'], temp_attribute_dictionary['relevant_disorders'], temp_attribute_dictionary['mouseOverField']]
+                    
+            
             count = count + 1
             continuous_count = continuous_count + 1
 
@@ -949,7 +970,7 @@ def main():
     
     # First update panelApp England
     # Gene panels track
-    hg19Bed, hg38Bed = downloadGenes("https://panelapp.genomicsengland.co.uk/api/v1/panels/?format=json", onlyPanels=[137, 126])
+    hg19Bed, hg38Bed = downloadGenes("https://panelapp.genomicsengland.co.uk/api/v1/panels/?format=json")
     writeBb(hg19Bed, hg38Bed, "genes")
     # STRs track
     hg19Bed, hg38Bed = downloadTandReps("https://panelapp.genomicsengland.co.uk/api/v1/strs/?format=json")
@@ -964,7 +985,7 @@ def main():
 
     # Now update panelApp Australia
     # Genes track
-    hg19Bed, hg38Bed = downloadGenes("https://panelapp-aus.org/api/v1/panels/?format=json")
+    hg19Bed, hg38Bed = downloadGenes("https://panelapp-aus.org/api/v1/panels/?format=json", onlyPanels=[137, 126])
     writeBb(hg19Bed, hg38Bed, "genesAus")
     # STRs track
     hg19Bed, hg38Bed = downloadTandReps("https://panelapp-aus.org/api/v1/strs/?format=json")

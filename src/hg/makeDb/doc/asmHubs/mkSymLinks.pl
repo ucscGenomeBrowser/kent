@@ -143,6 +143,7 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/${accessionId}.repeatModeler.2bit"`;
   `rm -f "${destDir}/${accessionId}.rmod.log.txt"`;
   `rm -f "${destDir}/${accessionId}.userTrackDb.txt"`;
+  `rm -f "${gbdbDir}/${accessionId}.userTrackDb.txt"`;
   `rm -f "${destDir}/trackDb.txt"`;
   `rm -f "${destDir}/genomes.txt"`;
   `rm -f "${destDir}/download.genomes.txt"`;
@@ -207,14 +208,14 @@ foreach my $asmId (@orderList) {
       printf STDERR "# error missing ${asmId}.masked.2bit.bpt\n";
    }
   `ln -s "${buildDir}/${asmId}.chrNames.2bit" "${destDir}/${accessionId}.chrNames.2bit"` if (-s "${buildDir}/${asmId}.chrNames.2bit");
-   if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
-      if (-s "${buildDir}/${accessionId}.trans.gfidx") {
-        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
-        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
-        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${dynaDir}/${accessionId}.untrans.gfidx"`;
-        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${dynaDir}/${accessionId}.trans.gfidx"`;
-      }
-   }
+#   if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
+#      if (-s "${buildDir}/${accessionId}.trans.gfidx") {
+#        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
+#        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
+#        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${dynaDir}/${accessionId}.untrans.gfidx"`;
+#        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${dynaDir}/${accessionId}.trans.gfidx"`;
+#      }
+#   }
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
    if (-s "${buildDir}/${asmId}.chrom.sizes") {
     `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/${accessionId}.chrom.sizes.txt"`;
@@ -259,7 +260,10 @@ foreach my $asmId (@orderList) {
       `ln -s "${buildDir}/${asmId}.groups.txt" "${destDir}/groups.txt"`;
       `ln -s "${buildDir}/${asmId}.groups.txt" "${gbdbDir}/groups.txt"`;
    }
-  `ln -s "${buildDir}/${asmId}.userTrackDb.txt" "${destDir}/${accessionId}.userTrackDb.txt"` if ( -s "${buildDir}/${asmId}.userTrackDb.txt");
+   if ( -s "${buildDir}/${asmId}.userTrackDb.txt") {
+    `ln -s "${buildDir}/${asmId}.userTrackDb.txt" "${destDir}/${accessionId}.userTrackDb.txt"`;
+    `ln -s "${buildDir}/${asmId}.userTrackDb.txt" "${gbdbDir}/${accessionId}.userTrackDb.txt"`;
+   }
    if (-s "${buildDir}/${asmId}.bigMaf.trackDb.txt") {
      `rm -f "${destDir}/${asmId}.bigMaf.trackDb.txt"`;
      `ln -s "${buildDir}/${asmId}.bigMaf.trackDb.txt" "${destDir}/${asmId}.bigMaf.trackDb.txt"`;

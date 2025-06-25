@@ -12,33 +12,41 @@ workDir=subLollyBuild$db
 rm -rf $workDir
 mkdir $workDir
 cd $workDir
-bigBedToBed /gbdb/$db/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $43, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
+#bigBedToBed /gbdb/$db/bbi/clinvar$alphaSuffix/clinvarMain.bb stdout | tawk '{print $43, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
+bigBedToBed /gbdb/$db/bbi/clinvar$alphaSuffix/clinvarMain.bb stdout | tawk '{print $46, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
 hgsql $db -Ne "select varId,clinSign,scv from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
 
 join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,$6,$1, $7}' | sort -S 40g -k1,1 -k2,2n -k5,5 | tawk -f ../makeFranklin   | tawk -f ../assignColors > tmp1
 tawk '{print $1":"$2 + 1"-"$3" <br>Variants (submissions):"$11}' tmp1 > tmp2
 paste tmp1 tmp2 > bigBedInput.bed
 
-rm -f ../clinvarSubLolly$alphaSuffix.$db.bb
-bedToBigBed -as=../clinvarSubLolly.as -type=bed9+5 -tab bigBedInput.bed /cluster/data/$db/chrom.sizes ../clinvarSubLolly$alphaSuffix.$db.bb
+bedToBigBed -as=../clinvarSubLolly.as -type=bed9+5 -tab bigBedInput.bed /cluster/data/$db/chrom.sizes ../clinvarSubLolly$alphaSuffix.$db.new.bb
 
-bigBedToBed /gbdb/$db/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $43, $1,$2,$2+1,$4,$13,$15,$18,$19}' | sort  -S 40g > sort.main.bed
+bigBedToBed /gbdb/$db/bbi/clinvar$alphaSuffix/clinvarMain.bb stdout | tawk '{print $46, $1,$2,$2+1,$4,$13,$15,$18,$19}' | sort  -S 40g > sort.main.bed
 hgsql $db -Ne "select * from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
 join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,0,"+",0,0,"0,0,0",$6,$20,$8, $9,$1,$10,$7,$11,$12,$13,$14,$15,$16,$17,$18,$19,$21}' | sort -S 40g -k1,1 -k2,2n | tawk -f ../assignScore > bigBedInput.bed
 
-rm -f ../clinvarSub$alphaSuffix.$db.bb
-bedToBigBed -as=../clinvarSubBB.as -type=bed9+11 -tab bigBedInput.bed /cluster/data/$db/chrom.sizes ../clinvarSub$alphaSuffix.$db.bb
+bedToBigBed -as=../clinvarSubBB.as -type=bed9+11 -tab bigBedInput.bed /cluster/data/$db/chrom.sizes ../clinvarSub$alphaSuffix.$db.new.bb
 
 cd ..
 
 #validate
+bigBedMaxPercDiff 5 clinvarSubLolly$alphaSuffix.$db.new.bb clinvarSubLolly$alphaSuffix.$db.bb
+bigBedMaxPercDiff 5 clinvarSub$alphaSuffix.$db.new.bb clinvarSub$alphaSuffix.$db.bb
+
+mv -f clinvarSub$alphaSuffix.$db.new.bb clinvarSub$alphaSuffix.$db.bb
+mv -f clinvarSubLolly$alphaSuffix.$db.new.bb clinvarSubLolly$alphaSuffix.$db.bb
 
 mkdir -p /gbdb/$db/clinvarSubLolly$alphaSuffix
 rm -f /gbdb/$db/clinvarSubLolly$alphaSuffix/clinvarSubLolly.bb /gbdb/$db/clinvarSubLolly$alphaSuffix/clinvarSub.bb
 ln -s `pwd`/clinvarSubLolly$alphaSuffix.$db.bb /gbdb/$db/clinvarSubLolly$alphaSuffix/clinvarSubLolly.bb
 ln -s `pwd`/clinvarSub$alphaSuffix.$db.bb /gbdb/$db/clinvarSubLolly$alphaSuffix/clinvarSub.bb
 
-# archive
+# archive only if not in alpha mode
+if [ -z "$alphaSuffix" ]; then
+    today=$(date +%F)
+    cp clinvarSubLolly$alphaSuffix.$db.bb clinvarSub$alphaSuffix.$db.bb /usr/local/apache/htdocs-hgdownload/goldenPath/archive/hg38/clinvar/${today}/
+fi
 
 rm -rf $workDir
 done

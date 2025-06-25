@@ -207,7 +207,7 @@ SCRIPT_FILES = \
 	genePredToBed \
 	cgiSmokeTest \
 	phegenToBed \
-	doLocusName \
+	bigMaxPercDiff \
 	cancerMafToBigBed \
 	pq \
 	bedAppendPaperInfo \

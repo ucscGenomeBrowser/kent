@@ -50,4 +50,5 @@ table clinVarBed
     string _dbVarSsvId;           "dbVar SSV ID"
     string vcvId;            "ClinVar VCV Accession"
     string _vcvIdVersion;            "ClinVar VCV with version"
+    string _label;            "Label replacing the name field on hgTracks"
     )

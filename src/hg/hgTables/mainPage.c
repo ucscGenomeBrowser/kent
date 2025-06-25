@@ -934,6 +934,8 @@ if (isPositional)
         {
 	hPrintf("<TR><TD><B>Intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "Create");
+        hPrintf("<small style='margin-left: 12px'>Need to intersect on position?</small>");
+        printInfoIcon("Want to intersect two tables on their chrom-start-end fields and keep all other fields from both tables? For exampe, you selec one track with SNPs and want to overlap against enhancers and need to output both the SNP and the enhancer information, our <a href='hgIntegrator'>Data Annotation Integrator</a> is the right tool for you");
         hPrintf("</TD></TR>\n");
 	}
     }

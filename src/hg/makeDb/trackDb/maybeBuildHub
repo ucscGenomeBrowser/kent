@@ -61,8 +61,8 @@ if test ! -d $hubParent ; then
   exit 0
 fi
 
-# process 'hs1' just like it has always been processed
-if [ "${db}" = "hs1" ]; then
+# process 'hs1' and 'mpxvRivers' just like they have always been processed
+if [[ "${db}" = "hs1" || "${db}" = "mpxvRivers" ]]; then
   if dbExists $db ; then
      trackDbToTxt $db $trackDb $hubDir
      # creates $hubDir/hubAndGenome.txt

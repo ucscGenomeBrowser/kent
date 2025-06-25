@@ -2,7 +2,7 @@
 
 <p> This track collection shows <a href="https://sites.google.com/site/revelgenomics/"
 target="_blank">Rare Exome Variant Ensemble Learner</a> (REVEL) scores that can be
-used as evidence for pathogenicity annotations.
+used as evidence for pathogenicity classifications.
 </p>
 
 <p>
@@ -13,7 +13,7 @@ SiPhy, phyloP, and phastCons. REVEL was trained using recently discovered pathog
 and rare neutral missense variants, excluding those previously used to train its 
 constituent tools. The REVEL score for an individual missense variant can range 
 from 0 to 1, with higher scores reflecting greater likelihood that the variant is 
-disease-causing. 
+damaging.
 </p>
 
 <p>Most authors of deleteriousness scores argue against using fixed cutoffs in
@@ -33,18 +33,18 @@ There are five subtracks for this track:
 <ul>
 <li>
 <p>Four lettered subtracks, one for every nucleotide, showing
-scores for mutation from the reference to that
+scores for the variant from the reference to that
 nucleotide. All subtracks show the REVEL ensemble score on mouseover. Across the exome, 
 there are three values per position, one for every possible
-nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing
+nucleotide variant. The fourth value, &quot;no variant&quot;, representing
 the reference allele, e.g. A to A, is always set to zero, "0.0". REVEL only
-takes into account amino acid changes, so a nucleotide change that results in no
+takes into account amino acid changes, so a nucleotide variant that predicts no
 amino acid change (synonymous) also receives the score "0.0". 
 </p><p>
 In rare cases, two scores are output for the same variant at a 
 genome position. This happens when there are two transcripts with
-different splicing patterns and since some input scores for REVEL take into account
-the sequence context, the same mutation can get two different scores. In these cases,
+distinct splicing patterns and since some input scores for REVEL take into account
+the sequence context, the same variant can get two different scores. In these cases,
 only the maximum score is shown in the four per-nucleotide subtracks. The complete set of 
 scores are shown in the Overlaps track.
 </p>
@@ -54,19 +54,19 @@ scores are shown in the Overlaps track.
 In rare cases (0.05% of genome positions), multiple scores exist with a single variant, 
 due to multiple, overlapping transcripts. For example, if there are 
 two transcripts and one covers only half of an exon, then the amino acids
-that overlap both transcripts will get two different REVEL scores, since some of the underlying 
+that overlap both transcripts will get two distinct REVEL scores, since some of the underlying
 scores (polyPhen for example) take into account the amino acid sequence context and 
 this context is different depending on the transcript.
 For these cases, this subtrack contains at least two
 graphical features, for each affected genome position. Each feature is labeled
-with the mutation (A, C, T or G). The transcript IDs and resulting score is 
+with the reference or variant (A, C, T, or G). The transcript IDs and resulting score is
 shown when hovering over the feature or clicking
 it. For the large majority of the genome, this subtrack has no features.
 This is because REVEL usually outputs only a single score per nucleotide and 
 most transcript-derived amino acid sequence contexts are identical.
 </p>
 <p>
-Note that in most diagnostic assays, variants are called using WGS
+Note that in most diagnostic testing scenarios, variants are called using WGS
 pipelines, not RNA-seq. As a result, variants are originally located on the
 genome, not on transcripts, and the choice of transcript is made by
 a variant calling software using a heuristic. In addition, clinically, in the
@@ -75,6 +75,13 @@ because only certain transcripts may be expressed in the relevant tissue. So
 the choice of the most relevant transcript, and as such the REVEL score, may be
 a question of manual curation standards rather than a result of the variant itself.
 </p>
+<p>
+Note further that these thresholds represent the recommended score
+cutoffs for genes with no Variant Curation Expert Panel (VCEP) rules.
+For genes with published VCEP rules, the VCEP might
+select different thresholds, which are adjusted for the frequency of the
+relevant disorders. These are available in the ClinGen Criteria
+Specification.</p>
 </ul>
 
 <p>
@@ -85,7 +92,8 @@ your mouse cursor and no score will be shown on the mouseover tooltip.
 
 <p><b>Track colors</b></p>
 <p>
-This track is colored according to <a target="_blank" href="https://www.sciencedirect.com/science/article/pii/S000292972200461X">Table 2 in Pejaver et al</a>. The colors represent the recommended ACMG/AMP score cutoffs.
+This track is colored according to Table 2 in Pejaver et al. The colors represent the recommended
+ClinGen score cutoffs.
 
 <table style="text-align: left;">
   <thead>
@@ -97,7 +105,7 @@ This track is colored according to <a target="_blank" href="https://www.scienced
   <tbody>
     <tr>
       <td>&ge; 0.644</td>
-      <td style="color: rgb(255,0,0);">Pathogenic_supporting</td>
+      <td style="color: rgb(255,0,0);">Pathogenic supporting</td>
     </tr>
     <tr>
       <td>0.643 - 0.291</td>
@@ -105,23 +113,24 @@ This track is colored according to <a target="_blank" href="https://www.scienced
     </tr>
     <tr>
       <td>&le; 0.290</td>
-      <td style="color: rgb(80,166,230);">Benign_supporting</td>
+      <td style="color: rgb(80,166,230);">Benign supporting</td>
     </tr>
   </tbody>
 </table>
 
 <p>
-More details on these scoring ranges can be found in Bergquist et al. Genet Med 2025, Table 2:
+More details on these scoring ranges can be found in Bergquist et al. Genet Med 2025, Table 2:<br>
+<br>
 <img src="../images/bergquist25.png" alt="Table 2 from Bergquist Genet Med 2025">
 </p>
 
-<p>For hg38, note that the data was converted from the hg19 data using the UCSC
+<p>For hg38, note that the data were converted from the hg19 data using the UCSC
 liftOver program, by the REVEL authors. This can lead to missing values or
 duplicated values. When a hg38 position is annotated with two scores due to the
 lifting, the authors removed all the scores for this position. They did the same when
-the reference allele has changed from hg19 to hg38.  Also, on hg38, the track has
-the &quot;lifted&quot; icon to indicate
-this <img class="gbsInlineImg" src="../images/19.jpg">. You can double-check if a nucleotide
+the reference nucleotide has changed from hg19 to hg38.  Also, on hg38, the track has
+the <img class="gbsInlineImg" src="../images/19.jpg"> &quot;lifted&quot; icon to indicate
+this. You can double-check if a nucleotide
 position is possibly affected by the lifting procedure by activating the track
 &quot;Hg19 Mapping&quot; under &quot;Mapping and Sequencing&quot;.
 </p>
@@ -148,7 +157,7 @@ For automated download and analysis, the genome annotation is stored at UCSC in 
 files that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/revel/" target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw</tt>. Individual
-regions or the whole genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
+regions or the genome annotation can be obtained using our tool <tt>bigWigToWig</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
