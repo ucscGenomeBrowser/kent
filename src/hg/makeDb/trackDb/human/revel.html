@@ -59,7 +59,7 @@ scores (polyPhen for example) take into account the amino acid sequence context 
 this context is different depending on the transcript.
 For these cases, this subtrack contains at least two
 graphical features, for each affected genome position. Each feature is labeled
-with the reference or variant (A, C, T or G). The transcript IDs and resulting score is
+with the reference or variant (A, C, T, or G). The transcript IDs and resulting score is
 shown when hovering over the feature or clicking
 it. For the large majority of the genome, this subtrack has no features.
 This is because REVEL usually outputs only a single score per nucleotide and 
@@ -79,7 +79,7 @@ a question of manual curation standards rather than a result of the variant itse
 Note further that these thresholds represent the recommended score
 cutoffs for genes with no Variant Curation Expert Panel (VCEP) rules.
 For genes with published VCEP rules, the VCEP might
-select different thresholds which are adjusted for the frequency of the
+select different thresholds, which are adjusted for the frequency of the
 relevant disorders. These are available in the ClinGen Criteria
 Specification.</p>
 </ul>
@@ -129,8 +129,8 @@ liftOver program, by the REVEL authors. This can lead to missing values or
 duplicated values. When a hg38 position is annotated with two scores due to the
 lifting, the authors removed all the scores for this position. They did the same when
 the reference nucleotide has changed from hg19 to hg38.  Also, on hg38, the track has
-the &quot;lifted&quot; icon to indicate
-this <img class="gbsInlineImg" src="../images/19.jpg">. You can double-check if a nucleotide
+the <img class="gbsInlineImg" src="../images/19.jpg"> &quot;lifted&quot; icon to indicate
+this. You can double-check if a nucleotide
 position is possibly affected by the lifting procedure by activating the track
 &quot;Hg19 Mapping&quot; under &quot;Mapping and Sequencing&quot;.
 </p>
@@ -157,7 +157,7 @@ For automated download and analysis, the genome annotation is stored at UCSC in 
 files that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/revel/" target="_blank">our download server</a>.
 The files for this track are called <tt>a.bw, c.bw, g.bw, t.bw</tt>. Individual
-regions or the genome annotation can be obtained using our tool <tt>bigWigToWig</tt>
+regions or the genome annotation can be obtained using our tool <tt>bigWigToWig</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.

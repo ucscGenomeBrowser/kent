@@ -27,6 +27,18 @@ export downloadDest3="hgdownload3.gi.ucsc.edu"
 # hgdownload2.soe.ucsc.edu is an alias for hgdownload2.gi.ucsc.edu.
 # hgdownload2.gi.ucsc.edu has address 128.114.198.53
 
+export tB="/hive/data/genomes/asmHubs/allBuild/${dirPath}"
+export dCount=`ls -d ${tB}_* | wc -l`
+if [ "${dCount}" -ne 1 ]; then
+   printf "ERROR: can not find build directory\n%s_*\n" "${tB}"
+   exit 255
+fi
+export tD=`ls -d ${tB}_*`
+export buildDir=`realpath ${tD}`
+if [ ! -d "${buildDir}" ]; then
+   printf "ERROR: can not find build directory\n%s\n" "${td}"
+   exit 255
+fi
 ## verify no broken symlinks
 export srcDir="/hive/data/genomes/asmHubs/${dirPath}"
 if [ ! -d "${srcDir}" ]; then
@@ -68,9 +80,9 @@ export dynaBlat="dynablat-01.soe.ucsc.edu"
 
 ### check if there are actually index files to go:
 
-export idxCount=`ls ${srcDir}/*.gfidx 2> /dev/null | wc -l`
+export idxCount=`ls ${buildDir}/*.gfidx 2> /dev/null | wc -l`
 
-if [ "${idxCount}" -gt 0 ]; then
+if [ "${idxCount}" -eq 2 ]; then
 
 export dynaServerDir="/scratch/hubs/${dirPath}"
 
@@ -80,10 +92,12 @@ printf "# successful mkdir on $dynaBlat\n" 1>&2
 printf "rsync --stats -a -L -P ${srcDir}/${accession}.2bit \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
 rsync --stats -a -L -P ${srcDir}/${accession}.2bit "qateam@$dynaBlat:${dynaServerDir}/" \
   2>&1 | grep -v "X11 forwarding request"
-printf "rsync --stats -a -L -P ${srcDir}/*.gfidx \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
-rsync --stats -a -L -P ${srcDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \
+printf "rsync --stats -a -L -P ${buildDir}/*.gfidx \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
+rsync --stats -a -L -P ${buildDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \
   2>&1 | grep -v "X11 forwarding request"
 
+else
+  printf "warning: no dynamic server indexes found in ${buildDir}/*.gfidx\n" 1>&2
 fi
 
 # the single file hub genome trackDb file:

@@ -352,12 +352,12 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   printf "htmlPath ../%s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
   # until blat server host is ready for hgdownload, avoid these lines
   if ($blatHost ne $downloadHost) {
-    if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
+    if ( -s "${buildDir}/$accessionId.trans.gfidx" ) {
       printf "blat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
     printf "transBlat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
       printf "isPcr $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
     } else {
-      printf STDERR "# missing ${destDir}/$accessionId.trans.gfidx\n";
+      printf STDERR "# missing ${buildDir}/$accessionId.trans.gfidx\n";
     }
   }
   printf "\n";
@@ -407,7 +407,7 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   printf GF "htmlPath html/%s.description.html\n", $asmId;
   # until blat server host is ready for hgdownload, avoid these lines
   if ($blatHost ne $downloadHost) {
-    if ( -s "${destDir}/$accessionId.trans.gfidx" ) {
+    if ( -s "${buildDir}/$accessionId.trans.gfidx" ) {
       printf GF "blat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
       printf GF "transBlat $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
      printf GF "isPcr $blatHost$blatHostDomain %d dynamic $accessionDir/$accessionId\n", $blatPort + $hugeGenome;
