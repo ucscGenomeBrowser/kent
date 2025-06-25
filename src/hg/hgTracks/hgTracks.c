@@ -10000,10 +10000,10 @@ if (pdfFile != NULL)
     freez(&pdfFile);
     freez(&ideoPdfFile);
 
-    printf("If you require a bitmap image in PNG or TIFF format, note that the PDF format \n");
-    printf("is vector-based and can be easily opened in any software that opens PDF/SVG vector files. You can use these to edit the screenshot\n");
-    printf("and many publishers accept PDF or SVG files for figures. \n");
-    printf("If you publisher requires bitmap images such as TIFF or PNG, use your vector graphics program to export to these \n");
+    printf("If you require a bitmap image in <b>PNG</b> or <b>TIFF format</b>, note that PDF format \n");
+    printf("is vector-based and can be opened in any software that opens PDF/SVG vector files. You can use these to edit the screenshot.\n");
+    printf("Many publishers also accept PDF or SVG files for figures. <br><br>\n");
+    printf("If your publisher requires bitmap images such as PNG or TIFF, use your vector graphics program to export to these \n");
     printf("formats. For this export, use the publishers recommended dpi (dots per inch value), usually 300 dpi.\n");
 
     // see redmine #1077
@@ -10011,10 +10011,11 @@ if (pdfFile != NULL)
     printf("<UL style=\"margin-top:0px\">\n");
     printf("<LI>Add assembly name and chromosome range to the image on the\n"
         "<A HREF=\"hgTrackUi?g=ruler\">configuration page of the base position track</A>.\n");
-    printf("<LI>If using the UCSC Genes track, consider showing only one transcript per gene by turning off splice variants on the track configuration page.\n");
+    printf("<LI>If using the default genes track (e.g. GENCODE for hg38 or UCSC Genes for older assemblies),\n"
+           "consider showing only one transcript per gene by turning off splice variants on the track configuration page.\n");
     printf("<LI>Increase the font size and remove the light blue vertical guidelines in the \n"
         "<A HREF=\"hgTracks?hgTracksConfigPage=configure\">image configuration menu</A>.");
-    printf("<LI>In the image configuration menu, change the size of the image,\n"
+    printf("<LI>Change the size of the image in the image configuration menu\n"
             "to make it look more square.\n");
     printf("</UL>\n");
     printf("</div>\n");
