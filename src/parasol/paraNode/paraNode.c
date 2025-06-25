@@ -32,6 +32,7 @@ static struct optionSpec optionSpecs[] = {
     {"randomDelay", OPTION_INT},
     {"cpu", OPTION_INT},
     {"localhost", OPTION_STRING},
+    {"node", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -60,6 +61,7 @@ errAbort("paraNode - version %s\n"
 	 "        file opens when loading up an idle cluster.  Also it limits\n"
 	 "        the impact on the hub of very short jobs. Default 5000.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n"
+	 "    -node=host  name used to identify this machine including resurrect and checkjob.\n"
 	, version
 	);
 }
@@ -814,7 +816,6 @@ char *command;
 struct sockaddr_storage sai;
 
 /* We have to know who we are... */
-hostName = getMachine();
 initRandom();
 getTicksToHundreths();
 
@@ -905,6 +906,7 @@ userPath = optionVal("userPath", userPath);
 sysPath = optionVal("sysPath", sysPath);
 envExtra = optionMultiVal("env", NULL);
 randomDelay = optionInt("randomDelay", randomDelay);
+hostName = optionVal("node", getMachine());
 
 /* Look up IP addresses. */
 lookupIp("localhost", localIp, sizeof localIp);
