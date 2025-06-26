@@ -204,13 +204,8 @@
 
             // prevent tooltips from showing up while contextmenu is open
             if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                console.log("right click open, disabling mouseovers");
-                clearTimeout(mouseoverTimer);
-                if (mousemoveController) {
-                    mousemoveController.abort();
-                }
+                suppressTooltips = true;
                 hideMouseoverText(mouseoverContainer);
-                canShowNewMouseover = false;
             }
 
 			cmenu.target = t; // Preserve the object that triggered this context menu so menu item click methods can see it
@@ -276,7 +271,7 @@
 			cmenu.shown = false;
             // re-enable tooltips on contextmenu close
             if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                canShowNewMouseover = true;
+                suppressTooltips = false;
             }
 		}
 	};

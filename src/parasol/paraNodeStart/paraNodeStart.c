@@ -86,7 +86,7 @@ while (lineFileRow(lf, row))
         errAbort("Expecting cpu count in second column, line %d of %s\n",
 		lf->lineIx, lf->fileName);
     dyStringClear(dy);
-    dyStringPrintf(dy, "%s %s %s start -cpu=%d", rsh, name, exe, cpu);
+    dyStringPrintf(dy, "%s %s %s start -node=%s -cpu=%d", rsh, name, exe, name, cpu);
     carryOption("logFacility", dy);
     carryOption("logMinPriority", dy);
     carryOption("log", dy);

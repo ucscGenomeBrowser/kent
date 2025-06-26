@@ -50,18 +50,14 @@ Learn how best to use the Gateway page to find assemblies and download shortcuts
 <div class="col-md-6">
 <div class="panel panel-default" style="padding-bottom: 10px">
 <h3 class="panel-title" style="width: -webkit-fill-available;">
-    Table Browser Tutorial
-    <span
-        style="color: red; font-size: smaller; margin-left: 10px; cursor: pointer;"
-        title="Subscribe to our news mailing list to be the first to learn about new tutorials.">
-        Coming soon!
+    Table Browser
     </span>
 </h3>
 
 Learn how to extract Genome Browser data sets in various ways.
 
 <p style="text-align: end">
-<button>Coming soon!</button>
+<button>[View Tutorial](tableBrowserTutorial.html)</button>
 </p>
 </div>
 </div>

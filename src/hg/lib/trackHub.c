@@ -1013,6 +1013,7 @@ else
                   startsWithWord("bigRmsk", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
+                  startsWithWord("bigMethyl", type) ||
                   startsWithWord("hic", type) ||
                   startsWithWord("bigDbSnp", type) ||
                   startsWithWord("instaPort", type) ||

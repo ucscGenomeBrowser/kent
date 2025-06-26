@@ -14808,6 +14808,20 @@ track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
 }
 
+static void bigMethylLoadItems(struct track *tg)
+/* get items from bigBed in bedMethyl format */
+{
+loadSimpleBedWithLoader(tg, (bedItemLoader)bedMethylLoad);
+}
+
+static void bigMethylMethods(struct track *track)
+/* methods for bigBed in bedMethyl format */
+{
+track->isBigBed = TRUE;
+bedMethylMethods(track);
+track->loadItems = bigMethylLoadItems;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -14916,6 +14930,11 @@ else if (sameWord(type, "bigInteract"))
     {
     track->isBigBed = TRUE;
     interactMethods(track);
+    }
+else if (sameWord(type, "bigMethyl"))
+    {
+    bigMethylMethods(track);
+    tdb->canPack = TRUE;
     }
 else if (sameWord(type, "bigNarrowPeak"))
     {
@@ -15852,6 +15871,8 @@ registerTrackHandler("leptin", mafMethods );
 registerTrackHandler("igtc", igtcMethods );
 registerTrackHandler("cactusBed", cactusBedMethods );
 registerTrackHandler("variome", variomeMethods);
+registerTrackHandler("bedMethyl", bedMethylMethods);
+registerTrackHandler("bigMethyl", bigMethylMethods);
 /* Lowe lab related */
 #ifdef LOWELAB
 registerTrackHandler("refSeq", archaeaGeneMethods);

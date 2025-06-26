@@ -13,7 +13,7 @@ beta:
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
 	rsync ${rsyncOpts} ${DOCUMENTROOT}-beta/docs/ qateam@hgwbeta:${DOCUMENTROOT}/docs/
 
-DOCS = index gb101 gatewayTutorial page_template
+DOCS = index gb101 gatewayTutorial page_template tableBrowserTutorial
 
 doInstall: ${DOCS:%=%_install}
 
