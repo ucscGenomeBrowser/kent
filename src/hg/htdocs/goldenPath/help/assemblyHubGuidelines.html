@@ -60,7 +60,12 @@
 
 <a id="webServer"></a>
 <h2>Web Server</h2>
-<p>To display your novel genome sequence, use a web server at your institution (or free services like <a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Hosting">Cyverse</a>), for usage behind a firewall you can also load them locally through <a href="https://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html#blatGbib">GBiB</a> to supply your files to the UCSC Genome Browser. Note that hosting hub files on HTTP is highly recommended and much more efficient than FTP. You then establish a hierarchy of directories and files to host your novel genome sequence. For example:</p>
+<p>To display your novel genome sequence, use a web server at your institution (or free services 
+like <a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Hosting">Cyverse</a>), 
+for usage behind a firewall you can also load them locally through <a href="docker.html">docker</a> 
+to supply your files to the UCSC Genome Browser. Note that hosting hub files on HTTP is highly 
+recommended and much more efficient than FTP. You then establish a hierarchy of directories and 
+files to host your novel genome sequence. For example:</p>
 
 <pre style="margin-left: 20px;">
 myHub/ - directory to organize your files on this hub
@@ -291,7 +296,8 @@ isPcr yourServer.yourInstitution.edu 17779
 </ul>
 
 <p>Please see more about <a href="http://example.com/configuring-your-blat-gfserver">configuring your blat gfServer</a> to replicate the UCSC Browser's settings, which will also have information about optimizing PCR results. The <a href="http://example.com/source-downloads">Source Downloads</a> page offers access to utilities with pre-compiled binaries such as gfserver found in a blat/ directory for your machine type <a href="http://example.com/here">here</a> and further blat documentation <a href="http://example.com/here">here</a>, and the gfServer usage statement for further options.</p>
-<p>Please also know you can set up gfservers on a <a href="http://example.com/gbibi">GBiB</a> and run it locally. Please see this <a href="http://example.com/gbib-assembly-blat-step-by-step-setup">GBiB assembly blat step-by-step set up</a> page for details.</p>
+<p>Please also know you can set up gfservers on <a href="docker.html">docker</a> and run it locally. 
+
 <p>Note: You can stop your instance of gfServer with a command. For example:</p>
 <pre>
 gfServer stop localhost 17860

@@ -775,7 +775,7 @@ hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.
         "<b>Note:</b> Most dbSNP and gnomAD variant tables are huge. Trying to download them through the Table Browser "
         "usually leads to a timeout.<br> "
         "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
-        "on how to download dbSNP or gnomAD data or the Data Access section of their track documentation pages.</DIV></td></tr>");
+        "for information on how to download dbSNP data, or refer to the Data Access section of the dbSNP or gnomAD track documentation pages.</DIV></td></tr>");
 
 /* Region line */
 {

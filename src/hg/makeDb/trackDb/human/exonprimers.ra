@@ -1,0 +1,7 @@
+track exonprimers
+shortLabel Exon primers
+longLabel Exon primers - one pair of primers for each Gencode exon
+type bigBed 12 +
+bigDataUrl /gbdb/$D/exonprimers/exonprimers.bb
+group genes
+visibility hide
