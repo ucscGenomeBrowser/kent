@@ -2932,6 +2932,14 @@ static boolean bedTabixRecognizer(struct customFactory *fac,
 return (sameType(type, "bedTabix"));
 }
 
+static boolean bigMethylRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigMethyl track */
+{
+return (sameType(type, "bigMethyl"));
+}
+
 static boolean bigPslRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -3148,6 +3156,15 @@ static struct customFactory bigLollyFactory =
     NULL,
     "bigLolly",
     bigLollyRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigMethylFactory =
+/* Factory for bigPsl tracks */
+    {
+    NULL,
+    "bigMethyl",
+    bigMethylRecognizer,
     bigBedLoader,
     };
 
@@ -3715,6 +3732,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &bigGenePredFactory);
     slAddTail(&factoryList, &bigNarrowPeakFactory);
     slAddTail(&factoryList, &bigPslFactory);
+    slAddTail(&factoryList, &bigMethylFactory);
     slAddTail(&factoryList, &bedTabixFactory);
     slAddTail(&factoryList, &longTabixFactory);
     slAddTail(&factoryList, &bigChainFactory);
