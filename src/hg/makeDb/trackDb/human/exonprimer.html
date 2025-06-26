@@ -1,0 +1,265 @@
+<h2>Description</h2>
+    
+<p>The Exon PCR Primers track displays computationally designed primer pairs for PCR amplification of individual exons across all protein-coding genes. Each track item represents a complete PCR reaction designed to amplify a single exon, with primer locations highlighted as blocks within the amplicon span. This track is designed to facilitate exon-specific PCR experiments, including mutation screening, expression analysis, and targeted sequencing applications.</p>
+
+<h2>Display Conventions</h2>
+
+<ul>
+    <li><strong>Track Items:</strong> Each item represents one PCR amplicon spanning from the forward primer to the reverse primer</li>
+    <li><strong>Color:</strong> All PCR products are displayed in green (RGB: 0,128,0)</li>
+    <li><strong>Blocks:</strong> Two thick blocks within each item indicate the exact locations of the forward and reverse primers</li>
+    <li><strong>Strand:</strong> No strand indicators are shown (strand = ".")</li>
+    <li><strong>Score:</strong> Represents the average melting temperature (Tm) of both primers × 10</li>
+</ul>
+
+<p>PCR products are named using the format: <span class="code">{transcript_id}_exon{number}_PCR</span></p>
+<p>Example: <span class="code">NM_001001130_exon3_PCR</span></p>
+
+<p>Each PCR product contains comprehensive metadata accessible by clicking on track items:</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+            <th>Example</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>forwardSeq</td>
+            <td>DNA sequence of the forward primer (5' → 3')</td>
+            <td>ATGCGATCGTAGCATGC</td>
+        </tr>
+        <tr>
+            <td>forwardTm</td>
+            <td>Melting temperature of forward primer (°C)</td>
+            <td>59.8</td>
+        </tr>
+        <tr>
+            <td>forwardGc</td>
+            <td>GC content of forward primer (%)</td>
+            <td>52.4</td>
+        </tr>
+        <tr>
+            <td>reverseSeq</td>
+            <td>DNA sequence of the reverse primer (5' → 3')</td>
+            <td>GCATGCTACGATCGCAT</td>
+        </tr>
+        <tr>
+            <td>reverseTm</td>
+            <td>Melting temperature of reverse primer (°C)</td>
+            <td>60.2</td>
+        </tr>
+        <tr>
+            <td>reverseGc</td>
+            <td>GC content of reverse primer (%)</td>
+            <td>58.8</td>
+        </tr>
+        <tr>
+            <td>transcript</td>
+            <td>RefSeq transcript identifier</td>
+            <td>NM_001001130</td>
+        </tr>
+        <tr>
+            <td>geneSymbol</td>
+            <td>HGNC gene symbol</td>
+            <td>GAPDH</td>
+        </tr>
+        <tr>
+            <td>exonNum</td>
+            <td>Exon number within the transcript</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>productSize</td>
+            <td>Expected PCR amplicon size (bp)</td>
+            <td>185</td>
+        </tr>
+    </tbody>
+</table>
+
+    <h2>Applications</h2>
+
+    <h3>Research Applications</h3>
+    <ul>
+        <li><strong>Mutation Screening:</strong> PCR amplification of exons for Sanger sequencing or variant detection</li>
+        <li><strong>Expression Analysis:</strong> RT-PCR analysis of exon inclusion/exclusion patterns</li>
+        <li><strong>Targeted Sequencing:</strong> Primer design for custom amplicon sequencing panels</li>
+        <li><strong>Cloning:</strong> Exon-specific amplification for molecular cloning applications</li>
+        <li><strong>Functional Studies:</strong> Generation of exon-specific constructs for functional analysis</li>
+    </ul>
+
+    <h3>Clinical Applications</h3>
+    <ul>
+        <li><strong>Diagnostic PCR:</strong> Disease gene mutation screening in clinical samples</li>
+        <li><strong>Pharmacogenomics:</strong> Analysis of drug metabolism gene variants</li>
+        <li><strong>Genetic Testing:</strong> Targeted analysis of known pathogenic variants</li>
+    </ul>
+
+    <div class="warning">
+        <h3>Important Considerations</h3>
+        <ul>
+            <li><strong>Validation Required:</strong> All primers should be experimentally validated before use</li>
+            <li><strong>Specificity:</strong> Check primer specificity using BLAST or similar tools</li>
+            <li><strong>Polymorphisms:</strong> Consider known SNPs/variants that may affect primer binding</li>
+            <li><strong>Splice Variants:</strong> Primers may not amplify all transcript isoforms</li>
+            <li><strong>Pseudogenes:</strong> Be aware of potential cross-amplification with pseudogenes</li>
+        </ul>
+    </div>
+
+    <h2>Data Access</h2>
+
+    <h3>Table Browser</h3>
+    <p>The complete dataset can be accessed through the UCSC Table Browser:</p>
+    <ol>
+        <li>Navigate to the Table Browser</li>
+        <li>Select "Exon PCR Primers" from the track dropdown</li>
+        <li>Choose desired output format (BED, GTF, or custom)</li>
+        <li>Apply region or gene-based filters as needed</li>
+    </ol>
+
+    <h3>API Access</h3>
+    <p>Programmatic access is available through the UCSC REST API:</p>
+    <p class="code">https://api.genome.ucsc.edu/getData/track?genome=hg38;track=exonPrimers;chrom=chr1;start=1000000;end=2000000</p>
+
+    <h2>Methods</h2>
+
+    <p>Primers are designed using Primer3 with the following default parameters:</p>
+
+    <table class="param-table">
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Default Value</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Primer Length</td>
+                <td>18-25 bp (optimal: 20 bp)</td>
+                <td>Length range for primer oligonucleotides</td>
+            </tr>
+            <tr>
+                <td>Melting Temperature</td>
+                <td>57-63°C (optimal: 60°C)</td>
+                <td>Target Tm for primer annealing</td>
+            </tr>
+            <tr>
+                <td>Product Size</td>
+                <td>100-300 bp</td>
+                <td>Expected PCR amplicon length</td>
+            </tr>
+            <tr>
+                <td>Flanking Distance</td>
+                <td>500 bp</td>
+                <td>Sequence context around each exon</td>
+            </tr>
+            <tr>
+                <td>Max Self-Complementarity</td>
+                <td>8 bp</td>
+                <td>Maximum self-annealing allowed</td>
+            </tr>
+            <tr>
+                <td>Max 3' Self-Complementarity</td>
+                <td>3 bp</td>
+                <td>Maximum 3' end self-annealing</td>
+            </tr>
+            <tr>
+                <td>Max Pair Complementarity</td>
+                <td>8 bp</td>
+                <td>Maximum primer-dimer formation</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="methodology">
+        <h3>Computational Pipeline</h3>
+        <p>The primer design pipeline consists of the following steps:</p>
+        
+        <h4>1. Input Processing</h4>
+        <ul>
+            <li>UCSC genePred format gene annotations are parsed to extract exon coordinates</li>
+            <li>Transcript information including gene symbols are retained</li>
+            <li>Only protein-coding transcripts are processed</li>
+        </ul>
+
+        <h4>2. Sequence Extraction</h4>
+        <ul>
+            <li>Genomic sequences are retrieved from 2bit genome files</li>
+            <li>Flanking sequences (default 500 bp) are added to each exon</li>
+            <li>Repetitive sequences are masked using standard genome masks</li>
+        </ul>
+
+        <h4>3. Primer Design</h4>
+        <ul>
+            <li>Primer3 is executed in batch mode for computational efficiency</li>
+            <li>Target regions are set to exon boundaries within the flanking sequence</li>
+            <li>Primer pairs are optimized for uniform melting temperatures and minimal secondary structure</li>
+        </ul>
+
+        <h4>4. Quality Control</h4>
+        <ul>
+            <li>Primers failing quality criteria are excluded</li>
+            <li>Genomic coordinates are calculated and validated</li>
+            <li>Primer specificity is assessed computationally</li>
+        </ul>
+
+        <h4>5. Output Generation</h4>
+        <ul>
+            <li>Results are formatted as BED12 files with metadata</li>
+            <li>BigBed files are generated for genome browser display</li>
+            <li>Comprehensive metadata is embedded in extra fields</li>
+        </ul>
+    </div>
+
+    <h2>Limitations</h2>
+
+    <ul>
+        <li><strong>Computational Design:</strong> Primers are designed computationally and may require experimental optimization</li>
+        <li><strong>Single Isoform:</strong> Primers target the canonical transcript and may not amplify all splice variants</li>
+        <li><strong>Repetitive Regions:</strong> Exons in highly repetitive regions may lack suitable primers</li>
+        <li><strong>Polymorphisms:</strong> Common genetic variants may affect primer efficiency</li>
+        <li><strong>Species Specificity:</strong> Primers are designed for human sequences only</li>
+    </ul>
+
+    <h2>Data Sources and Updates</h2>
+
+    <ul>
+        <li><strong>Gene Annotations:</strong> UCSC Gencode V48</li>
+        <li><strong>Genome Sequence:</strong> Reference genome assemblies (hg19, hg38)</li>
+        <li><strong>Update Frequency:</strong> Updated with each major Gencode annotation release</li>
+        <li><strong>Quality Assurance:</strong> Automated validation against current genome builds</li>
+    </ul>
+
+    <h2>Technical Details</h2>
+
+    <h3>File Formats</h3>
+    <ul>
+        <li><strong>Track Format:</strong> BigBed 12+10</li>
+        <li><strong>Coordinate System:</strong> 0-based, half-open intervals</li>
+        <li><strong>Strand Convention:</strong> No strand displayed (strand = ".")</li>
+        <li><strong>Color Encoding:</strong> RGB values embedded in itemRgb field</li>
+    </ul>
+
+    <h3>Software used</h3>
+    <ul>
+        <li><strong>Primer3:</strong> Primer design and optimization</li>
+        <li><strong>UCSC Tools:</strong> Genome sequence access and file format conversion</li>
+        <li><strong>Python Libraries:</strong> twobitreader for genome access</li>
+    </ul>
+
+    <div class="citation">
+        <h2>References</h2>
+        <p><strong>Primer3 Software:</strong><br>
+        Untergasser A, Cutcutache I, Koressaar T, Ye J, Faircloth BC, Remm M, Rozen SG (2012) 
+        Primer3--new capabilities and interfaces. <em>Nucleic Acids Research</em> 40(15):e115. 
+        doi: 10.1093/nar/gks596</p>
+
+        <p><strong>ExonPrimer:</strong><br>
+        Written in the early 2000s by Tim Strom, the Exonprimer website inspired this track. The 
+        tool used to be available at http://ihg.gsf.de/ihg/ExonPrimer.html, but the server seems to be offline now.
+    </div>
+</body>
+</html>
