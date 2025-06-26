@@ -41,6 +41,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         noScoreFilter on
         searchIndex _dbVarSsvId,snpId,vcvId
         maxWindowCoverage 10000000
+        decorator.default.bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMainDecor.bb
 
         track clinvarCnv
         parent clinvar
