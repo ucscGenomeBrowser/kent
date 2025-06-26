@@ -50,7 +50,7 @@ Learn how best to use the Gateway page to find assemblies and download shortcuts
 <div class="col-md-6">
 <div class="panel panel-default" style="padding-bottom: 10px">
 <h3 class="panel-title" style="width: -webkit-fill-available;">
-    Table Browser Tutorial
+    Table Browser
     </span>
 </h3>
 

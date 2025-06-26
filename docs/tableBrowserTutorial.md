@@ -52,7 +52,7 @@ An in-browser walkthrough that introduces the Table Browser interface and workfl
 
 ``` image
 src=../images/tableBrowserAnnotated.png
-width=80%
+width=65%
 ```
 
 ---
