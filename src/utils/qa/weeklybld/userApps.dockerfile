@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     libbz2-dev \
     libmysqlclient-dev \
     uuid-dev \
+    libcurl4-openssl-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set umask for both bash and commands from docker run

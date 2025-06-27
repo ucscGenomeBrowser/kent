@@ -19,6 +19,22 @@ function checkProg() {
          /linux-vdso\.so|libc\.so|libgcc_s\.so|libdl\.so|libm\.so|ld-linux-x86-64\.so/ {
              next;
          }
+         /libcurl\.so|libnghttp2\.so|libidn2\.so|librtmp\.so|libssh\.so|libpsl\.so|libssl\.so|libcrypto\.so/ {
+             next;  # libcurl stuff
+         }
+         /libgssapi_krb5\.so|libldap\.so|liblber\.so|libzstd\.so|libbrotlidec\.so|libz\.so/ {
+             next;  # more libcurl stuff
+         }
+         /libunistring\.so|libgnutls\.so|libhogweed\.so|libnettle\.so|libgmp\.so|libkrb5\.so|libk5crypto\.so/ {
+             next;  # yet more libcurl stuff
+         }
+         /libcom_err\.so|libkrb5support\.so|libsasl2\.so|libbrotlicommon\.so|libp11-kit\.so|libtasn1\.so/ {
+             next;  # even more libcurl stuff
+         }
+         /libkeyutils\.so|libresolv\.so|libffi\.so|libevent-2\.1\.so|libselinux\.so|libcrypt\.so|libpcre2-8\.so/ {
+             next;  # last of the libcurl stuff
+         }
+
          {
             print prog, "found unallowed dynamic library:", $0 > "/dev/stderr";
             errcnt += 1

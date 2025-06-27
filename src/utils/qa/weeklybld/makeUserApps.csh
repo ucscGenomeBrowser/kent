@@ -64,23 +64,23 @@ if ("$HOST" == "hgwdev") then
 	case ${DESTDIR}${BINDIR}/gfServerHuge:
 	case ${DESTDIR}${BINDIR}/gfPcr:
 	case ${DESTDIR}${BINDIR}/isPcr:
-	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    ssh -n qateam@hgdownload "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
-	    ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    ssh -n qateam@hgdownload2 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
-	    ssh -n qateam@hgdownload3 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    ssh -n qateam@hgdownload3 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload3:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
-	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    ssh -n qateam@genome-euro "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    breaksw
 	default:
-	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    ssh -n qateam@hgdownload "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
-	    ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    ssh -n qateam@hgdownload2 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
-	    ssh -n qateam@hgdownload3 "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    ssh -n qateam@hgdownload3 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload3:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
-	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    ssh -n qateam@genome-euro "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    breaksw
     endsw
