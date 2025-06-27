@@ -10,7 +10,7 @@ pwd
 echo "trackDb Make strict. [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/makeDb/trackDb
 #make -O -j 5 beta >& make.strict.log  # gotta fix the metaDb makefiles in trackDb first
-make strict >& make.strict.log
+make beta >& make.strict.log
 /bin/egrep -i "html missing" make.strict.log > warning.txt
 /bin/egrep -iv "html missing" make.strict.log > make.strict.log2
 mv make.strict.log2 make.strict.log
