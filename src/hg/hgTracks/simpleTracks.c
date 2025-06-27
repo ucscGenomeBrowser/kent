@@ -2942,7 +2942,9 @@ while (exon != NULL)
 slSort(&exonList, exonSlRefCmp);
 
 numExons = slCount(exonList);
-struct genePred *gp = lf->original;
+struct genePred *gp = NULL;
+if (startsWith("bigGenePred", tg->tdb->type) || startsWith("genePred", tg->tdb->type))
+    gp = lf->original;
 boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;

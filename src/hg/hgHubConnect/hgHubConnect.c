@@ -1438,8 +1438,6 @@ cartWebStart(cart, NULL, "%s", headerText);
 
 struct trackHub *tHub = hub->trackHub;
 
-hPrintf("<P><i><B style='color: red;'>Note:</B> As of May 27 this page <B>no longer redirects</B> to our Genome Gateway page. Make a genome selection below to go directly to the tracks display. This message will be removed July 8th.</i></P>");
-
 hPrintf("<P><B>Connected Hub: </B>%s</P>", tHub->shortLabel);
 
 hPrintf("<P><B>Hub Description:</B> %s</P>", tHub->longLabel);
