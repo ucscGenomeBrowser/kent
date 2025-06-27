@@ -93,6 +93,9 @@ HTCOLOR="#8080CC"
 # transparency for the gene graph edges
 TRANSPARENCY="C0"
 
+# do not show more than X snippets
+MAXSNIPPETS=100
+
 # url of the user's manual
 MANUALURL="../goldenPath/help/hgGeneGraph.html"
 
@@ -1662,7 +1665,7 @@ def queryEventText(conn, gene1, gene2):
         "FROM ggLinkEvent, ggEventText " \
         "JOIN ggDoc ON (ggDoc.docId=ggEventText.docId) " \
         "WHERE gene1='%s' and gene2='%s' AND ggEventText.eventId=ggLinkEvent.eventId " \
-        "ORDER BY ggDoc.docId" % (gene1,gene2)
+        "ORDER BY ggDoc.docId REVERSE LIMIT %d" % (gene1,gene2,MAXSNIPPETS)
     rows =  sqlQuery(conn, q)
     return rows
 
@@ -1713,6 +1716,9 @@ def showSnipsLink(conn, gene1, gene2):
 
     if len(rows)!=0:
         print('<h3>Text-mined interactions from <A HREF="http://literome.azurewebsites.net/Network?gene1=%s&gene2=%s">Literome</A></h3>' % (gene1, gene2))
+
+    if len(rows)==MAXSNIPPETS:
+        print("Only %d snippets are shown below. Use our public MariaDB server to access the others or contact us.<br>" % MAXSNIPPETS)
 
     byDoc = defaultdict(list)
     for row in rows:
@@ -2031,7 +2037,7 @@ def htmlMiddle():
     showGraphBrowser()
 
 def main():
-    cgiSetup(bottleneckFraction=2, useBytes=2)
+    cgiSetup(bottleneckFraction=2)
 
     format = getCgiVar("format")
     if format in ["pdf", "svg", "sif", "json"]:

@@ -97,29 +97,6 @@ def parseConf(fname):
 # cache of hg.conf contents
 hgConf = None
 
-captchaQuestions = {
-        1 : "How many chromosomes do humans have?",
-        2 : "What is the family name of the UCSC Genome Browser's original creator?",
-        3 : "The genome is stored in which type of molecule? It's a three letter acronym.",
-        4 : "RNA encodes for which type of molecule?",
-        5 : "In eukaryotes, transcripts are composed of exons and ...",
-        6 : "What do you call the specific location of a gene on a chromosome?",
-        7 : "A gene is composed of multiple .... ? (hint: starts with trans- and has exons and introns)",
-        8 : "Enter the name of either one of the human sex chromosomes",
-        9 : "This genome browser is hosted by a University named...",
-        }
-
-captchaAnswers = {
-        1 : ["46", "23"],
-        2 : ["kent", "jim"],
-        3 : ["dna"],
-        4 : ["proteins", "amino acids", "aa", "protein"],
-        5 : ["introns"],
-        6 : ["locus"],
-        7 : ["transcripts", "transcript", "isoforms", "proteins"],
-        8 : ["x", "y", "chrx", "chry"],
-        9 : ["ucsc"],
-}
 def parseHgConf():
     """ return hg.conf as dict key:value. """
     global hgConf
@@ -478,26 +455,27 @@ def getCookieUser():
 
     return user
 
+def showCookieError():
+    " output error message if cookie not found "
+    print("Content-type: text/html\n\n")
+    print("<html><body>")
+    print("Sorry, the gene interactions viewer requires that you visit the genome browser first once, to defend against bots. ")
+    print("<a href='hgTracks'>Click here</a> to visit the genome browser, then come back to this page.")
+    print("</body></html>")
+    sys.exit(0)
+
 def getBotCheckString(ip, fraction):
     " port of lib/botDelay.c:getBotCheckString: compose user.ip fraction for bot check  "
-    user = getCookieUser()
-    useNew = cfgOptionBoolean("newBotDelay")
-    if (useNew):
-        hgsid = cgiString("hgsid")
-        if user:
-            botCheckString = "uid%s %f" % (user, fraction)
-        elif hgsid:
-            botCheckString = "sid%s %f" % (hgsid, fraction)
-        else:
-            botCheckString = "%s %f" % (ip, fraction)
-    else:
-        if user:
-            botCheckString = "%s.%s %f" % (user, ip, fraction)
-        else:
-            botCheckString = "%s %f" % (ip, fraction)
+    userId = getCookieUser()
+
+    if not userId:
+        showCookieError()
+
+    botCheckString = "uid%s %f" % (userId, fraction)
+
     return botCheckString
 
-def hgBotDelay(fraction=1.0, useBytes=None):
+def hgBotDelay(fraction=1.0, useBytes=None, botCheckString=None):
     """
     Implement bottleneck delay, get bottleneck server from hg.conf.
     This behaves similar to the function src/hg/lib/botDelay.c:hgBotDelay
@@ -524,33 +502,37 @@ def hgBotDelay(fraction=1.0, useBytes=None):
     if not host or not port or not ip:
         return
 
-    botCheckString = getBotCheckString(ip, fraction)
+    warnMsg = None
+    if botCheckString is None:
+        botCheckString = getBotCheckString(ip, fraction)
+    else:
+        warnMsg = "Too many parallel requests for this CGI program. Please wait for a while and try this page again. If the problem persists, "
+        "please email us at genome@soe.ucsc.edu."
+
     millis = botDelayTime(host, port, botCheckString)
     debug(1, "Bottleneck delay: %d msecs" % millis)
     botDelayMsecs = millis
-
-    captchaId = int(cgiString("captchaId", 0))
-    if captchaId!=0:
-        captchaAnswer = cgiString("captchaAnswer", "").lower()
-        allowedAnswers = captchaAnswers.get(captchaId, [])
-        if captchaAnswer in allowedAnswers:
-            millis -= 10000
 
     if millis > (botDelayBlock/fraction):
         # retry-after time factor 10 is based on the example in the bottleneck help message
         sys.stderr.write("hgLib.py hogExit\n")
         printContentType(status=429, headers={"Retry-after" : str(millis / 200)})
         print("<html><head></head><body>")
-        print("<b>Too many HTTP requests and not enough delay between them.</b><p> "
-        "Your IP has been blocked to keep this website responsive for other users. "
-        "Please contact genome-www@soe.ucsc.edu to unblock your IP address, especially if you were just browsing our site and are not running a bot,"
-        "or solve the captcha below. We can help you obtain the data you need without "
-        "web crawling.<p>")
-        showCaptcha()
+        if warnMsg:
+            print(warnMsg)
+            print(millis)
+            print(botDelayBlock)
+            print(fraction)
+        else:
+            print("<b>Too many HTTP requests and not enough delay between them.</b><p> "
+            "Your IP has been blocked to keep this website responsive for other users. "
+            "Please contact genome-www@soe.ucsc.edu to unblock your IP address, especially if you were just browsing our site and are not running a bot,"
+            "We can help you obtain the data you need without web crawling.<p>")
         print("</html>")
         sys.exit(0)
 
     if millis > (botDelayWarn/fraction):
+        printContentType(status=429, headers={"Retry-after" : str(millis / 1000.0)})
         time.sleep(millis/1000.0)
         doWarnBot = True # = show warning message later in printContentType()
 
@@ -1041,8 +1023,8 @@ def cartDbLoadFromId(conn, table, cartId, oldCart):
     query = "SELECT contents FROM "+table+" WHERE id=%(id)s and sessionKey=%(sessionKey)s"
     rows = sqlQuery(conn, query, {"id":idStr, "sessionKey":secureId})
     if len(rows)==0:
-        # silently ignore invalid cart IDs for now. Future code may want to generate a new cart.
-        return {}
+        # invalid cart ID
+        return None
 
     cartList = urllib.parse.parse_qs(rows[0][0])
 
@@ -1104,30 +1086,21 @@ def cartAndCookieSimple():
 
     cart = {}
     userInfo = cartDbLoadFromId(conn, "userDb", hguid, cart)
+    if userInfo is None:
+        # invalid cookie hguid
+        showCookieError()
+
     sessionInfo = cartDbLoadFromId(conn, "sessionDb", hgsid, cart)
+    if sessionInfo is None:
+        # tolerate invalid hgsid
+        sessionInfo = {}
     return cart
 
 def cartString(cart, default=None):
     " Get a string from the cart. For better readability for programmers used to the C code. "
     return cart.get(cart, default)
 
-def showCaptcha():
-    import random
-    captchaId = random.choice(list(captchaAnswers.keys()))
-    print("Please answer the following question to unblock your IP:")
-    print("<p><b>")
-    print(captchaQuestions[captchaId])
-    print("</b><p>")
-    print('<form action="" method="get">')
-    print('<label for="textInput">Enter answer:</label>')
-
-    print('<input type="text" id="textInput" name="captchaAnswer" required>')
-    print('<input type="hidden" name="captchaId" value="'+str(captchaId)+'">')
-    print('<input type="hidden" name="debug" value="'+cgiString("debug", "0")+'">')
-    print('<input type="hidden" name="gene" value="'+cgiString("gene", "")+'">')
-    print('<input type="submit" value="Submit" />')
-
-def cgiSetup(bottleneckFraction=1.0, useBytes=None):
+def cgiSetup(bottleneckFraction=1.0, useBytes=None, botCheckString=None):
     """ do the usual browser CGI setup: parse the hg.conf file, parse the CGI
     variables, get the cart, do bottleneck delay. Returns the cart.
 
@@ -1141,7 +1114,7 @@ def cgiSetup(bottleneckFraction=1.0, useBytes=None):
         global verboseLevel
         verboseLevel = int(cgiString("debug"))
 
-    hgBotDelay(fraction=bottleneckFraction, useBytes=useBytes)
+    hgBotDelay(fraction=bottleneckFraction, useBytes=useBytes, botCheckString=botCheckString)
 
     cart = cartAndCookieSimple()
     return cart

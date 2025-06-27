@@ -13,5 +13,5 @@ Clinical CNVs	View	Clinical_CNVs_hg38	Assess potential disease contributions of 
 Non-coding SNVs	View	Non_Coding_SNVs_hg38	Investigate functional aspects of non-coding variants
 Determine Exon Relevance	View	Exon_Relevance_hg38	Examine if variants are present in an exon required for the function of the expressed gene product
 Problematic Regions	View	Problematic_Regions_hg38	Evaluate if annotations are on potential low confidence regions due to high homology or other reported concerns
-ENIGMA BRCA1/BRCA2 VCEP	View	BRCA1_BRCA2_ENIGMA_hg38	Asses potential disease contribution of variants on BRCA1 and BRCA2 according to the ENIGMA VCEP guidelines
+ENIGMA BRCA1/BRCA2 VCEP	View	BRCA1_BRCA2_ENIGMA_hg38	Assess potential disease contribution of variants on BRCA1 and BRCA2 according to the ENIGMA VCEP guidelines
 
