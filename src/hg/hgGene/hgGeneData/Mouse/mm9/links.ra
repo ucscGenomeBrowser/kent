@@ -1,9 +1,9 @@
 # mm9 link info.
 
-name exonPrimer
-shortLabel ExonPrimer
-tables kgXref
-idSql select kgID from kgXref where kgID = '%s'
-url https://ihg.helmholtz-munich.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm9&acc=%s
-priority 10
+#name exonPrimer
+#shortLabel ExonPrimer
+#tables kgXref
+#idSql select kgID from kgXref where kgID = '%s'
+#url https://ihg.helmholtz-munich.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm9&acc=%s
+#priority 10
 
