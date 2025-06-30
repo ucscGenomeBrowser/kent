@@ -66,8 +66,8 @@ if ("$HOST" == "hgwdev") then
 	case ${DESTDIR}${BINDIR}/isPcr:
 	    ssh -n qateam@hgdownload "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
-	    ssh -n qateam@hgdownload2 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
-	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+#	    ssh -n qateam@hgdownload2 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+#	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    ssh -n qateam@hgdownload3 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload3:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    ssh -n qateam@genome-euro "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
@@ -76,8 +76,8 @@ if ("$HOST" == "hgwdev") then
 	default:
 	    ssh -n qateam@hgdownload "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
-	    ssh -n qateam@hgdownload2 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
-	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+#	    ssh -n qateam@hgdownload2 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+#	    scp -p $f qateam@hgdownload2:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    ssh -n qateam@hgdownload3 "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload3:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    ssh -n qateam@genome-euro "rm -f /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"

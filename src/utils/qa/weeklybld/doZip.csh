@@ -17,19 +17,19 @@ endif
 
 echo "removing old jksrc zip and symlink [${0}: `date`]"
 ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
-ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
+#ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
 ssh -n qateam@hgdownload3 "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
 ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
 
 echo "scp-ing jksrc.v${BRANCHNN}.zip to hgdownload(s) [${0}: `date`]"
 scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload:/mirrordata/apache/htdocs/admin/
-scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload2:/mirrordata/apache/htdocs/admin/
+#scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload2:/mirrordata/apache/htdocs/admin/
 scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload3:/mirrordata/apache/htdocs/admin/
 scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@genome-euro:/mirrordata/apache/htdocs/admin/
 
 echo "updating jksrc.zip symlink [${0}: `date`]"
 ssh -n qateam@hgdownload "cd /mirrordata/apache/htdocs/admin/;ln jksrc.v${BRANCHNN}.zip jksrc.zip"
-ssh -n qateam@hgdownload2 "cd /mirrordata/apache/htdocs/admin/;ln jksrc.v${BRANCHNN}.zip jksrc.zip"
+#ssh -n qateam@hgdownload2 "cd /mirrordata/apache/htdocs/admin/;ln jksrc.v${BRANCHNN}.zip jksrc.zip"
 ssh -n qateam@hgdownload3 "cd /mirrordata/apache/htdocs/admin/;ln jksrc.v${BRANCHNN}.zip jksrc.zip"
 ssh -n qateam@genome-euro "cd /mirrordata/apache/htdocs/admin/;ln jksrc.v${BRANCHNN}.zip jksrc.zip"
 
