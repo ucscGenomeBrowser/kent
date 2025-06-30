@@ -29,8 +29,8 @@ puts("<p style='margin:0'>Primer3Plus can design qPCR Primers that straddle exon
 printPrimer3Anchor(globalTdb->table, curGeneId, curGeneChrom, curGeneStart, curGeneEnd);
 puts("Click here to load the transcript sequence and exon structure into Primer3Plus</a></p>");
 
-puts("<p style='margin-top:0.3em; margin-bottom:0.3em'>Exonprimer can design one pair of Sanger sequencing primers around every exon, located in non-genic sequence.<br>");
-printf("<a href='https://ihg.helmholtz-munich.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=%s&acc=%s'>Click here to open Exonprimer with this transcript</a></p>", database, geneId);
+//puts("<p style='margin-top:0.3em; margin-bottom:0.3em'>Exonprimer can design one pair of Sanger sequencing primers around every exon, located in non-genic sequence.<br>");
+//printf("<a href='https://ihg.helmholtz-munich.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=%s&acc=%s'>Click here to open Exonprimer with this transcript</a></p>", database, geneId);
 printf("<p style='margin-top:0.3em; margin-bottom:0.3em'>To design primers for a non-coding sequence, zoom to a region of interest and select from the drop-down menu: View &gt; In External Tools &gt; Primer3</p>");
 }
 

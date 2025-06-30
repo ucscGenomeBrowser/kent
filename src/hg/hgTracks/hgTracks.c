@@ -4649,6 +4649,18 @@ for(;track;track=track->nextWindow)
 return result;
 }
 
+boolean anyWindowHaveItems(struct track *track)
+/* Check if track limitedVis == hidden for all windows.
+ * Return true if all are hidden */
+{
+for(;track;track=track->nextWindow)
+    {
+    if (slCount(track->items) > 0)
+	return TRUE;
+    }
+return FALSE;
+}
+
 boolean isTypeBedLike(struct track *track)
 /* Check if track type is BED-like packable thing (but not rmsk or joinedRmsk) */
 { // TODO GALT do we have all the types needed?
@@ -5146,8 +5158,9 @@ for (track = trackList; track != NULL; track = track->next)
                     continue;
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack) && 
-                        !(doHideEmpties && slCount(subtrack->items) == 0))
-                        // Ignore subtracks with no items in window
+                        !(doHideEmpties && !anyWindowHaveItems(subtrack)))
+                        // Ignore subtracks with no items in windows
+
                     {
                     addPreFlatTrack(&preFlatTracks, subtrack);
                     }
@@ -8677,7 +8690,7 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX)); // TODO GALT  fullInsideX? or does not matter?
+jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX)); 
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
 
 if (hPrintStatus()) cartSaveSession(cart);
@@ -8911,7 +8924,6 @@ for (window=windows; window; window=window->next)
 	    }
 	}
 
-    // TODO GALT
     /* load regular tracks */
     for (track = trackList; track != NULL; track = track->next)
 	{
@@ -8924,7 +8936,7 @@ for (window=windows; window; window=window->next)
 
 		checkMaxWindowToDraw(track);
 
-		checkHideEmptySubtracks(track);     // TODO: Test with multi-window feature
+		checkHideEmptySubtracks(track);
 
 		checkIfWiggling(cart, track);
 

@@ -384,7 +384,7 @@ endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
-L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB} -lcurl
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # NOTE: these must be last libraries and must be dynamic.
@@ -393,7 +393,7 @@ ifeq (${SEMI_STATIC},yes)
     # switch back to dynamic libraries
     DYNAMIC_PRE = -Wl,-Bdynamic
 endif
-DYNAMIC_LIBS =  ${DYNAMIC_PRE} -ldl -lm -lc
+DYNAMIC_LIBS =  ${DYNAMIC_PRE} -ldl -lm -lc -lcurl
 
 L+= ${DYNAMIC_LIBS}
 

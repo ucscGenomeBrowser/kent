@@ -917,9 +917,9 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 }
 
 .autoCompleteInfo {
-  color: #EEE;
+  color: #666;
   padding-left: 3px;
-  background-color: #666;
+  background-color: #EEE;
 }
 
 /* for autocompleteCat (autocomplete with optional category labels) */
