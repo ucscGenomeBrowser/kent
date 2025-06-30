@@ -1176,7 +1176,7 @@ function varHashToQueryString(varHash)
                     retVal += "&";
                 retVal += aVar + "=" + encodeURIComponent(this);
             });
-        } else {
+        } else if (typeof(val) === 'string') {
             // sometimes val is already encoded or partially encoded
             // the CGI cannot know if user input is double encoded
             // so test for already encoded characters here and only
@@ -1189,6 +1189,8 @@ function varHashToQueryString(varHash)
                 // Encode unencoded parts
                 return encodeURIComponent(match);
             });
+        } else {
+            retVal += aVar + "=" + encodeURIComponent(val);
         }
     }
     return retVal;
