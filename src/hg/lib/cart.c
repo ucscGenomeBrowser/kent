@@ -653,21 +653,29 @@ if (isEmpty(sessionOwner))
 if (isEmpty(sessionName))
     errAbort("Please go back and enter a session name to load.");
 
-sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
-      "WHERE userName = '%s' AND sessionName = '%s';",
-      namedSessionTable, encSessionOwner, encSessionName);
+char *queryTempl = "SELECT shared, contents FROM %s WHERE userName = '%s' AND sessionName = '%s';";
+sqlSafef(query, sizeof(query), queryTempl, namedSessionTable, encSessionOwner, encSessionName);
 sr = sqlGetResult(conn, query);
 
-if (sqlCountRows(sr)==0 && cfgOption("namedSessionAlt"))
+row = sqlNextRow(sr);
+
+// try alternative namedSessionDb tables if no result. Stop on first match.
+struct slName *namedSessionAlts = cfgValsWithPrefix("namedSessionAlt.");
+if (namedSessionAlts && row == NULL)
     {
-    sqlFreeResult(&sr);
-    sqlSafef(query, sizeof(query), "SELECT shared, contents FROM %s "
-          "WHERE userName = '%s' AND sessionName = '%s';",
-          cfgOption("namedSessionAlt"), encSessionOwner, encSessionName);
-    sr = sqlGetResult(conn, query);
+    for (struct slName *sl = namedSessionAlts;  sl != NULL;  sl = sl->next)
+        {
+        char *namedSessionAlt = sl->name;
+        sqlFreeResult(&sr);
+        sqlSafef(query, sizeof(query), queryTempl, namedSessionAlt, encSessionOwner, encSessionName);
+        sr = sqlGetResult(conn, query);
+        row = sqlNextRow(sr);
+        if (row!=NULL)
+            break;
+        }
     }
 
-if ((row = sqlNextRow(sr)) != NULL)
+if (row != NULL)
     {
     boolean shared = atoi(row[0]);
     if (shared ||
