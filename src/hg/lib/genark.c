@@ -10,6 +10,7 @@
 #include "genark.h"
 #include "hgConfig.h"
 #include "hdb.h"
+#include "dbDb.h"
 
 char *genarkCommaSepFieldNames = "gcAccession,hubUrl,asmName,scientificName,commonName,taxId,priority,clade";
 
@@ -382,4 +383,85 @@ char *url = genarkUrl(genome);
 if (isEmpty(url))
     return FALSE;
 return TRUE;
+}
+
+struct dbDb * genarkMakeDbDb(char **row)
+/* Fake a dbDb structure for a Genark hub. */
+{
+struct dbDb *dbDb;
+struct hash *orgHash = genarkGetOrgHash();
+
+AllocVar(dbDb);
+
+dbDb->name = cloneString(row[0]);
+dbDb->nibPath = cloneString("genark"); 
+dbDb->description = cloneString(row[4]); // commonName
+dbDb->scientificName = cloneString(row[3]); 
+dbDb->taxId = atoi(row[5]); 
+dbDb->genome = hashFindVal(orgHash, row[0]);
+dbDb->orderKey = 99999;
+dbDb->defaultPos = "default";
+if (dbDb->genome == NULL)
+    dbDb->genome = "Other";
+
+return dbDb;
+}
+
+struct dbDb *genarkLiftOverDbs(char *listOfAccs)
+/* return list of dbDb structures for the genark genomes that match listOfAccs */
+{
+if (!cfgOption("genarkLiftOver"))
+    return NULL;
+struct dbDb *list = NULL;
+char query[64 * 1024];
+
+safef(query, sizeof query, "NOSQLINJ select * from %s where gcAccession in (%s)", genarkTableName(), listOfAccs);
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct dbDb *dbDb = genarkMakeDbDb(row);
+    slAddHead(&list, dbDb);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return list;
+}
+
+struct dbDb *genarkLiftOverDb(char *acc)
+/* return dbDb structure for GC* acc */
+{
+char query[4096];
+safef(query, sizeof query, "'%s'", acc);
+
+return genarkLiftOverDbs(query);
+}
+
+struct hash *genarkGetOrgHash()
+/* read table that maps gcAccession to UCSC org. */
+{
+static struct hash *orgHash = NULL;
+
+if (orgHash != NULL)
+    return orgHash;
+char query[64 * 1024];
+
+sqlSafef(query, sizeof query, "select * from %s", "genarkOrg");
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+orgHash = newHash(0);
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(orgHash, cloneString(row[0]), cloneString(row[1]));
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return orgHash;
 }

@@ -4,6 +4,7 @@
 #include "chromAlias.h"
 #include "hgConfig.h"
 #include "bigChain.h"
+#include "trackHub.h"
 
 struct highRegions
 // store highlight information
@@ -11,6 +12,9 @@ struct highRegions
 struct highRegions *next;
 long chromStart;
 long chromEnd;
+long oChromStart;
+long oChromEnd;
+char strand;
 unsigned hexColor;
 };
 
@@ -91,8 +95,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         {
         AllocVar(hr);
         slAddHead(&hrList, hr);
+        hr->strand = 
         hr->chromStart = previousTEnd;
         hr->chromEnd = tStart;
+        hr->oChromStart = previousQEnd;
+        hr->oChromEnd = qStart;
         hr->hexColor = highlightColors[DEL_COLOR];
         }
     if ( (previousQEnd != -1) && (previousQEnd == qStart))
@@ -101,7 +108,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         slAddHead(&hrList, hr);
         hr->chromStart = previousTEnd;
         hr->chromEnd = tStart;
-         hr->hexColor = highlightColors[INSERT_COLOR];
+        hr->oChromStart = previousQEnd;
+        hr->oChromEnd = qStart;
+        hr->hexColor = highlightColors[INSERT_COLOR];
         }
     if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
          && ((previousTEnd != -1) && (previousTEnd != tStart)))
@@ -110,6 +119,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         slAddHead(&hrList, hr);
         hr->chromStart = previousTEnd;
         hr->chromEnd = tStart;
+        hr->oChromStart = previousQEnd;
+        hr->oChromEnd = qStart;
         hr->hexColor = highlightColors[DOUBLE_COLOR];
         }
     previousQEnd = qEnd;
@@ -121,6 +132,19 @@ hashAdd(highLightsHash, quickLiftFile, hrList);
 return hrList;
 }
 
+static void drawTri(struct hvGfx *hvg, int x1, int x2, int y, Color color)
+/* Draw traingle. */
+{
+struct gfxPoly *poly = gfxPolyNew();
+int half = (x2 - x1) / 2;
+
+gfxPolyAddPoint(poly, x1, y);
+gfxPolyAddPoint(poly, x1+half, y+2*half);
+gfxPolyAddPoint(poly, x2, y);
+hvGfxDrawPoly(hvg, poly, color, TRUE);
+gfxPolyFree(&poly);
+}
+
 void maybeDrawQuickLiftLines( struct track *tg, int seqStart, int seqEnd,
                       struct hvGfx *hvg, int xOff, int yOff, int width,
                       MgFont *font, Color color, enum trackVisibility vis)
@@ -130,12 +154,15 @@ char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
 if (quickLiftFile == NULL)
     return;
 
+boolean drawTriangle = FALSE;
+if (startsWith("quickLiftChain", trackHubSkipHubName(tg->track)))
+    drawTriangle = TRUE;
 struct highRegions *regions = getQuickLiftLines(quickLiftFile, seqStart, seqEnd);
 struct highRegions *hr = regions;
 
 int fontHeight = mgFontLineHeight(tl.font);
 int height = tg->height;
-if (isCenterLabelIncluded(tg))
+if (!drawTriangle && isCenterLabelIncluded(tg))
     {
     height += fontHeight;
     yOff -= fontHeight;
@@ -150,6 +177,20 @@ for(; hr; hr = hr->next)
     if (w == 0) 
         w = 1;
     hvGfxSetClip(hvg, xOff, yOff, width, height);  // we're drawing in the center label at the moment
-    hvGfxBox(hvg, x1, yOff, w, height, hexColor);
+    if (drawTriangle)
+        {
+        drawTri(hvg, x1 + w/2 - fontHeight/2, x1 + w/2 + fontHeight/2 , yOff, hexColor);
+        }
+    else
+        hvGfxBox(hvg, x1, yOff, w, height, hexColor);
+
+    char mouseOver[4096];
+
+    if (hr->chromStart == hr->chromEnd)
+        safef(mouseOver, sizeof mouseOver, "deletion %ldbp", hr->oChromStart - hr->oChromStart);
+    else
+        safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->oChromEnd - hr->oChromStart);
+    mapBoxHc(hvg, seqStart, seqEnd, x1, yOff, width, height, tg->track, "insert", mouseOver);
+
     }
 }

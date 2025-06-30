@@ -365,6 +365,14 @@ if (res)
     hFreeConn(&conn2);
     }
 hDisconnectCentral(&conn);
+
+#ifdef NTONOW
+if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", FALSE))
+    {
+    if (genarkUrl(database) != NULL)
+        res = TRUE;
+    }
+#endif
 hashAddInt(dbsChecked, database, res);
 return res;
 }
@@ -2592,7 +2600,11 @@ return res;
 char *hDbDbOptionalField(char *database, char *field)
  /* Look up in the regular central database. */
 {
-if (trackHubDatabase(database) && !hubConnectIsCurated(trackHubSkipHubName(database)))
+boolean isGenark = FALSE;
+//if (genarkUrl(database) != NULL)
+//    isGenark = TRUE;
+
+if (isGenark || (trackHubDatabase(database) && !hubConnectIsCurated(trackHubSkipHubName(database))))
     {
     // In dbDb the genome field is the name of the organism, but
     // genome is the name of the assembly in track hubs.
@@ -4968,10 +4980,17 @@ struct hash *dbNameHash = newHash(3);
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainListForDbFiltered(fromDb);
 
+struct dyString *dy = newDyString(4096);
 /* Create hash of databases having liftOver chains from the fromDb */
 for (chain = chainList; chain != NULL; chain = chain->next)
     if (sameString(chain->fromDb,fromDb))
+        {
 	hashAdd(hash, chain->toDb, chain->toDb);
+        if (startsWith("GC", chain->toDb))
+            {
+            dyStringPrintf(dy, "'%s',", chain->toDb);
+            }
+        }
 
 /* Get list of all current databases */
 allDbList = hDbDbListDeadOrAlive();
@@ -4989,6 +5008,14 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     else
         dbDbFree(&dbDb);
     }
+
+if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (strlen(dy->string) > 0))
+    {
+    dy->string[strlen(dy->string) - 1] = 0;
+    struct dbDb *genarkDbDbs = genarkLiftOverDbs(dy->string);
+    liftOverDbList = slCat(genarkDbDbs, liftOverDbList);
+    }
+
 hashFree(&hash);
 liftOverChainFreeList(&chainList);
 

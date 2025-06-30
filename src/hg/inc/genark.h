@@ -122,5 +122,13 @@ boolean isGenArk(char *genome);
  *  yes/no this is a genark genome assembly
  */
 
+struct dbDb *genarkLiftOverDbs(char *listOfAccs);
+/* return list of dbDb structures for the genark genomes that match listOfAccs */
+
+struct dbDb *genarkLiftOverDb(char *acc);
+/* return dbDb structure for GC* acc */
+
+struct hash *genarkGetOrgHash();
+/* read table that maps gcAccession to UCSC org. */
 #endif /* GENARK_H */
 
