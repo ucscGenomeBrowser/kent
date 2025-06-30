@@ -1665,7 +1665,7 @@ def queryEventText(conn, gene1, gene2):
         "FROM ggLinkEvent, ggEventText " \
         "JOIN ggDoc ON (ggDoc.docId=ggEventText.docId) " \
         "WHERE gene1='%s' and gene2='%s' AND ggEventText.eventId=ggLinkEvent.eventId " \
-        "ORDER BY ggDoc.docId REVERSE LIMIT %d" % (gene1,gene2,MAXSNIPPETS)
+        "ORDER BY ggDoc.docId DESC LIMIT %d" % (gene1,gene2,MAXSNIPPETS)
     rows =  sqlQuery(conn, q)
     return rows
 
