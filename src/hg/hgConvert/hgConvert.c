@@ -51,8 +51,11 @@ for (db = list; db != NULL; db = db->next)
     if (sameString(name, db->name))
         return db;
     }
-errAbort("Can't find %s in matchingDb", name);
-return NULL;
+
+struct dbDb *toDb =  genarkLiftOverDb(name);
+if (toDb == NULL)
+    errAbort("Can't find %s in matchingDb", name);
+return toDb;
 }
 
 static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
@@ -61,8 +64,9 @@ static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 {
 struct dbDb *dbList;
 boolean askAboutQuickLift = FALSE;
+boolean quickLiftChainExists =  (quickLiftGetChain(fromDb->name, toDb->name) != 0);
 
-if (quickLiftEnabled())
+if (quickLiftEnabled() && quickLiftChainExists)
     askAboutQuickLift = TRUE;
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
@@ -279,6 +283,12 @@ static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
 struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+
+if (fromDb == NULL)
+    fromDb =  genarkLiftOverDbs(database);
+if (toDb == NULL)
+    toDb =  genarkLiftOverDb(cartString(cart, HGLFT_TODB_VAR));
+
 if (!fromDb || !toDb)
     errAbort("Early error - unable to find matching database records in dbDb - please contact support");
 
@@ -353,6 +363,7 @@ else
            If these conditions are met then print position link to
            browser for toDb, otherwise just print position without link. */
         boolean startedAnchor = FALSE;
+        visDy = newDyString(20);
         if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath))
             {
             if (quickChain)
@@ -370,11 +381,11 @@ else
                 {
                 startedAnchor = TRUE;
                 if (quickChain)
-                    printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
-                       hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
+                    printf("<A HREF=\"%s?hgsid=%s&genome=%s&hubUrl=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
+                       hgTracksName(), cartSessionId(cart), toDb->name, hubUrl, chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
                 else
-                    printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d\">",
-                       hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd);
+                    printf("<A HREF=\"%s?hgsid=%s&genome=%s&hubUrl=%s&position=%s:%d-%d\">",
+                       hgTracksName(), cartSessionId(cart), toDb->name, hubUrl, chain->qName, qStart+1, qEnd);
                 }
             }
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
@@ -386,8 +397,15 @@ else
 	}
     }
 if (badList)
+    {
+    printf("<BR>Some of your tracks failed to lift because the type is not supported by quickLift.<BR><BR>");
+    printf("<TABLE><TR><TD><B>Short label<TD><B>Type</TD></TR>");
     for(; badList; badList = badList->next)
-        printf("%s %s<BR>", badList->track, badList->type);
+        {
+        printf("<TR><TD>%s</TD><TD>%s</TD></TR>", badList->shortLabel, badList->type);
+        }
+    printf("</TABLE>");
+    }
 cartWebEnd();
 }
 

@@ -342,6 +342,7 @@ else
     hFreeConn(&sqlClosure.conn);
 }
 
+#ifdef NOTFORNOW
 static void denseChainReverse(struct track *tg, int seqStart, int seqEnd,
                         struct hvGfx *hvg, int xOff, int yOff, int width,
                         MgFont *font, Color color, enum trackVisibility vis)
@@ -390,6 +391,7 @@ for (item = tg->items; item != NULL; item = item->next)
         }
     }
 }
+#endif
 
 void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -404,8 +406,8 @@ if (tg->items == NULL)		/*Exit Early if nothing to do */
 
 char *chainType = trackDbSetting(tg->tdb, "chainType");
 if ((chainType != NULL) && (vis == tvDense) )
-    denseChainReverse(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
+    maybeDrawQuickLiftLines( tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+                      font, color, vis);
 else
     linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis);

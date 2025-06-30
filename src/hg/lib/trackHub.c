@@ -1693,7 +1693,8 @@ return dy;
 static boolean validateOneTdb(char *db, struct trackDb *tdb, struct trackDb **badList)
 /* Make sure the tdb is a track type we grok. */
 {
-if (sameString("cytoBandIdeo", tdb->track) || !( startsWith("bigBed", tdb->type) || \
+if (sameString("cytoBandIdeo", tdb->track) || 
+    !( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
        startsWith("bigDbSnp", tdb->type) || \
        startsWith("bigGenePred", tdb->type) || \
@@ -1704,7 +1705,7 @@ if (sameString("cytoBandIdeo", tdb->track) || !( startsWith("bigBed", tdb->type)
        sameString("bed", tdb->type) ||
        startsWith("bed ", tdb->type)))
     {
-    printf("%s %s<BR>\n",tdb->track,tdb->type);
+    slAddHead(badList, tdb);
     return FALSE;
     }
 
@@ -1809,9 +1810,12 @@ static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb,
 {
 unsigned priority = 1;
 struct hash *haveSuper = newHash(0);
+struct trackDb *tdbNext = NULL;
 
-for(; tdb; tdb = tdb->next)
+for(; tdb; tdb = tdbNext)
     {
+    tdbNext = tdb->next;
+
     boolean isVisible =  FALSE;
 
     if (tdb->parent == NULL)
