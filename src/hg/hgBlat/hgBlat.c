@@ -34,6 +34,7 @@
 #include "net.h"
 #include "fuzzyFind.h"
 #include "chromAlias.h"
+#include "subText.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -839,6 +840,23 @@ else  // hyperlink
         printf("</TABLE></FORM></DIV>");
         }
 
+        boolean hasDb = sqlDatabaseExists(database);
+        struct sqlConnection *locusConn = NULL;
+        struct subText *subList = NULL;
+        if (hasDb)
+            {
+	    struct sqlConnection *conn = hAllocConn(database);
+            if (cfgOptionBooleanDefault("blatShowLocus", FALSE) && sqlTableExists(conn, "locusName") )
+                {
+                locusConn = hAllocConn(database);
+                slSafeAddHead(&subList, subTextNew("ig:", "intergenic "));
+                slSafeAddHead(&subList, subTextNew("ex:", "exon "));
+                slSafeAddHead(&subList, subTextNew("in:", "intron "));
+                slSafeAddHead(&subList, subTextNew("|", "-"));
+                }
+            hFreeConn(&conn);
+            }
+
     printf("<DIV STYLE=\"display:block;\"><PRE>");
 
     // find maximum query name size for padding calculations and
@@ -855,7 +873,12 @@ else  // hyperlink
     maxQChromNameSize = max(maxQChromNameSize,5);
     maxTChromNameSize = max(maxTChromNameSize,5);
 
-    printf("   ACTIONS                 QUERY ");
+    printf("   ACTIONS ");
+    if (locusConn)
+        // 25 characters wide
+        printf("               LOCUS ");
+
+    printf("                 QUERY ");
     
     spaceOut(stdout, maxQChromNameSize - 5);
 
@@ -865,6 +888,8 @@ else  // hyperlink
     printf(" STRAND  START       END   SPAN\n");
 
     printf("----------------------------------------------------------------------------------------------------------");
+    if (locusConn)
+        repeatCharOut(stdout, '-', 25);
     repeatCharOut(stdout, '-', maxQChromNameSize - 5);
     repeatCharOut(stdout, '-', maxTChromNameSize - 5);
 
@@ -914,6 +939,22 @@ else  // hyperlink
 	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
+
+        // print name of this locus
+        if (locusConn)
+            {
+            struct sqlResult *sr = hRangeQuery(locusConn, "locusName", psl->tName, psl->tStart, psl->tEnd, NULL, 0);
+            char **row;
+            row = sqlNextRow(sr);
+            if (row != NULL)
+                {
+                char *desc = row[4];
+                char *descLong = subTextString(subList, desc);
+                printf("%-25s", descLong);
+                freeMem(descLong);
+                }
+            sqlFreeResult(&sr);
+            }
 
 	printf("%s",psl->qName);
 	spaceOut(stdout, maxQChromNameSize - strlen(psl->qName));
