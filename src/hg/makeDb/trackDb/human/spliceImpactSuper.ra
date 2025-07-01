@@ -3,7 +3,6 @@ shortLabel Splicing Impact
 longLabel Splicing Impact Prediction Scores and Databases
 superTrack on hide
 group phenDis
-pennantIcon New red ../goldenPath/newsarch.html#030525 "Released Mar. 5, 2025"
 cartVersion 8
 
 include splicevardb.ra

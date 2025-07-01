@@ -214,7 +214,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025
         skipFields Variant,VariantUrl,score
         detailsDynamicTable VariantDetails|Variant Details
         dataVersion /gbdb/$D/bbi/varChatVersion.txt
-        pennantIcon New red ../goldenPath/newsarch.html#022425 "Released Feb. 24, 2025"
         html varChat.html
 
         track pubtator
