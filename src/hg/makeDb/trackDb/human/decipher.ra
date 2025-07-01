@@ -24,7 +24,8 @@ group phenDis
     filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
     mergeSpannedItems on
     searchIndex name
-    mouseOverField _mouseOver
+    #mouseOverField _mouseOver
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of Variant</b>: $size<br> <b>Genotype</b>: $genotype<br> <b>Variant Class</b>: $variant_class<br> <b>Inheritance</b>: $inheritance<br> <b>Pathogenicity</b>: $pathogenicity<br> <b>Phenotypes</b>: $phenotypes<br>
     html decipherContainer
     parent decipherContainer
 
