@@ -24,7 +24,7 @@ group phenDis
     filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
     mergeSpannedItems on
     searchIndex name
-    mouseOverField _mouseOvera
+    mouseOverField _mouseOver
     html decipherContainer
     parent decipherContainer
 
