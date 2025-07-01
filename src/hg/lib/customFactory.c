@@ -3160,7 +3160,7 @@ static struct customFactory bigLollyFactory =
     };
 
 static struct customFactory bigMethylFactory =
-/* Factory for bigPsl tracks */
+/* Factory for bigMethyl tracks */
     {
     NULL,
     "bigMethyl",
