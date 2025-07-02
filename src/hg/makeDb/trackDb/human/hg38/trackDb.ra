@@ -900,3 +900,4 @@ include long_read_transcripts.ra
 include mavedb.ra alpha
 
 include vgpLiftOver.ra alpha
+include psuVsUcscChains.ra alpha

@@ -1,0 +1,15 @@
+# --- testing ---
+track maxPsuMm39
+shortLabel Mm39 Galaxy Chains
+longLabel Mouse chains made by the Galaxy pipeline
+group x
+type chain mm39
+otherDb mm39
+
+track maxUcscMm39
+shortLabel Mm39 UCSC Chains
+longLabel Mouse chains made by the UCSC pipeline
+group x
+type chain mm39
+# --- testing ---
+
