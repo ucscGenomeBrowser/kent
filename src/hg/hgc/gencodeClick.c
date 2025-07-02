@@ -187,7 +187,7 @@ struct genePred *geneAnno;
 for (geneAnno = geneAnnos; geneAnno != NULL; geneAnno = geneAnno->next)
     {
     *geneChromStart = min(*geneChromStart, geneAnno->txStart);
-    *geneChromEnd = max(*geneChromEnd, transAnno->txEnd);
+    *geneChromEnd = max(*geneChromEnd, geneAnno->txEnd);
     }
 genePredFreeList(&geneAnnos);
 }
