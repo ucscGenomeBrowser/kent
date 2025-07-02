@@ -65,7 +65,7 @@ if (optionExists("extraIndex"))
 	{
 	int fieldIx = 0;
 	struct bptFile *bpt = bigBedOpenExtraIndex(bbi, el->name, &fieldIx);
-        printf("    %s (field %d) with %lld items\n", el->name, fieldIx, (long long)bpt->itemCount);
+        printf("    %s (field %d) with %lld items\n", el->name, fieldIx+1, (long long)bpt->itemCount);
 	}
     }
 printLabelAndLongNumber("itemCount", bigBedItemCount(bbi));
