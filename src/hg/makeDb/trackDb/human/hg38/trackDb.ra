@@ -176,7 +176,6 @@ url https://cancer.sanger.ac.uk/cosmic/search?q=$$
 urlLabel Genomic Mutation ID:
 noScoreFilter on
 dataVersion COSMIC v101
-pennantIcon Updated red ../goldenPath/newsarch.html#013125 "Updated January 31, 2025"
 
 track vistaEnhancersBb
 shortLabel VISTA Enhancers

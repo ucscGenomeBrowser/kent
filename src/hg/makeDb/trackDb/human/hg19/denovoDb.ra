@@ -7,7 +7,6 @@ html denovoDb.html
 visibility hide
 type bigBed 9 +
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html#031425 "Released Mar. 14, 2025"
 
     track denovoDbssc
     parent denovoDbComposite on

@@ -6,4 +6,3 @@ group phenDis
 bigDataUrl /gbdb/$D/civic/civic.bb
 mouseOverField mouseOverHTML
 urls origVariant="https://civicdb.org/variants/$$/summary" alleleRegistryId="https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=$$" clinvarId="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" diseaseLink="https://www.disease-ontology.org/?id=DOID:$$"
-pennantIcon New red ../goldenPath/newsarch.html#021425 "Released Feb. 14, 2025"

@@ -16,7 +16,7 @@ type genePred
 configurable off
 wgEncodeGencodeVersion M37
 maxTransEnabled on
-pennantIcon New red ../goldenPath/newsarch.html#062425 "Updated June 24, 2025"
+pennantIcon New red ../goldenPath/newsarch.html#062425 "New June 24, 2025"
 
     track wgEncodeGencodeVM37ViewGenes
     shortLabel Genes
