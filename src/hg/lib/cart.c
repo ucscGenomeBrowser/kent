@@ -1528,7 +1528,7 @@ for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
     {
     if (regexMatch(agent, sl->name))
         {
-        fprintf(stderr, "CAPTCHAPASS %s\n", agent);
+        fprintf(stderr, "CAPTCHAPASS %s matches %s\n", agent, sl->name);
         return TRUE;
         }
     }
@@ -1536,13 +1536,13 @@ for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
 return FALSE;
 }
 
-static boolean captchaCheckDone = FALSE;
-
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
 /* print captcha if user did not sent a valid hguid cookie or a valid
  * cloudflare token. Allow certain IPs and user-agents. */
 {
-// no need to do this again. Can happen if cartNew() is called somewhere else in a CGI
+static boolean captchaCheckDone = FALSE;
+
+// No need to do this again. Can happen if cartNew() is called somewhere else in a CGI
 if (captchaCheckDone)
     return;
 
@@ -1555,6 +1555,7 @@ if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
 if (botException())
     return;
 
+// certain user agents are allowed to use the website without a captcha
 if (isUserAgentException())
     return;
 
@@ -1578,13 +1579,13 @@ printCaptcha();
 
 void cartRemove(struct cart *cart, char *var);
 
-static boolean genericSetupDone = FALSE;
-
 static void genericCgiSetup()
 /* Run steps that all CGIs must do that unrelated to the cart: timeout, logging setup, UDC.
  */
 {
-// do this only once per CGI
+static boolean genericSetupDone = FALSE;
+
+// do this only once per execution
 if (genericSetupDone)
     return;
 
