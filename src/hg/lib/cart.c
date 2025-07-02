@@ -1536,10 +1536,18 @@ for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
 return FALSE;
 }
 
+static boolean captchaCheckDone = FALSE;
+
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
 /* print captcha is user did not sent a valid hguid cookie or a valid
  * cloudflare token. Allow certain IPs and user-agents. */
 {
+// no need to do this again. Can happen if cartNew() is called somewhere else in a CGI
+if (captchaCheckDone)
+    return;
+
+captchaCheckDone = TRUE;
+
 if (fromCommandLine || isEmpty(cfgOption(CLOUDFLARESITEKEY)))
     return;
 
