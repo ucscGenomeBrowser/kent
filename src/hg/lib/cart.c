@@ -1539,7 +1539,7 @@ return FALSE;
 static boolean captchaCheckDone = FALSE;
 
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
-/* print captcha is user did not sent a valid hguid cookie or a valid
+/* print captcha if user did not sent a valid hguid cookie or a valid
  * cloudflare token. Allow certain IPs and user-agents. */
 {
 // no need to do this again. Can happen if cartNew() is called somewhere else in a CGI
@@ -1578,11 +1578,18 @@ printCaptcha();
 
 void cartRemove(struct cart *cart, char *var);
 
-struct cart *cartNew(char *userId, char *sessionId,
-                     char **exclude, struct hash *oldVars)
-/* Load up cart from user & session id's.  Exclude is a null-terminated list of
- * strings to not include */
+static boolean genericSetupDone = FALSE;
+
+static void genericCgiSetup()
+/* Run steps that all CGIs must do that unrelated to the cart: timeout, logging setup, UDC.
+ */
 {
+// do this only once per CGI
+if (genericSetupDone)
+    return;
+
+genericSetupDone = TRUE;
+
 cgiApoptosisSetup();
 if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
     errAbortSetDoContentType(TRUE);
@@ -1593,6 +1600,14 @@ if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
 setUdcCacheDir();
 
 netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
+}
+
+struct cart *cartNew(char *userId, char *sessionId,
+                     char **exclude, struct hash *oldVars)
+/* Load up cart from user & session id's.  Exclude is a null-terminated list of
+ * strings to not include */
+{
+genericCgiSetup();
 
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
@@ -1615,21 +1630,6 @@ forceUserIdOrCaptcha(cart, userId, userIdFound, fromCli);
 // we rely on the cookie being validated, so if we reset a cookie, do this after the captcha
 if ( cgiOptionalString("ignoreCookie") != NULL )
     cart->userInfo = loadDb(conn, userDbTable(), NULL, &userIdFound);
-
-// Leaving this in the code temporarily, until June 2025 release.
-if (!fromCli && 
-    ((sessionId && !sessionIdFound) || !sessionId) && 
-    (!userId || !userIdFound) && 
-    cfgOptionBooleanDefault("punishInvalidHgsid", FALSE))
-    {
-    fprintf(stderr, "HGSID_WAIT no sessionId and no cookie: 5 seconds penalty");
-    sleep(5);
-    if (sessionId && !sessionIdFound)
-        {
-        fprintf(stderr, "HGSID_WAIT2 sessionId sent but invalid: 10 seconds penalty");
-        sleep(10);
-        }
-    }
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
