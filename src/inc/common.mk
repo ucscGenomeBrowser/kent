@@ -564,3 +564,10 @@ ifeq ($(UNAME_S),Darwin)
 else
     CPREMDESTOPT=--remove-destination
 endif
+
+ifeq (${LOWELAB}, 1)
+  O += lowelabPfamHit.o lowelabArkinOperonScore.o lowelabTIGROperonScore.o loweutils.o \
+  geneTree.o cogsxra.o jgiGene.o snoRNAs.o sargassoSeaXra.o minGeneInfo.o gbRNAs.o easyGene.o arcogdesc.o arCOGs.o cddDesc.o cddInfo.o \
+  megablastInfo.o alignInfo.o ec.o codeBlastScore.o ecAttribute.o tRNAs.o
+endif
+
