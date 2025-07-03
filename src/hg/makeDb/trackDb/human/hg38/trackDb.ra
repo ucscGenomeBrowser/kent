@@ -142,7 +142,7 @@ searchDescription miRNA Tissue Atlas Sample 2
 searchMethod exact
 semiShortCircuit 1
 
-include unusualcons.ra alpha
+include unusualcons.ra alpha,beta
 
 track cosmicRegions
 shortLabel COSMIC Regions
