@@ -481,8 +481,14 @@ href="https://www.wikiwand.com/en/DNA_and_RNA_codon_tables">Wikiwand website</a>
 
 <a name="blat14"></a>
 <h2>Querying BLAT programmatically using URLs</h2>
+<p><b>Note:</b> Open programmatic access was removed in 2025 due to bot abuse. If you would like
+to request access, please <a href="/contacts.html">contact us</a>. Keep in mind that BLAT can also
+be run <a href="#blat15">locally</a>, which can lead to improved performance. A <a target="_blank"
+href="https://kentinformatics.com/">license</a> is required for commercial use of the local BLAT utility.
+</p>
 <p>
-For programmatic access, BLAT supports URL queries which are returned as psl format in a JSON structure. 
+The following entry explains the usage of our programmatic access, although programmatic usage will not work
+without special access. BLAT supports URL queries which are returned as psl format in a JSON structure. 
 The URL requires three variables: the sequence to blat, the type of query and the database, as follows</p>
 <pre>
 https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=[seq]&amp;type=[type]&amp;db=[database]&amp;output=json</pre>
