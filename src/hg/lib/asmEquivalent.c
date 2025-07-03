@@ -269,7 +269,7 @@ if (ucscName == NULL)
     return ret;
 
 
-struct sqlConnection *conn = hAllocConn("hgFixed");
+struct sqlConnection *conn = hAllocConnMaybe("hgFixed");
 if (!conn)
     return ret;
 

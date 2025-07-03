@@ -19,9 +19,6 @@ function on_error {
   [[ -n "$jobdir" ]] && rm -rf "$jobdir" || true
   [[ -n "$out_dir" ]] && rm -rf "$out_dir" || true
   [[ -n "$splits" ]] && rm -rf "$splits" || true
-  # [[ -n "$pmid_splits" ]] && rm -rf "$pmid_splits" || true
-  # [[ -n "$pmid_splits_with_summary" ]] && rm -rf "$pmid_splits_with_summary" || true
-  # [[ -n "$new_dbs_dir" ]] && rm -rf "$new_dbs_dir" || true
   [[ -n "$VENV_DIR" ]] && rm -rf "$VENV_DIR" || true
 
   exit 1
@@ -64,7 +61,6 @@ deactivate
 rm -rf $VENV_DIR
 
 # remove temp dirs and files:
-# rm -rf ${pmid_splits} ${pmid_splits_with_summary} ${new_dbs_dir} ${jobdir}
 
 cut -f 1 rs_to_pmid.tsv > rsIds.tsv
 splits=`mktemp -d ./rsids_splits_XXXXXXXX`
@@ -85,7 +81,6 @@ do
   
   full_jobdir=`readlink -f ${jobdir}`
   
-  # ssh ku "cd ${full_jobdir} && /parasol/bin/para make joblist"
   cat ${full_jobdir}/joblist | parallel -j 50
   
   cat ${out_dir}/* > rsids.${db}.bed

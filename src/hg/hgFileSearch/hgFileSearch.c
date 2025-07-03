@@ -17,6 +17,11 @@
 #include "search.h"
 #include "cart.h"
 #include "grp.h"
+#include "botDelay.h"
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
+static boolean issueBotWarning = FALSE;
 
 #define FAKE_MDB_MULTI_SELECT_SUPPORT
 
@@ -427,6 +432,13 @@ printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more he
 void doMiddle(struct cart *cart)
 /* Write body of web page. */
 {
+/* Using earlyBotCheck() at the beginning of main() to output message here if in delay time */
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
+
 struct trackDb *tdbList = NULL;
 char *organism = NULL;
 char *db = NULL;
@@ -467,6 +479,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgFileSearch", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgFileSearch", enteredMainTime);
