@@ -1,4 +1,6 @@
-#! /bin/bash
+#!/bin/bash
+
+set -e -o pipefile
 
 cd /hive/data/outside/otto/varChat
 
