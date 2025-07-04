@@ -2133,7 +2133,7 @@ jsOnEventById("click", "allResultsText",
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
-printf("<INPUT style='height:1.5em; width:100px; font-size:1.0em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT style=' font-size:1.0em; width:100px' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
 printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
 printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
 printf("</TD>\n");
