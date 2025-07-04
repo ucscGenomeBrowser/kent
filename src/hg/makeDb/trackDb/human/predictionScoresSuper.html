@@ -42,6 +42,9 @@ The score varies from 0.0 - 1.0, following a geometric distribution with a mean 
 
 <h3>MutScore</h3>
 <p>
+<b>Interpretation:</b> The authors defined the thresholds &lt;0.140 for a variant
+to be benign, and &gt; 0.730 for pathogenic with 95% confidence.</p>
+<p>
 The within-gene clustering of pathogenic and benign DNA changes is an important
 feature of the human exome.
 <a target=_blank href="https://mutscore.iob.ch/">MutScore</a>
@@ -51,6 +54,9 @@ positional clustering. Variants of unknown significance that are scored
 as benign by other algorithms but located close to known pathogenic variants
 should be weighted more pathogenic by MutScore. The score ranges from 0.0-1.0, resembles
 a negative binomial distribution with a maximum ~0.05, depending on the nucleotide.
+MutScore was seen to outperform other scores by papers <a href="https://pubmed.ncbi.nlm.nih.gov/40397311/"
+target="_blank">Porretta et al</a> and <a href="https://pubmed.ncbi.nlm.nih.gov/38453143/"
+target="_blank">Brock et al</a>.
 </p>
 
 <h2>Display Conventions and Configuration</h2>

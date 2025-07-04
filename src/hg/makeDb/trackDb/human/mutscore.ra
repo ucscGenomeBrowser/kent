@@ -7,6 +7,7 @@ compositeTrack on
 visibility full
 group phenDis
 color 50,80,200
+html predictionScoresSuper
 
         track mutScoreA
         shortLabel Mutation: A
@@ -52,7 +53,7 @@ color 50,80,200
 
         track mutScoreT
         shortLabel Mutation: T
-        longLabel mutScore: Mutation is T
+        longLabel MutScore: Mutation is T
         type bigWig
         parent mutScore on
         visibility full
