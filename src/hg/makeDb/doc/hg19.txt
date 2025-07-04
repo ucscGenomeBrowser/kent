@@ -34327,6 +34327,10 @@ Footprint file:
 cut -f1,2,3 sorted-KAPA_HyperExome_hg19_capture_targets.bed > sorted-cut-KAPA_HyperExome_hg19_capture_targets.bed
 
 
+# Bionano, max, July 4 2025
+# received files from apang@bionano.com
+# converted to bigBed with standard bedToBigBed
+
 #############################################################################
 # haploinsufficiency from DECIPHER - DONE 3/18/2021 Jonathan
 
