@@ -2,6 +2,7 @@ track unusualcons
 compositeTrack on
 shortLabel Unusually Conserved
 longLabel Unusually Conserved Regions - Ultracons, HARs, etc.
+pennantIcon New red ../goldenPath/newsarch.html#070725 "Released July 07, 2025"
 type bed
 group compGeno
 

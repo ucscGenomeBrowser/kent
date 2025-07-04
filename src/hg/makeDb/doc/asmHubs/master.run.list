@@ -769,6 +769,7 @@
 ./runBuild GCA_004325055.1_Ordospora_FISK_v1 fungi Ordospora_colligata
 ./runBuild GCA_004325065.1_BEOM2_v1 fungi Hamiltosporidium_magnivora
 ./runBuild GCA_004325075.1_ILG3_v1 fungi Hamiltosporidium_tvaerminnensis
+./runBuild GCA_004335455.1_ASM433545v1 invertebrate Nannochloropsis_oculata_CCMP525
 ./runBuild GCA_004337985.1_PpBr36 fungi Pyricularia_pennisetigena
 ./runBuild GCA_004354385.2_ASM435438v2 invertebrate Drosophila_innubila
 ./runBuild GCA_004355085.1_Ricmel1 fungi Rickenella_mellea
