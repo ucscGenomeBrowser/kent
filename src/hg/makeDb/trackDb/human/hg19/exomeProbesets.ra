@@ -433,3 +433,11 @@ compositeTrack on
 	type bigBed 4
 	color 22,62,164
 
+
+        track bionano
+	parent exomeProbesets on
+	bigDataUrl /gbdb/hg19/exomeProbesets/hg19_CTTAAG_0kb_0labels.bb
+	shortLabel BioNano DLE-1
+	longLabel BioNao DLE-1 CTTAAG sites
+	type bigBed
+	color 100,255,143

@@ -572,7 +572,9 @@ bedToBigBed short_sorted_SeqCap_EZ_MedExome_hg38_empirical_targets.bed hg38.chro
  
 #------------------------------------------------------
  
-
+# Bionano, max, July 4 2025
+# received files from apang@bionano.com
+# converted to bigBed with standard bedToBigBed
 
  
 

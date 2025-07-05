@@ -2133,7 +2133,7 @@ jsOnEventById("click", "allResultsText",
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
-printf("<INPUT style='height:1.5em; width:100px; font-size:1.0em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT style=' font-size:1.0em; width:100px' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
 printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
 printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
 printf("</TD>\n");
@@ -2173,8 +2173,8 @@ printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so
 "This checkbox can be useful with short queries and with the tiny genomes of microorganisms. \n"
 );
 
-printf("<P>For programmatic access, BLAT supports URL queries which return in JSON format. "
-"See our <a href=\"/FAQ/FAQblat.html#blat14\">BLAT FAQ</a> for more.</P>\n"
+printf("<P>If you are interested in programmatic BLAT use,"
+" see our <a href=\"/FAQ/FAQblat.html#blat14\">BLAT FAQ</a>.</P>\n"
 );
 
 if (hgPcrOk(db))

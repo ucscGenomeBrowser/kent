@@ -222,8 +222,11 @@ static int filteredCategoryCount(struct barChartTrack *extras)
 {
 if (extras->facetsMergeList != NULL)
     return slCount(extras->facetsMergeList);
-else
+else {
+    if (extras->categoryFilter==NULL)
+        errAbort("Internal error: the number of barchart colors doesn't match the barchart labels");
     return hashNumEntries(extras->categoryFilter);
+}
 }
 
 static boolean filterCategory(struct barChartTrack *extras, char *name)

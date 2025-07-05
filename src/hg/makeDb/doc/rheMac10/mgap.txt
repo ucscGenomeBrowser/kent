@@ -1,0 +1,6 @@
+# Fri Jul  4 03:08:32 AM PDT 2025 - Max
+# got all the files from mgap directly, as a track hub at https://mgapdownload.ohsu.edu/latest/hubDirectory/rheMac10/trackDb.txt
+# by email from bimber@ohsu.edu conradon@ohsu.edu rayka@ohsu.edu
+cd /hive/data/genomes/rheMac10/bed/mgap/
+wget https://mgapdownload.ohsu.edu/latest/mGAP.Rhesus_macaque.vcf.gz
+wget https://mgapdownload.ohsu.edu/latest/mGAP.Rhesus_macaque.vcf.gz.tbi
