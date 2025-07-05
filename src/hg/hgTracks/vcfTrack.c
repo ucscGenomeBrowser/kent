@@ -2274,16 +2274,11 @@ pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
 static void vcfPhasedLoadItems(struct track *tg)
 /* Load up one individuals phased genotypes in window */
 {
-char *fileOrUrl = NULL;
+char *fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
 char *tbiFileOrUrl = trackDbSetting(tg->tdb, "bigDataIndex"); // unrelated to mysql
 
 /* Figure out url or file name. */
-if (tg->parallelLoading)
-    {
-    /* do not use mysql during parallel-fetch load */
-    fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
-    }
-else
+if (!fileOrUrl)
     {
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
     fileOrUrl = bbiNameFromSettingOrTableChrom(tg->tdb, conn, tg->table, chromName);
@@ -3035,16 +3030,10 @@ return maxItems;
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
 {
-char *fileOrUrl = NULL;
+char *fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
 char *tbiFileOrUrl = trackDbSetting(tg->tdb, "bigDataIndex"); // unrelated to mysql
 
-/* Figure out url or file name. */
-if (tg->parallelLoading)
-    {
-    /* do not use mysql during parallel-fetch load */
-    fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
-    }
-else
+if (!fileOrUrl)
     {
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
     fileOrUrl = bbiNameFromSettingOrTableChrom(tg->tdb, conn, tg->table, chromName);
