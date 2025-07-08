@@ -493,6 +493,12 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
 
     hashAdd(tdb->settingsHash, "quickLiftUrl", quickLiftChain);
     hashAdd(tdb->settingsHash, "quickLiftDb", db);
+
+    if (tdb->parent)
+        {
+        hashAdd(tdb->parent->settingsHash, "quickLiftUrl", quickLiftChain);
+        hashAdd(tdb->parent->settingsHash, "quickLiftDb", db);
+        }
     }
 }
 

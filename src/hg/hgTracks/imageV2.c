@@ -16,6 +16,7 @@
 #include "regexHelper.h"
 #include "customComposite.h"
 #include "chromAlias.h"
+#include "trackHub.h"
 
 // Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
@@ -1906,8 +1907,20 @@ else
                 tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
-        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN'></p>",
-                trackName,(slice->link == NULL ? "inset " : ""));
+
+        // make quickLifted tracks have a green left button
+        struct trackDb *tdb = imgTrack->tdb;
+        struct trackHub *tHub = NULL;
+        char *grpName = NULL;
+        if (tdb != NULL)
+            grpName = tdb->grp;
+        if (grpName != NULL)
+            tHub = grabHashedHub(grpName);
+        char *btnType = "btn";
+        if ((tHub != NULL) && startsWith("Quicklift", tHub->longLabel))
+            btnType = "btnGreen";
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'></p>",
+                trackName,(slice->link == NULL ? "inset " : ""), btnType);
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);

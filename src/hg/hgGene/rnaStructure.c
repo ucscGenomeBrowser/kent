@@ -46,6 +46,8 @@ static char *names[2] =
 	{"5' UTR", "3' UTR"};
 static char *tables[2] = {"foldUtr5", "foldUtr3"};
 int side;
+char *tableName = cartUsualString(cart, hggType, NULL);
+char *geneName = cartUsualString(cart, hggGene, NULL);
 
 if (firstTime)
     {
@@ -138,8 +140,10 @@ for (side = 0; side < ArraySize(names); ++side)
             {
             /* Print link to png image. */
             webPrintLinkCellStart();
-            hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
+            hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
                 geneCgi, cartSidUrlString(cart), 
+                hggType, tableName,
+                hggGene, geneName,
                 hggMrnaFoldRegion, table,
                 hggMrnaFoldPs, psName,
                 hggDoRnaFoldDisplay, "picture");
@@ -157,8 +161,10 @@ for (side = 0; side < ArraySize(names); ++side)
 
 	/* Print link to text. */
 	webPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
+	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
 	    geneCgi, cartSidUrlString(cart), 
+            hggType, tableName,
+            hggGene, geneName,
 	    hggMrnaFoldRegion, table,
 	    hggDoRnaFoldDisplay, "text");
 	hPrintf(" Text ");
