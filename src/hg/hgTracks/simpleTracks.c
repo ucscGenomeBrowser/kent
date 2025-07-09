@@ -8129,7 +8129,16 @@ void bedMethylMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 struct bedMethyl *bed = item;
 struct dyString *mouseOver = newDyString(4096);
 
-dyStringPrintf(mouseOver, "Cov %s, %s %% modified, N_mod %s, N_canon %s, N_other %s, N_delete %s, N_fail %s, N_diff %s, N_nocall %s",
+dyStringPrintf(mouseOver,
+    "<b>Coverage:</b> %s<br>"
+    "<b>%%_modified:</b> %s<br>"
+    "<b>N_modified:</b> %s<br>"
+    "<b>N_canonical:</b> %s<br>"
+    "<b>N_other:</b> %s<br>"
+    "<b>N_delete:</b> %s<br>"
+    "<b>N_fail:</b> %s<br>"
+    "<b>N_diff:</b> %s<br>"
+    "<b>N_nocall:</b> %s",
 bed->nValidCov, bed->percMod, bed->nMod, bed->nCanon, bed->nOther, bed->nDelete, bed->nFail, bed->nDiff, bed->nNoCall);
 
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,

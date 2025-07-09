@@ -27061,7 +27061,7 @@ else if (sameWord(table, "decipherOld"))
     {
     doDecipherCnvs(tdb, item, NULL);
     }
-else if (sameWord(table, "decipherSnvs"))
+else if (sameWord(table, trackHubSkipHubName("decipherSnvs")))
     {
     doDecipherSnvs(tdb, item, NULL);
     }
