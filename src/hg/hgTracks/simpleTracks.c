@@ -5307,6 +5307,7 @@ else if (vis == tvPack || vis == tvSquish || (vis == tvFull && isTypeBedLike(tg)
 else
     genericDrawItemsFullDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                               font, color, vis);
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,

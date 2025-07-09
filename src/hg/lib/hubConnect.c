@@ -480,6 +480,12 @@ trackHubPolishTrackNames(hub->trackHub, tdb);
 trackHubAddDescription(hubGenome->trackDbFile, tdb);
 }
 
+static void addQuickToHash(struct hash *hash, char *chain, char *db)
+{
+hashAdd(hash, "quickLiftUrl", chain);
+hashAdd(hash, "quickLiftDb", db);
+}
+
 static void assignQuickLift(struct trackDb *tdbList, char *quickLiftChain, char *db)
 /* step through a trackDb list and assign a quickLift chain to each track */
 {
@@ -491,13 +497,11 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
     {
     assignQuickLift(tdb->subtracks, quickLiftChain, db);
 
-    hashAdd(tdb->settingsHash, "quickLiftUrl", quickLiftChain);
-    hashAdd(tdb->settingsHash, "quickLiftDb", db);
+    addQuickToHash( tdb->settingsHash, quickLiftChain, db);
 
     if (tdb->parent)
         {
-        hashAdd(tdb->parent->settingsHash, "quickLiftUrl", quickLiftChain);
-        hashAdd(tdb->parent->settingsHash, "quickLiftDb", db);
+        addQuickToHash( tdb->parent->settingsHash, quickLiftChain, db);
         }
     }
 }
@@ -509,7 +513,8 @@ static char *chainTdbString =
     "type bigChain %s\n"
     "chainType reverse\n"
     "bigDataUrl %s\n"
-    "quickLiftUrl %s\n";
+    "quickLiftUrl %s\n"
+    "quickLiftDb %s\n";
 
 static struct trackDb *makeQuickLiftChainTdb(struct trackHubGenome *hubGenome,  struct hubConnectStatus *hub)
 // make a trackDb entry for a quickLift chain
@@ -521,7 +526,7 @@ AllocVar(tdb);
 char buffer[4096];
 safef(buffer, sizeof buffer, "hub_%d_quickLiftChain", hub->id);
 tdb->table = tdb->track = cloneString(buffer);
-safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain);
+safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb);
 tdb->settings = cloneString(buffer);
 tdb->settingsHash = trackDbSettingsFromString(tdb, buffer);
 trackDbFieldsFromSettings(tdb);
