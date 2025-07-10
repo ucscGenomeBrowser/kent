@@ -160,8 +160,16 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
             }
         qMax = qMin + (tMax - tMin);
 
+        if (bc->strand[0] == '-')
+            {
+            qMin = bc->qSize - qMax;
+            qMax = qMin + (tMax - tMin);
+            }
+
         struct dnaSeq *tSeq = hDnaFromSeq(database, chromName, tMin, tMax, dnaUpper);
         struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
+        if (bc->strand[0] == '-')
+            reverseComplement(qSeq->dna, qSeq->size);
 
         unsigned tAddr = tMin;
         unsigned qAddr = qMin;
