@@ -87,7 +87,6 @@ struct bigBedInterval  *bbLink, *bbLinkList =  bigBedIntervalQuery(bbiLink, chro
 char *chainRow[1024];
 char *linkRow[1024];
 char startBuf[16], endBuf[16];
-int chainCount = 0;
 
 for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
     {
@@ -96,7 +95,6 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
 
     int previousTEnd = -1;
     int previousQEnd = -1;
-    int linkCount = 0;
     for (bbLink = bbLinkList; bbLink != NULL; bbLink = bbLink->next)
         {
         bigBedIntervalToRow(bbLink, chromName, startBuf, endBuf, linkRow, ArraySize(linkRow));
@@ -162,8 +160,16 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
             }
         qMax = qMin + (tMax - tMin);
 
+        if (bc->strand[0] == '-')
+            {
+            qMin = bc->qSize - qMax;
+            qMax = qMin + (tMax - tMin);
+            }
+
         struct dnaSeq *tSeq = hDnaFromSeq(database, chromName, tMin, tMax, dnaUpper);
         struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
+        if (bc->strand[0] == '-')
+            reverseComplement(qSeq->dna, qSeq->size);
 
         unsigned tAddr = tMin;
         unsigned qAddr = qMin;
