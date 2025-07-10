@@ -7,18 +7,7 @@
 
 <h1>BedMethyl Track Format</h1>
 <p> 
-The bedMethyl format allows display of continuous-valued data in track format. This display type is 
-useful for probability scores and transcriptome data.  This track type is similar to the wiggle 
-(<a href="/goldenPath/help/wiggle.html">WIG</a>) format, but unlike the wiggle format, data exported
-in the bedMethyl format are preserved in their original state. This can be seen on export using the
-table browser. For more details on data compression in wiggle tracks see the notes section of the
-wiggle <a href="wiggle.html" target="_blank">track description page</a>. If you have a very large
-data set and you would like to keep it on your own server, you should use the <a href="bigWig.html">
-bigWig</a> data format. In fact, an attempt to load a bedMethyl custom track over 50,000,000 lines
-will result in an error message, but can be addressed by turning the bedMethyl into a bigWig (see
-<a href="bigWig.html#Ex3">Example 3</a>). Note that bedMethyl files cannot easily be converted to
-wiggle files; converting bedMethyl to bigWig and using <code>bigWigToWig</code> will return the
-original bedMethyl file.</p>
+The bedMethyl format allows display of methylation sites. 
 
 <h2>General Structure</h2>
 <p>
@@ -26,7 +15,7 @@ The bedMethyl format is line-oriented. BedMethyl data are preceded by a
 <a href="customTrack.html#TRACK">track definition line</a>, which adds a number of options for 
 controlling the default display of this track.</p> 
 <p> 
-Following the track definition line are the track data in four column BED format:</p>
+Following the track definition line are the track data in 18 column BED format:</p>
 
 <pre><code><em>chromA</em>  <em>chromStartA</em>  <em>chromEndA</em>  <em>dataValueA</em>
 <em>chromB</em>  <em>chromStartB</em>  <em>chromEndB</em>  <em>dataValueB</em></code></pre>
