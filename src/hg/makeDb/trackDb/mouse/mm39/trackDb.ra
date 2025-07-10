@@ -54,3 +54,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 include ../refSeqComposite.mm10.mm39.ra
 
 include cytoBand.ra
+
+track ucscGenePfam override
+shortLabel Pfam in GENCODE
+longLabel Pfam Domains in GENCODE Genes
+html gencodePfam

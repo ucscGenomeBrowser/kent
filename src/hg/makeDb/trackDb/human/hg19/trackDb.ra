@@ -37,6 +37,11 @@ urlLabel Genomic Mutation ID:
 noScoreFilter on
 dataVersion COSMIC v101
 
+track ucscGenePfam override
+shortLabel Pfam in GENCODE
+longLabel Pfam Domains in GENCODE Genes
+html gencodePfam
+
 # knownGene archive
 include knownGeneArchive.ra
 
