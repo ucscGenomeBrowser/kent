@@ -90,7 +90,7 @@ and viewed with associated data.</p>
 The data underlying the tracks and optional sequence in a hub reside on the
 remote server of the data provider rather than at UCSC. Genomic annotations are
 stored in compressed binary indexed files in bigBed, bigBarChart, bigGenePred,
-bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL,
+bigNarrowPeak, bigMethyl, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL,
 hic or VCF format that contain the data at several resolutions. In the case of
 assemblies that UCSC does not support, genomic sequence is stored in the
 efficient twoBit format. When a hub track is displayed in the Genome Browser,
@@ -376,7 +376,7 @@ To create your own hub you will need:</p>
 <ul>
   <li>
   one or more data sets formatted in one of the compressed binary index formats supported by the 
-  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract,
+  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigMethyl, bigPsl, bigChain, bigInteract,
   bigMaf, bigWig, BAM, CRAM, HAL, hic or VCF</li>
   <li>
   a set of text files that specify properties for the track hub and for each of the data tracks 
@@ -446,6 +446,7 @@ supported by the Genome Browser:
 <a href="bigGenePred.html">bigGenePred</a>,
 <a href="bigChain.html">bigChain</a>, 
 <a href="bigNarrowPeak.html">bigNarrowPeak</a>,
+<a href="bigMethyl.html">bigMethyl</a>,
 <a href="barChart.html">bigBarChart</a>,
 <a href="interact.html">bigInteract</a>,
 <a href="bigPsl.html">bigPsl</a>, 
@@ -487,6 +488,12 @@ Format</a> help page for information on creating and configuring bigGenePred tra
 <a href="chain.html">chain</a> files. BigChain format is useful for large pairwise alignment data 
 sets. See the <a href="bigChain.html">bigChain Track Format</a> help page for more information on 
 creating and configuring bigChain tracks.</p>
+<p>
+<em>bigMethyl</em> - BigMethyl files are binary indexed versions of Browser Extensible Data 
+(<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with first nine fields being the same as bed,
+and an extra nine fields that contain various scores.
+ See the <a href="bigMethyl.html">bigMethyl Track
+Format</a> help page for information on creating and configuring bigMethyl tracks.</p>
 <p>
 <em>bigNarrowPeak</em> - BigNarrowPeak files are binary indexed versions of Browser Extensible Data 
 (<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with first six fields being the same as bed,
