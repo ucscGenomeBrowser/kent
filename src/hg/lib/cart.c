@@ -1559,6 +1559,10 @@ if (botException())
 if (isUserAgentException())
     return;
 
+// hgRenderTracks should not show the captcha - it was made to be used from other websites
+if (sameWord(cgiScriptName(), "/cgi-bin/hgRenderTracks"))
+    return;
+
 // Do not show a captcha if we have a valid cookie 
 // but for debugging, it's nice to be able to force the captcha
 if (userId && userIdFound && !cgiOptionalString("captcha"))
