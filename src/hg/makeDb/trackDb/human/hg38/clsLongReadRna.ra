@@ -37,7 +37,7 @@ subGroup3 type Type \
           post_capture_ont_reads=Post-capture_ONT_reads \
           post_capture_pacbio_reads=Post-capture_PacBio_reads
 dimensions dimX=type dimY=sample
-html clsLongReadRna.html
+html clsLongReadRna
 
     track targets_view
     view targets_view
@@ -196,7 +196,7 @@ html clsLongReadRna.html
 
     track per_expr_models_view
     parent clsLongReadRnaTrack on
-    view per_exp_models_view
+    view per_expr_models_view
     shortLabel Models
     visibility hide
     type bam
