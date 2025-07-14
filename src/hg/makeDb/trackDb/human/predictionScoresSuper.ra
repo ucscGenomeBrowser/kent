@@ -4,8 +4,8 @@ longLabel Variant Deleteriousness / Variant Impact Prediction Scores
 superTrack on hide
 visibility hide
 group phenDis
+pennantIcon New red ../goldenPath/newsarch.html#071525 "Released July 15, 2025"
 
-# bayesDel track
 include bayesDel.ra
-include mutscore.ra alpha
-include mcap.ra alpha
+include mutscore.ra
+include mcap.ra
