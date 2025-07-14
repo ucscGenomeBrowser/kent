@@ -1472,7 +1472,7 @@ boolean isValidToken(char *token)
     safef(data, sizeof(data), "secret=%s&response=%s", secret, token);
     char *reply = curlPostUrl(url, data);
 
-    boolean res = startsWith("{\"success\":true", reply);
+    boolean res = strstr(reply, "\"success\":true") != NULL;
     freez(&reply);
     return res;
 }
@@ -1567,10 +1567,25 @@ if (userId && userIdFound && !cgiOptionalString("captcha"))
 // After the reload, the new page URL has the captcha token in the URL argument list, so now we need to validate it
 // and remove it from the cart
 char *token = cgiOptionalString("token");
-if (token && isValidToken(token))
-{
-    cartRemove(cart, "token");
-    return;
+if (token)
+{ 
+    if (isValidToken(token))
+        {
+        cartRemove(cart, "token");
+        return;
+        }
+    else
+        {
+        puts("Content-Type: text/html\n");
+        puts("<html><body>Internal captcha error: Cloudflare rejected the captcha token. "
+                "Something is not working internally, we are very sorry. You can try reloading the page. "
+                "If this problem persists, send an email to genome-www@soe.ucsc.edu and we will "
+                "look into it as quickly as we can in the PST timezone. You can use any internet browser "
+                "where you have used the genome browser before, but not from this internet browser. "
+                "You can try our mirror sites, "
+                "genome-euro.ucsc.edu or genome-asia.ucsc.edu, while we are working on a solution.</body></html>");
+        exit(0);
+        }
 }
 
 printCaptcha();
