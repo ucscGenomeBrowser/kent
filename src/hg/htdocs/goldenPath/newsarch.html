@@ -64,6 +64,34 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
 
+<a name="071525"></a>
+<h2>July 15, 2025 &nbsp;&nbsp; New pathogenicity prediction scores for human: MutScore and M-CAP</h2>
+<p>
+We have two new pathogenicity prediction score tracks available in our 
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=predictionScoresSuper"
+target="_blank">Deleteriousness Predictions</a> super track.</p>
+<ul>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=mutScore"
+target="_blank">MutScore</a> (hg19/hg38) - MutScore is a pathogenicity predictor that integrates unsupervised 
+features of single DNA variants with information derived from such clusters. The predictive model 
+for MutScore was trained with a random forest approach on medically-relevant mutations and 
+subsequently tested against various genomic databases for both hereditary conditions and 
+cancer (ClinVar, HGMD, and DoCM) to achieve high performance.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=mcap"
+target="_blank">M-CAP</a> (hg19) - M-CAP is a pathogenicity classifier for
+rare missense variants tuned to the high sensitivity required in the clinic. By combining previous
+pathogenicity scores (including SIFT, Polyphen-2 and CADD) with novel features and a powerful
+model, it yields an effective classifier, reducing a typical exome/genome rare (&lt;1%) missense
+variant (VUS) list from 300 to 120, while never mistaking 95% of known pathogenic variants as benign.</li></ul>
+<p>
+See the track description page
+for more information and interpretation guidelines.</p>
+<p>
+We would like to thank the authors of <a href="https://mutscore.iob.ch/"
+target="_blank">MutScore</a> and <a href="http://bejerano.stanford.edu/mcap/"
+target="_blank">M-CAP</a> for creating and providing these data. We would also
+like to thank Max Haeussler and Lou Nassar for the development and release of these tracks.</p>
+
 <a name="070925"></a>
 <h2>July 15, 2025 &nbsp;&nbsp; ENCODE4 Long-read RNA-seq Transcripts</h2>
 <p>
