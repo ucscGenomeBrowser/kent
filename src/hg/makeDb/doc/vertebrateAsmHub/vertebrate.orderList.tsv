@@ -15,7 +15,7 @@ GCF_014858855.1_ASM1485885v1	Asiatic toad (SCDJY-AF-19 2020)
 GCF_040869285.1_UKY_Mglu_1.0	Atlantic hagfish (MG_SS 2024)
 GCA_964187855.1_kmMyxGlut1.1	Atlantic hagfish (primary hap 2024)
 GCA_965140285.1_rLepKem1.hap1	Atlantic ridley (rLepKem1 hap1 2025)
-GCA_965140265.1_rLepKem1.hap2	Atlantic ridley (rLepKem1 hap2 2025)
+GCF_965140265.1_rLepKem1.hap2	Atlantic ridley (rLepKem1 hap2 2025 refseq)
 GCF_030144855.1_sHypSab1.hap1	Atlantic stingray (hap1 2023 refseq)
 GCA_030144785.1_sHypSab1.hap2	Atlantic stingray (hap2 2023)
 GCF_001723895.1_CroPor_comp1	Australian saltwater crocodile
@@ -40,7 +40,8 @@ GCA_022578425.1_rAriEle1.0.a	California glossy snake (A.elegans occidentalis HBS
 GCA_022577455.1_rAriEle1.0.p	California glossy snake (A.elegans occidentalis HBS 135684 primary hap 2022)
 GCF_036971445.1_sNarBan1.hap1	Caribbean electric ray (hap1 2024 refseq)
 GCA_036971175.1_sNarBan1.hap2	Caribbean electric ray (hap2 2024)
-GCF_900067755.1_pvi1.1	central bearded dragon
+GCF_900067755.1_pvi1.1	central bearded dragon (2017)
+GCF_047335585.1_Pvi2.1	central bearded dragon (2025)
 GCF_000455745.1_ASM45574v1	Chinese alligator
 GCA_021292165.1_IOZ_Scro_1.0	Chinese crocodile lizard (Guangxi GXDGS128 2021)
 GCF_000230535.1_PelSin_1.0	Chinese soft-shelled turtle
@@ -73,6 +74,7 @@ GCA_951804945.1_rPodCre2.1	Cretan wall lizard (primary hap 2023)
 GCA_040207535.1_USC_Ccil_1.0	crested gecko (US Hobby MAA-2024a 2024)
 GCF_027887155.1_rMalTer1.hap1	diamondback terrapin (hap1 2023 refseq)
 GCA_027887205.1_rMalTer1.hap2	diamondback terrapin (hap2 rMalTer1 2023)
+GCF_039654945.1_ASM3965494v1	dyeing poison frog (UK_male_01 2024)
 GCF_900518735.1_EBS10Xv2-PRI	eastern brown snake
 GCA_032164245.1_rSteOdo2_p1.0	eastern musk turtle (primary hap 2023)
 GCA_027917415.1_aGasCar1.hap2	eastern narrow-mouthed toad (hap2 2023)
@@ -217,6 +219,7 @@ GCA_965119315.1_aPelLes1.hap2.1	pool frog (hap2 2025)
 GCF_032191835.1_APGP_CSIRO_Hbin_v1	prickly gecko (False Entrance Well CCM8104 2023)
 GCF_035609145.1_aEleCoq1.hap1	Puerto Rican coqui (hap1 2024 refseq)
 GCA_035609135.1_aEleCoq1.hap2	Puerto Rican coqui (hap2 2024)
+GCF_048418815.1_sHemAka1.3	red stingray (2025)
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
 GCA_900700845.3_fErpCal1.3_alternate_haplotype	reedfish (v3 alternate hap 2021)
 GCF_016161935.1_ASM1616193v1	Reeves's turtle
