@@ -142,8 +142,8 @@ html clsLongReadRna
 
         track placenta_placenta_models
         parent sample_models_view on
-        shortLabel placenta_placenta models
-        longLabel placenta_placenta transcript models
+        shortLabel Placenta models
+        longLabel Placenta transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Placenta.bb
         type bigBed 12 +
         color 100,22,180

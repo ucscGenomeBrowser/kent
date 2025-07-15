@@ -86,8 +86,8 @@ html clsLongReadRna
 
         track embryo_heart_models
         parent sample_models_view on
-        shortLabel embryo_heart models
-        longLabel embryo_heart transcript models
+        shortLabel Embryo Heart models
+        longLabel Embryo Heart transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbHeart.bb
         type bigBed 12 +
         color 100,22,180
@@ -95,8 +95,8 @@ html clsLongReadRna
 
         track embryo_liver_models
         parent sample_models_view on
-        shortLabel embryo_liver models
-        longLabel embryo_liver transcript models
+        shortLabel Embryo Liver models
+        longLabel Embryo Liver transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbLiver.bb
         type bigBed 12 +
         color 100,22,180
@@ -104,8 +104,8 @@ html clsLongReadRna
 
         track adult_testis_models
         parent sample_models_view on
-        shortLabel adult_testis models
-        longLabel adult_testis transcript models
+        shortLabel Adult Testis models
+        longLabel Adult Testis transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-Testis.bb
         type bigBed 12 +
         color 100,22,180
@@ -158,8 +158,8 @@ html clsLongReadRna
 
         track embryo_brain_models
         parent sample_models_view on
-        shortLabel embryo_brain models
-        longLabel embryo_brain transcript models
+        shortLabel Embryo Brain models
+        longLabel Embryo Brain transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbBrain.bb
         type bigBed 12 +
         color 100,22,180
@@ -167,8 +167,8 @@ html clsLongReadRna
 
         track embryo_esc_models
         parent sample_models_view on
-        shortLabel embryo_esc models
-        longLabel embryo_esc transcript models
+        shortLabel Embryo ESC models
+        longLabel Embryo ESC transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbESC.bb
         type bigBed 12 +
         color 100,22,180
