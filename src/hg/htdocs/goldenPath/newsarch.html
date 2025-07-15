@@ -65,6 +65,39 @@ credits page</a> for acknowledgments of the data we host.</p>
 <a name="2025"></a>
 
 <a name="070925"></a>
+<h2>July 15, 2025 &nbsp;&nbsp; ENCODE4 Long-read RNA-seq Transcripts</h2>
+<p>
+We are pleased to announce the release of the ENCODE4 long-read RNA-seq transcripts track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=encode4LongRnaTranscripts"
+target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=encode4LongRnaTranscripts"
+target="_blank">mm10</a>.
+This track annotates trancripts using numerical triplets representing the
+identity of the start site, exon junction chain, and transcript end site of
+each transcript. This is presented alongside sample enrichment information to
+show how promoter selection, splice pattern, and 3’ processing are deployed
+across human tissues.
+</p>
+
+<div class="text-center">
+  <img src="../images/encode4LongReadTranscriptsHelp.png"
+  alt="Screenshot showing ENCODE4 long-read transcripts track">
+</div>
+<p>
+Transcripts are labeled with triplets, e.g. [1,1,1] or [1,1,3] or [2,1,3].
+If transcripts share a number in any of the positions that means they share
+that feature, e.g. sharing a 8 in the second position but different numbers in
+the others means those two transcripts share the same set of exons, but different
+start and end sites.
+</p>
+
+<p>
+This track is part of a &quot;Long-read Transcripts&quot; supertrack that will
+consist of other datasets derived from third-generation sequencing technology,
+such as PacBio and Oxford Nanopore.
+</p>
+
+<a name="070925"></a>
 <h2>July 09, 2025 &nbsp;&nbsp; Unusually Conserved Regions track for hg38</h2>
 <p>
 We are happy to announce the release of the <a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=unusualcons"
