@@ -499,6 +499,7 @@ if (type != NULL && (startsWithWord("makeItems", type) ||
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
         sameWord("interact", type) || 
+        sameWord("bedMethyl", type) || 
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -513,6 +514,8 @@ if (type != NULL && (startsWithWord("makeItems", type) ||
     else if (sameWord("barChart", type))
         fieldCount = 6;
     else if (sameWord("interact", type))
+        fieldCount = 5;
+    else if (sameWord("bedMethyl", type))
         fieldCount = 5;
     }
 else if (ct->wiggle)
@@ -606,6 +609,7 @@ if (startsWithWord("makeItems", type) ||
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) ||
         sameWord("interact", type) ||
+        sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

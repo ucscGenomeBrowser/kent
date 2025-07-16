@@ -630,6 +630,8 @@ else if (startsWithWord("chromGraph", type))
     showSchemaCtChromGraph(table, ct);
 else if (startsWithWord("bed", type) || startsWithWord("bedGraph", type))
     showSchemaCtBed(table, ct);
+else if (startsWithWord("bedMethyl", type))
+    showSchemaCtBed(table, ct);
 else if (startsWithWord("maf", type))
     showSchemaCtMaf(table, ct);
 else if (startsWithWord("array", type))
