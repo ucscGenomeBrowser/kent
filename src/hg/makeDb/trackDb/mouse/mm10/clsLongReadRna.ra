@@ -35,7 +35,7 @@ subGroup3 type Type \
           post_capture_ont_reads=Post-capture_ONT_reads \
           post_capture_pacbio_reads=Post-capture_PacBio_reads
 dimensions dimX=type dimY=sample
-html clsLongReadRna.html
+html clsLongReadRna
 
     track targets_view
     view targets_view
@@ -86,8 +86,8 @@ html clsLongReadRna.html
 
         track embryo_heart_models
         parent sample_models_view on
-        shortLabel embryo_heart models
-        longLabel embryo_heart transcript models
+        shortLabel Embryo Heart models
+        longLabel Embryo Heart transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbHeart.bb
         type bigBed 12 +
         color 100,22,180
@@ -95,8 +95,8 @@ html clsLongReadRna.html
 
         track embryo_liver_models
         parent sample_models_view on
-        shortLabel embryo_liver models
-        longLabel embryo_liver transcript models
+        shortLabel Embryo Liver models
+        longLabel Embryo Liver transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbLiver.bb
         type bigBed 12 +
         color 100,22,180
@@ -104,8 +104,8 @@ html clsLongReadRna.html
 
         track adult_testis_models
         parent sample_models_view on
-        shortLabel adult_testis models
-        longLabel adult_testis transcript models
+        shortLabel Adult Testis models
+        longLabel Adult Testis transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-Testis.bb
         type bigBed 12 +
         color 100,22,180
@@ -158,8 +158,8 @@ html clsLongReadRna.html
 
         track embryo_brain_models
         parent sample_models_view on
-        shortLabel embryo_brain models
-        longLabel embryo_brain transcript models
+        shortLabel Embryo Brain models
+        longLabel Embryo Brain transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbBrain.bb
         type bigBed 12 +
         color 100,22,180
@@ -167,8 +167,8 @@ html clsLongReadRna.html
 
         track embryo_esc_models
         parent sample_models_view on
-        shortLabel embryo_esc models
-        longLabel embryo_esc transcript models
+        shortLabel Embryo ESC models
+        longLabel Embryo ESC transcript models
         bigDataUrl /gbdb/mm10/clsLongReadRna/cls-models-EmbESC.bb
         type bigBed 12 +
         color 100,22,180
@@ -176,7 +176,7 @@ html clsLongReadRna.html
 
     track per_expr_models_view
     parent clsLongReadRnaTrack on
-    view per_exp_models_view
+    view per_expr_models_view
     shortLabel Models
     visibility hide
     type bam

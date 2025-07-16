@@ -4,8 +4,10 @@
 #   genome that it represents
 GCA_015852565.1	GCA_015852565.1_bf_hap-2	Branchiostoma floridae	7739
 GCA_019207075.1	GCA_019207075.1_Bb-hap	Branchiostoma belcheri	7741
-GCF_003369695.1	GCF_003369695.1_UOA_Brahman_1	Bos indicus	9915
-GCA_003369685.2	GCA_003369685.2_UOA_Angus_1	Bos taurus	9913
+
+# Francoise says not to do this: they should both be taxId 30522
+# GCF_003369695.1	GCF_003369695.1_UOA_Brahman_1	Bos indicus	9915
+# GCA_003369685.2	GCA_003369685.2_UOA_Angus_1	Bos taurus	9913
 
 
 # invertebrateAsmHub/invertebrate.orderList.tsv:GCA_019207075.1_Bb-hap	lancelets B.floridae x B.belcheri (bbbf 2021)

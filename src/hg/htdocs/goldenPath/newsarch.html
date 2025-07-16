@@ -64,6 +64,67 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
 
+<a name="071525b"></a>
+<h2>July 15, 2025 &nbsp;&nbsp; New pathogenicity prediction scores for human: MutScore and M-CAP</h2>
+<p>
+We have two new pathogenicity prediction score tracks available in our 
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=predictionScoresSuper"
+target="_blank">Deleteriousness Predictions</a> super track.</p>
+<ul>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=mutScore"
+target="_blank">MutScore</a> (hg19/hg38) - MutScore is a pathogenicity predictor that integrates unsupervised 
+features of single DNA variants with information derived from such clusters. The predictive model 
+for MutScore was trained with a random forest approach on medically-relevant mutations and 
+subsequently tested against various genomic databases for both hereditary conditions and 
+cancer (ClinVar, HGMD, and DoCM) to achieve high performance.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=mcap"
+target="_blank">M-CAP</a> (hg19) - M-CAP is a pathogenicity classifier for
+rare missense variants tuned to the high sensitivity required in the clinic. By combining previous
+pathogenicity scores (including SIFT, Polyphen-2 and CADD) with novel features and a powerful
+model, it yields an effective classifier, reducing a typical exome/genome rare (&lt;1%) missense
+variant (VUS) list from 300 to 120, while never mistaking 95% of known pathogenic variants as benign.</li></ul>
+<p>
+See the track description page
+for more information and interpretation guidelines.</p>
+<p>
+We would like to thank the authors of <a href="https://mutscore.iob.ch/"
+target="_blank">MutScore</a> and <a href="http://bejerano.stanford.edu/mcap/"
+target="_blank">M-CAP</a> for creating and providing these data. We would also
+like to thank Max Haeussler and Lou Nassar for the development and release of these tracks.</p>
+
+<a name="071525a"></a>
+<h2>July 15, 2025 &nbsp;&nbsp; ENCODE4 Long-read RNA-seq Transcripts</h2>
+<p>
+We are pleased to announce the release of the ENCODE4 long-read RNA-seq transcripts track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=encode4LongRnaTranscripts"
+target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=encode4LongRnaTranscripts"
+target="_blank">mm10</a>.
+This track annotates trancripts using numerical triplets representing the
+identity of the start site, exon junction chain, and transcript end site of
+each transcript. This is presented alongside sample enrichment information to
+show how promoter selection, splice pattern, and 3’ processing are deployed
+across human tissues.
+</p>
+
+<div class="text-center">
+  <img src="../images/encode4LongReadTranscriptsHelp.png"
+  alt="Screenshot showing ENCODE4 long-read transcripts track">
+</div>
+<p>
+Transcripts are labeled with triplets, e.g. [1,1,1] or [1,1,3] or [2,1,3].
+If transcripts share a number in any of the positions that means they share
+that feature, e.g. sharing a 8 in the second position but different numbers in
+the others means those two transcripts share the same set of exons, but different
+start and end sites.
+</p>
+
+<p>
+This track is part of a &quot;Long-read Transcripts&quot; supertrack that will
+consist of other datasets derived from third-generation sequencing technology,
+such as PacBio and Oxford Nanopore.
+</p>
+
 <a name="070925"></a>
 <h2>July 09, 2025 &nbsp;&nbsp; Unusually Conserved Regions track for hg38</h2>
 <p>
