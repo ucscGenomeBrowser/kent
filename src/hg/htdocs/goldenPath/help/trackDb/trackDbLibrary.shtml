@@ -1110,7 +1110,7 @@ will be displayed in the custom track.
 
     bigMethyl files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigMethyl. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
     For complete bigMethyl format definitions please see the
-    <A HREF="../bigMethyl.html">bigMethyl help page</A>.</P>
+    <A HREF="../bedMethyl.html#bigMethyl">bigMethyl help page</A>.</P>
 </DIV>
 
 <DIV class="bigNarrowPeak_intro">
