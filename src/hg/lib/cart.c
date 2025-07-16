@@ -1560,7 +1560,9 @@ if (isUserAgentException())
     return;
 
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
-if (sameWord(cgiScriptName(), "/cgi-bin/hgRenderTracks"))
+// For hgSession, we redirect from euro and asia to the RR - avoid showing the captcha there
+char *cgi = cgiScriptName();
+if ( sameWord(cgi, "/cgi-bin/hgRenderTracks") || sameWord(cgi, "/cgi-bin/hgSession") )
     return;
 
 // Do not show a captcha if we have a valid cookie 
