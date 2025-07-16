@@ -1561,8 +1561,9 @@ if (isUserAgentException())
 
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
 // For hgSession, we redirect from euro and asia to the RR - avoid showing the captcha there
+// hgLogin is the redirect target for hgSession, so avoid it there as well
 char *cgi = cgiScriptName();
-if ( sameWord(cgi, "/cgi-bin/hgRenderTracks") || sameWord(cgi, "/cgi-bin/hgSession") )
+if ( sameWord(cgi, "/cgi-bin/hgRenderTracks") || sameWord(cgi, "/cgi-bin/hgSession") || sameWord(cgi, "/cgi-bin/hgLogin") )
     return;
 
 // Do not show a captcha if we have a valid cookie 
