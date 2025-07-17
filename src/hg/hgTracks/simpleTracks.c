@@ -8131,15 +8131,15 @@ struct bedMethyl *bed = item;
 struct dyString *mouseOver = newDyString(4096);
 
 dyStringPrintf(mouseOver,
-    "<b>Coverage:</b> %s<br>"
-    "<b>%%_modified:</b> %s<br>"
-    "<b>N_modified:</b> %s<br>"
-    "<b>N_canonical:</b> %s<br>"
-    "<b>N_other:</b> %s<br>"
-    "<b>N_delete:</b> %s<br>"
-    "<b>N_fail:</b> %s<br>"
-    "<b>N_diff:</b> %s<br>"
-    "<b>N_nocall:</b> %s",
+    "<b>Valid coverage:</b> %s<br>"
+    "<b>Percent modified:</b> %s%%<br>"
+    "<b>Modified calls:</b> %s<br>"
+    "<b>Canonical calls:</b> %s<br>"
+    "<b>Other modification calls:</b> %s<br>"
+    "<b>Reads with a deletion:</b> %s<br>"
+    "<b>Low-confidence calls:</b> %s<br>"
+    "<b>Reads with a base mismatch:</b> %s<br>"
+    "<b>Reads with no modification call:</b> %s",
 bed->nValidCov, bed->percMod, bed->nMod, bed->nCanon, bed->nOther, bed->nDelete, bed->nFail, bed->nDiff, bed->nNoCall);
 
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
