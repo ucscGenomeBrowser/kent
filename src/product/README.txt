@@ -109,7 +109,7 @@ or visit the [Genome Browser store](https://genome-store.ucsc.edu/).
 
 If you do not want to use our prepared virtual machine Genome-Browser-in-a-Box, we provide a
 Genome Browser in the Cloud (GBiC)
-[installation program](https://genome.ucsc.edu/goldenPath/help/gbic.html) 
+[installation program](/goldenPath/help/gbic.html) 
 that sets up a fully functional mirror on all major Linux
 distributions.  
 
