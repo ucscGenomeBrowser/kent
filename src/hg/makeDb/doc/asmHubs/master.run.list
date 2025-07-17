@@ -3552,6 +3552,7 @@
 ./runBuild GCF_000281045.1_Sap_diclina_VS20_V1 invertebrate Saprolegnia_diclina_VS20
 ./runBuild GCF_000281105.1_Coni_apol_CBS100218_V1 fungi Coniosporium_apollinis_CBS_100218
 ./runBuild GCF_000281125.3_ASM28112v4 vertebrate Alligator_mississippiensis
+./runBuild GCF_000282495.1_GM79.fsa bacteria Pseudomonas_sp._GM79
 ./runBuild GCF_000283155.1_CerSimSim1.0 mammals Ceratotherium_simum
 ./runBuild GCF_000283595.1_ASM28359v1 bacteria Rickettsia_japonica_YH
 ./runBuild GCF_000283915.1_ASM28391v1 bacteria Rickettsia_canadensis_str._CA410
