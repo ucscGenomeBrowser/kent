@@ -56,7 +56,9 @@ For information about operating in the cloud, visit the
     We recommend this only if none of the above options fulfill your needs. Our
     [GBIC installation](https://genome.ucsc.edu/goldenpath/help/gbic.html) script 
     will install a full local mirror of the UCSC website,
-    for the assemblies you select. We support mirror site installations as time
+    for the assemblies you select. GBiC can also be used as a Docker container. See the
+    [Docker installation instructions](#docker-installation-instructions) below.
+    We support mirror site installations as time
     allows, and have many functional mirrors of the Genome Browser worldwide. For
     details, see the [section below](#installing-a-genome-browser-locally-with-the-gbic-installer).
 
