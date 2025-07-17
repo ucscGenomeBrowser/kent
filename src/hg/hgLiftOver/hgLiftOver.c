@@ -71,6 +71,7 @@ void webMain(struct liftOverChain *chain, boolean multiple, boolean keepSettings
 /* set up page for entering data */
 {
 struct dbDb *dbList;
+printf("main %s\n", chain->toDb);
 char *fromOrg = hOrganism(chain->fromDb), *toOrg = hOrganism(chain->toDb);
 char *chainString = chainStringVal(chain);
 cgiParagraph(
@@ -124,6 +125,7 @@ printLiftOverGenomeList(HGLFT_TOORG_VAR, chain->toDb, dbList, "change", onChange
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
+printf("new %s\n", chain->fromDb);
 printAllAssemblyListHtmlParm(chain->toDb, dbList, HGLFT_TODB_VAR, TRUE, NULL, NULL);
 cgiTableFieldEnd();
 
@@ -411,11 +413,8 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList,
 /* Out of a list of liftOverChains and a cart, choose a
  * list to display. */
 {
-char *fromOrg, *fromDb, *toOrg, *toDb, *cartOrg;
+char *fromOrg, *fromDb, *toOrg, *toDb; 
 struct liftOverChain *choice = NULL;  
-struct hash *dbRank = hGetDatabaseRank();
-struct hash *dbDbHash = hDbDbHash();
-double bestScore = -1;
 struct liftOverChain *this = NULL;
 
 /* Get the initial values. */
@@ -423,7 +422,6 @@ fromOrg = cartCgiUsualString(cart, HGLFT_FROMORG_VAR, "0");
 fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, "0");
 toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
-cartOrg = hOrganism(cartDb);
 
 if (sameWord(fromOrg,"0"))
     fromOrg = NULL;
@@ -438,13 +436,14 @@ if (sameWord(cartDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
-    double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank, dbDbHash);
-    if (score > bestScore)
-	{
-	choice = this;
-	bestScore = score;
-	}
+    if (sameString(this->fromDb ,fromDb) && sameString(this->toDb, toDb))
+        {
+        choice = this;
+        break;
+        }
     }
+if (choice == NULL)
+    errAbort("liftOverChain not found\n");
 
 return choice;
 }
