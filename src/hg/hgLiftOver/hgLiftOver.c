@@ -438,6 +438,11 @@ if (sameWord(cartDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
+    if (sameOk(this->fromDb ,fromDb) && sameOk(this->toDb, toDb))
+        {
+        choice = this;
+        break;
+        }
     double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank, dbDbHash);
     if (score > bestScore)
 	{
