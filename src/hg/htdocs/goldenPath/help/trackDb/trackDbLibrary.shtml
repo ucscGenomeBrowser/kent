@@ -1198,8 +1198,8 @@ There are no extra options that can appear on the type bigPsl line.
 
 <DIV class="bigChain"><span class="types bigChain"></span>
 <div class="format">
-    <code>type bigChain</code></div>
-There are no extra options that can appear on the type bigChain line.
+    <code>type bigChain targetDb</code></div>
+You must specify the target database in the type bigChain line.
 </DIV>
 
 <DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>
