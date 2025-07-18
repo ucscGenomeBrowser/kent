@@ -2644,6 +2644,13 @@ char *hOrganism(char *database)
 {
 if (sameString(database, "rep"))    /* bypass dbDb if repeat */
     return cloneString("Repeat");
+if (startsWith("GC", database))
+    {
+    struct dbDb *dbDb = genarkLiftOverDb(database);
+    if (dbDb != NULL)
+        return dbDb->genome;
+    }
+
 return hDbDbOptionalField(database, "organism");
 }
 
