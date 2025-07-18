@@ -67,21 +67,20 @@ if (!tusdDataBaseDir  || isEmpty(tusdDataBaseDir))
 if (tusdDataBaseDir[0] != '/')
     errAbort("config setting tusdDataDir must be an absolute path (starting with '/')");
 
+// the tusdDataBaseDir may be a symlink, so canonicalize it, but do not include
+// the userName part since it may not exist yet:
+char *canonicalPath = needMem(PATH_MAX);
+realpath(tusdDataBaseDir, canonicalPath);
+
 char *encUserName = cgiEncode(userName);
 char *userPrefix = md5HexForString(encUserName);
 userPrefix[2] = '\0';
 
-struct dyString *newDataDir = dyStringNew(0);
-dyStringPrintf(newDataDir, "%s/%s/%s",
-    tusdDataBaseDir, userPrefix, encUserName);
-
-char *canonicalPath = needMem(PATH_MAX);
-realpath(dyStringContents(newDataDir), canonicalPath);
-// now that we have canonicalized the path we need to add a '/' back on
+// now that we have a canonicalized the path we need to add a '/' back on
 // so the rest of the routines can append to this result
-
-dyStringClear(newDataDir);
-dyStringPrintf(newDataDir, "%s/", canonicalPath);
+struct dyString *newDataDir = dyStringNew(0);
+dyStringPrintf(newDataDir, "%s/%s/%s/",
+    canonicalPath, userPrefix, encUserName);
 
 dataDir = dyStringCannibalize(&newDataDir);
 return dataDir;
@@ -93,6 +92,27 @@ char *getDataDir(char *userName)
 {
 if (!dataDir)
     setDataDir(userName);
+
+char *tusdMountPoint = cfgOption("tusdMountPoint");
+if (tusdMountPoint && !isEmpty(tusdMountPoint))
+    {
+    // the data server may be somewhere else and mounted over NFS. In this
+    // case, when tusd saves files, it is writing it's local tusdDataDir
+    // value into the hgcentral file location. When the CGI running somewhere
+    // else needs to verify file existence, the tusdDataDir won't exist on the
+    // CGI filesystem, but will instead be mounted as some different path.
+    // In this case, replace tusdDataDir with tusdMountPoint
+    char *tusdDataDir = cfgOption("tusdDataDir");
+    char *canonicalPath = needMem(PATH_MAX);
+    if (!startsWith(tusdDataDir, dataDir))
+        {
+        // could be a symlink
+        realpath(tusdDataDir, canonicalPath);
+        }
+    else
+        canonicalPath = tusdDataDir;
+    strSwapStrs(dataDir, strlen(dataDir), canonicalPath, tusdMountPoint);
+    }
 return dataDir;
 }
 
