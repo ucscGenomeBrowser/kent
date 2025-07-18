@@ -435,6 +435,10 @@ if (sameWord(toDb,"0"))
     toDb = NULL;
 if (sameWord(cartDb,"0"))
     cartDb = NULL;
+if ((fromDb != NULL) && !sameOk(fromOrg, hOrganism(fromDb)))
+    fromDb = NULL;
+if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
+    toDb = NULL;
 
 for (this = chainList; this != NULL; this = this->next)
     {
