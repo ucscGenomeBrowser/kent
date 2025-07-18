@@ -134,12 +134,11 @@ but can be changed to get the size for a particular assembly:
 
 # Installing the UCSC Genome browser
 
-Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
-machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
-popular environments. We also offer Genome-Browser-in-the-Cloud (GBIC) an
+**Note:** We offer Genome-Browser-in-the-Cloud (GBIC), an
 shell script that installs a genome browser in most main Linux distributions
-(Most Debian and Redhat-based ones, like Ubuntu and CentOS). 
-See <https://genome.ucsc.edu/goldenPath/help/mirror.html>
+(Most Debian and Redhat-based ones, like Ubuntu and CentOS). GBIC is also available
+as a [dockerfile](/goldenPath/help/docker.html).
+See our [mirror page](https://genome.ucsc.edu/goldenPath/help/mirror.html) for more general information.
 
 Scripts to perform all of the functions below can be found in
 the directory <https://github.com/ucscGenomeBrowser/kent/tree/master/src/product/scripts>.

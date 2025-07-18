@@ -51,37 +51,14 @@ For information about operating in the cloud, visit the
         provider closer to Santa Cruz or by using a content distribution network,
         where all content is mirrored and the closest location is chosen by your provider.
 
-3.  **Use Genome Browser in a Box**
-
-    [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html) (GBiB): 
-    is a fully configured virtual machine that includes
-    Apache and MariaDB, and has behavior identical to the UCSC website.
-    GBiB loads genome data from the UCSC download servers on the fly.
-    Website and data updates are applied automatically every two weeks. By default, GBiB
-    uses the VirtualBox virtualization software, so it can be run on any
-    operating system, Windows, OSX and Linux. It does not require VirtualBox,
-    the virtual machine image can easily be converted to e.g., VMWare or HyperV.
-    For increased privacy, you can download the genomes and
-    annotation tracks you need and use your GBiB off-line even on a laptop.
-
-    * Pros:
-        * Relatively simple to install: download and double-click.
-        * By default, software and data updates are managed remotely by UCSC, via an update script run every week.
-        * Best performance when rendering local BAM/bigWig/bigBed files.
-        * No Unix webserver needed, runs on any OS.
-        * For commercial users: easier click-through licensing compared to a full multi-seat, manual license.
-    * Cons:
-        * Requires the free VirtualBox software or a commercial Virtualization system.
-        * By default requires opening at least three outgoing ports to UCSC for MariaDB, Rsync downloads 
-          and BLAT in your firewall. Once all data is downloaded, no open ports are needed.
-        * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.
-
-4.  **Install locally with the Genome Browser installation script (GBIC)**
+3.  **Install locally with the Genome Browser installation script (GBIC)**
 
     We recommend this only if none of the above options fulfill your needs. Our
     [GBIC installation](https://genome.ucsc.edu/goldenpath/help/gbic.html) script 
     will install a full local mirror of the UCSC website,
-    for the assemblies you select. We support mirror site installations as time
+    for the assemblies you select. GBiC can also be used as a Docker container. See the
+    [Docker installation instructions](#docker-installation-instructions) below.
+    We support mirror site installations as time
     allows, and have many functional mirrors of the Genome Browser worldwide. For
     details, see the [section below](#installing-a-genome-browser-locally-with-the-gbic-installer).
 
@@ -100,7 +77,7 @@ For information about operating in the cloud, visit the
           setup locally, no open ports are needed anymore.
         * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.
 
-5.  **Install manually yourself, by following installation instructions**
+4.  **Install manually yourself, by following installation instructions**
 
     We do provide [step-by-step
     instructions](https://genome.ucsc.edu/goldenpath/help/mirrorManual.html) for
@@ -253,3 +230,34 @@ list [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). **<span cl
 Messages sent to this address 
 will be posted the moderated genome-mirror mailing list, which is archived on a SEARCHABLE PUBLIC
 </span>[Google Groups forum](http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror)**.
+
+# What happened to Genome Browser in a Box (GBiB)?
+
+Support for the Genome Browser in a Box (GBiB) product **product ended in 2025**. We recommend
+use of the GBiC [dockerfile](/goldenPath/help/mirror.html#docker-installation-instructions) instead.
+The information below is kept for historical purposes.
+
+1.  **Use Genome Browser in a Box**
+
+    [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html) (GBiB):
+    is a fully configured virtual machine that includes
+    Apache and MariaDB, and has behavior identical to the UCSC website.
+    GBiB loads genome data from the UCSC download servers on the fly.
+    Website and data updates are applied automatically every two weeks. By default, GBiB
+    uses the VirtualBox virtualization software, so it can be run on any
+    operating system, Windows, OSX and Linux. It does not require VirtualBox,
+    the virtual machine image can easily be converted to e.g., VMWare or HyperV.
+    For increased privacy, you can download the genomes and
+    annotation tracks you need and use your GBiB off-line even on a laptop.
+
+    * Pros:
+        * Relatively simple to install: download and double-click.
+        * By default, software and data updates are managed remotely by UCSC, via an update script run every week.
+        * Best performance when rendering local BAM/bigWig/bigBed files.
+        * No Unix webserver needed, runs on any OS.
+        * For commercial users: easier click-through licensing compared to a full multi-seat, manual license.
+    * Cons:
+        * Requires the free VirtualBox software or a commercial Virtualization system.
+        * By default requires opening at least three outgoing ports to UCSC for MariaDB, Rsync downloads
+          and BLAT in your firewall. Once all data is downloaded, no open ports are needed.
+        * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.
