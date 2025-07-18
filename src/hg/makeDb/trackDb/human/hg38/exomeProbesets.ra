@@ -256,8 +256,8 @@ compositeTrack on
         track bionano
 	parent exomeProbesets on
 	bigDataUrl /gbdb/hg38/exomeProbesets/hg38_CTTAAG_0kb_0labels.bb
-	shortLabel BioNano DLE-1
-	longLabel BioNao DLE-1 CTTAAG sites
+	shortLabel Bionano DLE-1
+	longLabel Bionano DLE-1 CTTAAG sites
 	type bigBed
-	color 100,255,143
+	color 0,163,108
         release alpha
