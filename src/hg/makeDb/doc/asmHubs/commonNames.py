@@ -65,7 +65,7 @@ def extractNames(asmRpt, hapX):
             pat = re.compile(r'\?')
             sciName = pat.sub(' ', sciName)
 
-            pat = r'kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of'
+            pat = r'bacteria|kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of'
             if re.search(pat, orgName):
               orgName = sciName
             else:
@@ -126,7 +126,7 @@ def extractNames(asmRpt, hapX):
                   orgName = "ant " + words[0][0].upper() + "." + restWords
                 elif re.search("dinoflagellates", orgName):
                   orgName = "dinoflagellates " + words[0][0].upper() + "." + restWords
-                elif re.search("bacteria", orgName):
+                elif re.search("\bbacteria\b", orgName):
                   orgName = "bacteria " + words[0][0].upper() + "." + restWords
                 elif re.search("hemichordates", orgName):
                   orgName = "hemichordates " + words[0][0].upper() + "." + restWords
