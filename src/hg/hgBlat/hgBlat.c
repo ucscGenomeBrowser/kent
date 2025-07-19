@@ -643,7 +643,7 @@ else  // hyperlink
         safef(item, sizeof item, "%s %s %s", pslName,faName,psl->qName);
 
         struct dyString *url = dyStringNew(256);
-        dyStringPrintf(url, "http%s://%s", sameString(getenv("HTTPS"), "on") ? "s" : "", getenv("HTTP_HOST"));
+        dyStringPrintf(url, "http%s://%s", sameOk(getenv("HTTPS"), "on") ? "s" : "", getenv("HTTP_HOST"));
         dyStringPrintf(url, "%s",    hgcUrl+2);
         dyStringPrintf(url, "?o=%d", psl->tStart);
         dyStringPrintf(url, "&t=%d", psl->tEnd);
