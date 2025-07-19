@@ -1255,6 +1255,7 @@ else if (isCustomTrack(table))
             sameWord("bedDetail", type) || 
             sameWord("barChart", type) || 
             sameWord("interact", type) || 
+            sameWord("bedMethyl", type) || 
             sameWord("pgSnp", type))
 	        fieldList = sqlListFields(conn, ct->dbTableName);
 	hFreeConn(&conn);

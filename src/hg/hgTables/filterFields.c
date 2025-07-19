@@ -1140,6 +1140,11 @@ else if (isHicTable(table))
     struct sqlFieldType *ftList = hicListFieldsAndTypes();
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
+else if (isBedMethylTable(table))
+    {
+    struct sqlFieldType *ftList = bedMethylListFieldsAndTypes();
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
 else
     {
     if (ct->fieldCount >= 3)

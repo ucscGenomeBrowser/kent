@@ -910,6 +910,15 @@ void hicMainPageConfig(struct cart *cart, struct trackDb *tdb);
 /* Display Hi-C-specific track configuration options (resolution, normalization) on
  * the main page. */
 
+/* bedMethyl stuff from bedMethyl.c */
+
+boolean isBedMethylTable(char *table);
+/* Return TRUE if table corresponds to a bedMethyl file. */
+
+
+struct sqlFieldType *bedMethylListFieldsAndTypes();
+/* Get fields of bedMethyl as list of sqlFieldType (again, this is really just the list of bedMethyl fields. */
+
 /* VCF (Variant Call Format) stuff from vcf.c */
 
 extern char *vcfDataLineAutoSqlString;

@@ -4,6 +4,7 @@
 #include "chromAlias.h"
 #include "hgConfig.h"
 #include "bigChain.h"
+#include "bigLink.h"
 #include "trackHub.h"
 
 struct highRegions
@@ -16,11 +17,13 @@ long oChromStart;
 long oChromEnd;
 char strand;
 unsigned hexColor;
+char otherBase;
 };
 
 #define INSERT_COLOR     0
 #define DEL_COLOR      1
 #define DOUBLE_COLOR     2
+#define MISMATCH_COLOR     3
 
 static Color *highlightColors;
 static unsigned lengthLimit;
@@ -49,10 +52,11 @@ if (highlightColors == NULL)
     highlightColors[INSERT_COLOR] = getColor("quickLift.insColor","255,0,0,255");
     highlightColors[DEL_COLOR] = getColor("quickLift.delColor","0,255,0,255");
     highlightColors[DOUBLE_COLOR] = getColor("quickLift.doubleColor","0,0,255,255");
+    highlightColors[MISMATCH_COLOR] = getColor("quickLift.mismatchColor","255,0,0,255");
     }
 }
 
-struct highRegions *getQuickLiftLines(char *quickLiftFile, int seqStart, int seqEnd)
+struct highRegions *getQuickLiftLines(char *liftDb, char *quickLiftFile, int seqStart, int seqEnd)
 /* Figure out the highlight regions and cache them. */
 {
 static struct hash *highLightsHash = NULL;
@@ -73,58 +77,118 @@ else
     }
 
 
-char *links = bigChainGetLinkFile(quickLiftFile);
-struct bbiFile *bbi = bigBedFileOpenAlias(links, chromAliasFindAliases);
+struct bbiFile *bbiChain = bigBedFileOpenAlias(quickLiftFile, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
+struct bigBedInterval *bbChain, *bbChainList =  bigBedIntervalQuery(bbiChain, chromName, seqStart, seqEnd, 0, lm);
+char *links = bigChainGetLinkFile(quickLiftFile);
+struct bbiFile *bbiLink = bigBedFileOpenAlias(links, chromAliasFindAliases);
+struct bigBedInterval  *bbLink, *bbLinkList =  bigBedIntervalQuery(bbiLink, chromName, seqStart, seqEnd, 0, lm);
 
-char *bedRow[5];
+char *chainRow[1024];
+char *linkRow[1024];
 char startBuf[16], endBuf[16];
 
-int previousTEnd = -1;
-int previousQEnd = -1;
-for (bb = bbList; bb != NULL; bb = bb->next)
+for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
     {
-    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    int tStart = atoi(bedRow[1]);
-    int tEnd = atoi(bedRow[2]);
-    int qStart = atoi(bedRow[4]);
-    int qEnd = qStart + (tEnd - tStart);
-    struct highRegions *hr;
-    if ((previousTEnd != -1) && (previousTEnd == tStart))
+    bigBedIntervalToRow(bbChain, chromName, startBuf, endBuf, chainRow, ArraySize(chainRow));
+    struct bigChain *bc = bigChainLoad(chainRow);
+
+    int previousTEnd = -1;
+    int previousQEnd = -1;
+    for (bbLink = bbLinkList; bbLink != NULL; bbLink = bbLink->next)
         {
-        AllocVar(hr);
-        slAddHead(&hrList, hr);
-        hr->strand = 
-        hr->chromStart = previousTEnd;
-        hr->chromEnd = tStart;
-        hr->oChromStart = previousQEnd;
-        hr->oChromEnd = qStart;
-        hr->hexColor = highlightColors[DEL_COLOR];
+        bigBedIntervalToRow(bbLink, chromName, startBuf, endBuf, linkRow, ArraySize(linkRow));
+        struct bigLink *bl = bigLinkLoad(linkRow);
+
+        if (!sameString(bl->name, bc->name))
+            continue;
+
+        int tStart = bl->chromStart;
+        int tEnd = bl->chromEnd;
+        int qStart = bl->qStart;
+        int qEnd = qStart + (tEnd - tStart);
+        struct highRegions *hr;
+        if ((previousTEnd != -1) && (previousTEnd == tStart))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+        //    hr->strand = 
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->hexColor = highlightColors[DEL_COLOR];
+            }
+        if ( (previousQEnd != -1) && (previousQEnd == qStart))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->hexColor = highlightColors[INSERT_COLOR];
+            }
+        if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
+             && ((previousTEnd != -1) && (previousTEnd != tStart)))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->hexColor = highlightColors[DOUBLE_COLOR];
+            }
+        previousQEnd = qEnd;
+        previousTEnd = tEnd;
+
+        // crop the chain block if it's bigger than the window
+        int tMin, tMax;
+        int qMin, qMax;
+        tMin = bl->chromStart;
+        tMax = bl->chromEnd;
+        qMin = bl->qStart;
+        if (seqStart > bl->chromStart) 
+            {
+            tMin = seqStart;
+            qMin = qStart + (seqStart - bl->chromStart);
+            }
+        if (seqEnd < bl->chromEnd) 
+            {
+            tMax = seqEnd;
+            }
+        qMax = qMin + (tMax - tMin);
+
+        if (bc->strand[0] == '-')
+            {
+            qMin = bc->qSize - qMax;
+            qMax = qMin + (tMax - tMin);
+            }
+
+        struct dnaSeq *tSeq = hDnaFromSeq(database, chromName, tMin, tMax, dnaUpper);
+        struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
+        if (bc->strand[0] == '-')
+            reverseComplement(qSeq->dna, qSeq->size);
+
+        unsigned tAddr = tMin;
+        unsigned qAddr = qMin;
+        int count = 0;
+        for(; tAddr < tEnd; tAddr++, qAddr++, count++)
+            {
+            if (tSeq->dna[count] != qSeq->dna[count])
+                {
+                AllocVar(hr);
+                slAddHead(&hrList, hr);
+                hr->chromStart = tAddr;
+                hr->chromEnd = tAddr + 1;
+                hr->oChromStart = qAddr;
+                hr->oChromEnd = qAddr + 1;
+                hr->otherBase = qSeq->dna[count];
+                hr->hexColor = highlightColors[MISMATCH_COLOR];
+                }
+            }
         }
-    if ( (previousQEnd != -1) && (previousQEnd == qStart))
-        {
-        AllocVar(hr);
-        slAddHead(&hrList, hr);
-        hr->chromStart = previousTEnd;
-        hr->chromEnd = tStart;
-        hr->oChromStart = previousQEnd;
-        hr->oChromEnd = qStart;
-        hr->hexColor = highlightColors[INSERT_COLOR];
-        }
-    if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
-         && ((previousTEnd != -1) && (previousTEnd != tStart)))
-        {
-        AllocVar(hr);
-        slAddHead(&hrList, hr);
-        hr->chromStart = previousTEnd;
-        hr->chromEnd = tStart;
-        hr->oChromStart = previousQEnd;
-        hr->oChromEnd = qStart;
-        hr->hexColor = highlightColors[DOUBLE_COLOR];
-        }
-    previousQEnd = qEnd;
-    previousTEnd = tEnd;
     }
 
 hashAdd(highLightsHash, quickLiftFile, hrList);
@@ -157,7 +221,8 @@ if (quickLiftFile == NULL)
 boolean drawTriangle = FALSE;
 if (startsWith("quickLiftChain", trackHubSkipHubName(tg->track)))
     drawTriangle = TRUE;
-struct highRegions *regions = getQuickLiftLines(quickLiftFile, seqStart, seqEnd);
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+struct highRegions *regions = getQuickLiftLines(liftDb, quickLiftFile, seqStart, seqEnd);
 struct highRegions *hr = regions;
 
 int fontHeight = mgFontLineHeight(tl.font);
@@ -186,7 +251,9 @@ for(; hr; hr = hr->next)
 
     char mouseOver[4096];
 
-    if (hr->chromStart == hr->chromEnd)
+    if (hr->otherBase != 0)
+        safef(mouseOver, sizeof mouseOver, "mismatch %c", hr->otherBase);
+    else if (hr->chromStart == hr->chromEnd)
         safef(mouseOver, sizeof mouseOver, "deletion %ldbp", hr->oChromStart - hr->oChromStart);
     else
         safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->oChromEnd - hr->oChromStart);

@@ -2642,8 +2642,17 @@ char *hOrganism(char *database)
 /* Return organism associated with database.   use freeMem on
  * this when done. */
 {
+if (database == NULL)
+    return NULL;
 if (sameString(database, "rep"))    /* bypass dbDb if repeat */
     return cloneString("Repeat");
+if (startsWith("GC", database))
+    {
+    struct dbDb *dbDb = genarkLiftOverDb(database);
+    if (dbDb != NULL)
+        return dbDb->genome;
+    }
+
 return hDbDbOptionalField(database, "organism");
 }
 
@@ -2668,6 +2677,14 @@ char *hGenome(char *database)
 /* Return genome associated with database.
  * use freeMem on this when done. */
 {
+if (database == NULL)
+    return NULL;
+if (startsWith("GC", database))
+    {
+    struct dbDb *dbDb = genarkLiftOverDb(database);
+    if (dbDb != NULL)
+        return dbDb->genome;
+    }
 return hDbDbOptionalField(database, "genome");
 }
 

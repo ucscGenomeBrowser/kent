@@ -9,7 +9,7 @@ A = hgTables
 
 T = tstbug.o
 
-O = $A.o asFilter.o bam.o bedList.o bigBed.o bigWig.o \
+O = $A.o asFilter.o bam.o bedList.o bedMethyl.o bigBed.o bigWig.o \
     chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o hal.o hic.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o longRange.o maf.o mainPage.o microarrayTables.o rangeHistogram.o schema.o pal.o \

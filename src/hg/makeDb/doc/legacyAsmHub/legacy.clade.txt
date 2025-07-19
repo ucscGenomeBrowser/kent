@@ -400,6 +400,7 @@ GCA_040954595.1_ASM4095459v1	invertebrate
 GCA_040954625.1_ASM4095462v1	invertebrate
 GCA_042242105.1_fPemKlu1.hap1	fish
 GCA_043159975.1_mMacNem.hap1	primates
+GCA_043250625.1_fSebFas1.pri	fish
 GCA_044704955.1_sPriJap1.hap1	vertebrate
 GCA_047511675.1_mMarFla1.hap1	mammals
 GCA_048164855.1_mCanLup2.hap1	mammals
@@ -457,6 +458,7 @@ GCA_964212035.1_mMyoNat1.hap1.1	mammals
 GCA_964237555.1_mOryCun1.1	mammals
 GCA_964264875.1_mNycLei1.hap1.1	mammals
 GCA_964264895.1_mNycLei1.hap2.1	mammals
+GCA_965140265.1_rLepKem1.hap2	vertebrate
 GCF_000001405.39_GRCh38.p13	primates
 GCF_000001405.40_GRCh38.p14	primates
 GCF_000001635.26_GRCm38.p6	mammals

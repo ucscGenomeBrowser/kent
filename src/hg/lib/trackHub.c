@@ -1527,6 +1527,7 @@ return hubName;
 static char *vettedTracks[] =
 /* tracks that have been tested with quickLift */
 {
+"decipherContainer",
 "decipherSnvs",
 "omimLocation",
 "omimAvSnp",
@@ -1543,6 +1544,8 @@ static char *vettedTracks[] =
 static boolean isVetted(char *track)
 /* Is this a track that's been tested with quickLift?  If not we don't want to do the special name handling on the track. */
 {
+if (startsWith("wgEncodeGencode", track))
+    return TRUE;
 static bool inited = FALSE;
 static struct hash *vettedHash = NULL;
 

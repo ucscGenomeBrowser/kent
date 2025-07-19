@@ -1,0 +1,69 @@
+<h2>Description</h2>
+
+<p>
+Most proteins are composed of one or more conserved functional regions called
+domains. This track shows the high-quality, manually-curated
+<a href="http://pfam.xfam.org" target="_blank">
+Pfam-A</a>
+domains found in transcripts located in the GENCODE Genes track by the software HMMER3.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+This track follows the display conventions for
+<a href="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene
+tracks</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The sequences from the knownGenePep table (see 
+<a href="hgTrackUi?g=knownGene">GENCODE Genes description page</a>)
+are submitted to the set of Pfam-A, HMMs which annotate regions within the
+predicted peptide that are recognizable as Pfam protein domains. These regions
+are then mapped to the transcripts themselves using the
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">
+pslMap utility</a>. A complete shell script log for every version of UCSC genes can be found in 
+our GitHub repository under 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/ucscGenes/">
+hg/makeDb/doc/ucscGenes</a>, e.g. 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/ucscGenes/mm10.ucscGenes17.csh#L1258">
+mm10.knownGenes17.csh</a> is for the database mm10 and version 17 of UCSC known genes.
+</p>
+
+<p>
+Of the several options for filtering out false positives, the &quot;Trusted cutoff (TC)&quot; 
+threshold method is used in this track to determine significance. For more information regarding 
+thresholds and scores, see the HMMER 
+<a href="http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf#page=73"
+target="_blank">documentation</a> and
+<a href="https://hmmer-web-docs.readthedocs.io/en/latest/result.html#profile-hmm-matches"
+target="_blank">results interpretation</a> pages.
+</p>
+
+<p>
+Note: There is currently an undocumented but known HMMER problem that results in lessened 
+sensitivity and possible missed searches for some zinc finger domains. Until a fix is released for 
+HMMER /PFAM thresholds, please also consult the &quot;UniProt Domains&quot; subtrack of the UniProt
+track for more comprehensive zinc finger annotations.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+pslMap was written by Mark Diekhans at UCSC.
+</p>
+
+<h2>References</h2>
+
+<p>
+Finn RD, Mistry J, Tate J, Coggill P, Heger A, Pollington JE, Gavin OL, Gunasekaran P, Ceric G,
+Forslund K <em>et al</em>.
+<a href="https://academic.oup.com/nar/article/38/suppl_1/D211/3112325/The-Pfam-protein-families-
+database" target="_blank">The Pfam protein families database</a>.
+<em>Nucleic Acids Res</em>. 2010 Jan;38(Database issue):D211-22.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19920124" target="_blank">19920124</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2808889/" target="_blank">PMC2808889</a>
+</p>

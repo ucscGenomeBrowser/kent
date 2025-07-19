@@ -732,6 +732,7 @@ if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
 else
     genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	    font, color, vis);
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 char *bedName(struct track *tg, void *item)

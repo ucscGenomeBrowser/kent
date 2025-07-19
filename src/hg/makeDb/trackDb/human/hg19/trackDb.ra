@@ -37,6 +37,11 @@ urlLabel Genomic Mutation ID:
 noScoreFilter on
 dataVersion COSMIC v101
 
+track ucscGenePfam override
+shortLabel Pfam in GENCODE
+longLabel Pfam Domains in GENCODE Genes
+html gencodePfam
+
 # knownGene archive
 include knownGeneArchive.ra
 
@@ -1629,7 +1634,7 @@ noInherit on
 
 track genotypeArrays
 shortLabel Array Probesets
-longLabel Microarray Probesets
+longLabel Microarray Probesets and OGM sites
 compositeTrack on
 group varRep
 visibility hide
@@ -1895,6 +1900,15 @@ configurable off
     urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
+
+    track bionano
+    parent genotypeArrays on
+    bigDataUrl /gbdb/hg19/bionano/hg19_CTTAAG_0kb_0labels.bb
+    shortLabel Bionano DLE-1
+    longLabel Bionano DLE-1 CTTAAG sites
+    type bigBed
+    color 0,163,108
+    release alpha
 
 searchTable snpArrayIllumina450k
 searchMethod exact

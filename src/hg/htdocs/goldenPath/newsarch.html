@@ -64,6 +64,183 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
 
+<a name="071525"></a>
+<h2>July 15, 2025 &nbsp;&nbsp; New pathogenicity prediction scores for human: MutScore and M-CAP</h2>
+<p>
+We have two new pathogenicity prediction score tracks available in our 
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=predictionScoresSuper"
+target="_blank">Deleteriousness Predictions</a> super track.</p>
+<ul>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=mutScore"
+target="_blank">MutScore</a> (hg19/hg38) - MutScore is a pathogenicity predictor that integrates unsupervised 
+features of single DNA variants with information derived from such clusters. The predictive model 
+for MutScore was trained with a random forest approach on medically-relevant mutations and 
+subsequently tested against various genomic databases for both hereditary conditions and 
+cancer (ClinVar, HGMD, and DoCM) to achieve high performance.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=mcap"
+target="_blank">M-CAP</a> (hg19) - M-CAP is a pathogenicity classifier for
+rare missense variants tuned to the high sensitivity required in the clinic. By combining previous
+pathogenicity scores (including SIFT, Polyphen-2 and CADD) with novel features and a powerful
+model, it yields an effective classifier, reducing a typical exome/genome rare (&lt;1%) missense
+variant (VUS) list from 300 to 120, while never mistaking 95% of known pathogenic variants as benign.</li></ul>
+<p>
+See the track description page
+for more information and interpretation guidelines.</p>
+<p>
+We would like to thank the authors of <a href="https://mutscore.iob.ch/"
+target="_blank">MutScore</a> and <a href="http://bejerano.stanford.edu/mcap/"
+target="_blank">M-CAP</a> for creating and providing these data. We would also
+like to thank Max Haeussler and Lou Nassar for the development and release of these tracks.</p>
+
+<a name="071525a"></a>
+<h2>July 15, 2025 &nbsp;&nbsp; ENCODE4 Long-read RNA-seq Transcripts</h2>
+<p>
+We are pleased to announce the release of the ENCODE4 long-read RNA-seq transcripts track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=encode4LongRnaTranscripts"
+target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=encode4LongRnaTranscripts"
+target="_blank">mm10</a>.
+This track annotates trancripts using numerical triplets representing the
+identity of the start site, exon junction chain, and transcript end site of
+each transcript. This is presented alongside sample enrichment information to
+show how promoter selection, splice pattern, and 3’ processing are deployed
+across human tissues.
+</p>
+
+<div class="text-center">
+  <img src="../images/encode4LongReadTranscriptsHelp.png"
+  alt="Screenshot showing ENCODE4 long-read transcripts track">
+</div>
+<p>
+Transcripts are labeled with triplets, e.g. [1,1,1] or [1,1,3] or [2,1,3].
+If transcripts share a number in any of the positions that means they share
+that feature, e.g. sharing a 8 in the second position but different numbers in
+the others means those two transcripts share the same set of exons, but different
+start and end sites.
+</p>
+
+<p>
+This track is part of a &quot;Long-read Transcripts&quot; supertrack that will
+consist of other datasets derived from third-generation sequencing technology,
+such as PacBio and Oxford Nanopore.
+</p>
+
+<a name="070925"></a>
+<h2>July 09, 2025 &nbsp;&nbsp; Unusually Conserved Regions track for hg38</h2>
+<p>
+We are happy to announce the release of the <a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=unusualcons"
+target="_blank">Unusually Conserved Regions</a> track for GRCh38/hg38. The supertrack consists of
+12 tracks that show regions of unusual conservation in humans relative to other organisms. The full
+list of tracks, along with item count and coverage is summarized in the following table:
+</p>
+<p>
+<table class="stdTbl">
+    <tbody><tr>
+        <th>Track</th>
+        <th>Count</th>
+        <th>Coverage in bp</th>
+    </tr>
+    <tr>
+        <td>HAQERS: Human Ancestor Quickly Evolved Regions</td>
+        <td>1,580</td>
+        <td>1,410,669</td>
+    </tr>
+    <tr>
+        <td>HARs: Human Accelerated Regions (HARs) merged from various
+            publications by the Pollard Lab</td>
+        <td>2,647</td>
+        <td>681,420</td>
+    </tr>
+    <tr>
+        <td>Long hConDels: Long Human Conserved Deletions - present in chimp and
+            macaque but deleted in humans</td>
+        <td>583</td>
+        <td>293,809</td>
+    </tr>
+    <tr>
+        <td>Short hConDels: Human Conserved Deletions &lt; 40bp</td>
+        <td>10,032</td>
+        <td>1,968,123</td>
+    </tr>
+    <tr>
+        <td>UCNEBase Chicken - Chicken-conserved elements</td>
+        <td>4,351</td>
+        <td>1,415,142</td>
+    </tr>
+    <tr>
+        <td>UCNEBase Paralogs - Paralogous elements</td>
+        <td>987</td>
+        <td>215,800</td>
+    </tr>
+    <tr>
+        <td>UCNEBase Clusters: Ultra-conserved genomic regulatory blocks</td>
+        <td>239</td>
+        <td>199,269,634</td>
+    </tr>
+    <tr>
+        <td>Ultracons: Ultraconserved regions -
+            100% identical in human, mouse and rat, &gt;200bp</td>
+        <td>481</td>
+        <td>126,007</td>
+    </tr>
+    <tr>
+        <td>UltraZoos: Ultraconserved regions in Zoonomia alignment -
+            100% identical in 235 species, &gt;20bp</td>
+        <td>4,552</td>
+        <td>131,661</td>
+    </tr>
+    <tr>
+        <td>ZooHARs: Human Accelerated Regions (HARs) from Zoonomia alignments</td>
+        <td>312</td>
+        <td>49,173</td>
+    </tr>
+    <tr>
+        <td>Zoonomia RoCCs: Runs of contiguous phyloP constraint</td>
+        <td>595,536</td>
+        <td>26,995,284</td>
+    </tr><tr>
+        <td>Zoonomia UNICORNs: Unannotated Intergenic Constrained Regions</td>
+        <td>423,586</td>
+        <td>16,155,520</td>
+    </tr>
+</tbody></table></p>
+<p>
+We would like to thank Katie Pollard, Hiram Clawson, James Xue, Matt Christmas, Carol Nguyen,
+and Mark Diekhans for providing the data. We would also like to thank Max Haeussler and Jairo
+Navarro for the creation and release of the tracks.
+</p>
+
+<a name="070725"></a>
+<h2>July 7, 2025 &nbsp;&nbsp; UCSC Genome Browser turns 25</h2>
+<p>
+July 7th marks the 25th anniversary of the human genome going online, and the start of the 
+UCSC Genome Browser. Our visualization journey 
+began when Jim Kent wrote the <a href = "https://hgwdev-hiram.gi.ucsc.edu/intronerator/index.html"
+target="_blank">Intronerator</a>, which displayed regions of C. elegans. This was the 
+foundation for the UCSC Genome Browser as we know it now, and decades later, we are 
+proud to continue serving our ever-growing users.<br><br>
+So, how has the Browser evolved over the years?
+</p>
+<ul>
+<li>We now have <b>165k</b> monthly users and <b>1.5M</b> users per year
+<li>The project is now comprised of <b>three million lines of code</b>
+<li>We have responded to over <b>15k</b> mailing questions from our users
+<li>The Genome Browser’s data exchange formats, like bigBed and track hubs, 
+have become industry standards, allowing other software like IGV to build their tooling upon our data
+</ul>
+
+<div class="text-center">
+  <img src="../images/ucscGenomeBrowser2003Database.png" alt="Example screenshot from 2003 UCSC Genome Browser"
+width="50%">
+</div>
+
+<p>
+With user growth each year, the Genome Browser has continued to become more critically 
+important to research with time. A recent <a href="https://www.nature.com/articles/d41586-025-02034-7"
+target="_blank">Nature article</a> shared some examples from 
+users of the Genome Browser for the 25th year anniversary. See our <a href="/goldenPath/history.html"
+target="_blank">history page</a> if you would like to learn more about the project's past.</p>
+
 <a name="062625"></a>
 <h2>June 26, 2025 &nbsp;&nbsp; New Genome Browser tutorials</h2>
 <p>

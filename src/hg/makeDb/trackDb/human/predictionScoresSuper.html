@@ -5,7 +5,7 @@ The "Prediction Scores" container track contains subtracks showing the results o
 scores. Usually these are prediction algorithms that use protein features, conservation, nucleotide composition and similar
 signals to determine if a genome variant is pathogenic or not.</p>
 
-<h3>BayesDel</h3>
+<h3>BayesDel - Only hg19</h3>
 <p>BayesDel is a deleteriousness meta-score for coding and non-coding variants, single nucleotide
 variants, and small insertion/deletions. The range of the score is from -1.29334 to 0.75731.
 The higher the score, the more likely the variant is pathogenic.</p>
@@ -25,7 +25,7 @@ reach various levels of evidence; please refer to Pejaver et al. 2022 for genera
 of these scores in clinical applications.
 </p>
 
-<h3>M-CAP</h3>
+<h3>M-CAP - Only hg19</h3>
 <p>
 <b>Interpretation:</b> The authors define that at an M-CAP score &gt; 0.025, 5% of 
 pathogenic variants are misclassified as benign. 0.025 is the recommended cutoff.
@@ -45,7 +45,7 @@ At an M-CAP score &gt; 0.025, 5% of pathogenic variants are misclassified as ben
 The score varies from 0.0 - 1.0, following a geometric distribution with a mean of 0.09.
 </p>
 
-<h3>MutScore</h3>
+<h3>MutScore - hg38/hg19</h3>
 <p>
 <b>Interpretation:</b> The authors defined the thresholds &lt;0.140 for a variant
 to be benign, and &gt; 0.730 for pathogenic with 95% confidence.</p>

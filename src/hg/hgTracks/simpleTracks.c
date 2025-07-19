@@ -5307,6 +5307,7 @@ else if (vis == tvPack || vis == tvSquish || (vis == tvFull && isTypeBedLike(tg)
 else
     genericDrawItemsFullDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                               font, color, vis);
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
@@ -8129,7 +8130,16 @@ void bedMethylMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 struct bedMethyl *bed = item;
 struct dyString *mouseOver = newDyString(4096);
 
-dyStringPrintf(mouseOver, "Cov %s, %s %% modified, N_mod %s, N_canon %s, N_other %s, N_delete %s, N_fail %s, N_diff %s, N_nocall %s",
+dyStringPrintf(mouseOver,
+    "<b>Valid coverage:</b> %s<br>"
+    "<b>Percent modified:</b> %s%%<br>"
+    "<b>Modified calls:</b> %s<br>"
+    "<b>Canonical calls:</b> %s<br>"
+    "<b>Other modification calls:</b> %s<br>"
+    "<b>Reads with a deletion:</b> %s<br>"
+    "<b>Low-confidence calls:</b> %s<br>"
+    "<b>Reads with a base mismatch:</b> %s<br>"
+    "<b>Reads with no modification call:</b> %s",
 bed->nValidCov, bed->percMod, bed->nMod, bed->nCanon, bed->nOther, bed->nDelete, bed->nFail, bed->nDiff, bed->nNoCall);
 
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,

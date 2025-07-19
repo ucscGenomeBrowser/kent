@@ -401,7 +401,7 @@
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
     the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly,
-    bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig, vcfTabix, or hic.
+    bigInteract, bigMaf, bigPsl, bigGenePred, bigMethyl, bigNarrowPeak, bigWig, vcfTabix, or hic.
     Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -944,7 +944,7 @@
     </pre>
 </DIV>
 
-<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigMethyl bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipEmptyFields on</code><BR>
     </div>
@@ -954,7 +954,7 @@
     fields but only few of them have a value.</P> 
 </DIV>
 
-<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMethyl bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -968,7 +968,7 @@
     </pre>
 </DIV>
 
-<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigMethyl bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>sepFields fieldName1,fieldName2 ...</code><BR>
     </div>
@@ -983,7 +983,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigNarrowPeak bigGenePred"></span>
+<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred"></span>
     <div class="format">
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
@@ -1005,7 +1005,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigNarrowPeak bigGenePred"></span>
+<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred"></span>
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
@@ -1103,6 +1103,16 @@ will be displayed in the custom track.
     <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
 </DIV>
 
+<DIV class="bigMethyl_intro">
+<H3>bigMethyl: Metholated sites</H3>
+    <P>
+    The bigMethyl format stores methylation sights. bigMethyl files are based on the bigBed format.  The first nine fields are the same as bed.  The other nine include various scores.
+
+    bigMethyl files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigMethyl. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigMethyl format definitions please see the
+    <A HREF="../bedMethyl.html#bigMethyl">bigMethyl help page</A>.</P>
+</DIV>
+
 <DIV class="bigNarrowPeak_intro">
 <H3>bigNarrowPeak: Peaks</H3>
     <P>
@@ -1188,8 +1198,8 @@ There are no extra options that can appear on the type bigPsl line.
 
 <DIV class="bigChain"><span class="types bigChain"></span>
 <div class="format">
-    <code>type bigChain</code></div>
-There are no extra options that can appear on the type bigChain line.
+    <code>type bigChain targetDb</code></div>
+You must specify the target database in the type bigChain line.
 </DIV>
 
 <DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>

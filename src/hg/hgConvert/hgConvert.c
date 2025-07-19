@@ -367,11 +367,11 @@ else
         if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath))
             {
             if (quickChain)
-                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
-                   hgTracksName(), toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
+                printf("<A HREF=\"%s?hgsid=%s&db=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
+                   hgTracksName(), cartSessionId(cart), toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
             else
-                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
-		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
+                printf("<A HREF=\"%s?hgsid=%s&db=%s&position=%s:%d-%d\">",
+		   hgTracksName(), cartSessionId(cart), toDb->name, chain->qName, qStart+1, qEnd);
             startedAnchor = TRUE;
             }
         else if (sameString(toDb->nibPath, "genark"))

@@ -74,9 +74,16 @@ else
             {
             // maybe an apiKey was provided, use that instead to look up the userName
             char *apiKey = jsonQueryString(req, "", "Event.Upload.MetaData.apiKey", NULL);
-            userName = userNameForApiKey(apiKey);
-            if (!userName)
+            if (!apiKey)
+                {
                 errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
+                }
+            else
+                {
+                userName = userNameForApiKey(apiKey);
+                if (!userName)
+                    errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
+                }
             }
         fprintf(stderr, "userName='%s'\n'", userName);
         long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
