@@ -108,6 +108,7 @@ the endpoint functions.  For example:
 <p>
 The following data sets can be accessed at this time:
 <ul>
+<li>Find a genome in the UCSC browser with a search string</li>
 <li>List of available public hubs</li>
 <li>List of available UCSC Genome Browser genome assemblies</li>
 <li>List of files available for download for UCSC Browser genome assemblies</li>
@@ -139,11 +140,10 @@ the endpoint functions.  For example:
 </p>
 <p>
 <ul>
+<li><b>/findGenome</b> - search for a genome in the UCSC browser</li>
 <li><b>/list/publicHubs</b> - list public hubs</li>
 <li><b>/list/ucscGenomes</b> - list UCSC Genome Browser database genomes from database host</li>
-<!-- not yet
 <li><b>/list/genarkGenomes</b> - list UCSC Genome Browser database genomes from assembly hub host</li>
--->
 <li><b>/list/hubGenomes</b> - list genomes from specified hub</li>
 <li><b>/list/files</b> - list download files available for specified genome</li>
 <li><b>/list/tracks</b> - list data tracks available in specified hub or database genome
@@ -162,6 +162,8 @@ genome</li>
 <h2>Parameters to endpoint functions</h2>
 <p>
 <ul>
+<li>maxItemsOutput=1000000 - limit number of items to output, default: 1,000,000, maximum limit:
+1,000,000 (use <em>-1</em> to get maximum output)</li>
 <li>hubUrl=&lt;url&gt; - specify track hub or assembly hub URL</li>
 <li>genome=&lt;name&gt; - specify genome assembly in UCSC Genome Browser or track/assembly hub.  Use with with /list/genarkGenomes to test for existence.</li>
 <li>track=&lt;trackName&gt; - specify data track in track/assembly hub or UCSC database genome
@@ -175,11 +177,16 @@ target=_blank>UCSC browser coordinate counting systems</a></li>
 retrieval (start and end required together). See also: <a
  href='https://genome-blog.gi.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/'
 target=_blank>UCSC browser coordinate counting systems</a></li>
-<li>revComp=1 - on <em>/getData/sequence</em> function, return reverse complement of sequence data</li>
-<li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit:
-1,000,000 (use <em>-1</em> to get maximum output)</li>
+<li>q=&lt;search word(s)&gt; - used with <em>/findGenome</em>, a search string</li>
+<li>browser=&lt;mustExist|mayExist|notExist&gt; - used with <em>/findGenome</em>, <em>mustExist</em> result only for assemblies in the UCSC browser, <em>mayExist</em> may exist in the UCSC browser, or may not, <em>notExist</em> not yet available in the browser.  default is <em>mustExist</em> </li>
+<li>statsOnly=1 - on <em>/findGenome</em> function, only show statistics about search result</li>
+<li>year=&lt;2025&gt; - on <em>/findGenome</em> function, only show search result for given year, default is any year</li>
+<li>category=&lt;reference|representative&gt; - on <em>/findGenome</em> function, show search result only for given NCBI category of assembly</li>
+<li>status=&lt;reference|representative&gt; - on <em>/findGenome</em> function, show search result only for given NCBI status of assembly</li>
+<li>level=&lt;complete|chromosome|scaffold|contig&gt; - on <em>/findGenome</em> function, show search result only for given NCBI level of assembly</li>
 <li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show
 composite container information</li>
+<li>revComp=1 - on <em>/getData/sequence</em> function, return reverse complement of sequence data</li>
 <li>jsonOutputArrays=1 - on <em>/getData/track</em> function, JSON format is array type
 for each item of data, instead of the default object type</li>
 <li>format=text - on <em>/list/files</em> function, return plain text listing
@@ -209,6 +216,7 @@ https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM
 <p>
 <table>
 <tr><th>Endpoint function</th><th>Required</th><th>Optional</th></tr>
+<tr><th>/findGenome</th><td>q</td><td>statsOnly, browser, year, category, status, level, maxItemsOutput</td></tr>
 <tr><th>/list/publicHubs</th><td>(none)</td><td>(none)</td></tr>
 <tr><th>/list/ucscGenomes</th><td>(none)</td><td>(none)</td></tr>
 <tr><th>/list/genarkGenomes</th><td>(none)</td><td>genome, maxItemsOutput</td></tr>
@@ -246,6 +254,15 @@ of assembly hubs.
 <p>
 The <b>/list/files</b> endpoint only works for UCSC hosted genome assemblies,
 not for external hosted assembly hubs.
+</p>
+<p>
+The <b>/findGenome</b> endpoint can find genome assemblies in the browser or
+any other assembly available at NCBI even when not in the browser.  Note,
+there are almost 4 million assemblies available at NCBI.  All searches are
+<b>case insensitive</b>.  Force inclusion: Use a + sign before <b>+word</b> to ensure
+it appears in the result.  Exclude words: Use a - sign before <b>-word</b> to
+exclude it from the search result.  Wildcard search: Add an * (asterisk) at
+end of <b>word*</b> to search for all terms starting with that prefix.
 </p>
 <p>
 Any extra parameters not allowed in a function will be flagged as an error.
@@ -332,6 +349,14 @@ the functions of the API interface.
 </p>
 <h3>Listing functions</h3>
 <ol>
+<li><a href='https://api.genome.ucsc.edu/findGenome?q=dog&jsonOutputArrays=1' target=_blank>find any genome with the word 'dog'</a> -
+<b>api.genome.ucsc.edu/findGenome?q=dog</b></li>
+<li><a href='https://api.genome.ucsc.edu/findGenome?q=%2Bwhite%20%2Brhino%2A%20-southern' target=_blank>find any genome matching the search string: '+white +rhino* -southern'</a> -
+<b>api.genome.ucsc.edu/findGenome?q=%2Bwhite%20%2Brhino%2A%20-southern</b></li>
+<li><a href='https://api.genome.ucsc.edu/findGenome?q=GCF_028858775.2' target=_blank>find any genome with the accession id: <b>GCF_028858775.2</b></a> -
+<b>api.genome.ucsc.edu/findGenome?q=GCF_028858775.2</b></li>
+<li><a href='https://api.genome.ucsc.edu/findGenome?q=GRCh38' target=_blank>find any genome with the name: <b>GRCh38</b></a> -
+<b>api.genome.ucsc.edu/findGenome?q=GRCh38</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/publicHubs' target=_blank>list public hubs</a> -
 <b>api.genome.ucsc.edu/list/publicHubs</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/ucscGenomes' target=_blank>list UCSC database genomes</a> -
