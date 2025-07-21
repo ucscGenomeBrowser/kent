@@ -476,6 +476,7 @@ double barNumLabelWidth = estimateStringWidth(" 1234.000");
 double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
+jsInline("var svgTable = true;\n");
 printf("<svg id='svgBarChart' width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 
 /* Draw header */

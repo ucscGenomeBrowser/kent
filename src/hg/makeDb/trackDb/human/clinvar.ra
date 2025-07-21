@@ -31,7 +31,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
         filterType._allTypeCode multiple
         filter._varLen 0
-        skipFields rcvAcc
+        labelFields _label
         filterByRange._varLen on
         filterLimits._varLen 0:49
         filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown,initiator codon variant|initiator codon variant
@@ -39,8 +39,9 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on
-        searchIndex _dbVarSsvId
+        searchIndex _dbVarSsvId,snpId,vcvId
         maxWindowCoverage 10000000
+        decorator.default.bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMainDecor.bb
 
         track clinvarCnv
         parent clinvar
@@ -69,7 +70,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         mergeSpannedItems on
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on
-        searchIndex _dbVarSsvId
+        searchIndex _dbVarSsvId,snpId,vcvId
 
         track clinvarSubLolly
         parent clinvar
@@ -82,6 +83,7 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         lollySizeField 10
         yAxisNumLabels off
         lollyNoStems on
+        configurable off
         skipFields reviewStatus
         yAxisLabel.0 0 on 150,150,150 OTH
         yAxisLabel.1 1 on 150,150,150 B
@@ -100,9 +102,11 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 searchTable clinvarCnv
 searchType bigBed
 searchDescription ClinVar Copy Number Variants 
-termRegex ^[ne]ssv[0-9]+
+termRegex ^([ne]ssv.*)|(rs[0-9]+)|(VCV.*)
+searchMethod prefix
 
 searchTable clinvarMain
 searchType bigBed
-searchDescription ClinVar Copy Number Variants
-termRegex ^[ne]ssv[0-9]+
+searchDescription ClinVar Short Nucleotide Variants
+termRegex ^([ne]ssv.*)|(rs[0-9]+)|(VCV.*)
+searchMethod prefix
