@@ -272,7 +272,7 @@ function initPage() {
     if (typeof doHPRCTable !== "undefined") {
         makeHPRCTable();
     }
-    if ($("#svgTable") !== null) {
+    if (typeof svgTable !== "undefined") {
         // redraw the svg with appropriate widths for all columns
         // swatchWidth and columnSpacer are taken from svgBarChart() in hgc/barChartClick.c
         // they should probably be dynamically determined

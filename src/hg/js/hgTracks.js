@@ -3647,9 +3647,6 @@ var popUpHgcOrHgGene = {
 
         $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ cleanHtml +"</div>");
         appendNonceJsToPage(nonceJs);
-        // if there is anything on the hgc page that would normally run
-        // on document.ready, run it now
-        hgc.initPage();
         let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
         popUpHgcOrHgGene.saveAllVars = getAllVars( $('#hgcDialog'), subtrack );
 
@@ -3720,6 +3717,9 @@ var popUpHgcOrHgGene = {
         // override the _title function to show custom html:
         //$('#hgcDialog').dialog('option' , 'title', titleText);
         $('#hgcDialog').dialog('open');
+        // if there is anything on the hgc page that would normally run
+        // on document.ready, run it now
+        hgc.initPage();
         document.addEventListener('click', e => {
             // if we clicked outside of the pop up, close the popup:
             mouseX = e.clientX;
