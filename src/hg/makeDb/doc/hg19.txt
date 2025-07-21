@@ -35887,3 +35887,10 @@ cd /hive/data/genomes/hg19/bed/mcap/
 wget http://bejerano.stanford.edu/mcap/downloads/dat/mcap_v1_4.txt.gz
 python ~/kent/src/hg/makeDb/scripts/mcap/mcapToBw.py
 rm -f bw/*.bedGraph
+
+
+#########################################################################
+
+# Bionano, max, July 4 2025
+# received files from apang@bionano.com
+# converted to bigBed with standard bedToBigBed

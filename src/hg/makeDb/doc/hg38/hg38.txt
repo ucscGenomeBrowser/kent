@@ -7446,3 +7446,7 @@ ln -s /hive/data/genomes/hg38/bed/mavedb/2025_04_12/all_mave.bb
 
 
 #########################################################################
+
+# Bionano, max, July 4 2025
+# received files from apang@bionano.com
+# converted to bigBed with standard bedToBigBed
