@@ -478,7 +478,6 @@ GCF_000004515.5_Glycine_max_v2.1	plants
 GCF_000004555.1_ASM455v1	invertebrate
 GCF_000004665.1_Callithrix_jacchus-3.2	primates
 GCF_000005975.2_dyak_caf1	invertebrate
-GCF_000006175.1_ASM617v2	archaea
 GCF_000090795.1_v1.0	invertebrate
 GCF_000091225.1_ASM9122v1	fungi
 GCF_000143185.1_v1.0	fungi
