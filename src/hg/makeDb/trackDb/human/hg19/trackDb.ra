@@ -1907,7 +1907,6 @@ configurable off
     shortLabel Bionano DLE-1
     longLabel Bionano DLE-1 CTTAAG sites
     type bigBed
-    release alpha
 
 searchTable snpArrayIllumina450k
 searchMethod exact
