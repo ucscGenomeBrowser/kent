@@ -4,10 +4,11 @@
 <p><span style="font-weight: bold; color: #c70000;">NOTE:</span><br> 
 ClinVar is intended for use primarily by physicians and other
 professionals concerned with genetic disorders, by genetics researchers, and
-by advanced students in science and medicine. While the ClinVar database is
-open to all academic users, users seeking information about a personal medical
-or genetic condition are urged to consult with a qualified physician for
-diagnosis and for answers to personal questions.</p>
+by advanced students in science and medicine. Research data is not easy to interpret, and not
+everything shown is necessarily useful. While the ClinVar
+database is open to all academic users, users seeking information about a
+personal medical or genetic condition are urged to consult with a qualified
+physician for diagnosis and for answers to personal questions.</p>
 </div>
 
 <p>
@@ -18,12 +19,8 @@ of the relationships among human variations and phenotypes, with supporting
 evidence. </p>
 
 <p>
-The <b>ClinVar SNVs track</b> displays substitutions and indels shorter than 50 bp and 
-the <b>ClinVar CNVs track</b> displays copy number variants (CNVs) equal or larger than 50 bp.
-Until October 2017, all variants with the ClinVar types 
-<em>copy number gain/loss</em> and <em>DbVar "nsv" accessions</em> were assigned in the CNV 
-category. Because the ClinVar type no longer captures this information, any variation equal to or 
-larger than 50 bp is now considered a CNV.
+The <b>ClinVar SNVs track</b> displays substitutions and indels shorter than 50 bp, and 
+the <b>ClinVar CNVs track</b> displays copy number variants (CNVs) equal to or larger than 50 bp.
 </p>
 
 <p>
@@ -33,45 +30,24 @@ the ClinVar database.
 </p>
  
 <p>
-<b>Note:</b> The data in the track are obtained directly from ClinVar's FTP site.
+<b>Note on the start position of variants:</b> The data in the track are obtained directly from ClinVar's FTP site.
 We display the data obtained from ClinVar as-is to avoid discrepancies between UCSC and NCBI. 
 However, be aware that the ClinVar conventions are different from the VCF standard. 
 Variants may be right-aligned or may contain additional context, e.g. for
-inserts. ExAC/gnomAD make available <a href="https://github.com/macarthur-lab/clinvar"
-target="_blank">a converter</a>
-to make ClinVar more comparable to VCF files.</p>
+inserts. The VCF position is also available in this track,
+as an additional field, at the end of the list of fields, when you click any variant.
+It can be extracted using our table browser, the API,
+or the bigBedToBed tool (see the Data access section below). 
+And GnomAD has <a href="https://github.com/macarthur-lab/clinvar" target="_blank">a converter</a>.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
 Items can be filtered according to the size of the variant, variant type, clinical significance,
-allele origin, and molecular consequence, using the track <b>Configure</b> options.
+allele origin, phenotype, and molecular consequence, using the track <b>Configure</b> options.
 Each subtrack has separate display controls, as described
 <a href="../../goldenPath/help/multiView.html">here</a>.
-</p>
-
-<p>
-<b>Mouseover</b> on the genomic locations of ClinVar variants shows variant details, clinical 
-interpretation, and associated conditions. Further information on each variant is displayed on 
-the details page by a click onto any variant. ClinVar is an archive for assertions of clinical 
-significance made by the submitters. The level of review supporting the assertion of clinical 
-significance for the variation is reported as the 
-<a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/">review status</a>. 
-<b>Stars</b> (0 to 4) provide a graphical representation of the aggregate review status. 
-</p>
-
-<p>
-Entries in the <b>ClinVar CNVs track</b> are colored by <b>type of variant</b>, among others:
-<ul>
- <li><b><font color="red">red for loss</font></b></li>
- <li><b><font color="blue">blue for gain</font></b></li>
- <li><b><font color="purple">purple for inversion</font></b></li>
- <li><b><font color="orange">orange for insertion</font></b></li>
-</ul>
-A light-to-dark color gradient indicates the <b>clinical significance</b> of each variant, with the 
-lightest shade being benign, to the darkest shade being pathogenic. Detailed information on the 
-CNV color code is described 
-<a href="../../goldenPath/help/hgCnvColoring.html">here</a>. 
 </p>
 
 <p>
@@ -87,7 +63,38 @@ significance</b>:
 </p>
 
 <p>
-The variants in the <b>ClinVar Interpretations track</b> are sorted by the variant 
+Entries in the <b>ClinVar CNVs track</b> are colored by <b>type of variant</b>, among others:
+<ul>
+ <li><b><font color="red">red for loss</font></b></li>
+ <li><b><font color="blue">blue for gain</font></b></li>
+ <li><b><font color="purple">purple for inversion</font></b></li>
+ <li><b><font color="orange">orange for insertion</font></b></li>
+</ul>
+A light-to-dark color gradient indicates the <b>clinical significance</b> of each variant, with the 
+lightest shade being benign to the darkest shade being pathogenic. Detailed information on the 
+CNV color code is described 
+<a href="../../goldenPath/help/hgCnvColoring.html">here</a>. 
+</p>
+
+<p>
+In the ClinVar SNV track, an option to show triangles for protein-truncating mutations is available
+under the Decoration settings, using the <b>Glyph</b> decoration placement option. Triangles can be placed
+using either the Overlay or Adjacent display. Variants with the following molecular consequences
+are considered protein-truncating: nonsense, frameshift variant, splice acceptor variant, and
+splice donor variant.</p>
+
+<p>
+<b>Mouseover</b> on the genomic locations of ClinVar variants shows variant details, clinical 
+interpretation, and associated conditions. Further information on each variant is displayed on 
+the details page by clicking onto any variant. ClinVar is an archive for assertions of clinical 
+significance made by the submitters. The level of review supporting the assertion of clinical 
+significance for the variation is reported as the 
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/">review status</a>. 
+<b>Stars</b> (0 to 4) provide a graphical representation of the aggregate review status. 
+</p>
+
+<p>
+The variants in the <b>ClinVar Interpretations track</b> are arranged from top to bottom by the variant 
 classification of each submission:
 <ul>
  <li><b>P:</b> Pathogenic</li>
@@ -98,18 +105,18 @@ classification of each submission:
  <li><b>OTH:</b> Others</li>
 </ul>
 The size of the bead represents 
-the number of submissions at that genomic position. For track display clarity, these submission
-numbers are binned into three categories:
+the number of submissions at that genomic position. For better readability, the numbers
+are binned into three categories:
 <ul>
  <li><b>Small-sized beads:</b> 1-2 submissions</li>
  <li><b>Medium-sized beads:</b> 3-7 submissions</li>
  <li><b>Large-sized beads:</b> 8 or more submissions</li>
 </ul>
-Hovering on the track items shows the genomic variations which start at that position 
+Hovering on the track items shows the genomic variations that start at that position 
 and the number of individual submissions with that classification. The details page lists all
 rated submissions from ClinVar, with specific details to the interpretation of the clinical or 
 functional significance of each variant in relation to a condition. Interpretation is at 
-variant-level, not at case (or patient-specific) level.
+the variant-level, not at the case (or patient-specific) level.
 </p>
 
 <p>
@@ -118,13 +125,13 @@ More information about using and understanding the ClinVar data can be found
 </p>
 
 <p>
-For the human genome version hg19: the hg19 genome released by UCSC in 2009 had a 
+For the human genome version hg19, the hg19 genome released by UCSC in 2009 had a 
 mitochondrial genome "chrM" that was not the same as the one later used for most
 databases like ClinVar. As a result, we added the official mitochondrial genome
-in 2020 as "chrMT" and all mitochondrial annotations of ClinVar and most other
-databases are shown on the mitochondrial genome called "chrMT". For full description
+in 2020 as "chrMT", and all mitochondrial annotations of ClinVar and most other
+databases are shown on the mitochondrial genome called "chrMT". For a full description
 of the issue of the mitochondrial genome in hg19, please see the 
-<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/">README file</a> 
+<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/">hg19 README file</a> 
 on our download site. 
 </p>
 
@@ -132,9 +139,9 @@ on our download site.
 <h2>Data updates</h2>
 <p>ClinVar publishes a new release on the 
 <a target="_blank"
-href="https://www.ncbi.nlm.nih.gov/feed/rss.cgi?ChanKey=ClinVarNews">first Thursday every month</a>. 
+href="https://www.ncbi.nlm.nih.gov/feed/rss.cgi?ChanKey=ClinVarNews">first Thursday of every month</a>. 
 This track is then updated automatically at most six days 
-later. The exact date of our last update is shown when you click onto any variant. 
+later. The exact date of our last update is shown on the track configuration page. 
 You can find the previous versions of the track organized by month on our
 downloads server in the 
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/clinvar/" target="_blank">archive</a>
@@ -151,15 +158,15 @@ accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>,
 <p>
 For automated download and analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
-The files for this track are called <tt>clinVarMain.bb</tt> and <tt>clinVarCnv.bb</tt>. Individual
-regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/clinvar" target="_blank">our download server</a>.
+The files for this track are called <tt>clinvarMain.bb</tt> and <tt>clinvarCnv.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool
 can also be used to obtain only features within a given range, e.g. 
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/clinvar/clinvarMain.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/clinvar/clinvarMain.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 
 <h2>Methods</h2>
@@ -169,12 +176,13 @@ ClinVar files were reformatted at UCSC to the <a href="../goldenPath/help/bigBed
 The data is updated every month, one week after the ClinVar release date.
 The program that performs the update is available on
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/otto/clinvar/clinVarToBed"
-target="_blank">Github</a>.
+target="_blank">GitHub</a>.
 </p>
 
 <h2>Credits</h2>
 <p>
 Thanks to NCBI for making the ClinVar data available on their FTP site as a tab-separated file.
+If you email them (clinvar@ncbi.nlm.nih.gov), feel free to CC us, it is always good to learn more about ClinVar.
 </p>
 
 <h2>References</h2>
