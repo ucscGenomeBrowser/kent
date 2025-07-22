@@ -57,6 +57,7 @@ my %expectedList = (
  "legacy" => 1,
  "plants" => 1,
  "viral" => 1,
+ "archaea" => 1,
  "bacteria" => 1,
 );
 
@@ -76,6 +77,7 @@ my %titles = (
  "legacy" => "NCBI genomes legacy/superseded by newer versions",
  "plants" => "NCBI plant genomes",
  "viral" => "NCBI virus genomes",
+ "archaea" => "NCBI archaea genomes",
  "bacteria" => "NCBI bacteria genomes",
  "gtexAnalysis" => "Genotype-Tissue Expression (GTEx) Project analysis results track hub, V6 October 2015",
  "gtex" => "Genotype-Tissue Expression (GTEx) RNA-seq signal track hub, V6 October 2015",
@@ -104,6 +106,7 @@ my @orderOutHubs = (
  "fungi",
  "plants",
  "viral",
+ "archaea",
  "bacteria",
  "VGP",
  "CCGP",
@@ -131,6 +134,7 @@ my %indexPage = (
  "legacy" => "index.html",
  "plants" => "index.html",
  "viral" => "index.html",
+ "archaea" => "index.html",
  "bacteria" => "index.html",
  "VGP" => "index.html",
  "CCGP" => "index.html",
@@ -163,7 +167,7 @@ my $genomeCount = `cat $asmListJson | python -mjson.tool | grep -c '"asmId":'`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
-my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'CCGP', 'HPRC', 'BRC', 'globalReference');
+my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'archaea', 'bacteria', 'CCGP', 'HPRC', 'BRC', 'globalReference');
 
 foreach my $hubSet (@checkList) {
   $asmListJson = "/mirrordata/hubs/$hubSet/assemblyList.json";

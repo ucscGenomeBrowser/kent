@@ -25,7 +25,7 @@ sub otherHubLinks($$) {
   my ($vgpIndex, $asmHubName) = @_;
 
 my %asmCounts;	# key is hubName, value is number of assemblies
-my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi viral bacteria);
+my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi viral archaea bacteria);
 foreach my $hubName (@hubList) {
   my $asmCount = `grep -v "^#" ../${hubName}AsmHub/${hubName}.orderList.tsv | wc -l`;
   chomp $asmCount;
@@ -37,6 +37,9 @@ $asmCounts{'vgp'} = $vgpCount;
 my $hprcCount = `grep -c -h -v "^#" ../hprcAsmHub/hprc.orderList.tsv`;
 chomp $hprcCount;
 $asmCounts{'hprc'} = $hprcCount;
+my $brcCount = `grep -c -h -v "^#" ../brcAsmHub/brc.orderList.tsv`;
+chomp $brcCount;
+$asmCounts{'brc'} = $brcCount;
 my $ccgpCount = `grep -c -h -v "^#" ../ccgpAsmHub/ccgp.orderList.tsv`;
 chomp $ccgpCount;
 $asmCounts{'ccgp'} = $ccgpCount;
@@ -63,6 +66,8 @@ if ((0 == $vgpIndex)) {
       printf "<tr><th>Invertebrates</th>\n";
     } elsif ($hubName =~ m/viral/) {
       printf "<tr><th>Viruses</th>\n";
+    } elsif ($hubName =~ m/archaea/) {
+      printf "<tr><th>Archaea</th>\n";
     } elsif ($hubName =~ m/bacteria/) {
       printf "<tr><th>Bacteria</th>\n";
     } else {
@@ -97,6 +102,11 @@ if ((0 == $vgpIndex)) {
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "HPRC", $asmCounts{'hprc'};
   printf "    <th><a href='../HPRC/asmStats.html'>assembly stats</a></th>\n";
   printf "    <th><a href='../HPRC/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
+  printf "<tr><th>BRC - BRC Analytics - Bioinformatics Research Center</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "BRC", $asmCounts{'brc'};
+  printf "    <th><a href='../BRC/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../BRC/trackData.html'>track stats</a></th>\n";
   printf "</tr></thead>\n</table>\n</p>\n";
 } elsif (1 == $vgpIndex) {
   printf "<p>\n<table style='border: 1px solid black;'><thead>\n";
