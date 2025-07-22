@@ -2650,7 +2650,7 @@ if (startsWith("GC", database))
     {
     struct dbDb *dbDb = genarkLiftOverDb(database);
     if (dbDb != NULL)
-        return dbDb->genome;
+        return cloneString(dbDb->genome);
     }
 
 return hDbDbOptionalField(database, "organism");
@@ -2683,7 +2683,7 @@ if (startsWith("GC", database))
     {
     struct dbDb *dbDb = genarkLiftOverDb(database);
     if (dbDb != NULL)
-        return dbDb->genome;
+        return cloneString(dbDb->genome);
     }
 return hDbDbOptionalField(database, "genome");
 }
