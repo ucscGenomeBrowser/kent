@@ -8054,6 +8054,7 @@
 ./runBuild GCF_041464075.1_Sian_SB4e_Nov012A_05_Novo_LR_0 bacteria Lelliottia_nimipressuralis
 ./runBuild GCF_041475515.1_ASM4147551v1 bacteria Tistrella_mobilis
 ./runBuild GCF_041504375.1_ASM4150437v1 bacteria Tistrella_bauzanensis
+./runBuild GCF_041506625.1_ASM4150662v1 bacteria Microcystis_aeruginosa_PCC_7806
 ./runBuild GCF_041508025.1_ASM4150802v1 bacteria Candidatus_Uabimicrobium_helgolandensis
 ./runBuild GCF_041514305.1_ASM4151430v1 bacteria Salinarimonas_chemoclinalis
 ./runBuild GCF_041519305.1_ASM4151930v1 bacteria Streptomyces_luteireticuli
