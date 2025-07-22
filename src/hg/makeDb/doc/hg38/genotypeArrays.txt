@@ -182,3 +182,9 @@ bedToBigBed -sort -as=hg19IlluminaEPIC.as -type=bed12+ -tab /hive/data/outside/i
 ln -s /hive/data/outside/illuminaEPIC2/illuminaEpicMethylationV2Hg19.bb /gbdb/hg19/bbi/illumina/illuminaEPICv2.bb
 
 ######################################
+
+#########################################################################
+
+# Bionano, max, July 4 2025
+# received files from apang@bionano.com
+# converted to bigBed with standard bedToBigBed
