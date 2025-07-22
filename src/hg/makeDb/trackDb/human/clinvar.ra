@@ -42,6 +42,8 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         searchIndex _dbVarSsvId,snpId,vcvId
         maxWindowCoverage 10000000
         decorator.default.bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMainDecor.bb
+        decorator.default.blockMode hide
+        decorator.default.glyphMode hide
 
         track clinvarCnv
         parent clinvar
