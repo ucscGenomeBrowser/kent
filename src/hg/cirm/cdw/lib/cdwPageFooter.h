@@ -12,7 +12,7 @@
     "</div>\n"
     "<div class='col'>\n"
       "<p class='text-muted'>\n"
-      "<a href='https://sspsygene.ucsc.edu/resources/' target='_blank'>SSPsyGene Public Resources Page <i\n"
+      "<a href='https://docs.google.com/spreadsheets/d/1bHH1rKILTXGyWaOxb6RnaaNbRlAzqa_tahEo4sYrFxE/edit?gid=0#gid=0' target='_blank'>SSPsyGene Gene Spreadsheet <i\n"
       "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
       "<a href='https://drive.google.com/drive/folders/1nr5A3MMogKKNrl0TEeNNdiOD3U50Licd?usp=drive_link' target='_blank'>Shared SSPsyGene Folder<i\n"
       "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
@@ -23,6 +23,9 @@
 
     "<div class='col-sm'>\n"
       "<div class='row'>\n"
+        "<p class='text-muted'>\n"
+        "<a href='https://sspsygene.ucsc.edu/resources/' target='_blank'>SSPsyGene Public Resources Page <i\n"
+        "</p>\n"
         "<p class='centered-text col-md-12'>\n"
         "<a href='https://www.facebook.com/nimhgov'\n"
         "target='_blank'><i class='fab fa-facebook-square fa-2x'></i></a>\n"
