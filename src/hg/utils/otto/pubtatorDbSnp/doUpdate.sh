@@ -1,12 +1,12 @@
 #! /bin/zsh -ex
 
-today=$(date +%Y-%m-%d)
 year=$(date +%Y)
 month=$(date +%m)
-final_out_dir=out/${year}/${month}/${today}
+day=$(date +%d)
+final_out_dir=out/${year}/${month}/${day}
 mkdir -p $final_out_dir
 
-LOG_FILE="$final_out_dir/${today}.log"
+LOG_FILE="$final_out_dir/script_output.log"
 
 absolute_log=`readlink -f $LOG_FILE`
 
