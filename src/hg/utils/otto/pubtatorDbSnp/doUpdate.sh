@@ -1,9 +1,12 @@
 #! /bin/zsh -ex
 
-today=$(date +%Y-%m-%d)
-mkdir -p $today
+year=$(date +%Y)
+month=$(date +%m)
+day=$(date +%d)
+final_out_dir=out/${year}/${month}/${day}
+mkdir -p $final_out_dir
 
-LOG_FILE="${today}/script_output.log"
+LOG_FILE="$final_out_dir/script_output.log"
 
 absolute_log=`readlink -f $LOG_FILE`
 
@@ -93,12 +96,12 @@ do
     <(sort -t $'\t' -k4,4 rsids.${db}.bed) \
     <(sort -t $'\t' -k1,1 rs_to_pmid.tsv) |
     awk -F $'\t' '{OFS="\t"; print $2, $3, $4, $1, 0, ".", $3, $4, $NF, $(NF-2), $(NF-1)}' |
-    sort -t $'\t' -k1,1 -k2,2n > $today/track.${db}.bed
+    sort -t $'\t' -k1,1 -k2,2n > $final_out_dir/track.${db}.bed
 
-  /cluster/bin/x86_64/bedToBigBed -as=pubtatorDbSnp.as -type=bed9+2 -tab $today/track.${db}.bed /cluster/data/${db}/chrom.sizes $today/pubtatorDbSnp.${db}.bb
+  /cluster/bin/x86_64/bedToBigBed -as=pubtatorDbSnp.as -type=bed9+2 -tab $final_out_dir/track.${db}.bed /cluster/data/${db}/chrom.sizes $final_out_dir/pubtatorDbSnp.${db}.bb
 
   rm -f /gbdb/${db}/pubs2/pubtatorDbSnp.bb
-  ln -s `readlink -f $today/pubtatorDbSnp.${db}.bb` /gbdb/${db}/pubs2/pubtatorDbSnp.bb
+  ln -s `readlink -f $final_out_dir/pubtatorDbSnp.${db}.bb` /gbdb/${db}/pubs2/pubtatorDbSnp.bb
 
   rm -rf $jobdir
   rm -rf $out_dir
