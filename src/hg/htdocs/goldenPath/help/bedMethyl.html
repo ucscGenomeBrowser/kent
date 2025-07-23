@@ -119,12 +119,9 @@ In this example, you will create a bigMethyl file to display as a custom track.<
   Download the <code>bedToBigBed</code>
   <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utility</a>.</li>
   <li>
-  Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. This
-  file contains the chrom.sizes for the human hg38 assembly.</li>
-  <li>
 Use the <code>bedToBigBed</code> utility to create a bigMethyl file from your sorted bedMethyl file, using
 the <em>bedMethyl.bed</em> file and <em>chrom.sizes</em> files created above. </p>
-<pre><code><strong>bedToBigBed</strong> -as=bigMethyl.as -type=bed9+9 bedMethyl.bed hg38.chrom.sizes bigMethyl.bb</code></pre></li>
+<pre><code><strong>bedToBigBed</strong> -as=bigMethyl.as -type=bed9+9 bedMethyl.bed https://genome.ucsc.edu/goldenPath/help/hg38.chrom.sizes bigMethyl.bb</code></pre></li>
 <p>
   <li>
 Move the newly created bigMethyl file (<em>bigMethyl.bb</em>) to a web-accessible http, https, or
@@ -144,8 +141,8 @@ target="_blank">This link</a> loads the same <em>bigMethyl.bb</em> track and set
 <pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?ignoreCookie=1&db=hg38&position=chr21:5,010,030-5,010,408&hgct_customText=track%20type=bigMethyl%20name=Example %20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMethyl.bb %20visibility=pack</code></pre>
 
 <p>
-If you would like to share your bigMethyl data track with a colleague, learn how to create a URL
-link to your data by looking at <a href="customTrack.html#EXAMPLE6">Example #6</a> on the
+If you would like to share your bigMethyl data track with a colleague, you can learn how to create
+a URL link to your data by looking at <a href="customTrack.html#EXAMPLE6">Example #6</a> on the
 custom track help page.</p>
 
 <a name=extracting_data></a>
