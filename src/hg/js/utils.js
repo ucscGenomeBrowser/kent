@@ -3844,9 +3844,94 @@ var dragReorder = {
             id = a[1];
         }
         if (id.length > 0) {
-            if ( ! imageV2.lastTrack || imageV2.lastTrack.id !== id)
+            if ( ! imageV2.lastTrack || imageV2.lastTrack.id !== id) {
                 imageV2.lastTrack = rightClick.makeMapItem(id);
                 // currentMapItem gets set by mapItemMapOver.   This is just backup
+            }
+
+            if (typeof greyBarIcons !== 'undefined' && greyBarIcons === true) {
+                // add a gear icon over the grey bar to bring up the context menu
+                let tdBtn = document.getElementById("td_btn_" + id);
+                if (tdBtn) {
+                    if (!document.getElementById("gear_btn_" + id)) {
+                        let span = document.createElement("span");
+                        span.id = "gear_btn_" + id;
+                        span.classList.add("hgTracksGearIcon", "ui-icon", "ui-icon-gear");
+                        span.title = "Configure track";
+                        tdBtn.appendChild(span);
+                        tdBtn.style.position = "relative";
+                        span.addEventListener("click", (e) => {
+                            // create a contextmenu event that the imgTbl will pick up
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            const rightClickEvent = new MouseEvent("contextmenu", {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window,
+                                clientX: tdBtn.getBoundingClientRect().left + 15,
+                                clientY: tdBtn.getBoundingClientRect().top,
+                                button: 2,
+                            });
+                            tdBtn.dispatchEvent(rightClickEvent);
+                        });
+                    }
+                }
+
+                // add an 'x' icon in the label area to hide the track
+                let tdSide = document.getElementById("td_side_" + id);
+                if (tdSide) {
+                    // mouseover event fires if you stop moving the mouse while still
+                    // hovering the element and then move it again, don't make
+                    // duplicate btns in that case
+                    if (!document.getElementById("close_btn_" + id)) {
+                        let btn = document.createElement("span");
+                        btn.id = "close_btn_" + id;
+                        btn.classList.add("hgTracksCloseIcon", "ui-icon", "ui-icon-close");
+                        btn.title = "Hide track";
+                        tdSide.appendChild(btn);
+                        tdSide.style.position = "relative";
+                        if (hgTracks && hgTracks.revCmplDisp) {
+                            // set up 'x' icon to the right
+                            btn.classList.add("hgTracksCloseIconRight");
+                        } else {
+                            // set up 'x' icon to the left
+                            btn.classList.add("hgTracksCloseIconLeft");
+                        }
+                        btn.addEventListener("click", (e) => {
+                           rightClick.hideTracks([id]);
+                        });
+                    }
+                }
+            }
+        }
+    },
+
+    trMouseLeave: function(e)
+    {
+        var id = '';
+        var a = /tr_(.*)/.exec($(this).attr('id'));  // voodoo
+        if (a && a[1]) {
+            id = a[1];
+        }
+        if (id.length > 0) {
+            // remove 'x' icon in the label area to hide the track
+            let tdSide = document.getElementById("td_side_" + id);
+            if (tdSide) {
+                let btn = document.getElementById("close_btn_" + id);
+                if (btn) {
+                    btn.remove();
+                }
+            }
+
+            // remove gear icon over the grey bar
+            let tdBtn = document.getElementById("td_btn_" + id);
+            if (tdBtn) {
+                let btn = document.getElementById("gear_btn_" + id);
+                if (btn) {
+                    btn.remove();
+                }
+            }
         }
     },
 
@@ -3920,6 +4005,7 @@ var dragReorder = {
 
         // setup mouse callbacks for the area tags
         $("#imgTbl").find("tr").on("mouseover", dragReorder.trMouseOver );
+        $("#imgTbl").find("tr").on("mouseleave", dragReorder.trMouseLeave );
         $("#imgTbl").find("tr").each( function (i, row) {
             // save the original y positions of each row
             //if (row.id in dragReorder.originalHeights === false) {

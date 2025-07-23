@@ -227,14 +227,14 @@
 				}
 				$c.css( {top:pos.y+"px", left:pos.x+"px", position:"absolute",zIndex:9999} )[cmenu.showTransition](cmenu.showSpeed,((cmenu.showCallback)?function(){cmenu.showCallback.call(cmenu);}:null));
 				cmenu.shown=true;
-				$(document).one('click',null,function(){cmenu.hide()}); // Handle a single click to the document to hide the menu
-                                    $(document).one('keyup', null, function(event){
+                                $(document).one('click',null,function(){cmenu.hide()}); // Handle a single click to the document to hide the menu
+                                $(document).one('keyup', null, function(event){
                                     // hide menu when user presses the escape key
                                     // XXXX This doesn't work on the Mac (we never get any keyup events).
                                     if (event.keyCode == 27) {
                                         cmenu.hide();
                                     }
-				});
+                                });
 			}
 		},
 		

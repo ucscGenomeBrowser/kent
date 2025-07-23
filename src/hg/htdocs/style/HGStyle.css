@@ -1206,3 +1206,36 @@ span.gbSessionChanged {
     padding: 1px;
     height: 18px;
 }
+
+.hgTracksGearIcon {
+    position: absolute !important;
+    top: 4px;
+    left: -25%;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.hgTracksCloseIcon {
+    position: absolute !important;
+    top: 4px;
+    line-height: 16px;
+    vertical-align: top;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    z-index: 10;
+}
+.hgTracksCloseIconLeft {
+    left: 2px;
+}
+
+.hgTracksCloseIconRight {
+    right: 2px;
+}
