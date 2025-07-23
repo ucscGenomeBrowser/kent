@@ -1642,6 +1642,7 @@ noScoreFilter .
 noInherit on
 type bed 3 .
 configurable off
+pennantIcon Updated red ../goldenPath/newsarch.html#072325 "Bionano DLE-1 released July 23, 2025"
 
     track snpArrayAffy6
     parent genotypeArrays
