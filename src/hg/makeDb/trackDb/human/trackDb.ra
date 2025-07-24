@@ -228,7 +228,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025
         parent varsInPubs pack
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOver $name found in ${numPubmedIds} PubMed articles
-        html varsInPubs.html
+        html varsInPubs
 
         track varaico
         shortLabel Varaico Variants
