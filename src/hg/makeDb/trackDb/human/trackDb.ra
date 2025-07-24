@@ -217,7 +217,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025
         html varChat.html
 
         track pubtator
-        shortLabel PubTator variants
+        shortLabel PubTator Variants
         longLabel dbSNP variants and other genetic variants grounded to dbSNP by tmVar; collected by PubTator3
         visibility dense
         type bigBed 9 +
