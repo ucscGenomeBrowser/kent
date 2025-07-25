@@ -1,0 +1,4 @@
+# July 24 2025 - Johannes
+# This is created by an otto script in kent/src/hg/utils/otto/pubtatorDbSnp
+# There's a line in the otto crontab: src/hg/utils/otto/otto.crontab
+# cd /hive/data/outside/otto/pubtatorDbSnp && ./doUpdate.sh
