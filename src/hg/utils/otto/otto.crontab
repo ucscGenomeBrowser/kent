@@ -118,7 +118,9 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 # push out the /gbdb/hubs/GC[AF]/ hierarchy to:
 #  hgwbeta hgw0 hgw1 hgw2 euroNode
 #   There is an equivalent 'pull' script running on the asiaNode
-# 03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
+#    as of 2025-07-24 this script now protects itself from overrunning itself
+#    with a lock file.  It will email when it is doing that.
+03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
 
 #NCBI RefSeq
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
