@@ -732,7 +732,7 @@ if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
   if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
-  export asmSize=`grep -v "^#" \${asmId}_assembly_report.txt | head | cut -f9 | ave stdin | grep total | awk '{printf "%d", \$NF}'`
+  export asmSize=`grep -v "^#" \${asmId}_assembly_report.txt | cut -f9 | ave stdin | grep total | awk '{printf "%d", \$NF}'`
   export longArg=""
   if [ "\$asmSize" -gt 4294967295 ]; then
     longArg="-long"
