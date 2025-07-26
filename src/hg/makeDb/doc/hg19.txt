@@ -33942,7 +33942,6 @@ dos2unix UCSC.txt
 cat UCSC.txt | tawk '{$1="chr"$1; chrom=$1; start=$2; rsId=$3; ref=$4; alt=$5; zygo=$6; gene=$7; genotype=$8; inh=$9; end=$2+length(ref); print chrom, start, end, ref">"alt, "0", ".", start, end, "0,0,0", "1", length(ref), "0", ref, alt, rsId, zygo, gene, genotype, inh;}' | grep -v chrchr > covidMuts.bed
 bedSort covidMuts.bed covidMuts.bed
 bedToBigBed -tab covidMuts.bed ../../chrom.sizes covidMuts.bb -as=../../hg19/bed/covidMuts/covidMuts.as -type=bed12+
-<<<<<<< Updated upstream
 
 #############################################################################
 # gnomAD v2.1.1 update, ChrisL 12-2-2020
@@ -35055,6 +35054,9 @@ ln -s `pwd`/search.hg19.ixx /gbdb/hg19/hgnc/search.ixx
 #######
 #  HGNC   Done (braney 2022-09-07)
 #
+
+# *** PROCESS HAS CHANGE DON"T DO THIS ***
+
 mkdir -p /cluster/data/hg19/bed/hgnc
 cd /cluster/data/hg19/bed/hgnc
 
@@ -35786,6 +35788,9 @@ bedToBigBed -as=bedExample2.as -type=bed9+27 -tab output_non_ssc_final_fixed_tru
 #######
 #  HGNC   Done (galt 2025-04-17)
 #
+
+# *** PROCESS HAS CHANGE DON"T DO THIS ***
+
 #mkdir -p /cluster/data/hg19/bed/hgnc
 cd /cluster/data/hg19/bed/hgnc
 mkdir old2
@@ -35893,9 +35898,43 @@ wget http://bejerano.stanford.edu/mcap/downloads/dat/mcap_v1_4.txt.gz
 python ~/kent/src/hg/makeDb/scripts/mcap/mcapToBw.py
 rm -f bw/*.bedGraph
 
-
 #########################################################################
-
 # Bionano, max, July 4 2025
 # received files from apang@bionano.com
 # converted to bigBed with standard bedToBigBed
+
+#############################################################################
+# HGNC 2025-07-24 markd
+
+Replace previous build method with one to based on GENCODE, RefSeq curated,
+and RefSeq other.  This address various problems dealing with the complexity
+of NCBI gene2accession to find the locations. See #36073.
+
+cd /cluster/data/hg19/bed/hgnc/
+mkdir build.2025-07-24
+cd build.2025-07-24
+
+# hgnc was just download for hg38 from
+# https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt
+# so just link to make sure the versions are the same
+
+ln /cluster/data/hg38/bed/hgnc/build.2025-07-24/hgnc_complete_set.txt .
+
+~/kent/src/hg/makeDb/outside/hgnc/hgncToBigBed hg19 V48lift37 --unmappedTsv=hgnc.unmapped.tsv hgnc_complete_set.txt hgnc.bed hgnc.bb search locus_type.filter.txt
+
+# Note it is expected that there will be unmapped:
+#  - a few protein-coding genes not in the assembly
+#  - pseudogenes and non-coding genes not in GENCODE or RefSeq for unknown reasons
+#  - locus_group `other' types that are not mapped.
+
+# put the files into /gbdb
+mkdir -p /gbdb/hg19/hgnc
+ln -sf $(realpath hgnc.bb search.ix search.ixx) /gbdb/hg19/hgnc/
+
+# double check
+ls -l /gbdb/hg19/hgnc/
+file  /gbdb/hg19/hgnc/*
+
+# if not already done for hg38:
+# edit trackDb/human/trackDb.ra to set filterValues.locus_type
+# from the locus_type.filter.txt file

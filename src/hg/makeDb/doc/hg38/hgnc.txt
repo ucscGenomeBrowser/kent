@@ -154,6 +154,35 @@ rm -rf /gbdb/hg38/hgnc/search.ix /gbdb/hg38/hgnc/search.ixx
 ln -s `pwd`/search.hg38.ix /gbdb/hg38/hgnc/search.ix
 ln -s `pwd`/search.hg38.ixx /gbdb/hg38/hgnc/search.ixx
 
-##################################
+#################################################################################
+2025-07-23:  markd #36073
 
+Replace previous build method with one to based on GENCODE, RefSeq curated,
+and RefSeq other.  This address various problems dealing with the complexity
+of NCBI gene2accession to find the locations. See #36073.
 
+cd /cluster/data/hg38/bed/hgnc/
+mkdir build.2025-07-24
+cd build.2025-07-24
+
+wget -nv https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt
+
+~/kent/src/hg/makeDb/outside/hgnc/hgncToBigBed --unmappedTsv=hgnc.unmapped.tsv hg38 V48 hgnc_complete_set.txt hgnc.bed hgnc.bb search locus_type.filter.txt
+
+# Note it is expected that there will be unmapped:
+#  - a few protein-coding genes not in the assembly
+#  - pseudogenes and non-coding genes not in GENCODE or RefSeq for unknown reasons
+#  - locus_group `other' types that are not mapped.
+
+# put the files into /gbdb
+mkdir -p /gbdb/hg38/hgnc
+ln -sf $(realpath hgnc.bb search.ix search.ixx) /gbdb/hg38/hgnc/
+
+# double check
+ls -l /gbdb/hg38/hgnc/
+file  /gbdb/hg38/hgnc/*
+
+# edit trackDb/human/trackDb.ra to set  filterValues.locus_type
+# from the locus_type.filter.txt file
+
+#################################################################################
