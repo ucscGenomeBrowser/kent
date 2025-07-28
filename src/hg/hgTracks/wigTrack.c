@@ -825,20 +825,24 @@ Color *colorArray = NULL;       /*      Array of pixels to be drawn.    */
  *      is specified also fill in the color array with that.
  */
 AllocArray(colorArray, width);
-for(x1 = 0; x1 < width; ++x1)
-    {
-    int preDrawIndex = x1 + preDrawZero;
-    if (preDraw[preDrawIndex].count)
-	{
-	double dataValue;	/*	the data value in data space	*/
 
-	dataValue = preDraw[preDrawIndex].smooth;
-	/*	negative data is the alternate color	*/
-	if (dataValue < 0.0)
-	    colorArray[x1] = tg->ixAltColor;
-	else
-	    colorArray[x1] = tg->ixColor;
-	}
+if ((colorTrack == NULL) && (colorBigBed == NULL))
+    {
+    for(x1 = 0; x1 < width; ++x1)
+        {
+        int preDrawIndex = x1 + preDrawZero;
+        if (preDraw[preDrawIndex].count)
+            {
+            double dataValue;	/*	the data value in data space	*/
+
+            dataValue = preDraw[preDrawIndex].smooth;
+            /*	negative data is the alternate color	*/
+            if (dataValue < 0.0)
+                colorArray[x1] = tg->ixAltColor;
+            else
+                colorArray[x1] = tg->ixColor;
+            }
+        }
     }
 
 /* Fill in colors from alternate track or bigBed if necessary. */

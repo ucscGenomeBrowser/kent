@@ -201,6 +201,8 @@ shortLabel gnomAD Mut Constraint
 longLabel Gnocchi: Genome Aggregation Database (gnomAD) non-coding constraint of haploinsufficient variation, includes chrX
 bigDataUrl /gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw
 type bigWig
+setColorWith /gbdb/hg38/gnomAD/mutConstraint/mutConstraint.color.bb
+windowingFunction minimum
 altColor 0,150,0
 color 150,0,0
 maxHeightPixels 128:40:8
