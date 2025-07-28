@@ -2536,6 +2536,7 @@
 ./runBuild GCA_049354665.1_calJac220_pri primates Callithrix_jacchus
 ./runBuild GCA_049354675.1_calJac220_alt primates Callithrix_jacchus
 ./runBuild GCA_049354715.1_calJac240_pri primates Callithrix_jacchus
+./runBuild GCA_050655825.1_ASM5065582v1 birds Lonchura_striata
 ./runBuild GCA_050656315.1_RPE1V1.1_Haplotype_2 primates Homo_sapiens
 ./runBuild GCA_050656345.1_RPE1V1.1_Haplotype_1 primates Homo_sapiens
 ./runBuild GCA_900002395.1_PYYM01 invertebrate Plasmodium_yoelii
