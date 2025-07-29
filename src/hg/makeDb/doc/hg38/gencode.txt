@@ -1481,3 +1481,47 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     jkmake DBS=hg38 alpha
 #########################################################################
+2025-07-28: import of UCSC GENCODE group processing of GENCODE V49 pre-release for GENCODE Versions (markd)
+   # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release type and versions
+
+   # pre-release shell variables 
+       ver=49
+       ensver=115
+       pre="Pre"
+       ensdate='July 2025 pre-release' 
+   # release shell variables 
+       ver=49
+       ensver=115
+       pre=""
+       ensdate='May 2025'
+    
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV${ver}/hgcImport${pre}
+    pushd /hive/data/genomes/hg38/bed/gencodeV${ver}/hgcImport${pre}
+
+    (time nice make -O -j 32 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 ${ver} ${ensver} "${ensdate}"
+
+    # edit human/hg38/trackDb.gencode.ra to add new .ra file include
+    # edit all.joiner to add ~/tmp/gencodeV${ver}.joiner
+
+    # if final release, Update 'Release Notes' 
+    #  human/hg38/wgEncodeGencodeSuper.html
+
+    jkmake DBS=hg38
+
+    # check joiner 
+    pushd /hive/data/genomes/hg38/bed/gencodeV${ver}/hgcImport${pre}
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # check tracks in browser sandbox
+    # commit all
+    jkmake DBS=hg38 alpha
+#########################################################################

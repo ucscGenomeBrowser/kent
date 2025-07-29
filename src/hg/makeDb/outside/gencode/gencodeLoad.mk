@@ -32,20 +32,20 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-#preRelease = yes
-preRelease = no
+preRelease = yes
+#preRelease = no
 #db = hg38
 #db = hg19
 db = mm39
 ifeq (${db},mm39)
-    ver = M37
-    prevVer = M36
+    ver = M38
+    prevVer = M37
 else ifeq (${db},hg38)
-    ver = 48
-    prevVer = 47
+    ver = 49
+    prevVer = 48
 else ifeq (${db},hg19)
-    verBase = 48
-    prevVerBase = 47
+    verBase = 49
+    prevVerBase = 48
     ver = ${verBase}lift37
 else
     $(error unimplement genome database: ${db})
