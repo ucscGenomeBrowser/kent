@@ -1,0 +1,210 @@
+track wgEncodeGencodeV49lift37
+compositeTrack on
+superTrack wgEncodeGencodeSuper pack
+shortLabel GENCODE V49lift37
+longLabel GENCODE lifted annotations from V49lift37 (Ensembl 115)
+group genes
+dragAndDrop subTracks
+priority 34.156
+visibility pack
+subGroup1 view View aGenes=Genes bPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA
+allButtonPair on
+sortOrder name=+ view=+
+fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
+type genePred
+configurable off
+wgEncodeGencodeVersion 49lift37
+
+    track wgEncodeGencodeV49lift37ViewGenes
+    shortLabel Genes
+    view aGenes
+    configurable on
+    visibility pack
+    subTrack wgEncodeGencodeV49lift37
+    type genePred
+    idXref wgEncodeGencodeAttrsV49lift37 transcriptId geneId
+    itemClassTbl wgEncodeGencodeAttrsV49lift37
+    itemClassNameColumn transcriptId
+    itemClassClassColumn transcriptClass
+    cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    geneClasses coding nonCoding pseudo problem
+    gClass_coding 12,12,120
+    gClass_nonCoding 0,153,0
+    gClass_pseudo 255,51,255
+    gClass_problem 254,0,0
+    highlightColor 255,255,0
+    # filterBy notes:
+    #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
+    #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code
+    #  - attrs.transcriptType are transcript biotypes.  This will get the current list of values:
+    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsV49lift37 order by transcriptType' hg19
+    #  - tag - is s pseudo-column name for join with the tag table.  This will get the current list of values:
+    #    hgsql -Ne 'select distinct(tag) from wgEncodeGencodeTagV49lift37 order by tag' hg19
+    #  - supportLevel is a pseudo-column name handled in the code
+    filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \
+             transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
+             attrs.transcriptType:Transcript_Biotype=antisense,artifact,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,processed_pseudogene,processed_transcript,protein_coding,protein_coding_CDS_not_defined,protein_coding_LoF,pseudogene,retained_intron,ribozyme,rRNA,rRNA_pseudogene,sense_intronic,sense_overlapping,snoRNA,snRNA,TEC,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene,vault_RNA \
+             tag:Tag=3_nested_supported_extension,3_standard_supported_extension,454_RNA_Seq_supported,5_nested_supported_extension,5_standard_supported_extension,alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_candidate,appris_candidate_longest,appris_principal,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,artifactual_duplication,basic,bicistronic,CAGE_supported_TSS,CCDS,cds_end_NF,cds_start_NF,confirm_experimentally,dotter_confirmed,downstream_ATG,Ensembl_canonical,EnsEMBL_merge_exception,exp_conf,fragmented_locus,fragmented_mixed_strand_locus,GENCODE_Primary,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,MANE_Plus_Clinical,MANE_Select,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,ncRNA_host,nested_454_RNA_Seq_supported,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,overlapping_locus,overlapping_uORF,overlaps_pseudogene,PAR,polymorphic_pseudogene_no_stop,precursor_RNA,pseudo_consens,readthrough_gene,readthrough_transcript,reference_genome_error,retained_intron_CDS,retained_intron_final,retained_intron_first,retrogene,RNA_Seq_supported_only,RNA_Seq_supported_partial,RP_supported_TIS,seleno,Selenoprotein,semi_processed,sequence_error,stop_codon_readthrough,TAGENE,upstream_ATG,upstream_uORF \
+             supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
+    highlightBy transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
+                attrs.transcriptType:Transcript_Biotype=antisense,artifact,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,processed_pseudogene,processed_transcript,protein_coding,protein_coding_CDS_not_defined,protein_coding_LoF,pseudogene,retained_intron,ribozyme,rRNA,rRNA_pseudogene,sense_intronic,sense_overlapping,snoRNA,snRNA,TEC,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene,vault_RNA \
+                tag:Tag=3_nested_supported_extension,3_standard_supported_extension,454_RNA_Seq_supported,5_nested_supported_extension,5_standard_supported_extension,alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_candidate,appris_candidate_longest,appris_principal,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,artifactual_duplication,basic,bicistronic,CAGE_supported_TSS,CCDS,cds_end_NF,cds_start_NF,confirm_experimentally,dotter_confirmed,downstream_ATG,Ensembl_canonical,EnsEMBL_merge_exception,exp_conf,fragmented_locus,fragmented_mixed_strand_locus,GENCODE_Primary,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,MANE_Plus_Clinical,MANE_Select,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,ncRNA_host,nested_454_RNA_Seq_supported,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,overlapping_locus,overlapping_uORF,overlaps_pseudogene,PAR,polymorphic_pseudogene_no_stop,precursor_RNA,pseudo_consens,readthrough_gene,readthrough_transcript,reference_genome_error,retained_intron_CDS,retained_intron_final,retained_intron_first,retrogene,RNA_Seq_supported_only,RNA_Seq_supported_partial,RP_supported_TIS,seleno,Selenoprotein,semi_processed,sequence_error,stop_codon_readthrough,TAGENE,upstream_ATG,upstream_uORF \
+                supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
+
+        track wgEncodeGencodeBasicV49lift37
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeV49lift37ViewGenes on
+        shortLabel Basic
+        subGroups view=aGenes name=Basic
+        longLabel Basic Gene Annotation Set from GENCODE Version 49lift37 (Ensembl 115)
+        type genePred
+        priority 1
+
+        track wgEncodeGencodeCompV49lift37
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeV49lift37ViewGenes off
+        subGroups view=aGenes name=Comprehensive
+        shortLabel Comprehensive
+        longLabel Comprehensive Gene Annotation Set from GENCODE Version 49lift37 (Ensembl 115)
+        type genePred
+        priority 2
+
+        track wgEncodeGencodePseudoGeneV49lift37
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeV49lift37ViewGenes on
+        subGroups view=aGenes name=Pseudogenes
+        shortLabel Pseudogenes
+        longLabel Pseudogene Annotation Set from GENCODE Version 49lift37 (Ensembl 115)
+        type genePred
+        color 255,51,255
+        priority 3
+
+# searches for basic
+searchName wgEncodeGencodeBasicV49lift37
+searchTable wgEncodeGencodeBasicV49lift37
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9._]+
+searchPriority 2.24801
+
+searchName wgEncodeGencodeBasicGeneSymV49lift37
+searchTable wgEncodeGencodeBasicV49lift37
+searchMethod exact
+searchType genePred
+searchPriority 2.24802
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeBasicGeneV49lift37
+searchTable wgEncodeGencodeBasicV49lift37
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9._]+
+searchPriority 2.24803
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaTranscriptV49lift37
+searchTable wgEncodeGencodeBasicV49lift37
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9._]+
+searchPriority 2.24804
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaGeneV49lift37
+searchTable wgEncodeGencodeBasicV49lift37
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9._]+
+searchPriority 2.24806
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searches for comp
+searchName wgEncodeGencodeCompV49lift37
+searchTable wgEncodeGencodeCompV49lift37
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9._]+
+searchPriority 2.24808
+
+searchName wgEncodeGencodeCompGeneSymV49lift37
+searchTable wgEncodeGencodeCompV49lift37
+searchMethod exact
+searchType genePred
+searchPriority 2.24809
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeCompGeneV49lift37
+searchTable wgEncodeGencodeCompV49lift37
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9._]+
+searchPriority 2.24810
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaTranscriptV49lift37
+searchTable wgEncodeGencodeCompV49lift37
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9._]+
+searchPriority 2.24811
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaGeneV49lift37
+searchTable wgEncodeGencodeCompV49lift37
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9._]+
+searchPriority 2.24812
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searches for pseudogene
+searchName wgEncodeGencodePseudoGeneV49lift37
+searchTable wgEncodeGencodePseudoGeneV49lift37
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9._]+
+searchPriority 2.24814
+
+searchName wgEncodeGencodePseudoGeneGeneSymV49lift37
+searchTable wgEncodeGencodePseudoGeneV49lift37
+searchMethod exact
+searchType genePred
+searchPriority 2.24815
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodePseudoGeneGeneV49lift37
+searchTable wgEncodeGencodePseudoGeneV49lift37
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9._]+
+searchPriority 2.24816
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaTranscriptV49lift37
+searchTable wgEncodeGencodePseudoGeneV49lift37
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9._]+
+searchPriority 2.24817
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaGeneV49lift37
+searchTable wgEncodeGencodePseudoGeneV49lift37
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9._]+
+searchPriority 2.24818
+xrefTable wgEncodeGencodeAttrsV49lift37
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
