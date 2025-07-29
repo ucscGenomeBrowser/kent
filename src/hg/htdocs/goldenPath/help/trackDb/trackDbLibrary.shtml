@@ -2850,7 +2850,10 @@ that identifies the reference sequence.
     <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py"
     target="_blank">previously used script</a> for a method on how to
     generate this file based on score thresholds, colors, and an
-    input bigWig track.</p>
+    input bigWig track. It is recommended to use
+    <code>windowingFunction minimum</code> alongside this setting
+    in order to prevent confusing coloring when items are averaged
+    at zoomed out levels.</p>
     <P><B>Example:</B></P>
     <pre>   setColorWith url or relative path </pre>
 </DIV>
