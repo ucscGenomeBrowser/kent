@@ -7,7 +7,7 @@ parent spliceImpactSuper on
 type bigBed 9 +
 visibility dense
 tableBrowser off
-dataVersion Illumina SpliceAI Score v1.3
+dataVersion Illumina SpliceAI Score v1.3 (August 22, 2024)
 
     track spliceAIsnvs
     type bigBed 9 +
