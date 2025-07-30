@@ -1,5 +1,17 @@
 #!/bin/bash
 
+#############################################################################
+###  This source is from the source tree:
+###     ~/kent/src/hg/utils/otto/genArk/devList.sh
+###  do *not* edit this in the otto directory /hive/data/inside/GenArk/pushRR/
+###  where this is used.
+###  Running as the otto cron job:
+###  58 20 * * * /hive/data/inside/GenArk/pushRR/devList.sh
+###
+###  This script takes about 90 minutes to run as of 2025-07-30
+###
+#############################################################################
+
 set -beEu -o pipefail
 
 export DS=`date "+%F"`
