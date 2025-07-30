@@ -6,6 +6,11 @@
 ###    script running.  They are a listing of files in /gbdb/genark/GC[AF]/
 ###    with the 'mtime' - last modified time.  This time will be compared
 ###    to decide if anything needs to go out.
+###
+###  This source is from the source tree:
+###     ~/kent/src/hg/utils/otto/genArk/quickPush.pl
+###  do *not* edit this in the otto directory /hive/data/inside/GenArk/pushRR/
+###  where this is used.
 #############################################################################
 
 use strict;
@@ -224,7 +229,7 @@ my %hgw1List;	# key is file name, value is mtime == last modified time
 my %hgw1Accession;	# key is an assembly 'accession' found on hgw1, value
 			# is the 'mtime' of the hub.txt file on hgw1
 # this list only has /hub.txt files and /contrib/ files
-open ($fh, "-|", "zegrep '/contrib/|hub.txt' hgw1.todayList.gz | grep -v GCA_019395325.1") or die "can not read hgw1.todayList.gz";
+open ($fh, "-|", "zegrep '/contrib/|hub.txt' hgw1.todayList.gz") or die "can not read hgw1.todayList.gz";
 while (my $line = <$fh>) {
   chomp $line;
   my ($mtime, $fileName) = split('\t', $line);
@@ -256,7 +261,7 @@ printf $lf "### %d assemblies on hgw1 not on hgwdev - ERROR should not be presen
 
 my %betaList;	# key is file name, value is mtime == last modified time
 # this list only has /hub.txt files and /contrib/ files
-open ($fh, "-|", "zegrep '/contrib/|hub.txt' hgwbeta.todayList.gz | grep -v GCA_019395325.1") or die "can not read hgwbeta.todayList.gz";
+open ($fh, "-|", "zegrep '/contrib/|hub.txt' hgwbeta.todayList.gz") or die "can not read hgwbeta.todayList.gz";
 while (my $line = <$fh>) {
   chomp $line;
   my ($mtime, $fileName) = split('\t', $line);
