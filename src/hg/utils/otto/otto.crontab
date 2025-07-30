@@ -114,6 +114,9 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 # the script itself sends email for notices about activity
 37 10 * * 2 /hive/data/inside/GenArk/updateHgcentral.sh makeItSo
 
+##### this script is making a listing that is used in the pushRR.sh script
+58 20 * * * /hive/data/inside/GenArk/pushRR/devList.sh
+
 ##### see also, in the source tree: src/hg/utils/otto/genArk/pushRR/README.txt
 # push out the /gbdb/hubs/GC[AF]/ hierarchy to:
 #  hgwbeta hgw0 hgw1 hgw2 euroNode
