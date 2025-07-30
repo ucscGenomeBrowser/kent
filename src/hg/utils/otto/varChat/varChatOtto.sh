@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -o pipefile
+set -e -o pipefail
 
 cd /hive/data/outside/otto/varChat
 
