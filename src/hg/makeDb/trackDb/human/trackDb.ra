@@ -5550,7 +5550,7 @@ type bigBed 9 +
 labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
 defaultLabelFields symbol
 mouseOver Symbol:$symbol; $name, Alias symbol: $alias_symbol; Previous symbols:$prev_symbol
-filterValues.locus_type Y RNA, long non-coding RNA, micro RNA, misc RNA, ribosomal RNA, small nuclear RNA, small nucleolar RNA, transfer RNA, vault RNA, T cell receptor gene, T cell receptor pseudogene, complex locus constituent, endogenous retrovirus, gene with protein product, immunoglobulin gene, immunoglobulin pseudogene, pseudogene, readthrough, unknown
+filterValues.locus_type Y RNA,long non-coding RNA,micro RNA,misc RNA,ribosomal RNA,small nuclear RNA,small nucleolar RNA,transfer RNA,vault RNA,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,pseudogene,readthrough,unknown
 group genes
 searchIndex name
 searchTrix /gbdb/$D/hgnc/search.ix

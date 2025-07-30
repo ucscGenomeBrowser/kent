@@ -337,8 +337,8 @@ def writeLocusTypeFilter(hgncBeds, locusTypeFilter):
         else:
             otherTypes.add(hgncBed.locus_type)
 
-    filterVal = (", ".join(sorted(rnaTypes)) + ", " +
-                 ", ".join(sorted(otherTypes)))
+    filterVal = (",".join(sorted(rnaTypes)) + "," +
+                 ",".join(sorted(otherTypes)))
     with open(locusTypeFilter, 'w') as fh:
         print(filterVal, file=fh)
 
