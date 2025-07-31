@@ -53,6 +53,14 @@ char *getDataDir(char *userName);
 char *stripDataDir(char *fname, char *userName);
 /* Strips the getDataDir(userName) off of fname */
 
+char *swapDataDir(char *userName, char *in);
+/* Try replacing the current dataDir with what is defined in hg.conf:tusdMountPoint as
+ * the data server may be somewhere else and mounted over NFS. In this case, when
+ * tusd saves files, it is writing it's local tusdDataDir value into the hgcentral
+ * file location. When the CGI running somewhere else needs to verify file existence,
+ * the tusdDataDir won't exist on the CGI filesystem, but will instead be mounted as some
+ * different path.  In this case, replace tusdDataDir with tusdMountPoint */
+
 char *prefixUserFile(char *userName, char *fname, char *parentDir);
 /* Allocate a new string that contains the full per-user path to fname. return NULL if
  * we cannot construct a full path because of a realpath(3) failure.

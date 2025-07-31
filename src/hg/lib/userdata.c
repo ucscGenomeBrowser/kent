@@ -68,9 +68,17 @@ if (tusdDataBaseDir[0] != '/')
     errAbort("config setting tusdDataDir must be an absolute path (starting with '/')");
 
 // the tusdDataBaseDir may be a symlink, so canonicalize it, but do not include
-// the userName part since it may not exist yet:
+// the userName part since it may not exist yet.
 char *canonicalPath = needMem(PATH_MAX);
-realpath(tusdDataBaseDir, canonicalPath);
+char *retValue = realpath(tusdDataBaseDir, canonicalPath);
+if (!retValue)
+    {
+    // realpath returned NULL, check if we need to swap with a mounted filesystem
+    char *swapped = swapDataDir(userName, tusdDataBaseDir);
+    retValue = realpath(swapped, canonicalPath);
+    if (!retValue)
+        errAbort("cannot resolve tusdDataDir nor tusdMountPoint");
+    }
 
 char *encUserName = cgiEncode(userName);
 char *userPrefix = md5HexForString(encUserName);
@@ -93,33 +101,30 @@ char *getDataDir(char *userName)
 if (!dataDir)
     setDataDir(userName);
 
+return dataDir;
+}
+
+char *swapDataDir(char *userName, char *in)
+/* Try replacing the current dataDir with what is defined in hg.conf:tusdMountPoint as
+ * the data server may be somewhere else and mounted over NFS. In this case, when
+ * tusd saves files, it is writing it's local tusdDataDir value into the hgcentral
+ * file location. When the CGI running somewhere else needs to verify file existence,
+ * the tusdDataDir won't exist on the CGI filesystem, but will instead be mounted as some
+ * different path.  In this case, replace tusdDataDir with tusdMountPoint */
+{
+char *ret = cloneString(in);
+char *tusdDataDir = cfgOption("tusdDataDir");
 char *tusdMountPoint = cfgOption("tusdMountPoint");
 if (tusdMountPoint && !isEmpty(tusdMountPoint))
     {
-    // the data server may be somewhere else and mounted over NFS. In this
-    // case, when tusd saves files, it is writing it's local tusdDataDir
-    // value into the hgcentral file location. When the CGI running somewhere
-    // else needs to verify file existence, the tusdDataDir won't exist on the
-    // CGI filesystem, but will instead be mounted as some different path.
-    // In this case, replace tusdDataDir with tusdMountPoint
-    char *tusdDataDir = cfgOption("tusdDataDir");
-    char *canonicalPath = needMem(PATH_MAX);
-    if (!startsWith(tusdDataDir, dataDir))
-        {
-        // could be a symlink
-        realpath(tusdDataDir, canonicalPath);
-        }
-    else
-        canonicalPath = tusdDataDir;
-    strSwapStrs(dataDir, strlen(dataDir), canonicalPath, tusdMountPoint);
+    replaceChars(ret, tusdDataDir, tusdMountPoint);
     }
-return dataDir;
+return ret;
 }
 
 char *stripDataDir(char *fname, char *userName)
 /* Strips the getDataDir(userName) off of fname. The dataDir may be a symbolic
- * link, we will resolve it here. NOTE that this relies on
- * calling realpath(3) on the fname argument prior to calling stripDataDir() */
+ * link, or on a different filesystem. */
 {
 getDataDir(userName);
 if (!dataDir)
@@ -132,6 +137,14 @@ if (startsWith(dataDir, fname))
     {
     char *ret = fname + prefixSize;
     return ret;
+    }
+// may be calling from a different server than the files are actually
+// residing, try swapping with hg.conf values
+char *mountedFilePath = swapDataDir(userName, fname);
+if (startsWith(dataDir, mountedFilePath))
+    {
+    int prefixSize = strlen(dataDir);
+    return mountedFilePath + prefixSize;
     }
 return NULL;
 }
