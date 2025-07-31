@@ -1,5 +1,21 @@
 #!/bin/bash
 
+#############################################################################
+###  This source is from the source tree:
+###     ~/kent/src/hg/utils/otto/genArk/pushRR.sh
+###  do *not* edit this in the otto directory /hive/data/inside/GenArk/pushRR/
+###  where this is used.
+###
+###  running in otto user crontab:
+###  03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
+###
+###  Expects to have listings made before this from other cron jobs:
+###  -rw-r--r-- 1 5727305 Jul 30 10:33 hgwbeta.todayList.gz
+###  -rw-r--r-- 1 6237612 Jul 30 11:03 hgw1.todayList.gz
+###  -rw-r--r-- 1 6562130 Jul 30 22:28 dev.todayList.gz
+###
+#############################################################################
+
 # exit on any error
 set -beEu -o pipefail
 
@@ -44,25 +60,16 @@ mkdir -p "${logDir}"
 
 logFile="${logDir}/rsync.pushRR.${DS}"
 
-for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
-do
-  DS=`date "+%F"`
-  TS=`date "+%T"`
-  printf "### sending GCA %s %s to machine %s\n" "${DS}" "${TS}" "${M}" >> "${logFile}"
-  time (rsync --delete --stats -a -L --itemize-changes --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="contrib/" "/gbdb/genark/GCA/" "qateam@${M}:/gbdb/genark/GCA/") >> "${logFile}" 2>&1
-  DS=`date "+%F"`
-  TS=`date "+%T"`
-  printf "### sending GCF %s %s to machine %s\n" "${DS}" "${TS}" "${M}" >> "${logFile}"
-  time (rsync --delete --stats -a -L --itemize-changes --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="contrib/" "/gbdb/genark/GCF/" "qateam@${M}:/gbdb/genark/GCF/") >> "${logFile}" 2>&1
-done
+time (${TOP}/pushNewOnes.sh) >> "${logFile}" 2>&1
 
 DS=`date "+%F"`
 TS=`date "+%T"`
-printf "### running alphaBetaPush %s %s \n" "${DS}" "${TS}" >> "${logFile}"
-time (./alphaBetaPush.pl)  >> "${logFile}" 2>&1
+printf "### running quickPush.pl %s %s \n" "${DS}" "${TS}" >> "${logFile}"
+printf "### the log for quickPush.pl will be in %s/quickBetaPublic...\n" "${logDir}" >> "${logFile}"
+time (${TOP}/quickPush.pl) >> "${logFile}" 2>&1
 DS=`date "+%F"`
 TS=`date "+%T"`
-printf "### finished alphaBetaPush %s %s \n" "${DS}" "${TS}" >> "${logFile}"
+printf "### finished quickPush.pl %s %s \n" "${DS}" "${TS}" >> "${logFile}"
 gzip "${logFile}"
 
 rm lockFile.txt
