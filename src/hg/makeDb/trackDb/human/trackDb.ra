@@ -5557,7 +5557,7 @@ searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
 itemRgb on
 noScoreFilter on
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated May 5, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated July 31, 2025"
 
 searchTable hgnc
 searchMethod exact
