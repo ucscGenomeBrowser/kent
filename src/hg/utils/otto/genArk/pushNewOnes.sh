@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#############################################################################
+###  This source is from the source tree:
+###     ~/kent/src/hg/utils/otto/genArk/pushNewOnes.sh
+###  do *not* edit this in the otto directory /hive/data/inside/GenArk/pushRR/
+###  where this is used.
+#############################################################################
+
 # exit on any error
 set -beEu -o pipefail
 
@@ -54,10 +61,23 @@ if [ "${onDevNotHgw1}" -gt 0 ]; then
 comm -23 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort) \
    <(zgrep "/hub.txt" hgw1.todayList.gz | cut -f2 | sort) \
      | sed -e 's#/hub.txt##;' | while read P
-do
-   sendTo "${P}"
+do	# make sure it really is a valid directory path
+   validCount=`echo "${P}" | awk -F'/' '{print NF}'`
+   if [ "${validCount}" -gt 4 ]; then
+      if [ -d "/gbdb/genark/${P}" ]; then	# and it really is a directory
+        sendTo "${P}"
+      else
+        printf "ERROR: invalid directory path '/gbdb/genark/${P}'\n" 1>&2
+        exit 255
+      fi
+   else
+      printf "ERROR: invalid directory path '${P}'\n" 1>&2
+      exit 255
+   fi
 done
 
 else
   printf "# nothing to push, all up to date.\n" 1>&2
 fi
+
+printf "### finished pushNewOnes.sh %s\n" "`date '+%F %T'`" 1>&2
