@@ -159,7 +159,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#052125 "Updated May 21, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Variants Aug. 01, 2025"
 
         track mastermind
         shortLabel Mastermind Variants
