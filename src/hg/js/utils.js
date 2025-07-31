@@ -3860,6 +3860,7 @@ var dragReorder = {
                         span.title = "Configure track";
                         tdBtn.appendChild(span);
                         tdBtn.style.position = "relative";
+                        addMouseover(span, span.title);
                         span.addEventListener("click", (e) => {
                             // create a contextmenu event that the imgTbl will pick up
                             e.preventDefault();
@@ -3890,6 +3891,7 @@ var dragReorder = {
                         btn.classList.add("hgTracksCloseIcon", "ui-icon", "ui-icon-close");
                         btn.title = "Hide track";
                         tdSide.appendChild(btn);
+                        addMouseover(btn, btn.title);
                         tdSide.style.position = "relative";
                         if (hgTracks && hgTracks.revCmplDisp) {
                             // set up 'x' icon to the right
