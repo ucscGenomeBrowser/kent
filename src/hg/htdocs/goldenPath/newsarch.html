@@ -64,6 +64,40 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
 
+<a name="073125"></a>
+<h2>July 31, 2025 &nbsp;&nbsp; New bedMethyl and bigMethyl track type</h2>
+<p>
+We are excited to announce support for a new track format for visualizing DNA
+methylation data:
+<a href="https://www.encodeproject.org/data-standards/wgbs/" target="_blank">bedMethyl</a>.
+This format, and its binary-indexed counterpart, <b>bigMethyl</b>, is designed to
+represent methylation calls from bisulfite sequencing or similar methods at single-base resolution
+across the genome.</p>
+<p>
+The <a href="help/bedMethyl.html" target="_blank">bedMethyl</a> format extends the standard 
+<a href="/FAQ/FAQformat.html#format1" target="_blank">BED 9 format</a> to include additional fields
+such as coverage, percent methylation, and the number of modified and canonical bases. When viewed
+in the Genome Browser, hovering over or clicking an item reveals these additional details. Items are
+color-coded from <b><font color="#0000FF">0%</font></b> methylated (blue) to
+<b><font color="#FF0000">100%</font></b> (red). Methylation calls are shown separately for CpG sites
+(<b>m</b>) and non-CpG (CHG/CHH) sites (<b>h</b>).
+</p>
+<p class="text-center">
+<img "1080" height="148" src="../../images/bedMethylEx.jpg">
+</p>
+<p>
+The <a href="help/bedMethyl.html#bigMethyl" target="_blank">bigMethyl</a>
+format allows fast access to large methylation datasets and is ideal for displaying
+these tracks at scale in the Genome Browser.</p>
+<p>
+For more information, see the
+<a href="help/bedMethyl.html" target="_blank">bedMethyl and bigMethyl Track Format</a> help page.
+</p>
+<p>
+We would like to thank Brian Joseph Raney, Max Haeussler, and Gerardo Perez for their work
+developing and testing this track format.</p>
+ 
+</p>
 <a name="072325"></a>
 <h2>July 23, 2025 &nbsp;&nbsp; Bionano DLE-1 CTTAAG sites for human, hg38 and hg19</h2>
 <p>

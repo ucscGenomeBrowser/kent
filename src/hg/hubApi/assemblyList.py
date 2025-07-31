@@ -39,6 +39,55 @@ def set_utf8_encoding():
         sys.stderr = open(sys.stderr.fileno(), mode='w', encoding='utf-8', buffering=1)
 
 ####################################################################
+### add aliases to description when they are not there yet
+####################################################################
+def addAliases(browserName, aliasData, descr):
+    description = descr
+    if browserName in aliasData:
+        aliasList = aliasData[browserName]
+        descriptionSetLc = set(word.lower() for word in description.split())
+        for alias in aliasList:
+            if alias.lower() not in descriptionSetLc:
+                descriptionSetLc.add(alias.lower())
+                description += " " + alias
+    return description
+
+####################################################################
+### reading hgcentral.asmAlias table
+####################################################################
+def asmAliasData():
+    # Run the MySQL command and capture the output as bytes
+    result = subprocess.run(
+        ["hgsql", "-hgenome-centdb", "-N", "-e", "SELECT alias,browser FROM asmAlias;", "hgcentral"],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    if result.returncode != 0:
+        print(f"Error executing MySQL command: {result.stderr.decode('utf-8')}")
+        exit(1)
+    # Decode the output from bytes to string using utf-8
+    decoded = result.stdout.decode('latin-1')
+    # Split the data into lines (rows)
+    rows = decoded.strip().split('\n')
+
+    aliasData = {}
+
+    aliasCount = 0
+    browserCount = 0
+
+    for row in rows:
+        columns = row.split('\t')	# Split each row into columns
+        alias = columns[0]
+        browser = columns[1]
+        if browser not in aliasData:
+            aliasData[browser] = []
+            browserCount += 1
+        aliasData[browser].append(alias)
+        aliasCount += 1
+
+    print(f"# counted {aliasCount} aliases for {browserCount} 'browsers'")
+    return aliasData
+
+####################################################################
 ### reading hgcentral.dbDb table
 ####################################################################
 def dbDbData():
@@ -522,7 +571,7 @@ def establishPriorities(dbDb, genArk):
     #    of each name
     for item in dbDb:
         dbDbName = item['name']
-        splitMatch = re.match("([a-zA-Z]+)(\d+)", dbDbName)
+        splitMatch = re.match(r"([a-zA-Z]+)(\d+)", dbDbName)
         if splitMatch:
             allDbDbNames[dbDbName] = splitMatch.group(2)
             itemCount += 1
@@ -660,7 +709,7 @@ def establishPriorities(dbDb, genArk):
     for item in dbDb:
         dbDbName = item['name']
         if dbDbName not in allPriorities:
-            splitMatch = re.match("([a-zA-Z]+)(\d+)", dbDbName)
+            splitMatch = re.match(r"([a-zA-Z]+)(\d+)", dbDbName)
             if splitMatch:
                 noVersion = splitMatch.group(1)
                 version = allDbDbNames[dbDbName]
@@ -739,6 +788,7 @@ def main():
     # Get the dbDb.hgcentral table data
     rawData = dbDbData()
     dbDbItems = processDbDbData(rawData, dbDbClades, dbDbYears, dbDbNcbi)
+    aliasData = asmAliasData()
 
     # read the GenArk data from hgdownload into a list of dictionaries
     genArkUrl = "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt"
@@ -800,6 +850,8 @@ def main():
               assemblyLevel = stat['assemblyLevel'].lower()
             if gcAccession not in description:
               description += " " + gcAccession
+        ### add alias names to description if they are not already there
+        description = addAliases(dbDbName, aliasData, description)
 
         descr = f"{entry['sourceName']} {entry['taxId']} {description}"
         if year not in organism and year not in descr:
@@ -829,6 +881,8 @@ def main():
         descr = f"{entry['asmName']} {entry['taxId']}"
         if year not in commonName and year not in descr:
             descr = f"{entry['asmName']} {entry['taxId']} {year}"
+        ### add alias names to description if they are not already there
+        descr = addAliases(gcAccession, aliasData, descr)
         description = re.sub(r'\s+', ' ', descr).strip()
         refSeqCategory = entry['refSeqCategory'].lower()
         versionStatus = entry['versionStatus'].lower()
@@ -858,6 +912,8 @@ def main():
         descr = f"{asmName} {entry['taxId']} {entry['other']}"
         if year not in commonName and year not in descr:
             descr = f"{asmName} {entry['taxId']} {entry['other']} {year}"
+        ### add alias names to description if they are not already there
+        descr = addAliases(gcAccession, aliasData, descr)
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
         fileOut.write(outLine)
