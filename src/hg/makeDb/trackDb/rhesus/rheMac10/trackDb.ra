@@ -44,3 +44,4 @@ longLabel Variants from The Macaque Genotype And Phenotype Resource (mGAP)
 visibility dense
 bigDataUrl /gbdb/rheMac10/mgap/mGAP.Rhesus_macaque.vcf.gz
 group varRep
+pennantIcon New red /goldenPath/newsarch.html "Released Aug. 01, 2025"
