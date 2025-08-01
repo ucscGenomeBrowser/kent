@@ -285,7 +285,11 @@ static void doConvert(char *fromPos)
 struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
 
 if (fromDb == NULL)
-    fromDb =  genarkLiftOverDbs(database);
+    {
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "'%s'", trackHubSkipHubName(database));
+    fromDb =  genarkLiftOverDbs(buffer);
+    }
 if (toDb == NULL)
     toDb =  genarkLiftOverDb(cartString(cart, HGLFT_TODB_VAR));
 
@@ -447,7 +451,7 @@ else
     {
     struct liftOverChain *checkLiftOverList = liftOverChainListForDbFiltered(trackHubSkipHubName(database));
     struct liftOverChain *liftOverList = cleanLiftOverList(checkLiftOverList);
-    struct liftOverChain *choice = defaultChoices(liftOverList, organism, database);
+    struct liftOverChain *choice = defaultChoices(liftOverList, organism, trackHubSkipHubName(database));
     if (choice == NULL)
 	errAbort("Sorry, no conversions available from this assembly.");
     struct dbDb *dbList, *fromDb, *toDb;
