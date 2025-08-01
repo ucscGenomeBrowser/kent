@@ -383,6 +383,13 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
 	$defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority,
            $hugeGenome);
 
+  ### make the hub.txt and public.hub.txt identical times for the otto push
+  ### job detection so it won't be pushing public.hub.txt just because it
+  ### it has a different mtime from the hub.txt.  This singleFile.hub.txt
+  ### becomes the 'hub.txt' on hgdownload and in /gbdb/ and that file is
+  ### identical to public.hub.txt
+  `touch -r "$buildDir/${asmId}.singleFile.hub.txt" "$buildDir/public.hub.txt"`;
+
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
   printf GF "genome %s\n", $accessionId;

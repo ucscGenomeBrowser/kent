@@ -2,17 +2,23 @@
 
 set -beEu -o pipefail
 
-export gcxName=$1
-export asmId=$2
-export clade=$3
-export sciName=$4
-### !!! the 'clade' is obsolete and is unused anywhere.  It is passed around
-### because it used to be a requirement for the gateway page script, but it
-### it isn't used there either
+export LANG=C
+export asmId=$1
+export clade=$2
+export sciName=$3
+### the 'clade' is used to establish specific options for the build
 
-export asmHubName=$clade
+### start seconds
+export startT=`date "+%s"`
 
-export rmskSpecies="${sciName}"
+export bigHub="hgwdev"
+export smallHub="hgwdev"
+export fileServer="hgwdev"
+export workHorse="hgwdev"
+# export bigHub="ku"
+# export smallHub="ku"
+
+export rmskSpecies="xy"
 
 ### This ucscNames decision needs to be an automatic process since
 ### some browsers have been built with ucscNames and other have not.
@@ -23,60 +29,81 @@ export augustusSpecies="-augustusSpecies=human"
 
 export ncbiRmsk="-ncbiRmsk"
 export noRmsk=""
+export RMSK=""
 export subGroup="vertebrate_other"
+
+# sleep 5 to 25 seconds to avoid the ssh overload of a bunch of jobs
+# all starting at the same time.
+export sleepTime=$((RANDOM % 21 + 5))
+sleep "${sleepTime}"
 
 if [ "${clade}" = "primates" ]; then
   subGroup="vertebrate_mammalian"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "mammals" ]; then
   subGroup="vertebrate_mammalian"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "fishes" ]; then
   subGroup="vertebrate_other"
   augustusSpecies="-augustusSpecies=zebrafish"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "fish" ]; then
   subGroup="vertebrate_other"
   augustusSpecies="-augustusSpecies=zebrafish"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "birds" ]; then
   subGroup="vertebrate_other"
   augustusSpecies="-augustusSpecies=chicken"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "vertebrate" ]; then
   subGroup="vertebrate_other"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "invertebrate" ]; then
   subGroup="invertebrate"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "invertebrates" ]; then
   subGroup="invertebrate"
 elif [ "${clade}" = "fungi" ]; then
   subGroup="fungi"
   augustusSpecies="-augustusSpecies=saccharomyces"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
 elif [ "${clade}" = "plants" ]; then
   subGroup="plants"
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   augustusSpecies="-augustusSpecies=arabidopsis"
 elif [ "${clade}" = "vertebrate_mammalian" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="vertebrate_mammalian"
 elif [ "${clade}" = "vertebrate_other" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="vertebrate_other"
 elif [ "${clade}" = "nematode" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="invertebrate"
-  asmHubName="invertebrate"
   augustusSpecies="-augustusSpecies=caenorhabditis"
 elif [ "${clade}" = "drosophila" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="invertebrate"
-  asmHubName="invertebrate"
   augustusSpecies="-augustusSpecies=fly"
 elif [ "${clade}" = "Amellifera" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="invertebrate"
-  asmHubName="invertebrate"
   augustusSpecies="-augustusSpecies=honeybee1"
 elif [ "${clade}" = "Agambiae" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="invertebrate"
-  asmHubName="invertebrate"
   augustusSpecies="-augustusSpecies=culex"
 elif [ "${clade}" = "Scerevisiae" ]; then
+  rmskSpecies=`/hive/data/genomes/asmHubs/allBuild/rmCheck/findTaxon.pl "${sciName}" 2> /dev/null`
   subGroup="fungi"
-  asmHubName="fungi"
   augustusSpecies="-augustusSpecies=saccharomyces"
 elif [ "${clade}" = "viral" ]; then
   subGroup="viral"
   rmskSpecies="viruses"
+  augustusSpecies="-noAugustus -noXenoRefSeq"
+elif [ "${clade}" = "archaea" ]; then
+  subGroup="archaea"
+  noRmsk="-noRmsk"
   augustusSpecies="-noAugustus -noXenoRefSeq"
 elif [ "${clade}" = "bacteria" ]; then
   subGroup="bacteria"
@@ -87,7 +114,48 @@ else
   exit 255
 fi
 
+if [ "${rmskSpecies}" = "xy" ]; then
+    noRmsk="-noRmsk"
+elif [ "x${rmskSpecies}y" = "xy" ]; then
+  export RMSK="-runRepeatModeler"
+  printf "# rmskSpecies: $sciName NOT FOUND, running RepeatModeler\n" 1>&2
+else
+  printf "# rmskSpecies: $sciName -> $rmskSpecies\n" 1>&2
+  RMSK='-rmskSpecies="'"${rmskSpecies}"'"'
+#  RMSK='-runRepeatModeler -rmskSpecies="'"${rmskSpecies}"'"'
+fi
+
 export stepStart="download"
+## export stepStart="sequence"
+## export stepStart="gatewayPage"
+## export stepStart="chromAlias"
+## export stepStart="cytoBand"
+## export stepStart="repeatModeler"
+## export stepStart="repeatMasker"
+## export stepStart="simpleRepeat"
+## export stepStart="allGaps"
+## export stepStart="windowMasker"
+## export stepStart="addMask"
+## export stepStart="gapOverlap"
+## export stepStart="tandemDups"
+## export stepStart="cpgIslands"
+## export stepStart="ncbiGene"
+## export stepStart="ncbiRefSeq"
+## export stepStart="xenoRefGene"
+## export stepStart="augustus"
+## export stepStart="trackDb"
+
+## export stepEnd="gatewayPage"
+## export stepEnd="chromAlias"
+## export stepEnd="repeatModeler"
+## export stepEnd="repeatMasker"
+### export stepEnd="ncbiRefSeq"
+## export stepEnd="gatewayPage"
+## export stepEnd="addMask"
+## export stepEnd="ncbiGene"
+### export stepEnd="ncbiRefSeq"
+### export stepStart="trackDb"
+## export stepEnd="windowMasker"
 export stepEnd="trackDb"
 
 # download, sequence, assemblyGap, gatewayPage, cytoBand, gc5Base,
@@ -100,19 +168,19 @@ export TOP0="/hive/data/genomes/asmHubs"
 export TOP="/hive/data/genomes/asmHubs/allBuild"
 cd $TOP
 
-export gcPrefix=`echo $gcxName | cut -c1-3`
+export gcX="${asmId:0:3}"
 export topBuild="genbankBuild"
 export genbankRefseq="genbank"
-if [ "${gcPrefix}" = "GCF" ]; then
+if [ "${gcX}" = "GCF" ]; then
   topBuild="refseqBuild"
   genbankRefseq="refseq"
 fi
 
-export gc0=`echo $gcxName | cut -c5-7`
-export gc1=`echo $gcxName | cut -c8-10`
-export gc2=`echo $gcxName | cut -c11-13`
+export d0="${asmId:4:3}"
+export d1="${asmId:7:3}"
+export d2="${asmId:10:3}"
 
-export buildDir=`printf "%s/%s/%s/%s/%s/%s" "${TOP0}/${topBuild}" "${gcPrefix}" "${gc0}" "${gc1}" "${gc2}" "${asmId}"`
+export buildDir=`printf "%s/%s/%s/%s/%s/%s" "${TOP0}/${topBuild}" "${gcX}" "${d0}" "${d1}" "${d2}" "${asmId}"`
 
 export linkDir=`printf "%s/%s/%s/%s" "${linkTop}" "${genbankRefseq}" "${subGroup}" "${sciName}"`
 
@@ -120,12 +188,12 @@ if [ -d "${buildDir}" ]; then
 #  printf "# removing: %s\n" "${buildDir}" 1>&2
 #  rm -fr "${buildDir}"
   if [ -s "${buildDir}/${asmId}.trackDb.txt" ]; then
-     printf "# Already done $gcxName\n"
-     printf "# Already done $gcxName\n" 1>&2
-     exit 0
+     printf "# Already done $asmId\n"
+     printf "# Already done $asmId\n" 1>&2
+##     exit 0
   fi
-  printf "# partially done $gcxName\n"
-  printf "# partially done $gcxName\n" 1>&2
+  printf "# partially done $asmId\n"
+  printf "# partially done $asmId\n" 1>&2
 fi
 
 mkdir -p ${TOP0}/${topBuild}/buildLogs/${subGroup}
@@ -138,6 +206,7 @@ if [ ! -d "${linkDir}" ]; then
   mkdir -p "${linkDir}"
 fi
 if [ ! -L "${linkDir}/${asmId}" ]; then
+  printf "@ ln -s \"${buildDir}\" \"${linkDir}\"\n" 1>&2
   ln -s "${buildDir}" "${linkDir}"
 fi
 ls -d "${buildDir}" "${linkDir}/${asmId}"
@@ -150,17 +219,76 @@ echo "/hive/data/genomes/asmHubs/${genbankRefseq}Build/doIdKeys \"${asmId}\" &" 
 
 echo "### \$HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
   -continue=\"${stepStart}\" -stop=\"${stepEnd}\" \
-    -rmskSpecies=\"${rmskSpecies}\" -bigClusterHub=ku -buildDir=\`pwd\` \
-      -asmHubName=$asmHubName -fileServer=hgwdev -smallClusterHub=hgwdev \
-        ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=hgwdev \"${asmId}\"" >> "${logFile}"
+    ${RMSK} -bigClusterHub="${bigHub}" -buildDir=\`pwd\` \
+      -fileServer=${fileServer} -smallClusterHub=${smallHub} \
+        ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=${workHorse} \"${asmId}\"" >> "${logFile}"
 
 cd "${buildDir}"
 if [ ! -s "${buildDir}/build.log" ]; then
+  symLinkPath=`readlink "${buildDir}/build.log" || true`
+  if [ "x${symLinkPath}y" != "xy" ]; then	# empty symLink
+     rm -f "${buildDir}/build.log"
+  fi
   ln -s "${logFile}" "${buildDir}/build.log"
 fi
 
 time ($HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
   -continue="${stepStart}" -stop="${stepEnd}" \
-    -rmskSpecies="${rmskSpecies}" -bigClusterHub=ku -buildDir=`pwd` \
-      -asmHubName=$asmHubName -fileServer=hgwdev -smallClusterHub=hgwdev \
-        ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=hgwdev "${asmId}") >> "${logFile}" 2>&1
+    ${RMSK} -bigClusterHub="${bigHub}" -buildDir=`pwd` \
+      -fileServer=${fileServer} -smallClusterHub=${smallHub} \
+        ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} -workhorse=${workHorse} "${asmId}") >> "${logFile}" 2>&1
+
+export docDir="$HOME/kent/src/hg/makeDb/doc/asmHubs"
+export userName="`whoami`"
+export runCmd="./runBuild $asmId $clade $sciName"
+
+export lockFile="/hive/data/genomes/asmHubs/allBuild/docLock"
+touch $lockFile
+
+# one at a time only to append to this file
+if [ -d "${docDir}" ]; then
+  # establish lock
+  exec 200<$lockFile
+  flock -x 200 || exit 255
+
+  printf "%s\n" "${runCmd}" >> "$docDir/genArk.done.list"
+
+  sleep 10
+
+  # release lock
+  exec 200>&-
+
+fi
+
+### end seconds
+export endT=`date "+%s"`
+
+### Send completion message:
+printf "To: $userName
+Reply-to: $userName
+Return-path: $userName
+Subject: genArk build done: $asmId
+
+##################################################################
+
+$runCmd
+
+  (runBuild)
+
+" > /tmp/send.txt.$$
+
+### show elapsed time
+printf "%s\t%s\n" "${endT}" "${startT}" | awk -F$'\t' '{
+seconds=$1-$2
+hours=int(seconds/3600)
+minutes=int((seconds-(hours*3600))/60)
+s=seconds % 60
+printf "### elapsed time: %02dh %02dm %02ds\n\n", hours, minutes, s
+}' >> /tmp/send.txt.$$
+
+date >> /tmp/send.txt.$$
+printf "##################################################################\n" >> /tmp/send.txt.$$
+
+# cat /tmp/send.txt.$$ | /usr/sbin/sendmail -t -oi
+
+rm -f /tmp/send.txt.$$
