@@ -283,7 +283,7 @@ mafToBigMaf $tDb $tDb.$qDb.rbestNet.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.rbestNet.txt
 bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
   $targetSizes $tDb.$qDb.rbestNet.bb
-hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.rbestNet.summary \\
+hgLoadMafSummary.v483 -minSeqSize=1 -test $tDb $tDb.$qDb.rbestNet.summary \\
         $tDb.$qDb.rbestNet.maf.gz
 cut -f2- $tDb.$qDb.rbestNet.summary.tab | sort -k1,1 -k2,2n \\
         > $tDb.$qDb.rbestNet.summary.bed
