@@ -228,6 +228,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         parent varsInPubs pack
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOver $name found in ${numPubmedIds} PubMed articles
+        pennantIcon New red ../goldenPath/newsarch.html#080125 "Released Aug. 01, 2025"
         html varsInPubs
 
         track varaico
@@ -243,7 +244,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $pmidCount <br> <b>Variant Effect:</b> $variantEffect
-        pennantIcon New red ../goldenPath/newsarch.html#052125 "Released May 21, 2025"
         html varaico.html
 
 track caseControl
