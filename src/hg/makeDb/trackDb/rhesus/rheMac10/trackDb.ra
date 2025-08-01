@@ -39,7 +39,8 @@ maxWindowToDraw 1000000
 
 track mgap
 type vcfTabix
-shortLabel mGAP VCF
-longLabel mGAP VCF - Variants from The Macaque Genotype And Phenotype Resource 
+shortLabel mGAP Variants
+longLabel Variants from The Macaque Genotype And Phenotype Resource (mGAP)
 visibility dense
 bigDataUrl /gbdb/rheMac10/mgap/mGAP.Rhesus_macaque.vcf.gz
+group varRep
