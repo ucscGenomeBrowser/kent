@@ -1084,7 +1084,7 @@ mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
 bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab \\
   $tDb.$qDb.net.txt  $defVars{SEQ1_LEN} $tDb.$qDb.net.bb
-hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.net.summary \\
+hgLoadMafSummary.v483 -minSeqSize=1 -test $tDb $tDb.$qDb.net.summary \\
   $tDb.$qDb.net.maf.gz
 cut -f2- $tDb.$qDb.net.summary.tab | sort -k1,1 -k2,2n \\
   > $tDb.$qDb.net.summary.bed
@@ -1900,7 +1900,7 @@ if (\$lineCount > 0) then
     | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
   bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\
     $defVars{SEQ1_LEN} $tDb.$qDb.synNet.bb
-  hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.synNet.summary \\
+  hgLoadMafSummary.v483 -minSeqSize=1 -test $tDb $tDb.$qDb.synNet.summary \\
         ../axtChain/$tDb.$qDb.synNet.maf.gz
   cut -f2- $tDb.$qDb.synNet.summary.tab | sort -k1,1 -k2,2n \\
         > $tDb.$qDb.synNet.summary.bed
