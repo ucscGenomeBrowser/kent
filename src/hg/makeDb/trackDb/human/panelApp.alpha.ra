@@ -71,7 +71,7 @@ showCfg on
     type bigBed 9 +
     visibility pack
     bigDataUrl /gbdb/$D/panelApp/genesAus.bb
-    url https://panelapp-aus.org//panels/$<panelID>/gene/$<geneSymbol>/
+    url https://panelapp-aus.org/panels/$<panelID>/gene/$<geneSymbol>/
     urlLabel Link to PanelApp Australia
     urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp-aus.org/panels/$$/" geneSymbol="https://panelapp-aus.org/panels/entities/$$"
     mouseOver <b>Gene:</b> $entityName<br><b>Panel:</b> $panelName<br><b>MOI:</b> $modeOfInheritance<br><b>Phenotypes: </b> $phenotypes<br><b>Confidence level:</b> $confidenceLevel
