@@ -1,13 +1,25 @@
 <h2>Description</h2>
 
-The Macaque Genotype and Phenotype Resource (mGAP) provides reference population-level short variant data for rhesus macaques. The current dataset was generated from ~4,000 rhesus macaques, primarily derived from the NIH National Primate Research Center (NPRC) colonies, although other colonies are represented. These are outbred, genetically diverse populations.
+The Macaque Genotype and Phenotype Resource (mGAP) provides reference population-level short variant
+data for rhesus macaques. The current dataset was generated from ~4,000 rhesus macaques, primarily
+derived from the NIH National Primate Research Center (NPRC) colonies, although other colonies are
+represented. These are outbred, genetically diverse populations.
 
 <p>
-This track contains the ~130 million high-quality short variants (SNVs and INDELs), generated from whole genome and whole exome data. Samples were jointly called to ensure each sample was genotyped for all loci. This track omits sample-level genotypes; however, the complete dataset with genotypes is available to browse or download from  <a href="http://www.mgap.ohsu.edu/" target="_blank">https://mgap.ohsu.edu</a>. Allele frequency and other annotations are provided.
+This track contains the ~130 million high-quality short variants (SNVs and INDELs), generated from
+whole genome and whole exome data. Samples were jointly called to ensure each sample was genotyped
+for all loci. This track omits sample-level genotypes; however, the complete dataset with genotypes
+is available to browse or download from  <a href="https://mgap.ohsu.edu/"
+target="_blank">https://mgap.ohsu.edu</a>. Allele frequency and other annotations are provided.
 </p>
 
 <p>
-One of the unique features of the mGAP dataset is that most samples are derived from captive macaques housed within the NIH NPRC system. As such, these animals have lifelong health records and usually come from a genetically validated pedigree. If a variant of interest is identified in the mGAP dataset, it is often possible to identify specific macaques harboring that variant and interrogate other data that exists on these animals. <a href="http://www.mgap.ohsu.edu/">The mGAP website contains additional search features for these data</a>.
+One of the unique features of the mGAP dataset is that most samples are derived from captive
+macaques housed within the NIH NPRC system. As such, these animals have lifelong health records and
+usually come from a genetically validated pedigree. If a variant of interest is identified in the
+mGAP dataset, it is often possible to identify specific macaques harboring that variant and
+interrogate other data that exists on these animals. <a href="https://mgap.ohsu.edu/"
+target="_blank">The mGAP website contains additional search features for these data</a>.
 </p>
 
 <p>
@@ -17,16 +29,29 @@ Email <a href="mailto:mgap@ohsu.edu">mgap@ohsu.edu</a> with any questions.
 
 <h2>Methods</h2>
 
-Sequence reads are aligned to the Mmul10 (rheMac10) genomic assembly. Variant calling is performed using a modified version of the Broad Institute <a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels" target="_blank">GATK SNP and Indel Discovery Best Practices</a>, adapted for macaques. Raw variant calls are subjected to fairly strict quality filtering approach, validated using Mendelian violations and other analyses to identify regions of the macaque genome with systematic errors in short read alignment or genotype calling.
+<p>
+Sequence reads are aligned to the Mmul10 (rheMac10) genomic assembly. Variant calling is performed
+using a modified version of the Broad Institute
+<a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels"
+target="_blank">GATK SNP and Indel Discovery Best Practices</a>, adapted for macaques. Raw variant
+calls are subjected to fairly strict quality filtering approach, validated using Mendelian
+violations and other analyses to identify regions of the macaque genome with systematic errors in
+short read alignment or genotype calling.</p>
 
-<p />
-
-Annotation takes place in two phases. First, variants are annotated according to their predicted consequence on protein coding. Second, a pipeline is run that maps macaque variants to the human genome and applies a panel of annotations. <a href="https://mgap.ohsu.edu/mGAP/mgap-annotation.view">Please see the mGAP website for more detail</a> (requires user registration).
+<p>
+Annotation takes place in two phases. First, variants are annotated according to their predicted
+consequence on protein coding. Second, a pipeline is run that maps macaque variants to the human
+genome and applies a panel of annotations.
+<a href="https://mgap.ohsu.edu/mGAP/mgap-annotation.view"
+target="_blank">Please see the mGAP website for more detail</a> (requires user registration).
+</p>
 
 
 <h2>Credits</h2>
 
-mGAP is supported by NIH R24OD021324. Please remember to cite this funding source in all publications that make use of mGAP data.
+<p>
+mGAP is supported by NIH R24OD021324. Please remember to cite this funding source in all
+publications that make use of mGAP data.</p>
 
 <h2>References</h2>
 <p>
