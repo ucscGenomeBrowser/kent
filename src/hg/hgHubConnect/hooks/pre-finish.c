@@ -157,7 +157,20 @@ else
             row->creationTime = NULL; // automatically handled by mysql
             row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
             row->db = db;
-            row->location = tusFile;
+            // resolve any symlinks in the path, because tusd sets the path as
+            // the command line specified dataDir + pre-create's ChangeFileInfo
+            // this was leading to a bug where the uploaded file had the symlinked
+            // path, but the containing hub.txt and directory row had the realpath,
+            // which was causing confusion in the UI code
+            char *canonicalPath = realpath(tusFile, NULL);
+            if (canonicalPath != NULL)
+                row->location = canonicalPath;
+            else
+                {
+                // all upload data should have been received and thus the realpath
+                // should not fail, but just in case, put something valid here
+                row->location = tusFile;
+                }
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = encodedParentDir ? encodedParentDir : "";
             if (!isHubToolsUpload && !(sameString(fileType, "hub.txt")))
