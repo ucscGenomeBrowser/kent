@@ -343,10 +343,18 @@ for (name = nameList; name != NULL; name = name->next)
             }
         sqlFreeResult(&sr);
 
-//   this line needs to be reintroduced somehow to prevent quickLift hubs from
-//   being loaded on the wrong database, but it depends on db being set, which it isn't always at this point
-//        if (sameOk(toDb, hubConnectSkipHubPrefix(db)))
+        // don't load quickLift hubs that aren't for us
+        if ((db == NULL) || sameOk(toDb, hubConnectSkipHubPrefix(db)))
             hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
+        else
+            {
+            // for now we're deleting quickLifted ups that aren't to the current datbase
+            char buffer[4096];
+
+            safef(buffer, sizeof buffer, "quickLift.%d.%s", id, toDb);
+            cartRemove(cart, buffer);
+            cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+            }
         }
     if (hub != NULL)
 	{

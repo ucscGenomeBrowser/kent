@@ -144,6 +144,9 @@ return NULL;
 unsigned quickLiftGetChain(char *fromDb, char *toDb)
 /* Return the id from the quickLiftChain table for given assemblies. */
 {
+if (!quickLiftEnabled())
+    return 0;
+
 unsigned ret = 0;
 struct sqlConnection *conn = hConnectCentral();
 char query[2048];

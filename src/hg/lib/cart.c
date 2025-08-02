@@ -498,7 +498,8 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    if (startsWith(customCompositeCartName, el->name) || startsWith(quickLiftCartName, el->name))
+    // we probably shouldn't be doing this until the user actually makes a change in the collection
+    if (startsWith(customCompositeCartName, el->name))
         copyLocalHubs(cart, el);
     }
 }

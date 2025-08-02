@@ -1507,19 +1507,16 @@ safef(buffer, sizeof buffer, "%s-%s", quickLiftCartName, db);
 char *hubName = cartOptionalString(cart, buffer);
 int fd = -1;
 
+// we don't reuse userdata paths since they are in save sessions
+if ((hubName != NULL) && strstr(hubName, "userdata"))
+    hubName = NULL;
+
 if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
     {
     trashDirDateFile(&hubTn, "quickLift", "hub", ".txt");
     hubName = cloneString(hubTn.forCgi);
     cartSetString(cart, buffer, hubName);
     }
-
-FILE *f = mustOpen(hubName, "w");
-outHubHeader(f, db);
-fclose(f);
-
-if (fd >= 0)
-    close(fd);
 
 return hubName;
 }
@@ -1896,8 +1893,9 @@ slSort(&tdbList, cmpPriority);
 
 char *filename = getHubName(cart, db);
 
-FILE *f = mustOpen(filename, "a");
+FILE *f = mustOpen(filename, "w");
 chmod(filename, 0666);
+outHubHeader(f, db);
 
 walkTree(f, db, cart, tdbList, visDy, badList);
 fclose(f);
