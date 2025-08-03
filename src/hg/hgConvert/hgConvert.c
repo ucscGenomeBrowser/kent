@@ -64,9 +64,9 @@ static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 {
 struct dbDb *dbList;
 boolean askAboutQuickLift = FALSE;
-boolean quickLiftChainExists =  (quickLiftGetChain(fromDb->name, toDb->name) != 0);
+//boolean quickLiftChainExists =  (quickLiftGetChain(fromDb->name, toDb->name) != 0);
 
-if (quickLiftEnabled() && quickLiftChainExists)
+if (quickLiftEnabled())
     askAboutQuickLift = TRUE;
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
