@@ -50,7 +50,7 @@ beta:
 	cp -p ${CPREMDESTOPT} ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
-	rsync --chmod=Fu=rwx,Fg=rwx,Fo=rx --whole-file --times -a ${DOCUMENTROOT}-beta/assemblyRequest.html qateam@hgwbeta:${DOCUMENTROOT}/
+	rsync --whole-file --times -a ${DOCUMENTROOT}-beta/assemblyRequest.html qateam@hgwbeta:${DOCUMENTROOT}/
 
 # Run rsync. Care is taken to preserve times and modes on files.  rsync is
 # smart about recreating files under the current users so that times and
