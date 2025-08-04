@@ -354,12 +354,12 @@ TARGETS_TDB = """\
     view targets_view
     parent clsLongReadRnaTrack
     shortLabel Targets
-    visibility hide
+    visibility dense
     type bigBed
     noScoreFilter on
 
         track target_regions
-        parent targets_view on
+        parent targets_view off
         subGroups view=targets_view sample=combined type=targets
         shortLabel CLS targets
         longLabel CLS target regions
@@ -408,8 +408,8 @@ SAMPLE_MODELS_VIEW_TDB = """\
 SAMPLE_MODELS_TDB = """\
         track {sample}_models
         parent sample_models_view on
-        shortLabel {sample} models
-        longLabel {sample} transcript models
+        shortLabel {shortLabel}
+        longLabel {longLabel}
         bigDataUrl {bigDataUrl}
         type bigBed 12 +
         color 100,22,180
@@ -419,8 +419,8 @@ SAMPLE_MODELS_TDB = """\
 
 EXPR_READS_VIEW_TDB = """\
     track per_expr_reads_view
-    parent clsLongReadRnaTrack on
     view per_expr_reads_view
+    parent clsLongReadRnaTrack on
     shortLabel Reads
     visibility hide
     type bam
@@ -440,8 +440,8 @@ EXPR_READS_TDB = """\
 
 EXPR_MODELS_VIEW_TDB = """\
     track per_expr_models_view
+    view per_expr_models_view
     parent clsLongReadRnaTrack on
-    view per_exp_models_view
     shortLabel Models
     visibility hide
     type bam
@@ -490,29 +490,40 @@ def getShortLabel(clsMeta, dtype):
     return clsMetaToDesc(clsMeta, short=True) + " " + dtype
 
 def getLongLabel(clsMeta, dtype):
+    if dtype == "models":
+        dtype = "transcript models"
     return clsMetaToDesc(clsMeta) + " " + dtype
 
 def getType(clsMeta, dtype):
     return (clsMeta.capture.replace('-', '_').lower() + '_' + platform_desc_map[clsMeta.platform].lower() +
             '_' + dtype)
 
-
 def write_expr_data_trackdb(fh, clsMeta, dtype, bigDataUrl, template):
     fh.write(template.format(track=getTrackName(clsMeta, dtype),
                              sample=sampleGrpName(clsMeta),
+                             stage=stageTissueName(clsMeta),
                              shortLabel=getShortLabel(clsMeta, dtype),
                              longLabel=getLongLabel(clsMeta, dtype),
                              type=getType(clsMeta, dtype),
                              bigDataUrl=bigDataUrl))
 
-def write_sample_model_trackdb(fh, stage_tissue, sample, bigDataUrl):
-    fh.write(SAMPLE_MODELS_TDB.format(sample=sample,
+def write_sample_model_trackdb(fh, clsMetaST, bigDataUrl):
+    "unique stage/tissue clsMeta"
+    fh.write(SAMPLE_MODELS_TDB.format(sample=sampleGrpName(clsMetaST),
+                                      shortLabel=clsMetaToSampleDesc(clsMetaST, short=True) + " models",
+                                      longLabel=clsMetaToSampleDesc(clsMetaST, short=False) + " transcript models",
                                       bigDataUrl=bigDataUrl))
 
-def build_stage_tissue_samples_list(clsMetas):
-    return set((stageTissueName(clsMeta), sampleGrpName(clsMeta))
-               for clsMeta in clsMetas)
-
+def filter_stage_tissue_samples(clsMetas):
+    # only returns clsMetas on per stage/tissue
+    clsMetaSubset = []
+    done = set()
+    for clsMeta in clsMetas:
+        stageTissue = (stageTissueName(clsMeta), sampleGrpName(clsMeta))
+        if stageTissue not in done:
+            clsMetaSubset.append(clsMeta)
+            done.add(stageTissue)
+    return clsMetaSubset
 
 def writeTrackDb(fh, clsMetas, trackDir, parent):
     parentSpec = '' if parent is None else f'parent {parent}\n'
@@ -523,9 +534,9 @@ def writeTrackDb(fh, clsMetas, trackDir, parent):
     fh.write(MODELS_TDB.format(bigDataUrl=osp.join(trackDir, "cls-models.bb")))
 
     fh.write(SAMPLE_MODELS_VIEW_TDB)
-    for stage_tissue, sample in build_stage_tissue_samples_list(clsMetas):
-        write_sample_model_trackdb(fh, stage_tissue, sample,
-                                   osp.join(trackDir, stageTissueToBigBedPath(stage_tissue)))
+    for clsMeta in filter_stage_tissue_samples(clsMetas):
+        write_sample_model_trackdb(fh, clsMeta,
+                                   osp.join(trackDir, stageTissueToBigBedPath(stageTissueName(clsMeta))))
 
     fh.write(EXPR_MODELS_VIEW_TDB)
     for clsMeta in clsMetas:
