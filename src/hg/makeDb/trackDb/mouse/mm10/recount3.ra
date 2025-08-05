@@ -6,18 +6,23 @@ type bigBed 9 +
 visibility pack
 spectrum on
 scoreMax 225
-filterValues.strand +,-,.
-filterType.strand multiple
-filterLabel.strand strand
-html recount3.html
-bigDataUrl /gbdb/$D/recount3/srav1m.bb
-filter.readcount 10000:2000000000
-filterByRange.readcount on
-filterLimits.readcount 0:2000000000
-filterLabel.readcount Filter by supporting split reads
 labelFields none
 maxWindowToDraw 10000000
-mouseOver $readcount supporting split reads<br>Strand $strand<br>Splice donor $donor<br>Splice acceptor $acceptor
+bigDataUrl /gbdb/$D/recount3/srav1m.bb
+filterLabel.strand Strand
+filterType.strand multiple
+filterValues.strand +,-,.
+filterLabel.readcount Filter by supporting split reads
+filterByRange.readcount on
+filter.readcount 10000:2000000000
+filterLimits.readcount 0:2000000000
+filterLabel.size Filter by intron size
+filterByRange.size on
+filter.size 30:100000
+filterLabel.sjPair Filter by splice junctions (format GT/AG)
+filterType.sjPair regexp
+filterText.sjPair ^GT/AG$
+mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
 iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav1m&jid=$$&coords=$S:${-$}
 iframeOptions height='300' width='1000' scrolling='yes'
 decorator.default.bigDataUrl /gbdb/$D/recount3/decsrav1m.bb
