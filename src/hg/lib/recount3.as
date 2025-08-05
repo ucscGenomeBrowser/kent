@@ -10,9 +10,11 @@ table recount3
     uint thickStart;   "Start of where display should be thick"
     uint thickEnd;     "End of where display should be thick"
     uint reserved;     "Used as itemRgb as of 2004-11-22"
+    uint size;         "Size of the intron"
     bigint readcount;  "Read count"
     uint samplecount;  "Sample count"
     string donor;      "Splice donor"
     string acceptor;   "Splice acceptor"
     string url;        "URL"
+    string sjPair;     "Splice junctions in format 'GT/AG' for filtering"
     )

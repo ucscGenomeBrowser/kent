@@ -8,9 +8,9 @@ import argparse
 import textwrap
 from collections import namedtuple
 from math import log
-sys.path.append('/hive/groups/browser/pycbio/lib')
+#sys.path.append('/hive/groups/browser/pycbio/lib')
 from pycbio.hgdata.bed import Bed, BedBlock, BedReader, intArraySplit
-
+from pycbio.sys import fileOps
 
 
 def main():
@@ -25,8 +25,8 @@ Also outputs a decorator bed file, see https://genome.ucsc.edu/goldenPath/help/d
 	parser.add_argument('--junctions', required=True, type=str, help='annotated gff')
 	parser.add_argument('--bed', required=True, type=str, help='output bed')
 	parser.add_argument('--decorator', required=True, type=str, help='output decorator bed')
-	parser.add_argument('--compilation', required=True, type=str, 
-		choices=['ccle', 'gtexv2', 'srav3h', 'tcgav2', 'srav1m'], 
+	parser.add_argument('--compilation', required=True, type=str,
+		choices=['ccle', 'gtexv2', 'srav3h', 'tcgav2', 'srav1m'],
 		help='one of ccle, gtexv2, srav3h, tcgav2, srav1m')
 	args = parser.parse_args()
 
@@ -36,17 +36,17 @@ Also outputs a decorator bed file, see https://genome.ucsc.edu/goldenPath/help/d
 def makeSpliceDecorator(bedObj, donor, acc, outFH):
 	'''Create decorators for splice consensus'''
 	#chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:feature glyph 0,255,0,255 Circle
-	#colorblind color scheme Paul Tol's Muted from 
+	#colorblind color scheme Paul Tol's Muted from
 	# https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf
-	# dark blue = GT donor, AG acceptor (046,037,133), teal= GC donor (093,168,153), faded red = AG/AC (194,106,119) 
+	# dark blue = GT donor, AG acceptor (046,037,133), teal= GC donor (093,168,153), faded red = AG/AC (194,106,119)
 	if bedObj.strand == '.':
 		# do not decorate
 		return
 	# assign colors
 	splice_map_donor  = {'GT': '046,037,133','GC': '093,168,153','AT': '194,106,119'}
 	splice_map_acc = {'AG': '046,037,133', 'AC': '194,106,119'}
-	leftColor  = splice_map_donor.get(donor, 'default') 
-	rightColor = splice_map_acc.get(acc, 'default') 
+	leftColor  = splice_map_donor.get(donor, 'default')
+	rightColor = splice_map_acc.get(acc, 'default')
 	# correct for negative strand
 	if bedObj.strand == '-':
 		leftColor, rightColor = rightColor, leftColor
@@ -70,7 +70,7 @@ def makeSpliceDecorator(bedObj, donor, acc, outFH):
 				strand=bedObj.strand, blocks=rightBlocks, numStdCols=12, itemRgb=rightColor,
 				extraCols=extraCols)
 	rightObj.write(outFH)
-     
+
 
 def junction_to_bed(outputfile, junctions, decoratorfile, compilation):
 	'''Parses intron lines, extracts ID info from last field, assigns score'''
@@ -83,12 +83,13 @@ def junction_to_bed(outputfile, junctions, decoratorfile, compilation):
 		writer = csv.writer(outfile, delimiter='\t', lineterminator=os.linesep)
 		# extract all exons from the gff, keep exons grouped by transcript
 		maxScore=1
-		for line in open(junctions, 'rt'):  
+		infh = fileOps.opengz(junctions, 'rt')
+		for line in infh:
 			if line.startswith('#'):
 				continue
-			[snaptron_id, chrom, start, end, length, strand, annotated, 
-				left_motif, right_motif, left_annotated, right_annotated, samples, 
-				samples_count, coverage_sum, coverage_avg, coverage_median, 
+			[snaptron_id, chrom, start, end, length, strand, annotated,
+				left_motif, right_motif, left_annotated, right_annotated, samples,
+				samples_count, coverage_sum, coverage_avg, coverage_median,
 				source_dataset_id] = line.rstrip().split('\t')
 			# skip non-genome chromosomes
 			if any(chrom.startswith(prefix) for prefix in ('ERCC', 'SIRV', 'GL', 'JH', 'chrEBV')):
@@ -110,9 +111,10 @@ def junction_to_bed(outputfile, junctions, decoratorfile, compilation):
 			# score scaling
 			score = int(10*log(int(coverage_sum))) # score field only accepts integers
 			maxScore = max(score, maxScore)
-			extraCols = [coverage_sum, samples_count, donor, acc, link] 
+			size = end - start
+			extraCols = [size, coverage_sum, samples_count, donor, acc, link, donor + '/' + acc]
 			# create bed object
-			bedObj = Bed(chrom, start, end, name=snaptron_id, strand=strand, score=score, 
+			bedObj = Bed(chrom, start, end, name=snaptron_id, strand=strand, score=score,
 				thickStart=start, thickEnd=end, numStdCols=9, extraCols=extraCols)
 			# create splice site decorator file
 			makeSpliceDecorator(bedObj, donor, acc, decFile)
