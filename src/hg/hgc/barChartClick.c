@@ -27,6 +27,7 @@
 #include "pipeline.h"
 #include "chromAlias.h"
 #include "jsHelper.h"
+#include "jsonWrite.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -395,30 +396,6 @@ else
     warn("Error creating boxplot from sample data with command: %s", pipelineDesc(pl));
 }
 
-static double estimateStringWidth(char *s)
-/* Get estimate of string width based on a memory font that is about the
- * same size as svg will be using.  After much research I don't think we
- * can get the size from the server, would have to be in Javascript to get
- * more precise */
-{
-MgFont *font = mgHelvetica14Font();
-return mgFontStringWidth(font, s);
-}
-
-static double longestLabelSize(struct barChartCategory *categList)
-/* Get estimate of longest label in pixels */
-{
-int longest = 0;
-struct barChartCategory *categ;
-for (categ = categList; categ != NULL; categ = categ->next)
-    {
-    int size = estimateStringWidth(categ->label);
-    if (size > longest)
-        longest = size;
-    }
-return longest * 1.02;
-}
-
 void deunderbarColumn(struct fieldedTable *ft, int fieldIx)
 /* Ununderbar all of a column inside table because space/underbar gets
  * so confusing */
@@ -458,75 +435,48 @@ if (statsFile != NULL)
     statsSize = 8*(fieldedTableMaxColChars(ft, countStatIx)+1);
     }
 
-/* Some constants that control layout */
-double heightPer=18.0;
-double totalWidth=1250.0;
-double borderSize = 1.0;
-
-double headerHeight = heightPer + 2*borderSize;
-double innerHeight=heightPer-borderSize;
-double labelWidth = longestLabelSize(categs) + 9;  // Add some because size is just estimate
-if (labelWidth > totalWidth/2) labelWidth = totalWidth/2;  // Don't let labels take up more than half
-double patchWidth = heightPer;
-double labelOffset = patchWidth + 2*borderSize;
-double statsOffset = labelOffset + labelWidth;
-double barOffset = statsOffset + statsSize;
-double statsRightOffset = barOffset - 9;
-double barNumLabelWidth = estimateStringWidth(" 1234.000");
-double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
-double totalHeight = headerHeight + heightPer * categCount + borderSize;
-
 jsInline("var svgTable = true;\n");
-printf("<svg id='svgBarChart' width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 
-/* Draw header */
-printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
 char *sampleLabel = trackDbSettingOrDefault(tdb, "barChartLabel", "Sample");
-printf("<text class=\"sampleLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n",
-    labelOffset, innerHeight-1, innerHeight-1, sampleLabel);
-if (statsSize > 0.0)
-    printf("<text class=\"statsLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
-	statsRightOffset, innerHeight-1, innerHeight-1, "N");
-printf("<text class=\"valueLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n",
-    barOffset, innerHeight-1, innerHeight-1, metric, "Value");
-
-/* Set up clipping path for the pesky labels, which may be too long */
-printf("<clipPath id=\"labelClip\"><rect x=\"%g\" y=\"0\" width=\"%g\" height=\"%g\"/></clipPath>\n",
-    labelOffset, barOffset-labelOffset, totalHeight);
-
-double yPos = headerHeight;
+jsonWriteString(jw, "sampleLabel", sampleLabel);
+char metricLabel[512];
+safef(metricLabel, sizeof(metricLabel), "%s Value", metric);
+jsonWriteString(jw, "metricLabel", metricLabel);
+jsonWriteListStart(jw, "values");
 struct barChartCategory *categ;
-int i;
-for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer)
+int i = 0;
+for (categ = categs; i < categCount && categ != NULL; ++i, categ = categ->next)
     {
     double score = chart->expScores[i];
-    double barWidth = 0;
-    if (maxVal > 0.0)
-	barWidth = barMaxWidth * score/maxVal;
     char *deunder = cloneString(categ->label);
     replaceChar(deunder, '_', ' ');
-    printf("<rect x=\"0\" y=\"%g\" width=\"15\" height=\"%g\" style=\"fill:#%06X\"/>\n",
-	yPos, innerHeight, categ->color);
-    printf("<rect id=\"bar%d\" x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
-	i+1, barOffset, yPos, barWidth, innerHeight, categ->color);
-    if (i&1)  // every other time
-	printf("<rect class=\"sampleBand\" x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
-	    labelOffset, yPos, labelWidth+statsSize, innerHeight, 0xFFFFFF);
-    printf("<text class=\"sampleLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n",
- 	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteTag(jw, "color");
+    dyStringPrintf(jw->dy, "\"#%06X\"", categ->color);
+    jsonWriteString(jw, "label", deunder);
     if (statsSize > 0.0)
-	{
-	struct fieldedRow *fr = hashFindVal(statsHash, deunder);
-	if (fr != NULL)
-	    {
-	    printf("<text class=\"statsLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
-		statsRightOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
-	    }
-	}
-    printf("<text class=\"valueLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n",
-	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
+        {
+        struct fieldedRow *fr = hashFindVal(statsHash, deunder);
+        if (fr != NULL)
+            {
+            jsonWriteString(jw, "nValue", fr->row[countStatIx]);
+            }
+        }
+    else
+        {
+        jsonWriteDouble(jw, "nValue", -1);
+        }
+    jsonWriteTag(jw, "barValue");
+    dyStringPrintf(jw->dy, "%5.3f", score);
+    jsonWriteObjectEnd(jw);
     }
-printf("</svg>");
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+jsInlineF("var barChartValues = %s\n", jw->dy->string);
+jsonWriteFree(&jw);
+printf("<svg id='svgBarChart' hasSampleN=%s></svg>\n", statsSize > 0.0 ? "true" : "false");
 }
 
 

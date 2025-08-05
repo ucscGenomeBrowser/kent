@@ -267,6 +267,156 @@ function makeHPRCTable() {
     }
 }
 
+const svgNS = "http://www.w3.org/2000/svg";
+function getTextWidth(text) {
+    let hiddenSvg = document.createElementNS(svgNS, "svg");
+    hiddenSvg.style.visibility = "hidden";
+    hiddenSvg.style.position = "absolute";
+    document.body.appendChild(hiddenSvg);
+    let textN = document.createElementNS(svgNS, "text");
+    textN.setAttribute("x", 0);
+    textN.setAttribute("y", 0);
+    textN.textContent = text;
+    hiddenSvg.appendChild(textN);
+    let ret = textN.getComputedTextLength();
+    document.body.removeChild(hiddenSvg);
+    return ret;
+}
+
+function drawSvgTable(svg, data) {
+    // Given an id of an svg (which has already been mostly created), fill it in
+    // with the data in arr. data is an object with structure:
+    // {metricLabel, sampleLabel, values: [
+    //     {color: "", label: "", nValue: number, barValue: number},
+    //     {...},
+    //     ...
+    // ]
+    let parentTable = svg.parentNode;
+    while (parentTable && parentTable.nodeName !== "TABLE") {
+        parentTable = parentTable.parentNode;
+    }
+    let totalWidth = Math.round(parentTable.clientWidth * 0.95);
+    let padding = 5;
+    let hasSampleN = svg.getAttribute("hassamplen") === "true" || svg.getAttribute("hassamplen") === "TRUE";
+    let labelWidth = 0;
+    let nWidth = 0;
+    for (let obj of data.values) {
+        labelWidth = Math.max(labelWidth, getTextWidth(obj.label));
+        if (hasSampleN) {
+            if (typeof obj.nValue !== "undefined") {
+                nWidth = Math.max(nWidth, getTextWidth(obj.nValue));
+            }
+        }
+    }
+    if (labelWidth > (totalWidth * 0.4)) {
+        labelWidth = totalWidth * 0.4; // clamp at 40% of max width
+    }
+    labelWidth += padding; // for padding on each
+    if (hasSampleN) {
+        nWidth += (2 * padding);
+    }
+
+    // these values come from barChartClick.c:
+    let heightPer = 17;
+    let fontSize = 16;
+    let borderSize = 1;
+    let headerColor = "#d9e4f8";
+    let swatchWidth = 15;
+    let swatchColWidth = swatchWidth + padding;
+    // find the total width leftover for the bar itself
+    // the barValue is specified as %5.3f in barChartClick.c, so max of 8 chars
+    let barWidth = totalWidth - (swatchColWidth + labelWidth + nWidth + getTextWidth("00000.000") + padding);
+
+    let columnWidths = [swatchColWidth, labelWidth, nWidth, barWidth];
+
+    // now we can draw the header
+    let header = document.createElementNS(svgNS, "rect");
+    header.id = "svgTableHeader";
+    header.setAttribute("width", totalWidth);
+    header.setAttribute("height", 20);
+    header.setAttribute("fill", headerColor);
+    svg.appendChild(header);
+    let sampleColLabel = document.createElementNS(svgNS, "text");
+    sampleColLabel.textContent = data.sampleLabel;
+    sampleColLabel.setAttribute("x", swatchColWidth);
+    sampleColLabel.setAttribute("y", heightPer - 1);
+    sampleColLabel.setAttribute("font-size", fontSize);
+    svg.appendChild(sampleColLabel);
+
+    if (hasSampleN) {
+        let nColLabel = document.createElementNS(svgNS, "text");
+        nColLabel.textContent = "N";
+        nColLabel.setAttribute("x", swatchColWidth + labelWidth);
+        nColLabel.setAttribute("y", heightPer - 1);
+        nColLabel.setAttribute("font-size", fontSize);
+        svg.appendChild(nColLabel);
+    }
+
+    let metricColLabel = document.createElementNS(svgNS, "text");
+    metricColLabel.textContent = data.metricLabel;
+    metricColLabel.setAttribute("x", swatchColWidth + labelWidth + nWidth);
+    metricColLabel.setAttribute("y", heightPer - 1);
+    metricColLabel.setAttribute("font-size", fontSize);
+    svg.appendChild(metricColLabel);
+    svg.setAttribute("width", totalWidth);
+    svg.setAttribute("height", (data.values.length * (heightPer + 1) + 20));
+
+    // finally we can draw each row of the table
+    let maxVal = data.values.reduce((a,b) => Math.max(a, b.barValue), -Infinity);
+    for (let i = 0; i < data.values.length; ++i) {
+        let textY = 20 + (i * (heightPer + 1)) + (heightPer / 2) + (fontSize / 3);
+        let swatch = document.createElementNS(svgNS, "rect");
+        swatch.setAttribute("x", 0);
+        swatch.setAttribute("y", 20 + ((heightPer + 1) * i));
+        swatch.setAttribute("width", swatchWidth);
+        swatch.setAttribute("fill", data.values[i].color);
+        swatch.setAttribute("height", heightPer);
+
+        if (i & 1) {
+            let band = document.createElementNS(svgNS, "rect");
+            band.setAttribute("x", swatchColWidth);
+            band.setAttribute("y", 20 + ((heightPer + 1) * i));
+            band.setAttribute("fill", "#ffffff");
+            band.setAttribute("width", labelWidth + nWidth);
+            band.setAttribute("height", heightPer);
+            svg.appendChild(band);
+        }
+
+        let label = document.createElementNS(svgNS, "text");
+        label.setAttribute("x", swatchColWidth);
+        label.setAttribute("y", textY);
+        label.setAttribute("font-size", fontSize);
+        label.textContent = data.values[i].label;
+
+        if (typeof data.values[i].nValue !== "undefined") {
+            let optN = document.createElementNS(svgNS, "text");
+            optN.setAttribute("x", swatchColWidth + labelWidth);
+            optN.setAttribute("y", textY);
+            optN.setAttribute("font-size", fontSize);
+            optN.textContent = data.values[i].nValue;
+            svg.appendChild(optN);
+        }
+
+        let bar = document.createElementNS(svgNS, "rect");
+        bar.setAttribute("x", swatchColWidth + labelWidth + nWidth);
+        bar.setAttribute("y", 20 + ((heightPer + 1) * i));
+        let thisBarWidth = barWidth * data.values[i].barValue / maxVal;
+        bar.setAttribute("width", thisBarWidth);
+        bar.setAttribute("height", heightPer);
+        bar.setAttribute("fill", data.values[i].color);
+
+        let barVal = document.createElementNS(svgNS, "text");
+        barVal.setAttribute("x", swatchColWidth + labelWidth + nWidth + thisBarWidth + padding);
+        barVal.setAttribute("y", textY);
+        barVal.setAttribute("font-size", fontSize);
+        barVal.textContent = data.values[i].barValue;
+        svg.appendChild(swatch);
+        svg.appendChild(label);
+        svg.appendChild(bar);
+        svg.appendChild(barVal);
+    }
+}
+
 
 function initPage() {
     if (typeof doHPRCTable !== "undefined") {
@@ -276,51 +426,7 @@ function initPage() {
         // redraw the svg with appropriate widths for all columns
         // swatchWidth and columnSpacer are taken from svgBarChart() in hgc/barChartClick.c
         // they should probably be dynamically determined
-        var swatchWidth = 20.0;
-        var columnSpacer = 4.0;
-        var maxSampleWidth = 0.0;
-
-        // determine the size taken up by the sample names
-        $(".sampleLabel").each(function(s) {
-            if ((sampleLength = this.getComputedTextLength()) >= maxSampleWidth) {
-                maxSampleWidth = sampleLength;
-            }
-        });
-
-        // determine the size taken up by the 'N' counts
-        var maxStatsWidth = 0.0;
-        $(".statsLabel").each(function(s) {
-            if ((statWidth = this.getComputedTextLength()) >= maxStatsWidth) {
-                maxStatsWidth = statWidth;
-            }
-        });
-
-        // the stat is right aligned so take into account it's width as well
-        statsRightOffset = swatchWidth + maxSampleWidth + (2 * columnSpacer) + maxStatsWidth;
-
-        // The white band that separates every other row needs to be resized
-        $(".sampleBand").each(function(s) {
-            this.setAttribute("width", statsRightOffset - swatchWidth);
-        });
-
-        // now move the stat number
-        $(".statsLabel").each(function(s) {
-            this.setAttribute("x", statsRightOffset);
-        });
-
-        // now shift the actual bars (plus value) over if necessary
-        $(".valueLabel").each(function(s) {
-            barName = "#bar" + s;
-            var barWidth = 0;
-            var newX = statsRightOffset + (2 * columnSpacer);
-            if ($(barName).length > 0) {
-                barWidth = parseInt($(barName)[0].getAttribute("width"));
-                $(barName)[0].setAttribute("x", newX);
-                this.setAttribute("x", newX + barWidth + 2 * columnSpacer);
-            } else { // the header label only
-                this.setAttribute("x", newX + barWidth);
-            }
-        });
+        drawSvgTable(document.getElementById("svgBarChart"), barChartValues);
     }
     if (typeof _jsonHgcLabels !== "undefined") {
         var obj, o;
