@@ -6,6 +6,7 @@ type bigBed 12 +
 superTrack on
 
 track mavedb_maps
+priority 2
 shortLabel MaveDB Heatmaps
 longLabel Variant Effect Maps from MaveDB
 visibility pack
@@ -20,6 +21,7 @@ filterLabel.name Experiment ID
 maxWindowCoverage 200000
 
 track mavedb_align_composite
+priority 1
 visibility pack
 compositeTrack on
 parent mavedb
