@@ -557,7 +557,7 @@ var genomePos = {
                 type: "GET",
                 async: false, // wait for result
                 url: "../cgi-bin/hgTracks",
-                data: cart.varsToUrlData({ 'hgt.convertChromToVirtChrom': pos, 'hgt.trackImgOnly' : 1, 'hgsid': getHgsid(), 'db': getDb() }),
+                data: cart.varsToUrlData({ 'hgt.convertChromToVirtChrom': pos, 'hgt.trackImgOnly' : 1, 'hgsid': getHgsid() }),
                 dataType: "html",
                 trueSuccess: genomePos.handleConvertChromPosToVirtCoords,
                 success: catchErrorOrDispatch,
@@ -2424,7 +2424,7 @@ var rightClick = {
                             // on for non-safari browsers (see redmine #4667).
                             jQuery('body').css('cursor', '');
                             var data = "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" +
-                                       newPosition + "&hgsid=" + getHgsid() + "&db=" + getDb();
+                                       newPosition + "&hgsid=" + getHgsid();
                             if (name)
                                 data += "&hgFind.matches=" + name;
                             $.ajax({
@@ -2564,7 +2564,7 @@ var rightClick = {
                     type: "GET",
                     url: "../cgi-bin/hgTracks",
                     data: cart.varsToUrlData({ 'hgt.imageV1': '1','hgt.trackImgOnly': '1', 
-                                               'hgsid': getHgsid(), 'db': getDb() }),
+                                               'hgsid': getHgsid() }),
                     dataType: "html",
                     trueSuccess: rightClick.handleViewImg,
                     success: catchErrorOrDispatch,
@@ -4449,7 +4449,7 @@ var imageV2 = {
     requestImgUpdate: function (trackName,extraData,loadingId,newVisibility)
     {
         // extraData, loadingId and newVisibility are optional
-        var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName + "&db=" + getDb();
+        var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
         if (extraData && extraData !== "")
             data += "&" + extraData;
         if (!loadingId || loadingId === "")
@@ -4755,7 +4755,7 @@ var imageV2 = {
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
                 data: cart.addUpdatesToUrl(params + 
-                                      "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid() + "&db=" + getDb()),
+                                      "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid()),
                 dataType: "html",
                 trueSuccess: imageV2.updateImgAndMap,
                 success: catchErrorOrDispatch,
