@@ -422,7 +422,7 @@ EXPR_READS_VIEW_TDB = """\
     view per_expr_reads_view
     parent clsLongReadRnaTrack on
     shortLabel Reads
-    visibility hide
+    visibility squish
     type bam
 
 """
@@ -434,6 +434,7 @@ EXPR_READS_TDB = """\
         longLabel {longLabel}
         bigDataUrl {bigDataUrl}
         type bam
+        visibility hide
         subGroups view=per_expr_reads_view sample={sample} type={type}
 
 """
@@ -443,7 +444,7 @@ EXPR_MODELS_VIEW_TDB = """\
     view per_expr_models_view
     parent clsLongReadRnaTrack on
     shortLabel Models
-    visibility hide
+    visibility dense
     type bam
     noScoreFilter on
 
@@ -458,6 +459,7 @@ EXPR_MODELS_TDB = """\
         type bigBed 12 +
         noScoreFilter on
         color 100,22,180
+        visibility hide
         subGroups view=per_expr_models_view sample={sample} type={type}
 
 """
