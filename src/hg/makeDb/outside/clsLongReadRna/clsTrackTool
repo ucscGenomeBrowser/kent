@@ -366,6 +366,7 @@ TARGETS_TDB = """\
         labelFields name
         defaultLabelFields none
         type bigBed 6 +
+        visibility hide
         color 0,100,0
         bigDataUrl {bigDataUrl}
         priority 1
@@ -413,6 +414,7 @@ SAMPLE_MODELS_TDB = """\
         bigDataUrl {bigDataUrl}
         type bigBed 12 +
         color 100,22,180
+        visibility squish
         subGroups view=sample_models_view sample={sample} type=models
 
 """
@@ -422,14 +424,14 @@ EXPR_READS_VIEW_TDB = """\
     view per_expr_reads_view
     parent clsLongReadRnaTrack on
     shortLabel Reads
-    visibility squish
+    visibility hide
     type bam
 
 """
 
 EXPR_READS_TDB = """\
         track {track}
-        parent per_expr_reads_view on
+        parent per_expr_reads_view off
         shortLabel {shortLabel}
         longLabel {longLabel}
         bigDataUrl {bigDataUrl}
@@ -445,14 +447,14 @@ EXPR_MODELS_VIEW_TDB = """\
     parent clsLongReadRnaTrack on
     shortLabel Models
     visibility dense
-    type bam
+    type bigBed
     noScoreFilter on
 
 """
 
 EXPR_MODELS_TDB = """\
         track {track}
-        parent per_expr_models_view on
+        parent per_expr_models_view off
         shortLabel {shortLabel}
         longLabel {longLabel}
         bigDataUrl {bigDataUrl}
