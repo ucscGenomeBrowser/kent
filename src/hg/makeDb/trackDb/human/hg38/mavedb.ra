@@ -1,8 +1,15 @@
-track mavedb_maps
-shortLabel MaveDB Maps
-longLabel Variant Effect Maps from MaveDB
+track mavedb
+shortLabel MaveDB Experiments
+longLabel Heatmaps and Alignment for MaveDB
 group expression
+type bigBed 12 +
+superTrack on
+
+track mavedb_maps
+shortLabel MaveDB Heatmaps
+longLabel Variant Effect Maps from MaveDB
 visibility pack
+parent mavedb
 type bigBed 12 +
 bigDataUrl /gbdb/hg38/maveDB/all_mave.bb
 style heatmap
@@ -11,3 +18,31 @@ filterText.name .*
 filterType.name regexp
 filterLabel.name Experiment ID
 maxWindowCoverage 200000
+
+track mavedb_align_composite
+visibility pack
+compositeTrack on
+parent mavedb
+shortLabel MaveDB Alignments
+longLabel MaveDB Experiment Sequence Alignments
+type bigPsl
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
+html mavedb_align
+hideEmptySubtracks on
+
+track mavedb_align_dna
+shortLabel MaveDB DNA Align
+longLabel Reference-Aligned DNA Sequences from MaveDB Experiments
+parent mavedb_align_composite
+bigDataUrl /gbdb/hg38/maveDB/mavedb_dna.bb
+showDiffBasesAllScales .
+baseColorUseSequence lfExtra
+baseColorDefault diffBases
+
+track mavedb_align_aa
+shortLabel MaveDB AA Align
+longLabel Reference-Aligned AA Sequences from MaveDB Experiments
+parent mavedb_align_composite
+bigDataUrl /gbdb/hg38/maveDB/mavedb_aa.bb

@@ -1,0 +1,43 @@
+<p>
+<h2>Description</h2>
+This track displays alignments of the tested gene sequences for experiments in
+<a href="https://mavedb.org" target=_blank>MaveDB</a> (see the accompanying heatmap track for
+more details).  Please note that only a subset of MaveDB experiments could be displayed as
+heatmaps; the sequence alignments in this track only cover those experiments.
+</p><p>
+<h2>Display Conventions</h2>
+There are two subtracks - one for alignments of DNA sequences and one for peptide sequences.  For convenience,
+the subtracks are set by default to only appear when an alignment appears in the current view window.
+</p><p>
+The DNA subtrack is also configured to highlight base differences from the reference genome.  Due to the
+alignment method, this highlighting is currently unavailable for the peptide alignments.
+</p><p>
+<h2>Methods</h2>
+Sequences from MaveDB experiments were aligned using BLAT.  DNA sequences went through two processes.
+First they were aligned directly to the genome.  Second they were aligned directly to GENCODE transcripts,
+and the resulting alignments were projected onto the genome using pslMap (the former method is more likely
+to capture intronic matches, while the latter does a better job of capturing the expected exon boundaries).
+The two alignment sets were then combined and filtered for overlap with the mapped loci of the corresponding
+heatmaps, and the best alignments were selected for presentation.
+</p><p>
+Two DNA sequences (for 00000002-a-2 and 00000053-a-2) weren't sufficiently identical for this process to
+find a good alignment; in those cases, the sequences were instead aligned using BLAT's translated alignment flags.
+</p><p>
+Peptide sequences went solely through the GENCODE-pslMap path.
+</p><p>
+<h2>Data Access</h2>
+Direct access to the data files for these experiments can be obtained from
+<a href="https://mavedb.org" target="_blank">MaveDB</a>.
+</p><p>
+<h2>References</h2>
+<p>
+Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff
+SB <em>et al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-025-03476-y"
+target="_blank">
+MaveDB 2024: a curated community database with over seven million variant effects from multiplexed
+functional assays</a>.
+<em>Genome Biol</em>. 2025 Jan 21;26(1):13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">39838450</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11753097/" target="_blank">PMC11753097</a>
+</p>
