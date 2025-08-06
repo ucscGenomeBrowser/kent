@@ -424,7 +424,7 @@ EXPR_READS_VIEW_TDB = """\
     view per_expr_reads_view
     parent clsLongReadRnaTrack on
     shortLabel Reads
-    visibility hide
+    visibility squish
     type bam
 
 """

@@ -747,7 +747,7 @@ html clsLongReadRna.html
     view per_expr_reads_view
     parent clsLongReadRnaTrack on
     shortLabel Reads
-    visibility hide
+    visibility squish
     type bam
 
         track adult_brain_ont_post_reads
