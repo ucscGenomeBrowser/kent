@@ -12,7 +12,7 @@ type bigBed 9 +
 visibility hide
 spectrum on
 scoreMax 225
-html recount3.html
+html recount3
 compositeTrack on
 noParentConfig on
 

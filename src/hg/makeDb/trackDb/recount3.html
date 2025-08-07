@@ -6,12 +6,13 @@
 <body>
 <h2>Description</h2>
 <p>
-Recount3 is a comprehensive resource for re-analyzing RNA-seq data. It provides uniformly processed 
-RNA-seq data and associated metadata from a wide range of studies, enabling researchers to access 
-and analyze gene expression data in a consistent manner. Recount3 aggregates data from multiple 
-sources, including the Sequence Read Archive (SRA) and the Genotype-Tissue Expression (GTEx) project, 
-and reprocesses it using a standardized pipeline. This allows for cross-study comparisons and 
-meta-analyses, facilitating discoveries in genomics and transcriptomics.
+<a href="https://rna.recount.bio/" target="_blank">Recount3</a> is a comprehensive resource for
+re-analyzing RNA-seq data. It provides uniformly processed RNA-seq data and associated metadata
+from a wide range of studies, enabling researchers to access and analyze gene expression data in a
+consistent manner. Recount3 aggregates data from multiple sources, including the Sequence Read
+Archive (SRA) and the Genotype-Tissue Expression (GTEx) project, and reprocesses it using a
+standardized pipeline. This allows for cross-study comparisons and meta-analyses, facilitating
+discoveries in genomics and transcriptomics.
 </p><p>
 These tracks display the recount3 intron data including split read counts.
 </p>
@@ -19,21 +20,30 @@ These tracks display the recount3 intron data including split read counts.
 
 <h2>Display Conventions</h2>
 <p>
-Intron blocks are grayscale colored based on read support (darker tones indicate higher coverage). <br>
-Split read counts and splice motifs are shown on mouseover. <br>
+Intron blocks are grayscale colored based on read support (darker tones indicate higher coverage).
 By default only introns with a minimum read count of 10,000 are shown. This setting can be changed
-on the track configuration page. <br>
-The intron ends are color coded: 
+on the track configuration page. The SRA track is only visible when zoomed in within 10 million
+bases because of its data density.
+</p>
+<p>
+The intron ends are color-coded:
 <ul>
 <li><b><font color="#2E2585">Dark blue</font></b> GT donors and AG acceptors (CT and AC on 
 the minus strand) </li>
 <li><b><font color="#5DA899">Teal</font></b> GC donors (GT on the minus strand) </li>
 <li><b><font color="#C26A77">Faded red</font></b> AT donors and AC acceptors (GT and GT on the 
 minus strand) </li>
+<li>Introns with non-standard ends do not have colored tags.</li>
 </ul>
-Introns with non standard ends do not have colored tags.
-<br>
-The SRA track is only visible when zoomed in within 10 million bases because of its data density.
+<p>
+Split read counts and splice motifs are shown on mouseover.
+</p>
+
+<h2>Methods</h2>
+<p>
+Junction files were converted to bed format. For grayscaling total read count was log10
+transformed and multiplied by 10 to get a score between 0 and 225, which can be found
+in the bed score field.
 </p>
 
 <h2>Data Access</h2>
@@ -59,13 +69,6 @@ https://snaptron.cs.jhu.edu/data/srav3h/junctions.bgz</a><br>
 https://snaptron.cs.jhu.edu/data/ccle/junctions.bgz</a><br>
 <a href="https://snaptron.cs.jhu.edu/data/srav1m/junctions.bgz" target="_blank">
 https://snaptron.cs.jhu.edu/data/srav1m/junctions.bgz (mouse)</a><br>
-</p>
-
-<h2>Methods</h2>
-<p>
-Junction files were converted to bed format. For grayscaling total read count was log10
-transformed and multiplied by 10 to get a score between 0 and 225, which can be found
-in the bed score field.
 </p>
 
 <h2>References</h2>
