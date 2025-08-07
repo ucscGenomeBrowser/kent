@@ -1,7 +1,7 @@
 <h2>Description</h2>
 <p>
 The PanelApp tracks show regions that are related to human disorders. These can be either
-genes, short tandem repeats or copy number variants. The regions were curated by groups of
+genes, short tandem repeats, or copy number variants. The regions were curated by groups of
 specialists collaborating using the PanelApp web tool. The primary website is <a target="_blank"
 href="https://panelapp.genomicsengland.co.uk/#!">Genomics England PanelApp</a>.
 Another deployment of the website, with different data, is 
@@ -11,9 +11,9 @@ Another deployment of the website, with different data, is
 <p>
 Originally, PanelApp was developed to aid interpretation of participant genomes in the
 <a href="https://www.genomicsengland.co.uk/initiatives/100000-genomes-project" target="_blank">
-100,000 Genomes Project</a>, 
-<a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!">Genomics England PanelApp</a> now being used as the platform for
-achieving consensus on gene panels in the <a target="_blank"
+100,000 Genomes Project</a>.
+<a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!">Genomics England PanelApp</a>
+is now being used as the platform for achieving consensus on gene panels in the <a target="_blank"
     href="https://www.england.nhs.uk/genomics/nhs-genomic-med-service/"> NHS
     Genomic Medicine Service (GMS)</a>. Later, the same platform was also deployed by
 <a target=_blank
@@ -31,7 +31,7 @@ supporting association with phenotypes covered by the gene panel in question.
 </p>
 
 <p>
-There are six subtracks in total: Three different types (genes, STRs and CNVs) and these 
+There are six subtracks in total: Three different types (genes, STRs, and CNVs), and these 
 three exist for both countries, England and Australia. The three types of tracks are:</p>
 
 <ul>
@@ -111,8 +111,8 @@ For automated analysis, the data may be queried from our
 For automated download and analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/panelApp/" target="_blank">our download server</a>.
-The files for this track are called <tt>genes.bb</tt>, <tt>tandRep.bb</tt> and <tt>cnv.bb</tt>. Individual
-regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+The files for this track are called <tt>genes.bb</tt>, <tt>tandRep.bb</tt>, and <tt>cnv.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
@@ -136,14 +136,15 @@ and the <a target=_blank href="https://panelapp-aus.org/api/docs/">Australia Pan
 <h2>Updates and archiving of old releases</h2>
 <p>
 This track is updated automatically every week. If you need to access older releases of the data,
-you can download them from our <a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/panelApp/">archive directory</a> on the download server. To load them into the browser, select a week on the archive directory, copy the link to a file, go to <a href="http://genome.ucsc.edu/cgi-bin/hgCustom">My Data &gt; Custom Tracks</a>, click "Add custom track", paste the link into the box and click "Submit".
+you can download them from our <a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/panelApp/">archive directory</a> on the download server. To load them into the browser, select a week on the archive directory, copy the link to a file, go to <a href="http://genome.ucsc.edu/cgi-bin/hgCustom">My Data &gt; Custom Tracks</a>, click "Add custom track", paste the link into the box, and click "Submit".
 </p>
 
 <h2>Methods</h2>
 <p>
 PanelApp files were reformatted at UCSC to the <a target="_blank"
 href="/goldenPath/help/bigBed.html">bigBed</a> format. The script that updates the track is called 
-<tt>updatePanelApp</tt> and can be found in our <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/panelApp">Github repository</a>.
+<tt>doPanelApp.py</tt> and can be found in our <a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/panelApp/doPanelApp.py">GitHub repository</a>.
 </p>
 
 <h2>Credits</h2>
