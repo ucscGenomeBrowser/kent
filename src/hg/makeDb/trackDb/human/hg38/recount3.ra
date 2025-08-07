@@ -1,3 +1,7 @@
+
+
+# Note: sjPair filter doesn't work.  It always get reset to default.
+
 track recount3
 shortLabel recount3
 longLabel recount 3 introns
@@ -8,19 +12,6 @@ spectrum on
 scoreMax 225
 html recount3.html
 compositeTrack on
-filterLabel.strand Strand
-filterType.strand multiple
-filterValues.strand +,-,.
-filterLabel.readcount Filter by supporting split reads
-filterByRange.readcount on
-filter.readcount 10000:2000000000
-filterLimits.readcount 0:2000000000
-filterLabel.size Filter by intron size
-filterByRange.size on
-filter.size 30:100000
-filterLabel.sjPair Filter by splice junctions (format GT/AG)
-filterType.sjPair regexp
-filterText.sjPair ^GT/AG$
 
     track gtex
     shortLabel GTEX
@@ -33,6 +24,19 @@ filterText.sjPair ^GT/AG$
     decorator.default.bigDataUrl /gbdb/$D/recount3/decgtexv2.bb
     parent recount3
     priority 1
+    filterLabel.strand Strand
+    filterType.strand multiple
+    filterValues.strand +,-,.
+    filterLabel.readcount Filter by supporting split reads
+    filterByRange.readcount on
+    filter.readcount 10000:2000000000
+    filterLimits.readcount 0:2000000000
+    filterLabel.size Filter by intron size
+    filterByRange.size on
+    filter.size 30:100000
+    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterType.sjPair wildcard
+    filterText.sjPair *
 
     track tcga
     shortLabel TCGA
@@ -45,12 +49,24 @@ filterText.sjPair ^GT/AG$
     decorator.default.bigDataUrl /gbdb/$D/recount3/dectcgav2.bb
     parent recount3
     priority 2
+    filterLabel.strand Strand
+    filterType.strand multiple
+    filterValues.strand +,-,.
+    filterLabel.readcount Filter by supporting split reads
+    filterByRange.readcount on
+    filter.readcount 10000:2000000000
+    filterLimits.readcount 0:2000000000
+    filterLabel.size Filter by intron size
+    filterByRange.size on
+    filter.size 30:100000
+#    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+#    filterType.sjPair wildcard
+#    filterText.sjPair *
 
     track srav3h
     shortLabel SRA
     longLabel recount 3 SRA introns
     bigDataUrl /gbdb/$D/recount3/srav3h.bb
-    filter.readcount 10000:2000000000
     labelFields none
     maxWindowToDraw 10000000
     mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
@@ -59,6 +75,19 @@ filterText.sjPair ^GT/AG$
     decorator.default.bigDataUrl /gbdb/$D/recount3/decsrav3h.bb
     parent recount3
     priority 3
+    filterLabel.strand Strand
+    filterType.strand multiple
+    filterValues.strand +,-,.
+    filterLabel.readcount Filter by supporting split reads
+    filterByRange.readcount on
+    filter.readcount 10000:2000000000
+    filterLimits.readcount 0:2000000000
+    filterLabel.size Filter by intron size
+    filterByRange.size on
+    filter.size 30:100000
+#    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+#    filterType.sjPair wildcard
+#    filterText.sjPair *
 
     track ccle
     shortLabel CCLE
@@ -71,4 +100,16 @@ filterText.sjPair ^GT/AG$
     decorator.default.bigDataUrl /gbdb/$D/recount3/decccle.bb
     parent recount3
     priority 4
-
+    filterLabel.strand Strand
+    filterType.strand multiple
+    filterValues.strand +,-,.
+    filterLabel.readcount Filter by supporting split reads
+    filterByRange.readcount on
+    filter.readcount 10000:2000000000
+    filterLimits.readcount 0:2000000000
+    filterLabel.size Filter by intron size
+    filterByRange.size on
+    filter.size 30:100000
+#    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+#    filterType.sjPair wildcard
+#    filterText.sjPair *
