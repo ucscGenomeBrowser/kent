@@ -7444,3 +7444,91 @@ mkdir -p /gbdb/hg38/maveDB
 cd /gbdb/hg38/maveDB
 ln -s /hive/data/genomes/hg38/bed/mavedb/2025_04_12/all_mave.bb
 
+# Now for the sequence alignments.  parseMave.pl generated a corresponding sequence file: seqFile.fa
+# Split the contents of seqFile.fa into two files: dna_seqs.fa and aa_seqs.fa (this was done manually).
+# The plan is to align the DNA sequences both directly to the genome and projected through knownGene,
+# while the AA sequences are only going to be projected through knownGene (those seemed consistently
+# a bit better than direct alignments in testing).
+
+mkdir alignments
+cd alignments
+
+# Align DNA sequences to genome
+blat -noHead -stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0 /hive/data/genomes/hg38/hg38.2bit ../dna_seqs.fa dna_align.psl
+
+# Align DNA and AA to knownGene, then project onto the genome
+blat -noHead -q=prot -t=dnax -stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0 /gbdb/hg38/targetDb/hg38KgSeqV48.2bit ../aa_seqs.fa aa_kg_align.psl
+blat -noHead -stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0 /gbdb/hg38/targetDb/hg38KgSeqV48.2bit ../dna_seqs.fa dna_kg_align.psl
+
+# Map to genome; note that the target names from hg38KgSeqV48.2bit have gene symbols attached; need to remove those
+# to link with the gene names mapped to the genome
+pslMap <(cat aa_kg_align.psl | perl -pe 's/(ENST\S+)__\S+/$1/;' ) /hive/data/genomes/hg38/bed/gencodeV48/build/ucscGenes.psl aa_kg_genome_align.psl
+pslMap <(cat dna_kg_align.psl | perl -pe 's/(ENST\S+)__\S+/$1/;' ) /hive/data/genomes/hg38/bed/gencodeV48/build/ucscGenes.psl dna_kg_genome_align.psl.tmp
+
+# Fixing the projected DNA alignment scores so they can be more directly compared with the direct alignments
+pslRecalcMatch dna_kg_genome_align.psl.tmp /hive/data/genomes/hg38/hg38.2bit ../dna_seqs.fa dna_kg_genome_align.psl
+
+# Short script for filtering alignments to look for overlap with the loci of corresponding heatmaps
+
+printf '$pslName = shift;
+
+open($exppos, "<", "../combined.bed");
+while ($line = <$exppos>)
+{
+    chomp $line;
+    @f = split /\s+/, $line;
+    ($chr, $start, $end, $name) = ($f[0], $f[1], $f[2], $f[3]);
+    #$chr = lc($chr);
+    $posMap{$name} = "$chr $start $end";
+}
+close($exppos);
+
+open($alignF, "<", $pslName);
+while ($line = <$alignF>)
+{
+    chomp $line;
+    @f = split /\t/, $line;
+    ($match, $name, $chr, $start, $end) = ($f[0], $f[9], $f[13], $f[15], $f[16]);
+    $name =~ m/^([^_]+)_/ or die "Unable to get name from $name";
+    $expId = $1;
+    $heatmapPos = $posMap{$expId};
+    $heatmapPos =~ m/^(\S+) (\S+) (\S+)$/ or die "Unable to parse position from $heatmapPos for $expId";
+    ($hChr, $hStart, $hEnd) = ($1, $2, $3);
+    if ($chr eq $hChr)
+    {
+        if (($hStart < $end) && ($hEnd > $start))
+        {
+            print "$line\n";
+        }
+    }
+}
+close($alignF);
+' > filter.pl
+
+# Filter for alignments overlapping with the loci of the heatmaps
+perl filter.pl dna_align.psl | sort -k1,1nr -k10,10 | pslUniq stdin dna_align_uniq.psl
+perl filter.pl dna_kg_genome_align.psl | sort -k1,1nr -k10,10 | pslUniq stdin dna_kg_genome_align_uniq.psl
+perl filter.pl aa_kg_genome_align.psl | sort -k1,1nr -k10,10 | pslUniq stdin mavedb_aa.psl
+
+# favor high match counts, then after that high substitution counts, then finally favor knownGene-mapped
+# alignments (for more consistent exon boundaries)
+sort -k2,2nr -k3,3nr -k1,1 <(sed -e 's/^/a\t/' dna_kg_genome_align_uniq.psl) <(sed -e 's/^/b\t/' dna_align_uniq.psl) |
+    cut -f 2- | pslUniq stdin mavedb_dna.psl
+
+# Two squences weren't mapped by this process: 53-a-2 and 02-a-2.  Try those again with dnax alignments.
+# The knownGene projected versions looked better again, so we went with those.
+
+grep -A 1 -P '(53|02)-a-2' ../dna_seqs.fa > stragglers.fa
+blat -q=dnax -t=dnax -noHead -stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0 /gbdb/hg38/targetDb/hg38KgSeqV48.2bit ../stragglers.fa stragglers_kg_align.psl
+pslMap <(cat stragglers_kg_align.psl | perl -pe 's/(ENST\S+)__\S+/$1/;' ) /hive/data/genomes/hg38/bed/gencodeV48/build/ucscGenes.psl stragglers_kg_genome_align.psl
+perl filter.pl stragglers_kg_genome_align.psl | sort -k1,1nr -k10,10 | pslUniq stdin stragglers_kg_genome_align_uniq.psl
+cat stragglers_kg_genome_align_uniq.psl >> mavedb_dna.psl
+
+# Now build the bigBeds.  We can't include sequence for the projected AA alignments because pslMap changes the
+# sequence length (from AA to cDNA), and that breaks the sequence linkage system for pslToBigPsl.
+pslToBigPsl -fa=../seqFile.fa mavedb_dna.psl stdout | sort -k1,1 -k2,2n > mavedb_dna.bigPslInput
+pslToBigPsl mavedb_aa.psl stdout | sort -k1,1 -k2,2n > mavedb_aa.bigPslInput
+bedToBigBed -as=../bigPsl.as -type=bed12+13 -tab mavedb_dna.bigPslInput /hive/data/genomes/hg38/chrom.sizes mavedb_dna.bb
+bedToBigBed -as=../bigPsl.as -type=bed12+13 -tab mavedb_aa.bigPslInput /hive/data/genomes/hg38/chrom.sizes mavedb_aa.bb
+
+#########################################################################

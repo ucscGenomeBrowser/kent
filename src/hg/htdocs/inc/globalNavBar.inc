@@ -7,9 +7,7 @@
 		<div class="blockcontent">
 						<div class="content">
 
-<ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1" style="display: flex; justify-content: space-between; width: 100%; position: relative; min-width: 1000px">
-
-<div style="display: flex; white-space: nowrap;">
+<ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
 
 <li class="first even" id="home"><a href="../index.html" ><span id="home-link">Home</span></a></li> 
 
@@ -115,9 +113,6 @@
 	<li class="even last" id="aboutContactLink"><a href="../contacts.html">Contact Us</a></li>
 	</ul>
 </li>
-</div>
-
-<li class="last" id="donate" style="position: absolute; right: 5px;"><a href="https://secure.ucsc.edu/s/1069/bp18/interior.aspx?sid=1069&gid=1001&pgid=780&cid=1749&dids=645">Donate</a></li>
 
 </ul>
 </div>
