@@ -1,6 +1,8 @@
 
 
-# Note: sjPair filter doesn't work.  It always get reset to default.
+# Note: sjPair filter at the parent doesn't work,
+# it was always reset to the default.  So they
+# we move to only being on the individual tracks.
 
 track recount3
 shortLabel recount3
@@ -12,8 +14,10 @@ spectrum on
 scoreMax 225
 html recount3.html
 compositeTrack on
+noParentConfig on
 
     track gtex
+    showCfg on
     shortLabel GTEX
     longLabel recount 3 GTEX introns
     bigDataUrl /gbdb/$D/recount3/gtexv2.bb
@@ -59,9 +63,9 @@ compositeTrack on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-#    filterLabel.sjPair Filter by splice junctions (format GT/AG)
-#    filterType.sjPair wildcard
-#    filterText.sjPair *
+    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterType.sjPair wildcard
+    filterText.sjPair *
 
     track srav3h
     shortLabel SRA
@@ -85,9 +89,9 @@ compositeTrack on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-#    filterLabel.sjPair Filter by splice junctions (format GT/AG)
-#    filterType.sjPair wildcard
-#    filterText.sjPair *
+    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterType.sjPair wildcard
+    filterText.sjPair *
 
     track ccle
     shortLabel CCLE
@@ -110,6 +114,6 @@ compositeTrack on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-#    filterLabel.sjPair Filter by splice junctions (format GT/AG)
-#    filterType.sjPair wildcard
-#    filterText.sjPair *
+    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterType.sjPair wildcard
+    filterText.sjPair *
