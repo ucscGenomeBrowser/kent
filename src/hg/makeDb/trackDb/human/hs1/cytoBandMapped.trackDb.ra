@@ -6,3 +6,11 @@ group map
 visibility dense
 type bigBed 4 +
 bigDataUrl /gbdb/hs1/cytoBandMapped/cytoBandMapped.bb
+searchIndex name
+
+searchTable cytoBandIdeo
+searchType bigBed
+searchPriority 1
+searchDescription Cytobands
+searchMethod exact
+shortCircuit 1
