@@ -93,11 +93,11 @@ def flipFiles(country):
             if db=="hg19" and "cnv" in subTrack:
                 # no cnvs for hg19 yet
                 continue
-            oldFname = "current/%s/%s.bb.tmp" % (db, subTrack)
-            newFname = "current/%s/%s.bb" % (db, subTrack)
+            oldFname = "current/%s/%s.bb.tmp" % (db, subTrack) #New data just generated
+            newFname = "current/%s/%s.bb" % (db, subTrack) #Existing .bb
 
             #Check if files are more than 10% different
-            checkIfFilesTooDifferent(oldFname,newFname)
+            checkIfFilesTooDifferent(newFname,oldFname)
             
             os.replace(oldFname, newFname)
 
