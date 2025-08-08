@@ -25,6 +25,7 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "quickLift.h"
+#include "chromAlias.h"
 
 
 /* CGI Variables */
@@ -296,6 +297,7 @@ if (toDb == NULL)
 if (!fromDb || !toDb)
     errAbort("Early error - unable to find matching database records in dbDb - please contact support");
 
+chromAliasSetup(database);
 cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
 	fromPos, toDb->organism, toDb->description);
 
