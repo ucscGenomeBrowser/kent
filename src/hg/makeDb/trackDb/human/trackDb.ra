@@ -1,8 +1,7 @@
 include predictionScoresSuper.ra
 
 #PanelApp
-include panelApp.ra public
-include panelApp.alpha.ra alpha,beta
+include panelApp.ra
 
 # ENCODE tracks
 include trackDb.encode.ra
