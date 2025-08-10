@@ -20,6 +20,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "errCatch.h"
+#include "hgConfig.h"
 
 
 /* CGI Variables */
@@ -118,7 +119,9 @@ cgiTableFieldEnd();
 /* to assembly */
 
 cgiSimpleTableFieldStart();
-dbDbFreeList(&dbList);
+// Genark is generating some less than fully populated dbDb structures
+// so we don't expect them to free without causing problems.
+//dbDbFreeList(&dbList);   
 dbList = hGetLiftOverToDatabases(chain->fromDb);
 printLiftOverGenomeList(HGLFT_TOORG_VAR, chain->toDb, dbList, "change", onChange);
 cgiTableFieldEnd();
@@ -440,11 +443,13 @@ if ((fromDb != NULL) && !sameOk(fromOrg, hOrganism(fromDb)))
 if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
     toDb = NULL;
 
+boolean choiceBestScore = FALSE;
 for (this = chainList; this != NULL; this = this->next)
     {
     if (sameOk(this->fromDb ,fromDb) && sameOk(this->toDb, toDb))
         {
         choice = this;
+        choiceBestScore = FALSE;
         break;
         }
     double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank, dbDbHash);
@@ -452,7 +457,22 @@ for (this = chainList; this != NULL; this = this->next)
 	{
 	choice = this;
 	bestScore = score;
+        choiceBestScore = TRUE;
 	}
+    }
+
+// the scoring regime is not working correctly with genark assemblies to get
+// the user selected fromDb even if there is a change for it.
+if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && choiceBestScore && !sameOk(choice->fromDb ,fromDb))
+    {
+    for (this = chainList; this != NULL; this = this->next)
+        {
+        if (sameOk(this->fromDb ,fromDb))
+            {
+            choice = this;
+            break;
+            }
+        }
     }
 
 return choice;

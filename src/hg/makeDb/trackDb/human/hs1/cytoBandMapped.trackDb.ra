@@ -6,9 +6,17 @@ group map
 visibility dense
 type bigBed 4 +
 bigDataUrl /gbdb/hs1/cytoBandMapped/cytoBandMapped.bb
-searchIndex name
 
-searchTable cytoBandIdeo
+track cytoBand
+shortLabel Cytobands (Ideogram)
+longLabel Cytobands Mapped from hg38/GRCh38
+group map
+visibility hide
+type bigBed 4 +
+bigDataUrl /gbdb/hs1/cytoBandMapped/cytoBandMapped.bb
+searchIndex name,name2
+
+searchTable cytoBand
 searchType bigBed
 searchPriority 1
 searchDescription Cytobands
