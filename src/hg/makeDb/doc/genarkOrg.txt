@@ -1,6 +1,32 @@
- hgsql hgcentraltest -Ne "select taxId, gcAccession from genark"  | sort > /tmp/1
- hgsql hgcentraltest -Ne "select taxId, genome from dbDb group by taxId"  | sort > /tmp/2
- hgsql hgcentraltest -Ne "create table genarkOrg (gcAccession varchar(255), genome varchar(255))"
- join -t $'\t' /tmp/1 /tmp/2 | cut -f 2- > /tmp/3
- hgsql hgcentraltest -Ne "load data local infile '/tmp/3' into table genarkOrg"
+# get UCSC org names from dbDb
+hgsql  -hgenome-centdb.soe.ucsc.edu hgcentral -Ne "select taxId, organism from  dbDb where active=1" | sort | uniq > taxIdOrg.txt
 
+# get all the genark accessions with their taxId
+hgsql hgcentraltest -Ne "select taxId, gcAccession from genark" | sort > taxIdGC.txt
+
+# mapping of genark accessions to UCSC Org
+join -t $'\t' taxIdOrg.txt taxIdGC.txt | tawk '{print $3,$2}' | sort > gcToUCSCOrg.txt
+
+# grab NCBI Taxonomy database name table
+wget "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz"
+tar xf taxdump.tar.gz names.dmp
+
+# get list of genbank common names from NCBI taxonomy database
+grep "genbank common" names.dmp | tawk '{print $1, $3}' | sort > taxIdCommon.txt
+
+# mapping of genark accessions to NCBI Common names
+join -t $'\t' taxIdCommon.txt taxIdGC.txt | tawk '{print $3,$2}' | sort > gcToCommon.txt
+
+# get list of scientific names from NCBI taxonomy database
+grep "scientific" names.dmp | tawk '{print $1, $3}' | sort > taxIdScientific.txt
+
+# mapping of genark accessions to NCBI Scientific names
+join -t $'\t' taxIdScientific.txt taxIdGC.txt | tawk '{print $3,$2}' | sort > gcToSci.txt
+
+# get list of all GCs to make "other" file
+cut -f 2 taxIdGC.txt | sort > gc.txt
+tawk '{print $1, "Other"}' gc.txt > gcToOther.txt
+
+cat gcToUCSCOrg.txt gcToCommon.txt gcToSci.txt gcToOther.txt  | tawk '{if (!seen[$1]) print; seen[$1]=1}' | sort >  genarkOrg.txt
+
+# load as genarkOrg table..
