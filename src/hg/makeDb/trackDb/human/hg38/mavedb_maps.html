@@ -1,43 +1,53 @@
-<p>
 <h2>Description</h2>
-This track provides heatmap of multiplexed assays of variant effects (MAVE) from
+<p>
+This track provides heatmaps of multiplexed assays of variant effects (MAVE) from
 <a href="https://mavedb.org" target=_blank>MaveDB</a>.  Each heatmap presents the results of an
 experiment where many small substitutions were tested within a gene to examine their
 functional consequences.
-</p><p>
+</p>
 <h2>Display Conventions</h2>
+<p>
 Heatmaps within the track display the consequence of substituting invididual amino acids within the
 genome with alternatives (alternatives are listed along the left edge of the heatmap).  Score ranges
 vary among experiments, but each is presented with the highest scores in
 <span style="color: #FF0000; font-weight: bold;">red</span>, the lowest scores in
 <span style="color: #0000FF; font-weight: bold;">blue</span>, and scores at the midpoint between the two in
-<span style="color: #C0C0C0; font-weight: bold;">silver</span>.
-<p>
+<span style="color: #C0C0C0; font-weight: bold;">silver</span>.  Higher scores correspond to a
+higher enrichment level for that variant compared to others in the experiment set.
+</p><p>
+The column along the left edge of each heatmap provide single-letter amino acid codes do indicate what
+was substituted in for that piece of the experiment.  = indicates a synonymous substitution, - indicates
+a deletion, and * indicates a stop codon.
+</p><p>
 Cells where multiple scores were reported are marked with the score count (e.g. "2" if two scores were
 reported).  Mousing over a cell in the heatmap will display the ID number of that particular substitution
 in the experiment, a <a href="https://www.mavedb.org/docs/mavehgvs/index.html" target=_blank>MAVE-HGVS</a>
-description of the substitution, and the score (or scores, if more than one is present).
-<p>
+description of the substitution with three-letter amino acid codes, and the score (or scores, if more
+than one is present).
+</p><p>
 When the display is zoomed out farther than a 200,000 base window, the display switches to a coverage plot
 of where the MaveDB heatmaps can be found.
-</p><p>
+</p>
 <h4>Track Controls</h4>
+<p>
 The track controls include a filter for the URN ID of the experiment (e.g. 00000103-a-1).  The display supports
 full, pack, and squish modes.  In dense mode, the track switches to a dense BED-like display where items mark
 the extent of individual heatmaps and exons indicate where the heatmap includes score values.
-</p><p>
+</p>
 <h2>Methods</h2>
+<p>
 Methods for the various experiments are described briefly on the individual details pages for each heatmap
 in the track, and in greater detail on the MaveDB page for that experiment (link available on our own
 details pages).
 </p><p>
 JSON files containing data from these experiments were processed into UCSC's heatmap extension of the
 standard BED format for display here.
-</p><p>
+</p>
 <h2>Data Access</h2>
+<p>
 Direct access to the data files for these experiments can be obtained from
 <a href="https://mavedb.org" target="_blank">MaveDB</a>.
-</p><p>
+</p>
 <h2>References</h2>
 <p>
 Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff

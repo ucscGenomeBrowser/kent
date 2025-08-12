@@ -1,5 +1,5 @@
 # Encode4 triplet annotations (Jeltje, April 2025)
-track encode4
+track encode4LongRnaTranscripts
 shortLabel ENCODE4 transcripts
 longLabel ENCODE4 Long read transcripts
 superTrack long_read_transcripts

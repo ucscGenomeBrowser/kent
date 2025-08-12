@@ -4949,11 +4949,17 @@ struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainList();
 
+struct dyString *dy = newDyString(4096);
 /* Create hash of databases having liftOver chains from this database */
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     if (!hashFindVal(hash, chain->fromDb))
         hashAdd(hash, chain->fromDb, chain->fromDb);
+    if (startsWith("GC", chain->fromDb))
+        {
+        dyStringPrintf(dy, "'%s',", chain->fromDb);
+        }
+
     }
 
 /* Get list of all databases */
@@ -4971,6 +4977,13 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
 	}
     else
         dbDbFree(&dbDb);
+    }
+
+if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (strlen(dy->string) > 0))
+    {
+    dy->string[strlen(dy->string) - 1] = 0;
+    struct dbDb *genarkDbDbs = genarkLiftOverDbs(dy->string);
+    liftOverDbList = slCat(genarkDbDbs, liftOverDbList);
     }
 
 hashFree(&hash);

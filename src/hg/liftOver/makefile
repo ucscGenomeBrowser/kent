@@ -7,7 +7,7 @@ PROGS = liftOver liftOverMerge
 default:: ${PROGS:%=%_default}
 %_default:
 	${MAKE} default PROG=$*
-compile:: ${PROGS:%=%_complie}
+compile:: ${PROGS:%=%_compile}
 %_compile:
 	${MAKE} compile PROG=$*
 clean:: ${PROGS:%=%_clean}

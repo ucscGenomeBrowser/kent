@@ -14,7 +14,7 @@ priority 3
 defaultIsClosed 0
 
 name rna
-label mRNA and EST
+label RNA and Transcriptome
 priority 4
 defaultIsClosed 0
 
