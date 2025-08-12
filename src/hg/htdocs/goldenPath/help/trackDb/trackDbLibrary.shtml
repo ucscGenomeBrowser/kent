@@ -1807,7 +1807,8 @@ There are no extra options that can appear on the type hic line.
     Usually these are category names.
     The option requires at least one value to filter on.</P>
     <P>Every individual possible value that can ever occur in the field must be
-    passed in a comma separated list. You will then be able to select those
+    passed in a comma separated list. If there are commas in the values, two commas
+    can be used to designate literal commas. You will then be able to select those
     values as categories, choosing to display only items that
     belong to one, any, or at least one of the selected values. By default, the user
     can select multiple values from this list and the filter lets pass any features
