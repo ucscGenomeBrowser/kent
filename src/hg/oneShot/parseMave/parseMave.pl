@@ -505,6 +505,8 @@ $outstring .= "\t$rowCount\t$rowLabels\t";
 $outstring .= join ",", (min(@justScores), (min(@justScores)+max(@justScores))/2, max(@justScores));
 $outstring .= ",\t";
 
+die "Min and max score are both " . min(@justScores) . ".  Likely a parsing error." if (min(@justScores) == max(@justScores));
+
 # now the colors for each block
 
 $outstring .= join ",", ("blue", "silver", "red");
