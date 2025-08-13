@@ -27,6 +27,6 @@ join -t $'\t' taxIdScientific.txt taxIdGC.txt | tawk '{print $3,$2}' | sort > gc
 cut -f 2 taxIdGC.txt | sort > gc.txt
 tawk '{print $1, "Other"}' gc.txt > gcToOther.txt
 
-cat gcToUCSCOrg.txt gcToCommon.txt gcToSci.txt gcToOther.txt  | tawk '{if (!seen[$1]) print; seen[$1]=1}' | sort >  genarkOrg.txt
+cat gcToUCSCOrg.txt gcToCommon.txt gcToSci.txt gcToOther.txt  | tawk '{if (!seen[$1]) { $2 = toupper(substr($2,1,1)) tolower(substr($2,2));  print}; seen[$1]=1}' | sort >  genarkOrg.txt
 
 # load as genarkOrg table..

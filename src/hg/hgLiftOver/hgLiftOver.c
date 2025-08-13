@@ -367,8 +367,8 @@ double score = 0;
 struct dbDb *chainFromDbDb = hashFindVal(dbHash, chain->fromDb);
 struct dbDb *chainToDbDb = hashFindVal(dbHash, chain->toDb);
 
-char *chainFromOrg = (chainFromDbDb) ? chainFromDbDb->organism : NULL;
-char *chainToOrg = (chainToDbDb) ? chainToDbDb->organism : NULL;
+char *chainFromOrg = (chainFromDbDb) ? chainFromDbDb->organism : hOrganism(chain->fromDb);
+char *chainToOrg = (chainToDbDb) ? chainToDbDb->organism : hOrganism(chain->toDb);
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to approx. #assemblies */
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank"); 
@@ -443,13 +443,11 @@ if ((fromDb != NULL) && !sameOk(fromOrg, hOrganism(fromDb)))
 if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
     toDb = NULL;
 
-boolean choiceBestScore = FALSE;
 for (this = chainList; this != NULL; this = this->next)
     {
     if (sameOk(this->fromDb ,fromDb) && sameOk(this->toDb, toDb))
         {
         choice = this;
-        choiceBestScore = FALSE;
         break;
         }
     double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank, dbDbHash);
@@ -457,22 +455,7 @@ for (this = chainList; this != NULL; this = this->next)
 	{
 	choice = this;
 	bestScore = score;
-        choiceBestScore = TRUE;
 	}
-    }
-
-// the scoring regime is not working correctly with genark assemblies to get
-// the user selected fromDb even if there is a change for it.
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && choiceBestScore && !sameOk(choice->fromDb ,fromDb))
-    {
-    for (this = chainList; this != NULL; this = this->next)
-        {
-        if (sameOk(this->fromDb ,fromDb))
-            {
-            choice = this;
-            break;
-            }
-        }
     }
 
 return choice;

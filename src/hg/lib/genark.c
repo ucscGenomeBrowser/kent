@@ -398,7 +398,7 @@ dbDb->nibPath = cloneString("genark");
 dbDb->description = cloneString(row[4]); // commonName
 dbDb->scientificName = cloneString(row[3]); 
 dbDb->taxId = atoi(row[5]); 
-dbDb->genome = hashFindVal(orgHash, row[0]);
+dbDb->organism = dbDb->genome = hashFindVal(orgHash, row[0]);
 dbDb->orderKey = 99999;
 dbDb->defaultPos = "default";
 if (dbDb->genome == NULL)

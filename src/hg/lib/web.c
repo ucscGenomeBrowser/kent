@@ -705,7 +705,7 @@ char *cgiName;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (!hashFindVal(hash, cur->genome) &&
-	(!doCheck || hDbExists(cur->name)))
+	(!doCheck || hDbExists(cur->name) || startsWith("GC", cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = trackHubSkipHubName(cur->genome);

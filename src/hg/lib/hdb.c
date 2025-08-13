@@ -2920,6 +2920,28 @@ else if (b->orderKey < a->orderKey) return 1;
 else return 0;
 }
 
+static int hDbDbCmpName(const void *va, const void *vb)
+/* Compare to sort based on organism */
+{
+const struct dbDb *a = *((struct dbDb **)va);
+const struct dbDb *b = *((struct dbDb **)vb);
+
+// put Human at top followed by Mouse and then alphabetically with "Other" at the bottom
+if (sameString(a->genome, "Human"))
+    return -1;
+if (sameString(b->genome, "Human"))
+    return 1;
+if (sameString(a->genome, "Mouse"))
+    return -1;
+if (sameString(b->genome, "Mouse"))
+    return 1;
+if (sameString(a->genome, "Other"))
+    return 1;
+if (sameString(b->genome, "Other"))
+    return -1;
+return strcmp(a->genome, b->genome);
+}
+
 struct slName *hDbList()
 /* List of all database versions that are online (database
  * names only).  See also hDbDbList. */
@@ -4992,7 +5014,7 @@ liftOverChainFreeList(&chainList);
 
 /* sort by orderKey so that assemblies always appear from most recent */
 /* to the oldest assemblies in the dropdown menu for fromDbs */
-slSort(&liftOverDbList, hDbDbCmpOrderKey);
+slSort(&liftOverDbList, hDbDbCmpName);
 
 return liftOverDbList;
 }
@@ -5051,7 +5073,7 @@ liftOverChainFreeList(&chainList);
 
 /* sort by orderKey so that assemblies always appear from most recent */
 /* to the oldest assemblies in the dropdown menu for toDbs */
-slSort(&liftOverDbList, hDbDbCmpOrderKey);
+slSort(&liftOverDbList, hDbDbCmpName);
 return liftOverDbList;
 }
 

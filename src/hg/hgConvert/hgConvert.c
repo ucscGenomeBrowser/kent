@@ -156,8 +156,9 @@ if (sameOk(toOrg,chainToOrg))
 if (sameOk(toDb,chain->toDb))
     score += 100000;
 
-if (toRank == 0)  // chains to db's that are not active shouldn't be considered
-    return 0;
+// at the moment we aren't ranking genark db's
+//if (toRank == 0)  // chains to db's that are not active shouldn't be considered
+    //return 0;
 score += 10*(maxRank-fromRank);
 score += (maxRank - toRank);
 
@@ -183,6 +184,11 @@ if (sameWord(toOrg,"0"))
     toOrg = NULL;
 if (sameWord(toDb,"0"))
     toDb = NULL;
+if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
+    toDb = NULL;
+
+if (toOrg == NULL)
+    toOrg = "Human";
 
 for (this = chainList; this != NULL; this = this->next)
     {
@@ -411,7 +417,7 @@ struct liftOverChain *next = NULL;
 for (this = list; this != NULL; this = next)
     {
     next = this->next;
-    if (hashLookup(dbDbHash, this->toDb))
+    if (hashLookup(dbDbHash, this->toDb) || startsWith("GC", this->toDb))
         slAddHead(&cleanList, this);
     else
         liftOverChainFree(&this);
