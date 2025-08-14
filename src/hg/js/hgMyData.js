@@ -325,11 +325,13 @@ const uppy = new Uppy.Uppy({
                 continue;
             }
             // check if the user is uploading a hub.txt into a hub that already has a hub.txt
-            let hubFiles = hubCreate.uiState.filesHash[file.meta.parentDir].children;
-            if (file.meta.fileType === "hub.txt" && hubFiles.filter((f) => f.fileType === "hub.txt").length !== 0) {
-                uppy.info(`Error: the hub definition file (ex: hub.txt) already exists, create a new hub if you want to upload this hub definition file`);
-                doUpload = false;
-                continue;
+            if (file.meta.parentDir in hubCreate.uiState.filesHash) {
+                let hubFiles = hubCreate.uiState.filesHash[file.meta.parentDir].children;
+                if (file.meta.fileType === "hub.txt" && hubFiles.filter((f) => f.fileType === "hub.txt").length !== 0) {
+                    uppy.info(`Error: the hub definition file (ex: hub.txt) already exists, create a new hub if you want to upload this hub definition file`);
+                    doUpload = false;
+                    continue;
+                }
             }
 
             uppy.setFileMeta(file.id, {
@@ -625,7 +627,7 @@ var hubCreate = (function() {
 
     let defaultGenomeChoices = {
         "Human hg38": {value: "hg38", label: "Human hg38"},
-        "Human T2T": {value: "T2T", label: "Human T2T"},
+        "Human T2T": {value: "hs1", label: "Human T2T"},
         "Human hg19": {value: "hg19", label: "Human hg19"},
         "Mouse mm39": {value: "mm39", label: "Mouse mm39"},
         "Mouse mm10": {value: "mm10", label: "Mouse mm10"}
