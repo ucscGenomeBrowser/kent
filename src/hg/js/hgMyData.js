@@ -1081,6 +1081,9 @@ var hubCreate = (function() {
         let rows = table.rows((idx, data) => pathList.includes(data.fullPath));
         rows.remove().draw();
         let toKeep = (elem) => !pathList.includes(elem.fullPath);
+        pathList.forEach((f) => {
+            updateQuota(-uiState.filesHash[f].fileSize);
+        });
         uiState.fileList = uiState.fileList.filter(toKeep);
         history.replaceState(uiState, "", document.location.href);
     }
@@ -1097,6 +1100,13 @@ var hubCreate = (function() {
         cart.flush();
     }
 
+    function updateQuota(newFileSize) {
+        // Change the quota displayed to the user, pass in newFileSize as a negative number
+        // when deleting files
+        let container = document.getElementById("quotaDiv");
+        uiState.userQuota += newFileSize;
+        container.textContent = `Using ${prettyFileSize(uiState.userQuota)} of ${prettyFileSize(uiState.maxQuota)}`;
+    }
 
     function addNewUploadedHubToTable(hub) {
         // hub is a list of objects representing the file just uploaded, the associated
@@ -1295,6 +1305,7 @@ var hubCreate = (function() {
         DataTable.feature.register('quota', function(settings, opts) {
             let options = Object.assign({option1: false, option2: false}, opts);
             let container = document.createElement("div");
+            container.id = "quotaDiv";
             if (uiState.isLoggedIn) {
                 container.textContent = `Using ${prettyFileSize(uiState.userQuota)} of ${prettyFileSize(uiState.maxQuota)}`;
             }
@@ -1419,6 +1430,7 @@ var hubCreate = (function() {
                 hub.push(hubTxtObj);
             }
             addNewUploadedHubToTable(hub);
+            updateQuota(metadata.fileSize);
         });
         uppy.on('complete', (result) => {
             history.replaceState(uiState, "", document.location.href);
