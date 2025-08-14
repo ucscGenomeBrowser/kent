@@ -1077,7 +1077,7 @@ var hubCreate = (function() {
             return folderIcon;
         } else {
             // only offer the button if this is a track file
-            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType in extensionMap) {
+            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType in extensionMap) {
                 let container = document.createElement("div");
                 let viewBtn = document.createElement("button");
                 viewBtn.textContent = "View in Genome Browser";
