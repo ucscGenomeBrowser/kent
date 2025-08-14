@@ -6562,6 +6562,85 @@ and is particularly useful for tracks with large numbers of categories.
     the view level.  Exceptions to this pattern do exist but they are rare.</P>
 </DIV>
 
+<DIV class="view_exampleTwo"><span class="types view"></span>
+<div class="format"><B>Example hub of a superTrack with a composite track containing different track types with Views</B></div>
+    <pre>
+    hub fiberSeqExample
+    shortLabel fiberSeqExampleShort
+    longLabel fiberSeqExampleLong
+    useOneFile on
+    email nnnn@nnn.com
+    descriptionUrl https://www.example.com
+
+    genome hg38
+
+    track fiberSeq
+    superTrack on show
+    shortLabel FiberSeq SuperTrack
+    longLabel Fiber-Seq LongLabel
+    html TrackDescription.html
+
+    track myMultiViewComposite
+    compositeTrack on
+    shortLabel FiberSeq Composite
+    longLabel FiberSeq Composite LongLabel
+    parent fiberSeq
+    visibility dense
+    subGroup1 view Views PK=Peaks SIG=Signals
+    subGroup2 cell Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14+
+    dimensions dimY=cell
+    sortOrder cell=+ view=+
+    type bed 3
+    html TrackDescription.html
+
+        track myViewPeaks
+        parent myMultiViewComposite
+        shortLabel Peaks
+        view PK
+        visibility pack
+        type bigBed 12 +
+
+            track myFirstPeakSubtrack
+            parent myViewPeaks on
+            shortLabel Peak One
+            longLabel Peak One Long
+            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
+            subGroups cell=CD14 view=PK
+
+            track mySecondPeakSubtrack
+            parent myViewPeaks on
+            shortLabel Peak Two
+            longLabel Peak Two Long
+            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
+            subGroups cell=A1GM12 view=PK
+
+        track myViewSignals
+        parent myMultiViewComposite
+        shortLabel Peaks
+        view SIG
+        visibility pack
+        type bigWig
+
+            track myFirstSignalsSubtrack
+            parent myViewSignals on
+            shortLabel Sig One
+            longLabel Sig One Long
+            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwK562Signal.bw
+            subGroups cell=CD14 view=SIG
+
+            track mySecondSignalsSubtrack
+            parent myViewSignals on
+            shortLabel Sig Two
+            longLabel Sig Two Long
+            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwK562Signal.bw
+            subGroups cell=A1GM12 view=SIG
+    </pre>
+    <p>
+    Similar to the example above, except this example shows a composite track containing two views, one with
+    bigBeds and one with bigBeds, all inside of a superTrack.</p>
+</DIV>
 
 <!-- - - - - - - - CONTAINER/MULTIWIG/AGGREGATE settings - - - - - - - -->
 <DIV class="container_intro">
