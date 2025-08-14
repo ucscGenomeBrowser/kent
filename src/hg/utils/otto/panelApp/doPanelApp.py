@@ -985,7 +985,7 @@ def main():
 
     # Now update panelApp Australia
     # Genes track
-    hg19Bed, hg38Bed = downloadGenes("https://panelapp-aus.org/api/v1/panels/?format=json", onlyPanels=[137, 126])
+    hg19Bed, hg38Bed = downloadGenes("https://panelapp-aus.org/api/v1/panels/?format=json")
     writeBb(hg19Bed, hg38Bed, "genesAus")
     # STRs track
     hg19Bed, hg38Bed = downloadTandReps("https://panelapp-aus.org/api/v1/strs/?format=json")
