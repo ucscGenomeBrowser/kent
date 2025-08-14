@@ -612,7 +612,7 @@ var subCfg = { // subtrack config module.
         $(cfg).show();
         // Tricks to get this in the size and position I want
         $(cfg).css({ position: 'absolute'});
-        var maxWidth = $(cfg).parents('table').first()[0].clientWidth;
+        var maxWidth = $("[name='mainForm']")[0].clientWidth;
         var schemaLink = $(cfg).parents('td').first().next();
         var schemaLinkWidth = schemaLink !== null ? schemaLink[0].clientWidth : 0;
         var shiftLeft = -1;
