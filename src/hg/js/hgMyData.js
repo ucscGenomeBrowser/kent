@@ -310,17 +310,35 @@ const uppy = new Uppy.Uppy({
                 uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
-            } else if  (!file.meta.fileType) {
+            }
+            if  (!file.meta.fileType) {
                 uppy.info(`Error: File type not supported, file: ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
+            // check if this hub already exists and the genome is different from what was
+            // just selected, if so, make the user create a new hub
+            if (file.meta.parentDir in hubCreate.uiState.filesHash && hubCreate.uiState.filesHash[file.meta.parentDir].genome !== file.meta.genome) {
+                genome = hubCreate.uiState.filesHash[file.meta.parentDir].genome;
+                uppy.info(`Error: the hub ${file.meta.parentDir} already exists and is for genome "${genome}". Please select the correct genome, a different hub or make a new hub.`);
+                doUpload = false;
+                continue;
+            }
+            // check if the user is uploading a hub.txt into a hub that already has a hub.txt
+            let hubFiles = hubCreate.uiState.filesHash[file.meta.parentDir].children;
+            if (file.meta.fileType === "hub.txt" && hubFiles.filter((f) => f.fileType === "hub.txt").length !== 0) {
+                uppy.info(`Error: the hub definition file (ex: hub.txt) already exists, create a new hub if you want to upload this hub definition file`);
+                doUpload = false;
+                continue;
+            }
+
             uppy.setFileMeta(file.id, {
                 fileName: file.meta.name,
                 fileSize: file.size,
                 lastModified: file.data.lastModified,
             });
             thisQuota += file.size;
+
         }
         if (thisQuota + hubCreate.uiState.userQuota > hubCreate.uiState.maxQuota) {
             uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
