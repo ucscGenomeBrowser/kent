@@ -307,6 +307,16 @@ slReverse(&hubList);
 return hubList;
 }
 
+void removeQuickListReference(struct cart *cart, unsigned hubId, char *toDb)
+{
+// for now we're deleting quickLifted ups that aren't to the current datbase
+char buffer[4096];
+
+safef(buffer, sizeof buffer, "quickLift.%d.%s", hubId, toDb);
+cartRemove(cart, buffer);
+cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+}
+
 struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart, char *db)
 /* Return list of track hubs that are turned on by user in cart. */
 {
@@ -344,17 +354,8 @@ for (name = nameList; name != NULL; name = name->next)
         sqlFreeResult(&sr);
 
         // don't load quickLift hubs that aren't for us
-        if ((db == NULL) || sameOk(toDb, hubConnectSkipHubPrefix(db)))
-            hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
-        else
-            {
-            // for now we're deleting quickLifted ups that aren't to the current datbase
-            char buffer[4096];
-
-            safef(buffer, sizeof buffer, "quickLift.%d.%s", id, toDb);
-            cartRemove(cart, buffer);
-            cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
-            }
+        //if ((db == NULL) || sameOk(toDb, hubConnectSkipHubPrefix(db)))
+        hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
         }
     if (hub != NULL)
 	{
