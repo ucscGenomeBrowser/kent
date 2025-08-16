@@ -17,7 +17,8 @@ long oChromStart;
 long oChromEnd;
 char strand;
 unsigned hexColor;
-char otherBase;
+char *otherBases;
+unsigned otherCount;
 };
 
 #define INSERT_COLOR     0
@@ -107,42 +108,6 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
         int tEnd = bl->chromEnd;
         int qStart = bl->qStart;
         int qEnd = qStart + (tEnd - tStart);
-        struct highRegions *hr;
-        if ((previousTEnd != -1) && (previousTEnd == tStart))
-            {
-            AllocVar(hr);
-            slAddHead(&hrList, hr);
-        //    hr->strand = 
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->hexColor = highlightColors[DEL_COLOR];
-            }
-        if ( (previousQEnd != -1) && (previousQEnd == qStart))
-            {
-            AllocVar(hr);
-            slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->hexColor = highlightColors[INSERT_COLOR];
-            }
-        if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
-             && ((previousTEnd != -1) && (previousTEnd != tStart)))
-            {
-            AllocVar(hr);
-            slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->hexColor = highlightColors[DOUBLE_COLOR];
-            }
-        previousQEnd = qEnd;
-        previousTEnd = tEnd;
-
         // crop the chain block if it's bigger than the window
         int tMin, tMax;
         int qMin, qMax;
@@ -170,6 +135,44 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
         struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
         if (bc->strand[0] == '-')
             reverseComplement(qSeq->dna, qSeq->size);
+        struct highRegions *hr;
+        if ((previousTEnd != -1) && (previousTEnd == tStart))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+        //    hr->strand = 
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->hexColor = highlightColors[DEL_COLOR];
+            hr->otherBases = &qSeq->dna[qStart - qMin];
+            hr->otherCount = hr->oChromEnd - hr->oChromStart;
+            }
+        if ( (previousQEnd != -1) && (previousQEnd == qStart))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->hexColor = highlightColors[INSERT_COLOR];
+            }
+        if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
+             && ((previousTEnd != -1) && (previousTEnd != tStart)))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->hexColor = highlightColors[DOUBLE_COLOR];
+            }
+        previousQEnd = qEnd;
+        previousTEnd = tEnd;
+
 
         unsigned tAddr = tMin;
         unsigned qAddr = qMin;
@@ -184,7 +187,8 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
                 hr->chromEnd = tAddr + 1;
                 hr->oChromStart = qAddr;
                 hr->oChromEnd = qAddr + 1;
-                hr->otherBase = qSeq->dna[count];
+                hr->otherBases = &qSeq->dna[count];
+                hr->otherCount = 1;
                 hr->hexColor = highlightColors[MISMATCH_COLOR];
                 }
             }
@@ -251,13 +255,15 @@ for(; hr; hr = hr->next)
 
     char mouseOver[4096];
 
-    if (hr->otherBase != 0)
-        safef(mouseOver, sizeof mouseOver, "mismatch %c", hr->otherBase);
+    if (hr->hexColor == highlightColors[MISMATCH_COLOR])
+        safef(mouseOver, sizeof mouseOver, "mismatch %.*s", hr->otherCount, hr->otherBases);
     else if (hr->chromStart == hr->chromEnd)
-        safef(mouseOver, sizeof mouseOver, "deletion %ldbp", hr->oChromStart - hr->oChromStart);
+        safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherCount, hr->otherBases);
+    else if (hr->oChromStart == hr->oChromEnd)
+        safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->chromEnd - hr->chromStart);
     else
-        safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->oChromEnd - hr->oChromStart);
-    mapBoxHc(hvg, seqStart, seqEnd, x1, yOff, width, height, tg->track, "insert", mouseOver);
+        safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
+    mapBoxHc(hvg, seqStart, seqEnd, x1, yOff, width, height, tg->track, "indel", mouseOver);
 
     }
 }
