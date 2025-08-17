@@ -28056,6 +28056,10 @@ else if (startsWith("hprcDeletions", table) || startsWith("hprcInserts", table) 
     {
     doHPRCTable(tdb, item);
     }
+else if (tdb && sameString(tdb->type, "lorax"))
+    {
+    doLorax(tdb, item);
+    }
 else
     return FALSE;
 

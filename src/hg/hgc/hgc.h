@@ -601,6 +601,9 @@ void doInteractDetails(struct trackDb *tdb, char *item);
 void doParDetails(struct trackDb *tdb, char *name);
 /* show details of a PAR item. */
 
+void doLorax(struct trackDb *tdb, char *item);
+/* Display the Lorax multi-tree viewer. */
+
 
 struct psl *getPslAndSeq(struct trackDb *tdb, char *chromName, struct bigBedInterval *bb, 
     unsigned seqTypeField, DNA **retSeq, char **retCdsStr);
