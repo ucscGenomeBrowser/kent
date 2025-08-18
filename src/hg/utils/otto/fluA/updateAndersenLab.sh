@@ -29,12 +29,23 @@ csvToTab < ~/github/avian-influenza/metadata/SraRunTable_automated.csv \
 | perl -wne 'chomp;
     ($run, $date, $country, $host, $sample) = split(/\t/);
     $year = $date;  $year =~ s/^(\d{4}).*/$1/;
-    $sample =~ s/-original$//; $sample =~ s/-repeat2?//;
-    $sample =~ s/([0-9]{2}-[0-9]{6}-[0-9]{3})-(300|MTM)/$1/;
     $host = ucfirst(lc($host));
     $host =~ s/ /-/g;
-    foreach $segment (qw/HA MP M2 NA NP NS PA PB1 PB2/) {
-      print "Consensus_${run}_${segment}_cns_threshold_0.5_quality_20\tA/$host/$country/${sample}_$segment/$year|$run|$date\n";
+    $host =~ s/['"'"':;\[\]()]//g;
+    $country =~ s/:.*//;
+    if ($sample =~ m@^Influenza A virus (A/.*)/\d{4}\(H\dN\d\)\)?@) {
+      $sample = $1;
+      foreach $segment (qw/HA MP M2 NA NP NS PA PB1 PB2/) {
+        print "Consensus_${run}_${segment}_cns_threshold_0.5_quality_20\t${sample}_$segment/$year|$run|$date\n";
+        print "Consensus_${run}_${segment}_cns_threshold_0.75_quality_20\t${sample}_$segment/$year|$run|$date\n";
+      }
+    } else {
+      $sample =~ s/-original$//; $sample =~ s/-repeat2?//;
+      $sample =~ s/([0-9]{2}-[0-9]{6}-[0-9]{3})-(300|MTM)/$1/;
+      foreach $segment (qw/HA MP M2 NA NP NS PA PB1 PB2/) {
+        print "Consensus_${run}_${segment}_cns_threshold_0.5_quality_20\tA/$host/$country/${sample}_$segment/$year|$run|$date\n";
+        print "Consensus_${run}_${segment}_cns_threshold_0.75_quality_20\tA/$host/$country/${sample}_$segment/$year|$run|$date\n";
+      }
     }' \
 | grep -Fwf <(grep ^\> sraNotGb.fa | sed -re 's/^>//;') \
     > srr_renaming.tsv
@@ -53,13 +64,25 @@ csvToTab < ~/github/avian-influenza/metadata/SraRunTable_automated.csv \
 | perl -wne 'chomp;
     ($run, $proj, $biosamp, $center, $date, $country, $loc, $host, $sample, $serotype) = split(/\t/);
     $year = $date;  $year =~ s/^(\d{4}).*/$1/;
-    $sample =~ s/-original$//; $sample =~ s/-repeat2?//;
-    $sample =~ s/([0-9]{2}-[0-9]{6}-[0-9]{3})-(300|MTM)/$1/;
     $host = ucfirst(lc($host));
     $host =~ s/ /-/g;
-    foreach $segment (qw/HA MP M2 NA NP NS PA PB1 PB2/) {
-      print join("\t", "A/$host/$country/${sample}_$segment/$year|$run|$date", "", $date, $country, $loc, "",
-                 $host, $proj, $biosamp, $run, $center, "", $serotype, $segment) . "\n";
+    $host =~ s/['"'"':;\[\]()]//g;
+    $country =~ s/: ?(.*)//;
+    $loc =~ s/: /:/;
+    $loc = $1 if ($loc eq "" && $1 ne "");
+    if ($sample =~ m@^Influenza A virus (A/.*)/\d{4}\(H\dN\d\)\)?@) {
+      $sample = $1;
+      foreach $segment (qw/HA MP M2 NA NP NS PA PB1 PB2/) {
+        print join("\t", "${sample}_$segment/$year|$run|$date", "", $date, $country, $loc, "",
+                   $host, $proj, $biosamp, $run, $center, "", $serotype, $segment) . "\n";
+      }
+    } else {
+      $sample =~ s/-original$//; $sample =~ s/-repeat2?//;
+      $sample =~ s/([0-9]{2}-[0-9]{6}-[0-9]{3})-(300|MTM)/$1/;
+      foreach $segment (qw/HA MP M2 NA NP NS PA PB1 PB2/) {
+        print join("\t", "A/$host/$country/${sample}_$segment/$year|$run|$date", "", $date, $country, $loc, "",
+                   $host, $proj, $biosamp, $run, $center, "", $serotype, $segment) . "\n";
+      }
     }' \
 | grep -Fwf <(grep ^\> $fluADir/andersen_lab.srrNotGb.renamed.fa | sed -re 's/^>//;') \
 | sort -u \

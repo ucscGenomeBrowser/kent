@@ -15175,6 +15175,10 @@ else if (sameWord(type, "bedMethyl"))
     {
     bedMethylMethods(track);
     }
+else if (sameWord(type, "lorax"))
+    {
+    loraxMethods(track);
+    }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);

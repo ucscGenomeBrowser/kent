@@ -6,6 +6,8 @@
     "meta_sa26_increase": { "scale": [ [0, "#D8D8D8"], [1.9567, "#5050F8"] ] }
   },
   "customNames": {
+    "meta_genoflu_genotype": "GenoFlu genotype",
+    "meta_genoflu_segtype": "GenoFlu segment type",
     "meta_mouse_escape": "Mouse sera escape relative to AmWigeon/SC/2021",
     "meta_ferret_escape": "Ferret sera escape relative to AmWigeon/SC/2021",
     "meta_cell_entry": "Cell entry",
@@ -19,10 +21,11 @@
   },
   "colorBy": {
       "colorByOptions": [ "meta_host", "meta_country", "meta_location", "meta_Nextstrain_clade",
-                          "meta_serotype", "meta_segment",
+                          "meta_serotype", "meta_segment", "meta_genoflu_genotype", "meta_genoflu_segtype",
                           "meta_mouse_escape", "meta_ferret_escape", "meta_cell_entry",
                           "meta_stability", "meta_sa26_increase",
                           "genotype",
                           "None" ]
-  }
+  },
+  "defaultColorByField": "meta_serotype"
 }

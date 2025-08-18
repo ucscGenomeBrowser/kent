@@ -27,5 +27,6 @@
                           "meta_mutdiffsel",
                           "genotype",
                           "None" ]
-  }
+  },
+  "defaultColorByField": "meta_host"
 }

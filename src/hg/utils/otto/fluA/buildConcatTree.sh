@@ -22,7 +22,7 @@ asmDir=$(echo $asmAcc \
          | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
 assemblyReport=$assemblyDir/$asmDir*/$asmAcc*_assembly_report.txt
 
-threads=32
+threads=16
 
 
 # Assembly reports have segment numbers but not names, so map like this:
@@ -137,6 +137,8 @@ grep -w $cladeNode sample-paths.$asmAcc.$segRef \
 # Exclude some sequences that would require the root to be further back than my selected segments.
 cat samples.h5n1_outbreak_2024.* | grep -v \|SRR | cut -d\| -f 2 \
 | grep -Fwf - $fluANcbiDir/metadata.tsv \
+| grep -v 1969-12-31 \
+| grep -v 1970-01-01 \
 | cut -f 15 | sort -u \
 | grep -vE 'A/Texas/37/2024|24-003692-001|24-005915-001|23-038138-001|24-006483-001' \
 | grep -Ff - $fluANcbiDir/metadata.tsv \
@@ -186,8 +188,14 @@ $matOptimize -T $threads -m 0.00000001 -M 1 -S move_log.h5n1_outbreak_2024 \
     >& matOptimize.h5n1_outbreak_2024.log
 chmod 664 h5n1_outbreak_2024.pb*
 
-# Collapse nodes
+# Collapse nodes and filter out extremely long branches that imply outside-of-outbreak sequences
+# Sometimes that filtering needs to be done twice!  I guess getting rid of some long branches
+# can create others.  I hope we don't need more than two rounds...
 $matUtils extract -i h5n1_outbreak_2024.pb.opt.gz \
+    --max-branch-length 65 \
+    -O -o tmp.pb.gz
+$matUtils extract -i tmp.pb.gz \
+    --max-branch-length 65 \
     -O -o h5n1_outbreak_2024.pb.gz
 
 # Make a tree version description for hgPhyloPlace
@@ -205,12 +213,13 @@ echo -e "strain\tdate\tcountry\tlocation\thost\tbioproject_accession\tbiosample_
     > h5n1_outbreak_2024.metadata.tsv
 # INSDC metadata (from HA segment; remove uniquifying INSDC accessions)
 grep -Fwf <(cut -d\| -f 2 samples.h5n1_outbreak_2024.4 | grep -v ^SRR) $fluANcbiDir/metadata.tsv \
+| grep -v 1970-01-01 \
 | sort \
 | perl -F'/\t/' -walne '$F[3] =~ s/(: ?|$)/\t/;  print join("\t", @F);' \
 | join -t$'\t' -o 1.2,2.6,2.4,2.5,2.9,2.10,2.11,2.12,2.14,2.15 \
     <(zcat renaming.tsv.gz | cut -d\| -f 1,3| sort) \
     - \
-| sort -u \
+| sort -k1,1 -u \
     >> h5n1_outbreak_2024.metadata.tsv
 # Add Andersen lab metadata (from HA segment but remove _HA from names)
 grep _HA/ $fluADir/andersen_lab.srrNotGb.renamed.metadata.tsv \
@@ -248,7 +257,7 @@ usher_to_taxonium --input h5n1_outbreak_2024.pb.gz \
     --columns host,country,location,date,authors,mouse_escape,ferret_escape,cell_entry,stability,sa26_increase,mouse_escape_mutations,ferret_escape_mutations,cell_entry_mutations,stability_mutations,sa26_increase_mutations,mutdiffsel,mutdiffsel_mutations \
     --genbank $fluADir/h5n1_outbreak_2024/concat.gbff \
     --name_internal_nodes \
-    --title "2024 H5N1 outbreak in USA, concatenated segments from INSDC and SRA ($today)" \
+    --title "2024 H5N1 B3.13 outbreak in USA, concatenated segments from INSDC and SRA ($today)" \
     --config_json $fluAScriptDir/concat.config.json \
     --chronumental \
     --chronumental_steps 500 \
@@ -296,7 +305,13 @@ mkdir -p $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/$y/$m/$d
 ln -sf $archive/h5n1_outbreak_2024.* $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/$y/$m/$d/
 ln -sf $archiveRoot/h5n1_outbreak_2024.latest.* $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/
 # rsync to hgdownload hubs dir
-for h in hgdownload1 hgdownload2; do
-    rsync -a -L --delete $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024 \
-        qateam@$h:/mirrordata/hubs/$asmDir/
+for h in hgdownload1 hgdownload3; do
+    if rsync -a -L --delete $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024 \
+             qateam@$h:/mirrordata/hubs/$asmDir/ ; then
+        true
+    else
+        echo ""
+        echo "*** rsync to $h failed -- disk full ? ***"
+        echo ""
+    fi
 done

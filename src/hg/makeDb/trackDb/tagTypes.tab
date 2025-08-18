@@ -52,7 +52,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed bigLolly
 bedPackDense bed bigBed
-bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio 
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio lorax
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -288,6 +288,8 @@ logoMaf wig bigWig
 longLabel *
 longlabel genePred
 longLabelClip *
+loraxBackendUrl lorax
+loraxIframeHeight lorax
 lossColor bed
 macaqueDb bed
 mafDot wigMaf
@@ -303,7 +305,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
-maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource
+maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource lorax
 maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
 metadata *

@@ -60,7 +60,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb.gz ]; then
     # Prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i merged.deltaMasked.pb.gz \
         --max-parsimony 20 \
-        --max-branch-length 60 \
+        --max-branch-length 70 \
         --max-path-length 225 \
         -O -o merged.deltaMasked.filtered.pb.gz
     # matOptimize: used -r 8 -M2 until 2023-05-12, then switched to Cheng's recommended
@@ -86,7 +86,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb.gz ]; then
     # Again prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.fix.pb.gz \
         --max-parsimony 20 \
-        --max-branch-length 60 \
+        --max-branch-length 70 \
         --max-path-length 225 \
         -O -o gisaidAndPublic.$today.masked.pb.gz
 fi

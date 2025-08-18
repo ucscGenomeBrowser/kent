@@ -61,7 +61,7 @@ maxAttempts=5
 retryDelay=300
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "fasta attempt $attempt"
-    if datasets download virus genome taxon $taxId --include genome,biosample; then
+    if datasets download virus genome taxon $taxId --include genome,biosample --no-progressbar; then
         break;
     else
         echo "FAILED fasta; will try again after $retryDelay seconds"
@@ -102,14 +102,44 @@ wc -l metadata.2017outbreak.tsv
 
 # Run nextclade on the lot (takes only a few seconds as of 2022-07-25) to get alignments,
 # QC, clade assignments.
+# Clade II 2017 outbreak:
 nextclade dataset get --name hMPXV --output-zip hMPXV.zip
 time nextclade run \
     -D hMPXV.zip \
     -j 30 \
-    --output-tsv nextclade.tsv \
-    --output-fasta nextalign.fa.xz \
+    --output-tsv nextclade.II.tsv.gz \
+    --output-fasta nextalign.II.fa.xz \
     --retry-reverse-complement true \
     genbank.fa.xz
+
+# Clade I: Nextstrain uses a different reference (DQ011155.1 Zaire_1979-005 instead of
+# RefSeq NC_003310.1 AF380138.1 Zaire-96-I-16); use the Nextstrain dataset for clade assignments,
+# but run nextclade separately with the RefSeq sequence for sequence alignments.
+nextclade dataset get --name nextstrain/mpox/clade-i --output-zip mpox_clade-i.zip
+nextclade run \
+    -D mpox_clade-i.zip \
+    -j 30 \
+    --output-tsv nextclade.I.tsv.gz \
+    --retry-reverse-complement true \
+    genbank.fa.xz
+
+# Use alignment parameters from pathogen.json in mpox_clade-i.zip
+nextclade run \
+    --input-ref $mpxvDir/GCF_000857045.1.NC_003310.1.fa \
+    --excess-bandwidth 100 \
+    --terminal-bandwidth 300 \
+    --allowed-mismatches 8 \
+    --window-size 40 \
+    --min-seed-cover 0.1 \
+    --output-fasta nextalign.I.fa.xz \
+    genbank.fa.xz
+
+# Extract metadata for only clade I sequences
+zcat nextclade.I.tsv.gz \
+| tawk '$3 ~ /^I[^I]/ {print $2;}' \
+| grep -Fwf - metadata.tsv \
+    > metadata.cladeI.tsv
+
 
 rm -f $mpxvDir/ncbi/ncbi.latest
 ln -s ncbi.$today $mpxvDir/ncbi/ncbi.latest

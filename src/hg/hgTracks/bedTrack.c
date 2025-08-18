@@ -294,30 +294,64 @@ if (tg->isBigBed)
     }
 else
     {
-    struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-    struct sqlResult *sr;
-    char **row;
-    int rowOffset;
+    char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
-    if (scoreFilterClause != NULL)
-	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
-	freeMem(scoreFilterClause);
-	}
-    else
-	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
-			 NULL, &rowOffset);
-	}
 
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, 9);
-	lf = bedMungToLinkedFeatures(&bed, tdb, 9, scoreMin, scoreMax, useItemRgb);
-	slAddHead(&lfList, lf);
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
+    if (liftDb == NULL)
+        {
+        struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+        struct sqlResult *sr;
+        char **row;
+        int rowOffset;
+        char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
+        if (scoreFilterClause != NULL)
+            {
+            sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+            freeMem(scoreFilterClause);
+            }
+        else
+            {
+            sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
+                             NULL, &rowOffset);
+            }
+
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            bed = bedLoadN(row+rowOffset, 9);
+            lf = bedMungToLinkedFeatures(&bed, tdb, 9, scoreMin, scoreMax, useItemRgb);
+            slAddHead(&lfList, lf);
+            }
+        sqlFreeResult(&sr);
+        hFreeConn(&conn);
+        }
+    else
+        {
+        char *table;
+        if (isCustomTrack(tg->table))
+            {
+            liftDb = CUSTOM_TRASH;
+            table = trackDbSetting(tg->tdb, "dbTableName");
+            }
+        else
+            table = tg->table;
+        struct hash *chainHash = newHash(8);
+        struct sqlConnection *conn = hAllocConn(liftDb);
+        char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoadN, 9, chainHash);
+
+        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
+        for(bed = liftedBeds; bed; bed = bed->next)
+            {
+            lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+            if (useItemRgb)
+                {
+                lf->useItemRgb = TRUE;
+                lf->filterColor=bed->itemRgb;
+                }
+            slAddHead(&lfList, lf);
+            }
+        hFreeConn(&conn);
+        }
     }
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
@@ -346,30 +380,63 @@ if (tg->isBigBed)
     }
 else
     {
-    struct sqlConnection *conn = hAllocConn(database);
-    struct sqlResult *sr;
-    char **row;
-    int rowOffset;
+    char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
-    if (scoreFilterClause != NULL)
-	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
-	freeMem(scoreFilterClause);
-	}
-    else
-	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
-			 NULL, &rowOffset);
-	}
 
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, 8);
-	lf = bedMungToLinkedFeatures(&bed, tdb, 8, scoreMin, scoreMax, useItemRgb);
-	slAddHead(&lfList, lf);
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
+    if (liftDb == NULL)
+        {
+        struct sqlConnection *conn = hAllocConn(database);
+        struct sqlResult *sr;
+        char **row;
+        int rowOffset;
+        if (scoreFilterClause != NULL)
+            {
+            sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+            freeMem(scoreFilterClause);
+            }
+        else
+            {
+            sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
+                             NULL, &rowOffset);
+            }
+
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            bed = bedLoadN(row+rowOffset, 8);
+            lf = bedMungToLinkedFeatures(&bed, tdb, 8, scoreMin, scoreMax, useItemRgb);
+            slAddHead(&lfList, lf);
+            }
+        sqlFreeResult(&sr);
+        hFreeConn(&conn);
+        }
+    else
+        {
+        char *table;
+        if (isCustomTrack(tg->table))
+            {
+            liftDb = CUSTOM_TRASH;
+            table = trackDbSetting(tg->tdb, "dbTableName");
+            }
+        else
+            table = tg->table;
+        struct hash *chainHash = newHash(8);
+        struct sqlConnection *conn = hAllocConn(liftDb);
+        char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoadN, 8, chainHash);
+
+        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
+        for(bed = liftedBeds; bed; bed = bed->next)
+            {
+            lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+            if (useItemRgb)
+                {
+                lf->useItemRgb = TRUE;
+                lf->filterColor=bed->itemRgb;
+                }
+            slAddHead(&lfList, lf);
+            }
+        hFreeConn(&conn);
+        }
     }
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);

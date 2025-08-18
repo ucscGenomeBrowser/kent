@@ -39,8 +39,11 @@ cd $cncbDir && time $scriptDir/getCncb.sh >& getCncb.log &
 
 wait
 
-time $scriptDir/updateIdMapping.sh \
-    $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz}
+if ! time $scriptDir/updateIdMapping.sh \
+              $gisaidDir/{metadata_batch_$today.tsv.gz,sequences_batch_$today.fa.xz} ; then
+    echo "*** updateIdMapping failed -- proceeding with .latest versions:"
+    ls -l $epiToPublic $ottoDir/ncbi.latest $ottoDir/cogUk.latest $ottoDir/cncb.latest
+fi
 
 buildDir=$ottoDir/$today
 mkdir -p $buildDir

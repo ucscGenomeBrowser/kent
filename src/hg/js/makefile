@@ -12,7 +12,7 @@ UCSC_JS_FILES=ajax.js alleles.js assemblySearch.js autocomplete.js \
     hgHubConnect.js hgTracks.js hgc.js hgMyData.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js \
-	cdwSummaryJs.js spectrum.min.js hgSearch.js
+	cdwSummaryJs.js spectrum.min.js hgSearch.js lorax.js
 
 # STATIC files must pass jshint
 STATIC_FILES=staticDoc.js dbDbTaxonomy.js analytics.js

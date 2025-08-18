@@ -156,11 +156,19 @@ done
     # Update hgdownload-test link for archive
     asmDir=$(echo $asmAcc \
         | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
-    mkdir -p /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER/$y/$m
-    ln -sf $archive /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER/$y/$m
+    mkdir -p /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_Mtb/$y/$m
+    ln -sf $archive /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_Mtb/$y/$m
     # rsync to hgdownload hubs dir
-    rsync -v -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER/* \
-        qateam@hgdownload.soe.ucsc.edu:/mirrordata/hubs/$asmDir/UShER/
+    for h in hgdownload1 hgdownload2 hgdownload3; do
+        if rsync -v -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/UShER_Mtb/* \
+                 qateam@$h:/mirrordata/hubs/$asmDir/UShER_Mtb/ ; then
+            true
+        else
+            echo ""
+            echo "*** rsync to $h failed; disk full? ***"
+            echo ""
+        fi
+    done
 
 rm -f mutation-paths.txt *.pre*.pb final-tree.nh
 nice gzip -f *.log *.tsv move_log* *.stderr samples.*

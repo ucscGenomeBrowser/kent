@@ -11,7 +11,7 @@ today=$(date +%F)
 
 ottoDir=/hive/data/outside/otto/sarscov2phylo
 
-metadataUrl='https://ngdc.cncb.ac.cn/ncov/api/es/genome/download?q=&accession=&country=&province=&city=&host=&minCollectDate=&maxCollectDate=&source=CNGBdb,GenBase,Genome+Warehouse,NMDC&qc=&complete=&minLength=15000&maxLength=31000&ns=&ds=&lineage=&whoLabel=&latest=0&md5=0&md5value=&minSubDate=&maxSubDate='
+metadataUrl='https://ngdc.cncb.ac.cn/ncov/api/es/genome/download?q=&accession=&country=&province=&city=&host=&minCollectDate=&maxCollectDate=&source=CNGBdb,GenBase,Genome%20Warehouse,NMDC&qc=&complete=&minLength=15000&maxLength=31000&ns=&ds=&lineage=&whoLabel=&latest=0&md5=0&md5value=&minSubDate=&maxSubDate='
 genBaseFileApiBase='https://ngdc.cncb.ac.cn/genbase/api/file/fasta?acc='
 
 mkdir -p $ottoDir/cncb.$today
@@ -20,7 +20,7 @@ cd $ottoDir/cncb.$today
 function curlRetry {
     local url=$*
     local attempt=0
-    local maxAttempts=100
+    local maxAttempts=20
     local retryDelay=300
     while [[ $((++attempt)) -le $maxAttempts ]]; do
         >&2 echo "curl attempt $attempt"
@@ -32,7 +32,7 @@ function curlRetry {
         fi
     done
     if [[ $attempt -gt $maxAttempts ]]; then
-        $>2 echo "curl failed $maxAttempts times; quitting."
+        >&2 echo "curl failed $maxAttempts times; quitting."
         exit 1
     fi
 }

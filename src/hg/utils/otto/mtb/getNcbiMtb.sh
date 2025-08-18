@@ -44,7 +44,7 @@ unzip ncbi_dataset.zip
 # Extract metadata for single-sequence GCA assemblies only from assembly_data_report.jsonl
 jq -c -r 'if .assemblyStats.numberOfComponentSequences == 1 then ([.accession, .assemblyInfo.biosample.accession, (.assemblyInfo.biosample.attributes[] | select(.name == "collection_date") | .value) // "", (.assemblyInfo.biosample.attributes[] | select(.name == "geo_loc_name") | .value) // "", (.assemblyInfo.biosample.attributes[] | select(.name == "host") | .value) // "", .assemblyInfo.assemblyName, .assemblyStats.totalSequenceLength, .assemblyInfo.bioprojectAccession // "", (if .assemblyInfo.biosample.sampleIds != null then .assemblyInfo.biosample.sampleIds[] | select(.db == "SRA") | .value else "" end) // "", (.assemblyInfo.biosample.attributes[] | select(.name == "strain") | .value) // "", .organism.organismName, .organism.infraspecificNames.strain // "", .organism.infraspecificNames.isolate // ""] | join("\t")) else "" end' \
     ncbi_dataset/data/assembly_data_report.jsonl \
-| g ^GCA \
+| grep ^GCA \
 | sort \
     > assembly_metadata.tsv
 

@@ -7,7 +7,11 @@ set -beEu -o pipefail
 
 fluAScriptDir=$(dirname "${BASH_SOURCE[0]}")
 
-today=$(date +%F)
+if [[ $# > 0 ]]; then
+    today=$1
+else
+    today=$(date +%F)
+fi
 
 fluADir=/hive/data/outside/otto/fluA
 fluANcbiDir=$fluADir/ncbi/ncbi.latest
@@ -19,7 +23,7 @@ matUtils=$usherDir/build/matUtils
 matOptimize=$usherDir/build/matOptimize
 
 minSize=800
-threads=32
+threads=16
 
 assemblyDir=/hive/data/outside/ncbi/genomes
 asmHubDir=/hive/data/genomes/asmHubs/refseqBuild
@@ -191,8 +195,8 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                 --jobs $threads \
                 --output-fasta aligned.$asmAcc.$segRef.fa.xz \
                 >& nextalign.log
-        elif [[ $segment == 1 ]]; then
-            # All PB2 (segment 1): align SRA assemblies in addition to INSDC
+        else
+            # Align SRA assemblies in addition to INSDC
             cat $fluADir/andersen_lab.srrNotGb.renamed.fa \
                 <(xzcat $fluADir/ncbi/ncbi.$today/genbank.fa.xz) \
             | nextclade run --input-dataset $fluADir/nextclade/$asmAcc/$segRef \
@@ -200,18 +204,10 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                 --jobs $threads \
                 --output-fasta aligned.$asmAcc.$segRef.fa.xz \
                 >& nextalign.log
-        else
-            # Align INSDC
-            nextclade run --input-dataset $fluADir/nextclade/$asmAcc/$segRef \
-                --include-reference \
-                --jobs $threads \
-                --output-fasta aligned.$asmAcc.$segRef.fa.xz \
-                $fluADir/ncbi/ncbi.$today/genbank.fa.xz \
-                >& nextalign.log
         fi
 
         # Add -excludeFile=$fluAScriptDir/exclude.ids if we need to exclude any in the future.
-        time faToVcf -verbose=2 -includeRef -includeNoAltN \
+        time faToVcf -verbose=2 -includeNoAltN \
             <(xzcat aligned.$asmAcc.$segRef.fa.xz) stdout \
         | vcfRenameAndPrune stdin renaming.tsv stdout \
         | pigz -p 8 \
@@ -233,6 +229,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
         # Optimize:
         time $matOptimize -T $threads -m 0.00000001 -M 1 -S move_log.$asmAcc.$segRef \
             -i fluA.$asmAcc.$segRef.$today.preOpt.pb \
+            -v all.$asmAcc.$segRef.vcf.gz \
             -o fluA.$asmAcc.$segRef.$today.pb \
             >& matOptimize.$asmAcc.$segRef.log
         chmod 664 fluA.$asmAcc.$segRef.$today.pb*
@@ -279,8 +276,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                  # Also run on collab's sequences and SRA assemblies
                  time cat <(faSomeRecords <(xzcat $fluADir/ncbi/ncbi.$today/genbank.fa.xz) \
                                 accs.$asmAcc.$segRef.tsv stdout) \
-                          $fluADir/h5nx.epiNoMatchRenamed.fa \
-                          $fluADir/andersen_lab.srrNotGb.renamed.fa
+                          $fluADir/h5nx.epiNoMatchRenamed.fa \                          $fluADir/andersen_lab.srrNotGb.renamed.fa
              else
                  time faSomeRecords <(xzcat $fluADir/ncbi/ncbi.$today/genbank.fa.xz) \
                          accs.$asmAcc.$segRef.tsv stdout
@@ -307,80 +303,70 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
         | sort \
             >> fluA.$asmAcc.$segRef.$today.metadata.tsv
 
+        # Add columns: GenoFlu genotype and segment type
+        csvtk join -t --left-join fluA.$asmAcc.$segRef.$today.metadata.tsv $fluADir/genoflu/genoflu.tsv \
+              > tmp
+        mv tmp fluA.$asmAcc.$segRef.$today.metadata.tsv
+
         if [[ x$nextcladeName != x ]]; then
-            tail -n+2 fluA.$asmAcc.$segRef.$today.metadata.tsv \
-            | join -t$'\t' -a1 -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,2.2 \
-                - \
-                <(join -o 1.2,2.2 -t$'\t' <(sort renaming.tsv) \
-                    <(cut -f 1,2 nextclade.$asmAcc.$segRef.tsv | sort) \
-                  | sort) \
-            > tmp
-            echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tserotype\tsegment\tNextstrain_clade" \
-                > fluA.$asmAcc.$segRef.$today.metadata.tsv
-            cat tmp >> fluA.$asmAcc.$segRef.$today.metadata.tsv
-            rm tmp
+            # Add column: nextclade assignment
+            cut -f 1,2 nextclade.$asmAcc.$segRef.tsv \
+            | csvtk rename -t -f clade -n Nextstrain_clade \
+            | csvtk replace -t -f seqName -p '(.*)' -r '{kv}' -k renaming.tsv \
+            | csvtk join -t --left-join fluA.$asmAcc.$segRef.$today.metadata.tsv - \
+                > tmp
+            mv tmp fluA.$asmAcc.$segRef.$today.metadata.tsv
         fi
 
         if [[ $segRef == "NC_007362.1" ]]; then
-            # Add Bloom lab's H5N1 HA Deep Mutational Scanning scores
-            tail -n+2 fluA.$asmAcc.$segRef.$today.metadata.tsv \
-            | sort \
-            | join -t$'\t' -a1 \
-                  -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11 \
-                  - <(tail -n+2 H5N1_HA_DMS_metadata.tsv | sort) \
-               > tmp
-            oldFields=$(head -1 fluA.$asmAcc.$segRef.$today.metadata.tsv | sed -re 's/\t/\\t/g')
-            newFields=$(head -1 H5N1_HA_DMS_metadata.tsv | cut -f 2- | sed -re 's/\t/\\t/g')
-            echo -e "$oldFields\t$newFields"\
-                > fluA.$asmAcc.$segRef.$today.metadata.tsv
-            cat tmp >> fluA.$asmAcc.$segRef.$today.metadata.tsv
-            rm tmp
+            # Add columns: Bloom lab's H5N1 HA Deep Mutational Scanning scores
+            csvtk join -t --left-join fluA.$asmAcc.$segRef.$today.metadata.tsv H5N1_HA_DMS_metadata.tsv \
+                  > tmp
+            mv tmp fluA.$asmAcc.$segRef.$today.metadata.tsv
         fi
         if [[ $segment == 1 ]]; then
-            # Add Bloom lab's Avian PB2 Differential selection to metadata for all PB2 (segment 1)
-            tail -n+2 fluA.$asmAcc.$segRef.$today.metadata.tsv \
-            | sort \
-            | join -t$'\t' -a1 \
-                  -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,2.2,2.3,2.4 \
-                  - <(tail -n+2 PB2_DMS_metadata.tsv | sort) \
-               > tmp
-            oldFields=$(head -1 fluA.$asmAcc.$segRef.$today.metadata.tsv | sed -re 's/\t/\\t/g')
-            newFields=$(head -1 PB2_DMS_metadata.tsv | cut -f 2- | sed -re 's/\t/\\t/g')
-            echo -e "$oldFields\t$newFields"\
-                > fluA.$asmAcc.$segRef.$today.metadata.tsv
-            cat tmp >> fluA.$asmAcc.$segRef.$today.metadata.tsv
-            rm tmp
+            # Add columns: Bloom lab's Avian PB2 Differential selection to metadata for all PB2 (segment 1)
+            csvtk join -t --left-join fluA.$asmAcc.$segRef.$today.metadata.tsv PB2_DMS_metadata.tsv \
+                  > tmp
+            mv tmp fluA.$asmAcc.$segRef.$today.metadata.tsv
         fi
         if [[ $asmAcc == GCF_000864105.1 ]]; then
-            # Add h5nx from collab
-            if [[ $segRef == "NC_007362.1" ]]; then
-                # Add clades and Bloom lab DMS scores
-                grep -Fwf samples.$asmAcc.$segRef.$today $fluADir/h5nx.epiNoMatchRenamed.metadata.tsv \
-                | tawk '{print $1, "", $3, $4, $5, "?", $6, "", "", "", $7, $8, $9, $10;}' \
+            # Add rows: h5nx from collab
+            grep -Fwf samples.$asmAcc.$segRef.$today $fluADir/h5nx.epiNoMatchRenamed.metadata.tsv \
+            | tawk '{print $1, "", $3, $4, $5, "?", $6, "", "", "", $7, $8, $9, $10;}' \
+                   > tmp
+            # Proceed only if tmp is non-empty because csvtk join just barfs the second file if the first
+            # file is empty, instead of doing a proper left join with empty!
+            if [[ -s tmp ]]; then
+                csvtk join -t --left-join tmp $fluADir/genoflu/genoflu.tsv \
                 | sort \
-                | join -t$'\t' -a1 \
-                    -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,2.2 \
-                    - <(cut -f 1,2 nextclade.$asmAcc.$segRef.tsv | sort) \
-                | join -t$'\t' -a1 \
-                  -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11 \
-                 - <(tail -n+2 H5N1_HA_DMS_metadata.tsv | sort) \
-                    >> fluA.$asmAcc.$segRef.$today.metadata.tsv
-            else
-                grep -Fwf samples.$asmAcc.$segRef.$today \
-                    $fluADir/h5nx.epiNoMatchRenamed.metadata.tsv \
-                | tawk '{print $1, "", $3, $4, $5, "?", $6, "", "", "", $7, $8, $9, $10;}' \
-                    >> fluA.$asmAcc.$segRef.$today.metadata.tsv
+                      > tmp2
+                mv tmp2 tmp
+                if [[ $segRef == "NC_007362.1" ]]; then
+                    # Add clades and Bloom lab DMS scores
+                    join -t$'\t' -a1 -o auto \
+                         tmp <(cut -f 1,2 nextclade.$asmAcc.$segRef.tsv | sort) \
+                    | join -t$'\t' -a1 -o auto \
+                           - <(tail -n+2 H5N1_HA_DMS_metadata.tsv | sort) \
+                           >> fluA.$asmAcc.$segRef.$today.metadata.tsv
+                elif [[ $segment == 1 ]]; then
+                    join -t$'\t' -a1 -o auto tmp <(tail -n+2 PB2_DMS_metadata.tsv | sort) \
+                         >> fluA.$asmAcc.$segRef.$today.metadata.tsv
+                else
+                    cat tmp \
+                        >> fluA.$asmAcc.$segRef.$today.metadata.tsv
+                fi
             fi
-            # Add SRA runs
+            rm tmp
+            # Add rows: SRA runs
             if [[ $segRef == "NC_007362.1" ]]; then
                 grep -Fwf samples.$asmAcc.$segRef.$today \
                     $fluADir/andersen_lab.srrNotGb.renamed.metadata.tsv \
+                | csvtk join -t --left-join - $fluADir/genoflu/genoflu.tsv \
                 | sort \
-                | join -t$'\t' -a1 \
-                    -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,2.2 \
+                | join -t$'\t' -a1 -o auto \
                     - <(cut -f 1,2 nextclade.$asmAcc.$segRef.tsv | sort) \
-                | join -t$'\t' -a1 \
-                  -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11 \
+                | join -t$'\t' -a1 -o auto \
                  - <(tail -n+2 H5N1_HA_DMS_metadata.tsv | sort) \
                     >> fluA.$asmAcc.$segRef.$today.metadata.tsv
             elif [[ $segRef == "NC_007357.1" ]]; then
@@ -391,8 +377,14 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                 grep -Fwf samples.$asmAcc.$segRef.$today \
                     $fluADir/andersen_lab.srrNotGb.renamed.metadata.tsv \
                 | cat \
-                    >> fluA.$asmAcc.$segRef.$today.metadata.tsv
+                    > tmp
                 set -o pipefail
+                # Proceed only if tmp is non-empty because csvtk join just barfs the second file if the first
+                # file is empty, instead of doing a proper left join with empty!
+                if [[ -s tmp ]]; then
+                    csvtk join -t --left-join tmp $fluADir/genoflu/genoflu.tsv \
+                          >> fluA.$asmAcc.$segRef.$today.metadata.tsv
+                fi
             fi
         fi
         if [[ $segment == 1 ]]; then
@@ -400,9 +392,9 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
             # references are considered, GsGd (GCF_000864105.1 / NC_007357.1) is not the best match.
             grep -Fwf samples.$asmAcc.$segRef.$today \
                 $fluADir/andersen_lab.srrNotGb.renamed.metadata.tsv \
+            | csvtk join -t --left-join - $fluADir/genoflu/genoflu.tsv \
             | sort \
-            | join -t$'\t' -a1 \
-                -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,2.2,2.3,2.4,2.5,2.6 \
+            | join -t$'\t' -a1 -o auto \
                 - <(tail -n+2 PB2_DMS_metadata.tsv | sort) \
                 >> fluA.$asmAcc.$segRef.$today.metadata.tsv
         fi
@@ -416,7 +408,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
             gisaid=""
         fi
         title="Influenza A $strain segment $segment ($segName) $today tree with $sampleCountComma genomes from INSDC$gisaid"
-        columns="genbank_accession,country,location,date,host,serotype,segment,authors$nextcladeTaxCo"
+        columns="genbank_accession,country,location,date,host,serotype,segment,genoflu_genotype,genoflu_segtype,authors,bioproject_accession$nextcladeTaxCo"
         config_json=""
         if [[ $segRef == "NC_007362.1" ]]; then
             columns="$columns,mouse_escape,ferret_escape,cell_entry,stability,sa26_increase"
@@ -474,7 +466,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
             sampleCountComma=$(zcat samples.$asmAcc.$segRef.$today.gz | wc -l \
                    | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
             title="Influenza A $strain segment $segment ($segName) $today tree with $sampleCountComma genomes from INSDC"
-            columns="genbank_accession,country,location,date,host,serotype,segment,authors$nextcladeTaxCo"
+            columns="genbank_accession,country,location,date,host,serotype,segment,genoflu_genotype,genoflu_segtype,authors,bioproject_accession$nextcladeTaxCo"
             config_json=""
             if [[ $segRef == "NC_007362.1" ]]; then
                 columns="$columns,mouse_escape,ferret_escape,cell_entry,stability,sa26_increase"
@@ -556,17 +548,26 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
         ln -sf $archive/*.$segRef.* $downloadsRoot/$asmDir/UShER_$segRef/$y/$m/$d/
         ln -sf $archiveRoot/*.$segRef.latest.* $downloadsRoot/$asmDir/UShER_$segRef/
         # rsync to hgdownload hubs dir
-        for h in hgdownload1 hgdownload2; do
-            rsync -a -L --delete $downloadsRoot/$asmDir/UShER_$segRef \
-                qateam@$h:/mirrordata/hubs/$asmDir/
+        for h in hgdownload1 hgdownload3; do
+            if rsync -a -L --delete $downloadsRoot/$asmDir/UShER_$segRef \
+                     qateam@$h:/mirrordata/hubs/$asmDir/; then
+                true
+            else
+            echo ""
+                echo "*** rsync to $h failed -- disk full ? ***"
+            echo ""
+            fi
         done
     done
 done
+
+$fluAScriptDir/runGenoFlu.sh >& genoflu.log
 
 echo "Built the trees, cleaning up."
 rm -f mutation-paths.txt *.pre*.pb final-tree.nh tmp.log
 nice gzip -f *.log *.tsv move_log* *.stderr
 
-echo "Building H5N1 outbreak tree"
+echo "Building H5N1 outbreak trees"
 $fluAScriptDir/buildConcatTree.sh $today
+$fluAScriptDir/buildConcatTreeD1.1.sh $today
 echo "All done!"
