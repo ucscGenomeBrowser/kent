@@ -494,48 +494,11 @@ struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
 struct bigBedInterval *result = NULL;
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
-boolean filtering = FALSE; // for the moment assume we're not filtering
+
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
     result = bigBedIntervalQuery(bbi, chrom, start, end, bigBedMaxItems() + 1, lm);
-    if (slCount(result) > bigBedMaxItems())
-	{
-        if (filtering)
-            errAbort("Too many items in window to filter.Zoom in or remove filters to view track.");
-        else
-            {
-            // use summary levels
-            if (track->visibility != tvDense)
-                {
-                track->limitedVis = tvFull;
-                track->limitWiggle = TRUE;
-                track->limitedVisSet = TRUE;
-                }
-            else
-                {
-                track->limitedVis = tvDense;
-                track->limitedVisSet = TRUE;
-                }
-            result = NULL;
-            AllocArray(track->summary, insideWidth);
-            if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
-                {
-                char *denseCoverage = trackDbSettingClosestToHome(track->tdb, "denseCoverage");
-                if (denseCoverage != NULL)
-                    {
-                    double endVal = atof(denseCoverage);
-                    if (endVal <= 0)
-                        {
-                        AllocVar(track->sumAll);
-                        *track->sumAll = bbiTotalSummary(bbi);
-                        }
-                    }
-                }
-            else
-                freez(&track->summary);
-            }
-        }
     track->bbiFile = NULL;
     }
 errCatchEnd(errCatch);
