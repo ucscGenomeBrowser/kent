@@ -1320,7 +1320,7 @@ var hubCreate = (function() {
         if (uiState.isLoggedIn) {
             tableInitOptions.language = {emptyTable: "Uploaded files will appear here. Click \"Upload\" to get started"};
         } else {
-            tableInitOptions.language = {emptyTable: "You are not logged in, please navigate to \"My Data\" > \"My Sessions\" and log in or create an account to begin uploading files"};
+            tableInitOptions.language = {emptyTable: "You are not logged in, please <a href=\"../cgi-bin/hgSession\">log in or create an account</a> to begin uploading files"};
         }
         DataTable.feature.register('quota', function(settings, opts) {
             let options = Object.assign({option1: false, option2: false}, opts);
