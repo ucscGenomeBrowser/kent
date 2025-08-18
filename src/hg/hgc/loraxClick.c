@@ -18,22 +18,8 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 
-// Set iframe style and make iframe with src=[lorax docker with chrom, start and end in URL]
-char *iframeHeight = trackDbSetting(tdb, "loraxIframeHeight");
-printf(
-"<style>\n"
-"iframe {\n"
-"    width: %s;\n"
-"    height: %s;\n"
-"    border: none;\n"
-"}\n"
-"</style>\n",
-       "100%", iframeHeight);
-
-// Get backend URL from trackDb setting, add chrom, start and end params
-char *iframeUrlBase = trackDbSetting(tdb, "loraxIframeUrlBase");
-printf("<iframe id='loraxIframe' src='%s?chrom=%s&start=%d&end=%d'></iframe>\n",
-       iframeUrlBase, chrom, start, end);
+// Print iframe (using tdb settings iframeUrl and iframeOptions)
+printIframe(tdb, "");
 
 // jsIncludeFile throws an error due to CSP when invoked via pop-up, but is necessary when
 // "Enable pop-up when clicking items" is disabled in Genome Browser.
@@ -42,7 +28,7 @@ printf("<iframe id='loraxIframe' src='%s?chrom=%s&start=%d&end=%d'></iframe>\n",
 jsIncludeFile("lorax.js", NULL);
 
 // jsInline still works in pop-up mode even though jsIncludeFile doesn't. (ASH has no idea why.)
-jsInlineF("loraxView('%s', %d, %d);", chrom, start, end);
+jsInlineF("loraxView('%s', %d, %d, %d, %d);", chrom, winStart, winEnd, start, end);
 
 printTrackHtml(tdb);
 }

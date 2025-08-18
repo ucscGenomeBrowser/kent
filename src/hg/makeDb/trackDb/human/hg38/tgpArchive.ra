@@ -28,8 +28,8 @@ html ../tgpArchive
     visibility hide
     maxWindowToDraw 5000000
     bigDataUrl /gbdb/hg38/bbi/tgpLorax.bb
-    loraxIframeUrlBase https://host.docker.internal:5173
-    loraxIframeHeight 550px
+    iframeUrl https://host.docker.internal:5173?chrom=$S&genomiccoordstart=$[&genomiccoordend=$]&regionstart=${&regionend=$}
+    iframeOptions width='100%' height='550px' border='none'
 
     track tgpTrios
     parent tgpArchive
