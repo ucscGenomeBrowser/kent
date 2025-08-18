@@ -28,7 +28,7 @@ html ../tgpArchive
     visibility hide
     maxWindowToDraw 5000000
     bigDataUrl /gbdb/hg38/bbi/tgpLorax.bb
-    loraxBackendUrl https://host.docker.internal:5173
+    loraxIframeUrlBase https://host.docker.internal:5173
     loraxIframeHeight 550px
 
     track tgpTrios

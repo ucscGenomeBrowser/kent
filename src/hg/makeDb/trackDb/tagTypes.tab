@@ -288,7 +288,7 @@ logoMaf wig bigWig
 longLabel *
 longlabel genePred
 longLabelClip *
-loraxBackendUrl lorax
+loraxIframeUrlBase lorax
 loraxIframeHeight lorax
 lossColor bed
 macaqueDb bed

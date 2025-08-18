@@ -31,9 +31,9 @@ printf(
        "100%", iframeHeight);
 
 // Get backend URL from trackDb setting, add chrom, start and end params
-char *backendUrl = trackDbSetting(tdb, "loraxBackendUrl");
+char *iframeUrlBase = trackDbSetting(tdb, "loraxIframeUrlBase");
 printf("<iframe id='loraxIframe' src='%s?chrom=%s&start=%d&end=%d'></iframe>\n",
-       backendUrl, chrom, start, end);
+       iframeUrlBase, chrom, start, end);
 
 // jsIncludeFile throws an error due to CSP when invoked via pop-up, but is necessary when
 // "Enable pop-up when clicking items" is disabled in Genome Browser.
