@@ -659,7 +659,8 @@ GCA_905404095.1_ilGlaAlex1.1	green-underside blue
 GCA_900625125.1_D_medinensis_Ghana_0011_upd	Guinea worm (2018)
 GCA_023969395.1_ASM2396939v1	Gulf Coast tick (SK-2019 2022)
 GCA_000715275.1_Gsalaris_v1	gyrodactylosis fluke (Lier 2014)
-GCA_002082055.1_nHd_3.1	H.dujardini (Z151 2017 tardigrades)
+GCA_001579985.1_ASM157998v1	H.dujardini tardigrades (Sciento 2016)
+GCA_002082055.1_nHd_3.1	H.dujardini tardigrades (Z151 2017)
 GCA_020186115.1_ASM2018611v1	H.meleagridis (2922-C6/04-10x 2021 genbank)
 GCF_020186115.1_ASM2018611v1	H.meleagridis (2922-C6/04-10x 2021 refseq)
 GCA_020184695.1_ASM2018469v1	H.meleagridis (2922-C6/04-290x 2021)
@@ -688,6 +689,7 @@ GCF_021155765.1_iyDipSimi1.1	hymenopterans (iyDipSimi1 2021)
 GCF_021155785.1_iyNeoFabr1.1	hymenopterans (iyNeoFabr1 2021)
 GCF_021901495.1_iyNeoVirg1.1	hymenopterans (iyNeoVirg1 2022)
 GCF_000612105.2_Oabi_2.0	hymenopterans O.abietinus
+GCA_034696485.1_ASM3469648v1	I.dastychi tardigrades (Gr-Tar-00864 2023)
 GCA_002811675.1_ASM281167v1	Ichthyosporea XGB-2017a (Hawaii 2017)
 GCA_048571015.1_Sr_NBRP_v3.0	Indian eri silkmoth (White GU1 2025)
 GCF_027563975.2_ilPloInte3.2	Indianmeal moth (v2 USDA-ARS_2022_Savannah primary hap 2024)
@@ -1055,6 +1057,7 @@ GCF_015104395.2_ASM1510439v2	oriental river prawn (v2 FS-2020 2020 refseq)
 GCF_000327385.1_Helro1	owl limpet
 GCF_000006405.1_JCVI_PMG_1.0	P.marinus (ATCC 50983 2009)
 GCF_019649055.1_Prichtersi_v1.0	P.metropolitanus (2021 tardigrades)
+GCA_034698045.1_ASM3469804v1	P.richtersi tardigrades (Gr-Tar-00820 2023)
 GCA_036924085.1_xgAriColu1.0.hap1	Pacific banana slug (1044Chap1 2024)
 GCA_000297895.2_ASM29789v2	Pacific oyster (BGI 05x7-T-G4-1.051 20 2019)
 GCF_963853765.1_xbMagGiga1.1	Pacific oyster (primary hap 2023)
@@ -1223,7 +1226,6 @@ GCF_017591435.1_ASM1759143v1	swimming crab
 GCA_001839685.2_ASM183968v2	T.foetus (K 2016 genbank)
 GCF_001839685.1_ASM183968v2	T.foetus (K 2016 refseq)
 GCA_013358835.2_BIME_Iper_1.3	taiga tick (Iper-2018 2020)
-GCA_001579985.1_ASM157998v1	tardigrades H.dujardini (Sciento 2016)
 GCF_002891405.2_Csec_1.0	termite C.secundus
 GCF_000696155.1_ZooNev1.0	termite Z.nevadensis
 GCA_900618365.1_T_callipaeda_Ticino_0011_upd	thelaziosis nematode (2018)
