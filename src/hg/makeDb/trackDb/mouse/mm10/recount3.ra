@@ -4,8 +4,7 @@ longLabel Recount 3 SRA introns
 group rna
 type bigBed 9 +
 visibility pack
-spectrum on
-scoreMax 225
+itemRgb on
 labelFields none
 maxWindowToDraw 10000000
 bigDataUrl /gbdb/$D/recount3/srav1m.bb
@@ -20,10 +19,9 @@ filterLabel.size Filter by intron size
 filterByRange.size on
 filter.size 30:100000
 filterLabel.sjPair Filter by splice junctions (format GT/AG)
-filterType.sjPair regexp
-filterText.sjPair ^GT/AG$
+filterType.sjPair wildcard
+filterText.sjPair *
 mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
 iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav1m&jid=$$&coords=$S:${-$}
 iframeOptions height='300' width='1000' scrolling='yes'
-decorator.default.bigDataUrl /gbdb/$D/recount3/decsrav1m.bb
 

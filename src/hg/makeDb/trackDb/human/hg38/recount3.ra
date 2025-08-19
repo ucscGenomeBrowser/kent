@@ -10,13 +10,11 @@ longLabel recount 3 introns
 group rna
 type bigBed 9 +
 visibility hide
-spectrum on
-scoreMax 225
 html recount3
 compositeTrack on
 noParentConfig on
 
-    track gtex
+    track recount3_gtex
     showCfg on
     shortLabel GTEX
     longLabel recount 3 GTEX introns
@@ -25,9 +23,9 @@ noParentConfig on
     mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=gtexv2&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
-    decorator.default.bigDataUrl /gbdb/$D/recount3/decgtexv2.bb
     parent recount3
     priority 1
+    itemRgb on
     filterLabel.strand Strand
     filterType.strand multiple
     filterValues.strand +,-,.
@@ -42,7 +40,7 @@ noParentConfig on
     filterType.sjPair wildcard
     filterText.sjPair *
 
-    track tcga
+    track recount3_tcga
     shortLabel TCGA
     longLabel recount 3 TCGA introns
     bigDataUrl /gbdb/$D/recount3/tcgav2.bb
@@ -50,9 +48,9 @@ noParentConfig on
     mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=tcgav2&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
-    decorator.default.bigDataUrl /gbdb/$D/recount3/dectcgav2.bb
     parent recount3
     priority 2
+    itemRgb on
     filterLabel.strand Strand
     filterType.strand multiple
     filterValues.strand +,-,.
@@ -67,7 +65,7 @@ noParentConfig on
     filterType.sjPair wildcard
     filterText.sjPair *
 
-    track srav3h
+    track recount3_srav3h
     shortLabel SRA
     longLabel recount 3 SRA introns
     bigDataUrl /gbdb/$D/recount3/srav3h.bb
@@ -76,9 +74,9 @@ noParentConfig on
     mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav3h&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
-    decorator.default.bigDataUrl /gbdb/$D/recount3/decsrav3h.bb
     parent recount3
     priority 3
+    itemRgb on
     filterLabel.strand Strand
     filterType.strand multiple
     filterValues.strand +,-,.
@@ -93,7 +91,7 @@ noParentConfig on
     filterType.sjPair wildcard
     filterText.sjPair *
 
-    track ccle
+    track recount3_ccle
     shortLabel CCLE
     longLabel recount 3 CCLE introns
     bigDataUrl /gbdb/$D/recount3/ccle.bb
@@ -101,9 +99,9 @@ noParentConfig on
     mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=ccle&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
-    decorator.default.bigDataUrl /gbdb/$D/recount3/decccle.bb
     parent recount3
     priority 4
+    itemRgb on
     filterLabel.strand Strand
     filterType.strand multiple
     filterValues.strand +,-,.
