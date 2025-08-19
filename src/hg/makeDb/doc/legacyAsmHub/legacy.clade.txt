@@ -206,6 +206,7 @@ GCA_016128335.1_ZJU1.0	birds
 GCA_016432865.1_AdamAnt	mammals
 GCA_017916325.1_LU_Lmar_1.0	invertebrate
 GCA_017916335.1_LU_Lori_1.0	invertebrate
+GCA_017918235.1_LU_Pher_1.0	invertebrate
 GCA_017976375.1_bCucCan1.pri	birds
 GCA_017976425.1_fToxJac2.pri	fish
 GCA_018139145.1_ASM1813914v1	birds
