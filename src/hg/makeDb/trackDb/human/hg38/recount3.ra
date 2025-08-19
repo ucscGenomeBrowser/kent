@@ -70,7 +70,7 @@ noParentConfig on
     longLabel recount 3 SRA introns
     bigDataUrl /gbdb/$D/recount3/srav3h.bb
     labelFields none
-    maxWindowToDraw 10000000
+    #maxWindowToDraw 10000000
     mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav3h&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'

@@ -6,7 +6,7 @@ type bigBed 9 +
 visibility pack
 itemRgb on
 labelFields none
-maxWindowToDraw 10000000
+#maxWindowToDraw 10000000
 bigDataUrl /gbdb/$D/recount3/srav1m.bb
 filterLabel.strand Strand
 filterType.strand multiple
