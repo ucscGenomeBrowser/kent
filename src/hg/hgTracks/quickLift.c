@@ -246,12 +246,19 @@ for(; hr; hr = hr->next)
     if (w == 0) 
         w = 1;
     hvGfxSetClip(hvg, xOff, yOff, width, height);  // we're drawing in the center label at the moment
+    int startX, endX;
     if (drawTriangle)
         {
-        drawTri(hvg, x1 + w/2 - fontHeight/2, x1 + w/2 + fontHeight/2 , yOff, hexColor);
+        startX = x1 + w/2 - fontHeight/2;
+        endX = x1 + w/2 + fontHeight/2 ;
+        drawTri(hvg, startX, endX , yOff, hexColor);
         }
     else
-        hvGfxBox(hvg, x1, yOff, w, height, hexColor);
+        {
+        startX = x1;
+        endX = x1 + w;
+        hvGfxBox(hvg, startX, yOff, w, height, hexColor);
+        }
 
     char mouseOver[4096];
 
@@ -263,7 +270,7 @@ for(; hr; hr = hr->next)
         safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->chromEnd - hr->chromStart);
     else
         safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
-    mapBoxHc(hvg, seqStart, seqEnd, x1, yOff, width, height, tg->track, "indel", mouseOver);
+    mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, "indel", mouseOver);
 
     }
 }

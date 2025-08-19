@@ -28060,6 +28060,10 @@ else if (tdb && sameString(tdb->type, "lorax"))
     {
     doLorax(tdb, item);
     }
+else if (sameString(trackHubSkipHubName(table), "quickLiftChain"))
+    {
+    doQuickLiftChain(tdb, item);
+    }
 else
     return FALSE;
 
