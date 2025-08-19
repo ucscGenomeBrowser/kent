@@ -5005,7 +5005,7 @@ if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (strlen(dy->string) > 0)
     {
     dy->string[strlen(dy->string) - 1] = 0;
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(dy->string);
-    liftOverDbList = slCat(genarkDbDbs, liftOverDbList);
+    liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
     }
 
 hashFree(&hash);
@@ -5065,7 +5065,7 @@ if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (strlen(dy->string) > 0)
     {
     dy->string[strlen(dy->string) - 1] = 0;
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(dy->string);
-    liftOverDbList = slCat(genarkDbDbs, liftOverDbList);
+    liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
     }
 
 hashFree(&hash);

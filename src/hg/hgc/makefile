@@ -11,7 +11,7 @@ O = $A.o bamClick.o barChartClick.o bigBedClick.o bigDbSnpClick.o \
 	ccdsClick.o cgapSageClick.o clinvarSubLolly.o dbRIP.o \
 	dotPlot.o encodeClick.o expClick.o facetedBar.o \
 	gencodeClick.o gtexEqtlClusterClick.o gtexClick.o gvfClick.o hgdpClick.o \
-	interactClick.o lowelab.o lrgClick.o \
+	interactClick.o loraxClick.o lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
 	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
 	bigRmskClick.o rnaFoldClick.o togaClick.o \

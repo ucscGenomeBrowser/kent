@@ -67,7 +67,7 @@ time $matUtils annotate -T 50 \
 time $matUtils extract -i public-$today.all.masked.pb.gz \
     -t public-$today.all.nwk \
     -v public-$today.all.masked.vcf
-time pigz -p 8 -f public-$today.all.masked.vcf
+time pigz -p 8 -f public-$today.all.masked.vcf public-$today.all.nwk
 zcat gisaidAndPublic.$today.metadata.tsv.gz \
 | grep -v \|EPI_ISL_ \
 | pigz -p 8 \
@@ -114,7 +114,7 @@ archiveRoot=/hive/users/angie/publicTrees
 read y m d < <(echo $today | sed -re 's/-/ /g')
 archive=$archiveRoot/$y/$m/$d
 mkdir -p $archive
-gzip -c public-$today.all.nwk > $archive/public-$today.all.nwk.gz
+ln -f `pwd`/public-$today.all.nwk.gz $archive/
 ln -f `pwd`/public-$today.all.masked.vcf.gz $archive/
 ln -f `pwd`/public-$today.all.masked.pb.gz $archive/
 ln -f `pwd`/public-$today.metadata.tsv.gz $archive/
@@ -147,33 +147,3 @@ ln -sf `pwd`/public-$today.all.masked.pb.gz $dir/public-latest.all.masked.pb.gz
 ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
 ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
 ln -sf `pwd`/samples.public.$today.gz $dir/public-latest.names.gz
-
-# Update MSA and make tree version with only MSA sequences
-awk -F\| '{ if ($3 == "") { print $1 "\t" $0; } else { print $2 "\t" $0; } }' samples.public.$today \
-| sort > idToName.public
-time cat <(faSomeRecords <(xzcat $ottoDir/$prevDate/public-$prevDate.all.aligned.fa.xz) \
-                         <(cut -f 1 idToName.public) stdout) \
-         <(faSomeRecords new.aligned.fa <(cut -f 1 idToName.public) stdout) \
-| xz -T 30 \
-    > public-$today.all.aligned.fa.xz
-time faRenameRecords <(xzcat public-$today.all.aligned.fa.xz) idToName.public stdout \
-| faUniqify stdin stdout \
-| xz -T 30 \
-    > public-$today.all.msa.fa.xz
-fastaNames public-$today.all.msa.fa.xz | sort > msaFaNames
-wc -l msaFaNames
-$matUtils extract -i public-$today.all.masked.pb.gz -s msaFaNames \
-    -o public-$today.all.masked.msa.pb.gz
-$matUtils extract -i public-$today.all.masked.msa.pb.gz -u samples.public.msa
-cmp msaFaNames <(sort samples.public.msa)
-$matUtils extract -i public-$today.all.masked.msa.pb.gz -t public-$today.all.masked.msa.nwk
-pigz -f -p 8 public-$today.all.masked.msa.nwk
-archiveRoot=/hive/users/angie/publicTrees
-read y m d < <(echo $today | sed -re 's/-/ /g')
-archive=$archiveRoot/$y/$m/$d
-ln -f $(pwd)/public-$today.all.masked.msa.pb.gz $archive/
-ln -f $(pwd)/public-$today.all.msa.fa.xz $archive/
-ln -f $(pwd)/public-$today.all.masked.msa.nwk.gz $archive/
-ln -f $(pwd)/public-$today.all.masked.msa.pb.gz $archiveRoot/public-latest.all.masked.msa.pb.gz
-ln -f $(pwd)/public-$today.all.msa.fa.xz $archiveRoot/public-latest.all.msa.fa.xz
-ln -f $(pwd)/public-$today.all.masked.msa.nwk.gz $archiveRoot/public-latest.masked.msa.nwk.gz

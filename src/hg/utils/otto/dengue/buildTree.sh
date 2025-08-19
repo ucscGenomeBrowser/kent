@@ -142,7 +142,7 @@ for subtype in 1 2 3 4; do
         | pigz -p 8 \
         > all.$subtype.vcf.gz
 
-    time $usherSampled -T 64 -A -e 5 \
+    time $usherSampled -T 16 -A -e 5 \
         -t emptyTree.nwk \
         -v all.$subtype.vcf.gz \
         -o denv$subtype.$today.preFilter.pb\
@@ -155,7 +155,7 @@ for subtype in 1 2 3 4; do
         -O -o denv$subtype.$today.preOpt.pb >& tmp.log
 
     # Optimize:
-    time $matOptimize -T 64 -r 20 -M 2 -S move_log.$subtype \
+    time $matOptimize -T 16 -r 20 -M 2 -S move_log.$subtype \
         -i denv$subtype.$today.preOpt.pb \
         -o denv$subtype.$today.pb \
         >& matOptimize.$subtype.log
@@ -228,9 +228,15 @@ for subtype in 1 2 3 4; do
     mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
     ln -sf $archive /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
     # rsync to hgdownload hubs dir
-    for h in hgdownload1 hgdownload2; do
-        rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/* \
-            qateam@$h:/mirrordata/hubs/$asmDir/UShER_DENV-$subtype/
+    for h in hgdownload1 hgdownload3; do
+        if rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/* \
+                 qateam@$h:/mirrordata/hubs/$asmDir/UShER_DENV-$subtype/; then
+            true
+        else
+            echo ""
+            echo "*** rsync to $h failed; disk full? ***"
+            echo ""
+        fi
     done
 done
 

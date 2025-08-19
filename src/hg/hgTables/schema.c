@@ -724,6 +724,8 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
 else if (isBigWig(database, table, curTrack, ctLookupName) && !hTableExists(db, table))
 	showSchemaBigWigNoTable(db, table, tdb);
+else if (tdb && sameString(tdb->type, "lorax"))
+    showSchemaBigBed(table, tdb);
 else
     showSchemaDb(db, tdb, table);
 }

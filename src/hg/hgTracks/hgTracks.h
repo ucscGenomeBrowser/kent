@@ -1703,6 +1703,9 @@ void hicCtMethods(struct track *tg);
 void bedMethylCtMethods(struct track *tg);
 /* bedMethyl track methods for custom track */
 
+void loraxMethods(struct track *tg);
+/* Lorax track type methods */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */

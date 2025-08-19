@@ -126,14 +126,14 @@ for aOrB in A B; do
     else
         maskCmd="cat"
     fi
-    time faToVcf -verbose=2 -includeRef -includeNoAltN -excludeFile=$rsvScriptDir/exclude.ids \
+    time faToVcf -verbose=2 -includeNoAltN -excludeFile=$rsvScriptDir/exclude.ids \
         <(xzcat aligned.$aOrB.fa.xz) stdout \
         | vcfRenameAndPrune stdin renaming.tsv stdout \
         | $maskCmd \
         | pigz -p 8 \
         > all.$aOrB.vcf.gz
 
-    time $usherSampled -T 64 -A -e 5 \
+    time $usherSampled -T 16 -A -e 5 \
         -t emptyTree.nwk \
         -v all.$aOrB.vcf.gz \
         -o rsv$aOrB.$today.preFilter.pb\
@@ -146,60 +146,18 @@ for aOrB in A B; do
         -O -o rsv$aOrB.$today.preOpt.pb >& tmp.log
 
     # Optimize:
-    time $matOptimize -T 64 -r 20 -M 2 -S move_log.$aOrB \
+    time $matOptimize -T 16 -r 20 -M 2 -S move_log.$aOrB \
         -i rsv$aOrB.$today.preOpt.pb \
         -o rsv$aOrB.$today.opt.pb \
         >& matOptimize.$aOrB.log
 
-    # Annotate consortium clades and Goya et al. clades using nextclade assignments and
-    # other sources (nextstrain.org, supplemental table...).
+    # Annotate consortium clades using nextclade assignments and other sources
+    # (nextstrain.org, supplemental table...).
     function tl {
         perl -wne 'chomp; @w = split(/\t/, $_, -1); $i = 1; foreach $w (@w) { print "$i\t$w[$i-1]\n"; $i++; }'
     }
     cCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w clade | cut -f 1)
-    gCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w G_clade | cut -f 1)
     subsCol=$(head -1 nextclade.rsv$aOrB.tsv | tl | grep -w totalSubstitutions | cut -f 1)
-    tail -n+2 nextclade.rsv$aOrB.tsv \
-    | tawk '$'$subsCol' < '$maxSubs' && $'$gCol' != "" {print $2, $'$gCol';}' \
-    | sed -re 's/unassigned/Unassigned/;' \
-    | sort > accToGClade
-    join -t$'\t' accToGClade renaming.tsv | grep -v Unassigned | cut -f 2,3 | sort \
-        > gCladeToName.$aOrB
-    if [[ $aOrB == A ]]; then
-        # RSV-A only: if nextclade is not calling some GAs, use assignments from nextstrain.org.
-        for ga in GA1 GA2.1 GA2.2 GA2.3.6a; do
-            set +o pipefail
-            gaCount=$(grep -w $ga gCladeToName.A | wc -l)
-            set -o pipefail
-            if (( $gaCount < 10 )); then
-                join -t$'\t' \
-                    <(grep -w $ga $rsvDir/nextstrain_acc_to_clade.tsv | sort) \
-                    <(sed -re 's/\.[0-9]+\t/\t/;' renaming.tsv) \
-                | cut -f 2,3 \
-                    >> gCladeToName.$aOrB
-            fi
-        done
-    else
-        # RSV-B only: if nextclade is not calling GB1, use assignments from nextstrain.org.
-        set +o pipefail
-        gb1Count=$(grep -w GB1 gCladeToName.B | wc -l)
-        set -o pipefail
-        if (( $gb1Count < 10 )); then
-            join -t$'\t' \
-                <(grep -w GB1 $rsvDir/nextstrain_acc_to_clade.tsv | sort) \
-                <(sed -re 's/\.[0-9]+\t/\t/;' renaming.tsv) \
-            | cut -f 2,3 \
-                >> gCladeToName.$aOrB
-        fi
-    fi
-    if [[ -s $rsvScriptDir/goya.$aOrB.clade-mutations.tsv ]]; then
-        cladeMuts="-M $rsvScriptDir/goya.$aOrB.clade-mutations.tsv"
-    else
-        cladeMuts=""
-    fi
-    $matUtils annotate -T 64 -f 0.9 -m 0.1 -i rsv$aOrB.$today.opt.pb \
-        -l -c gCladeToName.$aOrB $cladeMuts -o rsv$aOrB.$today.gClade.pb \
-        >& annotate.$aOrB.gClade.log
     tail -n+2 nextclade.rsv$aOrB.tsv \
     | tawk '$'$subsCol' < '$maxSubs' && $'$cCol' != "" {print $2, $'$cCol';}' \
     | sed -re 's/unassigned/Unassigned/;' \
@@ -212,20 +170,19 @@ for aOrB in A B; do
     else
         cladeMuts=""
     fi
-    $matUtils annotate -T 64 -f 0.9 -m 0.1 -i rsv$aOrB.$today.gClade.pb \
+    $matUtils annotate -T 16 -f 0.9 -m 0.1 -i rsv$aOrB.$today.opt.pb \
         -c cCladeToName.$aOrB $cladeMuts -o rsv$aOrB.$today.pb \
         >& annotate.$aOrB.cClade.log
     $matUtils summary -i rsv$aOrB.$today.pb -C sample-clades.$aOrB >& tmp.log
 
     # Make metadata that uses same names as tree
-    echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tgoya_nextclade\tGCC_nextclade\tgoya_usher\tGCC_usher\tGCC_assigned_2023-11" \
+    echo -e "strain\tgenbank_accession\tdate\tcountry\tlocation\tlength\thost\tbioproject_accession\tbiosample_accession\tsra_accession\tauthors\tpublications\tGCC_nextclade\tGCC_usher\tGCC_assigned_2023-11" \
         > rsv$aOrB.$today.metadata.tsv
     join -t$'\t' -o 1.2,2.1,2.6,2.4,2.5,2.8,2.9,2.10,2.11,2.13,2.14,2.15 \
         <(sort renaming.tsv) \
         <(sort $rsvNcbiDir/metadata.tsv \
           | perl -F'/\t/' -walne '$F[3] =~ s/(: ?|$)/\t/;  print join("\t", @F);') \
     | sort \
-    | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' renaming.tsv accToGClade | sort) \
     | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' renaming.tsv accToCClade | sort) \
     | join -t$'\t' - <(sort sample-clades.$aOrB | sed -re 's/None/Unassigned/g') \
     | join -t$'\t' - <(join -a 1 -o 1.2,2.2 -t$'\t' \
@@ -245,7 +202,7 @@ for aOrB in A B; do
     # Make a taxonium view
     usher_to_taxonium --input rsv$aOrB.$today.pb \
         --metadata rsv$aOrB.$today.metadata.tsv.gz \
-        --columns genbank_accession,country,location,date,authors,GCC_nextclade,goya_nextclade,GCC_usher,goya_usher,GCC_assigned_2023-11 \
+        --columns genbank_accession,country,location,date,authors,GCC_nextclade,GCC_usher,GCC_assigned_2023-11 \
         --clade_types=placeholder,pango \
         --genbank $gbff \
         --name_internal_nodes \
@@ -287,9 +244,15 @@ for aOrB in A B; do
     mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
     ln -sf $archive /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
     # rsync to hgdownload{1,2} hubs dir
-    for h in hgdownload1 hgdownload2; do
-        rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/* \
-            qateam@$h:/mirrordata/hubs/$asmDir/UShER_RSV-$aOrB/
+    for h in hgdownload1 hgdownload3; do
+        if rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/* \
+                 qateam@$h:/mirrordata/hubs/$asmDir/UShER_RSV-$aOrB/; then
+            true
+        else
+            echo ""
+            echo "*** rsync to $h failed; disk full? ***"
+            echo ""
+        fi
     done
 done
 
@@ -309,5 +272,5 @@ zcat rsvA.$today.metadata.tsv.gz | tail -n+2 | cut -f 14,16,17 | sort | uniq -c
 echo ""
 zcat rsvB.$today.metadata.tsv.gz | tail -n+2 | cut -f 14,16,17 | sort | uniq -c
 
-rm -f mutation-paths.txt *.pre*.pb final-tree.nh *.opt.pb *.gClade.pb *.pbintermediate*.pb
+rm -f mutation-paths.txt *.pre*.pb final-tree.nh *.opt.pb *.pbintermediate*.pb
 nice gzip -f *.log *.tsv move_log* *.stderr samples.* sample-clades.*
