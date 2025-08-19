@@ -904,7 +904,7 @@ include recount3.ra alpha
 
 include long_read_transcripts.ra
 
-include mavedb.ra alpha
+include mavedb.ra alpha,beta
 
 include vgpLiftOver.ra alpha
 include psuVsUcscChains.ra alpha
