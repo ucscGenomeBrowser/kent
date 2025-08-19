@@ -2,7 +2,9 @@
 
 // Copyright (C) 2025 The Regents of the University of California
 
-function loraxView(chrom, start, end) {
-    console.log("Hello from lorax.js:loraxView.  chrom is", chrom, ", start is", start, ", end is", end);
-    console.log(document.getElementById("loraxIframe"));
+function loraxView(chrom, gStart, gEnd, rStart, rEnd) {
+    console.log("Hello from lorax.js:loraxView.  chrom is", chrom,
+                ", (genomiccoords) window start is", gStart, ", window end is", gEnd,
+                ", (region) item start is", rStart, ", item end is", rEnd);
+    console.log(document.getElementById("hgcIframe"));
 }
