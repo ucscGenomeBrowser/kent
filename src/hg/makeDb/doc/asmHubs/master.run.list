@@ -325,6 +325,7 @@
 ./runBuild GCA_000757745.1_S_scapt_v1 invertebrate Steinernema_scapterisci
 ./runBuild GCA_000757755.1_S_glas_v1 invertebrate Steinernema_glaseri
 ./runBuild GCA_000762945.2_Bger_2.0 invertebrate Blattella_germanica
+./runBuild GCA_000766575.2_ASM76657v2 fungi Saccharomyces_cerevisiae
 ./runBuild GCA_000767525.1_Vi_pacos_V1.0 mammals Vicugna_pacos_huacaya
 ./runBuild GCA_000767585.1_PRJNA234474_Ca_dromedarius_V1.0 mammals Camelus_dromedarius
 ./runBuild GCA_000767855.1_Ca_bactrianus_MBC_1.0 mammals Camelus_bactrianus
