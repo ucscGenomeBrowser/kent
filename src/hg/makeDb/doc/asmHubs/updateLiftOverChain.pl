@@ -57,15 +57,15 @@ while (my $line = <$fh>) {
     }
     if ( defined($validDb{$toDb}) && defined($validDb{$fromDb}) ) {
       my $key = sprintf("%s|%s", $fromDb, $toDb);
-      printf STDERR "# %s\n", $key if ($liftOverCount < 10);
+#     printf STDERR "# %s\n", $key if ($liftOverCount < 10);
       $liftOverFiles{$key} = $filePath;
       ++$liftOverCount;
     } else {
-      printf STDERR "# invalid Db: %s or %s\n", $fromDb, $toDb if ($invalidCount < 10);
+#     printf STDERR "# invalid Db: %s or %s\n", $fromDb, $toDb if ($invalidCount < 10);
       ++$invalidCount;
     }
   } else {
-      printf STDERR "# no db name foundin:\n%s\n"< $filePath if ($invalidCount < 10);
+      printf STDERR "# no db name found in:\n%s\n"< $filePath if ($invalidCount < 10);
       ++$invalidCount;
 #   printf STDERR "warning: no db name found in liftOver file name:\n%s\n", $filePath;
   }
@@ -87,7 +87,7 @@ while (my $filePath = <$fh>) {
     }
     if ( defined($validDb{$toDb}) && defined($validDb{$fromDb}) ) {
       my $key = sprintf("%s|%s", $fromDb, $toDb);
-      printf STDERR "# %s\n", $key if ($liftOverCount < 10);
+#     printf STDERR "# %s\n", $key if ($liftOverCount < 10);
       $liftOverFiles{$key} = $filePath;
       ++$liftOverCount;
     } else {
@@ -132,6 +132,7 @@ printf STDERR "# liftOverCount table: %d valid, %d path missing, %d invalidToFro
 
 my $toAddCount = 0;
 my $missingPath = 0;
+my $alreadyExisting = 0;
 
 printf STDERR "# reading: '%s'\n", $hasChainNets;
 my $asmId = "";
@@ -152,9 +153,13 @@ while (my $line = <$fh>) {
        if ( defined($validDb{$toDb}) && defined($validDb{$fromDb}) ) {
           my $key = sprintf("%s|%s", $fromDb, $toDb);
           if (defined($liftOverFiles{$key})) {
-            printf STDERR "# to add: %s\n", $key if ($toAddCount < 10);
-            printf "%s\t%s\t%s\t0.1\t0\t0\tY\t1\tN\n", $fromDb, $toDb, $liftOverFiles{$key};
-            ++$toAddCount;
+            if (defined($fromToToday{$key})) {
+              ++$alreadyExisting;
+            } else {
+              printf STDERR "# to add: %s\n", $key if ($toAddCount < 10);
+              printf "%s\t%s\t%s\t0.1\t0\t0\tY\t1\tN\n", $fromDb, $toDb, $liftOverFiles{$key};
+              ++$toAddCount;
+            }
           } else {
             printf STDERR "# missing path: %s\n", $key if ($missingPath < 10);
             ++$missingPath;
@@ -166,7 +171,32 @@ while (my $line = <$fh>) {
   }
 }
 close ($fh);
-printf STDERR "# %d entries to add to table, %d missing path file\n", $toAddCount, $missingPath;
+printf STDERR "# %d already exist, %d entries to add to table, %d missing path file\n", $alreadyExisting, $toAddCount, $missingPath;
+
+my %checked;	# key is fromDb|toDb value is 1 for been examined
+my $hasRecipCount = 0;
+my $needRecip = 0;
+
+### check for reciprocals
+printf STDERR "### checking for reciprocals\n";
+my $totalEntries = 0;
+for my $fromTo (sort keys %fromToToday) {
+   ++$totalEntries;
+   next if (defined($checked{$fromTo}));
+   my ($from, $to) = split('\|', $fromTo);
+   $checked{$fromTo} = 1;
+   my $key = sprintf("%s|%s", $to, $from);
+   next if (defined($checked{$key}));
+   if (defined($fromToToday{$key})) {
+     ++$hasRecipCount;
+   } else {
+     ++$needRecip;
+     printf STDERR "# need recip %s %s\n", $to, $from if ($needRecip < 10);
+   }
+   $checked{$key} = 1;
+}
+
+printf STDERR "# %d totals, %d expected half, %d(%d) have reciprocals, %d(%d) need reciprocals\n", $totalEntries, int($totalEntries / 2), $hasRecipCount, 2 * $hasRecipCount, $needRecip, int($needRecip / 2);
 
 # head hasChainNets.txt  | cat -A
 # GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri^I10$
