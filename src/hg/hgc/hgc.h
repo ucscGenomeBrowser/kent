@@ -604,6 +604,8 @@ void doParDetails(struct trackDb *tdb, char *name);
 void doLorax(struct trackDb *tdb, char *item);
 /* Display the Lorax multi-tree viewer. */
 
+void doQuickLiftChain(struct trackDb *tdb, char *item);
+/* Deal with click on quickLift chain track.*/
 
 struct psl *getPslAndSeq(struct trackDb *tdb, char *chromName, struct bigBedInterval *bb, 
     unsigned seqTypeField, DNA **retSeq, char **retCdsStr);

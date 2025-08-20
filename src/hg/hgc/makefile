@@ -13,7 +13,7 @@ O = $A.o bamClick.o barChartClick.o bigBedClick.o bigDbSnpClick.o \
 	gencodeClick.o gtexEqtlClusterClick.o gtexClick.o gvfClick.o hgdpClick.o \
 	interactClick.o loraxClick.o lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
-	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
+	parClick.o peakClusters.o quickLift.o regMotif.o retroClick.o rmskJoinedClick.o \
 	bigRmskClick.o rnaFoldClick.o togaClick.o \
 	transMapClick.o txCdsInfo.o pubs.o vcfClick.o wiggleClick.o \
 	wikiTrack.o variomeClick.o numtsClick.o geneReviewsClick.o
