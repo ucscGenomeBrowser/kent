@@ -14,8 +14,6 @@ process_dataset() {
 	    wget -nv -O $dset.tsv.bgz https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
 	fi
         ~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --decorator dec$dset.bed --compilation $dset
-	bedSort $dset.bed $dset.bed
-	bedSort dec$dset.bed dec$dset.bed
 }
 
 for dset in gtexv2 srav3h tcgav2 ccle; do

@@ -137,8 +137,8 @@ double score = 0;
 char *chainFromOrg = hOrganism(chain->fromDb);
 char *chainToOrg = hOrganism(chain->toDb);
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);
-int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank");
+int toRank = hashIntValDefault(dbRank, chain->toDb, maxRank);
 
 if (sameOk(fromOrg,chainFromOrg) &&
     sameOk(fromDb,chain->fromDb) &&

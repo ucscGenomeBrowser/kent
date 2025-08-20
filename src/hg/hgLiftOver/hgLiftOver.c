@@ -369,9 +369,9 @@ struct dbDb *chainToDbDb = hashFindVal(dbHash, chain->toDb);
 
 char *chainFromOrg = (chainFromDbDb) ? chainFromDbDb->organism : hOrganism(chain->fromDb);
 char *chainToOrg = (chainToDbDb) ? chainToDbDb->organism : hOrganism(chain->toDb);
-int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to approx. #assemblies */
-int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank"); 
+int fromRank = hashIntValDefault(dbRank, chain->fromDb, maxRank);  /* values up to approx. #assemblies */
+int toRank = hashIntValDefault(dbRank, chain->toDb, maxRank);
 
 if (!chainFromOrg || !chainToOrg)
     return 0;
