@@ -3,7 +3,7 @@ shortLabel recount3
 longLabel Recount 3 SRA introns
 group rna
 type bigBed 9 +
-visibility pack
+visibility hide
 itemRgb on
 labelFields none
 #maxWindowToDraw 10000000
