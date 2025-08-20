@@ -69,6 +69,10 @@ my %nameLabels = (
    "refseq" => "RefSeq",
    "ucsc" => "UCSC",
    "ensembl" => "Ensembl",
+   "xenbase" => "Xenbase",
+   "chrNames" => "chrNames",
+   "chrN" => "chrN",
+   "VEuPathDB" => "VEuPathDB",
    "custom" => "custom"
 );
 
@@ -93,6 +97,8 @@ foreach my $title (@legendNames) {
   } else {
     $indexNames = $title;
   }
+  die "not defined title" if (!defined($title));
+  die "not defined nameLabels{$title}" if (!defined($nameLabels{$title}));
   printf AS "    string %s;\t\"%s name\"\n", $title, $nameLabels{$title};
 }
 printf AS "    )\n";
