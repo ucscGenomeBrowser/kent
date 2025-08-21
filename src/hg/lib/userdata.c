@@ -112,12 +112,12 @@ char *swapDataDir(char *userName, char *in)
  * the tusdDataDir won't exist on the CGI filesystem, but will instead be mounted as some
  * different path.  In this case, replace tusdDataDir with tusdMountPoint */
 {
-char *ret = cloneString(in);
+char *ret = NULL;
 char *tusdDataDir = cfgOption("tusdDataDir");
 char *tusdMountPoint = cfgOption("tusdMountPoint");
 if (tusdMountPoint && !isEmpty(tusdMountPoint))
     {
-    replaceChars(ret, tusdDataDir, tusdMountPoint);
+    ret = replaceChars(in, tusdDataDir, tusdMountPoint);
     }
 return ret;
 }

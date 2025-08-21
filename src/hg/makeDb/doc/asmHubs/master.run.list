@@ -600,6 +600,7 @@
 ./runBuild GCA_002749425.1_ASM274942v1 invertebrate Trypanosoma_cruzi
 ./runBuild GCA_002749535.1_ASM274953v1 fungi Apophysomyces_variabilis
 ./runBuild GCA_002754865.1_ASM275486v1 primates Callithrix_jacchus
+./runBuild GCA_002759435.2_Cand_auris_B8441_V2 fungi Candidozyma_auris
 ./runBuild GCA_002759435.3_Cand_auris_B8441_V3 fungi Candidozyma_auris
 ./runBuild GCA_002760635.1_GanSi1.6 fungi Ganoderma_sinense_ZZ0214-1
 ./runBuild GCA_002763495.2_F_hepatica_1.0.allpaths.pg invertebrate Fasciola_hepatica

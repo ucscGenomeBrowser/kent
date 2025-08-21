@@ -4,6 +4,7 @@ longLabel Heatmaps and Alignment for MaveDB
 group expression
 type bigBed 12 +
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#082125 "Released Aug. 21, 2025"
 
 track mavedb_maps
 priority 2
