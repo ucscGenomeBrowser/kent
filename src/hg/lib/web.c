@@ -177,7 +177,7 @@ dnaUtilOpen();
 if (withHttpHeader)
     {
     char *cookieName = hUserCookie();
-    cartWriteHeaderAndCont(theCart, cookieName);
+    cartWriteHeaderAndCont(theCart, cookieName, NULL);
     }
 
 // If the database name is not already in the title string, add it now
@@ -494,7 +494,7 @@ static void webStartGbOptionalBanner(struct cart *cart, char *db, char *title, b
  */
 {
 char *cookieName = hUserCookie();
-cartWriteHeaderAndCont(cart, cookieName);
+cartWriteHeaderAndCont(cart, cookieName, NULL);
 
 char *csp = getCspMetaHeader();
 if (hgGateway)
