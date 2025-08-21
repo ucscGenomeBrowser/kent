@@ -441,9 +441,6 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
 void cartWriteCookie(struct cart *cart, char *cookieName);
 /* Write out HTTP Set-Cookie statement for cart. */
 
-void cartWriteHeaderAndCont(struct cart* cart, char *cookieName);
-/* write http headers including cookie and content type line */
-
 struct cart *cartAndCookie(char *cookieName, char **exclude,
 	struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write cookie and
@@ -454,8 +451,10 @@ struct cart *cartAndCookieNoContent(char *cookieName, char **exclude,
 /* Load cart from cookie and session cgi variable. Don't write out
  * content type or any HTML. */
 
-void cartWriteHeaderAndCont(struct cart* cart, char *cookieName);
+void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType);
 /* write http headers including cookie and content type line */
+/* contType defaults to text/html when NULL.  */
+/* cookieName defaults to hUserCookie() when NULL */
 
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
 	struct hash *oldVars, boolean doContentType);
@@ -698,5 +697,6 @@ void cartMatchValue(struct cart *cart, char *oldTrackName,  char *newTrackName);
 
 char *cartNamedSessionDbTable();
 /* Get the name of the table that lists named sessions.  Don't free the result. */
+
 #endif /* CART_H */
 

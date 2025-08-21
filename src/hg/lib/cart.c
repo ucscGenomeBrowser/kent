@@ -2720,12 +2720,19 @@ for (h = httpHeaders; h != NULL; h = h->next)
     }
 }
 
-void cartWriteHeaderAndCont(struct cart* cart, char *cookieName)
-/* write http headers including cookie and content type line */
+void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
+/* write http headers including cookie and content type line. 
+ * contType defaults to text/html when NULL. 
+ * cookieName defaults to hUserCookie() when NULL */
 {
+if (!contType)
+    contType = "text/html";
+if (!cookieName)
+    cookieName = hUserCookie();
+
 addHttpHeaders();
 cartWriteCookie(cart, cookieName);
-puts("Content-Type: text/html\n"); // puts outputs one newline. Headers requires two.
+printf("Content-Type: %s\n\n", contType);
 cartDidContentType = TRUE;
 }
 
@@ -2742,7 +2749,7 @@ popWarnHandler();
 popAbortHandler();
 
 if (doContentType && !cartDidContentType)
-    cartWriteHeaderAndCont(cart, cookieName);
+    cartWriteHeaderAndCont(cart, cookieName, NULL);
 
 return cart;
 }
