@@ -172,7 +172,7 @@ if(isErrAbortInProgress())
 static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
-puts("Content-Type:text/html\n");
+cartWriteHeaderAndCont(cart, NULL, NULL);
 cartVaWebStart(cart, database, format, args);
 pushWarnHandler(errAbortHandler);
 }
@@ -1404,7 +1404,7 @@ cartRemove(cart, "hgta_metaTables");
 void doMetaData(struct sqlConnection *conn)
 /* Get meta data for a database. */
 {
-puts("Content-Type:text/plain\n");
+cartWriteHeaderAndCont(cart, NULL, "text/plain");
 char query[1024];
 sqlSafef(query, sizeof query, "%s", ""); 
 if (cartVarExists(cart, hgtaMetaStatus))
