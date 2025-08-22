@@ -17,5 +17,4 @@ darkerLabels on
 labelFields accessionLabel,ucscLabel,encodeLabel
 defaultLabelFields accessionLabel,ucscLabel
 skipFields encodeLabel,ucscLabel,accessionLabel,description
-mouseOverField description
-
+mouseOver <b>Accession</b>: $name<br> <b>Classification</b>: $ccre<br>
