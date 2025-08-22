@@ -622,7 +622,7 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
-    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
+    mouseOver <b>ID</b>: $name<br> <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size</b>: $_size<br> <b>Type</b>: $varType
 
     track dgvSupporting override
     parent dgvPlus
@@ -634,7 +634,7 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
-    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
+    mouseOver <b>ID</b>: $name<br> <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size</b>: $_size<br> <b>Type</b>: $varType
 
     track dgvGold
     parent dgvPlus
@@ -644,7 +644,7 @@ group varRep
     type bigBed 12 +
     url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg38?ref=$S;start=${;end=$};name=$$;class=Sequence
     searchIndex name
-    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type; Frequency:$Frequency
+    mouseOver <b>ID</b>: $name<br> <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>CNV subtype</b>: $variant_sub_type<br> <b>Frequency</b>: $Frequency
 
 searchTable dgvGold
 searchType bigBed
