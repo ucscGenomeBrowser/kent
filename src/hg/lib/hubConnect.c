@@ -523,7 +523,8 @@ static char *chainTdbString =
     "chainType reverse\n"
     "bigDataUrl %s\n"
     "quickLiftUrl %s\n"
-    "quickLiftDb %s\n";
+    "quickLiftDb %s\n"
+    "otherTwoBitUrl %s\n";
 
 static struct trackDb *makeQuickLiftChainTdb(struct trackHubGenome *hubGenome,  struct hubConnectStatus *hub)
 // make a trackDb entry for a quickLift chain
@@ -535,7 +536,9 @@ AllocVar(tdb);
 char buffer[4096];
 safef(buffer, sizeof buffer, "hub_%d_quickLiftChain", hub->id);
 tdb->table = tdb->track = cloneString(buffer);
-safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb);
+char otherTwoBitFile[4096];
+hNibForChrom(hubGenome->quickLiftDb, NULL, otherTwoBitFile);
+safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb, otherTwoBitFile);
 tdb->settings = cloneString(buffer);
 tdb->settingsHash = trackDbSettingsFromString(tdb, buffer);
 trackDbFieldsFromSettings(tdb);
