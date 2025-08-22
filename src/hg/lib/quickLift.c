@@ -20,6 +20,22 @@
 #include "hgConfig.h"
 #include "quickLift.h"
 #include "bigChain.h"
+#include "bigLink.h"
+#include "chromAlias.h"
+
+#define QUICKTYPE_INSERT     0
+#define QUICKTYPE_DEL      1
+#define QUICKTYPE_DOUBLE     2
+#define QUICKTYPE_MISMATCH     3
+#define QUICKTYPE_NOTHING     4
+
+char *quickTypeStrings[] = 
+{
+    "insert",
+    "deletion",
+    "double",
+    "mismatch"
+};
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -257,4 +273,170 @@ boolean quickLiftEnabled()
 {
 char *cfgEnabled = cfgOption("browser.quickLift");
 return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
+}
+
+static int hrCmp(const void *va, const void *vb)
+/* Compare to sort based on chromStart. */
+{
+const struct quickLiftRegions *a = *((struct quickLiftRegions **)va);
+const struct quickLiftRegions *b = *((struct quickLiftRegions **)vb);
+return a->chromStart - b->chromStart;
+}
+
+struct quickLiftRegions *quickLiftGetRegions(char *ourDb, char *liftDb, char *quickLiftFile, char *chrom, int seqStart, int seqEnd)
+/* Figure out the highlight regions and cache them. */
+{
+static struct hash *highLightsHash = NULL;
+struct quickLiftRegions *hrList = NULL;
+
+unsigned lengthLimit = atoi(cfgOptionDefault("quickLift.lengthLimit", "10000"));
+if (seqEnd - seqStart > lengthLimit)
+    return hrList;
+
+if (highLightsHash != NULL)
+    {
+    if ((hrList = (struct quickLiftRegions *)hashFindVal(highLightsHash, quickLiftFile)) != NULL)
+        return hrList;
+    }
+else
+    {
+    highLightsHash = newHash(0);
+    }
+
+
+struct bbiFile *bbiChain = bigBedFileOpenAlias(quickLiftFile, chromAliasFindAliases);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bbChain, *bbChainList =  bigBedIntervalQuery(bbiChain, chrom, seqStart, seqEnd, 0, lm);
+char *links = bigChainGetLinkFile(quickLiftFile);
+struct bbiFile *bbiLink = bigBedFileOpenAlias(links, chromAliasFindAliases);
+struct bigBedInterval  *bbLink, *bbLinkList =  bigBedIntervalQuery(bbiLink, chrom, seqStart, seqEnd, 0, lm);
+
+char *chainRow[1024];
+char *linkRow[1024];
+char startBuf[16], endBuf[16];
+
+for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
+    {
+    bigBedIntervalToRow(bbChain, chrom, startBuf, endBuf, chainRow, ArraySize(chainRow));
+    struct bigChain *bc = bigChainLoad(chainRow);
+
+    int previousTEnd = -1;
+    int previousQEnd = -1;
+    for (bbLink = bbLinkList; bbLink != NULL; bbLink = bbLink->next)
+        {
+        bigBedIntervalToRow(bbLink, chrom, startBuf, endBuf, linkRow, ArraySize(linkRow));
+        struct bigLink *bl = bigLinkLoad(linkRow);
+
+        if (!sameString(bl->name, bc->name))
+            continue;
+
+        int tStart = bl->chromStart;
+        int tEnd = bl->chromEnd;
+        int qStart = bl->qStart;
+        int qEnd = qStart + (tEnd - tStart);
+        // crop the chain block if it's bigger than the window
+        int tMin, tMax;
+        int qMin, qMax;
+        tMin = bl->chromStart;
+        tMax = bl->chromEnd;
+        qMin = bl->qStart;
+        if (seqStart > bl->chromStart) 
+            {
+            tMin = seqStart;
+            qMin = qStart + (seqStart - bl->chromStart);
+            }
+        if (seqEnd < bl->chromEnd) 
+            {
+            tMax = seqEnd;
+            }
+        qMax = qMin + (tMax - tMin);
+
+        if (bc->strand[0] == '-')
+            {
+            qMin = bc->qSize - qMax;
+            qMax = qMin + (tMax - tMin);
+            }
+
+        struct quickLiftRegions *hr;
+        AllocVar(hr);
+        slAddHead(&hrList, hr);
+        hr->chromStart = tMin;
+        hr->chromEnd = tMax;
+        hr->oChromStart = qMin;
+        hr->oChromEnd = qMax;
+        //jhr->type = highlightColors[NOTHING];
+        hr->type = QUICKTYPE_NOTHING;
+        hr->id = bc->name;
+
+        struct dnaSeq *tSeq = hDnaFromSeq(ourDb, chrom, tMin, tMax, dnaUpper);
+        struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
+        if (bc->strand[0] == '-')
+            reverseComplement(qSeq->dna, qSeq->size);
+        if ((previousTEnd != -1) && (previousTEnd == tStart))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->type = QUICKTYPE_DEL;
+            hr->otherBases = &qSeq->dna[qStart - qMin];
+            hr->otherCount = hr->oChromEnd - hr->oChromStart;
+            hr->id = bc->name;
+            }
+        else if ( (previousQEnd != -1) && (previousQEnd == qStart))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->type = QUICKTYPE_INSERT;
+            hr->id = bc->name;
+            }
+        else if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
+             && ((previousTEnd != -1) && (previousTEnd != tStart)))
+            {
+            AllocVar(hr);
+            slAddHead(&hrList, hr);
+            hr->chromStart = previousTEnd;
+            hr->chromEnd = tStart;
+            hr->oChromStart = previousQEnd;
+            hr->oChromEnd = qStart;
+            hr->type = QUICKTYPE_DOUBLE;
+        hr->id = bc->name;
+            }
+
+        previousQEnd = qEnd;
+        previousTEnd = tEnd;
+
+
+        unsigned tAddr = tMin;
+        unsigned qAddr = qMin;
+        int count = 0;
+        for(; tAddr < tMax; tAddr++, qAddr++, count++)
+            {
+            if (tSeq->dna[count] != qSeq->dna[count])
+                {
+                AllocVar(hr);
+                slAddHead(&hrList, hr);
+                hr->chromStart = tAddr;
+                hr->chromEnd = tAddr + 1;
+                hr->oChromStart = qAddr;
+                hr->oChromEnd = qAddr + 1;
+                hr->otherBases = &qSeq->dna[count];
+                hr->otherCount = 1;
+                hr->type = QUICKTYPE_MISMATCH;
+                hr->id = bc->name;
+                }
+            }
+        }
+    }
+
+slSort(&hrList,  hrCmp);
+hashAdd(highLightsHash, quickLiftFile, hrList);
+
+return hrList;
 }

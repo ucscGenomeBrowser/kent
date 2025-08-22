@@ -3928,6 +3928,35 @@ else if (otherIsActive && subChain != chain)
     }
 chainFree(&toFree);
 
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+
+if (liftDb != NULL)
+    {
+    int seqStart = cartInt(cart, "l");
+    int seqEnd =   cartInt(cart, "r");
+    char *chromName = cartString(cart, "c");
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    struct quickLiftRegions *hr, *regions = quickLiftGetRegions(database, liftDb, quickLiftFile, chromName, seqStart, seqEnd);
+
+    printf("<TABLE> <TR>\n");
+    for(hr = regions; hr; hr = hr->next)
+        {
+        if (hr->type == QUICKTYPE_NOTHING)
+            continue;
+
+        char position[128];
+        char *newPos;
+        snprintf(position, 128, "%s:%ld-%ld", chromName, hr->chromStart, hr->chromEnd);
+        newPos = addCommasToPos(database, position);
+        printf("<TR><TD>%s</TD><TD>%s</TD>", quickTypeStrings[hr->type], newPos);
+
+        printf("<TD>");
+        hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
+            printf("DNA alignment</A>");
+        }
+    printf("</TABLE>");
+    }
+
 printf("<B>%s position:</B> <A HREF=\"%s?%s&db=%s&position=%s:%d-%d\">%s:%d-%d</A>"
        "  size: %d <BR>\n",
        trackHubSkipHubName(thisOrg), hgTracksName(), cartSidUrlString(cart), database,
@@ -28059,10 +28088,6 @@ else if (startsWith("hprcDeletions", table) || startsWith("hprcInserts", table) 
 else if (tdb && sameString(tdb->type, "lorax"))
     {
     doLorax(tdb, item);
-    }
-else if (sameString(trackHubSkipHubName(table), "quickLiftChain"))
-    {
-    doQuickLiftChain(tdb, item);
     }
 else
     return FALSE;
