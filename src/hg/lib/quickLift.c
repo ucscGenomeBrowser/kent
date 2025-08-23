@@ -283,6 +283,85 @@ const struct quickLiftRegions *b = *((struct quickLiftRegions **)vb);
 return a->chromStart - b->chromStart;
 }
 
+struct quickLiftRegions *getMismatches(char *ourDb, char strand, char *chrom, char *liftDb, char *liftChrom,  struct bigLink *bl, int querySize,  int seqStart, int seqEnd, char * chainId)
+// Helper function to calculate mismatches in a bigLink block
+{
+struct quickLiftRegions *hrList = NULL, *hr;
+
+int tStart = bl->chromStart;
+int tEnd = bl->chromEnd;
+int width = tEnd - tStart;
+int qStart = bl->qStart;
+int qEnd = qStart + width;
+
+if (strand == '-')
+    {
+    int saveStart = qStart;
+    qStart = querySize - qEnd;
+    qEnd = querySize - saveStart;
+    }
+
+// grab that DNA
+struct dnaSeq *tSeq = hDnaFromSeq(ourDb, chrom, tStart, tEnd, dnaUpper);
+struct dnaSeq *qSeq = hDnaFromSeq(liftDb, liftChrom, qStart, qEnd, dnaUpper);
+if (strand == '-')
+    reverseComplement(qSeq->dna, qSeq->size);
+
+// now step through looking for mismatches
+char *tDna = tSeq->dna;
+char *qDna = qSeq->dna;
+unsigned tAddr = tStart;
+unsigned qAddr = qStart;
+for(; tAddr < tEnd; tAddr++, qAddr++, tDna++, qDna++)
+    {
+    if (tAddr < seqStart)
+        continue;
+    if (tAddr > seqEnd)
+        break;
+    if (*tDna != *qDna)
+        {
+        AllocVar(hr);
+        slAddHead(&hrList, hr);
+        hr->chrom = cloneString(chrom);
+        hr->oChrom = cloneString(liftChrom);
+        hr->chromStart = tAddr;
+        hr->chromEnd = tAddr + 1;
+        hr->oChromStart = qAddr;
+        hr->oChromEnd = qAddr + 1;
+        hr->bases = tDna;
+        hr->otherBases = qDna;
+        hr->baseCount = 1;
+        hr->otherBaseCount = 1;
+        hr->type = QUICKTYPE_MISMATCH;
+        hr->id = chainId;
+        }
+    }
+return hrList;
+}
+
+struct quickLiftRegions *fillWithGap(struct bigChain *bc, unsigned previousTEnd, unsigned tStart, unsigned previousQEnd, unsigned qStart)
+{
+struct quickLiftRegions *hr;
+
+AllocVar(hr);
+hr->id = bc->name;
+hr->chrom = cloneString(bc->chrom);
+hr->oChrom = cloneString(bc->qName);
+hr->chromStart = previousTEnd;
+hr->chromEnd = tStart;
+if (bc->strand[0] == '-')
+    {
+    hr->oChromStart = bc->qSize - qStart;
+    hr->oChromEnd = bc->qSize - previousQEnd;
+    }
+else
+    {
+    hr->oChromStart = previousQEnd;
+    hr->oChromEnd = qStart;
+    }
+return hr;
+}
+
 struct quickLiftRegions *quickLiftGetRegions(char *ourDb, char *liftDb, char *quickLiftFile, char *chrom, int seqStart, int seqEnd)
 /* Figure out the highlight regions and cache them. */
 {
@@ -302,7 +381,6 @@ else
     {
     highLightsHash = newHash(0);
     }
-
 
 struct bbiFile *bbiChain = bigBedFileOpenAlias(quickLiftFile, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
@@ -334,104 +412,57 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
         int tEnd = bl->chromEnd;
         int qStart = bl->qStart;
         int qEnd = qStart + (tEnd - tStart);
-        // crop the chain block if it's bigger than the window
-        int tMin, tMax;
-        int qMin, qMax;
-        tMin = bl->chromStart;
-        tMax = bl->chromEnd;
-        qMin = bl->qStart;
-        if (seqStart > bl->chromStart) 
-            {
-            tMin = seqStart;
-            qMin = qStart + (seqStart - bl->chromStart);
-            }
-        if (seqEnd < bl->chromEnd) 
-            {
-            tMax = seqEnd;
-            }
-        qMax = qMin + (tMax - tMin);
-
-        if (bc->strand[0] == '-')
-            {
-            qMin = bc->qSize - qMax;
-            qMax = qMin + (tMax - tMin);
-            }
 
         struct quickLiftRegions *hr;
         AllocVar(hr);
-        slAddHead(&hrList, hr);
-        hr->chromStart = tMin;
-        hr->chromEnd = tMax;
-        hr->oChromStart = qMin;
-        hr->oChromEnd = qMax;
-        //jhr->type = highlightColors[NOTHING];
+        //slAddHead(&hrList, hr);
+        hr->chrom = cloneString(bc->chrom);
+        hr->oChrom = cloneString(bc->qName);
+        hr->chromStart = tStart;
+        hr->chromEnd = tEnd;
+        hr->oChromStart = qStart;
+        hr->oChromEnd = qEnd;
         hr->type = QUICKTYPE_NOTHING;
         hr->id = bc->name;
 
-        struct dnaSeq *tSeq = hDnaFromSeq(ourDb, chrom, tMin, tMax, dnaUpper);
-        struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
-        if (bc->strand[0] == '-')
-            reverseComplement(qSeq->dna, qSeq->size);
         if ((previousTEnd != -1) && (previousTEnd == tStart))
             {
-            AllocVar(hr);
+            hr = fillWithGap(bc, previousTEnd, tStart, previousQEnd, qStart);
             slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
             hr->type = QUICKTYPE_DEL;
-            hr->otherBases = &qSeq->dna[qStart - qMin];
-            hr->otherCount = hr->oChromEnd - hr->oChromStart;
-            hr->id = bc->name;
+            struct dnaSeq *qSeq = NULL;
+            if (bc->strand[0] == '-')
+                {
+                qSeq = hDnaFromSeq(liftDb, bc->qName, bc->qSize - hr->oChromEnd, bc->qSize - hr->oChromStart, dnaUpper);
+                reverseComplement(qSeq->dna, qSeq->size);
+                }
+            else
+                qSeq = hDnaFromSeq(liftDb, bc->qName, hr->oChromStart, hr->oChromEnd, dnaUpper);
+            hr->otherBases = qSeq->dna;
+            hr->otherBaseCount = hr->oChromEnd - hr->oChromStart;
             }
         else if ( (previousQEnd != -1) && (previousQEnd == qStart))
             {
-            AllocVar(hr);
+            hr = fillWithGap(bc, previousTEnd, tStart, previousQEnd, qStart);
             slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
             hr->type = QUICKTYPE_INSERT;
-            hr->id = bc->name;
+            struct dnaSeq *tSeq = hDnaFromSeq(ourDb, chrom, hr->chromStart, hr->chromEnd, dnaUpper);
+            hr->bases = tSeq->dna;
+            hr->baseCount = hr->chromEnd - hr->chromStart;
             }
         else if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
              && ((previousTEnd != -1) && (previousTEnd != tStart)))
             {
-            AllocVar(hr);
+            hr = fillWithGap(bc, previousTEnd, tStart, previousQEnd, qStart);
             slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->type = QUICKTYPE_DOUBLE;
-        hr->id = bc->name;
             }
 
         previousQEnd = qEnd;
         previousTEnd = tEnd;
 
-
-        unsigned tAddr = tMin;
-        unsigned qAddr = qMin;
-        int count = 0;
-        for(; tAddr < tMax; tAddr++, qAddr++, count++)
-            {
-            if (tSeq->dna[count] != qSeq->dna[count])
-                {
-                AllocVar(hr);
-                slAddHead(&hrList, hr);
-                hr->chromStart = tAddr;
-                hr->chromEnd = tAddr + 1;
-                hr->oChromStart = qAddr;
-                hr->oChromEnd = qAddr + 1;
-                hr->otherBases = &qSeq->dna[count];
-                hr->otherCount = 1;
-                hr->type = QUICKTYPE_MISMATCH;
-                hr->id = bc->name;
-                }
-            }
+        // now find the mismatches in this block
+        struct quickLiftRegions *mismatches = getMismatches(ourDb, bc->strand[0], chrom, liftDb, bc->qName, bl, bc->qSize, seqStart, seqEnd, bc->name);
+        hrList = slCat(mismatches, hrList);
         }
     }
 

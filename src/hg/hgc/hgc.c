@@ -3938,17 +3938,21 @@ if (liftDb != NULL)
     char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
     struct quickLiftRegions *hr, *regions = quickLiftGetRegions(database, liftDb, quickLiftFile, chromName, seqStart, seqEnd);
 
-    printf("<TABLE> <TR>\n");
+    printf("<B>Variants in Window:</B><BR>");
+    printf("<TABLE border=\"1\"> <TR>\n");
+    printf("<TR><TD>Type</TD><TD>Pos</TD><TD>Other Pos</TD><TD>Other Count</TD><TD>Other Bases</TD><TD>Count</TD><TD>Bases</TD>");
     for(hr = regions; hr; hr = hr->next)
         {
         if (hr->type == QUICKTYPE_NOTHING)
             continue;
 
         char position[128];
-        char *newPos;
-        snprintf(position, 128, "%s:%ld-%ld", chromName, hr->chromStart, hr->chromEnd);
-        newPos = addCommasToPos(database, position);
-        printf("<TR><TD>%s</TD><TD>%s</TD>", quickTypeStrings[hr->type], newPos);
+        char *ourPos, *otherPos;
+        snprintf(position, 128, "%s:%ld-%ld", hr->chrom, hr->chromStart, hr->chromEnd);
+        ourPos = cloneString(addCommasToPos(database, position));
+        snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
+        otherPos = cloneString(addCommasToPos(database, position));
+        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%.*s</TD><TD>%d</TD><TD>%.*s", quickTypeStrings[hr->type], ourPos,otherPos, hr->otherBaseCount, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->baseCount, hr->bases);
 
         printf("<TD>");
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);

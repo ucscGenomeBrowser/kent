@@ -13,12 +13,16 @@ struct quickLiftRegions
 {
 struct quickLiftRegions *next;
 unsigned type;
+char *chrom;
 long chromStart;
 long chromEnd;
+char *bases;
+unsigned baseCount;
+char *oChrom;
 long oChromStart;
 long oChromEnd;
 char *otherBases;
-unsigned otherCount;
+unsigned otherBaseCount;
 char * id;
 };
 

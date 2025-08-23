@@ -113,11 +113,11 @@ for(; hr; hr = hr->next)
             }
 
         if (hr->type == QUICKTYPE_MISMATCH)
-            safef(mouseOver, sizeof mouseOver, "mismatch %.*s", hr->otherCount, hr->otherBases);
+            safef(mouseOver, sizeof mouseOver, "mismatch %c->%c", *hr->otherBases, *hr->bases);
         else if (hr->chromStart == hr->chromEnd)
-            safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherCount, hr->otherBases);
+            safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherBaseCount, hr->otherBases);
         else if (hr->oChromStart == hr->oChromEnd)
-            safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->chromEnd - hr->chromStart);
+            safef(mouseOver, sizeof mouseOver, "insertion %ldbp (%.*s)", hr->chromEnd - hr->chromStart, hr->baseCount, hr->bases);
         else
             safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
 
