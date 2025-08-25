@@ -4394,6 +4394,10 @@ while ((line = customPpNextReal(cpp)) != NULL)
     // NOTE: line is binary data if a file upload
     lf = cpp->fileStack;
     char *dataUrl = NULL;
+
+    if (startsWith("https://www.ncbi.nlm.nih.gov/geo/download/", lf->fileName))
+	errAbort("You are using the GEO download 'http' link, but it will not work. Please use the GEO link labelled 'ftp' for custom tracks.");
+
     if (lf->fileName && (
             startsWith("http://" , lf->fileName) ||
             startsWith("https://", lf->fileName) ||
