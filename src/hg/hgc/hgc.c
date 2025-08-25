@@ -4750,6 +4750,200 @@ printf("<TR><TD><B>standard deviation</B></TD><TD>%f</TD></TR>\n", as->stdDev);
 printf("</TABLE>\n");
 }
 
+void quickLiftChainClick(struct sqlConnection *conn, struct trackDb *tdb,
+                       char *item, int start, char *otherDb)
+/* Handle a click on the quickChain track */
+{
+struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
+char *otherOrg = NULL;
+struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
+int chainWinSize;
+boolean otherIsActive = FALSE;
+
+if (hDbIsActive(otherDb))
+    otherIsActive = TRUE;
+
+if (! sameWord(otherDb, "seq"))
+    {
+    otherOrg = hOrganism(otherDb);
+    }
+if (otherOrg == NULL)
+    {
+    /* use first word of chain label (count on org name as first word) */
+    otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
+    }
+
+chain = chainLoadItemInRange(tdb, item);
+if (startsWith("big", tdb->type))
+    {
+    if (!otherIsActive) // if this isn't a native database, check to see if it's a hub
+        {
+        struct trackHubGenome *genome = trackHubGetGenomeUndecorated(otherDb);
+        if (genome)
+            {
+            otherIsActive = TRUE;
+            otherDb = genome->name;
+            }
+        }
+    }
+
+chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
+
+char position[128];
+char *ourPos, *otherPos;
+int seqStart = cartInt(cart, "l");
+int seqEnd =   cartInt(cart, "r");
+char *chromName = cartString(cart, "c");
+safef(position, 128, "%s:%d-%d", chromName, seqStart, seqEnd);
+ourPos = cloneString(addCommasToPos(database, position));
+printf("<B>%s position:</B> %s<BR>", trackHubSkipHubName(database), ourPos);
+
+int qs,qe;
+qChainRangePlusStrand(subChain, &qs, &qe);
+safef(position, 128, "%s:%d-%d", subChain->qName, qs-1, qe);
+otherPos = cloneString(addCommasToPos(otherDb, position));
+printf("<B>%s position: </B>", trackHubSkipHubName(otherDb));
+linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
+printf("%s</A><BR><BR>",  otherPos);
+chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
+
+if (otherTbf != NULL || 
+    (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) 
+     && chromSeqFileExists(otherDb, chain->qName)))
+    {
+    if (chainWinSize < 1000000)
+        {
+        printf("View ");
+        hgcAnchorSomewhere("htcChainAli", item, tdb->track, chain->tName);
+        printf("DNA sequence alignment of whole window.</A><BR><BR>");
+        }
+    else
+        {
+        printf("Zoom so that browser window covers 1,000,000 bases or less "
+           "and return here to see alignment details.<BR>\n");
+        }
+    }
+
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct quickLiftRegions *hr, *regions = quickLiftGetRegions(database, liftDb, quickLiftFile, chromName, seqStart, seqEnd);
+
+unsigned deletions = 0;
+unsigned insertions = 0;
+unsigned mismatches = 0;
+unsigned doubles = 0;
+
+for(hr = regions; hr; hr = hr->next)
+    {
+    switch(hr->type)
+        {
+        case QUICKTYPE_INSERT:
+            insertions++;
+            break;
+        case QUICKTYPE_DEL:
+            deletions++;
+            break;
+        case QUICKTYPE_DOUBLE:
+            doubles++;
+            break;
+        case QUICKTYPE_MISMATCH:
+            mismatches++;
+            break;
+        }
+    }
+
+if (deletions)
+    {
+    printf("<BR><B>Deletions in Window:</B><BR>");
+    printf("<TABLE border=\"1\"> <TR>\n");
+    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Bases</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    for(hr = regions; hr; hr = hr->next)
+        {
+        if (hr->type != QUICKTYPE_DEL)
+            continue;
+
+        char *ourPos, *otherPos;
+        snprintf(position, 128, "%s:%ld-%ld", hr->chrom, hr->chromStart, hr->chromEnd);
+        ourPos = cloneString(addCommasToPos(database, position));
+        snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
+        otherPos = cloneString(addCommasToPos(database, position));
+        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   ourPos, otherPos, hr->otherBaseCount, hr->otherBases);
+        hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
+            printf("alignment</A></TD></TR>");
+
+        }
+    printf("</TABLE>");
+    }
+
+if (insertions)
+    {
+    printf("<BR><B>Insertions in Window:</B><BR>");
+    printf("<TABLE border=\"1\"> <TR>\n");
+    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Bases</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    for(hr = regions; hr; hr = hr->next)
+        {
+        if (hr->type != QUICKTYPE_INSERT)
+            continue;
+
+        char *ourPos, *otherPos;
+        snprintf(position, 128, "%s:%ld-%ld", hr->chrom, hr->chromStart, hr->chromEnd);
+        ourPos = cloneString(addCommasToPos(database, position));
+        snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
+        otherPos = cloneString(addCommasToPos(database, position));
+        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   ourPos, otherPos, hr->baseCount, hr->bases);
+        hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
+            printf("alignment</A></TD></TR>");
+
+        }
+    printf("</TABLE>");
+    }
+
+if (doubles)
+    {
+    printf("<BR><B>Double Gaps in Window:</B><BR>");
+    printf("<TABLE border=\"1\"> <TR>\n");
+    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD># Bases in %s</TD><TD>#Bases in %s</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb), trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    for(hr = regions; hr; hr = hr->next)
+        {
+        if (hr->type != QUICKTYPE_DOUBLE)
+            continue;
+
+        char *ourPos, *otherPos;
+        snprintf(position, 128, "%s:%ld-%ld", hr->chrom, hr->chromStart, hr->chromEnd);
+        ourPos = cloneString(addCommasToPos(database, position));
+        snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
+        otherPos = cloneString(addCommasToPos(database, position));
+        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%d</TD><TD>",   ourPos, otherPos, hr->baseCount, hr->otherBaseCount);
+        hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
+            printf("alignment</A></TD></TR>");
+
+        }
+    printf("</TABLE>");
+    }
+
+if (mismatches)
+    {
+    printf("<BR><B>Mismatches in Window:</B><BR>");
+    printf("<TABLE border=\"1\"> <TR>\n");
+    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Change</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    for(hr = regions; hr; hr = hr->next)
+        {
+        if (hr->type != QUICKTYPE_MISMATCH)
+            continue;
+
+        char *ourPos, *otherPos;
+        snprintf(position, 128, "%s:%ld-%ld", hr->chrom, hr->chromStart, hr->chromEnd);
+        ourPos = cloneString(addCommasToPos(database, position));
+        snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
+        otherPos = cloneString(addCommasToPos(database, position));
+        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s -> %.*s</TD><TD>",   ourPos, otherPos, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
+        hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
+            printf("alignment</A></TD></TR>");
+
+        }
+    printf("</TABLE>");
+    }
+}
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -4875,6 +5069,10 @@ else if (wordCount > 0)
 	if (wordCount < 3)
 	    errAbort("Missing field in netAlign track type field");
 	genericNetClick(conn, tdb, item, start, words[1], words[2]);
+	}
+    else if (sameString(type, "bigQuickLiftChain")) 
+        {
+	quickLiftChainClick(conn, tdb, item, start, words[1]);
 	}
     else if (sameString(type, "chain") || sameString(type, "bigChain") )
         {

@@ -7,9 +7,16 @@
 #include "bigLink.h"
 #include "trackHub.h"
 #include "quickLift.h"
+#include "chainCart.h"
 
 static Color *highlightColors;
 //static unsigned lengthLimit;
+
+struct cartOptions
+    {
+    enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
+    int scoreFilter ; /* filter chains by score if > 0 */
+    };
 
 static Color getColor(char *confVariable, char *defaultRgba)
 {
@@ -110,6 +117,7 @@ for(; hr; hr = hr->next)
             startX = x1;
             endX = x1 + w;
             hvGfxBox(hvg, startX, yOff, w, height, hexColor);
+            continue;
             }
 
         if (hr->type == QUICKTYPE_MISMATCH)
@@ -124,4 +132,30 @@ for(; hr; hr = hr->next)
         mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, hr->id, mouseOver);
         }
     }
+}
+
+void quickLiftDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+//mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  "fart", "hallo");
+maybeDrawQuickLiftLines( tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+}
+
+void quickLiftChainMethods(struct track *tg, struct trackDb *tdb,
+	int wordCount, char *words[])
+/* Fill in custom parts of quickLift chains */
+{
+struct cartOptions *chainCart;
+
+AllocVar(chainCart);
+tg->extraUiData = (void *) chainCart;
+
+tg->isBigBed = TRUE;
+
+void bigChainLoadItems(struct track *tg);
+tg->loadItems = bigChainLoadItems;
+tg->drawItems = quickLiftDraw;
+int linkedFeaturesFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
+tg->totalHeight = linkedFeaturesFixedTotalHeightNoOverflow;
 }

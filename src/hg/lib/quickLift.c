@@ -454,6 +454,9 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
              && ((previousTEnd != -1) && (previousTEnd != tStart)))
             {
             hr = fillWithGap(bc, previousTEnd, tStart, previousQEnd, qStart);
+            hr->type = QUICKTYPE_DOUBLE;
+            hr->baseCount = hr->chromEnd - hr->chromStart;
+            hr->otherBaseCount = hr->oChromEnd - hr->oChromStart;
             slAddHead(&hrList, hr);
             }
 

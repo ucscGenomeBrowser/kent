@@ -4695,6 +4695,7 @@ if (
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
 || sameWord(type, "bigRmsk")
+|| sameWord(type, "bigQuickLiftChain")
 || sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
