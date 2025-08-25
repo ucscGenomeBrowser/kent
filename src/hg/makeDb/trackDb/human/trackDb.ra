@@ -2177,12 +2177,14 @@ dataVersion 2020-02-25
     shortLabel DGV Struct Var
     longLabel Database of Genomic Variants: Structural Var Regions (CNV, Inversion, In/del)
     priority 1
+    mouseOver <b>ID</b>: $name<br> <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size</b>: $_size<br> <b>Type</b>: $varType
 
     track dgvSupporting
     parent dgvPlus
     shortLabel DGV Supp Var
     longLabel Database of Genomic Variants: Supporting Structural Var (CNV, Inversion, In/del)
     priority 2
+    mouseOver <b>ID</b>: $name<br> <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size</b>: $_size<br> <b>Type</b>: $varType
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -5105,7 +5107,7 @@ visibility hide
 color 0, 80, 0
 type bigBed 9 +
 bigDataUrl /gbdb/$D/geneReviews/geneReviews.bb
-mouseOver $name disease(s): $diseases
+mouseOver <b>Gene</b>: $name<br> <b>Count</b>: $diseaseCount<br> <b>Disease(s)</b>: $diseases<br>
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 noScoreFilter on
@@ -5548,7 +5550,7 @@ bigDataUrl /gbdb/$D/hgnc/hgnc.bb
 type bigBed 9 +
 labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
 defaultLabelFields symbol
-mouseOver Symbol:$symbol; $name, Alias symbol: $alias_symbol; Previous symbols:$prev_symbol
+mouseOver <b>Symbol</b>: $symbol<br> <b>$name</b><br> <b>Alias symbol</b>: $alias_symbol<br> <b>Previous symbols</b>: $prev_symbol
 filterValues.locus_type Y RNA,long non-coding RNA,micro RNA,misc RNA,ribosomal RNA,small nuclear RNA,small nucleolar RNA,transfer RNA,vault RNA,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,pseudogene,readthrough,unknown
 group genes
 searchIndex name

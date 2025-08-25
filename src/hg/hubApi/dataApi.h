@@ -25,7 +25,6 @@
 #include "errCatch.h"
 #include "vcf.h"
 #include "bedTabix.h"
-#include "bamFile.h"
 #include "jsonParse.h"
 #include "jsonWrite.h"
 #include "chromInfo.h"
@@ -83,6 +82,10 @@
 #define argCategory "category"
 #define argStatus "status"
 #define argLevel "level"
+#define argFromGenome "fromGenome"
+#define argToGenome "toGenome"
+/* used in liftOver 'listExisting' function to filter the result */
+#define argFilter "filter"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
@@ -99,6 +102,7 @@ extern char *argGetDataTrack[];
 extern char *argGetDataSequence[];
 extern char *argSearch[];
 extern char *argFindGenome[];
+extern char *argLiftOver[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -287,5 +291,8 @@ void apiSearch(char *words[MAX_PATH_INFO]);
 
 void apiFindGenome(char *words[MAX_PATH_INFO]);
 /* 'findGenome' function */
+
+void apiLiftOver(char *words[MAX_PATH_INFO]);
+/* 'liftOver' function */
 
 #endif	/*	 DATAAPH_H	*/

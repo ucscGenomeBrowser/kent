@@ -3862,19 +3862,19 @@ var dragReorder = {
                         tdBtn.style.position = "relative";
                         addMouseover(span, span.title);
                         span.addEventListener("click", (e) => {
-                            // create a contextmenu event that the imgTbl will pick up
+                            // trigger a click on the <a> of the td
                             e.preventDefault();
                             e.stopPropagation();
                             e.stopImmediatePropagation();
-                            const rightClickEvent = new MouseEvent("contextmenu", {
+                            const clickEvent = new MouseEvent("click", {
                                 bubbles: true,
                                 cancelable: true,
                                 view: window,
                                 clientX: tdBtn.getBoundingClientRect().left + 15,
                                 clientY: tdBtn.getBoundingClientRect().top,
-                                button: 2,
+                                button: 1,
                             });
-                            tdBtn.dispatchEvent(rightClickEvent);
+                            tdBtn.children[0].dispatchEvent(clickEvent);
                         });
                     }
                 }

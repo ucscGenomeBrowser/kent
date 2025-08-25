@@ -3,6 +3,10 @@
 #include "botDelay.h"
 #include "jsHelper.h"
 #include "srcVersion.h"
+/* can not include bamFile.h with the liftOver business, there
+ * is a conflict in a definition of the enum 'bed'
+ */
+#include "bamFile.h"
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -54,6 +58,7 @@ char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, 
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argRevComp, NULL };
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 char *argFindGenome[] = {argQ, argMaxItemsOutput, argJsonOutputArrays, argStatsOnly, argBrowser, argYear, argCategory, argStatus, argLevel, NULL};
+char *argLiftOver[] = {argFromGenome, argToGenome, argChrom, argStart, argEnd, argFilter, argMaxItemsOutput, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -992,6 +997,7 @@ hashAdd(apiFunctionHash, "list", &apiList);
 hashAdd(apiFunctionHash, "getData", &apiGetData);
 hashAdd(apiFunctionHash, "search", &apiSearch);
 hashAdd(apiFunctionHash, "findGenome", &apiFindGenome);
+hashAdd(apiFunctionHash, "liftOver", &apiLiftOver);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])

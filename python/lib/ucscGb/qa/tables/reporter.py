@@ -1,5 +1,5 @@
 import time
-from pycbio.sys import procOps
+import re
 
 class Reporter(object):
 
@@ -23,9 +23,26 @@ class Reporter(object):
         self.description = None
 
     @staticmethod
+    def shQuoteWord(word):
+        """quote word so that it will evaluate as a simple string by common Unix
+        shells"""
+        # help from http://code.activestate.com/recipes/498202/
+        word = str(word)
+        if re.match(r"^[-+./_=,:@0-9A-Za-z]+$", word):
+            return word
+        else:
+            return "\\'".join("'" + c + "'" for c in word.split("'"))
+
+    @staticmethod
+    def shQuote(words):
+        """quote a list of words so that it will evaluate as simple strings by
+        common Unix shells"""
+        return [Reporter.shQuoteWord(w) for w in words]
+
+    @staticmethod
     def __formatCommand(command):
         """Turns command list into string, keeping whitespace quoted."""
-        return " ".join(procOps.shQuote(command))
+        return " ".join(Reporter.shQuote(command))
 
     def beginStep(self, db, table, description):
         """To be run at the beginning of each test. Sets variables."""
