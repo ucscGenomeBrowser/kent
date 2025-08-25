@@ -2742,10 +2742,17 @@ return dyStringCannibalize(&dy);
 static char *bdsMouseOver(struct bigDbSnp *bds)
 /* Simulate mouseover with options... */
 {
-struct dyString *dy = dyStringCreate("%s:", bds->name);
-bdsAppendRefAlt(bds, dy);
-bdsAppendFunc(bds, dy);
-return dyStringCannibalize(&dy);
+    struct dyString *dy = dyStringNew(256);
+    // dbSNP ID
+    dyStringPrintf(dy, "<b>dbSNP ID</b>: %s<br>", bds->name);
+    // Reference/alt alleles
+    dyStringAppend(dy, "<b>Ref/Alt allele(s)</b>: ");
+    bdsAppendRefAlt(bds, dy);
+    dyStringAppend(dy, "<br>");
+    // Functional effects
+    dyStringAppend(dy, "<b>Functional effects</b>: ");
+    bdsAppendFunc(bds, dy);
+    return dyStringCannibalize(&dy);
 }
 
 static void paranoidCheckMnvLengths(struct bigDbSnp *bds)
