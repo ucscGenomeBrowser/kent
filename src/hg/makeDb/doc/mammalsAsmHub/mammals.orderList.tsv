@@ -408,7 +408,8 @@ GCF_014570535.1_YNU_ManJav_2.0	Malayan pangolin YNU ManJav 2.0
 GCA_048126345.1_UniMelb_NotTyph_v1.0	marsupial mole (Waite Creek area ABTC07570 2025)
 GCA_001651235.1_ASM165123v1	Masai giraffe (MA1 2016 Penn St)
 GCA_004024765.1_ZapHud_v1_BIUU	meadow jumping mouse
-GCA_037038515.1_mMicPen1.hap1	meadow vole (hap1 2024)
+GCA_037038515.1_mMicPen1.hap1	meadow vole (hap1 2024 genbank)
+GCF_037038515.1_mMicPen1.hap1	meadow vole (hap1 2024 refseq)
 GCA_037039175.1_mMicPen1.hap2	meadow vole (hap2 2024)
 GCF_006229205.1_meerkat_22Aug2017_6uvM2_HiC	meerkat (VVHF042 2019 DNA Zoo refseq)
 GCA_024711525.1_mDipMer1.0.a	Merriam's kangaroo rat (MVZ:Mamm:240054 alternate hap 2022)
@@ -623,6 +624,7 @@ GCF_032405125.1_serow.2	Sumatran serow (serow.1 2024)
 GCF_000696425.1_G_variegatus-3.0.2	Sunda flying lemur (2014 WashU)
 GCA_004027255.1_GalVar_v1_BIUU	Sunda flying lemur (US047 2019 Broad)
 GCA_004027475.1_AnoCau_v1_BIUU	tailed tailless bat
+GCF_050624435.1_mTenEca1.hap1	tailess tenrec (hap1 2025)
 GCF_023091745.1_Takin1.1	takin (Tak-1 2022)
 GCA_004026705.1_MicTal_v1_BIUU	Talazac's shrew tenrec
 GCA_028389975.1_mMacEug1.alt	tammar wallaby (alternate hap 2023)

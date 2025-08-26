@@ -15035,6 +15035,10 @@ else if (sameWord(type, "snake"))
     snakeMethods(track, tdb, wordCount, words);
     }
 #endif
+else if (sameWord(type, "bigQuickLiftChain"))
+    {
+    quickLiftChainMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);

@@ -6,28 +6,17 @@
 #include "bigChain.h"
 #include "bigLink.h"
 #include "trackHub.h"
-
-struct highRegions
-// store highlight information
-{
-struct highRegions *next;
-long chromStart;
-long chromEnd;
-long oChromStart;
-long oChromEnd;
-char strand;
-unsigned hexColor;
-char *otherBases;
-unsigned otherCount;
-};
-
-#define INSERT_COLOR     0
-#define DEL_COLOR      1
-#define DOUBLE_COLOR     2
-#define MISMATCH_COLOR     3
+#include "quickLift.h"
+#include "chainCart.h"
 
 static Color *highlightColors;
-static unsigned lengthLimit;
+//static unsigned lengthLimit;
+
+struct cartOptions
+    {
+    enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
+    int scoreFilter ; /* filter chains by score if > 0 */
+    };
 
 static Color getColor(char *confVariable, char *defaultRgba)
 {
@@ -46,159 +35,18 @@ static void initializeHighlightColors()
 {
 if (highlightColors == NULL)
     {
-    highlightColors = needMem(sizeof(Color) * 3);
+    highlightColors = needMem(sizeof(Color) * 5);
  
-    lengthLimit = atoi(cfgOptionDefault("quickLift.lengthLimit", "10000"));
+    //lengthLimit = atoi(cfgOptionDefault("quickLift.lengthLimit", "10000"));
 
-    highlightColors[INSERT_COLOR] = getColor("quickLift.insColor","255,0,0,255");
-    highlightColors[DEL_COLOR] = getColor("quickLift.delColor","0,255,0,255");
-    highlightColors[DOUBLE_COLOR] = getColor("quickLift.doubleColor","0,0,255,255");
-    highlightColors[MISMATCH_COLOR] = getColor("quickLift.mismatchColor","255,0,0,255");
+    highlightColors[QUICKTYPE_INSERT] = getColor("quickLift.insColor","255,0,0,255");
+    highlightColors[QUICKTYPE_DEL] = getColor("quickLift.delColor","0,255,0,255");
+    highlightColors[QUICKTYPE_DOUBLE] = getColor("quickLift.doubleColor","0,0,255,255");
+    highlightColors[QUICKTYPE_MISMATCH] = getColor("quickLift.mismatchColor","255,0,0,255");
+    highlightColors[QUICKTYPE_NOTHING] = getColor("quickLift.nothingColor","1,1,1,1");
     }
 }
 
-struct highRegions *getQuickLiftLines(char *liftDb, char *quickLiftFile, int seqStart, int seqEnd)
-/* Figure out the highlight regions and cache them. */
-{
-static struct hash *highLightsHash = NULL;
-struct highRegions *hrList = NULL;
-
-initializeHighlightColors();
-if (seqEnd - seqStart > lengthLimit)
-    return hrList;
-
-if (highLightsHash != NULL)
-    {
-    if ((hrList = (struct highRegions *)hashFindVal(highLightsHash, quickLiftFile)) != NULL)
-        return hrList;
-    }
-else
-    {
-    highLightsHash = newHash(0);
-    }
-
-
-struct bbiFile *bbiChain = bigBedFileOpenAlias(quickLiftFile, chromAliasFindAliases);
-struct lm *lm = lmInit(0);
-struct bigBedInterval *bbChain, *bbChainList =  bigBedIntervalQuery(bbiChain, chromName, seqStart, seqEnd, 0, lm);
-char *links = bigChainGetLinkFile(quickLiftFile);
-struct bbiFile *bbiLink = bigBedFileOpenAlias(links, chromAliasFindAliases);
-struct bigBedInterval  *bbLink, *bbLinkList =  bigBedIntervalQuery(bbiLink, chromName, seqStart, seqEnd, 0, lm);
-
-char *chainRow[1024];
-char *linkRow[1024];
-char startBuf[16], endBuf[16];
-
-for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
-    {
-    bigBedIntervalToRow(bbChain, chromName, startBuf, endBuf, chainRow, ArraySize(chainRow));
-    struct bigChain *bc = bigChainLoad(chainRow);
-
-    int previousTEnd = -1;
-    int previousQEnd = -1;
-    for (bbLink = bbLinkList; bbLink != NULL; bbLink = bbLink->next)
-        {
-        bigBedIntervalToRow(bbLink, chromName, startBuf, endBuf, linkRow, ArraySize(linkRow));
-        struct bigLink *bl = bigLinkLoad(linkRow);
-
-        if (!sameString(bl->name, bc->name))
-            continue;
-
-        int tStart = bl->chromStart;
-        int tEnd = bl->chromEnd;
-        int qStart = bl->qStart;
-        int qEnd = qStart + (tEnd - tStart);
-        // crop the chain block if it's bigger than the window
-        int tMin, tMax;
-        int qMin, qMax;
-        tMin = bl->chromStart;
-        tMax = bl->chromEnd;
-        qMin = bl->qStart;
-        if (seqStart > bl->chromStart) 
-            {
-            tMin = seqStart;
-            qMin = qStart + (seqStart - bl->chromStart);
-            }
-        if (seqEnd < bl->chromEnd) 
-            {
-            tMax = seqEnd;
-            }
-        qMax = qMin + (tMax - tMin);
-
-        if (bc->strand[0] == '-')
-            {
-            qMin = bc->qSize - qMax;
-            qMax = qMin + (tMax - tMin);
-            }
-
-        struct dnaSeq *tSeq = hDnaFromSeq(database, chromName, tMin, tMax, dnaUpper);
-        struct dnaSeq *qSeq = hDnaFromSeq(liftDb, bc->qName, qMin, qMax, dnaUpper);
-        if (bc->strand[0] == '-')
-            reverseComplement(qSeq->dna, qSeq->size);
-        struct highRegions *hr;
-        if ((previousTEnd != -1) && (previousTEnd == tStart))
-            {
-            AllocVar(hr);
-            slAddHead(&hrList, hr);
-        //    hr->strand = 
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->hexColor = highlightColors[DEL_COLOR];
-            hr->otherBases = &qSeq->dna[qStart - qMin];
-            hr->otherCount = hr->oChromEnd - hr->oChromStart;
-            }
-        if ( (previousQEnd != -1) && (previousQEnd == qStart))
-            {
-            AllocVar(hr);
-            slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->hexColor = highlightColors[INSERT_COLOR];
-            }
-        if ( ((previousQEnd != -1) && (previousQEnd != qStart)) 
-             && ((previousTEnd != -1) && (previousTEnd != tStart)))
-            {
-            AllocVar(hr);
-            slAddHead(&hrList, hr);
-            hr->chromStart = previousTEnd;
-            hr->chromEnd = tStart;
-            hr->oChromStart = previousQEnd;
-            hr->oChromEnd = qStart;
-            hr->hexColor = highlightColors[DOUBLE_COLOR];
-            }
-        previousQEnd = qEnd;
-        previousTEnd = tEnd;
-
-
-        unsigned tAddr = tMin;
-        unsigned qAddr = qMin;
-        int count = 0;
-        for(; tAddr < tEnd; tAddr++, qAddr++, count++)
-            {
-            if (tSeq->dna[count] != qSeq->dna[count])
-                {
-                AllocVar(hr);
-                slAddHead(&hrList, hr);
-                hr->chromStart = tAddr;
-                hr->chromEnd = tAddr + 1;
-                hr->oChromStart = qAddr;
-                hr->oChromEnd = qAddr + 1;
-                hr->otherBases = &qSeq->dna[count];
-                hr->otherCount = 1;
-                hr->hexColor = highlightColors[MISMATCH_COLOR];
-                }
-            }
-        }
-    }
-
-hashAdd(highLightsHash, quickLiftFile, hrList);
-
-return hrList;
-}
 
 static void drawTri(struct hvGfx *hvg, int x1, int x2, int y, Color color)
 /* Draw traingle. */
@@ -222,12 +70,13 @@ char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
 if (quickLiftFile == NULL)
     return;
 
+initializeHighlightColors();
 boolean drawTriangle = FALSE;
 if (startsWith("quickLiftChain", trackHubSkipHubName(tg->track)))
     drawTriangle = TRUE;
 char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
-struct highRegions *regions = getQuickLiftLines(liftDb, quickLiftFile, seqStart, seqEnd);
-struct highRegions *hr = regions;
+struct quickLiftRegions *regions = quickLiftGetRegions(database, liftDb, quickLiftFile, chromName, seqStart, seqEnd);
+struct quickLiftRegions *hr = regions;
 
 int fontHeight = mgFontLineHeight(tl.font);
 int height = tg->height;
@@ -237,9 +86,10 @@ if (!drawTriangle && isCenterLabelIncluded(tg))
     yOff -= fontHeight;
     }
 
+//mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  "fart", "hallo");
 for(; hr; hr = hr->next)
     {
-    unsigned int hexColor = hr->hexColor;
+    unsigned int hexColor = highlightColors[hr->type];
     double scale = scaleForWindow(width, seqStart, seqEnd);
     int x1 = xOff + scale * (hr->chromStart - seqStart);
     int w =  scale * (hr->chromEnd - hr->chromStart);
@@ -247,30 +97,65 @@ for(; hr; hr = hr->next)
         w = 1;
     hvGfxSetClip(hvg, xOff, yOff, width, height);  // we're drawing in the center label at the moment
     int startX, endX;
-    if (drawTriangle)
-        {
-        startX = x1 + w/2 - fontHeight/2;
-        endX = x1 + w/2 + fontHeight/2 ;
-        drawTri(hvg, startX, endX , yOff, hexColor);
-        }
-    else
-        {
-        startX = x1;
-        endX = x1 + w;
-        hvGfxBox(hvg, startX, yOff, w, height, hexColor);
-        }
-
     char mouseOver[4096];
 
-    if (hr->hexColor == highlightColors[MISMATCH_COLOR])
-        safef(mouseOver, sizeof mouseOver, "mismatch %.*s", hr->otherCount, hr->otherBases);
-    else if (hr->chromStart == hr->chromEnd)
-        safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherCount, hr->otherBases);
-    else if (hr->oChromStart == hr->oChromEnd)
-        safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->chromEnd - hr->chromStart);
+    if (hr->type == QUICKTYPE_NOTHING)
+        {
+        safef(mouseOver, sizeof mouseOver, "identical");
+        mapBoxHc(hvg, hr->chromStart, hr->chromEnd, x1, yOff, w, height, tg->track, hr->id, mouseOver);
+        }
     else
-        safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
-    mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, "indel", mouseOver);
+        {
+        if (drawTriangle)
+            {
+            startX = x1 + w/2 - fontHeight/2;
+            endX = x1 + w/2 + fontHeight/2 ;
+            drawTri(hvg, startX, endX , yOff, hexColor);
+            }
+        else
+            {
+            startX = x1;
+            endX = x1 + w;
+            hvGfxBox(hvg, startX, yOff, w, height, hexColor);
+            continue;
+            }
 
+        if (hr->type == QUICKTYPE_MISMATCH)
+            safef(mouseOver, sizeof mouseOver, "mismatch %c->%c", *hr->otherBases, *hr->bases);
+        else if (hr->chromStart == hr->chromEnd)
+            safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherBaseCount, hr->otherBases);
+        else if (hr->oChromStart == hr->oChromEnd)
+            safef(mouseOver, sizeof mouseOver, "insertion %ldbp (%.*s)", hr->chromEnd - hr->chromStart, hr->baseCount, hr->bases);
+        else
+            safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
+
+        mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, hr->id, mouseOver);
+        }
     }
+}
+
+void quickLiftDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+//mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  "fart", "hallo");
+maybeDrawQuickLiftLines( tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+}
+
+void quickLiftChainMethods(struct track *tg, struct trackDb *tdb,
+	int wordCount, char *words[])
+/* Fill in custom parts of quickLift chains */
+{
+struct cartOptions *chainCart;
+
+AllocVar(chainCart);
+tg->extraUiData = (void *) chainCart;
+
+tg->isBigBed = TRUE;
+
+void bigChainLoadItems(struct track *tg);
+tg->loadItems = bigChainLoadItems;
+tg->drawItems = quickLiftDraw;
+int linkedFeaturesFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
+tg->totalHeight = linkedFeaturesFixedTotalHeightNoOverflow;
 }

@@ -321,6 +321,7 @@ struct track
     char * originalTrack;       /* the name of the original track if this a pseduo-duplicate track used for squishyPack */
     boolean limitWiggle;       /* TRUE if this track is drawing in coverage mode because of limited visibility */
     boolean isColorBigBed;      /* True if this track is a fake track used for wiggle coloring. */
+    void (*loadSummary)(struct track *tg); /* loadSumary data for bigBed etc.   */
     };
 
 struct window  // window in multiwindow image
@@ -1098,6 +1099,10 @@ void longRangeMethods(struct track *track, struct trackDb *tdb);
 void snakeMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Make track group for chain-based snake alignment. */
+
+void quickLiftChainMethods(struct track *tg, struct trackDb *tdb,
+	int wordCount, char *words[]);
+/* Fill in custom parts of quickLift chains */
 
 void chainMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);

@@ -8,7 +8,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgapcgi.a $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hubApi
-O = hubApi.o getData.o apiUtils.o list.o search.o findGenome.o
+O = hubApi.o getData.o apiUtils.o list.o search.o findGenome.o liftOver.o
 
 A = hubApi
 

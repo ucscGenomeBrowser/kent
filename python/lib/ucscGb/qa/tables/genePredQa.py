@@ -10,7 +10,7 @@ class GenePredQa(PositionalQa):
         self.reporter.beginStep(self.db, self.table, "genePredCheck")
         command = ["genePredCheck", "db=" + self.db, self.table]
         self.reporter.writeCommand(command)
-	commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
+        commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
         self.reporter.fh.write(commandErr)
         if commandReturnCode:
             self.recordError()

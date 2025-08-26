@@ -665,18 +665,37 @@ safecpy(fileName, sizeof(fileName), url);
 chopSuffixAt(fileName, '?');
 
 // based on udc cache dir analysis by hiram in rm #12813
-if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileName, ".bigbed"))
+if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileName, ".bigbed")
+ || endsWith(fileName, "%2Ebb") || endsWith(fileName, "%2EbigBed") || endsWith(fileName, "%2Ebigbed")
+ || endsWith(fileName, "%2ebb") || endsWith(fileName, "%2ebigBed") || endsWith(fileName, "%2ebigbed"))
     return cloneString("bigBed");
-if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig") ||  
-            endsWith(fileName, ".bigwig") || endsWith(fileName, ".bwig"))
+
+if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig") 
+ || endsWith(fileName, "%2Ebw") || endsWith(fileName, "%2EbigWig")
+ || endsWith(fileName, "%2ebw") || endsWith(fileName, "%2ebigWig")
+         || endsWith(fileName, ".bigwig") || endsWith(fileName, ".bwig")
+         || endsWith(fileName, "%2Ebigwig") || endsWith(fileName, "%2Ebwig")
+         || endsWith(fileName, "%2ebigwig") || endsWith(fileName, "%2ebwig"))
     return cloneString("bigWig");
-if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
+
+if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed")
+ || endsWith(fileName, "%2Einter%2Ebb") || endsWith(fileName, "%2Einter%2EbigBed")
+ || endsWith(fileName, "%2einter%2ebb") || endsWith(fileName, "%2Einter%2ebigBed"))
    return cloneString("bigInteract");
-if (endsWith(fileName, ".bam") || endsWith(fileName, ".cram"))
+
+if (endsWith(fileName, ".bam") || endsWith(fileName, ".cram")
+ || endsWith(fileName, "%2Ebam") || endsWith(fileName, "%2Ecram")
+ || endsWith(fileName, "%2ebam") || endsWith(fileName, "%2ecram"))
     return cloneString("bam");
-if (endsWith(fileName, ".vcf.gz"))
+
+if (endsWith(fileName, ".vcf.gz")
+ || endsWith(fileName, "%2Evcf%2Egz")
+ || endsWith(fileName, "%2evcf%2egz"))
     return cloneString("vcfTabix");
-if (endsWith(fileName, ".vcf"))
+
+if (endsWith(fileName, ".vcf")
+ || endsWith(fileName, "%2Evcf")
+ || endsWith(fileName, "%2evcf"))
     return cloneString("vcf");
 return NULL;
 }
