@@ -2744,13 +2744,13 @@ static char *bdsMouseOver(struct bigDbSnp *bds)
 {
     struct dyString *dy = dyStringNew(256);
     // dbSNP ID
-    dyStringPrintf(dy, "<b>dbSNP ID</b>: %s<br>", bds->name);
+    dyStringPrintf(dy, "<b>rsID</b>: %s<br>", bds->name);
     // Reference/alt alleles
     dyStringAppend(dy, "<b>Ref/Alt allele(s)</b>: ");
     bdsAppendRefAlt(bds, dy);
     dyStringAppend(dy, "<br>");
     // Functional effects
-    dyStringAppend(dy, "<b>Functional effects</b>: ");
+    dyStringAppend(dy, "<b>Classification</b>: ");
     bdsAppendFunc(bds, dy);
     return dyStringCannibalize(&dy);
 }
