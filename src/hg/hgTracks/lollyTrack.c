@@ -180,7 +180,10 @@ if ( tg->visibility == tvDense)  // in dense mode we just draw lines
 doYLabels(tg, hvg, width, trackHeight, tg->lollyCart, xOff, yOff, color, font, FALSE);
 
 if (popList == NULL)   // nothing to draw
+    {
+    maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     return;
+    }
 
 boolean noMapBoxes = FALSE;
 int numItems =  slCount(popList);
@@ -229,6 +232,7 @@ for (pop = popList; pop; pop = pop->next)
         mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + usableHeight - pop->radius - pop->height, 2 * pop->radius,2 * pop->radius,
                           tg->track, pop->name, pop->mouseOver, NULL, TRUE, NULL);
     }
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void lollyLeftLabels(struct track *tg, int seqStart, int seqEnd,

@@ -5181,7 +5181,6 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
                         scale, withLeftLabels);
     }
 
-maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 hvGfxUnclip(hvg);
 }
 
@@ -5340,7 +5339,6 @@ else
 	    font, color, vis);
     }
 
-maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 // put up the color key for the gnomAD pLI track
 // If you change this code below, you must also change hgTracks.js:hideLegends
 if (startsWith("pliBy", tg->track))
@@ -6309,7 +6307,11 @@ extern struct genePred *genePredExtLoad15(char **row);
 
     struct linkedFeatures *lfList = NULL;
     for(;gp; gp = gp->next)
+        {
+        if (gp->chrom == NULL) // if the lift failed, ignore this one
+            continue;
         slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, TRUE));
+        }
     slReverse(&lfList);
     tg->items = lfList;
     }
