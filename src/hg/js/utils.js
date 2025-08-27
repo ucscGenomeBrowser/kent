@@ -3860,7 +3860,14 @@ var dragReorder = {
                         span.title = "Configure track";
                         tdBtn.appendChild(span);
                         tdBtn.style.position = "relative";
-                        addMouseover(span, span.title);
+                        let tdbKey = tdBtn.id.replace("td_btn_","");
+                        let tdb = hgTracks.trackDb[tdbKey];
+                        let tooltip = " - click or right click to configure - drag to reorder";
+                        if (typeof tdb.parentLabel !== 'undefined') {
+                            addMouseover(span, tdb.parentLabel + tooltip + " highlighted subtracks");
+                        } else {
+                            addMouseover(span, tdb.shortLabel + tooltip);
+                        }
                         span.addEventListener("click", (e) => {
                             // trigger a click on the <a> of the td
                             e.preventDefault();
