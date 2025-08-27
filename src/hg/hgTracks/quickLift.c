@@ -71,8 +71,7 @@ if (quickLiftFile == NULL)
 
 initializeHighlightColors();
 boolean drawTriangle = FALSE;
-// this should be checking the type not the name
-if (sameString("bigQuickLiftChain", tg->tdb->type)) //startsWith("quickLiftChain", trackHubSkipHubName(tg->track)))
+if (startsWith("bigQuickLiftChain", tg->tdb->type))
     drawTriangle = TRUE;
 char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
 struct quickLiftRegions *regions = quickLiftGetRegions(database, liftDb, quickLiftFile, chromName, seqStart, seqEnd);
