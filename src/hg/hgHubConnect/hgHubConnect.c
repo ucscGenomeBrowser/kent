@@ -1456,7 +1456,7 @@ for(; genomeList; genomeList = genomeList->next)
 
     char *org = trackHubSkipHubName( genomeList->organism );
     if (org==NULL)
-        org = hOrganism(genomeList->name);
+        org = trackHubSkipHubName(hOrganism(genomeList->name));
 
     hPrintf("<li>Open: <A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s: %s</A></li>",genomeList->name, 
         cartSidUrlString(cart), org, desc);

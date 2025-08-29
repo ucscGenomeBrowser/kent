@@ -489,6 +489,13 @@ else
     struct hash *wrapperHash = hashNew(0);
     hashAdd(wrapperHash, "color", wrapColor);
 
+    boolean singleCell = !trackDbSettingOff(tdb, "singleCellColumnNames");
+    if (singleCell)
+	{
+	if (sameString(selected->fields[1], "count"))
+	    selected->fields[1] = cloneString("cell count");
+        }
+
     /* Pick which fields to display.  We'll take the first field whatever it is
      * named, color if possible, and also count, and any faceted fields. */
     struct dyString *displayList = dyStringNew(0);
@@ -496,7 +503,10 @@ else
     if (colorIx >= 0)
        dyStringPrintf(displayList, "color,");
     dyStringAppend(displayList, selected->fields[0]);
-    dyStringPrintf(displayList, ",count");
+    if (singleCell)
+	dyStringPrintf(displayList, ",cell count");
+    else
+	dyStringPrintf(displayList, ",count");
     struct slName *facetNameList = slNameListFromComma(facets);
     struct slName *facetName;
     for (facetName = facetNameList; facetName != NULL; facetName = facetName->next)

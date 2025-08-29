@@ -744,6 +744,8 @@ for(chain = chainList; chain; chain = chain->next)
     }
 calcLiftOverGenePreds( curGenePred, chainHash, 0.0, 1.0, TRUE, NULL, NULL,  TRUE, FALSE);
 curGeneChrom = curGenePred->chrom;
+if (curGenePred->chrom == NULL)
+    errAbort("Failed to quickLift %s", curGenePred->name);
 curGeneStart = curGenePred->txStart;
 curGeneEnd = curGenePred->txEnd;
 }
