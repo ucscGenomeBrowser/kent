@@ -519,7 +519,7 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
 static char *chainTdbString = 
     "shortLabel chain to %s\n"
     "longLabel chain to %s\n"
-    "type bigChain %s\n"
+    "type bigQuickLiftChain %s\n"
     "chainType reverse\n"
     "bigDataUrl %s\n"
     "quickLiftUrl %s\n"

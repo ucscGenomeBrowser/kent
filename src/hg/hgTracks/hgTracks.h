@@ -1100,6 +1100,10 @@ void snakeMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Make track group for chain-based snake alignment. */
 
+void quickLiftChainMethods(struct track *tg, struct trackDb *tdb,
+	int wordCount, char *words[]);
+/* Fill in custom parts of quickLift chains */
+
 void chainMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Make track group for chain alignment. */

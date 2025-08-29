@@ -7,9 +7,16 @@
 #include "bigLink.h"
 #include "trackHub.h"
 #include "quickLift.h"
+#include "chainCart.h"
 
 static Color *highlightColors;
 //static unsigned lengthLimit;
+
+struct cartOptions
+    {
+    enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
+    int scoreFilter ; /* filter chains by score if > 0 */
+    };
 
 static Color getColor(char *confVariable, char *defaultRgba)
 {
@@ -36,7 +43,6 @@ if (highlightColors == NULL)
     highlightColors[QUICKTYPE_DEL] = getColor("quickLift.delColor","0,255,0,255");
     highlightColors[QUICKTYPE_DOUBLE] = getColor("quickLift.doubleColor","0,0,255,255");
     highlightColors[QUICKTYPE_MISMATCH] = getColor("quickLift.mismatchColor","255,0,0,255");
-    highlightColors[QUICKTYPE_NOTHING] = getColor("quickLift.nothingColor","1,1,1,1");
     }
 }
 
@@ -65,7 +71,7 @@ if (quickLiftFile == NULL)
 
 initializeHighlightColors();
 boolean drawTriangle = FALSE;
-if (startsWith("quickLiftChain", trackHubSkipHubName(tg->track)))
+if (startsWith("bigQuickLiftChain", tg->tdb->type))
     drawTriangle = TRUE;
 char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
 struct quickLiftRegions *regions = quickLiftGetRegions(database, liftDb, quickLiftFile, chromName, seqStart, seqEnd);
@@ -79,7 +85,11 @@ if (!drawTriangle && isCenterLabelIncluded(tg))
     yOff -= fontHeight;
     }
 
-//mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  "fart", "hallo");
+if (drawTriangle && (hr == NULL))  // if there are no differences make a map for the whole track
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  hr->id, "identical");
+
+int pos = xOff;
+char * lastId = 0;
 for(; hr; hr = hr->next)
     {
     unsigned int hexColor = highlightColors[hr->type];
@@ -92,36 +102,77 @@ for(; hr; hr = hr->next)
     int startX, endX;
     char mouseOver[4096];
 
-    if (hr->type == QUICKTYPE_NOTHING)
+    if (drawTriangle)
         {
-        safef(mouseOver, sizeof mouseOver, "identical");
-        mapBoxHc(hvg, hr->chromStart, hr->chromEnd, x1, yOff, w, height, tg->track, hr->id, mouseOver);
+        startX = x1 + w/2 - fontHeight/2;
+        endX = x1 + w/2 + fontHeight/2 ;
+        drawTri(hvg, startX, endX , yOff, hexColor);
+        if (drawTriangle && (x1 > pos))
+            mapBoxHc(hvg, seqStart, seqEnd, pos, yOff, startX - pos,  tg->height, tg->track,  hr->id, "identical");
+        pos = endX;
         }
     else
         {
-        if (drawTriangle)
-            {
-            startX = x1 + w/2 - fontHeight/2;
-            endX = x1 + w/2 + fontHeight/2 ;
-            drawTri(hvg, startX, endX , yOff, hexColor);
-            }
-        else
-            {
-            startX = x1;
-            endX = x1 + w;
-            hvGfxBox(hvg, startX, yOff, w, height, hexColor);
-            }
-
-        if (hr->type == QUICKTYPE_MISMATCH)
-            safef(mouseOver, sizeof mouseOver, "mismatch %c->%c", *hr->otherBases, *hr->bases);
-        else if (hr->chromStart == hr->chromEnd)
-            safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherBaseCount, hr->otherBases);
-        else if (hr->oChromStart == hr->oChromEnd)
-            safef(mouseOver, sizeof mouseOver, "insertion %ldbp (%.*s)", hr->chromEnd - hr->chromStart, hr->baseCount, hr->bases);
-        else
-            safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
-
-        mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, hr->id, mouseOver);
+        startX = x1;
+        endX = x1 + w;
+        hvGfxBox(hvg, startX, yOff, w, height, hexColor);
+        continue;
         }
+
+    if (hr->type == QUICKTYPE_MISMATCH)
+        safef(mouseOver, sizeof mouseOver, "mismatch %c->%c", *hr->otherBases, *hr->bases);
+    else if (hr->chromStart == hr->chromEnd)
+        safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherBaseCount, hr->otherBases);
+    else if (hr->oChromStart == hr->oChromEnd)
+        safef(mouseOver, sizeof mouseOver, "insertion %ldbp (%.*s)", hr->chromEnd - hr->chromStart, hr->baseCount, hr->bases);
+    else
+        safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
+
+    mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, hr->id, mouseOver);
+    lastId = hr->id;
     }
+if (drawTriangle && (pos != xOff))
+    mapBoxHc(hvg, seqStart, seqEnd, pos, yOff, width - pos,  tg->height, tg->track, lastId, "identical");
+
+}
+
+void quickLiftDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+//mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  "fart", "hallo");
+maybeDrawQuickLiftLines( tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+}
+
+static int quickLiftTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Return configured height of track. */
+{
+return tg->lineHeight;
+}
+
+static void quickLiftDoLeftLabels(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+                              int xOff, int yOff, int width, int height, boolean withCenterLabels,
+                              MgFont *font, Color color, enum trackVisibility vis)
+/* For now, draw no left labels. */
+{
+return;
+}
+
+void quickLiftChainMethods(struct track *tg, struct trackDb *tdb,
+	int wordCount, char *words[])
+/* Fill in custom parts of quickLift chains */
+{
+struct cartOptions *chainCart;
+
+AllocVar(chainCart);
+tg->extraUiData = (void *) chainCart;
+
+tg->isBigBed = TRUE;
+
+void bigChainLoadItems(struct track *tg);
+tg->loadItems = bigChainLoadItems;
+tg->drawItems = quickLiftDraw;
+tg->totalHeight = quickLiftTotalHeight;
+tg->drawLeftLabels = quickLiftDoLeftLabels;
+tg->mapsSelf = TRUE;
 }
