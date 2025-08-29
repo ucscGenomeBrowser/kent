@@ -1184,6 +1184,11 @@ span.gbSessionChanged {
     border-radius: 2px;
     box-shadow: 0px 1px 2px darkgrey;
     max-width: 400px;
+/* Allow breaking long lines, hopefully web browsers will mostly pick
+ * punctuation, primarily added to support the gnomad tooltips where the 'variation'
+ * filter is a long comma sep list with no spaces after the commas */
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .tooltip:hover .tooltiptext {
