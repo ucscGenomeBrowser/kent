@@ -13,6 +13,10 @@ mammary, muscle, pancreas, prostate, salivary gland, skin, small intestine,
 spleen, thymus, tongue, trachea, uterus, and vasculature. The dataset includes
 264,009 immune cells, 102,580 epithelial cells, 32,701 endothelial cells, and
 81,529 stromal cells. A total of 475 distinct cell types were identified.
+<br>
+<br>
+The read count is calculated by taking, for this cell type and gene location, the total number of
+transcript reads divided by the number of cells, and is therefore an average or mean value.
 </p>
 
 <p>
@@ -117,6 +121,15 @@ href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
 list archives</a> for questions, or our <a
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
 information.</p>
+<p>
+The <em>expScores</em> field for this track contains a comma-separated list of values for
+each cell type, and the <em>expCount</em> field is the size of the expScores array,
+which is the total number of cell types. The value in the expScores
+field corresponds to the read count for that cell type, and the order of the cell types
+is defined by the <em>barChartBars</em> line in the
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/makeDb/trackDb/human/hg38/tabulaSapiens.ra"
+target="_blank">trackDb file</a> for this track.
+</p>
 
 <p>
 The cell/gene matrix and cell-level metadata was downloaded from the <a
