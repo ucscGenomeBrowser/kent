@@ -103,7 +103,6 @@ edit the html file to include information about the track
 #navigate to custom hub and paste the following URL
 #https://hgwdev.gi.ucsc.edu/~mchalama/tracks/difficult/hub.txt
 
-
 # Gerardo workflow for v3.5:
 # Copied the trackDb.txt into the human/hg38/problematic.ra and copied html description into problematic html
 # Downloaded the v3.5 data
@@ -124,3 +123,8 @@ ln -s /hive/data/genomes/hg38/bed/problematic/GIAB/alllowmapandsegdupregions.bb
 ln -s /hive/data/genomes/hg38/bed/problematic/GIAB/notinalllowmapandsegdupregions.bb
 # Updated the bigDataUrl problematic.ra and problematic.html
 #############################################################################
+
+# Panmask track, Max, Aug 29 2025
+wget https://zenodo.org/records/16755940/files/hg38.pm151b-v3.easy.bed.gz?download=1
+mv hg38.pm151b-v3.easy.bed.gz\?download\=1 hg38.pm151b-v3.easy.bed.gz
+bedToBigBed hg38.pm151b-v3.easy.bed.gz ../../../chrom.sizes hg38.pm151b-v3.easy.bb
