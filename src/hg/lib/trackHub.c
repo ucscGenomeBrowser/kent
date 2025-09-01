@@ -159,6 +159,9 @@ if (hubAssemblyHash == NULL)
 struct hashEl *hel = hashLookup(hubAssemblyHash, database);
 
 if (hel == NULL)
+    hel = hashLookup(hubAssemblyUndecoratedHash, database);
+
+if (hel == NULL)
     return NULL;
 
 return (struct trackHubGenome *)hel->val;
@@ -1640,10 +1643,10 @@ while ((hel = hashNext(&cookie)) != NULL)
             char *str = "off";
             if (sameString(cartSelected, "1"))
                 str = "on";
-            dyStringPrintf(dy, "parent %s %s\n", tdb->parent->track, str);
+            dyStringPrintf(dy, "parent %s %s\n", trackHubSkipHubName(tdb->parent->track), str);
             }
         else
-            dyStringPrintf(dy, "%s %s\n", hel->name, ((char *)hel->val));
+            dyStringPrintf(dy, "%s %s\n", hel->name, trackHubSkipHubName(((char *)hel->val)));
         }
     else if (sameString(hel->name, "html"))
         dyStringPrintf(dy, "%s %s\n", hel->name, trackHubSkipHubName((char *)hel->val));
@@ -1693,7 +1696,7 @@ return dy;
 static boolean validateOneTdb(char *db, struct trackDb *tdb, struct trackDb **badList)
 /* Make sure the tdb is a track type we grok. */
 {
-if (sameString("cytoBandIdeo", tdb->track) || 
+if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) || 
     !( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
        startsWith("bigDbSnp", tdb->type) || \
@@ -1895,7 +1898,7 @@ char *filename = getHubName(cart, db);
 
 FILE *f = mustOpen(filename, "w");
 chmod(filename, 0666);
-outHubHeader(f, db);
+outHubHeader(f, trackHubSkipHubName(db));
 
 walkTree(f, db, cart, tdbList, visDy, badList);
 fclose(f);

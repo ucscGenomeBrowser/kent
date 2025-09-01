@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "asmAlias.h"
+#include "trackHub.h"
 
 
 
@@ -167,7 +168,7 @@ char *asmAliasFind(char *alias)
 if (alias == NULL)
     return NULL;
 
-char *ret = alias;
+char *ret = cloneString(alias);
 struct sqlConnection *centralConn = hConnectCentral();
 
 if (!sqlTableExists(centralConn, "asmAlias"))
@@ -178,7 +179,7 @@ if (!sqlTableExists(centralConn, "asmAlias"))
 
 char buffer[4096];
 
-sqlSafef(buffer, sizeof buffer, "select * from asmAlias where alias='%s' limit 1", alias);
+sqlSafef(buffer, sizeof buffer, "select * from asmAlias where alias='%s' limit 1", trackHubSkipHubName(alias));
 struct asmAlias *asmAlias = asmAliasLoadByQuery(centralConn, buffer);
 hDisconnectCentral(&centralConn);
 if (asmAlias)

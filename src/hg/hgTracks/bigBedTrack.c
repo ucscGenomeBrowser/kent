@@ -978,6 +978,7 @@ if (summary)
 	    }
 	}
     }
+maybeDrawQuickLiftLines(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, tvDense);
 freez(&tg->summary);
 }
 
