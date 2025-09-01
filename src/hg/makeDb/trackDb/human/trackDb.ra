@@ -169,7 +169,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         bigDataUrl /gbdb/$D/bbi/mastermind.bb
         noScoreFilter on
         exonNumbers off
-        mouseOverField _mouseOver
+        mouseOver <b>Variant</b>: $name<br>  <b>Gene</b>: $gene<br> <b>Linkout</b>: <a href="$url" target="_blank">$_mouseOver</a><br> <b>Article count 1</b>: $mmcnt1<br> <b>Article count 2</b>: $mmcnt2<br> <b>Article count 3</b>: $mmcnt3
+        #mouseOver <b>Gene - MMCNT1/2/3</b>:  <a href="$url" target="_blank">$_mouseOver</a>
         itemRgb on
         filter.mmcnt1 0
         filter.mmcnt2 0
@@ -192,7 +193,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         dataVersion release 1
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
-        mouseOverField _mouseOver
+        mouseOver <b>Variant</b>: $variant<br> <b>Ensembl ID</b>: $ensId<br> <b>Title of Publication</b>: $title<br> <b>Reference</b>: $ref<br> <b>Authors</b>: $authors<br> <b>Pubmed ID</b>: $pmid
         html varsInPubs.html
 
         track varChat

@@ -24,7 +24,6 @@ visibility hide
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (LOEUF and pLI) v2.1.1
         subGroups view=v2
         type bigBed 12 +
-        mouseOverField _mouseOver
         itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByGene.bb
@@ -37,13 +36,13 @@ visibility hide
         filterByRange._pli on
         parent constraintV2 on
         priority 1
+        mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
         track missenseByGene
         shortLabel Gene Missense
         longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores) v2.1.1
         subGroups view=v2
         type bigBed 12 +
-        mouseOverField _mouseOver
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByGene.bb
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
@@ -55,13 +54,13 @@ visibility hide
         filterByRange._zscore on
         parent constraintV2 off
         priority 2
+        mouseOver Z: $_zscore<br> $synonymous<br> $missense
 
         track pliByTranscript
         shortLabel Transcript LoF v2
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI) v2.1.1
         subGroups view=v2
         type bigBed 12 +
-        mouseOverField _mouseOver
         itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.bb
@@ -73,13 +72,13 @@ visibility hide
         filterByRange._pli on
         parent constraintV2 off
         priority 2
+        mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
         track missenseByTranscript
         shortLabel Transcript Missense v2
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v2.1.1
         subGroups view=v2
         type bigBed 12 +
-        mouseOverField _mouseOver
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
@@ -90,6 +89,7 @@ visibility hide
         filterByRange._zscore on
         parent constraintV2 off
         priority 2
+        mouseOver Z: $_zscore<br> $synonymous<br> $missense
 
     track constraintV4
     parent gnomadPLI off
@@ -104,7 +104,6 @@ visibility hide
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI) v4
         subGroups view=v4
         type bigBed 12 +
-        mouseOverField _mouseOver
         itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.v4.bb
@@ -116,13 +115,13 @@ visibility hide
         filterByRange._pli on
         parent constraintV4
         priority 2
+        mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
         track missenseByTranscriptV4
         shortLabel Transcript Missense v4
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v4
         subGroups view=v4
         type bigBed 12 +
-        mouseOverField _mouseOver
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.v4.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
@@ -133,6 +132,7 @@ visibility hide
         filterByRange._zscore on
         parent constraintV4
         priority 2
+        mouseOver Z: $_zscore<br> $synonymous<br> $missense
 
     track constraintV4_1
     parent gnomadPLI off
@@ -147,7 +147,6 @@ visibility hide
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI) v4.1
         subGroups view=v4_1
         type bigBed 12 +
-        mouseOverField _mouseOver
         itemRgb on
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.v4.1.bb
@@ -159,13 +158,13 @@ visibility hide
         filterByRange._pli on
         parent constraintV4_1
         priority 2
+        mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
         track missenseByTranscriptV4_1
         shortLabel Transcript Missense v4.1
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v4.1
         subGroups view=v4_1
         type bigBed 12 +
-        mouseOverField _mouseOver
         searchIndex name,geneName
         bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.v4.1.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
@@ -176,3 +175,4 @@ visibility hide
         filterByRange._zscore on
         parent constraintV4_1
         priority 2
+        mouseOver Z: $_zscore<br> $synonymous<br> $missense
