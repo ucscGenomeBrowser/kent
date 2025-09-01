@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Training" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<style>
+/* --- Collapsible button styling --- */
+.collapsible {
+  background-color: #4C759C;
+  color: white;
+  cursor: pointer;
+  padding: 6px 20px;
+  width: 100%;
+  text-align: left;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.collapsible:hover {
+  background-color: #327DE4;
+}
+
+/* Add "+" sign to collapsible buttons */
+.collapsible:after {
+  content: '\002B'; /* Unicode plus sign */
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+/* Change "+" to "–" when active */
+.active:after {
+  content: "\2212"; /* Unicode minus sign */
+  font-weight: bold;
+}
+
+/* Collapsible content (hidden by default) */
+.collapseMe {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+}
+
+/* Centered links under poster thumbnails */
+.poster-link {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Reserved for additional genome-specific styles */
+.otherGenomes {
+}
+</style>
+
+<h1>UCSC Genome Browser Conference Posters</h1>
+
+<!-- =================== YEAR 2025 =================== -->
+<button id="2025" class="collapsible active" style="font-size: 20px;">2025</button>
+<div class="collapseMe" style="max-height: 2000px;"> <!-- set high enough to fit content -->
+  <div class="row">
+
+    <!-- Left column -->
+    <div class="col-md-6">
+      <ul>
+        <!-- Link to ESHG 2025 Poster -->
+        <a class="poster-link" href="/goldenPath/posters/trackDecorators_ESHG2025.pdf" target="_blank"
+		 style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ESHG 2025
+        </a>
+	<!-- PDF Embed for inline preview -->
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/trackDecorators_ESHG2025.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Right column -->
+    <div class="col-md-6">
+      <ul>
+        <!-- Link to Biology of Genomes 2025 Poster -->
+        <a class="poster-link" href="/goldenPath/posters/BiologyofGenomes2025.pdf" target="_blank"
+		 style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Biology of Genomes 2025
+        </a>
+	<!-- PDF Embed for inline preview -->
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/BiologyofGenomes2025.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2024 =================== -->
+<button id="2024" class="collapsible" style="font-size: 20px;">2024</button>
+<div class="collapseMe">
+  <div class="row">
+
+    <!-- Column 1 -->
+    <div class="col-md-4">
+      <ul>
+        <!-- Link to Biology of Genomes 2024 Poster -->
+        <a class="poster-link" href="/goldenPath/posters/BiologyofGenomes2024.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Biology of Genomes 2024
+        </a>
+        <!-- PDF Embed for inline preview -->
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/BiologyofGenomes2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+        <!-- Link to VEPTC 2024 Poster -->
+        <a class="poster-link" href="/goldenPath/posters/veptc2024.pdf" target="_blank" 
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          VEPTC 2024
+        </a>
+        <!-- PDF Embed for inline preview -->
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/veptc2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="col-md-4">
+      <ul>
+        <!-- Link to Biology of ICTE 2024 Poster -->
+        <a class="poster-link" href="/goldenPath/posters/ICTE2024.pdf" target="_blank" 
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ICTE 2024
+        </a>
+        <!-- PDF Embed for inline preview -->
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/ICTE2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="col-md-4">
+      <ul>
+        <!-- Link to ISV 2024 Poster -->
+        <a class="poster-link" href="/goldenPath/posters/ISV2024.pdf" target="_blank" 
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ISV 2024
+        </a>
+        <!-- PDF Embed for inline preview -->
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/ISV2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2023 =================== -->
+<button id="2023" class="collapsible" style="font-size: 20px;">2023</button>
+<div class="collapseMe">
+  <div class="row">
+    <!-- Column 1 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/genomeBrowserBoG2023.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Biology of Genomes 2023
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/genomeBrowserBoG2023.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/genomeBrowserASHG2023.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ASHG 2023
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/genomeBrowserASHG2023.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/CSHL_GenomeInformatics_2023.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          CSHL 2023
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/CSHL_GenomeInformatics_2023.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2021 =================== -->
+<button id="2021" class="collapsible" style="font-size: 20px;">2021</button>
+<div class="collapseMe">
+  <div class="row">
+    <div class="col-md-12">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/CSHL_2021.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          CSHL 2021
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin: 5px auto;">
+          <embed src="/goldenPath/posters/CSHL_2021.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2020 =================== -->
+<button id="2020" class="collapsible" style="font-size: 20px;">2020</button>
+<div class="collapseMe">
+  <div class="row">
+    <div class="col-md-12">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/PAG_Poster_API_2020.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          PAG 2020
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin: 5px auto;">
+          <embed src="/goldenPath/posters/PAG_Poster_API_2020.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2019 =================== -->
+<button id="2019" class="collapsible" style="font-size: 20px;">2019</button>
+<div class="collapseMe">
+  <div class="row">
+    <!-- Left column -->
+    <div class="col-md-6">
+      <ul>
+          <a class="poster-link" href="/goldenPath/posters/UCSC_PAG_2019_AssemblyHub.pdf" target="_blank"
+		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+            PAG 2019
+          </a>
+          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+            <embed src="/goldenPath/posters/UCSC_PAG_2019_AssemblyHub.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                   type="application/pdf" width="100%" height="300px" />
+          </div>
+      </ul>
+    </div>
+
+    <!-- Right column -->
+    <div class="col-md-6">
+      <ul>
+          <a class="poster-link" href="/goldenPath/posters/ASHG_2019_Interact.pdf" target="_blank"
+		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+            ASHG 2019
+          </a>
+          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+            <embed src="/goldenPath/posters/ASHG_2019_Interact.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                   type="application/pdf" width="100%" height="300px" />
+          </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2018 =================== -->
+<button id="2018" class="collapsible" style="font-size: 20px;">2018</button>
+<div class="collapseMe">
+  <div class="row">
+    <!-- Left column -->
+    <div class="col-md-6">
+      <ul>
+          <a class="poster-link" href="/goldenPath/posters/UCSC_BoG_2018_GtexPoster.pdf" target="_blank"
+		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+            Biology of Genomes 2018
+          </a>
+          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+            <embed src="/goldenPath/posters/UCSC_BoG_2018_GtexPoster.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                   type="application/pdf" width="100%" height="300px" />
+          </div>
+      </ul>
+    </div>
+
+    <!-- Right column -->
+    <div class="col-md-6">
+      <ul>
+          <a class="poster-link" href="/goldenPath/posters/UcscPostDoc_2018.pdf" target="_blank"
+		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+            UCSC PostDoc 2018
+          </a>
+          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+            <embed src="/goldenPath/posters/UcscPostDoc_2018.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                   type="application/pdf" width="100%" height="300px" />
+          </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2017 =================== -->
+<button id="2017" class="collapsible" style="font-size: 20px;">2017</button>
+<div class="collapseMe">
+  <div class="row">
+    <div class="col-md-12">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/GenomeInformatics2017.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Genome Informatics 2017
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin: 5px auto;">
+          <embed src="/goldenPath/posters/GenomeInformatics2017.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2016 =================== -->
+<button id="2016" class="collapsible" style="font-size: 20px;">2016</button>
+<div class="collapseMe">
+  <div class="row">
+    <!-- Column 1 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/ACMGposter2016.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ACMG 2016
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/ACMGposter2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+
+        <a class="poster-link" href="/goldenPath/posters/GTEX_2016_Poster.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          GTEx Community Meeting 2016
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/GTEX_2016_Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/PosterIchg2016.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ICHG 2016
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/PosterIchg2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+
+        <a class="poster-link" href="/goldenPath/posters/CrisporCshl2016.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          CSHL 2016
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/CrisporCshl2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/Multi-region-BoG2016.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Biology of Genomes 2016
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/Multi-region-BoG2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== YEAR 2015 =================== -->
+<button id="2015" class="collapsible" style="font-size: 20px;">2015</button>
+<div class="collapseMe">
+  <div class="row">
+    <!-- Column 1 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/Acmg2015poster.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          ACMG 2015
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/Acmg2015poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+
+        <a class="poster-link" href="/goldenPath/posters/BioengSymp2015Poster.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          UC-wide Bioengineering Symposium 2015
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/BioengSymp2015Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/G10K2015.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Genome 10K 2015
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/G10K2015.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+
+        <a class="poster-link" href="/goldenPath/posters/GTEX2015Poster.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          GTEx Community Meeting 2015
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/GTEX2015Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+
+        </div>
+      </ul>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="col-md-4">
+      <ul>
+        <a class="poster-link" href="/goldenPath/posters/BoG2015DataIntegrator.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          Biology of Genomes 2015
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src="/goldenPath/posters/BoG2015DataIntegrator.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />
+
+        <a class="poster-link" href="/goldenPath/posters/UCSC_Proteomics_HUPO2015_Poster.pdf" target="_blank"
+		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
+          HUPO 2015
+        </a>
+        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
+          <embed src=/goldenPath/posters/CrisporCshl2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
+                 type="application/pdf" width="100%" height="300px" />```
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+/* =================== Collapsible Section Logic =================== */
+document.addEventListener("DOMContentLoaded", function() {
+  const buttons = document.querySelectorAll(".collapsible");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", function() {
+      // Toggle "active" class on the clicked button
+      this.classList.toggle("active");
+
+      // Find the next sibling element (collapsible content)
+      let content = this.nextElementSibling;
+
+      // Expand or collapse the section
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null; // Collapse
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px"; // Expand
+      }
+    });
+  });
+});
+</script>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
