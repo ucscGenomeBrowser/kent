@@ -1,7 +1,7 @@
 track problematicSuper
 shortLabel Problematic Regions
 longLabel Problematic/special genomic regions for sequencing or very variable regions
-superTrack on
+superTrack on show
 html problematic
 group map
 
@@ -10,7 +10,7 @@ group map
     shortLabel Problematic Regions
     longLabel Problematic/special genomic regions for sequencing or very variable regions
     compositeTrack on
-    hideEmptySubtracks off
+    hideEmptySubtracks on
     visibility pack
     priority 1
     type bigBed 3 +
@@ -20,7 +20,6 @@ group map
         longLabel UCSC unusual regions on assembly structure (manually annotated)
         type bigBed 9 +
         bigDataUrl /gbdb/hg38/problematic/comments.bb
-        visibility dense
         parent problematic
         priority 1
         mouseOverField note
@@ -33,8 +32,7 @@ group map
         longLabel ENCODE Blacklist V2
         type bigBed 4
         bigDataUrl /gbdb/hg38/problematic/encBlacklist.bb
-        visibility dense
-        parent problematic
+        parent problematic off
         priority 2
 
         track grcExclusions
@@ -42,8 +40,7 @@ group map
         longLabel GRC Exclusion list: contaminations or false duplications
         type bigBed 4
         bigDataUrl /gbdb/hg38/problematic/grcExclusions.bb
-        visibility dense
-        parent problematic
+        parent problematic off
         priority 3
 
     track highlyReproducible
@@ -147,7 +144,7 @@ group map
     shortLabel GIAB Problematic Regions
     longLabel Difficult regions from GIAB via NCBI
     hideEmptySubtracks off
-    visibility dense
+    visibility hide
     priority 3
     html problematic
     
@@ -190,7 +187,7 @@ group map
     longLabel Panmask Easy 151b: High accuracy for variant calling (151-mers, no low-complex. regions)
     type bigBed 3
     dataVersion pm151b-v3.easy.bed.gz from Panmask release Zenodo V1.4 (Aug 6 2025), MD5 2f59a43dab0b463bafcf3b59fc62
-    visibility dense
+    visibility hide
     release alpha
 
 searchTable comments
