@@ -535,8 +535,8 @@ priority 2
         shortLabel RefSeq All
         type bigGenePred
         urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
-        labelFields name,geneName,geneName2
-        defaultLabelFields geneName2
+        labelFields name2,geneName,geneName2
+        defaultLabelFields name2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeq.ix
         bigDataUrl bbi/%s.ncbiRefSeq.bb
@@ -561,8 +561,8 @@ priority 2
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
         urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
-        labelFields name,geneName,geneName2
-        defaultLabelFields geneName2
+        labelFields name2,geneName,geneName2
+        defaultLabelFields name2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -587,8 +587,8 @@ priority 2
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
         urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
-        labelFields name,geneName,geneName2
-        defaultLabelFields geneName2
+        labelFields name2,geneName,geneName2
+        defaultLabelFields name2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -708,8 +708,8 @@ rm -f ${buildDir}/genes/${asmId}.ncbiGene.gtf.gz
 export longLabel="Gene models submitted to NCBI"
 export shortLabel="Gene models"
 if [ "$asmType" = "refseq" ]; then
-  longLabel="NCBI gene predictions"
-  shortLabel="NCBI Genes"
+  longLabel="RefSeq gene predictions from NCBI"
+  shortLabel="NCBI RefSeq"
 fi
 if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
   mkdir -p $buildDir/genes
@@ -733,7 +733,7 @@ urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://w
 html html/%s.ncbiGene
 searchIndex name%s
 urlLabel Entrez gene:
-labelFields name,geneName,geneName2
+labelFields geneName,geneName2
 defaultLabelFields geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
