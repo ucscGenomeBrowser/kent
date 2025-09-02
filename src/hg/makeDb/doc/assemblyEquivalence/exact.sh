@@ -4,32 +4,35 @@ onePair() {
 join -t$'\t' $1 $2 | cut -f2- | sort
 }
 
+#### Ensembl rapidRelease to the other four
+# for T in ensembl ucsc refseq genbank
+for T in ensembl ucsc refseq genbank
+do
+onePair rapidRelease/rapidRelease.keySignatures.txt \
+    $T/$T.keySignatures.txt > rapidRelease.$T.exact.txt
+onePair $T/$T.keySignatures.txt \
+    rapidRelease/rapidRelease.keySignatures.txt > $T.rapidRelease.exact.txt
+done
+
 #### Ensembl to the other three
-onePair ensembl/ensembl.keySignatures.txt ucsc/ucsc.keySignatures.txt \
-   > ensembl.ucsc.exact.txt
-onePair ucsc/ucsc.keySignatures.txt ensembl/ensembl.keySignatures.txt \
-   > ucsc.ensembl.exact.txt
-
-onePair ensembl/ensembl.keySignatures.txt refseq/refseq.keySignatures.txt \
-   > ensembl.refseq.exact.txt
-onePair refseq/refseq.keySignatures.txt ensembl/ensembl.keySignatures.txt \
-   > refseq.ensembl.exact.txt
-
-onePair ensembl/ensembl.keySignatures.txt genbank/genbank.keySignatures.txt \
-   > ensembl.genbank.exact.txt
-onePair genbank/genbank.keySignatures.txt ensembl/ensembl.keySignatures.txt \
-   > genbank.ensembl.exact.txt
+# for T in ucsc refseq genbank
+for T in ucsc refseq genbank
+do
+onePair ensembl/ensembl.keySignatures.txt $T/$T.keySignatures.txt \
+   > ensembl.$T.exact.txt
+onePair $T/$T.keySignatures.txt ensembl/ensembl.keySignatures.txt \
+   > $T.ensembl.exact.txt
+done
 
 #### ucsc to the other two
-onePair ucsc/ucsc.keySignatures.txt refseq/refseq.keySignatures.txt \
-   > ucsc.refseq.exact.txt
-onePair refseq/refseq.keySignatures.txt ucsc/ucsc.keySignatures.txt \
-   > refseq.ucsc.exact.txt
-
-onePair ucsc/ucsc.keySignatures.txt genbank/genbank.keySignatures.txt \
-   > ucsc.genbank.exact.txt
-onePair genbank/genbank.keySignatures.txt ucsc/ucsc.keySignatures.txt \
-   > genbank.ucsc.exact.txt
+# for T in refseq genbank
+for T in refseq genbank
+do
+onePair ucsc/ucsc.keySignatures.txt $T/$T.keySignatures.txt \
+   > ucsc.$T.exact.txt
+onePair $T/$T.keySignatures.txt ucsc/ucsc.keySignatures.txt \
+   > $T.ucsc.exact.txt
+done
 
 #### genbank to refseq
 
