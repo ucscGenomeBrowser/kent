@@ -85,8 +85,8 @@ if (!drawTriangle && isCenterLabelIncluded(tg))
     yOff -= fontHeight;
     }
 
-if (drawTriangle && (hr == NULL))  // if there are no differences make a map for the whole track
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  hr->id, "identical");
+//if (drawTriangle && (hr == NULL))  // if there are no differences make a map for the whole track
+    //mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  hr->id, "identical");
 
 int pos = xOff;
 char * lastId = 0;
