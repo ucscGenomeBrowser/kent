@@ -110,9 +110,9 @@ def relateData(identifierDict, genArk, dataDict):
         identEquiv[key] = f"{key}_{genArk[key]}"
 
     genArkCount = len(identEquiv)
-    print(f"### genArk matched {genArkCount}")
+    print(f"### genArk perfect matched {genArkCount}")
     notMatched = identifierDict.keys() - identEquiv.keys()
-    print(f"### remaining identifiers to  match {len(notMatched)}")
+    print(f"### remaining identifiers to match {len(notMatched)}")
 
     equivCount = 0
     # check for equivalent GCA/GCF in genArk
@@ -133,12 +133,13 @@ def relateData(identifierDict, genArk, dataDict):
 ### main()
 #############################################################################
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        sys.stderr.write("Usage: findEquiv.py <identifierFile> <resultFile>\n")
+    if len(sys.argv) != 4:
+        sys.stderr.write("Usage: findEquiv.py <identifierFile> <resultFile> <notFoundFile>\n")
         sys.exit(1)
     
     identifierFile = sys.argv[1]
     resultFile = sys.argv[2]
+    notFoundFile = sys.argv[3]
     identifierDict = readIdentifiers(identifierFile)
     genArkDict = readGenArk("UCSC_GI.assemblyHubList.txt")
     dataDict = readGrepData()
@@ -149,3 +150,13 @@ if __name__ == "__main__":
         writer = csv.writer(file, delimiter="\t", lineterminator="\n")
         for key, value in sorted(identEquiv.items()):
             writer.writerow([key, value])
+
+    # check if all items matched, if not write them out to notFoundFile
+    notFound = [key for key in identifierDict if key not in identEquiv]
+    if len(notFound) > 0:
+        print(f"### {len(notFound)} identifiers not found written to: {notFoundFile}")
+        with open(notFoundFile, "w", newline="\n") as file:
+            file.writelines(f"{key}\n" for key in sorted(notFound))
+    else:
+        with open(notFoundFile, "w", newline="\n") as file:
+            file.write(f"# all matched OK\n")
