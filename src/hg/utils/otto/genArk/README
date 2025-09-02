@@ -8,3 +8,7 @@ from kent/src/hg/hubApi/assemblyList.py
 
 pullHgwdev.sh
 pushRR.sh
+
+### manages the pushing of the beta and public versions of 'contrib'
+### tracks in genark assemblies
+alphaBetaPush.pl
