@@ -10,19 +10,46 @@
 
 
 
-char *genomePriorityCommaSepFieldNames = "name,priority,commonName,scientificName,taxId,description";
+char *genomePriorityCommaSepFieldNames = "name,priority,commonName,scientificName,taxId,clade,description,browserExists,hubUrl";
 
-void genomePriorityStaticLoad(char **row, struct genomePriority *ret)
+void genomePriorityStaticLoadWithNull(char **row, struct genomePriority *ret)
 /* Load a row from genomePriority table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
 ret->name = row[0];
-ret->priority = sqlUnsigned(row[1]);
+if (row[1] != NULL)
+    {
+    ret->priority = needMem(sizeof(*(ret->priority)));
+    *(ret->priority) = sqlUnsigned(row[1]);
+    }
+else
+    {
+    ret->priority = NULL;
+    }
 ret->commonName = row[2];
 ret->scientificName = row[3];
-ret->taxId = sqlUnsigned(row[4]);
-ret->description = row[5];
+if (row[4] != NULL)
+    {
+    ret->taxId = needMem(sizeof(*(ret->taxId)));
+    *(ret->taxId) = sqlUnsigned(row[4]);
+    }
+else
+    {
+    ret->taxId = NULL;
+    }
+ret->clade = row[5];
+ret->description = row[6];
+if (row[7] != NULL)
+    {
+    ret->browserExists = needMem(sizeof(*(ret->browserExists)));
+    *(ret->browserExists) = sqlUnsigned(row[7]);
+    }
+else
+    {
+    ret->browserExists = NULL;
+    }
+ret->hubUrl = row[8];
 }
 
 struct genomePriority *genomePriorityLoadByQuery(struct sqlConnection *conn, char *query)
@@ -39,7 +66,7 @@ char **row;
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = genomePriorityLoad(row);
+    el = genomePriorityLoadWithNull(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -55,13 +82,13 @@ void genomePrioritySaveToDb(struct sqlConnection *conn, struct genomePriority *e
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,'%s','%s',%u,'%s')", 
-	tableName,  el->name,  el->priority,  el->commonName,  el->scientificName,  el->taxId,  el->description);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,'%s','%s',%u,'%s','%s',%u,'%s')", 
+	tableName,  el->name,  *(el->priority),  el->commonName,  el->scientificName,  *(el->taxId),  el->clade,  el->description,  *(el->browserExists),  el->hubUrl);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
 
-struct genomePriority *genomePriorityLoad(char **row)
+struct genomePriority *genomePriorityLoadWithNull(char **row)
 /* Load a genomePriority from row fetched with select * from genomePriority
  * from database.  Dispose of this with genomePriorityFree(). */
 {
@@ -69,11 +96,38 @@ struct genomePriority *ret;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
-ret->priority = sqlUnsigned(row[1]);
+if (row[1] != NULL)
+    {
+    ret->priority = needMem(sizeof(*(ret->priority)));
+    *(ret->priority) = sqlUnsigned(row[1]);
+    }
+else
+    {
+    ret->priority = NULL;
+    }
 ret->commonName = cloneString(row[2]);
 ret->scientificName = cloneString(row[3]);
-ret->taxId = sqlUnsigned(row[4]);
-ret->description = cloneString(row[5]);
+if (row[4] != NULL)
+    {
+    ret->taxId = needMem(sizeof(*(ret->taxId)));
+    *(ret->taxId) = sqlUnsigned(row[4]);
+    }
+else
+    {
+    ret->taxId = NULL;
+    }
+ret->clade = cloneString(row[5]);
+ret->description = cloneString(row[6]);
+if (row[7] != NULL)
+    {
+    ret->browserExists = needMem(sizeof(*(ret->browserExists)));
+    *(ret->browserExists) = sqlUnsigned(row[7]);
+    }
+else
+    {
+    ret->browserExists = NULL;
+    }
+ret->hubUrl = cloneString(row[8]);
 return ret;
 }
 
@@ -83,11 +137,11 @@ struct genomePriority *genomePriorityLoadAll(char *fileName)
 {
 struct genomePriority *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
-    el = genomePriorityLoad(row);
+    el = genomePriorityLoadWithNull(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -101,11 +155,11 @@ struct genomePriority *genomePriorityLoadAllByChar(char *fileName, char chopper)
 {
 struct genomePriority *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = genomePriorityLoad(row);
+    el = genomePriorityLoadWithNull(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -123,11 +177,17 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->name = sqlStringComma(&s);
-ret->priority = sqlUnsignedComma(&s);
+ret->priority = needMem(sizeof(unsigned));
+*(ret->priority) = sqlUnsignedComma(&s);
 ret->commonName = sqlStringComma(&s);
 ret->scientificName = sqlStringComma(&s);
-ret->taxId = sqlUnsignedComma(&s);
+ret->taxId = needMem(sizeof(unsigned));
+*(ret->taxId) = sqlUnsignedComma(&s);
+ret->clade = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
+ret->browserExists = needMem(sizeof(unsigned));
+*(ret->browserExists) = sqlUnsignedComma(&s);
+ret->hubUrl = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -142,7 +202,9 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->name);
 freeMem(el->commonName);
 freeMem(el->scientificName);
+freeMem(el->clade);
 freeMem(el->description);
+freeMem(el->hubUrl);
 freez(pEl);
 }
 
@@ -166,7 +228,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->priority);
+fprintf(f, "%u", *(el->priority));
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->commonName);
@@ -176,10 +238,20 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->scientificName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->taxId);
+fprintf(f, "%u", *(el->taxId));
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->clade);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", *(el->browserExists));
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->hubUrl);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -200,7 +272,7 @@ fputc('"',f);
 fprintf(f,"priority");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", el->priority);
+fprintf(f, "%u", *(el->priority));
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"commonName");
@@ -222,7 +294,15 @@ fputc('"',f);
 fprintf(f,"taxId");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", el->taxId);
+fprintf(f, "%u", *(el->taxId));
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"clade");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->clade);
+fputc('"',f);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"description");
@@ -230,6 +310,20 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->description);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"browserExists");
+fputc('"',f);
+fputc(':',f);
+fprintf(f, "%u", *(el->browserExists));
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"hubUrl");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->hubUrl);
 fputc('"',f);
 fputc('}',f);
 }
