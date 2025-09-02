@@ -4,10 +4,43 @@ set -beEu -o pipefail
 
 if [ $# -lt 1 ]; then
   printf "usage: gdDbLinks.sh asmId [... asmId ...]\n" 1>&2
+  printf "or with the single argument: 'ucscDb' to check the database links\n" 1>&2
   exit 255
 fi
 
 export dynaBlatLinks="/hive/data/inside/dynaBlat/backUpLinks"
+
+if [ $# -eq 1 ]; then
+  asmId=$*
+  if [ "${asmId}" = "ucscDb" ]; then
+    for D in /hive/data/genomes/*/dynamicBlat
+    do
+       dbDir=`dirname "${D}"`
+       db=`basename "${dbDir}"`
+       twoBit="${dbDir}/${db}.2bit"
+       if [ -s "${twoBit}" ]; then
+         printf "2bit: '%s'\n" "${twoBit}"
+         mkdir -p "${dynaBlatLinks}/${db}"
+         ln -s "${twoBit}" "${dynaBlatLinks}/${db}"
+         for ext in untrans.gfidx trans.gfidx
+         do
+           filePath="${D}/${db}.${ext}"
+           if [ ! -s "${filePath}" ]; then
+              printf "missing: '%s'\n" "${filePath}"
+              exit 255
+           else
+              ln -s "${filePath}" "${dynaBlatLinks}/${db}"
+           fi
+         done
+       else
+         printf "ERROR: can not find 2bit file: '%s'\n" "${twoBit}" 1>&2
+       fi
+    done
+  else
+    printf "# arge 1 '%s'\n" "$*"
+  fi
+  exit 255
+fi
 
 for asmId in $*
 do
