@@ -486,6 +486,21 @@ if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiRefSeq.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
+#  also remove all these other ones, they may not exist and their if 'exist'
+#    statements below will not remove them if they were there before
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqCurated.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqCurated.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqCurated.ixx
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqPredicted.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqPredicted.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqPredicted.ixx
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqOther.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqOther.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqOther.ixx
+rm -f $buildDir/bbi/${asmId}.bigPsl.bb
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqSelectCurated.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ixx
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb $buildDir/bbi/${asmId}.ncbiRefSeq.bb
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ix $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
@@ -714,11 +729,11 @@ altColor 150,80,0
 colorByStrand 0,80,150 150,80,0
 bigDataUrl bbi/%s.ncbiGene.bb
 type bigGenePred
+urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
 html html/%s.ncbiGene
 searchIndex name%s
-url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene:
-labelFields geneName,geneName2
+labelFields name,geneName,geneName2
 defaultLabelFields geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 

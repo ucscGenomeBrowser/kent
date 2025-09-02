@@ -165,25 +165,57 @@ while (my $line = <FH>) {
 close (FH);
 # printf STDERR "# counted %d sequence names in the twoBit file\n", $sequenceCount;
 
-my %customName;	# key is native sequence name, value is a custom alias
+### improvement to customName system, now allow multiple name schemes to
+### be defined in the single customNames.tsv file.  Must have a first
+### line to name the columns.  Will tolerate previous scheme of only one
+### column of names with no title line.
+
 my $customNameCount = 0;
+my @customSource;	# when first line present with source names 
 
 if ( -s "customNames.tsv" ) {
   open (FH, "<customNames.tsv") or die "can not read customNames.tsv";
   while (my $line = <FH>) {
     chomp $line;
-    my ($native, $alias) = split('\s+', $line);
-    if (!defined($sequenceSizes{$native})) {
-       printf STDERR "ERROR: processing customNames.tsv given native name\n";
-       printf STDERR " '%s' that does not exist (alias: %s)\n", $native, $alias;
+    if ( (0 == $customNameCount) && ($line =~ m/^#/) ) {
+       my @sources = split('\t', $line);
+       for (my $i = 1; $i < scalar(@sources); ++$i) {
+          push @customSource, $sources[$i];
+       }
+       next;
+    }
+
+    my @aliases = split('\s+', $line);
+    if ( (scalar(@aliases) > 2) && !defined($customSource[0]) ) {
+       printf STDERR "ERROR: multiple name scheme found in customNames.txt\n";
+       printf STDERR "       but missing name scheme title line\n";
+       printf STDERR "Should have a first line starting with '# native'\n";
+       printf STDERR "and then tab separated list of names to specify the\n";
+       printf STDERR "the title name of the that column of names\n";
        exit 255;
     }
-    $customName{$native} = $alias;
+    my $native = $aliases[0];
+    if (!defined($sequenceSizes{$native})) {
+       printf STDERR "ERROR: processing customNames.tsv given native name\n";
+       printf STDERR " '%s' that does not exist\n", $native;
+       exit 255;
+    }
+    for (my $i = 1; $i < scalar(@aliases); ++$i) {
+      my $alias = $aliases[$i];
+      if (defined($customSource[$i-1])) {
+         addAlias($customSource[$i-1], $alias, $native);
+      } else {
+         addAlias("custom", $alias, $native);
+      }
+    }
     ++$customNameCount;
-    addAlias("custom", $alias, $native);
   }
   close (FH);
-  printf STDERR "# read %d custom alias names from customNames.tsv\n", $customNameCount;
+  if (defined($customSource[0])) {
+    printf STDERR "# read %d custom alias names from customNames.tsv with %d naming schemes defined\n", $customNameCount, scalar(@customSource);
+  } else {
+    printf STDERR "# read %d custom alias names from customNames.tsv\n", $customNameCount;
+  }
 }
 
 my %ensemblName;	# key is native sequence name, value is a ensembl alias

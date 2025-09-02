@@ -8,6 +8,7 @@ use warnings;
 use strict;
 use FindBin qw($Bin);
 use lib "$Bin";
+use AsmHub;
 use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
@@ -409,6 +410,19 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
   "$HgAutomate::clusterData/$db/$db.2bit";
 $mrnas = $opt_mrnas ? $opt_mrnas : $mrnas;
+
+my $maxSeqSize = `twoBitInfo $maskedSeq stdout | sort -k2,2nr | head -1 | awk '{printf "%s", \$NF}'`;
+my $asmSize = `twoBitInfo $maskedSeq stdout | ave -col=2 stdin | grep -w total | awk '{printf "%d", \$NF}'`;
+chomp $maxSeqSize;
+chomp $asmSize;
+#   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
+#   or if maxSeqSize over 1Gb
+if ( "$asmSize" > 4*1024**3 || $maxSeqSize > 1024**3 ) {
+  $ram = '8g';
+}
+printf STDERR "# maxSeqSize: %s\n", &AsmHub::commify($maxSeqSize);
+printf STDERR "# asmSize %s\n", &AsmHub::commify($asmSize);
+printf STDERR "# -ram=%s\n", $ram;
 
 # Do everything.
 $stepper->execute();

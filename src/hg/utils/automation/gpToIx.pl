@@ -52,7 +52,7 @@ while (my $line = <FH>) {
       }
   }
   if (defined($name2)) {
-    if ($name !~ m/\Q$name2\E/i) {
+    if (lc($name) ne lc($name2)) {
       if (length($extraNames) > 0) {
          $extraNames .= "\t" . $name2;
       } else {
