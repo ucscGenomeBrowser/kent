@@ -321,7 +321,6 @@ struct track
     char * originalTrack;       /* the name of the original track if this a pseduo-duplicate track used for squishyPack */
     boolean limitWiggle;       /* TRUE if this track is drawing in coverage mode because of limited visibility */
     boolean isColorBigBed;      /* True if this track is a fake track used for wiggle coloring. */
-    void (*loadSummary)(struct track *tg); /* loadSumary data for bigBed etc.   */
     };
 
 struct window  // window in multiwindow image
