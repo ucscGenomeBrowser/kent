@@ -1244,3 +1244,15 @@ span.gbSessionChanged {
 .hgTracksCloseIconRight {
     right: 2px;
 }
+
+#hgta_doClearFilter {
+    color: red;
+}
+
+#hgta_doClearIdentifiers {
+    color: red;
+}
+
+#hgta_doClearIntersect {
+    color: red;
+}
