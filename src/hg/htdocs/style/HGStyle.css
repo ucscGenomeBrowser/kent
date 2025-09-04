@@ -1256,3 +1256,11 @@ span.gbSessionChanged {
 #hgta_doClearIntersect {
     color: red;
 }
+
+#hgta_doClearUserRegions {
+    color: red;
+}
+
+#hgta_doClearSubtrackMerge {
+    color: red;
+}
