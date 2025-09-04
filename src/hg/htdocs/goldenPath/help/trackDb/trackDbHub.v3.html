@@ -30,6 +30,18 @@
 
 <!--#include virtual="../../../cgi-bin/hgMenubar"-->
 
+<!-- Search controls at top level for proper sticky behavior -->
+<div id="searchDiv">
+    <div class="search-controls">
+        <span class="search-label">Search this document:</span>
+        <input id='tdbSearch' type='text' placeholder='ex: dynseq'></input>
+    </div>
+    <div class="search-actions">
+        <a href="#TOP" class="search-button secondary" id="jumpToTop">^ Top</a>
+        <button class="search-button" id="clearSearch" type="button">Clear</button>
+    </div>
+</div>
+
 <!--Content Tables-->
     <!--outer table is for border purposes-->
 

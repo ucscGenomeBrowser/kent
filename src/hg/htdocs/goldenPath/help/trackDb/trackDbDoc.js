@@ -6,7 +6,6 @@ function jumpTo(obj) {
     obj.href="#"+obj.text;
     return true;
 }
-
 var tdbDoc = {
 
     sortNoCase: function (x,y) {
@@ -110,7 +109,7 @@ var tdbDoc = {
             if (level && level.length !== 0) {
                 var start = $(blurb).find('p').first();
                 if ($(start).attr('class') !== 'level') {
-                    $(start).before('<p class="level">Support level: ' + '<span class=' + 
+                    $(start).before('<p class="level">Support level: ' + '<span class=' +
                                     level + '>' + level.replace('level-','') + '</span></p>');
                 }
                 $(blurb).find('code').addClass(level);
@@ -447,7 +446,7 @@ var tdbDoc = {
 
     isHubDoc: function () {
        return $('#trackDbHub_version').length !== 0;
-    }, 
+    },
 
     documentLoad: function () {
         // Called at $(document).ready() to load a trackDb document page
@@ -475,5 +474,481 @@ var tdbDoc = {
         });
         if (document.URL.search('#allOpen') !== -1)
             tdbDoc.toggleAll($('img.toggle.all')[0],true);
+
+        document.addEventListener("keydown", e => {
+            if (e.key === "F3") {
+                e.preventDefault();
+                jumpToResult(e.shiftKey ? -1 : 1);
+            }
+        });
+
+
+        // add the tdb setting to the img toggle classList
+        let toggles = document.querySelectorAll("IMG.toggle.detail");
+        toggles.forEach( (toggle) => {
+            toggle.classList.add(toggle.parentNode.className + "_imgToggle");
+        });
+        let inp = document.getElementById("tdbSearch");
+        inp.addEventListener("input", (e) => {
+            let term = inp.value.trim();
+            if (term.length >= 2) {
+                runSearch(term);
+            } else if (term.length === 1) {
+                // Show helpful message for single character
+                runSearch(term);
+            } else if (term.length === 0) {
+                // Clear search when input is empty
+                clearSearchHighlights();
+                hideSearchStatus();
+                currentResults = [];
+                currentIndex = -1;
+            }
+        });
+
+        // Add keyboard shortcuts for search navigation
+        inp.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                if (currentResults.length > 0) {
+                    jumpToResult(e.shiftKey ? -1 : 1);
+                }
+            } else if (e.key === "Escape") {
+                e.preventDefault();
+                clearSearch();
+            }
+        });
+
+        // Add clear search button functionality
+        let clearButton = document.getElementById("clearSearch");
+        if (clearButton) {
+            clearButton.addEventListener("click", () => {
+                clearSearch();
+            });
+        }
+
+        // Add jump to top functionality with smooth scrolling
+        let jumpToTopButton = document.getElementById("jumpToTop");
+        if (jumpToTopButton) {
+            jumpToTopButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                // Smooth scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+                // Also focus the search input for easy continued searching
+                setTimeout(() => {
+                    inp.focus();
+                }, 500);
+            });
+        }
     }
 }
+
+function searchHidden(term) {
+    // Reset previous search
+    clearSearchHighlights();
+
+    if (!term || term.length < 2) {
+        return [];
+    }
+
+    let results = [];
+    let escapedTerm = escapeRegexSpecialChars(term);
+
+    // Strategy: Search ALL content and sort results by document position
+
+    // First, collect all searchable elements
+    let allElements = [];
+
+    // 1. Add visible format divs (which contain code blocks with setting names)
+    let formatDivs = document.querySelectorAll('div.format');
+    formatDivs.forEach(element => {
+        // Skip if this element is inside the library (which is hidden) or already in details
+        if (!element.closest('#library') && !element.closest('div.details')) {
+            allElements.push(element);
+        }
+    });
+
+    // 2. Add standalone code and pre elements (not inside format divs or details)
+    let codeElements = document.querySelectorAll('code, pre');
+    codeElements.forEach(element => {
+        // Skip if inside library, details, or format divs (already searched above)
+        if (!element.closest('#library') && !element.closest('div.details') && !element.closest('div.format')) {
+            allElements.push(element);
+        }
+    });
+
+    // 3. Add other table content that might contain searchable text
+    let tableCells = document.querySelectorAll('table.settingsTable td');
+    tableCells.forEach(element => {
+        // Skip if inside library or if it contains details/format (avoid duplication)
+        if (!element.closest('#library') && !element.querySelector('div.details') && !element.querySelector('div.format')) {
+            allElements.push(element);
+        }
+    });
+
+    // 4. Add all already-opened details sections
+    let existingDetails = document.querySelectorAll('div.details');
+    existingDetails.forEach(div => {
+        allElements.push(div);
+    });
+
+    // Sort elements by their position in the document (top to bottom)
+    allElements.sort((a, b) => {
+        let position = a.compareDocumentPosition(b);
+        if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
+            return -1; // a comes before b
+        } else if (position & Node.DOCUMENT_POSITION_PRECEDING) {
+            return 1; // a comes after b
+        }
+        return 0; // same position
+    });
+
+    // Now search through elements in document order
+    allElements.forEach(element => {
+        let foundMatches = searchAndHighlightInElement(element, escapedTerm);
+        if (foundMatches.length > 0) {
+            results.push(...foundMatches);
+        }
+    });
+
+    // 5. Find all toggle elements that might have hidden content not yet opened
+    let toggles = [...document.querySelectorAll("[class]")].filter(el =>
+        [...el.classList].some(c => c.endsWith("_imgToggle")));
+
+    // Sort toggles by document position too
+    toggles.sort((a, b) => {
+        let position = a.compareDocumentPosition(b);
+        if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
+            return -1;
+        } else if (position & Node.DOCUMENT_POSITION_PRECEDING) {
+            return 1;
+        }
+        return 0;
+    });
+
+    toggles.forEach((toggle) => {
+        let detailsId = toggle.parentNode.className;
+        if (!detailsId)
+            return;
+
+        let td = toggle.parentNode;
+        let existingDetails = $(td).find('div.details');
+
+        // Only search library content if details are not already visible
+        if (existingDetails.length === 0) {
+            let blurb = tdbDoc.library.lookup(detailsId, false);
+            if (blurb && blurb.length > 0) {
+                // Check if library content contains the search term
+                let hasMatch = false;
+                blurb.each((ix, div) => {
+                    if (div.textContent && div.textContent.toLowerCase().includes(term.toLowerCase())) {
+                        hasMatch = true;
+                        return false; // break out of jQuery each
+                    }
+                });
+
+                if (hasMatch) {
+                    // Show the details to move content from library to document
+                    tdbDoc.toggleDetails(toggle, true);
+
+                    // Now search the newly visible content and insert results in correct position
+                    let newDetails = $(td).find('div.details');
+                    let newMatches = [];
+                    newDetails.each((ix, docDiv) => {
+                        let docMatches = searchAndHighlightInElement(docDiv, escapedTerm);
+                        newMatches.push(...docMatches);
+                    });
+
+                    // Insert new matches in the correct position relative to existing results
+                    if (newMatches.length > 0) {
+                        // Find where to insert these results to maintain document order
+                        let insertIndex = results.length;
+                        for (let i = 0; i < results.length; i++) {
+                            let position = newMatches[0].compareDocumentPosition(results[i]);
+                            if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
+                                insertIndex = i;
+                                break;
+                            }
+                        }
+                        results.splice(insertIndex, 0, ...newMatches);
+                    }
+                }
+            }
+        }
+    });
+
+    return results;
+}
+
+function escapeRegexSpecialChars(str) {
+    // Escape special regex characters to treat search term as literal text
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function clearSearchHighlights() {
+    // More robust cleanup of previous search highlights
+    document.querySelectorAll("mark").forEach(mark => {
+        let parent = mark.parentNode;
+        if (parent) {
+            // Replace mark with its text content
+            let textNode = document.createTextNode(mark.textContent);
+            parent.replaceChild(textNode, mark);
+
+            // Normalize to merge adjacent text nodes
+            parent.normalize();
+        }
+    });
+}
+
+function clearHighlightsInElement(element) {
+    // Clear highlights only within a specific element
+    if (!element) return;
+
+    let marks = element.querySelectorAll("mark");
+    marks.forEach(mark => {
+        let parent = mark.parentNode;
+        if (parent) {
+            let textNode = document.createTextNode(mark.textContent);
+            parent.replaceChild(textNode, mark);
+            parent.normalize();
+        }
+    });
+}
+
+function searchAndHighlightInElement(element, escapedTerm) {
+    let results = [];
+    let regex = new RegExp(`(${escapedTerm})`, "gi");
+
+    // Create a tree walker to traverse only text nodes
+    let walker = document.createTreeWalker(
+        element,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+
+    let textNodes = [];
+    let node;
+
+    // Collect all text nodes first to avoid modifying tree during traversal
+    while (node = walker.nextNode()) {
+        if (node.textContent.trim().length > 0) {
+            textNodes.push(node);
+        }
+    }
+
+    // Process each text node
+    textNodes.forEach(textNode => {
+        let text = textNode.textContent;
+        if (regex.test(text)) {
+            // Create a document fragment to hold the new nodes
+            let fragment = document.createDocumentFragment();
+            let lastIndex = 0;
+            let match;
+
+            // Reset regex lastIndex for global search
+            regex.lastIndex = 0;
+
+            while ((match = regex.exec(text)) !== null) {
+                // Add text before match
+                if (match.index > lastIndex) {
+                    fragment.appendChild(
+                        document.createTextNode(text.substring(lastIndex, match.index))
+                    );
+                }
+
+                // Add highlighted match
+                let mark = document.createElement('mark');
+                mark.textContent = match[1];
+                fragment.appendChild(mark);
+                results.push(mark);
+
+                lastIndex = regex.lastIndex;
+
+                // Prevent infinite loop on zero-length matches
+                if (match.index === regex.lastIndex) {
+                    regex.lastIndex++;
+                }
+            }
+
+            // Add remaining text after last match
+            if (lastIndex < text.length) {
+                fragment.appendChild(
+                    document.createTextNode(text.substring(lastIndex))
+                );
+            }
+
+            // Replace the original text node with the fragment
+            textNode.parentNode.replaceChild(fragment, textNode);
+        }
+    });
+
+    return results;
+}
+
+let currentIndex = -1;
+let currentResults = [];
+
+function jumpToResult(direction) {
+    if (currentResults.length === 0) {
+        return;
+    }
+
+    currentIndex += direction;
+    if (currentIndex >= currentResults.length) {
+        currentIndex = 0;
+    }
+    if (currentIndex < 0) {
+        currentIndex = currentResults.length - 1;
+    }
+
+
+    // Clear previous active results
+    currentResults.forEach( (r) => {
+        if (r && r.classList) {
+            r.classList.remove("active-result");
+        }
+    });
+
+    let target = currentResults[currentIndex];
+    if (target && target.classList) {
+        target.classList.add("active-result");
+
+        // Ensure the element is visible and scroll to it
+        scrollToResult(target);
+    } else {
+        console.log("Target result element not found or invalid");
+    }
+}
+
+function scrollToResult(target) {
+    if (!target) return;
+
+    // Function to attempt scrolling with retries
+    function attemptScroll(retries = 3) {
+        if (retries <= 0) {
+            console.log("Failed to scroll to result after retries");
+            return;
+        }
+
+        // Check if the target is visible in the DOM
+        if (target.offsetParent !== null) {
+            console.log("Scrolling to result");
+            target.scrollIntoView({behavior: "smooth", block: "center"});
+        } else {
+            // Target might be hidden, try to find its visible container
+            let container = target.closest('div.details');
+            if (container && container.offsetParent !== null) {
+                console.log("Scrolling to result container");
+                container.scrollIntoView({behavior: "smooth", block: "start"});
+            } else {
+                // Wait a bit and try again
+                console.log(`Retrying scroll (${retries} retries left)`);
+                setTimeout(() => attemptScroll(retries - 1), 50);
+            }
+        }
+    }
+
+    attemptScroll();
+}
+
+function runSearch(term) {
+
+    // Clear previous results
+    currentResults = [];
+    currentIndex = -1;
+
+    if (!term || term.length < 2) {
+        // Show message for short terms
+        if (term.length === 1) {
+            showSearchStatus(term, 0);
+        } else {
+            hideSearchStatus();
+        }
+        return;
+    }
+
+    currentResults = searchHidden(term);
+
+    // Always show search results count for valid searches
+    showSearchStatus(term, currentResults.length);
+
+    if (currentResults.length > 0) {
+        // Small delay to ensure any new details sections are fully opened and rendered
+        setTimeout(() => {
+            jumpToResult(1);
+        }, 150);
+    }
+}
+
+function clearSearch() {
+    let inp = document.getElementById("tdbSearch");
+    if (inp) {
+        inp.value = "";
+    }
+    clearSearchHighlights();
+    hideSearchStatus();
+    currentResults = [];
+    currentIndex = -1;
+    if (inp) {
+        inp.blur();
+    }
+}
+
+function showSearchStatus(term, count) {
+
+    let statusDiv = document.getElementById('searchStatus');
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'searchStatus';
+        statusDiv.style.cssText = `
+            margin: 5px 0;
+            padding: 5px 10px;
+            background-color: #e8f4f8;
+            border: 1px solid #bee5eb;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #0c5460;
+            display: block;
+        `;
+
+        let searchDiv = document.getElementById('searchDiv');
+        if (searchDiv) {
+            searchDiv.appendChild(statusDiv);
+        } else {
+            console.log('ERROR: Could not find searchDiv to append status');
+        }
+    }
+
+    // Ensure the status div is visible
+    statusDiv.style.display = 'block';
+
+    if (count === 0) {
+        if (term.length === 1) {
+            statusDiv.textContent = `Type at least 2 characters to search`;
+            statusDiv.style.backgroundColor = '#fff3cd';
+            statusDiv.style.borderColor = '#ffeaa7';
+            statusDiv.style.color = '#856404';
+        } else {
+            statusDiv.textContent = `No results found for "${term}"`;
+            statusDiv.style.backgroundColor = '#f8d7da';
+            statusDiv.style.borderColor = '#f5c6cb';
+            statusDiv.style.color = '#721c24';
+        }
+    } else {
+        statusDiv.textContent = `Found ${count} result${count !== 1 ? 's' : ''} for "${term}" - Use F3/Enter to navigate`;
+        statusDiv.style.backgroundColor = '#e8f4f8';
+        statusDiv.style.borderColor = '#bee5eb';
+        statusDiv.style.color = '#0c5460';
+    }
+}
+
+function hideSearchStatus() {
+    let statusDiv = document.getElementById('searchStatus');
+    if (statusDiv) {
+        statusDiv.style.display = 'none';
+    }
+}
+

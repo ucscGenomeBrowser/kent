@@ -32,6 +32,8 @@ I { color:#006600; }     /* Green until issues are dealt with */
 DIV.pageWidth {
     width:100%;
     max-width:1000px;
+    /* Ensure pageWidth doesn't interfere with sticky positioning */
+    position: relative;
 }
 
 /* Section tables */
@@ -142,4 +144,117 @@ table.matrixTable th {
 }
 .red { color: #990000; }
 .rejectSection { background-color:#F8F8F8; }
+
+/* Search highlighting styles */
+mark {
+    background-color: #ffff99;
+    color: #000000;
+    padding: 1px 2px;
+    border-radius: 2px;
+}
+
+mark.active-result {
+    background-color: #ff6b35;
+    color: #ffffff;
+    font-weight: bold;
+    box-shadow: 0 0 3px rgba(255, 107, 53, 0.6);
+}
+
+#searchDiv {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+    /* Ensure it matches the pageWidth container */
+    width: 100%;
+    max-width: 1000px;
+    box-sizing: border-box;
+    /* Ensure no parent containers can interfere */
+    contain: layout style;
+}
+
+/* Ensure the sticky search div has proper spacing from any potential fixed headers */
+@media (max-width: 768px) {
+    #searchDiv {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #searchDiv .search-controls,
+    #searchDiv .search-actions {
+        justify-content: center;
+    }
+
+    #tdbSearch {
+        width: 100%;
+    }
+}
+
+#searchDiv .search-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+#searchDiv .search-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#tdbSearch {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 200px;
+    min-width: 150px;
+}
+
+.search-button {
+    padding: 6px 12px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.search-button.secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.search-button.secondary:hover {
+    background-color: #545b62;
+    border-color: #545b62;
+}
+
+.search-label {
+    font-weight: bold;
+    color: #495057;
+}
 
