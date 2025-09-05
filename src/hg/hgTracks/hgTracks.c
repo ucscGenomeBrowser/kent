@@ -7771,7 +7771,6 @@ struct paraFetchData
     struct paraFetchData *next;
     struct track *track;
     boolean done;
-    boolean doLoadSummary;
     };
 
 static boolean isTrackForParallelLoad(struct track *track)
@@ -7782,7 +7781,7 @@ char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 return customFactoryParallelLoad(bdu, track->tdb->type) && (track->subtracks == NULL);
 }
 
-static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
+static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)
 /* Find leaves of track tree that are remote network resources for parallel-fetch loading */
 {
 struct track *track;
@@ -7790,9 +7789,6 @@ if (!trackList)
     return;
 for (track = trackList; track != NULL; track = track->next)
     {
- 
-    if (doLoadSummary && !track->loadSummary)
-      continue;    
 
     if (track->visibility != tvHide)
 	{
@@ -7801,17 +7797,12 @@ for (track = trackList; track != NULL; track = track->next)
 	    struct paraFetchData *pfd;
 	    AllocVar(pfd);
 	    pfd->track = track;  // need pointer to be stable
-            pfd->doLoadSummary = doLoadSummary;
 	    slAddHead(ppfdList, pfd);
 	    track->parallelLoading = TRUE;
 	    }
 	struct track *subtrack;
         for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
 	    {
-
-	    if (doLoadSummary && !subtrack->loadSummary)
-	      continue;    
-
 	    if (isTrackForParallelLoad(subtrack))
 		{
 		if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
@@ -7819,7 +7810,6 @@ for (track = trackList; track != NULL; track = track->next)
 		    struct paraFetchData *pfd;
 		    AllocVar(pfd);
 		    pfd->track = subtrack;  // need pointer to be stable
-		    pfd->doLoadSummary = doLoadSummary;
 		    slAddHead(ppfdList, pfd);
 		    subtrack->parallelLoading = TRUE;
 		    }
@@ -7962,21 +7952,14 @@ while(1)
     if (errCatchStart(errCatch))
 	{
 	pfd->done = FALSE;
-
-        if (pfd->doLoadSummary)
-	    pfd->track->loadSummary(pfd->track);
-	else
+	checkMaxWindowToDraw(pfd->track);
+	checkHideEmptySubtracks(pfd->track);
+	pfd->track->loadItems(pfd->track);
+        if (tdbHasDecorators(pfd->track))
             {
-	    checkMaxWindowToDraw(pfd->track);
-	    checkHideEmptySubtracks(pfd->track);
-	    pfd->track->loadItems(pfd->track); 
-	    if (tdbHasDecorators(pfd->track))
-		{
-		loadDecorators(pfd->track);
-		decoratorMethods(pfd->track);
-		}
+            loadDecorators(pfd->track);
+            decoratorMethods(pfd->track);
             }
-
 	pfd->done = TRUE;
 	}
     errCatchEnd(errCatch);
@@ -8901,130 +8884,110 @@ int lastWinEnd = 0;
 for (window=windows; window; window=window->next)
     lastWinEnd = window->winEnd;
 
-int doLoadLoop;
-boolean doLoadSummary = FALSE;
-
-for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
+for (window=windows; window; window=window->next)
     {
+    trackList = window->trackList;  // set track list
+    setGlobalsFromWindow(window);
 
-    for (window=windows; window; window=window->next)
+    // TEMP HACK GALT REMOVE
+    if (loadHack)
 	{
-	trackList = window->trackList;  // set track list
-	setGlobalsFromWindow(window);
+	if (currentWindow == windows) // first window
+	    winEnd = lastWinEnd; // so now we load the entire span inside the first window.
+	}
 
-	// TEMP HACK GALT REMOVE
-	if (loadHack)
-	    {
-	    if (currentWindow == windows) // first window
-		winEnd = lastWinEnd; // so now we load the entire span inside the first window.
-	    }
-
-	/* pre-load remote tracks in parallel */
-	int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
-	int pfdListCount = 0;
-	pthread_t *threads = NULL;
-	if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
-	    {
-	    findLeavesForParallelLoad(trackList, &pfdList, doLoadSummary);
-	    pfdListCount = slCount(pfdList);
-	    /* launch parallel threads */
-	    ptMax = min(ptMax, pfdListCount);
-	    if (ptMax > 0)
-		{
-		AllocArray(threads, ptMax);
-		/* Create threads */
-		int pt;
-		for (pt = 0; pt < ptMax; ++pt)
-		    {
-		    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, NULL);
-		    if (rc)
-			{
-			errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
-			}
-		    pthread_detach(threads[pt]);  // this thread will never join back with it's progenitor
-			// Canceled threads that might leave locks behind,
-			// so the theads are detached and will be neither joined nor canceled.
-		    }
-		}
-	    }
-
-	/* load regular tracks */
-	for (track = trackList; track != NULL; track = track->next)
-	    {
-	    if (track->visibility != tvHide)
-		{
-		if (!track->parallelLoading)
-		    {
-		    if (measureTiming)
-			lastTime = clock1000();
-
-		    checkMaxWindowToDraw(track);
-
-		    checkHideEmptySubtracks(track);
-
-		    checkIfWiggling(cart, track);
-
-		    if (!loadHack)
-			{
-
-			if (doLoadSummary)
-			    {
-			    if (track->loadSummary)
-				track->loadSummary(track);
-			    }
-			else
-			    {
-			    track->loadItems(track);
-			    if (tdbHasDecorators(track))
-				{
-				loadDecorators(track);
-				decoratorMethods(track);
-				}
-			    }
-
-			}
-		    else
-			{
-			// TEMP HACK GALT REMOVE
-			if (currentWindow == windows) // first window
-			    {
-			    track->loadItems(track);
-			    }
-			else
-			    {
-			    track->items = track->prevWindow->items;  // just point to the previous windows items (faster than loading)
-			    // apparently loadItems is setting some other fields that we want, but which ones?
-			    track->visibility = track->prevWindow->visibility;
-			    track->limitedVis = track->prevWindow->limitedVis;
-			    track->limitedVisSet = track->prevWindow->limitedVisSet;
-			    track->height = track->prevWindow->height;
-			    track->lineHeight = track->prevWindow->lineHeight;
-			    track->heightPer = track->prevWindow->heightPer;
-			    // TODO does this work for subtracks or parents/children?
-			    }
-			}
-
-		    if (measureTiming)
-			{
-			thisTime = clock1000();
-			track->loadTime = thisTime - lastTime;
-			}
-		    }
-		}
-	    }
-
+    /* pre-load remote tracks in parallel */
+    int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
+    int pfdListCount = 0;
+    pthread_t *threads = NULL;
+    if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
+	{
+	findLeavesForParallelLoad(trackList, &pfdList);
+	pfdListCount = slCount(pfdList);
+	/* launch parallel threads */
+	ptMax = min(ptMax, pfdListCount);
 	if (ptMax > 0)
 	    {
-	    /* wait for remote parallel load to finish */
-	    remoteParallelLoadWait(getParaLoadTimeout());  // wait up to default 90 seconds.
-	    if (measureTiming)
-		measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
+	    AllocArray(threads, ptMax);
+	    /* Create threads */
+	    int pt;
+	    for (pt = 0; pt < ptMax; ++pt)
+		{
+		int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, NULL);
+		if (rc)
+		    {
+		    errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
+		    }
+		pthread_detach(threads[pt]);  // this thread will never join back with it's progenitor
+		    // Canceled threads that might leave locks behind,
+		    // so the theads are detached and will be neither joined nor canceled.
+		}
 	    }
 	}
 
-    doLoadSummary = TRUE;
-    }
+    /* load regular tracks */
+    for (track = trackList; track != NULL; track = track->next)
+	{
+	if (track->visibility != tvHide)
+	    {
+            if (!track->parallelLoading)
+		{
+		if (measureTiming)
+		    lastTime = clock1000();
 
+		checkMaxWindowToDraw(track);
+
+		checkHideEmptySubtracks(track);
+
+		checkIfWiggling(cart, track);
+
+		if (!loadHack)
+		    {
+		    track->loadItems(track);
+                    if (tdbHasDecorators(track))
+                        {
+                        loadDecorators(track);
+                        decoratorMethods(track);
+                        }
+		    }
+		else
+		    {
+		    // TEMP HACK GALT REMOVE
+		    if (currentWindow == windows) // first window
+			{
+			track->loadItems(track);
+			}
+		    else
+			{
+			track->items = track->prevWindow->items;  // just point to the previous windows items (faster than loading)
+			// apparently loadItems is setting some other fields that we want, but which ones?
+			track->visibility = track->prevWindow->visibility;
+			track->limitedVis = track->prevWindow->limitedVis;
+			track->limitedVisSet = track->prevWindow->limitedVisSet;
+			track->height = track->prevWindow->height;
+			track->lineHeight = track->prevWindow->lineHeight;
+			track->heightPer = track->prevWindow->heightPer;
+			// TODO does this work for subtracks or parents/children?
+			}
+		    }
+
+		if (measureTiming)
+		    {
+		    thisTime = clock1000();
+		    track->loadTime = thisTime - lastTime;
+		    }
+		}
+	    }
+	}
+
+    if (ptMax > 0)
+	{
+	/* wait for remote parallel load to finish */
+	remoteParallelLoadWait(getParaLoadTimeout());  // wait up to default 90 seconds.
+	if (measureTiming)
+	    measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
+	}
+    }
 trackLoadingInProgress = FALSE;
 
 setGlobalsFromWindow(windows); // first window // restore globals

@@ -3,14 +3,18 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#listing all UCSC genomes, dbDb or GenArk, with search priority
+#listing all UCSC genomes, dbDb or GenArk, with search priority, and any potentila can be requested assembly
 CREATE TABLE genomePriority (
-    name varchar(255) not null,	# UCSC genome: dbDb name or GenArk accession
-    priority int unsigned not null,	# assigned search priority
-    commonName varchar(255) not null,	# a common name
-    scientificName varchar(255) not null,	# binomial scientific name
-    taxId int unsigned not null,	# Entrez taxon ID: www.ncbi.nlm.nih.gov/taxonomy/?term=xxx
-    description varchar(255) not null,	# other description text
+    name varchar(255),	# UCSC genome: dbDb name or GenArk/NCBI accession
+    priority int unsigned,	# assigned search priority
+    commonName varchar(255),	# a common name
+    scientificName varchar(255),	# binomial scientific name
+    taxId int unsigned,	# Entrez taxon ID: www.ncbi.nlm.nih.gov/taxonomy/?term=xxx
+    clade varchar(255),	# approximate clade: primates mammals birds fish ... etc ...
+    description varchar(255),	# other description text
+    browserExists tinyint unsigned,	# 1 == this assembly is available at UCSC, 0 == can be requested
+    hubUrl varchar(255),	# path name to hub.txt: GCF/000/001/405/GCF_000001405.39/hub.txt
+    FULLTEXT gIdx (name, commonName, scientificName, clade, description),
               #Indices
     PRIMARY KEY(name)
 );

@@ -9,6 +9,10 @@ to call gene expression levels accurate.
 
 The gene expression levels are normalized so that the total level of expression for all genes in a
 single cell or cell type adds up to one million. 
+<br>
+<br>
+The read count is calculated by taking, for this cell type and gene location, the total number of 
+transcript reads divided by the number of cells, and is therefore an average or mean value.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -157,7 +161,8 @@ href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
 information.</p>
 <p>
 The <em>expScores</em> field for this track contains a comma-separated list of values for
-each cell type, and the <em>expCount</em> field is the total cell count. The value in the expScores
+each cell type, and the <em>expCount</em> field is the size of the expScores array, 
+which is the total number of cell types. The value in the expScores
 field corresponds to the read count for that cell type, and the order of the cell types
 is defined by the <em>barChartBars</em> line in the
 <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/makeDb/trackDb/human/hg38/singleCellMerged.ra"

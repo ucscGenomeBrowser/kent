@@ -1384,7 +1384,8 @@ _EOF_
 
   $bossScript->add(<<_EOF_
 # These directories are necessary for running make in trackDb:
-$HgAutomate::git archive --remote=git://genome-source.soe.ucsc.edu/kent.git \\
+https://raw.githubusercontent.com/ucscGenomeBrowser/kent.git
+$HgAutomate::git archive --remote=git://raw.githubusercontent.com/ucscGenomeBrowser/kent.git \\
   --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.transMap.ra \\

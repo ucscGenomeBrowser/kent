@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use File::Basename;
 
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
@@ -16,8 +17,12 @@ if ($argc != 3) {
 my $nDiff = shift;
 my $listA = shift;
 my $listB = shift;
-my (undef, $typeA, undef, undef) = split('\.', $listA);
-my (undef, $typeB, undef, undef) = split('\.', $listB);
+my $baseA = basename($listA);
+my $baseB = basename($listB);
+my (undef, $typeA, undef, undef) = split('\.', $baseA);
+my (undef, $typeB, undef, undef) = split('\.', $baseB);
+
+# printf STDERR "# createNearMissRunList: $nDiff $listA $listB $typeA $typeB\n";
 
 my %listBUniqueCount;	# key is listB name, value is uniqueline count in idKeys
 my %listBFullCount;	# key is listB name, value is total line count in idKeys
@@ -33,7 +38,7 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-printf STDERR "# number of assemblies in %s %d\n", $listB, scalar(@listBNames);
+# printf STDERR "# number of assemblies in %s %d\n", $listB, scalar(@listBNames);
 
 my %listAUniqueCount;	# key is listA name, value is uniqueline count in idKeys
 my %listAFullCount;	# key is listA name, value is total line count in idKeys

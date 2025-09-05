@@ -26,6 +26,7 @@ export scriptDir="$HOME/kent/src/hg/utils/automation"
 
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/liftOver
+mkdir -p $buildDir/quickLift
 
 export chainNetPriority=1
 
@@ -66,6 +67,8 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
   rm -f $buildDir/liftOver/${overToChain}
+  rm -f $buildDir/quickLift/${otherDb}.bb
+  rm -f $buildDir/quickLift/${otherDb}.link.bb
   if [ -s "$buildDir/trackData/$lastzDir/axtChain/${overChain}" ]; then
      ln -s ../trackData/$lastzDir/axtChain/${overChain} $buildDir/liftOver/${overToChain}
   fi
@@ -93,8 +96,9 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.bb
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
   fi
+
   if [ -s "$buildDir/trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}.bb" ]; then
-printf "# making chainLiftOver${OtherDb}.bb\n" 1>&2
+    printf "# making chainLiftOver${OtherDb}.bb\n" 1>&2
     ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}.bb $buildDir/bbi/${asmId}.chainLiftOver$OtherDb.bb
     ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainLiftOver${OtherDb}Link.bb
     if [ -s "$buildDir/trackData/$lastzDir/bigMaf/${accessionId}.${otherDb}.liftOverNet.bb" ]; then
@@ -102,7 +106,15 @@ printf "# making chainLiftOver${OtherDb}.bb\n" 1>&2
       ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
     fi
   else
-printf "# there is NO chainLiftOver${OtherDb}.bb\n" 1>&2
+    printf "# there is NO chainLiftOver${OtherDb}.bb\n" 1>&2
+  fi
+
+  if [ -s "$buildDir/trackData/$lastzDir/axtChain/${accessionId}.${otherDb}.quick.bb" ]; then
+    printf "# making quickLift/${otherDb}.bb\n" 1>&2
+    ln -s ../trackData/$lastzDir/axtChain/${accessionId}.${otherDb}.quick.bb $buildDir/quickLift/${otherDb}.bb
+    ln -s ../trackData/$lastzDir/axtChain/${accessionId}.${otherDb}.quickLink.bb $buildDir/quickLift/${otherDb}.link.bb
+  else
+    printf "# there is NO chainQuickLift${OtherDb}.bb\n" 1>&2
   fi
 
   otherPrefix=`echo $otherDb | cut -c1-2`

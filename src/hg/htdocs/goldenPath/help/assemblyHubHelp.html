@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Assembly User Guide" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Assembly Hub User Guide</strong></h1>
+
+<a id="overview"></a>
+<h2>Overview</h2>
+<p>
+An Assembly Data Hub is a set of Internet-accessible data files that define the reference sequence
+to be used for a browser instance, as well as all the data files that define the annotation for
+that sequence. Assembly Data Hubs allow researchers to use the UCSC Genome Browser to view their
+own sequences with associated annotation, without the requirement that UCSC support a browser on that sequence.
+</p>
+
+<p>
+<b>Note</b>: if you are working with a genome that has already been submitted
+to the <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/">NCBI Assembly</a> system, it may
+already be available in the <a href="https://genome.ucsc.edu">UCSC Genome Browser</a>.
+Please check the <a href="https://hgdownload.soe.ucsc.edu/hubs/">GenArk Assembly Hub</a> collection
+to see if your genome of interest is already available. If it is not listed there, you can use the
+<a href="/assemblyRequest">UCSC Assembly Request</a> page to request that the genome assembly be
+added.</p>
+
+
+<h2>Contents</h2>
+<h6><a href="#webServer">Web Server</a></h6>
+<h6><a href="#hubTxt">Assembly Hub Components</a></h6>
+    <ul style="margin-left: 20px;">
+        <li><a href="#hubTxt">hub.txt</a></li>
+	<li><a href="#genomesTxt">genomes.txt</a></li>
+	<li><a href="#twoBitFile">2bit File</a></li>
+        <li><a href="#groupsTxt">groups.txt</a></li>
+	<li><a href="#singleFileHub">Single-File Track Hub</a></li> 
+    </ul>
+<h6><a href="#linkingHub">Linking to Your Assembly Hub</a></h6>
+<h6><a href="#buildingTracks">Building Tracks</a></h6>
+<ul style="margin-left: 20px;">
+    <li><a href="#cytobandTrack">Cyotoband Track</a></li>
+</ul>
+<h6><a href="#assemblyHubResources">Assembly Hub Resources</a></h6>
+<ul style="margin-left: 20px;">
+    <li><a href="#gOnRamp">G-OnRamp</a></li>
+    <li><a href="#makeHub">MakeHub</a></li>
+    <li><a href="#exampleNcbiAssemblyHubs">Example NCBI Assembly Hubs</a></li>   
+        </ul>
+    </li>
+</ul>
+<h6><a href="#addingBlatServers">Adding BLAT Servers</a></h6>
+<ul style="margin-left: 20px;">
+    <li><a href="#configuringAssemblyHubs">Configuring Assembly Hubs to Use a Dedicated gfServer</a></li>
+    <li><a href="#troubleshootingBlatServers">Troubleshooting BLAT Servers</a></li>
+    <li><a href="#configuringDynamicGfServer">Configuring Assembly Hubs to Use a Dynamic gfServer</a></li>
+    <li><a href="#checkGfServerStatusForDynamicServers">Check gfServer Status for Dynamic Servers</a></li>
+        </ul>
+    </li>
+</ul>
+
+<a id="webServer"></a>
+<h2>Web Server</h2>
+<p>
+To display a novel genome sequence in the UCSC Genome Browser, a web server hosted by the
+institution (or a free service such as <a href="hgTrackHubHelp.html#Hosting">Cyverse</a>)
+can be used. For environments operating behind a firewall, hub files can also be loaded locally
+through <a href="hubQuickStartAssembly.html#blatGbib">GBiB</a> to provide access to the UCSC Genome
+Browser. Hosting hub files over HTTP is strongly recommended, as it is
+significantly more efficient than FTP. A hierarchical directory structure must then be
+established to organize the files associated with the genome sequence. For example:
+</p>
+
+<pre style="margin-left: 20px;">
+myHub/ - directory to organize your files on this hub
+    hub.txt - primary reference text file to define the hub, refers to:
+    genomes.txt - definitions for each genome assembly on this hub
+        newOrg1/ - directory of files for this specific genome assembly
+            newOrg1.2bit - '2bit' file constructed from your fasta sequence
+            description.html - information about this assembly for users
+            trackDb.txt - definitions for tracks on this genome assembly
+            groups.txt - definitions for track groups on this assembly
+            bigWig and bigBed files - data for tracks on this assembly
+            external track hub data tracks
+</pre>
+<p>
+The hub can be referenced by a URL such as: http://yourLab.yourInstitution.edu/myHub/hub.txt</p>
+
+<h2>Assembly Hub Components</h2>
+<a id=#assemblyHubComponents"></a>
+
+<a id="hubTxt"></a>
+<h3>hub.txt</h3>
+<p>    
+The initial file, <b>hub.txt</b> is the primary URL reference for the assembly hub:</p>
+<p>Format of the file:</p>
+<pre style="margin-left: 20px;">
+hub hubName
+shortLabel genome
+longLabel Comment describing this hub contents
+genomesFile genomes.txt
+email contactEmail@institution.edu
+descriptionUrl aboutHub.html
+</pre>
+<p>
+<strong>shortLabel</strong> is the name that will appear in the genome pull-down menu at the
+UCSC gateway page.</p>
+<p>
+<strong>genomesFile</strong> is a reference to the next definition file in this chain that will
+describe the assemblies and tracks available at this hub. Typically, <em>genomes.txt</em> is at
+the same directory level as this <em>hub.txt</em>; however, it can also be a relative path
+reference to a different directory level.</p>
+<p>
+<strong>email</strong> provides users with a contact point for questions related to this assembly hub.</p>
+<p>
+<strong>descriptionUrl</strong> specifies a relative path or URL link to a webpage describing the hub.</p>
+<p>
+You can view a working example at <a href="examples/hubExamples/hubPlants/cshl2013/hub.txt">hub.txt</a></p>
+
+<a id="genomesTxt"></a>
+<h3>genomes.txt</h3>
+<p>The <b>genomes.txt</b> file provides references to the genome assemblies and tracks available in
+the assembly hub.</p>
+<pre>
+genome ricCom1
+trackDb ricCom1/trackDb.txt
+groups ricCom1/groups.txt
+description July 2011 Castor bean
+twoBitPath ricCom1/ricCom1.2bit
+organism Ricinus communis
+defaultPos E09R7372:1000000-2000000
+orderKey 4800
+scientificName Ricinus communis
+htmlPath ricCom1/description.html
+transBlat yourLab.yourInstitution.edu 17777
+blat yourLab.yourInstitution.edu 17777
+isPcr yourLab.yourInstitution.edu 17779
+</pre>
+<p>
+Multiple assembly definitions can be included in a single file, separated by blank lines. The file
+references are relative paths. In this example, the subdirectory <strong>ricCom1</strong> contains
+the files for this specific assembly.</p>
+<ul>
+    <li><strong>genome</strong> is equivalent to the UCSC database name. This name appears on title
+	    pages in the Genome Browser.</li>
+    <li><strong>trackDb</strong> points to the file that defines the tracks for this genome
+	    assembly (see the
+	    <a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">Track Hub</a>
+	    help documentation for details).</li>
+    <li><strong>groups</strong> points to the file defining track groups, which are collections of
+	    related tracks displayed together under the main Genome Browser image.</li>
+    <li><strong>description</strong> is displayed on the Gateway page and title pages for this
+	    assembly. It also appears in the assembly pull-down menu.</li>
+    <li><strong>twoBitPath</strong> points to the <em>.2bit</em> sequence file for the assembly.
+	    This file is typically generated from FASTA files using the <em>faToTwoBit</em>
+	    kent program. The path can also point to a URL.</li>
+    <li><strong>organism</strong> is displayed alongside the description on title pages. It also
+	    appears in the assembly pull-down menu.</li>
+    <li><strong>defaultPos</strong> defines the initial view in the Genome Browser, usually
+	    highlighting a popular gene or region of interest.</li>
+    <li><strong>orderKey</strong> controls the ordering of assemblies in the pull-down menu.</li>
+    <li><strong>htmlPath</strong> points to the HTML file with assembly information. The HTML file
+	    is displayed on the Gateway page.</li>
+    <li><strong>transBlat</strong>, <strong>blat</strong>, and <strong>isPcr</strong> configure
+	    different gfServer instances for amino acid searches, BLAT alignments, and PCR.
+	    <a href="#configuringAssemblyHubs"> More here.</a></li>
+</ul>
+<p><b>Note</b>: it is strongly recommended that each genome stanza includes <em>defaultPos</em>,
+<em>scientificName</em>, <em>organism</em>, <em>description</em>, so that the hub loads with
+meaningful defaults and can be more easily searched from the Gateway page.</p>
+
+<a id="twoBitFile"></a>
+<h3>2bit File</h3>
+<p>
+The <strong>.2bit</strong> file is constructed from the FASTA sequence for the assembly using the
+<strong>faToTwoBit</strong> <em>kent</em> program (available from the
+<a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">downloads</a> page).</p>
+<p>Example:</p>
+<pre>
+faToTwoBit ricCom1.fa ricCom1.2bit
+</pre>
+<p>
+Use <strong>twoBitInfo</strong> to verify sequences and create a <strong>chrom.sizes</strong> file,
+which is not used in the hub itself but is helpful for constructing <strong>big*</strong> files:
+</p>
+<pre>
+twoBitInfo ricCom1.2bit stdout | sort -k2rn &gt; ricCom1.chrom.sizes
+</pre>
+<p>
+The <em>.2bit</em> file can also be hosted at a URL:</p>
+<pre>
+twoBitInfo -udcDir=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/ricCom1/ricCom1.2bit stdout | sort -k2nr &gt; ricCom1.chrom.sizes
+</pre>
+<p>
+To extract sequences from a <em>.2bit</em> file:
+</p>
+<pre>
+twoBitToFa -seq=chrCp -udcDir=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/ricCom1/ricCom1.2bit stdout &gt; ricCom1.chrCp.fa
+</pre>
+
+<a id="groupsTxt"></a>
+<h3>groups.txt</h3>
+<p>The <b>groups.txt</b> file defines the grouping of track controls under the Genome Browser graphic
+display.</p>
+<p>Example:</p>
+<pre>
+name map
+label Mapping
+priority 2
+defaultIsClosed 0
+</pre>
+
+<ul>
+   <li>The <b>name</b> setting is used in the trackDb.txt file to associate specific tracks with a
+       group.</li>
+   <li>The <b>label</b> setting specifies the title of the group in the genome browser. By default,
+       groups are sorted alphabetically based on the label.</li>
+   <li>The <b>priority</b> setting dictates the display order of the track groups, with lower
+       numbers shown first.</li>
+   <li>The <b>defaultIsClosed</b> setting controls whether the group is initially expanded or
+       collapsed (0 for expanded, 1 for collapsed).</li>
+</ul>
+<p>Refer to the <a href="/goldenPath/help/hgTrackHubHelp.html#Group"
+target="_blank">Adding Groups to a Track hub</a> section of the Track Hubs help page for more
+details.</p>
+
+<a id="singleFileHub"></a>
+<h3>Single-File Track Hub (useOneFile on)</h3>
+<p>
+Traditionally, an assembly hub required multiple configuration files (<code>hub.txt</code>,
+<code>genomes.txt</code>, <code>trackDb.txt</code>, and optionally <code>groups.txt</code>), along
+with a <code>.2bit</code> file for the sequence. The <code>useOneFile on</code> option simplifies
+this by consolidating everything into a single configuration file. <b>Note:</b> The single-file
+format supports one genome assembly per file. For multiple assemblies, use the traditional
+multi-file setup.</p>
+<p>Example configuration:</p>
+<pre>
+hub mySingleFileHub
+shortLabel My Single-File Hub
+longLabel An example of a single-file UCSC track hub
+useOneFile on
+email myEmail@example.com
+
+genome hg19
+
+track exampleBigWig
+shortLabel BigWig Coverage
+longLabel Coverage data over hg19
+type bigWig
+visibility full
+bigDataUrl http://myServer.com/data/example.bigWig
+
+track exampleVCF
+shortLabel VCF Variants
+longLabel Variant calls over hg19 region
+type vcfTabix
+visibility pack
+bigDataUrl http://myServer.com/data/example.vcf.gz
+</pre>
+
+<ul>
+    <li>The <strong>hub</strong> stanza with the <strong>useOneFile on</strong> setting replaces <code>hub.txt</code>.</li>
+    <li>The <strong>genome</strong> line replaces <code>genomes.txt</code>.</li>
+    <li>The <strong>track</strong> stanzas replaces <code>trackDb.txt</code>.</li>
+</ul>
+
+<p>
+If your hub requires a reference genome sequence, you can still provide a <code>.2bit</code> file
+with <code>twoBitPath</code>. Grouping (previously in
+<a href="#groupsTxt">groups.txt.</a>) can also be integrated here if needed.
+</p>
+
+<p>
+Once hosted on a server, the single configuration file (and associated data files such as 
+<code>.bigWig</code>, <code>.vcf.gz</code>, <code>.2bit</code>) can be loaded into the UCSC Genome
+Browser via the <a href="/cgi-bin/hgHubConnect" target="_blank">My Hubs</a> page.</p>
+
+<a id="buildingTracks"></a>
+<h2>Building Tracks</h2>
+<p>Tracks are defined in the <strong>trackDb.txt</strong> file, where each stanza specifies how
+tracks are displayed (shortLabel, longLabel, color, visibility), along with other information such
+as the group the track belongs to (referencing <a href="#groupsTxt">groups.txt</a>) and whether
+additional HTML should be displayed when a user clicks into the track or a track item:</p>
+<pre>
+track gap_
+longLabel Gap
+shortLabel Gap
+priority 11
+visibility dense
+color 0,0,0
+bigDataUrl bbi/ricCom1.gap.bb
+type bigBed 4
+group map
+html ../trackDescriptions/gap
+</pre>
+<p>
+For more information about the syntax of the <b>trackDb.txt</b> file, refer to the
+<a href="/goldenPath/help/trackDb/trackDbHub.html"
+	target="_blank">Track Database Definition page</a>.
+</p>
+<p>Processing genomes to construct tracks often requires a cluster or supercomputer. Small
+genomes can be processed on single computers with multiple cores. The process for each track is
+unique. For details, refer to the
+<a href="https://genomewiki.ucsc.edu/index.php?title=Browser_Track_Construction" target="_blank">
+	Browser Track Construction page</a>, which discusses constructing tracks for assembly
+hubs.</p>
+
+<a id="cytobandTrack"></a>
+<h3>Cytoband Track</h3>
+<p>
+Assembly hubs can include a Cytoband track, which allows quicker navigation of chromosomes and
+displays banding pattern information, if known.</p>
+<p>
+A simple version of the track can be built using the existing chrom.sizes file for your assembly.
+Banding options include: <code style="background-color: transparent; color: inherit;">gneg, gpos25,
+	gpos50, gpos75, gpos100, acen, gvar, or stalk</code>).</p>
+<p>Example:</p>
+<pre>
+cat araTha1.chrom.sizes | sort -k1,1 -k2,2n | awk '{print $1,0,$2,$1,"gneg"}' &gt; cytoBandIdeo.bed
+</pre>
+<p>
+The resulting BED file can be converted into a BigBed file and associated with an <code>.as</code>
+definition file (see
+<a href="examples/hubExamples/hubAssembly/plantAraTha1/araTha1/cytoBand.as"
+	target="_blank">example</a>) to
+to inform the browser that this is not a standard BED:</p>
+<pre>
+bedToBigBed -type=bed4 cytoBandIdeo.bed -as=cytoBand.as araTha1.chrom.sizes cytoBandIdeo.bigBed
+</pre>
+<p>
+In <b>trackDb.txt</b>, if the track is named <b>cytoBandIdeo</b> (e.g.,
+<a href="examples/hubExamples/hubAssembly/plantAraTha1/araTha1/trackDb.txt"
+        target="_blank">track cytoBandIdeo</a>), it will automatically load into the assembly
+hub.</p>
+
+<a id="linkingHub"></a>
+<h2>Linking to Your Assembly Hub</h2>
+<p>
+Direct links to the genome(s) within the assembly hub can then be constructed.</p>
+<ul style="list-style-type: none; margin-left: 20px;">
+    <li>
+        <strong>The hub connect page:</strong>
+        <br>
+        <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt" target="_blank">
+                http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt
+        </a>
+    </li>
+    <li>
+        <strong>The genome gateway page:</strong>
+        <br>
+        <a href="http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt" target="_blank">
+            http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt
+        </a>
+    </li>
+    <li>
+        <strong>Directly to the genome browser:</strong>
+        <br>
+        <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt" target="_blank">
+            http://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt
+        </a>
+    </li>
+</ul>
+
+
+
+<a id="assemblyHubResources"></a>
+<h2>Assembly Hub Resources</h2>
+<p>
+Resources for automatically building assembly hubs include <a href="https://g-onramp.org/"
+	target="_blank">G-OnRamp</a> and <a href="https://github.com/Gaius-Augustus/MakeHub"
+	target="_blank">MakeHub</a>.</p>
+
+<a id="gOnRamp"></a>
+<h3>G-OnRamp</h3>
+<p>
+G-OnRamp is a Galaxy workflow that turns a genome assembly and RNA-Seq data into a Genome Browser
+with multiple evidence tracks. Since G-OnRamp is based on the Galaxy platform, becoming familiar
+with Galaxy concepts and functionalities is recommended. See their
+<a href="https://g-onramp.org/index5c4e.html?page_id=32" target="_blank">instruction page</a>
+for an overview.
+</p>
+
+<a id="makeHub"></a>
+<h3>MakeHub</h3>
+<p>
+MakeHub is a command-line tool for fully automatic generation of track data hubs for visualizing
+genomes with the UCSC Genome Browser. More information is available on their
+<a href="https://github.com/Gaius-Augustus/MakeHub" target="_blank">GitHub page</a>.</p>
+
+<a id="exampleNcbiAssemblyHubs"></a>
+<h3>Example NCBI assembly hubs</h3>
+<p>
+There is a collection of example NCBI assembly hubs that can be used directly or copied as
+templates. A large collection of script-generated assembly hubs can be browsed on the development server, with
+links defaulting to the  <b>genome-test site</b>. To load these hubs on the public UCSC site, copy
+the hub.txt link and replace the test server domain with the public domain.</p>
+<p>
+The following table provides links to launch various assembly hubs grouped by species subsets. By
+scrolling down each page, you can access rows for individual assemblies (or groups of assemblies,
+e.g., bacteria). Clicking the &quot;common name&quot; hyperlink (e.g., &quot;African bush
+elephant&quot; on the Vertebrate Mammalian page) loads the selected hub.</p>
+<div id="tableContainer"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tableContainer = document.getElementById('tableContainer');
+
+  // Map each first-column entry to a unique URL
+  const linkMap = {
+    'non-Mammalian other Vertebrate assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_other/vertebrate_other.ncbi.html',
+    'Vertebrate Mammalian assembly hub': 'https://genome-test.gi.ucsc.edu/~hiram/hubs/genbank/vertebrate_mammalian/vertebrate_mammalian.ncbi.html',
+    'Plant assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/plant/plant.ncbi.html',
+    'Protozoa assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/protozoa/protozoa.ncbi.html',
+    'Invertebrates assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/invertebrate/invertebrate.ncbi.html',
+    'Fungi assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/fungi/fungi.ncbi.html',
+    'Archaea assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/archaea/archaea.ncbi.html',
+    'Bacteria assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/bacteria/bacteria.ncbi.html'
+  };
+
+  // Create table elements
+  const table = document.createElement('table');
+  table.setAttribute('border', '1');
+  table.setAttribute('cellpadding', '5');
+  table.setAttribute('cellspacing', '0');
+  table.style.borderCollapse = 'collapse';
+
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+
+  const headers = [
+    {name: 'species subset', type: 'string'},
+    {name: 'number of species', type: 'number'},
+    {name: 'number of assemblies', type: 'number'},
+    {name: 'total contig count', type: 'number'},
+    {name: 'total nucleotide count', type: 'number'},
+    {name: 'average contig size', type: 'number'},
+    {name: 'average assembly size', type: 'number'}
+  ];
+
+  headers.forEach(h => {
+    const th = document.createElement('th');
+    th.setAttribute('data-type', h.type);
+    th.style.cursor = 'pointer';
+    th.style.fontWeight = 'bold';
+    th.textContent = h.name + ' ';
+
+    // Show both arrows by default (three-state: original, ascending, descending)
+    const span = document.createElement('span');
+    span.className = 'sort-arrow';
+    span.innerText = '▲▼'; 
+    th.appendChild(span);
+    headerRow.appendChild(th);
+  });
+
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  const data = [
+    ['non-Mammalian other Vertebrate assembly hub', '156', '172', '18,548,615', '193,684,015,605', '10,441', '1,126,069,858'],
+    ['Vertebrate Mammalian assembly hub', '118', '204', '30,643,657', '498,264,459,566', '16,259', '2,442,472,841'],
+    ['Plant assembly hub', '190', '269', '34,577,423', '145,341,422,954', '4203', '540,302,687'],
+    ['Protozoa assembly hub', '282', '338', '3,939,128', '16,816,724,183', '4269', '49,753,621'],
+    ['Invertebrates assembly hub', '392', '492', '32,264,511', '170,439,035,382', '5282', '346,420,803'],
+    ['Fungi assembly hub', '1106', '1215', '4,143,097', '38,677,096,556', '9,335', '31,833,001'],
+    ['Archaea assembly hub', '688', '742', '57,569', '2,010,246,046', '34,918', '2,709,226'],
+    ['Bacteria assembly hub', '34,005', '58,658', '8,397,216', '234,147,691,500', '27,883', '3,991,743']
+  ];
+
+  data.forEach(rowData => {
+    const tr = document.createElement('tr');
+    rowData.forEach((value, colIndex) => {
+      const td = document.createElement('td');
+
+      if (colIndex === 0) {
+        // Create a link for the first column
+        const a = document.createElement('a');
+        // Use the mapping to find the correct URL, fallback to '#' if not found
+        a.href = linkMap[value] || '#';
+        a.textContent = value + ' ';
+        
+        // Add an external link icon
+        const icon = document.createElement('span');
+        icon.innerHTML = '&#x2197;'; // Unicode arrow
+        icon.style.fontSize = '0.8em';
+        icon.style.textDecoration = 'none';
+        a.appendChild(icon);
+
+        td.innerHTML = '';
+        td.appendChild(a);
+      } else {
+        td.textContent = value;
+      }
+
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  tableContainer.appendChild(table);
+
+  // Store the original order of rows
+  const originalRows = Array.from(tbody.querySelectorAll('tr'));
+
+  // Sorting logic with three-state toggle
+  const tableHeaders = thead.querySelectorAll('th');
+  let currentSortCol = null;
+  // States: 0 = original, 1 = ascending, 2 = descending
+  let sortState = 0; 
+
+  tableHeaders.forEach((header, colIndex) => {
+    header.addEventListener('click', () => {
+      if (currentSortCol === colIndex) {
+        sortState = (sortState + 1) % 3; 
+      } else {
+        currentSortCol = colIndex;
+        sortState = 1; // ascending first
+      }
+
+      const type = header.getAttribute('data-type');
+      const arrow = header.querySelector('.sort-arrow');
+      let rows = originalRows.slice(); 
+
+      if (sortState === 0) {
+        // Return to original order
+        tbody.innerHTML = '';
+        originalRows.forEach(r => tbody.appendChild(r));
+        arrow.innerText = '▲▼';
+      } else {
+        // Sort rows
+        rows.sort((a, b) => {
+          let aText = a.children[colIndex].innerText;
+          let bText = b.children[colIndex].innerText;
+
+          if (type === 'number') {
+            aText = aText.replace(/,/g, '');
+            bText = bText.replace(/,/g, '');
+            var compA = parseFloat(aText);
+            var compB = parseFloat(bText);
+          } else {
+            var compA = aText.toLowerCase();
+            var compB = bText.toLowerCase();
+          }
+
+          if (compA < compB) return (sortState === 1) ? -1 : 1;
+          if (compA > compB) return (sortState === 1) ? 1 : -1;
+          return 0;
+        });
+
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+
+        // Update arrows
+        tableHeaders.forEach(h => {
+          const sp = h.querySelector('.sort-arrow');
+          if (sp) sp.innerText = '▲▼'; 
+        });
+        arrow.innerText = (sortState === 1) ? '▲' : '▼';
+      }
+    });
+  });
+});
+</script>
+<p>These assemblies use <b>NCBI accession naming patterns</b>. Prototype gene tracks from NCBI gene
+predictions are available for a few assemblies. No BLAT servers are provided. Users can copy the
+skeleton structure of a hub to run their own BLAT server locally. Brief instructions are available
+on each assembly gateway page under &quot;Download files for this assembly hub.&quot;
+
+<a id="exampleLoadingAfricanBushElephant"></a>
+<h4>Example: Loading the African bush elephant assembly hub and reviewing the related genomes.txt
+	and trackDb.txt</h4>
+<p>
+Here are some quick steps to load an example hub from this collection, along with an explanation
+of how to view the files behind the hub.</p>
+<ol>
+    <li>Click the
+	    <a href="https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/vertebrate_mammalian.ncbi.html"
+		    target="_blank">Vertebrate Mammalian assembly hub</a> link above.</li>
+    <li>Scroll down to the <b>common name</b> column and click the hyperlink for
+	    <b>"African bush elephant"</b>.</li>
+    <li>You will arrive at a gateway page titled <em>"African bush elephant Genome Browser - 
+		    GCA_000001905.1_Loxafr3.0 assembly"</em>. This page includes a section,
+	    <b>Data file downloads</b>, where you can access the underlying
+	    files.</li>
+    <li>Click <b>Go</b> (or use the top Genome Browser blue bar menu) to view this assembly hub.
+	    (Note: this will open on our <b>genome-test site</b>.).</li>
+    <li>To load this hub on our public site, copy the hyperlink for 
+            <a href="https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/hub.ncbi.txt&genome=GCA_000001905.1_Loxafr3.0"
+                    target="_blank">African bush elephant</a> and paste it into your browser.
+	    Then, change the beginning of the URL from</li>
+<pre>
+https://genome-test.gi.ucsc.edu/...
+</pre>
+        to
+<pre>
+https://genome.ucsc.edu/...
+</pre>
+</ol>
+<h3>Exploring the files behind the hub</h3>
+<p>
+To better understand how the hub works, you can review the associated files:</p>
+<ol>
+	<li>Go to the GCA_000001905.1_Loxafr3.0 directory </b>
+	    <a href="https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/GCA_000001905.1_Loxafr3.0/"
+	       target="_blank">link</a>.</li>
+    <li>Locate the file <b> GCA_000001905.1_Loxafr3.0.ncbi.2bit</b>. This binary indexed file allows
+	    the Browser to display the genome sequence.</li>
+    <li>Open <b>GCA_000001905.1_Loxafr3.0.genomes.ncbi.txt</b>. This <code>genomes.txt</code> file
+	    defines each assembly in the hub. It points to the genome's <code>.2bit</code> file
+	    (<code>twoBitPath</code>) and specifies the <code>trackDb</code> file that contains the
+	    track definitions. (In the case of this large hub with 204 assemblies, the main
+	    genomes.txt file is one directory up, and this stanza is included there.)</li>
+    <li>Review <b>GCA_000001905.1_Loxafr3.0.trackDb.ncbi.txt</b>. This <code>trackDb.txt</code>
+	    file defines the tracks displayed in the hub. It contains <code>bigDataUrl</code> lines
+	    that tell the Browser where to retrieve data for each track, along with optional
+	    settings such as:</li>
+    <ul>
+	    <li><a href="/goldenPath/help/trackDb/trackDbHub.html#searchIndex"
+			    target="_blank">searchIndex</a>
+		    and <a href="/goldenPath/help/trackDb/trackDbHub.html#searchTrix"
+			    target="_blank">searchTrix</a>: support data searches within the hub</li>
+            <li><a href="/goldenPath/help/trackDb/trackDbHub.html#url"
+                            target="_blank">url</a>  and
+		              <a href="/goldenPath/help/trackDb/trackDbHub.html#urlLabel"
+                            target="_blank">urlLabel</a>: create outbound links to external
+		    resources</li>
+	    <li><a href="/goldenPath/help/trackDb/trackDbHub.html#html"
+                            target="_blank">html</a>: links to a file with descriptive information
+		    displayed when users click into a track</li>
+    </ul>
+</ol>
+
+<a id="addingBlatServers"></a>
+<h2>Adding BLAT servers</h2>
+<p>BLAT servers (<code>gfServer</code>) can be configured as either <b>dedicated</b> or
+<b>dynamic</b>:</p>
+<ul>
+	<li><b>Dedicated BLAT servers</b> index a genome at startup and remain running in memory, allowing
+		fast responses. The drawback is that they continuously consume memory.</li>
+	<li><b>Dynamic BLAT servers</b> pre-index genomes into files and start on demand to handle a
+		request, exiting afterward. They are more memory-efficient and work well for hubs
+		with many assemblies or infrequent use. Their response time depends on disk speed
+		but improves with repeated access due to operating system caching.</li>
+</ul>
+
+
+<a id="configuringAssemblyHubs"></a>
+<h3>Configuring assembly hubs to use a dedicated gfServer</h3>
+<p>
+When running a local BLAT server, assembly hubs can be configured to support BLAT searches by
+adding entries to the
+ <a href="#genomesTxt">genomes.txt</a> file.</p>
+<p>
+Installation and configuration details for gfServer are provided in the
+<a href="https://genomewiki.ucsc.edu/index.php/Running_your_own_gfServer">Running your own gfServer</a>
+page.</p>
+<p>
+In the  <code>genomes.txt</code> stanza for the target assembly, include the following lines (note
+the capital B in <code>transBlat</code>):</p>
+<pre>
+transBlat yourServer.yourInstitution.edu 17777
+blat yourServer.yourInstitution.edu 17779
+isPcr yourServer.yourInstitution.edu 17779
+</pre>
+<p>With this configuration, BLAT and PCR searches become available for the assembly.
+For example:</p>
+<pre>
+http://genome.ucsc.edu/cgi-bin/hgBlat?hubUrl=http://yourServer.yourInstitution.edu/myHub/hub.txt
+</pre>
+<p>
+This URL opens the BLAT interface, where the assembly will appear in the Genome drop-down menu.
+The <code>isPcr</code> line enables the use of a different gfServer instance for PCR queries if
+desired.</p>
+<p><b>Firewall note</b>: Some institutions block repeated BLAT server queries. In such cases,
+administrators must whitelist the following IP ranges:</p>
+<ul>
+	<li><code>128.114.119.*</code> (U.S. site: genome.ucsc.edu)</li>
+	<li><code>129.70.40.120</code> (European mirror: genome-euro.ucsc.edu)
+</ul>
+<p>
+Further details on gfServer options are available from the
+<a href="https://hgdownload.gi.ucsc.edu/downloads.html#source_downloads">Source Downloads page</a>
+(pre-compiled binaries are located in the <b>blat/</b> directory) and the
+<a href="/goldenPath/help/blatSpec.html">blat documentation</a>.</p>
+<p>
+gfServers may also be set up within
+<a href="/goldenPath/help/gbib.html" target="_blank">GBiB</a>
+for local operation; see the
+<a href="/goldenPath/help/hubQuickStartAssembly.html#blatGbib" target="_blank">GBiB assembly BLAT setup</a>
+guide for detailed instructions.
+
+<p>To terminate a gfServer instance, run:</p>
+<pre>gfServer stop localhost 17860</pre>
+
+<a id="troubleshootingBlatServers"></a>
+<h3>Troubleshooting BLAT servers</h3>
+<p>
+Errors may occur if translatedBlat and nucleotideBlat port numbers are reversed. A typical
+message in this case is:</p>
+<pre>Expecting 6 words from server got 2</pre>
+<p>If a gfServer instance is started from the same directory as the .2bit file, for example:</p>
+<pre>
+gfServer start localhost 17779 -stepSize=5 contigsRenamed.2bit &</pre>
+<p>an attempt to run a DNA sequence query through the web-based BLAT tool may return:</p>
+<pre>
+Error in TCP non-blocking connect() 111 - Connection refused
+Operation now in progress
+Sorry, the BLAT/iPCR server seems to be down. Please try again later.
+</pre>
+
+
+<ol>
+	<li><b>Process check</b><br>
+		Confirm that a gfServer process is running:</li>
+                <pre>ps aux | grep gfServer</pre>
+        <li><b>Verify path and filename</b><br>
+		In the <code>genomes.txt</code>, the twoBitPath/filename must match the .2bit file
+		used when starting <code>gfServer</code>. The location of the gfServer instance can
+		be verified by changing into the directory where gfServer was launched and running
+		the appropriate hostname command.
+                <pre>hostname -i</pre>
+		This will return an IP address, for example:
+		<code>132.249.245.79</code><br>
+		Test the connection with telnet:
+		<code>telnet</code>:
+                <pre>telnet yourIP yourPort</pre>
+		For example:
+                <pre>telnet 132.249.245.79 17777</pre>
+		A successful connection shows:
+		<pre>Connected to 132.249.245.79</pre>
+		If <code>Connection refused</code> appears, gfServer may not be running, or the
+		IP/port configuration is incorrect.<br>
+		The <code>genomes.txt</code> file should also be checked to confirm that the BLAT
+		line matches the correct IP and port. For example:
+                <pre>blat 132.249.245.79 17777</pre>
+		Instead of:
+                <pre>blat localhost 17777</pre></li>
+	<li><b>Check gfServer status</b><br>
+		Request status directly from <code>gfServer</code>:
+		<pre>gfServer status yourLocation yourPort</pre>
+        	For example:
+		<pre>gfServer status 132.249.245.79 17777</pre>
+        	Sample output might look like:</li>
+<pre>
+version 36x2
+type nucleotide
+host localhost
+port 17777
+tileSize 11
+stepSize 5
+minMatch 2
+pcr requests 0
+blat requests 0
+bases 0
+misses 0
+noSig 1
+trimmed 0
+warnings 0
+</pre>
+	<li><b>Test with gfClient</b><br>
+		A reliable troubleshooting method is to bypass the web interface and use the
+		command-line utility <code>gfClient</code>. If <code>gfClient</code> successfully
+		connects to <code>gfServer</code>, the IP/port configuration is correct. Running
+		<code>gfClient</code> directly verifies connectivity independently of the browser
+		interface. From the directory containing the hub's <code>.2bit</code> file, the
+		command can be executed as follows:
+                <pre>gfClient yourLocation yourPort pathTo2bitFile yourFastaQuery.fa output.psl</pre>
+		For example:
+		<pre>gfClient localhost 17777 . query.fa gfOutput.psl</pre>
+		Note the <code>.</code> after the port, which tells <code>gfClient</code> to use
+		the <code>.2bit</code> file in the current directory. Check <code>gfOutput.psl</code> for BLAT results.<br>
+		<ul>
+			<b>DNA test</b>
+		        <pre>gfClient yourServer.yourInstitution.edu 17779 `pwd` test.fa dnaTestOut.psl</pre>
+                        <b>Protein test</b>
+		        <pre>gfClient -t=dnaX -q=prot yourServer.yourInstitution.edu 17779 `pwd` proteinSequence.fa proteinOut.psl</pre>
+		</ul>
+		Ensure that the <code>yourAssembly.2bit</code> file is present on the test machine.
+</ol>
+
+<a id="configuringDynamicGfServer"></a>
+<h3>Configuring assembly hubs to use a dynamic gfServer</h3>
+<p>A dynamic BLAT server is specified with the <code>&quot;dynamic&quot;</code> argument to the
+<code>blat</code>, <code>transBlat</code>, and <code>isPcr</code> definitions in the hub
+<a href="#genomesTxt">genomes.txt</a> file, followed by the gfServer root-relative path of the
+directory containing the <code>.2bit</code> and <code>.gfidx</code> files.</p>
+<p>For example:</p>
+<pre>
+blat yourServer.yourInstitution.edu 4096 dynamic yourAssembly
+transBlat yourServer.yourInstitution.edu 4096 dynamic yourAssembly
+isPcr yourServer.yourInstitution.edu 4096 dynamic yourAssembly
+</pre>
+<p>The genome and gfServer indexes would be:</p>
+<pre>
+$rootdir/yourAssembly/yourAssembly.2bit
+$rootdir/yourAssembly/yourAssembly.untrans.gfidx
+$rootdir/yourAssembly/yourAssembly.trans.gfidx
+</pre>
+<p>Refer to the
+<a href="http://genomewiki.ucsc.edu/index.php/Running_your_own_gfServer#Building_gfServer_indexes"
+   target="_blank">Building gfServer indexes</a> section for for detailed instructions on building
+   the index.</p>
+<p>For large hubs, it is possible to have more deeply nested directories. For instance, the
+following NCBI convention:</p>
+<pre>
+blat yourServer.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
+transBlat yourServer.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
+isPcr yourServer.yourInstitution.edu 4096 dynamic GCF/000/181/335/GCF_000181335.3
+</pre>
+<p>Which will reference these genome files and indexes:</p>
+<pre>
+$rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.2bit
+$rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.untrans.gfidx
+$rootdir/GCF/000/181/335/GCF_000181335.3/GCF_000181335.3.trans.gfidx
+</pre>
+
+
+<a id="checkGfServerStatusForDynamicServers"></a>
+<h3>Checking gfServer status for dynamic servers</h3>
+<p>A query without specifying <code>genome</code> acts as an &quot;I am alive&quot; check:
+<pre>
+% gfServer status myserver 4040
+version 37x1
+serverType dynamic
+</pre>
+<p>Specifying a <code>-genome</code> checks that it is valid and provides information on how the index was
+built:</p>
+<pre>
+% gfServer -genome=mm10 -genomeDataDir=test/mm10 status myserver 4040
+version 37x1
+serverType dynamic
+type nucleotide
+tileSize 11
+stepSize 5
+minMatch 2
+</pre><p>Using <code>-trans</code> checks the translated index:</p></pre>
+<pre>
+% gfServer -genome=mm10 -genomeDataDir=test/mm10 -trans status myserver 4040
+version 37x1
+serverType dynamic
+type translated
+tileSize 4
+stepSize 4
+minMatch 3
+</pre>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

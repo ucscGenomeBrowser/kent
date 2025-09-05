@@ -16,7 +16,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/hive/data/outside/RepeatMasker/RepeatMasker-4.1.7-p1";
+my $RepeatMaskerPath = "/hive/data/outside/RepeatMasker/RepeatMasker-4.2.1";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
 # default engine changed from crossmatch to rmblast as of 2022-12
 # with RM version 4.1.4
@@ -336,8 +336,8 @@ chmod a+x RMRun.csh
 # Record RM version used:
 printf "The repeat files provided for this assembly were generated using RepeatMasker.\\
   Smit, AFA, Hubley, R & Green, P.,\\
-  RepeatMasker version 4.1.4\\
-  1996-2010 <http://www.repeatmasker.org>.\\
+  RepeatMasker version 4.2.1\\
+  1996-2025 <http://www.repeatmasker.org>.\\
 \\
 VERSION:\\n" > ../versionInfo.txt
 

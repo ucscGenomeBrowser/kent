@@ -73,7 +73,8 @@
 #	pointer got here, else print ,name:length when left pointer got here
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
+no warnings 'recursion';
 use Getopt::Long;
 
 ##############################################################################

@@ -307,7 +307,7 @@ chromAliasSetup(database);
 cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
 	fromPos, toDb->organism, toDb->description);
 
-char *fileName = liftOverChainFile(fromDb->name, toDb->name);
+char *fileName = liftOverChainFile(trackHubSkipHubName(fromDb->name), trackHubSkipHubName(toDb->name));
 if (isEmpty(fileName))
     errAbort("Unable to find a chain file from %s to %s - please contact support", fromDb->name, toDb->name);
 
@@ -331,7 +331,7 @@ struct trackDb *badList = NULL;
 
 if (doQuickLift)
     {
-    quickChain = quickLiftGetChain(fromDb->name, toDb->name);
+    quickChain = quickLiftGetChain(trackHubSkipHubName(fromDb->name), trackHubSkipHubName(toDb->name));
 
     if (quickChain == 0)
         errAbort("can't find quickChain from %s to %s", fromDb->name, toDb->name);

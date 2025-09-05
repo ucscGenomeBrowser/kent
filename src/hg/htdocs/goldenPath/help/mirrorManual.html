@@ -34,6 +34,7 @@
 <h6><a href='#using-freetype-font-support-for-anti-aliased-text'>Using FreeType font support for anti-aliased text</a></h6>
 <h6><a href='#building-the-kent-source-tree'>Building the kent source tree.</a></h6>
 <h6><a href='#adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</a></h6>
+<h6><a href='#make-the-api-work-in-the-same-way-as-on-the-public-website'>Make the API work in the same way as on the public website</a></h6>
 <a name='overview-of-the-genome-browser-directories-and-databases'></a>
 <h2>Overview of the Genome Browser directories and databases</h2>
 
@@ -2646,6 +2647,46 @@ Output is:
 <p>
 Then we run hubCrawl to get the searches to work (most mirrors do not need this). See <a href='https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA' title=''>https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA</a> for more details.
 </p>
+
+<a name='make-the-api-work-in-the-same-way-as-on-the-public-website'></a>
+<h2>Make the API work in the same way as on the public website</h2>
+
+<p>
+The API is served by the hubApi program, but an Apache rule in httpd.conf allows shorter URLs to be used for API queries.
+The virtual host definition looks as follows on our server:
+</p>
+
+<pre><code>&lt;VirtualHost *:443&gt;
+ServerName api.genome.ucsc.edu
+ServerAlias api
+ScriptAlias /cgi-bin/ &quot;/data/apache/cgi-bin/&quot; 
+DocumentRoot &quot;/data/apache/htdocs&quot; 
+RewriteEngine on
+RewriteOptions Inherit
+# The next four rewrite rules added by Hiram&#39;s request 05/01/2019
+RewriteRule &quot;^/list/(.*)$&quot; &quot;/cgi-bin/hubApi/list/$1&quot; [L,PT]
+RewriteRule &quot;^/getData/(.*)$&quot; &quot;/cgi-bin/hubApi/getData/$1&quot; [L,PT]
+RewriteRule &quot;^/findGenome(.*)$&quot; &quot;/cgi-bin/hubApi/findGenome$1&quot; [L,PT]
+RewriteRule &quot;^/search$&quot; &quot;/cgi-bin/hubApi/search?%{QUERY_STRING}&quot; [L,PT]
+RewriteRule &quot;^/cgi-bin/hubApi(.*)$&quot; &quot;/cgi-bin/hubApi$1&quot; [L,PT]
+RewriteRule &quot;^(.*)$&quot; &quot;http://genome.ucsc.edu/goldenPath/help/api.html&quot; [L]
+AllowEncodedSlashes NoDecode
+&lt;Directory &quot;/usr/local/apache/htdocs&quot;&gt;
+   SSILegacyExprParser on
+   Options Indexes FollowSymLinks MultiViews Includes
+   AllowOverride None
+   Require all granted
+&lt;/Directory&gt;
+AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/x-javascript application/json application/javascript
+SSLEngine on
+SSLProtocol all -SSLv2 -SSLv3
+SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
+SSLCertificateFile /etc/httpd/conf/ssl.crt/server.crt
+SSLCertificateKeyFile /etc/httpd/conf/ssl.key/server.key
+SSLCertificateChainFile /etc/httpd/conf/ssl.crt/chain.crt
+Header set Access-Control-Allow-Origin &quot;*&quot; 
+Header set Access-Control-Allow-Headers &quot;Range&quot; 
+&lt;/VirtualHost&gt;</code></pre>
 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

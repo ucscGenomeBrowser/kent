@@ -777,7 +777,7 @@ var hgSearch = (function() {
             var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
             if (positionMatch !== null) {
                 var prevCgi = uiState.prevCgi !== undefined ? uiState.prevCgi : "hgTracks";
-                window.location.replace("../cgi-bin/" + prevCgi + "?db=" + db + "position=" + encodeURIComponent(searchTerm));
+                window.location.replace("../cgi-bin/" + prevCgi + "?db=" + db + "&position=" + encodeURIComponent(searchTerm));
                 return;
             }
 

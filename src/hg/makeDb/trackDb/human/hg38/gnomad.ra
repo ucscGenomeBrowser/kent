@@ -79,7 +79,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#051425 "Updated May 14, 2025
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>rsId</b>: $rsId<br> <b>Genes</b>: $genes<br> <b>Type</b>: $annot<br> <b>Tag</b>: $FILTER<br> <b>Allele Frequency</b>: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     detailsStaticTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
@@ -113,7 +113,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#051425 "Updated May 14, 2025
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}} ($ref/$alt)<br> <b>rsId</b>: $rsId<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: $FILTER<br> <b>Var type</b>: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies

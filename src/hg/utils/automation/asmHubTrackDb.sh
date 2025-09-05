@@ -486,6 +486,21 @@ if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiRefSeq.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
+#  also remove all these other ones, they may not exist and their if 'exist'
+#    statements below will not remove them if they were there before
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqCurated.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqCurated.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqCurated.ixx
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqPredicted.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqPredicted.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqPredicted.ixx
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqOther.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqOther.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqOther.ixx
+rm -f $buildDir/bbi/${asmId}.bigPsl.bb
+rm -f $buildDir/bbi/${asmId}.ncbiRefSeqSelectCurated.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ixx
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb $buildDir/bbi/${asmId}.ncbiRefSeq.bb
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ix $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
@@ -520,8 +535,8 @@ priority 2
         shortLabel RefSeq All
         type bigGenePred
         urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
-        labelFields name,geneName,geneName2
-        defaultLabelFields geneName2
+        labelFields name2,geneName,geneName2
+        defaultLabelFields name2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeq.ix
         bigDataUrl bbi/%s.ncbiRefSeq.bb
@@ -546,8 +561,8 @@ priority 2
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
         urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
-        labelFields name,geneName,geneName2
-        defaultLabelFields geneName2
+        labelFields name2,geneName,geneName2
+        defaultLabelFields name2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -572,8 +587,8 @@ priority 2
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
         urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
-        labelFields name,geneName,geneName2
-        defaultLabelFields geneName2
+        labelFields name2,geneName,geneName2
+        defaultLabelFields name2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -693,8 +708,8 @@ rm -f ${buildDir}/genes/${asmId}.ncbiGene.gtf.gz
 export longLabel="Gene models submitted to NCBI"
 export shortLabel="Gene models"
 if [ "$asmType" = "refseq" ]; then
-  longLabel="NCBI gene predictions"
-  shortLabel="NCBI Genes"
+  longLabel="RefSeq gene predictions from NCBI"
+  shortLabel="NCBI RefSeq"
 fi
 if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
   mkdir -p $buildDir/genes
@@ -714,9 +729,9 @@ altColor 150,80,0
 colorByStrand 0,80,150 150,80,0
 bigDataUrl bbi/%s.ncbiGene.bb
 type bigGenePred
+urls name2=\"https://www.ncbi.nlm.nih.gov/gene/?term=\$\$\" geneName=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" geneName2=\"https://www.ncbi.nlm.nih.gov/nuccore/\$\$\"
 html html/%s.ncbiGene
 searchIndex name%s
-url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene:
 labelFields geneName,geneName2
 defaultLabelFields geneName2

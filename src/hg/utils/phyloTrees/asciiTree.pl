@@ -46,11 +46,17 @@ my $file = shift;
 
 my $nhString = "";
 
-open (FH, "<$file") or die "can not read $file";
-while (my $line = <FH>) {
+my $fh;
+
+if ($file eq "stdin") {
+  open ($fh, "<" , "/dev/stdin") or die "can not read /dev/stdin";
+} else {
+  open ($fh, "<" , "$file") or die "can not read $file";
+}
+while (my $line = <$fh>) {
   $nhString .= $line;
 }
-close (FH);
+close ($fh);
 
 $nhString =~ s/\s//g;
 my @species = split(',', $nhString);

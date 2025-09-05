@@ -23,20 +23,6 @@
 #include "bigLink.h"
 #include "chromAlias.h"
 
-#define QUICKTYPE_INSERT     0
-#define QUICKTYPE_DEL      1
-#define QUICKTYPE_DOUBLE     2
-#define QUICKTYPE_MISMATCH     3
-#define QUICKTYPE_NOTHING     4
-
-char *quickTypeStrings[] = 
-{
-    "insert",
-    "deletion",
-    "double",
-    "mismatch"
-};
-
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
@@ -414,16 +400,6 @@ for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
         int qEnd = qStart + (tEnd - tStart);
 
         struct quickLiftRegions *hr;
-        AllocVar(hr);
-        //slAddHead(&hrList, hr);
-        hr->chrom = cloneString(bc->chrom);
-        hr->oChrom = cloneString(bc->qName);
-        hr->chromStart = tStart;
-        hr->chromEnd = tEnd;
-        hr->oChromStart = qStart;
-        hr->oChromEnd = qEnd;
-        hr->type = QUICKTYPE_NOTHING;
-        hr->id = bc->name;
 
         if ((previousTEnd != -1) && (previousTEnd == tStart))
             {

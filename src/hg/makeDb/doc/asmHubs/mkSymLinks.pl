@@ -107,7 +107,9 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/ixIxx"`;
   `rm -f "${destDir}/genesGtf"`;
   `rm -f "${destDir}/liftOver"`;
+  `rm -f "${destDir}/quickLift"`;
   `rm -f "${gbdbDir}/liftOver"`;
+  `rm -f "${gbdbDir}/quickLift"`;
   `rm -f "${destDir}/otherAligners"`;
   `rm -fr "${destDir}/html"`;
   `mkdir -p "${destDir}/html"`;
@@ -177,6 +179,10 @@ foreach my $asmId (@orderList) {
    if (-d "${buildDir}/liftOver") {
       `ln -s "${buildDir}/liftOver" "${destDir}/liftOver"`;
       `ln -s "${buildDir}/liftOver" "${gbdbDir}/liftOver"`;
+   }
+   if (-d "${buildDir}/quickLift") {
+      `ln -s "${buildDir}/quickLift" "${destDir}/quickLift"`;
+      `ln -s "${buildDir}/quickLift" "${gbdbDir}/quickLift"`;
    }
   `ln -s "${buildDir}/otherAligners" "${destDir}/otherAligners"` if (-d "${buildDir}/otherAligners");
    if (-d "${buildDir}/html") {

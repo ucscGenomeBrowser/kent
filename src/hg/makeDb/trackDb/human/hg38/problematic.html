@@ -3,10 +3,8 @@
 <p>
 This container track helps call out sections of the genome that often cause problems or
 confusion when working with the genome. The hg19 genome has a track with the same name, but with
-many more subtracks, as the GeT-RM and Genome-in-a-Bottle artifact variants do not exist yet
-for hg38, to our knowledge. If you are missing a track here that you know from
-hg19 and have an idea how to add it hg38, do not hesitate to contact us.</p>
-
+more subtracks, as the GeT-RM and Genome-in-a-Bottle artifact variants do not exist 
+for hg38.
 
 <h3>Problematic Regions</h3>
 <p>
@@ -20,7 +18,7 @@ clusters (IGH, IGL, PAR1/2, TCRA, TCRB, etc) and annotations for the GRC
 <a href="/cgi-bin/hgTracks?db=hg19&chromInfoPage=">fixed sequences, alternate haplotypes, unplaced
 contigs, pseudo-autosomal regions, and mitochondria</a>. These loci can yield alignments with
 low-quality mapping scores and discordant read pairs, especially for short-read sequencing data.
-This data set was manually curated, based on the <a href="/cgi-bin/hgGateway">Genome Browser's
+The data set was manually curated, based on the <a href="/cgi-bin/hgGateway">Genome Browser's
 assembly</a> description, the <a href="/FAQ/FAQdownloads.html">FAQs</a> about assembly, and the
 <a href="/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite">NCBI RefSeq &quot;other&quot; annotations</a>
 track data.
@@ -43,9 +41,20 @@ file to be used as a companion to GRCh38, and the BED file is available from the
 <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GRCh38_major_release_seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_GRC_exclusions.bed"
 target="_blank">GenBank FTP site</a>.
 </li>
+
+<li>
+The <b>panmask</b> (Li Heng, Arxiv 2025) subtrack contains a set of sample-agnostic easy regions
+where short-read variant calling reaches high accuracy. The track can be used to filter
+variant calls for clinical or research human samples. Like the HighRepro track
+in this container (see below), it shows the regions that are easy to sequence,
+not those that are problematic. The panmask regions cover 87.9% of GRCh38, 92.7% of
+coding regions and 96.4% of ClinVar pathogenic variants. The data was derived
+from the HPRC assemblies. We show the 151b-easy panmask set.
+</li>
+
 </ul>
 
-<h3>Highly Reproducible Regions</h3>
+<h3>Highly Reproducible Regions (HighRepro)</h3>
 <p>
 The <b>Highly Reproducible Regions</b> track highlights regions and variants
 from eight samples that can be used to assess variant detection pipelines. The
@@ -183,3 +192,14 @@ sequencing</a>.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34980216" target="_blank">34980216</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8722114/" target="_blank">PMC8722114</a>
 </p>
+
+
+<p>
+Li H.
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/pmid/40799803/" target="_blank">
+Finding easy regions for short-read variant calling from pangenome data</a>.
+<em>ArXiv</em>. 2025 Aug 8;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40799803" target="_blank">40799803</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12340882/" target="_blank">PMC12340882</a>
+</p>
+

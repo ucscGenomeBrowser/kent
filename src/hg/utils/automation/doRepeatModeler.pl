@@ -14,14 +14,14 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatModelerPath = "/hive/data/outside/RepeatModeler-2.0.4";
+my $RepeatModelerPath = "/hive/data/outside/RepeatModeler-2.0.7";
 my $RepeatModeler = "$RepeatModelerPath/RepeatModeler";
 my $BuildDatabase = "$RepeatModelerPath/BuildDatabase";
 # configured to consume one entire ku machine node
 my $threadCount = "-threads 32";
 my $parasolOpts = "-cpu=32 -ram=128g";
 # Option defaults
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 my $workhorse = "hgwdev";
 my $defaultWorkhorse = 'hgwdev';
 
@@ -151,7 +151,7 @@ if [ "\${unmasked2Bit}" -nt "\${asmId}.fa" ]; then
 fi
 
 if [ "\${asmId}.fa" -nt "\${asmId}.nsq" ]; then
-  time (\$bDatabase -name "\${asmId}" -engine ncbi "\${asmId}.fa") > blastDb.log 2>&1
+  time (\$bDatabase -name "\${asmId}" "\${asmId}.fa") > blastDb.log 2>&1
 fi
 
 _EOF_

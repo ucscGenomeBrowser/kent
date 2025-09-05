@@ -30,7 +30,6 @@ char * id;
 #define QUICKTYPE_DEL      1
 #define QUICKTYPE_DOUBLE     2
 #define QUICKTYPE_MISMATCH     3
-#define QUICKTYPE_NOTHING     4
 
 extern char *quickTypeStrings[];
 

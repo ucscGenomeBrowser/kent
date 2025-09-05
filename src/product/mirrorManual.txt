@@ -1949,3 +1949,39 @@ Output is:
 
 Then we run hubCrawl to get the searches to work (most mirrors do not need this). See <https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA> for more details.
 
+# Make the API work in the same way as on the public website
+
+The API is served by the hubApi program, but an Apache rule in httpd.conf allows shorter URLs to be used for API queries.
+The virtual host definition looks as follows on our server:
+
+    <VirtualHost *:443>
+    ServerName api.genome.ucsc.edu
+    ServerAlias api
+    ScriptAlias /cgi-bin/ "/data/apache/cgi-bin/" 
+    DocumentRoot "/data/apache/htdocs" 
+    RewriteEngine on
+    RewriteOptions Inherit
+    # The next four rewrite rules added by Hiram's request 05/01/2019
+    RewriteRule "^/list/(.*)$" "/cgi-bin/hubApi/list/$1" [L,PT]
+    RewriteRule "^/getData/(.*)$" "/cgi-bin/hubApi/getData/$1" [L,PT]
+    RewriteRule "^/findGenome(.*)$" "/cgi-bin/hubApi/findGenome$1" [L,PT]
+    RewriteRule "^/search$" "/cgi-bin/hubApi/search?%{QUERY_STRING}" [L,PT]
+    RewriteRule "^/cgi-bin/hubApi(.*)$" "/cgi-bin/hubApi$1" [L,PT]
+    RewriteRule "^(.*)$" "http://genome.ucsc.edu/goldenPath/help/api.html" [L]
+    AllowEncodedSlashes NoDecode
+    <Directory "/usr/local/apache/htdocs">
+       SSILegacyExprParser on
+       Options Indexes FollowSymLinks MultiViews Includes
+       AllowOverride None
+       Require all granted
+    </Directory>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/x-javascript application/json application/javascript
+    SSLEngine on
+    SSLProtocol all -SSLv2 -SSLv3
+    SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
+    SSLCertificateFile /etc/httpd/conf/ssl.crt/server.crt
+    SSLCertificateKeyFile /etc/httpd/conf/ssl.key/server.key
+    SSLCertificateChainFile /etc/httpd/conf/ssl.crt/chain.crt
+    Header set Access-Control-Allow-Origin "*" 
+    Header set Access-Control-Allow-Headers "Range" 
+    </VirtualHost>

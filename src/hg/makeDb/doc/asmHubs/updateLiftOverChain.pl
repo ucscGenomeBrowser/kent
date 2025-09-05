@@ -176,6 +176,7 @@ printf STDERR "# %d already exist, %d entries to add to table, %d missing path f
 my %checked;	# key is fromDb|toDb value is 1 for been examined
 my $hasRecipCount = 0;
 my $needRecip = 0;
+my $moreAdd = 0;
 
 ### check for reciprocals
 printf STDERR "### checking for reciprocals\n";
@@ -190,8 +191,20 @@ for my $fromTo (sort keys %fromToToday) {
    if (defined($fromToToday{$key})) {
      ++$hasRecipCount;
    } else {
-     ++$needRecip;
-     printf STDERR "# need recip %s %s\n", $to, $from if ($needRecip < 10);
+     if ( defined($validDb{$from}) && defined($validDb{$to}) ) {
+       if (defined($liftOverFiles{$key})) {
+          if (! defined($fromToToday{$key})) {
+            printf STDERR "# to add: %s\n", $key if ($toAddCount < 10);
+            printf "%s\t%s\t%s\t0.1\t0\t0\tY\t1\tN\n", $to, $from, $liftOverFiles{$key};
+            ++$moreAdd;
+          } else {
+            ++$needRecip;
+            printf STDERR "# need recip %s %s\n", $to, $from if ($needRecip < 10);
+          }
+       } else {
+         printf STDERR "# need liftOver file to recip %s %s\n", $to, $from if ($needRecip < 10);
+       }
+     }
    }
    $checked{$key} = 1;
 }

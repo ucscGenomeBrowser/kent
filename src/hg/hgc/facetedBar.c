@@ -132,25 +132,46 @@ cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("i");
 
+char *valFieldName = "val";
+
+boolean singleCell = !trackDbSettingOff(tdb, "singleCellColumnNames");
+
+if (singleCell)
+    {
+    if (sameString(selected->fields[1], "count"))
+	selected->fields[1] = cloneString("cell count");
+    int i;
+    for (i = selected->fieldCount -1; i >= 0; --i)
+	{
+	if (sameString(selected->fields[i], "val"))
+	    {
+	    selected->fields[i] = cloneString("read count");
+	    break;
+	    }
+	}
+    valFieldName = "read count";
+    }
 
 /* Set up context for functions that wrap output fields */
 struct wrapContext context = {
-		              .valIx = fieldedTableFindFieldIx(selected, "val"),
+                              .valIx = fieldedTableFindFieldIx(selected, valFieldName),
 			      .colorIx = fieldedTableFindFieldIx(selected, "color"), 
 			     };
 context.maxVal = fieldedTableMaxInCol(selected, context.valIx);
 
 /* Add wrapper function(s) */
-hashAdd(wrapperHash, "val", wrapVal);
+hashAdd(wrapperHash, valFieldName, wrapVal);
 
 /* Pick which fields to display.  We'll take the first field whatever it is
  * named, and also count, and the "val" field we added and wrapped. */
 char displayList[256];
-safef(displayList, sizeof(displayList), "%s,count,val", selected->fields[0]);
+if (singleCell)
+    safef(displayList, sizeof(displayList), "%s,cell count,read count", selected->fields[0]);
+else
+    safef(displayList, sizeof(displayList), "%s,count,val", selected->fields[0]);
 
 facetedTableWriteHtml(facTab, cart, selected, selectedFf, displayList,
     returnUrl->string, 45, wrapperHash, &context, 7);
-
 
 /* Clean up and go home. */
 printf("</div></form>\n");
