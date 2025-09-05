@@ -159,9 +159,6 @@ if (hubAssemblyHash == NULL)
 struct hashEl *hel = hashLookup(hubAssemblyHash, database);
 
 if (hel == NULL)
-    hel = hashLookup(hubAssemblyUndecoratedHash, database);
-
-if (hel == NULL)
     return NULL;
 
 return (struct trackHubGenome *)hel->val;
