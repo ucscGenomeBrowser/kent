@@ -16,7 +16,7 @@ html dosageSensitivityCollins2022
     visibility pack
     type bigBed 9 + 2
     bigDataUrl /gbdb/$D/bbi/dosageSensitivityCollins2022/pHaploDosageSensitivity.bb
-    mouseOver $name, $ensGene, pHaplo:$pHaplo
+    mouseOver <b>Gene</b>: $name<br> <b>pHaplo</b>: $pHaplo<br> <b>Ensembl ID</b>: $ensGene
     itemRgb on
     showCfg on
     filter.pHaplo 0
@@ -32,7 +32,7 @@ html dosageSensitivityCollins2022
     visibility pack
     type bigBed 9 + 2
     bigDataUrl /gbdb/$D/bbi/dosageSensitivityCollins2022/pTriploDosageSensitivity.bb
-    mouseOver $name, $ensGene, pTriplo:$pTriplo
+    mouseOver <b>Gene</b>: $name<br> <b>pTriplo</b>: $pTriplo<br> <b>Ensembl ID</b>: $ensGene
     itemRgb on
     showCfg on
     filter.pTriplo 0

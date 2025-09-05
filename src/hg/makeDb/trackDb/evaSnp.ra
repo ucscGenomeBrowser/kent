@@ -13,7 +13,7 @@ longLabel Short Genetic Variants from European Variant Archive Release 3
 type bigBed 9 +
 parent evaSnpContainer off
 itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
+mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
@@ -38,7 +38,7 @@ type bigBed 9 +
 parent evaSnpContainer off
 visibility hide
 itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
+mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp4.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
@@ -62,7 +62,7 @@ longLabel Short Genetic Variants from European Variant Archive Release 5
 type bigBed 9 +
 parent evaSnpContainer off
 itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
+mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp5.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
@@ -86,7 +86,7 @@ longLabel Short Genetic Variants from European Variant Archive Release 6
 type bigBed 9 +
 parent evaSnpContainer off
 itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
+mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp6.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
@@ -112,7 +112,7 @@ type bigBed 9 +
 parent evaSnpContainer on
 visibility dense
 itemRgb on
-mouseOver $ref>$alt $ucscClass $aaChange
+mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp7.bb
 url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
 filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
