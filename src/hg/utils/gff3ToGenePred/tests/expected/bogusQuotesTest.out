@@ -1,2 +1,2 @@
-input/bogusQuotes.gff3:2: invalid attribute tag, must be only alphanumeric, dash or underscore: "ID
+input/bogusQuotes.gff3:2: invalid attribute tag, must be only alphanumeric, dash or underscore: "ID (error can be a warning)
 GFF3: 1 parser errors

@@ -90,6 +90,8 @@ if (g3f->lf != NULL)
 if (isWarning)
     fprintf(g3f->errFh, "WARNING: ");
 vfprintf(g3f->errFh, format, args);
+if (canWarn && !isWarning)
+    fprintf(g3f->errFh, " (error can be a warning)");
 fprintf(g3f->errFh, "\n");
 if (!isWarning)
     {
