@@ -31,7 +31,7 @@ csvToTab < ~/github/avian-influenza/metadata/SraRunTable_automated.csv \
     $year = $date;  $year =~ s/^(\d{4}).*/$1/;
     $host = ucfirst(lc($host));
     $host =~ s/ /-/g;
-    $host =~ s/['"'"':;\[\]()]//g;
+    $host =~ s/['"'"':;\[\](),]//g;
     $country =~ s/:.*//;
     if ($sample =~ m@^Influenza A virus (A/.*)/\d{4}\(H\dN\d\)\)?@) {
       $sample = $1;
@@ -66,7 +66,7 @@ csvToTab < ~/github/avian-influenza/metadata/SraRunTable_automated.csv \
     $year = $date;  $year =~ s/^(\d{4}).*/$1/;
     $host = ucfirst(lc($host));
     $host =~ s/ /-/g;
-    $host =~ s/['"'"':;\[\]()]//g;
+    $host =~ s/['"'"':;\[\](),]//g;
     $country =~ s/: ?(.*)//;
     $loc =~ s/: /:/;
     $loc = $1 if ($loc eq "" && $1 ne "");

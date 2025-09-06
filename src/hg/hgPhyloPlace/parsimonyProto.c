@@ -7,6 +7,7 @@
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
+#include "pipeline.h"
 #include "parsimonyProto.h"
 #include "protobuf.h"
 
@@ -212,7 +213,15 @@ struct mutationAnnotatedTree *parseParsimonyProtobuf(char *savedAssignmentsFile)
  * condensedNodes is a hash mapping names of condensed nodes to slName lists of
  * sample IDs that were condensed.  nodeHash is a hash mapping node names to nodes. */
 {
-FILE *f = mustOpen(savedAssignmentsFile, "r");
+FILE *f = NULL;
+if (endsWith(savedAssignmentsFile, ".gz"))
+    {
+    static char *command[] = {"gzip", "-dc", NULL};
+    struct pipeline *pl = pipelineOpen1(command, pipelineRead|pipelineSigpipe, savedAssignmentsFile, NULL, 0);
+    f = pipelineFile(pl);
+    }
+else
+    f = mustOpen(savedAssignmentsFile, "r");
 
 // Hand-compiled from ~angie/github/yatish_strain_phylogenetics/parsimony.proto Aug. 10 2020...
 // message mut {
