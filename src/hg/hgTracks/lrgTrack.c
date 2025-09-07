@@ -62,5 +62,4 @@ tg->canPack = TRUE;
 tg->isBigBed = TRUE;
 tg->loadItems = lrgLoadItems;
 tg->itemName = lrgItemName;
-tg->nextPrevExon = simpleBedNextPrevEdge;
 }
