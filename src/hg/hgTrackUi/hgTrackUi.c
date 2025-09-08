@@ -2996,6 +2996,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
       }
   }
   printf("],");  // close data elements array and separator
+  printf("\"mdid\": \"%s\",", tdb->track);  // metadata id is track name
   printf(metaDataUrlFmt, metaDataId);
   printf(closeJSON);
   /* --- END embedded JSON data --- */
