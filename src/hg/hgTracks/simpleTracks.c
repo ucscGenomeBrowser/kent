@@ -6014,6 +6014,45 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
+/* Functions associated with bigComposite */
+
+void
+bigCompositeLoadItems_no_op(struct track *tg) {}
+
+static void
+bigCompositeMethods(struct track *tg) {
+/* ADS: This is fake; exists to define functions for bigComposite */
+  tg->bedSize = 3;
+  bedMethods(tg);
+  tg->loadItems = bigCompositeLoadItems_no_op;
+}
+
+/* Functions associated with MethBase2 */
+
+static void
+MethBase2HmrMethods(struct track *tg)
+/* HMRs are a BED4 (not using score or direction) that is always dense
+ * because they inherently can't overlap and are bigBed */
+{
+    bedMethods(tg);
+    tg->bedSize = 4;
+    tg->loadItems = loadSimpleBed;
+    tg->limitedVis = tvDense;
+    tg->limitedVisSet = TRUE;
+    tg->isBigBed = TRUE;
+}
+
+static void
+MethBase2BigWigFull(struct track *tg, struct trackDb *tdb, int wordCount,
+		    char *words[])
+/* ADS: Just a bigWig set to always show full; surely a better way to
+ * accomplish that */
+{
+    bigWigMethods(tg, tdb, wordCount, words);
+    tg->limitedVisSet = TRUE;
+    tg->limitedVis = tvFull;
+}
+
 #endif /* GBROWSE */
 
 
@@ -14987,6 +15026,18 @@ else if (sameWord(type, "bedGraph"))
 else if (sameWord(type, "bigWig"))
     {
     bigWigMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "bigComposite"))
+    {
+    bigCompositeMethods(track);
+    }
+else if (sameWord(type, "hmr"))
+    {
+    MethBase2HmrMethods(track);
+    }
+else if (sameWord(type, "levels") || sameWord(type, "reads"))
+    {
+    MethBase2BigWigFull(track, tdb, wordCount, words);
     }
 else
 #endif /* GBROWSE */
