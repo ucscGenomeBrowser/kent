@@ -3627,7 +3627,7 @@ if (!isCustomTrack(tdb->track))
     {
     char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 
-    if (liftDb)
+    if (liftDb && (tdb->html == NULL))
         tdb->html = getTrackHtml(liftDb, tdb->table);
 
     printRelatedTracks(database, trackHash, tdb, cart);
@@ -4932,7 +4932,8 @@ if (liftDb)
         liftDb = CUSTOM_TRASH;
         tdb->table = trackDbSetting(tdb, "dbTableName");
         }
-    conn = hAllocConnTrack(liftDb, tdb);
+    if (!trackHubDatabase(liftDb))
+        conn = hAllocConnTrack(liftDb, tdb);
     }
 else if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);

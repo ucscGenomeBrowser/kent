@@ -227,14 +227,14 @@ if (uEnd < uStart)
 struct dbDb *fromDb = hDbDb(fromGenome);
 if (fromDb == NULL)
     {
-    fromDb = genarkLiftOverDbs(fromGenome);
+    fromDb = genarkLiftOverDb(fromGenome);
     }
 if (fromDb == NULL)
     apiErrAbort(err400, err400Msg, "can not find 'fromGenome=%s' for endpoint '/liftOver", fromGenome);
 struct dbDb *toDb = hDbDb(toGenome);
 if (toDb == NULL)
     {
-    toDb = genarkLiftOverDbs(toGenome);
+    toDb = genarkLiftOverDb(toGenome);
     }
 if (toDb == NULL)
     apiErrAbort(err400, err400Msg, "can not find 'toGenome=%s' for endpoint '/liftOver", toGenome);
@@ -247,7 +247,7 @@ char fromPos[4096];
 safef(fromPos, sizeof(fromPos), "%s:%u-%u", chrom, uStart, uEnd);
 char *nChrom;
 int nStart, nEnd;
-if (!hgParseChromRange(fromDb->name, fromPos, &nChrom, &nStart, &nEnd))
+if (!hgParseChromRange(NULL, fromPos, &nChrom, &nStart, &nEnd))
     apiErrAbort(err400, err400Msg, "position %s is not in chrom:start-end format", fromPos);
 int origSize = nEnd - nStart;
 struct chain *chainList = chainLoadAndTrimIntersecting(fileName, nChrom, nStart, nEnd);
