@@ -49,7 +49,6 @@ cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</TD></TR></TABLE>");
 hPrintf("</FORM><BR>\n");
 webIncludeHelpFile("hgTbUserRegionsHelp", FALSE);
-htmlClose();
 }
 
 void doSetUserRegions(struct sqlConnection *conn)
@@ -57,6 +56,7 @@ void doSetUserRegions(struct sqlConnection *conn)
 {
 htmlOpen("Enter region definition\n");
 doSetUserRegionsAfterOpen(conn);
+htmlClose();
 }
 
 static char *limitText(char *text)
