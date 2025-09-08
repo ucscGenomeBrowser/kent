@@ -2845,6 +2845,171 @@ cgiMakeDropListFull(codeVarName, ancestors, ancestors,
 }
 #endif
 
+static char **
+parseDataTypes(struct trackDb *tdb, int *out_count) {
+  // ADS: almost certainly a function already exists to do this??
+  /* Get entries 'nDataTypes' and 'dataTypes' from the 'settings'
+   * field for the given 'trackDb' entry. 'nDataTypes' is a count, and
+   * 'dataTypes' is a space separated list of words, each indicating a
+   * data type. This function returns the array of data types. The
+   * caller must free the returned array and each member. If
+   * nDataTypes does not match the number of words parsed from
+   * 'dataTypes' it is an error. Return value is NULL on error.
+   */
+  const char *n_datatypes_str =
+    (const char *)hashMustFindVal(tdb->settingsHash, "nDataTypes");
+  const int n_datatypes = atoi(n_datatypes_str);
+  if (n_datatypes <= 0) return NULL;
+
+  const char *datatypes_str =
+    (const char *)hashMustFindVal(tdb->settingsHash, "dataTypes");
+  if (!datatypes_str) return NULL;
+
+  // returned, must be freed
+  char **datatypes = calloc(n_datatypes, sizeof(char *));
+  if (!datatypes) return NULL;
+
+  const char *name_start = datatypes_str;
+  int observed_count = 0;
+
+  for (int i = 0; i < n_datatypes; ++i) {
+    const char *name_end = strchr(name_start, ' ');
+    if (!name_end) name_end = strchr(name_start, '\0');
+
+    const int name_len = name_end - name_start;
+    if (name_len <= 0) break;  // skip empty segments
+
+    datatypes[i] = calloc(name_len + 1, sizeof(char));
+    if (!datatypes[i]) {  // cleanup on failure
+      for (int j = 0; j < i; ++j) free(datatypes[j]);
+      free(datatypes);
+      return NULL;
+    }
+    memcpy(datatypes[i], name_start, name_len);
+    datatypes[i][name_len] = '\0';
+
+    ++observed_count;
+
+    if (*name_end == '\0') break;
+    name_start = name_end + 1;
+  }
+
+  if (n_datatypes != observed_count) {  // cleanup on failure
+    for (int i = 0; i < n_datatypes; ++i) free(datatypes[i]);
+    free(datatypes);
+    return NULL;
+  }
+
+  if (out_count) *out_count = observed_count;
+  return datatypes;
+}
+
+unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
+
+#define COMMA_IF(x) (((x)++) ? "," : "")  // ADS: pattern for JSON comma
+
+static void
+bigCompositeCfgUi(struct trackDb *tdb) {
+  const int token_size = 64;
+  const int query_buff_size = 256;
+
+  const char db[] = "hgcentral";
+  const char profile[] = "central";
+  // html elements for the controls page (from singleCellMerged)
+  const char pageStyle[] =
+    "<style>body.cgi { background: #F0F0F0; }"
+    "table.hgInside { background: #FFFFFF; }</style>";
+  const char placeholderDiv[] = "<div id='metadata-placeholder'></div>\n";
+  const char openJSON[] = "<script id=\"app-data\" type=\"application/json\">{";
+  const char closeJSON[] = "}</script>\n";
+  const char openDataTypesJSON[] = "\"data_types\":[";
+  const char openDataElementsJSON[] = "\"data_elements\":[";
+  const char metadataTableScriptElement[] =
+    "<script type='text/javascript' src='/js/bigComposite.js'></script>\n";
+  const char metaDataUrlFmt[] = "\"metadata_url\": \"/%s_metadata.json\"";
+
+  /* ADS: maybe cart should be used below, but I don't know how from here */
+  // parse the hgsid as id and sessionKey
+  char *hgsid = cgiString("hgsid");
+  char *sessionKey = NULL;
+  const int id = cartDbParseId(hgsid, &sessionKey);
+  if (!sessionKey)
+    errAbort("Failed to parse session key from: %s", hgsid);
+
+  // --- Get data from 'settings' in 'trackDb' entry ---
+  int nDataTypes = 0;
+  char **dataTypes = parseDataTypes(tdb, &nDataTypes);
+  if (!dataTypes)
+    errAbort("Failed to parse data types from bigComposite settings for: %s",
+             tdb->track);
+
+  const char *metaDataId = tdb->track;
+
+  char queryFmt[] =
+    "SELECT contents FROM sessionDb WHERE id='%d' AND sessionKey='%s';";
+  char query[query_buff_size];
+  sqlSafef(query, query_buff_size, queryFmt, id, sessionKey);
+
+  struct sqlConnection *conn = hAllocConnProfile((char *)profile, (char *)db);
+  const char *contents = sqlQuickString(conn, query);
+  struct cgiParsedVars *varList = cgiParsedVarsNew((char *)contents);
+
+  printf(pageStyle);       // css
+  printf(placeholderDiv);  // placholder
+
+  /* --- START embedded JSON data --- */
+  printf(openJSON);
+  printf(openDataTypesJSON);
+  // find selected data types
+  int not_first = 0;
+  int anySelDataType = -1;  // non-neg val will be used as index and flag
+  for (int i = 0; i < nDataTypes; ++i) {
+    char toMatch[token_size];
+    snprintf(toMatch, token_size, "_%s_sel", dataTypes[i]);
+    boolean dataTypeSel = FALSE;
+    for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
+      if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
+        dataTypeSel = TRUE;
+    if (dataTypeSel) {
+      anySelDataType = i;
+      printf("%s\"%s\"", COMMA_IF(not_first), dataTypes[i]);
+    }
+  }
+  printf("],");  // close data types array separator
+  // find selected data sets
+  printf(openDataElementsJSON);
+  not_first = 0;
+  if (anySelDataType >= 0) {
+    char suffix[token_size];
+    snprintf(suffix, token_size, "_%s_sel", dataTypes[anySelDataType]);
+    for (struct cgiVar *le = varList->list; le; le = le->next)
+      if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix)) {
+	const char *nameStart = strchr(le->name, '_');
+	if (nameStart) {
+	  ++nameStart;  // move past '_'
+	  const char *nameEnd = strchr(nameStart, '_');
+	  if (nameEnd && nameEnd > nameStart) {
+	    const int nameLen = nameEnd - nameStart;
+	    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+	  }
+	}
+      }
+  }
+  printf("],");  // close data elements array and separator
+  printf(metaDataUrlFmt, metaDataId);
+  printf(closeJSON);
+  /* --- END embedded JSON data --- */
+
+  printf(metadataTableScriptElement);
+
+  // cleanup
+  for (int i = 0; i < nDataTypes; ++i)
+    free(dataTypes[i]);
+  free(dataTypes);
+  cgiParsedVarsFreeList(&varList);
+  hFreeConn(&conn);
+}
+
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Draw track specific parts of UI. */
 {
@@ -2866,6 +3031,10 @@ boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 // 4) special cases falling through the cracks but based upon type
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb, tdbList);
+else if (sameString(tdb->type, "bigComposite"))
+    // ADS: switching on 'type' here, instead of track name as for all
+    // other cases (except hic and ld2)
+    bigCompositeCfgUi(tdb);
 else if (sameString(track, "stsMap"))
     stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -3048,7 +3217,10 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     // Composites *might* have had their top level controls just printed,
     // but almost certainly have additional controls
     boolean isLogo = (trackDbSetting(tdb, "logo") != NULL);
-    if (tdbIsComposite(tdb) && !isLogo)  // for the moment generalizing this to include other containers...
+    // ADS: added 'bigComposite' below to avoid generating the
+    // hCompositeUi controls for bigComposite. Better solution would
+    // be define bigComposite to avoid using 'compositeTrack on'
+    if (!sameString(tdb->type, "bigComposite") && tdbIsComposite(tdb) && !isLogo) // for the moment generalizing this to include other containers...
         hCompositeUi(db, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
