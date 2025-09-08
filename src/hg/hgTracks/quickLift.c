@@ -8,6 +8,7 @@
 #include "trackHub.h"
 #include "quickLift.h"
 #include "chainCart.h"
+#include "bigChain.h"
 
 static Color *highlightColors;
 //static unsigned lengthLimit;
@@ -55,9 +56,46 @@ int half = (x2 - x1) / 2;
 
 gfxPolyAddPoint(poly, x1, y);
 gfxPolyAddPoint(poly, x1+half, y+2*half);
-gfxPolyAddPoint(poly, x2, y);
-hvGfxDrawPoly(hvg, poly, color, TRUE);
-gfxPolyFree(&poly);
+    gfxPolyAddPoint(poly, x2, y);
+    hvGfxDrawPoly(hvg, poly, color, TRUE);
+    gfxPolyFree(&poly);
+    }
+
+static int snakePalette2[] =
+{
+0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
+};
+
+static void drawDenseChain(struct track *tg, struct hvGfx *hvg, char *fileName, int start, int end, int xOff, int yOff, int width, MgFont *font, Color color)
+// draw a dense version of a chain that users can use to click through to the other species
+{
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, start, end, 0, lm);
+char *bedRow[12];
+char startBuf[16], endBuf[16];
+double scale = scaleForWindow(width, start, end);
+
+unsigned colorIndex = 0;
+for(bb=bbList; bb; bb = bb->next, colorIndex++)
+    {
+    colorIndex %= sizeof(snakePalette2) / sizeof(int);
+
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct bigChain *chain = bigChainLoad(bedRow);
+    if (chain->chromStart < start)
+        chain->chromStart = start;
+    if (chain->chromEnd > end)
+        chain->chromEnd = end;
+    int x1 = xOff + scale * (chain->chromStart - start);
+    int w =  scale * (chain->chromEnd - chain->chromStart);
+    unsigned colorHex = snakePalette2[colorIndex];
+    unsigned colorVal = MAKECOLOR_32(((colorHex >> 16) & 0xff),((colorHex >> 8) & 0xff),((colorHex >> 0) & 0xff));
+    hvGfxBox(hvg, x1, yOff, w, tg->height, colorVal);
+    char otherChrom[1024];
+    safef(otherChrom, sizeof otherChrom, "%s:%d-%d", chain->qName, chain->qStart, chain->qEnd);
+    mapBoxHc(hvg, chain->chromStart, chain->chromEnd, x1, yOff, w,  tg->height, tg->track,  chain->name, otherChrom);
+    }
 }
 
 void maybeDrawQuickLiftLines( struct track *tg, int seqStart, int seqEnd,
@@ -85,8 +123,11 @@ if (!drawTriangle && isCenterLabelIncluded(tg))
     yOff -= fontHeight;
     }
 
-//if (drawTriangle && (hr == NULL))  // if there are no differences make a map for the whole track
-    //mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width,  tg->height, tg->track,  hr->id, "identical");
+if (drawTriangle && (hr == NULL))  
+    {
+    drawDenseChain(tg, hvg, quickLiftFile, seqStart, seqEnd, xOff, yOff, width, font, color);
+    return;
+    }
 
 int pos = xOff;
 char * lastId = 0;

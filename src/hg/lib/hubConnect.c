@@ -354,8 +354,10 @@ for (name = nameList; name != NULL; name = name->next)
         sqlFreeResult(&sr);
 
         // don't load quickLift hubs that aren't for us
-        //if ((db == NULL) || sameOk(toDb, hubConnectSkipHubPrefix(db)))
-        hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
+        if ((db == NULL) || sameOk(toDb, hubConnectSkipHubPrefix(db)))
+            hub = hubConnectStatusForIdExt(conn, id, replaceDb, toDb, quickLiftChain);
+        else
+            removeQuickListReference(cart, id, toDb);
         }
     if (hub != NULL)
 	{
@@ -516,9 +518,19 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
 }
 
 // a string to define trackDb for quickLift chain
-static char *chainTdbString = 
-    "shortLabel chain to %s\n"
-    "longLabel chain to %s\n"
+char *chainTdbString = 
+    "shortLabel %s Chain\n"
+    "longLabel %s Chain\n"
+    "type bigChain %s\n"
+    "bigDataUrl %s\n"
+    "quickLiftUrl %s\n"
+    "quickLiftDb %s\n"
+    "otherTwoBitUrl %s\n";
+
+// a string to define trackDb for quickLift chain
+char *controlTdbString = 
+    "shortLabel Warnings %s\n"
+    "longLabel Warnings %s\n"
     "type bigQuickLiftChain %s\n"
     "chainType reverse\n"
     "bigDataUrl %s\n"
@@ -538,7 +550,7 @@ safef(buffer, sizeof buffer, "hub_%d_quickLiftChain", hub->id);
 tdb->table = tdb->track = cloneString(buffer);
 char otherTwoBitFile[4096];
 hNibForChrom(hubGenome->quickLiftDb, NULL, otherTwoBitFile);
-safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb, otherTwoBitFile);
+safef(buffer, sizeof buffer, controlTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb, otherTwoBitFile);
 tdb->settings = cloneString(buffer);
 tdb->settingsHash = trackDbSettingsFromString(tdb, buffer);
 trackDbFieldsFromSettings(tdb);
