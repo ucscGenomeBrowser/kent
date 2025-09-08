@@ -120,7 +120,8 @@ UTILS_APPLIST = \
 	sqlToXml \
 	trfBig \
 	xmlCat \
-	xmlToSql
+	xmlToSql \
+	bigCompositeUpdate
 
 # List of directories to build at UCSC
 UTIL_DIRS = \
@@ -223,7 +224,8 @@ UTIL_DIRS = \
 	utils \
 	uniqSize \
 	updateStsInfo \
-	visiGene/knownToVisiGene
+	visiGene/knownToVisiGene \
+	bigCompositeUpdate
 
 APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
 
