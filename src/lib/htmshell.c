@@ -1042,6 +1042,11 @@ dyStringAppend(policy, " cdn.datatables.net/2.2.2/js/dataTables.min.js");
 dyStringAppend(policy, " cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.min.js");
 dyStringAppend(policy, " cdn.datatables.net/select/3.0.0/js/dataTables.select.min.js");
 
+// for bigComposite.js: best compatible combination
+// jquery 3.5.1 (already above), dataTables 1.13.6, dataTables.select 1.7.0
+dyStringAppend(policy, " cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js");
+dyStringAppend(policy, " cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js");
+
 // shephered js for tutorial overlay
 dyStringAppend(policy, " cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js");
 dyStringAppend(policy, " www.google.com/recaptcha/api.js");
