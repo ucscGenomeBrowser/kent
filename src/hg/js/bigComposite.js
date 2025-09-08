@@ -35,11 +35,11 @@ $(function() {
     const db = paramsFromUrl.get("db");
     const hgsid = paramsFromUrl.get("hgsid");
 
-    function updateVisibilities(sessionDbContents, submitBtnEvent) {
+    function updateVisibilities(sessionDbUriForUpdate, submitBtnEvent) {
         fetch("/cgi-bin/bigCompositeUpdate", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `hgsid=${hgsid}&db=${db}&${sessionDbContents}`,
+            body: `hgsid=${hgsid}&db=${db}&${sessionDbUriForUpdate}`,
         }).then(() => {
             const dtLength =
                   submitBtnEvent.target.form.querySelector("select[name$='_length']");
@@ -312,19 +312,18 @@ $(function() {
                     selectedDataTypes.push(cb.value);
                 }
             });
-            const sessionDbUri = new URLSearchParams();
-            sessionDbUri.set("mdid", mdid);
-            selectedData.forEach(obj =>
-                sessionDbUri.append(`${mdid}_de`, obj.accession));
-            selectedDataTypes.forEach(
-                dat => sessionDbUri.append(`${mdid}_dt`, dat));
-            updateVisibilities(sessionDbUri, submitBtnEvent);
+            const sessionDbUriForUpdate = new URLSearchParams({ mdid: mdid });
+            selectedData.forEach(obj =>  // 'de' for data element
+                sessionDbUriForUpdate.append(`${mdid}_de`, obj.accession));
+            selectedDataTypes.forEach(dat =>  // 'dt' for data type
+                sessionDbUriForUpdate.append(`${mdid}_dt`, dat));
+            updateVisibilities(sessionDbUriForUpdate, submitBtnEvent);
         });
     }  // end initTableAndFilters
 
     function loadDataAndInit() {
-        const CACHE_KEY = "MethBase2MetaData";
-        const CACHE_TIMESTAMP_KEY = "MethBase2MetaDataTimestamp";
+        const CACHE_KEY = pageEmbeddedData.mdid;
+        const CACHE_TIMESTAMP_KEY = `${CACHE_KEY}_time_stamp`;
         const CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
 
         const now = Date.now();
