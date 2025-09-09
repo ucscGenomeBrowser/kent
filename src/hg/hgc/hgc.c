@@ -3607,11 +3607,13 @@ static void printOrigAssembly(struct trackDb *tdb)
 trackDbPrintOrigAssembly(tdb, database);
 }
 
-static char *getHtmlFromSelfOrParent(struct trackDb *tdb)
+static char *getHtmlFromSelfOrParent(struct trackDb *tdb, char *liftDb)
 /* Get html from self or from parent if not in self. */
 {
 for (;tdb != NULL; tdb = tdb->parent)
     {
+    if (liftDb && (tdb->html == NULL))
+        tdb->html = getTrackHtml(liftDb, tdb->table);
     if (tdb->html != NULL && tdb->html[0] != 0)
         return tdb->html;
     }
@@ -3625,11 +3627,6 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
-    char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-
-    if (liftDb)
-        tdb->html = getTrackHtml(liftDb, tdb->table);
-
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);
     printTrackUiLink(tdb);
@@ -3638,7 +3635,8 @@ if (!isCustomTrack(tdb->track))
     printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
-char *html = getHtmlFromSelfOrParent(tdb);
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+char *html = getHtmlFromSelfOrParent(tdb, liftDb);
 if (html != NULL && html[0] != 0)
     {
     htmlHorizontalLine();
@@ -4932,7 +4930,8 @@ if (liftDb)
         liftDb = CUSTOM_TRASH;
         tdb->table = trackDbSetting(tdb, "dbTableName");
         }
-    conn = hAllocConnTrack(liftDb, tdb);
+    if (!trackHubDatabase(liftDb))
+        conn = hAllocConnTrack(liftDb, tdb);
     }
 else if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);

@@ -10098,23 +10098,33 @@ hFreeConn(&conn);
 char *getTrackHtml(char *db, char *trackName)
 /* Grab HTML from trackDb in native database for quickLift tracks. */
 {
-char query[4096];
+char *html = NULL;
 
-sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
-struct trackDb *loadTrackDb(char *db, char *where);
-struct trackDb *tdb = loadTrackDb(db, query);
-
-char *html = tdb->html;
-if (isEmpty(tdb->html))
+if (trackHubDatabase(db))
     {
-    char *parent = trackDbSetting(tdb, "parent");
-    char *words[10];
+    // somehow get to the HTML that's not in the quickLift hub, but in the original hub
+    }
+else
+    {
+    char query[4096];
 
-    chopLine(parent,words);
-    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
+    sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(trackName));
+    struct trackDb *loadTrackDb(char *db, char *where);
     struct trackDb *tdb = loadTrackDb(db, query);
 
     html = tdb->html;
+    //char *html = tdb->html;
+    if (isEmpty(tdb->html))
+        {
+        char *parent = trackDbSetting(tdb, "parent");
+        char *words[10];
+
+        chopLine(parent,words);
+        sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
+        struct trackDb *tdb = loadTrackDb(db, query);
+
+        html = tdb->html;
+        }
     }
 return html;
 }

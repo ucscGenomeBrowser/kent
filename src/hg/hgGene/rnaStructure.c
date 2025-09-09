@@ -140,12 +140,15 @@ for (side = 0; side < ArraySize(names); ++side)
             {
             /* Print link to png image. */
             webPrintLinkCellStart();
-            hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
+            hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\" class=\"toc\" TARGET=_blank>",
                 geneCgi, cartSidUrlString(cart), 
                 hggType, tableName,
                 hggGene, geneName,
                 hggMrnaFoldRegion, table,
                 hggMrnaFoldPs, psName,
+                hggChrom, curGeneChrom,
+                hggStart, curGeneStart,
+                hggEnd, curGeneEnd,
                 hggDoRnaFoldDisplay, "picture");
             hPrintf(" Picture ");
             hPrintf("</A>");
@@ -161,11 +164,14 @@ for (side = 0; side < ArraySize(names); ++side)
 
 	/* Print link to text. */
 	webPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
+	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\" class=\"toc\" TARGET=_blank>",
 	    geneCgi, cartSidUrlString(cart), 
             hggType, tableName,
             hggGene, geneName,
 	    hggMrnaFoldRegion, table,
+            hggChrom, curGeneChrom,
+            hggStart, curGeneStart,
+            hggEnd, curGeneEnd,
 	    hggDoRnaFoldDisplay, "text");
 	hPrintf(" Text ");
 	hPrintf("</A>");

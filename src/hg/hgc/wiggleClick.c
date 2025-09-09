@@ -275,6 +275,7 @@ if (isNotEmpty(maxWinToQuery))
 
 if ((maxWinToQuery == NULL) || (maxWTQ > winEnd-winStart))
     {
+    // this needs to deal with quickLift
     bbi = bigWigFileOpenAlias(fileName, chromAliasFindAliases);
     bbList = bigWigIntervalQuery(bbi, chrom, winStart, winEnd, lm);
     }
