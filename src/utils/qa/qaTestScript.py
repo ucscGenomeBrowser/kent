@@ -497,7 +497,7 @@ driver.find_element(By.ID, "positionInput").clear()
 driver.find_element(By.ID, "positionInput").send_keys("HOPX")
 driver.find_element(By.ID, "goButton").click()
 time.sleep(3)
-driver.find_element(By.LINK_TEXT, "XM_008267819.2").click()
+driver.find_element(By.LINK_TEXT, "HOPX").click()
 
 # Tests Assembly Hubs at GitHub
 cartReset()
