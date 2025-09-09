@@ -2,7 +2,7 @@ track wgEncodeGencodeV49
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE V49
-longLabel All GENCODE annotations from V49 (Ensembl 114)
+longLabel All GENCODE annotations from V49 (Ensembl 115)
 group genes
 dragAndDrop subTracks
 priority 34.156
@@ -60,7 +60,7 @@ maxTransEnabled on
         subTrack wgEncodeGencodeV49ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from GENCODE Version 49 (Ensembl 114)
+        longLabel Basic Gene Annotation Set from GENCODE Version 49 (Ensembl 115)
         type genePred
         priority 1
 
@@ -69,7 +69,7 @@ maxTransEnabled on
         subTrack wgEncodeGencodeV49ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from GENCODE Version 49 (Ensembl 114)
+        longLabel Comprehensive Gene Annotation Set from GENCODE Version 49 (Ensembl 115)
         type genePred
         priority 2
 
@@ -78,7 +78,7 @@ maxTransEnabled on
         subTrack wgEncodeGencodeV49ViewGenes on
         subGroups view=aGenes name=Pseudogenes
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from GENCODE Version 49 (Ensembl 114)
+        longLabel Pseudogene Annotation Set from GENCODE Version 49 (Ensembl 115)
         type genePred
         color 255,51,255
         priority 3
@@ -96,7 +96,7 @@ maxTransEnabled on
         subTrack wgEncodeGencodeV49ViewPolya off
         subGroups view=bPolya name=zPolyA
         shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from GENCODE Version 49 (Ensembl 114)
+        longLabel PolyA Transcript Annotation Set from GENCODE Version 49 (Ensembl 115)
         type genePred
         color 0,0,0
         priority 5
