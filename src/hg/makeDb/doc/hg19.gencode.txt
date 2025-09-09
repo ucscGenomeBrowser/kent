@@ -1416,7 +1416,8 @@ to data/release_46lift37/ and rerun the make
     # commit all
     jkmake DBS=hg19 alpha
 #########################################################################
-: import of UCSC GENCODE group processing of GENCODE V49lift38 pre-release for GENCODE Versions (markd)
+2025-08-29: import of UCSC GENCODE group processing of GENCODE V49lift38 pre-release for GENCODE Versions (markd)
+2025-09-08: import of UCSC GENCODE group processing of GENCODE V49lift38 release for GENCODE Versions (markd)
    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release type and versions
 
    # pre-release shell variables 
@@ -1428,7 +1429,7 @@ to data/release_46lift37/ and rerun the make
        ver=49lift37
        ensver=115
        pre=""
-       ensdate='August 2025' 
+       ensdate='Sept 2025' 
     
     # download, build and load tables
     mkdir -p /hive/data/genomes/hg19/bed/gencodeV${ver}/hgcImport${pre}
