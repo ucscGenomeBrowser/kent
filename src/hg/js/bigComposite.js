@@ -89,8 +89,7 @@ $(function() {
         dataTypes.forEach(type => {
             const label = document.createElement("label");
             label.innerHTML = `
-                <input type="checkbox" class="group1" value="${type}">
-                ${type}
+                <input type="checkbox" class="group1" value="${type}">${type}
             `;
             selector.appendChild(label);
         });
@@ -216,26 +215,17 @@ $(function() {
                 return;
             }
 
-            const groupDiv = document.createElement("div");
-            groupDiv.dataset.colidx = colIdx;  // store the column index here
-
-            // Add the heading and the filtered checkboxes
-            // (only top MAX_CHECKBOX_ELEMENTS)
-            const heading = document.createElement("strong");
-            heading.textContent = toTitleCase(key);
-            groupDiv.appendChild(heading);
-
             const sortedPossibleValues = Array.from(possibleValues[key].entries());
             sortedPossibleValues.sort((a, b) => b[1] - a[1]);  // neg: less-than
 
-            // Keep only the top MAX_CHECKBOX_ELEMENTS most frequent entries
+            // Keep only the top maxCheckboxes most frequent entries
             let topToShow = sortedPossibleValues
                 .filter(([val, _]) => val.trim().toUpperCase() !== "NA")
-                .slice(0, settings.MAX_CHECKBOX_ELEMENTS);
+                .slice(0, settings.maxCheckboxes);
 
             // If there is an "other" entry, put it at the end
             let otherKey = null;
-            let otherValue = null;  // might be title case or not
+            let otherValue = null;  // might differ by case; e.g. title case
             topToShow = topToShow.filter(([val, value]) => {
                 if (val.toLowerCase() === "other") {
                     otherKey = val;
@@ -248,13 +238,27 @@ $(function() {
                 topToShow.push([otherKey, otherValue]);
             }
 
+            if (topToShow.length < 2) {  // no point if just one entry
+                settings.excludedFromCheckboxes.push(key);
+                return;
+            }
+
+            const groupDiv = document.createElement("div");
+            groupDiv.dataset.colidx = colIdx;  // store the column index here
+
+            // Add the heading and the filtered checkboxes (only top
+            // maxCheckboxes)
+            const heading = document.createElement("strong");
+            heading.textContent = toTitleCase(key);
+            groupDiv.appendChild(heading);
+
             topToShow.forEach(([val, count]) => {
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.value = escapeRegex(val);
                 label.appendChild(checkbox);
-                if (key === settings.color_attribute) {
+                if (key === settings.colorAttribute) {
                     const colorBox = document.createElement("span");
                     colorBox.classList.add("color-box");
                     colorBox.style.backgroundColor = colorMap[val];  // color
