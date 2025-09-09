@@ -2910,6 +2910,29 @@ unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
 
 static void
 bigCompositeCfgUi(struct trackDb *tdb) {
+  /* ADS: How bigComposite differs from other track types
+   * - track name is bigComposite (!)
+   * - Required fields in the 'settings' longblob for the trackDb entry:
+   * - 'metaDataUrl': a non-blocked URL (can be server-local) with
+   *   metadata to generate the table.
+   * - 'nDataTypes': positive integer counting the data types for each sample.
+   * - 'dataTypes': the names of the data types, ordered and space separated.
+   *
+   * This function will embed sessionDb.settings/cart data in the
+   * generated HTML. Instead of embedding all relevant tracks, it
+   * parses the tracks named like:
+   *
+   *    bigCompositeName_dataElementName_dataTypeName_sel=1
+   *
+   * And only sends unique dataElement and dataTypes, which might be
+   * much smaller. The bigComposite assumes that selection of
+   * dataTypes applies to all dataElements, but within the cart, these
+   * are separate tracks, and each must be present to be drawn. But
+   * the JS doesn't need the product {dataType} x {dataElement}, just
+   * the union {datType} U {dataElement}. These are put in two arrays
+   * in a JSON section of the HTML.
+   */
+
   const int token_size = 64;
   const int query_buff_size = 256;
 
@@ -2986,15 +3009,15 @@ bigCompositeCfgUi(struct trackDb *tdb) {
     snprintf(suffix, token_size, "_%s_sel", dataTypes[anySelDataType]);
     for (struct cgiVar *le = varList->list; le; le = le->next)
       if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix)) {
-	const char *nameStart = strchr(le->name, '_');
-	if (nameStart) {
-	  ++nameStart;  // move past '_'
-	  const char *nameEnd = strchr(nameStart, '_');
-	  if (nameEnd && nameEnd > nameStart) {
-	    const int nameLen = nameEnd - nameStart;
-	    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-	  }
-	}
+        const char *nameStart = strchr(le->name, '_');
+        if (nameStart) {
+          ++nameStart;  // move past '_'
+          const char *nameEnd = strchr(nameStart, '_');
+          if (nameEnd && nameEnd > nameStart) {
+            const int nameLen = nameEnd - nameStart;
+            printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+          }
+        }
       }
   }
   printf("],");  // close data elements array and separator
