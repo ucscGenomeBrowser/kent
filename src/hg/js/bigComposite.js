@@ -3,6 +3,7 @@ $(function() {
     /* ADS: Uncomment below to force confirm on unload/reload */
     // window.addEventListener("beforeunload", function (e) {
     //     e.preventDefault(); e.returnValue = ""; });
+    const DEFAULT_MAX_CHECKBOXES = 10; // ADS: without default, can get crazy
 
     // ADS: need "matching" versions for the libraries/plugins
     const JQUERY_URL = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
@@ -80,6 +81,7 @@ $(function() {
 
         // identifier for database (e.g., mb2 for MethBase2) and data types
         const { mdid, dataTypes } = settings;
+        settings.maxCheckboxes ??= DEFAULT_MAX_CHECKBOXES;
 
         // Make data type selector checkboxes
         const selector = document.getElementById("dataTypeSelector");
@@ -258,10 +260,13 @@ $(function() {
                 checkbox.type = "checkbox";
                 checkbox.value = escapeRegex(val);
                 label.appendChild(checkbox);
-                if (key === settings.colorAttribute) {
+                if ("colorAttribute" in (settings ?? {}) &&
+                    key === settings?.colorAttribute) {
                     const colorBox = document.createElement("span");
                     colorBox.classList.add("color-box");
-                    colorBox.style.backgroundColor = colorMap[val];  // color
+                    if (colorMap && val in colorMap) {
+                        colorBox.style.backgroundColor = colorMap[val];  // color
+                    }
                     label.appendChild(colorBox);
                 }
                 label.appendChild(document.createTextNode(`${val} (${count})`));
