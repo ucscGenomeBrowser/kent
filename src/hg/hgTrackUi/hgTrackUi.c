@@ -2926,7 +2926,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   const char openDataElementsJSON[] = "\"data_elements\":[";
   const char metadataTableScriptElement[] =
     "<script type='text/javascript' src='/js/bigComposite.js'></script>\n";
-  const char metaDataUrlFmt[] = "\"metadata_url\": \"/%s_metadata.json\"";
+  const char metaDataUrlFmt[] = "\"metadata_url\": \"%s\"";
 
   /* ADS: maybe cart should be used below, but I don't know how from here */
   // parse the hgsid as id and sessionKey
@@ -2937,6 +2937,8 @@ bigCompositeCfgUi(struct trackDb *tdb) {
     errAbort("Failed to parse session key from: %s", hgsid);
 
   // --- Get data from 'settings' in 'trackDb' entry ---
+  const char *metaDataUrl =
+    (const char *)hashMustFindVal(tdb->settingsHash, "metaDataUrl");
   int nDataTypes = 0;
   char **dataTypes = parseDataTypes(tdb, &nDataTypes);
   if (!dataTypes)
@@ -2997,7 +2999,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   }
   printf("],");  // close data elements array and separator
   printf("\"mdid\": \"%s\",", tdb->track);  // metadata id is track name
-  printf(metaDataUrlFmt, metaDataId);
+  printf(metaDataUrlFmt, metaDataUrl);
   printf(closeJSON);
   /* --- END embedded JSON data --- */
 
