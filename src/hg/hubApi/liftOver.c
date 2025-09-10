@@ -72,7 +72,7 @@ long long itemCount = 0;
 char *filter = cgiOptionalString(argFilter);
 
 struct sqlConnection *conn = hConnectCentral();
-char *tableName = cloneString("liftOverChain");
+char *tableName = cloneString(liftOverChainTable());
 char query[1024];
 sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s", tableName);
 long long totalRows = sqlQuickLongLong(conn, query);

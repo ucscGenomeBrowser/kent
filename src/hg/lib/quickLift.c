@@ -89,6 +89,10 @@ if (maxGapBefore > maxGapAfter)
 else
     maxGapBefore = maxGapAfter;
 
+// sometimes the edges are way too large.  Needs research
+//if (maxGapBefore > 1000000)
+    //maxGapBefore = maxGapAfter = 1000000;
+
 int newStart = start - maxGapBefore * 2;
 if (newStart < 0)
     newStart = 0;
@@ -449,4 +453,14 @@ slSort(&hrList,  hrCmp);
 hashAdd(highLightsHash, quickLiftFile, hrList);
 
 return hrList;
+}
+
+char *quickLiftChainTable()
+/* Return the name of the quickLiftChain table. */
+{
+static char *quickLiftChainTable = NULL;
+if (quickLiftChainTable == NULL)
+    quickLiftChainTable = cfgOptionEnvDefault("QUICKLIFTCHAINNAME",
+	    quickLiftChainTableConfVariable, defaultQuickLiftChainTableName);
+return quickLiftChainTable;
 }
