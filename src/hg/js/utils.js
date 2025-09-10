@@ -4301,20 +4301,20 @@ function convertTitleTagsToMouseovers() {
         hideMouseoverText(mouseoverContainer);
     });
 
+    function hideTooltips() {
+        hideMouseoverText(mouseoverContainer);
+    }
+
     /* make the mouseovers go away if we are in an input */
     const inps = document.getElementsByTagName("input");
     for (let inp of inps) {
         if (!(inp.type == "hidden" || inp.type == "HIDDEN")) {
             if (inp.type !== "submit") {
-                inp.addEventListener("focus", (ev) => {
-                    hideMouseoverText(mouseoverContainer);
-                });
+                inp.addEventListener("focus", hideTooltips);
             } else {
                 // the buttons are inputs that don't blur right away (or ever? I can't tell), so
                 // be sure to restore the tooltips when they are clicked
-                inp.addEventListener("click", (ev) => {
-                    hideMouseoverText(mouseoverContainer);
-                });
+                inp.addEventListener("click", hideTooltips);
             }
         }
     }
@@ -4324,13 +4324,9 @@ function convertTitleTagsToMouseovers() {
      * that click separately */
     const sels = document.getElementsByTagName("select");
     for (let sel of sels) {
-        sel.addEventListener("focus", (ev) => {
-            hideMouseoverText(mouseoverContainer);
-        });
+        sel.addEventListener("focus", hideTooltips);
         for (let opt of sel.options) {
-            opt.addEventListener("click", (evt) => {
-                hideMouseoverText(mouseoverContainer);
-            });
+            opt.addEventListener("click", hideTooltips);
         }
     }
 
