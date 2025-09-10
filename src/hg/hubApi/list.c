@@ -722,7 +722,7 @@ errCatchFree(&errCatch);
 return totalBytes;
 }
 
-static void filesJsonOutput(FILE *f, char *genome, boolean textOut)
+static void filesJsonOutput(FILE *f, char *genome, char *fileType, boolean textOut)
 /* for given genome, output the URLs to files available on hgdownload
  *   can be a UCSC database genome, or a GenArk hub genome name
  */
@@ -740,7 +740,8 @@ if ( isGenArk(genome) )
 /* if UCSC genome database, it has already been proven to exist */
 
 struct jsonWrite *jw = NULL;
-if (textOut)
+boolean doContext = (cgiInt(argSkipContext)==0);
+if (textOut && doContext)
     {
     char outString[1024];
     safef(outString, sizeof(outString), "# genome: %s", genome);
@@ -751,14 +752,31 @@ if (textOut)
 else
     {
     jw = apiStartOutput();
-    jsonWriteString(jw, "genome", genome);
-    jsonWriteString(jw, "rsyncHost", "rsync://" DOWNLOAD_HOST);
-
+    if (doContext)
+        {
+        jsonWriteString(jw, "genome", genome);
+        jsonWriteString(jw, "rsyncHost", "rsync://" DOWNLOAD_HOST);
+        }
     jsonWriteListStart(jw, "urlList");
     }
 
 long long totalBytes = 0;
-if (genArkHub)
+if (fileType)
+    {
+    char outString[1024];
+    if (genArkHub)
+        {
+        safef(outString, sizeof(outString), "https://%s/%s/%s/%s.2bit", DOWNLOAD_HOST, genArkUrl, genome, genome);
+        textLineOut(outString);
+        }
+    else
+        {
+        safef(outString, sizeof(outString), "https://%s/gbdb/%s/%s.2bit", DOWNLOAD_HOST, genome, genome);
+        textLineOut(outString);
+        }
+            
+    }
+else if (genArkHub)
     {
     totalBytes = rsyncList(jw, genome, genArkUrl, &itemsReturned, textOut);
     }
@@ -774,33 +792,42 @@ else
 if (textOut)
     {
     char outString[1024];
-    safef(outString, sizeof(outString), "# totalBytes: %lld", totalBytes);
-    textLineOut(outString);
-    if (itemsReturned > maxItemsOutput)
+    if (doContext)
+        {
+        safef(outString, sizeof(outString), "# totalBytes: %lld", totalBytes);
+        textLineOut(outString);
+        }
+    if ((itemsReturned > maxItemsOutput) && doContext)
 	{
         safef(outString, sizeof(outString), "# maxItemLimit: TRUE");
         textLineOut(outString);
-   safef(outString, sizeof(outString), "# itemsReturned: %d", maxItemsOutput);
+        safef(outString, sizeof(outString), "# itemsReturned: %d", maxItemsOutput);
         textLineOut(outString);
 	}
     else
 	{
-   safef(outString, sizeof(outString), "# itemsReturned: %lld", itemsReturned);
-        textLineOut(outString);
+        if (doContext)
+            {
+       safef(outString, sizeof(outString), "# itemsReturned: %lld", itemsReturned);
+            textLineOut(outString);
+            }
 	}
     textFinishOutput();
     }
 else
     {
     jsonWriteListEnd(jw);
-    jsonWriteNumber(jw, "totalBytes", totalBytes);
-    if (itemsReturned > maxItemsOutput)
-	{
-	jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
-	jsonWriteNumber(jw, "itemsReturned", maxItemsOutput);
-	}
-    else
-	jsonWriteNumber(jw, "itemsReturned", itemsReturned);
+    if (doContext)
+        {
+        jsonWriteNumber(jw, "totalBytes", totalBytes);
+        if (itemsReturned > maxItemsOutput)
+            {
+            jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
+            jsonWriteNumber(jw, "itemsReturned", maxItemsOutput);
+            }
+        else
+            jsonWriteNumber(jw, "itemsReturned", itemsReturned);
+        }
     apiFinishOutput(0, NULL, jw);
     }
 }
@@ -1247,10 +1274,11 @@ else if (sameWord("files", words[1]))
     boolean textOut = FALSE;
     char *extraArgs = verifyLegalArgs(argListFiles);
     if (extraArgs)
-	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/files '%s', only 'genome' and 'format' is allowed.", extraArgs);
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/files '%s', only 'genome', 'fileType', 'skipContext' and 'format' are allowed.", extraArgs);
 
     char *genome = cgiOptionalString("genome");
     char *format = cgiOptionalString("format");
+    char *fileType = cgiOptionalString("fileType");
     if (isEmpty(genome))
         apiErrAbort(err400, err400Msg, "must supply a genome name for endpoint '/list/files' (a database name or GenArk genome name, e.g.: 'hg38' or 'GCA_021951015.1'");
     if (isNotEmpty(format))
@@ -1260,7 +1288,7 @@ else if (sameWord("files", words[1]))
         else
 	    apiErrAbort(err400, err400Msg, "only format=text allowed for endpoint '/list/files', found: format=%s", format);
 	}
-    filesJsonOutput(stdout, genome, textOut);
+    filesJsonOutput(stdout, genome, fileType, textOut);
     }
 else
     apiErrAbort(err400, err400Msg, "do not recognize endpoint function: '/%s/%s'", words[0], words[1]);

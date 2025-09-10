@@ -44,6 +44,10 @@ function initVars()
         genomePos.originalSize = $('#size').text().replace(/,/g, ""); // strip out any commas
         dragSelect.originalCursor = jQuery('body').css('cursor');
 
+        if (typeof (igv) !== "undefined") {
+            igv.initIgvUcsc();
+        }
+
         imageV2.imgTbl = $('#imgTbl');
         // imageV2.enabled === true unless: advancedJavascript===false, or trackSearch, or config pg
         imageV2.enabled = (imageV2.imgTbl && imageV2.imgTbl.length > 0);
@@ -1969,6 +1973,11 @@ jQuery.fn.panImages = function(){
             portalScrolledX = (closedPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
             newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
         }
+
+        if (typeof (igv) !== "undefined") {
+           igv.updateIgvStartPosition(newPortalStart);
+        }
+
 
         ret = {};
         ret.newX = newOffsetX;
@@ -4290,6 +4299,9 @@ var imageV2 = {
         if (typeof showMouseovers !== 'undefined' && showMouseovers) {
             convertTitleTagsToMouseovers();
         }
+        if(typeof window.igvBrowser !== "undefined") {
+           window.igvBrowser.search(genomePos.get());
+        }
     },
 
     updateImgForId: function (html, id, fullImageReload, newJsonRec)
@@ -4490,6 +4502,7 @@ var imageV2 = {
             return false;
         }
         document.TrackHeaderForm.submit();
+        window.igv.initUcsc();
     },
 
     updateImgAndMap: function (response, status)
@@ -6034,3 +6047,43 @@ function hgtWarnTiming(maxSeconds) {
     notifBoxSetup("hgTracks", "hideSpeedNotification", msg);
     notifBoxShow("hgTracks", "hideSpeedNotification");
 }
+
+//////////////////////////
+// Attempt to support panning by dragging IGV track.  The dragging works, but its not clear to do on drag end.
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof igv !== 'undefined') {
+
+        // TODO -- probably should use genomePos.get() and set() here, but I (JTR) don't fully understand that
+        // object and calling set() seems to have side effects.  So this variable is a placeholder.
+
+        const pos = {};
+
+        igv.ucscTrackpan = (newPosition) => {
+
+            const positionOffset = (newPosition - hgTracks.imgBoxPortalStart);
+            const pixelOffset = Math.round(positionOffset / hgTracks.imgBoxBasesPerPixel);
+            const newX = -(pixelOffset + hgTracks.imgBoxLeftLabel);
+            var nowPos = newX.toString() + "px";
+            $(".panImg").css({'left': nowPos});
+            $('.tdData').css({'backgroundPosition': nowPos});
+
+            pos.chrom = hgTracks.chromName;
+            pos.start = Math.round(newPosition + 1);
+            pos.end = pos.start + (hgTracks.winEnd - hgTracks.winStart);  // Dragging will not change the bp width
+
+            $('#positionDisplay').text(pos.chrom + ":" + commify(pos.start) + "-" + commify(pos.end));
+        };
+
+        igv.ucscTrackpanEnd = () => {
+            if (imageV2.inPlaceUpdate) {
+                imageV2.navigateInPlace("db=" + getDb() + "&position=" +
+                    encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end),
+                    null, false);
+            } else {
+                document.TrackHeaderForm.submit();
+            }
+        };
+    }
+});
+
