@@ -5,7 +5,7 @@
 // "use strict";
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
-/* jshint esnext: true */
+/* jshint esversion: 8 */
 
 
 var debug = false;
@@ -2914,7 +2914,7 @@ var rightClick = {
                             // name+value) with item name
                             if (rec.type.indexOf("barChart") === 0
                             || rec.type.indexOf("bigBarChart") === 0) {
-                                a = /i=([^&]+)/.exec(href);
+                                let a = /i=([^&]+)/.exec(href);
                                 if (a && a[1]) {
                                     title = a[1];
                                 }
@@ -2938,7 +2938,7 @@ var rightClick = {
                                             || href.indexOf('g=knownGene') !== -1 )) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
-                            a = /i=([^&]+)/.exec(href);
+                            let a = /i=([^&]+)/.exec(href);
                             if (a && a[1]) {
                                 title = decodeURIComponent(a[1].replace(/\+/g, " "));
                             }
@@ -2963,7 +2963,7 @@ var rightClick = {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
-                                var a = reg.exec(href);
+                                let a = reg.exec(href);
                                 if (a && a[1]) {
                                     name = a[1];
                                     reg = new RegExp("hgg_type=([^&]+)");

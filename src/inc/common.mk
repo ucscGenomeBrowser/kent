@@ -524,7 +524,7 @@ CC_PROG_OPTS = ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC}
 
 # autodetect UCSC installation of node.js:
 ifeq (${NODEBIN},)
-    NODEBIN = /cluster/software/src/node-v0.10.24-linux-x64/bin
+    NODEBIN = /cluster/software/src/node-v22.19.0-linux-x64/bin
     ifeq ($(wildcard ${NODEBIN}),)
 	NODEBIN=
     endif

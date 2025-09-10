@@ -99,9 +99,9 @@ var suggestBox = {
                         that._renderItemData(ul, item);
                     });
                     if ($(this)[0].term === "") {
-                        ul.append("<div class='autoCompleteInfo' style='color:grey'>Showing 5 most recent searches. Enter 2 or more characters to start auto-complete search. Click the go button or press Enter to search across all tracks, hubs and our website. See 'examples' link above.</div>");
+                        ul.append("<div class='autoCompleteInfo'>Showing 5 most recent searches. Enter 2 or more characters to start auto-complete search.</div>");
                     } else {
-                        ul.append("<div class='autoCompleteInfo' style='color:grey'>Click the go button or press Enter to search across all tracks, hubs and our website. See 'examples' link above.</div>");
+                        ul.append("<div class='autoCompleteInfo'>Click 'Search' or press Enter to search all tracks, hubs and our web pages. See 'examples' link.</div>");
                     }
                 },
                 _renderItem: function(ul, item) {

@@ -1625,7 +1625,7 @@ if (cartVis != NULL)
 dyStringPrintf(dy, "visibility %s\n", hStringFromTv(tdb->visibility));
 
 if (tdbIsSuperTrack(tdb->parent))
-    dyStringPrintf(dy, "parent %s\n", tdb->parent->track);
+    dyStringPrintf(dy, "parent %s\n", trackHubSkipHubName(tdb->parent->track));
 
 while ((hel = hashNext(&cookie)) != NULL)
     {   

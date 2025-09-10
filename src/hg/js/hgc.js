@@ -18,7 +18,7 @@ function makeGenericTable(data) {
         var row = table.insertRow();
         if (Array.isArray(val)) {
             for (j = 0; j < val.length; j++) {
-                cell = row.insertCell();
+                let cell = row.insertCell();
                 if (j < val.length) {
                     cell.appendChild(document.createTextNode(val[j]));
                 } else {
