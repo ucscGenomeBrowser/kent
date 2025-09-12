@@ -170,7 +170,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         noScoreFilter on
         exonNumbers off
         mouseOver <b>Variant</b>: $name<br>  <b>Gene</b>: $gene<br> <b>Linkout</b>: <a href="$url" target="_blank">$_mouseOver</a><br> <b>Article count 1</b>: $mmcnt1<br> <b>Article count 2</b>: $mmcnt2<br> <b>Article count 3</b>: $mmcnt3
-        #mouseOver <b>Gene - MMCNT1/2/3</b>:  <a href="$url" target="_blank">$_mouseOver</a>
         itemRgb on
         filter.mmcnt1 0
         filter.mmcnt2 0
