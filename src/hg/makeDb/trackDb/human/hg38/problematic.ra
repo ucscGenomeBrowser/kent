@@ -184,11 +184,12 @@ group map
     parent problematicSuper on
     bigDataUrl /gbdb/hg38/problematic/hg38.pm151b-v3.easy.bb
     shortLabel Panmask Easy 151b
-    longLabel Panmask Easy 151b: High accuracy for variant calling (151-mers, no low-complex. regions)
+    longLabel Panmask Easy 151b Regions: High accuracy for variant calling
     type bigBed 3
-    dataVersion pm151b-v3.easy.bed.gz from Panmask release Zenodo V1.4 (Aug 6 2025), MD5 2f59a43dab0b463bafcf3b59fc62
+    dataVersion pm151b-v3.easy.bed.gz (Panmask v1.4, Aug 6 2025, MD5: 2f59a43dab0b463bafcf3b59fc62)
     visibility hide
     release alpha
+    html problematic
 
 searchTable comments
 searchPriority 0.5
