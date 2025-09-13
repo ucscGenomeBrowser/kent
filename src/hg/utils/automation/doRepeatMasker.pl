@@ -634,7 +634,10 @@ hgLoadOut -verbose=2 -tabFile=\$db.rmsk$updateTable.tab -table=rmsk$updateTable 
 # construct bbi files for assembly hub
 $RepeatMaskerPath/util/rmToTrackHub.pl -out \$db.sorted.fa.out -align \$db.fa.align
 # in place same file sort using the -o output option
-sort -k1,1 -k2,2n -o \$db.fa.align.tsv \$db.fa.align.tsv &
+awk -F\$'\\t' '\$15 > -1' \$db.fa.align.tsv sort -k1,1 -k2,2n > t.tsv
+rm -f \$db.fa.align.tsv
+mv t.tsv \$db.fa.align.tsv
+# sort -k1,1 -k2,2n -o \$db.fa.align.tsv \$db.fa.align.tsv &
 sort -k1,1 -k2,2n -o \$db.sorted.fa.join.tsv \$db.sorted.fa.join.tsv
 wait
 bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigRmskAlignBed.as -type=bed3+14 \\
