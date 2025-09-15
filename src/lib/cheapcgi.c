@@ -209,7 +209,7 @@ void jsOnEventBySelector(char *query, char *eventName, char *jsText)
 /* Add js mapping for inline event given a query selector, e.g. '.className' */
 {
 checkValidEvent(eventName);
-jsInlineF("document.querySelector('%s').addEventListener( '%s', function(event) { %s });\n", query, eventName, jsText);
+jsInlineF("document.querySelectorAll('%s').forEach(function (el) { el.addEventListener( '%s', function(event) { %s })});\n", query, eventName, jsText);
 }
 
 
