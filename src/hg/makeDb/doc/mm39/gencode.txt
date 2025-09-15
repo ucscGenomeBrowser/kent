@@ -582,6 +582,7 @@
     jkmake DBS=mm39 alpha
 ##############################################################################
 2025-07-29: import of UCSC GENCODE group processing of GENCODE VM38 pre-release for GENCODE Versions (markd)
+2025-09-08: import of UCSC GENCODE group processing of GENCODE VM38 release for GENCODE Versions (markd)
 
    # set shell variable:
    # pre-release shell variables 
@@ -593,7 +594,7 @@
        ver=M38
        ensver=115
        pre=""
-       ensdate='August 2025'
+       ensdate='Sept 2025'
 
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release
 

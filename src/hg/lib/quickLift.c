@@ -89,6 +89,10 @@ if (maxGapBefore > maxGapAfter)
 else
     maxGapBefore = maxGapAfter;
 
+// sometimes the edges are way too large.  Needs research
+//if (maxGapBefore > 1000000)
+    //maxGapBefore = maxGapAfter = 1000000;
+
 int newStart = start - maxGapBefore * 2;
 if (newStart < 0)
     newStart = 0;
@@ -200,8 +204,13 @@ for(chain = chainList; chain; chain = chain->next)
             qEnd = cb->qEnd;
         }
 
+    // correct for strand
     if (chain->qStrand == '-')
-        qStart = chain->qSize - qStart;
+        {
+        int saveStart = qStart;
+        qStart = chain->qSize - qEnd;
+        qEnd = chain->qSize - saveStart;
+        }
 
     // now grab the items 
     if (query == NULL)
@@ -242,6 +251,10 @@ for(bed = bedList; bed; bed = nextBed)
         error = liftOverRemapRange(chainHash, 0.0, bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
                              
                             0.001, &bed->chrom, (int *)&bed->chromStart, (int *)&bed->chromEnd, &bed->strand[0]);
+
+        // probably this should keep track of cases where the input does NOT have thickStart == chromStart
+        bed->thickStart = bed->chromStart;
+        bed->thickEnd = bed->chromEnd;
         }
     else
         error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL);
@@ -449,4 +462,14 @@ slSort(&hrList,  hrCmp);
 hashAdd(highLightsHash, quickLiftFile, hrList);
 
 return hrList;
+}
+
+char *quickLiftChainTable()
+/* Return the name of the quickLiftChain table. */
+{
+static char *quickLiftChainTable = NULL;
+if (quickLiftChainTable == NULL)
+    quickLiftChainTable = cfgOptionEnvDefault("QUICKLIFTCHAINNAME",
+	    quickLiftChainTableConfVariable, defaultQuickLiftChainTableName);
+return quickLiftChainTable;
 }
