@@ -8661,8 +8661,17 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
-}
 
+// remove the hg.conf option once this feature is released
+if (cfgOptionBooleanDefault("showIgv", FALSE))
+    {
+    puts(" <button id='hgtIgv' type='button' "
+            "title='Add an IGV.js window below the UCSC Browser, to open files from "
+            "your local harddisk or server' >Add IGV Tracks</button>");
+    //jsInline("document.getElementById('hgtIgv').addEventListener('click', onIgvClick);");
+    }
+
+}
 
 #ifdef NOTNOW
 static void printAliases(char *name)
@@ -11630,6 +11639,13 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+
+    // remove the hg.conf option once this feature is released
+    if (cfgOptionBooleanDefault("showIgv", FALSE))
+        {
+        jsIncludeFile("igv.min.js", NULL);
+        jsIncludeFile("igvFileHelper.js", NULL);
+        }
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);

@@ -74,6 +74,7 @@
 #define argJsonOutputArrays	"jsonOutputArrays"
 #define argCategories "categories"
 #define argSearchTerm "search"
+#define argSkipContext "skipContext"
 /* used in findGenome, 'q' is for the query search term */
 #define argQ "q"
 #define argStatsOnly "statsOnly"
@@ -86,6 +87,8 @@
 #define argToGenome "toGenome"
 /* used in liftOver 'listExisting' function to filter the result */
 #define argFilter "filter"
+/* used in list/files to show only certain file types */
+#define argFileType "fileType"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c

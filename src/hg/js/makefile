@@ -23,7 +23,8 @@ JQUERY_FILES_UNTOUCHED= \
     jquery.js jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
     jquery.cookie.js jquery.watermark.js jquery.watermarkinput.js jquery.ui.colorPicker.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js \
-    jquery.validate.min.js jquery.history.js jquery.treetable.js mousetrap.min.js dagre-d3.js
+    jquery.validate.min.js jquery.history.js jquery.treetable.js mousetrap.min.js dagre-d3.js \
+    igv.min.js igvFileHelper.js
 
 # JQUERY or other third pary files which HAVE BEEN MODIFIED by UCSC
 JQUERY_FILES_MODIFIED=jquery.tablednd.js ui.dropdownchecklist.js
