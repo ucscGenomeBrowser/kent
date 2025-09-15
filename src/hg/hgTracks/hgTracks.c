@@ -9674,6 +9674,10 @@ if (!hideControls)
                     hPrintf("&nbsp;&nbsp;");
                     }
 
+                hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
+                        "title='Hide all tracks in this group'>Hide all</button>&nbsp;",
+                        group->name);
+
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
@@ -9682,7 +9686,10 @@ if (!hideControls)
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
 		    hubName + strlen(hubTrackPrefix));
+
 		}
+
+
 
             hPrintf("<input type='submit' name='hgt.refresh' value='Refresh' "
                     "title='Update image with your changes'>\n");
@@ -9758,6 +9765,8 @@ if (!hideControls)
 	    }
         hashFree(&superHash);
 	endControlGrid(&cg);
+
+        jsOnEventBySelector(".hgtButtonHideGroup", "click", "onHideAllGroupButtonClick(event)");
 	}
 
     if (measureTiming)
