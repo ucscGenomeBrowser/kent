@@ -36,7 +36,7 @@ fi
 
 # assume this file name pattern
 export faAlign=`echo "${rmOutFile}" | sed -e 's/sorted.fa.out/fa.align/; s/.gz//;'`
-export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker221107"
+export RepeatMaskerPath="/hive/data/outside/RepeatMasker/RepeatMasker-4.2.1"
 
 if [ -d "${destDir}" ]; then
   cd "${destDir}"
@@ -49,17 +49,14 @@ if [ -d "${destDir}" ]; then
   # it is OK if it is missing, can do this anyway without it
   if [ -s "${faAlign}" ]; then
     printf "# using faAlign file: %s\n" "${faAlign}" 1>&2
-    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
-    time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
-    awk -F$'\t' '$15 > -1 && $13 > -1' "$asmId.fa.align.tsv" | sort -k1,1 -k2,2n > t.tsv
-    rm -f "$asmId.fa.align.tsv"
-    mv t.tsv "$asmId.fa.align.tsv"
+    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -chromsizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
+    time $RepeatMaskerPath/util/rmToTrackHub.pl -chromsizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
     # in place same file sort using the -o output option
-#    sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
+    sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
   else
     printf "# there is no faAlign file\n" 1>&2
-    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2
-    time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}"
+    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -chromsizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2
+    time $RepeatMaskerPath/util/rmToTrackHub.pl -chromsizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}"
   fi
   sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv" &
   wait
