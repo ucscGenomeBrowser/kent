@@ -1,5 +1,7 @@
 # About bigComposite
 
+*(UPDATE 2025-09-14 at bottom)*
+
 For whomever is testing.
 
 - `bigComposite` should be in the `src/hg/makefile` among targets, and in my
@@ -58,3 +60,22 @@ For whomever is testing.
   ```
   in the "settings" field of the trackDb entry for the mb2 bigComposite track
   works.
+
+# Update (2025-09-14)
+ - `bigComposite.js` has been updated to use TSV for the metadata table.
+ - All config info is in the `trackDb.settings` field and parsed within `hgTrackUi.c`
+ - Correspondingly, `hgTrackUi.c` has been updated.
+ - Colors can be used or completely ignored. If used, they need a separate
+   JSON file, and checkbox filters for multiple columns can have associated
+   colors.
+ - The updated data files (corresponding to those above and the new ones):
+   ```console
+   https://smithlabresearch.org/data/mb2_trackDb_updated.txt
+   https://smithlabresearch.org/data/mb2_metadata.tsv
+   https://smithlabresearch.org/data/mb2_color.json
+   ```
+   The `_trackDb_updated.txt` is used to fill the trackDb entries, and only
+   differs by specific lines in the `settings` field. The other two files go
+   in `htdocs` or can be put anywhere if the `metaDataUrl` and
+   `colorSettingsUrl` are changed in the first logical line of
+   `mb2_trackDb_updated.txt`.
