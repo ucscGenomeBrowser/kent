@@ -27,6 +27,7 @@
 #include "genark.h"
 #include "asmAlias.h"
 #include "cheapcgi.h"
+#include "quickLift.h"
 
 boolean hubsCanAddGroups()
 /* can track hubs have their own groups? */
@@ -338,7 +339,7 @@ for (name = nameList; name != NULL; name = name->next)
     else
         {
         char query[4096];
-        sqlSafef(query, sizeof(query), "select fromDb, toDb, path from %s where id = \"%s\"", "quickLiftChain", colon);
+        sqlSafef(query, sizeof(query), "select fromDb, toDb, path from %s where id = \"%s\"", quickLiftChainTable(), colon);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
         char *replaceDb = NULL;

@@ -33,6 +33,7 @@ added.</p>
         <li><a href="#hubTxt">hub.txt</a></li>
 	<li><a href="#genomesTxt">genomes.txt</a></li>
 	<li><a href="#twoBitFile">2bit File</a></li>
+	<li><a href="#chromAlias">chromAlias</a></li>
         <li><a href="#groupsTxt">groups.txt</a></li>
 	<li><a href="#singleFileHub">Single-File Track Hub</a></li> 
     </ul>
@@ -198,6 +199,106 @@ To extract sequences from a <em>.2bit</em> file:
 twoBitToFa -seq=chrCp -udcDir=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/ricCom1/ricCom1.2bit stdout &gt; ricCom1.chrCp.fa
 </pre>
 
+
+<a id="chromAlias"></a>
+<h3>chromAlias</h3>
+
+<p>
+The <code>chromAlias</code> setting enables the Genome Browser to automatically convert chromosome
+names in submitted custom track data from alternate naming schemes to the names used in the
+assembly. The <code>chromAlias</code> setting uses a <code>chromAlias.txt</code> file. This
+functionality applies to both custom track data and assembly hub data.</p>
+
+<p><b>chromAlias.txt Format</b></p>
+<p>
+The first line of the <code>chromAlias.txt</code> file begins with a pound symbol (<code>#</code>)
+followed by a blank space. Each subsequent word on this line, separated by tab characters,
+specifies the source authority for the sequence names in that column. The first column contains the
+sequence names used in the Genome Browser assembly, while the subsequent columns provide alternate
+naming schemes.</p>
+
+<p>
+All lines following the header line consist of columns of sequence names separated by a tab
+character. If no equivalent name exists in a particular naming scheme, the column remains empty,
+resulting in two adjacent tab characters.</p><br>
+<p>Example:</p>
+<pre>
+# ucsc  assembly        genbank ncbi    refseq  ensembl
+chr1    1       CM000663.2      1       NC_000001.11    1
+chr10   10      CM000672.2      10      NC_000010.11    10
+chrM    MT      J01415.2        MT      NC_012920.1     MT
+chrX    X       CM000685.2      X       NC_000023.11    X
+</pre>
+
+<p>In this example, the columns represent:</p>
+<ul>
+	<li><b>ucsc</b> -  UCSC-style <code>chrN</code> names</li>
+	<li><b>assembly</b> - names from the NCBI assembly_report.txt</code> file</li>
+	<li><b>genbank</b> - INSDC names</li>
+	<li><b>ncbi</b> - names from the <code>chr2acc</code> file in the <code>assembly_structure/</code> hierarchy</li>
+	<li><b>refseq</b> - names from RefSeq annotations</li>
+	<li><b>ensembl</b> - names from the Ensembl assembly</li>
+</ul>
+<p><b>Assembly Hub Usage</b></p>
+<p>To use the <code>chromAlias.txt</code> file in an assembly hub, add the following line to the
+genome stanza of the hub.txt file:</p>
+<pre>chromAlias thisGenome.chromAlias.txt</pre>
+<p>This is a relative path reference from the <code>hub.txt</code> file.</p>
+<p>Example genome stanza:</p>
+<pre>
+genome GCF_000001405.39
+taxId 9606
+groups groups.txt
+description human
+twoBitPath GCF_000001405.39.2bit
+twoBitBptUrl GCF_000001405.39.2bit.bpt
+chromSizes GCF_000001405.39.chrom.sizes.txt
+chromAlias GCF_000001405.39.chromAlias.txt
+organism human
+defaultPos chr1:82985474-82995474
+scientificName Homo sapiens
+htmlPath html/GCF_000001405.39_GRCh38.p13.description.html
+</pre>
+
+<p><b>Best Performance</b></p>
+<p>
+For improved performance, the <code>chromAlias.txt</code> file can be converted to a bigBed format.
+This enables efficient searching for sequence names without requiring the entire text file to be
+read, which is particularly important for assemblies with large numbers of sequences.</p>
+<p>
+The Perl script
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/automation/aliasTextToBed.pl"
+	target="_blank">aliasTextToBed.pl</a> converts the <code>chromAlias.txt</code> file into the
+corresponding bed and bigBed files:</p>
+<pre>
+aliasTextToBed.pl -chromSizes=asmId.chrom.sizes -aliasText=asmId.chromAlias.txt \
+   -aliasBed=asmId.chromAlias.bed -aliasAs=asmId.chromAlias.as -aliasBigBed=asmId.chromAlias.bb
+</pre>
+<p>Inputs:</p>
+<ul>
+	<li><code>chrom.sizes</code> file</li>
+	<li><code>chromAlias.txt</code> file</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+        <li><code>chromAlias.bed</code></li>
+        <li><code>chromAlias.as</code></li>
+	<li><code>chromAlias.bb</code></li>
+</ul>
+<p>
+Replace the <code>chromAlias</code> setting with the <code>chromAliasBb</code> setting, and specify
+the <code>.bb</code> file in the genome stanza of the hub definition:</p>
+<pre>chromAliasBb GCF_000001405.39.chromAlias.bb</pre>
+<p>This replaces the <code>chromAlias.txt</code> specification.</p>
+<p><b>Default Naming Scheme</b></p>
+<p>A default naming scheme may be set in the <code>hub.txt</code> file using the
+<code>chromAuthority</code> setting:</p>
+<pre>chromAuthority ucsc</pre>
+<p>In this example, the value <code>ucsc</code> corresponds to the column header from the
+<code>chromAlias.txt</code> file. This setting ensures that names in the specified column are
+displayed by default in the Genome Browser.</p>
+
+
 <a id="groupsTxt"></a>
 <h3>groups.txt</h3>
 <p>The <b>groups.txt</b> file defines the grouping of track controls under the Genome Browser graphic
@@ -209,6 +310,7 @@ label Mapping
 priority 2
 defaultIsClosed 0
 </pre>
+
 
 <ul>
    <li>The <b>name</b> setting is used in the trackDb.txt file to associate specific tracks with a

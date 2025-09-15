@@ -51,8 +51,11 @@ if [ -d "${destDir}" ]; then
     printf "# using faAlign file: %s\n" "${faAlign}" 1>&2
     printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
     time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
+    awk -F$'\t' '$15 > -1 && $13 > -1' "$asmId.fa.align.tsv" | sort -k1,1 -k2,2n > t.tsv
+    rm -f "$asmId.fa.align.tsv"
+    mv t.tsv "$asmId.fa.align.tsv"
     # in place same file sort using the -o output option
-    sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
+#    sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
   else
     printf "# there is no faAlign file\n" 1>&2
     printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2

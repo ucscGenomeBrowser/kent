@@ -1018,10 +1018,10 @@ fi
 
 ###################################################################
 # hubLinks is for mouseStrains specific hub only
-export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
-if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
-  printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
-fi
+# export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
+# if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
+#   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
+# fi
 ##  for mouse strain hubs only
 ## turned off 2022-11-02 until these can be correctly translated
 ## to GenArk naming schemes

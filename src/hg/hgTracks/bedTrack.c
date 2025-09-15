@@ -339,7 +339,7 @@ else
         char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
         bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoadN, 9, chainHash);
 
-        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
+        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, FALSE);
         for(bed = liftedBeds; bed; bed = bed->next)
             {
             lf = lfFromBedExtra(bed, scoreMin, scoreMax);

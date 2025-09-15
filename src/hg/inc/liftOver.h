@@ -12,6 +12,9 @@
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
 
+#define liftOverChainTableConfVariable      "liftOverChainName"
+#define defaultLiftOverChainTableName       "liftOverChain"
+
 enum liftOverFileType
 {
     none = 0,
@@ -137,6 +140,8 @@ char *remapBlockedBed(struct hash *chainHash, struct bed *bed,
 void liftOverAddChainHash(struct hash *chainHash, struct chain *chain);
 /* Add this chain to the hash of chains used by remapBlockedBed */
 
+char *liftOverChainTable();
+/* Return the name of the liftOverChain table. */
 #endif
 
 

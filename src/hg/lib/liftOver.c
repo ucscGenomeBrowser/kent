@@ -18,6 +18,7 @@
 #include "portable.h"
 #include "obscure.h"
 #include "net.h"
+#include "hgConfig.h"
 
 
 struct chromMap
@@ -1872,7 +1873,7 @@ struct liftOverChain *liftOverChainList()
 struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
 char query[1024];
-sqlSafef(query, sizeof query, "select * from liftOverChain");
+sqlSafef(query, sizeof query, "select * from %s",liftOverChainTable());
 list = liftOverChainLoadByQuery(conn, query);
 hDisconnectCentral(&conn);
 return list;
@@ -1923,10 +1924,10 @@ struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
 char query[512];
 if (isNotEmpty(fromDb))
-    sqlSafef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
-	  fromDb);
+    sqlSafef(query, sizeof(query), "select * from %s where fromDb='%s'",
+	  liftOverChainTable(),fromDb);
 else
-    sqlSafef(query, sizeof(query), "select * from liftOverChain");
+    sqlSafef(query, sizeof(query), "select * from %s", liftOverChainTable());
 list = liftOverChainLoadByQuery(conn, query);
 hDisconnectCentral(&conn);
 return list;
@@ -1943,8 +1944,8 @@ char *path = NULL;
 if (conn)
     {
     sqlSafef(query, sizeof(query), 
-            "select * from liftOverChain where fromDb='%s' and toDb='%s'",
-                        fromDb, toDb);
+            "select * from %s where fromDb='%s' and toDb='%s'",
+                        liftOverChainTable(), fromDb, toDb);
     chain = liftOverChainLoadByQuery(conn, query);
     if (chain != NULL)
         {
@@ -1970,4 +1971,14 @@ char *liftOverErrHelp()
     "    Sequence sufficiently intersects multiple chains\n"
     "Boundary problem:\n"
     "    Missing start or end base in an exon\n";
+}
+
+char *liftOverChainTable()
+/* Return the name of the liftOverChain table. */
+{
+static char *liftOverChainTable = NULL;
+if (liftOverChainTable == NULL)
+    liftOverChainTable = cfgOptionEnvDefault("LIFTOVERCHAINNAME",
+	    liftOverChainTableConfVariable, defaultLiftOverChainTableName);
+return liftOverChainTable;
 }

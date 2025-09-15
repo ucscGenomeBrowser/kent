@@ -8,6 +8,9 @@
 
 #define quickLiftCartName     "hubQuickLift"
 
+#define quickLiftChainTableConfVariable      "quickLiftChainName"
+#define defaultQuickLiftChainTableName       "quickLiftChain"
+
 struct quickLiftRegions
 // store highlight information
 {
@@ -62,4 +65,6 @@ boolean quickLiftEnabled();
 struct quickLiftRegions *quickLiftGetRegions(char *ourDb, char *liftDb, char *quickLiftFile, char *chrom, int seqStart, int seqEnd);
 /* Figure out the highlight regions and cache them. */
 
+char *quickLiftChainTable();
+/* Return the name of the quickLiftChain table. */
 #endif

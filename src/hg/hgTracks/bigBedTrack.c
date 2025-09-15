@@ -487,55 +487,135 @@ if (!set)
 return maxItems;
 }
 
-struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
-	char *chrom, int start, int end, struct lm *lm, int maxItems)
-/* Return list of intervals in range. */
+static boolean hasOverflowedInWindow(struct track *track)
+/* has it overlowed in the given track? */
 {
-struct bigBedInterval *result = NULL;
+uint resultCount = 0;  // do not use -1, it messes up the compare of signed resultsCount with unsigned bigMaxItems.
+char *resultCountString = trackDbSetting(track->tdb, "bigBedItemsCount");
+if (resultCountString)
+    resultCount = sqlUnsigned(resultCountString);
+return (resultCount > bigBedMaxItems());
+}
+
+
+static void loadBigBedSummary(struct track *track)
+/* Check if summary loading needed for bigBed */
+{
+if (track->subtracks)  // do tracks or subtracks but not parents.
+    {
+    return;
+    }
+
+struct lm *lm = lmInit(0);
+
+char *chrom = chromName;
+int start = winStart;
+int end = winEnd;
+
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
 boolean filtering = FALSE; // for the moment assume we're not filtering
 if (errCatchStart(errCatch))
     {
-    struct bbiFile *bbi = fetchBbiForTrack(track);
-    result = bigBedIntervalQuery(bbi, chrom, start, end, bigBedMaxItems() + 1, lm);
-    if (slCount(result) > bigBedMaxItems())
+    // scan all windows for errors and overflows
+    boolean errorsInWindows = FALSE;
+    boolean overFlowedInWindows = FALSE;
+
+    struct track *thisTrack;
+    for(thisTrack=track->prevWindow; thisTrack; thisTrack=thisTrack->prevWindow)
+        {
+        if (hasOverflowedInWindow(thisTrack))
+	    overFlowedInWindows = TRUE;
+        if (thisTrack->drawItems == bigDrawWarning)
+	    errorsInWindows = TRUE;
+        }
+    for(thisTrack=track->nextWindow; thisTrack; thisTrack=thisTrack->nextWindow)
+        {
+        if (hasOverflowedInWindow(thisTrack))
+	    overFlowedInWindows = TRUE;
+        if (thisTrack->drawItems == bigDrawWarning)
+	    errorsInWindows = TRUE;
+        }
+    
+    if (hasOverflowedInWindow(track))
+	overFlowedInWindows = TRUE;
+
+    if (!errorsInWindows && overFlowedInWindows)
 	{
         if (filtering)
             errAbort("Too many items in window to filter.Zoom in or remove filters to view track.");
         else
             {
-            // use summary levels
-            if (track->visibility != tvDense)
-                {
-                track->limitedVis = tvFull;
-                track->limitWiggle = TRUE;
-                track->limitedVisSet = TRUE;
-                }
-            else
-                {
-                track->limitedVis = tvDense;
-                track->limitedVisSet = TRUE;
-                }
-            result = NULL;
-            AllocArray(track->summary, insideWidth);
-            if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
-                {
-                char *denseCoverage = trackDbSettingClosestToHome(track->tdb, "denseCoverage");
-                if (denseCoverage != NULL)
-                    {
-                    double endVal = atof(denseCoverage);
-                    if (endVal <= 0)
-                        {
-                        AllocVar(track->sumAll);
-                        *track->sumAll = bbiTotalSummary(bbi);
-                        }
-                    }
-                }
-            else
-                freez(&track->summary);
-            }
+	    struct bbiFile *bbi = fetchBbiForTrack(track);
+            if (bbi)
+		{
+		// use summary levels
+		if (track->visibility != tvDense)
+		    {
+		    track->limitedVis = tvFull;
+		    track->limitWiggle = TRUE;
+		    track->limitedVisSet = TRUE;
+		    }
+		else
+		    {
+		    track->limitedVis = tvDense;
+		    track->limitedVisSet = TRUE;
+		    }
+		AllocArray(track->summary, insideWidth);
+		if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
+		    {
+		    char *denseCoverage = trackDbSettingClosestToHome(track->tdb, "denseCoverage");
+		    if (denseCoverage != NULL)
+			{
+			double endVal = atof(denseCoverage);
+			if (endVal <= 0)
+			    {
+			    AllocVar(track->sumAll);
+			    *track->sumAll = bbiTotalSummary(bbi);
+			    }
+			}
+		    }
+		else
+		    freez(&track->summary);
+		}
+	    }
         }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    track->networkErrMsg = cloneString(errCatch->message->string);
+    track->drawItems = bigDrawWarning;
+    track->totalHeight = bigWarnTotalHeight;
+    }
+errCatchFree(&errCatch);
+lmCleanup(&lm);
+track->bbiFile = NULL;
+
+}
+
+struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
+	char *chrom, int start, int end, struct lm *lm, int maxItems)
+/* Return list of intervals in range. */
+{
+
+struct bigBedInterval *result = NULL;
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct bbiFile *bbi = fetchBbiForTrack(track);
+    result = bigBedIntervalQuery(bbi, chrom, start, end, bigBedMaxItems() + 1, lm);  // pass in desired limit or 0 for all.
+
+    char resultCount[32];
+    safef(resultCount, sizeof resultCount, "%u", slCount(result));
+    trackDbAddSetting(track->tdb, "bigBedItemsCount", resultCount);
+
+    if (slCount(result) > bigBedMaxItems())
+	    {
+            result = NULL;  // IS Having it return NULL a critical part of this?
+	    }
+
     track->bbiFile = NULL;
     }
 errCatchEnd(errCatch);
@@ -977,6 +1057,7 @@ if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 
     }
 #endif
 complexBedMethods(track, tdb, TRUE, wordCount, newWords);
+track->loadSummary = loadBigBedSummary;
 }
 
 void bigBedMethods(struct track *track, struct trackDb *tdb, 
@@ -991,3 +1072,4 @@ if (sameWordOk(trackDbSetting(tdb, "style"), "heatmap"))
     heatmapMethods(track);
     }
 }
+

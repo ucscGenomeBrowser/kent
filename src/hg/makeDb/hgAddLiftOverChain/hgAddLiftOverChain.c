@@ -12,9 +12,7 @@
 #include "dystring.h"
 #include "hdb.h"
 #include "liftOverChain.h"
-
-
-#define TABLE_NAME "liftOverChain"
+#include "liftOver.h"
 
 /* Command line options */
 char *path = NULL; /* filename instead of 
@@ -74,9 +72,9 @@ struct liftOverChain loChain;
 verbose(1, "Connected to central database %s\n", sqlGetDatabase(conn));
 
 /* First make table definition. */
-if (!sqlTableExists(conn, TABLE_NAME))
+if (!sqlTableExists(conn, liftOverChainTable()))
     {
-    verbose(1, "Creating table %s\n", TABLE_NAME);
+    verbose(1, "Creating table %s\n", liftOverChainTable());
     /* Create definition statement and make table */
     struct dyString *dy = sqlDyStringCreate(
     "CREATE TABLE %s (\n"
@@ -89,21 +87,21 @@ if (!sqlTableExists(conn, TABLE_NAME))
     "  multiple char(1) not null,\n"
     "  minBlocks float not null,\n"
     "  fudgeThick char(1) not null\n"
-    ")\n", TABLE_NAME);
-    sqlRemakeTable(conn, TABLE_NAME, dy->string);
+    ")\n", liftOverChainTable());
+    sqlRemakeTable(conn, liftOverChainTable(), dy->string);
     dyStringFree(&dy);
     }
 
-if (liftOverChainExists(conn, TABLE_NAME, fromDb, toDb))
+if (liftOverChainExists(conn, liftOverChainTable(), fromDb, toDb))
     {
     if (noForce)
         errAbort("Liftover chain %s to %s already exists", fromDb, toDb);
     verbose(1, "Removing existing %s entries for %s to %s\n", 
-                        TABLE_NAME, fromDb, toDb);
-    liftOverChainRemove(conn, TABLE_NAME, fromDb, toDb);
+                        liftOverChainTable(), fromDb, toDb);
+    liftOverChainRemove(conn, liftOverChainTable(), fromDb, toDb);
     }
 
-verbose(1, "Inserting record %s to %s in %s\n", fromDb, toDb, TABLE_NAME);
+verbose(1, "Inserting record %s to %s in %s\n", fromDb, toDb, liftOverChainTable());
 /* Create entry and write out to tab-separated file */
 
 if (!fileExists(chainFile))
@@ -123,7 +121,7 @@ loChain.multiple[0] = (multiple) ? 'Y' : 'N';
 loChain.minBlocks = minBlocks;
 loChain.fudgeThick[0] = (fudgeThick) ? 'Y' : 'N';
 
-liftOverChainSaveToDb(conn, &loChain, TABLE_NAME, 1024);
+liftOverChainSaveToDb(conn, &loChain, liftOverChainTable(), 1024);
 hDisconnectCentral(&conn);
 }
 
