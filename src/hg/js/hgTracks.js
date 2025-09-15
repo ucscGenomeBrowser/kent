@@ -3857,9 +3857,14 @@ function onHideAllGroupButtonClick(ev) {
     /* called when 'hide all' button is clicked on group blue bar menu */
     let groupName = ev.target.getAttribute("data-group-name");
     let visSelects = document.querySelectorAll(`tr[id^="${groupName}"] select`);
+    let trackNames = [];
+    let values = [];
     for (let sel of visSelects) {
         sel.value = "hide";
+        trackNames.push(sel.name);
+        values.push("hide");
     }
+    cart.setVars(trackNames, values);
 }
 
 // A function for the keyboard shortcuts "zoom to x bp"

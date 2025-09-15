@@ -3290,8 +3290,9 @@ group genes
 visibility hide
 type bigPsl
 html lrgTranscriptAli
-mouseOver ${name}: ${ncbiTranscript} ${ensemblTranscript} ${ncbiProtein} ${ensemblProtein} ${geneName}
+#mouseOver ${name}: ${ncbiTranscript} ${ensemblTranscript} ${ncbiProtein} ${ensemblProtein} ${geneName}
 skipFields mouseOver
+exonNumbers on
 skipEmptyFields on
 urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
 altColor 127,127,127
