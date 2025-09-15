@@ -2945,11 +2945,13 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   const char placeholderDiv[] = "<div id='metadata-placeholder'></div>\n";
   const char openJSON[] = "<script id=\"app-data\" type=\"application/json\">{";
   const char closeJSON[] = "}</script>\n";
-  const char openDataTypesJSON[] = "\"data_types\":[";
-  const char openDataElementsJSON[] = "\"data_elements\":[";
+  const char openDataTypesJSON[] = "\"dataTypes\":{";
+  const char closeDataTypesJSON[] = "}";  // closing a dict
+  const char openDataElementsJSON[] = "\"dataElements\":[";
+  const char closeDataElementsJSON[] = "]";  // closing an array
   const char metadataTableScriptElement[] =
     "<script type='text/javascript' src='/js/bigComposite.js'></script>\n";
-  const char metaDataUrlFmt[] = "\"metadata_url\": \"%s\"";
+  // const char metaDataUrlFmt[] = "\"metadata_url\": \"%s\"";
 
   /* ADS: maybe cart should be used below, but I don't know how from here */
   // parse the hgsid as id and sessionKey
@@ -2959,14 +2961,23 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   if (!sessionKey)
     errAbort("Failed to parse session key from: %s", hgsid);
 
-  // --- Get data from 'settings' in 'trackDb' entry ---
+  // --- Get data from 'settings' field in 'trackDb' entry ---
+  // required
   const char *metaDataUrl =
     (const char *)hashMustFindVal(tdb->settingsHash, "metaDataUrl");
+  const char *primaryKey =
+    (const char *)hashMustFindVal(tdb->settingsHash, "primaryKey");
   int nDataTypes = 0;
   char **dataTypes = parseDataTypes(tdb, &nDataTypes);
   if (!dataTypes)
     errAbort("Failed to parse data types from bigComposite settings for: %s",
              tdb->track);
+  // optional
+  const char *colorSettingsUrl =
+    (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
+  const char *maxCheckboxes =
+    (const char *)hashFindVal(tdb->settingsHash, "maxCheckboxes");
+  // --- done parsing values from trackDb.settings ---
 
   const char *metaDataId = tdb->track;
 
@@ -2995,12 +3006,11 @@ bigCompositeCfgUi(struct trackDb *tdb) {
     for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
       if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
         dataTypeSel = TRUE;
-    if (dataTypeSel) {
-      anySelDataType = i;
-      printf("%s\"%s\"", COMMA_IF(not_first), dataTypes[i]);
-    }
+    printf("%s\"%s\": %d", COMMA_IF(not_first), dataTypes[i], dataTypeSel ? 1 : 0);
+    anySelDataType = dataTypeSel ? i : anySelDataType;
   }
-  printf("],");  // close data types array separator
+  printf(closeDataTypesJSON);
+  printf(",");  // add separator
   // find selected data sets
   printf(openDataElementsJSON);
   not_first = 0;
@@ -3020,9 +3030,14 @@ bigCompositeCfgUi(struct trackDb *tdb) {
         }
       }
   }
-  printf("],");  // close data elements array and separator
-  printf("\"mdid\": \"%s\",", tdb->track);  // metadata id is track name
-  printf(metaDataUrlFmt, metaDataUrl);
+  printf(closeDataElementsJSON);
+  printf(",\"mdid\": \"%s\"", tdb->track);  // metadata id is track name
+  printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
+  if (maxCheckboxes) // only if present in trackDb.settings entry
+    printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
+  if (colorSettingsUrl) // only if present in trackDb.settings entry
+    printf(",\"colorSettingsUrl\": \"%s\"", colorSettingsUrl);
+  printf(",\"metadataUrl\": \"%s\"", metaDataUrl);
   printf(closeJSON);
   /* --- END embedded JSON data --- */
 
