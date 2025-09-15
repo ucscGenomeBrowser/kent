@@ -11278,6 +11278,7 @@ dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWid
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
+dyStringPrintf(dy,"Mousetrap.bind('c h', function() { hubQuickConnect() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 
 // highlight
 dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");

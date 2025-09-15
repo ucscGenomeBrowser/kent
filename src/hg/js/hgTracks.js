@@ -3826,6 +3826,34 @@ function gotoGetDnaPage() {
     return false;
 }
 
+function hubQuickConnect() {
+    /* open a little dialog window that accepts a URL to a hub.txt file */
+    const dialogHtml = 
+        '<div id="hubQuickDialog" title="Track hub quick connect">'+
+        '<b>Track hub URL:</b><br>'+
+        '<form action="hgTracks" method="GET">'+
+        '<input type="text" name="hubUrl" maxlength="1024" size="60" />'+
+        '<input type="hidden" hgsid="'+getHgsid()+'"/>'+
+        '<input type="submit" value="OK" />'+
+        '</form>'+
+        'To connect to public hubs, more options when connecting via URL or hub development tools, select from the menu My Data &gt; Track Hubs.'+
+        '</div>';
+    $('body').append(dialogHtml);
+
+    // Initialize the dialog
+    $("#hubQuickDialog").dialog({
+        autoOpen: false,
+        width: 600,
+        height: 400,
+        modal: true,
+        // not showing a Cancel button, the standard X should be sufficient and the user can always use Esc
+    });
+
+    // Show dialog
+    $("#hubQuickDialog").dialog("open");
+}
+
+
 // A function for the keyboard shortcuts "zoom to x bp"
 function zoomTo(zoomSize) {
     var flankSize = Math.floor(zoomSize/2);
