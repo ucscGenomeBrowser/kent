@@ -96,6 +96,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const channel = new BroadcastChannel('igv_file_channel')
+        channel.postMessage({type: 'filePickerReady'})
         const fileCache = new Map()
         const restoreCache = new Map()
 
@@ -126,7 +127,7 @@
                         indexURL = url + ".tbi"
                     }
                 }
-                channel.postMessage({type: 'loadURL', config: {url, indexURL}})
+                channel.postMessage({type: 'loadURL', config: {id: url, url, indexURL}})
             }
         })
 
@@ -135,7 +136,13 @@
             const {id, type} = event.data
             if (type === 'getFile') {
                 const selectedFile = fileCache.get(id)
+
+                if(selectedFile) {
                 channel.postMessage({type: 'file', data: selectedFile})   // TODO -- what if selectedFile is undefined?  Handle here or in browser?
+                } else {
+                    // Don't respond if we don't have the file.  Its possible multiple file pickers are open.
+                    console.info(`No file found for id: ${id}`)
+                }
             } else if (type === 'removeFile') {
                 fileCache.delete(id)
                 refreshFileList()

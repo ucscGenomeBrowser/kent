@@ -13,6 +13,7 @@
         let igvBrowser = null;
         let igvInitialized = false;
         let isDragging = false;
+        let sessionAutoSaveTimer = null;
 
         // Create a BroadcastChannel for communication between the UCSC browser page and the file picker page.
         const channel = new BroadcastChannel('igv_file_channel');
@@ -331,11 +332,29 @@
                 const db = getDb();
                 sessionDict[db] = igvBrowser.compressedSession();
                 localStorage.setItem(IGV_STORAGE_KEY, JSON.stringify(sessionDict));
+            } else {
+                localStorage.removeItem(IGV_STORAGE_KEY);
             }
         }
 
-        // Periodically update the igv session in local storage.
-        setInterval(updateSessionStorage, 1);
+        /**
+         * Start a timer to periodically save the igv session to local storage.  When / if we are able to
+         * reliably capture IGV state changes we can eliminate this and just save on state change.
+         *
+         * @param intervalMs
+         */
+        function startSessionAutoSave(intervalMs = 1000) {
+            if (sessionAutoSaveTimer !== null) return; // already running
+            sessionAutoSaveTimer = setInterval(updateSessionStorage, intervalMs);
+        }
+
+        function stopSessionAutoSave() {
+            if (sessionAutoSaveTimer !== null) {
+                clearInterval(sessionAutoSaveTimer);
+                sessionAutoSaveTimer = null;
+            }
+        }
+
 
         // Detect a page refresh (visibility change to hidden) and save the session to local storage.  This is meant to
         // simulate  UCSC browser session handling.
@@ -386,51 +405,88 @@
             let top = 0;
             document.getElementById('igv_namediv').innerHTML = ""; // Clear any existing content
             for (let track of allTracks) {
-                const trackLabelDiv = document.createElement('div');
-                trackLabelDiv.setAttribute('data-track-id', track.id); // Set the track ID attribute
-                trackLabelDiv.textContent = track.name; // Set the track name as the label
-                trackLabelDiv.style.marginBottom = '5px'; // Optional: Add spacing between labels
-                trackLabelDiv.style.position = 'absolute'; // Use absolute positioning
-                trackLabelDiv.style.top = `${top}px`; // Position the element at the current value of "top"
-                trackLabelDiv.style.right = '5px'; // Set a fixed width for the label div
-                trackLabelDiv.style.textAlign = 'right'; // Right-justify the text
-                document.getElementById('igv_namediv').appendChild(trackLabelDiv);
 
-                trackLabelDiv.addEventListener('contextmenu', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    const trackId = e.currentTarget.getAttribute('data-track-id');
-                    const matchingTracks = igvBrowser.findTracks(t => t.id === trackId);
-                    if (matchingTracks.length > 0) {
-                        const trackView = matchingTracks[0].trackView;
-                        trackView.trackGearPopup.presentMenuList(
-                            trackView,
-                            igvBrowser.menuUtils.trackMenuItemList(trackView),
-                            igvBrowser.config);
+                if ('sequence' !== track.type) {
+                    const labelContainer = document.createElement('div');
+                    labelContainer.style.position = 'absolute'; // Use relative positioning
+                    labelContainer.style.top = `${top}px`; // Position the element at the current value of "top"
+                    labelContainer.style.left = '0';
+                    labelContainer.style.right = '0';       // span full width of the enclosing td via igv_namediv
+                    labelContainer.style.width = '100%';    // optional, for clarity
+
+                    const gearDiv = document.createElement('div');
+                    gearDiv.style.position = 'absolute';
+                    gearDiv.style.left = '5px';
+                    gearDiv.style.width = '15px';
+                    gearDiv.style.height = '15px';
+                    gearDiv.style.maxWidth = '15px';
+                    gearDiv.style.maxHeight = '15px';
+                    gearDiv.style.overflow = 'hidden';
+                    gearDiv.style.cursor = 'pointer';
+
+                    const cog = igv.createIcon('cog', 'grey');
+                    // Ensure the underlying SVG is 15x15
+                    const svg = cog.tagName && cog.tagName.toLowerCase() === 'svg' ? cog : cog.querySelector('svg');
+                    if (svg) {
+                        svg.setAttribute('width', '15');
+                        svg.setAttribute('height', '15');
+                        svg.style.width = '15px';
+                        svg.style.height = '15px';
                     }
-                });
+                    gearDiv.appendChild(cog);
+                    gearDiv.setAttribute('data-track-id', track.id); // Set the track ID attribute
+                    labelContainer.appendChild(gearDiv);
+                    gearDiv.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const trackId = e.currentTarget.getAttribute('data-track-id');
+                        const matchingTracks = igvBrowser.findTracks(t => t.id === trackId);
+                        if (matchingTracks.length > 0) {
+                            const trackView = matchingTracks[0].trackView;
+                            trackView.trackGearPopup.presentMenuList(
+                                trackView,
+                                igvBrowser.menuUtils.trackMenuItemList(trackView),
+                                igvBrowser.config);
+                        }
+                    });
 
+                    // Move the track gear popup location, and hide its true parent.  This is a bit hacky, but
+                    // moving the gear popover to a new parent has undesired side effects.
+                    const popover = track.trackView.trackGearPopup.popover;
+                    if (popover) {
+                        popover.parentElement.style.width = '0px';  // don't use display=none, that breaks the popup
+                        popover.parentElement.style.height = '0px';
+                        popover.style.left = "-100px";
+                    }
+
+                    const trackLabelDiv = document.createElement('div');
+                    trackLabelDiv.textContent = track.name; // Set the track name as the label
+                    trackLabelDiv.style.right = '5px'; // Set a fixed width for the label div
+                    trackLabelDiv.style.textAlign = 'right'; // Right-justify the text
+                    labelContainer.appendChild(trackLabelDiv);
+
+                    document.getElementById('igv_namediv').appendChild(labelContainer);
+                }
                 top += track.trackView.viewports[0].viewportElement.clientHeight; // Adjust top for the next element
             }
         }
 
         function insertIGVRow() {
-            // Insert the IGV row into the image table.
             const imgTbl = document.getElementById('imgTbl');
             const tbody = imgTbl.querySelector('tbody');
             const igvRow = document.createElement('tr');
             igvRow.id = "tr_igv";
             igvRow.innerHTML = `
-            <td style="background: grey">
-                <div style="width:13px"></div>
-            </td>
-            <td style="position: relative">
-                <div id = "igv_namediv" style="width: 140px;position: absolute;top: 0; bottom: 0;"></div>
-            </td>
-            <td>
-                <div id="igv_div" style="width: auto"></div>
-            </td>
-             `;
+                <td style="background: grey">
+                    <div style="width:13px"></div>
+                </td>
+                <td style="position: relative">
+                    <div id="igv_namediv" style="position:absolute; top:0; bottom:0; left:0; right:0;"></div>
+                </td>
+                <td>
+                    <div id="igv_div" style="width: auto"></div>
+                </td>
+            `;
             tbody.appendChild(igvRow);
             return igvRow;
         }
@@ -472,6 +528,7 @@
                 gearColumnPosition: 'left',
                 showGearColumn: false,
                 showTrackLabels: false,
+                formEmbedMode: true,  // triggers key capture in input dialogs
                 disableZoom: true,
                 minimumBases: 0
             });
@@ -489,6 +546,8 @@
                 if (allTracks.length === 0) {
                     igvRow.remove();
                     igvBrowser = null;
+                    updateSessionStorage();
+                    stopSessionAutoSave(); // stop auto save timer
                     delete window.igvBrowser;
                 }
                 updateTrackNames();
@@ -511,6 +570,9 @@
             );
 
             window.igvBrowser = igvBrowser;
+
+            startSessionAutoSave();
+
             return igvBrowser;
         }
 
@@ -612,25 +674,25 @@
         }
 
 
-	/* get first line of text from URL */
-        async function getLine(url, { timeoutMs = 10000 } = {}) {
-	  const ctrl = new AbortController();
-	  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+        /* get first line of text from URL */
+        async function getLine(url, {timeoutMs = 10000} = {}) {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), timeoutMs);
 
-	  const res = await fetch(url, {
-	      headers: { Accept: "text/plain" },
-	      signal: ctrl.signal,
-	  }).catch(err => {
-	      // surface timeouts/aborts as regular errors
-	      throw new Error(`Request failed: ${err.message}`);
-	  });
-	  clearTimeout(t);
+            const res = await fetch(url, {
+                headers: {Accept: "text/plain"},
+                signal: ctrl.signal,
+            }).catch(err => {
+                // surface timeouts/aborts as regular errors
+                throw new Error(`Request failed: ${err.message}`);
+            });
+            clearTimeout(t);
 
-	  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
 
-	  const text = await res.text();
-	  // Return a single line (trim and take first line)
-	  return text.trim().split(/\r?\n/, 1)[0];
+            const text = await res.text();
+            // Return a single line (trim and take first line)
+            return text.trim().split(/\r?\n/, 1)[0];
         }
 
         /**
@@ -645,18 +707,33 @@
         async function getMinimalReference(genomeID) {
             const currentURL = window.location.href;
             const upOneDirURL = currentURL.substring(0, currentURL.lastIndexOf('/'));
-            const apiUrl = upOneDirURL+`/hubApi?cmd=/list/files;genome=${genomeID};format=text;skipContext=1;fileType=2bit`;
+            const apiUrl = upOneDirURL + `/hubApi?cmd=/list/files;genome=${genomeID};format=text;skipContext=1;fileType=2bit`;
             try {
                 const twoBitURL = await getLine(apiUrl);
                 return {
                     "id": genomeID,
                     "twoBitURL": twoBitURL,
-                }
+                };
             } catch (e) {
                 console.error(e);
-                alert("Internal Error: Cannot get 2bit file from "+ apiUrl);
+                alert("Internal Error: Cannot get 2bit file from " + apiUrl);
                 return null;
             }
+        }
+
+        function parseLocusString(locusString) {
+            const locusRegex = /^([^:]+)(?::(\d+)(?:-(\d+))?)?$/;
+            const match = locusString.match(locusRegex);
+            if (!match) {
+                throw new Error(`Invalid locus string: ${locusString}`);
+            }
+            const chr = match[1];
+            let start = match[2] ? parseInt(match[2].replace(",", ""), 10) - 1 : 0; // Convert to 0-based
+            let end = match[3] ? parseInt(match[3].replace(",", ""), 10) : start + 100; // Default to 100bp if no end provided
+            if (isNaN(start) || isNaN(end) || start < 0 || end <= start) {
+                throw new Error(`Invalid start or end in locus string: ${locusString}`);
+            }
+            return {chr, start, end};
         }
 
         // Attach helper functions to the igv object
