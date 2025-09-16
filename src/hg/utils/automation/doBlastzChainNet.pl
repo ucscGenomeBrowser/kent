@@ -1629,6 +1629,7 @@ sub installDownloads {
   }
   &dumpDownloadReadme("$runDir/README.txt");
   my $over = $tDb . "To$QDb.over.chain.gz";
+  my $quick = $qDb;
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   if ($tDb =~ m/^GC/) {
      $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
@@ -1676,9 +1677,14 @@ _EOF_
       $bossScript->add(<<_EOF_
 mkdir -p $gbdbLiftOverDir $gbdbQuickLiftDir
 rm -f $gbdbLiftOverDir/$over
+rm -f $gbdbQuickLiftDir/${quick}.bb
+rm -f $gbdbQuickLiftDir/${quick}.link.bb
+ln -s $buildDir/axtChain/$tDb.$qDb.quick.bb $gbdbQuickLiftDir/${quick}.bb
+ln -s $buildDir/axtChain/$tDb.$qDb.quickLink.bb $gbdbQuickLiftDir/${quick}.link.bb
 ln -s $liftOverDir/$over $gbdbLiftOverDir/$over
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbLiftOverDir/$over \\
   $tDb $qDb
+$ENV{'HOME'}/kent/src/hg/utils/automation/addQuickLift.py $tDb $qDb $gbdbQuickLiftDir/${quick}.bb
 _EOF_
       );
     }

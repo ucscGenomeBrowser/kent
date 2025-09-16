@@ -95,6 +95,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+        window.focus()
         const channel = new BroadcastChannel('igv_file_channel')
         channel.postMessage({type: 'filePickerReady'})
         const fileCache = new Map()
@@ -147,10 +149,14 @@
                 fileCache.delete(id)
                 refreshFileList()
             } else if (type === 'restoreFiles') {
+
+                // Process a request to restore a list of files, which means prompt the user to select them
+
                 const failed = event.data.files
                 for (const f of failed) {
                     restoreCache.set(f.id, f.name)
                 }
+                window.focus()
                 refreshFileList()
             } else if (type === 'removedTrack') {
                 // TODO -- might want to remove from restoreCache too
