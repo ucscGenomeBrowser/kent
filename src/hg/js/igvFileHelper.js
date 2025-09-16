@@ -472,6 +472,7 @@
                 gearColumnPosition: 'left',
                 showGearColumn: false,
                 showTrackLabels: false,
+                formEmbedMode: true,  // triggers key capture in input dialogs
                 disableZoom: true,
                 minimumBases: 0
             });
@@ -651,12 +652,27 @@
                 return {
                     "id": genomeID,
                     "twoBitURL": twoBitURL,
-                }
+                };
             } catch (e) {
                 console.error(e);
                 alert("Internal Error: Cannot get 2bit file from "+ apiUrl);
                 return null;
             }
+        }
+
+        function parseLocusString(locusString) {
+            const locusRegex = /^([^:]+)(?::(\d+)(?:-(\d+))?)?$/;
+            const match = locusString.match(locusRegex);
+            if (!match) {
+                throw new Error(`Invalid locus string: ${locusString}`);
+            }
+            const chr = match[1];
+            let start = match[2] ? parseInt(match[2].replace(",", ""), 10) - 1 : 0; // Convert to 0-based
+            let end = match[3] ? parseInt(match[3].replace(",", ""), 10) : start + 100; // Default to 100bp if no end provided
+            if (isNaN(start) || isNaN(end) || start < 0 || end <= start) {
+                throw new Error(`Invalid start or end in locus string: ${locusString}`);
+            }
+            return {chr, start, end};
         }
 
         // Attach helper functions to the igv object
