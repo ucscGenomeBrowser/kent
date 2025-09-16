@@ -11,7 +11,6 @@
         const IGV_STORAGE_KEY = "igvSession";
         let filePicker = null;
         let igvBrowser = null;
-        let igvInitialized = false;
         let isDragging = false;
         let sessionAutoSaveTimer = null;
 
@@ -67,8 +66,66 @@
 
 
         /**
+         * Initialize igv.js, creating an igvBrowser if a session is found in local storage.   The existence of a
+         * global "igvBrowser" variable indicates igv.js has already been initialized.
+         *
+         * @returns {Promise<void>}
+         */
+        async function initIgvUcsc() {
+
+            if (window.igvBrowser) {
+                //console.log("igvBrowser already exists");
+                return;
+            }
+
+            // Retrieve the igv session for this genome, if any,  from local storage.
+            // TODO -- in the future this might come from the UCSC session (cart)
+            const db = getDb();
+            let sessionString = getSessionStorage()[db];
+
+            if (sessionString) {
+
+                const igvSession = JSON.parse(igv.uncompressSession(`blob:${sessionString}`));
+
+                // Reconnect any file-based tracks to the actual File objects.
+                if (igvSession.tracks) {
+
+                    const failed = await restoreTrackConfigurations(igvSession.tracks);
+
+                    if (failed.length > 0) {
+
+                        const sendRestoreRequest = () => channel.postMessage({type: "restoreFiles", files: failed});
+
+                        if (filePicker && !filePicker.closed) {
+                            sendRestoreRequest();
+                            return;
+                        } else if (pingFilePicker()) {
+
+                            // A file picker is open, but (apparently) doesn't have references to the requested files.
+                            // Send a request to restore the files, which will bring the file picker to the front and
+                            // prompt the user to select the files.
+                            sendRestoreRequest();
+
+                        } else {
+
+                            // Open a file picker and prompt user to select files to restore the connections.
+                            filePicker = openFilePicker();
+                            filePicker.onload = () => {
+                                channel.postMessage({type: "restoreFiles", files: failed});
+                            };
+                        }
+                    }
+                }
+                await createIGVBrowser(igvSession);
+            }
+        }
+
+        /**
          * Given a list of files, return a list of track configurations.  Each configuration contains a url (MockFile) and
          * optionally an indexURL (MockFile).
+         *
+         * NOTE: igv uses the "url" and "indexURL" fiels for local files as well as URLs.
+         *
          * @param files
          * @returns {*[]}
          */
@@ -93,7 +150,7 @@
                 }
             }
 
-            // Now create configurations, matching index files when possible
+            // Now create configurations, matching index files to corresponding data files when possible
             const configurations = [];
             for (let {id, file} of dataFiles) {
 
@@ -150,6 +207,13 @@
             }
         }
 
+        /**
+         * Called upon a page reload to restore file references in the track configurations.  Returns a list of file
+         * descriptors {id, name} for files that could not be restored.
+         *
+         * @param trackConfigurations
+         * @returns {Promise<*[]>}
+         */
         async function restoreTrackConfigurations(trackConfigurations) {
             const failed = [];
             for (let config of trackConfigurations) {
@@ -176,20 +240,22 @@
 
         /**
          * Attempt to restore a File object given its id by sending a "getFile" message on the BroadcastChannel and waiting for
-         * a "file" message in response.  If no response is received within 1 second undefined is returned.
+         * a "file" message in response.  If no response is received within 1/2 a second undefined is returned.
+         *
+         * NOTE: the 1/2 second timeout is arbitrary, and could be reduced to improve responsiveness.
          *
          * @param id
          * @returns {Promise<unknown>}
          */
         async function restoreFile(id) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
 
                 const previousOnMessage = channel.onmessage;
                 const timeoutId = setTimeout(() => {
                     cleanup();
                     console.error(`Timeout waiting for file with id: ${id}`);
                     resolve(undefined);
-                }, 1000);
+                }, 500);
 
                 function cleanup() {
                     channel.onmessage = previousOnMessage;
@@ -217,9 +283,9 @@
 
         /**
          *  Update the igv.js browser to reflect a change in the UCSC browser start position.  This is called
-         *  when the user drags a track image to a new position.  It is intended for small changes, and
+         *  when the user drags a UCSC track image to a new position.  It is intended for small changes, and
          *  works by shifting the igv.js predrawn track image.  This will not work for large position
-         *  changes.
+         *  changes, or for changes in resolution.
          *
          * @param newPortalStart
          */
@@ -239,76 +305,6 @@
             }
         }
 
-        function openFilePicker() {
-            return window.open('../admin/filePicker.html', 'filePicker' + Date.now(), 'width=600,height=1000');
-        }
-
-        // Initialize the embedded IGV browser, restoring state from local storage.
-        async function initIgvUcsc() {
-
-            console.log("invoking initIgvUcsc");
-
-            if (window.igvBrowser) {
-                console.log("igvBrowser already exists");
-                return;
-            }
-
-            if (igvInitialized) {
-                // Already initialized, do nothing
-                return;
-            }
-
-            // Retrieve igv session string from local storage.
-            // TODO -- in the future this might come from the UCSC session (cart)
-
-
-            const db = getDb();
-            let sessionString = getSessionStorage()[db];
-
-            if (sessionString) {
-
-                // Restore the previously saved igv session, if any.
-                const igvSession = JSON.parse(igv.uncompressSession(`blob:${sessionString}`));
-
-                // Reconnect any file-based tracks to the actual File objects.
-                if (igvSession.tracks) {
-
-                    const failed = await restoreTrackConfigurations(igvSession.tracks);
-
-                    if (failed.length > 0) {
-
-                        const sendRestoreRequest = () => channel.postMessage({type: "restoreFiles", files: failed});
-
-                        if (filePicker && !filePicker.closed) {
-                            sendRestoreRequest();
-                            return;
-                        }
-                        if (filePicker) {
-                            // Unexpected: filePicker reference exists but window is closed.
-                            alert(
-                                `The following file connections could not be restored:\n<ul>${
-                                    failed.map(f => `<li>${f.name}</li>`).join('')
-                                }</ul>\nTo restore the connection select 'Choose Files' and select the files.`
-                            );
-                            sendRestoreRequest();
-                        } else {
-
-                            // No filePicker, open one
-                            filePicker = openFilePicker();
-                            filePicker.onload = () => {
-                                channel.postMessage({type: "restoreFiles", files: failed});
-                                //alert(
-                                //    `The following file connections could not be restored:\n<ul>${
-                                //        failed.map(f => `<li>${f}</li>`).join('')
-                                //    }</ul>\nTo restore the connection select 'Choose Files' and select the files.`
-                                //)
-                            };
-                        }
-                    }
-                }
-                await createIGVBrowser(igvSession);
-            }
-        };
 
         /**
          * Return the session storage object, which is a dictionary of {genomeID: sessionString}
@@ -356,22 +352,22 @@
         }
 
 
-        // Detect a page refresh (visibility change to hidden) and save the session to local storage.  This is meant to
-        // simulate  UCSC browser session handling.
-        // XX TODO - not enough time for sending an HTTP request to update cart - need a better system!
-        // document.onvisibilitychange = () => {
-        //     if (document.visibilityState === "hidden") {
-        //         if (igvBrowser) {
-        //             //setCartVar("igvState", igvSession, null, false);
-        //             //const igvSession = igvBrowser.compressedSession();
-        //             //localStorage.setItem("igvSession", igvSession);
-        //         }
-        //     }
-        // };
+// Detect a page refresh (visibility change to hidden) and save the session to local storage.  This is meant to
+// simulate  UCSC browser session handling.
+// XX TODO - not enough time for sending an HTTP request to update cart - need a better system!
+// document.onvisibilitychange = () => {
+//     if (document.visibilityState === "hidden") {
+//         if (igvBrowser) {
+//             //setCartVar("igvState", igvSession, null, false);
+//             //const igvSession = igvBrowser.compressedSession();
+//             //localStorage.setItem("igvSession", igvSession);
+//         }
+//     }
+// };
 
-        // The "Add IGV track" button handler.  The button opens the file picker window, unless
-        // it is already open in which case it brings that window to the front.  Tracks are added
-        // from the filePicker page by selecting track files.
+// The "Add IGV track" button handler.  The button opens the file picker window, unless
+// it is already open in which case it brings that window to the front.  Tracks are added
+// from the filePicker page by selecting track files.
         window.addEventListener("DOMContentLoaded", () => {
             document.getElementById('hgtIgv').addEventListener('click', async function (e) {
                 e.preventDefault(); // our
@@ -397,13 +393,49 @@
 
 
         /**
+         * Send a "ping" message to the file picker window and wait up to 100 msec for a "pong" response.  Used to
+         * determine if a file picker window is already open.
+         * @param channel
+         * @returns {Promise<unknown>}
+         */
+        async function pingFilePicker() {
+            const waitForResponse = new Promise((resolve) => {
+                const originalOnMessage = channel.onmessage;
+                channel.onmessage = (event) => {
+                    if (event.data && event.data.type === "pong") {
+                        channel.onmessage = originalOnMessage;
+                        resolve(true);
+                    }
+                };
+                setTimeout(() => {
+                    channel.onmessage = originalOnMessage;
+                    resolve(false);
+                }, 100);
+            });
+
+            channel.postMessage({type: "ping"});
+
+            const responded = await waitForResponse;
+            return responded;
+        }
+
+
+        function openFilePicker() {
+            return window.open('../admin/filePicker.html', 'filePicker' + Date.now(), 'width=600,height=1000');
+        }
+
+        /**
          * Update the track names in the left hand column of the IGV row in the image table.
          */
         function updateTrackNames() {
+
+            document.getElementById('igv_namediv').innerHTML = ""; // Clear any existing content
+
             // Add track names to the left hand column.
+            if(!igvBrowser) return;
+
             const allTracks = igvBrowser.findTracks(t => t.type);
             let top = 0;
-            document.getElementById('igv_namediv').innerHTML = ""; // Clear any existing content
             for (let track of allTracks) {
 
                 if ('sequence' !== track.type) {
@@ -471,6 +503,13 @@
             }
         }
 
+        /**
+         * Insert a new row into the image table for the IGV browser.  The igv browser object is a super-track of
+         * sorts, containing all igv.js tracks in the session.  In the future we might want to allocate a row
+         * for each igv.js track, but this will require some refactoring of igv.js.
+         *
+         * @returns {HTMLTableRowElement}
+         */
         function insertIGVRow() {
             const imgTbl = document.getElementById('imgTbl');
             const tbody = imgTbl.querySelector('tbody');
@@ -492,7 +531,7 @@
         }
 
         /**
-         * Create an IGV browser instance and insert it into the image table as a new row. The IGV browser essentially becomes
+         * Create an IGV browser instance and insert it into the image table in a new row. The IGV browser essentially becomes
          * a track in the UCSC browser context.  This function is called when the user adds the first IGV track, or
          * the igv session is restored on page reload.
          *
@@ -516,21 +555,21 @@
             }
             const igvRow = insertIGVRow();
 
-            // Ammend the config to remove most of the IGV widgets.  We only want the track display area.
+            // Ammend the igv config to remove most of the IGV widgets.  We only want the track display area.
             Object.assign(config, {
                 showNavigation: false,
                 showIdeogram: false,
                 showRuler: false,
-                //showSequence: false,
+                //showSequence: false,   // Uncomment this to hide igv sequence track
                 showAxis: false,
                 showTrackDragHandles: false,
                 showAxisColumn: false,
                 gearColumnPosition: 'left',
                 showGearColumn: false,
-                showTrackLabels: false,
-                formEmbedMode: true,  // triggers key capture in input dialogs
-                disableZoom: true,
-                minimumBases: 0
+                //showTrackLabels: false,   // Uncomment this to hide the "floating div" igv track labels
+                formEmbedMode: true,  // works around hotkey issues affecting igv input elements
+                disableZoom: true,   // disable zooming in igv, use UCSC zoom controls
+                minimumBases: 0     // No lower limit on bases per pixel, this is controlled by UCSC zoom
             });
 
             const div = document.getElementById("igv_div");
@@ -571,6 +610,8 @@
 
             window.igvBrowser = igvBrowser;
 
+            // Start the session auto-save timer.  This will periodically save the igv session to local storage.
+            // When / if we can reliably capture IGV state changes we can eliminate this and just save on state change.
             startSessionAutoSave();
 
             return igvBrowser;
@@ -595,6 +636,7 @@
                     loadIGVTracks([event.data.config]);
                     break;
 
+                // NOTE: The file picker ready message does not appear to be used.
                 case MSG.FILE_PICKER_READY:
                     const filesToRestore = JSON.parse(sessionStorage.getItem('filesToRestore'));
                     if (filesToRestore) {
@@ -605,8 +647,13 @@
             }
         };
 
+        /**
+         * Load one or more tracks into the igvBrowser.  If the igvBrowser does not exist it is created.
+         *
+         * @param configs
+         * @returns {Promise<void>}
+         */
         async function loadIGVTracks(configs) {
-
 
             if (configs.length > 0) {
 
@@ -645,34 +692,6 @@
                 updateSessionStorage();
             }
         }
-
-        /**
-         * Send a "ping" message to the file picker window and wait up to 100 msec for a "pong" response.  Used to
-         * determine if a file picker window is already open.
-         * @param channel
-         * @returns {Promise<unknown>}
-         */
-        async function pingFilePicker(channel) {
-            const waitForResponse = new Promise((resolve) => {
-                const originalOnMessage = channel.onmessage;
-                channel.onmessage = (event) => {
-                    if (event.data && event.data.type === "pong") {
-                        channel.onmessage = originalOnMessage;
-                        resolve(true);
-                    }
-                };
-                setTimeout(() => {
-                    channel.onmessage = originalOnMessage;
-                    resolve(false);
-                }, 100);
-            });
-
-            channel.postMessage({type: "ping"});
-
-            const responded = await waitForResponse;
-            return responded;
-        }
-
 
         /* get first line of text from URL */
         async function getLine(url, {timeoutMs = 10000} = {}) {
@@ -721,6 +740,13 @@
             }
         }
 
+        /**
+         * Parse a IGV / UCSC style locus string, e.g. "chr1:1000-2000" or "chr1:1000" or "chr1", and return
+         * a locus object {chr, start, end}.  The start is 0-based, end is 1-based.
+         *
+         * @param locusString
+         * @returns {{chr: *, start: (number|number), end: (number|*)}}
+         */
         function parseLocusString(locusString) {
             const locusRegex = /^([^:]+)(?::(\d+)(?:-(\d+))?)?$/;
             const match = locusString.match(locusRegex);
@@ -741,4 +767,5 @@
         igv.updateIgvStartPosition = updateIgvStartPosition;
 
     }
-)();
+)
+();
