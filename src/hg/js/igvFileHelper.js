@@ -13,6 +13,7 @@
         let igvBrowser = null;
         let igvInitialized = false;
         let isDragging = false;
+        let sessionAutoSaveTimer = null;
 
         // Create a BroadcastChannel for communication between the UCSC browser page and the file picker page.
         const channel = new BroadcastChannel('igv_file_channel');
@@ -331,11 +332,29 @@
                 const db = getDb();
                 sessionDict[db] = igvBrowser.compressedSession();
                 localStorage.setItem(IGV_STORAGE_KEY, JSON.stringify(sessionDict));
+            } else {
+                localStorage.removeItem(IGV_STORAGE_KEY);
             }
         }
 
-        // Periodically update the igv session in local storage.
-        setInterval(updateSessionStorage, 1);
+        /**
+         * Start a timer to periodically save the igv session to local storage.  When / if we are able to
+         * reliably capture IGV state changes we can eliminate this and just save on state change.
+         *
+         * @param intervalMs
+         */
+        function startSessionAutoSave(intervalMs = 1000) {
+            if (sessionAutoSaveTimer !== null) return; // already running
+            sessionAutoSaveTimer = setInterval(updateSessionStorage, intervalMs);
+        }
+
+        function stopSessionAutoSave() {
+            if (sessionAutoSaveTimer !== null) {
+                clearInterval(sessionAutoSaveTimer);
+                sessionAutoSaveTimer = null;
+            }
+        }
+
 
         // Detect a page refresh (visibility change to hidden) and save the session to local storage.  This is meant to
         // simulate  UCSC browser session handling.
@@ -387,7 +406,7 @@
             document.getElementById('igv_namediv').innerHTML = ""; // Clear any existing content
             for (let track of allTracks) {
 
-                if('sequence' !== track.type) {
+                if ('sequence' !== track.type) {
                     const labelContainer = document.createElement('div');
                     labelContainer.style.position = 'absolute'; // Use relative positioning
                     labelContainer.style.top = `${top}px`; // Position the element at the current value of "top"
@@ -403,17 +422,17 @@
                     gearDiv.style.maxWidth = '15px';
                     gearDiv.style.maxHeight = '15px';
                     gearDiv.style.overflow = 'hidden';
+                    gearDiv.style.cursor = 'pointer';
 
                     const cog = igv.createIcon('cog', 'grey');
                     // Ensure the underlying SVG is 15x15
                     const svg = cog.tagName && cog.tagName.toLowerCase() === 'svg' ? cog : cog.querySelector('svg');
                     if (svg) {
                         svg.setAttribute('width', '15');
-                        svg.setAttribute('height', '1');
+                        svg.setAttribute('height', '15');
                         svg.style.width = '15px';
                         svg.style.height = '15px';
                     }
-
                     gearDiv.appendChild(cog);
                     gearDiv.setAttribute('data-track-id', track.id); // Set the track ID attribute
                     labelContainer.appendChild(gearDiv);
@@ -430,6 +449,15 @@
                                 igvBrowser.config);
                         }
                     });
+
+                    // Move the track gear popup location, and hide its true parent.  This is a bit hacky, but
+                    // moving the gear popover to a new parent has undesired side effects.
+                    const popover = track.trackView.trackGearPopup.popover;
+                    if (popover) {
+                        popover.parentElement.style.width = '0px';  // don't use display=none, that breaks the popup
+                        popover.parentElement.style.height = '0px';
+                        popover.style.left = "-100px";
+                    }
 
                     const trackLabelDiv = document.createElement('div');
                     trackLabelDiv.textContent = track.name; // Set the track name as the label
@@ -518,6 +546,8 @@
                 if (allTracks.length === 0) {
                     igvRow.remove();
                     igvBrowser = null;
+                    updateSessionStorage();
+                    stopSessionAutoSave(); // stop auto save timer
                     delete window.igvBrowser;
                 }
                 updateTrackNames();
@@ -540,6 +570,9 @@
             );
 
             window.igvBrowser = igvBrowser;
+
+            startSessionAutoSave();
+
             return igvBrowser;
         }
 
