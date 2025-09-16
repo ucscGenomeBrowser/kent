@@ -99,7 +99,7 @@
                         if (filePicker && !filePicker.closed) {
                             sendRestoreRequest();
                             return;
-                        } else if (pingFilePicker()) {
+                        } else if (await pingFilePicker()) {
 
                             // A file picker is open, but (apparently) doesn't have references to the requested files.
                             // Send a request to restore the files, which will bring the file picker to the front and
@@ -368,7 +368,7 @@
 // The "Add IGV track" button handler.  The button opens the file picker window, unless
 // it is already open in which case it brings that window to the front.  Tracks are added
 // from the filePicker page by selecting track files.
-        window.addEventListener("DOMContentLoaded", () => {
+        window.addEventListener("DOMContentLoaded", async () => {
             document.getElementById('hgtIgv').addEventListener('click', async function (e) {
                 e.preventDefault(); // our
                 if (filePicker && !filePicker.closed) {
@@ -380,7 +380,7 @@
                     // a message on the channel and waiting briefly for a response, but we cannot get a reference to the window
                     // so we ask the user to bring it to the front.
 
-                    const responded = await pingFilePicker(channel);
+                    const responded = await pingFilePicker();
                     if (responded) {
                         alert("File picker is already open. Please switch to that window.");
                     } else {
