@@ -178,7 +178,7 @@ function setCartVars(names, values, errFunc, async)
     }
     loc = loc + "/cartDump";
     var hgsid = getHgsid();
-    var data = "submit=1&noDisplay=1&hgsid=" + hgsid + "&db=" + getDb();
+    var data = "submit=1&noDisplay=1&hgsid=" + hgsid;
     var track = getTrack();
     if (track && track.length > 0)
         data = data + "&g=" + track;
