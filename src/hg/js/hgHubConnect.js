@@ -1,3 +1,7 @@
+// "use strict";
+// Don't complain about line break before '||' etc:
+/* jshint -W014 */
+/* jshint esversion: 8 */
 function makeIframe(ev) {
     /* It's unusual to show script output in an iframe. But this solution has a few advantages:
      * - We can show a "waiting" message while the data loads
@@ -71,12 +75,23 @@ $(function() {
           localStorage.setItem("hubTab", ui.newTab.index());
       },
   });
-  // activate tabs if the current URL ends with #dev or #conn
+  // activate tabs if the current URL ends with the appropriate tab name
   var tabName = window.location.hash;
-  if (tabName==="#dev")
-      $("#tabs").tabs("option", "active", 2);
-  if (tabName==="#conn")
+  if (tabName==="publicHubs")
+      $("#tabs").tabs("option", "active", 0);
+  if (tabName==="#conn" || tabName === "unlistedHubs")
       $("#tabs").tabs("option", "active", 1);
+  if (tabName==="#dev" || tabName === "hubDeveloper")
+      $("#tabs").tabs("option", "active", 2);
+  if (tabName==="#hubUpload")
+      $("#tabs").tabs("option", "active", 3);
+
+  $("#tabs").tabs().on("tabsactivate", function(event, ui) {
+    const  newHash = ui.newTab.find("a").attr("href");
+    if (newHash) {
+      history.replaceState(null, null, newHash);
+    }
+  });
 });
 
 // creates keyup event; listening for return key press
