@@ -1,0 +1,191 @@
+#########################################################################
+# DDG2P (09-19-2025) Jaidan Jenkins-Kiefer
+
+# Source: https://www.ebi.ac.uk/gene2phenotype/
+# G2P_DD_2025-07-30.csv
+
+############################################################
+# Obtain gene coordinates with Table Browser
+############################################################
+# Go to: https://genome.ucsc.edu/cgi-bin/hgTables
+# Assembly: hg38
+# Group: Genes and Gene Predictions
+# Track: HGNC
+# Table: hgnc
+# Region: genome
+# Identifiers (names/accessions): Upload list of HGNC IDs from G2P_DD_2025-07-30.csv (4th column)
+# Output format: selected fields from primary table
+# Fields selected: chrom, txStart, txEnd, name2, name, strand
+# Output file: hg38_gene_coords.tsv
+
+############################################################
+# Merge DDG2P with gene coords
+############################################################
+python3
+import pandas as pd
+#!/usr/bin/python3
+import csv
+import sys
+from pathlib import Path
+
+def confidence_to_color(confidence):
+    """ Map a confidence string to an RGB color string for UCSC BED itemRgb."""
+    color_map = {
+        "definitive": "0,128,0",   # green
+        "strong": "0,0,255",       # blue
+        "moderate": "255,165,0",   # orange
+        "limited": "255,0,0",      # red
+        "refuted": "128,128,128"   # gray
+    }
+    return color_map.get(confidence.lower(), "0,0,0")  # default black
+
+
+def load_g2p(file_path):
+    """Load G2P CSV into dict keyed by HGNC ID, plus list of missing IDs."""
+    g2p_map = {}
+    with open(file_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            hgnc_id = row["hgnc id"].strip()
+            if hgnc_id not in g2p_map:
+                g2p_map[hgnc_id] = []
+            g2p_map[hgnc_id].append(row)
+    return g2p_map
+
+
+def load_coordinates(file_path):
+    """Load coordinates TSV into dict keyed by HGNC ID."""
+    coord_map = {}
+    with open(file_path, newline='', encoding='utf-8') as tsvfile:
+        reader = csv.DictReader(tsvfile, delimiter="\t")
+        for row in reader:
+            if row["name"].startswith("HGNC:"):
+                hgnc_id = row["name"].split(":")[1]
+                coord_map[hgnc_id] = row
+    return coord_map
+
+
+def join_and_write(g2p_data, coords, output_file):
+    """Join G2P and coordinates into BED 8+19 format."""
+    with open(output_file, "w", newline='', encoding="utf-8") as out:
+        writer = csv.writer(out, delimiter="\t")
+
+        for hgnc_id, rows in g2p_data.items():
+            for row in rows:
+                coord = coords.get(hgnc_id, None)
+
+                # BED 9 fields
+                chrom       = coord["#chrom"] if coord else ""
+                chromStart  = coord["chromStart"] if coord else "0"
+                chromEnd    = coord["chromEnd"] if coord else "0"
+                name        = row["gene symbol"]
+                score       = coord["score"] if coord else "0"
+                strand      = coord["strand"] if coord else "+"
+                thickStart  = coord["thickStart"] if coord else "0"
+                thickEnd    = coord["thickEnd"] if coord else "0"
+                rgb         = confidence_to_color(row["confidence"])
+
+                # G2P 20 fields
+                g2p_id      = row["g2p id"]
+                gene_mim    = row["gene mim"]
+                hgnc_id_val = row["hgnc id"]
+                prev_symbols= row["previous gene symbols"]
+                disease_name= row["disease name"]
+                disease_mim = row["disease mim"]
+                disease_MONDO = row["disease MONDO"]
+                allelic_req = row["allelic requirement"]
+                cross_mod   = row["cross cutting modifier"]
+                confidence  = row["confidence"]
+                var_conseq  = row["variant consequence"]
+                var_types   = row["variant types"]
+                mol_mech    = row["molecular mechanism"]
+                mol_mech_cat= row["molecular mechanism categorisation"]
+                mol_mech_ev = row["molecular mechanism evidence"]
+                phenotypes  = row["phenotypes"]
+                publications= row["publications"]
+                panel       = row["panel"]
+                comments    = row["comments"]
+                date_review = row["date of last review"]
+
+                # Write BED 9 + 20
+                writer.writerow([
+                    chrom, chromStart, chromEnd, name, score, strand, thickStart, thickEnd,
+                    rgb, g2p_id, gene_mim, hgnc_id_val, prev_symbols, disease_name, disease_mim,
+                    disease_MONDO, allelic_req, cross_mod, confidence, var_conseq, var_types,
+                    mol_mech, mol_mech_cat, mol_mech_ev, phenotypes, publications, panel,
+                    comments, date_review
+                ])
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print(f"Usage: {sys.argv[0]} <g2p_csv> <coords_tsv> <output_file>")
+        sys.exit(1)
+
+    g2p_file = Path(sys.argv[1])
+    coord_file = Path(sys.argv[2])
+    output_file = Path(sys.argv[3])
+
+    g2p_data = load_g2p(g2p_file)
+    coords_data = load_coordinates(coord_file)
+
+    join_and_write(g2p_data, coords_data, output_file)
+    print(f"Output written to {output_file}")
+
+############################################################
+# Run the python script to add coordinates
+############################################################
+./ddg2p_merge.py G2P_DD_2025-07-30.csv hg19_gene_coords.sorted.tsv hg19bed 
+
+############################################################
+# DDG2P autoSQL file
+############################################################
+table ddg2p
+"Developmental Disorders (DD) panel in the Gene2Phenotype (G2P) database (DDG2P) - BED 9+20"
+(
+    string chrom;        "Reference sequence chromosome or scaffold"
+    uint   chromStart;    "Start position of feature on chromosome"
+    uint   chromEnd;      "End position of feature on chromosome"
+    string name;          "Gene symbol"
+    uint   score;         "Score"
+    char[1] strand;       "+ or - for strand"
+    uint   thickStart;    "Coding region start"
+    uint   thickEnd;      "Coding region end"
+    uint   itemRGB;       "Color based on confidence (R,G,B values)"
+
+    # ----- 20 additional custom fields -----
+    string g2p_id;                           "G2P ID"
+    string   gene_mim;                         "Gene MIM ID"
+    string   hgnc_id;                          "HGNC ID"
+    string previous_gene_symbols;            "List of previous gene symbols"
+    lstring disease_name;                     "Disease name"
+    string disease_mim;                      "Disease MIM ID"
+    string disease_MONDO;                    "MONDO ID"
+    string allelic_requirement;              "Number of alleles affected to cause the relevant disease"
+    string cross_cutting_modifier;           "Optional cross-cutting modifiers giving extra info"
+    string confidence;                       "Likelihood that the gene-disease association is true"
+    string variant_consequence;              "SO terms for the variant consequence"
+    string variant_types;                    "SO terms for variant types"
+    string molecular_mechanism;              "Molecular mechanism"
+    string molecular_mechanism_categorisation; "Categorisation of the molecular mechanism"
+    lstring molecular_mechanism_evidence;     "Evidence to determine the disease mechanism"
+    lstring phenotypes;                       "Human phenotype ontology IDs"
+    lstring publications;                     "Pubmed IDs"
+    string panel;                            "Disease grouping or defined clinical category"
+    lstring comments;                         "Comments added by online curators"
+    string date_of_last_review;              "Date of last review"
+)
+
+############################################################
+# Sort and build BigBed
+############################################################
+sort -k1,1 -k2,2n hg19bed > ddg2p_hg19.sorted
+sort -k1,1 -k2,2n hg38bed > ddg2p_hg38.sorted
+
+fetchChromSizes hg19 > hg19.chrom.sizes
+fetchChromSizes hg38 > hg38.chrom.sizes
+
+bedToBigBed -type=bed9+20 -as=../ddg2p.as -tab hg19/ddg2p_hg19.sorted hg19.chrom.sizes DDG2P_hg19.bb
+bedToBigBed -type=bed9+20 -as=../ddg2p.as -tab hg38/ddg2p_hg38.sorted hg38.chrom.sizes DDG2P_hg38.bb
+
+
