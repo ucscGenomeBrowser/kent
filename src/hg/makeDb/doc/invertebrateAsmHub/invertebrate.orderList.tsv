@@ -34,6 +34,7 @@ GCA_000150785.1_g4	African malaria mosquito (S 2008)
 GCA_028142955.1_Pfu_4.1A	Akoya pearl oyster (2022)
 GCA_002216045.1_PinMar1.0	Akoya pearl oyster (pearl oyster-OUG 2017)
 GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee
+GCF_051020985.1_iyNomMela1	Alkali bee (GNS246 2025)
 GCF_003710045.2_USU_Nmel_1.3	alkali bee (v1.3 Touchet_males 2018)
 GCF_040183065.1_P.americana_PAMFEO1_priV1	American cockroach (PAMFEO1 primary hap 2024)
 GCF_050947875.1_ASM5094787v1	American dog tick (Ectoservices 2025)
@@ -218,6 +219,7 @@ GCA_000224905.2_TGFOU1v02	apicomplexans T.gondii (FOU 2014)
 GCA_000325525.2_TGGABGALDOM2_v2.1	apicomplexans T.gondii (GAB2-2007-GAL-DOM2 2014)
 GCA_000149715.2_TGGT1	apicomplexans T.gondii (GT1 2013)
 GCA_000224865.2_TGMAS1_v2	apicomplexans T.gondii (MAS 2014)
+GCA_019455585.1_ASM1945558v1	apicomplexans T.gondii (ME49 B7 2021)
 GCA_014898695.1_ASM1489869v1	apicomplexans T.gondii (ME49xCTG S27 2020)
 GCA_000224885.2_TGP89A_v02	apicomplexans T.gondii (p89 2014)
 GCA_001593265.1_ToxRH1.0	apicomplexans T.gondii (RH 2016)
@@ -274,6 +276,7 @@ GCF_000671375.1_Cexi_2.0	bark scorpion
 GCF_015706575.1_ASM1570657v1	bat star
 GCF_041381155.1_Ai_NY	bay scallop (NY 2024)
 GCF_000648675.2_Clec_2.1	bed bug
+GCF_050908995.1_iyAndCera1_principal	bee A.cerasifolii (SP2316 primary hap 2025)
 GCF_024516045.1_iyBomAffi1.2	bee B.affinis (iyBomAffi1 2022)
 GCF_011952205.1_Bbif_JDL3187	bee B.bifarius
 GCF_041682495.1_iyBomFerv1	bee B.fervidus (BK054 2024)
@@ -283,16 +286,23 @@ GCF_024542735.1_iyBomHunt1.1	bee B.huntii (Logan2020A 2022)
 GCF_905332965.1_iyBomPasc1.1	bee B.pascuorum (primary hap 2021)
 GCF_014825855.1_ASM1482585v1	bee B.pyrosoma
 GCF_011952275.1_Bvanc_JDL1245	bee B.vancouverensis nearcticus
+GCF_051014615.1_iyBomVanc1_principal	bee B.vancouverensis nearcticus (primary hap 2025)
 GCF_011952255.1_Bvos_JDL3184-5_v1.1	bee B.vosnesenskii
 GCF_001652005.2_ASM165200v1	bee C.calcarata (v2 Rehan_Ccalc_2016 2016)
 GCF_013123115.1_ASM1312311v1	bee C.gigas
+GCF_051014445.1_iyColLati1	bee C.latitarsis (SP2378_abdomen 2025)
 GCF_001272555.1_ASM127255v1	bee D.novaeangliae
 GCF_001483705.2_ASM148370v2	bee E.mexicana (v2 0111107269 2016)
 GCF_011392965.1_Fvar_1.2	bee F.varia
 GCF_026225885.1_UHH_iyHylAnth1.0_haploid	bee H.anthracinus (JK02 2022)
 GCF_001263275.1_ASM126327v1	bee H.laboriosa
+GCF_050948215.1_iyHalRubi1_principal	bee H.rubicundus (RS-2024b primary hap 2025)
 GCF_026283585.1_UHH_iyHylVolc1.0_haploid	bee H.volcanicus (JK05 2022)
+GCF_051020765.1_iyLasBale1	bee L.baleicum (2025)
 GCF_011865705.1_USU_MGEN_1.2	bee M.genalis
+GCF_051020955.1_iyMegGena1_principal	bee M.genalis (19385.01 primary hap 2025)
+GCF_051014685.1_iyPtiAriz1_principal	bee P.arizonensis (GNS036 primary hap 2025)
+GCF_050948175.1_iyXylSono1_principal	bee X.sonorina (GNS202 primary hap 2025)
 GCA_963969225.2_iyXylViol4.1	bee X.violacea (2024)
 GCA_001693075.2_ASM169307v2	beef tapeworm (TSAYD01 2016)
 GCA_011316535.1_NJAU_Sexi_v1	beet armyworm
@@ -394,6 +404,7 @@ GCA_000004695.1_dicty_2.7	cellular slime molds (AX4 2009)
 GCA_000190715.1_v1.0	cellular slime molds (QSDP1 2011)
 GCF_021461385.2_iqSchPice1.1	Central American locust (TAMUIC-IGC-003096 2022)
 GCA_018389105.1_ASM1838910v1	chambered nautilus (Nautilus ZY-0506 2021)
+GCF_004210375.1_ASM421037v1	Chinese horseshoe crab (NWPU-2018 2019)
 GCF_024679095.1_ASM2467909v1	Chinese mitten crab (Jianghai 21 2022)
 GCA_013436485.1_ASM1343648v1	Chinese mitten crab (nwpu-v1-2020 2020)
 GCF_032854445.1_CUHK_Ljap_v2	chiton L.japonica (JHLJ2023 2024)
@@ -687,6 +698,7 @@ GCA_018806985.1_UZH_Avas_1.0	French heartworm (ZH-2019-22 2021)
 GCA_002600895.1_ASM260089v1	freshwater planarian (S2 2017)
 GCA_000181075.1_ASM18107v1	freshwater planarian (S2F2 2007)
 GCF_025200985.1_Dgunungcola_SK_2	fruit fly (Sukarami 2022)
+GCF_041734735.1_ASM4173473v1	gastropods B.areolata (BAREFJ2019XMU 2024)
 GCF_016097555.1_Gae_host_genome	gastropods G.aegis
 GCF_037392515.1_JCU_Hal_asi_v2	gastropods H.asinina (JCU_RB_2024 2024)
 GCF_037325665.1_US_GU_Lsax_2.0	gastropods L.saxatilis (snail1 2024)
@@ -1203,6 +1215,7 @@ GCF_000002335.3_Tcas5.2	red flour beetle
 GCF_031307605.1_icTriCast1.1	red flour beetle (GA2 primary hap 2023)
 GCF_000187915.1_Pbar_UMD_V03	red harvester ant
 GCF_907164935.1_iOsmBic2.1	red mason bee (2021)
+GCF_030347505.1_kcgeb_rfMv2	red palm weevil (W39M 2023)
 GCF_001313835.1_ASM131383v1	red paper wasp
 GCF_964194025.1_txConMacr16.3	red planarian C.macropyga (primary hap 2025)
 GCA_025618425.1_DUKEBGI_Htub_1.0	red sea urchin (PLD820 2022)
