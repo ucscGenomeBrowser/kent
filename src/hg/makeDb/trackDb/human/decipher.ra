@@ -63,7 +63,7 @@ searchTable decipher
 searchMethod exact
 searchType bigBed
 
-searchTable decipherDDG2P
+searchTable decipherPopulation
 searchMethod exact
 searchType bigBed
 
