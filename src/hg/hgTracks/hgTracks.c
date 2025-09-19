@@ -8897,27 +8897,6 @@ trackList = windows->trackList;  // restore original track list
 // Loop over each window loading all tracks
 trackLoadingInProgress = TRUE;
 
-// LOAD OPTIMIZATION HACK GALT
-// This is an attempt to try to optimize loading by having multiple regions
-// treated as a single span.  The hack just grabs the dimensions of the first and last windows
-// and uses the loader in the first window to load them, then copies the results to all tracks.
-// This basically has only been tried on BED-like tracks, and only for exon/gene-mostly vmodes.
-// I am not re-partitioning the results after the load, so this means all windows see all items.
-// The reason that tends to work is that by luck most BED handlers have code to check if the item
-// overlaps the current window and to skip it if it does not.
-// I do not expect something so simple would work with wigs and other track types.
-// Even if we do want to optimize the BED-like tracks (which are already the fastest loading type),
-// to handle all of the virtmodes properly, this would have be be done differently.
-// Instead of just lumping them all into a single range, you would have to cluster together
-// ranges that are close together and on the same chromosome.
-// Clearly this was just to test an idea for optimizing.
-// NOT FINISHED.
-bool loadHack = FALSE; //TRUE;  // probably should only be tried on non-wiggle tracks
-//warn ("loadHack = %d", loadHack); // TODO
-int lastWinEnd = 0;
-for (window=windows; window; window=window->next)
-    lastWinEnd = window->winEnd;
-
 int doLoadLoop;
 boolean doLoadSummary = FALSE;
 
@@ -8928,13 +8907,6 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 	{
 	trackList = window->trackList;  // set track list
 	setGlobalsFromWindow(window);
-
-	// TEMP HACK GALT REMOVE
-	if (loadHack)
-	    {
-	    if (currentWindow == windows) // first window
-		winEnd = lastWinEnd; // so now we load the entire span inside the first window.
-	    }
 
 	/* pre-load remote tracks in parallel */
 	int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
@@ -8982,74 +8954,49 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 
 		    checkIfWiggling(cart, track);
 
-		    if (!loadHack)
+		    if (doLoadSummary)
 			{
-
-			if (doLoadSummary)
+			if (track->loadSummary)
 			    {
-			    if (track->loadSummary)
+			    if (!track->subtracks)
 				{
-				if (!track->subtracks)
+				char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
+				if (!quickLiftFile)
 				    {
-				    char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
+				    if (!startsWith("bigLolly", track->tdb->type))
+					{
+					track->loadSummary(track);
+					}
+				    }
+				}
+			    }
+			struct track *subtrack;
+			for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
+			    {
+			    if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
+				{
+				if (!subtrack->parallelLoading)
+				    {
+				    char *quickLiftFile = trackDbSetting(subtrack->tdb, "quickLiftUrl");
 				    if (!quickLiftFile)
 					{
-					if (!startsWith("bigLolly", track->tdb->type))
+					if (!startsWith("bigLolly", subtrack->tdb->type))
 					    {
-					    track->loadSummary(track);
-					    }
-					}
-				    }
-				}
-			    struct track *subtrack;
-			    for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
-				{
-				if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
-				    {
-				    if (!subtrack->parallelLoading)
-					{
-					char *quickLiftFile = trackDbSetting(subtrack->tdb, "quickLiftUrl");
-					if (!quickLiftFile)
-					    {
-					    if (!startsWith("bigLolly", subtrack->tdb->type))
-						{
-						if (subtrack->loadSummary)
-						    subtrack->loadSummary(subtrack);
-						}
+					    if (subtrack->loadSummary)
+						subtrack->loadSummary(subtrack);
 					    }
 					}
 				    }
 				}
 			    }
-			else
-			    {
-			    track->loadItems(track);
-			    if (tdbHasDecorators(track))
-				{
-				loadDecorators(track);
-				decoratorMethods(track);
-				}
-			    }
-
 			}
 		    else
 			{
-			// TEMP HACK GALT REMOVE
-			if (currentWindow == windows) // first window
+			track->loadItems(track);
+			if (tdbHasDecorators(track))
 			    {
-			    track->loadItems(track);
-			    }
-			else
-			    {
-			    track->items = track->prevWindow->items;  // just point to the previous windows items (faster than loading)
-			    // apparently loadItems is setting some other fields that we want, but which ones?
-			    track->visibility = track->prevWindow->visibility;
-			    track->limitedVis = track->prevWindow->limitedVis;
-			    track->limitedVisSet = track->prevWindow->limitedVisSet;
-			    track->height = track->prevWindow->height;
-			    track->lineHeight = track->prevWindow->lineHeight;
-			    track->heightPer = track->prevWindow->heightPer;
-			    // TODO does this work for subtracks or parents/children?
+			    loadDecorators(track);
+			    decoratorMethods(track);
 			    }
 			}
 
