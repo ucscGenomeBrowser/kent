@@ -188,7 +188,7 @@ group map
     type bigBed 3
     dataVersion pm151b-v3.easy.bed.gz (Panmask v1.4, Aug 6 2025, MD5: 2f59a43dab0b463bafcf3b59fc62)
     visibility hide
-    release alpha
+    release alpha,beta
     html problematic
 
 searchTable comments
