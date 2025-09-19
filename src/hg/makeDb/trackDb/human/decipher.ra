@@ -58,6 +58,15 @@ group phenDis
     filterValues.type loss,gain,del/dup
     filter.sample_size 0
 
+    track ddg2p
+    parent decipherContainer
+    shortLabel DDG2P
+    longLabel Developmental Disorders Gene2Phenotype (DDG2P)
+    type bigBed 9 +
+    bigDataUrl /gbdb/$D/ddg2p/ddg2p.bb
+    visibility pack
+    mouseOver <b>G2P ID:</b> ${g2p_id} <br> <b>Variant Consequence:</b> ${variant_consequence} <br> <b>Disease Name:</b> ${disease_name} <br> <b>Pubmed IDs:</b> ${publications} <br> <b>Molecular Mechanism:</b> ${molecular_mechanism} <br> <b>Allelic Requirments:</b> ${allelic_requirement} <br> <b>Date of Last Review:</b> ${date_of_last_review}
+    html decipherContainer
 
 searchTable decipher
 searchMethod exact

@@ -57,6 +57,13 @@ DECIPHER web site.</p>
 The <b>Population CNVs</b> track shows common copy-number variants (CNVs) and their
 population frequencies, lifted over from the hg19 assembly.</p>
 
+<p>
+The <strong>Developmental Disorders Genotype-to-Phenotype (DDG2P)</strong> track displays genes
+associated with severe developmental disorders. The track can be used to filter genomic sequencing
+data from individuals with genetic disorders to identify likely causative variants and accelerate
+diagnosis.
+</p>
+
 <H2>Display Conventions and Configuration</H2>
 <P>
 The genomic locations of DECIPHER variants are labeled with the DECIPHER variant descriptions. 
@@ -116,11 +123,52 @@ about the data:
   <li><strong>Sample Size of Study:</strong> The total number of samples examined.</li>
 </ul>
 
+
+<p>
+For the <b>DDG2P track</b>, items are colored according confidence of gene disease association is true:</p>
+<ul>
+    <li style="color: green;">Definitive</li>
+    <li style="color: blue;">Strong</li>
+    <li style="color: orange;">Moderate</li>
+    <li style="color: red;">Limited</li>
+    <li style="color: gray;">Refuted</li>
+</ul>
+
+<p>Each mouse over item includes the following fields:</p>
+<dl>
+  <dt><strong>G2P ID</strong></dt>
+  <dd>Unique identifier assigned by the Gene2Phenotype (G2P) database.</dd>
+
+  <dt><strong>Number of PubMed IDs</strong></dt>
+  <dd>Count of publications associated with the variant.</dd>
+
+  <dt><strong>Molecular Mechanism</strong></dt>
+  <dd>Description of the molecular processes and interactions causing pathogenic effects.</dd>
+
+  <dt><strong>Allelic Requirements</strong></dt>
+  <dd>Number of alleles required at a locus to produce a pathogenic phenotype (e.g., monoallelic, biallelic).</dd>
+
+  <dt><strong>Variant Consequence</strong></dt>
+  <dd>Predicted effect each allele of a variant has on a transcript.</dd>
+
+  <dt><strong>Disease Name</strong></dt>
+  <dd>Name of the disease associated with the variant.</dd>
+
+  <dt><strong>Date of Last Review</strong></dt>
+  <dd>Most recent date the entry was manually reviewed.</dd>
+</dl>
+
+
 <H2>Method</H2>
 <P>
 Data provided by the DECIPHER project group are imported and processed
 to create a simple BED track to annotate the genomic regions associated
 with individual patients.
+</p>
+<p>
+Data provided by the Gene2Phenotype project group were imported and processed to create a BED-based track
+annotating genomic regions associated with individual patients. Standard genome assembly coordinates
+and gene annotations were used to map DDG2P entries to the browser.
 </P>
 
 
@@ -138,6 +186,10 @@ For more information on DECIPHER, please contact
 The DECIPHER data access and documentation can be found at
 <a href="https://www.deciphergenomics.org/about/downloads" target="_blank">DECIPHER Downloads</a>.
 </p>
+<p>
+Source data for the DDG2P track are available directly from
+<a href="https://www.ebi.ac.uk/gene2phenotype/" target="_blank">Gene2Phenotype</a>. 
+</p>
 
 <H2>References</H2>
 <p>
@@ -148,4 +200,15 @@ DECIPHER: Database of Chromosomal Imbalance and Phenotype in Humans Using Ensemb
 <em>Am J Hum Genet</em>. 2009 Apr;84(4):524-33.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19344873" target="_blank">19344873</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2667985/" target="_blank">PMC2667985</a>
+</p>
+<p>
+Thormann A, Halachev M, McLaren W, Moore DJ, Svinti V, Campbell A, Kerr SM, Tischkowitz M, Hunt SE,
+Dunlop MG <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-019-10016-3" target="_blank">
+Flexible and scalable diagnostic filtering of genomic variants using G2P with Ensembl VEP</a>.
+<em>Nat Commun</em>. 2019 May 30;10(1):2373.
+DOI: <a href="https://doi.org/10.1038/s41467-019-10016-3"
+target="_blank">10.1038/s41467-019-10016-3</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/31147538" target="_blank">31147538</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6542828/" target="_blank">PMC6542828</a>
 </p>
