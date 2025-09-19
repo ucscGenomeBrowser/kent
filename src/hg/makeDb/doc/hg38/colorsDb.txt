@@ -1,0 +1,231 @@
+#########################################################################
+# ColorsDb v1.2.0 (09-19-2025) Karen Wang
+
+############################################################
+# Download input VCFs from Zenodo
+############################################################
+# hg38
+cd hg38
+wget https://zenodo.org/records/14814308/files/CoLoRSdb.GRCh38.v1.2.0.pbsv.jasmine.vcf.gz
+wget https://zenodo.org/records/14814308/files/CoLoRSdb.GRCh38.v1.2.0.pbsv.jasmine.vcf.gz.tbi
+
+# hs1
+cd ../hs1
+wget https://zenodo.org/records/14814308/files/CoLoRSdb.CHM13.v1.2.0.pbsv.jasmine.vcf.gz
+wget https://zenodo.org/records/14814308/files/CoLoRSdb.CHM13.v1.2.0.pbsv.jasmine.vcf.gz.tbi
+cd ..
+
+############################################################
+# Python script 
+############################################################
+'''
+Goal: To convert .vcf.gz files to a bigBed format for genome display in the UCSC Genome Browser.
+
+Why: bigBed allows for faster and better genome annotation display because it only requires minimal data to be loaded.
+    In contrast, VCF is designed to store all possible info about variants, which can be too much for efficient display.
+
+VCF columns include:
+- Chromosome (CHROM)
+- Position (POS)
+- Variant ID (ID)
+- Reference allele (REF)
+- Alternate allele (ALT)
+- Quality (QUAL)
+- Filter (FILTER)
+- Info (INFO): 
+    - SVTYPE = Structural Variant type
+    - SVLEN = Structural Variant length
+    - NS = Number of Samples with Data
+    - AN = Total number of alleles in called genotypes
+    - AF = Allele Frequency estimate for each alternate allele
+    - AC = Allele count in genotypes
+    - AC_Hom = Allele count in homozygous genotypes
+    - AC_Het = Allele count in heterozygous genotypes
+    - AC_Hemi = Allele count in hemizygous genotypes
+    - nhomalt = The number of individuals that are called homozygous for the alternate allele
+    - HWE = Hardy-Weinberg Equilibrium p-value
+    - ExcHet = Excess Heterozygosity p-value
+'''
+
+import gzip # To read compressed .vcf.gz files.
+import argparse # To handle command line arguments.
+import sys
+
+def vcf_info_dict(info):
+    ''' 
+    Converts INFO filelds to a dictionary from a vcf line to access values easily. 
+    Example: SVTYPE=DEL;SVLEN=-1000;AF=0.5 becomes {'SVTYPE': 'DEL', 'SVLEN': '-1000', 'AF': '0.5'}
+    '''
+    info_dict = {}
+    for item in info.split(';'):
+        if '=' in item:
+            key, value = item.split('=', 1)
+            info_dict[key] = value
+        else:
+            info_dict[item] = True
+    return info_dict
+
+def sv_color(svtype):
+    ''' RGB color based on SVTYPE. '''
+    colors ={'DEL': '255,0,0', #Red for DEL
+           'INS': '0,0,255', #Blue for INS
+           'INV': '128,0,128'} #Purple for INV
+    return colors.get(svtype,'0,0,0')
+
+def parse_vcf_to_bed(vcf_file, bed_file):
+    '''
+    Converts a .vcf.gz file to a bed12+ file.
+    '''
+    svtypes_found = set()
+
+    with gzip.open(vcf_file, 'rt') as vcf, open(bed_file, 'w') as bed:
+
+        for line in vcf:
+            if line.startswith('#'):
+                continue  # Skip header lines
+
+            fields = line.strip().split('\t')
+            chrom = fields[0]
+            pos = int(fields[1])
+            ref = fields[3]
+            alt = fields[4]
+            info = vcf_info_dict(fields[7])
+
+            svtype = info.get('SVTYPE', 'NA')
+            svtypes_found.add(svtype)  # Track SVTYPEs found
+
+            svlen = info.get('SVLEN', '0') # Returns to 0 if no SVLEN is found.
+            af = info.get('AF', '0')
+
+            try:
+                svlen = abs(int(svlen))
+            except ValueError:
+                sys.exit(f"Error: invalid svlen value.") # if SVLEN returns as non-numerical numbers, it raises an error.
+            try:
+                af_scaled = float(af) * 1000
+            except ValueError:
+                sys.exit(f"Error: invalid af value.")
+
+            start = pos - 1
+            end = pos if svtype == "INS" else pos + svlen
+
+            # BED12 required columns
+            thickStart = start
+            thickEnd = end
+            itemRgb = sv_color(svtype)  # Set color based on svtype 
+
+            NS = int(info.get('NS','0'))
+            AN = int(info.get('AN','0'))
+            AC = int(info.get('AC','0'))
+            AC_Hom = int(info.get('AC_Hom','0'))
+            AC_Het = int(info.get('AC_Het','0'))
+            AC_Hemi = int(info.get('AC_Hemi','0'))
+            nhomalt = int(info.get('nhomalt','0'))
+            HWE = float(info.get('HWE','0'))
+            ExcHet = float(info.get('ExcHet','0'))
+            
+            if fields[2] != '.':
+                name = fields[2]
+            else:
+                if svlen < 1000:
+                    name = f"{svtype}-{svlen}bp" # If the variant length is <1000, use bp unit.
+                else:
+                    name = f"{svtype}-{svlen/1000:.1f}kb" # Else, return a kb unit.
+
+            strand = "."
+            score = int(af_scaled)
+
+            # BED12+ line
+            bed_line = (
+                f"{chrom}\t{start}\t{end}\t{name}\t{score}\t{strand}\t"
+                f"{thickStart}\t{thickEnd}\t{itemRgb}\t"
+                f"{svtype}\t{svlen}\t{af}\t{NS}\t{AN}\t{AC}\t"
+                f"{AC_Hom}\t{AC_Het}\t{AC_Hemi}\t{nhomalt}\t{HWE}\t{ExcHet}\t"
+                f"{ref}\t{alt}\n"
+            )
+            bed.write(bed_line)
+
+   
+    for sv in sorted(svtypes_found):
+        print(sv)
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser(
+        description="Split a structural-variant VCF into separate BED12+ files by SVTYPE"
+    )
+    p.add_argument('--vcf', required=True, help="Input .vcf.gz file")
+    p.add_argument('--bed', required=True, help="Output BED")
+    args = p.parse_args()
+    parse_vcf_to_bed(args.vcf, args.bed)
+
+############################################################
+# Convert VCF to BED (structural variants)
+############################################################
+python3 vcf_to_bed_convert.py \
+  --vcf hg38/CoLoRSdb.GRCh38.v1.2.0.pbsv.jasmine.vcf.gz \
+  --bed hg38/sv.hg38.bed
+
+python3 vcf_to_bed_convert.py \
+  --vcf hs1/CoLoRSdb.CHM13.v1.2.0.pbsv.jasmine.vcf.gz \
+  --bed hs1/sv.hs1.bed
+
+############################################################
+# Sort BED files
+############################################################
+sort -k1,1 -k2,2n hg38/sv.hg38.bed > hg38/sv.hg38.sorted.bed
+sort -k1,1 -k2,2n hs1/sv.hs1.bed > hs1/sv.hs1.sorted.bed
+
+############################################################
+# autoSql file
+############################################################
+table svBed9plus14
+"Structural variants from pbsv+jasmine as BED9 + 14 extra fields"
+(
+string  chrom;         "Chromosome"
+uint    chromStart;    "Start (0-based)"
+uint    chromEnd;      "End (half-open)"
+string  name;          "Variant ID"
+uint    score;         "0-1000; here AF*1000"
+char[1] strand;        "+, -, or ."
+uint    thickStart;    "Thick start"
+uint    thickEnd;      "Thick end"
+uint    reserved;      "itemRgb packed uint (R<<16|G<<8|B)"
+string  svType;        "SVTYPE (DEL/INS/INV)"
+int     svLen;         "Absolute SV length"
+string  af;            "Allele frequency (0-1)"
+uint    NS;            "Number of samples with data"
+uint    AN;            "Total allele number"
+uint    AC;            "Alt allele count"
+uint    AC_Hom;        "Homozygous alt count"
+uint    AC_Het;        "Heterozygous alt count"
+uint    AC_Hemi;       "Hemizygous alt count"
+uint    nhomalt;       "Individuals homozygous ALT"
+float   HWE;           "HWE p-value"
+float   ExcHet;        "Excess heterozygosity p-value"
+lstring  ref;           "REF allele"
+lstring  alt;           "ALT allele"
+)
+
+
+############################################################
+# Convert BED to BigBed
+############################################################
+# hg38
+bedToBigBed \
+  -type=bed9+14 \
+  -as=../svBed.as \
+  -extraIndex=name,svType \
+  -sizesIsChromAliasBb \
+  hg38/sv.hg38.sorted.bed \
+  /gbdb/hg38/hg38.chromAlias.bb \
+  bigBed/sv.hg38.bb
+
+# hs1
+bedToBigBed \
+  -type=bed9+14 \
+  -as=../svBed.as \
+  -extraIndex=name,svType \
+  -sizesIsChromAliasBb \
+  hs1/sv.hs1.sorted.bed \
+  /gbdb/hs1/hubs/chromAlias.bb \
+  bigBed/sv.hs1.bb
