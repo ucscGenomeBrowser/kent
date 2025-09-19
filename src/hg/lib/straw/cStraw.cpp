@@ -80,20 +80,27 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
     // ones that are).
  
     vector<contactRecord> strawRecords;
-    try {
+    {
         // using chrom[1] because [0] is always "All", which doesn't seem to play well because it
         // may have a different set of resolution options
-        string chrPos = (*p)->chromNames[1] + ":1:1";
-        // Intentionally feed straw an empty normalization option.  This will cause an error (which we trap),
-        // but it's the easiest way to make the library load and compare the available options (the library
-        // short-circuits out early if "NONE" is provided).
-        strawRecords = straw("observed", "", string(repFname),
-            chrPos, chrPos, "BP", (*p)->bpResolutions[0]);
-    } catch (strawException& err) {
-        // Do nothing - we're intentionally feeding it a bad norm option just so it'll go through the list
-        // and realize it can't find it, populating a list along the way.
+        int chrIx = 0;
+        do
+        {
+            chrIx++;
+            try {
+                string chrPos = (*p)->chromNames[chrIx] + ":1:1";
+                // Intentionally feed straw an empty normalization option.  This will cause an error (which we trap),
+                // but it's the easiest way to make the library load and compare the available options (the library
+                // short-circuits out early if "NONE" is provided).
+                strawRecords = straw("observed", "", string(repFname),
+                    chrPos, chrPos, "BP", (*p)->bpResolutions[0]);
+            } catch (strawException& err) {
+                // Do nothing - we're intentionally feeding it a bad norm option just so it'll go through the list
+                // and realize it can't find it, populating a list along the way.  This doesn't work if there's no
+                // data for that chromosome though, in which case we have to keep trying until one works (or we run out).
+            }
+        } while ((chrIx < (*p)->nChroms) && (getNormOptions().size() == 0));
     }
-
     // Now the list that getNormOptions() depends on should be populated
     (*p)->normOptions = getNormOptions();
 

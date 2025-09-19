@@ -44,6 +44,10 @@ function initVars()
         genomePos.originalSize = $('#size').text().replace(/,/g, ""); // strip out any commas
         dragSelect.originalCursor = jQuery('body').css('cursor');
 
+        if (typeof (igv) !== "undefined") {
+            igv.initIgvUcsc();
+        }
+
         imageV2.imgTbl = $('#imgTbl');
         // imageV2.enabled === true unless: advancedJavascript===false, or trackSearch, or config pg
         imageV2.enabled = (imageV2.imgTbl && imageV2.imgTbl.length > 0);
@@ -1970,6 +1974,11 @@ jQuery.fn.panImages = function(){
             newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
         }
 
+        if (typeof (igv) !== "undefined") {
+           igv.updateIgvStartPosition(newPortalStart);
+        }
+
+
         ret = {};
         ret.newX = newOffsetX;
         ret.isOutsideChrom = recalculate;
@@ -3826,6 +3835,47 @@ function gotoGetDnaPage() {
     return false;
 }
 
+function hubQuickConnect() {
+    /* open a little dialog window that accepts a URL to a hub.txt file */
+    const dialogHtml = 
+        '<div id="hubQuickDialog" title="Track hub quick connect">'+
+        '<b>Track hub URL:</b><br>'+
+        '<form action="hgTracks" method="GET">'+
+        '<input type="text" name="hubUrl" maxlength="1024" size="60" />'+
+        '<input type="hidden" hgsid="'+getHgsid()+'"/>'+
+        '<input type="submit" value="OK" />'+
+        '</form>'+
+        'To connect to public hubs, more options when connecting via URL or hub development tools, select from the menu My Data &gt; Track Hubs.'+
+        '</div>';
+    $('body').append(dialogHtml);
+
+    // Initialize the dialog
+    $("#hubQuickDialog").dialog({
+        autoOpen: false,
+        width: 600,
+        height: 400,
+        modal: true,
+        // not showing a Cancel button, the standard X should be sufficient and the user can always use Esc
+    });
+
+    // Show dialog
+    $("#hubQuickDialog").dialog("open");
+}
+
+function onHideAllGroupButtonClick(ev) {
+    /* called when 'hide all' button is clicked on group blue bar menu */
+    let groupName = ev.target.getAttribute("data-group-name");
+    let visSelects = document.querySelectorAll(`tr[id^="${groupName}"] select`);
+    let trackNames = [];
+    let values = [];
+    for (let sel of visSelects) {
+        sel.value = "hide";
+        trackNames.push(sel.name);
+        values.push("hide");
+    }
+    cart.setVars(trackNames, values);
+}
+
 // A function for the keyboard shortcuts "zoom to x bp"
 function zoomTo(zoomSize) {
     var flankSize = Math.floor(zoomSize/2);
@@ -4290,6 +4340,9 @@ var imageV2 = {
         if (typeof showMouseovers !== 'undefined' && showMouseovers) {
             convertTitleTagsToMouseovers();
         }
+        if(typeof window.igvBrowser !== "undefined") {
+           window.igvBrowser.search(genomePos.get());
+        }
     },
 
     updateImgForId: function (html, id, fullImageReload, newJsonRec)
@@ -4490,6 +4543,7 @@ var imageV2 = {
             return false;
         }
         document.TrackHeaderForm.submit();
+        window.igv.initUcsc();
     },
 
     updateImgAndMap: function (response, status)
@@ -6034,3 +6088,43 @@ function hgtWarnTiming(maxSeconds) {
     notifBoxSetup("hgTracks", "hideSpeedNotification", msg);
     notifBoxShow("hgTracks", "hideSpeedNotification");
 }
+
+//////////////////////////
+// Attempt to support panning by dragging IGV track.  The dragging works, but its not clear to do on drag end.
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof igv !== 'undefined') {
+
+        // TODO -- probably should use genomePos.get() and set() here, but I (JTR) don't fully understand that
+        // object and calling set() seems to have side effects.  So this variable is a placeholder.
+
+        const pos = {};
+
+        igv.ucscTrackpan = (newPosition) => {
+
+            const positionOffset = (newPosition - hgTracks.imgBoxPortalStart);
+            const pixelOffset = Math.round(positionOffset / hgTracks.imgBoxBasesPerPixel);
+            const newX = -(pixelOffset + hgTracks.imgBoxLeftLabel);
+            var nowPos = newX.toString() + "px";
+            $(".panImg").css({'left': nowPos});
+            $('.tdData').css({'backgroundPosition': nowPos});
+
+            pos.chrom = hgTracks.chromName;
+            pos.start = Math.round(newPosition + 1);
+            pos.end = pos.start + (hgTracks.winEnd - hgTracks.winStart);  // Dragging will not change the bp width
+
+            $('#positionDisplay').text(pos.chrom + ":" + commify(pos.start) + "-" + commify(pos.end));
+        };
+
+        igv.ucscTrackpanEnd = () => {
+            if (imageV2.inPlaceUpdate) {
+                imageV2.navigateInPlace("db=" + getDb() + "&position=" +
+                    encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end),
+                    null, false);
+            } else {
+                document.TrackHeaderForm.submit();
+            }
+        };
+    }
+});
+

@@ -8661,8 +8661,17 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
-}
 
+// remove the hg.conf option once this feature is released
+if (cfgOptionBooleanDefault("showIgv", FALSE))
+    {
+    puts(" <button id='hgtIgv' type='button' "
+            "title='Add an IGV.js window below the UCSC Browser, to open files from "
+            "your local harddisk or server' >Add IGV Tracks</button>");
+    //jsInline("document.getElementById('hgtIgv').addEventListener('click', onIgvClick);");
+    }
+
+}
 
 #ifdef NOTNOW
 static void printAliases(char *name)
@@ -9707,6 +9716,10 @@ if (!hideControls)
                     hPrintf("&nbsp;&nbsp;");
                     }
 
+                hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
+                        "title='Hide all tracks in this group'>Hide all</button>&nbsp;",
+                        group->name);
+
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
@@ -9715,7 +9728,10 @@ if (!hideControls)
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
 		    hubName + strlen(hubTrackPrefix));
+
 		}
+
+
 
             hPrintf("<input type='submit' name='hgt.refresh' value='Refresh' "
                     "title='Update image with your changes'>\n");
@@ -9791,6 +9807,8 @@ if (!hideControls)
 	    }
         hashFree(&superHash);
 	endControlGrid(&cg);
+
+        jsOnEventBySelector(".hgtButtonHideGroup", "click", "onHideAllGroupButtonClick(event)");
 	}
 
     if (measureTiming)
@@ -11311,6 +11329,7 @@ dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWid
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
+dyStringPrintf(dy,"Mousetrap.bind('c h', function() { hubQuickConnect() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 
 // highlight
 dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
@@ -11567,6 +11586,13 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+
+    // remove the hg.conf option once this feature is released
+    if (cfgOptionBooleanDefault("showIgv", FALSE))
+        {
+        jsIncludeFile("igv.min.js", NULL);
+        jsIncludeFile("igvFileHelper.js", NULL);
+        }
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);

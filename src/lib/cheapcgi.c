@@ -205,11 +205,11 @@ checkValidEvent(eventName);
 jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
 }
 
-void jsOnEventBySelector(char *eventName, char *query, char *jsText)
+void jsOnEventBySelector(char *query, char *eventName, char *jsText)
 /* Add js mapping for inline event given a query selector, e.g. '.className' */
 {
 checkValidEvent(eventName);
-jsInlineF("document.querySelector('%s').addEventListener( '%s', function(event) { %s };\n", eventName, query, jsText);
+jsInlineF("document.querySelectorAll('%s').forEach(function (el) { el.addEventListener( '%s', function(event) { %s })});\n", query, eventName, jsText);
 }
 
 

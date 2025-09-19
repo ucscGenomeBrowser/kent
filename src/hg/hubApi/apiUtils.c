@@ -738,19 +738,24 @@ void textLineOut(char *lineOut)
 {
 if (NULL == textOutput)
     {
-    char outString[1024];
     textOutput = dyStringNew(0);
-    time_t timeNow = time(NULL);
-    struct tm tm;
-    gmtime_r(&timeNow, &tm);
-    safef(outString, sizeof(outString),
-       "# downloadTime: \"%d:%02d:%02dT%02d:%02d:%02dZ\"",
-        1900+tm.tm_year, tm.tm_mon+1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-         tm.tm_sec);
-    dyStringPrintf(textOutput, "%s\n", outString);
-    safef(outString, sizeof(outString), "# downloadTimeStamp: %lld",
-        (long long) timeNow);
-    dyStringPrintf(textOutput, "%s\n", outString);
+
+    boolean doContext = (cgiInt(argSkipContext)==0);
+    if (doContext)
+        {
+        char outString[1024];
+        time_t timeNow = time(NULL);
+        struct tm tm;
+        gmtime_r(&timeNow, &tm);
+        safef(outString, sizeof(outString),
+           "# downloadTime: \"%d:%02d:%02dT%02d:%02d:%02dZ\"",
+            1900+tm.tm_year, tm.tm_mon+1, tm.tm_mday, tm.tm_hour, tm.tm_min,
+             tm.tm_sec);
+        dyStringPrintf(textOutput, "%s\n", outString);
+        safef(outString, sizeof(outString), "# downloadTimeStamp: %lld",
+            (long long) timeNow);
+        dyStringPrintf(textOutput, "%s\n", outString);
+        }
     }
 
 dyStringPrintf(textOutput, "%s\n", lineOut);

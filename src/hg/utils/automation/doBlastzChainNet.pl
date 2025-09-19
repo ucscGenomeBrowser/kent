@@ -999,6 +999,10 @@ chainPreNet $inclHap $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net $chain stdout \\
 | chainStitchId stdin stdout | gzip -c > $tDb.$qDb.over.chain.gz
+# make quickLift chain:
+chainSwap $tDb.$qDb.over.chain.gz stdout \\
+   | chainToBigChain stdin $tDb.$qDb.quick.chain.txt \\
+         $tDb.$qDb.quick.link.txt
 
 hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $tDb.$qDb.over.chain.gz
 wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
@@ -1007,11 +1011,21 @@ sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11,
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
 bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainLiftOver${QDb}Link.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}Link.bb
+
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $defVars{SEQ2_LEN} $tDb.$qDb.quick.bb
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $defVars{SEQ2_LEN} $tDb.$qDb.quickLink.bb
+
 set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
 set basesCovered = `bedSingleCover.pl chainLiftOver${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
 set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainLiftOver${QDb}Link.txt
-rm -f link.tab chain.tab bigChain.as bigLink.as chainLiftOver${QDb}Link.tab chainLiftOver${QDb}.tab
+
+set totalBases = `ave -col=2 $defVars{SEQ2_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl $tDb.$qDb.quick.link.txt | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.quick${QDb}Link.txt
+
+rm -f link.tab chain.tab bigChain.as bigLink.as chainLiftOver${QDb}Link.tab chainLiftOver${QDb}.tab $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
 
 _EOF_
     );
@@ -1615,12 +1629,14 @@ sub installDownloads {
   }
   &dumpDownloadReadme("$runDir/README.txt");
   my $over = $tDb . "To$QDb.over.chain.gz";
+  my $quick = $qDb;
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   if ($tDb =~ m/^GC/) {
      $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
   }
   my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
+  my $gbdbQuickLiftDir = "$HgAutomate::gbdb/$tDb/quickLift";
   my $andNets = $isSelf ? "." :
     ", nets and axtNet,\n" .
     "# and copies the liftOver chains to the liftOver download dir.";
@@ -1659,11 +1675,16 @@ _EOF_
       );
     if ($tDb !~ m/^GC/) {
       $bossScript->add(<<_EOF_
-mkdir -p $gbdbLiftOverDir
+mkdir -p $gbdbLiftOverDir $gbdbQuickLiftDir
 rm -f $gbdbLiftOverDir/$over
+rm -f $gbdbQuickLiftDir/${quick}.bb
+rm -f $gbdbQuickLiftDir/${quick}.link.bb
+ln -s $buildDir/axtChain/$tDb.$qDb.quick.bb $gbdbQuickLiftDir/${quick}.bb
+ln -s $buildDir/axtChain/$tDb.$qDb.quickLink.bb $gbdbQuickLiftDir/${quick}.link.bb
 ln -s $liftOverDir/$over $gbdbLiftOverDir/$over
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbLiftOverDir/$over \\
   $tDb $qDb
+$ENV{'HOME'}/kent/src/hg/utils/automation/addQuickLift.py $tDb $qDb $gbdbQuickLiftDir/${quick}.bb
 _EOF_
       );
     }

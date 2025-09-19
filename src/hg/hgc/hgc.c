@@ -2031,7 +2031,8 @@ if (liftDb)
     struct hash *chainHash = newHash(10);
     char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
     bed = (struct bed *)quickLiftSql(conn, quickLiftFile, sqlTable, seqName, winStart, winEnd,  NULL, NULL, (ItemLoader2)bedLoadN, bedSize, chainHash);
-    bedPrintPos(bed, bedSize, tdb);
+    struct bed *liftedBeds = quickLiftBeds(bed, chainHash, FALSE);
+    bedPrintPos(liftedBeds, bedSize, tdb);
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }

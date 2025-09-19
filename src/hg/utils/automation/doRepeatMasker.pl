@@ -20,7 +20,9 @@ my $RepeatMaskerPath = "/hive/data/outside/RepeatMasker/RepeatMasker-4.2.1";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
 # default engine changed from crossmatch to rmblast as of 2022-12
 # with RM version 4.1.4
-my $RepeatMaskerEngine = "-engine rmblast -pa 1";
+# version 4.2.1 changed the way the libraries are used, now need
+#   the -uncurated option to have behavior similar to before
+my $RepeatMaskerEngine = "-uncurated -engine rmblast -pa 1";
 # per RM doc, rmblast uses 4 CPUs for each job
 my $parasolRAM = "-cpu=4 -ram=32g";
 
@@ -209,14 +211,14 @@ sub doCluster {
 
   # updated for ku kluster operation -cpu option instead of ram option
   if ( $opt_useRMBlastn ) {
-    $RepeatMaskerEngine = "-engine rmblast -pa 1";
+    $RepeatMaskerEngine = "-uncurated -engine rmblast -pa 1";
     $parasolRAM = "-cpu=4 -ram=32g";
   } elsif ( $opt_useCrossMatch ) {
-    $RepeatMaskerEngine = "-engine crossmatch -s";
+    $RepeatMaskerEngine = "-uncurated -engine crossmatch -s";
     $parasolRAM = "-cpu=1";
   } elsif ( $opt_useHMMER ) {
     # NOTE: This is only applicable for 8gb one-job-per-node scheduling
-    $RepeatMaskerEngine = "-engine hmmer -pa 4";
+    $RepeatMaskerEngine = "-uncurated -engine hmmer -pa 4";
     $parasolRAM = "-cpu=4 -ram=32g";
   }
 
@@ -630,9 +632,12 @@ export LC_COLLATE=C
 hgLoadOut -table=rmsk$updateTable $split \$db \$db.sorted.fa.out
 hgLoadOut -verbose=2 -tabFile=\$db.rmsk$updateTable.tab -table=rmsk$updateTable -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records.txt
 # construct bbi files for assembly hub
-$RepeatMaskerPath/util/rmToTrackHub.pl -out \$db.sorted.fa.out -align \$db.fa.align
+$RepeatMaskerPath/util/rmToTrackHub.pl -chromsizes=../../chrom.sizes -out \$db.sorted.fa.out -align \$db.fa.align
 # in place same file sort using the -o output option
-sort -k1,1 -k2,2n -o \$db.fa.align.tsv \$db.fa.align.tsv &
+awk -F\$'\\t' '\$15 > -1 && \$13 > -1' \$db.fa.align.tsv | sort -k1,1 -k2,2n > t.tsv
+rm -f \$db.fa.align.tsv
+mv t.tsv \$db.fa.align.tsv
+# sort -k1,1 -k2,2n -o \$db.fa.align.tsv \$db.fa.align.tsv &
 sort -k1,1 -k2,2n -o \$db.sorted.fa.join.tsv \$db.sorted.fa.join.tsv
 wait
 bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigRmskAlignBed.as -type=bed3+14 \\
