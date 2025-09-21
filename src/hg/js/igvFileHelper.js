@@ -10,9 +10,9 @@
     // File scope variables
     const IGV_STORAGE_KEY = "igvSession";
     let filePicker = null;
-    let igvBrowser = null;
     let isDragging = false;
     let sessionAutoSaveTimer = null;
+    window.igvBrowser = undefined;  // The gloal igv.js browser object, TODO -- perhaps this should be attached to "igv"
 
     // Create a BroadcastChannel for communication between the UCSC browser page and the file picker page.
     const channel = new BroadcastChannel('igv_file_channel');
@@ -436,7 +436,7 @@
 
 
         // Add track names to the left hand column.
-        if (!igvBrowser) return;
+        if (typeof igvBrowser === "undefined") return;
 
         const gearIconSize = 10;
         const leftSidebar = document.getElementById('igv_leftsidebar');
@@ -549,6 +549,7 @@
         // Second cell for track names
         const td2 = document.createElement('td');
         td2.style.position = 'relative';
+        td2.className = 'dragHandle tdLeft';
         igvRow.appendChild(td2);
 
         const nameDiv = document.createElement('div');
@@ -596,8 +597,8 @@
         // });
         //
 
-         tbody.appendChild(igvRow);
-         return igvRow;
+        tbody.appendChild(igvRow);
+        return igvRow;
     }
 
     /**
@@ -619,11 +620,12 @@
 
         console.log("Creating IGV browser with config: ", config);
 
-        if (document.getElementById("tr_igv")) {
-            console.warn("IGV track row already exists ???");   // TODO -- how can this happen?
-            return;
+        let igvRow = document.getElementById("tr_igv")
+        if (!igvRow) {
+            // No existing igv row, insert one
+            igvRow = insertIGVRow();
         }
-        const igvRow = insertIGVRow();
+
 
         // Ammend the igv config to remove most of the IGV widgets.  We only want the track display area.
         Object.assign(config, {
