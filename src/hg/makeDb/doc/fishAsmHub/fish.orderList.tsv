@@ -1,4 +1,5 @@
 GCF_043250625.1_fSebFas1.pri	Acadian redfish (fSebFas1 primary hap 2024 refseq)
+GCF_046254945.1_YU_APseudo_1.1	alewife (anadromous, Long Island Sound Yale_2024_CS 2024)
 GCF_019802595.1_ASM1980259v1	alligator pipefish (LvHL_M 2021)
 GCF_017589495.1_AALO_Geno_1.1	allis shad
 GCF_000485575.1_Poecilia_formosa-5.1.2	Amazon molly
@@ -445,6 +446,7 @@ GCF_016859285.1_ASM1685928v1	swordfish
 GCF_904425465.1_Colossoma_macropomum	tambaqui
 GCA_963457635.1_fMicVar1.1	thickback sole (primary hap 2023)
 GCA_963514085.1_fCheLab1.1	thicklip grey mullet (primary hap 2023)
+GCF_051107435.1_fChaAug3.hap1	threadfin butterflyfish (fChaAug3hap1 2025)
 GCF_016920845.1_GAculeatus_UGA_version5	three-spined stickleback
 GCA_964276395.1_fGasAcu3.hap1.1	three-spined stickleback (hap1 2024)
 GCA_964276385.1_fGasAcu3.hap2.1	three-spined stickleback (hap2 2024)
@@ -491,7 +493,8 @@ GCF_904848185.1_fAcaLat1.1	yellowfin seabream (v.2019 primary hap 2020)
 GCA_914744365.1_fThuAlb1.1_alternate_haplotype	yellowfin tuna (alternate hap 2021)
 GCF_914725855.1_fThuAlb1.1	yellowfin tuna (primary hap 2021)
 GCF_002814215.2_Sedor1	yellowtail amberjack (v2 SW California HSWRI2012SDOR001 2017)
-GCF_000238955.4_M_zebra_UMD2a	zebra mbuna
+GCF_000238955.4_M_zebra_UMD2a	zebra mbuna (Mazinzi reef 2018)
+GCF_041146795.1_Mzebra_GT3a	zebra mbuna (NMK-2024a 2024)
 GCA_944039255.1_fDanRer4.1_alternate_haplotype	zebrafish (fDanRer4 alternate hap 2022)
 GCA_018400075.1_ASM1840007v1	zebrafish (T5D 2021)
 GCF_049306965.1_GRCz12tu	zebrafish (GRCz12tu Tuebingen 2025)
