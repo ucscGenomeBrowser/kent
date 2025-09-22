@@ -41,9 +41,9 @@ void curl_easy_cleanup(CURL *curl)
             udcFileClose(&(curl->udc));
         // clear the local copies of URL strings
         if (curl->url)
-            free(curl->url);
+            freeMem(curl->url);
         if (curl->range)
-            free(curl->range);
+            freeMem(curl->range);
         free(curl);
     }
 }
@@ -72,7 +72,7 @@ CURLcode curl_easy_setopt(CURL *curl, CURLoption option, ...)
             break;
         case CURLOPT_RANGE:
             if (curl->range)
-                free(curl->range);
+                freeMem(curl->range);
             curl->range = cloneString(va_arg(args,char *));
             break;
         case CURLOPT_WRITEFUNCTION:
@@ -85,7 +85,7 @@ CURLcode curl_easy_setopt(CURL *curl, CURLoption option, ...)
             if (curl->udc)
                 udcFileClose(&(curl->udc));
             if (curl->url)
-                free(curl->url);
+                freeMem(curl->url);
             curl->url = cloneString(newUrl);
             break;
         case CURLOPT_FOLLOWLOCATION:

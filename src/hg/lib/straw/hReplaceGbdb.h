@@ -11,3 +11,6 @@
 char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
  * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
+
+void freeMem(void *pt);
+/* Free memory will check for null before freeing. */
