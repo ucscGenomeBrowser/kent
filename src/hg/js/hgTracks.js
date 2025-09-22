@@ -4999,6 +4999,7 @@ var imageV2 = {
 
             // helper functions for checking whether a plain chrom name was searched for
             term = encodeURIComponent(genomePos.get().replace(/^[\s]*/,'').replace(/[\s]*$/,''));
+            term = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0-width chars
             function onSuccess(jqXHR, textStatus) {
                 if (jqXHR.chromName !== null) {
                     imageV2.markAsDirtyPage();

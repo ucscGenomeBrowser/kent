@@ -752,6 +752,7 @@ var hgSearch = (function() {
         // term, fire off a search
         cart.debug(debugCartJson);
         var searchTerm = $("#searchBarSearchString").val().replaceAll("\"","");
+        searchTerm = searchTerm.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0-width chars
         if (typeof searchTerm !== 'undefined' && searchTerm.length > 0) {
             // put up a loading image
             $("#searchBarSearchButton").after("<i id='spinner' class='fa fa-spinner fa-spin'></i>");

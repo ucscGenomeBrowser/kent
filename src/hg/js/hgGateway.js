@@ -1540,6 +1540,7 @@ var hgGateway = (function() {
         // Create and submit a form for hgTracks with hidden inputs for org, db and position.
         var goDirectlyToHgTracks = false;
         var position = $('#positionInput').val();
+        position = position.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0-width chars
         var searchTerm = encodeURIComponent(position.replace(/^[\s]*/,'').replace(/[\s]*$/,''));
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
