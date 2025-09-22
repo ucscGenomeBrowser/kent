@@ -8,6 +8,7 @@ type bigBed 9 +
 visibility dense
 tableBrowser off
 dataVersion Illumina SpliceAI Score v1.3 (August 22, 2024)
+priority 1
 
     track spliceAIsnvs
     type bigBed 9 +
@@ -75,4 +76,13 @@ dataVersion Illumina SpliceAI Score v1.3 (August 22, 2024)
     filter.AIscore 0.02
     filterLimits.AIscore 0.02:1
     mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b> $spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+    html spliceAI
+
+    track spliceAIWtDonorPlus
+    priority 1.4
+    type bigWig
+    shortLabel SpliceAI Wildtype Donor Plus
+    longLabel SpliceAI Wildtype Donor Sites on DNA Forward Strand
+    parent spliceAI off
+    bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiDonorPlus.bw
     html spliceAI

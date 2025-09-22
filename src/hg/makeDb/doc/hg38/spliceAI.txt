@@ -66,5 +66,5 @@ END
 ) 
 bedToBigBed -type=bed9+4 -tab -as=spliceAI.as spliceAI.bed /hive/data/genomes/hg38/chrom.sizes ~/public_html/trackHubs/spliceAIhub/hg38/spliceAI.bb
 
-
+# Got splice AI wildtype files as-is from Michael Hiller
 

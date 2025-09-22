@@ -5,8 +5,11 @@ superTrack on hide
 group phenDis
 cartVersion 8
 
+include spliceAI.ra
+
+include spliceAIWt.ra
+
 include splicevardb.ra
 
 include abSplice.ra
 
-include spliceAI.ra
