@@ -426,11 +426,11 @@ if (errMsg != NULL)
     warn("Error fetching header for track %s: %s", tdb->shortLabel, errMsg);
     return;
     }
-hPrintf("<TR><TD><B>track options:</B> ");
-hPrintf("resolution ");
+hPrintf("<TR><TD><B>Track options:</B> ");
+hPrintf("Resolution ");
 hicUiResolutionDropDown(cart, tdb, meta);
 hPrintf("&nbsp;&nbsp;&nbsp;");
-hPrintf("score normalization ");
+hPrintf("Score normalization ");
 hicUiNormalizationDropDown(cart, tdb, meta);
 hPrintf("</TD></TR>\n");
 }
