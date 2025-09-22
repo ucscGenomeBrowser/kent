@@ -359,13 +359,13 @@
                 showDialog("To add tracks please use the IGV File Manager window.");
                 filePicker.focus();
                 return;
-            }
-
-            else {
+            } else {
                 // A file picker may be open from a previous session. First ping it to see if it is still there,
                 // if it responds the user should be alerted, if needed,  from a failed track load.
                 const responded = await pingFilePicker();
-                if (!responded) {
+                if (responded) {
+                    showDialog("To add tracks please use the existing IGV File Manager window.");
+                } else {
                     filePicker = openFilePicker();
                 }
             }
@@ -687,10 +687,10 @@
         // Repaint name panels as needed
         igvBrowser.on('trackheightchange', () => {
             updateTrackNames();
-        })
+        });
         igvBrowser.on('tracknamechange', () => {
             updateTrackNames();
-        })
+        });
 
         // Start the session auto-save timer.  This will periodically save the igv session to local storage.
         // When / if we can reliably capture IGV state changes we can eliminate this and just save on state change.
