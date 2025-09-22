@@ -356,7 +356,7 @@
         document.getElementById('hgtIgv').addEventListener('click', async function (e) {
             e.preventDefault(); // our
             if (filePicker && !filePicker.closed) {
-                showDialog("To add tracks please use the IGV File Manager window.");
+                showDialog("To add tracks please use the existing IGV File Manager window.");
                 filePicker.focus();
                 return;
             } else {
@@ -366,6 +366,7 @@
                 if (responded) {
                     showDialog("To add tracks please use the existing IGV File Manager window.");
                 } else {
+                    showDialog("To add tracks please use the IGV File Manager window.");
                     filePicker = openFilePicker();
                 }
             }
