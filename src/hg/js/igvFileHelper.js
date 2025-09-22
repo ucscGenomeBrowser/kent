@@ -12,7 +12,7 @@
     let filePicker = null;
     let isDragging = false;
     let sessionAutoSaveTimer = null;
-    window.igvBrowser = undefined;  // The gloal igv.js browser object, TODO -- perhaps this should be attached to "igv"
+    let igvBrowser = null;
 
     // Create a BroadcastChannel for communication between the UCSC browser page and the file picker page.
     const channel = new BroadcastChannel('igv_file_channel');
@@ -74,7 +74,8 @@
      */
     async function initIgvUcsc() {
 
-        if (window.igvBrowser) {
+        if (igvBrowser) {
+            // This can happend because initVars(), which calls initIgvUcsc(), is called from multiple places
             //console.log("igvBrowser already exists");
             return;
         }
@@ -355,11 +356,14 @@
         document.getElementById('hgtIgv').addEventListener('click', async function (e) {
             e.preventDefault(); // our
             if (filePicker && !filePicker.closed) {
+                showDialog("To add tracks please use the IGV File Manager window.");
                 filePicker.focus();
                 return;
-            } else {
+            }
+
+            else {
                 // A file picker may be open from a previous session. First ping it to see if it is still there,
-                // if it responds the user should be alerted from that window, no need to open a new window.
+                // if it responds the user should be alerted, if needed,  from a failed track load.
                 const responded = await pingFilePicker();
                 if (!responded) {
                     filePicker = openFilePicker();
@@ -618,9 +622,9 @@
         const resolution = (hgTracks.winEnd - hgTracks.winStart) / ucscImageWidth;
         config.locus = {chr: hgTracks.chromName, start: hgTracks.winStart, bpPerPixel: resolution};
 
-        console.log("Creating IGV browser with config: ", config);
+        //console.log("Creating IGV browser with config: ", config);
 
-        let igvRow = document.getElementById("tr_igv")
+        let igvRow = document.getElementById("tr_igv");
         if (!igvRow) {
             // No existing igv row, insert one
             igvRow = insertIGVRow();
@@ -680,17 +684,24 @@
             }
         );
 
-        window.igvBrowser = igvBrowser;
+        // Repaint name panels as needed
+        igvBrowser.on('trackheightchange', () => {
+            updateTrackNames();
+        })
+        igvBrowser.on('tracknamechange', () => {
+            updateTrackNames();
+        })
 
         // Start the session auto-save timer.  This will periodically save the igv session to local storage.
         // When / if we can reliably capture IGV state changes we can eliminate this and just save on state change.
         startSessionAutoSave();
 
+        window.igvBrowser = igvBrowser;  // Make available to hgTracks.js code
+
         return igvBrowser;
     }
 
-
-// Respond to messages from the filePicker window.
+    // Respond to messages from the filePicker window.
     channel.onmessage = async function (event) {
         const msg = event.data;
         if (!msg || !msg.type) return;
@@ -699,7 +710,7 @@
 
             case MSG.SELECTED_FILES:
 
-                console.log("Received selected files: ", event.data.files);
+                //console.log("Received selected files: ", event.data.files);
                 const configs = getTrackConfigurations(event.data.files);
                 loadIGVTracks(configs);
 
@@ -731,7 +742,7 @@
 
             // Create igvBrowser if needed -- i.e. this is the first track being added.  State needs to be obtained
             // from the UCSC browser for genome and locus.
-            if (typeof (window.igvBrowser) === 'undefined' || window.igvBrowser === null) {
+            if (typeof (igvBrowser) === 'undefined' || igvBrowser === null) {
                 const defaultConfig = {
                     reference: await getMinimalReference(getDb()),
                     // locus: genomePos.get()
