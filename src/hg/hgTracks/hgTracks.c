@@ -11395,7 +11395,8 @@ hPrintf("<tr><td> &nbsp;5000bp (3 zeros)</td><td class=\"hotkey\">3</td><td>Tool
 hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools - PCR</td><td class='hotkey'>t then i</td></tr>\n");
 hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
 hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
-hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>Clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
+hPrintf("<tr><td> highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
+hPrintf("<tr><td> quick connect hub</td><td class=\"hotkey\">c then k</td>  <td></td>                 </tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");

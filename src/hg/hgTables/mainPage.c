@@ -769,7 +769,16 @@ if (curTrack == NULL)
 
 /* Table-specific options */
 if (isHicTable(curTable))
-    hicMainPageConfig(cart, hTrackDbForTrack(database,curTable));
+    {
+    // Seems like there should be a better way to do this, but I'm not clear what it is at the moment.
+    // TrackDb processing could probably use some refactoring.
+    struct trackDb *tdb = hTrackDbForTrack(database,curTable);
+    if (tdb == NULL)
+        tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
+    if (tdb == NULL)
+        errAbort("Unable to find trackDb structure for track; something is wrong");
+    hicMainPageConfig(cart, tdb);
+    }
 
 hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='snpTablesNote'>"
         "<b>Note:</b> Most dbSNP and gnomAD variant tables are huge. Trying to download them through the Table Browser "

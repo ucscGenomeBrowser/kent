@@ -385,9 +385,12 @@ if (!trackHubDatabase(database))
 char *fileName = bamFileName(table, conn, NULL);
 
 struct asObject *as = bamAsObj();
+char *downPrefix = "";
+if (startsWith("/gbdb", fileName))
+    downPrefix = "https://hgdownload.soe.ucsc.edu";
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
-hPrintf("<B>BAM File:</B> %s", fileName);
+hPrintf("<B>BAM File Download:</B> <A HREF='%s%s'>%s%s</A>", downPrefix, fileName, downPrefix, fileName);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 hPrintf("See the <A HREF=\"%s\" target=_blank>SAM Format Specification</A> for  more details<BR>\n",
