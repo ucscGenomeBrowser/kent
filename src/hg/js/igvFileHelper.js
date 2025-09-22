@@ -523,86 +523,73 @@
      * sorts, containing all igv.js tracks in the session.  In the future we might want to allocate a row
      * for each igv.js track, but this will require some refactoring of igv.js.
      *
+     * The function returns a Promise that resolves with the new row element after the DOM content has fully loaded.
+     * This (hopefully) ensures that the table is completely rendered before the new row is added, which can help
+     * with the initialization of plugins like tableDnD.
+     *
      * @returns {HTMLTableRowElement}
      */
 
     function insertIGVRow() {
-        const imgTbl = document.getElementById('imgTbl');
-        const tbody = imgTbl.querySelector('tbody');
-        const igvRow = document.createElement('tr');
-        igvRow.id = "tr_igv";
-        igvRow.classList.add('imgOrd', 'trDraggable');
-        igvRow.style.position = 'relative'; // For positioning the overlay
+        return new Promise(resolve => {
+            const doInsert = () => {
+                const imgTbl = document.getElementById('imgTbl');
+                const tbody = imgTbl.querySelector('tbody');
+                const igvRow = document.createElement('tr');
+                igvRow.id = "tr_igv";
+                igvRow.classList.add('imgOrd', 'trDraggable');
+                igvRow.style.position = 'relative'; // For positioning the overlay
 
-        // First cell for drag handle and left sidebar
-        const td1 = document.createElement('td');
-        td1.className = 'dragHandle';
-        td1.style.position = 'relative';
-        igvRow.appendChild(td1);
+                // First cell for drag handle and left sidebar
+                const td1 = document.createElement('td');
+                td1.className = 'dragHandle';
+                td1.style.position = 'relative';
+                igvRow.appendChild(td1);
 
-        const leftSidebarDiv = document.createElement('div');
-        leftSidebarDiv.id = 'igv_leftsidebar';
-        leftSidebarDiv.style.position = "absolute";
-        leftSidebarDiv.style.top = "0px";
-        leftSidebarDiv.style.bottom = "0px";
-        leftSidebarDiv.style.left = "0px";
-        leftSidebarDiv.style.right = "0px";
-        leftSidebarDiv.style.background = "rgb(193,193,193)";
-        td1.appendChild(leftSidebarDiv);
+                const leftSidebarDiv = document.createElement('div');
+                leftSidebarDiv.id = 'igv_leftsidebar';
+                leftSidebarDiv.style.position = "absolute";
+                leftSidebarDiv.style.top = "0px";
+                leftSidebarDiv.style.bottom = "0px";
+                leftSidebarDiv.style.left = "0px";
+                leftSidebarDiv.style.right = "0px";
+                leftSidebarDiv.style.background = "rgb(193,193,193)";
+                td1.appendChild(leftSidebarDiv);
 
-        // Second cell for track names
-        const td2 = document.createElement('td');
-        td2.style.position = 'relative';
-        td2.className = 'dragHandle tdLeft';
-        igvRow.appendChild(td2);
+                // Second cell for track names
+                const td2 = document.createElement('td');
+                td2.style.position = 'relative';
+                td2.className = 'dragHandle tdLeft';
+                igvRow.appendChild(td2);
 
-        const nameDiv = document.createElement('div');
-        nameDiv.id = 'igv_namediv';
-        nameDiv.style.position = 'absolute';
-        nameDiv.style.top = '0';
-        nameDiv.style.bottom = '0';
-        nameDiv.style.left = '0';
-        nameDiv.style.right = '0';
-        td2.appendChild(nameDiv);
+                const nameDiv = document.createElement('div');
+                nameDiv.id = 'igv_namediv';
+                nameDiv.style.position = 'absolute';
+                nameDiv.style.top = '0';
+                nameDiv.style.bottom = '0';
+                nameDiv.style.left = '0';
+                nameDiv.style.right = '0';
+                td2.appendChild(nameDiv);
 
-        // Third cell for the IGV browser div
-        const td3 = document.createElement('td');
-        igvRow.appendChild(td3);
+                // Third cell for the IGV browser div
+                const td3 = document.createElement('td');
+                igvRow.appendChild(td3);
 
-        const igvDiv = document.createElement('div');
-        igvDiv.id = 'igv_div';
-        igvDiv.style.width = 'auto';
-        td3.appendChild(igvDiv);
+                const igvDiv = document.createElement('div');
+                igvDiv.id = 'igv_div';
+                igvDiv.style.width = 'auto';
+                td3.appendChild(igvDiv);
 
-        // Create a transparent overlay for the entire row --currently disabled
-        // const overlay = document.createElement('div');
-        // overlay.style.position = 'absolute';
-        // overlay.style.top = '0';
-        // overlay.style.left = '0';
-        // overlay.style.width = '100%';
-        // overlay.style.height = '100%';
-        // overlay.style.backgroundColor = 'rgba(75, 255, 75, 0.2)';
-        // overlay.style.display = 'none'; // Initially hidden
-        // overlay.style.pointerEvents = 'none'; // Allow clicks to pass through
-        // igvRow.appendChild(overlay);
-        //
-        // // Show/hide overlay on mouseover/mouseout of the left sidebar
-        // leftSidebarDiv.addEventListener('mouseenter', () => {
-        //     overlay.style.display = 'block';
-        // });
-        // leftSidebarDiv.addEventListener('mouseleave', () => {
-        //     overlay.style.display = 'none';
-        // });
-        // nameDiv.addEventListener('mouseenter', () => {
-        //     overlay.style.display = 'block';
-        // });
-        // nameDiv.addEventListener('mouseleave', () => {
-        //     overlay.style.display = 'none';
-        // });
-        //
+                tbody.appendChild(igvRow);
+                resolve(igvRow);
+            };
 
-        tbody.appendChild(igvRow);
-        return igvRow;
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', doInsert);
+            } else {
+                doInsert();
+            }
+        });
     }
 
     /**
@@ -627,7 +614,7 @@
         let igvRow = document.getElementById("tr_igv");
         if (!igvRow) {
             // No existing igv row, insert one
-            igvRow = insertIGVRow();
+            igvRow = await insertIGVRow();
         }
 
 
