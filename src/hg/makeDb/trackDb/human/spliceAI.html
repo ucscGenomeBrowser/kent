@@ -1,24 +1,37 @@
 <br><br>
-<b>Important</b>: The SpliceAI data on the UCSC Genome Browser is directly from 
+<b>Important</b>: The SpliceAI variant impact data on the UCSC Genome Browser is directly from 
 Illumina (See <a href="#dataAccess">Data Access</a> below). However, since SpliceAI refers to the
 algorithm, and not the computed dataset, the data on the Broad server or other sources may have
 some differences between them.
 </p>
 <h2>Description</h2>
 <p>
-SpliceAI is an <a href="https://github.com/Illumina/SpliceAI" target="_blank">open-source</a> deep
-learning splicing prediction algorithm that can predict splicing alterations caused by DNA variations. 
+<a href="https://github.com/Illumina/SpliceAI" target="_blank">SpliceAI</a> is an open-source deep
+learning algorithm that predicts splicing probability for nucleotides and 
+as a result can score DNA variants for splicing impact.
 Such variants may activate nearby cryptic splice sites, leading to abnormal transcript isoforms.
 SpliceAI was developed at Illumina; a 
 <a href="https://spliceailookup.broadinstitute.org" target="_blank">lookup tool</a> 
 is provided by the Broad institute.
 </p>
+
+<p>The spliceAI algorithm is run on the genome sequence itself and scores each
+nucleotide for the probability that it is a donor or acceptor site, on both the
+forward and the reverse strand. Then variants are added and the new sequence is
+scored again. The "wildtype" container track shows the scores for the genome
+sequence itself and the "variants" container track shows the impact of all
+possible variants close to known splice sites. The "wildtype" subtracks are
+useful when looking at new transcript models, to evaluate how likely exon
+boundaries are. The "variants" subtracks are used to evaluate the impact of
+variants onto splicing, typically in medical diagnostics.
+</p>
+
 <h3>Why are some variants not scored by SpliceAI?</h3>
 <p>
-SpliceAI only annotates variants within genes defined by the gene
-annotation file. Additionally, SpliceAI does not annotate variants if they are close to chromosome
-ends (5kb on either side), deletions of length greater than twice the input parameter -D, or
-inconsistent with the reference fasta file.
+SpliceAI only annotates variants close to splice sites of genes defined by the 
+Gencode gene annotation track. Additionally, SpliceAI does not annotate variants if they are
+close to chromosome ends (5kb on either side), deletions of length greater than
+twice the input parameter -D, or inconsistent with the reference fasta file.
 </p>
 
 <h3>What are the differeneces between masked and unmasked tracks?</h3>
@@ -95,6 +108,12 @@ use this data for your own personal academic or not-for-profit research only,
 and not for any other purposes. You may not use this data for any for-profit, 
 clinical, or other commercial purpose without obtaining a commercial license 
 from Illumina, Inc.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Illumina for making the data available. Thanks to Michael Hiller, Francois Lecoquierre and
+Jean-Madeleine de Sainte Agathe for making available and suggesting the SpliceAI wildtype tracks.
 </p>
 
 <h2>References</h2>

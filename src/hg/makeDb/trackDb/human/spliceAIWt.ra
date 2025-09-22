@@ -1,0 +1,45 @@
+track spliceAIWt
+compositeTrack on
+shortLabel SpliceAI Wildtype
+longLabel SpliceAI Wildtype: Splicing of the reference genome sequence 
+group phenDis
+parent spliceImpactSuper on
+type bigWig
+visibility dense
+priority 2
+
+    track spliceAiAccPlus
+    type bigWig
+    priority 1
+    shortLabel SpliceAI Acceptor, Plus Strand
+    longLabel SpliceAI Splice Acceptor Sites, Plus Strand
+    parent spliceAIWt on
+    bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiAcceptorPlus.bw
+    html spliceAI
+
+    track spliceAiAccMinus
+    type bigWig
+    priority 2
+    shortLabel SpliceAI Acceptor, Minus Strand
+    longLabel SpliceAI Splice Acceptor Sites, Minus Strand
+    parent spliceAIWt on
+    bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiAcceptorMinus.bw
+    html spliceAI
+
+    track spliceAiDonorPlus
+    type bigWig
+    priority 3
+    shortLabel SpliceAI Donor Plus
+    longLabel SpliceAI Splice Donor Sites, Plus Strand
+    parent spliceAIWt on
+    bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiDonorPlus.bw
+    html spliceAI
+
+    track spliceAiDonorMinus
+    type bigWig
+    priority 4
+    shortLabel SpliceAI Donor Minus
+    longLabel SpliceAI Splice Donor Sites, Minus Strand
+    parent spliceAIWt on
+    bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiDonorMinus.bw
+    html spliceAI

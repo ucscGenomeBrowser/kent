@@ -176,10 +176,15 @@ if (trackDataAccessible(db, tdb) && differentString("longTabix", tdb->type))
     {
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
-	return FALSE;
+        {
+	puts("(Download unavailable, see below)");
+        return FALSE;
+        }
+
     char *hint = " title='Open data format (table schema) in new window'";
     if (label == NULL)
 	label = " View data format";
+
     struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
     printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track, tdb->table, hint, label);
     return TRUE;
