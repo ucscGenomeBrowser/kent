@@ -271,13 +271,14 @@ puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not a
         "<a href=\"/goldenPath/help/hgSessionHelp.html\" style='color:#121E9A' target=_blank>session link</a>. "
         "First, connect the hub and configure the tracks image as desired, then navigate to "
         "<a href=\"/cgi-bin/hgSession\" style='color:#121E9A' target=_blank>My Sessions</a> (<b>My Data</b> > <b>My Sessions</b>). "
-        "The resulting stable link can be added to publications and shared freely. You, as the author, "
+        "The resulting stable link can be added to publications and shared freely. We never delete them. You, as the author, "
         "also have the power to update the session contents freely. "
         "Alternatively, you may <a href=\"/goldenPath/help/hgTrackHubHelp.html#Sharing\" "
         "style='color:#121E9A' target=_blank>build a link with the hub URL</a> to allow users to retain their browser "
         "configuration, connected hubs, and custom tracks.</p>"
         "</p>"
-        "<p>See our <a href=\"/goldenPath/help/publicHubGuidelines.html\" style='color:#121E9A'>public "
+        "<p>When you are ready to share you hub more widely, "
+        "see our <a href=\"/goldenPath/help/publicHubGuidelines.html\" style='color:#121E9A'>public "
         "hub guidelines</A> for information on submitting a new public hub.</p>\n"
         );
 
@@ -286,9 +287,10 @@ if (unlistedHubCount == 0)
     // nothing to see here
     printf("<tr><td style='text-align:left'>No connected track or assembly hubs.<p>To connect a hub:"
             "<ul><li>Enter its URL into the input box above and click 'Add Hub'. </li>"
+            "<li>To quickly connect a single hub URL from the Genome Browser directly, use the keyboard shortcut 'c then h'"
             "<li>Alternatively, you can go to the 'Public Hubs' tab on this page and connect one "
             "of the hubs that were submitted to us. </li>"
-            "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected. </li>"
+            "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected (adding &hubUrl=https://xxx to the URL). </li>"
             "<li>You can also connect to hub by following a short link to a saved session, created though the menu "
             "'My Data &gt; My Sessions', if the Genome Browser had connected hubs when the session was saved.</li>"
             "</ul></td></tr>");
