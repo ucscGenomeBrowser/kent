@@ -122,6 +122,21 @@ if (tusdMountPoint && !isEmpty(tusdMountPoint))
 return ret;
 }
 
+char *unswapDataDir(char *userName, char *in)
+/* Opposite of swapDataDir, for trusting that the other system string is 
+ * correct. Used for deleting the row in the table for a file which has
+ * tusdDataDir as the prefix, not the tusdMountPoint. */
+{
+char *ret = cloneString(in);
+char *tusdDataDir = cfgOption("tusdDataDir");
+char *tusdMountPoint = cfgOption("tusdMountPoint");
+if (tusdMountPoint && !isEmpty(tusdMountPoint))
+    {
+    ret = replaceChars(in, tusdMountPoint, tusdDataDir);
+    }
+return ret;
+}
+
 char *stripDataDir(char *fname, char *userName)
 /* Strips the getDataDir(userName) off of fname. The dataDir may be a symbolic
  * link, or on a different filesystem. */
@@ -224,6 +239,16 @@ struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace w
 int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
 hDisconnectCentral(&conn);
 return ret > 0;
+}
+
+static boolean checkHubSpaceLocationExists(char *userName, char *location)
+/* Return TRUE if location exists for userName and has exactly one row */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace where userName='%s' and location='%s'", userName, location);
+int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
+hDisconnectCentral(&conn);
+return ret == 1;
 }
 
 char *hubNameFromPath(char *path)
@@ -449,8 +474,17 @@ if (fileExists(canonicalPath))
     {
     // delete the actual file
     mustRemove(canonicalPath);
-    // delete the table row
-    deleteHubSpaceRow(canonicalPath, userName);
+
+    // delete the table row, which probably has the location based
+    // on the other filesystem
+    if (checkHubSpaceLocationExists(userName, canonicalPath))
+        deleteHubSpaceRow(canonicalPath, userName);
+    else
+        {
+        char *unswapped = unswapDataDir();
+        if (checkHubSpaceLocationExists(userName, unswapped))
+            deleteHubSpaceRow(unswapped, userName);
+        }
     }
 // TODO: we should also modify the hub.txt associated with this file
 }
