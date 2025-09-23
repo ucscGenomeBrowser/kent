@@ -853,5 +853,4 @@
     igv.initIgvUcsc = initIgvUcsc;
     igv.updateIgvStartPosition = updateIgvStartPosition;
 
-})
-();
+})();
