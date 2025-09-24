@@ -140,9 +140,9 @@ MAILTO=cells@ucsc.edu
 # Cell Browser news sec update by Matt/Brittney Sept 2022
 0 0 * * 1-5 ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
 
-# update Cell Browser .json facets files using tabulate_facets.pl
+# Update Cell Browser .json facets files using tabulate_facets.pl
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
-0 0 * * 1-5 /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
+0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
  
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
