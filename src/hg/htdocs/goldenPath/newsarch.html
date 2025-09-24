@@ -63,6 +63,36 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
+
+<a name="092525"></a>
+<h2>Sep. 25, 2025 &nbsp;&nbsp; Panmask Easy 151b Regions track for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=panmask151b"
+	target="_blank">Panmask Easy 151b Regions</a>
+track for hg38. This new track is available in the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=problematicSuper"
+        target="_blank">Problematic Regions superTrack</a>.
+The track contains a set of sample-agnostic easy regions where short-read variant calling reaches
+high accuracy. Easy regions are derived for variant filtration agnostic to individual samples. They
+are genomic intervals where general variant callers achieve high accuracy without sophisticated
+filtering.</p>
+<p class="text-center">
+<img src="../../images/newsArchImages/panmask.png"
+alt="Panmask Easy 151b Regions track for the BRCA1 exon 19" width='75%'></p>
+<p>
+The pm151 regions are used to filter spurious variant calls in centromeres, long repeats, and
+other genomic regions where short-read mapping is often problematic. They cover 88.2% of hg38,
+92.2% of coding regions, and 96.3% of ClinVar pathogenic variants. The track can be used to filter
+variant calls for clinical or research human samples. It shows regions that are easy to sequence,
+rather than those that are problematic. The data was derived from the HPRC assemblies, and this
+track presents the 151b-easy panmask set.</p>
+<p>
+We would like to thank the
+<a href="https://hlilab.github.io/" target="_blank">HLi lab</a>
+at Harvard Medical School for making this data available. We
+would also like to thank Max Haeussler and Gerardo Perez for their efforts on this release.</p>
+
 <a name="091925"></a>
 <h2>Sep. 19, 2025 &nbsp;&nbsp; Developmental Disorders Gene2Phenotype (DDG2P) for hg38 and hg19</h2>
 <p>
