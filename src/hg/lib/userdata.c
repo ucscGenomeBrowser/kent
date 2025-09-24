@@ -481,7 +481,7 @@ if (fileExists(canonicalPath))
         deleteHubSpaceRow(canonicalPath, userName);
     else
         {
-        char *unswapped = unswapDataDir();
+        char *unswapped = unswapDataDir(userName, canonicalPath);
         if (checkHubSpaceLocationExists(userName, unswapped))
             deleteHubSpaceRow(unswapped, userName);
         }
