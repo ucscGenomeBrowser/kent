@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>File Picker</title>
+    <title>File Manager</title>
 
     <link rel="stylesheet" href="../../style/HGStyle.css" type="text/css">
     <style>
@@ -35,34 +35,35 @@
 <body>
 
 <section class="section-group" style="text-align: center; margin-bottom: 32px; background: #e3f2fd;">
-    <h2 style="margin: 0; font-size: 2em;">File Manager</h2>
-    <p style="font-size: 1.1em;">Please do not close this window, it is necessary to get access to the files that you open below. If you close this window, the Genome Browser's IGV track loses access to the files.</p>
+    <h2 style="margin: 0; font-size: 2em;">IGV File Manager</h2>
+    <p style="font-size: 1.1em;">
+        Please do not close this window, it is necessary to maintain access to the files that you open below. If
+        you close this window, the Genome Browser's IGV track loses access to the files.</p>
 </section>
 
 <section class="section-group">
     <div id="message" style="color: red; font-weight: bold; display: none;">
-        You can open files from your local harddisk using the 'Choose Files' button. The Genome Browser does not have access to 
-        any other files on your harddisk, since it is a website. Data of these files is not sent to UCSC, but it
-        remains on your local computer. As far as we know, the files can include identifying health information,
-        since the data does not leave your computer. If you make a session shortlink on the Genome Browser, then these
-        files cannot be loaded by the person that opens the session link, because this exact window must be open to load
-        the files. As soon as the window is closed, file access is lost and you must re-open the files in this window again.
+        Please select the following files to restore access:
         <p>
         <ul id="restoreList"></ul>
         </p>
     </div>
     <h3>Local Files</h3>
-    <p>Click 'Chose Files' to open files from your local harddisk. For indexed formats both data and index files must be selected.</p>
     <p>
-        The Genome Browser webserver does not have access to any files on your
-        harddisk, since it is a website. Data of the files opened below is not
-        sent to UCSC, but it remains on your local computer. As far as we know,
-        it is OK if these files include identifying health information, since the data
-        does not leave your computer. If you make a session shortlink on the
-        Genome Browser, then these files cannot be loaded by the person that
+        Click the "Choose Files" button to select track files in supported formats from your local file system. For
+        indexed
+        formats both data and index files must be selected.
+    </p>
+    <p>
+        Selected files are loaded directly from your file system to the web browser. <b>No data is transfered to UCSC or
+        any other server, it remains on your local computer</b>. If you make a session shortlink on the
+        Genome Browser, these files will not be included and cannot be loaded by the person that
         opens the session link.
-        As soon as the window is closed, file access is lost and you must re-open the files in this window again.
-     </p>
+    </p>
+    <p>
+        If this window is closed file access is lost, and you must re-open this window with the "Add IGV Tracks" button
+        and re-select the files to restore access.
+    </p>
 
     <input type="file" id="fileInput" multiple>
     <p>
@@ -72,12 +73,15 @@
 </section>
 
 <section class="section-group">
-    <h3>Local URL</h3>
-    Enter a local URL on your intranet to a track file to load. For indexed
-    formats the index file is assumed to be at the same location with an added
-    extension if not specified. It is OK if the UCSC webserver cannot access this file, 
-    as all display is handled on your local computer. If this is a publicly accessible
-    URL and public data, it is usually easier to load the file as a 'custom track' or 'track hub'.
+    <h3>URL</h3>
+    <p>
+        Enter a 'https' URL to an IGV supported track file and its index, if applicable. Data from this URL is loaded
+        directly to your web browser, <b>no data is sent to UCSC or any other server</b>.
+    </p>
+    <p>
+        Note if this is a publicly accessible URL and public data, it is usually easier to load the file as a 'custom
+        track' or 'track hub'.
+    </p>
 
     <div class="input-row">
         <label for="urlInput">URL</label>
@@ -94,108 +98,99 @@
 
 
 <script>
+    const fileCache = new Map();
+    const restoreCache = new Map();
+    const channel = new BroadcastChannel('igv_file_channel');
+
     document.addEventListener('DOMContentLoaded', () => {
 
-        window.focus()
-        const channel = new BroadcastChannel('igv_file_channel')
-        channel.postMessage({type: 'filePickerReady'})
-        const fileCache = new Map()
-        const restoreCache = new Map()
+        channel.postMessage({type: 'filePickerReady'});
 
         document.getElementById('fileInput').addEventListener('change', function (event) {
-            const files = []
+            const files = [];
             for (let file of event.target.files) {
-                const id = `${file.name}_${file.size}`
-                files.push({id, file}) //value)
-                fileCache.set(id, file)
-                restoreCache.delete(id)
-                refreshFileList()
+                const id = `${file.name}_${file.size}`;
+                files.push({id, file}); //value)
+                fileCache.set(id, file);
+                restoreCache.delete(id);
+                refreshFileList();
             }
-            event.target.value = ""
+            event.target.value = "";
 
-            channel.postMessage({type: 'selectedFiles', files: files})
-        })
+            channel.postMessage({type: 'selectedFiles', files: files});
+        });
 
         document.getElementById("urlButton").addEventListener('click', event => {
-            const url = document.getElementById("urlInput").value
+            const url = document.getElementById("urlInput").value;
             if (url) {
-                let indexURL = document.getElementById("indexURLInput").value
+                let indexURL = document.getElementById("indexURLInput").value;
                 if (!indexURL) {
                     if (url.endsWith(".bam")) {
-                        indexURL = url + ".bai"
+                        indexURL = url + ".bai";
                     } else if (url.endsWith(".cram")) {
-                        indexURL = url + ".crai"
+                        indexURL = url + ".crai";
                     } else if (url.endsWith(".vcf.gz")) {
-                        indexURL = url + ".tbi"
+                        indexURL = url + ".tbi";
                     }
                 }
-                channel.postMessage({type: 'loadURL', config: {id: url, url, indexURL}})
+                channel.postMessage({type: 'loadURL', config: {url, indexURL}});
             }
-        })
+        });
 
         // Respond to messages from the browser page
         channel.onmessage = function (event) {
-            const {id, type} = event.data
+            const {id, type} = event.data;
             if (type === 'getFile') {
-                const selectedFile = fileCache.get(id)
-
-                if(selectedFile) {
-                channel.postMessage({type: 'file', data: selectedFile})   // TODO -- what if selectedFile is undefined?  Handle here or in browser?
-                } else {
-                    // Don't respond if we don't have the file.  Its possible multiple file pickers are open.
-                    console.info(`No file found for id: ${id}`)
-                }
+                const selectedFile = fileCache.get(id);
+                channel.postMessage({type: 'file', id: id, data: selectedFile});   // TODO -- what if selectedFile is undefined?  Handle here or in browser?
             } else if (type === 'removeFile') {
-                fileCache.delete(id)
-                refreshFileList()
+                fileCache.delete(id);
+                refreshFileList();
             } else if (type === 'restoreFiles') {
-
-                // Process a request to restore a list of files, which means prompt the user to select them
-
-                const failed = event.data.files
+                const failed = event.data.files;
                 for (const f of failed) {
-                    restoreCache.set(f.id, f.name)
+                    restoreCache.set(f.id, f.name);
                 }
-                window.focus()
-                refreshFileList()
+                refreshFileList();
             } else if (type === 'removedTrack') {
                 // TODO -- might want to remove from restoreCache too
-                const config = event.data.config
+                const config = event.data.config;
                 if (config.url && config.url.id) {
-                    fileCache.delete(config.url.id)
-                    restoreCache.delete(config.url.id)
+                    fileCache.delete(config.url.id);
+                    restoreCache.delete(config.url.id);
                 }
                 if (config.indexURL && config.indexURL.id) {
-                    fileCache.delete(config.indexURL.id)
-                    restoreCache.delete(config.indexURL.id)
+                    fileCache.delete(config.indexURL.id);
+                    restoreCache.delete(config.indexURL.id);
                 }
-                refreshFileList()
+                refreshFileList();
             } else if (type === 'ping') {
-                window.focus()
-                channel.postMessage({type: 'pong', id: window.name})
+                channel.postMessage({type: 'pong', id: window.name});
             }
+            channel.postMessage({type: 'pong', id: window.name});
+        };
+    });
+
+    function refreshFileList() {
+
+        if (restoreCache.size > 0) {
+            const ul = document.getElementById("restoreList");
+            ul.innerHTML = "";
+            for (let name of restoreCache.values()) {
+                ul.innerHTML += `<li>${name}</li>`;
+            }
+            document.getElementById("message").style.display = "block";
+        } else {
+            document.getElementById("message").style.display = "none";
         }
 
-        function refreshFileList() {
-
-            if (restoreCache.size > 0) {
-                const ul = document.getElementById("restoreList")
-                ul.innerHTML = ""
-                for (let name of restoreCache.values()) {
-                    ul.innerHTML += `<li>${name}</li>`
-                }
-                document.getElementById("message").style.display = "block"
-            } else {
-                document.getElementById("message").style.display = "none"
-            }
-
-            const ul = document.getElementById("fileList")
-            ul.innerHTML = ""
-            for (let file of fileCache.values()) {
-                ul.innerHTML += `<li>${file.name}</li>`
-            }
+        const ul = document.getElementById("fileList");
+        ul.innerHTML = "";
+        for (let file of fileCache.values()) {
+            ul.innerHTML += `<li>${file.name}</li>`;
         }
-    })
+    }
+
 </script>
 </body>
 </html>
