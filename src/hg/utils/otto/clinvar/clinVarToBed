@@ -23,6 +23,7 @@ possMolConseqs = set(["genic downstream transcript variant","no sequence alterat
 
 # these consequences are highlighted using a triangle decorator. Similar to Decipher and Gnomad browsers
 truncConseqs = set(["nonsense", "frameshift variant", "splice acceptor variant", "splice donor variant"])
+pinkConseqs = set(["splice acceptor variant", "splice donor variant"])
 
 # make sure that if the second list is edited, it is never out of sync with the first list
 assert(len(set(truncConseqs - possMolConseqs))==0)
@@ -1023,6 +1024,9 @@ for line in ifh:
         rgbColor = row[8]
         #decorRow[8] = "0,0,0" # line color
         decorRow[8] = "255,255,255" # line color
+        if molConseq in pinkConseqs:
+            decorRow[8] = "255,192,203" # inspired by decipher colors
+
         mouseOverText = row[mouseOverIdx]
 
         decorRef = row[0]+":"+row[1]+"-"+row[2]+":"+row[3]
@@ -1032,7 +1036,7 @@ for line in ifh:
         decorRow.append("glyph")
         #decorRow.append(rgbColor)
         decorRow.append(rgbColor) # fill color
-        decorRow.append("Triangle")
+        decorRow.append("Diamond")
         decorRow.append(mouseOverText)
 
         decorOfh.write("\t".join(decorRow))
