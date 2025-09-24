@@ -9,7 +9,7 @@ visibility dense
 priority 2
 
     track spliceAiAccPlus
-    type bigWig
+    type bigWig 0 1
     priority 1
     shortLabel SpliceAI Acceptor, Plus Strand
     longLabel SpliceAI Splice Acceptor Sites, Plus Strand
@@ -18,7 +18,7 @@ priority 2
     html spliceAI
 
     track spliceAiAccMinus
-    type bigWig
+    type bigWig 0 1
     priority 2
     shortLabel SpliceAI Acceptor, Minus Strand
     longLabel SpliceAI Splice Acceptor Sites, Minus Strand
@@ -27,7 +27,7 @@ priority 2
     html spliceAI
 
     track spliceAiDonorPlus
-    type bigWig
+    type bigWig 0 1
     priority 3
     shortLabel SpliceAI Donor Plus
     longLabel SpliceAI Splice Donor Sites, Plus Strand
@@ -36,7 +36,7 @@ priority 2
     html spliceAI
 
     track spliceAiDonorMinus
-    type bigWig
+    type bigWig 0 1
     priority 4
     shortLabel SpliceAI Donor Minus
     longLabel SpliceAI Splice Donor Sites, Minus Strand
