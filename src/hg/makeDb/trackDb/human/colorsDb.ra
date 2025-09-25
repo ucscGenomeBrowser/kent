@@ -1,0 +1,38 @@
+track structuralVariants
+superTrack on
+shortLabel Structural Variants
+longLabel Long-read Structural Variants
+group varRep
+visibility hide
+
+    track deepvariant
+    parent structuralVariants
+    shortLabel CoLoRSdb Small Variants
+    longLabel CoLoRSdb DeepVariant + GLnexus callset
+    type vcfTabix
+    visibility pack
+    bigDataUrl /gbdb/$D/colorsDb/colorsDb.v1.2.0.deepvariant.glnexus.vcf.gz
+    html colorsDb.html
+     
+    track pbsv
+    parent structuralVariants
+    shortLabel CoLoRSdb Structural Variants
+    longLabel CoLoRSdb pbsv + Jasmine callset
+    type bigBed 9 +
+    visibility pack
+    itemRgb on
+    bigDataUrl /gbdb/$D/colorsDb/colorsDb.v1.2.0.sv.bb
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>SV type</b>: ${svType}<br> <b>Length</b>: ${svLen} bp<br> <b>Allele Frequency</b>: ${af}<br> <b>Alt allele count</b>: ${AC} (Hom: ${AC_Hom}, Het: ${AC_Het}, Hemi: ${AC_Hemi})<br> <b>Number of samples</b>: ${NS} <br> <b>Total allele number</b>: ${AN}<br> <b>HWE p-value</b>: ${HWE}<br> <b>ExcHet</b>: ${ExcHet}
+    html colorsDb.html
+    searchIndex name,svType
+    filter.svLen 0
+    filterByRange.svLen on
+    filterLimits.svLen 0:12000
+    filterLabel.svLen SV length (bp)
+    filterValues.svType INS,DEL,INV
+    filterType.svType multiple    
+    filterLabel.svType Type
+    filter.AC 0
+    filterByRange.AC on
+    filterLimits.AC 0:3000
+    filterLabel.AC Alt allele count (AC)
