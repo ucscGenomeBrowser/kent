@@ -1,14 +1,14 @@
 track structuralVariants
 superTrack on
-shortLabel Structural Variants
+shortLabel Long-read Structural Variants
 longLabel Long-read Structural Variants
 group varRep
 visibility hide
 
     track deepvariant
     parent structuralVariants
-    shortLabel CoLoRSdb Small Variants
-    longLabel CoLoRSdb DeepVariant + GLnexus callset
+    shortLabel CoLoRSdb small variants
+    longLabel CoLoRSdb long-read small variants
     type vcfTabix
     visibility pack
     bigDataUrl /gbdb/$D/colorsDb/colorsDb.v1.2.0.deepvariant.glnexus.vcf.gz
@@ -16,8 +16,8 @@ visibility hide
      
     track pbsv
     parent structuralVariants
-    shortLabel CoLoRSdb Structural Variants
-    longLabel CoLoRSdb pbsv + Jasmine callset
+    shortLabel CoLoRSdb structural variants
+    longLabel CoLoRSdb long-read structural variants
     type bigBed 9 +
     visibility pack
     itemRgb on
