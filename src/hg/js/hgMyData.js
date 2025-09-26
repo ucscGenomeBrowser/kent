@@ -172,8 +172,9 @@ function revokeApiKeys() {
     cart.flush();
 }
 
-const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
-const parentDirRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in hub names
+const fileNameRegex = /[0-9a-zA-Z._]+/g; // allowed characters in file names
+const fileNameFixRegex = /[^0-9a-zA-Z_]+/g; // '.' get replaced to underbars in trackHub.c. Also any files uploaded from hubtools that may have weird chars need to be escaped
+const parentDirRegex = /[0-9a-zA-Z._]+/g; // allowed characters in hub names
 
 function getTusdEndpoint() {
     // this variable is set by hgHubConnect and comes from hg.conf value
@@ -297,12 +298,12 @@ const uppy = new Uppy.Uppy({
             let fileNameMatch = file.meta.name.match(fileNameRegex);
             let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
             if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
@@ -560,10 +561,10 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
                 const dash = uppy.getPlugin("Dashboard");
                 if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                    uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                    uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 }
                 if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                    uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                    uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 }
             }
         });
@@ -688,10 +689,9 @@ var hubCreate = (function() {
         }
     }
 
-    const regex = /[^A-Za-z0-9_-]/g;
     function trackHubFixName(trackName) {
-        // replace everything but alphanumeric, underscore and dash with underscore
-        return encodeURIComponent(trackName).replaceAll(regex, "_");
+        // replace everything but alphanumeric and underscore with underscore
+        return encodeURIComponent(trackName.replaceAll(fileNameFixRegex, "_"));
     }
 
     // helper object so we don't need to use an AbortController to update
