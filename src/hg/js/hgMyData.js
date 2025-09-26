@@ -1492,13 +1492,16 @@ var hubCreate = (function() {
         cart.setCgiAndUrl(fileListEndpoint);
         cart.debug(debugCartJson);
         // get the file list immediately upon page load
-        const url = new URL(window.location.href);
-        if (url.protocol === "http:") {
-            warn(`This feature is only available over HTTPS. Please load the HTTPS version of ` +
-                    `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
-        } else {
-            cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
-            cart.flush();
+        let activeTab = $("#tabs").tabs( "option", "active" );
+        if (activeTab === 3) {
+            let url = new URL(window.location.href);
+            if (url.protocol === "http:") {
+                warn(`This feature is only available over HTTPS. Please load the HTTPS version of ` +
+                        `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
+            } else {
+                cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
+                cart.flush();
+            }
         }
     }
     return { init: init,
