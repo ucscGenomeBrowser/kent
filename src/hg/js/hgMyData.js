@@ -1315,6 +1315,10 @@ var hubCreate = (function() {
     function showExistingFiles(d) {
         // Make the DataTable for each file
         // make buttons have the same style as other buttons
+        if ($.fn.dataTable.isDataTable("#filesTable")) {
+            return $("#filesTable").DataTable();
+        }
+
         $.fn.dataTable.Buttons.defaults.dom.button.className = 'button';
         tableInitOptions.data = d;
         if (uiState.isLoggedIn) {
@@ -1388,6 +1392,7 @@ var hubCreate = (function() {
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
         table.columns.adjust().draw();
+
         uppy.use(Uppy.Dashboard, uppyOptions);
 
         // define this in init so globals are available at runtime
@@ -1456,6 +1461,7 @@ var hubCreate = (function() {
             history.replaceState(uiState, "", document.location.href);
             console.log("replace history with uiState");
         });
+        inited = true;
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -1488,6 +1494,7 @@ var hubCreate = (function() {
         cart.defaultErrorCallback(jqXHR, textStatus);
     }
 
+    let inited = false; // keep track of first init for tab switching purposes
     function init() {
         cart.setCgiAndUrl(fileListEndpoint);
         cart.debug(debugCartJson);
@@ -1498,12 +1505,13 @@ var hubCreate = (function() {
             if (url.protocol === "http:") {
                 warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +
                         `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
-            } else {
+            } else if (!inited) {
                 cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
                 cart.flush();
             }
         }
     }
+
     return { init: init,
              uiState: uiState,
              defaultDb: defaultDb,
