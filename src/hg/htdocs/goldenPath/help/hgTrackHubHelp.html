@@ -76,10 +76,10 @@ Browser (please note that hosting hub files on HTTP tends to work even better th
 hubs can be displayed on <a  href="hubQuickStartAssembly.html#blatGbib" target="_blank">GBiB</a>).  
 Track hubs can be displayed on genomes that UCSC directly supports, or on your own sequence. Hubs 
 are a useful tool for visualizing a large number of genome-wide data sets. For example, a project 
-that has produced several wiggle plots of data can use the hub utility to organize the tracks into 
-composite and super-tracks, making it possible to show the data for a large collection of tissues 
-and experimental conditions in a visually elegant way, similar to how the ENCODE native data tracks 
-are displayed in the browser.</p>
+that has produced several <a href="wiggle.html" target="_blank">wiggle plots</a> of data can use the
+hub utility to organize the tracks into composite and super-tracks, making it possible to show the
+data for a large collection of tissues and experimental conditions in a visually elegant way,
+similar to how the ENCODE native data tracks are displayed in the browser.</p>
 <p>
 The track hub utility allows efficient access to data sets from around the world through the 
 familiar Genome Browser interface. Browser users can display tracks from any public track hub that 
@@ -197,7 +197,7 @@ backing up custom data</a>.</p>
 <a name="hubUrl"></a>
 <h3>Creating a URL for a Track Hub</h3>
 <p>Hubs can be loaded into the URL using the <code>hubUrl=</code> parameter. This parameter
-takes input similar to the <a href="../cgi-bin/hgHubConnect#unlistedHubs">track hub input box</a>.
+takes input similar to the <a href="/cgi-bin/hgHubConnect#unlistedHubs">track hub input box</a>.
 Native UCSC supported genomes can be loaded into the URL using the <code>db=</code> parameter while
 non-natively supported genomes such as assembly hubs or GenArk hubs use the <code>genome=</code>
 parameter. URL parameters can be combined by using <code>&amp;</code>.
@@ -288,7 +288,7 @@ three hubs on the Genome Browser.
 The following example links to an assembly hub using the <code>hubUrl=</code> and
 <code>genome=</code> parameters where in the example, <code>genome=araTha1</code>, is the assembly
 name set for <code>genome</code> in the genomes.txt file. URL parameters can be combined by using <code>&amp;</code>.</p>
-<pre><a href=../cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt>https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</a></pre>
+<pre><a href=/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt>https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</a></pre>
 </p>
 <h6>Additional hub connection parameters</h6>
 <ul>
