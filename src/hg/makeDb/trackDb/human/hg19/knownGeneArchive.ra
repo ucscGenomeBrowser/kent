@@ -85,3 +85,29 @@ html ../../knownGeneArchive
     squishyPackField rank
     squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
 
+    track knownGeneV48lift37
+    shortLabel GENCODE V48lift37
+    longLabel GENCODE V48lift37
+    parent knownGeneArchive
+    priority 4.9
+    visibility pack
+    type bigGenePred knownGenePep knownGeneMrna
+    bigDataUrl /gbdb/hg19/gencode/gencodeV48lift37.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneV48lift37
+    maxItems 50000
+    html knownGeneV48lift37
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+    squishyPackPoint 1
+    squishyPackField rank
+    squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
+
