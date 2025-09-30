@@ -8,4 +8,9 @@ function submitClick(ele)
 $(document).ready(function()
 {
     loadingImage.init($("#loadingImg"), $("#loadingMsg"), "<p style='color: red; font-style: italic;'>Uploading and processing your data may take some time. Please leave this window open while your custom track is loading.</p>");
+    if (typeof customTrackTour !== 'undefined') {
+        if (typeof startCustomTutorialOnLoad !== 'undefined' && startCustomTutorialOnLoad) {
+            customTrackTour.start();
+        }
+    }
 });

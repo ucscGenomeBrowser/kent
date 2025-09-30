@@ -25,6 +25,7 @@
 #include "trackHub.h"
 #include "botDelay.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -175,6 +176,19 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
+if (cfgOptionBooleanDefault("showTutorial", TRUE))
+    {
+    jsIncludeFile("shepherd.min.js", NULL);
+    webIncludeResourceFile("shepherd.css");
+    jsIncludeFile("jquery-ui.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    //jsIncludeFile("tutorialPopup.js", NULL);
+    jsIncludeFile("customTrackTutorial.js", NULL);
+    if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
+        {
+        jsInline("var startCustomTutorialOnLoad = true;");
+        }
+    }
 
 /* main form */
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
