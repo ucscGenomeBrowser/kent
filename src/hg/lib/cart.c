@@ -1626,7 +1626,7 @@ if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
 
 setUdcCacheDir();
 
-netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
+netSetTimeoutErrorMsg("Connection timeout: either the server is offline or any firewall between UCSC and the server blocks the connection.");
 }
 
 struct cart *cartNew(char *userId, char *sessionId,
@@ -2706,7 +2706,7 @@ if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
     }
 
 // activate optional debuging output for CGIs
-verboseCgi(cartCgiUsualString(cart, "verbose", NULL));
+verboseCgi(cgiUsualString("verbose", NULL));
 
 return cart;
 }
