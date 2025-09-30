@@ -157,7 +157,7 @@ driver.get(machine + "/cgi-bin/hgTracks?db=mm10")
 driver.find_element(By.XPATH, "//td[@id='td_data_knownGene']/div[2]/map/area[5]").click()
 
 # Tests if click_and_drag opens a second window
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element(By.ID, "positionInput").clear()
 driver.find_element(By.ID, "positionInput").send_keys("chr7 192500 727300")
@@ -209,12 +209,12 @@ driver.find_element(By.LINK_TEXT, "Genomic Sequence (chrX:152,166,234-152,451,31
 driver.find_element(By.NAME, "submit").click()
 
 # Tests hub on canFam3
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=canFam3")
 driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://data.broadinstitute.org/vgb/dog/dog/hub.txt&genome=canFam3&position=lastDbPos")
 
 # Tests non-human/mouse (oviAri4) on Table Browser
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=oviAri4")
 hover_and_click(driver, "tools3", "tableBrowserMenuLink")
 driver.find_element(By.ID, "hgta_doSchema").click()
@@ -223,19 +223,19 @@ driver.get(machine + "/cgi-bin/hgTables?db=oviAri4")
 driver.find_element(By.NAME, "hgta_doSummaryStats").click()
 
 # Tests a split table (mm10 intronEst table) on the Table Browser
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine +"/cgi-bin/hgTables?clade=mammal&org=Mouse&db=mm10&hgta_group=allTables&hgta_track=mm10&hgta_table=intronEst")
 driver.find_element(By.NAME, "hgta_doSummaryStats").click()
 time.sleep(3)
 
 # Tests a session with custom tracks, multiRegion, and assembly hub
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=QAtester&hgS_otherUserSessionName=Custom_Tracks_AssemblyHub_MultiRegion_TrackCollection_BigWigs")
 driver.find_element(By.XPATH, "//td[@id='td_data_ct_UserTrack_3545']/div[2]/map/area[4]").click()
 driver.find_element(By.LINK_TEXT, "chr1:33719895-33742564").click()
 
 # Tests a DNA search on hgTracks
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38&hideTracks=1")
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element(By.ID, "positionInput").clear()
@@ -271,7 +271,7 @@ driver.find_element(By.ID, "goButton").click()
 time.sleep(5)
 
 # Tests small custom track to click into hgTrackUi
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
 hover_and_click(driver, "myData", "customTracksMenuLink")
 driver.find_element(By.NAME, "hgct_customText").clear()
@@ -291,7 +291,7 @@ driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table
 driver.find_element(By.XPATH, "//a[contains(text(),'Data schema/format description and download')]")
 
 ## Tests chromAlias hg38 custom track
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
 hover_and_click(driver, "myData", "customTracksMenuLink")
 driver.find_element(By.NAME, "hgct_customText").clear()
@@ -305,7 +305,7 @@ driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table
 driver.find_element(By.XPATH, "//a[contains(text(),'Data schema/format description and download')]")
 
 # Tests mm10 ENCODE hub
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?db=mm10&hideTracks=1")
 driver.get(machine + "/cgi-bin/hgGateway?db=mm10&hubUrl=https://www.encodeproject.org/experiments/ENCSR736GVO/@@hub/hub.txt")
 driver.get(machine + "/cgi-bin/hgHubConnect?#unlistedHubs")
@@ -322,7 +322,7 @@ driver.get(machine + "/cgi-bin/hgHubConnect?hubSearchTerms=methpipe")
 driver.get(machine + "/cgi-bin/hgHubConnect?hubSearchTerms=GCF")
 
 # Tests AssemblyHub search
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?hubUrl=https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/hub.ncbi.txt&genome=GCA_000493695.1_BalAcu1.0&position=lastDbPos")
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element(By.NAME, "hgt.positionInput").clear()
@@ -331,7 +331,7 @@ driver.find_element(By.NAME, "goButton").click()
 time.sleep(2)
 
 # Tests HGVS searches
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element(By.NAME, "hgt.positionInput").clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_000310.4(PPT1):c.271_287del17insTT")
@@ -389,7 +389,7 @@ driver.find_element(By.ID, "goButton").click()
 time.sleep(3)
 
 # Tests hgBlat
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
 hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.NAME, "userSeq").clear()
@@ -422,7 +422,7 @@ driver.find_element(By.LINK_TEXT, "Show chr16_KI270853v1_alt placed on its chrom
 time.sleep(3)
 
 # Tests hgBlat for fix patch sequence
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
 hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.NAME, "userSeq").clear()
@@ -457,18 +457,46 @@ driver.find_element(By.NAME, "hglft_doConvert").click()
 driver.find_element(By.LINK_TEXT, "chrX:39460925-39461424").click()
 driver.find_element(By.CSS_SELECTOR, "#tools3 > span").click()
 
-# Tests hgLiftOver for mm39
+# Tests hgLiftOver
 cartReset()
 time.sleep(3)
-hover_and_click(driver, "tools3", "liftOverMenuLink")
+
+action = ActionChains(driver)
+
+# Hovers over the Tools menu to trigger dropdown
+menu = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "tools3"))
+            )
+action.move_to_element(menu).perform()
+
+# Waits until at least one link in the Tools menu is present
+WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "liftOverMenuLink"))
+            )
+
+# Gets the submenu element
+submenu = driver.find_element(By.ID, "liftOverMenuLink")
+
+# Tries normal click first, fallback to JS click if not interactable
+try:
+        submenu.click()
+except:
+        driver.execute_script("arguments[0].click();", submenu)
+
+# Waits until the LiftOver form loads
+WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.NAME, "hglft_userData"))
+            )
+
 driver.find_element(By.NAME, "hglft_userData").clear()
 driver.find_element(By.NAME, "hglft_userData").send_keys("chr11:101,379,590-101,442,705")
 driver.find_element(By.NAME, "Submit").click()
+
 time.sleep(3)
 driver.find_element(By.LINK_TEXT, "View conversions")
 
 # Tests hgPcr target Genes Track (data changes with data pushes)
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38&hideTracks=1")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38&wp_target=hg38KgSeqV41") #will be hg38KgSeqV41
 hover_and_click(driver, "tools3", "ispMenuLink")
@@ -487,7 +515,7 @@ driver.find_element(By.NAME, "Submit").click()
 driver.find_element(By.LINK_TEXT, "ENST00000611156.4__ABO:90+1305").click()
 time.sleep(3)
 driver.find_element(By.XPATH, "//td[@id='td_data_hgPcrResult']/div[2]/map/area[2]").click()
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 
 # Tests GenArk Rabbit Hub
 #cartReset()
@@ -500,7 +528,7 @@ time.sleep(3)
 driver.find_element(By.LINK_TEXT, "HOPX").click()
 
 # Tests Assembly Hubs at GitHub
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?genome=daph&hubUrl=https://raw.githubusercontent.com/ucsc-browser/assemblyHubEx/master/Daphnia/hubExamples/hubAssembly/daph/hub.txt&position=scaffold_1%3A35591-35626")
 driver.get(machine + "/cgi-bin/hgTracks")
 time.sleep(3)
@@ -516,7 +544,7 @@ else:
 
 
 # Tests Mega Hub US 
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?db=hg19&measureTiming=1&hubUrl=https://genecats.gi.ucsc.edu/qa/hubTesting/exampleHubManyMulit/hub.txt")
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element(By.ID, "positionInput").clear()
@@ -532,13 +560,13 @@ else:
      driver.find_element(By.XPATH, "//td[@id='td_data_hub_37972_multiWig4']/div[2]/map/area").click()
 
 # Tests hub with HAL tracks
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://genecats.gi.ucsc.edu/qa/hubTesting/CICHLID2023/myHub/hub.txt&genome=hub_68124_Anc0&position=lastDbPos")
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element(By.ID, "positionInput").clear()
 
 # Tests hgBlat All and Monk Seal/Human MYLK Protein
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
 hover_and_click(driver, "tools3", "blatMenuLink")
 driver.find_element(By.ID, "searchAllText").click()
@@ -549,7 +577,7 @@ driver.find_element(By.ID, "res0").click()
 time.sleep(3)
 
 # Tests hgFind.matches cart variable
-cartReset()
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?position=chr2:25,485,759-25,487,667&ignoreCookie=1&db=hg19&hgFind.matches=this&filterAlign=pack")
 driver.find_element(By.ID, "goButton").click()
 
