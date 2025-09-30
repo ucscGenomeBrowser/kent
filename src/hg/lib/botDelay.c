@@ -15,6 +15,7 @@
 #include "botDelay.h"
 #include "jsonWrite.h"
 #include "regexHelper.h"
+#include "hubSpaceKeys.h"
 
 #define defaultDelayFrac 1.0   /* standard penalty for most CGIs */
 #define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
@@ -92,7 +93,7 @@ hUserAbort("There is an exceedingly high volume of traffic coming from your "
 }
 
 static char *getCookieUser()
-/* get user from hguid cookie */
+/* get the ID string stored in the hguid cookie, it looks like our hgsid session strings on the URL */
 {
 char *user = NULL;
 char *centralCookie = hUserCookie();
@@ -121,31 +122,52 @@ return FALSE;
 char *getBotCheckString(char *ip, double fraction)
 /* compose "user.ip fraction" string for bot check */
 {
-char *user = getCookieUser();
+char *cookieUserId = getCookieUser();
 char *botCheckString = needMem(256);
 boolean useNew = cfgOptionBooleanDefault("newBotDelay", FALSE);
 if (useNew)
     {
-        if (user)
-            safef(botCheckString, 256, "uid%s %f", user, fraction);
-        else
+        // the new strategy is: bottleneck on apiKey, then cookie-userId, then
+        // hgsid, and only if none of these is available, on IP address. Also, check
+        // apiKey and cookieId if they are valid, check hgsid if the string looks OK.
+        char *apiKey = cgiOptionalString("apiKey");
+        if (apiKey)
             {
-            char *hgsid = cgiOptionalString("hgsid");
-            if (hgsid && isValidHgsidForEarlyBotCheck(hgsid))
-                safef(botCheckString, 256, "sid%s %f", hgsid, fraction);
+            // Here we do a mysql query before the bottleneck is complete. 
+            // In theory, this can overload the MariaDB server.
+            // But there is no way around it, we must check that the apiKey is valid
+            // And this is better than handling the request without bottleneck
+            char *userName = userNameForApiKey(apiKey);
+            if (userName)
+                safef(botCheckString, 256, "apiKey%s %f", apiKey, fraction);
+            else 
+                hUserAbort("Invalid apiKey provided on URL. Make sure that the apiKey is valid. Or contact us.");
+            }
+        else
+            if (cookieUserId)
+                safef(botCheckString, 256, "uid%s %f", cookieUserId, fraction);
             else
                 {
-                if (hgsid)
-                    // We were given an invalid hgsid - penalize this source in case of abuse
-                    fraction *= 5;
-                safef(botCheckString, 256, "%s %f", ip, fraction);
+                // The following happens very rarely on sites like our RR that use the cloudflare captcha,
+                // as all requests (except hgLogin, hgRenderTracks) should come in with a cookie user ID
+                char *hgsid = cgiOptionalString("hgsid");
+                // For now, we do not check the hgsid against the MariaDb table, only check if the string looks OK
+                if (hgsid && isValidHgsidForEarlyBotCheck(hgsid))
+                    safef(botCheckString, 256, "sid%s %f", hgsid, fraction);
+                else
+                    {
+                    if (hgsid)
+                        // We were given an invalid hgsid - penalize this source in case of abuse
+                        fraction *= 5;
+                    safef(botCheckString, 256, "%s %f", ip, fraction);
+                    }
                 }
-            }
     }
 else
+    // our old system - only relevant on mirrors: bottleneck on cookie or IP address
     {
-    if (user)
-      safef(botCheckString, 256, "%s.%s %f", user, ip, fraction);
+    if (cookieUserId)
+      safef(botCheckString, 256, "%s.%s %f", cookieUserId, ip, fraction);
     else
       safef(botCheckString, 256, "%s %f", ip, fraction);
     }

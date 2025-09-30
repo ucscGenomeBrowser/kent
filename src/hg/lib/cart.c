@@ -39,6 +39,7 @@
 #include "quickLift.h"
 #include "botDelay.h"
 #include "curlWrap.h"
+#include "hubSpaceKeys.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1561,6 +1562,12 @@ if (botException())
 
 // certain user agents are allowed to use the website without a captcha
 if (isUserAgentException())
+    return;
+
+// a valid apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
+// of the apiKey, if a valid apiKey has been supplied, see botDelay.c
+char *apiKey = cgiOptionalString("apiKey");
+if (apiKey && userNameForApiKey(apiKey))
     return;
 
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
