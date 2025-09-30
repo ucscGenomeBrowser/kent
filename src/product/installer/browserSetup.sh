@@ -402,8 +402,6 @@ examples:
 All options have to precede the command.
 
 options:
-  -a   - use alternative download server at Univ Bielefeld, Germany
-         (used by default if faster ping time than to UCSC)
   -b   - batch mode, do not prompt for key presses
   -t   - For the "mirror" command: Track selection, requires a value.
          This option is only useful for Human/Mouse assemblies.
@@ -1675,10 +1673,10 @@ function installBrowser ()
     ucscspeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
-       echo modifying hg.conf to pull data from genome-euro instead of genome
+       echo modifying hg.conf to pull MariaDB data from genome-euro-mysql instead of genome
        $SEDINPLACE s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
-       $SEDINPLACE "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
-       HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
+       #$SEDINPLACE "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
+       #HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
     else
        echo genome.ucsc.edu seems to be closer
        echo not modifying $CGIBINDIR/hg.conf
@@ -1728,7 +1726,7 @@ function installBrowser ()
     echo2 Notice that this mirror is still configured to use Mysql and data files loaded
     echo2 through the internet from UCSC. From most locations on the world, this is very slow.
     echo2 It also requires an open outgoing TCP port 3306 for Mysql to genome-mysql.soe.ucsc.edu/genome-euro-mysql.soe.ucsc.edu,
-    echo2 and open TCP port 80 to hgdownload.soe.ucsc.edu/hgdownload-euro.soe.ucsc.edu.
+    echo2 and open TCP port 80 to hgdownload.soe.ucsc.edu
     echo2
     echo2 To finish the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
@@ -2036,8 +2034,7 @@ function downloadMinimal
     echo2 two open ports, outgoing, TCP, from this machine:
     echo2 - to genome-mysql.soe.ucsc.edu, port 3306, to load MySQL tables
     echo2 - to hgdownload.soe.ucsc.edu, port 80, to download non-MySQL data files
-    echo2 - or the above two servers European counterparts:
-    echo2   genome-euro-mysql.soe.ucsc.edu and hgdownload-euro.soe.ucsc.edu
+    echo2 - or its counterpart: genome-euro-mysql.soe.ucsc.edu
     echo2
     showMyAddress
     goOnline
@@ -2158,7 +2155,7 @@ if [[ $# -eq 0 ]] ; then
    exit 0
 fi
 
-while getopts ":baeut:hof" opt; do
+while getopts ":beut:hof" opt; do
   case $opt in
     h)
       echo "$HELP_STR"
@@ -2169,9 +2166,9 @@ while getopts ":baeut:hof" opt; do
           echo
       }
       ;;
-    a)
-      HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
-      ;;
+    #a)
+      #HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
+      #;;
     t)
       val=${OPTARG}
       # need to include all subdirectories for include to work
