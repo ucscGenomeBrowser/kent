@@ -39,6 +39,7 @@
 #include "quickLift.h"
 #include "botDelay.h"
 #include "curlWrap.h"
+#include "hubSpaceKeys.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1563,6 +1564,12 @@ if (botException())
 if (isUserAgentException())
     return;
 
+// a valid apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
+// of the apiKey, if a valid apiKey has been supplied, see botDelay.c
+char *apiKey = cgiOptionalString("apiKey");
+if (apiKey && userNameForApiKey(apiKey))
+    return;
+
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
 // For hgSession, we redirect from euro and asia to the RR - avoid showing the captcha there
 // hgLogin is the redirect target for hgSession, so avoid it there as well
@@ -1626,7 +1633,7 @@ if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
 
 setUdcCacheDir();
 
-netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
+netSetTimeoutErrorMsg("Connection timeout: either the server is offline or any firewall between UCSC and the server blocks the connection.");
 }
 
 struct cart *cartNew(char *userId, char *sessionId,
@@ -2706,7 +2713,7 @@ if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
     }
 
 // activate optional debuging output for CGIs
-verboseCgi(cartCgiUsualString(cart, "verbose", NULL));
+verboseCgi(cgiUsualString("verbose", NULL));
 
 return cart;
 }
