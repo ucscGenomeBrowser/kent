@@ -288,6 +288,7 @@ GCF_014825855.1_ASM1482585v1	bee B.pyrosoma
 GCF_011952275.1_Bvanc_JDL1245	bee B.vancouverensis nearcticus
 GCF_051014615.1_iyBomVanc1_principal	bee B.vancouverensis nearcticus (primary hap 2025)
 GCF_011952255.1_Bvos_JDL3184-5_v1.1	bee B.vosnesenskii
+GCF_051401765.1_iyCalAndr_principal	bee C.andreniformis (RMS-2024a primary hap 2025)
 GCF_001652005.2_ASM165200v1	bee C.calcarata (v2 Rehan_Ccalc_2016 2016)
 GCF_013123115.1_ASM1312311v1	bee C.gigas
 GCF_051014445.1_iyColLati1	bee C.latitarsis (SP2378_abdomen 2025)
@@ -554,6 +555,7 @@ GCF_027571235.1_Derpt_VIB-CSIC_2022.12	European house dust mite (colony J.1.1.1.
 GCA_035149815.1_klBraLanc5.hap1	European lancelet (hap1 2024)
 GCA_964187965.1_klBraLanc2.hap1.1	European lancelet (hap1.1 2024)
 GCF_035083965.1_klBraLanc5.hap2	European lancelet (hap2 2024 refseq)
+GCA_958450375.1_Homarus_gammarus	European lobster (2023)
 GCF_001465965.1_Pdom_r1.2	European paper wasp
 GCF_905147045.1_ilAglIoxx1.1	European peacock (2021 refseq)
 GCF_902459465.1_eAstRub1.3	European starfish (2020)

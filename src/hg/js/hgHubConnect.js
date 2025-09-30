@@ -91,6 +91,9 @@ $(function() {
     if (newHash) {
       history.replaceState(null, null, newHash);
     }
+    if (newHash === "#hubUpload") {
+        hubCreate.init();
+    }
   });
 });
 

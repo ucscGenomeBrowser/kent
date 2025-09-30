@@ -172,8 +172,9 @@ function revokeApiKeys() {
     cart.flush();
 }
 
-const fileNameRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in file names
-const parentDirRegex = /[0-9a-zA-Z._\-+]+/g; // allowed characters in hub names
+const fileNameRegex = /[0-9a-zA-Z._]+/g; // allowed characters in file names
+const fileNameFixRegex = /[^0-9a-zA-Z_]+/g; // '.' get replaced to underbars in trackHub.c. Also any files uploaded from hubtools that may have weird chars need to be escaped
+const parentDirRegex = /[0-9a-zA-Z._]+/g; // allowed characters in hub names
 
 function getTusdEndpoint() {
     // this variable is set by hgHubConnect and comes from hg.conf value
@@ -297,12 +298,12 @@ const uppy = new Uppy.Uppy({
             let fileNameMatch = file.meta.name.match(fileNameRegex);
             let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
             if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
@@ -560,10 +561,10 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
                 const dash = uppy.getPlugin("Dashboard");
                 if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
-                    uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, dash, underscore or plus.`, 'error', 5000);
+                    uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 }
                 if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                    uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, dash, underscore, or plus.`, 'error', 5000);
+                    uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 }
             }
         });
@@ -688,10 +689,9 @@ var hubCreate = (function() {
         }
     }
 
-    const regex = /[^A-Za-z0-9_-]/g;
     function trackHubFixName(trackName) {
-        // replace everything but alphanumeric, underscore and dash with underscore
-        return encodeURIComponent(trackName).replaceAll(regex, "_");
+        // replace everything but alphanumeric and underscore with underscore
+        return encodeURIComponent(trackName.replaceAll(fileNameFixRegex, "_"));
     }
 
     // helper object so we don't need to use an AbortController to update
@@ -1315,6 +1315,10 @@ var hubCreate = (function() {
     function showExistingFiles(d) {
         // Make the DataTable for each file
         // make buttons have the same style as other buttons
+        if ($.fn.dataTable.isDataTable("#filesTable")) {
+            return $("#filesTable").DataTable();
+        }
+
         $.fn.dataTable.Buttons.defaults.dom.button.className = 'button';
         tableInitOptions.data = d;
         if (uiState.isLoggedIn) {
@@ -1388,6 +1392,7 @@ var hubCreate = (function() {
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
         table.columns.adjust().draw();
+
         uppy.use(Uppy.Dashboard, uppyOptions);
 
         // define this in init so globals are available at runtime
@@ -1456,6 +1461,7 @@ var hubCreate = (function() {
             history.replaceState(uiState, "", document.location.href);
             console.log("replace history with uiState");
         });
+        inited = true;
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -1488,13 +1494,24 @@ var hubCreate = (function() {
         cart.defaultErrorCallback(jqXHR, textStatus);
     }
 
+    let inited = false; // keep track of first init for tab switching purposes
     function init() {
         cart.setCgiAndUrl(fileListEndpoint);
         cart.debug(debugCartJson);
         // get the file list immediately upon page load
-        cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
-        cart.flush();
+        let activeTab = $("#tabs").tabs( "option", "active" );
+        if (activeTab === 3) {
+            let url = new URL(window.location.href);
+            if (url.protocol === "http:") {
+                warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +
+                        `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
+            } else if (!inited) {
+                cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
+                cart.flush();
+            }
+        }
     }
+
     return { init: init,
              uiState: uiState,
              defaultDb: defaultDb,

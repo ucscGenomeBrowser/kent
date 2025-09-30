@@ -63,6 +63,72 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <!-- ============= 2025 archived news ============= -->
 <a name="2025"></a>
+<a name="092525"></a>
+<h2>Sep. 25, 2025 &nbsp;&nbsp; Panmask Easy 151b Regions track for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=panmask151b"
+	target="_blank">Panmask Easy 151b Regions</a>
+track for hg38. This new track is available in the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=problematicSuper"
+        target="_blank">Problematic Regions superTrack</a>.
+The track contains a set of sample-agnostic easy regions where short-read variant calling reaches
+high accuracy. Easy regions are derived for variant filtration agnostic to individual samples. They
+are genomic intervals where general variant callers achieve high accuracy without sophisticated
+filtering.</p>
+<p class="text-center">
+<img src="../../images/newsArchImages/panmask.png"
+alt="Panmask Easy 151b Regions track for the BRCA1 exon 19" width='75%'></p>
+<p>
+The pm151 regions are used to filter spurious variant calls in centromeres, long repeats, and
+other genomic regions where short-read mapping is often problematic. They cover 88.2% of hg38,
+92.2% of coding regions, and 96.3% of ClinVar pathogenic variants. The track can be used to filter
+variant calls for clinical or research human samples. It shows regions that are easy to sequence,
+rather than those that are problematic. The data was derived from the HPRC assemblies, and this
+track presents the 151b-easy panmask set.</p>
+<p>
+We would like to thank the
+<a href="https://hlilab.github.io/" target="_blank">HLi lab</a>
+at Harvard Medical School for making this data available. We
+would also like to thank Max Haeussler and Gerardo Perez for their efforts on this release.</p>
+
+<a name="092425"></a>
+<h2>Sep. 24, 2025 &nbsp;&nbsp; CoLoRSdb small and structure variants for hg38 and hs1</h2>
+<p>
+We are excited to announce the release of the CoLoRSdb Small and Structural Variant tracks for the
+human assemblies
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=structuralVariants&position=default" target="_blank">GRCh38/hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=hs1&g=hub_3671779_structuralVariants&position=default"
+target="_blank">CHM13/hs1</a>. These tracks provide a comprehensive catalog of genetic variation
+discovered through long-read whole genome sequencing, contributed by the international
+<a href="https://colorsdb.org" target="_blank">Consortium of Long Read Sequencing (CoLoRS)</a>. The
+small variant tracks (DeepVariant + GLnexus) contain single nucleotide polymorphisms (SNPs) and
+short indels, while the structural variant tracks (pbsv + Jasmine) display larger events including
+insertions, deletions, and inversions. Long-read sequencing technology improves sensitivity in
+repetitive regions and provides more precise breakpoint resolution than short-read approaches,
+enabling accurate visualization of complex loci in the Genome Browser.</p>
+<p>
+Each track includes allele frequency and sample count annotations, with additional filtering options
+for variant size and type. Users can click on individual variants to view detailed metadata, such as
+allele counts, homozygous/heterozygous call distributions, and Hardy-Weinberg equilibrium values.
+</p>
+
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/jnavarr5/CoLoRSdb_announcement">
+  <img src="../images/newsArchImages/CoLoRSdb.png"
+       alt="CoLoRSdb track with the mouseover tooltip on the DEL-159bp item." width='65%'>
+  <p class="gbsCaption">
+  <em>Genome Browser screenshot of the CoLoRSdb tracks with the mouseover tooltip on the DEL-159bp
+      item.</em>
+  </p></a>
+</div>
+<p>
+We would like to thank Mike Schatz, Evan Eichler, and all <a href="https://colorsdb.org/membership"
+target="_blank">CoLoRSdb investigators</a> for generating and making the data publicly available. We
+would also like to thank Karen Wang and Jairo Navarro Gonzalez for the creation and release of these
+tracks.
+</p>
+
 <a name="091925"></a>
 <h2>Sep. 19, 2025 &nbsp;&nbsp; Developmental Disorders Gene2Phenotype (DDG2P) for hg38 and hg19</h2>
 <p>
@@ -88,14 +154,14 @@ association is true:</p>
 <p>Each <b>mouseover</b> tooltip provides the following information:</p>
 <ul>
   <li><strong>G2P ID</strong>: Unique identifier assigned by the Gene2Phenotype (G2P) database.</li>
-  <li><strong>Number of PubMed IDs</strong>: Count of publications associated with the variant.</li>
+  <li><strong>Variant Consequence</strong>: Predicted effect each allele of a variant has on a
+      transcript.</li>
+  <li><strong>Disease Name</strong>: Name of the disease associated with the variant.</li>
+  <li><strong>PubMed IDs</strong>: Publications associated with the variant.</li>
   <li><strong>Molecular Mechanism</strong>: Description of the molecular processes and interactions
       causing pathogenic effects.</li>
   <li><strong>Allelic Requirements</strong>: Number of alleles required at a locus to produce a
       pathogenic phenotype (e.g., monoallelic, biallelic).</li>
-  <li><strong>Variant Consequence</strong>: Predicted effect each allele of a variant has on a
-      transcript.</li>
-  <li><strong>Disease Name</strong>: Name of the disease associated with the variant.</li>
   <li><strong>Date of Last Review</strong>: Most recent date the entry was manually reviewed.</li>
 </ul>
 

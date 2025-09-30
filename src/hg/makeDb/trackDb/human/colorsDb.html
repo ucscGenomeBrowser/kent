@@ -1,0 +1,129 @@
+<h2>Description</h2>
+<p>
+  The Consortium of Long Read Sequencing (CoLoRSdb) catalogs both small genetic variants
+  (single nucleotide polymorphisms and short insertions and deletions) and structural
+  variants (insertions, deletions, and inversions) discovered from long-read whole genome
+  sequencing. Long reads improve sensitivity and breakpoint resolution compared to
+  short-read data, especially for repeats and complex loci.
+</p>
+<p>
+  For more information, see the CoLoRSdb website:
+  <a href="https://colorsdb.org/" target="_blank" rel="noopener">https://colorsdb.org/</a>
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<h4>Small variants (DeepVariant + GLnexus)</h4>
+<ul>
+  <li>
+    DeepVariant + GLnexus tracks are shown using the UCSC Genome Browser VCF display format.</li>
+  <li>
+    In <em>dense</em> mode, each variant appears as a single pixel.</li>
+  <li>
+    In <em>pack</em> or <em>full</em> modes, clicking a variant reveals the reference and
+    alternate alleles (REF/ALT), the quality score (QUAL), the filter status (FILTER), and fields
+    from the INFO column.</li>
+  <li>More details on the VCF display format are available at:
+    <a href="https://genome.ucsc.edu/goldenPath/help/vcf.html"
+    target="_blank">https://genome.ucsc.edu/goldenPath/help/vcf.html</a>
+  </li>
+</ul>
+
+<h4>Structural variants (pbsv + Jasmine)</h4>
+<ul>
+  <li>
+    Structural variants are rendered as intervals with spans and block structures when applicable.
+  </li>
+  <li>
+    <b>Coloring</b> for each item is based on the variant type:
+    <ul>
+      <li><span style="display:inline-block;width:12px;height:12px;background:#ff0000;border:1px solid #000;vertical-align:middle;margin-right:6px;"></span> Deletion (DEL) = red</li>
+      <li><span style="display:inline-block;width:12px;height:12px;background:#0000ff;border:1px solid #000;vertical-align:middle;margin-right:6px;"></span> Insertion (INS) = blue</li>
+      <li><span style="display:inline-block;width:12px;height:12px;background:#800080;border:1px solid #000;vertical-align:middle;margin-right:6px;"></span> Inversion (INV) = purple</li>
+    </ul>
+  </li>
+  <li>
+    Mouseover an item reveals the genomic position, structural variant type,
+    variant length, allele frequency, alternative allele count, number of samples, total allele
+    number, Hardy-Weinburg equilibrium (HWE) p-value, and excess heterozygosity (ExcHet) p-value.
+  </li>
+</ul>
+
+<h2>Methods</h2>
+<ul>
+  <li><strong>Small variants:</strong> Per-sample variant calling was performed with DeepVariant,
+      followed by joint genotyping across the cohort using GLnexus.</li>
+  <li><strong>Structural variants:</strong> Called from long-read sequencing data using pbsv and
+      merged using Jasmine across individuals. The VCF file was converted to a bigBed file for
+      efficient display.</li>
+</ul>
+
+<h2>Data Access</h2>
+<p>
+The CoLoRSdb track can be explored interactively using the
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>, the
+<a href="/cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="/cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. 
+The VCF and bigBed files files are available from our 
+<a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/$db/colorsDb/">
+downloads directory</a>.
+The original VCF files are part of the v1.2.0 dataset, and documentation is available on Zenodo:
+<a href="https://zenodo.org/records/14814308"
+target="_blank">https://zenodo.org/records/14814308</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Mike Schatz, Evan Eichler, and all <a href="https://colorsdb.org/membership"
+target="_blank">CoLoRSdb investigators</a> for generating and making the data publicly available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Poplin R, Chang PC, Alexander D, Schwartz S, Colthurst T, Ku A, Newburger D, Dijamco J, Nguyen N,
+Afshar PT <em>et al</em>.
+<a href="https://doi.org/10.1038/nbt.4235" target="_blank">
+A universal SNP and small-indel variant caller using deep neural networks</a>.
+<em>Nat Biotechnol</em>. 2018 Nov;36(10):983-987.
+DOI: <a href="https://doi.org/10.1038/nbt.4235" target="_blank">10.1038/nbt.4235</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/30247488" target="_blank">30247488</a>
+</p>
+<p>
+Yun T, Li H, Chang PC, Lin MF, Carroll A, McLean CY.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btaa1081"
+target="_blank">
+Accurate, scalable cohort variant calls using DeepVariant and GLnexus</a>.
+<em>Bioinformatics</em>. 2021 Apr 5;36(24):5582-5589.
+DOI: <a href="https://doi.org/10.1093/bioinformatics/btaa1081"
+target="_blank">10.1093/bioinformatics/btaa1081</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/33399819" target="_blank">33399819</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8023681/" target="_blank">PMC8023681</a>
+</p>
+<p>
+Kirsche M, Prabhu G, Sherman R, Ni B, Battle A, Aganezov S, Schatz MC.
+<a href="https://doi.org/10.1038/s41592-022-01753-3" target="_blank">
+Jasmine and Iris: population-scale structural variant comparison and analysis</a>.
+<em>Nat Methods</em>. 2023 Mar;20(3):408-417.
+DOI: <a href="https://doi.org/10.1038/s41592-022-01753-3"
+target="_blank">10.1038/s41592-022-01753-3</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/36658279" target="_blank">36658279</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10006329/" target="_blank">PMC10006329</a>
+</p>
+<p>
+Eisfeldt J, Ameur A, Lenner F, Ten Berk de Boer E, Ek M, Wincent J, Vaz R, Ottosson J, Jonson T,
+Ivarsson S <em>et al</em>.
+<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=39472022" target="_blank">
+A national long-read sequencing study on chromosomal rearrangements uncovers hidden
+complexities</a>.
+<em>Genome Res</em>. 2024 Nov 20;34(11):1774-1784.
+DOI: <a href="https://doi.org/10.1101/gr.279510.124" target="_blank">10.1101/gr.279510.124</a>;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39472022" target="_blank">39472022</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11610602/" target="_blank">PMC11610602</a>
+</p>
+<p>
+Lake, J. A., &amp; Consortium of Long Read Sequencing (CoLoRS).
+<a href="https://doi.org/10.5281/zenodo.14814308" target="_blank">Consortium of Long Read
+Sequencing Database (CoLoRSdb) (v1.2.0) [Data set]</a> <em>Zendo</em>. 2025 Feb 5.
+<a href=https://doi.org/10.5281/zenodo.14814308 target="_blank">10.5281/zenodo.14814308</a>
+</p>

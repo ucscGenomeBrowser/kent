@@ -4,6 +4,7 @@ longLabel Problematic/special genomic regions for sequencing or very variable re
 superTrack on show
 html problematic
 group map
+pennantIcon Updated red ../goldenPath/newsarch.html#092525 "Panmask Easy 151b Regions released Sep. 25, 2025"
 
     track problematic
     parent problematicSuper
@@ -188,8 +189,8 @@ group map
     type bigBed 3
     dataVersion pm151b-v3.easy.bed.gz (Panmask v1.4, Aug 6 2025, MD5: 2f59a43dab0b463bafcf3b59fc62)
     visibility hide
-    release alpha,beta
     html problematic
+    pennantIcon New red ../goldenPath/newsarch.html#092525 "Released Sep. 25, 2025"
 
 searchTable comments
 searchPriority 0.5
