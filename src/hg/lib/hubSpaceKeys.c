@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "hubSpaceKeys.h"
 #include "hdb.h"
+#include "hgConfig.h"
 
 
 
@@ -128,8 +129,9 @@ fputc(lastSep,f);
 char *userNameForApiKey(char *apiKey)
 /* Return userName associated with apiKey else NULL */
 {
+char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select userName from %s where apiKey = '%s'", HUBSPACE_AUTH_TABLE, apiKey);
+struct dyString *query = sqlDyStringCreate("select userName from %s where apiKey = '%s'", tableName, apiKey);
 char *userName = sqlQuickString(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 return userName;
