@@ -16,17 +16,14 @@
 <h4>Small variants (DeepVariant + GLnexus)</h4>
 <ul>
   <li>
-    DeepVariant + GLnexus tracks are shown using the UCSC Genome Browser VCF display format.</li>
+    DeepVariant + GLnexus tracks are shown using the <a href="/goldenPath/help/hgVcfTrackHelp.html"
+    target="_blank">VCF display format</a>.</li>
   <li>
     In <em>dense</em> mode, each variant appears as a single pixel.</li>
   <li>
     In <em>pack</em> or <em>full</em> modes, clicking a variant reveals the reference and
     alternate alleles (REF/ALT), the quality score (QUAL), the filter status (FILTER), and fields
     from the INFO column.</li>
-  <li>More details on the VCF display format are available at:
-    <a href="https://genome.ucsc.edu/goldenPath/help/vcf.html"
-    target="_blank">https://genome.ucsc.edu/goldenPath/help/vcf.html</a>
-  </li>
 </ul>
 
 <h4>Structural variants (pbsv + Jasmine)</h4>
@@ -62,9 +59,9 @@
 <p>
 The CoLoRSdb track can be explored interactively using the
 <a href="../goldenPath/help/api.html" target="_blank">REST API</a>, the
-<a href="/cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="/cgi-bin/hgTables" target="_blank">Table Browser</a>, or the
 <a href="/cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. 
-The VCF and bigBed files files are available from our 
+The VCF and bigBed files are available from our 
 <a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/$db/colorsDb/">
 downloads directory</a>.
 The original VCF files are part of the v1.2.0 dataset, and documentation is available on Zenodo:
@@ -80,6 +77,33 @@ target="_blank">CoLoRSdb investigators</a> for generating and making the data pu
 
 <h2>References</h2>
 
+<p>
+Eisfeldt J, Ameur A, Lenner F, Ten Berk de Boer E, Ek M, Wincent J, Vaz R, Ottosson J, Jonson T,
+Ivarsson S <em>et al</em>.
+<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=39472022" target="_blank">
+A national long-read sequencing study on chromosomal rearrangements uncovers hidden
+complexities</a>.
+<em>Genome Res</em>. 2024 Nov 20;34(11):1774-1784.
+DOI: <a href="https://doi.org/10.1101/gr.279510.124" target="_blank">10.1101/gr.279510.124</a>;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39472022" target="_blank">39472022</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11610602/" target="_blank">PMC11610602</a>
+</p>
+<p>
+Kirsche M, Prabhu G, Sherman R, Ni B, Battle A, Aganezov S, Schatz MC.
+<a href="https://doi.org/10.1038/s41592-022-01753-3" target="_blank">
+Jasmine and Iris: population-scale structural variant comparison and analysis</a>.
+<em>Nat Methods</em>. 2023 Mar;20(3):408-417.
+DOI: <a href="https://doi.org/10.1038/s41592-022-01753-3"
+target="_blank">10.1038/s41592-022-01753-3</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/36658279" target="_blank">36658279</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10006329/" target="_blank">PMC10006329</a>
+</p>
+<p>
+Lake, J. A., &amp; Consortium of Long Read Sequencing (CoLoRS).
+<a href="https://doi.org/10.5281/zenodo.14814308" target="_blank">Consortium of Long Read
+Sequencing Database (CoLoRSdb) (v1.2.0) [Data set]</a> <em>Zendo</em>. 2025 Feb 5.
+<a href=https://doi.org/10.5281/zenodo.14814308 target="_blank">10.5281/zenodo.14814308</a>
+</p>
 <p>
 Poplin R, Chang PC, Alexander D, Schwartz S, Colthurst T, Ku A, Newburger D, Dijamco J, Nguyen N,
 Afshar PT <em>et al</em>.
@@ -99,31 +123,4 @@ DOI: <a href="https://doi.org/10.1093/bioinformatics/btaa1081"
 target="_blank">10.1093/bioinformatics/btaa1081</a>; PMID: <a
 href="https://www.ncbi.nlm.nih.gov/pubmed/33399819" target="_blank">33399819</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8023681/" target="_blank">PMC8023681</a>
-</p>
-<p>
-Kirsche M, Prabhu G, Sherman R, Ni B, Battle A, Aganezov S, Schatz MC.
-<a href="https://doi.org/10.1038/s41592-022-01753-3" target="_blank">
-Jasmine and Iris: population-scale structural variant comparison and analysis</a>.
-<em>Nat Methods</em>. 2023 Mar;20(3):408-417.
-DOI: <a href="https://doi.org/10.1038/s41592-022-01753-3"
-target="_blank">10.1038/s41592-022-01753-3</a>; PMID: <a
-href="https://www.ncbi.nlm.nih.gov/pubmed/36658279" target="_blank">36658279</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10006329/" target="_blank">PMC10006329</a>
-</p>
-<p>
-Eisfeldt J, Ameur A, Lenner F, Ten Berk de Boer E, Ek M, Wincent J, Vaz R, Ottosson J, Jonson T,
-Ivarsson S <em>et al</em>.
-<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=39472022" target="_blank">
-A national long-read sequencing study on chromosomal rearrangements uncovers hidden
-complexities</a>.
-<em>Genome Res</em>. 2024 Nov 20;34(11):1774-1784.
-DOI: <a href="https://doi.org/10.1101/gr.279510.124" target="_blank">10.1101/gr.279510.124</a>;
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39472022" target="_blank">39472022</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11610602/" target="_blank">PMC11610602</a>
-</p>
-<p>
-Lake, J. A., &amp; Consortium of Long Read Sequencing (CoLoRS).
-<a href="https://doi.org/10.5281/zenodo.14814308" target="_blank">Consortium of Long Read
-Sequencing Database (CoLoRSdb) (v1.2.0) [Data set]</a> <em>Zendo</em>. 2025 Feb 5.
-<a href=https://doi.org/10.5281/zenodo.14814308 target="_blank">10.5281/zenodo.14814308</a>
 </p>
