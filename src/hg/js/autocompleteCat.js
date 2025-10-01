@@ -87,7 +87,8 @@ var autocompleteCat = (function() {
         var doSearch = function(term, acCallback) {
             // Look up term in searchObj and by sending an ajax request
             var timestamp = new Date().getTime();
-            var url = options.baseUrl + encodeURIComponent(term);
+            let cleanedTerm = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0 len chars
+            var url = options.baseUrl + encodeURIComponent(cleanedTerm);
             if (!options.baseUrl.startsWith("hubApi")) {
                 // hubApi doesn't tolerate extra arguments
                 url += '&_=' + timestamp;
@@ -97,11 +98,11 @@ var autocompleteCat = (function() {
             $.getJSON(url)
                .done(function(results) {
                 if (_.isFunction(options.onServerReply)) {
-                    results = options.onServerReply(results, term);
+                    results = options.onServerReply(results, cleanedTerm);
                 }
                 // remove the loading icon
                 toggleSpinner(false, options);
-                cache[term] = results;
+                cache[cleanedTerm] = results;
                 acCallback(results);
             });
             // ignore errors to avoid spamming people on flaky network connections
