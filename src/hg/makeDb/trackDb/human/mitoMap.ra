@@ -6,7 +6,6 @@ visibility hide
 group phenDis
 noScoreFilter on
 compositeTrack on
-pennantIcon New red ../goldenPath/newsarch.html#030625 "Released Mar. 6, 2025"
 dataVersion /gbdb/$D/bbi/mitoMapVersion.txt
 chromosomes chrM,chrMT
 

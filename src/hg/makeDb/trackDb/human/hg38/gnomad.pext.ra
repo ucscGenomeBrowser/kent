@@ -9,7 +9,6 @@ viewLimits 0:1
 visibility hide
 html gnomadPext
 dataVersion Release 4.1
-pennantIcon Updated red ../goldenPath/newsarch.html#051425 "Updated May 14, 2025"
 
     track gnomADPextmean_proportion
     bigDataUrl /gbdb/hg38/gnomAD/pext/exp_prop_mean.bw

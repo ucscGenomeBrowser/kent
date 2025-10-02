@@ -2,7 +2,6 @@ track knownGene
 table knownGene
 shortLabel GENCODE V48lift37
 longLabel GENCODE V48lift37
-pennantIcon Updated red ../goldenPath/newsarch.html#051925 "Released May 19, 2025"
 # parent knownGeneArchive
 priority 1
 #priority 5
