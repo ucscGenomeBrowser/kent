@@ -448,7 +448,7 @@ else
     char *existingKey = getApiKey(userName);
     if (existingKey)
         {
-        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an api key for use in hubtools. If you would like to generate a new key (which automatically revokes old keys), please click 'generate key'. Otherwise, you can copy and paste the below key to your ~/.hubtools.conf file:<br>");
+        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an api key for use in hubtools. If you would like to generate a new key (which automatically revokes old keys), please click 'generate key'. Otherwise, you can copy and paste the below key to your ~/.hubtools.conf file:<br><br>");
         puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
         printf("%s\n", existingKey);
         puts("</div>");
