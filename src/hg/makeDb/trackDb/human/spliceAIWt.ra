@@ -7,6 +7,7 @@ parent spliceImpactSuper on
 type bigWig
 visibility dense
 priority 2
+html spliceImpactSuper
 
     track spliceAiAccPlus
     type bigWig 0 1
@@ -15,7 +16,6 @@ priority 2
     longLabel SpliceAI Splice Acceptor Sites, Plus Strand
     parent spliceAIWt on
     bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiAcceptorPlus.bw
-    html spliceAI
 
     track spliceAiAccMinus
     type bigWig 0 1
@@ -24,7 +24,6 @@ priority 2
     longLabel SpliceAI Splice Acceptor Sites, Minus Strand
     parent spliceAIWt on
     bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiAcceptorMinus.bw
-    html spliceAI
 
     track spliceAiDonorPlus
     type bigWig 0 1
@@ -33,7 +32,6 @@ priority 2
     longLabel SpliceAI Splice Donor Sites, Plus Strand
     parent spliceAIWt on
     bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiDonorPlus.bw
-    html spliceAI
 
     track spliceAiDonorMinus
     type bigWig 0 1
@@ -42,4 +40,3 @@ priority 2
     longLabel SpliceAI Splice Donor Sites, Minus Strand
     parent spliceAIWt on
     bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiDonorMinus.bw
-    html spliceAI
