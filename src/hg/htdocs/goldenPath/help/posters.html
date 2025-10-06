@@ -1,504 +1,515 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="Genome Browser Training" -->
+<!--#set var="TITLE" value="Genome Browser Poster Gallery" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <style>
-/* --- Collapsible button styling --- */
-.collapsible {
-  background-color: #4C759C;
-  color: white;
-  cursor: pointer;
-  padding: 6px 20px;
-  width: 100%;
-  text-align: left;
-  font-size: 17px;
-  font-weight: bold;
-}
+  /* === Poster box styling === */
+  .poster-box {
+    text-align: center; /* center text and image inside poster cell */
+  }
 
-.collapsible:hover {
-  background-color: #327DE4;
-}
+  /* clickable image itself should only be the visible PNG */
+  .poster-box a img {
+    display: inline-block;   /* ensures the clickable area = only the image */
+  }
 
-/* Add "+" sign to collapsible buttons */
-.collapsible:after {
-  content: '\002B'; /* Unicode plus sign */
-  color: white;
-  font-weight: bold;
-  float: right;
-  margin-left: 5px;
-}
+  /* wrapper link around poster content */
+  .poster-link {
+    text-decoration: none;
+    display: inline-block; /* shrink to contents */
+    text-align: center;
+    color: inherit; /* inherit surrounding text color */
+  }
 
-/* Change "+" to "–" when active */
-.active:after {
-  content: "\2212"; /* Unicode minus sign */
-  font-weight: bold;
-}
+  /* conference label */
+  .poster-conf {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+  }
+ 
+  /* poster title under conference name */
+  .poster-title {
+    display: block;
+    font-size: 14px;
+    color: #333;
+  }
 
-/* Collapsible content (hidden by default) */
-.collapseMe {
-  padding: 0 18px;
-  max-height: 0;
-  overflow: hidden;
-}
+  /* poster preview image (thumbnail) */
+  .poster-img {
+    display: block;
+    margin: 0 auto;
+    max-width: 400px;
+    height: auto;
+  }
 
-/* Centered links under poster thumbnails */
-.poster-link {
-  display: block;
-  text-align: center;
-  margin-top: 8px;
-}
+  /* larger preview version for certain posters */
+  .poster-img.large {
+    max-width: 600px; /* new larger preview width */
+    width: 100%;
+    height: auto;
+  }
+
+  /* === Collapsible year button styling === */
+  .collapsible {
+    background-color: #4C759C;
+    color: white;
+    cursor: pointer;
+    padding: 8px 20px;
+    width: 100%;
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+  }
+  .collapsible:hover { background-color: #327DE4; }
+  .collapsible:after { content: '\002B'; float: right; margin-left: 5px; }
+  .collapsible.active:after { content: '\2212'; }
+
+  .collapseMe {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .collapseMe.open {
+    padding: 12px 18px 24px;
+  }
+
+  /* Center year navigation */
+  .year-nav {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+ 
+  .year-nav ul {
+    list-style: none; /* remove bullets */
+    padding: 0;
+    margin: 0;
+  }
+
+  .year-nav a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+    color: #004080;   /* UCSC dark blue */
+    transition: color 0.2s ease;
+  }
+  
+  .year-nav a:hover {
+    color: #327DE4;   /* lighter blue on hover */
+    text-decoration: underline;
+  }
+  
+  .year-nav li {
+    margin: 6px 0;
+  }
+  
+  .year-nav .col-sm-3 {
+    padding-left: 120px;
+    padding-right: 120px;
+  }
+
+  /* small responsive */
+  @media (max-width: 768px) {
+    .col-md-6, .col-md-4, .col-md-12 { width: 100%; display: block; }
+    .poster-img { width: 320px; }
+  }
 
 /* Reserved for additional genome-specific styles */
 .otherGenomes {
-}
 </style>
 
 <h1>UCSC Genome Browser Poster Gallery</h1>
 
-<!-- =================== YEAR 2025 =================== -->
-<button id="2025" class="collapsible active" style="font-size: 20px;">2025</button>
-<div class="collapseMe" style="max-height: 2000px;"> <!-- set high enough to fit content -->
+<!-- ===== Year Navigation Menu (4 columns, 2025-2015) ===== -->
+<div class="container year-nav">
   <div class="row">
+    <div class="col-sm-3">
+      <ul>
+        <li><a href="#2025">2025</a></li>
+        <li><a href="#2024">2024</a></li>
+        <li><a href="#2023">2023</a></li>
+      </ul>
+    </div>
 
-    <!-- Left column -->
+    <div class="col-sm-3">
+      <ul>
+        <li><a href="#2022">2022</a></li>
+        <li><a href="#2021">2021</a></li>
+        <li><a href="#2020">2020</a></li>
+      </ul>
+    </div>
+
+    <div class="col-sm-3">
+      <ul>
+        <li><a href="#2019">2019</a></li>
+        <li><a href="#2018">2018</a></li>
+        <li><a href="#2017">2017</a></li>
+      </ul>
+    </div>
+
+    <div class="col-sm-3">
+      <ul>
+        <li><a href="#2016">2016</a></li>
+        <li><a href="#2015">2015</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Poster Sections ===== -->
+<!-- ======= YEAR 2025 ======= -->
+<button id="2025" class="collapsible active">2025</button>
+<div class="collapseMe" >
+  <div class="row">
     <div class="col-md-6">
-      <ul>
-        <!-- Link to ESHG 2025 Poster -->
-        <a class="poster-link" href="/goldenPath/posters/trackDecorators_ESHG2025.pdf" target="_blank"
-		 style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ESHG 2025
+      <div class="poster-box">
+        <!-- Poster link (PDF) + preview (PNG) -->
+        <a class="poster-link" href="/goldenPath/posters/trackDecorators_ESHG2025.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ESHG 2025</span>
+          <span class="poster-title">UCSC Genome Browser Track Decorators</span>
+          <img class="poster-img" src="/goldenPath/posters/trackDecorators_ESHG2025_thumb.png" alt="ESHG 2025 poster preview">
         </a>
-	<!-- PDF Embed for inline preview -->
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/trackDecorators_ESHG2025.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Right column -->
     <div class="col-md-6">
-      <ul>
-        <!-- Link to Biology of Genomes 2025 Poster -->
-        <a class="poster-link" href="/goldenPath/posters/BiologyofGenomes2025.pdf" target="_blank"
-		 style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Biology of Genomes 2025
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/BiologyofGenomes2025.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Biology of Genomes 2025</span>
+          <span class="poster-title">UCSC Genome Browser: HubSpace Track Storage</span>
+          <img class="poster-img" src="/goldenPath/posters/BiologyofGenomes2025_thumb.png" alt="Biology of Genomes 2025 preview">
         </a>
-	<!-- PDF Embed for inline preview -->
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/BiologyofGenomes2025.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2024 =================== -->
-<button id="2024" class="collapsible" style="font-size: 20px;">2024</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2024 ======= -->
+<button id="2024" class="collapsible active">2024</button>
+<div class="collapseMe" >
   <div class="row">
-
-    <!-- Column 1 -->
     <div class="col-md-4">
-      <ul>
-        <!-- Link to Biology of Genomes 2024 Poster -->
-        <a class="poster-link" href="/goldenPath/posters/BiologyofGenomes2024.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Biology of Genomes 2024
+      <div class="poster-box">
+        <!-- Poster link (PDF) + preview (PNG) -->
+        <a class="poster-link" href="/goldenPath/posters/BiologyofGenomes2024.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Biology of Genomes 2024</span>
+          <span class="poster-title">Viewing Human Pangenome Research Consortium (HPRC) data on the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/BiologyofGenomes2024_thumb.png" alt="Biology of Genomes 2024 preview">
         </a>
-        <!-- PDF Embed for inline preview -->
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/BiologyofGenomes2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-        <!-- Link to VEPTC 2024 Poster -->
-        <a class="poster-link" href="/goldenPath/posters/veptc2024.pdf" target="_blank" 
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          VEPTC 2024
+      </div>
+
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/veptc2024.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">VEPTC 2024</span>
+          <span class="poster-title">UCSC Genome Browser: Latest developments for variant interpretation</span>
+          <img class="poster-img" src="/goldenPath/posters/veptc2024_thumb.png" alt="VEPTC 2024 preview">
         </a>
-        <!-- PDF Embed for inline preview -->
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/veptc2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 2 -->
     <div class="col-md-4">
-      <ul>
-        <!-- Link to Biology of ICTE 2024 Poster -->
-        <a class="poster-link" href="/goldenPath/posters/ICTE2024.pdf" target="_blank" 
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ICTE 2024
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/ICTE2024.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ICTE 2024</span>
+          <span class="poster-title">Visualizing transposable elements with the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/ICTE2024_thumb.png" alt="ICTE 2024 preview">
         </a>
-        <!-- PDF Embed for inline preview -->
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/ICTE2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 3 -->
     <div class="col-md-4">
-      <ul>
-        <!-- Link to ISV 2024 Poster -->
-        <a class="poster-link" href="/goldenPath/posters/ISV2024.pdf" target="_blank" 
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ISV 2024
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/ISV2024.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ISV 2024</span>
+          <span class="poster-title">UCSC Genome Browser: Latest resources for variant interpretation</span>
+          <img class="poster-img" src="/goldenPath/posters/ISV2024_thumb.png" alt="ISV 2024 preview">
         </a>
-        <!-- PDF Embed for inline preview -->
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/ISV2024.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2023 =================== -->
-<button id="2023" class="collapsible" style="font-size: 20px;">2023</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2023 ======= -->
+<button id="2023" class="collapsible active">2023</button>
+<div class="collapseMe" >
   <div class="row">
-    <!-- Column 1 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/genomeBrowserBoG2023.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Biology of Genomes 2023
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/genomeBrowserBoG2023.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Biology of Genomes 2023</span>
+          <span class="poster-title">Visualizing genomic rearrangements with the UCSC Genome Browser snakes display</span>
+          <img class="poster-img" src="/goldenPath/posters/genomeBrowserBoG2023_thumb.png" alt="BoG 2023 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/genomeBrowserBoG2023.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 2 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/genomeBrowserASHG2023.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ASHG 2023
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/genomeBrowserASHG2023.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ASHG 2023</span>
+          <span class="poster-title">quickLift: Lifting UCSC Genome Browser annotations on demand</span>
+          <img class="poster-img" src="/goldenPath/posters/genomeBrowserASHG2023_thumb.png" alt="ASHG 2023 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/genomeBrowserASHG2023.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 3 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/CSHL_GenomeInformatics_2023.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          CSHL 2023
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/CSHL_GenomeInformatics_2023.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">CSHL 2023</span>
+          <span class="poster-title">GenArk: Towards A Million Genome Browsers</span>
+          <img class="poster-img" src="/goldenPath/posters/CSHL_GenomeInformatics_2023_thumb.png" alt="CSHL 2023 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/CSHL_GenomeInformatics_2023.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2021 =================== -->
-<button id="2021" class="collapsible" style="font-size: 20px;">2021</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2021 ======= -->
+<button id="2021" class="collapsible active">2021</button>
+<div class="collapseMe" >
   <div class="row">
     <div class="col-md-12">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/CSHL_2021.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          CSHL 2021
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/CSHL_2021.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">CSHL 2021</span>
+          <span class="poster-title">UCSC Genome Browser in the Cloud (GBiC)</span>
+          <img class="poster-img" src="/goldenPath/posters/CSHL_2021_thumb.png" alt="CSHL 2021 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin: 5px auto;">
-          <embed src="/goldenPath/posters/CSHL_2021.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2020 =================== -->
-<button id="2020" class="collapsible" style="font-size: 20px;">2020</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2020 ======= -->
+<button id="2020" class="collapsible active">2020</button>
+<div class="collapseMe" >
   <div class="row">
     <div class="col-md-12">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/PAG_Poster_API_2020.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          PAG 2020
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/PAG_Poster_API_2020.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">PAG 2020</span>
+          <span class="poster-title">UCSC Genome Browser REST API Returning Assembly Hub JSON Data</span>
+          <img class="poster-img" src="/goldenPath/posters/PAG_Poster_API_2020_thumb.png" alt="PAG 2020 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin: 5px auto;">
-          <embed src="/goldenPath/posters/PAG_Poster_API_2020.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2019 =================== -->
-<button id="2019" class="collapsible" style="font-size: 20px;">2019</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2019 ======= -->
+<button id="2019" class="collapsible active">2019</button>
+<div class="collapseMe" >
   <div class="row">
-    <!-- Left column -->
     <div class="col-md-6">
-      <ul>
-          <a class="poster-link" href="/goldenPath/posters/UCSC_PAG_2019_AssemblyHub.pdf" target="_blank"
-		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-            PAG 2019
-          </a>
-          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-            <embed src="/goldenPath/posters/UCSC_PAG_2019_AssemblyHub.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                   type="application/pdf" width="100%" height="300px" />
-          </div>
-      </ul>
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/UCSC_PAG_2019_AssemblyHub.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">PAG 2019</span>
+          <span class="poster-title">Annotating Variants and Displaying Multiple Alignments on Your Assemblies Using the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/UCSC_PAG_2019_AssemblyHub_thumb.png" alt="PAG 2019 preview">
+        </a>
+      </div>
     </div>
 
-    <!-- Right column -->
     <div class="col-md-6">
-      <ul>
-          <a class="poster-link" href="/goldenPath/posters/ASHG_2019_Interact.pdf" target="_blank"
-		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-            ASHG 2019
-          </a>
-          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-            <embed src="/goldenPath/posters/ASHG_2019_Interact.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                   type="application/pdf" width="100%" height="300px" />
-          </div>
-      </ul>
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/ASHG_2019_Interact.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ASHG 2019</span>
+          <span class="poster-title">UCSC Genome Browser: New Interact Format and GeneHancer Data</span>
+          <img class="poster-img" src="/goldenPath/posters/ASHG_2019_Interact_thumb.png" alt="ASHG 2019 preview">
+        </a>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2018 =================== -->
-<button id="2018" class="collapsible" style="font-size: 20px;">2018</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2018 ======= -->
+<button id="2018" class="collapsible active">2018</button>
+<div class="collapseMe" >
   <div class="row">
-    <!-- Left column -->
     <div class="col-md-6">
-      <ul>
-          <a class="poster-link" href="/goldenPath/posters/UCSC_BoG_2018_GtexPoster.pdf" target="_blank"
-		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-            Biology of Genomes 2018
-          </a>
-          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-            <embed src="/goldenPath/posters/UCSC_BoG_2018_GtexPoster.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                   type="application/pdf" width="100%" height="300px" />
-          </div>
-      </ul>
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/UCSC_BoG_2018_GtexPoster.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Biology of Genomes 2018</span>
+          <span class="poster-title">GTEx resources and new 'barChart' and 'interacton' track displays inspired by GTEx</span>
+          <img class="poster-img" src="/goldenPath/posters/UCSC_BoG_2018_GtexPoster_thumb.png" alt="BoG 2018 preview">
+        </a>
+      </div>
     </div>
 
-    <!-- Right column -->
     <div class="col-md-6">
-      <ul>
-          <a class="poster-link" href="/goldenPath/posters/UcscPostDoc_2018.pdf" target="_blank"
-		  style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-            UCSC PostDoc 2018
-          </a>
-          <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-            <embed src="/goldenPath/posters/UcscPostDoc_2018.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                   type="application/pdf" width="100%" height="300px" />
-          </div>
-      </ul>
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/UcscPostDoc_2018.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">UCSC PostDoc 2018</span>
+          <span class="poster-title">Visualizing RNA-seq data in the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/UcscPostDoc_2018_thumb.png" alt="PostDoc 2018 preview">
+        </a>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2017 =================== -->
-<button id="2017" class="collapsible" style="font-size: 20px;">2017</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2017 ======= -->
+<button id="2017" class="collapsible active">2017</button>
+<div class="collapseMe" >
   <div class="row">
     <div class="col-md-12">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/GenomeInformatics2017.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Genome Informatics 2017
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/GenomeInformatics2017.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Genome Informatics 2017</span>
+          <span class="poster-title">HGVS variant nomenclature in the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/GenomeInformatics2017_thumb.png" alt="Genome Informatics 2017 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin: 5px auto;">
-          <embed src="/goldenPath/posters/GenomeInformatics2017.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2016 =================== -->
-<button id="2016" class="collapsible" style="font-size: 20px;">2016</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2016 ======= -->
+<button id="2016" class="collapsible active">2016</button>
+<div class="collapseMe" >
   <div class="row">
-    <!-- Column 1 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/ACMGposter2016.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ACMG 2016
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/ACMGposter2016.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ACMG 2016</span>
+          <span class="poster-title">Visualize and Analyze Your Genomic Data on the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/ACMGposter2016_thumb.png" alt="ACMG 2016 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/ACMGposter2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
+      </div>
 
-        <a class="poster-link" href="/goldenPath/posters/GTEX_2016_Poster.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          GTEx Community Meeting 2016
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/GTEX_2016_Poster.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">GTEx 2016</span>
+          <span class="poster-title">GTEx Data in the UCSC Genome Browser 2016 Update</span>
+          <img class="poster-img" src="/goldenPath/posters/GTEX_2016_Poster_thumb.png" alt="GTEx 2016 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/GTEX_2016_Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 2 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/PosterIchg2016.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ICHG 2016
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/PosterIchg2016.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ICHG 2016</span>
+          <span class="poster-title">Visualize and Analyze Your Genomic Data on the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/PosterIchg2016_thumb.png" alt="ICHG 2016 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/PosterIchg2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
+      </div>
 
-        <a class="poster-link" href="/goldenPath/posters/CrisporCshl2016.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          CSHL 2016
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/CrisporCshl2016.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">CSHL 2016</span>
+          <span class="poster-title">Evaluation of off-target and on-target scoring algorithms: Integration into crispor.org and the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/CrisporCshl2016_thumb.png" alt="CSHL 2016 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/CrisporCshl2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 3 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/Multi-region-BoG2016.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Biology of Genomes 2016
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/Multi-region-BoG2016.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Biology of Genomes 2016</span>
+          <span class="poster-title">New UCSC Genome Browser Views: Exon-Only, Gene-Only, Alternate Haplotypes, and Custom Regions</span>
+          <img class="poster-img" src="/goldenPath/posters/Multi-region-BoG2016_thumb.png" alt="BoG 2016 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/Multi-region-BoG2016.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- =================== YEAR 2015 =================== -->
-<button id="2015" class="collapsible" style="font-size: 20px;">2015</button>
-<div class="collapseMe">
+<!-- ======= YEAR 2015 ======= -->
+<button id="2015" class="collapsible active">2015</button>
+<div class="collapseMe" >
   <div class="row">
-    <!-- Column 1 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/Acmg2015poster.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          ACMG 2015
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/Acmg2015poster.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">ACMG 2015</span>
+          <span class="poster-title">UCSC Genome Browser and Variant Annotation Integrator</span>
+          <img class="poster-img" src="/goldenPath/posters/Acmg2015poster_thumb.png" alt="ACMG 2015 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/Acmg2015poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
+      </div>
 
-        <a class="poster-link" href="/goldenPath/posters/BioengSymp2015Poster.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          UC-wide Bioengineering Symposium 2015
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/BioengSymp2015Poster.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">UC-wide Bioeng 2015</span>
+          <span class="poster-title">Use The UCSC Genome Browser To Visualize And Analyze Your Genomic Data</span>
+          <img class="poster-img" src="/goldenPath/posters/BioengSymp2015Poster_thumb.png" alt="Bioeng 2015 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/BioengSymp2015Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 2 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/G10K2015.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Genome 10K 2015
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/G10K2015.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">Genome 10K 2015</span>
+          <span class="poster-title">Assembly Hubs and Genome Browser in a Box Makes Viewing Private Annotations and Custom Sequences Easy</span>
+          <img class="poster-img" src="/goldenPath/posters/G10K2015_thumb.png" alt="G10K 2015 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/G10K2015.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
+      </div>
 
-        <a class="poster-link" href="/goldenPath/posters/GTEX2015Poster.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          GTEx Community Meeting 2015
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/GTEX2015Poster.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">GTEx 2015</span>
+          <span class="poster-title">GTEx Data in the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/GTEX2015Poster_thumb.png" alt="GTEx 2015 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/GTEX2015Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
-
-        </div>
-      </ul>
+      </div>
     </div>
 
-    <!-- Column 3 -->
     <div class="col-md-4">
-      <ul>
-        <a class="poster-link" href="/goldenPath/posters/BoG2015DataIntegrator.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          Biology of Genomes 2015
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/BoG2015DataIntegrator.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">BoG 2015</span>
+          <span class="poster-title">The Data Integrator: a new way to combine data sources underlying the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/BoG2015DataIntegrator_thumb.png" alt="BoG 2015 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src="/goldenPath/posters/BoG2015DataIntegrator.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />
+      </div>
 
-        <a class="poster-link" href="/goldenPath/posters/UCSC_Proteomics_HUPO2015_Poster.pdf" target="_blank"
-		style="font-size:24px; font-weight:bold; display:block; text-align:center; margin-top:8px;">
-          HUPO 2015
+      <div class="poster-box">
+        <a class="poster-link" href="/goldenPath/posters/UCSC_Proteomics_HUPO2015_Poster.pdf" target="_blank" rel="noopener">
+          <span class="poster-conf">HUPO 2015</span>
+          <span class="poster-title">Visualizing proteomics data in genomic context using the UCSC Genome Browser</span>
+          <img class="poster-img" src="/goldenPath/posters/UCSC_Proteomics_HUPO2015_Poster_thumb.png" alt="HUPO 2015 preview">
         </a>
-        <div style="max-width:400px; border:1px solid #ccc; margin-bottom:5px; margin-left:auto; margin-right:auto;">
-          <embed src=/goldenPath/posters/UCSC_Proteomics_HUPO2015_Poster.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                 type="application/pdf" width="100%" height="300px" />```
-        </div>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
-
-
 
 
 <script>
-/* =================== Collapsible Section Logic =================== */
+/* === Collapsible year sections logic === */
 document.addEventListener("DOMContentLoaded", function() {
   const buttons = document.querySelectorAll(".collapsible");
   buttons.forEach(btn => {
+    let content = btn.nextElementSibling;
+
+    // Open all collapsibles by default
+    btn.classList.add("active");
+    content.classList.add("open");
+    content.style.maxHeight = "none"; // allow natural height
+
+    // Toggle open/close when clicking button
     btn.addEventListener("click", function() {
-      // Toggle "active" class on the clicked button
       this.classList.toggle("active");
 
-      // Find the next sibling element (collapsible content)
-      let content = this.nextElementSibling;
-
-      // Expand or collapse the section
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null; // Collapse
+      if (content.classList.contains("open")) {
+        content.classList.remove("open");
+        content.style.maxHeight = null;
       } else {
-        content.style.maxHeight = content.scrollHeight + "px"; // Expand
+        content.classList.add("open");
+        content.style.maxHeight = "none"; // expand fully
       }
     });
   });
 });
 </script>
-
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -231,16 +231,17 @@ puts("</div>");
 void revokeApiKey(struct cartJson *cj, struct hash *paramHash)
 /* Remove any api keys for the user */
 {
+char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
 char *userName = getUserName();
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("delete from %s where userName='%s'", HUBSPACE_AUTH_TABLE, userName);
+struct dyString *query = sqlDyStringCreate("delete from %s where userName='%s'", tableName, userName);
 sqlUpdate(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 jsonWriteString(cj->jw, "revoke", "true");
 }
 
 void generateApiKey(struct cartJson *cj, struct hash *paramHash)
-/* Make a random (but not crypto-secure api key for use of hubtools to upload to hubspace */
+/* Make a random (but not crypto-secure) api key for use of hubtools to upload to hubspace */
 {
 char *userName = getUserName();
 if (!userName)
@@ -251,7 +252,8 @@ if (!userName)
 char *apiKey = makeRandomKey(256); // just needs some arbitrary length
 // save this key to the database for this user, the 'on duplicate' part automatically revokes old keys
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("insert into %s values ('%s', '%s') on duplicate key update apiKey='%s'", HUBSPACE_AUTH_TABLE, userName, apiKey, apiKey);
+char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
+struct dyString *query = sqlDyStringCreate("insert into %s values ('%s', '%s') on duplicate key update apiKey='%s'", tableName, userName, apiKey, apiKey);
 sqlUpdate(conn, dyStringCannibalize(&query));
 jsonWriteString(cj->jw, "apiKey", apiKey);
 hDisconnectCentral(&conn);

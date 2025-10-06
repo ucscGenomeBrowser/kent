@@ -9717,7 +9717,7 @@ if (!hideControls)
                     }
 
                 hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
-                        "title='Hide all tracks in this group'>Hide all</button>&nbsp;",
+                        "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
                         group->name);
 
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);

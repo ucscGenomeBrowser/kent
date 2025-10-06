@@ -67,7 +67,14 @@ int bigWigIntervalDump(struct bbiFile *bwf, char *chrom, bits32 start, bits32 en
 /* Print out info on bigWig parts that intersect chrom:start-end.   Set maxCount to 0 if you 
  * don't care how many are printed.  Returns number printed. */
 
-boolean bigWigSummaryArray(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
+int bigWigIntervalDumpWithName(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end, int maxCount, char *name, 
+                               FILE *out);
+/* Print out info on bigWig parts that intersect chrom:start-end.   Set maxCount to 0 if you 
+ * don't care how many are printed.  Returns number printed. 
+   Same as bigWigIntervalDump but passes the name parameter on to bigWigBlockDumpIntersectingRangeWithName
+ */
+
+    boolean bigWigSummaryArray(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
