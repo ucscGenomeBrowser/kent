@@ -591,7 +591,7 @@ var subCfg = { // subtrack config module.
         if (boxWithin.length > 1)
             $(boxWithin[1]).removeClass('blueBox');
 
-        var subObjs = $(cfg).find('input,select').filter("[name]");
+        var subObjs = $(cfg).find('input,select').filter("[name]").not('[type="submit"]');
         if (subObjs.length === 0) {
             warn('DEBUG: Did not find controls for cfg: ' + cfg.id);
             return;
