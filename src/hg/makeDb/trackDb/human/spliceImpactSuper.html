@@ -19,14 +19,25 @@ track includes 49 tissues available from the
 Expression (GTEx) dataset</a>.
 </p>
 
-<h3>SpliceAI</h3>
+<h3>SpliceAI Variants</h3>
 <p>SpliceAI is an <a href="https://github.com/Illumina/SpliceAI" target="_blank">open-source</a> deep
 learning splicing prediction algorithm that can predict splicing alterations caused by DNA variations.
-Such variants may activate nearby cryptic splice sites, leading to abnormal transcript isoforms.
+To score variants, the spliceAI algorithm is run on the genome sequence itself and scores each
+nucleotide for the probability that it is a donor or acceptor site, on both the
+forward and the reverse strand. Then variants are added to the sequence and the new sequence is
+scored. Variants may activate nearby cryptic splice sites, leading to abnormal transcript isoforms.
 SpliceAI was developed at Illumina; a
 <a href="https://spliceailookup.broadinstitute.org" target="_blank">lookup tool</a>
-is provided by the Broad institute.
+is provided by the Broad institute. 
 </p>
+
+<h3>SpliceAI Wildtype</h3>
+<p>This "wildtype" container track shows the scores for the genome
+sequence itself, without variants. The "wildtype" subtracks are
+useful when looking at new transcript models, to evaluate how likely exon
+boundaries are and where possible splice acceptor sites are, in combination with the variants track. 
+</p>
+
 <b>Why are some variants not scored by SpliceAI?</b>
 <p>
 SpliceAI only annotates variants within genes defined by the gene
@@ -35,7 +46,7 @@ ends (5kb on either side), deletions of length greater than twice the input para
 inconsistent with the reference fasta file.
 </p>
 
-<b>What are the differeneces between masked and unmasked tracks?</b>
+<b>What are the differences between masked and unmasked tracks?</b>
 <p>
 The unmasked tracks include splicing changes corresponding to strengthening annotated splice sites
 and weakening unannotated splice sites, which are typically much less pathogenic than weakening
@@ -168,6 +179,14 @@ The complete processing of this track can be found in the <a target="_blank"
 href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/spliceAI/spliceAI.py">
 makedoc</a>.
 </p>
+<h3>SpliceAI wildtype</h3>
+<p>Data was provided by the Michael Hiller lab. 
+SpliceAI was run on the entire genome reference chromosomes.
+Since the algorithm does not know where transcripts start or end,
+the scores can differ from other websites, especially for splice sites
+before the last exon or around the first exon. 
+</p>
+
 
 <h3>SpliceVarDB</h3>
 <p>The data was converted by Patricia Sullivan from SpliceVarDB to
