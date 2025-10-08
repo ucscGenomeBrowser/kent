@@ -12,7 +12,7 @@ html spliceImpactSuper
     track spliceAiAccPlus
     type bigWig 0 1
     priority 1
-    shortLabel SpliceAI Acceptor, Plus Strand
+    shortLabel SpliceAI Acceptor Plus
     longLabel SpliceAI Splice Acceptor Sites, Plus Strand
     parent spliceAIWt on
     bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiAcceptorPlus.bw
@@ -20,7 +20,7 @@ html spliceImpactSuper
     track spliceAiAccMinus
     type bigWig 0 1
     priority 2
-    shortLabel SpliceAI Acceptor, Minus Strand
+    shortLabel SpliceAI Acceptor Minus
     longLabel SpliceAI Splice Acceptor Sites, Minus Strand
     parent spliceAIWt on
     bigDataUrl /gbdb/$D/bbi/spliceAi/wildtype/spliceAiAcceptorMinus.bw
