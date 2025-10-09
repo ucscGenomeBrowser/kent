@@ -53,13 +53,16 @@ struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, cha
 /* Load a list of items (usually beds) from another database in a region that corresponds to chromName:winStart-winEnd in the reference database.
  * Fill a hash with the chains that were used to map the desired range.  These chains will be used to map the query side items back to the reference. */
 
-unsigned quickLiftGetChain(char *fromDb, char *toDb);
+unsigned quickLiftGetChainId(struct cart *, char *fromDb, char *toDb);
 /* Return the id from the quickLiftChain table for given assemblies. */
+
+char *quickLiftGetChainPath(struct cart *, char *fromDb, char *toDb);
+/* Return the path from the quickLiftChain table for given assemblies. */
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
 // Map a list of bedd in query coordinates to our current reference
 
-boolean quickLiftEnabled();
+boolean quickLiftEnabled(struct cart *cart);
 /* Return TRUE if feature is available */
 
 struct quickLiftRegions *quickLiftGetRegions(char *ourDb, char *liftDb, char *quickLiftFile, char *chrom, int seqStart, int seqEnd);
