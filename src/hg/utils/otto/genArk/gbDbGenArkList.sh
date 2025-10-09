@@ -31,7 +31,7 @@ do
   find -L ./${Q} -type f
 done | sed -e 's#^./##;' | gzip -c > /dev/shm/${quickLiftFileList}.gz
 
-zcat /dev/shm/g${quickLiftFileList}.gz | xargs stat -L --printf="%Y\t%n\n" \
+zcat /dev/shm/${quickLiftFileList}.gz | xargs stat -L --printf="%Y\t%n\n" \
   | gzip -c > /dev/shm/${quickLiftStat}.gz
 
 scp -p /dev/shm/${quickLiftStat}.gz \
