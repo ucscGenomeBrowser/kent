@@ -3885,11 +3885,11 @@ var dragReorder = {
                         });
                         let tdp = tdBtn.querySelector("p.btn");
                         if (tdp) {
-                            span.addEventListener("mouseenter", (e) => {
+                            span.addEventListener("pointerenter", (e) => {
                                 // trigger a mouseover on the actual btn
                                 dragReorder.buttonMouseOver.call(tdp, e);
                             });
-                            span.addEventListener("mouseleave", (e) => {
+                            span.addEventListener("pointerleave", (e) => {
                                 dragReorder.buttonMouseOut.call(tdp, e);
                             });
                         }
