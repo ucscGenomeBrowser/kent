@@ -3855,6 +3855,8 @@ var dragReorder = {
                 if (tdBtn) {
                     let span = document.getElementById("gear_btn_" + id);
                     if (span) {
+                        // hide any gears that may be present from dragging
+                        $(document.querySelectorAll("[id^=gear_btn]")).hide();
                         $(span).show();
                         tdBtn.style.position = "relative";
                         let tdbKey = tdBtn.id.replace("td_btn_","");
@@ -3899,12 +3901,11 @@ var dragReorder = {
                     // mouseover event fires if you stop moving the mouse while still
                     // hovering the element and then move it again, don't make
                     // duplicate btns in that case
-                    if (!document.getElementById("close_btn_" + id)) {
-                        let btn = document.createElement("span");
-                        btn.id = "close_btn_" + id;
-                        btn.classList.add("hgTracksCloseIcon", "ui-icon", "ui-icon-close");
-                        btn.title = "Hide track";
-                        tdSide.appendChild(btn);
+                    let btn = document.getElementById("close_btn_" + id);
+                    if (btn) {
+                        // hide any shown 'x' buttons from dragging
+                        $(document.querySelectorAll("[id^=close_btn]")).hide();
+                        $(btn).show();
                         addMouseover(btn, btn.title);
                         tdSide.style.position = "relative";
                         if (hgTracks && hgTracks.revCmplDisp) {
@@ -3931,12 +3932,12 @@ var dragReorder = {
             id = a[1];
         }
         if (id.length > 0) {
-            // remove 'x' icon in the label area to hide the track
+            // hide 'x' icon in the label area to hide the track
             let tdSide = document.getElementById("td_side_" + id);
             if (tdSide) {
                 let btn = document.getElementById("close_btn_" + id);
                 if (btn) {
-                    btn.remove();
+                    $(btn).hide();
                 }
             }
 
