@@ -1917,7 +1917,7 @@ else
         if (grpName != NULL)
             tHub = grabHashedHub(grpName);
         char *btnType = "btn";
-        if ((tHub != NULL) && startsWith("Quicklift", tHub->longLabel))
+        if ((tHub != NULL) && startsWith("QuickLift", tHub->longLabel))
             btnType = "btnGreen";
         hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'></p>",
                 trackName,(slice->link == NULL ? "inset " : ""), btnType);

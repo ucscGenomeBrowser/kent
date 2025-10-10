@@ -3232,6 +3232,9 @@ if (trackDbLocalSetting(tdb, "container"))
     }
 if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
+    char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+    if (liftDb)
+        tdb->html = getTrackHtml(liftDb, tdb->table);
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {

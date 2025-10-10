@@ -530,8 +530,8 @@ char *chainTdbString =
 
 // a string to define trackDb for quickLift chain
 char *controlTdbString = 
-    "shortLabel Warnings %s\n"
-    "longLabel Warnings %s\n"
+    "shortLabel Alignment Differences\n"
+    "longLabel Alignment Differences\n"
     "type bigQuickLiftChain %s\n"
     "chainType reverse\n"
     "bigDataUrl %s\n"
@@ -551,7 +551,7 @@ safef(buffer, sizeof buffer, "hub_%d_quickLiftChain", hub->id);
 tdb->table = tdb->track = cloneString(buffer);
 char otherTwoBitFile[4096];
 hNibForChrom(hubGenome->quickLiftDb, NULL, otherTwoBitFile);
-safef(buffer, sizeof buffer, controlTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb, otherTwoBitFile);
+safef(buffer, sizeof buffer, controlTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftChain, hubGenome->quickLiftChain, hubGenome->quickLiftDb, otherTwoBitFile);
 tdb->settings = cloneString(buffer);
 tdb->settingsHash = trackDbSettingsFromString(tdb, buffer);
 trackDbFieldsFromSettings(tdb);
