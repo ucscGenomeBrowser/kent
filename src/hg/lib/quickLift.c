@@ -147,15 +147,32 @@ if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) 
 return NULL;
 }
 
-unsigned quickLiftGetChain(char *fromDb, char *toDb)
+char *quickLiftGetChainPath(struct cart *cart, char *fromDb, char *toDb)
+/* Return the path from the quickLiftChain table for given assemblies. */
+{
+if (!quickLiftEnabled(cart))
+    return 0;
+
+struct sqlConnection *conn = hConnectCentral();
+char query[2048];
+sqlSafef(query, sizeof(query), "select q.path from %s q  where q.fromDb='%s' and q.toDb='%s'", quickLiftChainTable(), fromDb, toDb);
+char *path = sqlQuickString(conn, query);
+
+hDisconnectCentral(&conn);
+
+return path;
+}
+
+unsigned quickLiftGetChainId(struct cart *cart, char *fromDb, char *toDb)
 /* Return the id from the quickLiftChain table for given assemblies. */
 {
-if (!quickLiftEnabled())
+if (!quickLiftEnabled(cart))
     return 0;
 
 unsigned ret = 0;
 struct sqlConnection *conn = hConnectCentral();
 char query[2048];
+// this needs to use the hg.conf setting
 sqlSafef(query, sizeof(query), "select q.id from quickLiftChain q  where q.fromDb='%s' and q.toDb='%s'", fromDb, toDb);
 char *geneId = sqlQuickString(conn, query);
 
@@ -267,10 +284,10 @@ for(bed = bedList; bed; bed = nextBed)
 return liftedBedList;
 }
 
-boolean quickLiftEnabled()
+boolean quickLiftEnabled(struct cart *cart)
 /* Return TRUE if feature is available */
 {
-char *cfgEnabled = cfgOption("browser.quickLift");
+char *cfgEnabled = cartOrCfgOption(cart, "browser.quickLift");
 return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
 }
 

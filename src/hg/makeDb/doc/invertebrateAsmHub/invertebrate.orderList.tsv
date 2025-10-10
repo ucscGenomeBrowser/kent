@@ -33,7 +33,8 @@ GCF_943734735.2_idAnoGambNW_F1_1	African malaria mosquito (primary hap NW_F1_1 2
 GCA_000150785.1_g4	African malaria mosquito (S 2008)
 GCA_028142955.1_Pfu_4.1A	Akoya pearl oyster (2022)
 GCA_002216045.1_PinMar1.0	Akoya pearl oyster (pearl oyster-OUG 2017)
-GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee
+GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee (2011)
+GCF_050947335.1_iyMegRotu1	alfalfa leafcutting bee (GNS110a 2025)
 GCF_051020985.1_iyNomMela1	Alkali bee (GNS246 2025)
 GCF_003710045.2_USU_Nmel_1.3	alkali bee (v1.3 Touchet_males 2018)
 GCF_040183065.1_P.americana_PAMFEO1_priV1	American cockroach (PAMFEO1 primary hap 2024)
@@ -66,6 +67,7 @@ GCF_005281655.2_TAMU_Nfulva_1.1	ant N.fulva (TAMU-Nful-2015 v1.1 2019)
 GCF_010583005.1_Obru_v1	ant O.brunneus
 GCF_002006095.1_ASM200609v1	ant P.gracilis
 GCF_030449975.1_iyPolMexi1.0	ant P.mexicanus (NDT 795.1 2023)
+GCF_048541705.1_ASM4854170v1	ant T.americanus (GAGA-0224 2025)
 GCF_001594075.2_Tcor1.1	ant T.cornetzi (Tcor2-1 v1.1 2016 BGI)
 GCF_003070985.1_ASM307098v1	ant T.curvispinosus
 GCF_030848805.1_Tlon_JGU_v1	ant T.longispinosus (EJ_2023e 2024)
@@ -814,7 +816,8 @@ GCA_001299535.1_ASM129953v1	Leptomonas seymouri (ATCC 30220 2015)
 GCF_030625045.1_CSIRO_AGI_Agris_v1	lesser wax moth (CSIRO2021 2023)
 GCA_004359215.2_BlacSF5v2	lettuce downy mildew (SF5 2021 genbank)
 GCF_004359215.1_BlacSF5v2	lettuce downy mildew (SF5 2021 refseq)
-GCA_947623445.1_kaClaLepa1.1	light-bulb sea squirt (2022)
+GCA_947623445.1_kaClaLepa1.1	light-bulb sea squirt (primary hap 2022 genbank)
+GCF_947623445.1_kaClaLepa1.1	light-bulb sea squirt (primary hap 2022 refseq)
 GCF_000956235.1_wasmannia.A_1.0	little fire ant
 GCF_000184785.3_Aflo_1.1	little honeybee
 GCA_002763495.2_F_hepatica_1.0.allpaths.pg	liver fluke (2019)
@@ -1139,7 +1142,8 @@ GCA_905404175.1_ilAntCard3.1	orange tip (primary hap 2021)
 GCF_009176505.1_AAFC_SMos_1.0	orange wheat blossom midge (CC-2019 2019)
 GCA_963082865.1_kaCorEumy4.1_alternate_haplotype	orange-tipped seq squirt (alternate hap 2023)
 GCA_963082875.1_kaCorEumy4.1	orange-tipped seq squirt (primary hap 2023)
-GCF_012274295.1_USDA_OLig_1.0	orchard mason bee
+GCF_051020975.1_iyOsmLign1	orchard mason bee (PbOS001 2025)
+GCF_012274295.1_USDA_OLig_1.0	orchard mason bee (UT-Olig-1 2020)
 GCF_023373825.1_ASM2337382v1	oriental fruit fly (Fly_Bdor 2022)
 GCF_000789215.1_ASM78921v2	oriental fruit fly (Punador 2014)
 GCA_022674325.1_ASM2267432v1	oriental fruit moth (lab01 2022)

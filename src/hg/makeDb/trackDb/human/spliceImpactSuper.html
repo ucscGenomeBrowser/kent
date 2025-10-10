@@ -32,11 +32,13 @@ is provided by the Broad institute.
 </p>
 
 <h3>SpliceAI Wildtype</h3>
-<p>This "wildtype" container track shows the scores for the genome
-sequence itself, without variants. The "wildtype" subtracks are
-useful when looking at new transcript models, to evaluate how likely exon
-boundaries are and where possible splice acceptor sites are, in combination with the variants track. 
-</p>
+<p>
+This SpliceAI &quot;Wildtype&quot; container track shows the scores for the genome sequence itself,
+without variants, from predicted splice donor (5&apos; intron boundaries) and splice acceptor
+(3&apos; intron boundaries) sites. Predictions are strand-specific, with separate subtracks for the
+plus and minus strands. These tracks are useful when looking at new transcript models to evaluate
+how likely exon boundaries are and where possible splice acceptor sites are, in combination with
+the variants track.</p>
 
 <b>Why are some variants not scored by SpliceAI?</b>
 <p>
@@ -179,13 +181,12 @@ The complete processing of this track can be found in the <a target="_blank"
 href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/spliceAI/spliceAI.py">
 makedoc</a>.
 </p>
-<h3>SpliceAI wildtype</h3>
-<p>Data was provided by the Michael Hiller lab. 
-SpliceAI was run on the entire genome reference chromosomes.
-Since the algorithm does not know where transcripts start or end,
-the scores can differ from other websites, especially for splice sites
-before the last exon or around the first exon. 
-</p>
+
+<h3>SpliceAI Wildtype</h3>
+<p>Data was provided by the Michael Hiller lab. SpliceAI was run on the entire genome reference
+chromosomes. Since the algorithm does not know where transcripts start or end, the scores
+can differ from those on other websites, especially for splice sites before the last exon or
+around the first exon.</p>
 
 
 <h3>SpliceVarDB</h3>
@@ -220,20 +221,31 @@ or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated anal
 be queried from our <a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.</p>
 
 <p>
-For automated download and analysis, the genome annotation is stored in a bigBed file that
-can be downloaded from
+For automated download and analysis, the genome annotation is stored in a bigBed or a bigWig file
+that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/" target="_blank">our download server</a>.
-Individual regions or the whole genome annotation can be obtained using our tool
-<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+Individual regions or the whole genome annotation can be obtained using our tools, e.g.
+<br>
+<br>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/splicevardb/SVADB.bb
+	-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500
+	http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/spliceAi/wildtype/spliceAiAcceptorMinus.bw
+	stdout</tt>
+<br>
+<br>
+These tools can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tool can also be used to obtain only features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/splicevardb/SVADB.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
-</p>
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.</p>
 
 <h2>Credits</h2>
 
-<p>Thanks to Nils Wagner for helpful comments and suggestionsi for the AbSplice track.</p>
+<p>Thanks to Illumina for making available SpliceAI, both the model and the precomputed data files.</p>
+
+<p>Thanks to Francois Lecoquierre from the University of Oxford, Jean-Madeleine de Sainte Agathe from Institut Pasteur Paris and Michael Hiller from the Senckenberg Museum Frankfurt for suggesting and then creating the SpliceAI wildtype annotations.</p>
+
+<p>Thanks to Nils Wagner for helpful comments and suggestions for the AbSplice track.</p>
 
 <p>Thanks to the SpliceVarDB team for converting the data into our data formats.</p>
 

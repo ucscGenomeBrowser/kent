@@ -20,6 +20,7 @@ export M=`date "+%m"`
 export machName=`uname -n | cut -d'.' -f1`
 export fileOut="gbdbGenArk.${machName}.${DS}"
 export statList="gbdbGenArkStat.${machName}.${DS}"
+export quickLiftStat="gbdbQuickLiftStat.${machName}.${DS}"
 
 find -L /gbdb/genark/GCA /gbdb/genark/GCF -type d | sort \
   | gzip -c > /dev/shm/${fileOut}.gz
@@ -38,4 +39,18 @@ cp -p /dev/shm/${statList}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
 cp -p /dev/shm/${statList}.gz /hive/data/inside/GenArk/pushRR/dev.todayList.gz
 
 rm -f /dev/shm/gbdbGenark.fl.gz /dev/shm/${statList}.gz
+
+cd /gbdb
+ls -d */quickLift | while read Q
+do
+  find -L ./${Q} -type f
+done | sed -e 's#^./##;' | gzip -c > /dev/shm/gbdbQuickLift.fl.gz
+
+zcat /dev/shm/gbdbQuickLift.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
+  | gzip -c > /dev/shm/${quickLiftStat}.gz
+
+cp -p /dev/shm/${quickLiftStat}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
+cp -p /dev/shm/${quickLiftStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.quickLiftList.gz
+
+rm -f /dev/shm/gbdbQuickLift.fl.gz /dev/shm/${quickLiftStat}.gz
 

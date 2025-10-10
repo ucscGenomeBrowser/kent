@@ -698,5 +698,7 @@ void cartMatchValue(struct cart *cart, char *oldTrackName,  char *newTrackName);
 char *cartNamedSessionDbTable();
 /* Get the name of the table that lists named sessions.  Don't free the result. */
 
+char *cartOrCfgOption(struct cart *cart, char *name);
+/* Return the option with the given name. First check cart then hg.conf.  Return NULL if * it doesn't exist. */
 #endif /* CART_H */
 

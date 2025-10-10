@@ -32,7 +32,7 @@ void quickLiftPull(char *db)
 if (!quickLiftPullEnabled())
     return;
 
-hPrintf("<div style='display:none;' id='quickLiftPullPopup' title='Quicklift One Track'>\n");
+hPrintf("<div style='display:none;' id='quickLiftPullPopup' title='QuickLift One Track'>\n");
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n", hgTracksName(),
 	cartUsualString(cart, "formMethod", "POST"));
 hPrintf("<br>Choose an assembly:<div> <input id=\"speciesSearch\" value=\"\" size=42> </div>\n");

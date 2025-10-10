@@ -3850,15 +3850,14 @@ var dragReorder = {
             }
 
             if (typeof greyBarIcons !== 'undefined' && greyBarIcons === true) {
-                // add a gear icon over the grey bar to bring up the context menu
+                // show the gear icon over the grey bar to bring up the context menu
                 let tdBtn = document.getElementById("td_btn_" + id);
                 if (tdBtn) {
-                    if (!document.getElementById("gear_btn_" + id)) {
-                        let span = document.createElement("span");
-                        span.id = "gear_btn_" + id;
-                        span.classList.add("hgTracksGearIcon", "ui-icon", "ui-icon-gear");
-                        span.title = "Configure track";
-                        tdBtn.appendChild(span);
+                    let span = document.getElementById("gear_btn_" + id);
+                    if (span) {
+                        // hide any gears that may be present from dragging
+                        $(document.querySelectorAll("[id^=gear_btn]")).hide();
+                        $(span).show();
                         tdBtn.style.position = "relative";
                         let tdbKey = tdBtn.id.replace("td_btn_","");
                         let tdb = hgTracks.trackDb[tdbKey];
@@ -3885,11 +3884,11 @@ var dragReorder = {
                         });
                         let tdp = tdBtn.querySelector("p.btn");
                         if (tdp) {
-                            span.addEventListener("mouseenter", (e) => {
+                            span.addEventListener("pointerenter", (e) => {
                                 // trigger a mouseover on the actual btn
                                 dragReorder.buttonMouseOver.call(tdp, e);
                             });
-                            span.addEventListener("mouseleave", (e) => {
+                            span.addEventListener("pointerleave", (e) => {
                                 dragReorder.buttonMouseOut.call(tdp, e);
                             });
                         }
@@ -3902,12 +3901,11 @@ var dragReorder = {
                     // mouseover event fires if you stop moving the mouse while still
                     // hovering the element and then move it again, don't make
                     // duplicate btns in that case
-                    if (!document.getElementById("close_btn_" + id)) {
-                        let btn = document.createElement("span");
-                        btn.id = "close_btn_" + id;
-                        btn.classList.add("hgTracksCloseIcon", "ui-icon", "ui-icon-close");
-                        btn.title = "Hide track";
-                        tdSide.appendChild(btn);
+                    let btn = document.getElementById("close_btn_" + id);
+                    if (btn) {
+                        // hide any shown 'x' buttons from dragging
+                        $(document.querySelectorAll("[id^=close_btn]")).hide();
+                        $(btn).show();
                         addMouseover(btn, btn.title);
                         tdSide.style.position = "relative";
                         if (hgTracks && hgTracks.revCmplDisp) {
@@ -3934,21 +3932,21 @@ var dragReorder = {
             id = a[1];
         }
         if (id.length > 0) {
-            // remove 'x' icon in the label area to hide the track
+            // hide 'x' icon in the label area to hide the track
             let tdSide = document.getElementById("td_side_" + id);
             if (tdSide) {
                 let btn = document.getElementById("close_btn_" + id);
                 if (btn) {
-                    btn.remove();
+                    $(btn).hide();
                 }
             }
 
-            // remove gear icon over the grey bar
+            // hide gear icon over the grey bar
             let tdBtn = document.getElementById("td_btn_" + id);
             if (tdBtn) {
                 let btn = document.getElementById("gear_btn_" + id);
                 if (btn) {
-                    btn.remove();
+                    $(btn).hide();
                 }
             }
         }

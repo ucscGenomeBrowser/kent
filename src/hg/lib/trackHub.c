@@ -1490,8 +1490,8 @@ static void outHubHeader(FILE *f, char *db)
 // output a track hub header
 {
 fprintf(f,"hub quickLiftHub%s\n\
-shortLabel Quicklift from %s\n\
-longLabel Quicklift from %s\n\
+shortLabel QuickLift from %s\n\
+longLabel QuickLift from %s\n\
 useOneFile on\n\
 email genome-www@soe.ucsc.edu\n\n", db, db, db);
 fprintf(f,"genome %s\n\n", db);
@@ -1541,8 +1541,8 @@ static char *vettedTracks[] =
 static boolean isVetted(char *track)
 /* Is this a track that's been tested with quickLift?  If not we don't want to do the special name handling on the track. */
 {
-if (startsWith("wgEncodeGencode", track))
-    return TRUE;
+//if (startsWith("wgEncodeGencode", track))
+    //return TRUE;
 static bool inited = FALSE;
 static struct hash *vettedHash = NULL;
 

@@ -26,6 +26,11 @@
 #include "hubConnect.h"
 #include "quickLift.h"
 #include "chromAlias.h"
+#ifdef NOTNOW
+#include "jsHelper.h"
+#include "bigChain.h"
+#include "bigLink.h"
+#endif
 
 
 /* CGI Variables */
@@ -67,7 +72,7 @@ struct dbDb *dbList;
 boolean askAboutQuickLift = FALSE;
 //boolean quickLiftChainExists =  (quickLiftGetChain(fromDb->name, toDb->name) != 0);
 
-if (quickLiftEnabled())
+if (quickLiftEnabled(cart))
     askAboutQuickLift = TRUE;
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
@@ -286,10 +291,166 @@ slSort(&chainList, chainCmpScore);
 return chainList;
 }
 
+#ifdef NOTNOW
+struct segment
+{
+struct segment *next;
+unsigned start, end;
+char strand;
+};
+
+void compressSegs(struct segment *segs)
+{
+struct segment *nextSeg = NULL;
+struct segment *growSeg = NULL;
+
+for(; segs; segs = nextSeg)
+    {
+    nextSeg = segs->next;
+    if (nextSeg == NULL)
+        break;
+
+    if (growSeg == NULL)
+        growSeg = segs;
+
+    if ((nextSeg->start < growSeg->end + 10000) || (nextSeg->strand != growSeg->strand))
+        {
+        growSeg->end = nextSeg->end;
+        //nextSeg = nextSeg->next;
+        }
+    else
+        {
+        growSeg->next = segs;
+        growSeg = NULL;
+        }
+    }
+}
+
+static void getSegs(char *fromDb, char *toDb, struct segment **fromSegs, struct segment **toSegs, char *chrom, unsigned seqStart, unsigned seqEnd)
+{
+char *quickLiftFile = quickLiftGetChainPath(cart, fromDb, toDb);
+struct lm *lm = lmInit(0);
+//struct bigBedInterval *bbChain, *bbChainList =  bigBedIntervalQuery(bbiChain, chrom, seqStart, seqEnd, 0, lm);
+struct bbiFile *bbiChain = bigBedFileOpenAlias(quickLiftFile, chromAliasFindAliases);
+struct bigBedInterval *bbChain, *bbChainList =  bigBedIntervalQuery(bbiChain, chrom, seqStart, seqEnd, 0, lm);
+
+char *links = bigChainGetLinkFile(quickLiftFile);
+struct bbiFile *bbiLink = bigBedFileOpenAlias(links, chromAliasFindAliases);
+struct bigBedInterval  *bbLink, *bbLinkList =  bigBedIntervalQuery(bbiLink, chrom, seqStart, seqEnd, 0, lm);
+
+char *chainRow[1024];
+char *linkRow[1024];
+char startBuf[16], endBuf[16];
+
+bigBedIntervalToRow(bbChainList, chrom, startBuf, endBuf, chainRow, ArraySize(chainRow));
+struct bigChain *fbc = bigChainLoad(chainRow);
+
+for (bbChain = bbChainList; bbChain != NULL; bbChain = bbChain->next)
+    {
+    bigBedIntervalToRow(bbChain, chrom, startBuf, endBuf, chainRow, ArraySize(chainRow));
+    struct bigChain *bc = bigChainLoad(chainRow);
+    if (differentString(bc->chrom, fbc->chrom))
+        continue;
+
+   for (bbLink = bbLinkList; bbLink != NULL; bbLink = bbLink->next)
+        {
+        bigBedIntervalToRow(bbLink, chrom, startBuf, endBuf, linkRow, ArraySize(linkRow));
+        struct bigLink *bl = bigLinkLoad(linkRow);
+
+        if (!sameString(bl->name, bc->name))
+            continue;
+
+        boolean isFlipped = fbc->strand[0] != bc->strand[0];
+        struct segment *seg;
+        AllocVar(seg);
+        seg->start = bl->chromStart;
+        seg->end = bl->chromEnd;
+        seg->strand = 0;
+        slAddHead(fromSegs, seg);
+
+        unsigned width = bl->chromEnd - bl->chromStart;
+        unsigned qStart = bl->qStart;
+        unsigned qEnd = bl->qStart + width;
+        if (bc->strand[0] == '-')
+            {
+            qStart = bc->qSize - qStart;
+            qEnd = bc->qSize - qEnd;
+            }
+
+        AllocVar(seg);
+        seg->start = qStart;
+        seg->end = qEnd;
+        seg->strand = isFlipped;
+        slAddHead(toSegs, seg);
+        }
+    }
+slReverse(toSegs);
+//compressSegs(*toSegs);
+slReverse(fromSegs);
+//compressSegs(*fromSegs);
+
+}
+
+static void printSegs(struct segment *segs)
+{
+unsigned segNum = 0;
+
+jsInline("segments: [\n");
+for(; segs; segs = segs->next)
+    jsInlineF("{ name: '%d', start: %d, end: %d },\n", segNum++, segs->start, segs->end);
+jsInline("]\n");
+}
+
+static void drawSegments(char *fromDb, char *toDb, struct chain *chain)
+{
+struct segment *fromSegs = NULL;
+struct segment *toSegs = NULL;
+/*
+unsigned seqStart = chain->tStart;
+unsigned seqEnd = chain->tEnd;
+char *chrom = chain->tName;
+*/
+
+unsigned qStart = chain->qStart;
+unsigned qEnd = chain->qEnd;
+if (chain->qStrand == '-')
+    {
+    unsigned saveQStart = qStart;
+    qStart = chain->qSize - qEnd;
+    qEnd = chain->qSize - saveQStart;
+    }
+
+getSegs(fromDb, toDb, &fromSegs, &toSegs, chain->qName, chain->qStart, chain->qEnd);
+
+printf("<canvas id='canvas' width='900' height='500'></canvas>");
+jsIncludeFile("parallelSegments.js", NULL);
+
+jsInline("function drawCustom() {\n");
+jsInline("const line1Data = {\n");
+jsInlineF("range: { start: %d, end: %d },\n", chain->tStart, chain->tEnd);
+jsInlineF("label: \"%s %s:%d-%d\",\n", fromDb, chain->tName, chain->tStart, chain->tEnd);
+printSegs(toSegs);
+jsInline("}\n");
+
+jsInline("const line2Data = {\n");
+jsInlineF("range: { start: %d, end: %d },\n", qStart, qEnd);
+jsInlineF("label: \"%s %s:%d-%d\",\n", fromDb, chain->qName, qStart, qEnd);
+printSegs(fromSegs);
+jsInline("}\n");
+
+jsInline("ParallelSegments.drawCoordinateBasedSegments(line1Data, line2Data);\n");
+jsInline("}\n");
+jsInline("drawCustom();\n");
+}
+#endif
+
 static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
 struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+#ifdef NOTNOW
+boolean doSegments = TRUE;
+#endif
 
 if (fromDb == NULL)
     {
@@ -331,7 +492,7 @@ struct trackDb *badList = NULL;
 
 if (doQuickLift)
     {
-    quickChain = quickLiftGetChain(trackHubSkipHubName(fromDb->name), trackHubSkipHubName(toDb->name));
+    quickChain = quickLiftGetChainId(cart, trackHubSkipHubName(fromDb->name), trackHubSkipHubName(toDb->name));
 
     if (quickChain == 0)
         errAbort("can't find quickChain from %s to %s", fromDb->name, toDb->name);
@@ -392,6 +553,11 @@ else
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,
 	    100.0 * (chain->tEnd - chain->tStart) / origSize);
+#ifdef NTONOW
+        if (doSegments)
+            drawSegments(fromDb->name, toDb->name, chain);
+        break;
+#endif
 	}
     }
 if (badList)

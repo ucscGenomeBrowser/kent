@@ -4133,3 +4133,13 @@ void cartSetVersion(struct cart *cart, unsigned version)
 {
 cartSetInt(cart, "cartVersion", version);
 }
+
+char *cartOrCfgOption(struct cart *cart, char *name)
+/* Return the option with the given name. First check cart then hg.conf.  Return NULL if * it doesn't exist. */
+{
+char *str = NULL;
+if ((str = cartOptionalString(cart, name)) == NULL)
+    return str = cfgOption(name);
+
+return str;
+}

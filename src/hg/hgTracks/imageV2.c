@@ -1917,10 +1917,16 @@ else
         if (grpName != NULL)
             tHub = grabHashedHub(grpName);
         char *btnType = "btn";
-        if ((tHub != NULL) && startsWith("Quicklift", tHub->longLabel))
+        if ((tHub != NULL) && startsWith("QuickLift", tHub->longLabel))
             btnType = "btnGreen";
-        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'></p>",
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'>",
                 trackName,(slice->link == NULL ? "inset " : ""), btnType);
+        // insert the gear spans with display: none
+        if (cfgOptionBooleanDefault("greyBarIcons", FALSE))
+            {
+            hPrintf("<span title='Configure track' id='gear_%s' class='hgTracksGearIcon ui-icon ui-icon-gear' style='display: none;'></span>", name);
+            }
+        hPrintf("</p>");
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
@@ -2156,6 +2162,8 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
+        if (cfgOptionBooleanDefault("greyBarIcons", FALSE))
+            hPrintf("<span id='close_btn_%s' title='Hide track' class='hgTracksCloseIcon ui-icon ui-icon-close' style='display: none'></span>", trackName);
         hPrintf("</TD>\n");
         }
 
@@ -2184,6 +2192,8 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
+        if (cfgOptionBooleanDefault("greyBarIcons", FALSE))
+            hPrintf("<span id='close_btn_%s' title='Hide track' class='hgTracksCloseIcon ui-icon ui-icon-close' style='display: none'></span>", trackName);
         hPrintf("</TD>\n");
         // button
         safef(name, sizeof(name), "btn_%s", trackName);

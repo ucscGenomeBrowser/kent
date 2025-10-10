@@ -8704,6 +8704,9 @@ void doTrackForm(char *psOutput, struct tempName *ideoTn)
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
  * ideogram is created.  */
 {
+#ifdef GRAPH_BUTTON_ON_QUICKLIFT
+int graphCount = 0;
+#endif
 int disconCount = 0;
 struct group *group;
 struct track *track;
@@ -9659,7 +9662,7 @@ if (!hideControls)
                 hPrintf("<th align=\"left\" colspan=%d class='errorToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("Hub", group->label))
                 hPrintf("<th align=\"left\" colspan=%d class='hubToggleBar'>",MAX_CONTROL_COLUMNS);
-            else if (startsWith("Quicklift", group->label))
+            else if (startsWith("QuickLift", group->label))
                 hPrintf("<th align=\"left\" colspan=%d class='quickToggleBar'>",MAX_CONTROL_COLUMNS);
             else
                 hPrintf("<th align=\"left\" colspan=%d class='nativeToggleBar'>",MAX_CONTROL_COLUMNS);
@@ -9729,6 +9732,12 @@ if (!hideControls)
                     "document.disconnectHubForm.submit();return true;",
 		    hubName + strlen(hubTrackPrefix));
 
+#ifdef GRAPH_BUTTON_ON_QUICKLIFT
+		safef(idText, sizeof idText, "%s_%d_graph", hubName, graphCount);
+                graphCount++;
+                hPrintf("<input name=\"graphButton\" id='%s'"
+                    " type=\"button\" value=\"Graph\">\n", idText);
+#endif
 		}
 
 
