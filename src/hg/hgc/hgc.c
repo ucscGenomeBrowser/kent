@@ -267,6 +267,7 @@
 #include "chromAlias.h"
 #include "dotPlot.h"
 #include "quickLift.h"
+#include "liftOver.h"
 
 static char *rootDir = "hgcData";
 
@@ -2981,7 +2982,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	    }
 	}
     /* if a gene class table exists, get gene class and print */
-    if (classTable != NULL)
+    if ((liftDb == NULL) && (classTable != NULL))
         {
         if (hTableExists(db, classTable))
            {
@@ -9516,26 +9517,56 @@ else
     }
 }
 
-static struct genePred *getGenePredForPositionSql(char *table, char *geneName)
+static struct genePred *getGenePredForPositionSql(struct trackDb *tdb, char *geneName)
 /* find the genePred for the current gene using an SQL table*/
 {
 struct genePred *gpList = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL) 
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 struct genePred *gp;
-int rowOffset = hOffsetPastBin(database, seqName, table);
-
-sqlSafef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+int rowOffset = hOffsetPastBin(db, seqName, tdb->table);
+if (liftDb != NULL)
     {
-    gp = genePredLoad(row+rowOffset);
-    slAddHead(&gpList, gp);
-    }
+    char *table;
+    if (isCustomTrack(tdb->table))
+        {
+        liftDb = CUSTOM_TRASH;
+        table = trackDbSetting(tdb, "dbTableName");
+        }
+    else
+        table = tdb->table;
+    struct hash *chainHash = newHash(8);
+    struct sqlConnection *conn = hAllocConn(liftDb);
 
-sqlFreeResult(&sr);
+// using this loader on genePred tables with less than 15 fields may be a problem.
+extern struct genePred *genePredExtLoad15(char **row);
+
+    char extraWhere[4096];
+    sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", geneName);
+    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, seqName, winStart, winEnd,  NULL, extraWhere, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    hFreeConn(&conn);
+
+    calcLiftOverGenePreds( gpList, chainHash, 0.0, 1.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query), "select * from %s where name = \"%s\"", tdb->table, geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        gp = genePredLoad(row+rowOffset);
+        slAddHead(&gpList, gp);
+        }
+
+    sqlFreeResult(&sr);
+    }
 hFreeConn(&conn);
 return gpList;
 }
@@ -9596,19 +9627,18 @@ if (isCustomTrack(table))
     struct trackDb *tdb = getCustomTrackTdb(table);
     gpList = getGenePredForPositionBigGene(tdb,  geneName);
     }
-else if (isHubTrack(table))
-    {
-    struct trackDb *tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
-    gpList =  getGenePredForPositionBigGene(tdb, geneName);
-    }
 else
     {
-    struct trackDb *tdb = hashFindVal(trackHash, table);
+    struct trackDb *tdb = NULL;
+    if (isHubTrack(table))
+        tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+    else
+        tdb = hashFindVal(trackHash, table);
     char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
     if (bigDataUrl)
         gpList =  getGenePredForPositionBigGene(tdb, geneName);
     else
-        gpList =  getGenePredForPositionSql(table, geneName);
+        gpList =  getGenePredForPositionSql(tdb, geneName);
     }
 
 return gpList;
@@ -9876,7 +9906,7 @@ printf("</TT></PRE>");
 void htcGeneMrna(char *geneName)
 /* Display cDNA predicted from genome */
 {
-char *table = cartString(cart, "o");
+char *table = cartString(cart, "table");
 cartHtmlStart("Predicted mRNA from Genome");
 struct genePred *gp, *gpList = getGenePredForPosition(table, geneName), *next;
 int cdsStart, cdsEnd;
@@ -9927,7 +9957,7 @@ void htcGeneInGenome(char *geneName)
 /* Put up page that lets user display genomic sequence
  * associated with gene. */
 {
-char *tbl = cgiString("o");
+char *tbl = cgiString("table");
 
 cartWebStart(cart, database, "Genomic Sequence Near Gene");
 printf("<H2>Get Genomic Sequence Near Gene</H2>");
@@ -10087,24 +10117,22 @@ void htcDnaNearGene( char *geneName)
 /* Fetch DNA near a gene. */
 {
 cartWebStart(cart, database, "%s", geneName);
-char *table    = cartString(cart, "o");
+char *table    = cartString(cart, "table");
 int itemCount;
 puts("<PRE>");
 struct trackDb *tdb = NULL;
 
-if (isHubTrack(table))
-    {
-    tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
-    itemCount = getSeqForBigGene(tdb, geneName);
-    }
-else if (isCustomTrack(table))
+if (isCustomTrack(table))
     {
     tdb = getCustomTrackTdb(table);
     itemCount = getSeqForBigGene(tdb, geneName);
     }
 else
     {
-    tdb = hashFindVal(trackHash, table);
+    if (isHubTrack(table))
+        tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+    else
+        tdb = hashFindVal(trackHash, table);
     char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
     if (bigDataUrl)
         {
@@ -10114,7 +10142,11 @@ else
         {
         char constraints[256];
         sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
-        itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+        char *db = database;
+        char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+        if (liftDb != NULL) 
+            db = liftDb;
+        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), seqName, winStart, winEnd, constraints);
         }
     }
 if (itemCount == 0)
