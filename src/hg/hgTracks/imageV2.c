@@ -1919,8 +1919,14 @@ else
         char *btnType = "btn";
         if ((tHub != NULL) && startsWith("Quicklift", tHub->longLabel))
             btnType = "btnGreen";
-        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'></p>",
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'>",
                 trackName,(slice->link == NULL ? "inset " : ""), btnType);
+        // insert the gear spans with display: hide
+        if (cfgOptionBooleanDefault("greyBarIcons", FALSE))
+            {
+            hPrintf("<span title='Configure track' id='gear_%s' class='hgTracksGearIcon ui-icon ui-icon-gear' style='display: hide;'></span>", name);
+            }
+        hPrintf("</p>");
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);

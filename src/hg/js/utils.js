@@ -3850,15 +3850,12 @@ var dragReorder = {
             }
 
             if (typeof greyBarIcons !== 'undefined' && greyBarIcons === true) {
-                // add a gear icon over the grey bar to bring up the context menu
+                // show the gear icon over the grey bar to bring up the context menu
                 let tdBtn = document.getElementById("td_btn_" + id);
                 if (tdBtn) {
-                    if (!document.getElementById("gear_btn_" + id)) {
-                        let span = document.createElement("span");
-                        span.id = "gear_btn_" + id;
-                        span.classList.add("hgTracksGearIcon", "ui-icon", "ui-icon-gear");
-                        span.title = "Configure track";
-                        tdBtn.appendChild(span);
+                    let span = document.getElementById("gear_btn_" + id);
+                    if (span) {
+                        $(span).show();
                         tdBtn.style.position = "relative";
                         let tdbKey = tdBtn.id.replace("td_btn_","");
                         let tdb = hgTracks.trackDb[tdbKey];
@@ -3943,12 +3940,12 @@ var dragReorder = {
                 }
             }
 
-            // remove gear icon over the grey bar
+            // hide gear icon over the grey bar
             let tdBtn = document.getElementById("td_btn_" + id);
             if (tdBtn) {
                 let btn = document.getElementById("gear_btn_" + id);
                 if (btn) {
-                    btn.remove();
+                    $(btn).hide();
                 }
             }
         }
