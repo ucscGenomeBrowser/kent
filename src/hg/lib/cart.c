@@ -1509,7 +1509,8 @@ void printCaptcha()
     puts("</head><body>");
     puts("<style>body, h1, h2, h3, h4, h5, h6  { font-family: Helvetica, Arial, sans-serif; }</style>\n");
     puts("<h4>The Genome Browser is protecting itself from bots. This will just take a few seconds.</h4>");
-    puts("<small>If you are a bot and were made for a research project, please contact us by email.</small>");
+    puts("<small>If you wish to make programmatic queries, see our FAQ: https://genome.ucsc.edu/FAQ/FAQdownloads.html#CAPTCHA.</small>");
+    puts("");
     puts("<script src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=showWidget' async defer></script>");
     puts("<div id='myWidget'></div>");
     puts("</body></html>");
