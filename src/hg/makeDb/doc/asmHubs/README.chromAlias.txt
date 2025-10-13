@@ -8,7 +8,7 @@ cd /hive/data/genomes/asmHubs/genbankBuild/GCA/044/165/215/GCA_044165215.1_HG000
 
 2. Create or add to any existing customNames.tsv file there:
 
-   head customNames.tsv 
+   head customNames.tsv
 # genbank       hprcV2
 CM094060.1      HG00097#1#CM094060.1
 CM094061.1      HG00097#1#CM094061.1
