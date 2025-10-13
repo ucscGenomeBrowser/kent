@@ -837,6 +837,12 @@ if (*pConn != NULL)
     sqlConnCacheDealloc(centralCc, pConn);
 }
 
+void hFreeAllCentral() 
+/* disconnect and free all connections in the hgCentral connection cache */
+{
+    sqlConnCacheFree(&centralCc);
+}
+
 static void hCartMkCache()
 /* Create the cart connection cache.  Defaults to the central connection
  * unless cart.db or cart.host are configured. */

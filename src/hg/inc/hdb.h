@@ -175,6 +175,9 @@ struct sqlConnection *hConnectCentral(void);
 void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+void hFreeAllCentral();
+/* disconnect and free all connections in the hgCentral connection cache */
+
 struct sqlConnection *hConnectCart(void);
 /* Connect to cart database.  Defaults to the central connection
  * unless cart.db or cart.host are configured. Free this
