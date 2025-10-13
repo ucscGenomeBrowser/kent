@@ -1509,7 +1509,8 @@ void printCaptcha()
     puts("</head><body>");
     puts("<style>body, h1, h2, h3, h4, h5, h6  { font-family: Helvetica, Arial, sans-serif; }</style>\n");
     puts("<h4>The Genome Browser is protecting itself from bots. This will just take a few seconds.</h4>");
-    puts("<small>If you are a bot and were made for a research project, please contact us by email.</small>");
+    puts("<small>To make programmatic queries, see our FAQ: https://genome.ucsc.edu/FAQ/FAQdownloads.html#CAPTCHA.</small>");
+    puts("");
     puts("<script src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=showWidget' async defer></script>");
     puts("<div id='myWidget'></div>");
     puts("</body></html>");
@@ -4132,4 +4133,14 @@ void cartSetVersion(struct cart *cart, unsigned version)
 /* Set the current version of the cart, which is stored in the variable "cartVersion" */
 {
 cartSetInt(cart, "cartVersion", version);
+}
+
+char *cartOrCfgOption(struct cart *cart, char *name)
+/* Return the option with the given name. First check cart then hg.conf.  Return NULL if * it doesn't exist. */
+{
+char *str = NULL;
+if ((str = cartOptionalString(cart, name)) == NULL)
+    return str = cfgOption(name);
+
+return str;
 }

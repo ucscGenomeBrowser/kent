@@ -55,6 +55,7 @@
 <li><a href="#downloadAnalysis">What is the genome analysis set?</a></li>
 <li><a href="#downloadGenArk">How do I download GenArk data?</li>
 <li><a href="#downloadConservation">Why are the conservation scores different from the ones in the download file?</li>
+<li><a href="#CAPTCHA">How to make programmatic queries to the Genome Browser</li>
 </ul>
 <hr>
 <p>
@@ -1297,4 +1298,23 @@ display but does not reconstruct the true original scores. This is why we make t
 files available for download.
 </p>
 
+<a name="CAPTCHA"></a>
+<h2>How to make programmatic queries to the Genome Browser</h2>
+<p>
+To access the UCSC Genome Browser programmatically and bypass the CAPTCHA, all requests must 
+include an API key. Note than an API key is not needed to use our <a target="_blank"
+href="/goldenPath/help/api.html">REST API</a>.</p>
+<p>
+To generate your own key, first <a target="_blank" href="/cgi-bin/hgSession">log in</a>
+with your UCSC Genome Browser account. Once logged in, go to the <a 
+target="_blank" href="/cgi-bin/hgHubConnect#hubDeveloper">Hub Development</a> page and generate a key
+from the <b>API key</b> section at the bottom of the page.</p>
+<p>
+The key must be appended to your request URLs using the <code>apiKey=</code> variable. 
+Separate it from other URL parameters with an ampersand (&amp;). For example, most queries will 
+work by adding <code>apiKey=YOUR_UNIQUE_KEY</code> to the end of the URL:</p>
+<p>
+<code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;apiKey=YOUR_UNIQUE_KEY</code></p>
+<p>
+If you experience any issues using the API key, please <a href="/contacts.html">contact us</a>.</p>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -434,7 +434,7 @@ return apiKey;
 void printApiKeySection()
 {
 puts("<div id='apiKeySection' class='tabSection'>");
-puts("<h4>Hubtools API key</h4>");
+puts("<h4>API key</h4>");
 char *userName = wikiLinkUserName();
 char *userId = wikiLinkUserId();
 if (userName==NULL || userId==NULL)
@@ -448,12 +448,12 @@ else
     char *existingKey = getApiKey(userName);
     if (existingKey)
         {
-        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an api key for use in hubtools. If you would like to generate a new key (which automatically revokes old keys), please click 'generate key'. Otherwise, you can copy and paste the below key to your ~/.hubtools.conf file:<br><br>");
+        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an API key. If you would like to generate a new key (which revokes old keys), click 'Generate key'. To use your API key with Hubtools, copy and paste the below key to your ~/.hubtools.conf file. This is not necessary for URL use to bypass our CAPTCHA.<br><br>");
         puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
         printf("%s\n", existingKey);
         puts("</div>");
         puts("</div>");
-        puts("<div id='generateDiv' class='help'>Generate an api key <button id='generateApiKey'>generate key</button></div>");
+        puts("<div id='generateDiv' class='help'>Generate an API key <button id='generateApiKey'>Generate key</button></div>");
         }
     else
         {
@@ -463,7 +463,7 @@ else
         puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
         puts("</div></div>");
         }
-    printf("<div id='revokeDiv' class='help' style='display: %s'>\nTo revoke any apiKeys associated with your account, click the revoke button: <button id='revokeApiKeys'>revoke</button>\n</div>", existingKey != NULL ? "block" : "none");
+    printf("<div id='revokeDiv' class='help' style='display: %s'>\nTo revoke any API keys associated with your account, click the revoke button: <button id='revokeApiKeys'>Revoke</button>\n</div>", existingKey != NULL ? "block" : "none");
     // add the event handlers for clicking the generate/revoke buttons
     jsInlineF(""
     "document.getElementById('generateApiKey').addEventListener('click', generateApiKey);\n"
