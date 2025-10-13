@@ -9039,7 +9039,7 @@ for (dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
     printf(
       "<SELECT id='%s' name='%s.filterComp.%s' %s " 
       "style='display: none; font-size:.8em;' " 
-      "class='filterComp'><BR>\n" 
+      "class='filterComp'>\n"
 	,id,parentTdb->track,membersForAll->members[dimIx]->groupTag,
        "multiple");
     jsOnEventById("change", id, "filterCompositeSelectionChanged(this);");
