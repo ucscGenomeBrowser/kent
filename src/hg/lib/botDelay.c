@@ -219,6 +219,7 @@ int delay = 0;
 if (host != NULL && port != NULL && ip != NULL)
     {
     char *botCheckString = getBotCheckString(ip, fraction);
+    hFreeAllCentral();
     delay = botDelayTime(host, atoi(port), botCheckString);
     freeMem(botCheckString);
     }

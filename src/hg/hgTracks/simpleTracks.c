@@ -1768,6 +1768,9 @@ switch (glyph)
         hvGfxCircle(hvg, middleX, middleY, heightPer/2, fillColor, TRUE);
         hvGfxCircle(hvg, middleX, middleY, heightPer/2, outlineColor, FALSE);
         break;
+    case GLYPH_1PX:
+        hvGfxLine(hvg, middleX, middleY-heightPer/2, middleX, middleY+heightPer/2, outlineColor);
+        break;
     default:
         ptCount = glyphShapes[glyph].nPoints;
         struct gfxPoly *poly = gfxPolyNew();
@@ -1783,17 +1786,6 @@ switch (glyph)
         break;
     }
 }
-
-#define GLYPH_STRING_CIRCLE "Circle"
-#define GLYPH_STRING_TRIANGLE "Triangle"
-#define GLYPH_STRING_INV_TRIANGLE "InvTriangle"
-#define GLYPH_STRING_SQUARE "Square"
-#define GLYPH_STRING_DIAMOND "Diamond"
-#define GLYPH_STRING_OCTAGON "Octagon"
-#define GLYPH_STRING_STAR "Star"
-#define GLYPH_STRING_PENTAGRAM "Pentagram"
-#define GLYPH_STRING_PLUS "Plus"
-#define GLYPH_STRING_X "X"
 
 glyphType parseGlyphType(char *glyphStr)
 /* Return the enum glyph type for a string specifying a glyph.
@@ -1817,6 +1809,8 @@ if (sameWordOk(glyphStr, GLYPH_STRING_PLUS))
     return GLYPH_PLUS;
 if (sameWordOk(glyphStr, GLYPH_STRING_X))
     return GLYPH_X;
+if (sameWordOk(glyphStr, GLYPH_STRING_1PX))
+    return GLYPH_1PX;
 
 return GLYPH_CIRCLE;
 }
