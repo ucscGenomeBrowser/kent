@@ -769,7 +769,9 @@ typedef enum {
     GLYPH_DIAMOND,
     GLYPH_OCTAGON,
     GLYPH_STAR,
-    GLYPH_PENTAGRAM
+    GLYPH_PENTAGRAM,
+    GLYPH_PLUS,
+    GLYPH_X
     } glyphType;
 
 void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,

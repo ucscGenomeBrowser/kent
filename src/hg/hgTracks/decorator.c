@@ -160,6 +160,11 @@ int itemY = y + rowsAbove*(tg->lineHeight);
 // Draw the primary track item without doing its mouseover yet
 tg->decoratorGroup->drawItemAt(tg, item, hvg, xOff, itemY, scale, font, color, vis);
 
+int primaryItemRows = 1;
+if (tg->itemHeightRowsForPack)
+    primaryItemRows = tg->itemHeightRowsForPack(tg, item);
+int overlayHeightPer = tg->heightPer*primaryItemRows;
+
 // Draw overlay decorations and their labels, as the labels will ascend above the item
 int yOffset = itemY - tg->lineHeight;
 for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
@@ -173,11 +178,11 @@ for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
             for (hel = hashLookup(td->hash, itemName); hel != NULL; hel = hashLookupNext(hel))
                 {
                 struct decoration *d = hel->val;
-                drawDecoration(d, hvg, scale, xOff, itemY, tg->heightPer, font, TRUE);
+                drawDecoration(d, hvg, scale, xOff, itemY, overlayHeightPer, font, TRUE);
                 // in the future, we might want to break out the outline drawing until after all
                 // the fill blocks are drawn.  That way we won't risk overwriting boundary lines
                 // with the fill blocks of subsequent, overlapping decorations.
-                drawDecoration(d, hvg, scale, xOff, itemY, tg->heightPer, font, FALSE);
+                drawDecoration(d, hvg, scale, xOff, itemY, overlayHeightPer, font, FALSE);
                 drawDecorationMouseover(d, td->decTdb, tg, item, hvg, scale, xOff, itemY, tg->heightPer, TRUE);
                 }
             // draw any packed decoration labels unless we're in dense or squish
@@ -224,7 +229,7 @@ for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
     }
 
 // now to draw adjacent blocks underneath the item, but at half height
-yOffset = itemY + tg->lineHeight;
+yOffset = itemY + tg->lineHeight*primaryItemRows;
 for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
     {
     if (td->style == DECORATION_STYLE_BLOCK && decoratorDrawMode(td->decTdb, cart, td->style) == DECORATOR_MODE_ADJACENT)

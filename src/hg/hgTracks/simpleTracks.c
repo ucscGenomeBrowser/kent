@@ -1736,7 +1736,11 @@ static struct glyphShape glyphShapes[] = {
             {1,0.292893},{0.707107,0},{0.292893,0},{0,0.292893},{0,0.707107}}},
     [GLYPH_STAR] = (struct glyphShape) {10, (struct xyPair[]) {{0.500000,0.000000},{0.624108,0.381966},{1.025731,0.381966},
             {0.700811,0.618034},{0.824920,1.000000},{0.500000,0.763932},{0.175080,1.000000},{0.299189,0.618034},
-            {-0.025731,0.381966},{0.375892,0.381966}}}
+            {-0.025731,0.381966},{0.375892,0.381966}}},
+    [GLYPH_PLUS] = (struct glyphShape) {12, (struct xyPair[]) {{0.4,0},{0.6,0},{0.6,0.4},{1.0,0.4},{1.0,0.6},{0.6,0.6},
+            {0.6,1.0},{0.4,1.0},{0.4,0.6},{0,0.6},{0,0.4},{0.4,0.4}}},
+    [GLYPH_X] = (struct glyphShape) {12, (struct xyPair[]) {{0.1,0},{0.5,0.4},{0.9,0},{1,0.1},{0.6,0.5},{1,0.9},{0.9,1},
+            {0.5,0.6},{0.1,1},{0,0.9},{0.4,0.5},{0,0.1}}}
 };
 
 
@@ -1788,6 +1792,8 @@ switch (glyph)
 #define GLYPH_STRING_OCTAGON "Octagon"
 #define GLYPH_STRING_STAR "Star"
 #define GLYPH_STRING_PENTAGRAM "Pentagram"
+#define GLYPH_STRING_PLUS "Plus"
+#define GLYPH_STRING_X "X"
 
 glyphType parseGlyphType(char *glyphStr)
 /* Return the enum glyph type for a string specifying a glyph.
@@ -1807,6 +1813,10 @@ if (sameWordOk(glyphStr, GLYPH_STRING_STAR))
     return GLYPH_STAR;
 if (sameWordOk(glyphStr, GLYPH_STRING_PENTAGRAM))
     return GLYPH_PENTAGRAM;
+if (sameWordOk(glyphStr, GLYPH_STRING_PLUS))
+    return GLYPH_PLUS;
+if (sameWordOk(glyphStr, GLYPH_STRING_X))
+    return GLYPH_X;
 
 return GLYPH_CIRCLE;
 }
