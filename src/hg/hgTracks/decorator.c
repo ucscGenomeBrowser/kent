@@ -104,7 +104,11 @@ if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
     int centeredBaseEnd = (baseStart + baseEnd + 1)/2;
     int centeredBaseMidpoint = (centeredBaseStart + centeredBaseEnd)/2;
     int middlePixel = round((double)(centeredBaseMidpoint - w->winStart)*scale);
-    startPixel = middlePixel - (tl.fontHeight/2);
+
+    if (parseGlyphType(d->glyph) == GLYPH_1PX)
+        startPixel = middlePixel;
+    else
+        startPixel = middlePixel - (tl.fontHeight/2);
     if (startPixel < 0)
         startPixel = 0;
     }
@@ -135,7 +139,10 @@ if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
     int centeredBaseMidpoint = (centeredBaseStart + centeredBaseEnd)/2;
     int middlePixel = round((double)(centeredBaseMidpoint - w->winStart)*scale);
     int start = middlePixel - (tl.fontHeight/2);
-    end = start + tl.fontHeight;
+    if (parseGlyphType(d->glyph) == GLYPH_1PX)
+        end = middlePixel;
+    else
+        end = start + tl.fontHeight;
     if (end > w->insideWidth)
         end = w->insideWidth;
     }
@@ -888,6 +895,10 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
     struct decoration *newDec = decorationFromInterval(chrom, thisInterval);
     // have to assemble any custom mouseover text here because it may depend on extra bbi fields
     // that won't be included in the decoration structure
+    bool reduceGlyphs = FALSE;
+    long basesInImage = insideWidth*basesPerPixel;
+    if (basesInImage > decoratorUiMaxLabeledBaseCount(decTdb, cart))
+        reduceGlyphs = TRUE;
     char *mouseOverText = mouseOverGetBbiText(mouseScheme, thisInterval, chrom);
     if (decorationGetStyle(newDec) == DECORATION_STYLE_BLOCK)
         {
@@ -895,6 +906,11 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
         }
     else if (decorationGetStyle(newDec) == DECORATION_STYLE_GLYPH)
         {
+        if (reduceGlyphs)
+            {
+            freeMem(newDec->glyph);
+            newDec->glyph = cloneString(GLYPH_STRING_1PX);
+            }
         addToDecorator(newGlyphs, newDec, mouseOverText);
         }
     else
@@ -1255,7 +1271,6 @@ Color outlineColor = bedColorToGfxColor(d->color);
 Color fillColor = bedColorToGfxColor(bedParseColor(d->fillColor));
 drawScaledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
                  heightPer, glyph, filled, outlineColor, fillColor);
-
 }
 
 
