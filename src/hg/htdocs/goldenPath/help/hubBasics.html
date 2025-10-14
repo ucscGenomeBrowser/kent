@@ -28,7 +28,7 @@ This page covers the basics of setting up your own hub:
 
 <p>
 As you build your hub, use the "Hub Development" tab on the <a
-href="/cgi-bin/hgHubConnect">Track Data Hub</a> page to
+href="/cgi-bin/hgHubConnect#hubDeveloper">Track Data Hub</a> page to
 check your hub for errors or to disable file caching to
 see your changes immediately, rather than after the 300ms refresh
 rate.
@@ -45,10 +45,12 @@ them, but there is also a version provided without these.
 
 <p>
 <ul>
+  <li><a href="examples/hubExamples/hubBasicSettings/hub.minimal.txt"
+  target="_blank">Minimal hub.txt</a>
   <li><a href="examples/hubExamples/hubBasicSettings/hub.txt"
-  target="_blank"><b>Example hub.txt with explanations</b></a></li>
-  <li><a href="examples/hubExamples/hubBasicSettings/hub.simple.txt"
-  target="_blank"><b>Example hub.txt no explanations</b></a></li>
+  target="_blank"><b>Detailed hub.txt with setting explanations</b></a> or
+  <a href="examples/hubExamples/hubBasicSettings/hub.noExplanations.txt"
+  target="_blank"><b>without explanations</b></a></li>
   <li><a href="/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBasicSettings/hub.txt"
   target="_blank">Visualize this example hub.txt</a></li>
 </ul>
@@ -61,7 +63,9 @@ The first step in creating a track hub is to create your hub.txt file. Download 
 and use this as a starting point, changing our default values to those for your hub. But, we'll also
 provide the necessary settings here. These settings control how your hub is labeled in the interface
 and contact information:
-<pre><code>hub myExampleHub # a short, unique identifier for your hub, no spaces
+<pre><code>hub myExampleHub # a short, unique internal identifier for your hub, no spaces
+# shortLabel and longLabel are how your hub is labeled in the Genome Browser interface
+# shortLabels should be under 20 characters and longLabels under 70
 shortLabel Example Hub
 longLabel Example Hub for useOneFile option
 useOneFile on
@@ -107,10 +111,13 @@ Next, we'll discuss how to build a bigBed from a bed file.
           file can be found under the "Data file downloads" section on the
           <a href="/cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
       <li>If you have custom fields in your bed file, you will need to create a custom .as file.
-          You can download the <a href="">basic BED .as</a> and modify this by adding new fields 
-          below those in your file. 
+          You can download the <a href="examples/bed12.as">basic BED .as</a>
+          and modify this by adding new fields below those in your file.
     </ul>
-  <li>Put your bigBed file alongside your hub.txt in a web-accessible location
+  <li>Put your bigBed file alongside your hub.txt in a web-accessible location,
+      either through <a href="/cgi-bin/hgHubConnect#hubUpload">the 10GB of space we
+      make available to users</a> or through one of <a href="hgTrackHubHelp#Hosting">several
+      other services</a>
   <li>You will use the file name (e.g. &quot;myBigBed.bb&quot;) with the <code>bigDataUrl</code> setting in your hub.txt
 </ol>
 
@@ -201,7 +208,10 @@ Next, we'll discuss how to build a bigWig from a wig or bedGraph file.
           file can be found under the "Data file downloads" section on the
           <a href="/cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
     </ul>
-  <li>Place your bigWig file in a web-accessible location alongside your hub.txt
+  <li>Put your bigWig file alongside your hub.txt in a web-accessible location,
+      either through <a href="/cgi-bin/hgHubConnect#hubUpload">the 10GB of space we
+      make available to users</a> or through one of <a href="hgTrackHubHelp#Hosting">several
+      other services</a>
   <li>You will use the file name (e.g. &quot;myBigWig.bw&quot;) with the <code>bigDataUrl</code> setting
 </ol>
 
@@ -380,9 +390,12 @@ You will then append these to a genome browser URL. For example, this url with l
 <pre><code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBasicSettings/hub.txt
 </code></pre>
 
-<!--<h2>Making it a Public Hub</h2>
 <p>
--->
+If you feel that your hub would be of general use to the research community,
+you can contact us about making it a public hub. Note that public hubs have to meet
+more stringent requirements than the basics described here.
+Check that your hub meets the <a href="publicHubGuidelines.html">public hub requirements</a>
+and then follow the directions on that page for submitting it to us for review.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 
