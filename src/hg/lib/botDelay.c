@@ -134,10 +134,13 @@ if (useNew)
         if (apiKey)
             {
             // Here we do a mysql query before the bottleneck is complete. 
-            // In theory, this can overload the MariaDB server.
-            // But there is no way around it, we must check that the apiKey is valid
             // And this is better than handling the request without bottleneck
-            char *userName = userNameForApiKey(apiKey);
+            // The connection is closed right away, so if the bottleneck leads to a long sleep, it won't tie up
+            // the MariaDB server. The cost of opening a connection is less than 1msec.
+            struct sqlConnection *conn = hConnectCentralNoCache();
+            char *userName = userNameForApiKey(conn, apiKey);
+            sqlDisconnect(&conn);
+
             if (userName)
                 safef(botCheckString, 256, "apiKey%s %f", apiKey, fraction);
             else 
@@ -219,7 +222,6 @@ int delay = 0;
 if (host != NULL && port != NULL && ip != NULL)
     {
     char *botCheckString = getBotCheckString(ip, fraction);
-    hFreeAllCentral();
     delay = botDelayTime(host, atoi(port), botCheckString);
     freeMem(botCheckString);
     }

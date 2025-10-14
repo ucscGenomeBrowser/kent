@@ -87,7 +87,7 @@ else
             {
             // maybe an apiKey was provided, use that instead to look up the userName
             char *apiKey = jsonQueryString(req, "", "Event.Upload.MetaData.apiKey", NULL);
-            userName = userNameForApiKey(apiKey);
+            userName = userNameForApiKey(NULL, apiKey);
             if (!userName)
                 errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
             }

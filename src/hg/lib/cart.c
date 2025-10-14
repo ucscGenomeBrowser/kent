@@ -1566,10 +1566,15 @@ if (isUserAgentException())
     return;
 
 // a valid apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
-// of the apiKey, if a valid apiKey has been supplied, see botDelay.c
+// of the apiKey, if a valid apiKey has been supplied, see botDelay.c, so the check if the apiKey is valid is assumed 
+// to have been done at the bottleneck step
 char *apiKey = cgiOptionalString("apiKey");
-if (apiKey && userNameForApiKey(apiKey))
-    return;
+if (apiKey) 
+    {
+        // This assumes that we've checked the API key already in botdelay.c. All our CGIs 
+        // call botDelay, we assume that botDelay has been called.
+        return;
+    }
 
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
 // For hgSession, we redirect from euro and asia to the RR - avoid showing the captcha there
