@@ -837,10 +837,13 @@ if (*pConn != NULL)
     sqlConnCacheDealloc(centralCc, pConn);
 }
 
-void hFreeAllCentral() 
-/* disconnect and free all connections in the hgCentral connection cache */
+struct sqlConnection *hConnectCentralNoCache() 
+/* open an hgcentral connection, but do not use the cache. Used before the bottleneck call. */
 {
-    sqlConnCacheFree(&centralCc);
+    struct sqlConnection *conn = sqlMayConnect(centralDb);
+    if (conn == NULL)
+        errAbort("Cannot connect to MariaDB database defined in hg.conf called '%s'", centralDb);
+    return conn;
 }
 
 static void hCartMkCache()
