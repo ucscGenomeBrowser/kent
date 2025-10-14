@@ -2720,6 +2720,7 @@ if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
 
 // activate optional debuging output for CGIs
 verboseCgi(cgiUsualString("verbose", NULL));
+cartExclude(cart, "verbose");
 
 return cart;
 }
