@@ -15,6 +15,7 @@
 #define CFG_LOGIN_MAIL_RETURN_ADDR "login.mailReturnAddr"
 #define CFG_COOKIIENAME_USERNAME  "wiki.userNameCookie"
 #define CFG_COOKIIENAME_USERID  "wiki.loggedInCookie"
+#define CFG_APPROVED_HOSTS "login.approvedReturn"
 #endif /* hgLogin_H */
 
 
