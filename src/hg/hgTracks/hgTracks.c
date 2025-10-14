@@ -8558,9 +8558,9 @@ if (track->hasUi)
     struct trackDb *tdb = track->tdb;
 
     if (tdbIsSuper(tdb))
-        dyStringPrintf(dsMouseOver, " - container supertrack (%d subtracks) ", slCount(tdb->children));
+        dyStringPrintf(dsMouseOver, " - container, %d tracks ", slCount(tdb->children));
     else if (tdbIsComposite(tdb))
-        dyStringPrintf(dsMouseOver, " - container track (%d subtracks) ", slCount(tdb->subtracks));
+        dyStringPrintf(dsMouseOver, " - container, %d subtracks ", slCount(tdb->subtracks));
 
     // Print icons before the title when any are defined
     hPrintIcons(track->tdb);
