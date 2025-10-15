@@ -1,0 +1,88 @@
+
+# LCR - Low Complexity Regions from Heng Li
+# 2025-10-15 - Hiram
+
+From Heng Li paper:
+
+  https://arxiv.org/abs/2509.23057
+
+Download files from:
+
+  https://zenodo.org/records/17204470
+
+Specifically:
+
+ chm13v2.cen-mask.bed
+ chm13v2.PAR.bed
+ chm13v2.lcr-v4.bed.gz
+
+mkdir /hive/data/genomes/hs1/bed/LCR
+cd /hive/data/genomes/hs1/bed/LCR
+
+# the chromEnd coordinates in chm13v2.lcr-v4.bed.gz were all 5 bp beyond
+#   the ends of the chromosomes, fixed the coordinates:
+#   zcat chm13v2.lcr-v4.bed.gz > chm13v2.lcr-v4.bed
+#   Edited the chm13v2.lcr-v4.bed file to fix those coordinates,
+#   discovered by running bedToBigBed on the file
+
+#   I added a name column to chm13v2.cen-mask.bed to identify
+#    the type of centromere:
+# chr13   0       17508596        acrocentric p-arm
+# chr14   0       12708411        acrocentric p-arm
+# chr15   0       17694466        acrocentric p-arm
+# chr21   0       11306378        acrocentric p-arm
+# chr22   0       15711065        acrocentric p-arm
+
+And all the others were named:
+
+# chr1    121619169       142242033       pericentromeric region
+
+# and, gave names to the items in chm13v2.PAR.bed
+
+# chrX    0       2394410 chrX PAR1
+# chrX    153925834       154259566       chrX PAR2
+# chrY    0       2458320 chrY PAR1
+# chrY    62122809        62460029        chrY PAR2
+
+# resulting source files here:
+# -rw-r--r-- 1      118 Oct 14 09:36 chm13v2.PAR.bed
+# -rw-r--r-- 1     1013 Oct 14 09:47 chm13v2.cen-mask.bed
+# -rw-rw-r-- 1  3971675 Oct 14 09:57 chm13v2.lcr-v4.bed
+
+## converting to bigBed files:
+
+bedToBigBed -tab -type=bed4 chm13v2.PAR.bed ../../chrom.sizes chm13v2.PAR.bb
+
+bedToBigBed -tab -type=bed4 chm13v2.cen-mask.bed ../../chrom.sizes \
+  chm13v2.cen-mask.bb
+
+bedToBigBed -type=bed4+1 -as=lcr.as chm13v2.lcr-v4.bed \
+  ../../chrom.sizes chm13v2.lcr-v4.bb
+
+## and then intersecting with simple repeats
+
+### fix the chrom names in simpleRepeat.bed.gz, get a sed file:
+
+grep -v "^#" ../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt \
+  | awk -F$'\t' '{printf "s/%s/%s/;\n", $1, $5}' > genbank.ucsc.sed
+
+head genbank.ucsc.sed
+
+s/CP068254.1/chrM/;
+s/CP068255.2/chrX/;
+s/CP068256.2/chr22/;
+
+
+ln -s /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/simpleRepeat/simpleRepeat.bed.gz ./
+
+zcat simpleRepeat.bed.gz | sed -f genbank.ucsc.sed | bedSingleCover.pl stdin > trf.singleCover.bed
+
+bedToBigBed -tab -type=bed4 trf.singleCover.bed ../../chrom.sizes trf.singleCover.bb
+
+bedSingleCover.pl chm13v2.lcr-v4.bed > chm13v2.lcr-v4.singleCover.bed
+
+bedIntersect -minCoverage=0.0000000014 trf.singleCover.bed \
+    chm13v2.lcr-v4.singleCover.bed stdout | sort -k1,1 -k2,2n > lcr.AND.trf.bed
+
+bedToBigBed -tab -type=bed4 lcr.AND.trf.bed ../../chrom.sizes lcr.AND.trf.bb
+
