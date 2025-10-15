@@ -1736,7 +1736,11 @@ static struct glyphShape glyphShapes[] = {
             {1,0.292893},{0.707107,0},{0.292893,0},{0,0.292893},{0,0.707107}}},
     [GLYPH_STAR] = (struct glyphShape) {10, (struct xyPair[]) {{0.500000,0.000000},{0.624108,0.381966},{1.025731,0.381966},
             {0.700811,0.618034},{0.824920,1.000000},{0.500000,0.763932},{0.175080,1.000000},{0.299189,0.618034},
-            {-0.025731,0.381966},{0.375892,0.381966}}}
+            {-0.025731,0.381966},{0.375892,0.381966}}},
+    [GLYPH_PLUS] = (struct glyphShape) {12, (struct xyPair[]) {{0.4,0},{0.6,0},{0.6,0.4},{1.0,0.4},{1.0,0.6},{0.6,0.6},
+            {0.6,1.0},{0.4,1.0},{0.4,0.6},{0,0.6},{0,0.4},{0.4,0.4}}},
+    [GLYPH_X] = (struct glyphShape) {12, (struct xyPair[]) {{0.1,0},{0.5,0.4},{0.9,0},{1,0.1},{0.6,0.5},{1,0.9},{0.9,1},
+            {0.5,0.6},{0.1,1},{0,0.9},{0.4,0.5},{0,0.1}}}
 };
 
 
@@ -1764,6 +1768,9 @@ switch (glyph)
         hvGfxCircle(hvg, middleX, middleY, heightPer/2, fillColor, TRUE);
         hvGfxCircle(hvg, middleX, middleY, heightPer/2, outlineColor, FALSE);
         break;
+    case GLYPH_1PX:
+        hvGfxLine(hvg, middleX, middleY-heightPer/2, middleX, middleY+heightPer/2, outlineColor);
+        break;
     default:
         ptCount = glyphShapes[glyph].nPoints;
         struct gfxPoly *poly = gfxPolyNew();
@@ -1779,15 +1786,6 @@ switch (glyph)
         break;
     }
 }
-
-#define GLYPH_STRING_CIRCLE "Circle"
-#define GLYPH_STRING_TRIANGLE "Triangle"
-#define GLYPH_STRING_INV_TRIANGLE "InvTriangle"
-#define GLYPH_STRING_SQUARE "Square"
-#define GLYPH_STRING_DIAMOND "Diamond"
-#define GLYPH_STRING_OCTAGON "Octagon"
-#define GLYPH_STRING_STAR "Star"
-#define GLYPH_STRING_PENTAGRAM "Pentagram"
 
 glyphType parseGlyphType(char *glyphStr)
 /* Return the enum glyph type for a string specifying a glyph.
@@ -1807,6 +1805,12 @@ if (sameWordOk(glyphStr, GLYPH_STRING_STAR))
     return GLYPH_STAR;
 if (sameWordOk(glyphStr, GLYPH_STRING_PENTAGRAM))
     return GLYPH_PENTAGRAM;
+if (sameWordOk(glyphStr, GLYPH_STRING_PLUS))
+    return GLYPH_PLUS;
+if (sameWordOk(glyphStr, GLYPH_STRING_X))
+    return GLYPH_X;
+if (sameWordOk(glyphStr, GLYPH_STRING_1PX))
+    return GLYPH_1PX;
 
 return GLYPH_CIRCLE;
 }

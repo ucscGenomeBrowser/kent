@@ -73,6 +73,7 @@ my %nameLabels = (
    "chrNames" => "chrNames",
    "chrN" => "chrN",
    "VEuPathDB" => "VEuPathDB",
+   "hprcV2" => "HPRCv2",
    "custom" => "custom"
 );
 

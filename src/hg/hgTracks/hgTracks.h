@@ -769,8 +769,23 @@ typedef enum {
     GLYPH_DIAMOND,
     GLYPH_OCTAGON,
     GLYPH_STAR,
-    GLYPH_PENTAGRAM
+    GLYPH_PENTAGRAM,
+    GLYPH_PLUS,
+    GLYPH_X,
+    GLYPH_1PX
     } glyphType;
+
+#define GLYPH_STRING_CIRCLE "Circle"
+#define GLYPH_STRING_TRIANGLE "Triangle"
+#define GLYPH_STRING_INV_TRIANGLE "InvTriangle"
+#define GLYPH_STRING_SQUARE "Square"
+#define GLYPH_STRING_DIAMOND "Diamond"
+#define GLYPH_STRING_OCTAGON "Octagon"
+#define GLYPH_STRING_STAR "Star"
+#define GLYPH_STRING_PENTAGRAM "Pentagram"
+#define GLYPH_STRING_PLUS "Plus"
+#define GLYPH_STRING_X "X"
+#define GLYPH_STRING_1PX "1px"
 
 void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
