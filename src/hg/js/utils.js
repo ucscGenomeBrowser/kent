@@ -4573,3 +4573,82 @@ function forceDisplayBedFile(url) {
     .catch(error => console.error('Error fetching BED file:', error));
 }
 
+function processFindGenome(result, term) {
+    // process the hubApi/findGenome?q= result set into somthing
+    // jquery-ui autocomplete can use
+    let data = [];
+    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount"]);
+    Object.keys(result).forEach((key) => {
+        if (!(apiSkipList.has(key))) {
+            let val = result[key];
+            let d = {
+                "genome": key,
+                "label": `${val.commonName} (${key})`,
+            };
+            if (val.hubUrl !== null) {
+                d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
+            } else {
+                d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
+            }
+            data.push(d);
+        }
+    });
+    return data;
+}
+
+function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null,
+        watermark = null, onServerReply = null) {
+/* Generic function for turning an <input> element into a species search bar with an autocomplete
+ * list separating results by category.
+ * Required arguments:
+ *     inputId: id of the input element itself, not created here
+ *     selectFunction: the function to call when the user actually clicks on a result
+ * Optional arguments:
+ *     baseUrl: where we send requests to which will return json we can parse into a list
+ *         of results, defaults to 'hubApi/findGenome?browser=mustExist&q='
+ *     watermark: placeholder text in the input
+ *     onServerReply: function to run after querying baseUrl, by default use processFindGenome()
+ *         to standardize on hubApi, but can be something else
+ */
+    let defaultSearchUrl = "hubApi/findGenome?browser=mustExist&q=";
+    $.widget("custom.autocompleteCat",
+        $.ui.autocomplete,
+        {
+            _renderMenu: function(ul, items) {
+                var that = this;
+                var currentCategory = "";
+                // There's no this._super as shown in the doc, so I can't override
+                // _create as shown in the doc -- just do this every time we render...
+                this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                $(ul).css("z-index", "99999999");
+                $.each(items, function(index, item) {
+                    // Add a heading each time we see a new category:
+                    if (item.category && item.category !== currentCategory) {
+                        ul.append("<li class='ui-autocomplete-category'>" +
+                                item.category + "</li>" );
+                        currentCategory = item.category;
+                    }
+                    that._renderItem( ul, item );
+                });
+            },
+            _renderItem: function(ul, item) {
+                // In order to use HTML markup in the autocomplete, one has to overwrite
+                // autocomplete's _renderItem method using .html instead of .text.
+                // http://forum.jquery.com/topic/using-html-in-autocomplete
+                // Hits to assembly hub top level (not individial db names) have no item label,
+                // so use the value instead
+                return $("<li></li>")
+                    .data("ui-autocomplete-item", item)
+                    .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
+                    .appendTo(ul);
+            }
+        }
+    );
+    autocompleteCat.init($("[id='"+inputId+"']"), {
+        baseUrl: baseUrl !== null ? baseUrl : defaultSearchUrl,
+        watermark: watermark,
+        onSelect: selectFunction,
+        onServerReply: onServerReply !== null ? onServerReply : processFindGenome,
+        enterSelectsIdentical: false
+    });
+}
