@@ -86,3 +86,102 @@ bedIntersect -minCoverage=0.0000000014 trf.singleCover.bed \
 
 bedToBigBed -tab -type=bed4 lcr.AND.trf.bed ../../chrom.sizes lcr.AND.trf.bb
 
+bedInvert.pl ../../chrom.sizes chm13v2.lcr-v4.singleCover.bed \
+    > chm13v2.lcr-v4.invert.bed
+
+bedInvert.pl ../../chrom.sizes trf.singleCover.bed > trf.invert.bed
+
+bedIntersect -minCoverage=0.0000000014 trf.invert.bed \
+    chm13v2.lcr-v4.singleCover.bed stdout | sort -k1,1 -k2,2n \
+       > in.lcr.not.trf.bed
+
+bedIntersect -minCoverage=0.0000000014 chm13v2.lcr-v4.invert.bed \
+   trf.singleCover.bed stdout | sort -k1,1 -k2,2n > in.trf.not.lcr.bed
+
+bedToBigBed -tab -type=bed4 in.trf.not.lcr.bed ../../chrom.sizes inTrfNotLcr.bb
+
+bedToBigBed -tab -type=bed4 in.lcr.not.trf.bed ../../chrom.sizes inLcrNotTrf.bb
+
+for F in *.bb
+do
+  printf "bigBedInfo $F:\t"
+  bigBedInfo $F | grep basesCovered
+done
+bigBedInfo trf.singleCover.bb:  basesCovered: 277,065,041
+bigBedInfo inTrfNotLcr.bb:      basesCovered: 215,694,223
+bigBedInfo chm13v2.cen-mask.bb: basesCovered: 202,448,824
+bigBedInfo chm13v2.lcr-v4.bb:   basesCovered: 79,604,249
+bigBedInfo lcr.AND.trf.bb:      basesCovered: 61,370,818
+bigBedInfo inLcrNotTrf.bb:      basesCovered: 18,233,431
+bigBedInfo chm13v2.PAR.bb:      basesCovered: 5,523,682
+
+########## in trackDb/human/hs1 add LCR.ra file to define the tracks:
+
+track LCRs
+superTrack on show
+type bed 4
+shortLabel LCRs
+longLabel Low complexity regions from Heng Li, longdust measurements
+html LCRs
+group map
+
+track hs1LCR
+parent LCRs
+shortLabel LCR
+longLabel low-complexity regions excluding alpha and HSAT2/3 satellites.
+type bigBed 5 .
+visibility hide
+priority 1
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.lcr-v4.bb
+html LCRs
+
+track hs1CenMask
+parent LCRs
+shortLabel Cent-Sat
+longLabel Centromeric satellite repeats
+type bigBed 5 .
+visibility hide
+priority 2
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.cen-mask.bb
+html LCRs
+
+track hs1PAR
+parent LCRs
+shortLabel PAR region
+longLabel the PAR regions on chrX, chrY
+type bigBed 4 .
+visibility hide
+priority 3
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.PAR.bb
+html LCRs
+
+track lcrANDTrf
+parent LCRs
+shortLabel in LCR AND TRF
+longLabel intersection of LCR track and the trf/simpleRepeats track
+type bigBed 4 .
+visibility hide
+priority 4
+bigDataUrl /gbdb/hs1/LCRs/lcr.AND.trf.bb
+html LCRs
+
+track inLcrNotTrf
+parent LCRs
+shortLabel in LCR not TRF
+longLabel areas in the LCR track not in the trf/simpleRepeats track
+type bigBed 4 .
+visibility hide
+priority 5
+bigDataUrl /gbdb/hs1/LCRs/inLcrNotTrf.bb
+html LCRs
+
+track inTrfNotLcr
+parent LCRs
+shortLabel in TRF not LCR
+longLabel areas in the TRF track not in the LCR
+type bigBed 4 .
+visibility hide
+priority 5
+bigDataUrl /gbdb/hs1/LCRs/inTrfNotLcr.bb
+html LCRs
+
