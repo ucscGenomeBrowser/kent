@@ -242,6 +242,18 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
+void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean withSearchButton);
+/* Prints an input text box that can be used to search for any genome.
+ * param withSearchButton - controls if there is a button next to the bar
+ *     to manually fire the search
+ * param classStr - if desired, a custom class name or string can be used
+ *     otherwise the default styling of 'genomeSearchBarDefault' is applied via HGStyle.css
+ *
+ * There is a default class in HGStyle.css that is used
+ *
+ * The caller CGI needs to include  jquery-ui.js and utils.js to turn this into a
+ * useable search bar with autocomplete */
+
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars);
 /* Examine CGI and cart variables to determine which db, genome, or clade

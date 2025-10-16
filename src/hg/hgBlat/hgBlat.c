@@ -35,6 +35,7 @@
 #include "fuzzyFind.h"
 #include "chromAlias.h"
 #include "subText.h"
+#include "jsHelper.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -2063,11 +2064,6 @@ void askForSeq(char *organism, char *db)
 /* ignore struct serverTable* return, but can error out if not found */
 findServer(db, FALSE);
 
-/* JavaScript to update form when org changes */
-char *onChangeText = ""
-    "document.mainForm.changeInfo.value='orgChange';"
-    "document.mainForm.submit();";
-
 char *userSeq = NULL;
 char *type = NULL;
 
@@ -2097,8 +2093,30 @@ printf("<TD ALIGN=CENTER>&nbsp;</TD>");
 printf("</TR>\n");
 
 printf("<TR>\n");
-printf("<TD ALIGN=CENTER>\n");
-printBlatGenomeListHtml(db, "change", onChangeText);
+printf("<TD class='searchCell' ALIGN=CENTER>\n");
+jsIncludeAutoCompleteLibs();
+char *searchPlaceholder = "Search any species, genome or assembly name";
+char *searchBarId = "genomeSearch";
+printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE);
+jsInlineF(
+    "function blatSelect(selectEle, item) {\n"
+    "   let newOpt = document.createElement(\"option\");\n"
+    "   newOpt.value = item.genome;\n"
+    "   newOpt.label = item.label;\n"
+    "   newOpt.selected = true;\n"
+    "   selectEle.appendChild(newOpt);\n"
+    "   const event = new Event(\"change\");\n"
+    "   selectEle.dispatchEvent(event);\n"
+    "}\n\n"
+    "document.addEventListener(\"DOMContentLoaded\", () => {\n"
+    "    // bind the actual <select> to the function blatSelect, that way\n"
+    "    // initSpeciesAutoCompleteDropdown can call the function\n"
+    "    let selectEle = document.querySelector(\"select[name=db]\");\n"
+    "    let boundSelect = blatSelect.bind(null, selectEle);\n"
+    "    initSpeciesAutoCompleteDropdown('%s', boundSelect);\n"
+    "});\n"
+    , searchBarId
+);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 printBlatAssemblyListHtml(db);

@@ -896,6 +896,27 @@ struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList, NULL, NULL);
 }
 
+void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean withSearchButton)
+/* Prints an input text box that can be used to search for any genome.
+ * param withSearchButton - controls if there is a button next to the bar
+ *     to manually fire the search
+ * param classStr - if desired, a custom class name or string can be used
+ *     otherwise the default styling of 'genomeSearchBarDefault' is applied via HGStyle.css
+ *
+ * There is a default class in HGStyle.css that is used
+ *
+ * The caller CGI needs to include  jquery-ui.js and utils.js to turn this into a
+ * useable search bar with autocomplete */
+{
+printf("<input id='%s' type='text' ", id);
+if (isNotEmpty(placeholder))
+    printf("placeholder='%s' ", placeholder);
+printf("class='%s' ", isNotEmpty(classStr) ? classStr : "genomeSearchBarDefault");
+printf("></input>\n");
+if (withSearchButton)
+    printf("<input id='%sButton' value='search' type='button'></input>", id);
+}
+
 static char *getDbForGenome(char *genome, struct cart *cart)
 /*
   Function to find the default database for the given Genome.

@@ -1264,3 +1264,14 @@ span.gbSessionChanged {
 #hgta_doClearSubtrackMerge {
     color: red;
 }
+
+td.searchCell {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.genomeSearchBarDefault {
+    flex: 1;
+    box-sizing: border-box;
+}
