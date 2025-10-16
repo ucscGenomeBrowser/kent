@@ -108,7 +108,7 @@ errAbort(
   "   -sizesIsBb  -- Obsolete name for -sizesIsChromAliasBb.\n"
   "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
   "   -allow1bpOverlap  -- allow exons to overlap by at most one base pair\n"
-  "   -fixScores  -- change non-integer scores to 0 and for scores into range 0..1000\n"
+  "   -fixScores  -- change non-integer scores to 0 and force integer scores into the range 0..1000\n"
   "   -maxAlloc=N -- Set the maximum memory allocation size to N bytes\n"
   "   -sort -- sort the input file\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
