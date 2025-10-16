@@ -233,10 +233,6 @@ param db - The default assembly (the database name) to choose as selected.
                 If NULL, no default selection.
  */
 
-void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
-/* Find all the organisms/assemblies that are referenced in axtInfo,
- * and print the dropdown list. */
-
 void printBlatAssemblyListHtml(char *curDb);
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
