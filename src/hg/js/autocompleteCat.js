@@ -97,7 +97,7 @@ var autocompleteCat = (function() {
             toggleSpinner(true, options);
             $.getJSON(url)
                .done(function(results) {
-                if (_.isFunction(options.onServerReply)) {
+                if (typeof options.onServerReply === 'function') {
                     results = options.onServerReply(results, cleanedTerm);
                 }
                 // remove the loading icon
