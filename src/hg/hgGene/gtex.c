@@ -26,7 +26,7 @@ if (!sqlTableExists(conn, "gtexGene"))
 #define NO_ENSGENE 1
 // NOTE: Can remove this ifdef when/if hg38 ensGene is pushed 
 #ifdef NO_ENSGENE
-if (sameString(database, "hg38"))
+if (sameString(sqlGetDatabase(conn), "hg38"))
     {
     // Get ENSG (w/ version) from knownCanonical
     sqlSafef(query, sizeof(query), 

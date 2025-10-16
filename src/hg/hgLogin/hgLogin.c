@@ -313,6 +313,23 @@ for (sl = newCookies;  sl != NULL;  sl = sl->next)
 return result; 
 }
 
+static boolean isValidReturnUrl(char *returnUrl)
+/* Verify that returnUrl startswith an hg.conf approved set of hosts. */
+{
+struct slName *approvedHosts = slNameListFromComma(cfgOptionDefault(CFG_APPROVED_HOSTS, NULL));
+slAddHead(&approvedHosts, slNameNew(hLoginHostCgiBinUrl()));
+if (approvedHosts)
+    {
+    struct slName *approvedStart;
+    for (approvedStart = approvedHosts; approvedStart != NULL; approvedStart = approvedStart->next)
+        {
+        if (startsWith(approvedStart->name, returnUrl))
+            return TRUE;
+        }
+    }
+return FALSE;
+}
+
 char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
@@ -320,9 +337,20 @@ char *returnURL = cartUsualString(cart, "returnto", "");
 char returnTo[2048];
   
 if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", hLoginHostCgiBinUrl());
+    safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", hLoginHostCgiBinUrl());
+else if (cfgOptionDefault(CFG_APPROVED_HOSTS, NULL))
+    {
+    if (isValidReturnUrl(returnURL))
+        safecpy(returnTo, sizeof(returnTo), returnURL);
+    else
+        {
+        errAbort("Error: Invalid returnto URL. Please send email to genome-www@soe.ucsc.edu "
+                "with the returnto argument from the URL (or just the full URL) so we can "
+                "fix this.");
+        }
+    }
 else
-   safecpy(returnTo, sizeof(returnTo), returnURL);
+    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
 }
 
