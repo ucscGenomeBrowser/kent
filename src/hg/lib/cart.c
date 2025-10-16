@@ -1482,6 +1482,7 @@ boolean isValidToken(char *token)
     return res;
 }
 
+// hg.conf key with the cloud flare secret key, used twice here, so a global macro
 #define CLOUDFLARESITEKEY "cloudFlareSiteKey"
 
 void printCaptcha() 
@@ -1565,21 +1566,21 @@ if (botException())
 if (isUserAgentException())
     return;
 
-// a valid apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
+char *cgi = cgiScriptName();
+
+// An apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
 // of the apiKey, if a valid apiKey has been supplied, see botDelay.c, so the check if the apiKey is valid is assumed 
-// to have been done at the bottleneck step
+// to have been done at the bottleneck step, which in all our CGIs is called before the cart is initialized.
 char *apiKey = cgiOptionalString("apiKey");
 if (apiKey) 
-    {
-        // This assumes that we've checked the API key already in botdelay.c. All our CGIs 
-        // call botDelay, we assume that botDelay has been called.
-        return;
-    }
+{
+    fprintf(stderr, "CAPTCHAPASS_APIKEY %s %s\n", apiKey, cgi);
+    return;
+}
 
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
 // For hgSession, we redirect from euro and asia to the RR - avoid showing the captcha there
 // hgLogin is the redirect target for hgSession, so avoid it there as well
-char *cgi = cgiScriptName();
 if ( sameWord(cgi, "/cgi-bin/hgRenderTracks") || sameWord(cgi, "/cgi-bin/hgSession") || sameWord(cgi, "/cgi-bin/hgLogin") )
     return;
 
