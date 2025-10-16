@@ -45,6 +45,7 @@ static boolean tabSep = FALSE;
 static boolean sizesIs2Bit = FALSE;
 static boolean sizesIsChromAliasBb = FALSE;
 static boolean allow1bpOverlap = FALSE;
+static boolean fixScores = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -107,6 +108,7 @@ errAbort(
   "   -sizesIsBb  -- Obsolete name for -sizesIsChromAliasBb.\n"
   "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
   "   -allow1bpOverlap  -- allow exons to overlap by at most one base pair\n"
+  "   -fixScores  -- change non-integer scores to 0 and for scores into range 0..1000\n"
   "   -maxAlloc=N -- Set the maximum memory allocation size to N bytes\n"
   "   -sort -- sort the input file\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
@@ -126,6 +128,7 @@ static struct optionSpec options[] = {
    {"extraIndex", OPTION_STRING},
    {"udcDir", OPTION_STRING},
    {"allow1bpOverlap", OPTION_BOOLEAN},
+   {"fixScores", OPTION_BOOLEAN},
    {"maxAlloc", OPTION_LONG_LONG},
    {"sort", OPTION_BOOLEAN},
    {NULL, 0},
@@ -227,6 +230,12 @@ bits32 start = 0, end = 0;
 char *chrom = NULL;
 struct bed *bed;
 AllocVar(bed);
+unsigned opts = 0;
+if (allow1bpOverlap)
+    opts |= BED_ALLOW_1BP_OVERLAP;
+if (fixScores)
+    opts |= BED_FIX_SCORE;
+
 
 /* Help keep track of which beds are in current chunk so as to write out
  * namedChunks to eim if need be. */
@@ -245,7 +254,7 @@ for (;;)
 	    wordCount = chopLine(line, row);
 	lineFileExpectWordsMesg(lf, fieldCount, wordCount, "If the input is a tab-sep file, do not forget to use the -tab option");
 
-	loadAndValidateBedExt(row, bedN, fieldCount, lf, bed, as, FALSE, allow1bpOverlap);
+	loadAndValidateBedOpts(row, bedN, fieldCount, lf, bed, as, opts);
 
 	chrom = bed->chrom;
 	start = bed->chromStart;
@@ -354,8 +363,10 @@ for (;;)
 	/* Write 3rd through next to last field and a tab separator. */
 	for (i=3; i<lastField; ++i)
 	    {
-	    char *s = row[i];
-	    dyStringAppend(stream, s);
+            if ((opts & BED_FIX_SCORE) && (i == 4))
+                dyStringPrintf(stream, "%d", bed->score);  // keep fixed score
+            else
+                dyStringAppend(stream, row[i]);
 	    dyStringAppendC(stream, '\t');
 	    }
 	/* Write last field and terminal zero */
@@ -882,6 +893,7 @@ if (sizesIs2Bit && sizesIsChromAliasBb)
 extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
 allow1bpOverlap = optionExists("allow1bpOverlap");
+fixScores = optionExists("fixScores");
 udcDir = optionVal("udcDir", udcDefaultDir());
 size_t maxAlloc = optionLongLong("maxAlloc", 0);
 if (argc != 4)
