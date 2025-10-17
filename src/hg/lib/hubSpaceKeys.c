@@ -126,13 +126,21 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *userNameForApiKey(char *apiKey)
-/* Return userName associated with apiKey else NULL */
+char *userNameForApiKey(struct sqlConnection *conn, char *apiKey)
+/* Return userName associated with apiKey else NULL. If conn is NULL, will create a connection and free it. */
 {
 char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
-struct sqlConnection *conn = hConnectCentral();
+
+boolean doClose = FALSE;
+if (conn == NULL)
+    {
+    conn = hConnectCentral();
+    doClose = TRUE;
+    }
+
 struct dyString *query = sqlDyStringCreate("select userName from %s where apiKey = '%s'", tableName, apiKey);
 char *userName = sqlQuickString(conn, dyStringCannibalize(&query));
-hDisconnectCentral(&conn);
+if (doClose)
+    hDisconnectCentral(&conn);
 return userName;
 }

@@ -53,6 +53,14 @@ struct bed3
     unsigned chromEnd;	/* End position in chromosome */
     };
 
+enum bedParseOpts
+/* boolean options to control parsing of BEDs */
+{
+    BED_IS_CUSTOM_TRACK = 0x01,      // less error checking for custom tracks
+    BED_ALLOW_1BP_OVERLAP = 0x02,    // allow exons to overlap by at most one base pair
+    BED_FIX_SCORE = 0x04,            // correct out-of-range or floating scores
+};
+
 struct bed3 *bed3New(char *chrom, int start, int end);
 /* Make new bed3. */
 
@@ -337,6 +345,10 @@ void loadAndValidateBed(char *row[], int wordCount, int fieldCount, struct lineF
 
 void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt,  boolean allow1bpOverlap);
 /* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject. Possibly allow one base overlap in exons */
+
+void loadAndValidateBedOpts(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, unsigned opts);
+/* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
+ * If a customTrack, then some errors are tolerated. Possibly allow exons to overlap by one base. */
 
 int itemRgbColumn(char *column9);
 /* Convert color specification to internal format. */

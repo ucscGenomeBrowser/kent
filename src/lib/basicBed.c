@@ -1455,10 +1455,11 @@ if (size > currentSize)
 return currentMem;
 }
 
-void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt,  boolean allow1bpOverlap)
+void loadAndValidateBedOpts(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, unsigned opts)
 /* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
  * If a customTrack, then some errors are tolerated. Possibly allow exons to overlap by one base. */
 {
+boolean isCt = (opts & BED_IS_CUSTOM_TRACK) != 0;
 int count;
 int *blockSizes = NULL;
 int *chromStarts;
@@ -1489,9 +1490,18 @@ if (bedFieldCount > 3)
     }
 if (bedFieldCount > 4)
     {
-    lineFileAllInts(lf, row, 4, &bed->score, TRUE, 4, "integer", FALSE);
-    if (!isCt && (bed->score < 0 || bed->score > 1000))
-	    lineFileAbort(lf, "score (%d) must be between 0 and 1000", bed->score);
+    if ((opts & BED_FIX_SCORE) && !isAllDigits(row[4]))
+        bed->score = 0;
+    else
+        lineFileAllInts(lf, row, 4, &bed->score, TRUE, 4, "integer", FALSE);
+    if (bed->score < 0 || bed->score > 1000)
+        {
+        if (opts & BED_FIX_SCORE)
+            bed->score = min(max(bed->score, 0), 1000);
+        else if (!isCt)
+            lineFileAbort(lf, "score (%d) must be between 0 and 1000", bed->score);
+        // else allow out of range score for custom tracks
+        }
     }
 
 if (bedFieldCount > 5)
@@ -1651,7 +1661,7 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 	    }
 	// chrom blocks must ascend without overlap
         int fudge = 0;
-        if (allow1bpOverlap)
+        if (opts & BED_ALLOW_1BP_OVERLAP)
             fudge = -1;
         if (!(chromStarts[i] >= chromStarts[i-1] + blockSizes[i-1] + fudge))
 		lineFileAbort(lf, "BED blocks must be in ascending order without overlap. Blocks %d and %d overlap.", i-1, i);
@@ -1786,12 +1796,26 @@ if (as)
 
 }
 
+void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt,  boolean allow1bpOverlap)
+/* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
+ * If a customTrack, then some errors are tolerated. Possibly allow exons to overlap by one base. */
+{
+unsigned opts = 0;
+if (isCt)
+    opts |= BED_IS_CUSTOM_TRACK;
+if (allow1bpOverlap)
+    opts |= BED_ALLOW_1BP_OVERLAP;
+loadAndValidateBedOpts(row, bedFieldCount, fieldCount, lf, bed, as, opts);
+}
+   
+
 void loadAndValidateBed(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt)
 /* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
  * If a customTrack, then some errors are tolerated. */
 {
 loadAndValidateBedExt(row, bedFieldCount, fieldCount, lf, bed, as, isCt, FALSE);
 }
+
 
 
 struct bed3 *bed3LoadAll(char *fileName)

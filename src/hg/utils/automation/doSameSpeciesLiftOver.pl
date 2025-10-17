@@ -78,7 +78,7 @@ options:
     -querySizes  /path/query.chrom.sizes   Full path to query chrom.sizes (toDb)
     -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
     -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
-    -localTmp  /tmp  Full path to temporary storage for heavy I/O usage
+    -localTmp  /tmp  Full path to temporary storage for heavy I/O usage - UNUSED 2025-10
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -237,12 +237,29 @@ set targetList = \$1
 set queryListIn = \$2
 set outPsl = \$3
 
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  set tmpSz = `df --output=avail -k /tmp | tail -1`
+  set shmSz = `df --output=avail -k /dev/shm | tail -1`
+  if ( "\${shmSz}" > "\${tmpSz}" ) then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     setenv TMPDIR "/dev/shm/tmp"
+  else
+     setenv TMPDIR "/tmp"
+  endif
+endif
+
 if (\$targetList:e == "lst") set targetList = $runDir/\$targetList
 if (\$queryListIn:e == "lst") set queryListIn = $runDir/\$queryListIn
 
 # Use local disk for output, and move the final result to \$outPsl
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p $localTmp doSame.blat.XXXXXX`
+set tmpDir = `mktemp -d -p \$TMPDIR doSame.blat.XXXXXX`
 pushd \$tmpDir
 
 # We might get a .lst or a 2bit spec here -- convert to (list of) 2bit spec:
@@ -421,7 +438,24 @@ sub doChain {
 set inPattern = \$1
 set outChain = \$2
 
-set tmpOut = `mktemp -p $localTmp doSame.chain.XXXXXX`
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  set tmpSz = `df --output=avail -k /tmp | tail -1`
+  set shmSz = `df --output=avail -k /dev/shm | tail -1`
+  if ( "\${shmSz}" > "\${tmpSz}" ) then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     setenv TMPDIR "/dev/shm/tmp"
+  else
+     setenv TMPDIR "/tmp"
+  endif
+endif
+
+set tmpOut = `mktemp -p \$TMPDIR doSame.chain.XXXXXX`
 
 cat $pslDir/\$inPattern* \\
 | axtChain -verbose=0 -linearGap=medium -psl stdin \\
@@ -475,8 +509,24 @@ liftOver chains.";
   my $chromBased = (`wc -l < $tSizes` <= $HgAutomate::splitThreshold);
   my $lump = $chromBased ? "" : "-lump=100";
   $bossScript->add(<<_EOF_
+unsetenv TMPDIR
+if ( -d "/data/tmp" ) then
+  setenv TMPDIR "/data/tmp"
+else if ( -d "/scratch/tmp" ) then
+  setenv TMPDIR "/scratch/tmp"
+else
+  set tmpSz = `df --output=avail -k /tmp | tail -1`
+  set shmSz = `df --output=avail -k /dev/shm | tail -1`
+  if ( "\${shmSz}" > "\${tmpSz}" ) then
+     mkdir -p /dev/shm/tmp
+     chmod 777 /dev/shm/tmp
+     setenv TMPDIR "/dev/shm/tmp"
+  else
+     setenv TMPDIR "/tmp"
+  endif
+endif
 # Use local scratch disk... this can be quite I/O intensive:
-set tmpDir = `mktemp -d -p $localTmp doSame.blat.XXXXXX`
+set tmpDir = `mktemp -d -p \$TMPDIR doSame.blat.XXXXXX`
 
 # Merge up the hierarchy and assign unique chain IDs:
 mkdir \$tmpDir/chainMerged

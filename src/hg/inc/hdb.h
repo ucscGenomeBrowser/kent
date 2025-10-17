@@ -175,6 +175,9 @@ struct sqlConnection *hConnectCentral(void);
 void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+struct sqlConnection *hConnectCentralNoCache();
+/* open an hgcentral connection, but do not use the cache. Used before the bottleneck call. */
+
 struct sqlConnection *hConnectCart(void);
 /* Connect to cart database.  Defaults to the central connection
  * unless cart.db or cart.host are configured. Free this

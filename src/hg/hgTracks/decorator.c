@@ -104,7 +104,11 @@ if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
     int centeredBaseEnd = (baseStart + baseEnd + 1)/2;
     int centeredBaseMidpoint = (centeredBaseStart + centeredBaseEnd)/2;
     int middlePixel = round((double)(centeredBaseMidpoint - w->winStart)*scale);
-    startPixel = middlePixel - (tl.fontHeight/2);
+
+    if (parseGlyphType(d->glyph) == GLYPH_1PX)
+        startPixel = middlePixel;
+    else
+        startPixel = middlePixel - (tl.fontHeight/2);
     if (startPixel < 0)
         startPixel = 0;
     }
@@ -135,7 +139,10 @@ if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
     int centeredBaseMidpoint = (centeredBaseStart + centeredBaseEnd)/2;
     int middlePixel = round((double)(centeredBaseMidpoint - w->winStart)*scale);
     int start = middlePixel - (tl.fontHeight/2);
-    end = start + tl.fontHeight;
+    if (parseGlyphType(d->glyph) == GLYPH_1PX)
+        end = middlePixel;
+    else
+        end = start + tl.fontHeight;
     if (end > w->insideWidth)
         end = w->insideWidth;
     }
@@ -160,6 +167,11 @@ int itemY = y + rowsAbove*(tg->lineHeight);
 // Draw the primary track item without doing its mouseover yet
 tg->decoratorGroup->drawItemAt(tg, item, hvg, xOff, itemY, scale, font, color, vis);
 
+int primaryItemRows = 1;
+if (tg->itemHeightRowsForPack)
+    primaryItemRows = tg->itemHeightRowsForPack(tg, item);
+int overlayHeightPer = tg->heightPer*primaryItemRows;
+
 // Draw overlay decorations and their labels, as the labels will ascend above the item
 int yOffset = itemY - tg->lineHeight;
 for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
@@ -173,11 +185,11 @@ for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
             for (hel = hashLookup(td->hash, itemName); hel != NULL; hel = hashLookupNext(hel))
                 {
                 struct decoration *d = hel->val;
-                drawDecoration(d, hvg, scale, xOff, itemY, tg->heightPer, font, TRUE);
+                drawDecoration(d, hvg, scale, xOff, itemY, overlayHeightPer, font, TRUE);
                 // in the future, we might want to break out the outline drawing until after all
                 // the fill blocks are drawn.  That way we won't risk overwriting boundary lines
                 // with the fill blocks of subsequent, overlapping decorations.
-                drawDecoration(d, hvg, scale, xOff, itemY, tg->heightPer, font, FALSE);
+                drawDecoration(d, hvg, scale, xOff, itemY, overlayHeightPer, font, FALSE);
                 drawDecorationMouseover(d, td->decTdb, tg, item, hvg, scale, xOff, itemY, tg->heightPer, TRUE);
                 }
             // draw any packed decoration labels unless we're in dense or squish
@@ -224,7 +236,7 @@ for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
     }
 
 // now to draw adjacent blocks underneath the item, but at half height
-yOffset = itemY + tg->lineHeight;
+yOffset = itemY + tg->lineHeight*primaryItemRows;
 for (td = tg->decoratorGroup->decorators; td != NULL; td = td->next)
     {
     if (td->style == DECORATION_STYLE_BLOCK && decoratorDrawMode(td->decTdb, cart, td->style) == DECORATOR_MODE_ADJACENT)
@@ -883,6 +895,10 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
     struct decoration *newDec = decorationFromInterval(chrom, thisInterval);
     // have to assemble any custom mouseover text here because it may depend on extra bbi fields
     // that won't be included in the decoration structure
+    bool reduceGlyphs = FALSE;
+    long basesInImage = insideWidth*basesPerPixel;
+    if (basesInImage > decoratorUiMaxLabeledBaseCount(decTdb, cart))
+        reduceGlyphs = TRUE;
     char *mouseOverText = mouseOverGetBbiText(mouseScheme, thisInterval, chrom);
     if (decorationGetStyle(newDec) == DECORATION_STYLE_BLOCK)
         {
@@ -890,6 +906,11 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
         }
     else if (decorationGetStyle(newDec) == DECORATION_STYLE_GLYPH)
         {
+        if (reduceGlyphs)
+            {
+            freeMem(newDec->glyph);
+            newDec->glyph = cloneString(GLYPH_STRING_1PX);
+            }
         addToDecorator(newGlyphs, newDec, mouseOverText);
         }
     else
@@ -1250,7 +1271,6 @@ Color outlineColor = bedColorToGfxColor(d->color);
 Color fillColor = bedColorToGfxColor(bedParseColor(d->fillColor));
 drawScaledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
                  heightPer, glyph, filled, outlineColor, fillColor);
-
 }
 
 

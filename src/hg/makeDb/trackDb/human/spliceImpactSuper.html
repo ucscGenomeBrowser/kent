@@ -36,9 +36,9 @@ is provided by the Broad institute.
 This SpliceAI &quot;Wildtype&quot; container track shows the scores for the genome sequence itself,
 without variants, from predicted splice donor (5&apos; intron boundaries) and splice acceptor
 (3&apos; intron boundaries) sites. Predictions are strand-specific, with separate subtracks for the
-plus and minus strands. These tracks are useful when looking at new transcript models to evaluate
-how likely exon boundaries are and where possible splice acceptor sites are, in combination with
-the variants track.</p>
+plus and minus strands. These tracks are useful in combination with the variants track for
+evaluating new transcript models. They can be used to assess potential exon boundaries or
+possible splice acceptor sites.</p>
 
 <b>Why are some variants not scored by SpliceAI?</b>
 <p>
@@ -108,6 +108,13 @@ a table with this information.
 The scores range from 0 to 1 and can be interpreted as the
 probability of the variant being splice-altering. In the paper, a detailed characterization is
 provided for 0.2 (high recall), 0.5 (recommended), and 0.8 (high precision) cutoffs.</p>
+
+<h3>SpliceAI Wildtype</h3>
+<p>
+These tracks are in bigWig format. The signal height represents the SpliceAI probability score.
+This track may be configured in a variety of ways to highlight different aspects of the displayed
+information. Click the "Graph configuration help" link for an explanation of configuration
+options.</p>
 
 <h3>SpliceVarDB</h3>
 <p>According to the strength of their supporting
@@ -241,9 +248,11 @@ binary for your system. Instructions for downloading source code and binaries ca
 
 <h2>Credits</h2>
 
-<p>Thanks to Illumina for making available SpliceAI, both the model and the precomputed data files.</p>
+<p>Thanks to Illumina for making SpliceAI available, both the model and the precomputed data files.</p>
 
-<p>Thanks to Francois Lecoquierre from the University of Oxford, Jean-Madeleine de Sainte Agathe from Institut Pasteur Paris and Michael Hiller from the Senckenberg Museum Frankfurt for suggesting and then creating the SpliceAI wildtype annotations.</p>
+<p>Thanks to Francois Lecoquierre from the University of Oxford, Jean-Madeleine de Sainte Agathe
+from Institut Pasteur Paris, and Michael Hiller from the Senckenberg Museum Frankfurt for
+suggesting and then creating the SpliceAI Wildtype annotations.</p>
 
 <p>Thanks to Nils Wagner for helpful comments and suggestions for the AbSplice track.</p>
 

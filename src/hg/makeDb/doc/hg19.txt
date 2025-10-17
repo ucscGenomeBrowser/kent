@@ -35938,3 +35938,10 @@ file  /gbdb/hg19/hgnc/*
 # if not already done for hg38:
 # edit trackDb/human/trackDb.ra to set filterValues.locus_type
 # from the locus_type.filter.txt file
+
+#############################################################################
+# gnomad MPC 2025-10-17 max
+cd /hive/data/genomes/hg19/bed/gnomad/mpc
+wget https://storage.googleapis.com/gcp-public-data--gnomad/release/2.1.1/regional_missense_constraint/gnomAD_v2.1.1_transcripts_with_rmc.tsv
+cat gnomAD_v2.1.1_transcripts_with_rmc.tsv | python ~/kent/src/hg/makeDb/gnomad/gnomadMpcToBed.py | sort -k1,2n > mpc.bed
+bedToBigBed mpc.bed ../../../chrom.sizes mpc.bb -as=~/kent/src/hg/makeDb/gnomad/mpc.as -type=bed9+ -tab

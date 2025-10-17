@@ -15,14 +15,16 @@ endif
 my::
 	rm -f ${CGI_BIN_USER}/hgMirror
 	cp -p hgMirror ${CGI_BIN_USER}/
-	# can only delete temp files as the apache user
-	curl -s "http://hgwdev-${USER}.soe.ucsc.edu/cgi-bin/hgMirror?reset=1" || true
 beta::
 	rm -f ${CGI_BIN_BETA}/hgMirror
 	cp -p hgMirror ${CGI_BIN_BETA}/
+	# can only delete temp files as the apache user
+	curl -s "http://hgwdev-${USER}.soe.ucsc.edu/cgi-bin/hgMirror?reset=1" || true
 alpha::
 	rm -f ${CGI_BIN}/hgMirror
 	cp -p hgMirror ${CGI_BIN}/
+	# can only delete temp files as the apache user
+	curl -s "http://hgwdev-${USER}.soe.ucsc.edu/cgi-bin/hgMirror?reset=1" || true
 clean::
 
 compile::
