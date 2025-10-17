@@ -1,0 +1,67 @@
+track LCRs
+superTrack on show
+type bed 4
+shortLabel LCRs
+longLabel Low complexity regions from Heng Li, longdust measurements
+html LCRs
+group map
+
+track hs1LCR
+parent LCRs
+shortLabel LCR
+longLabel low-complexity regions excluding alpha and HSAT2/3 satellites.
+type bigBed 5 .
+visibility hide
+priority 1
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.lcr-v4.bb
+html LCRs
+
+track hs1CenMask
+parent LCRs
+shortLabel Cent-Sat
+longLabel Centromeric satellite repeats
+type bigBed 4 .
+visibility hide
+priority 2
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.cen-mask.bb
+html LCRs
+
+track hs1PAR
+parent LCRs
+shortLabel PAR region
+longLabel the PAR regions on chrX, chrY
+type bigBed 4 .
+visibility hide
+priority 3
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.PAR.bb
+html LCRs
+
+track lcrANDTrf
+parent LCRs
+shortLabel in LCR AND TRF
+longLabel intersection of LCR track and the trf/simpleRepeats track
+type bigBed 4 .
+visibility hide
+priority 4
+bigDataUrl /gbdb/hs1/LCRs/lcr.AND.trf.bb
+html LCRs
+
+track inLcrNotTrf
+parent LCRs
+shortLabel in LCR not TRF
+longLabel areas in the LCR track not in the trf/simpleRepeats track
+type bigBed 4 .
+visibility hide
+priority 5
+bigDataUrl /gbdb/hs1/LCRs/inLcrNotTrf.bb
+html LCRs
+
+track inTrfNotLcr
+parent LCRs
+shortLabel in TRF not LCR
+longLabel areas in the TRF track not in the LCR
+type bigBed 4 .
+visibility hide
+priority 5
+bigDataUrl /gbdb/hs1/LCRs/inTrfNotLcr.bb
+html LCRs

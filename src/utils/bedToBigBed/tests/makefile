@@ -2,7 +2,8 @@ kentSrc = ../../..
 A = bedToBigBed
 include ../../../inc/common.mk
 
-test: testOddSorted testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin testCompress testNotSorted
+test: testOddSorted testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin \
+	testCompress testNotSorted testFixScores
 
 # use ! cmd 2> output/$@.err || (${shouldHaveFailed})
 shouldHaveFailed = echo "Error: command should have failed" >&2 && false
@@ -100,6 +101,12 @@ testStdin: outputDir
 test2bitMissingSeq: outputDir ${fakeGenomeTwoBit}
 	! ${BINDIR}/${A} -tab -type=bed4 -as=input/tabSep.as -sizesIs2Bit input/tabSep.bed ${fakeGenomeTwoBit} output/tabSep.bb 2> output/$@.err || (${shouldHaveFailed})
 	diff expected/$@.err output/$@.err
+
+testFixScores: outputDir
+	${BINDIR}/${A} -fixScores -verbose=0 -type=bed9 -as=input/itemRgb.as input/badScores.bed input/chrom.sizes output/fixScores.bb
+	bigBedToBed output/fixScores.bb output/fixScores.bed
+	diff expected/fixScores.bed output/fixScores.bed
+
 
 ${fakeGenomeTwoBit}: outputDir input/fakeGenome.fa
 	faToTwoBit input/fakeGenome.fa $@ 

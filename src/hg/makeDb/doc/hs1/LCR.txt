@@ -1,0 +1,187 @@
+
+# LCR - Low Complexity Regions from Heng Li
+# 2025-10-15 - Hiram
+
+From Heng Li paper:
+
+  https://arxiv.org/abs/2509.23057
+
+Download files from:
+
+  https://zenodo.org/records/17204470
+
+Specifically:
+
+ chm13v2.cen-mask.bed
+ chm13v2.PAR.bed
+ chm13v2.lcr-v4.bed.gz
+
+mkdir /hive/data/genomes/hs1/bed/LCR
+cd /hive/data/genomes/hs1/bed/LCR
+
+# the chromEnd coordinates in chm13v2.lcr-v4.bed.gz were all 5 bp beyond
+#   the ends of the chromosomes, fixed the coordinates:
+#   zcat chm13v2.lcr-v4.bed.gz > chm13v2.lcr-v4.bed
+#   Edited the chm13v2.lcr-v4.bed file to fix those coordinates,
+#   discovered by running bedToBigBed on the file
+
+#   I added a name column to chm13v2.cen-mask.bed to identify
+#    the type of centromere:
+# chr13   0       17508596        acrocentric p-arm
+# chr14   0       12708411        acrocentric p-arm
+# chr15   0       17694466        acrocentric p-arm
+# chr21   0       11306378        acrocentric p-arm
+# chr22   0       15711065        acrocentric p-arm
+
+And all the others were named:
+
+# chr1    121619169       142242033       pericentromeric region
+
+# and, gave names to the items in chm13v2.PAR.bed
+
+# chrX    0       2394410 chrX PAR1
+# chrX    153925834       154259566       chrX PAR2
+# chrY    0       2458320 chrY PAR1
+# chrY    62122809        62460029        chrY PAR2
+
+# resulting source files here:
+# -rw-r--r-- 1      118 Oct 14 09:36 chm13v2.PAR.bed
+# -rw-r--r-- 1     1013 Oct 14 09:47 chm13v2.cen-mask.bed
+# -rw-rw-r-- 1  3971675 Oct 14 09:57 chm13v2.lcr-v4.bed
+
+## converting to bigBed files:
+
+bedToBigBed -tab -type=bed4 chm13v2.PAR.bed ../../chrom.sizes chm13v2.PAR.bb
+
+bedToBigBed -tab -type=bed4 chm13v2.cen-mask.bed ../../chrom.sizes \
+  chm13v2.cen-mask.bb
+
+bedToBigBed -type=bed4+1 -as=lcr.as chm13v2.lcr-v4.bed \
+  ../../chrom.sizes chm13v2.lcr-v4.bb
+
+## and then intersecting with simple repeats
+
+### fix the chrom names in simpleRepeat.bed.gz, get a sed file:
+
+grep -v "^#" ../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt \
+  | awk -F$'\t' '{printf "s/%s/%s/;\n", $1, $5}' > genbank.ucsc.sed
+
+head genbank.ucsc.sed
+
+s/CP068254.1/chrM/;
+s/CP068255.2/chrX/;
+s/CP068256.2/chr22/;
+
+
+ln -s /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/simpleRepeat/simpleRepeat.bed.gz ./
+
+zcat simpleRepeat.bed.gz | sed -f genbank.ucsc.sed | bedSingleCover.pl stdin > trf.singleCover.bed
+
+bedToBigBed -tab -type=bed4 trf.singleCover.bed ../../chrom.sizes trf.singleCover.bb
+
+bedSingleCover.pl chm13v2.lcr-v4.bed > chm13v2.lcr-v4.singleCover.bed
+
+bedIntersect -minCoverage=0.0000000014 trf.singleCover.bed \
+    chm13v2.lcr-v4.singleCover.bed stdout | sort -k1,1 -k2,2n > lcr.AND.trf.bed
+
+bedToBigBed -tab -type=bed4 lcr.AND.trf.bed ../../chrom.sizes lcr.AND.trf.bb
+
+bedInvert.pl ../../chrom.sizes chm13v2.lcr-v4.singleCover.bed \
+    > chm13v2.lcr-v4.invert.bed
+
+bedInvert.pl ../../chrom.sizes trf.singleCover.bed > trf.invert.bed
+
+bedIntersect -minCoverage=0.0000000014 trf.invert.bed \
+    chm13v2.lcr-v4.singleCover.bed stdout | sort -k1,1 -k2,2n \
+       > in.lcr.not.trf.bed
+
+bedIntersect -minCoverage=0.0000000014 chm13v2.lcr-v4.invert.bed \
+   trf.singleCover.bed stdout | sort -k1,1 -k2,2n > in.trf.not.lcr.bed
+
+bedToBigBed -tab -type=bed4 in.trf.not.lcr.bed ../../chrom.sizes inTrfNotLcr.bb
+
+bedToBigBed -tab -type=bed4 in.lcr.not.trf.bed ../../chrom.sizes inLcrNotTrf.bb
+
+for F in *.bb
+do
+  printf "bigBedInfo $F:\t"
+  bigBedInfo $F | grep basesCovered
+done
+bigBedInfo trf.singleCover.bb:  basesCovered: 277,065,041
+bigBedInfo inTrfNotLcr.bb:      basesCovered: 215,694,223
+bigBedInfo chm13v2.cen-mask.bb: basesCovered: 202,448,824
+bigBedInfo chm13v2.lcr-v4.bb:   basesCovered: 79,604,249
+bigBedInfo lcr.AND.trf.bb:      basesCovered: 61,370,818
+bigBedInfo inLcrNotTrf.bb:      basesCovered: 18,233,431
+bigBedInfo chm13v2.PAR.bb:      basesCovered: 5,523,682
+
+########## in trackDb/human/hs1 add LCR.ra file to define the tracks:
+
+track LCRs
+superTrack on show
+type bed 4
+shortLabel LCRs
+longLabel Low complexity regions from Heng Li, longdust measurements
+html LCRs
+group map
+
+track hs1LCR
+parent LCRs
+shortLabel LCR
+longLabel low-complexity regions excluding alpha and HSAT2/3 satellites.
+type bigBed 5 .
+visibility hide
+priority 1
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.lcr-v4.bb
+html LCRs
+
+track hs1CenMask
+parent LCRs
+shortLabel Cent-Sat
+longLabel Centromeric satellite repeats
+type bigBed 5 .
+visibility hide
+priority 2
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.cen-mask.bb
+html LCRs
+
+track hs1PAR
+parent LCRs
+shortLabel PAR region
+longLabel the PAR regions on chrX, chrY
+type bigBed 4 .
+visibility hide
+priority 3
+bigDataUrl /gbdb/hs1/LCRs/chm13v2.PAR.bb
+html LCRs
+
+track lcrANDTrf
+parent LCRs
+shortLabel in LCR AND TRF
+longLabel intersection of LCR track and the trf/simpleRepeats track
+type bigBed 4 .
+visibility hide
+priority 4
+bigDataUrl /gbdb/hs1/LCRs/lcr.AND.trf.bb
+html LCRs
+
+track inLcrNotTrf
+parent LCRs
+shortLabel in LCR not TRF
+longLabel areas in the LCR track not in the trf/simpleRepeats track
+type bigBed 4 .
+visibility hide
+priority 5
+bigDataUrl /gbdb/hs1/LCRs/inLcrNotTrf.bb
+html LCRs
+
+track inTrfNotLcr
+parent LCRs
+shortLabel in TRF not LCR
+longLabel areas in the TRF track not in the LCR
+type bigBed 4 .
+visibility hide
+priority 5
+bigDataUrl /gbdb/hs1/LCRs/inTrfNotLcr.bb
+html LCRs
+

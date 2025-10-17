@@ -1,0 +1,99 @@
+# LCR - Low Complexity Regions from Heng Li
+# 2025-10-15 - Hiram
+
+From Heng Li paper:
+
+  https://arxiv.org/abs/2509.23057
+
+Download files from:
+
+  https://zenodo.org/records/17204470
+
+Specifically:
+
+-rw-r--r-- 1     532 Oct 15 10:53 hg38.cen-mask.bed
+-rw-r--r-- 1   17455 Oct 15 10:54 hg38.gap50.bed
+-rw-r--r-- 1     288 Oct 15 10:54 hg38.immuno.bed
+-rw-r--r-- 1 1180317 Oct 15 10:55 hg38.lcr-v4.bed.gz
+-rw-r--r-- 1      78 Oct 15 10:55 hg38.PAR.bed
+-rw-r--r-- 1   74114 Oct 15 10:56 hg38.SD.bed.gz
+
+# added names to hg38.PAR.bed
+
+# chrX    0       2781479 chrX PAR1
+# chrX    155701382       156040895       chrX PAR2
+# chrY    0       2781479 chrY PAR1
+# chrY    56887902        57227415        chrY PAR2
+
+bedToBigBed -type=bed4 -tab hg38.PAR.bed ../../chrom.sizes hg38.PAR.bb
+
+bedToBigBed -type=bed4+1 -as=lcr.as hg38.lcr-v4.bed.gz \
+    ../../chrom.sizes hg38.lcr-v4.bb
+
+# where lcr.as is:
+
+table lcr
+"LCRs - low-complexity regions"
+    (
+    string chrom;      "Reference sequence chromosome"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "'ldust' for longdust regions 50bp or longer, 'mg' for regions overlapping with minigraph LCR SVs"
+    uint   longestAllele;   "Longest allele in each LCR" 
+    )
+
+### added names to the cen-mask.bed file:
+# chr13   0       18196955        acrocentric p-arm
+# chr14   0       19387465        acrocentric p-arm
+# chr15   0       19796638        acrocentric p-arm
+# chr21   0       12967873        acrocentric p-arm
+# chr22   0       15917438        acrocentric p-arm
+
+# and the rest are:
+# chr1    121616702       143242010       pericentromeric region
+
+bedToBigBed -type=bed3 -tab hg38.SD.bed.gz ../../chrom.sizes hg38.SD.bb
+bedToBigBed -type=bed4 -tab hg38.cen-mask.bed ../../chrom.sizes hg38.cen-mask.bb
+bedToBigBed -type=bed6 -tab hg38.immuno.bed ../../chrom.sizes hg38.immuno.bb
+
+### intersecting the LCR with simpleRepeat track
+
+bedSingleCover.pl ../simpleRepeat/simpleRepeat.bed > trf.singleCover.bed
+ bedToBigBed -tab -type=bed4 trf.singleCover.bed ../../chrom.sizes trf.singleCover.bb
+
+zcat hg38.lcr-v4.bed.gz | bedSingleCover.pl stdin > hg38.lcr-v4.singleCover.bed
+bedIntersect -minCoverage=0.0000000014 trf.singleCover.bed \
+    hg38.lcr-v4.singleCover.bed stdout | sort -k1,1 -k2,2n > lcr.AND.trf.bed
+
+bedToBigBed -tab -type=bed4 lcr.AND.trf.bed ../../chrom.sizes lcr.AND.trf.bb
+bedInvert.pl ../../chrom.sizes hg38.lcr-v4.singleCover.bed \
+    > hg38.lcr-v4.invert.bed
+
+bedInvert.pl ../../chrom.sizes trf.singleCover.bed > trf.invert.bed
+bedIntersect -minCoverage=0.0000000014 trf.invert.bed \
+    hg38.lcr-v4.singleCover.bed stdout | sort -k1,1 -k2,2n \
+       > in.lcr.not.trf.bed
+
+bedIntersect -minCoverage=0.0000000014 hg38.lcr-v4.invert.bed \
+   trf.singleCover.bed stdout | sort -k1,1 -k2,2n > in.trf.not.lcr.bed
+
+bedToBigBed -tab -type=bed4 in.trf.not.lcr.bed ../../chrom.sizes inTrfNotLcr.bb
+bedToBigBed -tab -type=bed4 in.lcr.not.trf.bed ../../chrom.sizes inLcrNotTrf.bb
+
+### checking coverage of these tracks:
+
+for F in *.bb
+do
+  printf "bigBedInfo $F:\t"
+  bigBedInfo $F | grep basesCovered
+done
+
+bigBedInfo hg38.cen-mask.bb:    basesCovered: 194,042,334
+bigBedInfo hg38.SD.bb:  basesCovered: 175,429,664
+bigBedInfo trf.singleCover.bb:  basesCovered: 146,785,521
+bigBedInfo inTrfNotLcr.bb:      basesCovered: 116,912,031
+bigBedInfo hg38.lcr-v4.bb:      basesCovered: 35,426,253
+bigBedInfo hg38.immuno.bb:      basesCovered: 12,326,162
+bigBedInfo lcr.AND.trf.bb:      basesCovered: 29,873,490
+bigBedInfo hg38.PAR.bb: basesCovered: 6,241,984
+bigBedInfo inLcrNotTrf.bb:      basesCovered: 5,552,763

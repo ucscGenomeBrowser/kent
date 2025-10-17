@@ -5,9 +5,10 @@ longLabel SpliceAI Wildtype: Splicing of the reference genome sequence
 group phenDis
 parent spliceImpactSuper on
 type bigWig
-visibility dense
+visibility full
 priority 2
 html spliceImpactSuper
+pennantIcon New red ../goldenPath/newsarch.html#101625 "Released Oct. 16, 2025"
 
     track spliceAiAccPlus
     type bigWig 0 1

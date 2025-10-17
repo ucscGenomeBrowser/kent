@@ -273,6 +273,17 @@ foreach my $queryDb (@queryList) {
   $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
   $QueryDb = ucfirst($queryDb);
 
+  # there may be a quickLift without the chainLiftOver track files
+  if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quick.bb" ) {
+      printf STDERR  "### $targetDb.chainQuickLift${QueryDb}.bb\n";
+      `rm -f $buildDir/quickLift/${queryDb}.bb`;
+      `rm -f $buildDir/quickLift/${queryDb}.link.bb`;
+      `ln -s ../trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quick.bb  $buildDir/quickLift/${queryDb}.bb`;
+      `ln -s ../trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quickLink.bb  $buildDir/quickLift/${queryDb}.link.bb`;
+  } else {
+      printf STDERR  "### NOT FOUND: $buildDir/trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quick.bb\n";
+  }
+
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}.bb" ) {
     printf STDERR "### $targetDb.chainLiftOver${QueryDb}.bb\n";
     `rm -f $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}.bb`;
@@ -280,15 +291,6 @@ foreach my $queryDb (@queryList) {
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}.bb  $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}.bb`;
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}Link.bb`;
 
-    if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quick.bb" ) {
-      printf STDERR  "### $targetDb.chainQuickLift${QueryDb}.bb\n";
-      `rm -f $buildDir/quickLift/${queryDb}.bb`;
-      `rm -f $buildDir/quickLift/${queryDb}.link.bb`;
-      `ln -s ../trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quick.bb  $buildDir/quickLift/${queryDb}.bb`;
-      `ln -s ../trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quickLink.bb  $buildDir/quickLift/${queryDb}.link.bb`;
-    } else {
-      printf STDERR  "### NOT FOUND: $buildDir/trackData/lastz.$queryDb/axtChain/${targetAccession}.${queryDb}.quick.bb\n";
-    }
     if ( $queryDb !~ m/^GC/ ) {
       $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
       chomp $queryDate;

@@ -158,7 +158,9 @@ var suggestBox = {
 
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
-        $('#positionInput').on("focus", function() {$(this).autocompletePosInput("search", "");});
+        if (typeof $(this).autocompletePosInput !== 'undefined') {
+            $('#positionInput').on("focus", function() {$(this).autocompletePosInput("search", "");});
+        }
         $("#positionInput").on("change", function(event) {
             if (!lastSelected || lastSelected !== $('#positionInput').val()) {
                 // This handles case where user typed or edited something rather than choosing from a suggest list;
