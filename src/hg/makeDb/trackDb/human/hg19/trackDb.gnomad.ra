@@ -932,6 +932,21 @@ html gnomad
     detailsStaticTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
 
+    track gnomadMpc
+    parent gnomadSuper
+    shortLabel gnomAD MPC
+    longLabel Genome Aggregation Database (gnomAD) - MPC: Missense Deleteriousness Prediction by Constraint
+    visibility pack
+    group varRep
+    type bigBed 9 +
+    mouseOver <b>Transcript:</b> $trans<br><b>OE Obs/Exp:</b> $oe<br><b>Chi-Square:</b> $chisq<br><b>P-Val:</b>$pval
+    bigDataUrl /gbdb/hg19/gnomAD/mpc/mpc.bb
+    #spectrum on
+    itemRgb on
+    dataVersion Oct 2025
+    html gnomadMpc.html
+    noParentConfig on
+
 searchTable pliByTranscript
 searchType bigBed
 searchDescription gnomAD Loss of Function Metrics by Transcript
