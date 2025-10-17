@@ -1265,10 +1265,14 @@ span.gbSessionChanged {
     color: red;
 }
 
-td.searchCell {
+td.searchCell > .flexContainer {
     display: flex;
     align-items: center;
     gap: 0.5em;
+}
+
+td.searchCell:first-child {
+    padding-right: 1em;
 }
 
 .genomeSearchBarDefault {

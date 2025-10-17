@@ -896,6 +896,18 @@ struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList, NULL, NULL);
 }
 
+char *getCurrentGenomeLabel(char *db)
+/* Construct a label from dbDb (or dbDb related for an assembly hub) for the currently
+ * selected genome */
+{
+// TODO: what if 'db' is a reference to an assembly hub or genark?
+struct dbDb *info = hDbDb(db);
+if (info)
+    return cloneString(info->description);
+else
+    return cloneString(db);
+}
+
 void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean withSearchButton)
 /* Prints an input text box that can be used to search for any genome.
  * param withSearchButton - controls if there is a button next to the bar
@@ -908,6 +920,7 @@ void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean w
  * The caller CGI needs to include  jquery-ui.js and utils.js to turn this into a
  * useable search bar with autocomplete */
 {
+printf("<div class='flexContainer'>\n"); // for styling purposes
 printf("<input id='%s' type='text' ", id);
 if (isNotEmpty(placeholder))
     printf("placeholder='%s' ", placeholder);
@@ -915,6 +928,7 @@ printf("class='%s' ", isNotEmpty(classStr) ? classStr : "genomeSearchBarDefault"
 printf("></input>\n");
 if (withSearchButton)
     printf("<input id='%sButton' value='search' type='button'></input>", id);
+printf("</div>\n");
 }
 
 static char *getDbForGenome(char *genome, struct cart *cart)
