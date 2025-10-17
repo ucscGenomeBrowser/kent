@@ -158,9 +158,11 @@ else
 fi
 
 export totalBases=`ave -col=2 "${querySizes}" | grep "^total" | awk '{printf "%d", $2}'`
-export basesCovered=`bedSingleCover.pl ${targetAcc}.${queryAcc}.quick.link.txt | ave -col=4 stdin | grep "^total" | awk '{printf "%d", $2}'`
+export basesCovered=`bigBedInfo ${targetAcc}.${queryAcc}.quickLink.bb | grep basesCovered | cut -d' ' -f2 | tr -d ','`
 export percentCovered=`echo $basesCovered $totalBases | awk '{printf "%.3f", 100.0*$1/$2}'`
 printf "%d bases of %d (%s%%) in intersection\n" "$basesCovered" "$totalBases" "$percentCovered" > "${fbTargetQuery}"
+printf "# %s %s %s\n" "${targetAcc}" "${queryAcc}" "`cat ${fbTargetQuery}`" 1>&2
+rm -f ${targetAcc}.${queryAcc}.quick.chain.txt ${targetAcc}.${queryAcc}.quick.link.txt
 
 if [[ $target == GC* ]]; then
     cd "${targetDir}"
