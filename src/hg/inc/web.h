@@ -249,6 +249,10 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
+char *getCurrentGenomeLabel(char *db);
+/* Construct a label from dbDb (or dbDb related for an assembly hub) for the currently
+ * selected genome */
+
 void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean withSearchButton);
 /* Prints an input text box that can be used to search for any genome.
  * param withSearchButton - controls if there is a button next to the bar

@@ -2101,26 +2101,27 @@ char *searchBarId = "genomeSearch";
 printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE);
 jsInlineF(
     "function blatSelect(selectEle, item) {\n"
-    "   let newOpt = document.createElement(\"option\");\n"
-    "   newOpt.value = item.genome;\n"
-    "   newOpt.label = item.label;\n"
-    "   newOpt.selected = true;\n"
-    "   selectEle.appendChild(newOpt);\n"
-    "   const event = new Event(\"change\");\n"
-    "   selectEle.dispatchEvent(event);\n"
+    "   selectEle.innerHTML = item.label;\n"
     "}\n\n"
     "document.addEventListener(\"DOMContentLoaded\", () => {\n"
     "    // bind the actual <select> to the function blatSelect, that way\n"
     "    // initSpeciesAutoCompleteDropdown can call the function\n"
-    "    let selectEle = document.querySelector(\"select[name=db]\");\n"
+    "    let selectEle = document.getElementById(\"genomeLabel\");\n"
     "    let boundSelect = blatSelect.bind(null, selectEle);\n"
     "    initSpeciesAutoCompleteDropdown('%s', boundSelect);\n"
+    "    // make the search button trigger the autocomplete manually\n"
+    "    let btn = document.getElementById(\"%sButton\");\n"
+    "    btn.addEventListener(\"click\", () => {\n"
+    "        let val = document.getElementById(\"%s\").value;\n"
+    "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
+    "    });\n"
     "});\n"
-    , searchBarId
+    , searchBarId, searchBarId, searchBarId, searchBarId
 );
 printf("</TD>\n");
-printf("<TD ALIGN=CENTER>\n");
-printBlatAssemblyListHtml(db);
+printf("<TD id='genomeLabel' class='searchCell' ALIGN=CENTER>\n");
+char *dbLabel = getCurrentGenomeLabel(db);
+printf("%s\n", dbLabel);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 if (orgChange)
