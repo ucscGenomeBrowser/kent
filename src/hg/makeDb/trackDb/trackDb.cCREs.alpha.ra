@@ -1,0 +1,19 @@
+# ENCODE 3 tracks
+
+track encodeCcreCombined
+type bigBed 9 +
+shortLabel ENCODE cCREs
+longLabel ENCODE Candidate Cis-Regulatory Elements (cCREs) combined from all cell types
+bigDataUrl /gbdb/$D/encode3/ccre/encodeCcreCombined.bb
+bedNameLabel ENCODE Accession
+urlLabel cCRE details at ENCODE SCREEN:
+filterValues.ucscLabel prom|promoter-like signature (PLS/prom),enhP|proximal enhancer-like signature (pELS/enhP),enhD|distal enhancer-like signature (dELS/enhD),CTCF|CTCF only (CTCF/CTCF-only),K4m3|DNase-H3K4me3 (DNase-H3K4me3/k4m3)
+filterLabel.ucscLabel cCRE classification
+group regulation
+visibility dense
+priority 1
+darkerLabels on
+labelFields accessionLabel,ucscLabel,encodeLabel
+defaultLabelFields accessionLabel,ucscLabel
+skipFields encodeLabel,ucscLabel,accessionLabel,description
+mouseOver <b>Accession</b>: $name<br> <b>Classification</b>: $ccre<br>
