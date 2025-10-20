@@ -156,8 +156,8 @@ the perspective of the genomic sequence. Also, in bosTau9, galGal5, rheMac10,
 and danRer11 the mitochondrial sequence was removed or renamed to match UCSC.
 For complete documentation of the processing of these tracks, see the makedoc corresponding
 to the version of interest. For example, the
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp7.txt">
-EVA Release 7 MakeDoc</a>.</p>
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp8.txt">
+EVA Release 8 MakeDoc</a>.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -176,14 +176,14 @@ information.</p>
 For automated download and analysis, this annotation is stored in a bigBed file that
 can be downloaded from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/"
 target="_blank">our download server</a>. Use the corresponding version number for the track
-of interest, e.g. <tt>evaSnp7.bb</tt>.
+of interest, e.g. <tt>evaSnp8.bb</tt>.
 Individual regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.
 <br><br>
-<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp7.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp8.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 
 <h2>Credits</h2>
