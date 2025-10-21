@@ -1,0 +1,27 @@
+track cCREs
+superTrack on show
+shortLabel ENCODE cCREs ALPHA 
+longLabel ENCODE Registry of cCREs (candidate Cis-Regulatory Elements) 
+group regulation
+canPack On
+priority 1
+pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "XXX"
+
+track encodeCcreCombined override
+superTrack cCREs hide
+
+track cCREregistry
+shortLabel cCRE Registry
+longLabel Candidate cis-regulatory elements (cCREs) from the ENCODE Registry
+type bigBed 9 + 5
+bigDataUrl /gbdb/$D/encode4/ccre/encodeCcreRegistry.bb
+visibility dense
+maxHeightPixels 50
+priority 1
+filterValues.cCRE_class CA|Chromatin accessibility (CA),CA-CTCF|Chromatin accessibility + CTCF (CA-CTCF),CA-H3K4me3|Chromatin accessibility + H3K4me3 (CA-H3K4me3),CA-TF|Chromatin accessibility + transcription factor (CA-TF),dELS|TSS-distal enhancer-like signatures (distal enhancer),pELS|TSS-proximal enhancer-like signatures (proximal enhancer),PLS|Promoter-like signatures (promoter),TF|Transcription factor (TF)
+superTrack cCREs show
+filterType.cCRE_class multipleListOr
+mouseOver <b>ID:</b> ${name}<br><b>Class:</b> ${cCRE_class}
+url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$&page=2
+urlLabel cCRE details on SCREEN:
+html ccre.html

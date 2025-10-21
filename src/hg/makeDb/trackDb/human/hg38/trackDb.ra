@@ -668,7 +668,8 @@ include trackDb.gencode.ra
 
 include wgEncodeReg.ra
 
-include encode3.ra 
+include encode3.ra beta,public
+include encode.cCREs.override.ra alpha 
 
 include hic.ra
 
