@@ -147,7 +147,8 @@ if (wordCount < 2)
     bfBadHeader(bf);
 bf->program = cloneString(words[0]);
 bf->version = cloneString(words[1]);
-bf->buildDate = cloneString(words[2]);
+if (wordCount > 2)
+    bf->buildDate = cloneString(words[2]);
 if (!wildMatch("*BLAST*", bf->program))
     bfBadHeader(bf);
 if (!isdigit(bf->version[0]))
