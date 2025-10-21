@@ -2098,7 +2098,7 @@ printf("<TD class='searchCell' ALIGN=CENTER>\n");
 jsIncludeAutoCompleteLibs();
 char *searchPlaceholder = "Search any species, genome or assembly name";
 char *searchBarId = "genomeSearch";
-printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE);
+printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, NULL, NULL);
 jsInlineF(
     "function blatSelect(selectEle, item) {\n"
     "   selectEle.innerHTML = item.label;\n"
