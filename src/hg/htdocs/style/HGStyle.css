@@ -1267,8 +1267,14 @@ span.gbSessionChanged {
 
 td.searchCell > .flexContainer {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 0.5em;
+}
+
+.searchBarAndButton {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
 }
 
 td.searchCell:first-child {

@@ -33,6 +33,7 @@
 #include "hubConnect.h"
 #include "obscure.h"
 #include "chromAlias.h"
+#include "jsHelper.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -407,22 +408,47 @@ redoDbAndOrgIfNoServer(serverList, &db, &organism);
 struct sqlConnection *conn = hConnectCentral();
 boolean gotTargetDb = sqlTableExists(conn, "targetDb");
 hDisconnectCentral(&conn);
-
+jsIncludeAutoCompleteLibs();
 
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
 printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=7><TR>\n");
 
-printf("%s", "<TD><CENTER>\n");
-printf("Genome:<BR>");
-showGenomes(organism, serverList);
-printf("%s", "</CENTER></TD>\n");
+printf("<TD class='searchCell'><center>\n");
+char *searchPlaceholder = "Search any species, genome or assembly name";
+char *searchBarId = "genomeSearch";
+printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Genome:", NULL);
+jsInlineF(
+    "function isPcrSelect(selectEle, item) {\n"
+    "   selectEle.innerHTML = item.label;\n"
+    ORGFORM_KEEP_PARAMS
+    "\n"
+    "document.orgForm.db.value = item.genome;\n"
+    ORGFORM_RESET_TARGET
+    "\n"
+    ORGFORM_SUBMIT
+    "\n"
+    "}\n\n"
+    "document.addEventListener(\"DOMContentLoaded\", () => {\n"
+    "    // bind the actual <select> to the function isPcrSelect, that way\n"
+    "    // initSpeciesAutoCompleteDropdown can call the function\n"
+    "    let selectEle = document.getElementById(\"genomeLabel\");\n"
+    "    let boundSelect = isPcrSelect.bind(null, selectEle);\n"
+    "    initSpeciesAutoCompleteDropdown('%s', boundSelect);\n"
+    "    // make the search button trigger the autocomplete manually\n"
+    "    let btn = document.getElementById(\"%sButton\");\n"
+    "    btn.addEventListener(\"click\", () => {\n"
+    "        let val = document.getElementById(\"%s\").value;\n"
+    "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
+    "    });\n"
+    "});\n"
+    , searchBarId, searchBarId, searchBarId, searchBarId
+);
 
-printf("%s", "<TD><CENTER>\n");
-printf("Assembly:<BR>");
-showAssemblies(organism, db, serverList, gotTargetDb);
-printf("%s", "</CENTER></TD>\n");
+printf("</center></td><TD><CENTER>\n");
+printf("Assembly:<BR><span id='genomeLabel'>%s</span>", getCurrentGenomeLabel(db));
+printf("</CENTER></TD>\n");
 
 if (gotTargetDb)
     {
