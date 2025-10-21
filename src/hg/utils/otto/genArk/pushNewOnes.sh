@@ -43,7 +43,7 @@ cd "${TOP}"
 
 function sendTo() {
    export D="${1}"
-   for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
+   for M in hgwbeta
    do
      printf "ssh qateam\@${M} \"umask 002; mkdir -p '/gbdb/genark/${D}'\"\n" 1>&2
      ssh qateam@${M} "umask 002; mkdir -p '/gbdb/genark/${D}'" < /dev/null
@@ -96,7 +96,7 @@ fi
 
 # check existing browsers that may have new or updated files to go out
 if [ -s "new.files.ready.to.go.txt" ]; then
-   for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
+   for M in hgwbeta
    do
      printf "time (rsync --stats -a -L --files-from=new.files.ready.to.go.txt \"/gbdb/genark/\" \"qateam@${M}:/gbdb/genark/\") 2>&1\n" 1>&2
      time (rsync --stats -a -L --files-from=new.files.ready.to.go.txt "/gbdb/genark/" "qateam@${M}:/gbdb/genark/") 2>&1
@@ -105,7 +105,7 @@ fi
 
 # and the /gbdb/*/quickLift files:
 if [ -s "new.quickLift.ready.to.go.txt" ]; then
-   for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
+   for M in hgwbeta
    do
      printf "time (rsync --stats -a -L --files-from=new.quickLift.ready.to.go.txt \"/gbdb/\" \"qateam@${M}:/gbdb/\") 2>&1\n" 1>&2
      time (rsync --stats -a -L --files-from=new.quickLift.ready.to.go.txt "/gbdb/" "qateam@${M}:/gbdb/") 2>&1
@@ -113,7 +113,7 @@ if [ -s "new.quickLift.ready.to.go.txt" ]; then
 fi
 
 if [ -s "new.timeStamps.txt" ]; then
-   for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
+   for M in hgwbeta
    do
      printf "time (rsync --stats -a -L --files-from=new.timeStamps.txt \"/gbdb/genark/\" \"qateam@${M}:/gbdb/genark/\") 2>&1\n" 1>&2
      time (rsync --stats -a -L --files-from=new.timeStamps.txt "/gbdb/genark/" "qateam@${M}:/gbdb/genark/") 2>&1
@@ -122,7 +122,7 @@ fi
 
 # and the /gbdb/*/quickLift files:
 if [ -s "new.quickLift.timeStamps.txt" ]; then
-   for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
+   for M in hgwbeta
    do
      printf "time (rsync --stats -a -L --files-from=new.quickLift.timeStamps.txt \"/gbdb/\" \"qateam@${M}:/gbdb/\") 2>&1\n" 1>&2
      time (rsync --stats -a -L --files-from=new.quickLift.timeStamps.txt "/gbdb/" "qateam@${M}:/gbdb/") 2>&1
