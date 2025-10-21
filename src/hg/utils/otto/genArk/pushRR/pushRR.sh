@@ -1,5 +1,12 @@
 #!/bin/bash
 
+######################################################################
+###  this script from the source tree in:
+###     src/hg/utils/otto/genArk/pushRR/pushRR.sh
+###  used in an otto cron job:
+###   03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
+######################################################################
+
 # exit on any error
 set -beEu -o pipefail
 

@@ -1,5 +1,11 @@
 #!/usr/bin/env perl
 
+##############################################################
+### this script from the source tree in:
+###     src/hg/utils/otto/genArk/pushRR/alphaBetaPush.pl
+### obsolete script as of 30 July 2025 - replaced by other processes
+##############################################################
+
 use strict;
 use warnings;
 use File::Basename;
