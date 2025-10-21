@@ -3,8 +3,8 @@
 ######################################################################
 ###  this script from the source tree in:
 ###     src/hg/utils/otto/genArk/pushRR/pushRR.sh
-###  used in an otto cron job:
-###   03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
+###  obsolete script, current copy is in:
+###   03 01 * * * /hive/data/inside/GenArk/pushRR.sh
 ######################################################################
 
 # exit on any error
