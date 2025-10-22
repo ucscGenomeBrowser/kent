@@ -185,36 +185,40 @@ cartSaveSession(cart);
 
 if (!isUpdateForm)
     {
-    /* Print clade, genome and assembly  */
-    /* NOTE: this uses an additional, hidden form (orgForm), below */
-    char *onChangeDb = "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();";
-    char *onChangeOrg = "document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();";
-    char *onChangeClade = "document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();";
+    /* Print genome search bar and selected genome label */
 
     puts("<TABLE BORDER=0>\n");
-    if (gotClade)
-        {
-        puts("<TR><TD>Clade\n");
-        printCladeListHtml(hOrganism(database), "change", onChangeClade);
-        puts("&nbsp;&nbsp;&nbsp;");
-        puts("Genome\n");
-        printGenomeListForCladeHtml(database, "change", onChangeOrg);
-        }
-    else
-        {
-        puts("<TR><TD>genome\n");
-        printGenomeListHtml(database, "change", onChangeOrg);
-        }
-    puts("&nbsp;&nbsp;&nbsp;");
-    puts("Assembly\n");
-    printAssemblyListHtml(database, "change", onChangeDb);
-    char *description = hFreezeFromDb(database);
-    if ((description != NULL) && ! stringIn(database, description))
-	{
-	puts("&nbsp;&nbsp;&nbsp;");
-	printf("[%s]", trackHubSkipHubName(database));
-	}
-    puts("</TD></TR></TABLE>\n");
+    printf("<tr>\n");
+    printf("<td class='searchCell' align=center>\n");
+    jsIncludeAutoCompleteLibs();
+    char *searchPlaceholder = "Search any species, genome or assembly name";
+    char *searchBarId = "genomeSearch";
+    printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Change selected genome:", NULL);
+    jsInlineF(
+        "function hgCustomSelect(selectEle, item) {\n"
+        "   selectEle.innerHTML = item.label;\n"
+        "}\n\n"
+        "document.addEventListener(\"DOMContentLoaded\", () => {\n"
+        "    // bind the actual <select> to the function hgCustomSelect, that way\n"
+        "    // initSpeciesAutoCompleteDropdown can call the function\n"
+        "    let selectEle = document.getElementById(\"genomeLabel\");\n"
+        "    let boundSelect = hgCustomSelect.bind(null, selectEle);\n"
+        "    initSpeciesAutoCompleteDropdown('%s', boundSelect);\n"
+        "    // make the search button trigger the autocomplete manually\n"
+        "    let btn = document.getElementById(\"%sButton\");\n"
+        "    btn.addEventListener(\"click\", () => {\n"
+        "        let val = document.getElementById(\"%s\").value;\n"
+        "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
+        "    });\n"
+        "});\n"
+        , searchBarId, searchBarId, searchBarId, searchBarId
+    );
+    printf("</td>\n");
+    printf("<td class='searchCell' align=center>\n");
+    char *dbLabel = getCurrentGenomeLabel(database);
+    printf("Current Genome: <span id='genomeLabel'>%s</span>\n", dbLabel);
+    printf("</td>\n");
+    puts("</TR></TABLE>\n");
     }
 
 /* intro text */
