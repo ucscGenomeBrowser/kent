@@ -186,10 +186,12 @@ cartSaveSession(cart);
 if (!isUpdateForm)
     {
     /* Print genome search bar and selected genome label */
-
     puts("<TABLE BORDER=0>\n");
     printf("<tr>\n");
     printf("<td class='searchCell' align=center>\n");
+    // hgCustom requires this <input> be created to go along with form submission, we
+    // will change it when a genome is selected in the search bar
+    printf("<input name='db' value='%s' type='hidden'></input>\n", database);
     jsIncludeAutoCompleteLibs();
     char *searchPlaceholder = "Search any species, genome or assembly name";
     char *searchBarId = "genomeSearch";
@@ -197,6 +199,7 @@ if (!isUpdateForm)
     jsInlineF(
         "function hgCustomSelect(selectEle, item) {\n"
         "   selectEle.innerHTML = item.label;\n"
+        "   document.mainForm.db.value = item.genome;\n"
         "}\n\n"
         "document.addEventListener(\"DOMContentLoaded\", () => {\n"
         "    // bind the actual <select> to the function hgCustomSelect, that way\n"
@@ -478,19 +481,6 @@ if (isUpdateForm)
     freeMem(trackLine);
     freeMem(shortLabel);
     freeMem(longLabel);
-    }
-else
-    {
-    /* hidden form to handle clade/genome/assembly dropdown.
-     * This is at end of page for layout reasons (preserve vertical space) */
-    puts("</FORM>");
-    printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
-    cartSaveSession(cart);
-    if (gotClade)
-        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"\">\n");
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
     }
 puts("</FORM>");
 cgiDown(0.9);
