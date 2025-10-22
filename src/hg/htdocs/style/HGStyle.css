@@ -1265,12 +1265,11 @@ span.gbSessionChanged {
     color: red;
 }
 
-td.searchCell {
-    width: 1%;
+.searchCell {
     white-space: nowrap;
 }
 
-td.searchCell > .flexContainer {
+.searchCell > .flexContainer {
     display: flex;
     flex-direction: column;
     gap: 0.2em;
@@ -1284,7 +1283,7 @@ td.searchCell > .flexContainer {
     gap: 0.25em;
 }
 
-td.searchCell:first-child {
+.searchCell:first-child {
     padding-right: 1em;
 }
 
