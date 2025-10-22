@@ -2094,6 +2094,9 @@ printf("</TR>\n");
 
 printf("<TR>\n");
 printf("<TD class='searchCell' ALIGN=CENTER>\n");
+// hgBlat requires this <input> be created to go along with form submission, we
+// will change it when a genome is selected in the search bar
+printf("<input name='db' value='%s' type='hidden'></input>\n", db);
 jsIncludeAutoCompleteLibs();
 char *searchPlaceholder = "Search any species, genome or assembly name";
 char *searchBarId = "genomeSearch";
@@ -2101,6 +2104,7 @@ printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, NULL, NULL);
 jsInlineF(
     "function blatSelect(selectEle, item) {\n"
     "   selectEle.innerHTML = item.label;\n"
+    "   document.mainForm.db.value = item.genome;\n"
     "}\n\n"
     "document.addEventListener(\"DOMContentLoaded\", () => {\n"
     "    // bind the actual <select> to the function blatSelect, that way\n"
