@@ -123,47 +123,6 @@ jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, onByDefaul
 #define endCollapsibleSection jsEndCollapsibleSection
 
 
-static struct dyString *onChangeStart()
-/* Start up a javascript onChange command */
-{
-struct dyString *dy = jsOnChangeStart();
-jsTextCarryOver(dy, hgvaRegionType);
-jsTextCarryOver(dy, hgvaRange);
-return dy;
-}
-
-static char *onChangeClade()
-/* Return javascript executed when they change clade. */
-{
-struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-dyStringAppend(dy, " document.hiddenForm.org.value=0;");
-dyStringAppend(dy, " document.hiddenForm.db.value=0;");
-dyStringAppend(dy, " document.hiddenForm." hgvaRange ".value='';");
-return jsOnChangeEnd(&dy);
-}
-
-static char *onChangeOrg()
-/* Return javascript executed when they change organism. */
-{
-struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, "org");
-dyStringAppend(dy, " document.hiddenForm.db.value=0;");
-dyStringAppend(dy, " document.hiddenForm." hgvaRange ".value='';");
-return jsOnChangeEnd(&dy);
-}
-
-static char *onChangeDb()
-/* Return javascript executed when they change database. */
-{
-struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, "db");
-dyStringAppend(dy, " document.hiddenForm." hgvaRange ".value='';");
-return jsOnChangeEnd(&dy);
-}
-
 INLINE void printOption(char *val, char *selectedVal, char *label)
 /* For rolling our own select without having to build conditional arrays/lists. */
 {
@@ -223,22 +182,35 @@ puts("</div>");
 void hgGatewayCladeGenomeDb()
 /* Make a row of labels and row of buttons like hgGateway, but not using tables. */
 {
-boolean gotClade = hGotClade();
-if (gotClade)
-    {
-    topLabelSpansStart("clade");
-    printCladeListHtml(genome, "change", onChangeClade());
-    topLabelSpansEnd();
-    }
-topLabelSpansStart("genome");
-if (gotClade)
-    printGenomeListForCladeHtml(database, "change", onChangeOrg());
-else
-    printGenomeListHtml(database, "change", onChangeOrg());
-topLabelSpansEnd();
-topLabelSpansStart("assembly");
-printAssemblyListHtml(database, "change", onChangeDb());
-topLabelSpansEnd();
+jsIncludeAutoCompleteLibs();
+char *searchPlaceholder = "Search any species, genome or assembly name";
+char *searchBarId = "genomeSearch";
+printf("<div class='searchCell'>\n");
+printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Change selected genome:", NULL);
+jsInlineF(
+    "function hgVaiSelect(selectEle, item) {\n"
+    "   selectEle.innerHTML = item.label;\n"
+    "   setCartVar(\"db\", item.genome);\n"
+    "}\n\n"
+    "document.addEventListener(\"DOMContentLoaded\", () => {\n"
+    "    // bind the actual <select> to the function hgVaiSelect, that way\n"
+    "    // initSpeciesAutoCompleteDropdown can call the function\n"
+    "    let selectEle = document.getElementById(\"genomeLabel\");\n"
+    "    let boundSelect = hgVaiSelect.bind(null, selectEle);\n"
+    "    initSpeciesAutoCompleteDropdown('%s', boundSelect);\n"
+    "    // make the search button trigger the autocomplete manually\n"
+    "    let btn = document.getElementById(\"%sButton\");\n"
+    "    btn.addEventListener(\"click\", () => {\n"
+    "        let val = document.getElementById(\"%s\").value;\n"
+    "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
+    "    });\n"
+    "});\n"
+    , searchBarId, searchBarId, searchBarId, searchBarId
+);
+printf("<div class='searchCell'>\n");
+char *dbLabel = getCurrentGenomeLabel(database);
+printf("Current Genome: <span id='genomeLabel'>%s</span>\n", dbLabel);
+printf("</div>\n");
 puts("<BR>");
 topLabelSpansStart("region to annotate");
 printRegionListHtml(database);
