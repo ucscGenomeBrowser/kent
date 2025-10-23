@@ -79,12 +79,15 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080825 "PanelApp Australia r
     labelFields geneSymbol
     skipEmptyFields on
     skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
+    filterValues.confidenceLevel 3|Green (3),2|Amber (2),1|Red (1),0|Red (0)
+    filterValuesDefault.confidenceLevel 3,2,1
     filter.panelVersion 0
     filterLabel.panelVersion Minimum panel version to display
     filterValues.panelName Mendeliome,Incidentalome,Intellectual disability syndromic and non-syndromic,Fetal anomalies,Genomic newborn screening: BabyScreen+
     filterValuesDefault.panelName Mendeliome,Incidentalome
     filterLabel.panelName Panel Name (only 5 common shown, use all to display all panels)
+    filterText.name *
+    filterLabel.name item name: gene (panel name)
     filterValues.modeOfInheritance BIALLELIC,, autosomal or pseudoautosomal|BIALLELIC (autosomal/pseudoautosomal),MONOALLELIC,, autosomal or pseudoautosomal,, imprinted status unknown|MONOALLELIC (autosomal/pseudoautosomal) imprinted status unknown,MONOALLELIC,, autosomal or pseudoautosomal,, maternally imprinted (paternal allele expressed)|MONOALLELIC (autosomal/pseudoautosomal) maternally imprinted (paternal allele expressed),MONOALLELIC,, autosomal or pseudoautosomal,, paternally imprinted (maternal allele expressed)|MONOALLELIC (autosomal/pseudoautosomal) paternally imprinted (maternal allele expressed),MONOALLELIC,, autosomal or pseudoautosomal,, NOT imprinted|MONOALLELIC (autosomal/pseudoautosomal) NOT imprinted,BOTH monoallelic and biallelic,, autosomal or pseudoautosomal|BOTH monoallelic/biallelic (autosomal/pseudoautosomal),BOTH monoallelic and biallelic (but BIALLELIC mutations cause a more SEVERE disease form),, autosomal or pseudoautosomal|BOTH monoallelic/biallelic (but BIALLELIC mutations more SEVERE)(autosomal/pseudoautosomal),X-LINKED: hemizygous mutation in males,, biallelic mutations in females|X-LINKED: hemizygous mutation in males,, biallelic mutations in females,X-LINKED: hemizygous mutation in males,, monoallelic mutations in females may cause disease (may be less severe,, later onset than males)|X-LINKED: hemizygous mutation in males,, monoallelic mutations in females may cause disease,MITOCHONDRIAL|MITOCHONDRIAL,Other|Other,Unknown|Unknown
     priority 4
 
