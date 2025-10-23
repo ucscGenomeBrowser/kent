@@ -1,8 +1,9 @@
 #!/hive/data/outside/otto/panelApp/venv/bin/python3
 
 from datetime import date
-import pandas as pd 
+import pandas as pd,time 
 import gzip, logging, re, sys, json, time, requests, shutil, os, subprocess
+from requests.exceptions import RequestException
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -104,23 +105,18 @@ def flipFiles(country):
 def getAllPages(url, results=[]):
     " recursively download all pages. Stack should be big enough "
     try:
-        myResponse = requests.get(url)
-        if (myResponse.ok):
-            jData = json.loads(myResponse.content.decode())
-            # If jData is empty create, else append
-            if "error" in jData.keys() or not "results" in jData.keys():
-                raise Exception("Error in keys when downloading %s" % url)
-
-            if "count" in jData and not "page" in url:
-                print("API says that there are %d results for url %s" % (jData["count"], url))
-            results.extend(jData["results"])
-
-            if "next" in jData and jData["next"] is not None: # need to get next URL
-                return getAllPages(jData["next"], results)
-        else:
-            raise Exception("Error in object when downloading %s" % url)
-    except:
-        raise Exception("HTTP Error when downloading %s" % url)
+        jData = requests_get_with_retry(url)
+        
+        # If jData is empty create, else append
+        if "error" in jData.keys() or not "results" in jData.keys():
+            raise Exception("Error in keys when downloading %s" % url)
+        if "count" in jData and not "page" in url:
+            print("API says that there are %d results for url %s" % (jData["count"], url))
+        results.extend(jData["results"])
+        if "next" in jData and jData["next"] is not None: # need to get next URL
+            return getAllPages(jData["next"], results)
+    except Exception as e:
+        raise Exception("Error when downloading %s: %s" % (url, str(e)))
     return results
 
 def downloadCnvs(url):
@@ -490,49 +486,85 @@ def downloadTandReps(url):
 
     return pd_19_table, pd_38_table
 
+def requests_get_with_retry(url, max_retries=10, retry_delay=60):
+    """
+    Make a GET request with retry logic for handling API throttling.
+    Returns the parsed JSON data.
+    """
+    headers = {
+        'User-Agent': 'UCSC-Genome-Browser-PanelApp/1.0 (contact: genome-www@soe.ucsc.edu)'
+    }
+    
+    last_status_code = None
+    last_error = None
+    
+    for attempt in range(max_retries):
+        logging.debug("Getting %s (attempt %d/%d)" % (url, attempt + 1, max_retries))
+        try:
+            myResponse = requests.get(url, headers=headers)
+            last_status_code = myResponse.status_code
+            
+            if myResponse.ok:
+                # Check if response is JSON
+                content_type = myResponse.headers.get('Content-Type', '')
+                if 'application/json' in content_type:
+                    try:
+                        data = myResponse.json()
+                        return data
+                    except json.JSONDecodeError:
+                        logging.warning(f"Failed to decode JSON on attempt {attempt + 1}/{max_retries}")
+                else:
+                    logging.warning(f"Non-JSON response received on attempt {attempt + 1}/{max_retries}. Content-Type: {content_type}")
+        except RequestException as e:
+            # Catch all request-related exceptions (ConnectionError, Timeout, etc.)
+            last_error = str(e)
+        
+        # Wait before retrying (except on the last attempt)
+        if attempt < max_retries - 1:
+            time.sleep(retry_delay)
+    
+    # If all retries failed
+    error_msg = f"Failed to get valid JSON response after {max_retries} attempts for URL: {url}"
+    if last_status_code:
+        error_msg += f", last status code: {last_status_code}"
+    if last_error:
+        error_msg += f", last error: {last_error}"
+    raise Exception(error_msg)
+
 def getPanelIds(url):
     #logging.basicConfig(level=logging.DEBUG)
     logging.basicConfig(level=logging.INFO)
     logging.getLogger("urllib3").propagate = False
-
     logging.info("Downloading panel IDs")
     panelIds = []
-
     gotError = False
+    
     while not gotError:
-        logging.debug("Getting %s" % url)
-        myResponse = requests.get(url)
-
-        jsonData = myResponse.content
-        #jsonFh.write(jsonData)
-        #jsonFh.write("\n".encode())
-        data = json.loads(jsonData.decode())
-
+        data = requests_get_with_retry(url)
+        
         for res in data["results"]:
             panelIds.append(res["id"])
-
         logging.debug("Total Panel IDs downloaded:  %s" % len(panelIds))
+        
         url = data["next"]
         if url is None:
             break
-
+    
     return panelIds
+
 
 def downloadPanels(url):
     panelIds = getPanelIds(url)
     panelInfos = {}
-
     for panelId in panelIds:
         if 'england' in url:
             panelUrl = "https://panelapp.genomicsengland.co.uk/api/v1/panels/%d?format=json" % panelId
         elif 'aus' in url:
             panelUrl = "https://panelapp-aus.org/api/v1/panels/%d/?format=json" % panelId
-        logging.debug("Getting %s" % panelUrl)
-        resp = requests.get(panelUrl)
-        res  = resp.json()
-
+        
+        res = requests_get_with_retry(panelUrl)
         panelInfos[panelId] = res
-
+    
     return panelInfos
 
 def getGeneSymbols(url):
@@ -559,38 +591,20 @@ def getGenesLocations(jsonFh,url,onlyPanels):
     continuous_count = 0
     genes_missing_info = list()
     genes_no_location = list()
-
     syms = getGeneSymbols(url)
-
     for sym in syms:
         if 'england' in url:
             entityUrl = "https://panelapp.genomicsengland.co.uk/api/v1/genes/?entity_name={}&format=json".format(sym)
         elif 'aus' in url:
             entityUrl = "https://panelapp-aus.org/api/v1/genes/?entity_name={}&format=json".format(sym)
-
-        count = 0
-        while True:
-            try:
-                myResponse = requests.get(entityUrl)
-                if myResponse.ok:
-                    break
-                else:
-                    logging.error("Some error on %s, retrying after 1 minute (trial %d)" % (entityUrl, count))
-            except Exception:
-                logging.error("HTTP error on %s, retrying after 1 minute (trial %d)" % (entityUrl, count))
-
-            time.sleep(60)    # Wait 1 minute before trying again
-            count += 1        # Count the number of tries before failing
-            if count > 10:    # Quit afer 10 failed attempts
-                assert False, "Cannot get URL after 10 attempts"
-
-        jsonData = myResponse.content
-        #jData = myResponse.json()
-        jData = json.loads(jsonData.decode())
-
+        
+        jData = requests_get_with_retry(entityUrl)
+        
+        # Write to file (converting back to JSON bytes for file writing)
+        jsonData = json.dumps(jData).encode()
         jsonFh.write(jsonData)
         jsonFh.write("\n".encode())
-
+        
         res = jData['results']
         
         #filter by onlyPanels early, if specified
