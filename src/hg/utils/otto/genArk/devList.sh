@@ -31,7 +31,7 @@ cp -p /dev/shm/${fileOut}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
 rm -f /dev/shm/${fileOut}.gz
 
 cd /gbdb/genark
-find -L ./GCA ./GCF -type f | sed -e 's#^./##;' | gzip -c \
+find -L ./GCA ./GCF -type f | sed -e 's#^./##;' | sort | gzip -c \
 	> /dev/shm/gbdbGenark.fl.gz
 zcat /dev/shm/gbdbGenark.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
 	| gzip -c > /dev/shm/${statList}.gz
@@ -44,7 +44,7 @@ cd /gbdb
 ls -d */quickLift | while read Q
 do
   find -L ./${Q} -type f
-done | sed -e 's#^./##;' | gzip -c > /dev/shm/gbdbQuickLift.fl.gz
+done | sed -e 's#^./##;' | sort | gzip -c > /dev/shm/gbdbQuickLift.fl.gz
 
 zcat /dev/shm/gbdbQuickLift.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
   | gzip -c > /dev/shm/${quickLiftStat}.gz

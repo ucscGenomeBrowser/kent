@@ -1,5 +1,12 @@
 #!/bin/bash
 
+##########################################################################
+###  this script from the source tree in:
+###    src/hg/utils/otto/genArk/pushRR/pullHgwdev.sh
+###  running in the asia node in a cron job:
+###    02 16 * * * ~/cronScripts/pullHgwdev.sh
+##########################################################################
+
 # exit on any error
 set -beEu -o pipefail
 
