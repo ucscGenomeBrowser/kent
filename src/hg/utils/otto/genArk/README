@@ -1,4 +1,12 @@
 
+Thu Oct 23 12:10:27 PDT 2025
+
+In the process of readjusting the push scripts so they
+will only push out from hgwdev to hgwbeta, and then
+cluster admin cron jobs will push out from hgwbeta to the RR machines
+
+###################################################################
+
 Also using the assemblyList.py script
 from kent/src/hg/hubApi/assemblyList.py
 

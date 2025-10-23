@@ -18,6 +18,10 @@ printf "### count of common files between hgw1 and hgwdev,\nnot counting /contri
 zegrep -v "${doNotCount}" dev.todayList.gz | cut -f2 | sort \
   | join -t$'\t' - <(zegrep -v "${doNotCount}" hgw1.todayList.gz | cut -f2 | sort) | wc -l
 
+# accumulate list for cluster-admin cron job rsync
+#   from hgwbeta out to RR machines
+rm -f rsync.gbdb.genark.fileList.txt
+
 rm -f new.files.ready.to.go.txt
 touch new.files.ready.to.go.txt
 if [ "${devCount}" -gt "${hgw1Count}" ]; then
@@ -28,6 +32,8 @@ if [ "${devCount}" -gt "${hgw1Count}" ]; then
    head -3 new.files.ready.to.go.txt
    printf " . . .\n"
    tail -3 new.files.ready.to.go.txt
+   touch rsync.gbdb.genark.fileList.txt
+   cat new.files.ready.to.go.txt >> rsync.gbdb.genark.fileList.txt
 fi
 
 printf "### files with different time stamps:\n"
@@ -36,7 +42,11 @@ rm -f new.timeStamps.txt
 zegrep -v "${doNotCount}" dev.todayList.gz | sort -k2 \
   | join -t$'\t' -1 2 -2 2 - <(zegrep -v "${doNotCount}" hgw1.todayList.gz | sort -k2) | awk -F$'\t' '$2 != $3' | cut -f1 | sort -u > new.timeStamps.txt
 
-head new.timeStamps.txt
+if [ -s "new.timeStamps.txt" ]; then
+  head new.timeStamps.txt
+  touch rsync.gbdb.genark.fileList.txt
+  cat new.timeStamps.txt >> rsync.gbdb.genark.fileList.txt
+fi
 
 ./quickLiftNew.sh
 

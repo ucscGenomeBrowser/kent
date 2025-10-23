@@ -20,7 +20,7 @@ scp -p /dev/shm/${directoryList}.gz \
 rm -f /dev/shm/${directoryList}.gz
 
 cd /gbdb/genark
-find . -type f | sed -e 's#^./##;' | gzip -c > /dev/shm/${fileList}.gz
+find . -type f | sed -e 's#^./##;' | sort | gzip -c > /dev/shm/${fileList}.gz
 zcat /dev/shm/${fileList}.gz | xargs stat --printf="%Y\t%n\n" | gzip -c > /dev/shm/${statList}.gz
 scp -p /dev/shm/${statList}.gz \
   otto@hgwdev:/hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/ > /dev/null
@@ -29,7 +29,7 @@ cd /gbdb
 ls -d */quickLift | while read Q
 do
   find -L ./${Q} -type f
-done | sed -e 's#^./##;' | gzip -c > /dev/shm/${quickLiftFileList}.gz
+done | sed -e 's#^./##;' | sort | gzip -c > /dev/shm/${quickLiftFileList}.gz
 
 zcat /dev/shm/${quickLiftFileList}.gz | xargs stat -L --printf="%Y\t%n\n" \
   | gzip -c > /dev/shm/${quickLiftStat}.gz

@@ -289,6 +289,8 @@ else
 return itemCount;
 }	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, boolean *prefixSearch) */
 
+#ifdef NOT
+// disabled 2025-10-22
 static long elapsedTime(struct jsonWrite *jw)
 {
 long nowTime = clock1000();
@@ -296,6 +298,7 @@ long elapsedTimeMs = nowTime - enteredMainTime;
 jsonWriteNumber(jw, "elapsedTimeMs", elapsedTimeMs);
 return elapsedTimeMs;
 }
+#endif
 
 void apiFindGenome(char *pathString[MAX_PATH_INFO])
 /* 'findGenome' function */
@@ -498,9 +501,9 @@ sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s", asmListTable);
 long long universeCount = sqlQuickLongLong(conn, query->string);
 dyStringFree(&query);
 
-long elapTimeMs = elapsedTime(jw);
+// disabled 2025-10-22 long elapTimeMs = elapsedTime(jw);
 /* apache error_log recording */
-fprintf(stderr, "findGenome: '%s' found %lld returned %lld in %ld ms\n", endResultSearchString, totalMatchCount, itemCount, elapTimeMs);
+// disabled 2025-10-22 fprintf(stderr, "findGenome: '%s' found %lld returned %lld in %ld ms\n", endResultSearchString, totalMatchCount, itemCount, elapTimeMs);
 if (statsOnly)
     jsonWriteBoolean(jw, "statsOnly", TRUE);
 if (itemCount)
