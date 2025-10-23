@@ -221,7 +221,7 @@ def parseRareDiseases(disorderDict, ensemblDict):
 
                     # Grab the Ensembl reference link
                     geneDict[
-                        'ensemblLink'] = 'https://uswest.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=' + ensemblId
+                        'ensemblLink'] = 'https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=' + ensemblId
 
                     # Capture ensembl info
                     if ensemblId in ensemblDict.keys():
