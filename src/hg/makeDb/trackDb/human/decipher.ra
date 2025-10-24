@@ -4,7 +4,6 @@ shortLabel DECIPHER
 longLabel DECIPHER
 cartVersion 7
 group phenDis
-pennantIcon Updated red ../goldenPath/newsarch.html#091925 "Added the DDG2P track Sep. 19, 2025"
 
     track decipher
     priority 1
@@ -60,6 +59,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#091925 "Added the DDG2P trac
     filter.sample_size 0
 
     track ddg2p
+    release beta,public
     parent decipherContainer
     shortLabel DDG2P
     longLabel Developmental Disorders Gene2Phenotype (DDG2P)
@@ -68,7 +68,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#091925 "Added the DDG2P trac
     visibility pack
     mouseOver <b>G2P ID:</b> ${g2p_id} <br> <b>Variant Consequence:</b> ${variant_consequence} <br> <b>Disease Name:</b> ${disease_name} <br> <b>Pubmed IDs:</b> ${publications} <br> <b>Molecular Mechanism:</b> ${molecular_mechanism} <br> <b>Allelic Requirements:</b> ${allelic_requirement} <br> <b>Date of Last Review:</b> ${date_of_last_review}
     html decipherContainer
-    pennantIcon New red ../goldenPath/newsarch.html#091925 "Released Sep. 19, 2025"
 
 searchTable decipher
 searchMethod exact
