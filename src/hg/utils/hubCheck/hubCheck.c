@@ -170,6 +170,7 @@ for (suggest = options->suggest; suggest != NULL; suggest = suggest->next)
         bestCount++;
         }
     }
+    
 if (bestCount == 1 && bestScore > 15)
     {
     verbose(3, "suggest %s score: %d\n", best, bestScore);
@@ -833,6 +834,80 @@ if (errCatch->gotError)
 return retVal;
 }
 
+boolean isValidDouble(char *s, double *result)
+/* Convert string to a double.  Assumes all of string is number
+ * and returns FALSE if double is invalid.
+ * Does not errAbort. Avoids sqlDouble which does abort. */
+{
+char* end;
+double val = strtod(s, &end);
+
+if ((end == s) || (*end != '\0')
+ || *s == ' '
+ )
+    return FALSE;
+*result = val;
+return TRUE;
+}
+
+
+static void parseColonRange(struct trackDb *tdb, char *settingName, char *setting)
+/* Parse setting's two colon-separated numbers and detects errors in their value. 
+ * Helpfully shows track and setting name as well as setting value in the error message. 
+ * Does not swap or return min max range values.
+ * trackDbDoc syntax
+    viewLimits <lower:upper>
+ */
+{
+char tmp[64];
+safecpy(tmp, sizeof(tmp), setting);
+char *words[3];
+if (chopByChar(tmp, ':', words, ArraySize(words)) == 2)
+    {
+    char *lower = words[0];
+    double lowerVal = 0;
+    boolean validLower = isValidDouble(lower, &lowerVal);
+    if (!validLower)
+	errAbort("Invalid double range lower value '%s' in range '%s' in setting %s track %s", lower, setting, settingName, tdb->track);
+
+    char *upper = words[1];
+    double upperVal = 0;
+    boolean validUpper = isValidDouble(upper, &upperVal);
+    if (!validUpper)
+	errAbort("Invalid double range upper value '%s' in range '%s' in setting %s track %s", upper, setting, settingName, tdb->track);
+
+    if (validUpper && validLower)
+	{
+	if (upperVal < lowerVal)
+	    warn("upper < lower. Should swap lower and upper range values in %s' in setting %s track %s", setting, settingName, tdb->track);
+	}
+    }
+else
+    errAbort("Missing a colon in range value '%s' in setting %s track %s", setting, settingName, tdb->track);
+}
+
+void checkViewLimitsSettings(struct trackDb *tdb)
+/* check viewLimits and viewLimitsMax and defaultViewLimits setting values */
+{
+int i;
+for(i = 0; i < 3; i++)
+    {
+    char *settingName;
+    if (i == 0)
+	settingName = VIEWLIMITS;
+    if (i == 1)
+	settingName = VIEWLIMITSMAX;
+    if (i == 2)
+	settingName = DEFAULTVIEWLIMITS;
+
+    char *setting = trackDbSetting(tdb, settingName);
+    if (setting)
+        {
+        parseColonRange(tdb, settingName, setting);
+        }
+    }
+}
+
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -912,6 +987,9 @@ if (errCatchStart(errCatch))
     // consistent messaging on command line interface vs web interface
     if (!foundTypeError && options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
+
+
+    checkViewLimitsSettings(tdb);
 
     if (!sameString(tdb->track, "cytoBandIdeo"))
         {
