@@ -4866,7 +4866,7 @@ include phastBias.ra
 
 include omim.ra
 
-include decipher.ra
+include decipher.ra beta,public
 
 include ../refSeqComposite.ra
 
@@ -5607,3 +5607,5 @@ include mitoMap.ra
 include nmdEscape.ra alpha
 include exonprimers.ra alpha
 include longReadVariants.ra
+
+include g2p.ra alpha
