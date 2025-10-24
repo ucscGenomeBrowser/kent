@@ -17,3 +17,4 @@ labelFields accessionLabel,ucscLabel,encodeLabel
 defaultLabelFields accessionLabel,ucscLabel
 skipFields encodeLabel,ucscLabel,accessionLabel,description
 mouseOver <b>Accession</b>: $name<br> <b>Classification</b>: $ccre<br>
+cartVersion 9
