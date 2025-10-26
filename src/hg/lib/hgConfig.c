@@ -378,3 +378,10 @@ if ((maxMemStr = cfgOption("maxMem")) != NULL)
     setMemLimit(maxMem);
     }
 }
+
+void cfgSetLogCgiVars()
+/* optionally activate dumping of all CGI variables to stderr log */
+{
+cgiSetMaxLogLen(atoi(cfgOptionDefault("logCgiVarMaxLen", "0")));
+}
+

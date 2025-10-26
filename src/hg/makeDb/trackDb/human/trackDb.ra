@@ -4866,7 +4866,7 @@ include phastBias.ra
 
 include omim.ra
 
-include decipher.ra beta,public
+include decipher.ra
 
 include ../refSeqComposite.ra
 
