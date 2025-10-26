@@ -55,14 +55,14 @@ contains only data.</p>
 <p> 
 <strong>Step 3.</strong> 
 Download the <code>wigToBigWig</code> program from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <p> 
 <strong>Step 4.</strong> 
 Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create the 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">same directory</a> to create the 
 <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19).
 If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
-<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></p> 
+<code>http://hgdownload.gi.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></p> 
 <p> 
 <strong>Step 5.</strong> 
 Use the <code>wigToBigWig</code> utility to create the bigWig file from your wig file:</p> 
@@ -189,13 +189,13 @@ To create a bigWig track from a bedGraph file, follow these steps:</p>
   data.</li>
   <li> 
   Download the <code>bedGraphToBigWig</code> program from the 
-  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</li>
+  <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</li>
   <li> 
   Use the <code>fetchChromSizes</code> script from the 
-  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create the 
+  <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">same directory</a> to create the 
   <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19).
   If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like
-  <code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></li>
+  <code>http://hgdownload.gi.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></li>
   <li> 
   Use the <code>bedGraphToBigWig</code> utility to create a bigWig file from your bedGraph file:
   <pre><code><strong>bedGraphToBigWig</strong> in.bedGraph chrom.sizes myBigWig.bw</code></pre>
@@ -255,7 +255,7 @@ looking at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 <p>
 Because bigWig files are indexed binary files, it can be difficult to extract data from them. 
 UCSC has developed the following programs to assist in working with these files, available from 
-the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.
+the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.
 <ul>
   <li>
   <code>bigWigToBedGraph</code> &mdash; converts a bigWig file to ASCII 

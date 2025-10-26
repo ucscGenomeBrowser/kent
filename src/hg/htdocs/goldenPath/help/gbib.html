@@ -71,7 +71,7 @@ situations where it's infeasible to load the data onto a public web server.</p>
 <p>
 Rather than installing the entire UCSC genome annotation database (several terabytes of data), GBiB 
 instead depends upon remote connections to various UCSC servers for much of its functionality and 
-data. It connects to the UCSC <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 
+data. It connects to the UCSC <a href="http://hgdownload.gi.ucsc.edu/downloads.html" 
 target="_blank">download server</a> to obtain genomic sequences, liftOver files, and many of the 
 other large data files, and connects to one of UCSC's <a href="mysql.html">public MariaDB servers</a>
 to download data displayed by the various annotation tracks. A few Genome Browser tracks are
@@ -124,18 +124,18 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <ul>
     <li>MariaDB connections, used to load tracks not local to your computer:
       <ul>
-        <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
+        <li>US server: Port 3306 on genome-mysql.gi.ucsc.edu (128.114.119.174)</li>
         <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
       </ul>
     </li>
     <li>Rsync, used to download track data:
       <ul>
-        <li>US server: TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
+        <li>US server: TCP port 873 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
         <li>European server: TCP port 873 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
       </ul></li>
     <li>Download HTML descriptions on the fly:
       <ul>
-        <li>US server: TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
+        <li>US server: TCP port 80 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
         <li>European server: TCP port 80 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
       </ul>
     </li>
@@ -285,7 +285,7 @@ If you are in your GBiB on the command-line you can use a direct rsync command f
 interest. For example, if you knew you wanted all the GENCODE tracks on hg19 you could run either
 of the two rsync commands for the North American or European hgdownload servers:
 <pre>
-<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
+<code>sudo rsync hgdownload.gi.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
 </pre>
 <pre>
 <code>sudo rsync hgdownload-euro.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
@@ -299,15 +299,15 @@ commands.</p>
 Here is another example for hg38 where the following commands would download all the supporting
 encRegTfbs and factorbook tables for the Transcription Factor ChIP-seq Clusters track:
 <pre>
-<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg38/encRegTfbs* /data/mysql/hg38/.</code>
+<code>sudo rsync hgdownload.gi.ucsc.edu::mysql/hg38/encRegTfbs* /data/mysql/hg38/.</code>
 </pre>
 <pre>
-<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg38/factor* /data/mysql/hg38/.</code>
+<code>sudo rsync hgdownload.gi.ucsc.edu::mysql/hg38/factor* /data/mysql/hg38/.</code>
 </pre>
 <p>
 You can also download gbdb files in this manner.
 <pre>
-<code>sudo rsync hgdownload.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
+<code>sudo rsync hgdownload.gi.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
 </pre>
 
 <pre>
@@ -498,7 +498,7 @@ Genome Browser tools, type the following command into the GBiB terminal window:
 provided by UCSC. Many of these extra tools can be used to extract data and other useful information
 from your files, or to convert them between various file types. A complete listing and description 
 for all of these tools can be found on UCSC's
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/FOOTER" target="_blank">download 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/linux.x86_64/FOOTER" target="_blank">download 
 server</a>.</p>
 <p>
 You can use these tools to convert and extract data from your shared files with the standard
@@ -791,7 +791,7 @@ resolve this problem:</p>
 </ol>
 <p>
 <strong>Genome Browser Error:</strong> &quot;<em>Couldn't connect to database hg19 on 
-genome-mysql.soe.ucsc.edu as genomep.</em>&quot;
+genome-mysql.gi.ucsc.edu as genomep.</em>&quot;
 <p>
 <em>Solution 1:</em> This indicates that the virtual machine could not connect to the UCSC MariaDB 
 server. This error can be caused by a change of the IP address (e.g. on a wifi connection) that has 
@@ -871,11 +871,11 @@ hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>
 <p>
 In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To fix this command, 
 edit the <code>/home/browser/.bashrc</code> file and change the following line:
-<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
+<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.gi.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
 </p>
 <p>
 to either of the follwing lines:
-<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.gi.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
 <pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload-euro.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
 </p>
 <p>

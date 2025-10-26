@@ -99,8 +99,8 @@ access on the cloud, including details about the <a href="#REST_API">API</a> and
 S3 stands for Simple Storage Service, and it is the name for cloud storage in Amazon Web Services
 (AWS). The data available through S3 is essentially stored in a folder called a bucket, and
 files are called objects. The s3://genome-browser bucket is a copy of the main data available on our
-UCSC Genome Browser Download website: <a href="https://hgdownload.soe.ucsc.edu/downloads.html"
-target="_blank">https://hgdownload.soe.ucsc.edu/downloads.html</a></p>
+UCSC Genome Browser Download website: <a href="https://hgdownload.gi.ucsc.edu/downloads.html"
+target="_blank">https://hgdownload.gi.ucsc.edu/downloads.html</a></p>
 <p>
 By placing our Download server files in an S3 bucket, developers
 working in the cloud can more easily integrate with UCSC data.
@@ -111,7 +111,7 @@ accessible anywhere across the world with low latency and high durability by rev
 <a id="S3_contents"></a>
 <h2>What specific files are in the s3://genome-browser bucket?</h2>
 <p>
-The data mirrors our <a href="https://hgdownload.soe.ucsc.edu/downloads.html"
+The data mirrors our <a href="https://hgdownload.gi.ucsc.edu/downloads.html"
 target="_blank">UCSC Genome Browser Download</a> website's main rsync directories:
 <pre>
 UCSC Human Golden Path Downloads             s3://genome-browser/goldenPath
@@ -126,7 +126,7 @@ UCSC Human Genome Web Site Htdocs            s3://genome-browser/htdocs
 structure on our Download server, which includes README.txt files. For
 instance, the sequence data for the human hg38 assembly would be found in this location with an
 instructive README.txt: <code>goldenPath/hg38/bigZips/README.txt</code>. The README.txt, also
-available on the <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/README.txt"
+available on the <a href="https://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/README.txt"
 target="_blank">Download website</a>,
 informs that the most recent patch-inclusive sequence is found in
 <code>goldenPath/hg38/bigZips/latest/</code>.</li>
@@ -229,8 +229,8 @@ you can learn more about the ways of using the API to extract data.</p>
 <a id="download"></a>
 <h2>What is the Download server and how does one use it?</h2>
 <p>
-The UCSC Genome Browser Download website, <a href="https://hgdownload.soe.ucsc.edu/downloads.html"
-target="_blank">hgdownload.soe.ucsc.edu</a>, is the source of the data
+The UCSC Genome Browser Download website, <a href="https://hgdownload.gi.ucsc.edu/downloads.html"
+target="_blank">hgdownload.gi.ucsc.edu</a>, is the source of the data
 hosted in the Amazon s3://genome-browser bucket. It can be viewed in a web browser to access
 specific download files, or the data can be copied with rysnc commands.</p>
 <h3>Examples</h3>
@@ -238,7 +238,7 @@ specific download files, or the data can be copied with rysnc commands.</p>
 For instance, the following <a href="https://en.wikipedia.org/wiki/Rsync" target="_blank">rsync</a>
 command will show you the various rysnc directories available on our Download server:
 <pre>
-$ rsync -a -P rsync://hgdownload.soe.ucsc.edu/ 
+$ rsync -a -P rsync://hgdownload.gi.ucsc.edu/ 
 
 genome         UCSC Human Genome Downloads
 sars           UCSC Human Genome SARS Downloads
@@ -255,13 +255,13 @@ hubs           UCSC Genome Browser Public Hubs
 <ul>
 <li>For instance, here is an example of accessing a README file
 in the <code>goldenPath/</code>Downloads directory:<br>
-<code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/README.txt ./</code></li>
+<code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/README.txt ./</code></li>
 <li>And here is an example link that would access the <code>gbdb/</code> binary data directory
 for the human hg38 assembly 2bit file:<br>
-<code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/gbdb/hg38/hg38.2bit ./</code></li>
+<code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/gbdb/hg38/hg38.2bit ./</code></li>
 <li>And here is an example link that would access our
 publications html page from the bucket's <code>htdocs/</code> hypertext document directory:</br>
-<code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/htdocs/goldenPath/pubs.html ./</code></li>
+<code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/htdocs/goldenPath/pubs.html ./</code></li>
 </ul></p>
 <p>
 Many of these rsync directories exist to support the Genome Browser in a Cloud (<a target="_blank"
@@ -279,7 +279,7 @@ commands can also be pointed to the <code>hgdownload-euro</code> locations.
 <p>
 The UCSC Genome Browser uses <a href="https://en.wikipedia.org/wiki/MariaDB"
 target="_blank">MariaDB</a> (fork of MySQL) as the backend database server and maintains
-a public server at <b>genome-mysql.soe.ucsc.edu</b> to allow direct queries.</p>
+a public server at <b>genome-mysql.gi.ucsc.edu</b> to allow direct queries.</p>
 <h3>Examples</h3>
 <p>
 <ul>
@@ -287,19 +287,19 @@ a public server at <b>genome-mysql.soe.ucsc.edu</b> to allow direct queries.</p>
 selecting from the table <code>trackDb</code> all the entries in the group (grp) &quot;genes&quot and
 ordering those entries by tableName:<br>
 <code>
-mysql -h genome-mysql.soe.ucsc.edu -u genome -NBe 'select tableName from trackDb where grp = "genes" order by tableName' hg38
+mysql -h genome-mysql.gi.ucsc.edu -u genome -NBe 'select tableName from trackDb where grp = "genes" order by tableName' hg38
 </code></li>
 <li>And here is an example of accessing a specific Transcription Factor Binding Site (TFBS) table
 <code>wgEncodeRegTfbsClusteredV3</code> on the human hg19 assembly
 and selecting entries from a 500 base pair region on chr1:<br>
 <code>
-mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -Ne 'select chrom,chromStart,chromEnd,name,score
+mysql --user=genome --host=genome-mysql.gi.ucsc.edu -A -Ne 'select chrom,chromStart,chromEnd,name,score
 from wgEncodeRegTfbsClusteredV3 where chrom = "chr1" and chromStart > 10000 and chromEnd < 10500;' hg19
 </code></li>
 <li>And here is an example query that will pull all the long non-coding entries (lncRNA) from the
 <code>wgEncodeGencodeBasicV39</code> table on the hg38 genome:<br>
 <code>
-mysql -u genome -h genome-mysql.soe.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g,
+mysql -u genome -h genome-mysql.gi.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g,
 wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");'
 </code></li>
 </ul></p>

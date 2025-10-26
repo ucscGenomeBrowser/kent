@@ -153,9 +153,9 @@ Commercial licensing information is available on the <a href="http://www.kentinf
 target="_blank">Kent Informatics website</a>.</p>
 <p>
 BLAT source may be downloaded from 
-<a href="http://hgdownload.soe.ucsc.edu/admin/">http://hgdownload.soe.ucsc.edu/admin/</a> (located 
+<a href="http://hgdownload.gi.ucsc.edu/admin/">http://hgdownload.gi.ucsc.edu/admin/</a> (located 
 at /kent/src/blat within the most recent jksrci*.zip source tree). For BLAT executables, go to 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">http://hgdownload.soe.ucsc.edu/admin/exe/</a> 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">http://hgdownload.gi.ucsc.edu/admin/exe/</a> 
 and choose your machine type.</p>
 <p>
 Documentation on BLAT program specifications is available 
@@ -429,9 +429,9 @@ how to set up an hg19 gfServer, then make a query. First, download the appropria
 the operating system and give it executable permissions:</p>
 <pre>
 #For linux
-rsync -a rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/blat/ ./
+rsync -a rsync://hgdownload.gi.ucsc.edu/genome/admin/exe/linux.x86_64/blat/ ./
 #For MacOS
-rsync -a rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86_64/blat/ ./
+rsync -a rsync://hgdownload.gi.ucsc.edu/genome/admin/exe/macOSX.x86_64/blat/ ./
 
 chmod +x gfServer gfClient blat
 </pre>
@@ -439,7 +439,7 @@ chmod +x gfServer gfClient blat
 Next, download the appropriate .2bit genome (hg19 in this example), and run the gfServer
 utility with the web Blat parameters, designating the local machine and port 1234:</p>
 <pre>
-wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+wget http://hgdownload.gi.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
 ./gfServer start 127.0.0.1 1234 -stepSize=5 hg19.2bit
 </pre>
 <p>
@@ -510,7 +510,7 @@ Query types include DNA, protein, translated RNA and translated DNA:</p>
 <p>
 If you have access to a Linux or Mac OSX command-line you can run <code>blat</code> locally.
 The blat binary is available under the directory for your system type under the
-<a href="https://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a> on our download server.
+<a href="https://hgdownload.gi.ucsc.edu/admin/exe/">utilities directory</a> on our download server.
 <p>
 Once you have the downloaded the <code>blat</code> program to your computer, ensure the 'execute' bit is
 on for permissions:
@@ -531,10 +531,10 @@ sample.fa, to find that sequence in the human/hg38 genome, you would run:
 <pre><code>$ ./blat hg38.2bit sample.fa output.psl</code></pre>
 <p>
 You can download the 2bit file for your assembly of interest from the
-<a href="https://hgdownload.soe.ucsc.edu/downloads.html">download server</a>
+<a href="https://hgdownload.gi.ucsc.edu/downloads.html">download server</a>
 under the &quot;Genome sequence files and select annotations (2bit, GTF,
 GC-content, etc)&quot; link. For example, the hg38.2bit sequence can be found <a
-href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/">here</a>.
+href="https://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/">here</a>.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>

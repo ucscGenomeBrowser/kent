@@ -15,7 +15,7 @@ free and open-source software under the GNU General Public License.
 <p>
 We have two  MariaDB databases for public access:
 <ul>
-  <li><strong>genome-mysql.soe.ucsc.edu</strong> (located on the US west coast)</li>
+  <li><strong>genome-mysql.gi.ucsc.edu</strong> (located on the US west coast)</li>
   <li><strong>genome-euro-mysql.soe.ucsc.edu</strong> (located in Europe)</li>
 </ul></p>
 <p>
@@ -32,7 +32,7 @@ You must have MariaDb (MySQL) client libraries installed on your computer. You c
 </p>
 <p>
 You can connect to the US MariaDB server using the command:</p>
-<pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -P 3306</code></pre> 
+<pre><code>mysql --user=genome --host=genome-mysql.gi.ucsc.edu -A -P 3306</code></pre> 
 <p>Or the European MariaDB server with this command:</p>
 <pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A -P 3306</code></pre>
 <p>
@@ -62,19 +62,19 @@ For more details about the Conditions of Use, please refer to the following page
 <h2>Using the MariaDB server with our utilities</h2> 
 <p>
 The MariaDB database can also be used by the numerous utilities in the 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Genome Browser source</a> 
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#source_downloads">Genome Browser source</a> 
 tree. Some of these utilities require a password, so you will need to add the following 
 specifications to your $HOME/.hg.conf file (remember to chmod your .hg.conf file to 600 
 permissions) if you would like to access the US public MariaDB server:</p>
 <pre><code>#US MariaDB server
-db.host=genome-mysql.soe.ucsc.edu
+db.host=genome-mysql.gi.ucsc.edu
 db.user=genomep
 db.password=password
 central.db=hgcentral
-central.host=genome-mysql.soe.ucsc.edu
+central.host=genome-mysql.gi.ucsc.edu
 central.user=genomep
 central.password=password
-gbdbLoc1=http://hgdownload.soe.ucsc.edu/gbdb/
+gbdbLoc1=http://hgdownload.gi.ucsc.edu/gbdb/
 forceTwoBit=on
 </code></pre>
 <p>
@@ -87,7 +87,7 @@ central.db=hgcentral
 central.host=genome-euro-mysql.soe.ucsc.edu
 central.user=genomep
 central.password=password
-gbdbLoc1=http://hgdownload.soe.ucsc.edu/gbdb/
+gbdbLoc1=http://hgdownload.gi.ucsc.edu/gbdb/
 forceTwoBit=on
 </code></pre>
 
@@ -100,11 +100,11 @@ The <code>forceTwoBit</code> setting is necessary for utilities that retrieve ge
 <p>
 If you have set up your .hg.conf file as above, you can use the <code>hgsql</code> utility,
 available from our downloads server in the
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities section</a>,
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">Utilities section</a>,
 to access the public MariaDB server. The benefit of using the <code> hgsql</code> command is that
 you don't have to include the username or password as part of your command. You only need to
 specify the host:</p>
-<p><pre><code>hgsql -h genome-mysql.soe.ucsc.edu</code></pre></p>
+<p><pre><code>hgsql -h genome-mysql.gi.ucsc.edu</code></pre></p>
 
 <p>
 If you prefer a graphical user interface (GUI) to the UCSC database tables, use the 
