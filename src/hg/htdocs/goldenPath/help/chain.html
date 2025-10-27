@@ -77,7 +77,7 @@ forward strand coordinates:</p>
 
 <p>
 For example, using the query coordinates from chain 5 in
-<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
+<a href="https://hgdownload.gi.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
 target="_blank">hg38ToMm10.over.chain.gz</a>:
 <pre><code>    chain score tName tSize tStrand tStart tEnd qName qSize qStrand qStart qEnd id
     chain 442878230 chr1 248956422 + 158547112 207360161 chr1 195471971 - 21022354 65032227 5</code></pre>
@@ -91,7 +91,7 @@ chr1:130,439,745-174,449,617.</p>
 
 <p>
 To reverse the calculation and derive the corresponding hg38 coordinates using chain 5 in
-<a href="https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg38.over.chain.gz"
+<a href="https://hgdownload.gi.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg38.over.chain.gz"
 target="_blank">mm10ToHg38.over.chain.gz</a>, note that the derived mm10 coordinates match the
 <code>tStart</code> and <code>tEnd</code> values:</p>
 <pre><code>    chain 442878230 chr1 195471971 + 130439744 174449617 chr1 248956422 - 41596261 90409310 5</code></pre>
@@ -102,7 +102,7 @@ The hg38 coordinates are subtracted as follows:</p>
     hg38End   = 248956422 - 41596261 = 207360161</code></pre>
 
 <p>These coordinates match the target coordinates in
-<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
+<a href="https://hgdownload.gi.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
 target="_blank">hg38ToMm10.over.chain.gz</a>.</p>
 
 <p>

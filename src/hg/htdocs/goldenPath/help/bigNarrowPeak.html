@@ -82,18 +82,18 @@ do this:</p>
 <p>
 <strong>Step 2.</strong> 
 Download the <code>bedToBigBed</code> program from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <p>
 <strong>Step 3.</strong> 
 Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">same directory</a> to create a 
 <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38).
 Alternatively, you can download the <em>chrom.sizes</em> file for any assembly hosted at UCSC from 
-our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
+our <a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
 data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38
 database is located at 
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
-target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
+target="_blank">http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
 <p>
 <strong>Step 4.</strong> 
 Create the bigNarrowPeak file from your sorted input file using the <code>bedToBigBed</code> 
@@ -160,7 +160,7 @@ file.</p>
   <em><a href="examples/bigNarrowPeak.txt">bigNarrowPeak.txt</a></em>, to your computer (<em>Step 1</em>
   in <em>Creating a bigNarrowPeak track</em>, above).</li>
   <li> 
-  Download the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/"><code>bedToBigBed</code></a>
+  Download the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/"><code>bedToBigBed</code></a>
   utility (<em>Step 2</em>, above).</li>
   <li> 
   Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer.
@@ -235,7 +235,7 @@ by looking at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a> an
 Because the bigNarrowPeak files are an extension of bigBed files, which are indexed binary files, it 
 can be difficult to extract data from them. UCSC has developed the following programs to
 assist in working with bigBed formats, available from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
@@ -248,7 +248,7 @@ assist in working with bigBed formats, available from the
 <p>
 Such tools can be used to obtain only features within a given range, for example:
 <p><tt>
-bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/danRer10/transMap/V4/danRer10.refseq.transMapV4.bigPsl
+bigBedToBed http://hgdownload.gi.ucsc.edu/gbdb/danRer10/transMap/V4/danRer10.refseq.transMapV4.bigPsl
 -chrom=chr6 -start=0 -end=1000000 stdout
 </tt>
 </>
@@ -261,7 +261,7 @@ command line to view the usage statement.</p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
 file for data coordinates that extend past the end of the chromosome. If these are 
 present, run the <code>bedClip</code> program 
-(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
+(<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
 row(s) before running the <code>bedToBigBed</code> program. </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

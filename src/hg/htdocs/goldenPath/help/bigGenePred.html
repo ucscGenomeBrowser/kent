@@ -97,17 +97,17 @@ can use the UNIX <code>sort</code> command to do this:</p>
 <p>
 <strong>Step 2.</strong> 
 Download the <code>bedToBigBed</code> program from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <p>
 <strong>Step 3.</strong> 
 Download the <em>chrom.sizes</em> file for your assembly from
-our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full
+our <a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full
 data set&quot; for your organism). For example, the <em>hg38.chrom.sizes</em> file for the hg38
 database is located at
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
-target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
+<a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
+target="_blank">http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
 Alternatively, you can use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">utilities directory</a>.
 <p>
 <strong>Step 4.</strong> 
 Create the bigGenePred file from your pre-bigGenePred file using the <code>bedToBigBed</code> 
@@ -208,7 +208,7 @@ file, a bed12+8 file.</p>
   Save the example bed12+8 input file to your computer,
   <em><a href="examples/bigGenePred.txt">bigGenePred.txt</a></em>.</li>
   <li> 
-  Download the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/"><code>bedToBigBed</code></a>
+  Download the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/"><code>bedToBigBed</code></a>
   utility (<em>Step 2</em>, in the <em>Creating a bigGenePred</em> section above).</li>
   <li> 
   Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer.
@@ -235,7 +235,7 @@ file, a bed12+8 file.</p>
 You will need <code>gtfToGenePred</code>, <code>genePredTobigGenePred</code>,
 and <code>bedToBigBed</code>. If you would like to convert a GFF file to bigGenePred, you will use
 <code>gff3ToGenePred</code> in place of the <code>gtfToGenePred</code>. You can download utilities from the
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">utilities directory</a>.</p>
 <ol>
   <li>
   Obtain a GTF file using the <code>wget</code> command. Skip this step if you already have a GTF
@@ -256,8 +256,8 @@ and <code>bedToBigBed</code>. If you would like to convert a GFF file to bigGene
   <li>
   Convert your text bigGenePred to a binary indexed format. If you are not using hg38,
   you will need to replace the hg38.chrom.sizes file path with your organism's file path from the
-  <a href="http://hgdownload.soe.ucsc.edu">downloads directory</a> under "Genome Sequence Files".
-  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as bigGenePredEx4.txt http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes bigGenePredEx4.bb</code></pre></li>
+  <a href="http://hgdownload.gi.ucsc.edu">downloads directory</a> under "Genome Sequence Files".
+  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as bigGenePredEx4.txt http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes bigGenePredEx4.bb</code></pre></li>
   <li> 
   Put your binary indexed file, bigGenePredEx4.bb, in a web-accessible location. See the 
   <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting">hosting section</a> for more information.</li>
@@ -332,7 +332,7 @@ custom track help page.</p>
 Because the bigGenePred files are an extension of bigBed files, which are indexed binary files, it 
 can be difficult to extract data from them. UCSC has developed the following programs to
 assist in working with bigBed formats, available from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
@@ -351,7 +351,7 @@ command line to view the usage statement.</p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
 file for data coordinates that extend past the end of the chromosome. If these are 
 present, run the <code>bedClip</code> program 
-(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
+(<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
 row(s) before running the <code>bedToBigBed</code> program. </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

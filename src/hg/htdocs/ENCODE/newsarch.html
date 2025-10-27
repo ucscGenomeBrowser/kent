@@ -175,7 +175,7 @@ amounts of data to be downloaded efficiently over long distances.
 <p>
 Remember that we now have two identical download servers to better serve your needs. You can use either one:
 <p>
-<a href="http://hgdownload.soe.ucsc.edu" target="_blank">http://hgdownload.soe.ucsc.edu</a>
+<a href="http://hgdownload.gi.ucsc.edu" target="_blank">http://hgdownload.gi.ucsc.edu</a>
 <p>
 <a href="http://hgdownload-sd.sdsc.edu" target="_blank">http://hgdownload-sd.sdsc.edu</a>
 <p>
@@ -207,7 +207,7 @@ For your convenience, we are offering a binary distribution of UDR for Red Hat E
 Linux 6.x (or variants such as CentOS 6 or Scientific Linux 6). You'll find both a 64-bit
 and 32-bit rpm here:</p>
 <p>
-<a href="http://hgdownload.soe.ucsc.edu/admin/udr" target="_blank">http://hgdownload.soe.ucsc.edu/admin/udr</a>
+<a href="http://hgdownload.gi.ucsc.edu/admin/udr" target="_blank">http://hgdownload.gi.ucsc.edu/admin/udr</a>
 <p>
 <h4>Using UDR to Download ENCODE Data from the UCSC Genome Browser Download Server(s):</h4>
 <p>
@@ -216,11 +216,11 @@ Once you have a working UDR binary, either by building from source or by install
 download servers in a very similar fashion to rsync. For example, using rsync, you may want
 to download all of the ENCODE information for the mm9 database using the following command:</p>
 <p>
-<pre class="code">$ rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+<pre class="code">$ rsync -avP rsync://hgdownload.gi.ucsc.edu/goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
 <p>
 Using UDR is very similar. The UDR syntax for downloading the same data would be:</p>
 <p>
-<pre class="code">$udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+<pre class="code">$udr rsync -avP hgdownload.gi.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
 <p>
 If you installed the rpm, use the 'man udr' command for more information via the man page;
 if you installed from source please refer to the UDR GitHub page for more details on the
@@ -299,7 +299,7 @@ Browser track: <a class="euro" target="_blank" href="http://genome.ucsc.edu/cgi-
 Transcription Factor ChIP-seq Uniform Uniform Peaks from ENCODE/Analysis</a>
 <br>
 File downloads: 
-<a class="euro" target="_blank" href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/">Directory</a>
+<a class="euro" target="_blank" href="http://hgdownload.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/">Directory</a>
 <a class="euro" target="_blank" href="http://genome.ucsc.edu/cgi-bin/hgFileUi?db=hg19&g=wgEncodeAwgTfbsUniform">File selection tool</a>
 </p>
 <p>
@@ -1917,7 +1917,7 @@ group for contributing to this first ENCODE track release.
 		    not lifted during this migration; instead, they will be 
 		    replaced by new data. The first ENCODE MSA alignment for 
 		    hg18 (TBA) is currently in progress on the UCSC 
-		    <A HREF="http://hgwdev.soe.ucsc.edu/ENCODE/">development 
+		    <A HREF="http://hgwdev.gi.ucsc.edu/ENCODE/">development 
 		    server</A>.
 		    <P>
 		    During the migration, ENCODE tracks with whole-genome 
@@ -2090,7 +2090,7 @@ group for contributing to this first ENCODE track release.
 		    the agreement among the alignment methods. The alignments 
 		    were based on genomic sequence in the ENCODE regions of 28 
 		    vertebrate species, as defined in the 
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg17/encode/alignments/SEP-2005"
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/hg17/encode/alignments/SEP-2005"
 		    TARGET=_blank>MSA September 2005 sequence freeze</A>.
 		    <P>
 		    The following tracks can now be found in the ENCODE 
@@ -2650,8 +2650,8 @@ group for contributing to this first ENCODE track release.
 		    sequences from 23 vertebrates provided by NISC, Baylor, 
 		    the Broad Institute (2X) and the whole genome shotgun 
 		    (WGS) assemblies.  The data may be downloaded as 
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg16/encode/alignments/MAY-2005/">individual data files</A> or a
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg16/encode/alignments/MAY-2005.tgz">directory tarball</A>. 
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/hg16/encode/alignments/MAY-2005/">individual data files</A> or a
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/hg16/encode/alignments/MAY-2005.tgz">directory tarball</A>. 
 		    Aligners are encouraged to upload alignments and related 
 		    data (such as conservation scores and elements) to the 
 		    UCSC ENCODE ftp site as soon as possible and then notify 
@@ -2815,15 +2815,15 @@ group for contributing to this first ENCODE track release.
 		    is now:
 		    <P>
 		    &nbsp; &nbsp; &nbsp; &nbsp;
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/encode/"
-		    TARGET=_blank>http://hgdownload.soe.ucsc.edu/goldenPath/encode/</A>
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/encode/"
+		    TARGET=_blank>http://hgdownload.gi.ucsc.edu/goldenPath/encode/</A>
 		    <P>
 		    and the annotations are now located in the 
 		    assembly-specific download directory, currently:
 		    <P>
 		    &nbsp; &nbsp; &nbsp; &nbsp;
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg16/encode/"
-		    TARGET=_blank>http://hgdownload.soe.ucsc.edu/goldenPath/hg16/encode/</A>
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/hg16/encode/"
+		    TARGET=_blank>http://hgdownload.gi.ucsc.edu/goldenPath/hg16/encode/</A>
 		    <P>
 		    Any web pages referencing the previous UCSC ENCODE 
 		    downloads will need to be updated.  Please contact us if 
@@ -2904,10 +2904,10 @@ group for contributing to this first ENCODE track release.
 		    We are pleased to release the first "official" sequence 
 		    data freeze for the ENCODE multiple sequence alignment 
 		    projects. The data formats are described in the 
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg16/encode/alignments/OCT-2004/README.txt" 
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/hg16/encode/alignments/OCT-2004/README.txt" 
 		    TARGET=_blank>README</A> file, and the sequences and 
 		    supporting information is collected in the 
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg16/encode/alignments/OCT-2004" 
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/hg16/encode/alignments/OCT-2004" 
 		    TARGET=_blank> data directory</A>.
 		    <P>
 		    The species included in this freeze are as follows:
@@ -2989,7 +2989,7 @@ group for contributing to this first ENCODE track release.
 		    Bulk downloads of the sequence and annotations may
 		    be obtained from the ENCODE Project 
 		    <!--<A HREF="ftp://genome-test.soe.ucsc.edu/encode/downloads/">FTP</A> or -->
-		    <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/encode/">Downloads</A> 
+		    <A HREF="http://hgdownload.gi.ucsc.edu/goldenPath/encode/">Downloads</A> 
 		    page.  The sequences available here are repeat-masked 
 		    versions of the GenBank records.
 	    <BR><BR>
