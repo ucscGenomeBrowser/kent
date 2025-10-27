@@ -25,7 +25,7 @@ fi
 cd "${WORKDIR}"
 
 # Note: timestamping no longer works
-wget -q --timestamping  -O gwascatalog.txt http://www.ebi.ac.uk/gwas/api/search/downloads/full
+wget -q --timestamping  -O gwascatalog.txt https://www.ebi.ac.uk/gwas/api/search/downloads/associations/v1.0?split=false
 if [  ! gwascatalog.txt  -nt old.gwascatalog.txt ]; then
     echo "Not newer"
     exit 0
