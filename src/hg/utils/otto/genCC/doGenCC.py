@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #Made otto by Lou 9/14/2023
 
 import subprocess
