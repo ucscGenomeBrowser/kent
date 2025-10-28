@@ -93,7 +93,7 @@ def makeManeDic():
 
 def assignRGBcolorByEvidenceClassification(classification):
     if classification == "Definitive":
-        classificationRgb = "39,103,73"
+        classificationRgb = "56,161,105"
     elif classification == "Disputed Evidence":
         classificationRgb = "229,62,62"
     elif classification == "Limited":
@@ -105,7 +105,7 @@ def assignRGBcolorByEvidenceClassification(classification):
     elif classification == "Refuted Evidence":
         classificationRgb = "155,44,44"
     elif classification == "Strong":
-        classificationRgb = "56,161,105"
+        classificationRgb = "39,103,73"
     elif classification == "Supportive":
         classificationRgb = "99,179,237"
     else:
