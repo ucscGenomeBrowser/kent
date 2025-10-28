@@ -91,7 +91,7 @@ struct bigBedFilter
 {
 struct bigBedFilter *next;
 int fieldNum;   // the field number
-enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH, COMPARE_REGEXP, COMPARE_WILDCARD, COMPARE_HASH_LIST_AND, COMPARE_HASH_LIST_OR } comparisonType;  // the type of the comparison
+enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH, COMPARE_REGEXP, COMPARE_WILDCARD, COMPARE_HASH_LIST_AND, COMPARE_HASH_LIST_OR, COMPARE_CHROMPOSNAME } comparisonType;  // the type of the comparison
 double value1, value2;
 struct hash *valueHash;
 unsigned numValuesInHash;
