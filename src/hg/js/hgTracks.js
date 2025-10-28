@@ -3873,7 +3873,8 @@ function onHideAllGroupButtonClick(ev) {
         trackNames.push(sel.name);
         values.push("hide");
     }
-    cart.setVars(trackNames, values);
+    cart.setVars(trackNames, values, null, false);
+    imageV2.fullReload();
 }
 
 // A function for the keyboard shortcuts "zoom to x bp"
