@@ -91,7 +91,10 @@ cgiTableField("Old assembly: ");
 cgiTableField("New genome: ");
 cgiTableField("New assembly: ");
 if (askAboutQuickLift)
-    cgiTableField("QuickLift tracks: ");
+    cgiTableField("<a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' \
+		    target='ucscHelp' title='QuickLift is in beta testing, which means it is not polished and will have bugs.' \
+		    style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px \
+		    4px;background:lavender;border-radius:3px;text-decoration:none;margin-right:6px;'>beta</a>QuickLift tracks: ");
 cgiTableField(" ");
 cgiTableRowEnd();
 

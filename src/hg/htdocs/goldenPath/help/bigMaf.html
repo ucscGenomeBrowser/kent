@@ -127,28 +127,28 @@ wget https://genome.ucsc.edu/goldenPath/help/examples/chr22_KI270731v1_random.gp
 wget https://genome.ucsc.edu/goldenPath/help/examples/bigMaf.as
 wget https://genome.ucsc.edu/goldenPath/help/examples/mafSummary.as
 wget https://genome.ucsc.edu/goldenPath/help/examples/mafFrames.as
-wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
+wget http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
 </code></pre>
 <p>
 <strong>Step 4.</strong> 
 Download the <code>bedToBigBed</code> and <code>mafToBigMaf</code> programs from the UCSC
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>. If you have 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>. If you have 
 opted to generate the optional frame and summary files for your multiple alignment, you must also 
 download the <code>hgLoadMafSummary</code>, <code>genePredSingleCover</code>, and 
 <code>genePredToMafFrames</code> programs from the same 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">directory</a>.</p> 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">directory</a>.</p> 
 <p>
 <strong>Step 5.</strong> 
 Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">same directory</a> to create a 
 <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38). 
 Alternatively, you can download the 
 <em>chrom.sizes</em> file for any assembly hosted at UCSC from our 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
 data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38 
 database is located at 
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
-target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
+target="_blank">http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
 <pre><code>mafToBigMaf hg38 chr22_KI270731v1_random.maf stdout | sort -k1,1 -k2,2n > bigMaf.txt
 bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt hg38.chrom.sizes bigMaf.bb </code></pre>
 <p>Note that the hg38 in the mafToBigMaf hg38 command indicates the referenceDb and matches the
@@ -234,7 +234,7 @@ In this example, you will create a bigMaf file from an existing bigMaf input fil
   (<em>Step 3</em>, above).</li>
   <li>
   Download the 
-  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/"><code>bedToBigBed</code> utility</a> 
+  <a href="http://hgdownload.gi.ucsc.edu/admin/exe/"><code>bedToBigBed</code> utility</a> 
  (<em>Step 4</em>, above).</li>
   <li>
   Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. 
@@ -263,7 +263,7 @@ looking at Example 6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 Because bigMaf files are an extension of bigBed files, which are indexed binary files, it can 
 be difficult to extract data from them. UCSC has developed the following programs to assist
 in working with bigBed formats, available from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
@@ -281,7 +281,7 @@ command line to view the usage statement.</p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
 file for data coordinates that extend past the the end of the chromosome. If these are present, run 
 the <code>bedClip</code> program 
-(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+(<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
 row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

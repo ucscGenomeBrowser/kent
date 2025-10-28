@@ -82,6 +82,8 @@ def initialize_driver(headless):
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument("--start-maximized")
         options.add_argument("--window-size=1920,1080")
+        options.add_argument("--ignore-certificate-errors")
+        options.add_argument("--disable-gpu")
         options.binary_location = '/hive/users/lrnassar/selenium/chrom113/chromeInstall/opt/google/chrome/google-chrome'
         service = Service('/hive/users/lrnassar/selenium/chrom113/chromedriver')
         driver = webdriver.Chrome(service=service, options=options)

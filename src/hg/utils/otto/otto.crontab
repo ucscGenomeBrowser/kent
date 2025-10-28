@@ -114,8 +114,10 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 # the script itself sends email for notices about activity
 37 10 * * 2 /hive/data/inside/GenArk/updateHgcentral.sh makeItSo
 
-##### this script is making a listing that is used in the pushRR.sh script
-58 20 * * * /hive/data/inside/GenArk/pushRR/devList.sh
+##### this script is making a listing that is used by the pushRR.sh script.
+##### this takes a significant amount of time to run, 2 or 3 hours.
+##### Needs to be done before the pushRR.sh script below is running at 01:03
+58 18 * * * /hive/data/inside/GenArk/pushRR/devList.sh
 
 ##### see also, in the source tree: src/hg/utils/otto/genArk/pushRR/README.txt
 # push out the /gbdb/hubs/GC[AF]/ hierarchy to:

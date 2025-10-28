@@ -74,7 +74,7 @@ wigDebugPrint("wigFetch");
 
 #endif
 
-static void parseColonRange(char *setting, double *retMin, double *retMax)
+static void parseColonRange(char *settingName, char *setting, double *retMin, double *retMax)
 /* Parse setting's two colon-separated numbers into ret{Min,Max}, unless setting
  * is NULL or empty or retMin/retMax is NULL.  errAbort if invalid format. */
 {
@@ -94,7 +94,7 @@ if (isNotEmpty(setting))
 	    *retMax = high;
         }
     else
-	errAbort("Can't parse colon range '%s'", setting);
+	errAbort("Can't parse colon range value '%s' in setting %s", setting, settingName);
     }
 }
 
@@ -124,7 +124,7 @@ if (isNameAtParentLevel(tdb,name))
             setting = trackDbSettingByView(tdb,VIEWLIMITSMAX);  // Legacy
             if (setting != NULL)
                 {
-                parseColonRange(setting, absMin, absMax);
+                parseColonRange(VIEWLIMITSMAX, setting, absMin, absMax);
                 }
             }
         }
@@ -132,7 +132,7 @@ if (isNameAtParentLevel(tdb,name))
     setting = trackDbSettingByView(tdb, VIEWLIMITS);
     if (setting != NULL)
         {
-        parseColonRange(setting, retMin, retMax);
+        parseColonRange(VIEWLIMITS, setting, retMin, retMax);
         }
     }
 }
@@ -206,12 +206,16 @@ if(cartMaxStr)
 
 // Get trackDb defaults, and resolve missing wiggle data range if necessary.
 char *defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, NULL);
+char *defaultViewLimitsName = DEFAULTVIEWLIMITS;
 if (defaultViewLimits == NULL)
+    {
     defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, NULL);
+    defaultViewLimitsName = VIEWLIMITS;
+    }
 if (defaultViewLimits != NULL)
     {
     double viewLimitMin = 0.0, viewLimitMax = 0.0;
-    parseColonRange(defaultViewLimits, &viewLimitMin, &viewLimitMax);
+    parseColonRange(defaultViewLimitsName, defaultViewLimits, &viewLimitMin, &viewLimitMax);
     *retMin = viewLimitMin;
     *retMax = viewLimitMax;
     if (missingAbsMax)

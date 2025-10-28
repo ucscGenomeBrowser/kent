@@ -9676,6 +9676,7 @@ if (!hideControls)
 
             if (isHubTrack(group->name))
 		{
+
                 if (strstr(group->label, "Collections"))
                     {
                     safef(idText, sizeof idText, "%s_edit", group->name);
@@ -9687,12 +9688,21 @@ if (!hideControls)
                 }
 
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
-            hPrintf("</td><td style='text-align:right;'>\n");
-            if (isHubTrack(group->name))
-		{
-                char *hubName = hubNameFromGroupName(group->name);
-                struct trackHub *hub = grabHashedHub(hubName);
+            
+            char *hubName = hubNameFromGroupName(group->name);
+            struct trackHub *hub = grabHashedHub(hubName);
+            if (hubName)
+                {
+                puts("&nbsp;");
+                char infoText[10000];
+                safef(infoText, sizeof infoText, "A track hub is a list of tracks produced and hosted by external data providers. The UCSC browser group is not responsible for them. This hub is loaded from %s", hub->url);
+                printInfoIconColor(infoText, "white");
+                }
 
+            hPrintf("</td><td style='text-align:right;'>\n");
+            
+            if (hubName)
+		{
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
                 if (hub != NULL)
                     {
@@ -9716,14 +9726,18 @@ if (!hideControls)
                         }
                     hPrintf("&nbsp;&nbsp;");
                     }
+                }
 
-                hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
-                        "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
-                        group->name);
+            hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
+                    "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
+                    group->name);
 
+            if (hubName)
+                {
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
-                hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
+                hPrintf("<input name=\"hubDisconnectButton\" title='Disconnect third-party track hub and remove all tracks' "
+                        "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
@@ -9738,10 +9752,8 @@ if (!hideControls)
 #endif
 		}
 
-
-
             hPrintf("<input type='submit' name='hgt.refresh' value='Refresh' "
-                    "title='Update image with your changes'>\n");
+                    "title='Update image with your changes. Any of the refresh buttons on this page may be used.'>\n");
             hPrintf("</td></tr></table></th>\n");
             controlGridEndRow(cg);
 

@@ -217,11 +217,13 @@ def parseRareDiseases(disorderDict, ensemblDict):
                 # Find Ensembl reference
                 if ref.find("Source").text.lower() == "ensembl":
                     ensemblId = ref.find("Reference").text
+                    if ensemblId is None:
+                        continue
                     geneDict['ensembl'] = str(ensemblId)
 
                     # Grab the Ensembl reference link
                     geneDict[
-                        'ensemblLink'] = 'https://uswest.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=' + ensemblId
+                        'ensemblLink'] = 'https://useast.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=' + ensemblId
 
                     # Capture ensembl info
                     if ensemblId in ensemblDict.keys():

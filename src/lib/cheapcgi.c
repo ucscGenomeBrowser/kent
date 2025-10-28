@@ -12,6 +12,7 @@
 #include "errAbort.h"
 #include "filePath.h"
 #include "htmshell.h"
+#include "dystring.h"
 #ifndef GBROWSE
 #include "mime.h"
 #endif /* GBROWSE */
@@ -238,6 +239,9 @@ static struct cgiVar *inputList = NULL;
 static boolean haveCookiesHash = FALSE;
 static struct hash *cookieHash = NULL;
 static struct cgiVar *cookieList = NULL;
+
+// maximum length of CGI variables to dump to stderr, 0 = switch off
+static int logCgiVarMaxLen = 0;
 
 /* should cheapcgi use temp files to store uploaded files */
 static boolean doUseTempFile = FALSE;
@@ -904,6 +908,12 @@ cgiDecode(val,val,end-val);
 return TRUE;
 }
 
+void cgiSetMaxLogLen(int l)
+/* set the size of variable values that are dumped to stderr. Default is 0, which means no logging */
+{
+logCgiVarMaxLen = l;
+}
+
 void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
@@ -920,6 +930,10 @@ if (!hash)
   hash = newHash(6);
 slReverse(&list);
 
+struct dyString *logMsg = NULL;
+if (logCgiVarMaxLen > 0)
+    logMsg = dyStringNew(1024);	
+
 namePt = input;
 while (namePt != NULL && namePt[0] != 0)
     {
@@ -934,6 +948,10 @@ while (namePt != NULL && namePt[0] != 0)
 	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
+
+    if (logMsg && dataPt && strlen(dataPt) < logCgiVarMaxLen)
+        dyStringPrintf(logMsg, "%s=%s ", namePt, dataPt); // if dataPt is empty string, still print it, could be important
+
     cgiDecode(namePt,namePt,strlen(namePt));	/* for unusual ct names */
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
@@ -941,10 +959,20 @@ while (namePt != NULL && namePt[0] != 0)
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
     namePt = nextNamePt;
+
     }
+
+if (logMsg)
+    {
+    char *logStr = dyStringCannibalize(&logMsg);
+    fprintf(stderr, "CGIVARS %s\n", logStr);
+    freez(&logStr);
+    }
+
 slReverse(&list);
 *retList = list;
 *retHash = hash;
+
 }
 
 static jmp_buf cgiParseRecover;

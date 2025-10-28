@@ -5551,9 +5551,11 @@ bigDataUrl /gbdb/$D/hgnc/hgnc.bb
 type bigBed 9 +
 labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
 defaultLabelFields symbol
-mouseOver <b>Symbol</b>: $symbol<br> <b>$name</b><br> <b>Alias symbol</b>: $alias_symbol<br> <b>Previous symbols</b>: $prev_symbol
+mouseOver <b>Symbol</b>: <a href="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$symbol">$symbol</a><br> <b>ID</b>: $name<br> <b>Alias symbol</b>: $alias_symbol<br> <b>Previous symbols</b>: $prev_symbol
 filterValues.locus_type Y RNA,long non-coding RNA,micro RNA,misc RNA,ribosomal RNA,small nuclear RNA,small nucleolar RNA,transfer RNA,vault RNA,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,pseudogene,readthrough,unknown
 group genes
+url https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$
+urlLabel HGNC Details:
 searchIndex name
 searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
@@ -5605,3 +5607,5 @@ include mitoMap.ra
 include nmdEscape.ra alpha
 include exonprimers.ra alpha
 include longReadVariants.ra
+
+include g2p.ra alpha

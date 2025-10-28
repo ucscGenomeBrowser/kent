@@ -9490,14 +9490,27 @@ return TRUE;
 
 static bool mouseOverJsDone = FALSE;
 
-void printInfoIconSvg()
-/* Print just info icon (i) as svg tag to stdout */
+void printInfoIconSvg(char *color)
+/* Print just info icon (i) as svg tag to stdout, default color is #1C274C */
 {
 puts("<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>");
-puts("<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>");
-puts("<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>");
-puts("<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/>");
+printf("<circle cx='12' cy='12' r='10' stroke='%s' stroke-width='1.5'/>", color);
+printf("<path d='M12 17V11' stroke='%s' stroke-width='1.5' stroke-linecap='round'/>", color);
+printf("<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='%s'/>", color);
 puts("</svg>");
+}
+
+void printInfoIconColor(char *mouseover, char *color)
+/* Print info icon (i) with explanatory text on mouseover, with color */
+{
+printf("<span title=\"%s\">", mouseover);
+printInfoIconSvg(color);
+puts("</span>");
+if (!mouseOverJsDone)
+    {
+    jsInline("convertTitleTagsToMouseovers();\n");
+    mouseOverJsDone = TRUE;
+    }
 }
 
 void printInfoIcon(char *mouseover)
@@ -9505,7 +9518,7 @@ void printInfoIcon(char *mouseover)
 {
 // see https://www.svgrepo.com/svg/524660/info-circle
 printf("<span title=\"%s\">", mouseover);
-printInfoIconSvg();
+printInfoIconSvg("#1C274C");
 puts("</span>");
 if (!mouseOverJsDone)
     {

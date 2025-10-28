@@ -38,7 +38,10 @@ int main(int argc, char *argv[])
 enteredMainTime = clock1000();
 measureTime(NULL);
 
+// This is generic CGI setup code: Should be moved one day into a generic function 
+// combined with the code cart.c:genericCgiSetup() ?
 cfgSetMaxMem(); // read hg.conf and set the maxMem if there
+cfgSetLogCgiVars(); // set logging of the CGI vars
 
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, 0, 0, "html");
 browserName = hBrowserName();
