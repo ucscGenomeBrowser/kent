@@ -15,6 +15,8 @@
 #define NAVBAR_INC_PATH "/inc/globalNavBar.inc"
 #define OLD_HREF "href=\"../"
 
+char* errMessage;
+
 char *incFilePath(char *cgiPath, char *filePath, char *docRoot)
 /* Replace CGI_NAME in cgiPath with docRoot/filePath.  filePath must begin with "/" eg "/inc/..." */
 {
@@ -79,6 +81,11 @@ void parseEnvOrDie (char **cgiPath, char** docRoot, char** pagePath)
 *pagePath = getenv("REDIRECT_URL");
 if (*pagePath == NULL)
     *pagePath = getenv("DOCUMENT_URI");
+if (*pagePath == NULL)
+    {
+    *pagePath = cloneString("/inc/");
+    errMessage = "Error: hgMenubar was run without the REDIRECT_URL or DOCUMENT_URI variable set. Looks like it wasn't run from an SSI statement. Defaulting to the 'inc/' directory, avoids errors in the Apache error log.";
+    }
 
 if ( (*cgiPath == NULL) || (*docRoot == NULL) || (*pagePath == NULL) )
     {
@@ -95,5 +102,7 @@ parseEnvOrDie(&cgiPath, &docRoot, &pagePath);
 cgiSpoof(&argc, argv);
 char *incFile = cgiUsualString("incFile", NAVBAR_INC_PATH);
 printMenuBar(cgiPath, docRoot, pagePath, incFile);
+if (errMessage)
+    puts(errMessage);
 return 0;
 }

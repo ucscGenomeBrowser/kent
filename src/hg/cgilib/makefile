@@ -7,7 +7,8 @@ O=HInv.o affy10KDetails.o affy120KDetails.o ancientRref.o annoFormatVep.o annoGr
   annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o api.o atomDb.o axtLib.o \
   bactigPos.o barChartData.o barChartSample.o bdgpExprLink.o bdgpGeneInfo.o bed5FloatScore.o \
   bed6FloatScore.o bed8Attrs.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigTransMap.o borkPseudoHom.o \
-  cartEdit0.o cartEdit1.o cartEdit2.o cartEdit3.o cartEdit4.o cartEdit5.o cartEdit6.o cartEdit7.o cartJson.o cartRewrite.o ccdsGeneMap.o ccdsInfo.o ccdsNotes.o \
+  cartEdit0.o cartEdit1.o cartEdit2.o cartEdit3.o cartEdit4.o cartEdit5.o cartEdit6.o cartEdit7.o \
+  cartEdit9.o cartJson.o cartRewrite.o ccdsGeneMap.o ccdsInfo.o ccdsNotes.o \
   cdsSpec.o celeraCoverage.o celeraDupPositive.o cgh.o chicken13kInfo.o chr18deletions.o cnpIafrate.o \
   cnpIafrate2.o cnpLocke.o cnpSebat.o cnpSebat2.o cnpSharp.o cnpSharp2.o codeBlast.o cogs.o contigAcc.o \
   cpgIslandExt.o ctgPos2.o cutter.o dbRIP.o dbSnpDetails.o dbSnpRs.o delConrad2.o delHinds2.o dgv.o \

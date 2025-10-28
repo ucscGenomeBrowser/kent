@@ -27,7 +27,7 @@ See <a href="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_dat
 target="_blank">this wiki page</a> for help in selecting the graphing track data format that is most
 appropriate for your type of data. To see an example of turning a text-based bedDetail custom track
 into the <code>bigBed</code> format, see this
-<a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/03/how-make-a-bigbed-file-part-1/"
+<a href="https://genome-blog.gi.ucsc.edu/blog/2021/08/03/how-make-a-bigbed-file-part-1/"
 target="_blank">How to make a bigBed file</a> blog post.</p>
 <p>
 Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory:
@@ -43,7 +43,7 @@ explained in more detail in the following sections on this page:
 
 <pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample.txt
 wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes
-wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
+wget http://hgdownload.gi.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
 chmod a+x bedToBigBed
 ./bedToBigBed bedExample.txt hg19.chrom.sizes myBigBed.bb
 mv myBigBed.bb ~/public_html/
@@ -81,7 +81,7 @@ by <code>bedToBigBed</code>.
 <p> 
 <strong>Step 2.</strong>
 Download the <code>bedToBigBed</code> program from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>. 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>. 
 Example #2 below shows the exact Unix command.
 </p>
 
@@ -100,10 +100,10 @@ command line to display the usage message.
 <p>
 <strong>Step 3.</strong>
 Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">same directory</a> 
 to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).
 If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
-<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code>. 
+<code>http://hgdownload.gi.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code>. 
 </p>
 
 <p> 
@@ -204,7 +204,7 @@ In this example, you will convert a sample BED file to bigBed format.</p>
 <li>If you use your own file, it has to be sorted, first on the
   <code>chrom</code> field, and secondarily on the <code>chromStart</code>
   field. You can use the utility <code>bedSort</code>
-available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>
+available <a href="http://hgdownload.gi.ucsc.edu/admin/exe/" target="_blank">here</a>
 or the following UNIX <code>sort</code>
 command to do this: </p>
 <pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
@@ -213,7 +213,7 @@ command to do this: </p>
 <li> 
   Download the <code>bedToBigBed</code> utility (<em>Step 2</em>, above). Replace "linux" below with "macOSX" 
   if your server is a Mac.
-    <pre><code>wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
+    <pre><code>wget http://hgdownload.gi.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
 chmod a+x bedToBigBed</code></pre>
   </li>
   <li> 
@@ -267,7 +267,7 @@ Then, the bedToBigBed program is run with the arguments <code>-type=bed9+2</code
 This example also demonstrates how to create an extra search index on the name field, and the first of the 
 extra fields to be used for track item search. The searchIndex setting requires the input BED data to be
 case-sensitive sorted (<code>sort -k1,1 -k2,2n</code>), where newer versions of the tool bedToBigBed
-(available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>) are enhanced to catch
+(available <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">here</a>) are enhanced to catch
 improper input.</p>
 <ol>
   <li> 
@@ -346,7 +346,7 @@ look at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.
 <p>
 Because the bigBed files are indexed binary files, it can be difficult to extract data from them. 
 UCSC has developed the following programs to assist in working with bigBed formats, available from 
-the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>:</p>
+the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>:</p>
 <ul>
   <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
@@ -365,7 +365,7 @@ view the usage statement.</p>
 If you get an error when you run the <code>bedToBigBed</code> program, check your input BED file for
 data coordinates that extend past the end of the chromosome. If these are present, run the 
 <code>bedClip</code> program
-(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
+(<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
 row(s) in your input BED file before using the <code>bedToBigBed</code> program. 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
