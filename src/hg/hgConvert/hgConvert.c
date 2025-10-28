@@ -92,7 +92,8 @@ cgiTableField("New genome: ");
 cgiTableField("New assembly: ");
 if (askAboutQuickLift)
     cgiTableField("<a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' \
-		    target='ucscHelp' title='QuickLift is in beta testing, which means it is not polished and will have bugs.' \
+		    target='ucscHelp' title='QuickLift is in beta testing, which means it is not polished and will contain bugs. \
+		    Contact us at genome-www@soe.ucsc.edu if you would to report a bug.'\
 		    style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px \
 		    4px;background:lavender;border-radius:3px;text-decoration:none;margin-right:6px;'>beta</a>QuickLift tracks: ");
 cgiTableField(" ");
