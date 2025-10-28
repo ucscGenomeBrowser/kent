@@ -888,7 +888,8 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 }
 
 static boolean isComplex(char *name)
-/* Check to see if this is one of the filter variables that have arbitrary initial strings. */
+/* Check to see if this is one of the filter variables that have arbitrary initial strings. 
+ * This routine copied to hubCheck.  */
 {
 if (startsWith("yAxisLabel.", name))
     return TRUE;
