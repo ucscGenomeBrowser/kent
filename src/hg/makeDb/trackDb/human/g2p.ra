@@ -4,6 +4,7 @@ shortLabel G2P Project
 longLabel Gene2Phenotype Project
 group phenDis
 pennantIcon Updated red ../goldenPath/newsarch.html#091925 "Added the DDG2P track Sep. 19, 2025"
+cartVersion 9
 html g2p.html
 
     track ddg2p

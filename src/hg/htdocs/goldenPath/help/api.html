@@ -44,10 +44,10 @@ For this reason, we also provide alternative methods to access our data:
     accessible</a>.
   <li>
     Dumps of SQL-stored tracks, as well as tracks in binary file formats, can be found on our
-    <a href="https://hgdownload.soe.ucsc.edu/" target="_blank">download server</a>.
+    <a href="https://hgdownload.gi.ucsc.edu/" target="_blank">download server</a>.
   <li>
     All binary files on the download server (bigBed, bigWig and derivatives like bigPsl, bigChain,
-    etc) can even be <a href="https://hgdownload.soe.ucsc.edu/downloads.html#gbdb"
+    etc) can even be <a href="https://hgdownload.gi.ucsc.edu/downloads.html#gbdb"
     target="_blank">streamed over HTTP</a>.
 </ul>
 <p>
@@ -248,7 +248,7 @@ Using the <b>revComp=1</b> parameter returns the reverse complement.
 <p>
 Use the <b>genome</b> argument with the <b>/list/genarkGenomes</b> function
 to test for the existence of a specific genome assembly in the
-<a href='https://hgdownload.soe.ucsc.edu/hubs/' target=_blank>Genark</a> set
+<a href='https://hgdownload.gi.ucsc.edu/hubs/' target=_blank>Genark</a> set
 of assembly hubs.
 </p>
 <p>
@@ -306,7 +306,7 @@ Any extra parameters not allowed in a function will be flagged as an error.
     <li><a href='/FAQ/FAQformat.html#format17' target=_blank>peptideMapping</a></li>
     <li><a href='/FAQ/FAQformat.html#format10' target=_blank>pgSnp</a></li>
     <li><a href='/FAQ/FAQformat.html#format2' target=_blank>psl</a></li>
-    <li><a href='http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/rmsk.sql' target=_blank>rmsk - repeat masker</a></li>
+    <li><a href='http://hgdownload.gi.ucsc.edu/goldenPath/hg38/database/rmsk.sql' target=_blank>rmsk - repeat masker</a></li>
     <li><a href='/goldenPath/help/wiggle.html' target=_blank>wiggle/wig</a></li>
     </ul>
   </div>
@@ -365,12 +365,12 @@ the functions of the API interface.
 <b>api.genome.ucsc.edu/list/genarkGenomes?maxItemsOutput=5</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/genarkGenomes?genome=GCF_028858775.2' target=_blank>test if genome GCF_028858775.2 exists in the GenArk assembly hub genomes</a> -
 <b>api.genome.ucsc.edu/list/genarkGenomes?genome=GCF_028858775.2</b></li>
-<li><a href='https://api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt'
+<li><a href='https://api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt'
 target=_blank>list genomes from specified hub</a> -
-<b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt</b></li>
-<li><a href='https://api.genome.ucsc.edu/list/tracks?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ'
+<b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/tracks?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ'
 target=_blank>list tracks from specified hub and genome</a> -
-<b>api.genome.ucsc.edu/list/tracks?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ</b></li>
+<b>api.genome.ucsc.edu/list/tracks?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/tracks?genome=hg38' target=_blank>list tracks from UCSC database genome</a> -
 <b>api.genome.ucsc.edu/list/tracks?genome=hg38</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg38' target=_blank>list chromosomes from UCSC database genome</a> -
@@ -378,12 +378,12 @@ target=_blank>list tracks from specified hub and genome</a> -
 <li><a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg38;track=gold'
 target=_blank>list chromosomes from specified track in UCSC database genome</a> -
 <b>api.genome.ucsc.edu/list/chromosomes?genome=hg38;track=gold</b></li>
-<li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ'
+<li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ'
 target=_blank>list chromosomes from assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ</b></li>
-<li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
+<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
 target=_blank>list chromosomes from specified track in assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
+<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
 <li><a href='https://api.genome.ucsc.edu/list/schema?genome=hg38;track=knownGene'
 target=_blank>list schema from specified track in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/list/schema?genome=hg38;track=knownGene</b></li>
@@ -406,12 +406,12 @@ target=_blank>Get DNA sequence from specified chromosome and start,end coordinat
 <li><a href='https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678;revComp=1'
 target=_blank>Get the reverse complement of the DNA sequence from specified chromosome and start,end coordinates in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678;revComp=1</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678'
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678'
 target=_blank>Get DNA sequence from a track hub where 'genome' is a UCSC database</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;chrom=chr1;start=4321;end=5678'
+<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;chrom=chr1;start=4321;end=5678'
 target=_blank>Get DNA sequence from specified chromosome and start,end coordinates in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;chrom=chr1;start=4321;end=5678</b></li>
+<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;chrom=chr1;start=4321;end=5678</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;maxItemsOutput=100'
 target=_blank>Get track data for specified track in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;maxItemsOutput=100</b></li>
@@ -421,21 +421,21 @@ target=_blank>Get track data for specified track and chromosome in UCSC database
 <li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chr1;start=47000;end=48000'
 target=_blank>Get track data for specified track, chromosome and start,end coordinates in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chr1;start=47000;end=48000</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
 target=_blank>Get track data for specified track in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp'
 target=_blank>Get track data for specified track and chromosome in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chr1</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chr1</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene'
 target=_blank>Get track data for specified track in a track hub</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene;chrom=chr1'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene;chrom=chr1'
 target=_blank>Get track data for specified track and chromosome in a track hub</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene;chrom=chr1</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=gc5Base;chrom=chr1;start=4321;end=5678'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene;chrom=chr1</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=gc5Base;chrom=chr1;start=4321;end=5678'
 target=_blank>Wiggle track data for specified track, chromosome with start and end limits in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=gc5Base;chrom=chr1;start=4321;end=5678</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=gc5Base;chrom=chr1;start=4321;end=5678</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100'
 target=_blank>Wiggle track data for specified track in a UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100</b></li>
@@ -470,9 +470,9 @@ search within the track database (trackDb) settings</a> -
 <h3>Error return examples</h3>
 <p>
 <ol>
-<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321'
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321'
 target=_blank>Request track data for non-existent chromosome in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.gi.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs'
 target=_blank>Request track data from a restricted track</a>. See <a href='../../FAQ/FAQdownloads.html#download40'
 target=_blank>FAQ</a> -

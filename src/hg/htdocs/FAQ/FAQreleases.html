@@ -388,7 +388,7 @@ The asmEquivalent table on the hgFixed database is available on the public MySQL
 which assemblies versions are identical (or almost identical) to each other between UCSC, Ensembl,
 Genbank, and RefSeq assemblies.</p>
 <pre>
-mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -e 'desc asmEquivalent;' hgFixed
+mysql --user=genome --host=genome-mysql.gi.ucsc.edu -A -e 'desc asmEquivalent;' hgFixed
 +----------------------+-------------------------------------------+
 | Field                | Type                                      |
 +----------------------+-------------------------------------------+
@@ -473,7 +473,7 @@ Browser menu. What should I do?</h6>
 <p> 
 In addition to the assembly versions currently available in the Genome Browser, you can access the 
 data for older assemblies of the browser through our 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> page.</p>
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html" target="_blank">Downloads</a> page.</p>
 
 <a name="release6"></a>
 <h2>Frequency of GenBank data updates</h2>
@@ -587,7 +587,7 @@ without arguments to get the usage statement.
 <h6>How can I extract a list of rsIDs using chrom:start-end or vice versa?</h6>
 <p>
 Several utilities for working with bigBed-formatted binary files can be downloaded
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 Run a utility with no arguments to see a brief description of the utility and its options.
 </p>
 <ul>
@@ -605,7 +605,7 @@ Run a utility with no arguments to see a brief description of the utility and it
 <h6>Examples:</h6>
 <ol>
   <li>Retrieve all variants in the region chr1:200001-200400
-  <pre><tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
+  <pre><tt>bigBedToBed http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp155.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
   </li>
   <li>Retrieve variant rs6657048
   <pre><tt>bigBedNamedItems dbSnp155.bb rs6657048 stdout</tt></pre>

@@ -43,7 +43,7 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 my $ramG = '4g';
 my $cpu = 1;
-my $blatRam = '4g';	# -ram=Ng argument
+my $blatRam = '3g';	# -ram=Ng argument
 my $blatCpu = 1;	# -cpu=N argument
 my $chainRam = '16g';	# -chainRam=Ng argument
 my $chainCpu = 1;	# -chainCpu=N argument
@@ -556,6 +556,10 @@ cat \$tmpDir/chainSplit/*.chain | gzip -c > $tDb.$qDb.all.chain.gz
 cat \$tmpDir/netSplit/*.net     | gzip -c > $tDb.$qDb.noClass.net.gz
 
 cat \$tmpDir/overSplit/*.chain | gzip -c > $buildDir/$liftOverChainFile
+# make quickLift chain:
+chainSwap  $buildDir/$liftOverChainFile stdout \\
+   | chainToBigChain stdin $buildDir/$tDb.$qDb.quick.chain.txt \\
+         $buildDir/$tDb.$qDb.quick.link.txt
 
 rm -rf \$tmpDir/
 _EOF_
@@ -613,11 +617,21 @@ sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11,
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
 bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
+
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
+
 set totalBases = `ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
-set basesCovered = `bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bigBedInfo chain${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
 set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.$tDb.chain.${QDb}Link.txt
-rm -f link.tab chain.tab bigChain.as bigLink.as chain${QDb}.tab chain${QDb}Link.tab
+
+set qBases = `ave -col=2 $qSizes | grep "^total" | awk '{printf "%d", \$2}'`
+set qCovered = `bigBedInfo $tDb.$qDb.quickLink.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+set qPerCent = `echo \$qCovered \$qBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPerCent" > fb.$tDb.quick${QDb}Link.txt
+rm -f link.tab chain.tab bigChain.as bigLink.as chain${QDb}.tab chain${QDb}Link.tab $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
+
 _EOF_
     );
   }
