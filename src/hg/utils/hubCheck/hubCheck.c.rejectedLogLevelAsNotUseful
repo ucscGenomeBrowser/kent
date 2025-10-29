@@ -1,5 +1,5 @@
 /* Copyright (C) 2014 The Regents of the University of California 
- * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
+ * See README in this or parent directory for licensing information. */
 
 #include "axt.h"
 #include "common.h"
@@ -44,8 +44,7 @@ errAbort(
   "   -genome=genome        - only check this genome\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
-  "   -httpsCertCheck=[abort,warn,log,none] - set the ssl certificate verification mode.\n"  
-  "   -httpsCertCheckDomainExceptions= - space separated list of domains to whitelist.\n"  
+  "   -httpsCertCheck=[abort,warn,log,none] - set the ssl certificate verification mode.\n"
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
@@ -65,7 +64,6 @@ static struct optionSpec options[] = {
    {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
    {"httpsCertCheck", OPTION_STRING},
-   {"httpsCertCheckDomainExceptions", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
    // intentionally undocumented option for hgHubConnect
@@ -170,7 +168,6 @@ for (suggest = options->suggest; suggest != NULL; suggest = suggest->next)
         bestCount++;
         }
     }
-    
 if (bestCount == 1 && bestScore > 15)
     {
     verbose(3, "suggest %s score: %d\n", best, bestScore);
@@ -419,58 +416,6 @@ errCatchFree(&errCatch);
 return retVal;
 }
 
-static boolean isComplex(char *name)
-/* Check to see if this is one of the filter variables that have arbitrary initial strings. 
- * This routine copied from tdbQuery.  */
-{
-if (startsWith("yAxisLabel.", name))
-    return TRUE;
-if (startsWith("filter.", name))
-    return TRUE;
-if (startsWith("filterValues.", name))
-    return TRUE;
-if (startsWith("filterValuesDefault.", name))
-    return TRUE;
-if (startsWith("filterType.", name))
-    return TRUE;
-if (startsWith("filterLimits.", name))
-    return TRUE;
-if (startsWith("filterLabel.", name))
-    return TRUE;
-if (startsWith("filterByRange.", name))
-    return TRUE;
-if (startsWith("filterText.", name))
-    return TRUE;
-if (endsWith(name, "Filter"))
-    return TRUE;
-if (endsWith(name, "FilterValues"))
-    return TRUE;
-if (endsWith(name, "FilterType"))
-    return TRUE;
-if (endsWith(name, "FilterLimits"))
-    return TRUE;
-if (endsWith(name, "FilterText"))
-    return TRUE;
-if (startsWith("highlight.", name))
-    return TRUE;
-if (startsWith("highlightValues.", name))
-    return TRUE;
-if (startsWith("highlightValuesDefault.", name))
-    return TRUE;
-if (startsWith("highlightType.", name))
-    return TRUE;
-if (startsWith("highlightLimits.", name))
-    return TRUE;
-if (startsWith("highlightLabel.", name))
-    return TRUE;
-if (startsWith("highlightByRange.", name))
-    return TRUE;
-if (startsWith("highlightText.", name))
-    return TRUE;
-return FALSE;
-}
-
-     
 
 int hubCheckTrackSetting(struct trackHub *hub, struct trackDb *tdb, char *setting, 
                                 struct trackHubCheckOptions *options, struct dyString *errors)
@@ -489,14 +434,6 @@ if (options->extra && hashLookup(options->extra, setting))
 
 /* check setting is supported in this version */
 struct trackHubSettingSpec *hubSetting = hashFindVal(options->settings, setting);
-
-boolean isComplexSetting = isComplex(setting);
-if (isComplexSetting)
-    {
-    verbose(5, "skipping validation for complex setting=%s.", setting);
-    return 1;
-    }
-
 if (hubSetting == NULL)
     {
     dyStringPrintf(errors, "Setting '%s' is unknown/unsupported", setting);
@@ -680,8 +617,7 @@ return FALSE;
 }
 
 int hubCheckSubtrackSettings(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
-/* Check subtrack specific settings, for example that 'subgroups' are consistent with what
- * is defined at the parent level */
+/* Check that 'subgroups' are consistent with what is defined at the parent level */
 {
 int retVal = 0;
 if (!tdbIsSubtrack(tdb))
@@ -696,15 +632,6 @@ struct errCatch *errCatch = errCatchNew();
 
 if (errCatchStart(errCatch))
     {
-    // check that subtrack group is the same as the parent group:
-    char *subTrackGroup = tdb->grp;
-    char *parentGroup = tdb->parent->grp;
-    if (!sameString(subTrackGroup, parentGroup))
-        {
-        errAbort("assembly %s: track %s has a different group (%s) than parent %s (group %s). Please specify the group setting in both the parent and the subtrack stanzas", trackHubSkipHubName(genome->name), subtrackName, subTrackGroup, trackHubSkipHubName(tdb->parent->track), parentGroup);
-        }
-
-    // check subgroups settings
     membersForAll = membersForAllSubGroupsGet(tdb->parent, NULL);
 
     // membersForAllSubGroupsGet() warns about the parent stanza, turn it into an errAbort
@@ -730,7 +657,7 @@ if (errCatchStart(errCatch))
                 {
                 char *col = sortOrder->column[i];
                 if ( (!sameString(col, SUBTRACK_COLOR_SUBGROUP)) && (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1))
-                    warn("%s not a member of sortOrder subgroup %s", subtrackName, col);
+                    errAbort("%s not a member of sortOrder subgroup %s", subtrackName, col);
                 }
             }
 
@@ -742,24 +669,14 @@ if (errCatchStart(errCatch))
                 char *subgroupName = membersForAll->members[i]->groupTag;
                 if (stringArrayIx(subgroupName, membership->subgroups, membership->count) == -1)
                     {
-                    warn("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
+                    errAbort("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
                     }
-                }
-            }
-
-        // check that the subtrack does not have any bogus subgroups that don't exist in the parent
-        for (i = 0; i < membership->count; i++)
-            {
-            char *subgroupName = membership->subgroups[i];
-            if (!subgroupingExists(tdb->parent, subgroupName))
-                {
-                warn("subtrack \"%s\" has a subgroup \"%s\" not defined at parent level", subtrackName, subgroupName);
                 }
             }
         }
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError || errCatch->gotWarning)
+if (errCatch->gotError)
     {
     retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
@@ -842,132 +759,6 @@ else if (tdb->subtracks != NULL)
     }
 }
 
-boolean checkTypeLine(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
-{
-boolean retVal = FALSE;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    char *type = trackDbRequiredSetting(tdb, "type");
-    char *splitType[4];
-    int numWords = chopByWhite(cloneString(type), splitType, sizeof(splitType));
-    char *trackType = splitType[0];
-    boolean isParentTrack = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
-    if (!isParentTrack &&
-            // these are the valid trackDb types for hub data tracks:
-            !(sameString("bigNarrowPeak", trackType) || sameString("bigBed", trackType) ||
-                    sameString("bigGenePred", trackType)  || sameString("bigPsl", trackType)||
-                    sameString("bigChain", trackType)|| sameString("bigMaf", trackType) ||
-                    sameString("bigBarChart", trackType) || sameString("bigInteract", trackType) ||
-                    sameString("bigLolly", trackType) || sameString("bigRmsk", trackType) ||
-                    sameString("bigWig", trackType) || sameString("longTabix", trackType) ||
-                    sameString("vcfTabix", trackType) || sameString("vcfPhasedTrio", trackType) ||
-                    sameString("bam", trackType) || sameString("hic", trackType)
-            #ifdef USE_HAL
-                    || sameString("halSnake", trackType)
-            #endif
-            ))
-        {
-        errAbort("error in type line \"%s\" for track \"%s\". The only valid types for tracks that are not composites, views or supertracks are: bigWig, bigBed and bigBed variants like bigGenePred/bigChain/bigBarChart/etc, longTabix, vcfTabix, vcfPhasedTrio, bam, hic and halSnake.", trackType, tdb->track);
-        }
-
-    if (sameString(splitType[0], "bigBed"))
-        {
-        if (numWords > 1 && (strchr(splitType[1], '+') || strchr(splitType[1], '.')))
-            {
-            errAbort("error in type line \"%s\" for track \"%s\". "
-                "A space is needed after the \"+\" or \".\" character.", type, tdb->track);
-            }
-        if (numWords > 2 && (!sameString(splitType[2], "+") && !sameString(splitType[2], ".")))
-            {
-            errAbort("error in type line \"%s\" for track \"%s\". "
-                "Only \"+\" or \".\" is allowed after bigBed numFields setting.", type, tdb->track);
-            }
-        }
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
-    retVal = TRUE;
-    }
-return retVal;
-}
-
-boolean isValidDouble(char *s, double *result)
-/* Convert string to a double.  Assumes all of string is number
- * and returns FALSE if double is invalid.
- * Does not errAbort. Avoids sqlDouble which does abort. */
-{
-char* end;
-double val = strtod(s, &end);
-
-if ((end == s) || (*end != '\0')
- || *s == ' '
- )
-    return FALSE;
-*result = val;
-return TRUE;
-}
-
-
-static void parseColonRange(struct trackDb *tdb, char *settingName, char *setting)
-/* Parse setting's two colon-separated numbers and detects errors in their value. 
- * Helpfully shows track and setting name as well as setting value in the error message. 
- * Does not swap or return min max range values.
- * trackDbDoc syntax
-    viewLimits <lower:upper>
- */
-{
-char tmp[64];
-safecpy(tmp, sizeof(tmp), setting);
-char *words[3];
-if (chopByChar(tmp, ':', words, ArraySize(words)) == 2)
-    {
-    char *lower = words[0];
-    double lowerVal = 0;
-    boolean validLower = isValidDouble(lower, &lowerVal);
-    if (!validLower)
-	errAbort("Invalid double range lower value '%s' in range '%s' in setting %s track %s", lower, setting, settingName, tdb->track);
-
-    char *upper = words[1];
-    double upperVal = 0;
-    boolean validUpper = isValidDouble(upper, &upperVal);
-    if (!validUpper)
-	errAbort("Invalid double range upper value '%s' in range '%s' in setting %s track %s", upper, setting, settingName, tdb->track);
-
-    if (validUpper && validLower)
-	{
-	if (upperVal < lowerVal)
-	    warn("upper < lower. Should swap lower and upper range values in '%s' in setting %s track %s", setting, settingName, tdb->track);
-	}
-    }
-else
-    errAbort("Missing a colon in range value '%s' in setting %s track %s", setting, settingName, tdb->track);
-}
-
-void checkViewLimitsSettings(struct trackDb *tdb)
-/* check viewLimits and viewLimitsMax and defaultViewLimits setting values */
-{
-int i;
-for(i = 0; i < 3; i++)
-    {
-    char *settingName;
-    if (i == 0)
-	settingName = VIEWLIMITS;
-    if (i == 1)
-	settingName = VIEWLIMITSMAX;
-    if (i == 2)
-	settingName = DEFAULTVIEWLIMITS;
-
-    char *setting = trackDbSetting(tdb, settingName);
-    if (setting)
-        {
-        parseColonRange(tdb, settingName, setting);
-        }
-    }
-}
-
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -1027,9 +818,6 @@ if (options->htmlOut)
 
 if (errCatchStart(errCatch))
     {
-    if (tdb->errMessage)  // if we found any errors when first reading in the trackDb
-        errAbort("%s",tdb->errMessage);
-
     hubCheckParentsAndChildren(tdb);
     if (trackIsContainer)
         retVal |= hubCheckCompositeSettings(genome, tdb, errors, options);
@@ -1037,40 +825,13 @@ if (errCatchStart(errCatch))
     if (tdbIsSubtrack(tdb))
         retVal |= hubCheckSubtrackSettings(genome, tdb, errors, options);
 
-    // check that type line is syntactically correct regardless of
-    // if we actually want to check the data file itself
-    boolean foundTypeError = checkTypeLine(genome, tdb, errors, options);
-
-    // No point in checking the data file if the type setting is incorrect,
-    // since hubCheckBigDataUrl will error out early with a less clear message
-    // if the type line is messed up. This has the added benefit of providing
-    // consistent messaging on command line interface vs web interface
-    if (!foundTypeError && options->checkFiles)
+    if (options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
-
-
-    checkViewLimitsSettings(tdb);
-
     if (!sameString(tdb->track, "cytoBandIdeo"))
         {
         trackHubAddDescription(genome->trackDbFile, tdb);
         if (!tdb->html)
-            warn("warning: missing description page for track. Add 'html %s.html' line to the '%s' track stanza. ",
-                 tdb->track, tdb->track);
-        }
-
-    if (!trackIsContainer && sameString(trackDbRequiredSetting(tdb, "type"), "bigWig"))
-        {
-        char *autoScaleSetting = trackDbLocalSetting(tdb, "autoScale");
-        if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
-            {
-            errAbort("track \"%s\" has value \"%s\" for autoScale setting, "
-                    "valid autoScale values for individual bigWig tracks are \"off\" or \"on\" only. "
-                    "If \"%s\" is part of a bigWig composite track and you want to use the "
-                    "\"%s\" setting, only declare \"autoScale group\" in the parent stanza",
-                    trackHubSkipHubName(tdb->track), autoScaleSetting, trackHubSkipHubName(tdb->track), 
-                    autoScaleSetting);
-            }
+            warn("warning: missing description page for track: '%s'", tdb->track);
         }
     }
 errCatchEnd(errCatch);
@@ -1139,8 +900,7 @@ if (errCatchStart(errCatch))
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
         }
-    boolean foundFirstGenome = FALSE;
-    tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);
+    tdbList = trackHubTracksForGenome(hub, genome, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
@@ -1406,26 +1166,18 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 char *httpsCertCheck = optionVal("httpsCertCheck", NULL);
 if (httpsCertCheck)
     {
-    //  level log for testing, but you only see something if SCRIPT_NAME env variable is set like CGIs have.
     if (sameString(httpsCertCheck, "abort") || sameString(httpsCertCheck, "warn") || sameString(httpsCertCheck, "log") || sameString(httpsCertCheck, "none"))
 	{
 	setenv("https_cert_check", httpsCertCheck, 1);
 	}
     else
 	{
-	// log level is not very useful, but included it for completeness.
 	verbose(1, "The value of -httpsCertCheck should be either abort to avoid Man-in-middle attack,\n"
 		"warn to warn about failed certs,\n"
+		"log to just show failed certs to stderr, or\n"
 		"none indicating the verify is skipped entirely.");
 	usage();
 	}
-    }
-
-// should be space separated list, if that lists contains "noHardwiredExceptions" then the built-in hardwired whitelist in https.c is skipped.
-char *httpsCertCheckDomainExceptions = optionVal("httpsCertCheckDomainExceptions", NULL);
-if (httpsCertCheckDomainExceptions)
-    {
-    setenv("https_cert_check_domain_exceptions", httpsCertCheckDomainExceptions, 1);
     }
 
 knetUdcInstall();  // make the htslib library use udc
@@ -1438,7 +1190,7 @@ if (optionExists("settings"))
 
 // hgHubConnect specific option for generating a jstree of the hub errors
 checkOptions->htmlOut = optionExists("htmlOut");
-struct dyString *errors = dyStringNew(1024);
+struct dyString *errors = newDyString(1024);
 if (trackHubCheck(argv[1], checkOptions, errors) || checkOptions->htmlOut)
     {
     if (checkOptions->htmlOut) // just dump errors string to stdout

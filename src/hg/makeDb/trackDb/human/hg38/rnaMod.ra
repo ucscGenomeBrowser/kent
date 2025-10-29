@@ -1,0 +1,16 @@
+track rnaMod
+superTrack on
+shortLabel RNA modifications
+longLabel RNA modifications
+group rna
+visibility hide
+type bed 4
+
+    track fetalXiao2019
+    shortLabel Fetal M6A from Xiao 2019
+    longLabel RNA modification: Fetal M6A from Xiao 2019
+    parent rnaMod show
+    visibility dense
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/hg38/rnaMod/fetalXiao2019.bb

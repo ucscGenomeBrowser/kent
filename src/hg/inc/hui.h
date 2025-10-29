@@ -1578,8 +1578,15 @@ int defaultFieldLocation(char *field);
 void printInfoIconSvg();
 /* Print just info icon (i) as svg to stdout */
 
+void printInfoIconColor(char *mouseover, char *color);
+/* Print info icon (i) with explanatory text on mouseover, with color */
+
 void printInfoIcon(char *mouseover);
 /* Print info icon (i) with explanatory text on mouseover
+ * Uses jquery icon set, with style customized to GB in jquery-ui.css */
+
+void printInfoIconColor(char *mouseover, char *color);
+/* Same as above, but with a color attribute.
  * Uses jquery icon set, with style customized to GB in jquery-ui.css */
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart);

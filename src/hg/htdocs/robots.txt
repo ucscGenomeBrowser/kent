@@ -1,4 +1,7 @@
 # This robots.txt should not be pushed to the RR. For RR edit robots.rr.txt.
+User-agent: Claude-User
+Allow: /
+
 User-agent: *
 Disallow: /
 
