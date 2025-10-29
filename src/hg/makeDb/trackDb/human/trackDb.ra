@@ -265,7 +265,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         longLabel Varaico Main Test
         visibility dense
         type bigBed 9 +
-        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/full/$D/normalized_variants.$D.bb
+        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/None/full/$D/normalized_variants.$D.bb
         noScoreFilter on
         exonNumbers off
         # itemRgb on
@@ -281,7 +281,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         longLabel Varaico Suppl Test
         visibility dense
         type bigBed 9 +
-        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/full/$D/normalized_variants_supplements.$D.bb
+        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/None/full/$D/normalized_variants_supplements.$D.bb
         noScoreFilter on
         exonNumbers off
         # itemRgb on
