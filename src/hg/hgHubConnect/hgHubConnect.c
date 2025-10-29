@@ -448,7 +448,7 @@ else
     char *existingKey = getApiKey(userName);
     if (existingKey)
         {
-        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an API key. If you would like to generate a new key (which revokes old keys), click 'Generate key'. To use your API key with Hubtools, copy and paste the below key to your ~/.hubtools.conf file. This is not necessary for URL use to bypass the CAPTCHA.<br><br>");
+        puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an API key. If you would like to generate a new key (which revokes old keys), click 'Generate key'. To use your API key with Hubtools, copy and paste the below key to your ~/.hubtools.conf file. This is not necessary for URL use to <a href='/FAQ/FAQdownloads.html#CAPTCHA'>bypass the CAPTCHA</a>.<br><br>");
         puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
         printf("%s\n", existingKey);
         puts("</div>");
@@ -457,9 +457,9 @@ else
         }
     else
         {
-        puts("<div id='generateDiv' class='help'>Generate an API key to bypass the CAPTCHA or use the <tt>hubtools up</tt> command");
+        puts("<div id='generateDiv' class='help'>Generate an API key to <a href='/FAQ/FAQdownloads.html#CAPTCHA'>bypass the CAPTCHA</a> or use the <tt>hubtools up</tt> command");
         puts("<button id='generateApiKey'>Generate key</button></div>");
-        printf("<div id='apiKeyInstructions' style='display: %s'>To use your API key with hubtools, create a file ~/.hubtools.conf and add the key. This is not necessary for URL use to bypass the CAPTCHA.<br><br>\n", existingKey != NULL ? "block" : "none");
+        printf("<div id='apiKeyInstructions' style='display: %s'>To use your API key with hubtools, create a file ~/.hubtools.conf and add the key. This is not necessary for URL use to <a href='/FAQ/FAQdownloads.html#CAPTCHA'>bypass the CAPTCHA</a>.<br><br>\n", existingKey != NULL ? "block" : "none");
         puts("<div id='apiKey' style='margin-left: 15px; font-family: monospace'>");
         puts("</div></div>");
         }
