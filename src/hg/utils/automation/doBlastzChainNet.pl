@@ -83,9 +83,9 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 # my $bigClusterHub = 'swarm';
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 # my $smallClusterHub = 'encodek';
-my $smallClusterHub = 'ku';
+my $smallClusterHub = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $ram = '3g';
 my $cpu = 1;
