@@ -3858,39 +3858,43 @@ var dragReorder = {
                         // hide any gears that may be present from dragging
                         $(document.querySelectorAll("[id^=gear_btn]")).hide();
                         $(span).show();
-                        tdBtn.style.position = "relative";
-                        let tdbKey = tdBtn.id.replace("td_btn_","");
-                        let tdb = hgTracks.trackDb[tdbKey];
-                        let tooltip = " click or right click to configure... drag to reorder";
-                        if (typeof tdb.parentLabel !== 'undefined') {
-                            addMouseover(span, tdb.parentLabel + tooltip + " highlighted subtracks");
-                        } else {
-                            addMouseover(span, tdb.shortLabel + tooltip);
-                        }
-                        span.addEventListener("click", (e) => {
-                            // trigger a click on the <a> of the td
-                            e.preventDefault();
-                            e.stopPropagation();
-                            e.stopImmediatePropagation();
-                            const clickEvent = new MouseEvent("click", {
-                                bubbles: true,
-                                cancelable: true,
-                                view: window,
-                                clientX: tdBtn.getBoundingClientRect().left + 15,
-                                clientY: tdBtn.getBoundingClientRect().top,
-                                button: 1,
+                        if (!span.dataset.alreadySetup) {
+                            tdBtn.style.position = "relative";
+                            let tdbKey = tdBtn.id.replace("td_btn_","");
+                            let tdb = hgTracks.trackDb[tdbKey];
+                            let tooltip = " click or right click to configure... drag to reorder";
+                            if (typeof tdb.parentLabel !== 'undefined') {
+                                addMouseover(span, tdb.parentLabel + tooltip + " highlighted subtracks");
+                            } else {
+                                addMouseover(span, tdb.shortLabel + tooltip);
+                            }
+                            span.addEventListener("click", (e) => {
+                                // trigger a click on the <a> of the td
+                                e.preventDefault();
+                                e.stopPropagation();
+                                e.stopImmediatePropagation();
+                                const clickEvent = new MouseEvent("click", {
+                                    bubbles: true,
+                                    cancelable: true,
+                                    view: window,
+                                    clientX: tdBtn.getBoundingClientRect().left + 15,
+                                    clientY: tdBtn.getBoundingClientRect().top,
+                                    button: 1,
+                                });
+                                tdBtn.children[0].dispatchEvent(clickEvent);
                             });
-                            tdBtn.children[0].dispatchEvent(clickEvent);
-                        });
-                        let tdp = tdBtn.querySelector("p.btn");
-                        if (tdp) {
-                            span.addEventListener("pointerenter", (e) => {
-                                // trigger a mouseover on the actual btn
-                                dragReorder.buttonMouseOver.call(tdp, e);
-                            });
-                            span.addEventListener("pointerleave", (e) => {
-                                dragReorder.buttonMouseOut.call(tdp, e);
-                            });
+                            let tdp = tdBtn.querySelector("p.btn");
+                            if (tdp) {
+                                span.addEventListener("pointerenter", (e) => {
+                                    // trigger a mouseover on the actual btn
+                                    dragReorder.buttonMouseOver.call(tdp, e);
+                                });
+                                span.addEventListener("pointerleave", (e) => {
+                                    dragReorder.buttonMouseOut.call(tdp, e);
+                                });
+                            }
+                            // prevent attaching multiple events every time the tr is moused over
+                            span.dataset.alreadySetup = "true";
                         }
                     }
                 }
@@ -3906,18 +3910,22 @@ var dragReorder = {
                         // hide any shown 'x' buttons from dragging
                         $(document.querySelectorAll("[id^=close_btn]")).hide();
                         $(btn).show();
-                        addMouseover(btn, btn.title);
-                        tdSide.style.position = "relative";
-                        if (hgTracks && hgTracks.revCmplDisp) {
-                            // set up 'x' icon to the right
-                            btn.classList.add("hgTracksCloseIconRight");
-                        } else {
-                            // set up 'x' icon to the left
-                            btn.classList.add("hgTracksCloseIconLeft");
+                        if (!btn.dataset.alreadySetup) {
+                            addMouseover(btn, btn.title);
+                            tdSide.style.position = "relative";
+                            if (hgTracks && hgTracks.revCmplDisp) {
+                                // set up 'x' icon to the right
+                                btn.classList.add("hgTracksCloseIconRight");
+                            } else {
+                                // set up 'x' icon to the left
+                                btn.classList.add("hgTracksCloseIconLeft");
+                            }
+                            btn.addEventListener("click", (e) => {
+                               rightClick.hideTracks([id]);
+                            });
+                            // prevent attaching multiple events every time the tr is moused over
+                            btn.dataset.alreadySetup = "true";
                         }
-                        btn.addEventListener("click", (e) => {
-                           rightClick.hideTracks([id]);
-                        });
                     }
                 }
             }
