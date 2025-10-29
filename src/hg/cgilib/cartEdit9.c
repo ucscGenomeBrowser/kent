@@ -23,6 +23,9 @@ length = ArraySize(edit9TracksCcre);
 cartTurnOnSuper(cart, edit9TracksCcre, length, "cCREs");
 
 // Move the ddg2p track from the decipher container to it's own supertrack
+// but only if the decipherContainer was on previously and ddg2p was also on
 length = ArraySize(edit9TracksG2p);
-cartTurnOnSuper(cart, edit9TracksG2p, length, "g2pContainer");
+char *oldContainerVis = cartOptionalString(cart, "decipherContainer");
+if (oldContainerVis && sameString(oldContainerVis, "show"))
+    cartTurnOnSuper(cart, edit9TracksG2p, length, "g2pContainer");
 }
