@@ -1585,6 +1585,10 @@ void printInfoIcon(char *mouseover);
 /* Print info icon (i) with explanatory text on mouseover
  * Uses jquery icon set, with style customized to GB in jquery-ui.css */
 
+void printInfoIconColor(char *mouseover, char *color);
+/* Same as above, but with a color attribute.
+ * Uses jquery icon set, with style customized to GB in jquery-ui.css */
+
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart);
 /* Maybe print a "related track" section */
 

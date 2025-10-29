@@ -9691,7 +9691,7 @@ if (!hideControls)
             
             char *hubName = hubNameFromGroupName(group->name);
             struct trackHub *hub = grabHashedHub(hubName);
-            if (hubName)
+            if (hub && hub->url)
                 {
                 puts("&nbsp;");
                 char infoText[10000];

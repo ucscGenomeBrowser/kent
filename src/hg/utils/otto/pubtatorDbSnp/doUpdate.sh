@@ -69,22 +69,27 @@ cut -f 1 rs_to_pmid.tsv > rsIds.tsv
 splits=`mktemp -d ./rsids_splits_XXXXXXXX`
 split -l 2000 rsIds.tsv ${splits}/split_
 
+
+
 for db in $dbs
 do
   jobdir=`mktemp -d ./jobs_XXXXXXXX`
   out_dir=`mktemp -d ./out_XXXXXXXX`
+
+  mkdir -p /scratch/tmp/pubtatorDbSnp
+  cp /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26/${db}.dbSnp155.bb /scratch/tmp/pubtatorDbSnp
   
   for i in ${splits}/split_*
   do
       basename=`basename $i`
       full_path=`readlink -f $i`
       out=`readlink -f ${out_dir}/${basename}.bed`
-      echo "bigBedNamedItems /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26/${db}.dbSnp155.bb -nameFile ${full_path} ${out}" >> ${jobdir}/joblist
+      echo "bigBedNamedItems /scratch/tmp/pubtatorDbSnp/${db}.dbSnp155.bb -nameFile ${full_path} ${out}" >> ${jobdir}/joblist
   done
   
   full_jobdir=`readlink -f ${jobdir}`
   
-  cat ${full_jobdir}/joblist | parallel -j 50
+  cat ${full_jobdir}/joblist | parallel -j 20
   
   cat ${out_dir}/* > rsids.${db}.bed
   
@@ -105,6 +110,7 @@ do
 
   rm -rf $jobdir
   rm -rf $out_dir
+  rm -f /scratch/tmp/pubtatorDbSnp/${db}.dbSnp155.bb
 done
 
 rm -rf $splits
