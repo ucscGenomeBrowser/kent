@@ -245,7 +245,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
         html varaico.html
 
-        track varaico
+        track varaicoSuppl
         shortLabel Varaico Variants (suppl)
         longLabel Varaico Variants extracted from Supplementary Data
         visibility dense
