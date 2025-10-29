@@ -948,6 +948,7 @@ printf("<script type='text/javascript' nonce='%s'>\n%s</script>\n", getNonce(), 
 jsIncludeReactLibs();
 jsIncludeFile("reactHgIntegrator.js", NULL);
 jsIncludeFile("hgIntegratorModel.js", NULL);
+jsIncludeFile("autocompleteCat.js", NULL);
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",

@@ -725,16 +725,17 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
-static void jsonWriteValueLabel(struct jsonWrite *jw, char *value, char *label)
-/* Assuming we're already in an object, write out value and label tags & strings. */
+//static void jsonWriteValueLabel(struct jsonWrite *jw, char *value, char *label)
+/* Assuming we're already in an object, write out value and label tags & strings. 
 {
 jsonWriteString(jw, "value", value);
 jsonWriteString(jw, "label", label);
 }
+*/
 
-static void printCladeOrgDbTree(struct jsonWrite *jw)
+//static void printCladeOrgDbTree(struct jsonWrite *jw)
 /* Print out the tree of clades, organisms and dbs as JSON.  Each node has value and label
- * for menu options; clade nodes and org nodes also have children and default. */
+ * for menu options; clade nodes and org nodes also have children and default. 
 {
 jsonWriteListStart(jw, "cladeOrgDb");
 struct slPair *clade, *cladeOptions = hGetCladeOptions();
@@ -775,12 +776,13 @@ for (clade = cladeOptions;  clade != NULL;  clade = clade->next)
     }
 jsonWriteListEnd(jw);
 }
+*/
 
 static void getCladeOrgDbPos(struct cartJson *cj, struct hash *paramHash)
 /* Get cart's current clade, org, db, position and geneSuggest track. */
 {
 jsonWriteObjectStart(cj->jw, "cladeOrgDb");
-printCladeOrgDbTree(cj->jw);
+//printCladeOrgDbTree(cj->jw);
 char *db = cartString(cj->cart, "db");
 jsonWriteString(cj->jw, "db", db);
 char *org = cartUsualString(cj->cart, "org", hGenome(db));
