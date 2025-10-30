@@ -10,10 +10,6 @@ static char *edit9TracksCcre[] = {
     "encodeCcreCombined",
 };
 
-static char *edit9TracksG2p[] = {
-    "ddg2p",
-};
-
 void cartEdit9(struct cart *cart)
 {
 int length = 0;
@@ -22,10 +18,11 @@ int length = 0;
 length = ArraySize(edit9TracksCcre);
 cartTurnOnSuper(cart, edit9TracksCcre, length, "cCREs");
 
-// Move the ddg2p track from the decipher container to it's own supertrack
+// Move the ddg2p track from the decipher container to it's own track called g2p,
 // but only if the decipherContainer was on previously and ddg2p was also on
-length = ArraySize(edit9TracksG2p);
 char *oldContainerVis = cartOptionalString(cart, "decipherContainer");
+char *oldDdg2pVis = cartOptionalString(cart, "ddg2p");
 if (oldContainerVis && sameString(oldContainerVis, "show"))
-    cartTurnOnSuper(cart, edit9TracksG2p, length, "g2pContainer");
+    if (oldDdg2pVis && !sameString(oldDdg2pVis, "hide"))
+        cartSetString(cart, "g2p", oldDdg2pVis);
 }
