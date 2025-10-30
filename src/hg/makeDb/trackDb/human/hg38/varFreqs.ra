@@ -21,7 +21,7 @@ compositeTrack on
         longLabel Mexico Biobank Prospective Study (MCPS)
         tableBrowser off
         parent varFreqs on
-        bigDataUrl /gbdb/hg38/varFreqs/mcps/mcps.vcf.gz
+        bigDataUrl /gbdb/hg38/varFreqs/mcps/mcps.freq.vcf.gz
         visibility dense
         type vcfTabix
         hapClusterEnabled true
