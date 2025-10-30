@@ -103,7 +103,7 @@ sub doSetup {
      return;
   }
   if (! $opt_debug) {
-    my @outs = ("$runDir/doSetup.bash",
+    my @outs = ("$runDir/setup.bash",
                 "$runDir/chrom.sizes",
                 "$runDir/part.list");
     HgAutomate::checkCleanSlate('setup', 'cluster', @outs);
@@ -112,7 +112,7 @@ sub doSetup {
 
   my $whatItDoes = "prepare files for longdust cluster run.";
   my $workhorse = $opt_debug ? "hgwdev" : HgAutomate::chooseWorkhorse();
-  my $bossScript = newBash HgRemoteScript("$runDir/doSetup.bash", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/setup.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   my $tmpDir = HgAutomate::tmpDir();
@@ -206,8 +206,7 @@ sub doBedResult {
      return;
   }
   my $whatItDoes = "Consolidate the cluster run bed.gz files.  Make single bed and bigBed file.";
-  HgAutomate::checkExistsUnlessDebug('cluster', 'cleanup', ("$runDir/longdust.bed.gz",
-           "$runDir/longdust.bb"));
+  HgAutomate::checkExistsUnlessDebug('cluster', 'cleanup', "$runDir/run.time");
   my $fileServer = $opt_debug ? "hgwdev" : HgAutomate::chooseFileServer($runDir);
   my $bossScript = newBash HgRemoteScript("$runDir/makeBed.bash", $fileServer,
 				      $runDir, $whatItDoes);
