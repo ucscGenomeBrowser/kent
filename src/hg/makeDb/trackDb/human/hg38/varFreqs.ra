@@ -15,3 +15,13 @@ compositeTrack on
         visibility pack
         type vcfTabix
         hapClusterEnabled true
+
+        track mcps
+        shortLabel Mexico City Prospective Study 
+        longLabel Mexico Biobank Prospective Study (MCPS)
+        tableBrowser off
+        parent varFreqs on
+        bigDataUrl /gbdb/hg38/varFreqs/mcps/mcps.vcf.gz
+        visibility dense
+        type vcfTabix
+        hapClusterEnabled true
