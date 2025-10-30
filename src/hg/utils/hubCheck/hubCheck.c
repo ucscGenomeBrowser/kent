@@ -939,7 +939,7 @@ if (chopByChar(tmp, ':', words, ArraySize(words)) == 2)
     if (validUpper && validLower)
 	{
 	if (upperVal < lowerVal)
-	    warn("upper < lower. Should swap lower and upper range values in %s' in setting %s track %s", setting, settingName, tdb->track);
+	    warn("upper < lower. Should swap lower and upper range values in '%s' in setting %s track %s", setting, settingName, tdb->track);
 	}
     }
 else

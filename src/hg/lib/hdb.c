@@ -68,6 +68,8 @@ static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as 
 static char *cartDb = NULL;
 static char *hdbTrackDb = NULL;
 
+static char *centralProfile = "central";
+
 /* cached list of tables in databases.  This keeps a hash of databases to
  * hashes of track/table name to slName list of actual table names, which
  * might be split.  Since individual tables can be mapped to different
@@ -792,7 +794,6 @@ static void hCentralMkCache()
 /* create the central database cache, trying to connect to the
  * database and failing over if needed */
 {
-char *centralProfile = "central";
 centralDb = cfgOption2(centralProfile, "db");
 centralCc = sqlConnCacheNewProfile(centralProfile);
 sqlSetParanoid(TRUE);
@@ -840,6 +841,7 @@ if (*pConn != NULL)
 struct sqlConnection *hConnectCentralNoCache() 
 /* open an hgcentral connection, but do not use the cache. Used before the bottleneck call. */
 {
+    char *centralDb = cfgOption2(centralProfile, "db");
     struct sqlConnection *conn = sqlMayConnect(centralDb);
     if (conn == NULL)
         errAbort("Cannot connect to MariaDB database defined in hg.conf called '%s'", centralDb);

@@ -10,7 +10,10 @@
 #include "maf.h"
 #include "obscure.h"
 #include "genePred.h"
+#include "dnaseq.h"
 #include "mafGene.h"
+#include "chromAlias.h"
+#include "hgMaf.h"
 
 
 struct exonInfo
@@ -115,7 +118,29 @@ seq->size = actualSize;
 return seq;
 }
 
-static struct mafAli *getRefAli(char *database, char *chrom, int start, int end)
+static DNA *getTwoBitSeq(struct mafFileCache *mafFileCache, char *chrom, int start, int end)
+{
+if (!sameOk(mafFileCache->chrom, chrom))
+    {
+    freeMem(mafFileCache->chrom);
+    mafFileCache->chrom = cloneString(chrom);
+
+    freeDnaSeq(&mafFileCache->dnaSeq);
+
+    int size;
+    struct dnaSeq *dnaSeq = twoBitReadSeqFragExt(mafFileCache->tbf, chrom, 0, 0, FALSE, &size);
+    mafFileCache->dnaSeq = dnaSeq;
+    }
+
+// we copy this because it gets freed later by the maf code
+int length = end - start;
+char *text = cloneMem(mafFileCache->dnaSeq->dna + start, length+1); 
+text[length] = 0;
+
+return text;
+}
+
+static struct mafAli *getRefAli(char *database, char *chrom, int start, int end, struct mafFileCache *mafFileCache)
 {
 struct mafAli *ali;
 struct mafComp *comp;
@@ -131,9 +156,15 @@ comp->src = cloneString(buffer);
 comp->start = start;
 comp->strand = '+';
 comp->size = end - start;
-struct dnaSeq *seq = hChromSeqMixed(database, chrom, start , end);
-comp->text = cloneString(seq->dna);
-freeDnaSeq(&seq);
+struct dnaSeq *seq = NULL;
+if (mafFileCache && mafFileCache->tbf)
+    comp->text = getTwoBitSeq(mafFileCache, chrom, start , end);
+else
+    {
+    seq = hChromSeqMixed(database, chrom, start , end);
+    comp->text = cloneString(seq->dna);
+    freeDnaSeq(&seq);
+    }
 
 return ali;
 }
@@ -142,18 +173,18 @@ return ali;
  * there isn't a maf loaded in this region
  */
 static struct mafAli *padOutAli(struct mafAli *list, char *database, 
-    char *chrom, int start, int end)
+    char *chrom, int start, int end, struct mafFileCache *mafFileCache)
 {
 if (list == NULL)
     {
-    struct mafAli *ali = getRefAli(database, chrom, start, end);
+    struct mafAli *ali = getRefAli(database, chrom, start, end, mafFileCache);
     return ali;
     }
 
 int aliStart = list->components->start;
 if (start != aliStart)
     {
-    struct mafAli *ali = getRefAli(database, chrom, start, aliStart);
+    struct mafAli *ali = getRefAli(database, chrom, start, aliStart, mafFileCache);
     slAddHead(&list, ali);
     }
 
@@ -166,7 +197,7 @@ for(; last->next; last = last->next)
 
     if (aliEnd != nextStart)
 	{
-	struct mafAli *ali = getRefAli(database, chrom, aliEnd, nextStart);
+	struct mafAli *ali = getRefAli(database, chrom, aliEnd, nextStart, mafFileCache);
 	ali->next = next;
 	last->next = ali;
 	}
@@ -175,7 +206,7 @@ for(; last->next; last = last->next)
 int aliEnd = last->components->start + last->components->size;
 if (end != aliEnd)
     {
-    struct mafAli *ali = getRefAli(database, chrom, aliEnd, end);
+    struct mafAli *ali = getRefAli(database, chrom, aliEnd, end, mafFileCache);
     slAddTail(&list, ali);
     }
 
@@ -183,16 +214,22 @@ return list;
 }
 
 static struct mafAli *getAliForRange(char *database, char *mafTable, 
-    char *chrom, int start, int end)
+    char *chrom, int start, int end, struct mafFileCache *mafFileCache)
 {
-struct sqlConnection *conn = hAllocConn(database);
-struct mafAli *aliAll = mafLoadInRegion(conn, mafTable,
-	chrom, start, end);
+struct mafAli *aliAll = NULL;
+if (mafFileCache && (mafFileCache->bbi != NULL))
+    {
+    aliAll = bigMafLoadInRegion(mafFileCache->bbi, chrom, start, end);
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    aliAll = mafLoadInRegion(conn, mafTable, chrom, start, end);
+    hFreeConn(&conn);
+    }
 struct mafAli *ali;
 struct mafAli *list = NULL;
 struct mafAli *nextAli;
-
-hFreeConn(&conn);
 
 for(ali = aliAll; ali; ali = nextAli)
     {
@@ -219,7 +256,7 @@ for(ali = aliAll; ali; ali = nextAli)
     }
 slReverse(&list);
 
-list = padOutAli(list, database, chrom, start, end);
+list = padOutAli(list, database, chrom, start, end, mafFileCache);
 
 return list;
 }
@@ -319,7 +356,7 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	thisSeq.dna = exonBuffer;
 	thisSeq.size = ptr - exonBuffer;
 	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE, doUniq);
-	char buffer[10 * 1024];
+	char buffer[1024 * 1024];
 
 	safef(buffer, sizeof buffer,  "%s_%s_%d_%d %d %d %d %s",
 	    gi->name, 
@@ -550,7 +587,7 @@ static void flushPosString(struct speciesInfo *si)
 {
 if (si->chrom != NULL)
     {
-    char buffer[10*1024];
+    char buffer[1024*1024];
     char strand = '+';
 
     if (si->strand != si->frameStrand)
@@ -794,7 +831,7 @@ for(; list ; list = giNext)
 }
  
 static struct exonInfo *buildGIList(char *database, struct genePred *pred, 
-    char *mafTable, unsigned options)
+    char *mafTable, unsigned options, struct mafFileCache *mafFileCache)
 {
 struct exonInfo *giList = NULL;
 unsigned *exonStart = pred->exonStarts;
@@ -853,7 +890,7 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     gi->frame = *frames;
     gi->name = pred->name;
     gi->ali = getAliForRange(database, mafTable, pred->chrom, 
-	thisStart, thisEnd);
+	thisStart, thisEnd, mafFileCache);
     gi->chromStart = thisStart;
     gi->chromEnd = thisEnd;
     gi->exonStart = start;
@@ -874,9 +911,10 @@ slReverse(&giList);
 return giList;
 }
 
-void mafGeneOutPred(FILE *f, struct genePred *pred, char *dbName, 
+
+void mafGeneOutPredExt(FILE *f, struct genePred *pred, char *dbName, 
     char *mafTable,  struct slName *speciesNameList, unsigned options,
-    int numCols) 
+    int numCols, struct mafFileCache *mafFileCache) 
 {
 boolean inExons = options & MAFGENE_EXONS;
 
@@ -886,7 +924,8 @@ if (pred->cdsStart == pred->cdsEnd)
 if (numCols < -1)
     errAbort("Number of columns must be zero or greater.");
 
-struct exonInfo *giList = buildGIList(dbName, pred, mafTable, options);
+
+struct exonInfo *giList = buildGIList(dbName, pred, mafTable, options, mafFileCache);
 
 if (giList == NULL)
     return;
@@ -905,4 +944,11 @@ writeOutSpecies(f, dbName, speciesList, giList, options, numCols);
 
 freeSpeciesInfo(speciesList);
 freeGIList(giList);
+}
+
+void mafGeneOutPred(FILE *f, struct genePred *pred, char *dbName, 
+    char *mafTable,  struct slName *speciesNameList, unsigned options,
+    int numCols) 
+{
+mafGeneOutPredExt(f, pred, dbName, mafTable,  speciesNameList, options, numCols, NULL) ;
 }

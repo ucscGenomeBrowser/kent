@@ -242,8 +242,55 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         dataVersion release 1
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
-        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $pmidCount <br> <b>Variant Effect:</b> $variantEffect
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
         html varaico.html
+
+        track varaicoSuppl
+        shortLabel Varaico Variants (suppl)
+        longLabel Varaico Variants extracted from Supplementary Data
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/bbi/varaicoSuppl.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        html varaico.html
+
+        track varaicoTest
+        shortLabel Varaico Main Test
+        longLabel Varaico Main Test
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/None/full/$D/normalized_variants.$D.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        html varaico.html
+        release alpha
+
+        track varaicoSupplTest
+        shortLabel Varaico Suppl Test
+        longLabel Varaico Suppl Test
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/None/full/$D/normalized_variants_supplements.$D.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        html varaico.html
+        release alpha
 
 track caseControl
 compositeTrack on
