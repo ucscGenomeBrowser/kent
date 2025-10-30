@@ -100,10 +100,10 @@ sub doSetup {
   my $runDir = "$buildDir";
   if ( ! $opt_debug && (-s "$runDir/chrom.sizes" && -s "$runDir/part.list" )) {
      printf STDERR "# setup step already complete\n";
-     return
+     return;
   }
   if (! $opt_debug) {
-    my @outs = ("$runDir/doSetup.bash",
+    my @outs = ("$runDir/setup.bash",
                 "$runDir/chrom.sizes",
                 "$runDir/part.list");
     HgAutomate::checkCleanSlate('setup', 'cluster', @outs);
@@ -112,7 +112,7 @@ sub doSetup {
 
   my $whatItDoes = "prepare files for longdust cluster run.";
   my $workhorse = $opt_debug ? "hgwdev" : HgAutomate::chooseWorkhorse();
-  my $bossScript = newBash HgRemoteScript("$runDir/doSetup.bash", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/setup.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   my $tmpDir = HgAutomate::tmpDir();
@@ -137,10 +137,14 @@ _EOF_
 sub doCluster {
   my $paraHub = $bigClusterHub;
   my $runDir = "$buildDir";
+  if ( ! $opt_debug && -s "$runDir/run.time") {
+     printf STDERR "# cluster step already complete\n";
+     return;
+  }
   my $partList = "part.list";	# from doSetup
   HgAutomate::checkExistsUnlessDebug('setup', 'bedResult', "$runDir/part.list");
   my $whatItDoes = "Cluster run longdust on the part.list sequences.  Results into ./result/*.bed.gz";
-  my $templateCmd = ('runOne $(path1) { check out exists result/$(root1).bed.gz }');
+  my $templateCmd = ('runOne $(path1) {check out exists result/$(root1).bed.gz}');
   HgAutomate::makeGsub($runDir, $templateCmd);
   `touch "$runDir/para_hub_$paraHub"`;
   my $paraRun = <<'_EOF_';
@@ -197,14 +201,17 @@ _EOF_
 # * step: bedResult [fileServer]
 sub doBedResult {
   my $runDir = "$buildDir";
+  if ( ! $opt_debug && -s "$runDir/longdust.bb") {
+     printf STDERR "# bedResult step already complete\n";
+     return;
+  }
   my $whatItDoes = "Consolidate the cluster run bed.gz files.  Make single bed and bigBed file.";
-  HgAutomate::checkExistsUnlessDebug('cluster', 'cleanup', ("$runDir/longdust.bed.gz",
-           "$runDir/windowmasker.sdust.bed"));
+  HgAutomate::checkExistsUnlessDebug('cluster', 'cleanup', "$runDir/run.time");
   my $fileServer = $opt_debug ? "hgwdev" : HgAutomate::chooseFileServer($runDir);
   my $bossScript = newBash HgRemoteScript("$runDir/makeBed.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-ls -S result/*.bed | xargs gzcat | gzip -c > longdust.bed.gz
+ls -S result/*.bed.gz | xargs zcat | gzip -c > longdust.bed.gz
 bedToBigBed -type=bed3 longdust.bed.gz chrom.sizes longdust.bb
 export totalBases=`ave -col=2 chrom.sizes | grep total | awk '{printf "%d", \$NF}'`
 export basesCovered=`bigBedInfo longdust.bb | grep basesCovered | awk '{printf "%s", \$NF}' | tr -d ','`
@@ -220,9 +227,13 @@ _EOF_
 # * step: cleanup [fileServer]
 sub doCleanup {
   my $runDir = "$buildDir";
+  if ( ! $opt_debug && ( ! -d "$runDir/tmp" && ! -d "$runDir/result")) {
+     printf STDERR "# cleanup step already complete\n";
+     return;
+  }
   my $whatItDoes = "Cleans up or compresses intermediate files.";
   my $fileServer = $opt_debug ? "hgwdev" : HgAutomate::chooseFileServer($runDir);
-  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/cleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 rm -fr tmp result
