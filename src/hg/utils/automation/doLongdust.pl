@@ -45,7 +45,7 @@ sub usage {
   # Usage / help / self-documentation:
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
-  print STDERR "usage: $base path/to/unmasked.2bit
+  print STDERR "usage: $base db path/to/unmasked.2bit
 options:
 ";
   print STDERR $stepper->getOptionHelp();
@@ -127,6 +127,14 @@ export seqMax=`head -1 chrom.sizes | awk '{printf "%d", \$2+1}'`
 partitionSequence.pl -lstDir listFiles \$seqMax 0 \\
   unmasked.2bit chrom.sizes 10000
 ls -S listFiles/*.lst > part.list
+printf "#####################################################\n" > version.txt
+printf "# longdust version: %s\n" "`$longDust -v`" >> version.txt
+printf "#####################################################\n" >> version.txt
+printf "# running longdust with no options: all defaults\n" >> version.txt
+printf "#####################################################\n" >> version.txt
+printf "# %s\n" "$longDust" >> version.txt
+$longDust >> version.txt 2>&1 || true
+printf "#####################################################\n" >> version.txt
 _EOF_
   );
   $bossScript->execute() if (! $opt_debug);
@@ -250,10 +258,10 @@ HgAutomate::closeStdin();
 
 # Make sure we have valid options and exactly 1 argument:
 checkOptions();
-usage(1) if (scalar(@ARGV) != 1);
+usage(1) if (scalar(@ARGV) != 2);
 my $secondsStart = `date "+%s"`;
 chomp $secondsStart;
-($unmaskedSeq) = @ARGV;
+($db, $unmaskedSeq) = @ARGV;
 
 # Force debug and verbose until this is looking pretty solid:
 #$opt_debug = 1;
