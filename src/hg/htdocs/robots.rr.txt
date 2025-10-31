@@ -28,7 +28,6 @@ User-agent: YouBot
 Disallow: /
 
 User-agent: *
-Crawl-delay: 5
 Disallow: /admin/stats/
 Disallow: /goldenPath/certificate.html
 Disallow: /goldenPath/certificates/

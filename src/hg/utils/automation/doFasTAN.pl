@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/hg/utils/automation/doLongdust.pl instead.
+# edit ~/kent/src/hg/utils/automation/doFasTAN.pl instead.
 
 use Getopt::Long;
 use warnings;
@@ -29,8 +29,9 @@ my $stepper = new HgStepManager(
     ]
 				);
 
-# longdust command
-my $longDust = "/cluster/bin/x86_64/longdust";
+# FasTAN and tanbed commands
+my $FasTAN = "/cluster/bin/x86_64/FasTAN";
+my $tanbed = "/cluster/bin/x86_64/tanbed";
 
 # Option defaults:
 my $bigClusterHub = 'hgwdev';
@@ -58,15 +59,15 @@ _EOF_
   print STDERR HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 					'workhorse' => $defaultWorkhorse);
   print STDERR "
-Automates Heng Li's 'longdust' process for the given unmasked.2bit sequence.
+Automates Gene Myers' 'FasTAN' process for the given unmasked.2bit sequence.
 Steps:
     setup:   Prepares partitioned sequence listings from the given unmasked.2bit
-    cluster: Does the cluster run of 'longdust' on the partitioned sequences
+    cluster: Does the cluster run of 'FasTAN' on the partitioned sequences
     bedResult: Gathers the individual cluster job results into
                one .bed and .bb bigBed result
     cleanup: Removes temporary files
 All operations are performed in the build directory which is
-$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/longdust.\$date unless -buildDir is given.";
+$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/fasTan.\$date unless -buildDir is given.";
   # There is no detailed help (-help):
   print "\n";
   exit $status;
@@ -110,7 +111,7 @@ sub doSetup {
   }
   HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "prepare files for longdust cluster run.";
+  my $whatItDoes = "prepare files for FasTAN cluster run.";
   my $workhorse = $opt_debug ? "hgwdev" : HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/setup.bash", $workhorse,
 				      $runDir, $whatItDoes);
@@ -128,12 +129,15 @@ partitionSequence.pl -lstDir listFiles \$seqMax 0 \\
   unmasked.2bit chrom.sizes 10000
 ls -S listFiles/*.lst > part.list
 printf "#####################################################\n" > version.txt
-printf "# longdust version: %s\n" "`$longDust -v`" >> version.txt
+printf "# FasTAN version: %s\n" "`ls -og $FasTAN`" >> version.txt
+printf "# tanbed version: %s\n" "`ls -og $tanbed`" >> version.txt
 printf "#####################################################\n" >> version.txt
-printf "# running longdust with no options: all defaults\n" >> version.txt
+printf "# running FasTAN with -T8 option for 8 threads\n" >> version.txt
 printf "#####################################################\n" >> version.txt
-printf "# %s\n" "$longDust" >> version.txt
-$longDust >> version.txt 2>&1 || true
+printf "# %s\n" "$FasTAN -v tmp/seqName.fa tmp/seqName" >> version.txt
+printf "# %s\n" "$tanbed tmp/seqName.1aln >> result/seqName.bed.gz" >> version.txt
+printf "#####################################################\n" >> version.txt
+$FasTAN >> version.txt 2>&1 || true
 printf "#####################################################\n" >> version.txt
 _EOF_
   );
@@ -151,12 +155,13 @@ sub doCluster {
   }
   my $partList = "part.list";	# from doSetup
   HgAutomate::checkExistsUnlessDebug('setup', 'bedResult', "$runDir/part.list");
-  my $whatItDoes = "Cluster run longdust on the part.list sequences.  Results into ./result/*.bed.gz";
+  my $whatItDoes = "Cluster run FasTAN on the part.list sequences.  Results into ./result/*.bed.gz";
   my $templateCmd = ('runOne $(path1) {check out exists result/$(root1).bed.gz}');
   HgAutomate::makeGsub($runDir, $templateCmd);
   `touch "$runDir/para_hub_$paraHub"`;
   my $paraRun = <<'_EOF_';
-para make -ram=3g jobList
+# 24 Gb = 3 Gb each thread X 8 threads
+para make -cpu=8 -ram=24g jobList
 para check
 para time > run.time
 cat run.time
@@ -189,8 +194,9 @@ do
    seqName=`basename \$seqSpec | cut -d":" -f2`
    rm -f tmp/\${seqName}.fa
    twoBitToFa \$seqSpec tmp/\${seqName}.fa
-   $longDust tmp/\${seqName}.fa >> \${resultBed}
-   rm -f tmp/\${seqName}.fa
+   $FasTAN -T8 -v tmp/\${seqName}.fa tmp/\${seqName}
+   $tanbed tmp/\${seqName}.1aln >> \${resultBed}
+   rm -f tmp/\${seqName}.fa tmp/\$seqName.1aln
 done
 gzip \${resultBed}
 _EOM_
@@ -209,7 +215,7 @@ _EOF_
 # * step: bedResult [fileServer]
 sub doBedResult {
   my $runDir = "$buildDir";
-  if ( ! $opt_debug && -s "$runDir/longdust.bb") {
+  if ( ! $opt_debug && -s "$runDir/fasTAN.bb") {
      printf STDERR "# bedResult step already complete\n";
      return;
   }
@@ -219,13 +225,18 @@ sub doBedResult {
   my $bossScript = newBash HgRemoteScript("$runDir/makeBed.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-ls -S result/*.bed.gz | xargs zcat | gzip -c > longdust.bed.gz
-bedToBigBed -type=bed3 longdust.bed.gz chrom.sizes longdust.bb
+if [ -s ~/kent/src/hg/lib/fasTAN.as ]; then
+  cp -p ~/kent/src/hg/lib/fasTAN.as ./
+else
+  wget --no-check-certificate -O fasTAN.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/fasTAN.as'
+fi
+ls -S result/*.bed.gz | xargs zcat | gzip -c > fasTAN.bed.gz
+bedToBigBed -type=bed3+2 -as=fasTAN.as fasTAN.bed.gz chrom.sizes fasTAN.bb
 export totalBases=`ave -col=2 chrom.sizes | grep total | awk '{printf "%d", \$NF}'`
-export basesCovered=`bigBedInfo longdust.bb | grep basesCovered | awk '{printf "%s", \$NF}' | tr -d ','`
+export basesCovered=`bigBedInfo fasTAN.bb | grep basesCovered | awk '{printf "%s", \$NF}' | tr -d ','`
 export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.2f", 100*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.longdust.txt
-cat fb.longdust.txt
+printf "%d bases of %d (%s%%) in intersection\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.fasTAN.txt
+cat fb.fasTAN.txt
 _EOF_
   );
   $bossScript->execute() if (! $opt_debug);
