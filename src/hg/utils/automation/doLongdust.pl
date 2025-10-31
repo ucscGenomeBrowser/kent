@@ -244,7 +244,7 @@ sub doCleanup {
   my $bossScript = newBash HgRemoteScript("$runDir/cleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -fr tmp result
+rm -fr tmp result liftFiles err part.list chrom.sizes
 _EOF_
   );
   $bossScript->execute() if (! $opt_debug);
