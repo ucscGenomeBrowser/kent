@@ -59,7 +59,7 @@ _EOF_
   print STDERR HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 					'workhorse' => $defaultWorkhorse);
   print STDERR "
-Automates Gene Meyers' 'FasTAN' process for the given unmasked.2bit sequence.
+Automates Gene Myers' 'FasTAN' process for the given unmasked.2bit sequence.
 Steps:
     setup:   Prepares partitioned sequence listings from the given unmasked.2bit
     cluster: Does the cluster run of 'FasTAN' on the partitioned sequences
