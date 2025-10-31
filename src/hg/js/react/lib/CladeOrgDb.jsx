@@ -19,7 +19,12 @@ var CladeOrgDb = React.createClass({
         var path = this.props.path || [];
         return (
             <div>
-              <SpeciesSearch className="flexContainer" />
+              <SpeciesSearch className="flexContainer"
+                db={menuData.get('db')}
+                org={menuData.get('org')}
+                update={this.props.update}
+                path={path.concat('db')}
+                />
             </div>
         );
     }
