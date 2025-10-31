@@ -225,8 +225,13 @@ sub doBedResult {
   my $bossScript = newBash HgRemoteScript("$runDir/makeBed.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
+if [ -s ~/kent/src/hg/lib/fasTAN.as ]; then
+  cp -p ~/kent/src/hg/lib/fasTAN.as ./
+else
+  wget --no-check-certificate -O fasTAN.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/fasTAN.as'
+fi
 ls -S result/*.bed.gz | xargs zcat | gzip -c > fasTAN.bed.gz
-bedToBigBed -type=bed5 fasTAN.bed.gz chrom.sizes fasTAN.bb
+bedToBigBed -type=bed3+2 -as=fasTAN.as fasTAN.bed.gz chrom.sizes fasTAN.bb
 export totalBases=`ave -col=2 chrom.sizes | grep total | awk '{printf "%d", \$NF}'`
 export basesCovered=`bigBedInfo fasTAN.bb | grep basesCovered | awk '{printf "%s", \$NF}' | tr -d ','`
 export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.2f", 100*\$1/\$2}'`
