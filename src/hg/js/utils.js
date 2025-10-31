@@ -17,6 +17,11 @@ var lengthRangeExp =    /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\+[\s]*([0-9,
 var bedRangeExp =       /^[\s]*([\w._#-]+)[\s]+([0-9,]+)[\s]+([0-9,]+)[\s]*$/;
 var sqlRangeExp =       /^[\s]*([\w._#-]+)[\s]*\|[\s]*([0-9,]+)[\s]*\|[\s]*([0-9,]+)[\s]*$/;
 var singleBaseExp =     /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*$/;
+// also allow gnomad variants, ex: 12-1234-A-C
+var gnomadVarExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([A-Za-z]+)-([A-Za-z]+)$";
+
+// allow gnomad ranges, ex: 12-1234-11223344
+var gnomadRangeExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([0-9]+)$";
 
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
