@@ -576,12 +576,12 @@ fi
 }
 
 
-# oracle's mysql install e.g. on redhat distros does not secure mysql by default, so do this now
+# some mariadb installers e.g. on redhat distros does not secure mariadb by default, so do this now
 # this is copied from Oracle's original script, on centos /usr/bin/mysql_secure_installation
 function secureMysql ()
 {
         echo2
-        echo2 Securing the Mysql install by removing the test user, restricting root
+        echo2 Securing the Mariadb install by removing the test user, restricting root
         echo2 logins to localhost and dropping the database named test.
         waitKey
         # do not parse .my.cnf for this, as we're sure that there is no root password yet
@@ -596,12 +596,12 @@ function secureMysql ()
         $MYSQL -e "FLUSH PRIVILEGES;"
 }
 
-# When we install Mysql, make sure we do not have an old .my.cnf lingering around
+# When we install Mariadb, make sure we do not have an old .my.cnf lingering around
 function moveAwayMyCnf () 
 {
 if [ -f ~/.my.cnf ]; then
    echo2
-   echo2 Mysql is going to be installed, but the file ~/.my.cnf already exists
+   echo2 Mariadb is going to be installed, but the file ~/.my.cnf already exists
    echo2 The file will be renamed to .my.cnf.old so it will not interfere with the
    echo2 installation.
    waitKey
@@ -693,49 +693,72 @@ function setupCgiOsx ()
     # dbTrash tool needed for trash cleaning
 }
 
-# This should not be needed anymore: hgGeneGraph has moved to Python3 finally. But leaving the code in here
-# anyways, as it should not hurt and some mirrors may have old Python2 code or old CGIs around. 
-# We can remove this section in around 1-2 years when we are sure that no one needs Python2 anymore
-function installPy2MysqlRedhat () {
-
-    # Rocky 9
-    if yum list python3-mysqlclient 2> /dev/null ; then
-        yum install -y python3-mysqlclient python3 python3-devel mariadb-connector-c mariadb-common mariadb-connector-c-devel wget gcc
-    else
-	yum install -y python2 mysql-devel python2-devel wget gcc
-	if [ -f /usr/include/mysql/my_config.h ]; then
-		echo my_config.h found
-	else
-	    wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
-	fi
-
-	# this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
-	# somehow the mysql.h does not have the "reconnect" field anymore in Fedora
-	if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
-	    echo /usr/include/mysql/mysql.h already has reconnect attribute
-	else
-	    sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
-	fi
-
-	# fedora > 34 doesn't have any pip2 package anymore so install it now
-	if ! type "pip2" > /dev/null; then
-	     wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-	     python2 get-pip.py
-	     mv /usr/bin/pip /usr/bin/pip2
-
-	fi
-	pip2 install MySQL-python
-    fi
-    }
-
 # little function that compares two floating point numbers
 # see https://stackoverflow.com/questions/8654051/how-can-i-compare-two-floating-point-numbers-in-bash
 function numCompare () {
    awk -v n1="$1" -v n2="$2" 'BEGIN {printf (n1<n2?"<":">=") }'
 }
 
-# redhat specific part of mysql and apache installation
+# Commercial redhat versions do not have R and various other tools in the default repos, so we need to activate them
+# The way this works is different on the different versions. It requires commercial licenses that we don't have
+# so the following is LLM-generated and checked against a few forums, but has not been tested. Please contact us
+# if the repo setup below doesn't work.
+function enableRhelRepos () {
+    echo "=== Checking OS and enabling repositories (EPEL + PowerTools/CRB if needed) ==="
+
+    local os_id=""
+    local os_ver=""
+
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        os_id="${ID,,}"
+        os_ver="${VERSION_ID%%.*}"
+    fi
+
+    case "$os_id" in
+        fedora)
+            echo "Detected Fedora $os_ver — all repos already available."
+            return 0
+            ;;
+        rhel|rocky|almalinux|centos|eurolinux|navylinux|miraclelinux)
+            echo "Detected $os_id $os_ver — configuring repositories..."
+            dnf -y install dnf-plugins-core || true
+            if [[ "$os_ver" == "8" ]]; then
+                echo "Enabling PowerTools..."
+                dnf config-manager --set-enabled powertools 2>/dev/null || \
+                dnf config-manager --set-enabled PowerTools 2>/dev/null || \
+                echo "⚠️ Unable to enable PowerTools."
+            elif [[ "$os_ver" == "9" ]]; then
+                echo "Enabling CodeReady Builder (crb)..."
+                dnf config-manager --set-enabled crb 2>/dev/null || \
+                echo "⚠️ Unable to enable CRB."
+            fi
+            echo "Installing EPEL..."
+            dnf -y install epel-release || echo "⚠️ EPEL installation failed."
+            ;;
+        ol|oraclelinux)
+            echo "Detected Oracle Linux $os_ver — enabling CodeReady Builder (ol${os_ver}_codeready_builder)."
+            dnf -y install dnf-plugins-core || true
+            dnf config-manager --enable ol${os_ver}_codeready_builder 2>/dev/null || \
+            echo "⚠️ Unable to enable Oracle CodeReady Builder."
+            echo "Installing EPEL..."
+            dnf -y install oracle-epel-release-el${os_ver} || dnf -y install epel-release || true
+            ;;
+        *)
+            echo2 "Non–RHEL-family system detected ($os_id) — skipping repository configuration. "
+            echo2 "You may need to install Codeready builder, EPEL and/or powertools manually."
+            waitKey
+            ;;
+    esac
+
+    echo "Redhat-based repo setup check completed."
+}
+
+
+# generic redhat part of mysql and apache installation, also covers centos and rocky
 function installRedhat () {
+    enableRhelRepos
+
     echo2 
     echo2 Installing EPEL, ghostscript, libpng
     waitKey
@@ -744,36 +767,13 @@ function installRedhat () {
     yum -y update
 
     # Fedora doesn't have or need EPEL, however, it does not include chkconfig by default
-    if cat /etc/redhat-release | egrep '(edora|ocky)' > /dev/null; then
-	yum -y install chkconfig
-    else
-        yum -y install epel-release
-    fi
-
-    yum -y install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
+    yum -y chkconfig install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
 
     # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
         echo2 libpng12 found
     else
         yum -y install libpng12
-    fi
-    
-    # try to activate the powertools repo. Exists on CentOS and Rocky but not Redhat
-    # this may only be necessary for chkconfig? If so, we probably want to avoid using chkconfig.
-    if grep 'Red Hat' /etc/redhat-release ; then
-        if yum repolist | grep -i codeready ; then
-            echo codeready repo enabled
-        else
-            echo2 This is a RHEL server and the codeready repository is not enabled. 
-            echo2 Please activate it and also the EPEL reposity, then run the browserSetup command again. 
-            exit 1
-        fi
-    else
-        set +o pipefail
-        echo2 Not on RHEL: Enabling the powertools repository
-        yum config-manager --set-enabled powertools || true
-        set -o pipefail
     fi
     
     # install apache if not installed yet
@@ -843,14 +843,14 @@ function installRedhat () {
             MYSQLD=mariadb
         fi
             
-        # start mysql on boot
+        # start mariadb on boot
         yum -y install chkconfig
         chkconfig --level 2345 $MYSQLD on 
 
         # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
         mysqlStrictModeOff
 
-        # start mysql now
+        # start mariadb now
         startMysql
 
         secureMysql
@@ -860,20 +860,9 @@ function installRedhat () {
         echo2 Mysql already installed
     fi
 
-    # MySQL-python is required for hgGeneGraph
-    # CentOS up to and including 7 default to python2, so MySQL-python is in the repos
-    if yum list MySQL-python 2> /dev/null ; then
-            yum -y install MySQL-python
-    # Centos 8 defaults to python3 and it does not have a package MySQL-python anymore
-    # So we install python2, the mysql libraries and fix up my_config.h manually
-    # This is strange, but I was unable to find a different working solution. MariaDB simply does not have my_config.h
-    else
-	    if [ `numCompare $VERNUM 9` == "<" ] ; then
-                installPy2MysqlRedhat
-	    else
-	        echo2 Not installing Python2, this Linux does not have it and it should not be needed anymore
-	    fi
-    fi
+    # Mariadb connector for python3 and hgGeneGraph
+    if yum list python3-mysqlclient 2> /dev/null ; then
+        yum install -y python3-mysqlclient python3 python3-devel mariadb-connector-c mariadb-common mariadb-connector-c-devel wget gcc
 
     # open port 80 in firewall
     if which firewall-cmd ; then
@@ -1015,7 +1004,7 @@ function installOsx ()
        # only mysql does not tolerate world-writable conf files
        chmod a-w $APACHEDIR/ext/my.cnf
 
-       # development machine + mysql only reachable from localhost = empty root pwd
+       # development machine + mariadb only reachable from localhost = empty root pwd
        # secureMysql - not needed
        touch $APACHEDIR/ext/configOk.flag 
    fi
