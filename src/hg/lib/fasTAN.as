@@ -1,5 +1,5 @@
 table fasTAN
-"fasTAN - Gene Myers tandem repeats"
+"fasTAN - Gene Myers' tandem repeats"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
