@@ -19,89 +19,23 @@ var SpeciesSearch = React.createClass({
         //   positionMatches (Immutable.Vector of Maps): multiple search results for popup
 
         // Optional
-        className: pt.string   // class(es) to pass to wrapper div
+        className: pt.string,   // class(es) to pass to wrapper div
+        org: pt.string, // name of organism currently selected (ex. Human)
+        db: pt.string, // name of database currently selected (ex. hg38)
     },
 
-    /*
-    autoCompleteSourceFactory: function() {
-        // This returns a 'source' callback function for jqueryui.autocomplete.
-        // We get a lot of duplicate requests (especially the first letters of
-        // words), so we keep a cache of the suggestions lists we've retreived.
-        var cache = {};
-
-        function makeUrl(key) {
-            return 'hubApi/findGenome?browser=mustExist&q=' encodeURIComponent(key);
-        }
-
-        return function (request, acCallback) {
-            // This is a callback for jqueryui.autocomplete: when the user types
-            // a character, this is called with the input value as request.term and an acCallback
-            // for this to return the result to autocomplete.
-            // See http://api.jqueryui.com/autocomplete/#option-source
-            if (this.props.positionInfo.get('geneSuggestTrack')) {
-                var key = request.term;
-                var db = this.props.db;
-                if (cache[db] && cache[db][key]) {
-                    acCallback(cache[db][key]);
-                } else {
-                    var url = makeUrl(key);
-                    $.getJSON(url)
-                    .done(function(result) {
-                            cache[db] = cache[db] || {};
-                            cache[db][key] = result;
-                            acCallback(result);
-                    });
-                    // ignore errors to avoid spamming people on flaky network connections
-                    // with tons of error messages (#8816).
-                }
-            }
-        }.bind(this);
+    onSpeciesSelect: function(selectEle, item) {
+        selectEle.innerHTML = item.label;
+        this.props.update(this.props.path, item.genome);
     },
-
-    autoCompleteMenuOpen: function() {
-        // This is an 'open' event callback for autocomplete to let us know when the
-        // menu showing completions is opened.
-        // See http://api.jqueryui.com/autocomplete/#event-open
-        // Determine whether the menu will need a scrollbar:
-        var $jq = $(this.refs.input.getDOMNode());
-        var pos = $jq.offset().top + $jq.height();
-        if (!isNaN(pos)) {
-            // take off a little more because IE needs it:
-            var maxHeight = $(window).height() - pos - 30;
-            var auto = $('.ui-autocomplete');
-            var curHeight = $(auto).children().length * 21;
-            if (curHeight > maxHeight) {
-                $(auto).css({maxHeight: maxHeight+'px', overflow:'scroll', zIndex: 12});
-            } else {
-                $(auto).css({maxHeight: 'none', overflow:'hidden', zIndex: 12});
-            }
-        }
-    },
-
-    autoCompleteSelect: function(event, ui) {
-        // This is a callback for autocomplete to let us know that the user selected
-        // a species from the list.
-        this.setState({position: ui.item.id,
-
-                       //#*** TODO: This currently does nothing.  Hook it up to the model.
-                       // highlight genes choosen from suggest list (#6330)
-                       hgFindParams: { 'track': geneTrack,
-                                       'vis': 'pack',
-                                       'extraSel': '',
-                                       'matches': ui.item.internalId }
-                       });
-        this.props.update(this.props.path.concat('position'), ui.item.id);
-        // Don't let autocomplete whack the input's value:
-        event.preventDefault();
-    },
-    */
 
     componentDidMount: function() {
         // If we have a geneSuggest track, set up autocomplete.
         var inputNode, $input;
         inputNode = this.refs.input.getDOMNode();
-        $input = $(inputNode);
-        initSpeciesAutoCompleteDropdown($input.id, genomeLabel);
+        var sel = document.getElementById("genomeLabel");
+        var boundSel = this.onSpeciesSelect.bind(null, sel);
+        initSpeciesAutoCompleteDropdown(inputNode.id, boundSel);
     },
 
     render: function() {
@@ -111,12 +45,11 @@ var SpeciesSearch = React.createClass({
                 Change selected genome:
               </label>
               <div className="searchBarAndButton">
-                  <TextInput 
-                             update={this.props.update}
+                  <TextInput id='speciesSearchInput' placeholder="Search for any species, genome or assembly name"
                              size={45} ref='input' />
                   <div className="searchCell">
                     Current Genome:
-                    <span id="genomeLabel">temp</span>
+                    <span id="genomeLabel">{this.props.org + " (" + this.props.db + ")"}</span>
                   </div>
               </div>
             </div>

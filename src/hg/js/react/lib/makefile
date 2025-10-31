@@ -14,6 +14,7 @@ BUNDLE_FILE=reactLibBundle.js
 include ${JS_DIR}/install.mk
 include ../react.mk
 
-JSX=/cluster/software/src/node-v0.10.24-linux-x64/bin/jsx
-UGLIFYJS=/cluster/software/src/node-v0.10.24-linux-x64/bin/uglifyjs
+NODEBIN=/cluster/software/src/node-v0.10.24-linux-x64/bin/
+JSX=$(NODEBIN)/node $(NODEBIN)/jsx
+UGLIFYJS=$(NODEBIN)/node $(NODEBIN)/uglifyjs
 
