@@ -3873,7 +3873,8 @@ function onHideAllGroupButtonClick(ev) {
         trackNames.push(sel.name);
         values.push("hide");
     }
-    cart.setVars(trackNames, values);
+    cart.setVars(trackNames, values, null, false);
+    imageV2.fullReload();
 }
 
 // A function for the keyboard shortcuts "zoom to x bp"
@@ -5020,7 +5021,9 @@ var imageV2 = {
             var bedMatch = newPos.match(bedRangeExp);
             var sqlMatch = newPos.match(sqlRangeExp);
             var singleMatch = newPos.match(singleBaseExp);
-            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+            var gnomadRangeMatch = searchTerm.match(gnomadRangeExp);
+            var gnomadVarMatch = searchTerm.match(gnomadVarExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch || gnomadRangeMatch || gnomadVarMatch;
             if (positionMatch === null) {
                 // user may have entered a full chromosome name, check for that asynchronosly:
                 $.ajax({

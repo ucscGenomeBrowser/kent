@@ -147,6 +147,8 @@ void verboseCgi(char *level)
     if (level==NULL)
         return;
     int levelNum = atoi(level);
+    if (levelNum==0)
+        return;
     verboseSetLevel(levelNum);
     verboseSetLogFile("stdout");
     puts("Content-type: text/html\n");

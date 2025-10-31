@@ -1,14 +1,13 @@
 track knownGene
 table knownGene
-shortLabel GENCODE V48lift37
-longLabel GENCODE V48lift37
-pennantIcon Updated red ../goldenPath/newsarch.html#051925 "Released May 19, 2025"
+shortLabel GENCODE V49lift37
+longLabel GENCODE V49lift37
 # parent knownGeneArchive
 priority 1
 #priority 5
 visibility pack
 type bigGenePred knownGenePep knownGeneMrna
-bigDataUrl /gbdb/hg19/gencode/gencodeV48lift37.bb
+bigDataUrl /gbdb/hg19/gencode/gencodeV49lift37.bb
 downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.knownGene.gtf.gz
 baseColorDefault genomicCodons
 group genes
@@ -17,9 +16,9 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-#externalDb knownGeneV48lift37
+#externalDb knownGeneV49lift37
 maxItems 50000
-html knownGeneV48lift37
+html knownGeneV49lift37
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
@@ -27,6 +26,7 @@ defaultLinkedTables kgXref
 squishyPackPoint 1
 squishyPackField rank
 squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
+pennantIcon Updated red ../goldenPath/newsarch.html#103125 "Updated Oct. 31, 2025"
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -42,6 +42,6 @@ searchTable knownGene
 searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
-searchTrix /gbdb/hg19/knownGeneFastV48lift37.ix
+searchTrix /gbdb/hg19/knownGeneFastV49lift37.ix
 doPage 1
 

@@ -671,4 +671,9 @@ char *cgiScriptDirUrl();
 
 void cgiChangeVar(char *varName, char *value);
 /* An entry point to change the value of a something passed to us on the URL. */
+
+void cgiSetMaxLogLen(int l);
+/* set the size of variable values that are dumped to stderr. Default is 0, which means no logging */
+
 #endif /* CHEAPCGI_H */
+

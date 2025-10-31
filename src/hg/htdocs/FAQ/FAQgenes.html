@@ -466,7 +466,7 @@ that was not the mitochondrial genome sequence later selected by NCBI for GRCh37
 is why <strong>the current hg19 version contains two mitochondrial sequences,
 the old one called &quot;chrM&quot; and the current GRCh37 reference, 
 called &quot;chrMT&quot;</strong>. The issue is described in detail in our 
-<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
+<a target=_blank href="https://hgdownload.gi.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
 hg19 sequence download instructions</a>. If you use hg19 today, chrMT should be
 considered the current mitochondrial sequence, chrM is only supported for backwards
 compatibility and legacy annotation files. Our hg19.fa.gz in the "current" download directory
@@ -578,7 +578,7 @@ RefSeq and Ensembl. Therefore, the following gene tracks have "best-transcripts"
 href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a> track. It was generated at UCSC by 
 identifying a canonical isoform for each cluster ID, or gene. Generally, this is the longest
 isoform. It can be downloaded directly from the <a target="_blank" 
-href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/">hg19 downloads database</a> 
+href="http://hgdownload.gi.ucsc.edu/goldenPath/hg19/database/">hg19 downloads database</a> 
 or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
 
 <p>
@@ -597,7 +597,7 @@ cluster, then a transcript in the BASIC set is chosen. If no BASIC transcript ex
 the longest isoform is used.</i></p>
 <p>
 It can be downloaded directly from the <a target="_blank" 
-href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">hg38 downloads database</a>
+href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/database/">hg38 downloads database</a>
 or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
 
 <p>
@@ -769,9 +769,9 @@ different data and metadata.</p>
 These files are generated using the <code>genePredToGtf</code> method described in our 
 <a target="_blank" href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#download37">
 downloads FAQ</a> using the <code>-utr</code> flag. They can be found on the download server 
-address <i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where
+address <i>http://hgdownload.gi.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where
 <i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
-href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
+href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
 
 <a name="coding"></a>
 <h2>What is the best way to get only coding genes (or only non-coding genes)
@@ -792,7 +792,7 @@ The example below will attempt to make a simple example to select
 all types that have &quot;protein_coding&quot; in this transcriptType field:</p>
 <p>
 <pre>
-mysql -u genome -h genome-mysql.soe.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "protein_coding");'
+mysql -u genome -h genome-mysql.gi.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "protein_coding");'
 </pre></p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,
@@ -842,7 +842,7 @@ of all genes and the wgEncodeGencodeAttrsV39 related table to find the transcrip
 to select just lncRNA entries.</p>
 <p>
 <pre>
-mysql -u genome -h genome-mysql.soe.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");'
+mysql -u genome -h genome-mysql.gi.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g, wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");'
 </pre></p>
 <p>
 What this query does is access the hg38 database, and then from the wgEncodeGencodeBasicV39 table,

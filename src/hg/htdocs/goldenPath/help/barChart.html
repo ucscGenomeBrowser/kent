@@ -243,7 +243,7 @@ chr14	95086227	95158010	ENSG00000100697.10	999	-	DICER1
    follow along with the rest of this example, you can download an example bed6+1 file
    <a href="examples/barChart/hg38.gtexTranscripts">here</a>.</li>
    <li>Download the helper programs <em>expMatrixToBarchartBed</em> and <em>bedJoinTabOffset</em> 
-   from the <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a>
+   from the <a href="http://hgdownload.gi.ucsc.edu/admin/exe">utilities directory</a>
    appropriate for your operating system. </li>
    <li>Make sure the programs downloaded above are in your system's PATH variable. For example,
    if you downloaded the programs to your $HOME/Downloads directory, set your PATH variable
@@ -307,16 +307,16 @@ bigBarChart on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigBarChar
    <li>If not already completed, follow steps 1-4 from <a href="#example3">Example 3</a> above, or
    download the example bed6+5 file <a href="examples/barChart/hg38.gtexTranscripts.bed">here</a> </li>
    <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
-   <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
+   <a href="http://hgdownload.gi.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
    operating system.
    <li>Use <em>fetchChromSizes</em> to create a <em>chrom.sizes</em> file for the UCSC database you
    are working with (hg38 for these examples). Alternatively, you can download the 
    <em>chrom.sizes</em> file for any assembly hosted at UCSC from
-   our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full
+   our <a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full
    data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38
    database is located at
-   <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
-   target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
+   <a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
+   target="_blank">http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
    <li>Save the autoSql file <a href="examples/barChart/barChartBed.as">barChartBed.as</a> to your computer.</li>
    <li>Run bedToBigBed to create the bigBarChart file:
    <pre><code>
@@ -421,7 +421,7 @@ target="_blank">Tabula Sapiens single cell RNA data from many tissues</a> track.
 of settings from that track allows experimenting to see these settings in action, and to be
 loaded by going to the My Data, Custom Tracks page.</p>
 <pre>
-track type=bigBarChart  name="ex Tabula Sapiens" description="A bigBarChart using Tabula Sapiens data to illustrate new Details pages" visibility=pack barChartCategoryUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/bw_edit_tissue_cell_type.categories barChartFacets=tissue,cell_class,cell_type barChartStatsUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/bw_edit_tissue_cell_type.facets barChartMerge=on bigDataUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/tissue_cell_type.bb
+track type=bigBarChart  name="ex Tabula Sapiens" description="A bigBarChart using Tabula Sapiens data to illustrate new Details pages" visibility=pack barChartCategoryUrl=http://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/bw_edit_tissue_cell_type.categories barChartFacets=tissue,cell_class,cell_type barChartStatsUrl=http://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/bw_edit_tissue_cell_type.facets barChartMerge=on bigDataUrl=http://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/tissue_cell_type.bb
 </pre>
 <p>
 Once loaded, click into an item to see the details page, in this case for the gene ACE2
@@ -564,7 +564,7 @@ looking at Example 6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 Because bigBarChart files are an extension of bigBed files, which are indexed binary files, it can 
 be difficult to extract data from them. UCSC has developed the following programs to assist
 in working with bigBed formats, available from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
@@ -582,7 +582,7 @@ command line to view the usage statement.</p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
 file for data coordinates that extend past the end of the chromosome. If these are present, run 
 the <code>bedClip</code> program 
-(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+(<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
 row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

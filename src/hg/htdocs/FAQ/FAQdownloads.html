@@ -55,6 +55,7 @@
 <li><a href="#downloadAnalysis">What is the genome analysis set?</a></li>
 <li><a href="#downloadGenArk">How do I download GenArk data?</li>
 <li><a href="#downloadConservation">Why are the conservation scores different from the ones in the download file?</li>
+<li><a href="#CAPTCHA">How to make programmatic queries to the Genome Browser</li>
 </ul>
 <hr>
 <p>
@@ -73,7 +74,7 @@ server</a>, but we recommend using rsync, which has the advantage of starting up
 after a failure, when run again. Please see the previous link for examples.</p> 
 <p>
 You can also download data from our 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page or our 
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html">Downloads</a> page or our 
 <a href="../cgi-bin/das/dsn" target="_blank">DAS server</a>. To download a specific subset of the 
 data or to configure the output format of the data, use the 
 <a href="../cgi-bin/hgTables">Table Browser</a>. For information on extracting a large set of 
@@ -91,7 +92,7 @@ both UCSC assemblies and from hubs.</p>
 <strong>To quickly download large volumes of data you can use UDR (UDT Enabled Rysnc):</strong> UDR 
 provides users much faster download rates. Here is an example using UDR, once installed, to download
 all the mouse mm9 ENCODE information that amounts to several terabytes:</p>
-<pre><code>$ udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
+<pre><code>$ udr rsync -avP hgdownload.gi.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
 <pre><code>$ udr rsync -avP hgdownload-euro.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
 <p>
 
@@ -110,7 +111,7 @@ As of June 2016, the location of metadata tables that support the GenBank and Re
 to one global database, hgFixed.</p> 
 <p>
 The tables below (previously found per assembly) can now be downloaded from the 
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hgFixed/database/">hgFixed database</a>:</p>
+<a href="http://hgdownload.gi.ucsc.edu/goldenPath/hgFixed/database/">hgFixed database</a>:</p>
 
 <!-- 3-column layout -->
 <div class="row">
@@ -175,12 +176,12 @@ What is the best way to proceed? </h6>
 There are two ways to extract genomic sequence in batch from an assembly:</p>
 <p>
 A. Download the appropriate fasta files from our 
-<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/">ftp server</a> and extract sequence data using 
+<a href="ftp://hgdownload.gi.ucsc.edu/goldenPath/">ftp server</a> and extract sequence data using 
 your own tools or the tools from our source tree. This is the recommended method when you have very 
 large sequence datasets or will be extracting data frequently. Sequence data for most assemblies is 
 located in the assembly's &quot;chromosomes&quot; subdirectory on the downloads server. For example,
 the sequence for human assembly hg17 can be found in 
-<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg17/chromosomes/">ftp://hgdownload.soe.ucsc.edu/goldenPath/hg17/chromosomes/</a>.  
+<a href="ftp://hgdownload.gi.ucsc.edu/goldenPath/hg17/chromosomes/">ftp://hgdownload.gi.ucsc.edu/goldenPath/hg17/chromosomes/</a>.  
 You'll find instructions for obtaining our source programs and utilities 
 <a href="FAQlicense.html#license3">here</a>. Some programs that you may find useful are nibFrag and 
 twoBitToFa, as well as other fa* programs. To obtain usage information about most programs, execute 
@@ -661,7 +662,7 @@ executable file for this utility can be downloaded
 <a href="https://genome-store.ucsc.edu" target="_blank">here</a>. LiftOver requires a 
 pre-generated <em>over.chain</em> file as input, available for selected 
 assemblies from the 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#liftover">Downloads</a> page. If the desired 
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#liftover">Downloads</a> page. If the desired 
 file is not available, send a request to the <a href="../contacts.html">genome mailing list</a> and 
 we may be able to  provide you with one.</p>
 <h3 id="liftOver">Using liftOver</h3>
@@ -682,9 +683,9 @@ usage:
    liftOver oldFile map.chain newFile unMapped
 ...</pre></li>
   <li>Download your genome conversion chain file from the 
-  <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads directory</a>.
+  <a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads directory</a>.
   For example, the human to mouse conversion (hg38ToMm10) can be downloaded like so:
-  <pre>wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz</pre>
+  <pre>wget http://hgdownload.gi.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz</pre>
   </li>
   <li>Prepare your BED file input. Here is a few lines from a BED file you can
   copy into a text file, saved as &quot;preLift.bed&quot;.
@@ -715,7 +716,7 @@ the <em>kgAlias</em> table.</p>
 particular organism?</h6>
 <p> 
 To obtain a complete copy of the entire Known Genes data set for an organism, open the Genome 
-Browser <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads page</a>, jump to the 
+Browser <a href="http://hgdownload.gi.ucsc.edu/downloads.html">Downloads page</a>, jump to the 
 section specific to the organism, click the Annotation database link in that section, then click the
 link for the <em>knownGene.txt.gz</em> table.</p> 
 <p>
@@ -795,7 +796,7 @@ Data for a specific region or chromosome may be obtained from the Table Browser 
 <p>
 UCSC uses the latest versions of RepeatMasker and repeat libraries available on the date when the 
 assembly data is processed. RepeatMasker version information can usually be found in the README text
-for the assembly's bigZips <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> 
+for the assembly's bigZips <a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads</a> 
 directory.</p> 
 <p>
 Masking is done using the RepeatMasker <em>-s</em> flag. For mouse repeats, we also use 
@@ -828,7 +829,7 @@ for more information).</p>
 The UCSC Genome Browser offers several ways to obtain this information, depending on your 
 requirements.</p> 
 <p>
-The Genome Browser <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads site</a> 
+The Genome Browser <a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads site</a> 
 provides prepackaged downloads of 1000 bp, 2000 bp, and 5000 bp upstream sequence for RefSeq genes 
 that have a coding portion and annotated 5' and 3' UTRs. You can obtain these from the bigZips 
 downloads directory for the assembly of interest.</p> 
@@ -909,7 +910,7 @@ Yes. See our documentation on <a href="../goldenPath/help/mysql.html">Downloadin
 MariaDB (MySQL)</a>.</p> 
 <p>
 Connect to the US MariaDB server using the command:</p>
-<pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A </code></pre>
+<pre><code>mysql --user=genome --host=genome-mysql.gi.ucsc.edu -A </code></pre>
 <p>Or to the European MariaDB server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A </code></pre>
 
@@ -960,7 +961,7 @@ The raw data underlying a track can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>, <a href="../cgi-bin/hgIntegrator">Data 
 Integrator</a>, or <a href="../cgi-bin/hgVai">Variant Annotation Integrator</a>. For automated 
 analysis, the genome annotation can be downloaded from the 
-<a href="http://hgdownload.soe.ucsc.edu/">downloads server</a>, one of our two
+<a href="http://hgdownload.gi.ucsc.edu/">downloads server</a>, one of our two
 <a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MariaDB servers</a>, or 
 using our <a href='../goldenPath/help/api.html' target=_blank>REST API</a>.</p>
 <p> 
@@ -968,13 +969,13 @@ using our <a href='../goldenPath/help/api.html' target=_blank>REST API</a>.</p>
 regions or the whole genome annotation can be obtained using our tool bigBedToBed which can be 
 compiled from the source code or downloaded as a precompiled binary for your system. Instructions 
 for downloading source code and binaries can be found 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can 
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can 
 also be used to obtain only features within a given range using one of the hgdownload servers,
 example:</p> 
 <ul>
   <li>
     North American server:
-    <pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+    <pre><code>bigBedToBed http://hgdownload.gi.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
   </li>
   <li>
     European server:
@@ -1004,8 +1005,8 @@ to a specific set of rs# IDs (which can be pasted/uploaded into the Table Browse
 or to one of the subset tracks such as Common or ClinVar.
 </p><p>
 For automated analysis, the track data files can be downloaded from the downloads server for
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/" target=_blank>hg19</a> and
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/" target=_blank>hg38</a>. Below
+<a href="http://hgdownload.gi.ucsc.edu/gbdb/hg19/snp/" target=_blank>hg19</a> and
+<a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/" target=_blank>hg38</a>. Below
 are specific examples for <b>dbSNP153</b>, however, the same methods and directories
 will work by substituting a more recent dbSNP release.
 <table class="descTbl">
@@ -1016,52 +1017,52 @@ will work by substituting a more recent dbSNP release.
   </tr>
   <tr>
     <td>dbSnp153.bb</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp153.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg19/snp/dbSnp153.bb"
            target=_blank>hg19</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp153.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp153.bb"
            target=_blank>hg38</a></td>
     <td>bigDbSnp (bigBed4+13)</td>
     <td>All dbSNP (153)</td>
   </tr>
   <tr>
     <td>dbSnp153ClinVar.bb</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp153ClinVar.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg19/snp/dbSnp153ClinVar.bb"
            target=_blank>hg19</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp153ClinVar.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp153ClinVar.bb"
            target=_blank>hg38</a></td>
     <td>bigDbSnp (bigBed4+13)</td>
     <td>ClinVar dbSNP (153)</td>
   </tr>
   <tr>
     <td>dbSnp153Common.bb</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp153Common.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg19/snp/dbSnp153Common.bb"
            target=_blank>hg19</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp153Common.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp153Common.bb"
            target=_blank>hg38</a></td>
     <td>bigDbSnp (bigBed4+13)</td>
     <td>Common dbSNP (153)</td>
   </tr>
   <tr>
     <td>dbSnp153Mult.bb</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp153Mult.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg19/snp/dbSnp153Mult.bb"
            target=_blank>hg19</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp153Mult.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp153Mult.bb"
            target=_blank>hg38</a></td>
     <td>bigDbSnp (bigBed4+13)</td>
     <td>Mult. dbSNP (153)</td>
   </tr>
   <tr>
     <td>dbSnp153BadCoords.bb</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp153BadCoords.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg19/snp/dbSnp153BadCoords.bb"
            target=_blank>hg19</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp153BadCoords.bb"
+    <td><a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp153BadCoords.bb"
            target=_blank>hg38</a></td>
     <td>bigBed4</td>
     <td>Map Err (153)</td>
   </tr>
   <tr>
     <td colspan=3>
-      <a href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz"
+      <a href="http://hgdownload.gi.ucsc.edu/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz"
          target=_blank>dbSnp153Details.tab.gz</a>
     </td>
     <td>gzip-compressed tab-separated text</td>
@@ -1071,7 +1072,7 @@ will work by substituting a more recent dbSNP release.
 </p>
 <p>
 Several utilities for working with bigBed-formatted binary files can be downloaded
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads"
    target=_blank>here</a>.
 Run a utility with no arguments in order to see a brief description of the utility and its options.
 <ul>
@@ -1087,7 +1088,7 @@ Run a utility with no arguments in order to see a brief description of the utili
 </p>
 
 <p><b>Example:</b> retrieve all variants in the region chr1:200001-200400</p>
-<pre><tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp153.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
+<pre><tt>bigBedToBed http://hgdownload.gi.ucsc.edu/gbdb/hg38/snp/dbSnp153.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
 <p><b>Example:</b> retrieve variant rs6657048</p>
 <pre><tt>bigBedNamedItems dbSnp153.bb rs6657048 stdout</tt></pre>
 <p><b>Example:</b> retrieve all variants with rs# IDs in file myIds.txt</p>
@@ -1160,9 +1161,9 @@ this short guide</a>.</p>
 For simplicity, GTF files have been generated using the <code>genePredToGtf</code> method 
 described above and are available on our download server for the main gene transcript sets.
 These can be found at the following download server address:
-<i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> 
+<i>http://hgdownload.gi.ucsc.edu/goldenPath/$db/bigZips/genes/</i> 
 where <i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
-href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
+href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
 <p>
 <p>Summary of Table Browser limitations:</p>
 <ul>
@@ -1180,7 +1181,7 @@ row. Tables are not stored in GTF as it would require many rows to describe a si
 since each gene feature (i.e., exon) requires a separate line. The <code>genePredToGtf</code> command-line
 utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating 
 system-specific command-line utility from the
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">utilities directory</a>.</p>
 <p>
 Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format"> Genes in GTF
 or GFF Format wiki page</a> for examples and various methods for conversion. The <code>genePredToGtf</code>
@@ -1255,7 +1256,7 @@ href="https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/#seqsforalign" target="_bla
 FAQ</a>. Information on what is contained in each specific assembly analysis set can be 
 found in the README by clicking the <strong>Genome sequence files</strong> link for the 
 assembly of interest in our 
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads page</a>.
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html">Downloads page</a>.
 </p>
 
 <a name="downloadGenArk"></a>
@@ -1272,7 +1273,7 @@ following format:</p>
 The downloads data for these assemblies is stored in a different location
 than our goldenPath, SQL, or gbdb file directories. There are two ways to access 
 this data for download. First, you can go to the 
-<a href="https://hgdownload.soe.ucsc.edu/hubs">GenArk page</a>
+<a href="https://hgdownload.gi.ucsc.edu/hubs">GenArk page</a>
 and select your clade (primates, mammals, birds, etc.) and then
 you will be brought to a page with a table of species and 
 GCA/GCF assembly identifiers. Find your genome and click on the third column, 
@@ -1282,7 +1283,7 @@ directory for that species.
 Alternatively, you can enter your GCA/GCF identifier 
 in the URL in groups of three characters, seperated by slashes. For example, the 
 identifier "GCA_004027835.1" has data in the following directory:
-<pre>https://hgdownload.soe.ucsc.edu/hubs/GCA/004/027/835/</pre>
+<pre>https://hgdownload.gi.ucsc.edu/hubs/GCA/004/027/835/</pre>
 </p>
 
 <a name="downloadConservation"></a>
@@ -1297,4 +1298,25 @@ display but does not reconstruct the true original scores. This is why we make t
 files available for download.
 </p>
 
+<a name="CAPTCHA"></a>
+<h2>How to make programmatic queries to the Genome Browser</h2>
+<p>
+To access the UCSC Genome Browser programmatically and bypass the CAPTCHA, all requests must 
+include an API key. Note that an API key is not needed to use our <a target="_blank"
+href="/goldenPath/help/api.html">REST API</a>.</p>
+<p>
+API key access is only available on our primary site (not available on genome-euro or genome-asia). 
+To generate your own key, first <a target="_blank" href="/cgi-bin/hgSession">log in</a>
+with your UCSC Genome Browser account. Once logged in, go to the <a 
+target="_blank" href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#hubDeveloper">
+Hub Development</a> page and generate a key
+from the <b>API key</b> section at the bottom of the page.</p>
+<p>
+The key must be appended to your request URLs using the <code>apiKey=</code> variable. 
+Separate it from other URL parameters with an ampersand (&amp;). For example, most queries will 
+work by adding <code>apiKey=YOUR_UNIQUE_KEY</code> to the end of the URL:</p>
+<p>
+<code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;apiKey=YOUR_UNIQUE_KEY</code></p>
+<p>
+If you experience any issues using the API key, please <a href="/contacts.html">contact us</a>.</p>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

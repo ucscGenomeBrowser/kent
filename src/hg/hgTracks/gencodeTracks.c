@@ -355,7 +355,11 @@ static boolean annotIsGenePredExt(struct track *tg)
 /* determine if a table has genePred extended fields.  two-way consensus
  * pseudo doesn't have them. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+if (liftDb)
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *fields = sqlFieldNames(conn, tg->table);
 hFreeConn(&conn);
 boolean isGenePredX = slNameInList(fields, "score");
@@ -563,7 +567,11 @@ return lf;
 static void loadGencodeTrack(struct track *tg)
 /* Load genePreds in window info linked feature, with filtering, etc. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *db = database;
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+if (liftDb)
+    db = liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 unsigned enabledLabels = getEnabledLabels(tg);
 boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for certain labels
 struct hash *highlightIds = NULL;
@@ -603,7 +611,12 @@ else
 static void gencodeGeneMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode gene track */
 {
-tg->loadItems = loadGencodeTrack;
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+extern void loadGenePredWithName2(struct track *tg);
+if (liftDb)
+    tg->loadItems = loadGenePredWithName2;
+else
+    tg->loadItems = loadGencodeTrack;
 tg->itemName = gencodeGeneName;
 }
 

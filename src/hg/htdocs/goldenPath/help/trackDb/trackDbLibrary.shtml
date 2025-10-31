@@ -141,7 +141,7 @@
     dataHub.  Typically this is the MariaDB table name or remote data
     file root name (without path or suffix).  Must begin with a letter
     and contain only the following chars:
-    [<code>a-zA-Z0-9_</code>].</P>
+    [<code>a-zA-Z0-9_-</code>].</P>
     <P><B>Example:</B></P>
     <pre>   track myFirstTrack</pre>
 </DIV>
@@ -695,7 +695,7 @@
     <P>For pairwise alignment tracks this can specify where to find the query sequence
     This setting can be used in psl, bigPsl, chain, and bigChain tracks.</P>
     <P><B>Example:</B></P>
-    <pre>   otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit</pre>
+    <pre>   otherTwoBitUrl https://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit</pre>
 </DIV>
 
 <DIV class="origAssembly"><span class="types all"></span>
@@ -2225,7 +2225,7 @@ There are no extra options that can appear on the type hic line.
     The searchIndex setting requires the input BED data to be
     case-senstive sorted (<code>sort -k1,1 -k2,2n</code>), where
     newer versions of the tool bedToBigBed (available
-    <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>)
+    <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">here</a>)
     are enhanced to catch improper input.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
@@ -2899,7 +2899,7 @@ that identifies the reference sequence.
     by counting the number of each nucleotide aligned to that base, which will be scaled by 
     the value in the wiggle.</p>
     <P><B>Example:</B></P>
-    <pre>   logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf</pre>
+    <pre>   logoMaf https://hgdownload.gi.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf</pre>
 </DIV>
 
 <DIV class="mouseOverFunction"><span class="types wig bigWig bedGraph"></span>
@@ -4273,7 +4273,7 @@ that identifies the reference sequence.
     Provides a template to a tab separated text file where $&lt;fieldName&gt;
     strings will be substituted for data in the bigBed and displayed as an HTML
     table. For an example of this, please see the following text file:
-    <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
+    <a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
     the strings such as &quot;${AC_afr}&quot; will be substituted for the data in that
     field for the particular item from the bigBed.
     </p>
@@ -4357,7 +4357,7 @@ that identifies the reference sequence.
     Provides a template to a tab separated text file where $&lt;fieldName&gt;
     strings will be substituted for data in the bigBed and displayed as an HTML
     table. For an example of this, please see the following text file:
-    <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
+    <a href="http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
     the strings such as &quot;${AC_afr}&quot; will be substituted for the data in that
     field for the particular item from the bigBed.
     </p>
@@ -6606,14 +6606,14 @@ and is particularly useful for tracks with large numbers of categories.
             parent myViewPeaks on
             shortLabel Peak One
             longLabel Peak One Long
-            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
+            bigDataUrl https://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
             subGroups cell=CD14 view=PK
 
             track mySecondPeakSubtrack
             parent myViewPeaks on
             shortLabel Peak Two
             longLabel Peak Two Long
-            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
+            bigDataUrl https://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/ENCODE4/TFrPeakClusters.bb
             subGroups cell=A1GM12 view=PK
 
         track myViewSignals
@@ -6627,14 +6627,14 @@ and is particularly useful for tracks with large numbers of categories.
             parent myViewSignals on
             shortLabel Sig One
             longLabel Sig One Long
-            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwK562Signal.bw
+            bigDataUrl https://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwK562Signal.bw
             subGroups cell=CD14 view=SIG
 
             track mySecondSignalsSubtrack
             parent myViewSignals on
             shortLabel Sig Two
             longLabel Sig Two Long
-            bigDataUrl https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwK562Signal.bw
+            bigDataUrl https://hgdownload.gi.ucsc.edu/gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwK562Signal.bw
             subGroups cell=A1GM12 view=SIG
     </pre>
     <p>

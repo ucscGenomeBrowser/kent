@@ -2727,6 +2727,19 @@ char *singleBaseExp =
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)$";
 
+// allow gnomad variants, ex: 12-1234-A-C
+char *gnomadVarExp =
+            "^(([0-9]+)|(X|Y|M|MT))-"
+            "([0-9]+)-"
+            "([A-Za-z]+)-"
+            "([A-Za-z]+)$";
+
+// allow gnomad ranges, ex: 12-1234-11223344
+char *gnomadRangeExp =
+            "^(([0-9]+)|(X|Y|M|MT))-"
+            "([0-9]+)-"
+            "([0-9]+)$";
+
 static void collapseSamePos(struct hgPositions *hgp)
 /* If all positions in all tables in hgp are the same position, then 
  * trim all but the first table/pos. */
@@ -3753,11 +3766,13 @@ struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
 /* Return container of tracks and positions (if any) that match term. */
 {
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
-regmatch_t substrs[4];
+regmatch_t substrs[7];
 boolean canonicalSpec = FALSE;
 boolean gbrowserSpec = FALSE;
 boolean lengthSpec = FALSE;
 boolean singleBaseSpec = FALSE;
+boolean gnomadVarSpec = FALSE;
+boolean gnomadRangeSpec = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
 
@@ -3837,16 +3852,37 @@ if ((canonicalSpec =
     regexMatchSubstrNoCase(term, bedRangeExp, substrs, ArraySize(substrs)) ||
     (singleBaseSpec =
 	regexMatchSubstrNoCase(term, singleBaseExp, substrs, ArraySize(substrs))) ||
+    (gnomadVarSpec =
+	regexMatchSubstrNoCase(term, gnomadVarExp, substrs, ArraySize(substrs))) ||
+    (gnomadRangeSpec =
+	regexMatchSubstrNoCase(term, gnomadRangeExp, substrs, ArraySize(substrs))) ||
     regexMatchSubstrNoCase(term, sqlRangeExp, substrs, ArraySize(substrs)))
     {
     term = cloneString(term);
-    /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart, 
-     * [3] is relEnd. ([0] is all.) */
-    term[substrs[1].rm_eo] = 0;
-    eraseTrailingSpaces(term);
-    term[substrs[2].rm_eo] = 0;
-    relStart = atoi(stripCommas(term+substrs[2].rm_so));
-    term[substrs[3].rm_eo] = 0;
+    if (gnomadVarSpec || gnomadRangeSpec)
+        {
+        /* Since we got a match, substrs[1] is the chrom/term, [4] is relStart,
+         * [5] is relEnd or an allele. ([0] is all.) */
+        term[substrs[1].rm_eo] = 0;
+        eraseTrailingSpaces(term);
+        term[substrs[4].rm_eo] = 0;
+        relStart = atoi(term+substrs[4].rm_so);
+        term[substrs[5].rm_eo] = 0;
+        if (gnomadVarSpec)
+            singleBaseSpec = TRUE; // relEnd = relStart, relStart -= 1
+        else
+            relEnd = atoi(term+substrs[5].rm_so);
+        }
+    else
+        {
+        /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart,
+         * [3] is relEnd. ([0] is all.) */
+        term[substrs[1].rm_eo] = 0;
+        eraseTrailingSpaces(term);
+        term[substrs[2].rm_eo] = 0;
+        relStart = atoi(stripCommas(term+substrs[2].rm_so));
+        term[substrs[3].rm_eo] = 0;
+        }
     if (singleBaseSpec)
         {
         relEnd   = relStart;

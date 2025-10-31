@@ -740,7 +740,7 @@ if ( isGenArk(genome) )
 /* if UCSC genome database, it has already been proven to exist */
 
 struct jsonWrite *jw = NULL;
-boolean doContext = (cgiInt(argSkipContext)==0);
+boolean doContext = (cgiOptionalInt(argSkipContext, 0)==0);
 if (textOut && doContext)
     {
     char outString[1024];

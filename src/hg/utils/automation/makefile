@@ -18,6 +18,7 @@ LIB_FILES = \
 	AsmHub.pm
 
 SCRIPT_FILES = \
+	addQuickLift.py \
 	asmHubAllGaps.pl \
 	asmHubAssembly.pl \
 	asmHubAugustusGene.pl \

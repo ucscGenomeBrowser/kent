@@ -110,6 +110,7 @@ my %obsoleteClusterFilesystem =
     );
 
 $defaultDbHost = 'hgwdev';
+my $defaultFileServer = "hgwdev";
 
 sub readMainCluster() {
     # return the first line of the file cluster.txt in same directory as
@@ -307,7 +308,7 @@ sub getFileServer {
       return $localhost;
     }
   }
-  confess "Could not extract server from output of \"df $path\":\n$host\n";
+  return $defaultFileServer;
 }
 
 sub canLogin {
@@ -458,7 +459,7 @@ my %optionHelpText = ( 'workhorse' =>
 ',
 		       'fileServer' =>
 '    -fileServer mach      Use mach (default: fileServer of the build directory)
-                          for I/O-intensive steps.
+                          for I/O-intensive steps, fallback: %s.
 ',
 		       'dbHost' =>
 '    -dbHost mach          Use mach (default: %s) as database server.
@@ -496,6 +497,7 @@ my %optionHelpText = ( 'workhorse' =>
 my %optionDefaultDefaults = ( 'workhorse' => 'least loaded',
 			      'dbHost' => $defaultDbHost,
 			      'priority' => '10',
+			      'fileServer' => $defaultFileServer,
 			      'bigClusterHub' => 'most available',
 			      'smallClusterHub' => 'most available',
 			      'ram' => $defaultRamG,

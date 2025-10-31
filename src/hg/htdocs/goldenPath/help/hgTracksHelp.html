@@ -160,7 +160,7 @@ you are already familiar, or use the default position. To open the Genome Browse
   Select the clade, genome and assembly that you wish to display from the corresponding pull-down
   menus. Assemblies are typically named by the first three characters of an organism's genus and
   species names. For older assemblies that are no longer available from the menu, the data may still
-  be available on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html"
+  be available on our <a href="http://hgdownload.gi.ucsc.edu/downloads.html"
   target="_blank">Downloads</a> page.</li>
   <li>
   Specify the genome location you'd like the Genome Browser to open to. To select a location, enter
@@ -1006,7 +1006,7 @@ display</a>.</p>
   on the track's center label.</li>
   <li>
   Only the most recent assemblies are fully active. The data for older assemblies may be available
-  on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a>
+  on our <a href="http://hgdownload.gi.ucsc.edu/downloads.html" target="_blank">Downloads</a>
   page.</li>
   <li>
   Not all tracks appear in all assemblies. Only a basic set of tracks appears initially in a new
@@ -1378,7 +1378,7 @@ This utility requires access to a Linux platform. The
 executable file may be downloaded <a href="https://genome-store.ucsc.edu">here</a>.
 Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated
 files for a given assembly can be accessed from the assembly's &quot;LiftOver files&quot; link on
-the <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page. If the desired
+the <a href="http://hgdownload.gi.ucsc.edu/downloads.html">Downloads</a> page. If the desired
 conversion file is not listed, send a request to the <a href="../../contacts.html">genome mailing
 list</a> and we may be able to generate one for you. For use of the command-line
 version of LiftOver, we require all for-profit businesses or commercial companies to
@@ -1403,13 +1403,13 @@ servers, hgdownload, hgdownload2, and hgdownload-euro.</p>
     The UCSC Genome Browser hgdownload server contains download directories for all genome versions
     currently accessible in the Genome Browser. Either of the following rsync commands can quickly
     and efficiently download large files to your current directory (./).</dd>
-    <pre><code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/path/file ./</code></pre>
+    <pre><code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/path/file ./</code></pre>
     <pre><code>rsync -a -P rsync://hgdownload2.soe.ucsc.edu/path/file ./</code></pre>
     <pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/path/file ./</code></pre>
   <dd>
     To download an entire directory (note the trailing slash), you would use an expression such
     as:</dd>
-    <pre><code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/directory/ ./</code></pre>
+    <pre><code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/directory/ ./</code></pre>
     <pre><code>rsync -a -P rsync://hgdownload2.soe.ucsc.edu/directory/ ./</code></pre>
     <pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/directory/ ./</code></pre>
   <dd>
@@ -1418,7 +1418,7 @@ servers, hgdownload, hgdownload2, and hgdownload-euro.</p>
   <dd>
     The UCSC Genome Browser FTP server contains download directories for all genome versions
     currently accessible in the Genome Browser. The FTP URLs
-    <code>ftp://hgdownload.soe.ucsc.edu/goldenPath/</code>,
+    <code>ftp://hgdownload.gi.ucsc.edu/goldenPath/</code>,
     <code>ftp://hgdownload2.soe.ucsc.edu/goldenPath/</code>,
     or
     <code>ftp://hgdownload-euro.soe.ucsc.edu/goldenPath/</code>
@@ -1430,11 +1430,11 @@ servers, hgdownload, hgdownload2, and hgdownload-euro.</p>
   <dt>Via the Downloads link:</dt>
   <dd>
     Click the
-    <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> link on
+    <a href="http://hgdownload.gi.ucsc.edu/downloads.html" target="_blank">Downloads</a> link on
     the left side bar on the UCSC Genome Browser home page to display a list of all database
     directories available for download. If the data you wish to download pre-dates the assembly
     versions listed, look for the data on our
-    <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> page.</dd>
+    <a href="http://hgdownload.gi.ucsc.edu/downloads.html" target="_blank">Downloads</a> page.</dd>
   <dt>Via the REST API:</dt>
   <dd>
     The <a href='./api.html' target=_blank>REST API</a> can be used to query both annotation
@@ -1557,7 +1557,7 @@ Browser Track Hub User Guide</a>. For specific information on configuring your t
 refer to the <a href="trackDb/trackDbHub.html">Track Database Definition Document</a>. See also the
 <a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>,
 <a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track Hubs into
-Groupings</a>, <a href="https://genome-blog.soe.ucsc.edu/blog/2022/06/28/track-hub-settings/"
+Groupings</a>, <a href="https://genome-blog.gi.ucsc.edu/blog/2022/06/28/track-hub-settings/"
 target="_blank">Track hub settings blog post</a>, <a href="hubQuickStartAssembly.html"
 target="_blank">Quick Start Guide to Assembly Hubs</a>, <a href="hubQuickStartSearch.html"
 target="_blank">Quick Start Guide to Searchable Track Hubs</a>, and <a href="/FAQ/FAQlink#hubUrl"
@@ -1567,7 +1567,7 @@ target="_blank">Loading Track Hubs and Assembly Hubs with the URL</a>.</p>
 <h2>Track Hubs for <em>GenArk</em> assembly hub</h2>
 <p>
 To construct a track hub that will display on a
-<a href='https://hgdownload.soe.ucsc.edu/hubs/'
+<a href='https://hgdownload.gi.ucsc.edu/hubs/'
 target=_blank>GenArk Assembly</a> hub, specify the <em>GenArk</em> assembly
 name in the <b>genome</b> statement in your <b>hub.txt</b> file as
 <a href='#UseOneFile'>described below</a>.
@@ -1592,7 +1592,7 @@ itself.
 <p>
 A complete list of all available <em>GenArk</em> assemblies available can
 be seen in the text file
-<a href='https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt'
+<a href='https://hgdownload.gi.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt'
 target=_blank>UCSC_GI.assemblyHubList.txt</a>.
 </p>
 

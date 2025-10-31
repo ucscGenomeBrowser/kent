@@ -50,4 +50,8 @@ unsigned long cfgModTime();
 void cfgSetMaxMem();
 /* Check hg.conf for maxMem.  If not set, don't limit memory.  Otherwise
  * limit memory usage to that number. */
+
+void cfgSetLogCgiVars();
+/* optionally activate dumping of all CGI variables to stderr log */
 #endif
+

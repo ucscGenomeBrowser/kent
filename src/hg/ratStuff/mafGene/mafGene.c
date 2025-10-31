@@ -12,6 +12,7 @@
 #include "genePred.h"
 #include "mafGene.h"
 #include "genePredReader.h"
+#include "chromAlias.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -22,16 +23,17 @@ errAbort(
   "   mafGene dbName mafTable genePredTable species.lst output\n"
   "arguments:\n"
   "   dbName         name of SQL database\n"
-  "   mafTable       name of maf file table\n"
-  "   genePredTable  name of the genePred table\n"
+  "   mafTable       name of maf file table or bigMaf if ends in .bigMaf or .bb\n"
+  "   genePredTable  name of the genePred table or file if useFile is on or ends in .gp\n"
   "   species.lst    list of species names\n"
   "   output         put output here\n"
   "options:\n"
-  "   -useFile           genePredTable argument is a genePred file name\n"
+  "   -twoBit=file.2bit  use 2bit file to fill in spaces in the alignment instead of database\n"
   "   -geneName=foobar   name of gene as it appears in genePred\n"
   "   -geneList=foolst   name of file with list of genes\n"
   "   -geneBeds=foo.bed  name of bed file with genes and positions\n"
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
+  "   -useFile           genePredTable is a file\n"
   "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
   "   -uniqAA            put out unique pseudo-AA for every different codon\n"
@@ -45,6 +47,7 @@ static struct optionSpec options[] = {
    {"geneName", OPTION_STRING},
    {"geneList", OPTION_STRING},
    {"geneBeds", OPTION_STRING},
+   {"twoBit", OPTION_STRING},
    {"chrom", OPTION_STRING},
    {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
@@ -60,6 +63,7 @@ char *geneName = NULL;
 char *geneList = NULL;
 char *geneBeds = NULL;
 char *onlyChrom = NULL;
+char *twoBitFile = NULL;
 boolean inExons = FALSE;
 boolean noTrans = TRUE;
 int delay = 0;
@@ -111,7 +115,7 @@ return list;
  * the file stream 
  */
 void outGenePred(FILE *f, struct genePred *pred, char *dbName, 
-    char *mafTable, char *geneTable, struct slName *speciesNameList)
+    char *mafTable, char *geneTable, struct slName *speciesNameList, struct mafFileCache *mafFileCache)
 {
 unsigned options = 0;
 
@@ -126,7 +130,7 @@ if (!noDash)
 if (includeUtr)
     options |= MAFGENE_INCLUDEUTR;
 
-mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options, 0);
+mafGeneOutPredExt(f, pred, dbName, mafTable, speciesNameList, options, 0, mafFileCache);
 }
 
 /* read a list of single words from a file */
@@ -239,10 +243,22 @@ else if (geneBeds != NULL)
 else
     list = queryPreds(dbName, geneTable);
 
+
+boolean isBigMaf =endsWith(mafTable, ".bigMaf") || endsWith(mafTable, ".bb"); 
+struct mafFileCache *mafFileCache = NULL;
+if (isBigMaf || twoBitFile)
+    {
+    AllocVar(mafFileCache);
+    if (isBigMaf)
+        mafFileCache->bbi = bigBedFileOpenAlias(mafTable, chromAliasFindAliases);
+    if (twoBitFile != NULL)
+        mafFileCache->tbf = twoBitOpen(twoBitFile);
+    }
+
 for(; list; list = list->next)
     {
     verbose(2, "outting  gene %s \n",list->name);
-    outGenePred(f, list, dbName, mafTable, geneTable,  speciesNames);
+    outGenePred(f, list, dbName, mafTable, geneTable,  speciesNames, mafFileCache);
     if (delay)
 	{
 	verbose(2, "delaying %d seconds\n",delay);
@@ -259,16 +275,18 @@ optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
 
+boolean isGp = endsWith(argv[3], ".gp");
 geneName = optionVal("geneName", geneName);
 geneList = optionVal("geneList", geneList);
 geneBeds = optionVal("geneBeds", geneBeds);
+twoBitFile = optionVal("twoBit", twoBitFile);
 onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
 uniqAA = optionExists("uniqAA");
 noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
 includeUtr = optionExists("includeUtr");
-useFile = optionExists("useFile");
+useFile = optionExists("useFile") || isGp;
 delay = optionInt("delay", delay);
 
 if (((geneName != NULL) && ((geneList != NULL) || geneBeds != NULL)) ||

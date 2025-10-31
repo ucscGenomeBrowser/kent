@@ -1,0 +1,46 @@
+<h2>low-complexity regions</h2>
+
+<h3>Tracks in this set:</h3>
+
+<ul>
+<li>Cent-Sat - Centromeric satellite repeats - gives the approximate locations
+of centromeric satellite repeats and acrocentric short arms in T2T-CHM13.
+It was manually constructed based on the official satellite annotation,
+the DNA-BRNN satellite annotation and the minigraph pangenome graph from the
+HPRC year-1 data.  Alignment in the BED regions is usually much worse than in
+the rest of the genome.  This file is intended for filtering spurious
+alignments or variant calls caused by centromeric repeats or
+acrocentric arms.</li>
+<li>PAR regions on chrX, chrY - pseudo-autosomal regions (PARs) on chrX and chrY</li>
+<li>low-complexity regions excluding alpha and HSAT2/3 satellites -  Column 4: "ldust" for longdust regions 50bp or longer; "mg" for regions overlapping with minigraph LCR SVs.  Column 5: longest allele in each LCR.</li>
+<li>in LCR AND TRF - intersection of LCR track and the trf/simpleRepeats track</li>
+<li>in TRF not LCR - regions in trf/simpleRepeat that are not found in LCR</li>
+<li>in LCR not TRF - regions in LCR that are not found in trf/simpleRepeat</li>
+</ul>
+
+<h2>Intersections</h2>
+<ul>
+<li>TRF/simpleRepeat coverage: 277,065,041 bases</li>
+<li>chm13v2.lcr-v4 coverage: 79,604,249 bases</li>
+<li>In both TRF and LCR: 61,370,818 bases</li>
+<li>In TRF not in LCR: 215,694,223 bases</li>
+<li>In LCR not in TRF: 18,233,431 bases</li>
+</ul>
+
+<h2>PAR regions</h2>
+<ul>
+<li><a href='/cgi-bin/hgTracks?position=chrX:1-2394410' target=_blank>chrX:1-2394410</a></li>
+<li><a href='/cgi-bin/hgTracks?position=chrX:153925835-154259566' target=_blank>chrX:153925835-154259566</a></li>
+<li><a href='/cgi-bin/hgTracks?position=chrY:1-2458320' target=_blank>chrY:1-2458320</a></li>
+<li><a href='/cgi-bin/hgTracks?position=chrY:62122810-62460029' target=_blank>chrY:62122810-62460029</a></li>
+</ul>
+
+<h2>References</h2>
+<p>
+Qian Quin, Heng Li
+<a href="https://arxiv.org/abs/2509.23057"
+target=_blank>Challenges in structural variant calling in low-complexity regions</a>
+
+<em>arXiv</em>.  2025 Sep;25:2509.23057
+DOI: <a href="https://doi.org/10.48550/arXiv.2509.23057" target="_blank">arXiv.2509.23057</a>
+</p>

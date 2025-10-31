@@ -124,7 +124,7 @@ static void bfBadHeader(struct blastFile *bf)
 /* Report bad header. */
 {
 bfError(bf, "Bad first line\nShould be something like:\n"
-            "BLASTN 2.0.11 [Jan-20-2000]");
+            "BLASTN 2.0.11");
 }
 
 struct blastFile *blastFileOpenVerify(char *fileName)
@@ -143,16 +143,15 @@ bf->fileName = cloneString(fileName);
 /* Parse first line - something like: */
 line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
-if (wordCount < 3)
+if (wordCount < 2)
     bfBadHeader(bf);
 bf->program = cloneString(words[0]);
 bf->version = cloneString(words[1]);
-bf->buildDate = cloneString(words[2]);
+if (wordCount > 2)
+    bf->buildDate = cloneString(words[2]);
 if (!wildMatch("*BLAST*", bf->program))
     bfBadHeader(bf);
 if (!isdigit(bf->version[0]))
-    bfBadHeader(bf);
-if (bf->buildDate[0] != '[')
     bfBadHeader(bf);
 return bf;
 }

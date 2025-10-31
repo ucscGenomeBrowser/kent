@@ -45,6 +45,8 @@ include nuMtSeq.ra
 
 include gnomad.pext.ra
 
+include rnaMod.ra alpha
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -187,7 +189,6 @@ mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 track coriellDelDup override
 origAssembly hg19 
@@ -526,8 +527,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
@@ -669,7 +669,8 @@ include trackDb.gencode.ra
 
 include wgEncodeReg.ra
 
-include encode3.ra 
+include encode3.ra beta,public
+include encode.cCREs.override.ra alpha 
 
 include hic.ra
 
@@ -912,3 +913,4 @@ include psuVsUcscChains.ra alpha
 
 include varFreqs.ra alpha
 
+include LCR.ra alpha

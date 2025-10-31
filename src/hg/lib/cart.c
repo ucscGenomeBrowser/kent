@@ -1403,6 +1403,10 @@ if (id != NULL)
     // now we need to remove any custom tracks that are on this hub
     safef(buffer, sizeof buffer, "ctfile_hub_%s", id);
     cartRemovePrefix(cart, buffer);
+
+    // remove any visibilities in the cart
+    safef(buffer, sizeof buffer, "hub_%s", id);
+    cartRemovePrefix(cart, buffer);
     }
 
 cartRemove(cart, "hubId");
@@ -1482,6 +1486,7 @@ boolean isValidToken(char *token)
     return res;
 }
 
+// hg.conf key with the cloud flare secret key, used twice here, so a global macro
 #define CLOUDFLARESITEKEY "cloudFlareSiteKey"
 
 void printCaptcha() 
@@ -1509,7 +1514,8 @@ void printCaptcha()
     puts("</head><body>");
     puts("<style>body, h1, h2, h3, h4, h5, h6  { font-family: Helvetica, Arial, sans-serif; }</style>\n");
     puts("<h4>The Genome Browser is protecting itself from bots. This will just take a few seconds.</h4>");
-    puts("<small>If you are a bot and were made for a research project, please contact us by email.</small>");
+    puts("<small>To make programmatic queries, see our FAQ: https://genome.ucsc.edu/FAQ/FAQdownloads.html#CAPTCHA.</small>");
+    puts("");
     puts("<script src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=showWidget' async defer></script>");
     puts("<div id='myWidget'></div>");
     puts("</body></html>");
@@ -1564,16 +1570,21 @@ if (botException())
 if (isUserAgentException())
     return;
 
-// a valid apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
-// of the apiKey, if a valid apiKey has been supplied, see botDelay.c
+char *cgi = cgiScriptName();
+
+// An apiKey can always be used to get around the captcha. Note that bottlenecking is then done on the level
+// of the apiKey, if a valid apiKey has been supplied, see botDelay.c, so the check if the apiKey is valid is assumed 
+// to have been done at the bottleneck step, which in all our CGIs is called before the cart is initialized.
 char *apiKey = cgiOptionalString("apiKey");
-if (apiKey && userNameForApiKey(apiKey))
+if (apiKey) 
+{
+    fprintf(stderr, "CAPTCHAPASS_APIKEY %s %s\n", apiKey, cgi);
     return;
+}
 
 // hgRenderTracks should not show the captcha - it was made to be used from other websites
 // For hgSession, we redirect from euro and asia to the RR - avoid showing the captcha there
 // hgLogin is the redirect target for hgSession, so avoid it there as well
-char *cgi = cgiScriptName();
 if ( sameWord(cgi, "/cgi-bin/hgRenderTracks") || sameWord(cgi, "/cgi-bin/hgSession") || sameWord(cgi, "/cgi-bin/hgLogin") )
     return;
 
@@ -2714,6 +2725,7 @@ if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
 
 // activate optional debuging output for CGIs
 verboseCgi(cgiUsualString("verbose", NULL));
+cartExclude(cart, "verbose");
 
 return cart;
 }
@@ -4132,4 +4144,14 @@ void cartSetVersion(struct cart *cart, unsigned version)
 /* Set the current version of the cart, which is stored in the variable "cartVersion" */
 {
 cartSetInt(cart, "cartVersion", version);
+}
+
+char *cartOrCfgOption(struct cart *cart, char *name)
+/* Return the option with the given name. First check cart then hg.conf.  Return NULL if * it doesn't exist. */
+{
+char *str = NULL;
+if ((str = cartOptionalString(cart, name)) == NULL)
+    return str = cfgOption(name);
+
+return str;
 }

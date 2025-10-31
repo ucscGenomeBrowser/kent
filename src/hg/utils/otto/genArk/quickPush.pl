@@ -17,7 +17,7 @@ use strict;
 use warnings;
 use File::Basename;
 
-my @machList = qw( hgw0 hgw1 hgw2 Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de );
+my @machList = qw( hgw0 );
 
 my $lf;		# going to become the output handle for the logfile
 my $expectName = "hgwdev";

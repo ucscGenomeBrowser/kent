@@ -927,7 +927,7 @@ See also:
 
 # Adding a new, custom (non-UCSC) genome to the browser
     
-Please note that setting up an [assembly hub](http://genomewiki.ucsc.edu/index.php/Assembly_Hubs) 
+Please note that setting up an [assembly hub](/goldenPath/help/assemblyHubHelp.html)
 is a lot easier than adding a genome to a local mirror.
 
 The browser can be made to operate with a bare minimum of tables

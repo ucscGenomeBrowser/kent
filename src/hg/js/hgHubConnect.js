@@ -77,11 +77,11 @@ $(function() {
   });
   // activate tabs if the current URL ends with the appropriate tab name
   var tabName = window.location.hash;
-  if (tabName==="publicHubs")
+  if (tabName==="#publicHubs")
       $("#tabs").tabs("option", "active", 0);
-  if (tabName==="#conn" || tabName === "unlistedHubs")
+  if (tabName==="#conn" || tabName === "#unlistedHubs")
       $("#tabs").tabs("option", "active", 1);
-  if (tabName==="#dev" || tabName === "hubDeveloper")
+  if (tabName==="#dev" || tabName === "#hubDeveloper")
       $("#tabs").tabs("option", "active", 2);
   if (tabName==="#hubUpload")
       $("#tabs").tabs("option", "active", 3);

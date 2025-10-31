@@ -152,6 +152,103 @@ assert( (maxCount != 0 && outCount >= maxCount) || (blockPt == blockEnd));
 return outCount;
 }
 
+
+static int bigWigBlockDumpIntersectingRangeWithName(boolean isSwapped, char *blockPt, char *blockEnd, 
+	char *chrom, bits32 rangeStart, bits32 rangeEnd, int maxCount, char *name, FILE *out)
+/* Print out info on parts of block that intersect start-end, block starting at current position. 
+   Same as bigWigBlockDumpIntersectingRange() but prints the optional name parameter
+*/
+{
+struct bwgSectionHead head;
+bwgSectionHeadFromMem(&blockPt, &head, isSwapped);
+bits16 i;
+float val;
+int outCount = 0;
+
+switch (head.type)
+    {
+    case bwgTypeBedGraph:
+	{
+/*	fprintf(out, "#bedGraph section %s:%u-%u\n",  chrom, head.start, head.end);
+*/
+	for (i=0; i<head.itemCount; ++i)
+	    {
+	    bits32 start = memReadBits32(&blockPt, isSwapped);
+	    bits32 end = memReadBits32(&blockPt, isSwapped);
+	    val = memReadFloat(&blockPt, isSwapped);
+	    if (rangeIntersection(rangeStart, rangeEnd, start, end) > 0)
+		{
+		if (name != NULL) {
+		   fprintf(out, "%s\t%u\t%u\t%s\t%g\n", chrom, start, end, name, val);
+		}else{
+		   fprintf(out, "%s\t%u\t%u\t%g\n", chrom, start, end, val);		
+		}
+		++outCount;
+		if (maxCount != 0 && outCount >= maxCount)
+		    break;
+		}
+	    }
+	break;
+	}
+    case bwgTypeVariableStep:
+	{
+/*	fprintf(out, "variableStep chrom=%s span=%u\n", chrom, head.itemSpan);
+*/
+	for (i=0; i<head.itemCount; ++i)
+	    {
+	    bits32 start = memReadBits32(&blockPt, isSwapped);
+	    val = memReadFloat(&blockPt, isSwapped);
+	    if (rangeIntersection(rangeStart, rangeEnd, start, start+head.itemSpan) > 0)
+		{
+		if (name != NULL) {
+		   fprintf(out, "%u\t%s\t%g\n", start+1, name, val);
+		}else{
+		   fprintf(out, "%u\t%g\n", start+1, val);		
+		}
+		++outCount;
+		if (maxCount != 0 && outCount >= maxCount)
+		    break;
+		}
+	    }
+	break;
+	}
+    case bwgTypeFixedStep:
+	{
+	boolean gotStart = FALSE;
+	bits32 start = head.start;
+	for (i=0; i<head.itemCount; ++i)
+	    {
+	    val = memReadFloat(&blockPt, isSwapped);
+	    if (rangeIntersection(rangeStart, rangeEnd, start, start+head.itemSpan) > 0)
+	        {
+		if (!gotStart)
+		    {
+/*		    fprintf(out, "fixedStep chrom=%s start=%u step=%u span=%u\n", 
+			    chrom, start+1, head.itemStep, head.itemSpan);
+*/
+		    gotStart = TRUE;
+		    }
+		if (name != NULL) {
+		   fprintf(out, "%s\t%g\n", name, val);
+		}else{
+		   fprintf(out, "%g\n", val);
+		}
+		++outCount;
+		if (maxCount != 0 && outCount >= maxCount)
+		    break;
+		}
+	    start += head.itemStep;
+	    }
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
+assert( (maxCount != 0 && outCount >= maxCount) || (blockPt == blockEnd));
+return outCount;
+}
+
 struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	struct lm *lm)
 /* Get data for interval.  Return list allocated out of lm. */
@@ -361,6 +458,82 @@ slFreeList(&blockList);
 return printCount;
 }
 
+int bigWigIntervalDumpWithName(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end, int maxCount, char *name, 
+	FILE *out)
+/* Print out info on bigWig parts that intersect chrom:start-end.   Set maxCount to 0 if you 
+ * don't care how many are printed.  Returns number printed. 
+   Same as bigWigIntervalDump but passes the name parameter on to bigWigBlockDumpIntersectingRangeWithName
+ */
+{
+if (bwf->typeSig != bigWigSig)
+   errAbort("Trying to do bigWigIntervalDump on a non big-wig file.");
+bbiAttachUnzoomedCir(bwf);
+struct fileOffsetSize *blockList = bbiOverlappingBlocks(bwf, bwf->unzoomedCir, 
+	chrom, start, end, NULL);
+struct fileOffsetSize *block, *beforeGap, *afterGap;
+struct udcFile *udc = bwf->udc;
+int printCount = 0;
+
+/* Set up for uncompression optionally. */
+char *uncompressBuf = NULL;
+if (bwf->uncompressBufSize > 0)
+    uncompressBuf = needLargeMem(bwf->uncompressBufSize);
+
+/* This loop is a little complicated because we merge the read requests for efficiency, but we 
+ * have to then go back through the data one unmerged block at a time. */
+for (block = blockList; block != NULL; )
+    {
+    /* Find contigious blocks and read them into mergedBuf. */
+    fileOffsetSizeFindGap(block, &beforeGap, &afterGap);
+    bits64 mergedOffset = block->offset;
+    bits64 mergedSize = beforeGap->offset + beforeGap->size - mergedOffset;
+    udcSeek(udc, mergedOffset);
+    char *mergedBuf = needLargeMem(mergedSize);
+    udcMustRead(udc, mergedBuf, mergedSize);
+    char *blockBuf = mergedBuf;
+
+    /* Loop through individual blocks within merged section. */
+    for (;block != afterGap; block = block->next)
+        {
+	/* Uncompress if necessary. */
+	char *blockPt, *blockEnd;
+	if (uncompressBuf)
+	    {
+	    blockPt = uncompressBuf;
+	    int uncSize = zUncompress(blockBuf, block->size, uncompressBuf, bwf->uncompressBufSize);
+	    blockEnd = blockPt + uncSize;
+	    }
+	else
+	    {
+	    blockPt = blockBuf;
+	    blockEnd = blockPt + block->size;
+	    }
+
+	/* Do the actual dump. */
+	int oneCount = bigWigBlockDumpIntersectingRangeWithName(bwf->isSwapped, blockPt, blockEnd, 
+		chrom, start, end, maxCount, name, out);
+
+	/* Keep track of how many dumped, not exceeding maximum. */
+	printCount += oneCount;
+	if (maxCount != 0)
+	    {
+	    if (oneCount >= maxCount)
+		{
+		block = NULL;	 // we want to drop out of the outer loop too
+		break;
+		}
+
+	    maxCount -= oneCount;
+	    }
+	blockBuf += block->size;
+	}
+    freeMem(mergedBuf);
+    }
+freeMem(uncompressBuf);
+
+slFreeList(&blockList);
+return printCount;
+}
 boolean bigWigSummaryArray(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.

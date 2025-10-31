@@ -303,7 +303,7 @@
               to query the metaDb table for each database.
             </ol>  
             The metadata uses controlled vocabulary (cv.ra), which can be downloaded as a text file
-              <a href="http://hgdownload.soe.ucsc.edu/goldenPath/encodeDCC/cv.ra" target="_blank">here</a>.
+              <a href="http://hgdownload.gi.ucsc.edu/goldenPath/encodeDCC/cv.ra" target="_blank">here</a>.
           </div><!--end content-->
     </div><!--end wrapper-->
 
@@ -324,8 +324,8 @@
                                target="_blank">File Formats</a>
             link from the ENCODE portal page you can reach a list of various file formats used in ENCODE.
             Every ENCODE file has metadata included under a &quot;files.txt&quot; file in the related downloads page.
-            For example, from the <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/">HudsonAlpha DNA methylation download page</a>,
-            in the <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/files.txt">files.txt</a> 
+            For example, from the <a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/">HudsonAlpha DNA methylation download page</a>,
+            in the <a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/files.txt">files.txt</a> 
             file, a line after the specific bed9 file in question, wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9,
             reads 'objstatus=replaced'. This metadata indicates this bed9 file was preliminary data that has
             since been replaced. A similar note in the automatically displayed README file states:
@@ -459,13 +459,13 @@
           <p>
             Here is an example using UDR, once installed, to download all the mouse mm9 ENCODE
             information:</p>
-          <pre class="code">$ udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+          <pre class="code">$ udr rsync -avP hgdownload.gi.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
             Please read more about the new UDR method <a href="../../ENCODE/newsarch.html#091213"
                                                       target="_blank">here</a>.</p>
           <p>
             For those not downloading high amounts of data, we highly recommend using rsync.
             For example:</p>
-          <pre class="code">$ rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</pre>
+          <pre class="code">$ rsync -a -P rsync://hgdownload.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</pre>
           <p>
             Using rsync has the advantage of starting up where it left off after a failure, when run again.
           </p>
@@ -551,7 +551,7 @@
           </p>
           <p>
             For example in the README.txt file displayed at the top of the page in the
-            <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/">Caltech RNA-seq directory</a>
+            <a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/">Caltech RNA-seq directory</a>
             you can find the following link:
             &quot;http://genome.ucsc.edu/cgi-bin/hgFileUi?db=hg19&g=wgEncodeCaltechRnaSeq&quot;
           </p>
@@ -692,7 +692,7 @@
             <a href="../../FAQ/FAQformat.html#format1.5">bigBed</a> files.
             Click <a href="../../goldenPath/help/bigBed.html">here</a> for extensive information on the bigBed
             format and how to extract data with different binary utilities located in this
-            <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">directory</a>.
+            <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">directory</a>.
          </div><!--end content-->
     </div><!--end wrapper-->
 
@@ -739,7 +739,7 @@
               Note: We recommend a minimal number of default visible tracks in your trackDb.txt to
               quicken hub loading time and to avoid overwhelming users. For more suggestions on
               hub structure, please see our
-              <a href="http://genomewiki.soe.ucsc.edu/index.php/Public_Hub_Guidelines".>Public Hub Guidelines</a>
+              <a href="http://genomewiki.gi.ucsc.edu/index.php/Public_Hub_Guidelines".>Public Hub Guidelines</a>
               wikipage. Also, for help defining unfamiliar terms, you may want to see the Hub Track
               Database Definition's <a href="http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#toc"
                           target="_blank">table of contents</a>.

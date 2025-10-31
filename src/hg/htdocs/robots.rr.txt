@@ -1,24 +1,15 @@
-User-agent: AdsBot-Google
 User-agent: AhrefsBot
-User-agent: Amazonbot
-User-agent: anthropic-ai
-User-agent: Applebot
 User-agent: AwarioRssBot
 User-agent: AwarioSmartBot
 User-agent: Bytedance
 User-agent: Bytespider
 User-agent: CCBot
-User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: Claude-Web
 User-agent: cohere-ai
 User-agent: DataForSeoBot
 User-agent: Diffbot
 User-agent: FacebookBot
 User-agent: SemrushBot
 User-agent: FriendlyCrawler
-User-agent: Google-Extended
-User-agent: GoogleOther
 User-agent: GPTBot
 User-agent: img2dataset
 User-agent: ImagesiftBot
@@ -37,8 +28,9 @@ User-agent: YouBot
 Disallow: /
 
 User-agent: *
-Crawl-delay: 5
 Disallow: /admin/stats/
 Disallow: /goldenPath/certificate.html
 Disallow: /goldenPath/certificates/
 Disallow: /cgi-bin/hgTracks*.customText*.
+Disallow: /cgi-bin/hgBlat*output=json*
+Disallow: /cgi-bin/hgGeneGraph*

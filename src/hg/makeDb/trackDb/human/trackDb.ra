@@ -242,8 +242,55 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         dataVersion release 1
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
-        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $pmidCount <br> <b>Variant Effect:</b> $variantEffect
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
         html varaico.html
+
+        track varaicoSuppl
+        shortLabel Varaico Variants (suppl)
+        longLabel Varaico Variants extracted from Supplementary Data
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/bbi/varaicoSuppl.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        html varaico.html
+
+        track varaicoTest
+        shortLabel Varaico Main Test
+        longLabel Varaico Main Test
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/None/full/$D/normalized_variants.$D.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        html varaico.html
+        release alpha
+
+        track varaicoSupplTest
+        shortLabel Varaico Suppl Test
+        longLabel Varaico Suppl Test
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /hive/users/jbirgmei/amelie2/data/out/None/full/$D/normalized_variants_supplements.$D.bb
+        noScoreFilter on
+        exonNumbers off
+        # itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        html varaico.html
+        release alpha
 
 track caseControl
 compositeTrack on
@@ -5551,9 +5598,11 @@ bigDataUrl /gbdb/$D/hgnc/hgnc.bb
 type bigBed 9 +
 labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
 defaultLabelFields symbol
-mouseOver <b>Symbol</b>: $symbol<br> <b>$name</b><br> <b>Alias symbol</b>: $alias_symbol<br> <b>Previous symbols</b>: $prev_symbol
+mouseOver <b>Symbol</b>: <a href="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$symbol">$symbol</a><br> <b>ID</b>: $name<br> <b>Alias symbol</b>: $alias_symbol<br> <b>Previous symbols</b>: $prev_symbol
 filterValues.locus_type Y RNA,long non-coding RNA,micro RNA,misc RNA,ribosomal RNA,small nuclear RNA,small nucleolar RNA,transfer RNA,vault RNA,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,pseudogene,readthrough,unknown
 group genes
+url https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$
+urlLabel HGNC Details:
 searchIndex name
 searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
@@ -5604,4 +5653,6 @@ include mitoMap.ra
 
 include nmdEscape.ra alpha
 include exonprimers.ra alpha
-include colorsDb.ra
+include longReadVariants.ra
+
+include g2p.ra alpha

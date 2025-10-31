@@ -1579,7 +1579,9 @@ var hgGateway = (function() {
         var bedMatch = position.match(bedRangeExp);
         var sqlMatch = position.match(sqlRangeExp);
         var singleMatch = position.match(singleBaseExp);
-        var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+        var gnomadRangeMatch = searchTerm.match(gnomadRangeExp);
+        var gnomadVarMatch = searchTerm.match(gnomadVarExp);
+        var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch || gnomadRangeMatch || gnomadVarMatch;
         if (positionMatch !== null || goDirectlyToHgTracks) {
             // We already have a position from either selecting a suggestion or the user just typed a regular
             // old position, so go to hgTracks at that location

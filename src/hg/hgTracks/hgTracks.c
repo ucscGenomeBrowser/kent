@@ -8558,11 +8558,9 @@ if (track->hasUi)
     struct trackDb *tdb = track->tdb;
 
     if (tdbIsSuper(tdb))
-        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of different types "
-                "(super track)", slCount(tdb->children));
+        dyStringPrintf(dsMouseOver, " - container, %d tracks ", slCount(tdb->children));
     else if (tdbIsComposite(tdb))
-        dyStringPrintf(dsMouseOver, " - this is a container track with %d subtracks of similar types "
-                "(composite track)", slCount(tdb->subtracks));
+        dyStringPrintf(dsMouseOver, " - container, %d subtracks ", slCount(tdb->subtracks));
 
     // Print icons before the title when any are defined
     hPrintIcons(track->tdb);
@@ -8704,6 +8702,9 @@ void doTrackForm(char *psOutput, struct tempName *ideoTn)
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
  * ideogram is created.  */
 {
+#ifdef GRAPH_BUTTON_ON_QUICKLIFT
+int graphCount = 0;
+#endif
 int disconCount = 0;
 struct group *group;
 struct track *track;
@@ -9659,7 +9660,7 @@ if (!hideControls)
                 hPrintf("<th align=\"left\" colspan=%d class='errorToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("Hub", group->label))
                 hPrintf("<th align=\"left\" colspan=%d class='hubToggleBar'>",MAX_CONTROL_COLUMNS);
-            else if (startsWith("Quicklift", group->label))
+            else if (startsWith("QuickLift", group->label))
                 hPrintf("<th align=\"left\" colspan=%d class='quickToggleBar'>",MAX_CONTROL_COLUMNS);
             else
                 hPrintf("<th align=\"left\" colspan=%d class='nativeToggleBar'>",MAX_CONTROL_COLUMNS);
@@ -9675,6 +9676,7 @@ if (!hideControls)
 
             if (isHubTrack(group->name))
 		{
+
                 if (strstr(group->label, "Collections"))
                     {
                     safef(idText, sizeof idText, "%s_edit", group->name);
@@ -9686,12 +9688,21 @@ if (!hideControls)
                 }
 
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
-            hPrintf("</td><td style='text-align:right;'>\n");
-            if (isHubTrack(group->name))
-		{
-                char *hubName = hubNameFromGroupName(group->name);
-                struct trackHub *hub = grabHashedHub(hubName);
+            
+            char *hubName = hubNameFromGroupName(group->name);
+            struct trackHub *hub = grabHashedHub(hubName);
+            if (hub && hub->url)
+                {
+                puts("&nbsp;");
+                char infoText[10000];
+                safef(infoText, sizeof infoText, "A track hub is a list of tracks produced and hosted by external data providers. The UCSC browser group is not responsible for them. This hub is loaded from %s", hub->url);
+                printInfoIconColor(infoText, "white");
+                }
 
+            hPrintf("</td><td style='text-align:right;'>\n");
+            
+            if (hubName)
+		{
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
                 if (hub != NULL)
                     {
@@ -9715,26 +9726,34 @@ if (!hideControls)
                         }
                     hPrintf("&nbsp;&nbsp;");
                     }
+                }
 
-                hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
-                        "title='Hide all tracks in this group'>Hide all</button>&nbsp;",
-                        group->name);
+            hPrintf("<button type='button' class=\"hgtButtonHideGroup\" data-group-name=\"%s\" "
+                    "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
+                    group->name);
 
+            if (hub)
+                {
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
-                hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
+                hPrintf("<input name=\"hubDisconnectButton\" title='Disconnect third-party track hub and remove all tracks' "
+                        "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
 		    hubName + strlen(hubTrackPrefix));
 
+#ifdef GRAPH_BUTTON_ON_QUICKLIFT
+		safef(idText, sizeof idText, "%s_%d_graph", hubName, graphCount);
+                graphCount++;
+                hPrintf("<input name=\"graphButton\" id='%s'"
+                    " type=\"button\" value=\"Graph\">\n", idText);
+#endif
 		}
 
-
-
             hPrintf("<input type='submit' name='hgt.refresh' value='Refresh' "
-                    "title='Update image with your changes'>\n");
+                    "title='Update image with your changes. Any of the refresh buttons on this page may be used.'>\n");
             hPrintf("</td></tr></table></th>\n");
             controlGridEndRow(cg);
 

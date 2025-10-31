@@ -10,6 +10,7 @@
 # exit on any error
 set -beEu -o pipefail
 
+export TOP="/hive/data/inside/GenArk/pushRR"
 export expectHost="hgwdev"
 
 export hostName=$(hostname -s)
@@ -17,6 +18,17 @@ if [[ "${hostName}" != "${expectHost}" ]]; then
   printf "ERROR: must run this on %s !  This is: %s\n" "${expectHost}" "${hostName}" 1>&2
   exit 255
 fi
+
+cd "${TOP}"
+
+### this script will create listings for new files in existing browsers:
+
+./whatIsNew.sh
+
+### example:
+# -rw-rw-r-- 1   42974 Aug 15 12:14 new.files.ready.to.beta.txt
+# -rw-rw-r-- 1      43 Aug 15 12:14 new.beta.timeStamps.txt
+
 
 #############################################################################
 ### rsync out one given directory.  The excludes avoid:
@@ -31,7 +43,7 @@ fi
 
 function sendTo() {
    export D="${1}"
-   for M in hgwbeta hgw0 hgw1 hgw2 "Genome-Browser-Mirror-3.dhcp.uni-bielefeld.de"
+   for M in hgwbeta
    do
      printf "ssh qateam\@${M} \"umask 002; mkdir -p '/gbdb/genark/${D}'\"\n" 1>&2
      ssh qateam@${M} "umask 002; mkdir -p '/gbdb/genark/${D}'" < /dev/null
@@ -42,24 +54,26 @@ function sendTo() {
 #############################################################################
 
 #############################################################################
-### these listings: dev.todayList.gz and hgw1.todayList.gz are created by
+### these listings: dev.todayList.gz and hgwbeta.todayList.gz are created by
 ###  cron jobs elsewhere before this script runs
 
 printf "### starting pushNewOnes.sh %s\n" "`date '+%F %T'`" 1>&2
 
-export inCommon=`comm -12 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort)  <(zgrep "/hub.txt" hgw1.todayList.gz | cut -f2 | sort) | wc -l`
-printf "# in common hgwdev to hgw1: %d\n" "${inCommon}" 1>&2
+export inCommon=`comm -12 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort)  <(zgrep "/hub.txt" hgwbeta.todayList.gz | cut -f2 | sort) | wc -l`
+printf "# in common hgwdev to hgwbeta: %d\n" "${inCommon}" 1>&2
 
-export onHgw1NotDev=`comm -13 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort) <(zgrep "/hub.txt" hgw1.todayList.gz | cut -f2 | sort) | wc -l`
-printf "# on hgw1 not in hgwdev: %d\n" "${onHgw1NotDev}" 1>&2
+export onHgwBetaNotDev=`comm -13 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort) <(zgrep "/hub.txt" hgwbeta.todayList.gz | cut -f2 | sort) | wc -l`
+printf "# on hgwbeta not in hgwdev: %d\n" "${onHgwBetaNotDev}" 1>&2
 
-export onDevNotHgw1=`comm -23 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort) <(zgrep "/hub.txt" hgw1.todayList.gz | cut -f2 | sort) | wc -l`
-printf "# on hgwdev not in hgw1: %d\n" "${onDevNotHgw1}" 1>&2
+export onDevNotHgwBeta=`comm -23 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort) <(zgrep "/hub.txt" hgwbeta.todayList.gz | cut -f2 | sort) | wc -l`
+printf "# on hgwdev not in hgwbeta: %d\n" "${onDevNotHgwBeta}" 1>&2
 
-if [ "${onDevNotHgw1}" -gt 0 ]; then
+### this is only a check for brand new assemblies since just the 'hub.txt'
+### file listings were compared
+if [ "${onDevNotHgwBeta}" -gt 0 ]; then
 
 comm -23 <(zgrep "/hub.txt" dev.todayList.gz | cut -f2 | sort) \
-   <(zgrep "/hub.txt" hgw1.todayList.gz | cut -f2 | sort) \
+   <(zgrep "/hub.txt" hgwbeta.todayList.gz | cut -f2 | sort) \
      | sed -e 's#/hub.txt##;' | while read P
 do	# make sure it really is a valid directory path
    validCount=`echo "${P}" | awk -F'/' '{print NF}'`
@@ -78,6 +92,41 @@ done
 
 else
   printf "# nothing to push, all up to date.\n" 1>&2
+fi
+
+# check existing browsers that may have new or updated files to go out
+if [ -s "new.files.ready.to.beta.txt" ]; then
+   for M in hgwbeta
+   do
+     printf "time (rsync --stats -a -L --files-from=new.files.ready.to.beta.txt \"/gbdb/genark/\" \"qateam@${M}:/gbdb/genark/\") 2>&1\n" 1>&2
+     time (rsync --stats -a -L --files-from=new.files.ready.to.beta.txt "/gbdb/genark/" "qateam@${M}:/gbdb/genark/") 2>&1
+   done
+fi
+
+# and the /gbdb/*/quickLift files:
+if [ -s "new.quickLift.ready.to.beta.txt" ]; then
+   for M in hgwbeta
+   do
+     printf "time (rsync --stats -a -L --files-from=new.quickLift.ready.to.beta.txt \"/gbdb/\" \"qateam@${M}:/gbdb/\") 2>&1\n" 1>&2
+     time (rsync --stats -a -L --files-from=new.quickLift.ready.to.beta.txt "/gbdb/" "qateam@${M}:/gbdb/") 2>&1
+   done
+fi
+
+if [ -s "new.beta.timeStamps.txt" ]; then
+   for M in hgwbeta
+   do
+     printf "time (rsync --stats -a -L --files-from=new.beta.timeStamps.txt \"/gbdb/genark/\" \"qateam@${M}:/gbdb/genark/\") 2>&1\n" 1>&2
+     time (rsync --stats -a -L --files-from=new.beta.timeStamps.txt "/gbdb/genark/" "qateam@${M}:/gbdb/genark/") 2>&1
+   done
+fi
+
+# and the /gbdb/*/quickLift files:
+if [ -s "beta.quickLift.timeStamps.txt" ]; then
+   for M in hgwbeta
+   do
+     printf "time (rsync --stats -a -L --files-from=beta.quickLift.timeStamps.txt \"/gbdb/\" \"qateam@${M}:/gbdb/\") 2>&1\n" 1>&2
+     time (rsync --stats -a -L --files-from=beta.quickLift.timeStamps.txt "/gbdb/" "qateam@${M}:/gbdb/") 2>&1
+   done
 fi
 
 printf "### finished pushNewOnes.sh %s\n" "`date '+%F %T'`" 1>&2

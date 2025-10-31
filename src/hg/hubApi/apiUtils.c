@@ -740,7 +740,7 @@ if (NULL == textOutput)
     {
     textOutput = dyStringNew(0);
 
-    boolean doContext = (cgiInt(argSkipContext)==0);
+    boolean doContext = (cgiOptionalInt(argSkipContext, 0)==0);
     if (doContext)
         {
         char outString[1024];

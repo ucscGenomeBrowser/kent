@@ -18,48 +18,54 @@ data.
 <p>
 This page covers the basics of setting up your own hub:
 <ol>
-  <li>Creating your hub.txt
-  <li>Common track types and their configuration
-  <li>Grouping tracks
-  <li>Creating description pages
-  <li>Sharing and linking to your hub
+  <li><a href="#create">Creating your hub.txt</a>
+  <li><a href="#types">Common track types and their configuration</a>
+  <li><a href="#grouping">Grouping tracks</a>
+  <li><a href="#description">Creating description pages</a>
+  <li><a href="#sharing">Sharing and linking to your hub</a>
 </ol>
 </p>
 
 <p>
 As you build your hub, use the "Hub Development" tab on the <a
-href="../../cgi-bin/hgHubConnect">Track Data Hub</a> page to
-check your hub for errors or to disable file caching to
-see your changes immediately rather than after the 300ms refresh
+href="/cgi-bin/hgHubConnect#hubDeveloper">Track Data Hub</a> page to
+check for errors or to disable file caching to
+see your changes immediately, rather than after the 300ms refresh
 rate.
 </p>
 
 <h2>Example hub.txt</h2>
 <p>
-To begin, we want to provide an example hub.txt that has been created in a way
+To begin, here is  an example hub.txt that has been created in a way
 to make it easy to swap in your data URLs in place of our examples. It
 indicates what settings are required and includes many optional settings that
 can help elevate your tracks beyond the basics. Alongside these settings, it
 includes short explanations of how those settings work and how to configure
-them, but there is also a version provided without these.
+them. There is also a version provided without the explanations.
 
 <p>
 <ul>
+  <li><a href="examples/hubExamples/hubBasicSettings/hub.minimal.txt"
+  target="_blank">Minimal hub.txt</a>
   <li><a href="examples/hubExamples/hubBasicSettings/hub.txt"
-  target="_blank"><b>Example hub.txt with explanations</b></a></li>
-  <li><a href="examples/hubExamples/hubBasicSettings/hub.simple.txt"
-  target="_blank"><b>Example hub.txt no explanations</b></a></li>
-  <li><a href=""
+  target="_blank"><b>Detailed hub.txt with setting explanations</b></a> or
+  <a href="examples/hubExamples/hubBasicSettings/hub.noExplanations.txt"
+  target="_blank"><b>without explanations</b></a></li>
+  <li><a href="/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBasicSettings/hub.txt"
   target="_blank">Visualize this example hub.txt</a></li>
 </ul>
 
+<a name="create"></a>
 <h2>Creating your own hub.txt</h2>
 <p>
-The first step in creating a track hub is to create your hub.txt file. Download the example hub.txt
-and use this as a starting point, changing our default values to those for your hub. But, we'll also
-provide the necessary settings here. These settings control how your hub is labeled in the interface
+The first step in creating a track hub is to create your hub.txt file. Download the
+<a href="examples/hubExamples/hubBasicSettings/hub.txt">example hub.txt</a>
+and use this as a starting point, changing our default values to those for your hub.
+These settings control how your hub is labeled in the interface
 and contact information:
-<pre><code>hub myExampleHub # a short, unique identifier for your hub, no spaces
+<pre><code>hub myExampleHub # a short, unique internal identifier for your hub, no spaces
+# shortLabel and longLabel are how your hub is labeled in the Genome Browser interface
+# shortLabels should be under 20 characters and longLabels under 70
 shortLabel Example Hub
 longLabel Example Hub for useOneFile option
 useOneFile on
@@ -71,44 +77,55 @@ genome hg38
 If you have tracks across multiple assemblies,
 see the <a href="hgTrackHubHelp.html">full track hub documentation</a>.</p>
 
+<a name="types"></a>
 <h2>Common Track Types</h2>
 <p>
-The most common track types are bigBed and bigWig, compressed, binary versions of
-corresponding plain-text formats. Together they should cover much
+The most common <a href="/FAQ/FAQformat.html">track types</a> are bigBed and bigWig. Compressed, binary versions of
+the corresponding plain-text formats. Together they should cover most
 of what you might want to display in the Genome Browser, from transcription peaks to
-RNA-seq results.
+RNA-seq signals.
 
 <h2>bigBed Tracks</h2>
 <p>
 You can use <a href="bigBed.html">bigBed</a> tracks to display discrete annotations, such as genes, transcription
 start sites, or conserved genomic elements. The bigBed format builds off the
-plain-text <a href="FAQ/FAQformat.html#format1">BED format</a> and is thus flexible in terms of what fields are included.
-Your file must start with a set of 12 standard fields (though not necessarily all of them), but
+plain-text <a href="/FAQ/FAQformat.html#format1">BED format</a> and is thus flexible in terms of what fields are included.
+Your file must start with a minimum of 3, and up to 12, standard fields, but
 can also extend the format with any number of additional fields.
 
 <h3>Building a bigBed</h3>
 <p>
-Next, we'll discuss how to build a bigBed from a bed file. 
 
 <ol>
   <li>Download the <code>bedToBigBed</code> utility for your system type from
-      our <a href="https://hgdownload.soe.ucsc.edu/downloads.html">download
+      our <a href="https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">download
       server</a>.
   <li>Use <code>bedToBigBed</code> to build your bigBed:
       <pre><code>bedToBigBed -sort in.bed chrom.sizes myBigBed.bb</code></pre>
     <ul>
       <li>If your assembly is a UCSC-hosted assembly (e.g. hg38), chrom.sizes can
+<<<<<<< HEAD
           be a URL (replace &quot;genNom&quot; with the assembly name (e.g. hg38)):
-          http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes.
+          http://hgdownload.gi.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes.
           If you're working with a GenArk assembly hub, then the chrom.sizes
+=======
+          be a URL (e.g. hg38):
+          <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes">
+          https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
+          If you're working with a <a href="https://hgdownload.soe.ucsc.edu/hubs/">
+          GenArk assembly hub</a> (e.g. GCF/GCA), then the chrom.sizes
+>>>>>>> 7ec5fd8d353ae3486915167a5d57c84cb0cb918f
           file can be found under the "Data file downloads" section on the
-          <a href="../../cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
+          <a href="/cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
       <li>If you have custom fields in your bed file, you will need to create a custom .as file.
-          You can download the <a href="">basic BED .as</a> and modify this by adding new fields 
-          below those in your file. 
+          You can download the <a href="examples/bed12.as">basic BED .as</a>
+          and modify this by adding new fields below those in your file.
     </ul>
-  <li>Put your bigBed file alongside your hub.txt in a web-accessible location
-  <li>You will use the file name (e.g. &quot;myBigBed.bb&quot;) with the <code>bigDataUrl</code> setting in your hub.txt
+  <li>Put your bigBed file alongside your hub.txt in a web-accessible location,
+      either through <a href="/cgi-bin/hgHubConnect#hubUpload">the 10GB of space we
+      make available to users</a> or through one of <a href="hgTrackHubHelp#Hosting">several
+      other services</a>.
+  <li>You will use the file name (e.g. &quot;myBigBed.bb&quot;) with the <code>bigDataUrl</code> setting in your hub.txt.
 </ol>
 
 <h3>bigBed track hub configuration</h3>
@@ -126,22 +143,24 @@ bigDataUrl gtexCaviar.chr7_155799529-155812871.bb
 </code></pre>
 <p>The type line consists of three parts: 
 <ul>
-  <li>&quot;bigBed&quot; is the basic track type
+  <li>&quot;bigBed&quot; is the basic track type.
   <li>&quot;12&quot; indicates how many standard BED fields are included in
   your file. You may need to change this to match the number of standard BED
   fields in your file.
   <li>&quot;+&quot; tells the genome browser there are extra fields beyond the
   standard fields. If your file has no extra fields, replace this with a
-  &quot;.&quot;.
+  &quot;.&quot; (e.g. type bigBed 12 .).
 </ul>
 <p>Here is a screenshot of what this basic bigBed track looks like displayed in the Genome Browser:
 <br>
-<img src="../../images/bigBedReqSettings.png">
+<img src="/images/bigBedReqSettings.png">
 
 <p>
 The bigBed format also offer a wide range of customization options for the
-display, from decorators to highlights. Additionally, they offer extensive
-filter controls, searching options, and mouseover configurations. Our <a
+display, from decorators to highlights. Additionally, it offer extensive
+<a href="/goldenPath/help/hubQuickStartFilter.html">
+filter controls</a>, <a href="/goldenPath/help/hubQuickStartSearch.html">
+searching options</a>, and mouseover configurations. Our <a
 href="trackDb/trackDbHub.html"
 target="_blank">trackDb documentation</a> contains a full listing of
 settings available for the format.
@@ -165,45 +184,51 @@ mouseOver $name; CPP: $cpp
 <p>
 And here is what that track looks like in the Genome Browser:
 <br>
-<img src="../../images/bigBedCommonSettings.png">
+<img src="/images/bigBedCommonSettings.png">
 
 <p>
 These common settings added options to the track configuration pop-up:
 <br>
-<img src="../../images/bigBedCommonSettingsPopUp.png">
+<img src="/images/bigBedCommonSettingsPopUp.png">
 
 <h2>bigWig Tracks</h2>
 <p>
 You can use <a href="bigWig.html">bigWig</a> to tracks to display continuous
 annotations, such as RNA-seq expression, conservation scores, or other
-genome-wide scores. You can build a bigWig using one of two plain-text formats:
+genome signal scores. You can build a bigWig using one of two plain-text formats:
 <a href="wiggle.html" target="_blank">wiggle</a> or
 <a href="bedgraph.html" target="_blank">bedGraph</a>. 
 
 <h3>Building a bigWig</h3>
 <p>
-Next, we'll discuss how to build a bigWig from a wig or bedGraph file. 
 
 <ol>
-  <li>Download the <code>wigToBigWig</code> utility for your system type from our <a href="">download server</a>.
+  <li>Download the <code>wigToBigWig</code> utility for your system type from
+  our <a href="https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">download
+  server</a>.
   <li>Use this utility to build your bigWig:
       <pre><code>wigToBigWig in.bedGraph chrom.sizes myBigWig.bw</code></pre>
     <ul>
       <li>If your assembly is a UCSC-hosted assembly (e.g. hg38), chrom.sizes can
-          be a URL (replace &quot;genNom&quot; with the assembly name (e.g. hg38)):
-          http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes.
-          If you're working with a GenArk assembly hub, then the chrom.sizes
+          be a URL (e.g. hg38):
+          <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes">
+          https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
+          If you're working with a <a href="https://hgdownload.soe.ucsc.edu/hubs/">
+          GenArk assembly hub</a> (e.g. GCF/GCA), then the chrom.sizes
           file can be found under the "Data file downloads" section on the
-          <a href="../../cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
+          <a href="/cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
     </ul>
-  <li>Place your bigWig file in a web-accessible location alongside your hub.txt
-  <li>You will use the file name (e.g. &quot;myBigWig.bw&quot;) with the <code>bigDataUrl</code> setting
+  <li>Put your bigWig file alongside your hub.txt in a web-accessible location,
+      either through <a href="/cgi-bin/hgHubConnect#hubUpload">the 10GB of space we
+      make available to users</a> or through one of <a href="hgTrackHubHelp#Hosting">several
+      other services</a>.
+  <li>You will use the file name (e.g. &quot;myBigWig.bw&quot;) with the <code>bigDataUrl</code> setting.
 </ol>
 
 <h3>bigWig track hub configuration</h3>
 <p>
 The basic trackDb configuration for a bigWig track is similar to a bigBed track as
-all tracks required the same basic settings (<code>track, shortLabel, longLabel, type, bigDataUrl</code>). 
+all tracks require the same basic settings (<code>track, shortLabel, longLabel, type, bigDataUrl</code>). 
 This is what the configuration for a bigWig track might look like (the example
 hub.txt includes other useful settings):
 <p><pre><code>track bigWigExample
@@ -223,13 +248,14 @@ color 60,60,140
 <p>
 Here is what this looks like visualized in the Genome Browser:
 <br>
-<img src="../../images/bigWigReqSettings.png">
+<img src="/images/bigWigReqSettings.png">
 
+<a name="grouping"></a>
 <h2>Grouping tracks</h2>
 <p>
 Next, we'll provide a basic overview of how to group your tracks using
 composite tracks and super tracks. This will allow you to pull similar data
-together under a single track.
+together under a single container.
 
 <h3>Composite Tracks</h3>
 <p>
@@ -272,7 +298,7 @@ compositeTrack on
 <p>
 This composite track configuration will display like so:
 <br>
-<img src="../../images/compositeBigWig.png">
+<img src="/images/compositeBigWig.png">
 
 <h3>Super Tracks</h3>
 <p>
@@ -326,8 +352,9 @@ html examplePage
 <p>
 Loading the example hub with this super track onfiguration looks like this:
 <br>
-<img src="../../images/superTrackEx.png">
+<img src="/images/superTrackEx.png">
 
+<a name="description"></a>
 <h2>Creating description pages</h2>
 <p>
 If you plan to share your track hub more widely, you will want to create a description page for your tracks.
@@ -346,7 +373,7 @@ bigDataUrl hg38.phyloP100way.chr7_155799529-155812871.bw
 html bigWigDescription.html
 </code></pre>
 
-
+<a name="sharing"></a>
 <h2>Sharing your hub</h2>
 <p>
 Once you have a functional hub that you would like to share with others, you
@@ -354,7 +381,7 @@ can create links that you give to others in two ways.
 
 <p>
 The first option is to create a <a href="hgSessionHelp.html">session</a> link,
-which requires a <a href="../../cgi-bin/hgLogin">Genome Browser account</a>. 
+which requires a <a href="/cgi-bin/hgLogin">Genome Browser account</a>.
 Load your hub, configure the genome browser as you'd like (e.g. position and
 data tracks), select "My Sessions" under "My Data", and use the option to save
 the current settings as a session. You will then be provided with a URL that
@@ -362,7 +389,8 @@ you can share with others.
 
 <p>
 The other option is to create a URL to the Genome Browser that loads your hub 
-on the assembly of interest. There are three URL parameters you will want to use:
+on the assembly of interest. There are three <a href="/FAQ/FAQlink.html">URL parameters</a>
+you will want to use:
 <ul>
   <li><code>db</code> - UCSC assembly name (e.g. hg38)
   <li><code>position</code> - chromosome position to load
@@ -373,9 +401,12 @@ You will then append these to a genome browser URL. For example, this url with l
 <pre><code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBasicSettings/hub.txt
 </code></pre>
 
-<!--<h2>Making it a Public Hub</h2>
 <p>
--->
+If you feel that your hub would be of general use to the research community,
+you can contact us about making it a public hub. Note that public hubs have to meet
+more stringent requirements than the basics described here.
+Check that your hub meets the <a href="publicHubGuidelines.html">public hub requirements</a>
+and then follow the directions on that page for submitting it to us for review.
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 

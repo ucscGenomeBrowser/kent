@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "hubSpaceKeys.h"
 #include "hdb.h"
+#include "hgConfig.h"
 
 
 
@@ -125,12 +126,21 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *userNameForApiKey(char *apiKey)
-/* Return userName associated with apiKey else NULL */
+char *userNameForApiKey(struct sqlConnection *conn, char *apiKey)
+/* Return userName associated with apiKey else NULL. If conn is NULL, will create a connection and free it. */
 {
-struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select userName from %s where apiKey = '%s'", HUBSPACE_AUTH_TABLE, apiKey);
+char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
+
+boolean doClose = FALSE;
+if (conn == NULL)
+    {
+    conn = hConnectCentral();
+    doClose = TRUE;
+    }
+
+struct dyString *query = sqlDyStringCreate("select userName from %s where apiKey = '%s'", tableName, apiKey);
 char *userName = sqlQuickString(conn, dyStringCannibalize(&query));
-hDisconnectCentral(&conn);
+if (doClose)
+    hDisconnectCentral(&conn);
 return userName;
 }

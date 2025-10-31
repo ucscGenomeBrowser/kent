@@ -1,22 +1,66 @@
 <div id='hubUpload'>
     <div id='fileTableInfoDiv' class='tabSection'>
+        <div style="background-color: #fff8e1; border-left: 5px solid #ff9800;
+        padding: 10px 15px; margin: 20px 0;">
+          <strong>New feature!</strong>
+          We're excited to introduce this new hosting space.<br>
+          We would love to hear your feedback &mdash; please
+          <a href="../contacts.html">contact us</a> and let us know what you think!
+        </div>
         <p>
-        Upload track hub files directly to UCSC from this page. You can then immediately view your bigBeds, bigWigs, BAMs (etc) without relying on third party hosting providers like DropBox or Google Drive or AWS. Users are limited to 10GB of total storage. Please keep a backup of your data. While we strive to maintain this service without interruption, we are unable to promise storage of your data indefinitely.
+        Upload your track hub files to UCSC and view your bigBed, bigWig,
+        BAM, VCF, and <a href="/goldenPath/help/hgTrackHubHelp.html#format">other supported files</a> -- no need to rely on third-party hosting services
+        such as Dropbox, Google Drive, or AWS.
         </p>
+        <p>
+        Each account is allocated 10 GB of storage. While we strive to maintain uninterrupted
+        access, please maintain your own backups. Data persistence over the long term
+        is not guaranteed. To request additional storage space, please
+        <a href="../contacts.html">contact us</a>.
+        </p>
+        <details>
+          <summary><b>How to use Hub Space</b></summary>
+          <p>There are two primary ways to upload your files:</p>
+          <ol>
+            <li>
+            Upload a single (or group) of binary-indexed files for immediate visualization.</li>
+            <li>
+            Upload an entire track hub along with all supporting files (hub.txt,
+            bigWig, bigBed, etc.) to visualize the hub.</li>
+          </ol>
+          <p>
+          If a hub.txt file is not provided when uploading the data files, a hub.txt file
+          is automatically generated. The generated hub.txt file is configured with the
+          <a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile
+          trackDb setting</a>, and as a result, each hub is limited to a single genome assembly.</p>
+          <p>
+          <i>Editing the generated hub.txt file is not yet supported.</i>
+          To customize the hub configuration or data display, replace the generated
+          hub.txt file with your own version after uploading the data files.
+          </p>
+          <div style="display: flex; align-items: center; gap: 150px;">
+            <p style="flex: 1;">
+            By default, your most recently used genome assembly is selected after choosing which
+            files to upload. Use the <em>popular assemblies</em> drop-down menu or the search
+            box to select another genome assembly.
+            </p>
+            <img src="../images/HubSpaceUpload.png"
+            alt="Example of the upload dialog box for Hub Space" width="35%">
+          </div>
+        </details>
     </div>
 
-    <div id='selectedFileInfo' class="tabSection">
-        <div id='placeHolderInfo'>Selected file information</div>
-        <div style="display: none">
-            <span id='numberSelectedFiles'></span> selected. <button id='viewSelectedFiles'></button><button id='deleteSelectedFiles'></button>
-        </div>
-    </div>
 
     <div id='filesDiv' class='tabSection'>
         <table id="filesTable" class="sessionTable stripe hover row-border compact" borderwidth=0>
         </table>
-    </div>
-
+        <div id='selectedFileInfo' class="tabSection" style="margin-bottom: 20px;">
+            <div id='placeHolderInfo'>Select files for more options</div>
+            <div style="display: none">
+                <span id='numberSelectedFiles'></span> selected.
+                <button id='viewSelectedFiles'></button><button id='deleteSelectedFiles'></button>
+         </div>
+     </div>
 
     <div>
         For information on making track hubs, see the following pages:

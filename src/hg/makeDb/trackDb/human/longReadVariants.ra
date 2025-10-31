@@ -1,12 +1,13 @@
-track structuralVariants
+track longReadVariants
 superTrack on
-shortLabel Long-read Structural Variants
-longLabel Long-read Structural Variants
+shortLabel Long-read Variants
+longLabel Long-read Variants
 group varRep
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#092425 "Added CoLoRSdb Variants Sep. 24, 2025"
 
     track deepvariant
-    parent structuralVariants
+    parent longReadVariants
     shortLabel CoLoRSdb small variants
     longLabel CoLoRSdb long-read small variants
     type vcfTabix
@@ -15,7 +16,7 @@ visibility hide
     html colorsDb.html
      
     track pbsv
-    parent structuralVariants
+    parent longReadVariants
     shortLabel CoLoRSdb structural variants
     longLabel CoLoRSdb long-read structural variants
     type bigBed 9 +

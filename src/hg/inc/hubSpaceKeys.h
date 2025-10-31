@@ -60,10 +60,10 @@ void hubSpaceKeysOutput(struct hubSpaceKeys *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#define HUBSPACE_AUTH_TABLE "hubSpaceKeys"
+#define AUTH_TABLE_DEFAULT "apiKeys"
 
-char *userNameForApiKey(char *apiKey);
-/* Return userName associated with apiKey else NULL */
+char *userNameForApiKey(struct sqlConnection *conn, char *apiKey);
+/* Return userName associated with apiKey else NULL. If conn is NULL, will create a connection and free it. */
 
 #endif /* HUBSPACEKEYS_H */
 

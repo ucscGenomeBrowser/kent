@@ -2100,8 +2100,7 @@ baseColorDefault genomicCodons
 #query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 #searchPriority 3.53
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
 include lincRNAs.ra
 
 track sibTxGraph override
@@ -2440,7 +2439,6 @@ mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg19/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 track ncbiRefSeq override
 parent refSeqComposite off

@@ -32,8 +32,7 @@ include trackDb.chainNet.ra
 include trackDb.syntenicNet.ra alpha
 include trackDb.rbestNet.ra alpha
 include trackDb.gencode.ra
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
 include knownGeneArchive.ra
 include reMap.ra
 
@@ -49,7 +48,6 @@ mouseOverField patternExpression
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm39/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon Updated red ../goldenPath/newsarch.html#050525 "Updated May 5, 2025"
 
 include ../refSeqComposite.mm10.mm39.ra
 
