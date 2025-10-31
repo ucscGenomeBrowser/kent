@@ -527,8 +527,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra public
-include knownGene.alpha.ra alpha,beta
+include knownGene.ra
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 

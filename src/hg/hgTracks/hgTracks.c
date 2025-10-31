@@ -9732,7 +9732,7 @@ if (!hideControls)
                     "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
                     group->name);
 
-            if (hubName)
+            if (hub)
                 {
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
