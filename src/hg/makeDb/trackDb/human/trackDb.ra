@@ -5656,3 +5656,4 @@ include exonprimers.ra alpha
 include longReadVariants.ra
 
 include g2p.ra alpha
+include varFreqs.ra alpha

@@ -367,7 +367,7 @@ ifeq (${IS_HGWDEV},yes)
 
 else
    ifeq (${CONDA_BUILD},1)
-       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a
+       L+=${PREFIX}/lib/libssl.so ${PREFIX}/lib/libcrypto.so
    else
        ifneq (${SSLLIB},)
           L+=${SSLLIB}
