@@ -1,0 +1,603 @@
+# Original hub was prepared as a hub: https://users.wenglab.org/gaomingshi/ENCODE_Reg/hub.txt
+
+# Cloned it locally to work with: /cluster/home/lrnassar/public_html/track_hubs/ENCODE4/ENCODE_V4_Regulation/hub.txt
+
+# Cloned it with -download into this dir to process the data: /hive/data/outside/encode4/ccre/
+
+# The data were then processed using 3 AI-created scripts:
+# 1. Copy the files from the hubClone dir (/hive/data/outside/encode4/ccre/) to rename the files and place them in the correct dirs
+# 2. Script to process ENCODE hub.txt file and create trackDb RA file with various transformations applied, linking to the gbdb locations
+# 3. Script to restructure trackDb.ra with view containers. Converts fileType subgroup to view subgroup and creates view parent tracks.
+
+# Some small edits were made after the trackDb.ra file was made, such as removing newlines. See the ticket for details.
+
+# Make all symlinks: ln -s /hive/data/outside/encode4/ccre/human/coreCollection/* /gbdb/hg38/encode4/ccre/coreCollection/ ln -s /hive/data/outside/encode4/ccre/human/encode4CcreCombined.bb /gbdb/hg38/encode4/ccre/encode4CcreCombined.bb
+
+# The three python scripts will be pasted below in order:
+
+#!/usr/bin/env python3
+"""
+Script to process ENCODE hub.txt file and copy bigBed/bigWig files
+with appropriate renaming and destination directories.
+"""
+
+import os
+import shutil
+import re
+from pathlib import Path
+
+def extract_filename_from_url(url):
+    """Extract the filename from a URL."""
+    # Remove query parameters and fragments
+    url = url.split('?')[0].split('#')[0]
+    # Get the last part of the URL path
+    filename = url.rstrip('/').split('/')[-1]
+    return filename
+
+def process_hub_file(hub_file_path):
+    """Process the hub.txt file and copy files according to rules."""
+    
+    source_dir = "/hive/data/outside/encode4/ccre/ENCODE_V4_Regulation/"
+    dest_dir_human = "/hive/data/outside/encode4/ccre/human/"
+    dest_dir_core = "/hive/data/outside/encode4/ccre/human/coreCollection/"
+    
+    # Create destination directories if they don't exist
+    os.makedirs(dest_dir_human, exist_ok=True)
+    os.makedirs(dest_dir_core, exist_ok=True)
+    
+    files_copied = 0
+    
+    # Read and process the hub file
+    with open(hub_file_path, 'r') as f:
+        for line_num, line in enumerate(f, 1):
+            line = line.strip()
+            
+            # Look for lines starting with bigDataUrl
+            if line.startswith('bigDataUrl'):
+                # Extract the URL (everything after 'bigDataUrl ')
+                parts = line.split(None, 1)  # Split on whitespace, max 1 split
+                if len(parts) < 2:
+                    continue
+                
+                url = parts[1]
+                filename = extract_filename_from_url(url)
+                
+                # Rule 1: Special case for GRCh38-cCREs.annotated.bigBed
+                if filename == "GRCh38-cCREs.annotated.bigBed":
+                    source_file = os.path.join(source_dir, filename)
+                    dest_file = os.path.join(dest_dir_human, "encode4CcreCombined.bb")
+                    
+                    if os.path.exists(source_file):
+                        print(f"Copying {filename} -> encode4CcreCombined.bb")
+                        shutil.copy2(source_file, dest_file)
+                        files_copied += 1
+                    else:
+                        print(f"Warning: Source file not found: {source_file}")
+                
+                # Rule 2: Other bigBed files
+                elif filename.endswith('.bigBed'):
+                    source_file = os.path.join(source_dir, filename)
+                    new_filename = filename.replace('.bigBed', '.bb')
+                    dest_file = os.path.join(dest_dir_core, new_filename)
+                    
+                    if os.path.exists(source_file):
+                        print(f"Copying {filename} -> {new_filename}")
+                        shutil.copy2(source_file, dest_file)
+                        files_copied += 1
+                    else:
+                        print(f"Warning: Source file not found: {source_file}")
+                
+                # Rule 3: bigWig files
+                elif 'bigWig' in url:
+                    source_file = os.path.join(source_dir, filename)
+                    # Remove .bigWig?proxy=TRUE or just .bigWig and add .bw
+                    new_filename = re.sub(r'\.bigWig(\?.*)?$', '.bw', filename)
+                    dest_file = os.path.join(dest_dir_core, new_filename)
+                    
+                    if os.path.exists(source_file):
+                        print(f"Copying {filename} -> {new_filename}")
+                        shutil.copy2(source_file, dest_file)
+                        files_copied += 1
+                    else:
+                        print(f"Warning: Source file not found: {source_file}")
+    
+    return files_copied
+
+def main():
+    hub_file = "/cluster/home/lrnassar/public_html/track_hubs/ENCODE4/ENCODE_V4_Regulation/hub.txt"
+    
+    print("Processing hub.txt file...")
+    print(f"Hub file: {hub_file}")
+    print("-" * 60)
+    
+    if not os.path.exists(hub_file):
+        print(f"Error: Hub file not found at {hub_file}")
+        return 1
+    
+    try:
+        total_copied = process_hub_file(hub_file)
+        print("-" * 60)
+        print(f"\nTotal files copied: {total_copied}")
+        return 0
+    except Exception as e:
+        print(f"Error processing file: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+if __name__ == "__main__":
+    exit(main())
+
+########################################
+
+#!/usr/bin/env python3
+"""
+Script to process ENCODE hub.txt file and create trackDb RA file
+with various transformations applied.
+"""
+
+import os
+import re
+
+def extract_filename_from_url(url):
+    """Extract the filename from a URL."""
+    # Remove query parameters and fragments
+    url = url.split('?')[0].split('#')[0]
+    # Get the last part of the URL path
+    filename = url.rstrip('/').split('/')[-1]
+    return filename
+
+def capitalize_after_equals(text):
+    """Capitalize the first letter after each equals sign in a line."""
+    result = []
+    parts = text.split('=')
+    
+    for i, part in enumerate(parts):
+        if i == 0:
+            # First part - keep as is
+            result.append(part)
+        else:
+            # Capitalize first character after the equals sign
+            if part:
+                result.append(part[0].upper() + part[1:])
+            else:
+                result.append(part)
+    
+    return '='.join(result)
+
+def transform_line(line):
+    """Apply transformations to a line based on the rules."""
+    
+    # Rule: Replace "Core-cCREs" with "coreCcres" everywhere
+    line = line.replace('Core-cCREs', 'coreCcres')
+    
+    # Rule: subGroup2 biosampleType line - capitalize first, before cleaning
+    if line.startswith('subGroup2 biosampleType Biosample_type'):
+        line = capitalize_after_equals(line)
+    
+    # Rule: subGroup1 organ line - capitalize first, before cleaning
+    if line.startswith('subGroup1 organ Organ/Tissue'):
+        line = capitalize_after_equals(line)
+    
+    # Rule: Clean subGroup lines - replace commas with dashes and replace all non-conforming characters with underscores
+    # Valid characters are: a-z, A-Z, 0-9, _, -
+    # Special case: μ (mu) becomes 'u'
+    # Everything else (dots, parentheses, slashes, other non-ASCII, etc.) becomes underscore
+    # This must happen AFTER capitalization
+    if line.startswith('subGroup'):
+        line = line.replace(',', '-')  # Replace commas with dashes
+        line = line.replace('μ', 'u')  # Replace mu with u
+        # Replace any character that's not ASCII alphanumeric, underscore, dash, or whitespace/equals with underscore
+        cleaned = []
+        for char in line:
+            # Check if it's ASCII alphanumeric (a-z, A-Z, 0-9)
+            if (char >= 'a' and char <= 'z') or (char >= 'A' and char <= 'Z') or (char >= '0' and char <= '9'):
+                cleaned.append(char)
+            elif char in ('_', '-', ' ', '\t', '='):
+                cleaned.append(char)
+            else:
+                cleaned.append('_')
+        line = ''.join(cleaned)
+    
+    # Rule: type bigBed 9+1 -> type bigBed 9 + 2
+    if line.strip() == 'type bigBed 9+1':
+        return 'type bigBed 9 + 2'
+    
+    # Rule: bigDataUrl with bigBed
+    if line.startswith('bigDataUrl') and line.endswith('.bigBed'):
+        parts = line.split(None, 1)  # Split on whitespace, max 1 split
+        if len(parts) == 2:
+            url = parts[1]
+            filename = extract_filename_from_url(url)
+            new_filename = filename.replace('.bigBed', '.bb')
+            return f'bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/{new_filename}'
+    
+    # Rule: bigDataUrl with bigWig
+    if line.startswith('bigDataUrl') and 'bigWig' in line:
+        parts = line.split(None, 1)  # Split on whitespace, max 1 split
+        if len(parts) == 2:
+            url = parts[1]
+            filename = extract_filename_from_url(url)
+            # Remove .bigWig and any query parameters, add .bw
+            new_filename = re.sub(r'\.bigWig.*$', '.bw', filename)
+            return f'bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/{new_filename}'
+    
+    # Rule: visibility squish -> visibility pack
+    if line.strip() == 'visibility squish':
+        return 'visibility pack'
+    
+    # No transformation needed
+    return line
+
+def process_hub_file(input_file, output_file):
+    """Process the hub.txt file and write transformed output."""
+    
+    lines_written = 0
+    lines_skipped = 0
+    lines_transformed = 0
+    
+    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        for line_num, line in enumerate(infile, 1):
+            # Skip first 32 lines
+            if line_num <= 32:
+                lines_skipped += 1
+                continue
+            
+            # Remove trailing newline for processing
+            line_stripped = line.rstrip('\n')
+            
+            # Transform the line
+            transformed_line = transform_line(line_stripped)
+            
+            # Track if line was transformed
+            if transformed_line != line_stripped:
+                lines_transformed += 1
+            
+            # Write the line (add back newline)
+            outfile.write(transformed_line + '\n')
+            lines_written += 1
+    
+    return lines_written, lines_skipped, lines_transformed
+
+def main():
+    input_file = "/cluster/home/lrnassar/public_html/track_hubs/ENCODE4/ENCODE_V4_Regulation/hub.txt"
+    output_file = "/cluster/home/lrnassar/kent/src/hg/makeDb/trackDb/human/hg38/encode4.ccres.ra"
+    
+    print("Processing hub.txt file...")
+    print(f"Input file:  {input_file}")
+    print(f"Output file: {output_file}")
+    print("-" * 60)
+    
+    if not os.path.exists(input_file):
+        print(f"Error: Input file not found at {input_file}")
+        return 1
+    
+    # Create output directory if it doesn't exist
+    output_dir = os.path.dirname(output_file)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+    
+    try:
+        lines_written, lines_skipped, lines_transformed = process_hub_file(input_file, output_file)
+        print("-" * 60)
+        print(f"\nLines skipped (first 32): {lines_skipped}")
+        print(f"Lines written: {lines_written}")
+        print(f"Lines transformed: {lines_transformed}")
+        print(f"\nOutput written to: {output_file}")
+        return 0
+    except Exception as e:
+        print(f"Error processing file: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+if __name__ == "__main__":
+    exit(main())
+
+#####################################
+
+#!/usr/bin/env python3
+"""
+Script to restructure ENCODE hub.txt with view containers.
+Converts fileType subgroup to view subgroup and creates view parent tracks.
+"""
+
+import os
+import re
+from collections import OrderedDict
+
+def extract_filename_from_url(url):
+    """Extract the filename from a URL."""
+    url = url.split('?')[0].split('#')[0]
+    filename = url.rstrip('/').split('/')[-1]
+    return filename
+
+def capitalize_after_equals(text):
+    """Capitalize the first letter after each equals sign in a line."""
+    result = []
+    parts = text.split('=')
+    
+    for i, part in enumerate(parts):
+        if i == 0:
+            result.append(part)
+        else:
+            if part:
+                result.append(part[0].upper() + part[1:])
+            else:
+                result.append(part)
+    
+    return '='.join(result)
+
+def clean_subgroup_line(line):
+    """Clean subgroup line by replacing invalid characters."""
+    line = line.replace(',', '-')  # Replace commas with dashes
+    line = line.replace('μ', 'u')  # Replace mu with u
+    cleaned = []
+    for char in line:
+        if (char >= 'a' and char <= 'z') or (char >= 'A' and char <= 'Z') or (char >= '0' and char <= '9'):
+            cleaned.append(char)
+        elif char in ('_', '-', ' ', '\t', '='):
+            cleaned.append(char)
+        else:
+            cleaned.append('_')
+    return ''.join(cleaned)
+
+def clean_long_label(label):
+    """Clean up longLabel by capitalizing first letter and replacing underscores with spaces."""
+    # Replace underscores with spaces
+    label = label.replace('_', ' ')
+    
+    # Capitalize the first letter
+    if label:
+        label = label[0].upper() + label[1:]
+    
+    return label
+
+def transform_basic_line(line):
+    """Apply basic transformations to a line."""
+    # Replace "Core-cCREs" with "coreCcres"
+    line = line.replace('Core-cCREs', 'coreCcres')
+    
+    # Clean longLabel formatting
+    if line.startswith('longLabel '):
+        parts = line.split(None, 1)  # Split into 'longLabel' and the rest
+        if len(parts) == 2:
+            cleaned_label = clean_long_label(parts[1])
+            line = f'longLabel {cleaned_label}'
+    
+    # Capitalize biosampleType values
+    if line.startswith('subGroup2 biosampleType Biosample_type'):
+        line = capitalize_after_equals(line)
+    
+    # Capitalize organ values
+    if line.startswith('subGroup1 organ Organ/Tissue'):
+        line = capitalize_after_equals(line)
+    
+    # Clean subGroup lines
+    if line.startswith('subGroup'):
+        line = clean_subgroup_line(line)
+    
+    # Change subGroup3 fileType to view
+    if line.startswith('subGroup3 fileType'):
+        # Replace fileType with view and add _view suffix to each value
+        line = line.replace('subGroup3 fileType File_Type', 'subGroup3 view Views')
+        # Add _view suffix to the tag part (before =)
+        # Pattern: word=word -> word_view=word
+        line = re.sub(r'(\w+)=(\w+)', r'\1_view=\2', line)
+        # But don't add _view to the subGroup3, view, and Views parts
+        line = line.replace('subGroup3_view', 'subGroup3')
+        line = line.replace('view_view', 'view')
+        line = line.replace('Views_view', 'Views')
+    
+    # Change type bigBed 9+1 to type bigBed 9 + 2
+    if line.strip() == 'type bigBed 9+1':
+        return 'type bigBed 9 + 2'
+    
+    # Transform bigDataUrl with bigBed
+    if line.startswith('bigDataUrl') and line.endswith('.bigBed'):
+        parts = line.split(None, 1)
+        if len(parts) == 2:
+            url = parts[1]
+            filename = extract_filename_from_url(url)
+            new_filename = filename.replace('.bigBed', '.bb')
+            return f'bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/{new_filename}'
+    
+    # Transform bigDataUrl with bigWig
+    if line.startswith('bigDataUrl') and 'bigWig' in line:
+        parts = line.split(None, 1)
+        if len(parts) == 2:
+            url = parts[1]
+            filename = extract_filename_from_url(url)
+            new_filename = re.sub(r'\.bigWig.*$', '.bw', filename)
+            return f'bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/{new_filename}'
+    
+    # Change visibility squish to visibility pack
+    if line.strip() == 'visibility squish':
+        return 'visibility pack'
+    
+    return line
+
+def parse_track_stanza(lines):
+    """Parse a track stanza into a dictionary."""
+    stanza = OrderedDict()
+    current_key = None
+    
+    for line in lines:
+        line = line.rstrip('\n')
+        if not line.strip():
+            continue
+            
+        # Check if this is a key-value line
+        if ' ' in line and not line.startswith(' '):
+            parts = line.split(None, 1)
+            key = parts[0]
+            value = parts[1] if len(parts) > 1 else ''
+            stanza[key] = value
+            current_key = key
+        elif current_key and line.startswith(' '):
+            # Continuation of previous line
+            stanza[current_key] += '\n' + line
+    
+    return stanza
+
+def extract_filetype_from_subgroups(subgroups_line):
+    """Extract the fileType value from a subGroups line."""
+    if not subgroups_line:
+        return None
+    
+    # Look for fileType=value pattern
+    match = re.search(r'fileType=(\w+)', subgroups_line)
+    if match:
+        return match.group(1)
+    return None
+
+def process_hub_file(input_file, output_file):
+    """Process the hub.txt file and restructure with views."""
+    
+    with open(input_file, 'r') as f:
+        lines = f.readlines()
+    
+    # Skip first 32 lines entirely
+    # Process remaining lines into track stanzas
+    current_stanza_lines = []
+    stanzas = []
+    
+    for i in range(32, len(lines)):
+        line = lines[i].rstrip('\n')
+        
+        if line.startswith('track ') and current_stanza_lines:
+            # Save previous stanza
+            stanzas.append(current_stanza_lines)
+            current_stanza_lines = [line]
+        else:
+            current_stanza_lines.append(line)
+    
+    # Don't forget the last stanza
+    if current_stanza_lines:
+        stanzas.append(current_stanza_lines)
+    
+    # Organize tracks by view
+    composite_stanza = None
+    tracks_by_view = {}  # {view_name: [list of track stanzas]}
+    view_types = {}  # {view_name: 'bigBed' or 'bigWig'}
+    
+    for stanza_lines in stanzas:
+        if not stanza_lines or not stanza_lines[0].startswith('track '):
+            continue
+        
+        # Transform all lines in the stanza
+        transformed_lines = []
+        filetype = None
+        track_type = None
+        is_composite = False
+        
+        for line in stanza_lines:
+            # Skip itemRgb and priority lines
+            if line.startswith('itemRgb ') or line.startswith('priority '):
+                continue
+                
+            transformed_line = transform_basic_line(line)
+            transformed_lines.append(transformed_line)
+            
+            # Check if composite
+            if 'compositeTrack' in line:
+                is_composite = True
+            
+            # Extract fileType from subGroups
+            if line.startswith('subGroups '):
+                match = re.search(r'fileType=(\w+)', line)
+                if match:
+                    filetype = match.group(1)
+            
+            # Extract type
+            if line.startswith('type '):
+                if 'bigBed' in line:
+                    track_type = 'bigBed'
+                elif 'bigWig' in line:
+                    track_type = 'bigWig'
+        
+        if is_composite:
+            composite_stanza = transformed_lines
+        elif filetype:
+            # Add to the appropriate view group
+            if filetype not in tracks_by_view:
+                tracks_by_view[filetype] = []
+                view_types[filetype] = track_type if track_type else 'bigBed'
+            tracks_by_view[filetype].append(transformed_lines)
+    
+    # Write output
+    with open(output_file, 'w') as f:
+        # Write composite stanza first
+        if composite_stanza:
+            for line in composite_stanza:
+                f.write(line + '\n')
+            f.write('\n')
+        
+        # Write each view and its children
+        for view_name in tracks_by_view.keys():
+            view_name_with_suffix = f'{view_name}_view'
+            
+            # Write view parent stanza
+            f.write(f'    track {view_name_with_suffix}\n')
+            f.write(f'    view {view_name_with_suffix}\n')
+            f.write(f'    parent coreCcres\n')
+            f.write(f'    shortLabel {view_name}\n')
+            
+            if view_name == 'cCREs':
+                f.write(f'    visibility pack\n')
+                f.write(f'    type bigBed\n')
+            else:
+                f.write(f'    visibility dense\n')
+                f.write(f'    type bigWig\n')
+            
+            f.write('\n')
+            
+            # Write all tracks for this view
+            for track_lines in tracks_by_view[view_name]:
+                for line in track_lines:
+                    if line.startswith('parent '):
+                        # Change parent to the view
+                        f.write(f'parent {view_name_with_suffix}\n')
+                    elif line.startswith('subGroups '):
+                        # Replace fileType=X with view=X_view
+                        modified_line = re.sub(r'fileType=(\w+)', r'view=\1_view', line)
+                        f.write(modified_line + '\n')
+                    else:
+                        f.write(line + '\n')
+                
+                f.write('\n')
+    
+    print(f"Created {len(tracks_by_view)} view containers: {', '.join(tracks_by_view.keys())}")
+    total_tracks = sum(len(tracks) for tracks in tracks_by_view.values())
+    print(f"Organized {total_tracks} tracks into views")
+
+def main():
+    input_file = "/cluster/home/lrnassar/public_html/track_hubs/ENCODE4/ENCODE_V4_Regulation/hub.txt"
+    output_file = "/cluster/home/lrnassar/kent/src/hg/makeDb/trackDb/human/hg38/encode4.ccres.ra"
+    
+    print("Processing hub.txt file with view restructuring...")
+    print(f"Input file:  {input_file}")
+    print(f"Output file: {output_file}")
+    print("-" * 60)
+    
+    if not os.path.exists(input_file):
+        print(f"Error: Input file not found at {input_file}")
+        return 1
+    
+    output_dir = os.path.dirname(output_file)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+    
+    try:
+        process_hub_file(input_file, output_file)
+        print("-" * 60)
+        print(f"\nOutput written to: {output_file}")
+        return 0
+    except Exception as e:
+        print(f"Error processing file: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+if __name__ == "__main__":
+    exit(main())
