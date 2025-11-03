@@ -1,7 +1,7 @@
 track bayesDel
 parent predictionScoresSuper
 type bigWig
-longLabel BayesDel - deleteriousness meta-score
+longLabel BayesDel: Deleteriousness meta-score
 compositeTrack on
 allButtonPair on
 group phenDis

@@ -52,14 +52,8 @@ var subCfg = { // subtrack config module.
         // then set the parent composite to pack
         var compEl = $("[name='"+this.compositeName+"'");
         if (compEl.length!==0 && obj.type==="checkbox" && obj.checked && compEl.val()==="hide")
-            compEl.val("pack");
+            compEl.val("pack").change();
 
-        // if the user unchecked a child checkbox that used to be checked, and the parent composite is on pack,
-        // and no more child is checked, then set the parent composite to hide.
-        var subCfgs = $(".subCB:checked");
-        if (subCfgs.length===0)
-            compEl.val("hide");
-        
         // checkboxes have hidden boolshads which should be marked when unchecked
         if (obj.type === "checkbox") {
             var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
@@ -71,7 +65,18 @@ var subCfg = { // subtrack config module.
 		    $(boolshad).addClass('changed');
 		}
             }
+            
+            // if the user unchecked a child checkbox that used to be checked, and the parent composite is on pack,
+            // and no more child is checked, then set the parent composite to hide.
+            var subCfgs = $(".subCB:checked");
+            if (subCfgs.length===0) {
+                //$(obj).val("pack"); // 
+                //compEl.val("hide").change();
+                compEl.val("hide");
+                $(obj).val("hide");
+            }
         }
+        
     },
 
     clearChange: function (obj)

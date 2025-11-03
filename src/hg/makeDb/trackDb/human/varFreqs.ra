@@ -1,0 +1,49 @@
+track varFreqs
+shortLabel Variant Allele Frequencies
+longLabel Variant Allele Frequencies from various population- or cohort-specific Projects
+group varRep
+type bed 12
+visibility hide
+superTrack on
+
+        track mexbb
+        shortLabel Mexico Biobank
+        longLabel Mexico Biobank
+        tableBrowser off
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/mexbb/MXBv2.vcf.gz
+        visibility pack
+        type vcfTabix
+        hapClusterEnabled true
+        dataVersion Nov 2025
+
+        track mcps
+        shortLabel Mexico City Prospective Study 
+        longLabel Mexico City Prospective Study (MCPS)
+        tableBrowser off
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        visibility pack
+        type vcfTabix
+        hapClusterEnabled true
+        dataVersion May 2023 (v1.2.0)
+
+        track me
+        shortLabel Million Exomes
+        longLabel Regeneron One Million Exomes (ME) Project
+        tableBrowser off
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        visibility pack
+        type vcfTabix
+        hapClusterEnabled true
+        dataVersion 10/04/2023, v1.1.3
+
+        track topmed
+        shortLabel NHLBI TOPMED V10
+        longLabel NHLBI TOPMED V10
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/topmed10.vcf.gz
+        dataVersion Freeze 10
+        visibility pack

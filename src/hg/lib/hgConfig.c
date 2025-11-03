@@ -10,6 +10,7 @@
 #include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
+#include "htmshell.h"
 #include "customTrack.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -383,5 +384,18 @@ void cfgSetLogCgiVars()
 /* optionally activate dumping of all CGI variables to stderr log */
 {
 cgiSetMaxLogLen(atoi(cfgOptionDefault("logCgiVarMaxLen", "0")));
+}
+
+void cfgInitCgi()
+/* init kent libraries for CGI programs: max RAM, CGI logging, etc*/
+{
+cfgSetLogCgiVars();
+cfgSetMaxMem();
+
+if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
+    errAbortSetDoContentType(TRUE);
+
+if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
+    htmlSuppressErrors();
 }
 

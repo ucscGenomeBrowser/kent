@@ -53,5 +53,8 @@ void cfgSetMaxMem();
 
 void cfgSetLogCgiVars();
 /* optionally activate dumping of all CGI variables to stderr log */
+
+void cfgInitCgi();
+/* init kent libraries for CGI programs: max RAM, CGI logging, etc*/
 #endif
 

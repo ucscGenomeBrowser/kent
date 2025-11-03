@@ -775,7 +775,9 @@ var hgSearch = (function() {
             var bedMatch = searchTerm.match(bedRangeExp);
             var sqlMatch = searchTerm.match(sqlRangeExp);
             var singleMatch = searchTerm.match(singleBaseExp);
-            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+            var gnomadRangeMatch = searchTerm.match(gnomadRangeExp);
+            var gnomadVarMatch = searchTerm.match(gnomadVarExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch || gnomadVarMatch || gnomadRangeMatch;
             if (positionMatch !== null) {
                 var prevCgi = uiState.prevCgi !== undefined ? uiState.prevCgi : "hgTracks";
                 window.location.replace("../cgi-bin/" + prevCgi + "?db=" + db + "&position=" + encodeURIComponent(searchTerm));

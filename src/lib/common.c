@@ -3002,6 +3002,16 @@ if (e == NULL) return s;
 return e;
 }
 
+char *chopPrefixAtAlt(char *s, char c1, char c2)
+/* Like chopPrefixAt, but with an alternative character: first try to chop on c1, if no c1 found, chop on c2 */
+{
+char *e = strchr(s, c1);
+if (e == NULL) 
+    return chopPrefixAt(s, c2);
+else
+    return chopPrefixAt(s, c1);
+}
+
 char *chopPrefix(char *s)
 /* This will replace the first '.' in a string with
  * 0, and return the character after this.  If there
