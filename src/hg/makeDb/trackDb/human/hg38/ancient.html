@@ -1,0 +1,51 @@
+<h2>Description</h2>
+<p>
+This container track contains genome variants from ancient hominids, from DNA
+samples extracted from Denisovan and Neanderthal, provided by the database <a
+target=_blank href="http://www.arcseqhub.com/">Arcseqhub</a> (Lian et al, Gen Biol 2025).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Variants that differ from human are highlighted. 
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>, the track name is
+"denisovan" and "neanderthal".</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a tabix-indexed VCF file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ancient" target="_blank">our download server</a>.
+The files for this track are called <tt>denisovan.hg38.filt.vcf.gz</tt> and <tt>neanderthal.hg38.filt.vcf.gz</tt>. 
+Various command line tools exist for working with VCF files. Users without command line experience can use the Galaxy website, by exporting the data directly from our table browser to Galaxy.
+</p>
+
+<h2>Methods</h2>
+<p>
+Liang et al (see below) realigned the original sequencing reads to the hg38 and
+T2T CHM13 assemblies. UCSC removed positions from the VCF without an alternate
+allele to show only variants that are present in the ancient genomes and loaded the VCFs.
+</p>
+
+<h2>Credits</h2>
+<p>
+We thank the Arcseqhub authors for making the data available.
+</p>
+
+<h2>References</h2>
+<p>
+Liang SA, Ren T, Zhang J, He J, Wang X, Jiang X, He Y, McCoy RC, Fu Q, Akey JM <em>et al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-025-03502-z"
+target="_blank">
+A refined analysis of Neanderthal-introgressed sequences in modern humans with a complete reference
+genome</a>.
+<em>Genome Biol</em>. 2025 Feb 17;26(1):32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39962554" target="_blank">39962554</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11834205/" target="_blank">PMC11834205</a>
+</p>
+

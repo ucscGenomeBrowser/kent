@@ -8,18 +8,18 @@ superTrack on
 
         track denisovan
         shortLabel Arcseqhub Denisovan
-        longLabel Arcseqhub Denisovan VCF Variants
+        longLabel Ancient Hominids: Arcseqhub Denisovan VCF Variants
         parent ancient on
-        bigDataUrl /gbdb/hg38/ancient/denisovan.hg38.vcf.gz
+        bigDataUrl /gbdb/hg38/ancient/denisovan.hg38.filt.vcf.gz
         visibility pack
         type vcfTabix
         hapClusterEnabled true
 
         track neanderthal
         shortLabel Arcseqhub Neanderthal
-        longLabel Arcseqhub Neanderthal VCF Variants
+        longLabel Ancient Hominids: Arcseqhub Neanderthal VCF Variants
         parent ancient on
-        bigDataUrl /gbdb/hg38/ancient/neanderthal.hg38.vcf.gz
+        bigDataUrl /gbdb/hg38/ancient/neanderthal.hg38.filt.vcf.gz
         visibility pack
         type vcfTabix
         hapClusterEnabled true
