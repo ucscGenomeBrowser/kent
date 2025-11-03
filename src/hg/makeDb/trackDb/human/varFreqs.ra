@@ -44,6 +44,6 @@ superTrack on
         longLabel NHLBI TOPMED V10
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/topmed10.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
         dataVersion Freeze 10
         visibility pack
