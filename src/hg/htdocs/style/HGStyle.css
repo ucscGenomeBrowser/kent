@@ -607,6 +607,23 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
 /* For color selector inputs */
 input[type=color] { padding: 0px; }
 
+/* Safari, Chrome and Firefox all style the dropdowns different, especially Safary. Here we harmonize them. */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    background: url(../images/ab_down.gif)  no-repeat; /* low-res. Replace with better one */
+    background-position: right center;
+    background-repeat: no-repeat;
+    color: #000000;
+    border: 1px solid #666666;
+    padding-left: 2px;
+    background-color: #CCCCCC;
+}
+
 /* tr:hover.found { color: #000088; } */
 
 .filterBy { display: none; } /* All filterBy's should be converted to dropdownchecklists by document.ready(). */

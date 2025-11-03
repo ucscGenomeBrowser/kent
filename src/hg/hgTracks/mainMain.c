@@ -49,7 +49,7 @@ organization = "UCSC";
 
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which
- * somehow can't be moved effectively into doMiddle. */
+ * somehow can't be moved effectively into dh, andoMiddle. */
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link

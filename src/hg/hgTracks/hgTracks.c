@@ -9703,6 +9703,17 @@ if (!hideControls)
             
             if (hubName)
 		{
+                if (cfgOptionBooleanDefault("groupDropdown", FALSE) && hub && hub->genomeList && hub->genomeList->next)
+                    {
+                    puts("<span style='font-size:13px'>Genomes: </span><select style='width:7em' name='db'>");
+                    for (struct trackHubGenome *thg = hub->genomeList; thg != NULL; thg = thg->next)
+                        {
+                        if (!sameWord(thg->name, database))
+                            printf("<option value='%s'>%s</option>\n", thg->name, thg->name);
+                        }
+                    puts("</select>");
+                    }
+
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
                 if (hub != NULL)
                     {
@@ -9725,6 +9736,8 @@ if (!hideControls)
                             "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>", hub->descriptionUrl);
                         }
                     hPrintf("&nbsp;&nbsp;");
+
+
                     }
                 }
 

@@ -11,6 +11,7 @@ var debug = false;
 
 /* Support these formats for range specifiers.  Note the ()'s around chrom,
  * start and end portions for substring retrieval: */
+// \s = whitespace, \w = azAZ0-9_, 
 var canonicalRangeExp = /^[\s]*([\w._#-]+)[\s]*:[\s]*([-0-9,]+)[\s]*[-_][\s]*([0-9,]+)[\s]*$/;
 var gbrowserRangeExp =  /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\.\.[\s]*([0-9,]+)[\s]*$/;
 var lengthRangeExp =    /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\+[\s]*([0-9,]+)[\s]*$/;
