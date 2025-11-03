@@ -1,0 +1,147 @@
+<h2>Description</h2>
+<p>
+This track displays biosample-specific candidate cis-regulatory elements (cCREs) 
+alongside genome-wide epigenomic signals for the ENCODE Core Collection of 170 
+ENCODE biosamples that have been fully profiled using four core assays: 
+DNase-seq, ChIP-seq for the histone modifications H3K4me3 and H3K27ac, 
+and ChIP-seq for CTCF binding.</p>
+<ul>
+<li>DNase-seq identifies regions of <b>open chromatin</b> commonly associated with enhancers, 
+promoters, and insulators.</li>
+<li>ChIP-seq for <b>H3K4me3</b> and <b>H3K27ac</b> marks active and poised promoters and enhancers.</li>
+<li><b>CTCF</b> ChIP-seq identifies chromatin loop anchors and insulator elements.</li>
+</ul>
+<p>
+Each subtrack corresponds to an individual experiment in a specific biosample. 
+These data form the basis for generating biosample-specific annotations of 
+cCREs, which compose the fifth subtrack for the biosample.</p>
+<p>
+Additional epigenomic datasets are available at the <a target="_blank" 
+href="https://www.encodeproject.org/">ENCODE portal</a>, and further exploration 
+of cCREs and their supporting data is available through the <a target="_blank" 
+href="https://screen.wenglab.org/">SCREEN web tool</a>, accessible via the 
+track details page.</p>
+
+<h2>Display Conventions and Configurations</h2>
+<p>
+Each biosample contains five subtracks (DNase, CTCF, H3K27ac, and H3K4me3 signals 
+and biosample-specific cCREs). Click a specific biosample type and organ/tissue 
+combination to view available datasets. Epigenomic subtracks can be further 
+filtered by the signal type. Below is a graphic summarizing biosampling available:</p>
+<p>
+<img src="../images/encode4cCREsBiosampleSpectrum.png" alt="Graphic of biosample spectrum" width="30%"></p>
+
+<p>
+Each signal track is colored based on the type of signal.
+The cCREs subtrack displays each active cCRE in the corresponding biosample 
+as a colored box by type 
+<ul>
+<li><b><span style="color: #ff0000;">Promoter</span></b> in <span style="color: #ff0000;">red</span>
+<li><b><span style="color: #ffa700;">Proximal enhancer</span></b> in <span style="color: #ffa700;">orange</span>
+<li><b><span style="color: #ffcd00;">Distal
+enhancer</span></b> in <span style="color: #ffcd00;">yellow</span>
+<li><b><span style="color: #ffaaaa;">CA-H3K4me3</span></b> in
+<span style="color: #ffaaaa;">pink</span>
+<li><b><span style="color: #00b0f0;">CA-CTCF</span></b>
+in <span style="color: #00b0f0;">blue</span>
+<li><b><span style="color: #be28e5;">CA-TF</span></b> in
+<span style="color: #be28e5;">dark purple</span>
+<li><b><span style="color: #06da93;">CA</span></b> in <span style="color: #06da93;">green</span>
+<li><b><span style="color: #d876ec;">TF</span></b> in
+<span style="color: #d876ec;">light purple</span>
+</ul>
+cCREs with low DNase Z-scores in individual biosamples were deemed 
+to be inactive and displayed as a gray box. The following graphic summarizes
+the cCRE classification criteria:</p>
+<p>
+<img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="40%"></p>
+<p>
+For item sin the cCREs track, mousing over shows the element ID, along with a linkout to 
+the corresponding element on SCREEN, as well as the <b>cCRE group</b> and 
+<b>Classification type</b>.</p>
+
+<h2>Methods</h2>
+<p>
+The DNase-seq data were processed using the <a 
+href="https://www.encodeproject.org/data-standards/dnase-seq-encode4/" 
+target="_blank">ENCODE DNase-seq pipeline</a>, the H3K4me3 and H3K27ac ChIP-seq 
+data were processed using the <a href="https://www.encodeproject.org/chip-seq/histone-encode4/" 
+target="_blank">ENCODE histone ChIP-seq pipeline</a>, and the CTCF ChIP-seq data were 
+processed using the <a href="https://www.encodeproject.org/chip-seq/transcription-factor-encode4/" 
+target="_blank">ENCODE transcription factor ChIP-seq pipeline</a>.</p>
+<p>
+In addition to the cell type-agnostic classification (described in the cCRE Registry track
+in this collection), we evaluated the biochemical activity of each cCRE in individual
+biosamples using the corresponding biosample-specific DNase, H3K4me3, H3K27ac, and CTCF data.
+This allowed us to annotate active cCREs in individual biosamples, included as the cCRE
+subtrack for each biosample. cCREs with low DNase Z-scores in individual biosamples were
+deemed to be inactive and labeled with "Low Chromatin Accessibility."
+</p>
+
+<h2>Data Access</h2>
+<p>
+All data is available from the <a href="https://www.encodeproject.org/"
+target="_blank">ENCODE data portal</a>.</p>
+
+<p>
+The data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/cadd/" target="_blank">our download server</a>.</p>
+<p>
+The cCREs tracks in this data are found as bigBed files, and the biosignal tracks as bigWig files.
+See the <b>Data format</b> link besides the specific data track for a URL to the file on our download
+server. Individual
+regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
+or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br><br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 https://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/coreCollection/ENCFF811RQX.bw stdout</tt>
+<br><br>
+or
+<br><br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 https://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/coreCollection/ENCFF013UBZ_ENCFF901QWB_ENCFF972ZHA_ENCFF500RDL.bb stdout</tt></p>
+</p>
+
+<h2>Credits</h2>
+<p>
+Data were generated by the ENCODE Consortium. We thank the production labs for 
+generating the data: Drs. Barbara Wold (Caltech), Bing Ren (UCSD), Bradley 
+Bernstein (Broad), Gregory Crawford (Duke), John Stamatoyannopoulos (UW), Joseph 
+Costello (UCSF), Michael Snyder Lab (Stanford), Peggy Farnham (USC), Richard 
+Myers (HAIB), Stephen Montgomery (Stanford), Vishwanath Iyer (UTA), Will 
+Greenleaf (Stanford), and Yin Shen (UCSF).</p>
+<p>
+The data were further processed for 
+visualization through a collaborative effort between the <a target="_blank" 
+href="https://www.umassmed.edu/zlab">Weng lab</a> and the <a target="_blank" 
+href="https://sites.google.com/view/moore-lab/">Moore lab</a> at UMass Chan Medical 
+School (funded by NIH grant HG012343). Integration and visualization were developed 
+by Drs. Mingshi Gao, Jill Moore, and Zhiping Weng at UMass Chan Medical School, who were 
+part of the ENCODE Data Analysis Center. We thank the ENCODE production labs 
+for generating the data.</p>
+
+<h2>References</h2>
+<p>
+ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, Adrian J, Kawli T,
+Davis CA, Dobin A <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2493-4" target="_blank">
+Expanded encyclopaedias of DNA elements in the human and mouse genomes</a>.
+<em>Nature</em>. 2020 Jul;583(7818):699-710.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32728249" target="_blank">32728249</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7410828/" target="_blank">PMC7410828</a>
+</p>
+<p>
+Moore JE, Pratt HE, Fan K, Phalke N, Fisher J, Elhajjajy SI, Andrews G, Gao M, Shedd N, Fu Y <em>et
+al</em>.
+<a href="https://doi.org/10.1101/2024.12.26.629296" target="_blank">
+An Expanded Registry of Candidate cis-Regulatory Elements for Studying Transcriptional
+Regulation</a>.
+<em>bioRxiv</em>. 2024 Dec 26;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>
+</p>
