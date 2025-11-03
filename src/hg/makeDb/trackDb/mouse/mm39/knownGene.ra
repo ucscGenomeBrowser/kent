@@ -1,12 +1,12 @@
 track knownGene
-shortLabel GENCODE VM37
-longLabel GENCODE VM37
+shortLabel GENCODE VM38
+longLabel GENCODE VM38
 #parent knownGeneArchive
 priority 1
 #priority 5
 visibility pack
 type bigGenePred
-bigDataUrl /gbdb/mm39/gencode/gencodeVM37.bb
+bigDataUrl /gbdb/mm39/gencode/gencodeVM38.bb
 baseColorDefault genomicCodons
 group genes
 isGencode3 on
@@ -14,13 +14,14 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-#externalDb knownGeneVM37
+#externalDb knownGeneVM38
 maxItems 50000
-html knownGeneVM37
+html knownGeneVM38
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
+pennantIcon Updated red ../goldenPath/newsarch.html#103125 "Updated Oct. 31, 2025"
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -36,6 +37,6 @@ searchTable knownGene
 searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
-searchTrix /gbdb/mm39/knownGeneFastVM37.ix
+searchTrix /gbdb/mm39/knownGeneFastVM38.ix
 doPage 1
 

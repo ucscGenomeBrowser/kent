@@ -1505,9 +1505,11 @@ var hubCreate = (function() {
             if (url.protocol === "http:") {
                 warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +
                         `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
-            } else if (!inited) {
+            } else if (!inited && isLoggedIn) {
                 cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
                 cart.flush();
+            } else {
+                showExistingFiles([]);
             }
         }
     }
