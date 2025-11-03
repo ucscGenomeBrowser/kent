@@ -117,10 +117,10 @@ if (mcMaster == NULL)
 return mcMaster;
 }
 
-char *mafSplitSrcGetChrom(char *src) 
+char *mafSplitSrcGetChrom(char *src, char* database) 
 /* src can be in format chrom, db|chrom or db.chrom: split string on separator and return pointer to chrom.
- * Can even handle a db with a single dot in it and the db.chrom format, but only if db has a single dot (=NCBI format)
- * The side effect of this function is that src contains only the db, not the chrom anymore.
+ * the db part of src can also have a dot in it, but only if the 'database' argument is not null.
+ * Changes 'src': The side effect of this function is that src contains only the db, not the chrom anymore.
  * */
 {
 char *pipe = strchr(src, '|');
@@ -133,13 +133,33 @@ if (pipe) {
 char *dot1 = strchr(src, '.');
 if (!dot1)
     return src;  // if there are no dots, assume the name is the chrom
-else
+
+if (database)
     {
-    // the most common format: db.chrom
-    char* chrom = dot1 + 1;
-    *dot1 = '\0';
-    return chrom;
+    // if 'database' is not NULL we can resolve a situation like GCF_1234.3.CJS12323.4 because we know that
+    // GCF_1234.3 is the db part
+    if (differentString(src, database))
+        {
+        // the database name isn't matching the first part of the component source,
+        // look to see if maybe the database has a dot in it
+        *dot1 = '.';   // replace the dot
+        char *dot2 = strchr(dot1 + 1, '.'); // look for the next dot
+        if (dot2 != NULL)
+            {
+            *dot2 = 0;
+            char *chrom = dot2 + 1;
+            return chrom;
+            }
+
+        if ((dot2 == NULL) || differentString(src, database))
+            errAbort("expecting first component to have assembly name with no more than one dot");
+        }
     }
+
+// if database is NULL and there is no pipe character, just split on the first dot and that's it
+char* chrom = dot1 + 1;
+*dot1 = '\0';
+return chrom;
 }
 
 long processMaf(struct mafAli *maf, struct hash *componentHash, 
@@ -157,7 +177,7 @@ char src[256];
 
 strcpy(src, mcMaster->src);
 
-chrom = mafSplitSrcGetChrom(src);
+chrom = mafSplitSrcGetChrom(src, database);
 
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
@@ -173,7 +193,7 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     /* BED chromEnd is start+size */
     ms->chromEnd = mcMaster->start + mcMaster->size;
     ms->src = cloneString(mc->src);
-    mafSplitSrcGetChrom(ms->src);
+    mafSplitSrcGetChrom(ms->src, database);
 
     /* construct pairwise maf for scoring */
     ZeroVar(&pairMaf);
