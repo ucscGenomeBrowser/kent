@@ -15,15 +15,12 @@ files using the North American or European download servers.</p>
 For example, when downloading files to your present directory (./), use an expression such 
 as:</p> 
 <pre><code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/gbdb/hg38/uniprot/unipAliTrembl.bb ./</code></pre> 
-<pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/gbdb/hg38/uniprot/unipAliTrembl.bb ./</code></pre> 
 <p> 
 To download the entire directory (note the trailing slash), use an expression such as:</p>
 <pre><code>rsync -a -P rsync://hgdownload.gi.ucsc.edu/gbdb/hg38/uniprot/ ./</code></pre> 
-<pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/gbdb/hg38/uniprot/ ./</code></pre> 
 <p>
 To obtain a file's location (URL) to use with 
-rsync (<em>rsync://hgdownload.gi.ucsc.edu/...</em> or
-<em>rsync://hgdownload-euro.soe.ucsc.edu/...</em>), navigate in your browser to our FTP site at 
+rsync (<em>rsync://hgdownload.gi.ucsc.edu/...</em>), navigate in your browser to our FTP site at 
 <a href="ftp://hgdownload.gi.ucsc.edu/" target="_blank">ftp://hgdownload.gi.ucsc.edu/</a> or our 
 downloads page at <a href="http://hgdownload.gi.ucsc.edu/" 
 target="_blank">http://hgdownload.gi.ucsc.edu/downloads.html</a>, and look for your file of 
@@ -54,9 +51,6 @@ Password: &lt;your email address&gt;
 ftp&gt; cd goldenPath
 ftp&gt; cd &lt;assembly name&gt; (e.g., hg19)
 ftp&gt; cd &lt;data directory&gt; (e.g., liftOver)</code></pre> 
-<p>
-The same ftp connection can also be made to our European server:
-</p><pre><code>$ ftp hgdownload-euro.soe.ucsc.edu</code></pre>
 <p>
 To download multiple files from the UNIX ftp command line, use the &quot;mget&quot; command. You may
 want to use the <code>prompt</code> command to toggle the interactive mode if you do not want to be
