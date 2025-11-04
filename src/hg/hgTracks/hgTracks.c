@@ -7779,7 +7779,7 @@ static boolean isTrackForParallelLoad(struct track *track)
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 
-return customFactoryParallelLoad(bdu, track->tdb->type) && (track->subtracks == NULL);
+return customFactoryParallelLoad(bdu, track->tdb->type, database, TRUE) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
@@ -7905,7 +7905,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        if (isValidBigDataUrl(decoratorUrl,TRUE))
+        if (isValidBigDataUrl(decoratorUrl,TRUE, database, TRUE))
             bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
         }
     errCatchEnd(errCatch);

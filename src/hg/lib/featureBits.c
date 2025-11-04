@@ -568,7 +568,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		    {
                     // the -1 is because we output exon numbers starting at 0
                     int exonNum = bed->strand[0] == '+' ? i : count - 1 - i;
-		    safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_%d_%s_%d_%c", 
+		    safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_flank%d_%s_%d_%c", 
 			    bed->name, fName, exonNum, extraSize, bed->chrom, s+1,
 			    frForStrand(bed->strand[0]));
 		    setRangePlusExtra(db, &fbList, nameBuf, bed->chrom, s, e,
