@@ -118,10 +118,10 @@ config.
 
 <p>
 This will result in a Genome Browser accessible on localhost that loads its data through
-genome-mysql.gi.ucsc.edu:3306 and hgdownload.gi.ucsc.edu:80. If your geographic location is not on
+genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If your geographic location is not on
 the US West Coast, the performance will be too slow for normal use, though sufficient to test that
 the setup is functional. A special MySQL (MariaDB) server is set up in Germany for users in Europe.
-You can change the <code>/usr/local/apache/cgi-bin/hg.conf</code> genome-mysql.gi.ucsc.edu lines to
+You can change the <code>/usr/local/apache/cgi-bin/hg.conf</code> genome-mysql.soe.ucsc.edu lines to
 genome-euro-mysql.soe.ucsc.edu in order to get better performance. You can then use the program to
 download assemblies of interest to your local Genome Browser, which will result in performance at
 least as fast as the UCSC site.
@@ -137,20 +137,17 @@ Your network firewall must allow outgoing connections to the following servers a
 <li>MySQL (MariaDB) connections, used to load tracks not local to your computer:
 
 <ul>
-<li>US server: Port 3306 on genome-mysql.gi.ucsc.edu (128.114.119.174)</li>
-<li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
+<li>Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
 </ul></li>
 <li>Rsync, used to download track data:
 
 <ul>
-<li>US server: TCP port 873 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
-<li>European server: TCP port 873 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+<li>TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
 </ul></li>
 <li>Download HTML descriptions on the fly:
 
 <ul>
-<li>US server: TCP port 80 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
-<li>European server: TCP port 80 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+<li>TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
 </ul></li>
 </ul>
 
@@ -298,7 +295,7 @@ If you find that you need the Kent command line utilities in addition to the Gen
 <p>
 A majority of these utilities require an <code>.hg.conf</code> file in the users home directory. For
 an example of a minimal <code>.hg.conf</code> file, click
-<a href='http://genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/product/minimal.hg.conf' title=''>here</a>.
+<a href='http://github.com/ucscGenomeBrowser/kent/blob/master/src/product/minimal.hg.conf' title=''>here</a>.
 </p>
 
 <p>
@@ -308,7 +305,7 @@ If you find a bug, or if your Linux distribution is not supported, please contac
 
 <p>
 More details about the Genome Browser installation are available
-<a href='http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/product' title=''>here</a>.
+<a href='http://github.com/ucscGenomeBrowser/kent/tree/master/src/product' title=''>here</a>.
 </p>
 
 <a name='all-gbic-options'></a>

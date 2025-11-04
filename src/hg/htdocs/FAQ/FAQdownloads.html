@@ -93,11 +93,10 @@ both UCSC assemblies and from hubs.</p>
 provides users much faster download rates. Here is an example using UDR, once installed, to download
 all the mouse mm9 ENCODE information that amounts to several terabytes:</p>
 <pre><code>$ udr rsync -avP hgdownload.gi.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
-<pre><code>$ udr rsync -avP hgdownload-euro.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
 <p>
 
 Optional: download from our secondary download server.
-<pre><code>$ udr rsync -avP hgdownload2.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre> 
+<pre><code>$ udr rsync -avP hgdownload2.gi.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre> 
 
 Please read more about the new UDR method <a href="../../goldenPath/newsarch.html#030315" 
 target="_blank">here</a>.</p>
@@ -970,16 +969,12 @@ regions or the whole genome annotation can be obtained using our tool bigBedToBe
 compiled from the source code or downloaded as a precompiled binary for your system. Instructions 
 for downloading source code and binaries can be found 
 <a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can 
-also be used to obtain only features within a given range using one of the hgdownload servers,
+also be used to obtain only features within a given range using our hgdownload server,
 example:</p> 
 <ul>
   <li>
     North American server:
     <pre><code>bigBedToBed http://hgdownload.gi.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
-  </li>
-  <li>
-    European server:
-    <pre><code>bigBedToBed http://hgdownload-euro.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
   </li>
 </ul>
 <p>

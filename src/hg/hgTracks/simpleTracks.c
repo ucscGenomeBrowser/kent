@@ -7217,7 +7217,7 @@ if (isGencode3)
     words[0] = "bigGenePred";
     words[1] = "12";
     words[2] = 0;
-    complexBedMethods(tg, tg->tdb, TRUE, 2, words);
+    bigBedMethods(tg, tg->tdb,  2, words);
     return;
     }
 
