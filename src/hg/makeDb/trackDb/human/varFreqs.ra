@@ -1,6 +1,6 @@
 track varFreqs
-shortLabel Variant Allele Frequencies
-longLabel Variant Allele Frequencies from various population- or cohort-specific Projects
+shortLabel Variant Frequencies
+longLabel Variant Frequencies from various population- or cohort-specific Projects
 group varRep
 type bed 12
 visibility hide
@@ -8,7 +8,7 @@ superTrack on
 
         track mexbb
         shortLabel Mexico Biobank
-        longLabel Mexico Biobank
+        longLabel Variant Frequencies: Mexico Biobank
         tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mexbb/MXBv2.vcf.gz
@@ -19,18 +19,17 @@ superTrack on
 
         track mcps
         shortLabel Mexico City Prospective Study 
-        longLabel Mexico City Prospective Study (MCPS)
+        longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
         tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
         visibility pack
         type vcfTabix
-        hapClusterEnabled true
         dataVersion May 2023 (v1.2.0)
 
         track me
-        shortLabel Million Exomes
-        longLabel Regeneron One Million Exomes (ME) Project
+        shortLabel Regeneron Million Exomes
+        longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project
         tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
@@ -41,9 +40,27 @@ superTrack on
 
         track topmed
         shortLabel NHLBI TOPMED V10
-        longLabel NHLBI TOPMED V10
+        longLabel Variant Frequencies: NHLBI TOPMED V10
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
         dataVersion Freeze 10
         visibility pack
+
+        track gasp
+        shortLabel GenomeAsia Pilot Subs
+        longLabel Variant Frequencies: GenomeAsia Pilot Substitutions
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
+        visibility pack
+        #dataVersion GAsP Pilot: 1,739 individuals
+
+        track gaspIndels
+        shortLabel GenomeAsia Pilot Indels
+        longLabel Variant Frequencies: GenomeAsia Pilot Indels
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
+        visibility pack
+        #dataVersion GAsP Pilot: 1,739 individuals
