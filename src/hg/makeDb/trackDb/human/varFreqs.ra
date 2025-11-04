@@ -25,11 +25,10 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
         visibility pack
         type vcfTabix
-        hapClusterEnabled true
         dataVersion May 2023 (v1.2.0)
 
         track me
-        shortLabel Million Exomes
+        shortLabel Regeneron Million Exomes
         longLabel Regeneron One Million Exomes (ME) Project
         tableBrowser off
         parent varFreqs on
@@ -47,3 +46,21 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/topmed10.vcf.gz
         dataVersion Freeze 10
         visibility pack
+
+        track gasp
+        shortLabel GenomeAsia Pilot Subs
+        longLabel GenomeAsia Pilot Substitutions
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
+        visibility pack
+        #dataVersion GAsP Pilot: 1,739 individuals
+
+        track gaspIndels
+        shortLabel GenomeAsia Pilot Indels
+        longLabel GenomeAsia Pilot Indels
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
+        visibility pack
+        #dataVersion GAsP Pilot: 1,739 individuals
