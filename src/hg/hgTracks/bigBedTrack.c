@@ -706,6 +706,11 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
+boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
+if (bigBedOnePath )
+    // always use the definedFieldCount as gospel
+    track->bedSize = fieldCount = bbi->definedFieldCount;
+
 struct bigBedInterval *bb, *bbList; 
 char *quickLiftFile = cloneString(trackDbSetting(track->tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
@@ -891,7 +896,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         // Clone bb so that we'll have access the to extra fields contents.  This is used in
         // alternate display modes for bigBeds (so far just "heatmap", but more are likely to come).
         struct bigBedInterval *bbCopy = CloneVar(bb);
-        bbCopy->rest = cloneMem(bbCopy->rest, strlen(bbCopy->rest)+1);
+        if (bbCopy->rest)
+            bbCopy->rest = cloneMem(bbCopy->rest, strlen(bbCopy->rest)+1);
         bbCopy->next = NULL;
         lf->original = bbCopy;
         }
@@ -1036,27 +1042,52 @@ void commonBigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[])
 /* Set up common bigBed methods used by several track types that depend on the bigBed format. */
 {
-char *newWords[wordCount];
+boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
 
-int ii;
-for(ii=0; ii < wordCount; ii++)
-    newWords[ii] = words[ii];
-
-#ifdef NOTNOW
-// let's help the user out and get the definedFieldCount if they didn't specify it on the type line
-if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 1) && sameString(words[0], "bigBed"))
+if (bigBedOnePath)
     {
-    int fieldCount = getFieldCount(track);
-    if (fieldCount > 3) 
+    track->isBigBed = TRUE;
+    linkedFeaturesMethods(track);
+    track->extraUiData = newBedUiData(track->track);
+    track->loadItems = loadGappedBed;
+
+    // make sure that hgTracks completely ignore the items following "bigBed" in the type line
+    char *type = cloneString(tdb->type);
+    char *space = strchr(type, ' ');
+    if (space)
+        *space = 0;
+    tdb->type = type;
+
+    if (trackDbSetting(tdb, "colorByStrand"))
         {
-        char buffer[1024];
-        safef(buffer, sizeof buffer, "%d", fieldCount);
-        newWords[1] = cloneString(buffer);
-        wordCount = 2;
+        Color lfItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg);
+        track->itemColor = lfItemColorByStrand;
         }
     }
-#endif
-complexBedMethods(track, tdb, TRUE, wordCount, newWords);
+else 
+    {
+    char *newWords[wordCount];
+
+    int ii;
+    for(ii=0; ii < wordCount; ii++)
+        newWords[ii] = words[ii];
+
+    #ifdef NOTNOW
+    // let's help the user out and get the definedFieldCount if they didn't specify it on the type line
+    if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 1) && sameString(words[0], "bigBed"))
+        {
+        int fieldCount = getFieldCount(track);
+        if (fieldCount > 3) 
+            {
+            char buffer[1024];
+            safef(buffer, sizeof buffer, "%d", fieldCount);
+            newWords[1] = cloneString(buffer);
+            wordCount = 2;
+            }
+        }
+    #endif
+    complexBedMethods(track, tdb, TRUE, wordCount, newWords);
+    }
 track->loadSummary = loadBigBedSummary;
 }
 
