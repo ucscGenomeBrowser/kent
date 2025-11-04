@@ -59,6 +59,10 @@
 
 static boolean doExtraChecking = FALSE;
 
+// SET to true to allow loading local URLs in custom tracks.
+// We normally do NOT want local CTs.
+static boolean allowLocalsForCTs = FALSE;  
+
 /*** Utility routines used by many factories. ***/
 
 char *customFactoryNextTilTrack(struct customPp *cpp)
@@ -160,15 +164,16 @@ freeMem(bCopy);
 return same;
 }
 
-boolean isValidBigDataUrl(char *url, boolean doAbort)
+boolean isValidBigDataUrl(char *url, boolean doAbort, char *db, boolean allowLocals)
 /* return True if the URL is a valid bigDataUrl.
  * It can be a local filename if this is allowed by udc.localDir
+ * or is localFile for curated genomes /gbdb/$db
  */
 {
 if ((startsWith("http://", url)
    || startsWith("https://", url)
    || startsWith("ftp://", url)))
-return TRUE;
+    return TRUE;
 
 // we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
 char *sessionDataDir = cfgOption("sessionDataDir");
@@ -180,6 +185,14 @@ if (startsWith(trashDir(), url) ||
 
 if (udcIsResolvable(url))
     return TRUE;
+
+if (allowLocals)
+    {
+    char gbdbPrefix[256];
+    safef(gbdbPrefix, sizeof gbdbPrefix, "/gbdb/%s/", trackHubSkipHubName(db));
+    if (startsWith(gbdbPrefix, url))
+	return TRUE;
+    }
 
 char *prefix = cfgOption("udc.localDir");
 if (prefix == NULL)
@@ -203,12 +216,14 @@ else
     return TRUE;
 }
 
-static void checkAllowedBigDataUrlProtocols(char *url)
+static void checkAllowedBigDataUrlProtocols(char *url, char *db, boolean allowLocals)
 /* Abort if url is not using one of the allowed bigDataUrl network protocols.
  * In particular, do not allow a local file reference, unless explicitely
- * allowed by hg.conf's udc.localDir directive. */
+ * allowed by hg.conf's udc.localDir directive
+ *  or url begins with local path for curated genome /gbdb/$db/ 
+ */
 {
-isValidBigDataUrl(url, TRUE);
+isValidBigDataUrl(url, TRUE, db, allowLocals);
 }
 
 static char *bigDataDocPath(char *type)
@@ -1822,7 +1837,7 @@ static struct customTrack *hicLoader(struct customFactory *fac,
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
-checkAllowedBigDataUrlProtocols(bigDataUrl);
+checkAllowedBigDataUrlProtocols(bigDataUrl, track->genomeDb, allowLocalsForCTs);
 
 if (doExtraChecking)
     {
@@ -2852,7 +2867,7 @@ static struct customTrack *bigWigLoader(struct customFactory *fac,
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
-checkAllowedBigDataUrlProtocols(bigDataUrl);
+checkAllowedBigDataUrlProtocols(bigDataUrl, track->genomeDb, allowLocalsForCTs);
 
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
@@ -3020,7 +3035,7 @@ if (sameString(track->tdb->type, "bigPsl"))
     addSpecialSettings(settings);
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
-checkAllowedBigDataUrlProtocols(bigDataUrl);
+checkAllowedBigDataUrlProtocols(bigDataUrl, track->genomeDb, allowLocalsForCTs);
 
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
@@ -3078,7 +3093,7 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 struct dyString *dyErr = dyStringNew(0);
-checkAllowedBigDataUrlProtocols(bigDataUrl);
+checkAllowedBigDataUrlProtocols(bigDataUrl, track->genomeDb, allowLocalsForCTs);
 if (doExtraChecking)
     {
     /* protect against temporary network error */
@@ -3253,9 +3268,9 @@ char *bigDataIndexUrl = hashFindVal(settings, "bigDataIndex");
 struct dyString *dyErr = dyStringNew(0);
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 
-checkAllowedBigDataUrlProtocols(bigDataUrl);
+checkAllowedBigDataUrlProtocols(bigDataUrl, track->genomeDb, allowLocalsForCTs);
 if (bigDataIndexUrl != NULL)
-    checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+    checkAllowedBigDataUrlProtocols(bigDataIndexUrl, track->genomeDb, allowLocalsForCTs);
 
 if (doExtraChecking)
     {
@@ -3306,9 +3321,9 @@ char *bigDataIndexUrl = hashFindVal(settings, "bigDataIndex");
 
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 struct dyString *dyErr = dyStringNew(0);
-checkAllowedBigDataUrlProtocols(bigDataUrl);
+checkAllowedBigDataUrlProtocols(bigDataUrl, track->genomeDb, allowLocalsForCTs);
 if (bigDataIndexUrl)
-    checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+    checkAllowedBigDataUrlProtocols(bigDataIndexUrl, track->genomeDb, allowLocalsForCTs);
 
 boolean isVcfPhasedTrio = sameString(hashFindVal(settings,"type"),"vcfPhasedTrio");
 if (isVcfPhasedTrio)
@@ -4318,7 +4333,7 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
-boolean customFactoryParallelLoad(char *bdu, char *type)
+boolean customFactoryParallelLoad(char *bdu, char *type, char *db, boolean allowLocals)
 /* Is this a data type that should be loaded in parallel ? */
 {
 if ((type == NULL) || (bdu == NULL))
@@ -4332,7 +4347,7 @@ return (startsWith("big", type)
      || startsWithWord("bigLolly", type)
      || startsWithWord("vcfTabix", type))
      // XX code-review: shouldn't we error abort if the URL is not valid?
-     && (bdu && isValidBigDataUrl(bdu, FALSE))
+     && (bdu && isValidBigDataUrl(bdu, FALSE, db, allowLocals))
      && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (!startsWith("bigInteract", type))
      && (!startsWith("bigMaf", type));
@@ -4544,7 +4559,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
                     errAbort(TYPE_UNRECOGNIZED, type);
                 }
 	    }
-	if (customFactoryParallelLoad(bigDataUrl, type) && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
+	if (customFactoryParallelLoad(bigDataUrl, type, ctDb, allowLocalsForCTs) && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
             {
             if (doParallelLoad)
