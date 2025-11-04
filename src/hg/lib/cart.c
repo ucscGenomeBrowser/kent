@@ -1636,11 +1636,6 @@ if (genericSetupDone)
 genericSetupDone = TRUE;
 
 cgiApoptosisSetup();
-if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
-    errAbortSetDoContentType(TRUE);
-
-if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
-    htmlSuppressErrors();
 
 setUdcCacheDir();
 

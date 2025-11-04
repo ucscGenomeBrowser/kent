@@ -1,6 +1,0 @@
-track topmed
-shortLabel NHLBI TOPMED
-longLabel NHLBI TOPMED Freeze 8 - 705,486,649 DNA variants on 132,345 whole genomes
-type bigBed 9 +
-bigDataUrl /gbdb/hg38/topmed/topmed.bb
-group varRep

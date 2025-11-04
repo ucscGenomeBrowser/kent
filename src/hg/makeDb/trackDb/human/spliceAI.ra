@@ -1,6 +1,6 @@
 track spliceAI
 compositeTrack on
-shortLabel SpliceAI
+shortLabel SpliceAI Variants
 longLabel SpliceAI: Splice Variant Prediction Score
 group phenDis
 parent spliceImpactSuper on
