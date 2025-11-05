@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT; (c) 2025 Andrew D Smith (author)
+/* jshint esversion: 11 */
 $(function() {
     /* ADS: Uncomment below to force confirm on unload/reload */
     // window.addEventListener("beforeunload", function (e) {
@@ -207,17 +208,22 @@ $(function() {
         const possibleValues = {};
         for (const entry of metadata) {
             for (const [key, val] of Object.entries(entry)) {
-                const map = possibleValues[key] ??= new Map();
+                if (possibleValues[key] === null || possibleValues[key] === undefined) {
+                    possibleValues[key] = new Map();
+                }
+                const map = possibleValues[key];
                 map.set(val, (map.get(val) ?? 0) + 1);
             }
         }
 
-        const { maxCheckboxes, primaryKey } = embeddedData;
-        maxCheckboxes ??= DEFAULT_MAX_CHECKBOXES;
-        const excludeCheckboxes = [primaryKey]
+        let { maxCheckboxes, primaryKey } = embeddedData;
+        if (maxCheckboxes === null || maxCheckboxes === undefined) {
+            maxCheckboxes = DEFAULT_MAX_CHECKBOXES;
+        }
+        const excludeCheckboxes = [primaryKey];
 
         const filtersDiv = document.getElementById("filters");
-        colNames.forEach((key, colIdx) => {
+        colNames.forEach((key) => {
             // skip attributes if they should be excluded from checkbox sets
             if (excludeCheckboxes.includes(key)) {
                 return;
@@ -332,7 +338,7 @@ $(function() {
     function initAll(dataForTable) {
         initDataTypeSelector();
         const table = initTable(dataForTable);
-        initFilters(table, dataForTable)
+        initFilters(table, dataForTable);
         initSubmit(table);
     }
 
@@ -374,7 +380,7 @@ $(function() {
                     const metadata = rows.slice(1).map(row => {
                         const values = row.split("\t");
                         const obj = {};
-                        colNames.forEach((attrib, i) => { obj[attrib] = values[i] });
+                        colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
                         return obj;
                     });
                     if (!metadata.length || !colNames.length) {
