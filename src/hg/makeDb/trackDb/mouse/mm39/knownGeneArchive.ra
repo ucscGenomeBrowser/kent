@@ -149,7 +149,6 @@ html ../../knownGeneArchive
     defaultLinkedTables kgXref
 
     track knownGeneVM36
-    release alpha
     shortLabel GENCODE VM36
     longLabel GENCODE VM36
     parent knownGeneArchive
@@ -173,7 +172,6 @@ html ../../knownGeneArchive
     defaultLinkedTables kgXref
 
     track knownGeneVM37
-    release alpha
     shortLabel GENCODE VM37
     longLabel GENCODE VM37
     parent knownGeneArchive
