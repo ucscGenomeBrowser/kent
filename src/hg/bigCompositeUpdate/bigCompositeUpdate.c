@@ -56,7 +56,6 @@ void doMiddle(struct cart *theCart) {
   }
   cartParseOverHash(cart, dyStringContents(updated_cgi));
   cartRemove(cart, "mdid");  // could clash someday
-  cartCheckout(&cart);
 
   dyStringFree(&cgi_encoded);
   dyStringFree(&updated_cgi);
