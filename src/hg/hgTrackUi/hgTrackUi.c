@@ -2936,8 +2936,6 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   const int token_size = 64;
   const int query_buff_size = 256;
 
-  const char db[] = "hgcentral";
-  const char profile[] = "central";
   // html elements for the controls page (from singleCellMerged)
   const char pageStyle[] =
     "<style>body.cgi { background: #F0F0F0; }"
@@ -2986,7 +2984,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   char query[query_buff_size];
   sqlSafef(query, query_buff_size, queryFmt, id, sessionKey);
 
-  struct sqlConnection *conn = hAllocConnProfile((char *)profile, (char *)db);
+  struct sqlConnection *conn = hConnectCentral();
   const char *contents = sqlQuickString(conn, query);
   struct cgiParsedVars *varList = cgiParsedVarsNew((char *)contents);
 
@@ -3048,7 +3046,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
     free(dataTypes[i]);
   free(dataTypes);
   cgiParsedVarsFreeList(&varList);
-  hFreeConn(&conn);
+  hDisconnectCentral(&conn);
 }
 
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
