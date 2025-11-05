@@ -164,7 +164,7 @@ mark.active-result {
     position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 99;
     margin: 10px 0;
     padding: 10px;
     background-color: #f8f9fa;
