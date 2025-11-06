@@ -158,7 +158,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Variants Aug. 01, 2025"
+pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Updated Varaico Variants to release 2 and new Varaico Variants (suppl) track Nov. 06, 2025"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -243,6 +243,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        pennantIcon Updated red ../goldenPath/newsarch.html#110625 "Nov. 06, 2025"
         html varaico.html
 
         track varaicoSuppl
@@ -258,8 +259,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#080125 "Added PubTator Varia
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
+        pennantIcon New red ../goldenPath/newsarch.html#110625 "Released Nov. 06, 2025"
         html varaico.html
-        release alpha
 
 track caseControl
 compositeTrack on
@@ -5624,5 +5625,5 @@ include nmdEscape.ra alpha
 include exonprimers.ra alpha
 include longReadVariants.ra
 
-include g2p.ra alpha
+include g2p.ra alpha,beta
 include varFreqs.ra alpha
