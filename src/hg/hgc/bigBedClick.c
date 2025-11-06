@@ -149,7 +149,8 @@ for (i=0; i<coordCount; i++)
         reverseComplement(seq->dna, seq->size);
     char *guideSeq = (char*)slPairFindVal(extraFields, "guideSeq");
     // PAM = the last three chars of the off-target
-    char *pam = seq->dna+20;
+    int seqLen = strlen(seq->dna);
+    char *pam = seq->dna+(seqLen-3);
         
     // print sequence + PAM
     printf("<td><tt>");
