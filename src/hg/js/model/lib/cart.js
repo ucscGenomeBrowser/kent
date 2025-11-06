@@ -150,7 +150,10 @@ var cart = (function() {
             type: "POST",
             url: requireCgiUrl(),
             data: reqObj,
-            dataType: 'json'
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true,
+            },
         };
         var paramString = reqToString(reqObj);
         debugLog('cart.flush: data =', reqObj, ', params = ' + paramString);

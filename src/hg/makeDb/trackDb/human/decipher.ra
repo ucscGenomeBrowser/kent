@@ -59,7 +59,7 @@ group phenDis
     filter.sample_size 0
 
     track ddg2p
-    release beta,public
+    release public
     parent decipherContainer
     shortLabel DDG2P
     longLabel Developmental Disorders Gene2Phenotype (DDG2P)
