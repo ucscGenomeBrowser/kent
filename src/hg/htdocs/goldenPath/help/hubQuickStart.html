@@ -179,6 +179,15 @@ If the file contains the first 9 <a href="../../FAQ/FAQformat.html#format1" targ
 standard BED columns</a>, one could use <code>type bigBed 9 +</code> to denote the additional 
 non-standard columns as defined in AutoSql format(.as) file, <code>-as=bedExample1.as</code>.
 </p>
+<p>
+Creating a trackDb.txt file for an assembly hub, you can control where the track appears underneath
+the Genome Browser image using the <a href="/goldenpath/help/hgTrackHubHelp.html#groups"
+target="_blank">groups</a> setting. The special groups setting in Assembly Hubs points to a separate
+text document that defines track groups under the main image (such as the first &quot;Mapping and
+Sequencing&quot; group found on almost all Browsers). The group setting is not inherited by the
+subtracks for a composite, supertrack, or multiwigs, so you will have to add the setting to each
+stanza in the container.
+</p>
 
 
 
