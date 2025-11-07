@@ -12,6 +12,7 @@ GCF_000001905.1_Loxafr3.0	African savanna elephant (2009 refseq)
 GCA_030020305.1_mLoxAfr1.hap1	African savanna elephant (hap1 mLoxAfr1 2023)
 GCA_030014295.1_mLoxAfr1.hap2	African savanna elephant (hap2 2023 genbank)
 GCF_030014295.1_mLoxAfr1.hap2	African savanna elephant (hap2 2023 refseq)
+GCA_021653895.1_UFL_Mnatal_1.0	African soft-furred rat (Lowveld savanna grassland N552 2022)
 GCF_016433145.1_AgileGrace	agile gracile mouse opossum
 GCA_019843855.1_ASM1984385v1	Allen's wood mouse (MVZ Mamm 196246 2021)
 GCF_048564905.1_VicPac4	alpaca (2025)
@@ -54,6 +55,7 @@ GCF_003426925.1_ASM342692v1	Arctic ground squirrel (AGS 11-09-20 2018)
 GCA_045843805.1_mUroPar1.hap1	Arctic ground squirrel (hap1 2024)
 GCA_045843765.1_mUroPar1.hap2	Arctic ground squirrel (hap2 2024)
 GCA_004024585.1_ParHer_v1_BIUU	Asian palm civet
+GCA_016801275.1_DSBC_Hbra_1.0	Asiatic brush-tailed porcupine (POm2014 2021)
 GCA_024166345.1_mEleMax1_alternate_haplotype	Asiatic elephant (mEleMax1 alternate hap 2022)
 GCF_024166365.1_mEleMax1_primary_haplotype	Asiatic elephant (mEleMax1 primary hap 2022)
 GCA_014523465.1_CAU_Oori_1.0	Asiatic mouflon (Amuf_v1 2020)
@@ -176,6 +178,7 @@ GCA_030463245.1_zhanglab2022	Corsac fox (zsh2022 2023)
 GCA_034620425.1_Cla-1	coyote (coyote_06102 2023)
 GCF_018167655.1_Mior012	creeping vole
 GCA_004026905.1_HysCri_v1_BIUU	crested porcupine
+GCA_907164525.1_mLopImh1.curated_primary_1811	crested rat (2021)
 GCA_964271855.1_mAcoMin1	Crete spiny mouse (2024)
 GCA_004364475.1_ZipCav_v1_BIUU	Cuvier's beaked whale
 GCA_043880285.1_ASM4388028v1	cyclops roundleaf bat (Cote d'Ivoire 20210929_DDa primary hap 2024)
@@ -343,6 +346,7 @@ GCA_949316305.1_mMusMuc1.1_alternate_haplotype	house mouse (alternate hap 2023)
 GCA_921998355.2_A_J_v3	house mouse (A_J v3 2022)
 GCA_921997145.2_BALB_cJ_v3	house mouse (BALB_cJ v3 2022)
 GCA_921997125.2_C3H_HeJ_v3	house mouse (C3H_HeJ v3 2022)
+GCA_000185105.2_MmusALLPATHS2	house mouse (C57BL/6J 2012)
 GCA_964188535.1_C57BL_6J_T2T_v1	house mouse (C57BL_6J T2T 2024)
 GCA_921998905.2_CBA_J_v3	house mouse (CBA_J v3 2022)
 GCA_921998315.2_DBA_2J_v3	house mouse (DBA_2J v3 2022)
@@ -404,6 +408,7 @@ GCA_024363575.1_mPerLon1.0.p	little pocket mouse (longimembris primary hap 2022)
 GCA_004026665.1_MurFea_v1_BIUU	little tube-nosed bat
 GCF_963455315.2_mGloMel1.2	long-finned pilot whale (v2 primary hap 2024 refseq)
 GCF_006547405.1_ASM654740v1	long-finned pilot whale (X-22926-18 2019)
+GCA_904812075.1_ERS5079564_MarsupialExonCaptKit	long-footed potoroo (2021)
 GCF_000276665.1_ChiLan1.0	long-tailed chinchilla
 GCA_004027375.1_MacSob_v1_BIUU	long-tongued fruit bat (US102 2019 Broad)
 GCA_004365215.1_CunPac_v1_BIUU	Lowland paca
@@ -422,6 +427,7 @@ GCA_024711535.1_mDipMer1.0.p	Merriam's kangaroo rat (MVZ:Mamm:240054 primary hap
 GCF_024711535.1_mDipMer1.0.p	Merriam's kangaroo rat (MVZ:Mamm:240054 primary hap 2022)
 GCA_039655065.1_mGloMut1.hap1	Merriam's long-tongued bat (hap1 2024)
 GCA_039656995.1_mGloMut1.hap2	Merriam's long-tongued bat (hap2 2024)
+GCA_019844195.1_ASM1984419v1	mesic four-striped grass rat (FMNH 192475 2021)
 GCF_048164855.1_mCanLup2.hap1	Mexican gray wolf (hap1 2025 refseq)
 GCA_048164845.1_mCanLup2.hap2	Mexican gray wolf (hap2 2025)
 GCF_000493695.1_BalAcu1.0	minke whale (2013 refseq)
@@ -436,6 +442,7 @@ GCA_004027695.1_CavTsc_v1_BIUU	Montane guinea pig
 GCA_964270355.1_Elg.assembly.v.1.0	moose/elk (2024)
 GCA_015832495.2_NRM_Aalces_2_0.fsa	moose/elk (AALL_1980 2023)
 GCA_007570765.1_GSC_moose_1.0	moose/elk (MIG12-28694850 2019)
+GCA_019843965.1_ASM1984396v1	Mount Data shrew rat (FMNH 198792 2021)
 GCA_004027875.1_AplRuf_v1_BIUU	mountain beaver
 GCA_004026605.1_OndZib_v1_BIUU	muskrat
 GCA_944319725.1_Naked_mole-rat_paternal	naked mole-rat (2022)
@@ -480,6 +487,7 @@ GCA_048771875.1_mCteGun2.hap1	northern gundi (hap1 2025)
 GCA_048771865.1_mCteGun2.hap2	northern gundi (hap2 2025)
 GCA_004027205.1_CteGun_v1_BIUU	northern gundi (US049 2019)
 GCA_001685095.1_ETalpinus_0.1	northern mole vole
+GCA_036346955.1_IOZCAS_Dsag_1.1	northern three-toed jerboa (halli NM19106 2024)
 GCA_004027795.1_CerCot_v1_BIUU	northern white rhinoceros
 GCA_043748575.1_ASM4374857v1	northern woolly horseshoe bat (20210929_DDc primary hap 2024)
 GCA_036323735.1_GRCr8	Norway rat (BN/NHsdMcwi 2024 genbank)
@@ -494,6 +502,8 @@ GCA_021556685.1_UTH_Rnor_SHRSP_BbbUtx_1.0	Norway rat SHRSP/BppUtx 2022
 GCA_023515805.1_UTH_Rnor_WKY_Bbb_1.0	Norway rat WKY/Bbb 2022
 GCA_004027025.1_MyoCoy_v1_BIUU	nutria
 GCA_001660835.1_ASM166083v1	okapi
+GCA_047150545.1_Tmue_2.0	Okinawa island spiny rat (P-3 2024)
+GCA_036184385.1_Tmue1	Okinawa island spiny rat (P-3 primary hap 2023)
 GCF_000151885.1_Dord_2.0	Ord's kangaroo rat
 GCA_004027595.1_DinBra_v1_BIUU	pacarana
 GCA_004363475.1_PerLonPac_v1_BIUU	Pacific pocket mouse (BS65 2019 Broad)
@@ -518,6 +528,7 @@ GCF_000003025.6_Sscrofa11.1	pig (Duroc 2017)
 GCA_963921485.1_norwegian_landrace	pig (Norwegian landrace 2024)
 GCA_002844635.1_USMARCv1.0	pig (USMARCv1 2017)
 GCA_048338725.1_T2T_pig1.0	pig (Wuzhishan WZS1 2025)
+GCA_002564285.1_Tym_barrerae_AO245_v1	plains viscacha rat (AO245 2017)
 GCF_021613505.1_UCLA_HA_Equagga_1.0	plains zebra (Etosha38 2022 UCLA)
 GCA_004115175.2_mOrnAna1.alt.v3	platypus (alternate hap Pmale09 2020)
 GCF_004115215.2_mOrnAna1.pri.v4	platypus (Pmale09 v4 2020)
@@ -536,6 +547,7 @@ GCA_028749965.1_mPumCon1.0.hap2	puma (L17-30 alternate hap 2023)
 GCA_028749985.1_mPumCon1.0.hap1	puma (L17-30 primary hap 2023)
 GCF_003327715.1_PumCon1.0	puma (SC36_Marlon 2018 refseq)
 GCA_004363535.1_DasPun_v1_BIUU	punctate agouti
+GCA_033318265.1_ASM3331826v1	Punta de Vaca leaf-eared mouse (GD2095 2023)
 GCA_004363705.1_KogBre_v1_BIUU	pygmy sperm whale
 GCF_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (haplotype 1 2022 refseq)
 GCA_026419985.1_mKogBre1_haplotype_2	pygmy sperm whale (mKogBre1 haplotype 2 2022)
@@ -565,6 +577,7 @@ GCF_028023285.1_mBalRic1.hap2	Rice's whale (hap2 2023 refseq)
 GCA_036010255.1_ASM3601025v1	Rickett's big-footed myotis (AB-2021 2024)
 GCA_964374135.1_mGraGri1.hap1.1	Risso's dolphin (hap1.1 2024)
 GCA_964374185.1_mGraGri1.hap2.1	Risso's dolphin (hap2.1 2024)
+GCA_963919705.1_Aoec_v1	root vole (2023)
 GCF_900094665.2_CAROLI_EIJ_v1.1	Ryukyu mouse (v2 2017)
 GCA_015443085.1_Saanen_v1	Saanen dairy goat
 GCA_949987525.1_mDelDel1.1_alternate_haplotype	saddleback dolphin (alternate hap 2023)
@@ -592,6 +605,7 @@ GCF_029834395.1_SorFum_2.1	smoky shrew (2023)
 GCF_023721935.1_Puncia_PCG_1.0	snow leopard (11264 2022)
 GCA_004026855.1_LepAme_v1_BIUU	snowshoe hare
 GCA_004027165.1_CteSoc_v1_BIUU	social tuco-tuco
+GCA_023101885.1_KIZ_TCIN_v1.0	Soft-furred tree mouse (WYS1704033 2022)
 GCA_949987765.1_mPipPyg2.1_alternate_haplotype	soprano pipistrelle (alternate hap 2023)
 GCA_949987585.1_mPipPyg2.1	soprano pipistrelle (primary hap 2023)
 GCA_004024805.1_XerIna_v1_BIUU	South African ground squirrel
@@ -656,6 +670,7 @@ GCA_008692045.1_mPhoSin1.alt	vaquita (alternate hap mPhoSin1 2019)
 GCF_008692025.1_mPhoSin1.pri	vaquita (mPhoSin1 2019)
 GCF_003121395.1_ASM312139v1	water buffalo (Mediterranean 2018)
 GCF_019923935.1_NDDB_SH_1	water buffalo (Murrah 2021)
+GCA_019206885.2_ASM1920688v2	water vole (JQ59JK4JDI 2023)
 GCF_000349705.1_LepWed1.0	Weddell seal (WS11-02 2013 refseq)
 GCF_000296755.1_EriEur2.0	western European hedgehog (2012 refseq)
 GCA_950295305.1_mEriEur2.1_alternate_haplotype	western European hedgehog (alternate hap 2023)
@@ -678,6 +693,7 @@ GCF_000311805.1_CB1	wild Bactrian camel (CB1 Naran 2013 refseq)
 GCA_000978405.1_CapAeg_1.0	wild goat
 GCF_027580195.1_NWIPB_WYAK_1.1	wild yak (GX-2022 2023)
 GCF_000298355.1_BosGru_v2.0	wild yak (yakQH1 2013)
+GCA_030556225.1_Psun-UiT-1	winter white dwarf (Siberian hamster Psun_Stras_1 2023)
 GCF_021218885.2_Marmota_monax_Labrador192_F-V1.1	woodchuck (v1.1 L192 2022)
 GCA_004027655.1_GraMur_v1_BIUU	woodland dormouse
 GCF_004785775.1_NIH_TR_1.0	woodland thicket rat
