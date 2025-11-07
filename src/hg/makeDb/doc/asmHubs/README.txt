@@ -1,4 +1,25 @@
 #############################################################################
+# Update 2025-11-07
+#############################################################################
+
+Since the orderList.tsv listings have become very large, it has
+become inconveniently time consuming to run through the standard
+process as described below.  There is a newer 'minimal build' procedure
+in use now that can save a lot of time.
+
+At the point where you have added your new assembly to the orderList.tsv
+file, instead of running through the full sequence of make commands
+for the entire clade set you are working on, go to the clade directory and
+run:
+
+   time (../asmHubs/minimalBuild.sh) > minimal.log 2>&1
+
+and that script will run the make commands on only the new assemblies
+in the orderList.tsv.  It still takes a long time (hours) to do part of that
+job when it is making up the clade index.html files, but much of the
+time consuming working through every assembly in the list is eliminated.
+
+#############################################################################
 ### Building the GenArk assembly hubs ###
 #############################################################################
 ### Requests from the request system:
