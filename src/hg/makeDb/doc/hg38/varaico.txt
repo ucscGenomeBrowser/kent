@@ -5,6 +5,13 @@ export AMELIE2_CONFIG_JSON=/hive/users/jbirgmei/amelie2/src/scripts/config.json
 # then run the pipeline to create hg19 and hg38 bigbeds:
 /cluster/home/jbirgmei/opt_rocky9/miniconda3/envs/amelie2/bin/amelie2 workflow final_out --partition hg19,hg38
 
+# move bigbeds to track version directory:
+mv /hive/users/jbirgmei/amelie2/data/out/None/full/hg*/*.bb /hive/users/jbirgmei/TRACK_VERSIONS/v4_20251110
+
 # copy bigbeds:
-cp /hive/users/jbirgmei/amelie2/data/out/full/hg19/normalized_variants.hg19.bb /gbdb/hg19/bbi/varaico.bb
-cp /hive/users/jbirgmei/amelie2/data/out/full/hg38/normalized_variants.hg19.bb /gbdb/hg38/bbi/varaico.bb
+cp /hive/users/jbirgmei/TRACK_VERSIONS/v4_20251110/varaico.hg19.bb /hive/data/genomes/hg19/bed/varaico/varaico.bb
+cp /hive/users/jbirgmei/TRACK_VERSIONS/v4_20251110/varaico.hg38.bb /hive/data/genomes/hg38/bed/varaico/varaico.bb
+cp /hive/users/jbirgmei/TRACK_VERSIONS/v4_20251110/varaicoSuppl.hg19.bb /hive/data/genomes/hg19/bed/varaico/varaicoSuppl.bb
+cp /hive/users/jbirgmei/TRACK_VERSIONS/v4_20251110/varaicoSuppl.hg38.bb /hive/data/genomes/hg38/bed/varaico/varaicoSuppl.bb
+
+# finally, create symlinks from /gbdb/$D/bbi/varaico{Suppl,}.bb to /hive/data/genomes/$D/bed/varaico/varaico{Suppl,}.bb

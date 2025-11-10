@@ -81,7 +81,7 @@ see the <a href="hgTrackHubHelp.html">full track hub documentation</a>.</p>
 <h2>Common Track Types</h2>
 <p>
 The most common <a href="/FAQ/FAQformat.html">track types</a> are bigBed and bigWig. Compressed, binary versions of
-the corresponding plain-text formats. Together they should cover most
+the corresponding plain-text formats. Together, they should cover most
 of what you might want to display in the Genome Browser, from transcription peaks to
 RNA-seq signals.
 
@@ -104,17 +104,10 @@ can also extend the format with any number of additional fields.
       <pre><code>bedToBigBed -sort in.bed chrom.sizes myBigBed.bb</code></pre>
     <ul>
       <li>If your assembly is a UCSC-hosted assembly (e.g. hg38), chrom.sizes can
-<<<<<<< HEAD
           be a URL (replace &quot;genNom&quot; with the assembly name (e.g. hg38)):
           http://hgdownload.gi.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes.
-          If you're working with a GenArk assembly hub, then the chrom.sizes
-=======
-          be a URL (e.g. hg38):
-          <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes">
-          https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
           If you're working with a <a href="https://hgdownload.soe.ucsc.edu/hubs/">
           GenArk assembly hub</a> (e.g. GCF/GCA), then the chrom.sizes
->>>>>>> 7ec5fd8d353ae3486915167a5d57c84cb0cb918f
           file can be found under the "Data file downloads" section on the
           <a href="/cgi-bin/hgGateway" target="_blank">assembly gateway page</a>.
       <li>If you have custom fields in your bed file, you will need to create a custom .as file.
@@ -141,7 +134,7 @@ visibility pack
 type bigBed 12 +
 bigDataUrl gtexCaviar.chr7_155799529-155812871.bb
 </code></pre>
-<p>The type line consists of three parts: 
+<p>The <code>type</code> line consists of three parts:
 <ul>
   <li>&quot;bigBed&quot; is the basic track type.
   <li>&quot;12&quot; indicates how many standard BED fields are included in
@@ -156,8 +149,8 @@ bigDataUrl gtexCaviar.chr7_155799529-155812871.bb
 <img src="/images/bigBedReqSettings.png">
 
 <p>
-The bigBed format also offer a wide range of customization options for the
-display, from decorators to highlights. Additionally, it offer extensive
+The bigBed format also offers a wide range of customization options for the
+display, from decorators to highlights. Additionally, it offers extensive
 <a href="/goldenPath/help/hubQuickStartFilter.html">
 filter controls</a>, <a href="/goldenPath/help/hubQuickStartSearch.html">
 searching options</a>, and mouseover configurations. Our <a
@@ -227,7 +220,7 @@ genome signal scores. You can build a bigWig using one of two plain-text formats
 
 <h3>bigWig track hub configuration</h3>
 <p>
-The basic trackDb configuration for a bigWig track is similar to a bigBed track as
+The basic trackDb configuration for a bigWig track is similar to a bigBed track, as
 all tracks require the same basic settings (<code>track, shortLabel, longLabel, type, bigDataUrl</code>). 
 This is what the configuration for a bigWig track might look like (the example
 hub.txt includes other useful settings):
@@ -239,7 +232,7 @@ type bigWig -20 10.003
 bigDataUrl hg38.phyloP100way.chr7_155799529-155812871.bw
 color 60,60,140
 </code></pre>
-<p>The type line consists of two parts: 
+<p>The <code>type</code> line consists of two parts:
 <ul>
   <li>&quot;bigWig&quot; is the basic track type
   <li>&quot;-20 10.003&quot; indicates the minimum and maximum of the data in the bigWig
@@ -260,7 +253,7 @@ together under a single container.
 <h3>Composite Tracks</h3>
 <p>
 Composite tracks can hold multiple tracks of the same type. For example, you
-use a composite to group together a set of RNA-seq experiments including
+use a composite to group together a set of RNA-seq experiments, including
 replicates.
 
 <p>
@@ -350,7 +343,7 @@ html examplePage
 </code></pre>
 
 <p>
-Loading the example hub with this super track onfiguration looks like this:
+Loading the example hub with this super track configuration looks like this:
 <br>
 <img src="/images/superTrackEx.png">
 
@@ -359,12 +352,14 @@ Loading the example hub with this super track onfiguration looks like this:
 <p>
 If you plan to share your track hub more widely, you will want to create a description page for your tracks.
 A description page could contain a short description of what the data represents, how the data was generated,
-a link to the associated paper, or a contact email for questions regarding the data.
+a link to the associated paper, or a contact email for questions regarding the data. Multiple tracks can use
+the same description page.
+
 
 <p>
 We provide an <a href="examples/hubExamples/templatePage.html">example description html</a> that you can modify with
 the details for your track. Once you've modified this example html for your
-track add an <code>html</code> to the corresponding track stanza:
+track, add an <code>html</code> to the corresponding track stanza:
 <p><pre><code>track bigWigExample
 shortLabel bigWig Example
 longLabel A bigWig Example with Commonly Used Settings
@@ -397,7 +392,7 @@ you will want to use:
   <li><code>hubUrl</code> - URL to your hub
 </ul>
 <p>
-You will then append these to a genome browser URL. For example, this url with load the example hub:
+You will then append these to a genome browser URL. For example, this url loads the example hub:
 <pre><code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBasicSettings/hub.txt
 </code></pre>
 
