@@ -75,15 +75,15 @@ def flipFiles():
 
 def main():
     " create the 2 x three BED files and convert each to bigBed and update the archive "
-    hg19Bed, hg38Bed = genes.downloadGenes()
-    writeBb(hg19Bed, hg38Bed, "genes")
-
     hg19Bed, hg38Bed = tandRep.downloadTandReps()
     writeBb(hg19Bed, hg38Bed, "tandRep")
 
     hg38Bed = cnv.downloadCnvs()
     # no hg19 CNV data yet from PanelApp
     writeBb(None, hg38Bed, "cnv")
+
+    hg19Bed, hg38Bed = genes.downloadGenes()
+    writeBb(hg19Bed, hg38Bed, "genes")
 
     flipFiles()
     updateGbdbSymlinks()

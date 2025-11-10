@@ -889,7 +889,10 @@ var cart = {
     },
 
     updateSessionPanel: function()
+    /* This function tries to find out if the current cart changed enough. It is not used anymore, as the 
+     * current active rec. track set name is not shown anymore */
     {
+    // this is never set anymore
     if (typeof recTrackSetsDetectChanges === 'undefined' || recTrackSetsDetectChanges === null)
         return;
 
@@ -2349,7 +2352,7 @@ var rightClick = {
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
             return;
         }
-        if (cmd === 'selectWholeGene' || cmd === 'getDna' || cmd === 'highlightItem') {
+        if (cmd === 'selectWholeGene' || cmd === 'getDna' || cmd === 'highlightItem' || cmd === 'highlightThisRegion') {
                 // bring whole gene into view or redirect to DNA screen.
                 href = rightClick.selectedMenuItem.href;
                 var chrom, chromStart, chromEnd;
@@ -2410,6 +2413,8 @@ var rightClick = {
                             var newPos3 = newChrom+":"+(parseInt(chromStart))+"-"+parseInt(chromEnd);
                             dragSelect.highlightThisRegion(newPos3, true);
                         }
+                    } else if (cmd === 'highlightThisItem') {
+
                     } else {
                         var newPosition = genomePos.setByCoordinates(chrom, chromStart, chromEnd);
                         var reg = new RegExp("hgg_gene=([^&]+)");
@@ -2964,6 +2969,13 @@ var rightClick = {
                                 {   onclick: function(menuItemClicked, menuObject) {
                                         rightClick.hit(menuItemClicked, menuObject,
                                                        "highlightItem"); 
+                                        return true;
+                                    }
+                                };
+                            o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
+                                {   onclick: function(menuItemClicked, menuObject) {
+                                        rightClick.hit(menuItemClicked, menuObject,
+                                                       "highlightThisItem"); 
                                         return true;
                                     }
                                 };
@@ -5021,7 +5033,9 @@ var imageV2 = {
             var bedMatch = newPos.match(bedRangeExp);
             var sqlMatch = newPos.match(sqlRangeExp);
             var singleMatch = newPos.match(singleBaseExp);
-            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+            var gnomadRangeMatch = newPos.match(gnomadRangeExp);
+            var gnomadVarMatch = newPos.match(gnomadVarExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch || gnomadRangeMatch || gnomadVarMatch;
             if (positionMatch === null) {
                 // user may have entered a full chromosome name, check for that asynchronosly:
                 $.ajax({

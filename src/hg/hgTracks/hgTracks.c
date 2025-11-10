@@ -7779,7 +7779,7 @@ static boolean isTrackForParallelLoad(struct track *track)
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 
-return customFactoryParallelLoad(bdu, track->tdb->type) && (track->subtracks == NULL);
+return customFactoryParallelLoad(bdu, track->tdb->type, database, TRUE) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
@@ -7905,7 +7905,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        if (isValidBigDataUrl(decoratorUrl,TRUE))
+        if (isValidBigDataUrl(decoratorUrl,TRUE, database, TRUE))
             bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
         }
     errCatchEnd(errCatch);
@@ -9691,7 +9691,7 @@ if (!hideControls)
             
             char *hubName = hubNameFromGroupName(group->name);
             struct trackHub *hub = grabHashedHub(hubName);
-            if (hubName)
+            if (hub && hub->url)
                 {
                 puts("&nbsp;");
                 char infoText[10000];
@@ -9703,6 +9703,17 @@ if (!hideControls)
             
             if (hubName)
 		{
+                if (cfgOptionBooleanDefault("groupDropdown", FALSE) && hub && hub->genomeList && hub->genomeList->next)
+                    {
+                    puts("<span style='font-size:13px'>Genomes: </span><select style='width:7em' name='db'>");
+                    for (struct trackHubGenome *thg = hub->genomeList; thg != NULL; thg = thg->next)
+                        {
+                        if (!sameWord(thg->name, database))
+                            printf("<option value='%s'>%s</option>\n", thg->name, thg->name);
+                        }
+                    puts("</select>");
+                    }
+
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
                 if (hub != NULL)
                     {
@@ -9725,6 +9736,8 @@ if (!hideControls)
                             "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>", hub->descriptionUrl);
                         }
                     hPrintf("&nbsp;&nbsp;");
+
+
                     }
                 }
 
@@ -9732,7 +9745,7 @@ if (!hideControls)
                     "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
                     group->name);
 
-            if (hubName)
+            if (hub)
                 {
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;

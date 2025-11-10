@@ -6,7 +6,7 @@ longLabel All GENCODE annotations from VM37 (Ensembl 114)
 group genes
 dragAndDrop subTracks
 priority 2.947
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes bPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA
 allButtonPair on

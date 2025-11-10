@@ -83,9 +83,9 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 # my $bigClusterHub = 'swarm';
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 # my $smallClusterHub = 'encodek';
-my $smallClusterHub = 'ku';
+my $smallClusterHub = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $ram = '3g';
 my $cpu = 1;
@@ -830,7 +830,8 @@ _EOF_
 to each target sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doChainRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
-  my $paraRun = &HgAutomate::paraRun();
+  # raise memory limit to 12g 2025-10-29
+  my $paraRun = &HgAutomate::paraRun("12g", 1);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh

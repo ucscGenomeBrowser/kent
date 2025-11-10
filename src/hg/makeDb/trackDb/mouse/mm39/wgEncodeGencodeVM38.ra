@@ -16,6 +16,7 @@ type genePred
 configurable off
 wgEncodeGencodeVersion M38
 maxTransEnabled on
+pennantIcon New red ../goldenPath/newsarch.html#103125 "Released Oct. 31, 2025"
 
     track wgEncodeGencodeVM38ViewGenes
     shortLabel Genes

@@ -35945,3 +35945,13 @@ cd /hive/data/genomes/hg19/bed/gnomad/mpc
 wget https://storage.googleapis.com/gcp-public-data--gnomad/release/2.1.1/regional_missense_constraint/gnomAD_v2.1.1_transcripts_with_rmc.tsv
 cat gnomAD_v2.1.1_transcripts_with_rmc.tsv | python ~/kent/src/hg/makeDb/gnomad/gnomadMpcToBed.py | sort -k1,2n > mpc.bed
 bedToBigBed mpc.bed ../../../chrom.sizes mpc.bb -as=~/kent/src/hg/makeDb/gnomad/mpc.as -type=bed9+ -tab
+#############################################################################
+# variant frequencies, 2025-11-07, Max
+cd /hive/data/genomes/hg19/bed/varFreqs/mexbb/
+# got files as-is from Carmina
+cd /hive/data/genomes/hg19/bed/varFreqs/sgdp/
+https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/vcfs.variants.public_samples.279samples.tar
+tar xvfz *.tar
+ls *.vcf.gz > vcf.list
+bcftools merge -l vcf.list -O z -o SGDP.nh2.vcf.gz --threads 20
+tabix -p vcf SGDP.nh2.vcf.gz

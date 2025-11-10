@@ -1,0 +1,121 @@
+<h2>Description</h2>
+<p>
+This track displays the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs) 
+in the human genome from ENCODE 4. A total of <b>2,348,854</b> elements identified and classified by the 
+ENCODE Data Analysis Center according to biochemical signatures. Most cCREs are anchored on 
+DNase hypersensitive sites further annotated with histone modifications (H3K4me3 and H3K27ac) 
+or CTCF binding measured by ChIP-seq experiments. In this latest version of the Registry (V4), 
+the representative DNase hypersensitive sites (rDHSs) were supplemented 
+with 86,748 representative transcription factor ChIP-seq peaks (TF 
+rPeaks)—peaks that represent binding sites for at least five TFs. The Registry of cCREs is 
+one of the core components of the integrative level of the ENCODE Encyclopedia of DNA Elements.</p>
+
+<p>Additional exploration of the cCREs and underlying raw ENCODE signal data can be done with the
+<b>Core Collection</b> track. The data is also available on the <a 
+target=" blank" href="https://screen.wenglab.org/">SCREEN</a> (Search Candidate cis-Regulatory 
+Elements) web tool, designed specifically for the Registry, accessible by item mouseovers and linkouts from the 
+track details page.</p>
+
+<h2>Display Conventions and Configurations</h2>
+<p>
+Each cCRE is displayed as a colored box by type, which reflects its putative functional assignment 
+based on biochemical signatures and genomic context:</p>
+<p>
+<img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="40%"></p>
+<p>
+Mousing over the data will display the accession ID, the assigned cCRE class type, and the Max-Z scores
+for the various underlying biosignals (DNase, H3K4me3, H3K27ac, CTCF). A track filter is also available
+to selectively show items based on their cCRE class type.</p>
+
+<h2>Methods</h2>
+<p>
+Candidate cis-regulatory elements (cCREs) were first anchored on nucleosome-sized DNase 
+hypersensitive sites (rDHSs) identified from DNase-seq data. These rDHSs were then annotated 
+using ChIP-seq data for histone modifications—H3K4me3 and H3K27ac, marking promoters and 
+enhancers, respectively—and CTCF, marking insulators. To supplement rDHS-anchored cCRE 
+definitions, transcription factor ChIP-seq peaks were incorporated, enabling identification 
+of cCREs even in regions of low chromatin accessibility. Although not used for anchoring, 
+ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.</p>
+
+<p>
+Classification of cCRE's was performed based on the following criteria:</p>
+<ol>
+<li><strong><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></strong> 
+must fall within 200 bp of a TSS and have high chromatin accessibility and H3K4me3 signals.</li>
+<li><strong><span style="color: #ffa700;">TSS-proximal enhancer-like signatures (proximal 
+enhancer)</span></strong> have high chromatin accessibility and H3K27ac signals and are 
+within 2 kb of an annotated TSS. If they are within 200 bp of a TSS, they must 
+also have low H3K4me3 signal.</li>
+<li><strong><span style="color: #ffcd00;">TSS-distal enhancer-like signatures 
+(distal enhancer)</span></strong> have high chromatin accessibility and H3K27ac signals 
+and are farther than 2 kb from an annotated TSS.</li>
+<li><strong><span style="color: #ffaaaa;">Chromatin accessibility + 
+H3K4me3 (CA-H3K4me3)</strong></span> have high chromatin accessibility and H3K4me3 
+signals but low H3K27ac signals and do not fall within 200 bp of a TSS.</li>
+<li><strong><span style="color: #00b0f0;">Chromatin accessibility + 
+CTCF (CA-CTCF)</strong></span>have high chromatin accessibility and CTCF signals 
+but low H3K4me3 and H3K27ac signals.</li>
+<li><strong><span style="color: #be28e5;">Chromatin accessibility + 
+transcription factor (CA-TF)</strong></span> have high chromatin accessibility, 
+low H3K4me3, H3K27ac, and CTCF signals, and are bound by a transcription factor.</li>
+<li><strong><span style="color: #06da93;">Chromatin accessibility 
+(CA)</strong></span>have high chromatin accessibility and low H3K4me3, H3K27ac, and 
+CTCF signals.</li>
+<li><strong><span style="color: #d876ec;">Transcription factor 
+(TF)</strong></span> have low chromatin accessibility, low H3K4me3, H3K27ac, 
+and CTCF signals and are bound by a transcription factor.</li>
+</ol>
+
+<h2>Data Access</h2>
+<p>
+The ENCODE accession numbers of the constituent datasets at the <a target="_blank"
+href="https://encodeproject.org/">ENCODE Portal</a> are available from the cCRE details page.</p>
+<p>
+The data in this track can be interactively explored with the <a target="_blank" 
+href="/cgi-bin/hgTables">Table Browser</a> or the <a target="_blank" 
+href="/cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from 
+scripts through our a <target="_blank" href="https://api.genome.ucsc.edu/">API</a>, 
+the track name is "cCREregistry".</p>
+<p>
+For automated download and analysis, this annotation is stored in a bigBed file 
+that can be downloaded from <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/">our download server</a>. 
+The file for this track is called cCREregistry.bb. Individual regions or the whole genome 
+annotation can be obtained using our tool bigBedToBed which can be compiled from the source 
+code or downloaded as a precompiled binary for your system. Instructions for downloading 
+source code and binaries can be found <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities downloads">here</a>. 
+The tool can also be used to obtain only features within a given range, e.g.<br><br>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/cCREregistry.bb -chrom=chr21 -start=0 -end=100000000 stdout</code></p>
+
+<h2>Credits</h2>
+<p>
+Data were generated by the ENCODE Consortium. The data were further processed for 
+visualization through a collaborative effort between the <a target="_blank" 
+href="https://www.umassmed.edu/zlab">Weng lab</a> and the <a target="_blank" 
+href="https://sites.google.com/view/moore-lab/">Moore lab</a> at UMass Chan Medical 
+School (funded by NIH grant HG012343). Integration and visualization were developed 
+by Drs. Mingshi Gao, Jill Moore, and Zhiping Weng at UMass Chan Medical School, who were 
+part of the ENCODE Data Analysis Center. We thank the ENCODE production labs 
+for generating the data.</p>
+
+<h2>References</h2>
+<p>
+ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, Adrian J, Kawli T,
+Davis CA, Dobin A <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2493-4" target="_blank">
+Expanded encyclopaedias of DNA elements in the human and mouse genomes</a>.
+<em>Nature</em>. 2020 Jul;583(7818):699-710.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32728249" target="_blank">32728249</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7410828/" target="_blank">PMC7410828</a>
+</p>
+<p>
+Moore JE, Pratt HE, Fan K, Phalke N, Fisher J, Elhajjajy SI, Andrews G, Gao M, Shedd N, Fu Y <em>et
+al</em>.
+<a href="https://doi.org/10.1101/2024.12.26.629296" target="_blank">
+An Expanded Registry of Candidate cis-Regulatory Elements for Studying Transcriptional
+Regulation</a>.
+<em>bioRxiv</em>. 2024 Dec 26;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>
+</p>

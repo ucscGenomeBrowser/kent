@@ -697,6 +697,7 @@ GCF_010093885.1_Aplpr1	ascomycetes A.prunicola CBS 121167
 GCF_009193645.1_Asppsen1	ascomycetes A.pseudonomius
 GCF_009193445.1_Asppset1	ascomycetes A.pseudotamarii
 GCF_018340605.1_Asppvi_assembly01	ascomycetes A.pseudoviridinutans IFM 55266
+GCA_023079325.1_ASM2307932v1	ascomycetes A.pullulans (NRRL 62031 2022)
 GCF_000721785.1_Aureobasidium_pullulans_var._pullulans_EXF-150_assembly_version_1.0	ascomycetes A.pullulans EXF-150
 GCF_016861865.1_ApuulaauensisMK2_assembly01	ascomycetes A.puulaauensis MK2
 GCF_004011695.2_ASM401169v2	ascomycetes A.rabiei (Me14 2022)
@@ -708,6 +709,8 @@ GCF_003184525.1_Aspscl1	ascomycetes A.sclerotioniger CBS 115572
 GCF_047715825.1_Aspstel1_1	ascomycetes A.stella-maris (CBS 113639 2025)
 GCF_002849105.1_Aspste1	ascomycetes A.steynii IBT 23096
 GCF_000721755.1_Aureobasidium_pullulans_var._subglaciale_EXF-2481_v1.0	ascomycetes A.subglaciale EXF-2481
+GCA_026319385.1_ASM2631938v1	ascomycetes A.sydowii (AS31 2022)
+GCA_026319405.1_ASM2631940v1	ascomycetes A.sydowii (AS42 2022)
 GCA_001890705.1_Aspsy1	ascomycetes A.sydowii (CBS 593.65 2016)
 GCA_009193685.1_ASM919368v1	ascomycetes A.sydowii (Fsh102 2019)
 GCA_040113305.1_ASM4011330v1	ascomycetes A.sydowii (PKU 374 2024)
@@ -883,6 +886,7 @@ GCA_014849695.1_ASM1484969v1	ascomycetes C.carpinicola (M9290 2020)
 GCA_001700775.1_ASM170077v1	ascomycetes C.carrionii (KSF 2016)
 GCF_000365165.1_Clad_carr_CBS_160_54_V1	ascomycetes C.carrionii CBS 160.54
 GCF_026319265.1_ASM2631926v1	ascomycetes C.chrysophilum (AFK26 2022)
+GCA_016808195.1_ASM1680819v1	ascomycetes C.chrysosperma (Cn-1 2021)
 GCA_023920165.1_ASM2392016v1	ascomycetes C.clavata (yc1106 2022)
 GCF_000585585.1_Capr_coro_CBS_617_96_V1	ascomycetes C.coronata CBS 617.96
 GCF_030867565.1_CCOSS01	ascomycetes C.costaricense (IMI 309622  2023)
@@ -892,6 +896,7 @@ GCF_000365145.1_Phia_euro_CBS_101466_V1	ascomycetes C.europaea CBS 101466
 GCF_033439085.1_Chafi1	ascomycetes C.fimeti (CBS 168.71 2023)
 GCF_026319165.1_ASM2631916v1	ascomycetes C.fioriniae (ACFK16 2022)
 GCF_027942845.1_ASM2794284v1	ascomycetes C.fioriniae (IMI 355084 2023)
+GCA_000582985.1_CFIO01	ascomycetes C.fioriniae (PJ7 2014)
 GCF_009771025.1_ASM977102v1	ascomycetes C.fructicola
 GCF_000319635.2_ASM31963v2	ascomycetes C.fructicola (Nara gc5 2020)
 GCF_001636725.1_ISF_1.0	ascomycetes C.fumosorosea ARSEF 2679
@@ -916,6 +921,7 @@ GCA_014849795.1_ASM1484979v1	ascomycetes C.japonica (IF-6 2020)
 GCA_014851275.1_ASM1485127v1	ascomycetes C.japonica (M9249 2020)
 GCF_011947395.1_ASM1194739v2	ascomycetes C.karsti
 GCF_019650295.1_Ck_assembly01	ascomycetes C.kikuchii
+GCA_003386485.1_ASM338648v1	ascomycetes C.lentis (CT-30 2018)
 GCF_023278565.1_ASM2327856v1	ascomycetes C.lupini (IMI 504893 2022)
 GCA_004802535.1_ASM480253v1	ascomycetes C.macrospora (CBS 109764 2019)
 GCF_017655625.1_BP57	ascomycetes C.metapsilosis (2021)
@@ -963,6 +969,7 @@ GCA_014849275.1_ASM1484927v1	ascomycetes C.radicalis (M2268 2020)
 GCA_003264845.1_ASM326484v1	ascomycetes C.radicalis (M2270 2018)
 GCA_014849355.1_ASM1484935v1	ascomycetes C.radicalis (M283 2020)
 GCA_014850315.1_ASM1485031v1	ascomycetes C.radicalis (M4733 2020)
+GCA_026769995.1_ASM2676999v1	ascomycetes C.rosea (GU-9 2022)
 GCF_011075155.1_ASM1107515v1	ascomycetes C.scovillei
 GCF_013390195.1_ASM1339019v1	ascomycetes C.siamense
 GCA_000170175.2_CPS2	ascomycetes C.Silveira (Silveira 2011)
@@ -972,6 +979,7 @@ GCF_033439665.1_Achstr1	ascomycetes C.strumarium (CBS 333.67 2023)
 GCF_030869305.1_CTAM01	ascomycetes C.tamarilloi (Tom-12  2023)
 GCF_020726465.1_Chagl1	ascomycetes C.tenue (MPI-SDFR-AT-0079 2021)
 GCF_000221225.1_CTHT_3.0	ascomycetes C.thermophilum var. thermophilum DSM 1495
+GCA_001625265.1_Ct0861v1	ascomycetes C.tofieldiae (0861 2016)
 GCA_021019025.2_ASM2101902v2	ascomycetes C.tropicalis (C4 2024)
 GCA_024220415.1_ASM2422041v1	ascomycetes C.tropicalis (CBW-2 2022)
 GCA_017315405.1_ASM1731540v1	ascomycetes C.tropicalis (MYA-3404 2021)
@@ -982,6 +990,7 @@ GCA_023373895.1_ASM2337389v1	ascomycetes C.tropicalis (PNY 2022)
 GCA_002864075.1_CtY66041.0	ascomycetes C.tropicalis (Y6604 2018)
 GCF_014235925.1_CTRU02	ascomycetes C.truncatum (v1 WU-2223L 2020)
 GCF_014235925.2_CTRU02v2	ascomycetes C.truncatum (v2 CMES1059 2024)
+GCA_003327735.1_ASM332773v1	ascomycetes C.viswanathii (ATCC 20962 2018)
 GCF_000585515.1_Clad_yegr_CBS_114405_V1	ascomycetes C.yegresii CBS 114405
 GCF_010015565.1_Disac1	ascomycetes D.aciculare CBS 342.82
 GCF_026229845.1_ASM2622984v1	ascomycetes D.amygdali (CAA958 2022)
@@ -1783,6 +1792,7 @@ GCA_014282265.3_NRCB_FocR1_VCG01213_16	ascomycetes F.oxysporum f. sp. cubense (B
 GCA_000350345.1_Foc1_1.0	ascomycetes F.oxysporum f. sp. cubense (race 1 2013)
 GCA_027920445.1_ASM2792044v1	ascomycetes F.oxysporum f. sp. cubense (race 4 2023)
 GCA_011316005.3_NRCB_FocR1_VCG0124	ascomycetes F.oxysporum f. sp. cubense (TC1-1 2021)
+GCA_007994515.1_ASM799451v1	ascomycetes F.oxysporum f. sp. cubense (TR4 UK0001 2019)
 GCA_016802205.1_NRCB_FocSTR4_VCG0120	ascomycetes F.oxysporum f. sp. cubense (VCG0120 2021)
 GCA_016802195.1_NRCB_FocR1_VCG0125	ascomycetes F.oxysporum f. sp. cubense (VCG0125 2021)
 GCA_016802225.1_NRCB_FocR1_VCG01220	ascomycetes F.oxysporum f. sp. cubense race 1 (VCG01220 2021)
@@ -2049,6 +2059,7 @@ GCA_029603225.1_F2	ascomycetes F.solani (2023)
 GCA_027945525.1_F_sol_A01-1	ascomycetes F.solani (A01-1 2023)
 GCA_045529305.1_TL_NS_CBS140079	ascomycetes F.solani (CBS 140079 2024)
 GCA_046630155.1_DGL_Fsol_CSH_7	ascomycetes F.solani (CSH_7 2025)
+GCA_020744495.1_Fusso1	ascomycetes F.solani (FSSC 5 MPI-SDFR-AT-0091 2021)
 GCA_027574645.1_ASM2757464v1	ascomycetes F.solani (GU-3 2023)
 GCA_002215905.1_ASM221590v1	ascomycetes F.solani (JS-169 2017)
 GCA_024220475.1_Fusarium_solani_Karbala-1	ascomycetes F.solani (Karbala-1 2022)
@@ -2236,6 +2247,7 @@ GCF_000150115.1_ASM15011v1	ascomycetes H.capsulatum G186AR
 GCF_000149585.1_ASM14958v1	ascomycetes H.capsulatum NAm1
 GCA_000151005.2_ASM15100v2	ascomycetes H.capsulatum var. duboisii (H88 2011)
 GCA_017310615.1_ASM1731061v1	ascomycetes H.capsulatum var. duboisii (H88 2021)
+GCA_021399475.1_Hyafin1	ascomycetes H.finlandica (PMI_746 2022)
 GCF_022984875.1_Hypfra2	ascomycetes H.fragiforme (CBS 206.31 2022)
 GCA_014183025.1_ASM1418302v1	ascomycetes H.lauricola (RL4 2020)
 GCA_000149585.1_ASM14958v1	ascomycetes H.mississippiense (NAm1 2007)
@@ -2308,6 +2320,9 @@ GCF_000150975.2_MS_CBS118893	ascomycetes N.gypsea CBS 118893
 GCF_033458365.1_Neuhi1	ascomycetes N.hispaniola (FGSC 10403 2023)
 GCA_052058435.1_ASM5205843v1	ascomycetes N.intermedia (NRRL 2884 2025)
 GCF_022829205.1_ASM2282920v1	ascomycetes N.moseri (CBS 164.80 2022)
+GCA_020912385.1_ASM2091238v1	ascomycetes N.parvum (DUCC19944 2021)
+GCA_030270345.1_Np_assembly_02	ascomycetes N.parvum (PPO83 2023)
+GCA_000385595.1_UCRNP2V3	ascomycetes N.parvum (UCRNP2 2013)
 GCF_041146345.1_N_Populina_1.0	ascomycetes N.populina (CPC 39397 2024)
 GCF_000213175.1_v2.0	ascomycetes N.tetrasperma FGSC 2508
 GCF_033439725.1_Gelte1	ascomycetes N.tetraspora (CBS 560.94 2023)
@@ -2378,12 +2393,14 @@ GCA_000769735.1_ASM76973v1	ascomycetes P.expansum (d1 2014)
 GCF_000516985.1_PFICI	ascomycetes P.fici W106-1
 GCF_000340215.1_Mycfi2	ascomycetes P.fijiensis CIRAD86
 GCF_004355905.1_PgNI	ascomycetes P.grisea (NI907 2019)
+GCA_020557365.1_ASM2055736v1	ascomycetes P.griseofulvum (D-756 2021)
 GCF_001561935.1_ASM156193v1	ascomycetes P.griseofulvum PG3
 GCF_028827665.1_ASM2882766v1	ascomycetes P.hispanicum (IBT 35686 2023)
 GCF_028827395.1_ASM2882739v1	ascomycetes P.hordei (IBT 12815 2023)
 GCF_010093815.1_Psehy1	ascomycetes P.hyperparasitica
 GCA_000333975.2_ASM33397v2	ascomycetes P.jirovecii (SE8 2012)
 GCF_001477535.1_Pneu_jiro_RU7_V2	ascomycetes P.jirovecii RU7
+GCA_019096115.1_ASM1909611v1	ascomycetes P.kluyveri (X31-10 2021)
 GCA_019843505.1_ASCUSDY21	ascomycetes P.kudriavzevii (2021)
 GCA_041903555.1_BM01SB	ascomycetes P.kudriavzevii (ATCC 6258 2024)
 GCA_037040875.1_ASM3704087v1	ascomycetes P.kudriavzevii (B114-03 2024)
@@ -2443,6 +2460,7 @@ GCA_002072375.1_ASM207237v1	ascomycetes P.steckii (IBT 24891 2017)
 GCF_028828155.1_ASM2882815v1	ascomycetes P.subrubescens (IBT 31985 2023)
 GCF_022605165.1_ASM2260516v1	ascomycetes P.takamizusanense
 GCF_028828555.1_ASM2882855v1	ascomycetes P.taxi (IBT 34144 2023)
+GCA_010093695.1_Photr1	ascomycetes P.tracheiphilus (IPT5 2020)
 GCF_003171515.1_CUR_PTRM4_2.2	ascomycetes P.tritici-repentis (M4 2021)
 GCF_000149985.1_ASM14998v1	ascomycetes P.tritici-repentis Pt-1C-BFP
 GCF_028828195.1_ASM2882819v1	ascomycetes P.verhagenii (IBT 33310 2023)
@@ -2529,6 +2547,7 @@ GCA_051944165.1_ASM5194416v1	ascomycetes T.mentagrophytes (CBS 435.73 2025)
 GCA_047301425.1_ASM4730142v1	ascomycetes T.mentagrophytes (LL-2024a 2025)
 GCA_003118255.1_ABySS_70bp_45k_152cov_v1	ascomycetes T.mentagrophytes (TIMM 2789 2018)
 GCF_010094035.1_Trepe1	ascomycetes T.pertusa
+GCA_030278935.1_ASM3027893v1	ascomycetes T.polysporum (HZ-31 2023)
 GCF_024521635.1_Tripra1	ascomycetes T.praecox (CBS 144465 2022)
 GCF_021365285.1_Talpro1	ascomycetes T.proteolyticus
 GCA_001270325.1_PPv01	ascomycetes T.purpureogenus (MYA-38 2015)
@@ -2663,6 +2682,7 @@ GCA_003689165.1_ASM368916v1	ascomycetes V.inaequalis (domRvi6 QWWW01 2018)
 GCA_003689135.1_ASM368913v1	ascomycetes V.inaequalis (domRvi6 QWWX01 2018)
 GCA_003689115.1_ASM368911v1	ascomycetes V.inaequalis (domRvi6 QWWY01 2018)
 GCA_002148305.1_Vi1.14.1.0	ascomycetes V.inaequalis (EU-B04 2016)
+GCA_003689225.1_ASM368922v1	ascomycetes V.inaequalis (EU-B04 2018)
 GCA_003689095.1_ASM368909v1	ascomycetes V.inaequalis (FLO QWXA01 2018)
 GCA_003693075.1_ASM369307v1	ascomycetes V.inaequalis (FLO QWXB01 2018)
 GCA_003690625.1_ASM369062v1	ascomycetes V.inaequalis (FLO QWXC01 2018)
@@ -2900,6 +2920,7 @@ GCF_024613125.1_Pisori2	basidiomycetes P.orientalis (OTSU 2022)
 GCF_000006255.1_Postia_placenta_V1.0	basidiomycetes P.placenta (Mad-698-R 2009)
 GCA_002117355.1_PosplRSB12_1	basidiomycetes P.placenta (MAD-698-R-SB12 2017)
 GCF_002117355.1_PosplRSB12_1	basidiomycetes P.placenta MAD-698-R-SB12
+GCA_012980535.1_ASM1298053v1	basidiomycetes P.pulmonarius (PM_ss5 2020)
 GCA_022160315.1_Panru1	basidiomycetes P.rudis ss-1 (PR-1116 2022)
 GCA_047370925.1_ASM4737092v1	basidiomycetes P.sp. (L20-19 2025)
 GCF_000264995.1_Punctularia_strigosozonata_v1.0	basidiomycetes P.strigosozonata HHB-11173 SS5
@@ -2914,7 +2935,9 @@ GCA_004355085.1_Ricmel1	basidiomycetes R.mellea (SZMC22713 2019)
 GCA_015832375.1_TUM_RhoPla_FPRL280	basidiomycetes R.placenta (FPRL280 2020)
 GCA_004679265.1_ASM467926v1	basidiomycetes R.roseus (DSM 105464 2019)
 GCF_022264815.1_Fomros1	basidiomycetes R.roseus CIRM-BRFM 1785
+GCA_028551635.1_AG1IA_BRS1_1.0	basidiomycetes R.solani (AG1-IA_BRS1 2023)
 GCF_016906535.1_ASM1690653v1	basidiomycetes R.solani AG-1 IA
+GCA_000320785.2_RHOziaDV1.0	basidiomycetes R.toruloides (NP11 2013)
 GCF_000320785.1_RHOziaDV1.0	basidiomycetes R.toruloides NP11
 GCA_000313545.1_ASM31354v1	basidiomycetes S.11827 (DSM 11827 2012)
 GCF_016758785.1_Suibov1	basidiomycetes S.bovinux UH-Sbo-P2
@@ -2950,6 +2973,7 @@ GCA_965199485.1_gfSpaMino1.hap2.1	basidiomycetes S.minoensis (gfSpaMino1.hap2.1 
 GCA_964035595.1_gfSpoDele1	basidiomycetes S.occarium (2024)
 GCA_004332605.1_INBI_StOhra_v1.0	basidiomycetes S.ochraceum (LE-BIN_3174 2019)
 GCF_016628075.1_Suipal1	basidiomycetes S.paluster FC165
+GCA_049640115.1_ASM4964011v1	basidiomycetes S.pararoseus (TR71 2025)
 GCF_016647745.1_Suiplo1	basidiomycetes S.plorans S12
 GCF_016647625.1_Suisu1	basidiomycetes S.subalutaceus FC151
 GCF_016647635.1_Suisub1	basidiomycetes S.subaureus MN1
@@ -3072,6 +3096,7 @@ GCA_025767825.1_ASM2576782v1	budding yeast C.parapsilosis (Y4602 2022)
 GCF_003013735.1_Cand_pseudohaemulonii_B12108	budding yeast C.pseudohaemulonis
 GCF_024610245.1_ASM2461024v1	budding yeast C.pseudojiufengensis (CBS 10847 2022)
 GCF_035610405.1_ASM3561040v1	budding yeast C.saopauloensis (19XY460 2024)
+GCA_019280635.1_ASM1928063v1	budding yeast C.sp. (LN1 2021)
 GCF_019202705.1_ASM1920270v1	budding yeast C.subhashii (CBS 10753 2021)
 GCF_024610275.1_ASM2461027v1	budding yeast C.theae (CBS 12239 2022)
 GCA_000633855.1_ASM63385v1	budding yeast C.tropicalis (121 2014)
@@ -3140,6 +3165,7 @@ GCF_000938715.1_LALA0	budding yeast L.lanzarotensis
 GCF_029532465.1_Liptet1	budding yeast L.tetrasporus (NRRL Y-64009 2023)
 GCF_000142805.1_ASM14280v1	budding yeast L.thermotolerans CBS 6340
 GCF_001664035.1_Metbi1	budding yeast M.bicuspidata var. bicuspidata NRRL YB-4993
+GCA_900497725.1_magCapA	budding yeast M.capitatus NRRL Y-17686 (2018)
 GCA_900174495.1_MGUIL.PP1	budding yeast M.guilliermondii (2017)
 GCA_000149425.1_ASM14942v1	budding yeast M.guilliermondii (ATCC 6260 2007)
 GCA_051546255.1_ASM5154625v1	budding yeast M.guilliermondii (ATCC 6260 2025)
@@ -3649,6 +3675,7 @@ GCA_900239735.1_BGH_DH14_v4	grass mildew (Golden Promise 2018)
 GCA_000417025.1_ASM41702v1	grass mildew (JIW2 2013)
 GCA_900237765.1_BghRACE1_v1	grass mildew (RACE1 RACE1 2018)
 GCA_905067625.1_Bgtriticale_THUN12_genome_v1_2	grass mildew (THUN-12 2021)
+GCA_006506795.2_HeCS-4_2.0	lion's mane mushroom (CS-4 2020)
 GCF_017499595.1_MGC_Penvy_1	magic mushroom
 GCA_003313135.1_ASM331313v1	maitake (MG88 2018)
 GCA_041464085.1_ASM4146408v1	maitake (SiL91 2024)
@@ -3791,10 +3818,17 @@ GCA_037040325.1_ASM3704032v1	mucoromycotan M.sp. (M7501 2024)
 GCA_040807105.1_ASM4080710v1	mucoromycotan M.sp. (PG5414 2024)
 GCF_035048745.1_Mvel_NIH1002.PB.canu.pilon.trimmedMito	mucoromycotan M.velutinosus (NIH1002 2024)
 GCA_011764055.1_ASM1176405v1	mucoromycotan R.arrhizus (GL1 2020)
+GCA_011801785.2_ASM1180178v2	mucoromycotan R.arrhizus (GL10 2020)
 GCA_011764025.1_ASM1176402v1	mucoromycotan R.arrhizus (GL11 2020)
+GCA_011801705.2_ASM1180170v2	mucoromycotan R.arrhizus (GL2 2020)
 GCA_011764185.1_ASM1176418v1	mucoromycotan R.arrhizus (GL21 2020)
+GCA_011801675.2_ASM1180167v2	mucoromycotan R.arrhizus (GL26 2020)
+GCA_011951295.2_ASM1195129v2	mucoromycotan R.arrhizus (GL3 2020)
+GCA_011801725.2_ASM1180172v2	mucoromycotan R.arrhizus (GL30 2020)
 GCA_011952145.2_ASM1195214v2	mucoromycotan R.arrhizus (GL37 2020)
 GCA_011764225.1_ASM1176422v1	mucoromycotan R.arrhizus (GL4 2020)
+GCA_011951285.2_ASM1195128v2	mucoromycotan R.arrhizus (GL42 2020)
+GCA_011950985.2_ASM1195098v2	mucoromycotan R.arrhizus (GL43 2020)
 GCA_011801495.1_ASM1180149v1	mucoromycotan R.arrhizus (GL45 2020)
 GCA_011764265.1_ASM1176426v1	mucoromycotan R.arrhizus (GL5 2020)
 GCA_011952045.2_ASM1195204v2	mucoromycotan R.arrhizus (GL6 2020)
@@ -3887,6 +3921,7 @@ GCF_050403365.1_S_koalae_JCM15063v1	rust S.koalae (JCM15063 2024)
 GCF_050403485.1_S_salmoneus_JCM6883v1	rust S.salmoneus (JCM6883 2024)
 GCA_000785685.1_ASM78568v1	rust U.viciae-fabae (I2 2014)
 GCF_021015755.1_Lenedo1	shiitake mushroom
+GCA_002003045.1_Lened_assembly01	shiitake mushroom (NBRC 111202 2017)
 GCF_000417875.1_Pflocc_1.0	smut fungi A.flocculosa PF-1
 GCA_014826065.1_ASM1482606v1	smut fungi A.panici-leucophaei (SPL10 2020)
 GCA_040365765.1_JCM_8976_assembly_v001	smut fungi F.acheniorum (JCM 8976 2024)

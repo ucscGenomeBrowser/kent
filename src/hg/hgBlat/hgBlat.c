@@ -2687,6 +2687,8 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cfgInitCgi();
+
 enteredMainTime = clock1000();
 /* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgBlat", delayFraction, 0, 0, "html");
@@ -2697,7 +2699,8 @@ autoBigPsl = cfgOptionBooleanDefault("autoBlatBigPsl", autoBigPsl);
 
 /* org has precedence over db when changeInfo='orgChange' */
 
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+char *cookieName = hUserCookie();
+cartEmptyShell(doMiddle, cookieName, excludeVars, oldVars);
 cgiExitTime("hgBlat", enteredMainTime);
 return 0;
 }

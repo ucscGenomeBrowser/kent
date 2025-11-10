@@ -1,0 +1,69 @@
+# Mexico Biobank, Max, Nov 8 2025
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz /hive
+/data/genomes/hg19/bed/varFreqs/mexbb/MXBv2.vcf.gz /hive/data/genomes/hg38/p14Clean/hg38.p14.fa MXBv2.lift.hg19ToHg38.vcf && bgzip MXBv2.lift.hg19ToHg38.vcf && bcftools sort MXBv2.lift.hg19ToHg38.vcf -Oz -m 200G -T /data/tmp/ -o MXBv2.lift.hg19ToHg38.vcf.gz && tabix -p vcf MXBv2.lift.hg19ToHg38.vcf.gz
+
+# Mexico City Prospective study, Max Oct 28 2025
+cd /hive/data/genomes/hg38/bed/varFreqs/mcps/
+for i in `seq 1 22` X; do wget https://rgc-mcps.regeneron.com/downloads/20230130/chr$i.freq.vcf.gz; done
+for i in `seq 1 22` X; do wget https://rgc-mcps.regeneron.com/downloads/20230130/chr$i.freq.vcf.gz.tbi; done
+mv *vcf* vcf/
+bcftools concat  --threads 16  -Oz -o mcps.freq.vcf.gz vcf/chr{1..22}.freq.vcf.gz vcf/chrX.freq.vcf.gz
+# make normal AC and AF and AN fields for mouseovers
+zcat mcps.freq.vcf.gz | sed -e 's/_RAW//g' > mcps.fix.freq.vcf
+mv -f mcps.fix.freq.vcf mcps.freq.vcf
+bgzip mcps.freq.vcf
+tabix -p vcf mcps.freq.vcf.gz 
+
+# Regeneron million exomes, Max, Nov 3 2025
+cd /hive/data/genomes/hg38/bed/varFreqs/me
+for i in `seq 1 22` X Y; do wget https://rgc-research.regeneron.com/me/downloads/20231004/rgc_me_variant_frequencies_chr${i}_20231004.vcf.gz.tbi; done
+bcftools concat  --threads 10  -Oz -o rgc_me_freqs_20231004.vcf.gz rgc_me_variant_frequencies_chr{1..22}_20231004.vcf.gz  rgc_me_variant_frequencies_chrX_20231004.vcf.gz rgc_me_variant_frequencies_chrY_20231004.vcf.gz 
+zcat rgc_me_freqs_20231004.vcf.gz | sed -e 's/ALL_//g' > rgc_me_freqs_20231004.fix.vcf
+tabix -p vcf rgc_me_freqs_20231004.vcf.gz
+
+# GA south asia 100k pilot
+cd /hive/data/genomes/hg38/bed/varFreqs/ga100k/
+parallel -j 8 wget -q --no-check-certificate https://browser.genomeasia100k.org/service/web/download_files/{}.substitutions.annot.cont_withmaf.vcf.gz ::: {1..22} X Y
+# fix the header line, remove "FORMAT"
+for i in *.vcf.gz; do echo "zcat $i |   awk 'BEGIN{OFS=\"\\t\"} /^#CHROM/{NF=8; print; next} /^#/ {print; next} {NF=8; print}' |   bgzip -c > fixed/$i" >> cmds.txt; done
+parallel -j 8 < cmds.txt
+bcftools concat  --threads 16  -Oz -o ../ga100k.subst.vcf.gz fixed/{1..22}.substitutions.annot.cont_withmaf.vcf.gz
+# add indels
+wget -q --no-check-certificate https://browser.genomeasia100k.org/service/web/download_files/All.indels.annot.cont_withmaf.vcf.gz
+# index
+tabix -p vcf ../ga100k*.vcf.gz
+tabix -p vcf All*.vcf.gz
+
+# TOPMED Freeze 10
+cd /hive/data/genomes/hg38/bed/varFreqs/topmed/
+# need to download the VCFs manually, 22 VCFs, with one time links from https://bravo.sph.umich.edu/vcfs.html
+# grrrr...
+bcftools concat  --threads 10  -Oz -o topmed10.vcf.gz {1..22}.vcf.gz X.vcf.gz 
+tabix -p vcf topmed10.vcf.gz
+
+# Abraom brazil
+# get unique download link from https://abraom.ib.usp.br/download/index.php
+cd /hive/data/genomes/hg38/bed/varFreqs/abraom/
+wget 'https://abraom.ib.usp.br/download/download-files.php?fid=RklEMTIzNDU2&key=1762266466-key690a0d62348de0.22872232' -O abraom.tar
+tar xvfz abraom.tar
+ln -s  /hive/data/genomes/hg38/p14Clean/hg38.p14.fa
+samtools faidx hg38.p14.fa 
+python ~/kent/src/hg/makeDb/scripts/abraomToVcf.py SABE1171.Abraom.clean.tsv abraom.vcf hg38.p14.fa
+tabix -p vcf abraom.vcf.gz 
+
+# SGDP
+cd /hive/data/genomes/hg38/bed/varFreqs/sgp/
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz /hive/data/genomes/hg19/bed/varFreqs/sgdp/SGDP.nh2.vcf.gz hg38.p14.fa sgdp.hg38.nh2.vcf
+bgzip sgdp.hg38.nh2.vcf
+bcftools sort sgdp.hg38.nh2.vcf.gz -Oz -m 200G -T /data/tmp/ -o sgdp.hg38.nh2.sort.vcf.gz 
+mv sgdp.hg38.nh2.sort.vcf.gz SGDP.nh2.vcf.gz
+tabix -p vcf SGDP.nh2.vcf.gz
+
+# KOVA
+cd /hive/data/genomes/hg38/bed/varFreqs/sgp/
+# got tsv file via google drive link from 장인수 <insoo078@kribb.re.kr> 
+# VCF converter, written by Claude Opus 4.1 using 2 lines of example input
+python ~/kent/src/hg/makeDb/scripts/kovaToVcf.py 1_KOVA.v7.tsv.gz kova.v7.vcf
+bgzip kova.v7.vcf
+tabix -p vcf kova.v7.vcf.gz
+

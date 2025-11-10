@@ -221,6 +221,7 @@ jsIncludeFile("hgMyData.js", NULL);
 webIncludeFile("inc/hgMyData.html");
 webIncludeResourceFile("hgMyData.css");
 
+jsInlineF("\nvar isLoggedIn = %s;\n", getUserName() ? "true" : "false");
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
