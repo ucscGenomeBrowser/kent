@@ -1,37 +1,26 @@
 track varFreqs
 shortLabel Variant Frequencies
-longLabel Variant Frequencies from various population- or cohort-specific Projects
+longLabel Variant Frequencies from various population-specific or national Projects
 group varRep
 type bed 12
 visibility hide
 superTrack on
 
         track mexbb
-        shortLabel Mexico Biobank
-        longLabel Variant Frequencies: Mexico Biobank
+        shortLabel Mexico Biobank, 6k Array
+        longLabel Phased Variants: Mexico Biobank 6k Array
         tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mexbb/MXBv2.vcf.gz
         visibility pack
         type vcfTabix
         hapClusterEnabled true
-        dataVersion Nov 2025
+        dataVersion Nov 2025 (hg38 lift)
         priority 0.5
 
-        track mcps
-        shortLabel Mexico City Prospective Study 
-        longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
-        tableBrowser off
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
-        visibility pack
-        type vcfTabix
-        dataVersion May 2023 (v1.2.0)
-        priority 3
-
         track me
-        shortLabel Regeneron Million Exomes
-        longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project
+        shortLabel Regeneron Million Exomes 983k WES
+        longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
         tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
@@ -42,8 +31,8 @@ superTrack on
         priority 1
 
         track topmed
-        shortLabel NHLBI TOPMED 10
-        longLabel Variant Frequencies: NHLBI TOPMED
+        shortLabel NHLBI TOPMED 10 151k WGS
+        longLabel Variant Frequencies: NHLBI TOPMED - 151k WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
@@ -51,8 +40,19 @@ superTrack on
         visibility pack
         priority 2
 
+        track mcps
+        shortLabel Mexico City Prospective Study 10k WGS+141k WES
+        longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
+        tableBrowser off
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        visibility pack
+        type vcfTabix
+        dataVersion May 2023 (v1.2.0)
+        priority 3
+
         track tommo60kjpn
-        shortLabel Japan 61k ToMMO 
+        shortLabel Japan ToMMO 61k WGS
         longLabel Variant Frequencies: Japan 61k - ToMMO SNV+Indels
         type vcfTabix
         parent varFreqs on
@@ -67,15 +67,13 @@ superTrack on
         visibility pack
         itemRgb on
         type bigBed 9 + .
-        shortLabel NCBI ALFA 
-        longLabel Variant Frequencies: NCBI ALFA (Allele Frequency Aggregator) from dbGaP
+        shortLabel NCBI ALFA 408k WGS/WES/array
+        longLabel Variant Frequencies: NCBI ALFA (Allele Frequency Aggregator) from dbGaP - 408k mixed WGS/WES/array
         mouseOverField frequency
         html ALFA.html
         filter.score 10
-        #filterByRange.score on
-        #filterLimits.score 400:500
-        #filterValues.name rs1424773263,rs2531320
         priority 4
+        dataVersion R4
 
              track ALFA_GLB
              parent ALFA on
@@ -174,29 +172,73 @@ superTrack on
              urlLabel NCBI Variation Page
 
         track hgdp
-        shortLabel Human Genome Diversity Project
-        longLabel Variant Frequencies: Human Genome Diversity Project (HGDP) - 1043 samples from indigenous and isolated populations
+        shortLabel Human Genome Diversity Project, 1k WGS
+        longLabel Phased Variants: Human Genome Diversity Project (HGDP) - 1043 samples, isolated populations
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hgdp/hgdp_wgs.20190516.full.vcf.gz
         visibility pack
         dataVersion 2019-05-16
+        priority 0.1
+
+        track sgdp
+        shortLabel Simons Genome Diversity Project 0.3k WGS
+        longLabel Phased Variants: Simons Genome Diversity Project - 279 samples, unmixed populations
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/sgdp/SGDP.nh2.vcf.gz
+        visibility pack
+        dataVersion 2016-12-07 public (hg38 lift)
+        priority 0.2
+
+        track hgdp1k
+        shortLabel gnomAD HGDP+1000G 4k WGS
+        longLabel Phased Variants: gnomAD HGDP + 1000 genomes callset - 4094 whole genomes, 80 populations
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/hgdp1k/hgdp1k.vcf.gz
+        visibility pack
+        dataVersion v 3.1.2
+        priority 0.3
 
         track gasp
-        shortLabel GenomeAsia Pilot Subs
+        shortLabel GenomeAsia Pilot Subs 1.7k WGS
         longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
         visibility pack
-        #dataVersion GAsP Pilot: 1,739 individuals
 
         track gaspIndel
-        shortLabel GenomeAsia Pilot Indels
+        shortLabel GenomeAsia Pilot Indels 1.7k WGS
         longLabel Variant Frequencies: GenomeAsia Pilot - Indels
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
         visibility pack
-        #dataVersion GAsP Pilot: 1,739 individuals
+
+        track abraom
+        shortLabel Brazil ABraOM 1k WGS
+        longLabel Variant Frequencies: ABraOM Brazil - 1,171 unrelated individuals
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
+        visibility pack
+
+        track indigenomes
+        shortLabel India IndiGenomes 1k WGS
+        longLabel Variant Frequencies: IndiGenomes India - 1,029 samples
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
+        visibility pack
+
+        track kova
+        shortLabel Korea KOVA 1.9k WGS+3.5k WES
+        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.5k WES
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz
+        visibility pack
+        tableBrowser off
 
