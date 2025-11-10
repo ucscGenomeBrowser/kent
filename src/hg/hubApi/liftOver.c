@@ -70,20 +70,32 @@ static void listExisting()
 {
 long long itemCount = 0;
 char *filter = cgiOptionalString(argFilter);
+char *fromDb = cgiOptionalString(argFromGenome);
+char *toDb = cgiOptionalString(argToGenome);
 
 struct sqlConnection *conn = hConnectCentral();
 char *tableName = cloneString(liftOverChainTable());
-char query[1024];
-sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s", tableName);
-long long totalRows = sqlQuickLongLong(conn, query);
+struct dyString *query = newDyString(0);
+sqlDyStringPrintf(query, "SELECT count(*) FROM %s", tableName);
+long long totalRows = sqlQuickLongLong(conn, dyStringContents(query));
+dyStringClear(query);
 
-if (isEmpty(filter))
+if (isNotEmpty(fromDb) || isNotEmpty(toDb))
     {
-    sqlSafef(query, sizeof(query), "SELECT fromDb,toDb FROM %s LIMIT %d", tableName, maxItemsOutput);
+    sqlDyStringPrintf(query, "SELECT fromDb,toDb FROM %s WHERE ", tableName);
+    if (isNotEmpty(fromDb))
+        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') %s ", fromDb, isNotEmpty(toDb) ? "AND" : "");
+    if (isNotEmpty(toDb))
+        sqlDyStringPrintf(query, "LOWER(toDb) = LOWER('%s') ", toDb);
+    sqlDyStringPrintf(query, "LIMIT %d;", maxItemsOutput);
+    }
+else if (isNotEmpty(filter))
+    {
+    sqlDyStringPrintf(query, "SELECT fromDb,toDb FROM %s WHERE LOWER(fromDb) = LOWER('%s') OR LOWER(toDb) = LOWER('%s') LIMIT %d;", tableName, filter, filter, maxItemsOutput);
     }
 else
     {
-    sqlSafef(query, sizeof(query), "SELECT fromDb,toDb FROM %s WHERE LOWER(fromDb) = LOWER('%s') OR LOWER(toDb) = LOWER('%s') LIMIT %d;", tableName, filter, filter, maxItemsOutput);
+    sqlDyStringPrintf(query, "SELECT fromDb,toDb FROM %s LIMIT %d", tableName, maxItemsOutput);
     }
 
 char *dataTime = sqlTableUpdate(conn, tableName);
@@ -94,7 +106,7 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 
 jsonWriteListStart(jw, "existingLiftOvers");
-struct sqlResult *sr = sqlGetResult(conn, query);
+struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
