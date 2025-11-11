@@ -6,6 +6,8 @@ projects. Only the projects 1000 Genomes (its own track), HGDP, SGDP, HGDP+1k an
 All others provide only allele frequencies, their genotypes require signing a data access agreement.
 </p>
 
+<p>
+<b>Available on hg19 and hg38:</b></p>
 <ul>
     <li>
         <b><a href="https://www.mxbiobank.org/" target="_blank">Mexico Biobank (MXB)</a></b>:
@@ -36,7 +38,10 @@ All others provide only allele frequencies, their genotypes require signing a da
         public, so this track contains only 279 genomes. For details, see
         (Mallick et al, Nature 2016). The hg38 track was lifted from hg19.
     </li>
-
+</ul>
+<p>
+<b>Available only on hg38:</b></p>
+<ul>
     <li>
         <b><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7115999/"
         target="_blank"></a>Human Genome Diversity Project (HGDP)</b>:
@@ -180,23 +185,24 @@ letters.
 </p>
 
 <p>
-Full haplotype display - only for the MXB and HGDP tracks: In &quot;pack&quot; mode, this track
-sorts the haplotypes. This can be
+Full haplotype display - only for the <b>MXB</b> and <b>HGDP</b> tracks:
+In &quot;pack&quot; mode, this track sorts the haplotypes. This can be
 useful for determining the similarity between the samples and inferring
 inheritance at a particular locus.
-For a full description of how the display works, please see our 
-<a href="../goldenpath/help/hgVcfTrackHelp.html">Haplotype Display help page</a>.
-Briefly, each sample's phased and/or homozygous genotypes are split into haplotypes,
+Each sample's phased and/or homozygous genotypes are split into haplotypes,
 clustered by similarity around a central variant (in pink), and sorted for
 display by their position in the clustering tree. Click a variant to center on it.
 The tree (as space allows) is drawn in the label area next to the track image.
 Leaf clusters, in which all haplotypes are identical (at least for the variants
 used in clustering), are colored purple. 
 </p>
+<p>
+For a full description of how the display works, please see our 
+<a href="../goldenpath/help/hgVcfTrackHelp.html">Haplotype Display help page</a>.
 
 <p>
-For NCBI ALFA: This track has no single VCF with INFO fields, but uses multiple subtracks instead,
-one per ancestry.
+For <b>NCBI ALFA:</b> This track has no single VCF with INFO fields, but uses multiple subtracks
+instead, one per ancestry.
 </p>
 
 
@@ -209,27 +215,27 @@ data usually requires a click-through license on the respectice websites:
 </p>
 
 <p>
-MXB: Allele frequencies by geographical state and ancestry are available via
+<b>MXB:</b> Allele frequencies by geographical state and ancestry are available via
 the <a target="_blank" href="https://morenolab.shinyapps.io/mexvar/">MexVar platform</a>.
 Raw genotype data are available under controlled access at the
 EGA (Study: EGAS00001005797; Dataset: EGAD00010002361). For the VCFs, email
 andres.moreno@cinvestav.mx.
 </p>
 <p>
-MCPS: VCFs with summarized allele frequencies are available from
+<b>MCPS:</b> VCFs with summarized allele frequencies are available from
 the <a target="_blank" href="https://rgc-mcps.regeneron.com/">MCPS website</a>.
 </p>
 <p>
-Regeneron one million exomes: VCFs with summarized allele frequencies are available from
+<b>Regeneron one million exomes:</b> VCFs with summarized allele frequencies are available from
 the <a target="_blank" href="https://rgc-research.regeneron.com/me/resources">RGC ME website</a>.
 </p>
 <p>
-TOPMED: VCFs with summarized allele frequencies are available from
+<b>TOPMED:</b> VCFs with summarized allele frequencies are available from
 the <a target="_blank" href="https://bravo.sph.umich.edu/">TOPMED BRAVO website</a>. They require a
 login.
 </p>
 <p>
-GenomeAsia Pilot: VCFs are available from UCSC and also from the 
+<b>GenomeAsia Pilot:</b> VCFs are available from UCSC and also from the 
 the <a target="_blank"
 href="https://browser.genomeasia100k.org/#tid=download">GenomeAsia 100K website</a>.
 No license nor login.
@@ -237,7 +243,7 @@ No license nor login.
 
 <h2>Methods</h2>
 <p>
-MXB: Genotyping was performed with the Illumina Multi-Ethnic Global Array
+<b>MXB:</b> Genotyping was performed with the Illumina Multi-Ethnic Global Array
 (MEGA, ~1.8M SNPs), optimized for admixed populations and enriched for
 ancestry-informative and medically relevant variants. Only autosomal, biallelic
 SNPs passing quality control are included. Samples were selected from 898
@@ -247,19 +253,19 @@ of duplicates, update of map positions using dbSNP Build 151 and low-quality
 variants/individuals, and relatedness filtering.
 </p>
 <p>
-SGDP: The version used was
+<b>SGDP:</b> The version used was
 <a target="_blank" href="https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/"
 >https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/</a>,
 merged with bcftools and lifted to hg38 with CrossMap. 
 </p>
 <p>
-KOVA: V7 of the TSV.gz was obtained from the KOVA staff and converted to VCF. If it not available 
-for download from our site but can be requested from the KOVA website.
+<b>KOVA:</b> V7 of the TSV.gz was obtained from the KOVA staff and converted to VCF. If it not
+available for download from our site but can be requested from the KOVA website.
 </p>
 
 <h2>Credits</h2>
 <p>
-MXB: We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
+<b>MXB:</b> We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
 generating and providing the frequency data, the National Institute of Medical
 Sciences and Nutrition (INCMNSZ) for DNA extraction, and the Ministry of Health
 together with the National Institute of Public Health (INSP) for the design and
@@ -269,7 +275,7 @@ data processing that made possible the construction of the MXB genomic
 resource.
 </p>
 <p>
-MCPS: Data produced by Regeneron RGC and collaborators, which are the
+<b>MCPS:</b> Data produced by Regeneron RGC and collaborators, which are the
 University of Oxford, Universidad Nacional Aut&oacute;noma de M&eacute;xico (UNAM) and
 National Institute of Genomic Medicine in Mexico.
 The Regeneron Genetics Center, University of Oxford, Universidad Nacional
@@ -280,7 +286,7 @@ here. Any opinions, insights, or conclusions presented herein are those of the
 authors and not of the Collaborators. </p>
 </p>
 <p>
-Regeneron Million Exomes: The Regeneron Genetics Center, and its collaborators
+<b>Regeneron Million Exomes:</b> The Regeneron Genetics Center, and its collaborators
 (collectively, the &quot;Collaborators&quot;) bear no responsibility for the analyses or
 interpretations of the data presented here. Any opinions, insights, or
 conclusions presented herein are those of the authors and not of the
@@ -288,11 +294,12 @@ Collaborators. This research has been conducted using the UK Biobank Resource
 under application number 26041.
 </p>
 <p>
-SGDP: This project was funded by the Simons Foundation. Thanks to David Reich and Swapan 
+<b>SGDP:</b> This project was funded by the Simons Foundation. Thanks to David Reich and Swapan 
 Mallick for help with importing the data.
 </p>
 <p>
-KOVA: Thanks to Insu Jang and the KOVA director for providing variant frequencies in TSV format.
+<b>KOVA:</b> Thanks to Insu Jang and the KOVA director for providing variant frequencies in TSV
+format.
 </p>
 <p>Thanks to Alex Ioannidis, UCSC, and Andreas Lahner, MGZ, for feedback on this track.</p>
 
