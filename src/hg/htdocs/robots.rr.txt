@@ -35,7 +35,7 @@ Disallow: /cgi-bin/hgTracks*.customText*.
 Disallow: /cgi-bin/hgBlat*output=json*
 Disallow: /cgi-bin/hgGeneGraph*
 Disallow: /cgi-bin/hgRenderTracks*
-Disallow: /cgi-bin/*hgsid*
+Disallow: /trash/
 
 User-agent: *
 Disallow: /admin/stats/
@@ -44,3 +44,4 @@ Disallow: /goldenPath/certificates/
 Disallow: /cgi-bin/hgTracks*.customText*.
 Disallow: /cgi-bin/hgBlat*output=json*
 Disallow: /cgi-bin/hgGeneGraph*
+Disallow: /trash/
