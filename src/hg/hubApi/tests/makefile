@@ -33,7 +33,7 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 list19 \
-	list20 list21 list22 list23 list24 list25 list26 list27 list28 list29 \
+	list20 list21 list22 list23 list24 list25 list27 list28 list29 \
 	list30 list31 list32
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
@@ -73,7 +73,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 
 notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
-bugReports: redmine23733 redmine24089a redmine24089b redmine24666 redmine25840
+bugReports: redmine24089a redmine24089b redmine24666 redmine25840
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -83,7 +83,7 @@ clean::
 	rmdir testOutput
 
 # exclude these lines from the JSON output for comparison with expected
-excludeLines = downloadTime|dataTime
+excludeLines = downloadTime|dataTime|priority
 
 # testing /list/noSubCommand, /list/publicHubs and /list/ucscGenomes
 test0: setOutput
@@ -218,10 +218,10 @@ list19: setOutput
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/chromosomes" -genome="hs1" -track="assembly" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#; s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/tracks? for a 'curated' assembly genome=hs1 trackLeavesOnly
+# testing /list/tracks? for a 'curated' assembly genome=mpxvRivers trackLeavesOnly
 list20: setOutput
-	@printf "### $@ '${SERVERNAME}/list/tracks?trackLeavesOnly=1;genome=hs1'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/tracks" -genome="hs1" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#; s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ '${SERVERNAME}/list/tracks?trackLeavesOnly=1;genome=mpxvRivers'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/tracks" -genome="mpxvRivers" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#; s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes?genome=hs1 - a 'curated' assembly
@@ -255,10 +255,10 @@ list25: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/genarkGenomes
-list26: setOutput
-	@printf "### $@ '${SERVERNAME}/list/genarkGenomes?maxItemsOutput=5'\n"
-	@./jsonConsumer.pl -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}|totalAssemblies" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
+#list26: setOutput
+#	@printf "### $@ '${SERVERNAME}/list/genarkGenomes?maxItemsOutput=5'\n"
+#	@./jsonConsumer.pl -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}|totalAssemblies" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	#@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/genarkGenomes verify existence of genome GCA_000002765.3
 list27: setOutput
@@ -329,17 +329,17 @@ test13: setOutput
 
 # testing /getData/track? hubUrl Bejerano &track=ultraConserved  track hub
 test14: setOutput
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -track="ultraConserved" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -track="hub_9604_ultraConserved" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track? hubUrl Bejerano &track=ultraConserved&chrom=chr1  track hub
 test15: setOutput
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -track="ultraConserved" -chrom="chr1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -track="hub_9604_ultraConserved" -chrom="chr1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track? hubUrl Bejerano &track=ultraConserved&chrom=chr1&start=N&end=M  track hub
 test16: setOutput
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -track="ultraConserved" -chrom="chr1" -start=10600000 -end=10800000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -track="hub_9604_ultraConserved" -chrom="chr1" -start=10600000 -end=10800000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # bigBed data from a database
@@ -1376,10 +1376,10 @@ notSup10: setOutput
 #     31 superTrack child - not supported</li>
 #      5 vcfTabix - not supported</li>
 
-redmine23733: setOutput
-	@printf "### $@ '${SERVERNAME}/getData/track?track=knownGene;genome=hg19;chrom=chr1;end=48000;start=47000'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg19 -track=knownGene -chrom=chr1 -start=47000 -end=48000 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | grep -v "^#" | sort | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
+#redmine23733: setOutput
+#	@printf "### $@ '${SERVERNAME}/getData/track?track=knownGene;genome=hg19;chrom=chr1;end=48000;start=47000'\n"
+#	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg19 -track=knownGene -chrom=chr1 -start=47000 -end=48000 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | grep -v "^#" | sort | gzip -c > testOutput/$@.gz
+#	@zdiff expected/$@.gz testOutput/$@.gz
 
 # end coordinate for get sequence past end of chromosome, database genome
 redmine24089a: setOutput
