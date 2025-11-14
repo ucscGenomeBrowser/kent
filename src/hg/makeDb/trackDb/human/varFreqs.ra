@@ -1,5 +1,5 @@
 track varFreqs
-shortLabel Variant Frequencies
+shortLabel Variants of the World
 longLabel Variant Frequencies from various population-specific or national Projects
 group varRep
 type bed 12

@@ -19,12 +19,12 @@ static boolean useAC = FALSE;
 static struct slRef *accessControlTrackRefList = NULL;
 
 /* Caches used for searching */
-struct trackDb *hgFindTdbList = NULL;
 struct grp *hgFindGrpList = NULL;
 struct hash *hgFindGroupHash = NULL;
 
 /* Also used by hgFind and defined there */
 extern struct hash *hgFindTrackHash;
+extern struct trackDb *hgFindTdbList;
 
 static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp **pHubGroups)
 {

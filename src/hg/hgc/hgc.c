@@ -26862,6 +26862,14 @@ customTracksSaveCart(database, cart, theCtList);
 
 cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
+
+if (sameOk(cartOptionalString(cart, "autoRearr"), "1"))  
+    {
+    char snakeVar[256];
+    safef(snakeVar, sizeof snakeVar, "%s.doSnake", newCts->tdb->track);
+    cartSetString(cart, snakeVar, "1");
+    }
+
 }
 
 void doHPRCTable(struct trackDb *tdb, char *itemName)

@@ -56,6 +56,7 @@ char *hgAppName = "";
 
 /* Caches used by hgFind.c */
 struct hash *hgFindTrackHash = NULL;
+struct trackDb *hgFindTdbList = NULL;
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "intronEst", "all_est", "xenoEst", NULL };
@@ -3275,7 +3276,7 @@ while ((table = *tables++) != NULL)
     }
 
 // add hub tracks to list
-struct trackDb *hubList = hubCollectTracks(db, NULL);
+struct trackDb *hubList = hgFindTdbList;
 hubList = getSearchableBigBeds(hubList);
 for (tdb = hubList; tdb != NULL; tdb = tdb->next)
     {
