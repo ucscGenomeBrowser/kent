@@ -9,6 +9,7 @@ export statList="gbdbGenArkStat.${machName}.${DS}"
 export fileList="gbdbGenark.fl"
 export quickLiftFileList="gbdbQuickLift.fl"
 export quickLiftStat="gbdbQuickLiftStat.${machName}.${DS}"
+export liftOverStat="gbdbLiftOverStat.${machName}.${DS}"
 
 find -L /gbdb/genark/GCA /gbdb/genark/GCF -type d | sort \
   | gzip -c > /dev/shm/${directoryList}.gz
@@ -37,12 +38,26 @@ zcat /dev/shm/${quickLiftFileList}.gz | xargs stat -L --printf="%Y\t%n\n" \
 scp -p /dev/shm/${quickLiftStat}.gz \
   otto@hgwdev:/hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/ > /dev/null
 
+ls -d */liftOver | while read Q
+do
+  find -L ./${Q} -type f
+done | sed -e 's#^./##;' | sort | gzip -c > /dev/shm/${liftOverFileList}.gz
+
+zcat /dev/shm/${liftOverFileList}.gz | xargs stat -L --printf="%Y\t%n\n" \
+  | gzip -c > /dev/shm/${liftOverStat}.gz
+
+scp -p /dev/shm/${liftOverStat}.gz \
+  otto@hgwdev:/hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/ > /dev/null
+
 if [[ "${machName}" =~ ^(hgw1|hgwbeta)$ ]]; then
   scp -p /dev/shm/${statList}.gz \
     otto@hgwdev:/hive/data/inside/GenArk/pushRR/${machName}.todayList.gz > /dev/null
   scp -p /dev/shm/${quickLiftStat}.gz \
     otto@hgwdev:/hive/data/inside/GenArk/pushRR/${machName}.today.quickLiftList.gz > /dev/null
+  scp -p /dev/shm/${liftOverStat}.gz \
+    otto@hgwdev:/hive/data/inside/GenArk/pushRR/${machName}.today.liftOverList.gz > /dev/null
 fi
 
 rm -f /dev/shm/${fileList}.gz /dev/shm/${statList}.gz \
-   /dev/shm/${quickLiftStat}.gz /dev/shm/${quickLiftFileList}.gz
+   /dev/shm/${quickLiftStat}.gz /dev/shm/${quickLiftFileList}.gz \
+   /dev/shm/${liftOverStat}.gz /dev/shm/${liftOverFileList}.gz
