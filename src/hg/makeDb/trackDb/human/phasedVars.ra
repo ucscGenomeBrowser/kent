@@ -1,0 +1,50 @@
+track phasedVars
+shortLabel Phased Variants
+longLabel Phased Variants from various sequencing projects
+group varRep
+type bed 12
+visibility hide
+superTrack on
+
+        track mexbb
+        shortLabel Mexico Biobank, 6k Array
+        longLabel Phased Variants: Mexico Biobank 6k Array
+        tableBrowser off
+        parent phasedVars on
+        bigDataUrl /gbdb/$D/phasedVars/mexbb/MXBv2.vcf.gz
+        visibility pack
+        type vcfTabix
+        hapClusterEnabled true
+        dataVersion Nov 2025 (hg38 lift)
+        priority 1
+
+        track hgdp
+        shortLabel Human Genome Diversity Project, 1k WGS
+        longLabel Phased Variants: Human Genome Diversity Project (HGDP) - 1043 samples, isolated populations
+        type vcfTabix
+        parent phasedVars on
+        bigDataUrl /gbdb/$D/phasedVars/hgdp/hgdp_wgs.20190516.full.vcf.gz
+        visibility pack
+        dataVersion 2019-05-16
+        priority 2
+
+        track sgdp
+        shortLabel Simons Genome Diversity Project 0.3k WGS
+        longLabel Phased Variants: Simons Genome Diversity Project - 279 samples, unmixed populations
+        type vcfTabix
+        parent phasedVars on
+        bigDataUrl /gbdb/$D/phasedVars/sgdp/SGDP.nh2.vcf.gz
+        visibility pack
+        dataVersion 2016-12-07 public (hg38 lift)
+        priority 4
+
+        track hgdp1k
+        shortLabel gnomAD HGDP+1000G 4k WGS
+        longLabel Phased Variants: gnomAD HGDP + 1000 genomes callset - 4094 whole genomes, 80 populations
+        type vcfTabix
+        parent phasedVars on
+        bigDataUrl /gbdb/$D/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz
+        visibility pack
+        dataVersion v 3.1.2
+        priority 5
+
