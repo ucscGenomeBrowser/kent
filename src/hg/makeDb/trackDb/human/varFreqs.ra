@@ -1,22 +1,10 @@
 track varFreqs
-shortLabel Variants of the World
-longLabel Variant Frequencies from various population-specific or national Projects
+shortLabel Variant Frequencies
+longLabel Variant Frequencies from various cohorts or national projects
 group varRep
 type bed 12
 visibility hide
 superTrack on
-
-        track mexbb
-        shortLabel Mexico Biobank, 6k Array
-        longLabel Phased Variants: Mexico Biobank 6k Array
-        tableBrowser off
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mexbb/MXBv2.vcf.gz
-        visibility pack
-        type vcfTabix
-        hapClusterEnabled true
-        dataVersion Nov 2025 (hg38 lift)
-        priority 0.5
 
         track me
         shortLabel Regeneron Million Exomes 983k WES
@@ -28,7 +16,18 @@ superTrack on
         type vcfTabix
         hapClusterEnabled true
         dataVersion 10/04/2023, v1.1.3
+        tableBrowser off
         priority 1
+
+        track allofus
+        shortLabel AllOfUs v7 245k WGS
+        longLabel Variant Frequencies: AllOfUs - v7 245k WGS - BROKEN AFTER CHR8
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.sort.vcf.gz
+        dataVersion V7
+        visibility pack
+        priority 2.5
 
         track topmed
         shortLabel NHLBI TOPMED 10 151k WGS
@@ -68,7 +67,7 @@ superTrack on
         itemRgb on
         type bigBed 9 + .
         shortLabel NCBI ALFA 408k WGS/WES/array
-        longLabel Variant Frequencies: NCBI ALFA (Allele Frequency Aggregator) from dbGaP - 408k mixed WGS/WES/array
+        longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array
         mouseOverField frequency
         html ALFA.html
         filter.score 10
@@ -170,36 +169,6 @@ superTrack on
              type bigBed 9 + .
              url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
              urlLabel NCBI Variation Page
-
-        track hgdp
-        shortLabel Human Genome Diversity Project, 1k WGS
-        longLabel Phased Variants: Human Genome Diversity Project (HGDP) - 1043 samples, isolated populations
-        type vcfTabix
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/hgdp/hgdp_wgs.20190516.full.vcf.gz
-        visibility pack
-        dataVersion 2019-05-16
-        priority 0.1
-
-        track sgdp
-        shortLabel Simons Genome Diversity Project 0.3k WGS
-        longLabel Phased Variants: Simons Genome Diversity Project - 279 samples, unmixed populations
-        type vcfTabix
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/sgdp/SGDP.nh2.vcf.gz
-        visibility pack
-        dataVersion 2016-12-07 public (hg38 lift)
-        priority 0.2
-
-        track hgdp1k
-        shortLabel gnomAD HGDP+1000G 4k WGS
-        longLabel Phased Variants: gnomAD HGDP + 1000 genomes callset - 4094 whole genomes, 80 populations
-        type vcfTabix
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/hgdp1k/hgdp1k.vcf.gz
-        visibility pack
-        dataVersion v 3.1.2
-        priority 0.3
 
         track gasp
         shortLabel GenomeAsia Pilot Subs 1.7k WGS
