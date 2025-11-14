@@ -2134,13 +2134,19 @@ jsOnEventById("click", "allResultsText",
 printf("</TD>\n");
 
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
+printf("<label for='autoRearr'>");
 cgiMakeCheckBoxWithId("autoRearr", autoRearr, "autoRearr");
-printf("<span id=autoRearrText>Automatically Turn on Rearrangement Mode in Custom Tracks</span>");
-// clicking on the autoRearr text clicks the checkbox.
-jsOnEventById("click", "autoRearrText", 
-    "document.mainForm.autoRearr.click();"
-    "return false;"   // cancel the default
-    );
+printf("<span> Optimize for Rearrangements </span>");
+printf("</label>");
+printInfoIcon("Rearrangement display (aka 'snakes' tracks) can show "
+"duplications of the query sequence using multiple lines and lines between "
+"fragments, see our "
+"<a href='/goldenPath/help/chain.html#rearrangement'>"
+"snakes documentation page"
+"</a>"
+"for more "
+"details. You can also switch this on or off on the BLAT track configuration "
+"page by checking the 'Rearrangement display' box.");
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
