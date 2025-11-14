@@ -27,6 +27,16 @@ User-agent: YandexBot
 User-agent: YouBot
 Disallow: /
 
+User-agent: Googlebot
+Disallow: /admin/stats/
+Disallow: /goldenPath/certificate.html
+Disallow: /goldenPath/certificates/
+Disallow: /cgi-bin/hgTracks*.customText*.
+Disallow: /cgi-bin/hgBlat*output=json*
+Disallow: /cgi-bin/hgGeneGraph*
+Disallow: /cgi-bin/hgRenderTracks*
+Disallow: /trash/
+
 User-agent: *
 Disallow: /admin/stats/
 Disallow: /goldenPath/certificate.html
@@ -34,3 +44,4 @@ Disallow: /goldenPath/certificates/
 Disallow: /cgi-bin/hgTracks*.customText*.
 Disallow: /cgi-bin/hgBlat*output=json*
 Disallow: /cgi-bin/hgGeneGraph*
+Disallow: /trash/

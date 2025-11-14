@@ -4477,8 +4477,8 @@ else if (sameString(tg->table, PCR_RESULT_TRACK_NAME))
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
 highlight = (hgFindMatches != NULL &&
-	     ( hashIntValDefault(hgFindMatches, name, 0) == 1 ||
-	       hashIntValDefault(hgFindMatches, mapName, 0) == 1));
+	     ( ((name != NULL) && (hashIntValDefault(hgFindMatches, name, 0) == 1)) ||
+	       ((mapName != NULL) &&  hashIntValDefault(hgFindMatches, mapName, 0) == 1)));
 return highlight;
 }
 
@@ -7217,7 +7217,7 @@ if (isGencode3)
     words[0] = "bigGenePred";
     words[1] = "12";
     words[2] = 0;
-    complexBedMethods(tg, tg->tdb, TRUE, 2, words);
+    bigBedMethods(tg, tg->tdb,  2, words);
     return;
     }
 

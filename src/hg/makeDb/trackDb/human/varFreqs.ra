@@ -1,36 +1,14 @@
 track varFreqs
-shortLabel Variant Allele Frequencies
-longLabel Variant Allele Frequencies from various population- or cohort-specific Projects
+shortLabel Variant Frequencies
+longLabel Variant Frequencies from various cohorts or national projects
 group varRep
 type bed 12
 visibility hide
 superTrack on
 
-        track mexbb
-        shortLabel Mexico Biobank
-        longLabel Mexico Biobank
-        tableBrowser off
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mexbb/MXBv2.vcf.gz
-        visibility pack
-        type vcfTabix
-        hapClusterEnabled true
-        dataVersion Nov 2025
-
-        track mcps
-        shortLabel Mexico City Prospective Study 
-        longLabel Mexico City Prospective Study (MCPS)
-        tableBrowser off
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
-        visibility pack
-        type vcfTabix
-        hapClusterEnabled true
-        dataVersion May 2023 (v1.2.0)
-
         track me
-        shortLabel Million Exomes
-        longLabel Regeneron One Million Exomes (ME) Project
+        shortLabel Regeneron Million Exomes 983k WES
+        longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
         tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
@@ -38,12 +16,198 @@ superTrack on
         type vcfTabix
         hapClusterEnabled true
         dataVersion 10/04/2023, v1.1.3
+        tableBrowser off
+        priority 1
 
-        track topmed
-        shortLabel NHLBI TOPMED V10
-        longLabel NHLBI TOPMED V10
+        track allofus
+        shortLabel AllOfUs v7 245k WGS
+        longLabel Variant Frequencies: AllOfUs - v7 245k WGS - BROKEN AFTER CHR8
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/topmed10.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.sort.vcf.gz
+        dataVersion V7
+        visibility pack
+        priority 2.5
+
+        track topmed
+        shortLabel NHLBI TOPMED 10 151k WGS
+        longLabel Variant Frequencies: NHLBI TOPMED - 151k WGS
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
         dataVersion Freeze 10
         visibility pack
+        priority 2
+
+        track mcps
+        shortLabel Mexico City Prospective Study 10k WGS+141k WES
+        longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
+        tableBrowser off
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        visibility pack
+        type vcfTabix
+        dataVersion May 2023 (v1.2.0)
+        priority 3
+
+        track tommo60kjpn
+        shortLabel Japan ToMMO 61k WGS
+        longLabel Variant Frequencies: Japan 61k - ToMMO SNV+Indels
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz
+        visibility pack
+        dataVersion 2025-06-16
+        priority 5
+
+        track ALFA
+        compositeTrack on
+        parent varFreqs on
+        visibility pack
+        itemRgb on
+        type bigBed 9 + .
+        shortLabel NCBI ALFA 408k WGS/WES/array
+        longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array
+        mouseOverField frequency
+        html ALFA.html
+        filter.score 10
+        priority 4
+        dataVersion R4
+
+             track ALFA_GLB
+             parent ALFA on
+             shortLabel NCBI ALFA: Global
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_GLB.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_EUR
+             parent ALFA on
+             shortLabel NCBI ALFA: European
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_EUR.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_AFA
+             parent ALFA on
+             shortLabel NCBI ALFA: African American
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_AFA.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_AFO
+             parent ALFA on
+             shortLabel NCBI ALFA: African Others
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_AFO.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_AFR
+             parent ALFA on
+             shortLabel NCBI ALFA: African
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_AFR.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_EAS
+             parent ALFA on
+             shortLabel NCBI ALFA: East Asian
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_EAS.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_SAS
+             parent ALFA on
+             shortLabel NCBI ALFA: South Asian
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_SAS.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_OAS
+             parent ALFA on
+             shortLabel NCBI ALFA: Other Asian
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_OAS.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_ASN
+             parent ALFA on
+             shortLabel NCBI ALFA: Asian
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_ASN.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_LAC
+             parent ALFA on
+             shortLabel NCBI ALFA: Latin American 1
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_LAC.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_LEN
+             parent ALFA on
+             shortLabel NCBI ALFA: Latin American 2
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_LEN.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+             track ALFA_OTR
+             parent ALFA on
+             shortLabel NCBI ALFA: Other
+             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_OTR.bb
+             type bigBed 9 + .
+             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+             urlLabel NCBI Variation Page
+
+        track gasp
+        shortLabel GenomeAsia Pilot Subs 1.7k WGS
+        longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
+        visibility pack
+
+        track gaspIndel
+        shortLabel GenomeAsia Pilot Indels 1.7k WGS
+        longLabel Variant Frequencies: GenomeAsia Pilot - Indels
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
+        visibility pack
+
+        track abraom
+        shortLabel Brazil ABraOM 1k WGS
+        longLabel Variant Frequencies: ABraOM Brazil - 1,171 unrelated individuals
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
+        visibility pack
+
+        track indigenomes
+        shortLabel India IndiGenomes 1k WGS
+        longLabel Variant Frequencies: IndiGenomes India - 1,029 samples
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
+        visibility pack
+
+        track kova
+        shortLabel Korea KOVA 1.9k WGS+3.5k WES
+        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.5k WES
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz
+        visibility pack
+        tableBrowser off
+

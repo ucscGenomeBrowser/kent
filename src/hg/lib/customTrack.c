@@ -974,7 +974,6 @@ if (customTracksExist(cart, &ctFileName))
                     char buf[128];
                     safef(buf, sizeof buf, "%s.", selectedTable);
                     cartRemovePrefix(cart, buf);
-                    /* remove control variables */
                     cartRemove(cart, CT_DO_REMOVE_VAR);
                     }
                 else
@@ -989,6 +988,7 @@ if (customTracksExist(cart, &ctFileName))
                 }
             }
         }
+    cartRemove(cart, CT_DO_REMOVE_VAR);
     cartRemove(cart, CT_SELECTED_TABLE_VAR);
     }
 

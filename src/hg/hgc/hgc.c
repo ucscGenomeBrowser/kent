@@ -5002,11 +5002,19 @@ else if (wordCount > 0)
 	}
     else if (sameString(type, "bigBed"))
         {
-	int num = 0;
-	if (wordCount > 1)
-	    num = atoi(words[1]);
-	if (num < 3) num = 3;
-        genericBigBedClick(conn, tdb, item, start, end, num);
+        boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
+
+        if (bigBedOnePath)
+            // always set field count using definedFieldCount in bigBed
+            genericBigBedClick(conn, tdb, item, start, end, 0);
+        else
+            {
+            int num = 0;
+            if (wordCount > 1)
+                num = atoi(words[1]);
+            if (num < 3) num = 3;
+            genericBigBedClick(conn, tdb, item, start, end, num);
+            }
 	}
     else if (sameString(type, "sample"))
 	{
@@ -26854,6 +26862,14 @@ customTracksSaveCart(database, cart, theCtList);
 
 cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
+
+if (sameOk(cartOptionalString(cart, "autoRearr"), "1"))  
+    {
+    char snakeVar[256];
+    safef(snakeVar, sizeof snakeVar, "%s.doSnake", newCts->tdb->track);
+    cartSetString(cart, snakeVar, "1");
+    }
+
 }
 
 void doHPRCTable(struct trackDb *tdb, char *itemName)

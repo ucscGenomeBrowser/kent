@@ -124,19 +124,16 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <ul>
     <li>MariaDB connections, used to load tracks not local to your computer:
       <ul>
-        <li>US server: Port 3306 on genome-mysql.gi.ucsc.edu (128.114.119.174)</li>
-        <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
+        <li>Port 3306 on genome-mysql.gi.ucsc.edu (128.114.119.174)</li>
       </ul>
     </li>
     <li>Rsync, used to download track data:
       <ul>
-        <li>US server: TCP port 873 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
-        <li>European server: TCP port 873 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+        <li>TCP port 873 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
       </ul></li>
     <li>Download HTML descriptions on the fly:
       <ul>
-        <li>US server: TCP port 80 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
-        <li>European server: TCP port 80 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+        <li>TCP port 80 on hgdownload.gi.ucsc.edu (128.114.119.163)</li>
       </ul>
     </li>
   </ul>
@@ -282,13 +279,10 @@ and <strong>you will not be able to use GBiB</strong>. Once the download is comp
 tracks should load in less than three seconds for a typical genomic position.</p>
 <p>
 If you are in your GBiB on the command-line you can use a direct rsync command for files of
-interest. For example, if you knew you wanted all the GENCODE tracks on hg19 you could run either
-of the two rsync commands for the North American or European hgdownload servers:
+interest. For example, if you knew you wanted all the GENCODE tracks on hg19 you could run
+this rsync command:
 <pre>
 <code>sudo rsync hgdownload.gi.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
-</pre>
-<pre>
-<code>sudo rsync hgdownload-euro.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
 </pre>
 <p>
 The above commands will rsync all of the files at the UCSC hgdownload server in the hg19 assembly
@@ -308,10 +302,6 @@ encRegTfbs and factorbook tables for the Transcription Factor ChIP-seq Clusters 
 You can also download gbdb files in this manner.
 <pre>
 <code>sudo rsync hgdownload.gi.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
-</pre>
-
-<pre>
-<code>sudo rsync hgdownload-euro.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
 </pre>
 
 <p>The above command would copy the phyloP100way track to display in the GBiB from a local file.</p>
@@ -876,7 +866,6 @@ edit the <code>/home/browser/.bashrc</code> file and change the following line:
 <p>
 to either of the follwing lines:
 <pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.gi.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
-<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload-euro.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
 </p>
 <p>
 The updated commands will install the tools to a location with more disk space available using

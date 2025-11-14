@@ -1,0 +1,15 @@
+# Done, Nov 1, Max
+cd /hive/data/genomes/hg38/bed/ancient/
+wget https://zenodo.org/records/14552025/files/archaic_vcf.tar.gz?download=1
+tar xvfz archaic_vcf.tar.gz
+cd archaic_vcf
+bcftools concat  --threads 16  -Oz -o denisovan.hg38.vcf.gz altai_Denisovan/hg38/output_se.hg38.chr{1..22}.vcf.gz
+bcftools concat  --threads 16  -Oz -o neanderthal.hg38.vcf.gz altai_Neanderthal/hg38/output_se.hg38.chr{1..22}.vcf.gz
+tabix -p vcf denisovan.hg38.vcf.gz &
+tabix -p vcf neanderthal.hg38.vcf.gz &
+mv *.vcf* ..
+# not sure why all positions are covered by this VCF, so keeping only ancient variants
+bcftools view -i 'ALT!="."'  denisovan.hg38.vcf.gz -Oz -o  denisovan.hg38.filt.vcf.gz
+bcftools view -i 'ALT!="."'   neanderthal.hg38.vcf.gz -Oz -o neanderthal.hg38.filt.vcf.gz
+tabix -p vcf denisovan.hg38.filt.vcf.gz
+tabix -p vcf neanderthal.hg38.filt.vcf.gz
