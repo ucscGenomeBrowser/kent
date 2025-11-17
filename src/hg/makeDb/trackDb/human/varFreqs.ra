@@ -9,7 +9,6 @@ superTrack on
         track me
         shortLabel Regeneron Million Exomes 983k WES
         longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
-        tableBrowser off
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
         visibility pack
