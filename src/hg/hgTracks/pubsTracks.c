@@ -234,7 +234,9 @@ if(isEmpty(articleTable))
 if (lf->extra != NULL) 
     return;
 
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 struct pubsExtra* extra = pubsMakeExtra(tg, articleTable, conn, lf);
 lf->extra = extra;
 hFreeConn(&conn);
@@ -268,7 +270,9 @@ static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 pubsParseClassColors();
-struct sqlConnection *conn = hAllocConn(database);
+char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
+char *db = (liftDb == NULL) ? database : liftDb;
+struct sqlConnection *conn = hAllocConn(db);
 char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterKeywords");
 char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterYear");
 char *publFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsFilterPublisher");

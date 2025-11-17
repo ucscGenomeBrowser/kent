@@ -1,6 +1,6 @@
 track coreCcres
 type bigBed 12
-longLabel ENCODE4 tissue/cell-type-specific cCREs and underlying signals for 170 samples
+longLabel ENCODE4 Core Collection of 170 biosamples with sample-specific cCRE annotations & epigenomic signals
 parent cCREs
 compositeTrack on
 html coreCollection.html
@@ -10,11 +10,12 @@ subGroup5 donor Donor_ID ENCDO000AAB=ENCDO000AAB ENCDO000AAC=ENCDO000AAC ENCDO00
 subGroup4 simpleBiosample Biosample A673=A673 AG04450=AG04450 CD14-positive_monocyte-_female=CD14-positive_monocyte-_female Caco-2=Caco-2 DND-41=DND-41 GM12878=GM12878 GM23338=GM23338 H1=H1 H9=H9 HCT116=HCT116 HFFc6=HFFc6 HL-60=HL-60 HeLa-S3=HeLa-S3 HepG2=HepG2 IMR-90=IMR-90 K562=K562 MCF-7=MCF-7 MM_1S=MM_1S NCI-H929=NCI-H929 OCI-LY7=OCI-LY7 PC-3=PC-3 PC-9=PC-9 Panc1=Panc1 Peyers_patch-_female_adult__51_years_=Peyers_patch-_female_adult__51_years_ Peyers_patch-_female_adult__53_years_=Peyers_patch-_female_adult__53_years_ Peyers_patch-_male_adult__37_years_=Peyers_patch-_male_adult__37_years_ Peyers_patch-_male_adult__54_years_=Peyers_patch-_male_adult__54_years_ SK-N-SH=SK-N-SH WERI-Rb-1=WERI-Rb-1 adrenal_gland-_female_adult__41_years_=adrenal_gland-_female_adult__41_years_ adrenal_gland-_female_adult__51_years_=adrenal_gland-_female_adult__51_years_ adrenal_gland-_female_adult__53_years_=adrenal_gland-_female_adult__53_years_ adrenal_gland-_male_adult__37_years_=adrenal_gland-_male_adult__37_years_ adrenal_gland-_male_adult__54_years_=adrenal_gland-_male_adult__54_years_ ascending_aorta-_female_adult__51_years_=ascending_aorta-_female_adult__51_years_ ascending_aorta-_female_adult__53_years_=ascending_aorta-_female_adult__53_years_ astrocyte=astrocyte astrocyte-_male_adult__53_years_=astrocyte-_male_adult__53_years_ bipolar_neuron__treated_-_male_adult__53_years__treated_with_0_5_ug_mL_doxycycline_hyclate_for_4_days=bipolar_neuron__treated_-_male_adult__53_years__treated_with_0_5_ug_mL_doxycycline_hyclate_for_4_days body_of_pancreas-_female_adult__51_years_=body_of_pancreas-_female_adult__51_years_ body_of_pancreas-_male_adult__37_years_=body_of_pancreas-_male_adult__37_years_ body_of_pancreas-_male_adult__54_years_=body_of_pancreas-_male_adult__54_years_ brain_microvascular_endothelial_cell=brain_microvascular_endothelial_cell breast_epithelium-_female_adult__51_years_=breast_epithelium-_female_adult__51_years_ cardiac_muscle_cell-_embryo=cardiac_muscle_cell-_embryo chondrocyte-_female_embryo__5_days_=chondrocyte-_female_embryo__5_days_ colonic_mucosa-_female_adult__41_years_=colonic_mucosa-_female_adult__41_years_ coronary_artery-_female_adult__53_years_=coronary_artery-_female_adult__53_years_ endodermal_cell-_female_embryo__5_days_=endodermal_cell-_female_embryo__5_days_ endothelial_cell-_male_adult__53_years_=endothelial_cell-_male_adult__53_years_ esophagus_muscularis_mucosa-_male_adult__37_years_=esophagus_muscularis_mucosa-_male_adult__37_years_ esophagus_squamous_epithelium-_male_adult__37_years_=esophagus_squamous_epithelium-_male_adult__37_years_ gastrocnemius_medialis-_female_adult__51_years_=gastrocnemius_medialis-_female_adult__51_years_ gastrocnemius_medialis-_female_adult__53_years_=gastrocnemius_medialis-_female_adult__53_years_ gastrocnemius_medialis-_male_adult__37_years_=gastrocnemius_medialis-_male_adult__37_years_ gastrocnemius_medialis-_male_adult__54_years_=gastrocnemius_medialis-_male_adult__54_years_ glutamatergic_neuron-_male_adult__53_years__male_adult__53_years__nuclear_fraction=glutamatergic_neuron-_male_adult__53_years__male_adult__53_years__nuclear_fraction heart_left_ventricle-_female_adult__46_years_=heart_left_ventricle-_female_adult__46_years_ heart_left_ventricle-_female_adult__53_years_=heart_left_ventricle-_female_adult__53_years_ heart_left_ventricle-_female_adult__56_years_=heart_left_ventricle-_female_adult__56_years_ heart_left_ventricle-_female_adult__59_years_=heart_left_ventricle-_female_adult__59_years_ heart_left_ventricle-_male_adult__43_years_=heart_left_ventricle-_male_adult__43_years_ heart_right_ventricle-_female_adult__46_years_=heart_right_ventricle-_female_adult__46_years_ heart_right_ventricle-_female_adult__56_years_=heart_right_ventricle-_female_adult__56_years_ heart_right_ventricle-_male_adult__40_years_=heart_right_ventricle-_male_adult__40_years_ heart_right_ventricle-_male_adult__43_years_=heart_right_ventricle-_male_adult__43_years_ heart_right_ventricle-_male_adult__61_years_=heart_right_ventricle-_male_adult__61_years_ heart_right_ventricle-_male_adult__66_years_=heart_right_ventricle-_male_adult__66_years_ heart_right_ventricle-_male_adult__69_years_=heart_right_ventricle-_male_adult__69_years_ hepatocyte-_female_embryo__5_days_=hepatocyte-_female_embryo__5_days_ keratinocyte-_female=keratinocyte-_female left_lung-_female_child__16_years_=left_lung-_female_child__16_years_ left_lung-_male_adult__40_years_=left_lung-_male_adult__40_years_ left_ventricle_myocardium_inferior-_male_adult__60_years_=left_ventricle_myocardium_inferior-_male_adult__60_years_ lower_lobe_of_left_lung-_female_adult__59_years_=lower_lobe_of_left_lung-_female_adult__59_years_ lower_lobe_of_left_lung-_male_adult__60_years_=lower_lobe_of_left_lung-_male_adult__60_years_ mesothelial_cell_of_epicardium-_female_embryo__5_days_=mesothelial_cell_of_epicardium-_female_embryo__5_days_ middle_frontal_area_46__Alzheimers_disease_-_female_adult__74_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__74_years__with_Alzheimers_disease middle_frontal_area_46__Alzheimers_disease_-_female_adult__81_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__81_years__with_Alzheimers_disease middle_frontal_area_46__Alzheimers_disease_-_female_adult__85_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__85_years__with_Alzheimers_disease middle_frontal_area_46__Alzheimers_disease_-_female_adult__86_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__86_years__with_Alzheimers_disease middle_frontal_area_46__Alzheimers_disease_-_female_adult__88_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__88_years__with_Alzheimers_disease middle_frontal_area_46__Alzheimers_disease_-_female_adult__89_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__89_years__with_Alzheimers_disease middle_frontal_area_46__Alzheimers_disease_-_female_adult__90_or_above_years__with_Alzheimers_disease=middle_frontal_area_46__Alzheimers_disease_-_female_adult__90_or_above_years__with_Alzheimers_disease middle_frontal_area_46__cognitive_impairment_-_female_adult__81_years__with_Cognitive_impairment=middle_frontal_area_46__cognitive_impairment_-_female_adult__81_years__with_Cognitive_impairment middle_frontal_area_46__cognitive_impairment_-_female_adult__86_years__with_Cognitive_impairment=middle_frontal_area_46__cognitive_impairment_-_female_adult__86_years__with_Cognitive_impairment middle_frontal_area_46__cognitive_impairment_-_female_adult__90_or_above_years__with_Cognitive_impairment=middle_frontal_area_46__cognitive_impairment_-_female_adult__90_or_above_years__with_Cognitive_impairment middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__83_years__with_mild_cognitive_impairment=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__83_years__with_mild_cognitive_impairment middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__87_years__with_mild_cognitive_impairment=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__87_years__with_mild_cognitive_impairment middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__88_years__with_mild_cognitive_impairment=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__88_years__with_mild_cognitive_impairment middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__90_or_above_years__with_mild_cognitive_impairment=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__90_or_above_years__with_mild_cognitive_impairment middle_frontal_area_46-_female_adult__78_years_=middle_frontal_area_46-_female_adult__78_years_ middle_frontal_area_46-_female_adult__79_years_=middle_frontal_area_46-_female_adult__79_years_ middle_frontal_area_46-_female_adult__82_years_=middle_frontal_area_46-_female_adult__82_years_ middle_frontal_area_46-_female_adult__83_years_=middle_frontal_area_46-_female_adult__83_years_ middle_frontal_area_46-_female_adult__84_years_=middle_frontal_area_46-_female_adult__84_years_ middle_frontal_area_46-_female_adult__87_years_=middle_frontal_area_46-_female_adult__87_years_ middle_frontal_area_46-_female_adult__88_years_=middle_frontal_area_46-_female_adult__88_years_ middle_frontal_area_46-_female_adult__89_years_=middle_frontal_area_46-_female_adult__89_years_ middle_frontal_area_46-_female_adult__90_or_above_years_=middle_frontal_area_46-_female_adult__90_or_above_years_ middle_frontal_area_46-_male_adult__71_years_=middle_frontal_area_46-_male_adult__71_years_ middle_frontal_area_46-_male_adult__78_years_=middle_frontal_area_46-_male_adult__78_years_ middle_frontal_area_46-_male_adult__82_years_=middle_frontal_area_46-_male_adult__82_years_ middle_frontal_area_46-_male_adult__83_years_=middle_frontal_area_46-_male_adult__83_years_ middle_frontal_area_46-_male_adult__84_years_=middle_frontal_area_46-_male_adult__84_years_ middle_frontal_area_46-_male_adult__86_years_=middle_frontal_area_46-_male_adult__86_years_ middle_frontal_area_46-_male_adult__87_years_=middle_frontal_area_46-_male_adult__87_years_ neural_crest_cell-_female_embryo__5_days_=neural_crest_cell-_female_embryo__5_days_ neural_progenitor_cell-_female_embryo__5_days_=neural_progenitor_cell-_female_embryo__5_days_ osteocyte-_female_embryo__5_days_=osteocyte-_female_embryo__5_days_ pancreas-_female_adult__41_years_=pancreas-_female_adult__41_years_ pancreas-_female_adult__59_years_=pancreas-_female_adult__59_years_ pancreas-_female_adult__61_years_=pancreas-_female_adult__61_years_ pancreas-_female_child__16_years_=pancreas-_female_child__16_years_ progenitor_cell_of_endocrine_pancreas-_female_embryo__5_days_=progenitor_cell_of_endocrine_pancreas-_female_embryo__5_days_ prostate_gland-_male_adult__37_years_=prostate_gland-_male_adult__37_years_ right_atrium_auricular_region-_female_adult__51_years_=right_atrium_auricular_region-_female_adult__51_years_ right_atrium_auricular_region-_female_adult__53_years_=right_atrium_auricular_region-_female_adult__53_years_ right_lobe_of_liver-_female_adult__53_years_=right_lobe_of_liver-_female_adult__53_years_ sigmoid_colon-_female_adult__53_years_=sigmoid_colon-_female_adult__53_years_ sigmoid_colon-_male_adult__54_years_=sigmoid_colon-_male_adult__54_years_ spleen-_female_adult__41_years_=spleen-_female_adult__41_years_ spleen-_female_adult__53_years_=spleen-_female_adult__53_years_ spleen-_female_adult__59_years_=spleen-_female_adult__59_years_ spleen-_female_adult__61_years_=spleen-_female_adult__61_years_ stomach-_female_adult__51_years_=stomach-_female_adult__51_years_ stomach-_female_adult__53_years_=stomach-_female_adult__53_years_ stomach-_male_adult__37_years_=stomach-_male_adult__37_years_ stomach-_male_adult__54_years_=stomach-_male_adult__54_years_ testis-_male_adult__37_years_=testis-_male_adult__37_years_ testis-_male_adult__54_years_=testis-_male_adult__54_years_ thoracic_aorta-_male_adult__37_years_=thoracic_aorta-_male_adult__37_years_ thyroid_gland-_female_adult__51_years_=thyroid_gland-_female_adult__51_years_ thyroid_gland-_female_adult__53_years_=thyroid_gland-_female_adult__53_years_ thyroid_gland-_male_adult__37_years_=thyroid_gland-_male_adult__37_years_ thyroid_gland-_male_adult__54_years_=thyroid_gland-_male_adult__54_years_ tibial_artery-_male_adult__37_years_=tibial_artery-_male_adult__37_years_ tibial_nerve-_female_adult__51_years_=tibial_nerve-_female_adult__51_years_ tibial_nerve-_male_adult__37_years_=tibial_nerve-_male_adult__37_years_ tibial_nerve-_male_adult__54_years_=tibial_nerve-_male_adult__54_years_ transverse_colon-_female_adult__51_years_=transverse_colon-_female_adult__51_years_ transverse_colon-_female_adult__53_years_=transverse_colon-_female_adult__53_years_ transverse_colon-_male_adult__37_years_=transverse_colon-_male_adult__37_years_ transverse_colon-_male_adult__54_years_=transverse_colon-_male_adult__54_years_ type_B_pancreatic_cell-_female_embryo__5_days_=type_B_pancreatic_cell-_female_embryo__5_days_ upper_lobe_of_left_lung-_female_adult__51_years_=upper_lobe_of_left_lung-_female_adult__51_years_ upper_lobe_of_left_lung-_female_adult__53_years_=upper_lobe_of_left_lung-_female_adult__53_years_ upper_lobe_of_left_lung-_male_adult__37_years_=upper_lobe_of_left_lung-_male_adult__37_years_ upper_lobe_of_left_lung-_male_adult__54_years_=upper_lobe_of_left_lung-_male_adult__54_years_ uterus-_female_adult__53_years_=uterus-_female_adult__53_years_ vagina-_female_adult__51_years_=vagina-_female_adult__51_years_ vagina-_female_adult__53_years_=vagina-_female_adult__53_years_
 subGroup2 biosampleType Biosample_type tissue=Tissue primary_cell=Primary_cell in_vitro_differentiated_cells=In_vitro_differentiated_cells organoid=Organoid cell_line=Cell_line
 subGroup6 dataType Data_type typeCcres=cCREs typeDNase=DNase typeH3k4me3=H3K4me3 typeH3k27ac=H3K27ac typeCtcf=CTCF
-dimensions dimX=biosampleType dimY=organ
+dimensions dimX=biosampleType dimY=organ dimA=donor
 shortLabel ENCODE4 Core Collection
 visibility hide
+filterComposite dimA
 subGroup1 organ Organ_Tissue adrenal_gland=Adrenal_gland blood=Blood blood_vessel=Blood_vessel bone=Bone bone_marrow=Bone_marrow brain=Brain breast=Breast connective_tissue=Connective_tissue embryo=Embryo epithelium=Epithelium esophagus=Esophagus eye=Eye heart=Heart large_intestine=Large_intestine liver=Liver lung=Lung muscle=Muscle nerve=Nerve pancreas=Pancreas penis=Penis prostate=Prostate skin=Skin small_intestine=Small_intestine spleen=Spleen stomach=Stomach testis=Testis thyroid=Thyroid uterus=Uterus vagina=Vagina
-sortOrder dataType=+ organ=+ biosampleType=+
+sortOrder dataType=+ organ=+ biosampleType=+ donor=+
 dataVersion ENCODE release 4, 2024. (ENCODE4 data includes ENCODE2 and ENCODE3)
 
 track cCREs_view
@@ -32,7 +33,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF136RNO_ENCFF630BQS_ENCFF6
 subGroups organ=blood view=cCREs_view simpleBiosample=OCI-LY7 biosampleType=cell_line donor=ENCDO351AAA dataType=typeCcres
 shortLabel ENCFF136RNO_ENCFF630BQS_ENCFF611XLA_ENCFF975BGM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -44,7 +45,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF494IGD_ENCFF719EBT_ENCFF4
 subGroups organ=skin view=cCREs_view simpleBiosample=keratinocyte-_female biosampleType=primary_cell donor=ENCDO268AAA dataType=typeCcres
 shortLabel ENCFF494IGD_ENCFF719EBT_ENCFF443TJZ_ENCFF638DZB
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -56,19 +57,19 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF926MIK_ENCFF153BJG_ENCFF7
 subGroups organ=brain view=cCREs_view simpleBiosample=astrocyte-_male_adult__53_years_ biosampleType=in_vitro_differentiated_cells donor=ENCDO336AAA dataType=typeCcres
 shortLabel ENCFF926MIK_ENCFF153BJG_ENCFF751GCN_ENCFF569HGW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF414OGC_ENCFF806YEZ_ENCFF849TDM_ENCFF736UDR
 type bigBed 9 + 2
 longLabel K562: cCREs
-parent cCREs_view on
+parent cCREs_view off
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF414OGC_ENCFF806YEZ_ENCFF849TDM_ENCFF736UDR.bb
 subGroups organ=blood view=cCREs_view simpleBiosample=K562 biosampleType=cell_line donor=ENCDO000AAD dataType=typeCcres
 shortLabel ENCFF414OGC_ENCFF806YEZ_ENCFF849TDM_ENCFF736UDR
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -80,7 +81,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF226FAT_ENCFF582GHH_ENCFF4
 subGroups organ=bone view=cCREs_view simpleBiosample=osteocyte-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF226FAT_ENCFF582GHH_ENCFF441MGU_ENCFF897TLT
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -92,7 +93,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF339ZGM_ENCFF695YII_ENCFF3
 subGroups organ=blood view=cCREs_view simpleBiosample=HL-60 biosampleType=cell_line donor=ENCDO000AAM dataType=typeCcres
 shortLabel ENCFF339ZGM_ENCFF695YII_ENCFF383GZA_ENCFF244CXJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -104,7 +105,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF291DQP_ENCFF879CSG_ENCFF9
 subGroups organ=eye view=cCREs_view simpleBiosample=WERI-Rb-1 biosampleType=cell_line donor=ENCDO000ADT dataType=typeCcres
 shortLabel ENCFF291DQP_ENCFF879CSG_ENCFF949IKU_ENCFF181ESK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -116,7 +117,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF978IHV_ENCFF221TSA_ENCFF6
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=Caco-2 biosampleType=cell_line donor=ENCDO000ACR dataType=typeCcres
 shortLabel ENCFF978IHV_ENCFF221TSA_ENCFF619JXN_ENCFF227NGR
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -128,7 +129,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF270ENA_ENCFF935BFQ_ENCFF0
 subGroups organ=breast view=cCREs_view simpleBiosample=MCF-7 biosampleType=cell_line donor=ENCDO000AAE dataType=typeCcres
 shortLabel ENCFF270ENA_ENCFF935BFQ_ENCFF063VLJ_ENCFF662LGI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -140,7 +141,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF389PZY_ENCFF587XGD_ENCFF1
 subGroups organ=blood view=cCREs_view simpleBiosample=CD14-positive_monocyte-_female biosampleType=primary_cell donor=ENCDO265AAA dataType=typeCcres
 shortLabel ENCFF389PZY_ENCFF587XGD_ENCFF184NWF_ENCFF496PSJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -152,7 +153,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF909KVS_ENCFF300WXD_ENCFF5
 subGroups organ=embryo view=cCREs_view simpleBiosample=endodermal_cell-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF909KVS_ENCFF300WXD_ENCFF504UNY_ENCFF976GAM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -164,7 +165,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF623TJB_ENCFF465MDM_ENCFF9
 subGroups organ=lung view=cCREs_view simpleBiosample=PC-9 biosampleType=cell_line donor=ENCDO647UHQ dataType=typeCcres
 shortLabel ENCFF623TJB_ENCFF465MDM_ENCFF907RYE_ENCFF936QRH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -176,7 +177,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF816IIS_ENCFF958CFK_ENCFF2
 subGroups organ=muscle view=cCREs_view simpleBiosample=A673 biosampleType=cell_line donor=ENCDO027VXA dataType=typeCcres
 shortLabel ENCFF816IIS_ENCFF958CFK_ENCFF213BSP_ENCFF070LLG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -188,7 +189,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF648XPS_ENCFF207MNM_ENCFF4
 subGroups organ=muscle view=cCREs_view simpleBiosample=cardiac_muscle_cell-_embryo biosampleType=in_vitro_differentiated_cells donor=ENCDO924HBJ dataType=typeCcres
 shortLabel ENCFF648XPS_ENCFF207MNM_ENCFF485DKZ_ENCFF466BIT
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -200,7 +201,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF286QGB_ENCFF835JIA_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=neural_progenitor_cell-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF286QGB_ENCFF835JIA_ENCFF618RAO_ENCFF700SCP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -212,7 +213,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF903ZCB_ENCFF179HBV_ENCFF9
 subGroups organ=embryo view=cCREs_view simpleBiosample=H9 biosampleType=cell_line donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF903ZCB_ENCFF179HBV_ENCFF988WEQ_ENCFF963CHU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -224,7 +225,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF766CUM_ENCFF446OPT_ENCFF6
 subGroups organ=skin view=cCREs_view simpleBiosample=GM23338 biosampleType=cell_line donor=ENCDO336AAA dataType=typeCcres
 shortLabel ENCFF766CUM_ENCFF446OPT_ENCFF641QBD_ENCFF369MIX
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -236,7 +237,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF971HXR_ENCFF376ZIM_ENCFF6
 subGroups organ=lung view=cCREs_view simpleBiosample=IMR-90 biosampleType=cell_line donor=ENCDO000AAX dataType=typeCcres
 shortLabel ENCFF971HXR_ENCFF376ZIM_ENCFF699OAR_ENCFF105FHL
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -248,7 +249,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF447YDA_ENCFF712FDJ_ENCFF1
 subGroups organ=heart view=cCREs_view simpleBiosample=mesothelial_cell_of_epicardium-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF447YDA_ENCFF712FDJ_ENCFF109WCV_ENCFF962LOU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -260,7 +261,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF647HDA_ENCFF530MCT_ENCFF3
 subGroups organ=pancreas view=cCREs_view simpleBiosample=type_B_pancreatic_cell-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF647HDA_ENCFF530MCT_ENCFF370QKJ_ENCFF973VNM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -272,7 +273,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF431JDU_ENCFF964OOU_ENCFF7
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=HCT116 biosampleType=cell_line donor=ENCDO000ABE dataType=typeCcres
 shortLabel ENCFF431JDU_ENCFF964OOU_ENCFF787LMI_ENCFF388PVO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -284,7 +285,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF428XFI_ENCFF280PUF_ENCFF4
 subGroups organ=blood view=cCREs_view simpleBiosample=GM12878 biosampleType=cell_line donor=ENCDO000AAK dataType=typeCcres
 shortLabel ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -296,7 +297,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF280RMA_ENCFF651WOM_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=SK-N-SH biosampleType=cell_line donor=ENCDO000ABD dataType=typeCcres
 shortLabel ENCFF280RMA_ENCFF651WOM_ENCFF262UEH_ENCFF850MLW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -308,7 +309,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF573NKX_ENCFF760NUN_ENCFF9
 subGroups organ=embryo view=cCREs_view simpleBiosample=H1 biosampleType=cell_line donor=ENCDO000AAW dataType=typeCcres
 shortLabel ENCFF573NKX_ENCFF760NUN_ENCFF919FBG_ENCFF332TNJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -320,7 +321,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF857RXA_ENCFF756NMQ_ENCFF4
 subGroups organ=pancreas view=cCREs_view simpleBiosample=Panc1 biosampleType=cell_line donor=ENCDO000ABB dataType=typeCcres
 shortLabel ENCFF857RXA_ENCFF756NMQ_ENCFF493AZX_ENCFF004ITE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -332,7 +333,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF963PFR_ENCFF577BWJ_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=astrocyte biosampleType=primary_cell donor=ENCDO916IIE dataType=typeCcres
 shortLabel ENCFF963PFR_ENCFF577BWJ_ENCFF643ZMC_ENCFF714NPP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -344,7 +345,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF807AUZ_ENCFF466YVQ_ENCFF3
 subGroups organ=connective_tissue view=cCREs_view simpleBiosample=chondrocyte-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF807AUZ_ENCFF466YVQ_ENCFF317LGP_ENCFF044ORH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -356,7 +357,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF757GHL_ENCFF432PYK_ENCFF6
 subGroups organ=uterus view=cCREs_view simpleBiosample=HeLa-S3 biosampleType=cell_line donor=ENCDO000AAB dataType=typeCcres
 shortLabel ENCFF757GHL_ENCFF432PYK_ENCFF658XKZ_ENCFF179RSE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -368,7 +369,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF735XLO_ENCFF970LMB_ENCFF4
 subGroups organ=blood view=cCREs_view simpleBiosample=MM_1S biosampleType=cell_line donor=ENCDO697GBW dataType=typeCcres
 shortLabel ENCFF735XLO_ENCFF970LMB_ENCFF481LLD_ENCFF838OJW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -380,7 +381,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF153DHV_ENCFF573ZFG_ENCFF3
 subGroups organ=lung view=cCREs_view simpleBiosample=AG04450 biosampleType=cell_line donor=ENCDO001AAA dataType=typeCcres
 shortLabel ENCFF153DHV_ENCFF573ZFG_ENCFF389RGR_ENCFF766VDL
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -392,7 +393,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF706PFS_ENCFF543KTX_ENCFF7
 subGroups organ=epithelium view=cCREs_view simpleBiosample=endothelial_cell-_male_adult__53_years_ biosampleType=in_vitro_differentiated_cells donor=ENCDO336AAA dataType=typeCcres
 shortLabel ENCFF706PFS_ENCFF543KTX_ENCFF708DDX_ENCFF084YDG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -404,7 +405,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF865UWE_ENCFF165GJZ_ENCFF2
 subGroups organ=pancreas view=cCREs_view simpleBiosample=progenitor_cell_of_endocrine_pancreas-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF865UWE_ENCFF165GJZ_ENCFF201DRD_ENCFF559SRW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -416,7 +417,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF546MZK_ENCFF732PJK_ENCFF7
 subGroups organ=liver view=cCREs_view simpleBiosample=HepG2 biosampleType=cell_line donor=ENCDO000AAC dataType=typeCcres
 shortLabel ENCFF546MZK_ENCFF732PJK_ENCFF795ONN_ENCFF357NFO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -428,7 +429,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF623ZIV_ENCFF995LLA_ENCFF4
 subGroups organ=penis view=cCREs_view simpleBiosample=HFFc6 biosampleType=cell_line donor=ENCDO737WWC dataType=typeCcres
 shortLabel ENCFF623ZIV_ENCFF995LLA_ENCFF426TLD_ENCFF406SZM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -440,7 +441,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF969JHD_ENCFF308GJB_ENCFF3
 subGroups organ=blood view=cCREs_view simpleBiosample=DND-41 biosampleType=cell_line donor=ENCDO183AAA dataType=typeCcres
 shortLabel ENCFF969JHD_ENCFF308GJB_ENCFF341LLL_ENCFF398MEO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -452,7 +453,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF269VAY_ENCFF346LEZ_ENCFF1
 subGroups organ=brain view=cCREs_view simpleBiosample=glutamatergic_neuron-_male_adult__53_years__male_adult__53_years__nuclear_fraction biosampleType=in_vitro_differentiated_cells donor=ENCDO336AAA dataType=typeCcres
 shortLabel ENCFF269VAY_ENCFF346LEZ_ENCFF118OBT_ENCFF536VOI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -464,7 +465,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF472WAW_ENCFF559ALK_ENCFF5
 subGroups organ=blood_vessel view=cCREs_view simpleBiosample=brain_microvascular_endothelial_cell biosampleType=primary_cell donor=ENCDO227AAA dataType=typeCcres
 shortLabel ENCFF472WAW_ENCFF559ALK_ENCFF575FKS_ENCFF176ELT
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -476,7 +477,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF902EEH_ENCFF137IUT_ENCFF3
 subGroups organ=liver view=cCREs_view simpleBiosample=hepatocyte-_female_embryo__5_days_ biosampleType=in_vitro_differentiated_cells donor=ENCDO222AAA dataType=typeCcres
 shortLabel ENCFF902EEH_ENCFF137IUT_ENCFF347LDC_ENCFF491FMJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -488,7 +489,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF146ZBO_ENCFF684UUJ_ENCFF9
 subGroups organ=bone_marrow view=cCREs_view simpleBiosample=NCI-H929 biosampleType=cell_line donor=ENCDO220OYR dataType=typeCcres
 shortLabel ENCFF146ZBO_ENCFF684UUJ_ENCFF900UMO_ENCFF327WOL
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -500,7 +501,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF599UKS_ENCFF319OET_ENCFF5
 subGroups organ=prostate view=cCREs_view simpleBiosample=PC-3 biosampleType=cell_line donor=ENCDO349AAA dataType=typeCcres
 shortLabel ENCFF599UKS_ENCFF319OET_ENCFF537PUA_ENCFF756ESH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -512,7 +513,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF241UWA_ENCFF494ASH_ENCFF1
 subGroups organ=skin view=cCREs_view simpleBiosample=GM23338 biosampleType=cell_line donor=ENCDO336AAA dataType=typeCcres
 shortLabel ENCFF241UWA_ENCFF494ASH_ENCFF114QME_ENCFF553NAP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -524,7 +525,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF675NNX_ENCFF220KZL_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__90_or_above_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO847KYQ dataType=typeCcres
 shortLabel ENCFF675NNX_ENCFF220KZL_ENCFF969AJT_ENCFF345GCX
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -536,7 +537,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF258AWM_ENCFF834IHE_ENCFF5
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__90_or_above_years_ biosampleType=tissue donor=ENCDO250PFZ dataType=typeCcres
 shortLabel ENCFF258AWM_ENCFF834IHE_ENCFF519CLG_ENCFF488PRF
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -548,7 +549,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF715WQG_ENCFF871ZNR_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__90_or_above_years_ biosampleType=tissue donor=ENCDO218FFZ dataType=typeCcres
 shortLabel ENCFF715WQG_ENCFF871ZNR_ENCFF694XDN_ENCFF161XMB
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -560,7 +561,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF987RXP_ENCFF419XND_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__cognitive_impairment_-_female_adult__81_years__with_Cognitive_impairment biosampleType=tissue donor=ENCDO077CCP dataType=typeCcres
 shortLabel ENCFF987RXP_ENCFF419XND_ENCFF224LYA_ENCFF081IRZ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -572,7 +573,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF163NDW_ENCFF730XOV_ENCFF1
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__83_years_ biosampleType=tissue donor=ENCDO736YJH dataType=typeCcres
 shortLabel ENCFF163NDW_ENCFF730XOV_ENCFF156YTC_ENCFF280OBE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -584,7 +585,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF013AMD_ENCFF563YFA_ENCFF3
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__88_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO070VNS dataType=typeCcres
 shortLabel ENCFF013AMD_ENCFF563YFA_ENCFF336MIJ_ENCFF302UYV
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -596,7 +597,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF463EIN_ENCFF005KPT_ENCFF0
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__cognitive_impairment_-_female_adult__90_or_above_years__with_Cognitive_impairment biosampleType=tissue donor=ENCDO448YMQ dataType=typeCcres
 shortLabel ENCFF463EIN_ENCFF005KPT_ENCFF046NYM_ENCFF250VKH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -608,7 +609,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF068GXP_ENCFF507KAZ_ENCFF3
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO915WZE dataType=typeCcres
 shortLabel ENCFF068GXP_ENCFF507KAZ_ENCFF383TGX_ENCFF409LLA
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -620,7 +621,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF753DPM_ENCFF353SJI_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__90_or_above_years_ biosampleType=tissue donor=ENCDO101GPB dataType=typeCcres
 shortLabel ENCFF753DPM_ENCFF353SJI_ENCFF649LLS_ENCFF554FTX
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -632,7 +633,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF521HEY_ENCFF862YHY_ENCFF1
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__85_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO080EZF dataType=typeCcres
 shortLabel ENCFF521HEY_ENCFF862YHY_ENCFF194KAZ_ENCFF263VJQ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -644,7 +645,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF497CVA_ENCFF981HHV_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__87_years_ biosampleType=tissue donor=ENCDO423GGP dataType=typeCcres
 shortLabel ENCFF497CVA_ENCFF981HHV_ENCFF224JSW_ENCFF653MQB
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -656,7 +657,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF636BNY_ENCFF732JQY_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__87_years_ biosampleType=tissue donor=ENCDO203ASI dataType=typeCcres
 shortLabel ENCFF636BNY_ENCFF732JQY_ENCFF658QWN_ENCFF961RFY
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -668,7 +669,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF722LEE_ENCFF077FBW_ENCFF6
 subGroups organ=spleen view=cCREs_view simpleBiosample=spleen-_female_adult__41_years_ biosampleType=tissue donor=ENCDO575WHY dataType=typeCcres
 shortLabel ENCFF722LEE_ENCFF077FBW_ENCFF634AAL_ENCFF215HQE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -680,7 +681,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF084QJF_ENCFF889GHD_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO634UMA dataType=typeCcres
 shortLabel ENCFF084QJF_ENCFF889GHD_ENCFF646GXZ_ENCFF374AEG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -692,7 +693,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF898XFY_ENCFF772JUK_ENCFF1
 subGroups organ=muscle view=cCREs_view simpleBiosample=gastrocnemius_medialis-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF898XFY_ENCFF772JUK_ENCFF149TEN_ENCFF782JRA
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -704,7 +705,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF700MXZ_ENCFF663EZB_ENCFF4
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_male_adult__66_years_ biosampleType=tissue donor=ENCDO926KEV dataType=typeCcres
 shortLabel ENCFF700MXZ_ENCFF663EZB_ENCFF400FAA_ENCFF430LIA
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -716,7 +717,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF832GZH_ENCFF646DAW_ENCFF3
 subGroups organ=heart view=cCREs_view simpleBiosample=right_atrium_auricular_region-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF832GZH_ENCFF646DAW_ENCFF337EUB_ENCFF886TBW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -728,7 +729,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF609VNS_ENCFF370WIV_ENCFF1
 subGroups organ=uterus view=cCREs_view simpleBiosample=uterus-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF609VNS_ENCFF370WIV_ENCFF154QOP_ENCFF700PHX
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -740,7 +741,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF644JWK_ENCFF237QAL_ENCFF9
 subGroups organ=heart view=cCREs_view simpleBiosample=left_ventricle_myocardium_inferior-_male_adult__60_years_ biosampleType=tissue donor=ENCDO520EJG dataType=typeCcres
 shortLabel ENCFF644JWK_ENCFF237QAL_ENCFF960KLD_ENCFF829QZW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -752,7 +753,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF547JQK_ENCFF379GSJ_ENCFF7
 subGroups organ=vagina view=cCREs_view simpleBiosample=vagina-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF547JQK_ENCFF379GSJ_ENCFF738HRV_ENCFF704JSE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -764,7 +765,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF384IMH_ENCFF283ZMI_ENCFF7
 subGroups organ=stomach view=cCREs_view simpleBiosample=stomach-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF384IMH_ENCFF283ZMI_ENCFF732NXU_ENCFF919OEF
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -776,7 +777,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF315VTA_ENCFF538YZL_ENCFF3
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_male_adult__69_years_ biosampleType=tissue donor=ENCDO477WED dataType=typeCcres
 shortLabel ENCFF315VTA_ENCFF538YZL_ENCFF346GTT_ENCFF359FNN
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -788,7 +789,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF407UXA_ENCFF119FKH_ENCFF3
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_male_adult__40_years_ biosampleType=tissue donor=ENCDO392CRK dataType=typeCcres
 shortLabel ENCFF407UXA_ENCFF119FKH_ENCFF378PDO_ENCFF170TDI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -800,19 +801,19 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF330ZGD_ENCFF236JWD_ENCFF8
 subGroups organ=pancreas view=cCREs_view simpleBiosample=pancreas-_female_adult__41_years_ biosampleType=tissue donor=ENCDO575WHY dataType=typeCcres
 shortLabel ENCFF330ZGD_ENCFF236JWD_ENCFF859IVY_ENCFF890FKH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF020EPF_ENCFF917LFF_ENCFF764VSN_ENCFF005YBS
 type bigBed 9 + 2
 longLabel Right lobe of liver, female adult (53 years): cCREs
-parent cCREs_view off
+parent cCREs_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF020EPF_ENCFF917LFF_ENCFF764VSN_ENCFF005YBS.bb
 subGroups organ=liver view=cCREs_view simpleBiosample=right_lobe_of_liver-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF020EPF_ENCFF917LFF_ENCFF764VSN_ENCFF005YBS
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -824,7 +825,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF291LZE_ENCFF339CRV_ENCFF3
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=transverse_colon-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF291LZE_ENCFF339CRV_ENCFF318ECM_ENCFF493XMW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -836,7 +837,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF935VSX_ENCFF642TNR_ENCFF3
 subGroups organ=lung view=cCREs_view simpleBiosample=left_lung-_female_child__16_years_ biosampleType=tissue donor=ENCDO575EGL dataType=typeCcres
 shortLabel ENCFF935VSX_ENCFF642TNR_ENCFF397ZHX_ENCFF975RFH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -848,7 +849,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF589CRI_ENCFF229BGF_ENCFF4
 subGroups organ=testis view=cCREs_view simpleBiosample=testis-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF589CRI_ENCFF229BGF_ENCFF487SXN_ENCFF453LVK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -860,7 +861,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF799QGM_ENCFF436OWL_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO033BMB dataType=typeCcres
 shortLabel ENCFF799QGM_ENCFF436OWL_ENCFF484YUA_ENCFF685MPU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -872,7 +873,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF386FNE_ENCFF768NPJ_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=bipolar_neuron__treated_-_male_adult__53_years__treated_with_0_5_ug_mL_doxycycline_hyclate_for_4_days biosampleType=in_vitro_differentiated_cells donor=ENCDO336AAA dataType=typeCcres
 shortLabel ENCFF386FNE_ENCFF768NPJ_ENCFF435NQW_ENCFF541XGP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -884,7 +885,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF156LUX_ENCFF696UEY_ENCFF7
 subGroups organ=blood_vessel view=cCREs_view simpleBiosample=thoracic_aorta-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF156LUX_ENCFF696UEY_ENCFF762YWL_ENCFF429ZQN
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -896,7 +897,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF162OQB_ENCFF387XJD_ENCFF9
 subGroups organ=spleen view=cCREs_view simpleBiosample=spleen-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF162OQB_ENCFF387XJD_ENCFF987FRB_ENCFF722HFK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -908,7 +909,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF237KCK_ENCFF700TZZ_ENCFF9
 subGroups organ=adrenal_gland view=cCREs_view simpleBiosample=adrenal_gland-_female_adult__41_years_ biosampleType=tissue donor=ENCDO575WHY dataType=typeCcres
 shortLabel ENCFF237KCK_ENCFF700TZZ_ENCFF988QAR_ENCFF796PZW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -920,7 +921,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF316SZE_ENCFF263CSV_ENCFF1
 subGroups organ=adrenal_gland view=cCREs_view simpleBiosample=adrenal_gland-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF316SZE_ENCFF263CSV_ENCFF144JOJ_ENCFF035TJC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -932,7 +933,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF525EPU_ENCFF904YBG_ENCFF0
 subGroups organ=vagina view=cCREs_view simpleBiosample=vagina-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF525EPU_ENCFF904YBG_ENCFF092VQF_ENCFF258LTU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -944,7 +945,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF221CLN_ENCFF551GZK_ENCFF4
 subGroups organ=spleen view=cCREs_view simpleBiosample=spleen-_female_adult__61_years_ biosampleType=tissue donor=ENCDO186XRB dataType=typeCcres
 shortLabel ENCFF221CLN_ENCFF551GZK_ENCFF438NSZ_ENCFF806GMH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -956,7 +957,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF417JSF_ENCFF651XRK_ENCFF3
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_left_ventricle-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF417JSF_ENCFF651XRK_ENCFF320IPT_ENCFF440RUS
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -968,7 +969,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF213UEB_ENCFF682UWZ_ENCFF9
 subGroups organ=pancreas view=cCREs_view simpleBiosample=pancreas-_female_adult__61_years_ biosampleType=tissue donor=ENCDO186XRB dataType=typeCcres
 shortLabel ENCFF213UEB_ENCFF682UWZ_ENCFF948MEI_ENCFF232BMJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -980,7 +981,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF428COP_ENCFF665CXY_ENCFF2
 subGroups organ=testis view=cCREs_view simpleBiosample=testis-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF428COP_ENCFF665CXY_ENCFF246QNM_ENCFF245HIM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -992,7 +993,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF477CEG_ENCFF580GFO_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__84_years_ biosampleType=tissue donor=ENCDO999WDR dataType=typeCcres
 shortLabel ENCFF477CEG_ENCFF580GFO_ENCFF646KVN_ENCFF496PUD
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1004,7 +1005,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF179VUT_ENCFF711EZK_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__79_years_ biosampleType=tissue donor=ENCDO609ZOG dataType=typeCcres
 shortLabel ENCFF179VUT_ENCFF711EZK_ENCFF909JLH_ENCFF924IJQ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1016,7 +1017,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF397SMJ_ENCFF666VNK_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO877NVF dataType=typeCcres
 shortLabel ENCFF397SMJ_ENCFF666VNK_ENCFF419XHK_ENCFF457ZFQ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1028,7 +1029,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF707HLC_ENCFF935CPK_ENCFF5
 subGroups organ=blood_vessel view=cCREs_view simpleBiosample=ascending_aorta-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF707HLC_ENCFF935CPK_ENCFF557HHH_ENCFF880CZK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1040,7 +1041,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF118JST_ENCFF446ELY_ENCFF5
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_female_adult__56_years_ biosampleType=tissue donor=ENCDO907YUG dataType=typeCcres
 shortLabel ENCFF118JST_ENCFF446ELY_ENCFF509VVM_ENCFF257ODJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1052,7 +1053,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF122VLP_ENCFF869EMQ_ENCFF7
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_left_ventricle-_female_adult__56_years_ biosampleType=tissue donor=ENCDO907YUG dataType=typeCcres
 shortLabel ENCFF122VLP_ENCFF869EMQ_ENCFF707MHB_ENCFF412TOH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1064,7 +1065,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF876OBV_ENCFF083ENU_ENCFF3
 subGroups organ=pancreas view=cCREs_view simpleBiosample=pancreas-_female_adult__59_years_ biosampleType=tissue donor=ENCDO856ZOJ dataType=typeCcres
 shortLabel ENCFF876OBV_ENCFF083ENU_ENCFF306RJQ_ENCFF297EQI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1076,7 +1077,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF518SGA_ENCFF827GEQ_ENCFF2
 subGroups organ=adrenal_gland view=cCREs_view simpleBiosample=adrenal_gland-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF518SGA_ENCFF827GEQ_ENCFF235TYQ_ENCFF419QIY
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1088,7 +1089,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF847FPR_ENCFF454ERF_ENCFF9
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_male_adult__43_years_ biosampleType=tissue donor=ENCDO967KID dataType=typeCcres
 shortLabel ENCFF847FPR_ENCFF454ERF_ENCFF982IVZ_ENCFF505OIJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1100,7 +1101,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF644VHX_ENCFF201UPO_ENCFF0
 subGroups organ=nerve view=cCREs_view simpleBiosample=tibial_nerve-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF644VHX_ENCFF201UPO_ENCFF038BIZ_ENCFF670BZH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1112,7 +1113,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF379EHP_ENCFF321LZL_ENCFF7
 subGroups organ=thyroid view=cCREs_view simpleBiosample=thyroid_gland-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF379EHP_ENCFF321LZL_ENCFF774RLX_ENCFF397CJU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1124,7 +1125,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF241BCT_ENCFF474VCQ_ENCFF5
 subGroups organ=small_intestine view=cCREs_view simpleBiosample=Peyers_patch-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF241BCT_ENCFF474VCQ_ENCFF525KQP_ENCFF715AGA
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1136,7 +1137,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF867EIA_ENCFF842QQE_ENCFF4
 subGroups organ=spleen view=cCREs_view simpleBiosample=spleen-_female_adult__59_years_ biosampleType=tissue donor=ENCDO856ZOJ dataType=typeCcres
 shortLabel ENCFF867EIA_ENCFF842QQE_ENCFF428HQD_ENCFF161AWO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1148,7 +1149,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF796XMI_ENCFF679AWS_ENCFF7
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__90_or_above_years_ biosampleType=tissue donor=ENCDO006DAA dataType=typeCcres
 shortLabel ENCFF796XMI_ENCFF679AWS_ENCFF703DMY_ENCFF782LSR
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1160,7 +1161,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF865IXT_ENCFF761PKU_ENCFF1
 subGroups organ=prostate view=cCREs_view simpleBiosample=prostate_gland-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF865IXT_ENCFF761PKU_ENCFF112GCV_ENCFF310UCW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1172,7 +1173,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF753MXL_ENCFF252OBP_ENCFF5
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=transverse_colon-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF753MXL_ENCFF252OBP_ENCFF532ZGB_ENCFF646EZE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1184,7 +1185,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF299OOV_ENCFF237VMY_ENCFF1
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=sigmoid_colon-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF299OOV_ENCFF237VMY_ENCFF111DLN_ENCFF154FOF
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1196,7 +1197,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF571QPS_ENCFF546VCE_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__82_years_ biosampleType=tissue donor=ENCDO407UTA dataType=typeCcres
 shortLabel ENCFF571QPS_ENCFF546VCE_ENCFF272DJL_ENCFF423POG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1208,7 +1209,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF427FGG_ENCFF616FVZ_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__82_years_ biosampleType=tissue donor=ENCDO290OPS dataType=typeCcres
 shortLabel ENCFF427FGG_ENCFF616FVZ_ENCFF962GLK_ENCFF417AGZ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1220,7 +1221,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF793FUR_ENCFF220GPW_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__86_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO997SGX dataType=typeCcres
 shortLabel ENCFF793FUR_ENCFF220GPW_ENCFF685BLE_ENCFF754BJX
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1232,7 +1233,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF632MSC_ENCFF499ALA_ENCFF7
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO471EKG dataType=typeCcres
 shortLabel ENCFF632MSC_ENCFF499ALA_ENCFF750UAD_ENCFF548SBE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1244,7 +1245,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF318DDE_ENCFF914PSJ_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__89_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO830KFO dataType=typeCcres
 shortLabel ENCFF318DDE_ENCFF914PSJ_ENCFF679HCC_ENCFF695EYC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1256,7 +1257,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF686DIT_ENCFF543PRC_ENCFF1
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__90_or_above_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO637GUS dataType=typeCcres
 shortLabel ENCFF686DIT_ENCFF543PRC_ENCFF111ACH_ENCFF800TZW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1268,7 +1269,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF813UXN_ENCFF261GPQ_ENCFF3
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__83_years_ biosampleType=tissue donor=ENCDO448ZXP dataType=typeCcres
 shortLabel ENCFF813UXN_ENCFF261GPQ_ENCFF398ITJ_ENCFF992YXC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1280,7 +1281,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF036SMP_ENCFF352MMI_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__83_years_ biosampleType=tissue donor=ENCDO592ZWW dataType=typeCcres
 shortLabel ENCFF036SMP_ENCFF352MMI_ENCFF942YRH_ENCFF394BNS
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1292,7 +1293,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF359QRX_ENCFF878BKX_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO739EFE dataType=typeCcres
 shortLabel ENCFF359QRX_ENCFF878BKX_ENCFF280YLT_ENCFF433RNM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1304,7 +1305,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF554VOU_ENCFF100JXF_ENCFF3
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__89_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO853VGZ dataType=typeCcres
 shortLabel ENCFF554VOU_ENCFF100JXF_ENCFF380WZB_ENCFF812RLY
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1316,7 +1317,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF841ILF_ENCFF173NSX_ENCFF0
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=colonic_mucosa-_female_adult__41_years_ biosampleType=tissue donor=ENCDO575WHY dataType=typeCcres
 shortLabel ENCFF841ILF_ENCFF173NSX_ENCFF004SRJ_ENCFF546ZNQ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1328,7 +1329,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF686OEZ_ENCFF018QTQ_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__88_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO151OJB dataType=typeCcres
 shortLabel ENCFF686OEZ_ENCFF018QTQ_ENCFF461GFM_ENCFF072ETP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1340,7 +1341,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF874WYJ_ENCFF562LUZ_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__87_years_ biosampleType=tissue donor=ENCDO640RUC dataType=typeCcres
 shortLabel ENCFF874WYJ_ENCFF562LUZ_ENCFF489BZS_ENCFF729DUW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1352,7 +1353,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF052CPA_ENCFF198NDW_ENCFF3
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__88_years_ biosampleType=tissue donor=ENCDO669IVL dataType=typeCcres
 shortLabel ENCFF052CPA_ENCFF198NDW_ENCFF371ZKC_ENCFF294XWZ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1364,7 +1365,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF278VYR_ENCFF971OSG_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO153NUY dataType=typeCcres
 shortLabel ENCFF278VYR_ENCFF971OSG_ENCFF238JTO_ENCFF264VOP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1376,7 +1377,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF732ABI_ENCFF127DBK_ENCFF7
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__87_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO354SJE dataType=typeCcres
 shortLabel ENCFF732ABI_ENCFF127DBK_ENCFF794RDI_ENCFF888DOQ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1388,7 +1389,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF615BRP_ENCFF902HIA_ENCFF3
 subGroups organ=lung view=cCREs_view simpleBiosample=lower_lobe_of_left_lung-_female_adult__59_years_ biosampleType=tissue donor=ENCDO856ZOJ dataType=typeCcres
 shortLabel ENCFF615BRP_ENCFF902HIA_ENCFF375YPQ_ENCFF033FEG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1400,19 +1401,19 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF801REE_ENCFF053KMZ_ENCFF8
 subGroups organ=adrenal_gland view=cCREs_view simpleBiosample=adrenal_gland-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF801REE_ENCFF053KMZ_ENCFF860MMV_ENCFF804PBU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF679FKQ_ENCFF163VOI_ENCFF791CAJ_ENCFF872ERK
 type bigBed 9 + 2
 longLabel Right atrium auricular region, female adult (51 years): cCREs
-parent cCREs_view off
+parent cCREs_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF679FKQ_ENCFF163VOI_ENCFF791CAJ_ENCFF872ERK.bb
 subGroups organ=heart view=cCREs_view simpleBiosample=right_atrium_auricular_region-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF679FKQ_ENCFF163VOI_ENCFF791CAJ_ENCFF872ERK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1424,7 +1425,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF383WYK_ENCFF811RQX_ENCFF1
 subGroups organ=blood_vessel view=cCREs_view simpleBiosample=coronary_artery-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF383WYK_ENCFF811RQX_ENCFF130NUG_ENCFF341RAH
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1436,7 +1437,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF412TKS_ENCFF066MLC_ENCFF1
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__cognitive_impairment_-_female_adult__86_years__with_Cognitive_impairment biosampleType=tissue donor=ENCDO845GYA dataType=typeCcres
 shortLabel ENCFF412TKS_ENCFF066MLC_ENCFF146LLE_ENCFF884XLS
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1448,7 +1449,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF767BTZ_ENCFF319HQY_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__90_or_above_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO201EUI dataType=typeCcres
 shortLabel ENCFF767BTZ_ENCFF319HQY_ENCFF435BRK_ENCFF891CZD
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1460,7 +1461,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF813QPY_ENCFF393NEJ_ENCFF8
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__83_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO832DBZ dataType=typeCcres
 shortLabel ENCFF813QPY_ENCFF393NEJ_ENCFF820MMW_ENCFF884MZR
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1472,7 +1473,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF841VBI_ENCFF764HZI_ENCFF0
 subGroups organ=esophagus view=cCREs_view simpleBiosample=esophagus_squamous_epithelium-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF841VBI_ENCFF764HZI_ENCFF037TME_ENCFF536DEU
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1484,7 +1485,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF639UGW_ENCFF958TLM_ENCFF5
 subGroups organ=nerve view=cCREs_view simpleBiosample=tibial_nerve-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF639UGW_ENCFF958TLM_ENCFF549DZD_ENCFF670COF
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1496,7 +1497,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF211HIT_ENCFF501SGE_ENCFF5
 subGroups organ=thyroid view=cCREs_view simpleBiosample=thyroid_gland-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF211HIT_ENCFF501SGE_ENCFF546UQS_ENCFF874CKO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1508,7 +1509,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF279ZNA_ENCFF282VQS_ENCFF0
 subGroups organ=lung view=cCREs_view simpleBiosample=upper_lobe_of_left_lung-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF279ZNA_ENCFF282VQS_ENCFF054VRQ_ENCFF468WUY
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1520,7 +1521,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF493HHP_ENCFF641DNV_ENCFF2
 subGroups organ=stomach view=cCREs_view simpleBiosample=stomach-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF493HHP_ENCFF641DNV_ENCFF225PPI_ENCFF807KJZ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1532,7 +1533,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF225DKL_ENCFF127LVQ_ENCFF8
 subGroups organ=pancreas view=cCREs_view simpleBiosample=body_of_pancreas-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF225DKL_ENCFF127LVQ_ENCFF853NJX_ENCFF893BCC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1544,7 +1545,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF013UBZ_ENCFF901QWB_ENCFF9
 subGroups organ=blood_vessel view=cCREs_view simpleBiosample=tibial_artery-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF013UBZ_ENCFF901QWB_ENCFF972ZHA_ENCFF500RDL
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1556,7 +1557,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF017LRG_ENCFF229BVH_ENCFF5
 subGroups organ=thyroid view=cCREs_view simpleBiosample=thyroid_gland-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF017LRG_ENCFF229BVH_ENCFF573DJV_ENCFF510THG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1568,7 +1569,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF674RXU_ENCFF996QZC_ENCFF6
 subGroups organ=lung view=cCREs_view simpleBiosample=upper_lobe_of_left_lung-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF674RXU_ENCFF996QZC_ENCFF607SXR_ENCFF862ZOO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1580,7 +1581,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF867HAD_ENCFF152PBB_ENCFF3
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_left_ventricle-_female_adult__46_years_ biosampleType=tissue donor=ENCDO411EVD dataType=typeCcres
 shortLabel ENCFF867HAD_ENCFF152PBB_ENCFF352YYH_ENCFF252IVK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1592,7 +1593,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF505TAB_ENCFF117DUU_ENCFF7
 subGroups organ=lung view=cCREs_view simpleBiosample=upper_lobe_of_left_lung-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF505TAB_ENCFF117DUU_ENCFF752LEN_ENCFF750ENA
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1604,7 +1605,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF066BOK_ENCFF431FFY_ENCFF7
 subGroups organ=muscle view=cCREs_view simpleBiosample=gastrocnemius_medialis-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF066BOK_ENCFF431FFY_ENCFF793HOY_ENCFF070MOG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1616,7 +1617,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF022SDS_ENCFF132YWJ_ENCFF1
 subGroups organ=blood_vessel view=cCREs_view simpleBiosample=ascending_aorta-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF022SDS_ENCFF132YWJ_ENCFF118EKX_ENCFF857NIC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1628,7 +1629,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF414ADM_ENCFF614FJF_ENCFF1
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_left_ventricle-_female_adult__59_years_ biosampleType=tissue donor=ENCDO856ZOJ dataType=typeCcres
 shortLabel ENCFF414ADM_ENCFF614FJF_ENCFF135RBK_ENCFF541CSJ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1640,7 +1641,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF284PMB_ENCFF713LKP_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__78_years_ biosampleType=tissue donor=ENCDO623FPG dataType=typeCcres
 shortLabel ENCFF284PMB_ENCFF713LKP_ENCFF973ZFT_ENCFF693AEK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1652,7 +1653,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF769AFQ_ENCFF557GVR_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__86_years_ biosampleType=tissue donor=ENCDO666UNK dataType=typeCcres
 shortLabel ENCFF769AFQ_ENCFF557GVR_ENCFF943HGP_ENCFF393UAO
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1664,7 +1665,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF305XCA_ENCFF478CLR_ENCFF0
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__cognitive_impairment_-_female_adult__90_or_above_years__with_Cognitive_impairment biosampleType=tissue donor=ENCDO359XWR dataType=typeCcres
 shortLabel ENCFF305XCA_ENCFF478CLR_ENCFF028IBW_ENCFF258OMT
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1676,7 +1677,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF349ZMO_ENCFF849YNY_ENCFF8
 subGroups organ=pancreas view=cCREs_view simpleBiosample=pancreas-_female_child__16_years_ biosampleType=tissue donor=ENCDO575EGL dataType=typeCcres
 shortLabel ENCFF349ZMO_ENCFF849YNY_ENCFF827CBM_ENCFF521NYK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1688,7 +1689,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF456EHL_ENCFF867WWB_ENCFF7
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO672KST dataType=typeCcres
 shortLabel ENCFF456EHL_ENCFF867WWB_ENCFF701XQB_ENCFF968SXQ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1700,7 +1701,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF960WAV_ENCFF372LSW_ENCFF1
 subGroups organ=lung view=cCREs_view simpleBiosample=upper_lobe_of_left_lung-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF960WAV_ENCFF372LSW_ENCFF174WAB_ENCFF543MYI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1712,7 +1713,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF549MXK_ENCFF278ZAD_ENCFF0
 subGroups organ=breast view=cCREs_view simpleBiosample=breast_epithelium-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF549MXK_ENCFF278ZAD_ENCFF085IYD_ENCFF271PWB
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1724,7 +1725,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF717OQE_ENCFF305GQX_ENCFF4
 subGroups organ=small_intestine view=cCREs_view simpleBiosample=Peyers_patch-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF717OQE_ENCFF305GQX_ENCFF485RWJ_ENCFF694HBV
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1736,7 +1737,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF164EEU_ENCFF391KDD_ENCFF4
 subGroups organ=stomach view=cCREs_view simpleBiosample=stomach-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF164EEU_ENCFF391KDD_ENCFF493RLF_ENCFF034PJC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1748,7 +1749,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF028FLY_ENCFF886LUE_ENCFF3
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=sigmoid_colon-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF028FLY_ENCFF886LUE_ENCFF322NLT_ENCFF634JUC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1760,7 +1761,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF047YGB_ENCFF145RER_ENCFF0
 subGroups organ=thyroid view=cCREs_view simpleBiosample=thyroid_gland-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF047YGB_ENCFF145RER_ENCFF050PLB_ENCFF603TNI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1772,7 +1773,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF541ZVM_ENCFF889QTE_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__81_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO097MEH dataType=typeCcres
 shortLabel ENCFF541ZVM_ENCFF889QTE_ENCFF480FCW_ENCFF796CNP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1784,7 +1785,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF812JCQ_ENCFF675KIN_ENCFF3
 subGroups organ=small_intestine view=cCREs_view simpleBiosample=Peyers_patch-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF812JCQ_ENCFF675KIN_ENCFF302XLU_ENCFF945PHV
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1796,7 +1797,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF798CZY_ENCFF779PMH_ENCFF7
 subGroups organ=nerve view=cCREs_view simpleBiosample=tibial_nerve-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF798CZY_ENCFF779PMH_ENCFF758AQR_ENCFF543LIT
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1808,7 +1809,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF926IJX_ENCFF996ZNX_ENCFF2
 subGroups organ=small_intestine view=cCREs_view simpleBiosample=Peyers_patch-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF926IJX_ENCFF996ZNX_ENCFF249ILQ_ENCFF758HAD
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1820,7 +1821,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF693WYZ_ENCFF672KET_ENCFF3
 subGroups organ=adrenal_gland view=cCREs_view simpleBiosample=adrenal_gland-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF693WYZ_ENCFF672KET_ENCFF355RRY_ENCFF673UYG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1832,7 +1833,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF688CZD_ENCFF330KOM_ENCFF3
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_male_adult__61_years_ biosampleType=tissue donor=ENCDO808ASZ dataType=typeCcres
 shortLabel ENCFF688CZD_ENCFF330KOM_ENCFF345XIS_ENCFF011PEP
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1844,7 +1845,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF649PLC_ENCFF138VRG_ENCFF9
 subGroups organ=pancreas view=cCREs_view simpleBiosample=body_of_pancreas-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF649PLC_ENCFF138VRG_ENCFF940UMR_ENCFF078UTK
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1856,7 +1857,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF990HTO_ENCFF973MQG_ENCFF4
 subGroups organ=lung view=cCREs_view simpleBiosample=left_lung-_male_adult__40_years_ biosampleType=tissue donor=ENCDO392CRK dataType=typeCcres
 shortLabel ENCFF990HTO_ENCFF973MQG_ENCFF441OEQ_ENCFF002ZEZ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1868,7 +1869,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF712ATQ_ENCFF880UEZ_ENCFF8
 subGroups organ=muscle view=cCREs_view simpleBiosample=gastrocnemius_medialis-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCcres
 shortLabel ENCFF712ATQ_ENCFF880UEZ_ENCFF825YXF_ENCFF055HAN
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1880,7 +1881,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF017QTW_ENCFF751MDE_ENCFF9
 subGroups organ=stomach view=cCREs_view simpleBiosample=stomach-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF017QTW_ENCFF751MDE_ENCFF975CDE_ENCFF324HRF
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1892,19 +1893,19 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF138FMV_ENCFF487CTD_ENCFF7
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=transverse_colon-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF138FMV_ENCFF487CTD_ENCFF741NZM_ENCFF626YRZ
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF986YEI_ENCFF345SEW_ENCFF137KZR_ENCFF341CQE
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: cCREs
-parent cCREs_view off
+parent cCREs_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF986YEI_ENCFF345SEW_ENCFF137KZR_ENCFF341CQE.bb
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO697SWU dataType=typeCcres
 shortLabel ENCFF986YEI_ENCFF345SEW_ENCFF137KZR_ENCFF341CQE
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1916,7 +1917,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF980SJY_ENCFF752DGV_ENCFF2
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_male_adult__71_years_ biosampleType=tissue donor=ENCDO570AKP dataType=typeCcres
 shortLabel ENCFF980SJY_ENCFF752DGV_ENCFF242WZH_ENCFF816YAI
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1928,7 +1929,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF886QYD_ENCFF344ITP_ENCFF3
 subGroups organ=muscle view=cCREs_view simpleBiosample=esophagus_muscularis_mucosa-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF886QYD_ENCFF344ITP_ENCFF322ZPK_ENCFF526HRV
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1940,7 +1941,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF270GCR_ENCFF654FHZ_ENCFF4
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_right_ventricle-_female_adult__46_years_ biosampleType=tissue donor=ENCDO411EVD dataType=typeCcres
 shortLabel ENCFF270GCR_ENCFF654FHZ_ENCFF406YGS_ENCFF803TUM
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1952,7 +1953,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF380ELC_ENCFF155GED_ENCFF6
 subGroups organ=heart view=cCREs_view simpleBiosample=heart_left_ventricle-_male_adult__43_years_ biosampleType=tissue donor=ENCDO967KID dataType=typeCcres
 shortLabel ENCFF380ELC_ENCFF155GED_ENCFF617TKL_ENCFF915AST
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1964,7 +1965,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF421SBY_ENCFF032IZZ_ENCFF5
 subGroups organ=lung view=cCREs_view simpleBiosample=lower_lobe_of_left_lung-_male_adult__60_years_ biosampleType=tissue donor=ENCDO520EJG dataType=typeCcres
 shortLabel ENCFF421SBY_ENCFF032IZZ_ENCFF504NPN_ENCFF812ODW
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1976,7 +1977,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF087WEP_ENCFF285STS_ENCFF9
 subGroups organ=pancreas view=cCREs_view simpleBiosample=body_of_pancreas-_male_adult__37_years_ biosampleType=tissue donor=ENCDO845WKR dataType=typeCcres
 shortLabel ENCFF087WEP_ENCFF285STS_ENCFF989SFZ_ENCFF885ZLN
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -1988,7 +1989,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF405NTZ_ENCFF568IBR_ENCFF4
 subGroups organ=large_intestine view=cCREs_view simpleBiosample=transverse_colon-_male_adult__54_years_ biosampleType=tissue donor=ENCDO451RUA dataType=typeCcres
 shortLabel ENCFF405NTZ_ENCFF568IBR_ENCFF427MZX_ENCFF435CDF
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2000,7 +2001,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF103WUK_ENCFF707BCP_ENCFF6
 subGroups organ=muscle view=cCREs_view simpleBiosample=gastrocnemius_medialis-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCcres
 shortLabel ENCFF103WUK_ENCFF707BCP_ENCFF638ZRF_ENCFF643VTS
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2012,7 +2013,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF592RWK_ENCFF922WUL_ENCFF6
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_female_adult__90_or_above_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO660TGP dataType=typeCcres
 shortLabel ENCFF592RWK_ENCFF922WUL_ENCFF686LXM_ENCFF111MOL
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2024,7 +2025,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF018BZK_ENCFF062WLH_ENCFF1
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__84_years_ biosampleType=tissue donor=ENCDO461DJY dataType=typeCcres
 shortLabel ENCFF018BZK_ENCFF062WLH_ENCFF156GJU_ENCFF741DPN
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2036,7 +2037,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF604AYM_ENCFF298AQY_ENCFF0
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__78_years_ biosampleType=tissue donor=ENCDO236YSH dataType=typeCcres
 shortLabel ENCFF604AYM_ENCFF298AQY_ENCFF014NIB_ENCFF203LSD
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2048,7 +2049,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF286BFK_ENCFF617PMJ_ENCFF9
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46-_female_adult__89_years_ biosampleType=tissue donor=ENCDO707TUE dataType=typeCcres
 shortLabel ENCFF286BFK_ENCFF617PMJ_ENCFF986LOD_ENCFF450HJC
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2060,7 +2061,7 @@ bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF492WAE_ENCFF586MLV_ENCFF4
 subGroups organ=brain view=cCREs_view simpleBiosample=middle_frontal_area_46__Alzheimers_disease_-_female_adult__74_years__with_Alzheimers_disease biosampleType=tissue donor=ENCDO907CMO dataType=typeCcres
 shortLabel ENCFF492WAE_ENCFF586MLV_ENCFF472UDH_ENCFF326PAG
 visibility pack
-mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>cCRE Group:</b> ${ccre}<br><b>Classification type:</b> ${classification}
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=GRCh38&accessions=${name}">${name}</a><br><b>Class:</b> ${ccre}
 url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
@@ -2112,7 +2113,7 @@ type bigWig
 longLabel K562: DNase, ENCFF414OGC
 autoScale on
 color 6,218,147
-parent DNase_view on
+parent DNase_view off
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF414OGC.bw
 subGroups organ=blood view=DNase_view simpleBiosample=K562 biosampleType=cell_line donor=ENCDO000AAD dataType=typeDNase
 maxHeightPixels 30
@@ -2856,7 +2857,7 @@ type bigWig
 longLabel Right lobe of liver, female adult (53 years): DNase, ENCFF020EPF
 autoScale on
 color 6,218,147
-parent DNase_view off
+parent DNase_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF020EPF.bw
 subGroups organ=liver view=DNase_view simpleBiosample=right_lobe_of_liver-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeDNase
 maxHeightPixels 30
@@ -3456,7 +3457,7 @@ type bigWig
 longLabel Right atrium auricular region, female adult (51 years): DNase, ENCFF679FKQ
 autoScale on
 color 6,218,147
-parent DNase_view off
+parent DNase_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF679FKQ.bw
 subGroups organ=heart view=DNase_view simpleBiosample=right_atrium_auricular_region-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeDNase
 maxHeightPixels 30
@@ -3948,7 +3949,7 @@ type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: DNase, ENCFF986YEI
 autoScale on
 color 6,218,147
-parent DNase_view off
+parent DNase_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF986YEI.bw
 subGroups organ=brain view=DNase_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO697SWU dataType=typeDNase
 maxHeightPixels 30
@@ -4159,7 +4160,7 @@ type bigWig
 longLabel K562: H3K4me3, ENCFF806YEZ
 autoScale on
 color 255,0,0
-parent H3K4me3_view on
+parent H3K4me3_view off
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF806YEZ.bw
 subGroups organ=blood view=H3K4me3_view simpleBiosample=K562 biosampleType=cell_line donor=ENCDO000AAD dataType=typeH3k4me3
 maxHeightPixels 30
@@ -4903,7 +4904,7 @@ type bigWig
 longLabel Right lobe of liver, female adult (53 years): H3K4me3, ENCFF917LFF
 autoScale on
 color 255,0,0
-parent H3K4me3_view off
+parent H3K4me3_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF917LFF.bw
 subGroups organ=liver view=H3K4me3_view simpleBiosample=right_lobe_of_liver-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeH3k4me3
 maxHeightPixels 30
@@ -5503,7 +5504,7 @@ type bigWig
 longLabel Right atrium auricular region, female adult (51 years): H3K4me3, ENCFF163VOI
 autoScale on
 color 255,0,0
-parent H3K4me3_view off
+parent H3K4me3_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF163VOI.bw
 subGroups organ=heart view=H3K4me3_view simpleBiosample=right_atrium_auricular_region-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeH3k4me3
 maxHeightPixels 30
@@ -5995,7 +5996,7 @@ type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: H3K4me3, ENCFF345SEW
 autoScale on
 color 255,0,0
-parent H3K4me3_view off
+parent H3K4me3_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF345SEW.bw
 subGroups organ=brain view=H3K4me3_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO697SWU dataType=typeH3k4me3
 maxHeightPixels 30
@@ -6206,7 +6207,7 @@ type bigWig
 longLabel K562: H3K27ac, ENCFF849TDM
 autoScale on
 color 255,205,0
-parent H3K27ac_view on
+parent H3K27ac_view off
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF849TDM.bw
 subGroups organ=blood view=H3K27ac_view simpleBiosample=K562 biosampleType=cell_line donor=ENCDO000AAD dataType=typeH3k27ac
 maxHeightPixels 30
@@ -6950,7 +6951,7 @@ type bigWig
 longLabel Right lobe of liver, female adult (53 years): H3K27ac, ENCFF764VSN
 autoScale on
 color 255,205,0
-parent H3K27ac_view off
+parent H3K27ac_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF764VSN.bw
 subGroups organ=liver view=H3K27ac_view simpleBiosample=right_lobe_of_liver-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeH3k27ac
 maxHeightPixels 30
@@ -7550,7 +7551,7 @@ type bigWig
 longLabel Right atrium auricular region, female adult (51 years): H3K27ac, ENCFF791CAJ
 autoScale on
 color 255,205,0
-parent H3K27ac_view off
+parent H3K27ac_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF791CAJ.bw
 subGroups organ=heart view=H3K27ac_view simpleBiosample=right_atrium_auricular_region-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeH3k27ac
 maxHeightPixels 30
@@ -8042,7 +8043,7 @@ type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: H3K27ac, ENCFF137KZR
 autoScale on
 color 255,205,0
-parent H3K27ac_view off
+parent H3K27ac_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF137KZR.bw
 subGroups organ=brain view=H3K27ac_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO697SWU dataType=typeH3k27ac
 maxHeightPixels 30
@@ -8253,7 +8254,7 @@ type bigWig
 longLabel K562: CTCF, ENCFF736UDR
 autoScale on
 color 0,176,240
-parent CTCF_view on
+parent CTCF_view off
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF736UDR.bw
 subGroups organ=blood view=CTCF_view simpleBiosample=K562 biosampleType=cell_line donor=ENCDO000AAD dataType=typeCtcf
 maxHeightPixels 30
@@ -8997,7 +8998,7 @@ type bigWig
 longLabel Right lobe of liver, female adult (53 years): CTCF, ENCFF005YBS
 autoScale on
 color 0,176,240
-parent CTCF_view off
+parent CTCF_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF005YBS.bw
 subGroups organ=liver view=CTCF_view simpleBiosample=right_lobe_of_liver-_female_adult__53_years_ biosampleType=tissue donor=ENCDO793LXB dataType=typeCtcf
 maxHeightPixels 30
@@ -9597,7 +9598,7 @@ type bigWig
 longLabel Right atrium auricular region, female adult (51 years): CTCF, ENCFF872ERK
 autoScale on
 color 0,176,240
-parent CTCF_view off
+parent CTCF_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF872ERK.bw
 subGroups organ=heart view=CTCF_view simpleBiosample=right_atrium_auricular_region-_female_adult__51_years_ biosampleType=tissue donor=ENCDO271OUW dataType=typeCtcf
 maxHeightPixels 30
@@ -10089,7 +10090,7 @@ type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: CTCF, ENCFF341CQE
 autoScale on
 color 0,176,240
-parent CTCF_view off
+parent CTCF_view on
 bigDataUrl /gbdb/hg38/encode4/ccre/coreCollection/ENCFF341CQE.bw
 subGroups organ=brain view=CTCF_view simpleBiosample=middle_frontal_area_46__mild_cognitive_impairment_-_male_adult__89_years__with_mild_cognitive_impairment biosampleType=tissue donor=ENCDO697SWU dataType=typeCtcf
 maxHeightPixels 30
