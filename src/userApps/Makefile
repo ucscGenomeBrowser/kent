@@ -53,6 +53,6 @@ update: clean userApps
 
 userApps:
 	git archive --format=zip -9 \
-	    --remote=git://genome-source.soe.ucsc.edu/kent.git \
+	    --remote=https://github.com/ucscGenomeBrowser/kent.git \
 	    HEAD src/userApps > userApps.zip
 	unzip -q -o -d . -j userApps.zip 

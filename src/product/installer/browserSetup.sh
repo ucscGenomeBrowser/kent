@@ -671,7 +671,7 @@ function setupCgiOsx ()
     # get samtools patched for UCSC and compile it
     cd kent
     if [ ! -d samtabix ]; then
-       git clone http://genome-source.soe.ucsc.edu/samtabix.git
+       git clone https://github.com/AngieHinrichs/samtabix.git
     else
        cd samtabix
        git pull

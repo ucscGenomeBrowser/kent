@@ -68,7 +68,7 @@ if [ "${asmFa}" -nt "${asmId}.agp.gz" ]; then
    touch -r "${asmFa}" "${asmId}.agp.gz"
 fi
 
-wget --timestamping "https://genome-source.gi.ucsc.edu/gitlist/kent.git/raw/master/src/hg/makeDb/doc/asmHubs/groups.txt"
+wget --timestamping "https://github.com/ucscGenomeBrowser/kent/raw/master/src/hg/makeDb/doc/asmHubs/groups.txt"
 
 # calculate a default position in the middle of the largest sequence
 export chrName=`head -1 $asmId.chrom.sizes.txt | cut -f1`
