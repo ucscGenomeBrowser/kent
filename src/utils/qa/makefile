@@ -86,6 +86,7 @@ install:
 	cp -p --remove-destination findPushQLocks.csh      ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
+	cp -p --remove-destination generateTipOfDay.py	   ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination getChainLines.csh       ${SCRIPTS}
