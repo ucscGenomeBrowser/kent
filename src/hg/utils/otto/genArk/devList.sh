@@ -21,6 +21,7 @@ export machName=`uname -n | cut -d'.' -f1`
 export fileOut="gbdbGenArk.${machName}.${DS}"
 export statList="gbdbGenArkStat.${machName}.${DS}"
 export quickLiftStat="gbdbQuickLiftStat.${machName}.${DS}"
+export liftOverStat="gbdbLiftOverStat.${machName}.${DS}"
 
 find -L /gbdb/genark/GCA /gbdb/genark/GCF -type d | sort \
   | gzip -c > /dev/shm/${fileOut}.gz
@@ -54,3 +55,15 @@ cp -p /dev/shm/${quickLiftStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.qui
 
 rm -f /dev/shm/gbdbQuickLift.fl.gz /dev/shm/${quickLiftStat}.gz
 
+ls -d */liftOver | while read Q
+do
+  find -L ./${Q} -type f
+done | sed -e 's#^./##;' | sort | gzip -c > /dev/shm/gbdbLiftOver.fl.gz
+
+zcat /dev/shm/gbdbLiftOver.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
+  | gzip -c > /dev/shm/${liftOverStat}.gz
+
+cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
+cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.quickLiftList.gz
+
+rm -f /dev/shm/gbdbLiftOver.fl.gz /dev/shm/${liftOverStat}.gz
