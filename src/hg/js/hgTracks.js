@@ -2972,13 +2972,13 @@ var rightClick = {
                                         return true;
                                     }
                                 };
-                            o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
-                                {   onclick: function(menuItemClicked, menuObject) {
-                                        rightClick.hit(menuItemClicked, menuObject,
-                                                       "highlightThisItem"); 
-                                        return true;
-                                    }
-                                };
+                            //o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
+                            //    {   onclick: function(menuItemClicked, menuObject) {
+                            //            rightClick.hit(menuItemClicked, menuObject,
+                            //                           "highlightThisItem"); 
+                            //            return true;
+                            //        }
+                            //    };
                             if (rightClick.supportZoomCodon &&
                                     (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
