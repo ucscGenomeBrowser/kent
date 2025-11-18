@@ -353,7 +353,11 @@
         // The "Add IGV track" button handler.  The button opens the file picker window, unless
         // it is already open in which case it brings that window to the front.  Tracks are added
         // from the filePicker page by selecting track files.
-        document.getElementById('hgtIgv').addEventListener('click', async function (e) {
+        let butEl = document.getElementById('hgtIgv');
+        if (butEl===null) // can only happen if page crashes, helps avoid distract engineer's attention
+            return;
+
+        butEl.addEventListener('click', async function (e) {
             e.preventDefault(); // our
             if (filePicker && !filePicker.closed) {
                 showDialog("To add tracks please use the existing IGV File Manager window.");

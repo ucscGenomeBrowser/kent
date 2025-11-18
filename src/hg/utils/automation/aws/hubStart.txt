@@ -81,7 +81,7 @@ if [ -s "${homeDir}/.bashrc" ]; then
   wget -qO /data/parasol/nodeInfo/nodeReport.sh 'http://genomewiki.ucsc.edu/images/e/e3/NodeReport.sh.txt' >> "${logFile}" 2>&1
   chmod 755 /data/parasol/nodeInfo/nodeReport.sh
   # bedSingleCover.pl for use in running featureBits like measurements
-  wget -P /data/scripts 'https://genome-source.gi.ucsc.edu/gitlist/kent.git/raw/master/src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
+  wget -P /data/scripts 'https://github.com/ucscGenomeBrowser/kent/raw/master/src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
   chmod +x /data/scripts/bedSingleCover.pl
   chown -R ${nativeUser}:${nativeUser} /data "${homeDir}/bin" "${homeDir}/.vimrc"
 
@@ -116,7 +116,7 @@ if [ -s "${homeDir}/.bashrc" ]; then
 
   # this business needs to be improved to be a single rsync from
   # a download directory.
-  git archive --format=tar --remote=git://genome-source.soe.ucsc.edu/kent.git \
+  git archive --format=tar --remote=https://github.com/ucscGenomeBrowser/kent.git \
       --prefix=kent/ HEAD src/hg/utils/automation \
         | tar vxf - -C /data/scripts --strip-components=5 \
       --exclude='kent/src/hg/utils/automation/incidentDb' \

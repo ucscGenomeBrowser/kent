@@ -42,6 +42,7 @@ boolean orgChange = FALSE;
 boolean dbChange = FALSE;
 boolean allGenomes = FALSE;
 boolean allResults = FALSE;
+boolean autoRearr = FALSE;
 static long enteredMainTime = 0;
 
 
@@ -2132,6 +2133,22 @@ jsOnEventById("click", "allResultsText",
     );
 printf("</TD>\n");
 
+printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
+printf("<label for='autoRearr'>");
+cgiMakeCheckBoxWithId("autoRearr", autoRearr, "autoRearr");
+printf("<span> Optimize for Rearrangements </span>");
+printf("</label>");
+printInfoIcon("Rearrangement display (aka 'snakes' tracks) can show "
+"duplications of the query sequence using multiple lines and lines between "
+"fragments, see our "
+"<a href='/goldenPath/help/chain.html#rearrangement'>"
+"snakes documentation page"
+"</a>"
+"for more "
+"details. You can also switch this on or off on the BLAT track configuration "
+"page by checking the 'Rearrangement display' box.");
+printf("</TD>\n");
+
 printf("<TD COLSPAN=4 style='text-align:right'>\n");
 printf("<INPUT style=' font-size:1.0em; width:100px' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
 printf("<INPUT style='font-size:1.0em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
@@ -2420,6 +2437,7 @@ char *oldDb = cloneString(db);
 findClosestServer(&db, &organism);
 
 allResults = cartUsualBoolean(cart, "allResults", allResults);
+autoRearr  = cartUsualBoolean(cart, "autoRearr", autoRearr);
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */

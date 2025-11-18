@@ -1531,6 +1531,7 @@ static char *vettedTracks[] =
 "ncbiRefSeq",
 "clinvar",
 "clinvarSubLolly",
+"pubs",
 "pubsBlat",
 "pubsMarkerBand",
 "pubsMarkerSnp",

@@ -4477,8 +4477,8 @@ else if (sameString(tg->table, PCR_RESULT_TRACK_NAME))
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
 highlight = (hgFindMatches != NULL &&
-	     ( hashIntValDefault(hgFindMatches, name, 0) == 1 ||
-	       hashIntValDefault(hgFindMatches, mapName, 0) == 1));
+	     ( ((name != NULL) && (hashIntValDefault(hgFindMatches, name, 0) == 1)) ||
+	       ((mapName != NULL) &&  hashIntValDefault(hgFindMatches, mapName, 0) == 1)));
 return highlight;
 }
 
