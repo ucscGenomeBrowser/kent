@@ -26,6 +26,7 @@ visibility pack
 type bigBed
 
 track ENCFF136RNO_ENCFF630BQS_ENCFF611XLA_ENCFF975BGM
+priority 1
 type bigBed 9 + 2
 longLabel OCI-LY7: cCREs
 parent cCREs_view off
@@ -38,6 +39,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF494IGD_ENCFF719EBT_ENCFF443TJZ_ENCFF638DZB
+priority 2
 type bigBed 9 + 2
 longLabel Keratinocyte, female: cCREs
 parent cCREs_view off
@@ -50,6 +52,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF926MIK_ENCFF153BJG_ENCFF751GCN_ENCFF569HGW
+priority 3
 type bigBed 9 + 2
 longLabel Astrocyte, male adult (53 years): cCREs
 parent cCREs_view off
@@ -62,6 +65,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF414OGC_ENCFF806YEZ_ENCFF849TDM_ENCFF736UDR
+priority 4
 type bigBed 9 + 2
 longLabel K562: cCREs
 parent cCREs_view off
@@ -74,6 +78,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF226FAT_ENCFF582GHH_ENCFF441MGU_ENCFF897TLT
+priority 5
 type bigBed 9 + 2
 longLabel Osteocyte, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -86,6 +91,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF339ZGM_ENCFF695YII_ENCFF383GZA_ENCFF244CXJ
+priority 6
 type bigBed 9 + 2
 longLabel HL-60: cCREs
 parent cCREs_view off
@@ -98,6 +104,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF291DQP_ENCFF879CSG_ENCFF949IKU_ENCFF181ESK
+priority 7
 type bigBed 9 + 2
 longLabel WERI-Rb-1: cCREs
 parent cCREs_view off
@@ -110,6 +117,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF978IHV_ENCFF221TSA_ENCFF619JXN_ENCFF227NGR
+priority 8
 type bigBed 9 + 2
 longLabel Caco-2: cCREs
 parent cCREs_view off
@@ -122,6 +130,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF270ENA_ENCFF935BFQ_ENCFF063VLJ_ENCFF662LGI
+priority 9
 type bigBed 9 + 2
 longLabel MCF-7: cCREs
 parent cCREs_view off
@@ -134,6 +143,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF389PZY_ENCFF587XGD_ENCFF184NWF_ENCFF496PSJ
+priority 10
 type bigBed 9 + 2
 longLabel CD14-positive monocyte, female: cCREs
 parent cCREs_view off
@@ -146,6 +156,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF909KVS_ENCFF300WXD_ENCFF504UNY_ENCFF976GAM
+priority 11
 type bigBed 9 + 2
 longLabel Endodermal cell, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -158,6 +169,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF623TJB_ENCFF465MDM_ENCFF907RYE_ENCFF936QRH
+priority 12
 type bigBed 9 + 2
 longLabel PC-9: cCREs
 parent cCREs_view off
@@ -170,6 +182,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF816IIS_ENCFF958CFK_ENCFF213BSP_ENCFF070LLG
+priority 13
 type bigBed 9 + 2
 longLabel A673: cCREs
 parent cCREs_view off
@@ -182,6 +195,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF648XPS_ENCFF207MNM_ENCFF485DKZ_ENCFF466BIT
+priority 14
 type bigBed 9 + 2
 longLabel Cardiac muscle cell, embryo: cCREs
 parent cCREs_view off
@@ -194,6 +208,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF286QGB_ENCFF835JIA_ENCFF618RAO_ENCFF700SCP
+priority 15
 type bigBed 9 + 2
 longLabel Neural progenitor cell, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -206,6 +221,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF903ZCB_ENCFF179HBV_ENCFF988WEQ_ENCFF963CHU
+priority 16
 type bigBed 9 + 2
 longLabel H9: cCREs
 parent cCREs_view off
@@ -218,6 +234,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF766CUM_ENCFF446OPT_ENCFF641QBD_ENCFF369MIX
+priority 17
 type bigBed 9 + 2
 longLabel GM23338: cCREs
 parent cCREs_view off
@@ -230,6 +247,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF971HXR_ENCFF376ZIM_ENCFF699OAR_ENCFF105FHL
+priority 18
 type bigBed 9 + 2
 longLabel IMR-90: cCREs
 parent cCREs_view off
@@ -242,6 +260,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF447YDA_ENCFF712FDJ_ENCFF109WCV_ENCFF962LOU
+priority 19
 type bigBed 9 + 2
 longLabel Mesothelial cell of epicardium, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -254,6 +273,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF647HDA_ENCFF530MCT_ENCFF370QKJ_ENCFF973VNM
+priority 20
 type bigBed 9 + 2
 longLabel Type B pancreatic cell, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -266,6 +286,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF431JDU_ENCFF964OOU_ENCFF787LMI_ENCFF388PVO
+priority 21
 type bigBed 9 + 2
 longLabel HCT116: cCREs
 parent cCREs_view off
@@ -278,6 +299,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX
+priority 22
 type bigBed 9 + 2
 longLabel GM12878: cCREs
 parent cCREs_view off
@@ -290,6 +312,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF280RMA_ENCFF651WOM_ENCFF262UEH_ENCFF850MLW
+priority 23
 type bigBed 9 + 2
 longLabel SK-N-SH: cCREs
 parent cCREs_view off
@@ -302,6 +325,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF573NKX_ENCFF760NUN_ENCFF919FBG_ENCFF332TNJ
+priority 24
 type bigBed 9 + 2
 longLabel H1: cCREs
 parent cCREs_view off
@@ -314,6 +338,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF857RXA_ENCFF756NMQ_ENCFF493AZX_ENCFF004ITE
+priority 25
 type bigBed 9 + 2
 longLabel Panc1: cCREs
 parent cCREs_view off
@@ -326,6 +351,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF963PFR_ENCFF577BWJ_ENCFF643ZMC_ENCFF714NPP
+priority 26
 type bigBed 9 + 2
 longLabel Astrocyte: cCREs
 parent cCREs_view off
@@ -338,6 +364,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF807AUZ_ENCFF466YVQ_ENCFF317LGP_ENCFF044ORH
+priority 27
 type bigBed 9 + 2
 longLabel Chondrocyte, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -350,6 +377,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF757GHL_ENCFF432PYK_ENCFF658XKZ_ENCFF179RSE
+priority 28
 type bigBed 9 + 2
 longLabel HeLa-S3: cCREs
 parent cCREs_view off
@@ -362,6 +390,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF735XLO_ENCFF970LMB_ENCFF481LLD_ENCFF838OJW
+priority 29
 type bigBed 9 + 2
 longLabel MM.1S: cCREs
 parent cCREs_view off
@@ -374,6 +403,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF153DHV_ENCFF573ZFG_ENCFF389RGR_ENCFF766VDL
+priority 30
 type bigBed 9 + 2
 longLabel AG04450: cCREs
 parent cCREs_view off
@@ -386,6 +416,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF706PFS_ENCFF543KTX_ENCFF708DDX_ENCFF084YDG
+priority 31
 type bigBed 9 + 2
 longLabel Endothelial cell, male adult (53 years): cCREs
 parent cCREs_view off
@@ -398,6 +429,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF865UWE_ENCFF165GJZ_ENCFF201DRD_ENCFF559SRW
+priority 32
 type bigBed 9 + 2
 longLabel Progenitor cell of endocrine pancreas, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -410,6 +442,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF546MZK_ENCFF732PJK_ENCFF795ONN_ENCFF357NFO
+priority 33
 type bigBed 9 + 2
 longLabel HepG2: cCREs
 parent cCREs_view off
@@ -422,6 +455,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF623ZIV_ENCFF995LLA_ENCFF426TLD_ENCFF406SZM
+priority 34
 type bigBed 9 + 2
 longLabel HFFc6: cCREs
 parent cCREs_view off
@@ -434,6 +468,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF969JHD_ENCFF308GJB_ENCFF341LLL_ENCFF398MEO
+priority 35
 type bigBed 9 + 2
 longLabel DND-41: cCREs
 parent cCREs_view off
@@ -446,6 +481,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF269VAY_ENCFF346LEZ_ENCFF118OBT_ENCFF536VOI
+priority 36
 type bigBed 9 + 2
 longLabel Glutamatergic neuron, male adult (53 years) male adult (53 years) nuclear fraction: cCREs
 parent cCREs_view off
@@ -458,6 +494,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF472WAW_ENCFF559ALK_ENCFF575FKS_ENCFF176ELT
+priority 37
 type bigBed 9 + 2
 longLabel Brain microvascular endothelial cell: cCREs
 parent cCREs_view off
@@ -470,6 +507,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF902EEH_ENCFF137IUT_ENCFF347LDC_ENCFF491FMJ
+priority 38
 type bigBed 9 + 2
 longLabel Hepatocyte, female embryo (5 days): cCREs
 parent cCREs_view off
@@ -482,6 +520,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF146ZBO_ENCFF684UUJ_ENCFF900UMO_ENCFF327WOL
+priority 39
 type bigBed 9 + 2
 longLabel NCI-H929: cCREs
 parent cCREs_view off
@@ -494,6 +533,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF599UKS_ENCFF319OET_ENCFF537PUA_ENCFF756ESH
+priority 40
 type bigBed 9 + 2
 longLabel PC-3: cCREs
 parent cCREs_view off
@@ -506,6 +546,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF241UWA_ENCFF494ASH_ENCFF114QME_ENCFF553NAP
+priority 41
 type bigBed 9 + 2
 longLabel GM23338: cCREs
 parent cCREs_view off
@@ -518,6 +559,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF675NNX_ENCFF220KZL_ENCFF969AJT_ENCFF345GCX
+priority 42
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -530,6 +572,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF258AWM_ENCFF834IHE_ENCFF519CLG_ENCFF488PRF
+priority 43
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (90 or above years): cCREs
 parent cCREs_view off
@@ -542,6 +585,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF715WQG_ENCFF871ZNR_ENCFF694XDN_ENCFF161XMB
+priority 44
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (90 or above years): cCREs
 parent cCREs_view off
@@ -554,6 +598,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF987RXP_ENCFF419XND_ENCFF224LYA_ENCFF081IRZ
+priority 45
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (cognitive impairment), female adult (81 years) with Cognitive impairment: cCREs
 parent cCREs_view off
@@ -566,6 +611,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF163NDW_ENCFF730XOV_ENCFF156YTC_ENCFF280OBE
+priority 46
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (83 years): cCREs
 parent cCREs_view off
@@ -578,6 +624,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF013AMD_ENCFF563YFA_ENCFF336MIJ_ENCFF302UYV
+priority 47
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (88 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -590,6 +637,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF463EIN_ENCFF005KPT_ENCFF046NYM_ENCFF250VKH
+priority 48
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: cCREs
 parent cCREs_view off
@@ -602,6 +650,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF068GXP_ENCFF507KAZ_ENCFF383TGX_ENCFF409LLA
+priority 49
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -614,6 +663,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF753DPM_ENCFF353SJI_ENCFF649LLS_ENCFF554FTX
+priority 50
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (90 or above years): cCREs
 parent cCREs_view off
@@ -626,6 +676,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF521HEY_ENCFF862YHY_ENCFF194KAZ_ENCFF263VJQ
+priority 51
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (85 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -638,6 +689,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF497CVA_ENCFF981HHV_ENCFF224JSW_ENCFF653MQB
+priority 52
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (87 years): cCREs
 parent cCREs_view off
@@ -650,6 +702,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF636BNY_ENCFF732JQY_ENCFF658QWN_ENCFF961RFY
+priority 53
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (87 years): cCREs
 parent cCREs_view off
@@ -662,6 +715,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF722LEE_ENCFF077FBW_ENCFF634AAL_ENCFF215HQE
+priority 54
 type bigBed 9 + 2
 longLabel Spleen, female adult (41 years): cCREs
 parent cCREs_view off
@@ -674,6 +728,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF084QJF_ENCFF889GHD_ENCFF646GXZ_ENCFF374AEG
+priority 55
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -686,6 +741,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF898XFY_ENCFF772JUK_ENCFF149TEN_ENCFF782JRA
+priority 56
 type bigBed 9 + 2
 longLabel Gastrocnemius medialis, male adult (54 years): cCREs
 parent cCREs_view off
@@ -698,6 +754,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF700MXZ_ENCFF663EZB_ENCFF400FAA_ENCFF430LIA
+priority 57
 type bigBed 9 + 2
 longLabel Heart right ventricle, male adult (66 years): cCREs
 parent cCREs_view off
@@ -710,6 +767,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF832GZH_ENCFF646DAW_ENCFF337EUB_ENCFF886TBW
+priority 58
 type bigBed 9 + 2
 longLabel Right atrium auricular region, female adult (53 years): cCREs
 parent cCREs_view off
@@ -722,6 +780,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF609VNS_ENCFF370WIV_ENCFF154QOP_ENCFF700PHX
+priority 59
 type bigBed 9 + 2
 longLabel Uterus, female adult (53 years): cCREs
 parent cCREs_view off
@@ -734,6 +793,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF644JWK_ENCFF237QAL_ENCFF960KLD_ENCFF829QZW
+priority 60
 type bigBed 9 + 2
 longLabel Left ventricle myocardium inferior, male adult (60 years): cCREs
 parent cCREs_view off
@@ -746,6 +806,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF547JQK_ENCFF379GSJ_ENCFF738HRV_ENCFF704JSE
+priority 61
 type bigBed 9 + 2
 longLabel Vagina, female adult (53 years): cCREs
 parent cCREs_view off
@@ -758,6 +819,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF384IMH_ENCFF283ZMI_ENCFF732NXU_ENCFF919OEF
+priority 62
 type bigBed 9 + 2
 longLabel Stomach, female adult (51 years): cCREs
 parent cCREs_view off
@@ -770,6 +832,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF315VTA_ENCFF538YZL_ENCFF346GTT_ENCFF359FNN
+priority 63
 type bigBed 9 + 2
 longLabel Heart right ventricle, male adult (69 years): cCREs
 parent cCREs_view off
@@ -782,6 +845,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF407UXA_ENCFF119FKH_ENCFF378PDO_ENCFF170TDI
+priority 64
 type bigBed 9 + 2
 longLabel Heart right ventricle, male adult (40 years): cCREs
 parent cCREs_view off
@@ -794,6 +858,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF330ZGD_ENCFF236JWD_ENCFF859IVY_ENCFF890FKH
+priority 65
 type bigBed 9 + 2
 longLabel Pancreas, female adult (41 years): cCREs
 parent cCREs_view off
@@ -806,6 +871,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF020EPF_ENCFF917LFF_ENCFF764VSN_ENCFF005YBS
+priority 66
 type bigBed 9 + 2
 longLabel Right lobe of liver, female adult (53 years): cCREs
 parent cCREs_view on
@@ -818,6 +884,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF291LZE_ENCFF339CRV_ENCFF318ECM_ENCFF493XMW
+priority 67
 type bigBed 9 + 2
 longLabel Transverse colon, female adult (53 years): cCREs
 parent cCREs_view off
@@ -830,6 +897,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF935VSX_ENCFF642TNR_ENCFF397ZHX_ENCFF975RFH
+priority 68
 type bigBed 9 + 2
 longLabel Left lung, female child (16 years): cCREs
 parent cCREs_view off
@@ -842,6 +910,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF589CRI_ENCFF229BGF_ENCFF487SXN_ENCFF453LVK
+priority 69
 type bigBed 9 + 2
 longLabel Testis, male adult (37 years): cCREs
 parent cCREs_view off
@@ -854,6 +923,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF799QGM_ENCFF436OWL_ENCFF484YUA_ENCFF685MPU
+priority 70
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -866,6 +936,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF386FNE_ENCFF768NPJ_ENCFF435NQW_ENCFF541XGP
+priority 71
 type bigBed 9 + 2
 longLabel Bipolar neuron (treated), male adult (53 years) treated with 0.5 μg/mL doxycycline hyclate for 4 days: cCREs
 parent cCREs_view off
@@ -878,6 +949,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF156LUX_ENCFF696UEY_ENCFF762YWL_ENCFF429ZQN
+priority 72
 type bigBed 9 + 2
 longLabel Thoracic aorta, male adult (37 years): cCREs
 parent cCREs_view off
@@ -890,6 +962,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF162OQB_ENCFF387XJD_ENCFF987FRB_ENCFF722HFK
+priority 73
 type bigBed 9 + 2
 longLabel Spleen, female adult (53 years): cCREs
 parent cCREs_view off
@@ -902,6 +975,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF237KCK_ENCFF700TZZ_ENCFF988QAR_ENCFF796PZW
+priority 74
 type bigBed 9 + 2
 longLabel Adrenal gland, female adult (41 years): cCREs
 parent cCREs_view off
@@ -914,6 +988,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF316SZE_ENCFF263CSV_ENCFF144JOJ_ENCFF035TJC
+priority 75
 type bigBed 9 + 2
 longLabel Adrenal gland, male adult (54 years): cCREs
 parent cCREs_view off
@@ -926,6 +1001,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF525EPU_ENCFF904YBG_ENCFF092VQF_ENCFF258LTU
+priority 76
 type bigBed 9 + 2
 longLabel Vagina, female adult (51 years): cCREs
 parent cCREs_view off
@@ -938,6 +1014,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF221CLN_ENCFF551GZK_ENCFF438NSZ_ENCFF806GMH
+priority 77
 type bigBed 9 + 2
 longLabel Spleen, female adult (61 years): cCREs
 parent cCREs_view off
@@ -950,6 +1027,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF417JSF_ENCFF651XRK_ENCFF320IPT_ENCFF440RUS
+priority 78
 type bigBed 9 + 2
 longLabel Heart left ventricle, female adult (53 years): cCREs
 parent cCREs_view off
@@ -962,6 +1040,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF213UEB_ENCFF682UWZ_ENCFF948MEI_ENCFF232BMJ
+priority 79
 type bigBed 9 + 2
 longLabel Pancreas, female adult (61 years): cCREs
 parent cCREs_view off
@@ -974,6 +1053,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF428COP_ENCFF665CXY_ENCFF246QNM_ENCFF245HIM
+priority 80
 type bigBed 9 + 2
 longLabel Testis, male adult (54 years): cCREs
 parent cCREs_view off
@@ -986,6 +1066,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF477CEG_ENCFF580GFO_ENCFF646KVN_ENCFF496PUD
+priority 81
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (84 years): cCREs
 parent cCREs_view off
@@ -998,6 +1079,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF179VUT_ENCFF711EZK_ENCFF909JLH_ENCFF924IJQ
+priority 82
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (79 years): cCREs
 parent cCREs_view off
@@ -1010,6 +1092,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF397SMJ_ENCFF666VNK_ENCFF419XHK_ENCFF457ZFQ
+priority 83
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1022,6 +1105,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF707HLC_ENCFF935CPK_ENCFF557HHH_ENCFF880CZK
+priority 84
 type bigBed 9 + 2
 longLabel Ascending aorta, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1034,6 +1118,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF118JST_ENCFF446ELY_ENCFF509VVM_ENCFF257ODJ
+priority 85
 type bigBed 9 + 2
 longLabel Heart right ventricle, female adult (56 years): cCREs
 parent cCREs_view off
@@ -1046,6 +1131,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF122VLP_ENCFF869EMQ_ENCFF707MHB_ENCFF412TOH
+priority 86
 type bigBed 9 + 2
 longLabel Heart left ventricle, female adult (56 years): cCREs
 parent cCREs_view off
@@ -1058,6 +1144,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF876OBV_ENCFF083ENU_ENCFF306RJQ_ENCFF297EQI
+priority 87
 type bigBed 9 + 2
 longLabel Pancreas, female adult (59 years): cCREs
 parent cCREs_view off
@@ -1070,6 +1157,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF518SGA_ENCFF827GEQ_ENCFF235TYQ_ENCFF419QIY
+priority 88
 type bigBed 9 + 2
 longLabel Adrenal gland, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1082,6 +1170,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF847FPR_ENCFF454ERF_ENCFF982IVZ_ENCFF505OIJ
+priority 89
 type bigBed 9 + 2
 longLabel Heart right ventricle, male adult (43 years): cCREs
 parent cCREs_view off
@@ -1094,6 +1183,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF644VHX_ENCFF201UPO_ENCFF038BIZ_ENCFF670BZH
+priority 90
 type bigBed 9 + 2
 longLabel Tibial nerve, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1106,6 +1196,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF379EHP_ENCFF321LZL_ENCFF774RLX_ENCFF397CJU
+priority 91
 type bigBed 9 + 2
 longLabel Thyroid gland, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1118,6 +1209,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF241BCT_ENCFF474VCQ_ENCFF525KQP_ENCFF715AGA
+priority 92
 type bigBed 9 + 2
 longLabel Peyers patch, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1130,6 +1222,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF867EIA_ENCFF842QQE_ENCFF428HQD_ENCFF161AWO
+priority 93
 type bigBed 9 + 2
 longLabel Spleen, female adult (59 years): cCREs
 parent cCREs_view off
@@ -1142,6 +1235,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF796XMI_ENCFF679AWS_ENCFF703DMY_ENCFF782LSR
+priority 94
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (90 or above years): cCREs
 parent cCREs_view off
@@ -1154,6 +1248,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF865IXT_ENCFF761PKU_ENCFF112GCV_ENCFF310UCW
+priority 95
 type bigBed 9 + 2
 longLabel Prostate gland, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1166,6 +1261,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF753MXL_ENCFF252OBP_ENCFF532ZGB_ENCFF646EZE
+priority 96
 type bigBed 9 + 2
 longLabel Transverse colon, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1178,6 +1274,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF299OOV_ENCFF237VMY_ENCFF111DLN_ENCFF154FOF
+priority 97
 type bigBed 9 + 2
 longLabel Sigmoid colon, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1190,6 +1287,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF571QPS_ENCFF546VCE_ENCFF272DJL_ENCFF423POG
+priority 98
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (82 years): cCREs
 parent cCREs_view off
@@ -1202,6 +1300,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF427FGG_ENCFF616FVZ_ENCFF962GLK_ENCFF417AGZ
+priority 99
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (82 years): cCREs
 parent cCREs_view off
@@ -1214,6 +1313,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF793FUR_ENCFF220GPW_ENCFF685BLE_ENCFF754BJX
+priority 100
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (86 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -1226,6 +1326,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF632MSC_ENCFF499ALA_ENCFF750UAD_ENCFF548SBE
+priority 101
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1238,6 +1339,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF318DDE_ENCFF914PSJ_ENCFF679HCC_ENCFF695EYC
+priority 102
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -1250,6 +1352,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF686DIT_ENCFF543PRC_ENCFF111ACH_ENCFF800TZW
+priority 103
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -1262,6 +1365,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF813UXN_ENCFF261GPQ_ENCFF398ITJ_ENCFF992YXC
+priority 104
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (83 years): cCREs
 parent cCREs_view off
@@ -1274,6 +1378,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF036SMP_ENCFF352MMI_ENCFF942YRH_ENCFF394BNS
+priority 105
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (83 years): cCREs
 parent cCREs_view off
@@ -1286,6 +1391,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF359QRX_ENCFF878BKX_ENCFF280YLT_ENCFF433RNM
+priority 106
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1298,6 +1404,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF554VOU_ENCFF100JXF_ENCFF380WZB_ENCFF812RLY
+priority 107
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -1310,6 +1417,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF841ILF_ENCFF173NSX_ENCFF004SRJ_ENCFF546ZNQ
+priority 108
 type bigBed 9 + 2
 longLabel Colonic mucosa, female adult (41 years): cCREs
 parent cCREs_view off
@@ -1322,6 +1430,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF686OEZ_ENCFF018QTQ_ENCFF461GFM_ENCFF072ETP
+priority 109
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (88 years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1334,6 +1443,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF874WYJ_ENCFF562LUZ_ENCFF489BZS_ENCFF729DUW
+priority 110
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (87 years): cCREs
 parent cCREs_view off
@@ -1346,6 +1456,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF052CPA_ENCFF198NDW_ENCFF371ZKC_ENCFF294XWZ
+priority 111
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (88 years): cCREs
 parent cCREs_view off
@@ -1358,6 +1469,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF278VYR_ENCFF971OSG_ENCFF238JTO_ENCFF264VOP
+priority 112
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1370,6 +1482,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF732ABI_ENCFF127DBK_ENCFF794RDI_ENCFF888DOQ
+priority 113
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (87 years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1382,6 +1495,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF615BRP_ENCFF902HIA_ENCFF375YPQ_ENCFF033FEG
+priority 114
 type bigBed 9 + 2
 longLabel Lower lobe of left lung, female adult (59 years): cCREs
 parent cCREs_view off
@@ -1394,6 +1508,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF801REE_ENCFF053KMZ_ENCFF860MMV_ENCFF804PBU
+priority 115
 type bigBed 9 + 2
 longLabel Adrenal gland, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1406,6 +1521,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF679FKQ_ENCFF163VOI_ENCFF791CAJ_ENCFF872ERK
+priority 116
 type bigBed 9 + 2
 longLabel Right atrium auricular region, female adult (51 years): cCREs
 parent cCREs_view on
@@ -1418,6 +1534,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF383WYK_ENCFF811RQX_ENCFF130NUG_ENCFF341RAH
+priority 117
 type bigBed 9 + 2
 longLabel Coronary artery, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1430,6 +1547,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF412TKS_ENCFF066MLC_ENCFF146LLE_ENCFF884XLS
+priority 118
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (cognitive impairment), female adult (86 years) with Cognitive impairment: cCREs
 parent cCREs_view off
@@ -1442,6 +1560,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF767BTZ_ENCFF319HQY_ENCFF435BRK_ENCFF891CZD
+priority 119
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -1454,6 +1573,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF813QPY_ENCFF393NEJ_ENCFF820MMW_ENCFF884MZR
+priority 120
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (83 years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1466,6 +1586,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF841VBI_ENCFF764HZI_ENCFF037TME_ENCFF536DEU
+priority 121
 type bigBed 9 + 2
 longLabel Esophagus squamous epithelium, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1478,6 +1599,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF639UGW_ENCFF958TLM_ENCFF549DZD_ENCFF670COF
+priority 122
 type bigBed 9 + 2
 longLabel Tibial nerve, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1490,6 +1612,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF211HIT_ENCFF501SGE_ENCFF546UQS_ENCFF874CKO
+priority 123
 type bigBed 9 + 2
 longLabel Thyroid gland, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1502,6 +1625,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF279ZNA_ENCFF282VQS_ENCFF054VRQ_ENCFF468WUY
+priority 124
 type bigBed 9 + 2
 longLabel Upper lobe of left lung, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1514,6 +1638,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF493HHP_ENCFF641DNV_ENCFF225PPI_ENCFF807KJZ
+priority 125
 type bigBed 9 + 2
 longLabel Stomach, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1526,6 +1651,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF225DKL_ENCFF127LVQ_ENCFF853NJX_ENCFF893BCC
+priority 126
 type bigBed 9 + 2
 longLabel Body of pancreas, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1538,6 +1664,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF013UBZ_ENCFF901QWB_ENCFF972ZHA_ENCFF500RDL
+priority 127
 type bigBed 9 + 2
 longLabel Tibial artery, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1550,6 +1677,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF017LRG_ENCFF229BVH_ENCFF573DJV_ENCFF510THG
+priority 128
 type bigBed 9 + 2
 longLabel Thyroid gland, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1562,6 +1690,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF674RXU_ENCFF996QZC_ENCFF607SXR_ENCFF862ZOO
+priority 129
 type bigBed 9 + 2
 longLabel Upper lobe of left lung, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1574,6 +1703,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF867HAD_ENCFF152PBB_ENCFF352YYH_ENCFF252IVK
+priority 130
 type bigBed 9 + 2
 longLabel Heart left ventricle, female adult (46 years): cCREs
 parent cCREs_view off
@@ -1586,6 +1716,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF505TAB_ENCFF117DUU_ENCFF752LEN_ENCFF750ENA
+priority 131
 type bigBed 9 + 2
 longLabel Upper lobe of left lung, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1598,6 +1729,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF066BOK_ENCFF431FFY_ENCFF793HOY_ENCFF070MOG
+priority 132
 type bigBed 9 + 2
 longLabel Gastrocnemius medialis, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1610,6 +1742,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF022SDS_ENCFF132YWJ_ENCFF118EKX_ENCFF857NIC
+priority 133
 type bigBed 9 + 2
 longLabel Ascending aorta, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1622,6 +1755,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF414ADM_ENCFF614FJF_ENCFF135RBK_ENCFF541CSJ
+priority 134
 type bigBed 9 + 2
 longLabel Heart left ventricle, female adult (59 years): cCREs
 parent cCREs_view off
@@ -1634,6 +1768,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF284PMB_ENCFF713LKP_ENCFF973ZFT_ENCFF693AEK
+priority 135
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (78 years): cCREs
 parent cCREs_view off
@@ -1646,6 +1781,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF769AFQ_ENCFF557GVR_ENCFF943HGP_ENCFF393UAO
+priority 136
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (86 years): cCREs
 parent cCREs_view off
@@ -1658,6 +1794,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF305XCA_ENCFF478CLR_ENCFF028IBW_ENCFF258OMT
+priority 137
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: cCREs
 parent cCREs_view off
@@ -1670,6 +1807,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF349ZMO_ENCFF849YNY_ENCFF827CBM_ENCFF521NYK
+priority 138
 type bigBed 9 + 2
 longLabel Pancreas, female child (16 years): cCREs
 parent cCREs_view off
@@ -1682,6 +1820,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF456EHL_ENCFF867WWB_ENCFF701XQB_ENCFF968SXQ
+priority 139
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -1694,6 +1833,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF960WAV_ENCFF372LSW_ENCFF174WAB_ENCFF543MYI
+priority 140
 type bigBed 9 + 2
 longLabel Upper lobe of left lung, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1706,6 +1846,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF549MXK_ENCFF278ZAD_ENCFF085IYD_ENCFF271PWB
+priority 141
 type bigBed 9 + 2
 longLabel Breast epithelium, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1718,6 +1859,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF717OQE_ENCFF305GQX_ENCFF485RWJ_ENCFF694HBV
+priority 142
 type bigBed 9 + 2
 longLabel Peyers patch, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1730,6 +1872,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF164EEU_ENCFF391KDD_ENCFF493RLF_ENCFF034PJC
+priority 143
 type bigBed 9 + 2
 longLabel Stomach, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1742,6 +1885,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF028FLY_ENCFF886LUE_ENCFF322NLT_ENCFF634JUC
+priority 144
 type bigBed 9 + 2
 longLabel Sigmoid colon, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1754,6 +1898,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF047YGB_ENCFF145RER_ENCFF050PLB_ENCFF603TNI
+priority 145
 type bigBed 9 + 2
 longLabel Thyroid gland, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1766,6 +1911,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF541ZVM_ENCFF889QTE_ENCFF480FCW_ENCFF796CNP
+priority 146
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (81 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -1778,6 +1924,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF812JCQ_ENCFF675KIN_ENCFF302XLU_ENCFF945PHV
+priority 147
 type bigBed 9 + 2
 longLabel Peyers patch, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1790,6 +1937,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF798CZY_ENCFF779PMH_ENCFF758AQR_ENCFF543LIT
+priority 148
 type bigBed 9 + 2
 longLabel Tibial nerve, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1802,6 +1950,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF926IJX_ENCFF996ZNX_ENCFF249ILQ_ENCFF758HAD
+priority 149
 type bigBed 9 + 2
 longLabel Peyers patch, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1814,6 +1963,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF693WYZ_ENCFF672KET_ENCFF355RRY_ENCFF673UYG
+priority 150
 type bigBed 9 + 2
 longLabel Adrenal gland, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1826,6 +1976,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF688CZD_ENCFF330KOM_ENCFF345XIS_ENCFF011PEP
+priority 151
 type bigBed 9 + 2
 longLabel Heart right ventricle, male adult (61 years): cCREs
 parent cCREs_view off
@@ -1838,6 +1989,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF649PLC_ENCFF138VRG_ENCFF940UMR_ENCFF078UTK
+priority 152
 type bigBed 9 + 2
 longLabel Body of pancreas, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1850,6 +2002,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF990HTO_ENCFF973MQG_ENCFF441OEQ_ENCFF002ZEZ
+priority 153
 type bigBed 9 + 2
 longLabel Left lung, male adult (40 years): cCREs
 parent cCREs_view off
@@ -1862,6 +2015,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF712ATQ_ENCFF880UEZ_ENCFF825YXF_ENCFF055HAN
+priority 154
 type bigBed 9 + 2
 longLabel Gastrocnemius medialis, female adult (53 years): cCREs
 parent cCREs_view off
@@ -1874,6 +2028,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF017QTW_ENCFF751MDE_ENCFF975CDE_ENCFF324HRF
+priority 155
 type bigBed 9 + 2
 longLabel Stomach, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1886,6 +2041,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF138FMV_ENCFF487CTD_ENCFF741NZM_ENCFF626YRZ
+priority 156
 type bigBed 9 + 2
 longLabel Transverse colon, female adult (51 years): cCREs
 parent cCREs_view off
@@ -1898,6 +2054,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF986YEI_ENCFF345SEW_ENCFF137KZR_ENCFF341CQE
+priority 157
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: cCREs
 parent cCREs_view on
@@ -1910,6 +2067,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF980SJY_ENCFF752DGV_ENCFF242WZH_ENCFF816YAI
+priority 158
 type bigBed 9 + 2
 longLabel Middle frontal area 46, male adult (71 years): cCREs
 parent cCREs_view off
@@ -1922,6 +2080,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF886QYD_ENCFF344ITP_ENCFF322ZPK_ENCFF526HRV
+priority 159
 type bigBed 9 + 2
 longLabel Esophagus muscularis mucosa, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1934,6 +2093,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF270GCR_ENCFF654FHZ_ENCFF406YGS_ENCFF803TUM
+priority 160
 type bigBed 9 + 2
 longLabel Heart right ventricle, female adult (46 years): cCREs
 parent cCREs_view off
@@ -1946,6 +2106,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF380ELC_ENCFF155GED_ENCFF617TKL_ENCFF915AST
+priority 161
 type bigBed 9 + 2
 longLabel Heart left ventricle, male adult (43 years): cCREs
 parent cCREs_view off
@@ -1958,6 +2119,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF421SBY_ENCFF032IZZ_ENCFF504NPN_ENCFF812ODW
+priority 162
 type bigBed 9 + 2
 longLabel Lower lobe of left lung, male adult (60 years): cCREs
 parent cCREs_view off
@@ -1970,6 +2132,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF087WEP_ENCFF285STS_ENCFF989SFZ_ENCFF885ZLN
+priority 163
 type bigBed 9 + 2
 longLabel Body of pancreas, male adult (37 years): cCREs
 parent cCREs_view off
@@ -1982,6 +2145,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF405NTZ_ENCFF568IBR_ENCFF427MZX_ENCFF435CDF
+priority 164
 type bigBed 9 + 2
 longLabel Transverse colon, male adult (54 years): cCREs
 parent cCREs_view off
@@ -1994,6 +2158,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF103WUK_ENCFF707BCP_ENCFF638ZRF_ENCFF643VTS
+priority 165
 type bigBed 9 + 2
 longLabel Gastrocnemius medialis, female adult (51 years): cCREs
 parent cCREs_view off
@@ -2006,6 +2171,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF592RWK_ENCFF922WUL_ENCFF686LXM_ENCFF111MOL
+priority 166
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: cCREs
 parent cCREs_view off
@@ -2018,6 +2184,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF018BZK_ENCFF062WLH_ENCFF156GJU_ENCFF741DPN
+priority 167
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (84 years): cCREs
 parent cCREs_view off
@@ -2030,6 +2197,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF604AYM_ENCFF298AQY_ENCFF014NIB_ENCFF203LSD
+priority 168
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (78 years): cCREs
 parent cCREs_view off
@@ -2042,6 +2210,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF286BFK_ENCFF617PMJ_ENCFF986LOD_ENCFF450HJC
+priority 169
 type bigBed 9 + 2
 longLabel Middle frontal area 46, female adult (89 years): cCREs
 parent cCREs_view off
@@ -2054,6 +2223,7 @@ url https://screen.wenglab.org/search?assembly=GRCh38&accessions=$$
 urlLabel cCRE details on SCREEN
 
 track ENCFF492WAE_ENCFF586MLV_ENCFF472UDH_ENCFF326PAG
+priority 170
 type bigBed 9 + 2
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (74 years) with Alzheimers disease: cCREs
 parent cCREs_view off
@@ -2073,6 +2243,7 @@ visibility full
 type bigWig
 
 track ENCFF136RNO
+priority 1.1
 type bigWig
 longLabel OCI-LY7: DNase, ENCFF136RNO
 autoScale on
@@ -2085,6 +2256,7 @@ shortLabel ENCFF136RNO
 visibility full
 
 track ENCFF494IGD
+priority 2.1
 type bigWig
 longLabel Keratinocyte, female: DNase, ENCFF494IGD
 autoScale on
@@ -2097,6 +2269,7 @@ shortLabel ENCFF494IGD
 visibility full
 
 track ENCFF926MIK
+priority 3.1
 type bigWig
 longLabel Astrocyte, male adult (53 years): DNase, ENCFF926MIK
 autoScale on
@@ -2109,6 +2282,7 @@ shortLabel ENCFF926MIK
 visibility full
 
 track ENCFF414OGC
+priority 4.1
 type bigWig
 longLabel K562: DNase, ENCFF414OGC
 autoScale on
@@ -2121,6 +2295,7 @@ shortLabel ENCFF414OGC
 visibility full
 
 track ENCFF226FAT
+priority 5.1
 type bigWig
 longLabel Osteocyte, female embryo (5 days): DNase, ENCFF226FAT
 autoScale on
@@ -2133,6 +2308,7 @@ shortLabel ENCFF226FAT
 visibility full
 
 track ENCFF339ZGM
+priority 6.1
 type bigWig
 longLabel HL-60: DNase, ENCFF339ZGM
 autoScale on
@@ -2145,6 +2321,7 @@ shortLabel ENCFF339ZGM
 visibility full
 
 track ENCFF291DQP
+priority 7.1
 type bigWig
 longLabel WERI-Rb-1: DNase, ENCFF291DQP
 autoScale on
@@ -2157,6 +2334,7 @@ shortLabel ENCFF291DQP
 visibility full
 
 track ENCFF978IHV
+priority 8.1
 type bigWig
 longLabel Caco-2: DNase, ENCFF978IHV
 autoScale on
@@ -2169,6 +2347,7 @@ shortLabel ENCFF978IHV
 visibility full
 
 track ENCFF270ENA
+priority 9.1
 type bigWig
 longLabel MCF-7: DNase, ENCFF270ENA
 autoScale on
@@ -2181,6 +2360,7 @@ shortLabel ENCFF270ENA
 visibility full
 
 track ENCFF389PZY
+priority 10.1
 type bigWig
 longLabel CD14-positive monocyte, female: DNase, ENCFF389PZY
 autoScale on
@@ -2193,6 +2373,7 @@ shortLabel ENCFF389PZY
 visibility full
 
 track ENCFF909KVS
+priority 11.1
 type bigWig
 longLabel Endodermal cell, female embryo (5 days): DNase, ENCFF909KVS
 autoScale on
@@ -2205,6 +2386,7 @@ shortLabel ENCFF909KVS
 visibility full
 
 track ENCFF623TJB
+priority 12.1
 type bigWig
 longLabel PC-9: DNase, ENCFF623TJB
 autoScale on
@@ -2217,6 +2399,7 @@ shortLabel ENCFF623TJB
 visibility full
 
 track ENCFF816IIS
+priority 13.1
 type bigWig
 longLabel A673: DNase, ENCFF816IIS
 autoScale on
@@ -2229,6 +2412,7 @@ shortLabel ENCFF816IIS
 visibility full
 
 track ENCFF648XPS
+priority 14.1
 type bigWig
 longLabel Cardiac muscle cell, embryo: DNase, ENCFF648XPS
 autoScale on
@@ -2241,6 +2425,7 @@ shortLabel ENCFF648XPS
 visibility full
 
 track ENCFF286QGB
+priority 15.1
 type bigWig
 longLabel Neural progenitor cell, female embryo (5 days): DNase, ENCFF286QGB
 autoScale on
@@ -2253,6 +2438,7 @@ shortLabel ENCFF286QGB
 visibility full
 
 track ENCFF903ZCB
+priority 16.1
 type bigWig
 longLabel H9: DNase, ENCFF903ZCB
 autoScale on
@@ -2265,6 +2451,7 @@ shortLabel ENCFF903ZCB
 visibility full
 
 track ENCFF766CUM
+priority 17.1
 type bigWig
 longLabel GM23338: DNase, ENCFF766CUM
 autoScale on
@@ -2277,6 +2464,7 @@ shortLabel ENCFF766CUM
 visibility full
 
 track ENCFF971HXR
+priority 18.1
 type bigWig
 longLabel IMR-90: DNase, ENCFF971HXR
 autoScale on
@@ -2289,6 +2477,7 @@ shortLabel ENCFF971HXR
 visibility full
 
 track ENCFF447YDA
+priority 19.1
 type bigWig
 longLabel Mesothelial cell of epicardium, female embryo (5 days): DNase, ENCFF447YDA
 autoScale on
@@ -2301,6 +2490,7 @@ shortLabel ENCFF447YDA
 visibility full
 
 track ENCFF647HDA
+priority 20.1
 type bigWig
 longLabel Type B pancreatic cell, female embryo (5 days): DNase, ENCFF647HDA
 autoScale on
@@ -2313,6 +2503,7 @@ shortLabel ENCFF647HDA
 visibility full
 
 track ENCFF431JDU
+priority 21.1
 type bigWig
 longLabel HCT116: DNase, ENCFF431JDU
 autoScale on
@@ -2325,6 +2516,7 @@ shortLabel ENCFF431JDU
 visibility full
 
 track ENCFF428XFI
+priority 22.1
 type bigWig
 longLabel GM12878: DNase, ENCFF428XFI
 autoScale on
@@ -2337,6 +2529,7 @@ shortLabel ENCFF428XFI
 visibility full
 
 track ENCFF280RMA
+priority 23.1
 type bigWig
 longLabel SK-N-SH: DNase, ENCFF280RMA
 autoScale on
@@ -2349,6 +2542,7 @@ shortLabel ENCFF280RMA
 visibility full
 
 track ENCFF573NKX
+priority 24.1
 type bigWig
 longLabel H1: DNase, ENCFF573NKX
 autoScale on
@@ -2361,6 +2555,7 @@ shortLabel ENCFF573NKX
 visibility full
 
 track ENCFF857RXA
+priority 25.1
 type bigWig
 longLabel Panc1: DNase, ENCFF857RXA
 autoScale on
@@ -2373,6 +2568,7 @@ shortLabel ENCFF857RXA
 visibility full
 
 track ENCFF963PFR
+priority 26.1
 type bigWig
 longLabel Astrocyte: DNase, ENCFF963PFR
 autoScale on
@@ -2385,6 +2581,7 @@ shortLabel ENCFF963PFR
 visibility full
 
 track ENCFF807AUZ
+priority 27.1
 type bigWig
 longLabel Chondrocyte, female embryo (5 days): DNase, ENCFF807AUZ
 autoScale on
@@ -2397,6 +2594,7 @@ shortLabel ENCFF807AUZ
 visibility full
 
 track ENCFF757GHL
+priority 28.1
 type bigWig
 longLabel HeLa-S3: DNase, ENCFF757GHL
 autoScale on
@@ -2409,6 +2607,7 @@ shortLabel ENCFF757GHL
 visibility full
 
 track ENCFF735XLO
+priority 29.1
 type bigWig
 longLabel MM.1S: DNase, ENCFF735XLO
 autoScale on
@@ -2421,6 +2620,7 @@ shortLabel ENCFF735XLO
 visibility full
 
 track ENCFF153DHV
+priority 30.1
 type bigWig
 longLabel AG04450: DNase, ENCFF153DHV
 autoScale on
@@ -2433,6 +2633,7 @@ shortLabel ENCFF153DHV
 visibility full
 
 track ENCFF706PFS
+priority 31.1
 type bigWig
 longLabel Endothelial cell, male adult (53 years): DNase, ENCFF706PFS
 autoScale on
@@ -2445,6 +2646,7 @@ shortLabel ENCFF706PFS
 visibility full
 
 track ENCFF865UWE
+priority 32.1
 type bigWig
 longLabel Progenitor cell of endocrine pancreas, female embryo (5 days): DNase, ENCFF865UWE
 autoScale on
@@ -2457,6 +2659,7 @@ shortLabel ENCFF865UWE
 visibility full
 
 track ENCFF546MZK
+priority 33.1
 type bigWig
 longLabel HepG2: DNase, ENCFF546MZK
 autoScale on
@@ -2469,6 +2672,7 @@ shortLabel ENCFF546MZK
 visibility full
 
 track ENCFF623ZIV
+priority 34.1
 type bigWig
 longLabel HFFc6: DNase, ENCFF623ZIV
 autoScale on
@@ -2481,6 +2685,7 @@ shortLabel ENCFF623ZIV
 visibility full
 
 track ENCFF969JHD
+priority 35.1
 type bigWig
 longLabel DND-41: DNase, ENCFF969JHD
 autoScale on
@@ -2493,6 +2698,7 @@ shortLabel ENCFF969JHD
 visibility full
 
 track ENCFF269VAY
+priority 36.1
 type bigWig
 longLabel Glutamatergic neuron, male adult (53 years) male adult (53 years) nuclear fraction: DNase, ENCFF269VAY
 autoScale on
@@ -2505,6 +2711,7 @@ shortLabel ENCFF269VAY
 visibility full
 
 track ENCFF472WAW
+priority 37.1
 type bigWig
 longLabel Brain microvascular endothelial cell: DNase, ENCFF472WAW
 autoScale on
@@ -2517,6 +2724,7 @@ shortLabel ENCFF472WAW
 visibility full
 
 track ENCFF902EEH
+priority 38.1
 type bigWig
 longLabel Hepatocyte, female embryo (5 days): DNase, ENCFF902EEH
 autoScale on
@@ -2529,6 +2737,7 @@ shortLabel ENCFF902EEH
 visibility full
 
 track ENCFF146ZBO
+priority 39.1
 type bigWig
 longLabel NCI-H929: DNase, ENCFF146ZBO
 autoScale on
@@ -2541,6 +2750,7 @@ shortLabel ENCFF146ZBO
 visibility full
 
 track ENCFF599UKS
+priority 40.1
 type bigWig
 longLabel PC-3: DNase, ENCFF599UKS
 autoScale on
@@ -2553,6 +2763,7 @@ shortLabel ENCFF599UKS
 visibility full
 
 track ENCFF241UWA
+priority 41.1
 type bigWig
 longLabel GM23338: DNase, ENCFF241UWA
 autoScale on
@@ -2565,6 +2776,7 @@ shortLabel ENCFF241UWA
 visibility full
 
 track ENCFF675NNX
+priority 42.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: DNase, ENCFF675NNX
 autoScale on
@@ -2577,6 +2789,7 @@ shortLabel ENCFF675NNX
 visibility full
 
 track ENCFF258AWM
+priority 43.1
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): DNase, ENCFF258AWM
 autoScale on
@@ -2589,6 +2802,7 @@ shortLabel ENCFF258AWM
 visibility full
 
 track ENCFF715WQG
+priority 44.1
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): DNase, ENCFF715WQG
 autoScale on
@@ -2601,6 +2815,7 @@ shortLabel ENCFF715WQG
 visibility full
 
 track ENCFF987RXP
+priority 45.1
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (81 years) with Cognitive impairment: DNase, ENCFF987RXP
 autoScale on
@@ -2613,6 +2828,7 @@ shortLabel ENCFF987RXP
 visibility full
 
 track ENCFF163NDW
+priority 46.1
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): DNase, ENCFF163NDW
 autoScale on
@@ -2625,6 +2841,7 @@ shortLabel ENCFF163NDW
 visibility full
 
 track ENCFF013AMD
+priority 47.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (88 years) with Alzheimers disease: DNase, ENCFF013AMD
 autoScale on
@@ -2637,6 +2854,7 @@ shortLabel ENCFF013AMD
 visibility full
 
 track ENCFF463EIN
+priority 48.1
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: DNase, ENCFF463EIN
 autoScale on
@@ -2649,6 +2867,7 @@ shortLabel ENCFF463EIN
 visibility full
 
 track ENCFF068GXP
+priority 49.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF068GXP
 autoScale on
@@ -2661,6 +2880,7 @@ shortLabel ENCFF068GXP
 visibility full
 
 track ENCFF753DPM
+priority 50.1
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): DNase, ENCFF753DPM
 autoScale on
@@ -2673,6 +2893,7 @@ shortLabel ENCFF753DPM
 visibility full
 
 track ENCFF521HEY
+priority 51.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (85 years) with Alzheimers disease: DNase, ENCFF521HEY
 autoScale on
@@ -2685,6 +2906,7 @@ shortLabel ENCFF521HEY
 visibility full
 
 track ENCFF497CVA
+priority 52.1
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): DNase, ENCFF497CVA
 autoScale on
@@ -2697,6 +2919,7 @@ shortLabel ENCFF497CVA
 visibility full
 
 track ENCFF636BNY
+priority 53.1
 type bigWig
 longLabel Middle frontal area 46, male adult (87 years): DNase, ENCFF636BNY
 autoScale on
@@ -2709,6 +2932,7 @@ shortLabel ENCFF636BNY
 visibility full
 
 track ENCFF722LEE
+priority 54.1
 type bigWig
 longLabel Spleen, female adult (41 years): DNase, ENCFF722LEE
 autoScale on
@@ -2721,6 +2945,7 @@ shortLabel ENCFF722LEE
 visibility full
 
 track ENCFF084QJF
+priority 55.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF084QJF
 autoScale on
@@ -2733,6 +2958,7 @@ shortLabel ENCFF084QJF
 visibility full
 
 track ENCFF898XFY
+priority 56.1
 type bigWig
 longLabel Gastrocnemius medialis, male adult (54 years): DNase, ENCFF898XFY
 autoScale on
@@ -2745,6 +2971,7 @@ shortLabel ENCFF898XFY
 visibility full
 
 track ENCFF700MXZ
+priority 57.1
 type bigWig
 longLabel Heart right ventricle, male adult (66 years): DNase, ENCFF700MXZ
 autoScale on
@@ -2757,6 +2984,7 @@ shortLabel ENCFF700MXZ
 visibility full
 
 track ENCFF832GZH
+priority 58.1
 type bigWig
 longLabel Right atrium auricular region, female adult (53 years): DNase, ENCFF832GZH
 autoScale on
@@ -2769,6 +2997,7 @@ shortLabel ENCFF832GZH
 visibility full
 
 track ENCFF609VNS
+priority 59.1
 type bigWig
 longLabel Uterus, female adult (53 years): DNase, ENCFF609VNS
 autoScale on
@@ -2781,6 +3010,7 @@ shortLabel ENCFF609VNS
 visibility full
 
 track ENCFF644JWK
+priority 60.1
 type bigWig
 longLabel Left ventricle myocardium inferior, male adult (60 years): DNase, ENCFF644JWK
 autoScale on
@@ -2793,6 +3023,7 @@ shortLabel ENCFF644JWK
 visibility full
 
 track ENCFF547JQK
+priority 61.1
 type bigWig
 longLabel Vagina, female adult (53 years): DNase, ENCFF547JQK
 autoScale on
@@ -2805,6 +3036,7 @@ shortLabel ENCFF547JQK
 visibility full
 
 track ENCFF384IMH
+priority 62.1
 type bigWig
 longLabel Stomach, female adult (51 years): DNase, ENCFF384IMH
 autoScale on
@@ -2817,6 +3049,7 @@ shortLabel ENCFF384IMH
 visibility full
 
 track ENCFF315VTA
+priority 63.1
 type bigWig
 longLabel Heart right ventricle, male adult (69 years): DNase, ENCFF315VTA
 autoScale on
@@ -2829,6 +3062,7 @@ shortLabel ENCFF315VTA
 visibility full
 
 track ENCFF407UXA
+priority 64.1
 type bigWig
 longLabel Heart right ventricle, male adult (40 years): DNase, ENCFF407UXA
 autoScale on
@@ -2841,6 +3075,7 @@ shortLabel ENCFF407UXA
 visibility full
 
 track ENCFF330ZGD
+priority 65.1
 type bigWig
 longLabel Pancreas, female adult (41 years): DNase, ENCFF330ZGD
 autoScale on
@@ -2853,6 +3088,7 @@ shortLabel ENCFF330ZGD
 visibility full
 
 track ENCFF020EPF
+priority 66.1
 type bigWig
 longLabel Right lobe of liver, female adult (53 years): DNase, ENCFF020EPF
 autoScale on
@@ -2865,6 +3101,7 @@ shortLabel ENCFF020EPF
 visibility full
 
 track ENCFF291LZE
+priority 67.1
 type bigWig
 longLabel Transverse colon, female adult (53 years): DNase, ENCFF291LZE
 autoScale on
@@ -2877,6 +3114,7 @@ shortLabel ENCFF291LZE
 visibility full
 
 track ENCFF935VSX
+priority 68.1
 type bigWig
 longLabel Left lung, female child (16 years): DNase, ENCFF935VSX
 autoScale on
@@ -2889,6 +3127,7 @@ shortLabel ENCFF935VSX
 visibility full
 
 track ENCFF589CRI
+priority 69.1
 type bigWig
 longLabel Testis, male adult (37 years): DNase, ENCFF589CRI
 autoScale on
@@ -2901,6 +3140,7 @@ shortLabel ENCFF589CRI
 visibility full
 
 track ENCFF799QGM
+priority 70.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF799QGM
 autoScale on
@@ -2913,6 +3153,7 @@ shortLabel ENCFF799QGM
 visibility full
 
 track ENCFF386FNE
+priority 71.1
 type bigWig
 longLabel Bipolar neuron (treated), male adult (53 years) treated with 0.5 μg/mL doxycycline hyclate for 4 days: DNase, ENCFF386FNE
 autoScale on
@@ -2925,6 +3166,7 @@ shortLabel ENCFF386FNE
 visibility full
 
 track ENCFF156LUX
+priority 72.1
 type bigWig
 longLabel Thoracic aorta, male adult (37 years): DNase, ENCFF156LUX
 autoScale on
@@ -2937,6 +3179,7 @@ shortLabel ENCFF156LUX
 visibility full
 
 track ENCFF162OQB
+priority 73.1
 type bigWig
 longLabel Spleen, female adult (53 years): DNase, ENCFF162OQB
 autoScale on
@@ -2949,6 +3192,7 @@ shortLabel ENCFF162OQB
 visibility full
 
 track ENCFF237KCK
+priority 74.1
 type bigWig
 longLabel Adrenal gland, female adult (41 years): DNase, ENCFF237KCK
 autoScale on
@@ -2961,6 +3205,7 @@ shortLabel ENCFF237KCK
 visibility full
 
 track ENCFF316SZE
+priority 75.1
 type bigWig
 longLabel Adrenal gland, male adult (54 years): DNase, ENCFF316SZE
 autoScale on
@@ -2973,6 +3218,7 @@ shortLabel ENCFF316SZE
 visibility full
 
 track ENCFF525EPU
+priority 76.1
 type bigWig
 longLabel Vagina, female adult (51 years): DNase, ENCFF525EPU
 autoScale on
@@ -2985,6 +3231,7 @@ shortLabel ENCFF525EPU
 visibility full
 
 track ENCFF221CLN
+priority 77.1
 type bigWig
 longLabel Spleen, female adult (61 years): DNase, ENCFF221CLN
 autoScale on
@@ -2997,6 +3244,7 @@ shortLabel ENCFF221CLN
 visibility full
 
 track ENCFF417JSF
+priority 78.1
 type bigWig
 longLabel Heart left ventricle, female adult (53 years): DNase, ENCFF417JSF
 autoScale on
@@ -3009,6 +3257,7 @@ shortLabel ENCFF417JSF
 visibility full
 
 track ENCFF213UEB
+priority 79.1
 type bigWig
 longLabel Pancreas, female adult (61 years): DNase, ENCFF213UEB
 autoScale on
@@ -3021,6 +3270,7 @@ shortLabel ENCFF213UEB
 visibility full
 
 track ENCFF428COP
+priority 80.1
 type bigWig
 longLabel Testis, male adult (54 years): DNase, ENCFF428COP
 autoScale on
@@ -3033,6 +3283,7 @@ shortLabel ENCFF428COP
 visibility full
 
 track ENCFF477CEG
+priority 81.1
 type bigWig
 longLabel Middle frontal area 46, male adult (84 years): DNase, ENCFF477CEG
 autoScale on
@@ -3045,6 +3296,7 @@ shortLabel ENCFF477CEG
 visibility full
 
 track ENCFF179VUT
+priority 82.1
 type bigWig
 longLabel Middle frontal area 46, female adult (79 years): DNase, ENCFF179VUT
 autoScale on
@@ -3057,6 +3309,7 @@ shortLabel ENCFF179VUT
 visibility full
 
 track ENCFF397SMJ
+priority 83.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (90 or above years) with mild cognitive impairment: DNase, ENCFF397SMJ
 autoScale on
@@ -3069,6 +3322,7 @@ shortLabel ENCFF397SMJ
 visibility full
 
 track ENCFF707HLC
+priority 84.1
 type bigWig
 longLabel Ascending aorta, female adult (51 years): DNase, ENCFF707HLC
 autoScale on
@@ -3081,6 +3335,7 @@ shortLabel ENCFF707HLC
 visibility full
 
 track ENCFF118JST
+priority 85.1
 type bigWig
 longLabel Heart right ventricle, female adult (56 years): DNase, ENCFF118JST
 autoScale on
@@ -3093,6 +3348,7 @@ shortLabel ENCFF118JST
 visibility full
 
 track ENCFF122VLP
+priority 86.1
 type bigWig
 longLabel Heart left ventricle, female adult (56 years): DNase, ENCFF122VLP
 autoScale on
@@ -3105,6 +3361,7 @@ shortLabel ENCFF122VLP
 visibility full
 
 track ENCFF876OBV
+priority 87.1
 type bigWig
 longLabel Pancreas, female adult (59 years): DNase, ENCFF876OBV
 autoScale on
@@ -3117,6 +3374,7 @@ shortLabel ENCFF876OBV
 visibility full
 
 track ENCFF518SGA
+priority 88.1
 type bigWig
 longLabel Adrenal gland, female adult (53 years): DNase, ENCFF518SGA
 autoScale on
@@ -3129,6 +3387,7 @@ shortLabel ENCFF518SGA
 visibility full
 
 track ENCFF847FPR
+priority 89.1
 type bigWig
 longLabel Heart right ventricle, male adult (43 years): DNase, ENCFF847FPR
 autoScale on
@@ -3141,6 +3400,7 @@ shortLabel ENCFF847FPR
 visibility full
 
 track ENCFF644VHX
+priority 90.1
 type bigWig
 longLabel Tibial nerve, male adult (37 years): DNase, ENCFF644VHX
 autoScale on
@@ -3153,6 +3413,7 @@ shortLabel ENCFF644VHX
 visibility full
 
 track ENCFF379EHP
+priority 91.1
 type bigWig
 longLabel Thyroid gland, female adult (51 years): DNase, ENCFF379EHP
 autoScale on
@@ -3165,6 +3426,7 @@ shortLabel ENCFF379EHP
 visibility full
 
 track ENCFF241BCT
+priority 92.1
 type bigWig
 longLabel Peyers patch, female adult (51 years): DNase, ENCFF241BCT
 autoScale on
@@ -3177,6 +3439,7 @@ shortLabel ENCFF241BCT
 visibility full
 
 track ENCFF867EIA
+priority 93.1
 type bigWig
 longLabel Spleen, female adult (59 years): DNase, ENCFF867EIA
 autoScale on
@@ -3189,6 +3452,7 @@ shortLabel ENCFF867EIA
 visibility full
 
 track ENCFF796XMI
+priority 94.1
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): DNase, ENCFF796XMI
 autoScale on
@@ -3201,6 +3465,7 @@ shortLabel ENCFF796XMI
 visibility full
 
 track ENCFF865IXT
+priority 95.1
 type bigWig
 longLabel Prostate gland, male adult (37 years): DNase, ENCFF865IXT
 autoScale on
@@ -3213,6 +3478,7 @@ shortLabel ENCFF865IXT
 visibility full
 
 track ENCFF753MXL
+priority 96.1
 type bigWig
 longLabel Transverse colon, male adult (37 years): DNase, ENCFF753MXL
 autoScale on
@@ -3225,6 +3491,7 @@ shortLabel ENCFF753MXL
 visibility full
 
 track ENCFF299OOV
+priority 97.1
 type bigWig
 longLabel Sigmoid colon, female adult (53 years): DNase, ENCFF299OOV
 autoScale on
@@ -3237,6 +3504,7 @@ shortLabel ENCFF299OOV
 visibility full
 
 track ENCFF571QPS
+priority 98.1
 type bigWig
 longLabel Middle frontal area 46, male adult (82 years): DNase, ENCFF571QPS
 autoScale on
@@ -3249,6 +3517,7 @@ shortLabel ENCFF571QPS
 visibility full
 
 track ENCFF427FGG
+priority 99.1
 type bigWig
 longLabel Middle frontal area 46, female adult (82 years): DNase, ENCFF427FGG
 autoScale on
@@ -3261,6 +3530,7 @@ shortLabel ENCFF427FGG
 visibility full
 
 track ENCFF793FUR
+priority 100.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (86 years) with Alzheimers disease: DNase, ENCFF793FUR
 autoScale on
@@ -3273,6 +3543,7 @@ shortLabel ENCFF793FUR
 visibility full
 
 track ENCFF632MSC
+priority 101.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF632MSC
 autoScale on
@@ -3285,6 +3556,7 @@ shortLabel ENCFF632MSC
 visibility full
 
 track ENCFF318DDE
+priority 102.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: DNase, ENCFF318DDE
 autoScale on
@@ -3297,6 +3569,7 @@ shortLabel ENCFF318DDE
 visibility full
 
 track ENCFF686DIT
+priority 103.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: DNase, ENCFF686DIT
 autoScale on
@@ -3309,6 +3582,7 @@ shortLabel ENCFF686DIT
 visibility full
 
 track ENCFF813UXN
+priority 104.1
 type bigWig
 longLabel Middle frontal area 46, female adult (83 years): DNase, ENCFF813UXN
 autoScale on
@@ -3321,6 +3595,7 @@ shortLabel ENCFF813UXN
 visibility full
 
 track ENCFF036SMP
+priority 105.1
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): DNase, ENCFF036SMP
 autoScale on
@@ -3333,6 +3608,7 @@ shortLabel ENCFF036SMP
 visibility full
 
 track ENCFF359QRX
+priority 106.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF359QRX
 autoScale on
@@ -3345,6 +3621,7 @@ shortLabel ENCFF359QRX
 visibility full
 
 track ENCFF554VOU
+priority 107.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: DNase, ENCFF554VOU
 autoScale on
@@ -3357,6 +3634,7 @@ shortLabel ENCFF554VOU
 visibility full
 
 track ENCFF841ILF
+priority 108.1
 type bigWig
 longLabel Colonic mucosa, female adult (41 years): DNase, ENCFF841ILF
 autoScale on
@@ -3369,6 +3647,7 @@ shortLabel ENCFF841ILF
 visibility full
 
 track ENCFF686OEZ
+priority 109.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (88 years) with mild cognitive impairment: DNase, ENCFF686OEZ
 autoScale on
@@ -3381,6 +3660,7 @@ shortLabel ENCFF686OEZ
 visibility full
 
 track ENCFF874WYJ
+priority 110.1
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): DNase, ENCFF874WYJ
 autoScale on
@@ -3393,6 +3673,7 @@ shortLabel ENCFF874WYJ
 visibility full
 
 track ENCFF052CPA
+priority 111.1
 type bigWig
 longLabel Middle frontal area 46, female adult (88 years): DNase, ENCFF052CPA
 autoScale on
@@ -3405,6 +3686,7 @@ shortLabel ENCFF052CPA
 visibility full
 
 track ENCFF278VYR
+priority 112.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF278VYR
 autoScale on
@@ -3417,6 +3699,7 @@ shortLabel ENCFF278VYR
 visibility full
 
 track ENCFF732ABI
+priority 113.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (87 years) with mild cognitive impairment: DNase, ENCFF732ABI
 autoScale on
@@ -3429,6 +3712,7 @@ shortLabel ENCFF732ABI
 visibility full
 
 track ENCFF615BRP
+priority 114.1
 type bigWig
 longLabel Lower lobe of left lung, female adult (59 years): DNase, ENCFF615BRP
 autoScale on
@@ -3441,6 +3725,7 @@ shortLabel ENCFF615BRP
 visibility full
 
 track ENCFF801REE
+priority 115.1
 type bigWig
 longLabel Adrenal gland, male adult (37 years): DNase, ENCFF801REE
 autoScale on
@@ -3453,6 +3738,7 @@ shortLabel ENCFF801REE
 visibility full
 
 track ENCFF679FKQ
+priority 116.1
 type bigWig
 longLabel Right atrium auricular region, female adult (51 years): DNase, ENCFF679FKQ
 autoScale on
@@ -3465,6 +3751,7 @@ shortLabel ENCFF679FKQ
 visibility full
 
 track ENCFF383WYK
+priority 117.1
 type bigWig
 longLabel Coronary artery, female adult (53 years): DNase, ENCFF383WYK
 autoScale on
@@ -3477,6 +3764,7 @@ shortLabel ENCFF383WYK
 visibility full
 
 track ENCFF412TKS
+priority 118.1
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (86 years) with Cognitive impairment: DNase, ENCFF412TKS
 autoScale on
@@ -3489,6 +3777,7 @@ shortLabel ENCFF412TKS
 visibility full
 
 track ENCFF767BTZ
+priority 119.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: DNase, ENCFF767BTZ
 autoScale on
@@ -3501,6 +3790,7 @@ shortLabel ENCFF767BTZ
 visibility full
 
 track ENCFF813QPY
+priority 120.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (83 years) with mild cognitive impairment: DNase, ENCFF813QPY
 autoScale on
@@ -3513,6 +3803,7 @@ shortLabel ENCFF813QPY
 visibility full
 
 track ENCFF841VBI
+priority 121.1
 type bigWig
 longLabel Esophagus squamous epithelium, male adult (37 years): DNase, ENCFF841VBI
 autoScale on
@@ -3525,6 +3816,7 @@ shortLabel ENCFF841VBI
 visibility full
 
 track ENCFF639UGW
+priority 122.1
 type bigWig
 longLabel Tibial nerve, female adult (51 years): DNase, ENCFF639UGW
 autoScale on
@@ -3537,6 +3829,7 @@ shortLabel ENCFF639UGW
 visibility full
 
 track ENCFF211HIT
+priority 123.1
 type bigWig
 longLabel Thyroid gland, male adult (37 years): DNase, ENCFF211HIT
 autoScale on
@@ -3549,6 +3842,7 @@ shortLabel ENCFF211HIT
 visibility full
 
 track ENCFF279ZNA
+priority 124.1
 type bigWig
 longLabel Upper lobe of left lung, female adult (51 years): DNase, ENCFF279ZNA
 autoScale on
@@ -3561,6 +3855,7 @@ shortLabel ENCFF279ZNA
 visibility full
 
 track ENCFF493HHP
+priority 125.1
 type bigWig
 longLabel Stomach, female adult (53 years): DNase, ENCFF493HHP
 autoScale on
@@ -3573,6 +3868,7 @@ shortLabel ENCFF493HHP
 visibility full
 
 track ENCFF225DKL
+priority 126.1
 type bigWig
 longLabel Body of pancreas, female adult (51 years): DNase, ENCFF225DKL
 autoScale on
@@ -3585,6 +3881,7 @@ shortLabel ENCFF225DKL
 visibility full
 
 track ENCFF013UBZ
+priority 127.1
 type bigWig
 longLabel Tibial artery, male adult (37 years): DNase, ENCFF013UBZ
 autoScale on
@@ -3597,6 +3894,7 @@ shortLabel ENCFF013UBZ
 visibility full
 
 track ENCFF017LRG
+priority 128.1
 type bigWig
 longLabel Thyroid gland, male adult (54 years): DNase, ENCFF017LRG
 autoScale on
@@ -3609,6 +3907,7 @@ shortLabel ENCFF017LRG
 visibility full
 
 track ENCFF674RXU
+priority 129.1
 type bigWig
 longLabel Upper lobe of left lung, male adult (37 years): DNase, ENCFF674RXU
 autoScale on
@@ -3621,6 +3920,7 @@ shortLabel ENCFF674RXU
 visibility full
 
 track ENCFF867HAD
+priority 130.1
 type bigWig
 longLabel Heart left ventricle, female adult (46 years): DNase, ENCFF867HAD
 autoScale on
@@ -3633,6 +3933,7 @@ shortLabel ENCFF867HAD
 visibility full
 
 track ENCFF505TAB
+priority 131.1
 type bigWig
 longLabel Upper lobe of left lung, male adult (54 years): DNase, ENCFF505TAB
 autoScale on
@@ -3645,6 +3946,7 @@ shortLabel ENCFF505TAB
 visibility full
 
 track ENCFF066BOK
+priority 132.1
 type bigWig
 longLabel Gastrocnemius medialis, male adult (37 years): DNase, ENCFF066BOK
 autoScale on
@@ -3657,6 +3959,7 @@ shortLabel ENCFF066BOK
 visibility full
 
 track ENCFF022SDS
+priority 133.1
 type bigWig
 longLabel Ascending aorta, female adult (53 years): DNase, ENCFF022SDS
 autoScale on
@@ -3669,6 +3972,7 @@ shortLabel ENCFF022SDS
 visibility full
 
 track ENCFF414ADM
+priority 134.1
 type bigWig
 longLabel Heart left ventricle, female adult (59 years): DNase, ENCFF414ADM
 autoScale on
@@ -3681,6 +3985,7 @@ shortLabel ENCFF414ADM
 visibility full
 
 track ENCFF284PMB
+priority 135.1
 type bigWig
 longLabel Middle frontal area 46, male adult (78 years): DNase, ENCFF284PMB
 autoScale on
@@ -3693,6 +3998,7 @@ shortLabel ENCFF284PMB
 visibility full
 
 track ENCFF769AFQ
+priority 136.1
 type bigWig
 longLabel Middle frontal area 46, male adult (86 years): DNase, ENCFF769AFQ
 autoScale on
@@ -3705,6 +4011,7 @@ shortLabel ENCFF769AFQ
 visibility full
 
 track ENCFF305XCA
+priority 137.1
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: DNase, ENCFF305XCA
 autoScale on
@@ -3717,6 +4024,7 @@ shortLabel ENCFF305XCA
 visibility full
 
 track ENCFF349ZMO
+priority 138.1
 type bigWig
 longLabel Pancreas, female child (16 years): DNase, ENCFF349ZMO
 autoScale on
@@ -3729,6 +4037,7 @@ shortLabel ENCFF349ZMO
 visibility full
 
 track ENCFF456EHL
+priority 139.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF456EHL
 autoScale on
@@ -3741,6 +4050,7 @@ shortLabel ENCFF456EHL
 visibility full
 
 track ENCFF960WAV
+priority 140.1
 type bigWig
 longLabel Upper lobe of left lung, female adult (53 years): DNase, ENCFF960WAV
 autoScale on
@@ -3753,6 +4063,7 @@ shortLabel ENCFF960WAV
 visibility full
 
 track ENCFF549MXK
+priority 141.1
 type bigWig
 longLabel Breast epithelium, female adult (51 years): DNase, ENCFF549MXK
 autoScale on
@@ -3765,6 +4076,7 @@ shortLabel ENCFF549MXK
 visibility full
 
 track ENCFF717OQE
+priority 142.1
 type bigWig
 longLabel Peyers patch, male adult (54 years): DNase, ENCFF717OQE
 autoScale on
@@ -3777,6 +4089,7 @@ shortLabel ENCFF717OQE
 visibility full
 
 track ENCFF164EEU
+priority 143.1
 type bigWig
 longLabel Stomach, male adult (54 years): DNase, ENCFF164EEU
 autoScale on
@@ -3789,6 +4102,7 @@ shortLabel ENCFF164EEU
 visibility full
 
 track ENCFF028FLY
+priority 144.1
 type bigWig
 longLabel Sigmoid colon, male adult (54 years): DNase, ENCFF028FLY
 autoScale on
@@ -3801,6 +4115,7 @@ shortLabel ENCFF028FLY
 visibility full
 
 track ENCFF047YGB
+priority 145.1
 type bigWig
 longLabel Thyroid gland, female adult (53 years): DNase, ENCFF047YGB
 autoScale on
@@ -3813,6 +4128,7 @@ shortLabel ENCFF047YGB
 visibility full
 
 track ENCFF541ZVM
+priority 146.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (81 years) with Alzheimers disease: DNase, ENCFF541ZVM
 autoScale on
@@ -3825,6 +4141,7 @@ shortLabel ENCFF541ZVM
 visibility full
 
 track ENCFF812JCQ
+priority 147.1
 type bigWig
 longLabel Peyers patch, female adult (53 years): DNase, ENCFF812JCQ
 autoScale on
@@ -3837,6 +4154,7 @@ shortLabel ENCFF812JCQ
 visibility full
 
 track ENCFF798CZY
+priority 148.1
 type bigWig
 longLabel Tibial nerve, male adult (54 years): DNase, ENCFF798CZY
 autoScale on
@@ -3849,6 +4167,7 @@ shortLabel ENCFF798CZY
 visibility full
 
 track ENCFF926IJX
+priority 149.1
 type bigWig
 longLabel Peyers patch, male adult (37 years): DNase, ENCFF926IJX
 autoScale on
@@ -3861,6 +4180,7 @@ shortLabel ENCFF926IJX
 visibility full
 
 track ENCFF693WYZ
+priority 150.1
 type bigWig
 longLabel Adrenal gland, female adult (51 years): DNase, ENCFF693WYZ
 autoScale on
@@ -3873,6 +4193,7 @@ shortLabel ENCFF693WYZ
 visibility full
 
 track ENCFF688CZD
+priority 151.1
 type bigWig
 longLabel Heart right ventricle, male adult (61 years): DNase, ENCFF688CZD
 autoScale on
@@ -3885,6 +4206,7 @@ shortLabel ENCFF688CZD
 visibility full
 
 track ENCFF649PLC
+priority 152.1
 type bigWig
 longLabel Body of pancreas, male adult (54 years): DNase, ENCFF649PLC
 autoScale on
@@ -3897,6 +4219,7 @@ shortLabel ENCFF649PLC
 visibility full
 
 track ENCFF990HTO
+priority 153.1
 type bigWig
 longLabel Left lung, male adult (40 years): DNase, ENCFF990HTO
 autoScale on
@@ -3909,6 +4232,7 @@ shortLabel ENCFF990HTO
 visibility full
 
 track ENCFF712ATQ
+priority 154.1
 type bigWig
 longLabel Gastrocnemius medialis, female adult (53 years): DNase, ENCFF712ATQ
 autoScale on
@@ -3921,6 +4245,7 @@ shortLabel ENCFF712ATQ
 visibility full
 
 track ENCFF017QTW
+priority 155.1
 type bigWig
 longLabel Stomach, male adult (37 years): DNase, ENCFF017QTW
 autoScale on
@@ -3933,6 +4258,7 @@ shortLabel ENCFF017QTW
 visibility full
 
 track ENCFF138FMV
+priority 156.1
 type bigWig
 longLabel Transverse colon, female adult (51 years): DNase, ENCFF138FMV
 autoScale on
@@ -3945,6 +4271,7 @@ shortLabel ENCFF138FMV
 visibility full
 
 track ENCFF986YEI
+priority 157.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: DNase, ENCFF986YEI
 autoScale on
@@ -3957,6 +4284,7 @@ shortLabel ENCFF986YEI
 visibility full
 
 track ENCFF980SJY
+priority 158.1
 type bigWig
 longLabel Middle frontal area 46, male adult (71 years): DNase, ENCFF980SJY
 autoScale on
@@ -3969,6 +4297,7 @@ shortLabel ENCFF980SJY
 visibility full
 
 track ENCFF886QYD
+priority 159.1
 type bigWig
 longLabel Esophagus muscularis mucosa, male adult (37 years): DNase, ENCFF886QYD
 autoScale on
@@ -3981,6 +4310,7 @@ shortLabel ENCFF886QYD
 visibility full
 
 track ENCFF270GCR
+priority 160.1
 type bigWig
 longLabel Heart right ventricle, female adult (46 years): DNase, ENCFF270GCR
 autoScale on
@@ -3993,6 +4323,7 @@ shortLabel ENCFF270GCR
 visibility full
 
 track ENCFF380ELC
+priority 161.1
 type bigWig
 longLabel Heart left ventricle, male adult (43 years): DNase, ENCFF380ELC
 autoScale on
@@ -4005,6 +4336,7 @@ shortLabel ENCFF380ELC
 visibility full
 
 track ENCFF421SBY
+priority 162.1
 type bigWig
 longLabel Lower lobe of left lung, male adult (60 years): DNase, ENCFF421SBY
 autoScale on
@@ -4017,6 +4349,7 @@ shortLabel ENCFF421SBY
 visibility full
 
 track ENCFF087WEP
+priority 163.1
 type bigWig
 longLabel Body of pancreas, male adult (37 years): DNase, ENCFF087WEP
 autoScale on
@@ -4029,6 +4362,7 @@ shortLabel ENCFF087WEP
 visibility full
 
 track ENCFF405NTZ
+priority 164.1
 type bigWig
 longLabel Transverse colon, male adult (54 years): DNase, ENCFF405NTZ
 autoScale on
@@ -4041,6 +4375,7 @@ shortLabel ENCFF405NTZ
 visibility full
 
 track ENCFF103WUK
+priority 165.1
 type bigWig
 longLabel Gastrocnemius medialis, female adult (51 years): DNase, ENCFF103WUK
 autoScale on
@@ -4053,6 +4388,7 @@ shortLabel ENCFF103WUK
 visibility full
 
 track ENCFF592RWK
+priority 166.1
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: DNase, ENCFF592RWK
 autoScale on
@@ -4065,6 +4401,7 @@ shortLabel ENCFF592RWK
 visibility full
 
 track ENCFF018BZK
+priority 167.1
 type bigWig
 longLabel Middle frontal area 46, female adult (84 years): DNase, ENCFF018BZK
 autoScale on
@@ -4077,6 +4414,7 @@ shortLabel ENCFF018BZK
 visibility full
 
 track ENCFF604AYM
+priority 168.1
 type bigWig
 longLabel Middle frontal area 46, female adult (78 years): DNase, ENCFF604AYM
 autoScale on
@@ -4089,6 +4427,7 @@ shortLabel ENCFF604AYM
 visibility full
 
 track ENCFF286BFK
+priority 169.1
 type bigWig
 longLabel Middle frontal area 46, female adult (89 years): DNase, ENCFF286BFK
 autoScale on
@@ -4101,6 +4440,7 @@ shortLabel ENCFF286BFK
 visibility full
 
 track ENCFF492WAE
+priority 170.1
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (74 years) with Alzheimers disease: DNase, ENCFF492WAE
 autoScale on
@@ -4120,6 +4460,7 @@ visibility full
 type bigWig
 
 track ENCFF630BQS
+priority 1.2
 type bigWig
 longLabel OCI-LY7: H3K4me3, ENCFF630BQS
 autoScale on
@@ -4132,6 +4473,7 @@ shortLabel ENCFF630BQS
 visibility full
 
 track ENCFF719EBT
+priority 2.2
 type bigWig
 longLabel Keratinocyte, female: H3K4me3, ENCFF719EBT
 autoScale on
@@ -4144,6 +4486,7 @@ shortLabel ENCFF719EBT
 visibility full
 
 track ENCFF153BJG
+priority 3.2
 type bigWig
 longLabel Astrocyte, male adult (53 years): H3K4me3, ENCFF153BJG
 autoScale on
@@ -4156,6 +4499,7 @@ shortLabel ENCFF153BJG
 visibility full
 
 track ENCFF806YEZ
+priority 4.2
 type bigWig
 longLabel K562: H3K4me3, ENCFF806YEZ
 autoScale on
@@ -4168,6 +4512,7 @@ shortLabel ENCFF806YEZ
 visibility full
 
 track ENCFF582GHH
+priority 5.2
 type bigWig
 longLabel Osteocyte, female embryo (5 days): H3K4me3, ENCFF582GHH
 autoScale on
@@ -4180,6 +4525,7 @@ shortLabel ENCFF582GHH
 visibility full
 
 track ENCFF695YII
+priority 6.2
 type bigWig
 longLabel HL-60: H3K4me3, ENCFF695YII
 autoScale on
@@ -4192,6 +4538,7 @@ shortLabel ENCFF695YII
 visibility full
 
 track ENCFF879CSG
+priority 7.2
 type bigWig
 longLabel WERI-Rb-1: H3K4me3, ENCFF879CSG
 autoScale on
@@ -4204,6 +4551,7 @@ shortLabel ENCFF879CSG
 visibility full
 
 track ENCFF221TSA
+priority 8.2
 type bigWig
 longLabel Caco-2: H3K4me3, ENCFF221TSA
 autoScale on
@@ -4216,6 +4564,7 @@ shortLabel ENCFF221TSA
 visibility full
 
 track ENCFF935BFQ
+priority 9.2
 type bigWig
 longLabel MCF-7: H3K4me3, ENCFF935BFQ
 autoScale on
@@ -4228,6 +4577,7 @@ shortLabel ENCFF935BFQ
 visibility full
 
 track ENCFF587XGD
+priority 10.2
 type bigWig
 longLabel CD14-positive monocyte, female: H3K4me3, ENCFF587XGD
 autoScale on
@@ -4240,6 +4590,7 @@ shortLabel ENCFF587XGD
 visibility full
 
 track ENCFF300WXD
+priority 11.2
 type bigWig
 longLabel Endodermal cell, female embryo (5 days): H3K4me3, ENCFF300WXD
 autoScale on
@@ -4252,6 +4603,7 @@ shortLabel ENCFF300WXD
 visibility full
 
 track ENCFF465MDM
+priority 12.2
 type bigWig
 longLabel PC-9: H3K4me3, ENCFF465MDM
 autoScale on
@@ -4264,6 +4616,7 @@ shortLabel ENCFF465MDM
 visibility full
 
 track ENCFF958CFK
+priority 13.2
 type bigWig
 longLabel A673: H3K4me3, ENCFF958CFK
 autoScale on
@@ -4276,6 +4629,7 @@ shortLabel ENCFF958CFK
 visibility full
 
 track ENCFF207MNM
+priority 14.2
 type bigWig
 longLabel Cardiac muscle cell, embryo: H3K4me3, ENCFF207MNM
 autoScale on
@@ -4288,6 +4642,7 @@ shortLabel ENCFF207MNM
 visibility full
 
 track ENCFF835JIA
+priority 15.2
 type bigWig
 longLabel Neural progenitor cell, female embryo (5 days): H3K4me3, ENCFF835JIA
 autoScale on
@@ -4300,6 +4655,7 @@ shortLabel ENCFF835JIA
 visibility full
 
 track ENCFF179HBV
+priority 16.2
 type bigWig
 longLabel H9: H3K4me3, ENCFF179HBV
 autoScale on
@@ -4312,6 +4668,7 @@ shortLabel ENCFF179HBV
 visibility full
 
 track ENCFF446OPT
+priority 17.2
 type bigWig
 longLabel GM23338: H3K4me3, ENCFF446OPT
 autoScale on
@@ -4324,6 +4681,7 @@ shortLabel ENCFF446OPT
 visibility full
 
 track ENCFF376ZIM
+priority 18.2
 type bigWig
 longLabel IMR-90: H3K4me3, ENCFF376ZIM
 autoScale on
@@ -4336,6 +4694,7 @@ shortLabel ENCFF376ZIM
 visibility full
 
 track ENCFF712FDJ
+priority 19.2
 type bigWig
 longLabel Mesothelial cell of epicardium, female embryo (5 days): H3K4me3, ENCFF712FDJ
 autoScale on
@@ -4348,6 +4707,7 @@ shortLabel ENCFF712FDJ
 visibility full
 
 track ENCFF530MCT
+priority 20.2
 type bigWig
 longLabel Type B pancreatic cell, female embryo (5 days): H3K4me3, ENCFF530MCT
 autoScale on
@@ -4360,6 +4720,7 @@ shortLabel ENCFF530MCT
 visibility full
 
 track ENCFF964OOU
+priority 21.2
 type bigWig
 longLabel HCT116: H3K4me3, ENCFF964OOU
 autoScale on
@@ -4372,6 +4733,7 @@ shortLabel ENCFF964OOU
 visibility full
 
 track ENCFF280PUF
+priority 22.2
 type bigWig
 longLabel GM12878: H3K4me3, ENCFF280PUF
 autoScale on
@@ -4384,6 +4746,7 @@ shortLabel ENCFF280PUF
 visibility full
 
 track ENCFF651WOM
+priority 23.2
 type bigWig
 longLabel SK-N-SH: H3K4me3, ENCFF651WOM
 autoScale on
@@ -4396,6 +4759,7 @@ shortLabel ENCFF651WOM
 visibility full
 
 track ENCFF760NUN
+priority 24.2
 type bigWig
 longLabel H1: H3K4me3, ENCFF760NUN
 autoScale on
@@ -4408,6 +4772,7 @@ shortLabel ENCFF760NUN
 visibility full
 
 track ENCFF756NMQ
+priority 25.2
 type bigWig
 longLabel Panc1: H3K4me3, ENCFF756NMQ
 autoScale on
@@ -4420,6 +4785,7 @@ shortLabel ENCFF756NMQ
 visibility full
 
 track ENCFF577BWJ
+priority 26.2
 type bigWig
 longLabel Astrocyte: H3K4me3, ENCFF577BWJ
 autoScale on
@@ -4432,6 +4798,7 @@ shortLabel ENCFF577BWJ
 visibility full
 
 track ENCFF466YVQ
+priority 27.2
 type bigWig
 longLabel Chondrocyte, female embryo (5 days): H3K4me3, ENCFF466YVQ
 autoScale on
@@ -4444,6 +4811,7 @@ shortLabel ENCFF466YVQ
 visibility full
 
 track ENCFF432PYK
+priority 28.2
 type bigWig
 longLabel HeLa-S3: H3K4me3, ENCFF432PYK
 autoScale on
@@ -4456,6 +4824,7 @@ shortLabel ENCFF432PYK
 visibility full
 
 track ENCFF970LMB
+priority 29.2
 type bigWig
 longLabel MM.1S: H3K4me3, ENCFF970LMB
 autoScale on
@@ -4468,6 +4837,7 @@ shortLabel ENCFF970LMB
 visibility full
 
 track ENCFF573ZFG
+priority 30.2
 type bigWig
 longLabel AG04450: H3K4me3, ENCFF573ZFG
 autoScale on
@@ -4480,6 +4850,7 @@ shortLabel ENCFF573ZFG
 visibility full
 
 track ENCFF543KTX
+priority 31.2
 type bigWig
 longLabel Endothelial cell, male adult (53 years): H3K4me3, ENCFF543KTX
 autoScale on
@@ -4492,6 +4863,7 @@ shortLabel ENCFF543KTX
 visibility full
 
 track ENCFF165GJZ
+priority 32.2
 type bigWig
 longLabel Progenitor cell of endocrine pancreas, female embryo (5 days): H3K4me3, ENCFF165GJZ
 autoScale on
@@ -4504,6 +4876,7 @@ shortLabel ENCFF165GJZ
 visibility full
 
 track ENCFF732PJK
+priority 33.2
 type bigWig
 longLabel HepG2: H3K4me3, ENCFF732PJK
 autoScale on
@@ -4516,6 +4889,7 @@ shortLabel ENCFF732PJK
 visibility full
 
 track ENCFF995LLA
+priority 34.2
 type bigWig
 longLabel HFFc6: H3K4me3, ENCFF995LLA
 autoScale on
@@ -4528,6 +4902,7 @@ shortLabel ENCFF995LLA
 visibility full
 
 track ENCFF308GJB
+priority 35.2
 type bigWig
 longLabel DND-41: H3K4me3, ENCFF308GJB
 autoScale on
@@ -4540,6 +4915,7 @@ shortLabel ENCFF308GJB
 visibility full
 
 track ENCFF346LEZ
+priority 36.2
 type bigWig
 longLabel Glutamatergic neuron, male adult (53 years) male adult (53 years) nuclear fraction: H3K4me3, ENCFF346LEZ
 autoScale on
@@ -4552,6 +4928,7 @@ shortLabel ENCFF346LEZ
 visibility full
 
 track ENCFF559ALK
+priority 37.2
 type bigWig
 longLabel Brain microvascular endothelial cell: H3K4me3, ENCFF559ALK
 autoScale on
@@ -4564,6 +4941,7 @@ shortLabel ENCFF559ALK
 visibility full
 
 track ENCFF137IUT
+priority 38.2
 type bigWig
 longLabel Hepatocyte, female embryo (5 days): H3K4me3, ENCFF137IUT
 autoScale on
@@ -4576,6 +4954,7 @@ shortLabel ENCFF137IUT
 visibility full
 
 track ENCFF684UUJ
+priority 39.2
 type bigWig
 longLabel NCI-H929: H3K4me3, ENCFF684UUJ
 autoScale on
@@ -4588,6 +4967,7 @@ shortLabel ENCFF684UUJ
 visibility full
 
 track ENCFF319OET
+priority 40.2
 type bigWig
 longLabel PC-3: H3K4me3, ENCFF319OET
 autoScale on
@@ -4600,6 +4980,7 @@ shortLabel ENCFF319OET
 visibility full
 
 track ENCFF494ASH
+priority 41.2
 type bigWig
 longLabel GM23338: H3K4me3, ENCFF494ASH
 autoScale on
@@ -4612,6 +4993,7 @@ shortLabel ENCFF494ASH
 visibility full
 
 track ENCFF220KZL
+priority 42.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: H3K4me3, ENCFF220KZL
 autoScale on
@@ -4624,6 +5006,7 @@ shortLabel ENCFF220KZL
 visibility full
 
 track ENCFF834IHE
+priority 43.2
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K4me3, ENCFF834IHE
 autoScale on
@@ -4636,6 +5019,7 @@ shortLabel ENCFF834IHE
 visibility full
 
 track ENCFF871ZNR
+priority 44.2
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K4me3, ENCFF871ZNR
 autoScale on
@@ -4648,6 +5032,7 @@ shortLabel ENCFF871ZNR
 visibility full
 
 track ENCFF419XND
+priority 45.2
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (81 years) with Cognitive impairment: H3K4me3, ENCFF419XND
 autoScale on
@@ -4660,6 +5045,7 @@ shortLabel ENCFF419XND
 visibility full
 
 track ENCFF730XOV
+priority 46.2
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): H3K4me3, ENCFF730XOV
 autoScale on
@@ -4672,6 +5058,7 @@ shortLabel ENCFF730XOV
 visibility full
 
 track ENCFF563YFA
+priority 47.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (88 years) with Alzheimers disease: H3K4me3, ENCFF563YFA
 autoScale on
@@ -4684,6 +5071,7 @@ shortLabel ENCFF563YFA
 visibility full
 
 track ENCFF005KPT
+priority 48.2
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: H3K4me3, ENCFF005KPT
 autoScale on
@@ -4696,6 +5084,7 @@ shortLabel ENCFF005KPT
 visibility full
 
 track ENCFF507KAZ
+priority 49.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF507KAZ
 autoScale on
@@ -4708,6 +5097,7 @@ shortLabel ENCFF507KAZ
 visibility full
 
 track ENCFF353SJI
+priority 50.2
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K4me3, ENCFF353SJI
 autoScale on
@@ -4720,6 +5110,7 @@ shortLabel ENCFF353SJI
 visibility full
 
 track ENCFF862YHY
+priority 51.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (85 years) with Alzheimers disease: H3K4me3, ENCFF862YHY
 autoScale on
@@ -4732,6 +5123,7 @@ shortLabel ENCFF862YHY
 visibility full
 
 track ENCFF981HHV
+priority 52.2
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): H3K4me3, ENCFF981HHV
 autoScale on
@@ -4744,6 +5136,7 @@ shortLabel ENCFF981HHV
 visibility full
 
 track ENCFF732JQY
+priority 53.2
 type bigWig
 longLabel Middle frontal area 46, male adult (87 years): H3K4me3, ENCFF732JQY
 autoScale on
@@ -4756,6 +5149,7 @@ shortLabel ENCFF732JQY
 visibility full
 
 track ENCFF077FBW
+priority 54.2
 type bigWig
 longLabel Spleen, female adult (41 years): H3K4me3, ENCFF077FBW
 autoScale on
@@ -4768,6 +5162,7 @@ shortLabel ENCFF077FBW
 visibility full
 
 track ENCFF889GHD
+priority 55.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF889GHD
 autoScale on
@@ -4780,6 +5175,7 @@ shortLabel ENCFF889GHD
 visibility full
 
 track ENCFF772JUK
+priority 56.2
 type bigWig
 longLabel Gastrocnemius medialis, male adult (54 years): H3K4me3, ENCFF772JUK
 autoScale on
@@ -4792,6 +5188,7 @@ shortLabel ENCFF772JUK
 visibility full
 
 track ENCFF663EZB
+priority 57.2
 type bigWig
 longLabel Heart right ventricle, male adult (66 years): H3K4me3, ENCFF663EZB
 autoScale on
@@ -4804,6 +5201,7 @@ shortLabel ENCFF663EZB
 visibility full
 
 track ENCFF646DAW
+priority 58.2
 type bigWig
 longLabel Right atrium auricular region, female adult (53 years): H3K4me3, ENCFF646DAW
 autoScale on
@@ -4816,6 +5214,7 @@ shortLabel ENCFF646DAW
 visibility full
 
 track ENCFF370WIV
+priority 59.2
 type bigWig
 longLabel Uterus, female adult (53 years): H3K4me3, ENCFF370WIV
 autoScale on
@@ -4828,6 +5227,7 @@ shortLabel ENCFF370WIV
 visibility full
 
 track ENCFF237QAL
+priority 60.2
 type bigWig
 longLabel Left ventricle myocardium inferior, male adult (60 years): H3K4me3, ENCFF237QAL
 autoScale on
@@ -4840,6 +5240,7 @@ shortLabel ENCFF237QAL
 visibility full
 
 track ENCFF379GSJ
+priority 61.2
 type bigWig
 longLabel Vagina, female adult (53 years): H3K4me3, ENCFF379GSJ
 autoScale on
@@ -4852,6 +5253,7 @@ shortLabel ENCFF379GSJ
 visibility full
 
 track ENCFF283ZMI
+priority 62.2
 type bigWig
 longLabel Stomach, female adult (51 years): H3K4me3, ENCFF283ZMI
 autoScale on
@@ -4864,6 +5266,7 @@ shortLabel ENCFF283ZMI
 visibility full
 
 track ENCFF538YZL
+priority 63.2
 type bigWig
 longLabel Heart right ventricle, male adult (69 years): H3K4me3, ENCFF538YZL
 autoScale on
@@ -4876,6 +5279,7 @@ shortLabel ENCFF538YZL
 visibility full
 
 track ENCFF119FKH
+priority 64.2
 type bigWig
 longLabel Heart right ventricle, male adult (40 years): H3K4me3, ENCFF119FKH
 autoScale on
@@ -4888,6 +5292,7 @@ shortLabel ENCFF119FKH
 visibility full
 
 track ENCFF236JWD
+priority 65.2
 type bigWig
 longLabel Pancreas, female adult (41 years): H3K4me3, ENCFF236JWD
 autoScale on
@@ -4900,6 +5305,7 @@ shortLabel ENCFF236JWD
 visibility full
 
 track ENCFF917LFF
+priority 66.2
 type bigWig
 longLabel Right lobe of liver, female adult (53 years): H3K4me3, ENCFF917LFF
 autoScale on
@@ -4912,6 +5318,7 @@ shortLabel ENCFF917LFF
 visibility full
 
 track ENCFF339CRV
+priority 67.2
 type bigWig
 longLabel Transverse colon, female adult (53 years): H3K4me3, ENCFF339CRV
 autoScale on
@@ -4924,6 +5331,7 @@ shortLabel ENCFF339CRV
 visibility full
 
 track ENCFF642TNR
+priority 68.2
 type bigWig
 longLabel Left lung, female child (16 years): H3K4me3, ENCFF642TNR
 autoScale on
@@ -4936,6 +5344,7 @@ shortLabel ENCFF642TNR
 visibility full
 
 track ENCFF229BGF
+priority 69.2
 type bigWig
 longLabel Testis, male adult (37 years): H3K4me3, ENCFF229BGF
 autoScale on
@@ -4948,6 +5357,7 @@ shortLabel ENCFF229BGF
 visibility full
 
 track ENCFF436OWL
+priority 70.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF436OWL
 autoScale on
@@ -4960,6 +5370,7 @@ shortLabel ENCFF436OWL
 visibility full
 
 track ENCFF768NPJ
+priority 71.2
 type bigWig
 longLabel Bipolar neuron (treated), male adult (53 years) treated with 0.5 μg/mL doxycycline hyclate for 4 days: H3K4me3, ENCFF768NPJ
 autoScale on
@@ -4972,6 +5383,7 @@ shortLabel ENCFF768NPJ
 visibility full
 
 track ENCFF696UEY
+priority 72.2
 type bigWig
 longLabel Thoracic aorta, male adult (37 years): H3K4me3, ENCFF696UEY
 autoScale on
@@ -4984,6 +5396,7 @@ shortLabel ENCFF696UEY
 visibility full
 
 track ENCFF387XJD
+priority 73.2
 type bigWig
 longLabel Spleen, female adult (53 years): H3K4me3, ENCFF387XJD
 autoScale on
@@ -4996,6 +5409,7 @@ shortLabel ENCFF387XJD
 visibility full
 
 track ENCFF700TZZ
+priority 74.2
 type bigWig
 longLabel Adrenal gland, female adult (41 years): H3K4me3, ENCFF700TZZ
 autoScale on
@@ -5008,6 +5422,7 @@ shortLabel ENCFF700TZZ
 visibility full
 
 track ENCFF263CSV
+priority 75.2
 type bigWig
 longLabel Adrenal gland, male adult (54 years): H3K4me3, ENCFF263CSV
 autoScale on
@@ -5020,6 +5435,7 @@ shortLabel ENCFF263CSV
 visibility full
 
 track ENCFF904YBG
+priority 76.2
 type bigWig
 longLabel Vagina, female adult (51 years): H3K4me3, ENCFF904YBG
 autoScale on
@@ -5032,6 +5448,7 @@ shortLabel ENCFF904YBG
 visibility full
 
 track ENCFF551GZK
+priority 77.2
 type bigWig
 longLabel Spleen, female adult (61 years): H3K4me3, ENCFF551GZK
 autoScale on
@@ -5044,6 +5461,7 @@ shortLabel ENCFF551GZK
 visibility full
 
 track ENCFF651XRK
+priority 78.2
 type bigWig
 longLabel Heart left ventricle, female adult (53 years): H3K4me3, ENCFF651XRK
 autoScale on
@@ -5056,6 +5474,7 @@ shortLabel ENCFF651XRK
 visibility full
 
 track ENCFF682UWZ
+priority 79.2
 type bigWig
 longLabel Pancreas, female adult (61 years): H3K4me3, ENCFF682UWZ
 autoScale on
@@ -5068,6 +5487,7 @@ shortLabel ENCFF682UWZ
 visibility full
 
 track ENCFF665CXY
+priority 80.2
 type bigWig
 longLabel Testis, male adult (54 years): H3K4me3, ENCFF665CXY
 autoScale on
@@ -5080,6 +5500,7 @@ shortLabel ENCFF665CXY
 visibility full
 
 track ENCFF580GFO
+priority 81.2
 type bigWig
 longLabel Middle frontal area 46, male adult (84 years): H3K4me3, ENCFF580GFO
 autoScale on
@@ -5092,6 +5513,7 @@ shortLabel ENCFF580GFO
 visibility full
 
 track ENCFF711EZK
+priority 82.2
 type bigWig
 longLabel Middle frontal area 46, female adult (79 years): H3K4me3, ENCFF711EZK
 autoScale on
@@ -5104,6 +5526,7 @@ shortLabel ENCFF711EZK
 visibility full
 
 track ENCFF666VNK
+priority 83.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF666VNK
 autoScale on
@@ -5116,6 +5539,7 @@ shortLabel ENCFF666VNK
 visibility full
 
 track ENCFF935CPK
+priority 84.2
 type bigWig
 longLabel Ascending aorta, female adult (51 years): H3K4me3, ENCFF935CPK
 autoScale on
@@ -5128,6 +5552,7 @@ shortLabel ENCFF935CPK
 visibility full
 
 track ENCFF446ELY
+priority 85.2
 type bigWig
 longLabel Heart right ventricle, female adult (56 years): H3K4me3, ENCFF446ELY
 autoScale on
@@ -5140,6 +5565,7 @@ shortLabel ENCFF446ELY
 visibility full
 
 track ENCFF869EMQ
+priority 86.2
 type bigWig
 longLabel Heart left ventricle, female adult (56 years): H3K4me3, ENCFF869EMQ
 autoScale on
@@ -5152,6 +5578,7 @@ shortLabel ENCFF869EMQ
 visibility full
 
 track ENCFF083ENU
+priority 87.2
 type bigWig
 longLabel Pancreas, female adult (59 years): H3K4me3, ENCFF083ENU
 autoScale on
@@ -5164,6 +5591,7 @@ shortLabel ENCFF083ENU
 visibility full
 
 track ENCFF827GEQ
+priority 88.2
 type bigWig
 longLabel Adrenal gland, female adult (53 years): H3K4me3, ENCFF827GEQ
 autoScale on
@@ -5176,6 +5604,7 @@ shortLabel ENCFF827GEQ
 visibility full
 
 track ENCFF454ERF
+priority 89.2
 type bigWig
 longLabel Heart right ventricle, male adult (43 years): H3K4me3, ENCFF454ERF
 autoScale on
@@ -5188,6 +5617,7 @@ shortLabel ENCFF454ERF
 visibility full
 
 track ENCFF201UPO
+priority 90.2
 type bigWig
 longLabel Tibial nerve, male adult (37 years): H3K4me3, ENCFF201UPO
 autoScale on
@@ -5200,6 +5630,7 @@ shortLabel ENCFF201UPO
 visibility full
 
 track ENCFF321LZL
+priority 91.2
 type bigWig
 longLabel Thyroid gland, female adult (51 years): H3K4me3, ENCFF321LZL
 autoScale on
@@ -5212,6 +5643,7 @@ shortLabel ENCFF321LZL
 visibility full
 
 track ENCFF474VCQ
+priority 92.2
 type bigWig
 longLabel Peyers patch, female adult (51 years): H3K4me3, ENCFF474VCQ
 autoScale on
@@ -5224,6 +5656,7 @@ shortLabel ENCFF474VCQ
 visibility full
 
 track ENCFF842QQE
+priority 93.2
 type bigWig
 longLabel Spleen, female adult (59 years): H3K4me3, ENCFF842QQE
 autoScale on
@@ -5236,6 +5669,7 @@ shortLabel ENCFF842QQE
 visibility full
 
 track ENCFF679AWS
+priority 94.2
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K4me3, ENCFF679AWS
 autoScale on
@@ -5248,6 +5682,7 @@ shortLabel ENCFF679AWS
 visibility full
 
 track ENCFF761PKU
+priority 95.2
 type bigWig
 longLabel Prostate gland, male adult (37 years): H3K4me3, ENCFF761PKU
 autoScale on
@@ -5260,6 +5695,7 @@ shortLabel ENCFF761PKU
 visibility full
 
 track ENCFF252OBP
+priority 96.2
 type bigWig
 longLabel Transverse colon, male adult (37 years): H3K4me3, ENCFF252OBP
 autoScale on
@@ -5272,6 +5708,7 @@ shortLabel ENCFF252OBP
 visibility full
 
 track ENCFF237VMY
+priority 97.2
 type bigWig
 longLabel Sigmoid colon, female adult (53 years): H3K4me3, ENCFF237VMY
 autoScale on
@@ -5284,6 +5721,7 @@ shortLabel ENCFF237VMY
 visibility full
 
 track ENCFF546VCE
+priority 98.2
 type bigWig
 longLabel Middle frontal area 46, male adult (82 years): H3K4me3, ENCFF546VCE
 autoScale on
@@ -5296,6 +5734,7 @@ shortLabel ENCFF546VCE
 visibility full
 
 track ENCFF616FVZ
+priority 99.2
 type bigWig
 longLabel Middle frontal area 46, female adult (82 years): H3K4me3, ENCFF616FVZ
 autoScale on
@@ -5308,6 +5747,7 @@ shortLabel ENCFF616FVZ
 visibility full
 
 track ENCFF220GPW
+priority 100.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (86 years) with Alzheimers disease: H3K4me3, ENCFF220GPW
 autoScale on
@@ -5320,6 +5760,7 @@ shortLabel ENCFF220GPW
 visibility full
 
 track ENCFF499ALA
+priority 101.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF499ALA
 autoScale on
@@ -5332,6 +5773,7 @@ shortLabel ENCFF499ALA
 visibility full
 
 track ENCFF914PSJ
+priority 102.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: H3K4me3, ENCFF914PSJ
 autoScale on
@@ -5344,6 +5786,7 @@ shortLabel ENCFF914PSJ
 visibility full
 
 track ENCFF543PRC
+priority 103.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: H3K4me3, ENCFF543PRC
 autoScale on
@@ -5356,6 +5799,7 @@ shortLabel ENCFF543PRC
 visibility full
 
 track ENCFF261GPQ
+priority 104.2
 type bigWig
 longLabel Middle frontal area 46, female adult (83 years): H3K4me3, ENCFF261GPQ
 autoScale on
@@ -5368,6 +5812,7 @@ shortLabel ENCFF261GPQ
 visibility full
 
 track ENCFF352MMI
+priority 105.2
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): H3K4me3, ENCFF352MMI
 autoScale on
@@ -5380,6 +5825,7 @@ shortLabel ENCFF352MMI
 visibility full
 
 track ENCFF878BKX
+priority 106.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF878BKX
 autoScale on
@@ -5392,6 +5838,7 @@ shortLabel ENCFF878BKX
 visibility full
 
 track ENCFF100JXF
+priority 107.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: H3K4me3, ENCFF100JXF
 autoScale on
@@ -5404,6 +5851,7 @@ shortLabel ENCFF100JXF
 visibility full
 
 track ENCFF173NSX
+priority 108.2
 type bigWig
 longLabel Colonic mucosa, female adult (41 years): H3K4me3, ENCFF173NSX
 autoScale on
@@ -5416,6 +5864,7 @@ shortLabel ENCFF173NSX
 visibility full
 
 track ENCFF018QTQ
+priority 109.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (88 years) with mild cognitive impairment: H3K4me3, ENCFF018QTQ
 autoScale on
@@ -5428,6 +5877,7 @@ shortLabel ENCFF018QTQ
 visibility full
 
 track ENCFF562LUZ
+priority 110.2
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): H3K4me3, ENCFF562LUZ
 autoScale on
@@ -5440,6 +5890,7 @@ shortLabel ENCFF562LUZ
 visibility full
 
 track ENCFF198NDW
+priority 111.2
 type bigWig
 longLabel Middle frontal area 46, female adult (88 years): H3K4me3, ENCFF198NDW
 autoScale on
@@ -5452,6 +5903,7 @@ shortLabel ENCFF198NDW
 visibility full
 
 track ENCFF971OSG
+priority 112.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF971OSG
 autoScale on
@@ -5464,6 +5916,7 @@ shortLabel ENCFF971OSG
 visibility full
 
 track ENCFF127DBK
+priority 113.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (87 years) with mild cognitive impairment: H3K4me3, ENCFF127DBK
 autoScale on
@@ -5476,6 +5929,7 @@ shortLabel ENCFF127DBK
 visibility full
 
 track ENCFF902HIA
+priority 114.2
 type bigWig
 longLabel Lower lobe of left lung, female adult (59 years): H3K4me3, ENCFF902HIA
 autoScale on
@@ -5488,6 +5942,7 @@ shortLabel ENCFF902HIA
 visibility full
 
 track ENCFF053KMZ
+priority 115.2
 type bigWig
 longLabel Adrenal gland, male adult (37 years): H3K4me3, ENCFF053KMZ
 autoScale on
@@ -5500,6 +5955,7 @@ shortLabel ENCFF053KMZ
 visibility full
 
 track ENCFF163VOI
+priority 116.2
 type bigWig
 longLabel Right atrium auricular region, female adult (51 years): H3K4me3, ENCFF163VOI
 autoScale on
@@ -5512,6 +5968,7 @@ shortLabel ENCFF163VOI
 visibility full
 
 track ENCFF811RQX
+priority 117.2
 type bigWig
 longLabel Coronary artery, female adult (53 years): H3K4me3, ENCFF811RQX
 autoScale on
@@ -5524,6 +5981,7 @@ shortLabel ENCFF811RQX
 visibility full
 
 track ENCFF066MLC
+priority 118.2
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (86 years) with Cognitive impairment: H3K4me3, ENCFF066MLC
 autoScale on
@@ -5536,6 +5994,7 @@ shortLabel ENCFF066MLC
 visibility full
 
 track ENCFF319HQY
+priority 119.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: H3K4me3, ENCFF319HQY
 autoScale on
@@ -5548,6 +6007,7 @@ shortLabel ENCFF319HQY
 visibility full
 
 track ENCFF393NEJ
+priority 120.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (83 years) with mild cognitive impairment: H3K4me3, ENCFF393NEJ
 autoScale on
@@ -5560,6 +6020,7 @@ shortLabel ENCFF393NEJ
 visibility full
 
 track ENCFF764HZI
+priority 121.2
 type bigWig
 longLabel Esophagus squamous epithelium, male adult (37 years): H3K4me3, ENCFF764HZI
 autoScale on
@@ -5572,6 +6033,7 @@ shortLabel ENCFF764HZI
 visibility full
 
 track ENCFF958TLM
+priority 122.2
 type bigWig
 longLabel Tibial nerve, female adult (51 years): H3K4me3, ENCFF958TLM
 autoScale on
@@ -5584,6 +6046,7 @@ shortLabel ENCFF958TLM
 visibility full
 
 track ENCFF501SGE
+priority 123.2
 type bigWig
 longLabel Thyroid gland, male adult (37 years): H3K4me3, ENCFF501SGE
 autoScale on
@@ -5596,6 +6059,7 @@ shortLabel ENCFF501SGE
 visibility full
 
 track ENCFF282VQS
+priority 124.2
 type bigWig
 longLabel Upper lobe of left lung, female adult (51 years): H3K4me3, ENCFF282VQS
 autoScale on
@@ -5608,6 +6072,7 @@ shortLabel ENCFF282VQS
 visibility full
 
 track ENCFF641DNV
+priority 125.2
 type bigWig
 longLabel Stomach, female adult (53 years): H3K4me3, ENCFF641DNV
 autoScale on
@@ -5620,6 +6085,7 @@ shortLabel ENCFF641DNV
 visibility full
 
 track ENCFF127LVQ
+priority 126.2
 type bigWig
 longLabel Body of pancreas, female adult (51 years): H3K4me3, ENCFF127LVQ
 autoScale on
@@ -5632,6 +6098,7 @@ shortLabel ENCFF127LVQ
 visibility full
 
 track ENCFF901QWB
+priority 127.2
 type bigWig
 longLabel Tibial artery, male adult (37 years): H3K4me3, ENCFF901QWB
 autoScale on
@@ -5644,6 +6111,7 @@ shortLabel ENCFF901QWB
 visibility full
 
 track ENCFF229BVH
+priority 128.2
 type bigWig
 longLabel Thyroid gland, male adult (54 years): H3K4me3, ENCFF229BVH
 autoScale on
@@ -5656,6 +6124,7 @@ shortLabel ENCFF229BVH
 visibility full
 
 track ENCFF996QZC
+priority 129.2
 type bigWig
 longLabel Upper lobe of left lung, male adult (37 years): H3K4me3, ENCFF996QZC
 autoScale on
@@ -5668,6 +6137,7 @@ shortLabel ENCFF996QZC
 visibility full
 
 track ENCFF152PBB
+priority 130.2
 type bigWig
 longLabel Heart left ventricle, female adult (46 years): H3K4me3, ENCFF152PBB
 autoScale on
@@ -5680,6 +6150,7 @@ shortLabel ENCFF152PBB
 visibility full
 
 track ENCFF117DUU
+priority 131.2
 type bigWig
 longLabel Upper lobe of left lung, male adult (54 years): H3K4me3, ENCFF117DUU
 autoScale on
@@ -5692,6 +6163,7 @@ shortLabel ENCFF117DUU
 visibility full
 
 track ENCFF431FFY
+priority 132.2
 type bigWig
 longLabel Gastrocnemius medialis, male adult (37 years): H3K4me3, ENCFF431FFY
 autoScale on
@@ -5704,6 +6176,7 @@ shortLabel ENCFF431FFY
 visibility full
 
 track ENCFF132YWJ
+priority 133.2
 type bigWig
 longLabel Ascending aorta, female adult (53 years): H3K4me3, ENCFF132YWJ
 autoScale on
@@ -5716,6 +6189,7 @@ shortLabel ENCFF132YWJ
 visibility full
 
 track ENCFF614FJF
+priority 134.2
 type bigWig
 longLabel Heart left ventricle, female adult (59 years): H3K4me3, ENCFF614FJF
 autoScale on
@@ -5728,6 +6202,7 @@ shortLabel ENCFF614FJF
 visibility full
 
 track ENCFF713LKP
+priority 135.2
 type bigWig
 longLabel Middle frontal area 46, male adult (78 years): H3K4me3, ENCFF713LKP
 autoScale on
@@ -5740,6 +6215,7 @@ shortLabel ENCFF713LKP
 visibility full
 
 track ENCFF557GVR
+priority 136.2
 type bigWig
 longLabel Middle frontal area 46, male adult (86 years): H3K4me3, ENCFF557GVR
 autoScale on
@@ -5752,6 +6228,7 @@ shortLabel ENCFF557GVR
 visibility full
 
 track ENCFF478CLR
+priority 137.2
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: H3K4me3, ENCFF478CLR
 autoScale on
@@ -5764,6 +6241,7 @@ shortLabel ENCFF478CLR
 visibility full
 
 track ENCFF849YNY
+priority 138.2
 type bigWig
 longLabel Pancreas, female child (16 years): H3K4me3, ENCFF849YNY
 autoScale on
@@ -5776,6 +6254,7 @@ shortLabel ENCFF849YNY
 visibility full
 
 track ENCFF867WWB
+priority 139.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF867WWB
 autoScale on
@@ -5788,6 +6267,7 @@ shortLabel ENCFF867WWB
 visibility full
 
 track ENCFF372LSW
+priority 140.2
 type bigWig
 longLabel Upper lobe of left lung, female adult (53 years): H3K4me3, ENCFF372LSW
 autoScale on
@@ -5800,6 +6280,7 @@ shortLabel ENCFF372LSW
 visibility full
 
 track ENCFF278ZAD
+priority 141.2
 type bigWig
 longLabel Breast epithelium, female adult (51 years): H3K4me3, ENCFF278ZAD
 autoScale on
@@ -5812,6 +6293,7 @@ shortLabel ENCFF278ZAD
 visibility full
 
 track ENCFF305GQX
+priority 142.2
 type bigWig
 longLabel Peyers patch, male adult (54 years): H3K4me3, ENCFF305GQX
 autoScale on
@@ -5824,6 +6306,7 @@ shortLabel ENCFF305GQX
 visibility full
 
 track ENCFF391KDD
+priority 143.2
 type bigWig
 longLabel Stomach, male adult (54 years): H3K4me3, ENCFF391KDD
 autoScale on
@@ -5836,6 +6319,7 @@ shortLabel ENCFF391KDD
 visibility full
 
 track ENCFF886LUE
+priority 144.2
 type bigWig
 longLabel Sigmoid colon, male adult (54 years): H3K4me3, ENCFF886LUE
 autoScale on
@@ -5848,6 +6332,7 @@ shortLabel ENCFF886LUE
 visibility full
 
 track ENCFF145RER
+priority 145.2
 type bigWig
 longLabel Thyroid gland, female adult (53 years): H3K4me3, ENCFF145RER
 autoScale on
@@ -5860,6 +6345,7 @@ shortLabel ENCFF145RER
 visibility full
 
 track ENCFF889QTE
+priority 146.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (81 years) with Alzheimers disease: H3K4me3, ENCFF889QTE
 autoScale on
@@ -5872,6 +6358,7 @@ shortLabel ENCFF889QTE
 visibility full
 
 track ENCFF675KIN
+priority 147.2
 type bigWig
 longLabel Peyers patch, female adult (53 years): H3K4me3, ENCFF675KIN
 autoScale on
@@ -5884,6 +6371,7 @@ shortLabel ENCFF675KIN
 visibility full
 
 track ENCFF779PMH
+priority 148.2
 type bigWig
 longLabel Tibial nerve, male adult (54 years): H3K4me3, ENCFF779PMH
 autoScale on
@@ -5896,6 +6384,7 @@ shortLabel ENCFF779PMH
 visibility full
 
 track ENCFF996ZNX
+priority 149.2
 type bigWig
 longLabel Peyers patch, male adult (37 years): H3K4me3, ENCFF996ZNX
 autoScale on
@@ -5908,6 +6397,7 @@ shortLabel ENCFF996ZNX
 visibility full
 
 track ENCFF672KET
+priority 150.2
 type bigWig
 longLabel Adrenal gland, female adult (51 years): H3K4me3, ENCFF672KET
 autoScale on
@@ -5920,6 +6410,7 @@ shortLabel ENCFF672KET
 visibility full
 
 track ENCFF330KOM
+priority 151.2
 type bigWig
 longLabel Heart right ventricle, male adult (61 years): H3K4me3, ENCFF330KOM
 autoScale on
@@ -5932,6 +6423,7 @@ shortLabel ENCFF330KOM
 visibility full
 
 track ENCFF138VRG
+priority 152.2
 type bigWig
 longLabel Body of pancreas, male adult (54 years): H3K4me3, ENCFF138VRG
 autoScale on
@@ -5944,6 +6436,7 @@ shortLabel ENCFF138VRG
 visibility full
 
 track ENCFF973MQG
+priority 153.2
 type bigWig
 longLabel Left lung, male adult (40 years): H3K4me3, ENCFF973MQG
 autoScale on
@@ -5956,6 +6449,7 @@ shortLabel ENCFF973MQG
 visibility full
 
 track ENCFF880UEZ
+priority 154.2
 type bigWig
 longLabel Gastrocnemius medialis, female adult (53 years): H3K4me3, ENCFF880UEZ
 autoScale on
@@ -5968,6 +6462,7 @@ shortLabel ENCFF880UEZ
 visibility full
 
 track ENCFF751MDE
+priority 155.2
 type bigWig
 longLabel Stomach, male adult (37 years): H3K4me3, ENCFF751MDE
 autoScale on
@@ -5980,6 +6475,7 @@ shortLabel ENCFF751MDE
 visibility full
 
 track ENCFF487CTD
+priority 156.2
 type bigWig
 longLabel Transverse colon, female adult (51 years): H3K4me3, ENCFF487CTD
 autoScale on
@@ -5992,6 +6488,7 @@ shortLabel ENCFF487CTD
 visibility full
 
 track ENCFF345SEW
+priority 157.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: H3K4me3, ENCFF345SEW
 autoScale on
@@ -6004,6 +6501,7 @@ shortLabel ENCFF345SEW
 visibility full
 
 track ENCFF752DGV
+priority 158.2
 type bigWig
 longLabel Middle frontal area 46, male adult (71 years): H3K4me3, ENCFF752DGV
 autoScale on
@@ -6016,6 +6514,7 @@ shortLabel ENCFF752DGV
 visibility full
 
 track ENCFF344ITP
+priority 159.2
 type bigWig
 longLabel Esophagus muscularis mucosa, male adult (37 years): H3K4me3, ENCFF344ITP
 autoScale on
@@ -6028,6 +6527,7 @@ shortLabel ENCFF344ITP
 visibility full
 
 track ENCFF654FHZ
+priority 160.2
 type bigWig
 longLabel Heart right ventricle, female adult (46 years): H3K4me3, ENCFF654FHZ
 autoScale on
@@ -6040,6 +6540,7 @@ shortLabel ENCFF654FHZ
 visibility full
 
 track ENCFF155GED
+priority 161.2
 type bigWig
 longLabel Heart left ventricle, male adult (43 years): H3K4me3, ENCFF155GED
 autoScale on
@@ -6052,6 +6553,7 @@ shortLabel ENCFF155GED
 visibility full
 
 track ENCFF032IZZ
+priority 162.2
 type bigWig
 longLabel Lower lobe of left lung, male adult (60 years): H3K4me3, ENCFF032IZZ
 autoScale on
@@ -6064,6 +6566,7 @@ shortLabel ENCFF032IZZ
 visibility full
 
 track ENCFF285STS
+priority 163.2
 type bigWig
 longLabel Body of pancreas, male adult (37 years): H3K4me3, ENCFF285STS
 autoScale on
@@ -6076,6 +6579,7 @@ shortLabel ENCFF285STS
 visibility full
 
 track ENCFF568IBR
+priority 164.2
 type bigWig
 longLabel Transverse colon, male adult (54 years): H3K4me3, ENCFF568IBR
 autoScale on
@@ -6088,6 +6592,7 @@ shortLabel ENCFF568IBR
 visibility full
 
 track ENCFF707BCP
+priority 165.2
 type bigWig
 longLabel Gastrocnemius medialis, female adult (51 years): H3K4me3, ENCFF707BCP
 autoScale on
@@ -6100,6 +6605,7 @@ shortLabel ENCFF707BCP
 visibility full
 
 track ENCFF922WUL
+priority 166.2
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K4me3, ENCFF922WUL
 autoScale on
@@ -6112,6 +6618,7 @@ shortLabel ENCFF922WUL
 visibility full
 
 track ENCFF062WLH
+priority 167.2
 type bigWig
 longLabel Middle frontal area 46, female adult (84 years): H3K4me3, ENCFF062WLH
 autoScale on
@@ -6124,6 +6631,7 @@ shortLabel ENCFF062WLH
 visibility full
 
 track ENCFF298AQY
+priority 168.2
 type bigWig
 longLabel Middle frontal area 46, female adult (78 years): H3K4me3, ENCFF298AQY
 autoScale on
@@ -6136,6 +6644,7 @@ shortLabel ENCFF298AQY
 visibility full
 
 track ENCFF617PMJ
+priority 169.2
 type bigWig
 longLabel Middle frontal area 46, female adult (89 years): H3K4me3, ENCFF617PMJ
 autoScale on
@@ -6148,6 +6657,7 @@ shortLabel ENCFF617PMJ
 visibility full
 
 track ENCFF586MLV
+priority 170.2
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (74 years) with Alzheimers disease: H3K4me3, ENCFF586MLV
 autoScale on
@@ -6167,6 +6677,7 @@ visibility full
 type bigWig
 
 track ENCFF611XLA
+priority 1.3
 type bigWig
 longLabel OCI-LY7: H3K27ac, ENCFF611XLA
 autoScale on
@@ -6179,6 +6690,7 @@ shortLabel ENCFF611XLA
 visibility full
 
 track ENCFF443TJZ
+priority 2.3
 type bigWig
 longLabel Keratinocyte, female: H3K27ac, ENCFF443TJZ
 autoScale on
@@ -6191,6 +6703,7 @@ shortLabel ENCFF443TJZ
 visibility full
 
 track ENCFF751GCN
+priority 3.3
 type bigWig
 longLabel Astrocyte, male adult (53 years): H3K27ac, ENCFF751GCN
 autoScale on
@@ -6203,6 +6716,7 @@ shortLabel ENCFF751GCN
 visibility full
 
 track ENCFF849TDM
+priority 4.3
 type bigWig
 longLabel K562: H3K27ac, ENCFF849TDM
 autoScale on
@@ -6215,6 +6729,7 @@ shortLabel ENCFF849TDM
 visibility full
 
 track ENCFF441MGU
+priority 5.3
 type bigWig
 longLabel Osteocyte, female embryo (5 days): H3K27ac, ENCFF441MGU
 autoScale on
@@ -6227,6 +6742,7 @@ shortLabel ENCFF441MGU
 visibility full
 
 track ENCFF383GZA
+priority 6.3
 type bigWig
 longLabel HL-60: H3K27ac, ENCFF383GZA
 autoScale on
@@ -6239,6 +6755,7 @@ shortLabel ENCFF383GZA
 visibility full
 
 track ENCFF949IKU
+priority 7.3
 type bigWig
 longLabel WERI-Rb-1: H3K27ac, ENCFF949IKU
 autoScale on
@@ -6251,6 +6768,7 @@ shortLabel ENCFF949IKU
 visibility full
 
 track ENCFF619JXN
+priority 8.3
 type bigWig
 longLabel Caco-2: H3K27ac, ENCFF619JXN
 autoScale on
@@ -6263,6 +6781,7 @@ shortLabel ENCFF619JXN
 visibility full
 
 track ENCFF063VLJ
+priority 9.3
 type bigWig
 longLabel MCF-7: H3K27ac, ENCFF063VLJ
 autoScale on
@@ -6275,6 +6794,7 @@ shortLabel ENCFF063VLJ
 visibility full
 
 track ENCFF184NWF
+priority 10.3
 type bigWig
 longLabel CD14-positive monocyte, female: H3K27ac, ENCFF184NWF
 autoScale on
@@ -6287,6 +6807,7 @@ shortLabel ENCFF184NWF
 visibility full
 
 track ENCFF504UNY
+priority 11.3
 type bigWig
 longLabel Endodermal cell, female embryo (5 days): H3K27ac, ENCFF504UNY
 autoScale on
@@ -6299,6 +6820,7 @@ shortLabel ENCFF504UNY
 visibility full
 
 track ENCFF907RYE
+priority 12.3
 type bigWig
 longLabel PC-9: H3K27ac, ENCFF907RYE
 autoScale on
@@ -6311,6 +6833,7 @@ shortLabel ENCFF907RYE
 visibility full
 
 track ENCFF213BSP
+priority 13.3
 type bigWig
 longLabel A673: H3K27ac, ENCFF213BSP
 autoScale on
@@ -6323,6 +6846,7 @@ shortLabel ENCFF213BSP
 visibility full
 
 track ENCFF485DKZ
+priority 14.3
 type bigWig
 longLabel Cardiac muscle cell, embryo: H3K27ac, ENCFF485DKZ
 autoScale on
@@ -6335,6 +6859,7 @@ shortLabel ENCFF485DKZ
 visibility full
 
 track ENCFF618RAO
+priority 15.3
 type bigWig
 longLabel Neural progenitor cell, female embryo (5 days): H3K27ac, ENCFF618RAO
 autoScale on
@@ -6347,6 +6872,7 @@ shortLabel ENCFF618RAO
 visibility full
 
 track ENCFF988WEQ
+priority 16.3
 type bigWig
 longLabel H9: H3K27ac, ENCFF988WEQ
 autoScale on
@@ -6359,6 +6885,7 @@ shortLabel ENCFF988WEQ
 visibility full
 
 track ENCFF641QBD
+priority 17.3
 type bigWig
 longLabel GM23338: H3K27ac, ENCFF641QBD
 autoScale on
@@ -6371,6 +6898,7 @@ shortLabel ENCFF641QBD
 visibility full
 
 track ENCFF699OAR
+priority 18.3
 type bigWig
 longLabel IMR-90: H3K27ac, ENCFF699OAR
 autoScale on
@@ -6383,6 +6911,7 @@ shortLabel ENCFF699OAR
 visibility full
 
 track ENCFF109WCV
+priority 19.3
 type bigWig
 longLabel Mesothelial cell of epicardium, female embryo (5 days): H3K27ac, ENCFF109WCV
 autoScale on
@@ -6395,6 +6924,7 @@ shortLabel ENCFF109WCV
 visibility full
 
 track ENCFF370QKJ
+priority 20.3
 type bigWig
 longLabel Type B pancreatic cell, female embryo (5 days): H3K27ac, ENCFF370QKJ
 autoScale on
@@ -6407,6 +6937,7 @@ shortLabel ENCFF370QKJ
 visibility full
 
 track ENCFF787LMI
+priority 21.3
 type bigWig
 longLabel HCT116: H3K27ac, ENCFF787LMI
 autoScale on
@@ -6419,6 +6950,7 @@ shortLabel ENCFF787LMI
 visibility full
 
 track ENCFF469WVA
+priority 22.3
 type bigWig
 longLabel GM12878: H3K27ac, ENCFF469WVA
 autoScale on
@@ -6431,6 +6963,7 @@ shortLabel ENCFF469WVA
 visibility full
 
 track ENCFF262UEH
+priority 23.3
 type bigWig
 longLabel SK-N-SH: H3K27ac, ENCFF262UEH
 autoScale on
@@ -6443,6 +6976,7 @@ shortLabel ENCFF262UEH
 visibility full
 
 track ENCFF919FBG
+priority 24.3
 type bigWig
 longLabel H1: H3K27ac, ENCFF919FBG
 autoScale on
@@ -6455,6 +6989,7 @@ shortLabel ENCFF919FBG
 visibility full
 
 track ENCFF493AZX
+priority 25.3
 type bigWig
 longLabel Panc1: H3K27ac, ENCFF493AZX
 autoScale on
@@ -6467,6 +7002,7 @@ shortLabel ENCFF493AZX
 visibility full
 
 track ENCFF643ZMC
+priority 26.3
 type bigWig
 longLabel Astrocyte: H3K27ac, ENCFF643ZMC
 autoScale on
@@ -6479,6 +7015,7 @@ shortLabel ENCFF643ZMC
 visibility full
 
 track ENCFF317LGP
+priority 27.3
 type bigWig
 longLabel Chondrocyte, female embryo (5 days): H3K27ac, ENCFF317LGP
 autoScale on
@@ -6491,6 +7028,7 @@ shortLabel ENCFF317LGP
 visibility full
 
 track ENCFF658XKZ
+priority 28.3
 type bigWig
 longLabel HeLa-S3: H3K27ac, ENCFF658XKZ
 autoScale on
@@ -6503,6 +7041,7 @@ shortLabel ENCFF658XKZ
 visibility full
 
 track ENCFF481LLD
+priority 29.3
 type bigWig
 longLabel MM.1S: H3K27ac, ENCFF481LLD
 autoScale on
@@ -6515,6 +7054,7 @@ shortLabel ENCFF481LLD
 visibility full
 
 track ENCFF389RGR
+priority 30.3
 type bigWig
 longLabel AG04450: H3K27ac, ENCFF389RGR
 autoScale on
@@ -6527,6 +7067,7 @@ shortLabel ENCFF389RGR
 visibility full
 
 track ENCFF708DDX
+priority 31.3
 type bigWig
 longLabel Endothelial cell, male adult (53 years): H3K27ac, ENCFF708DDX
 autoScale on
@@ -6539,6 +7080,7 @@ shortLabel ENCFF708DDX
 visibility full
 
 track ENCFF201DRD
+priority 32.3
 type bigWig
 longLabel Progenitor cell of endocrine pancreas, female embryo (5 days): H3K27ac, ENCFF201DRD
 autoScale on
@@ -6551,6 +7093,7 @@ shortLabel ENCFF201DRD
 visibility full
 
 track ENCFF795ONN
+priority 33.3
 type bigWig
 longLabel HepG2: H3K27ac, ENCFF795ONN
 autoScale on
@@ -6563,6 +7106,7 @@ shortLabel ENCFF795ONN
 visibility full
 
 track ENCFF426TLD
+priority 34.3
 type bigWig
 longLabel HFFc6: H3K27ac, ENCFF426TLD
 autoScale on
@@ -6575,6 +7119,7 @@ shortLabel ENCFF426TLD
 visibility full
 
 track ENCFF341LLL
+priority 35.3
 type bigWig
 longLabel DND-41: H3K27ac, ENCFF341LLL
 autoScale on
@@ -6587,6 +7132,7 @@ shortLabel ENCFF341LLL
 visibility full
 
 track ENCFF118OBT
+priority 36.3
 type bigWig
 longLabel Glutamatergic neuron, male adult (53 years) male adult (53 years) nuclear fraction: H3K27ac, ENCFF118OBT
 autoScale on
@@ -6599,6 +7145,7 @@ shortLabel ENCFF118OBT
 visibility full
 
 track ENCFF575FKS
+priority 37.3
 type bigWig
 longLabel Brain microvascular endothelial cell: H3K27ac, ENCFF575FKS
 autoScale on
@@ -6611,6 +7158,7 @@ shortLabel ENCFF575FKS
 visibility full
 
 track ENCFF347LDC
+priority 38.3
 type bigWig
 longLabel Hepatocyte, female embryo (5 days): H3K27ac, ENCFF347LDC
 autoScale on
@@ -6623,6 +7171,7 @@ shortLabel ENCFF347LDC
 visibility full
 
 track ENCFF900UMO
+priority 39.3
 type bigWig
 longLabel NCI-H929: H3K27ac, ENCFF900UMO
 autoScale on
@@ -6635,6 +7184,7 @@ shortLabel ENCFF900UMO
 visibility full
 
 track ENCFF537PUA
+priority 40.3
 type bigWig
 longLabel PC-3: H3K27ac, ENCFF537PUA
 autoScale on
@@ -6647,6 +7197,7 @@ shortLabel ENCFF537PUA
 visibility full
 
 track ENCFF114QME
+priority 41.3
 type bigWig
 longLabel GM23338: H3K27ac, ENCFF114QME
 autoScale on
@@ -6659,6 +7210,7 @@ shortLabel ENCFF114QME
 visibility full
 
 track ENCFF969AJT
+priority 42.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: H3K27ac, ENCFF969AJT
 autoScale on
@@ -6671,6 +7223,7 @@ shortLabel ENCFF969AJT
 visibility full
 
 track ENCFF519CLG
+priority 43.3
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K27ac, ENCFF519CLG
 autoScale on
@@ -6683,6 +7236,7 @@ shortLabel ENCFF519CLG
 visibility full
 
 track ENCFF694XDN
+priority 44.3
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K27ac, ENCFF694XDN
 autoScale on
@@ -6695,6 +7249,7 @@ shortLabel ENCFF694XDN
 visibility full
 
 track ENCFF224LYA
+priority 45.3
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (81 years) with Cognitive impairment: H3K27ac, ENCFF224LYA
 autoScale on
@@ -6707,6 +7262,7 @@ shortLabel ENCFF224LYA
 visibility full
 
 track ENCFF156YTC
+priority 46.3
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): H3K27ac, ENCFF156YTC
 autoScale on
@@ -6719,6 +7275,7 @@ shortLabel ENCFF156YTC
 visibility full
 
 track ENCFF336MIJ
+priority 47.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (88 years) with Alzheimers disease: H3K27ac, ENCFF336MIJ
 autoScale on
@@ -6731,6 +7288,7 @@ shortLabel ENCFF336MIJ
 visibility full
 
 track ENCFF046NYM
+priority 48.3
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: H3K27ac, ENCFF046NYM
 autoScale on
@@ -6743,6 +7301,7 @@ shortLabel ENCFF046NYM
 visibility full
 
 track ENCFF383TGX
+priority 49.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF383TGX
 autoScale on
@@ -6755,6 +7314,7 @@ shortLabel ENCFF383TGX
 visibility full
 
 track ENCFF649LLS
+priority 50.3
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K27ac, ENCFF649LLS
 autoScale on
@@ -6767,6 +7327,7 @@ shortLabel ENCFF649LLS
 visibility full
 
 track ENCFF194KAZ
+priority 51.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (85 years) with Alzheimers disease: H3K27ac, ENCFF194KAZ
 autoScale on
@@ -6779,6 +7340,7 @@ shortLabel ENCFF194KAZ
 visibility full
 
 track ENCFF224JSW
+priority 52.3
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): H3K27ac, ENCFF224JSW
 autoScale on
@@ -6791,6 +7353,7 @@ shortLabel ENCFF224JSW
 visibility full
 
 track ENCFF658QWN
+priority 53.3
 type bigWig
 longLabel Middle frontal area 46, male adult (87 years): H3K27ac, ENCFF658QWN
 autoScale on
@@ -6803,6 +7366,7 @@ shortLabel ENCFF658QWN
 visibility full
 
 track ENCFF634AAL
+priority 54.3
 type bigWig
 longLabel Spleen, female adult (41 years): H3K27ac, ENCFF634AAL
 autoScale on
@@ -6815,6 +7379,7 @@ shortLabel ENCFF634AAL
 visibility full
 
 track ENCFF646GXZ
+priority 55.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF646GXZ
 autoScale on
@@ -6827,6 +7392,7 @@ shortLabel ENCFF646GXZ
 visibility full
 
 track ENCFF149TEN
+priority 56.3
 type bigWig
 longLabel Gastrocnemius medialis, male adult (54 years): H3K27ac, ENCFF149TEN
 autoScale on
@@ -6839,6 +7405,7 @@ shortLabel ENCFF149TEN
 visibility full
 
 track ENCFF400FAA
+priority 57.3
 type bigWig
 longLabel Heart right ventricle, male adult (66 years): H3K27ac, ENCFF400FAA
 autoScale on
@@ -6851,6 +7418,7 @@ shortLabel ENCFF400FAA
 visibility full
 
 track ENCFF337EUB
+priority 58.3
 type bigWig
 longLabel Right atrium auricular region, female adult (53 years): H3K27ac, ENCFF337EUB
 autoScale on
@@ -6863,6 +7431,7 @@ shortLabel ENCFF337EUB
 visibility full
 
 track ENCFF154QOP
+priority 59.3
 type bigWig
 longLabel Uterus, female adult (53 years): H3K27ac, ENCFF154QOP
 autoScale on
@@ -6875,6 +7444,7 @@ shortLabel ENCFF154QOP
 visibility full
 
 track ENCFF960KLD
+priority 60.3
 type bigWig
 longLabel Left ventricle myocardium inferior, male adult (60 years): H3K27ac, ENCFF960KLD
 autoScale on
@@ -6887,6 +7457,7 @@ shortLabel ENCFF960KLD
 visibility full
 
 track ENCFF738HRV
+priority 61.3
 type bigWig
 longLabel Vagina, female adult (53 years): H3K27ac, ENCFF738HRV
 autoScale on
@@ -6899,6 +7470,7 @@ shortLabel ENCFF738HRV
 visibility full
 
 track ENCFF732NXU
+priority 62.3
 type bigWig
 longLabel Stomach, female adult (51 years): H3K27ac, ENCFF732NXU
 autoScale on
@@ -6911,6 +7483,7 @@ shortLabel ENCFF732NXU
 visibility full
 
 track ENCFF346GTT
+priority 63.3
 type bigWig
 longLabel Heart right ventricle, male adult (69 years): H3K27ac, ENCFF346GTT
 autoScale on
@@ -6923,6 +7496,7 @@ shortLabel ENCFF346GTT
 visibility full
 
 track ENCFF378PDO
+priority 64.3
 type bigWig
 longLabel Heart right ventricle, male adult (40 years): H3K27ac, ENCFF378PDO
 autoScale on
@@ -6935,6 +7509,7 @@ shortLabel ENCFF378PDO
 visibility full
 
 track ENCFF859IVY
+priority 65.3
 type bigWig
 longLabel Pancreas, female adult (41 years): H3K27ac, ENCFF859IVY
 autoScale on
@@ -6947,6 +7522,7 @@ shortLabel ENCFF859IVY
 visibility full
 
 track ENCFF764VSN
+priority 66.3
 type bigWig
 longLabel Right lobe of liver, female adult (53 years): H3K27ac, ENCFF764VSN
 autoScale on
@@ -6959,6 +7535,7 @@ shortLabel ENCFF764VSN
 visibility full
 
 track ENCFF318ECM
+priority 67.3
 type bigWig
 longLabel Transverse colon, female adult (53 years): H3K27ac, ENCFF318ECM
 autoScale on
@@ -6971,6 +7548,7 @@ shortLabel ENCFF318ECM
 visibility full
 
 track ENCFF397ZHX
+priority 68.3
 type bigWig
 longLabel Left lung, female child (16 years): H3K27ac, ENCFF397ZHX
 autoScale on
@@ -6983,6 +7561,7 @@ shortLabel ENCFF397ZHX
 visibility full
 
 track ENCFF487SXN
+priority 69.3
 type bigWig
 longLabel Testis, male adult (37 years): H3K27ac, ENCFF487SXN
 autoScale on
@@ -6995,6 +7574,7 @@ shortLabel ENCFF487SXN
 visibility full
 
 track ENCFF484YUA
+priority 70.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF484YUA
 autoScale on
@@ -7007,6 +7587,7 @@ shortLabel ENCFF484YUA
 visibility full
 
 track ENCFF435NQW
+priority 71.3
 type bigWig
 longLabel Bipolar neuron (treated), male adult (53 years) treated with 0.5 μg/mL doxycycline hyclate for 4 days: H3K27ac, ENCFF435NQW
 autoScale on
@@ -7019,6 +7600,7 @@ shortLabel ENCFF435NQW
 visibility full
 
 track ENCFF762YWL
+priority 72.3
 type bigWig
 longLabel Thoracic aorta, male adult (37 years): H3K27ac, ENCFF762YWL
 autoScale on
@@ -7031,6 +7613,7 @@ shortLabel ENCFF762YWL
 visibility full
 
 track ENCFF987FRB
+priority 73.3
 type bigWig
 longLabel Spleen, female adult (53 years): H3K27ac, ENCFF987FRB
 autoScale on
@@ -7043,6 +7626,7 @@ shortLabel ENCFF987FRB
 visibility full
 
 track ENCFF988QAR
+priority 74.3
 type bigWig
 longLabel Adrenal gland, female adult (41 years): H3K27ac, ENCFF988QAR
 autoScale on
@@ -7055,6 +7639,7 @@ shortLabel ENCFF988QAR
 visibility full
 
 track ENCFF144JOJ
+priority 75.3
 type bigWig
 longLabel Adrenal gland, male adult (54 years): H3K27ac, ENCFF144JOJ
 autoScale on
@@ -7067,6 +7652,7 @@ shortLabel ENCFF144JOJ
 visibility full
 
 track ENCFF092VQF
+priority 76.3
 type bigWig
 longLabel Vagina, female adult (51 years): H3K27ac, ENCFF092VQF
 autoScale on
@@ -7079,6 +7665,7 @@ shortLabel ENCFF092VQF
 visibility full
 
 track ENCFF438NSZ
+priority 77.3
 type bigWig
 longLabel Spleen, female adult (61 years): H3K27ac, ENCFF438NSZ
 autoScale on
@@ -7091,6 +7678,7 @@ shortLabel ENCFF438NSZ
 visibility full
 
 track ENCFF320IPT
+priority 78.3
 type bigWig
 longLabel Heart left ventricle, female adult (53 years): H3K27ac, ENCFF320IPT
 autoScale on
@@ -7103,6 +7691,7 @@ shortLabel ENCFF320IPT
 visibility full
 
 track ENCFF948MEI
+priority 79.3
 type bigWig
 longLabel Pancreas, female adult (61 years): H3K27ac, ENCFF948MEI
 autoScale on
@@ -7115,6 +7704,7 @@ shortLabel ENCFF948MEI
 visibility full
 
 track ENCFF246QNM
+priority 80.3
 type bigWig
 longLabel Testis, male adult (54 years): H3K27ac, ENCFF246QNM
 autoScale on
@@ -7127,6 +7717,7 @@ shortLabel ENCFF246QNM
 visibility full
 
 track ENCFF646KVN
+priority 81.3
 type bigWig
 longLabel Middle frontal area 46, male adult (84 years): H3K27ac, ENCFF646KVN
 autoScale on
@@ -7139,6 +7730,7 @@ shortLabel ENCFF646KVN
 visibility full
 
 track ENCFF909JLH
+priority 82.3
 type bigWig
 longLabel Middle frontal area 46, female adult (79 years): H3K27ac, ENCFF909JLH
 autoScale on
@@ -7151,6 +7743,7 @@ shortLabel ENCFF909JLH
 visibility full
 
 track ENCFF419XHK
+priority 83.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF419XHK
 autoScale on
@@ -7163,6 +7756,7 @@ shortLabel ENCFF419XHK
 visibility full
 
 track ENCFF557HHH
+priority 84.3
 type bigWig
 longLabel Ascending aorta, female adult (51 years): H3K27ac, ENCFF557HHH
 autoScale on
@@ -7175,6 +7769,7 @@ shortLabel ENCFF557HHH
 visibility full
 
 track ENCFF509VVM
+priority 85.3
 type bigWig
 longLabel Heart right ventricle, female adult (56 years): H3K27ac, ENCFF509VVM
 autoScale on
@@ -7187,6 +7782,7 @@ shortLabel ENCFF509VVM
 visibility full
 
 track ENCFF707MHB
+priority 86.3
 type bigWig
 longLabel Heart left ventricle, female adult (56 years): H3K27ac, ENCFF707MHB
 autoScale on
@@ -7199,6 +7795,7 @@ shortLabel ENCFF707MHB
 visibility full
 
 track ENCFF306RJQ
+priority 87.3
 type bigWig
 longLabel Pancreas, female adult (59 years): H3K27ac, ENCFF306RJQ
 autoScale on
@@ -7211,6 +7808,7 @@ shortLabel ENCFF306RJQ
 visibility full
 
 track ENCFF235TYQ
+priority 88.3
 type bigWig
 longLabel Adrenal gland, female adult (53 years): H3K27ac, ENCFF235TYQ
 autoScale on
@@ -7223,6 +7821,7 @@ shortLabel ENCFF235TYQ
 visibility full
 
 track ENCFF982IVZ
+priority 89.3
 type bigWig
 longLabel Heart right ventricle, male adult (43 years): H3K27ac, ENCFF982IVZ
 autoScale on
@@ -7235,6 +7834,7 @@ shortLabel ENCFF982IVZ
 visibility full
 
 track ENCFF038BIZ
+priority 90.3
 type bigWig
 longLabel Tibial nerve, male adult (37 years): H3K27ac, ENCFF038BIZ
 autoScale on
@@ -7247,6 +7847,7 @@ shortLabel ENCFF038BIZ
 visibility full
 
 track ENCFF774RLX
+priority 91.3
 type bigWig
 longLabel Thyroid gland, female adult (51 years): H3K27ac, ENCFF774RLX
 autoScale on
@@ -7259,6 +7860,7 @@ shortLabel ENCFF774RLX
 visibility full
 
 track ENCFF525KQP
+priority 92.3
 type bigWig
 longLabel Peyers patch, female adult (51 years): H3K27ac, ENCFF525KQP
 autoScale on
@@ -7271,6 +7873,7 @@ shortLabel ENCFF525KQP
 visibility full
 
 track ENCFF428HQD
+priority 93.3
 type bigWig
 longLabel Spleen, female adult (59 years): H3K27ac, ENCFF428HQD
 autoScale on
@@ -7283,6 +7886,7 @@ shortLabel ENCFF428HQD
 visibility full
 
 track ENCFF703DMY
+priority 94.3
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): H3K27ac, ENCFF703DMY
 autoScale on
@@ -7295,6 +7899,7 @@ shortLabel ENCFF703DMY
 visibility full
 
 track ENCFF112GCV
+priority 95.3
 type bigWig
 longLabel Prostate gland, male adult (37 years): H3K27ac, ENCFF112GCV
 autoScale on
@@ -7307,6 +7912,7 @@ shortLabel ENCFF112GCV
 visibility full
 
 track ENCFF532ZGB
+priority 96.3
 type bigWig
 longLabel Transverse colon, male adult (37 years): H3K27ac, ENCFF532ZGB
 autoScale on
@@ -7319,6 +7925,7 @@ shortLabel ENCFF532ZGB
 visibility full
 
 track ENCFF111DLN
+priority 97.3
 type bigWig
 longLabel Sigmoid colon, female adult (53 years): H3K27ac, ENCFF111DLN
 autoScale on
@@ -7331,6 +7938,7 @@ shortLabel ENCFF111DLN
 visibility full
 
 track ENCFF272DJL
+priority 98.3
 type bigWig
 longLabel Middle frontal area 46, male adult (82 years): H3K27ac, ENCFF272DJL
 autoScale on
@@ -7343,6 +7951,7 @@ shortLabel ENCFF272DJL
 visibility full
 
 track ENCFF962GLK
+priority 99.3
 type bigWig
 longLabel Middle frontal area 46, female adult (82 years): H3K27ac, ENCFF962GLK
 autoScale on
@@ -7355,6 +7964,7 @@ shortLabel ENCFF962GLK
 visibility full
 
 track ENCFF685BLE
+priority 100.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (86 years) with Alzheimers disease: H3K27ac, ENCFF685BLE
 autoScale on
@@ -7367,6 +7977,7 @@ shortLabel ENCFF685BLE
 visibility full
 
 track ENCFF750UAD
+priority 101.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF750UAD
 autoScale on
@@ -7379,6 +7990,7 @@ shortLabel ENCFF750UAD
 visibility full
 
 track ENCFF679HCC
+priority 102.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: H3K27ac, ENCFF679HCC
 autoScale on
@@ -7391,6 +8003,7 @@ shortLabel ENCFF679HCC
 visibility full
 
 track ENCFF111ACH
+priority 103.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: H3K27ac, ENCFF111ACH
 autoScale on
@@ -7403,6 +8016,7 @@ shortLabel ENCFF111ACH
 visibility full
 
 track ENCFF398ITJ
+priority 104.3
 type bigWig
 longLabel Middle frontal area 46, female adult (83 years): H3K27ac, ENCFF398ITJ
 autoScale on
@@ -7415,6 +8029,7 @@ shortLabel ENCFF398ITJ
 visibility full
 
 track ENCFF942YRH
+priority 105.3
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): H3K27ac, ENCFF942YRH
 autoScale on
@@ -7427,6 +8042,7 @@ shortLabel ENCFF942YRH
 visibility full
 
 track ENCFF280YLT
+priority 106.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF280YLT
 autoScale on
@@ -7439,6 +8055,7 @@ shortLabel ENCFF280YLT
 visibility full
 
 track ENCFF380WZB
+priority 107.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: H3K27ac, ENCFF380WZB
 autoScale on
@@ -7451,6 +8068,7 @@ shortLabel ENCFF380WZB
 visibility full
 
 track ENCFF004SRJ
+priority 108.3
 type bigWig
 longLabel Colonic mucosa, female adult (41 years): H3K27ac, ENCFF004SRJ
 autoScale on
@@ -7463,6 +8081,7 @@ shortLabel ENCFF004SRJ
 visibility full
 
 track ENCFF461GFM
+priority 109.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (88 years) with mild cognitive impairment: H3K27ac, ENCFF461GFM
 autoScale on
@@ -7475,6 +8094,7 @@ shortLabel ENCFF461GFM
 visibility full
 
 track ENCFF489BZS
+priority 110.3
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): H3K27ac, ENCFF489BZS
 autoScale on
@@ -7487,6 +8107,7 @@ shortLabel ENCFF489BZS
 visibility full
 
 track ENCFF371ZKC
+priority 111.3
 type bigWig
 longLabel Middle frontal area 46, female adult (88 years): H3K27ac, ENCFF371ZKC
 autoScale on
@@ -7499,6 +8120,7 @@ shortLabel ENCFF371ZKC
 visibility full
 
 track ENCFF238JTO
+priority 112.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF238JTO
 autoScale on
@@ -7511,6 +8133,7 @@ shortLabel ENCFF238JTO
 visibility full
 
 track ENCFF794RDI
+priority 113.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (87 years) with mild cognitive impairment: H3K27ac, ENCFF794RDI
 autoScale on
@@ -7523,6 +8146,7 @@ shortLabel ENCFF794RDI
 visibility full
 
 track ENCFF375YPQ
+priority 114.3
 type bigWig
 longLabel Lower lobe of left lung, female adult (59 years): H3K27ac, ENCFF375YPQ
 autoScale on
@@ -7535,6 +8159,7 @@ shortLabel ENCFF375YPQ
 visibility full
 
 track ENCFF860MMV
+priority 115.3
 type bigWig
 longLabel Adrenal gland, male adult (37 years): H3K27ac, ENCFF860MMV
 autoScale on
@@ -7547,6 +8172,7 @@ shortLabel ENCFF860MMV
 visibility full
 
 track ENCFF791CAJ
+priority 116.3
 type bigWig
 longLabel Right atrium auricular region, female adult (51 years): H3K27ac, ENCFF791CAJ
 autoScale on
@@ -7559,6 +8185,7 @@ shortLabel ENCFF791CAJ
 visibility full
 
 track ENCFF130NUG
+priority 117.3
 type bigWig
 longLabel Coronary artery, female adult (53 years): H3K27ac, ENCFF130NUG
 autoScale on
@@ -7571,6 +8198,7 @@ shortLabel ENCFF130NUG
 visibility full
 
 track ENCFF146LLE
+priority 118.3
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (86 years) with Cognitive impairment: H3K27ac, ENCFF146LLE
 autoScale on
@@ -7583,6 +8211,7 @@ shortLabel ENCFF146LLE
 visibility full
 
 track ENCFF435BRK
+priority 119.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: H3K27ac, ENCFF435BRK
 autoScale on
@@ -7595,6 +8224,7 @@ shortLabel ENCFF435BRK
 visibility full
 
 track ENCFF820MMW
+priority 120.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (83 years) with mild cognitive impairment: H3K27ac, ENCFF820MMW
 autoScale on
@@ -7607,6 +8237,7 @@ shortLabel ENCFF820MMW
 visibility full
 
 track ENCFF037TME
+priority 121.3
 type bigWig
 longLabel Esophagus squamous epithelium, male adult (37 years): H3K27ac, ENCFF037TME
 autoScale on
@@ -7619,6 +8250,7 @@ shortLabel ENCFF037TME
 visibility full
 
 track ENCFF549DZD
+priority 122.3
 type bigWig
 longLabel Tibial nerve, female adult (51 years): H3K27ac, ENCFF549DZD
 autoScale on
@@ -7631,6 +8263,7 @@ shortLabel ENCFF549DZD
 visibility full
 
 track ENCFF546UQS
+priority 123.3
 type bigWig
 longLabel Thyroid gland, male adult (37 years): H3K27ac, ENCFF546UQS
 autoScale on
@@ -7643,6 +8276,7 @@ shortLabel ENCFF546UQS
 visibility full
 
 track ENCFF054VRQ
+priority 124.3
 type bigWig
 longLabel Upper lobe of left lung, female adult (51 years): H3K27ac, ENCFF054VRQ
 autoScale on
@@ -7655,6 +8289,7 @@ shortLabel ENCFF054VRQ
 visibility full
 
 track ENCFF225PPI
+priority 125.3
 type bigWig
 longLabel Stomach, female adult (53 years): H3K27ac, ENCFF225PPI
 autoScale on
@@ -7667,6 +8302,7 @@ shortLabel ENCFF225PPI
 visibility full
 
 track ENCFF853NJX
+priority 126.3
 type bigWig
 longLabel Body of pancreas, female adult (51 years): H3K27ac, ENCFF853NJX
 autoScale on
@@ -7679,6 +8315,7 @@ shortLabel ENCFF853NJX
 visibility full
 
 track ENCFF972ZHA
+priority 127.3
 type bigWig
 longLabel Tibial artery, male adult (37 years): H3K27ac, ENCFF972ZHA
 autoScale on
@@ -7691,6 +8328,7 @@ shortLabel ENCFF972ZHA
 visibility full
 
 track ENCFF573DJV
+priority 128.3
 type bigWig
 longLabel Thyroid gland, male adult (54 years): H3K27ac, ENCFF573DJV
 autoScale on
@@ -7703,6 +8341,7 @@ shortLabel ENCFF573DJV
 visibility full
 
 track ENCFF607SXR
+priority 129.3
 type bigWig
 longLabel Upper lobe of left lung, male adult (37 years): H3K27ac, ENCFF607SXR
 autoScale on
@@ -7715,6 +8354,7 @@ shortLabel ENCFF607SXR
 visibility full
 
 track ENCFF352YYH
+priority 130.3
 type bigWig
 longLabel Heart left ventricle, female adult (46 years): H3K27ac, ENCFF352YYH
 autoScale on
@@ -7727,6 +8367,7 @@ shortLabel ENCFF352YYH
 visibility full
 
 track ENCFF752LEN
+priority 131.3
 type bigWig
 longLabel Upper lobe of left lung, male adult (54 years): H3K27ac, ENCFF752LEN
 autoScale on
@@ -7739,6 +8380,7 @@ shortLabel ENCFF752LEN
 visibility full
 
 track ENCFF793HOY
+priority 132.3
 type bigWig
 longLabel Gastrocnemius medialis, male adult (37 years): H3K27ac, ENCFF793HOY
 autoScale on
@@ -7751,6 +8393,7 @@ shortLabel ENCFF793HOY
 visibility full
 
 track ENCFF118EKX
+priority 133.3
 type bigWig
 longLabel Ascending aorta, female adult (53 years): H3K27ac, ENCFF118EKX
 autoScale on
@@ -7763,6 +8406,7 @@ shortLabel ENCFF118EKX
 visibility full
 
 track ENCFF135RBK
+priority 134.3
 type bigWig
 longLabel Heart left ventricle, female adult (59 years): H3K27ac, ENCFF135RBK
 autoScale on
@@ -7775,6 +8419,7 @@ shortLabel ENCFF135RBK
 visibility full
 
 track ENCFF973ZFT
+priority 135.3
 type bigWig
 longLabel Middle frontal area 46, male adult (78 years): H3K27ac, ENCFF973ZFT
 autoScale on
@@ -7787,6 +8432,7 @@ shortLabel ENCFF973ZFT
 visibility full
 
 track ENCFF943HGP
+priority 136.3
 type bigWig
 longLabel Middle frontal area 46, male adult (86 years): H3K27ac, ENCFF943HGP
 autoScale on
@@ -7799,6 +8445,7 @@ shortLabel ENCFF943HGP
 visibility full
 
 track ENCFF028IBW
+priority 137.3
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: H3K27ac, ENCFF028IBW
 autoScale on
@@ -7811,6 +8458,7 @@ shortLabel ENCFF028IBW
 visibility full
 
 track ENCFF827CBM
+priority 138.3
 type bigWig
 longLabel Pancreas, female child (16 years): H3K27ac, ENCFF827CBM
 autoScale on
@@ -7823,6 +8471,7 @@ shortLabel ENCFF827CBM
 visibility full
 
 track ENCFF701XQB
+priority 139.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF701XQB
 autoScale on
@@ -7835,6 +8484,7 @@ shortLabel ENCFF701XQB
 visibility full
 
 track ENCFF174WAB
+priority 140.3
 type bigWig
 longLabel Upper lobe of left lung, female adult (53 years): H3K27ac, ENCFF174WAB
 autoScale on
@@ -7847,6 +8497,7 @@ shortLabel ENCFF174WAB
 visibility full
 
 track ENCFF085IYD
+priority 141.3
 type bigWig
 longLabel Breast epithelium, female adult (51 years): H3K27ac, ENCFF085IYD
 autoScale on
@@ -7859,6 +8510,7 @@ shortLabel ENCFF085IYD
 visibility full
 
 track ENCFF485RWJ
+priority 142.3
 type bigWig
 longLabel Peyers patch, male adult (54 years): H3K27ac, ENCFF485RWJ
 autoScale on
@@ -7871,6 +8523,7 @@ shortLabel ENCFF485RWJ
 visibility full
 
 track ENCFF493RLF
+priority 143.3
 type bigWig
 longLabel Stomach, male adult (54 years): H3K27ac, ENCFF493RLF
 autoScale on
@@ -7883,6 +8536,7 @@ shortLabel ENCFF493RLF
 visibility full
 
 track ENCFF322NLT
+priority 144.3
 type bigWig
 longLabel Sigmoid colon, male adult (54 years): H3K27ac, ENCFF322NLT
 autoScale on
@@ -7895,6 +8549,7 @@ shortLabel ENCFF322NLT
 visibility full
 
 track ENCFF050PLB
+priority 145.3
 type bigWig
 longLabel Thyroid gland, female adult (53 years): H3K27ac, ENCFF050PLB
 autoScale on
@@ -7907,6 +8562,7 @@ shortLabel ENCFF050PLB
 visibility full
 
 track ENCFF480FCW
+priority 146.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (81 years) with Alzheimers disease: H3K27ac, ENCFF480FCW
 autoScale on
@@ -7919,6 +8575,7 @@ shortLabel ENCFF480FCW
 visibility full
 
 track ENCFF302XLU
+priority 147.3
 type bigWig
 longLabel Peyers patch, female adult (53 years): H3K27ac, ENCFF302XLU
 autoScale on
@@ -7931,6 +8588,7 @@ shortLabel ENCFF302XLU
 visibility full
 
 track ENCFF758AQR
+priority 148.3
 type bigWig
 longLabel Tibial nerve, male adult (54 years): H3K27ac, ENCFF758AQR
 autoScale on
@@ -7943,6 +8601,7 @@ shortLabel ENCFF758AQR
 visibility full
 
 track ENCFF249ILQ
+priority 149.3
 type bigWig
 longLabel Peyers patch, male adult (37 years): H3K27ac, ENCFF249ILQ
 autoScale on
@@ -7955,6 +8614,7 @@ shortLabel ENCFF249ILQ
 visibility full
 
 track ENCFF355RRY
+priority 150.3
 type bigWig
 longLabel Adrenal gland, female adult (51 years): H3K27ac, ENCFF355RRY
 autoScale on
@@ -7967,6 +8627,7 @@ shortLabel ENCFF355RRY
 visibility full
 
 track ENCFF345XIS
+priority 151.3
 type bigWig
 longLabel Heart right ventricle, male adult (61 years): H3K27ac, ENCFF345XIS
 autoScale on
@@ -7979,6 +8640,7 @@ shortLabel ENCFF345XIS
 visibility full
 
 track ENCFF940UMR
+priority 152.3
 type bigWig
 longLabel Body of pancreas, male adult (54 years): H3K27ac, ENCFF940UMR
 autoScale on
@@ -7991,6 +8653,7 @@ shortLabel ENCFF940UMR
 visibility full
 
 track ENCFF441OEQ
+priority 153.3
 type bigWig
 longLabel Left lung, male adult (40 years): H3K27ac, ENCFF441OEQ
 autoScale on
@@ -8003,6 +8666,7 @@ shortLabel ENCFF441OEQ
 visibility full
 
 track ENCFF825YXF
+priority 154.3
 type bigWig
 longLabel Gastrocnemius medialis, female adult (53 years): H3K27ac, ENCFF825YXF
 autoScale on
@@ -8015,6 +8679,7 @@ shortLabel ENCFF825YXF
 visibility full
 
 track ENCFF975CDE
+priority 155.3
 type bigWig
 longLabel Stomach, male adult (37 years): H3K27ac, ENCFF975CDE
 autoScale on
@@ -8027,6 +8692,7 @@ shortLabel ENCFF975CDE
 visibility full
 
 track ENCFF741NZM
+priority 156.3
 type bigWig
 longLabel Transverse colon, female adult (51 years): H3K27ac, ENCFF741NZM
 autoScale on
@@ -8039,6 +8705,7 @@ shortLabel ENCFF741NZM
 visibility full
 
 track ENCFF137KZR
+priority 157.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: H3K27ac, ENCFF137KZR
 autoScale on
@@ -8051,6 +8718,7 @@ shortLabel ENCFF137KZR
 visibility full
 
 track ENCFF242WZH
+priority 158.3
 type bigWig
 longLabel Middle frontal area 46, male adult (71 years): H3K27ac, ENCFF242WZH
 autoScale on
@@ -8063,6 +8731,7 @@ shortLabel ENCFF242WZH
 visibility full
 
 track ENCFF322ZPK
+priority 159.3
 type bigWig
 longLabel Esophagus muscularis mucosa, male adult (37 years): H3K27ac, ENCFF322ZPK
 autoScale on
@@ -8075,6 +8744,7 @@ shortLabel ENCFF322ZPK
 visibility full
 
 track ENCFF406YGS
+priority 160.3
 type bigWig
 longLabel Heart right ventricle, female adult (46 years): H3K27ac, ENCFF406YGS
 autoScale on
@@ -8087,6 +8757,7 @@ shortLabel ENCFF406YGS
 visibility full
 
 track ENCFF617TKL
+priority 161.3
 type bigWig
 longLabel Heart left ventricle, male adult (43 years): H3K27ac, ENCFF617TKL
 autoScale on
@@ -8099,6 +8770,7 @@ shortLabel ENCFF617TKL
 visibility full
 
 track ENCFF504NPN
+priority 162.3
 type bigWig
 longLabel Lower lobe of left lung, male adult (60 years): H3K27ac, ENCFF504NPN
 autoScale on
@@ -8111,6 +8783,7 @@ shortLabel ENCFF504NPN
 visibility full
 
 track ENCFF989SFZ
+priority 163.3
 type bigWig
 longLabel Body of pancreas, male adult (37 years): H3K27ac, ENCFF989SFZ
 autoScale on
@@ -8123,6 +8796,7 @@ shortLabel ENCFF989SFZ
 visibility full
 
 track ENCFF427MZX
+priority 164.3
 type bigWig
 longLabel Transverse colon, male adult (54 years): H3K27ac, ENCFF427MZX
 autoScale on
@@ -8135,6 +8809,7 @@ shortLabel ENCFF427MZX
 visibility full
 
 track ENCFF638ZRF
+priority 165.3
 type bigWig
 longLabel Gastrocnemius medialis, female adult (51 years): H3K27ac, ENCFF638ZRF
 autoScale on
@@ -8147,6 +8822,7 @@ shortLabel ENCFF638ZRF
 visibility full
 
 track ENCFF686LXM
+priority 166.3
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: H3K27ac, ENCFF686LXM
 autoScale on
@@ -8159,6 +8835,7 @@ shortLabel ENCFF686LXM
 visibility full
 
 track ENCFF156GJU
+priority 167.3
 type bigWig
 longLabel Middle frontal area 46, female adult (84 years): H3K27ac, ENCFF156GJU
 autoScale on
@@ -8171,6 +8848,7 @@ shortLabel ENCFF156GJU
 visibility full
 
 track ENCFF014NIB
+priority 168.3
 type bigWig
 longLabel Middle frontal area 46, female adult (78 years): H3K27ac, ENCFF014NIB
 autoScale on
@@ -8183,6 +8861,7 @@ shortLabel ENCFF014NIB
 visibility full
 
 track ENCFF986LOD
+priority 169.3
 type bigWig
 longLabel Middle frontal area 46, female adult (89 years): H3K27ac, ENCFF986LOD
 autoScale on
@@ -8195,6 +8874,7 @@ shortLabel ENCFF986LOD
 visibility full
 
 track ENCFF472UDH
+priority 170.3
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (74 years) with Alzheimers disease: H3K27ac, ENCFF472UDH
 autoScale on
@@ -8214,6 +8894,7 @@ visibility full
 type bigWig
 
 track ENCFF975BGM
+priority 1.4
 type bigWig
 longLabel OCI-LY7: CTCF, ENCFF975BGM
 autoScale on
@@ -8226,6 +8907,7 @@ shortLabel ENCFF975BGM
 visibility full
 
 track ENCFF638DZB
+priority 2.4
 type bigWig
 longLabel Keratinocyte, female: CTCF, ENCFF638DZB
 autoScale on
@@ -8238,6 +8920,7 @@ shortLabel ENCFF638DZB
 visibility full
 
 track ENCFF569HGW
+priority 3.4
 type bigWig
 longLabel Astrocyte, male adult (53 years): CTCF, ENCFF569HGW
 autoScale on
@@ -8250,6 +8933,7 @@ shortLabel ENCFF569HGW
 visibility full
 
 track ENCFF736UDR
+priority 4.4
 type bigWig
 longLabel K562: CTCF, ENCFF736UDR
 autoScale on
@@ -8262,6 +8946,7 @@ shortLabel ENCFF736UDR
 visibility full
 
 track ENCFF897TLT
+priority 5.4
 type bigWig
 longLabel Osteocyte, female embryo (5 days): CTCF, ENCFF897TLT
 autoScale on
@@ -8274,6 +8959,7 @@ shortLabel ENCFF897TLT
 visibility full
 
 track ENCFF244CXJ
+priority 6.4
 type bigWig
 longLabel HL-60: CTCF, ENCFF244CXJ
 autoScale on
@@ -8286,6 +8972,7 @@ shortLabel ENCFF244CXJ
 visibility full
 
 track ENCFF181ESK
+priority 7.4
 type bigWig
 longLabel WERI-Rb-1: CTCF, ENCFF181ESK
 autoScale on
@@ -8298,6 +8985,7 @@ shortLabel ENCFF181ESK
 visibility full
 
 track ENCFF227NGR
+priority 8.4
 type bigWig
 longLabel Caco-2: CTCF, ENCFF227NGR
 autoScale on
@@ -8310,6 +8998,7 @@ shortLabel ENCFF227NGR
 visibility full
 
 track ENCFF662LGI
+priority 9.4
 type bigWig
 longLabel MCF-7: CTCF, ENCFF662LGI
 autoScale on
@@ -8322,6 +9011,7 @@ shortLabel ENCFF662LGI
 visibility full
 
 track ENCFF496PSJ
+priority 10.4
 type bigWig
 longLabel CD14-positive monocyte, female: CTCF, ENCFF496PSJ
 autoScale on
@@ -8334,6 +9024,7 @@ shortLabel ENCFF496PSJ
 visibility full
 
 track ENCFF976GAM
+priority 11.4
 type bigWig
 longLabel Endodermal cell, female embryo (5 days): CTCF, ENCFF976GAM
 autoScale on
@@ -8346,6 +9037,7 @@ shortLabel ENCFF976GAM
 visibility full
 
 track ENCFF936QRH
+priority 12.4
 type bigWig
 longLabel PC-9: CTCF, ENCFF936QRH
 autoScale on
@@ -8358,6 +9050,7 @@ shortLabel ENCFF936QRH
 visibility full
 
 track ENCFF070LLG
+priority 13.4
 type bigWig
 longLabel A673: CTCF, ENCFF070LLG
 autoScale on
@@ -8370,6 +9063,7 @@ shortLabel ENCFF070LLG
 visibility full
 
 track ENCFF466BIT
+priority 14.4
 type bigWig
 longLabel Cardiac muscle cell, embryo: CTCF, ENCFF466BIT
 autoScale on
@@ -8382,6 +9076,7 @@ shortLabel ENCFF466BIT
 visibility full
 
 track ENCFF700SCP
+priority 15.4
 type bigWig
 longLabel Neural progenitor cell, female embryo (5 days): CTCF, ENCFF700SCP
 autoScale on
@@ -8394,6 +9089,7 @@ shortLabel ENCFF700SCP
 visibility full
 
 track ENCFF963CHU
+priority 16.4
 type bigWig
 longLabel H9: CTCF, ENCFF963CHU
 autoScale on
@@ -8406,6 +9102,7 @@ shortLabel ENCFF963CHU
 visibility full
 
 track ENCFF369MIX
+priority 17.4
 type bigWig
 longLabel GM23338: CTCF, ENCFF369MIX
 autoScale on
@@ -8418,6 +9115,7 @@ shortLabel ENCFF369MIX
 visibility full
 
 track ENCFF105FHL
+priority 18.4
 type bigWig
 longLabel IMR-90: CTCF, ENCFF105FHL
 autoScale on
@@ -8430,6 +9128,7 @@ shortLabel ENCFF105FHL
 visibility full
 
 track ENCFF962LOU
+priority 19.4
 type bigWig
 longLabel Mesothelial cell of epicardium, female embryo (5 days): CTCF, ENCFF962LOU
 autoScale on
@@ -8442,6 +9141,7 @@ shortLabel ENCFF962LOU
 visibility full
 
 track ENCFF973VNM
+priority 20.4
 type bigWig
 longLabel Type B pancreatic cell, female embryo (5 days): CTCF, ENCFF973VNM
 autoScale on
@@ -8454,6 +9154,7 @@ shortLabel ENCFF973VNM
 visibility full
 
 track ENCFF388PVO
+priority 21.4
 type bigWig
 longLabel HCT116: CTCF, ENCFF388PVO
 autoScale on
@@ -8466,6 +9167,7 @@ shortLabel ENCFF388PVO
 visibility full
 
 track ENCFF644EEX
+priority 22.4
 type bigWig
 longLabel GM12878: CTCF, ENCFF644EEX
 autoScale on
@@ -8478,6 +9180,7 @@ shortLabel ENCFF644EEX
 visibility full
 
 track ENCFF850MLW
+priority 23.4
 type bigWig
 longLabel SK-N-SH: CTCF, ENCFF850MLW
 autoScale on
@@ -8490,6 +9193,7 @@ shortLabel ENCFF850MLW
 visibility full
 
 track ENCFF332TNJ
+priority 24.4
 type bigWig
 longLabel H1: CTCF, ENCFF332TNJ
 autoScale on
@@ -8502,6 +9206,7 @@ shortLabel ENCFF332TNJ
 visibility full
 
 track ENCFF004ITE
+priority 25.4
 type bigWig
 longLabel Panc1: CTCF, ENCFF004ITE
 autoScale on
@@ -8514,6 +9219,7 @@ shortLabel ENCFF004ITE
 visibility full
 
 track ENCFF714NPP
+priority 26.4
 type bigWig
 longLabel Astrocyte: CTCF, ENCFF714NPP
 autoScale on
@@ -8526,6 +9232,7 @@ shortLabel ENCFF714NPP
 visibility full
 
 track ENCFF044ORH
+priority 27.4
 type bigWig
 longLabel Chondrocyte, female embryo (5 days): CTCF, ENCFF044ORH
 autoScale on
@@ -8538,6 +9245,7 @@ shortLabel ENCFF044ORH
 visibility full
 
 track ENCFF179RSE
+priority 28.4
 type bigWig
 longLabel HeLa-S3: CTCF, ENCFF179RSE
 autoScale on
@@ -8550,6 +9258,7 @@ shortLabel ENCFF179RSE
 visibility full
 
 track ENCFF838OJW
+priority 29.4
 type bigWig
 longLabel MM.1S: CTCF, ENCFF838OJW
 autoScale on
@@ -8562,6 +9271,7 @@ shortLabel ENCFF838OJW
 visibility full
 
 track ENCFF766VDL
+priority 30.4
 type bigWig
 longLabel AG04450: CTCF, ENCFF766VDL
 autoScale on
@@ -8574,6 +9284,7 @@ shortLabel ENCFF766VDL
 visibility full
 
 track ENCFF084YDG
+priority 31.4
 type bigWig
 longLabel Endothelial cell, male adult (53 years): CTCF, ENCFF084YDG
 autoScale on
@@ -8586,6 +9297,7 @@ shortLabel ENCFF084YDG
 visibility full
 
 track ENCFF559SRW
+priority 32.4
 type bigWig
 longLabel Progenitor cell of endocrine pancreas, female embryo (5 days): CTCF, ENCFF559SRW
 autoScale on
@@ -8598,6 +9310,7 @@ shortLabel ENCFF559SRW
 visibility full
 
 track ENCFF357NFO
+priority 33.4
 type bigWig
 longLabel HepG2: CTCF, ENCFF357NFO
 autoScale on
@@ -8610,6 +9323,7 @@ shortLabel ENCFF357NFO
 visibility full
 
 track ENCFF406SZM
+priority 34.4
 type bigWig
 longLabel HFFc6: CTCF, ENCFF406SZM
 autoScale on
@@ -8622,6 +9336,7 @@ shortLabel ENCFF406SZM
 visibility full
 
 track ENCFF398MEO
+priority 35.4
 type bigWig
 longLabel DND-41: CTCF, ENCFF398MEO
 autoScale on
@@ -8634,6 +9349,7 @@ shortLabel ENCFF398MEO
 visibility full
 
 track ENCFF536VOI
+priority 36.4
 type bigWig
 longLabel Glutamatergic neuron, male adult (53 years) male adult (53 years) nuclear fraction: CTCF, ENCFF536VOI
 autoScale on
@@ -8646,6 +9362,7 @@ shortLabel ENCFF536VOI
 visibility full
 
 track ENCFF176ELT
+priority 37.4
 type bigWig
 longLabel Brain microvascular endothelial cell: CTCF, ENCFF176ELT
 autoScale on
@@ -8658,6 +9375,7 @@ shortLabel ENCFF176ELT
 visibility full
 
 track ENCFF491FMJ
+priority 38.4
 type bigWig
 longLabel Hepatocyte, female embryo (5 days): CTCF, ENCFF491FMJ
 autoScale on
@@ -8670,6 +9388,7 @@ shortLabel ENCFF491FMJ
 visibility full
 
 track ENCFF327WOL
+priority 39.4
 type bigWig
 longLabel NCI-H929: CTCF, ENCFF327WOL
 autoScale on
@@ -8682,6 +9401,7 @@ shortLabel ENCFF327WOL
 visibility full
 
 track ENCFF756ESH
+priority 40.4
 type bigWig
 longLabel PC-3: CTCF, ENCFF756ESH
 autoScale on
@@ -8694,6 +9414,7 @@ shortLabel ENCFF756ESH
 visibility full
 
 track ENCFF553NAP
+priority 41.4
 type bigWig
 longLabel GM23338: CTCF, ENCFF553NAP
 autoScale on
@@ -8706,6 +9427,7 @@ shortLabel ENCFF553NAP
 visibility full
 
 track ENCFF345GCX
+priority 42.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: CTCF, ENCFF345GCX
 autoScale on
@@ -8718,6 +9440,7 @@ shortLabel ENCFF345GCX
 visibility full
 
 track ENCFF488PRF
+priority 43.4
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): CTCF, ENCFF488PRF
 autoScale on
@@ -8730,6 +9453,7 @@ shortLabel ENCFF488PRF
 visibility full
 
 track ENCFF161XMB
+priority 44.4
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): CTCF, ENCFF161XMB
 autoScale on
@@ -8742,6 +9466,7 @@ shortLabel ENCFF161XMB
 visibility full
 
 track ENCFF081IRZ
+priority 45.4
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (81 years) with Cognitive impairment: CTCF, ENCFF081IRZ
 autoScale on
@@ -8754,6 +9479,7 @@ shortLabel ENCFF081IRZ
 visibility full
 
 track ENCFF280OBE
+priority 46.4
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): CTCF, ENCFF280OBE
 autoScale on
@@ -8766,6 +9492,7 @@ shortLabel ENCFF280OBE
 visibility full
 
 track ENCFF302UYV
+priority 47.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (88 years) with Alzheimers disease: CTCF, ENCFF302UYV
 autoScale on
@@ -8778,6 +9505,7 @@ shortLabel ENCFF302UYV
 visibility full
 
 track ENCFF250VKH
+priority 48.4
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: CTCF, ENCFF250VKH
 autoScale on
@@ -8790,6 +9518,7 @@ shortLabel ENCFF250VKH
 visibility full
 
 track ENCFF409LLA
+priority 49.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF409LLA
 autoScale on
@@ -8802,6 +9531,7 @@ shortLabel ENCFF409LLA
 visibility full
 
 track ENCFF554FTX
+priority 50.4
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): CTCF, ENCFF554FTX
 autoScale on
@@ -8814,6 +9544,7 @@ shortLabel ENCFF554FTX
 visibility full
 
 track ENCFF263VJQ
+priority 51.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (85 years) with Alzheimers disease: CTCF, ENCFF263VJQ
 autoScale on
@@ -8826,6 +9557,7 @@ shortLabel ENCFF263VJQ
 visibility full
 
 track ENCFF653MQB
+priority 52.4
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): CTCF, ENCFF653MQB
 autoScale on
@@ -8838,6 +9570,7 @@ shortLabel ENCFF653MQB
 visibility full
 
 track ENCFF961RFY
+priority 53.4
 type bigWig
 longLabel Middle frontal area 46, male adult (87 years): CTCF, ENCFF961RFY
 autoScale on
@@ -8850,6 +9583,7 @@ shortLabel ENCFF961RFY
 visibility full
 
 track ENCFF215HQE
+priority 54.4
 type bigWig
 longLabel Spleen, female adult (41 years): CTCF, ENCFF215HQE
 autoScale on
@@ -8862,6 +9596,7 @@ shortLabel ENCFF215HQE
 visibility full
 
 track ENCFF374AEG
+priority 55.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF374AEG
 autoScale on
@@ -8874,6 +9609,7 @@ shortLabel ENCFF374AEG
 visibility full
 
 track ENCFF782JRA
+priority 56.4
 type bigWig
 longLabel Gastrocnemius medialis, male adult (54 years): CTCF, ENCFF782JRA
 autoScale on
@@ -8886,6 +9622,7 @@ shortLabel ENCFF782JRA
 visibility full
 
 track ENCFF430LIA
+priority 57.4
 type bigWig
 longLabel Heart right ventricle, male adult (66 years): CTCF, ENCFF430LIA
 autoScale on
@@ -8898,6 +9635,7 @@ shortLabel ENCFF430LIA
 visibility full
 
 track ENCFF886TBW
+priority 58.4
 type bigWig
 longLabel Right atrium auricular region, female adult (53 years): CTCF, ENCFF886TBW
 autoScale on
@@ -8910,6 +9648,7 @@ shortLabel ENCFF886TBW
 visibility full
 
 track ENCFF700PHX
+priority 59.4
 type bigWig
 longLabel Uterus, female adult (53 years): CTCF, ENCFF700PHX
 autoScale on
@@ -8922,6 +9661,7 @@ shortLabel ENCFF700PHX
 visibility full
 
 track ENCFF829QZW
+priority 60.4
 type bigWig
 longLabel Left ventricle myocardium inferior, male adult (60 years): CTCF, ENCFF829QZW
 autoScale on
@@ -8934,6 +9674,7 @@ shortLabel ENCFF829QZW
 visibility full
 
 track ENCFF704JSE
+priority 61.4
 type bigWig
 longLabel Vagina, female adult (53 years): CTCF, ENCFF704JSE
 autoScale on
@@ -8946,6 +9687,7 @@ shortLabel ENCFF704JSE
 visibility full
 
 track ENCFF919OEF
+priority 62.4
 type bigWig
 longLabel Stomach, female adult (51 years): CTCF, ENCFF919OEF
 autoScale on
@@ -8958,6 +9700,7 @@ shortLabel ENCFF919OEF
 visibility full
 
 track ENCFF359FNN
+priority 63.4
 type bigWig
 longLabel Heart right ventricle, male adult (69 years): CTCF, ENCFF359FNN
 autoScale on
@@ -8970,6 +9713,7 @@ shortLabel ENCFF359FNN
 visibility full
 
 track ENCFF170TDI
+priority 64.4
 type bigWig
 longLabel Heart right ventricle, male adult (40 years): CTCF, ENCFF170TDI
 autoScale on
@@ -8982,6 +9726,7 @@ shortLabel ENCFF170TDI
 visibility full
 
 track ENCFF890FKH
+priority 65.4
 type bigWig
 longLabel Pancreas, female adult (41 years): CTCF, ENCFF890FKH
 autoScale on
@@ -8994,6 +9739,7 @@ shortLabel ENCFF890FKH
 visibility full
 
 track ENCFF005YBS
+priority 66.4
 type bigWig
 longLabel Right lobe of liver, female adult (53 years): CTCF, ENCFF005YBS
 autoScale on
@@ -9006,6 +9752,7 @@ shortLabel ENCFF005YBS
 visibility full
 
 track ENCFF493XMW
+priority 67.4
 type bigWig
 longLabel Transverse colon, female adult (53 years): CTCF, ENCFF493XMW
 autoScale on
@@ -9018,6 +9765,7 @@ shortLabel ENCFF493XMW
 visibility full
 
 track ENCFF975RFH
+priority 68.4
 type bigWig
 longLabel Left lung, female child (16 years): CTCF, ENCFF975RFH
 autoScale on
@@ -9030,6 +9778,7 @@ shortLabel ENCFF975RFH
 visibility full
 
 track ENCFF453LVK
+priority 69.4
 type bigWig
 longLabel Testis, male adult (37 years): CTCF, ENCFF453LVK
 autoScale on
@@ -9042,6 +9791,7 @@ shortLabel ENCFF453LVK
 visibility full
 
 track ENCFF685MPU
+priority 70.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF685MPU
 autoScale on
@@ -9054,6 +9804,7 @@ shortLabel ENCFF685MPU
 visibility full
 
 track ENCFF541XGP
+priority 71.4
 type bigWig
 longLabel Bipolar neuron (treated), male adult (53 years) treated with 0.5 μg/mL doxycycline hyclate for 4 days: CTCF, ENCFF541XGP
 autoScale on
@@ -9066,6 +9817,7 @@ shortLabel ENCFF541XGP
 visibility full
 
 track ENCFF429ZQN
+priority 72.4
 type bigWig
 longLabel Thoracic aorta, male adult (37 years): CTCF, ENCFF429ZQN
 autoScale on
@@ -9078,6 +9830,7 @@ shortLabel ENCFF429ZQN
 visibility full
 
 track ENCFF722HFK
+priority 73.4
 type bigWig
 longLabel Spleen, female adult (53 years): CTCF, ENCFF722HFK
 autoScale on
@@ -9090,6 +9843,7 @@ shortLabel ENCFF722HFK
 visibility full
 
 track ENCFF796PZW
+priority 74.4
 type bigWig
 longLabel Adrenal gland, female adult (41 years): CTCF, ENCFF796PZW
 autoScale on
@@ -9102,6 +9856,7 @@ shortLabel ENCFF796PZW
 visibility full
 
 track ENCFF035TJC
+priority 75.4
 type bigWig
 longLabel Adrenal gland, male adult (54 years): CTCF, ENCFF035TJC
 autoScale on
@@ -9114,6 +9869,7 @@ shortLabel ENCFF035TJC
 visibility full
 
 track ENCFF258LTU
+priority 76.4
 type bigWig
 longLabel Vagina, female adult (51 years): CTCF, ENCFF258LTU
 autoScale on
@@ -9126,6 +9882,7 @@ shortLabel ENCFF258LTU
 visibility full
 
 track ENCFF806GMH
+priority 77.4
 type bigWig
 longLabel Spleen, female adult (61 years): CTCF, ENCFF806GMH
 autoScale on
@@ -9138,6 +9895,7 @@ shortLabel ENCFF806GMH
 visibility full
 
 track ENCFF440RUS
+priority 78.4
 type bigWig
 longLabel Heart left ventricle, female adult (53 years): CTCF, ENCFF440RUS
 autoScale on
@@ -9150,6 +9908,7 @@ shortLabel ENCFF440RUS
 visibility full
 
 track ENCFF232BMJ
+priority 79.4
 type bigWig
 longLabel Pancreas, female adult (61 years): CTCF, ENCFF232BMJ
 autoScale on
@@ -9162,6 +9921,7 @@ shortLabel ENCFF232BMJ
 visibility full
 
 track ENCFF245HIM
+priority 80.4
 type bigWig
 longLabel Testis, male adult (54 years): CTCF, ENCFF245HIM
 autoScale on
@@ -9174,6 +9934,7 @@ shortLabel ENCFF245HIM
 visibility full
 
 track ENCFF496PUD
+priority 81.4
 type bigWig
 longLabel Middle frontal area 46, male adult (84 years): CTCF, ENCFF496PUD
 autoScale on
@@ -9186,6 +9947,7 @@ shortLabel ENCFF496PUD
 visibility full
 
 track ENCFF924IJQ
+priority 82.4
 type bigWig
 longLabel Middle frontal area 46, female adult (79 years): CTCF, ENCFF924IJQ
 autoScale on
@@ -9198,6 +9960,7 @@ shortLabel ENCFF924IJQ
 visibility full
 
 track ENCFF457ZFQ
+priority 83.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF457ZFQ
 autoScale on
@@ -9210,6 +9973,7 @@ shortLabel ENCFF457ZFQ
 visibility full
 
 track ENCFF880CZK
+priority 84.4
 type bigWig
 longLabel Ascending aorta, female adult (51 years): CTCF, ENCFF880CZK
 autoScale on
@@ -9222,6 +9986,7 @@ shortLabel ENCFF880CZK
 visibility full
 
 track ENCFF257ODJ
+priority 85.4
 type bigWig
 longLabel Heart right ventricle, female adult (56 years): CTCF, ENCFF257ODJ
 autoScale on
@@ -9234,6 +9999,7 @@ shortLabel ENCFF257ODJ
 visibility full
 
 track ENCFF412TOH
+priority 86.4
 type bigWig
 longLabel Heart left ventricle, female adult (56 years): CTCF, ENCFF412TOH
 autoScale on
@@ -9246,6 +10012,7 @@ shortLabel ENCFF412TOH
 visibility full
 
 track ENCFF297EQI
+priority 87.4
 type bigWig
 longLabel Pancreas, female adult (59 years): CTCF, ENCFF297EQI
 autoScale on
@@ -9258,6 +10025,7 @@ shortLabel ENCFF297EQI
 visibility full
 
 track ENCFF419QIY
+priority 88.4
 type bigWig
 longLabel Adrenal gland, female adult (53 years): CTCF, ENCFF419QIY
 autoScale on
@@ -9270,6 +10038,7 @@ shortLabel ENCFF419QIY
 visibility full
 
 track ENCFF505OIJ
+priority 89.4
 type bigWig
 longLabel Heart right ventricle, male adult (43 years): CTCF, ENCFF505OIJ
 autoScale on
@@ -9282,6 +10051,7 @@ shortLabel ENCFF505OIJ
 visibility full
 
 track ENCFF670BZH
+priority 90.4
 type bigWig
 longLabel Tibial nerve, male adult (37 years): CTCF, ENCFF670BZH
 autoScale on
@@ -9294,6 +10064,7 @@ shortLabel ENCFF670BZH
 visibility full
 
 track ENCFF397CJU
+priority 91.4
 type bigWig
 longLabel Thyroid gland, female adult (51 years): CTCF, ENCFF397CJU
 autoScale on
@@ -9306,6 +10077,7 @@ shortLabel ENCFF397CJU
 visibility full
 
 track ENCFF715AGA
+priority 92.4
 type bigWig
 longLabel Peyers patch, female adult (51 years): CTCF, ENCFF715AGA
 autoScale on
@@ -9318,6 +10090,7 @@ shortLabel ENCFF715AGA
 visibility full
 
 track ENCFF161AWO
+priority 93.4
 type bigWig
 longLabel Spleen, female adult (59 years): CTCF, ENCFF161AWO
 autoScale on
@@ -9330,6 +10103,7 @@ shortLabel ENCFF161AWO
 visibility full
 
 track ENCFF782LSR
+priority 94.4
 type bigWig
 longLabel Middle frontal area 46, female adult (90 or above years): CTCF, ENCFF782LSR
 autoScale on
@@ -9342,6 +10116,7 @@ shortLabel ENCFF782LSR
 visibility full
 
 track ENCFF310UCW
+priority 95.4
 type bigWig
 longLabel Prostate gland, male adult (37 years): CTCF, ENCFF310UCW
 autoScale on
@@ -9354,6 +10129,7 @@ shortLabel ENCFF310UCW
 visibility full
 
 track ENCFF646EZE
+priority 96.4
 type bigWig
 longLabel Transverse colon, male adult (37 years): CTCF, ENCFF646EZE
 autoScale on
@@ -9366,6 +10142,7 @@ shortLabel ENCFF646EZE
 visibility full
 
 track ENCFF154FOF
+priority 97.4
 type bigWig
 longLabel Sigmoid colon, female adult (53 years): CTCF, ENCFF154FOF
 autoScale on
@@ -9378,6 +10155,7 @@ shortLabel ENCFF154FOF
 visibility full
 
 track ENCFF423POG
+priority 98.4
 type bigWig
 longLabel Middle frontal area 46, male adult (82 years): CTCF, ENCFF423POG
 autoScale on
@@ -9390,6 +10168,7 @@ shortLabel ENCFF423POG
 visibility full
 
 track ENCFF417AGZ
+priority 99.4
 type bigWig
 longLabel Middle frontal area 46, female adult (82 years): CTCF, ENCFF417AGZ
 autoScale on
@@ -9402,6 +10181,7 @@ shortLabel ENCFF417AGZ
 visibility full
 
 track ENCFF754BJX
+priority 100.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (86 years) with Alzheimers disease: CTCF, ENCFF754BJX
 autoScale on
@@ -9414,6 +10194,7 @@ shortLabel ENCFF754BJX
 visibility full
 
 track ENCFF548SBE
+priority 101.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF548SBE
 autoScale on
@@ -9426,6 +10207,7 @@ shortLabel ENCFF548SBE
 visibility full
 
 track ENCFF695EYC
+priority 102.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: CTCF, ENCFF695EYC
 autoScale on
@@ -9438,6 +10220,7 @@ shortLabel ENCFF695EYC
 visibility full
 
 track ENCFF800TZW
+priority 103.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: CTCF, ENCFF800TZW
 autoScale on
@@ -9450,6 +10233,7 @@ shortLabel ENCFF800TZW
 visibility full
 
 track ENCFF992YXC
+priority 104.4
 type bigWig
 longLabel Middle frontal area 46, female adult (83 years): CTCF, ENCFF992YXC
 autoScale on
@@ -9462,6 +10246,7 @@ shortLabel ENCFF992YXC
 visibility full
 
 track ENCFF394BNS
+priority 105.4
 type bigWig
 longLabel Middle frontal area 46, male adult (83 years): CTCF, ENCFF394BNS
 autoScale on
@@ -9474,6 +10259,7 @@ shortLabel ENCFF394BNS
 visibility full
 
 track ENCFF433RNM
+priority 106.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF433RNM
 autoScale on
@@ -9486,6 +10272,7 @@ shortLabel ENCFF433RNM
 visibility full
 
 track ENCFF812RLY
+priority 107.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (89 years) with Alzheimers disease: CTCF, ENCFF812RLY
 autoScale on
@@ -9498,6 +10285,7 @@ shortLabel ENCFF812RLY
 visibility full
 
 track ENCFF546ZNQ
+priority 108.4
 type bigWig
 longLabel Colonic mucosa, female adult (41 years): CTCF, ENCFF546ZNQ
 autoScale on
@@ -9510,6 +10298,7 @@ shortLabel ENCFF546ZNQ
 visibility full
 
 track ENCFF072ETP
+priority 109.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (88 years) with mild cognitive impairment: CTCF, ENCFF072ETP
 autoScale on
@@ -9522,6 +10311,7 @@ shortLabel ENCFF072ETP
 visibility full
 
 track ENCFF729DUW
+priority 110.4
 type bigWig
 longLabel Middle frontal area 46, female adult (87 years): CTCF, ENCFF729DUW
 autoScale on
@@ -9534,6 +10324,7 @@ shortLabel ENCFF729DUW
 visibility full
 
 track ENCFF294XWZ
+priority 111.4
 type bigWig
 longLabel Middle frontal area 46, female adult (88 years): CTCF, ENCFF294XWZ
 autoScale on
@@ -9546,6 +10337,7 @@ shortLabel ENCFF294XWZ
 visibility full
 
 track ENCFF264VOP
+priority 112.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF264VOP
 autoScale on
@@ -9558,6 +10350,7 @@ shortLabel ENCFF264VOP
 visibility full
 
 track ENCFF888DOQ
+priority 113.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (87 years) with mild cognitive impairment: CTCF, ENCFF888DOQ
 autoScale on
@@ -9570,6 +10363,7 @@ shortLabel ENCFF888DOQ
 visibility full
 
 track ENCFF033FEG
+priority 114.4
 type bigWig
 longLabel Lower lobe of left lung, female adult (59 years): CTCF, ENCFF033FEG
 autoScale on
@@ -9582,6 +10376,7 @@ shortLabel ENCFF033FEG
 visibility full
 
 track ENCFF804PBU
+priority 115.4
 type bigWig
 longLabel Adrenal gland, male adult (37 years): CTCF, ENCFF804PBU
 autoScale on
@@ -9594,6 +10389,7 @@ shortLabel ENCFF804PBU
 visibility full
 
 track ENCFF872ERK
+priority 116.4
 type bigWig
 longLabel Right atrium auricular region, female adult (51 years): CTCF, ENCFF872ERK
 autoScale on
@@ -9606,6 +10402,7 @@ shortLabel ENCFF872ERK
 visibility full
 
 track ENCFF341RAH
+priority 117.4
 type bigWig
 longLabel Coronary artery, female adult (53 years): CTCF, ENCFF341RAH
 autoScale on
@@ -9618,6 +10415,7 @@ shortLabel ENCFF341RAH
 visibility full
 
 track ENCFF884XLS
+priority 118.4
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (86 years) with Cognitive impairment: CTCF, ENCFF884XLS
 autoScale on
@@ -9630,6 +10428,7 @@ shortLabel ENCFF884XLS
 visibility full
 
 track ENCFF891CZD
+priority 119.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (90 or above years) with Alzheimers disease: CTCF, ENCFF891CZD
 autoScale on
@@ -9642,6 +10441,7 @@ shortLabel ENCFF891CZD
 visibility full
 
 track ENCFF884MZR
+priority 120.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (83 years) with mild cognitive impairment: CTCF, ENCFF884MZR
 autoScale on
@@ -9654,6 +10454,7 @@ shortLabel ENCFF884MZR
 visibility full
 
 track ENCFF536DEU
+priority 121.4
 type bigWig
 longLabel Esophagus squamous epithelium, male adult (37 years): CTCF, ENCFF536DEU
 autoScale on
@@ -9666,6 +10467,7 @@ shortLabel ENCFF536DEU
 visibility full
 
 track ENCFF670COF
+priority 122.4
 type bigWig
 longLabel Tibial nerve, female adult (51 years): CTCF, ENCFF670COF
 autoScale on
@@ -9678,6 +10480,7 @@ shortLabel ENCFF670COF
 visibility full
 
 track ENCFF874CKO
+priority 123.4
 type bigWig
 longLabel Thyroid gland, male adult (37 years): CTCF, ENCFF874CKO
 autoScale on
@@ -9690,6 +10493,7 @@ shortLabel ENCFF874CKO
 visibility full
 
 track ENCFF468WUY
+priority 124.4
 type bigWig
 longLabel Upper lobe of left lung, female adult (51 years): CTCF, ENCFF468WUY
 autoScale on
@@ -9702,6 +10506,7 @@ shortLabel ENCFF468WUY
 visibility full
 
 track ENCFF807KJZ
+priority 125.4
 type bigWig
 longLabel Stomach, female adult (53 years): CTCF, ENCFF807KJZ
 autoScale on
@@ -9714,6 +10519,7 @@ shortLabel ENCFF807KJZ
 visibility full
 
 track ENCFF893BCC
+priority 126.4
 type bigWig
 longLabel Body of pancreas, female adult (51 years): CTCF, ENCFF893BCC
 autoScale on
@@ -9726,6 +10532,7 @@ shortLabel ENCFF893BCC
 visibility full
 
 track ENCFF500RDL
+priority 127.4
 type bigWig
 longLabel Tibial artery, male adult (37 years): CTCF, ENCFF500RDL
 autoScale on
@@ -9738,6 +10545,7 @@ shortLabel ENCFF500RDL
 visibility full
 
 track ENCFF510THG
+priority 128.4
 type bigWig
 longLabel Thyroid gland, male adult (54 years): CTCF, ENCFF510THG
 autoScale on
@@ -9750,6 +10558,7 @@ shortLabel ENCFF510THG
 visibility full
 
 track ENCFF862ZOO
+priority 129.4
 type bigWig
 longLabel Upper lobe of left lung, male adult (37 years): CTCF, ENCFF862ZOO
 autoScale on
@@ -9762,6 +10571,7 @@ shortLabel ENCFF862ZOO
 visibility full
 
 track ENCFF252IVK
+priority 130.4
 type bigWig
 longLabel Heart left ventricle, female adult (46 years): CTCF, ENCFF252IVK
 autoScale on
@@ -9774,6 +10584,7 @@ shortLabel ENCFF252IVK
 visibility full
 
 track ENCFF750ENA
+priority 131.4
 type bigWig
 longLabel Upper lobe of left lung, male adult (54 years): CTCF, ENCFF750ENA
 autoScale on
@@ -9786,6 +10597,7 @@ shortLabel ENCFF750ENA
 visibility full
 
 track ENCFF070MOG
+priority 132.4
 type bigWig
 longLabel Gastrocnemius medialis, male adult (37 years): CTCF, ENCFF070MOG
 autoScale on
@@ -9798,6 +10610,7 @@ shortLabel ENCFF070MOG
 visibility full
 
 track ENCFF857NIC
+priority 133.4
 type bigWig
 longLabel Ascending aorta, female adult (53 years): CTCF, ENCFF857NIC
 autoScale on
@@ -9810,6 +10623,7 @@ shortLabel ENCFF857NIC
 visibility full
 
 track ENCFF541CSJ
+priority 134.4
 type bigWig
 longLabel Heart left ventricle, female adult (59 years): CTCF, ENCFF541CSJ
 autoScale on
@@ -9822,6 +10636,7 @@ shortLabel ENCFF541CSJ
 visibility full
 
 track ENCFF693AEK
+priority 135.4
 type bigWig
 longLabel Middle frontal area 46, male adult (78 years): CTCF, ENCFF693AEK
 autoScale on
@@ -9834,6 +10649,7 @@ shortLabel ENCFF693AEK
 visibility full
 
 track ENCFF393UAO
+priority 136.4
 type bigWig
 longLabel Middle frontal area 46, male adult (86 years): CTCF, ENCFF393UAO
 autoScale on
@@ -9846,6 +10662,7 @@ shortLabel ENCFF393UAO
 visibility full
 
 track ENCFF258OMT
+priority 137.4
 type bigWig
 longLabel Middle frontal area 46 (cognitive impairment), female adult (90 or above years) with Cognitive impairment: CTCF, ENCFF258OMT
 autoScale on
@@ -9858,6 +10675,7 @@ shortLabel ENCFF258OMT
 visibility full
 
 track ENCFF521NYK
+priority 138.4
 type bigWig
 longLabel Pancreas, female child (16 years): CTCF, ENCFF521NYK
 autoScale on
@@ -9870,6 +10688,7 @@ shortLabel ENCFF521NYK
 visibility full
 
 track ENCFF968SXQ
+priority 139.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF968SXQ
 autoScale on
@@ -9882,6 +10701,7 @@ shortLabel ENCFF968SXQ
 visibility full
 
 track ENCFF543MYI
+priority 140.4
 type bigWig
 longLabel Upper lobe of left lung, female adult (53 years): CTCF, ENCFF543MYI
 autoScale on
@@ -9894,6 +10714,7 @@ shortLabel ENCFF543MYI
 visibility full
 
 track ENCFF271PWB
+priority 141.4
 type bigWig
 longLabel Breast epithelium, female adult (51 years): CTCF, ENCFF271PWB
 autoScale on
@@ -9906,6 +10727,7 @@ shortLabel ENCFF271PWB
 visibility full
 
 track ENCFF694HBV
+priority 142.4
 type bigWig
 longLabel Peyers patch, male adult (54 years): CTCF, ENCFF694HBV
 autoScale on
@@ -9918,6 +10740,7 @@ shortLabel ENCFF694HBV
 visibility full
 
 track ENCFF034PJC
+priority 143.4
 type bigWig
 longLabel Stomach, male adult (54 years): CTCF, ENCFF034PJC
 autoScale on
@@ -9930,6 +10753,7 @@ shortLabel ENCFF034PJC
 visibility full
 
 track ENCFF634JUC
+priority 144.4
 type bigWig
 longLabel Sigmoid colon, male adult (54 years): CTCF, ENCFF634JUC
 autoScale on
@@ -9942,6 +10766,7 @@ shortLabel ENCFF634JUC
 visibility full
 
 track ENCFF603TNI
+priority 145.4
 type bigWig
 longLabel Thyroid gland, female adult (53 years): CTCF, ENCFF603TNI
 autoScale on
@@ -9954,6 +10779,7 @@ shortLabel ENCFF603TNI
 visibility full
 
 track ENCFF796CNP
+priority 146.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (81 years) with Alzheimers disease: CTCF, ENCFF796CNP
 autoScale on
@@ -9966,6 +10792,7 @@ shortLabel ENCFF796CNP
 visibility full
 
 track ENCFF945PHV
+priority 147.4
 type bigWig
 longLabel Peyers patch, female adult (53 years): CTCF, ENCFF945PHV
 autoScale on
@@ -9978,6 +10805,7 @@ shortLabel ENCFF945PHV
 visibility full
 
 track ENCFF543LIT
+priority 148.4
 type bigWig
 longLabel Tibial nerve, male adult (54 years): CTCF, ENCFF543LIT
 autoScale on
@@ -9990,6 +10818,7 @@ shortLabel ENCFF543LIT
 visibility full
 
 track ENCFF758HAD
+priority 149.4
 type bigWig
 longLabel Peyers patch, male adult (37 years): CTCF, ENCFF758HAD
 autoScale on
@@ -10002,6 +10831,7 @@ shortLabel ENCFF758HAD
 visibility full
 
 track ENCFF673UYG
+priority 150.4
 type bigWig
 longLabel Adrenal gland, female adult (51 years): CTCF, ENCFF673UYG
 autoScale on
@@ -10014,6 +10844,7 @@ shortLabel ENCFF673UYG
 visibility full
 
 track ENCFF011PEP
+priority 151.4
 type bigWig
 longLabel Heart right ventricle, male adult (61 years): CTCF, ENCFF011PEP
 autoScale on
@@ -10026,6 +10857,7 @@ shortLabel ENCFF011PEP
 visibility full
 
 track ENCFF078UTK
+priority 152.4
 type bigWig
 longLabel Body of pancreas, male adult (54 years): CTCF, ENCFF078UTK
 autoScale on
@@ -10038,6 +10870,7 @@ shortLabel ENCFF078UTK
 visibility full
 
 track ENCFF002ZEZ
+priority 153.4
 type bigWig
 longLabel Left lung, male adult (40 years): CTCF, ENCFF002ZEZ
 autoScale on
@@ -10050,6 +10883,7 @@ shortLabel ENCFF002ZEZ
 visibility full
 
 track ENCFF055HAN
+priority 154.4
 type bigWig
 longLabel Gastrocnemius medialis, female adult (53 years): CTCF, ENCFF055HAN
 autoScale on
@@ -10062,6 +10896,7 @@ shortLabel ENCFF055HAN
 visibility full
 
 track ENCFF324HRF
+priority 155.4
 type bigWig
 longLabel Stomach, male adult (37 years): CTCF, ENCFF324HRF
 autoScale on
@@ -10074,6 +10909,7 @@ shortLabel ENCFF324HRF
 visibility full
 
 track ENCFF626YRZ
+priority 156.4
 type bigWig
 longLabel Transverse colon, female adult (51 years): CTCF, ENCFF626YRZ
 autoScale on
@@ -10086,6 +10922,7 @@ shortLabel ENCFF626YRZ
 visibility full
 
 track ENCFF341CQE
+priority 157.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), male adult (89 years) with mild cognitive impairment: CTCF, ENCFF341CQE
 autoScale on
@@ -10098,6 +10935,7 @@ shortLabel ENCFF341CQE
 visibility full
 
 track ENCFF816YAI
+priority 158.4
 type bigWig
 longLabel Middle frontal area 46, male adult (71 years): CTCF, ENCFF816YAI
 autoScale on
@@ -10110,6 +10948,7 @@ shortLabel ENCFF816YAI
 visibility full
 
 track ENCFF526HRV
+priority 159.4
 type bigWig
 longLabel Esophagus muscularis mucosa, male adult (37 years): CTCF, ENCFF526HRV
 autoScale on
@@ -10122,6 +10961,7 @@ shortLabel ENCFF526HRV
 visibility full
 
 track ENCFF803TUM
+priority 160.4
 type bigWig
 longLabel Heart right ventricle, female adult (46 years): CTCF, ENCFF803TUM
 autoScale on
@@ -10134,6 +10974,7 @@ shortLabel ENCFF803TUM
 visibility full
 
 track ENCFF915AST
+priority 161.4
 type bigWig
 longLabel Heart left ventricle, male adult (43 years): CTCF, ENCFF915AST
 autoScale on
@@ -10146,6 +10987,7 @@ shortLabel ENCFF915AST
 visibility full
 
 track ENCFF812ODW
+priority 162.4
 type bigWig
 longLabel Lower lobe of left lung, male adult (60 years): CTCF, ENCFF812ODW
 autoScale on
@@ -10158,6 +11000,7 @@ shortLabel ENCFF812ODW
 visibility full
 
 track ENCFF885ZLN
+priority 163.4
 type bigWig
 longLabel Body of pancreas, male adult (37 years): CTCF, ENCFF885ZLN
 autoScale on
@@ -10170,6 +11013,7 @@ shortLabel ENCFF885ZLN
 visibility full
 
 track ENCFF435CDF
+priority 164.4
 type bigWig
 longLabel Transverse colon, male adult (54 years): CTCF, ENCFF435CDF
 autoScale on
@@ -10182,6 +11026,7 @@ shortLabel ENCFF435CDF
 visibility full
 
 track ENCFF643VTS
+priority 165.4
 type bigWig
 longLabel Gastrocnemius medialis, female adult (51 years): CTCF, ENCFF643VTS
 autoScale on
@@ -10194,6 +11039,7 @@ shortLabel ENCFF643VTS
 visibility full
 
 track ENCFF111MOL
+priority 166.4
 type bigWig
 longLabel Middle frontal area 46 (mild cognitive impairment), female adult (90 or above years) with mild cognitive impairment: CTCF, ENCFF111MOL
 autoScale on
@@ -10206,6 +11052,7 @@ shortLabel ENCFF111MOL
 visibility full
 
 track ENCFF741DPN
+priority 167.4
 type bigWig
 longLabel Middle frontal area 46, female adult (84 years): CTCF, ENCFF741DPN
 autoScale on
@@ -10218,6 +11065,7 @@ shortLabel ENCFF741DPN
 visibility full
 
 track ENCFF203LSD
+priority 168.4
 type bigWig
 longLabel Middle frontal area 46, female adult (78 years): CTCF, ENCFF203LSD
 autoScale on
@@ -10230,6 +11078,7 @@ shortLabel ENCFF203LSD
 visibility full
 
 track ENCFF450HJC
+priority 169.4
 type bigWig
 longLabel Middle frontal area 46, female adult (89 years): CTCF, ENCFF450HJC
 autoScale on
@@ -10242,6 +11091,7 @@ shortLabel ENCFF450HJC
 visibility full
 
 track ENCFF326PAG
+priority 170.4
 type bigWig
 longLabel Middle frontal area 46 (Alzheimers disease), female adult (74 years) with Alzheimers disease: CTCF, ENCFF326PAG
 autoScale on
