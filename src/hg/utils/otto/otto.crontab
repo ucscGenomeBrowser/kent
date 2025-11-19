@@ -134,6 +134,9 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 MAILTO=otto-group@ucsc.edu
 11 1 * * 4 /cluster/software/bin/python /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
 
+#Add a new daily tip to the home page
+5 5 * * 1-5 /cluster/software/bin/python /cluster/bin/scripts/generateTipOfDay.py ~/kent/src/hg/htdocs/allTipsRaw.html
+
 #OMIM Upload
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh

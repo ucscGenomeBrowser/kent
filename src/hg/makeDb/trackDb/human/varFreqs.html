@@ -6,18 +6,45 @@ projects. Only the projects 1000 Genomes (its own track), HGDP, SGDP, HGDP+1k an
 All others provide only allele frequencies, their genotypes require signing a data access agreement.
 </p>
 
+<p>
+<b>Available on hg19 and hg38:</b></p>
 <ul>
     <li>
-        <b><a href="https://www.mxbiobank.org/" target=_blank>Mexico Biobank (MXB)</a></b>: This track displays 
-            phased alleles from the Mexico Biobank Project
-      (MXB), based on array genotyping of 6,011 individuals sampled across all 32 states of Mexico during
-      the 2000 National Health Survey (ENSA 2000) conducted by the National Institute of Public Health (INSP). 
-      Frequencies can be plotted onto a map on <a href="https://morenolab.shinyapps.io/mexvar/" target=_blank>MexVar</a>.
-      The hg38 track was lifted from hg19.
-      (Publication?)
+        <b><a href="https://www.mxbiobank.org/" target="_blank">Mexico Biobank (MXB)</a></b>:
+        This track displays phased alleles from the Mexico Biobank Project (MXB), based on array
+        genotyping of 6,011 individuals sampled across all 32 states of Mexico during the 2000
+        National Health Survey (ENSA 2000) conducted by the National Institute of Public Health
+        (INSP). Frequencies can be plotted onto a map on
+        <a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar</a>.
+        The hg38 track was lifted from hg19.
+        (Publication?)
     </li>
 
-    <li><b><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7115999/" target=_blank></a>Human Genome Diversity Project (HGDP)</b>:
+    <li>
+        <b><a href="https://www.simonsfoundation.org/simons-genome-diversity-project/"
+        target="_blank">Simons Genome Diversity Project (SGDP)</a></b>:
+        Funded by the Simons Foundation, the Simons Genome Diversity Project
+        is a large-scale effort that sequenced high-coverage genomes from 300
+        individuals (279 in this track) representing 142 diverse and often
+        indigenous populations worldwide.
+        Its goal was to capture the full range of human genetic
+        diversity to better understand population history, migration, and
+        adaptation. It is sampling populations in a way that represents as much
+        anthropological, linguistic and cultural diversity as possible, and
+        thus includes many deeply divergent human populations that are not well
+        represented in other datasets.  SGDP emphasizes breadth of global representation and
+        population history, whereas HGDP emphasizes continuity and
+        comparability across major population groups. Not all its data is
+        public, so this track contains only 279 genomes. For details, see
+        (Mallick et al, Nature 2016). The hg38 track was lifted from hg19.
+    </li>
+</ul>
+<p>
+<b>Available only on hg38:</b></p>
+<ul>
+    <li>
+        <b><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7115999/"
+        target="_blank">Human Genome Diversity Project (HGDP)</b></a>:
         929 high-coverage genome sequences from 54 diverse human populations,
         26 of which are physically phased using linked-read sequencing. The
         Human Genome Diversity Project (HGDP) was launched in the early 1990s
@@ -30,142 +57,124 @@ All others provide only allele frequencies, their genotypes require signing a da
         populations worldwide, including groups from Africa, Europe, Asia,
         Oceania, and the Americas. These data have become a foundational
         reference for population genetics and human evolution studies.
-        Data can be downloaded from the <a href="https://ngs.sanger.ac.uk/production/hgdp/hgdp_wgs.20190516/" target=_blank>Sanger Website</a>. For details, see (Bergström et al, Science 2020).
+        Data can be downloaded from the
+        <a href="https://ngs.sanger.ac.uk/production/hgdp/hgdp_wgs.20190516/"
+        target="_blank">Sanger Website</a>. For details, see (Bergstr&ouml;m et al, Science 2020).
     </li>
 
-    <li><b><a href="https://gnomad.broadinstitute.org/news/2021-10-gnomad-v3-1-2-minor-release/" target=_blank>gnomAD HGDP and 1000 Genomes callset:</a></b>
+    <li>
+        <b><a href="https://gnomad.broadinstitute.org/news/2021-10-gnomad-v3-1-2-minor-release/"
+        target="_blank">gnomAD HGDP and 1000 Genomes callset</a></b>:
         A reprocessed version by the gnomAD project for the 1000 Genomes and
         Human Genome Diversity Project (HGDP) data, with 4094 genomes from 80
         populations. We already have separate, older tracks for 1000 Genomes on the main hg38
-        browser and for HGDP, just above. This 
-        track combines both datasets, with harmonized data quality. For details, see (Koenig et al, 2024).
-    </li>
-
-    <li><b><a href="https://www.simonsfoundation.org/simons-genome-diversity-project/" target=_blank>Simons Genome Diversity Project (SGDP):</a></b>
-        Funded by the Simons Foundation, the Simons Genome Diversity Project
-        is a large-scale effort that sequenced high-coverage genomes from 300
-        individuals (279 in this track) representing 142 diverse and often
-        indigenous populations worldwide. 
-        Its goal was to capture the full range of human genetic
-        diversity to better understand population history, migration, and
-        adaptation. It is sampling populations in a way that represents as much
-        anthropological, linguistic and cultural diversity as possible, and
-        thus includes many deeply divergent human populations that are not well
-        represented in other datasets.  SGDP emphasizes breadth of global representation and
-        population history, whereas HGDP emphasizes continuity and
-        comparability across major population groups. Not all iits data is
-        public, so this track contains only 279 genomes. For details, see
-        (Mallick et al, Nature 2016). The hg38 track was lifted from hg19.
+        browser and for HGDP, just above. This track combines both datasets, with harmonized data
+        quality. For details, see (Koenig et al, 2024).
     </li>
     
     <li>
-        <b><a href="https://rgc-mcps.regeneron.com/home" target=_blank>Mexico City Prospective Study (MCPS)</a></b>: 
-        9,950 whole genome sequenced individuals
-      and 141,046 exome sequenced and genotyped individuals from the Mexico
-  City Prospective Study (MCPS), a collaboration between the Regeneron Genetics
-  Center, University of Oxford, Universidad Nacional Autónoma de México (UNAM),
-  National Institute of Genomic Medicine in Mexico, Abbvie Inc. and AstraZeneca
-  UK. For details see (Ziyatdinov A, Nature 2023), the reference section.
+        <b><a href="https://rgc-mcps.regeneron.com/home"
+        target="_blank">Mexico City Prospective Study (MCPS)</a></b>:
+        9,950 whole genome sequenced individuals and 141,046 exome sequenced and genotyped
+        individuals from the Mexico City Prospective Study (MCPS), a collaboration between the
+        Regeneron Genetics Center, University of Oxford, Universidad Nacional Aut&oacute;noma de
+        M&eacute;xico (UNAM), National Institute of Genomic Medicine in Mexico, Abbvie Inc. and
+        AstraZeneca UK. For details see (Ziyatdinov A, Nature 2023), the reference section.
     </li>
 
-    <li>
-        <b><a href="https://rgc-mcps.regeneron.com/home" target=_blank>Mexico City Prospective Study (MCPS)</a></b>: 
-        9,950 whole genome sequenced individuals
-      and 141,046 exome sequenced and genotyped individuals from the Mexico
-  City Prospective Study (MCPS), a collaboration between the Regeneron Genetics
-  Center, University of Oxford, Universidad Nacional Autónoma de México (UNAM),
-  National Institute of Genomic Medicine in Mexico, Abbvie Inc. and AstraZeneca
-  UK. For details see (Ziyatdinov A, Nature 2023), the reference section.
-    </li>
     <li>
         <b><a href="https://rgc-research.regeneron.com/me/home"
-                target=_blank>Regeneron Million Exomes Project (ME)</a></b>:
-        Whole-exomes of
-        983,578 individuals sequenced by the Regeneron Genetics Center (RGC).
-    These data span dozens of collaborations including large biobanks and
-    health systems. All data were generated by the RGC on a single, harmonized
-sequencing and informatics protocol. The dataset includes individuals across
-diverse ancestral populations, encompassing outbred and founder populations and
-cohorts with high rates of consanguinity. See (Sun et al, Nature 2024) for details. </li>
+        target="_blank">Regeneron Million Exomes Project (ME)</a></b>:
+        Whole-exomes of 983,578 individuals sequenced by the Regeneron Genetics Center (RGC).
+        These data span dozens of collaborations including large biobanks and
+        health systems. All data were generated by the RGC on a single, harmonized
+        sequencing and informatics protocol. The dataset includes individuals across
+        diverse ancestral populations, encompassing outbred and founder populations and
+        cohorts with high rates of consanguinity. See (Sun et al, Nature 2024) for details.
+    </li>
+
     <li>
-        <b><a href="https://topmed.nhlbi.nih.gov/" target=_blank>NHLBI TOPMED
-                Freeze 10</a></b>: NHLBI TOPMed (Trans-Omics for Precision
+        <b><a href="https://topmed.nhlbi.nih.gov/" target="_blank">NHLBI TOPMED Freeze 10</a></b>:
+        NHLBI TOPMed (Trans-Omics for Precision
         Medicine) program, launched by the U.S. National Heart, Lung, and Blood
         Institute, integrates whole-genome sequencing with molecular, clinical,
-    and environmental data from large, well-phenotyped cohorts. Its goal is to
-    uncover the biological mechanisms underlying heart, lung, blood, and sleep
-disorders to advance precision medicine and improve population health. Freeze
-10 contains 868,581,653 variants from 150,899 whole genomes. VCFs were
-downloaded from <a href="https://bravo.sph.umich.edu/terms.html"
-                   target=_blank>BRAVO</a>.  </li>
-
-    <li><b><a href="https://www.genomeasia100k.org/" target=_blank>GenomeAsia
-                Pilot (GAsP)</a></b>: Whole-genome sequencing data of
-        1,739 individuals from 219 population groups across Asia. See
-        (GenomeAsia Consortium, Nature 2019) for details.  </li>
-    <li><b><a href="https://www.genomeasia100k.org/" target=_blank>GenomeAsia
-                Pilot (GAsP)</a></b>: Whole-genome sequencing data of
-        1,739 individuals from 219 population groups across Asia. See
-        (GenomeAsia Consortium, Nature 2019) for details.  </li>
-
-    <li><b><a href="https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/" target=_blank>ALFA</a></b>:
-The NCBI ALlele Frequency Aggregator pipeline computes allele frequencies from
-approved, unrestricted dbGaP studies and makes them publicly available through
-dbSNP. Its goal is to release frequency data from over one million dbGaP
-subjects to aid discoveries involving common and rare variants with biological
-or disease relevance. The R4 release includes 408,709 subjects and allele
-frequencies for 15.5 million rs sites, including nearly one million ClinVar
-variants. Genotype and associated 
-individual-level data are accessible through dbGaP <a href="https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login">authorized access</a>.
+        and environmental data from large, well-phenotyped cohorts. Its goal is to
+        uncover the biological mechanisms underlying heart, lung, blood, and sleep
+        disorders to advance precision medicine and improve population health. Freeze
+        10 contains 868,581,653 variants from 150,899 whole genomes. VCFs were
+        downloaded from <a href="https://bravo.sph.umich.edu/terms.html"
+        target="_blank">BRAVO</a>.
     </li>
 
-    <li><b><a href="https://jmorp.megabank.tohoku.ac.jp/downloads" target=_blank>JPN To61k Japan Tohoku University Tohoku Medical Megabank Organization 61k Allele frequency panel (JPN 61k) </a></b>:
+    <li>
+        <b><a href="https://www.genomeasia100k.org/"
+        target="_blank">GenomeAsia Pilot (GAsP)</a></b>:
+        Whole-genome sequencing data of 1,739 individuals from 219 population groups across Asia.
+        See (GenomeAsia Consortium, Nature 2019) for details.
+    </li>
+
+    <li>
+        <b><a href="https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/" target="_blank">ALFA</a></b>:
+        The NCBI ALlele Frequency Aggregator pipeline computes allele frequencies from
+        approved, unrestricted dbGaP studies and makes them publicly available through
+        dbSNP. Its goal is to release frequency data from over one million dbGaP
+        subjects to aid discoveries involving common and rare variants with biological
+        or disease relevance. The R4 release includes 408,709 subjects and allele
+        frequencies for 15.5 million rs sites, including nearly one million ClinVar
+        variants. Genotype and associated individual-level data are accessible through dbGaP
+        <a href="https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login"
+        target="_blank">authorized access</a>.
+    </li>
+
+    <li>
+        <b><a href="https://jmorp.megabank.tohoku.ac.jp/downloads"
+        target="_blank">JPN To61k Japan Tohoku University Tohoku Medical Megabank Organization
+        61k Allele frequency panel (JPN 61k)</a></b>:
         An allele frequency panel based on short-read WGS analysis of 61,000 Japanese individuals.
         The project includes other datatypes, such as STRs, long-read SVs and short-read CNVs.
-        Data can be downloaded from the <a href="https://jmorp.megabank.tohoku.ac.jp" target=_blank>jMorp Website</a>, specifically the <a href="https://jmorp.megabank.tohoku.ac.jp/downloads">Downloads</a> section.
-        For details, see (Tadaka et al, NAR 2023).
+        Data can be downloaded from the <a href="https://jmorp.megabank.tohoku.ac.jp"
+        target="_blank">jMorp Website</a>, specifically the
+        <a href="https://jmorp.megabank.tohoku.ac.jp/downloads" target="_blank">Downloads</a>
+        section. For details, see (Tadaka et al, NAR 2023).
     </li>
 
-    <li><b><a href="https://abraom.ib.usp.br/" target=_blank>Brazil Arquivo Brasileiro Online de Mutações (ABraOM)</a></b>:
+    <li>
+        <b><a href="https://abraom.ib.usp.br/"
+        target="_blank">Brazil Arquivo Brasileiro Online de Muta&ccedil;&otilde; (ABraOM)</a></b>:
         Genomic variants obtained with whole-genome sequencing from SABE, a
-        census-based sample of elderly individuals from São Paulo, Brazil's
+        census-based sample of elderly individuals from S&atilde;o Paulo, Brazil's
         largest city. Brazilian population is constituted by ~500 years of
         admixture between Africans, Europeans, and Native Americans.
         Additionally, the cohort presents ~3% of individuals with non-admixed
         Japanese ancestry (early 20th century migration). Coverage 38.6.  Data
         can be downloaded from the <a href="https://abraom.ib.usp.br/download/"
-        target=_blank>AbraOM Website</a>. For details see (Naslavsky et al, Nat
-    Comm 2022).
+        target="_blank">AbraOM Website</a>. For details see (Naslavsky et al, Nat Comm 2022).
     </li>
 
-    <li><b><a href="https://abraom.ib.usp.br/" target=_blank>Brazil Arquivo Brasileiro Online de Mutações (ABraOM)</a></b>:
-        Genomic variants obtained with whole-genome sequencing from SABE, a
-        census-based sample of 1,117 elderly individuals from São Paulo, Brazil's
-        largest city. The Brazilian population is constituted by ~500 years of
-        admixture between Africans, Europeans, and Native Americans.
-        Additionally, the cohort presents ~3% of individuals with non-admixed
-        Japanese ancestry (early 20th century migration). Coverage 38.6.  Data
-        can be downloaded from the <a href="https://abraom.ib.usp.br/download/"
-        target=_blank>AbraOM Website</a>. For details see (Naslavsky et al, Nat Comm 2022).
-    </li>
-
-    <li><b><a href="https://clingen.igib.res.in/indigen/" target=_blank>IndiGenomes</a></b>:
-        Whole genome sequencing of 1,029 healthy Indian individuals under the pilot phase of the 'IndiGen' program.
+    <li>
+        <b><a href="https://clingen.igib.res.in/indigen/" target="_blank">IndiGenomes</a></b>:
+        Whole genome sequencing of 1,029 healthy Indian individuals under the pilot phase of the
+        &quot;IndiGen&quot; program.
         Data can be downloaded from the <a href="https://clingen.igib.res.in/indigen/"
-        target=_blank>IndiGen Website</a>. For details see (Jain et al, NAR 2020). Only 
+        target="_blank">IndiGen Website</a>. For details see (Jain et al, NAR 2020). Only
         the allele frequency is available from this project. The website also provides SV call
         and Alu insertion VCFs.
     </li>
 
-    <li><b><a href="https://www.kobic.re.kr/kova/" target=_blank>Korean Variant Archive (KOVA)</a></b>:
-        1,896 whole genome sequencing and 3,409 whole exome sequencing data from healthy individuals of Korean ethnicity.
+    <li>
+        <b><a href="https://www.kobic.re.kr/kova/"
+        target="_blank">Korean Variant Archive (KOVA)</a></b>:
+        1,896 whole genome sequencing and 3,409 whole exome sequencing data from healthy individuals
+        of Korean ethnicity.
         Most of the samples were originated from normal tissue of cancer
         patients (40.16 %), healthy parents of rare disease patients (28.4 %),
-          or healthy volunteers (31.44 %). Japanese ancestry is broken down
-          in the INFO field.
-          TSV data can be requested on the <a target=_blank>KOVA Downloads</a> website. 
-          Coverage 100x for WES, 30x for WGS.
-        For details see (Lee et al, Exp Mol Med 2022).</li>
+        or healthy volunteers (31.44 %). Japanese ancestry is broken down
+        in the INFO field.
+        TSV data can be requested on the <a href="https://www.kobic.re.kr/kova/downloads"
+        target="_blank">KOVA Downloads</a> website. Coverage 100x for WES, 30x for WGS.
+        For details see (Lee et al, Exp Mol Med 2022).
+    </li>
+</ul>
 
 <h2>Display Conventions</h2>
 
@@ -176,21 +185,24 @@ letters.
 </p>
 
 <p>
-Full haplotype display - only for the MXB and HGDP tracks: In "pack" mode, this track sorts the haplotypes. This can be
+Full haplotype display - only for the <b>MXB</b> and <b>HGDP</b> tracks:
+In &quot;pack&quot; mode, this track sorts the haplotypes. This can be
 useful for determining the similarity between the samples and inferring
 inheritance at a particular locus.
-For a full description of how the display works, please see our 
-<a href="../goldenpath/help/hgVcfTrackHelp.html">Haplotype Display help page</a>.
-Briefly, each sample's phased and/or homozygous genotypes are split into haplotypes,
+Each sample's phased and/or homozygous genotypes are split into haplotypes,
 clustered by similarity around a central variant (in pink), and sorted for
 display by their position in the clustering tree. Click a variant to center on it.
 The tree (as space allows) is drawn in the label area next to the track image.
 Leaf clusters, in which all haplotypes are identical (at least for the variants
 used in clustering), are colored purple. 
 </p>
+<p>
+For a full description of how the display works, please see our 
+<a href="../goldenpath/help/hgVcfTrackHelp.html">Haplotype Display help page</a>.
 
 <p>
-For NCBI ALFA: This track has no single VCF with INFO fields, but uses multiple subtracks instead, one per ancestry.
+For <b>NCBI ALFA:</b> This track has no single VCF with INFO fields, but uses multiple subtracks
+instead, one per ancestry.
 </p>
 
 
@@ -203,31 +215,35 @@ data usually requires a click-through license on the respectice websites:
 </p>
 
 <p>
-MXB: Allele frequencies by geographical state and ancestry are available via
-the <a target=_blank href="https://morenolab.shinyapps.io/mexvar/">MexVar platform</a>.
+<b>MXB:</b> Allele frequencies by geographical state and ancestry are available via
+the <a target="_blank" href="https://morenolab.shinyapps.io/mexvar/">MexVar platform</a>.
 Raw genotype data are available under controlled access at the
-EGA (Study: EGAS00001005797; Dataset: EGAD00010002361). For the VCFs, email andres.moreno@cinvestav.mx.
+EGA (Study: EGAS00001005797; Dataset: EGAD00010002361). For the VCFs, email
+andres.moreno@cinvestav.mx.
 </p>
 <p>
-MCPS: VCFs with summarized allele frequencies are available from
-the <a target=_blank href="https://rgc-mcps.regeneron.com/">MCPS website</a>.
+<b>MCPS:</b> VCFs with summarized allele frequencies are available from
+the <a target="_blank" href="https://rgc-mcps.regeneron.com/">MCPS website</a>.
 </p>
 <p>
-Regeneron one million exomes: VCFs with summarized allele frequencies are available from
-the <a target=_blank href="https://rgc-research.regeneron.com/me/resources">RGC ME website</a>.
+<b>Regeneron one million exomes:</b> VCFs with summarized allele frequencies are available from
+the <a target="_blank" href="https://rgc-research.regeneron.com/me/resources">RGC ME website</a>.
 </p>
 <p>
-TOPMED: VCFs with summarized allele frequencies are available from
-the <a target=_blank href="https://bravo.sph.umich.edu/">TOPMED BRAVO website</a>. They require a login.
+<b>TOPMED:</b> VCFs with summarized allele frequencies are available from
+the <a target="_blank" href="https://bravo.sph.umich.edu/">TOPMED BRAVO website</a>. They require a
+login.
 </p>
 <p>
-GenomeAsia Pilot: VCFs are available from UCSC and also from the 
-the <a target=_blank href="https://browser.genomeasia100k.org/#tid=download">GenomeAsia 100K website</a>. No license nor login.
+<b>GenomeAsia Pilot:</b> VCFs are available from UCSC and also from
+the <a target="_blank"
+href="https://browser.genomeasia100k.org/#tid=download">GenomeAsia 100K website</a>.
+No license nor login.
 </p>
 
 <h2>Methods</h2>
 <p>
-MXB: Genotyping was performed with the Illumina Multi-Ethnic Global Array
+<b>MXB:</b> Genotyping was performed with the Illumina Multi-Ethnic Global Array
 (MEGA, ~1.8M SNPs), optimized for admixed populations and enriched for
 ancestry-informative and medically relevant variants. Only autosomal, biallelic
 SNPs passing quality control are included. Samples were selected from 898
@@ -237,17 +253,19 @@ of duplicates, update of map positions using dbSNP Build 151 and low-quality
 variants/individuals, and relatedness filtering.
 </p>
 <p>
-SGDP: The version used was https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/, 
+<b>SGDP:</b> The version used was
+<a target="_blank" href="https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/"
+>https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/</a>,
 merged with bcftools and lifted to hg38 with CrossMap. 
 </p>
 <p>
-KOVA: V7 of the TSV.gz was obtained from the KOVA staff and converted to VCF. If it not available 
-for download from our site but can be requested from the KOVA website.
+<b>KOVA:</b> V7 of the TSV.gz was obtained from the KOVA staff and converted to VCF. It is not
+available for download from our site but can be requested from the KOVA website.
 </p>
 
 <h2>Credits</h2>
 <p>
-MXB: We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
+<b>MXB:</b> We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
 generating and providing the frequency data, the National Institute of Medical
 Sciences and Nutrition (INCMNSZ) for DNA extraction, and the Ministry of Health
 together with the National Institute of Public Health (INSP) for the design and
@@ -257,30 +275,31 @@ data processing that made possible the construction of the MXB genomic
 resource.
 </p>
 <p>
-MCPS: Data produced by Regeneron RGC and collaborators, which are the
-University of Oxford, Universidad Nacional Autónoma de México (UNAM) and
+<b>MCPS:</b> Data produced by Regeneron RGC and collaborators, which are the
+University of Oxford, Universidad Nacional Aut&oacute;noma de M&eacute;xico (UNAM) and
 National Institute of Genomic Medicine in Mexico.
 The Regeneron Genetics Center, University of Oxford, Universidad Nacional
-Autónoma de México (UNAM), National Institute of Genomic Medicine in Mexico,
-Abbvie Inc. and AstraZeneca UK Limited (collectively, the “Collaborators”) bear
+Aut&oacute;noma de M&eacute;xico (UNAM), National Institute of Genomic Medicine in Mexico,
+Abbvie Inc. and AstraZeneca UK Limited (collectively, the &quot;Collaborators&quot;) bear
 no responsibility for the analyses or interpretations of the data presented
 here. Any opinions, insights, or conclusions presented herein are those of the
 authors and not of the Collaborators. </p>
 </p>
 <p>
-Regeneron Million Exomes: The Regeneron Genetics Center, and its collaborators
-(collectively, the “Collaborators”) bear no responsibility for the analyses or
+<b>Regeneron Million Exomes:</b> The Regeneron Genetics Center, and its collaborators
+(collectively, the &quot;Collaborators&quot;) bear no responsibility for the analyses or
 interpretations of the data presented here. Any opinions, insights, or
 conclusions presented herein are those of the authors and not of the
 Collaborators. This research has been conducted using the UK Biobank Resource
 under application number 26041.
 </p>
 <p>
-SGDP: This project was funded by the Simons Foundation. Thanks to David Reich and Swapan 
+<b>SGDP:</b> This project was funded by the Simons Foundation. Thanks to David Reich and Swapan 
 Mallick for help with importing the data.
 </p>
 <p>
-KOVA: Thanks to Insu Jang and the KOVA director for providing variant frequencies in TSV format.
+<b>KOVA:</b> Thanks to Insu Jang and the KOVA director for providing variant frequencies in TSV
+format.
 </p>
 <p>Thanks to Alex Ioannidis, UCSC, and Andreas Lahner, MGZ, for feedback on this track.</p>
 
@@ -301,8 +320,8 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10855211/" target="_blank">PM
 </p>
 
 <p>
-Sohail M, Palma-Martínez MJ, Chong AY, Quinto-Cortés CD, Barberena-Jonas C, Medina-Muñoz SG,
-Ragsdale A, Delgado-Sánchez G, Cruz-Hervert LP, Ferreyra-Reyes L <em>et al</em>.
+Sohail M, Palma-Mart&iacute;nez MJ, Chong AY, Quinto-Cor&eacute;s CD, Barberena-Jonas C, Medina-Mu&ntilde;oz SG,
+Ragsdale A, Delgado-S&aacute;nchez G, Cruz-Hervert LP, Ferreyra-Reyes L <em>et al</em>.
 <a href="https://doi.org/10.1038/s41586-023-06560-0" target="_blank">
 Mexican Biobank advances population and medical genomics of diverse ancestries</a>.
 <em>Nature</em>. 2023 Oct;622(7984):775-783.
@@ -311,7 +330,7 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10600006/" target="_blank">PM
 </p>
 
 <p>
-Ziyatdinov A, Torres J, Alegre-Díaz J, Backman J, Mbatchou J, Turner M, Gaynor SM, Joseph T, Zou Y,
+Ziyatdinov A, Torres J, Alegre-D&iacute;az J, Backman J, Mbatchou J, Turner M, Gaynor SM, Joseph T, Zou Y,
 Liu D <em>et al</em>.
 <a href="https://doi.org/10.1038/s41586-023-06595-3" target="_blank">
 Genotyping, sequencing and analysis of 140,000 adults from Mexico City</a>.
@@ -353,9 +372,9 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10767895/" target="_blank">PM
 
 <p>
 Naslavsky MS, Scliar MO, Yamamoto GL, Wang JYT, Zverinova S, Karp T, Nunes K, Ceroni JRM, de
-Carvalho DL, da Silva Simões CE <em>et al</em>.
+Carvalho DL, da Silva Sim&otilde;es CE <em>et al</em>.
 <a href="https://doi.org/10.1038/s41467-022-28648-3" target="_blank">
-Whole-genome sequencing of 1,171 elderly admixed individuals from São Paulo, Brazil</a>.
+Whole-genome sequencing of 1,171 elderly admixed individuals from S&atilde;o Paulo, Brazil</a>.
 <em>Nat Commun</em>. 2022 Mar 4;13(1):1004.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35246524" target="_blank">35246524</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8897431/" target="_blank">PMC8897431</a>
@@ -376,7 +395,7 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7778947/" target="_blank">PMC
 
 
 <p>
-Bergström A, McCarthy SA, Hui R, Almarri MA, Ayub Q, Danecek P, Chen Y, Felkel S, Hallast P, Kamm J
+Bergstr&ouml;m A, McCarthy SA, Hui R, Almarri MA, Ayub Q, Danecek P, Chen Y, Felkel S, Hallast P, Kamm J
 <em>et al</em>.
 <a href="https:///www.science.org/doi/10.1126/science.aay5012" target="_blank">
 Insights into human genetic variation and population history from 929 diverse genomes</a>.

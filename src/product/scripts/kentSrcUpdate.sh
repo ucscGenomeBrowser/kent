@@ -55,7 +55,7 @@ else
     cd "${kentSrc}"
     cd ..
     rmdir kent
-    time git clone git://genome-source.soe.ucsc.edu/kent.git
+    time git clone https://github.com/ucscGenomeBrowser/kent.git
     cd kent
     git checkout -t -b beta origin/beta
     cd ..

@@ -67,7 +67,7 @@ system package management tools.
    Using `git` to fetch the source, creates a directory `./userApps/`
 
         git archive --format=zip -9 \
-           --remote=git://genome-source.soe.ucsc.edu/kent.git \
+           --remote=https://github.com/ucscGenomeBrowser/kent.git \
            beta src/userApps > userApps.zip
         unzip -d userApps -j userApps.zip
         cd userApps
