@@ -7,6 +7,6 @@ html g2p.html
 bigDataUrl /gbdb/$D/g2p/g2p.bb
 visibility hide
 mouseOver <b>G2P ID:</b> ${g2p_id} <br> <b>Variant Consequence:</b> ${variant_consequence} <br> <b>Disease Name:</b> ${disease_name} <br> <b>Pubmed IDs:</b> ${publications} <br> <b>Molecular Mechanism:</b> ${molecular_mechanism} <br> <b>Allelic Requirements:</b> ${allelic_requirement} <br> <b>Date of Last Review:</b> ${date_of_last_review}
-urls g2p_id="https://www.ebi.ac.uk/gene2phenotype/lgd/$$"
+urls g2p_id="https://www.ebi.ac.uk/gene2phenotype/lgd/$$" gene_mim="https://omim.org/entry/$$" hgnc_id="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$" publications="https://pubmed.ncbi.nlm.nih.gov/$$/" phenotypes="https://www.ebi.ac.uk/ols4/ontologies/hp/classes?obo_id=$$" disease_mim="https://omim.org/entry/$$" disease_MONDO="https://monarchinitiative.org/$$"
 pennantIcon New red ../goldenPath/newsarch.html#091925 "Released Sep. 19, 2025"
 cartVersion 9
