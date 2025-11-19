@@ -17,7 +17,7 @@ TIP_OF_DAY_FILE = os.path.join(OUTPUT_DIR, "tipOfDay.html")
 
 # Tracking directory
 USER = os.environ.get('USER', 'default')
-TRACKING_DIR = f"/hive/users/{USER}/didYouKnowTips"
+TRACKING_DIR = f"/cluster/home/{USER}/"
 TIPS_DONE_FILE = os.path.join(TRACKING_DIR, "tipsDone.txt")
 
 # HTML header
