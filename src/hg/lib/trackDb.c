@@ -268,7 +268,6 @@ fputc(lastSep,f);
 
 boolean isComplexSetting(char *name)
 /* Check to see if this is one of the filter variables that have arbitrary initial strings. 
- * This routine copied to hubCheck.  */
 {
 if (startsWith("yAxisLabel.", name))
     return TRUE;
