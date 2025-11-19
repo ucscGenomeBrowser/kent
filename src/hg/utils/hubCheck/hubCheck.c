@@ -419,58 +419,6 @@ errCatchFree(&errCatch);
 return retVal;
 }
 
-static boolean isComplex(char *name)
-/* Check to see if this is one of the filter variables that have arbitrary initial strings. 
- * This routine copied from tdbQuery.  */
-{
-if (startsWith("yAxisLabel.", name))
-    return TRUE;
-if (startsWith("filter.", name))
-    return TRUE;
-if (startsWith("filterValues.", name))
-    return TRUE;
-if (startsWith("filterValuesDefault.", name))
-    return TRUE;
-if (startsWith("filterType.", name))
-    return TRUE;
-if (startsWith("filterLimits.", name))
-    return TRUE;
-if (startsWith("filterLabel.", name))
-    return TRUE;
-if (startsWith("filterByRange.", name))
-    return TRUE;
-if (startsWith("filterText.", name))
-    return TRUE;
-if (endsWith(name, "Filter"))
-    return TRUE;
-if (endsWith(name, "FilterValues"))
-    return TRUE;
-if (endsWith(name, "FilterType"))
-    return TRUE;
-if (endsWith(name, "FilterLimits"))
-    return TRUE;
-if (endsWith(name, "FilterText"))
-    return TRUE;
-if (startsWith("highlight.", name))
-    return TRUE;
-if (startsWith("highlightValues.", name))
-    return TRUE;
-if (startsWith("highlightValuesDefault.", name))
-    return TRUE;
-if (startsWith("highlightType.", name))
-    return TRUE;
-if (startsWith("highlightLimits.", name))
-    return TRUE;
-if (startsWith("highlightLabel.", name))
-    return TRUE;
-if (startsWith("highlightByRange.", name))
-    return TRUE;
-if (startsWith("highlightText.", name))
-    return TRUE;
-return FALSE;
-}
-
-     
 
 int hubCheckTrackSetting(struct trackHub *hub, struct trackDb *tdb, char *setting, 
                                 struct trackHubCheckOptions *options, struct dyString *errors)
@@ -490,8 +438,8 @@ if (options->extra && hashLookup(options->extra, setting))
 /* check setting is supported in this version */
 struct trackHubSettingSpec *hubSetting = hashFindVal(options->settings, setting);
 
-boolean isComplexSetting = isComplex(setting);
-if (isComplexSetting)
+boolean hasComplexSetting = isComplexSetting(setting);
+if (hasComplexSetting)
     {
     verbose(5, "skipping validation for complex setting=%s.", setting);
     return 1;

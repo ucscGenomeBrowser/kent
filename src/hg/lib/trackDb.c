@@ -266,5 +266,57 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+boolean isComplexSetting(char *name)
+/* Check to see if this is one of the filter variables that have arbitrary initial strings. 
+ * This routine copied to hubCheck.  */
+{
+if (startsWith("yAxisLabel.", name))
+    return TRUE;
+if (startsWith("filter.", name))
+    return TRUE;
+if (startsWith("filterValues.", name))
+    return TRUE;
+if (startsWith("filterValuesDefault.", name))
+    return TRUE;
+if (startsWith("filterType.", name))
+    return TRUE;
+if (startsWith("filterLimits.", name))
+    return TRUE;
+if (startsWith("filterLabel.", name))
+    return TRUE;
+if (startsWith("filterByRange.", name))
+    return TRUE;
+if (startsWith("filterText.", name))
+    return TRUE;
+if (endsWith(name, "Filter"))
+    return TRUE;
+if (endsWith(name, "FilterValues"))
+    return TRUE;
+if (endsWith(name, "FilterType"))
+    return TRUE;
+if (endsWith(name, "FilterLimits"))
+    return TRUE;
+if (endsWith(name, "FilterText"))
+    return TRUE;
+if (startsWith("highlight.", name))
+    return TRUE;
+if (startsWith("highlightValues.", name))
+    return TRUE;
+if (startsWith("highlightValuesDefault.", name))
+    return TRUE;
+if (startsWith("highlightType.", name))
+    return TRUE;
+if (startsWith("highlightLimits.", name))
+    return TRUE;
+if (startsWith("highlightLabel.", name))
+    return TRUE;
+if (startsWith("highlightByRange.", name))
+    return TRUE;
+if (startsWith("highlightText.", name))
+    return TRUE;
+return FALSE;
+}
+
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
