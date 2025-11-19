@@ -1,0 +1,165 @@
+#########################################################################
+# G2P (09-19-2025) Jaidan Jenkins-Kiefer, Jairo Navarro
+# Script to generate the track was created by Jaidan and updated by Jairo
+
+###########################################################
+#!/usr/bin/python3
+
+############################################################
+# Merge G2P with gene coords from HGNC
+############################################################
+import pandas as pd
+import csv
+import sys
+from pathlib import Path
+
+import subprocess
+from io import BytesIO
+#from zipfile import ZipFile
+from urllib.request import urlopen
+from ucscGb.qa.tables import trackUtils
+from ucscGb.qa import qaUtils
+
+def bash(cmd):
+    """Run the cmd in bash subprocess"""
+    try:
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
+        bashStdoutt = rawBashOutput.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    return (bashStdoutt)
+
+def download(URL):
+    '''
+    Generic command to wget a URL and prints the command to STDOUT.
+    '''
+    cmd = "curl -L -o AllG2P.csv %s" % URL
+    bash(cmd)
+
+def confidence_to_color(confidence):
+    """ Map a confidence string to an RGB color string for UCSC BED itemRgb."""
+    color_map = {
+        "definitive": "39,103,73",   # Dark-green
+        "strong": "56,161,105",      # green
+        "moderate": "104,211,145",   # light-green
+        "limited": "252,129,129",    # pink
+        "disputed": "229,62,62",     # red
+        "refuted": "155,44,44"       # Dark-red
+    }
+    return color_map.get(confidence.lower(), "0,0,0")  # default black
+
+
+def load_g2p(file_path):
+    """Load G2P CSV into dict keyed by HGNC ID, plus list of missing IDs."""
+    g2p_map = {}
+    numOfRows = 0
+    with open(file_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            numOfRows += 1
+            hgnc_id = row["hgnc id"].strip()
+            if hgnc_id not in g2p_map:
+                g2p_map[hgnc_id] = []
+            g2p_map[hgnc_id].append(row)
+    print ("Number of rows in file: %s" % numOfRows)
+    return g2p_map
+
+
+def load_coordinates(db,hgnc_ids):
+    """Creates a dictionary for the coordinates given a list of HGNC IDs."""
+    coord_map = {}
+    hgncBB = "/gbdb/%s/hgnc/hgnc.bb" % db
+    for id in hgnc_ids:
+        if id not in coord_map:
+            hgnc_data = bash("bigBedNamedItems %s HGNC:%s stdout" % (hgncBB,id)).split('\n')
+            split_data = [line.split('\t') for line in hgnc_data if line.strip()]
+            final_data = []
+            for row in split_data:
+                final_data.append(row[:8])
+            coord_map[id] = final_data
+    return coord_map
+
+
+def join_and_write(g2p_data, coords, output_file):
+    """Join G2P and coordinates into BED 8+19 format."""
+    with open(output_file, "w", newline='', encoding="utf-8") as out:
+        writer = csv.writer(out, delimiter="\t")
+        for hgnc_id, rows in g2p_data.items(): # Rows is a list of dictionaries
+            for row in rows:
+                for coord in coords.get(hgnc_id):
+                    # BED 9 fields
+                    chrom       = coord[0]
+                    chromStart  = coord[1]
+                    chromEnd    = coord[2]
+                    name        = row["gene symbol"]
+                    score       = coord[4]
+                    strand      = coord[5]
+                    thickStart  = coord[6]
+                    thickEnd    = coord[7]
+                    rgb         = confidence_to_color(row["confidence"])
+        
+                    # G2P 20 fields
+                    g2p_id      = row["g2p id"]
+                    gene_mim    = row["gene mim"]
+                    hgnc_id_val = row["hgnc id"]
+                    prev_symbols= row["previous gene symbols"].replace(';',',')
+                    disease_name= row["disease name"]
+                    disease_mim = row["disease mim"]
+                    disease_MONDO = row["disease MONDO"]
+                    allelic_req = row["allelic requirement"]
+                    cross_mod   = row["cross cutting modifier"]
+                    confidence  = row["confidence"]
+                    var_conseq  = row["variant consequence"]
+                    var_types   = row["variant types"]
+                    mol_mech    = row["molecular mechanism"]
+                    mol_mech_cat= row["molecular mechanism categorisation"]
+                    mol_mech_ev = row["molecular mechanism evidence"]
+                    phenotypes  = row["phenotypes"].replace(';',',')
+                    publications= row["publications"].replace(';',',')
+                    panel       = row["panel"]
+                    comments    = row["comments"]
+                    date_review = row["date of last review"]
+    
+                    # Write BED 9 + 20
+                    writer.writerow([
+                        chrom, chromStart, chromEnd, name, score, strand, thickStart, thickEnd,
+                        rgb, g2p_id, gene_mim, hgnc_id_val, prev_symbols, disease_name, disease_mim,
+                        disease_MONDO, allelic_req, cross_mod, confidence, var_conseq, var_types,
+                        mol_mech, mol_mech_cat, mol_mech_ev, phenotypes, publications, panel,
+                        comments, date_review
+                    ])
+
+
+if __name__ == "__main__":
+    # Databases in G2P
+    database = ["hg19", "hg38"]
+    # Download the CSV file from G2P
+    download("https://www.ebi.ac.uk/gene2phenotype/api/panel/all/download")
+    g2p_file = Path("AllG2P.csv") # Name of the file is in the curl command above
+    g2p_data = load_g2p(g2p_file) # Create a dictionary for each HGNC ID with the columns
+    hgnc_ids = g2p_data.keys()    # HGNC IDs are stored as '36036'
+    print("Number of HGNC IDs found: %s" % len(hgnc_ids))
+    # Get coordinates for hg38 and hg19 from the HGNC track
+    hg38_coordinates = load_coordinates("hg38",hgnc_ids)
+    hg19_coordinates = load_coordinates("hg19",hgnc_ids)
+    print ("Loaded %s hg38 and %s hg19 HGNC IDs" % (len(hg38_coordinates), len(hg19_coordinates)))
+    # For hg19 and hg38, go through coordinates and add the G2P data
+    for db, coords in zip(database, [hg19_coordinates, hg38_coordinates]):
+        outputFile = "%s_g2p_all.bed" % db
+        outputBigBed = "%s_g2p.bb" % db
+        chromSizes = "/gbdb/%s/%s.2bit" % (db,db)
+        join_and_write(g2p_data, coords, outputFile)
+        print("Output written to %s" % outputFile)
+        # Create the bigBeds
+        bash("bedToBigBed -type=bed9+20 -tab -sort -as=./g2p.as -sizesIs2Bit -extraIndex=name,g2p_id,gene_mim,hgnc_id %s %s %s" % (outputFile,chromSizes,outputBigBed))
+
+
+######################
+# End of Python script
+
+###########################################
+# Create symlinks
+
+ln -S /hive/data/outside/g2p/hg38_g2p.bb /gbdb/hg38/g2p/g2p.bb
+ln -S /hive/data/outside/g2p/hg19_g2p.bb /gbdb/hg19/g2p/g2p.bb
