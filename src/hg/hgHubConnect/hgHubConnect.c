@@ -149,7 +149,11 @@ for(; genome; genome = genome->next)
         { 
         if (withLink)
             {
-            dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+            if (hubConnectIsCurated(genome->name)) {
+                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+            } else {
+                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+            }
             // https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
             if (withPaste)
                 dyStringPrintf(dyShortHtml, linkHtml, hubUrl);
@@ -166,7 +170,11 @@ for(; genome; genome = genome->next)
     // always append to dyLongHtml
     if (withLink)
         {
-        dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+        if (hubConnectIsCurated(genome->name)) {
+            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+        } else {
+            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+        }
         if (withPaste)
             dyStringPrintf(dyLongHtml, linkHtml, hubUrl);
         }
