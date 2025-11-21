@@ -841,8 +841,8 @@ if (*pConn != NULL)
 struct sqlConnection *hConnectCentralNoCache() 
 /* open an hgcentral connection, but do not use the cache. Used before the bottleneck call. */
 {
-    char *centralDb = cfgOption2(centralProfile, "db");
-    struct sqlConnection *conn = sqlMayConnect(centralDb);
+    char *centDb = cfgOption2(centralProfile, "db");
+    struct sqlConnection *conn = sqlConnectProfile(centralProfile, centDb);
     if (conn == NULL)
         errAbort("Cannot connect to MariaDB database defined in hg.conf called '%s'", centralDb);
     return conn;
