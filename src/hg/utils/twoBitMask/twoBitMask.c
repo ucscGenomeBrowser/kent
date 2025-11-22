@@ -23,9 +23,9 @@ errAbort(
   "   twoBitMask input.2bit maskFile output.2bit\n"
   "options:\n"
   "   -add   Don't remove pre-existing masking before applying maskFile.\n"
-  "   -type=.XXX   Type of maskFile is XXX (bed or out).\n"
-  "maskFile can be a RepeatMasker .out file or a .bed file.  It must not\n"
-  "contain rows for sequences which are not in input.2bit.\n"
+  "   -type=.XXX   Type of maskFile is XXX (bed or bb or out).\n"
+  "maskFile can be a RepeatMasker .out file, a bigBed .bb file, or a .bed file.\n"
+  "It must not contain rows for sequences which are not in input.2bit.\n"
 );
 }
 
@@ -40,7 +40,7 @@ static struct optionSpec options[] = {
 };
 
 
-unsigned slurpInput(char *inName, struct hash *tbHash,
+static unsigned slurpInput(char *inName, struct hash *tbHash,
 			  struct hash *bitmapHash, struct twoBit **list)
 /* Read .2bit file inName into memory and return list of twoBit items.
  * Populate tbHash with twoBit items, and bitmapHash with bitmaps for
@@ -76,7 +76,7 @@ return version;
 }
 
 
-void addMasking(struct hash *twoBitHash, struct hash *bitmapHash, char *seqName,
+static void addMasking(struct hash *twoBitHash, struct hash *bitmapHash, char *seqName,
 		unsigned start, unsigned end)
 /* Set bits in range. */
 {
@@ -99,7 +99,7 @@ struct unsignedRange
     unsigned size;
     };
 
-void bitmapToMaskArray(struct hash *bitmapHash, struct hash *tbHash)
+static void bitmapToMaskArray(struct hash *bitmapHash, struct hash *tbHash)
 /* Translate each bitmap in bitmapHash into an array of mask coordinates
  * in the corresponding twoBit in tbHash.  Assume tbHash's mask array is
  * empty at the start -- we allocate it here.  Free bitmap when done. */
@@ -160,7 +160,27 @@ while ((hel = hashNext(&cookie)) != NULL)
 }
 
 
-void maskWithBed(char *bedName, struct hash *tbHash, struct hash *bitmapHash)
+static void maskWithBigBed(char *bbName, struct hash *tbHash, struct hash *bitmapHash)
+/* Read coordinates from bbName and apply them to twoBits in tbHash. */
+{
+struct bbiFile *bbi = bigBedFileOpen(bbName);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *list = bigBedIntervalQuery(bbi,chrom->name,0,chrom->size,0,lm);
+    struct bigBedInterval *el;
+    for (el = list; el != NULL; el = el->next)
+	{
+        addMasking(tbHash, bitmapHash, chrom->name, el->start, el->end);
+	}
+    lmCleanup(&lm);
+    }
+bigBedFileClose(&bbi);
+bitmapToMaskArray(bitmapHash, tbHash);
+}
+
+static void maskWithBed(char *bedName, struct hash *tbHash, struct hash *bitmapHash)
 /* Read coordinates from bedName and apply them to twoBits in tbHash. */
 {
 struct lineFile *lf = lineFileOpen(bedName, TRUE);
@@ -186,7 +206,7 @@ bitmapToMaskArray(bitmapHash, tbHash);
 }
 
 
-void maskWithOut(char *outName, struct hash *tbHash, struct hash *bitmapHash)
+static void maskWithOut(char *outName, struct hash *tbHash, struct hash *bitmapHash)
 /* Read coordinates from outName and apply them to twoBits in tbHash. */
 {
 struct lineFile *lf = lineFileOpen(outName, TRUE);
@@ -250,6 +270,8 @@ unsigned version = slurpInput(inName, tbHash, bitmapHash, &twoBitList);
 /* Read mask data into bitmapHash, store it in twoBits: */
 if ((type && endsWith(type, "bed")) || endsWith(maskName, ".bed"))
     maskWithBed(maskName, tbHash, bitmapHash);
+else if ((type && endsWith(type, "bb")) || endsWith(maskName, ".bb"))
+    maskWithBigBed(maskName, tbHash, bitmapHash);
 else if ((type && endsWith(type, "out")) || endsWith(maskName, ".out"))
     maskWithOut(maskName, tbHash, bitmapHash);
 else
