@@ -17,6 +17,9 @@ test::
 	cmp tests/expected/testMask1.2bit tests/output/testMask1.2bit
 	twoBitMask ${TEST_IN}/testMask.2bit tests/input/testMask2.out tests/output/testMask2.2bit
 	cmp ${TEST_IN}/testMask.2bit tests/output/testMask2.2bit
+	rm -f tests/output/testMask1.2bit
+	twoBitMask ${TEST_IN}/testMask.2bit tests/input/testMask1.bb tests/output/testMask1.2bit
+	cmp tests/expected/testMask1.2bit tests/output/testMask1.2bit
 	rm -r tests/output
 
 clean::
