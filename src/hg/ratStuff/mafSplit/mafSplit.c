@@ -49,6 +49,9 @@ errAbort(
   "                     assembly has more than one sequence name pattern,\n"
   "                     e.g. both chroms and scaffolds.\n"
   "\n"
+  "NOTE: as of November 2025 - can manage GenArk assembly names GCA_...\n"
+  "      and GCF_... with their .n extensions.  Can only work with such\n"
+  "      such names that begin with GC."
   );
 }
 
@@ -176,7 +179,19 @@ while ((maf = mafNext(mf)) != NULL)
 		/* skip over db. prefix if any */
 		char *target = strchr(targetName,'.');
 		if (target)
+		    {
 		    ++target;
+		    /* if GenArk assembly, get to the next dot */
+		    if (startsWith("GC", targetName))
+		        {
+		        char *nextDot = strchr(target,'.');
+		        if (nextDot)
+			    {
+			    ++nextDot;
+			    target = nextDot;
+			    }
+		        }   /* else: no next dot, leave target it where it is */
+		    }
 		else
 		    target = targetName;
 		path = mkOutPath(outRootDir, outRootFile, seqNum, target);
@@ -231,7 +246,17 @@ char *chromFromSrc(char *src)
 char *p;
 if ((p = strchr(src, '.')) == NULL)
     errAbort("Can't find chrom in MAF component src: %s\n", src);
-return ++p;
+++p;	/* skip the dot to the word following */
+if (startsWith("GC", src))
+    {
+    char *nextDot = strchr(p,'.');
+    if (nextDot)
+        {
+        ++nextDot;	/* skip the dot to the word following */
+        p = nextDot;	/* new answer */
+        }
+    }   /* else: no next dot, leave p it where it is */
+return p;
 }
 
 void splitMafFile(char *file, char *outDir, char *outPrefix, 
