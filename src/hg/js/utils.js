@@ -4577,7 +4577,7 @@ function processFindGenome(result, term) {
     // process the hubApi/findGenome?q= result set into somthing
     // jquery-ui autocomplete can use
     let data = [];
-    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount"]);
+    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount", "liftable"]);
     Object.keys(result).forEach((key) => {
         if (!(apiSkipList.has(key))) {
             let val = result[key];
@@ -4585,6 +4585,10 @@ function processFindGenome(result, term) {
                 "genome": key,
                 "label": `${val.commonName} (${key})`,
             };
+
+            Object.keys(val).forEach((vkey) => {
+                d[vkey] = val[vkey];
+            });
             if (val.hubUrl !== null) {
                 d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
             } else {

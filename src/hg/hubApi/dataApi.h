@@ -83,6 +83,7 @@
 #define argCategory "category"
 #define argStatus "status"
 #define argLevel "level"
+#define argLiftable "liftable"
 #define argFromGenome "fromGenome"
 #define argToGenome "toGenome"
 /* used by liftRequest */
