@@ -225,6 +225,7 @@ jsInlineF("\nvar isLoggedIn = %s;\n", getUserName() ? "true" : "false");
 jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
+jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }
