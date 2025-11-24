@@ -12,7 +12,7 @@ $(function() {
     const CSS_URLS = [
         "https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css",  // dataTables CSS
         "https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css",  // dataTables Select CSS
-        "/style/bigComposite.css",  // Local metadata table CSS
+        "../style/facetedComposite.css",  // Local metadata table CSS
     ];
 
     const isValidColorMap = obj =>  // check the whole thing and ignore if invalid
@@ -67,7 +67,7 @@ $(function() {
         const paramsFromUrl = new URLSearchParams(window.location.search);
         const db = paramsFromUrl.get("db");
         const hgsid = paramsFromUrl.get("hgsid");
-        fetch("/cgi-bin/bigCompositeUpdate", {
+        fetch("/cgi-bin/cartDump", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: `hgsid=${hgsid}&db=${db}&${uriForUpdate}`,
@@ -326,11 +326,11 @@ $(function() {
                     selectedDataTypes.push(cb.value);
                 }
             });
-            const uriForUpdate = new URLSearchParams({ mdid: mdid });
+            const uriForUpdate = new URLSearchParams({ "cartDump.metaDataId": mdid, "noDisplay": 1 });
             selectedRows.forEach(obj =>  // 'de' for data element
-                uriForUpdate.append(`${mdid}_de`, obj[primaryKey]));
+                uriForUpdate.append(`${mdid}.de`, obj[primaryKey]));
             selectedDataTypes.forEach(dat =>  // 'dt' for data type
-                uriForUpdate.append(`${mdid}_dt`, dat));
+                uriForUpdate.append(`${mdid}.dt`, dat));
             updateVisibilities(uriForUpdate, submitBtnEvent);
         });
     }  // end initSubmit

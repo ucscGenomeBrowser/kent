@@ -7,7 +7,7 @@ include subdirs.mk
 
 # UCSC js files must pass jshint
 UCSC_JS_FILES=ajax.js alleles.js assemblySearch.js autocomplete.js \
-    autocompleteCat.js edwPersona.js \
+    autocompleteCat.js edwPersona.js facetedComposite.js \
     gar.js hgCustom.js hgCollection.js  hgGateway.js hgGtexTrackSettings.js \
     hgHubConnect.js hgTracks.js hgc.js hgMyData.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
