@@ -609,6 +609,8 @@ extern boolean measureTiming;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 
 extern struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
+extern struct hash *origHgFindMatches; /* For use with pdf mode that sets hgFindMatches = NULL.
+                                  Original searches can use for bigBedLoading, squishy pack, etc.  */
 
 extern int maxShade;		  /* Highest shade in a color gradient. */
 extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black

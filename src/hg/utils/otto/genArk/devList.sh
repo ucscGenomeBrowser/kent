@@ -64,6 +64,6 @@ zcat /dev/shm/gbdbLiftOver.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
   | gzip -c > /dev/shm/${liftOverStat}.gz
 
 cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
-cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.quickLiftList.gz
+cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.liftOverList.gz
 
 rm -f /dev/shm/gbdbLiftOver.fl.gz /dev/shm/${liftOverStat}.gz
