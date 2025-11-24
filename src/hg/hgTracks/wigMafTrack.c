@@ -1989,6 +1989,14 @@ slReverse(&mfList);
 return mfList;
 }
 
+static char * extraPrevious = NULL;
+
+static void resetCache()
+// reset the frames cache
+{
+extraPrevious = NULL;
+}
+
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis,
@@ -2436,7 +2444,6 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
      * the table:
      * hgsql staAur2 -e 'CREATE INDEX src on multiz369wayFrames (src, bin);'
      */
-    static char * extraPrevious = NULL;
     static struct mafFrames *mfList = NULL, *mf;
     static boolean found = FALSE;
     if (framesTable != NULL)
@@ -2692,6 +2699,8 @@ if (vis == tvFull || vis == tvPack)
     {
     if (zoomedToBaseLevel)
 	{
+        resetCache();
+
 	struct wigMafItem *wiList = track->items;
         /* skip over cons wiggles */
         struct track *wigTrack = track->subtracks;
