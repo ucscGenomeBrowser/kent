@@ -2845,72 +2845,24 @@ cgiMakeDropListFull(codeVarName, ancestors, ancestors,
 }
 #endif
 
-static char **parseDataTypes(struct trackDb *tdb, int *out_count)
+static struct slName *parseDataTypes(struct trackDb *tdb)
 {
-// ADS: almost certainly a function already exists to do this??
-/* Get entries 'nDataTypes' and 'dataTypes' from the 'settings'
- * field for the given 'trackDb' entry. 'nDataTypes' is a count, and
+/* Parse the 'dataTypes' trackDb setting into an slName list.
  * 'dataTypes' is a space separated list of words, each indicating a
- * data type. This function returns the array of data types. The
- * caller must free the returned array and each member. If
- * nDataTypes does not match the number of words parsed from
- * 'dataTypes' it is an error. Return value is NULL on error.
+ * data type. Return value is NULL on error.
  */
-const char *n_datatypes_str = (const char *)hashMustFindVal(tdb->settingsHash, "nDataTypes");
-const int n_datatypes = atoi(n_datatypes_str);
-if (n_datatypes <= 0)
+char *tdbDataTypes = cloneString(trackDbSetting(tdb, "dataTypes"));
+if (tdbDataTypes == NULL)
     return NULL;
 
-const char *datatypes_str = (const char *)hashMustFindVal(tdb->settingsHash, "dataTypes");
-if (!datatypes_str)
-    return NULL;
-
-// returned, must be freed
+// A bit awkward to go through chopByWhite into slNameListFromStringArray, but
+// the slNameList family of functions doesn't have a chopByWhite equivalent.
+int n_datatypes = chopByWhiteRespectDoubleQuotes(tdbDataTypes, NULL, 0);
 char **datatypes = calloc(n_datatypes, sizeof(char *));
-if (!datatypes)
-    return NULL;
-
-const char *name_start = datatypes_str;
-int observed_count = 0;
-
-for (int i = 0; i < n_datatypes; ++i)
-    {
-    const char *name_end = strchr(name_start, ' ');
-    if (!name_end)
-        name_end = strchr(name_start, '\0');
-
-    const int name_len = name_end - name_start;
-    if (name_len <= 0)
-        break;  // skip empty segments
-
-    datatypes[i] = calloc(name_len + 1, sizeof(char));
-    if (!datatypes[i])
-        {  // cleanup on failure
-        for (int j = 0; j < i; ++j) free(datatypes[j]);
-        free(datatypes);
-        return NULL;
-        }
-    memcpy(datatypes[i], name_start, name_len);
-    datatypes[i][name_len] = '\0';
-
-    ++observed_count;
-
-    if (*name_end == '\0')
-        break;
-    name_start = name_end + 1;
-    }
-
-if (n_datatypes != observed_count)
-    {  // cleanup on failure
-    for (int i = 0; i < n_datatypes; ++i)
-        free(datatypes[i]);
-    free(datatypes);
-    return NULL;
-    }
-
-if (out_count)
-    *out_count = observed_count;
-return datatypes;
+chopByWhiteRespectDoubleQuotes(tdbDataTypes, datatypes, n_datatypes);
+struct slName *list = slNameListFromStringArray(datatypes, n_datatypes);
+freeMem(tdbDataTypes);
+return list;
 }
 
 unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
@@ -2925,7 +2877,6 @@ static void facetedCompositeUi(struct trackDb *tdb)
  * - 'metaDataUrl': a non-blocked URL (can be server-local) with
  *   metadata to generate the table.  This might change to an existing metadata
  *   setting in the future.
- * - 'nDataTypes': positive integer counting the data types for each sample.
  * - 'dataTypes': the names of the data types, ordered and space separated.
  *
  * This function will embed sessionDb.settings/cart data in the
@@ -2960,7 +2911,6 @@ const char closeDataElementsJSON[] = "]";  // closing an array
 const char metadataTableScriptElement[] =
     "<script type='text/javascript' src='/js/facetedComposite.js'></script>\n";
 
-/* ADS: maybe cart should be used below, but I don't know how from here */
 // parse the hgsid as id and sessionKey
 char *hgsid = cartSessionId(cart);
 char *sessionKey = NULL;
@@ -2971,12 +2921,9 @@ if (!sessionKey)
 // --- Get data from 'settings' field in 'trackDb' entry ---
 // required
 const char *metaDataUrl = trackDbSetting(tdb, "metaDataUrl");
-//    (const char *)hashMustFindVal(tdb->settingsHash, "metaDataUrl");
 const char *primaryKey = trackDbSetting(tdb, "primaryKey");
-//    (const char *)hashMustFindVal(tdb->settingsHash, "primaryKey");
 
-int nDataTypes = 0;
-char **dataTypes = parseDataTypes(tdb, &nDataTypes);
+struct slName *dataTypes = parseDataTypes(tdb);
 if (!dataTypes)
     errAbort("Failed to parse data types from faceted composite settings for: %s", tdb->track);
 // optional
@@ -3002,27 +2949,27 @@ printf(openJSON);
 printf(openDataTypesJSON);
 // find selected data types
 int not_first = 0;
-int anySelDataType = -1;  // non-neg val will be used as index and flag
-for (int i = 0; i < nDataTypes; ++i)
+struct slName *anySelDataType = NULL;  // non-null val will be used as flag
+for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
     {
     char toMatch[token_size];
-    safef(toMatch, token_size, "_%s_sel", dataTypes[i]);
+    safef(toMatch, token_size, "_%s_sel", thisType->name);
     boolean dataTypeSel = FALSE;
     for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
         if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
             dataTypeSel = TRUE;
-    printf("%s\"%s\": %d", COMMA_IF(not_first), dataTypes[i], dataTypeSel ? 1 : 0);
-    anySelDataType = dataTypeSel ? i : anySelDataType;
+    printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
+    anySelDataType = dataTypeSel ? thisType : anySelDataType;
     }
 printf(closeDataTypesJSON);
 printf(",");  // add separator
 // find selected data sets
 printf(openDataElementsJSON);
 not_first = 0;
-if (anySelDataType >= 0)
+if (anySelDataType != NULL)
     {
     char suffix[token_size];
-    safef(suffix, token_size, "_%s_sel", dataTypes[anySelDataType]);
+    safef(suffix, token_size, "_%s_sel", anySelDataType->name);
     for (struct cgiVar *le = varList->list; le; le = le->next)
         if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
             {
@@ -3053,9 +3000,7 @@ printf(closeJSON);
 printf(metadataTableScriptElement);
 
 // cleanup
-for (int i = 0; i < nDataTypes; ++i)
-    free(dataTypes[i]);
-free(dataTypes);
+slFreeList(&dataTypes);
 cgiParsedVarsFreeList(&varList);
 hDisconnectCentral(&conn);
 }
