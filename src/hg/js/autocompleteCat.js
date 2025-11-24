@@ -68,8 +68,8 @@ var autocompleteCat = (function() {
     }
 
     function init($input, options) {
-        // Set up an autocomplete and watermark for $input, with a callback options.onSelect
-        // for when the user chooses a result.
+        // Set up an autocomplete and watermark for each input in $input, with a callback
+        // options.onSelect for when the user chooses a result.
         // If options.baseUrl is null, the autocomplete will not do anything, but we (re)initialize
         // it anyway in case the same input had a previous db's autocomplete in effect.
         // options.onServerReply (if given) is a function (Array, term) -> Array that
@@ -81,95 +81,106 @@ var autocompleteCat = (function() {
         // options.onEnterTerm (if provided) is a callback function (jqEvent, jqUi) invoked
         // when the user hits Enter, after handling enterSelectsIdentical.
 
-        // The function closure allows us to keep a private cache of past searches.
-        var cache = {};
+        let $els = ($input instanceof jQuery) ? $input: $($input);
+        $els.each(function() {
+            let $el = $(this);
+            // clone options per-element so later changes don't affect other instances
+            var opts = $.extend(true, {}, options);
 
-        var doSearch = function(term, acCallback) {
-            // Look up term in searchObj and by sending an ajax request
-            var timestamp = new Date().getTime();
-            let cleanedTerm = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0 len chars
-            var url = options.baseUrl + encodeURIComponent(cleanedTerm);
-            if (!options.baseUrl.startsWith("hubApi")) {
-                // hubApi doesn't tolerate extra arguments
-                url += '&_=' + timestamp;
-            }
-            // put up a loading icon so users know something is happening
-            toggleSpinner(true, options);
-            $.getJSON(url)
-               .done(function(results) {
-                if (typeof options.onServerReply === 'function') {
-                    results = options.onServerReply(results, cleanedTerm);
+            // The function closure allows us to keep a private cache of past searches.
+            var cache = {};
+            $el.data("acOptions", opts);
+
+            var doSearch = function(term, acCallback) {
+                // Look up term in searchObj and by sending an ajax request
+                var timestamp = new Date().getTime();
+                let cleanedTerm = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0 len chars
+                var url = options.baseUrl + encodeURIComponent(cleanedTerm);
+                if (!options.baseUrl.startsWith("hubApi")) {
+                    // hubApi doesn't tolerate extra arguments
+                    url += '&_=' + timestamp;
                 }
-                // remove the loading icon
-                toggleSpinner(false, options);
-                cache[cleanedTerm] = results;
-                acCallback(results);
-            });
-            // ignore errors to avoid spamming people on flaky network connections
-            // with tons of error messages (#8816).
-        };
+                // put up a loading icon so users know something is happening
+                toggleSpinner(true, options);
+                $.getJSON(url)
+                    .done(function(results) {
+                       if (typeof options.onServerReply === 'function') {
+                           results = options.onServerReply(results, cleanedTerm);
+                       }
+                       // remove the loading icon
+                       toggleSpinner(false, options);
+                       cache[cleanedTerm] = results;
+                       acCallback(results);
+                    });
+                // ignore errors to avoid spamming people on flaky network connections
+                // with tons of error messages (#8816).
+            };
 
-        var autoCompleteSource = function(request, acCallback) {
-            // This is a callback for jqueryui.autocomplete: when the user types
-            // a character, this is called with the input value as request.term and an acCallback
-            // for this to return the result to autocomplete.
-            // See http://api.jqueryui.com/autocomplete/#option-source
-            if (this.element[0].id === "positionInput" && request.term.length < 2) {
-                let searchStack = window.localStorage.getItem("searchStack");
-                if (request.term.length === 0 && searchStack) {
-                    let searchObj = JSON.parse(searchStack);
-                    let currDb = getDb();
-                    if (currDb in searchObj) {
-                        // sort the results list according to the stack order:
-                        let entries = Object.entries(searchObj[currDb].results);
-                        let stack = searchObj[currDb].stack;
-                        let callbackData = [];
-                        for (let s of stack) {
-                            callbackData.push(searchObj[currDb].results[s]);
+            var autoCompleteSource = function(request, acCallback) {
+                // This is a callback for jqueryui.autocomplete: when the user types
+                // a character, this is called with the input value as request.term and an acCallback
+                // for this to return the result to autocomplete.
+                // See http://api.jqueryui.com/autocomplete/#option-source
+                // Note: 'this' is the widget instance
+                if (this.element[0].id === "positionInput" && request.term.length < 2) {
+                    let searchStack = window.localStorage.getItem("searchStack");
+                    if (request.term.length === 0 && searchStack) {
+                        let searchObj = JSON.parse(searchStack);
+                        let currDb = getDb();
+                        if (currDb in searchObj) {
+                            // sort the results list according to the stack order:
+                            let entries = Object.entries(searchObj[currDb].results);
+                            let stack = searchObj[currDb].stack;
+                            let callbackData = [];
+                            for (let s of stack) {
+                                callbackData.push(searchObj[currDb].results[s]);
+                            }
+                            acCallback(callbackData);
                         }
-                        acCallback(callbackData);
+                        return;
                     }
-                    return;
+                } else if (request.term.length >=2) {
+                    let results = cache[request.term];
+                    if (results) {
+                        acCallback(results);
+                    } else if (options.baseUrl) {
+                        doSearch(request.term, acCallback);
+                    }
                 }
-            } else if (request.term.length >=2) {
-                let results = cache[request.term];
-                if (results) {
-                    acCallback(results);
-                } else if (options.baseUrl) {
-                    doSearch(request.term, acCallback);
+            };
+
+            var autoCompleteSelect = function(event, ui) {
+                // This is a callback for autocomplete to let us know that the user selected
+                // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
+                // since we are in an autocomplete don't bother saving the
+                // prefix the user typed in, just keep the geneSymbol itself
+                if (this.id === "positionInput") {
+                    addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
                 }
+                if (typeof opts.onSelect === 'function') {
+                    opts.onSelect(ui.item, $el);
+                }
+                $el.blur();
+            };
+
+            // Provide default values where necessary:
+            opts.onSelect = opts.onSelect || function(){};
+            opts.enterSelectsIdentical = opts.enterSelectsIdentical || false;
+
+            $el.autocompleteCat({
+                delay: 500,
+                minLength: 0,
+                source: autoCompleteSource,
+                select: autoCompleteSelect,
+                enterSelectsIdentical: opts.enterSelectsIdentical,
+                enterTerm: opts.onEnterTerm
+            });
+
+            if (opts.watermark) {
+                $el.css('color', 'black');
+                $el.Watermark(opts.watermark, '#686868');
             }
-        };
-
-        var autoCompleteSelect = function(event, ui) {
-            // This is a callback for autocomplete to let us know that the user selected
-            // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
-            // since we are in an autocomplete don't bother saving the
-            // prefix the user typed in, just keep the geneSymbol itself
-            if (this.id === "positionInput") {
-                addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
-            }
-            options.onSelect(ui.item);
-            $input.blur();
-        };
-
-        // Provide default values where necessary:
-        options.onSelect = options.onSelect || console.log;
-        options.enterSelectsIdentical = options.enterSelectsIdentical || false;
-
-        $input.autocompleteCat({
-            delay: 500,
-            minLength: 0,
-            source: autoCompleteSource,
-            select: autoCompleteSelect,
-            enterSelectsIdentical: options.enterSelectsIdentical,
-            enterTerm: options.onEnterTerm
         });
-
-        if (options.watermark) {
-            $input.css('color', 'black');
-            $input.Watermark(options.watermark, '#686868');
-        }
     }
 
     return { init: init };

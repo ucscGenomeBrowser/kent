@@ -8,6 +8,7 @@
 #include "asmAlias.h"
 #include "assemblyList.h"
 #include "liftOver.h"
+#include "liftOverChain.h"
 #include "net.h"
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
@@ -68,7 +69,6 @@ apiFinishOutput(0, NULL, jw);
 static void listExisting()
 /* output the fromDb,toDb from liftOverChain.hgcentral SQL table */
 {
-long long itemCount = 0;
 char *filter = cgiOptionalString(argFilter);
 char *fromDb = cgiOptionalString(argFromGenome);
 char *toDb = cgiOptionalString(argToGenome);
@@ -82,21 +82,21 @@ dyStringClear(query);
 
 if (isNotEmpty(fromDb) || isNotEmpty(toDb))
     {
-    sqlDyStringPrintf(query, "SELECT fromDb,toDb FROM %s WHERE ", tableName);
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE ", tableName);
     if (isNotEmpty(fromDb))
         sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') %s ", fromDb, isNotEmpty(toDb) ? "AND" : "");
     if (isNotEmpty(toDb))
         sqlDyStringPrintf(query, "LOWER(toDb) = LOWER('%s') ", toDb);
-    sqlDyStringPrintf(query, "LIMIT %d;", maxItemsOutput);
     }
 else if (isNotEmpty(filter))
     {
-    sqlDyStringPrintf(query, "SELECT fromDb,toDb FROM %s WHERE LOWER(fromDb) = LOWER('%s') OR LOWER(toDb) = LOWER('%s') LIMIT %d;", tableName, filter, filter, maxItemsOutput);
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE LOWER(fromDb) = LOWER('%s') OR LOWER(toDb) = LOWER('%s')", tableName, filter, filter);
     }
 else
     {
-    sqlDyStringPrintf(query, "SELECT fromDb,toDb FROM %s LIMIT %d", tableName, maxItemsOutput);
+    sqlDyStringPrintf(query, "SELECT * FROM %s", tableName);
     }
+sqlDyStringPrintf(query, " LIMIT %d;", maxItemsOutput);
 
 char *dataTime = sqlTableUpdate(conn, tableName);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
@@ -106,19 +106,25 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 
 jsonWriteListStart(jw, "existingLiftOvers");
-struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&query));
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
+struct liftOverChain *chain, *chainList = liftOverChainLoadByQuery(conn, dyStringCannibalize(&query));
+for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    ++itemCount;
-    jsonWriteListStart(jw, NULL);
-    jsonWriteString(jw, NULL, row[0]);
-    jsonWriteString(jw, NULL, row[1]);
-    jsonWriteListEnd(jw);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "fromDb", chain->fromDb);
+    jsonWriteString(jw, "toDb", chain->toDb);
+    jsonWriteString(jw, "path", chain->path);
+    jsonWriteDouble(jw, "minMatch", chain->minMatch);
+    jsonWriteNumber(jw, "minChainT", chain->minChainT);
+    jsonWriteNumber(jw, "minSizeQ", chain->minSizeQ);
+    jsonWriteString(jw, "multiple", chain->multiple);
+    jsonWriteDouble(jw, "minBlocks", chain->minBlocks);
+    jsonWriteString(jw, "fudgeThick", chain->fudgeThick);
+    jsonWriteObjectEnd(jw);
     }
 jsonWriteListEnd(jw);
 jsonWriteNumber(jw, "totalLiftOvers", totalRows);
-jsonWriteNumber(jw, "itemsReturned", itemCount);
+jsonWriteNumber(jw, "itemsReturned", slCount(chainList));
+liftOverChainFreeList(&chainList);
 
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
