@@ -285,6 +285,8 @@ struct rgbColor darkSeaColor = {0, 60, 120, 255};
 struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
+struct hash *origHgFindMatches; /* For use with pdf mode that sets hgFindMatches = NULL.
+                                  Original searches can use for bigBedLoading, squishy pack, etc.  */
 
 struct trackLayout tl;
 
@@ -16007,5 +16009,6 @@ for(name = nameList; name != NULL; name = name->next)
     hashAddInt(hgFindMatches, name->name, 1);
     }
 slFreeList(&nameList);
+origHgFindMatches = hgFindMatches;  // can use with pdf mode when hgFindMatches = NULL
 }
 
