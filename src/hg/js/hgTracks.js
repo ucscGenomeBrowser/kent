@@ -2885,19 +2885,39 @@ var rightClick = {
                                 // use maxVisibility and change hgTracks so it can hide subtracks
                                 o = {};
                                 str = blankImg + " " + visStrings[i];
-                                if (rec.canPack
-                                || (visStrings[i] !== "pack" && visStrings[i] !== "squish")) {
-                                    if (rec.localVisibility) {
-                                        if (visStrings[i] === rec.localVisibility) {
+                                if (rec.onlyVisibility) {
+                                    if (visStrings[i] == "hide" || visStrings[i] === rec.onlyVisibility) {
+
+                                        if (rec.localVisibility) {
+                                            if (visStrings[i] === rec.localVisibility) {
+                                                str = selectedImg + " " + visStrings[i];
+                                            }
+                                        } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
                                             str = selectedImg + " " + visStrings[i];
                                         }
-                                    } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
-                                        str = selectedImg + " " + visStrings[i];
+                                        o[str] = { onclick:
+                                                    rightClick.makeHitCallback(visStrings[i])
+                                                 };
+                                        menu.push(o);
+
+
                                     }
-                                    o[str] = { onclick:
-                                                rightClick.makeHitCallback(visStrings[i])
-                                             };
-                                    menu.push(o);
+                                }
+                                else {
+                                    if (rec.canPack
+                                    || (visStrings[i] !== "pack" && visStrings[i] !== "squish")) {
+                                        if (rec.localVisibility) {
+                                            if (visStrings[i] === rec.localVisibility) {
+                                                str = selectedImg + " " + visStrings[i];
+                                            }
+                                        } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
+                                            str = selectedImg + " " + visStrings[i];
+                                        }
+                                        o[str] = { onclick:
+                                                    rightClick.makeHitCallback(visStrings[i])
+                                                 };
+                                        menu.push(o);
+                                    }
                                 }
                             }
                             done = true;

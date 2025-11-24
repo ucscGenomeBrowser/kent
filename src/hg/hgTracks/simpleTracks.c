@@ -6020,7 +6020,6 @@ tg->loadItems = loadBacEndPairs;
 
 #endif /* GBROWSE */
 
-
 // The following few functions are shared by GAD, OMIM, DECIPHER, Superfamily.
 // Those tracks need an extra label derived from item name -- the extra label
 // is used as mouseover text for each item, and appears to the immediate left
@@ -11782,7 +11781,7 @@ return tg->limitedVis;
 }
 
 void compositeTrackVis(struct track *track)
-/* set visibilities of subtracks */
+/* set visibilities of subtracks.  This seems to be unused - JC 11/2025 */
 {
 struct track *subtrack;
 

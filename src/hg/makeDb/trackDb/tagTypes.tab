@@ -343,7 +343,7 @@ lollyNoStems bigBed bigLolly
 ococci bed
 offset customTracks
 oldToNew genePred
-onlyVisibility wigMafProt wigMaf bed
+onlyVisibility *
 orangDb bed
 origAssembly *
 origTrackLine customTracks

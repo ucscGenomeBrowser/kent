@@ -5088,6 +5088,7 @@ for(window=windows;window;window=window->next)
 	    struct track *subtrack;
 	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		{
+// JC - debug - should I be removing the next two lines?
 		if (!isSubtrackVisible(subtrack))
 		    continue;
 
