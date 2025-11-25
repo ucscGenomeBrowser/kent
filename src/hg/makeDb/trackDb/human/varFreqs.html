@@ -4,80 +4,16 @@ This container shows results from projects
 where the variant frequencies, aka allele frequencies, are publicly available. The tracks were collected from the 
 projects listed below. Projects that provide haplotype-phased genotypes/variants can be found
 elsewhere: 1000 Genomes is a separate track, and the projects HGDP, SGDP,
-HGDP+1k and MXB can be found in the "Phased Variants" track.
+HGDP+1000 Genomes and Mexico Biobank can be found in the "Phased Variants" track.
 </p>
 <p>If you want us to add other projects, please contact us. We asked and were
-unable to obtain variant frequencies from the following projects: NPM Singapore
-(10k, Chinese/Indian/Malay, free, but requires login at <a href='https://npm.a-star.edu.sg/' target=_blank>NPM</a>.
-UK Biobank (request pending).
+unable to obtain variant frequencies from the following projects: UK Biobank (request pending), All of us (granted),
+SFARI SPARK (in process).
 </p>
 
 <p>
-<b>Available on hg19 and hg38:</b></p>
+The following projects were added:
 <ul>
-    <li>
-        <b><a href="https://www.mxbiobank.org/" target="_blank">Mexico Biobank (MXB)</a></b>:
-        This track displays phased alleles from the Mexico Biobank Project (MXB), based on array
-        genotyping of 6,011 individuals sampled across all 32 states of Mexico during the 2000
-        National Health Survey (ENSA 2000) conducted by the National Institute of Public Health
-        (INSP). Frequencies can be plotted onto a map on
-        <a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar</a>.
-        The hg38 track was lifted from hg19.
-        (Publication?)
-    </li>
-
-    <li>
-        <b><a href="https://www.simonsfoundation.org/simons-genome-diversity-project/"
-        target="_blank">Simons Genome Diversity Project (SGDP)</a></b>:
-        Funded by the Simons Foundation, the Simons Genome Diversity Project
-        is a large-scale effort that sequenced high-coverage genomes from 300
-        individuals (279 in this track) representing 142 diverse and often
-        indigenous populations worldwide.
-        Its goal was to capture the full range of human genetic
-        diversity to better understand population history, migration, and
-        adaptation. It is sampling populations in a way that represents as much
-        anthropological, linguistic and cultural diversity as possible, and
-        thus includes many deeply divergent human populations that are not well
-        represented in other datasets.  SGDP emphasizes breadth of global representation and
-        population history, whereas HGDP emphasizes continuity and
-        comparability across major population groups. Not all its data is
-        public, so this track contains only 279 genomes. For details, see
-        (Mallick et al, Nature 2016). The hg38 track was lifted from hg19.
-    </li>
-</ul>
-<p>
-<b>Available only on hg38:</b></p>
-<ul>
-    <li>
-        <b><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7115999/"
-        target="_blank">Human Genome Diversity Project (HGDP)</b></a>:
-        929 high-coverage genome sequences from 54 diverse human populations,
-        26 of which are physically phased using linked-read sequencing. The
-        Human Genome Diversity Project (HGDP) was launched in the early 1990s
-        to study the genetic variation and evolutionary history of modern
-        humans across global populations. Its goal was to document the full
-        spectrum of human genetic diversity, particularly in indigenous and
-        geographically isolated groups, to better understand population
-        structure, migration, adaptation, and disease susceptibility.The
-        project collected samples from ~1,000 individuals representing over 50
-        populations worldwide, including groups from Africa, Europe, Asia,
-        Oceania, and the Americas. These data have become a foundational
-        reference for population genetics and human evolution studies.
-        Data can be downloaded from the
-        <a href="https://ngs.sanger.ac.uk/production/hgdp/hgdp_wgs.20190516/"
-        target="_blank">Sanger Website</a>. For details, see (Bergstr&ouml;m et al, Science 2020).
-    </li>
-
-    <li>
-        <b><a href="https://gnomad.broadinstitute.org/news/2021-10-gnomad-v3-1-2-minor-release/"
-        target="_blank">gnomAD HGDP and 1000 Genomes callset</a></b>:
-        A reprocessed version by the gnomAD project for the 1000 Genomes and
-        Human Genome Diversity Project (HGDP) data, with 4094 genomes from 80
-        populations. We already have separate, older tracks for 1000 Genomes on the main hg38
-        browser and for HGDP, just above. This track combines both datasets, with harmonized data
-        quality. For details, see (Koenig et al, 2024).
-    </li>
-    
     <li>
         <b><a href="https://rgc-mcps.regeneron.com/home"
         target="_blank">Mexico City Prospective Study (MCPS)</a></b>:
@@ -180,7 +116,16 @@ UK Biobank (request pending).
         target="_blank">KOVA Downloads</a> website. Coverage 100x for WES, 30x for WGS.
         For details see (Lee et al, Exp Mol Med 2022).
     </li>
+    <li>
+        <b><a href=""
+        target="_blank">NPM Singapore</a></b>:
+        9,770 whole genomes, mostly of Chinese, Indian and Malay ancestry.
+        VCF access can be requested on the <a href="https://chorus.grids-platform.io/"
+        target="_blank">Chorus Browser</a> website, which requires an account and access request. 
+        For details see (Wong et al, Nat Genetics 2023).
+    </li>
 </ul>
+</p>
 
 <h2>Display Conventions</h2>
 
@@ -191,22 +136,6 @@ letters.
 </p>
 
 <p>
-Full haplotype display - only for the <b>MXB</b> and <b>HGDP</b> tracks:
-In &quot;pack&quot; mode, this track sorts the haplotypes. This can be
-useful for determining the similarity between the samples and inferring
-inheritance at a particular locus.
-Each sample's phased and/or homozygous genotypes are split into haplotypes,
-clustered by similarity around a central variant (in pink), and sorted for
-display by their position in the clustering tree. Click a variant to center on it.
-The tree (as space allows) is drawn in the label area next to the track image.
-Leaf clusters, in which all haplotypes are identical (at least for the variants
-used in clustering), are colored purple. 
-</p>
-<p>
-For a full description of how the display works, please see our 
-<a href="../goldenpath/help/hgVcfTrackHelp.html">Haplotype Display help page</a>.
-
-<p>
 For <b>NCBI ALFA:</b> This track has no single VCF with INFO fields, but uses multiple subtracks
 instead, one per ancestry.
 </p>
@@ -214,10 +143,11 @@ instead, one per ancestry.
 
 <h2>Data Access</h2>
 <p>Most of the data in these tracks are not available for download from UCSC.
-Only individual variants can be browsed on our website.
+Data can be browsed on our website.
 But the data can be downloaded
 for free from the original projects. Accessing the 
-data usually requires a click-through license on the respectice websites:
+data usually requires a click-through license on the respectice websites, links are either
+provided above in the project description or with more details here:
 </p>
 
 <p>
@@ -269,6 +199,23 @@ merged with bcftools and lifted to hg38 with CrossMap.
 available for download from our site but can be requested from the KOVA website.
 </p>
 
+<p><b>Finngen:</b> R12 was downloaded from https://finngen.gitbook.io/documentation/data-download and converted to VCF with a Python script. </p>
+
+<p><b>NPM Singapore:</b> Whole Genome Sequencing (WGS) data processing followed
+GATK4 best practices. GATK4 germline variant analysis workflow written in WDL
+was adapted to use Nextflow and deployed at the National Supercomputing Centre,
+Singapore (NSCC). In short, WGS reads were aligned against GRCh38 using the
+BWA-MEM algorithm and used as input to GATK HaplotypeCaller to produce single
+sample gVCFs. The gVCF files were joint-called then loaded in Hail, an
+open-source python-based data analysis library suited to work with
+population-scale with genomic data collections. Low-quality WGS libraries and
+low-quality variants were removed.  QC-ed variants were functionally annotated
+using Ensembl Variant Effect Predictor (VEP) (version 95). Functional
+annotations for variant impacting protein-coding were also complemented with
+information on the potential alteration to their cognate protein's 3D structure
+and drug binding ability.
+</p>
+
 <h2>Credits</h2>
 <p>
 <b>MXB:</b> We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
@@ -307,6 +254,26 @@ Mallick for help with importing the data.
 <b>KOVA:</b> Thanks to Insu Jang and the KOVA director for providing variant frequencies in TSV
 format.
 </p>
+<p>
+<b>Finngen:</b> We want to acknowledge the participants and investigators of the FinnGen study.
+</p>
+
+<p>
+<b>NPM Singapore:</b> Thanks to the NPM Data Access Committee and Eleanor for granting our data request. 
+By browsing the data, you agree to use the data only for academic, non-commercial
+research to improve human health (biology/disease).  We request all data users
+agree to protect the
+confidentiality of the data subjects in any research papers or publications
+that they may prepare, by taking all reasonable care to limit the possibility
+of identification. In particular, the data users shall not to use, or attempt
+to use, the data to deliberately compromise or otherwise infringe the
+confidentiality of information on data subjects and their right to privacy.
+If you use any of the data obtained from the CHORUS variant browser, we request
+that you cite the NPM flagship paper (Wong et al, 2023). All data users of the
+data must take note that the data provider and relevant SG10K_Health cohort
+owners bear no responsibility for the further analysis or interpretation of the
+data.  </p>
+
 <p>Thanks to Alex Ioannidis, UCSC, and Andreas Lahner, MGZ, for feedback on this track.</p>
 
 <h2>References</h2>
@@ -438,5 +405,24 @@ Asian population</a>.
 <em>Exp Mol Med</em>. 2022 Nov;54(11):1862-1871.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36323850" target="_blank">36323850</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9628380/" target="_blank">PMC9628380</a>
+</p>
+
+<p>
+Kurki MI, Karjalainen J, Palta P, Sipilä TP, Kristiansson K, Donner KM, Reeve MP, Laivuori H,
+Aavikko M, Kaunisto MA <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-022-05473-8" target="_blank">
+FinnGen provides genetic insights from a well-phenotyped isolated population</a>.
+<em>Nature</em>. 2023 Jan;613(7944):508-518.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36653562" target="_blank">36653562</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9849126/" target="_blank">PMC9849126</a>
+</p>
+
+<p>
+Wong E, Bertin N, Hebrard M, Tirado-Magallanes R, Bellis C, Lim WK, Chua CY, Tong PML, Chua R, Mak K
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-022-01274-x" target="_blank">
+The Singapore National Precision Medicine Strategy</a>.
+<em>Nat Genet</em>. 2023 Feb;55(2):178-186.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36658435" target="_blank">36658435</a>
 </p>
 
