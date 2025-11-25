@@ -359,8 +359,8 @@ return highlights;
 boolean bigBedFilterOne(struct bigBedFilter *filter, char **bedRow, struct bbiFile *bbi)
 /* Return TRUE if a bedRow passes one filter or is in hgFindMatches */
 {
-if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
-    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
+if ((bbi->definedFieldCount > 3) && (origHgFindMatches != NULL) && 
+    (bedRow[3] != NULL)  && hashLookup(origHgFindMatches, bedRow[3]) != NULL)
     return TRUE;
 
 double val = atof(bedRow[filter->fieldNum]);
@@ -427,8 +427,8 @@ return TRUE;
 boolean bigBedFilterInterval(struct bbiFile *bbi, char **bedRow, struct bigBedFilter *filters)
 /* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
 {
-if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
-    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
+if ((bbi->definedFieldCount > 3) && (origHgFindMatches != NULL) && 
+    (bedRow[3] != NULL)  && hashLookup(origHgFindMatches, bedRow[3]) != NULL)
     return TRUE;
 
 struct bigBedFilter *filter;

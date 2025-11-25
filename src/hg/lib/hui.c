@@ -10417,7 +10417,7 @@ ins[6] = "$D";
 outs[6] = trackHubSkipHubName(db);
 ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
 ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
-if (stringIn(":", idInUrl)) {
+if (idInUrl && stringIn(":", idInUrl)) {
     char *itemClone = cloneString(idInUrl);
     char *suffix = stringIn(":", itemClone);
     char *suffixClone = cloneString(suffix+1); /* +1 skip the : */

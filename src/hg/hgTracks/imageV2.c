@@ -309,6 +309,11 @@ jsonObjectAdd(ele, "canPack", newJsonNumber(track->canPack));
 if (track->limitedVis != track->visibility)
     jsonObjectAdd(ele, "limitedVis", newJsonNumber(track->limitedVis));
 jsonObjectAdd(ele, "visibility", newJsonNumber(track->visibility));
+
+if (trackDbSetting(track->tdb, "onlyVisibility"))
+    {
+    jsonObjectAdd(ele, "onlyVisibility", newJsonString(trackDbSetting(track->tdb, "onlyVisibility")));
+    }
 }
 
 void jsonTdbSettingsUse(struct jsonElement *settings)
