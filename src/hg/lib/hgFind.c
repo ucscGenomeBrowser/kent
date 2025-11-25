@@ -733,7 +733,7 @@ pos->description = cloneString(posDescription);
 pos->browserName = cloneString(browserName);
 }
 
-static void fixSinglePos(struct hgPositions *hgp)
+void fixSinglePos(struct hgPositions *hgp)
 /* Fill in posCount and if proper singlePos fields of hgp
  * by going through tables... */
 {
@@ -3595,7 +3595,7 @@ struct hgvsHelper
     boolean mapError; // does this hgvs mapping result in a map error?
     };
 
-static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp,
+boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp,
                             boolean measureTiming)
 /* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature
  * See http://varnomen.hgvs.org/

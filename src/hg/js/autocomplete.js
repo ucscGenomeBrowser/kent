@@ -38,24 +38,47 @@ var suggestBox = {
                 }
             }
             if (!cache[key]) {
-                $.ajax({
-                    url: "../cgi-bin/hgSuggest",
-                    data: "db=" + db + "&prefix=" + encodeURIComponent(key),
-                    // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
-                    trueSuccess: function(response, status) {
-                        // We get a lot of duplicate requests (especially the first letters of words),
-                        // so we keep a cache of the suggestions lists we've retreived.
-                        cache[this.key] = response;
-                        this.cont(JSON.parse(response));
-                    },
-                    success: catchErrorOrDispatch,
-                    error: function(request, status, errorThrown) {
-                        // tolerate errors (i.e. don't report them) to avoid spamming people on flaky network connections
-                        // with tons of error messages (#8816).
-                    },
-                    key: key,
-                    cont: callback
-                });
+                if (key.length < 8) {
+                    // probably a gene name
+                    $.ajax({
+                        url: "../cgi-bin/hgSuggest",
+                        data: "db=" + db + "&prefix=" + encodeURIComponent(key),
+                        // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
+                        trueSuccess: function(response, status) {
+                            // We get a lot of duplicate requests (especially the first letters of words),
+                            // so we keep a cache of the suggestions lists we've retreived.
+                            cache[this.key] = response;
+                            this.cont(JSON.parse(response));
+                        },
+                        success: catchErrorOrDispatch,
+                        error: function(request, status, errorThrown) {
+                            // tolerate errors (i.e. don't report them) to avoid spamming people on flaky network connections
+                            // with tons of error messages (#8816).
+                        },
+                        key: key,
+                        cont: callback
+                    });
+                } else {
+                    // probably an hgvs term?
+                    $.ajax({
+                        url: "../cgi-bin/hgSuggest",
+                        data: "db=" + db + "&prefix=" + encodeURIComponent(key) + "&type=hgvs",
+                        // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
+                        trueSuccess: function(response, status) {
+                            // We get a lot of duplicate requests (especially the first letters of words),
+                            // so we keep a cache of the suggestions lists we've retreived.
+                            cache[this.key] = response;
+                            this.cont(JSON.parse(response));
+                        },
+                        success: catchErrorOrDispatch,
+                        error: function(request, status, errorThrown) {
+                            // tolerate errors (i.e. don't report them) to avoid spamming people on flaky network connections
+                            // with tons of error messages (#8816).
+                        },
+                        key: key,
+                        cont: callback
+                    });
+                }
             } else {
                 callback(JSON.parse(cache[key]));
             }
@@ -148,7 +171,8 @@ var suggestBox = {
                 select: function(event, ui) {
                     lastSelected = ui.item.value;
                     suggestBox.updateFindMatches(ui.item.internalId);
-                    addRecentSearch(db, ui.item.geneSymbol, ui.item);
+                    let key = typeof(ui.item.geneSymbol) !== 'undefined' ? ui.item.geneSymbol : ui.item.value;
+                    addRecentSearch(db, key, ui.item);
                     selectCallback(ui.item);
                     // jQuery('body').css('cursor', 'wait');
                     // document.TrackHeaderForm.submit();

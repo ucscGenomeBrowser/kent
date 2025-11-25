@@ -4307,6 +4307,11 @@ var imageV2 = {
                                         selectedGene = item.value;
                                     }
                                     window.location.assign(item.id);
+                                } else if (item.type === "hgvs") {
+                                    let newPos = genomePos.setByCoordinates(item.chrom, item.start, item.end);
+                                    dragSelect.highlightThisRegion(newPos, true, "#fcfcac");
+                                    let withPadding = genomePos.setByCoordinates(item.chrom, item.start-5, item.end+5);
+                                    $("#goButton").trigger("click");
                                 } else {
                                     genomePos.set(item.id, getSizeFromCoordinates(item.id));
                                     if ($("#suggestTrack").length && $('#hgFindMatches').length) {
