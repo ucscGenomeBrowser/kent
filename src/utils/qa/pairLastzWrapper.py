@@ -78,7 +78,7 @@ def getClade(assembly):
         chromSizes_1="/hive/data/genomes/asmHubs/"+assembly[0:3]+"/"+assembly[4:7]+"/"+assembly[7:10]+"/"+assembly[10:13]+"/"+assembly+"/"+assembly+".chrom.sizes.txt"
         assembly=goto(assembly)
         assembly_version = "_".join(assembly.split('_', 2)[:2]) # Get the assembly ID, e.g. GCF_016772045.1
-        find_gcNum=bash(f"grep {assembly_version} /hive/data/genomes/asmHubs/UCSC_GI.assemblyHubList.txt")[0] #Bash returns a list, so get the first item
+        find_gcNum=bash(f"curl -s https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt | grep {assembly_version}")[0] #Bash returns a list, so get the first item
 
         try:
                clade=find_gcNum.split('\t')[5] # Value is tab-separated, the clade is the last item
