@@ -4835,6 +4835,7 @@ static void expandSquishyPackTracks(struct track *trackList)
 {
 if (windows->next)   // don't go into squishyPack mode if in multi-exon mode.
     return;
+
 struct track *nextTrack = NULL, *track;
 for (track = trackList; track != NULL; track = nextTrack)
     {
@@ -4871,7 +4872,7 @@ for (track = trackList; track != NULL; track = nextTrack)
             nextLf = lf->next;
 
             // if this is a hgFind match, it always is in pack, not squish
-            if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, lf->name))
+            if ((origHgFindMatches != NULL) && hashLookup(origHgFindMatches, lf->name))
                 slAddHead(&track->items, lf);
             else if (lf->squishyPackVal > squishyPackPoint)
                 slAddHead(&squishTrack->items, lf);
@@ -5088,6 +5089,7 @@ for(window=windows;window;window=window->next)
 	    struct track *subtrack;
 	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		{
+// JC - debug - should I be removing the next two lines?
 		if (!isSubtrackVisible(subtrack))
 		    continue;
 
@@ -8722,6 +8724,7 @@ zoomedToBaseLevel = (virtWinBaseCount <= fullInsideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
 zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
+
 
 if (psOutput != NULL)
    {

@@ -2762,7 +2762,7 @@ var sortTable = {
         var inputs = $(table).find("input.trPos");
         $( inputs ).each( function(i) {
             var tr = $( this ).closest('tr')[0];
-            var trIx = $( tr ).attr('rowIndex').toString();
+            var trIx = $( tr ).prop('rowIndex').toString();
             if ($( this ).val() != trIx) {
                 $( this ).val( trIx );
                 if (typeof(subCfg) === "object")  // NOTE: couldn't get $(this).change() to work.

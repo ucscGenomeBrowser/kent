@@ -247,6 +247,7 @@ GCF_001879475.1_Asagao_1.1	Japanese morning glory
 GCF_034140825.1_ASM3414082v1	Japanese rice (2023)
 GCA_009797565.1_Osativa_Kitaake_v2.0	Japanese rice (Kitaake 2020)
 GCF_001433935.1_IRGSP-1.0	Japanese rice (Nipponbare 2015)
+GCA_051820535.1_ASM5182053v1	jewel orchid monocots (Aro_GA 2025)
 GCF_026212465.1_ASM2621246v1	Joseph's coat eudicots (Red AtriRed21 2022)
 GCA_001602275.1_ASM160227v1	Korean lawngrass (Nagirizaki 2016)
 GCA_948465745.1_dcCheAlbu1.1	lamb's quarters (primary hap 2023)
@@ -267,11 +268,11 @@ GCA_000005005.6_B73_RefGen_v4	maize (B73 2017)
 GCA_902167015.1_Zm-Oh43-REFERENCE-NAM-1.0	maize (OH43 2020)
 GCF_000231095.2_ObraRS2	malo sina (v2 2021)
 GCF_011075055.1_CATAS_Mindica_2.1	mango
-GCF_002575655.2_Aet_v5.0	monocots
-GCA_900070015.1_Hordeum_bulbosum_assembly1	monocots (2017)
-GCA_947561735.1_pearl_millet_23DB_ONT_assembly	monocots (2023)
-GCA_024174645.1_Salk_lm5633_a03	monocots (lm5633 2022)
-GCA_030770085.1_ASM3077008v1	monocots (Oco-Bangladesh 2023)
+GCF_002575655.2_Aet_v5.0	Tausch's goatgrass monocots
+GCA_900070015.1_Hordeum_bulbosum_assembly1	bulbous barley monocots (2017)
+GCA_947561735.1_pearl_millet_23DB_ONT_assembly	pearl millet monocots (2023)
+GCA_024174645.1_Salk_lm5633_a03	least duckweed monocots (lm5633 2022)
+GCA_030770085.1_ASM3077008v1	coastal wild rice monocots (Oco-Bangladesh 2023)
 GCF_000002425.4_Phypa_V3	mosses
 GCA_000002425.3_Phypa_V5	mosses (Gransden 2004 2024)
 GCA_021442195.1_S.fallax_v1.1	mosses (MN 2022)

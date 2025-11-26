@@ -2885,19 +2885,39 @@ var rightClick = {
                                 // use maxVisibility and change hgTracks so it can hide subtracks
                                 o = {};
                                 str = blankImg + " " + visStrings[i];
-                                if (rec.canPack
-                                || (visStrings[i] !== "pack" && visStrings[i] !== "squish")) {
-                                    if (rec.localVisibility) {
-                                        if (visStrings[i] === rec.localVisibility) {
+                                if (rec.onlyVisibility) {
+                                    if (visStrings[i] == "hide" || visStrings[i] === rec.onlyVisibility) {
+
+                                        if (rec.localVisibility) {
+                                            if (visStrings[i] === rec.localVisibility) {
+                                                str = selectedImg + " " + visStrings[i];
+                                            }
+                                        } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
                                             str = selectedImg + " " + visStrings[i];
                                         }
-                                    } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
-                                        str = selectedImg + " " + visStrings[i];
+                                        o[str] = { onclick:
+                                                    rightClick.makeHitCallback(visStrings[i])
+                                                 };
+                                        menu.push(o);
+
+
                                     }
-                                    o[str] = { onclick:
-                                                rightClick.makeHitCallback(visStrings[i])
-                                             };
-                                    menu.push(o);
+                                }
+                                else {
+                                    if (rec.canPack
+                                    || (visStrings[i] !== "pack" && visStrings[i] !== "squish")) {
+                                        if (rec.localVisibility) {
+                                            if (visStrings[i] === rec.localVisibility) {
+                                                str = selectedImg + " " + visStrings[i];
+                                            }
+                                        } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
+                                            str = selectedImg + " " + visStrings[i];
+                                        }
+                                        o[str] = { onclick:
+                                                    rightClick.makeHitCallback(visStrings[i])
+                                                 };
+                                        menu.push(o);
+                                    }
                                 }
                             }
                             done = true;
@@ -2972,13 +2992,13 @@ var rightClick = {
                                         return true;
                                     }
                                 };
-                            o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
-                                {   onclick: function(menuItemClicked, menuObject) {
-                                        rightClick.hit(menuItemClicked, menuObject,
-                                                       "highlightThisItem"); 
-                                        return true;
-                                    }
-                                };
+                            //o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
+                            //    {   onclick: function(menuItemClicked, menuObject) {
+                            //            rightClick.hit(menuItemClicked, menuObject,
+                            //                           "highlightThisItem"); 
+                            //            return true;
+                            //        }
+                            //    };
                             if (rightClick.supportZoomCodon &&
                                     (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
@@ -4287,6 +4307,11 @@ var imageV2 = {
                                         selectedGene = item.value;
                                     }
                                     window.location.assign(item.id);
+                                } else if (item.type === "hgvs") {
+                                    let newPos = genomePos.setByCoordinates(item.chrom, item.start, item.end);
+                                    dragSelect.highlightThisRegion(newPos, true, "#fcfcac");
+                                    let withPadding = genomePos.setByCoordinates(item.chrom, item.start-5, item.end+5);
+                                    $("#goButton").trigger("click");
                                 } else {
                                     genomePos.set(item.id, getSizeFromCoordinates(item.id));
                                     if ($("#suggestTrack").length && $('#hgFindMatches').length) {

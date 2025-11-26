@@ -733,7 +733,7 @@ pos->description = cloneString(posDescription);
 pos->browserName = cloneString(browserName);
 }
 
-static void fixSinglePos(struct hgPositions *hgp)
+void fixSinglePos(struct hgPositions *hgp)
 /* Fill in posCount and if proper singlePos fields of hgp
  * by going through tables... */
 {
@@ -3595,7 +3595,7 @@ struct hgvsHelper
     boolean mapError; // does this hgvs mapping result in a map error?
     };
 
-static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp,
+boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp,
                             boolean measureTiming)
 /* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature
  * See http://varnomen.hgvs.org/
@@ -3644,7 +3644,19 @@ if (hgvsList)
                 {
                 if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
                     startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
-                    trackTable = "ncbiRefSeqCurated";
+                    if (sameString(db, "hg38") || sameString(db, "hg19"))
+                        {
+                        struct dyString *selectCheck = sqlDyStringCreate("select count(*) from ncbiRefSeqSelect where name='%s'", hgvs->seqAcc);
+                        struct sqlConnection *conn = hAllocConn(db);
+                        int count = sqlQuickNum(conn, dyStringCannibalize(&selectCheck));
+                        hFreeConn(&conn);
+                        if (count > 0)
+                            trackTable = "ncbiRefSeqSelect";
+                        else
+                            trackTable = "ncbiRefSeqCurated";
+                        }
+                    else
+                        trackTable = "ncbiRefSeqCurated";
                 else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
                          startsWith("XP_", hgvs->seqAcc))
                     trackTable = "ncbiRefSeqPredicted";

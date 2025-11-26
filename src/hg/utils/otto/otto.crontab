@@ -134,13 +134,16 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 MAILTO=otto-group@ucsc.edu
 11 1 * * 4 /cluster/software/bin/python /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
 
+#Add a new daily tip to the home page
+5 5 * * 1-5 /cluster/software/bin/python /cluster/bin/scripts/generateTipOfDay.py -s ~/kent/src/hg/htdocs/allTipsRaw.html
+
 #OMIM Upload
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
 
 MAILTO=cells@ucsc.edu
 # Cell Browser news sec update by Matt/Brittney Sept 2022
-0 0 * * 1-5 ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
+0 0 * * 1-5 umask 002; ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
 
 # Update Cell Browser .json facets files using tabulate_facets.pl
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json

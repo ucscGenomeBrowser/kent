@@ -1,11 +1,9 @@
 <h2>Description</h2>
 <p>
-The <b>${longLabel}</b> <b>MPC</b> track shows MPC (Missense deleteriousness
-Prediction by Constraint), a score that tries to identify missense-depleted
-regions using the patterns of rare missense variation in 125,748 individuals in
-the Genome Aggregation database, compared to a null mutational model.
-Missense-depleted regions are enriched for ClinVar pathogenic variants, de novo
-missense variants from individuals with neurodevelopmental disorders (NDDs) and
+The <b>${longLabel}</b> track shows a score that tries to identify missense-depleted
+regions using the patterns of rare missense variation in 125,748 gnomAD v2.1.1 exomes,
+compared to a null mutational model. Missense-depleted regions are enriched for ClinVar pathogenic
+variants, de novo missense variants in individuals with neurodevelopmental disorders (NDDs), and
 complex trait heritability. The score's publication suggests that regions
 with less than 20% of their expected missense variation achieve moderate
 support for pathogenicity according to ACMG criteria.
@@ -16,19 +14,54 @@ support for pathogenicity according to ACMG criteria.
 <p>
 Transcripts with constraint predictions are highlighted. Observed and expected
 number of missense mutations are shown on mouse overs, as well as their
-Observed/expected ratio (OE), and the Chi-square and P-Value of the ratio.
+Observed/expected ratio (OE), and the Chi-square and P-value of the ratio.
 Regions are colored using the viridis palette, with yellow for the lowest OE
 values and dark blue for the highest values.
 </p>
 
+<p><strong>OE Constraint Legend</strong><br>
+Yellow = strongest constraint, Purple = weakest</p>
+
+<table>
+  <thead>
+  <tr>
+    <th style="border-bottom: 2px solid #6678B1;">Color</th>
+    <th style="border-bottom: 2px solid #6678B1;">OE Range</th>
+  </tr>
+  </thead>
+    <tr>
+        <th bgcolor="#FDE724"></th>
+        <th align="left">OE = 0.0066884</th>
+    </tr>
+    
+    <tr>
+        <th bgcolor="#74D054"></th>
+        <th align="left">OE = 0.36229 </th>
+    </tr>
+    
+    <tr>
+        <th bgcolor="#22898d"></th>
+        <th align="left">OE = 0.66993</th>
+    </tr>
+    
+    <tr>
+        <th bgcolor="#39558B"></th>
+        <th align="left">OE = 0.93385 </th>
+    </tr>
+    
+    <tr>
+        <th bgcolor="#440154"></th>
+        <th align="left">OE = 2.2429</th>
+    </tr>
+</table>
+
 <H2>Methods</H2>
 <p>
-The study analyzed only canonical, coding transcripts as defined by GENCODE v19/Ensembl352
-v74. Some were excluded: transcripts that had
-outlier counts of variants expected under neutrality (zero expected pLoF, missense, or
-synonymous variants; too many observed pLoF, missense, or synonymous variants compared
-to expectation; or too few observed synonymous variants compared to expectation). In total, the
-study analyzed 18,629 transcripts.
+The study analyzed only canonical, coding transcripts as defined by GENCODE v19/Ensembl v74. Some
+were excluded: transcripts that had outlier counts of variants expected under neutrality (zero
+expected pLoF, missense, or synonymous variants; too many observed pLoF, missense, or synonymous
+variants compared to expectation; or too few observed synonymous variants compared to expectation).
+In total, the study analyzed 18,629 transcripts.
 </p>
 
 </p>125,748 gnomAD v2.1.1 exomes were used on hg19.
@@ -38,27 +71,48 @@ synthetic Hail Table (HT) containing all possible single nucleotide variants in 
 Ensembl VEP annotated this HT against GENCODE version 19, and filtered to
 variants with the consequence "missense_variant" in the canonical, coding
 transcripts as defined above. Variants were filtered by
-following criteria: (1) allele count (AC) > 0 and AF < 0.001, variant QC PASS, and median3
-coverage > 0 in gnomAD v2.1.1 exomes; or (2) AC = 0, i.e. variants not seen in gnomAD v2.1.1
+following criteria: (1) allele count (AC) &gt; 0 and AF &lt; 0.001, variant QC PASS, and median3
+coverage &gt; 0 in gnomAD v2.1.1 exomes; or (2) AC = 0, i.e. variants not seen in gnomAD v2.1.1
 exomes.
 </p>
 
 <p>
-A likelihood ratio test was applied to assess whether the missense observed/expected (OE) ratio was uniform along each transcript or if distinct regions of missense constraint were present. Observed and expected missense counts were modeled using a Poisson distribution, with the null hypothesis assuming no regional variability in missense depletion and the alternative allowing for subsections with differing OE ratios. Chi-square statistics (p = 0.001) were used to identify significant breakpoints dividing transcripts into two or more sections, requiring at least 16 expected missense variants per subsection. Transcripts lacking a single significant breakpoint were further analyzed for two simultaneous breakpoints, with all significant results merged across search types. Recursive testing was then performed, treating each identified subsection as an independent transcript until no additional significant breakpoints were detected. To focus on missense depletion, subsections with observed counts exceeding expectations were capped at an OE of 1, and subsections with zero expected variants were assigned an expected count of 10⁻⁹ to avoid nonfinite OE values.
+A likelihood ratio test was applied to assess whether the missense observed/expected (OE) ratio
+was uniform along each transcript or if distinct regions of missense constraint were present.
+Observed and expected missense counts were modeled using a Poisson distribution, with the null
+hypothesis assuming no regional variability in missense depletion and the alternative allowing for
+subsections with differing OE ratios. Chi-square statistics (p = 0.001) were used to identify
+significant breakpoints dividing transcripts into two or more sections, requiring at least 16
+expected missense variants per subsection. Transcripts lacking a single significant breakpoint were
+further analyzed for two simultaneous breakpoints, with all significant results merged across
+search types. Recursive testing was then performed, treating each identified subsection as an
+independent transcript until no additional significant breakpoints were detected. To focus on
+missense depletion, subsections with observed counts exceeding expectations were capped at an OE
+of 1, and subsections with zero expected variants were assigned an expected count of 10<sup>-9</sup>
+to avoid nonfinite OE values.
 </p>
 
 <p>
-Obs/Exp annotation genome annotation data was downloaded and reformatted at UCSC to bigBed with a script (mpcToBed.py) available in out Github repo. Like all our tracks, the file makeDb/doc/hg19.txt in our Github repo describes the commands for the entire download and conversion.
+Obs/Exp annotation genome annotation data was downloaded and reformatted at UCSC to bigBed with a script
+(<a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/gnomad/gnomadMpcToBed.py"
+>mpcToBed.py</a>) available in our
+<a target="_blank" href="https://github.com/ucscGenomeBrowser">Github repo</a>.
+Like all our tracks, the file
+<a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt#L35943"
+>makeDb/doc/hg19.txt</a>
+in our Github repo describes the commands for the entire download and conversion.
 </p>
 
 <h2>Data Access</h2>
 <p>
-The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
-the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all
-others, is available via our <a href="../goldenPath/help/api.html">API</a>.
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated access, this track, like
+all others, is available via our <a href="../goldenPath/help/api.html">API</a>.
 Our command line tool bigBedToBed can be used to transform the bigBed file from our server
 directly to a tab-sep text file.
-The data can also be found on the gnomAD <a target="_blank"
+The data can also be found on the <a target="_blank"
 href="https://gnomad.broadinstitute.org/downloads">gnomAD 2.1.1 downloads page</a>.
 </p>
 
@@ -71,7 +125,7 @@ for questions and example queries, or our
 for more information.</p>
 
 <p>
-More information about using and understanding the gnomAD data can be found in the
+More information about using and understanding the gnomAD data can be found on the
 <a target="_blank" href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a> site.
 </p>
 
@@ -81,7 +135,6 @@ Thanks to gnomAD for releasing this data and to Luis Nassar for finding it.
 </p>
 
 <h2>References</h2>
-
 <p>
 Chao KR, Wang L, Panchal R, Liao C, Abderrazzaq H, Ye R, Schultz P, Compitello J, Grant RH, Kosmicki
 JA <em>et al</em>.

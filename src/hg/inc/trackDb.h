@@ -764,5 +764,9 @@ char *labelAsFilteredNumber(char *label, unsigned number);
 
 int trackDbGetCartVersion();
 /* Get the highest cart version that a set of trackDb entries has specified. */
+
+boolean isComplexSetting(char *name);
+/* Check to see if this is one of the filter variables that have arbitrary initial strings. */
+
 #endif /* TRACKDB_H */
 

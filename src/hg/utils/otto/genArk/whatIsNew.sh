@@ -19,6 +19,14 @@ printf "### count of common files between beta and hgwdev,\nnot counting /contri
 zegrep -v "${doNotCount}" dev.todayList.gz | cut -f2 | sort \
   | join -t$'\t' - <(zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort) | wc -l
 
+printf "### count of files unique to beta compared to hgwdev,\nnot counting /contrib/ or the hub.txt files:\n"
+zegrep -v "${doNotCount}" dev.todayList.gz | cut -f2 | sort \
+  | join -v2 -t$'\t' - <(zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort) | wc -l
+zegrep -v "${doNotCount}" dev.todayList.gz | cut -f2 | sort \
+  | join -v2 -t$'\t' - <(zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort) > uniq.beta.not.hgwdev.list
+zegrep -v "${doNotCount}" dev.todayList.gz | cut -f2 | sort \
+  | join -v1 -t$'\t' - <(zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort) > uniq.hgwdev.not.beta.list
+
 printf "### count of common files between hgw1 and hgwbeta,\nnot counting /contrib/ or the hub.txt files:\n"
 
 zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort \
@@ -83,5 +91,6 @@ if [ -s "new.timeStamps.txt" ]; then
 fi
 
 ./quickLiftNew.sh
+./liftOverNew.sh
 
 exit $?

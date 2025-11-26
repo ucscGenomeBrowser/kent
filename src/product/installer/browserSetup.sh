@@ -671,7 +671,7 @@ function setupCgiOsx ()
     # get samtools patched for UCSC and compile it
     cd kent
     if [ ! -d samtabix ]; then
-       git clone http://genome-source.soe.ucsc.edu/samtabix.git
+       git clone https://github.com/AngieHinrichs/samtabix.git
     else
        cd samtabix
        git pull
@@ -863,6 +863,7 @@ function installRedhat () {
     # Mariadb connector for python3 and hgGeneGraph
     if yum list python3-mysqlclient 2> /dev/null ; then
         yum install -y python3-mysqlclient python3 python3-devel mariadb-connector-c mariadb-common mariadb-connector-c-devel wget gcc
+    fi
 
     # open port 80 in firewall
     if which firewall-cmd ; then

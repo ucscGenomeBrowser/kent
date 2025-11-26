@@ -285,6 +285,8 @@ struct rgbColor darkSeaColor = {0, 60, 120, 255};
 struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
+struct hash *origHgFindMatches; /* For use with pdf mode that sets hgFindMatches = NULL.
+                                  Original searches can use for bigBedLoading, squishy pack, etc.  */
 
 struct trackLayout tl;
 
@@ -4477,8 +4479,8 @@ else if (sameString(tg->table, PCR_RESULT_TRACK_NAME))
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
 highlight = (hgFindMatches != NULL &&
-	     ( hashIntValDefault(hgFindMatches, name, 0) == 1 ||
-	       hashIntValDefault(hgFindMatches, mapName, 0) == 1));
+	     ( ((name != NULL) && (hashIntValDefault(hgFindMatches, name, 0) == 1)) ||
+	       ((mapName != NULL) &&  hashIntValDefault(hgFindMatches, mapName, 0) == 1)));
 return highlight;
 }
 
@@ -6019,7 +6021,6 @@ tg->loadItems = loadBacEndPairs;
 }
 
 #endif /* GBROWSE */
-
 
 // The following few functions are shared by GAD, OMIM, DECIPHER, Superfamily.
 // Those tracks need an extra label derived from item name -- the extra label
@@ -11782,7 +11783,7 @@ return tg->limitedVis;
 }
 
 void compositeTrackVis(struct track *track)
-/* set visibilities of subtracks */
+/* set visibilities of subtracks.  This seems to be unused - JC 11/2025 */
 {
 struct track *subtrack;
 
@@ -16008,5 +16009,6 @@ for(name = nameList; name != NULL; name = name->next)
     hashAddInt(hgFindMatches, name->name, 1);
     }
 slFreeList(&nameList);
+origHgFindMatches = hgFindMatches;  // can use with pdf mode when hgFindMatches = NULL
 }
 

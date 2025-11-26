@@ -38,6 +38,9 @@ errAbort(
   "       adds rows of N's into maf blocks (rather than just annotating them)\n"
   "   -addDash\n"
   "       adds rows of -'s into maf blocks (rather than just annotating them)\n"
+  "NOTE: as of November 2025 - can manage GenArk assembly names GCA_...\n"
+  "      and GCF_... with their .n extensions.  Can only work with such\n"
+  "      such names that begin with GC."
   );
 }
 
@@ -88,6 +91,26 @@ struct strandHead
     struct linkBlock *links;
 };
 
+static char *chromFromSrc(char *src)
+/* get chrom name from <db>.<chrom>
+   returned pointer should be on the . separator */
+{
+char *p;
+if ((p = strchr(src, '.')) == NULL)
+    errAbort("Can't find chrom in MAF component src: %s\n", src);
+char *skipDot = p;
+++skipDot;	/* skip the dot to the word following */
+if (startsWith("GC", src))
+    {
+    char *nextDot = strchr(skipDot,'.');
+    if (nextDot)
+        {
+        p = nextDot;	/* new answer */
+        }
+    }   /* else: no next dot, leave p it where it is */
+return p;
+}
+
 struct mafAli *readMafs(struct mafFile *mf)
 {
 struct mafAli *maf;
@@ -105,7 +128,7 @@ while((maf = mafNext(mf)) != NULL)
 
     if (ourChrom == NULL)
 	ourChrom = masterMc->src;
-    else 
+    else
 	{
 	if (differentString(masterMc->src, ourChrom))
 	    errAbort("ERROR: mafAddIrows requires maf have only one target sequence.\n"
@@ -113,7 +136,7 @@ while((maf = mafNext(mf)) != NULL)
 	}
 
     strcpy(species, masterMc->src);
-    chrom = strchr(species,'.');
+    chrom = chromFromSrc(species);
     if (chrom)
 	*chrom++ = 0;
     else
@@ -137,7 +160,7 @@ while((maf = mafNext(mf)) != NULL)
 	struct subSpecies *subSpecies = NULL;
 
 	strcpy(species, mc->src);
-	chrom = strchr(species,'.');
+        chrom = chromFromSrc(species);
 	*chrom++ = 0;
 
 	if ((subSpecies = hashFindVal(speciesHash, species)) == NULL)
@@ -189,7 +212,7 @@ for(; strandHead ; strandHead = strandHead->next)
     struct linkBlock *link, *prevLink;
     struct hashEl *hel = hashLookup(bedHash, strandHead->species);
     struct hash *chromHash = (hel != NULL) ? hel->val : NULL;
-    struct bedHead *bedHead = (chromHash != NULL) ? 
+    struct bedHead *bedHead = (chromHash != NULL) ?
 	hashFindVal(chromHash, strandHead->qName): NULL;
 
     slReverse(&strandHead->links);
@@ -225,7 +248,7 @@ for(; strandHead ; strandHead = strandHead->next)
 
 		if ( bed->chromEnd > nStart)
 		    {
-		    nCount += positiveRangeIntersection(nStart, nEnd, 
+		    nCount += positiveRangeIntersection(nStart, nEnd,
 			bed->chromStart, bed->chromEnd);
 		    }
 		}
@@ -238,7 +261,7 @@ for(; strandHead ; strandHead = strandHead->next)
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_MISSING_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = nCount;
 	    }
-	else if  ((tDiff > 100000) ||  
+	else if  ((tDiff > 100000) ||
 		  (qDiff > 100000) || (qDiff < -100000))
 	    {
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
@@ -284,12 +307,12 @@ for(; subSpecies; subSpecies = subSpecies->next)
 	    {
 	    continue;
 	    }
-	if (mc->leftStatus == 0) 
+	if (mc->leftStatus == 0)
 	    errAbort("zero left status %s:%d\n",mc->src, mc->start);
 #ifdef NOTNOW
 	if (pushState && (mc->leftStatus == MAF_INSERT_STATUS))
 	    {
-	    if (prevMc && 
+	    if (prevMc &&
 		!((prevMc->rightStatus == mc->leftStatus) &&
 		(prevMc->rightLen == mc->leftLen)))
 		{
@@ -363,11 +386,9 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	for(species = speciesList; species; species = species->next)
 	    {
 	    mc = NULL;
-//	    printf("looking at %s\n",species->name);
 	    blockStatus = &species->blockStatus;
 	    if (blockStatus->mc)
 		{
-//	    printf("should match at %s\n",blockStatus->mc->src);
 		switch (blockStatus->mc->rightStatus)
 		    {
 		    case MAF_MISSING_STATUS:
@@ -398,9 +419,9 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    miniMasterMc->start = lastEnd;
 			    miniMasterMc->size =  masterMc->start - lastEnd;
 
-			    if ((seqName = strchr(miniMasterMc->src, '.')) != NULL)
+			    if ((seqName = chromFromSrc(miniMasterMc->src)) != NULL)
 				seqName++;
-			    else 
+			    else
 			    	seqName = miniMasterMc->src;
 
 //			    printf("hole filled from %d to %d\n",lastEnd, masterMc->start);
@@ -465,8 +486,8 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	blockStatus = &species->blockStatus;
 	
 	mc = NULL;
-	if ((blockStatus->masterStart <= masterMc->start) && 
-	    (blockStatus->masterEnd > masterMc->start) && 
+	if ((blockStatus->masterStart <= masterMc->start) &&
+	    (blockStatus->masterEnd > masterMc->start) &&
 	 ((mc = mafMayFindCompPrefix(maf, species->name,NULL)) == NULL))
 	    {
 	    if (blockStatus->mc != NULL)
@@ -514,7 +535,6 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    mc->text[mc->size] = 0;
 			    mc->size = 0;
 			    }
-			    
 			break;
 		    default:
 			break;
@@ -553,10 +573,7 @@ while (lineFileRow(lf, row))
 	char *ptr;
 
 	AllocVar(bedHead);
-	if ((ptr = strchr(row[0], '.')) != NULL)
-	    ptr++;
-	else 
-	    ptr = row[0];
+	ptr = row[0];
 	hel = hashAdd(hash, ptr, bedHead);
 	}
     bedHead = hel->val;
@@ -594,7 +611,7 @@ FILE *f = mustOpen(mafOut, "w");
 struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 struct mafAli *mafList, *maf;
 struct mafFile *mf = mafOpen(mafIn);
-struct hash *bedHash = newHash(6); 
+struct hash *bedHash = newHash(6);
 
 if (nBedFile != NULL)
     {

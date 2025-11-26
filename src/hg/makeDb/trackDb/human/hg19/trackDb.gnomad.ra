@@ -935,15 +935,13 @@ html gnomad
     track gnomadMpc
     parent gnomadSuper
     shortLabel gnomAD MPC
-    longLabel Genome Aggregation Database (gnomAD) - MPC: Missense Deleteriousness Prediction by Constraint
+    longLabel gnomAD Missense Deleteriousness Prediction by Constraint (MPC)
     visibility pack
     group varRep
     type bigBed 9 +
-    mouseOver <b>Transcript:</b> $trans<br><b>OE Obs/Exp:</b> $oe<br><b>Chi-Square:</b> $chisq<br><b>P-Val:</b>$pval
+    mouseOver <b>Transcript:</b> $trans<br><b>Obs/Exp (OE):</b> $oe<br><b>Chi-square:</b> $chisq<br><b>P-val:</b> $pval
     bigDataUrl /gbdb/hg19/gnomAD/mpc/mpc.bb
-    #spectrum on
-    itemRgb on
-    dataVersion Oct 2025
+    dataVersion Release 2.1.1 (Oct, 2025)
     html gnomadMpc.html
     noParentConfig on
 

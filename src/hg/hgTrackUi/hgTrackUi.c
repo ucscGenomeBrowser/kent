@@ -2015,12 +2015,12 @@ struct sqlConnection *conn = hAllocConn(database);
 
 char newRow = 0;
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->track );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->track );
-snprintf( &options[3][0], 256, "%s.fill", tdb->track );
-snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->track );
-snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->track );
-snprintf( &options[6][0], 256, "%s.interp.gap", tdb->track );
+safef(&options[0][0], 256, "%s.heightPer", tdb->track );
+safef(&options[1][0], 256, "%s.linear.interp", tdb->track );
+safef(&options[3][0], 256, "%s.fill", tdb->track );
+safef(&options[4][0], 256, "%s.min.cutoff", tdb->track );
+safef(&options[5][0], 256, "%s.max.cutoff", tdb->track );
+safef(&options[6][0], 256, "%s.interp.gap", tdb->track );
 
 thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
@@ -2054,7 +2054,7 @@ sr = hRangeQuery(conn, tdb->table, chromosome, 0, 1877426, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
-    snprintf( option, sizeof(option), "zooSpecies.%s", sample->name );
+    safef(option, sizeof(option), "zooSpecies.%s", sample->name );
     if( cartUsualBoolean(cart, option, TRUE ) )
 	cgiMakeCheckBox(option, TRUE );
     else
@@ -2285,12 +2285,12 @@ int thisHeightPer, thisLineGap;
 float thisMinYRange, thisMaxYRange;
 char *interpolate, *fill;
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->track );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->track );
-snprintf( &options[3][0], 256, "%s.fill", tdb->track );
-snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->track );
-snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->track );
-snprintf( &options[6][0], 256, "%s.interp.gap", tdb->track );
+safef(&options[0][0], 256, "%s.heightPer", tdb->track );
+safef(&options[1][0], 256, "%s.linear.interp", tdb->track );
+safef(&options[3][0], 256, "%s.fill", tdb->track );
+safef(&options[4][0], 256, "%s.min.cutoff", tdb->track );
+safef(&options[5][0], 256, "%s.max.cutoff", tdb->track );
+safef(&options[6][0], 256, "%s.interp.gap", tdb->track );
 
 thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
@@ -2352,12 +2352,12 @@ int thisHeightPer, thisLineGap;
 float thisMinYRange, thisMaxYRange;
 char *interpolate, *fill;
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->track );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->track );
-snprintf( &options[3][0], 256, "%s.fill", tdb->track );
-snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->track );
-snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->track );
-snprintf( &options[6][0], 256, "%s.interp.gap", tdb->track );
+safef(&options[0][0], 256, "%s.heightPer", tdb->track );
+safef(&options[1][0], 256, "%s.linear.interp", tdb->track );
+safef(&options[3][0], 256, "%s.fill", tdb->track );
+safef(&options[4][0], 256, "%s.min.cutoff", tdb->track );
+safef(&options[5][0], 256, "%s.max.cutoff", tdb->track );
+safef(&options[6][0], 256, "%s.interp.gap", tdb->track );
 
 thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
@@ -2845,6 +2845,166 @@ cgiMakeDropListFull(codeVarName, ancestors, ancestors,
 }
 #endif
 
+static struct slName *parseDataTypes(struct trackDb *tdb)
+{
+/* Parse the 'dataTypes' trackDb setting into an slName list.
+ * 'dataTypes' is a space separated list of words, each indicating a
+ * data type. Return value is NULL on error.
+ */
+char *tdbDataTypes = cloneString(trackDbSetting(tdb, "dataTypes"));
+if (tdbDataTypes == NULL)
+    return NULL;
+
+// A bit awkward to go through chopByWhite into slNameListFromStringArray, but
+// the slNameList family of functions doesn't have a chopByWhite equivalent.
+int n_datatypes = chopByWhiteRespectDoubleQuotes(tdbDataTypes, NULL, 0);
+char **datatypes = calloc(n_datatypes, sizeof(char *));
+chopByWhiteRespectDoubleQuotes(tdbDataTypes, datatypes, n_datatypes);
+struct slName *list = slNameListFromStringArray(datatypes, n_datatypes);
+freeMem(tdbDataTypes);
+return list;
+}
+
+unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
+
+#define COMMA_IF(x) (((x)++) ? "," : "")  // ADS: pattern for JSON comma
+
+static void facetedCompositeUi(struct trackDb *tdb)
+{
+/* ADS: How facetedComposite differs from other track types
+ * - compositeTrack track setting is "faceted"
+ * - Required fields in the 'settings' longblob for the trackDb entry:
+ * - 'metaDataUrl': a non-blocked URL (can be server-local) with
+ *   metadata to generate the table.  This might change to an existing metadata
+ *   setting in the future.
+ * - 'dataTypes': the names of the data types, ordered and space separated.
+ *
+ * This function will embed sessionDb.settings/cart data in the
+ * generated HTML. Instead of embedding all relevant tracks, it
+ * parses the tracks named like:
+ *
+ *    facetedCompositeName_dataElementName_dataTypeName_sel=1
+ *
+ * And only sends unique dataElement and dataTypes, which might be
+ * much smaller. The faceted composite assumes that selection of
+ * dataTypes applies to all dataElements, but within the cart, these
+ * are separate tracks, and each must be present to be drawn. But
+ * the JS doesn't need the product {dataType} x {dataElement}, just
+ * the union {datType} U {dataElement}. These are put in two arrays
+ * in a JSON section of the HTML.
+ */
+
+const int token_size = 64;
+const int query_buff_size = 256;
+
+// html elements for the controls page (from singleCellMerged)
+const char pageStyle[] =
+    "<style>body.cgi { background: #F0F0F0; }"
+    "table.hgInside { background: #FFFFFF; }</style>";
+const char placeholderDiv[] = "<div id='metadata-placeholder'></div>\n";
+const char openJSON[] = "<script id=\"app-data\" type=\"application/json\">{";
+const char closeJSON[] = "}</script>\n";
+const char openDataTypesJSON[] = "\"dataTypes\":{";
+const char closeDataTypesJSON[] = "}";  // closing a dict
+const char openDataElementsJSON[] = "\"dataElements\":[";
+const char closeDataElementsJSON[] = "]";  // closing an array
+const char metadataTableScriptElement[] =
+    "<script type='text/javascript' src='/js/facetedComposite.js'></script>\n";
+
+// parse the hgsid as id and sessionKey
+char *hgsid = cartSessionId(cart);
+char *sessionKey = NULL;
+const int id = cartDbParseId(hgsid, &sessionKey);
+if (!sessionKey)
+    errAbort("Failed to parse session key from: %s", hgsid);
+
+// --- Get data from 'settings' field in 'trackDb' entry ---
+// required
+const char *metaDataUrl = trackDbSetting(tdb, "metaDataUrl");
+const char *primaryKey = trackDbSetting(tdb, "primaryKey");
+
+struct slName *dataTypes = parseDataTypes(tdb);
+if (!dataTypes)
+    errAbort("Failed to parse data types from faceted composite settings for: %s", tdb->track);
+// optional
+const char *colorSettingsUrl = (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
+const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxCheckboxes");
+// --- done parsing values from trackDb.settings ---
+
+const char *metaDataId = tdb->track;
+
+char queryFmt[] = "SELECT contents FROM sessionDb WHERE id='%d' AND sessionKey='%s';";
+char query[query_buff_size];
+sqlSafef(query, query_buff_size, queryFmt, id, sessionKey);
+
+struct sqlConnection *conn = hConnectCentral();
+const char *contents = sqlQuickString(conn, query);
+struct cgiParsedVars *varList = cgiParsedVarsNew((char *)contents);
+
+printf(pageStyle);       // css
+printf(placeholderDiv);  // placholder
+
+/* --- START embedded JSON data --- */
+printf(openJSON);
+printf(openDataTypesJSON);
+// find selected data types
+int not_first = 0;
+struct slName *anySelDataType = NULL;  // non-null val will be used as flag
+for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
+    {
+    char toMatch[token_size];
+    safef(toMatch, token_size, "_%s_sel", thisType->name);
+    boolean dataTypeSel = FALSE;
+    for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
+        if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
+            dataTypeSel = TRUE;
+    printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
+    anySelDataType = dataTypeSel ? thisType : anySelDataType;
+    }
+printf(closeDataTypesJSON);
+printf(",");  // add separator
+// find selected data sets
+printf(openDataElementsJSON);
+not_first = 0;
+if (anySelDataType != NULL)
+    {
+    char suffix[token_size];
+    safef(suffix, token_size, "_%s_sel", anySelDataType->name);
+    for (struct cgiVar *le = varList->list; le; le = le->next)
+        if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
+            {
+            const char *nameStart = strchr(le->name+strlen(metaDataId), '_');
+            if (nameStart)
+                {
+                ++nameStart;  // move past '_'
+                const char *nameEnd = strchr(nameStart, '_');
+                if (nameEnd && nameEnd > nameStart)
+                    {
+                    const int nameLen = nameEnd - nameStart;
+                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                    }
+                }
+            }
+    }
+printf(closeDataElementsJSON);
+printf(",\"mdid\": \"%s\"", tdb->track);  // metadata id is track name
+printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
+if (maxCheckboxes) // only if present in trackDb.settings entry
+    printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
+if (colorSettingsUrl) // only if present in trackDb.settings entry
+    printf(",\"colorSettingsUrl\": \"%s\"", colorSettingsUrl);
+printf(",\"metadataUrl\": \"%s\"", metaDataUrl);
+printf(closeJSON);
+/* --- END embedded JSON data --- */
+
+printf(metadataTableScriptElement);
+
+// cleanup
+slFreeList(&dataTypes);
+cgiParsedVarsFreeList(&varList);
+hDisconnectCentral(&conn);
+}
+
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Draw track specific parts of UI. */
 {
@@ -2866,6 +3026,8 @@ boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 // 4) special cases falling through the cracks but based upon type
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb, tdbList);
+else if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+    facetedCompositeUi(tdb);
 else if (sameString(track, "stsMap"))
     stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -3048,8 +3210,11 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     // Composites *might* have had their top level controls just printed,
     // but almost certainly have additional controls
     boolean isLogo = (trackDbSetting(tdb, "logo") != NULL);
-    if (tdbIsComposite(tdb) && !isLogo)  // for the moment generalizing this to include other containers...
-        hCompositeUi(db, cart, tdb, NULL, NULL, MAIN_FORM);
+    // It'd be nice to handle faceted composites as a separate container type, but practically so much
+    // of the display features we want are identical to composites - it's easier to special case the UI.
+    if (tdbIsComposite(tdb) && !isLogo) // for the moment generalizing this to include other containers...
+        if (!sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) // but not faceted containers ...
+            hCompositeUi(db, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
     extraUiLinks(db, tdb, cart);

@@ -20,6 +20,7 @@
 #define ALT_OR_PATCH "altOrPatch"
 #define HELP_DOCS "helpDocs"
 #define TRACK "track"
+#define HGVS "hgvs"
 
 void suggestTrack(char *database,  char *prefix)
 {
@@ -274,6 +275,32 @@ puts(jw->dy->string);
 jsonWriteFree(&jw);
 }
 
+void suggestHGVS(char *database, char *prefix)
+/* Print out a list of javascript objects that define positions matching the HGVS term prefix */
+{
+struct hgPositions *hgp = NULL;
+AllocVar(hgp);
+boolean match = matchesHgvs(NULL, database, prefix, hgp, FALSE);
+if (match)
+    {
+fprintf(stderr, "suggesting hgvs for db: '%s' and prefix '%s'\n", database, prefix);
+    fixSinglePos(hgp);
+    struct jsonWrite *jw = jsonWriteNew();
+    jsonWriteListStart(jw,NULL);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "type", HGVS);
+    jsonWriteString(jw, "value", hgp->singlePos->description);
+    jsonWriteString(jw, "id", hgp->singlePos->description);
+    jsonWriteString(jw, "chrom", hgp->singlePos->chrom);
+    jsonWriteNumber(jw, "start", hgp->singlePos->chromStart);
+    jsonWriteNumber(jw, "end", hgp->singlePos->chromEnd);
+    jsonWriteObjectEnd(jw);
+    jsonWriteListEnd(jw);
+    puts(jw->dy->string);
+    jsonWriteFree(&jw);
+    }
+}
+
 char *checkParams(char *database, char *prefix, char *type)
 /* If we don't have valid CGI parameters, quit with a Bad Request HTTP response. */
 {
@@ -283,10 +310,10 @@ if(prefix == NULL || database == NULL)
     errAbort("%s", "Missing prefix and/or db CGI parameter");
 if (! hDbIsActive(database))
     errAbort("'%s' is not a valid, active database", htmlEncode(database));
-if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH) && differentString(type, HELP_DOCS) && differentString(type, TRACK))
+if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH) && differentString(type, HELP_DOCS) && differentString(type, TRACK) && differentString(type, HGVS))
     errAbort("'%s' is not a valid type", type);
 char *table = NULL;
-if (! sameOk(type, ALT_OR_PATCH) && !sameOk(type, HELP_DOCS))
+if (! sameOk(type, ALT_OR_PATCH) && !sameOk(type, HELP_DOCS) && !sameOk(type, HGVS))
     {
     char *knownDatabase = hdbDefaultKnownDb(database);
     struct sqlConnection *conn = hAllocConn(knownDatabase);
@@ -319,6 +346,8 @@ else if (sameOk(type, HELP_DOCS))
     suggestHelpPage(prefix);
 else if (sameOk(type, TRACK))
     suggestTrack(database, prefix);
+else if (sameOk(type, HGVS))
+    suggestHGVS(database, prefix);
 else
     suggestGene(database, table, prefix);
 

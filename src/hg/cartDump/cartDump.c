@@ -26,6 +26,7 @@ void doMiddle(struct cart *cart)
 
 char *vName = "cartDump.varName";
 char *vVal = "cartDump.newValue";
+char *mName = "cartDump.metaDataId";
 char *wildcard;
 boolean asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
 
@@ -60,6 +61,39 @@ if (cgiVarExists("noDisplay"))
             cartTdbTreeCleanupOverrides(tdb,cart,oldVars,lm);
 	    lmCleanup(&lm);
             }
+        }
+
+    if (cgiVarExists(mName))
+        {
+        char *mdid = cgiOptionalString(mName);
+        char mdid_de[1024], mdid_dt[1024];
+        safef(mdid_de, sizeof(mdid_de), "%s.de", mdid);
+        safef(mdid_dt, sizeof(mdid_dt), "%s.dt", mdid);
+        struct slName *de_list = cgiStringList(mdid_de);
+        struct slName *dt_list = cgiStringList(mdid_dt);
+
+        // This component should change.  Erasing settings doesn't preserve any user selections
+        // (like bigWig display changes) and doesn't work at all for tracks that are on by default.
+        char wc_mdid[1024];
+        safef(wc_mdid, sizeof(wc_mdid), "*_%s", mdid);
+        cartRemoveLike(cart, wc_mdid);
+        cartRemovePrefix(cart, mdid);
+        char subtrackSetting[1024];
+        for (struct slName *de_itr = de_list; de_itr; de_itr = de_itr->next)
+            {
+            struct slName *dt_itr = NULL;
+            for (dt_itr = dt_list; dt_itr; dt_itr = dt_itr->next)
+                {
+                safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_%s_sel", mdid, de_itr->name, dt_itr->name);
+                cartSetString(cart, subtrackSetting, "1");
+                safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_%s", mdid, de_itr->name, dt_itr->name);
+                cartSetString(cart, subtrackSetting, "1");
+                }
+            }
+
+        cartRemove(cart, mName);
+        cartRemove(cart, mdid_de);
+        cartRemove(cart, mdid_dt);
         }
 
     return;

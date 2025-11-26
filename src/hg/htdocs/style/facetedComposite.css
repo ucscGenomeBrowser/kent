@@ -1,0 +1,81 @@
+/* SPDX-License-Identifier: MIT; (c) 2025 Andrew D Smith (author) */
+#container {
+    display: flex;
+    width: 100%;
+    gap: 1em;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+#filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 300px;
+    flex-shrink: 0;
+    /* ADS: the lines below are for vertical scrolling if needed */
+    /* max-height: 80vh; */
+    /* overflow-y: auto; */
+    align-self: stretch;
+    box-sizing: border-box;
+    padding-right: 0.5em;
+}
+#filters > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    margin-bottom: 1em;
+}
+#filters > div > strong {
+    margin-bottom: 0.25em;
+    font-weight: bold;
+}
+#filters label {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    cursor: pointer;
+    user-select: none;
+}
+#theMetaDataTable_wrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+    box-sizing: border-box;
+}
+#theMetaDataTable {
+    width: 100% !important;
+    box-sizing: border-box;
+}
+#theMetaDataTable td:nth-child(n+2),
+#theMetaDataTable th:nth-child(n+2) {
+    vertical-align: top;
+    /* white-space: nowrap; */
+    /* overflow: hidden;          /* hide overflow */
+    min-width: 100px; /* Adjust width as needed */
+}
+#theMetaDataTable .select-checkbox {
+    width: 1em !important;   /* force narrow width */
+}
+#theMetaDataTable input.row-select {
+    /* additional checkbox styling */
+}
+table.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+table.dataTable tbody tr:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+table.dataTable tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+table.dataTable tbody tr:hover {
+    background-color: #d3eaff; /* Light blue on hover */
+}
+.color-box {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    /* background-color set dynamically in JS */
+}
