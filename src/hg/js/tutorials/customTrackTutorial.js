@@ -230,22 +230,22 @@
         customTrackTour.addStep({
             title: 'Text-based custom tracks',
             text:
-                  'The simplest way to view a custom track is to paste the '+
+                  'The simplest way to view a custom track is to paste '+
                   'the track and data lines in the dialog box. '+
                   'A custom track consists of three items:'+
                   '<ol>'+
                   '    <li><a href="/goldenPath/help/hgTracksHelp.html#BROWSER" '+
-                  '        target="_blank">browser line</a>: (optional)<br>'+
+                  '        target="_blank"><b>browser line</b></a>: (optional)<br>'+
                   '        Control aspects of the overall '+
-                  '        display of the Genome Browser</li>'+
+                  '        display window</li>'+
                   '    <li><a href="/goldenPath/help/hgTracksHelp.html#TRACK" '+
-                  '        target="_blank">track line</a>:<br> '+
-                  '        Defines the display attributes for '+
-                  '        all lines in the annotation data set</li>'+
-                  '    <li>data lines</li>'+
+                  '        target="_blank"><b>track line</b></a>:<br> '+
+                  '        Defines the attributes for '+
+                  '        the specific data set</li>'+
+                  '    <li><b>data lines</b></li>'+
                   '</ol>'+
                   'Alternatively, you can store the custom track data in a file on a web server, '+
-                  'and paste the URL to the file to load the custom track. ',
+                  'paste the file URL, or upload the file to load the custom track. ',
             buttons: [tutorialButtons.back, tutorialButtons.load_bed,
                       tutorialButtons.load_wig, tutorialButtons.next],
             attachTo: 
@@ -262,7 +262,7 @@
                   '<a href="/goldenPath/help/hgTrackHubHelp.html#Hosting" target="_blank">hosted '+
                   'on an external server</a> that allows byte-range requests. '+
                   'Binary-indexed custom tracks only need a <em>track</em> '+
-                  'line to define the custom track as it uses a '+
+                  'line to define the custom track as it uses the '+
                   '<a href="/goldenPath/help/trackDb/trackDbHub.html#bigDataUrl" '+
                   'target="_blank"><em>bigDataUrl</em></a> setting to fetch the annotations.'+
                   '<br><br>'+
@@ -338,7 +338,7 @@
             text:
                   'This table shows the custom tracks that you uploaded to the UCSC Genome Browser '+
                   'from the previous page. Using this table, you can delete any unwanted custom '+
-                  'tracks. ',
+                  'tracks. You can also click onto the track names to edit teh settings or data.',
             buttons: [tutorialButtons.next],
             attachTo: 
                 {
@@ -380,14 +380,14 @@
 
         customTrackTour.addStep({
             title: 'Additional resources and documentation',
-            text: 'For further examples of using the ' +
-                  'Table Browser, please read the <a href="/goldenPath/help/hgTablesHelp.html" '+
-                  'target="_blank">Table Browser user guide</a>. You can find examples of batch '+
-                  'queries, filtering on fields from tables, video examples, and more. '+
+            text: 'For further examples of using ' +
+                  'custom tracks, please read the <a href="/goldenPath/help/customTrack.html" '+
+                  'target="_blank">Custom Track user guide</a>. You can find examples of simple '+
+                  'annotation files, BED custom tracks with muliple blocks, loading custom tracks '+
+                  'via the URL, and more. '+
                   '<br><br>'+
                   'You can also <a href="/contacts.html" target="_blank">contact us</a> if you '+
-                  'have any questions or issues using a dataset '+
-                  'on the Table Browser.',
+                  'have any questions or issues uploading a custom track. ',
             attachTo: {
                 element: '#hgCustomHelp',
                 on: 'left-start'
