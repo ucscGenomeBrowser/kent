@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging, sys, optparse, re, os, datetime, gzip, urllib.request, urllib.error, urllib.parse, subprocess
-import tempfile, json
+import tempfile, json, glob
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, abspath, isdir
 from datetime import date, datetime, timedelta
@@ -39,7 +39,7 @@ Typical input files are at ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
 parser.add_option("", "--alpha", dest="isAlpha", action="store_true", help="Default target is /gbdb/{hg19,hg38}/bbi/clinvar. With this option, we use /gbdb/{hg19,hg38}/bbi/clinvarAlpha, the hgwdev only version of the track, see human/clinvarAlpha.ra in trackDb")
 parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBI into the current dir and convert to bigBed")
-parser.add_option("", "--skipDown", dest="skipDownload", action="store_true", help="Only with --auto: don't download again if it's already there, useful when debugging/developing")
+parser.add_option("", "--onlyNew", dest="onlyNew", action="store_true", help="Stop with no output to stdout if there is no new version on the Clinvar website")
 parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for last month's download file in current dir and accept this much difference, expressed as a ratio. Can only be used with --auto.")
 (options, args) = parser.parse_args()
 
@@ -153,7 +153,7 @@ def mustRun(cmd):
     ret = os.system(cmd)
     if ret!=0:
         print(("Could not run: %s" % cmd))
-        sys.exit(1)
+        raise
 
 def shortenName(name):
     "make the clinvar name shorter and keep a long version for the mouse over "
@@ -384,14 +384,11 @@ def lastMonth(d,x=1):
       newday = d.day
     return datetime( newyear, newmonth, newday)
 
-def compareWithLastMonth(fname, maxDiff):
-    " go back one month from current date, make sure that linecount diff is at most maxDiff "
-    todayStr = date.today().isoformat()
-    previousDate = lastMonth(date.today())
-    previousDateStr = previousDate.date().isoformat()
-    previousFname = fname.replace(todayStr, previousDateStr)
+def compareWithPrevRun(fname, maxDiff):
+    " make sure that linecount diff is at most maxDiff "
+    previousFname = "prevRun/"+basename(fname)
     if not isfile(previousFname):
-        print(("Cannot find %s, cannot compare new data with previous month" % previousFname))
+        print(("Cannot find %s, cannot compare new data with previous run" % previousFname))
         return
         
     previousCount = sum(1 for line in open(previousFname, encoding="utf8"))
@@ -613,19 +610,23 @@ def mostCurrentVersionName():
     version = verLine.split(" ")[3].split("=")[1].split('"')[1]
     return version
 
-def downloadFromNcbi(skipDownload):
-    " download files from NCBI and return list of filenames "
-    today = date.today().isoformat()
-    downDir = join("downloads", today)
+def downloadFromNcbi(onlyNew):
+    " download files from NCBI and return list of filenames. If onlyNew is true, exit with error code 0, no output "
+    clinvarVersion = mostCurrentVersionName()
+    downDir = join("downloads", clinvarVersion)
+
+    doDownload = True
+
     try:
         os.mkdir(downDir)
     except FileExistsError:
-        pass
+        if onlyNew:
+            exit(0)
+        else:
+            logging.warning("Not downloading ClinVar again, version '%s' is already in %s" % (clinvarVersion, downDir))
+            doDownload = False
 
-    version = mostCurrentVersionName()
-    logging.info("Version on NCBI server is %s" % version)
-    versionFname = join(downDir, "version.txt")
-    open(versionFname, "w").write(version)
+    logging.info("Version on NCBI server is %s" % clinvarVersion)
 
     baseUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/"
     url = baseUrl+"variant_summary.txt.gz"
@@ -648,11 +649,14 @@ def downloadFromNcbi(skipDownload):
     vcfUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz"
     vcfFname = join(downDir, "GRCh38.clinvar.vcf.gz")
 
-    if not (isfile(vcfFname)):
+    versionFname = join(downDir, "version.txt")
+
+    if doDownload:
+        logging.info("Creating %s" % versionFname)
+        open(versionFname, "w").write(clinvarVersion)
+
         logging.info("Downlading %s to %s" % (vcfUrl, vcfFname))
         open(vcfFname, "wb").write(urllib.request.urlopen(vcfUrl).read())
-
-    if not (skipDownload and isfile(outFname) and isfile(varFname) and isfile(hgvsFname) and isfile(summFname)):
         logging.info("Downlading %s to %s" % (url, outFname))
         open(outFname, "wb").write(urllib.request.urlopen(url).read())
         logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
@@ -697,6 +701,15 @@ def parseVcf(vcfFname):
 def shortenSeq(s):
     return s[:25]+"..."+s[-25:]
 
+def makeSubLolly(maxDiff, isAlpha):
+    "run the makeSubLolly script"
+    if maxDiff is None:
+        maxDiff = 5 # this is what was in doUpdate.sh, I admit it doesn't make sense
+    cmd = "sh ./clinvarSubLolly "+str(maxDiff)
+    if isAlpha:
+        cmd+= " --alpha"
+    assert(os.system(cmd)==0)
+
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -705,7 +718,7 @@ if args==[] and not options.auto:
 outSuffix = ""
 
 if options.auto:
-    filename, varFName, hgvsFname, vcfFname, summFname, versionFname = downloadFromNcbi(options.skipDownload)
+    filename, varFName, hgvsFname, vcfFname, summFname, versionFname = downloadFromNcbi(options.onlyNew)
 else:
     filename = args[0]
     varFname = args[1]
@@ -1066,7 +1079,7 @@ for fname in fnames:
 # check new bed files against last months's bed files
 if options.maxDiff and not options.isAlpha:
     for fname in fnames:
-        compareWithLastMonth(fname, options.maxDiff)
+        compareWithPrevRun(fname, options.maxDiff)
 
 bigBedDir = "bigBed"
 if options.isAlpha:
@@ -1113,13 +1126,9 @@ with open(outFname, "w") as ofh:
 
 # put a copy of the files into the archive
 if not options.isAlpha:
-    for db, tableName, tmpFname, finalFname in tmpFnames:
-        # not doing this anymore, using bigDataUrl now in trackDb
-        #cmd = "hgBbiDbLink %s %s %s" % (db, tableName, gbdbFname)
-        #mustRun(cmd)
-
+    for db, trackName, tmpFname, finalFname in tmpFnames:
         yearMonDay = date.today().strftime("%Y-%m-%d")
-        gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName)
+        gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, trackName)
         # put a copy into the archive
         outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
         if not isdir(outDir):
@@ -1129,12 +1138,19 @@ if not options.isAlpha:
         cmd = "cp %s %s" % (finalFname, archiveFname)
         mustRun(cmd)
 
+        # copy the BED files to prevRun, so we can do a diff in the next run
+        cmd = "cp bed/%s.%s.bed prevRun/" % (basename(trackName), db)
+        mustRun(cmd)
+
     # add the version.txt files
     for db in ["hg38", "hg19"]:
         archDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
         cmd = "cp %s/version.txt %s" % (bigBedDir, archDir)
         mustRun(cmd)
 
+
 loadSubmissions(summFname)
+makeSubLolly(options.maxDiff, options.isAlpha)
 
 print("ClinVar update end: OK")
+

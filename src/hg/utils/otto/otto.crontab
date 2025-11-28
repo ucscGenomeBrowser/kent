@@ -143,7 +143,7 @@ HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 
 MAILTO=cells@ucsc.edu
 # Cell Browser news sec update by Matt/Brittney Sept 2022
-0 0 * * 1-5 ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
+0 0 * * 1-5 umask 002; ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
 
 # Update Cell Browser .json facets files using tabulate_facets.pl
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json

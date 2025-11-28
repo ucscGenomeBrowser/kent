@@ -3644,7 +3644,19 @@ if (hgvsList)
                 {
                 if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
                     startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
-                    trackTable = "ncbiRefSeqCurated";
+                    if (sameString(db, "hg38") || sameString(db, "hg19"))
+                        {
+                        struct dyString *selectCheck = sqlDyStringCreate("select count(*) from ncbiRefSeqSelect where name='%s'", hgvs->seqAcc);
+                        struct sqlConnection *conn = hAllocConn(db);
+                        int count = sqlQuickNum(conn, dyStringCannibalize(&selectCheck));
+                        hFreeConn(&conn);
+                        if (count > 0)
+                            trackTable = "ncbiRefSeqSelect";
+                        else
+                            trackTable = "ncbiRefSeqCurated";
+                        }
+                    else
+                        trackTable = "ncbiRefSeqCurated";
                 else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
                          startsWith("XP_", hgvs->seqAcc))
                     trackTable = "ncbiRefSeqPredicted";
