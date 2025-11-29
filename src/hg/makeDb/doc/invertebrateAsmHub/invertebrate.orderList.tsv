@@ -784,6 +784,7 @@ GCF_945859685.1_idEupCoro1.1	hoverfly E.corollae (primary hap 2022)
 GCF_000006295.1_JCVI_LOUSE_1.0	human body louse
 GCA_900576705.1_E_vermicularis_Canary_Islands_upd	human pinworm (2018)
 GCA_000613005.1_TTRE2.1	human whipworm (2014)
+GCA_032352715.1_ASM3235271v1	hydrozoans B.muscus (IRGN PGID2E6BZW 2023)
 GCF_902728285.1_Clytia_hemisphaerica_genome_assembly	hydrozoans C.hemisphaerica (Z4C2 2020)
 GCF_000004095.1_Hydra_RP_1.0	hydrozoans H.vulgaris
 GCA_032273505.1_ASM3227350v1	hydrozoans N.bijuga (IRGN 2022FHL089 2023)
@@ -1064,6 +1065,7 @@ GCA_000143925.2_C_brenneri-6.0.1b	nematode C.brenneri (PB2801 2010)
 GCF_000004555.2_CB4	nematode C.briggsae (AF16 CB4 2014)
 GCA_021491975.1_ASM2149197v1	nematode C.briggsae (QX1410_ONT 2022)
 GCA_000002985.3_WBcel235	nematode C.elegans (Bristol N2 2013)
+GCA_052911875.1_C.elegans_CGC1_1.0	nematode C.elegans (CGC1 2025)
 GCA_900617965.1_C_goldi_Cheshire_0011	nematode C.goldi (2018)
 GCA_003052745.1_Sp34_v7	nematode C.inopinata
 GCA_000147155.1_C_japonica-7.0.1	nematode C.japonica (DF5081 2010)

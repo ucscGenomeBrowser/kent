@@ -2470,6 +2470,7 @@ GCF_002105095.1_Pseve2	ascomycetes P.vexata CBS 129021
 GCF_028829585.1_ASM2882958v1	ascomycetes P.vulpinum (IBT 29486 2023)
 GCA_017301755.1_ASM1730175v1	ascomycetes P.wakefieldiae (2A 2021)
 GCF_028829765.1_ASM2882976v1	ascomycetes P.waksmanii (IBT 27052 2023)
+GCA_014884795.1_ASM1488479v1	ascomycetes P.xanthii (2086 2020)
 GCF_001890105.1_Aspzo1	ascomycetes P.zonata CBS 506.65
 GCF_041956645.1_Rasby1	ascomycetes R.byssochlamydoides (NRRL 3658 2024)
 GCF_900074925.1_version_1	ascomycetes R.collo-cygni
@@ -3875,6 +3876,8 @@ GCA_003611215.1_ASM361121v1	powdery mildews (UCSC1 2018)
 GCA_003611235.1_ASM361123v1	powdery mildews (UMSG1 2018)
 GCA_003610855.1_ASM361085v1	powdery mildews (UMSG2 2018)
 GCA_003611195.1_ASM361119v1	powdery mildews (UMSG3 2018)
+GCA_010015925.1_POXAN_niab_assembly	powdery mildews (Wanju2017 2020)
+GCA_028751805.1_YZU_CsPM_1.2	powdery mildews (YZU573 2023)
 GCA_030378345.1_ASM3037834v1	powdery mildews (ZM-2022-MT899186 2023)
 GCF_000002495.2_MG8	rice blast fungus
 GCA_003724095.1_ASM372409v1	rust A.psidii (Apsidii_AM 2018)
