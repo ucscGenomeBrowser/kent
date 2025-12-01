@@ -109,11 +109,11 @@ window.createTutorialPopup = function() {
   document.getElementById('customTrackTutorial').addEventListener('click', function(event) {
     event.preventDefault();
     $("#tutorialContainer").dialog("close");
-    if (cgi == "hgCustom" && db == "hg38") {
-        customTrackTour.start(); // If you are on hg38, then start the tutorial
+    if (cgi == "hgCustom" && db == "hg19") {
+        customTrackTour.start(); // If you are on hg19, then start the tutorial
     } else {
-        // Otherwise go to hg38 and start the tutorial.
-        window.location.href = "/cgi-bin/hgCustom?db=hg38&startCustomTutorial=true&hgct_do_add=1";
+        // Otherwise go to hg19 and start the tutorial.
+        window.location.href = "/cgi-bin/hgCustom?db=hg19&startCustomTutorial=true&hgct_do_add=1";
     }
   });
 
