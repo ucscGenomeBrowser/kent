@@ -172,7 +172,6 @@ superTrack on
         track finngen
         parent varFreqs on
         visibility pack
-        itemRgb on
         type vcfTabix
         shortLabel Finngen
         longLabel Variant Frequencies: Finnland Finngen - 500k samples, arrays, imputation used 8.5k WGS
