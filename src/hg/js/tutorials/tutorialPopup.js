@@ -33,7 +33,7 @@ window.createTutorialPopup = function() {
           </td></tr>
       <tr><td style="padding: 8px;width: 200px; text-align: center; border: 1px solid #666666;">
           <a href="#" id="customTrackTutorial">Custom Track tutorial</a><br>
-          <em style="font-size: 11px">(only available on hg38)</em></td>
+          <em style="font-size: 11px">(only available on hg19)</em></td>
           <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
           <small>
           An introductory tutorial to guide users with steps to upload their own data into the
