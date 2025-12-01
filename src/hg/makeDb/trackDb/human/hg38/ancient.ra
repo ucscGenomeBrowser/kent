@@ -14,6 +14,7 @@ superTrack on
         visibility pack
         type vcfTabix
         hapClusterEnabled true
+        html ancient
 
         track neanderthal
         shortLabel Arcseqhub Neanderthal
@@ -23,3 +24,4 @@ superTrack on
         visibility pack
         type vcfTabix
         hapClusterEnabled true
+        html ancient
