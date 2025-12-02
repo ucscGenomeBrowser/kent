@@ -1183,7 +1183,7 @@ if (theImgBox && curImgTrack)
     //           hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width,
-                       y+height, track ? track->track : NULL);
+                       y+height, track ? track->track : NULL, message);
     }
 else
     {
@@ -1282,8 +1282,8 @@ if (x < xEnd)
         else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
             xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
-        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),
-                           x, y, xEnd, yEnd, track);
+        imgTrackAddMapItem(curImgTrack,link, encodedItem,
+                           x, y, xEnd, yEnd, track, statusLine);
         }
     else
         {
@@ -1306,7 +1306,9 @@ if (x < xEnd)
             hPrintf("&%s", extra);
         hPrintf("\" ");
         if (statusLine != NULL)
-            mapStatusMessage("%s", statusLine);
+            {
+            hPrintf(" TITLE='%s' data-tooltip='%s' ", item, statusLine);
+            }
         hPrintf("%s>\n", dyStringContents(id));
         }
     freeMem(encodedItem);

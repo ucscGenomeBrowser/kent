@@ -194,7 +194,7 @@ if (theImgBox && curImgTrack)
         warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
              encodedTrack,xOff, yOff, xOff+width, yOff+height, link);
 #endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,NULL,xOff,yOff,xOff+width,yOff+height,tg->track);
+    imgTrackAddMapItem(curImgTrack,link,NULL,xOff,yOff,xOff+width,yOff+height,tg->track, NULL);
     }
 else
     {

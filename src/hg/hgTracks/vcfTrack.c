@@ -1310,7 +1310,7 @@ if (theImgBox && curImgTrack)
     if (helper->endIx < helper->nRecords)
 	dyStringAppend(dy, "...");
     imgTrackAddMapItem(curImgTrack, TITLE_BUT_NO_LINK, dy->string,
-		       x1, y1, x2, y2, helper->track);
+		       x1, y1, x2, y2, helper->track, dy->string);
     }
 }
 
@@ -1730,7 +1730,7 @@ for (y = 0;  y < height;  y++)
             }
         }
     imgTrackAddMapItem(curImgTrack, TITLE_BUT_NO_LINK, dy->string,
-		       leftLabelX, y+yStart, labelEnd, y+yStart+1, track);
+		       leftLabelX, y+yStart, labelEnd, y+yStart+1, track, dy->string);
     }
 }
 

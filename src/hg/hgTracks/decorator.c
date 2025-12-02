@@ -1327,7 +1327,7 @@ if (theImgBox && curImgTrack)
         genericMapItem(tg, hvg, item, d->mouseOver, tg->mapItemName(tg, item), tg->itemStart(tg,item),
                 tg->itemEnd(tg,item), startX, y, endX-startX, heightPer);
     else
-        imgTrackAddMapItem(curImgTrack,"noLink",d->mouseOver, startX, y, endX, y+heightPer, NULL);
+        imgTrackAddMapItem(curImgTrack,"noLink",d->mouseOver, startX, y, endX, y+heightPer, NULL, NULL);
     }
 else
     {

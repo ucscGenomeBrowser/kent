@@ -4213,7 +4213,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
     if (ele1) {
         ele1.setAttribute("mouseoverText", text);
         // Remove title attribute to prevent default browser tooltip
-        if (ele1.title) {
+        if (ele1.title || ele1.dataset.tooltip) {
             ele1.setAttribute("originalTitle", ele1.title);
             ele1.title = "";
         }
@@ -4296,7 +4296,10 @@ function hideMouseoverText(ele) {
 function titleTagToMouseover(mapEl) {
     /* for a given area tag, extract the title text into a div that can be positioned
     * like a standard tooltip mouseover next to the item */
-    addMouseover(mapEl, mapEl.title);
+    if (mapEl.dataset.tooltip)
+        addMouseover(mapEl, mapEl.dataset.tooltip);
+    else
+        addMouseover(mapEl, mapEl.title);
 }
 
 function convertTitleTagsToMouseovers() {

@@ -480,7 +480,7 @@ if (theImgBox && curImgTrack)
     char link[512];
     safef(link,sizeof(link),"%s?complement_%s=%d&%s", hgTracksName(), database,
           !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, NULL);
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, NULL, NULL);
     }
 else
     {
@@ -5711,7 +5711,7 @@ if (rulerMode != tvHide)
 		if (revCmplDisp)
 		    x = tl.picWidth - (x + window->insideWidth);
 		imgTrackAddMapItem(curImgTrack, "#", position,
-		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME);
+		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME, NULL);
 		}
 
 	    }

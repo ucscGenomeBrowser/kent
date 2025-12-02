@@ -124,6 +124,8 @@ struct mapItem // IMAGEv2: single map item in an image map.
     int bottomRightY;         // in pixels relative to image
     char *id;                 // id; used by js right-click code to figure out what to do with
                               //     a map item (usually mapName)
+    char *tooltip;            // the tooltip (if any) to show for this area, fallback to title
+                              //     if not present
     };
 
 struct mapSet // IMAGEv2: full map for image OR partial map for slice
@@ -150,21 +152,21 @@ struct mapItem *mapSetItemFind(struct mapSet *map,int topLeftX,int topLeftY,
 
 struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,
                                  int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                 char *id);
+                                 char *id, char *tooltip);
 // Update an already existing mapItem
 
 struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,
-                              int bottomRightX,int bottomRightY, char *id);
+                              int bottomRightX,int bottomRightY, char *id, char *tooltip);
 // Add a single mapItem to a growing mapSet
 
 struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,
                                       int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                      char *id);
+                                      char *id, char *tooltip);
 // Update or add a single mapItem
 
 struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
                                     int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                    char *id);
+                                    char *id, char *tooltip);
 // Finds or adds the map item
 
 void mapItemFree(struct mapItem **pItem);
@@ -367,7 +369,7 @@ struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType typ
 // Gets the map assocated with a specific slice belonging to the imgTrack
 
 int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,
-                       int bottomRightX,int bottomRightY, char *id);
+                       int bottomRightX,int bottomRightY, char *id, char *tooltip);
 // Will add a map item it an imgTrack's appropriate slice's map
 // Since a map item may span slices, the imgTrack is in the best position to determine where
 // to put the map item.

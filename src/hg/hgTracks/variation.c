@@ -1675,7 +1675,7 @@ if (theImgBox && curImgTrack)
         warn("mapTrackBackground(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
              tg->track,xOff, yOff, xOff+insideWidth, yOff+tg->height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height, tg->track);
+    imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height, tg->track, NULL);
     }
 else
     {

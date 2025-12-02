@@ -398,6 +398,7 @@ tg->loadItems = encodePeakLoadItemsNormal;
 tg->drawItemAt = encodePeakDrawAt;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->itemName = encodePeakItemName;
+tg->mapItemName = encodePeakItemName;
 tg->canPack = TRUE;
 }
 
