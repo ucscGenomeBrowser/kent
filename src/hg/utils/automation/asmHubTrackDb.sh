@@ -705,12 +705,16 @@ rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
 rm -f ${buildDir}/genes/${asmId}.ncbiGene.gtf.gz
-export longLabel="Gene models submitted to NCBI"
-export shortLabel="Gene models"
-if [ "$asmType" = "refseq" ]; then
-  longLabel="RefSeq gene predictions from NCBI"
-  shortLabel="NCBI RefSeq"
-fi
+export longLabel="Gene models submitted to GenBank, ENA, DDBJ"
+export shortLabel="NCBI GenBank"
+# Note: 2025-12-02 - this isn't valid, since we are in this section due
+#                    to there being no NCBI RefSeq track.  Even though this
+#                    is a RefSeq assembly, these are other gene models, not
+#                    from RefSeq
+# if [ "$asmType" = "refseq" ]; then
+#   longLabel="RefSeq gene predictions from NCBI"
+#   shortLabel="NCBI RefSeq"
+# fi
 if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
   mkdir -p $buildDir/genes
   ln -s ../trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz $buildDir/genes/${asmId}.ncbiGene.gtf.gz
