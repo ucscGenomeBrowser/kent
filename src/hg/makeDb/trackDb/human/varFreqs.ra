@@ -173,7 +173,7 @@ superTrack on
         parent varFreqs on
         visibility pack
         type vcfTabix
-        shortLabel Finngen
+        shortLabel Finnland Finngen 500k imputed
         longLabel Variant Frequencies: Finnland Finngen - 500k samples, arrays, imputation used 8.5k WGS
         priority 4.5
         bigDataUrl /gbdb/$D/varFreqs/finngen/finnge_R12_annotated_variants_v1.vcf.gz
