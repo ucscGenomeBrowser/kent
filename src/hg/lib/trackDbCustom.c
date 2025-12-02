@@ -755,7 +755,7 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
         {
         char *words[3];
         int wordCount = chopLine(cloneString( type), words);
-        if (sameString("bigBed", type) && (wordCount == 1)) // no following words
+        if (startsWith("bigBed", type) )
             {
             cType = cfgBedScore;
 	    if (!bedHasFilters(tdb))
