@@ -4205,7 +4205,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         mouseoverContainer.style.opacity = "0";
         mouseoverContainer.id = "mouseoverContainer";
         let tooltipTextSize = localStorage.getItem("tooltipTextSize");
-        if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize;}
+        if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize !== null ? window.browserTextSize : 12;}
         mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
         document.body.append(mouseoverContainer);
     }
