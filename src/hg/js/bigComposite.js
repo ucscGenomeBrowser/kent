@@ -214,17 +214,18 @@ $(function() {
 
         const { maxCheckboxes, primaryKey } = embeddedData;
         maxCheckboxes ??= DEFAULT_MAX_CHECKBOXES;
-        const excludeCheckboxes = [primaryKey]
+        const excludeCheckboxes = [primaryKey];
 
         const filtersDiv = document.getElementById("filters");
-        colNames.forEach((key, colIdx) => {
+        colNames.forEach((key, _) => {
             // skip attributes if they should be excluded from checkbox sets
             if (excludeCheckboxes.includes(key)) {
                 return;
             }
 
             const sortedPossibleVals = Array.from(possibleValues[key].entries());
-            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // neg: less-than
+            sortedPossibleVals.sort((a, b) =>  // (below) neg: less-than
+                a[1] !== b[1] ? b[1] - a[1] : a[0].localeCompare(b[0]));
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals
@@ -332,7 +333,7 @@ $(function() {
     function initAll(dataForTable) {
         initDataTypeSelector();
         const table = initTable(dataForTable);
-        initFilters(table, dataForTable)
+        initFilters(table, dataForTable);
         initSubmit(table);
     }
 
@@ -374,7 +375,7 @@ $(function() {
                     const metadata = rows.slice(1).map(row => {
                         const values = row.split("\t");
                         const obj = {};
-                        colNames.forEach((attrib, i) => { obj[attrib] = values[i] });
+                        colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
                         return obj;
                     });
                     if (!metadata.length || !colNames.length) {
