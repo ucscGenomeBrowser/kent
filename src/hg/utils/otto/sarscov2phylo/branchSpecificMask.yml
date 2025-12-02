@@ -133,6 +133,11 @@ BA.2.86:
                   # designated recombinants fortunately:
                   T21941G,
                 ]
+    exclusions:
+      # Cornelius requested exclusion of XFJ.3.1, some of whose descendants have a real G23599T reversion.
+      # https://github.com/cov-lineages/pango-designation/commit/02d2cb6aa1155e4d0473fcb1ff345f472725be27
+      - site: 23599
+        representative: England/CLIMB-CM7YJM45/2025
 
 JN.1:
     # Inherits from BA.2.86
