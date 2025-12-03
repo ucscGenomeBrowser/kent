@@ -350,9 +350,13 @@ if (!trackHubDatabase(database))
     conn = hAllocConn(db);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 struct asObject *asObj = NULL;
+boolean isBb = isBigBed(database, rootTable, curTrack, ctLookupName);
 
 if (sameString("knownGene", rootTable))  // temporary hack to get table description from knownGene table instead of bigGenePred
+    {
     asObj = asForTableNoTdb(conn, rootTable);
+    isBb = FALSE;
+    }
 else
     asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
@@ -360,7 +364,7 @@ boolean showItemRgb = FALSE;
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 struct slName *fieldList;
-if (isBigBed(database, rootTable, curTrack, ctLookupName))
+if (isBb)
     fieldList = bigBedGetFields(rootTable, conn);
 else if (isLongTabixTable(rootTable))
     fieldList = getLongTabixFields();
