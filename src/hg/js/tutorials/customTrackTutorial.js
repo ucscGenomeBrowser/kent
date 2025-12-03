@@ -241,7 +241,7 @@
 
         const selectors = ['select', 'button', 'input[type="radio"]',
                            'input[type="submit"]', 'input[type="checkbox"]',
-                           'input[type="text"]'
+                           'input[type="text"]', 'a'
                           ];
         container.querySelectorAll(selectors).forEach(sel => {
             if (enabled) {
@@ -442,7 +442,11 @@
                 element: '#resultsTable',
                 on: 'bottom'
                 },
-            id: 'after-submit'
+            id: 'after-submit',
+            when: {
+                show: () => toggleSelects('resultsTable', false),
+                hide: () => toggleSelects('resultsTable', true)
+            }
         });
 
         customTrackTour.addStep({
@@ -459,7 +463,11 @@
                 element: '#navSelect',
                 on: 'bottom'
                 },
-            id: 'navigation-drop-down'
+            id: 'navigation-drop-down',
+            when: {
+                show: () => toggleSelects('navForm', false),
+                hide: () => toggleSelects('navForm', true)
+            }
         });
 
         customTrackTour.addStep({
