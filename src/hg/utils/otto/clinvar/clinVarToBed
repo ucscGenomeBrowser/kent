@@ -655,15 +655,15 @@ def downloadFromNcbi(onlyNew):
         logging.info("Creating %s" % versionFname)
         open(versionFname, "w").write(clinvarVersion)
 
-        logging.info("Downlading %s to %s" % (vcfUrl, vcfFname))
+        logging.info("Downloading %s to %s" % (vcfUrl, vcfFname))
         open(vcfFname, "wb").write(urllib.request.urlopen(vcfUrl).read())
-        logging.info("Downlading %s to %s" % (url, outFname))
+        logging.info("Downloading %s to %s" % (url, outFname))
         open(outFname, "wb").write(urllib.request.urlopen(url).read())
-        logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
+        logging.info("Downloading %s to %s" % (hgvsUrl, hgvsFname))
         open(hgvsFname, "wb").write(urllib.request.urlopen(hgvsUrl).read())
-        logging.info("Downlading %s to %s" % (varUrl, varFname))
+        logging.info("Downloading %s to %s" % (varUrl, varFname))
         open(varFname, "wb").write(urllib.request.urlopen(varUrl).read())
-        logging.info("Downlading %s to %s" % (summUrl, summFname))
+        logging.info("Downloading %s to %s" % (summUrl, summFname))
         open(summFname, "wb").write(urllib.request.urlopen(summUrl).read())
 
     return filename, varFname, hgvsFname, vcfFname, summFname, versionFname
