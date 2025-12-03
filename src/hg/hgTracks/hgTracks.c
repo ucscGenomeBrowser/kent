@@ -11679,6 +11679,7 @@ if(!trackImgOnly)
     if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
         {
         jsIncludeFile("hgc.js", NULL);
+        jsIncludeFile("alleles.js", NULL);
         hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
         }
 
