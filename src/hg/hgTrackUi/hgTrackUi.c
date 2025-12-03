@@ -3002,7 +3002,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   int anySelDataType = -1;  // non-neg val will be used as index and flag
   for (int i = 0; i < nDataTypes; ++i) {
     char toMatch[token_size];
-    snprintf(toMatch, token_size, "_%s_sel", dataTypes[i]);
+    safef(toMatch, token_size, "_%s_sel", dataTypes[i]);
     boolean dataTypeSel = FALSE;
     for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
       if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
@@ -3017,7 +3017,7 @@ bigCompositeCfgUi(struct trackDb *tdb) {
   not_first = 0;
   if (anySelDataType >= 0) {
     char suffix[token_size];
-    snprintf(suffix, token_size, "_%s_sel", dataTypes[anySelDataType]);
+    safef(suffix, token_size, "_%s_sel", dataTypes[anySelDataType]);
     for (struct cgiVar *le = varList->list; le; le = le->next)
       if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix)) {
         const char *nameStart = le->name + metaDataIdLen + 1;
