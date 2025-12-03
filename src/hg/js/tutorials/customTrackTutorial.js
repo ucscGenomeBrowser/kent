@@ -372,10 +372,10 @@
             id: 'bigCustom-tracks'
         });
         customTrackTour.addStep({
-            title: '(Optional) Upload track documentation',
+            title: 'Upload track documentation &nbsp;<em>(Optional)</em>',
             text:
                   'In this dialoge box, you can add HTML that will be shown on the custom '+
-                  'track\'s description page. '+
+                  'track\'s description page. This is not required but highly recommended.'+
                   '<br><br>'+
                   'An <a href="/goldenPath/help/ct_description.txt" '+
                   'target="_blank">example HTML</a> text is provided, and can '+
@@ -429,8 +429,9 @@
             title: 'View your uploaded custom tracks',
             text:
                   'This table shows the custom tracks that you uploaded to the UCSC Genome Browser '+
-                  'from the previous page. Using this table, you can delete any unwanted custom '+
-                  'tracks. You can also click onto the track names to edit teh settings or data.',
+                  'from the previous page.<br><br>'+
+                  'Using this table, you can delete any unwanted custom '+
+                  'tracks. You can also click onto the track names to edit the settings or data.',
             buttons: [tutorialButtons.next],
             attachTo: 
                 {
