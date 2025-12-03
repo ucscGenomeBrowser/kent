@@ -41,7 +41,18 @@
         },
         'load_bigWig': {
             text: 'Load a bigWig example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'bigWig example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'bigWig example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -60,7 +71,18 @@
         },
         'load_bigBed': {
             text: 'Load a bigBed example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'bigBed example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'bigBed example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -77,7 +99,18 @@
         },
         'load_bed': {
             text: 'Load a BED example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'BED example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'BED example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -98,7 +131,18 @@
         },
         'load_wig': {
             text: 'Load a WIG example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'WIG example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'WIG example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -118,6 +162,54 @@
                                 '33039353	12.5\n'+
                                 '33040461	10.0\n';
               
+              // Optional: trigger any change events if the page listens for them
+              textarea.dispatchEvent(new Event('change', { bubbles: true }));
+              textarea.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        },
+        'load_html': {
+            text: 'Load HTML example',
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'HTML example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'HTML example added';
+              }
+
+              // Add text to the textarea
+              const textarea = document.querySelector('textarea[name="hgct_docText"]');
+              textarea.value = '<h2>Description</h2>\n' +
+                               '<p>\n'+
+                               'Replace this text with a summary describing the concepts or \n'+
+                               'analysis represented by your data.</p>\n'+
+                               '\n'+
+                               '<h2>Methods</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a description of the methods used to \n'+
+                               'generate and analyze the data.</p>\n'+
+                               '\n'+
+                               '<h2>Verification</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a description of the methods used to \n'+
+                               'verify the data.</p>\n'+
+                               '\n'+
+                               '<h2>Credits</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a list of the individuals and/or \n'+
+                               'organizations who contributed to the collection and analysis \n'+
+                               'of the data.</p>\n'+
+                               '\n'+
+                               '<h2>References</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a list of relevant literature references \n'+
+                               'and/or websites that provide background or supporting \n'+
+                               'information about the data.</p>';
+
               // Optional: trigger any change events if the page listens for them
               textarea.dispatchEvent(new Event('change', { bubbles: true }));
               textarea.dispatchEvent(new Event('input', { bubbles: true }));
@@ -288,7 +380,7 @@
                   'An <a href="/goldenPath/help/ct_description.txt" '+
                   'target="_blank">example HTML</a> text is provided, and can '+
                   'be edited to fit your needs. ',
-            buttons: [tutorialButtons.back, tutorialButtons.next],
+            buttons: [tutorialButtons.back, tutorialButtons.load_html, tutorialButtons.next],
             attachTo: 
                 {
                 element: '#description-input',

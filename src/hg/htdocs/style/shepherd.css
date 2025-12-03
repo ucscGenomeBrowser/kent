@@ -25,6 +25,11 @@
     color: rgba(0, 0, 0, .75);
 }
 
+.shepherd-button.shepherd-button-optional {
+    background: #4682B4;
+    color: hsla(0, 0%, 100%, .75);
+}
+
 .shepherd-button:disabled {
     cursor: not-allowed;
 }
