@@ -2771,6 +2771,10 @@ var rightClick = {
         if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
             title = title.split("<br>")[0].split("</b>")[1];
         }
+        // for older UCSC genes tracks, the protein name is forced onto the item name
+        if (title.search(/&hgg_prot=/) !== -1) {
+            title = title.split("&hgg_prot=")[0];
+        }
         return title;
     },
 
@@ -2961,7 +2965,7 @@ var rightClick = {
 
                         // remove special genePred exon mouseover html text
                         // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
-                        title = rightClick.mouseOverToLabel(title);
+                        title = rightClick.mouseOverToLabel(decodeURIComponent(title));
 
                         if (title.length > maxLength) {
                             title = title.substring(0, maxLength) + "...";

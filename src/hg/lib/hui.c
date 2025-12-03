@@ -9508,7 +9508,9 @@ printInfoIconSvg(color);
 puts("</span>");
 if (!mouseOverJsDone)
     {
-    jsInline("convertTitleTagsToMouseovers();\n");
+    jsInline("document.addEventListener('DOMContentLoaded', function() {\n"
+        "    convertTitleTagsToMouseovers();\n"
+        "    });\n");
     mouseOverJsDone = TRUE;
     }
 }
@@ -9522,7 +9524,9 @@ printInfoIconSvg("#1C274C");
 puts("</span>");
 if (!mouseOverJsDone)
     {
-    jsInline("convertTitleTagsToMouseovers();\n");
+    jsInline("document.addEventListener('DOMContentLoaded', function() {\n"
+        "    convertTitleTagsToMouseovers();\n"
+        "    });\n");
     mouseOverJsDone = TRUE;
     }
 }
