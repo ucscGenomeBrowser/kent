@@ -317,7 +317,11 @@
                 element: '#genome-selection-table',
                 on: 'bottom'
                 },
-            id: 'genome-select'
+            id: 'genome-select',
+            when: {
+                show: () => toggleSelects('genome-selection-table', false),
+                hide: () => toggleSelects('genome-selection-table', true)
+            }
         });
         customTrackTour.addStep({
             title: 'Text-based custom tracks',
