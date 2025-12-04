@@ -165,6 +165,13 @@ KP.3.1.1:
                   G7842A, T23948G, C3565T, T17334G, G19722A, G23055A, T28271A, T23063A, G22910A
                 ]
 
+RE.1.1:
+    # No inheritance -- BA.3.2 descendant with lots of dropout in Australia/WA sequences
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/3093#issuecomment-3508425340
+    representative: Australia/WA17392/2025
+    reversions: [ A336G, C13375T, C22629A, T28996A ]
+    sites: [ 28254 ]
+
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
     representative: SouthAfrica/NICD-N41664/2022
