@@ -528,17 +528,14 @@ for (section = sectionList; section != NULL; section = section->next)
     dyStringPrintf(header, "<IMG id=\"%sBtn\" src=\"%s\" alt=\"%s\" class=\"bigBlue\">&nbsp;&nbsp;",
         section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
-    webNewSection("%s",header->string);
     if (isOpen)
-	{
-        long startTime = clock1000();
-	section->print(section, conn, geneId);
-        section->printTime = clock1000() - startTime;
-	}
+        webNewSection("%s",header->string);
     else
-	{
-	printf("Press \"+\" in the title bar above to open this section.");
-	}
+        webNewHiddenSection("%s",header->string);
+    
+    long startTime = clock1000();
+    section->print(section, conn, geneId);
+    section->printTime = clock1000() - startTime;
     dyStringFree(&header);
     }
 // add some simple javascript that can do the collapse/expand section buttons
