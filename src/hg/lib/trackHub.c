@@ -911,8 +911,8 @@ if (hel != NULL)
     char *oldVal = hel->val;
     hel->val = trackHubRelativeUrl(hubUrl, oldVal);
     char *newPath = (char *) hel->val;
-    
-    if (strchr(hubUrl, ':') && (!strchr(newPath, ':')))
+
+    if (hasProtocol(hubUrl) && !hasProtocol(newPath))
 	{
 	// allow local url with udc.localDir path prefix
 	char *prefix = cfgOption("udc.localDir");

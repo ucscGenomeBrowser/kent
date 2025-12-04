@@ -4872,7 +4872,7 @@ for (track = trackList; track != NULL; track = nextTrack)
             nextLf = lf->next;
 
             // if this is a hgFind match, it always is in pack, not squish
-            if ((origHgFindMatches != NULL) && hashLookup(origHgFindMatches, lf->name))
+            if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, lf->name))
                 slAddHead(&track->items, lf);
             else if (lf->squishyPackVal > squishyPackPoint)
                 slAddHead(&squishTrack->items, lf);
@@ -8732,7 +8732,7 @@ if (psOutput != NULL)
    hideControls = TRUE;
    withNextItemArrows = FALSE;
    withNextExonArrows = FALSE;
-   hgFindMatches = NULL;
+   hgFindMatchesShowHighlight = FALSE;
    }
 
 /* Tell browser where to go when they click on image. */
@@ -11592,7 +11592,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hideControls = TRUE;
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
-    hgFindMatches = NULL;     // XXXX necessary ???
+    hgFindMatchesShowHighlight = FALSE;
     }
 
 jsonForClient = newJsonObject(newHash(8));
