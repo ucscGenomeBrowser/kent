@@ -21,7 +21,7 @@ if (isEmpty(track->type))
 safecpy(setting, sizeof setting, track->type);
 char *type = nextWord(&p);
 
-if (!sameString(type, "genePred"))
+if (!(sameString(type, "genePred") || sameString(type, "bigGenePred")))
     return FALSE;
 
 if (!sameString(track->table, table))
