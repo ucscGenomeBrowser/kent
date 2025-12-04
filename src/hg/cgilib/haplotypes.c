@@ -474,7 +474,7 @@ safecpy(p,sizeQ - (p - popQuery),haplo->subjectIds);
 size_t count = strSwapStrs(p,sizeQ - (p - popQuery),",","','");
 assert(count == haplo->subjects - 1);
 p += strlen(p);
-sqlSafef(p,sizeQ - (p - popQuery),POP_QUERY_END);//,pop);
+safef(p,sizeQ - (p - popQuery),POP_QUERY_END);//,pop);
 
 // Do our best to calculate memory size for results string
 int sizeR = (popGroups + 1) * 12;
