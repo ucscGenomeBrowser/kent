@@ -2,6 +2,7 @@
 
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 // Alleles supports gene haplotype alleles section
 var alleles = (function()
@@ -68,10 +69,9 @@ var alleles = (function()
     { // Request an ajax update of this section
     
         // Use current url but make sure it is relative
-        var thisUrl = window.location.href;
-        var ix = thisUrl.indexOf("cgi-bin");
-        if (ix > 0)
-            thisUrl = "../" + thisUrl.substring(ix);
+        var thisUrl = new URL(window.location.href);
+        let queryArgs = varHashToQueryString(window.hgcOrHgGeneArgs);
+        thisUrl = "../cgi-bin/hgGene?" + queryArgs;
         
         $.ajax({
                 type: "GET",
@@ -81,7 +81,7 @@ var alleles = (function()
                 trueSuccess: update,
                 success: catchErrorOrDispatch,
                 error: errorHandler,
-                //async: false,
+                async: false,
                 //cmd: cmd,
                 loadingId: showLoadingImage(sectionName),
                 cache: false

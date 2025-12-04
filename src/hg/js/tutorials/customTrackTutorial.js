@@ -41,7 +41,18 @@
         },
         'load_bigWig': {
             text: 'Load a bigWig example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'bigWig example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'bigWig example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -60,7 +71,18 @@
         },
         'load_bigBed': {
             text: 'Load a bigBed example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'bigBed example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'bigBed example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -77,7 +99,18 @@
         },
         'load_bed': {
             text: 'Load a BED example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'BED example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'BED example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -98,7 +131,18 @@
         },
         'load_wig': {
             text: 'Load a WIG example',
-            action () {
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'WIG example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'WIG example added';
+              }
+
               // Add text to the textarea
               const textarea = document.querySelector('textarea[name="hgct_customText"]');
               if (textarea.value.trim() === '') {
@@ -118,6 +162,54 @@
                                 '33039353	12.5\n'+
                                 '33040461	10.0\n';
               
+              // Optional: trigger any change events if the page listens for them
+              textarea.dispatchEvent(new Event('change', { bubbles: true }));
+              textarea.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        },
+        'load_html': {
+            text: 'Load HTML example',
+            classes: 'shepherd-button-optional',
+            action (event) {
+              // If button was clicked already, do nothing
+              if (event.currentTarget.textContent === 'HTML example added'){
+                  return;
+              }
+              // Change button color when clicked
+              if (event && event.currentTarget) {
+                  event.currentTarget.style.backgroundColor = '#87CEEB'; // Light blue
+                  event.currentTarget.textContent = 'HTML example added';
+              }
+
+              // Add text to the textarea
+              const textarea = document.querySelector('textarea[name="hgct_docText"]');
+              textarea.value = '<h2>Description</h2>\n' +
+                               '<p>\n'+
+                               'Replace this text with a summary describing the concepts or \n'+
+                               'analysis represented by your data.</p>\n'+
+                               '\n'+
+                               '<h2>Methods</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a description of the methods used to \n'+
+                               'generate and analyze the data.</p>\n'+
+                               '\n'+
+                               '<h2>Verification</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a description of the methods used to \n'+
+                               'verify the data.</p>\n'+
+                               '\n'+
+                               '<h2>Credits</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a list of the individuals and/or \n'+
+                               'organizations who contributed to the collection and analysis \n'+
+                               'of the data.</p>\n'+
+                               '\n'+
+                               '<h2>References</h2>\n'+
+                               '<p>\n'+
+                               'Replace this text with a list of relevant literature references \n'+
+                               'and/or websites that provide background or supporting \n'+
+                               'information about the data.</p>';
+
               // Optional: trigger any change events if the page listens for them
               textarea.dispatchEvent(new Event('change', { bubbles: true }));
               textarea.dispatchEvent(new Event('input', { bubbles: true }));
@@ -144,14 +236,17 @@
         }
     };
     // Function to disable drop-downs, button clicks, and text inputs
+    // Now accepts a string or a DOM element.
     function toggleSelects(containerId, enabled) {
-        const container = document.getElementById(containerId);
+        const container = typeof containerId === 'string'
+                          ? document.getElementById(containerId) // If true, 
+                          : containerId; // else assume it is a DOM element
 
         const selectors = ['select', 'button', 'input[type="radio"]',
                            'input[type="submit"]', 'input[type="checkbox"]',
-                           'input[type="text"]'
+                           'input[type="text"]', 'a'
                           ];
-        container.querySelectorAll(selectors).forEach(sel => {
+        container.querySelectorAll(selectors.join(',')).forEach(sel => {
             if (enabled) {
                 sel.style.pointerEvents = '';
                 sel.style.opacity = '';
@@ -225,7 +320,11 @@
                 element: '#genome-selection-table',
                 on: 'bottom'
                 },
-            id: 'genome-select'
+            id: 'genome-select',
+            when: {
+                show: () => toggleSelects('genome-selection-table', false),
+                hide: () => toggleSelects('genome-selection-table', true)
+            }
         });
         customTrackTour.addStep({
             title: 'Text-based custom tracks',
@@ -280,15 +379,15 @@
             id: 'bigCustom-tracks'
         });
         customTrackTour.addStep({
-            title: '(Optional) Upload track documentation',
+            title: 'Upload track documentation &nbsp;<em>(Optional)</em>',
             text:
                   'In this dialoge box, you can add HTML that will be shown on the custom '+
-                  'track\'s description page. '+
+                  'track\'s description page. This is not required but highly recommended.'+
                   '<br><br>'+
                   'An <a href="/goldenPath/help/ct_description.txt" '+
                   'target="_blank">example HTML</a> text is provided, and can '+
                   'be edited to fit your needs. ',
-            buttons: [tutorialButtons.back, tutorialButtons.next],
+            buttons: [tutorialButtons.back, tutorialButtons.load_html, tutorialButtons.next],
             attachTo: 
                 {
                 element: '#description-input',
@@ -321,6 +420,12 @@
                         textarea.dispatchEvent(new Event('change', { bubbles: true }));
                         textarea.dispatchEvent(new Event('input', { bubbles: true }));
                     }
+                    const submitButton = document.querySelector('input#Submit').parentElement;
+                    toggleSelects(submitButton, false);
+                },
+                hide: function() {
+                    const submitButton = document.querySelector('input#Submit').parentElement;
+                    toggleSelects(submitButton, true);
                 }
             },
             attachTo: 
@@ -337,15 +442,20 @@
             title: 'View your uploaded custom tracks',
             text:
                   'This table shows the custom tracks that you uploaded to the UCSC Genome Browser '+
-                  'from the previous page. Using this table, you can delete any unwanted custom '+
-                  'tracks. You can also click onto the track names to edit teh settings or data.',
+                  'from the previous page.<br><br>'+
+                  'Using this table, you can delete any unwanted custom '+
+                  'tracks. You can also click onto the track names to edit the settings or data.',
             buttons: [tutorialButtons.next],
             attachTo: 
                 {
                 element: '#resultsTable',
                 on: 'bottom'
                 },
-            id: 'after-submit'
+            id: 'after-submit',
+            when: {
+                show: () => toggleSelects('resultsTable', false),
+                hide: () => toggleSelects('resultsTable', true)
+            }
         });
 
         customTrackTour.addStep({
@@ -362,7 +472,11 @@
                 element: '#navSelect',
                 on: 'bottom'
                 },
-            id: 'navigation-drop-down'
+            id: 'navigation-drop-down',
+            when: {
+                show: () => toggleSelects('navForm', false),
+                hide: () => toggleSelects('navForm', true)
+            }
         });
 
         customTrackTour.addStep({
@@ -375,7 +489,17 @@
                 element: '#addTracksButton',
                 on: 'bottom'
                 },
-            id: 'add-tracks'
+            id: 'add-tracks',
+            when: {
+                show: function() {
+                    const submitButton = document.querySelector('input#addTracksButton').parentElement;
+                    toggleSelects(submitButton, false);
+                },
+                hide: function() {
+                    const submitButton = document.querySelector('input#addTracksButton').parentElement;
+                    toggleSelects(submitButton, true);
+                }
+            }
         });
 
         customTrackTour.addStep({

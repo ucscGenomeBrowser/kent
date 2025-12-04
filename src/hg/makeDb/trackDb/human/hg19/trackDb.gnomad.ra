@@ -4,6 +4,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
+pennantIcon Updated red ../goldenPath/newsarch.html#120325 "New gnomAD MPC track Dec. 03, 2025"
 
     track gnomadCoverage
     compositeTrack on
@@ -944,6 +945,7 @@ html gnomad
     dataVersion Release 2.1.1 (Oct, 2025)
     html gnomadMpc.html
     noParentConfig on
+    pennantIcon New red ../goldenPath/newsarch.html#120325 "Released Dec. 03, 2025"
 
 searchTable pliByTranscript
 searchType bigBed
