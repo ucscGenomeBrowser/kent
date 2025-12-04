@@ -391,20 +391,6 @@ exonArrows on
 include dbSnpArchiveMm10.ra
 include reMap.ra
 
-# TOGA default annotation for hg38
-track HLTOGAannotvsHg38v1
-shortLabel TOGA hg38 annotations
-longLabel TOGA annotations using human hg38 as reference
-group genes
-priority 2
-visibility pack
-itemRgb on
-type bed 12
-
-searchTable HLTOGAannotvsHg38v1
-searchType bed
-searchMethod fuzzy
-
 track allGaps
 shortLabel All Gaps
 longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
