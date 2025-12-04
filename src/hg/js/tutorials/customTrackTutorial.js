@@ -236,14 +236,17 @@
         }
     };
     // Function to disable drop-downs, button clicks, and text inputs
+    // Now accepts a string or a DOM element.
     function toggleSelects(containerId, enabled) {
-        const container = document.getElementById(containerId);
+        const container = typeof containerId === 'string'
+                          ? document.getElementById(containerId) // If true, 
+                          : containerId; // else assume it is a DOM element
 
         const selectors = ['select', 'button', 'input[type="radio"]',
                            'input[type="submit"]', 'input[type="checkbox"]',
                            'input[type="text"]', 'a'
                           ];
-        container.querySelectorAll(selectors).forEach(sel => {
+        container.querySelectorAll(selectors.join(',')).forEach(sel => {
             if (enabled) {
                 sel.style.pointerEvents = '';
                 sel.style.opacity = '';
@@ -417,6 +420,12 @@
                         textarea.dispatchEvent(new Event('change', { bubbles: true }));
                         textarea.dispatchEvent(new Event('input', { bubbles: true }));
                     }
+                    const submitButton = document.querySelector('input#Submit').parentElement;
+                    toggleSelects(submitButton, false);
+                },
+                hide: function() {
+                    const submitButton = document.querySelector('input#Submit').parentElement;
+                    toggleSelects(submitButton, true);
                 }
             },
             attachTo: 
@@ -480,7 +489,17 @@
                 element: '#addTracksButton',
                 on: 'bottom'
                 },
-            id: 'add-tracks'
+            id: 'add-tracks',
+            when: {
+                show: function() {
+                    const submitButton = document.querySelector('input#addTracksButton').parentElement;
+                    toggleSelects(submitButton, false);
+                },
+                hide: function() {
+                    const submitButton = document.querySelector('input#addTracksButton').parentElement;
+                    toggleSelects(submitButton, true);
+                }
+            }
         });
 
         customTrackTour.addStep({
