@@ -420,6 +420,26 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
 puts("<div class='subheadingBar windowSize'>");
 }
 
+void webNewHiddenSectionHeaderEnd()
+/* Properly close header of hidden collapsible section on web page */
+{
+puts("     </div>\n"
+     "     <TABLE style='display:none' BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+          "<TR><TH HEIGHT=10></TH></TR>\n"
+     "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n");
+}
+
+void webNewHiddenSection(char* format, ...)
+/* create a new hidden section on the web page */
+{
+va_list args;
+va_start(args, format);
+webNewSectionHeaderStart();
+vprintf(format, args);
+webNewHiddenSectionHeaderEnd();
+va_end(args);
+}
+
 void webNewSectionHeaderEnd()
 /* Properly close header of collapsible section on web page */
 {
