@@ -749,6 +749,7 @@ var posting = {
             if (posting.blockUseMap === true) {
                 return false;
             } else if (cgi === "hgGene") {
+                window.hgcOrHgGeneArgs = parsedUrl.queryArgs;
                 id = parsedUrl.queryArgs.hgg_type;
                 popUpHgcOrHgGene.hgc(id, this.href);
                 return false;
