@@ -285,8 +285,7 @@ struct rgbColor darkSeaColor = {0, 60, 120, 255};
 struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
-struct hash *origHgFindMatches; /* For use with pdf mode that sets hgFindMatches = NULL.
-                                  Original searches can use for bigBedLoading, squishy pack, etc.  */
+boolean hgFindMatchesShowHighlight; /* For use with pdf mode which suppresses label highlight */
 
 struct trackLayout tl;
 
@@ -4480,7 +4479,7 @@ else if (sameString(tg->table, PCR_RESULT_TRACK_NAME))
 
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
-highlight = (hgFindMatches != NULL &&
+highlight = (hgFindMatchesShowHighlight &&
 	     ( ((name != NULL) && (hashIntValDefault(hgFindMatches, name, 0) == 1)) ||
 	       ((mapName != NULL) &&  hashIntValDefault(hgFindMatches, mapName, 0) == 1)));
 return highlight;
@@ -16011,6 +16010,6 @@ for(name = nameList; name != NULL; name = name->next)
     hashAddInt(hgFindMatches, name->name, 1);
     }
 slFreeList(&nameList);
-origHgFindMatches = hgFindMatches;  // can use with pdf mode when hgFindMatches = NULL
+hgFindMatchesShowHighlight = TRUE;  // default to showing the highlight searched item label.
 }
 

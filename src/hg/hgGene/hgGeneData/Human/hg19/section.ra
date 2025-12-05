@@ -4,7 +4,7 @@ name geneAlleles
 shortLabel Gene Alleles
 longLabel Common Gene Haplotype Alleles
 priority 38
-#visibility hide
+visibility hide
 
 name gtex
 shortLabel RNA-Seq Expression
