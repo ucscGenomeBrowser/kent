@@ -1,0 +1,163 @@
+track TOGAv2
+shortLabel TOGAv2
+longLabel TOGA 2.0 annotations, multiple reference
+group genes
+visibility hide
+type bigBed 12 +
+superTrack on
+html TOGAv2
+
+#################### 4 mammals
+    track HLTOGAannotvsHg38v2
+    parent TOGAv2
+    shortLabel TOGA2 human annotations
+    longLabel TOGA 2.0 annotations using human hg38 as reference
+    group genes
+    priority 3
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAvHg38v2/HLTOGAannotVsHg38v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAvHg38v2/HLTOGAannotVsHg38v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAvHg38v2/HLTOGAannotVsHg38v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsMm10v2
+    parent TOGAv2
+    shortLabel TOGA2 mouse annotations
+    longLabel TOGA 2.0 annotations using mouse mm10 as reference
+    group genes
+    priority 4
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAvMm10v2/HLTOGAannotVsMm10v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAvMm10v2/HLTOGAannotVsMm10v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAvMm10v2/HLTOGAannotVsMm10v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsHLbosTau10v2
+    parent TOGAv2
+    shortLabel TOGA2 cow annotations
+    longLabel TOGA 2.0 annotations using cow bosTau10 as reference
+    group genes
+    priority 4
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsHLeleMaxInd3Av2
+    parent TOGAv2
+    shortLabel TOGA2 elephant annotations
+    longLabel TOGA 2.0 annotations using elephant GCF_024166365.1_mEleMax1 as reference
+    group genes
+    priority 5
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+#################### 5 birds
+    track HLTOGAannotvsHLgalGal7v2
+    parent TOGAv2
+    shortLabel TOGA2 chicken annotations
+    longLabel TOGA 2.0 annotations using chicken galGal7 as reference
+    group genes
+    priority 2
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvGalGal7/HLTOGAannotVsHLgalGal7v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAv2/TOGAvGalGal7/HLTOGAannotVsHLgalGal7v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvGalGal7/HLTOGAannotVsHLgalGal7v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsHLtaeGut5v2
+    parent TOGAv2
+    shortLabel TOGA2 zebrafinch annotations
+    longLabel TOGA 2.0 annotations using zebrafinch taeGut5 as reference
+    group genes
+    priority 3
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_003957565.2v2/HLTOGAannotVsHLtaeGut5v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAv2/TOGAvGCF_003957565.2v2/HLTOGAannotVsHLtaeGut5v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_003957565.2v2/HLTOGAannotVsHLtaeGut5v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsHLrisTri2v2
+    parent TOGAv2
+    shortLabel TOGA2 kittiwake annotations
+    longLabel TOGA 2.0 annotations using Black-legged kittiwake HLrisTri2 as reference
+    group genes
+    priority 4
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_028500815.1v2/HLTOGAannotVsHLrisTri2v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAv2/TOGAvGCF_028500815.1v2/HLTOGAannotVsHLrisTri2v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_028500815.1v2/HLTOGAannotVsHLrisTri2v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsHLcorHaw3v2
+    parent TOGAv2
+    shortLabel TOGA2 crow annotations
+    longLabel TOGA 2.0 annotations using Hawaiian crow HLcorHaw3 as reference
+    group genes
+    priority 5
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_020740725.1v2/HLTOGAannotVsHLcorHaw3v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAv2/TOGAvGCF_020740725.1v2/HLTOGAannotVsHLcorHaw3v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_020740725.1v2/HLTOGAannotVsHLcorHaw3v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
+
+    track HLTOGAannotvsHLdroNov3v2
+    parent TOGAv2
+    shortLabel TOGA2 emu annotations
+    longLabel TOGA 2.0 annotations using emu HLdroNov3 as reference
+    group genes
+    priority 6
+    visibility pack
+    itemRgb on
+    type bigBed 12 +
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_036370855.1v2/HLTOGAannotVsHLdroNov3v2.bb
+    labelFields name
+    searchIndex name
+    searchTrix /gbdb/$D/TOGAv2/TOGAvGCF_036370855.1v2/HLTOGAannotVsHLdroNov3v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_036370855.1v2/HLTOGAannotVsHLdroNov3v2.decorator.bb
+    decorator.default.maxLabelBases 5000
+    html TOGAv2
