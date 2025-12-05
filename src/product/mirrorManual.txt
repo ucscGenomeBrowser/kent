@@ -86,8 +86,8 @@ Optional:
 It is best to install these packages with your standard operating
 system package management tools:
 
-* Debian/Ubuntu: `apt-get install ghostscript apache2 mariadb-server gmt r-base uuid-dev libcurl4-openssl-dev`
-* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel libcurl-devel`
+* Debian/Ubuntu: `apt-get install gcc make ghostscript apache2 mariadb-server gmt r-base uuid-dev libcurl4-openssl-dev libbz2-dev g++`
+* Redhat/Fedora/CentOS: `yum install gcc libpng12 httpd ghostscript GMT hdf5 R libuuid-devel libcurl-devel bzip2-devel gcc-c++`
 
 On newer distributions, python-mysqldb / MySQL-python is not available anymore.
 In this case, install python2, pip for it and then use pip to install the mysql
