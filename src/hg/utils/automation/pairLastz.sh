@@ -530,7 +530,6 @@ cd $swapDir
 
 export targetDb=\"${tAsmId}\"
 export Target=\"${Target}\"
-export Qarget=\"${Query}\"
 export queryDb=\"${qAsmId}\"
 
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
