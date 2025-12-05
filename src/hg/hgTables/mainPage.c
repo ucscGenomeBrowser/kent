@@ -726,9 +726,8 @@ printStep(stepNumber++);
     {
     hPrintf("<TR><TD><DIV ID=\"table-select\">");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
-    if (isHubTrack(curTable) || hashFindVal(fullTableToTdbHash, curTable) != NULL   /* In same database */
-          || sameString(curTable, "knownCanonical")  // not in the trackList but works.
-	)
+    // note that fullTableToTdbHash track hash is missing many tables including knownCanonical so cannot use it. 
+    if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
         {
         hti = getHti(database, curTable, conn);
         isPositional = htiIsPositional(hti);
