@@ -184,6 +184,8 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
                 text-align:center; vertical-align:middle; white-space:nowrap;}
 .nativeToggleBar {font-weight: bold; color:#FFFFFF; background-color:#00457c; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
+.visibleTracksToggleBar {font-weight: bold; color:#FFFFFF; background-color:#66A3EE; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap;}
 .toggleButton  {height: 20px; width: 20px; vertical-align:middle;}
 
 

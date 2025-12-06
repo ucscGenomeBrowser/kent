@@ -658,13 +658,17 @@ struct track *getTrackList(struct group **pGroupList, int vis);
  * If vis is -1, restore default groups to tracks.
  * Shared by hgTracks and configure page. */
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash);
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash, struct hash *trackHashRef);
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
  * Shared by hgTracks and configure page to expand track list,
  * in contexts where no track display functions (which don't understand
- * supertracks) are invoked.  */
+ * supertracks) are invoked.
+ * In general, trackHashRef is just a pointer to the global trackHash,
+ * except in the case of building the Visible Tracks group, in which
+ * case it is a new hash, because we want super tracks duplicated into
+ * the visible tracks list and their normal group list */
 
 void removeTrackFromGroup(struct track *track);
 /* Remove track from group it is part of. */

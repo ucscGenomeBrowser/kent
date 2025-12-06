@@ -1046,7 +1046,7 @@ slSort(&groupList, gCmpGroup);
 struct hash *superHash = hashNew(8);
 for (group = groupList; group != NULL; group = group->next)
     {
-    groupTrackListAddSuper(cart, group, superHash);
+    groupTrackListAddSuper(cart, group, superHash, trackHash);
     if (group->trackList != NULL)
         {
         groups[numGroups] = cloneString(group->name);
