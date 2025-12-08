@@ -251,6 +251,7 @@ foreach my $asmId (@orderList) {
   my $chromAuthority = "";
   $chromAuthority = `~/kent/src/hg/makeDb/doc/asmHubs/chromAuthority.pl $asmId 2> /dev/null`;
   chomp $chromAuthority;
+  printf STDERR "# chromAuthority: '%s'\n", $chromAuthority;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);

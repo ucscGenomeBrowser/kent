@@ -39,6 +39,7 @@ install:
 	cp -p --remove-destination checkPushedFiles.csh    ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
 	cp -p --remove-destination checkSessionsFromRR.py  ${SCRIPTS}
+	cp -p --remove-destination checkStaticDocsDiff.py  ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
 	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
