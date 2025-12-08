@@ -185,13 +185,13 @@ Steps to request an assembly:
 2. Click the **request button**.
 3. Fill out the required information on the submission page.
 
-</div>
-<div class="col-md-6">
-
 ```image
 src=/images/tutorialImages/assemblyRequest.png
-width=130%
+width=100%
 ```
+
+</div>
+<div class="col-md-6">
 
 ```image
 src=/images/tutorialImages/requestPage.png
