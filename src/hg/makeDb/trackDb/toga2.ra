@@ -17,11 +17,11 @@ html TOGAv2
     visibility pack
     itemRgb on
     type bigBed 12 +
-    bigDataUrl /gbdb/$D/TOGAvHg38v2/HLTOGAannotVsHg38v2.bb
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvHg38v2/HLTOGAannotVsHg38v2.bb
     labelFields name
     searchIndex name
-    searchTrix /gbdb/$D/TOGAvHg38v2/HLTOGAannotVsHg38v2.ix
-    decorator.default.bigDataUrl /gbdb/$D/TOGAvHg38v2/HLTOGAannotVsHg38v2.decorator.bb
+    searchTrix /gbdb/$D/TOGAv2/TOGAvHg38v2/HLTOGAannotVsHg38v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvHg38v2/HLTOGAannotVsHg38v2.decorator.bb
     decorator.default.maxLabelBases 5000
     html TOGAv2
 
@@ -34,11 +34,11 @@ html TOGAv2
     visibility pack
     itemRgb on
     type bigBed 12 +
-    bigDataUrl /gbdb/$D/TOGAvMm10v2/HLTOGAannotVsMm10v2.bb
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvMm10v2/HLTOGAannotVsMm10v2.bb
     labelFields name
     searchIndex name
-    searchTrix /gbdb/$D/TOGAvMm10v2/HLTOGAannotVsMm10v2.ix
-    decorator.default.bigDataUrl /gbdb/$D/TOGAvMm10v2/HLTOGAannotVsMm10v2.decorator.bb
+    searchTrix /gbdb/$D/TOGAv2/TOGAvMm10v2/HLTOGAannotVsMm10v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvMm10v2/HLTOGAannotVsMm10v2.decorator.bb
     decorator.default.maxLabelBases 5000
     html TOGAv2
 
@@ -51,11 +51,11 @@ html TOGAv2
     visibility pack
     itemRgb on
     type bigBed 12 +
-    bigDataUrl /gbdb/$D/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.bb
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.bb
     labelFields name
     searchIndex name
-    searchTrix /gbdb/$D/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.ix
-    decorator.default.bigDataUrl /gbdb/$D/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.decorator.bb
+    searchTrix /gbdb/$D/TOGAv2/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvBosTau10v2/HLTOGAannotVsHLbosTau10v2.decorator.bb
     decorator.default.maxLabelBases 5000
     html TOGAv2
 
@@ -68,11 +68,11 @@ html TOGAv2
     visibility pack
     itemRgb on
     type bigBed 12 +
-    bigDataUrl /gbdb/$D/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.bb
+    bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.bb
     labelFields name
     searchIndex name
-    searchTrix /gbdb/$D/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.ix
-    decorator.default.bigDataUrl /gbdb/$D/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.decorator.bb
+    searchTrix /gbdb/$D/TOGAv2/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.ix
+    decorator.default.bigDataUrl /gbdb/$D/TOGAv2/TOGAvGCF_024166365.1v2/HLTOGAannotVsHLeleMaxInd3Av2.decorator.bb
     decorator.default.maxLabelBases 5000
     html TOGAv2
 
