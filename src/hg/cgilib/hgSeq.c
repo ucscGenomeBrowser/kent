@@ -780,7 +780,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 			       (bedItem->chromStarts[i+1] -
 				bedItem->chromStarts[i] -
 				bedItem->blockSizes[i]),
-			       FALSE, isCDS, chromSize);
+			       FALSE, FALSE, chromSize);
 		    }
 		}
 	    else
