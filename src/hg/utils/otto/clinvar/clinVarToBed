@@ -1104,7 +1104,7 @@ for fname in fnames:
         asFname = "clinvarDecoration.as"
         extraOptions = ""
 
-    cmd = "bedToBigBed %s -tab -type=bed9+ -as=%s %s /hive/data/genomes/%s/chrom.sizes %s" % (extraOptions, asFname, fname, db, tmpFname)
+    cmd = "bedToBigBed %s -tab -type=bed12+ -as=%s %s /hive/data/genomes/%s/chrom.sizes %s" % (extraOptions, asFname, fname, db, tmpFname)
     mustRun(cmd)
 
     finalFname = "%s/%s.%s.bb" % (bigBedDir, base, db)
