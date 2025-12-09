@@ -623,7 +623,7 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
             htmlHorizontalLine();
             printf("<h4>Protein sequence alignment</h4><BR>\n");
             printf("<span class='hideToggle' data-target='collapseProtAli' style='cursor: pointer;'>Show alignment between reference and query</span>\n");
-            printf("<div id=\"collapseProtAli\" class=\"panel-collapse collapse\">\n");
+            printf("<div id='collapseProtAli' style='display: none;'>\n");
             printf("<p><TT>%s</TT></p><BR>\n", info->prot_alignment);
             printf("</div>\n<BR><BR>\n");
 
@@ -646,8 +646,8 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
         char **row;
         sqlSafef(query, sizeof(query), "select * from %s where transcript='%s'", togaInactMutTableName, item);
         sr = sqlGetResult(conn, query);
-        printf("<a data-toggle=\"collapse\" href=\"#collapseMuts\">Show inactivating mutations</a>\n");
-        printf("<div id=\"collapseMuts\" class=\"panel-collapse collapse\">\n");
+        printf("<span class='hideToggle' data-target='collapseMuts' style='cursor: pointer;'>Show inactivating mutations</span>\n");
+        printf("<div id='collapseMuts' style='display: none;'>\n");
         printf("<table border = \"1\" width = \"640\">\n");  // init table
         printf("<tr><th>Exon number</th><th>Codon number</th><th>Mutation class</th><th>Mutation</th><th>Treated as inactivating</th><th>Mutation ID</th>\n");
         printf("</tr>\n");
@@ -685,8 +685,8 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
         char query[256];
         struct sqlResult *sr = NULL;
         char **row;
-        printf("<a data-toggle=\"collapse\" href=\"#collapseExons\">Show exon sequences and features</a>\n");
-        printf("<div id=\"collapseExons\" class=\"panel-collapse collapse\">\n");
+        printf("<span class='hideToggle' data-target='collapseExons' style='cursor: pointer;'>Show exon sequences and features</span>\n");
+        printf("<div id='collapseExons' style='display: none;'>\n");
         sqlSafef(query, sizeof(query), "select * from %s where transcript='%s'", togaNuclTableName, item);
         sr = sqlGetResult(conn, query);
 
@@ -724,10 +724,6 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
 
     // TODO: check whether I need this
     printf("%s", hgTracksPathAndSettings());
-    hPrintf("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css\">");
-    hPrintf("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>");
-    hPrintf("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\"></script>");
-
 
     printTrackHtml(tdb);  // and do I need this?
     hFreeConn(&conn);
