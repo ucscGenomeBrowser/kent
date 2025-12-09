@@ -417,7 +417,6 @@ function drawSvgTable(svg, data) {
     }
 }
 
-
 function initPage() {
     if (typeof doHPRCTable !== "undefined") {
         makeHPRCTable();
@@ -450,6 +449,17 @@ function initPage() {
             last.parentNode.insertBefore(document.createElement("br"), newTable);
         }
     }
+    document.querySelectorAll('.hideToggle').forEach(function(element) {
+       element.addEventListener('click', function() {
+         var targetId = this.getAttribute('data-target');
+         var targetDiv = document.getElementById(targetId);
+         if (targetDiv.style.display === 'none') {
+             targetDiv.style.display = 'block';
+         } else {
+             targetDiv.style.display = 'none';
+         }
+       });
+    });
 }
 
 // Export a way to call the document.ready() functions after ajax
