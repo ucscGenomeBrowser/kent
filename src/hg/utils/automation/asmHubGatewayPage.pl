@@ -317,7 +317,7 @@ printf "<p>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
-<b>Assembly FTP location:</b> <a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/%s' target='_blank'>%s</a><br>
+<b>Assembly FASTA FTP location at NCBI:</b> <a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/%s' target='_blank'>%s</a><br>
 \n", $asmAccession, $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 

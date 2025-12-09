@@ -1,24 +1,7 @@
 #!/usr/bin/env python3
 
-# Program Header
-# Name:   Gerardo Perez
-# Description: A program that reports differences in static HTML docs
-#              across hgwdev, hgwbeta, and hgw0.
-#
-#
-# checkStaticDocsDiff.py
-#
-#
-
 import subprocess
 import argparse
-
-# Run a bash command locally
-def bash(cmd):
-    """Executes a shell command locally and returns output as a list of lines."""
-    rawOutput = subprocess.run(cmd, check=True, shell=True,
-                               stdout=subprocess.PIPE, universal_newlines=True)
-    return rawOutput.stdout.split('\n')[0:-1]
 
 # Run a command on a remote host via SSH
 def get_checksums_via_ssh(host, command):

@@ -9,5 +9,5 @@ include encode3.histone.ra
 include encode3.atac.ra
 
 track encodeCcreCombined override
-url https://screen-v2.wenglab.org/search/?q=$$&assembly=mm10
+url https://screen.wenglab.org/search/?q=$$&assembly=mm10
 
