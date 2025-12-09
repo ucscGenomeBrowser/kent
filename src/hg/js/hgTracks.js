@@ -761,7 +761,7 @@ var posting = {
                     location.assign(href);
                 }
             } else if (cgi === "hgc") {
-                if (id.startsWith("multiz") || id.startsWith("HLTOGA")) {
+                if (id.startsWith("multiz")) {
                     // multiz tracks have a form that lets you change highlighted bases
                     // that does not play well in a pop up
                     // toga tracks require bootstrap which does not work with something
