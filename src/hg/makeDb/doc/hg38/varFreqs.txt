@@ -67,3 +67,16 @@ python ~/kent/src/hg/makeDb/scripts/kovaToVcf.py 1_KOVA.v7.tsv.gz kova.v7.vcf
 bgzip kova.v7.vcf
 tabix -p vcf kova.v7.vcf.gz
 
+# NPM Singapore
+cd /hive/data/genomes/hg38/bed/varFreqs/npm/
+# downloaded data manually from chorus website, https://chorus.grids-platform.io/vcfdl
+bcftools concat  --threads 10  -Oz -o SG10K_Health_r5.3.2.sites.vcf.bgz  SG10K_Health_r5.3.2.sites.chr{1..22}.vcf.bgz SG10K_Health_r5.3.2.sites.chrX.vcf.bgz SG10K_Health_r5.3.2.sites.chrY.vcf.bgz 
+tabiv -p vcf SG10K_Health_r5.3.2.sites.vcf.bgz
+
+# Saudi 300 genomes
+cd /hive/data/genomes/hg38/bed/varFreqs/saudi
+wget https://figshare.com/ndownloader/files/51297884 -O 51297884.tsv.gz
+python3 ~/kent/src/hg/makeDb/scripts/saudiToVcf.py
+bgzip saudi.vcf
+tabix -p vcf saudi.vcf.gz
+

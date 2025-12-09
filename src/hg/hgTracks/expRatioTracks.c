@@ -191,7 +191,7 @@ if (theImgBox && curImgTrack)
         warn("mapBoxHcTwoItems(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
              track,x, y, x+width, y+height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,statusLine,x, y, x+width, y+height, track);
+    imgTrackAddMapItem(curImgTrack,link,statusLine,x, y, x+width, y+height, track, NULL);
     }
 else
     {
@@ -1444,7 +1444,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
             warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d "
                  "link:[%s]",tg->track,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
         #endif//def IMAGEv2_SHORT_MAPITEMS
-        imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight, tg->track);
+        imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight, tg->track, NULL);
         }
     else
         {

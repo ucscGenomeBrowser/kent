@@ -30,7 +30,7 @@ rm -fr kent/src/utils/uniprotLift
 rm -fr kent/src/utils/bedJoinTabOffset
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
-git archive --format=zip -9 --remote=https://github.com/ucscGenomeBrowser/kent.git \
+git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/machTest.sh \
 src/checkUmask.sh \
@@ -97,7 +97,7 @@ unzip -o -q part${partNumber}Src.zip
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=https://github.com/ucscGenomeBrowser/kent.git \
+git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/hg/gbToFaRa \
 src/hg/geneBounds \
@@ -160,7 +160,7 @@ unzip -o -q part${partNumber}Src.zip
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=https://github.com/ucscGenomeBrowser/kent.git \
+git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/hg/pslFilter \
 src/hg/pslFilterPrimers \
@@ -220,7 +220,7 @@ unzip -o -q part${partNumber}Src.zip
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=https://github.com/ucscGenomeBrowser/kent.git \
+git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/hg/makeDb/makefile \
 src/hg/makeDb/hgAar \
@@ -285,7 +285,7 @@ unzip -o -q part${partNumber}Src.zip
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=https://github.com/ucscGenomeBrowser/kent.git \
+git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/parasol \
 src/tabFile \

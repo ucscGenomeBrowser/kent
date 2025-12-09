@@ -285,6 +285,7 @@ struct rgbColor darkSeaColor = {0, 60, 120, 255};
 struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
+boolean hgFindMatchesShowHighlight; /* For use with pdf mode which suppresses label highlight */
 
 struct trackLayout tl;
 
@@ -1181,7 +1182,7 @@ if (theImgBox && curImgTrack)
     //           hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width,
-                       y+height, track ? track->track : NULL);
+                       y+height, track ? track->track : NULL, message);
     }
 else
     {
@@ -1280,8 +1281,8 @@ if (x < xEnd)
         else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
             xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
-        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),
-                           x, y, xEnd, yEnd, track);
+        imgTrackAddMapItem(curImgTrack,link, encodedItem,
+                           x, y, xEnd, yEnd, track, statusLine);
         }
     else
         {
@@ -1304,7 +1305,9 @@ if (x < xEnd)
             hPrintf("&%s", extra);
         hPrintf("\" ");
         if (statusLine != NULL)
-            mapStatusMessage("%s", statusLine);
+            {
+            hPrintf(" TITLE='%s' data-tooltip='%s' ", item, statusLine);
+            }
         hPrintf("%s>\n", dyStringContents(id));
         }
     freeMem(encodedItem);
@@ -4476,7 +4479,7 @@ else if (sameString(tg->table, PCR_RESULT_TRACK_NAME))
 
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
-highlight = (hgFindMatches != NULL &&
+highlight = (hgFindMatchesShowHighlight &&
 	     ( ((name != NULL) && (hashIntValDefault(hgFindMatches, name, 0) == 1)) ||
 	       ((mapName != NULL) &&  hashIntValDefault(hgFindMatches, mapName, 0) == 1)));
 return highlight;
@@ -6019,7 +6022,6 @@ tg->loadItems = loadBacEndPairs;
 }
 
 #endif /* GBROWSE */
-
 
 // The following few functions are shared by GAD, OMIM, DECIPHER, Superfamily.
 // Those tracks need an extra label derived from item name -- the extra label
@@ -11782,7 +11784,7 @@ return tg->limitedVis;
 }
 
 void compositeTrackVis(struct track *track)
-/* set visibilities of subtracks */
+/* set visibilities of subtracks.  This seems to be unused - JC 11/2025 */
 {
 struct track *subtrack;
 
@@ -16008,5 +16010,6 @@ for(name = nameList; name != NULL; name = name->next)
     hashAddInt(hgFindMatches, name->name, 1);
     }
 slFreeList(&nameList);
+hgFindMatchesShowHighlight = TRUE;  // default to showing the highlight searched item label.
 }
 

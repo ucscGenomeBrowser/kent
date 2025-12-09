@@ -59,6 +59,13 @@ void webStartSectionTables();
 void webFirstSection(char *title);
 /* Put up the first section (normally done by webStartWrap). */
 
+void webNewHiddenSection(char* format, ...)
+/* create a new hidden section on the web page */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
 void webNewSection(char* format, ...)
 /* create a new section on the web page */
 #if defined(__GNUC__)

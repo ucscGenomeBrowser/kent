@@ -36,7 +36,7 @@ parser.add_argument("-a2", "--assembly_two", help="Specify assembly two Ex. hg38
 # Parses arguemets through using the parse args method.
 args = parser.parse_args()
 
-validClades = ['primate', 'mammal']
+validClades = {'primate': ['primates','primates(L)'], 'mammal': ['mammals','mammals(L)']}
 
 #List of prefix names of the native primate databases
 primates=['hg','panTro', 'panPan', 'gorGor', 'ponAbe', 'nomLeu', 'chlSab', 'macFas', 'rheMac', 'papAnu', 'papHam', 'nasLar', 'rhiRox', 'calJac', 'saiBol', 'tarSyr']
@@ -77,15 +77,20 @@ def getClade(assembly):
     if assembly[0:3]=='GCA' or assembly[0:3]=='GCF':
         chromSizes_1="/hive/data/genomes/asmHubs/"+assembly[0:3]+"/"+assembly[4:7]+"/"+assembly[7:10]+"/"+assembly[10:13]+"/"+assembly+"/"+assembly+".chrom.sizes.txt"
         assembly=goto(assembly)
-        find_gcNum=bash("grep "+assembly+" /hive/data/outside/ncbi/genomes/reports/newAsm/all.*.today | head -1")
-        find_gcNum=str(find_gcNum)[1:-1]
+        assembly_version = "_".join(assembly.split('_', 2)[:2]) # Get the assembly ID, e.g. GCF_016772045.1
+        find_gcNum=bash(f"curl -s https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt | grep {assembly_version}")[0] #Bash returns a list, so get the first item
+
         try:
-               clade=find_gcNum.split('.')[2][:-1]
+               clade=find_gcNum.split('\t')[5] # Value is tab-separated, the clade is the last item
         except IndexError:
                print('# can not find '+assembly+', the assembly might be suppressed')
                quit()
         if clade in validClades:
             return clade
+        for singular, plural in validClades.items():
+            if clade in plural:
+                return singular # check to see if 'mammals' or 'mammal(L)' is given. If so return 'mammal'
+
         else: clade='other'
     else:
         chromSizes_1="/hive/data/genomes/"+assembly+"/chrom.sizes"

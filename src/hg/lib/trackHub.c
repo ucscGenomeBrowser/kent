@@ -910,6 +910,17 @@ if (hel != NULL)
     {
     char *oldVal = hel->val;
     hel->val = trackHubRelativeUrl(hubUrl, oldVal);
+    char *newPath = (char *) hel->val;
+
+    if (hasProtocol(hubUrl) && !hasProtocol(newPath))
+	{
+	// allow local url with udc.localDir path prefix
+	char *prefix = cfgOption("udc.localDir");
+	if (!(prefix && startsWith(prefix, newPath)))
+	    {
+	    errAbort("setting %s local URL %s not allowed with non-local host URL %s", variable, newPath, hubUrl);
+	    }
+	}
     freeMem(oldVal);
     }
 }

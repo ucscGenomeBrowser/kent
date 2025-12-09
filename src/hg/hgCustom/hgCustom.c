@@ -25,6 +25,7 @@
 #include "trackHub.h"
 #include "botDelay.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -160,21 +161,30 @@ void addCustomForm(struct customTrack *ct, char *err, boolean warnOnly)
 char *dataUrl = NULL;
 char buf[1024];
 
-boolean gotClade = FALSE;
 boolean isUpdateForm = FALSE;
 if (ct)
     {
     isUpdateForm = TRUE;
     dataUrl = ctDataUrl(ct);
     }
-else
-    /* add form needs clade for assembly menu */
-    gotClade = hGotClade();
 
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
+if (cfgOptionBooleanDefault("showTutorial", TRUE))
+    {
+    jsIncludeFile("shepherd.min.js", NULL);
+    webIncludeResourceFile("shepherd.css");
+    jsIncludeFile("jquery-ui.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    jsIncludeFile("tutorialPopup.js", NULL);
+    jsIncludeFile("customTrackTutorial.js", NULL);
+    if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
+        {
+        jsInline("var startCustomTutorialOnLoad = true;");
+        }
+    }
 
 /* main form */
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
@@ -186,7 +196,7 @@ cartSaveSession(cart);
 if (!isUpdateForm)
     {
     /* Print genome search bar and selected genome label */
-    puts("<TABLE BORDER=0>\n");
+    puts("<TABLE id=\"genome-selection-table\" BORDER=0>\n");
     printf("<tr>\n");
     printf("<td class='searchCell' align=center>\n");
     // hgCustom requires this <input> be created to go along with form submission, we
@@ -377,7 +387,7 @@ cgiTableRowEnd();
 
 /* next row - text entry box for  data, and clear button */
 cgiSimpleTableRowStart();
-puts("<TD COLSPAN=2>");
+puts("<TD ID=\"data-input\" COLSPAN=2>");
 if (dataUrl)
     {
     /* can't update via pasting if loaded from URL */
@@ -437,7 +447,7 @@ cgiTableRowEnd();
 
 /* next row - text entry for description, and clear button(s) */
 cgiSimpleTableRowStart();
-puts("<TD COLSPAN=2>");
+puts("<TD ID=\"description-input\" COLSPAN=2>");
 
 if (ct && ctHtmlUrl(ct))
     {
@@ -727,6 +737,19 @@ struct slPair *valsAndLabels = makeOtherCgiValsAndLabels();
 // Default to the first CGI in the menu.
 char *defaultCgi = valsAndLabels->name;
 char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
+if (cfgOptionBooleanDefault("showTutorial", TRUE))
+    {
+    jsIncludeFile("shepherd.min.js", NULL);
+    webIncludeResourceFile("shepherd.css");
+    jsIncludeFile("jquery-ui.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    jsIncludeFile("tutorialPopup.js", NULL);
+    jsIncludeFile("customTrackTutorial.js", NULL);
+    if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
+        {
+        jsInline("var startCustomTutorialOnLoad = true;");
+        }
+    }
 printf("<FORM STYLE=\"margin-bottom:0;\" METHOD=\"GET\" NAME=\"navForm\" ID=\"navForm\""
        " ACTION=\"%s\">\n", selected);
 cartSaveSession(cart);
@@ -819,7 +842,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 if (numCts)
     {
-    puts("<TD VALIGN=\"TOP\">");
+    puts("<TD ID=\"resultsTable\" VALIGN=\"TOP\">");
     showCustomTrackList(ctList, numCts);
     }
 else

@@ -1,6 +1,6 @@
 % UCSC Genome Browser Table Browser Tutorial
 
-The [UCSC Table Browser](../cgi-bin/hgTables) is a flexible tool for accessing and exporting data from genome browser tracks. This tutorial introduces the Table Browser interface and demonstrates how to:
+The [UCSC Table Browser](/cgi-bin/hgTables) is a flexible tool for accessing and exporting data from genome browser tracks. This tutorial introduces the Table Browser interface and demonstrates how to:
 
 - Select a genome and assembly
 - Choose a track and table
@@ -42,7 +42,7 @@ Step-by-step guidance for using the Table Browser to extract data for your analy
 An in-browser walkthrough that introduces the Table Browser interface and workflow.
 
 <p style="text-align: end">
-<button>[View](../cgi-bin/hgTables?db=hg38&startTutorial=true)</button>
+<button>[View](/cgi-bin/hgTables?db=hg38&startTutorial=true)</button>
 </p>
 </div>
 </div>
@@ -51,7 +51,7 @@ An in-browser walkthrough that introduces the Table Browser interface and workfl
 ## Table Browser Overview
 
 ``` image
-src=../images/tableBrowserAnnotated.png
+src=/images/tableBrowserAnnotated.png
 width=65%
 ```
 
@@ -73,7 +73,7 @@ width=65%
 
   <div class="col-md-6">
   ```image
-  src=../images/assemblySelection.gif
+  src=/images/assemblySelection.gif
   width=80%
   ```
 </div>
@@ -85,7 +85,7 @@ width=65%
 <div class="row">
   <div class="col-md-6">
   ``` image
-  src=../images/trackSelection.gif
+  src=/images/trackSelection.gif
   width=80%
   ```
   </div>
@@ -120,7 +120,7 @@ width=65%
 
   <div class="col-md-6">
   ``` image
-  src=../images/tableSelection.gif
+  src=/images/tableSelection.gif
   width=80%
   ```
   </div>
@@ -132,7 +132,7 @@ width=65%
 <div class="row">
   <div class="col-md-6">
   ``` image
-  src=../images/defineRegions.gif
+  src=/images/defineRegions.gif
   width=80%
   ```
   </div>
@@ -166,7 +166,7 @@ width=65%
   </div>
   <div class="col-md-6">
   ``` image
-  src=../images/tutorialImages/tableBrowserOutputDropDown.png
+  src=/images/tutorialImages/tableBrowserOutputDropDown.png
   width=80%
   ```
   </div>
@@ -178,7 +178,7 @@ width=65%
 <div class="row">
   <div class="col-md-6">
   ``` image
-  src=../images/downloadData.gif
+  src=/images/downloadData.gif
   width=80%
   ```
   </div>

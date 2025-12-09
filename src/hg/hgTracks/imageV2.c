@@ -309,6 +309,11 @@ jsonObjectAdd(ele, "canPack", newJsonNumber(track->canPack));
 if (track->limitedVis != track->visibility)
     jsonObjectAdd(ele, "limitedVis", newJsonNumber(track->limitedVis));
 jsonObjectAdd(ele, "visibility", newJsonNumber(track->visibility));
+
+if (trackDbSetting(track->tdb, "onlyVisibility"))
+    {
+    jsonObjectAdd(ele, "onlyVisibility", newJsonString(trackDbSetting(track->tdb, "onlyVisibility")));
+    }
 }
 
 void jsonTdbSettingsUse(struct jsonElement *settings)
@@ -373,11 +378,16 @@ return NULL;
 
 struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,
                                  int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                 char *id)
+                                 char *id, char *tooltip)
 // Update a single mapItem
 {
 if (title != NULL)
+    {
     item->title = cloneString(title);
+    item->tooltip = cloneString(title);
+    }
+if (tooltip != NULL)
+    item->tooltip = cloneString(tooltip);
 if (link != NULL)
     {
     if (map->linkRoot != NULL && startsWith(map->linkRoot,link))
@@ -395,13 +405,19 @@ return item;
 }
 
 struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,
-                              int bottomRightX,int bottomRightY, char *id)
+                              int bottomRightX,int bottomRightY, char *id, char *tooltip)
 // Add a single mapItem to a growing mapSet
 {
 struct mapItem *item;
 AllocVar(item);
 if (title != NULL)
+    {
     item->title = cloneString(title);
+    // default the tooltip to the title
+    item->tooltip = cloneString(title);
+    }
+if (tooltip != NULL)
+    item->tooltip = cloneString(tooltip);
 if (link != NULL)
     {
     if (map->linkRoot != NULL && startsWith(map->linkRoot,link))
@@ -421,31 +437,31 @@ return map->items;
 
 struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,
                                       int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                      char *id)
+                                      char *id, char *tooltip)
 // Update or add a single mapItem
 {
 struct mapItem *item = mapSetItemFind(map,topLeftX,topLeftY,bottomRightX,bottomRightY);
 if (item != NULL)
-    return mapSetItemUpdate(map,item,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY, id);
+    return mapSetItemUpdate(map,item,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY, id, tooltip);
 else
-    return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY, id);
+    return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY, id, tooltip);
 }
 
 struct mapItem *doMapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
                                     int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                    char *id)
+                                    char *id, char *tooltip)
 // Finds or adds the map item
 {
 struct mapItem *item = mapSetItemFind(map,topLeftX,topLeftY,bottomRightX,bottomRightY);
 if (item != NULL)
     return item;
 else
-    return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY,id);
+    return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY,id, tooltip);
 }
 
 struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
                                     int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
-                                    char *id)
+                                    char *id, char *tooltip)
 // Function to allow conf variable to turn off or on the searching of overlapping
 // previous boxes.
 {
@@ -459,7 +475,7 @@ if (mapFunc == NULL)
         mapFunc = mapSetItemAdd;
     }
 
-return (*mapFunc)(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY,id);
+return (*mapFunc)(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY,id, tooltip);
 }
 
 void mapItemFree(struct mapItem **pItem)
@@ -1130,7 +1146,7 @@ return sliceGetMap(slice,FALSE); // Map could belong to image or could be slice 
 }
 
 int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,
-                       int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id)
+                       int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id, char *tooltip)
 // Will add a map item to an imgTrack's appropriate slice's map.  Since a map item may span
 // slices, the imgTrack is in the best position to determine where to put the map item
 // returns count of map items added, which could be 0, 1 or more than one if item spans slices
@@ -1181,7 +1197,7 @@ for (slice = imgTrack->slices;slice != NULL;slice=slice->next)
             mapSetItemFindOrAdd(map,link,title,max(topLeftX,slice->offsetX),
                                 max(topLeftY,slice->offsetY),
                                 min(bottomRightX,slice->offsetX + slice->width),
-                                min(bottomRightY,slice->offsetY + slice->height), neededId);
+                                min(bottomRightY,slice->offsetY + slice->height), neededId, tooltip);
             count++;
             }
         else
@@ -1835,7 +1851,10 @@ for (;item!=NULL;item=item->next)
         char *encodedString = attributeEncode(item->title);
         if (cfgOptionBooleanDefault("showMouseovers", FALSE))
             {
-            hPrintf(" TITLE='%s'", encodedString);
+            if (isNotEmpty(item->tooltip))
+                hPrintf(" title='%s' data-tooltip='%s'", encodedString, attributeEncode(item->tooltip));
+            else
+                hPrintf(" TITLE='%s'", encodedString);
             }
         else
             {

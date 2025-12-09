@@ -2762,7 +2762,7 @@ var sortTable = {
         var inputs = $(table).find("input.trPos");
         $( inputs ).each( function(i) {
             var tr = $( this ).closest('tr')[0];
-            var trIx = $( tr ).attr('rowIndex').toString();
+            var trIx = $( tr ).prop('rowIndex').toString();
             if ($( this ).val() != trIx) {
                 $( this ).val( trIx );
                 if (typeof(subCfg) === "object")  // NOTE: couldn't get $(this).change() to work.
@@ -4205,7 +4205,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         mouseoverContainer.style.opacity = "0";
         mouseoverContainer.id = "mouseoverContainer";
         let tooltipTextSize = localStorage.getItem("tooltipTextSize");
-        if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize;}
+        if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize !== null ? window.browserTextSize : 12;}
         mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
         document.body.append(mouseoverContainer);
     }
@@ -4213,7 +4213,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
     if (ele1) {
         ele1.setAttribute("mouseoverText", text);
         // Remove title attribute to prevent default browser tooltip
-        if (ele1.title) {
+        if (ele1.title || ele1.dataset.tooltip) {
             ele1.setAttribute("originalTitle", ele1.title);
             ele1.title = "";
         }
@@ -4296,7 +4296,10 @@ function hideMouseoverText(ele) {
 function titleTagToMouseover(mapEl) {
     /* for a given area tag, extract the title text into a div that can be positioned
     * like a standard tooltip mouseover next to the item */
-    addMouseover(mapEl, mapEl.title);
+    if (mapEl.dataset.tooltip)
+        addMouseover(mapEl, mapEl.dataset.tooltip);
+    else
+        addMouseover(mapEl, mapEl.title);
 }
 
 function convertTitleTagsToMouseovers() {

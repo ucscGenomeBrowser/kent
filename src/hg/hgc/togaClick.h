@@ -40,6 +40,10 @@ struct togaDataBB
     char *ref_link;
     char *inact_mut_html_table;
     char *exon_ali_html;
+    char *CDSseq;
+    char *protseqFrameCorrected;
+    char *numExonsMutated;
+    char *percentExonsMutated;
 };
 
 
@@ -96,7 +100,7 @@ struct togaInactMut
 };
 
 
-struct togaDataBB *togaDataBBLoad(char **row);
+struct togaDataBB *togaDataBBLoad(char **row, bits16 fieldCount);
 /* Load a togaData from row fetched with select * from togaData
  * from database.  Dispose of this with togaDataFree(). */
 

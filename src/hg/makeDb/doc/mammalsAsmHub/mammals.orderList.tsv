@@ -13,6 +13,7 @@ GCA_030020305.1_mLoxAfr1.hap1	African savanna elephant (hap1 mLoxAfr1 2023)
 GCA_030014295.1_mLoxAfr1.hap2	African savanna elephant (hap2 2023 genbank)
 GCF_030014295.1_mLoxAfr1.hap2	African savanna elephant (hap2 2023 refseq)
 GCA_021653895.1_UFL_Mnatal_1.0	African soft-furred rat (Lowveld savanna grassland N552 2022)
+GCA_019843795.1_ASM1984379v1	African soft-furred rat (MVZ Mamm 221054 2021)
 GCF_016433145.1_AgileGrace	agile gracile mouse opossum
 GCA_019843855.1_ASM1984385v1	Allen's wood mouse (MVZ Mamm 196246 2021)
 GCF_048564905.1_VicPac4	alpaca (2025)
@@ -169,6 +170,7 @@ GCA_903992515.1_mPipPip1.1_alternate_haplotype	common pipistrelle (alternate hap
 GCA_004026625.1_PipPip_v1_BIUU	common pipistrelle (Broad 2019)
 GCA_965203405.1_mPipPip2.hap1.1	common pipistrelle (hap1.1 2025)
 GCA_965204225.1_mPipPip2.hap2.1	common pipistrelle (hap2.1 2025)
+GCA_019843835.1_ASM1984383v1	common thicket rat (MVZ Mamm 221001 2021)
 GCA_022682395.2_HLdesRot8B.1	common vampire bat (v2 HL8 alternate hap 2022 genbank)
 GCF_022682495.2_HLdesRot8A.1	common vampire bat (v2 HL8 primary hap 2022 refseq)
 GCF_002940915.2_ASM294091v3	common vampire bat (v3 DRU21DN04 2018)
@@ -446,6 +448,7 @@ GCA_019843965.1_ASM1984396v1	Mount Data shrew rat (FMNH 198792 2021)
 GCA_004027875.1_AplRuf_v1_BIUU	mountain beaver
 GCA_004026605.1_OndZib_v1_BIUU	muskrat
 GCA_944319725.1_Naked_mole-rat_paternal	naked mole-rat (2022)
+GCA_964261355.1_pHetGlaV3	naked mole-rat (2024)
 GCA_014060925.1_Heter_glaber.v1.7_hic_pac	naked mole-rat (MEF-2018 2020)
 GCF_000247695.1_HetGla_female_1.0	naked mole-rat (NMR 29 2012 refseq)
 GCF_005190385.1_NGI_Narwhal_1	narwhal (Baffin Bay 2019)

@@ -3005,3 +3005,5 @@ type bigBed 12
 searchIndex name
 searchTrix  /gbdb/$D/TOGAvGalGal6v1/HLTOGAannotVsgalGal6v1.ix
 html TOGAannotation
+
+include toga2.ra alpha

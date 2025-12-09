@@ -32,6 +32,15 @@ window.createTutorialPopup = function() {
           </small>
           </td></tr>
       <tr><td style="padding: 8px;width: 200px; text-align: center; border: 1px solid #666666;">
+          <a href="#" id="customTrackTutorial">Custom Track tutorial</a><br>
+          <em style="font-size: 11px">(only available on hg19)</em></td>
+          <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
+          <small>
+          An introductory tutorial to guide users with steps to upload their own data into the
+          UCSC Genome Browser. Learn how to upload a BED, Wiggle, bigBed, or bigWigs for the
+          hg38 genome assembly.</small>
+          </td></tr>
+      <tr><td style="padding: 8px;width: 200px; text-align: center; border: 1px solid #666666;">
           <a href="#" id="tableBrowserTutorial">Table Browser tutorial</a></td>
           <td style="padding: 8px; width: 450px; word-wrap: break-word; border: 1px solid #666666; text-align:center">
           <small>
@@ -93,6 +102,18 @@ window.createTutorialPopup = function() {
     } else {
         // Otherwise go to hg38 and start the tutorial.
         window.location.href = "/cgi-bin/hgTracks?db=hg38&startClinical=true";
+    }
+  });
+
+  // Function to control the clincial tutorial link
+  document.getElementById('customTrackTutorial').addEventListener('click', function(event) {
+    event.preventDefault();
+    $("#tutorialContainer").dialog("close");
+    if (cgi == "hgCustom" && db == "hg19") {
+        customTrackTour.start(); // If you are on hg19, then start the tutorial
+    } else {
+        // Otherwise go to hg19 and start the tutorial.
+        window.location.href = "/cgi-bin/hgCustom?db=hg19&startCustomTutorial=true&hgct_do_add=1";
     }
   });
 

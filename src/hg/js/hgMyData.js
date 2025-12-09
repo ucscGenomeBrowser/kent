@@ -1444,6 +1444,8 @@ var hubCreate = (function() {
             if (url.protocol === "http:") {
                 warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +
                         `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
+            } else if ((url.protocol + "//" + url.host) !== loginHost) {
+                warn(`The hub upload feature is only avaiable on our US based public site (<a href="${loginHost}">${loginHost}</a>) for speed purposes. Please go there to upload your hubs, copy the links to the hub.txt files, then use the Connected Hubs tab here to view your files.`);
             } else if (!inited && isLoggedIn) {
                 cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
                 cart.flush();

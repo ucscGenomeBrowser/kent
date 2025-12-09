@@ -39,6 +39,7 @@ install:
 	cp -p --remove-destination checkPushedFiles.csh    ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
 	cp -p --remove-destination checkSessionsFromRR.py  ${SCRIPTS}
+	cp -p --remove-destination checkStaticDocsDiff.py  ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
 	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
@@ -150,6 +151,7 @@ install:
 	cp -p --remove-destination qaThis.csh              ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination removeAlphas            ${SCRIPTS}
+	cp -p --remove-destination reportCaptchaBypass.py  ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
 	cp -p --remove-destination runBits                 ${SCRIPTS}
 	cp -p --remove-destination runCheckHgFindSpec      ${SCRIPTS}

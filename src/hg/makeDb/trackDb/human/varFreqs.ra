@@ -169,6 +169,17 @@ superTrack on
              url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
              urlLabel NCBI Variation Page
 
+        track finngen
+        parent varFreqs on
+        visibility pack
+        type vcfTabix
+        shortLabel Finnland Finngen 500k imputed
+        longLabel Variant Frequencies: Finnland Finngen - 500k samples, arrays, imputation used 8.5k WGS
+        priority 4.5
+        bigDataUrl /gbdb/$D/varFreqs/finngen/finnge_R12_annotated_variants_v1.vcf.gz
+        dataVersion R12
+        tableBrowser off
+
         track gasp
         shortLabel GenomeAsia Pilot Subs 1.7k WGS
         longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions
@@ -209,4 +220,15 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz
         visibility pack
         tableBrowser off
+        dataVersion V7
+
+        track npm
+        shortLabel Singapore NPM 9.7k WGS
+        longLabel Variant Frequencies: NPM Singapore - 9,770 samples
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/npm/SG10K_Health_r5.3.2.sites.vcf.bgz
+        visibility pack
+        tableBrowser off
+        dataVersion r5.3.2
 

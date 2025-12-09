@@ -1,6 +1,6 @@
 % UCSC Genome Browser Gateway Tutorial
 
-The [UCSC Genome Browser Gateway](../cgi-bin/hgGateway) page is a tool for finding and accessing
+The [UCSC Genome Browser Gateway](/cgi-bin/hgGateway) page is a tool for finding and accessing
 genome assemblies.  It features two search boxes: one for selecting an assembly and another for
 specifying a genomic position. This tutorial will guide you through various features of the
 Gateway page, including:
@@ -49,7 +49,7 @@ assembly identifiers, view sequences, and use search terms to jump to genome loc
 An interactive tutorial that covers the basic Browser introduction on the Gateway page.
 
 <p style="text-align: end">
-<button>[View](../cgi-bin/hgGateway?db=hg38&startTutorial=true)</button>
+<button>[View](/cgi-bin/hgGateway?db=hg38&startTutorial=true)</button>
 </p>
 </div>
 </div>
@@ -58,7 +58,7 @@ An interactive tutorial that covers the basic Browser introduction on the Gatewa
 ## Gateway page screenshot
 
 ```image
-src=../images/tutorialImages/gatewayPageAnnotated.jpg
+src=/images/tutorialImages/gatewayPageAnnotated.jpg
 width=90%
 ```
 
@@ -70,7 +70,7 @@ width=90%
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/popularSpecies.png
+src=/images/tutorialImages/popularSpecies.png
 width=70%
 ```
 
@@ -111,7 +111,7 @@ To change the assembly version, click the **Assembly** option under **Find Posit
 
 
 ```image
-src=../images/tutorialImages/assemblyVersion.png
+src=/images/tutorialImages/assemblyVersion.png
 width=90%
 ```
 
@@ -137,7 +137,7 @@ Searching by  **GC accession number**: GCF_016699485.2
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/searchByGCFid.gif
+src=/images/tutorialImages/searchByGCFid.gif
 width=100%
 ```
 
@@ -152,7 +152,7 @@ width=100%
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/speciesTree.png
+src=/images/tutorialImages/speciesTree.png
 width=60%
 ```
 
@@ -185,16 +185,16 @@ Steps to request an assembly:
 2. Click the **request button**.
 3. Fill out the required information on the submission page.
 
+```image
+src=/images/tutorialImages/assemblyRequest.png
+width=100%
+```
+
 </div>
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/assemblyRequest.png
-width=130%
-```
-
-```image
-src=../images/tutorialImages/requestPage.png
+src=/images/tutorialImages/requestPage.png
 width=40%
 ```
 
@@ -208,12 +208,12 @@ width=40%
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/viewSequence.png
+src=/images/tutorialImages/viewSequence.png
 width=30%
 ```
 
 ```image
-src=../images/tutorialImages/sequencesList.png
+src=/images/tutorialImages/sequencesList.png
 width=70%
 ```
 
@@ -260,7 +260,7 @@ The Gateway page also offers  **download links** for data files related to the g
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/assemblyDetails.png
+src=/images/tutorialImages/assemblyDetails.png
 width=90%
 ```
 </div>
@@ -279,7 +279,7 @@ width=90%
 <div class="col-md-6">
 
 ```image
-src=../images/tutorialImages/searchBox.png
+src=/images/tutorialImages/searchBox.png
 width=70%
 ```
 

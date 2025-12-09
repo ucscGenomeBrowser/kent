@@ -1,0 +1,183 @@
+<h2>Description</h2>
+<p>
+This tracks contains variants of individual genotypes, usually phased, from the projects
+Human Diversity Genome Project, Simons Genome Diversity Project, gnomad's HGDP+1000 Genomes callset 
+and the Mexico Biobank.
+The original release of 1000 Genomes has its own, separate track.
+Projects where the released variants are not phased can be found in the container track "Variant Frequencies".
+</p>
+
+<p>
+<b>Available on hg19 and hg38:</b></p>
+<ul>
+    <li>
+        <b><a href="https://www.mxbiobank.org/" target="_blank">Mexico Biobank (MXB)</a></b>:
+        This track displays phased alleles from the Mexico Biobank Project (MXB), based on array
+        genotyping of 6,011 individuals sampled across all 32 states of Mexico during the 2000
+        National Health Survey (ENSA 2000) conducted by the National Institute of Public Health
+        (INSP). Frequencies can be plotted onto a map on
+        <a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar</a>.
+        The hg38 track was lifted from hg19.
+        (Publication?)
+    </li>
+
+    <li>
+        <b><a href="https://www.simonsfoundation.org/simons-genome-diversity-project/"
+        target="_blank">Simons Genome Diversity Project (SGDP)</a></b>:
+        Funded by the Simons Foundation, the Simons Genome Diversity Project
+        is a large-scale effort that sequenced high-coverage genomes from 300
+        individuals (279 in this track) representing 142 diverse and often
+        indigenous populations worldwide.
+        Its goal was to capture the full range of human genetic
+        diversity to better understand population history, migration, and
+        adaptation. It is sampling populations in a way that represents as much
+        anthropological, linguistic and cultural diversity as possible, and
+        thus includes many deeply divergent human populations that are not well
+        represented in other datasets.  SGDP emphasizes breadth of global representation and
+        population history, whereas HGDP emphasizes continuity and
+        comparability across major population groups. Not all iits data is
+        public, so this track contains only 279 genomes. For details, see
+        (Mallick et al, Nature 2016). The hg38 track was lifted from hg19.
+    </li>
+</ul>
+<p>
+<b>Available only on hg38:</b></p>
+<ul>
+    <li>
+        <b><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7115999/"
+        target="_blank">Human Genome Diversity Project (HGDP)</b></a>:
+        929 high-coverage genome sequences from 54 diverse human populations,
+        26 of which are physically phased using linked-read sequencing. The
+        Human Genome Diversity Project (HGDP) was launched in the early 1990s
+        to study the genetic variation and evolutionary history of modern
+        humans across global populations. Its goal was to document the full
+        spectrum of human genetic diversity, particularly in indigenous and
+        geographically isolated groups, to better understand population
+        structure, migration, adaptation, and disease susceptibility.The
+        project collected samples from ~1,000 individuals representing over 50
+        populations worldwide, including groups from Africa, Europe, Asia,
+        Oceania, and the Americas. These data have become a foundational
+        reference for population genetics and human evolution studies.
+        Data can be downloaded from the
+        <a href="https://ngs.sanger.ac.uk/production/hgdp/hgdp_wgs.20190516/"
+        target="_blank">Sanger Website</a>. For details, see (Bergstr&ouml;m et al, Science 2020).
+    </li>
+
+    <li>
+        <b><a href="https://gnomad.broadinstitute.org/news/2021-10-gnomad-v3-1-2-minor-release/"
+        target="_blank">gnomAD HGDP and 1000 Genomes callset</a></b>:
+        A reprocessed version by the gnomAD project for the 1000 Genomes and
+        Human Genome Diversity Project (HGDP) data, with 4094 genomes from 80
+        populations. We already have separate, older tracks for 1000 Genomes on the main hg38
+        browser and for HGDP, just above. This track combines both datasets, with harmonized data
+        quality. For details, see (Koenig et al, 2024).
+    </li>
+</ul>    
+
+<h2>Display Conventions</h2>
+
+<p>
+Full haplotype display:
+In &quot;pack&quot; mode, this track sorts the haplotypes. This can be
+useful for determining the similarity between the samples and inferring
+inheritance at a particular locus.
+Each sample's phased and/or homozygous genotypes are split into haplotypes,
+clustered by similarity around a central variant (in pink), and sorted for
+display by their position in the clustering tree. Click a variant to center on it.
+The tree (as space allows) is drawn in the label area next to the track image.
+Leaf clusters, in which all haplotypes are identical (at least for the variants
+used in clustering), are colored purple. 
+</p>
+<p>
+For a full description of how the display works, please see our 
+<a href="../goldenpath/help/hgVcfTrackHelp.html">Haplotype Display help page</a>.
+
+<h2>Data Access</h2>
+<p>
+<b>MXB:</b> Allele frequencies by geographical state and ancestry are available via
+the <a target="_blank" href="https://morenolab.shinyapps.io/mexvar/">MexVar platform</a>.
+Raw genotype data are available under controlled access at the
+EGA (Study: EGAS00001005797; Dataset: EGAD00010002361). For the VCFs, email
+andres.moreno@cinvestav.mx.
+</p>
+
+<h2>Methods</h2>
+<p>
+<b>SGDP:</b> The version used was
+<a target="_blank" href="https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/"
+>https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/</a>,
+merged with bcftools and lifted to hg38 with CrossMap. 
+</p>
+
+<h2>Credits</h2>
+<p>
+<b>MXB:</b> We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
+generating and providing the frequency data, the National Institute of Medical
+Sciences and Nutrition (INCMNSZ) for DNA extraction, and the Ministry of Health
+together with the National Institute of Public Health (INSP) for the design and
+implementation of the National Health Survey 2000 (ENSA 2000). We also thank
+the ENSA-Genomics Consortium for their contributions to sample collection and
+data processing that made possible the construction of the MXB genomic
+resource.
+</p>
+<p>
+<b>SGDP:</b> This project was funded by the Simons Foundation. Thanks to David Reich and Swapan 
+Mallick for help with importing the data.
+</p>
+
+<h2>References</h2>
+<p>
+Barberena-Jonas, C. et al. (2025). MexVar database: Clinical genetic variation beyond the
+Hispanic label in the Mexican Biobank. <em>Nature Medicine (in press)</em>.
+</p>
+
+<p>
+Sohail M, Moreno-Estrada A.
+<a href="https://journals.biologists.com/dmm/article-lookup/doi/10.1242/dmm.050522" target="_blank">
+The Mexican Biobank Project promotes genetic discovery, inclusive science and local capacity
+building</a>.
+<em>Dis Model Mech</em>. 2024 Jan 1;17(1).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38299665" target="_blank">38299665</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10855211/" target="_blank">PMC10855211</a>
+</p>
+
+<p>
+Sohail M, Palma-Mart&iacute;nez MJ, Chong AY, Quinto-Cor&eacute;s CD, Barberena-Jonas C, Medina-Mu&ntilde;oz SG,
+Ragsdale A, Delgado-S&aacute;nchez G, Cruz-Hervert LP, Ferreyra-Reyes L <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-023-06560-0" target="_blank">
+Mexican Biobank advances population and medical genomics of diverse ancestries</a>.
+<em>Nature</em>. 2023 Oct;622(7984):775-783.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37821706" target="_blank">37821706</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10600006/" target="_blank">PMC10600006</a>
+</p>
+
+<p>
+Bergstr&ouml;m A, McCarthy SA, Hui R, Almarri MA, Ayub Q, Danecek P, Chen Y, Felkel S, Hallast P, Kamm J
+<em>et al</em>.
+<a href="https:///www.science.org/doi/10.1126/science.aay5012" target="_blank">
+Insights into human genetic variation and population history from 929 diverse genomes</a>.
+<em>Science</em>. 2020 Mar 20;367(6484).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32193295" target="_blank">32193295</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7115999/" target="_blank">PMC7115999</a>
+</p>
+
+<p>
+Koenig Z, Yohannes MT, Nkambule LL, Zhao X, Goodrich JK, Kim HA, Wilson MW, Tiao G, Hao SP, Sahakian
+N <em>et al</em>.
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/pmid/38749656/" target="_blank">
+A harmonized public resource of deeply sequenced diverse human genomes</a>.
+<em>Genome Res</em>. 2024 Jun 25;34(5):796-809.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38749656" target="_blank">38749656</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11216312/" target="_blank">PMC11216312</a>
+</p>
+
+<p>
+Mallick S, Li H, Lipson M, Mathieson I, Gymrek M, Racimo F, Zhao M, Chennagiri N, Nordenfelt S,
+Tandon A <em>et al</em>.
+<a href="https://doi.org/10.1038/nature18964" target="_blank">
+The Simons Genome Diversity Project: 300 genomes from 142 diverse populations</a>.
+<em>Nature</em>. 2016 Oct 13;538(7624):201-206.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27654912" target="_blank">27654912</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5161557/" target="_blank">PMC5161557</a>
+</p>
+

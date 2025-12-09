@@ -31,8 +31,8 @@ bedToBigBed -as=../clinvarSubBB.as -type=bed9+11 -tab bigBedInput.bed /cluster/d
 cd ..
 
 #validate
-bigBedMaxPercDiff 5 clinvarSubLolly$alphaSuffix.$db.new.bb clinvarSubLolly$alphaSuffix.$db.bb
-bigBedMaxPercDiff 5 clinvarSub$alphaSuffix.$db.new.bb clinvarSub$alphaSuffix.$db.bb
+bigBedMaxPercDiff $maxDiff clinvarSubLolly$alphaSuffix.$db.new.bb clinvarSubLolly$alphaSuffix.$db.bb
+bigBedMaxPercDiff $maxDiff clinvarSub$alphaSuffix.$db.new.bb clinvarSub$alphaSuffix.$db.bb
 
 mv -f clinvarSub$alphaSuffix.$db.new.bb clinvarSub$alphaSuffix.$db.bb
 mv -f clinvarSubLolly$alphaSuffix.$db.new.bb clinvarSubLolly$alphaSuffix.$db.bb

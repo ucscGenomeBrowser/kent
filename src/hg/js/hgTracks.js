@@ -749,6 +749,7 @@ var posting = {
             if (posting.blockUseMap === true) {
                 return false;
             } else if (cgi === "hgGene") {
+                window.hgcOrHgGeneArgs = parsedUrl.queryArgs;
                 id = parsedUrl.queryArgs.hgg_type;
                 popUpHgcOrHgGene.hgc(id, this.href);
                 return false;
@@ -763,6 +764,7 @@ var posting = {
                 if (id.startsWith("multiz")) {
                     // multiz tracks have a form that lets you change highlighted bases
                     // that does not play well in a pop up
+                    // toga tracks require bootstrap which does not work with something
                     location.assign(href);
                     return false;
                 }
@@ -2771,6 +2773,10 @@ var rightClick = {
         if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
             title = title.split("<br>")[0].split("</b>")[1];
         }
+        // for older UCSC genes tracks, the protein name is forced onto the item name
+        if (title.search(/&hgg_prot=/) !== -1) {
+            title = title.split("&hgg_prot=")[0];
+        }
         return title;
     },
 
@@ -2885,19 +2891,39 @@ var rightClick = {
                                 // use maxVisibility and change hgTracks so it can hide subtracks
                                 o = {};
                                 str = blankImg + " " + visStrings[i];
-                                if (rec.canPack
-                                || (visStrings[i] !== "pack" && visStrings[i] !== "squish")) {
-                                    if (rec.localVisibility) {
-                                        if (visStrings[i] === rec.localVisibility) {
+                                if (rec.onlyVisibility) {
+                                    if (visStrings[i] == "hide" || visStrings[i] === rec.onlyVisibility) {
+
+                                        if (rec.localVisibility) {
+                                            if (visStrings[i] === rec.localVisibility) {
+                                                str = selectedImg + " " + visStrings[i];
+                                            }
+                                        } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
                                             str = selectedImg + " " + visStrings[i];
                                         }
-                                    } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
-                                        str = selectedImg + " " + visStrings[i];
+                                        o[str] = { onclick:
+                                                    rightClick.makeHitCallback(visStrings[i])
+                                                 };
+                                        menu.push(o);
+
+
                                     }
-                                    o[str] = { onclick:
-                                                rightClick.makeHitCallback(visStrings[i])
-                                             };
-                                    menu.push(o);
+                                }
+                                else {
+                                    if (rec.canPack
+                                    || (visStrings[i] !== "pack" && visStrings[i] !== "squish")) {
+                                        if (rec.localVisibility) {
+                                            if (visStrings[i] === rec.localVisibility) {
+                                                str = selectedImg + " " + visStrings[i];
+                                            }
+                                        } else if (visStrings[i] === vis.enumOrder[rec.visibility]) {
+                                            str = selectedImg + " " + visStrings[i];
+                                        }
+                                        o[str] = { onclick:
+                                                    rightClick.makeHitCallback(visStrings[i])
+                                                 };
+                                        menu.push(o);
+                                    }
                                 }
                             }
                             done = true;
@@ -2941,7 +2967,7 @@ var rightClick = {
 
                         // remove special genePred exon mouseover html text
                         // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
-                        title = rightClick.mouseOverToLabel(title);
+                        title = rightClick.mouseOverToLabel(decodeURIComponent(title));
 
                         if (title.length > maxLength) {
                             title = title.substring(0, maxLength) + "...";
@@ -4287,6 +4313,11 @@ var imageV2 = {
                                         selectedGene = item.value;
                                     }
                                     window.location.assign(item.id);
+                                } else if (item.type === "hgvs") {
+                                    let newPos = genomePos.setByCoordinates(item.chrom, item.start, item.end);
+                                    dragSelect.highlightThisRegion(newPos, true, "#fcfcac");
+                                    let withPadding = genomePos.setByCoordinates(item.chrom, item.start-5, item.end+5);
+                                    $("#goButton").trigger("click");
                                 } else {
                                     genomePos.set(item.id, getSizeFromCoordinates(item.id));
                                     if ($("#suggestTrack").length && $('#hgFindMatches').length) {

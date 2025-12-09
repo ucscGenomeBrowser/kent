@@ -480,7 +480,7 @@ if (theImgBox && curImgTrack)
     char link[512];
     safef(link,sizeof(link),"%s?complement_%s=%d&%s", hgTracksName(), database,
           !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, NULL);
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, NULL, NULL);
     }
 else
     {
@@ -4835,6 +4835,7 @@ static void expandSquishyPackTracks(struct track *trackList)
 {
 if (windows->next)   // don't go into squishyPack mode if in multi-exon mode.
     return;
+
 struct track *nextTrack = NULL, *track;
 for (track = trackList; track != NULL; track = nextTrack)
     {
@@ -5088,6 +5089,7 @@ for(window=windows;window;window=window->next)
 	    struct track *subtrack;
 	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		{
+// JC - debug - should I be removing the next two lines?
 		if (!isSubtrackVisible(subtrack))
 		    continue;
 
@@ -5709,7 +5711,7 @@ if (rulerMode != tvHide)
 		if (revCmplDisp)
 		    x = tl.picWidth - (x + window->insideWidth);
 		imgTrackAddMapItem(curImgTrack, "#", position,
-		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME);
+		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME, NULL);
 		}
 
 	    }
@@ -8723,13 +8725,14 @@ zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
 zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
+
 if (psOutput != NULL)
    {
    hPrintDisable();
    hideControls = TRUE;
    withNextItemArrows = FALSE;
    withNextExonArrows = FALSE;
-   hgFindMatches = NULL;
+   hgFindMatchesShowHighlight = FALSE;
    }
 
 /* Tell browser where to go when they click on image. */
@@ -11589,7 +11592,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hideControls = TRUE;
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
-    hgFindMatches = NULL;     // XXXX necessary ???
+    hgFindMatchesShowHighlight = FALSE;
     }
 
 jsonForClient = newJsonObject(newHash(8));
@@ -11676,6 +11679,7 @@ if(!trackImgOnly)
     if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
         {
         jsIncludeFile("hgc.js", NULL);
+        jsIncludeFile("alleles.js", NULL);
         hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
         }
 

@@ -2159,17 +2159,17 @@ printf("</TD>\n");
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
 printf("<label for='autoRearr'>");
 cgiMakeCheckBoxWithId("autoRearr", autoRearr, "autoRearr");
-printf("<span> Optimize for Rearrangements </span>");
+printf("<span> Optimize Display for Rearrangements </span>");
 printf("</label>");
-printInfoIcon("Rearrangement display (aka 'snakes' tracks) can show "
-"duplications of the query sequence using multiple lines and lines between "
-"fragments, see our "
+printInfoIcon("<b>Rearrangement display</b> (aka 'snakes' tracks) can show "
+"duplications of the query sequence using multiple lines, "
+"with connecting lines between fragments. It can also "
+"better display inversions. See the "
 "<a href='/goldenPath/help/chain.html#rearrangement'>"
-"snakes documentation page"
-"</a>"
-"for more "
-"details. You can also switch this on or off on the BLAT track configuration "
-"page by checking the 'Rearrangement display' box.");
+"snakes documentation"
+"</a> for more "
+"details. You can switch this on or off from the BLAT track configuration "
+"page by checking the <b>Rearrangement display</b> box.");
 printf("</TD>\n");
 
 printf("<TD COLSPAN=4 style='text-align:right'>\n");

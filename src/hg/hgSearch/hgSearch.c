@@ -574,7 +574,14 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     trackHubFixName(trackName);
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");
-    printf("<script>window.location.href=\"../cgi-bin/hgTracks?");
+    printf("<script type='text/javascript' src='../js/utils.js'></script>\n");
+    printf("<script>\n");
+    // we are about to redirect back to hgTracks, save the search term onto the
+    // history stack so it will appear in the dropdown of auto-suggestions before
+    // redirecting
+    printf("addRecentSearch(\"%s\", \"%s\", {\"label\": \"%s\", \"value\": \"%s\", \"id\": \"%s\"});\n",
+            db, userSearch, userSearch, userSearch, newPosBuf);
+    printf("window.location.href=\"../cgi-bin/hgTracks?");
     printf("db=%s", db);
     printf("&position=%s", newPosBuf);
     if (!sameString(trackName, "chromInfo"))
