@@ -912,4 +912,4 @@ include psuVsUcscChains.ra alpha
 
 include LCR.ra alpha
 
-include ancient.ra alpha,beta
+include ancient.ra
