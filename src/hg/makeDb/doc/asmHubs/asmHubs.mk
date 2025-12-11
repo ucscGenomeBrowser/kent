@@ -124,10 +124,11 @@ hubTxt:
 	sed -e "s#index.html#${indexName}.html#; s#genomes.txt#${genomesTxt}.txt#;" ${srcDir}/${hubTxtFile} > ${destDir}/${hubFile}.txt
 
 # all hubs have the same set of groups, no need for any name customization
+#  copy only if different, the PHONY prevents problems if some file 'groupsTxt'
+#     happens to exist, it should not be examined
+.PHONY: groupsTxt
 groupsTxt:
-	rm -f ${destDir}/groups.txt
-	rm -f ${destDir}/groups.txt
-	cp -p ${toolsDir}/groups.txt ${destDir}/groups.txt
+	@cmp -s ${toolsDir}/groups.txt ${destDir}/groups.txt || cp --remove-destination -p ${toolsDir}/groups.txt ${destDir}/groups.txt
 
 clean::
 	rm -f ${destDir}/${hubFile}.txt
