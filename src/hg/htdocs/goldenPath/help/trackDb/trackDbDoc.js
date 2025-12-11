@@ -938,7 +938,7 @@ function showSearchStatus(term, count) {
             statusDiv.style.color = '#721c24';
         }
     } else {
-        statusDiv.textContent = `Found ${count} result${count !== 1 ? 's' : ''} for "${term}" - Use F3/Enter to navigate`;
+        statusDiv.textContent = `Found ${count} result${count !== 1 ? 's' : ''} for "${term}" - Use F3/Enter (Shift+F3/Shift+Enter) to navigate`;
         statusDiv.style.backgroundColor = '#e8f4f8';
         statusDiv.style.borderColor = '#bee5eb';
         statusDiv.style.color = '#0c5460';
