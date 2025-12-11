@@ -9721,7 +9721,7 @@ if (!hideControls)
                     }
 
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
-                if (hub != NULL)
+                if ((hub != NULL) && !startsWith("QuickLift", group->label))
                     {
                     if (hub->descriptionUrl == NULL)
                         {
