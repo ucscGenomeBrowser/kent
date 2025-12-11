@@ -19,19 +19,18 @@ export branch="beta"
 # individual fetches to get all the parts
 
 rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
+rm -fr kent-temp
 export partNumber=1
 export ofN="of 5"
 
-# this util changed from being in a directory to being a script
-# the extract can't overwrite the directory with a file
-rm -fr kent/src/utils/uniprotLift
-# v385 this util changed from a script by this name to a directory
-# and the script changed to a .py name
-rm -fr kent/src/utils/bedJoinTabOffset
+git clone --depth=1 --branch=${branch} \
+    https://github.com/ucscGenomeBrowser/kent.git kent-temp
+cd kent-temp
+
+git checkout ${branch}
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
-git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
---prefix=kent/ ${branch} \
+git archive --format=zip -9 --prefix=kent/ ${branch} \
 src/machTest.sh \
 src/checkUmask.sh \
 src/ameme \
@@ -90,15 +89,12 @@ src/hg/fqToQa \
 src/hg/fqToQac \
 src/hg/fragPart \
 src/hg/gbGetEntries \
-src/hg/gbOneAcc > part${partNumber}Src.zip
-
-unzip -o -q part${partNumber}Src.zip
+src/hg/gbOneAcc > ../part${partNumber}Src.zip
 
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
---prefix=kent/ ${branch} \
+git archive --format=zip -9 --prefix=kent/ ${branch} \
 src/hg/gbToFaRa \
 src/hg/geneBounds \
 src/hg/genePredHisto \
@@ -153,15 +149,12 @@ src/hg/pslPretty \
 src/hg/pslReps \
 src/hg/pslSort \
 src/hg/pslSomeRecords \
-src/hg/pslDropOverlap > part${partNumber}Src.zip
-
-unzip -o -q part${partNumber}Src.zip
+src/hg/pslDropOverlap > ../part${partNumber}Src.zip
 
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
---prefix=kent/ ${branch} \
+git archive --format=zip -9 --prefix=kent/ ${branch} \
 src/hg/pslFilter \
 src/hg/pslFilterPrimers \
 src/hg/pslGlue \
@@ -213,15 +206,12 @@ src/hg/near \
 src/hg/pslDiff \
 src/hg/sage \
 src/hg/gigAssembler/checkAgpAndFa \
-src/hg/genePredCheck > part${partNumber}Src.zip
-
-unzip -o -q part${partNumber}Src.zip
+src/hg/genePredCheck > ../part${partNumber}Src.zip
 
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
---prefix=kent/ ${branch} \
+git archive --format=zip -9 --prefix=kent/ ${branch} \
 src/hg/makeDb/makefile \
 src/hg/makeDb/hgAar \
 src/hg/makeDb/hgAddLiftOverChain \
@@ -278,15 +268,12 @@ src/hg/makeDb/ldHgGene \
 src/hg/makeDb/hgMrnaRefseq \
 src/hg/makeDb/schema \
 src/hg/makeDb/tfbsConsLoc \
-src/hg/makeDb/tfbsConsSort > part${partNumber}Src.zip
-
-unzip -o -q part${partNumber}Src.zip
+src/hg/makeDb/tfbsConsSort > ../part${partNumber}Src.zip
 
 ((partNumber++))
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 
-git archive --format=zip -9 --remote=git://genome-test.soe.ucsc.edu/kent.git \
---prefix=kent/ ${branch} \
+git archive --format=zip -9 --prefix=kent/ ${branch} \
 src/parasol \
 src/tabFile \
 src/htslib \
@@ -301,6 +288,23 @@ src/hg/mouseStuff \
 src/hg/ratStuff \
 src/hg/nci60 \
 src/hg/visiGene/knownToVisiGene \
-src/hg/visiGene/hgVisiGene > part${partNumber}Src.zip
+src/hg/visiGene/hgVisiGene > ../part${partNumber}Src.zip
 
+cd ..
+rm -rf kent-temp
+
+partNumber=1
+echo "unzip source part ${partNumber} ${ofN}" 1>&2
+unzip -o -q part${partNumber}Src.zip
+((partNumber++))
+echo "unzip source part ${partNumber} ${ofN}" 1>&2
+unzip -o -q part${partNumber}Src.zip
+((partNumber++))
+echo "unzip source part ${partNumber} ${ofN}" 1>&2
+unzip -o -q part${partNumber}Src.zip
+((partNumber++))
+echo "unzip source part ${partNumber} ${ofN}" 1>&2
+unzip -o -q part${partNumber}Src.zip
+((partNumber++))
+echo "unzip source part ${partNumber} ${ofN}" 1>&2
 unzip -o -q part${partNumber}Src.zip
