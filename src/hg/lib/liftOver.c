@@ -218,8 +218,6 @@ for (el = list; el != NULL; el = el->next)
         
         // see above
         if (start == end) end++;
-
-        minMatchSize = minMatch *  (end - start);
         }
     intersectSize = aliIntersectSize(chain, start, end);
     if (intersectSize >= minMatchSize)
