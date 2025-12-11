@@ -1,0 +1,19 @@
+track mpra
+shortLabel MPRAs
+longLabel Massively Parallel Reporter Assays
+group phenDis
+type bed 4
+visibility hide
+superTrack on
+
+        track mprabase
+        shortLabel MPRA-base
+        longLabel MPRAs: MPRA-base
+        parent mpra on
+        bigDataUrl /gbdb/hg38/mpra/mprabase/mprabase.bb
+        visibility pack
+        type bigBed 4
+        dataVersion hg38CustomLift
+        priority 1
+
+

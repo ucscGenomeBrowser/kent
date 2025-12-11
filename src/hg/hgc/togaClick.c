@@ -293,6 +293,12 @@ void print_with_newlines(const char *str) {
     }
 }
 
+static void panelPrompt(char *target, char *prompt)
+/* output span element for an expandable text element */
+{
+printf("<span class='hideToggle' dataTarget='%s' style='cursor: pointer; color: blue;'><img height='18' width='18' src='../images/add_sm.gif'>&nbsp;%s:</span>\n", target, prompt);
+printf("<div id='%s' style='display: none;'>\n", target);
+}
 
 void doHillerLabTOGAGeneBig(char *database, struct trackDb *tdb, char *item, char *table_name)
 /* Put up TOGA Gene track info. */
@@ -335,8 +341,7 @@ printf("<B>Genomic locus in query: </B>%s<BR>\n", info->query_region);
 printf("<B>Projection classification: </B>%s<BR>\n", info->status);
 printf("<B>Probability that query locus is orthologous: </B>%s<BR>\n", info->chain_score);
 // list of chain features (for orthology classification)
-printf("<span class='hideToggle' data-target='collapseChain' style='cursor: pointer;'>Show features used for ortholog probability:</span>\n");
-printf("<div id='collapseChain' style='display: none;'>\n");
+panelPrompt("collapseChain", "Show features used for ortholog probability");
 printf("<p><ul>\n");
 printf("<li>Synteny (log10 value): %s</li>\n", info->chain_synteny);
 printf("<li>Global CDS fraction: %s</li>\n", info->chain_gl_cds_fract);
@@ -392,8 +397,7 @@ printf(" red or blue are deleted or do not align at all.\nRed indicates that the
 printf("shifts the reading frame, while blue indicates that exon deletion(s) are framepreserving.<br>\n");
 
 // GLP features
-printf("<span class='hideToggle data-target='collapseGLP' style='cursor: pointer;'>Show features used for transcript classification</span>\n");
-printf("<div id='collapseGLP' style='display: none;'>\n");
+panelPrompt("collapseGLP", "Show features used for transcript classification");
 printf("<p><ul>\n");
 printf("<li>Percent intact, ignoring missing sequence: %s</li>\n", info->perc_intact_ign_M);
 printf("<li>Percent intact, treating missing as intact sequence: %s</li>\n", info->perc_intact_int_M);
@@ -420,15 +424,13 @@ printf("</ul></p>\n</div>\n");
 printf("<hr style='margin-bottom:-0.5em;color:black;'>\n");
 printf("<h4>Predicted protein sequence</h4>\n");
 
-printf("<span class='hideToggle' data-target='collapseProt' style='cursor: pointer;'>Show protein sequence of query</span>\n");
-printf("<div id='collapseProt' style='display: none;'>\n");
+panelPrompt("collapseProt", "Show protein sequence of query");
 printf("<p><TT>");
 HLprintQueryProtSeqForAli(info->prot_alignment);
 printf("\n</TT></p>\n</div><BR>\n");
 
 if (info->protseqFrameCorrected != NULL) {
-  printf("<span class='hideToggle' data-target='collapseProtFrameCorrected' style='cursor: pointer;'>Show frame-corrected protein sequence of query (potential frameshifts are masked)</span>\n");
-  printf("<div id='collapseProtFrameCorrected' style='display: none;'>\n");
+  panelPrompt("collapseProtFrameCorrected", "Show frame-corrected protein sequence of query (potential frameshifts are masked)");
   printf("<p><TT>");
   print_with_newlines(info->protseqFrameCorrected);
   printf("\n</TT></p>\n</div>\n");
@@ -437,8 +439,7 @@ if (info->protseqFrameCorrected != NULL) {
 if (info->CDSseq != NULL) {
   printf("<hr style='margin-bottom:-0.5em;color:black;'>\n");
   printf("<h4>Predicted coding (DNA) sequence</h4>\n");
-  printf("<span class='hideToggle' data-target='collapseCDS' style='cursor: pointer;'>Show coding sequence of query</span>\n");
-  printf("<div id='collapseCDS' style='display: none;'>\n");
+  panelPrompt("collapseCDS", "Show coding sequence of query");
   printf("<p><TT>");
   print_with_newlines(info->CDSseq);
   printf("\n</TT></p>\n</div>\n");
@@ -447,16 +448,14 @@ if (info->CDSseq != NULL) {
 // and show protein sequence
 printf("<hr style='margin-bottom:-0.5em;color:black;'>\n");
 printf("<h4>Protein sequence alignment</h4>\n");
-printf("<span class='hideToggle' data-target='collapseProtAli' style='cursor: pointer;'>Show alignment between reference and query</span>\n");
-printf("<div id='collapseProtAli' style='display: none;'>\n");
+panelPrompt("collapseProtAli", "Show alignment between reference and query");
 printf("<p><TT>%s</TT>\n", info->prot_alignment);
 printf("</p></div>\n");
 
 // show inactivating mutations if required
 printf("<hr style='margin-bottom:-0.5em;color:black;'>\n");
 printf("<h4>List of inactivating mutations</h4>\n");
-printf("<span class='hideToggle' data-target='collapseMuts' style='cursor: pointer;'>Show inactivating mutations</span>\n");
-printf("<div id='collapseMuts' style='display: none;'>\n");
+panelPrompt("collapseMuts", "Show inactivating mutations");
 printf("<p><table border = \"1\" width = \"640\">\n");  // init table
 printf("<tr><th>Exon number</th><th>Codon number</th><th>Mutation class</th><th>Mutation</th><th>Treated as inactivating</th><th>Mutation ID</th>\n");
 printf("</tr>\n");
@@ -468,8 +467,7 @@ printf("</div>\n\n");
 printf("<hr style='margin-bottom:-0.5em;color:black;'>\n");
 printf("<h4>Exon alignments</h4>\n");
 
-printf("<span class='hideToggle' data-target'collapseExons' style='cursor: pointer;'>Show exon sequences and features</span>\n");
-printf("<div id='collapseExons' style='display: none;'>\n");
+panelPrompt("collapseExons", "Show exon sequences and features");
 printf("<p>%s</p>\n", info->exon_ali_html);
 
 printf("<hr style='margin-bottom:-0.5em;color:black;'>\n");
@@ -535,8 +533,7 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
             printf("<B>Projection classification: </B>%s<BR>\n", info->status);
             printf("<B>Probability that query locus is orthologous: </B>%s<BR>\n", info->chain_score);
             // list of chain features (for orthology classification)
-            printf("<span class='hideToggle' data-target='collapseChain' style='cursor: pointer;'>Show features used for ortholog probability</span>\n");
-            printf("<div id='collapseChain' style='display: none;'");
+            panelPrompt("collapseChain", "Show features used for ortholog probability");
             printf("<p><ul>\n");
             printf("<li>Synteny (log10 value): %s</li>\n", info->chain_synteny);
             printf("<li>Global CDS fraction: %s</li>\n", info->chain_gl_cds_fract);
@@ -592,8 +589,7 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
             printf("shifts the reading frame, while blue indicates that exon deletion(s) are framepreserving.<br>\n");
 
             // GLP features
-            printf("<span class='hideToggle' data-target='collapseGLP' style='cursor: pointer;'>Show features used for transcript classification</span>\n");
-            printf("<div id='collapseGLP' style='display:none;'>\n");
+            panelPrompt("collapseGLP", "Show features used for transcript classification");
             printf("<p><ul>\n");
             printf("<li>Percent intact, ignoring missing sequence: %s</li>\n", info->perc_intact_ign_M);
             printf("<li>Percent intact, treating missing as intact sequence: %s</li>\n", info->perc_intact_int_M);
@@ -614,16 +610,14 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
             printf("</ul></p>\n</div>\n<BR>\n");
             printf("<HR ALIGN=\"CENTER\"><h4>Query protein sequence</h4><BR>");
 
-            printf("<span class='hideToggle' data-target='collapseProt' style='cursor: pointer;'>Show protein sequence of query</span>\n");
-            printf("<div id='collapseProt' style='display:none;'>\n");
+            panelPrompt("collapseProt", "Show protein sequence of query");
             printf("<p><TT>{protein seq of the query without dashes or other things. Should end with *}\n");
             printf("<BR>\n</TT></p>\n</div>\n");
 
             // and show protein sequence
             htmlHorizontalLine();
             printf("<h4>Protein sequence alignment</h4><BR>\n");
-            printf("<span class='hideToggle' data-target='collapseProtAli' style='cursor: pointer;'>Show alignment between reference and query</span>\n");
-            printf("<div id='collapseProtAli' style='display: none;'>\n");
+            panelPrompt("collapseProtAli", "Show alignment between reference and query");
             printf("<p><TT>%s</TT></p><BR>\n", info->prot_alignment);
             printf("</div>\n<BR><BR>\n");
 
@@ -646,8 +640,7 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
         char **row;
         sqlSafef(query, sizeof(query), "select * from %s where transcript='%s'", togaInactMutTableName, item);
         sr = sqlGetResult(conn, query);
-        printf("<span class='hideToggle' data-target='collapseMuts' style='cursor: pointer;'>Show inactivating mutations</span>\n");
-        printf("<div id='collapseMuts' style='display: none;'>\n");
+        panelPrompt("collapseMuts", "Show inactivating mutations");
         printf("<table border = \"1\" width = \"640\">\n");  // init table
         printf("<tr><th>Exon number</th><th>Codon number</th><th>Mutation class</th><th>Mutation</th><th>Treated as inactivating</th><th>Mutation ID</th>\n");
         printf("</tr>\n");
@@ -685,8 +678,7 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
         char query[256];
         struct sqlResult *sr = NULL;
         char **row;
-        printf("<span class='hideToggle' data-target='collapseExons' style='cursor: pointer;'>Show exon sequences and features</span>\n");
-        printf("<div id='collapseExons' style='display: none;'>\n");
+        panelPrompt("collapseExons", "Show exon sequences and features");
         sqlSafef(query, sizeof(query), "select * from %s where transcript='%s'", togaNuclTableName, item);
         sr = sqlGetResult(conn, query);
 

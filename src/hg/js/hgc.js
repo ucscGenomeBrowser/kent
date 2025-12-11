@@ -451,12 +451,15 @@ function initPage() {
     }
     document.querySelectorAll('.hideToggle').forEach(function(element) {
        element.addEventListener('click', function() {
-         var targetId = this.getAttribute('data-target');
+         var targetId = this.getAttribute('dataTarget');
          var targetDiv = document.getElementById(targetId);
+         var toggleImg = this.querySelector('img');
          if (targetDiv.style.display === 'none') {
              targetDiv.style.display = 'block';
+             toggleImg.src = '../images/remove_sm.gif';
          } else {
              targetDiv.style.display = 'none';
+             toggleImg.src = '../images/add_sm.gif';
          }
        });
     });
