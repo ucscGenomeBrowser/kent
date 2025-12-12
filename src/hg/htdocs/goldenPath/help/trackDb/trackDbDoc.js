@@ -549,6 +549,11 @@ function searchHidden(term) {
     // Reset previous search
     clearSearchHighlights();
 
+    // track elements already processed to prevent repeated <mark>ing
+    if (!window.__searchedElements) {
+        window.__searchedElements = new WeakSet();
+    }
+
     if (!term || term.length < 2) {
         return [];
     }
@@ -607,6 +612,17 @@ function searchHidden(term) {
 
     // Now search through elements in document order
     allElements.forEach(element => {
+        // skip elements already searched
+        if (window.__searchedElements.has(element)) {
+            return;
+        }
+        window.__searchedElements.add(element);
+
+        // skip anything inside an existing <mark>
+        if (element.closest && element.closest("mark")) {
+            return;
+        }
+
         let foundMatches = searchAndHighlightInElement(element, escapedTerm);
         if (foundMatches.length > 0) {
             results.push(...foundMatches);
@@ -638,6 +654,11 @@ function searchHidden(term) {
 
         // Only search library content if details are not already visible
         if (existingDetails.length === 0) {
+            if (window.__searchedElements.has(td)) {
+                return;
+            }
+            window.__searchedElements.add(td);
+
             let blurb = tdbDoc.library.lookup(detailsId, false);
             if (blurb && blurb.length > 0) {
                 // Check if library content contains the search term
@@ -657,6 +678,16 @@ function searchHidden(term) {
                     let newDetails = $(td).find('div.details');
                     let newMatches = [];
                     newDetails.each((ix, docDiv) => {
+                        // avoid re-searching if run multiple times
+                        if (window.__searchedElements.has(docDiv)) {
+                            return;
+                        }
+                        window.__searchedElements.add(docDiv);
+
+                        // skip elements inside <mark>
+                        if (docDiv.closest && docDiv.closest("mark")) {
+                            return;
+                        }
                         let docMatches = searchAndHighlightInElement(docDiv, escapedTerm);
                         newMatches.push(...docMatches);
                     });
@@ -719,7 +750,12 @@ function clearHighlightsInElement(element) {
 
 function searchAndHighlightInElement(element, escapedTerm) {
     let results = [];
-    let regex = new RegExp(`(${escapedTerm})`, "gi");
+    let regexFactory = () => new RegExp(`(${escapedTerm})`, "gi");
+
+    // track processed text nodes so they don't get re-<mark>ed
+    if (!window.__processedTextNodes) {
+        window.__processedTextNodes = new WeakSet();
+    }
 
     // Create a tree walker to traverse only text nodes
     let walker = document.createTreeWalker(
@@ -735,6 +771,12 @@ function searchAndHighlightInElement(element, escapedTerm) {
     // Collect all text nodes first to avoid modifying tree during traversal
     while (node = walker.nextNode()) {
         if (node.textContent.trim().length > 0) {
+            // skip already processed nodes
+            if (window.__processedTextNodes.has(node)) continue;
+            // skip anything inside a <mark>
+            if (node.parentNode.closest && node.parentNode.closest("mark")) continue;
+            window.__processedTextNodes.add(node);
+
             textNodes.push(node);
         }
     }
@@ -742,7 +784,11 @@ function searchAndHighlightInElement(element, escapedTerm) {
     // Process each text node
     textNodes.forEach(textNode => {
         let text = textNode.textContent;
-        if (regex.test(text)) {
+
+        // create a fresh regex to avoid lastIndex corruption
+        const regex = regexFactory();
+
+        if (regex.exec(text)) {
             // Create a document fragment to hold the new nodes
             let fragment = document.createDocumentFragment();
             let lastIndex = 0;
@@ -860,6 +906,9 @@ function runSearch(term) {
     currentResults = [];
     currentIndex = -1;
 
+    // Reset processed element tracking on each search
+    window.__searchedElements = new WeakSet();
+
     if (!term || term.length < 2) {
         // Show message for short terms
         if (term.length === 1) {
@@ -938,7 +987,7 @@ function showSearchStatus(term, count) {
             statusDiv.style.color = '#721c24';
         }
     } else {
-        statusDiv.textContent = `Found ${count} result${count !== 1 ? 's' : ''} for "${term}" - Use F3/Enter to navigate`;
+        statusDiv.textContent = `Found ${count} result${count !== 1 ? 's' : ''} for "${term}" - Use F3/Enter (Shift+F3/Shift+Enter) to navigate`;
         statusDiv.style.backgroundColor = '#e8f4f8';
         statusDiv.style.borderColor = '#bee5eb';
         statusDiv.style.color = '#0c5460';

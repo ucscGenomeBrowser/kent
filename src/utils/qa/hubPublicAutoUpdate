@@ -96,6 +96,9 @@ def buildCurrentHubTxtDic(hub):
     currentHub = {}
     response = curl(hub)
     for line in response.splitlines():
+        # Stop parsing at genome or track lines to avoid overwriting hub labels
+        if line.startswith("genome ") or line.startswith("track "):
+            break
         if "\t" in line.rstrip():
             line = line.split("\t")
             currentHub[line[0]] = line[1]
@@ -110,12 +113,17 @@ def queryHubTxt(currentHub,hub):
     """Query genomes.txt file and fill out dbList and dbCount values"""
     
     currentHub['dbList'] = []
-    genomeFileLocation = currentHub['genomesFile'].rstrip().lstrip()
-    if genomeFileLocation.startswith("http"):
-        genomeUrl = genomeFileLocation
+    # A check for useOneFile to parse genome info from hub.txt instead of genomes.txt
+    if currentHub.get('useOneFile') == 'on':
+        genomeInfo = curl(hub)
     else:
-        genomeUrl = "/".join(hub.split('/')[:-1])+"/"+genomeFileLocation
-    genomeInfo = curl(genomeUrl)
+        # Gets genome info from genomes.txt
+        genomeFileLocation = currentHub['genomesFile'].rstrip().lstrip()
+        if genomeFileLocation.startswith("http"):
+            genomeUrl = genomeFileLocation
+        else:
+            genomeUrl = "/".join(hub.split('/')[:-1])+"/"+genomeFileLocation
+        genomeInfo = curl(genomeUrl)
     
     for line in genomeInfo.splitlines():
         if "\t" in line:
