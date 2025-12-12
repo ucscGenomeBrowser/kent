@@ -18,7 +18,7 @@ filterLimits.readcount 0:2000000000
 filterLabel.size Filter by intron size
 filterByRange.size on
 filter.size 30:100000
-filterLabel.sjPair Filter by splice junctions (format GT/AG)
+filterLabel.sjPair splice junctions (format GT/AG)
 filterType.sjPair wildcard
 filterText.sjPair *
 mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor

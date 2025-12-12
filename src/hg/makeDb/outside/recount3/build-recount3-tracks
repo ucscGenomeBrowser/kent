@@ -1,0 +1,36 @@
+#!/bin/bash -e
+## use once code, don't code review
+set -beEu -o pipefail
+
+process_hg38_dataset() {
+	local dset=$1
+	if [ ! -f "$dset.tsv.bgz" ]; then
+	    wget -nv -O $dset.tsv.bgz https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
+	fi
+        ~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --compilation $dset
+	bedToBigBed -type=bed9+6 -tab -as=${HOME}/kent/src/hg/lib/recount3.as $dset.bed /hive/data/genomes/hg38/chrom.sizes $dset.bb
+}
+
+cd /hive/data/genomes/hg38/bed/recount3
+
+
+for dset in gtexv2 srav3h tcgav2 ccle; do
+	process_hg38_dataset $dset &
+done
+
+cd /hive/data/genomes/mm10/bed/recount3
+
+process_mm10_dataset() {
+	local dset=$1
+	if [ ! -f "$dset.tsv.bgz" ]; then
+	    wget -nv -O $dset.tsv.bgz https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
+	fi
+	~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --compilation $dset
+        bedToBigBed -type=bed9+6 -tab -as=${HOME}/kent/src/hg/lib/recount3.as $dset.bed /hive/data/genomes/mm10/chrom.sizes $dset.bb
+}
+
+
+dset=srav1m
+process_mm10_dataset $dset &
+
+wait

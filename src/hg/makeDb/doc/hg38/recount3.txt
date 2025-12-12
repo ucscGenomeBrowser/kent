@@ -6,32 +6,24 @@
 # or else the browser window won't load within the set time
 
 see kent/src/hg/lib/recount3.as
+cd /hive/data/genomes/hg38/bed/recount3
 
-
-process_dataset() {
+process_hg38_dataset() {
 	local dset=$1
 	if [ ! -f "$dset.tsv.bgz" ]; then
 	    wget -nv -O $dset.tsv.bgz https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
 	fi
-        ~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --decorator dec$dset.bed --compilation $dset
+        ~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --compilation $dset
+	bedToBigBed -type=bed9+6 -tab -as=${HOME}/kent/src/hg/lib/recount3.as $dset.bed /hive/data/genomes/hg38/chrom.sizes $dset.bb
 }
 
 for dset in gtexv2 srav3h tcgav2 ccle; do
-	process_dataset $dset &
+	process_hg38_dataset $dset &
 done
 wait
+ln -s $(realpath *.bb)  /gbdb/hg38/recount3/
 
-toBB() {
-	local dset=$1
-	bedToBigBed -type=bed9+6 -tab -as=${HOME}/kent/src/hg/lib/recount3.as $dset.bed /hive/data/genomes/hg38/chrom.sizes $dset.bb &
-	bedToBigBed -type=bed12+ -as=${HOME}/kent/src/hg/lib/decoration.as dec$dset.bed /hive/data/genomes/hg38/chrom.sizes dec$dset.bb &
-}
 
-for dset in gtexv2 srav3h tcgav2 ccle; do
-	toBB $dset &
-done
-wait
 
-rm *.bed *.tsv
-
-2025-08-04 markd: update to add size column for filter
+# once through QA:
+rm *.bed *.tsv.bgz
