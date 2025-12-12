@@ -13,7 +13,7 @@
       canClickTarget: false
     });
     
-    // log when a tutorial is started (commented out for now)
+    // log when a tutorial is started
     customTrackTour.on('start', function() {
         writeToApacheLog("customTrackTutorial start " + getHgsid());
     });
@@ -520,6 +520,8 @@
             when: {
                 show: () => {
                     keepMenuVisible('#help > ul');
+                    // Write to the apache log that the tutorial has finished
+                    writeToApacheLog("customTrackTutorial finish " + getHgsid());
                 },
                 hide: () => hideMenu('#help > ul')
             },
