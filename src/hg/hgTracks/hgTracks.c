@@ -9699,7 +9699,11 @@ if (!hideControls)
                 puts("&nbsp;");
                 char infoText[10000];
                 if (startsWith("QuickLift", group->label))
-                    safef(infoText, sizeof infoText, "This is a quickLift track group. It contains tracks that are annotation on %s that have been lifted up to this assembly, as well as a track (Alignment Differences) showing mismatches and indels between %s and this assembly.", hub->defaultDb, hub->defaultDb);
+                    safef(infoText, sizeof infoText, "This is a QuickLift track group that contains \
+				    tracks that are annotations on %s that have been lifted to this \
+				    assembly, along with a track (Alignment Differences) that shows \
+				    mismatches and indels between %s and this assembly."\
+				    , hub->defaultDb, hub->defaultDb);
                 else
                     safef(infoText, sizeof infoText, "A track hub is a list of tracks produced and hosted by external data providers. The UCSC browser group is not responsible for them. This hub is loaded from %s", hub->url);
                 printInfoIconColor(infoText, "white");
