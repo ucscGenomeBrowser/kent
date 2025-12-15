@@ -5005,8 +5005,12 @@ else if (wordCount > 0)
         boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
 
         if (bigBedOnePath)
-            // always set field count using definedFieldCount in bigBed
-            genericBigBedClick(conn, tdb, item, start, end, 0);
+            {
+            int num = 0;
+            if (wordCount > 1)
+                num = atoi(words[1]);
+            genericBigBedClick(conn, tdb, item, start, end, num);
+            }
         else
             {
             int num = 0;

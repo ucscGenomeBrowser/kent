@@ -36,7 +36,7 @@ noParentConfig on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterLabel.sjPair splice junctions (format GT/AG)
     filterType.sjPair wildcard
     filterText.sjPair *
 
@@ -61,7 +61,7 @@ noParentConfig on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterLabel.sjPair splice junctions (format GT/AG)
     filterType.sjPair wildcard
     filterText.sjPair *
 
@@ -87,7 +87,7 @@ noParentConfig on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterLabel.sjPair splice junctions (format GT/AG)
     filterType.sjPair wildcard
     filterText.sjPair *
 
@@ -112,6 +112,6 @@ noParentConfig on
     filterLabel.size Filter by intron size
     filterByRange.size on
     filter.size 30:100000
-    filterLabel.sjPair Filter by splice junctions (format GT/AG)
+    filterLabel.sjPair splice junctions (format GT/AG)
     filterType.sjPair wildcard
     filterText.sjPair *

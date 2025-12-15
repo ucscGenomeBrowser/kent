@@ -247,7 +247,7 @@ html gnomadSv.html
 
 track gnomadCopyNumberVariants
 parent gnomadVariants on
-bigDataUrl /gbdb/hg38/gnomAD/v4/cnv/gnomad.v4.1.cnv.non_neuro_controls.bb
+bigDataUrl /gbdb/hg38/gnomAD/v4/cnv/gnomad.v4.1.cnv.all.bb
 shortLabel gnomAD Rare CNV Variants
 longLabel Genome Aggregation Database (gnomAD) - Rare CNV variants (<1% overall site frequency) v4.1
 dataVersion Release 4.1 (November 01, 2023)

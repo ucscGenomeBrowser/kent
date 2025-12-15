@@ -9698,7 +9698,14 @@ if (!hideControls)
                 {
                 puts("&nbsp;");
                 char infoText[10000];
-                safef(infoText, sizeof infoText, "A track hub is a list of tracks produced and hosted by external data providers. The UCSC browser group is not responsible for them. This hub is loaded from %s", hub->url);
+                if (startsWith("QuickLift", group->label))
+                    safef(infoText, sizeof infoText, "This is a QuickLift track group that contains \
+				    tracks that are annotations on %s that have been lifted to this \
+				    assembly, along with a track (Alignment Differences) that shows \
+				    mismatches and indels between %s and this assembly."\
+				    , hub->defaultDb, hub->defaultDb);
+                else
+                    safef(infoText, sizeof infoText, "A track hub is a list of tracks produced and hosted by external data providers. The UCSC browser group is not responsible for them. This hub is loaded from %s", hub->url);
                 printInfoIconColor(infoText, "white");
                 }
 
@@ -9718,7 +9725,7 @@ if (!hideControls)
                     }
 
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
-                if (hub != NULL)
+                if ((hub != NULL) && !startsWith("QuickLift", group->label))
                     {
                     if (hub->descriptionUrl == NULL)
                         {
