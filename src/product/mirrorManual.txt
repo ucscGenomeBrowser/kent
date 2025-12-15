@@ -2000,3 +2000,13 @@ your cgi-bin/hg.conf file:
 Not need to restart Apache, at the next access to the browser, a one-click captcha will come up.
 The captcha comes up only a single time, once a unique cookie is set, it will never come up again.
 
+If you do not want to show the captcha for certain user agents:
+
+    noCaptchaAgent.1=^myUserAgent$
+    noCaptchaAgent.2=^AnotherUserAgentRegex
+
+Create as many as you want, they will be checked in order, as long as there is a number after the dot.
+
+If you want to exclude certain IP addresses from the captcha:
+
+    bottleneck.except=129.101.222.32 0a0a:ffff:136:1::20 10.80.10.10
