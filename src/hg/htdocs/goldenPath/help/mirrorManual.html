@@ -35,6 +35,7 @@
 <h6><a href='#building-the-kent-source-tree'>Building the kent source tree.</a></h6>
 <h6><a href='#adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</a></h6>
 <h6><a href='#make-the-api-work-in-the-same-way-as-on-the-public-website'>Make the API work in the same way as on the public website</a></h6>
+<h6><a href='#set-up-the-cloudflare-captcha'>Set up the Cloudflare captcha</a></h6>
 <a name='overview-of-the-genome-browser-directories-and-databases'></a>
 <h2>Overview of the Genome Browser directories and databases</h2>
 
@@ -2687,6 +2688,25 @@ SSLCertificateChainFile /etc/httpd/conf/ssl.crt/chain.crt
 Header set Access-Control-Allow-Origin &quot;*&quot; 
 Header set Access-Control-Allow-Headers &quot;Range&quot; 
 &lt;/VirtualHost&gt;</code></pre>
+
+<a name='set-up-the-cloudflare-captcha'></a>
+<h2>Set up the Cloudflare captcha</h2>
+
+<p>
+Go to Cloudflare.com, make an account, login, go to Application Security &gt;
+Turnstile, click &quot;Add Widget&quot;, make sure that you enter your publicly visible
+hostname of your web server. Copy the API site key and secret and put it into
+your cgi-bin/hg.conf file:
+</p>
+
+<pre><code># Turns on cloudflare turnstile captcha
+cloudFlareSiteKey=0x4xxxxxxxxxxxxxxx
+cloudFlareSecretKey=0x4xxxxxxxxxxxxx</code></pre>
+
+<p>
+Not need to restart Apache, at the next access to the browser, a one-click captcha will come up.
+The captcha comes up only a single time, once a unique cookie is set, it will never come up again.
+</p>
 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

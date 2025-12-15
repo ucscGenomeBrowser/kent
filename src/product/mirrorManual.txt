@@ -1985,3 +1985,18 @@ The virtual host definition looks as follows on our server:
     Header set Access-Control-Allow-Origin "*" 
     Header set Access-Control-Allow-Headers "Range" 
     </VirtualHost>
+
+# Set up the Cloudflare captcha
+
+Go to Cloudflare.com, make an account, login, go to Application Security >
+Turnstile, click "Add Widget", make sure that you enter your publicly visible
+hostname of your web server. Copy the API site key and secret and put it into
+your cgi-bin/hg.conf file:
+
+    # Turns on cloudflare turnstile captcha
+    cloudFlareSiteKey=0x4xxxxxxxxxxxxxxx
+    cloudFlareSecretKey=0x4xxxxxxxxxxxxx
+
+Not need to restart Apache, at the next access to the browser, a one-click captcha will come up.
+The captcha comes up only a single time, once a unique cookie is set, it will never come up again.
+
