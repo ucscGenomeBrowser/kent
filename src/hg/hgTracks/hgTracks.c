@@ -7218,7 +7218,6 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
-}
 void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash, struct hash *trackHashRef)
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
