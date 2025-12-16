@@ -903,7 +903,7 @@ if (trackDbSetting(tdb, setting))
         hub->url, genome->name, tdb->track);
 }
 
-static void expandOneUrl(struct hash *settingsHash, char *hubUrl, char *variable)
+static void expandOneUrl(struct hash *settingsHash, char *hubUrl, char *variable, boolean canFree)
 {
 struct hashEl *hel = hashLookup(settingsHash, variable);
 if (hel != NULL)
@@ -921,12 +921,13 @@ if (hel != NULL)
 	    errAbort("setting %s local URL %s not allowed with non-local host URL %s", variable, newPath, hubUrl);
 	    }
 	}
-    freeMem(oldVal);
+    if (canFree)
+	freeMem(oldVal);
     }
 }
 
 static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
-	struct trackDb *tdb)
+	struct trackDb *tdb, boolean canFree)
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
 struct hashEl *hel;
@@ -935,7 +936,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     char *name = hel->name;
     if (trackSettingIsFile(name))
-	expandOneUrl(tdb->settingsHash, genome->trackDbFile, name);
+	expandOneUrl(tdb->settingsHash, genome->trackDbFile, name, canFree);
     }
 }
 
@@ -1150,7 +1151,7 @@ if (tagStormName)
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    expandBigDataUrl(hub, genome, tdb);
+    expandBigDataUrl(hub, genome, tdb, TRUE);
     if  (absStormName)
         hashReplace(tdb->settingsHash, "metaDb", absStormName);
     if  (absTabName)
@@ -1947,7 +1948,7 @@ if (hubGenome != NULL)
 		struct trackDb *tdb;
 		for (tdb = cacheTdb; tdb != NULL; tdb = tdb->next)
 		    {  // disallow local bigDataUrl with non-local hub.
-		    expandBigDataUrl(hubGenome->trackHub, hubGenome, tdb);
+		    expandBigDataUrl(hubGenome->trackHub, hubGenome, tdb, FALSE);
 		    }
                 return cacheTdb;
 		}
