@@ -3,3 +3,4 @@
 # contrib track name: tracks found in <buildDir>/contrib/<thisName>/
 tiberius
 VEuPathDB
+TOGAv2

@@ -360,7 +360,7 @@ for (group = groupList; group != NULL; group = group->next)
      * tracks, and to insert a track in the list for the supertrack.
      * Sort tracks and supertracks together by priority */
     makeGlobalTrackHash(trackList);
-    groupTrackListAddSuper(cart, group, superHash);
+    groupTrackListAddSuper(cart, group, superHash, trackHash);
 
     if (!withPriorityOverride)
         {

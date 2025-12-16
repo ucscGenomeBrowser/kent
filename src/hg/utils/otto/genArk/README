@@ -20,3 +20,120 @@ pushRR.sh
 ### manages the pushing of the beta and public versions of 'contrib'
 ### tracks in genark assemblies
 alphaBetaPush.pl
+
+###################################################################
+# operation procedure
+###################################################################
+
+Listings of files are made on hgwdev, hgwbeta and hgw1 in order to
+determine what needs to be pushed out.  It is done with these listings
+instead of allowing rsync to simply push everything because there is
+a staged alpha, beta, public release procedure that pushes out different
+hub.txt files to hgwbeta and hgw1, and different 'contrib/' directories
+in the GenArk hubs.
+
+1. the script devList.sh is running as an otto cron job on hgwdev:
+   58 18 * * * /hive/data/inside/GenArk/pushRR/devList.sh
+   which runs on hgwdev and constructs listings of files with
+   their timestamps in:
+     /gbdb/GCA and /gbdb/GCF
+   sending the listings to an archive logs directory:
+       /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
+   and also a 'daily' list to be used by push scripts:
+       /hive/data/inside/GenArk/pushRR/dev.todayList.gz
+
+   It also makes listings of files with timestamps in /gbdb/*/quickLift/ and
+   /gbdb/*/liftOver/ placing the results into the logs/ directory
+   and also the daily listings:
+     /hive/data/inside/GenArk/pushRR/dev.today.quickLiftList.gz
+     /hive/data/inside/GenArk/pushRR/dev.today.liftOverList.gz
+
+2. The same type of script is also running on all the RR machines,
+    sending their listings back to the otto logs directory:
+       /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
+    and on hgwbeta and hgw1 it also sends the listings back to the
+    otto files:
+        /hive/data/inside/GenArk/pushRR/${machName}.today.quickLiftList.gz
+        /hive/data/inside/GenArk/pushRR/${machName}.today.liftOverList.gz
+    to be compared to the lists made by the job on hgwdev to see what
+    might need to go out.
+
+3. As those listings of files are made, the primary push script runs
+   as the otto user cronjob:
+
+    03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
+
+   It is running two scripts:
+        pushNewOnes.sh
+        quickPush.pl
+
+4. the pushNewOnes.sh script runs:
+
+        whatIsNew.sh
+           this is doing the joins between the listings on hgwdev
+           with the hgwbeta list to determine what files may be new
+           or updated between hgwdev and hgwbeta for the /gbdb/genark/
+           hierarchy.  These joins are done
+           while avoiding any hub.txt files or any contrib/ directories
+           in the assemblies, since those items are special and under control
+           of other operations.  Listings made:
+               new.files.ready.to.beta.txt
+               new.beta.timeStamps.txt
+           It also puts together the listing:
+               rsync.gbdb.toRR.fileList.txt
+           which is used by cluster admin for a push list of files from hgwbeta
+           to the RR machines avoiding the hub.txt files and the contrib/
+           directories.
+
+           This script also runs:
+               quickLiftNew.sh
+               liftOverNew.sh
+           which is doing the same type of listing comparisons, but just
+           for /gbdb/*/liftOver/ and /gbdb/*/quickLift/ directories.
+           They make listings:
+               new.quickLift.ready.to.beta.txt
+               new.liftOver.ready.to.go.txt
+               beta.quickLift.timeStamps.txt
+               new.liftOver.timeStamps.txt
+           and adding to the cluster admin push list:
+               rsync.gbdb.toRR.fileList.txt
+
+
+
+       pushNewOnes.sh uses the dev.todayList.gz and hgwbeta.todayList.gz lists
+           to push out any new assembly directories in /gbdb/genark/GCx/...
+           This push avoids any hub.txt files or any contrib/ directories
+           since those are under special control elsewhere.
+           It next uses the listing "new.files.ready.to.beta.txt"
+           to push out any new or updated files for existing browsers
+           for /gbdb/genark/ from hgwdev to hgwbeta
+           It uses the listing "new.quickLift.ready.to.beta.txt" to
+           push any new /gbdb/*/quickLift/ files to hgwbeta from hgwdev
+           It uses the listing "new.beta.timeStamps.txt" to send out
+           any updated files for assemblies in /gbdb/genark/...
+           And finally, the list: "beta.quickLift.timeStamps.txt"
+           to send any undated files from /gbdb/*/quickLift directories
+           from hgwdev to hgwbeta
+
+4. the quickPush.sh script is going to do the special businss
+           of getting the appropriate hub.txt and contrib/ directories
+           pushed out.  It uses the source tree files:
+               kent/src/hg/makeDb/trackDb/betaGenArk.txt
+               kent/src/hg/makeDb/trackDb/publicGenArk.txt
+           to find out what 'contrib' tracks are destined for
+           either hgwbeta or out to the RR.  It scans the
+           dev.todayList.gz listing for contrib directories or
+           hub.txt files:  zegrep '/contrib/|hub.txt' dev.todayList.gz"
+           For 'contrib' track names in the betaGenArk it gets those
+           contrib/ directories out to hgwbeta along with their beta.hub.txt
+           file to become the 'hub.txt' file on hgwbeta.  For the RR
+           push it uses the publicGenArk list and gets the designated
+           contrib/ directories out to 'hgw0' only, and their public.hub.txt
+           file to 'hgw0' only.  The cluster admin rsync systems are responsible
+           for getting the 'hgw0' content out to all the other RR systems           For 'contrib' track names in the betaGenArk it gets those
+           contrib/ directories out to hgwbeta along with their beta.hub.txt
+           file to become the 'hub.txt' file on hgwbeta.  For the RR
+           push it uses the publicGenArk list and gets the designated
+           contrib/ directories out to 'hgw0' only, and their public.hub.txt
+           file to 'hgw0' only.  The cluster admin rsync systems are responsible
+           for getting the 'hgw0' content out to all the other RR systems.

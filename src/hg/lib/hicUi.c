@@ -15,6 +15,58 @@
 #include "htmshell.h"
 #include "htmlColor.h"
 
+boolean hicUiArcLimitEnabled(struct cart *cart, struct trackDb *tdb)
+/* Returns true if the checkbox for limiting the number of displayed arcs is checked */
+{
+//return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_ARC_LIMIT_CHECKBOX, FALSE);
+return cartOrTdbBoolean(cart, tdb, HIC_ARC_LIMIT_CHECKBOX, FALSE);
+}
+
+int hicUiGetArcLimit(struct cart *cart, struct trackDb *tdb)
+/* Returns the currently configured limit on the number of arcs drawn in arc mode.
+ * Defaults to 5000.
+ */
+{
+//int arcLimit = cartUsualIntClosestToHome(cart, tdb, FALSE, HIC_ARC_LIMIT, 5000);
+int arcLimit = cartOrTdbInt(cart, tdb, HIC_ARC_LIMIT, 5000);
+return arcLimit;
+}
+
+void hicUiAddArcLimitJS(struct cart *cart, char *track)
+/* Write out a bit of javascript to associate checking/unchecking the arc count
+ * limit checkbox with deactivating/activating (respectively) the text
+ * input.  */
+{
+struct dyString *new = dyStringNew(0);
+dyStringPrintf(new, "$('input[name=\"%s.%s\"]')[0].onclick = function() {", track, HIC_ARC_LIMIT_CHECKBOX);
+dyStringPrintf(new, "if (this.checked) {$('input[name=\"%s.%s\"]')[0].disabled = false; $('span#hicArcLimitText').css('color', '');}", track, HIC_ARC_LIMIT);
+dyStringPrintf(new, "else {$('input[name=\"%s.%s\"]')[0].disabled = true; $('span#hicArcLimitText').css('color', 'gray');} };\n", track, HIC_ARC_LIMIT);
+dyStringPrintf(new, "if (!$('input[name=\"%s.%s\"]')[0].checked) {$('input[name=\"%s.%s\"]')[0].disabled = true; $('span#hicArcLimitText').css('color', 'gray');}\n",
+        track, HIC_ARC_LIMIT_CHECKBOX, track, HIC_ARC_LIMIT);
+jsInline(dyStringContents(new));
+dyStringFree(&new);
+}
+
+void hicUiArcLimitSection(struct cart *cart, struct trackDb *tdb)
+/* Draw the menu inputs associated with selecting whether the track should automatically
+ * scale its color gradient based on the scores present in the view window, or whether it
+ * should stick to a gradient based on a user-selected maximum score. */
+{
+printf("\n");
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_ARC_LIMIT_CHECKBOX);
+boolean arcLimitChecked = hicUiArcLimitEnabled(cart, tdb);
+cgiMakeCheckBox(cartVar, arcLimitChecked);
+int currentLimit = hicUiGetArcLimit(cart, tdb);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_ARC_LIMIT);
+printf("&nbsp;&nbsp;<span id='hicArcLimitText'><b>Limit arcs to the</b> ");
+cgiMakeIntVar(cartVar, currentLimit, 6);
+printf("<b> strongest interactions</b> </span>\n");
+
+hicUiAddArcLimitJS(cart, tdb->track);
+}
+
+
 char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 /* Return the current normalization selection, or the default if none
  * has been selected.  Right now this is a hard-coded set specifically for
@@ -164,7 +216,8 @@ boolean hicUiFetchInverted(struct cart *cart, struct trackDb *tdb)
  * this is the first pass at this feature. */
 {
 boolean defaultVal = FALSE;
-return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_INVERTED, defaultVal);
+//return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_INVERTED, defaultVal);
+return cartOrTdbBoolean(cart, tdb, HIC_DRAW_INVERTED, defaultVal);
 }
 
 
@@ -405,6 +458,8 @@ puts("&nbsp;&nbsp;");
 hicUiColorMenu(cart, tdb);
 puts("</p><p>\n");
 hicUiMinMaxRangeMenu(cart, tdb);
+puts("</p><p>\n");
+hicUiArcLimitSection(cart, tdb);
 puts("</p><p>\n");
 hicUiFileDetails(trackMeta);
 cfgEndBox(boxed);

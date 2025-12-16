@@ -267,6 +267,12 @@ int iDif = makeInt(dif);
 boolean aIsHub = startsWith("hub_", a->name);
 boolean bIsHub = startsWith("hub_", b->name);
 
+// visible tracks sorts first always
+if (sameString(a->name, "visible"))
+    return -1;
+else if (sameString(b->name, "visible"))
+    return 1;
+
 if (aIsHub)
     {
     if (bIsHub)
@@ -2189,6 +2195,41 @@ if (zoomedToBaseLevel || rulerCds)
     }
 hvGfxUnclip(hvg);
 return y;
+}
+
+static struct track *getVisibleTracks(struct track *trackList)
+/* Return just the tracks that are currently on */
+{
+struct track *retList = NULL;
+if (trackList == NULL)
+    return NULL;
+
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (sameString(trackHubSkipHubName(track->track), "cytoBandIdeo"))
+        continue;
+    int vis = track->limitedVisSet ? track->limitedVis : track->visibility;
+    if (vis)
+        {
+        int subtrackVis = 0;
+        if (track->subtracks)
+            {
+            struct track *subtrack;
+            for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+                subtrackVis |= subtrack->limitedVisSet ? subtrack->limitedVis : subtrack->visibility;
+            vis &= subtrackVis;
+            }
+        if (vis)
+            {
+            struct track *clone = CloneVar(track);
+            clone->next = NULL;
+            slAddHead(&retList, clone);
+            }
+        }
+    }
+// this will be sorted later, no need to reverse or sort now
+return retList;
 }
 
 static void logTrackList(struct dyString *dy, struct track *trackList)
@@ -7065,6 +7106,17 @@ if (!foundMap)
     hashAdd(hash, "map", group);
     }
 
+// The "Visible Tracks" group is now the default top group
+struct group *visible = NULL;
+AllocVar(visible);
+visible->name = "visible";
+visible->label = "Visible Tracks";
+visible->defaultPriority = priority;
+visible->priority = -1;
+visible->defaultIsClosed = FALSE;
+slAddHead(&list, visible);
+hashAdd(hash, "visible", visible);
+
 
 /* Loop through tracks and fill in their groups.
  * If necessary make up an unknown group. */
@@ -7166,13 +7218,17 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash)
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash, struct hash *trackHashRef)
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
  * Shared by hgTracks and configure page to expand track list,
  * in contexts where no track display functions (which don't understand
- * supertracks) are invoked. */
+ * supertracks) are invoked.
+ * In general, trackHashRef is just a pointer to the global trackHash,
+ * except in the case of building the Visible Tracks group, in which
+ * case it is a new hash, because we want super tracks duplicated into
+ * the visible tracks list and their normal group list */
 {
 struct trackRef *newList = NULL, *tr, *ref;
 
@@ -7197,12 +7253,12 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         /* create track and reference for the supertrack */
         struct track *superTrack = track->parent = trackFromTrackDb(track->tdb->parent);
         track->parent = superTrack;
-        if (trackHash != NULL)
-            hashAddUnique(trackHash,superTrack->track,superTrack);
+        if (trackHashRef != NULL)
+            hashAddUnique(trackHashRef,superTrack->track,superTrack);
         superTrack->hasUi = TRUE;
-        superTrack->group = group;
-        superTrack->groupName = cloneString(group->name);
-        superTrack->defaultGroupName = cloneString(group->name);
+        superTrack->group = track->group;
+        superTrack->groupName = cloneString(track->group->name);
+        superTrack->defaultGroupName = cloneString(track->group->name);
 
         /* handle track reordering */
         char cartVar[256];
@@ -8833,6 +8889,29 @@ if (cartUsualBoolean(cart, "dumpTracks", FALSE))
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
     logTrackVisibilities(cartSessionId(cart), trackList, position);
 
+struct track *visibleTracks = getVisibleTracks(trackList);
+if (visibleTracks)
+    {
+    // add these tracks to the special 'visible' group
+    struct group *group, *visibleGroup = NULL;
+    for (group = groupList; group != NULL; group = group->next)
+        {
+        if (sameString(group->name, "visible"))
+            {
+            visibleGroup = group;
+            break;
+            }
+        }
+    struct track *t;
+    for (t = visibleTracks; t != NULL; t=t->next)
+        {
+        struct trackRef *tr;
+        AllocVar(tr);
+        tr->track = t;
+        slAddHead(&visibleGroup->trackList, tr);
+        }
+    slReverse(&visibleGroup->trackList);
+    }
 
 /////////////////
 
@@ -9090,6 +9169,17 @@ for (group = groupList; group != NULL; group = group->next)
 		collapseGroupVar(group->name), collapseGroupVar(group->name), looper, isOpen ? "0" : "1");
             dyStringAppend(looper == 1 ? trackGroupsHidden1 : trackGroupsHidden2, buf);
             }
+        }
+    else if (sameString(group->name, "visible"))
+        {
+            boolean isOpen = !isCollapsedGroup(group);
+            char buf[1000];
+            safef(buf, sizeof(buf), "<input type='hidden' name=\"%s\" id=\"%s_1\" value=\"%s\">\n",
+                collapseGroupVar(group->name), collapseGroupVar(group->name), isOpen ? "0" : "1");
+            dyStringAppend(trackGroupsHidden1, buf);
+            safef(buf, sizeof(buf), "<input type='hidden' name=\"%s\" id=\"%s_2\" value=\"%s\">\n",
+                collapseGroupVar(group->name), collapseGroupVar(group->name), isOpen ? "0" : "1");
+            dyStringAppend(trackGroupsHidden2, buf);
         }
     }
 
@@ -9665,6 +9755,8 @@ if (!hideControls)
                 hPrintf("<th align=\"left\" colspan=%d class='hubToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("QuickLift", group->label))
                 hPrintf("<th align=\"left\" colspan=%d class='quickToggleBar'>",MAX_CONTROL_COLUMNS);
+            else if (sameString("Visible Tracks", group->label))
+                hPrintf("<th align=\"left\" colspan=%d class='visibleTracksToggleBar'>",MAX_CONTROL_COLUMNS);
             else
                 hPrintf("<th align=\"left\" colspan=%d class='nativeToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
@@ -9799,7 +9891,15 @@ if (!hideControls)
 
 	    /* Add supertracks to track list, sort by priority and
 	     * determine if they have visible member tracks */
-	    groupTrackListAddSuper(cart, group, superHash);
+            if (sameString(group->name, "visible"))
+                {
+                // we want tracks in the visible list to also be visible
+                // in the normal group list, so use a separate hash for the
+                // visible tracks grouping
+                groupTrackListAddSuper(cart, group, hashNew(8), hashNew(8));
+                }
+            else
+                groupTrackListAddSuper(cart, group, superHash, trackHash);
 
 	    /* Display track controls */
             if (group->errMessage)

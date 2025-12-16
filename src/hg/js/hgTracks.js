@@ -988,7 +988,8 @@ var vis = {
         var sels = $('select.normalText,select.hiddenText');
         $(sels).on("change", function() {
             var track = $(this).attr('name');
-            if ($(this).val() === 'hide') {
+            let newVis = $(this).val();
+            if (newVis === 'hide') {
                 var rec = hgTracks.trackDb[track];
                 if (rec)
                     rec.visibility = 0;
@@ -999,6 +1000,9 @@ var vis = {
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
+            document.querySelectorAll('[name="'+track+'"]').forEach( (sel) => {
+                sel.value = newVis;
+            });
             
             cart.setVars([track], [$(this).val()]);
             imageV2.markAsDirtyPage();

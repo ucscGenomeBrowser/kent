@@ -47,6 +47,8 @@
 #define HIC_DRAW_MAX_DISTANCE       "maxDistance"
 #define HIC_DRAW_MIN_DISTANCE       "minDistance"
 
+#define HIC_ARC_LIMIT               "hicArcLimit"
+#define HIC_ARC_LIMIT_CHECKBOX      "hicArcLimitEnabled"
 
 void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed);
@@ -111,5 +113,8 @@ double hicUiMaxInteractionRange(struct cart *cart, struct trackDb *tdb);
 double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the minimum range for an interaction to be drawn.  Range is
  * calculated from the left-most start to the right-most end of the interaction. */
+
+int hicUiGetArcLimit(struct cart *cart, struct trackDb *tdb);
+boolean hicUiArcLimitEnabled(struct cart *cart, struct trackDb *tdb);
 
 #endif
