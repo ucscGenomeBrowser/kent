@@ -11,10 +11,10 @@ superTrack on
         longLabel Variant Frequencies: AllOfUs - v7 245k WGS
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.sort.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
         dataVersion V7
         visibility pack
-        priority 2.5
+        priority 0.5
 
         track me
         shortLabel Regeneron Million Exomes 983k WES
