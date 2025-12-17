@@ -9733,6 +9733,7 @@ if (!hideControls)
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
         struct hash *superHash = hashNew(8);
+        long trackCount = 0;
 	for (group = groupList; group != NULL; group = group->next)
 	    {
 	    if ((group->trackList == NULL) && (group->errMessage == NULL))
@@ -9916,6 +9917,8 @@ if (!hideControls)
 		if (tdbIsSuperTrackChild(track->tdb))
 		    /* don't display supertrack members */
 		    continue;
+                // only top level tracks contribute to the total count
+                trackCount++;
 		myControlGridStartCell(cg, isOpen, group->name,
                                        shouldBreakAll(track->shortLabel));
 
@@ -9947,6 +9950,17 @@ if (!hideControls)
 	    if (group->next != NULL)
 		controlGridEndRow(cg);
 	    }
+        if (trackCount < 32)
+            {
+            // visible tracks not needed, set to display: none
+            // we have to do this here because we need to account for super tracks
+            // not being in the list until groupTrackListAddSuper has been called
+            jsInline("let visTrs = document.querySelectorAll(\"[id^=visible-]\");\n"
+                    "let prev = visTrs[0].previousSibling;\n"
+                    "visTrs.forEach( (v) => v.style.display = \"none\");\n"
+                    "prev.style.display = \"none\";\n"
+                    );
+            }
         hashFree(&superHash);
 	endControlGrid(&cg);
 

@@ -706,9 +706,9 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
+fieldCount = track->bedSize;
 boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
-if (bigBedOnePath )
-    // always use the definedFieldCount as gospel
+if (bigBedOnePath  && (fieldCount == 0))
     track->bedSize = fieldCount = bbi->definedFieldCount;
 
 struct bigBedInterval *bb, *bbList; 
@@ -1051,12 +1051,8 @@ if (bigBedOnePath)
     track->extraUiData = newBedUiData(track->track);
     track->loadItems = loadGappedBed;
 
-    // make sure that hgTracks completely ignore the items following "bigBed" in the type line
-    char *type = cloneString(tdb->type);
-    char *space = strchr(type, ' ');
-    if (space)
-        *space = 0;
-    tdb->type = type;
+    if (wordCount > 1)
+        track->bedSize = atoi(words[1]);
 
     if (trackDbSetting(tdb, "colorByStrand"))
         {

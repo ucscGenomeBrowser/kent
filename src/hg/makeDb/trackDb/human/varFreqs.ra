@@ -6,6 +6,16 @@ type bed 12
 visibility hide
 superTrack on
 
+        track allofus
+        shortLabel AllOfUs v7 245k WGS
+        longLabel Variant Frequencies: AllOfUs - v7 245k WGS
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
+        dataVersion V7
+        visibility pack
+        priority 0.5
+
         track me
         shortLabel Regeneron Million Exomes 983k WES
         longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
@@ -17,16 +27,6 @@ superTrack on
         dataVersion 10/04/2023, v1.1.3
         tableBrowser off
         priority 1
-
-        track allofus
-        shortLabel AllOfUs v7 245k WGS
-        longLabel Variant Frequencies: AllOfUs - v7 245k WGS - BROKEN AFTER CHR8
-        type vcfTabix
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.sort.vcf.gz
-        dataVersion V7
-        visibility pack
-        priority 2.5
 
         track topmed
         shortLabel NHLBI TOPMED 10 151k WGS
