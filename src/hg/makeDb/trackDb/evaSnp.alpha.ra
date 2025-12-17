@@ -5,6 +5,7 @@ group varRep
 type bigBed 9 +
 compositeTrack on
 visibility dense
+pennantIcon Updated red ../goldenPath/newsarch.html#121825 "New EVA SNP Release 8 track Dec. 18, 2025"
 
 track evaSnp
 shortLabel EVA SNP Release 3
