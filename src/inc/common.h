@@ -1649,4 +1649,15 @@ struct runTimes getTimesInSeconds(void);
 struct hash *loadSizes(char *sizesFile);
 /* load a sizes file */
 
+boolean parseRange(char *range, char **retSeq, int *retStart, int *retEnd);
+/* Parse seq:start-end into components. */
+
+void mustParseRange(char *range, char **retSeq, int *retStart, int *retEnd);
+/* Parse seq:start-end or die. */
+
+boolean parsePosition(char *position, char **retChrom, uint *retStart, uint *retEnd);
+/* If position is word:number-number (possibly with commas & whitespace),
+ * set retChrom, retStart (subtracting 1) and retEnd, and return TRUE.
+ * Otherwise return FALSE and leave rets unchanged. */
+
 #endif /* COMMON_H */
