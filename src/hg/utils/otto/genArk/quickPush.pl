@@ -34,7 +34,7 @@ if ($hostName ne $expectName) {
 sub rsyncContrib($$) {
   my ($dest, $contribDir) = @_;
   my $contribPath = "/gbdb/genark/" . $contribDir;
-  my $cmd = qq(rsync --stats -a -L --itemize-changes "$contribPath/" "qateam\@$dest:$contribPath/" 2>&1);
+  my $cmd = qq(rsync --mkpath --stats -a -L --itemize-changes "$contribPath/" "qateam\@$dest:$contribPath/" 2>&1);
   printf $lf "%s\n", $cmd;
   my $cmdOut = `$cmd`;
   if (length($cmdOut) > 1) {

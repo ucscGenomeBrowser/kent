@@ -27,8 +27,8 @@ include uniprot.ra
 
 include jaspar.ra
 
-include evaSnp.alpha.ra alpha
-include evaSnp.ra beta,public
+include evaSnp.alpha.ra alpha,beta
+include evaSnp.ra public
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
