@@ -1943,14 +1943,7 @@ if (hubGenome != NULL)
             struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
 
             if (cacheTdb != NULL)
-		{
-		struct trackDb *tdb;
-		for (tdb = cacheTdb; tdb != NULL; tdb = tdb->next)
-		    {  // disallow local bigDataUrl with non-local hub.
-		    expandBigDataUrl(hubGenome->trackHub, hubGenome, tdb);
-		    }
                 return cacheTdb;
-		}
             }
 
         memCheckPoint(); // we want to know how much memory is used to build the tdbList
