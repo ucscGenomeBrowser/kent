@@ -15245,33 +15245,6 @@ printAlignments(pslList, start, "htcBlatXeno", tdb->table, itemName);
 printTrackHtml(tdb);
 }
 
-boolean parseRange(char *range, char **retSeq, int *retStart, int *retEnd)
-/* Parse seq:start-end into components. */
-{
-char *s, *e;
-s = strchr(range, ':');
-if (s == NULL)
-    return FALSE;
-*s++ = 0;
-e = strchr(s, '-');
-if (e == NULL)
-    return FALSE;
-*e++ = 0;
-if (!isdigit(s[0]) || !isdigit(e[0]))
-    return FALSE;
-*retSeq = range;
-*retStart = atoi(s);
-*retEnd = atoi(e);
-return TRUE;
-}
-
-void mustParseRange(char *range, char **retSeq, int *retStart, int *retEnd)
-/* Parse seq:start-end or die. */
-{
-if (!parseRange(range, retSeq, retStart, retEnd))
-    errAbort("Malformed range %s", range);
-}
-
 struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tName, int tStart, int tEnd)
 /* Load a specific psl */
 {

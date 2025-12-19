@@ -126,7 +126,7 @@ if (!cds->endComplete)
 return convertCoord(endBuf, &cds->end);
 }
 
-static boolean parseRange(char *cdsBuf, struct genbankCds* cds)
+static boolean genbankParseRange(char *cdsBuf, struct genbankCds* cds)
 /* parse a cds range in the for 221..617 */
 {
 char *p1;
@@ -184,7 +184,7 @@ cds->complement = TRUE;
 if (startsWith(JOIN_PREFIX, p1))
     return parseJoin(p1, cds);
 else
-    return parseRange(p1, cds);
+    return genbankParseRange(p1, cds);
 }
 
 boolean genbankCdsParse(char *cdsStr, struct genbankCds* cds)
@@ -209,7 +209,7 @@ if (startsWith(JOIN_PREFIX, cdsBuf->string))
 else if (startsWith(COMPLEMENT_PREFIX, cdsBuf->string))
     isOk = parseComplement(cdsBuf->string, cds);
 else
-    isOk = parseRange(cdsBuf->string, cds);
+    isOk = genbankParseRange(cdsBuf->string, cds);
 
 if (!isOk)
     cds->start = cds->end = 0;
