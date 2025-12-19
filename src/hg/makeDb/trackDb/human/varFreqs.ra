@@ -6,6 +6,16 @@ type bed 12
 visibility hide
 superTrack on
 
+        track allofus
+        shortLabel AllOfUs v7 245k WGS
+        longLabel Variant Frequencies: AllOfUs - v7 245k WGS
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
+        dataVersion V7
+        visibility pack
+        priority 0.5
+
         track me
         shortLabel Regeneron Million Exomes 983k WES
         longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
@@ -17,16 +27,6 @@ superTrack on
         dataVersion 10/04/2023, v1.1.3
         tableBrowser off
         priority 1
-
-        track allofus
-        shortLabel AllOfUs v7 245k WGS
-        longLabel Variant Frequencies: AllOfUs - v7 245k WGS - BROKEN AFTER CHR8
-        type vcfTabix
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.sort.vcf.gz
-        dataVersion V7
-        visibility pack
-        priority 2.5
 
         track topmed
         shortLabel NHLBI TOPMED 10 151k WGS
@@ -180,6 +180,16 @@ superTrack on
         dataVersion R12
         tableBrowser off
 
+        track swefreq
+        parent varFreqs on
+        visibility pack
+        type vcfTabix
+        shortLabel Sweden SweGen 1k WGS
+        longLabel Variant Frequencies: Sweden SweGen - 1k WGS
+        priority 4.7
+        bigDataUrl /gbdb/$D/varFreqs/swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
+        dataVersion 20251201
+
         track gasp
         shortLabel GenomeAsia Pilot Subs 1.7k WGS
         longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions
@@ -203,6 +213,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
         visibility pack
+        dataVersion SABE-WGS-1171 Sep 2020
 
         track indigenomes
         shortLabel India IndiGenomes 1k WGS
@@ -224,7 +235,7 @@ superTrack on
 
         track npm
         shortLabel Singapore NPM 9.7k WGS
-        longLabel Variant Frequencies: NPM Singapore - 9,770 samples
+        longLabel Variant Frequencies: NPM Singapore - 9,770 WGS samples
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/npm/SG10K_Health_r5.3.2.sites.vcf.bgz
@@ -232,3 +243,10 @@ superTrack on
         tableBrowser off
         dataVersion r5.3.2
 
+        track saudi
+        shortLabel Saudi Genome Project 302 WGS
+        longLabel Variant Frequencies: Saudi Genome Project - 302 WGS samples
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/saudi/saudi.vcf.gz
+        visibility pack
