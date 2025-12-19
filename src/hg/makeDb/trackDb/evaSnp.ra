@@ -5,6 +5,7 @@ group varRep
 type bigBed 9 +
 compositeTrack on
 visibility dense
+pennantIcon Updated red ../goldenPath/newsarch.html#121925 "New EVA SNP Release 8 track Dec. 19, 2025"
 
 track evaSnp
 shortLabel EVA SNP Release 3
@@ -108,8 +109,7 @@ track evaSnp7
 shortLabel EVA SNP Release 7
 longLabel Short Genetic Variants from European Variant Archive Release 7
 type bigBed 9 +
-parent evaSnpContainer on
-visibility dense
+parent evaSnpContainer off
 itemRgb on
 mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp7.bb
@@ -129,3 +129,30 @@ searchTable evaSnp7
 searchType bigBed
 searchMethod exact
 padding 20
+
+track evaSnp8
+shortLabel EVA SNP Release 8
+longLabel Short Genetic Variants from European Variant Archive Release 8
+type bigBed 9 +
+parent evaSnpContainer on
+visibility dense
+itemRgb on
+mouseOver <b>Ref/Alt allele(s)</b>: $ref>$alt<br> <b>Var type</b>: $ucscClass<br> <b>AA change</b>: $aaChange
+bigDataUrl /gbdb/$D/bbi/evaSnp8.bb
+url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
+filterLabel.varClass Variant class from EVA SO term
+filterLabel.ucscClass Functional effect per UCSC Variant Annotation
+filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
+filterType.ucscClass multipleListOnlyOr
+filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
+filterLabel.itemRgb General variant types by color grouping
+maxWindowCoverage 250000
+maxItems 1000000
+html evaSnpContainer
+pennantIcon New red ../goldenPath/newsarch.html#121925 "Released Dec. 19, 2025"
+
+searchTable evaSnp8
+searchType bigBed
+searchMethod exact
+padding 2
