@@ -369,7 +369,7 @@ foreach my $fileName (keys %devList) {
       if ($yesUpdate) {
           my $dirName = dirname($betaHub);
           my $accession = basename($dirName);
-          my $pathDir = sprintf("/gbdb/genark/%s/%s", $dirName, $accession);
+          my $pathDir = sprintf("/gbdb/genark/%s", $dirName);
           my $src = "$pathDir/beta.hub.txt";
           my $dest = "$pathDir/hub.txt";
           sendHubTxt("beta", $src, $dest);
