@@ -14,12 +14,12 @@ def checkDateTimeOnFile(machine,lastMonth):
     date = latestLog[0].split(".")[0]
     datetime_object = datetime.datetime.strptime(date, '%Y%m%d')
     if datetime_object < lastMonth:
-        print("The following machine logs are more than a month old. Latest log: "+machine+": "+str(date))
+        print("The following machine logs are more than 45 days old. Latest log: "+machine+": "+str(date))
 
 def checkDateTimeOnAllMachines():
     machinesToCheck = ['hgw1','hgw2','asiaNode','euroNode']
     today = datetime.datetime.today()
-    lastMonth = today - datetime.timedelta(days=30)
+    lastMonth = today - datetime.timedelta(days=45)
     for machine in machinesToCheck:
         checkDateTimeOnFile(machine,lastMonth)
         

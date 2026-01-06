@@ -12,6 +12,7 @@
 #include "psl.h"
 #include "dnautil.h"
 #include "chain.h"
+#include "net.h"
 #include "verbose.h"
 
 
@@ -190,7 +191,11 @@ static struct genomeRangeTree* loadMapChains(char *chainFile)
 {
 struct genomeRangeTree* mapAlns = genomeRangeTreeNew();
 struct chain *ch;
-struct lineFile *chLf = lineFileOpen(chainFile, TRUE);
+struct lineFile *chLf;
+if (udcIsLocal(chainFile))
+    chLf = lineFileOpen(chainFile, TRUE);
+else
+    chLf = netLineFileOpen(chainFile);
 while ((ch = chainRead(chLf)) != NULL)
     {
     struct mapAln* mapAln = chainToPsl(ch);
@@ -232,7 +237,11 @@ struct dyString* idBuf = NULL;
 struct genomeRangeTree* mapAlns = genomeRangeTreeNew();
 int id = 0;
 struct mapAln* mapAln;
-struct lineFile *pslLf = lineFileOpen(pslFile, TRUE);
+struct lineFile *pslLf;
+if (udcIsLocal(pslFile))
+    pslLf = lineFileOpen(pslFile, TRUE);
+else
+    pslLf = netLineFileOpen(pslFile);
 while ((mapAln = readPslMapAln(pslLf, id)) != NULL)
     {
     mapAlnsAdd(mapAlns, getMappingId(mapAln->psl->qName, &idBuf), mapAln);
@@ -376,7 +385,11 @@ static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
 {
 struct genomeRangeTree *mapAlns;
 struct psl* inPsl;
-struct lineFile* inPslLf = pslFileOpen(inPslFile);
+struct lineFile* inPslLf;
+if (udcIsLocal(inPslFile))
+    inPslLf = lineFileOpen(inPslFile, TRUE);
+else
+    inPslLf = netLineFileOpen(inPslFile);
 FILE *outPslFh, *mapInfoFh = NULL, *mappingPslFh = NULL;
 unsigned outPslLine = 0;
 

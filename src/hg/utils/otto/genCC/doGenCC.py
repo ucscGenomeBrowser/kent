@@ -240,11 +240,11 @@ if checkIfUpdateIsNeeded():
     bash("mv /hive/data/outside/otto/genCC/newSubmission.tsv /hive/data/outside/otto/genCC/prevSubmission.tsv")
 
     bash("bedSort "+hg38outPutFile+" "+hg38outPutFile)
-    bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -extraIndex=gene_symbol -type=bed9+33 -tab "+hg38outPutFile+" /cluster/data/hg38/chrom.sizes "+hg38outPutFile.split(".")[0]+".bb")
+    bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -sort -extraIndex=gene_symbol -type=bed9+33 -tab "+hg38outPutFile+" /cluster/data/hg38/chrom.sizes "+hg38outPutFile.split(".")[0]+".bb")
     print("Final file created: "+hg38outPutFile.split(".")[0]+".bb")
 
     bash("bedSort "+hg19outPutFile+" "+hg19outPutFile)
-    bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -extraIndex=gene_symbol -type=bed9+33 -tab "+hg19outPutFile+" /cluster/data/hg19/chrom.sizes "+hg19outPutFile.split(".")[0]+".bb")
+    bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -sort -extraIndex=gene_symbol -type=bed9+33 -tab "+hg19outPutFile+" /cluster/data/hg19/chrom.sizes "+hg19outPutFile.split(".")[0]+".bb")
     print("Final file created: "+hg19outPutFile.split(".")[0]+".bb")
          
     bash("rm -f /gbdb/hg38/bbi/genCC.bb")

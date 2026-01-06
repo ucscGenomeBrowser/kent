@@ -196,14 +196,14 @@ freeMem (event);
 void jsAddEventForId(char *eventName, char *idText, char *jsText)
 {
 checkValidEvent(eventName);
-jsInlineF("document.getElementById('%s').addEventListener('%s', %s);\n", idText, eventName, jsText);
+jsInlineF("document.getElementById('%s').addEventListener('%s', %s);\n", javaScriptLiteralEncode(idText), eventName, jsText);
 }
 
 void jsOnEventById(char *eventName, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {
 checkValidEvent(eventName);
-jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", javaScriptLiteralEncode(idText), eventName, jsText);
 }
 
 void jsOnEventBySelector(char *query, char *eventName, char *jsText)
@@ -218,7 +218,7 @@ void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
 /* Add js mapping for inline event with printf formatting */
 {
 checkValidEvent(eventName);
-jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", javaScriptLiteralEncode(idText), eventName);
 va_list args;
 va_start(args, format);
 dyStringVaPrintf(jsInlineLines, format, args);

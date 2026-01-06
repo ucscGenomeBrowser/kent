@@ -399,7 +399,7 @@ if (bedSize != 0) // defined in trackDb
     }
 
 boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
-if (bigBedOnePath || (bedSize == 0))
+if (bigBedOnePath && (bedSize == 0))
     bedSize = bbi->definedFieldCount;
 
 char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);

@@ -663,6 +663,8 @@ foreach my $tSpec (@tFileSpecs) {
   }
   foreach my $qSpec (@qFileSpecs) {
     my ($qSeq, $qLocal) = ("", "");
+    my $answer = 1;  # flag: Will be set to 0 by plainBlastz() in case
+                     # it doesn't run blastz and creates an emtpy lav file
     if ($qSpec =~ m/.2bit$/) {
       $qLocal = $qSpec;
     } else {
@@ -671,11 +673,17 @@ foreach my $tSpec (@tFileSpecs) {
     if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
       &abridgeLinSpecReps($tLocal, $qLocal, $blastzOptions, $littleRaw);
     } else {
-      &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
+      $answer = &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
     }
     # there may be no lifting involved when axtResult TBD XXX
     if ($axtResult) {
-      &run("$cpCmd -p $littleRaw $littleOut");
+      # in case axtResult is set and plainBlastz() created an empty lav,
+      # convert this to an empty axt. Otherwise axtToPsl below crashes
+      if ($answer) {
+        &run("$cpCmd -p $littleRaw $littleOut");
+      } else {
+        &convertOutput($littleRaw, $littleOut);
+      }
     } else {
       if ($collapsed) {
         # Lift target side only:
