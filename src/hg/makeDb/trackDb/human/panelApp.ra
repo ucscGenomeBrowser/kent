@@ -7,7 +7,6 @@ group phenDis
 compositeTrack on
 noParentConfig on
 showCfg on
-pennantIcon Updated red ../goldenPath/newsarch.html#080825 "PanelApp Australia released Aug. 08, 2025"
 
     track panelAppGenes
     parent panelApp on

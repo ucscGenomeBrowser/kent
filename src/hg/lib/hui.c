@@ -596,7 +596,7 @@ if (links > 0)
 if (links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
-if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(tdb))
+if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(tdb) && !tdbIsSuper(tdb))
     // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
     // until it's implemented
     {
