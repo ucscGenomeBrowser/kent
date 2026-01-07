@@ -18,6 +18,7 @@
 <h6><a href="#Debug">Debugging Track Hubs</a></h6>
 <h6><a href="#Search">Setting up item search</a></h6>
 <h6><a href="#Filters">Adding filters to your Track Hub</a></h6>
+<h6><a href="#Includes">Using include statements for large Track Hubs</a></h6>
 <h6><a href="#Register">Registering a Track Hub with UCSC</a></h6>
 <h6><a href="#Compatibility">Checking Hub settings and compatibility</a></h6>
 <h6><a href="#Hosting">Where to host your data</a></h6>
@@ -1089,6 +1090,49 @@ For more information on the options available and examples on how to set up filt
 <a href="hubQuickStartFilter.html" target="_blank">Track Hub Filters Quick Start Guide</a>
 and the filter entries in the <a href="trackDb/trackDbHub.html#filter" target="_blank">
 Track Database Definition Document</a>.</p>
+
+<!-- ========== Using include statements for large Track Hubs ============================== -->
+<a name="Includes"></a>
+<h2>Using include statements for large Track Hubs</h2>
+<p>
+Track Hubs also support the use of include statements, which allow one to insert a file
+containing a set of trackDb stanzas into the primary trackDb. This can be useful when you
+have a hub where you have the same track across several assemblies, e.g. you're creating
+a new gene annotation pipeline and have generated predictions across several species to
+compare. You can also use include statements for breaking up large, complex track configurations,
+such as those with several large <a href="trackDb/trackDbHub.html#groupingTracks"
+>container tracks</a>. You can put the trackDb configuration stanzas for each container
+track into a separate file and then use an include statement in the primary trackDb.txt
+to pull them all into your hub. Include statements also function with the
+<a href="hgTracksHelp.html#UseOneFile">useOneFile setting</a>.</p>
+
+<p>Here's an example of what your hub directory structure might look like:
+<pre><code>myHub/ - directory containing track hub files
+
+hub.txt
+genomes.txt
+trackDb.geneAnnotations.txt
+hg38/
+     trackDb.txt
+     gene_annotations.bigBed
+     trackDb.cell_type_rnaseq.txt
+     rnaseq_files/
+        ...
+mm10/
+     trackDb.txt
+     gene_annotations.bigBed
+</code></pre>
+<p>
+To include these two trackDb files for hg38, you would add
+the following lines to your <code>hg38/trackDb.txt</code>:
+<pre><code>include ../trackDb.geneAnnotations.txt
+include trackDb.cell_type_rnaseq.txt
+</code></pre>
+<p><b>Note:</b> Using include statements may cause slower load times on high-latency
+connections due to our software checking the time of all included files.
+If this is the case, you should avoid include statements and instead concatenate your
+trackDb files. This shouldn't be a problem on low-latency connections.
+</p>
 
 <!-- ========== Registering a Track Hub with UCSC ==================== -->
 <a name="Register"></a>
