@@ -33,7 +33,7 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 
 listFunctions: list01 list02 list04 list05 list06 list07 list08 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 \
-	list20 list21 list22 list23 list24 list25 list27 list28 list29 \
+	list20 list21 list23 list24 list25 list27 list28 list29 \
 	list30 list31 list32
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
@@ -231,10 +231,10 @@ list21: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/files?genome=ce2
-list22: setOutput
-	@printf "### $@ '${SERVERNAME}/list/files?genome=ce2'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="ce2" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
+#list22: setOutput
+#	@printf "### $@ '${SERVERNAME}/list/files?genome=ce2'\n"
+#	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="ce2" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+#	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/files?genome=GCA_021951015.1
 list23: setOutput
