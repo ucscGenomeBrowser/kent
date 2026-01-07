@@ -96,7 +96,7 @@ var autocompleteCat = (function() {
                 var timestamp = new Date().getTime();
                 let cleanedTerm = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0 len chars
                 var url = options.baseUrl + encodeURIComponent(cleanedTerm);
-                if (!options.baseUrl.startsWith("hubApi")) {
+                if (!options.baseUrl.includes("hubApi")) {
                     // hubApi doesn't tolerate extra arguments
                     url += '&_=' + timestamp;
                 }
