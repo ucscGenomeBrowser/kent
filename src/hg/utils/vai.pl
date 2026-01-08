@@ -152,7 +152,7 @@ sub checkArgs() {
     # No args -- just show usage.
     usage(0);
   }
-  if ($db !~ /^\w+$/) {
+  if ($db !~ /^[\w.]+$/) {
     print STDERR "First argument must be a database identifier.\n";
     usage(-1);
   }

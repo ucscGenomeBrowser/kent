@@ -18,7 +18,6 @@
 boolean hicUiArcLimitEnabled(struct cart *cart, struct trackDb *tdb)
 /* Returns true if the checkbox for limiting the number of displayed arcs is checked */
 {
-//return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_ARC_LIMIT_CHECKBOX, FALSE);
 return cartOrTdbBoolean(cart, tdb, HIC_ARC_LIMIT_CHECKBOX, FALSE);
 }
 
@@ -27,7 +26,6 @@ int hicUiGetArcLimit(struct cart *cart, struct trackDb *tdb)
  * Defaults to 5000.
  */
 {
-//int arcLimit = cartUsualIntClosestToHome(cart, tdb, FALSE, HIC_ARC_LIMIT, 5000);
 int arcLimit = cartOrTdbInt(cart, tdb, HIC_ARC_LIMIT, 5000);
 return arcLimit;
 }
