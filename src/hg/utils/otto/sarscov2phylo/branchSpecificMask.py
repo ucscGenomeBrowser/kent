@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import yaml
+import re
 import subprocess, tempfile
 import logging, argparse, os, sys
 
@@ -81,6 +82,10 @@ def getRepresentativeNodes(pbIn, spec):
     for branch in spec:
         rep = spec[branch]['representative']
         repNodes[rep] = ''
+        exclusions = spec[branch].get('exclusions', [])
+        for ex in exclusions:
+            rep = ex['representative']
+            repNodes[rep] = ''
     samplePaths = tempfile.NamedTemporaryFile(delete=False)
     samplePaths.close()
     # matUtils SEGVs if given a full path output file name unless output dir is '/', need to fix that
@@ -113,6 +118,22 @@ def getRepresentativeNodes(pbIn, spec):
     os.unlink(samplePaths.name)
     return repNodes
 
+def getRevPos(rev):
+    """Parse the position out of a reversion [ACGT]([0-9]+)[ACGT], return int."""
+    m = re.match(r"^[ACGT]([0-9]+)[ACGT]$", rev)
+    if not m:
+        die(f"expected reversion string but got {rev}")
+    return int(m.group(1))
+
+def getExcludedNodes(exclusions, pos, repNodes):
+    """If pos is found in exclusions, return a semicolon-separated string of node IDs for pos."""
+    excludedNodes = []
+    for ex in exclusions:
+        if pos == ex['site']:
+            rep = ex['representative']
+            excludedNodes.append(repNodes[rep])
+    return ";".join(excludedNodes)
+
 def makeMaskFile(spec, repNodes, maskFileName):
     """Create a file to use as input for matUtils mask --mask-mutations,
     generated from spec with node IDs from repNodes."""
@@ -122,18 +143,23 @@ def makeMaskFile(spec, repNodes, maskFileName):
             rep = branchSpec['representative']
             nodeId = repNodes[rep]
             ranges = branchSpec.get('ranges')
+            exclusions = branchSpec.get('exclusions', [])
             if ranges:
                 for r in ranges:
                     for pos in range(r[0], r[1]+1):
-                        maskFile.write(f'N{pos}N\t{nodeId}\n')
+                        excludedNodes = getExcludedNodes(exclusions, pos, repNodes)
+                        maskFile.write(f'N{pos}N\t{nodeId}\t{excludedNodes}\n')
             sites = branchSpec.get('sites')
             if sites:
                 for pos in sites:
-                    maskFile.write(f'N{pos}N\t{nodeId}\n')
+                    excludedNodes = getExcludedNodes(exclusions, pos, repNodes)
+                    maskFile.write(f'N{pos}N\t{nodeId}\t{excludedNodes}\n')
             reversions = branchSpec.get('reversions')
             if reversions:
                 for rev in reversions:
-                    maskFile.write(f'{rev}\t{nodeId}\n')
+                    pos = getRevPos(rev)
+                    excludedNodes = getExcludedNodes(exclusions, pos, repNodes)
+                    maskFile.write(f'{rev}\t{nodeId}\t{excludedNodes}\n')
 
 def main():
     args = getArgs()
