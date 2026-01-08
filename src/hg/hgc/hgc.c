@@ -5005,8 +5005,12 @@ else if (wordCount > 0)
         boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
 
         if (bigBedOnePath)
-            // always set field count using definedFieldCount in bigBed
-            genericBigBedClick(conn, tdb, item, start, end, 0);
+            {
+            int num = 0;
+            if (wordCount > 1)
+                num = atoi(words[1]);
+            genericBigBedClick(conn, tdb, item, start, end, num);
+            }
         else
             {
             int num = 0;
@@ -15243,33 +15247,6 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 printAlignments(pslList, start, "htcBlatXeno", tdb->table, itemName);
 printTrackHtml(tdb);
-}
-
-boolean parseRange(char *range, char **retSeq, int *retStart, int *retEnd)
-/* Parse seq:start-end into components. */
-{
-char *s, *e;
-s = strchr(range, ':');
-if (s == NULL)
-    return FALSE;
-*s++ = 0;
-e = strchr(s, '-');
-if (e == NULL)
-    return FALSE;
-*e++ = 0;
-if (!isdigit(s[0]) || !isdigit(e[0]))
-    return FALSE;
-*retSeq = range;
-*retStart = atoi(s);
-*retEnd = atoi(e);
-return TRUE;
-}
-
-void mustParseRange(char *range, char **retSeq, int *retStart, int *retEnd)
-/* Parse seq:start-end or die. */
-{
-if (!parseRange(range, retSeq, retStart, retEnd))
-    errAbort("Malformed range %s", range);
 }
 
 struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tName, int tStart, int tEnd)

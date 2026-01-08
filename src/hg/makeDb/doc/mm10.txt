@@ -19539,28 +19539,30 @@ bedToBigBed -type=bed12+8 -as=encode4.as -tab transcripts.bed /hive/data/genomes
 # Jeltje January 2025
 # NOTE: The sra files are so large that the trackDb.ra file needs a maxWindowToDraw limit
 # or else the browser window won't load within the set time
+# 2025-08-04 markd: update to add size column for filter and color-code items rather than use
+# decorators
 
 see kent/src/hg/lib/recount3.as
 
-process_dataset() {
+cd /hive/data/genomes/mm10/bed/recount3
+
+process_mm10_dataset() {
 	local dset=$1
 	if [ ! -f "$dset.tsv.bgz" ]; then
 	    wget -nv -O $dset.tsv.bgz https://snaptron.cs.jhu.edu/data/$dset/junctions.bgz
 	fi
-	~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --decorator dec$dset.bed --compilation $dset
-#	bedSort $dset.bed $dset.bed
-	bedSort dec$dset.bed dec$dset.bed
+	~/kent/src/hg/makeDb/outside/recount3/junctionsToBed.py --junctions $dset.tsv.bgz --bed $dset.bed --compilation $dset
+        bedToBigBed -type=bed9+6 -tab -as=${HOME}/kent/src/hg/lib/recount3.as $dset.bed /hive/data/genomes/mm10/chrom.sizes $dset.bb
 }
 
 dset=srav1m
-process_dataset $dset
-
-bedToBigBed -type=bed9+6 -tab -as=${HOME}/kent/src/hg/lib/recount3.as $dset.bed /hive/data/genomes/mm10/chrom.sizes $dset.bb &
-bedToBigBed -type=bed12+ -as=${HOME}/kent/src/hg/lib/decoration.as dec$dset.bed /hive/data/genomes/mm10/chrom.sizes dec$dset.bb &
+process_mm10_dataset $dset &
 wait
+ln -s $(realpath *.bb)  /gbdb/mm10/recount3/
 
-#rm srav1m.bed srav1m.tsv junctions.bgz
-2025-08-04 markd: update to add size column for filter
+
+# once through QA:
+rm *.bed *.tsv.bgz
 
 ##############################################################################
 # ENCODE4 triplets - Jeltje April 2025

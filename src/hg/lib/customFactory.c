@@ -188,6 +188,13 @@ if (udcIsResolvable(url))
 
 if (allowLocals)
     {
+    if (startsWith("/gbdb/genark/", url))
+	{
+	char gbdbSection[256];
+	safef(gbdbSection, sizeof gbdbSection, "/%s/", trackHubSkipHubName(db));
+	if (strstr(url, gbdbSection))
+	    return TRUE;
+	}
     char gbdbPrefix[256];
     safef(gbdbPrefix, sizeof gbdbPrefix, "/gbdb/%s/", trackHubSkipHubName(db));
     if (startsWith(gbdbPrefix, url))

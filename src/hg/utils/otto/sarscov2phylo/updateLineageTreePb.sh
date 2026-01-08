@@ -31,8 +31,9 @@ cd $ottoDir/$buildDate
 
 # Remove sequences that have two or more reversions relative to their assigned clade/lineage.
 $matUtils summary -i $startingTree --node-stats node-stats
-#*** Until BA.2.3.22 gets more samples that don't have bogus reversion on 25000 and 26577,
-#*** exempt some samples; also, most of JP.1 has rev on 27383,27384:
+# Until BA.2.3.22 gets more samples that don't have bogus reversion on 25000 and 26577,
+# exempt some samples; also, most of JP.1 has rev on 27383,27384 and 2 of LF.7.6.5's 4
+# samples have revs.
 cat > pruneRevsExemptions <<EOF
 Germany/HH-RKI-I-1073418/2022|EPI_ISL_16330648|2022-12-18
 Germany/SH-RKI-I-1071936/2022|EPI_ISL_16329344|2022-12-05
@@ -59,6 +60,8 @@ SouthAfrica/NICD-N56013/2023|EPI_ISL_18125226|2023-06-15
 SouthAfrica/NICD-R10184/2023|EPI_ISL_18341856|2023-09-05
 SouthAfrica/NICD-R10169/2023|EPI_ISL_18341854|2023-09-05
 SouthAfrica/NICD-R10455/2023|EPI_ISL_18341867|2023-09-12
+USA/NY-PRL-250108_82B06/2024|PQ898526.1|2024-12-22
+Egypt/MOH-CPHL-0003/2025|EPI_ISL_19975232|2025-04-13
 EOF
 tawk '$5 > 1 {print $1;}' node-stats \
 | grep -vFwf pruneRevsExemptions \

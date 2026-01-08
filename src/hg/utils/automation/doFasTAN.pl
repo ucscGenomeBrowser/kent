@@ -52,7 +52,7 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
-                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/longdust.\$date
+                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/fasTan.\$date
                           (necessary when continuing at a later date).
 _EOF_
   ;
@@ -282,7 +282,7 @@ $opt_verbose = 3 if ($opt_verbose < 3);
 my $date = `date +%Y-%m-%d`;
 chomp $date;
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/longdust.$date";
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/fasTan.$date";
 
 # Do everything.
 $stepper->execute();

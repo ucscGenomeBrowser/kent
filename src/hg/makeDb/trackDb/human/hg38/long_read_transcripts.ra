@@ -3,7 +3,6 @@ superTrack on
 shortLabel Long-read Transcripts
 longLabel Transcripts and other data generated using long-read sequencing technology (PacBio and Oxford Nanopore)
 group rna
-pennantIcon New red ../goldenPath/newsarch.html#081125 "Updated August 11, 2025"
 
 include encode4LongRnaTranscripts.ra
 include clsLongReadRna.ra

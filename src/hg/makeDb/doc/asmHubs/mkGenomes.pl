@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use File::Basename;
+use File::Compare;
 
 my %commonName;	# key is asmId, value is common name
 my @monthNumber = qw( Zero Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec. );
@@ -251,7 +252,6 @@ foreach my $asmId (@orderList) {
   my $chromAuthority = "";
   $chromAuthority = `~/kent/src/hg/makeDb/doc/asmHubs/chromAuthority.pl $asmId 2> /dev/null`;
   chomp $chromAuthority;
-  printf STDERR "# chromAuthority: '%s'\n", $chromAuthority;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);
@@ -423,10 +423,18 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   }
   close (GF);
 
+  my $updateGroups = 1;
   my $localGroups = "$buildDir/${asmId}.groups.txt";
-  open (GR, ">$localGroups") or die "can not write to $localGroups";
-  printf GR "%s", $groupsTxt;
-  close (GR);
+  if ( -s "$buildDir/${asmId}.groups.txt" ) {
+    if (compare("$home/kent/src/hg/makeDb/doc/asmHubs/groups.txt", "$localGroups") == 0) {
+       $updateGroups = 0;	# already exists and is identical
+    }
+  }
+  if ($updateGroups) {
+      open (GR, ">$localGroups") or die "can not write to $localGroups";
+      printf GR "%s", $groupsTxt;
+      close (GR);
+  }
 }
 
 __END__

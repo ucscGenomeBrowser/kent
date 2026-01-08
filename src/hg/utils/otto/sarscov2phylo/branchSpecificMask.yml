@@ -133,6 +133,11 @@ BA.2.86:
                   # designated recombinants fortunately:
                   T21941G,
                 ]
+    exclusions:
+      # Cornelius requested exclusion of XFJ.3.1, some of whose descendants have a real G23599T reversion.
+      # https://github.com/cov-lineages/pango-designation/commit/02d2cb6aa1155e4d0473fcb1ff345f472725be27
+      - site: 23599
+        representative: England/CLIMB-CM7YJM45/2025
 
 JN.1:
     # Inherits from BA.2.86
@@ -159,6 +164,13 @@ KP.3.1.1:
                   # Others I noticed while looking at the above:
                   G7842A, T23948G, C3565T, T17334G, G19722A, G23055A, T28271A, T23063A, G22910A
                 ]
+
+RE.1.1:
+    # No inheritance -- BA.3.2 descendant with lots of dropout in Australia/WA sequences
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/3093#issuecomment-3508425340
+    representative: Australia/WA17392/2025
+    reversions: [ A336G, C13375T, C22629A, T28996A ]
+    sites: [ 28254 ]
 
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.

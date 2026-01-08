@@ -227,6 +227,8 @@ hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred bigBed bigGenePred
+hicArcLimit hic
+hicArcLimitEnabled hic
 hicDistanceMin hic
 hicDistanceMax hic
 highlightBy genePred

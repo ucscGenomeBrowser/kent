@@ -34,7 +34,7 @@ if ($hostName ne $expectName) {
 sub rsyncContrib($$) {
   my ($dest, $contribDir) = @_;
   my $contribPath = "/gbdb/genark/" . $contribDir;
-  my $cmd = qq(rsync --stats -a -L --itemize-changes "$contribPath/" "qateam\@$dest:$contribPath/" 2>&1);
+  my $cmd = qq(rsync --mkpath --stats -a -L --itemize-changes "$contribPath/" "qateam\@$dest:$contribPath/" 2>&1);
   printf $lf "%s\n", $cmd;
   my $cmdOut = `$cmd`;
   if (length($cmdOut) > 1) {
@@ -369,7 +369,7 @@ foreach my $fileName (keys %devList) {
       if ($yesUpdate) {
           my $dirName = dirname($betaHub);
           my $accession = basename($dirName);
-          my $pathDir = sprintf("/gbdb/genark/%s/%s", $dirName, $accession);
+          my $pathDir = sprintf("/gbdb/genark/%s", $dirName);
           my $src = "$pathDir/beta.hub.txt";
           my $dest = "$pathDir/hub.txt";
           sendHubTxt("beta", $src, $dest);

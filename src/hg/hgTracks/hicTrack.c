@@ -97,6 +97,7 @@ char *normalization = hicUiFetchNormalization(cart, tg->tdb, hicFileInfo);
 char abbrevBinSize[1024];
 sprintWithMetricBaseUnit(abbrevBinSize, sizeof(abbrevBinSize), binSize);
 int newStringLen = strlen(tg->longLabel) + strlen(abbrevBinSize) + strlen(normalization) + 10;
+char *drawMode = hicUiFetchDrawMode(cart, tg->tdb);
 char *newLabel = needMem(newStringLen);
 safef(newLabel, newStringLen, "%s (%s, %s)", tg->longLabel, abbrevBinSize, normalization);
 tg->longLabel = newLabel;  // leaks old cloneString() memory chunk
@@ -126,13 +127,13 @@ if (numRecords > 0)
     AllocArray(countsCopy, numRecords);
 
 struct interact *thisHic = hicItems;
-char *drawMode = hicUiFetchDrawMode(cart, tg->tdb);
 struct interact* filteredOut = NULL;
 struct interact** prevNextPtr = &hicItems; // for removing items from the linked list
 
 double maxRange = hicUiMaxInteractionRange(cart, tg->tdb);
 double minRange = hicUiMinInteractionRange(cart, tg->tdb);
 
+int filteredOutCount = 0; // For reporting how many elements were excluded (not including self loops)
 while (thisHic != NULL)
     {
     // Add filtering based on max interaction distance
@@ -147,6 +148,7 @@ while (thisHic != NULL)
             *prevNextPtr = thisHic->next; // set prev element's next to the following element
             slAddHead(&filteredOut, thisHic);
             thisHic = *prevNextPtr; // restore thisHic to point to the next element
+            filteredOutCount++;
             continue;
             }
         }
@@ -157,7 +159,10 @@ while (thisHic != NULL)
         if (sameString(thisHic->sourceChrom, thisHic->targetChrom) &&
                 (thisHic->sourceStart == thisHic->targetStart))
             {
-            thisHic = thisHic->next;
+            // a bit of pointer play to avoid repeated calls to slRemoveEl
+            *prevNextPtr = thisHic->next; // set prev element's next to the following element
+            slAddHead(&filteredOut, thisHic);
+            thisHic = *prevNextPtr; // restore thisHic to point to the next element
             continue;
             }
         }
@@ -182,12 +187,41 @@ if (filteredOut != NULL)
 // Heuristic for auto-scaling the color gradient based on the scores in view - draw the max color value
 // at or above 2*median score.
 if (filtNumRecords > 0)
-    tg->graphUpperLimit = 2.0*doubleMedian(filtNumRecords, countsCopy);
+    {
+    double median = doubleMedian(filtNumRecords, countsCopy);
+    tg->graphUpperLimit = 2.0*median;
+    //if (sameString(drawMode, HIC_DRAW_MODE_ARC) && filtNumRecords > 1000)
+    if (filtNumRecords > 1000)
+        {
+        int ix = (int)(filtNumRecords/(0.000008*filtNumRecords + 6.462459));
+        if (ix < 1)
+            ix = 1;
+        tg->graphUpperLimit = countsCopy[filtNumRecords-ix];
+        }
+    }
 else
     tg->graphUpperLimit = 0.0;
+
 if (countsCopy != NULL)
     freeMem(countsCopy);
 tg->items = hicItems;
+
+int hiddenCount = filteredOutCount;
+if (sameString(drawMode, HIC_DRAW_MODE_ARC) && hicUiArcLimitEnabled(cart, tg->tdb))
+    {
+    int itemLimit = hicUiGetArcLimit(cart, tg->tdb);
+    if (filtNumRecords > itemLimit)
+        hiddenCount += (filtNumRecords-itemLimit);
+    }
+if (hiddenCount > 0)
+    {
+    char filterString[1024] = "";
+    safef(filterString, sizeof(filterString), " (%d items filtered out)", hiddenCount);
+    newLabel = catTwoStrings(tg->longLabel, filterString);
+    freeMem(tg->longLabel);
+    tg->longLabel = newLabel;
+    }
+
 }
 
 void hicLoadItems(struct track *tg)
@@ -437,12 +471,26 @@ if (colorIxs == NULL)
     return; // something went wrong with colors
 
 slSort(&tg->items, cmpHicItems); // So that the darkest arcs are drawn on top and not lost
-for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
+hicItem = (struct interact *)tg->items;
+if (hicUiArcLimitEnabled(cart,tg->tdb) && (hicUiGetArcLimit(cart, tg->tdb) > 0))
+    {
+    // limit to only the X highest scoring interactions
+    int itemCount = slCount(tg->items);
+    int limit = hicUiGetArcLimit(cart, tg->tdb);
+    while (itemCount > limit && hicItem != NULL)
+        {
+        hicItem = hicItem->next;
+        itemCount--;
+        }
+    }
+
+for (; hicItem; hicItem = hicItem->next)
     {
     int leftStart = hicItem->sourceStart - winStart;
     int leftMidpoint = leftStart + binSize/2;
     int rightStart = hicItem->targetStart - winStart;
     int rightMidpoint = rightStart + binSize/2;
+
     if ((leftMidpoint < 0) || (leftMidpoint > winEnd-winStart))
         continue;  // skip this item - we'd be drawing to a point off the screen
     if ((rightMidpoint < 0) || (rightMidpoint > winEnd-winStart))
@@ -458,9 +506,9 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     double rightx = xScale * rightMidpoint;
     double midx = xScale * (rightMidpoint+leftMidpoint)/2.0;
     double midy = yScale * (rightMidpoint-leftMidpoint)/2.0;
+    midy *= 1.5; // Heuristic scaling for better use of vertical space
     if (!invert)
         midy = maxHeight-(int)midy;
-    midy *= 1.5; // Heuristic scaling for better use of vertical space
     int lefty = maxHeight, righty = maxHeight; // the height of the endpoints
     if (invert)
         lefty = righty = 0;

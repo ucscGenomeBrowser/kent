@@ -407,7 +407,8 @@ GCF_036250125.1_bDixPip1.hap1	white-crowned manakin (hap1 2024 refseq)
 GCA_036250135.1_bDixPip1.hap2	white-crowned manakin (hap2 2024)
 GCF_047495875.1_PitAlb_v1	white-plumed antbird (INPA30051 2025)
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
-GCA_046129695.1_bLonStr1.mat	white-rumped munia (maternal hap 2024)
+GCA_046129695.1_bLonStr1.mat	white-rumped munia (maternal hap 2024 genbank)
+GCF_046129695.1_bLonStr1.mat	white-rumped munia (maternal hap 2024 refseq)
 GCA_046129705.1_bLonStr1.pat	white-rumped munia (paternal hap 2024)
 GCF_017590055.1_ASM1759005v1	white-rumped snowfinch
 GCF_000691405.1_ASM69140v1	white-tailed eagle (BGI_N329 2014)

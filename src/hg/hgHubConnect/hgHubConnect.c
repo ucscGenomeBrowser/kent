@@ -501,7 +501,7 @@ puts("<div class='tabSection'>");
 puts("<h4>Create your own hub</h4>");
 puts("For information on making track hubs, see the following pages: \n "
     "<ul>\n"
-    "<li><a href='../goldenPath/help/hubQuickStart.html' style='color:#121E9A' target=_blank>Quick Start Guide</a></li>\n"
+    "<li><a href='/docs/hubs/hubBasics.html' style='color:#121E9A' target=_blank>Track Hub Basics</a></li>\n"
     "<li><a href=\"../goldenPath/help/hgTrackHubHelp.html\" style='color:#121E9A' TARGET=_blank>Track Hub User's Guide</a></li>\n"
     "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\" style='color:#121E9A' target=_blank>Where to Host Your Track Hub</a></li>\n"
     "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\" style='color:#121E9A' target=_blank>Track Hub Settings Reference</a></li>\n"

@@ -61,17 +61,29 @@
         changes</a> to the trackDb specification below.</p>
 
     <P>This document describes how to set dataset display characteristics
-    using "track database" or "trackDb" settings through key-value pair
+    using "track database" or "trackDb" settings through name-value pair
     associations used in a Track Hub's trackDb.txt file.
 
     <P>The text file format for trackDb settings starts by creating a
-    text block, or "stanza", for each track dataset following
-    "ra" rules to establish a "record" of related settings. The first
-    line establishes the <code>track</code> "key", with additional lines
-    containing further "setting" keys, and one or more words or numbers
-    that follow, which are the "values" for each setting.  All trackDb
-    stanzas are keyed by <code>track</code> and delimited by blank lines.
-    Here is an example:</P>
+    text block, or "stanza", for each track dataset. These stanzas should be structured
+    according to the following format specification:
+    <ul>
+      <li>Lines consist of name-value pairs. The first line of the stanza
+          establishes the the <code>track</code> name. Additional
+          lines will contain further "setting" names followed
+          by "values" of one or more words of numbers.
+      <li>All trackDb stanzas must begin with a <code>track</code> line and a stanza ends
+          with a blank line.
+      <li>Periods should be avoided in <code>track</code> names, although there are some
+          settings that include periods in the name, e.g. filter.fieldName.
+      <li>The format supports '\' continuation characters. If the setting
+          is long or complex, break it into several lines using terminating
+          '\' characters to make it more readable.
+      <li>Text should be ASCII characters, but a limited set of Unicode characters are
+          <a href="/FAQ/FAQcustom.html#custom13">supported for longLabel and
+          shortLabel settings</a>.
+    </ul>
+    <p>Here is an example:</p>
 
     <pre>
         track myFirstTrack
@@ -151,6 +163,13 @@ all into one file. Read about the special <a target="_blank"
 href="../hgTracksHelp.html#UseOneFile"><code>useOneFile on</code></a> setting to
 allow all a hub to exist in one file. Load a working example <a target="_blank"
 href="../examples/hubExamples/hubUseOneFile/singleFileHubExample.txt">here</a>.</p>
+
+<h3 id="includes">Using trackDb include statements</h3>
+<p>
+Hubs also support the use of <a href="../hgTrackHubHelp.html#Includes">include
+statements</a>, allowing one to insert a file containing a set of trackDb
+stanzas into a primary trackDb. Use this when you have the same track across
+several assemblies, or several large, complex tracks.
 
 <h3 id="assembly_hubs">Assembly Hubs</h3>
 <p>

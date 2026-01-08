@@ -176,7 +176,8 @@ function _matSetMatrixCheckBoxes(state)
 
     var matCBs = $("input.matCB").not(".abc");
     for (var vIx=1;vIx<arguments.length;vIx++) {
-        matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list
+        if (arguments[vIx] !== "")
+            matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list
     }
     $( matCBs ).each( function (i) {
         this.checked = state;
@@ -184,7 +185,8 @@ function _matSetMatrixCheckBoxes(state)
     });
     var subCbs = $("input.subCB");
     for (var sIx=1;sIx<arguments.length;sIx++) {
-        subCbs = $( subCbs ).filter("."+arguments[sIx]);  // Successively limit list
+        if (arguments[sIx] !== "")
+            subCbs = $( subCbs ).filter("."+arguments[sIx]);  // Successively limit list
     }
     if (state) { // If clicking [+], further limit to only checked ABCs
         var classes = matAbcCBclasses(false);
@@ -249,7 +251,7 @@ function matSubCBsCheck(state)
     // called by matCB clicks (matCbClick()) !
     var subCBs = $("input.subCB");
     for (var vIx=1;vIx<arguments.length;vIx++) {
-        subCBs = subCBs.filter("."+arguments[vIx]);  // Successively limit list
+        subCBs = subCBs.filter("."+CSS.escape(arguments[vIx]));  // Successively limit list
     }
 
     if (state) { 
@@ -1324,7 +1326,7 @@ var mat = { // Beginings of matrix object
                 }
                 if (cell.title.length > 0)
                     cell.title += " and ";
-                cell.title += $("th."+classList[cIx]).first().text();
+                cell.title += $("th."+CSS.escape(classList[cIx])).first().text();
             }
         }
     },

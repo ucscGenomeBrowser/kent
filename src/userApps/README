@@ -57,20 +57,23 @@ system package management tools.
    Alternative to `git` command, a gzipped tar file is available
    with all the source, via FTP or HTTP:
 
-        ftp://hgdownload.soe.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
-        http://hgdownload.soe.ucsc.edu/admin/exe/userApps.src.tgz
+        curl --output "userApps.src.tgz" \
+            http://hgdownload.soe.ucsc.edu/admin/exe/userApps.src.tgz
 
    Unpacking that file (tar xvzf userApps.src.tgz)
    creates a directory: `./userApps/`
    with all the source.  Proceed to step 2 to build this directory.
 
-   Using `git` to fetch the source, creates a directory `./userApps/`
+   Or, using `curl` with the github kent source code to fetch the source,
+       create a directory `./userApps/`
 
-        git archive --format=zip -9 \
-           --remote=git://genome-test.soe.ucsc.edu/kent.git \
-           beta src/userApps > userApps.zip
-        unzip -d userApps -j userApps.zip
+        mkdir userApps
         cd userApps
+        curl -s \
+  "https://api.github.com/repos/ucscGenomeBrowser/kent/contents/src/userApps" \
+     | grep '"download_url"' | cut -d '"' -f 4 | wget -i -
+        chmod +x fetchKentSource.sh
+
         make fetchSource
 
 2. Build the utilities:

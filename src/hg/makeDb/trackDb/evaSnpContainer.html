@@ -45,11 +45,11 @@ Mousing over an item shows the ucscClass, which is the consequence according to 
 <a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a>, and
 the aaChange when one is available, which is the change in amino acid in HGVS.p
 terms. Items may have multiple ucscClasses, which will all be shown in the mouse-over
-in a comma-separated list. Likewise, multiple HGVS.p terms may be shown for each rsID
-separated by spaces describing all possible AA changes.</p>
+in a comma-separated list. Likewise, multiple HGVS.p terms may be shown for each rsID,
+separated by spaces, describing all possible AA changes.</p>
 <p>
 Multiple items may appear due to different variant predictions on multiple gene transcripts.
-For all organisms, the gene models used were the NCBI RefSeq curated when available, if not then 
+For all organisms, the gene models used were the NCBI RefSeq curated when available, if not, then
 ensembl genes, or finally, UCSC mappings of RefSeq if neither of the previous models was possible.
 </p>
 
@@ -87,12 +87,12 @@ href="http://www.sequenceontology.org/">sequence ontology</a> terms:
   <li> <b>deletion</b> &mdash; 
        One or more nucleotides are deleted.  The representation in the database is to
        display one additional nucleotide in both the Reference field (Ref) and the 
-       Alternate Allele field (Alt).  E.g. a variant that is a deletion of an A
-       maybe be represented as Ref = GA and Alt = G.
+       Alternate Allele field (Alt).  E.g., a variant that is a deletion of an A
+       may be represented as Ref = GA and Alt = G.
   <li> <b>insertion</b> &mdash; 
        One or more nucleotides are inserted.  The representation in the database is to
        display one additional nucleotide in both the Reference field (Ref) and the 
-       Alternate Allele field (Alt).  E.g. a variant that is an insertion of a T may 
+       Alternate Allele field (Alt).  E.g., a variant that is an insertion of a T may
        be represented as Ref = G and Alt = GT.
   <li> <b>delins</b> &mdash; 
        Similar to a tandem repeat, in that the runs of Ref and Alt Alleles are of
@@ -113,10 +113,10 @@ Data were downloaded from the European Variation Archive EVA
 <a href="https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/"
 target="_blank">current_ids.vcf.gz</a> files corresponding to the proper assembly.</p>
 <p>
-Chromosome names were converted to UCSC-style
-and the variants passed through the
+Chromosome names were converted to UCSC-style,
+and the variants were passed through the
 <a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> to
-predict consequence. For every organism the NCBI RefSeq curated models were used when available, 
+predict consequence. For every organism, the NCBI RefSeq curated models were used when available,
 followed by ensembl genes, and finally UCSC mapping of RefSeq when neither of the previous models
 were possible.</p>
 <p>
@@ -142,7 +142,7 @@ intron_variant, intergenic_variant, NMD_transcript_variant, no_sequence_alterati
 Sequence Ontology (&quot;<a href="http://www.sequenceontology.org/browser/current_release"
 target="_blank">SO</a>:&quot;)
 terms were converted to the variant classes, then the files were converted to BED,
-and then bigBed format.
+and then to bigBed format.
 </p>
 <p>
 No functional annotations were provided by the EVA (e.g., missense, nonsense, etc).
@@ -153,7 +153,7 @@ predicted from translating the genomic sequence.  Therefore, in some instances, 
 variant and the genomic nucleotide and associated amino acid may be reversed.
 E.g., a Pro &gt; Arg change from the perspective of the mRNA would be Arg &gt; Pro from
 the perspective of the genomic sequence. Also, in bosTau9, galGal5, rheMac10,
-and danRer11 the mitochondrial sequence was removed or renamed to match UCSC.
+and danRer11, the mitochondrial sequence was removed or renamed to match UCSC.
 For complete documentation of the processing of these tracks, see the makedoc corresponding
 to the version of interest. For example, the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp8.txt">
@@ -165,20 +165,20 @@ EVA Release 8 MakeDoc</a>.</p>
 and more information about how to convert SNPs between assemblies can be found on the following
 <a href="/FAQ/FAQreleases.html#snpConversion">FAQ entry</a>.</p>
 <p>
-The data can be explored interactively with the <a href="/cgi-bin/hgTables">Table Browser</a>,
+The data can be explored interactively with the <a href="/cgi-bin/hgTables">Table Browser</a>
 or the <a href="/cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may be
 queried from our <a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
-for questions, or our <a href="/FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+for questions or our <a href="/FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
 information.</p>
 
 <p>
 For automated download and analysis, this annotation is stored in a bigBed file that
 can be downloaded from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/"
 target="_blank">our download server</a>. Use the corresponding version number for the track
-of interest, e.g. <tt>evaSnp8.bb</tt>.
+of interest, e.g., <tt>evaSnp8.bb</tt>.
 Individual regions or the whole genome annotation can be obtained using our tool
-<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.
@@ -190,7 +190,7 @@ The tool can also be used to obtain only features within a given range, e.g.
 <p>
 This track was produced from the <a target="_blank" href="https://www.ebi.ac.uk/eva/">European
 Variation Archive release</a> data. Consequences were predicted using UCSC's Variant Annotation
-Integrator and NCBI's RefSeq as well as ensembl gene models. 
+Integrator and NCBI's RefSeq, as well as ensembl gene models.
 </p>
 
 <h2>References</h2>

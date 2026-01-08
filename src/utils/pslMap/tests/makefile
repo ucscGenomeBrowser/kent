@@ -14,7 +14,8 @@ test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
 	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
 	kgProt negQChain testProtPort_ProtNa testProtPort_ProtProt \
 	testProtNa_NaNa testProtProt_NaNa \
-	testTypeErr testProtTrans
+	testTypeErr testProtTrans \
+	mrnaMapOverHttp mrnaMapOverChainHttp
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
@@ -140,6 +141,25 @@ testProtTrans: mkdirs
 	${pslMap} -inType=prot_prot -mapType=prot_na input/annotProt.psl input/protGencode.psl output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+
+# remote access
+mrnaToMm6_psl_https = https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/utils/pslMap/tests/input/mrnaToMm6.psl
+mm6ToHg17_psl_https = https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/utils/pslMap/tests/input/mm6ToHg17.psl
+mm6ToHg17_chain_https = https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/utils/pslMap/tests/input/mm6ToHg17.chain
+
+mrnaMapOverHttp: mkdirs
+	${pslMap} -mapInfo=output/$@.mapinfo ${mrnaToMm6_psl_https} ${mm6ToHg17_psl_https} output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/mrnaMapOver.psl output/$@.psl
+	diff -u expected/mrnaMapOver.mapinfo output/$@.mapinfo
+
+mrnaMapOverChainHttp: mkdirs
+	${pslMap} -chainMapFile -mappingPsls=output/$@.mapping.psl ${mrnaToMm6_psl_https} ${mm6ToHg17_chain_https} output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	${pslCheck} -verbose=0 output/$@.mapping.psl
+	diff -u expected/mrnaMapOver.psl output/$@.psl
+	diff -u expected/mrnaMapOverChain.mapping.psl output/$@.mapping.psl
+
 
 clean::
 	rm -rf output
