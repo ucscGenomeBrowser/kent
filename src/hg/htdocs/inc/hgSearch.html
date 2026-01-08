@@ -62,6 +62,48 @@ body.loading .modal {
     max-width: 100%;
 }
 
+.genomeSearch {
+    box-sizing: border-box;
+}
+
+.searchStep {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.stepLabel {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.currentGenomeLabel {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.currentGenomeLabel::before {
+    content: "Currently selected: ";
+    font-weight: bold;
+}
+
+/* for autocompleteCat (autocomplete with optional category labels) */
+.ui-autocomplete-category {
+    font-weight: bold;
+    line-height: 1.5;
+    background: lightgray;
+}
+
+.ui-menu-item {
+    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
+     * the category labels actually extend upwards, behind the preceding items! */
+    background: white;
+}
+
 #grid {
     width: 100%;
     display: grid;
@@ -72,6 +114,19 @@ body.loading .modal {
 
 .selectWrap {
     min-width: 0;
+    display: flex;
+    width: 90%;
+    position: relative;
+}
+
+.selectWrap input[type="text"] {
+    flex: 1;
+}
+
+#spinner {
+    position: absolute;
+    right: -25px;
+    top: 2px;
 }
 </style>
 
@@ -79,18 +134,24 @@ body.loading .modal {
     <div>
         <div class='gbSectionBanner searchTitle'>Search across the Genome Browser site</div>
         <div class="headerSpacer"> </div>
-        Search<br>
-        <div class="selectWrap">
-            <select name="speciesSelect" id="speciesSelect" class="selectSpecies"></select>
+        <div class="searchStep">
+            <div class="stepLabel">Step 1: Select a Genome</div>
+            <div class="selectWrap">
+                <input type="text" id="genomeSearchInput" class="genomeSearch" placeholder="Search for species or assembly..." />
+                <input type="submit" id="genomeSearchButton" value="Change Genome" />
+            </div>
+            <div id="currentGenome" class="currentGenomeLabel">
+                <!-- Shows currently selected genome, populated by JS -->
+            </div>
         </div>
-        <div class="selectWrap">
-            <select name="dbSelect" id="dbSelect" class="selectDb"></select>
+        <div class="searchStep">
+            <div class="stepLabel">Step 2: Search for a Term</div>
+            <div class="selectWrap">
+                <input name="searchString" id="searchBarSearchString" type="text" placeholder="TP53" />
+                <input name="searchButton" id="searchBarSearchButton" type="submit" value="Search" />
+            </div>
+            <a href="../../goldenPath/help/query.html">Examples</a>
         </div>
-        for
-        <div class="rowSpacer"></div>
-        <input name="searchString" id="searchBarSearchString" type="text" placeholder="TP53"></input>
-        <input name="searchButton" id="searchBarSearchButton" type="submit" value="Search"></input>
-        <a href="../../goldenPath/help/query.html">Examples</a>
         <p>Use the tree to hide/show results from only these categories. Hover your mouse over each category for an explanation:</p>
         <div id="searchCategories"> <!-- this will get populated by the javascript later -->
         </div>

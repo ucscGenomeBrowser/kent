@@ -631,54 +631,63 @@ var hgSearch = (function() {
         }
     }
 
-    function fillOutAssemblies(e) {
-        organism = $("#speciesSelect")[0].value;
-        select = $("#dbSelect");
-        select.empty();
-        _.each(_.sortBy(uiState.genomes[organism], ['orderKey']), function(assembly) {
-            newOpt = document.createElement("option");
-            newOpt.value = assembly.name;
-            newOpt.label = trackHubSkipHubName(assembly.organism) + " " + assembly.description;
-            if (assembly.name == db) {
-                newOpt.selected = true;
-            }
-            $("#dbSelect").append(newOpt);
+    function onGenomeSelect(item) {
+        // Called when user selects a genome from autocomplete
+        // item.genome is the db name from hubApi/findGenome
+        // Just update the label and store the selection - don't reload the page
+        db = item.genome;
+        $("#currentGenome").text(item.commonName + ' - ' + item.genome);
+        $("#genomeSearchInput").val('');
+    }
+
+    function initGenomeAutocomplete() {
+        // Initialize the genome search autocomplete using the standard function from utils.js
+        initSpeciesAutoCompleteDropdown('genomeSearchInput', onGenomeSelect);
+
+        // Add click handler for the Change Genome button to trigger autocomplete search
+        $("#genomeSearchButton").click(function(e) {
+            e.preventDefault();
+            $("#genomeSearchInput").autocomplete("search", $("#genomeSearchInput").val());
         });
-        // if we are getting here from a change event on the species dropdown
-        // and are switching to the default assembly for a species, we can
-        // automatically send a search for this organism+assembly
-        if (typeof e !== "undefined") {
-            switchAssemblies($("#dbSelect")[0].value);
+    }
+
+    function updateCurrentGenomeLabel() {
+        // Update the label showing current genome
+        var genomeInfo = null;
+        // Find the current db in the genomes data
+        _.each(uiState.genomes, function(genomeList) {
+            _.each(genomeList, function(assembly) {
+                if (assembly.name === db ||
+                    (assembly.isCurated && assembly.name === trackHubSkipHubName(db))) {
+                    genomeInfo = assembly;
+                }
+            });
+        });
+        if (genomeInfo) {
+            $("#currentGenome").text(genomeInfo.organism + ' - ' + genomeInfo.description + ' (' + db + ')');
+        } else {
+            $("#currentGenome").text(db);
         }
     }
 
-    function buildSpeciesDropdown() {
-        // Process the species select dropdowns
-        _.each(uiState.genomes, function(genome) {
-            newOpt = document.createElement("option");
-            newOpt.value = genome[0].organism;
-            newOpt.label = trackHubSkipHubName(genome[0].organism);
-            if (genome.some(function(assembly) {
-                if (assembly.isCurated) {
-                    if (assembly.name === trackHubSkipHubName(db)) {
-                        return true;
-                    }
-                } else {
-                    if (assembly.name === db) {
-                        return true;
-                    }
-                }
-            })) {
-                newOpt.selected = true;
-            }
-            $("#speciesSelect").append(newOpt);
-        });
-    }
-
     function changeSearchResultsLabel() {
-        // change the title to indicate what assembly was search:
+        // change the title to indicate what assembly was searched:
         $("#dbPlaceholder").empty();
-        $("#dbPlaceholder").append("on " + db + " (" + $("#dbSelect")[0].selectedOptions[0].label+ ")");
+        var genomeInfo = null;
+        // Find the current db in the genomes data
+        _.each(uiState.genomes, function(genomeList) {
+            _.each(genomeList, function(assembly) {
+                if (assembly.name === db ||
+                    (assembly.isCurated && assembly.name === trackHubSkipHubName(db))) {
+                    genomeInfo = assembly;
+                }
+            });
+        });
+        if (genomeInfo) {
+            $("#dbPlaceholder").append("on " + db + " (" + genomeInfo.organism + " " + genomeInfo.description + ")");
+        } else {
+            $("#dbPlaceholder").append("on " + db);
+        }
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -723,8 +732,7 @@ var hgSearch = (function() {
         }
         updateFilters(uiState);
         updateSearchResults(uiState);
-        buildSpeciesDropdown();
-        fillOutAssemblies();
+        updateCurrentGenomeLabel();
         urlVars = {"db": db, "search": uiState.search, "showSearchResults": ""};
         // changing the url allows the history to be associated to a specific url
         var urlParts = changeUrl(urlVars);
@@ -967,14 +975,8 @@ var hgSearch = (function() {
             cart.flush();
         }
 
-        buildSpeciesDropdown(); // make the list of available organisms
-        fillOutAssemblies(); // call once to get the initial state
-        $("#speciesSelect").change(fillOutAssemblies);
-        $("#dbSelect").change(function(e) {
-            e.preventDefault();
-            db = e.currentTarget.value;
-            switchAssemblies(db);
-        });
+        initGenomeAutocomplete(); // initialize the genome search autocomplete
+        updateCurrentGenomeLabel(); // show the current genome
         changeSearchResultsLabel();
     }
 
