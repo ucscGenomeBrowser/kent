@@ -24,6 +24,10 @@ var SpeciesSearch = React.createClass({
         db: pt.string, // name of database currently selected (ex. hg38)
     },
 
+    // No-op update function for TextInput - we don't want blur to trigger model updates,
+    // only the autocomplete selection should update the model via onSpeciesSelect
+    noOpUpdate: function() {},
+
     onSpeciesSelect: function(selectEle, item) {
         selectEle.innerHTML = item.label;
         this.props.update(this.props.path, item.genome);
@@ -46,7 +50,7 @@ var SpeciesSearch = React.createClass({
               </label>
               <div className="searchBarAndButton">
                   <TextInput id='speciesSearchInput' placeholder="Search for any species, genome or assembly name"
-                             size={45} ref='input' />
+                             size={45} ref='input' update={this.noOpUpdate} />
                   <div className="searchCell">
                     Current Genome:
                     <span id="genomeLabel">{this.props.org + " (" + this.props.db + ")"}</span>
