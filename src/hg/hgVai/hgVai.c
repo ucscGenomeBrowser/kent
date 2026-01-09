@@ -190,7 +190,9 @@ printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Change selecte
 jsInlineF(
     "function hgVaiSelect(selectEle, item) {\n"
     "   selectEle.innerHTML = item.label;\n"
-    "   setCartVar(\"db\", item.genome);\n"
+    "   document.hiddenForm.db.value = item.genome;\n"
+    "   document.hiddenForm.hgva_regionType.value = document.getElementById('hgva_regionType').value;\n"
+    "   document.hiddenForm.submit();\n"
     "}\n\n"
     "document.addEventListener(\"DOMContentLoaded\", () => {\n"
     "    // bind the actual <select> to the function hgVaiSelect, that way\n"
@@ -233,7 +235,7 @@ void printAssemblySection()
 /* Hidden form - for benefit of javascript. */
     {
     static char *saveVars[] = {
-      "clade", "org", "db", hgvaRange, hgvaRegionType };
+      "db", hgvaRange, hgvaRegionType };
     jsCreateHiddenForm(cart, cgiScriptName(), saveVars, ArraySize(saveVars));
     }
 

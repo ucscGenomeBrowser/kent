@@ -424,6 +424,7 @@ jsInlineF(
     "   selectEle.innerHTML = item.label;\n"
     ORGFORM_KEEP_PARAMS
     "\n"
+    "document.orgForm.org.value = '0';\n"
     "document.orgForm.db.value = item.genome;\n"
     ORGFORM_RESET_TARGET
     "\n"
