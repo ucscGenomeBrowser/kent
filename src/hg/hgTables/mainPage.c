@@ -661,6 +661,8 @@ printStep(stepNumber++);
         "function hgTablesSelect(selectEle, item) {\n"
         "   selectEle.innerHTML = item.label;\n"
         "   document.hiddenForm.db.value = item.genome;\n"
+        "   document.hiddenForm.hgta_regionType.value = regionType;\n"
+        "   document.hiddenForm.hgta_outputType.value = document.getElementById('outputTypeDropdown').value;\n"
         "   document.hiddenForm.submit();\n"
         "}\n\n"
         "document.addEventListener(\"DOMContentLoaded\", () => {\n"
