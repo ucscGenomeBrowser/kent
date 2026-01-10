@@ -8,9 +8,11 @@
 
 <p>
   Portions of this dataset were used to develop the lncRNA annotations
-  introduced in GENCODE v47. The data are a superset of the data incorporated
+  introduced in GENCODE VM36. The data are a superset of the data incorporated
   into GENCODE. The transcript models for a given RNA do not necessarily match
   those in GENCODE and are provided as a guide to exploring the sequencing data.
+  Note that GENCODE VM36 is released on GRCm39/mm39 while these tracks are on
+  GRCm38/mm10.
 </p>
 
 <p>
@@ -30,6 +32,19 @@ This is a multi-view composite track containing multiple data types (views). Eac
   <li><b>Per-experiment reads:</b> Read mappings per experiment</li>
   <li><b>Per-experiment Models:</b> Transcript models generated from the experiments</li>
 </ul></p>
+
+<p><b>Model Color Coding</b> <br>
+<p>
+Model annotations are color-coded based on their incorporation into GENCODE VM36
+and the assigned GENCODE VM36 BioType.  Note that VM36 is not on the mm10 assembly.
+</p>
+<ul>
+  <li style="color: rgb(12,12,120);"><b>coding</b></li>
+  <li style="color: rgb(0,100,0);"><b>non-coding</b></li>
+  <li style="color: rgb(255,51,255);"><b>pseudogene</b></li>
+  <li style="color: rgb(254,0,0);"><b>to be experimentally confirmed (TEC)</b></li>
+  <li style="color: rgb(255,160,122);"><b>Not incorporated into GENCODE V47</b></li>
+</ul>
 
 <h2>Methods</h2>
 <p>

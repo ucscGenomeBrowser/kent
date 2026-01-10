@@ -4,7 +4,8 @@ import os.path as osp
 import re
 import argparse
 import glob
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, Counter
+
 
 ###
 # DO NOT CODE REVIEW THIS.  IT WILL NEVER BE USED AGAIN.  SPEND OUR FUNDING ON
@@ -14,6 +15,7 @@ from collections import namedtuple, defaultdict
 sys.path.insert(0, '/hive/groups/browser/pycbio/lib')
 from pycbio.sys import cmdOps, fileOps
 from pycbio.tsv import TsvReader
+from pycbio.hgdata.autoSql import strArraySplit
 from pycbio.hgdata.bed import Bed, BedReader
 from pycbio.hgdata.autoSql import strArrayJoin
 
@@ -36,6 +38,7 @@ def parseArgs():
     beds_parser.add_argument("clsMetadataTab")
     beds_parser.add_argument("masterBedFile")
     beds_parser.add_argument("transcriptMetaTsv")
+    beds_parser.add_argument("clsGencodeAssocTsv")
     beds_parser.add_argument("trackDir")
 
     # make-trackdb subcommand
@@ -254,19 +257,89 @@ def loadTranscriptMeta(transcriptMetaTsv):
     }
     return {row.transcriptId: row
             for row in TsvReader(transcriptMetaTsv, typeMap=typeMap)}
+##
+# CLS to GENCODE
+##
+class ClsGencodeAssoc:
+    def __init__(self):
+        self.by_anchTM = dict()
+
+    def add(self, row, modelRefCounts):
+        # Some anchTM are duplicated in the give row,
+        # so sort to remove them.
+        for anchTM in sorted(set(row.CLS3_anchTM)):
+            self.by_anchTM[anchTM] = row
+            modelRefCounts[anchTM] += 1
+
+    def get(self, anchTM):
+        return self.by_anchTM.get(anchTM)
+
+def reportDupModelRefs(modelRefCounts):
+    multiCnt = 0
+    for cnt in modelRefCounts.values():
+        if cnt > 1:
+            multiCnt += 1
+    if multiCnt > 0:
+        print(f"Note: {multiCnt} or {len(modelRefCounts)} models are mapped to multiple GENCODE transcripts",
+              file=sys.stderr)
+
+
+def loadClsGencodeAssoc(clsGencodeAssocTsv):
+    clsGencodeAssoc = ClsGencodeAssoc()
+    # map to common column names
+    columnNameMap = {
+        "geneID_v47": "geneID",
+        "transcriptID_v47": "transcriptID",
+        "v47_biotype": "biotype",
+        "geneID_vM36": "geneID",
+        "transcriptID_vM36": "transcriptID",
+        "vM36_biotype": "biotype",
+    }
+
+    typeMap = {"CLS3_anchTM": strArraySplit}
+
+    # a small number are in multiple times, which we report,
+    # but only track one
+    modelRefCounts = Counter()
+    for row in TsvReader(clsGencodeAssocTsv, typeMap=typeMap,
+                         columnNameMapper=lambda c: columnNameMap.get(c, c)):
+        clsGencodeAssoc.add(row, modelRefCounts)
+    reportDupModelRefs(modelRefCounts)
+    return clsGencodeAssoc
 
 ##
 # BED generation
 ##
+colorMap = {"protein_coding": "12,12,120",
+            "lncRNA": "0,100,0",
+            "transcribed_unprocessed_pseudogene": "255,51,255",
+            "TEC": "254,0,0",
+            "": "255,160,122"}
+
+
+def getBiotypeColor(gencodeBioType):
+    return colorMap[gencodeBioType]
+
 def allModelsFile(trackDir, ext):
     return osp.join(trackDir, "cls-models" + ext)
 
-def makeTranscriptBed(bed, clsMetaBySid, transcriptMeta, allBeds, bedsBySid,
-                      bedsByStageTissue):
+def updateTranscriptBed(bed, clsMetaBySid, transcriptMeta, clsGencodeAssoc,
+                        allBeds, bedsBySid, bedsByStageTissue):
+    # must match clsModelBed.as
     sids = transcriptMeta.samplesMetadata
     sampleDesc = [clsMetaToDesc(clsMetaBySid[sid]) for sid in sids]
-    bed.extraCols = [len(sids), strArrayJoin(sampleDesc), strArrayJoin(sids)]
+    gencodeGeneId = gencodeTranscriptId = gencodeBioType = ""
+    gencodeMeta = clsGencodeAssoc.get(bed.name)
+    if gencodeMeta is not None:
+        gencodeGeneId = gencodeMeta.geneID
+        gencodeTranscriptId = gencodeMeta.transcriptID
+        gencodeBioType = gencodeMeta.biotype
 
+    inGencode = "yes" if gencodeGeneId != "" else "no"
+
+    bed.extraCols = [len(sids), strArrayJoin(sampleDesc), strArrayJoin(sids),
+                     inGencode, gencodeGeneId, gencodeTranscriptId, gencodeBioType]
+    bed.itemRgb = getBiotypeColor(gencodeBioType)
     allBeds.append(bed)
     for sid in sids:
         bedsBySid[sid].append(bed)
@@ -275,20 +348,20 @@ def makeTranscriptBed(bed, clsMetaBySid, transcriptMeta, allBeds, bedsBySid,
     for stageTissue in stageTissues:
         bedsByStageTissue[stageTissue].append(bed)
 
-def processTranscript(bed, clsMetaBySid, transcriptMetas, allBeds,
-                      bedsBySid, bedsByStageTissue):
+def processTranscript(bed, clsMetaBySid, transcriptMetas, clsGencodeAssoc,
+                      allBeds, bedsBySid, bedsByStageTissue):
     transcriptMeta = transcriptMetas[bed.name]
     if transcriptMeta.artifact == 'no':
-        makeTranscriptBed(bed, clsMetaBySid, transcriptMeta, allBeds, bedsBySid,
-                          bedsByStageTissue)
+        updateTranscriptBed(bed, clsMetaBySid, transcriptMeta, clsGencodeAssoc,
+                            allBeds, bedsBySid, bedsByStageTissue)
 
-def buildBeds(masterBedFile, clsMetaBySid, transcriptMetas):
+def buildBeds(masterBedFile, clsMetaBySid, transcriptMetas, clsGencodeAssoc):
     allBeds = []
     bedsBySid = defaultdict(list)
     bedsByStageTissue = defaultdict(list)
     for bed in BedReader(masterBedFile):
-        processTranscript(bed, clsMetaBySid, transcriptMetas, allBeds, bedsBySid,
-                          bedsByStageTissue)
+        processTranscript(bed, clsMetaBySid, transcriptMetas, clsGencodeAssoc,
+                          allBeds, bedsBySid, bedsByStageTissue)
     return allBeds, bedsBySid, bedsByStageTissue
 
 def write_bed_file(beds, bedfile):
@@ -307,10 +380,11 @@ def write_bed_files(clsMetaBySid, allBeds, bedsBySid, bedsByStageTissue, trackDi
         write_bed_file(beds,
                        osp.join(trackDir, stageTissueToBedPath(stageTissue)))
 
-def makeBeds(opts, clsMetadataTab, masterBedFile, transcriptMetaTsv, trackDir):
+def makeBeds(opts, clsMetadataTab, masterBedFile, transcriptMetaTsv, clsGencodeAssocTsv, trackDir):
     clsMetaBySid = loadClsMetadata(clsMetadataTab)
     transcriptMetas = loadTranscriptMeta(transcriptMetaTsv)
-    allBeds, bedsBySid, bedsByStageTissue = buildBeds(masterBedFile, clsMetaBySid, transcriptMetas)
+    clsGencodeAssoc = loadClsGencodeAssoc(clsGencodeAssocTsv)
+    allBeds, bedsBySid, bedsByStageTissue = buildBeds(masterBedFile, clsMetaBySid, transcriptMetas, clsGencodeAssoc)
     write_bed_files(clsMetaBySid, allBeds, bedsBySid, bedsByStageTissue, trackDir)
 
 ##
@@ -389,9 +463,12 @@ MODELS_TDB = """\
         longLabel CLS transcript models
         type bigBed 12 +
         bigDataUrl {bigDataUrl}
-        color 12,12,120
         visibility pack
         priority 2
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
 """
 
@@ -413,7 +490,6 @@ SAMPLE_MODELS_TDB = """\
         longLabel {longLabel}
         bigDataUrl {bigDataUrl}
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample={sample} type=models
 
@@ -460,9 +536,12 @@ EXPR_MODELS_TDB = """\
         bigDataUrl {bigDataUrl}
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample={sample} type={type}
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
 """
 
@@ -614,7 +693,7 @@ def checkBams(opts, clsMetadataTab, trackDir):
 def main():
     opts, args = parseArgs()
     if args.command == 'make-beds':
-        makeBeds(opts, args.clsMetadataTab, args.masterBedFile, args.transcriptMetaTsv, args.trackDir)
+        makeBeds(opts, args.clsMetadataTab, args.masterBedFile, args.transcriptMetaTsv, args.clsGencodeAssocTsv, args.trackDir)
     elif args.command == 'make-trackdb':
         makeTrackDb(opts, args.clsMetadataTab, args.trackDir, args.trackDb, args.parent)
     elif args.command == 'check-bams':
