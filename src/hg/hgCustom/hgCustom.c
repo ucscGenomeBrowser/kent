@@ -263,12 +263,12 @@ if (isUpdateForm)
         {
       printf(
      "<span style='color:RED'>"
-     "To update this data, which was loaded via a URL:<br>"
-     "1. Click Submit on this page to navigate to the <i>Manage Custom Tracks</i> page.<br>"
-     "2. In the <b>Update</b> column, select the checkbox next to the corresponding custom track.<br>"
-     "3. Click the <b>Update</b> button at the top of the column to apply the changes.\n</span><p><p> ");
+     "The custom track was loaded from a URL. To update it:<br>"
+     "1. Go to <a href='hgCustom?hgsid=%s'>My Data > Custom Tracks</a>.<br>"
+     "2. In the <b>Update</b> column, select the checkbox next to custom tracks that you want to update.<br>"
+     "3. Click the <b>Update</b> button at the top of the column to reload the data.\n</span><p><p> ", cartSessionId(cart));
 
-        puts("Current loaded configuration (do not update here):");
+        puts("Current custom track configuration (changes you make here will be lost when you update the track):");
         }
     else
         {
@@ -295,19 +295,9 @@ if (isUpdateForm)
     /* row for text entry box */
     cgiSimpleTableRowStart();
     puts("<TD COLSPAN=2>");
-    if (dataUrl)
-        {
-        /* can't update via pasting if loaded from URL */
-        cgiMakeTextAreaDisableable(hgCtConfigLines,
+    cgiMakeTextArea(hgCtConfigLines,
             cartUsualString(cart, hgCtConfigLines, customTrackUserConfig(ct)),
-                            CONFIG_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
-        }
-    else
-        {
-        cgiMakeTextArea(hgCtConfigLines,
-                cartUsualString(cart, hgCtConfigLines, customTrackUserConfig(ct)),
-                            CONFIG_ENTRY_ROWS, TEXT_ENTRY_COLS);
-        }
+                        CONFIG_ENTRY_ROWS, TEXT_ENTRY_COLS);
     cgiTableFieldEnd();
 
     cgiSimpleTableFieldStart();
