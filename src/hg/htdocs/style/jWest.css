@@ -444,3 +444,65 @@ div.jwFooterCopyright {
     padding-top: 14px;
 }
 
+/* Recent Genomes Panel (replaces species tree) */
+
+#recentGenomesPanel {
+    border: solid black 1px;
+    width: 405px;
+    height: 400px;
+    overflow: auto;
+    background-color: #fafafa;
+}
+
+#recentGenomesList {
+    padding: 10px;
+}
+
+.recentGenomeCard {
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.recentGenomeCard:hover {
+    background-color: #f0f5fa;
+    border-color: #4c759c;
+}
+
+.recentGenomeCard.selected {
+    background-color: #e8f0f8;
+    border-color: #003a72;
+    border-width: 2px;
+}
+
+.recentGenomeLabel {
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.recentGenomeDb {
+    font-size: 12px;
+    color: #666;
+}
+
+.recentGenomeCategory {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+}
+
+.recentGenomesEmpty {
+    padding: 30px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+

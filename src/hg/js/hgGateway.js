@@ -1338,15 +1338,12 @@ var hgGateway = (function() {
     function processSpeciesAutocompleteItems(searchObj, results, term) {
         // This (bound to searchObj) is passed into autocompleteCat as options.onServerReply.
         // The server sends a list of items that may include duplicates and can have
-        // results from dbDb and/or assembly hubs.  Also look for results from the
-        // phylogenetic tree, and insert those before the assembly hub matches.
-        // Then remove duplicates and return the processed results which will then
-        // be used to render the menu.
-        var phyloResults = searchByKeyNoCase(searchObj, term);
-        var hubResultIx = _.findIndex(results, function(result) { return !! result.hubUrl; });
-        var hubResults = hubResultIx >= 0 ? results.splice(hubResultIx) : [];
-        var combinedResults = results.concat(phyloResults).concat(hubResults);
-        return removeDups(combinedResults, speciesResultsEquiv);
+        // results from dbDb and/or assembly hubs.
+        // Remove duplicates and return the processed results which will then
+        // be used to render the autocomplete menu only.
+        // Note: Search results are NOT rendered to the panel - only recent genomes are shown there.
+        var processedResults = removeDups(results, speciesResultsEquiv);
+        return processedResults;
     }
 
     // Server response event handlers
@@ -1370,19 +1367,9 @@ var hgGateway = (function() {
 
     function updateStateAndPage(jsonData) {
         // Update uiState with new values and update the page.
-        var hubsChanged = !_.isEqual(jsonData.hubs, uiState.hubs);
-        // In rare cases, there can be a genome (e.g. Baboon) with multiple species/taxIds
-        // (e.g. Papio anubis for papAnu1 vs. Papio hamadryas for papHam1).  Changing the
-        // db can result in changing the taxId too.  In that case, update the highlighted
-        // species in the tree image.
-        if (jsonData.taxId !== uiState.taxId) {
-            highlightLabel('textEl_' + jsonData.taxId, false);
-        }
+        // Note: Tree highlighting and drawing removed as tree is no longer displayed.
         _.assign(uiState, jsonData);
         updateFindPositionSection(uiState);
-        if (hubsChanged) {
-            drawSpeciesPicker(prunedDbDbTree);
-        }
     }
 
     function handleRefreshState(jsonData) {
@@ -1483,21 +1470,46 @@ var hgGateway = (function() {
 
     function setDbFromAutocomplete(item) {
         // The user has selected a result from the species-search autocomplete.
-        // It might be a taxId and/or db from dbDb, or it might be a hub db.
+        // It might be a taxId and/or db from dbDb, or it might be a hub db,
+        // or a taxon-only result (like "Human") that shows an assembly dropdown.
         var taxId = item.taxId || -1;
         var db = item.db;
-        var org = item.org;
-        if (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) {
+        var org = item.org || item.value || item.label;
+        var cmd;
+        var genome = item.genome || '';
+
+        // Check if db is a valid assembly name (not an organism name)
+        // Valid db names are typically lowercase alphanumeric like "hg38", "mm10"
+        // Organism names are capitalized like "Human", "Mouse"
+        var isValidDb = db && /^[a-z]/.test(db) && db !== org;
+
+        // Detect GenArk by category OR by genome name pattern (GCA_/GCF_)
+        var isGenArk = (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) ||
+                       (item.hubUrl && (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
+
+        if (isGenArk) {
             db = item.genome;
-            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName, true);
-        } else if (item.hubUrl) {
-            // The autocomplete sends the hub database from hubPublic.dbList,
+            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName || org, true);
+        } else if (item.hubUrl && item.hubName) {
+            // Public hub - the autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;
             setHubDb(item.hubUrl, taxId, db, item.hubName, org, true);
-        } else {
-            setTaxId(taxId, item.db, org, true, false);
+        } else if (taxId > 0) {
+            // Native db with valid taxId - pass db only if it's a valid assembly name
+            setTaxId(taxId, isValidDb ? db : null, org, true, false);
+        } else if (isValidDb) {
+            // Native db without taxId - use setDb command directly
+            cmd = { setDb: { db: db, position: "lastDbPos" } };
+            cart.send(cmd, handleSetDb);
+            cart.flush();
+            uiState.db = db;
+            clearPositionInput();
+            clearSpeciesInput();
         }
+
+        // Refresh the recent genomes panel (autocompleteCat.js handles saving to localStorage)
+        displayRecentGenomesInPanel();
     }
 
     function onClickSpeciesLabel(taxId) {
@@ -1658,20 +1670,88 @@ var hgGateway = (function() {
         });
     }
 
+    // Recent Genomes Panel functions (Option C layout)
+
+    function renderRecentGenomesPanel(genomes) {
+        // Render recent genomes as vertical scrollable cards
+        var $panel = $('#recentGenomesList');
+        $panel.empty();
+
+        if (!genomes || genomes.length === 0) {
+            $panel.html('<div class="recentGenomesEmpty">Search for a genome above, ' +
+                        'or click a popular species icon</div>');
+            return;
+        }
+
+        // Render each genome as a card (vertical layout)
+        genomes.forEach(function(item) {
+            var $card = $('<div class="recentGenomeCard"></div>');
+            var label = item.label || item.value || item.genome || item.commonName;
+            var genome = item.genome || item.db || '';
+
+            $card.append('<div class="recentGenomeLabel">' + escapeHtml(label) + '</div>');
+            if (genome && label.indexOf(genome) < 0) {
+                $card.append('<div class="recentGenomeDb">' + escapeHtml(genome) + '</div>');
+            }
+
+            // Add category as small label
+            if (item.category) {
+                var shortCategory = item.category;
+                if (shortCategory.indexOf('UCSC Genome Browser') >= 0) {
+                    shortCategory = 'UCSC';
+                } else if (shortCategory.indexOf('GenArk') >= 0) {
+                    shortCategory = 'GenArk';
+                } else if (shortCategory.indexOf('Assembly Hub') >= 0) {
+                    shortCategory = 'Hub';
+                }
+                $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
+            }
+
+            // Store item data for click handler
+            $card.data('item', item);
+            $card.on('click', function() {
+                var clickedItem = $(this).data('item');
+                setDbFromAutocomplete(clickedItem);
+                // Highlight selected card
+                $('.recentGenomeCard').removeClass('selected');
+                $(this).addClass('selected');
+            });
+
+            $panel.append($card);
+        });
+    }
+
+    function displayRecentGenomesInPanel() {
+        // Display recent genomes in the panel on page load and after genome selection
+        var recentGenomes = getRecentGenomes();
+        // Show the section (hidden by default in HTML)
+        $('#recentGenomesTitle').show();
+        $('#recentGenomesSection').show();
+        renderRecentGenomesPanel(recentGenomes);
+    }
+
+    function escapeHtml(text) {
+        // Simple HTML escape for display
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
     function init() {
         // Boot up the page; initialize elements and install event handlers.
         var searchObj = {};
-        // We need a bound function to pass into autocompleteCat.init below;
-        // however, autocompleteFromTree is even slower than drawing the tree because of
-        // all the copying.  So bind now, fill in searchObj later.
+        // We need a bound function to pass into autocompleteCat.init below.
         var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
         cart.setCgi('hgGateway');
         cart.debug(debugCartJson);
         // Get state from cart
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
-	activeTaxIds = _.invert(activeGenomes);
-        // Prune inactive genomes from dbDbTree.
+        activeTaxIds = _.invert(activeGenomes);
+        // Note: Tree pruning kept for potential future use, but tree is no longer displayed.
         if (window.dbDbTree) {
             prunedDbDbTree = dbDbTree;
             if (! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
@@ -1689,6 +1769,7 @@ var hgGateway = (function() {
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
                                    onServerReply: processSpeciesResults,
+                                   showRecentGenomes: true,
                                    enterSelectsIdentical: false });
             $('#selectAssembly').on("change", onChangeDbMenu);
             $('#positionDisplay').on("click", onClickCopyPosition);
@@ -1697,11 +1778,11 @@ var hgGateway = (function() {
             $(window).on("resize", setRightColumnWidth.bind(null, scrollbarWidth));
             displaySurvey();
             replaceHgsidInLinks();
-            // Fill in searchObj here once everything is displayed.
-            autocompleteFromTree(prunedDbDbTree, searchObj);
 
+            // Display recent genomes in the left panel on page load
+            displayRecentGenomesInPanel();
 
-	    // Gateway tutorial
+            // Gateway tutorial
             if (typeof gatewayTour !== 'undefined') {
                 if (typeof startGatewayOnLoad !== 'undefined' && startGatewayOnLoad) {
                     gatewayTour.start();
