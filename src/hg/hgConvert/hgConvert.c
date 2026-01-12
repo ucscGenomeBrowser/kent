@@ -26,8 +26,9 @@
 #include "hubConnect.h"
 #include "quickLift.h"
 #include "chromAlias.h"
-#ifdef NOTNOW
 #include "jsHelper.h"
+#include "hPrint.h"
+#ifdef NOTNOW
 #include "bigChain.h"
 #include "bigLink.h"
 #endif
@@ -70,67 +71,149 @@ static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 {
 struct dbDb *dbList;
 boolean askAboutQuickLift = FALSE;
-//boolean quickLiftChainExists =  (quickLiftGetChain(fromDb->name, toDb->name) != 0);
+boolean quickLift = FALSE;
 
 if (quickLiftEnabled(cart))
+    {
     askAboutQuickLift = TRUE;
+    quickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
+    }
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
 
-/* create HMTL form */
+/* Include autocomplete libraries */
+jsIncludeAutoCompleteLibs();
+
+/* create HTML form */
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
-/* create HTML table for layout purposes */
-puts("\n<TABLE WIDTH=\"100%%\">\n");
+/* CSS for two-section layout */
+puts("<style>\n"
+     ".convertGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; }\n"
+     ".convertSection { padding: 15px; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }\n"
+     ".sectionLabel { font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }\n"
+     ".fieldRow { margin: 8px 0; }\n"
+     ".fieldLabel { display: inline-block; width: 80px; font-weight: bold; }\n"
+     ".currentSelection { margin-top: 8px; color: #333; }\n"
+     ".currentSelection::before { content: 'Selected: '; font-weight: bold; }\n"
+     "</style>\n");
 
-/* top row -- labels */
-cgiSimpleTableRowStart();
-cgiTableField("Old genome: ");
-cgiTableField("Old assembly: ");
-cgiTableField("New genome: ");
-cgiTableField("New assembly: ");
-if (askAboutQuickLift)
-    cgiTableField("<a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' \
-		    target='ucscHelp' title='QuickLift is in beta testing, which means it is not polished and will contain bugs. \
-		    Contact us at genome-www@soe.ucsc.edu to report a bug.'\
-		    style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px \
-		    4px;background:lavender;border-radius:3px;text-decoration:none;margin-right:6px;'>beta</a>QuickLift tracks: ");
-cgiTableField(" ");
-cgiTableRowEnd();
+puts("<div class='convertGrid'>\n");
 
-/* Next row -- data and controls */
-cgiSimpleTableRowStart();
+/* SOURCE SECTION (read-only) */
+puts("<div class='convertSection'>\n");
+puts("<div class='sectionLabel'>Source</div>\n");
+hPrintf("<div class='fieldRow'><span class='fieldLabel'>Genome:</span> %s</div>\n", fromDb->organism);
+hPrintf("<div class='fieldRow'><span class='fieldLabel'>Assembly:</span> %s</div>\n", fromDb->description);
+puts("</div>\n");
 
-/* From organism and assembly. */
-cgiTableField(fromDb->organism);
-cgiTableField(fromDb->description);
+/* DESTINATION SECTION (editable) */
+puts("<div class='convertSection'>\n");
+puts("<div class='sectionLabel'>Destination</div>\n");
 
-/* Destination organism. */
-cgiSimpleTableFieldStart();
+/* Hidden fields for form submission */
+hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TOORG_VAR, toDb->organism);
+hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TODB_VAR, liftOver->toDb);
+
+/* Search bar */
+char *searchBarId = "toGenomeSearch";
+puts("<div class='fieldRow'>\n");
+puts("<span class='fieldLabel'>Search:</span>\n");
+printGenomeSearchBar(searchBarId, "Search for target genome...", NULL, TRUE, NULL, NULL);
+puts("</div>\n");
+
+/* Current selection display */
+char *selectedLabel = getCurrentGenomeLabel(liftOver->toDb);
+hPrintf("<div class='currentSelection' id='toGenomeLabel'>%s</div>\n", selectedLabel);
+
+/* Assembly dropdown (updates based on genome selection) */
+puts("<div class='fieldRow'>\n");
+puts("<span class='fieldLabel'>Assembly:</span>\n");
 dbList = hGetLiftOverToDatabases(liftOver->fromDb);
-printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, liftOver->toDb, dbList, "change", onChangeToOrg);
-cgiTableFieldEnd();
+printAllAssemblyListHtmlParm(liftOver->toDb, dbList, HGLFT_TODB_VAR, TRUE, "change", onChangeToOrg);
+puts("</div>\n");
 
-/* Destination assembly */
-cgiSimpleTableFieldStart();
-printAllAssemblyListHtmlParm(liftOver->toDb, dbList, HGLFT_TODB_VAR, TRUE, NULL, NULL);
-cgiTableFieldEnd();
-
+/* QuickLift option */
 if (askAboutQuickLift)
     {
-    cgiSimpleTableFieldStart();
-    boolean quickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
+    puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
     cgiMakeCheckBoxWithId("doQuickLift", quickLift, "doQuickLift");
-    cgiTableFieldEnd();
+    puts(" <label for='doQuickLift'>QuickLift tracks</label>\n");
+    puts(" <a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' "
+         "target='ucscHelp' title='QuickLift is in beta testing' "
+         "style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px "
+         "4px;background:lavender;border-radius:3px;text-decoration:none;margin-left:6px;'>beta</a>\n");
+    puts("</div>\n");
     }
 
-cgiSimpleTableFieldStart();
-cgiMakeButton(HGLFT_DO_CONVERT, "Submit");
-cgiTableFieldEnd();
+puts("</div>\n");  /* end destination section */
+puts("</div>\n");  /* end grid */
 
-cgiTableRowEnd();
-cgiTableEnd();
+/* Submit button centered below */
+puts("<div style='text-align: center; margin-top: 20px;'>\n");
+cgiMakeButton(HGLFT_DO_CONVERT, "Submit");
+puts("</div>\n");
+
+/* JavaScript initialization for autocomplete with liftOver filtering */
+jsInlineF(
+    "let validTargets = new Set();\n"
+    "\n"
+    "fetch('../cgi-bin/hubApi/liftOver/listExisting?fromGenome=%s')\n"
+    "    .then(response => response.json())\n"
+    "    .then(data => {\n"
+    "        if (data.existingLiftOvers) {\n"
+    "            data.existingLiftOvers.forEach(chain => validTargets.add(chain.toDb));\n"
+    "        }\n"
+    "\n"
+    "        // Custom onServerReply that processes results and filters to valid targets\n"
+    "        function processAndFilterResults(result, term) {\n"
+    "            let processed = processFindGenome(result, term);\n"
+    "            let filtered = processed.filter(item => validTargets.has(item.genome));\n"
+    "            if (filtered.length === 0 && processed.length > 0) {\n"
+    "                // Found genomes but none have liftOver from source\n"
+    "                return [{label: 'No liftOver available for matching genomes', value: '', genome: '', disabled: true}];\n"
+    "            } else if (filtered.length === 0) {\n"
+    "                // No genomes matched the search at all\n"
+    "                return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
+    "            }\n"
+    "            return filtered;\n"
+    "        }\n"
+    "\n"
+    "        // Error handler for API failures (e.g. HTTP 400)\n"
+    "        function onSearchError(jqXHR, textStatus, errorThrown, term) {\n"
+    "            return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
+    "        }\n"
+    "\n"
+    "        function onGenomeSelect(selectEle, item) {\n"
+    "            // Ignore disabled/placeholder items\n"
+    "            if (item.disabled || !item.genome) {\n"
+    "                return;\n"
+    "            }\n"
+    "            selectEle.textContent = item.label;\n"
+    "            document.mainForm.%s.value = item.commonName.split('(')[0].trim();\n"
+    "            document.mainForm.%s.value = item.genome;\n"
+    "            document.mainForm.submit();\n"
+    "        }\n"
+    "\n"
+    "        let selectEle = document.getElementById('toGenomeLabel');\n"
+    "        initSpeciesAutoCompleteDropdown('%s', onGenomeSelect.bind(null, selectEle), null, null, processAndFilterResults, onSearchError);\n"
+    "    });\n"
+    "\n"
+    "document.addEventListener('DOMContentLoaded', () => {\n"
+    "    let btn = document.getElementById('%sButton');\n"
+    "    if (btn) {\n"
+    "        btn.addEventListener('click', () => {\n"
+    "            let val = document.getElementById('%s').value;\n"
+    "            $('[id=\\x27%s\\x27]').autocompleteCat('search', val);\n"
+    "        });\n"
+    "    }\n"
+    "});\n"
+    , liftOver->fromDb
+    , HGLFT_TOORG_VAR
+    , HGLFT_TODB_VAR
+    , searchBarId, searchBarId, searchBarId, searchBarId
+);
 
 puts("</FORM>\n");
 

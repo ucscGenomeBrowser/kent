@@ -112,9 +112,19 @@ var autocompleteCat = (function() {
                        toggleSpinner(false, options);
                        cache[cleanedTerm] = results;
                        acCallback(results);
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                       // remove the loading icon
+                       toggleSpinner(false, options);
+                       // If onError is defined, call it to handle the error;
+                       // otherwise silently ignore (ref #8816)
+                       if (typeof options.onError === 'function') {
+                           let results = options.onError(jqXHR, textStatus, errorThrown, cleanedTerm);
+                           if (results) {
+                               acCallback(results);
+                           }
+                       }
                     });
-                // ignore errors to avoid spamming people on flaky network connections
-                // with tons of error messages (#8816).
             };
 
             var autoCompleteSource = function(request, acCallback) {

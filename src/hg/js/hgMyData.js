@@ -29,6 +29,7 @@ function cgiDecode(value) {
 function setDbSelectFromAutocomplete(selectEle, item) {
     // this has been bound to the <select> we are going to add
     // a new child option to
+    if (item.disabled || !item.genome) return;
     let newOpt = document.createElement("option");
     newOpt.value = item.genome;
     newOpt.label = item.label;
@@ -36,6 +37,10 @@ function setDbSelectFromAutocomplete(selectEle, item) {
     selectEle.appendChild(newOpt);
     const event = new Event("change");
     selectEle.dispatchEvent(event);
+}
+
+function onSearchError(jqXHR, textStatus, errorThrown, term) {
+    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
 }
 
 let autocompletes = {};
@@ -47,7 +52,7 @@ function initAutocompleteForInput(inpIdStr, selectEle) {
     // set it up previously
     if ( !(inpIdStr in autocompletes) || autocompletes[inpIdStr] === false) {
         let selectFunction = setDbSelectFromAutocomplete.bind(null, selectEle);
-        initSpeciesAutoCompleteDropdown(inpIdStr, selectFunction);
+        initSpeciesAutoCompleteDropdown(inpIdStr, selectFunction, null, null, null, onSearchError);
         autocompletes[inpIdStr] = true;
         return true;
     }

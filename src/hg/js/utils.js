@@ -4601,7 +4601,7 @@ function processFindGenome(result, term) {
 }
 
 function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null,
-        watermark = null, onServerReply = null) {
+        watermark = null, onServerReply = null, onError = null) {
 /* Generic function for turning an <input> element into a species search bar with an autocomplete
  * list separating results by category.
  * Required arguments:
@@ -4613,6 +4613,8 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
  *     watermark: placeholder text in the input
  *     onServerReply: function to run after querying baseUrl, by default use processFindGenome()
  *         to standardize on hubApi, but can be something else
+ *     onError: function to call when the server returns an error (e.g. HTTP 400)
+ *         signature: onError(jqXHR, textStatus, errorThrown, searchTerm) => results array or null
  */
     let defaultSearchUrl = "hubApi/findGenome?browser=mustExist&q=";
     $.widget("custom.autocompleteCat",
@@ -4653,6 +4655,7 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
         watermark: watermark,
         onSelect: selectFunction,
         onServerReply: onServerReply !== null ? onServerReply : processFindGenome,
+        onError: onError,
         enterSelectsIdentical: false
     });
 }
