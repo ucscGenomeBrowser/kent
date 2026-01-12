@@ -3963,3 +3963,57 @@ while (lineFileNextRowTab(lf, cols, ArraySize(cols)))
 lineFileClose(&lf);
 return sizes;
 }
+
+boolean parseRange(char *range, char **retSeq, int *retStart, int *retEnd)
+/* Parse seq:start-end into components. */
+{
+char *s, *e;
+s = strchr(range, ':');
+if (s == NULL)
+    return FALSE;
+*s++ = 0;
+e = strchr(s, '-');
+if (e == NULL)
+    return FALSE;
+*e++ = 0;
+if (!isdigit(s[0]) || !isdigit(e[0]))
+    return FALSE;
+*retSeq = range;
+*retStart = atoi(s);
+*retEnd = atoi(e);
+return TRUE;
+}
+
+void mustParseRange(char *range, char **retSeq, int *retStart, int *retEnd)
+/* Parse seq:start-end or die. */
+{
+if (!parseRange(range, retSeq, retStart, retEnd))
+    errAbort("Malformed range %s", range);
+}
+
+boolean parsePosition(char *position, char **retChrom, uint *retStart, uint *retEnd)
+/* If position is word:number-number (possibly with commas & whitespace),
+ * set retChrom, retStart (subtracting 1) and retEnd, and return TRUE.
+ * Otherwise return FALSE and leave rets unchanged. */
+{
+char *chrom = cloneString(position);
+stripChar(chrom, ',');
+eraseWhiteSpace(chrom);
+char *startStr = strchr(chrom, ':');
+if (startStr == NULL)
+    return FALSE;
+*startStr++ = '\0';
+char *endStr = strchr(startStr, '-');
+if (endStr == NULL)
+    return FALSE;
+*endStr++ = '\0';
+if (!isAllDigits(startStr))
+    return FALSE;
+if (!isAllDigits(endStr))
+    return FALSE;
+*retChrom = chrom;
+*retStart = sqlUnsigned(startStr) - 1;
+*retEnd = sqlUnsigned(endStr);
+return TRUE;
+}
+

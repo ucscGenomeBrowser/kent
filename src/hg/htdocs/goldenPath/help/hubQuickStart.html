@@ -181,14 +181,19 @@ non-standard columns as defined in AutoSql format(.as) file, <code>-as=bedExampl
 </p>
 <p>
 Creating a trackDb.txt file for an assembly hub, you can control where the track appears underneath
-the Genome Browser image using the <a href="/goldenpath/help/hgTrackHubHelp.html#groups"
+the Genome Browser image using the <a href="/goldenPath/help/hgTrackHubHelp.html#groups"
 target="_blank">groups</a> setting. The special groups setting in Assembly Hubs points to a separate
 text document that defines track groups under the main image (such as the first &quot;Mapping and
 Sequencing&quot; group found on almost all Browsers). The group setting is not inherited by the
 subtracks for a composite, supertrack, or multiwigs, so you will have to add the setting to each
 stanza in the container.
 </p>
-
+<p>
+Assembly hubs also support <a href="assemblyHubHelp.html#chromAlias"
+target="_blank">chromAlias and chromAuthority</a>, which let the Browser map chromosome names
+across different naming schemes and display a preferred convention. A default naming scheme can be
+set using the <code>chromAuthority</code> setting.
+</p>
 
 
 

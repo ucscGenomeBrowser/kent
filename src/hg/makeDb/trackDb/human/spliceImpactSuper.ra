@@ -4,7 +4,6 @@ longLabel Splicing Impact Prediction Scores and Databases
 superTrack on hide
 group phenDis
 cartVersion 8
-pennantIcon Updated red ../goldenPath/newsarch.html#101625 "SpliceAI Wildtype tracks released Oct. 16, 2025"
 
 include spliceAI.ra
 

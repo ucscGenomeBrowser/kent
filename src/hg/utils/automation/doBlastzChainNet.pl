@@ -21,6 +21,7 @@
 use Getopt::Long;
 use warnings;
 use strict;
+use Carp;
 use FindBin qw($Bin);
 use lib "$Bin";
 use HgAutomate;
@@ -279,6 +280,21 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
 my ($swapDir, $tAsmId, $qAsmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists, $tChromInfoExists, $qChromInfoExists);
+
+sub genArkAccessionPath($) {
+  # return path to assembly hub GCx/012/345/678/accession/ directory
+  my ($asmId) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "must supply GC[AF]_... assembly ID" if ($asmId !~ m/^GC/);
+  my @a = split(/_/, $asmId);
+  my $accession = "$a[0]_$a[1]";
+  my $gcX = substr($asmId,0,3);
+  my $d0 = substr($asmId,4,3);
+  my $d1 = substr($asmId,7,3);
+  my $d2 = substr($asmId,10,3);
+  my $accessionDir = "$gcX/$d0/$d1/$d2/$accession";
+  return $accessionDir;
+}
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -1632,8 +1648,22 @@ sub installDownloads {
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $quick = $qDb;
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
+  my $genArkQuickDir = "";	# build directory
+  my $genArkQuickLinkDir = "";	# asmHubs staging link directory quickLift
+  my $genArkOverLinkDir = "";	# asmHubs staging link directory liftOver
+  my $genArkGbdbQuickDir = "";	# /gbdb/genark/.../quickLift directory
+  my $genArkGbdbOverDir = "";	# /gbdb/genark/.../liftOver directory
+  my $genArkTrackLink = "";	# ../trackData/... directory
   if ($tDb =~ m/^GC/) {
      $liftOverDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/liftOver";
+     $genArkQuickDir = &HgAutomate::asmHubBuildDir($tAsmId) . "/quickLift";
+     my $accessionPath = genArkAccessionPath($tAsmId);
+     $genArkQuickLinkDir = "/hive/data/genomes/asmHubs/${accessionPath}/quickLift";
+     $genArkOverLinkDir = "/hive/data/genomes/asmHubs/${accessionPath}/liftOver";
+     $genArkGbdbQuickDir = "/gbdb/genark/${accessionPath}/quickLift";
+     $genArkGbdbOverDir = "/gbdb/genark/${accessionPath}/liftOver";
+     $genArkTrackLink = "$buildDir/axtChain/$tDb.$qDb.quick";
+     $genArkTrackLink =~ s#.*trackData#../trackData#;
   }
   my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
@@ -1674,7 +1704,25 @@ rm -f $gpLiftOverDir/$over
 ln -s $liftOverDir/$over $gpLiftOverDir/$over
 _EOF_
       );
-    if ($tDb !~ m/^GC/) {
+    if ($tDb =~ m/^GC/) {
+      $bossScript->add(<<_EOF_
+mkdir -p $genArkQuickDir
+rm -f $genArkQuickDir/${quick}.bb
+rm -f $genArkQuickDir/${quick}.link.bb
+rm -f $genArkQuickLinkDir $genArkGbdbQuickDir
+rm -f $genArkOverLinkDir $genArkGbdbOverDir
+ln -s ${genArkTrackLink}.bb $genArkQuickDir/${quick}.bb
+ln -s ${genArkTrackLink}Link.bb $genArkQuickDir/${quick}.link.bb
+ln -s $genArkQuickDir $genArkQuickLinkDir
+ln -s $genArkQuickLinkDir $genArkGbdbQuickDir
+ln -s $liftOverDir $genArkOverLinkDir
+ln -s $genArkOverLinkDir $genArkGbdbOverDir
+hgAddLiftOverChain -minMatch=0.1 -multiple -path=$genArkGbdbOverDir/$over \\
+  $tDb $qDb
+$ENV{'HOME'}/kent/src/hg/utils/automation/addQuickLift.py $tDb $qDb $genArkGbdbQuickDir/${quick}.bb
+_EOF_
+      );
+    } else {
       $bossScript->add(<<_EOF_
 mkdir -p $gbdbLiftOverDir $gbdbQuickLiftDir
 rm -f $gbdbLiftOverDir/$over

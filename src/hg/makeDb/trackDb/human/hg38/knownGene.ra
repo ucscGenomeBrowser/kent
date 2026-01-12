@@ -27,7 +27,6 @@ defaultLinkedTables kgXref
 squishyPackPoint 1
 squishyPackField rank
 squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
-pennantIcon Updated red ../goldenPath/newsarch.html#103125 "Updated Oct. 31, 2025"
 
 searchName knownGeneAcc
 searchTable knownGene

@@ -75,9 +75,12 @@ html clsLongReadRna.html
         longLabel CLS transcript models
         type bigBed 12 +
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models.bb
-        color 12,12,120
         visibility pack
         priority 2
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
     track sample_models_view
     view sample_models_view
@@ -93,7 +96,6 @@ html clsLongReadRna.html
         longLabel Adult Brain transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Brain.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_brain type=models
 
@@ -103,7 +105,6 @@ html clsLongReadRna.html
         longLabel Embryonic Brain transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbBrain.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=embryo_brain type=models
 
@@ -113,7 +114,6 @@ html clsLongReadRna.html
         longLabel Cell Line Pool transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-CpoolA.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_cpoola type=models
 
@@ -123,7 +123,6 @@ html clsLongReadRna.html
         longLabel Adult Heart transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Heart.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_heart type=models
 
@@ -133,7 +132,6 @@ html clsLongReadRna.html
         longLabel Embryonic Heart transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbHeart.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=embryo_heart type=models
 
@@ -143,7 +141,6 @@ html clsLongReadRna.html
         longLabel Adult Liver transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Liver.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_liver type=models
 
@@ -153,7 +150,6 @@ html clsLongReadRna.html
         longLabel Embryonic Liver transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbLiver.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=embryo_liver type=models
 
@@ -163,7 +159,6 @@ html clsLongReadRna.html
         longLabel Placenta transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Placenta.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=placenta_placenta type=models
 
@@ -173,7 +168,6 @@ html clsLongReadRna.html
         longLabel Adult Testis transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-Testis.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_testis type=models
 
@@ -183,7 +177,6 @@ html clsLongReadRna.html
         longLabel Tissue Pool transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-TpoolA.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_tpoola type=models
 
@@ -193,7 +186,6 @@ html clsLongReadRna.html
         longLabel Adult Blood transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-WBlood.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=adult_wblood type=models
 
@@ -203,7 +195,6 @@ html clsLongReadRna.html
         longLabel Embryonic iPSC transcript models
         bigDataUrl /gbdb/hg38/clsLongReadRna/cls-models-EmbiPSC.bb
         type bigBed 12 +
-        color 100,22,180
         visibility squish
         subGroups view=sample_models_view sample=embryo_ipsc type=models
 
@@ -222,9 +213,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_Brain03Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_brain type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_brain_ont_pre_models
         parent per_expr_models_view off
@@ -233,9 +227,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_Brain03Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_brain type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_brain_pacbio_post_models
         parent per_expr_models_view off
@@ -244,9 +241,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_Brain03Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_brain type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_brain_pacbio_pre_models
         parent per_expr_models_view off
@@ -255,9 +255,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_Brain03Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_brain type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_brain_ont_post_models
         parent per_expr_models_view off
@@ -266,9 +269,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_EmbBrain01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_brain type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_brain_ont_pre_models
         parent per_expr_models_view off
@@ -277,9 +283,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_EmbBrain01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_brain type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_brain_pacbio_post_models
         parent per_expr_models_view off
@@ -288,9 +297,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_EmbBrain01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_brain type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_brain_pacbio_pre_models
         parent per_expr_models_view off
@@ -299,9 +311,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_EmbBrain01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_brain type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_cpoola_ont_post_models
         parent per_expr_models_view off
@@ -310,9 +325,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_CpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_cpoola type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_cpoola_ont_pre_models
         parent per_expr_models_view off
@@ -321,9 +339,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_CpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_cpoola type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_cpoola_pacbio_post_models
         parent per_expr_models_view off
@@ -332,9 +353,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_CpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_cpoola type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_cpoola_pacbio_pre_models
         parent per_expr_models_view off
@@ -343,9 +367,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_CpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_cpoola type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_heart_ont_post_models
         parent per_expr_models_view off
@@ -354,9 +381,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_Heart02Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_heart type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_heart_ont_pre_models
         parent per_expr_models_view off
@@ -365,9 +395,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_Heart02Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_heart type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_heart_pacbio_post_models
         parent per_expr_models_view off
@@ -376,9 +409,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_Heart02Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_heart type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_heart_pacbio_pre_models
         parent per_expr_models_view off
@@ -387,9 +423,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_Heart02Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_heart type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_heart_ont_post_models
         parent per_expr_models_view off
@@ -398,9 +437,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_EmbHeart01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_heart type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_heart_ont_pre_models
         parent per_expr_models_view off
@@ -409,9 +451,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_EmbHeart01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_heart type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_heart_pacbio_post_models
         parent per_expr_models_view off
@@ -420,9 +465,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_EmbHeart01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_heart type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_heart_pacbio_pre_models
         parent per_expr_models_view off
@@ -431,9 +479,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_EmbHeart01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_heart type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_liver_ont_post_models
         parent per_expr_models_view off
@@ -442,9 +493,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_Liver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_liver type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_liver_ont_pre_models
         parent per_expr_models_view off
@@ -453,9 +507,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_Liver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_liver type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_liver_pacbio_post_models
         parent per_expr_models_view off
@@ -464,9 +521,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_Liver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_liver type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_liver_pacbio_pre_models
         parent per_expr_models_view off
@@ -475,9 +535,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_Liver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_liver type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_liver_ont_post_models
         parent per_expr_models_view off
@@ -486,9 +549,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_EmbLiver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_liver type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_liver_ont_pre_models
         parent per_expr_models_view off
@@ -497,9 +563,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_EmbLiver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_liver type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_liver_pacbio_post_models
         parent per_expr_models_view off
@@ -508,9 +577,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_EmbLiver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_liver type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_liver_pacbio_pre_models
         parent per_expr_models_view off
@@ -519,9 +591,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_EmbLiver01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_liver type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track placenta_placenta_ont_post_models
         parent per_expr_models_view off
@@ -530,9 +605,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_Placenta01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=placenta_placenta type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track placenta_placenta_ont_pre_models
         parent per_expr_models_view off
@@ -541,9 +619,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_Placenta01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=placenta_placenta type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track placenta_placenta_pacbio_post_models
         parent per_expr_models_view off
@@ -552,9 +633,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_Placenta01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=placenta_placenta type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track placenta_placenta_pacbio_pre_models
         parent per_expr_models_view off
@@ -563,9 +647,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_Placenta01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=placenta_placenta type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_testis_ont_post_models
         parent per_expr_models_view off
@@ -574,9 +661,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_Testis01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_testis type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_testis_ont_pre_models
         parent per_expr_models_view off
@@ -585,9 +675,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_Testis01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_testis type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_testis_pacbio_post_models
         parent per_expr_models_view off
@@ -596,9 +689,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_Testis01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_testis type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_testis_pacbio_pre_models
         parent per_expr_models_view off
@@ -607,9 +703,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_Testis01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_testis type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_tpoola_ont_post_models
         parent per_expr_models_view off
@@ -618,9 +717,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_TpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_tpoola type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_tpoola_ont_pre_models
         parent per_expr_models_view off
@@ -629,9 +731,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_TpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_tpoola type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_tpoola_pacbio_post_models
         parent per_expr_models_view off
@@ -640,9 +745,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_TpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_tpoola type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_tpoola_pacbio_pre_models
         parent per_expr_models_view off
@@ -651,9 +759,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_TpoolA01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_tpoola type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_wblood_ont_post_models
         parent per_expr_models_view off
@@ -662,9 +773,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_WBlood01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_wblood type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_wblood_ont_pre_models
         parent per_expr_models_view off
@@ -673,9 +787,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_WBlood01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_wblood type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_wblood_pacbio_post_models
         parent per_expr_models_view off
@@ -684,9 +801,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_WBlood01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_wblood type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track adult_wblood_pacbio_pre_models
         parent per_expr_models_view off
@@ -695,9 +815,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_WBlood01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=adult_wblood type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_ipsc_ont_post_models
         parent per_expr_models_view off
@@ -706,9 +829,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/ont-Crg-CapTrap_Hv3_0+_iPSC01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_ipsc type=post_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_ipsc_ont_pre_models
         parent per_expr_models_view off
@@ -717,9 +843,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/ont-Crg-CapTrap_HpreCap_0+_iPSC01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_ipsc type=pre_capture_ont_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_ipsc_pacbio_post_models
         parent per_expr_models_view off
@@ -728,9 +857,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/post-capture/pacBioSII-Cshl-CapTrap_Hv3_0+_iPSC01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_ipsc type=post_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
         track embryo_ipsc_pacbio_pre_models
         parent per_expr_models_view off
@@ -739,9 +871,12 @@ html clsLongReadRna.html
         bigDataUrl /gbdb/hg38/clsLongReadRna/pre-capture/pacBioSII-Cshl-CapTrap_HpreCap_0+_iPSC01Rep1.bb
         type bigBed 12 +
         noScoreFilter on
-        color 100,22,180
         visibility hide
         subGroups view=per_expr_models_view sample=embryo_ipsc type=pre_capture_pacbio_models
+        itemRgb on
+        # bigBed filters don't work with composites
+        #filterType.inGencode singleList
+        #filterValues.inGencode yes,no
 
     track per_expr_reads_view
     view per_expr_reads_view

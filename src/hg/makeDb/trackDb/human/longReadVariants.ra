@@ -4,7 +4,6 @@ shortLabel Long-read Variants
 longLabel Long-read Variants
 group varRep
 visibility hide
-pennantIcon New red ../goldenPath/newsarch.html#092425 "Added CoLoRSdb Variants Sep. 24, 2025"
 
     track deepvariant
     parent longReadVariants

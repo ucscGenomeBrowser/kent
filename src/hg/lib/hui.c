@@ -596,7 +596,7 @@ if (links > 0)
 if (links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
-if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(tdb))
+if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(tdb) && !tdbIsSuper(tdb))
     // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
     // until it's implemented
     {
@@ -5413,7 +5413,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    if (membersForAll->members[di] && -1 !=
 				(ix = stringArrayIx(membersForAll->members[di]->groupTag,
 						    membership->subgroups, membership->count)))
-		dyStringPrintf(dyHtml," %s",membership->membership[ix]);
+		dyStringPrintf(dyHtml," %s",htmlEncode(membership->membership[ix]));
 	    }
 	}
     else if (membersForAll->abcCount && membership != NULL) // "dimensions" don't exist but may be subgroups anyway
@@ -5423,13 +5423,13 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    if (membersForAll->members[di] && -1 !=
 				(ix = stringArrayIx(membersForAll->members[di]->groupTag,
 						    membership->subgroups, membership->count)))
-		dyStringPrintf(dyHtml," %s",membership->membership[ix]);
+		dyStringPrintf(dyHtml," %s",htmlEncode(membership->membership[ix]));
 	    }
 	}
     if (membersForAll->members[dimV] && membership != NULL && -1 !=
 				(ix = stringArrayIx(membersForAll->members[dimV]->groupTag,
 						    membership->subgroups, membership->count)))
-	dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
+	dyStringPrintf(dyHtml, " %s",htmlEncode(membership->membership[ix]));  // Saved view for last
 
     // And finally the checkBox is made!
     safef(buffer, sizeof(buffer), "%s_sel", subtrack->track);
@@ -5871,7 +5871,7 @@ static void makeAddClearButtonPair(char *idPrefix, char *class,char *separator)
 {
 char buf[256];
 if (class)
-    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(true,'%s'); return false;", class);
+    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(true,CSS.escape('%s')); return false;", class);
 else
     safef(buf, sizeof buf,"matSetMatrixCheckBoxes(true); return false;");
 char id[256];
@@ -5880,7 +5880,7 @@ cgiMakeOnClickButton(id, buf, ADD_BUTTON_LABEL);
 if (separator)
     printf("%s",separator);
 if (class)
-    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(false,'%s'); return false;", class);
+    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(false,CSS.escape('%s')); return false;", class);
 else
     safef(buf, sizeof buf,"matSetMatrixCheckBoxes(false); return false;");
 safef(id, sizeof id, "%s_clr", idPrefix);
@@ -8619,10 +8619,10 @@ return cloneString(label);
 }
 
 #define PM_BUTTON_UC "<IMG height=18 width=18 id='%s' src='../images/%s'>"
-#define PM_BUTTON_UC_JS "return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);" 
+#define PM_BUTTON_UC_JS "return (matSetMatrixCheckBoxes(%s%sCSS.escape(\"%s\")%s%s%s) == false);"
 #define PM_MAKE_BUTTON_UC(s1,s2,s3,s4,s5,s6,name,img) \
     safef(id, sizeof id, "btn_%s", (name)); \
-    printf(PM_BUTTON_UC, id, (img)); \
+    printf(PM_BUTTON_UC, htmlEncode(id), (img)); \
     safef(javascript, sizeof javascript, PM_BUTTON_UC_JS, (s1),(s2),(s3),(s4),(s5),(s6)); \
     jsOnEventById("click", id, javascript);
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
@@ -8634,9 +8634,9 @@ char id[256];
 char javascript[1024];
 char fullname[256];
 safef(fullname, sizeof fullname, "plus_all_%s_%s", left ? "left" : "right", top ? "top" : "bottom");
-PM_MAKE_BUTTON_UC("true", "", "", "", "", "",  fullname,    "add_sm.gif")
+PM_MAKE_BUTTON_UC("true", ",", "", "", "", "",  fullname,    "add_sm.gif")
 safef(fullname, sizeof fullname, "minus_all_%s_%s", left ? "left" : "right", top ? "top" : "bottom");
-PM_MAKE_BUTTON_UC("false","", "", "", "", "", fullname, "remove_sm.gif")
+PM_MAKE_BUTTON_UC("false",",", "", "", "", "", fullname, "remove_sm.gif")
 }
 
 static void buttonsForOne(char *class, boolean vertical, boolean left, boolean top)
@@ -8646,12 +8646,12 @@ char javascript[1024];
 char fullname[256];
 safef(fullname, sizeof fullname, "plus_%s_all_%s_%s" , class, left ? "left" : "right",
                         top ? "top" : "bottom");
-PM_MAKE_BUTTON_UC("true",  ",'", class, "'", "", "", fullname,    "add_sm.gif")
+PM_MAKE_BUTTON_UC("true",  ",", class, "", "", "", fullname,    "add_sm.gif")
 if (vertical)
     puts("<BR>");
 safef(fullname, sizeof fullname, "minus_%s_all_%s_%s", class, left ? "left" : "right",
                         top ? "top" : "bottom");
-PM_MAKE_BUTTON_UC("false", ",'", class, "'", "", "", fullname, "remove_sm.gif")
+PM_MAKE_BUTTON_UC("false", ",", class, "", "", "", fullname, "remove_sm.gif")
 }
 
 #define MATRIX_SQUEEZE 10
@@ -8837,7 +8837,7 @@ if (dimensionY
 if (dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of buttons
     {
     printf("<TH class='matCell all %s' ALIGN=%s nowrap colspan=2>",
-           dimensionY->tags[ixY],left?"RIGHT":"LEFT");
+           htmlEncode(dimensionY->tags[ixY]),left?"RIGHT":"LEFT");
     if (left)
         printf("%s&nbsp;",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,
                                                       dimensionY->titles[ixY]));
@@ -8854,7 +8854,7 @@ else if (dimensionX)
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)
-    printf("<TH class='matCell all %s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
+    printf("<TH class='matCell all %s' ALIGN=RIGHT nowrap>%s</TH>\n",htmlEncode(dimensionY->tags[ixY]),
            compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,
                                        dimensionY->titles[ixY]));
 }
@@ -9240,7 +9240,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         matrixYheadings(db,parentTdb, membersForAll,ixY,TRUE);
 
 #define MAT_CB_SETUP "<INPUT TYPE=CHECKBOX NAME='%s' ID='%s' VALUE=on %s>"
-#define MAT_CB(name,js) printf(MAT_CB_SETUP,(name),(name),(js));
+#define MAT_CB(name,js) printf(MAT_CB_SETUP,(htmlEncode(name)),(htmlEncode(name)),(js));
         for (ixX = 0; ixX < sizeOfX; ixX++)
             {
             if (dimensionX == NULL || (dimensionX->tags[ixX]))
@@ -9284,10 +9284,10 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                         }
                     if (ttlX && ttlY)
                         printf("<TD class='matCell %s %s'>\n",
-                               dimensionX->tags[ixX],dimensionY->tags[ixY]);
+                               htmlEncode(dimensionX->tags[ixX]),htmlEncode(dimensionY->tags[ixY]));
                     else
                         printf("<TD class='matCell %s'>\n",
-                               (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
+                               htmlEncode(dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
                     dyStringPrintf(dySettings, " class=\"matCB");
                     if (halfChecked)
                         dyStringPrintf(dySettings, " disabled"); // appears disabled but still clickable!

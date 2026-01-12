@@ -390,16 +390,8 @@ else
     bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
-if (bedSize != 0) // defined in trackDb
-    {
-    // check to make sure trackDb number is the same as the number
-    // of defined fields
-    if (bedSize != bbi->definedFieldCount)
-        warn("trackDb for %s has type with %d bed fields but the bigBed file %s has %d bed fields. Fields may be printed with the wrong contents.", tdb->track, bedSize, fileName, bbi->definedFieldCount);
-    }
-
 boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
-if (bigBedOnePath || (bedSize == 0))
+if (bigBedOnePath && (bedSize == 0))
     bedSize = bbi->definedFieldCount;
 
 char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);

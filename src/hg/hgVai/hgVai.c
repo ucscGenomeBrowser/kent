@@ -2859,6 +2859,18 @@ for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->nex
     }
 }
 
+static char *getHubPrefix(char *dbOrTrack)
+/* Extract the hub_number_ prefix from a db or track identifier, allocate & return. */
+{
+if (!startsWith(hubTrackPrefix, dbOrTrack))
+    {
+    errAbort("getHubPrefix: '%s' does not start with the expected prefix '%s'", dbOrTrack, hubTrackPrefix);
+    }
+uint hubNumber = atoll(dbOrTrack + strlen(hubTrackPrefix));
+struct dyString *dy = dyStringCreate("%s%u_", hubTrackPrefix, hubNumber);
+return dyStringCannibalize(&dy);
+}
+
 void doQuery()
 /* Translate simple form inputs into anno* components and execute query. */
 {
@@ -2874,10 +2886,22 @@ char *geneTrack = cartString(cart, "hgva_geneTrack");
 struct trackDb *geneTdb = tdbForTrack(database, geneTrack, &fullTrackList);
 if (geneTdb == NULL)
     {
-    warn("Can't find tdb for gene track %s", geneTrack);
-    if (! isCommandLine)
-        doUi();
-    return;
+    if (startsWith(hubTrackPrefix, database) && !startsWith(hubTrackPrefix, geneTrack))
+        {
+        // geneTrack was provided without the hub_ prefix, try adding prefix and looking it up
+        char *hubNumberPrefix = getHubPrefix(database);
+        struct dyString *dy = dyStringCreate("%s%s", hubNumberPrefix, geneTrack);
+        geneTdb = tdbForTrack(database, dy->string, &fullTrackList);
+        if (geneTdb != NULL)
+            geneTrack = dyStringCannibalize(&dy);
+        }
+    if (geneTdb == NULL)
+        {
+        warn("Can't find tdb for gene track %s", geneTrack);
+        if (! isCommandLine)
+            doUi();
+        return;
+        }
     }
 
 int maxVarRows = cartUsualInt(cart, "hgva_variantLimit", 10);

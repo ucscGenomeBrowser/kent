@@ -227,7 +227,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#111425 "Updated Varaico Vari
         parent varsInPubs pack
         urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOver $name found in ${numPubmedIds} PubMed articles
-        pennantIcon New red ../goldenPath/newsarch.html#080125 "Released Aug. 01, 2025"
         html varsInPubs
 
         track varaico
@@ -5578,7 +5577,6 @@ searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
 itemRgb on
 noScoreFilter on
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated July 31, 2025"
 
 searchTable hgnc
 searchMethod exact
