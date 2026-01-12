@@ -133,6 +133,30 @@ var autocompleteCat = (function() {
                 // for this to return the result to autocomplete.
                 // See http://api.jqueryui.com/autocomplete/#option-source
                 // Note: 'this' is the widget instance
+
+                // Handle recent genomes for species search bars
+                if (options.showRecentGenomes && request.term.length < 2) {
+                    let recent = getRecentGenomes();
+                    if (request.term.length === 0) {
+                        // On focus with empty input, show all recent genomes
+                        if (recent.length > 0) {
+                            acCallback(recent);
+                            return;
+                        }
+                    } else {
+                        // On typing 1 char, filter recent genomes
+                        let matching = recent.filter(item =>
+                            item.label.toLowerCase().includes(request.term.toLowerCase()) ||
+                            item.genome.toLowerCase().includes(request.term.toLowerCase())
+                        );
+                        if (matching.length > 0) {
+                            acCallback(matching);
+                            return;
+                        }
+                    }
+                }
+
+                // Handle recent searches for position input
                 if (this.element[0].id === "positionInput" && request.term.length < 2) {
                     let searchStack = window.localStorage.getItem("searchStack");
                     if (request.term.length === 0 && searchStack) {
@@ -168,6 +192,10 @@ var autocompleteCat = (function() {
                 if (this.id === "positionInput") {
                     addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
                 }
+                // Save genome selection for species search bars
+                if (options.showRecentGenomes && ui.item.genome && !ui.item.disabled) {
+                    addRecentGenome(ui.item);
+                }
                 if (typeof opts.onSelect === 'function') {
                     opts.onSelect(ui.item, $el);
                 }
@@ -186,6 +214,15 @@ var autocompleteCat = (function() {
                 enterSelectsIdentical: opts.enterSelectsIdentical,
                 enterTerm: opts.onEnterTerm
             });
+
+            // Trigger autocomplete on focus for species search bars to show recent genomes
+            if (opts.showRecentGenomes) {
+                $el.on('focus', function() {
+                    if ($(this).val() === '' || $(this).val() === opts.watermark) {
+                        $(this).autocompleteCat('search', '');
+                    }
+                });
+            }
 
             if (opts.watermark) {
                 $el.css('color', 'black');

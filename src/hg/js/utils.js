@@ -4402,6 +4402,51 @@ function writeToApacheLog(msg) {
     xmlhttp.send();  // sends request and exits this function
 }
 
+function addRecentGenome(item) {
+    // Save a genome selection to localStorage for showing recent selections in species search.
+    // item is the autocomplete selection object with genome, label, commonName, category, etc.
+    // Keeps the 10 most recently selected genomes, ordered by recency.
+    const MAX_RECENT = 10;
+    let stored = window.localStorage.getItem("recentGenomes");
+    let recentObj = stored ? JSON.parse(stored) : {stack: [], results: {}};
+
+    let stack = recentObj.stack;
+    let genome = item.genome;
+
+    // Remove if already exists (will re-add at front)
+    if (stack.includes(genome)) {
+        stack.splice(stack.indexOf(genome), 1);
+    } else if (stack.length >= MAX_RECENT) {
+        // Remove oldest
+        let toDelete = stack.pop();
+        delete recentObj.results[toDelete];
+    }
+
+    // Add to front
+    stack.unshift(genome);
+    recentObj.results[genome] = item;
+
+    window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
+}
+
+function getRecentGenomes() {
+    // Retrieve recent genome selections from localStorage, formatted for autocomplete display.
+    // Returns an array of items with category set to "Recent selections".
+    let stored = window.localStorage.getItem("recentGenomes");
+    if (!stored) return [];
+
+    let recentObj = JSON.parse(stored);
+    let results = [];
+    for (let genome of recentObj.stack) {
+        if (recentObj.results[genome]) {
+            let item = Object.assign({}, recentObj.results[genome]);
+            item.category = "Recent selections";
+            results.push(item);
+        }
+    }
+    return results;
+}
+
 function addRecentSearch(db, searchTerm, extra={}) {
     // Push a searchTerm onto a stack in localStorage to show users their most recent
     // search terms. If an optional extra argument is supplied (ex: the response from hgSuggest),
@@ -4656,6 +4701,7 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
         onSelect: selectFunction,
         onServerReply: onServerReply !== null ? onServerReply : processFindGenome,
         onError: onError,
+        showRecentGenomes: true,
         enterSelectsIdentical: false
     });
 }
