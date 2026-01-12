@@ -192,8 +192,8 @@ var autocompleteCat = (function() {
                 if (this.id === "positionInput") {
                     addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
                 }
-                // Save genome selection for species search bars
-                if (options.showRecentGenomes && ui.item.genome && !ui.item.disabled) {
+                // Save genome selection for species search bars (includes taxon results like "Human")
+                if (options.showRecentGenomes && (ui.item.genome || ui.item.db || ui.item.taxId) && !ui.item.disabled) {
                     addRecentGenome(ui.item);
                 }
                 if (typeof opts.onSelect === 'function') {

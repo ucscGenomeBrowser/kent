@@ -4411,7 +4411,9 @@ function addRecentGenome(item) {
     let recentObj = stored ? JSON.parse(stored) : {stack: [], results: {}};
 
     let stack = recentObj.stack;
-    let genome = item.genome;
+    // Use db or genome as the key (different result types use different fields)
+    let genome = item.genome || item.db;
+    if (!genome) return; // Can't save without an identifier
 
     // Remove if already exists (will re-add at front)
     if (stack.includes(genome)) {
@@ -4422,16 +4424,27 @@ function addRecentGenome(item) {
         delete recentObj.results[toDelete];
     }
 
+    // Create a clean copy of the item with HTML stripped from labels
+    let cleanItem = Object.assign({}, item);
+    if (cleanItem.label) {
+        cleanItem.label = cleanItem.label.replace(/<[^>]*>/g, '');
+    }
+    if (cleanItem.value) {
+        cleanItem.value = cleanItem.value.replace(/<[^>]*>/g, '');
+    }
+    // Ensure genome field is set for re-selection
+    cleanItem.genome = genome;
+
     // Add to front
     stack.unshift(genome);
-    recentObj.results[genome] = item;
+    recentObj.results[genome] = cleanItem;
 
     window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
 }
 
 function getRecentGenomes() {
     // Retrieve recent genome selections from localStorage, formatted for autocomplete display.
-    // Returns an array of items with category set to "Recent selections".
+    // Preserves original category for re-selection logic, adds displayCategory for UI.
     let stored = window.localStorage.getItem("recentGenomes");
     if (!stored) return [];
 
@@ -4440,7 +4453,9 @@ function getRecentGenomes() {
     for (let genome of recentObj.stack) {
         if (recentObj.results[genome]) {
             let item = Object.assign({}, recentObj.results[genome]);
-            item.category = "Recent selections";
+            // Preserve original category for setDbFromAutocomplete to detect GenArk/hubs
+            // but also provide a display category for UI
+            item.displayCategory = "Recent";
             results.push(item);
         }
     }

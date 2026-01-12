@@ -46,161 +46,32 @@
               <div class="jwIconSprite jwIconSpriteYeast"></div>
               <div class="jwIconSpriteLabel">Yeast</div>
             </div>
-            <br>Search through thousands of genome browsers
+            <br>Search through thousands of genome assemblies
             <div>
               <input id="speciesSearch" value="" size=42>
             </div>
             <a href="/assemblySearch.html" id="assemblySearchLink" style="text-decoration: none;">
                 <div style="padding: 0px; display: flex; align-items: center; margin-top: 12px;">
-                    <p style="margin: 0; padding-right: 0px; color: blue; text-decoration: underline;" 
+                    <p style="margin: 0; padding-right: 0px; color: blue; text-decoration: underline;"
                        title="Not finding your assembly on the Gateway page? Visit the Genome assembly search and request page to request it. Ensure you have a GCA_ or GCF_ identifier from NCBI.">Unable to find a genome? Send us a request.</p>
-                    <img src="/images/magnify.png" 
-                         style="height: 16px; width: 16px; margin-top: 0px; margin-left: 5px;" 
+                    <img src="/images/magnify.png"
+                         style="height: 16px; width: 16px; margin-top: 0px; margin-left: 5px;"
                          title="Not finding your assembly on the Gateway page? Visit the Genome assembly search and request page to request it. Ensure you have a GCA_ or GCF_ identifier from NCBI.">
                 </div>
             </a>
           </div>
 
-          <!-- This subsection is hidden unless hgGateway.js has a tree to draw. -->
-          <div id="representedSpeciesTitle" class="jwSubsectionTitle" style="display: none;">
-            Commonly used assemblies
+          <!-- Recent Genomes Panel (replaces species tree) -->
+          <div id="recentGenomesTitle" class="jwSubsectionTitle" style="display: none;">
+            Recent Genomes
           </div>
-          <div id="speciesGraphic" class="jwSubsectionContents" style="display: none;">
-            <div id="sliderWidgetContainer" class="jwSliderWidget">
-              <div id="sliderSvgContainer" class="jwSliderIcon">
-                <svg id="sliderSvg"
-                     xmlns:svg="http://www.w3.org/2000/svg"
-                     xmlns="http://www.w3.org/2000/svg"
-                     version="1.1"
-                     height="53"
-                     width="30">
-                  <rect id="sliderRectangle"
-                        ry="3"
-                        y="1.5"
-                        x="1.5"
-                        height="50"
-                        width="24"
-                        style="fill: none; stroke: #222222; stroke-width: 3;"></rect>
-                  <path id="sliderTriangle"
-                        d="m 2.5,24 0,6 4,-3 z"
-                        style="fill: #222222; stroke: #222222; stroke-width: 3"></path>
-                </svg>
-              </div> <!-- sliderSvgContainer -->
-              <div class="jwRainbowSlider" id="rainbowSlider">
-                <!-- JS will populate this -->
+          <div id="recentGenomesSection" class="jwSubsectionContents" style="display: none;">
+            <div id="recentGenomesPanel">
+              <div id="recentGenomesList">
+                <!-- Recent genomes will be populated by JavaScript -->
               </div>
             </div>
-            <div class="jwSpeciesPicker" id="speciesPicker">
-              <div id="speciesTreeContainer" class="jwColumn" style="overflow: visible;">
-                <svg id="speciesTree"
-                     xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <defs>
-                    <!-- The y coordinates of these will be overwritten by JS. -->
-                    <!-- I tried creating them in JS, but then the image style
-                         url('#clipWhatever') didn't work. -->
-                    <clipPath id="clipHuman">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipMouse">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipFly">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipWorm">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipYeast">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipMonkey">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipHedgehog">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipPig">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipCow">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipOrca">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipHorse">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipDog">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipWalrus">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipBat">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipElephant">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipManatee">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipArmadillo">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipKangaroo">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipBird">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipLizard">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipFrog">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipFish">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                    <clipPath id="clipEbola">
-                      <rect x="2" y="0" width="65" height="65"></rect>
-                    </clipPath>
-                  </defs>
-                  <style>
-                  text {
-                      stroke:none;
-                      fill: black;
-                      font-size: 12px;
-                      text-anchor: end;
-                      letter-spacing: 0.025em;
-                      cursor: pointer;
-                  }
-                  text:hover, text.selected {
-                      fill: #31469A; /* rainbow dark blue: */
-                      font-weight: bold;
-                  }
-                  text.trackHubsLink {
-                      text-anchor: start;
-                  }
-                  line {
-                      stroke: #4b759d;
-                      stroke-width: 1;
-                  }
-                  line:hover {
-                      stroke-width: 2;
-                  }
-                  </style>
-
-                  <!-- Tree inserted here by JS -->
-
-                </svg>
-              </div> <!-- speciesTreeContainer -->
-            </div> <!-- speciesPicker -->
-
-          </div> <!-- subsection contents -->
+          </div>
 
         </div>
       </div>
