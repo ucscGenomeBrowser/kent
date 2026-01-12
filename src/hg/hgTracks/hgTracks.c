@@ -9905,10 +9905,11 @@ if (!hideControls)
 	    /* Display track controls */
             if (group->errMessage)
                 {
-		myControlGridStartCell(cg, isOpen, group->name,
-                                       shouldBreakAll(group->errMessage));
-                hPrintf("%s", group->errMessage);
-		controlGridEndCell(cg);
+                hPrintf("<td colspan=8><b>Track hub error</b> ");
+                printInfoIcon("Use our track hub debugging help under <i>My Data > Track Hubs > Hub Development</i>. Or click the disconnect button above to improve performance now temporarily. Contact us if you cannot resolve the issue.");
+                hPrintf(": ");
+                hPrintf("<i>%s</i>", group->errMessage);
+                hPrintf("</td>\n");
                 }
 
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
