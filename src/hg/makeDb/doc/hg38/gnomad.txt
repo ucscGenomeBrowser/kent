@@ -642,6 +642,22 @@ Sorting and writing extra index 1: 89 millis
     #Edited the gnomad.alpha.ra file
     cp gnomadSv.html gnomadCNV.html
     #Updated the gnomadCNV.html
+
+# UPDATE to the gnomAD v4.1 CNV track #36837:
+# We reached out to gnomAD, and they said that the gnomad.v4.1.cnv.non_neuro_controls.bed file we
+# used to build the gnomAD v4.1 CNV track contains CNVs computed on a subset of samples. The file
+# that contains the site count across all of the 464,297 exomes is gnomad.v4.1.cnv.all.bed. See
+# #36837 for more details. I updated the gnomAD v4.1 CNV track with the gnomad.v4.1.cnv.all.bed
+# data. The site count now shows 114 for the GD_16p11.2-BP4-BP5__DEL variant, which matches the
+# gnomAD website.
+
+    # Took similar steps to what is noted above and ran the following commands to update the track:
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/exome_cnv/gnomad.v4.1.cnv.all.bed
+
+    for f in gnomad.v4.1.cnv.all.bed; do out=${f/.bed/}; cat $f | tail -n +101 | awk 'BEGIN {FS=OFS="\t"} {gsub("variant_is_80_", "", $4); print $1, $2, $3, $4, 0, ".", $2, $3, $9, $13, $14, $19, $22, $32, $42, $52, $62, $72, $82, $92, $102}' | awk 'BEGIN {FS=OFS="\t"} {if ($11 == "DEL") $9="255,0,0"; else if ($11 == "DUP") $9="0,0,255"; print}' > $out.bed9Plus; done
+
+    # Updated the as file: /hive/data/outside/gnomAD.4/cnv/gnomadCNVall.as
+    for f in gnomad.v4.1.cnv.all.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+12 -as=gnomadCNVall.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
 ##############################################################################
 # Update gnomAD Structural Variants v4 - Gerardo
 # Redmine #35295

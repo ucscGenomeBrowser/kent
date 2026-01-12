@@ -64,3 +64,27 @@ cd /hive/data/genomes/mm10/bed/clsLongReadRna
 # link to gbdb
   mkdir -p /gbdb/mm10/clsLongReadRna/{post-capture,pre-capture}
   for bb in $(find . -name '*.bb' -o  -name '*.bam*') ; do ln -sf $(realpath $bb) /gbdb/mm10/clsLongReadRna/$bb ; done
+
+# 2026-01-09 markd
+  Based on paper review feedback, adding color coding and filters to indicate if 
+  transcript model was added to GENCODE and if so, indicate the assigned transcript
+  type.
+
+  # obtain mappings
+    https://github.com/guigolab/cls3-final-files-description?tab=readme-ov-file#v47-CLS3-Mappings-detailed
+
+    cd lyric-data
+    wget -nv https://public-docs.crg.es/rguigo/Data/gkaur/CLS3_finalFiles/v47-CLS3mapping_status.txthttps://public-docs.crg.es/rguigo/Data/gkaur/CLS3_finalFiles/vM36-CLS3mapping_status.txt
+    pigz vM36-CLS3mapping_status.txt
+    cd ..
+
+   # generate BEDS
+   $clsTrackTool make-beds lyric-data/Mv2_metadata.tsv.gz lyric-data/Mv2_masterTable_refined.bed.gz lyric-data/Mv2_transcript-meta.tsv.gz lyric-data/vM36-CLS3mapping_status.txt.gz . &
+    Note: 539 or 282296 models are mapped to multiple GENCODE transcripts
+
+   for bed in cls-models*.bed.gz cls-models.bed.gz *capture/*.bed.gz ; do
+     (bedToBigBed -tab -type=bed12+3 -as=$clsModelBedAs -sizesIsChromAliasBb $bed /hive/data/genomes/mm10/bed/chromAlias/p6/mm10.chromAlias.bb $(dirname $bed)/$(basename $bed .bed.gz).bb &)
+   done
+
+  # make trackDb
+  $clsTrackTool make-trackdb --parent=long_read_transcripts lyric-data/Mv2_metadata.tsv.gz /gbdb/mm10/clsLongReadRna ~/kent/src/hg/makeDb/trackDb/mouse/mm10/clsLongReadRna.ra
