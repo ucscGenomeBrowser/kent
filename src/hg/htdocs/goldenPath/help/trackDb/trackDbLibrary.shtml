@@ -5513,6 +5513,27 @@ is applied.
     </p>
 </div>
 
+<div class="hicArcLimit"><span class="types hic"></span>
+<div class="format"><code>hicArcLimit &lt;integer&gt;</code></div>
+    <p>The "arc" display mode for Hi-C tracks can become difficult to read if too many
+arcs are being drawn, particularly if many of them have scores close to the saturation
+score.  This setting can be used to restrict the display to only the N highest scoring
+arcs (it has no effect in other display modes).  The companion setting, hicArcLimitEnabled,
+controls whether this filter is applied to the track by default or not.  The default
+value for this setting is 10000.
+    </p>
+</div>
+
+<div class="hicArcLimitEnabled"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMax &lt;true|false&gt;</code></div>
+    <p>The "arc" display mode for Hi-C tracks can become difficult to read if too many
+arcs are being drawn, so there is an option to limit the display to the N highest scoring
+interactions.  The value of N is controlled by the companion setting, hicArcLimit, while
+this setting controls whether the filter is automatically turned on when the track is
+loaded.  The default value is false.
+    </p>
+</div>
+
 <DIV class="hic_example"><span class="types hic"></span>
 <div class="format"><B>Example of a hic track</B></div>
     <pre>
