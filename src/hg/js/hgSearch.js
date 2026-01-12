@@ -635,14 +635,19 @@ var hgSearch = (function() {
         // Called when user selects a genome from autocomplete
         // item.genome is the db name from hubApi/findGenome
         // Just update the label and store the selection - don't reload the page
+        if (item.disabled || !item.genome) return;
         db = item.genome;
         $("#currentGenome").text(item.commonName + ' - ' + item.genome);
         $("#genomeSearchInput").val('');
     }
 
+    function onSearchError(jqXHR, textStatus, errorThrown, term) {
+        return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+    }
+
     function initGenomeAutocomplete() {
         // Initialize the genome search autocomplete using the standard function from utils.js
-        initSpeciesAutoCompleteDropdown('genomeSearchInput', onGenomeSelect);
+        initSpeciesAutoCompleteDropdown('genomeSearchInput', onGenomeSelect, null, null, null, onSearchError);
 
         // Add click handler for the Change Genome button to trigger autocomplete search
         $("#genomeSearchButton").click(function(e) {

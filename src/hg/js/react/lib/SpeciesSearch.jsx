@@ -29,8 +29,13 @@ var SpeciesSearch = React.createClass({
     noOpUpdate: function() {},
 
     onSpeciesSelect: function(selectEle, item) {
+        if (item.disabled || !item.genome) return;
         selectEle.innerHTML = item.label;
         this.props.update(this.props.path, item.genome);
+    },
+
+    onSearchError: function(jqXHR, textStatus, errorThrown, term) {
+        return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
     },
 
     componentDidMount: function() {
@@ -39,7 +44,7 @@ var SpeciesSearch = React.createClass({
         inputNode = this.refs.input.getDOMNode();
         var sel = document.getElementById("genomeLabel");
         var boundSel = this.onSpeciesSelect.bind(null, sel);
-        initSpeciesAutoCompleteDropdown(inputNode.id, boundSel);
+        initSpeciesAutoCompleteDropdown(inputNode.id, boundSel, null, null, null, this.onSearchError);
     },
 
     render: function() {
