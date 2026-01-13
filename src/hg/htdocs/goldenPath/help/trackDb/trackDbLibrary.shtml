@@ -2242,6 +2242,17 @@ There are no extra options that can appear on the type hic line.
     <pre>   searchTrix url or relative path </pre>
 </DIV>
 
+<DIV class="style"><span class="types bigBed"></span>
+<div class="format"><code>style &lt;heatmap&gt;</code></div>
+    <P>BigBed tracks can be created with a variety of extra fields.  When created
+    according to the <a href="../heatmap.html">heatmap schema</a>, the extra
+    fields include data to support a positional heatmap display.  This setting
+    causes the browser to use those data for a heatmap display mode instead of the
+    standard bigBed display.</P>
+    <P><B>Example:</B></P>
+    <pre>   style heatmap</pre>
+</DIV>
+
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>
 <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
     <P>In bed tracks that
@@ -2957,18 +2968,18 @@ that identifies the reference sequence.
     is displayed in the Browser image, it may be necessary to summarize
     the actual signal.  This user-configurable setting controls how the Browser 
     collapses the signal from (for example) 100 or 100 thousand bases down to
-    a single pixel.  By default
-    the single pixel represents the <code>mean</code> of the data, though the
-    <code>maximum</code> or <code>minimum</code> can alternatively be displayed.  A more informative
-    option is often <code>mean+whiskers</code>.  This setting displays the
-    mean, max and one standard deviation above mean, differentiated by shading. 
+    a single pixel. By default, the data is shown using <code>mean+whiskers</code>
+    display, though the <code>maximum</code>, <code>mean</code>,
+    or <code>minimum</code> can alternatively be displayed.
+    The <code>mean+whiskers</code> setting displays the mean, max, and one
+    standard deviation above the mean, differentiated by shading.
     The mean is displayed as the darkest shade, one stdDev above mean as 
     slightly lighter, and the max as the lightest shade.
     This subtle shading can quickly indicate if the
     condensed data is hiding important information that can 
     be adequately evaluated only by zooming in.</P>
     <P><B>Example:</B></P>
-    <pre>   windowingFunction mean+whiskers</pre>
+    <pre>   windowingFunction mean</pre>
     <P>When zoomed out, this track will show the mean
     signal but include shading representing higher scores.  The user
     may change this setting.</P>
@@ -5510,6 +5521,27 @@ farther than the value of the maximum distance setting, that portion of the heat
 isn't drawn.  This setting, hicDistanceMax, controls the default value for that
 maximum (without this setting, the default is 0).  A value of 0 means that no filter
 is applied.
+    </p>
+</div>
+
+<div class="hicArcLimit"><span class="types hic"></span>
+<div class="format"><code>hicArcLimit &lt;integer&gt;</code></div>
+    <p>The "arc" display mode for Hi-C tracks can become difficult to read if too many
+arcs are being drawn, particularly if many of them have scores close to the saturation
+score.  This setting can be used to restrict the display to only the N highest scoring
+arcs (it has no effect in other display modes).  The companion setting, hicArcLimitEnabled,
+controls whether this filter is applied to the track by default or not.  The default
+value for this setting is 5000.
+    </p>
+</div>
+
+<div class="hicArcLimitEnabled"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMax &lt;true|false&gt;</code></div>
+    <p>The "arc" display mode for Hi-C tracks can become difficult to read if too many
+arcs are being drawn, so there is an option to limit the display to the N highest scoring
+interactions.  The value of N is controlled by the companion setting, hicArcLimit, while
+this setting controls whether the filter is automatically turned on when the track is
+loaded.  The default value is false.
     </p>
 </div>
 

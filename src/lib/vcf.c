@@ -543,7 +543,7 @@ struct lineFile *lf = lineFileOnString(name, TRUE, cloneString(headerString));
 return vcfFileHeaderFromLineFile(lf, maxErr);
 }
 
-#define VCF_MAX_INFO (4*1024)
+#define VCF_MAX_INFO (4*4096)
 
 static void parseRefAndAlt(struct vcfFile *vcff, struct vcfRecord *record, char *ref, char *alt)
 /* Make an array of alleles, ref first, from the REF and comma-sep'd ALT columns.

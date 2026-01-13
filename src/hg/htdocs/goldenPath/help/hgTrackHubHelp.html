@@ -1074,10 +1074,16 @@ Guide</a>.</p>
 See the searchIndex and searchTrix fields in the <a href="trackDb/trackDbHub.html">Hub Track 
 Database Definition document</a> for 
 information on how to set up your bigBed to enable searching. The searchIndex setting requires
-the input BED data to be case-senstive sorted (<code>sort -k1,1 -k2,2n</code>). You can use
-either the example UNIX <code>sort</code> command or the <code>bedSort</code> utility available
-<a href="http://hgdownload.gi.ucsc.edu/admin/exe/" target="_blank">here</a>. See an example
-<a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub</a>.</p>
+the input BED data to be case-sensitive sorted (<code>sort -k1,1 -k2,2n</code>), which can be done
+using the <code>-sort</code> option in the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/"
+target="_blank">bedToBigBed utility</a>.</p>
+<p>
+When a bigBed file is used in a track hub, additional indices can be created to support searching
+on specific fields. For example, running <code>bedToBigBed</code> with <code>-extraIndex=name</code>
+builds an index on the name field. You can then enable searching on that field by adding:</p>
+<pre><code>searchIndex name</code></pre>
+<p>to the stanza for that bigBed track in the hub's trackDb.txt file. See the
+<a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub example</a>.</p>
 
 <!-- ========== Adding Filters to Track Hub ============================== -->
 <a name="Filters"></a>
