@@ -1,8 +1,4 @@
 # ENCODE 3 tracks
-
-track encodeCcreCombined override
-url https://screen.wenglab.org/search/?q=$$&assembly=GRCh38
-
     # This is ENCODE 3 version of TFBS Clusters track, with normalization
     # This will be released track
     track encRegTfbsClustered
