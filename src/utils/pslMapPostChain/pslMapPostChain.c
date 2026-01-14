@@ -18,9 +18,7 @@ errAbort("pslMapPostChain - Post genomic pslMap (TransMap) chaining.\n"
          "that have been mapped via genomic chains adds back in\n"
          "blocks that didn't get include in genomic chains due\n"
          "to complex rearrangements or other issues.\n"
-         "This can also handle other PSLs, including protein-RNA alignments\n"
-         "\n"
-         "This program has not seen much use and may not do what you want\n");
+         "This also handles other PSLs, including protein-RNA alignments\n");
 }
 
 static struct optionSpec optionSpecs[] =

@@ -16,17 +16,18 @@
 #include "htmlColor.h"
 
 boolean hicUiArcLimitEnabled(struct cart *cart, struct trackDb *tdb)
-/* Returns true if the checkbox for limiting the number of displayed arcs is checked */
+/* Returns true if the checkbox for limiting the number of displayed arcs is checked.
+ * Defaults to true. */
 {
-return cartOrTdbBoolean(cart, tdb, HIC_ARC_LIMIT_CHECKBOX, FALSE);
+return cartOrTdbBoolean(cart, tdb, HIC_ARC_LIMIT_CHECKBOX, TRUE);
 }
 
 int hicUiGetArcLimit(struct cart *cart, struct trackDb *tdb)
 /* Returns the currently configured limit on the number of arcs drawn in arc mode.
- * Defaults to 5000.
+ * Defaults to 10000.
  */
 {
-int arcLimit = cartOrTdbInt(cart, tdb, HIC_ARC_LIMIT, 5000);
+int arcLimit = cartOrTdbInt(cart, tdb, HIC_ARC_LIMIT, 10000);
 return arcLimit;
 }
 
