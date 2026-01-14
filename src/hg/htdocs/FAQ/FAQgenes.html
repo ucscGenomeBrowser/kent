@@ -36,6 +36,7 @@
 <li><a href="#gtfDownload">Does UCSC provide GTF/GFF files for gene models?</a></li>
 <li><a href="#coding">What is the best way to get only coding genes (or only non-coding genes)
                       out of GENCODE (or other gene) tables?</a></li>
+<li><a href="#exonFrame">How do I interpret the exon frame information in the BED per-exon output for gene tracks?</a></li>
 </ul>
 <hr>
 <p>
@@ -866,6 +867,62 @@ entries are non-coding genes.</p>
 You can also <a href="https://groups.google.com/u/1/a/soe.ucsc.edu/g/genome/search?q=only%20non-coding%20genes"
 target="_blank">search our mailing-list archives</a> to read further details about only
 obtaining non-coding genes from the UCSC Genome Browser.</p>
+
+<a name="exonFrame"></a>
+<h2>How do I interpret the exon frame information in the BED per-exon output for gene tracks?</h2>
+<p>
+The per-exon option for BED output on the Table Browser outputs likes like so
+when using a gene track:
+<p>
+<pre><code>chr1 1046829 1047018 NM_001077977_utr3_2_0_chr1_1046830_f 0 +
+chr1 1099124 1099325 NM_001077124_utr3_0_0_chr1_1099125_r 0 -
+</code></pre>
+<p>
+The name column contains several pieces of information separated by underscores:
+<code>NM_001077124_utr3_0_0_chr1_1099125_r</code>. Here's a breakdown of that information:
+<ol>
+  <li><code>NM_001077124</code> - Transcript accession
+  <li><code>utr3</code> - will be cds or utr3/5
+  <li><code>0</code> - exon inFrame - This indicates the offset at the beginning
+      of a feature (like an exon) to reach the first base of the next complete
+      codon.
+  <li><code>0</code> - exon outFrame - This indicates the offset remaining at the end of a feature.
+  <li><code>chr1_1099125</code> - chromosome and start position of the exon
+  <li><code>r</code> - strand, &quot;r&quot; for reverse or &quot;-&quot; and &quot;f&quot;
+       for forward or &quot;+&quot;
+</ol>
+Here we're going to focus on the inFrame and outFrame specifically. The values
+typically range from 0 to 2. These numbers are a representation of where in the
+frame the exon starts and ends.
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>The feature starts/ends exactly at the beginning of a codon. No offset is required.</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>There is 1 "extra" nucleotide before/after the complete codons start.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>There are 2 "extra" nucleotides before/after the complete codons start.</td>
+    </tr>
+  </tbody>
+</table>
+<p>
+In the example lines above, the exons have &quot;0&quot; for both inFrame and outFrame because
+they are UTR exons.</p>
+
+<p>
+Finally, it should be noted that when the amino acid output is split per exons (where a split codon is impossible to
+denote), the amino acid for split codon is placed in the exon with most of the bases.</a>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 
