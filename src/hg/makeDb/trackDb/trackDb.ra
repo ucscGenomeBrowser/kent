@@ -16,8 +16,7 @@ include trackDb.chainNet.asmHub.ra
 
 include patchTracks.ra
 
-include trackDb.encode3.ra beta,public
-include trackDb.cCREs.alpha.ra alpha
+include trackDb.encode3.ra
 
 include trackDb.transMap.ra
 

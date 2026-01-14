@@ -124,9 +124,12 @@ natively on the Browser. Assembly Data Hubs were developed to address the increa
 researchers to annotate sequence for which UCSC does not provide an annotation database. They allow 
 researchers to include the underlying reference sequence, as well as data tracks that annotate that 
 sequence. Sequence is stored in the UCSC twoBit format, and the annotation tracks are stored in the 
-same manner as Track Data Hubs. For more information on how to setup your own Assembly Data Hub, 
-please refer to the <a href="assemblyHubHelp.html">Assembly Hub User Guide</a> and see the
-<a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to
+same manner as Track Data Hubs. Assembly hubs also support <a href="assemblyHubHelp.html#chromAlias"
+target="_blank">chromAlias and chromAuthority</a>, which let the Browser map chromosome names
+across different naming schemes and display a preferred convention. A default naming scheme can be
+set using the <code>chromAuthority</code> setting. For more information on how to set up your own
+Assembly Data Hub, please refer to the <a href="assemblyHubHelp.html">Assembly Hub User Guide</a>
+and see the <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to
 Assembly Hubs</a>.</p>
 
 <!-- ========== Viewing Hub Tracks in the Browser ==================== -->
@@ -1071,10 +1074,16 @@ Guide</a>.</p>
 See the searchIndex and searchTrix fields in the <a href="trackDb/trackDbHub.html">Hub Track 
 Database Definition document</a> for 
 information on how to set up your bigBed to enable searching. The searchIndex setting requires
-the input BED data to be case-senstive sorted (<code>sort -k1,1 -k2,2n</code>). You can use
-either the example UNIX <code>sort</code> command or the <code>bedSort</code> utility available
-<a href="http://hgdownload.gi.ucsc.edu/admin/exe/" target="_blank">here</a>. See an example
-<a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub</a>.</p>
+the input BED data to be case-sensitive sorted (<code>sort -k1,1 -k2,2n</code>), which can be done
+using the <code>-sort</code> option in the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/"
+target="_blank">bedToBigBed utility</a>.</p>
+<p>
+When a bigBed file is used in a track hub, additional indices can be created to support searching
+on specific fields. For example, running <code>bedToBigBed</code> with <code>-extraIndex=name</code>
+builds an index on the name field. You can then enable searching on that field by adding:</p>
+<pre><code>searchIndex name</code></pre>
+<p>to the stanza for that bigBed track in the hub's trackDb.txt file. See the
+<a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub example</a>.</p>
 
 <!-- ========== Adding Filters to Track Hub ============================== -->
 <a name="Filters"></a>

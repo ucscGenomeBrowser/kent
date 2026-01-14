@@ -8,7 +8,7 @@ superTrack on
 
         track allofus
         shortLabel AllOfUs v7 245k WGS
-        longLabel Variant Frequencies: AllOfUs - v7 245k WGS
+        longLabel Variant Frequencies: AllOfUs - v7 245k WGS, only with allele count >= 20
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
@@ -37,6 +37,16 @@ superTrack on
         dataVersion Freeze 10
         visibility pack
         priority 2
+
+        track sfariSparkExomes
+        shortLabel SFARI Spark 140k WES
+        longLabel Variant Frequencies: SFARI SPARK - 140k WES
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz
+        dataVersion iWES v3 2024_08
+        visibility pack
+        priority 2.5
 
         track mcps
         shortLabel Mexico City Prospective Study 10k WGS+141k WES
@@ -189,6 +199,7 @@ superTrack on
         priority 4.7
         bigDataUrl /gbdb/$D/varFreqs/swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
         dataVersion 20251201
+        tableBrowser off
 
         track gasp
         shortLabel GenomeAsia Pilot Subs 1.7k WGS
