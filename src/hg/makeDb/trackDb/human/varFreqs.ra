@@ -43,8 +43,18 @@ superTrack on
         longLabel Variant Frequencies: SFARI SPARK - 140k WES
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
         dataVersion iWES v3 2024_08
+        visibility pack
+        priority 2.5
+
+        track sfariSparkWgs
+        shortLabel SFARI Spark 12k WGS
+        longLabel Variant Frequencies: SFARI SPARK - 12,519 WGS
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
+        dataVersion iWGS v1.1
         visibility pack
         priority 2.5
 

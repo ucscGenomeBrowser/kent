@@ -7,8 +7,7 @@ elsewhere: 1000 Genomes is a separate track, and the projects HGDP, SGDP,
 HGDP+1000 Genomes and Mexico Biobank can be found in the "Phased Variants" track.
 </p>
 <p>If you want us to add other projects, please contact us. We asked and were
-unable to obtain variant frequencies from the following projects: UK Biobank (request pending), All of us (granted),
-SFARI SPARK (in process).
+unable to obtain variant frequencies from the following projects: UK Biobank (request pending), All of Us (granted, ongoing).
 </p>
 
 <p>
@@ -46,6 +45,19 @@ The following projects were added:
         10 contains 868,581,653 variants from 150,899 whole genomes. VCFs were
         downloaded from <a href="https://bravo.sph.umich.edu/terms.html"
         target="_blank">BRAVO</a>.
+    </li>
+
+    <li>
+        <b><a href=""https://sparkforautism.org/ target="_blank">SFARI SPARK</a></b>:
+        The Simons Foundation Autism Research Initiative (SFARI) recruited
+        a large cohort of families with autistic children who provided DNA
+        samples and phenotypes.  54,558 families, parents and their children
+        were sequenced, a total of 142,357 individuals with whole-exome (WES)
+        and 12,519 with whole-genome sequencing (WGS).  The data contains
+        32,559 trios and 8,895 quads (one sibling without autism), and 824
+        twins. The same frequencies shown here
+        are also available publicly on the <a href="https://genomes.sfari.org/" target=_blank>SFARI Genome Browser</a>. 
+       See (SPARK et al, Neuron 2018) for details or the methods below on this page.
     </li>
 
     <li>
@@ -103,12 +115,13 @@ The following projects were added:
         target="_blank">Brazil Arquivo Brasileiro Online de Muta&ccedil;&otilde; (ABraOM)</a></b>:
         Genomic variants obtained with whole-genome sequencing from SABE, a
         census-based sample of elderly individuals from S&atilde;o Paulo, Brazil's
-        largest city. Brazilian population is constituted by ~500 years of
+        largest city. The Brazilian population is constituted by ~500 years of
         admixture between Africans, Europeans, and Native Americans.
         Additionally, the cohort presents ~3% of individuals with non-admixed
-        Japanese ancestry (early 20th century migration). Coverage 38.6.  Data
+        Japanese ancestry (early 20th century migration). Coverage 38.6x.  Data
         can be downloaded from the <a href="https://abraom.ib.usp.br/download/"
-        target="_blank">AbraOM Website</a>. For details see (Naslavsky et al, Nat Comm 2022).
+        target="_blank">AbraOM Website</a>. TEs, HLAs and new sequence are also available.
+        For details see (Naslavsky et al, Nat Comm 2022).
     </li>
 
     <li>
@@ -126,11 +139,11 @@ The following projects were added:
         target="_blank">Korean Variant Archive (KOVA)</a></b>:
         1,896 whole genome sequencing and 3,409 whole exome sequencing data from healthy individuals
         of Korean ethnicity.
-        Most of the samples were originated from normal tissue of cancer
+        Most of the samples originated from normal tissue of cancer
         patients (40.16 %), healthy parents of rare disease patients (28.4 %),
         or healthy volunteers (31.44 %). Japanese ancestry is broken down
-        in the INFO field. Coverage 100x for WES, 30x for WGS.
-        For details see (Lee et al, Exp Mol Med 2022).</li>
+        in the INFO field. Coverage 100x for WES, 30x for WGS. SVs called with Manta
+        are also available. For details see (Lee et al, Exp Mol Med 2022).</li>
     <li>
         <b><a href="https://www.npm.sg/"
         target="_blank">NPM Singapore</a></b>:
@@ -166,9 +179,8 @@ instead, one per ancestry.
 <h2>Data Access</h2>
 <p>Most of the data in these tracks are not available for download from UCSC.
 Data can be browsed on our website.
-But the data can be downloaded
-for free from the original projects. Accessing the 
-data usually requires a click-through license on the respectice websites, links are either
+But the data can be downloaded for free from the original projects. Accessing the 
+data usually requires a click-through license or access request on the respectice websites, links are either
 provided above in the project description or with more details here:
 </p>
 
@@ -193,6 +205,13 @@ the <a target="_blank" href="https://bravo.sph.umich.edu/">TOPMED BRAVO website<
 login.
 </p>
 <p>
+<b>SFARI SPARK:</b> Allele frequencies can be displayed on the
+        <a href="https://genomes.sfari.org/" target=_blank>SFARI Genome Browser</a>.
+        Full CRAMs and VCFs with genotypes are available from <a target="_blank" href="https://base.sfari.org/">SFARI Base</a>. 
+They require a data access request, which is usually reviewed quickly. More information is available in the 
+<a href="https://cohorts-cdn.simonsfoundation.org/spark/researcher_packets/SPARK_SFARI_Researcher_Welcome_Packet.pdf" target=_blank>SPARK Welcome Packet</a>.
+</p>
+<p>
 <b>GenomeAsia Pilot:</b> VCFs are available from UCSC and also from
 the <a target="_blank"
 href="https://browser.genomeasia100k.org/#tid=download">GenomeAsia 100K website</a>.
@@ -206,7 +225,7 @@ No license nor login.
 
 <p><b>Finngen:</b> TSV data can be requested via the form at https://finngen.gitbook.io/documentation/data-download which triggers an email with the download link.</p>
 
-<p><b>SweGen:</b> We are allowed to redistribute the VCF, but under the condition that the file terms_of_use.txt is distributed with the file. You can find it <a target=_blank href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/swegen">on our download server</a>, alongside the VCF file. </p>
+<p><b>SweGen:</b> We are not allowed to redistribute the VCF, you can request it at <a target=_blank href="https://swefreq.nbis.se/dataset/SweGen">SweGen</a>, alongside the VCF file. </p>
 
 <p><b>NPM:</b> 
         VCF access can be requested on the 
@@ -232,9 +251,83 @@ variants/individuals, and relatedness filtering.
 merged with bcftools and lifted to hg38 with CrossMap. 
 </p>
 <p>
-<b>KOVA:</b> V7 of the TSV.gz was obtained from the KOVA staff and converted to VCF. It is not
+<b>KOVA:</b>Raw reads were aligned to the GRCh38+decoy reference using BWA-MEM v0.7.17 with default parameters, followed by duplicate marking and coordinate sorting with MarkDuplicatesSpark, and base quality score recalibration using BQSRPipelineSpark in GATK v4.1.3.0; mapping quality control metrics were generated with Qualimap v2.2.1. Single-nucleotide variants and small insertions/deletions were called per sample using GATK HaplotypeCaller in GVCF mode (-ERC GVCF), and joint genotyping was performed by creating a GenomicsDB with GenomicsDBImport and following GATK Best Practices, including variant quality score recalibration (VQSR) retaining 99.7% of true SNVs and 99.0% of true indels based on training sets (workflow detailed in Supplementary Fig. 1). Downstream analyses followed a modified version of the gnomAD quality-control framework and were primarily conducted using Hail, an open-source Python library for large-scale genome analysis; after merging WES and WGS data in Hail, multiallelic variants and variants with genotype quality <20, read depth <10, allelic balance <0.2, or overlapping low-complexity regions were excluded (Supplementary Fig. 2).
+<br>
+At UCSC, V7 of the TSV.gz was obtained from the KOVA staff by email and converted to VCF. It is not
 available for download from our site but can be requested from the KOVA website.
 </p>
+
+<p>
+<b>ABraOM:</b> For Academic use only. Licensing for commercial use might be available under request and agreement.
+By using this resource you agree to cite the flagship paper (Naslavsky et al. Nat Comm 2022).
+Whole-genome sequencing was performed at Human Longevity Inc. using TruSeq Nano DNA HT libraries sequenced on Illumina HiSeqX instruments with 150 bp paired-end reads targeting 30× coverage, and reads were mapped to GRCh38 using ISIS software. Sample sex was validated by comparing CPMs of X chromosome and male-specific Y (MSY) reads relative to autosomes, yielding the expected female (~55,000 X CPM, <200 MSY CPM) and male (~27,500 X CPM, >550 MSY CPM) patterns. Germline SNVs and indels were called following GATK Best Practices (GATK v3.7) via per-sample GVCFs (HaplotypeCaller), joint genotyping (CombineGVCFs, GenotypeGVCFs), and Variant Quality Score Recalibration (VQSR-AS); multiallelic variants were split with an in-house script, left-aligned with BCFtools, and annotated using Annovar and custom scripts against dbSNP, 1000 Genomes, and gnomAD, with putative loss-of-function variants identified using LOFTEE v0.3-beta irrespective of confidence labels. Variant and genotype quality was further assessed using the in-house CEGH-Filter two-step algorithm based on depth and allele balance, and analyses retained only GATK VQSR-AS PASS variants and higher-confidence CEGH-Filter calls. Relatedness was assessed using KING and PC-Relate (GENESIS), retaining a single proband per related pair and excluding one contaminated sample (>3% by verifyBAMID), resulting in a final dataset of 1,171 unrelated individuals. Final samples achieved mean coverages ranging from 31.3× to 64.8×, with an average of 38.65× and a median of 36.6×.
+</p>
+
+<p><b>SFARI SPARK:</b> The project as approved by the Simons Foundation as 14584.1. WES and WGS Data were downloaded from 
+        <a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
+        pVCFs were downloaded, anonymized with a script using bcftools and the fill-tags plugin and normalized,
+        without a minimum allele frequency cutoff.<br>
+        The methods are documented as follows by SFARI:<br>
+        <b>WES</b>:
+        This release consists of sequence and variant call data for 12,519
+        unique individuals, of which 12,517 (99.98%) have available genome-wide
+        SNP genotype data. Sequencing and genotyping of all samples in this
+        release was performed at New York Genome Center (NYGC). DNA from saliva
+        samples were extracted and prepared with PCR-free methods and sequenced
+        with paired-end sequencing of 150 bases on the Illumina NovaSeq 6000
+        system.  Alignment of reads to the human reference genome version
+        GRCh38, duplicate read marking, and Base Quality Score Recalibration
+        (BQSR) were performed by New York Genome Center (NYCG). Whole-genome
+        sequencing data were processed using a standardized, functionally
+        equivalent CCDG pipeline with alignment to the GRCh38DH (1000 Genomes)
+        reference using BWA-MEM v0.7.15 (deterministic settings, no -M, use of
+        .alt contigs), Picard-equivalent duplicate marking (Picard ≥2.4.1 or
+        equivalent), no indel realignment, and base quality score recalibration
+        with GATK (dbSNP138, Mills and 1000G gold-standard indels, known
+        indels).  Final outputs were stored as lossless CRAM files with
+        complete SAM-compliant read-group annotations and mandatory 4-bin
+        base-quality compression (Q2–6, 10, 20, 30), and all implementations
+        were validated for functional equivalence across centers before use.
+        Variant Calling was performed using DeepVariant. See <a href="https://github.com/CCDG/Pipeline-Standardization/blob/master/PipelineStandard.md" target=_blank>CCDG pipeline details</a>.<br>
+
+        <b>WGS</b>: This release contains
+            sequence data for 142,357 individuals and genotyping data for
+            141,368 individuals. DNA was sequenced from saliva for all
+            samples and all participants consented to having their genetic
+            data shared by Regeneron. Exomes for all samples were sequenced with
+            short-read, paired-end sequencing of 150 bases on Illumina
+            NovaSeq 6000 machines using S2/S4 flow cells. Sequencing and
+            genotyping was performed across nine batches (WES1 through
+            WES9) at the Regeneron Genetics Center (RGC) and integrated
+            together for this data release. All sequencing batches were
+            processed using the same DNA extraction methods and sequencing
+            machines, however two different exome capture panels were used,
+            as described below. Genotyping was performed using a SNP
+            genotyping array for WES1 through WES4 and using
+            “genotyping-by-sequencing” (GxS) for WES5 through WES9.  The
+            first four sequencing batches were sequenced at Regeneron using
+            custom NEB/Kapa reagents with the IDT (Integrated DNA
+            Technologies) xGen capture platform, including custom exome
+            capture regions. Samples starting with batch WES5 were
+            sequenced using the Twist Bioscience Human
+            Comprehensive Exome panel, combined with spike-ins for
+            sequencing genotyping sites (see Genotyping Methods), the full
+            mitochondrial genome, and coverage boosted at selected sites
+            for assaying clonal hematopoiesis of indeterminate potential
+            (CHIP).  SFARI performed NV/indel calling via DeepVariant and
+            GATK to generate gVCFs, pairwise relatedness inferred using
+            PLINK v1.9 IBD estimates from common SNPs (AF ≥ 0.01, dbSNP
+            v151) with ≥15% relatedness flagged, and comprehensive
+            individual- and family-level quality control executed using the
+            internal GenomeCheckMate pipeline to exclude samples based on
+            contamination (≥5%), insufficient coverage (<20× in <80% of
+            targets), sex discordance, pedigree/IBD inconsistencies,
+            unregistered relationships, unexpected duplicates, or excess
+            relatedness, after which QC-passing individuals (selecting the
+            most recent passing sample per person) were retained for
+            variant calling and joint genotyping.
+</p>
+
 
 <p><b>Finngen:</b> R12 annotated variants were downloaded from the Google Cloud
 bucket link received though an email after filling out the form linked from
@@ -263,7 +356,7 @@ information on the potential alteration to their cognate protein's 3D structure
 and drug binding ability.
 </p>
 
-<p><b>Saudi Genome Program:</b> Data was downloaded 
+<p><b>Saudi Genome Program:</b> Data were downloaded 
 from <a href="https://figshare.com/articles/dataset/A_list_of_Saudi_Arabian_variants_and_their_allele_frequencies/28059686/1?file=51297884">Figshare</a>,
 and converted to VCF.
 </p>
@@ -498,8 +591,6 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39868174" target="_blank">398
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11761371/" target="_blank">PMC11761371</a>
 </p>
 
-
-
 <p>
 Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kähäri AK, Lundin P, Che H
 <em>et al</em>.
@@ -509,5 +600,14 @@ population</a>.
 <em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+</p>
+
+<p>
+SPARK Consortium. Electronic address: pfeliciano@simonsfoundation.org, SPARK Consortium.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0896-6273(18)30018-7" target="_blank">
+SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research</a>.
+<em>Neuron</em>. 2018 Feb 7;97(3):488-493.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29420931" target="_blank">29420931</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7444276/" target="_blank">PMC7444276</a>
 </p>
 
