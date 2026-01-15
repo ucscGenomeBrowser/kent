@@ -124,7 +124,7 @@ char *getBotCheckString(char *ip, double fraction)
 {
 char *cookieUserId = getCookieUser();
 char *botCheckString = needMem(256);
-boolean useNew = cfgOptionBooleanDefault("newBotDelay", FALSE);
+boolean useNew = cfgOptionBooleanDefault("newBotDelay", TRUE);
 if (useNew)
     {
         // the new strategy is: bottleneck on apiKey, then cookie-userId, then
