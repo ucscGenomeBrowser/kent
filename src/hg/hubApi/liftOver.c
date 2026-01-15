@@ -267,7 +267,7 @@ struct chain *chainList = chainLoadAndTrimIntersecting(fileName, nChrom, nStart,
 if (chainList == NULL)
     apiErrAbort(err400, err400Msg, "Sorry, this position %s is not found in the %s assembly", fromPos, toGenome);
 chainListOut(fromGenome, toGenome, origSize, fromPos, chainList);
-}
+}	/*	void apiLiftOver(char *words[MAX_PATH_INFO])	*/
 
 // char *argLiftRequest[] = {argFromGenome, argToGenome, argEmail, argComment, NULL};
 void apiLiftRequest(char *words[MAX_PATH_INFO])
@@ -313,4 +313,4 @@ dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
 apiFinishOutput(0,NULL,jw);
-}
+}	/*	void apiLiftRequest(char *words[MAX_PATH_INFO])	*/
