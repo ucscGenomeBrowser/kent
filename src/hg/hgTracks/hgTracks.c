@@ -10052,7 +10052,7 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
 if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE) && cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
     jsInline("var doHgcInPopUp = true;\n");
 
-if (cfgOptionBooleanDefault("greyBarIcons", FALSE))
+if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
     jsInline("var greyBarIcons = true;\n");
 
 // TODO GALT nothing to do here.
