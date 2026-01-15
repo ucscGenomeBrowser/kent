@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Genome Assembly Alignment Request</title>
+<script type='text/javascript' SRC='../js/jquery.js'></script>
+<script type='text/javascript' SRC='../js/jquery.plugins.js'></script>
+<script type='text/javascript' SRC='../js/utils.js'></script>
+<script type='text/javascript' SRC='../js/jquery-ui.js'></script>
+<link rel='stylesheet' href='../style/jquery-ui.css' type='text/css'>
+<script type='text/javascript' SRC='../js/autocompleteCat.js'></script>
+<link rel="stylesheet" href="../style/HGStyle.css" type="text/css">
+<style>
+body {
+    margin: 0;
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 24px;
+    border-bottom: 2px solid #1565c0;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-group .description {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.assembly-input-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.assembly-input-wrapper input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.assembly-input-wrapper input[type="button"] {
+    padding: 10px 16px;
+    background-color: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.assembly-input-wrapper input[type="button"]:hover {
+    background-color: #0d47a1;
+}
+
+.selected-assembly {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 100px;
+}
+
+input[type="email"]:focus,
+textarea:focus,
+.assembly-input-wrapper input[type="text"]:focus {
+    outline: none;
+    border-color: #1565c0;
+    box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
+}
+
+#submitBtn {
+    background-color: #2e7d32;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#submitBtn:hover {
+    background-color: #1b5e20;
+}
+
+#successMessage {
+    display: none;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+#successMessage h2 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+#successMessage a {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+#errorMessage {
+    display: none;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: #ffebee;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    color: #c62828;
+}
+
+#errorMessage h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+#errorMessage p {
+    margin: 0;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<script>
+var assembly1Value = "";
+var assembly2Value = "";
+
+function assembly1Select(selectEle, item) {
+    selectEle.innerHTML = item.label;
+    assembly1Value = item.value || item.label;
+}
+
+function assembly2Select(selectEle, item) {
+    selectEle.innerHTML = item.label;
+    assembly2Value = item.value || item.label;
+}
+
+function submitForm() {
+    var email = document.getElementById("emailInput").value;
+    var comments = document.getElementById("commentsInput").value;
+
+    // Hide any previous error message
+    document.getElementById("errorMessage").style.display = "none";
+
+    if (!assembly1Value) {
+        alert("Please select Assembly 1");
+        return;
+    }
+    if (!assembly2Value) {
+        alert("Please select Assembly 2");
+        return;
+    }
+    if (!email) {
+        alert("Please enter an email address");
+        return;
+    }
+
+    // Build the API URL with query parameters
+    comment = comment.slice(0, 1000); // make sure that URL is not too long
+    var apiUrl = "https://api.genome.ucsc.edu/liftRequest?" +
+        "fromGenome=" + encodeURIComponent(assembly1Value) + ";" +
+        "toGenome=" + encodeURIComponent(assembly2Value) + ";" +
+        "email=" + encodeURIComponent(email) + ";" +
+        "comment=" + encodeURIComponent(comments);
+
+    $.ajax({
+        url: apiUrl,
+        type: "GET",
+        success: function(response) {
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("successMessage").style.display = "block";
+        },
+        error: function(xhr, status, error) {
+            var errorMsg = "Error submitting request";
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMsg = xhr.responseJSON.error;
+            } else if (xhr.responseText) {
+                try {
+                    var parsed = JSON.parse(xhr.responseText);
+                    if (parsed.error) {
+                        errorMsg = parsed.error;
+                    }
+                } catch (e) {
+                    errorMsg = error || status || "Unknown error occurred";
+                }
+            } else if (error) {
+                errorMsg = error;
+            }
+            document.getElementById("errorText").textContent = errorMsg;
+            document.getElementById("errorMessage").style.display = "block";
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Assembly 1 autocomplete
+    let selectEle1 = document.getElementById("genomeLabel1");
+    let boundSelect1 = assembly1Select.bind(null, selectEle1);
+    initSpeciesAutoCompleteDropdown('genomeSearch1', boundSelect1, "https://hgwdev-demo-chmalee.gi.ucsc.edu/cgi-bin/hubApi/findGenome?browser=mustExist&q=");
+
+    let btn1 = document.getElementById("genomeSearchButton1");
+    btn1.addEventListener("click", () => {
+        let val = document.getElementById("genomeSearch1").value;
+        $("[id='genomeSearch1']").autocompleteCat("search", val);
+    });
+
+    // Assembly 2 autocomplete
+    let selectEle2 = document.getElementById("genomeLabel2");
+    let boundSelect2 = assembly2Select.bind(null, selectEle2);
+    initSpeciesAutoCompleteDropdown('genomeSearch2', boundSelect2, "https://hgwdev-demo-chmalee.gi.ucsc.edu/cgi-bin/hubApi/findGenome?browser=mustExist&q=");
+
+    let btn2 = document.getElementById("genomeSearchButton2");
+    btn2.addEventListener("click", () => {
+        let val = document.getElementById("genomeSearch2").value;
+        $("[id='genomeSearch2']").autocompleteCat("search", val);
+    });
+});
+</script>
+
+<div id="formContainer" class="form-container">
+    <h1>Genome Assembly Alignment Request</h1>
+
+    <p>
+    On this page you can request a whole-genome alignment between two genomes that are on the UCSC Genome Browser.
+    Such alignments can take thousands of compute hours to produce.
+    The alignment here will be produced on the Galaxy platform, using a
+    workflow that uses TACC high performance compute GPU resources. The full
+    process may take up to a few days. You will receive an email when it is
+    complete.
+    </p>
+    </p>
+    Once complete,  will find two new tracks on both assemblies, one with the full alignment results ("all chains"), and one
+    track with the best alignment (single coverage) for every basepair, which can be used for "liftOver".
+    Since these tracks are single-coverage on the current genome, the alignments are reciprocal so one is produced
+    per assembly.
+    For more information on how to download these chain files and use liftOver, see --here--.
+    Once these tracks are available, you can also use our Quicklift feature to lift annotations on-the-fly, as you browser,
+    see --here-- for more information.
+
+
+    </p>
+    <p>If one of the two genomes is not on the UCSC browser yet, please request it first on our <a href="https://genome.ucsc.edu/assemblySearch.html">Assembly Request Page</a>, then come back here later.
+    </p>
+
+    <div class="form-group">
+        <label for="genomeSearch1">Assembly 1</label>
+        <div class="assembly-input-wrapper">
+            <input id="genomeSearch1" type="text" placeholder="Search any species, genome or assembly name" autocomplete="off">
+            <input id="genomeSearchButton1" value="Search" type="button">
+        </div>
+        <div id="genomeLabel1" class="selected-assembly">No assembly selected</div>
+    </div>
+
+    <div class="form-group">
+        <label for="genomeSearch2">Assembly 2</label>
+        <div class="assembly-input-wrapper">
+            <input id="genomeSearch2" type="text" placeholder="Search any species, genome or assembly name" autocomplete="off">
+            <input id="genomeSearchButton2" value="Search" type="button">
+        </div>
+        <div id="genomeLabel2" class="selected-assembly">No assembly selected</div>
+    </div>
+
+    <div class="form-group">
+        <label for="emailInput">Email Address</label>
+        <div class="description">You will receive a notification at this address when the alignment is complete.</div>
+        <input id="emailInput" type="email" placeholder="your.email@example.com">
+    </div>
+
+    <div class="form-group">
+        <label for="commentsInput">Comments (optional)</label>
+        <div class="description">Any additional information or notes about this alignment request.</div>
+        <textarea id="commentsInput" placeholder="Enter any additional information here..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <input id="submitBtn" type="button" value="Submit Request" onclick="submitForm()">
+    </div>
+</div>
+
+<div id="successMessage">
+    <h2>Your request has been submitted, you will receive an email when the alignment is complete.</h2>
+    <a href="../cgi-bin/hgGateway">Back to the genome browser gateway page</a>
+</div>
+
+<div id="errorMessage">
+    <h3>Error</h3>
+    <p id="errorText"></p>
+</div>
+
+</body>
+</html>
