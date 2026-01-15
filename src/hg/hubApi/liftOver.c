@@ -9,6 +9,7 @@
 #include "assemblyList.h"
 #include "liftOver.h"
 #include "net.h"
+#include "mailViaPipe.h"
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static long chainTotalBlockSize(struct chain *chain)
@@ -266,4 +267,51 @@ struct chain *chainList = chainLoadAndTrimIntersecting(fileName, nChrom, nStart,
 if (chainList == NULL)
     apiErrAbort(err400, err400Msg, "Sorry, this position %s is not found in the %s assembly", fromPos, toGenome);
 chainListOut(fromGenome, toGenome, origSize, fromPos, chainList);
+}
+
+// char *argLiftRequest[] = {argFromGenome, argToGenome, argEmail, argComment, NULL};
+void apiLiftRequest(char *words[MAX_PATH_INFO])
+/* 'liftOver' function words[1] is the subCommand */
+{
+char *extraArgs = verifyLegalArgs(argLiftRequest);
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftRequest'%s'", extraArgs);
+
+char *fromGenome = cgiOptionalString(argFromGenome);
+char *toGenome = cgiOptionalString(argToGenome);
+char *email = cgiOptionalString(argEmail);
+char *comment = cgiOptionalString(argComment);
+
+/* probably want a silent exit here */
+if (isEmpty(fromGenome) || isEmpty(toGenome) || isEmpty(email) || isEmpty(comment))
+    apiErrAbort(err400, err400Msg, "must have all arguments: %s, %s, %s, %s for endpoint '/liftRequest", argFromGenome, argToGenome, argEmail, argComment);
+
+char *cookieName = hUserCookie();
+char *userId = findCookieData(cookieName);
+char *referer = getenv("HTTP_REFERER");
+char dir[PATH_LEN];
+char name[FILENAME_LEN];
+char ext[FILEEXT_LEN];
+/* expecting request to come from something.ucsc.edu/liftRequest.html */
+if (isNotEmpty(referer) && isNotEmpty(userId))
+    {
+    splitPath(referer, dir, name, ext);
+    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(name, "liftRequest") && sameWord(ext, ".html"))) {
+          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+       }
+    } else {
+      if (! debug)
+          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+    }
+struct dyString *msg = newDyString(0);
+dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", fromGenome, toGenome, email, comment);
+/* our mailViaPipa never has any relevant return code indicating
+ *    success or failure.  So, ignore the return integer:
+ */
+// (void) mailViaPipe("TBD:GoogleEmailGroupAddress", "liftOver request", msg->string, "genome-www@ucsc.edu");
+
+/* some kind of response here back to the request page */
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
+apiFinishOutput(0,NULL,jw);
 }

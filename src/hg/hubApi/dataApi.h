@@ -85,6 +85,9 @@
 #define argLevel "level"
 #define argFromGenome "fromGenome"
 #define argToGenome "toGenome"
+/* used by liftRequest */
+#define argEmail "email"
+#define argComment "comment"
 /* used in liftOver 'listExisting' function to filter the result */
 #define argFilter "filter"
 /* used in list/files to show only certain file types */
@@ -106,6 +109,7 @@ extern char *argGetDataSequence[];
 extern char *argSearch[];
 extern char *argFindGenome[];
 extern char *argLiftOver[];
+extern char *argLiftRequest[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -295,7 +299,13 @@ void apiSearch(char *words[MAX_PATH_INFO]);
 void apiFindGenome(char *words[MAX_PATH_INFO]);
 /* 'findGenome' function */
 
+/* ######################################################################### */
+/*  functions in liftover.c */
+
 void apiLiftOver(char *words[MAX_PATH_INFO]);
 /* 'liftOver' function */
+
+void apiLiftRequest(char *words[MAX_PATH_INFO]);
+/* interface to the liftOver request page to send email */
 
 #endif	/*	 DATAAPH_H	*/
