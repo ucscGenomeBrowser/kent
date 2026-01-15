@@ -59,6 +59,7 @@ char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStar
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 char *argFindGenome[] = {argQ, argMaxItemsOutput, argJsonOutputArrays, argStatsOnly, argBrowser, argYear, argCategory, argStatus, argLevel, argLiftable, NULL};
 char *argLiftOver[] = {argFromGenome, argToGenome, argChrom, argStart, argEnd, argFilter, argMaxItemsOutput, NULL};
+char *argLiftRequest[] = {argFromGenome, argToGenome, argEmail, argComment, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -998,6 +999,7 @@ hashAdd(apiFunctionHash, "getData", &apiGetData);
 hashAdd(apiFunctionHash, "search", &apiSearch);
 hashAdd(apiFunctionHash, "findGenome", &apiFindGenome);
 hashAdd(apiFunctionHash, "liftOver", &apiLiftOver);
+hashAdd(apiFunctionHash, "liftRequest", &apiLiftRequest);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])

@@ -4,7 +4,7 @@ shortLabel ENCODE cCREs
 longLabel ENCODE Registry of cCREs (candidate Cis-Regulatory Elements) 
 group regulation
 priority 1
-pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "XXX"
+pennantIcon New red ../goldenPath/newsarch.html#011526 "Released Jan. 15, 2026"
 html cCREsSuper.html
 
 track encodeCcreCombined override
@@ -13,7 +13,7 @@ longLabel ENCODE3 Registry of candidate Cis-Regulatory Elements (cCREs)
 priority 3
 visibility hide
 shortLabel ENCODE3 cCREs
-pennantIcon snowflake.png ../goldenPath/newsarch.html#XXXXXX "This data represents ENCODE3 cCREs. For the latest data, see the ENCODE4 cCREs track."
+pennantIcon snowflake.png ../goldenPath/newsarch.html#011526 "This data represents ENCODE3 cCREs. For the latest data, see the ENCODE4 cCREs track."
 
 track cCREregistry
 shortLabel ENCODE4 cCREs
