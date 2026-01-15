@@ -296,9 +296,8 @@ char ext[FILEEXT_LEN];
 if (isNotEmpty(referer) && isNotEmpty(userId))
     {
     splitPath(referer, dir, name, ext);
-    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(name, "liftRequest") && sameWord(ext, ".html"))) {
+    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(name, "liftRequest") && sameWord(ext, ".html")))
           apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
-       }
     } else {
       if (! debug)
           apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
