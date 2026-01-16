@@ -765,7 +765,7 @@ hPrintf("Enable highlight with drag-and-select "
 hPrintf("</TD></TR>\n");
 
 // check if we can do hgc pages in a pop up before putting up the user control
-if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
+if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
     {
     // put a checkbox, on by default, to control whether item clicks stay on hgTracks or
     // go to hgTracks

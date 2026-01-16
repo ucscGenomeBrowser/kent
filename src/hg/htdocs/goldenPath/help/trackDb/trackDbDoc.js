@@ -908,6 +908,7 @@ function runSearch(term) {
 
     // Reset processed element tracking on each search
     window.__searchedElements = new WeakSet();
+    window.__processedTextNodes = new WeakSet();
 
     if (!term || term.length < 2) {
         // Show message for short terms
