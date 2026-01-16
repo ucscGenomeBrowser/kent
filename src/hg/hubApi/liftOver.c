@@ -302,30 +302,23 @@ if (isNotEmpty(referer) && isNotEmpty(userId))
       if (! debug)
           apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
     }
-/* some obfuscation here to avoid the email address appearing in plain text
-     let the AI systems figure out how to put it back together.
- */
-struct dyString *toAddr = newDyString(0);
-dyStringPrintf(toAddr, "chain-file-");
-dyStringPrintf(toAddr, "request-group");
-dyStringPrintf(toAddr, "@");
-dyStringPrintf(toAddr, "ucsc.ed");
-dyStringPrintf(toAddr, "u");
-struct dyString *fromAddr = newDyString(0);
-dyStringPrintf(fromAddr, "genome-www");
-dyStringPrintf(fromAddr, "@");
-dyStringPrintf(fromAddr, "ucsc.e");
-dyStringPrintf(fromAddr, "du");
-struct dyString *msg = newDyString(0);
-/* may need to encode these inputs to make them safe */
-dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", fromGenome, toGenome, email, comment);
-/* our mailViaPipa never has any relevant return code indicating
- *    success or failure.  So, ignore the return integer:
- */
-(void) mailViaPipe(dyStringCannibalize(&toAddr), "liftOver request", msg->string, dyStringCannibalize(&fromAddr));
 
-/* some kind of response here back to the request page */
-struct jsonWrite *jw = apiStartOutput();
-jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
-apiFinishOutput(0,NULL,jw);
+char *toAddr = cfgOption("chainFileRequestEmail");
+char *fromAddr = cfgOption("apiFromEmail");
+
+if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
+    {
+    struct dyString *msg = newDyString(0);
+    /* may need to encode these inputs to make them safe */
+    dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", fromGenome, toGenome, email, comment);
+    /* our mailViaPipa never has any relevant return code indicating
+    *    success or failure.  So, ignore the return integer:
+    */
+    (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
+
+    /* some kind of response here back to the request page */
+    struct jsonWrite *jw = apiStartOutput();
+    jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
+    apiFinishOutput(0,NULL,jw);
+    }
 }	/*	void apiLiftRequest(char *words[MAX_PATH_INFO])	*/
