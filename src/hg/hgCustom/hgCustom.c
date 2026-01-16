@@ -161,16 +161,12 @@ void addCustomForm(struct customTrack *ct, char *err, boolean warnOnly)
 char *dataUrl = NULL;
 char buf[1024];
 
-boolean gotClade = FALSE;
 boolean isUpdateForm = FALSE;
 if (ct)
     {
     isUpdateForm = TRUE;
     dataUrl = ctDataUrl(ct);
     }
-else
-    /* add form needs clade for assembly menu */
-    gotClade = hGotClade();
 
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
@@ -200,7 +196,7 @@ cartSaveSession(cart);
 if (!isUpdateForm)
     {
     /* Print genome search bar and selected genome label */
-    puts("<TABLE BORDER=0>\n");
+    puts("<TABLE id=\"genome-selection-table\" BORDER=0>\n");
     printf("<tr>\n");
     printf("<td class='searchCell' align=center>\n");
     // hgCustom requires this <input> be created to go along with form submission, we
