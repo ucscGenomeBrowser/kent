@@ -707,7 +707,7 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 fieldCount = track->bedSize;
-boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
+boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
 if (bigBedOnePath  && (fieldCount == 0))
     track->bedSize = fieldCount = bbi->definedFieldCount;
 
@@ -1042,7 +1042,7 @@ void commonBigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[])
 /* Set up common bigBed methods used by several track types that depend on the bigBed format. */
 {
-boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
+boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
 
 if (bigBedOnePath)
     {
