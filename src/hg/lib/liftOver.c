@@ -1718,6 +1718,7 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
             gp->chrom = cloneString(bed->chrom);
             int start = gp->txStart = bed->chromStart;
             gp->txEnd = bed->chromEnd;
+            gp->origStrand = gp->strand[0];
             gp->strand[0] = bed->strand[0];
             gp->cdsStart = bed->thickStart;
             gp->cdsEnd = bed->thickEnd;
