@@ -1,0 +1,161 @@
+body {
+    margin: 0;
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 24px;
+    border-bottom: 2px solid #1565c0;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-group .description {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.assembly-input-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.assembly-input-wrapper input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.assembly-input-wrapper input[type="button"] {
+    padding: 10px 16px;
+    background-color: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.assembly-input-wrapper input[type="button"]:hover {
+    background-color: #0d47a1;
+}
+
+.selected-assembly {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 100px;
+}
+
+input[type="email"]:focus,
+textarea:focus,
+.assembly-input-wrapper input[type="text"]:focus {
+    outline: none;
+    border-color: #1565c0;
+    box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
+}
+
+#submitBtn {
+    background-color: #2e7d32;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#submitBtn:hover {
+    background-color: #1b5e20;
+}
+
+#successMessage {
+    display: none;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+#successMessage h2 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+#successMessage a {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+#errorMessage {
+    display: none;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: #ffebee;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    color: #c62828;
+}
+
+#errorMessage h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+#errorMessage p {
+    margin: 0;
+    font-size: 14px;
+}
+
+#liftExists {
+    border: 2px solid #0066cc;
+    padding: 15px;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    margin: 15px 0;
+}
