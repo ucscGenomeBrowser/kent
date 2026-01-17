@@ -313,10 +313,10 @@ ss->alnCnt += ss2->alnCnt;
 
 /* header for alignment statistics */
 static char *alnStatsHdr = "qName\t" "qSize\t" "tName\t" "tStart\t" "tEnd\t"
-"ident\t" "qCover\t" "repMatch\t" "tCover\n";
+    "ident\t" "qCover\t" "repMatch\t" "tCover\t" "alnSize\t" "alnSpan\n";
 
 /* format for alignStats output */
-static char *alnStatsFmt = "%s\t%d\t%s\t%d\t%d\t%0.4f\t%0.4f\t%0.4f\t%0.4f\n";
+static char *alnStatsFmt = "%s\t%d\t%s\t%d\t%d\t%0.4f\t%0.4f\t%0.4f\t%0.4f\t%d\t%d\n";
 
 static void alignStatsOutputUnaligned(FILE *fh, struct hash* querySizesTbl)
 /* output stats on unaligned */
@@ -327,7 +327,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     struct querySizeCnt *qs = hel->val;
     if (qs->alnCnt == 0)
-        fprintf(fh, alnStatsFmt, hel->name, qs->qSize, "", 0, 0, 0.0, 0.0, 0.0, 0.0);
+        fprintf(fh, alnStatsFmt, hel->name, qs->qSize, "", 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0);
     }
 }
 
@@ -346,7 +346,8 @@ fputs(alnStatsHdr, fh);
 while ((psl = pslNext(pslLf)) != NULL)
     {
     fprintf(fh, alnStatsFmt, psl->qName, psl->qSize, psl->tName, psl->tStart, psl->tEnd,
-            calcIdent(psl), calcQCover(psl), calcRepMatch(psl), calcTCover(psl));
+            calcIdent(psl), calcQCover(psl), calcRepMatch(psl), calcTCover(psl),
+            calcAligned(psl), psl->tEnd - psl->tStart);
     if (querySizesTbl != NULL)
         querySizeCntGet(querySizesTbl, psl->qName, psl->qSize)->alnCnt++;
     pslFree(&psl);
