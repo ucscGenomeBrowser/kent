@@ -151,3 +151,11 @@ textarea:focus,
     margin: 0;
     font-size: 14px;
 }
+
+#liftExists {
+    border: 2px solid #0066cc;
+    padding: 15px;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    margin: 15px 0;
+}
