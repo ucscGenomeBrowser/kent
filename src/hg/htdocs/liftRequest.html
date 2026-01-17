@@ -4,9 +4,9 @@
 
 <!--#include virtual='$ROOT/inc/gbPageStartHardcoded.html' -->
 
-<link rel='stylesheet' type='text/css' href='<!--#echo var='ROOT' -->/style/jquery-ui.css'>
-<link rel='stylesheet' type='text/css' href='<!--#echo var='ROOT' -->/style/HGStyle.css'>
-<link rel='stylesheet' type='text/css' href='<!--#echo var='ROOT' -->/style/liftRequest.css'>
+<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/jquery-ui.css">
+<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/HGStyle.css">
+<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/liftRequest.css">
 
 <div id="formContainer" class="form-container">
     <h1>Genome Assembly Alignment Request</h1>
@@ -72,11 +72,11 @@
     <div class="form-group">
         <input id="submitBtn" type="button" value="Submit Request" onclick="submitForm()">
     </div>
-</div>
+</div>  <!-- end of formContainer -->
 
 <div id="successMessage">
     <h2>Your request has been submitted, you will receive an email when the alignment is complete.</h2>
-    <a href="../cgi-bin/hgGateway">Back to the genome browser gateway page</a>
+    <a href="<!--#echo var='ROOT' -->/cgi-bin/hgGateway">Back to the genome browser gateway page</a>
 </div>
 
 <div id="errorMessage">

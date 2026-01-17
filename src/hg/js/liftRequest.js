@@ -3,6 +3,20 @@ var assembly2Value = "";
 var genome1 = "";
 var genome2 = "";
 
+/* check if a file exists at the specified URL */
+function fileExists(url, callback) {
+    $.ajax({
+        type: 'HEAD',
+        url: url,
+        success: function() {
+            callback(true);  // file exists
+        },
+        error: function() {
+            callback(false); // file doesn't exist or not accessible
+        }
+    });
+}
+
 // Convert GCA_029289425.2 into the path: GCA/028/289/425/GCA_029289425.2
 function gcPath(identifier) {
     var parts = identifier.split('_');
@@ -21,7 +35,6 @@ function liftOverPath(asm1, asm2) {
         liftPath = "https://hgdownload.soe.ucsc.edu/goldenPath/";
         liftPath += asm1;
     }
-//    alert(liftPath);
     liftPath += "/liftOver/" + asm1 + "To";
     liftPath += asm2.charAt(0).toUpperCase() + asm2.slice(1);
     liftPath += ".over.chain.gz";
@@ -29,9 +42,6 @@ function liftOverPath(asm1, asm2) {
 }
 
 function checkAssemblyCompatibility(asm1, asm2) {
-    // Your API call here
-    console.log("Checking compatibility for:", asm1, asm2);
-
     $.ajax({
         url: "/cgi-bin/hubApi/liftOver/listExisting?fromGenome=" + encodeURIComponent(asm1) +
              ";" + "toGenome=" + encodeURIComponent(asm2),
@@ -39,14 +49,15 @@ function checkAssemblyCompatibility(asm1, asm2) {
             console.log(JSON.stringify(response, null, 2));
             if (response.itemsReturned === 1) {
                var liftPath = liftOverPath(asm1, asm2);
-//               console.log("liftPath: ", liftPath);
-               document.getElementById("liftExists").style.display = "block";
-               var liftMessage = 'An alignment already exists between these assemblies.<br>' +
+               fileExists(liftPath, function(exists) {
+                   if (exists) {
+                   document.getElementById("liftExists").style.display = "block";
+                   var liftMessage = 'An alignment already exists between these assemblies.<br>' +
               '<a href="' + liftPath + '" download>Click here to download the chain file</a>';
-               document.getElementById("liftPath").innerHTML = liftMessage;
+                   document.getElementById("liftPath").innerHTML = liftMessage;
+                   }
+               });
             }
-            console.log("itemsReturned: ", response.itemsReturned);
-            // Handle response
         }
     });
 }
@@ -62,7 +73,6 @@ function assembly1Select(selectEle, item) {
     assembly1Value = item.value || item.label;
     genome1 = item.genome;
 //    console.log("asm1:", JSON.stringify(item, null, 2));
-    console.log("asm1 genome:", item.genome);
     document.getElementById("liftExists").style.display = "none";
     checkBothAssembliesSelected();
 }
@@ -72,9 +82,19 @@ function assembly2Select(selectEle, item) {
     assembly2Value = item.value || item.label;
     genome2 = item.genome;
 //    console.log("asm2:", JSON.stringify(item, null, 2));
-    console.log("asm2 genome:", item.genome);
     document.getElementById("liftExists").style.display = "none";
     checkBothAssembliesSelected();
+}
+
+function validateEmail(checkEmail) {
+    // Require at least one dot in domain
+    var validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
+
+    if (!validEmail.test(checkEmail)) {
+        alert("You have entered an invalid email address !");
+        return false;
+    }
+    return true;
 }
 
 function submitForm() {
@@ -96,12 +116,16 @@ function submitForm() {
         alert("Please enter an email address");
         return;
     }
+    if (! validateEmail(email)) {
+        return;
+    }
 
     // Build the API URL with query parameters
     var comment = comments.slice(0, 1000); // make sure that URL is not too long
+    comment += ", from: " + assembly1Value + ", to: " + assembly2Value;
     var apiUrl = "/cgi-bin/hubApi/liftRequest?" +
-        "fromGenome=" + encodeURIComponent(assembly1Value) + ";" +
-        "toGenome=" + encodeURIComponent(assembly2Value) + ";" +
+        "fromGenome=" + encodeURIComponent(genome1) + ";" +
+        "toGenome=" + encodeURIComponent(genome2) + ";" +
         "email=" + encodeURIComponent(email) + ";" +
         "comment=" + encodeURIComponent(comment);
 
@@ -109,6 +133,8 @@ function submitForm() {
         url: apiUrl,
         type: "GET",
         success: function(response) {
+            console.log(JSON.stringify(response));
+            localStorage.setItem('liftRequestEmail', email);
             document.getElementById("formContainer").style.display = "none";
             document.getElementById("successMessage").style.display = "block";
         },
@@ -156,4 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let val = document.getElementById("genomeSearch2").value;
         $("[id='genomeSearch2']").autocompleteCat("search", val);
     });
+    // restore saved email if it exists
+    var savedEmail = localStorage.getItem('liftRequestEmail');
+    if (savedEmail) {
+        document.getElementById("emailInput").value = savedEmail;
+    }
 });
