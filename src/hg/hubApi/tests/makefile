@@ -236,10 +236,10 @@ list21: setOutput
 #	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="ce2" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 #	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/files?genome=GCA_021951015.1
+# testing /list/files?genome=GCF_018594675.1
 list23: setOutput
-	@printf "### $@ '${SERVERNAME}/list/files?genome=GCA_021951015.1'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="GCA_021951015.1" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ '${SERVERNAME}/list/files?genome=GCF_018594675.1'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="GCF_018594675.1" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/files?genome=ce2;maxItemsOutput=5
