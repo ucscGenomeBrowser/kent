@@ -328,7 +328,7 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
 	    {
             struct dyString *update = newDyString(0);
             sqlDyStringPrintf(update,
-		"INSERT INTO %s VALUES ( '%s','%s','%s','%s')",
+		"INSERT INTO %s (fromDb, toDb, email, comment, requestTime) VALUES ( '%s','%s','%s','%s',now())",
 		ottoTable,  fromGenome, toGenome, email, comment);
             sqlUpdate(conn, dyStringCannibalize(&update));
 	    }
