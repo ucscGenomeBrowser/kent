@@ -32230,9 +32230,48 @@ $ wc -l hgmd.curated.gp
 8971 hgmd.curated.gp in 2020
 10451 hgmd.curated.gp in 2021
 14693 hgmd.curated.gp in 2024
+15209 hgmd.curated.gp in 2025
 
 # now continue the process at ../hg38/hgmd.txt
 # or ideally make a shell script for all this...
+
+# HGMD 2025.4 release files from Elias.Hage@qiagen.com (updated 01/17/25 Gerardo)
+# Made a script using claude.ai that automates HGMD data processing for hg38 and hg19.
+
+# Location: ~/kent/src/hg/makeDb/scripts/hgmd/process_hgmd.py
+
+# What the script does:
+# 1. Creates BED files from HGMD TSV data with variant classifications
+# 2. Converts BED to BigBed format
+# 3. Creates symlinks in /gbdb/{db}/bbi/
+# 4. Registers BigBed files with hgBbiDbLink
+# 5. Extracts transcript IDs from hg38 HGMD file (column 7)
+# 6. Filters ncbiRefSeq gene predictions to HGMD transcripts only
+# 7. Loads filtered gene predictions into ncbiRefSeqHgmd table
+#
+# Key features:
+# - Always uses hg38 file for transcript extraction (hg19 file lacks column 7)
+# - Auto-detects ncbiRefSeq version: p13 for hg19, p14 for hg38
+# - Falls back to previous years if specified year's ncbiRefSeq not found
+
+# wc -l:
+331959 /hive/data/genomes/hg19/bed/hgmd/hgmd.bed
+
+# wc -l:
+15209 /hive/data/genomes/hg19/bed/hgmd/ncbiRefSeq.p13.2024-09-18/hgmd.curated.gp
+
+# Usage:
+python3 ~/kent/src/hg/makeDb/scripts/hgmd/process_hgmd.py --year 2025 --db hg19
+
+# Sample output:
+#    hg19 BigBed completed successfully!
+# Output files: /hive/data/genomes/hg19/bed/hgmd/hgmd.bed, /hive/data/genomes/hg19/bed/hgmd/hgmd.bb
+# Symlink created: /gbdb/hg19/bbi/hgmd.bb
+# hgBbiDbLink run: hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
+# Note: Using ncbiRefSeq.p13.2024-09-18 directory (year 2025 not found)
+#    hg19 transcript processing completed!
+# Output files: /hive/data/genomes/hg19/bed/hgmd/ncbiRefSeq.p13.2024-09-18/hgmdTranscripts.txt, /hive/data/genomes/hg19/bed/hgmd/ncbiRefSeq.p13.2024-09-18/hgmd.curated.gp
+# hgLoadGenePred run: hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
 
 #############################################################################
 # LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)

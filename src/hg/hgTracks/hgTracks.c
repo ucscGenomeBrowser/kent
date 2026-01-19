@@ -10049,10 +10049,10 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     jsInline("var showMouseovers = true;\n");
 
 // if the configure page allows hgc popups tell the javascript about it
-if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE) && cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
+if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE) && cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
     jsInline("var doHgcInPopUp = true;\n");
 
-if (cfgOptionBooleanDefault("greyBarIcons", FALSE))
+if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
     jsInline("var greyBarIcons = true;\n");
 
 // TODO GALT nothing to do here.
@@ -11798,7 +11798,7 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
-    if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
+    if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
         {
         jsIncludeFile("hgc.js", NULL);
         jsIncludeFile("alleles.js", NULL);
