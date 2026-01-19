@@ -390,7 +390,7 @@ else
     bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
-boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
+boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
 if (bigBedOnePath && (bedSize == 0))
     bedSize = bbi->definedFieldCount;
 

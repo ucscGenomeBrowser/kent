@@ -130,6 +130,7 @@ struct genePred
     int *exonFrames;              /* List of frame for each exon, or -1
                                    * if no frame or not known. NULL if not
                                    * available. */
+    char origStrand;              /* if quickLifted, this is the original strand. */
 };
 
 /* Standard value to use for insertMergeSize when creating genePred.

@@ -5002,7 +5002,7 @@ else if (wordCount > 0)
 	}
     else if (sameString(type, "bigBed"))
         {
-        boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", FALSE);
+        boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
 
         if (bigBedOnePath)
             {

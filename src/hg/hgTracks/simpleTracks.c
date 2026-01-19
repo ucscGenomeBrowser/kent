@@ -6316,6 +6316,18 @@ extern struct genePred *genePredExtLoad15(char **row);
         {
         if (gp->chrom == NULL) // if the lift failed, ignore this one
             continue;
+        // we need to reverse the order of the exon frames if the quickLift changed the strand
+        if (quickLiftFile && (gp->strand[0] != gp->origStrand) && (gp->exonCount > 1))
+            {
+            int *reorderFrames;
+            AllocArray(reorderFrames, gp->exonCount);
+
+            int ii;
+            for(ii=0; ii < gp->exonCount; ii++)
+                reorderFrames[ii] = gp->exonFrames[(gp->exonCount - 1) - ii];
+
+            gp->exonFrames = reorderFrames;
+            }
         slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, TRUE));
         }
     slReverse(&lfList);

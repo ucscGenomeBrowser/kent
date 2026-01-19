@@ -9,11 +9,25 @@ import csv
 import requests
 from io import StringIO
 
+# priorities derived from the 'Monthly usage stats' report
+# from the qateam cron job running on the first day of the month
 # special top priorities
 topPriorities = {
     'hg38': 1,
     'mm39': 2,
     'hs1': 3,
+    'hg19': 4,
+    'mm10': 5,
+    'dm6': 6,
+    'danRer11': 7,
+    'mm9': 8,
+    'hetGla2': 9,
+    'rn6': 10,
+    'hg18': 11,
+    'galGal6': 12,
+    'bosTau9': 13,
+    'ce11': 14,
+    'canFam4': 15,
 }
 
 ### key will be dbDb/GCx name, value will be priority number
