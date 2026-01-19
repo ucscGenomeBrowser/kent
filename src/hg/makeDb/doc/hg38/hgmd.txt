@@ -18,3 +18,40 @@ hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb
 # also update: hgmd on hg19, hgBeacon, the hgmd file for GBIB, see hg19.txt
 # for this, jump now to hg38/ncbiRefSeq.txt and hg19.txt
 
+# HGMD 2025.4 release files from Elias.Hage@qiagen.com (updated 01/17/25 Gerardo)
+# Made a script using claude.ai that automates HGMD data processing for hg38 and hg19.
+
+# Location: ~/kent/src/hg/makeDb/scripts/hgmd/process_hgmd.py
+
+# What the script does:
+# 1. Creates BED files from HGMD TSV data with variant classifications
+# 2. Converts BED to BigBed format
+# 3. Creates symlinks in /gbdb/{db}/bbi/
+# 4. Registers BigBed files with hgBbiDbLink
+# 5. Extracts transcript IDs from hg38 HGMD file (column 7)
+# 6. Filters ncbiRefSeq gene predictions to HGMD transcripts only
+# 7. Loads filtered gene predictions into ncbiRefSeqHgmd table
+#
+# Key features:
+# - Always uses hg38 file for transcript extraction (hg19 file lacks column 7)
+# - Auto-detects ncbiRefSeq version: p13 for hg19, p14 for hg38
+# - Falls back to previous years if specified year's ncbiRefSeq not found
+
+# wc -l:
+# 332094 /hive/data/genomes/hg38/bed/hgmd/hgmd.bed
+
+# wc -l:
+# 15691 /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmd.curated.gp
+
+# Usage:
+python3 ~/kent/src/hg/makeDb/scripts/hgmd/process_hgmd.py --year 2025 --db hg38
+
+# Sample output:
+#   hg38 BigBed completed successfully!
+# Output files: /hive/data/genomes/hg38/bed/hgmd/hgmd.bed, /hive/data/genomes/hg38/bed/hgmd/hgmd.bb
+# Symlink created: /gbdb/hg38/bbi/hgmd.bb
+# hgBbiDbLink run: hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb
+#   hg38 transcript processing completed!
+# Output files: /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmdTranscripts.txt, /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmd.curated.gp
+# hgLoadGenePred run: hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
+#############################################################################
