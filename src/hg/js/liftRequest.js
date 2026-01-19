@@ -48,13 +48,31 @@ function checkAssemblyCompatibility(asm1, asm2) {
         success: function(response) {
             console.log(JSON.stringify(response, null, 2));
             if (response.itemsReturned === 1) {
-               var liftPath = liftOverPath(asm1, asm2);
-               fileExists(liftPath, function(exists) {
+               var liftPath1 = liftOverPath(asm1, asm2);
+               var liftPath2 = liftOverPath(asm2, asm1);
+               var browser1 = "/cgi-bin/hgTracks?db=" + asm1;
+               var browser2 = "/cgi-bin/hgTracks?db=" + asm2
+               fileExists(liftPath1, function(exists) {
                    if (exists) {
-                   document.getElementById("liftExists").style.display = "block";
-                   var liftMessage = 'An alignment already exists between these assemblies.<br>' +
-              '<a href="' + liftPath + '" download>Click here to download the chain file</a>';
-                   document.getElementById("liftPath").innerHTML = liftMessage;
+                   document.getElementById("genome1Link").href = browser1;
+                   document.getElementById("genome1Link").textContent = assembly1Value;
+
+                   document.getElementById("genome1LiftOver").href = liftPath1;
+                   document.getElementById("genome1LiftOver").textContent = asm1 + " to " + asm2;
+
+                   // Make visible
+                  document.getElementById("liftExists").style.display = "block";
+                   }
+               });
+               fileExists(liftPath2, function(exists) {
+                   if (exists) {
+                   document.getElementById("genome2Link").href = browser2;
+                   document.getElementById("genome2Link").textContent = assembly2Value;
+
+                   document.getElementById("genome2LiftOver").href = liftPath2;
+                   document.getElementById("genome2LiftOver").textContent = asm2 + " to " + asm1;
+                   // Make visible
+                  document.getElementById("liftExists").style.display = "block";
                    }
                });
             }
