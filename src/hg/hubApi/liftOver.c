@@ -127,7 +127,7 @@ hDisconnectCentral(&conn);
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static char *skipWord(char *fw)
-/* skips over current word to start of next. 
+/* skips over current word to start of next.
  * Error for this not to exist. */
 {
 char *s;
@@ -311,8 +311,8 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     struct dyString *msg = newDyString(0);
     /* may need to encode these inputs to make them safe */
     dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", fromGenome, toGenome, email, comment);
-    /* our mailViaPipa never has any relevant return code indicating
-    *    success or failure.  So, ignore the return integer:
+    /* Even if the mailViaPipe returned a relevant return code, and I'm not
+    *    sure it would, there isn't much we can do about it from here.
     */
     (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
 
@@ -320,5 +320,19 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
     apiFinishOutput(0,NULL,jw);
+    char *ottoTable = cfgOption("ottoTable");	/* probably ottoRequest */
+    if (isNotEmpty(ottoTable))
+        {
+        struct sqlConnection *conn = hConnectCentral();
+        if (sqlTableExists(conn, ottoTable))
+	    {
+            struct dyString *update = newDyString(0);
+            sqlDyStringPrintf(update,
+		"INSERT INTO %s VALUES ( '%s','%s','%s','%s')",
+		ottoTable,  fromGenome, toGenome, email, comment);
+            sqlUpdate(conn, dyStringCannibalize(&update));
+	    }
+        hDisconnectCentral(&conn);
+        }
     }
 }	/*	void apiLiftRequest(char *words[MAX_PATH_INFO])	*/
