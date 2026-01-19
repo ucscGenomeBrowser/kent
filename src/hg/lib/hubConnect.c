@@ -37,7 +37,7 @@ static boolean canHubsSet = FALSE;
 
 if (!canHubsSet)
     {
-    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", FALSE);
+    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", TRUE);
     canHubsSet = TRUE;
     }
 

@@ -233,6 +233,7 @@ hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
 10772 hgmd.curated.gp for the 2021 version
 12602 hgmd.curated.gp for the 2023 version
 15167 hgmd.curated.gp for the 2024 version
+15691 hgmd.curated.gp for the 2025 version (See hg38/hgmd.txt for details)
 #############################################################################
 # ncbiRefSeq.p13 update (DONE - 2019-12-06 - Hiram)
 
