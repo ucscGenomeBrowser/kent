@@ -13,10 +13,15 @@ function prettyFileSize(num) {
 }
 
 function cgiEncode(value) {
-    // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters:
+    // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters, and
+    // space becomes '+':
     let splitVal = value.split('/');
     splitVal.forEach((ele, ix) => {
-        splitVal[ix] = encodeURIComponent(ele);
+        if (ele == " ") {
+            splitVal[ix] = '+';
+        } else {
+            splitVal[ix] = encodeURIComponent(ele);
+        }
     });
     return splitVal.join('/');
 }
