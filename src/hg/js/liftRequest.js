@@ -61,6 +61,9 @@ function checkAssemblyCompatibility(asm1, asm2) {
               document.getElementById("genome1LiftOver").textContent = asm1 + " to " + asm2;
 
               document.getElementById("liftExists").style.display = "block";
+              document.getElementById("emailForm").style.display = "none";
+              document.getElementById("commentsForm").style.display = "none";
+              document.getElementById("submitButton").style.display = "none";
             }
           });
 
@@ -73,6 +76,9 @@ function checkAssemblyCompatibility(asm1, asm2) {
               document.getElementById("genome2LiftOver").textContent = asm2 + " to " + asm1;
 
               document.getElementById("liftExists").style.display = "block";
+              document.getElementById("emailForm").style.display = "none";
+              document.getElementById("commentsForm").style.display = "none";
+              document.getElementById("submitButton").style.display = "none";
             }
           });
         }
@@ -193,6 +199,19 @@ function submitForm() {
       });
 }	// end of function submitForm()
 
+function dismissLiftExists() {
+    document.getElementById("liftExists").style.display = "none";
+    document.getElementById("emailForm").style.display = "block";
+    document.getElementById("commentsForm").style.display = "block";
+    document.getElementById("submitButton").style.display = "block";
+    document.getElementById("genomeSearch1").value = "";
+    document.getElementById("genomeSearch2").value = "";
+    assembly1Value = "";
+    assembly2Value = "";
+    genome1 = "";
+    genome2 = "";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // Assembly 1 autocomplete
     let selectEle1 = document.getElementById("genomeLabel1");
@@ -220,4 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (savedEmail) {
         document.getElementById("emailInput").value = savedEmail;
     }
+
+    document.getElementById("dismissLiftExists").addEventListener("click", dismissLiftExists);
 });
