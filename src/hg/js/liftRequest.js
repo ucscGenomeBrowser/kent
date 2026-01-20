@@ -5,15 +5,12 @@ var genome2 = "";
 
 /* check if a file exists at the specified URL */
 function fileExists(url, callback) {
-    $.ajax({
-        type: 'HEAD',
-        url: url,
-        success: function() {
-            callback(true);  // file exists
-        },
-        error: function() {
-            callback(false); // file doesn't exist or not accessible
-        }
+  fetch(url, { method: 'HEAD' })
+    .then(response => {
+      callback(response.ok);
+    })
+    .catch(() => {
+      callback(false);
     });
 }
 
@@ -42,43 +39,48 @@ function liftOverPath(asm1, asm2) {
 }
 
 function checkAssemblyCompatibility(asm1, asm2) {
-    $.ajax({
-        url: "/cgi-bin/hubApi/liftOver/listExisting?fromGenome=" + encodeURIComponent(asm1) +
-             ";" + "toGenome=" + encodeURIComponent(asm2),
-        success: function(response) {
-            console.log(JSON.stringify(response, null, 2));
-            if (response.itemsReturned === 1) {
-               var liftPath1 = liftOverPath(asm1, asm2);
-               var liftPath2 = liftOverPath(asm2, asm1);
-               var browser1 = "/cgi-bin/hgTracks?db=" + asm1;
-               var browser2 = "/cgi-bin/hgTracks?db=" + asm2
-               fileExists(liftPath1, function(exists) {
-                   if (exists) {
-                   document.getElementById("genome1Link").href = browser1;
-                   document.getElementById("genome1Link").textContent = assembly1Value;
+    const url = "/cgi-bin/hubApi/liftOver/listExisting?fromGenome=" + encodeURIComponent(asm1) +
+                ";" + "toGenome=" + encodeURIComponent(asm2);
 
-                   document.getElementById("genome1LiftOver").href = liftPath1;
-                   document.getElementById("genome1LiftOver").textContent = asm1 + " to " + asm2;
+    fetch(url)
+      .then(response => response.json())
+      .then(response => {
+//      console.log(JSON.stringify(response, null, 2));
+        if (response.itemsReturned === 1) {
+          const liftPath1 = liftOverPath(asm1, asm2);
+          const liftPath2 = liftOverPath(asm2, asm1);
+          const browser1 = "/cgi-bin/hgTracks?db=" + asm1;
+          const browser2 = "/cgi-bin/hgTracks?db=" + asm2;
 
-                   // Make visible
-                  document.getElementById("liftExists").style.display = "block";
-                   }
-               });
-               fileExists(liftPath2, function(exists) {
-                   if (exists) {
-                   document.getElementById("genome2Link").href = browser2;
-                   document.getElementById("genome2Link").textContent = assembly2Value;
+          fileExists(liftPath1, function(exists) {
+            if (exists) {
+              document.getElementById("genome1Link").href = browser1;
+              document.getElementById("genome1Link").textContent = assembly1Value;
 
-                   document.getElementById("genome2LiftOver").href = liftPath2;
-                   document.getElementById("genome2LiftOver").textContent = asm2 + " to " + asm1;
-                   // Make visible
-                  document.getElementById("liftExists").style.display = "block";
-                   }
-               });
+              document.getElementById("genome1LiftOver").href = liftPath1;
+              document.getElementById("genome1LiftOver").textContent = asm1 + " to " + asm2;
+
+              document.getElementById("liftExists").style.display = "block";
             }
+          });
+
+          fileExists(liftPath2, function(exists) {
+            if (exists) {
+              document.getElementById("genome2Link").href = browser2;
+              document.getElementById("genome2Link").textContent = assembly2Value;
+
+              document.getElementById("genome2LiftOver").href = liftPath2;
+              document.getElementById("genome2LiftOver").textContent = asm2 + " to " + asm1;
+
+              document.getElementById("liftExists").style.display = "block";
+            }
+          });
         }
-    });
-}
+      })
+      .catch(error => {
+        console.error("Error fetching liftOver list:", error);
+      });
+}	// end of function checkAssemblyCompatibility(asm1, asm2)
 
 function checkBothAssembliesSelected() {
     if (genome1 && genome2) { // Both assemblies are now selected
@@ -90,7 +92,7 @@ function assembly1Select(selectEle, item) {
     selectEle.innerHTML = item.label;
     assembly1Value = item.value || item.label;
     genome1 = item.genome;
-//    console.log("asm1:", JSON.stringify(item, null, 2));
+//  console.log("asm1:", JSON.stringify(item, null, 2));
     document.getElementById("liftExists").style.display = "none";
     checkBothAssembliesSelected();
 }
@@ -99,7 +101,7 @@ function assembly2Select(selectEle, item) {
     selectEle.innerHTML = item.label;
     assembly2Value = item.value || item.label;
     genome2 = item.genome;
-//    console.log("asm2:", JSON.stringify(item, null, 2));
+//  console.log("asm2:", JSON.stringify(item, null, 2));
     document.getElementById("liftExists").style.display = "none";
     checkBothAssembliesSelected();
 }
@@ -147,36 +149,49 @@ function submitForm() {
         "email=" + encodeURIComponent(email) + ";" +
         "comment=" + encodeURIComponent(comment);
 
-    $.ajax({
-        url: apiUrl,
-        type: "GET",
-        success: function(response) {
-            console.log(JSON.stringify(response));
-            localStorage.setItem('liftRequestEmail', email);
-            document.getElementById("formContainer").style.display = "none";
-            document.getElementById("successMessage").style.display = "block";
-        },
-        error: function(xhr, status, error) {
-            var errorMsg = "Error submitting request";
-            if (xhr.responseJSON && xhr.responseJSON.error) {
-                errorMsg = xhr.responseJSON.error;
-            } else if (xhr.responseText) {
-                try {
-                    var parsed = JSON.parse(xhr.responseText);
-                    if (parsed.error) {
-                        errorMsg = parsed.error;
-                    }
-                } catch (e) {
-                    errorMsg = error || status || "Unknown error occurred";
-                }
-            } else if (error) {
-                errorMsg = error;
+    fetch(apiUrl, { method: 'GET' })
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json().catch(() => null); // parse JSON if any
+//        console.log(JSON.stringify(data));
+          localStorage.setItem('liftRequestEmail', email);
+          document.getElementById("formContainer").style.display = "none";
+          document.getElementById("successMessage").style.display = "block";
+        } else {
+          // Try to extract error message from JSON or text
+          let errorMsg = "Error submitting request";
+          try {
+            const errorData = await response.json();
+            if (errorData && errorData.error) {
+              errorMsg = errorData.error;
+            } else {
+              errorMsg = response.statusText || errorMsg;
             }
-            document.getElementById("errorText").textContent = errorMsg;
-            document.getElementById("errorMessage").style.display = "block";
+          } catch {
+            // If JSON parse fails, try plain text
+            const text = await response.text();
+            try {
+              const parsed = JSON.parse(text);
+              if (parsed.error) {
+                errorMsg = parsed.error;
+              } else {
+                errorMsg = text || errorMsg;
+              }
+            } catch {
+              errorMsg = response.statusText || errorMsg;
+            }
+          }
+          document.getElementById("errorText").textContent = errorMsg;
+          document.getElementById("errorMessage").style.display = "block";
         }
-    });
-}
+      })
+      .catch((error) => {
+        // Network or other fetch errors
+        const errorMsg = error.message || "Unknown error occurred";
+        document.getElementById("errorText").textContent = errorMsg;
+        document.getElementById("errorMessage").style.display = "block";
+      });
+}	// end of function submitForm()
 
 document.addEventListener("DOMContentLoaded", () => {
     // Assembly 1 autocomplete
