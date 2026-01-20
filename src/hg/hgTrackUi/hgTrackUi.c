@@ -2739,7 +2739,7 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 /* List tracks in this collection, with visibility controls and UI links */
 {
 jsIncludeFile("hui.js",NULL);
-printf("<p style='margin-top:3px; margin-bottom:3px'>")
+printf("<p style='margin-top:3px; margin-bottom:3px'>");
 printf("Tracks that are part of this container are listed below. Use the buttons below to set their visibilities.</p>");
 printf("\n<TABLE id='superTrackTable' CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
