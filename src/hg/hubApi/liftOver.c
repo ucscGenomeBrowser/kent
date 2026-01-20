@@ -308,9 +308,14 @@ char *fromAddr = cfgOption("apiFromEmail");
 
 if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     {
+    char nowTime[256];
+    time_t seconds = clock1();
+    struct tm *timeNow = localtime(&seconds);
+    strftime(nowTime, sizeof nowTime, "%Y-%m-%d %H:%M:%S", timeNow);
+
     struct dyString *msg = newDyString(0);
     /* may need to encode these inputs to make them safe */
-    dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", fromGenome, toGenome, email, comment);
+    dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
     /* Even if the mailViaPipe returned a relevant return code, and I'm not
     *    sure it would, there isn't much we can do about it from here.
     */
