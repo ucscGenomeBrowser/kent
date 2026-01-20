@@ -2254,6 +2254,7 @@ void oligoMatchUi(struct trackDb *tdb)
 /* UI for oligo match track */
 {
 char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
+char *strand = cartUsualString(cart, oligoMatchStrandVar, oligoMatchStrandDefault);
 puts("<P><B>Short (2-30 base) sequence:</B>");
 jsInline(
 "function packTrack()\n"
@@ -2262,10 +2263,18 @@ jsInline(
 "if (box.val()=='hide')\n"
 "    box.val('pack');\n"
 "}\n");
-printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">", 
+printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
     oligoMatchVar, oligoMatchVar, 45, oligo);
 puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
+
+puts("<P><B>Search strand:</B> ");
+cgiMakeRadioButton(oligoMatchStrandVar, "both", sameString(strand, "both"));
+puts(" Both ");
+cgiMakeRadioButton(oligoMatchStrandVar, "forward", sameString(strand, "forward"));
+puts(" Forward (+) ");
+cgiMakeRadioButton(oligoMatchStrandVar, "reverse", sameString(strand, "reverse"));
+puts(" Reverse (-) ");
 }
 
 void cutterUi(struct trackDb *tdb)

@@ -91,6 +91,8 @@ char *hTrackUiForTrack(char *trackName);
 /* Definition for oligo match track. */
 #define oligoMatchVar "hgt.oligoMatch"
 #define oligoMatchDefault ""
+#define oligoMatchStrandVar "hgt.oligoMatchStrand"
+#define oligoMatchStrandDefault "both"
 #define OLIGO_MATCH_TRACK_NAME "oligoMatch"
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
