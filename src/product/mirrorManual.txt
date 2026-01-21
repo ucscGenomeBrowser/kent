@@ -2,6 +2,13 @@
 
 [comment]: <> (QA: When you are done editing this file, cd into mirrorDocs, run 'make' there and follow the instructions)
 
+We do not recommend following the procedure below anymore, as we provide a docker image and 
+the "GBIC" installation bash script. They can setup a genome browser with 
+a single linux command line and within a few minutes. This page exists as a
+reference, explains how the installer is structured and helps changing the
+configuration files once your genome browser is running. If you run into
+trouble with any of these steps, do not hesitate to contact us so we can improve this page.
+
 # Overview of the Genome Browser directories and databases
 
 The genome browser requires only Apache and MariaDB and uses these directories:
@@ -48,7 +55,9 @@ components called from Apache get their settings from the central configuration
 file `/usr/local/apache/cgi-bin/hg.conf`. Among others, the location and the
 username/password for the MariaDB server is specified there.
 
-To load data into the genome browser databases, you need a command line tool
+Today, most tracks are loaded from bigBed or bigWig files, and are referenced from the 
+track configuration (trackDb) via a "bigDataUrl" statement. For legacy MariaDB tracks,
+to load data into the genome browser databases, you need a command line tool
 like hgLoadBed. These tools are distributed separately from the CGI programs.
 Some tools create only MariaDB tables, others write into a /gbdb subdirectory.
 Most of them require a configuration file ~/.hg.conf in your home directory
@@ -86,13 +95,11 @@ Optional:
 It is best to install these packages with your standard operating
 system package management tools:
 
-* Debian/Ubuntu: `apt-get install gcc make ghostscript apache2 mariadb-server gmt r-base uuid-dev libcurl4-openssl-dev libbz2-dev g++`
+* Debian/Ubuntu: `apt-get install gcc make ghostscript apache2 mariadb-server gmt r-base uuid-dev libcurl4-openssl-dev libbz2-dev g++ libmariadb-dev libmariadb-dev`
 * Redhat/Fedora/CentOS: `yum install gcc libpng12 httpd ghostscript GMT hdf5 R libuuid-devel libcurl-devel bzip2-devel gcc-c++`
-
-On newer distributions, python-mysqldb / MySQL-python is not available anymore.
-In this case, install python2, pip for it and then use pip to install the mysql
-library ("pip2 install MySQL-python"). See the file
-installer/browserSetup.sh for the commands.
+The gcc, *-dev or *-devel packages are only needed if you want to build binaries
+yourself, but will not take up more than a few hundred megabytes and give you more
+options in case you want to modify the C code later.
 
 # Hardware and disk space requirements
 
@@ -106,7 +113,7 @@ day. Your hardware requirements may be much less demanding and will
 depend upon how much traffic you expect for your mirror.
 
 Annotation database size differs a lot between the assemblies: The full size
-of the hg19 database in 2016 is 6 TB, for ce2 it is 5GB. It also depends on
+of the hg38 database in 2026 is 8 TB, for ce2 it is 5GB. It also depends on
 the tracks: The size of the hg19 annotations can be reduced to 2TB if you
 do not download any ENCODE tracks. The size of only the main gene and SNP
 annotations is around 5GB for hg19 and hg38.
@@ -134,7 +141,7 @@ but can be changed to get the size for a particular assembly:
 
 # Installing the UCSC Genome browser
 
-**Note:** We offer Genome-Browser-in-the-Cloud (GBIC), an
+**Note:** We offer Genome-Browser-in-the-Cloud (GBIC), a
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS). GBIC is also available
 as a [dockerfile](/goldenPath/help/docker.html).
