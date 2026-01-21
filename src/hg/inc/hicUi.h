@@ -68,7 +68,7 @@ void hicUiResolutionDropDown(struct cart *cart, struct trackDb *tdb, struct hicM
 int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize);
 /* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
  * has been selected, return the largest available value that still partitions the window into at
- * least 5000 bins. */
+ * least 500 bins. */
 
 char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta);
 /* Return the current normalization selection, or the default if none
@@ -115,6 +115,12 @@ double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb);
  * calculated from the left-most start to the right-most end of the interaction. */
 
 int hicUiGetArcLimit(struct cart *cart, struct trackDb *tdb);
+/* Returns the currently configured limit on the number of arcs drawn in arc mode.
+ * Defaults to 10000.
+ */
+
 boolean hicUiArcLimitEnabled(struct cart *cart, struct trackDb *tdb);
+/* Returns true if the checkbox for limiting the number of displayed arcs is checked.
+ * Defaults to true. */
 
 #endif

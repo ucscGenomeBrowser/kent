@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="Genome Assembly Alignment Request" -->
+<!--#set var="ROOT" value="" -->
+
+<!--#include virtual='$ROOT/inc/gbPageStartHardcoded.html' -->
+
+<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/jquery-ui.css">
+<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/HGStyle.css">
+<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/liftRequest.css">
+
+<div id="formContainer" class="form-container">
+    <h1>Genome Assembly Alignment Request</h1>
+
+    <p>
+    On this page you can request a whole-genome alignment between two
+    genomes that are on the UCSC Genome Browser.
+    Such alignments can take thousands of compute hours to produce.
+    The alignment here will be generated on the <a href='https://usegalaxy.org/'
+target=_blank>Galaxy</a> platform, using a
+    workflow that uses the <a href='https://tacc.utexas.edu/'
+target=_blank>TACC</a></a> high performance compute GPU resources. The full
+    process may take up to a few days. You will receive an email when it is
+    complete.
+    </p>
+    <p>
+    Once complete, you will find two new tracks on both assemblies, one with
+    the full alignment results ("all chains"), and one
+    track with the best alignment (single coverage) for every basepair,
+    which can be used for "liftOver".
+    Since these tracks are single-coverage on the current genome, the
+    alignments are reciprocal so one is produced per assembly.
+    For more information on how to download these chain files and use
+    liftOver, see also: <a href='https://genome.ucsc.edu/FAQ/FAQdownloads.html#download28'
+target=_blank>Converting coordinates</a>.
+    Once these tracks are available, you can also use our Quicklift feature
+    to lift annotations on-the-fly, as you use the browser,
+    see also: <a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing'
+target=_blank>Quick Lift guide</a> for more information.
+
+    </p>
+    <p>If one of the two genomes is not on the UCSC browser yet, please
+     request it first on our
+     <a href="https://genome.ucsc.edu/assemblySearch.html"
+target=_blank>Assembly Request Page</a>, then come back here when the
+    assembly has been added to the browser.
+    </p>
+
+    <div class="form-group">
+        <label for="genomeSearch1">Assembly 1</label>
+        <div class="assembly-input-wrapper">
+            <input id="genomeSearch1" type="text" placeholder="Search any species, genome or assembly name" autocomplete="off">
+            <input id="genomeSearchButton1" value="Search" type="button">
+        </div>
+        <div id="genomeLabel1" class="selected-assembly">No assembly selected</div>
+    </div>
+
+    <div class="form-group">
+        <label for="genomeSearch2">Assembly 2</label>
+        <div class="assembly-input-wrapper">
+            <input id="genomeSearch2" type="text" placeholder="Search any species, genome or assembly name" autocomplete="off">
+            <input id="genomeSearchButton2" value="Search" type="button">
+        </div>
+        <div id="genomeLabel2" class="selected-assembly">No assembly selected</div>
+    </div>
+
+    <div id="liftExists" class="form-group" style="display: none;">
+        <button id="dismissLiftExists" style="float: right; cursor: pointer;">&times;</button>
+        <div class="description">
+        <p><strong>LiftOver chain files already exist for these assemblies:</strong></p>
+
+        <p>
+            <strong>Assembly 1:</strong>
+            <a id="genome1Link" href="#" target="_blank"></a> browser link<br>
+            Download: <a id="genome1LiftOver" href="#" download>Download chain file</a> over.chain.gz file
+        </p>
+
+        <p>
+            <strong>Assembly 2:</strong>
+            <a id="genome2Link" href="#" target="_blank"></a> browser link<br>
+            Download: <a id="genome2LiftOver" href="#" download>Download chain file</a> over.chain.gz file
+        </p>
+        </div>
+    </div>
+
+    <div id="emailForm" class="form-group">
+        <label for="emailInput">Email Address</label>
+        <div class="description">You will receive a notification at this address when the alignment is complete.</div>
+        <input id="emailInput" type="email" placeholder="your.email@example.com">
+    </div>
+
+    <div id="commentsForm"  class="form-group">
+        <label for="commentsInput">Comments (optional)</label>
+        <div class="description">Any additional information or notes about this alignment request.</div>
+        <textarea id="commentsInput" placeholder="Enter any additional information here..."></textarea>
+    </div>
+
+    <div id="submitButton" class="form-group">
+        <input id="submitBtn" type="button" value="Submit Request" onclick="submitForm()">
+    </div>
+</div>  <!-- end of formContainer -->
+
+<div id="successMessage">
+    <h2>Your request has been submitted, you will receive an email when the alignment is complete.</h2>
+    <a href="<!--#echo var='ROOT' -->/cgi-bin/hgGateway">Back to the genome browser gateway page</a>
+</div>
+
+<div id="errorMessage">
+    <h3>Error</h3>
+    <p id="errorText"></p>
+</div>
+
+<hr />
+</div><!-- closing gbsPage from gbPageStartHardcoded.html -->
+</div><!-- closing container-fluid from gbPageStartHardcoded.html -->
+<!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
+<script src="<!--#echo var='ROOT' -->/js/jquery-ui.js"></script>
+<script src="<!--#echo var='ROOT' -->/js/utils.js"></script>
+<script src="<!--#echo var='ROOT' -->/js/autocompleteCat.js"></script>
+<script src="<!--#echo var='ROOT' -->/js/liftRequest.js"></script>
+</body></html>

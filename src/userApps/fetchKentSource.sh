@@ -291,6 +291,7 @@ src/hg/visiGene/knownToVisiGene \
 src/hg/visiGene/hgVisiGene > ../part${partNumber}Src.zip
 
 cd ..
+du -hsc kent-temp
 rm -rf kent-temp
 
 partNumber=1

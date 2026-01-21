@@ -91,6 +91,8 @@ char *hTrackUiForTrack(char *trackName);
 /* Definition for oligo match track. */
 #define oligoMatchVar "hgt.oligoMatch"
 #define oligoMatchDefault ""
+#define oligoMatchStrandVar "hgt.oligoMatchStrand"
+#define oligoMatchStrandDefault "both"
 #define OLIGO_MATCH_TRACK_NAME "oligoMatch"
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
@@ -226,6 +228,10 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 
 void hTvDropDownClassWithJavascript(char *varName, char *id, enum trackVisibility vis, boolean canPack,
                                     char *class, struct slPair *events);
+
+/* return a NULL-terminated array of char* with possible track visibilities */
+char** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly);
+
 /* Make track visibility drop down for varName with style class and javascript */
 #define hTvDropDownClass(varName,vis,canPack,class) \
         hTvDropDownClassWithJavascript((varName),NULL,(vis),(canPack),(class),NULL)

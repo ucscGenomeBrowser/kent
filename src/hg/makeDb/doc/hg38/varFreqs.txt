@@ -80,3 +80,16 @@ python3 ~/kent/src/hg/makeDb/scripts/saudiToVcf.py
 bgzip saudi.vcf
 tabix -p vcf saudi.vcf.gz
 
+# SFARI SPARK
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
+# used globus to download into vcf/
+sh ~/kent/src/hg/makeDb/scripts/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
+bcftools norm -m-  SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz -Oz > SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz && tabix -p vcf SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
+
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs/
+# used globus to download into vcf/
+sh ~/kent/src/hg/makeDb/scripts/sparkMergeVcfAddCounts.sh vcf/wgs_12519_genome.deepvariant 8 
+bcftools norm -m-  wgs_12519_genome.deepvariant.sites.vcf.gz -Oz > wgs_12519_genome.deepvariant.norm.vcf.gz
+tabix -p vcf wgs_12519_genome.deepvariant.norm.vcf.gz
+
+

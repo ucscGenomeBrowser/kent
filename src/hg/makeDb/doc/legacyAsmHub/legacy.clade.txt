@@ -304,7 +304,7 @@ GCA_018691715.1_ASM1869171v1	invertebrate
 GCA_018852585.1_HG02145.pri.mat.f1_v2	primates
 GCA_018852595.1_HG02145.alt.pat.f1_v2	primates
 GCA_018852605.1_HG002.alt.pat.f1_v2	primates
-GCA_018852605.2_ASM1885260v2	primates
+GCA_018852605.2_Q100_hg002v1.0.1.pat	primates
 GCA_018852615.1_HG002.pri.mat.f1_v2	primates
 GCA_018852615.2_Q100_hg002v1.0.1.mat	primates
 GCA_019393635.1_mDroGli1.pri	mammals

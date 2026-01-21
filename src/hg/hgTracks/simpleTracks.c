@@ -6308,7 +6308,7 @@ extern struct genePred *genePredExtLoad15(char **row);
     struct genePred *gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)genePredExtLoad15, 0, chainHash);
     hFreeConn(&conn);
 
-    calcLiftOverGenePreds( gpList, chainHash, 0.0, 1.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
     struct genePred *gp = gpList;
 
     struct linkedFeatures *lfList = NULL;
@@ -6316,6 +6316,20 @@ extern struct genePred *genePredExtLoad15(char **row);
         {
         if (gp->chrom == NULL) // if the lift failed, ignore this one
             continue;
+        if (positiveRangeIntersection(winStart, winEnd, gp->txStart, gp->txEnd) == 0)
+            continue;
+        // we need to reverse the order of the exon frames if the quickLift changed the strand
+        if (quickLiftFile && (gp->strand[0] != gp->origStrand) && (gp->exonCount > 1))
+            {
+            int *reorderFrames;
+            AllocArray(reorderFrames, gp->exonCount);
+
+            int ii;
+            for(ii=0; ii < gp->exonCount; ii++)
+                reorderFrames[ii] = gp->exonFrames[(gp->exonCount - 1) - ii];
+
+            gp->exonFrames = reorderFrames;
+            }
         slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, TRUE));
         }
     slReverse(&lfList);
