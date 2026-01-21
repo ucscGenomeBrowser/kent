@@ -2772,13 +2772,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 
         printInfoIcon("The 'Apply to all' button sets all tracks below to the visibility selected on this dropdown. The 'Apply to all visible' button sets this visibility on all tracks below that are not hidden.");
 
-        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
-        // set all selectors to the current value of the top select
-	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
-        
-        // set all selectors that are not on 'hide' to the current value of the top select 
+        // First button: set all selectors that are not on 'hide' to the current value of the top select 
         printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
 	jsOnEventById("click", "superVizApplyButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').filter(function() { return $(this).val() !== 'hide'; }).val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText'); ");
+
+        // Second button: set all selectors to the current value of the top select
+        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
+	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
+        
         printf("</TD></TR>\n");
         }
     printf("<TR><TD NOWRAP>");
@@ -2803,7 +2804,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         printf("<div data-trackname='%s' class='seg-btn-group' style='margin-right:12px'>", tdb->track);
         char *trackVizStr = hStringFromTv(tv);
 
-        // vizList is e.g.  {"Hide", "Dense", "Squish", "Pack", "Full"}, but can be shorter, e.g. when canPack=false
+        // vizList is e.g.  {"hide", "dense", "squish", "pack", "full"}, but can be shorter, e.g. when canPack=false
         char **vizList = hTvGetVizArr(tv, tdb->canPack, onlyVis);
         int vizListLen = arrNullLen(vizList);
         for (int i = 0; i < vizListLen; i++) {
@@ -2813,9 +2814,10 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                 printf("<button class='seg-active'>");
             else
                 printf("<button>");
-            printf("%s</button>",buttonViz);
+            printf("%c%s", toupper((unsigned char)buttonViz[0]), buttonViz + 1); // upcase first letter
+            puts("</button>");
         }
-        puts("</div");
+        puts("</div>");
         
         printf("</TD>\n<TD>");
         hPrintPennantIcon(tdb);
