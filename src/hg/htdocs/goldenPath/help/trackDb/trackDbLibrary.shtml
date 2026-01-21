@@ -5536,7 +5536,7 @@ value for this setting is 5000.
 </div>
 
 <div class="hicArcLimitEnabled"><span class="types hic"></span>
-<div class="format"><code>hicDistanceMax &lt;true|false&gt;</code></div>
+<div class="format"><code>hicArcLimitEnabled &lt;true|false&gt;</code></div>
     <p>The "arc" display mode for Hi-C tracks can become difficult to read if too many
 arcs are being drawn, so there is an option to limit the display to the N highest scoring
 interactions.  The value of N is controlled by the companion setting, hicArcLimit, while
