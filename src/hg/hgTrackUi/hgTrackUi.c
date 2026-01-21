@@ -2995,6 +2995,7 @@ const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxChe
 // --- done parsing values from trackDb.settings ---
 
 const char *metaDataId = tdb->track;
+const int metaDataIdLen = strlen(metaDataId);
 
 char queryFmt[] = "SELECT contents FROM sessionDb WHERE id='%d' AND sessionKey='%s';";
 char query[query_buff_size];
@@ -3036,21 +3037,17 @@ if (anySelDataType != NULL)
     for (struct cgiVar *le = varList->list; le; le = le->next)
         if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
             {
-            const char *nameStart = strchr(le->name+strlen(metaDataId), '_');
-            if (nameStart)
+            const char *nameStart = le->name + metaDataIdLen + 1;
+            const char *nameEnd = strchr(nameStart, '_');
+            if (nameEnd && nameEnd > nameStart)
                 {
-                ++nameStart;  // move past '_'
-                const char *nameEnd = strchr(nameStart, '_');
-                if (nameEnd && nameEnd > nameStart)
-                    {
-                    const int nameLen = nameEnd - nameStart;
-                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-                    }
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
                 }
             }
     }
 printf(closeDataElementsJSON);
-printf(",\"mdid\": \"%s\"", tdb->track);  // metadata id is track name
+printf(",\"mdid\": \"%s\"", metaDataId);
 printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
     printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
