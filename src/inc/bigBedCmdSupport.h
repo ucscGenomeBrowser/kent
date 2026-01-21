@@ -13,4 +13,20 @@ void bigBedCmdOutputHeader(struct bbiFile *bbi, FILE *f);
 void bigBedCmdOutputTsvHeader(struct bbiFile *bbi, FILE *f);
 /* output a TSV-style header from the autoSql in the file */
 
+struct bed *bed3FromPositions(char *fileName);
+/* Read positions file and retrun bed 3 list. */
+
+void genericBigToNonBigFromBed(struct bbiFile *bbi, char *bedFileName, FILE *outFile, 
+ void (*processChromChunk)(struct bbiFile *bbi, char *chrom, int start, int end, char *bedName, FILE *f)
+);
+/* Read list of ranges from bed file chrom start end.
+ * Automatically sort them by chrom, start */
+
+void genericBigToNonBigFromPos(struct bbiFile *bbi, char *posFileName, FILE *outFile, 
+ void (*processChromChunk)(struct bbiFile *bbi, char *chrom, int start, int end, char *bedName, FILE *f)
+);
+/* Read  positions from file (chrom:start-end). starts are 1-based,
+ * but after conversion to bed3 list, they are 0-based. 
+ * Automatically sort them by chrom, start */
+
 #endif

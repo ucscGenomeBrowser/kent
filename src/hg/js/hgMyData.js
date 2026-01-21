@@ -13,10 +13,15 @@ function prettyFileSize(num) {
 }
 
 function cgiEncode(value) {
-    // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters:
+    // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters, and
+    // space becomes '+':
     let splitVal = value.split('/');
     splitVal.forEach((ele, ix) => {
-        splitVal[ix] = encodeURIComponent(ele);
+        if (ele == " ") {
+            splitVal[ix] = '+';
+        } else {
+            splitVal[ix] = encodeURIComponent(ele);
+        }
     });
     return splitVal.join('/');
 }
@@ -682,7 +687,8 @@ var hubCreate = (function() {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + uiState.userUrl + cgiEncode(hubName) + "/hub.txt&" + trackHubFixName(fname) + "=pack";
+                let hubUrl = uiState.userUrl + cgiEncode(hubName) + "/hub.txt";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + encodeURIComponent(hubUrl) + "&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
@@ -711,7 +717,7 @@ var hubCreate = (function() {
                     url += "&db=" + genome;
                 }
                 if (d.fileType === "hub.txt") {
-                    url += "&hubUrl=" + uiState.userUrl + cgiEncode(d.fullPath);
+                    url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(d.fullPath));
                 }
                 else if (d.fileType in extensionMap) {
                     // TODO: tusd should return this location in it's response after
@@ -721,7 +727,7 @@ var hubCreate = (function() {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
-                        url += "&hubUrl=" + uiState.userUrl + cgiEncode(d.parentDir);
+                        url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(d.parentDir));
                         if (d.parentDir.endsWith("/")) {
                             url += "hub.txt";
                         } else {

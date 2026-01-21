@@ -36,6 +36,15 @@
 <h6><a href='#adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</a></h6>
 <h6><a href='#make-the-api-work-in-the-same-way-as-on-the-public-website'>Make the API work in the same way as on the public website</a></h6>
 <h6><a href='#set-up-the-cloudflare-captcha'>Set up the Cloudflare captcha</a></h6>
+<p>
+We do not recommend following the procedure below anymore, as we provide a docker image and
+the &quot;GBIC&quot; installation bash script. They can setup a genome browser with
+a single linux command line and within a few minutes. This page exists as a
+reference, explains how the installer is structured and helps changing the
+configuration files once your genome browser is running. If you run into
+trouble with any of these steps, do not hesitate to contact us so we can improve this page.
+</p>
+
 <a name='overview-of-the-genome-browser-directories-and-databases'></a>
 <h2>Overview of the Genome Browser directories and databases</h2>
 
@@ -92,7 +101,9 @@ username/password for the MariaDB server is specified there.
 </p>
 
 <p>
-To load data into the genome browser databases, you need a command line tool
+Today, most tracks are loaded from bigBed or bigWig files, and are referenced from the
+track configuration (trackDb) via a &quot;bigDataUrl&quot; statement. For legacy MariaDB tracks,
+to load data into the genome browser databases, you need a command line tool
 like hgLoadBed. These tools are distributed separately from the CGI programs.
 Some tools create only MariaDB tables, others write into a /gbdb subdirectory.
 Most of them require a configuration file ~/.hg.conf in your home directory
@@ -147,16 +158,12 @@ system package management tools:
 </p>
 
 <ul>
-<li>Debian/Ubuntu: <code>apt-get install gcc make ghostscript apache2 mariadb-server gmt r-base uuid-dev libcurl4-openssl-dev libbz2-dev g++</code></li>
-<li>Redhat/Fedora/CentOS: <code>yum install gcc libpng12 httpd ghostscript GMT hdf5 R libuuid-devel libcurl-devel bzip2-devel gcc-c++</code></li>
+<li>Debian/Ubuntu: <code>apt-get install gcc make ghostscript apache2 mariadb-server gmt r-base uuid-dev libcurl4-openssl-dev libbz2-dev g++ libmariadb-dev libmariadb-dev</code></li>
+<li>Redhat/Fedora/CentOS: <code>yum install gcc libpng12 httpd ghostscript GMT hdf5 R libuuid-devel libcurl-devel bzip2-devel gcc-c++</code>
+The gcc, <em>-dev or </em>-devel packages are only needed if you want to build binaries
+yourself, but will not take up more than a few hundred megabytes and give you more
+options in case you want to modify the C code later.</li>
 </ul>
-
-<p>
-On newer distributions, python-mysqldb / MySQL-python is not available anymore.
-In this case, install python2, pip for it and then use pip to install the mysql
-library (&quot;pip2 install MySQL-python&quot;). See the file
-installer/browserSetup.sh for the commands.
-</p>
 
 <a name='hardware-and-disk-space-requirements'></a>
 <h2>Hardware and disk space requirements</h2>
@@ -178,7 +185,7 @@ depend upon how much traffic you expect for your mirror.
 
 <p>
 Annotation database size differs a lot between the assemblies: The full size
-of the hg19 database in 2016 is 6 TB, for ce2 it is 5GB. It also depends on
+of the hg38 database in 2026 is 8 TB, for ce2 it is 5GB. It also depends on
 the tracks: The size of the hg19 annotations can be reduced to 2TB if you
 do not download any ENCODE tracks. The size of only the main gene and SNP
 annotations is around 5GB for hg19 and hg38.
@@ -217,7 +224,7 @@ but can be changed to get the size for a particular assembly:
 <h2>Installing the UCSC Genome browser</h2>
 
 <p>
-<strong>Note:</strong> We offer Genome-Browser-in-the-Cloud (GBIC), an
+<strong>Note:</strong> We offer Genome-Browser-in-the-Cloud (GBIC), a
 shell script that installs a genome browser in most main Linux distributions
 (Most Debian and Redhat-based ones, like Ubuntu and CentOS). GBIC is also available
 as a <a href='/goldenPath/help/docker.html' title=''>dockerfile</a>.

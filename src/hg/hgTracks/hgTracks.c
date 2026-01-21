@@ -1204,14 +1204,18 @@ char *rMatch = NULL, *fMatch = NULL;
 struct bed *bedList = NULL, *bed;
 char strand;
 int count = 0, maxCount = 1000000;
+char *strandFilter = cartUsualString(cart, oligoMatchStrandVar, oligoMatchStrandDefault);
+boolean searchForward = sameString(strandFilter, "both") || sameString(strandFilter, "forward");
+boolean searchReverse = sameString(strandFilter, "both") || sameString(strandFilter, "reverse");
 
 if (oligoSize >= 2)
     {
-    fMatch = finder(fOligo, dna);
+    if (searchForward)
+        fMatch = finder(fOligo, dna);
     iupacReverseComplement(rOligo, oligoSize);
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
-    else
+    else if (searchReverse)
 	rMatch = finder(rOligo, dna);
     for (;;)
         {
@@ -9905,11 +9909,11 @@ if (!hideControls)
 	    /* Display track controls */
             if (group->errMessage)
                 {
-                hPrintf("<td colspan=8><b>Track hub error</b> ");
+                hPrintf("<tr><td colspan=8><b>Track hub error</b> ");
                 printInfoIcon("Use our track hub debugging help under <i>My Data > Track Hubs > Hub Development</i>. Note that you need to switch off caching there to see changes that you made to the track hub files without delay. Or click the disconnect button above to improve performance now temporarily. Contact us if you cannot resolve the issue.");
                 hPrintf(": ");
                 hPrintf("<i>%s</i>", group->errMessage);
-                hPrintf("</td>\n");
+                hPrintf("</td></tr>\n");
                 }
 
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)

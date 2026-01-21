@@ -230,7 +230,8 @@ $(function() {
             }
 
             const sortedPossibleVals = Array.from(possibleValues[key].entries());
-            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // neg: less-than
+            sortedPossibleVals.sort((a, b) => // neg: less-than
+                 a[1] !== b[1] ? b[1] - a[1] : a[0].localeCompare(b[0]));
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals

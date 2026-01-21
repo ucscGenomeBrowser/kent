@@ -48,7 +48,7 @@ The following projects were added:
     </li>
 
     <li>
-        <b><a href=""https://sparkforautism.org/ target="_blank">SFARI SPARK</a></b>:
+        <b><a href="https://sparkforautism.org/" target="_blank">SFARI SPARK</a></b>:
         The Simons Foundation Autism Research Initiative (SFARI) recruited
         a large cohort of families with autistic children who provided DNA
         samples and phenotypes.  54,558 families, parents and their children
@@ -180,7 +180,7 @@ instead, one per ancestry.
 <p>Most of the data in these tracks are not available for download from UCSC.
 Data can be browsed on our website.
 But the data can be downloaded for free from the original projects. Accessing the 
-data usually requires a click-through license or access request on the respectice websites, links are either
+data usually requires a click-through license or access request on the respective websites, links are either
 provided above in the project description or with more details here:
 </p>
 
@@ -263,69 +263,70 @@ By using this resource you agree to cite the flagship paper (Naslavsky et al. Na
 Whole-genome sequencing was performed at Human Longevity Inc. using TruSeq Nano DNA HT libraries sequenced on Illumina HiSeqX instruments with 150 bp paired-end reads targeting 30× coverage, and reads were mapped to GRCh38 using ISIS software. Sample sex was validated by comparing CPMs of X chromosome and male-specific Y (MSY) reads relative to autosomes, yielding the expected female (~55,000 X CPM, <200 MSY CPM) and male (~27,500 X CPM, >550 MSY CPM) patterns. Germline SNVs and indels were called following GATK Best Practices (GATK v3.7) via per-sample GVCFs (HaplotypeCaller), joint genotyping (CombineGVCFs, GenotypeGVCFs), and Variant Quality Score Recalibration (VQSR-AS); multiallelic variants were split with an in-house script, left-aligned with BCFtools, and annotated using Annovar and custom scripts against dbSNP, 1000 Genomes, and gnomAD, with putative loss-of-function variants identified using LOFTEE v0.3-beta irrespective of confidence labels. Variant and genotype quality was further assessed using the in-house CEGH-Filter two-step algorithm based on depth and allele balance, and analyses retained only GATK VQSR-AS PASS variants and higher-confidence CEGH-Filter calls. Relatedness was assessed using KING and PC-Relate (GENESIS), retaining a single proband per related pair and excluding one contaminated sample (>3% by verifyBAMID), resulting in a final dataset of 1,171 unrelated individuals. Final samples achieved mean coverages ranging from 31.3× to 64.8×, with an average of 38.65× and a median of 36.6×.
 </p>
 
-<p><b>SFARI SPARK:</b> The project as approved by the Simons Foundation as 14584.1. WES and WGS Data were downloaded from 
-        <a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
-        pVCFs were downloaded, anonymized with a script using bcftools and the fill-tags plugin and normalized,
-        without a minimum allele frequency cutoff.<br>
-        The methods are documented as follows by SFARI:<br>
-        <b>WES</b>:
-        This release consists of sequence and variant call data for 12,519
-        unique individuals, of which 12,517 (99.98%) have available genome-wide
-        SNP genotype data. Sequencing and genotyping of all samples in this
-        release was performed at New York Genome Center (NYGC). DNA from saliva
-        samples were extracted and prepared with PCR-free methods and sequenced
-        with paired-end sequencing of 150 bases on the Illumina NovaSeq 6000
-        system.  Alignment of reads to the human reference genome version
-        GRCh38, duplicate read marking, and Base Quality Score Recalibration
-        (BQSR) were performed by New York Genome Center (NYCG). Whole-genome
-        sequencing data were processed using a standardized, functionally
-        equivalent CCDG pipeline with alignment to the GRCh38DH (1000 Genomes)
-        reference using BWA-MEM v0.7.15 (deterministic settings, no -M, use of
-        .alt contigs), Picard-equivalent duplicate marking (Picard ≥2.4.1 or
-        equivalent), no indel realignment, and base quality score recalibration
-        with GATK (dbSNP138, Mills and 1000G gold-standard indels, known
-        indels).  Final outputs were stored as lossless CRAM files with
-        complete SAM-compliant read-group annotations and mandatory 4-bin
-        base-quality compression (Q2–6, 10, 20, 30), and all implementations
-        were validated for functional equivalence across centers before use.
-        Variant Calling was performed using DeepVariant. See <a href="https://github.com/CCDG/Pipeline-Standardization/blob/master/PipelineStandard.md" target=_blank>CCDG pipeline details</a>.<br>
+<p><b>SFARI SPARK:</b> The genome browser track project was approved by the Simons 
+Foundation as 14584.1. WES and WGS Data were downloaded from 
+<a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
+pVCFs were downloaded, anonymized with a script using bcftools and the fill-tags plugin and normalized,
+without a minimum allele frequency cutoff.<br>
+The methods are documented as follows by SFARI:<br>
+<b>WES</b>:
+This release consists of sequence and variant call data for 12,519
+unique individuals, of which 12,517 (99.98%) have available genome-wide
+SNP genotype data. Sequencing and genotyping of all samples in this
+release was performed at New York Genome Center (NYGC). DNA from saliva
+samples were extracted and prepared with PCR-free methods and sequenced
+with paired-end sequencing of 150 bases on the Illumina NovaSeq 6000
+system.  Alignment of reads to the human reference genome version
+GRCh38, duplicate read marking, and Base Quality Score Recalibration
+(BQSR) were performed by New York Genome Center (NYCG). Whole-genome
+sequencing data were processed using a standardized, functionally
+equivalent CCDG pipeline with alignment to the GRCh38DH (1000 Genomes)
+reference using BWA-MEM v0.7.15 (deterministic settings, no -M, use of
+.alt contigs), Picard-equivalent duplicate marking (Picard ≥2.4.1 or
+equivalent), no indel realignment, and base quality score recalibration
+with GATK (dbSNP138, Mills and 1000G gold-standard indels, known
+indels).  Final outputs were stored as lossless CRAM files with
+complete SAM-compliant read-group annotations and mandatory 4-bin
+base-quality compression (Q2–6, 10, 20, 30), and all implementations
+were validated for functional equivalence across centers before use.
+Variant Calling was performed using DeepVariant. See <a href="https://github.com/CCDG/Pipeline-Standardization/blob/master/PipelineStandard.md" target=_blank>CCDG pipeline details</a>.<br>
 
-        <b>WGS</b>: This release contains
-            sequence data for 142,357 individuals and genotyping data for
-            141,368 individuals. DNA was sequenced from saliva for all
-            samples and all participants consented to having their genetic
-            data shared by Regeneron. Exomes for all samples were sequenced with
-            short-read, paired-end sequencing of 150 bases on Illumina
-            NovaSeq 6000 machines using S2/S4 flow cells. Sequencing and
-            genotyping was performed across nine batches (WES1 through
-            WES9) at the Regeneron Genetics Center (RGC) and integrated
-            together for this data release. All sequencing batches were
-            processed using the same DNA extraction methods and sequencing
-            machines, however two different exome capture panels were used,
-            as described below. Genotyping was performed using a SNP
-            genotyping array for WES1 through WES4 and using
-            “genotyping-by-sequencing” (GxS) for WES5 through WES9.  The
-            first four sequencing batches were sequenced at Regeneron using
-            custom NEB/Kapa reagents with the IDT (Integrated DNA
-            Technologies) xGen capture platform, including custom exome
-            capture regions. Samples starting with batch WES5 were
-            sequenced using the Twist Bioscience Human
-            Comprehensive Exome panel, combined with spike-ins for
-            sequencing genotyping sites (see Genotyping Methods), the full
-            mitochondrial genome, and coverage boosted at selected sites
-            for assaying clonal hematopoiesis of indeterminate potential
-            (CHIP).  SFARI performed NV/indel calling via DeepVariant and
-            GATK to generate gVCFs, pairwise relatedness inferred using
-            PLINK v1.9 IBD estimates from common SNPs (AF ≥ 0.01, dbSNP
-            v151) with ≥15% relatedness flagged, and comprehensive
-            individual- and family-level quality control executed using the
-            internal GenomeCheckMate pipeline to exclude samples based on
-            contamination (≥5%), insufficient coverage (<20× in <80% of
-            targets), sex discordance, pedigree/IBD inconsistencies,
-            unregistered relationships, unexpected duplicates, or excess
-            relatedness, after which QC-passing individuals (selecting the
-            most recent passing sample per person) were retained for
-            variant calling and joint genotyping.
+<b>WGS</b>: This release contains
+sequence data for 142,357 individuals and genotyping data for
+141,368 individuals. DNA was sequenced from saliva for all
+samples and all participants consented to having their genetic
+data shared by Regeneron. Exomes for all samples were sequenced with
+short-read, paired-end sequencing of 150 bases on Illumina
+NovaSeq 6000 machines using S2/S4 flow cells. Sequencing and
+genotyping was performed across nine batches (WES1 through
+WES9) at the Regeneron Genetics Center (RGC) and integrated
+together for this data release. All sequencing batches were
+processed using the same DNA extraction methods and sequencing
+machines, however two different exome capture panels were used,
+as described below. Genotyping was performed using a SNP
+genotyping array for WES1 through WES4 and using
+“genotyping-by-sequencing” (GxS) for WES5 through WES9.  The
+first four sequencing batches were sequenced at Regeneron using
+custom NEB/Kapa reagents with the IDT (Integrated DNA
+Technologies) xGen capture platform, including custom exome
+capture regions. Samples starting with batch WES5 were
+sequenced using the Twist Bioscience Human
+Comprehensive Exome panel, combined with spike-ins for
+sequencing genotyping sites (see Genotyping Methods), the full
+mitochondrial genome, and coverage boosted at selected sites
+for assaying clonal hematopoiesis of indeterminate potential
+(CHIP).  SFARI performed NV/indel calling via DeepVariant and
+GATK to generate gVCFs, pairwise relatedness inferred using
+PLINK v1.9 IBD estimates from common SNPs (AF ≥ 0.01, dbSNP
+v151) with ≥15% relatedness flagged, and comprehensive
+individual- and family-level quality control executed using the
+internal GenomeCheckMate pipeline to exclude samples based on
+contamination (≥5%), insufficient coverage (<20× in <80% of
+targets), sex discordance, pedigree/IBD inconsistencies,
+unregistered relationships, unexpected duplicates, or excess
+relatedness, after which QC-passing individuals (selecting the
+most recent passing sample per person) were retained for
+variant calling and joint genotyping.
 </p>
 
 

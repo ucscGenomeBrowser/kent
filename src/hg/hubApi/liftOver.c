@@ -127,7 +127,7 @@ hDisconnectCentral(&conn);
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static char *skipWord(char *fw)
-/* skips over current word to start of next. 
+/* skips over current word to start of next.
  * Error for this not to exist. */
 {
 char *s;
@@ -213,7 +213,7 @@ void apiLiftOver(char *words[MAX_PATH_INFO])
 {
 char *extraArgs = verifyLegalArgs(argLiftOver);
 if (extraArgs)
-    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftOver'%s'", extraArgs);
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftOver '%s'", extraArgs);
 
 if (sameWordOk("listExisting", words[1]))
     {
@@ -275,7 +275,7 @@ void apiLiftRequest(char *words[MAX_PATH_INFO])
 {
 char *extraArgs = verifyLegalArgs(argLiftRequest);
 if (extraArgs)
-    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftRequest'%s'", extraArgs);
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftRequest '%s'", extraArgs);
 
 char *fromGenome = cgiOptionalString(argFromGenome);
 char *toGenome = cgiOptionalString(argToGenome);
@@ -308,11 +308,16 @@ char *fromAddr = cfgOption("apiFromEmail");
 
 if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     {
+    char nowTime[256];
+    time_t seconds = clock1();
+    struct tm *timeNow = localtime(&seconds);
+    strftime(nowTime, sizeof nowTime, "%Y-%m-%d %H:%M:%S", timeNow);
+
     struct dyString *msg = newDyString(0);
     /* may need to encode these inputs to make them safe */
-    dyStringPrintf(msg, "Lift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", fromGenome, toGenome, email, comment);
-    /* our mailViaPipa never has any relevant return code indicating
-    *    success or failure.  So, ignore the return integer:
+    dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
+    /* Even if the mailViaPipe returned a relevant return code, and I'm not
+    *    sure it would, there isn't much we can do about it from here.
     */
     (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
 
@@ -320,5 +325,19 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
     apiFinishOutput(0,NULL,jw);
+    char *ottoTable = cfgOption("ottoTable");	/* probably ottoRequest */
+    if (isNotEmpty(ottoTable))
+        {
+        struct sqlConnection *conn = hConnectCentral();
+        if (sqlTableExists(conn, ottoTable))
+	    {
+            struct dyString *update = newDyString(0);
+            sqlDyStringPrintf(update,
+		"INSERT INTO %s (fromDb, toDb, email, comment, requestTime) VALUES ( '%s','%s','%s','%s',now())",
+		ottoTable,  fromGenome, toGenome, email, comment);
+            sqlUpdate(conn, dyStringCannibalize(&update));
+	    }
+        hDisconnectCentral(&conn);
+        }
     }
 }	/*	void apiLiftRequest(char *words[MAX_PATH_INFO])	*/

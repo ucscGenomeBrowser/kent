@@ -85,28 +85,41 @@ export axtChain="${targetDir}/lastz.${queryAcc}/axtChain"
 printf "checking: %s\n" "${axtChain}" 1>&2
 printf "checking: %s\n" "${targetQueryOverChain}" 1>&2
 if [ ! -d "${axtChain}" ]; then
-   axtChain="`ls -d ${targetDir}/blat.${queryAcc}.* | tail -1`"
+   printf "checking ${targetDir}/blastz.${queryAcc}/axtChain\n" 1>&2
+   ls -d ${targetDir}/blastz.${queryAcc}/axtChain || true
+   axtChain="`ls -d ${targetDir}/blastz.${queryAcc}/axtChain || true | tail -1`"
    if [ -d "${axtChain}" ]; then
-     targetQueryOverChain="${axtChain}/${targetAcc}To${QueryAcc}.over.chain.gz"
-     fbTargetQuery="fb.${targetAcc}.quick${QueryAcc}Link.txt"
-     quickLinkSrc="${axtChain}/${targetAcc}.${queryAcc}"
-     if [ ! -s "${targetQueryOverChain}" ]; then
-       printf "ERROR: can not find target.query.over.chain:\n%s\n" "${targetQueryOverChain}"
-       exit 255
-     fi
+       targetQueryOverChain="${axtChain}/${targetAcc}.${queryAcc}.over.chain.gz"
+       fbTargetQuery="fb.${targetAcc}.quick${QueryAcc}Link.txt"
+       quickLinkSrc="${axtChain}/${targetAcc}.${queryAcc}"
    else
-   printf "ERROR: can not find axtChain: '%s'\n" "${axtChain}" 1>&2
-      exit 255
+       printf "checking ${targetDir}/blat.${queryAcc}.*\n" 1>&2
+       ls -d ${targetDir}/blat.${queryAcc}.* || true
+       axtChain="`ls -d ${targetDir}/blat.${queryAcc}.* || true | tail -1`"
+       if [ -d "${axtChain}" ]; then
+         targetQueryOverChain="${axtChain}/${targetAcc}To${QueryAcc}.over.chain.gz"
+         fbTargetQuery="fb.${targetAcc}.quick${QueryAcc}Link.txt"
+         quickLinkSrc="${axtChain}/${targetAcc}.${queryAcc}"
+         if [ ! -s "${targetQueryOverChain}" ]; then
+           printf "ERROR: can not find target.query.over.chain:\n%s\n" "${targetQueryOverChain}"
+           exit 255
+         fi
+       else
+         printf "ERROR: can not find axtChain: '%s'\n" "${axtChain}" 1>&2
+         exit 255
+       fi
    fi
 fi
 
 cd "${axtChain}"
 
+# rm -f "${fbTargetQuery}"
 if [ -s "${fbTargetQuery}" ]; then
   printf "DONE: ${target} ${query} %s\n" "`cat ${fbTargetQuery}`" 1>&2
   exit 0
 fi
 
+# rm -f "${quickLinkPath}.bb"
 if [ -s "${quickLinkPath}.bb" ]; then
   printf "symLink exists: ${quickLinkPath}.bb\n" 1>&2
   exit 0

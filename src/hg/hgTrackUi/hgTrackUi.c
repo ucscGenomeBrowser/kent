@@ -2254,6 +2254,7 @@ void oligoMatchUi(struct trackDb *tdb)
 /* UI for oligo match track */
 {
 char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
+char *strand = cartUsualString(cart, oligoMatchStrandVar, oligoMatchStrandDefault);
 puts("<P><B>Short (2-30 base) sequence:</B>");
 jsInline(
 "function packTrack()\n"
@@ -2262,10 +2263,18 @@ jsInline(
 "if (box.val()=='hide')\n"
 "    box.val('pack');\n"
 "}\n");
-printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">", 
+printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
     oligoMatchVar, oligoMatchVar, 45, oligo);
 puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
+
+puts("<P><B>Search strand:</B> ");
+cgiMakeRadioButton(oligoMatchStrandVar, "both", sameString(strand, "both"));
+puts(" Both ");
+cgiMakeRadioButton(oligoMatchStrandVar, "forward", sameString(strand, "forward"));
+puts(" Forward (+) ");
+cgiMakeRadioButton(oligoMatchStrandVar, "reverse", sameString(strand, "reverse"));
+puts(" Reverse (-) ");
 }
 
 void cutterUi(struct trackDb *tdb)
@@ -2739,7 +2748,7 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 /* List tracks in this collection, with visibility controls and UI links */
 {
 jsIncludeFile("hui.js",NULL);
-printf("<p style='margin-top:3px; margin-bottom:3px'>")
+printf("<p style='margin-top:3px; margin-bottom:3px'>");
 printf("Tracks that are part of this container are listed below. Use the buttons below to set their visibilities.</p>");
 printf("\n<TABLE id='superTrackTable' CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
@@ -2763,13 +2772,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 
         printInfoIcon("The 'Apply to all' button sets all tracks below to the visibility selected on this dropdown. The 'Apply to all visible' button sets this visibility on all tracks below that are not hidden.");
 
-        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
-        // set all selectors to the current value of the top select
-	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
-        
-        // set all selectors that are not on 'hide' to the current value of the top select 
+        // First button: set all selectors that are not on 'hide' to the current value of the top select 
         printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
 	jsOnEventById("click", "superVizApplyButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').filter(function() { return $(this).val() !== 'hide'; }).val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText'); ");
+
+        // Second button: set all selectors to the current value of the top select
+        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
+	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
+        
         printf("</TD></TR>\n");
         }
     printf("<TR><TD NOWRAP>");
@@ -2794,7 +2804,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         printf("<div data-trackname='%s' class='seg-btn-group' style='margin-right:12px'>", tdb->track);
         char *trackVizStr = hStringFromTv(tv);
 
-        // vizList is e.g.  {"Hide", "Dense", "Squish", "Pack", "Full"}, but can be shorter, e.g. when canPack=false
+        // vizList is e.g.  {"hide", "dense", "squish", "pack", "full"}, but can be shorter, e.g. when canPack=false
         char **vizList = hTvGetVizArr(tv, tdb->canPack, onlyVis);
         int vizListLen = arrNullLen(vizList);
         for (int i = 0; i < vizListLen; i++) {
@@ -2804,9 +2814,10 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                 printf("<button class='seg-active'>");
             else
                 printf("<button>");
-            printf("%s</button>",buttonViz);
+            printf("%c%s", toupper((unsigned char)buttonViz[0]), buttonViz + 1); // upcase first letter
+            puts("</button>");
         }
-        puts("</div");
+        puts("</div>");
         
         printf("</TD>\n<TD>");
         hPrintPennantIcon(tdb);
@@ -2986,6 +2997,7 @@ const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxChe
 // --- done parsing values from trackDb.settings ---
 
 const char *metaDataId = tdb->track;
+const int metaDataIdLen = strlen(metaDataId);
 
 char queryFmt[] = "SELECT contents FROM sessionDb WHERE id='%d' AND sessionKey='%s';";
 char query[query_buff_size];
@@ -3027,21 +3039,17 @@ if (anySelDataType != NULL)
     for (struct cgiVar *le = varList->list; le; le = le->next)
         if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
             {
-            const char *nameStart = strchr(le->name+strlen(metaDataId), '_');
-            if (nameStart)
+            const char *nameStart = le->name + metaDataIdLen + 1;
+            const char *nameEnd = strchr(nameStart, '_');
+            if (nameEnd && nameEnd > nameStart)
                 {
-                ++nameStart;  // move past '_'
-                const char *nameEnd = strchr(nameStart, '_');
-                if (nameEnd && nameEnd > nameStart)
-                    {
-                    const int nameLen = nameEnd - nameStart;
-                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-                    }
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
                 }
             }
     }
 printf(closeDataElementsJSON);
-printf(",\"mdid\": \"%s\"", tdb->track);  // metadata id is track name
+printf(",\"mdid\": \"%s\"", metaDataId);
 printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
     printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
