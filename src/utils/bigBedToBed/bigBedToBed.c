@@ -18,11 +18,12 @@
 char *clChrom = NULL;
 int clStart = -1;
 int clEnd = -1;
-char *clRange = NULL;
 char *clBed = NULL;
 char *clPos = NULL;
 boolean header = FALSE;
 boolean tsv = FALSE;
+
+struct lm *lm = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -35,9 +36,6 @@ errAbort(
   "   -chrom=chr1 - if set restrict output to given chromosome\n"
   "   -start=N - if set, restrict output to only that over start 0 based coordiate\n"
   "   -end=N - if set, restrict output to only that under end\n"
-  "   -range=start-end - if set, restrict output to only that within range from start to end. \n"
-  "          (NOTE the range start is a half-open 0-based coordinate like used in BED files). \n"
-  "          (Do not use range with chrom, start, and/or end options). \n"
   "   -bed=in.bed - restrict output to all regions in a BED file\n"
   "   -positions=in.pos - restrict output to all regions in a position file with 1-based start\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
@@ -55,64 +53,24 @@ static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"header", OPTION_BOOLEAN},
    {"tsv", OPTION_BOOLEAN},
-   {"range", OPTION_STRING},
    {NULL, 0},
 };
 
-static void writeFeatures(struct bbiFile *bbi, char *chromName, int start, int end, int itemsLeft, struct lm *lm, FILE *f)
+static void processChromChunk(struct bbiFile *bbi, char *chromName, int start, int end, char *bedName, FILE *f)
 {
-    struct bigBedInterval *interval, *intervalList = bigBedIntervalQuery(bbi, chromName, 
-    	start, end, itemsLeft, lm);
-    for (interval = intervalList; interval != NULL; interval = interval->next)
-	{
-	fprintf(f, "%s\t%u\t%u", chromName, interval->start, interval->end);
-	char *rest = interval->rest;
-	if (rest != NULL)
-	    fprintf(f, "\t%s\n", rest);
-	else
-	    fprintf(f, "\n");
-	}
-}
-
-static void bigBedToBedFromBed(struct bbiFile *bbi, char *bedFileName, FILE *outFile)
-{
-struct bed *bed, *bedList = bedLoadNAll(bedFileName, 3);
-int itemsLeft = 0;
-struct lm *lm = lmInit(0);
-for (bed = bedList; bed != NULL; bed = bed->next)
+int itemsLeft = 0;	// Zero actually means no limit.... 
+struct bigBedInterval *interval, *intervalList = bigBedIntervalQuery(bbi, chromName, 
+    start, end, itemsLeft, lm);
+for (interval = intervalList; interval != NULL; interval = interval->next)
     {
-    writeFeatures(bbi, bed->chrom, bed->chromStart, bed->chromEnd, itemsLeft, lm, outFile);
-    }
-lmCleanup(&lm);
-}
-
-static void bigBedToBedFromPos(struct bbiFile *bbi, char *posFileName, FILE *outFile)
-{
-/* Use  positions from file (chrom:start-end). */
-struct lineFile *lf = lineFileOpen(posFileName, TRUE);
-char *line;
-char *chrom;
-uint start, end;
-int itemsLeft = 0;
-struct lm *lm = lmInit(0);
-
-/* Convert input to bed file */
-while (lineFileNextReal(lf, &line))
-    {
-    if (parsePosition(line, &chrom, &start, &end))
-	{
-	if (start > end)
-	    errAbort("invalid range, (start - 1)=%u > end=%u", start, end);
-	writeFeatures(bbi, chrom, start, end, itemsLeft, lm, outFile);
-        }
+    fprintf(f, "%s\t%u\t%u", chromName, interval->start, interval->end);
+    char *rest = interval->rest;
+    if (rest != NULL)
+	fprintf(f, "\t%s\n", rest);
     else
-	{
-	errAbort("line %s has invalid position", line);
-	}
+	fprintf(f, "\n");
     }
-lineFileClose(&lf);
 }
-
 
 void bigBedToBed(char *inFile, char *outFile)
 /* bigBedToBed - Convert from bigBed to ascii bed format.. */
@@ -126,17 +84,13 @@ else if (tsv)
 
 if (clBed != NULL)
     {
-    bigBedToBedFromBed(bbi, clBed, f);
+    genericBigToNonBigFromBed(bbi, clBed, f, &processChromChunk);
     return;
     }
 if (clPos != NULL)
     {
-    bigBedToBedFromPos(bbi, clPos, f);
+    genericBigToNonBigFromPos(bbi, clPos, f, &processChromChunk);
     return;
-    }
-if (clRange)
-    {
-    mustParseRange(clRange, &clChrom, &clStart, &clEnd);
     }
 
 boolean chromFound = FALSE;
@@ -151,16 +105,17 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     if (clStart >= 0)
         start = clStart;
     if (clEnd >= 0)
+	{
         end = clEnd;
+	if (end > chrom->size)
+	    end = chrom->size;
+	}
     if (start > end)
 	errAbort("invalid range, start=%d > end=%d", start, end);
-    int itemsLeft = 0;	// Zero actually means no limit.... 
-    struct lm *lm = lmInit(0);
-    writeFeatures(bbi, chromName, start, end, itemsLeft, lm, f);
-    lmCleanup(&lm);
+    processChromChunk(bbi, chromName, start, end, NULL, f);
     }
 if (clChrom && !chromFound)
-    warn("specified chrom %s not found in maf", clChrom);
+    errAbort("specified chrom %s not found in maf", clChrom);
 bbiChromInfoFreeList(&chromList);
 carefulClose(&f);
 bbiFileClose(&bbi);
@@ -169,6 +124,7 @@ bbiFileClose(&bbi);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+lm = lmInit(0);
 optionInit(&argc, argv, options);
 clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
@@ -182,10 +138,15 @@ if (header & tsv)
     errAbort("can't specify both -header and -tsv");
 if (argc != 3)
     usage();
-clRange = optionVal("range", clRange);
-if (clRange && (optionExists("chrom") || optionExists("start") || optionExists("end")))
-    usage();
+
+if ((clBed || clPos) && (clChrom || (clStart >= 0) || (clEnd >= 0)))
+    errAbort("-bed or -positions can not be used with -chrom -start or -end options");
+if (clBed && clPos)
+    errAbort("-bed and -positions can not be used together");
+
 bigBedToBed(argv[1], argv[2]);
+
+lmCleanup(&lm);
 if (verboseLevel() > 1)
     printVmPeak();
 return 0;

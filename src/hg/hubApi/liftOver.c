@@ -213,7 +213,7 @@ void apiLiftOver(char *words[MAX_PATH_INFO])
 {
 char *extraArgs = verifyLegalArgs(argLiftOver);
 if (extraArgs)
-    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftOver'%s'", extraArgs);
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftOver '%s'", extraArgs);
 
 if (sameWordOk("listExisting", words[1]))
     {
@@ -275,7 +275,7 @@ void apiLiftRequest(char *words[MAX_PATH_INFO])
 {
 char *extraArgs = verifyLegalArgs(argLiftRequest);
 if (extraArgs)
-    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftRequest'%s'", extraArgs);
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /liftRequest '%s'", extraArgs);
 
 char *fromGenome = cgiOptionalString(argFromGenome);
 char *toGenome = cgiOptionalString(argToGenome);

@@ -1116,7 +1116,8 @@ track into a separate file and then use an include statement in the primary trac
 to pull them all into your hub. Include statements also function with the
 <a href="hgTracksHelp.html#UseOneFile">useOneFile setting</a>.</p>
 
-<p>Here's an example of what your hub directory structure might look like:
+<p>Here's an example of what your hub directory structure might look like:</p>
+<p>
 <pre><code>myHub/ - directory containing track hub files
 
 hub.txt
@@ -1131,13 +1132,14 @@ hg38/
 mm10/
      trackDb.txt
      gene_annotations.bigBed
-</code></pre>
+</code></pre></p>
 <p>
 To include these two trackDb files for hg38, you would add
 the following lines to your <code>hg38/trackDb.txt</code>:
+<p>
 <pre><code>include ../trackDb.geneAnnotations.txt
 include trackDb.cell_type_rnaseq.txt
-</code></pre>
+</code></pre></p>
 <p><b>Note:</b> Using include statements may cause slower load times on high-latency
 connections due to our software checking the time of all included files.
 If this is the case, you should avoid include statements and instead concatenate your

@@ -12,12 +12,14 @@
 #include "bigWig.h"
 #include "obscure.h"
 #include "basicBed.h"
+#include "bigBedCmdSupport.h"
 
 
 char *clChrom = NULL;
 int clStart = -1;
 int clEnd = -1;
 char *clBed = NULL;	/* Bed file that specifies bounds of sequences. */
+char *clPos = NULL;	/* Positions file that specifies bounds of sequences. */
 
 void usage()
 /* Explain usage and exit. */
@@ -33,6 +35,7 @@ errAbort(
   "   -start=N - if set, restrict output to only that over start\n"
   "   -end=N - if set, restict output to only that under end\n"
   "   -bed=input.bed  Extract values for all ranges specified by input.bed. If bed4, will also print the bed name.\n"
+  "   -positions=in.pos - restrict output to all regions in a position file with 1-based start\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
@@ -43,77 +46,67 @@ static struct optionSpec options[] = {
    {"end", OPTION_INT},
    {"udcDir", OPTION_STRING},
    {"bed", OPTION_STRING},
+   {"positions", OPTION_STRING},
    {NULL, 0},
 };
+
+
+
+
+static void processChromChunk(struct bbiFile *bbi, char *chrom,
+                              int start, int end, char *bedName, FILE *f)
+/* Output one chunk.  Only blocks where start is in the range will be written
+ * to avoid outputting a block multiple tines.  */
+{
+verbose(2, "==> extract %s:%d-%d   %s\n", chrom, start, end, bedName);
+if (bedName)
+    bigWigIntervalDumpWithName(bbi, chrom, start, end, 0, bedName, f); 
+else
+    bigWigIntervalDump(bbi, chrom, start, end, 0, f);
+}
+
 
 void bigWigToWig(char *inFile, char *outFile)
 /* bigWigToWig - Convert bigWig to wig.  This will keep more of the same structure of the 
  * original wig than bigWigToBedGraph does, but still will break up large stepped sections into 
  * smaller ones. */
 {
-struct bbiFile *bwf = bigWigFileOpen(inFile);
+struct bbiFile *bbi = bigWigFileOpen(inFile);
 FILE *f = mustOpen(outFile, "w");
-struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
+if (clBed != NULL)
+    {
+    genericBigToNonBigFromBed(bbi, clBed, f, &processChromChunk);
+    return;
+    }
+if (clPos != NULL)
+    {
+    genericBigToNonBigFromPos(bbi, clPos, f, &processChromChunk);
+    return;
+    }
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (clChrom != NULL && !sameString(clChrom, chrom->name))
         continue;
     char *chromName = chrom->name;
     int start = 0, end = chrom->size;
-    if (clStart > 0)
+    if (clStart >= 0)
         start = clStart;
-    if (clEnd > 0)
+    if (clEnd >= 0)
+	{
         end = clEnd;
-    bigWigIntervalDump(bwf, chromName, start, end, 0, f);
+	if (end > chrom->size)
+	    end = chrom->size;
+	}
+    if (start > end)
+	errAbort("invalid range, start=%d > end=%d", start, end);
+    bigWigIntervalDump(bbi, chromName, start, end, 0, f);
     }
 bbiChromInfoFreeList(&chromList);
 carefulClose(&f);
-bbiFileClose(&bwf);
+bbiFileClose(&bbi);
 }
 
-
-struct bed *bedLoad3Plus(char *fileName)
-/* Determines how many fields are in a bedFile and load all beds from
- * a tab-separated file.  Dispose of this with bedFreeList(). 
- * Small change by Michael to require only 3 or more fields. Meaning we will accept bed3 
- */
-{
-struct bed *list = NULL;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *row[bedKnownFields];
-
-while (lineFileNextReal(lf, &line))
-    {
-    int numFields = chopByWhite(line, row, ArraySize(row));
-    if (numFields < 3)
-	errAbort("file %s doesn't appear to be in bed format. At least 3 fields required, got %d", fileName, numFields);
-    slAddHead(&list, bedLoadN(row, numFields));
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-void bigWigToWigFromBed(char *inFile, char *bedFileName, char *outFile)
-/* bigWigToWig - Convert bigWig to wig.  This will keep more of the same structure of the 
- * original wig than bigWigToBedGraph does, but still will break up large stepped sections into 
- * smaller ones. */
-{
-struct bbiFile *bwf = bigWigFileOpen(inFile);
-struct bed *bed, *bedList = bedLoad3Plus(bedFileName);
-slSort(&bedList, bedCmp);
-
-verbose(2, "call bigWigToWigFromBed %s\n", bedFileName);
-FILE *f = mustOpen(outFile, "w");
-
-for (bed = bedList; bed != NULL; bed = bed->next) {
-    verbose(2, "==> extract %s:%d-%d   %s\n", bed->chrom, bed->chromStart, bed->chromEnd, bed->name);
-    bigWigIntervalDumpWithName(bwf, bed->chrom, bed->chromStart, bed->chromEnd, 0, bed->name, f);
-}
-carefulClose(&f);
-bbiFileClose(&bwf);
-bedFreeList(&bedList);
-}
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -125,13 +118,16 @@ clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
 clBed = optionVal("bed", clBed);
+clPos = optionVal("positions", clPos);
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 
-if (clBed != NULL) {
-	bigWigToWigFromBed(argv[1], clBed, argv[2]);
-}else{
-	bigWigToWig(argv[1], argv[2]);
-}
+if ((clBed || clPos) && (clChrom || (clStart >= 0) || (clEnd >= 0)))
+    errAbort("-bed or -positions can not be used with -chrom -start or -end options");
+if (clBed && clPos)
+    errAbort("-bed and -positions can not be used together");
+
+bigWigToWig(argv[1], argv[2]);
+
 if (verboseLevel() > 1)
     printVmPeak();
 return 0;
