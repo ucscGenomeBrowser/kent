@@ -9910,7 +9910,7 @@ if (!hideControls)
             if (group->errMessage)
                 {
                 hPrintf("<tr><td colspan=8><b>Track hub error</b> ");
-                printInfoIcon("Use our track hub debugging help under <i>My Data > Track Hubs > Hub Development</i>. Note that you need to switch off caching there to see changes that you made to the track hub files without delay. Or click the disconnect button above to improve performance now temporarily. Contact us if you cannot resolve the issue.");
+                printInfoIcon("Use the hub debugging tool under <i>My Data > Track Hubs > Hub Development</i>. You need to switch off <i>File caching</i> there to see your changes without delay. Error <i>Response is missing required header</i> usually means the hub is not reachable.<br><br>Contact us or the hub provider if you cannot resolve the issue.");
                 hPrintf(": ");
                 hPrintf("<i>%s</i>", group->errMessage);
                 hPrintf("</td></tr>\n");
