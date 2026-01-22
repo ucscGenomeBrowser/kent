@@ -11,6 +11,8 @@ CREATE TABLE ottoRequest (
     email varchar(255) not null,	# user email address
     comment longblob not null,	# other comments from the input form
     requestTime datetime not null,	# date time request was added
+    doneStatus tinyint unsigned not null,	# # 1 == alignment is complete, 0 == alignment to be done
+    completeTime datetime not null,	# date time for alignment completed and user notified
               #Indices
     PRIMARY KEY(id)
 );

@@ -7,5 +7,7 @@ table ottoRequest
     string email;     "user email address"
     lstring comment;   "other comments from the input form"
     string requestTime; "date time request was added"
+    ubyte doneStatus;   "# 1 == alignment is complete, 0 == alignment to be done"
+    string completeTime; "date time for alignment completed and user notified"
     )
 
