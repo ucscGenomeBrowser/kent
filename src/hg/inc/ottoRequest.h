@@ -6,7 +6,7 @@
 #define OTTOREQUEST_H
 
 #include "jksql.h"
-#define OTTOREQUEST_NUM_COLS 6
+#define OTTOREQUEST_NUM_COLS 8
 
 extern char *ottoRequestCommaSepFieldNames;
 
@@ -20,6 +20,8 @@ struct ottoRequest
     char *email;	/* user email address */
     char *comment;	/* other comments from the input form */
     char *requestTime;	/* date time request was added */
+    unsigned char doneStatus;	/* # 1 == alignment is complete, 0 == alignment to be done */
+    char *completeTime;	/* date time for alignment completed and user notified */
     };
 
 void ottoRequestStaticLoad(char **row, struct ottoRequest *ret);

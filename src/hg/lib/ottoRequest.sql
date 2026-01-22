@@ -9,8 +9,12 @@ CREATE TABLE ottoRequest (
     fromDb varchar(255) not null,	# can be a database name or a GC[AF]_ GenArk accession
     toDb varchar(255) not null,	# can be a database name or a GC[AF]_ GenArk accession
     email varchar(255) not null,	# user email address
-    comment longblob not null,	# other comments from the input form
+    comment longtext not null,	# other comments from the input form
     requestTime datetime not null,	# date time request was added
+    doneStatus tinyint unsigned not null,	# # 1 == alignment is complete, 0 == alignment to be done
+    completeTime datetime default null,	# date time for alignment completed and user notified
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(doneStatus),
+    INDEX(requestTime)
 );
