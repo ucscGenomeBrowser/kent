@@ -1341,7 +1341,6 @@ var hgGateway = (function() {
         // results from dbDb and/or assembly hubs.
         // Remove duplicates and return the processed results which will then
         // be used to render the autocomplete menu only.
-        // Note: Search results are NOT rendered to the panel - only recent genomes are shown there.
         var processedResults = removeDups(results, speciesResultsEquiv);
         return processedResults;
     }
@@ -1367,9 +1366,19 @@ var hgGateway = (function() {
 
     function updateStateAndPage(jsonData) {
         // Update uiState with new values and update the page.
-        // Note: Tree highlighting and drawing removed as tree is no longer displayed.
+        var hubsChanged = !_.isEqual(jsonData.hubs, uiState.hubs);
+        // In rare cases, there can be a genome (e.g. Baboon) with multiple species/taxIds
+        // (e.g. Papio anubis for papAnu1 vs. Papio hamadryas for papHam1).  Changing the
+        // db can result in changing the taxId too.  In that case, update the highlighted
+        // species in the tree image.
+        if (jsonData.taxId !== uiState.taxId) {
+            highlightLabel('textEl_' + jsonData.taxId, false);
+        }
         _.assign(uiState, jsonData);
         updateFindPositionSection(uiState);
+        if (hubsChanged) {
+            drawSpeciesPicker(prunedDbDbTree);
+        }
     }
 
     function handleRefreshState(jsonData) {

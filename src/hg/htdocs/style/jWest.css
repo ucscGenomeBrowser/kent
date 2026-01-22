@@ -449,13 +449,14 @@ div.jwFooterCopyright {
 #recentGenomesPanel {
     border: solid black 1px;
     width: 405px;
-    height: 400px;
-    overflow: auto;
     background-color: #fafafa;
 }
 
 #recentGenomesList {
     padding: 10px;
+    min-height: fit-content;
+    max-height: 350px;
+    overflow: auto;
 }
 
 .recentGenomeCard {
