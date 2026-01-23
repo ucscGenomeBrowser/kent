@@ -89,14 +89,22 @@ tl->picWidth = hgDefaultPixWidth;
 trackLayoutSetPicWidth(tl, cartOptionalString(cart, "pix"));
 // label width, but don't exceed 1/2 of image
 tl->leftLabelWidthChars = cartUsualInt(cart, leftLabelWidthVar, leftLabelWidthDefaultChars);
-if (tl->leftLabelWidthChars < 2)
-    tl->leftLabelWidthChars = leftLabelWidthDefaultChars;
-tl->leftLabelWidth = tl->leftLabelWidthChars*tl->nWidth + trackTabWidth + 3;
-int maxLabelWidth = 0.5*tl->picWidth;
-if (tl->leftLabelWidth  > maxLabelWidth)
+if (tl->leftLabelWidthChars == -1) // special case for IGV, so you can switch off the left label bar entirely
     {
-    // overflow, force to 1/2 width
-    tl->leftLabelWidthChars = maxLabelWidth/tl->nWidth;
-    tl->leftLabelWidth = tl->leftLabelWidthChars * tl->nWidth;
+    tl->leftLabelWidthChars = 0;
+    tl->leftLabelWidth = 0;
+    }
+else 
+    {
+    if (tl->leftLabelWidthChars < 2)
+        tl->leftLabelWidthChars = leftLabelWidthDefaultChars;
+    tl->leftLabelWidth = tl->leftLabelWidthChars*tl->nWidth + trackTabWidth + 3;
+    int maxLabelWidth = 0.5*tl->picWidth;
+    if (tl->leftLabelWidth  > maxLabelWidth)
+        {
+        // overflow, force to 1/2 width
+        tl->leftLabelWidthChars = maxLabelWidth/tl->nWidth;
+        tl->leftLabelWidth = tl->leftLabelWidthChars * tl->nWidth;
+        }
     }
 }
