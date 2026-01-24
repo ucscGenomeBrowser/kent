@@ -254,7 +254,13 @@ sub getWorkhorseLoads {
   # a valid workhorse needs to have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('ku', 'hgwdev', 'hgwdev-new') {
+  my @testList;
+  push (@testList, 'hgwdev');
+  for (my $i = 0; $i < 18; ++$i) {
+     my $n = sprintf("%02d", $i);
+     push (@testList, "hgcompute-$n");
+  }
+  foreach my $machLine (@testList) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
@@ -276,7 +282,7 @@ sub chooseWorkhorse {
 	   "idle small cluster machines.  This may take a minute...\n");
   while (1) {
     my %horses = &getWorkhorseLoads();
-    foreach my $maxLoad (0.1, 0.5, 1.0, 2.0) {
+    foreach my $maxLoad (0.1, 0.5, 1.0, 2.0, 3.0, 6.0, 10.0) {
       my @fastHorses = ();
       foreach my $horse (keys %horses) {
 	push @fastHorses, $horse if ($horses{$horse} <= $maxLoad);
