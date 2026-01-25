@@ -888,13 +888,13 @@ The name column contains several pieces of information separated by underscores:
       of a feature (like an exon) to reach the first base of the next complete
       codon.
   <li><code>0</code> - exon outFrame - This indicates the offset remaining at the end of a feature.
-  <li><code>chr1_1099125</code> - chromosome and start position of the exon
+  <li><code>chr1_1099125</code> - start position of the exon
   <li><code>r</code> - strand, &quot;r&quot; for reverse or &quot;-&quot; and &quot;f&quot;
        for forward or &quot;+&quot;
 </ol>
 </p>
 <p>
-Here we're going to focus on the inFrame and outFrame specifically. The values
+Here, we're going to focus on the inFrame and outFrame specifically. The values
 typically range from 0 to 2. These numbers are a representation of where in the
 frame the exon starts and ends.
 <table>
@@ -924,8 +924,9 @@ In the example lines above, the exons have &quot;0&quot; for both inFrame and ou
 they are UTR exons.</p>
 
 <p>
-Finally, it should be noted that when the amino acid output is split per exons (where a split codon is impossible to
-denote), the amino acid for split codon is placed in the exon with most of the bases.</p>
+Finally, it should be noted that when the amino acid output is split per exons
+(where a split codon is impossible to denote), the amino acid for this split codon
+is placed in the exon with most of the bases.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 
