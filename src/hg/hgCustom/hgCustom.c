@@ -268,7 +268,7 @@ if (isUpdateForm)
      "2. In the <b>Update</b> column, select the checkbox next to custom tracks that you want to update.<br>"
      "3. Click the <b>Update</b> button at the top of the column to reload the data.\n</span><p><p> ", cartSessionId(cart));
 
-        puts("Current custom track configuration (changes you make here will be lost when you update the track):");
+        puts("Current custom track configuration (changes made here will be lost when the track is updated):");
         }
     else
         {

@@ -299,6 +299,30 @@ const uppy = new Uppy.Uppy({
         // set all the fileTypes and genomes from their selects
         let doUpload = true;
         let thisQuota = 0;
+        let filesToOverwrite = []; // collect files that will overwrite existing ones
+
+        // Check if any file is a hub.txt - if so, we need to upload it first
+        // and switch to sequential uploads to prevent race conditions
+        let hasHubTxt = Object.values(files).some(f => f.meta.fileType === "hub.txt");
+        if (hasHubTxt) {
+            // Set TUS plugin to sequential uploads (limit: 1)
+            const tusPlugin = uppy.getPlugin('Tus');
+            if (tusPlugin) {
+                tusPlugin.setOptions({ limit: 1 });
+            }
+            // Reorder files so hub.txt comes first (JS objects maintain insertion order)
+            let hubTxtFiles = {};
+            let otherFiles = {};
+            for (let [key, file] of Object.entries(files)) {
+                if (file.meta.fileType === "hub.txt") {
+                    hubTxtFiles[key] = file;
+                } else {
+                    otherFiles[key] = file;
+                }
+            }
+            files = Object.assign({}, hubTxtFiles, otherFiles);
+        }
+
         for (let [key, file] of Object.entries(files)) {
             let fileNameMatch = file.meta.name.match(fileNameRegex);
             let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
@@ -330,29 +354,41 @@ const uppy = new Uppy.Uppy({
                 doUpload = false;
                 continue;
             }
-            // check if the user is uploading a hub.txt into a hub that already has a hub.txt
+            // check if the user is uploading a file that already exists in this hub
             if (file.meta.parentDir in hubCreate.uiState.filesHash) {
                 let hubFiles = hubCreate.uiState.filesHash[file.meta.parentDir].children;
-                if (file.meta.fileType === "hub.txt" && hubFiles.filter((f) => f.fileType === "hub.txt").length !== 0) {
-                    uppy.info(`Error: the hub definition file (ex: hub.txt) already exists, create a new hub if you want to upload this hub definition file`);
-                    doUpload = false;
-                    continue;
+                for (let j = 0; j < hubFiles.length; j++) {
+                    if (hubFiles[j].fileName === file.meta.name) {
+                        filesToOverwrite.push(file);
+                        break;
+                    }
                 }
             }
 
-            uppy.setFileMeta(file.id, {
-                fileName: file.meta.name,
-                fileSize: file.size,
-                lastModified: file.data.lastModified,
-            });
+            // Set metadata directly on the file object since we're returning a modified files object
+            // (using setFileMeta would be overwritten when we return the files object)
+            file.meta.fileName = file.meta.name;
+            file.meta.fileSize = file.size;
+            file.meta.lastModified = file.data.lastModified;
             thisQuota += file.size;
 
+        }
+        // If any files will overwrite existing ones, show a single confirmation dialog
+        if (filesToOverwrite.length > 0) {
+            let fileNames = filesToOverwrite.map(f => f.meta.name).join("\n  ");
+            if (!confirm(`The following file(s) already exist and will be overwritten:\n  ${fileNames}\n\nContinue?`)) {
+                doUpload = false;
+            } else {
+                // Set metadata flag to allow overwrite on backend for each file
+                filesToOverwrite.forEach(f => f.meta.allowOverwrite = "true");
+            }
         }
         if (thisQuota + hubCreate.uiState.userQuota > hubCreate.uiState.maxQuota) {
             uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
             doUpload = false;
         }
-        return doUpload;
+        // Return the (possibly reordered) files object to proceed, or false to cancel
+        return doUpload ? files : false;
     },
 });
 
@@ -703,6 +739,8 @@ var hubCreate = (function() {
     // helper object so we don't need to use an AbortController to update
     // the data this function is using
     let selectedData = {};
+    // track which items the user directly selected (vs children of selected directories)
+    let directlySelected = {};
     function viewAllInGenomeBrowser(ev) {
         // redirect to hgTracks with these tracks/hubs open
         let data = selectedData;
@@ -754,6 +792,14 @@ var hubCreate = (function() {
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
+        // Only warn about hub.txt deletion if the user directly selected the hub.txt file,
+        // not if it's being deleted as part of selecting a whole hub/directory
+        let hasDirectlySelectedHubTxt = Object.values(directlySelected).some(d => d.fileType === "hub.txt");
+        if (hasDirectlySelectedHubTxt) {
+            if (!confirm("Warning: Deleting a hub.txt file will remove your hub and its shareable URL. Are you sure?")) {
+                return;
+            }
+        }
         let cartData = {deleteFile: {fileList: []}};
         cart.setCgiAndUrl(fileListEndpoint);
         _.forEach(data, (d) => {
@@ -772,11 +818,6 @@ var hubCreate = (function() {
     function updateSelectedFileDiv(data, isFolderSelect = false) {
         // update the div that shows how many files are selected
         let numSelected = data !== null ? data.length : 0;
-        // if a hub.txt file is in data, disable the delete button
-        let disableDelete = false;
-        if (data) {
-            disableDelete = data.filter((obj) => obj.fileType === "hub.txt").length > 0;
-        }
         let infoDiv = document.getElementById("selectedFileInfo");
         let span = document.getElementById("numberSelectedFiles");
         let spanParentDiv = span.parentElement;
@@ -790,16 +831,10 @@ var hubCreate = (function() {
             let viewBtn = document.getElementById("viewSelectedFiles");
             viewBtn.addEventListener("click", viewAllInGenomeBrowser);
             viewBtn.textContent = "View selected";
-            if (!disableDelete) {
-                let deleteBtn = document.getElementById("deleteSelectedFiles");
-                deleteBtn.style.display = "inline-block";
-                deleteBtn.addEventListener("click", deleteFileList);
-                deleteBtn.textContent = "Delete selected";
-            } else {
-                // delete the old button:
-                let deleteBtn = document.getElementById("deleteSelectedFiles");
-                deleteBtn.style.display = "none";
-            }
+            let deleteBtn = document.getElementById("deleteSelectedFiles");
+            deleteBtn.style.display = "inline-block";
+            deleteBtn.addEventListener("click", deleteFileList);
+            deleteBtn.textContent = "Delete selected";
         } else {
             span.textContent = "";
         }
@@ -820,12 +855,15 @@ var hubCreate = (function() {
         // The selectedData global holds the actual information needed for the view/delete buttons
         // to work, so data plus any child rows
         selectedData = {};
+        // Track only the rows the user directly selected (not children)
+        directlySelected = {};
 
         // get all of the currently selected rows (may be more than just the one that
         // was most recently clicked)
         table.rows({selected: true}).data().each(function(row, ix) {
             data.push(row);
             selectedData[row.fullPath] = row;
+            directlySelected[row.fullPath] = row;
             // add any newly checked rows children to the selectedData structure for the view/delete
             if (row.children) {
                 row.children.forEach(function(child) {
@@ -1152,6 +1190,21 @@ var hubCreate = (function() {
                 uiState.fileList.push(obj);
                 // NOTE: we don't add the obj to the filesHash until after we're done
                 // so we don't need to reparse all files each time we add one
+            } else {
+                // File already exists - update the existing row with new data (for overwrites)
+                let existingObj = uiState.filesHash[obj.fullPath];
+                existingObj.fileSize = obj.fileSize;
+                existingObj.lastModified = obj.lastModified;
+                existingObj.uploadTime = obj.uploadTime;
+                // Find and invalidate the row in DataTable to refresh display
+                let allRows = table.rows().indexes();
+                for (let j = 0; j < allRows.length; j++) {
+                    let rowData = table.row(allRows[j]).data();
+                    if (rowData.fullPath === obj.fullPath) {
+                        table.row(allRows[j]).invalidate();
+                        break;
+                    }
+                }
             }
         }
 
@@ -1406,6 +1459,7 @@ var hubCreate = (function() {
             endpoint: getTusdEndpoint(),
             withCredentials: true,
             retryDelays: null,
+            removeFingerprintOnSuccess: true, // clean up localStorage after successful upload
         };
 
         uppy.use(Uppy.Tus, tusOptions);

@@ -4573,7 +4573,3 @@ function forceDisplayBedFile(url) {
     .catch(error => console.error('Error fetching BED file:', error));
 }
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-

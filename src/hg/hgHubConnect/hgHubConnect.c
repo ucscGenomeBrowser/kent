@@ -367,7 +367,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 		, id);
 	jsOnEventByIdF("click", id,
 	    "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-	    "document.resetHubForm.submit(); return true;", hub->hubUrl);
+	    "document.resetHubForm.submit(); return true;", javaScriptLiteralEncode(hub->hubUrl));
 	ourCellEnd();
 	}
     else if (hub->trackHub != NULL)

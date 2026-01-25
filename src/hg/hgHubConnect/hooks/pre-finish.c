@@ -91,28 +91,35 @@ else
             if (!userName)
                 errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
             }
-        fprintf(stderr, "userName='%s'\n'", userName);
+        fprintf(stderr, "userName='%s'\n", userName);
         // NOTE: All Upload.MetaData values are strings
-        fileName = cgiEncodeFull(jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL));
+        // Check multiple possible metadata keys for filename (Uppy sends 'filename' and 'name' by default,
+        // our JS code also sets 'fileName' - try all to handle resumed uploads with old metadata)
+        char *rawFileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
+        if (!rawFileName)
+            rawFileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
+        if (!rawFileName)
+            rawFileName = jsonQueryString(req, "", "Event.Upload.MetaData.name", NULL);
+        fileName = rawFileName ? cgiEncodeFull(rawFileName) : NULL;
         fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
         fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
         db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
         reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
-        lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
+        if (reqLm)
+            lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
+        else
+            lastModified = time(NULL); // fallback to current time if not provided
         parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
-        fprintf(stderr, "parentDir = '%s'\n", parentDir);
-        fflush(stderr);
+        fprintf(stderr, "parentDir = '%s'\n", parentDir ? parentDir : "(null)");
         // strip out plain leading '.' and '/' components
         // middle '.' components are dealt with later
-        if (startsWith("./", parentDir) || startsWith("/", parentDir))
+        if (parentDir && (startsWith("./", parentDir) || startsWith("/", parentDir)))
             parentDir = skipBeyondDelimit(parentDir, '/');
-        fprintf(stderr, "parentDir = '%s'\n", parentDir);
-        fflush(stderr);
         tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
         tusInfo = jsonQueryString(req, "", "Event.Upload.Storage.InfoPath", NULL);
         if (fileName == NULL)
             {
-            errAbort("No Event.Upload.fileName setting");
+            errAbort("No filename found in upload metadata (checked fileName, filename, and name)");
             }
         else if (tusFile == NULL)
             {
@@ -181,7 +188,7 @@ else
                 }
             // first make the parentDir rows
             makeParentDirRows(row->userName, sqlDateToUnixTime(row->lastModified), row->db, row->parentDir, userDataDir);
-            row->parentDir = hubNameFromPath(encodedParentDir);
+            row->parentDir = encodedParentDir ? hubNameFromPath(encodedParentDir) : "";
             addHubSpaceRowForFile(row);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
             fflush(stderr);

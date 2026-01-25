@@ -761,6 +761,13 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
 	    if (!bedHasFilters(tdb))
 		cType = cfgNone;
             }
+        // bigBeds with 3 or 4 fields specified in trackDb will get the filter UI if they have bigBed filters 
+        else if ((wordCount > 1) && ((atoi(words[1]) == 3) || atoi(words[1]) == 4))
+            {
+            cType = cfgBedScore;
+            if (!bedHasFilters(tdb))
+                cType = cfgNone;
+            }
         else if ((  ((wordCount > 1) && (atoi(words[1]) >= 5))
             || trackDbSetting(tdb, "scoreMin") != NULL)
         &&  // Historically needed 'bed n .' but encode didn't follow bed n .

@@ -29,7 +29,7 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-void jsOnEventBySelector(char *eventName, char *query, char *jsText);
+void jsOnEventBySelector(char *query, char *eventName, char *jsText);
 /* Add js mapping for inline event given a query selector, e.g. '.className' */
 
 void jsAddEventForId(char *eventName, char *idText, char *jsText);
