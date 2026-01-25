@@ -224,6 +224,15 @@ driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table
 driver.get(machine + "/cgi-bin/hgTables?db=oviAri4")
 driver.find_element(By.NAME, "hgta_doSummaryStats").click()
 
+# Tests GenArk (GCF_014441545.1) on Table Browser (test case came up in a build patch #36937)
+cartReset()
+driver.get(machine + "/cgi-bin/hgGateway?db=GCF_014441545.1")
+hover_and_click(driver, "tools3", "tableBrowserMenuLink")
+driver.find_element(By.ID, "hgta_track").click()
+select = Select(driver.find_element(By.ID, "hgta_track"))
+select.select_by_visible_text("Augustus")
+driver.find_element(By.ID, "hgta_doSchema").click()
+
 # Tests a split table (mm10 intronEst table) on the Table Browser
 driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine +"/cgi-bin/hgTables?clade=mammal&org=Mouse&db=mm10&hgta_group=allTables&hgta_track=mm10&hgta_table=intronEst")
