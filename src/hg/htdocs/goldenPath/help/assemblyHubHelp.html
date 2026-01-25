@@ -290,14 +290,31 @@ Replace the <code>chromAlias</code> setting with the <code>chromAliasBb</code> s
 the <code>.bb</code> file in the genome stanza of the hub definition:</p>
 <pre>chromAliasBb GCF_000001405.39.chromAlias.bb</pre>
 <p>This replaces the <code>chromAlias.txt</code> specification.</p>
+
+<a id="chromAuthority"></a>
 <p><b>Default Naming Scheme</b></p>
-<p>A default naming scheme may be set in the <code>hub.txt</code> file using the
+<p>A default chromosome naming scheme can be set in the genome stanza using the
 <code>chromAuthority</code> setting:</p>
 <pre>chromAuthority ucsc</pre>
 <p>In this example, the value <code>ucsc</code> corresponds to the column header from the
 <code>chromAlias.txt</code> file. This setting ensures that names in the specified column are
 displayed by default in the Genome Browser.</p>
-
+<p>Example genome stanza:</p>
+<pre>
+genome GCF_000001405.39
+taxId 9606
+groups groups.txt
+description human
+twoBitPath GCF_000001405.39.2bit
+twoBitBptUrl GCF_000001405.39.2bit.bpt
+chromSizes GCF_000001405.39.chrom.sizes.txt
+chromAlias GCF_000001405.39.chromAlias.txt
+chromAuthority ucsc
+organism human
+defaultPos chr1:82985474-82995474
+scientificName Homo sapiens
+htmlPath html/GCF_000001405.39_GRCh38.p13.description.html
+</pre>
 
 <a id="groupsTxt"></a>
 <h3>groups.txt</h3>
