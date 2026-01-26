@@ -2935,8 +2935,10 @@ const char *metaDataUrl = trackDbSetting(tdb, "metaDataUrl");
 const char *primaryKey = trackDbSetting(tdb, "primaryKey");
 
 struct slName *dataTypes = parseDataTypes(tdb);
-if (!dataTypes)
-    errAbort("Failed to parse data types from faceted composite settings for: %s", tdb->track);
+boolean hasDataTypes = (dataTypes != NULL);
+//if (!dataTypes)
+//    errAbort("Failed to parse data types from faceted composite settings for: %s", tdb->track);
+
 // optional
 const char *colorSettingsUrl = (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
 const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxCheckboxes");
@@ -2962,37 +2964,63 @@ printf(openDataTypesJSON);
 // find selected data types
 int not_first = 0;
 struct slName *anySelDataType = NULL;  // non-null val will be used as flag
-for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
+if (hasDataTypes)
     {
-    char toMatch[token_size];
-    safef(toMatch, token_size, "_%s_sel", thisType->name);
-    boolean dataTypeSel = FALSE;
-    for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
-        if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
-            dataTypeSel = TRUE;
-    printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
-    anySelDataType = dataTypeSel ? thisType : anySelDataType;
+    for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
+        {
+        char toMatch[token_size];
+        safef(toMatch, token_size, "_%s_sel", thisType->name);
+        boolean dataTypeSel = FALSE;
+        for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
+            if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
+                dataTypeSel = TRUE;
+        printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
+        anySelDataType = dataTypeSel ? thisType : anySelDataType;
+        }
     }
+// else: dataTypes dict is empty - JS will detect this
 printf(closeDataTypesJSON);
 printf(",");  // add separator
 // find selected data sets
 printf(openDataElementsJSON);
 not_first = 0;
-if (anySelDataType != NULL)
+if (hasDataTypes)
     {
-    char suffix[token_size];
-    safef(suffix, token_size, "_%s_sel", anySelDataType->name);
+    if (anySelDataType != NULL)
+        {
+        char suffix[token_size];
+        safef(suffix, token_size, "_%s_sel", anySelDataType->name);
+        for (struct cgiVar *le = varList->list; le; le = le->next)
+            if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
+                {
+                const char *nameStart = le->name + metaDataIdLen + 1;
+                const char *nameEnd = strchr(nameStart, '_');
+                if (nameEnd && nameEnd > nameStart)
+                    {
+                    const int nameLen = nameEnd - nameStart;
+                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                    }
+                }
+        }
+    }
+else
+    {
+    // No data types - look for {mdid}_{de}_sel pattern (no dataType component)
+    char suffix[] = "_sel";
     for (struct cgiVar *le = varList->list; le; le = le->next)
+        {
         if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
             {
+            // Extract data element name: between mdid_ and _sel
             const char *nameStart = le->name + metaDataIdLen + 1;
-            const char *nameEnd = strchr(nameStart, '_');
+            const char *nameEnd = strstr(nameStart, "_sel");
             if (nameEnd && nameEnd > nameStart)
                 {
                 const int nameLen = nameEnd - nameStart;
                 printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
                 }
             }
+        }
     }
 printf(closeDataElementsJSON);
 printf(",\"mdid\": \"%s\"", metaDataId);
