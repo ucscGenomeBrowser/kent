@@ -1084,7 +1084,7 @@ if (*retError == NULL)
                    &rangeList, &badRanges, retError);
 
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
-if (*retError == NULL)
+if ((*retError == NULL) && (rangeList != NULL))
     {
     int i, start, end = rangeList->end;
     if (chain->qStrand == '-')
@@ -1687,6 +1687,7 @@ char *error;
 for (gp = gpList ; gp != NULL ; gp = gp->next)
     {
     // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
+    char origStrand = gp->strand[0];
     if (preserveInput)
         {
         char *old = gp->name;
@@ -1718,7 +1719,7 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
             gp->chrom = cloneString(bed->chrom);
             int start = gp->txStart = bed->chromStart;
             gp->txEnd = bed->chromEnd;
-            gp->origStrand = gp->strand[0];
+            //gp->origStrand = gp->strand[0];
             gp->strand[0] = bed->strand[0];
             gp->cdsStart = bed->thickStart;
             gp->cdsEnd = bed->thickEnd;
@@ -1731,6 +1732,9 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
                 gp->exonStarts[i] = s;
                 gp->exonEnds[i] = e;
                 }
+            if (gp->strand[0] != origStrand)
+                genePredReverseFrames(gp);
+
             if (mapped)
                 genePredTabOut(gp, mapped);
 	    }
