@@ -14,9 +14,7 @@ underneath. Decorators can be added to <b>BED 12+</b>, <b>bigBed</b>, <b>PSL</b>
 <b>bigGenePred</b> tracks. To add decorations to a track, the decorations must first be stored in a
 separate bigBed file that includes extra fields to identify the decorated items. The track settings
 for the track must then be modified to include a pointer to that bigBed file; this can be done
-either in the track line for a custom track, or in the trackDb.txt file for a hub. At present, we
-only support a single decorator per track, but we anticipate supporting multiple decorators in the
-future.</p>
+either in the track line for a custom track, or in the trackDb.txt file for a hub.</p>
 
 <div class="text-center">
   <a href="http://genome.ucsc.edu/s/gperez2/RM_32467" target="_blank">
@@ -111,7 +109,8 @@ The full .as format for decorator bigBed files is as follows:
 A copy of this file can be found <a href="examples/decorator/decoration.as">here</a>.</p>
 <p>
 Valid values for the style field are "block" and "glyph".  Valid glyph entries include "Circle",
-"Square", "Diamond", "Triangle", "InvTriangle", "Octagon", "Star", and "Pentagram".  If the text isn't
+"Square", "Diamond", "Triangle", "InvTriangle", "Octagon", "Star", "X", and "Pentagram". 
+For non-glyph mode, the text can be the text string "Ignored". If the text isn't
 recognized, Circle will be used by default.</p>
 <p>
 The "decoratedItem" field (chr:start-end:item_name format) captures the link between the decoration and what item in the track is being
@@ -132,7 +131,7 @@ chr1 1000 2000 feature 0 + 1000 2000 0 2 400,400 0,600
 <p>
 We can take this <a href="examples/decorator/mainEx.bed">BED file</a> and construct a
 <a href="examples/decorator/mainEx.bb">mainEx.bb</a> from it as described in the <a href="bigBed.html">bigBed</a>
-documentation. To add a decoration to the &quot;feature&quot; item that highlights the region at position
+documentation. To add a decoration to the &quot;feature&quot; item that annotates the region at position
 chr1:1,201-1,800, we could create a corresponding item in a decorator bed file like the following:
 </p>
 <pre>
