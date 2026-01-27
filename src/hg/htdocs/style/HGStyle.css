@@ -1269,6 +1269,7 @@ span.gbSessionChanged {
 
 .searchCell {
     white-space: nowrap;
+    vertical-align: top;
 }
 
 .searchCell > .flexContainer {
