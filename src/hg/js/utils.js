@@ -4406,20 +4406,22 @@ function addRecentGenome(item) {
     // Save a genome selection to localStorage for showing recent selections in species search.
     // item is the autocomplete selection object with genome, label, commonName, category, etc.
     // Keeps the 10 most recently selected genomes, ordered by recency.
-    // TODO: we should store the results such that the db or genome is the key so hg38 does not
-    // overwrite hg19 because they both have "Human" as the "genome"
     const MAX_RECENT = 10;
     let stored = window.localStorage.getItem("recentGenomes");
     let recentObj = stored ? JSON.parse(stored) : {stack: [], results: {}};
 
     let stack = recentObj.stack;
-    // Use db or genome as the key (different result types use different fields)
-    let genome = item.genome || item.db;
-    if (!genome) return; // Can't save without an identifier
+    // Use db as the primary key so hg38 and hg19 don't overwrite each other (both have genome="Human")
+    // Fall back to genome for GenArk results which may not have a db field
+    let key = item.db || item.genome;
+    if (!key) return; // Can't save without an identifier
+
+    // Check if this key already exists
+    let existingItem = recentObj.results[key];
 
     // Remove if already exists (will re-add at front)
-    if (stack.includes(genome)) {
-        stack.splice(stack.indexOf(genome), 1);
+    if (stack.includes(key)) {
+        stack.splice(stack.indexOf(key), 1);
     } else if (stack.length >= MAX_RECENT) {
         // Remove oldest
         let toDelete = stack.pop();
@@ -4427,19 +4429,18 @@ function addRecentGenome(item) {
     }
 
     // Create a clean copy of the item with HTML stripped from labels
-    let cleanItem = Object.assign({}, item);
+    // If this key already exists, merge with existing data to preserve fields like category
+    let cleanItem = existingItem ? Object.assign({}, existingItem, item) : Object.assign({}, item);
     if (cleanItem.label) {
         cleanItem.label = cleanItem.label.replace(/<[^>]*>/g, '');
     }
     if (cleanItem.value) {
         cleanItem.value = cleanItem.value.replace(/<[^>]*>/g, '');
     }
-    // Ensure genome field is set for re-selection
-    cleanItem.genome = genome;
 
     // Add to front
-    stack.unshift(genome);
-    recentObj.results[genome] = cleanItem;
+    stack.unshift(key);
+    recentObj.results[key] = cleanItem;
 
     window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
 }

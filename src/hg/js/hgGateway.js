@@ -1392,6 +1392,18 @@ var hgGateway = (function() {
         if (checkJsonData(jsonData, 'handleSetDb') &&
             trackHubSkipHubName(jsonData.db) === trackHubSkipHubName(uiState.db)) {
             updateStateAndPage(jsonData);
+            // Save to recent genomes (for species tree/icon clicks and hub selections)
+            var recentItem = {
+                db: uiState.db,
+                genome: uiState.genome,
+                label: uiState.genomeLabel || uiState.genome,
+                taxId: uiState.taxId
+            };
+            if (uiState.hubUrl) {
+                recentItem.hubUrl = uiState.hubUrl;
+            }
+            addRecentGenome(recentItem);
+            displayRecentGenomesInPanel();
         } else {
             console.log('handleSetDb ignoring: ' + trackHubSkipHubName(jsonData.db) +
                         ' !== ' + trackHubSkipHubName(uiState.db));
@@ -1404,6 +1416,14 @@ var hgGateway = (function() {
             // Update uiState with new values and update the page:
             _.assign(uiState, jsonData);
             updateFindPositionSection(uiState);
+            // Save to recent genomes (for species tree/icon clicks)
+            addRecentGenome({
+                db: uiState.db,
+                genome: uiState.genome,
+                label: uiState.genomeLabel || uiState.genome,
+                taxId: uiState.taxId
+            });
+            displayRecentGenomesInPanel();
         } else {
             console.log('handleSetTaxId ignoring: ' + jsonData.taxId +
                         ' !== ' + uiState.taxId);
