@@ -230,10 +230,10 @@ ifeq (${USE_HAL},1)
     HDF5LIBS=${HDF5LIBDIR}/libhdf5_cpp.a ${HDF5LIBDIR}/libhdf5.a ${HDF5LIBDIR}/libhdf5_hl.a
     HALLIBS=${HALDIR}/hal/lib/libHalBlockViz.a ${HALDIR}/hal/lib/libHalMaf.a ${HALDIR}/hal/lib/libHalLiftover.a ${HALDIR}/hal/lib/libHalLod.a ${HALDIR}/hal/lib/libHal.a ${HALDIR}/sonLib/lib/sonLib.a ${HDF5LIBS} ${ZLIB}
     ifeq (${HOSTNAME},hgwdev)
-        HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
+        HALLIBS += /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.a
     else
       ifeq (${HOSTNAME},hgwdev-old.gi.ucsc.edu)
-          HALLIBS += ${OURSTUFF}/lib/libcurl.a /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
+          HALLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a
       else
           HALLIBS += -lstdc++
       endif
@@ -346,6 +346,7 @@ ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include/mariadb 
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
+   L+=${OURSTUFF}/lib/libcurl.a
    L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a
 
    ifeq (${HOSTNAME},hgwdev)
@@ -393,7 +394,7 @@ ifeq (${SEMI_STATIC},yes)
     # switch back to dynamic libraries
     DYNAMIC_PRE = -Wl,-Bdynamic
 endif
-DYNAMIC_LIBS =  ${DYNAMIC_PRE} -ldl -lm -lc -lcurl
+DYNAMIC_LIBS = ${DYNAMIC_PRE} -ldl -lm -lc
 
 L+= ${DYNAMIC_LIBS}
 
