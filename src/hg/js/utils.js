@@ -4406,6 +4406,8 @@ function addRecentGenome(item) {
     // Save a genome selection to localStorage for showing recent selections in species search.
     // item is the autocomplete selection object with genome, label, commonName, category, etc.
     // Keeps the 10 most recently selected genomes, ordered by recency.
+    // TODO: we should store the results such that the db or genome is the key so hg38 does not
+    // overwrite hg19 because they both have "Human" as the "genome"
     const MAX_RECENT = 10;
     let stored = window.localStorage.getItem("recentGenomes");
     let recentObj = stored ? JSON.parse(stored) : {stack: [], results: {}};
@@ -4460,6 +4462,45 @@ function getRecentGenomes() {
         }
     }
     return results;
+}
+
+function addRecentGenomesToMenuBar() {
+    // Retrieve recent genome selections from localStorage and add them to the "Genomes" menu heading
+    // Tries not add duplicate genomes
+    let stored = window.localStorage.getItem("recentGenomes");
+    if (!stored) return;
+
+    let recentObj = JSON.parse(stored);
+    let results = [];
+    for (let genome of recentObj.stack) {
+        if (recentObj.results[genome]) {
+            let item = document.createElement("li");
+            let link = document.createElement("a");
+            // TODO: these links need to work if the result (ie: genark) does not have a db
+            link.href = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + recentObj.results[genome].db + "&position=lastDbPos";
+            link.textContent = recentObj.results[genome].label;
+            item.appendChild(link);
+            results.push(item);
+        }
+    }
+
+    // construct the current list of labels
+    const labelList = [];
+    document.querySelectorAll("#tools1 > ul > li > a").forEach( (a) => {
+        labelList.push(a.textContent);
+    });
+
+    // filter our list of recents against the list of "Genomes"
+    let finalResult = results.filter( (result) => {
+        return !labelList.includes(result.firstChild.textContent);
+    });
+
+    // append the final list of links above the "other" link:
+    let lastLink = document.querySelector("#tools1 > ul > .last");
+    let parent = lastLink.parentNode;
+    finalResult.forEach( (res) => {
+        parent.insertBefore(res, lastLink);
+    });
 }
 
 function addRecentSearch(db, searchTerm, extra={}) {
