@@ -367,6 +367,7 @@ ifeq (${IS_HGWDEV},yes)
    endif
 
 else
+   L+=-lcurl
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.so ${PREFIX}/lib/libcrypto.so
    else
