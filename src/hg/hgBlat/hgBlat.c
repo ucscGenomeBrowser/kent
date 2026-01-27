@@ -2099,32 +2099,16 @@ printf("<TD class='searchCell' ALIGN=CENTER>\n");
 // will change it when a genome is selected in the search bar
 printf("<input name='db' value='%s' type='hidden'></input>\n", db);
 jsIncludeAutoCompleteLibs();
-char *searchPlaceholder = "Search any species, genome or assembly name";
 char *searchBarId = "genomeSearch";
-printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, NULL, NULL);
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, NULL, NULL);
 jsInlineF(
-    "function blatSelect(selectEle, item) {\n"
-    "   if (item.disabled || !item.genome) return;\n"
-    "   selectEle.innerHTML = item.label;\n"
-    "   document.mainForm.db.value = item.genome;\n"
-    "}\n\n"
-    "function onSearchError(jqXHR, textStatus, errorThrown, term) {\n"
-    "    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
-    "}\n\n"
-    "document.addEventListener(\"DOMContentLoaded\", () => {\n"
-    "    // bind the actual <select> to the function blatSelect, that way\n"
-    "    // initSpeciesAutoCompleteDropdown can call the function\n"
-    "    let selectEle = document.getElementById(\"genomeLabel\");\n"
-    "    let boundSelect = blatSelect.bind(null, selectEle);\n"
-    "    initSpeciesAutoCompleteDropdown('%s', boundSelect, null, null, null, onSearchError);\n"
-    "    // make the search button trigger the autocomplete manually\n"
-    "    let btn = document.getElementById(\"%sButton\");\n"
-    "    btn.addEventListener(\"click\", () => {\n"
-    "        let val = document.getElementById(\"%s\").value;\n"
-    "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
-    "    });\n"
+    "setupGenomeSearchBar({\n"
+    "    inputId: '%s',\n"
+    "    onSelect: function(item) {\n"
+    "        document.mainForm.db.value = item.genome;\n"
+    "    }\n"
     "});\n"
-    , searchBarId, searchBarId, searchBarId, searchBarId
+    , searchBarId
 );
 printf("</TD>\n");
 printf("<TD id='genomeLabel' class='searchCell' ALIGN=CENTER>\n");

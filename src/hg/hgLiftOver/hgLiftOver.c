@@ -95,45 +95,31 @@ cartSaveSession(cart);
 puts("\n<TABLE WIDTH=\"100%\">\n");
 printf("<TR>\n");
 jsIncludeAutoCompleteLibs();
-char *searchPlaceholder = "Search any species, genome or assembly name";
 char *searchBarId = "fromGenomeSearch";
 printf("<input name='%s' value='%s' type='hidden'></input>\n", HGLFT_FROMDB_VAR, chain->fromDb);
 printf("<input name='%s' value='%s' type='hidden'></input>\n", HGLFT_FROMORG_VAR, fromOrg);
 printf("<input name='formMethod' value='GET' type='hidden'></input>\n");
 printf("<TD class='searchCell'>\n");
-printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Change original genome:", NULL);
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Change original genome:", NULL);
 jsInlineF(
-    "function liftOverFromDbSelect(selectEle, item) {\n"
-    "   if (item.disabled || !item.genome) return;\n"
-    "   selectEle.innerHTML = item.label;\n"
-    "   document.mainForm."HGLFT_REFRESHONLY_VAR".value=1;\n"
-    "   document.mainForm."HGLFT_FROMDB_VAR".value=item.genome;\n"
-    "   document.mainForm."HGLFT_FROMORG_VAR".value=item.commonName.split('(')[0].trim();\n"
-    "   document.mainForm.submit();\n"
-    "}\n\n"
-    "function onSearchError(jqXHR, textStatus, errorThrown, term) {\n"
-    "    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
-    "}\n\n"
-    "document.addEventListener(\"DOMContentLoaded\", () => {\n"
-    "    // bind the actual <select> to the function liftOverFromDbSelect, that way\n"
-    "    // initSpeciesAutoCompleteDropdown can call the function\n"
-    "    let selectEle = document.getElementById(\"fromGenomeLabel\");\n"
-    "    let boundSelect = liftOverFromDbSelect.bind(null, selectEle);\n"
-    "    initSpeciesAutoCompleteDropdown('%s', boundSelect, \"hubApi/findGenome?browser=mustExist&liftable=true&q=\", null, null, onSearchError);\n"
-    "    // make the search button trigger the autocomplete manually\n"
-    "    let btn = document.getElementById(\"%sButton\");\n"
-    "    btn.addEventListener(\"click\", () => {\n"
-    "        let val = document.getElementById(\"%s\").value;\n"
-    "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
-    "    });\n"
+    "setupGenomeSearchBar({\n"
+    "    inputId: '%s',\n"
+    "    labelElementId: 'fromGenomeLabel',\n"
+    "    apiUrl: 'hubApi/findGenome?browser=mustExist&liftable=true&q=',\n"
+    "    onSelect: function(item) {\n"
+    "        document.mainForm."HGLFT_REFRESHONLY_VAR".value=1;\n"
+    "        document.mainForm."HGLFT_FROMDB_VAR".value=item.genome;\n"
+    "        document.mainForm."HGLFT_FROMORG_VAR".value=item.commonName.split('(')[0].trim();\n"
+    "        document.mainForm.submit();\n"
+    "    }\n"
     "});\n"
-    , searchBarId, searchBarId, searchBarId, searchBarId
+    , searchBarId
 );
 printf("</TD>\n");
-printf("<TD id='fromGenomeLabel' class='searchCell' ALIGN=CENTER>\n");
+printf("<TD class='searchCell' ALIGN=CENTER>\n");
 printf("<div class='flexContainer'>\n");
 printf("<span>Currently selected genome:</span>\n");
-printf("<span>%s (%s)</span>\n", fromOrg, chain->fromDb);
+printf("<span id='fromGenomeLabel'>%s (%s)</span>\n", fromOrg, chain->fromDb);
 printf("</TD>\n");
 
 // print select/options for toDb, it is more intuitive than a search bar

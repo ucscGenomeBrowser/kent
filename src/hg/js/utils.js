@@ -4762,3 +4762,51 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
         enterSelectsIdentical: false
     });
 }
+
+function setupGenomeSearchBar(config) {
+/* Higher-level wrapper for setting up a genome search bar with standard boilerplate.
+ * This handles the common pattern used across CGIs: error handling, DOMContentLoaded,
+ * element binding, search button handler, item validation, and label update.
+ *
+ * config object properties:
+ *   inputId (required): ID of the search input element
+ *   labelElementId: ID of the element to update with selected genome label (default: 'genomeLabel')
+ *   onSelect: Callback function(item, labelElement) when genome is selected.
+ *             Called AFTER standard validation and label update.
+ *             item has: {genome, label, commonName, disabled, ...}
+ *   apiUrl: Custom API URL (default: null uses standard hubApi/findGenome)
+ *   onServerReply: Custom function to process API results (default: null uses processFindGenome)
+ */
+    function onSearchError(jqXHR, textStatus, errorThrown, term) {
+        return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+    }
+
+    function wrappedSelect(labelElement, item) {
+        // Standard validation - all CGIs check this
+        if (item.disabled || !item.genome) return;
+        // Standard label update - all CGIs do this
+        labelElement.innerHTML = item.label;
+        // Call user's custom callback for CGI-specific logic
+        if (typeof config.onSelect === 'function') {
+            config.onSelect(item, labelElement);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let labelElementId = config.labelElementId || 'genomeLabel';
+        let labelElement = document.getElementById(labelElementId);
+        let boundSelect = wrappedSelect.bind(null, labelElement);
+
+        initSpeciesAutoCompleteDropdown(config.inputId, boundSelect,
+            config.apiUrl || null, null, config.onServerReply || null, onSearchError);
+
+        // Standard search button handler
+        let btn = document.getElementById(config.inputId + "Button");
+        if (btn) {
+            btn.addEventListener("click", () => {
+                let val = document.getElementById(config.inputId).value;
+                $("[id='" + config.inputId + "']").autocompleteCat("search", val);
+            });
+        }
+    });
+}

@@ -416,39 +416,20 @@ cartSaveSession(cart);
 printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=7><TR>\n");
 
 printf("<TD class='searchCell'><center>\n");
-char *searchPlaceholder = "Search any species, genome or assembly name";
 char *searchBarId = "genomeSearch";
-printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Genome:", NULL);
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Genome:", NULL);
 jsInlineF(
-    "function isPcrSelect(selectEle, item) {\n"
-    "   if (item.disabled || !item.genome) return;\n"
-    "   selectEle.innerHTML = item.label;\n"
-    ORGFORM_KEEP_PARAMS
-    "\n"
-    "document.orgForm.org.value = '0';\n"
-    "document.orgForm.db.value = item.genome;\n"
-    ORGFORM_RESET_TARGET
-    "\n"
-    ORGFORM_SUBMIT
-    "\n"
-    "}\n\n"
-    "function onSearchError(jqXHR, textStatus, errorThrown, term) {\n"
-    "    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
-    "}\n\n"
-    "document.addEventListener(\"DOMContentLoaded\", () => {\n"
-    "    // bind the actual <select> to the function isPcrSelect, that way\n"
-    "    // initSpeciesAutoCompleteDropdown can call the function\n"
-    "    let selectEle = document.getElementById(\"genomeLabel\");\n"
-    "    let boundSelect = isPcrSelect.bind(null, selectEle);\n"
-    "    initSpeciesAutoCompleteDropdown('%s', boundSelect, null, null, null, onSearchError);\n"
-    "    // make the search button trigger the autocomplete manually\n"
-    "    let btn = document.getElementById(\"%sButton\");\n"
-    "    btn.addEventListener(\"click\", () => {\n"
-    "        let val = document.getElementById(\"%s\").value;\n"
-    "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
-    "    });\n"
+    "setupGenomeSearchBar({\n"
+    "    inputId: '%s',\n"
+    "    onSelect: function(item) {\n"
+    "        " ORGFORM_KEEP_PARAMS "\n"
+    "        document.orgForm.org.value = '0';\n"
+    "        document.orgForm.db.value = item.genome;\n"
+    "        " ORGFORM_RESET_TARGET "\n"
+    "        " ORGFORM_SUBMIT "\n"
+    "    }\n"
     "});\n"
-    , searchBarId, searchBarId, searchBarId, searchBarId
+    , searchBarId
 );
 
 printf("</center></td><TD><CENTER>\n");

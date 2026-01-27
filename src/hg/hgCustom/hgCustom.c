@@ -203,32 +203,16 @@ if (!isUpdateForm)
     // will change it when a genome is selected in the search bar
     printf("<input name='db' value='%s' type='hidden'></input>\n", database);
     jsIncludeAutoCompleteLibs();
-    char *searchPlaceholder = "Search any species, genome or assembly name";
     char *searchBarId = "genomeSearch";
-    printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Change selected genome:", NULL);
+    printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Change selected genome:", NULL);
     jsInlineF(
-        "function hgCustomSelect(selectEle, item) {\n"
-        "   if (item.disabled || !item.genome) return;\n"
-        "   selectEle.innerHTML = item.label;\n"
-        "   document.mainForm.db.value = item.genome;\n"
-        "}\n\n"
-        "function onSearchError(jqXHR, textStatus, errorThrown, term) {\n"
-        "    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
-        "}\n\n"
-        "document.addEventListener(\"DOMContentLoaded\", () => {\n"
-        "    // bind the actual <select> to the function hgCustomSelect, that way\n"
-        "    // initSpeciesAutoCompleteDropdown can call the function\n"
-        "    let selectEle = document.getElementById(\"genomeLabel\");\n"
-        "    let boundSelect = hgCustomSelect.bind(null, selectEle);\n"
-        "    initSpeciesAutoCompleteDropdown('%s', boundSelect, null, null, null, onSearchError);\n"
-        "    // make the search button trigger the autocomplete manually\n"
-        "    let btn = document.getElementById(\"%sButton\");\n"
-        "    btn.addEventListener(\"click\", () => {\n"
-        "        let val = document.getElementById(\"%s\").value;\n"
-        "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
-        "    });\n"
+        "setupGenomeSearchBar({\n"
+        "    inputId: '%s',\n"
+        "    onSelect: function(item) {\n"
+        "        document.mainForm.db.value = item.genome;\n"
+        "    }\n"
         "});\n"
-        , searchBarId, searchBarId, searchBarId, searchBarId
+        , searchBarId
     );
     printf("</td>\n");
     printf("<td class='searchCell' align=center>\n");

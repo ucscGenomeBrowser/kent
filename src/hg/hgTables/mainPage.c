@@ -653,43 +653,26 @@ printStep(stepNumber++);
 /* Print genome search bar line. */
     {
     hPrintf("<tr style=\"display: block\"><td class='searchCell'>\n");
-    char *searchPlaceholder = "Search any species, genome or assembly name";
     char *searchBarId = "genomeSearch";
     jsIncludeAutoCompleteLibs();
-    printGenomeSearchBar(searchBarId, searchPlaceholder, NULL, TRUE, "Genome:", "tbSearchLabel");
+    printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Genome:", "tbSearchLabel");
     jsInlineF(
-        "function hgTablesSelect(selectEle, item) {\n"
-        "   if (item.disabled || !item.genome) return;\n"
-        "   selectEle.innerHTML = item.label;\n"
-        "   document.hiddenForm.db.value = item.genome;\n"
-        "   document.hiddenForm.hgta_regionType.value = regionType;\n"
-        "   document.hiddenForm.hgta_outputType.value = document.getElementById('outputTypeDropdown').value;\n"
-        "   document.hiddenForm.submit();\n"
-        "}\n\n"
-        "function onSearchError(jqXHR, textStatus, errorThrown, term) {\n"
-        "    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];\n"
-        "}\n\n"
-        "document.addEventListener(\"DOMContentLoaded\", () => {\n"
-        "    // bind the actual <select> to the function hgTablesSelect, that way\n"
-        "    // initSpeciesAutoCompleteDropdown can call the function\n"
-        "    // for hgTables specifically, we need to set the hiddenForm.db value so\n"
-        "    // we can force a form submit when the user chooses a new species\n"
-        "    document.hiddenForm.db.value = \"%s\";\n"
-        "    let selectEle = document.getElementById(\"genomeLabel\").childNodes[1];\n"
-        "    let boundSelect = hgTablesSelect.bind(null, selectEle);\n"
-        "    initSpeciesAutoCompleteDropdown('%s', boundSelect, null, null, null, onSearchError);\n"
-        "    // make the search button trigger the autocomplete manually\n"
-        "    let btn = document.getElementById(\"%sButton\");\n"
-        "    btn.addEventListener(\"click\", () => {\n"
-        "        let val = document.getElementById(\"%s\").value;\n"
-        "        $(\"[id=\'%s\']\").autocompleteCat(\"search\", val);\n"
-        "    });\n"
+        "document.hiddenForm.db.value = \"%s\";\n"
+        "setupGenomeSearchBar({\n"
+        "    inputId: '%s',\n"
+        "    labelElementId: 'genomeLabel',\n"
+        "    onSelect: function(item) {\n"
+        "        document.hiddenForm.db.value = item.genome;\n"
+        "        document.hiddenForm.hgta_regionType.value = regionType;\n"
+        "        document.hiddenForm.hgta_outputType.value = document.getElementById('outputTypeDropdown').value;\n"
+        "        document.hiddenForm.submit();\n"
+        "    }\n"
         "});\n"
-        , database, searchBarId, searchBarId, searchBarId, searchBarId
+        , database, searchBarId
     );
     hPrintf("</td>\n");
     char *selectedLabel = getCurrentGenomeLabel(database);
-    hPrintf("<td class='searchCell' id='genomeLabel'><b>Assembly:</b><span style=\"padding-left: 2px\">%s</span></td>\n", selectedLabel);
+    hPrintf("<td class='searchCell'><b>Assembly:</b><span id='genomeLabel' style=\"padding-left: 2px\">%s</span></td>\n", selectedLabel);
     hPrintf("</tr>\n");
     }
 
