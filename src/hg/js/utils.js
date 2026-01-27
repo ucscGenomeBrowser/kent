@@ -4429,13 +4429,33 @@ function addRecentGenome(item) {
     }
 
     // Create a clean copy of the item with HTML stripped from labels
-    // If this key already exists, merge with existing data to preserve fields like category
-    let cleanItem = existingItem ? Object.assign({}, existingItem, item) : Object.assign({}, item);
+    // Start with the new item, then selectively preserve better data from existing item
+    let cleanItem = Object.assign({}, item);
     if (cleanItem.label) {
         cleanItem.label = cleanItem.label.replace(/<[^>]*>/g, '');
     }
     if (cleanItem.value) {
         cleanItem.value = cleanItem.value.replace(/<[^>]*>/g, '');
+    }
+
+    // If this key already exists, preserve the more descriptive label and other important fields
+    // A label with parentheses or longer length is considered more descriptive
+    // (e.g., "Gorilla gorilla gorilla (gorGor3)" vs just "Gorilla")
+    if (existingItem) {
+        let existingLabel = existingItem.label || '';
+        let newLabel = cleanItem.label || '';
+        // Preserve the existing label if it's more descriptive
+        if (existingLabel.includes('(') || existingLabel.length > newLabel.length) {
+            cleanItem.label = existingLabel;
+        }
+        // Preserve category if not present in new item
+        if (!cleanItem.category && existingItem.category) {
+            cleanItem.category = existingItem.category;
+        }
+        // Preserve hubUrl if not present in new item
+        if (!cleanItem.hubUrl && existingItem.hubUrl) {
+            cleanItem.hubUrl = existingItem.hubUrl;
+        }
     }
 
     // Add to front
@@ -4693,6 +4713,9 @@ function processFindGenome(result, term) {
             });
             if (val.hubUrl !== null) {
                 d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
+                // For GenArk items, ensure db is set to the accession (key) for consistent
+                // identification in recent genomes storage (avoids duplicate entries)
+                d.db = key;
             } else {
                 d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
             }

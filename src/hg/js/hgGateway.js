@@ -864,10 +864,8 @@ var hgGateway = (function() {
         // image to scroll and the slider to move.
         var $speciesPicker = $('#speciesPicker');
         var $sliderBar = $('#rainbowSlider');
-        var sliderBarTop = $sliderBar.offset().top;
         var sliderBarHeight = $speciesPicker.outerHeight();
         var $sliderIcon = $('#sliderSvgContainer');
-        var sliderIconLeft = $sliderIcon.offset().left;
         var $speciesTree = $('#speciesTree');
         // When the user moves the slider, causing the image to scroll, don't do the
         // image onscroll action (do that only when the user scrolls the image).
@@ -884,8 +882,11 @@ var hgGateway = (function() {
 
         var moveSlider = function(normalizedTop) {
             // Move the slider icon to a normalized top coord scaled by sliderBarHeight.
+            // Get current offset dynamically since the recents list may have changed size
+            var sliderBarTop = $sliderBar.offset().top;
+            var sliderIconLeft = $sliderIcon.offset().left;
             $sliderIcon.offset({ top: sliderBarTop + (normalizedTop * sliderBarHeight),
-                                 left: sliderIconLeft.left });
+                                 left: sliderIconLeft });
         };
 
         var onClickStripe = function(normalizedTop) {
@@ -902,6 +903,8 @@ var hgGateway = (function() {
         var onDragSlider = function(event, ui) {
             // The user dragged the slider; scroll the tree image to the corresponding
             // position.
+            // Get current offset dynamically since the recents list may have changed size
+            var sliderBarTop = $sliderBar.offset().top;
             var sliderTop = ui.offset.top - sliderBarTop;
             var normalizedTop = sliderTop / sliderBarHeight;
             inhibitImageOnScroll = true;
@@ -916,6 +919,8 @@ var hgGateway = (function() {
                 inhibitImageOnScroll = false;
                 return;
             }
+            // Get current offset dynamically since the recents list may have changed size
+            var sliderBarTop = $sliderBar.offset().top;
             imageTop = -$speciesTree.offset().top + sliderBarTop + 1;
             normalizedTop = imageTop / svgHeight;
             moveSlider(normalizedTop);
@@ -1387,22 +1392,50 @@ var hgGateway = (function() {
         }
     }
 
+    function isGenomeAtFrontOfRecents(db) {
+        // Check if a genome with this db is already at the front of the recents list.
+        // This is used to detect if autocompleteCat.js just added it (to avoid double-adding).
+        // We compare without hub prefixes since autocompleteCat saves without prefix but
+        // server responses may include prefixes like "hub_123_GCA_xxx".
+        var stored = window.localStorage.getItem("recentGenomes");
+        if (!stored) return false;
+        var recentObj = JSON.parse(stored);
+        if (!recentObj.stack || recentObj.stack.length === 0) return false;
+        var frontKey = trackHubSkipHubName(recentObj.stack[0]);
+        var checkKey = trackHubSkipHubName(db);
+        return frontKey === checkKey;
+    }
+
     function handleSetDb(jsonData) {
         // Handle the server's response to cartJson command setDb or setHubDb
         if (checkJsonData(jsonData, 'handleSetDb') &&
             trackHubSkipHubName(jsonData.db) === trackHubSkipHubName(uiState.db)) {
             updateStateAndPage(jsonData);
-            // Save to recent genomes (for species tree/icon clicks and hub selections)
-            var recentItem = {
-                db: uiState.db,
-                genome: uiState.genome,
-                label: uiState.genomeLabel || uiState.genome,
-                taxId: uiState.taxId
-            };
-            if (uiState.hubUrl) {
-                recentItem.hubUrl = uiState.hubUrl;
+            // Save to recent genomes only if not already at the front (autocompleteCat.js may have just added it)
+            // Use db without hub prefix for consistent key comparison
+            var dbForRecents = trackHubSkipHubName(uiState.db);
+            if (!isGenomeAtFrontOfRecents(dbForRecents)) {
+                // Construct a descriptive label that includes the db/accession for identification
+                var label = uiState.genomeLabel || uiState.genome;
+                if (label && dbForRecents && label.indexOf(dbForRecents) < 0) {
+                    // Add the db/accession to the label if not already present
+                    label = label + ' (' + dbForRecents + ')';
+                }
+                var recentItem = {
+                    db: dbForRecents,
+                    genome: uiState.genome,
+                    label: label,
+                    taxId: uiState.taxId
+                };
+                if (uiState.hubUrl) {
+                    recentItem.hubUrl = uiState.hubUrl;
+                    // For hub genomes, add category for proper detection when re-selected
+                    if (dbForRecents.startsWith('GCA_') || dbForRecents.startsWith('GCF_')) {
+                        recentItem.category = "UCSC GenArk";
+                    }
+                }
+                addRecentGenome(recentItem);
             }
-            addRecentGenome(recentItem);
             displayRecentGenomesInPanel();
         } else {
             console.log('handleSetDb ignoring: ' + trackHubSkipHubName(jsonData.db) +
@@ -1416,13 +1449,23 @@ var hgGateway = (function() {
             // Update uiState with new values and update the page:
             _.assign(uiState, jsonData);
             updateFindPositionSection(uiState);
-            // Save to recent genomes (for species tree/icon clicks)
-            addRecentGenome({
-                db: uiState.db,
-                genome: uiState.genome,
-                label: uiState.genomeLabel || uiState.genome,
-                taxId: uiState.taxId
-            });
+            // Save to recent genomes only if not already at the front (autocompleteCat.js may have just added it)
+            // Use db without hub prefix for consistent key comparison
+            var dbForRecents = trackHubSkipHubName(uiState.db);
+            if (!isGenomeAtFrontOfRecents(dbForRecents)) {
+                // Construct a descriptive label that includes the db for identification
+                var label = uiState.genomeLabel || uiState.genome;
+                if (label && dbForRecents && label.indexOf(dbForRecents) < 0) {
+                    // Add the db to the label if not already present
+                    label = label + ' (' + dbForRecents + ')';
+                }
+                addRecentGenome({
+                    db: dbForRecents,
+                    genome: uiState.genome,
+                    label: label,
+                    taxId: uiState.taxId
+                });
+            }
             displayRecentGenomesInPanel();
         } else {
             console.log('handleSetTaxId ignoring: ' + jsonData.taxId +
@@ -1517,7 +1560,8 @@ var hgGateway = (function() {
                        (item.hubUrl && (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
 
         if (isGenArk) {
-            db = item.genome;
+            // For items from localStorage recents, db is the accession; for fresh autocomplete, genome is
+            db = item.db || item.genome;
             setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName || org, true);
         } else if (item.hubUrl && item.hubName) {
             // Public hub - the autocomplete sends the hub database from hubPublic.dbList,
