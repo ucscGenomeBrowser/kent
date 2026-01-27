@@ -22,10 +22,15 @@ var autocompleteCat = (function() {
                    // There's no this._super as shown in the doc, so I can't override
                    // _create as shown in the doc -- just do this every time we render...
                    this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                   // Check if all items are from recents (have displayCategory === "Recent")
+                   // If so, skip category headers since they're all recent selections
+                   var allRecent = items.length > 0 && items.every(function(item) {
+                       return item.displayCategory === "Recent";
+                   });
                    $.each(items,
                           function(index, item) {
-                              // Add a heading each time we see a new category:
-                              if (item.category && item.category !== currentCategory) {
+                              // Add a heading each time we see a new category (but not for recents)
+                              if (!allRecent && item.category && item.category !== currentCategory) {
                                   ul.append("<li class='ui-autocomplete-category'>" +
                                             item.category + "</li>" );
                                   currentCategory = item.category;
