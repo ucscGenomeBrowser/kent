@@ -18,6 +18,23 @@
   <div class="cirm-page-title back-dark-pink">
     <h5 class="cirm-page-title-text">SSPsyGene Milestone Charts</h5>
   </div>
+
+
+    <div class="col-md-12">
+    <pre class="mermaid">
+    gantt
+    dateFormat  MM
+    axisFormat %U
+    title  Color Key for Milestones
+
+
+    section Examples                           	
+    Grey = completed milestone     : done, milestone, hold1, 2025-03-31, 0d
+    Light blue = active milestone (have data, not all metadata)  : active, milestone, hold2, 2025-4-15, 0d
+    Red = due milestone  : crit, milestone, hold3, 2025-05-31, 0d
+    </pre>
+    </div>
+    
   <a name="ADGC1"></a>
   <!-- Start of ADGC1 Henry Gantt Chart-->
   <div class="cirm-page-title back-light-blue"><h5 class="cirm-page-title-text">ADGC1 UCLA Chart</h5></div>
@@ -31,9 +48,9 @@
 
 
     section Grant Year                                                                           
-    Start Grant Year 3     :milestone, year3_ucla, 2025-03-31, 0d                                       
-    Start Grant Year 4     :milestone, m1, 2026-03-31, 0d                                        
-    Start Grant Year 5     :milestone, m1, 2027-03-31, 0d
+    Start Grant Year 3     : milestone, year3_ucla, 2025-03-31, 0d                                       
+    Start Grant Year 4     : milestone, m1, 2026-03-31, 0d                                        
+    Start Grant Year 5     : milestone, m1, 2027-03-31, 0d
 
     click year3_ucla href "https://docs.google.com/spreadsheets/d/1Ml_UXDHE4UZo2kjLp1aZLa0KxLtLSnVi/edit?gid=1138387919#gid=1138387919&range=J1:M20"
         
@@ -156,13 +173,13 @@
         Submit initial data (L0, L1) CRISPRi ECCITEseq, KOLF2.2J and CW20107 in iGLUTs (fastq), 10 capstone genes (ARID1B - SMARCC2) : crit, milestone, ADGC3_K_6, 2025-09-30, 0d
         Submit initial data (L0, L1) CRISPRi organoid models ECCITEseq of 10 capstone genes (ARID1B - SMARCC2) genes in KOLF2.2J : crit, milestone, ADGC3_N_6, 2027-03-31, 0d
         Submit ECCITEseq data (L0, L1) to DRACC for 29 NDD genes (ANK3 - WAC) in induced NPCs, glutamatergic neurons, and GABAergic neurons; iGLUT 3182-3-clone5 (iNPC, d7 iGLUT and d21 iGLUT) and iGABA 553-3-clone34 (d36 iGABA) : done, milestone, ADGC3_I_7, 2025-03-31, 0d
-        Submit L3/L4 data from iGLUT manuscript : crit, milestone, ADGC3_K_7, 2025-09-30, 0d
+        Submit L3/L4 data from iGLUT manuscript : active, milestone, ADGC3_K_7, 2025-09-30, 0d
 
        
         section Aim 2
         Submit data (L0, L1) High-throughput quantitative behavioral profiling (.raw, .XLS), zebrafish, 10 stable mutant lines (ADNP - SYNGAP1) : crit, milestone, ADGC3_I_12, 2025-03-31, 0d
-        Submit data (L0, L1) High-throughput quantitative behavioral profiling (.raw, .XLS), zebrafish, 20 NPD genes (ANK2 - SMARCC2) : crit, milestone, ADGC3_J_14, 2025-07-01, 0d
-        Submit data (L0, L1) Whole-brain structure and activity mapping (.LIF, .XLS), zebrafish, 5 NPD genes (ADNP - NRXN1) : crit, milestone, ADGC3_K_14, 2025-09-30, 0d
+        Submit data (L0, L1) High-throughput quantitative behavioral profiling (.raw, .XLS), zebrafish, 20 NPD genes (ANK2 - SMARCC2) : active, milestone, ADGC3_J_14, 2025-07-01, 0d
+        Submit data (L0, L1) Whole-brain structure and activity mapping (.LIF, .XLS), zebrafish, 5 NPD genes (ADNP - NRXN1) : active, milestone, ADGC3_K_14, 2025-09-30, 0d
         Submit data (L0, L1) High-throughput quantitative behavioral profiling (.raw, .XLS), zebrafish, 20 NPD genes (AKAP11 - WAC) : crit, milestone, ADGC3_L_14, 2025-12-31, 0d
         Submit data (L0, L1) Whole-brain structure and activity mapping (.LIF, .XLS), zebrafish, 5 NPD genes (PPP2R5D - MBD5) : crit, milestone, ADGC3_M_14, 2026-03-31, 0d
         Submit L3/L4 data from 40 NPD gene manuscript : crit, milestone, ADGC3_K_15, 2025-09-30, 0d
@@ -209,7 +226,7 @@
         Submit remaining optical electrophysiology data : crit, milestone, ADGC4_Aim2_year5_item1, 2027-03-31, 0d
 
         section Aim 3
-        Submit RNA-seq profiles - ANALYSIS / SUBMISSION UNDERWAY : crit, milestone, ADGC4_Aim3_year3_D_15, 2025-03-31, 0d
+        Submit RNA-seq profiles - ANALYSIS / SUBMISSION UNDERWAY : active, milestone, ADGC4_Aim3_year3_D_15, 2025-03-31, 0d
         Submit RNA-seq profiles from >10,000 cells : crit, milestone, ADGC4_Aim3_year4_E_15, 2026-03-31, 0d
         Submit remaining RNA-seq profiles : crit, milestone, ADGC4_Aim3_year5_item1, 2027-03-31, 0d
         Submit 10 TB of associated images to DRACC : crit, milestone, ADGC4_Aim3_year4_D_16, 2026-03-31, 0d
