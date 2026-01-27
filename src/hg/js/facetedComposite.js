@@ -83,6 +83,11 @@ $(function() {
     }
 
     function initDataTypeSelector() {
+        // Skip if no dataTypes defined or empty object
+        if (!embeddedData.dataTypes || Object.keys(embeddedData.dataTypes).length === 0) {
+            return;
+        }
+
         const selector = document.getElementById("dataTypeSelector");
         selector.appendChild(Object.assign(document.createElement("label"), {
             innerHTML: "<b>Data type</b>",
@@ -230,12 +235,14 @@ $(function() {
             }
 
             const sortedPossibleVals = Array.from(possibleValues[key].entries());
-            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // neg: less-than
+            sortedPossibleVals.sort((a, b) => // neg: less-than
+                 a[1] !== b[1] ? b[1] - a[1] : a[0].localeCompare(b[0]));
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals
                 .filter(([val, count]) =>
-                    val.trim().toUpperCase() !== "NA" && count > 1)
+                    val.trim().toUpperCase() !== "NA")  // why only > 1?
+                    //val.trim().toUpperCase() !== "NA" && count > 1)
                 .slice(0, maxCheckboxes);
 
             // Any "other/Other/OTHER" entry will be put at the end
@@ -316,21 +323,36 @@ $(function() {
 
     function initSubmit(table) {  // logic for the submit event
         const { mdid, primaryKey } = embeddedData;  // mdid: metadata identifier
+        const hasDataTypes = embeddedData.dataTypes && 
+                             Object.keys(embeddedData.dataTypes).length > 0;
+
         document.getElementById("Submit").addEventListener("click", (submitBtnEvent) => {
             submitBtnEvent.preventDefault();  // hold the submit button event
 
             const selectedRows = table.rows({selected: true}).data().toArray();
-            const selectedDataTypes = [];
-            document.querySelectorAll("input.cbgroup").forEach(cb => {
-                if (cb.checked) {
-                    selectedDataTypes.push(cb.value);
-                }
-            });
             const uriForUpdate = new URLSearchParams({ "cartDump.metaDataId": mdid, "noDisplay": 1 });
             selectedRows.forEach(obj =>  // 'de' for data element
                 uriForUpdate.append(`${mdid}.de`, obj[primaryKey]));
-            selectedDataTypes.forEach(dat =>  // 'dt' for data type
-                uriForUpdate.append(`${mdid}.dt`, dat));
+
+            if (hasDataTypes) {
+                // Collect checked data types
+                const selectedDataTypes = [];
+                document.querySelectorAll("input.cbgroup").forEach(cb => {
+                    if (cb.checked) {
+                        selectedDataTypes.push(cb.value);
+                    }
+                });
+                // Require at least one data type when the selector exists
+                if (selectedDataTypes.length === 0) {
+                    alert("Please select at least one data type.");
+                    return;  // abort submission
+                }
+                selectedDataTypes.forEach(dat =>  // 'dt' for data type
+                    uriForUpdate.append(`${mdid}.dt`, dat));
+            } else {
+                // No data types configured for this track: send empty-string sentinel
+                uriForUpdate.append(`${mdid}.dt`, "");
+            }
             updateVisibilities(uriForUpdate, submitBtnEvent);
         });
     }  // end initSubmit

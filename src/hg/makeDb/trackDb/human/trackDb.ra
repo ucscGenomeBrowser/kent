@@ -5624,5 +5624,5 @@ include exonprimers.ra alpha
 include longReadVariants.ra
 
 include g2p.ra
-include varFreqs.ra alpha
-include phasedVars.ra alpha
+include varFreqs.ra alpha,beta
+include phasedVars.ra

@@ -16,6 +16,7 @@ import subprocess
 import sys
 import os
 import glob
+import re
 
 def run_command(cmd, description):
     """
@@ -64,9 +65,9 @@ def find_latest_ncbirefseq_dir(db, year):
     """
     Find the latest ncbiRefSeq directory for the given year
     
-    Searches for directories matching the pattern:
-    - hg38: /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.{year}-*
-    - hg19: /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.{year}-*
+    Automatically detects the latest patch version (p15, p14, p13, etc.)
+    by searching for all ncbiRefSeq.p*.{year}-* directories and using
+    the highest patch number found.
     
     If no directories match the given year, tries previous years (up to 5 years back)
     
@@ -77,10 +78,6 @@ def find_latest_ncbirefseq_dir(db, year):
     Returns:
         str: Path to the latest matching directory, or None if not found
     """
-    # Determine ncbiRefSeq version based on database
-    # hg19 uses p13, hg38 uses p14
-    version = "p13" if db == "hg19" else "p14"
-    
     base_path = "/hive/data/genomes/{}/bed".format(db)
     
     # Try the provided year first, then fall back to previous years
@@ -88,24 +85,55 @@ def find_latest_ncbirefseq_dir(db, year):
     max_attempts = 5  # Try up to 5 years back
     
     for attempt in range(max_attempts):
-        pattern = os.path.join(base_path, "ncbiRefSeq.{}.{}-*".format(version, current_year))
+        # Search for all ncbiRefSeq.p* directories for this year
+        pattern = os.path.join(base_path, "ncbiRefSeq.p*.{}-*".format(current_year))
         matching_dirs = glob.glob(pattern)
         
         if matching_dirs:
-            # Found matching directories, return the latest
-            latest_dir = sorted(matching_dirs)[-1]
+            # Extract patch numbers and find the highest one
+            # Example: "ncbiRefSeq.p14.2024-09-18" -> patch number is 14
+            patch_versions = []
+            for dir_path in matching_dirs:
+                basename = os.path.basename(dir_path)
+                match = re.match(r'ncbiRefSeq\.p(\d+)\.', basename)
+                if match:
+                    patch_num = int(match.group(1))
+                    patch_versions.append((patch_num, dir_path))
+            
+            if not patch_versions:
+                # No valid directories found
+                current_year -= 1
+                continue
+            
+            # Find the highest patch number
+            highest_patch = 0
+            for patch_num, dir_path in patch_versions:
+                if patch_num > highest_patch:
+                    highest_patch = patch_num
+            
+            # Get all directories with the highest patch number
+            highest_patch_dirs = []
+            for patch_num, dir_path in patch_versions:
+                if patch_num == highest_patch:
+                    highest_patch_dirs.append(dir_path)
+            
+            # Sort by date (lexicographic sort works for YYYY-MM-DD format)
+            latest_dir = sorted(highest_patch_dirs)[-1]
+            
             if current_year != int(year):
                 print("Note: Using {} directory (year {} not found)".format(
                     os.path.basename(latest_dir), year))
+            
             return latest_dir
         
         # No match, try previous year
         current_year -= 1
     
     # No directories found after trying multiple years
-    print("Error: No directories matching pattern ncbiRefSeq.{}.* found (tried years {} to {})".format(
-        version, year, int(year) - max_attempts + 1), file=sys.stderr)
+    print("Error: No ncbiRefSeq directories found (tried years {} to {})".format(
+        year, int(year) - max_attempts + 1), file=sys.stderr)
     return None
+
 
 def process_database(year, db, working_dir):
     """
@@ -226,13 +254,14 @@ def process_transcripts(year, db, ncbirefseq_source_dir, output_dir):
     #          -> version="p14", date_suffix="2025-08-13"
     dir_basename = os.path.basename(ncbirefseq_source_dir)
     
-    # Determine version (p13 or p14)
-    if dir_basename.startswith("ncbiRefSeq.p13."):
-        version = "p13"
-        date_suffix = dir_basename.replace("ncbiRefSeq.p13.", "")
-    else:
-        version = "p14"
-        date_suffix = dir_basename.replace("ncbiRefSeq.p14.", "")
+    # Extract version (p13, p14, p15, etc.) using regex
+    match = re.match(r'ncbiRefSeq\.(p\d+)\.(.+)', dir_basename)
+    if not match:
+        print("Error: Could not parse ncbiRefSeq directory name: {}".format(dir_basename), file=sys.stderr)
+        return False
+    
+    version = match.group(1)  # e.g., "p14"
+    date_suffix = match.group(2)  # e.g., "2025-08-13"
     
     # Create output directory with same version and date pattern
     # Example: /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/
@@ -377,8 +406,7 @@ def main():
     transcript_success_count = 0
     for db in databases:
         # Find the latest ncbiRefSeq directory for this database
-        # hg38: /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.{year}-{date}/
-        # hg19: /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.{year}-{date}/
+        # Automatically detects latest patch version (p15, p14, p13, etc.)
         # Falls back to previous years if specified year not found
         ncbirefseq_source_dir = find_latest_ncbirefseq_dir(db, year)
         if not ncbirefseq_source_dir:
@@ -386,7 +414,7 @@ def main():
             continue
         
         # Output to hgmd directory
-        # Files will be created in: /hive/data/genomes/{db}/bed/hgmd/ncbiRefSeq.p{13|14}.{date}/
+        # Files will be created in: /hive/data/genomes/{db}/bed/hgmd/ncbiRefSeq.p{XX}.{date}/
         output_dir = "/hive/data/genomes/{}/bed/hgmd".format(db)
         
         if process_transcripts(year, db, ncbirefseq_source_dir, output_dir):
@@ -408,7 +436,7 @@ if __name__ == '__main__':
 # Output files: /hive/data/genomes/hg38/bed/hgmd/hgmd.bed, /hive/data/genomes/hg38/bed/hgmd/hgmd.bb
 # Symlink created: /gbdb/hg38/bbi/hgmd.bb
 # hgBbiDbLink run: hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb
-# ✓ hg38 transcript processing completed!
+#  hg38 transcript processing completed!
 # Output files: /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmdTranscripts.txt, /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmd.curated.gp
 # hgLoadGenePred run: hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
 
@@ -418,6 +446,6 @@ if __name__ == '__main__':
 # Output files: /hive/data/genomes/hg19/bed/hgmd/hgmd.bed, /hive/data/genomes/hg19/bed/hgmd/hgmd.bb
 # Symlink created: /gbdb/hg19/bbi/hgmd.bb
 # hgBbiDbLink run: hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
-# ✓ hg19 transcript processing completed!
+#  hg19 transcript processing completed!
 # Output files: /hive/data/genomes/hg19/bed/hgmd/ncbiRefSeq.p13.2024-12-15/hgmdTranscripts.txt, /hive/data/genomes/hg19/bed/hgmd/ncbiRefSeq.p13.2024-12-15/hgmd.curated.gp
 # hgLoadGenePred run: hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp

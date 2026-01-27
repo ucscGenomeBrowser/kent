@@ -38,7 +38,7 @@ window.createTutorialPopup = function() {
           <small>
           An introductory tutorial to guide users with steps to upload their own data into the
           UCSC Genome Browser. Learn how to upload a BED, Wiggle, bigBed, or bigWigs for the
-          hg38 genome assembly.</small>
+          hg19 genome assembly.</small>
           </td></tr>
       <tr><td style="padding: 8px;width: 200px; text-align: center; border: 1px solid #666666;">
           <a href="#" id="tableBrowserTutorial">Table Browser tutorial</a></td>

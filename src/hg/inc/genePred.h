@@ -130,7 +130,6 @@ struct genePred
     int *exonFrames;              /* List of frame for each exon, or -1
                                    * if no frame or not known. NULL if not
                                    * available. */
-    char origStrand;              /* if quickLifted, this is the original strand. */
 };
 
 /* Standard value to use for insertMergeSize when creating genePred.
@@ -418,4 +417,7 @@ struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, s
 
 struct genePred *genePredExtLoad15(char **row);
 /* Load a genePred record assumed to be 15 fields. */
+
+void genePredReverseFrames(struct genePred *gp);
+// Reverse exon frames for this genePred
 #endif /* GENEPRED_H */

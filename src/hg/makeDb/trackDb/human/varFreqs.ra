@@ -79,115 +79,17 @@ superTrack on
         dataVersion 2025-06-16
         priority 5
 
-        track ALFA
-        compositeTrack on
-        parent varFreqs on
-        visibility pack
-        itemRgb on
-        type bigBed 9 + .
+        track alfaVcf
         shortLabel NCBI ALFA 408k WGS/WES/array
-        longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array
-        mouseOverField frequency
-        html ALFA.html
-        filter.score 10
-        priority 4
+        longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array, 163M variants
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA.vcf.gz
+        visibility pack
         dataVersion R4
-
-             track ALFA_GLB
-             parent ALFA on
-             shortLabel NCBI ALFA: Global
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_GLB.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_EUR
-             parent ALFA on
-             shortLabel NCBI ALFA: European
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_EUR.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_AFA
-             parent ALFA on
-             shortLabel NCBI ALFA: African American
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_AFA.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_AFO
-             parent ALFA on
-             shortLabel NCBI ALFA: African Others
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_AFO.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_AFR
-             parent ALFA on
-             shortLabel NCBI ALFA: African
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_AFR.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_EAS
-             parent ALFA on
-             shortLabel NCBI ALFA: East Asian
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_EAS.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_SAS
-             parent ALFA on
-             shortLabel NCBI ALFA: South Asian
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_SAS.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_OAS
-             parent ALFA on
-             shortLabel NCBI ALFA: Other Asian
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_OAS.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_ASN
-             parent ALFA on
-             shortLabel NCBI ALFA: Asian
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_ASN.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_LAC
-             parent ALFA on
-             shortLabel NCBI ALFA: Latin American 1
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_LAC.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_LEN
-             parent ALFA on
-             shortLabel NCBI ALFA: Latin American 2
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_LEN.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
-
-             track ALFA_OTR
-             parent ALFA on
-             shortLabel NCBI ALFA: Other
-             bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA_OTR.bb
-             type bigBed 9 + .
-             url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
-             urlLabel NCBI Variation Page
+        priority 4.1
+        url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
+        urlLabel NCBI Variation Page
 
         track finngen
         parent varFreqs on
@@ -271,3 +173,123 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/saudi/saudi.vcf.gz
         visibility pack
+
+        track schema
+        shortLabel SCHEMA Schizophrenia 121k WES
+        longLabel Variant Frequencies: SCHEMA Schizophrenia Exome Meta-Analysis - WES 24k cases, 97k controls
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz
+        visibility pack
+        dataVersion 2022
+        priority 4.9
+        url https://schema.broadinstitute.org/
+        urlLabel SCHEMA Browser
+
+        track varFreqsAll
+        shortLabel All Databases Combined
+        longLabel Variant Frequencies: All Databases Combined with Consequence Annotations
+        type bigBed 9 +
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/varFreqsAll.bb
+        visibility dense
+        itemRgb on
+        maxWindowToDraw 5000000
+        # Variant type and consequence filters
+        filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
+        filterLabel.varType Variant Type
+        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,.|Intergenic
+        filterLabel.consequence Consequence
+        filterValues.sources aou|AllOfUs,spk|SPARK_iWES,wgs|SFARI_WGS,ga|GenomeAsia100K,kov|KOVA,tom|ToMMo,mcp|MCPS,ind|IndiGenomes,fin|FinnGen,sau|Saudi,swe|SweGen,top|TOPMed,abr|ABraOM
+        filterType.sources multipleListOr
+        filterLabel.sources Source Database
+        # Length filters
+        filterByRange.refLen on
+        filterLabel.refLen Reference Length
+        filterByRange.altLen on
+        filterLabel.altLen Alternate Length
+        filterByRange.varLen on
+        filterLabel.varLen Length Change
+        # Max AF filter
+        filterByRange.maxAF on
+        filterLabel.maxAF Max Allele Frequency
+        filterLimits.maxAF 0:1
+        # Per-database AF filters
+        filterByRange.aouAF on
+        filterLabel.aouAF AllOfUs AF
+        filterByRange.spkAF on
+        filterLabel.spkAF SPARK AF
+        filterByRange.wgsAF on
+        filterLabel.wgsAF SFARI WGS AF
+        filterByRange.gaAF on
+        filterLabel.gaAF GenomeAsia AF
+        filterByRange.kovAF on
+        filterLabel.kovAF KOVA AF
+        filterByRange.tomAF on
+        filterLabel.tomAF ToMMo AF
+        filterByRange.mcpAF on
+        filterLabel.mcpAF MCPS AF
+        filterByRange.indAF on
+        filterLabel.indAF IndiGenomes AF
+        filterByRange.finAF on
+        filterLabel.finAF FinnGen AF
+        filterByRange.sauAF on
+        filterLabel.sauAF Saudi AF
+        filterByRange.sweAF on
+        filterLabel.sweAF SweGen AF
+        filterByRange.topAF on
+        filterLabel.topAF TOPMed AF
+        filterByRange.abrAF on
+        filterLabel.abrAF ABraOM AF
+        # Per-database AC filters
+        filterByRange.aouAC on
+        filterLabel.aouAC AllOfUs AC
+        filterByRange.spkAC on
+        filterLabel.spkAC SPARK AC
+        filterByRange.wgsAC on
+        filterLabel.wgsAC SFARI WGS AC
+        filterByRange.gaAC on
+        filterLabel.gaAC GenomeAsia AC
+        filterByRange.kovAC on
+        filterLabel.kovAC KOVA AC
+        filterByRange.tomAC on
+        filterLabel.tomAC ToMMo AC
+        filterByRange.mcpAC on
+        filterLabel.mcpAC MCPS AC
+        filterByRange.indAC on
+        filterLabel.indAC IndiGenomes AC
+        filterByRange.finAC on
+        filterLabel.finAC FinnGen AC
+        filterByRange.sauAC on
+        filterLabel.sauAC Saudi AC
+        filterByRange.sweAC on
+        filterLabel.sweAC SweGen AC
+        filterByRange.topAC on
+        filterLabel.topAC TOPMed AC
+        filterByRange.abrAC on
+        filterLabel.abrAC ABraOM AC
+        # Population-specific AF filters (AllOfUs)
+        filterByRange.aouAF_AFR on
+        filterLabel.aouAF_AFR AllOfUs AFR AF
+        filterByRange.aouAF_AMR on
+        filterLabel.aouAF_AMR AllOfUs AMR AF
+        filterByRange.aouAF_EAS on
+        filterLabel.aouAF_EAS AllOfUs EAS AF
+        filterByRange.aouAF_EUR on
+        filterLabel.aouAF_EUR AllOfUs EUR AF
+        filterByRange.aouAF_SAS on
+        filterLabel.aouAF_SAS AllOfUs SAS AF
+        # Population-specific AF filters (GenomeAsia)
+        filterByRange.gaAF_NEA on
+        filterLabel.gaAF_NEA GenomeAsia NEA AF
+        filterByRange.gaAF_SEA on
+        filterLabel.gaAF_SEA GenomeAsia SEA AF
+        filterByRange.gaAF_SAS on
+        filterLabel.gaAF_SAS GenomeAsia SAS AF
+        # Population-specific AF filters (MCPS)
+        filterByRange.mcpAF_AFR on
+        filterLabel.mcpAF_AFR MCPS AFR AF
+        filterByRange.mcpAF_EUR on
+        filterLabel.mcpAF_EUR MCPS EUR AF
+        filterByRange.mcpAF_IMX on
+        filterLabel.mcpAF_IMX MCPS Indigenous MX AF

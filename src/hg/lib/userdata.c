@@ -373,13 +373,56 @@ firstSlash = 0;
 return catTwoStrings(userDataDir, copy);
 }
 
+static boolean bigDataUrlExistsInHub(char *hubFileName, char *fileName)
+/* Check if a bigDataUrl line already references this file in the hub.txt.
+ * Simple line-by-line check - not a full trackDb parser. */
+{
+if (!hubFileName || !fileName)
+    return FALSE;
+
+struct lineFile *lf = lineFileMayOpen(hubFileName, TRUE);
+if (!lf)
+    return FALSE;
+
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    char *trimmedLine = skipLeadingSpaces(line);
+    if (startsWith("bigDataUrl ", trimmedLine))
+        {
+        char *url = trimmedLine + 11; // skip "bigDataUrl "
+        url = skipLeadingSpaces(url);
+        if (isEmpty(url))
+            continue;
+        // Check if the URL ends with this filename (handles relative paths)
+        if (endsWith(url, fileName) || sameString(url, fileName))
+            {
+            lineFileClose(&lf);
+            return TRUE;
+            }
+        }
+    }
+lineFileClose(&lf);
+return FALSE;
+}
+
 static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label, char *bigFileLocation)
 {
 if ( (sameString(type, "bamIndex") || sameString(type, "tabixIndex") || sameString(type, "text")) )
     // don't need to make track stanzas for these supporting files
     return;
 
+// Skip if this file is already referenced in hub.txt (e.g., user uploaded their own hub.txt)
+if (bigDataUrlExistsInHub(hubFileName, bigDataUrl))
+    {
+    fprintf(stderr, "DEBUG: bigDataUrl '%s' already exists in '%s', skipping stanza\n",
+            bigDataUrl, hubFileName);
+    return;
+    }
+
 FILE *f = mustOpen(hubFileName, "a");
+// Always add a leading newline to ensure separation from previous content
+fprintf(f, "\n");
 char *trackDbType = type;
 if (sameString(type, "bigBed"))
     {

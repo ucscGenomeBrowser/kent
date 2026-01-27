@@ -87,12 +87,26 @@ else
             }
         fprintf(stderr, "userName='%s'\n'", userName);
         long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
+        // Check multiple possible metadata keys for filename (Uppy sends 'filename' and 'name' by default,
+        // our JS code also sets 'fileName' - try all to handle resumed uploads with old metadata)
         char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
+        if (!reqFileName)
+            reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
+        if (!reqFileName)
+            reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.name", NULL);
+        if (!reqFileName)
+            {
+            errAbort("No filename found in upload metadata (checked fileName, filename, and name)");
+            }
         char *reqParentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
         boolean isHubToolsUpload = FALSE;
         char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
         if (hubtoolsStr)
             isHubToolsUpload = sameString(hubtoolsStr, "TRUE") || sameString(hubtoolsStr, "true");
+        // Check for allowOverwrite metadata from JavaScript (for hub.txt overwrites)
+        char *allowOverwriteStr = jsonQueryString(req, "", "Event.Upload.MetaData.allowOverwrite", NULL);
+        boolean allowOverwrite = (allowOverwriteStr && (sameString(allowOverwriteStr, "TRUE") || sameString(allowOverwriteStr, "true")));
+        boolean forceOverwrite = isHubToolsUpload || allowOverwrite;
         long currQuota = checkUserQuota(userName);
         long newQuota = currQuota + reqFileSize;
         long maxQuota = getMaxUserQuota(userName);
@@ -115,7 +129,7 @@ else
         if (exitStatus == 0)
             {
             // set the location of the upload to the location it will ultimately live
-            char *location = setUploadPath(userName, reqFileName, reqParentDir, isHubToolsUpload);
+            char *location = setUploadPath(userName, reqFileName, reqParentDir, forceOverwrite);
             if (!location)
                 {
                 errAbort("Error setting upload path in pre-create for file '%s'. This is an"

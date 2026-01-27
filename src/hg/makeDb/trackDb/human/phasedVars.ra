@@ -17,6 +17,7 @@ superTrack on
         hapClusterEnabled true
         dataVersion Nov 2025 (hg38 lift)
         priority 1
+        html phasedVars.html
 
         track hgdp
         shortLabel Human Genome Diversity Project, 1k WGS
@@ -27,6 +28,7 @@ superTrack on
         visibility pack
         dataVersion 2019-05-16
         priority 2
+        html phasedVars.html
 
         track sgdp
         shortLabel Simons Genome Diversity Project 0.3k WGS
@@ -37,6 +39,7 @@ superTrack on
         visibility pack
         dataVersion 2016-12-07 public (hg38 lift)
         priority 4
+        html phasedVars.html
 
         track hgdp1k
         shortLabel gnomAD HGDP+1000G 4k WGS
@@ -47,4 +50,5 @@ superTrack on
         visibility pack
         dataVersion v 3.1.2
         priority 5
+        html phasedVars.html
 

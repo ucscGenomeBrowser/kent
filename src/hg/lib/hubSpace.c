@@ -50,15 +50,18 @@ return list;
 }
 
 void hubSpaceSaveToDb(struct sqlConnection *conn, struct hubSpace *el, char *tableName, int updateSize)
-/* Save hubSpace as a row to the table specified by tableName. 
+/* Save hubSpace as a row to the table specified by tableName.
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+ * inserted as NULL. This function automatically escapes quoted strings for mysql.
+ * Uses ON DUPLICATE KEY UPDATE to handle file overwrites. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s',NULL,'%s','%s','%s','%s','%s')", 
-	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType, el->lastModified,  el->db,  el->location,  el->md5sum, el->parentDir);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s',NULL,'%s','%s','%s','%s','%s') "
+	"ON DUPLICATE KEY UPDATE fileSize=%lld, lastModified='%s', md5sum='%s', location='%s', db='%s'",
+	tableName, el->userName, el->fileName, el->fileSize, el->fileType, el->lastModified, el->db, el->location, el->md5sum, el->parentDir,
+	el->fileSize, el->lastModified, el->md5sum, el->location, el->db);
 fprintf(stderr, "hubSpace row insert:\n\n%s\n\n", update->string);
 fflush(stderr);
 sqlUpdate(conn, update->string);
