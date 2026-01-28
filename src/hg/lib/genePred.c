@@ -2115,6 +2115,22 @@ if (isCoding != NULL && codingBasesSoFar > 0)
 return -1;  // introns not okay
 }
 
+void genePredReverseFrames(struct genePred *gp)
+// Reverse exon frames for this genePred
+{
+if (gp->exonCount == 1)
+    return;
+
+int *reorderFrames;
+AllocArray(reorderFrames, gp->exonCount);
+
+int ii;
+for(ii=0; ii < gp->exonCount; ii++)
+    reorderFrames[ii] = gp->exonFrames[(gp->exonCount - 1) - ii];
+
+gp->exonFrames = reorderFrames;
+}
+
 struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb, boolean changedStrand)
 /* build a genePred from a bigGenePred and a bed file */
 {
@@ -2136,16 +2152,7 @@ gp->optFields |= genePredExonFramesFld;
 // exon frames are in transcription strand order so if it's changed during quickLift
 // we need to flip the order in the list
 if (changedStrand && (numBlocks > 1))
-    {
-    int *reorderFrames;
-    AllocArray(reorderFrames, numBlocks);
-
-    int ii;
-    for(ii=0; ii < numBlocks; ii++)
-        reorderFrames[ii] = gp->exonFrames[(numBlocks - 1) - ii];
-
-    gp->exonFrames = reorderFrames;
-    }
+    genePredReverseFrames((struct genePred *)gp);
 //assert (numBlocks == gp->exonCount);
 
 gp->type = cloneString(row[13]);

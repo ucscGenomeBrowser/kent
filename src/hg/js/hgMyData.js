@@ -494,7 +494,7 @@ class BatchChangePlugin extends Uppy.BasePlugin {
 
             let batchParentDirInput = document.createElement("input");
             batchParentDirInput.id = "batchParentDir";
-            batchParentDirInput.value = hubCreate.uiState.hubNameDefault;
+            batchParentDirInput.value = hubCreate.getDefaultHubName();
             batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
             batchParentDirInput.style.margin= "1px 1px auto";
             batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
@@ -553,7 +553,7 @@ class BatchChangePlugin extends Uppy.BasePlugin {
         this.uppy.on("file-added", (file) => {
             // add default meta data for genome and fileType
             console.log("file-added");
-            this.uppy.setFileMeta(file.id, {"genome": hubCreate.defaultDb(), "fileType": hubCreate.detectFileType(file.name), "parentDir": hubCreate.uiState.hubNameDefault});
+            this.uppy.setFileMeta(file.id, {"genome": hubCreate.defaultDb(), "fileType": hubCreate.detectFileType(file.name), "parentDir": hubCreate.getDefaultHubName()});
             if (this.uppy.getFiles().length > 1) {
                 this.addBatchSelectsToDashboard();
             } else {
@@ -620,6 +620,8 @@ var hubCreate = (function() {
     let uiState = { // our object for keeping track of the current UI and what to do
         userUrl: "", // the web accesible path where the uploads are stored for this user
         hubNameDefault: "",
+        currentHub: "", // if the user has a hub dir open, set the name here and use it as the default
+                        // hub name when uploading a new file with the dir open, otherwise hubNameDefault
         isLoggedIn: "",
         maxQuota: 0,
         userQuota: 0,
@@ -646,6 +648,10 @@ var hubCreate = (function() {
         "hub.txt": ["hub.txt"],
         "text": [".txt", ".text"],
     };
+
+    function getDefaultHubName() {
+        return uiState.currentHub.length > 0 ? uiState.currentHub : uiState.hubNameDefault;
+    }
 
     function detectFileType(fileName) {
         let fileLower = fileName.toLowerCase();
@@ -937,6 +943,7 @@ var hubCreate = (function() {
         table.search.fixed("showRoot", function(searchStr, rowData, rowIx) {
             return !rowData.parentDir;
         });
+        uiState.currentHub = "";
     }
 
     function dataTableShowDir(table, dirName, dirFullPath) {
@@ -961,6 +968,7 @@ var hubCreate = (function() {
                 return false;
             }
         });
+        uiState.currentHub = dirName;
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
     }
 
@@ -1580,6 +1588,7 @@ var hubCreate = (function() {
              uiState: uiState,
              defaultDb: defaultDb,
              makeGenomeSelectOptions: makeGenomeSelectOptions,
+             getDefaultHubName: getDefaultHubName,
              detectFileType: detectFileType,
            };
 }());

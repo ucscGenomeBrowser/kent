@@ -78,16 +78,33 @@ if (cgiVarExists("noDisplay"))
         safef(wc_mdid, sizeof(wc_mdid), "*_%s", mdid);
         cartRemoveLike(cart, wc_mdid);
         cartRemovePrefix(cart, mdid);
+
+        // Check for empty-string sentinel: means no data type suffix
+        boolean noDataTypes = (dt_list != NULL && 
+                               dt_list->name[0] == '\0' && 
+                               dt_list->next == NULL);
+
         char subtrackSetting[1024];
         for (struct slName *de_itr = de_list; de_itr; de_itr = de_itr->next)
             {
-            struct slName *dt_itr = NULL;
-            for (dt_itr = dt_list; dt_itr; dt_itr = dt_itr->next)
+            if (noDataTypes)
                 {
-                safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_%s_sel", mdid, de_itr->name, dt_itr->name);
+                // No data type suffix - use simpler track names
+                safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_sel", mdid, de_itr->name);
                 cartSetString(cart, subtrackSetting, "1");
-                safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_%s", mdid, de_itr->name, dt_itr->name);
+                safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s", mdid, de_itr->name);
                 cartSetString(cart, subtrackSetting, "1");
+                }
+            else
+                {
+                struct slName *dt_itr = NULL;
+                for (dt_itr = dt_list; dt_itr; dt_itr = dt_itr->next)
+                    {
+                    safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_%s_sel", mdid, de_itr->name, dt_itr->name);
+                    cartSetString(cart, subtrackSetting, "1");
+                    safef(subtrackSetting, sizeof(subtrackSetting), "%s_%s_%s", mdid, de_itr->name, dt_itr->name);
+                    cartSetString(cart, subtrackSetting, "1");
+                    }
                 }
             }
 

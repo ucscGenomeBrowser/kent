@@ -307,5 +307,8 @@ struct hash *hashFromNameArray(char **nameArray, int nameCount);
 struct hash *hashFromNameValArray(char *nameVal[][2], int nameValCount);
 /* Make up a hash from nameVal array */
 
+boolean hashItemExistsLike(struct hash *hash, char *wildcard);
+/* Return TRUE if a variable matching the wildcard is in the hash table. */
+
 #endif /* HASH_H */
 

@@ -35,6 +35,9 @@ hg38 mappability problematic The problematic regions track contains various gene
 hg38 problematic grcIncidentDb The GRC (Genome Reference Consortium) incidents track contains regions that were flagged by the group that puts together the genome 
 hg38 grcIncidentDb problematic The problematic regions track lists unusual regions and the ones that often lead to artefacts when aligning reads to the reference genome
 
+hg38 phasedVars varFreqs The variant frequencies track contains projects where variant frequencies, aka allele frequencies, are publicly available.
+hg38 varFreqs phasedVars The phased variants track contains projects that provide haplotype-phased genotypes/variants.
+
 # hg19:
 hg19 caddSuper gnomad View associated variants
 hg19 gnomad caddSuper View CADD scores for this variant and region
