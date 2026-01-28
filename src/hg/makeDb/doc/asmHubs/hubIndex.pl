@@ -17,12 +17,12 @@ if ($thisMachine ne "hgdownload") {
 #############################################################################
 sub startHtml() {
 printf '<!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="GenArk: UCSC Genome Archive" -->
+<!--#set var="TITLE" value="GenArk: UCSC Genome Repository" -->
 <!--#set var="ROOT" value=".." -->
 
 <!--#include virtual="$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>GenArk: UCSC Genome Archive</h1>
+<h1>GenArk: UCSC Genome Repository</h1>
 
 '
 }
