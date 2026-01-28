@@ -113,6 +113,17 @@ superTrack on
         dataVersion 20251201
         tableBrowser off
 
+        track mgrb
+        shortLabel Australie MGRB 4k WGS
+        longLabel Variant Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
+        dataVersion Phase 3
+        visibility pack
+        # no downloads as per Matt Hobbs email Jan 28 2026
+        tableBrowser off
+
         track gasp
         shortLabel GenomeAsia Pilot Subs 1.7k WGS
         longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions

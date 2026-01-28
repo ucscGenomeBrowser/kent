@@ -68,6 +68,17 @@ The following projects were added:
     </li>
 
     <li>
+        <b><a href="https://www.genomeasia100k.org/"
+        target="_blank">Australia MRGB</a></b>:
+        The Australian Medical Genome Reference Bank collected
+        whole-genome sequencing data of 4,011 healthy elderly individuals, to make sure 
+        that the dataset is depleted of damaging genetic variants.
+        Age and sex summary graphs are available from 
+        <a href="https://sgc.garvan.org.au/initiatives/mgrb/index.html">the MGRB website</a>.
+        See (Lacaze Eur J Humn Genet 2019) for details.
+    </li>
+
+    <li>
         <b><a href="https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/" target="_blank">ALFA</a></b>:
         The NCBI ALlele Frequency Aggregator pipeline computes allele frequencies from
         approved, unrestricted dbGaP studies and makes them publicly available through
@@ -75,9 +86,10 @@ The following projects were added:
         subjects to aid discoveries involving common and rare variants with biological
         or disease relevance. The R4 release includes 408,709 subjects and allele
         frequencies for 15.5 million rs sites, including nearly one million ClinVar
-        variants. Genotype and associated individual-level data are accessible through dbGaP
+        variants. We converted the NCBI track hub to VCF format, the data is freely available.
+        Genotype and associated individual-level data are accessible through the dbGaP
         <a href="https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login"
-        target="_blank">authorized access</a>.
+        target="_blank">authorized access request</a> system.
     </li>
 
     <li>
@@ -167,12 +179,7 @@ The following projects were added:
 <p>Most tracks only show the variant and allele frequencies on mouseover or clicks.
 When zoomed in, tracks display alleles with base-specific coloring. Homozygote
 data are shown as one letter, while heterozygotes will be displayed with both
-letters.
-</p>
-
-<p>
-For <b>NCBI ALFA:</b> This track has no single VCF with INFO fields, but uses multiple subtracks
-instead, one per ancestry.
+letters. All VCF files are normalized, with one single allele per annotation (no multi-allele lines).
 </p>
 
 
@@ -180,8 +187,7 @@ instead, one per ancestry.
 <p>Most of the data in these tracks are not available for download from UCSC.
 Data can be browsed on our website.
 But the data can be downloaded for free from the original projects. Accessing the 
-data usually requires a click-through license or access request on the respective websites, links are either
-provided above in the project description or with more details here:
+data usually requires a click-through license or filling out an access request form on the respective websites, links are either provided above in the project description or with more details here:
 </p>
 
 <p>
@@ -211,6 +217,12 @@ login.
 They require a data access request, which is usually reviewed quickly. More information is available in the 
 <a href="https://cohorts-cdn.simonsfoundation.org/spark/researcher_packets/SPARK_SFARI_Researcher_Welcome_Packet.pdf" target=_blank>SPARK Welcome Packet</a>.
 </p>
+
+<p>
+<b>Australia MGRB:</b> VCF access can be requested via a form from 
+<a target="_blank" href="https://sgc.garvan.org.au/terms/mgrb/index.html">Sydney Genomics</a>.
+</p>
+
 <p>
 <b>GenomeAsia Pilot:</b> VCFs are available from UCSC and also from
 the <a target="_blank"
