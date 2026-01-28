@@ -2959,8 +2959,7 @@ static void facetedCompositeUi(struct trackDb *tdb)
  * in a JSON section of the HTML.
  */
 
-const int token_size = 64;
-const int query_buff_size = 256;
+const int token_size = 1024;
 
 // html elements for the controls page (from singleCellMerged)
 const char pageStyle[] =
@@ -2976,13 +2975,6 @@ const char closeDataElementsJSON[] = "]";  // closing an array
 const char metadataTableScriptElement[] =
     "<script type='text/javascript' src='/js/facetedComposite.js'></script>\n";
 
-// parse the hgsid as id and sessionKey
-char *hgsid = cartSessionId(cart);
-char *sessionKey = NULL;
-const int id = cartDbParseId(hgsid, &sessionKey);
-if (!sessionKey)
-    errAbort("Failed to parse session key from: %s", hgsid);
-
 // --- Get data from 'settings' field in 'trackDb' entry ---
 // required
 const char *metaDataUrl = trackDbSetting(tdb, "metaDataUrl");
@@ -2990,8 +2982,6 @@ const char *primaryKey = trackDbSetting(tdb, "primaryKey");
 
 struct slName *dataTypes = parseDataTypes(tdb);
 boolean hasDataTypes = (dataTypes != NULL);
-//if (!dataTypes)
-//    errAbort("Failed to parse data types from faceted composite settings for: %s", tdb->track);
 
 // optional
 const char *colorSettingsUrl = (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
@@ -3001,16 +2991,31 @@ const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxChe
 const char *metaDataId = tdb->track;
 const int metaDataIdLen = strlen(metaDataId);
 
-char queryFmt[] = "SELECT contents FROM sessionDb WHERE id='%d' AND sessionKey='%s';";
-char query[query_buff_size];
-sqlSafef(query, query_buff_size, queryFmt, id, sessionKey);
-
-struct sqlConnection *conn = hConnectCentral();
-const char *contents = sqlQuickString(conn, query);
-struct cgiParsedVars *varList = cgiParsedVarsNew((char *)contents);
-
 printf(pageStyle);       // css
 printf(placeholderDiv);  // placholder
+
+// start by figuring out what's on by default
+struct hash *defaultOn = hashNew(0);
+for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
+    {
+    char *setting = NULL;
+    char *words[2];
+    boolean enabled = TRUE;
+    if ((setting = trackDbLocalSetting(st, "parent")) != NULL)
+        {
+        char *clone = NULL;
+        if (chopLine(clone = cloneString(setting), words) >= 2)
+            if (sameString(words[1], "off"))
+                enabled = FALSE;
+        freeMem(clone);
+        }
+    if (enabled)
+        {
+        char val[1024];
+        safef(val, sizeof(val), "%s_sel", st->track);
+        hashAdd(defaultOn, val, NULL);
+        }
+    }
 
 /* --- START embedded JSON data --- */
 printf(openJSON);
@@ -3023,11 +3028,8 @@ if (hasDataTypes)
     for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
         {
         char toMatch[token_size];
-        safef(toMatch, token_size, "_%s_sel", thisType->name);
-        boolean dataTypeSel = FALSE;
-        for (struct cgiVar *le = varList->list; !dataTypeSel && le; le = le->next)
-            if (startsWith(metaDataId, le->name) && endsWith(le->name, toMatch))
-                dataTypeSel = TRUE;
+        safef(toMatch, token_size, "%s_*_%s_sel", metaDataId, thisType->name);
+        boolean dataTypeSel = cartVarExistsLike(cart, toMatch) || hashItemExistsLike(defaultOn, toMatch);
         printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
         anySelDataType = dataTypeSel ? thisType : anySelDataType;
         }
@@ -3042,10 +3044,12 @@ if (hasDataTypes)
     {
     if (anySelDataType != NULL)
         {
-        char suffix[token_size];
-        safef(suffix, token_size, "_%s_sel", anySelDataType->name);
-        for (struct cgiVar *le = varList->list; le; le = le->next)
-            if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
+        char toMatch[token_size];
+        safef(toMatch, token_size, "%s_*_%s_sel", metaDataId, anySelDataType->name);
+        struct slPair *mdidVars = cartVarsLike(cart, toMatch);
+        for (struct slPair *le = mdidVars; le != NULL; le = le->next)
+            {
+            if (cartBoolean(cart, le->name))
                 {
                 const char *nameStart = le->name + metaDataIdLen + 1;
                 const char *nameEnd = strchr(nameStart, '_');
@@ -3055,15 +3059,36 @@ if (hasDataTypes)
                     printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
                     }
                 }
+            }
+        slPairFreeList(&mdidVars);
+        // Now add data elements on by default that haven't been modified
+        struct hashEl *el, *elList = hashElListHash(defaultOn);
+        slSort(&elList, hashElCmp);
+        for (el = elList; el != NULL; el = el->next)
+            {
+            if (!cartVarExistsLike(cart, el->name))
+                {
+                const char *nameStart = el->name + metaDataIdLen + 1;
+                const char *nameEnd = strchr(nameStart, '_');
+                if (nameEnd && nameEnd > nameStart)
+                    {
+                    const int nameLen = nameEnd - nameStart;
+                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                    }
+                }
+            }
+        hashElFreeList(&elList);
         }
     }
 else
     {
     // No data types - look for {mdid}_{de}_sel pattern (no dataType component)
-    char suffix[] = "_sel";
-    for (struct cgiVar *le = varList->list; le; le = le->next)
+    char toMatch[token_size];
+    safef(toMatch, token_size, "%s_*_sel", metaDataId);
+    struct slPair *mdidVars = cartVarsLike(cart, toMatch);
+    for (struct slPair *le = mdidVars; le != NULL; le = le->next)
         {
-        if (startsWith(metaDataId, le->name) && endsWith(le->name, suffix))
+        if (cartBoolean(cart, le->name))
             {
             // Extract data element name: between mdid_ and _sel
             const char *nameStart = le->name + metaDataIdLen + 1;
@@ -3075,6 +3100,25 @@ else
                 }
             }
         }
+    slPairFreeList(&mdidVars);
+
+    // Now add data elements on by default that haven't been modified
+    struct hashEl *el, *elList = hashElListHash(defaultOn);
+    slSort(&elList, hashElCmp);
+    for (el = elList; el != NULL; el = el->next)
+        {
+        if (!cartVarExistsLike(cart, el->name))
+            {
+            const char *nameStart = el->name + metaDataIdLen + 1;
+            const char *nameEnd = strstr(nameStart, "_sel");
+            if (nameEnd && nameEnd > nameStart)
+                {
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                }
+            }
+        }
+    hashElFreeList(&elList);
     }
 printf(closeDataElementsJSON);
 printf(",\"mdid\": \"%s\"", metaDataId);
@@ -3091,8 +3135,7 @@ printf(metadataTableScriptElement);
 
 // cleanup
 slFreeList(&dataTypes);
-cgiParsedVarsFreeList(&varList);
-hDisconnectCentral(&conn);
+hashFree(&defaultOn);
 }
 
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
