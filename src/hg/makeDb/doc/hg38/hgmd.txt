@@ -34,8 +34,10 @@ hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb
 #
 # Key features:
 # - Always uses hg38 file for transcript extraction (hg19 file lacks column 7)
-# - Auto-detects ncbiRefSeq version: p13 for hg19, p14 for hg38
+# - Auto-detects and selects latest ncbiRefSeq patch version (p15, p14, p13, etc.)
 # - Falls back to previous years if specified year's ncbiRefSeq not found
+# - Uses regex pattern matching to extract version and date from directory names
+#   Example: "ncbiRefSeq.p14.2025-08-13" -> extracts "p14" and "2025-08-13"
 
 # wc -l:
 # 332094 /hive/data/genomes/hg38/bed/hgmd/hgmd.bed
@@ -47,11 +49,11 @@ hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb
 python3 ~/kent/src/hg/makeDb/scripts/hgmd/process_hgmd.py --year 2025 --db hg38
 
 # Sample output:
-#   hg38 BigBed completed successfully!
+# hg38 BigBed completed successfully!
 # Output files: /hive/data/genomes/hg38/bed/hgmd/hgmd.bed, /hive/data/genomes/hg38/bed/hgmd/hgmd.bb
 # Symlink created: /gbdb/hg38/bbi/hgmd.bb
 # hgBbiDbLink run: hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb
-#   hg38 transcript processing completed!
+# hg38 transcript processing completed!
 # Output files: /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmdTranscripts.txt, /hive/data/genomes/hg38/bed/hgmd/ncbiRefSeq.p14.2025-08-13/hgmd.curated.gp
 # hgLoadGenePred run: hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
 #############################################################################
