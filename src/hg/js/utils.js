@@ -4516,11 +4516,38 @@ function addRecentGenomesToMenuBar() {
         return !labelList.includes(result.firstChild.textContent);
     });
 
-    // append the final list of links above the "other" link:
+    // Only add separators and items if we have recents to add
+    if (finalResult.length === 0) return;
+
     let lastLink = document.querySelector("#tools1 > ul > .last");
     let parent = lastLink.parentNode;
+
+    // Add a separator after the default entries to separate from recents
+    let defaultLinks = parent.querySelectorAll("li.defaultDropdownLink");
+    if (defaultLinks.length > 0) {
+        let lastDefault = defaultLinks[defaultLinks.length - 1];
+        let separator = document.createElement("li");
+        separator.className = "horizSep noHighlight";
+        lastDefault.after(separator);
+    }
+
+    // Add a "Recent Genomes" title after the separator
+    let title = document.createElement("li");
+    title.className = "noHighlight";
+    let titleSpan = document.createElement("span");
+    titleSpan.textContent = "Recent Genomes";
+    titleSpan.style.cssText = "color: #888; font-size: 11px; padding: 4px 8px; display: block;";
+    title.appendChild(titleSpan);
+    parent.insertBefore(title, lastLink);
+
+    // Add a separator before the "Other" link to separate recents from it
+    let separatorBeforeOther = document.createElement("li");
+    separatorBeforeOther.className = "horizSep noHighlight";
+    parent.insertBefore(separatorBeforeOther, lastLink);
+
+    // Append the recent genomes above the "other" link (and its separator)
     finalResult.forEach( (res) => {
-        parent.insertBefore(res, lastLink);
+        parent.insertBefore(res, separatorBeforeOther);
     });
 }
 
