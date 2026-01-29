@@ -25,6 +25,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "hgConfig.h"
+#include "jsHelper.h"
 
 
 static struct dyString *onChangeStart()
@@ -40,48 +41,10 @@ jsTextCarryOver(dy, hgtaOutFileName);
 return dy;
 }
 
-static char *onChangeClade()
-/* Return javascript executed when they change clade. */
-{
-struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, hgtaTable);
-dyStringAppend(dy, " document.hiddenForm.org.value=0;");
-dyStringAppend(dy, " document.hiddenForm.db.value=0;");
-dyStringAppend(dy, " document.hiddenForm.position.value='';");
-return jsOnChangeEnd(&dy);
-}
-
-static char *onChangeOrg()
-/* Return javascript executed when they change organism. */
-{
-struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, "org");
-jsDropDownCarryOver(dy, hgtaTable);
-dyStringAppend(dy, " document.hiddenForm.db.value=0;");
-dyStringAppend(dy, " document.hiddenForm.position.value='';");
-return jsOnChangeEnd(&dy);
-}
-
-static char *onChangeDb()
-/* Return javascript executed when they change database. */
-{
-struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, "db");
-jsDropDownCarryOver(dy, hgtaTable);
-dyStringAppend(dy, " document.hiddenForm.position.value='';");
-return jsOnChangeEnd(&dy);
-}
-
 static char *onChangeGroupOrTrack()
 /* Return javascript executed when they change group. */
 {
 struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, "db");
-jsDropDownCarryOver(dy, "org");
 dyStringPrintf(dy, " document.hiddenForm.%s.value=0;", hgtaTable);
 return jsOnChangeEnd(&dy);
 }
@@ -90,9 +53,6 @@ static char *onChangeTable()
 /* Return javascript executed when they change group. */
 {
 struct dyString *dy = onChangeStart();
-jsDropDownCarryOver(dy, "clade");
-jsDropDownCarryOver(dy, "db");
-jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
@@ -682,7 +642,7 @@ struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
         isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE,
         isLongTabix = FALSE, isHic = FALSE;
-boolean gotClade = hGotClade();
+//boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
 hPrintf("<TABLE BORDER=0>\n");
@@ -690,26 +650,30 @@ hPrintf("<TABLE BORDER=0>\n");
 int stepNumber = 1;
 printStep(stepNumber++);
 
-/* Print clade, genome and assembly line. */
+/* Print genome search bar line. */
     {
-
-    if (gotClade)
-        {
-        hPrintf("<TR><TD><DIV ID=\"genome-select\"><B>Clade:</B>\n");
-        printCladeListHtml(hGenome(database), "change", onChangeClade());
-        nbSpaces(3);
-        hPrintf("<B>Genome:</B>\n");
-        printGenomeListForCladeHtml(database, "change", onChangeOrg());
-        }
-    else
-        {
-        hPrintf("<TR><TD><DIV ID=\"genome-select\"><B>Genome:</B>\n");
-        printGenomeListHtml(database, "change", onChangeOrg());
-        }
-    nbSpaces(3);
-    hPrintf("<B>Assembly:</B>\n");
-    printAssemblyListHtml(database, "change", onChangeDb());
-    hPrintf("</DIV></TD></TR>\n");
+    hPrintf("<tr style=\"display: block\"><td class='searchCell'>\n");
+    char *searchBarId = "genomeSearch";
+    jsIncludeAutoCompleteLibs();
+    printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Genome:", "tbSearchLabel");
+    jsInlineF(
+        "document.hiddenForm.db.value = \"%s\";\n"
+        "setupGenomeSearchBar({\n"
+        "    inputId: '%s',\n"
+        "    labelElementId: 'genomeLabel',\n"
+        "    onSelect: function(item) {\n"
+        "        document.hiddenForm.db.value = item.genome;\n"
+        "        document.hiddenForm.hgta_regionType.value = regionType;\n"
+        "        document.hiddenForm.hgta_outputType.value = document.getElementById('outputTypeDropdown').value;\n"
+        "        document.hiddenForm.submit();\n"
+        "    }\n"
+        "});\n"
+        , database, searchBarId
+    );
+    hPrintf("</td>\n");
+    char *selectedLabel = getCurrentGenomeLabel(database);
+    hPrintf("<td class='searchCell'><b>Assembly:</b><span id='genomeLabel' style=\"padding-left: 2px\">%s</span></td>\n", selectedLabel);
+    hPrintf("</tr>\n");
     }
 
 /* Print group and track line. */
@@ -1214,7 +1178,7 @@ hPrintf("</FORM>\n");
 /* Hidden form - for benefit of javascript. */
     {
     static char *saveVars[] = {
-      "clade", "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
+      "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
       hgtaRange, hgtaOutputType, hgtaOutFileName};
     jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
     }

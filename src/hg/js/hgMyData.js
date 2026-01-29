@@ -34,6 +34,7 @@ function cgiDecode(value) {
 function setDbSelectFromAutocomplete(selectEle, item) {
     // this has been bound to the <select> we are going to add
     // a new child option to
+    if (item.disabled || !item.genome) return;
     let newOpt = document.createElement("option");
     newOpt.value = item.genome;
     newOpt.label = item.label;
@@ -43,26 +44,8 @@ function setDbSelectFromAutocomplete(selectEle, item) {
     selectEle.dispatchEvent(event);
 }
 
-function processFindGenome(result, term) {
-    // process the hubApi/findGenome?q= result set into somthing
-    // jquery-ui autocomplete can use
-    let data = [];
-    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount"]);
-    _.forEach(result, function(val, key) {
-        if (!(apiSkipList.has(key))) {
-            let d = {
-                "genome": key,
-                "label": `${val.commonName} (${key})`,
-            };
-            if (val.hubUrl !== null) {
-                d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
-            } else {
-                d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
-            }
-            data.push(d);
-        }
-    });
-    return data;
+function onSearchError(jqXHR, textStatus, errorThrown, term) {
+    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
 }
 
 let autocompletes = {};
@@ -73,47 +56,8 @@ function initAutocompleteForInput(inpIdStr, selectEle) {
     // Return true if we actually set up the autocomplete, false if we have already
     // set it up previously
     if ( !(inpIdStr in autocompletes) || autocompletes[inpIdStr] === false) {
-        $.widget("custom.autocompleteCat",
-                 $.ui.autocomplete,
-                 {
-                   _renderMenu: function(ul, items) {
-                       var that = this;
-                       var currentCategory = "";
-                       // There's no this._super as shown in the doc, so I can't override
-                       // _create as shown in the doc -- just do this every time we render...
-                       this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
-                       $(ul).css("z-index", "99999999");
-                       $.each(items,
-                              function(index, item) {
-                                  // Add a heading each time we see a new category:
-                                  if (item.category && item.category !== currentCategory) {
-                                      ul.append("<li class='ui-autocomplete-category'>" +
-                                                item.category + "</li>" );
-                                      currentCategory = item.category;
-                                  }
-                                  that._renderItem( ul, item );
-                              });
-                   },
-                   _renderItem: function(ul, item) {
-                     // In order to use HTML markup in the autocomplete, one has to overwrite
-                     // autocomplete's _renderItem method using .html instead of .text.
-                     // http://forum.jquery.com/topic/using-html-in-autocomplete
-                       // Hits to assembly hub top level (not individial db names) have no item label,
-                       // so use the value instead
-                       return $("<li></li>")
-                           .data("ui-autocomplete-item", item)
-                           .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
-                           .appendTo(ul);
-                   }
-                 });
         let selectFunction = setDbSelectFromAutocomplete.bind(null, selectEle);
-        autocompleteCat.init($("[id='"+inpIdStr+"']"), {
-            baseUrl: "hubApi/findGenome?browser=mustExist&q=",
-            //watermark: "Enter species name, common name, etc",
-            onSelect: selectFunction,
-            onServerReply: processFindGenome,
-            enterSelectsIdentical: false
-        });
+        initSpeciesAutoCompleteDropdown(inpIdStr, selectFunction, null, null, null, onSearchError);
         autocompletes[inpIdStr] = true;
         return true;
     }

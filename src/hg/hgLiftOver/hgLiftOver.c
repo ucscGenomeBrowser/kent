@@ -21,6 +21,7 @@
 #include "liftOverChain.h"
 #include "errCatch.h"
 #include "hgConfig.h"
+#include "jsHelper.h"
 
 
 /* CGI Variables */
@@ -71,7 +72,6 @@ void webMain(struct liftOverChain *chain, boolean multiple, boolean keepSettings
 	     int minChainT, float minBlocks, float minMatch, boolean fudgeThick, boolean extraNameInfo)
 /* set up page for entering data */
 {
-struct dbDb *dbList;
 char *fromOrg = hOrganism(chain->fromDb), *toOrg = hOrganism(chain->toDb);
 char *chainString = chainStringVal(chain);
 cgiParagraph(
@@ -93,44 +93,48 @@ cartSaveSession(cart);
 
 /* create HTML table for layout purposes */
 puts("\n<TABLE WIDTH=\"100%\">\n");
+printf("<TR>\n");
+jsIncludeAutoCompleteLibs();
+char *searchBarId = "fromGenomeSearch";
+printf("<input name='%s' value='%s' type='hidden'></input>\n", HGLFT_FROMDB_VAR, chain->fromDb);
+printf("<input name='%s' value='%s' type='hidden'></input>\n", HGLFT_FROMORG_VAR, fromOrg);
+printf("<input name='formMethod' value='GET' type='hidden'></input>\n");
+printf("<TD class='searchCell'>\n");
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Change original genome:", NULL);
+jsInlineF(
+    "setupGenomeSearchBar({\n"
+    "    inputId: '%s',\n"
+    "    labelElementId: 'fromGenomeLabel',\n"
+    "    apiUrl: 'hubApi/findGenome?browser=mustExist&liftable=true&q=',\n"
+    "    onSelect: function(item) {\n"
+    "        document.mainForm."HGLFT_REFRESHONLY_VAR".value=1;\n"
+    "        document.mainForm."HGLFT_FROMDB_VAR".value=item.genome;\n"
+    "        document.mainForm."HGLFT_FROMORG_VAR".value=item.commonName.split('(')[0].trim();\n"
+    "        document.mainForm.submit();\n"
+    "    }\n"
+    "});\n"
+    , searchBarId
+);
+printf("</TD>\n");
+printf("<TD class='searchCell' ALIGN=CENTER>\n");
+printf("<div class='flexContainer'>\n");
+printf("<span>Currently selected genome:</span>\n");
+printf("<span id='fromGenomeLabel'>%s (%s)</span>\n", fromOrg, chain->fromDb);
+printf("</TD>\n");
 
-/* top two rows -- genome and assembly menus */
-cgiSimpleTableRowStart();
-cgiTableField("Original genome: ");
-cgiTableField("Original assembly: ");
-cgiTableField("New genome: ");
-cgiTableField("New assembly: ");
-cgiTableRowEnd();
-
-cgiSimpleTableRowStart();
-
-/* genome */
-cgiSimpleTableFieldStart();
-dbList = hGetLiftOverFromDatabases();
-printSomeGenomeListHtmlNamed(HGLFT_FROMORG_VAR, chain->fromDb, dbList, "change", onChange);
-cgiTableFieldEnd();
-
-/* from assembly */
-cgiSimpleTableFieldStart();
-printAllAssemblyListHtmlParm(chain->fromDb, dbList, HGLFT_FROMDB_VAR, 
-			     TRUE, "change", onChange);
-cgiTableFieldEnd();
-
-/* to assembly */
-
-cgiSimpleTableFieldStart();
-// Genark is generating some less than fully populated dbDb structures
-// so we don't expect them to free without causing problems.
-//dbDbFreeList(&dbList);   
-dbList = hGetLiftOverToDatabases(chain->fromDb);
+// print select/options for toDb, it is more intuitive than a search bar
+struct dbDb *dbList = hGetLiftOverToDatabases(chain->fromDb);
+printf("<TD class='searchCell'>\n");
+printf("<label>Change new genome:</label>\n");
+printf("<div class='flexContainer'>\n");
 printLiftOverGenomeList(HGLFT_TOORG_VAR, chain->toDb, dbList, "change", onChange);
-cgiTableFieldEnd();
-
-cgiSimpleTableFieldStart();
+printf("</div></td>\n");
+printf("<TD class='searchCell'>\n");
+printf("<div class='flexContainer'>\n");
+printf("<label>Change new assembly:</label>\n");
 printAllAssemblyListHtmlParm(chain->toDb, dbList, HGLFT_TODB_VAR, TRUE, NULL, NULL);
-cgiTableFieldEnd();
+printf("</div></td>\n");
 
-cgiTableRowEnd();
 cgiTableEnd();
 
 printf("<br>");
@@ -438,7 +442,7 @@ if (sameWord(toDb,"0"))
     toDb = NULL;
 if (sameWord(cartDb,"0"))
     cartDb = NULL;
-if ((fromDb != NULL) && !sameOk(fromOrg, hOrganism(fromDb)))
+if ((fromDb != NULL) && !sameOk(strLower(fromOrg), strLower(hOrganism(fromDb))))
     fromDb = NULL;
 if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
     toDb = NULL;

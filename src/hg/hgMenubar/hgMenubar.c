@@ -70,6 +70,9 @@ jsInline("$(\"#tools1 ul li a\").each( function (a) {\n"
 "        }\n"
 "    }\n"
 "});\n");
+// if the user has previously searched for assemblies, add them to the "Genomes" menu heading,
+// above the "other" assemblies link
+jsInline("addRecentGenomesToMenuBar();\n");
 jsInlineFinish();
 }
 

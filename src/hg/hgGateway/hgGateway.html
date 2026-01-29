@@ -46,22 +46,34 @@
               <div class="jwIconSprite jwIconSpriteYeast"></div>
               <div class="jwIconSpriteLabel">Yeast</div>
             </div>
-            <br>Search through thousands of genome browsers
+            <br>Search through thousands of genome assemblies
             <div>
               <input id="speciesSearch" value="" size=42>
             </div>
             <a href="/assemblySearch.html" id="assemblySearchLink" style="text-decoration: none;">
                 <div style="padding: 0px; display: flex; align-items: center; margin-top: 12px;">
-                    <p style="margin: 0; padding-right: 0px; color: blue; text-decoration: underline;" 
+                    <p style="margin: 0; padding-right: 0px; color: blue; text-decoration: underline;"
                        title="Not finding your assembly on the Gateway page? Visit the Genome assembly search and request page to request it. Ensure you have a GCA_ or GCF_ identifier from NCBI.">Unable to find a genome? Send us a request.</p>
-                    <img src="/images/magnify.png" 
-                         style="height: 16px; width: 16px; margin-top: 0px; margin-left: 5px;" 
+                    <img src="/images/magnify.png"
+                         style="height: 16px; width: 16px; margin-top: 0px; margin-left: 5px;"
                          title="Not finding your assembly on the Gateway page? Visit the Genome assembly search and request page to request it. Ensure you have a GCA_ or GCF_ identifier from NCBI.">
                 </div>
             </a>
           </div>
 
-          <!-- This subsection is hidden unless hgGateway.js has a tree to draw. -->
+          <!-- Recent Genomes Panel (replaces species tree) -->
+          <div id="recentGenomesTitle" class="jwSubsectionTitle" style="display: none;">
+            Recent Genomes
+          </div>
+          <div id="recentGenomesSection" class="jwSubsectionContents" style="display: none;">
+            <div id="recentGenomesPanel">
+              <div id="recentGenomesList">
+                <!-- Recent genomes will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Species tree underneath the recent genomes section -->
           <div id="representedSpeciesTitle" class="jwSubsectionTitle" style="display: none;">
             Commonly used assemblies
           </div>
@@ -89,7 +101,7 @@
               <div class="jwRainbowSlider" id="rainbowSlider">
                 <!-- JS will populate this -->
               </div>
-            </div>
+            </div> <!-- sliderWidgetContainer -->
             <div class="jwSpeciesPicker" id="speciesPicker">
               <div id="speciesTreeContainer" class="jwColumn" style="overflow: visible;">
                 <svg id="speciesTree"
@@ -200,10 +212,10 @@
               </div> <!-- speciesTreeContainer -->
             </div> <!-- speciesPicker -->
 
-          </div> <!-- subsection contents -->
+          </div> <!-- speciesGraphic -->
 
-        </div>
-      </div>
+        </div> <!-- jwSectionContents -->
+      </div> <!-- selectSpeciesSection -->
 
       <div id="findPositionSection" class ="jwColumn">
         <div id="findPositionTitle" class="jwSectionTitle">

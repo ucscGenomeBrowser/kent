@@ -675,8 +675,12 @@ var HgIntegratorModel = ImModel.extend({
         if (cartVar === 'groupedTrackDb') {
             // The groupedTrackDb from cartJson is a wrapper object with children db
             // and groupedTrackDb.  If db matches current db, store the inner groupedTrackDb.
+            // For GenArk/hub assemblies, the server transforms db (e.g. GCA_002077035.3) to a
+            // hub-decorated name (e.g. hub_123_GCA_002077035.3), so also check if the
+            // server's db contains the client's db.
             currentDb = this.getDb(mutState);
-            if (! currentDb || newValue.db === currentDb) {
+            if (! currentDb || newValue.db === currentDb ||
+                (newValue.db && newValue.db.indexOf(currentDb) >= 0)) {
                 // Remove track groups with no tracks
                 _.remove(newValue.groupedTrackDb, function(trackGroup) {
                     return ! (trackGroup.tracks && trackGroup.tracks.length > 0);

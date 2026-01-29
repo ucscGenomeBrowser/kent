@@ -270,6 +270,15 @@ jsIncludeFile("ImmutableUpdate.js", NULL);
 jsIncludeFile("reactLibBundle.js", NULL);
 }
 
+void jsIncludeAutoCompleteLibs()
+/* Prints out <script src="..."> tags for autocompleteCat.js */
+{
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("autocompleteCat.js", NULL);
+}
+
 void jsIncludeDataTablesLibs()
 /* Prints out <script src="..."> tags for external libraries: jQuery 1.12.3, the jQuery DataTables
  * plugin (version 1.10.12), and the accompanying standard CSS file for DataTables. */

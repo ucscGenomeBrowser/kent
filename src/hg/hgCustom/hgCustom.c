@@ -161,16 +161,12 @@ void addCustomForm(struct customTrack *ct, char *err, boolean warnOnly)
 char *dataUrl = NULL;
 char buf[1024];
 
-boolean gotClade = FALSE;
 boolean isUpdateForm = FALSE;
 if (ct)
     {
     isUpdateForm = TRUE;
     dataUrl = ctDataUrl(ct);
     }
-else
-    /* add form needs clade for assembly menu */
-    gotClade = hGotClade();
 
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
@@ -199,36 +195,31 @@ cartSaveSession(cart);
 
 if (!isUpdateForm)
     {
-    /* Print clade, genome and assembly  */
-    /* NOTE: this uses an additional, hidden form (orgForm), below */
-    char *onChangeDb = "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();";
-    char *onChangeOrg = "document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();";
-    char *onChangeClade = "document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();";
-
+    /* Print genome search bar and selected genome label */
     puts("<TABLE id=\"genome-selection-table\" BORDER=0>\n");
-    if (gotClade)
-        {
-        puts("<TR><TD>Clade\n");
-        printCladeListHtml(hOrganism(database), "change", onChangeClade);
-        puts("&nbsp;&nbsp;&nbsp;");
-        puts("Genome\n");
-        printGenomeListForCladeHtml(database, "change", onChangeOrg);
-        }
-    else
-        {
-        puts("<TR><TD>genome\n");
-        printGenomeListHtml(database, "change", onChangeOrg);
-        }
-    puts("&nbsp;&nbsp;&nbsp;");
-    puts("Assembly\n");
-    printAssemblyListHtml(database, "change", onChangeDb);
-    char *description = hFreezeFromDb(database);
-    if ((description != NULL) && ! stringIn(database, description))
-	{
-	puts("&nbsp;&nbsp;&nbsp;");
-	printf("[%s]", trackHubSkipHubName(database));
-	}
-    puts("</TD></TR></TABLE>\n");
+    printf("<tr>\n");
+    printf("<td class='searchCell' align=center>\n");
+    // hgCustom requires this <input> be created to go along with form submission, we
+    // will change it when a genome is selected in the search bar
+    printf("<input name='db' value='%s' type='hidden'></input>\n", database);
+    jsIncludeAutoCompleteLibs();
+    char *searchBarId = "genomeSearch";
+    printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Change selected genome:", NULL);
+    jsInlineF(
+        "setupGenomeSearchBar({\n"
+        "    inputId: '%s',\n"
+        "    onSelect: function(item) {\n"
+        "        document.mainForm.db.value = item.genome;\n"
+        "    }\n"
+        "});\n"
+        , searchBarId
+    );
+    printf("</td>\n");
+    printf("<td class='searchCell' align=center>\n");
+    char *dbLabel = getCurrentGenomeLabel(database);
+    printf("Current Genome: <span id='genomeLabel'>%s</span>\n", dbLabel);
+    printf("</td>\n");
+    puts("</TR></TABLE>\n");
     }
 
 /* intro text */
@@ -478,19 +469,6 @@ if (isUpdateForm)
     freeMem(trackLine);
     freeMem(shortLabel);
     freeMem(longLabel);
-    }
-else
-    {
-    /* hidden form to handle clade/genome/assembly dropdown.
-     * This is at end of page for layout reasons (preserve vertical space) */
-    puts("</FORM>");
-    printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
-    cartSaveSession(cart);
-    if (gotClade)
-        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"\">\n");
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
     }
 puts("</FORM>");
 cgiDown(0.9);

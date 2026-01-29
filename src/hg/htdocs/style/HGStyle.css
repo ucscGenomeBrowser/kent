@@ -1266,3 +1266,47 @@ span.gbSessionChanged {
 #hgta_doClearSubtrackMerge {
     color: red;
 }
+
+.searchCell {
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+.searchCell > .flexContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    min-width: 0;
+    max-width: 500px;
+}
+
+.searchBarAndButton {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.searchCell:first-child {
+    padding-right: 1em;
+}
+
+.searchBarAndButton {
+    display: flex;
+    align-items: center;
+    max-width: 500px;
+    min-width: 0;
+    gap: 0.25em;
+}
+
+.genomeSearchBarDefault {
+    flex: 1;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.tbSearchLabel {
+    font-weight: bold;
+    white-space: normal;
+    max-width: 100%;
+    box-sizing: border-box;
+}

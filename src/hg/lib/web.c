@@ -916,6 +916,50 @@ struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList, NULL, NULL);
 }
 
+char *getCurrentGenomeLabel(char *db)
+/* Construct a label from dbDb (or dbDb related for an assembly hub) for the currently
+ * selected genome */
+{
+// TODO: what if 'db' is a reference to an assembly hub or genark?
+struct dbDb *info = hDbDb(db);
+if (info)
+    return cloneString(info->description);
+else
+    return cloneString(db);
+}
+
+void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean withSearchButton, char *labelText, char *labelClassStr)
+/* Prints an input text box that can be used to search for any genome.
+ * param withSearchButton - controls if there is a button next to the bar
+ *     to manually fire the search
+ * param classStr - if desired, a custom class name or string can be used
+ *     otherwise the default styling of 'genomeSearchBarDefault' is applied via HGStyle.css
+ * param labelText - If not empty, put up a <label> for the search bar, use labelClassStr to
+ *     style it
+ * param labelClassStr - if not empty and labelText not empty, apply this class to the label
+ *
+ * There is a default class in HGStyle.css that is used
+ *
+ * The caller CGI needs to include  jquery-ui.js and utils.js to turn this into a
+ * useable search bar with autocomplete */
+{
+printf("<div class='flexContainer'>\n"); // for styling purposes
+if (isNotEmpty(labelText))
+    {
+    printf("<label for='%s' class='%s'>%s</label>", id, isNotEmpty(labelClassStr) ? labelClassStr : "genomeSearchLabelDefault", labelText);
+    }
+printf("<div class='searchBarAndButton'>\n");
+printf("<input id='%s' type='text' ", id);
+if (isNotEmpty(placeholder))
+    printf("placeholder='%s' ", placeholder);
+printf("class='%s' ", isNotEmpty(classStr) ? classStr : "genomeSearchBarDefault");
+printf("></input>\n");
+if (withSearchButton)
+    printf("<input id='%sButton' value='search' type='button'></input>", id);
+printf("</div>\n"); // the search button is grouped with the input
+printf("</div>\n");
+}
+
 static char *getDbForGenome(char *genome, struct cart *cart)
 /*
   Function to find the default database for the given Genome.
@@ -1708,6 +1752,9 @@ jsInline("$(\"#tools1 ul li a\").each( function (a) {\n"
 "        }\n"
 "    }\n"
 "});\n");
+// if the user has previously searched for assemblies, add them to the "Genomes" menu heading,
+// above the "other" assemblies link
+jsInline("addRecentGenomesToMenuBar();\n");
 return menuStr;
 }
 

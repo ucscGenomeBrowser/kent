@@ -4402,6 +4402,155 @@ function writeToApacheLog(msg) {
     xmlhttp.send();  // sends request and exits this function
 }
 
+function addRecentGenome(item) {
+    // Save a genome selection to localStorage for showing recent selections in species search.
+    // item is the autocomplete selection object with genome, label, commonName, category, etc.
+    // Keeps the 10 most recently selected genomes, ordered by recency.
+    const MAX_RECENT = 10;
+    let stored = window.localStorage.getItem("recentGenomes");
+    let recentObj = stored ? JSON.parse(stored) : {stack: [], results: {}};
+
+    let stack = recentObj.stack;
+    // Use db as the primary key so hg38 and hg19 don't overwrite each other (both have genome="Human")
+    // Fall back to genome for GenArk results which may not have a db field
+    let key = item.db || item.genome;
+    if (!key) return; // Can't save without an identifier
+
+    // Check if this key already exists
+    let existingItem = recentObj.results[key];
+
+    // Remove if already exists (will re-add at front)
+    if (stack.includes(key)) {
+        stack.splice(stack.indexOf(key), 1);
+    } else if (stack.length >= MAX_RECENT) {
+        // Remove oldest
+        let toDelete = stack.pop();
+        delete recentObj.results[toDelete];
+    }
+
+    // Create a clean copy of the item with HTML stripped from labels
+    // Start with the new item, then selectively preserve better data from existing item
+    let cleanItem = Object.assign({}, item);
+    if (cleanItem.label) {
+        cleanItem.label = cleanItem.label.replace(/<[^>]*>/g, '');
+    }
+    if (cleanItem.value) {
+        cleanItem.value = cleanItem.value.replace(/<[^>]*>/g, '');
+    }
+
+    // If this key already exists, preserve the more descriptive label and other important fields
+    // A label with parentheses or longer length is considered more descriptive
+    // (e.g., "Gorilla gorilla gorilla (gorGor3)" vs just "Gorilla")
+    if (existingItem) {
+        let existingLabel = existingItem.label || '';
+        let newLabel = cleanItem.label || '';
+        // Preserve the existing label if it's more descriptive
+        if (existingLabel.includes('(') || existingLabel.length > newLabel.length) {
+            cleanItem.label = existingLabel;
+        }
+        // Preserve category if not present in new item
+        if (!cleanItem.category && existingItem.category) {
+            cleanItem.category = existingItem.category;
+        }
+        // Preserve hubUrl if not present in new item
+        if (!cleanItem.hubUrl && existingItem.hubUrl) {
+            cleanItem.hubUrl = existingItem.hubUrl;
+        }
+    }
+
+    // Add to front
+    stack.unshift(key);
+    recentObj.results[key] = cleanItem;
+
+    window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
+}
+
+function getRecentGenomes() {
+    // Retrieve recent genome selections from localStorage, formatted for autocomplete display.
+    // Preserves original category for re-selection logic, adds displayCategory for UI.
+    let stored = window.localStorage.getItem("recentGenomes");
+    if (!stored) return [];
+
+    let recentObj = JSON.parse(stored);
+    let results = [];
+    for (let genome of recentObj.stack) {
+        if (recentObj.results[genome]) {
+            let item = Object.assign({}, recentObj.results[genome]);
+            // Preserve original category for setDbFromAutocomplete to detect GenArk/hubs
+            // but also provide a display category for UI
+            item.displayCategory = "Recent";
+            results.push(item);
+        }
+    }
+    return results;
+}
+
+function addRecentGenomesToMenuBar() {
+    // Retrieve recent genome selections from localStorage and add them to the "Genomes" menu heading
+    // Tries not add duplicate genomes
+    let stored = window.localStorage.getItem("recentGenomes");
+    if (!stored) return;
+
+    let recentObj = JSON.parse(stored);
+    let results = [];
+    for (let genome of recentObj.stack) {
+        if (recentObj.results[genome]) {
+            let item = document.createElement("li");
+            let link = document.createElement("a");
+            // TODO: these links need to work if the result (ie: genark) does not have a db
+            link.href = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + recentObj.results[genome].db + "&position=lastDbPos";
+            link.textContent = recentObj.results[genome].label;
+            item.appendChild(link);
+            results.push(item);
+        }
+    }
+
+    // construct the current list of labels
+    const labelList = [];
+    document.querySelectorAll("#tools1 > ul > li > a").forEach( (a) => {
+        labelList.push(a.textContent);
+    });
+
+    // filter our list of recents against the list of "Genomes"
+    let finalResult = results.filter( (result) => {
+        return !labelList.includes(result.firstChild.textContent);
+    });
+
+    // Only add separators and items if we have recents to add
+    if (finalResult.length === 0) return;
+
+    let lastLink = document.querySelector("#tools1 > ul > .last");
+    let parent = lastLink.parentNode;
+
+    // Add a separator after the default entries to separate from recents
+    let defaultLinks = parent.querySelectorAll("li.defaultDropdownLink");
+    if (defaultLinks.length > 0) {
+        let lastDefault = defaultLinks[defaultLinks.length - 1];
+        let separator = document.createElement("li");
+        separator.className = "horizSep noHighlight";
+        lastDefault.after(separator);
+    }
+
+    // Add a "Recent Genomes" title after the separator
+    let title = document.createElement("li");
+    title.className = "noHighlight";
+    let titleSpan = document.createElement("span");
+    titleSpan.textContent = "Recent Genomes";
+    titleSpan.style.cssText = "color: #888; font-size: 11px; padding: 4px 8px; display: block;";
+    title.appendChild(titleSpan);
+    parent.insertBefore(title, lastLink);
+
+    // Add a separator before the "Other" link to separate recents from it
+    let separatorBeforeOther = document.createElement("li");
+    separatorBeforeOther.className = "horizSep noHighlight";
+    parent.insertBefore(separatorBeforeOther, lastLink);
+
+    // Append the recent genomes above the "other" link (and its separator)
+    finalResult.forEach( (res) => {
+        parent.insertBefore(res, separatorBeforeOther);
+    });
+}
+
 function addRecentSearch(db, searchTerm, extra={}) {
     // Push a searchTerm onto a stack in localStorage to show users their most recent
     // search terms. If an optional extra argument is supplied (ex: the response from hgSuggest),
@@ -4573,3 +4722,146 @@ function forceDisplayBedFile(url) {
     .catch(error => console.error('Error fetching BED file:', error));
 }
 
+function processFindGenome(result, term) {
+    // process the hubApi/findGenome?q= result set into somthing
+    // jquery-ui autocomplete can use
+    let data = [];
+    let apiSkipList = new Set(["downloadTime", "downloadTimeStamp", "availableAssemblies", "browser", "elapsedTimeMs", "itemCount", "q", "totalMatchCount", "liftable"]);
+    Object.keys(result).forEach((key) => {
+        if (!(apiSkipList.has(key))) {
+            let val = result[key];
+            let d = {
+                "genome": key,
+                "label": `${val.commonName} (${key})`,
+            };
+
+            Object.keys(val).forEach((vkey) => {
+                d[vkey] = val[vkey];
+            });
+            if (val.hubUrl !== null) {
+                d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
+                // For GenArk items, ensure db is set to the accession (key) for consistent
+                // identification in recent genomes storage (avoids duplicate entries)
+                d.db = key;
+            } else {
+                d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
+            }
+            data.push(d);
+        }
+    });
+    return data;
+}
+
+function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null,
+        watermark = null, onServerReply = null, onError = null) {
+/* Generic function for turning an <input> element into a species search bar with an autocomplete
+ * list separating results by category.
+ * Required arguments:
+ *     inputId: id of the input element itself, not created here
+ *     selectFunction: the function to call when the user actually clicks on a result
+ * Optional arguments:
+ *     baseUrl: where we send requests to which will return json we can parse into a list
+ *         of results, defaults to 'hubApi/findGenome?browser=mustExist&q='
+ *     watermark: placeholder text in the input
+ *     onServerReply: function to run after querying baseUrl, by default use processFindGenome()
+ *         to standardize on hubApi, but can be something else
+ *     onError: function to call when the server returns an error (e.g. HTTP 400)
+ *         signature: onError(jqXHR, textStatus, errorThrown, searchTerm) => results array or null
+ */
+    let defaultSearchUrl = "hubApi/findGenome?browser=mustExist&q=";
+    $.widget("custom.autocompleteCat",
+        $.ui.autocomplete,
+        {
+            _renderMenu: function(ul, items) {
+                var that = this;
+                var currentCategory = "";
+                // There's no this._super as shown in the doc, so I can't override
+                // _create as shown in the doc -- just do this every time we render...
+                this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                $(ul).css("z-index", "99999999");
+                // Check if all items are from recents (have displayCategory === "Recent")
+                // If so, skip category headers since they're all recent selections
+                var allRecent = items.length > 0 && items.every(function(item) {
+                    return item.displayCategory === "Recent";
+                });
+                $.each(items, function(index, item) {
+                    // Add a heading each time we see a new category (but not for recents)
+                    if (!allRecent && item.category && item.category !== currentCategory) {
+                        ul.append("<li class='ui-autocomplete-category'>" +
+                                item.category + "</li>" );
+                        currentCategory = item.category;
+                    }
+                    that._renderItem( ul, item );
+                });
+            },
+            _renderItem: function(ul, item) {
+                // In order to use HTML markup in the autocomplete, one has to overwrite
+                // autocomplete's _renderItem method using .html instead of .text.
+                // http://forum.jquery.com/topic/using-html-in-autocomplete
+                // Hits to assembly hub top level (not individial db names) have no item label,
+                // so use the value instead
+                return $("<li></li>")
+                    .data("ui-autocomplete-item", item)
+                    .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
+                    .appendTo(ul);
+            }
+        }
+    );
+    autocompleteCat.init($("[id='"+inputId+"']"), {
+        baseUrl: baseUrl !== null ? baseUrl : defaultSearchUrl,
+        watermark: watermark,
+        onSelect: selectFunction,
+        onServerReply: onServerReply !== null ? onServerReply : processFindGenome,
+        onError: onError,
+        showRecentGenomes: true,
+        enterSelectsIdentical: false
+    });
+}
+
+function setupGenomeSearchBar(config) {
+/* Higher-level wrapper for setting up a genome search bar with standard boilerplate.
+ * This handles the common pattern used across CGIs: error handling, DOMContentLoaded,
+ * element binding, search button handler, item validation, and label update.
+ *
+ * config object properties:
+ *   inputId (required): ID of the search input element
+ *   labelElementId: ID of the element to update with selected genome label (default: 'genomeLabel')
+ *   onSelect: Callback function(item, labelElement) when genome is selected.
+ *             Called AFTER standard validation and label update.
+ *             item has: {genome, label, commonName, disabled, ...}
+ *   apiUrl: Custom API URL (default: null uses standard hubApi/findGenome)
+ *   onServerReply: Custom function to process API results (default: null uses processFindGenome)
+ */
+    function onSearchError(jqXHR, textStatus, errorThrown, term) {
+        return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+    }
+
+    function wrappedSelect(labelElement, item) {
+        // Standard validation - all CGIs check this
+        if (item.disabled || !item.genome) return;
+        // Standard label update - all CGIs do this
+        labelElement.innerHTML = item.label;
+        // Call user's custom callback for CGI-specific logic
+        if (typeof config.onSelect === 'function') {
+            config.onSelect(item, labelElement);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let labelElementId = config.labelElementId || 'genomeLabel';
+        let labelElement = document.getElementById(labelElementId);
+        let boundSelect = wrappedSelect.bind(null, labelElement);
+
+        initSpeciesAutoCompleteDropdown(config.inputId, boundSelect,
+            config.apiUrl || null, null, config.onServerReply || null, onSearchError);
+
+        // Standard search button handler
+        let btn = document.getElementById(config.inputId + "Button");
+        if (btn) {
+            btn.addEventListener("click", () => {
+                let val = document.getElementById(config.inputId).value;
+                $("[id='" + config.inputId + "']").autocompleteCat("search", val);
+            });
+        }
+    });
+}
