@@ -114,7 +114,7 @@ superTrack on
         tableBrowser off
 
         track mgrb
-        shortLabel Australie MGRB 4k WGS
+        shortLabel Australia MGRB 4k WGS
         longLabel Variant Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS
         type vcfTabix
         parent varFreqs on
