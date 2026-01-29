@@ -16,6 +16,8 @@ maxHeightPixels 100:24:8
     parent gnomad3Coverage on
     color 255,0,0
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.mean.bw
+    priority 0.1
+    autoScale on
 
     track gnomad3MedianCoverage
     shortLabel Median Coverage
@@ -23,6 +25,8 @@ maxHeightPixels 100:24:8
     parent gnomad3Coverage off
     color 0,0,255
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.median.bw
+    priority 0.2
+    autoScale on
 
     track gnomad31XPercentage
     shortLabel Sample % > 1X
@@ -31,6 +35,7 @@ maxHeightPixels 100:24:8
     color 255,0,0
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_1.bw
     priority 1
+    viewLimits 0:1
 
     track gnomad35XPercentage
     shortLabel Sample % > 5X
@@ -39,6 +44,7 @@ maxHeightPixels 100:24:8
     color 225,0,30
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_5.bw
     priority 2
+    viewLimits 0:1
 
     track gnomad310XPercentage
     shortLabel Sample % > 10X
@@ -47,6 +53,7 @@ maxHeightPixels 100:24:8
     color 195,0,60
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_10.bw
     priority 3
+    viewLimits 0:1
 
     track gnomad315XPercentage
     shortLabel Sample % > 15X
@@ -55,6 +62,7 @@ maxHeightPixels 100:24:8
     color 165,0,90
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_15.bw
     priority 4
+    viewLimits 0:1
 
     track gnomad320XPercentage
     shortLabel Sample % > 20X
@@ -63,6 +71,7 @@ maxHeightPixels 100:24:8
     color 135,0,120
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_20.bw
     priority 5
+    viewLimits 0:1
 
     track gnomad325XPercentage
     shortLabel Sample % > 25X
@@ -71,6 +80,7 @@ maxHeightPixels 100:24:8
     color 105,0,150
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_25.bw
     priority 6
+    viewLimits 0:1
 
     track gnomad330XPercentage
     shortLabel Sample % > 30X
@@ -79,6 +89,7 @@ maxHeightPixels 100:24:8
     color 75,0,180
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_30.bw
     priority 7
+    viewLimits 0:1
 
     track gnomad350XPercentage
     shortLabel Sample % > 50X
@@ -87,6 +98,7 @@ maxHeightPixels 100:24:8
     color 45,0,210
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_50.bw
     priority 8
+    viewLimits 0:1
 
     track gnomad3100XPercentage
     shortLabel Sample % > 100X
@@ -95,3 +107,4 @@ maxHeightPixels 100:24:8
     color 15,0,240
     bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_100.bw
     priority 9
+    viewLimits 0:1
