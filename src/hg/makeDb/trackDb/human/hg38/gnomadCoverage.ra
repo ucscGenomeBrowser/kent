@@ -1,7 +1,7 @@
 track gnomad3Coverage
 compositeTrack on
 parent gnomadVariants
-shortLabel gnomAD v3 Coverage
+shortLabel gnomAD v3 Genome Coverage
 longLabel Genome Aggregation Database (gnomAD) Genome Sample Coverage v3.0.1
 group varRep
 dataVersion Release 3.0.1
@@ -15,7 +15,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Mean Genome Sample Coverage v3.0.1
     parent gnomad3Coverage on
     color 255,0,0
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.mean.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.mean.bw
     priority 0.1
     autoScale on
 
@@ -24,7 +24,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Median Genome Sample Coverage v3.0.1
     parent gnomad3Coverage off
     color 0,0,255
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.median.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.median.bw
     priority 0.2
     autoScale on
 
@@ -33,7 +33,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 1X Coverage v3.0.1
     parent gnomad3Coverage off
     color 255,0,0
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_1.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_1.bw
     priority 1
     viewLimits 0:1
 
@@ -42,7 +42,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 5X Coverage v3.0.1
     parent gnomad3Coverage off
     color 225,0,30
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_5.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_5.bw
     priority 2
     viewLimits 0:1
 
@@ -51,7 +51,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 10X Coverage v3.0.1
     parent gnomad3Coverage off
     color 195,0,60
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_10.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_10.bw
     priority 3
     viewLimits 0:1
 
@@ -60,7 +60,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 15X Coverage v3.0.1
     parent gnomad3Coverage off
     color 165,0,90
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_15.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_15.bw
     priority 4
     viewLimits 0:1
 
@@ -69,7 +69,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 20X Coverage v3.0.1
     parent gnomad3Coverage off
     color 135,0,120
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_20.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_20.bw
     priority 5
     viewLimits 0:1
 
@@ -78,7 +78,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 25X Coverage v3.0.1
     parent gnomad3Coverage off
     color 105,0,150
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_25.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_25.bw
     priority 6
     viewLimits 0:1
 
@@ -87,7 +87,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 30X Coverage v3.0.1
     parent gnomad3Coverage off
     color 75,0,180
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_30.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_30.bw
     priority 7
     viewLimits 0:1
 
@@ -96,7 +96,7 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 50X Coverage v3.0.1
     parent gnomad3Coverage off
     color 45,0,210
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_50.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_50.bw
     priority 8
     viewLimits 0:1
 
@@ -105,6 +105,117 @@ maxHeightPixels 100:24:8
     longLabel gnomAD Percentage of Genome Samples with at least 100X Coverage v3.0.1
     parent gnomad3Coverage off
     color 15,0,240
-    bigDataUrl /gbdb/hg38/gnomAD/coverage/gnomad.coverage.over_100.bw
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.over_100.bw
+    priority 9
+    viewLimits 0:1
+
+track gnomad4ExomeCoverage
+compositeTrack on
+parent gnomadVariants
+shortLabel gnomAD v4 Exome Coverage
+longLabel Genome Aggregation Database (gnomAD) Exome Sample Coverage v4.0
+group varRep
+dataVersion Release 4.0
+visibility full
+type bigWig
+priority 5
+maxHeightPixels 100:24:8
+
+    track gnomad4ExomeMeanCoverage
+    shortLabel Mean Coverage
+    longLabel gnomAD Mean Exome Sample Coverage v4.0
+    parent gnomad4ExomeCoverage on
+    color 255,0,0
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.mean.bw
+    priority 0.1
+    autoScale on
+
+    track gnomad4ExomeMedianCoverage
+    shortLabel Median Coverage
+    longLabel gnomAD Median Exome Sample Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 0,0,255
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.median.bw
+    priority 0.2
+    autoScale on
+
+    track gnomad4Exome1XPercentage
+    shortLabel Sample % > 1X
+    longLabel gnomAD Percentage of Exome Samples with at least 1X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 255,0,0
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_1.bw
+    priority 1
+    viewLimits 0:1
+
+    track gnomad4Exome5XPercentage
+    shortLabel Sample % > 5X
+    longLabel gnomAD Percentage of Exome Samples with at least 5X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 225,0,30
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_5.bw
+    priority 2
+    viewLimits 0:1
+
+    track gnomad4Exome10XPercentage
+    shortLabel Sample % > 10X
+    longLabel gnomAD Percentage of Exome Samples with at least 10X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 195,0,60
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_10.bw
+    priority 3
+    viewLimits 0:1
+
+    track gnomad4Exome15XPercentage
+    shortLabel Sample % > 15X
+    longLabel gnomAD Percentage of Exome Samples with at least 15X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 165,0,90
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_15.bw
+    priority 4
+    viewLimits 0:1
+
+    track gnomad4Exome20XPercentage
+    shortLabel Sample % > 20X
+    longLabel gnomAD Percentage of Exome Samples with at least 20X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 135,0,120
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_20.bw
+    priority 5
+    viewLimits 0:1
+
+    track gnomad4Exome25XPercentage
+    shortLabel Sample % > 25X
+    longLabel gnomAD Percentage of Exome Samples with at least 25X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 105,0,150
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_25.bw
+    priority 6
+    viewLimits 0:1
+
+    track gnomad4Exome30XPercentage
+    shortLabel Sample % > 30X
+    longLabel gnomAD Percentage of Exome Samples with at least 30X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 75,0,180
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_30.bw
+    priority 7
+    viewLimits 0:1
+
+    track gnomad4Exome50XPercentage
+    shortLabel Sample % > 50X
+    longLabel gnomAD Percentage of Exome Samples with at least 50X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 45,0,210
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_50.bw
+    priority 8
+    viewLimits 0:1
+
+    track gnomad4Exome100XPercentage
+    shortLabel Sample % > 100X
+    longLabel gnomAD Percentage of Exome Samples with at least 100X Coverage v4.0
+    parent gnomad4ExomeCoverage off
+    color 15,0,240
+    bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.over_100.bw
     priority 9
     viewLimits 0:1

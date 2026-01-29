@@ -702,59 +702,36 @@ filterValuesDefault.FILTER PASS
 filterType.FILTER multipleListAnd
 
 ##############################################################################
-# gnomAD Coverage v3.0.1 - Jan 28, 2025 - max
+# gnomAD Coverage v3.0.1 - Jan 28, 2026 - max
 ##############################################################################
 # Coverage data from gnomAD genomes v3.0.1
 # Source: https://gnomad.broadinstitute.org/downloads#v3-coverage
 
-cd /hive/data/genomes/hg38/bed/gnomad/coverage
+cd /hive/data/genomes/hg38/bed/gnomad/coverage/v3-genome
 
 # Download coverage summary file
 wget https://storage.googleapis.com/gcp-public-data--gnomad/release/3.0.1/coverage/genomes/gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz
 
-# Create chromosome sizes file (gnomAD uses only main chromosomes)
-cat > gnomad.chrom.sizes << 'EOF'
-chr1	248956422
-chr2	242193529
-chr3	198295559
-chr4	190214555
-chr5	181538259
-chr6	170805979
-chr7	159345973
-chr8	145138636
-chr9	138394717
-chr10	133797422
-chr11	135086622
-chr12	133275309
-chr13	114364328
-chr14	107043718
-chr15	101991189
-chr16	90338345
-chr17	83257441
-chr18	80373285
-chr19	58617616
-chr20	64444167
-chr21	46709983
-chr22	50818468
-chrX	156040895
-EOF
-
 # Convert TSV to bigWig files using Python script
-python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py
-# Creates 11 bigWig files:
-#   gnomad.coverage.mean.bw - Mean coverage
-#   gnomad.coverage.median.bw - Median coverage
-#   gnomad.coverage.over_1.bw - Fraction of samples with >= 1X coverage
-#   gnomad.coverage.over_5.bw - Fraction of samples with >= 5X coverage
-#   gnomad.coverage.over_10.bw - Fraction of samples with >= 10X coverage
-#   gnomad.coverage.over_15.bw - Fraction of samples with >= 15X coverage
-#   gnomad.coverage.over_20.bw - Fraction of samples with >= 20X coverage
-#   gnomad.coverage.over_25.bw - Fraction of samples with >= 25X coverage
-#   gnomad.coverage.over_30.bw - Fraction of samples with >= 30X coverage
-#   gnomad.coverage.over_50.bw - Fraction of samples with >= 50X coverage
-#   gnomad.coverage.over_100.bw - Fraction of samples with >= 100X coverage
+python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz
+# Creates 11 bigWig files
 
 # Create symlinks in /gbdb
-mkdir -p /gbdb/hg38/gnomAD/coverage
+mkdir -p /gbdb/hg38/gnomAD/coverage/v3-genome/
 cd /gbdb/hg38/gnomAD/coverage
 for f in /hive/data/genomes/hg38/bed/gnomad/coverage/*.bw; do ln -sf "$f" .; done
+
+##############################################################################
+# gnomAD Exome Coverage v4 - Jan 29, 2026 - max
+##############################################################################
+# Coverage data from gnomAD exomes v4
+# Source: https://gnomad.broadinstitute.org/downloads#v4-coverage
+
+cd /hive/data/genomes/hg38/bed/gnomad/coverage/v4-exome/
+
+# Download coverage summary file
+aria2c -x10 https://storage.googleapis.com/gcp-public-data--gnomad/release/4.0/coverage/exomes/gnomad.exomes.v4.0.coverage.summary.tsv.bgz
+
+# Convert TSV to bigWig files using Python script
+python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py gnomad.exomes.v4.0.coverage.summary.tsv.bgz
+# Creates 11 bigWig files

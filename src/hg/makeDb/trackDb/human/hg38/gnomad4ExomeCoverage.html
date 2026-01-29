@@ -1,0 +1,108 @@
+<h2>Description</h2>
+<p>
+The <strong>Genome Aggregation Database (gnomAD) v4 - Exome Coverage</strong> track shows how many times regions of the genomes were sequenced. This track includes several subtracks of average coverage metrics and sample percentage of coverage.
+</p>
+<p>There is no gnomAD v4 genome coverage track because the genomes were unchanged from V3. There is no gnomAD v3 exomes track because v3 was a genome-only release.</p>
+
+<p>
+Coverage was computed using all gnomAD 4 exome samples from their GVCFs . The gVCFs were produced using a 3-bin blocking scheme:
+</p>
+<p>
+<ul>
+    <li>No coverage
+    <li>Reference genotype quality < Q20
+    <li>Reference genotype quality >= Q20
+</ul>
+</p>
+
+<p>
+The coverage was binned by quality using the thresholds above and the median coverage value for each of the resulting coverage blocks was used to compute the coverage metrics presented in the browser. Coverage was computed for all callable bases in the genome (all non-N bases, minus telomeres and centromeres).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+The <strong>Average/Median Sample Coverage</strong> tracks display the mean and median read depth of the
+samples at each base position. The details page shows calculated sample percentages for the range
+of sequence within the browser window.
+</p>
+
+<p>
+The <strong>nX Coverage Percentage</strong> tracks display the percentage of samples whose read
+depth is at least 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, and 100X at each base position. The details
+page shows calculated sample percentages for the range of sequence within the browser window.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a target="_blank" 
+href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that 
+can be downloaded from our <a
+href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below). Coverage values
+for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
+the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.</p>
+<p>
+The data can also be found directly from the gnomAD <a target="_blank" 
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to 
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
+
+<p>
+More information about using and understanding the gnomAD data can be found in the
+<a target="_blank" href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a> site.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(ODbL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alf&#246;ldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
+</p>
+
