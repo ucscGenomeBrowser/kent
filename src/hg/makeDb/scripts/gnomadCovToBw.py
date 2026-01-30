@@ -5,8 +5,9 @@ import gzip
 import pyBigWig
 import sys
 
-INPUT = "gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz"
-CHROMSIZES = "/hive/data/genomes/hg38/bed/gnomad/coverage/gnomad.chrom.sizes"
+#INPUT = "gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz"
+INPUT = sys.argv[1]
+CHROMSIZES = "/hive/data/genomes/hg38/chrom.sizes"
 
 # Column definitions: (name, column_index 0-based)
 # locus(0) mean(1) median_approx(2) total_DP(3) over_1(4) over_5(5) over_10(6)
@@ -26,17 +27,28 @@ COLUMNS = [
 ]
 
 def load_chrom_sizes(path):
-    """Load chromosome sizes as list of tuples (preserves order)."""
-    sizes = []
+    """Load chromosome sizes as dict for lookup."""
+    sizes = {}
     with open(path) as f:
         for line in f:
             parts = line.strip().split('\t')
-            sizes.append((parts[0], int(parts[1])))
+            sizes[parts[0]] = int(parts[1])
     return sizes
+
+# Standard gnomAD chromosome order (numeric, then X, Y, M)
+GNOMAD_CHROM_ORDER = [
+    "chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10",
+    "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20",
+    "chr21", "chr22", "chrX", "chrY", "chrM"
+]
 
 def main():
     print("Loading chromosome sizes...")
-    chrom_sizes = load_chrom_sizes(CHROMSIZES)
+    chrom_size_dict = load_chrom_sizes(CHROMSIZES)
+
+    # Build header with chromosomes in gnomAD order (not chrom.sizes order)
+    chrom_sizes = [(c, chrom_size_dict[c]) for c in GNOMAD_CHROM_ORDER if c in chrom_size_dict]
+    print(f"  Using {len(chrom_sizes)} chromosomes in gnomAD order")
 
     print(f"Opening {len(COLUMNS)} bigWig files for writing...")
     bw_files = {}
@@ -49,12 +61,13 @@ def main():
 
     print(f"Processing {INPUT}...")
 
-    # Buffer entries by chromosome for batch writing
+    # Buffer entries per chromosome - only flush at chromosome boundaries
     buffers = {name: {"chroms": [], "starts": [], "ends": [], "values": []}
                for name, _ in COLUMNS}
     current_chrom = None
+    last_pos = -1
     line_count = 0
-    BUFFER_SIZE = 1000000  # Write in batches of 1M entries
+    dup_count = 0
 
     with gzip.open(INPUT, 'rt') as f:
         next(f)  # Skip header
@@ -62,7 +75,7 @@ def main():
         for line in f:
             line_count += 1
             if line_count % 10000000 == 0:
-                print(f"  Processed {line_count:,} lines...")
+                print(f"  Processed {line_count:,} lines...", flush=True)
 
             parts = line.strip().split('\t')
             locus = parts[0]
@@ -70,7 +83,12 @@ def main():
             pos = int(pos)
             start = pos - 1  # Convert to 0-based
 
-            # When chromosome changes, flush buffers
+            # Skip duplicate positions (same chrom and pos as previous line)
+            if chrom == current_chrom and start == last_pos:
+                dup_count += 1
+                continue
+
+            # When chromosome changes, flush buffers for previous chromosome
             if chrom != current_chrom and current_chrom is not None:
                 for name, _ in COLUMNS:
                     buf = buffers[name]
@@ -79,7 +97,8 @@ def main():
                             buf["chroms"], buf["starts"], ends=buf["ends"], values=buf["values"]
                         )
                         buffers[name] = {"chroms": [], "starts": [], "ends": [], "values": []}
-                print(f"  Finished {current_chrom}")
+                print(f"  Finished {current_chrom}", flush=True)
+                last_pos = -1  # Reset for new chromosome
 
             current_chrom = chrom
 
@@ -91,16 +110,9 @@ def main():
                 buf["ends"].append(start + 1)
                 buf["values"].append(float(parts[col_idx]))
 
-            # Flush if buffer is full
-            if len(buffers[COLUMNS[0][0]]["chroms"]) >= BUFFER_SIZE:
-                for name, _ in COLUMNS:
-                    buf = buffers[name]
-                    bw_files[name].addEntries(
-                        buf["chroms"], buf["starts"], ends=buf["ends"], values=buf["values"]
-                    )
-                    buffers[name] = {"chroms": [], "starts": [], "ends": [], "values": []}
+            last_pos = start
 
-    # Flush remaining data
+    # Flush remaining data for last chromosome
     for name, _ in COLUMNS:
         buf = buffers[name]
         if buf["chroms"]:
@@ -110,6 +122,8 @@ def main():
 
     print(f"  Finished {current_chrom}")
     print(f"Total lines processed: {line_count:,}")
+    if dup_count > 0:
+        print(f"Skipped {dup_count:,} duplicate positions")
 
     # Close all files
     print("Closing files...")

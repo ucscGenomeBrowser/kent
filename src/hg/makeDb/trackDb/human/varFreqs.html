@@ -72,9 +72,9 @@ The following projects were added:
         <b><a href="https://www.genomeasia100k.org/"
         target="_blank">Australia MRGB</a></b>:
         The Australian Medical Genome Reference Bank collected
-        whole-genome sequencing data of 4,011 healthy elderly individuals, to make sure 
-        that the dataset is depleted of damaging genetic variants.
-        Age and sex summary graphs are available from 
+        whole-genome sequencing data of 4,011 healthy elderly individuals who
+        lived >=70 years, to make sure that the dataset is depleted of damaging
+        genetic variants. Age and sex summary graphs are available from 
         <a href="https://sgc.garvan.org.au/initiatives/mgrb/index.html">the MGRB website</a>.
         See (Lacaze Eur J Humn Genet 2019) for details.
     </li>
@@ -412,6 +412,16 @@ VariantRecalibrator and ApplyRecalibration.
 from <a target="_blank" href="https://swefreq.nbis.se/dataset/SweGen/download">SweFreq</a>.
 </p>
 
+<p><b>Australia MGRB:</b> MGRB samples underwent whole-genome sequencing on
+Illumina HiSeq X instruments at KCCG under ISO 15189 accreditation, using
+paired-end TruSeq DNA Nano libraries sequenced one lane per sample. Reads were
+aligned to human reference genome Build 37 (GRCh37) and processed following
+GATK best practices, including indel realignment and base quality score
+recalibration, with variant calling performed using GATK HaplotypeCaller to
+generate g.vcf files. Data processing utilized the Genome One Discovery
+pipeline and analysis was conducted using the Hail framework.
+</p>
+
 <p><b>NPM Singapore:</b> Whole Genome Sequencing (WGS) data processing followed
 GATK4 best practices. GATK4 germline variant analysis workflow written in WDL
 was adapted to use Nextflow and deployed at the National Supercomputing Centre,
@@ -680,5 +690,18 @@ SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research</a>.
 <em>Neuron</em>. 2018 Feb 7;97(3):488-493.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29420931" target="_blank">29420931</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7444276/" target="_blank">PMC7444276</a>
+</p>
+
+
+
+<p>
+Lacaze P, Pinese M, Kaplan W, Stone A, Brion MJ, Woods RL, McNamara M, McNeil JJ, Dinger ME, Thomas
+DM.
+<a href="https://doi.org/10.1038/s41431-018-0279-z" target="_blank">
+The Medical Genome Reference Bank: a whole-genome data resource of 4000 healthy elderly individuals.
+Rationale and cohort design</a>.
+<em>Eur J Hum Genet</em>. 2019 Feb;27(2):308-316.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30353151" target="_blank">30353151</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6336775/" target="_blank">PMC6336775</a>
 </p>
 
