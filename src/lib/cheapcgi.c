@@ -206,7 +206,7 @@ checkValidEvent(eventName);
 jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", javaScriptLiteralEncode(idText), eventName, jsText);
 }
 
-void jsOnEventBySelector(char *query, char *eventName, char *jsText)
+void jsOnEventBySelector(char *eventName, char *query, char *jsText)
 /* Add js mapping for inline event given a query selector, e.g. '.className' */
 {
 checkValidEvent(eventName);
@@ -2125,7 +2125,9 @@ if (events && !id)  // use name as id
 if (id)
     printf(" id='%s'", id);
 if (class)
-    printf(" class='%s'", class);
+    printf(" class='vizSelect %s'", class);
+else
+    printf(" class='vizSelect'");
 if (events)
     {
     struct slPair *e;

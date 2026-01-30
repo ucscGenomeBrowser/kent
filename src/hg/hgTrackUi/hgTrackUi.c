@@ -2750,7 +2750,7 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 jsIncludeFile("hui.js",NULL);
 printf("<p style='margin-top:3px; margin-bottom:3px'>");
 printf("Tracks that are part of this container are listed below. Use the buttons below to set their visibilities.</p>");
-printf("\n<TABLE CELLPADDING=2>");
+printf("\n<TABLE id='superTrackTable' CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
 struct slRef *childRef;
 char javascript[1024];
@@ -2759,12 +2759,27 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     struct trackDb *tdb = childRef->val;
     if (childRef == superTdb->children) // first time through
         {
-        printf("\n<TR><TD NOWRAP colspan=2>");
-	printf("<IMG height=18 width=18 id='btn_plus_all' src='../images/add_sm.gif'>");
-	jsOnEventById("click", "btn_plus_all", "superT.plusMinus(true);");
-	printf("<IMG height=18 width=18 id='btn_minus_all' src='../images/remove_sm.gif'>");
-	jsOnEventById("click", "btn_minus_all", "superT.plusMinus(false);");
-        printf("&nbsp;<B>All</B><BR>");
+        printf("<TR style='border-bottom: none'><TD style='margin-bottom:10px' NOWRAP colspan=2>\n");
+
+        printf("<b>Apply visibility: </b>\n");
+        printf("<select id='superSubViz' class='normalText'>\n");
+        printf("<option value='hide'>Hide</option>");
+        printf("<option value='dense'>Dense</option>");
+        printf("<option value='squish'>Squish</option>");
+        printf("<option value='pack' selected='selected'>Pack</option>");
+        printf("<option value='full'>Full</option>\n");
+        printf("</select>\n");
+
+        printInfoIcon("The 'Apply to all' button sets all tracks below to the visibility selected on this dropdown. The 'Apply to all visible' button sets this visibility on all tracks below that are not hidden.");
+
+        // First button: set all selectors that are not on 'hide' to the current value of the top select 
+        printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
+	jsOnEventById("click", "superVizApplyButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').filter(function() { return $(this).val() !== 'hide'; }).val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText'); ");
+
+        // Second button: set all selectors to the current value of the top select
+        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
+	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
+        
         printf("</TD></TR>\n");
         }
     printf("<TR><TD NOWRAP>");
@@ -2773,22 +2788,41 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 	char id[256];
         enum trackVisibility tv =
                 hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
-        // Don't use cheapCgi code... no name and no boolshad... just js
 	safef(id, sizeof id, "%s_check", tdb->track);
-        printf("<INPUT TYPE=CHECKBOX id='%s'%s>",
+        printf("<INPUT style='display:none' class='subtrackCheckbox' TYPE=CHECKBOX id='%s'%s>",
                id, (tv != tvHide?" CHECKED":""));
-	jsOnEventById("change", id, "superT.childChecked(this);");
-
         safef(javascript, sizeof(javascript), "superT.selChanged(this)");
         struct slPair *event = slPairNew("change", cloneString(javascript));
+
+        char *onlyVis = trackDbSetting(tdb, "onlyVisibility");
         hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
                                         (tv == tvHide ? "hiddenText":"normalText"),
-                                        trackDbSetting(tdb, "onlyVisibility"),
+                                        onlyVis,
                                         event);
 
+        // print a group of buttons that act like radiobuttons (see javascript lines below)
+        printf("<div data-trackname='%s' class='seg-btn-group' style='margin-right:12px'>", tdb->track);
+        char *trackVizStr = hStringFromTv(tv);
+
+        // vizList is e.g.  {"hide", "dense", "squish", "pack", "full"}, but can be shorter, e.g. when canPack=false
+        char **vizList = hTvGetVizArr(tv, tdb->canPack, onlyVis);
+        int vizListLen = arrNullLen(vizList);
+        for (int i = 0; i < vizListLen; i++) {
+            char *buttonViz = vizList[i];
+            // the currently active viz mode is an 'active' button = pressed
+            if (strcasecmp(buttonViz, trackVizStr) == 0)
+                printf("<button class='seg-active'>");
+            else
+                printf("<button>");
+            printf("%c%s", toupper((unsigned char)buttonViz[0]), buttonViz + 1); // upcase first letter
+            puts("</button>");
+        }
+        puts("</div>");
+        
         printf("</TD>\n<TD>");
         hPrintPennantIcon(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
+        // the <select> tag is only needed to send arguments to the hgTracks CGI. It will be hidden, see below.
         printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
                     tdbIsDownloadsOnly(tdb) ? hgFileUiName(): hTrackUiForTrack(tdb->track),
                     cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(tdb->track), 
@@ -2811,6 +2845,26 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("</TD></TR>");
     }
 printf("</TABLE>");
+
+// Now configure the elements above with Javascript:
+
+// * Clicking a button sets the dropdown to the button's text
+jsOnEventBySelector("click", ".seg-btn-group > button", "let dropdown = $('#' + $(this).parent().data('trackname')); let buttonText=$(this).text().toLowerCase(); dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');");
+// * Clicking buttons does not submit the form (default action of <button> is to submit, unless type=button)
+jsInline("$('.seg-btn-group button').attr('type', 'button');");
+// * Clicking buttons makes them pressed
+jsInline("$('.seg-btn-group').on('click', 'button', function() {"
+  "$(this).addClass('seg-active').siblings().removeClass('seg-active');"
+  "});");
+// * Changing the dropdown updates the buttons
+jsInline("$('.vizSelect').on('change', function() {"
+  "$(this).next().children().removeClass('seg-active');"
+  "let labelToFind = capitalizeFirstLetter($(this).val());"
+  "$(this).next().find('button').filter(function() { return $(this).text().trim() === labelToFind; }).addClass('seg-active');"
+  "});");
+// * Hide all subtrack dropdowns from the user. They are used so the CGI arguments
+// are sent to hgTracks, but are not necessary as UI elements anymore
+jsInline("$('#superTrackTable .vizSelect').hide();");
 }
 
 #ifdef USE_HAL
@@ -3625,8 +3679,11 @@ if (!tdbIsDownloadsOnly(tdb))
     /* Display visibility menu */
     if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
         printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+    else if (tdbIsSuper(tdb))
+        printf("<B>Show or hide this container and all tracks:&nbsp;</B>");
     else
         printf("<B>Display&nbsp;mode:&nbsp;</B>");
+
     if (tdbIsSuper(tdb))
         {
         superTrackDropDown(cart, tdb, 1);
