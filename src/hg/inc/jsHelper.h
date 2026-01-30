@@ -105,6 +105,9 @@ void jsIncludeReactLibs();
 /* Prints out <script src="..."> tags for external libraries including ReactJS & ImmutableJS
  * and our own model libs, React mixins and components. */
 
+void jsIncludeAutoCompleteLibs();
+/* Prints out <script src="..."> tags for autocompleteCat.js */
+
 void jsIncludeDataTablesLibs();
 /* Prints out <script src="..."> tags for external libraries: jQuery 1.12.3, the jQuery DataTables
  * plugin (version 1.10.12), and the accompanying standard CSS file for DataTables. */

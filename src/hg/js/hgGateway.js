@@ -864,10 +864,8 @@ var hgGateway = (function() {
         // image to scroll and the slider to move.
         var $speciesPicker = $('#speciesPicker');
         var $sliderBar = $('#rainbowSlider');
-        var sliderBarTop = $sliderBar.offset().top;
         var sliderBarHeight = $speciesPicker.outerHeight();
         var $sliderIcon = $('#sliderSvgContainer');
-        var sliderIconLeft = $sliderIcon.offset().left;
         var $speciesTree = $('#speciesTree');
         // When the user moves the slider, causing the image to scroll, don't do the
         // image onscroll action (do that only when the user scrolls the image).
@@ -884,8 +882,11 @@ var hgGateway = (function() {
 
         var moveSlider = function(normalizedTop) {
             // Move the slider icon to a normalized top coord scaled by sliderBarHeight.
+            // Get current offset dynamically since the recents list may have changed size
+            var sliderBarTop = $sliderBar.offset().top;
+            var sliderIconLeft = $sliderIcon.offset().left;
             $sliderIcon.offset({ top: sliderBarTop + (normalizedTop * sliderBarHeight),
-                                 left: sliderIconLeft.left });
+                                 left: sliderIconLeft });
         };
 
         var onClickStripe = function(normalizedTop) {
@@ -902,6 +903,8 @@ var hgGateway = (function() {
         var onDragSlider = function(event, ui) {
             // The user dragged the slider; scroll the tree image to the corresponding
             // position.
+            // Get current offset dynamically since the recents list may have changed size
+            var sliderBarTop = $sliderBar.offset().top;
             var sliderTop = ui.offset.top - sliderBarTop;
             var normalizedTop = sliderTop / sliderBarHeight;
             inhibitImageOnScroll = true;
@@ -916,6 +919,8 @@ var hgGateway = (function() {
                 inhibitImageOnScroll = false;
                 return;
             }
+            // Get current offset dynamically since the recents list may have changed size
+            var sliderBarTop = $sliderBar.offset().top;
             imageTop = -$speciesTree.offset().top + sliderBarTop + 1;
             normalizedTop = imageTop / svgHeight;
             moveSlider(normalizedTop);
@@ -1338,15 +1343,11 @@ var hgGateway = (function() {
     function processSpeciesAutocompleteItems(searchObj, results, term) {
         // This (bound to searchObj) is passed into autocompleteCat as options.onServerReply.
         // The server sends a list of items that may include duplicates and can have
-        // results from dbDb and/or assembly hubs.  Also look for results from the
-        // phylogenetic tree, and insert those before the assembly hub matches.
-        // Then remove duplicates and return the processed results which will then
-        // be used to render the menu.
-        var phyloResults = searchByKeyNoCase(searchObj, term);
-        var hubResultIx = _.findIndex(results, function(result) { return !! result.hubUrl; });
-        var hubResults = hubResultIx >= 0 ? results.splice(hubResultIx) : [];
-        var combinedResults = results.concat(phyloResults).concat(hubResults);
-        return removeDups(combinedResults, speciesResultsEquiv);
+        // results from dbDb and/or assembly hubs.
+        // Remove duplicates and return the processed results which will then
+        // be used to render the autocomplete menu only.
+        var processedResults = removeDups(results, speciesResultsEquiv);
+        return processedResults;
     }
 
     // Server response event handlers
@@ -1391,11 +1392,51 @@ var hgGateway = (function() {
         }
     }
 
+    function isGenomeAtFrontOfRecents(db) {
+        // Check if a genome with this db is already at the front of the recents list.
+        // This is used to detect if autocompleteCat.js just added it (to avoid double-adding).
+        // We compare without hub prefixes since autocompleteCat saves without prefix but
+        // server responses may include prefixes like "hub_123_GCA_xxx".
+        var stored = window.localStorage.getItem("recentGenomes");
+        if (!stored) return false;
+        var recentObj = JSON.parse(stored);
+        if (!recentObj.stack || recentObj.stack.length === 0) return false;
+        var frontKey = trackHubSkipHubName(recentObj.stack[0]);
+        var checkKey = trackHubSkipHubName(db);
+        return frontKey === checkKey;
+    }
+
     function handleSetDb(jsonData) {
         // Handle the server's response to cartJson command setDb or setHubDb
         if (checkJsonData(jsonData, 'handleSetDb') &&
             trackHubSkipHubName(jsonData.db) === trackHubSkipHubName(uiState.db)) {
             updateStateAndPage(jsonData);
+            // Save to recent genomes only if not already at the front (autocompleteCat.js may have just added it)
+            // Use db without hub prefix for consistent key comparison
+            var dbForRecents = trackHubSkipHubName(uiState.db);
+            if (!isGenomeAtFrontOfRecents(dbForRecents)) {
+                // Construct a descriptive label that includes the db/accession for identification
+                var label = uiState.genomeLabel || uiState.genome;
+                if (label && dbForRecents && label.indexOf(dbForRecents) < 0) {
+                    // Add the db/accession to the label if not already present
+                    label = label + ' (' + dbForRecents + ')';
+                }
+                var recentItem = {
+                    db: dbForRecents,
+                    genome: uiState.genome,
+                    label: label,
+                    taxId: uiState.taxId
+                };
+                if (uiState.hubUrl) {
+                    recentItem.hubUrl = uiState.hubUrl;
+                    // For hub genomes, add category for proper detection when re-selected
+                    if (dbForRecents.startsWith('GCA_') || dbForRecents.startsWith('GCF_')) {
+                        recentItem.category = "UCSC GenArk";
+                    }
+                }
+                addRecentGenome(recentItem);
+            }
+            displayRecentGenomesInPanel();
         } else {
             console.log('handleSetDb ignoring: ' + trackHubSkipHubName(jsonData.db) +
                         ' !== ' + trackHubSkipHubName(uiState.db));
@@ -1408,6 +1449,24 @@ var hgGateway = (function() {
             // Update uiState with new values and update the page:
             _.assign(uiState, jsonData);
             updateFindPositionSection(uiState);
+            // Save to recent genomes only if not already at the front (autocompleteCat.js may have just added it)
+            // Use db without hub prefix for consistent key comparison
+            var dbForRecents = trackHubSkipHubName(uiState.db);
+            if (!isGenomeAtFrontOfRecents(dbForRecents)) {
+                // Construct a descriptive label that includes the db for identification
+                var label = uiState.genomeLabel || uiState.genome;
+                if (label && dbForRecents && label.indexOf(dbForRecents) < 0) {
+                    // Add the db to the label if not already present
+                    label = label + ' (' + dbForRecents + ')';
+                }
+                addRecentGenome({
+                    db: dbForRecents,
+                    genome: uiState.genome,
+                    label: label,
+                    taxId: uiState.taxId
+                });
+            }
+            displayRecentGenomesInPanel();
         } else {
             console.log('handleSetTaxId ignoring: ' + jsonData.taxId +
                         ' !== ' + uiState.taxId);
@@ -1483,21 +1542,47 @@ var hgGateway = (function() {
 
     function setDbFromAutocomplete(item) {
         // The user has selected a result from the species-search autocomplete.
-        // It might be a taxId and/or db from dbDb, or it might be a hub db.
+        // It might be a taxId and/or db from dbDb, or it might be a hub db,
+        // or a taxon-only result (like "Human") that shows an assembly dropdown.
         var taxId = item.taxId || -1;
         var db = item.db;
-        var org = item.org;
-        if (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) {
-            db = item.genome;
-            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName, true);
-        } else if (item.hubUrl) {
-            // The autocomplete sends the hub database from hubPublic.dbList,
+        var org = item.org || item.value || item.label;
+        var cmd;
+        var genome = item.genome || '';
+
+        // Check if db is a valid assembly name (not an organism name)
+        // Valid db names are typically lowercase alphanumeric like "hg38", "mm10"
+        // Organism names are capitalized like "Human", "Mouse"
+        var isValidDb = db && /^[a-z]/.test(db) && db !== org;
+
+        // Detect GenArk by category OR by genome name pattern (GCA_/GCF_)
+        var isGenArk = (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) ||
+                       (item.hubUrl && (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
+
+        if (isGenArk) {
+            // For items from localStorage recents, db is the accession; for fresh autocomplete, genome is
+            db = item.db || item.genome;
+            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName || org, true);
+        } else if (item.hubUrl && item.hubName) {
+            // Public hub - the autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;
             setHubDb(item.hubUrl, taxId, db, item.hubName, org, true);
-        } else {
-            setTaxId(taxId, item.db, org, true, false);
+        } else if (taxId > 0) {
+            // Native db with valid taxId - pass db only if it's a valid assembly name
+            setTaxId(taxId, isValidDb ? db : null, org, true, false);
+        } else if (isValidDb) {
+            // Native db without taxId - use setDb command directly
+            cmd = { setDb: { db: db, position: "lastDbPos" } };
+            cart.send(cmd, handleSetDb);
+            cart.flush();
+            uiState.db = db;
+            clearPositionInput();
+            clearSpeciesInput();
         }
+
+        // Refresh the recent genomes panel (autocompleteCat.js handles saving to localStorage)
+        displayRecentGenomesInPanel();
     }
 
     function onClickSpeciesLabel(taxId) {
@@ -1658,20 +1743,88 @@ var hgGateway = (function() {
         });
     }
 
+    // Recent Genomes Panel functions (Option C layout)
+
+    function renderRecentGenomesPanel(genomes) {
+        // Render recent genomes as vertical scrollable cards
+        var $panel = $('#recentGenomesList');
+        $panel.empty();
+
+        if (!genomes || genomes.length === 0) {
+            $panel.html('<div class="recentGenomesEmpty">Search for a genome above, ' +
+                        'or click a popular species icon</div>');
+            return;
+        }
+
+        // Render each genome as a card (vertical layout)
+        genomes.forEach(function(item) {
+            var $card = $('<div class="recentGenomeCard"></div>');
+            var label = item.label || item.value || item.genome || item.commonName;
+            var genome = item.genome || item.db || '';
+
+            $card.append('<div class="recentGenomeLabel">' + escapeHtml(label) + '</div>');
+            if (genome && label.indexOf(genome) < 0) {
+                $card.append('<div class="recentGenomeDb">' + escapeHtml(genome) + '</div>');
+            }
+
+            // Add category as small label
+            if (item.category) {
+                var shortCategory = item.category;
+                if (shortCategory.indexOf('UCSC Genome Browser') >= 0) {
+                    shortCategory = 'UCSC';
+                } else if (shortCategory.indexOf('GenArk') >= 0) {
+                    shortCategory = 'GenArk';
+                } else if (shortCategory.indexOf('Assembly Hub') >= 0) {
+                    shortCategory = 'Hub';
+                }
+                $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
+            }
+
+            // Store item data for click handler
+            $card.data('item', item);
+            $card.on('click', function() {
+                var clickedItem = $(this).data('item');
+                setDbFromAutocomplete(clickedItem);
+                // Highlight selected card
+                $('.recentGenomeCard').removeClass('selected');
+                $(this).addClass('selected');
+            });
+
+            $panel.append($card);
+        });
+    }
+
+    function displayRecentGenomesInPanel() {
+        // Display recent genomes in the panel on page load and after genome selection
+        var recentGenomes = getRecentGenomes();
+        // Show the section (hidden by default in HTML)
+        $('#recentGenomesTitle').show();
+        $('#recentGenomesSection').show();
+        renderRecentGenomesPanel(recentGenomes);
+    }
+
+    function escapeHtml(text) {
+        // Simple HTML escape for display
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
     function init() {
         // Boot up the page; initialize elements and install event handlers.
         var searchObj = {};
-        // We need a bound function to pass into autocompleteCat.init below;
-        // however, autocompleteFromTree is even slower than drawing the tree because of
-        // all the copying.  So bind now, fill in searchObj later.
+        // We need a bound function to pass into autocompleteCat.init below.
         var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
         cart.setCgi('hgGateway');
         cart.debug(debugCartJson);
         // Get state from cart
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
-	activeTaxIds = _.invert(activeGenomes);
-        // Prune inactive genomes from dbDbTree.
+        activeTaxIds = _.invert(activeGenomes);
+        // Note: Tree pruning kept for potential future use, but tree is no longer displayed.
         if (window.dbDbTree) {
             prunedDbDbTree = dbDbTree;
             if (! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
@@ -1689,6 +1842,7 @@ var hgGateway = (function() {
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
                                    onServerReply: processSpeciesResults,
+                                   showRecentGenomes: true,
                                    enterSelectsIdentical: false });
             $('#selectAssembly').on("change", onChangeDbMenu);
             $('#positionDisplay').on("click", onClickCopyPosition);
@@ -1697,11 +1851,11 @@ var hgGateway = (function() {
             $(window).on("resize", setRightColumnWidth.bind(null, scrollbarWidth));
             displaySurvey();
             replaceHgsidInLinks();
-            // Fill in searchObj here once everything is displayed.
-            autocompleteFromTree(prunedDbDbTree, searchObj);
 
+            // Display recent genomes in the left panel on page load
+            displayRecentGenomesInPanel();
 
-	    // Gateway tutorial
+            // Gateway tutorial
             if (typeof gatewayTour !== 'undefined') {
                 if (typeof startGatewayOnLoad !== 'undefined' && startGatewayOnLoad) {
                     gatewayTour.start();

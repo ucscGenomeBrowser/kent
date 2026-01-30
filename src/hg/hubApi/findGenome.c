@@ -7,6 +7,7 @@
 #include "genark.h"
 #include "asmAlias.h"
 #include "assemblyList.h"
+#include "liftOver.h"
 
 /* will be initialized as this function begins */
 static char *genarkTable = NULL;
@@ -23,6 +24,7 @@ static char *refSeqCategory = NULL;
 static char *versionStatus = NULL;
 /* from level= one of complete, chromosome, scaffold or contig */
 static char *assemblyLevel = NULL;
+static boolean liftable = FALSE;
 
 /*
 hgsql -e 'desc assemblyList;' hgcentraltest
@@ -186,6 +188,13 @@ if (isNotEmpty(assemblyLevel))
     sqlDyStringPrintf(query, " AND assemblyLevel='%s'", assemblyLevel);
 }
 
+static void addLiftover(struct dyString *query)
+/* liftable = are there liftover chains for this assembly */
+{
+if (liftable)
+    sqlDyStringPrintf(query, " AND exists (select 1 from %s where %s.name = %s.fromDb) ", liftOverChainTable(), asmListTable, liftOverChainTable());
+}
+
 static void addConditions(struct dyString *query)
 /* add any of the optional conditions */
 {
@@ -193,6 +202,7 @@ addBrowserExists(query);
 addCategory(query);
 addStatus(query);
 addLevel(query);
+addLiftover(query);
 if (specificYear > 0)
     sqlDyStringPrintf(query, " AND year='%u'", specificYear);
 }
@@ -213,7 +223,8 @@ for (int i = 1; i < wordCount; ++i)
 
 /* initial SELECT allows any browser exist status, existing or not */
 struct dyString *query = dyStringNew(64);
-sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s ", asmListTable);
+sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
 addConditions(query);	/* add optional SELECT options */
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
@@ -227,8 +238,8 @@ if (matchCount > 0)
     else
 	{
 	dyStringFree(&query);
-	query = dyStringNew(64);
-	sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, queryDy->string);
+	sqlDyStringPrintf(query, "SELECT * FROM %s ", asmListTable);
+        sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
 	addConditions(query);	/* add optional SELECT options */
 	sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
 	struct sqlResult *sr = sqlGetResult(conn, query->string);
@@ -248,17 +259,17 @@ static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, str
 long long itemCount = 0;
 *totalMatchCount = 0;
 
-struct dyString *query = dyStringNew(64);
-sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", asmListTable, searchWord);
+struct dyString *query = sqlDyStringCreate("SELECT COUNT(*) FROM %s ", asmListTable);
+sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", searchWord);
 addConditions(query);	/* add optional SELECT options */
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
 *prefixSearch = FALSE;	/* assume not */
 if (matchCount < 1)	/* no match, add the * wild card match to make a prefix match */
     {
-    dyStringFree(&query);
-    query = dyStringNew(64);
-    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE)", asmListTable, searchWord);
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s ", asmListTable);
+    sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE)", searchWord);
     addConditions(query);	/* add optional SELECT options */
     matchCount = sqlQuickLongLong(conn, query->string);
     if (matchCount > 0)
@@ -274,10 +285,9 @@ if (statsOnly)	// only counting, nothing returned
     }	// when less than totalMatchCount
 else
     {
-    dyStringFree(&query);
-    query = dyStringNew(64);
-
-    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s%s' IN BOOLEAN MODE)", asmListTable, searchWord, *prefixSearch ? "*" : "");
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "SELECT * FROM %s ", asmListTable);
+    sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s%s' IN BOOLEAN MODE)", searchWord, *prefixSearch ? "*" : "");
     addConditions(query);	/* add optional SELECT options */
     sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
     struct sqlResult *sr = sqlGetResult(conn, query->string);
@@ -327,6 +337,7 @@ char *yearString = cgiOptionalString(argYear);
 char *categoryString = cgiOptionalString(argCategory);
 char *statusString = cgiOptionalString(argStatus);
 char *levelString = cgiOptionalString(argLevel);
+char *liftableStr = cgiOptionalString(argLiftable);
 /* protect sqlUnsigned from errors */
 if (isNotEmpty(yearString))
     {
@@ -376,6 +387,18 @@ if (isNotEmpty(levelString))
 		if (differentWord(assemblyLevel, "contig"))
 		    apiErrAbort(err400, err400Msg, "values for argument %s=%s must be one of: 'complete', 'chromosome', 'scaffold' or 'contig'", argLevel, levelString);
 	}
+    }
+
+if (isNotEmpty(liftableStr))
+    {
+    char *lower = cloneString(liftableStr);
+    tolowers(lower);
+    if (sameWord(lower, "liftable") || sameWord(lower, "true") || sameWord(lower, "yes") ||sameWord(lower, "on"))
+        liftable = TRUE;
+    else if (sameWord(lower, "false") || sameWord(lower, "no") || sameWord(lower, "off"))
+        liftable = FALSE;
+    else
+        apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, must be either 'liftable' or 'true', or completely missing", argLiftable, liftableStr);
     }
 
 char *browserExistString = cgiOptionalString(argBrowser);
@@ -444,6 +467,7 @@ if (isNotEmpty(versionStatus))
     jsonWriteString(jw, argStatus, versionStatus);
 if (isNotEmpty(assemblyLevel))
     jsonWriteString(jw, argLevel, assemblyLevel);
+jsonWriteString(jw, argLiftable, liftableStr);
 
 long long itemCount = 0;
 long long totalMatchCount = 0;

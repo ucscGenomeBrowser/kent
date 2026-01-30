@@ -22,10 +22,15 @@ var autocompleteCat = (function() {
                    // There's no this._super as shown in the doc, so I can't override
                    // _create as shown in the doc -- just do this every time we render...
                    this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                   // Check if all items are from recents (have displayCategory === "Recent")
+                   // If so, skip category headers since they're all recent selections
+                   var allRecent = items.length > 0 && items.every(function(item) {
+                       return item.displayCategory === "Recent";
+                   });
                    $.each(items,
                           function(index, item) {
-                              // Add a heading each time we see a new category:
-                              if (item.category && item.category !== currentCategory) {
+                              // Add a heading each time we see a new category (but not for recents)
+                              if (!allRecent && item.category && item.category !== currentCategory) {
                                   ul.append("<li class='ui-autocomplete-category'>" +
                                             item.category + "</li>" );
                                   currentCategory = item.category;
@@ -39,7 +44,8 @@ var autocompleteCat = (function() {
                  // autocomplete's _renderItem method using .html instead of .text.
                  // http://forum.jquery.com/topic/using-html-in-autocomplete
                    let clockIcon = '';
-                   if ($("#positionInput").val().length < 2) {
+                   let posInput = $("#positionInput");
+                   if (posInput.length > 0 && posInput.val() && posInput.val().length < 2) {
                        clockIcon = '<svg xmlns="http://www.w3.org/2000/svg" height=".75em" width=".75em" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg>&nbsp';
                    }
                    // Hits to assembly hub top level (not individial db names) have no item label,
@@ -68,8 +74,8 @@ var autocompleteCat = (function() {
     }
 
     function init($input, options) {
-        // Set up an autocomplete and watermark for $input, with a callback options.onSelect
-        // for when the user chooses a result.
+        // Set up an autocomplete and watermark for each input in $input, with a callback
+        // options.onSelect for when the user chooses a result.
         // If options.baseUrl is null, the autocomplete will not do anything, but we (re)initialize
         // it anyway in case the same input had a previous db's autocomplete in effect.
         // options.onServerReply (if given) is a function (Array, term) -> Array that
@@ -81,95 +87,155 @@ var autocompleteCat = (function() {
         // options.onEnterTerm (if provided) is a callback function (jqEvent, jqUi) invoked
         // when the user hits Enter, after handling enterSelectsIdentical.
 
-        // The function closure allows us to keep a private cache of past searches.
-        var cache = {};
+        let $els = ($input instanceof jQuery) ? $input: $($input);
+        $els.each(function() {
+            let $el = $(this);
+            // clone options per-element so later changes don't affect other instances
+            var opts = $.extend(true, {}, options);
 
-        var doSearch = function(term, acCallback) {
-            // Look up term in searchObj and by sending an ajax request
-            var timestamp = new Date().getTime();
-            let cleanedTerm = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0 len chars
-            var url = options.baseUrl + encodeURIComponent(cleanedTerm);
-            if (!options.baseUrl.startsWith("hubApi")) {
-                // hubApi doesn't tolerate extra arguments
-                url += '&_=' + timestamp;
-            }
-            // put up a loading icon so users know something is happening
-            toggleSpinner(true, options);
-            $.getJSON(url)
-               .done(function(results) {
-                if (_.isFunction(options.onServerReply)) {
-                    results = options.onServerReply(results, cleanedTerm);
+            // The function closure allows us to keep a private cache of past searches.
+            var cache = {};
+            $el.data("acOptions", opts);
+
+            var doSearch = function(term, acCallback) {
+                // Look up term in searchObj and by sending an ajax request
+                var timestamp = new Date().getTime();
+                let cleanedTerm = term.replace(/[\u200b-\u200d\u2060\uFEFF]/g,''); // remove 0 len chars
+                var url = options.baseUrl + encodeURIComponent(cleanedTerm);
+                if (!options.baseUrl.includes("hubApi")) {
+                    // hubApi doesn't tolerate extra arguments
+                    url += '&_=' + timestamp;
                 }
-                // remove the loading icon
-                toggleSpinner(false, options);
-                cache[cleanedTerm] = results;
-                acCallback(results);
-            });
-            // ignore errors to avoid spamming people on flaky network connections
-            // with tons of error messages (#8816).
-        };
+                // put up a loading icon so users know something is happening
+                toggleSpinner(true, options);
+                $.getJSON(url)
+                    .done(function(results) {
+                       if (typeof options.onServerReply === 'function') {
+                           results = options.onServerReply(results, cleanedTerm);
+                       }
+                       // remove the loading icon
+                       toggleSpinner(false, options);
+                       cache[cleanedTerm] = results;
+                       acCallback(results);
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                       // remove the loading icon
+                       toggleSpinner(false, options);
+                       // If onError is defined, call it to handle the error;
+                       // otherwise silently ignore (ref #8816)
+                       if (typeof options.onError === 'function') {
+                           let results = options.onError(jqXHR, textStatus, errorThrown, cleanedTerm);
+                           if (results) {
+                               acCallback(results);
+                           }
+                       }
+                    });
+            };
 
-        var autoCompleteSource = function(request, acCallback) {
-            // This is a callback for jqueryui.autocomplete: when the user types
-            // a character, this is called with the input value as request.term and an acCallback
-            // for this to return the result to autocomplete.
-            // See http://api.jqueryui.com/autocomplete/#option-source
-            if (this.element[0].id === "positionInput" && request.term.length < 2) {
-                let searchStack = window.localStorage.getItem("searchStack");
-                if (request.term.length === 0 && searchStack) {
-                    let searchObj = JSON.parse(searchStack);
-                    let currDb = getDb();
-                    if (currDb in searchObj) {
-                        // sort the results list according to the stack order:
-                        let entries = Object.entries(searchObj[currDb].results);
-                        let stack = searchObj[currDb].stack;
-                        let callbackData = [];
-                        for (let s of stack) {
-                            callbackData.push(searchObj[currDb].results[s]);
+            var autoCompleteSource = function(request, acCallback) {
+                // This is a callback for jqueryui.autocomplete: when the user types
+                // a character, this is called with the input value as request.term and an acCallback
+                // for this to return the result to autocomplete.
+                // See http://api.jqueryui.com/autocomplete/#option-source
+                // Note: 'this' is the widget instance
+
+                // Handle recent genomes for species search bars
+                if (options.showRecentGenomes && request.term.length < 2) {
+                    let recent = getRecentGenomes();
+                    if (request.term.length === 0) {
+                        // On focus with empty input, show all recent genomes
+                        if (recent.length > 0) {
+                            acCallback(recent);
+                            return;
                         }
-                        acCallback(callbackData);
+                    } else {
+                        // On typing 1 char, filter recent genomes
+                        let matching = recent.filter(item =>
+                            item.label.toLowerCase().includes(request.term.toLowerCase()) ||
+                            item.genome.toLowerCase().includes(request.term.toLowerCase())
+                        );
+                        if (matching.length > 0) {
+                            acCallback(matching);
+                            return;
+                        }
                     }
-                    return;
                 }
-            } else if (request.term.length >=2) {
-                let results = cache[request.term];
-                if (results) {
-                    acCallback(results);
-                } else if (options.baseUrl) {
-                    doSearch(request.term, acCallback);
+
+                // Handle recent searches for position input
+                if (this.element[0].id === "positionInput" && request.term.length < 2) {
+                    let searchStack = window.localStorage.getItem("searchStack");
+                    if (request.term.length === 0 && searchStack) {
+                        let searchObj = JSON.parse(searchStack);
+                        let currDb = getDb();
+                        if (currDb in searchObj) {
+                            // sort the results list according to the stack order:
+                            let entries = Object.entries(searchObj[currDb].results);
+                            let stack = searchObj[currDb].stack;
+                            let callbackData = [];
+                            for (let s of stack) {
+                                callbackData.push(searchObj[currDb].results[s]);
+                            }
+                            acCallback(callbackData);
+                        }
+                        return;
+                    }
+                } else if (request.term.length >=2) {
+                    let results = cache[request.term];
+                    if (results) {
+                        acCallback(results);
+                    } else if (options.baseUrl) {
+                        doSearch(request.term, acCallback);
+                    }
                 }
+            };
+
+            var autoCompleteSelect = function(event, ui) {
+                // This is a callback for autocomplete to let us know that the user selected
+                // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
+                // since we are in an autocomplete don't bother saving the
+                // prefix the user typed in, just keep the geneSymbol itself
+                if (this.id === "positionInput") {
+                    addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
+                }
+                // Save genome selection for species search bars, but only if item has a definite db.
+                // Taxa-only selections (like "Human" without a specific db) are handled by the
+                // CGI's response handler after the actual db is determined.
+                if (options.showRecentGenomes && ui.item.db && !ui.item.disabled) {
+                    addRecentGenome(ui.item);
+                }
+                if (typeof opts.onSelect === 'function') {
+                    opts.onSelect(ui.item, $el);
+                }
+                $el.blur();
+            };
+
+            // Provide default values where necessary:
+            opts.onSelect = opts.onSelect || function(){};
+            opts.enterSelectsIdentical = opts.enterSelectsIdentical || false;
+
+            $el.autocompleteCat({
+                delay: 500,
+                minLength: 0,
+                source: autoCompleteSource,
+                select: autoCompleteSelect,
+                enterSelectsIdentical: opts.enterSelectsIdentical,
+                enterTerm: opts.onEnterTerm
+            });
+
+            // Trigger autocomplete on focus for species search bars to show recent genomes
+            if (opts.showRecentGenomes) {
+                $el.on('focus', function() {
+                    if ($(this).val() === '' || $(this).val() === opts.watermark) {
+                        $(this).autocompleteCat('search', '');
+                    }
+                });
             }
-        };
 
-        var autoCompleteSelect = function(event, ui) {
-            // This is a callback for autocomplete to let us know that the user selected
-            // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
-            // since we are in an autocomplete don't bother saving the
-            // prefix the user typed in, just keep the geneSymbol itself
-            if (this.id === "positionInput") {
-                addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
+            if (opts.watermark) {
+                $el.css('color', 'black');
+                $el.Watermark(opts.watermark, '#686868');
             }
-            options.onSelect(ui.item);
-            $input.blur();
-        };
-
-        // Provide default values where necessary:
-        options.onSelect = options.onSelect || console.log;
-        options.enterSelectsIdentical = options.enterSelectsIdentical || false;
-
-        $input.autocompleteCat({
-            delay: 500,
-            minLength: 0,
-            source: autoCompleteSource,
-            select: autoCompleteSelect,
-            enterSelectsIdentical: options.enterSelectsIdentical,
-            enterTerm: options.onEnterTerm
         });
-
-        if (options.watermark) {
-            $input.css('color', 'black');
-            $input.Watermark(options.watermark, '#686868');
-        }
     }
 
     return { init: init };
