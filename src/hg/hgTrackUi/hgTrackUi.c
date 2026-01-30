@@ -2796,7 +2796,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 
         char *onlyVis = trackDbSetting(tdb, "onlyVisibility");
         hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
-                                        (tv == tvHide ? "hiddenText":"normalText"),
+                                        (tv == tvHide ? "vizSelect hiddenText":"vizSelect normalText"),
                                         onlyVis,
                                         event);
 
@@ -2852,9 +2852,10 @@ printf("</TABLE>");
 jsOnEventBySelector("click", ".seg-btn-group > button", "let dropdown = $('#' + $(this).parent().data('trackname')); let buttonText=$(this).text().toLowerCase(); dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');");
 // * Clicking buttons does not submit the form (default action of <button> is to submit, unless type=button)
 jsInline("$('.seg-btn-group button').attr('type', 'button');");
-// * Clicking buttons makes them pressed
+// * Clicking buttons makes them pressed. Also, clicking any button shows the superTrack
 jsInline("$('.seg-btn-group').on('click', 'button', function() {"
   "$(this).addClass('seg-active').siblings().removeClass('seg-active');"
+  "$('.superDropdown').val('show');"
   "});");
 // * Changing the dropdown updates the buttons
 jsInline("$('.vizSelect').on('change', function() {"
@@ -3680,7 +3681,10 @@ if (!tdbIsDownloadsOnly(tdb))
     if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
         printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
     else if (tdbIsSuper(tdb))
+        {
         printf("<B>Show or hide this container and all tracks:&nbsp;</B>");
+        printInfoIcon("Switching off the entire container here will preserve the visibility settings below, so you can come back later and restore the visibility settings again with a single click.");
+        }
     else
         printf("<B>Display&nbsp;mode:&nbsp;</B>");
 

@@ -9680,7 +9680,7 @@ if (show && (visibleChild == -1))
         }
     }
 hideShowDropDownWithClassAndExtra(tdb->track, NULL, show, (show && visibleChild) ?
-                                  "normalText visDD" : "hiddenText visDD", events);
+                                  "superDropdown normalText visDD" : "superDropdown hiddenText visDD", events);
 return TRUE;
 }
 

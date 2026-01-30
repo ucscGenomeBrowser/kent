@@ -2124,10 +2124,10 @@ if (events && !id)  // use name as id
     id = name;
 if (id)
     printf(" id='%s'", id);
+
 if (class)
-    printf(" class='vizSelect %s'", class);
-else
-    printf(" class='vizSelect'");
+    printf(" class='%s'", class);
+
 if (events)
     {
     struct slPair *e;
