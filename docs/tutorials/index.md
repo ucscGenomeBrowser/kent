@@ -62,5 +62,20 @@ Learn how to extract Genome Browser data sets in various ways.
 </div>
 </div>
 
+<div class="col-md-6">
+<div class="panel panel-default" style="padding-bottom: 10px">
+<h3 class="panel-title" style="width: -webkit-fill-available;">
+    Custom Tracks
+    </span>
+</h3>
+
+Learn how to format and upload your own data to the Genome Browser.
+
+<p style="text-align: end">
+<button>[View Tutorial](customTrackTutorial.html)</button>
+</p>
+</div>
+</div>
+</div>
 
 </div>
