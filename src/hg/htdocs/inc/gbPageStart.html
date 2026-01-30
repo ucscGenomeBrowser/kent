@@ -7,7 +7,7 @@
             <!--#echo var="TITLE" -->
         </title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/font-awesome.min.css">
 
         <!-- Redirects don't forward ROOT, so can't determine relative paths -->
         <!--#if expr="($REDIRECT_URL)" -->
@@ -15,19 +15,13 @@
         <!--#endif -->
         <!-- Use ROOT variable set in caller to determine relative path to style sheets -->
 
-        <!--#if expr="${DYNAMIC}" -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <!--#else -->
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/bootstrap.min.css">
-        <!--#endif -->
 
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/gb.css">
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/staticStyle/gbStatic.css">
 
-        <!--#if expr="${DYNAMIC}" -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <!--#endif -->
+        <script src="<!--#echo var="ROOT" -->/js/jquery.js"></script>
+        <script src="<!--#echo var="ROOT" -->/js/external/bootstrap-3.3.7.min.js"></script>
 
         <!--#if expr="${ENCODING}" -->
         <meta http-equiv="Content-Type" content="text/html; charset=${ENCODING}"/>

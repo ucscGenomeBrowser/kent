@@ -1555,11 +1555,9 @@ void printIncludes()
 /* print the CSS and javascript include lines */
 {
 jsIncludeFile("jquery.js", NULL);
-printf(
-"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
-"<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
-);
+webIncludeResourceFile("jstree-3.3.7.min.css");
+jsIncludeFile("jstree-3.3.7.min.js", NULL);
+printf("<style>.jstree-default .jstree-anchor { height: initial; } </style>\n");
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
 webIncludeResourceFile("jquery-ui.css");

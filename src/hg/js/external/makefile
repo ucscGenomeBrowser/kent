@@ -3,9 +3,17 @@ include ../../../inc/common.mk
 include ../install.mk
 
 JS_FILES= BackboneExtend.js \
+	bootstrap-3.3.7.min.js \
+	dataTables-1.10.12.min.js \
+	dataTables-1.13.6.min.js \
+	dataTables-2.2.2.min.js \
+	dataTables.buttons-3.2.2.min.js \
+	dataTables.select-1.7.0.min.js \
+	dataTables.select-3.0.0.min.js \
 	es5-sham.4.0.3.min.js es5-shim.4.0.3.min.js \
 	immutable.3.7.4.min.js \
 	jquery.bifrost.1.0.1.min.js \
+	jstree-3.3.7.min.js \
 	lodash.3.10.0.compat.min.js \
 	react-with-addons-0.12.2.min.js \
 	sorttable.js tus.min.js \
