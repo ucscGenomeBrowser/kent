@@ -394,7 +394,7 @@ function populateTableAndInfo(jsonData) {
     var extraInfo = {};
 
     for (var key in jsonData) {
-        if (jsonData[key].scientificName) {
+        if (jsonData[key] && jsonData[key].scientificName) {
             genomicEntries[key] = jsonData[key];
         } else {
             extraInfo[key] = jsonData[key];
