@@ -103,15 +103,17 @@ The full .as format for decorator bigBed files is as follows:
     string decoratedItem; "Identity of the decorated item in chr:start-end:item_name format"
     string style;      "Draw style for the decoration (e.g. block, glyph)"
     string fillColor;  "Secondary color to use for filling decoration, blocks, supports RGBA"
-    string glyph;  "The glyph to draw in glyph mode; "Ignored" for other styles"
+    string glyph;  "The glyph to draw in glyph mode; "Ignored" for block style"
 </pre>
 <p>
 A copy of this file can be found <a href="examples/decorator/decoration.as">here</a>.</p>
 <p>
-Valid values for the style field are "block" and "glyph".  Valid glyph entries include "Circle",
-"Square", "Diamond", "Triangle", "InvTriangle", "Octagon", "Star", "X", and "Pentagram". 
-For non-glyph mode, the text can be the text string "Ignored". If the text isn't
-recognized, Circle will be used by default.</p>
+Valid values for the <code>style</code> field are &quot;block&quot; and &quot;glyph&quot;. Valid
+values for the <code>glyph</code> field include &quot;Circle&quot;, &quot;Square&quot;,
+&quot;Diamond&quot;, &quot;Triangle&quot;, &quot;InvTriangle&quot;, &quot;Octagon&quot;,
+&quot;Star&quot;, &quot;X&quot;, and &quot;Pentagram&quot;. For block <code>style</code>
+(non-glyph mode), the <code>glyph</code> field can be set to the string &quot;Ignored&quot;. If the
+text is not recognized, Circle is used by default.</p>
 <p>
 The "decoratedItem" field (chr:start-end:item_name format) captures the link between the decoration and what item in the track is being
 decorated.  The contents of this field must be the chromosome, BED start coordinate, BED end coordinate,
