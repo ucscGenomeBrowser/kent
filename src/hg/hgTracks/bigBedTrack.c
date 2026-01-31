@@ -816,7 +816,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 }
             else
                 {
-                bed = bedLoadN(bedRow, fieldCount);
+                bed = bedLoadN(bedRow, fieldCount == 7 ? 6 : fieldCount);
                 bedCopy = cloneBed(bed);
                 lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
                     scoreMin, scoreMax, useItemRgb);
