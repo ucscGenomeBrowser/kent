@@ -324,19 +324,19 @@ def getGbHeader():
     <meta name="keywords" content="genome, genome browser, human genome, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, SNPs, EST, mRNA, mouse genome, rat genome, chicken genome, chimp genome, dog genome, fruitfly genome, zebrafish genome, xenopus, frog genome, rhesus, opossum, danio rerio genome, drosophila, fugu, yeast, ciona,  comparative genomics, human variation, hapMap">
     <title>UCSC %s</title>
     <link href='https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css' type='text/css'>
+    <link rel="stylesheet" href="../style/font-awesome.min.css">
+    <link rel='stylesheet' href='../style/jquery-ui.css' type='text/css'>
     <link rel='stylesheet' href='../style/nice_menu.css' type='text/css'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../style/bootstrap.min.css">
 
 <!-- BEGIN added for gene interactions page -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+<script src="../js/jquery.js"></script>
+<script src="../js/jquery-ui.js"></script>
 <script nonce='%s'> /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
 $.widget.bridge('uibutton', $.ui.button); $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 <script type='text/javascript' src='../js/jquery.plugins.js'></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="../js/bootstrap-3.3.7.min.js"></script>
 <script nonce='%s'>
 $.fn.bsTooltip = $.fn.tooltip.noConflict();
 </script>

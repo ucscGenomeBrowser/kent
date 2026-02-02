@@ -1699,13 +1699,13 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
                             multiple, db, chainTable);
     if (error)
 	{
-        gp->chrom = NULL; // this gp didn't get lifted so we want to make sure the caller can figure that out
         bedFree(&bed);
         if (unmapped)
             {
             fprintf(unmapped, "# %s\n", error);
             genePredTabOut(gp, unmapped);
             }
+        gp->chrom = NULL; // this gp didn't get lifted so we want to make sure the caller can figure that out
 	}
    else
 	{

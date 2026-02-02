@@ -64,6 +64,80 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2026"></a>
 
+<!--
+<a name="020326"></a>
+<h2>Feb. 03, 2026 &nbsp;&nbsp; New &quot;Visible Tracks&quot; group feature</h2>
+<p>
+We are excited to announce a new improvement to the UCSC Genome Browser: the
+<b>Visible Tracks</b> group. The Genome Browser now includes a dynamic track group that
+automatically displays all currently visible tracks in one convenient location. This means you no
+longer need to hunt through multiple track categories to adjust tracks you've already turned on.
+</p>
+<div class="text-center">
+<img src="/images/newsArchImages/visibleTracks.png" width='65%'>
+</div>
+<p>
+Previously, managing visible tracks required navigating back to their original categories &mdash;
+whether that was Genes and Gene Predictions, Conservation, Variation, or any other group. Now, all
+your active tracks appear together in the <b>Visible Tracks</b> group, making it faster and easier
+to adjust display modes for visible tracks.
+</p>
+<p>
+We would like to thank Chris Lee and Jairo Navarro Gonzalez for their work on creating and testing
+the feature.</p> 
+-->
+
+<!--
+<a name="020326"></a>
+<h2>Feb. 03, 2026 &nbsp;&nbsp; Hub Space: Host Your Track Hubs Directly on the Genome Browser</h2>
+<p>
+We are excited to introduce <a href="/cgi-bin/hgHubConnect#hubUpload">Hub Space</a>, a new
+hosting service that allows users to upload and visualize track hub files directly on the UCSC
+Genome Browser without relying on third-party hosting services such as Dropbox, Google Drive, or
+AWS.
+</p>
+
+<p>
+<b>Hub Space Features:</b><br>
+Each account is allocated 10 GB of storage space. While we strive to maintain uninterrupted
+access, please maintain your own backups. Data persistence over the long term is not
+guaranteed. To request additional storage space, please
+<a href="/contacts.html">contact us</a>.
+</p>
+
+<p>
+<b>How to Use Hub Space:</b><br>
+There are two primary ways to upload your files:
+</p>
+
+<ol>
+  <li>
+    <b>Single file upload:</b> Upload individual binary-indexed files (bigBed, bigWig, BAM, VCF,
+    and other supported formats) for immediate visualization.
+  </li>
+  <li>
+    <b>Complete hub upload:</b> Upload an entire track hub along with all supporting files
+    (hub.txt, bigWig, bigBed, etc.) to visualize the hub.
+  </li>
+</ol>
+
+<p>
+If a hub.txt file is not provided when uploading data files, one is automatically generated.
+The generated hub.txt file is configured with the
+<a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile</a> trackDb setting, and
+as a result, each hub is limited to a single genome assembly. Editing the generated hub.txt file is
+not yet supported. To customize the hub configuration or data display, replace the generated hub.txt
+file with your own version after uploading the data files.
+</p>
+
+<p>
+To get started with Hub Space, visit the
+<a href="/cgi-bin/hgHubConnect#hubUpload">Track Data Hubs page</a> and
+click on the &quot;Hub Space&quot; section. We would love to hear your feedback on this new feature.
+Please <a href="/contacts.html">contact us</a> and let us know what you think!
+</p>
+-->
+
 <a name="011526"></a>
 <h2>Jan. 15, 2026 &nbsp;&nbsp; New ENCODE cCREs track available for human (hg38)</h2>
 <p>
@@ -336,57 +410,6 @@ We would like to thank the <a href="http://www.arcseqhub.com/plot/-1/"
 target="_blank">ArcSeqHub</a> authors for making the data available.
 We would also like to thank Maximilian Haeussler and Matthew Speir for the
 creation and release of this track.</p>
-
-<!--
-<a name="120525"></a>
-<h2>Dec. 05, 2025 &nbsp;&nbsp; Hub Space: Host Your Track Hubs Directly on the Genome Browser</h2>
-<p>
-We are excited to introduce <a href="/cgi-bin/hgHubConnect#hubUpload">Hub Space</a>, a new
-hosting service that allows users to upload and visualize track hub files directly on the UCSC
-Genome Browser without relying on third-party hosting services such as Dropbox, Google Drive, or
-AWS.
-</p>
-
-<p>
-<b>Hub Space Features:</b><br>
-Each account is allocated 10 GB of storage space. While we strive to maintain uninterrupted
-access, please maintain your own backups. Data persistence over the long term is not
-guaranteed. To request additional storage space, please
-<a href="/contacts.html">contact us</a>.
-</p>
-
-<p>
-<b>How to Use Hub Space:</b><br>
-There are two primary ways to upload your files:
-</p>
-
-<ol>
-  <li>
-    <b>Single file upload:</b> Upload individual binary-indexed files (bigBed, bigWig, BAM, VCF,
-    and other supported formats) for immediate visualization.
-  </li>
-  <li>
-    <b>Complete hub upload:</b> Upload an entire track hub along with all supporting files
-    (hub.txt, bigWig, bigBed, etc.) to visualize the hub.
-  </li>
-</ol>
-
-<p>
-If a hub.txt file is not provided when uploading data files, one is automatically generated.
-The generated hub.txt file is configured with the
-<a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile</a> trackDb setting, and
-as a result, each hub is limited to a single genome assembly. Editing the generated hub.txt file is
-not yet supported. To customize the hub configuration or data display, replace the generated hub.txt
-file with your own version after uploading the data files.
-</p>
-
-<p>
-To get started with Hub Space, visit the
-<a href="/cgi-bin/hgHubConnect#hubUpload">Track Data Hubs page</a> and
-click on the &quot;Hub Space&quot; section. We would love to hear your feedback on this new feature.
-Please <a href="/contacts.html">contact us</a> and let us know what you think!
-</p>
--->
 
 <a name="120325"></a>
 <h2>Dec. 03, 2025 &nbsp;&nbsp; New gnomAD Missense Deleteriousness Prediction by Constraint (MPC) track for hg19</h2>

@@ -7,11 +7,11 @@ $(function() {
     const DEFAULT_MAX_CHECKBOXES = 20;  // ADS: without default, can get crazy
 
     // ADS: need "matching" versions for the plugins
-    const DATATABLES_URL = "https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js";
-    const DATATABLES_SELECT_URL = "https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js";
+    const DATATABLES_URL = "../js/dataTables-1.13.6.min.js";
+    const DATATABLES_SELECT_URL = "../js/dataTables.select-1.7.0.min.js";
     const CSS_URLS = [
-        "https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css",  // dataTables CSS
-        "https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css",  // dataTables Select CSS
+        "../style/dataTables-1.13.6.min.css",  // dataTables CSS
+        "../style/dataTables.select-1.7.0.min.css",  // dataTables Select CSS
         "../style/facetedComposite.css",  // Local metadata table CSS
     ];
 

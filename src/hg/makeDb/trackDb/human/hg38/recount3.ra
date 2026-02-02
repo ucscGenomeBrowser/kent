@@ -20,7 +20,7 @@ noParentConfig on
     longLabel recount 3 GTEX introns
     bigDataUrl /gbdb/$D/recount3/gtexv2.bb
     labelFields none
-    mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver <b>Split read count</b>: $readcount<br><b>Splice donor</b>: $donor<br><b>Splice acceptor</b>: $acceptor<br><b>Intron size</b>: $size bp<br><b>Strand</b>: $strand
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=gtexv2&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     parent recount3
@@ -45,7 +45,7 @@ noParentConfig on
     longLabel recount 3 TCGA introns
     bigDataUrl /gbdb/$D/recount3/tcgav2.bb
     labelFields none
-    mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver <b>Split read count</b>: $readcount<br><b>Splice donor</b>: $donor<br><b>Splice acceptor</b>: $acceptor<br><b>Intron size</b>: $size bp<br><b>Strand</b>: $strand
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=tcgav2&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     parent recount3
@@ -71,7 +71,7 @@ noParentConfig on
     bigDataUrl /gbdb/$D/recount3/srav3h.bb
     labelFields none
     #maxWindowToDraw 10000000
-    mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver <b>Split read count</b>: $readcount<br><b>Splice donor</b>: $donor<br><b>Splice acceptor</b>: $acceptor<br><b>Intron size</b>: $size bp<br><b>Strand</b>: $strand
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav3h&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     parent recount3
@@ -96,7 +96,7 @@ noParentConfig on
     longLabel recount 3 CCLE introns
     bigDataUrl /gbdb/$D/recount3/ccle.bb
     labelFields none
-    mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
+    mouseOver <b>Split read count</b>: $readcount<br><b>Splice donor</b>: $donor<br><b>Splice acceptor</b>: $acceptor<br><b>Intron size</b>: $size bp<br><b>Strand</b>: $strand
     iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=ccle&jid=$$&coords=$S:${-$}
     iframeOptions height='300' width='1000' scrolling='yes'
     parent recount3

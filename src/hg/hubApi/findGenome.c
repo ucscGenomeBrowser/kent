@@ -238,6 +238,7 @@ if (matchCount > 0)
     else
 	{
 	dyStringFree(&query);
+	query = dyStringNew(64);
 	sqlDyStringPrintf(query, "SELECT * FROM %s ", asmListTable);
         sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
 	addConditions(query);	/* add optional SELECT options */
