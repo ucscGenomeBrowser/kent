@@ -2,13 +2,14 @@
 <p>
 This container shows results from projects where the variant frequencies, aka allele frequencies,
 are publicly available. The tracks were collected from the 
-projects listed below. Projects that provide haplotype-phased genotypes/variants can be found
-elsewhere: 1000 Genomes is a separate track, and the projects HGDP, SGDP,
-HGDP+1000 Genomes and Mexico Biobank can be found in the &quot;Phased Variants&quot; track.
+projects listed below. More detailed data for projects that provide haplotype-phased genotypes/variants can also be found
+in other tracks: 1000 Genomes is a separate track, and the projects HGDP, SGDP,
+HGDP+1000 Genomes and Mexico Biobank can be found in the &quot;Phased Variants&quot; track, showing the linkage between variants.
 </p>
-<p>If you want us to add other projects, please contact us. We asked and were
-unable to obtain variant frequencies from the following projects: UK Biobank (request pending), All
-of Us (granted, ongoing).
+
+<p>If you want us to add other projects, please contact us. We were
+unable to obtain variant frequencies from the following projects: UK Biobank (request pending), 
+Regeneron's Million Exomes and Mexico City Studies (request rejected).
 </p>
 
 <p>
@@ -190,10 +191,8 @@ letters. All VCF files are normalized, with one single allele per annotation (no
 
 
 <h2>Data Access</h2>
-<p>Most of the data in these tracks are not available for download from UCSC.
-Data can be browsed on our website.
-But the data can be downloaded for free from the original projects. Accessing the 
-data usually requires a click-through license or filling out an access request form on the respective websites, links are either provided above in the project description or with more details here:
+<p>Most of the data in these tracks are not available for download from UCSC and the data can only be browsed on our website.
+But all variant data can be downloaded for free from the original project websites. Accessing it usually requires a click-through license or filling out an access request form on the respective websites, by following these instructions:
 </p>
 
 <p>
@@ -203,6 +202,8 @@ Raw genotype data are available under controlled access at the
 EGA (Study: EGAS00001005797; Dataset: EGAD00010002361). For the VCFs, email
 andres.moreno@cinvestav.mx.
 </p>
+
+<!--
 <p>
 <b>MCPS:</b> VCFs with summarized allele frequencies are available from
 the <a target="_blank" href="https://rgc-mcps.regeneron.com/">MCPS website</a>.
@@ -211,6 +212,8 @@ the <a target="_blank" href="https://rgc-mcps.regeneron.com/">MCPS website</a>.
 <b>Regeneron one million exomes:</b> VCFs with summarized allele frequencies are available from
 the <a target="_blank" href="https://rgc-research.regeneron.com/me/resources">RGC ME website</a>.
 </p>
+-->
+
 <p>
 <b>TOPMED:</b> VCFs with summarized allele frequencies are available from
 the <a target="_blank" href="https://bravo.sph.umich.edu/">TOPMED BRAVO website</a>. They require a
@@ -239,26 +242,27 @@ No license nor login.
 </p>
 
 <p><b>KOVA:</b> 
-        TSV data can be requested on the <a href="https://www.kobic.re.kr/kova/downloads"
-        target="_blank">KOVA Downloads</a> website. 
+TSV data can be requested on the <a href="https://www.kobic.re.kr/kova/downloads"
+target="_blank">KOVA Downloads</a> website. Our Github repo contains a script that 
+converts this format to VCF.
 </p>
 
 <p><b>Finngen:</b> TSV data can be requested via the form at
-https://finngen.gitbook.io/documentation/data-download which triggers an email with the download
-link.</p>
+<a href="https://finngen.gitbook.io/documentation/data-download" target=_blank>Finngen</a>
+which triggers an automated email containing the download
+link. A script in our Github repo converts this file to VCF (see methods below).</p>
 
-<p><b>SweGen:</b> We are not allowed to redistribute the VCF, you can request it at
-<a target="_blank" href="https://swefreq.nbis.se/dataset/SweGen">SweGen</a>, alongside the VCF file.
+<p><b>SweGen:</b> VCF files can be requested at
+<a target="_blank" href="https://swefreq.nbis.se/dataset/SweGen">SweGen</a> via a form, the request needs manual approval, which usually is quick. If there is no reply, email SweGen directly.
 </p>
 
 <p><b>NPM:</b> 
-   VCF access can be requested on the 
-   <a href="https://chorus.grids-platform.io/" target="_blank">Chorus Browser</a> website, which
-   requires an <a href = "https://npm.a-star.edu.sg/" target=_blank>account and data access
-   request</a>. 
+VCF download can be requested on the <a href="https://chorus.grids-platform.io/" target="_blank">Chorus Browser</a> website, which requires an <a href = "https://npm.a-star.edu.sg/" target=_blank>account and data access request</a>. 
 </p>
 
 <h2>Methods</h2>
+<p>The following are quotes from the respective papers and/or websites of the datasets:</p>
+
 <p>
 <b>MXB:</b> Genotyping was performed with the Illumina Multi-Ethnic Global Array
 (MEGA, ~1.8M SNPs), optimized for admixed populations and enriched for
@@ -317,10 +321,10 @@ achieved mean coverages ranging from 31.3x to 64.8x, with an average of 38.65x a
 </p>
 
 <p><b>SFARI SPARK:</b> The genome browser track project was approved by the Simons 
-Foundation as 14584.1. WES and WGS Data were downloaded from 
+Foundation under request number 14584.1. WES and WGS Data were downloaded from 
 <a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
-pVCFs were downloaded, anonymized with a script using bcftools and the fill-tags plugin and
-normalized, without a minimum allele frequency cutoff.<br>
+pVCFs were downloaded, anonymized with a script using bcftools and its "fill-tags" plugin and
+normalized. There was no minimum allele frequency cutoff.<br>
 The methods are documented as follows by SFARI:<br>
 <ul>
   <li>
@@ -389,8 +393,8 @@ The methods are documented as follows by SFARI:<br>
 </ul>
 
 <p><b>Finngen:</b> R12 annotated variants were downloaded from the Google Cloud
-bucket link received though an email after filling out the form linked from
-https://finngen.gitbook.io/documentation/data-download and converted to VCF
+bucket link received though an email and
+converted to VCF
 with a <a
 href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/finngen_to_vcf.py"
 target="_blank">custom Python script</a>. </p>
@@ -510,7 +514,8 @@ data must take note that the data provider and relevant SG10K_Health cohort
 owners bear no responsibility for the further analysis or interpretation of the
 data.  </p>
 
-<p>Thanks to Alex Ioannidis, UCSC, and Andreas Lahner, MGZ, for feedback on this track.</p>
+<p>Thanks to Alex Ioannidis, UCSC, for the idea and motivation for this track. 
+Thanks to Andreas Lahner, MGZ, for feedback and suggestions.</p>
 
 <h2>References</h2>
 <p>
