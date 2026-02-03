@@ -871,7 +871,7 @@ def main():
         if year not in organism and year not in descr:
             descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
+        outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -901,7 +901,7 @@ def main():
         refSeqCategory = entry['refSeqCategory'].lower()
         versionStatus = entry['versionStatus'].lower()
         assemblyLevel = entry['assemblyLevel'].lower()
-        outLine = f"{entry['gcAccession']}\t{priority}\t{commonName.encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
+        outLine = f"{entry['gcAccession']}\t{priority}\t{commonName.encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -929,7 +929,7 @@ def main():
         ### add alias names to description if they are not already there
         descr = addAliases(gcAccession, aliasData, descr)
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\n"
+        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t\n"
         fileOut.write(outLine)
         incrementPriority += 1
         itemCount += 1
