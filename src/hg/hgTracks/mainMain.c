@@ -73,7 +73,7 @@ else
     }
 
 // TODO: better place for this ?
-puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css\">\n");
+webIncludeResourceFile("font-awesome.min.css");
 
 if (measureTiming)
     measureTime("Time to write and close cart");

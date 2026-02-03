@@ -1984,6 +1984,12 @@ hashElFreeList(&elList);
 return cartVars;
 }
 
+boolean cartVarExistsLike(struct cart *cart, char *wildCard)
+/* Return TRUE if a variable matching the wildcard is in the cart. */
+{
+return hashItemExistsLike(cart->hash, wildCard);
+}
+
 struct slPair *cartVarsWithPrefix(struct cart *cart, char *prefix)
 /* Return a slPair list of cart vars that begin with prefix */
 {

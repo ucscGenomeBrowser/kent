@@ -899,36 +899,35 @@ else
 					   noPack[vis], class, TV_DROPDOWN_STYLE, events);
 }
 
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+				 boolean canPack, char *class, char *visOnly, struct slPair *events)
+// Make track visibility drop down for varName with style class, and potentially limited to visOnly
+{
 static char *denseOnly[] =
     {
     "hide",
     "dense",
-    NULL
     };
 static char *squishOnly[] =
     {
     "hide",
     "squish",
-    NULL
     };
 static char *packOnly[] =
     {
     "hide",
     "pack",
-    NULL
     };
 static char *fullOnly[] =
     {
     "hide",
     "full",
-    NULL
     };
 static char *noPack[] =
     {
     "hide",
     "dense",
     "full",
-    NULL
     };
 static char *pack[] =
     {
@@ -937,49 +936,37 @@ static char *pack[] =
     "squish",
     "pack",
     "full",
-    NULL
     };
-
-char ** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly) 
-/* return a NULL-terminated array of char* with possible track visibilities */
-{
+static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (visOnly != NULL)
     {
+    int visIx = (vis > 0) ? 1 : 0;
     if (sameWord(visOnly,"dense"))
-        return denseOnly;
+	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
+						   denseOnly[visIx],class,TV_DROPDOWN_STYLE, events);
     else if (sameWord(visOnly,"squish"))
-        return squishOnly;
+	cgiMakeDropListClassWithStyleAndJavascript(varName, squishOnly,
+						   ArraySize(squishOnly), squishOnly[visIx],
+						   class, TV_DROPDOWN_STYLE, events);
     else if (sameWord(visOnly,"pack"))
-        return packOnly;
+	cgiMakeDropListClassWithStyleAndJavascript(varName, packOnly, ArraySize(packOnly),
+						   packOnly[visIx], class, TV_DROPDOWN_STYLE, events);
     else if (sameWord(visOnly,"full"))
-        return fullOnly;
-    else /* default when not recognized */
-        return denseOnly;
+	cgiMakeDropListClassWithStyleAndJavascript(varName, fullOnly, ArraySize(fullOnly),
+						   fullOnly[visIx], class, TV_DROPDOWN_STYLE, events);
+    else                        /* default when not recognized */
+	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
+						   denseOnly[visIx], class, TV_DROPDOWN_STYLE, events);
     }
 else
     {
     if (canPack)
-        return pack;
+	cgiMakeDropListClassWithStyleAndJavascript(varName, pack, ArraySize(pack),
+						   pack[packIx[vis]], class, TV_DROPDOWN_STYLE, events);
     else
-        return noPack;
+	cgiMakeDropListClassWithStyleAndJavascript(varName, noPack, ArraySize(noPack),
+						   noPack[vis], class, TV_DROPDOWN_STYLE, events);
     }
-}
-
-void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-				 boolean canPack, char *class, char *visOnly, struct slPair *events)
-// Make track visibility drop down for varName with style class, and potentially limited to visOnly
-{
-char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
-int visIx = (vis > 0) ? 1 : 0;
-char* checked = vizArr[visIx];
-
-static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
-if (visOnly && canPack)
-    checked = vizArr[packIx[vis]];
-
-int vizArrLen = arrNullLen(vizArr);
-
-cgiMakeDropListClassWithStyleAndJavascript(varName, vizArr, vizArrLen, checked, class,TV_DROPDOWN_STYLE, events);
 }
 
 void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
@@ -10552,7 +10539,7 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Version:</B> %s <BR>\n", version);
+    printf("<B>Source data version:</B> %s <BR>\n", version);
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)

@@ -85,7 +85,7 @@ ul.nice-menu ul {
 }
 
 ul.nice-menu ul li {
-  width: 12.5em;
+  min-width: 12.5em;
 }
 
 /******************************
@@ -353,7 +353,8 @@ ul.nice-menu ul li {
 	margin:0;
 	border:0px;
 	text-align:left;
-	width:200px;
+	min-width:200px;
+	white-space:nowrap;
 	background:#fbfbfb;
 	border-bottom:1px solid #ffffff;
 	/* old color => #fecc51; */
@@ -422,7 +423,7 @@ ul.nice-menu ul li.inactive span {
     padding-bottom:5px !important;
     padding-right:0px;
     border:0px !important;
-    width:180px;
+    min-width:180px;
     font-size:13px;
     font-weight:bold;
     font-family:Arial, Helvetica, sans-serif;
@@ -439,9 +440,9 @@ ul.nice-menu ul li a {
 	padding:8px;
 	padding-top:5px !important;
 	padding-bottom:5px !important;
-	padding-right:0px;
+	padding-right:8px;
 	border:0px !important;
-	width:160px;
+	min-width:160px;
 	font-size:13px;
 	font-weight:bold;
 	font-family:Arial, Helvetica, sans-serif;
@@ -454,7 +455,6 @@ ul.nice-menu ul li a:hover, ul.nice-menu ul li a.active {
 }
 ul.nice-menu li.menuparent li a {
 	padding:8px;
-	padding-right:0px;
 }
 
 ul.nice-menu-down li li.menuparent {

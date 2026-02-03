@@ -35,6 +35,7 @@
 #include "fuzzyFind.h"
 #include "chromAlias.h"
 #include "subText.h"
+#include "jsHelper.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -2064,11 +2065,6 @@ void askForSeq(char *organism, char *db)
 /* ignore struct serverTable* return, but can error out if not found */
 findServer(db, FALSE);
 
-/* JavaScript to update form when org changes */
-char *onChangeText = ""
-    "document.mainForm.changeInfo.value='orgChange';"
-    "document.mainForm.submit();";
-
 char *userSeq = NULL;
 char *type = NULL;
 
@@ -2098,11 +2094,26 @@ printf("<TD ALIGN=CENTER>&nbsp;</TD>");
 printf("</TR>\n");
 
 printf("<TR>\n");
-printf("<TD ALIGN=CENTER>\n");
-printBlatGenomeListHtml(db, "change", onChangeText);
+printf("<TD class='searchCell' ALIGN=CENTER>\n");
+// hgBlat requires this <input> be created to go along with form submission, we
+// will change it when a genome is selected in the search bar
+printf("<input name='db' value='%s' type='hidden'></input>\n", db);
+jsIncludeAutoCompleteLibs();
+char *searchBarId = "genomeSearch";
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, NULL, NULL);
+jsInlineF(
+    "setupGenomeSearchBar({\n"
+    "    inputId: '%s',\n"
+    "    onSelect: function(item) {\n"
+    "        document.mainForm.db.value = item.genome;\n"
+    "    }\n"
+    "});\n"
+    , searchBarId
+);
 printf("</TD>\n");
-printf("<TD ALIGN=CENTER>\n");
-printBlatAssemblyListHtml(db);
+printf("<TD id='genomeLabel' class='searchCell' ALIGN=CENTER>\n");
+char *dbLabel = getCurrentGenomeLabel(db);
+printf("%s\n", dbLabel);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 if (orgChange)

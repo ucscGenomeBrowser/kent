@@ -848,4 +848,20 @@ for (i=0; i<nameValCount; ++i)
 return hash;
 }
 
+boolean hashItemExistsLike(struct hash *hash, char *wildcard)
+/* Return TRUE if a variable matching the wildcard is in the hash table. */
+{
+struct hashEl *el, *elList = hashElListHash(hash);
+slSort(&elList, hashElCmp);
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (wildMatch(wildcard, el->name))
+        {
+        hashElFreeList(&elList);
+        return TRUE;
+        }
+    }
+hashElFreeList(&elList);
+return FALSE;
+}
 

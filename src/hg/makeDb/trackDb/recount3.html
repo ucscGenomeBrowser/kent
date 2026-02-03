@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-
-<body>
 <h2>Description</h2>
 <p>
 Recount3 is a comprehensive resource for re-analyzing RNA-seq data. It provides uniformly processed
 RNA-seq data and associated metadata from a wide range of studies, enabling researchers to access
 and analyze gene expression data in a consistent manner. Recount3 aggregates data from multiple
-sources, including the Sequence Read Archive (SRA) and the Genotype-Tissue Expression (GTEx) project,
+sources, including the
+<a href="https://www.ncbi.nlm.nih.gov/sra/docs/" target=_blank>Sequence Read Archive (SRA)</a>
+and the
+<a href="https://commonfund.nih.gov/GTEx" target=_blank>Genotype-Tissue Expression (GTEx) project</a>,
 and reprocesses it using a standardized pipeline. This allows for cross-study comparisons and
-meta-analyses, facilitating discoveries in genomics and transcriptomics.
+meta-analyses, facilitating discoveries in genomics and transcriptomics. Processed recount3 data
+were integrated into the
+<a href="https://snaptron.cs.jhu.edu/data.html" target=_blank>Snaptron system</a>
+for indexing and querying data summaries. Recount3 is available
+at: <a href="http://rna.recount.bio">http://rna.recount.bio</a>.
 </p>
 <p>
 These tracks display the recount3 intron data, including split read counts and splice junction motifs.
@@ -19,48 +20,67 @@ These tracks display the recount3 intron data, including split read counts and s
 
 <h2>Display Conventions</h2>
 <p>
-Intron items are colored based on splice junction motifs and read support (darker colors indicate higher coverage).
-Split read counts and splice motifs are shown on mouseover.
-By default, only introns with a minimum read count of 10,000 are shown. This setting can be changed
-on the track configuration page.
+Intron items are colored based on splice junction motifs and read support. Darker colors indicate
+higher read coverage. Split read counts and splice motifs are shown on mouseover.
+By default, only introns with a minimum read count of 10,000 are shown. This threshold can be
+changed on the track configuration page.
 </p>
 <p>
-The intron items are color-coded:
-<ul>
-  <li><b><font color="#00bfff">Sky blue</font></b> GT donors and AG acceptors (CT and AC on
-the minus strand)</li>
-  <li><b><font color="#00ced1">Turquoise</font></b> GC donors (GT on the minus strand)</li>
-  <li><b><font color="#ff8c00">Orange</font></b> AT donors and AC acceptors (GT and GT on the
-minus strand)</li>
-  <li><b><font color="#a9a9a9">Grey</font></b> Non-canonical junction motifs. These could be sequencing errors, polymorphisms, or very rare U12 introns.</li>
-</ul>
+The intron items are color-coded (darker colors indicate higher coverage):
 </p>
+<ul>
+  <li><b><font color="#00bfff">Sky blue</font></b>: GT donors and AG acceptors (CT and AC on
+the minus strand)</li>
+  <li><b><font color="#00ced1">Turquoise</font></b>: GC donors (GT on the minus strand)</li>
+  <li><b><font color="#ff8c00">Orange</font></b>: AT donors and AC acceptors (GT and GT on the
+minus strand)</li>
+  <li><b><font color="#a9a9a9">Grey</font></b>: Non-canonical junction motifs. These could be
+sequencing errors, polymorphisms, or very rare U12 introns.</li>
+</ul>
 
 <p>
 Introns can be filtered by:
+</p>
 <ul>
-  <li><b>read count</b> - Number of split reads supporting the intron. The default is a minimum of 10,000 reads.</li>
-  <li><b>intron size</b> - Length of the intron. The default is 30 to 100,000.</li>
-  <li><b>splice junction motif</b> - The motif is specified in the form <em>GT/AG</em>, with canonical motifs being uppercase and unknown motifs being lowercase.
+  <li><b>Intron size</b> - Length of the intron. The default range is 30 to 100,000 bases.</li>
+  <li><b>Split read count</b> - Number of split reads supporting the intron. The default is a
+    minimum of 10,000 reads.</li>
+  <li><b>Splice junction motif</b> - The motif is specified in the form <em>GT/AG</em>, with
+    canonical motifs in uppercase and unknown motifs in lowercase.
     The default is no filtering.</li>
-  <li><b>strand</b> - Filter by positive strand (&apos;+&apos;),
+  <li><b>Strand</b> - Filter by positive strand (&apos;+&apos;),
     negative strand (&apos;-&apos;), and/or
     unknown strand (&apos;.&apos;).  The default is no strand filtering (&apos;all&apos;).
   </li>
 </ul>
+
+<h2>Methods</h2>
+<p>
+A distributed processing system for RNA-seq data called Monorail was developed. Using Monorail,
+recount3 processed and summarized 316,443 human and 416,803 mouse RNA-seq run accessions collected
+from the Sequence Read Archive (SRA), with the human runs including large-scale consortia such as
+GTEx v8 and The Cancer Genome Atlas (TCGA).
+</p>
+<p>
+Junction files were converted to BED format. For grayscaling total read count was log10
+transformed and multiplied by 10 to get a score between 0 and 225, which can be found
+in the BED score field.
 </p>
 
 <h2>Data Access</h2>
+<p>
 The raw data can be explored interactively with the
 <a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
 <a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated analysis, the data may be queried from our
-<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.<br>
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.</p>
+<p>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
-for questions, or our
+for questions or our
 <a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a>
 for more information.
+</p>
 <p>
 The original junction files for human can be found at:
 </p>
@@ -75,20 +95,12 @@ The original junction files for human can be found at:
       https://snaptron.cs.jhu.edu/data/ccle/junctions.bgz</a>
 </ul>
 <p>
-The mouse junction file is at:
+The mouse junction file is available at:
 </p>
 <ul>
   <li> <a href="https://snaptron.cs.jhu.edu/data/srav1m/junctions.bgz" target="_blank">
       https://snaptron.cs.jhu.edu/data/srav1m/junctions.bgz</a>
 </ul>
-</p>
-
-<h2>Methods</h2>
-<p>
-Junction files were converted to bed format. For grayscaling total read count was log10
-transformed and multiplied by 10 to get a score between 0 and 225, which can be found
-in the bed score field.
-</p>
 
 <h2>References</h2>
 <p>

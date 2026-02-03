@@ -142,6 +142,9 @@ void cartRemovePrefix(struct cart *cart, char *prefix);
 boolean cartVarExists(struct cart *cart, char *var);
 /* Return TRUE if variable is in cart. */
 
+boolean cartVarExistsLike(struct cart *cart, char *wildCard);
+/* Return TRUE if a variable matching the wildcard is in the cart. */
+
 boolean cartListVarExists(struct cart *cart, char *var);
 /* Return TRUE if a list variable is in cart (list may still be empty). */
 

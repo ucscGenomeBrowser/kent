@@ -700,3 +700,38 @@ Sorting and writing extra index 1: 89 millis
 filterValues.FILTER PASS,HIGH_NCR,IGH_MHC_OVERLAP,UNRESOLVED,REFERENCE_ARTIFACT
 filterValuesDefault.FILTER PASS
 filterType.FILTER multipleListAnd
+
+##############################################################################
+# gnomAD Coverage v3.0.1 - Jan 28, 2026 - max
+##############################################################################
+# Coverage data from gnomAD genomes v3.0.1
+# Source: https://gnomad.broadinstitute.org/downloads#v3-coverage
+
+cd /hive/data/genomes/hg38/bed/gnomad/coverage/v3-genome
+
+# Download coverage summary file
+wget https://storage.googleapis.com/gcp-public-data--gnomad/release/3.0.1/coverage/genomes/gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz
+
+# Convert TSV to bigWig files using Python script
+python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py gnomad.genomes.r3.0.1.coverage.summary.tsv.bgz
+# Creates 11 bigWig files
+
+# Create symlinks in /gbdb
+mkdir -p /gbdb/hg38/gnomAD/coverage/v3-genome/
+cd /gbdb/hg38/gnomAD/coverage
+for f in /hive/data/genomes/hg38/bed/gnomad/coverage/*.bw; do ln -sf "$f" .; done
+
+##############################################################################
+# gnomAD Exome Coverage v4 - Jan 29, 2026 - max
+##############################################################################
+# Coverage data from gnomAD exomes v4
+# Source: https://gnomad.broadinstitute.org/downloads#v4-coverage
+
+cd /hive/data/genomes/hg38/bed/gnomad/coverage/v4-exome/
+
+# Download coverage summary file
+aria2c -x10 https://storage.googleapis.com/gcp-public-data--gnomad/release/4.0/coverage/exomes/gnomad.exomes.v4.0.coverage.summary.tsv.bgz
+
+# Convert TSV to bigWig files using Python script
+python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py gnomad.exomes.v4.0.coverage.summary.tsv.bgz
+# Creates 11 bigWig files

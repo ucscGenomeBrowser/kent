@@ -13,12 +13,12 @@
 
 <li class="menuparent" id="tools1"><a href="../cgi-bin/hgGateway">Genomes</a>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a href="../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
-        <li><a href="../cgi-bin/hgTracks?db=hub_3671779_hs1&position=lastDbPos">Human T2T-CHM13/hs1</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
-	<li><a title="Browse thousands of additional assemblies in our Genome Archive" href="https://hgdownload.gi.ucsc.edu/hubs/">Genome Archive GenArk</a></li>
+	<li class="first defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
+	<li class="defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
+        <li class="defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=hub_3671779_hs1&position=lastDbPos">Human T2T-CHM13/hs1</a></li>
+	<li class="defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
+	<li class="defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
+	<li class="defaultDropdownLink"><a title="Browse thousands of additional assemblies in our Genome Repository" href="https://hgdownload.gi.ucsc.edu/hubs/">Genome Respository GenArk</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
 </li>

@@ -161,8 +161,8 @@ static void showTableFilterControlRow(struct fieldedTable *table, struct slName 
  * it's value is slName list of suggestion values */
 {
 /* Include javascript and style we need  */
-printf("<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css'>\n");
-printf("<script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>\n");
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("jquery-ui.js", NULL);
 
 printf("<tr>");
 struct slName *el;

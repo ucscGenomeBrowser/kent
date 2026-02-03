@@ -253,8 +253,8 @@ void jsIncludeReactLibs()
 jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
 jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
-puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
-puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("react-with-addons-0.12.2.min.js", NULL);
 jsIncludeFile("immutable.3.7.4.min.js", NULL);
 jsIncludeFile("jquery.bifrost.1.0.1.min.js", NULL);
@@ -270,16 +270,22 @@ jsIncludeFile("ImmutableUpdate.js", NULL);
 jsIncludeFile("reactLibBundle.js", NULL);
 }
 
+void jsIncludeAutoCompleteLibs()
+/* Prints out <script src="..."> tags for autocompleteCat.js */
+{
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("autocompleteCat.js", NULL);
+}
+
 void jsIncludeDataTablesLibs()
-/* Prints out <script src="..."> tags for external libraries: jQuery 1.12.3, the jQuery DataTables
+/* Prints out <script src="..."> tags for jQuery and the jQuery DataTables
  * plugin (version 1.10.12), and the accompanying standard CSS file for DataTables. */
 {
-puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
-puts("<script type=\"text/javascript\" "
-    "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"></script>");
-puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>");
+webIncludeResourceFile("dataTables-1.10.12.min.css");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("dataTables-1.10.12.min.js", NULL);
 }
 
 char *jsDataTableStateSave (char *cartPrefix)

@@ -1212,11 +1212,15 @@ if (oligoSize >= 2)
     {
     if (searchForward)
         fMatch = finder(fOligo, dna);
-    iupacReverseComplement(rOligo, oligoSize);
+
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
     else if (searchReverse)
+        {
+        iupacReverseComplement(rOligo, oligoSize);
 	rMatch = finder(rOligo, dna);
+        }
+
     for (;;)
         {
 	char *oneMatch = NULL;
@@ -8819,6 +8823,37 @@ unsigned paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
 return paraLoadTimeout;
 }
 
+static char *hubPublicEmailFromHubName(char *hubName)
+{
+/* return public hub email given url or NULL if such a column doesn't exist (mirrors don't have this column) */
+/* result must be freed */
+char *hubIdStr = strchr(hubName, '_'); // could not find a function for this in hubConnect.c
+if (!hubIdStr)
+    return NULL;
+unsigned hubId = sqlUnsigned(hubIdStr+1);
+
+struct hubConnectStatus *hubStatus = hubFromIdNoAbort(hubId);                                                           
+if (hubStatus == NULL)
+    return NULL;
+
+char *url = hubStatus->hubUrl;
+if (!url)
+    return NULL;
+
+struct sqlConnection *conn = hConnectCentral();
+
+char *email = NULL;
+if (sqlColumnExists(conn, "hubPublic", "email"))
+    {
+    char query[1000];
+    sqlSafef(query, sizeof query, "SELECT email FROM hubPublic WHERE hubUrl='%s'", url);
+    email = sqlQuickNonemptyString(conn, query);
+    }
+
+hDisconnectCentral(&conn);
+return email;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -9973,6 +10008,9 @@ if (!hideControls)
                 printInfoIcon("Use the hub debugging tool under <i>My Data > Track Hubs > Hub Development</i>. You need to switch off <i>File caching</i> there to see your changes without delay. Error <i>Response is missing required header</i> usually means the hub is not reachable.<br><br>Contact us or the hub provider if you cannot resolve the issue.");
                 hPrintf(": ");
                 hPrintf("<i>%s</i>", group->errMessage);
+                char *email = hubPublicEmailFromHubName(hubName);
+                if (isNotEmpty(email))
+                    hPrintf("<br>You can contact the hub author at %s", email);
                 hPrintf("</td></tr>\n");
                 }
 
@@ -10029,7 +10067,7 @@ if (!hideControls)
         hashFree(&superHash);
 	endControlGrid(&cg);
 
-        jsOnEventBySelector("click", ".hgtButtonHideGroup", "onHideAllGroupButtonClick(event)");
+        jsOnEventBySelector(".hgtButtonHideGroup", "click", "onHideAllGroupButtonClick(event)");
 	}
 
     if (measureTiming)
