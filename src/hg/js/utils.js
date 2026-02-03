@@ -4800,9 +4800,39 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
                 // http://forum.jquery.com/topic/using-html-in-autocomplete
                 // Hits to assembly hub top level (not individial db names) have no item label,
                 // so use the value instead
+                var searchTerm = this.term;
+                // remove special characters - the \W means remove anything
+                // that is not: [A-Za-z0-9_] which are 'word' == \w characters
+                // then eliminate runs of white space characters and trim any
+                // white space at the beginning or end of the string
+                var cleanTerm = searchTerm.replace(/\W/g, ' ')
+                                  .replace(/\s+/g, ' ')
+                                  .trim();
+                var label = item.label !== null ? item.label : item.value;
+
+                // Highlight matching search terms with bold tags
+                if (cleanTerm && cleanTerm.length > 0) {
+                    // Split search term into individual words (by whitespace)
+                    var words = cleanTerm.split(/\s+/).filter(function(word) {
+                        return word.length > 0;  // Filter out empty strings
+                    });
+
+                    // Apply bolding for each word separately
+                    words.forEach(function(word) {
+                       // Escape special regex characters in each word
+                       var escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+                       // Create case-insensitive regex to find all occurrences
+                       var regex = new RegExp('(' + escapedWord + ')', 'gi');
+
+                       // Replace matches with bolded version (preserves original case)
+                       label = label.replace(regex, '<b>$1</b>');
+                   });
+                }
+                console.log("label:", label);
                 return $("<li></li>")
                     .data("ui-autocomplete-item", item)
-                    .append($("<a></a>").html((item.label !== null ? item.label : item.value)))
+                    .append($("<a></a>").html(label))
                     .appendTo(ul);
             }
         }
