@@ -9,7 +9,9 @@
 #include "hgConfig.h"
 #include "assemblyList.h"
 
-char *assemblyListCommaSepFieldNames = "name,priority,commonName,scientificName,taxId,clade,description,browserExists,hubUrl,year,refSeqCategory,versionStatus,assemblyLevel";
+
+
+char *assemblyListCommaSepFieldNames = "name,priority,commonName,scientificName,taxId,clade,description,browserExists,hubUrl,year,refSeqCategory,versionStatus,assemblyLevel,haplotypes";
 
 void assemblyListStaticLoadWithNull(char **row, struct assemblyList *ret)
 /* Load a row from assemblyList table into ret.  The contents of ret will
@@ -61,6 +63,7 @@ else
 ret->refSeqCategory = row[10];
 ret->versionStatus = row[11];
 ret->assemblyLevel = row[12];
+ret->haplotypes = row[13];
 }
 
 struct assemblyList *assemblyListLoadByQuery(struct sqlConnection *conn, char *query)
@@ -93,8 +96,8 @@ void assemblyListSaveToDb(struct sqlConnection *conn, struct assemblyList *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,'%s','%s',%u,'%s','%s',%u,'%s',%u,'%s','%s','%s')",
-	tableName,  el->name,  *(el->priority),  el->commonName,  el->scientificName,  *(el->taxId),  el->clade,  el->description,  *(el->browserExists),  el->hubUrl,  *(el->year),  el->refSeqCategory,  el->versionStatus,  el->assemblyLevel);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,'%s','%s',%u,'%s','%s',%u,'%s',%u,'%s','%s','%s','%s')",
+	tableName,  el->name,  *(el->priority),  el->commonName,  el->scientificName,  *(el->taxId),  el->clade,  el->description,  *(el->browserExists),  el->hubUrl,  *(el->year),  el->refSeqCategory,  el->versionStatus,  el->assemblyLevel,  el->haplotypes);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -151,6 +154,7 @@ else
 ret->refSeqCategory = cloneString(row[10]);
 ret->versionStatus = cloneString(row[11]);
 ret->assemblyLevel = cloneString(row[12]);
+ret->haplotypes = cloneString(row[13]);
 return ret;
 }
 
@@ -160,7 +164,7 @@ struct assemblyList *assemblyListLoadAll(char *fileName)
 {
 struct assemblyList *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -178,7 +182,7 @@ struct assemblyList *assemblyListLoadAllByChar(char *fileName, char chopper)
 {
 struct assemblyList *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -216,6 +220,7 @@ ret->year = needMem(sizeof(unsigned));
 ret->refSeqCategory = sqlStringComma(&s);
 ret->versionStatus = sqlStringComma(&s);
 ret->assemblyLevel = sqlStringComma(&s);
+ret->haplotypes = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -236,6 +241,7 @@ freeMem(el->hubUrl);
 freeMem(el->refSeqCategory);
 freeMem(el->versionStatus);
 freeMem(el->assemblyLevel);
+freeMem(el->haplotypes);
 freez(pEl);
 }
 
@@ -297,6 +303,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->assemblyLevel);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->haplotypes);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -399,6 +409,14 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->assemblyLevel);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"haplotypes");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->haplotypes);
 fputc('"',f);
 fputc('}',f);
 }
