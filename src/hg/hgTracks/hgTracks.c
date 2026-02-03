@@ -3752,7 +3752,8 @@ gene->exonEnds[0] = gene->exonEnds[gene->exonCount - 1];
 gene->exonCount = 1;
 }
 
-void initVirtRegionsFromEMGeneTableExons(boolean showNoncoding, char *knownCanonical, char *knownToTag, boolean geneMostly)
+void initVirtRegionsFromEMGeneTableExons(boolean showPseudo, boolean showNoncoding, char *knownCanonical,
+ char *knownToTag, boolean geneMostly, char *kgnf)
 /* Create a regionlist from knownGene exons. */
 // Merge exon regions that overlap.
 
@@ -3773,6 +3774,8 @@ void initVirtRegionsFromEMGeneTableExons(boolean showNoncoding, char *knownCanon
 //
 // Adding support for extra options from Gencode hg38 so we can filter for
 // comprehensive, splice-variants, non-coding subsets.
+// Added add support for pseudo filter for pseudoGenes, default off.
+// Added support for Track Sets including new MANE and Id-list filter.
 
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -3784,6 +3787,24 @@ struct dyString *query = NULL;
 int padding = emPadding;
 if (sameString(virtModeType, "geneMostly"))
     padding = gmPadding;
+
+// knownPseudo Hash
+struct hash *kpHash = NULL;
+if (!showPseudo) // filter out pseudo variants
+    {
+    // load up hash of pseudo transcriptIds
+    query = sqlDyStringCreate("select kgId from knownAttrs"
+	" where transcriptClass = 'pseudo'");
+    kpHash = newHash(10);
+    sr = sqlGetResult(conn, dyStringContents(query));
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	hashAdd(kpHash, row[0], NULL);
+	}
+    sqlFreeResult(&sr);
+    dyStringFree(&query);
+    }
+
 // knownCanonical Hash
 struct hash *kcHash = NULL;
 if (knownCanonical) // filter out alt splicing variants
@@ -3808,7 +3829,7 @@ struct hash *ktHash = NULL;
 if (knownToTag) // filter out all but Basic
     {
     // load up hash of canonical transcriptIds
-    query = sqlDyStringCreate("select name from %s where value='basic'", knownToTag);
+    query = sqlDyStringCreate("select name from knownToTag where value='%s'", knownToTag);
     ktHash = newHash(10);
     sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
@@ -3824,8 +3845,25 @@ if (!emGeneTable)
 if (hIsBinned(database, emGeneTable)) // skip first bin column if any
     ++rowOffset;
 query = sqlDyStringCreate("select * from %s", emGeneTable);
+if (virtualSingleChrom() || kgnf)
+    sqlDyStringPrintf(query, " where");
 if (virtualSingleChrom())
-    sqlDyStringPrintf(query, " where chrom='%s'", chromName);
+    sqlDyStringPrintf(query, " chrom='%s'", chromName);
+if (virtualSingleChrom() && kgnf)
+    sqlDyStringPrintf(query, " and");
+if (kgnf)
+    {
+    sqlDyStringPrintf(query, " name in (");
+    struct slName *id, *list = slNameListFromCommaEscaped(kgnf);
+    for (id=list; id; id=id->next)
+	{
+        if (id != list)
+	    sqlDyStringPrintf(query, ",");
+	sqlDyStringPrintf(query, "'%s'", trimSpaces(id->name));
+	}
+    sqlDyStringPrintf(query, ")");
+    }
+
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
 // also, using where chrom= causes it to use indexes which disturb order returned.
@@ -3892,6 +3930,12 @@ while (1)
 	    // skip gene not in knownToTag Basic hash
 	    genePredFree(&gene);
 	    }
+	if (gene && !showPseudo && hashLookup(kpHash, gene->name))
+	    {
+	    //skip gene in knownPseudo hash
+	    genePredFree(&gene);
+	    }
+
 	boolean transferIt = FALSE;
 	if (gene && !kceList)
 	    {
@@ -4006,8 +4050,10 @@ while (1)
 	}
 
     }
+
 sqlFreeResult(&sr);
 slReverse(&virtRegionList);
+hashFree(&kpHash);
 hashFree(&kcHash);
 hashFree(&ktHash);
 hFreeConn(&conn);
@@ -4515,6 +4561,8 @@ else if (sameString(virtModeType, "exonMostly")
     char *knownToTag = NULL;      // show comprehensive set not filtered by knownToTag
     char varName[SMALLBUF];
     boolean geneMostly = FALSE;
+    boolean showPseudo = TRUE;
+    char *kgnf = NULL;
 
     lastDbPosSaveCartSetting("emGeneTable");
 
@@ -4542,17 +4590,29 @@ else if (sameString(virtModeType, "exonMostly")
 	    if (hTableExists(database, canonicalTable))
 		knownCanonical = canonicalTable;
 	    }
+
 	safef(varName, sizeof(varName), "%s.show.comprehensive", emGeneTable);
 	boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
 	//DISGUISE makes obsolete dySaveCartSetting(dy, varName);
+	knownToTag = NULL;
 	if (!showComprehensive)
 	    {
 	    if (hTableExists(database, "knownToTag"))
 		{
-		knownToTag = "knownToTag";
+		safef(varName, sizeof(varName), "%s.show.set", emGeneTable);
+		char *setString = cartUsualString(cart, varName, "basic");
+		if (differentString(setString, "all"))
+		   knownToTag = setString;
 		}
 	    }
 
+	safef(varName, sizeof(varName), "%s.show.pseudo", emGeneTable);
+	showPseudo = cartUsualBoolean(cart, varName, FALSE);
+
+	safef(varName, sizeof(varName), "%s.nameFilter", emGeneTable);
+	kgnf = trimSpaces(cartUsualString(cart, varName, NULL));
+	if (sameOk(kgnf, ""))
+	    kgnf = NULL;
 	}
     if (sameString(emGeneTable, "refGene"))
 	{
@@ -4562,7 +4622,7 @@ else if (sameString(virtModeType, "exonMostly")
 	//DISGUISE makes obsolete dySaveCartSetting(dy, varName);
 	}
 
-    initVirtRegionsFromEMGeneTableExons(showNoncoding, knownCanonical, knownToTag, geneMostly);
+    initVirtRegionsFromEMGeneTableExons(showPseudo, showNoncoding, knownCanonical, knownToTag, geneMostly, kgnf);
     if (!virtRegionList)
 	{
 	warn("No genes found on chrom %s for track %s, returning to default view", chromName, emGeneTrack->shortLabel);
