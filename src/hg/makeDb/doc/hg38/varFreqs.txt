@@ -95,27 +95,15 @@ tabix -p vcf wgs_12519_genome.deepvariant.norm.vcf.gz
 # NCBI ALFA bigBed to VCF, Max Jan 26 2026
 # Source: ALFA R4 bigBed files, 904M variants, output 163M with non-zero AF
 cd /hive/data/genomes/hg38/bed/varFreqs/alfa
-mkdir -p parallel_out
-# run 10 parallel jobs, each processing 2-3 chromosomes
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part01.vcf --zero-file parallel_out/part01_zero.txt --chrom chr1 chr13 chr21 &> parallel_out/part01.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part02.vcf --zero-file parallel_out/part02_zero.txt --no-header --chrom chr2 chr16 chr22 &> parallel_out/part02.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part03.vcf --zero-file parallel_out/part03_zero.txt --no-header --chrom chr3 chr17 &> parallel_out/part03.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part04.vcf --zero-file parallel_out/part04_zero.txt --no-header --chrom chr4 chr20 &> parallel_out/part04.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part05.vcf --zero-file parallel_out/part05_zero.txt --no-header --chrom chr5 chr19 chrY &> parallel_out/part05.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part06.vcf --zero-file parallel_out/part06_zero.txt --no-header --chrom chr6 chr18 &> parallel_out/part06.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part07.vcf --zero-file parallel_out/part07_zero.txt --no-header --chrom chr7 chr15 &> parallel_out/part07.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part08.vcf --zero-file parallel_out/part08_zero.txt --no-header --chrom chr8 chr12 chrM &> parallel_out/part08.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part09.vcf --zero-file parallel_out/part09_zero.txt --no-header --chrom chr9 chr11 &> parallel_out/part09.log &
-python ~/kent/src/hg/makeDb/scripts/alfa_to_vcf.py --bigbed ALFA_GLB.bb --output parallel_out/part10.vcf --zero-file parallel_out/part10_zero.txt --no-header --chrom chr10 chr14 chrX &> parallel_out/part10.log &
-wait
-cat parallel_out/part*.vcf > ALFA_merged.vcf
-cat parallel_out/part*_zero.txt > ALFA_zero.txt
-grep '^#' ALFA_merged.vcf > ALFA_sorted.vcf
-grep -v '^#' ALFA_merged.vcf | sort -k1,1V -k2,2n >> ALFA_sorted.vcf
-bgzip -f ALFA_sorted.vcf && mv -f ALFA_sorted.vcf.gz ALFA.vcf.gz && tabix -p vcf ALFA.vcf.gz
-rm -f ALFA_merged.vcf parallel_out/*.vcf parallel_out/*_zero.txt
-ln -sf /hive/data/genomes/hg38/bed/varFreqs/alfa/ALFA.vcf.gz /gbdb/hg38/varFreqs/alfa/
-ln -sf /hive/data/genomes/hg38/bed/varFreqs/alfa/ALFA.vcf.gz.tbi /gbdb/hg38/varFreqs/alfa/
+python3 alfa_to_vcf.py --out ALFA.vcf --zero-af-file ALFA_zero.txt
+# Compress and index
+bgzip ALFA.vcf
+tabix -p vcf ALFA.vcf.gz
 # Final: 2.7GB, 163M variants (146M SNPs, 17M indels), ALFA_zero.txt has 26GB of zero-AF variants
 
+# Australia, Max, Jan 2026
+# received files from m.hobbs@garvan.org.au
+cd /hive/data/genomes/hg38/bed/varFreqs/mgrb/
+bcftools norm -f hg38.fa -m-any MGRB.phase3.GRCh38.vcf.gz -o MGRB.phase3.GRCh38.norm.vcf.gz
+tabix MGRB.phase3.GRCh38.norm.vcf.gz
 
