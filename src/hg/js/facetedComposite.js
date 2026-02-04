@@ -45,6 +45,12 @@ $(function() {
         return dataTag ? JSON.parse(dataTag.innerText) : "";
     })();
 
+    // Store initial checkbox states for delta computation on server
+    const initialState = {
+        dataElements: new Set(),
+        dataTypes: new Set()
+    };
+
     function generateHTML() {
         const container = document.createElement("div");
         container.id = "myTag";
@@ -105,6 +111,9 @@ $(function() {
         // initialize data type checkboxes (using class instead of 'name')
         document.querySelectorAll("input.cbgroup")
             .forEach(cb => { cb.checked = selectedDataTypes.has(cb.value); });
+
+        // Capture initial data type state
+        initialState.dataTypes = new Set(selectedDataTypes);
     }
 
     function initTable(allData) {
@@ -145,6 +154,8 @@ $(function() {
                         api.row(rowIndex).select();
                     }
                 });
+                // Capture initial data element state
+                initialState.dataElements = new Set(embeddedData.dataElements);
             },
             drawCallback: function() {  // Reset header "select all" checkbox
                 $("#select-all")
@@ -325,34 +336,65 @@ $(function() {
         const { mdid, primaryKey } = embeddedData;  // mdid: metadata identifier
         const hasDataTypes = embeddedData.dataTypes && 
                              Object.keys(embeddedData.dataTypes).length > 0;
-
         document.getElementById("Submit").addEventListener("click", (submitBtnEvent) => {
             submitBtnEvent.preventDefault();  // hold the submit button event
 
-            const selectedRows = table.rows({selected: true}).data().toArray();
-            const uriForUpdate = new URLSearchParams({ "cartDump.metaDataId": mdid, "noDisplay": 1 });
-            selectedRows.forEach(obj =>  // 'de' for data element
-                uriForUpdate.append(`${mdid}.de`, obj[primaryKey]));
-
+            const currentDataTypes = [];
             if (hasDataTypes) {
-                // Collect checked data types
-                const selectedDataTypes = [];
+                // Get current data type selections
                 document.querySelectorAll("input.cbgroup").forEach(cb => {
                     if (cb.checked) {
-                        selectedDataTypes.push(cb.value);
+                        currentDataTypes.push(cb.value);
                     }
                 });
                 // Require at least one data type when the selector exists
-                if (selectedDataTypes.length === 0) {
+                if (currentDataTypes.length === 0) {
                     alert("Please select at least one data type.");
                     return;  // abort submission
                 }
-                selectedDataTypes.forEach(dat =>  // 'dt' for data type
-                    uriForUpdate.append(`${mdid}.dt`, dat));
-            } else {
-                // No data types configured for this track: send empty-string sentinel
-                uriForUpdate.append(`${mdid}.dt`, "");
             }
+
+            // Get current data element selections
+            const currentDataElements = table.rows({selected: true}).data().toArray()
+                .map(obj => obj[primaryKey]);
+
+            // Build the parameters for the cart update
+            const uriForUpdate = new URLSearchParams({
+                "cartDump.metaDataId": mdid,
+                "noDisplay": 1
+            });
+
+            // Data elements: was and now
+            if (initialState.dataElements.size > 0) {
+                initialState.dataElements.forEach(de =>
+                    uriForUpdate.append(`${mdid}.de_was`, de));
+            } else {
+                uriForUpdate.append(`${mdid}.de_was`, "");
+            }
+            if (currentDataElements.length > 0) {
+                currentDataElements.forEach(de =>
+                    uriForUpdate.append(`${mdid}.de_now`, de));
+            } else {
+                uriForUpdate.append(`${mdid}.de_now`, "");
+            }
+
+            if (hasDataTypes) {
+            // Data types: was and now
+                if (initialState.dataTypes.size > 0) {
+                    initialState.dataTypes.forEach(dt => {
+                        uriForUpdate.append(`${mdid}.dt_was`, dt);});
+                } else {
+                    uriForUpdate.append(`${mdid}.dt_was`, "");
+                }
+                if (currentDataTypes.length > 0) {
+                    currentDataTypes.forEach(dt => {
+                        uriForUpdate.append(`${mdid}.dt_now`, dt);});
+                } else {
+                    uriForUpdate.append(`${mdid}.dt_now`, "");
+                }
+            }
+            // No ${mdid}.dt* variables indicates that the composite doesn't use data types
+
             updateVisibilities(uriForUpdate, submitBtnEvent);
         });
     }  // end initSubmit

@@ -2940,7 +2940,7 @@ const int metaDataIdLen = strlen(metaDataId);
 printf(pageStyle);       // css
 printf(placeholderDiv);  // placholder
 
-// start by figuring out what's on by default
+// start by figuring out what's on by default and hasn't been overridden
 struct hash *defaultOn = hashNew(0);
 for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
     {
@@ -2959,7 +2959,8 @@ for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
         {
         char val[1024];
         safef(val, sizeof(val), "%s_sel", st->track);
-        hashAdd(defaultOn, val, NULL);
+        if (!cartVarExists(cart, val))
+            hashAdd(defaultOn, val, NULL);
         }
     }
 
@@ -2968,63 +2969,82 @@ printf(openJSON);
 printf(openDataTypesJSON);
 // find selected data types
 int not_first = 0;
-struct slName *anySelDataType = NULL;  // non-null val will be used as flag
+struct slName *selectedDataTypes = NULL;  // non-null val will be used as flag
 if (hasDataTypes)
     {
     for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
         {
         char toMatch[token_size];
+        boolean selected = FALSE;
         safef(toMatch, token_size, "%s_*_%s_sel", metaDataId, thisType->name);
-        boolean dataTypeSel = cartVarExistsLike(cart, toMatch) || hashItemExistsLike(defaultOn, toMatch);
-        printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
-        anySelDataType = dataTypeSel ? thisType : anySelDataType;
+        // Easy case - check if there's a defaultOn track still active with this track type
+        if (hashItemExistsLike(defaultOn, toMatch))
+            {
+            slNameAddHead(&selectedDataTypes, thisType->name);
+            selected = TRUE;
+            }
+        else
+            {
+            // Now we have to check for any cart variables that turn on a track with this data type
+            struct slPair *dt_vars = cartVarsLike(cart, toMatch);
+            struct slPair *this_var = dt_vars;
+            while (this_var != NULL)
+                {
+                if (cartBoolean(cart, this_var->name))
+                    {
+                    slNameAddHead(&selectedDataTypes, thisType->name);
+                    selected = TRUE;
+                    break;
+                    }
+                this_var = this_var->next;
+                }
+            slPairFreeList(&dt_vars);
+            }
+        printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, selected ? 1 : 0);
         }
     }
 // else: dataTypes dict is empty - JS will detect this
 printf(closeDataTypesJSON);
 printf(",");  // add separator
+
 // find selected data sets
 printf(openDataElementsJSON);
 not_first = 0;
 if (hasDataTypes)
     {
-    if (anySelDataType != NULL)
+    char toMatch[token_size];
+    safef(toMatch, token_size, "%s_*_*_sel", metaDataId);
+    struct slPair *mdidVars = cartVarsLike(cart, toMatch);
+    for (struct slPair *le = mdidVars; le != NULL; le = le->next)
         {
-        char toMatch[token_size];
-        safef(toMatch, token_size, "%s_*_%s_sel", metaDataId, anySelDataType->name);
-        struct slPair *mdidVars = cartVarsLike(cart, toMatch);
-        for (struct slPair *le = mdidVars; le != NULL; le = le->next)
+        if (cartBoolean(cart, le->name))
             {
-            if (cartBoolean(cart, le->name))
+            const char *nameStart = le->name + metaDataIdLen + 1;
+            const char *nameEnd = strchr(nameStart, '_');
+            if (nameEnd && nameEnd > nameStart)
                 {
-                const char *nameStart = le->name + metaDataIdLen + 1;
-                const char *nameEnd = strchr(nameStart, '_');
-                if (nameEnd && nameEnd > nameStart)
-                    {
-                    const int nameLen = nameEnd - nameStart;
-                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-                    }
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
                 }
             }
-        slPairFreeList(&mdidVars);
-        // Now add data elements on by default that haven't been modified
-        struct hashEl *el, *elList = hashElListHash(defaultOn);
-        slSort(&elList, hashElCmp);
-        for (el = elList; el != NULL; el = el->next)
-            {
-            if (!cartVarExistsLike(cart, el->name))
-                {
-                const char *nameStart = el->name + metaDataIdLen + 1;
-                const char *nameEnd = strchr(nameStart, '_');
-                if (nameEnd && nameEnd > nameStart)
-                    {
-                    const int nameLen = nameEnd - nameStart;
-                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-                    }
-                }
-            }
-        hashElFreeList(&elList);
         }
+    slPairFreeList(&mdidVars);
+    // Now add data elements on by default that haven't been modified
+    struct hashEl *el, *elList = hashElListHash(defaultOn);
+    for (el = elList; el != NULL; el = el->next)
+        {
+        if (!cartVarExistsLike(cart, el->name))
+            {
+            const char *nameStart = el->name + metaDataIdLen + 1;
+            const char *nameEnd = strchr(nameStart, '_');
+            if (nameEnd && nameEnd > nameStart)
+                {
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                }
+            }
+        }
+    hashElFreeList(&elList);
     }
 else
     {
@@ -3050,7 +3070,6 @@ else
 
     // Now add data elements on by default that haven't been modified
     struct hashEl *el, *elList = hashElListHash(defaultOn);
-    slSort(&elList, hashElCmp);
     for (el = elList; el != NULL; el = el->next)
         {
         if (!cartVarExistsLike(cart, el->name))
