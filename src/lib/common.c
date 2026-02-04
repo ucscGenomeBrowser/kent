@@ -1746,7 +1746,7 @@ return s;
 }
 
 void replaceChar(char *s, char oldc, char newc)
-/* Repace one char with another. Modifies original string. */
+/* Replace one char with another. Modifies original string. */
 {
 if (!s)
     return;
@@ -1757,6 +1757,17 @@ while((c=*s))
        *s = newc;	
     ++s;
     }
+}
+
+char *stripHtml(char *s) 
+    /* replace < and > with [ and ]. Whenever we
+     * print a string that we get from the internet, e.g. through HTTP headers,
+     * in a hub.txt file or via a HTTP GET or POST argument, we need to strip
+     * tags. */
+{
+replaceChar(s, '<', '[');
+replaceChar(s, '>', ']');
+return s;
 }
 
 char *replaceChars(char *string, char *old, char *new)
