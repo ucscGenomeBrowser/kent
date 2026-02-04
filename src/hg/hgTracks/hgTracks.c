@@ -8825,7 +8825,7 @@ return paraLoadTimeout;
 
 static char *hubPublicEmailFromHubName(char *hubName)
 {
-/* return public hub email given url or NULL if such a column doesn't exist (mirrors don't have this column) */
+/* return public hub email given hubName or NULL if such a column doesn't exist (mirrors don't have this column) */
 /* result must be freed */
 char *hubIdStr = strchr(hubName, '_'); // could not find a function for this in hubConnect.c
 if (!hubIdStr)
@@ -10007,10 +10007,10 @@ if (!hideControls)
                 hPrintf("<tr><td colspan=8><b>Track hub error</b> ");
                 printInfoIcon("Use the hub debugging tool under <i>My Data > Track Hubs > Hub Development</i>. You need to switch off <i>File caching</i> there to see your changes without delay. Error <i>Response is missing required header</i> usually means the hub is not reachable.<br><br>Contact us or the hub provider if you cannot resolve the issue.");
                 hPrintf(": ");
-                hPrintf("<i>%s</i>", group->errMessage);
+                hPrintf("<i>%s</i>", stripHtml(cloneString(group->errMessage)));
                 char *email = hubPublicEmailFromHubName(hubName);
                 if (isNotEmpty(email))
-                    hPrintf("<br>You can contact the hub author at %s", email);
+                    hPrintf("<br>You can contact the hub author at %s", stripHtml(email));
                 hPrintf("</td></tr>\n");
                 }
 
