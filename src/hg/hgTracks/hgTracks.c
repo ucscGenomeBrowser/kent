@@ -1212,14 +1212,12 @@ if (oligoSize >= 2)
     {
     if (searchForward)
         fMatch = finder(fOligo, dna);
+    iupacReverseComplement(rOligo, oligoSize);
 
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
     else if (searchReverse)
-        {
-        iupacReverseComplement(rOligo, oligoSize);
 	rMatch = finder(rOligo, dna);
-        }
 
     for (;;)
         {
