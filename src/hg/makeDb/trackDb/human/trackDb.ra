@@ -3796,7 +3796,7 @@ html lovdComp
         mergeSpannedItems on
 
 track hgmd
-shortLabel HGMD public 2025
+shortLabel HGMD Public 2025
 longLabel Human Gene Mutation Database - Public Version 2025
 group phenDis
 visibility hide

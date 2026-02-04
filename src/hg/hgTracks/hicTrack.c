@@ -81,6 +81,18 @@ if (errMsg != NULL)
 return metaResult;
 }
 
+int cmpHicItems(const void *elem1, const void *elem2)
+/* Comparison function for sorting Hi-C interactions by score */
+{
+struct interact *item1 = *((struct interact**)elem1);
+struct interact *item2 = *((struct interact**)elem2);
+if (item1->value > item2->value)
+    return 1;
+if (item1->value < item2->value)
+    return -1;
+return 0;
+}
+
 static void loadAndFilterItems(struct track *tg)
 /* Load all Hi-C items in the current region and identify the window height
  * and median value for this region. */
@@ -171,7 +183,8 @@ while (thisHic != NULL)
     // Calculate the track draw height required to see this item
     int leftx = max(thisHic->chromStart, winStart);
     int rightx = min(thisHic->chromEnd, winEnd);
-    double thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(rightx - leftx)/2.0; // triangle or arc
+    // Height in triangle or square mode (we handle arcs separately a bit later)
+    double thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(rightx - leftx)/2.0; // triangle
     if (sameString(drawMode,HIC_DRAW_MODE_SQUARE))
         thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(winEnd-winStart); // square - always draw the full square
 
@@ -190,7 +203,6 @@ if (filtNumRecords > 0)
     {
     double median = doubleMedian(filtNumRecords, countsCopy);
     tg->graphUpperLimit = 2.0*median;
-    //if (sameString(drawMode, HIC_DRAW_MODE_ARC) && filtNumRecords > 1000)
     if (filtNumRecords > 1000)
         {
         int ix = (int)(filtNumRecords/(0.000008*filtNumRecords + 6.462459));
@@ -222,6 +234,35 @@ if (hiddenCount > 0)
     tg->longLabel = newLabel;
     }
 
+if (sameString(drawMode, HIC_DRAW_MODE_ARC))
+    {
+    // Handle track height calculations in arc mode (have to sort the arcs first)
+    slSort(&tg->items, cmpHicItems); // So that the darkest arcs are drawn on top (i.e. last) and not lost
+    struct interact *this = (struct interact*) tg->items;
+    if (hicUiArcLimitEnabled(cart, tg->tdb))
+        {
+        // Skip past the arcs that won't be drawn
+        int limit = hicUiGetArcLimit(cart, tg->tdb);
+        int itemCount = filtNumRecords;
+        while (itemCount > limit && this != NULL)
+            {
+            this = this->next;
+            itemCount--;
+            }
+        }
+    tg->maxRange = 0;
+    while (this != NULL)
+        {
+        int leftx = max(this->chromStart, winStart);
+        int rightx = min(this->chromEnd, winEnd);
+        // The max height of this Bezier will be half the height of the middle control point.  We're putting
+        // the control point height at 0.75 of the width between the endpoints because it looks decent.
+        double thisHeight = 0.75 * scaleForWindow(insideWidth, winStart, winEnd)*(rightx - leftx)/2.0;
+        if (thisHeight > tg->maxRange)
+            tg->maxRange = thisHeight;
+        this = this->next;
+        }
+    }
 }
 
 void hicLoadItems(struct track *tg)
@@ -436,18 +477,6 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
 }
 
 
-int cmpHicItems(const void *elem1, const void *elem2)
-/* Comparison function for sorting Hi-C interactions by score */
-{
-struct interact *item1 = *((struct interact**)elem1);
-struct interact *item2 = *((struct interact**)elem2);
-if (item1->value > item2->value)
-    return 1;
-if (item1->value < item2->value)
-    return -1;
-return 0;
-}
-
 static void drawHicArc(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -470,7 +499,6 @@ Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
 if (colorIxs == NULL)
     return; // something went wrong with colors
 
-slSort(&tg->items, cmpHicItems); // So that the darkest arcs are drawn on top and not lost
 hicItem = (struct interact *)tg->items;
 if (hicUiArcLimitEnabled(cart,tg->tdb) && (hicUiGetArcLimit(cart, tg->tdb) > 0))
     {
@@ -505,8 +533,7 @@ for (; hicItem; hicItem = hicItem->next)
     double leftx = xScale * leftMidpoint;
     double rightx = xScale * rightMidpoint;
     double midx = xScale * (rightMidpoint+leftMidpoint)/2.0;
-    double midy = yScale * (rightMidpoint-leftMidpoint)/2.0;
-    midy *= 1.5; // Heuristic scaling for better use of vertical space
+    double midy = yScale * (rightMidpoint-leftMidpoint) * 0.75; // Heuristic scaling for better-looking arcs
     if (!invert)
         midy = maxHeight-(int)midy;
     int lefty = maxHeight, righty = maxHeight; // the height of the endpoints
