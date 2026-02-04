@@ -1,6 +1,6 @@
 track recount3
 shortLabel recount3
-longLabel Recount 3 SRA introns
+longLabel recount3 SRA introns
 group rna
 type bigBed 9 +
 visibility hide
