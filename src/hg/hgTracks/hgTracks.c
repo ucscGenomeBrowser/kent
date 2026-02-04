@@ -2224,7 +2224,7 @@ for (track = trackList; track != NULL; track = track->next)
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 subtrackVis |= subtrack->limitedVisSet ? subtrack->limitedVis : subtrack->visibility;
-            vis &= subtrackVis;
+            vis |= subtrackVis;
             }
         if (vis)
             {
