@@ -2,12 +2,15 @@
 
 import subprocess
 import locale
+import gzip
 import sys
 import re
 import os
 import csv
 import requests
+from pathlib import Path
 from io import StringIO
+from datetime import datetime, UTC
 
 # priorities derived from the 'Monthly usage stats' report
 # from the qateam cron job running on the first day of the month
@@ -53,6 +56,25 @@ def set_utf8_encoding():
         sys.stderr = open(sys.stderr.fileno(), mode='w', encoding='utf-8', buffering=1)
 
 ####################################################################
+### read in haplotype CSV listing if the file exists
+####################################################################
+def readHaplotypes(filePath):
+    hapList = {}
+    hapCount = 0
+    if Path(filePath).exists():
+        with gzip.open(filePath, "rt") as fh:
+            for line in fh:
+                line = line.rstrip("\n")
+                if not line:
+                    continue
+                asmId, csvHaplotypes = line.split("\t", 1)
+                parts = asmId.split('_', 2)
+                accession = '_'.join(parts[:2])
+                hapList[accession] = csvHaplotypes
+                hapCount += 1
+    print(f"# haplotype list: {hapCount}")
+    return hapList
+
 ### add aliases to description when they are not there yet
 ####################################################################
 def addAliases(browserName, aliasData, descr):
@@ -797,6 +819,7 @@ def main():
 
     dbDbNameCladeFile = sys.argv[1]
 
+    csvHaplotypes = readHaplotypes("/hive/data/outside/ncbi/genomes/reports/haploscan/csvHaplotypes.tsv.gz")
     # the correspondence of dbDb names to GenArk clade categories
     dbDbClades, dbDbYears, dbDbNcbi = dbDbCladeList(dbDbNameCladeFile)
     # Get the dbDb.hgcentral table data
@@ -871,7 +894,8 @@ def main():
         if year not in organism and year not in descr:
             descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t\n"
+        haplotypes = csvHaplotypes.get(entry['name'], "")
+        outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t{haplotypes}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -892,6 +916,8 @@ def main():
         commonName = entry['commonName']
         clade = entry['clade']
         year = entry['year']
+        if year == 0:
+           year = datetime.now(UTC).strftime("%Y-%m-%d")
         descr = f"{entry['asmName']} {entry['taxId']}"
         if year not in commonName and year not in descr:
             descr = f"{entry['asmName']} {entry['taxId']} {year}"
@@ -901,7 +927,8 @@ def main():
         refSeqCategory = entry['refSeqCategory'].lower()
         versionStatus = entry['versionStatus'].lower()
         assemblyLevel = entry['assemblyLevel'].lower()
-        outLine = f"{entry['gcAccession']}\t{priority}\t{commonName.encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t\n"
+        haplotypes = csvHaplotypes.get(entry['gcAccession'], "")
+        outLine = f"{entry['gcAccession']}\t{priority}\t{commonName.encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t{haplotypes}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -929,7 +956,8 @@ def main():
         ### add alias names to description if they are not already there
         descr = addAliases(gcAccession, aliasData, descr)
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t\n"
+        haplotypes = csvHaplotypes.get(entry['gcAccession'], "")
+        outLine = f"{gcAccession}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t{haplotypes}\n"
         fileOut.write(outLine)
         incrementPriority += 1
         itemCount += 1
