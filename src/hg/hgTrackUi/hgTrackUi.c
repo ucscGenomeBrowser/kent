@@ -2856,7 +2856,7 @@ cgiMakeDropListFull(codeVarName, ancestors, ancestors,
 }
 #endif
 
-static struct slName *parseDataTypes(struct trackDb *tdb)
+static struct slPair *parseDataTypes(struct trackDb *tdb)
 {
 /* Parse the 'dataTypes' trackDb setting into an slName list.
  * 'dataTypes' is a space separated list of words, each indicating a
@@ -2871,7 +2871,25 @@ if (tdbDataTypes == NULL)
 int n_datatypes = chopByWhiteRespectDoubleQuotes(tdbDataTypes, NULL, 0);
 char **datatypes = calloc(n_datatypes, sizeof(char *));
 chopByWhiteRespectDoubleQuotes(tdbDataTypes, datatypes, n_datatypes);
-struct slName *list = slNameListFromStringArray(datatypes, n_datatypes);
+struct slPair *list = NULL;
+
+// At this point, each row in datatypes is the string for one data type.
+// Either a (possibly quoted) label, or else that followed by | followed
+// by (possibly quoted) text to display with the data type checkox.
+
+for (int i = 0; i < n_datatypes; i++)
+    {
+    // If it's just a name, use that for the name and the display title.
+    // But if it's of the form <name|title>, then split them apart.
+    char *dtParts[2];
+    int partCount = chopByCharRespectDoubleQuotes(datatypes[i], '|',
+            dtParts, 2);
+    char *name, *title;
+    name = title = dtParts[0];
+    if (partCount > 1)
+        title = dtParts[1];
+    slPairAdd(&list, name, cloneString(title));
+    }
 freeMem(tdbDataTypes);
 return list;
 }
@@ -2926,7 +2944,7 @@ const char metadataTableScriptElement[] =
 const char *metaDataUrl = trackDbSetting(tdb, "metaDataUrl");
 const char *primaryKey = trackDbSetting(tdb, "primaryKey");
 
-struct slName *dataTypes = parseDataTypes(tdb);
+struct slPair *dataTypes = parseDataTypes(tdb);
 boolean hasDataTypes = (dataTypes != NULL);
 
 // optional
@@ -2972,7 +2990,7 @@ int not_first = 0;
 struct slName *selectedDataTypes = NULL;  // non-null val will be used as flag
 if (hasDataTypes)
     {
-    for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
+    for (struct slPair *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
         {
         char toMatch[token_size];
         boolean selected = FALSE;
@@ -3000,7 +3018,8 @@ if (hasDataTypes)
                 }
             slPairFreeList(&dt_vars);
             }
-        printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, selected ? 1 : 0);
+        printf("%s\"%s\": {\"active\":%d, \"title\":\"%s\"}", COMMA_IF(not_first), thisType->name,
+                selected ? 1 : 0, stripEnclosingDoubleQuotes(thisType->val));
         }
     }
 // else: dataTypes dict is empty - JS will detect this
@@ -3099,7 +3118,7 @@ printf(closeJSON);
 printf(metadataTableScriptElement);
 
 // cleanup
-slFreeList(&dataTypes);
+slPairFreeValsAndList(&dataTypes);
 hashFree(&defaultOn);
 }
 

@@ -100,12 +100,13 @@ $(function() {
         }));
         Object.keys(embeddedData.dataTypes).forEach(name => {
             const label = document.createElement("label");
+            const dataType = embeddedData.dataTypes[name];
             label.innerHTML = `
-                <input type="checkbox" class="cbgroup" value="${name}">${name}`;
+                <input type="checkbox" class="cbgroup" value="${name}">${dataType.title}`;
             selector.appendChild(label);
         });
         const selectedDataTypes = new Set(  // get dataTypes selected initially
-            Object.entries(embeddedData.dataTypes).filter(([_, val]) => val === 1)
+            Object.entries(embeddedData.dataTypes).filter(([_, val]) => val.active === 1)
                 .map(([key]) => key)
         );
         // initialize data type checkboxes (using class instead of 'name')
@@ -357,6 +358,22 @@ $(function() {
             // Get current data element selections
             const currentDataElements = table.rows({selected: true}).data().toArray()
                 .map(obj => obj[primaryKey]);
+
+            // Enforce an upper bound on the number of tracks on at the same time.
+            // This is imperfect when data types are present - some combinations might
+            // have been manually hidden by the user.  But it should be a good ballpark.
+            const trackLimit = 1000;
+            if (hasDataTypes) {
+                if (currentDataTypes.length * currentDataElements.length > trackLimit) {
+                    alert("You have turned on too many subtracks (over 1000) - please uncheck some.");
+                    return;  // abort submission
+                }
+            } else {
+                if (currentDataElements.length > trackLimit) {
+                    alert("You have turned on too many subtracks (over 1000) - please uncheck some.");
+                    return;  // abort submission
+                }
+            }
 
             // Build the parameters for the cart update
             const uriForUpdate = new URLSearchParams({
