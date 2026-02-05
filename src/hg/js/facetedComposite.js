@@ -96,7 +96,7 @@ $(function() {
 
         const selector = document.getElementById("dataTypeSelector");
         selector.appendChild(Object.assign(document.createElement("label"), {
-            innerHTML: "<b>Data type</b>",
+            innerHTML: "<b>Subtrack types enabled:</b>",
         }));
         Object.keys(embeddedData.dataTypes).forEach(name => {
             const label = document.createElement("label");
@@ -137,6 +137,9 @@ $(function() {
         };
 
         const columns = [checkboxColumn, ...ordinaryColumns];
+        const hasDataTypes = embeddedData.dataTypes && 
+                             Object.keys(embeddedData.dataTypes).length > 0;
+        const itemLabel = hasDataTypes ? "samples" : "tracks";
         const table = $("#theMetaDataTable").DataTable({
             data: metadata,
             deferRender: true,    // seems faster
@@ -146,6 +149,7 @@ $(function() {
             order: [[1, "asc"]],  // sort by the first data column, not checkbox
             pageLength: 50,       // show 50 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            language: { lengthMenu: `Show _MENU_ ${itemLabel}`, },
             select: { style: "multi", selector: "td:first-child" },
             initComplete: function() {  // Check appropriate boxes
                 const api = this.api();
