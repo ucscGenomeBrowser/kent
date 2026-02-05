@@ -9953,8 +9953,10 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
+                    "if (window.confirm(\"Are you sure you want to disconnect this hub? To reconnect it you will need to navigate to My Data -> Track Hubs and find the hub in the public hubs list or re-enter the URL if the hub is not listed there. Click 'OK' to continue with the disconnect, or 'Cancel' to continue browsing wit hthe hub attached.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
-                    "document.disconnectHubForm.submit();return true;",
+                    "document.disconnectHubForm.submit();return true;"
+                    "}",
 		    hubName + strlen(hubTrackPrefix));
 
 #ifdef GRAPH_BUTTON_ON_QUICKLIFT
