@@ -13,6 +13,7 @@ visibility hide
 html recount3
 compositeTrack on
 noParentConfig on
+pennantIcon New red ../goldenPath/newsarch.html#020526 "Released Feb. 5, 2026"
 
     track recount3_gtex
     showCfg on

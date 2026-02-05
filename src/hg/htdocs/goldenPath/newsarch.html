@@ -64,6 +64,65 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2026"></a>
 
+<a name="020526"></a>
+<h2>Feb. 05, 2026 &nbsp;&nbsp; New recount3 track for hg38 and mm10</h2>
+<p>
+We are happy to announce the release of the <a href="http://rna.recount.bio"
+	target="_blank">recount3</a> track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=recount3" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=recount3" target="_blank">mm10</a>. Recount3
+is a comprehensive resource for re-analyzing RNA-seq data. It provides uniformly processed
+RNA-seq data and associated metadata from a wide range of studies, enabling researchers to access
+and analyze gene expression data in a consistent manner. Recount3 aggregates data from multiple
+sources, including the
+<a href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank">Sequence Read Archive (SRA)</a>
+and the <a href="https://commonfund.nih.gov/GTEx"
+	target="_blank">Genotype-Tissue Expression (GTEx) project</a>, and reprocesses it using a
+standardized pipeline. This allows for cross-study comparisons and meta-analyses, facilitating
+discoveries in genomics and transcriptomics.
+</p>
+<p>
+The tracks display recount3 intron data, including split read counts and splice junction motifs.
+</p>
+<div class="text-center">
+<img src="../../images/newsArchImages/recount3.png" width='80%'></a>
+</div>
+
+<p>
+For hg38, the tracks available are:
+</p>
+<ul>
+  <li>recount3 GTEx introns</li>
+  <li>recount3 TCGA introns</li>
+  <li>recount3 SRA introns</li>
+  <li>recount3 CCLE introns</li>
+</ul>
+<p>
+For mm10:
+</p>
+<ul>
+  <li>recount3 SRA introns</li>
+</ul>
+<p>
+Introns can be filtered by intron size, split read count, splice junction motif, and strand; intron
+items are color-coded, with darker colors indicating higher coverage:
+</p>
+<ul>
+  <li><b><font color="#00bfff">Sky blue</font></b>: GT donors and AG acceptors (CT and AC on
+the minus strand)</li>
+  <li><b><font color="#00ced1">Turquoise</font></b>: GC donors and AG acceptors (CT and GC on the
+minus strand)</li>
+  <li><b><font color="#ff8c00">Orange</font></b>: AT donors and AC acceptors (GT and AT on the
+minus strand)</li>
+  <li><b><font color="#a9a9a9">Grey</font></b>: Non-canonical junction motifs. These could be
+sequencing errors, polymorphisms, or very rare U12 introns.</li>
+</ul>
+<p>
+We would like to thank the ReCount team for making this data available.  We would also like to thank
+Jeltje van Baren, Mark Diekhans, and Gerardo Perez for their efforts on this release.
+</p>
+
+
 <a name="020326a"></a>
 <h2>Feb. 03, 2026 &nbsp;&nbsp; New &quot;Visible Tracks&quot; group feature</h2>
 <p>
