@@ -18,7 +18,7 @@ shortLabel Unmethylated regions
 longLabel All unmethylated regions
 parent humanMethylationAtlasSummary on
 bigDataUrl /gbdb/$D/dnaMethylationAtlas/hmaSummaryUnmethylated.bb
-visibility pack
+visibility dense
 filterLabel.name Cell/Tissue Type
 filterValues.name Adipocytes,Bladder-Ep,Blood-B,Blood-Granul,Blood-Mono+Macro,Blood-NK,Blood-T,Bone-Osteob,Breast-Basal-Ep,Breast-Luminal-Ep,Colon-Ep,Colon-Fibro,Dermal-Fibro,Endothel,Epid-Kerat,Eryth-prog,Fallopian-Ep,Gallbladder,Gastric-Ep,Head-Neck-Ep,Heart-Cardio,Heart-Fibro,Kidney-Ep,Liver-Hep,Lung-Ep-Alveo,Lung-Ep-Bron,Neuron,Oligodend,Ovary-Ep,Pancreas-Acinar,Pancreas-Alpha,Pancreas-Beta,Pancreas-Delta,Pancreas-Duct,Prostate-Ep,Skeletal-Musc,Small-Int-Ep,Smooth-Musc,Thyroid-Ep
 
@@ -30,7 +30,7 @@ shortLabel Putative enhancers
 longLabel Putative enhancers from unmethylated regions
 parent humanMethylationAtlasSummary on
 bigDataUrl /gbdb/$D/dnaMethylationAtlas/hmaSummaryPutEnhancers.bb
-visibility pack
+visibility dense
 filterLabel.name Cell/Tissue Type
 filterValues.name Bladder-Ep,Blood-B,Blood-Granul,Blood-Mono+Macro,Blood-NK,Blood-T,Breast-Basal-Ep,Breast-Luminal-Ep,Colon-Ep,Colon-Fibro,Dermal-Fibro,Endothel,Epid-Kerat,Gastric-Ep,Head-Neck-Ep,Heart-Cardio,Heart-Fibro,Kidney-Ep,Liver-Hep,Lung-Ep-Alveo,Lung-Ep-Bron,Neuron,Oligodend,Pancreas-Acinar,Pancreas-Alpha,Pancreas-Beta,Pancreas-Delta,Pancreas-Duct,Prostate-Ep,Skeletal-Musc,Small-Int-Ep,Thyroid-Ep
 
@@ -42,7 +42,7 @@ shortLabel Top 250 U markers per cell type
 longLabel Top 250 unmethylated regions specific to each cell type
 parent humanMethylationAtlasSummary on
 bigDataUrl /gbdb/$D/dnaMethylationAtlas/hmaSummaryU250.bb
-visibility pack
+visibility dense
 filterLabel.name Cell/Tissue Type
 filterValues.name Adipocytes,Bladder-Ep,Blood-B,Blood-Granul,Blood-Mono+Macro,Blood-NK,Blood-T,Bone-Osteob,Breast-Basal-Ep,Breast-Basal-Ep:Breast-Luminal-Ep,Breast-Luminal-Ep,Colon-Ep,Colon-Ep:Gastric-Ep:Small-Int-Ep,Colon-Ep:Small-Int-Ep,Colon-Fibro,Colon-Fibro:Heart-Fibro,Dermal-Fibro,Endothel,Epid-Kerat,Eryth-prog,Fallopian-Ep,Fallopian-Ep:Ovary-Ep,Gallbladder,Gastric-Ep,Gastric-Ep:Small-Int-Ep,Head-Neck-Ep,Heart-Cardio,Heart-Cardio:Heart-Fibro,Heart-Cardio:Skeletal-Musc:Smooth-Musc,Heart-Fibro,Kidney-Ep,Liver-Hep,Lung-Ep-Alveo,Lung-Ep-Alveo:Lung-Ep-Bron,Lung-Ep-Bron,Neuron,Neuron:Oligodend,Oligodend,Ovary-Ep,Pancreas-Acinar,Pancreas-Alpha,Pancreas-Alpha:Pancreas-Beta:Pancreas-Delta,Pancreas-Beta,Pancreas-Delta,Pancreas-Duct,Prostate-Ep,Skeletal-Musc,Skeletal-Musc:Smooth-Musc,Small-Int-Ep,Smooth-Musc,Thyroid-Ep
 
