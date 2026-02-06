@@ -274,7 +274,18 @@ struct trackHub *hub = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    hub = trackHubOpen(hubUrl, "");
+    unsigned getHubId(char *url, char **errorMessage);
+    char *errMessage;
+    unsigned hubId = hubFindOrAddUrlInStatusTable(NULL, hubUrl, &errMessage);
+    
+    // if we got an error, throw error
+    if (errMessage != NULL)
+        errAbort("%s", errMessage);
+
+    // use hubId in hubName
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "hub_%d", hubId);
+    hub = trackHubOpen(hubUrl, buffer);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -325,11 +336,11 @@ for (trackFound = tdb; trackFound; trackFound = trackFound->next)
         struct trackDb *subTrack = findTrackDb(track, trackFound->subtracks);
 	if (subTrack)
 	    {
-	    if (sameOk(subTrack->track, track))
+	    if (sameOk(trackHubSkipHubName(subTrack->track), track))
 		trackFound = subTrack;
 	    }
 	}
-    if (sameOk(trackFound->track, track))
+    if (sameOk(trackHubSkipHubName(trackFound->track), track))
 	break;
     }
 
@@ -395,7 +406,7 @@ struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
 struct trackHubGenome *hubGenome = NULL;
 for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
     {
-    if (sameString(genome, hubGenome->name))
+    if (sameString(genome, trackHubSkipHubName(hubGenome->name)))
 	break;
     }
 if (NULL == hubGenome)
@@ -663,6 +674,16 @@ else
 boolean protectedTrack(char *db, struct trackDb *tdb, char *tableName)
 /* determine if track is off-limits protected data */
 {
+// if the table is from hub, assume db should be from hub as well
+if (isHubTrack(tableName))
+    {
+    char buffer[4096];
+
+    safef(buffer, sizeof buffer, "hub_%d_%s",hubIdFromTrackName(tableName), db);
+
+    db = cloneString(buffer);
+    }
+
 return cartTrackDbIsAccessDenied(db, tableName) || cartTrackDbIsNoGenome(db, tableName);
 }
 

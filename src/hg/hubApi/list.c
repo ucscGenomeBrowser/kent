@@ -85,7 +85,7 @@ static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el,
  */
 {
 int i = 0;
-jsonWriteObjectStart(jw, el->name);
+jsonWriteObjectStart(jw, trackHubSkipHubName(el->name));
 i++;
 // redundant: jsonWriteString(jw, NULL, el->name);
 jsonWriteString(jw, columnNames[i++], el->description);
@@ -96,7 +96,7 @@ jsonWriteNumber(jw, columnNames[i++], (long long)el->active);
 jsonWriteNumber(jw, columnNames[i++], (long long)el->orderKey);
 jsonWriteString(jw, columnNames[i++], el->genome);
 jsonWriteString(jw, columnNames[i++], el->scientificName);
-jsonWriteString(jw, columnNames[i++], el->htmlPath);
+jsonWriteString(jw, columnNames[i++], trackHubSkipHubName(el->htmlPath));
 jsonWriteNumber(jw, columnNames[i++], (long long)el->hgNearOk);
 jsonWriteNumber(jw, columnNames[i++], (long long)el->hgPbOk);
 jsonWriteString(jw, columnNames[i++], el->sourceName);
@@ -212,7 +212,7 @@ struct trackHubGenome *foundGenome = NULL;
 
 for (ge = hub->genomeList; ge; ge = ge->next)
     {
-    if (sameOk(genome, ge->name))
+    if (sameOk(genome, trackHubSkipHubName(ge->name)))
 	{
 	foundGenome = ge;
 	continue;	/* found genome */
@@ -406,7 +406,7 @@ if (tdb->settingsHash)
         else if (protectedData && sameWord(hel->name, "bigDataUrl"))
             jsonWriteString(jw, hel->name, "protectedData");
         else
-            jsonWriteString(jw, hel->name, (char *)hel->val);
+            jsonWriteString(jw, hel->name, trackHubSkipHubName((char *)hel->val));
         }
     }
 }
@@ -424,7 +424,7 @@ struct trackHubGenome *foundGenome = NULL;
 
 for (ge = hub->genomeList; ge; ge = ge->next)
     {
-    if (sameOk(genome, ge->name))
+    if (sameOk(genome, trackHubSkipHubName(ge->name)))
 	{
 	foundGenome = ge;
 	continue;	/* found genome */
@@ -1036,7 +1036,7 @@ if (! (trackLeavesOnly && isContainer) )
     if (! (isContainer || protectedTrack(db, tdb, tdb->track)))
 	itemCount = dataItemCount(db, tdb);
 #endif
-    jsonWriteObjectStart(jw, tdb->track);
+    jsonWriteObjectStart(jw, trackHubSkipHubName(tdb->track));
     if (tdbIsComposite(tdb))
         jsonWriteString(jw, "compositeContainer", "TRUE");
     if (tdbIsCompositeView(tdb))
@@ -1130,8 +1130,8 @@ else if (sameWord("hubGenomes", words[1]))
 	struct trackHubGenome *el;
         for ( el = hub->genomeList; el; el = el->next)
 	    {
-	    jsonWriteObjectStart(jw, el->name);
-	    jsonWriteString(jw, "organism", el->organism);
+	    jsonWriteObjectStart(jw, trackHubSkipHubName(el->name));
+	    jsonWriteString(jw, "organism", trackHubSkipHubName(el->organism));
 	    jsonWriteString(jw, "description", el->description);
 	    jsonWriteString(jw, "trackDbFile", el->trackDbFile);
 	    jsonWriteString(jw, "twoBitPath", el->twoBitPath);
@@ -1185,7 +1185,7 @@ else if (sameWord("tracks", words[1]))
     struct trackDb *tdbList = obtainTdb(hubGenome, NULL);
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "hubUrl", hubUrl);
-    jsonWriteObjectStart(jw, hubGenome->name);
+    jsonWriteObjectStart(jw, trackHubSkipHubName(hubGenome->name));
     struct trackDb *el = NULL;
     for (el = tdbList; el != NULL; el = el->next )
 	    {

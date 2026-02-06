@@ -897,7 +897,7 @@ struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
 struct trackHubGenome *hubGenome = NULL;
 for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
     {
-    if (sameString(genome, hubGenome->name))
+    if (sameString(genome, trackHubSkipHubName(hubGenome->name)))
 	break;
     }
 if (NULL == hubGenome)
