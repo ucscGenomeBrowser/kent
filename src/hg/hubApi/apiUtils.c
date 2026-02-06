@@ -559,10 +559,10 @@ for (el = supportedTypes; el; el = el->next)
 return ret;
 }
 
-void wigColumnTypes(struct jsonWrite *jw)
+void wigColumnTypes(struct jsonWrite *jw, char *track)
 /* output column headers for a wiggle data output schema */
 {
-jsonWriteListStart(jw, "columnTypes");
+jsonWriteListStart(jw, track);
 
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "name", "start");
@@ -591,16 +591,16 @@ jsonWriteListEnd(jw);
 void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
     char *columnNames[], char *columnTypes[], int jsonTypes[],
 	struct hTableInfo *hti, int columnCount, int asColumnCount,
-	    struct asColumn *columnEl)
+	    struct asColumn *columnEl, char *keyStr)
 /* print out the SQL schema for this trackDb */
 {
 if (tdb && isWiggleDataTable(tdb->type))
     {
-        wigColumnTypes(jw);
+        wigColumnTypes(jw, keyStr);
     }
 else
     {
-    jsonWriteListStart(jw, "columnTypes");
+    jsonWriteListStart(jw, keyStr);
     int i = 0;
     for (i = 0; i < columnCount; ++i)
         {
@@ -630,11 +630,11 @@ else
 }
 
 void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
-    struct asObject *as)
+    struct asObject *as, char *track)
 /* show the column types from a big file autoSql definitions */
 {
 struct asColumn *columnEl = as->columnList;
-jsonWriteListStart(jw, "columnTypes");
+jsonWriteListStart(jw, track);
 struct sqlFieldType *fi = fiList;
 for ( ; fi; fi = fi->next, columnEl = columnEl->next)
     {

@@ -5676,7 +5676,7 @@ var downloadCurrentTrackData = {
         downloadCurrentTrackData.downloadData[track] = data;
     },
 
-    convertJson: function(data, outType) {
+    convertJson: function(data, outType, withHeaders) {
         if (outType !== "tsv" && outType !== "csv") {
             alert("ERROR: incorrect output format option");
             return null;
@@ -5689,12 +5689,25 @@ var downloadCurrentTrackData = {
             "bigDataUrl", "chromSize", "hubUrl"]);
         // first get rid of top level non track object keys
         _.each(data, function(val, key) {
-            if (ignoredKeys.has(key)) {delete data[key];}
+            if (ignoredKeys.has(key)) {
+                // squirrel away the columnTypes if requested
+                if (key === "columnTypes") {
+                    columnTypes = data[key];
+                }
+                delete data[key];
+            }
         });
         // now go through each track and format it correctly
         str = "";
         _.each(data, function(val, track) {
             str += "track name=\"" + track + "\"\n";
+            if (withHeaders) {
+                headers = [];
+                for (let i of columnTypes[track]) {
+                    headers.push(i.name);
+                }
+                str += headers.join(outSep) + "\n";
+            }
             for (var row in val) {
                 for (var  i = 0; i < val[row].length; i++) {
                     str += JSON.stringify(val[row][i]);
@@ -5711,12 +5724,13 @@ var downloadCurrentTrackData = {
         if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
             // first stop the timer so we don't execute again
             clearInterval(downloadCurrentTrackData.intervalId);
-            outType = $("#outputFormat")[0].selectedOptions[0].value;
+            let outType = $("#outputFormat")[0].selectedOptions[0].value;
+            let withHeaders = document.getElementById("downloadTrackHeaders").checked;
             var blob = null;
             if (outType === 'json') {
                 blob = new Blob([JSON.stringify(downloadCurrentTrackData.downloadData[key])], {type: "text/plain"});
             } else {
-                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType);
+                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType, withHeaders);
             }
             if (blob) {
                 anchor = document.createElement("a");
@@ -5854,7 +5868,7 @@ var downloadCurrentTrackData = {
         });
         htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
         htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
-            " value='" + getDb() + ".tracks'</input>";
+            " value='" + getDb() + ".tracks'></input>";
         htmlStr += "<br>";
         htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
         htmlStr += "<select name='outputFormat' id='outputFormat'>";
@@ -5862,6 +5876,9 @@ var downloadCurrentTrackData = {
         htmlStr += "<option value='csv'>CSV</option>";
         htmlStr += "<option value='tsv'>TSV</option>";
         htmlStr += "</select>";
+        htmlStr += "<br>";
+        htmlStr += "<label style='padding-rught: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
+        htmlStr += "<input type='checkbox' id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;
         $("#checkAllDownloadTracks").on("click", function() {
