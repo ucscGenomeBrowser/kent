@@ -1863,7 +1863,8 @@ function stripHgErrors(returnedHtml, whatWeDid)
 function stripJsFiles(returnedHtml, debug, whatWeDid)
 { // strips javascript files from html returned by ajax
     var cleanHtml = returnedHtml;
-    var shlurpPattern=/<script type=\'text\/javascript\' SRC\=\'.*\'\><\/script\>/gi;
+    // Match script tags with src attribute - handles single/double quotes, with/without type attr
+    var shlurpPattern=/<script[^>]*\ssrc\s*=\s*(['"])[^'"]*\1[^>]*>\s*<\/script>/gi;
     if (debug || whatWeDid) {
         var jsFiles = cleanHtml.match(shlurpPattern);
         if (jsFiles && jsFiles.length > 0) {

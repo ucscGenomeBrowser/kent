@@ -23,6 +23,7 @@
 /* globals dbDbTree, activeGenomes, surveyLink, surveyLabel, surveyLabelImage, cart */
 /* globals autoCompleteCat */
 /* globals calculateHgTracksWidth */ // function is defined in utils.js
+/* jshint esnext: true */
 
 window.hgsid = '';
 window.activeGenomes = {};
@@ -1082,7 +1083,7 @@ var hgGateway = (function() {
             if (document.createElementNS) {
                 // Draw the phylogenetic tree and do layout adjustments
                 svg = document.getElementById('speciesTree');
-                spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
+                spTree = speciesTree.draw(svg, dbDbTree, null,
                                           { hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
                                             containerWidth: $('#speciesPicker').width()
                                             });
@@ -1092,14 +1093,81 @@ var hgGateway = (function() {
             } else {
                 $('#speciesTreeContainer').html(getBetterBrowserMessage);
             }
-            $('#representedSpeciesTitle').show();
-            $('#speciesGraphic').show();
-            if (dbDbTree && document.createElementNS) {
-                // These need to be done after things are visible because heights are 0 when hidden.
-                highlightLabelForDb(uiState.db, uiState.taxId);
-                initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
-            }
+            let showSpeciesTree = document.getElementById("speciesTreeLink");
+            showSpeciesTree.addEventListener("click", function() {
+                let speciesTreeSection = document.getElementById("speciesGraphic");
+                if (!$(speciesTreeSection).is(":visible")) {
+                    $('#representedSpeciesTitle').show();
+                    $('#speciesGraphic').show();
+                    if (dbDbTree && document.createElementNS) {
+                        // These need to be done after things are visible because heights are 0 when hidden.
+                        highlightLabelForDb(uiState.db, uiState.taxId);
+                        initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
+                    }
+                    showSpeciesTree.textContent = "Hide species tree";
+                } else {
+                    $('#representedSpeciesTitle').hide();
+                    $('#speciesGraphic').hide();
+                    showSpeciesTree.textContent = "Show species tree";
+                }
+            });
         }
+    }
+
+    function addHubsToList(hubList) {
+        // Render connected hubs into the connected hubs section
+        // Only show the section if there are non-curated hubs to display
+        var $title = $('#connectedHubsTitle');
+        var $section = $('#connectedHubsSection');
+        var $panel = $('#connectedHubsList');
+
+        if (!hubList || hubList.length === 0) {
+            // No hubs, hide the section
+            $title.hide();
+            $section.hide();
+            return;
+        }
+
+        // Filter out curated assembly hubs (those in /gbdb but not /gbdb/genark)
+        // and convert hub objects to card-compatible format
+        var displayHubs = [];
+        hubList.forEach(function(hub) {
+            // Skip curated assembly hubs (same logic as drawHubs)
+            if (hub.hubUrl.startsWith("/gbdb") && !hub.hubUrl.startsWith("/gbdb/genark")) {
+                return;
+            }
+            // Convert hub object to card-compatible format
+            var hubItem = {
+                label: hub.shortLabel + ' (' + hub.assemblyCount + ' assembl' +
+                       (hub.assemblyCount === 1 ? 'y' : 'ies') + ')',
+                genome: hub.defaultDb,
+                category: 'Assembly Hub',
+                hubUrl: hub.hubUrl,
+                taxId: hub.taxId,
+                db: hub.defaultDb,
+                hubName: hub.name,
+                longLabel: hub.longLabel
+            };
+            displayHubs.push(hubItem);
+        });
+
+        if (displayHubs.length === 0) {
+            // No non-curated hubs, hide the section
+            $title.hide();
+            $section.hide();
+            return;
+        }
+
+        // Show the section and render hub cards
+        $title.show();
+        $section.show();
+
+        // Custom click handler for hub cards
+        var onHubClick = function(item) {
+            setHubDb(item.hubUrl, item.taxId, item.db, item.hubName, null, false);
+        };
+
+        renderGenomeCards(displayHubs, $panel, null, onHubClick);
     }
 
     function addCommasToPosition(pos) {
@@ -1383,6 +1451,7 @@ var hgGateway = (function() {
         updateFindPositionSection(uiState);
         if (hubsChanged) {
             drawSpeciesPicker(prunedDbDbTree);
+            addHubsToList(uiState.hubs);
         }
     }
 
@@ -1743,23 +1812,29 @@ var hgGateway = (function() {
         });
     }
 
-    // Recent Genomes Panel functions (Option C layout)
+    // Genome Cards Panel functions (shared by recent genomes and connected hubs)
 
-    function renderRecentGenomesPanel(genomes) {
-        // Render recent genomes as vertical scrollable cards
-        var $panel = $('#recentGenomesList');
+    function renderGenomeCards(items, $panel, emptyMessage, onCardClick) {
+        // Render genome/hub items as vertical scrollable cards
+        // items: array of genome or hub objects
+        // $panel: jQuery element to render into
+        // emptyMessage: message to show when no items
+        // onCardClick: optional callback for card clicks (defaults to setDbFromAutocomplete)
         $panel.empty();
 
-        if (!genomes || genomes.length === 0) {
-            $panel.html('<div class="recentGenomesEmpty">Search for a genome above, ' +
-                        'or click a popular species icon</div>');
+        if (!items || items.length === 0) {
+            if (emptyMessage) {
+                $panel.html('<div class="recentGenomesEmpty">' + emptyMessage + '</div>');
+            }
             return;
         }
 
-        // Render each genome as a card (vertical layout)
-        genomes.forEach(function(item) {
+        var clickHandler = onCardClick || setDbFromAutocomplete;
+
+        // Render each item as a card (vertical layout)
+        items.forEach(function(item) {
             var $card = $('<div class="recentGenomeCard"></div>');
-            var label = item.label || item.value || item.genome || item.commonName;
+            var label = item.label || item.shortLabel || item.value || item.genome || item.commonName;
             var genome = item.genome || item.db || '';
 
             $card.append('<div class="recentGenomeLabel">' + escapeHtml(label) + '</div>');
@@ -1784,9 +1859,9 @@ var hgGateway = (function() {
             $card.data('item', item);
             $card.on('click', function() {
                 var clickedItem = $(this).data('item');
-                setDbFromAutocomplete(clickedItem);
-                // Highlight selected card
-                $('.recentGenomeCard').removeClass('selected');
+                clickHandler(clickedItem);
+                // Highlight selected card in this panel
+                $panel.find('.recentGenomeCard').removeClass('selected');
                 $(this).addClass('selected');
             });
 
@@ -1800,7 +1875,8 @@ var hgGateway = (function() {
         // Show the section (hidden by default in HTML)
         $('#recentGenomesTitle').show();
         $('#recentGenomesSection').show();
-        renderRecentGenomesPanel(recentGenomes);
+        var emptyMessage = 'Search for a genome above, or click a popular species icon';
+        renderGenomeCards(recentGenomes, $('#recentGenomesList'), emptyMessage);
     }
 
     function escapeHtml(text) {
