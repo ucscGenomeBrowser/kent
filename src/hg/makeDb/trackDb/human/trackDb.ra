@@ -5626,3 +5626,14 @@ include longReadVariants.ra
 include g2p.ra
 include varFreqs.ra alpha,beta
 include phasedVars.ra
+
+track dnaMethylation
+superTrack on
+shortLabel DNA Methylation
+longLabel DNA Methylation Projects
+group regulation
+priority 3
+pennantIcon New red ../goldenPath/newsarch.html#NNNN "Released NNNN"
+html dnaMethylation.html
+
+include humanMethylationAtlas.ra

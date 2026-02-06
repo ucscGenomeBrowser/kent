@@ -1,0 +1,185 @@
+<h2>Description</h2>
+<p>
+The <b>Human Methylation Atlas</b> tracks display genome-wide DNA methylation profiles from 
+deep whole-genome bisulfite sequencing (WGBS) of <b>39 primary human cell types</b> 
+sorted from 205 healthy tissue samples. This comprehensive resource enables fragment-level 
+analysis across thousands of unique markers, providing a detailed reference for 
+cell-type-specific methylation patterns.
+</p>
+
+<p>
+The atlas comprises two track sets:
+</p>
+
+<ul>
+  <li><b>Human Methylation Atlas Summary</b> - Contains cell-type-specific marker regions 
+  identified from the atlas, including uniquely unmethylated loci and putative enhancer 
+  regions annotated with regulatory features.</li>
+  <li><b>Human Methylation Atlas Signals</b> - Contains per-cell-type methylation signal 
+  tracks (bigWig format) showing methylation beta values (0-1 scale) across the genome, 
+  with merged tracks for each cell type and individual sample replicates.</li>
+</ul>
+
+<p>
+DNA methylation patterns are highly reproducible across individuals of the same cell type 
+(>99.5% identical), reflecting the robustness of cell identity programs. Unsupervised 
+clustering of these methylomes recapitulates key elements of tissue ontogeny and 
+developmental lineage relationships.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<h3>Signal Tracks</h3>
+<p>
+Signal tracks display methylation beta values on a 0-1 scale, where 0 indicates fully 
+unmethylated CpGs and 1 indicates fully methylated CpGs. A value of -1 indicates 
+missing data. For optimal comparison across cell types, set the vertical viewing range 
+to 0-1 with auto-scale off.
+</p>
+
+<p>
+Merged signal tracks aggregate data across biological replicates for each cell type. 
+Individual replicate tracks are available for detailed analysis.
+</p>
+
+<h3>Track Colors</h3>
+<p>
+Tracks are colored by tissue/cell type category as follows:
+</p>
+
+<table border="1" cellpadding="4" cellspacing="0">
+<tr><th>Color</th><th>Cell Type(s)</th></tr>
+<tr><td style="background-color:rgb(138,43,226);width:30px;">&nbsp;</td><td>Neurons</td></tr>
+<tr><td style="background-color:rgb(148,103,189);width:30px;">&nbsp;</td><td>Oligodendrocytes</td></tr>
+<tr><td style="background-color:rgb(72,61,139);width:30px;">&nbsp;</td><td>Thyroid Epithelium</td></tr>
+<tr><td style="background-color:rgb(153,50,204);width:30px;">&nbsp;</td><td>Prostate Epithelium</td></tr>
+<tr><td style="background-color:rgb(186,85,211);width:30px;">&nbsp;</td><td>Bladder Epithelium</td></tr>
+<tr><td style="background-color:rgb(220,20,60);width:30px;">&nbsp;</td><td>Heart Cardiomyocytes</td></tr>
+<tr><td style="background-color:rgb(205,92,92);width:30px;">&nbsp;</td><td>Smooth Muscle</td></tr>
+<tr><td style="background-color:rgb(178,34,34);width:30px;">&nbsp;</td><td>Heart Fibroblasts</td></tr>
+<tr><td style="background-color:rgb(139,0,0);width:30px;">&nbsp;</td><td>Skeletal Muscle</td></tr>
+<tr><td style="background-color:rgb(205,51,51);width:30px;">&nbsp;</td><td>Erythrocyte Progenitors</td></tr>
+<tr><td style="background-color:rgb(255,99,71);width:30px;">&nbsp;</td><td>Blood Granulocytes</td></tr>
+<tr><td style="background-color:rgb(244,164,96);width:30px;">&nbsp;</td><td>Blood Monocytes/Macrophages</td></tr>
+<tr><td style="background-color:rgb(255,140,0);width:30px;">&nbsp;</td><td>Blood T Cells</td></tr>
+<tr><td style="background-color:rgb(255,165,0);width:30px;">&nbsp;</td><td>Blood B Cells</td></tr>
+<tr><td style="background-color:rgb(255,127,80);width:30px;">&nbsp;</td><td>Blood NK Cells</td></tr>
+<tr><td style="background-color:rgb(255,215,0);width:30px;">&nbsp;</td><td>Pancreas Beta Cells</td></tr>
+<tr><td style="background-color:rgb(218,165,32);width:30px;">&nbsp;</td><td>Pancreas Alpha Cells</td></tr>
+<tr><td style="background-color:rgb(240,230,140);width:30px;">&nbsp;</td><td>Pancreas Delta Cells</td></tr>
+<tr><td style="background-color:rgb(238,232,170);width:30px;">&nbsp;</td><td>Pancreas Duct Cells</td></tr>
+<tr><td style="background-color:rgb(189,183,107);width:30px;">&nbsp;</td><td>Pancreas Acinar Cells</td></tr>
+<tr><td style="background-color:rgb(34,139,34);width:30px;">&nbsp;</td><td>Colon Epithelium</td></tr>
+<tr><td style="background-color:rgb(85,107,47);width:30px;">&nbsp;</td><td>Colon Fibroblasts</td></tr>
+<tr><td style="background-color:rgb(46,139,87);width:30px;">&nbsp;</td><td>Small Intestine Epithelium</td></tr>
+<tr><td style="background-color:rgb(60,179,113);width:30px;">&nbsp;</td><td>Gastric Epithelium</td></tr>
+<tr><td style="background-color:rgb(107,142,35);width:30px;">&nbsp;</td><td>Gallbladder</td></tr>
+<tr><td style="background-color:rgb(139,69,19);width:30px;">&nbsp;</td><td>Liver Hepatocytes</td></tr>
+<tr><td style="background-color:rgb(100,149,237);width:30px;">&nbsp;</td><td>Lung Bronchus Epithelium</td></tr>
+<tr><td style="background-color:rgb(135,206,250);width:30px;">&nbsp;</td><td>Lung Alveolar Epithelium</td></tr>
+<tr><td style="background-color:rgb(255,140,105);width:30px;">&nbsp;</td><td>Kidney Epithelium</td></tr>
+<tr><td style="background-color:rgb(255,105,180);width:30px;">&nbsp;</td><td>Endothelial</td></tr>
+<tr><td style="background-color:rgb(219,112,147);width:30px;">&nbsp;</td><td>Breast Basal Epithelium</td></tr>
+<tr><td style="background-color:rgb(255,182,193);width:30px;">&nbsp;</td><td>Breast Luminal Epithelium</td></tr>
+<tr><td style="background-color:rgb(218,112,214);width:30px;">&nbsp;</td><td>Fallopian Epithelium</td></tr>
+<tr><td style="background-color:rgb(221,160,221);width:30px;">&nbsp;</td><td>Ovary Epithelium</td></tr>
+<tr><td style="background-color:rgb(210,180,140);width:30px;">&nbsp;</td><td>Adipocytes</td></tr>
+<tr><td style="background-color:rgb(222,184,135);width:30px;">&nbsp;</td><td>Epidermal Keratinocytes</td></tr>
+<tr><td style="background-color:rgb(245,222,179);width:30px;">&nbsp;</td><td>Dermal Fibroblasts</td></tr>
+<tr><td style="background-color:rgb(188,143,143);width:30px;">&nbsp;</td><td>Bone Osteoblasts</td></tr>
+<tr><td style="background-color:rgb(0,206,209);width:30px;">&nbsp;</td><td>Head Neck Epithelium</td></tr>
+</table>
+
+<h2>Methods</h2>
+
+<h3>Sample Collection and Sequencing</h3>
+<p>
+Primary human cells were isolated from freshly dissociated adult healthy tissues using 
+fluorescence-activated cell sorting (FACS), yielding high-purity preparations across major 
+cell lineages. A total of 205 samples representing 77 primary cell types were collected from
+137 consenting donors and merged into 39 cell type groups based on methylation similarity.
+Average sample purity exceeded 90% as determined by flow cytometry, gene expression, and
+DNA methylation analysis.
+</p>
+
+<p>
+Whole-genome bisulfite sequencing was performed using 150 bp paired-end reads at an average 
+sequencing depth of 30&times; (minimum 6.62&times;). Libraries were prepared using the 
+Accel-NGS Methyl-Seq DNA library preparation kit and sequenced on the Illumina NovaSeq 6000 
+platform.
+</p>
+
+<h3>Processing and Analysis</h3>
+<p>
+Reads were mapped to the human genome (hg38) using bwa-meth, deduplicated with Sambamba, 
+and processed into per-CpG methylation calls. The genome was segmented into 7.1 million 
+non-overlapping methylation blocks using a multi-channel dynamic programming algorithm 
+that identifies regions of homogeneous methylation across samples.
+</p>
+
+<p>
+Cell-type-specific differentially methylated regions were identified using a one-versus-all 
+comparison approach. Regions uniquely unmethylated in specific cell types were found to be 
+enriched for transcriptional enhancers and tissue-specific transcription factor binding motifs.
+</p>
+
+<p>
+Data processing was performed using 
+<a href="https://github.com/nloyfer/wgbs_tools" target="_blank">wgbstools</a>, an open-source 
+computational suite for DNA methylation sequencing data representation, visualization, 
+and analysis.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data for these tracks can be explored interactively using the 
+<a href="../cgi-bin/hgTables">Table Browser</a> or the 
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. 
+For automated analysis, the data may also be queried from our 
+<a href="../goldenPath/help/api.html">REST API</a>.
+</p>
+
+<p>
+The complete dataset, including all WGBS data files and processed methylation calls, 
+is available from GEO accession 
+<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE186458" 
+target="_blank">GSE186458</a>.
+</p>
+
+<p>
+For questions regarding the data, please contact 
+<a href="mailto:tommy.kaplan@mail.huji.ac.il">Prof. Tommy Kaplan</a> at the Hebrew 
+University of Jerusalem.
+</p>
+
+<h2>Credits</h2>
+<p>
+Data generation and analysis were performed at the Hebrew University of Jerusalem by the 
+Dor, Kaplan, and Glaser laboratories and collaborators. Sample collection involved 
+collaboration with Hadassah Medical Center, Oregon Health &amp; Science University, 
+Karolinska Institute, and University of Alberta.
+</p>
+
+<p>
+Track development and UCSC Genome Browser integration by the 
+<a href="../contacts.html">UCSC Genome Browser Group</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Loyfer N, Magenheim J, Peretz A, Cann G, Bredno J, Klochendler A, Fox-Fisher I, 
+Shabi-Porat S, Hecht M, Pelet T <em>et al</em>.
+<a href="https://www.nature.com/articles/s41586-022-05580-6" target="_blank">
+A DNA methylation atlas of normal human cell types</a>.
+<em>Nature</em>. 2023 Jan;613(7943):355-364.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36599988" target="_blank">36599988</a>
+</p>
+
+<p>
+Loyfer N, Rosenski J, Kaplan T.
+<a href="https://doi.org/10.26508/lsa.202503514" target="_blank">
+wgbstools: a computational suite for DNA methylation sequencing data analysis</a>.
+<em>Life Sci Alliance</em>. 2026 Apr;9(4):e202503514.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41611450" target="_blank">41611450</a>
+</p>
+
