@@ -15,10 +15,10 @@ set of genome assemblies.
 
 Development process:
 
-1. Develop your annotations in a track hub under your control.
-2. Provide a reference to your development track hub to the genome browser
+- Develop your annotations in a track hub under your control.
+- Provide a reference to your development track hub to the genome browser
    for inclusion consideration.
-3. By following the suggested outline, the browser will be able to
+- By following the suggested outline, the browser will be able to
    efficiently add your annotations to the genome browser system.
 
 ## Your track hub file/directory structure
@@ -92,8 +92,9 @@ List each assembly for which you have calculated annotations.
 The **trackDb.txt** file defines the tracks. To emphasize again,
 the assembly names must be the GenBank accession identifier or
 the UCSC database name, e.g.: **'GCF\_016077325.2', or 'hg38', 'mm39'**.
-You can find a full list of all GenArk repository assemblies at:
-[assembly hub list](https://hgdownload.gi.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt)
+Refer to the [full
+list](https://hgdownload.gi.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt) of all
+GenArk repository assemblies to find the correct identifier for your genome.
 
 ## Example trackDb.txt file
 
@@ -117,7 +118,9 @@ html ../documentation
 Since all the annotations are the same type, a single **trackDb.txt**
 file is sufficient for all assemblies. The **html** link refers
 to **../documentation.html** as used in the **hub.txt** file.
-For documentation structure, you can follow the typical UCSC track
+For documentation structure, you can follow the typical UCSC track description
 format with sections for: **Description**, **Methods**, **Credits**,
-**References**. For example:
-[typical UCSC track](/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=recombRate2) documentation.
+**References**. We provide an [example
+template](/goldenPath/help/examples/hubExamples/templatePage.html), or see, for example, the
+description page of a
+[typical UCSC track](/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=recombRate2).
