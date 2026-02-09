@@ -6823,6 +6823,304 @@ and is particularly useful for tracks with large numbers of categories.
     configuration page as well as in the image.</P>
 </DIV>
 
+<!-- - - - - - - - hub.txt and genomes.txt settings - - - - - - - -->
+<DIV class="hub_general_intro">
+<H3>General hub configuration settings</H3>
+<p>
+These settings control basic, top-level information regarding your hub, such as
+how it is labeled in the Genome Browser interface. Nearly every hub will make
+use of these settings.</p>
+</DIV>
+
+<DIV class="genomes_file_intro">
+<H3>Assembly hub &quot;genome&quot; settings</H3>
+<p>
+<a href="/goldenPath/help/assemblyHubHelp.html">Assembly hubs</a> allow users to
+display custom genome assemblies in the Genome Browser.</p>
+</DIV>
+
+<DIV class="blat"><span class="types all"></span>
+<div class="format"><code>blat &lt;url&gt; &lt;port&gt;</code></div>
+    <P>Indicates the server and port to be used for the BLAT tool.
+    See <a href="/goldenPath/help/assemblyHubHelp.html#configuringAssemblyHubs"
+    >our documentation</a> for more details about setting up BLAT for your hub.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   blat yourServer.yourInstitution.edu 17777</pre>
+</DIV>
+
+<DIV class="chromAlias"><span class="types all"></span>
+<div class="format"><code>chromAlias &lt;url/relativePath&gt;</code></div>
+    <P>Enables the Genome Browser to automatically convert chromosome names in
+    submitted custom track data from alternate naming schemes to the names used
+    in the assembly. This functionality applies to both custom track data and
+    assembly hub data.</p>
+
+    <p>
+    See our <a
+    href="/goldenPath/help/assemblyHubHelp.html#chromAlias">chromAlias</a>
+    documentation for details on the required file format.
+
+    <P><B>Example:</B></P>
+    <pre>   chromAlias thisGenome.chromAlias.txt</pre>
+</DIV>
+
+<DIV class="chromAliasBb"><span class="types all"></span>
+<div class="format"><code>chromAliasBb &lt;url/relativePath&gt;</code></div>
+    <P>Like <code>chromAlias</code>, except the file is in the compressed, binary <code>bigBed</code>
+    format. This allows efficient searching for sequence names without
+    requiring the entire text file to be read, which is important
+    for assemblies with a large number of sequences.
+    </p>
+
+    <p>See our <a
+    href="/goldenPath/help/assemblyHubHelp.html#chromAlias">chromAlias</a>
+    documentation for details on the required file format.
+
+    <P><B>Example:</B></P>
+    <pre>   chromAliasBb thisGenome.chromAlias.bb</pre>
+</DIV>
+
+<DIV class="chromAuthority"><span class="types all"></span>
+<div class="format"><code>chromAuthority &lt;str&gt;</code></div>
+    <P>Indicates which chromosome naming scheme from the <code>chromAlias</code>
+    file to be used as the default in the Genome Browser display. The string must
+    match a name defined in the <code>chromAlias</code> header.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   chromAuthority ucsc</pre>
+</DIV>
+
+<DIV class="chromSizes"><span class="types all"></span>
+<div class="format"><code>chromSizes &lt;url/relativePath&gt;</code></div>
+    <P>Defines a file to used when displaying the sequences contained in an
+    assembly. These are visible from the &quot;View Sequences&quot; link
+    on the Gateway page, or with the &quot;vs&quot; keyboard shortcut
+    when looking at the main Genome Browser image.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   chromSizes thisGenome.chromSizes.txt</pre>
+</DIV>
+
+<DIV class="defaultPos"><span class="types all"></span>
+<div class="format"><code>defaultPos &lt;chr:start-end&gt;</code></div>
+    <P>Defines the initial view in the Genome Browser, usually highlighting a
+    popular gene or region of interest.</P>
+    <P><B>Example:</B></P>
+    <pre>   defaultPos chr7:155799529-155812871</pre>
+</DIV>
+
+<DIV class="description"><span class="types all"></span>
+<div class="format"><code>description &lt;str&gt;</code></div>
+    <P>Description of the assembly version that is displayed on the Gateway
+    page and title pages for this assembly. It also appears in the assembly
+    pull-down menu.</P>
+    <P><B>Example:</B></P>
+    <pre>   description July 2011 Castor bean</pre>
+</DIV>
+
+<DIV class="descriptionUrl"><span class="types all"></span>
+<div class="format"><code>descriptionUrl &lt;url/relativePath&gt;</code></div>
+    <P>Specify a relative path or URL link to a webpage (e.g. a paper)
+    describing the hub.  For public hubs, this can be used to highlight key
+    words to make searching easier and direct users to your hub.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   descriptionUrl castorBeanHubDescription.html</pre>
+</DIV>
+
+<DIV class="email"><span class="types all"></span>
+<div class="format"><code>email &lt;email address&gt;</code></div>
+    <P>Provides users with a contact point for questions related to the hub.</P>
+    <P><B>Example:</B></P>
+    <pre>   email contactEmail@institution.edu</pre>
+</DIV>
+
+<DIV class="hubGenome"><span class="types all"></span>
+<div class="format"><code>genome &lt;str&gt;</code></div>
+    <P>For hubs on native assemblies, use the UCSC database name (e.g. hg38).</P>
+    <p>For custom assemblies, create your own name. This will appear on title pages
+    in the Genome Browser.</p>
+    <P><B>Example:</B></P>
+    <pre>   genome ricCom1</pre>
+</DIV>
+
+<DIV class="genomesFile"><span class="types all"></span>
+<div class="format"><code>genomesFile &lt;url/relativePath&gt;</code></div>
+    <P>References the next definition file in this hub that will describe
+    the assemblies and tracks available at this hub. Typically, genomes.txt is
+    at the same directory level as this hub.txt; however, it can also be a
+    relative path reference to a different directory level.</p>
+    <p>Not needed if using <code>useOneFile</code> (recommended).</p>
+    <P><B>Example:</B></P>
+    <pre>   genomesFile genomes.txt</pre>
+</DIV>
+
+<DIV class="groupsFile"><span class="types all"></span>
+<div class="format"><code>groups &lt;url/relativePath&gt;</code></div>
+    <P>Relative path or URL that points to a file defining track groups, which are collections of
+    related tracks displayed together under the main Genome Browser image.</p>
+    <p>
+    See our assembly hub <a href="/goldenPath/help/assemblyHubHelp.html#groupsTxt">groups.txt</a>
+    documentation for format details.
+    </p>
+    <P><B>Example:</B></P>
+    <pre>   groups ricCom1/groups.txt</pre>
+</DIV>
+
+<DIV class="htmlPath"><span class="types all"></span>
+<div class="format"><code>htmlPath &lt;url/relativePath&gt;</code></div>
+    <P>Points to an HTML file with assembly information. The HTML file is
+    displayed on the Gateway page.</P>
+    <P><B>Example:</B></P>
+    <pre>   groups ricCom1/description.html</pre>
+</DIV>
+
+<DIV class="hub"><span class="types all"></span>
+<div class="format"><code>hub &lt;str&gt;</code></div>
+    <P>A short, unique identifier for the hub used internally by the Genome
+    Browser software to identify your hub. It must not contain any spaces.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   hub myRnaSeqData</pre>
+</DIV>
+
+<DIV class="isPcr"><span class="types all"></span>
+<div class="format"><code>isPcr &lt;url&gt; &lt;port&gt;</code></div>
+    <P>Indicates the server and port to be used for the In-Silico PCR
+    tool. See <a href="/goldenPath/help/assemblyHubHelp.html#configuringAssemblyHubs"
+    >our documentation</a> for more details about setting up In-Silico
+    PCR for your hub.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   isPcr yourServer.yourInstitution.edu 17779</pre>
+</DIV>
+
+<DIV class="hubLongLabel"><span class="types all"></span>
+<div class="format"><code>longLabel &lt;str&gt;</code></div>
+    <P>A longer, more descriptive label for the hub. Should
+    be under 70 characters long.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   longLabel Comment describing this hub contents</pre>
+</DIV>
+
+<DIV class="orderKey"><span class="types all"></span>
+<div class="format"><code>orderKey &lt;int&gt;</code></div>
+    <P>Controls the ordering of assemblies in the pull-down menu.
+    Useful if you have several assemblies in your hub.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   orderKey 4800</pre>
+</DIV>
+
+<DIV class="organism"><span class="types all"></span>
+<div class="format"><code>organism &lt;str&gt;</code></div>
+    <P>Common name of the organism, displayed alongside the description on
+    title pages. It also appears in the assembly pull-down menu.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   organism Orangutan</pre>
+</DIV>
+
+<DIV class="scientificName"><span class="types all"></span>
+<div class="format"><code>scientificName &lt;str&gt;</code></div>
+    <P>Scientific name of organism, displayed alongside the description on
+    title pages. It also appears in the assembly pull-down menu.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   scientificName Ricinus communis</pre>
+</DIV>
+
+<DIV class="hubShortLabel"><span class="types all"></span>
+<div class="format"><code>shortLabel &lt;str&gt;</code></div>
+    <P>A short description of the hub. Used as track group label below the
+    under the main Genome Browser image. Should be under 20 characters.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   shortLabel ENCODE3 RNA-seq Data</pre>
+</DIV>
+
+<DIV class="trackDbFile"><span class="types all"></span>
+<div class="format"><code>trackDb &lt;url/relativePath&gt;</code></div>
+    <P>Relative path or URL to the file that defines the tracks for the assembly
+    specified by the <code>genome</code> setting.
+    </p>
+    <p>Not necessary if using the <code>useOneFile</code> setting (recommended).
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   trackDb ricCom1/trackDb.txt</pre>
+</DIV>
+
+<DIV class="transBlat"><span class="types all"></span>
+<div class="format"><code>transBlat &lt;url&gt; &lt;port&gt;</code></div>
+    <P>Indicates the server and port to be used for the "translated DNA/RNA" options
+    in the BLAT interface.
+    See <a href="/goldenPath/help/assemblyHubHelp.html#configuringAssemblyHubs"
+    >our documentation</a> for more details about setting up BLAT for your hub.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   transBlat yourServer.yourInstitution.edu 17778</pre>
+</DIV>
+
+<DIV class="twoBitPath"><span class="types all"></span>
+<div class="format"><code>twoBitPath &lt;url/relativePath&gt;</code></div>
+    <P>Relative path or URL to the .2bit sequence file for the assembly. This
+    file is typically generated from FASTA files using the <code>faToTwoBit</code> command-line
+    program, available from our <a
+    href="https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">download
+    server</a>.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   twoBitPath ricCom1/ricCom1.2bit</pre>
+</DIV>
+
+<DIV class="useOneFile"><span class="types all"></span>
+<div class="format"><code>useOneFile &lt;on&gt;</code></div>
+    <P>If the hub only has tracks on a single genome, <code>useOneFile</code>
+    allows all hub and track configuration settings to be in a single file.
+    See <a href="/goldenPath/help/hgTracksHelp.html#UseOneFile"
+    >our documentation</a> for more details.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   useOneFile on</pre>
+</DIV>
+
+<DIV class="hub_txt_example"><span class="types all"></span>
+<div class="format"><B>Example of an opening hub stanza</B></div>
+    <pre>
+    hub hubName
+    shortLabel genome
+    longLabel Comment describing this hub contents
+    genomesFile genomes.txt
+    email contactEmail@institution.edu
+    descriptionUrl aboutHub.html
+    </pre>
+</DIV>
+
+<DIV class="genome_example"><span class="types all"></span>
+<div class="format"><B>Example of a genome stanza</B></div>
+    <pre>
+    genome ricCom1
+    trackDb ricCom1/trackDb.txt
+    groups ricCom1/groups.txt
+    description July 2011 Castor bean
+    twoBitPath ricCom1/ricCom1.2bit
+    organism Ricinus communis
+    defaultPos E09R7372:1000000-2000000
+    orderKey 4800
+    scientificName Ricinus communis
+    htmlPath ricCom1/description.html
+    transBlat yourLab.yourInstitution.edu 17777
+    blat yourLab.yourInstitution.edu 17777
+    isPcr yourLab.yourInstitution.edu 17779
+    </pre>
+    <P>This is the configuration needed for an assembly hub displaying
+    a custom genome assembly. To display tracks on a UCSC-hosted assembly,
+    you will only need the <code>genome</code> setting if you are using
+    <code>useOneFile</code>.</p>
+</DIV>
+
 <!-- - - - - - - - CUSTOM settings - - - - - - - -->
 <DIV class="customTracks_intro">
 <H3>Custom Tracks</H3>
