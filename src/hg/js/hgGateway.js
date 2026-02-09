@@ -1936,6 +1936,37 @@ var hgGateway = (function() {
             // Display recent genomes in the left panel on page load
             displayRecentGenomesInPanel();
 
+            // Set up info icon tooltips
+            var speciesSearchInfo = document.getElementById('speciesSearchInfo');
+            if (speciesSearchInfo) {
+                addMouseover(speciesSearchInfo,
+                    "Searches are case-insensitive and match by prefix. You can search by:" +
+                    "<ul class='noBullets'>" +
+                    "<li>Common name (e.g., Human, Mouse)</li>" +
+                    "<li>Scientific name (e.g., Homo sapiens)</li>" +
+                    "<li>Abbreviated scientific name (e.g., P. trog for Pan troglodytes)</li>" +
+                    "<li>Database name (e.g., hg38, mm39)</li>" +
+                    "<li>Accession (e.g., GCA_000001405.29)</li>" +
+                    "</ul>" +
+                    "For multi-word searches, all words are required by default.");
+            }
+            var recentGenomesInfo = document.getElementById('recentGenomesInfo');
+            if (recentGenomesInfo) {
+                addMouseover(recentGenomesInfo,
+                    "Your recently selected genome assemblies, stored in this browser. " +
+                    "Click a card to quickly return to that genome. " +
+                    "\"UCSC Curated\" genomes are maintained by UCSC with curated annotation tracks. " +
+                    "\"External\" genomes are from track hubs you have connected.");
+            }
+            var connectedHubsInfo = document.getElementById('connectedHubsInfo');
+            if (connectedHubsInfo) {
+                addMouseover(connectedHubsInfo,
+                    "Track data hubs you have connected. These are external data sets hosted " +
+                    "outside of UCSC. To connect a hub, use the top blue bar and navigate to " +
+                    "My Data -&gt; Track Hubs. Both UCSC-hosted and public hub assemblies are " +
+                    "searchable via the search bar above.");
+            }
+
             // Gateway tutorial
             if (typeof gatewayTour !== 'undefined') {
                 if (typeof startGatewayOnLoad !== 'undefined' && startGatewayOnLoad) {
