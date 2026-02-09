@@ -2750,7 +2750,7 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 jsIncludeFile("hui.js",NULL);
 printf("<p style='margin-top:3px; margin-bottom:3px'>");
 printf("Tracks that are part of this container are listed below. Use the buttons below to set their visibilities.</p>");
-printf("\n<TABLE id='superTrackTable' CELLPADDING=2>");
+printf("\n<TABLE CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
 struct slRef *childRef;
 char javascript[1024];
@@ -2759,27 +2759,12 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     struct trackDb *tdb = childRef->val;
     if (childRef == superTdb->children) // first time through
         {
-        printf("<TR style='border-bottom: none'><TD style='margin-bottom:10px' NOWRAP colspan=2>\n");
-
-        printf("<b>Apply visibility: </b>\n");
-        printf("<select id='superSubViz' class='normalText'>\n");
-        printf("<option value='hide'>Hide</option>");
-        printf("<option value='dense'>Dense</option>");
-        printf("<option value='squish'>Squish</option>");
-        printf("<option value='pack' selected='selected'>Pack</option>");
-        printf("<option value='full'>Full</option>\n");
-        printf("</select>\n");
-
-        printInfoIcon("The 'Apply to all' button sets all tracks below to the visibility selected on this dropdown. The 'Apply to all visible' button sets this visibility on all tracks below that are not hidden.");
-
-        // First button: set all selectors that are not on 'hide' to the current value of the top select 
-        printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
-	jsOnEventById("click", "superVizApplyButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').filter(function() { return $(this).val() !== 'hide'; }).val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText'); ");
-
-        // Second button: set all selectors to the current value of the top select
-        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
-	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
-        
+        printf("\n<TR><TD NOWRAP colspan=2>");
+	printf("<IMG height=18 width=18 id='btn_plus_all' src='../images/add_sm.gif'>");
+	jsOnEventById("click", "btn_plus_all", "superT.plusMinus(true);");
+	printf("<IMG height=18 width=18 id='btn_minus_all' src='../images/remove_sm.gif'>");
+	jsOnEventById("click", "btn_minus_all", "superT.plusMinus(false);");
+        printf("&nbsp;<B>All</B><BR>");
         printf("</TD></TR>\n");
         }
     printf("<TR><TD NOWRAP>");
@@ -2788,41 +2773,22 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 	char id[256];
         enum trackVisibility tv =
                 hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
+        // Don't use cheapCgi code... no name and no boolshad... just js
 	safef(id, sizeof id, "%s_check", tdb->track);
-        printf("<INPUT style='display:none' class='subtrackCheckbox' TYPE=CHECKBOX id='%s'%s>",
+        printf("<INPUT TYPE=CHECKBOX id='%s'%s>",
                id, (tv != tvHide?" CHECKED":""));
+	jsOnEventById("change", id, "superT.childChecked(this);");
+
         safef(javascript, sizeof(javascript), "superT.selChanged(this)");
         struct slPair *event = slPairNew("change", cloneString(javascript));
-
-        char *onlyVis = trackDbSetting(tdb, "onlyVisibility");
         hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
                                         (tv == tvHide ? "hiddenText":"normalText"),
-                                        onlyVis,
+                                        trackDbSetting(tdb, "onlyVisibility"),
                                         event);
 
-        // print a group of buttons that act like radiobuttons (see javascript lines below)
-        printf("<div data-trackname='%s' class='seg-btn-group' style='margin-right:12px'>", tdb->track);
-        char *trackVizStr = hStringFromTv(tv);
-
-        // vizList is e.g.  {"hide", "dense", "squish", "pack", "full"}, but can be shorter, e.g. when canPack=false
-        char **vizList = hTvGetVizArr(tv, tdb->canPack, onlyVis);
-        int vizListLen = arrNullLen(vizList);
-        for (int i = 0; i < vizListLen; i++) {
-            char *buttonViz = vizList[i];
-            // the currently active viz mode is an 'active' button = pressed
-            if (strcasecmp(buttonViz, trackVizStr) == 0)
-                printf("<button class='seg-active'>");
-            else
-                printf("<button>");
-            printf("%c%s", toupper((unsigned char)buttonViz[0]), buttonViz + 1); // upcase first letter
-            puts("</button>");
-        }
-        puts("</div>");
-        
         printf("</TD>\n<TD>");
         hPrintPennantIcon(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
-        // the <select> tag is only needed to send arguments to the hgTracks CGI. It will be hidden, see below.
         printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
                     tdbIsDownloadsOnly(tdb) ? hgFileUiName(): hTrackUiForTrack(tdb->track),
                     cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(tdb->track), 
@@ -2845,26 +2811,6 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("</TD></TR>");
     }
 printf("</TABLE>");
-
-// Now configure the elements above with Javascript:
-
-// * Clicking a button sets the dropdown to the button's text
-jsOnEventBySelector("click", ".seg-btn-group > button", "let dropdown = $('#' + $(this).parent().data('trackname')); let buttonText=$(this).text().toLowerCase(); dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');");
-// * Clicking buttons does not submit the form (default action of <button> is to submit, unless type=button)
-jsInline("$('.seg-btn-group button').attr('type', 'button');");
-// * Clicking buttons makes them pressed
-jsInline("$('.seg-btn-group').on('click', 'button', function() {"
-  "$(this).addClass('seg-active').siblings().removeClass('seg-active');"
-  "});");
-// * Changing the dropdown updates the buttons
-jsInline("$('.vizSelect').on('change', function() {"
-  "$(this).next().children().removeClass('seg-active');"
-  "let labelToFind = capitalizeFirstLetter($(this).val());"
-  "$(this).next().find('button').filter(function() { return $(this).text().trim() === labelToFind; }).addClass('seg-active');"
-  "});");
-// * Hide all subtrack dropdowns from the user. They are used so the CGI arguments
-// are sent to hgTracks, but are not necessary as UI elements anymore
-jsInline("$('#superTrackTable .vizSelect').hide();");
 }
 
 #ifdef USE_HAL
@@ -2910,7 +2856,7 @@ cgiMakeDropListFull(codeVarName, ancestors, ancestors,
 }
 #endif
 
-static struct slName *parseDataTypes(struct trackDb *tdb)
+static struct slPair *parseDataTypes(struct trackDb *tdb)
 {
 /* Parse the 'dataTypes' trackDb setting into an slName list.
  * 'dataTypes' is a space separated list of words, each indicating a
@@ -2925,7 +2871,25 @@ if (tdbDataTypes == NULL)
 int n_datatypes = chopByWhiteRespectDoubleQuotes(tdbDataTypes, NULL, 0);
 char **datatypes = calloc(n_datatypes, sizeof(char *));
 chopByWhiteRespectDoubleQuotes(tdbDataTypes, datatypes, n_datatypes);
-struct slName *list = slNameListFromStringArray(datatypes, n_datatypes);
+struct slPair *list = NULL;
+
+// At this point, each row in datatypes is the string for one data type.
+// Either a (possibly quoted) label, or else that followed by | followed
+// by (possibly quoted) text to display with the data type checkox.
+
+for (int i = 0; i < n_datatypes; i++)
+    {
+    // If it's just a name, use that for the name and the display title.
+    // But if it's of the form <name|title>, then split them apart.
+    char *dtParts[2];
+    int partCount = chopByCharRespectDoubleQuotes(datatypes[i], '|',
+            dtParts, 2);
+    char *name, *title;
+    name = title = dtParts[0];
+    if (partCount > 1)
+        title = dtParts[1];
+    slPairAdd(&list, name, cloneString(title));
+    }
 freeMem(tdbDataTypes);
 return list;
 }
@@ -2980,7 +2944,7 @@ const char metadataTableScriptElement[] =
 const char *metaDataUrl = trackDbSetting(tdb, "metaDataUrl");
 const char *primaryKey = trackDbSetting(tdb, "primaryKey");
 
-struct slName *dataTypes = parseDataTypes(tdb);
+struct slPair *dataTypes = parseDataTypes(tdb);
 boolean hasDataTypes = (dataTypes != NULL);
 
 // optional
@@ -2994,7 +2958,7 @@ const int metaDataIdLen = strlen(metaDataId);
 printf(pageStyle);       // css
 printf(placeholderDiv);  // placholder
 
-// start by figuring out what's on by default
+// start by figuring out what's on by default and hasn't been overridden
 struct hash *defaultOn = hashNew(0);
 for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
     {
@@ -3013,7 +2977,8 @@ for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
         {
         char val[1024];
         safef(val, sizeof(val), "%s_sel", st->track);
-        hashAdd(defaultOn, val, NULL);
+        if (!cartVarExists(cart, val))
+            hashAdd(defaultOn, val, NULL);
         }
     }
 
@@ -3022,63 +2987,83 @@ printf(openJSON);
 printf(openDataTypesJSON);
 // find selected data types
 int not_first = 0;
-struct slName *anySelDataType = NULL;  // non-null val will be used as flag
+struct slName *selectedDataTypes = NULL;  // non-null val will be used as flag
 if (hasDataTypes)
     {
-    for (struct slName *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
+    for (struct slPair *thisType = dataTypes; thisType != NULL; thisType = thisType->next)
         {
         char toMatch[token_size];
+        boolean selected = FALSE;
         safef(toMatch, token_size, "%s_*_%s_sel", metaDataId, thisType->name);
-        boolean dataTypeSel = cartVarExistsLike(cart, toMatch) || hashItemExistsLike(defaultOn, toMatch);
-        printf("%s\"%s\": %d", COMMA_IF(not_first), thisType->name, dataTypeSel ? 1 : 0);
-        anySelDataType = dataTypeSel ? thisType : anySelDataType;
+        // Easy case - check if there's a defaultOn track still active with this track type
+        if (hashItemExistsLike(defaultOn, toMatch))
+            {
+            slNameAddHead(&selectedDataTypes, thisType->name);
+            selected = TRUE;
+            }
+        else
+            {
+            // Now we have to check for any cart variables that turn on a track with this data type
+            struct slPair *dt_vars = cartVarsLike(cart, toMatch);
+            struct slPair *this_var = dt_vars;
+            while (this_var != NULL)
+                {
+                if (cartBoolean(cart, this_var->name))
+                    {
+                    slNameAddHead(&selectedDataTypes, thisType->name);
+                    selected = TRUE;
+                    break;
+                    }
+                this_var = this_var->next;
+                }
+            slPairFreeList(&dt_vars);
+            }
+        printf("%s\"%s\": {\"active\":%d, \"title\":\"%s\"}", COMMA_IF(not_first), thisType->name,
+                selected ? 1 : 0, stripEnclosingDoubleQuotes(thisType->val));
         }
     }
 // else: dataTypes dict is empty - JS will detect this
 printf(closeDataTypesJSON);
 printf(",");  // add separator
+
 // find selected data sets
 printf(openDataElementsJSON);
 not_first = 0;
 if (hasDataTypes)
     {
-    if (anySelDataType != NULL)
+    char toMatch[token_size];
+    safef(toMatch, token_size, "%s_*_*_sel", metaDataId);
+    struct slPair *mdidVars = cartVarsLike(cart, toMatch);
+    for (struct slPair *le = mdidVars; le != NULL; le = le->next)
         {
-        char toMatch[token_size];
-        safef(toMatch, token_size, "%s_*_%s_sel", metaDataId, anySelDataType->name);
-        struct slPair *mdidVars = cartVarsLike(cart, toMatch);
-        for (struct slPair *le = mdidVars; le != NULL; le = le->next)
+        if (cartBoolean(cart, le->name))
             {
-            if (cartBoolean(cart, le->name))
+            const char *nameStart = le->name + metaDataIdLen + 1;
+            const char *nameEnd = strchr(nameStart, '_');
+            if (nameEnd && nameEnd > nameStart)
                 {
-                const char *nameStart = le->name + metaDataIdLen + 1;
-                const char *nameEnd = strchr(nameStart, '_');
-                if (nameEnd && nameEnd > nameStart)
-                    {
-                    const int nameLen = nameEnd - nameStart;
-                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-                    }
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
                 }
             }
-        slPairFreeList(&mdidVars);
-        // Now add data elements on by default that haven't been modified
-        struct hashEl *el, *elList = hashElListHash(defaultOn);
-        slSort(&elList, hashElCmp);
-        for (el = elList; el != NULL; el = el->next)
-            {
-            if (!cartVarExistsLike(cart, el->name))
-                {
-                const char *nameStart = el->name + metaDataIdLen + 1;
-                const char *nameEnd = strchr(nameStart, '_');
-                if (nameEnd && nameEnd > nameStart)
-                    {
-                    const int nameLen = nameEnd - nameStart;
-                    printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
-                    }
-                }
-            }
-        hashElFreeList(&elList);
         }
+    slPairFreeList(&mdidVars);
+    // Now add data elements on by default that haven't been modified
+    struct hashEl *el, *elList = hashElListHash(defaultOn);
+    for (el = elList; el != NULL; el = el->next)
+        {
+        if (!cartVarExistsLike(cart, el->name))
+            {
+            const char *nameStart = el->name + metaDataIdLen + 1;
+            const char *nameEnd = strchr(nameStart, '_');
+            if (nameEnd && nameEnd > nameStart)
+                {
+                const int nameLen = nameEnd - nameStart;
+                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                }
+            }
+        }
+    hashElFreeList(&elList);
     }
 else
     {
@@ -3104,7 +3089,6 @@ else
 
     // Now add data elements on by default that haven't been modified
     struct hashEl *el, *elList = hashElListHash(defaultOn);
-    slSort(&elList, hashElCmp);
     for (el = elList; el != NULL; el = el->next)
         {
         if (!cartVarExistsLike(cart, el->name))
@@ -3134,7 +3118,7 @@ printf(closeJSON);
 printf(metadataTableScriptElement);
 
 // cleanup
-slFreeList(&dataTypes);
+slPairFreeValsAndList(&dataTypes);
 hashFree(&defaultOn);
 }
 
@@ -3679,11 +3663,8 @@ if (!tdbIsDownloadsOnly(tdb))
     /* Display visibility menu */
     if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
         printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
-    else if (tdbIsSuper(tdb))
-        printf("<B>Show or hide this container and all tracks:&nbsp;</B>");
     else
         printf("<B>Display&nbsp;mode:&nbsp;</B>");
-
     if (tdbIsSuper(tdb))
         {
         superTrackDropDown(cart, tdb, 1);

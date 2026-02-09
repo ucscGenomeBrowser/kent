@@ -16,17 +16,17 @@ superTrack on
         visibility pack
         priority 0.5
 
-        track me
-        shortLabel Regeneron Million Exomes 983k WES
-        longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
-        visibility pack
-        type vcfTabix
-        hapClusterEnabled true
-        dataVersion 10/04/2023, v1.1.3
-        tableBrowser off
-        priority 1
+        #track me
+        #shortLabel Regeneron Million Exomes 983k WES
+        #longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
+        #parent varFreqs on
+        #bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        #visibility pack
+        #type vcfTabix
+        #hapClusterEnabled true
+        #dataVersion 10/04/2023, v1.1.3
+        #tableBrowser off
+        #priority 1
 
         track topmed
         shortLabel NHLBI TOPMED 10 151k WGS
@@ -58,16 +58,16 @@ superTrack on
         visibility pack
         priority 2.5
 
-        track mcps
-        shortLabel Mexico City Prospective Study 10k WGS+141k WES
-        longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
-        tableBrowser off
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
-        visibility pack
-        type vcfTabix
-        dataVersion May 2023 (v1.2.0)
-        priority 3
+        #track mcps
+        #shortLabel Mexico City Prospective Study 10k WGS+141k WES
+        #longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
+        #tableBrowser off
+        #parent varFreqs on
+        #bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        #visibility pack
+        #type vcfTabix
+        #dataVersion May 2023 (v1.2.0)
+        #priority 3
 
         track tommo60kjpn
         shortLabel Japan ToMMO 61k WGS
@@ -114,7 +114,7 @@ superTrack on
         tableBrowser off
 
         track mgrb
-        shortLabel Australie MGRB 4k WGS
+        shortLabel Australia MGRB 4k WGS
         longLabel Variant Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS
         type vcfTabix
         parent varFreqs on

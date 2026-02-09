@@ -64,6 +64,145 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2026"></a>
 
+<a name="020526"></a>
+<h2>Feb. 05, 2026 &nbsp;&nbsp; New recount3 track for hg38 and mm10</h2>
+<p>
+We are happy to announce the release of the <a href="http://rna.recount.bio"
+	target="_blank">recount3</a> track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=recount3" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=recount3" target="_blank">mm10</a>. Recount3
+is a comprehensive resource for re-analyzing RNA-seq data. It provides uniformly processed
+RNA-seq data and associated metadata from a wide range of studies, enabling researchers to access
+and analyze gene expression data in a consistent manner. Recount3 aggregates data from multiple
+sources, including the
+<a href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank">Sequence Read Archive (SRA)</a>
+and the <a href="https://commonfund.nih.gov/GTEx"
+	target="_blank">Genotype-Tissue Expression (GTEx) project</a>, and reprocesses it using a
+standardized pipeline. This allows for cross-study comparisons and meta-analyses, facilitating
+discoveries in genomics and transcriptomics.
+</p>
+<p>
+The tracks display recount3 intron data, including split read counts and splice junction motifs.
+</p>
+<div class="text-center">
+<img src="../../images/newsArchImages/recount3.png" width='80%'></a>
+</div>
+
+<p>
+For hg38, the tracks available are:
+</p>
+<ul>
+  <li>recount3 GTEx introns</li>
+  <li>recount3 TCGA introns</li>
+  <li>recount3 SRA introns</li>
+  <li>recount3 CCLE introns</li>
+</ul>
+<p>
+For mm10:
+</p>
+<ul>
+  <li>recount3 SRA introns</li>
+</ul>
+<p>
+Introns can be filtered by intron size, split read count, splice junction motif, and strand; intron
+items are color-coded, with darker colors indicating higher coverage:
+</p>
+<ul>
+  <li><b><font color="#00bfff">Sky blue</font></b>: GT donors and AG acceptors (CT and AC on
+the minus strand)</li>
+  <li><b><font color="#00ced1">Turquoise</font></b>: GC donors and AG acceptors (CT and GC on the
+minus strand)</li>
+  <li><b><font color="#ff8c00">Orange</font></b>: AT donors and AC acceptors (GT and AT on the
+minus strand)</li>
+  <li><b><font color="#a9a9a9">Grey</font></b>: Non-canonical junction motifs. These could be
+sequencing errors, polymorphisms, or very rare U12 introns.</li>
+</ul>
+<p>
+We would like to thank the ReCount team for making this data available.  We would also like to thank
+Jeltje van Baren, Mark Diekhans, and Gerardo Perez for their efforts on this release.
+</p>
+
+
+<a name="020326a"></a>
+<h2>Feb. 03, 2026 &nbsp;&nbsp; New &quot;Visible Tracks&quot; group feature</h2>
+<p>
+We are excited to announce a new improvement to the UCSC Genome Browser: the
+<b>Visible Tracks</b> group. The Genome Browser now includes a dynamic track group that
+automatically displays all currently visible tracks in one convenient location. This means you no
+longer need to hunt through multiple track categories to adjust tracks you've already turned on.
+</p>
+<div class="text-center">
+<img src="/images/newsArchImages/visibleTracks.png" width='55%'>
+</div>
+<p>
+Previously, managing visible tracks required navigating back to their original categories &mdash;
+whether that was Genes and Gene Predictions, Conservation, Variation, or any other group. Now, all
+your active tracks appear together in the <b>Visible Tracks</b> group, making it faster and easier
+to adjust display modes for visible tracks.
+</p>
+<p>
+The &quot;Visible Tracks&quot; group will appear only when more than 32 tracks are available for a
+genome assembly.
+</p>
+<p>
+We would like to thank Chris Lee and Jairo Navarro Gonzalez for releasing this feature.</p>
+
+<a name="020326b"></a>
+<h2>Feb. 03, 2026 &nbsp;&nbsp; Hub Space: Host Your Track Hubs Directly on the Genome Browser</h2>
+<p>
+We are excited to introduce <a href="/cgi-bin/hgHubConnect#hubUpload">Hub Space</a>, a new
+hosting service that enables users to upload and visualize track hub files directly on the UCSC
+Genome Browser without relying on third-party hosting services such as Dropbox, Google Drive, or
+AWS.
+</p>
+
+<div class="text-center">
+<img src="/images/newsArchImages/HubSpace.png" width='65%'>
+</div>
+
+<p>
+<b>Hub Space Features:</b><br>
+Each account is allocated 10 GB of storage space. While we strive to maintain uninterrupted
+access, please maintain your own backups. Data persistence over the long term is not
+guaranteed. To request additional storage space, please
+<a href="/contacts.html">contact us</a>.
+</p>
+
+<p>
+<b>How to Use Hub Space:</b><br>
+There are two primary ways to upload your files:
+</p>
+
+<ol>
+  <li>
+    <b>Single file upload:</b> Upload individual binary-indexed files (bigBed, bigWig, BAM, VCF,
+    and other supported formats) for immediate visualization.
+  </li>
+  <li>
+    <b>Complete hub upload:</b> Upload the entire track hub, along with all supporting files
+    (hub.txt, bigWig, bigBed, etc.), to visualize the hub.
+  </li>
+</ol>
+
+<p>
+If a hub.txt file is not provided when uploading data files, one is automatically generated.
+The generated hub.txt file is configured with the
+<a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile</a> trackDb setting, and
+as a result, each hub is limited to a single genome assembly. Editing the generated hub.txt file
+directly on the UCSC Genome Browser is not yet supported. To customize the hub configuration or
+data display, replace the generated hub.txt file with your own.
+</p>
+
+<p>
+To get started with Hub Space, visit the
+<a href="/cgi-bin/hgHubConnect#hubUpload">Track Data Hubs page</a> and
+click on the &quot;Hub Space&quot; tab. We would love to hear your feedback on this new feature.
+Please <a href="/contacts.html">contact us</a> and let us know what you think!
+</p>
+
+<p>
+We would like to thank Chris Lee and Jairo Navarro Gonzalez for releasing this feature.</p>
+
 <a name="011526"></a>
 <h2>Jan. 15, 2026 &nbsp;&nbsp; New ENCODE cCREs track available for human (hg38)</h2>
 <p>
@@ -336,57 +475,6 @@ We would like to thank the <a href="http://www.arcseqhub.com/plot/-1/"
 target="_blank">ArcSeqHub</a> authors for making the data available.
 We would also like to thank Maximilian Haeussler and Matthew Speir for the
 creation and release of this track.</p>
-
-<!--
-<a name="120525"></a>
-<h2>Dec. 05, 2025 &nbsp;&nbsp; Hub Space: Host Your Track Hubs Directly on the Genome Browser</h2>
-<p>
-We are excited to introduce <a href="/cgi-bin/hgHubConnect#hubUpload">Hub Space</a>, a new
-hosting service that allows users to upload and visualize track hub files directly on the UCSC
-Genome Browser without relying on third-party hosting services such as Dropbox, Google Drive, or
-AWS.
-</p>
-
-<p>
-<b>Hub Space Features:</b><br>
-Each account is allocated 10 GB of storage space. While we strive to maintain uninterrupted
-access, please maintain your own backups. Data persistence over the long term is not
-guaranteed. To request additional storage space, please
-<a href="/contacts.html">contact us</a>.
-</p>
-
-<p>
-<b>How to Use Hub Space:</b><br>
-There are two primary ways to upload your files:
-</p>
-
-<ol>
-  <li>
-    <b>Single file upload:</b> Upload individual binary-indexed files (bigBed, bigWig, BAM, VCF,
-    and other supported formats) for immediate visualization.
-  </li>
-  <li>
-    <b>Complete hub upload:</b> Upload an entire track hub along with all supporting files
-    (hub.txt, bigWig, bigBed, etc.) to visualize the hub.
-  </li>
-</ol>
-
-<p>
-If a hub.txt file is not provided when uploading data files, one is automatically generated.
-The generated hub.txt file is configured with the
-<a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile</a> trackDb setting, and
-as a result, each hub is limited to a single genome assembly. Editing the generated hub.txt file is
-not yet supported. To customize the hub configuration or data display, replace the generated hub.txt
-file with your own version after uploading the data files.
-</p>
-
-<p>
-To get started with Hub Space, visit the
-<a href="/cgi-bin/hgHubConnect#hubUpload">Track Data Hubs page</a> and
-click on the &quot;Hub Space&quot; section. We would love to hear your feedback on this new feature.
-Please <a href="/contacts.html">contact us</a> and let us know what you think!
-</p>
--->
 
 <a name="120325"></a>
 <h2>Dec. 03, 2025 &nbsp;&nbsp; New gnomAD Missense Deleteriousness Prediction by Constraint (MPC) track for hg19</h2>
@@ -4522,7 +4610,7 @@ feature.</p>
 With the realization that we could not possibly host every single genomic assembly available, we created
 <a href="help/hgTrackHubHelp.html#Assembly" target="_blank">Assembly Hubs</a>. Assembly Hubs allow
 anyone to host and view the genome of any species in the context of the UCSC Genome Browser.
-Last summer we <a href="newsarch.html#060121">announced</a> the creation of the Genome Archive
+Last summer we <a href="newsarch.html#060121">announced</a> the creation of the Genome Repository
 (GenArk) which included Assembly Hubs for the genomic assemblies of more than 1,300 species.
 Since then, we have taken this a step further by creating this new <a href="/assemblyRequest.html"
 target="_blank">Assembly Request</a> page that displays about 14,000 assemblies: those that
@@ -4904,7 +4992,7 @@ on the Gateway page.">
 
 <p>
 CHM13 is a part of our <a href="/goldenPath/newsarch.html#060121" target="_blank">Genome 
-Archive (GenArk)</a> system, and thus exists as an <a target="_blank"
+Repository (GenArk)</a> system, and thus exists as an <a target="_blank"
 href="/goldenPath/help/hgTrackHubHelp.html#Assembly">assembly hub</a>. GenArk assemblies can 
 always be reached directly via their shortlink URL corresponding to their GCA accession, 
 e.g. CHM13: <a 
@@ -6274,7 +6362,7 @@ We would also like to thank Hiram Clawson, Lou Nassar, and Gerardo Perez for dev
 </p>
 
 <a name="060121"></a>
-<h2>June 1, 2021 &nbsp;&nbsp; Genome Archive (GenArk) hubs and Dynamic BLAT</h2>
+<h2>June 1, 2021 &nbsp;&nbsp; Genome Repository (GenArk) hubs and Dynamic BLAT</h2>
 <p>
 Do you have a favorite species or a research organism for which you'd like to visualize
 the genomic sequence? With the recent addition of genomic assemblies for more than 1,300
@@ -6288,7 +6376,7 @@ alignment tool. You can add your own data to your view of the assembly hub by up
 or creating a <a href="help/hgTrackHubHelp.html">track hub</a>.</p>
 <p>
 We call this group of assembly hubs, the <a href=https://hgdownload.gi.ucsc.edu/hubs/>
-Genome Archive (GenArk)</a>. The genomes in the GenArk are sourced from 
+Genome Repository (GenArk)</a>. The genomes in the GenArk are sourced from 
 <a href=https://www.ncbi.nlm.nih.gov/refseq/ target="_blank">NCBI RefSeq</a>, 
 the  <a href="https://vertebrategenomesproject.org/" target="_blank">Vertebrate Genomes Project (VGP)</a> 
 and other projects. See the complete list of assembly hubs <a target="_blank"

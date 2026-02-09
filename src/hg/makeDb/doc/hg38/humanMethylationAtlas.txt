@@ -1,0 +1,7 @@
+mkdir /hive/data/outside/humanMethylationAtlas
+cd /hive/data/outside/humanMethylationAtlas
+
+hubClone -download https://files.cs.huji.ac.il/tommy/Meth_Atlas_hg38/hub.txt
+hubClone -download https://files.cs.huji.ac.il/tommy/Meth_Atlas_hg19/hub.txt
+
+python3 ~/kent/src/hg/makeDb/scripts/humanMethylationAtlas/humanMethylationAtlas_setup.py

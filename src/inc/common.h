@@ -329,9 +329,6 @@ memset(vpt, '\0', count);
 
 #define ZeroVar(v) zeroBytes(v, sizeof(*v))
 
-/* count elements of a NULL-terminated array */
-int arrNullLen(char **arr);
-
 void reverseBytes(char *bytes, long length);
 /* Reverse the order of the bytes. */
 
@@ -927,7 +924,13 @@ char *strLower(char *s);
 /* Convert entire string to lower case */
 
 void replaceChar(char *s, char oldc, char newc);
-/* Repace one char with another. Modifies original string. */
+/* Replace one char with another. Modifies original string. */
+
+char *stripHtml(char *s);
+/* replace < and > with [ and ]. Modifies string in-place. Whenever we
+ * print a string that we get from the internet, e.g. through HTTP headers,
+ * in a hub.txt file or via a HTTP GET or POST argument, we need to strip
+ * tags. */
 
 char *replaceChars(char *string, char *oldStr, char *newStr);
 /*

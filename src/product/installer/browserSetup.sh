@@ -1503,9 +1503,7 @@ function buildTree ()
       #echo2 Branch is: \"beta\" = our current release, beta = testing
       waitKey
       cd ~
-      #git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
-      # cannot checkout the beta branch, leads to a ton of problems, sticking with master for now
-      git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
+      git clone -b beta https://github.com/ucscGenomeBrowser/kent.git --depth=1
    fi
 
    echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 

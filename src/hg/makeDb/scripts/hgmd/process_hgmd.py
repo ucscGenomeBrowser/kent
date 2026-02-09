@@ -95,9 +95,11 @@ def find_latest_ncbirefseq_dir(db, year):
             patch_versions = []
             for dir_path in matching_dirs:
                 basename = os.path.basename(dir_path)
+                # Regex pattern matches: "ncbiRefSeq.p14.2024-09-18"
+                # Extracts: "14" (the patch number after 'p')
                 match = re.match(r'ncbiRefSeq\.p(\d+)\.', basename)
                 if match:
-                    patch_num = int(match.group(1))
+                    patch_num = int(match.group(1))  # e.g., 14
                     patch_versions.append((patch_num, dir_path))
             
             if not patch_versions:
@@ -215,7 +217,7 @@ sort -k1,1 -k2,2n > {}""".format(year, db, bed_file)
     
     # Output summary
     bed_path = os.path.join(working_dir, bed_file)
-    print("✓ {} BigBed completed successfully!".format(db))
+    print("{} BigBed completed successfully!".format(db))
     print("Output files: {}, {}".format(bed_path, bb_path))
     print("Symlink created: {}".format(symlink_path))
     print("hgBbiDbLink run: hgBbiDbLink {} hgmd {}".format(db, symlink_path))
@@ -255,6 +257,8 @@ def process_transcripts(year, db, ncbirefseq_source_dir, output_dir):
     dir_basename = os.path.basename(ncbirefseq_source_dir)
     
     # Extract version (p13, p14, p15, etc.) using regex
+    # Regex pattern matches: "ncbiRefSeq.p14.2025-08-13"
+    # Extracts: "p14" (group 1) and "2025-08-13" (group 2)
     match = re.match(r'ncbiRefSeq\.(p\d+)\.(.+)', dir_basename)
     if not match:
         print("Error: Could not parse ncbiRefSeq directory name: {}".format(dir_basename), file=sys.stderr)
@@ -323,7 +327,7 @@ awk '{{print $1"."}}' > {}""".format(year, transcript_file)
     # Output summary
     transcript_path = os.path.join(transcript_output_dir, transcript_file)
     gp_output_path = os.path.join(transcript_output_dir, output_file)
-    print("✓ {} transcript processing completed!".format(db))
+    print("{} transcript processing completed!".format(db))
     print("Output files: {}, {}".format(transcript_path, gp_output_path))
     print("hgLoadGenePred run: hgLoadGenePred -genePredExt {} ncbiRefSeqHgmd {}".format(db, output_file))
     
@@ -392,11 +396,11 @@ def main():
         if process_database(year, db, working_dir):
             success_count += 1
         else:
-            print("\n✗ Failed to process BigBed for {}".format(db), file=sys.stderr)
+            print("Failed to process BigBed for {}".format(db), file=sys.stderr)
     
     # Exit if any BigBed processing failed
     if success_count < len(databases):
-        print("\nSome BigBed processing failed. Exiting.", file=sys.stderr)
+        print("Some BigBed processing failed. Exiting.", file=sys.stderr)
         sys.exit(1)
     
     # ========================================================================
@@ -410,7 +414,7 @@ def main():
         # Falls back to previous years if specified year not found
         ncbirefseq_source_dir = find_latest_ncbirefseq_dir(db, year)
         if not ncbirefseq_source_dir:
-            print("\n✗ Failed to find ncbiRefSeq directory for {}".format(db), file=sys.stderr)
+            print("Failed to find ncbiRefSeq directory for {}".format(db), file=sys.stderr)
             continue
         
         # Output to hgmd directory
@@ -420,7 +424,7 @@ def main():
         if process_transcripts(year, db, ncbirefseq_source_dir, output_dir):
             transcript_success_count += 1
         else:
-            print("\n✗ Failed to process transcripts for {}".format(db), file=sys.stderr)
+            print("Failed to process transcripts for {}".format(db), file=sys.stderr)
     
     # Exit if any transcript processing failed
     if transcript_success_count < len(databases):

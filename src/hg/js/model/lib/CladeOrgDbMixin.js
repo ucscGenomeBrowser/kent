@@ -101,34 +101,12 @@ var CladeOrgDbMixin = function(myPath) {
         // uiPath is myPath + either 'clade', 'org' or 'db'.
         // User changed clade, org or db; if clade or org, figure out the new lower-level
         // selections.  Update state, tell the server, and call this.onChangeDb if present.
-        var cladeOrgDb = myGetIn(mutState, 'cladeOrgDb');
-        var which = _.last(uiPath);
         var oldDb = myGetIn(mutState, 'db');
-        var clade, org, db;
-        var cladeNode, orgNode, dbNode;
         // Update the changed item in mutState, then handle possible side-effects on lower levels:
         mutState.setIn(uiPath, newValue);
-        clade = myGetIn(mutState, 'clade');
-        org = myGetIn(mutState, 'org');
-        db = myGetIn(mutState, 'db');
-        if (which === 'clade') {
-            cladeNode = findNodeByPath(cladeOrgDb, [clade]);
-            org = cladeNode.get('default');
-            mySetIn(mutState, 'org', org);
-        }
-        if (which === 'clade' || which === 'org') {
-            orgNode = findNodeByPath(cladeOrgDb, [clade, org]);
-            db = orgNode.get('default');
-            mySetIn(mutState, 'db', db);
-        }
-        generateMenuOptions(mutState);
+        var db = myGetIn(mutState, 'db');
         if (db !== oldDb) {
-            dbNode = findNodeByPath(cladeOrgDb, [clade, org, db]);
-            this.cartSend({ cgiVar: { clade: clade,
-                                      org: org,
-                                      db: db,
-                                      position: dbNode.get('defaultPos')
-                                    } });
+            this.cartSend({cgiVar: {db: db}});
             if (this.onChangeDb) {
                 this.onChangeDb(mutState);
             }

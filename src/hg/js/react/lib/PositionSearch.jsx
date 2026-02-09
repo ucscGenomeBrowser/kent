@@ -155,6 +155,7 @@ var PositionSearch = React.createClass({
             <div className={this.props.className}>
               <TextInput value={posInfo.get('position')}
                          path={this.props.path.concat('position')} update={this.props.update}
+                         placeholder=""
                          size={45} ref='input' />
               {spinner}
               {posPopup}

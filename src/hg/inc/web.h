@@ -240,10 +240,6 @@ param db - The default assembly (the database name) to choose as selected.
                 If NULL, no default selection.
  */
 
-void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
-/* Find all the organisms/assemblies that are referenced in axtInfo,
- * and print the dropdown list. */
-
 void printBlatAssemblyListHtml(char *curDb);
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
@@ -252,6 +248,25 @@ assemblies to choose from that have blat servers available.
 param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
+
+char *getCurrentGenomeLabel(char *db);
+/* Construct a label from dbDb (or dbDb related for an assembly hub) for the currently
+ * selected genome */
+
+void printGenomeSearchBar(char *id, char *placeholder, char *classStr, boolean withSearchButton, char *labelText, char *labelClassStr);
+/* Prints an input text box that can be used to search for any genome.
+ * param withSearchButton - controls if there is a button next to the bar
+ *     to manually fire the search
+ * param classStr - if desired, a custom class name or string can be used
+ *     otherwise the default styling of 'genomeSearchBarDefault' is applied via HGStyle.css
+ * param labelText - If not empty, put up a <label> for the search bar, use labelClassStr to
+ *     style it
+ * param labelClassStr - if not empty and labelText not empty, apply this class to the label
+ *
+ * There is a default class in HGStyle.css that is used
+ *
+ * The caller CGI needs to include  jquery-ui.js and utils.js to turn this into a
+ * useable search bar with autocomplete */
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars);

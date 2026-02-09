@@ -1,6 +1,6 @@
 track recount3
 shortLabel recount3
-longLabel Recount 3 SRA introns
+longLabel recount3 SRA introns
 group rna
 type bigBed 9 +
 visibility hide
@@ -21,7 +21,7 @@ filter.size 30:100000
 filterLabel.sjPair splice junctions (format GT/AG)
 filterType.sjPair wildcard
 filterText.sjPair *
-mouseOver $readcount supporting split reads<br>Strand $strand<br>Size $size<br>Splice donor $donor<br>Splice acceptor $acceptor
+mouseOver <b>Split read count</b>: $readcount<br><b>Splice donor</b>: $donor<br><b>Splice acceptor</b>: $acceptor<br><b>Intron size</b>: $size bp<br><b>Strand</b>: $strand
 iframeUrl https://snaptron.cs.jhu.edu/snaptron-studies/jxn2studies?compilation=srav1m&jid=$$&coords=$S:${-$}
 iframeOptions height='300' width='1000' scrolling='yes'
-
+pennantIcon New red ../goldenPath/newsarch.html#020526 "Released Feb. 5, 2026"

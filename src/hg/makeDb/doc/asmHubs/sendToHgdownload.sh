@@ -89,11 +89,11 @@ export dynaServerDir="/scratch/hubs/${dirPath}"
 ssh qateam@$dynaBlat "mkdir -p ${dynaServerDir}" 2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful mkdir on $dynaBlat\n" 1>&2
 
-printf "rsync --stats -a -L -P ${srcDir}/${accession}.2bit \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
-rsync --stats -a -L -P ${srcDir}/${accession}.2bit "qateam@$dynaBlat:${dynaServerDir}/" \
+printf "rsync --stats -a -L -P --exclude=\"md5sum.txt\" ${srcDir}/${accession}.2bit \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
+rsync --stats -a -L -P --exclude="md5sum.txt" ${srcDir}/${accession}.2bit "qateam@$dynaBlat:${dynaServerDir}/" \
   2>&1 | grep -v "X11 forwarding request"
-printf "rsync --stats -a -L -P ${buildDir}/*.gfidx \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
-rsync --stats -a -L -P ${buildDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \
+printf "rsync --stats -a -L -P --exclude=\"md5sum.txt\" ${buildDir}/*.gfidx \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
+rsync --stats -a -L -P --exclude="md5sum.txt" ${buildDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \
   2>&1 | grep -v "X11 forwarding request"
 
 else
@@ -102,14 +102,14 @@ fi
 
 # the single file hub genome trackDb file:
 
-printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
+printf "rsync --delete --exclude=\"md5sum.txt\"--exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
 # printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\"  --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest2}:${destDir}/\"\n" 1>&2
-printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest3}:${destDir}/\"\n" 1>&2
-rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt"   --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
+printf "rsync --delete --exclude=\"md5sum.txt\" --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest3}:${destDir}/\"\n" 1>&2
+rsync --delete --exclude="md5sum.txt" --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt"   --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request" &
 # rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest2}:${destDir}/" \
 #  2>&1 | grep -v "X11 forwarding request"
-rsync --delete --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest3}:${destDir}/" \
+rsync --delete --exclude="md5sum.txt" --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt" --exclude="user.hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest3}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request"
 wait
 

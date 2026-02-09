@@ -1213,10 +1213,12 @@ if (oligoSize >= 2)
     if (searchForward)
         fMatch = finder(fOligo, dna);
     iupacReverseComplement(rOligo, oligoSize);
+
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
     else if (searchReverse)
 	rMatch = finder(rOligo, dna);
+
     for (;;)
         {
 	char *oneMatch = NULL;
@@ -2222,7 +2224,7 @@ for (track = trackList; track != NULL; track = track->next)
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 subtrackVis |= subtrack->limitedVisSet ? subtrack->limitedVis : subtrack->visibility;
-            vis &= subtrackVis;
+            vis |= subtrackVis;
             }
         if (vis)
             {
@@ -3752,7 +3754,8 @@ gene->exonEnds[0] = gene->exonEnds[gene->exonCount - 1];
 gene->exonCount = 1;
 }
 
-void initVirtRegionsFromEMGeneTableExons(boolean showNoncoding, char *knownCanonical, char *knownToTag, boolean geneMostly)
+void initVirtRegionsFromEMGeneTableExons(boolean showPseudo, boolean showNoncoding, char *knownCanonical,
+ char *knownToTag, boolean geneMostly, char *kgnf)
 /* Create a regionlist from knownGene exons. */
 // Merge exon regions that overlap.
 
@@ -3773,6 +3776,8 @@ void initVirtRegionsFromEMGeneTableExons(boolean showNoncoding, char *knownCanon
 //
 // Adding support for extra options from Gencode hg38 so we can filter for
 // comprehensive, splice-variants, non-coding subsets.
+// Added add support for pseudo filter for pseudoGenes, default off.
+// Added support for Track Sets including new MANE and Id-list filter.
 
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -3784,6 +3789,24 @@ struct dyString *query = NULL;
 int padding = emPadding;
 if (sameString(virtModeType, "geneMostly"))
     padding = gmPadding;
+
+// knownPseudo Hash
+struct hash *kpHash = NULL;
+if (!showPseudo) // filter out pseudo variants
+    {
+    // load up hash of pseudo transcriptIds
+    query = sqlDyStringCreate("select kgId from knownAttrs"
+	" where transcriptClass = 'pseudo'");
+    kpHash = newHash(10);
+    sr = sqlGetResult(conn, dyStringContents(query));
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	hashAdd(kpHash, row[0], NULL);
+	}
+    sqlFreeResult(&sr);
+    dyStringFree(&query);
+    }
+
 // knownCanonical Hash
 struct hash *kcHash = NULL;
 if (knownCanonical) // filter out alt splicing variants
@@ -3808,7 +3831,7 @@ struct hash *ktHash = NULL;
 if (knownToTag) // filter out all but Basic
     {
     // load up hash of canonical transcriptIds
-    query = sqlDyStringCreate("select name from %s where value='basic'", knownToTag);
+    query = sqlDyStringCreate("select name from knownToTag where value='%s'", knownToTag);
     ktHash = newHash(10);
     sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
@@ -3824,8 +3847,25 @@ if (!emGeneTable)
 if (hIsBinned(database, emGeneTable)) // skip first bin column if any
     ++rowOffset;
 query = sqlDyStringCreate("select * from %s", emGeneTable);
+if (virtualSingleChrom() || kgnf)
+    sqlDyStringPrintf(query, " where");
 if (virtualSingleChrom())
-    sqlDyStringPrintf(query, " where chrom='%s'", chromName);
+    sqlDyStringPrintf(query, " chrom='%s'", chromName);
+if (virtualSingleChrom() && kgnf)
+    sqlDyStringPrintf(query, " and");
+if (kgnf)
+    {
+    sqlDyStringPrintf(query, " name in (");
+    struct slName *id, *list = slNameListFromCommaEscaped(kgnf);
+    for (id=list; id; id=id->next)
+	{
+        if (id != list)
+	    sqlDyStringPrintf(query, ",");
+	sqlDyStringPrintf(query, "'%s'", trimSpaces(id->name));
+	}
+    sqlDyStringPrintf(query, ")");
+    }
+
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
 // also, using where chrom= causes it to use indexes which disturb order returned.
@@ -3892,6 +3932,12 @@ while (1)
 	    // skip gene not in knownToTag Basic hash
 	    genePredFree(&gene);
 	    }
+	if (gene && !showPseudo && hashLookup(kpHash, gene->name))
+	    {
+	    //skip gene in knownPseudo hash
+	    genePredFree(&gene);
+	    }
+
 	boolean transferIt = FALSE;
 	if (gene && !kceList)
 	    {
@@ -4006,8 +4052,10 @@ while (1)
 	}
 
     }
+
 sqlFreeResult(&sr);
 slReverse(&virtRegionList);
+hashFree(&kpHash);
 hashFree(&kcHash);
 hashFree(&ktHash);
 hFreeConn(&conn);
@@ -4515,6 +4563,8 @@ else if (sameString(virtModeType, "exonMostly")
     char *knownToTag = NULL;      // show comprehensive set not filtered by knownToTag
     char varName[SMALLBUF];
     boolean geneMostly = FALSE;
+    boolean showPseudo = TRUE;
+    char *kgnf = NULL;
 
     lastDbPosSaveCartSetting("emGeneTable");
 
@@ -4542,17 +4592,29 @@ else if (sameString(virtModeType, "exonMostly")
 	    if (hTableExists(database, canonicalTable))
 		knownCanonical = canonicalTable;
 	    }
+
 	safef(varName, sizeof(varName), "%s.show.comprehensive", emGeneTable);
 	boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
 	//DISGUISE makes obsolete dySaveCartSetting(dy, varName);
+	knownToTag = NULL;
 	if (!showComprehensive)
 	    {
 	    if (hTableExists(database, "knownToTag"))
 		{
-		knownToTag = "knownToTag";
+		safef(varName, sizeof(varName), "%s.show.set", emGeneTable);
+		char *setString = cartUsualString(cart, varName, "basic");
+		if (differentString(setString, "all"))
+		   knownToTag = setString;
 		}
 	    }
 
+	safef(varName, sizeof(varName), "%s.show.pseudo", emGeneTable);
+	showPseudo = cartUsualBoolean(cart, varName, FALSE);
+
+	safef(varName, sizeof(varName), "%s.nameFilter", emGeneTable);
+	kgnf = trimSpaces(cartUsualString(cart, varName, NULL));
+	if (sameOk(kgnf, ""))
+	    kgnf = NULL;
 	}
     if (sameString(emGeneTable, "refGene"))
 	{
@@ -4562,7 +4624,7 @@ else if (sameString(virtModeType, "exonMostly")
 	//DISGUISE makes obsolete dySaveCartSetting(dy, varName);
 	}
 
-    initVirtRegionsFromEMGeneTableExons(showNoncoding, knownCanonical, knownToTag, geneMostly);
+    initVirtRegionsFromEMGeneTableExons(showPseudo, showNoncoding, knownCanonical, knownToTag, geneMostly, kgnf);
     if (!virtRegionList)
 	{
 	warn("No genes found on chrom %s for track %s, returning to default view", chromName, emGeneTrack->shortLabel);
@@ -8759,6 +8821,37 @@ unsigned paraLoadTimeout = sqlUnsigned(paraLoadTimeoutStr);
 return paraLoadTimeout;
 }
 
+static char *hubPublicEmailFromHubName(char *hubName)
+{
+/* return public hub email given hubName or NULL if such a column doesn't exist (mirrors don't have this column) */
+/* result must be freed */
+char *hubIdStr = strchr(hubName, '_'); // could not find a function for this in hubConnect.c
+if (!hubIdStr)
+    return NULL;
+unsigned hubId = sqlUnsigned(hubIdStr+1);
+
+struct hubConnectStatus *hubStatus = hubFromIdNoAbort(hubId);                                                           
+if (hubStatus == NULL)
+    return NULL;
+
+char *url = hubStatus->hubUrl;
+if (!url)
+    return NULL;
+
+struct sqlConnection *conn = hConnectCentral();
+
+char *email = NULL;
+if (sqlColumnExists(conn, "hubPublic", "email"))
+    {
+    char query[1000];
+    sqlSafef(query, sizeof query, "SELECT email FROM hubPublic WHERE hubUrl='%s'", url);
+    email = sqlQuickNonemptyString(conn, query);
+    }
+
+hDisconnectCentral(&conn);
+return email;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -9860,8 +9953,10 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
+                    "if (window.confirm(\"Are you sure you want to disconnect this hub? To reconnect it you will need to navigate to My Data -> Track Hubs and find the hub in the public hubs list or re-enter the URL if the hub is not listed there. Click 'OK' to continue with the disconnect, or 'Cancel' to continue browsing with the hub attached.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
-                    "document.disconnectHubForm.submit();return true;",
+                    "document.disconnectHubForm.submit();return true;"
+                    "}",
 		    hubName + strlen(hubTrackPrefix));
 
 #ifdef GRAPH_BUTTON_ON_QUICKLIFT
@@ -9912,7 +10007,10 @@ if (!hideControls)
                 hPrintf("<tr><td colspan=8><b>Track hub error</b> ");
                 printInfoIcon("Use the hub debugging tool under <i>My Data > Track Hubs > Hub Development</i>. You need to switch off <i>File caching</i> there to see your changes without delay. Error <i>Response is missing required header</i> usually means the hub is not reachable.<br><br>Contact us or the hub provider if you cannot resolve the issue.");
                 hPrintf(": ");
-                hPrintf("<i>%s</i>", group->errMessage);
+                hPrintf("<i>%s</i>", stripHtml(cloneString(group->errMessage)));
+                char *email = hubPublicEmailFromHubName(hubName);
+                if (isNotEmpty(email))
+                    hPrintf("<br>You can contact the hub author at %s", stripHtml(email));
                 hPrintf("</td></tr>\n");
                 }
 
@@ -9969,7 +10067,7 @@ if (!hideControls)
         hashFree(&superHash);
 	endControlGrid(&cg);
 
-        jsOnEventBySelector("click", ".hgtButtonHideGroup", "onHideAllGroupButtonClick(event)");
+        jsOnEventBySelector(".hgtButtonHideGroup", "click", "onHideAllGroupButtonClick(event)");
 	}
 
     if (measureTiming)

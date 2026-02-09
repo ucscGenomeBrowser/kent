@@ -22,6 +22,7 @@ errAbort(
   "options:\n"
   "   -udcDir=/dir/to/udcCache   Path to udc directory\n"
   "   -download                  Download data files in addition to the hub configuration files\n"
+  "   -skipMissingAssemblies     Skip assemblies whose trackDb.txt files are missing instead of aborting\n"
   );
 }
 
@@ -29,8 +30,17 @@ errAbort(
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"download", OPTION_BOOLEAN},
+   {"skipMissingAssemblies", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+/* Simple structure to hold genome info when doing manual parsing */
+struct simpleGenome
+    {
+    struct simpleGenome *next;
+    char *name;           /* genome name */
+    char *trackDbPath;    /* relative path to trackDb file */
+    };
 
 void polishHubName(char *name)
 /* Helper function for making somewhat safe directory names. Changes non-alpha to '_' */
@@ -260,8 +270,137 @@ printOneFile(url, f, useOneFile, downloadDir);
 carefulClose(&f);
 }
 
-void hubClone(char *hubUrl, boolean download)
-/* hubClone - Clone the hub text files to a local copy, fixing up bigDataUrls 
+boolean canAccessUrl(char *url)
+/* Check if a URL can be accessed by attempting to open it */
+{
+struct errCatch *errCatch = errCatchNew();
+boolean canAccess = FALSE;
+
+if (errCatchStart(errCatch))
+    {
+    struct lineFile *lf = udcWrapShortLineFile(url, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
+    if (lf != NULL)
+        {
+        canAccess = TRUE;
+        lineFileClose(&lf);
+        }
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+return canAccess;
+}
+
+char *parseHubTxtForGenomesFile(char *hubUrl, char **retHubName, boolean *retUseOneFile)
+/* Parse hub.txt to get genomesFile path and hub name. Returns genomesFile value or NULL. */
+{
+struct lineFile *lf;
+struct hash *stanza;
+char *genomesFile = NULL;
+char *hubName = NULL;
+boolean useOneFile = FALSE;
+
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    lf = udcWrapShortLineFile(hubUrl, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
+    while ((stanza = raNextRecord(lf)) != NULL)
+        {
+        if (hashLookup(stanza, "hub"))
+            {
+            hubName = cloneString(hashFindVal(stanza, "hub"));
+            char *gf = hashFindVal(stanza, "genomesFile");
+            if (gf != NULL)
+                genomesFile = cloneString(gf);
+            if (hashFindVal(stanza, "useOneFile"))
+                useOneFile = TRUE;
+            }
+        freeHash(&stanza);
+        }
+    lineFileClose(&lf);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    errAbort("Error reading hub.txt: %s", errCatch->message->string);
+errCatchFree(&errCatch);
+
+if (retHubName)
+    *retHubName = hubName;
+if (retUseOneFile)
+    *retUseOneFile = useOneFile;
+return genomesFile;
+}
+
+struct simpleGenome *parseGenomesTxt(char *genomesUrl)
+/* Parse genomes.txt to get list of genomes with their trackDb paths */
+{
+struct lineFile *lf;
+struct hash *stanza;
+struct simpleGenome *genomeList = NULL;
+
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    lf = udcWrapShortLineFile(genomesUrl, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
+    while ((stanza = raNextRecord(lf)) != NULL)
+        {
+        char *genomeName = hashFindVal(stanza, "genome");
+        char *trackDbPath = hashFindVal(stanza, "trackDb");
+        if (genomeName != NULL && trackDbPath != NULL)
+            {
+            struct simpleGenome *sg;
+            AllocVar(sg);
+            sg->name = cloneString(genomeName);
+            sg->trackDbPath = cloneString(trackDbPath);
+            slAddHead(&genomeList, sg);
+            }
+        freeHash(&stanza);
+        }
+    lineFileClose(&lf);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    errAbort("Error reading genomes.txt: %s", errCatch->message->string);
+errCatchFree(&errCatch);
+
+slReverse(&genomeList);
+return genomeList;
+}
+
+void printGenomesTxtFiltered(char *genomesUrl, char *outputPath, struct hash *skipGenomes)
+/* Read genomes.txt and write it out, skipping genomes in skipGenomes hash */
+{
+struct lineFile *lf;
+struct hash *stanza;
+FILE *out = createPathAndFile(outputPath);
+
+lf = udcWrapShortLineFile(genomesUrl, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
+while ((stanza = raNextRecord(lf)) != NULL)
+    {
+    char *genomeName = hashFindVal(stanza, "genome");
+    if (genomeName != NULL)
+        {
+        if (hashLookup(skipGenomes, genomeName))
+            {
+            // Skip this genome stanza
+            freeHash(&stanza);
+            continue;
+            }
+        // Print the genome stanza
+        printGenomeStanza(stanza, out, genomesUrl, FALSE);
+        }
+    else
+        {
+        // Non-genome stanza (shouldn't happen in valid genomes.txt, but handle gracefully)
+        printGenericStanza(stanza, out, genomesUrl);
+        }
+    freeHash(&stanza);
+    }
+lineFileClose(&lf);
+carefulClose(&out);
+}
+
+void hubClone(char *hubUrl, boolean download, boolean skipMissingAssemblies)
+/* hubClone - Clone the hub text files to a local copy, fixing up bigDataUrls
  * to remote locations if necessary. */
 {
 struct trackHub *hub;
@@ -269,16 +408,102 @@ struct trackHubGenome *genome;
 char *hubBasePath, *hubName, *hubFileName;
 char *genomesUrl, *genomesDir, *genomesFileName;
 char *tdbFileName, *tdbFilePath;
-char *path; 
+char *path;
 FILE *f;
 struct dyString *downloadDir = dyStringNew(0);
 boolean oneFile = FALSE;
 
 hubBasePath = cloneString(hubUrl);
 chopSuffixAt(hubBasePath, '/'); // don't forget to add a "/" back on!
-hubFileName = strrchr(hubUrl, '/'); 
+hubFileName = strrchr(hubUrl, '/');
 hubFileName += 1;
 
+if (skipMissingAssemblies)
+    {
+    // Manual parsing mode: don't use trackHubOpen which validates all files upfront
+    char *genomesFile = parseHubTxtForGenomesFile(hubUrl, &hubName, &oneFile);
+    polishHubName(hubName);
+
+    if (oneFile)
+        {
+        // For useOneFile hubs, we still need to try trackHubOpen since everything is in one file
+        // Fall through to standard processing
+        hub = readHubFromUrl(hubUrl);
+        if (hub == NULL)
+            errAbort("error opening %s", hubUrl);
+        makeDirs(hubName);
+        path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
+        f = mustOpen(path, "w");
+        if (download)
+            dyStringPrintf(downloadDir, "%s/", hubName);
+        printOneFile(hubUrl, f, oneFile, dyStringContents(downloadDir));
+        carefulClose(&f);
+        return;
+        }
+
+    if (genomesFile == NULL)
+        errAbort("No genomesFile found in hub.txt");
+
+    genomesUrl = trackHubRelativeUrl(hubUrl, genomesFile);
+    struct simpleGenome *genomeList = parseGenomesTxt(genomesUrl);
+
+    if (genomeList == NULL)
+        errAbort("No genomes found in %s", genomesUrl);
+
+    // Write hub.txt
+    path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
+    createWriteAndCloseFile(path, hubUrl, FALSE, dyStringContents(downloadDir));
+
+    // Track which genomes to skip
+    struct hash *skipGenomes = hashNew(0);
+
+    // Process each genome, checking accessibility
+    genomesFileName = catTwoStrings(hubName, catTwoStrings("/", genomesFile));
+    char *genomePath = cloneString(genomesFileName);
+    chopSuffixAt(genomePath, '/');
+
+    struct simpleGenome *sg;
+    for (sg = genomeList; sg != NULL; sg = sg->next)
+        {
+        char *trackDbUrl = trackHubRelativeUrl(genomesUrl, sg->trackDbPath);
+        char *genomeName = sg->name;
+
+        // Strip leading underscore for assembly hubs
+        if (startsWith("_", genomeName))
+            genomeName = genomeName + 1;
+
+        if (!canAccessUrl(trackDbUrl))
+            {
+            warn("Skipping assembly '%s': trackDb file not accessible: %s",
+                 genomeName, trackDbUrl);
+            hashAdd(skipGenomes, sg->name, NULL);
+            continue;
+            }
+
+        // Make correct directory structure and write trackDb
+        genomesDir = catTwoStrings(genomePath, catTwoStrings("/", genomeName));
+        if (download)
+            {
+            dyStringClear(downloadDir);
+            dyStringPrintf(downloadDir, "%s/%s/", hubName, genomeName);
+            }
+        tdbFileName = strrchr(sg->trackDbPath, '/');
+        if (tdbFileName != NULL)
+            tdbFileName += 1;
+        else
+            tdbFileName = sg->trackDbPath;
+        tdbFilePath = catTwoStrings(genomesDir, catTwoStrings("/", tdbFileName));
+        createWriteAndCloseFile(tdbFilePath, trackDbUrl, FALSE, dyStringContents(downloadDir));
+        }
+
+    // Write genomes.txt, filtering out skipped genomes
+    printGenomesTxtFiltered(genomesUrl, genomesFileName, skipGenomes);
+
+    hashFree(&skipGenomes);
+    return;
+    }
+
+// Standard mode: use trackHubOpen
 hub = readHubFromUrl(hubUrl);
 if (hub == NULL)
     errAbort("error opening %s", hubUrl);
@@ -342,6 +567,6 @@ if (argc < 2)
     usage();
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
-hubClone(argv[1], optionExists("download"));
+hubClone(argv[1], optionExists("download"), optionExists("skipMissingAssemblies"));
 return 0;
 }

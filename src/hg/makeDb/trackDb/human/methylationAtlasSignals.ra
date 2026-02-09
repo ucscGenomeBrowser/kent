@@ -1,0 +1,3673 @@
+track humanMethylationAtlasSignals
+type bigWig
+parent dnaMethylation
+shortLabel Human Methylation Atlas Signals
+longLabel Human Methylation Atlas WGBS cell type signals
+dimensions dimY=cellType dimX=dataType
+compositeTrack on
+subGroup2 dataType Data_Type Merged=Merged Replicate=Replicates
+visibility full
+subGroup1 cellType Cell_Type Neuron=Neuron Oligodend=Oligodend Heart-Cardio=Heart_Cardio Smooth-Musc=Smooth_Musc Heart-Fibro=Heart_Fibro Skeletal-Musc=Skeletal_Musc Adipocytes=Adipocytes Endothel=Endothel Blood-T=Blood_T Blood-B=Blood_B Blood-NK=Blood_NK Blood-Mono-Macro=Blood_Mono_Macro Blood-Granul=Blood_Granul Eryth-prog=Eryth_prog Head-Neck-Ep=Head_Neck_Ep Lung-Ep-Bron=Lung_Ep_Bron Lung-Ep-Alveo=Lung_Ep_Alveo Breast-Basal-Ep=Breast_Basal_Ep Breast-Luminal-Ep=Breast_Luminal_Ep Pancreas-Alpha=Pancreas_Alpha Pancreas-Beta=Pancreas_Beta Pancreas-Delta=Pancreas_Delta Pancreas-Acinar=Pancreas_Acinar Pancreas-Duct=Pancreas_Duct Liver-Hep=Liver_Hep Kidney-Ep=Kidney_Ep Gastric-Ep=Gastric_Ep Small-Int-Ep=Small_Int_Ep Colon-Ep=Colon_Ep Bladder-Ep=Bladder_Ep Prostate-Ep=Prostate_Ep Fallopian-Ep=Fallopian_Ep Ovary-Ep=Ovary_Ep Dermal-Fibro=Dermal_Fibro Epid-Kerat=Epid_Kerat Gallbladder=Gallbladder Colon-Fibro=Colon_Fibro Thyroid-Ep=Thyroid_Ep Bone-Osteob=Bone_Osteob
+priority 2
+dataVersion Data release version 2
+html humanMethylationAtlas.html
+
+track neuronMerged
+type bigWig
+longLabel Neurons Merged Samples
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/neuronMerged.bw
+subGroups cellType=Neuron dataType=Merged
+priority 1
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Neurons Merged
+alwaysZero on
+
+track cerebNeuron0TB
+type bigWig
+longLabel Cerebellum - Neuron - Z000000TB
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cerebNeuron0TB.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 2
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cerebellum - Neuron - Z000000TB
+alwaysZero on
+
+track cortexNeuron0TD
+type bigWig
+longLabel Cortex - Neuron - Z000000TD
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron0TD.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 3
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z000000TD
+alwaysZero on
+
+track cortexNeuron0TF
+type bigWig
+longLabel Cortex - Neuron - Z000000TF
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron0TF.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 4
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z000000TF
+alwaysZero on
+
+track cortexNeuron42F
+type bigWig
+longLabel Cortex - Neuron - Z0000042F
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron42F.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 5
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z0000042F
+alwaysZero on
+
+track cortexNeuron42H
+type bigWig
+longLabel Cortex - Neuron - Z0000042H
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron42H.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 6
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z0000042H
+alwaysZero on
+
+track cortexNeuron42J
+type bigWig
+longLabel Cortex - Neuron - Z0000042J
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron42J.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 7
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z0000042J
+alwaysZero on
+
+track cortexNeuron42K
+type bigWig
+longLabel Cortex - Neuron - Z0000042K
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron42K.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 8
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z0000042K
+alwaysZero on
+
+track cortexNeuron42M
+type bigWig
+longLabel Cortex - Neuron - Z0000042M
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron42M.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 9
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z0000042M
+alwaysZero on
+
+track cortexNeuron42P
+type bigWig
+longLabel Cortex - Neuron - Z0000042P
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/cortexNeuron42P.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 10
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Cortex - Neuron - Z0000042P
+alwaysZero on
+
+track neuron0TH
+type bigWig
+longLabel Neuron - Z000000TH
+viewLimits 0:1
+autoScale off
+color 138,43,226
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/neuron0TH.bw
+subGroups cellType=Neuron dataType=Replicate
+priority 11
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Neuron - Z000000TH
+alwaysZero on
+
+track oligodendMerged
+type bigWig
+longLabel Oligodendrocytes Merged Samples
+viewLimits 0:1
+autoScale off
+color 148,103,189
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/oligodendMerged.bw
+subGroups cellType=Oligodend dataType=Merged
+priority 12
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Oligodendrocytes Merged
+alwaysZero on
+
+track oligo0TK
+type bigWig
+longLabel Oligodendrocytes - Z000000TK
+viewLimits 0:1
+autoScale off
+color 148,103,189
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/oligo0TK.bw
+subGroups cellType=Oligodend dataType=Replicate
+priority 13
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Oligodendrocytes - Z000000TK
+alwaysZero on
+
+track oligo42E
+type bigWig
+longLabel Oligodendrocytes - Z0000042E
+viewLimits 0:1
+autoScale off
+color 148,103,189
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/oligo42E.bw
+subGroups cellType=Oligodend dataType=Replicate
+priority 14
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Oligodendrocytes - Z0000042E
+alwaysZero on
+
+track oligo42L
+type bigWig
+longLabel Oligodendrocytes - Z0000042L
+viewLimits 0:1
+autoScale off
+color 148,103,189
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/oligo42L.bw
+subGroups cellType=Oligodend dataType=Replicate
+priority 15
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Oligodendrocytes - Z0000042L
+alwaysZero on
+
+track oligo42N
+type bigWig
+longLabel Oligodendrocytes - Z0000042N
+viewLimits 0:1
+autoScale off
+color 148,103,189
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/oligo42N.bw
+subGroups cellType=Oligodend dataType=Replicate
+priority 16
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Oligodendrocytes - Z0000042N
+alwaysZero on
+
+track heartCardioMerged
+type bigWig
+longLabel Heart Cardiomyocytes Merged Samples
+viewLimits 0:1
+autoScale off
+color 220,20,60
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartCardioMerged.bw
+subGroups cellType=Heart-Cardio dataType=Merged
+priority 17
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart Cardiomyocytes Merged
+alwaysZero on
+
+track heartCardio44G
+type bigWig
+longLabel Heart - Cardiomyocyte - Z0000044G
+viewLimits 0:1
+autoScale off
+color 220,20,60
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartCardio44G.bw
+subGroups cellType=Heart-Cardio dataType=Replicate
+priority 18
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Cardiomyocyte - Z0000044G
+alwaysZero on
+
+track heartCardio44K
+type bigWig
+longLabel Heart - Cardiomyocyte - Z0000044K
+viewLimits 0:1
+autoScale off
+color 220,20,60
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartCardio44K.bw
+subGroups cellType=Heart-Cardio dataType=Replicate
+priority 19
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Cardiomyocyte - Z0000044K
+alwaysZero on
+
+track heartCardio44Q
+type bigWig
+longLabel Heart - Cardiomyocyte - Z0000044Q
+viewLimits 0:1
+autoScale off
+color 220,20,60
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartCardio44Q.bw
+subGroups cellType=Heart-Cardio dataType=Replicate
+priority 20
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Cardiomyocyte - Z0000044Q
+alwaysZero on
+
+track heartCardio44R
+type bigWig
+longLabel Heart - Cardiomyocyte - Z0000044R
+viewLimits 0:1
+autoScale off
+color 220,20,60
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartCardio44R.bw
+subGroups cellType=Heart-Cardio dataType=Replicate
+priority 21
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Cardiomyocyte - Z0000044R
+alwaysZero on
+
+track smoothMuscMerged
+type bigWig
+longLabel Smooth Muscle Merged Samples
+viewLimits 0:1
+autoScale off
+color 205,92,92
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smoothMuscMerged.bw
+subGroups cellType=Smooth-Musc dataType=Merged
+priority 22
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Smooth Muscle Merged
+alwaysZero on
+
+track aortaSmMusc41U
+type bigWig
+longLabel Aorta - Smooth Muscle - Z0000041U
+viewLimits 0:1
+autoScale off
+color 205,92,92
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/aortaSmMusc41U.bw
+subGroups cellType=Smooth-Musc dataType=Replicate
+priority 23
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Aorta - Smooth Muscle - Z0000041U
+alwaysZero on
+
+track bladderSmMusc41Z
+type bigWig
+longLabel Bladder - Smooth Muscle - Z0000041Z
+viewLimits 0:1
+autoScale off
+color 205,92,92
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderSmMusc41Z.bw
+subGroups cellType=Smooth-Musc dataType=Replicate
+priority 24
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder - Smooth Muscle - Z0000041Z
+alwaysZero on
+
+track coronArtSmMusc420
+type bigWig
+longLabel Coronary Artery - Smooth Muscle - Z00000420
+viewLimits 0:1
+autoScale off
+color 205,92,92
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/coronArtSmMusc420.bw
+subGroups cellType=Smooth-Musc dataType=Replicate
+priority 25
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Coronary Artery - Smooth Muscle - Z00000420
+alwaysZero on
+
+track lungBronSmMusc421
+type bigWig
+longLabel Lung Bronchus - Smooth Muscle - Z00000421
+viewLimits 0:1
+autoScale off
+color 205,92,92
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungBronSmMusc421.bw
+subGroups cellType=Smooth-Musc dataType=Replicate
+priority 26
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Bronchus - Smooth Muscle - Z00000421
+alwaysZero on
+
+track prostSmMusc41Y
+type bigWig
+longLabel Prostate - Smooth Muscle - Z0000041Y
+viewLimits 0:1
+autoScale off
+color 205,92,92
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/prostSmMusc41Y.bw
+subGroups cellType=Smooth-Musc dataType=Replicate
+priority 27
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Prostate - Smooth Muscle - Z0000041Y
+alwaysZero on
+
+track heartFibroMerged
+type bigWig
+longLabel Heart Fibroblasts Merged Samples
+viewLimits 0:1
+autoScale off
+color 178,34,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartFibroMerged.bw
+subGroups cellType=Heart-Fibro dataType=Merged
+priority 28
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart Fibroblasts Merged
+alwaysZero on
+
+track heartFibro41V
+type bigWig
+longLabel Heart - Fibroblasts - Z0000041V
+viewLimits 0:1
+autoScale off
+color 178,34,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartFibro41V.bw
+subGroups cellType=Heart-Fibro dataType=Replicate
+priority 29
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Fibroblasts - Z0000041V
+alwaysZero on
+
+track heartFibro41W
+type bigWig
+longLabel Heart - Fibroblasts - Z0000041W
+viewLimits 0:1
+autoScale off
+color 178,34,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartFibro41W.bw
+subGroups cellType=Heart-Fibro dataType=Replicate
+priority 30
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Fibroblasts - Z0000041W
+alwaysZero on
+
+track heartFibro41X
+type bigWig
+longLabel Heart - Fibroblasts - Z0000041X
+viewLimits 0:1
+autoScale off
+color 178,34,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartFibro41X.bw
+subGroups cellType=Heart-Fibro dataType=Replicate
+priority 31
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Fibroblasts - Z0000041X
+alwaysZero on
+
+track heartFibro43R
+type bigWig
+longLabel Heart - Fibroblasts - Z0000043R
+viewLimits 0:1
+autoScale off
+color 178,34,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/heartFibro43R.bw
+subGroups cellType=Heart-Fibro dataType=Replicate
+priority 32
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Heart - Fibroblasts - Z0000043R
+alwaysZero on
+
+track skelMuscMerged
+type bigWig
+longLabel Skeletal Muscle Merged Samples
+viewLimits 0:1
+autoScale off
+color 139,0,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/skelMuscMerged.bw
+subGroups cellType=Skeletal-Musc dataType=Merged
+priority 33
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Skeletal Muscle Merged
+alwaysZero on
+
+track skelMusc427
+type bigWig
+longLabel Skeletal - Muscle - Z00000427
+viewLimits 0:1
+autoScale off
+color 139,0,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/skelMusc427.bw
+subGroups cellType=Skeletal-Musc dataType=Replicate
+priority 34
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Skeletal - Muscle - Z00000427
+alwaysZero on
+
+track skelMusc429
+type bigWig
+longLabel Skeletal - Muscle - Z00000429
+viewLimits 0:1
+autoScale off
+color 139,0,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/skelMusc429.bw
+subGroups cellType=Skeletal-Musc dataType=Replicate
+priority 35
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Skeletal - Muscle - Z00000429
+alwaysZero on
+
+track adipocytesMerged
+type bigWig
+longLabel Adipocytes Merged Samples
+viewLimits 0:1
+autoScale off
+color 210,180,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/adipocytesMerged.bw
+subGroups cellType=Adipocytes dataType=Merged
+priority 36
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Adipocytes Merged
+alwaysZero on
+
+track adipo0T5
+type bigWig
+longLabel Adipocytes - Z000000T5
+viewLimits 0:1
+autoScale off
+color 210,180,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/adipo0T5.bw
+subGroups cellType=Adipocytes dataType=Replicate
+priority 37
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Adipocytes - Z000000T5
+alwaysZero on
+
+track adipo0T7
+type bigWig
+longLabel Adipocytes - Z000000T7
+viewLimits 0:1
+autoScale off
+color 210,180,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/adipo0T7.bw
+subGroups cellType=Adipocytes dataType=Replicate
+priority 38
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Adipocytes - Z000000T7
+alwaysZero on
+
+track adipo0T9
+type bigWig
+longLabel Adipocytes - Z000000T9
+viewLimits 0:1
+autoScale off
+color 210,180,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/adipo0T9.bw
+subGroups cellType=Adipocytes dataType=Replicate
+priority 39
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Adipocytes - Z000000T9
+alwaysZero on
+
+track endothelMerged
+type bigWig
+longLabel Endothelial Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/endothelMerged.bw
+subGroups cellType=Endothel dataType=Merged
+priority 40
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Endothelial Merged
+alwaysZero on
+
+track aortaEndoth422
+type bigWig
+longLabel Aorta - Endothel - Z00000422
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/aortaEndoth422.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 41
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Aorta - Endothel - Z00000422
+alwaysZero on
+
+track aortaEndoth43G
+type bigWig
+longLabel Aorta - Endothel - Z0000043G
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/aortaEndoth43G.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 42
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Aorta - Endothel - Z0000043G
+alwaysZero on
+
+track kidneyGlomEndoth0Q5
+type bigWig
+longLabel Kidney Glomerular - Endothel - Z000000Q5
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomEndoth0Q5.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 43
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Endothel - Z000000Q5
+alwaysZero on
+
+track kidneyGlomEndoth443
+type bigWig
+longLabel Kidney Glomerular - Endothel - Z00000443
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomEndoth443.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 44
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Endothel - Z00000443
+alwaysZero on
+
+track kidneyGlomEndoth45J
+type bigWig
+longLabel Kidney Glomerular - Endothel - Z0000045J
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomEndoth45J.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 45
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Endothel - Z0000045J
+alwaysZero on
+
+track kidneyTubEndoth0PX
+type bigWig
+longLabel Kidney Tubular - Endothel - Z000000PX
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyTubEndoth0PX.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 46
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Tubular - Endothel - Z000000PX
+alwaysZero on
+
+track kidneyTubEndoth0Q3
+type bigWig
+longLabel Kidney Tubular - Endothel - Z000000Q3
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyTubEndoth0Q3.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 47
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Tubular - Endothel - Z000000Q3
+alwaysZero on
+
+track kidneyTubEndoth42R
+type bigWig
+longLabel Kidney Tubular - Endothel - Z0000042R
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyTubEndoth42R.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 48
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Tubular - Endothel - Z0000042R
+alwaysZero on
+
+track liverEndothium0RB
+type bigWig
+longLabel Liver - Endothelium - Z000000RB
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverEndothium0RB.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 49
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Endothelium - Z000000RB
+alwaysZero on
+
+track lungAlveoEndoth0Q1
+type bigWig
+longLabel Lung Alveolar - Endothel - Z000000Q1
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEndoth0Q1.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 50
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Endothel - Z000000Q1
+alwaysZero on
+
+track lungAlveoEndoth0QK
+type bigWig
+longLabel Lung Alveolar - Endothel - Z000000QK
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEndoth0QK.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 51
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Endothel - Z000000QK
+alwaysZero on
+
+track lungAlveoEndoth45H
+type bigWig
+longLabel Lung Alveolar - Endothel - Z0000045H
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEndoth45H.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 52
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Endothel - Z0000045H
+alwaysZero on
+
+track pancEndoth42D
+type bigWig
+longLabel Pancreas - Endothel - Z0000042D
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancEndoth42D.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 53
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Endothel - Z0000042D
+alwaysZero on
+
+track pancEndoth42X
+type bigWig
+longLabel Pancreas - Endothel - Z0000042X
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancEndoth42X.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 54
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Endothel - Z0000042X
+alwaysZero on
+
+track pancEndoth430
+type bigWig
+longLabel Pancreas - Endothel - Z00000430
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancEndoth430.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 55
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Endothel - Z00000430
+alwaysZero on
+
+track pancIsletEndoth42Y
+type bigWig
+longLabel Pancreas Islet - Endothel - Z0000042Y
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancIsletEndoth42Y.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 56
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas Islet - Endothel - Z0000042Y
+alwaysZero on
+
+track saphVeinEndoth0RM
+type bigWig
+longLabel Saphenous Vein - Endothel - Z000000RM
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/saphVeinEndoth0RM.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 57
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Saphenous Vein - Endothel - Z000000RM
+alwaysZero on
+
+track saphVeinEndoth0S7
+type bigWig
+longLabel Saphenous Vein - Endothel - Z000000S7
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/saphVeinEndoth0S7.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 58
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Saphenous Vein - Endothel - Z000000S7
+alwaysZero on
+
+track saphVeinEndoth0SB
+type bigWig
+longLabel Saphenous Vein - Endothel - Z000000SB
+viewLimits 0:1
+autoScale off
+color 255,105,180
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/saphVeinEndoth0SB.bw
+subGroups cellType=Endothel dataType=Replicate
+priority 59
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Saphenous Vein - Endothel - Z000000SB
+alwaysZero on
+
+track bloodTMerged
+type bigWig
+longLabel Blood T Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTMerged.bw
+subGroups cellType=Blood-T dataType=Merged
+priority 60
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood T Cells Merged
+alwaysZero on
+
+track bloodTCd30TV
+type bigWig
+longLabel Blood - T CD3 - Z000000TV
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd30TV.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 61
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD3 - Z000000TV
+alwaysZero on
+
+track bloodTCd30UP
+type bigWig
+longLabel Blood - T CD3 - Z000000UP
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd30UP.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 62
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD3 - Z000000UP
+alwaysZero on
+
+track bloodTCd40TT
+type bigWig
+longLabel Blood - T CD4 - Z000000TT
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd40TT.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 63
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD4 - Z000000TT
+alwaysZero on
+
+track bloodTCd40U7
+type bigWig
+longLabel Blood - T CD4 - Z000000U7
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd40U7.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 64
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD4 - Z000000U7
+alwaysZero on
+
+track bloodTCd40UM
+type bigWig
+longLabel Blood - T CD4 - Z000000UM
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd40UM.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 65
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD4 - Z000000UM
+alwaysZero on
+
+track bloodTCd80TR
+type bigWig
+longLabel Blood - T CD8 - Z000000TR
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd80TR.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 66
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD8 - Z000000TR
+alwaysZero on
+
+track bloodTCd80U5
+type bigWig
+longLabel Blood - T CD8 - Z000000U5
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd80U5.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 67
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD8 - Z000000U5
+alwaysZero on
+
+track bloodTCd80UK
+type bigWig
+longLabel Blood - T CD8 - Z000000UK
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCd80UK.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 68
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CD8 - Z000000UK
+alwaysZero on
+
+track bloodTCenmemCd4417
+type bigWig
+longLabel Blood - T CenMem CD4 - Z00000417
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCenmemCd4417.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 69
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CenMem CD4 - Z00000417
+alwaysZero on
+
+track bloodTCenmemCd441D
+type bigWig
+longLabel Blood - T CenMem CD4 - Z0000041D
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCenmemCd441D.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 70
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CenMem CD4 - Z0000041D
+alwaysZero on
+
+track bloodTCenmemCd441N
+type bigWig
+longLabel Blood - T CenMem CD4 - Z0000041N
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTCenmemCd441N.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 71
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T CenMem CD4 - Z0000041N
+alwaysZero on
+
+track bloodTEffCd8419
+type bigWig
+longLabel Blood - T Eff CD8 - Z00000419
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffCd8419.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 72
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T Eff CD8 - Z00000419
+alwaysZero on
+
+track bloodTEffCd841F
+type bigWig
+longLabel Blood - T Eff CD8 - Z0000041F
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffCd841F.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 73
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T Eff CD8 - Z0000041F
+alwaysZero on
+
+track bloodTEffCd841Q
+type bigWig
+longLabel Blood - T Eff CD8 - Z0000041Q
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffCd841Q.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 74
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T Eff CD8 - Z0000041Q
+alwaysZero on
+
+track bloodTEffmemCd4416
+type bigWig
+longLabel Blood - T EffMem CD4 - Z00000416
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffmemCd4416.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 75
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T EffMem CD4 - Z00000416
+alwaysZero on
+
+track bloodTEffmemCd441C
+type bigWig
+longLabel Blood - T EffMem CD4 - Z0000041C
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffmemCd441C.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 76
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T EffMem CD4 - Z0000041C
+alwaysZero on
+
+track bloodTEffmemCd441M
+type bigWig
+longLabel Blood - T EffMem CD4 - Z0000041M
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffmemCd441M.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 77
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T EffMem CD4 - Z0000041M
+alwaysZero on
+
+track bloodTEffmemCd841A
+type bigWig
+longLabel Blood - T EffMem CD8 - Z0000041A
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffmemCd841A.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 78
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T EffMem CD8 - Z0000041A
+alwaysZero on
+
+track bloodTEffmemCd841G
+type bigWig
+longLabel Blood - T EffMem CD8 - Z0000041G
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTEffmemCd841G.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 79
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T EffMem CD8 - Z0000041G
+alwaysZero on
+
+track bloodTNaiveCd441E
+type bigWig
+longLabel Blood - T Naive CD4 - Z0000041E
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTNaiveCd441E.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 80
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T Naive CD4 - Z0000041E
+alwaysZero on
+
+track bloodTNaiveCd841B
+type bigWig
+longLabel Blood - T Naive CD8 - Z0000041B
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTNaiveCd841B.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 81
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T Naive CD8 - Z0000041B
+alwaysZero on
+
+track bloodTNaiveCd841H
+type bigWig
+longLabel Blood - T Naive CD8 - Z0000041H
+viewLimits 0:1
+autoScale off
+color 255,140,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodTNaiveCd841H.bw
+subGroups cellType=Blood-T dataType=Replicate
+priority 82
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - T Naive CD8 - Z0000041H
+alwaysZero on
+
+track bloodBMerged
+type bigWig
+longLabel Blood B Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,165,0
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodBMerged.bw
+subGroups cellType=Blood-B dataType=Merged
+priority 83
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood B Cells Merged
+alwaysZero on
+
+track bloodBMem41J
+type bigWig
+longLabel Blood - B Mem - Z0000041J
+viewLimits 0:1
+autoScale off
+color 255,165,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodBMem41J.bw
+subGroups cellType=Blood-B dataType=Replicate
+priority 84
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - B Mem - Z0000041J
+alwaysZero on
+
+track bloodBMem41K
+type bigWig
+longLabel Blood - B Mem - Z0000041K
+viewLimits 0:1
+autoScale off
+color 255,165,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodBMem41K.bw
+subGroups cellType=Blood-B dataType=Replicate
+priority 85
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - B Mem - Z0000041K
+alwaysZero on
+
+track bloodB0TX
+type bigWig
+longLabel Blood - B - Z000000TX
+viewLimits 0:1
+autoScale off
+color 255,165,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodB0TX.bw
+subGroups cellType=Blood-B dataType=Replicate
+priority 86
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - B - Z000000TX
+alwaysZero on
+
+track bloodB0UB
+type bigWig
+longLabel Blood - B - Z000000UB
+viewLimits 0:1
+autoScale off
+color 255,165,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodB0UB.bw
+subGroups cellType=Blood-B dataType=Replicate
+priority 87
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - B - Z000000UB
+alwaysZero on
+
+track bloodB0UR
+type bigWig
+longLabel Blood - B - Z000000UR
+viewLimits 0:1
+autoScale off
+color 255,165,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodB0UR.bw
+subGroups cellType=Blood-B dataType=Replicate
+priority 88
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - B - Z000000UR
+alwaysZero on
+
+track bloodNkMerged
+type bigWig
+longLabel Blood NK Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,127,80
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodNkMerged.bw
+subGroups cellType=Blood-NK dataType=Merged
+priority 89
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood NK Cells Merged
+alwaysZero on
+
+track bloodNk0TM
+type bigWig
+longLabel Blood - NK - Z000000TM
+viewLimits 0:1
+autoScale off
+color 255,127,80
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodNk0TM.bw
+subGroups cellType=Blood-NK dataType=Replicate
+priority 90
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - NK - Z000000TM
+alwaysZero on
+
+track bloodNk0U1
+type bigWig
+longLabel Blood - NK - Z000000U1
+viewLimits 0:1
+autoScale off
+color 255,127,80
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodNk0U1.bw
+subGroups cellType=Blood-NK dataType=Replicate
+priority 91
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - NK - Z000000U1
+alwaysZero on
+
+track bloodNk0UF
+type bigWig
+longLabel Blood - NK - Z000000UF
+viewLimits 0:1
+autoScale off
+color 255,127,80
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodNk0UF.bw
+subGroups cellType=Blood-NK dataType=Replicate
+priority 92
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - NK - Z000000UF
+alwaysZero on
+
+track bloodMonoMacroMerged
+type bigWig
+longLabel Blood Monocytes Macrophages Merged Samples
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodMonoMacroMerged.bw
+subGroups cellType=Blood-Mono-Macro dataType=Merged
+priority 93
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood Monocytes Macrophages Merged
+alwaysZero on
+
+track bloodMono0TP
+type bigWig
+longLabel Blood - Monocytes - Z000000TP
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodMono0TP.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 94
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - Monocytes - Z000000TP
+alwaysZero on
+
+track bloodMono0U3
+type bigWig
+longLabel Blood - Monocytes - Z000000U3
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodMono0U3.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 95
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - Monocytes - Z000000U3
+alwaysZero on
+
+track bloodMono0UH
+type bigWig
+longLabel Blood - Monocytes - Z000000UH
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodMono0UH.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 96
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - Monocytes - Z000000UH
+alwaysZero on
+
+track colonMacro444
+type bigWig
+longLabel Colon - Macrophages - Z00000444
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonMacro444.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 97
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon - Macrophages - Z00000444
+alwaysZero on
+
+track colonMacro446
+type bigWig
+longLabel Colon - Macrophages - Z00000446
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonMacro446.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 98
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon - Macrophages - Z00000446
+alwaysZero on
+
+track liverMacro43P
+type bigWig
+longLabel Liver - Macrophages - Z0000043P
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverMacro43P.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 99
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Macrophages - Z0000043P
+alwaysZero on
+
+track lungAlveoMacro448
+type bigWig
+longLabel Lung Alveolar - Macrophages - Z00000448
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoMacro448.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 100
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Macrophages - Z00000448
+alwaysZero on
+
+track lungAlveoMacro44C
+type bigWig
+longLabel Lung Alveolar - Macrophages - Z0000044C
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoMacro44C.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 101
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Macrophages - Z0000044C
+alwaysZero on
+
+track lungInterMacro447
+type bigWig
+longLabel Lung Interstitial - Macrophages - Z00000447
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungInterMacro447.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 102
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Interstitial - Macrophages - Z00000447
+alwaysZero on
+
+track lungInterMacro44D
+type bigWig
+longLabel Lung Interstitial - Macrophages - Z0000044D
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungInterMacro44D.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 103
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Interstitial - Macrophages - Z0000044D
+alwaysZero on
+
+track lungInterMacro44E
+type bigWig
+longLabel Lung Interstitial - Macrophages - Z0000044E
+viewLimits 0:1
+autoScale off
+color 244,164,96
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungInterMacro44E.bw
+subGroups cellType=Blood-Mono-Macro dataType=Replicate
+priority 104
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Interstitial - Macrophages - Z0000044E
+alwaysZero on
+
+track bloodGranulMerged
+type bigWig
+longLabel Blood Granulocytes Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,99,71
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodGranulMerged.bw
+subGroups cellType=Blood-Granul dataType=Merged
+priority 105
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood Granulocytes Merged
+alwaysZero on
+
+track bloodGran0TZ
+type bigWig
+longLabel Blood - Granulocytes - Z000000TZ
+viewLimits 0:1
+autoScale off
+color 255,99,71
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodGran0TZ.bw
+subGroups cellType=Blood-Granul dataType=Replicate
+priority 106
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - Granulocytes - Z000000TZ
+alwaysZero on
+
+track bloodGran0UD
+type bigWig
+longLabel Blood - Granulocytes - Z000000UD
+viewLimits 0:1
+autoScale off
+color 255,99,71
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodGran0UD.bw
+subGroups cellType=Blood-Granul dataType=Replicate
+priority 107
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - Granulocytes - Z000000UD
+alwaysZero on
+
+track bloodGran0UT
+type bigWig
+longLabel Blood - Granulocytes - Z000000UT
+viewLimits 0:1
+autoScale off
+color 255,99,71
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bloodGran0UT.bw
+subGroups cellType=Blood-Granul dataType=Replicate
+priority 108
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Blood - Granulocytes - Z000000UT
+alwaysZero on
+
+track erythProgMerged
+type bigWig
+longLabel Erythrocyte Progenitors Merged Samples
+viewLimits 0:1
+autoScale off
+color 205,51,51
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/erythProgMerged.bw
+subGroups cellType=Eryth-prog dataType=Merged
+priority 109
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Erythrocyte Progenitors Merged
+alwaysZero on
+
+track boneMarrowErythProg0RF
+type bigWig
+longLabel Bone marrow - Erythrocyte progenitors - Z000000RF
+viewLimits 0:1
+autoScale off
+color 205,51,51
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/boneMarrowErythProg0RF.bw
+subGroups cellType=Eryth-prog dataType=Replicate
+priority 110
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bone marrow - Erythrocyte progenitors - Z000000RF
+alwaysZero on
+
+track boneMarrowErythProg0RH
+type bigWig
+longLabel Bone marrow - Erythrocyte progenitors - Z000000RH
+viewLimits 0:1
+autoScale off
+color 205,51,51
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/boneMarrowErythProg0RH.bw
+subGroups cellType=Eryth-prog dataType=Replicate
+priority 111
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bone marrow - Erythrocyte progenitors - Z000000RH
+alwaysZero on
+
+track boneMarrowErythProg0RK
+type bigWig
+longLabel Bone marrow - Erythrocyte progenitors - Z000000RK
+viewLimits 0:1
+autoScale off
+color 205,51,51
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/boneMarrowErythProg0RK.bw
+subGroups cellType=Eryth-prog dataType=Replicate
+priority 112
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bone marrow - Erythrocyte progenitors - Z000000RK
+alwaysZero on
+
+track headNeckEpMerged
+type bigWig
+longLabel Head Neck Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/headNeckEpMerged.bw
+subGroups cellType=Head-Neck-Ep dataType=Merged
+priority 113
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Head Neck Epithelium Merged
+alwaysZero on
+
+track esophEp0PZ
+type bigWig
+longLabel Esophagus - Epithelial - Z000000PZ
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/esophEp0PZ.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 114
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Esophagus - Epithelial - Z000000PZ
+alwaysZero on
+
+track esophEp426
+type bigWig
+longLabel Esophagus - Epithelial - Z00000426
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/esophEp426.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 115
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Esophagus - Epithelial - Z00000426
+alwaysZero on
+
+track larynxEp0QB
+type bigWig
+longLabel Larynx - Epithelial - Z000000QB
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/larynxEp0QB.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 116
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Larynx - Epithelial - Z000000QB
+alwaysZero on
+
+track pharynxEp44A
+type bigWig
+longLabel Pharynx - Epithelial - Z0000044A
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pharynxEp44A.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 117
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pharynx - Epithelial - Z0000044A
+alwaysZero on
+
+track tongueEp0QV
+type bigWig
+longLabel Tongue - Epithelial - Z000000QV
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tongueEp0QV.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 118
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tongue - Epithelial - Z000000QV
+alwaysZero on
+
+track tongueEp449
+type bigWig
+longLabel Tongue - Epithelial - Z00000449
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tongueEp449.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 119
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tongue - Epithelial - Z00000449
+alwaysZero on
+
+track tongueEp44F
+type bigWig
+longLabel Tongue - Epithelial - Z0000044F
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tongueEp44F.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 120
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tongue - Epithelial - Z0000044F
+alwaysZero on
+
+track tongueBaseEp44B
+type bigWig
+longLabel Tongue base - Epithelial - Z0000044B
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tongueBaseEp44B.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 121
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tongue base - Epithelial - Z0000044B
+alwaysZero on
+
+track tonsilPalatineEp0QF
+type bigWig
+longLabel Tonsil Palatine - Epithelial - Z000000QF
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tonsilPalatineEp0QF.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 122
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tonsil Palatine - Epithelial - Z000000QF
+alwaysZero on
+
+track tonsilPalatineEp0RP
+type bigWig
+longLabel Tonsil Palatine - Epithelial - Z000000RP
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tonsilPalatineEp0RP.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 123
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tonsil Palatine - Epithelial - Z000000RP
+alwaysZero on
+
+track tonsilPalatineEp0RR
+type bigWig
+longLabel Tonsil Palatine - Epithelial - Z000000RR
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tonsilPalatineEp0RR.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 124
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tonsil Palatine - Epithelial - Z000000RR
+alwaysZero on
+
+track tonsilPharyngealEp0Q9
+type bigWig
+longLabel Tonsil Pharyngeal - Epithelial - Z000000Q9
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tonsilPharyngealEp0Q9.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 125
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tonsil Pharyngeal - Epithelial - Z000000Q9
+alwaysZero on
+
+track tonsilPharyngealEp0S1
+type bigWig
+longLabel Tonsil Pharyngeal - Epithelial - Z000000S1
+viewLimits 0:1
+autoScale off
+color 0,206,209
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/tonsilPharyngealEp0S1.bw
+subGroups cellType=Head-Neck-Ep dataType=Replicate
+priority 126
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Tonsil Pharyngeal - Epithelial - Z000000S1
+alwaysZero on
+
+track lungBronEpMerged
+type bigWig
+longLabel Lung Bronchus Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 100,149,237
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungBronEpMerged.bw
+subGroups cellType=Lung-Ep-Bron dataType=Merged
+priority 127
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Bronchus Epithelium Merged
+alwaysZero on
+
+track lungBronEp0QD
+type bigWig
+longLabel Lung Bronchus - Epithelial - Z000000QD
+viewLimits 0:1
+autoScale off
+color 100,149,237
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungBronEp0QD.bw
+subGroups cellType=Lung-Ep-Bron dataType=Replicate
+priority 128
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Bronchus - Epithelial - Z000000QD
+alwaysZero on
+
+track lungBronEp0RZ
+type bigWig
+longLabel Lung Bronchus - Epithelial - Z000000RZ
+viewLimits 0:1
+autoScale off
+color 100,149,237
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungBronEp0RZ.bw
+subGroups cellType=Lung-Ep-Bron dataType=Replicate
+priority 129
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Bronchus - Epithelial - Z000000RZ
+alwaysZero on
+
+track lungBronEp0S5
+type bigWig
+longLabel Lung Bronchus - Epithelial - Z000000S5
+viewLimits 0:1
+autoScale off
+color 100,149,237
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungBronEp0S5.bw
+subGroups cellType=Lung-Ep-Bron dataType=Replicate
+priority 130
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Bronchus - Epithelial - Z000000S5
+alwaysZero on
+
+track lungAlveoEpMerged
+type bigWig
+longLabel Lung Alveolar Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 135,206,250
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEpMerged.bw
+subGroups cellType=Lung-Ep-Alveo dataType=Merged
+priority 131
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar Epithelium Merged
+alwaysZero on
+
+track lungAlveoEp0T1
+type bigWig
+longLabel Lung Alveolar - Epithelial - Z000000T1
+viewLimits 0:1
+autoScale off
+color 135,206,250
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEp0T1.bw
+subGroups cellType=Lung-Ep-Alveo dataType=Replicate
+priority 132
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Epithelial - Z000000T1
+alwaysZero on
+
+track lungAlveoEp0VC
+type bigWig
+longLabel Lung Alveolar - Epithelial - Z000000VC
+viewLimits 0:1
+autoScale off
+color 135,206,250
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEp0VC.bw
+subGroups cellType=Lung-Ep-Alveo dataType=Replicate
+priority 133
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Epithelial - Z000000VC
+alwaysZero on
+
+track lungAlveoEp0VE
+type bigWig
+longLabel Lung Alveolar - Epithelial - Z000000VE
+viewLimits 0:1
+autoScale off
+color 135,206,250
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungAlveoEp0VE.bw
+subGroups cellType=Lung-Ep-Alveo dataType=Replicate
+priority 134
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung Alveolar - Epithelial - Z000000VE
+alwaysZero on
+
+track lungPleura42B
+type bigWig
+longLabel Lung - Pleura - Z0000042B
+viewLimits 0:1
+autoScale off
+color 135,206,250
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/lungPleura42B.bw
+subGroups cellType=Lung-Ep-Alveo dataType=Replicate
+priority 135
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Lung - Pleura - Z0000042B
+alwaysZero on
+
+track breastBasalEpMerged
+type bigWig
+longLabel Breast Basal Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 219,112,147
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastBasalEpMerged.bw
+subGroups cellType=Breast-Basal-Ep dataType=Merged
+priority 136
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Basal Epithelium Merged
+alwaysZero on
+
+track breastBasalEp0V6
+type bigWig
+longLabel Breast Basal - Epithelial - Z000000V6
+viewLimits 0:1
+autoScale off
+color 219,112,147
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastBasalEp0V6.bw
+subGroups cellType=Breast-Basal-Ep dataType=Replicate
+priority 137
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Basal - Epithelial - Z000000V6
+alwaysZero on
+
+track breastBasalEp0VG
+type bigWig
+longLabel Breast Basal - Epithelial - Z000000VG
+viewLimits 0:1
+autoScale off
+color 219,112,147
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastBasalEp0VG.bw
+subGroups cellType=Breast-Basal-Ep dataType=Replicate
+priority 138
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Basal - Epithelial - Z000000VG
+alwaysZero on
+
+track breastBasalEp0VL
+type bigWig
+longLabel Breast Basal - Epithelial - Z000000VL
+viewLimits 0:1
+autoScale off
+color 219,112,147
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastBasalEp0VL.bw
+subGroups cellType=Breast-Basal-Ep dataType=Replicate
+priority 139
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Basal - Epithelial - Z000000VL
+alwaysZero on
+
+track breastBasalEp43E
+type bigWig
+longLabel Breast Basal - Epithelial - Z0000043E
+viewLimits 0:1
+autoScale off
+color 219,112,147
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastBasalEp43E.bw
+subGroups cellType=Breast-Basal-Ep dataType=Replicate
+priority 140
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Basal - Epithelial - Z0000043E
+alwaysZero on
+
+track breastLuminalEpMerged
+type bigWig
+longLabel Breast Luminal Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,182,193
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastLuminalEpMerged.bw
+subGroups cellType=Breast-Luminal-Ep dataType=Merged
+priority 141
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Luminal Epithelium Merged
+alwaysZero on
+
+track breastLumEp0V2
+type bigWig
+longLabel Breast Luminal - Epithelial - Z000000V2
+viewLimits 0:1
+autoScale off
+color 255,182,193
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastLumEp0V2.bw
+subGroups cellType=Breast-Luminal-Ep dataType=Replicate
+priority 142
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Luminal - Epithelial - Z000000V2
+alwaysZero on
+
+track breastLumEp0VJ
+type bigWig
+longLabel Breast Luminal - Epithelial - Z000000VJ
+viewLimits 0:1
+autoScale off
+color 255,182,193
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastLumEp0VJ.bw
+subGroups cellType=Breast-Luminal-Ep dataType=Replicate
+priority 143
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Luminal - Epithelial - Z000000VJ
+alwaysZero on
+
+track breastLumEp0VN
+type bigWig
+longLabel Breast Luminal - Epithelial - Z000000VN
+viewLimits 0:1
+autoScale off
+color 255,182,193
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/breastLumEp0VN.bw
+subGroups cellType=Breast-Luminal-Ep dataType=Replicate
+priority 144
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Breast Luminal - Epithelial - Z000000VN
+alwaysZero on
+
+track pancAlphaMerged
+type bigWig
+longLabel Pancreas Alpha Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 218,165,32
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAlphaMerged.bw
+subGroups cellType=Pancreas-Alpha dataType=Merged
+priority 145
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas Alpha Cells Merged
+alwaysZero on
+
+track pancAlpha453
+type bigWig
+longLabel Pancreas - Alpha - Z00000453
+viewLimits 0:1
+autoScale off
+color 218,165,32
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAlpha453.bw
+subGroups cellType=Pancreas-Alpha dataType=Replicate
+priority 146
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Alpha - Z00000453
+alwaysZero on
+
+track pancAlpha456
+type bigWig
+longLabel Pancreas - Alpha - Z00000456
+viewLimits 0:1
+autoScale off
+color 218,165,32
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAlpha456.bw
+subGroups cellType=Pancreas-Alpha dataType=Replicate
+priority 147
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Alpha - Z00000456
+alwaysZero on
+
+track pancAlpha459
+type bigWig
+longLabel Pancreas - Alpha - Z00000459
+viewLimits 0:1
+autoScale off
+color 218,165,32
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAlpha459.bw
+subGroups cellType=Pancreas-Alpha dataType=Replicate
+priority 148
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Alpha - Z00000459
+alwaysZero on
+
+track pancBetaMerged
+type bigWig
+longLabel Pancreas Beta Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,215,0
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancBetaMerged.bw
+subGroups cellType=Pancreas-Beta dataType=Merged
+priority 149
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas Beta Cells Merged
+alwaysZero on
+
+track pancBeta452
+type bigWig
+longLabel Pancreas - Beta - Z00000452
+viewLimits 0:1
+autoScale off
+color 255,215,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancBeta452.bw
+subGroups cellType=Pancreas-Beta dataType=Replicate
+priority 150
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Beta - Z00000452
+alwaysZero on
+
+track pancBeta455
+type bigWig
+longLabel Pancreas - Beta - Z00000455
+viewLimits 0:1
+autoScale off
+color 255,215,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancBeta455.bw
+subGroups cellType=Pancreas-Beta dataType=Replicate
+priority 151
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Beta - Z00000455
+alwaysZero on
+
+track pancBeta458
+type bigWig
+longLabel Pancreas - Beta - Z00000458
+viewLimits 0:1
+autoScale off
+color 255,215,0
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancBeta458.bw
+subGroups cellType=Pancreas-Beta dataType=Replicate
+priority 152
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Beta - Z00000458
+alwaysZero on
+
+track pancDeltaMerged
+type bigWig
+longLabel Pancreas Delta Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 240,230,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDeltaMerged.bw
+subGroups cellType=Pancreas-Delta dataType=Merged
+priority 153
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas Delta Cells Merged
+alwaysZero on
+
+track pancDelta451
+type bigWig
+longLabel Pancreas - Delta - Z00000451
+viewLimits 0:1
+autoScale off
+color 240,230,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDelta451.bw
+subGroups cellType=Pancreas-Delta dataType=Replicate
+priority 154
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Delta - Z00000451
+alwaysZero on
+
+track pancDelta454
+type bigWig
+longLabel Pancreas - Delta - Z00000454
+viewLimits 0:1
+autoScale off
+color 240,230,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDelta454.bw
+subGroups cellType=Pancreas-Delta dataType=Replicate
+priority 155
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Delta - Z00000454
+alwaysZero on
+
+track pancDelta457
+type bigWig
+longLabel Pancreas - Delta - Z00000457
+viewLimits 0:1
+autoScale off
+color 240,230,140
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDelta457.bw
+subGroups cellType=Pancreas-Delta dataType=Replicate
+priority 156
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Delta - Z00000457
+alwaysZero on
+
+track pancAcinarMerged
+type bigWig
+longLabel Pancreas Acinar Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 189,183,107
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAcinarMerged.bw
+subGroups cellType=Pancreas-Acinar dataType=Merged
+priority 157
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas Acinar Cells Merged
+alwaysZero on
+
+track pancAcinar0QX
+type bigWig
+longLabel Pancreas - Acinar - Z000000QX
+viewLimits 0:1
+autoScale off
+color 189,183,107
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAcinar0QX.bw
+subGroups cellType=Pancreas-Acinar dataType=Replicate
+priority 158
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Acinar - Z000000QX
+alwaysZero on
+
+track pancAcinar43W
+type bigWig
+longLabel Pancreas - Acinar - Z0000043W
+viewLimits 0:1
+autoScale off
+color 189,183,107
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAcinar43W.bw
+subGroups cellType=Pancreas-Acinar dataType=Replicate
+priority 159
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Acinar - Z0000043W
+alwaysZero on
+
+track pancAcinar43X
+type bigWig
+longLabel Pancreas - Acinar - Z0000043X
+viewLimits 0:1
+autoScale off
+color 189,183,107
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAcinar43X.bw
+subGroups cellType=Pancreas-Acinar dataType=Replicate
+priority 160
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Acinar - Z0000043X
+alwaysZero on
+
+track pancAcinar43Y
+type bigWig
+longLabel Pancreas - Acinar - Z0000043Y
+viewLimits 0:1
+autoScale off
+color 189,183,107
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancAcinar43Y.bw
+subGroups cellType=Pancreas-Acinar dataType=Replicate
+priority 161
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Acinar - Z0000043Y
+alwaysZero on
+
+track pancDuctMerged
+type bigWig
+longLabel Pancreas Duct Cells Merged Samples
+viewLimits 0:1
+autoScale off
+color 238,232,170
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDuctMerged.bw
+subGroups cellType=Pancreas-Duct dataType=Merged
+priority 162
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas Duct Cells Merged
+alwaysZero on
+
+track pancDuct0QZ
+type bigWig
+longLabel Pancreas - Duct - Z000000QZ
+viewLimits 0:1
+autoScale off
+color 238,232,170
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDuct0QZ.bw
+subGroups cellType=Pancreas-Duct dataType=Replicate
+priority 163
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Duct - Z000000QZ
+alwaysZero on
+
+track pancDuct43T
+type bigWig
+longLabel Pancreas - Duct - Z0000043T
+viewLimits 0:1
+autoScale off
+color 238,232,170
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDuct43T.bw
+subGroups cellType=Pancreas-Duct dataType=Replicate
+priority 164
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Duct - Z0000043T
+alwaysZero on
+
+track pancDuct43U
+type bigWig
+longLabel Pancreas - Duct - Z0000043U
+viewLimits 0:1
+autoScale off
+color 238,232,170
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDuct43U.bw
+subGroups cellType=Pancreas-Duct dataType=Replicate
+priority 165
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Duct - Z0000043U
+alwaysZero on
+
+track pancDuct43V
+type bigWig
+longLabel Pancreas - Duct - Z0000043V
+viewLimits 0:1
+autoScale off
+color 238,232,170
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/pancDuct43V.bw
+subGroups cellType=Pancreas-Duct dataType=Replicate
+priority 166
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Pancreas - Duct - Z0000043V
+alwaysZero on
+
+track liverHepMerged
+type bigWig
+longLabel Liver Hepatocytes Merged Samples
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHepMerged.bw
+subGroups cellType=Liver-Hep dataType=Merged
+priority 167
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver Hepatocytes Merged
+alwaysZero on
+
+track liverHep0R3
+type bigWig
+longLabel Liver - Hepatocytes - Z000000R3
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHep0R3.bw
+subGroups cellType=Liver-Hep dataType=Replicate
+priority 168
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Hepatocytes - Z000000R3
+alwaysZero on
+
+track liverHep0T3
+type bigWig
+longLabel Liver - Hepatocytes - Z000000T3
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHep0T3.bw
+subGroups cellType=Liver-Hep dataType=Replicate
+priority 169
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Hepatocytes - Z000000T3
+alwaysZero on
+
+track liverHep431
+type bigWig
+longLabel Liver - Hepatocytes - Z00000431
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHep431.bw
+subGroups cellType=Liver-Hep dataType=Replicate
+priority 170
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Hepatocytes - Z00000431
+alwaysZero on
+
+track liverHep43Q
+type bigWig
+longLabel Liver - Hepatocytes - Z0000043Q
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHep43Q.bw
+subGroups cellType=Liver-Hep dataType=Replicate
+priority 171
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Hepatocytes - Z0000043Q
+alwaysZero on
+
+track liverHep44H
+type bigWig
+longLabel Liver - Hepatocytes - Z0000044H
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHep44H.bw
+subGroups cellType=Liver-Hep dataType=Replicate
+priority 172
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Hepatocytes - Z0000044H
+alwaysZero on
+
+track liverHep44M
+type bigWig
+longLabel Liver - Hepatocytes - Z0000044M
+viewLimits 0:1
+autoScale off
+color 139,69,19
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/liverHep44M.bw
+subGroups cellType=Liver-Hep dataType=Replicate
+priority 173
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Liver - Hepatocytes - Z0000044M
+alwaysZero on
+
+track kidneyEpMerged
+type bigWig
+longLabel Kidney Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyEpMerged.bw
+subGroups cellType=Kidney-Ep dataType=Merged
+priority 174
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Epithelium Merged
+alwaysZero on
+
+track kidneyGlomEp45K
+type bigWig
+longLabel Kidney Glomerular - Epithelial - Z0000045K
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomEp45K.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 175
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Epithelial - Z0000045K
+alwaysZero on
+
+track kidneyGlomEp45L
+type bigWig
+longLabel Kidney Glomerular - Epithelial - Z0000045L
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomEp45L.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 176
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Epithelial - Z0000045L
+alwaysZero on
+
+track kidneyGlomPodo42W
+type bigWig
+longLabel Kidney Glomerular - Podocytes - Z0000042W
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomPodo42W.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 177
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Podocytes - Z0000042W
+alwaysZero on
+
+track kidneyGlomPodo441
+type bigWig
+longLabel Kidney Glomerular - Podocytes - Z00000441
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomPodo441.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 178
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Podocytes - Z00000441
+alwaysZero on
+
+track kidneyGlomPodo442
+type bigWig
+longLabel Kidney Glomerular - Podocytes - Z00000442
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyGlomPodo442.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 179
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Glomerular - Podocytes - Z00000442
+alwaysZero on
+
+track kidneyTubEp0QH
+type bigWig
+longLabel Kidney Tubular - Epithelial - Z000000QH
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyTubEp0QH.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 180
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Tubular - Epithelial - Z000000QH
+alwaysZero on
+
+track kidneyTubEp43Z
+type bigWig
+longLabel Kidney Tubular - Epithelial - Z0000043Z
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyTubEp43Z.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 181
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Tubular - Epithelial - Z0000043Z
+alwaysZero on
+
+track kidneyTubEp440
+type bigWig
+longLabel Kidney Tubular - Epithelial - Z00000440
+viewLimits 0:1
+autoScale off
+color 255,140,105
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/kidneyTubEp440.bw
+subGroups cellType=Kidney-Ep dataType=Replicate
+priority 182
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Kidney Tubular - Epithelial - Z00000440
+alwaysZero on
+
+track gastricEpMerged
+type bigWig
+longLabel Gastric Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastricEpMerged.bw
+subGroups cellType=Gastric-Ep dataType=Merged
+priority 183
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric Epithelium Merged
+alwaysZero on
+
+track gastAntEndo437
+type bigWig
+longLabel Gastric antrum - Endocrine - Z00000437
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastAntEndo437.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 184
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric antrum - Endocrine - Z00000437
+alwaysZero on
+
+track gastAntEndo438
+type bigWig
+longLabel Gastric antrum - Endocrine - Z00000438
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastAntEndo438.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 185
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric antrum - Endocrine - Z00000438
+alwaysZero on
+
+track gastAntEp0SF
+type bigWig
+longLabel Gastric antrum - Epithelial - Z000000SF
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastAntEp0SF.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 186
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric antrum - Epithelial - Z000000SF
+alwaysZero on
+
+track gastAntEp0SP
+type bigWig
+longLabel Gastric antrum - Epithelial - Z000000SP
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastAntEp0SP.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 187
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric antrum - Epithelial - Z000000SP
+alwaysZero on
+
+track gastAntEp0SR
+type bigWig
+longLabel Gastric antrum - Epithelial - Z000000SR
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastAntEp0SR.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 188
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric antrum - Epithelial - Z000000SR
+alwaysZero on
+
+track gastBodyEp0SD
+type bigWig
+longLabel Gastric body - Epithelial - Z000000SD
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastBodyEp0SD.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 189
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric body - Epithelial - Z000000SD
+alwaysZero on
+
+track gastBodyEp0SM
+type bigWig
+longLabel Gastric body - Epithelial - Z000000SM
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastBodyEp0SM.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 190
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric body - Epithelial - Z000000SM
+alwaysZero on
+
+track gastBodyEp0ST
+type bigWig
+longLabel Gastric body - Epithelial - Z000000ST
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastBodyEp0ST.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 191
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric body - Epithelial - Z000000ST
+alwaysZero on
+
+track gastFundEp0RX
+type bigWig
+longLabel Gastric fundus - Epithelial - Z000000RX
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastFundEp0RX.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 192
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric fundus - Epithelial - Z000000RX
+alwaysZero on
+
+track gastFundEp0SK
+type bigWig
+longLabel Gastric fundus - Epithelial - Z000000SK
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastFundEp0SK.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 193
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric fundus - Epithelial - Z000000SK
+alwaysZero on
+
+track gastFundEp0SV
+type bigWig
+longLabel Gastric fundus - Epithelial - Z000000SV
+viewLimits 0:1
+autoScale off
+color 60,179,113
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gastFundEp0SV.bw
+subGroups cellType=Gastric-Ep dataType=Replicate
+priority 194
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gastric fundus - Epithelial - Z000000SV
+alwaysZero on
+
+track smallIntEpMerged
+type bigWig
+longLabel Small Intestine Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 46,139,87
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smallIntEpMerged.bw
+subGroups cellType=Small-Int-Ep dataType=Merged
+priority 195
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Small Intestine Epithelium Merged
+alwaysZero on
+
+track smIntEndo436
+type bigWig
+longLabel Small int - Endocrine - Z00000436
+viewLimits 0:1
+autoScale off
+color 46,139,87
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smIntEndo436.bw
+subGroups cellType=Small-Int-Ep dataType=Replicate
+priority 196
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Small int - Endocrine - Z00000436
+alwaysZero on
+
+track smIntEp0RT
+type bigWig
+longLabel Small int - Epithelial - Z000000RT
+viewLimits 0:1
+autoScale off
+color 46,139,87
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smIntEp0RT.bw
+subGroups cellType=Small-Int-Ep dataType=Replicate
+priority 197
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Small int - Epithelial - Z000000RT
+alwaysZero on
+
+track smIntEp0UW
+type bigWig
+longLabel Small int - Epithelial - Z000000UW
+viewLimits 0:1
+autoScale off
+color 46,139,87
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smIntEp0UW.bw
+subGroups cellType=Small-Int-Ep dataType=Replicate
+priority 198
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Small int - Epithelial - Z000000UW
+alwaysZero on
+
+track smIntEp0UY
+type bigWig
+longLabel Small int - Epithelial - Z000000UY
+viewLimits 0:1
+autoScale off
+color 46,139,87
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smIntEp0UY.bw
+subGroups cellType=Small-Int-Ep dataType=Replicate
+priority 199
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Small int - Epithelial - Z000000UY
+alwaysZero on
+
+track smIntEp42V
+type bigWig
+longLabel Small int - Epithelial - Z0000042V
+viewLimits 0:1
+autoScale off
+color 46,139,87
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/smIntEp42V.bw
+subGroups cellType=Small-Int-Ep dataType=Replicate
+priority 200
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Small int - Epithelial - Z0000042V
+alwaysZero on
+
+track colonEpMerged
+type bigWig
+longLabel Colon Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals on
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonEpMerged.bw
+subGroups cellType=Colon-Ep dataType=Merged
+priority 201
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Epithelium Merged
+alwaysZero on
+
+track colonLeftEndo44J
+type bigWig
+longLabel Colon Left - Endocrine - Z0000044J
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonLeftEndo44J.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 202
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Left - Endocrine - Z0000044J
+alwaysZero on
+
+track colonLeftEndo44T
+type bigWig
+longLabel Colon Left - Endocrine - Z0000044T
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonLeftEndo44T.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 203
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Left - Endocrine - Z0000044T
+alwaysZero on
+
+track colonLeftEp0VA
+type bigWig
+longLabel Colon Left - Epithelial - Z000000VA
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonLeftEp0VA.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 204
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Left - Epithelial - Z000000VA
+alwaysZero on
+
+track colonLeftEp43B
+type bigWig
+longLabel Colon Left - Epithelial - Z0000043B
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonLeftEp43B.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 205
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Left - Epithelial - Z0000043B
+alwaysZero on
+
+track colonLeftEp43C
+type bigWig
+longLabel Colon Left - Epithelial - Z0000043C
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonLeftEp43C.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 206
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Left - Epithelial - Z0000043C
+alwaysZero on
+
+track colonRightEndo44S
+type bigWig
+longLabel Colon Right - Endocrine - Z0000044S
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonRightEndo44S.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 207
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Right - Endocrine - Z0000044S
+alwaysZero on
+
+track colonRightEp0V0
+type bigWig
+longLabel Colon Right - Epithelial - Z000000V0
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonRightEp0V0.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 208
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Right - Epithelial - Z000000V0
+alwaysZero on
+
+track colonRightEp0V8
+type bigWig
+longLabel Colon Right - Epithelial - Z000000V8
+viewLimits 0:1
+autoScale off
+color 34,139,34
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonRightEp0V8.bw
+subGroups cellType=Colon-Ep dataType=Replicate
+priority 209
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Right - Epithelial - Z000000V8
+alwaysZero on
+
+track bladderEpMerged
+type bigWig
+longLabel Bladder Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 186,85,211
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderEpMerged.bw
+subGroups cellType=Bladder-Ep dataType=Merged
+priority 210
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder Epithelium Merged
+alwaysZero on
+
+track bladderEp0QM
+type bigWig
+longLabel Bladder - Epithelial - Z000000QM
+viewLimits 0:1
+autoScale off
+color 186,85,211
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderEp0QM.bw
+subGroups cellType=Bladder-Ep dataType=Replicate
+priority 211
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder - Epithelial - Z000000QM
+alwaysZero on
+
+track bladderEp0QP
+type bigWig
+longLabel Bladder - Epithelial - Z000000QP
+viewLimits 0:1
+autoScale off
+color 186,85,211
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderEp0QP.bw
+subGroups cellType=Bladder-Ep dataType=Replicate
+priority 212
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder - Epithelial - Z000000QP
+alwaysZero on
+
+track bladderEp43F
+type bigWig
+longLabel Bladder - Epithelial - Z0000043F
+viewLimits 0:1
+autoScale off
+color 186,85,211
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderEp43F.bw
+subGroups cellType=Bladder-Ep dataType=Replicate
+priority 213
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder - Epithelial - Z0000043F
+alwaysZero on
+
+track bladderEp44L
+type bigWig
+longLabel Bladder - Epithelial - Z0000044L
+viewLimits 0:1
+autoScale off
+color 186,85,211
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderEp44L.bw
+subGroups cellType=Bladder-Ep dataType=Replicate
+priority 214
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder - Epithelial - Z0000044L
+alwaysZero on
+
+track bladderEp450
+type bigWig
+longLabel Bladder - Epithelial - Z00000450
+viewLimits 0:1
+autoScale off
+color 186,85,211
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/bladderEp450.bw
+subGroups cellType=Bladder-Ep dataType=Replicate
+priority 215
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bladder - Epithelial - Z00000450
+alwaysZero on
+
+track prostateEpMerged
+type bigWig
+longLabel Prostate Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 153,50,204
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/prostateEpMerged.bw
+subGroups cellType=Prostate-Ep dataType=Merged
+priority 216
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Prostate Epithelium Merged
+alwaysZero on
+
+track prostEp0RV
+type bigWig
+longLabel Prostate - Epithelial - Z000000RV
+viewLimits 0:1
+autoScale off
+color 153,50,204
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/prostEp0RV.bw
+subGroups cellType=Prostate-Ep dataType=Replicate
+priority 217
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Prostate - Epithelial - Z000000RV
+alwaysZero on
+
+track prostEp0S3
+type bigWig
+longLabel Prostate - Epithelial - Z000000S3
+viewLimits 0:1
+autoScale off
+color 153,50,204
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/prostEp0S3.bw
+subGroups cellType=Prostate-Ep dataType=Replicate
+priority 218
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Prostate - Epithelial - Z000000S3
+alwaysZero on
+
+track prostEp45F
+type bigWig
+longLabel Prostate - Epithelial - Z0000045F
+viewLimits 0:1
+autoScale off
+color 153,50,204
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/prostEp45F.bw
+subGroups cellType=Prostate-Ep dataType=Replicate
+priority 219
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Prostate - Epithelial - Z0000045F
+alwaysZero on
+
+track prostEp45G
+type bigWig
+longLabel Prostate - Epithelial - Z0000045G
+viewLimits 0:1
+autoScale off
+color 153,50,204
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/prostEp45G.bw
+subGroups cellType=Prostate-Ep dataType=Replicate
+priority 220
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Prostate - Epithelial - Z0000045G
+alwaysZero on
+
+track fallopianEpMerged
+type bigWig
+longLabel Fallopian Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 218,112,214
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/fallopianEpMerged.bw
+subGroups cellType=Fallopian-Ep dataType=Merged
+priority 221
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Fallopian Epithelium Merged
+alwaysZero on
+
+track fallopEp0Q7
+type bigWig
+longLabel Fallopian - Epithelial - Z000000Q7
+viewLimits 0:1
+autoScale off
+color 218,112,214
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/fallopEp0Q7.bw
+subGroups cellType=Fallopian-Ep dataType=Replicate
+priority 222
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Fallopian - Epithelial - Z000000Q7
+alwaysZero on
+
+track fallopEp0S9
+type bigWig
+longLabel Fallopian - Epithelial - Z000000S9
+viewLimits 0:1
+autoScale off
+color 218,112,214
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/fallopEp0S9.bw
+subGroups cellType=Fallopian-Ep dataType=Replicate
+priority 223
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Fallopian - Epithelial - Z000000S9
+alwaysZero on
+
+track fallopEp0UV
+type bigWig
+longLabel Fallopian - Epithelial - Z000000UV
+viewLimits 0:1
+autoScale off
+color 218,112,214
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/fallopEp0UV.bw
+subGroups cellType=Fallopian-Ep dataType=Replicate
+priority 224
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Fallopian - Epithelial - Z000000UV
+alwaysZero on
+
+track ovaryEpMerged
+type bigWig
+longLabel Ovary Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 221,160,221
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/ovaryEpMerged.bw
+subGroups cellType=Ovary-Ep dataType=Merged
+priority 225
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Ovary Epithelium Merged
+alwaysZero on
+
+track endomEp434
+type bigWig
+longLabel Endometrium - Epithelial - Z00000434
+viewLimits 0:1
+autoScale off
+color 221,160,221
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/endomEp434.bw
+subGroups cellType=Ovary-Ep dataType=Replicate
+priority 226
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Endometrium - Epithelial - Z00000434
+alwaysZero on
+
+track endomEp435
+type bigWig
+longLabel Endometrium - Epithelial - Z00000435
+viewLimits 0:1
+autoScale off
+color 221,160,221
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/endomEp435.bw
+subGroups cellType=Ovary-Ep dataType=Replicate
+priority 227
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Endometrium - Epithelial - Z00000435
+alwaysZero on
+
+track endomEp43S
+type bigWig
+longLabel Endometrium - Epithelial - Z0000043S
+viewLimits 0:1
+autoScale off
+color 221,160,221
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/endomEp43S.bw
+subGroups cellType=Ovary-Ep dataType=Replicate
+priority 228
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Endometrium - Epithelial - Z0000043S
+alwaysZero on
+
+track ovaryEp0QT
+type bigWig
+longLabel Ovary - Epithelial - Z000000QT
+viewLimits 0:1
+autoScale off
+color 221,160,221
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/ovaryEp0QT.bw
+subGroups cellType=Ovary-Ep dataType=Replicate
+priority 229
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Ovary - Epithelial - Z000000QT
+alwaysZero on
+
+track dermalFibroMerged
+type bigWig
+longLabel Dermal Fibroblasts Merged Samples
+viewLimits 0:1
+autoScale off
+color 245,222,179
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/dermalFibroMerged.bw
+subGroups cellType=Dermal-Fibro dataType=Merged
+priority 230
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Dermal Fibroblasts Merged
+alwaysZero on
+
+track dermFibro423
+type bigWig
+longLabel Dermal - Fibroblasts - Z00000423
+viewLimits 0:1
+autoScale off
+color 245,222,179
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/dermFibro423.bw
+subGroups cellType=Dermal-Fibro dataType=Replicate
+priority 231
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Dermal - Fibroblasts - Z00000423
+alwaysZero on
+
+track epidKeratMerged
+type bigWig
+longLabel Epidermal Keratinocytes Merged Samples
+viewLimits 0:1
+autoScale off
+color 222,184,135
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/epidKeratMerged.bw
+subGroups cellType=Epid-Kerat dataType=Merged
+priority 232
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Epidermal Keratinocytes Merged
+alwaysZero on
+
+track epidKerat424
+type bigWig
+longLabel Epidermal - Keratinocytes - Z00000424
+viewLimits 0:1
+autoScale off
+color 222,184,135
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/epidKerat424.bw
+subGroups cellType=Epid-Kerat dataType=Replicate
+priority 233
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Epidermal - Keratinocytes - Z00000424
+alwaysZero on
+
+track gallbladderMerged
+type bigWig
+longLabel Gallbladder Merged Samples
+viewLimits 0:1
+autoScale off
+color 107,142,35
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gallbladderMerged.bw
+subGroups cellType=Gallbladder dataType=Merged
+priority 234
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gallbladder Merged
+alwaysZero on
+
+track gallbladEp432
+type bigWig
+longLabel Gallbladder - Epithelial - Z00000432
+viewLimits 0:1
+autoScale off
+color 107,142,35
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/gallbladEp432.bw
+subGroups cellType=Gallbladder dataType=Replicate
+priority 235
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Gallbladder - Epithelial - Z00000432
+alwaysZero on
+
+track colonFibroMerged
+type bigWig
+longLabel Colon Fibroblasts Merged Samples
+viewLimits 0:1
+autoScale off
+color 85,107,47
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonFibroMerged.bw
+subGroups cellType=Colon-Fibro dataType=Merged
+priority 236
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon Fibroblasts Merged
+alwaysZero on
+
+track colonFibro42A
+type bigWig
+longLabel Colon - Fibroblasts - Z0000042A
+viewLimits 0:1
+autoScale off
+color 85,107,47
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonFibro42A.bw
+subGroups cellType=Colon-Fibro dataType=Replicate
+priority 237
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon - Fibroblasts - Z0000042A
+alwaysZero on
+
+track colonFibro42C
+type bigWig
+longLabel Colon - Fibroblasts - Z0000042C
+viewLimits 0:1
+autoScale off
+color 85,107,47
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/colonFibro42C.bw
+subGroups cellType=Colon-Fibro dataType=Replicate
+priority 238
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Colon - Fibroblasts - Z0000042C
+alwaysZero on
+
+track thyroidEpMerged
+type bigWig
+longLabel Thyroid Epithelium Merged Samples
+viewLimits 0:1
+autoScale off
+color 72,61,139
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/thyroidEpMerged.bw
+subGroups cellType=Thyroid-Ep dataType=Merged
+priority 239
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Thyroid Epithelium Merged
+alwaysZero on
+
+track thyroidEp42S
+type bigWig
+longLabel Thyroid - Epithelial - Z0000042S
+viewLimits 0:1
+autoScale off
+color 72,61,139
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/thyroidEp42S.bw
+subGroups cellType=Thyroid-Ep dataType=Replicate
+priority 240
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Thyroid - Epithelial - Z0000042S
+alwaysZero on
+
+track thyroidEp42T
+type bigWig
+longLabel Thyroid - Epithelial - Z0000042T
+viewLimits 0:1
+autoScale off
+color 72,61,139
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/thyroidEp42T.bw
+subGroups cellType=Thyroid-Ep dataType=Replicate
+priority 241
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Thyroid - Epithelial - Z0000042T
+alwaysZero on
+
+track thyroidEp42U
+type bigWig
+longLabel Thyroid - Epithelial - Z0000042U
+viewLimits 0:1
+autoScale off
+color 72,61,139
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/thyroidEp42U.bw
+subGroups cellType=Thyroid-Ep dataType=Replicate
+priority 242
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Thyroid - Epithelial - Z0000042U
+alwaysZero on
+
+track boneOsteobMerged
+type bigWig
+longLabel Bone Osteoblasts Merged Samples
+viewLimits 0:1
+autoScale off
+color 188,143,143
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/boneOsteobMerged.bw
+subGroups cellType=Bone-Osteob dataType=Merged
+priority 243
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bone Osteoblasts Merged
+alwaysZero on
+
+track boneOsteob42Z
+type bigWig
+longLabel Bone - Osteoblasts - Z0000042Z
+viewLimits 0:1
+autoScale off
+color 188,143,143
+parent humanMethylationAtlasSignals off
+bigDataUrl /gbdb/$D/dnaMethylationAtlas/boneOsteob42Z.bw
+subGroups cellType=Bone-Osteob dataType=Replicate
+priority 244
+maxHeightPixels 100:70:5
+windowingFunction mean
+shortLabel Bone - Osteoblasts - Z0000042Z
+alwaysZero on

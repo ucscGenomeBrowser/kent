@@ -560,11 +560,11 @@ printHelp();
 
 doTable(cart, db, groupList, trackList);
 
-puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");
-puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
-puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
-puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-puts("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n");
+webIncludeResourceFile("jquery-ui.css");
+webIncludeResourceFile("jstree-3.3.7.min.css");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+jsIncludeFile("jstree-3.3.7.min.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("spectrum.min.js", NULL);

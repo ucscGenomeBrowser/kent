@@ -200,19 +200,13 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
 jsIncludeFile("autocompleteCat.js",NULL);
-puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
-puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css\">\n");
-puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/2.2.2/js/dataTables.min.js\"></script>");
-puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.min.css\">\n");
-puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.min.js\"></script>");
-puts("<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"https://cdn.datatables.net/select/3.0.0/css/select.dataTables.min.css\">\n");
-puts("<script type=\"text/javascript\" "
-    "src=\"https://cdn.datatables.net/select/3.0.0/js/dataTables.select.min.js\"></script>");
+webIncludeResourceFile("font-awesome.min.css");
+webIncludeResourceFile("dataTables-2.2.2.min.css");
+jsIncludeFile("dataTables-2.2.2.min.js", NULL);
+webIncludeResourceFile("dataTables.buttons-3.2.2.min.css");
+jsIncludeFile("dataTables.buttons-3.2.2.min.js", NULL);
+webIncludeResourceFile("dataTables.select-3.0.0.min.css");
+jsIncludeFile("dataTables.select-3.0.0.min.js", NULL);
 puts("<link href=\"https://releases.transloadit.com/uppy/v4.5.0/uppy.min.css\" rel=\"stylesheet\">");
 puts("<script type=\"text/javascript\" src=\"https://releases.transloadit.com/uppy/v4.5.0/uppy.min.js\"></script>");
 jsIncludeFile("hgMyData.js", NULL);
