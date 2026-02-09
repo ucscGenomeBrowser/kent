@@ -341,8 +341,8 @@ var speciesTree = (function() {
         if (hubList && hubList.length) {
             for (i = 0;  i < hubList.length;  i++) {
                 hub = hubList[i];
-                // is this a curated assembly hub? If so, don't list it
-                if (!(hub.hubUrl.startsWith("/gbdb") && ! hub.hubUrl.startsWith("/gbdb/genark"))) {
+                // Skip UCSC-hosted hubs (native and GenArk) under /gbdb
+                if (!hub.hubUrl.startsWith("/gbdb")) {
                     addHubLabel(svg, hub, y);
                     y += cfg.labelLineHeight;
                     countNonCurated++;
@@ -1128,12 +1128,12 @@ var hgGateway = (function() {
             return;
         }
 
-        // Filter out curated assembly hubs (those in /gbdb but not /gbdb/genark)
-        // and convert hub objects to card-compatible format
+        // Filter out UCSC-hosted hubs (native and GenArk) under /gbdb
+        // and convert remaining hub objects to card-compatible format
         var displayHubs = [];
         hubList.forEach(function(hub) {
-            // Skip curated assembly hubs (same logic as drawHubs)
-            if (hub.hubUrl.startsWith("/gbdb") && !hub.hubUrl.startsWith("/gbdb/genark")) {
+            // Skip UCSC-hosted hubs (native and GenArk) under /gbdb
+            if (hub.hubUrl.startsWith("/gbdb")) {
                 return;
             }
             // Convert hub object to card-compatible format
@@ -1498,10 +1498,13 @@ var hgGateway = (function() {
                 };
                 if (uiState.hubUrl) {
                     recentItem.hubUrl = uiState.hubUrl;
-                    // For hub genomes, add category for proper detection when re-selected
-                    if (dbForRecents.startsWith('GCA_') || dbForRecents.startsWith('GCF_')) {
-                        recentItem.category = "UCSC GenArk";
+                    if (uiState.hubUrl.startsWith("/gbdb")) {
+                        recentItem.category = "UCSC Curated";
+                    } else {
+                        recentItem.category = "Assembly Hub";
                     }
+                } else {
+                    recentItem.category = "UCSC Curated";
                 }
                 addRecentGenome(recentItem);
             }
@@ -1532,7 +1535,8 @@ var hgGateway = (function() {
                     db: dbForRecents,
                     genome: uiState.genome,
                     label: label,
-                    taxId: uiState.taxId
+                    taxId: uiState.taxId,
+                    category: "UCSC Curated"
                 });
             }
             displayRecentGenomesInPanel();
@@ -1835,25 +1839,23 @@ var hgGateway = (function() {
         items.forEach(function(item) {
             var $card = $('<div class="recentGenomeCard"></div>');
             var label = item.label || item.shortLabel || item.value || item.genome || item.commonName;
-            var genome = item.genome || item.db || '';
+            var genome = trackHubSkipHubName(item.genome || item.db || '');
 
             $card.append('<div class="recentGenomeLabel">' + escapeHtml(label) + '</div>');
             if (genome && label.indexOf(genome) < 0) {
                 $card.append('<div class="recentGenomeDb">' + escapeHtml(genome) + '</div>');
             }
 
-            // Add category as small label
-            if (item.category) {
-                var shortCategory = item.category;
-                if (shortCategory.indexOf('UCSC Genome Browser') >= 0) {
-                    shortCategory = 'UCSC';
-                } else if (shortCategory.indexOf('GenArk') >= 0) {
-                    shortCategory = 'GenArk';
-                } else if (shortCategory.indexOf('Assembly Hub') >= 0) {
-                    shortCategory = 'Hub';
-                }
-                $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
+            // Add category label: "External" for assembly hubs, "UCSC Curated" for everything else.
+            // The indexOf check handles both the new "Assembly Hub" category from handleSetDb
+            // and legacy localStorage entries from addHubsToList or older code.
+            var shortCategory;
+            if (item.category && item.category.indexOf('Assembly Hub') >= 0) {
+                shortCategory = 'External';
+            } else {
+                shortCategory = 'UCSC Curated';
             }
+            $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
 
             // Store item data for click handler
             $card.data('item', item);
@@ -1877,6 +1879,9 @@ var hgGateway = (function() {
         $('#recentGenomesSection').show();
         var emptyMessage = 'Search for a genome above, or click a popular species icon';
         renderGenomeCards(recentGenomes, $('#recentGenomesList'), emptyMessage);
+        // Clear any selected state from connected hub cards (selection was transient,
+        // the genome is now reflected in the recent genomes panel)
+        $('#connectedHubsList .recentGenomeCard').removeClass('selected');
     }
 
     function escapeHtml(text) {
