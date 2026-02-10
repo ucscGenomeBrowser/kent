@@ -4490,6 +4490,25 @@ function getRecentGenomes() {
     return results;
 }
 
+function removeRecentGenomesByHubUrl(hubUrl) {
+    // Remove all recent genome entries whose hubUrl matches the given URL.
+    // Used when a hub is disconnected to clean up stale entries.
+    let stored = window.localStorage.getItem("recentGenomes");
+    if (!stored) return;
+    let recentObj = JSON.parse(stored);
+    let newStack = [];
+    for (let key of recentObj.stack) {
+        let item = recentObj.results[key];
+        if (item && item.hubUrl === hubUrl) {
+            delete recentObj.results[key];
+        } else {
+            newStack.push(key);
+        }
+    }
+    recentObj.stack = newStack;
+    window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
+}
+
 function addRecentGenomesToMenuBar() {
     // Retrieve recent genome selections from localStorage and add them to the "Genomes" menu heading
     // Tries not add duplicate genomes
