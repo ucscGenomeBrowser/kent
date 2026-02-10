@@ -90,9 +90,8 @@ trackDb GCF_014108235.1/trackDb.txt
 
 List each assembly for which you have calculated annotations.
 The **trackDb.txt** file defines the tracks. To emphasize again,
-the assembly names must be the GenBank accession identifier or
-the UCSC database name, e.g.: **'GCF\_016077325.2', or 'hg38', 'mm39'**.
-Refer to the [full
+the assembly names must be the GenBank accession identifier,
+e.g.: **'GCF\_016077325.2'**. Refer to the [full
 list](https://hgdownload.gi.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt) of all
 GenArk repository assemblies to find the correct identifier for your genome.
 
