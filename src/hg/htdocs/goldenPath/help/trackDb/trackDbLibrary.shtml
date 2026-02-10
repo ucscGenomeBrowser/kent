@@ -6859,7 +6859,7 @@ display custom genome assemblies in the Genome Browser.</p>
     <p>
     See our <a
     href="/goldenPath/help/assemblyHubHelp.html#chromAlias">chromAlias</a>
-    documentation for details on the required file format.
+    documentation for details on the required file format.</p>
 
     <P><B>Example:</B></P>
     <pre>   chromAlias thisGenome.chromAlias.txt</pre>
@@ -6875,7 +6875,7 @@ display custom genome assemblies in the Genome Browser.</p>
 
     <p>See our <a
     href="/goldenPath/help/assemblyHubHelp.html#chromAlias">chromAlias</a>
-    documentation for details on the required file format.
+    documentation for details on the required file format.</p>
 
     <P><B>Example:</B></P>
     <pre>   chromAliasBb thisGenome.chromAlias.bb</pre>
@@ -6893,7 +6893,7 @@ display custom genome assemblies in the Genome Browser.</p>
 
 <DIV class="chromSizes"><span class="types all"></span>
 <div class="format"><code>chromSizes &lt;url/relativePath&gt;</code></div>
-    <P>Defines a file to used when displaying the sequences contained in an
+    <P>Defines a file to be used when displaying the sequences contained in an
     assembly. These are visible from the &quot;View Sequences&quot; link
     on the Gateway page, or with the &quot;vs&quot; keyboard shortcut
     when looking at the main Genome Browser image.
@@ -6973,7 +6973,7 @@ display custom genome assemblies in the Genome Browser.</p>
     <P>Points to an HTML file with assembly information. The HTML file is
     displayed on the Gateway page.</P>
     <P><B>Example:</B></P>
-    <pre>   groups ricCom1/description.html</pre>
+    <pre>   htmlPath ricCom1/description.html</pre>
 </DIV>
 
 <DIV class="hub"><span class="types all"></span>
@@ -7034,8 +7034,8 @@ display custom genome assemblies in the Genome Browser.</p>
 
 <DIV class="hubShortLabel"><span class="types all"></span>
 <div class="format"><code>shortLabel &lt;str&gt;</code></div>
-    <P>A short description of the hub. Used as track group label below the
-    under the main Genome Browser image. Should be under 20 characters.
+    <P>A short description of the hub. Used as track group label
+    below the main Genome Browser image. Should be under 20 characters.
     </P>
     <P><B>Example:</B></P>
     <pre>   shortLabel ENCODE3 RNA-seq Data</pre>
@@ -7106,7 +7106,7 @@ display custom genome assemblies in the Genome Browser.</p>
     groups ricCom1/groups.txt
     description July 2011 Castor bean
     twoBitPath ricCom1/ricCom1.2bit
-    organism Ricinus communis
+    organism Castor bean
     defaultPos E09R7372:1000000-2000000
     orderKey 4800
     scientificName Ricinus communis
