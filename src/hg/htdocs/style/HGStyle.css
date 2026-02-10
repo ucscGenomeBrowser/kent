@@ -1310,3 +1310,19 @@ span.gbSessionChanged {
     max-width: 100%;
     box-sizing: border-box;
 }
+
+/* For styling facetedComposite UI elements */
+
+#dataTypeSelector {
+    border-left: 4px solid #4a90d9;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background: #f8fafc;
+}
+
+#dataTypeSelector:empty {
+    border-left: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 24px;
+}

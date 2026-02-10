@@ -6,7 +6,7 @@
 #define ASSEMBLYLIST_H
 
 #include "jksql.h"
-#define ASSEMBLYLIST_NUM_COLS 13
+#define ASSEMBLYLIST_NUM_COLS 14
 
 extern char *assemblyListCommaSepFieldNames;
 
@@ -27,6 +27,7 @@ struct assemblyList
     char *refSeqCategory;	/* one of: reference, representative or na */
     char *versionStatus;	/* one of: latest, replaced or suppressed */
     char *assemblyLevel;	/* one of: complete, chromosome, scaffold or contig */
+    char *haplotypes;	/* related haplotype assembly when available, comma separated list for polyploid */
     };
 
 void assemblyListStaticLoadWithNull(char **row, struct assemblyList *ret);
@@ -107,4 +108,3 @@ char *asmListMatchAllWords(char *searchString);
  */
 
 #endif /* ASSEMBLYLIST_H */
-

@@ -1102,3 +1102,15 @@ unzip JASPAR2024_CORE_non-redundant_pfms_jaspar.zip
 for i in *.jaspar; do f=`awk '{print $1; exit}' $i | tr -d '>'`;  tail -n +1  $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) counts[ii - 3] += $ii;} END {for(ii=0; ii < count; ii++) printf "%d\t", counts[ii]; printf "\n"}'  > /tmp/1;  tail -n +2   $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) printf "%d\t", $ii; printf "\n"}' >> /tmp/1; tail -n +1 $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) counts[ii - 3] += $ii;} END {for(ii=0; ii < count; ii++) printf "%d\t", counts[ii]; printf "\n"}' | awk '{numCols=NF; for(ii=1;ii <= numCols; ii++) mat[NR-1][ii] = $ii;} END {for(jj=1; jj <= numCols; jj++) {for(ii=0; ii < NR; ii++) printf "%d\t",mat[ii][jj]; printf "\n";}}'  /tmp/1 | awk '{for (ii=2; ii <= NF; ii++) printf "%f\t",$ii/$1; printf "\n";}' | awk -v name=$f '{numCols=NF; for(ii=1;ii <= numCols; ii++) mat[NR-1][ii] = $ii;} END {printf "%s\t%d\t",name,NR;for(jj=1; jj <= numCols; jj++) {for(ii=0; ii < NR; ii++) printf "%g,",mat[ii][jj]; printf "\t";}} END {printf "\n"}'  ; done > jasparMotif.tab
 
 hgLoadSqlTab hgFixed jasparCore2024 ~/kent/src/hg/lib/dnaMotif.sql jasparMotif.tab
+
+#####
+# Jaspar 2026 PFM  (DONE 2026/2/9 braney)
+#####
+cd /hive/data/outside/jaspar/2026/JASPAR_TFBS
+wget https://jaspar.elixir.no/download/data/2026/CORE/JASPAR2026_CORE_non-redundant_pfms_jaspar.zip
+mkdir PFMs
+cd PFMs
+unzip JASPAR2026_CORE_non-redundant_pfms_jaspar.zip
+for i in *.jaspar; do f=`awk '{print $1; exit}' $i | tr -d '>'`;  tail -n +1  $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) counts[ii - 3] += $ii;} END {for(ii=0; ii < count; ii++) printf "%d\t", counts[ii]; printf "\n"}'  > /tmp/1;  tail -n +2   $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) printf "%d\t", $ii; printf "\n"}' >> /tmp/1; tail -n +1 $i | awk '{count=NF - 3;  for (ii=3; ii <= NF - 1; ii++) counts[ii - 3] += $ii;} END {for(ii=0; ii < count; ii++) printf "%d\t", counts[ii]; printf "\n"}' | awk '{numCols=NF; for(ii=1;ii <= numCols; ii++) mat[NR-1][ii] = $ii;} END {for(jj=1; jj <= numCols; jj++) {for(ii=0; ii < NR; ii++) printf "%d\t",mat[ii][jj]; printf "\n";}}'  /tmp/1 | awk '{for (ii=2; ii <= NF; ii++) printf "%f\t",$ii/$1; printf "\n";}' | awk -v name=$f '{numCols=NF; for(ii=1;ii <= numCols; ii++) mat[NR-1][ii] = $ii;} END {printf "%s\t%d\t",name,NR;for(jj=1; jj <= numCols; jj++) {for(ii=0; ii < NR; ii++) printf "%g,",mat[ii][jj]; printf "\t";}} END {printf "\n"}'  ; done > jasparMotif.tab
+
+hgLoadSqlTab hgFixed jasparCore2026 ~/kent/src/hg/lib/dnaMotif.sql jasparMotif.tab

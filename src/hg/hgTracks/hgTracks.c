@@ -1212,14 +1212,12 @@ if (oligoSize >= 2)
     {
     if (searchForward)
         fMatch = finder(fOligo, dna);
+    iupacReverseComplement(rOligo, oligoSize);
 
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
     else if (searchReverse)
-        {
-        iupacReverseComplement(rOligo, oligoSize);
 	rMatch = finder(rOligo, dna);
-        }
 
     for (;;)
         {
@@ -2226,7 +2224,7 @@ for (track = trackList; track != NULL; track = track->next)
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 subtrackVis |= subtrack->limitedVisSet ? subtrack->limitedVis : subtrack->visibility;
-            vis &= subtrackVis;
+            vis |= subtrackVis;
             }
         if (vis)
             {
@@ -8826,7 +8824,7 @@ return paraLoadTimeout;
 
 static char *hubPublicEmailFromHubName(char *hubName)
 {
-/* return public hub email given url or NULL if such a column doesn't exist (mirrors don't have this column) */
+/* return public hub email given hubName or NULL if such a column doesn't exist (mirrors don't have this column) */
 /* result must be freed */
 char *hubIdStr = strchr(hubName, '_'); // could not find a function for this in hubConnect.c
 if (!hubIdStr)
@@ -9956,8 +9954,10 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
+                    "if (window.confirm(\"Are you sure you want to disconnect this hub? To reconnect it you will need to navigate to My Data -> Track Hubs and find the hub in the public hubs list or re-enter the URL if the hub is not listed there. Click 'OK' to continue with the disconnect, or 'Cancel' to continue browsing with the hub attached.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
-                    "document.disconnectHubForm.submit();return true;",
+                    "document.disconnectHubForm.submit();return true;"
+                    "}",
 		    hubName + strlen(hubTrackPrefix));
 
 #ifdef GRAPH_BUTTON_ON_QUICKLIFT
@@ -10008,10 +10008,10 @@ if (!hideControls)
                 hPrintf("<tr><td colspan=8><b>Track hub error</b> ");
                 printInfoIcon("Use the hub debugging tool under <i>My Data > Track Hubs > Hub Development</i>. You need to switch off <i>File caching</i> there to see your changes without delay. Error <i>Response is missing required header</i> usually means the hub is not reachable.<br><br>Contact us or the hub provider if you cannot resolve the issue.");
                 hPrintf(": ");
-                hPrintf("<i>%s</i>", group->errMessage);
+                hPrintf("<i>%s</i>", stripHtml(cloneString(group->errMessage)));
                 char *email = hubPublicEmailFromHubName(hubName);
                 if (isNotEmpty(email))
-                    hPrintf("<br>You can contact the hub author at %s", email);
+                    hPrintf("<br>You can contact the hub author at %s", stripHtml(email));
                 hPrintf("</td></tr>\n");
                 }
 

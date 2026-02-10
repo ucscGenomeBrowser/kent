@@ -414,7 +414,7 @@ itemRgb on
 include ../../trackDb.mgc-orfeome.ra
 include ../refSeqComposite.mm10.mm39.ra
 
-include recount3.ra alpha
+include recount3.ra
 
 include long_read_transcripts.ra
 
@@ -422,3 +422,6 @@ track ucscGenePfam override
 shortLabel Pfam in GENCODE
 longLabel Pfam Domains in GENCODE Genes
 html gencodePfam
+
+track jaspar2024 override
+parent jaspar on

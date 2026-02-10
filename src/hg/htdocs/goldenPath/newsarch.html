@@ -64,8 +64,118 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2026"></a>
 
-<!--
-<a name="020326"></a>
+<a name="020926"></a>
+<h2>Feb. 09, 2026 &nbsp;&nbsp; Phased variants track for human (hg38 and hg19)</h2>
+<p>
+We are pleased to announce the release of the Phased Variants container track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=phasedVars">hg38/GRCh38</a>
+and <a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=phasedVars">hg19/GRCh19</a>.
+This new track brings together
+phased individual-level genotype data from four projects: Human Diversity Genome Project,
+Simons Genome Diversity Project, gnomad's HGDP+1000 Genomes callset, and the Mexico Biobank.
+</p>
+
+<p>
+The Phased Variants track includes the following
+subtracks:
+</p>
+
+<ul>
+  <li>
+    <a href="https://www.mxbiobank.org/" target="_blank"<b>Mexico Biobank (MXB) 6k Array</b></a> 
+    &ndash;
+    Phased alleles from array genotyping of 6,011 individuals sampled across all 32 states of
+    Mexico during the 2000 National Health Survey (ENSA 2000). Frequencies can be plotted onto a
+    map on <a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar</a>.
+  </li>
+  <li>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7115999/" target="_blank"><b>Human Genome
+    Diversity Project (HGDP) 1k WGS</b></a> &ndash;
+    929 high-coverage genome sequences from 54 diverse human populations, 26 of which are physically
+    phased using linked-read sequencing (hg38 only).
+  </li>
+  <li>
+    <a href="https://www.simonsfoundation.org/simons-genome-diversity-project/"
+    target="_blank"><b>Simons Genome Diversity Project (SGDP) 0.3k WGS</b></a> &ndash;
+    279 whole genomes from 142 diverse and often indigenous populations worldwide, emphasizing
+    anthropological, linguistic, and cultural diversity.
+  </li>
+  <li>
+    <a href="https://gnomad.broadinstitute.org/news/2021-10-gnomad-v3-1-2-minor-release/"
+    target="_blank"><b>gnomAD HGDP+1000 Genomes 4k WGS</b></a> &ndash;
+    A reprocessed and harmonized callset of 4,094 whole genomes from 80 populations, combining the
+    HGDP and 1000 Genomes datasets (hg38 only).
+  </li>
+</ul>
+
+<p>
+We would like to thank the Center for Research and Advanced Studies (Cinvestav) of Mexico, the
+Simons Foundation, David Reich and Swapan Mallick, and the Genome Aggregation Database Consortium
+(gnomAD) for making these data available. We would also like to thank Maximilian Haeussler and
+Jairo Navarro Gonzalez for the creation and release of these tracks.
+</p>
+
+
+<a name="020526"></a>
+<h2>Feb. 05, 2026 &nbsp;&nbsp; New recount3 track for hg38 and mm10</h2>
+<p>
+We are happy to announce the release of the <a href="http://rna.recount.bio"
+	target="_blank">recount3</a> track for
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=recount3" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=recount3" target="_blank">mm10</a>. Recount3
+is a comprehensive resource for re-analyzing RNA-seq data. It provides uniformly processed
+RNA-seq data and associated metadata from a wide range of studies, enabling researchers to access
+and analyze gene expression data in a consistent manner. Recount3 aggregates data from multiple
+sources, including the
+<a href="https://www.ncbi.nlm.nih.gov/sra/docs/" target="_blank">Sequence Read Archive (SRA)</a>
+and the <a href="https://commonfund.nih.gov/GTEx"
+	target="_blank">Genotype-Tissue Expression (GTEx) project</a>, and reprocesses it using a
+standardized pipeline. This allows for cross-study comparisons and meta-analyses, facilitating
+discoveries in genomics and transcriptomics.
+</p>
+<p>
+The tracks display recount3 intron data, including split read counts and splice junction motifs.
+</p>
+<div class="text-center">
+<img src="../../images/newsArchImages/recount3.png" width='80%'></a>
+</div>
+
+<p>
+For hg38, the tracks available are:
+</p>
+<ul>
+  <li>recount3 GTEx introns</li>
+  <li>recount3 TCGA introns</li>
+  <li>recount3 SRA introns</li>
+  <li>recount3 CCLE introns</li>
+</ul>
+<p>
+For mm10:
+</p>
+<ul>
+  <li>recount3 SRA introns</li>
+</ul>
+<p>
+Introns can be filtered by intron size, split read count, splice junction motif, and strand; intron
+items are color-coded, with darker colors indicating higher coverage:
+</p>
+<ul>
+  <li><b><font color="#00bfff">Sky blue</font></b>: GT donors and AG acceptors (CT and AC on
+the minus strand)</li>
+  <li><b><font color="#00ced1">Turquoise</font></b>: GC donors and AG acceptors (CT and GC on the
+minus strand)</li>
+  <li><b><font color="#ff8c00">Orange</font></b>: AT donors and AC acceptors (GT and AT on the
+minus strand)</li>
+  <li><b><font color="#a9a9a9">Grey</font></b>: Non-canonical junction motifs. These could be
+sequencing errors, polymorphisms, or very rare U12 introns.</li>
+</ul>
+<p>
+We would like to thank the ReCount team for making this data available.  We would also like to thank
+Jeltje van Baren, Mark Diekhans, and Gerardo Perez for their efforts on this release.
+</p>
+
+
+<a name="020326a"></a>
 <h2>Feb. 03, 2026 &nbsp;&nbsp; New &quot;Visible Tracks&quot; group feature</h2>
 <p>
 We are excited to announce a new improvement to the UCSC Genome Browser: the
@@ -74,7 +184,7 @@ automatically displays all currently visible tracks in one convenient location. 
 longer need to hunt through multiple track categories to adjust tracks you've already turned on.
 </p>
 <div class="text-center">
-<img src="/images/newsArchImages/visibleTracks.png" width='65%'>
+<img src="/images/newsArchImages/visibleTracks.png" width='55%'>
 </div>
 <p>
 Previously, managing visible tracks required navigating back to their original categories &mdash;
@@ -83,19 +193,24 @@ your active tracks appear together in the <b>Visible Tracks</b> group, making it
 to adjust display modes for visible tracks.
 </p>
 <p>
-We would like to thank Chris Lee and Jairo Navarro Gonzalez for their work on creating and testing
-the feature.</p> 
--->
+The &quot;Visible Tracks&quot; group will appear only when more than 32 tracks are available for a
+genome assembly.
+</p>
+<p>
+We would like to thank Chris Lee and Jairo Navarro Gonzalez for releasing this feature.</p>
 
-<!--
-<a name="020326"></a>
+<a name="020326b"></a>
 <h2>Feb. 03, 2026 &nbsp;&nbsp; Hub Space: Host Your Track Hubs Directly on the Genome Browser</h2>
 <p>
 We are excited to introduce <a href="/cgi-bin/hgHubConnect#hubUpload">Hub Space</a>, a new
-hosting service that allows users to upload and visualize track hub files directly on the UCSC
+hosting service that enables users to upload and visualize track hub files directly on the UCSC
 Genome Browser without relying on third-party hosting services such as Dropbox, Google Drive, or
 AWS.
 </p>
+
+<div class="text-center">
+<img src="/images/newsArchImages/HubSpace.png" width='65%'>
+</div>
 
 <p>
 <b>Hub Space Features:</b><br>
@@ -116,8 +231,8 @@ There are two primary ways to upload your files:
     and other supported formats) for immediate visualization.
   </li>
   <li>
-    <b>Complete hub upload:</b> Upload an entire track hub along with all supporting files
-    (hub.txt, bigWig, bigBed, etc.) to visualize the hub.
+    <b>Complete hub upload:</b> Upload the entire track hub, along with all supporting files
+    (hub.txt, bigWig, bigBed, etc.), to visualize the hub.
   </li>
 </ol>
 
@@ -125,18 +240,20 @@ There are two primary ways to upload your files:
 If a hub.txt file is not provided when uploading data files, one is automatically generated.
 The generated hub.txt file is configured with the
 <a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile</a> trackDb setting, and
-as a result, each hub is limited to a single genome assembly. Editing the generated hub.txt file is
-not yet supported. To customize the hub configuration or data display, replace the generated hub.txt
-file with your own version after uploading the data files.
+as a result, each hub is limited to a single genome assembly. Editing the generated hub.txt file
+directly on the UCSC Genome Browser is not yet supported. To customize the hub configuration or
+data display, replace the generated hub.txt file with your own.
 </p>
 
 <p>
 To get started with Hub Space, visit the
 <a href="/cgi-bin/hgHubConnect#hubUpload">Track Data Hubs page</a> and
-click on the &quot;Hub Space&quot; section. We would love to hear your feedback on this new feature.
+click on the &quot;Hub Space&quot; tab. We would love to hear your feedback on this new feature.
 Please <a href="/contacts.html">contact us</a> and let us know what you think!
 </p>
--->
+
+<p>
+We would like to thank Chris Lee and Jairo Navarro Gonzalez for releasing this feature.</p>
 
 <a name="011526"></a>
 <h2>Jan. 15, 2026 &nbsp;&nbsp; New ENCODE cCREs track available for human (hg38)</h2>

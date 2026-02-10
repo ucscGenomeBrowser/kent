@@ -446,13 +446,13 @@ div.jwFooterCopyright {
 
 /* Recent Genomes Panel (replaces species tree) */
 
-#recentGenomesPanel {
+.recentGenomesPanel {
     border: solid black 1px;
     width: 405px;
     background-color: #fafafa;
 }
 
-#recentGenomesList {
+.recentGenomesList {
     padding: 10px;
     min-height: fit-content;
     max-height: 350px;

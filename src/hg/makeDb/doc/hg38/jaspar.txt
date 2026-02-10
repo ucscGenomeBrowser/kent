@@ -52,3 +52,19 @@ cd /hive/data/genomes/hg38/bed/jaspar
 wget https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/hg38/JASPAR2024_hg38.bb
 mv JASPAR2024_hg38.bb JASPAR2024.bb
 ln -s JASPAR2024.bb /gbdb/hg38/jaspar/JASPAR2024.bb
+
+###############################################################################
+# JASPAR 2026 bigBed update 2/4/26
+
+cd /hive/data/outside/jaspar/
+mkdir 2026
+cd 2026/
+hubClone -skipMissingAssemblies -download https://mencius.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/hub.txt
+#cd into the hub dir
+for D in galGal6 ce11 ci3 danRer11 dm6 hg38 mm39 sacCer3; do
+    mv $D/JASPAR2026*.bb $D/JASPAR2026.bb
+    mkdir -p /gbdb/$D/jaspar
+    ln -sf $(realpath $D/JASPAR2026.bb) /gbdb/$D/jaspar/JASPAR2026.bb
+done
+
+# Also added the new PFMs table, see hgFixed makedoc for that

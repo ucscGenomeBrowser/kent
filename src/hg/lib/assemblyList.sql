@@ -18,7 +18,8 @@ CREATE TABLE assemblyList (
     refSeqCategory varchar(31),	# one of: reference, representative or na
     versionStatus varchar(15),	# one of: latest, replaced or suppressed
     assemblyLevel varchar(15),	# one of: complete, chromosome, scaffold or contig
-    FULLTEXT gIdx (name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel),
+    haplotypes varchar(511),	# related haplotype assembly when available, comma separated list for polyploid
               #Indices
+    FULLTEXT gIdx (name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes),
     PRIMARY KEY(name)
 );

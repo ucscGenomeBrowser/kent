@@ -313,7 +313,8 @@
             title: 'Selecting the genome assembly',
             text:
                   'By default, your most recently viewed assembly is selected. '+
-                  'Alter the drop-down menus to change the genome assembly.',
+                  'If you wish to change the assembly, start by using the search box'+
+                  ' to search any species, genome, or assembly name.',
             buttons: [tutorialButtons.back, tutorialButtons.next],
             attachTo: 
                 {

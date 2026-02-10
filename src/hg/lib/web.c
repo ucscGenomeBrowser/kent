@@ -956,6 +956,15 @@ printf("class='%s' ", isNotEmpty(classStr) ? classStr : "genomeSearchBarDefault"
 printf("></input>\n");
 if (withSearchButton)
     printf("<input id='%sButton' value='search' type='button'></input>", id);
+char *searchHelpText = "All genome searches are case-insensitive.  Single-word searches default to prefix "
+"matching if an exact match is not found. "
+"<ul id='searchTipList' class='noBullets'>"
+"<li> Force inclusion: Use a + sign before <b>+word</b> to ensure it appears in result.</li>"
+"<li> Exclude words: Use a - sign before <b>-word</b> to exclude it from the search result.</li>"
+"<li> Wildcard search: Add an * (asterisk) at end of <b>word*</b> to search for all terms starting with that prefix.</li>"
+"<li> Phrase search: Enclose 'words in quotes' to search for the exact phrase.</li>"
+"</ul>";
+printInfoIcon(searchHelpText);
 printf("</div>\n"); // the search button is grouped with the input
 printf("</div>\n");
 }

@@ -173,30 +173,12 @@ several assemblies, or several large, complex tracks.
 
 <h3 id="assembly_hubs">Assembly Hubs</h3>
 <p>
-This page focuses on the settings found in the <a target="_blank"
-href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a> file used in
-both Track Hubs and Assembly Hubs; however, this page does not describe the settings unique to
-Assembly Hubs. Track Hubs can display novel genomes, through a type of hub called an
-<a href="../hgTrackHubHelp.html#Assembly" target="_blank">Assembly Hub</a>.
-The <a href="../hgTrackHubHelp.html#example_genomes.txt"
-target="_blank"><code>genomes.txt</code></a> file for an Assembly Hub involves
-many additional settings not described on this page, such as
-<a href="../hgTrackHubHelp.html#twoBitPath" target="_blank"><code>twoBitPath</code></a> and
-<a href="../hgTrackHubHelp.html#defaultPos" target="_blank"><code>defaultPos</code></a> to
-identify the location of the sequence for the novel assembly and what default position to
-display. The <code>genomes.txt</code> file in Assembly Hubs also requires display information
-such as <a href="../hgTrackHubHelp.html#organism" target="_blank"><code>organism</code></a>,
-<a href="../hgTrackHubHelp.html#scientificName" target="_blank"><code>scientificName</code></a>,
-<a href="../hgTrackHubHelp.html#description" target="_blank"><code>description</code></a>,
-<a href="../hgTrackHubHelp.html#orderKey" target="_blank"><code>orderKey</code></a>,
-and <a href="../hgTrackHubHelp.html#htmlPath" target="_blank"><code>htmlPath</code></a> to
-label the novel assembly on the gateway page. A special <a href="../hgTrackHubHelp.html#groups"
-target="_blank"><code>groups</code></a> setting in Assembly Hubs points to a separate text
-document that defines track groups under the main image (such as the first &quot;Mapping and
-Sequencing&quot; group found on almost all Browsers). Read the <a target="_blank"
-href="../hgTrackHubHelp.html#genomes.txt">&quot;Create the genomes.txt file&quot;</a> section
-of the Track Hub User Guide for more information, and see examples in the <a target="_blank"
-href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs<a>.</p>
+Assembly hubs can display novel genome assemblies and annotations in the UCSC
+Genome Browser. This involves creating a <a href="#assembly">genomes.txt</a>
+using several settings described below in addition to a trackDb file for each
+genome assembly. To create an assembly hub, refer to our
+<a href="../assemblyHubUserGuide.html" target="_blank">Assembly Hub User Guide</a> or our <a
+href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
 
 <P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>
@@ -206,7 +188,7 @@ in the sections below.</I>
 <OL>
 
     <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
-    <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
+    <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples</LI>
     <UL>
         <LI><A HREF="#bam">bam/cram</A>: Compressed Sequence Alignment/Map tracks</LI>
         <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
@@ -224,7 +206,7 @@ in the sections below.</I>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
         <LI><A HREF="#vcfPhasedTrio">vcfPhasedTrio</A>: Variant Call Format Trios</LI>
     </UL></LI>
-    <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
+    <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A></LI>
         &ndash; with examples
     <UL>
         <LI><A HREF="#superTrack">Supertracks (Folders)</A></LI>
@@ -234,7 +216,12 @@ in the sections below.</I>
             <LI><A HREF="#view">Views</A></LI>
         </UL></LI>
         <LI><A HREF="#aggregate">Aggregate or Overlay Tracks: multiWig</A></LI>
-    </UL></LI>
+    </UL>
+    <LI><A HREF="#generalHubSettings">General Hub and Assembly Configuration Settings</A></LI>
+    <UL>
+        <LI><A HREF="#hubGeneral">General hub configuration settings</A></LI>
+        <LI><A HREF="#assembly">Assembly hub "genome" settings</A></LI>
+    </UL>
     <LI><A HREF="#toc">Table of Contents</A></LI>
 </OL>
 </div></div>
@@ -1559,6 +1546,118 @@ hierarchical containers:
     <TR class="examples" VALIGN=TOP><TD class="container_hub_example">
         <IMG class='toggle detail'>
         <div class="format"><B>Example of an Aggregate track</B></div>
+    </TD></TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div class="contentBorder">
+
+<A name="generalHubSettings"></A>
+<div class="lightBlueBar">
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;General Hub and Assembly Configuration Settings</div>
+</div>
+<div class="borderGuard">
+<p>
+This section describes hub and assembly configuration settings. It is recommended
+to use the <code>useOneFile</code> setting, which allows all hub configuration settings
+to be placed in a single file without the need for separate
+<code>hub.txt</code>, <code>genomes.txt</code>, or <code>trackDb.txt</code> files.</p>
+
+<A name="hubGeneral"></A>
+<TABLE class="settingsTable" id="general_hub_file_settings">
+<THEAD><TR><TD><DIV ID="hub_general_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;General hub configuration settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="hub"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">hub &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hubShortLabel"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">shortLabel &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hubLongLabel"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">longLabel &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="genomesFile"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">genomesFile &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="email"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">email &lt;email address&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="descriptionUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">descriptionUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="useOneFile"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">useOneFile &lt;on&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="hub_txt_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of an opening hub stanza</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="assembly"></A>
+<TABLE class="settingsTable" id="genomes_file_settings">
+<THEAD><TR><TD><DIV ID="genomes_file_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Assembly hub &quot;genome&quot; settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="hubGenome"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">genome &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="trackDbFile"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">trackDb &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="groupsFile"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">groups &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="description"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">description &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="twoBitPath"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">twoBitPath &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chromAlias"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">chromAlias &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chromAliasBb"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">chromAliasBb &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chromSizes"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">chromSizes &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chromAuthority"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">chromAuthority &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="organism"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">organism &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultPos"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">defaultPos &lt;chr:start-end&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="orderKey"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">orderKey &lt;int&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="scientificName"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">scientificName &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="htmlPath"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">htmlPath &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="transBlat"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">transBlat &lt;url&gt; &lt;port&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="blat"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">blat &lt;url&gt; &lt;port&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="isPcr"><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">isPcr &lt;url&gt; &lt;port&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="genome_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a genome stanza</B></div>
     </TD></TR>
 </TABLE>
 </div></div>

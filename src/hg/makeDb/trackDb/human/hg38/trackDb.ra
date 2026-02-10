@@ -900,7 +900,7 @@ include primates11way.ra alpha
 
 include pseudogenes.ra
 
-include recount3.ra alpha
+include recount3.ra
 
 include long_read_transcripts.ra
 

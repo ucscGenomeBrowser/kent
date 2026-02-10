@@ -14,4 +14,5 @@ table assemblyList
     string refSeqCategory;	"one of: reference, representative or na"
     string versionStatus;	"one of: latest, replaced or suppressed"
     string assemblyLevel;	"one of: complete, chromosome, scaffold or contig"
+    string haplotypes;	"related haplotype assembly when available, comma separated list for polyploid"
     )

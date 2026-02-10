@@ -2444,3 +2444,6 @@ parent refSeqComposite off
 
 include ../../trackDb.mgc-orfeome.ra
 include denovoDb.ra
+
+track jaspar2024 override
+parent jaspar on

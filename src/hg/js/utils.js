@@ -1863,7 +1863,8 @@ function stripHgErrors(returnedHtml, whatWeDid)
 function stripJsFiles(returnedHtml, debug, whatWeDid)
 { // strips javascript files from html returned by ajax
     var cleanHtml = returnedHtml;
-    var shlurpPattern=/<script type=\'text\/javascript\' SRC\=\'.*\'\><\/script\>/gi;
+    // Match script tags with src attribute - handles single/double quotes, with/without type attr
+    var shlurpPattern=/<script[^>]*\ssrc\s*=\s*(['"])[^'"]*\1[^>]*>\s*<\/script>/gi;
     if (debug || whatWeDid) {
         var jsFiles = cleanHtml.match(shlurpPattern);
         if (jsFiles && jsFiles.length > 0) {
@@ -3988,7 +3989,11 @@ var dragReorder = {
                 // if the custom mouseover code has removed this title, check the attr
                 // for the original title
                 if (this.title.length === 0) {
-                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                    if (this.getAttribute('data-tooltip') !== null) {
+                        rightClick.currentMapItem.title = this.getAttribute("data-tooltip");
+                    } else {
+                        rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                    }
                 }
 
                 // Handle linked features with separate clickmaps for each exon/intron
@@ -4829,7 +4834,6 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
                        label = label.replace(regex, '<b>$1</b>');
                    });
                 }
-                console.log("label:", label);
                 return $("<li></li>")
                     .data("ui-autocomplete-item", item)
                     .append($("<a></a>").html(label))

@@ -120,6 +120,7 @@ printf("<TD class='searchCell' ALIGN=CENTER>\n");
 printf("<div class='flexContainer'>\n");
 printf("<span>Currently selected genome:</span>\n");
 printf("<span id='fromGenomeLabel'>%s (%s)</span>\n", fromOrg, chain->fromDb);
+printf("</div>\n");
 printf("</TD>\n");
 
 // print select/options for toDb, it is more intuitive than a search bar
@@ -442,7 +443,7 @@ if (sameWord(toDb,"0"))
     toDb = NULL;
 if (sameWord(cartDb,"0"))
     cartDb = NULL;
-if ((fromDb != NULL) && !sameOk(strLower(fromOrg), strLower(hOrganism(fromDb))))
+if ((fromDb != NULL) && !sameWordOk(fromOrg, hOrganism(fromDb)))
     fromDb = NULL;
 if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
     toDb = NULL;
