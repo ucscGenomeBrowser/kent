@@ -3989,7 +3989,11 @@ var dragReorder = {
                 // if the custom mouseover code has removed this title, check the attr
                 // for the original title
                 if (this.title.length === 0) {
-                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                    if (this.getAttribute('data-tooltip') !== null) {
+                        rightClick.currentMapItem.title = this.getAttribute("data-tooltip");
+                    } else {
+                        rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                    }
                 }
 
                 // Handle linked features with separate clickmaps for each exon/intron

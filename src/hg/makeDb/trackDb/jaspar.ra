@@ -28,6 +28,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#NNNNNN "Updated NNN"
         labelFields TFName
         visibility pack
         bigDataUrl /gbdb/$D/jaspar/JASPAR2026.bb
+        motifPwmTable hgFixed.jasparCore2026
         maxItems 100000
         filter.score 400
         filterByRange.score 0:1000

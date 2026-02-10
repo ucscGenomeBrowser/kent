@@ -652,7 +652,7 @@ printStep(stepNumber++);
 
 /* Print genome search bar line. */
     {
-    hPrintf("<tr style=\"display: block\"><td class='searchCell'>\n");
+    hPrintf("<tr ID=\"genome-select\" style=\"display: block\"><td class='searchCell'>\n");
     char *searchBarId = "genomeSearch";
     jsIncludeAutoCompleteLibs();
     printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Genome:", "tbSearchLabel");

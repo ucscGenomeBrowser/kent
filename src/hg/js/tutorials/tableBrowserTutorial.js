@@ -136,12 +136,8 @@
             text: 'To begin, select the genome you want to use on the Table Browser. By default, '+
                   'your most recently used assembly will be selected.'+
                   '<br><br>'+
-                  'If you wish to change the assembly, start by altering the:'+
-                  '<ul>'+
-                  '<li><b>Clade</b> to select another domain of life</li>'+
-                  '<li><b>Genome</b> to change the organism</li>'+
-                  '<li><b>Assembly</b> to specify the assembly version</li>'+
-                  '</ul>',
+                  'If you wish to change the assembly, start by using the search box'+
+                  ' to search any species, genome, or assembly name.',
             attachTo: {
                 element: '#genome-select',
                 on: 'bottom'

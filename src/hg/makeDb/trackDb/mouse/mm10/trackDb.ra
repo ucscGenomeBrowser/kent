@@ -422,3 +422,6 @@ track ucscGenePfam override
 shortLabel Pfam in GENCODE
 longLabel Pfam Domains in GENCODE Genes
 html gencodePfam
+
+track jaspar2024 override
+parent jaspar on
