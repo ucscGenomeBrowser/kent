@@ -4853,7 +4853,6 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
                        label = label.replace(regex, '<b>$1</b>');
                    });
                 }
-                console.log("label:", label);
                 return $("<li></li>")
                     .data("ui-autocomplete-item", item)
                     .append($("<a></a>").html(label))
