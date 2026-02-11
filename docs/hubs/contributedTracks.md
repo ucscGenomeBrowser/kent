@@ -7,11 +7,11 @@ in one process, or creating a number of annotations for one assembly.
 It would be useful to the wider research community to have these
 annotations included in the default browser view on those assemblies.
 
-This discussion outlines procedures for submitting a set of tracks to the
-browser for inclusion in the default view of a genome assembly.
-This procedure is for developers of tracks that have a number of tracks
-to submit to one assembly, or a set of tracks to deliver to a multiple
-set of genome assemblies.
+This page outlines the procedures for submitting a set of tracks to the
+UCSC Genome Browser for inclusion in the default view of a genome assembly.
+This procedure is for developers that have a number of tracks
+to submit to a single genome assembly, or a set of tracks to deliver to multiple
+genome assemblies.
 
 Development process:
 
@@ -64,7 +64,7 @@ descriptionUrl documentation.html
 # load this hub with a reference to this hub.txt file:
 # https://genome-test.gi.ucsc.edu/~hiram/BRC/contrib/hub.txt
 
-# for example, to show this track hub in the genome browser::
+# for example, to show this track hub in the genome browser:
 
 # https://genome.ucsc.edu/cgi-bin/hgTracks?genome=GCA_000260495.2&
 #    hubUrl=https://genome-test.gi.ucsc.edu/~hiram/BRC/contrib/hub.txt
