@@ -43,12 +43,14 @@ Development process:
 
 ## Requirements
 
-Assembly names need to be the NCBI GenBank accession names to
-identify the corresponding assembly. **GCF\_...** or **GCA\_...**
+A hub must meet the following requirements before being accepted for consideration:
 
-All annotations must have appropriate documentation.
+- Assembly names must be NCBI GenBank accession names (i.e. GCF\_\* or GCA\_\*) to
+identify the corresponding assembly.
 
-The track hub directory structure must be as described here.
+- All annotations must have appropriate documentation as described below.
+
+- The track hub directory structure must match that described on this page.
 
 ## Example hub.txt file
 
