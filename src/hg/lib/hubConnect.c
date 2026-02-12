@@ -536,7 +536,6 @@ char *controlTdbString =
     "chainType reverse\n"
     "bigDataUrl %s\n"
     "quickLiftUrl %s\n"
-    "quickLiftDb %s\n"
     "otherTwoBitUrl %s\n";
 
 static struct trackDb *makeQuickLiftChainTdb(struct trackHubGenome *hubGenome,  struct hubConnectStatus *hub)

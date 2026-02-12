@@ -2126,6 +2126,12 @@ void wikiTrackUi(struct trackDb *tdb)
 return;	// currently empty
 }
 
+void quickLiftUi(struct trackDb *tdb)
+/* UI for base position (ruler) */
+{
+tdb->html = hFileContentsOrWarning(hHelpFile(trackHubSkipHubName(tdb->track)));
+}
+
 void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
@@ -3254,6 +3260,8 @@ else if (sameString(track, WIKI_TRACK_TABLE))
     wikiTrackUi(tdb);
 else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
+else if (sameString(trackHubSkipHubName(track), "quickLiftChain"))
+    quickLiftUi(tdb);
 else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
     oligoMatchUi(tdb);
 else if (sameString(track, CUTTERS_TRACK_NAME))
