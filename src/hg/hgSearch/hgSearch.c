@@ -372,8 +372,9 @@ fprintf(stderr, "performed query on %s\n", searchTerms);
 static void getUiState(struct cartJson *cj, struct hash *paramHash)
 /* We haven't seen this database before, return list of all searchable stuff */
 {
-char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "getUiState");
-cartSetString(cj->cart, "db", db);
+// cart's db was already set by handling of hub CGI variables sent along
+// with this command (e.g., hubUrl for GenArk assemblies).
+char *db = cartString(cj->cart, "db");
 initGenbankTableNames(db);
 hashTracksAndGroups(cj->cart, db);
 chromAliasSetup(db);
