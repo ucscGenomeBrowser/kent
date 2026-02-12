@@ -51,8 +51,8 @@ goodGroups: mkout
 	diff expected/goodGroups.output.txt output/goodGroups.output.txt
 
 noCompositeGroup: mkout
-	-${hubCheck} input/noCompositeGroup.txt > output/noCompositeGroup.ouptut.txt 2>/dev/null
-	diff expected/noCompositeGroup.output.txt output/noCompositeGroup.txt
+	-${hubCheck} input/noCompositeGroup.txt > output/noCompositeGroup.output.txt 2>/dev/null
+	diff expected/noCompositeGroup.output.txt output/noCompositeGroup.output.txt
 
 mkout::
 	@mkdir -p output

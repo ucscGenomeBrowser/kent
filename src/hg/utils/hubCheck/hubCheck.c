@@ -447,7 +447,7 @@ if (hasComplexSetting)
 
 if (hubSetting == NULL)
     {
-    dyStringPrintf(errors, "Setting '%s' is unknown/unsupported", setting);
+    dyStringPrintf(errors, "Setting '%s' is not recognized. Check for typos, or see https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html for supported settings", setting);
     char *suggest = suggestSetting(setting, options);
     if (suggest != NULL)
         dyStringPrintf(errors, " (did you mean '%s' ?)", suggest);
@@ -649,7 +649,7 @@ if (errCatchStart(errCatch))
     char *parentGroup = tdb->parent->grp;
     if (!sameString(subTrackGroup, parentGroup))
         {
-        errAbort("assembly %s: track %s has a different group (%s) than parent %s (group %s). Please specify the group setting in both the parent and the subtrack stanzas", trackHubSkipHubName(genome->name), subtrackName, subTrackGroup, trackHubSkipHubName(tdb->parent->track), parentGroup);
+        errAbort("assembly %s: subtrack \"%s\" has 'group %s' but its parent \"%s\" has 'group %s'. Subtracks inherit their parent's group. Either remove the 'group' line from the subtrack, or set both parent and subtrack to the same group.", trackHubSkipHubName(genome->name), subtrackName, subTrackGroup, trackHubSkipHubName(tdb->parent->track), parentGroup);
         }
 
     // check subgroups settings
@@ -668,7 +668,7 @@ if (errCatchStart(errCatch))
 
         if (membership == NULL)
             {
-            errAbort("missing 'subgroups' setting for subtrack %s", subtrackName);
+            errAbort("missing 'subgroups' setting for subtrack %s. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'", subtrackName);
             }
 
         // if a sortOrder is defined, make sure every subtrack has that membership
@@ -701,7 +701,7 @@ if (errCatchStart(errCatch))
             char *subgroupName = membership->subgroups[i];
             if (!subgroupingExists(tdb->parent, subgroupName))
                 {
-                warn("subtrack \"%s\" has a subgroup \"%s\" not defined at parent level", subtrackName, subgroupName);
+                warn("subtrack \"%s\" declares subgroup \"%s\", but the parent composite does not define this subgroup. Check the 'subGroup' lines in the parent stanza for a matching group name.", subtrackName, subgroupName);
                 }
             }
         }
@@ -769,8 +769,10 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
     // Containers should not have a bigDataUrl setting
     if (trackDbLocalSetting(tdb, "bigDataUrl"))
         {
-        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
-            "container, and also has a bigDataUrl", tdb->track);
+        errAbort("Track \"%s\" is a container (compositeTrack/superTrack/view) but also has "
+            "a 'bigDataUrl'. Container tracks organize subtracks and should not have data files. "
+            "Remove 'bigDataUrl' from this stanza, or remove the container declaration if this is "
+            "a data track.", tdb->track);
         }
 
     // multiWigs cannot be the child of a composite
@@ -816,7 +818,7 @@ if (errCatchStart(errCatch))
             #endif
             ))
         {
-        errAbort("error in type line \"%s\" for track \"%s\". The only valid types for tracks that are not composites, views or supertracks are: bigWig, bigBed and bigBed variants like bigGenePred/bigChain/bigBarChart/etc, longTabix, vcfTabix, vcfPhasedTrio, bam, hic and halSnake.", trackType, tdb->track);
+        errAbort("error: unrecognized type \"%s\" for track \"%s\". Valid types include: bigWig, bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigBarChart, bigInteract, vcfTabix, bam, hic, and longTabix. See https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#type for the full list.", trackType, tdb->track);
         }
 
     if (sameString(splitType[0], "bigBed"))
@@ -887,7 +889,7 @@ if (chopByChar(tmp, ':', words, ArraySize(words)) == 2)
     if (validUpper && validLower)
 	{
 	if (upperVal < lowerVal)
-	    warn("upper < lower. Should swap lower and upper range values in '%s' in setting %s track %s", setting, settingName, tdb->track);
+	    warn("in track \"%s\", setting '%s' has the range '%s' where the upper bound is less than the lower bound. Swap the values so the format is lower:upper (e.g. 'viewLimits 0:100').", tdb->track, settingName, setting);
 	}
     }
 else
@@ -1012,12 +1014,10 @@ if (errCatchStart(errCatch))
         char *autoScaleSetting = trackDbLocalSetting(tdb, "autoScale");
         if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
             {
-            errAbort("track \"%s\" has value \"%s\" for autoScale setting, "
-                    "valid autoScale values for individual bigWig tracks are \"off\" or \"on\" only. "
-                    "If \"%s\" is part of a bigWig composite track and you want to use the "
-                    "\"%s\" setting, only declare \"autoScale group\" in the parent stanza",
-                    trackHubSkipHubName(tdb->track), autoScaleSetting, trackHubSkipHubName(tdb->track), 
-                    autoScaleSetting);
+            errAbort("track \"%s\" uses 'autoScale %s', but individual bigWig tracks only accept "
+                    "'autoScale on' or 'autoScale off'. To use 'autoScale %s', move that setting to the "
+                    "parent composite stanza instead.",
+                    trackHubSkipHubName(tdb->track), autoScaleSetting, autoScaleSetting);
             }
         }
     }
@@ -1183,9 +1183,9 @@ if (errCatchStart(errCatch))
     hub = trackHubOpen(hubUrl, "");
     char *descUrl = hub->descriptionUrl;
     if (descUrl == NULL)
-        warn("warning: missing hub overview description page (descriptionUrl setting)");
+        warn("warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.");
     else if (!extFileExists(descUrl))
-        warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
+        warn("warning: descriptionUrl '%s' could not be accessed. Verify the file exists at the specified path and is publicly readable.", hub->descriptionUrl);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
