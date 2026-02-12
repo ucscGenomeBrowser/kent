@@ -48,6 +48,7 @@ errAbort(
   "   -httpsCertCheckDomainExceptions= - space separated list of domains to whitelist.\n"  
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
+  "   -allowWarnings        - return 0 exit code when only warnings are found (no errors)\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
   );
@@ -68,6 +69,7 @@ static struct optionSpec options[] = {
    {"httpsCertCheckDomainExceptions", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
+   {"allowWarnings", OPTION_BOOLEAN},
    // intentionally undocumented option for hgHubConnect
    {"htmlOut", OPTION_BOOLEAN},
    {NULL, 0},
@@ -88,6 +90,7 @@ struct trackHubCheckOptions
     struct hash *settings;      /* supported settings for this version */
     struct hash *extra;         /* additional trackDb settings to accept */
     struct slName *suggest;     /* list of supported settings for suggesting */
+    boolean allowWarnings;      /* return 0 exit code for warnings (no errors) */
     /* hgHubConnect only */
     boolean htmlOut;            /* put special formatted text into the errors dyString */
     };
@@ -709,8 +712,9 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
     {
-    retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    if (errCatch->gotError || !options->allowWarnings)
+        retVal = 1;
     }
 errCatchFree(&errCatch);
 
@@ -749,7 +753,8 @@ if (errCatch->gotError || errCatch->gotWarning)
     {
     // don't add a new line because one will already be inserted by the errCatch->message
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
-    retVal = 1;
+    if (errCatch->gotError || !options->allowWarnings)
+        retVal = 1;
     }
 
 return retVal;
@@ -990,6 +995,7 @@ if (errCatchStart(errCatch))
     // check that type line is syntactically correct regardless of
     // if we actually want to check the data file itself
     boolean foundTypeError = checkTypeLine(genome, tdb, errors, options);
+    retVal |= foundTypeError;
 
     // No point in checking the data file if the type setting is incorrect,
     // since hubCheckBigDataUrl will error out early with a less clear message
@@ -1024,8 +1030,9 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
     {
-    retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    if (errCatch->gotError || !options->allowWarnings)
+        retVal = 1;
     if (errCatch->gotError)
         trackDbErrorCount += 1;
     }
@@ -1098,7 +1105,7 @@ if (errCatch->gotError || errCatch->gotWarning)
     {
     openedGenome = TRUE;
     genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
-    if (errCatch->gotError || errCatch->gotWarning)
+    if (errCatch->gotError || !options->allowWarnings)
         genomeErrorCount += 1;
     }
 errCatchFree(&errCatch);
@@ -1190,8 +1197,9 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
     {
-    retVal = 1;
     hubErr(hubErrors, errCatch->message->string, hub, options->htmlOut);
+    if (errCatch->gotError || !options->allowWarnings)
+        retVal = 1;
 
     if (options->htmlOut)
         {
@@ -1325,6 +1333,7 @@ checkOptions->printMeta = optionExists("printMeta");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
 checkOptions->genome = optionVal("genome", NULL);
+checkOptions->allowWarnings = optionExists("allowWarnings");
 
 struct trackHubSettingSpec *setting = NULL;
 AllocVar(setting);
@@ -1387,23 +1396,21 @@ if (optionExists("settings"))
 // hgHubConnect specific option for generating a jstree of the hub errors
 checkOptions->htmlOut = optionExists("htmlOut");
 struct dyString *errors = dyStringNew(1024);
-if (trackHubCheck(argv[1], checkOptions, errors) || checkOptions->htmlOut)
+int checkResult = trackHubCheck(argv[1], checkOptions, errors);
+if (checkOptions->htmlOut)
     {
-    if (checkOptions->htmlOut) // just dump errors string to stdout
-        {
-        printf("%s", errors->string);
-        return 1;
-        }
-    else
-        {
-        // uniquify and count errors
-        struct slName *errs = slNameListFromString(errors->string, '\n');
-        slUniqify(&errs, slNameCmp, slNameFree);
-        int errCount = slCount(errs);
-        printf("Found %d problem%s:\n", errCount, errCount == 1 ? "" : "s");
-        printf("%s\n", slNameListToString(errs, '\n'));
-        return 1;
-        }
+    printf("%s", errors->string);
+    return checkResult ? 1 : 0;
+    }
+else if (errors->stringSize > 0)
+    {
+    // uniquify and count errors
+    struct slName *errs = slNameListFromString(errors->string, '\n');
+    slUniqify(&errs, slNameCmp, slNameFree);
+    int errCount = slCount(errs);
+    printf("Found %d problem%s:\n", errCount, errCount == 1 ? "" : "s");
+    printf("%s\n", slNameListToString(errs, '\n'));
+    return checkResult ? 1 : 0;
     }
 return 0;
 }
