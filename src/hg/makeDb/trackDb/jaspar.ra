@@ -13,8 +13,6 @@ filterByRange.score 0:1000
 maxWindowCoverage 15000
 exonArrows on
 spectrum on
-noParentConfig on
-showCfg on
 tableBrowser tbNoGenome
 noGenomeReason JASPAR files contain billions of items. The Table Browser allows regional queries for this track, but those may timeout if the regions are too big. See the Data Access section in the track description page for other ways to query this data, such as command-line tools and our API.
 pennantIcon Updated red ../goldenPath/newsarch.html#NNNNNN "Updated NNN"
@@ -28,6 +26,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#NNNNNN "Updated NNN"
         labelFields TFName
         visibility pack
         bigDataUrl /gbdb/$D/jaspar/JASPAR2026.bb
+        motifPwmTable hgFixed.jasparCore2026
         maxItems 100000
         filter.score 400
         filterByRange.score 0:1000

@@ -1101,6 +1101,23 @@ var hubCreate = (function() {
             updateQuota(-uiState.filesHash[f].fileSize);
         });
         uiState.fileList = uiState.fileList.filter(toKeep);
+        // Rebuild filesHash from remaining fileList to remove stale entries
+        uiState.filesHash = {};
+        parseFileListIntoHash(uiState.fileList);
+        // If the currently viewed hub directory was deleted (its data is in oldRowData
+        // because dataTableCustomOrder moved it to the header), clean up that stale state
+        if (oldRowData && pathList.includes(oldRowData.fullPath)) {
+            let thead = document.querySelector(
+                ".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
+            if (thead && thead.childNodes.length > 1) {
+                thead.removeChild(thead.lastChild);
+            }
+            oldRowData = null;
+            dataTableShowTopLevel(table);
+            dataTableEmptyBreadcrumb(table);
+            table.order([{name: "uploadTime", dir: "desc"}]);
+            table.draw();
+        }
         history.replaceState(uiState, "", document.location.href);
     }
 
@@ -1167,7 +1184,12 @@ var hubCreate = (function() {
         dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
         table.draw();
         dataTableCustomOrder(table, hubDirData);
-        table.columns.adjust().draw();
+        // Flush dataTableCustomOrder's row.remove() so DataTables internal state is clean,
+        // then defer columns.adjust() to allow browser reflow after header DOM manipulation
+        table.draw();
+        setTimeout(function() {
+            table.columns.adjust();
+        }, 0);
     }
 
     function doRowSelect(evtype, table, indexes) {

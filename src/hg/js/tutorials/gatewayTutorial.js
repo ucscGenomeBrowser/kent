@@ -166,7 +166,8 @@
 
         gatewayTour.addStep({
             title: 'Exploring the UCSC Species Tree',
-            text: 'The <b>Species Tree</b> option displays a phylogenetic tree that can be navigated '+
+            text: 'Click this link to show the <b>Species Tree</b>. <br><br>' +
+                  'The <b>Species Tree</b> option displays a phylogenetic tree that can be navigated '+
                   'using scrolling or by clicking different parts of the tree.  Hovering over '+
                   'a branch will reveal the lineage branch name.<br><br>'+
 		  '<b>The Species Tree does not include all available Genome Browser assemblies.</b> '+
@@ -174,8 +175,8 @@
 		  'omitting certain previous features, such as inclusion in the Species Tree. To find a '+
 		  'specific assembly, use the assembly search box.',
             attachTo: {
-                element: '#representedSpeciesTitle',
-                on: 'top'
+                element: '#speciesTreeLink',
+                on: 'right'
             },
             buttons: [tutorialButtons.back , tutorialButtons.next ],
             id: 'speciesTree',

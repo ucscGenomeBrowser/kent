@@ -341,8 +341,8 @@ var speciesTree = (function() {
         if (hubList && hubList.length) {
             for (i = 0;  i < hubList.length;  i++) {
                 hub = hubList[i];
-                // is this a curated assembly hub? If so, don't list it
-                if (!(hub.hubUrl.startsWith("/gbdb") && ! hub.hubUrl.startsWith("/gbdb/genark"))) {
+                // Skip UCSC-hosted hubs (native and GenArk) under /gbdb
+                if (!hub.hubUrl.startsWith("/gbdb")) {
                     addHubLabel(svg, hub, y);
                     y += cfg.labelLineHeight;
                     countNonCurated++;
@@ -713,6 +713,9 @@ var hgGateway = (function() {
     var activeTaxIds = [];  // gets set in init() now;
     // This is dbDbTree after pruning -- null if dbDbTree has no children left
     var prunedDbDbTree = null;
+    // These store the latest species tree draw results for use by the species tree toggle handler
+    var latestSpTree = null;
+    var latestStripeTops = null;
     // This keeps track of which gene the user has selected most recently from autocomplete.
     var selectedGene = null;
 
@@ -1090,27 +1093,11 @@ var hgGateway = (function() {
                 setSpeciesPickerSizes(spTree.width, spTree.height);
                 stripeTops = rainbow.draw(svg, dbDbTree,
                                           spTree.yTree, spTree.height, spTree.leafTops);
+                latestSpTree = spTree;
+                latestStripeTops = stripeTops;
             } else {
                 $('#speciesTreeContainer').html(getBetterBrowserMessage);
             }
-            let showSpeciesTree = document.getElementById("speciesTreeLink");
-            showSpeciesTree.addEventListener("click", function() {
-                let speciesTreeSection = document.getElementById("speciesGraphic");
-                if (!$(speciesTreeSection).is(":visible")) {
-                    $('#representedSpeciesTitle').show();
-                    $('#speciesGraphic').show();
-                    if (dbDbTree && document.createElementNS) {
-                        // These need to be done after things are visible because heights are 0 when hidden.
-                        highlightLabelForDb(uiState.db, uiState.taxId);
-                        initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
-                    }
-                    showSpeciesTree.textContent = "Hide species tree";
-                } else {
-                    $('#representedSpeciesTitle').hide();
-                    $('#speciesGraphic').hide();
-                    showSpeciesTree.textContent = "Show species tree";
-                }
-            });
         }
     }
 
@@ -1128,12 +1115,12 @@ var hgGateway = (function() {
             return;
         }
 
-        // Filter out curated assembly hubs (those in /gbdb but not /gbdb/genark)
-        // and convert hub objects to card-compatible format
+        // Filter out UCSC-hosted hubs (native and GenArk) under /gbdb
+        // and convert remaining hub objects to card-compatible format
         var displayHubs = [];
         hubList.forEach(function(hub) {
-            // Skip curated assembly hubs (same logic as drawHubs)
-            if (hub.hubUrl.startsWith("/gbdb") && !hub.hubUrl.startsWith("/gbdb/genark")) {
+            // Skip UCSC-hosted hubs (native and GenArk) under /gbdb
+            if (hub.hubUrl.startsWith("/gbdb")) {
                 return;
             }
             // Convert hub object to card-compatible format
@@ -1439,7 +1426,7 @@ var hgGateway = (function() {
 
     function updateStateAndPage(jsonData) {
         // Update uiState with new values and update the page.
-        var hubsChanged = !_.isEqual(jsonData.hubs, uiState.hubs);
+        var hubsChanged = !_.isEqual(jsonData.hubs || [], uiState.hubs || []);
         // In rare cases, there can be a genome (e.g. Baboon) with multiple species/taxIds
         // (e.g. Papio anubis for papAnu1 vs. Papio hamadryas for papHam1).  Changing the
         // db can result in changing the taxId too.  In that case, update the highlighted
@@ -1447,11 +1434,24 @@ var hgGateway = (function() {
         if (jsonData.taxId !== uiState.taxId) {
             highlightLabel('textEl_' + jsonData.taxId, false);
         }
+        // Before overwriting uiState, clean up localStorage recents for any removed hubs
+        if (hubsChanged) {
+            var newHubUrls = {};
+            (jsonData.hubs || []).forEach(function(hub) {
+                newHubUrls[hub.hubUrl] = true;
+            });
+            (uiState.hubs || []).forEach(function(hub) {
+                if (!newHubUrls[hub.hubUrl]) {
+                    removeRecentGenomesByHubUrl(hub.hubUrl);
+                }
+            });
+        }
         _.assign(uiState, jsonData);
         updateFindPositionSection(uiState);
+        drawSpeciesPicker(prunedDbDbTree);
         if (hubsChanged) {
-            drawSpeciesPicker(prunedDbDbTree);
             addHubsToList(uiState.hubs);
+            displayRecentGenomesInPanel();
         }
     }
 
@@ -1498,10 +1498,18 @@ var hgGateway = (function() {
                 };
                 if (uiState.hubUrl) {
                     recentItem.hubUrl = uiState.hubUrl;
-                    // For hub genomes, add category for proper detection when re-selected
-                    if (dbForRecents.startsWith('GCA_') || dbForRecents.startsWith('GCF_')) {
-                        recentItem.category = "UCSC GenArk";
+                    // Store hubName so we can reconstruct the full hub db name later
+                    var parsedHubName = hubNameFromDb(uiState.db);
+                    if (parsedHubName) {
+                        recentItem.hubName = parsedHubName;
                     }
+                    if (uiState.hubUrl.startsWith("/gbdb")) {
+                        recentItem.category = "UCSC Curated";
+                    } else {
+                        recentItem.category = "Assembly Hub";
+                    }
+                } else {
+                    recentItem.category = "UCSC Curated";
                 }
                 addRecentGenome(recentItem);
             }
@@ -1532,7 +1540,8 @@ var hgGateway = (function() {
                     db: dbForRecents,
                     genome: uiState.genome,
                     label: label,
-                    taxId: uiState.taxId
+                    taxId: uiState.taxId,
+                    category: "UCSC Curated"
                 });
             }
             displayRecentGenomesInPanel();
@@ -1602,7 +1611,9 @@ var hgGateway = (function() {
             cart.flush();
             clearPositionInput();
         }
-        highlightLabel('textEl_' + hubName, isAutocomplete);
+        if (hubName) {
+            highlightLabel('textEl_' + hubName, isAutocomplete);
+        }
         if (! isAutocomplete) {
             clearSpeciesInput();
         }
@@ -1619,14 +1630,16 @@ var hgGateway = (function() {
         var cmd;
         var genome = item.genome || '';
 
-        // Check if db is a valid assembly name (not an organism name)
-        // Valid db names are typically lowercase alphanumeric like "hg38", "mm10"
-        // Organism names are capitalized like "Human", "Mouse"
-        var isValidDb = db && /^[a-z]/.test(db) && db !== org;
+        // Check if db is a valid assembly name (not an organism name).
+        // If db is the same as org, it's likely a taxon-only result, not an assembly.
+        var isValidDb = db && db !== org;
 
-        // Detect GenArk by category OR by genome name pattern (GCA_/GCF_)
-        var isGenArk = (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) ||
-                       (item.hubUrl && (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
+        // Detect GenArk: must have hubUrl, and either "UCSC Curated" category (GenArk hubs
+        // under /gbdb) or a GCA_/GCF_ genome pattern.  The hubUrl check distinguishes GenArk
+        // from native databases which also use "UCSC Curated" category.
+        var isGenArk = item.hubUrl &&
+                       ((typeof item.category !== "undefined" && item.category.startsWith("UCSC Curated")) ||
+                        (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
 
         if (isGenArk) {
             // For items from localStorage recents, db is the accession; for fresh autocomplete, genome is
@@ -1637,6 +1650,10 @@ var hgGateway = (function() {
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;
             setHubDb(item.hubUrl, taxId, db, item.hubName, org, true);
+        } else if (item.hubUrl) {
+            // Connected hub from localStorage recents without hubName.
+            // db is already the bare assembly name; server resolves via hubUrl.
+            setHubDb(item.hubUrl, taxId, db, null, org, true);
         } else if (taxId > 0) {
             // Native db with valid taxId - pass db only if it's a valid assembly name
             setTaxId(taxId, isValidDb ? db : null, org, true, false);
@@ -1835,25 +1852,23 @@ var hgGateway = (function() {
         items.forEach(function(item) {
             var $card = $('<div class="recentGenomeCard"></div>');
             var label = item.label || item.shortLabel || item.value || item.genome || item.commonName;
-            var genome = item.genome || item.db || '';
+            var genome = trackHubSkipHubName(item.genome || item.db || '');
 
             $card.append('<div class="recentGenomeLabel">' + escapeHtml(label) + '</div>');
             if (genome && label.indexOf(genome) < 0) {
                 $card.append('<div class="recentGenomeDb">' + escapeHtml(genome) + '</div>');
             }
 
-            // Add category as small label
-            if (item.category) {
-                var shortCategory = item.category;
-                if (shortCategory.indexOf('UCSC Genome Browser') >= 0) {
-                    shortCategory = 'UCSC';
-                } else if (shortCategory.indexOf('GenArk') >= 0) {
-                    shortCategory = 'GenArk';
-                } else if (shortCategory.indexOf('Assembly Hub') >= 0) {
-                    shortCategory = 'Hub';
-                }
-                $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
+            // Add category label: "External" for assembly hubs, "UCSC Curated" for everything else.
+            // The indexOf check handles both the new "Assembly Hub" category from handleSetDb
+            // and legacy localStorage entries from addHubsToList or older code.
+            var shortCategory;
+            if (item.category && item.category.indexOf('Assembly Hub') >= 0) {
+                shortCategory = 'External';
+            } else {
+                shortCategory = 'UCSC Curated';
             }
+            $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
 
             // Store item data for click handler
             $card.data('item', item);
@@ -1877,6 +1892,9 @@ var hgGateway = (function() {
         $('#recentGenomesSection').show();
         var emptyMessage = 'Search for a genome above, or click a popular species icon';
         renderGenomeCards(recentGenomes, $('#recentGenomesList'), emptyMessage);
+        // Clear any selected state from connected hub cards (selection was transient,
+        // the genome is now reflected in the recent genomes panel)
+        $('#connectedHubsList .recentGenomeCard').removeClass('selected');
     }
 
     function escapeHtml(text) {
@@ -1930,6 +1948,59 @@ var hgGateway = (function() {
 
             // Display recent genomes in the left panel on page load
             displayRecentGenomesInPanel();
+
+            // Set up species tree toggle link (attach once to avoid duplicate listeners)
+            var speciesTreeLink = document.getElementById("speciesTreeLink");
+            if (speciesTreeLink) {
+                speciesTreeLink.addEventListener("click", function() {
+                    var speciesTreeSection = document.getElementById("speciesGraphic");
+                    if (!$(speciesTreeSection).is(":visible")) {
+                        $('#representedSpeciesTitle').show();
+                        $('#speciesGraphic').show();
+                        if (prunedDbDbTree && document.createElementNS && latestSpTree) {
+                            // These need to be done after things are visible because heights are 0 when hidden.
+                            highlightLabelForDb(uiState.db, uiState.taxId);
+                            initRainbowSlider(latestSpTree.height, rainbow.colors, latestStripeTops);
+                        }
+                        speciesTreeLink.textContent = "Hide species tree";
+                    } else {
+                        $('#representedSpeciesTitle').hide();
+                        $('#speciesGraphic').hide();
+                        speciesTreeLink.textContent = "Show species tree";
+                    }
+                });
+            }
+
+            // Set up info icon tooltips
+            var speciesSearchInfo = document.getElementById('speciesSearchInfo');
+            if (speciesSearchInfo) {
+                addMouseover(speciesSearchInfo,
+                    "Searches are case-insensitive and match by prefix. You can search by:" +
+                    "<ul class='noBullets'>" +
+                    "<li>Common name (e.g., Human, Mouse)</li>" +
+                    "<li>Scientific name (e.g., Homo sapiens)</li>" +
+                    "<li>Abbreviated scientific name (e.g., P. trog for Pan troglodytes)</li>" +
+                    "<li>Database name (e.g., hg38, mm39)</li>" +
+                    "<li>Accession (e.g., GCA_000001405.29)</li>" +
+                    "</ul>" +
+                    "For multi-word searches, all words are required by default.");
+            }
+            var recentGenomesInfo = document.getElementById('recentGenomesInfo');
+            if (recentGenomesInfo) {
+                addMouseover(recentGenomesInfo,
+                    "Your recently selected genome assemblies, stored in this browser. " +
+                    "Click a card to quickly return to that genome. " +
+                    "\"UCSC Curated\" genomes are maintained by UCSC with curated annotation tracks. " +
+                    "\"External\" genomes are from track hubs you have connected.");
+            }
+            var connectedHubsInfo = document.getElementById('connectedHubsInfo');
+            if (connectedHubsInfo) {
+                addMouseover(connectedHubsInfo,
+                    "Track data hubs you have connected. These are external data sets hosted " +
+                    "outside of UCSC. To connect a hub, use the top blue bar and navigate to " +
+                    "My Data -&gt; Track Hubs. Both UCSC-hosted and public hub assemblies are " +
+                    "searchable via the search bar above.");
+            }
 
             // Gateway tutorial
             if (typeof gatewayTour !== 'undefined') {

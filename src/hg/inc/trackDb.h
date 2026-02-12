@@ -38,7 +38,7 @@ struct minMax
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 /* This number is tacked onto the end of cached trackDb entries to make sure we
  * don't use a cached structure that has different contents. */
-#define TRACKDB_VERSION 8
+#define TRACKDB_VERSION 9
 
 struct trackDb
 /* This describes an annotation track.  */

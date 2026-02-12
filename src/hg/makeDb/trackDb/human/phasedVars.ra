@@ -5,6 +5,7 @@ group varRep
 type bed 12
 visibility hide
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#020926 "Released Feb. 09, 2026"
 
         track mexbb
         shortLabel Mexico Biobank, 6k Array

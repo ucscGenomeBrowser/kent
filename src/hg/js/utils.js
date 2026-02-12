@@ -3989,7 +3989,11 @@ var dragReorder = {
                 // if the custom mouseover code has removed this title, check the attr
                 // for the original title
                 if (this.title.length === 0) {
-                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                    if (this.getAttribute('data-tooltip') !== null) {
+                        rightClick.currentMapItem.title = this.getAttribute("data-tooltip");
+                    } else {
+                        rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                    }
                 }
 
                 // Handle linked features with separate clickmaps for each exon/intron
@@ -4486,6 +4490,25 @@ function getRecentGenomes() {
     return results;
 }
 
+function removeRecentGenomesByHubUrl(hubUrl) {
+    // Remove all recent genome entries whose hubUrl matches the given URL.
+    // Used when a hub is disconnected to clean up stale entries.
+    let stored = window.localStorage.getItem("recentGenomes");
+    if (!stored) return;
+    let recentObj = JSON.parse(stored);
+    let newStack = [];
+    for (let key of recentObj.stack) {
+        let item = recentObj.results[key];
+        if (item && item.hubUrl === hubUrl) {
+            delete recentObj.results[key];
+        } else {
+            newStack.push(key);
+        }
+    }
+    recentObj.stack = newStack;
+    window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
+}
+
 function addRecentGenomesToMenuBar() {
     // Retrieve recent genome selections from localStorage and add them to the "Genomes" menu heading
     // Tries not add duplicate genomes
@@ -4830,7 +4853,6 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
                        label = label.replace(regex, '<b>$1</b>');
                    });
                 }
-                console.log("label:", label);
                 return $("<li></li>")
                     .data("ui-autocomplete-item", item)
                     .append($("<a></a>").html(label))

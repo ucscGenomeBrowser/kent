@@ -3776,7 +3776,7 @@ void initVirtRegionsFromEMGeneTableExons(boolean showPseudo, boolean showNoncodi
 //
 // Adding support for extra options from Gencode hg38 so we can filter for
 // comprehensive, splice-variants, non-coding subsets.
-// Added add support for pseudo filter for pseudoGenes, default off.
+// Added support for pseudo filter for pseudoGenes, default off.
 // Added support for Track Sets including new MANE and Id-list filter.
 
 {
@@ -3864,6 +3864,7 @@ if (kgnf)
 	sqlDyStringPrintf(query, "'%s'", trimSpaces(id->name));
 	}
     sqlDyStringPrintf(query, ")");
+    slNameFreeList(&list);
     }
 
 // TODO GALT may have to change this to in-memory sorting?
@@ -9953,7 +9954,7 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
-                    "if (window.confirm(\"Are you sure you want to disconnect this hub? To reconnect it you will need to navigate to My Data -> Track Hubs and find the hub in the public hubs list or re-enter the URL if the hub is not listed there. Click 'OK' to continue with the disconnect, or 'Cancel' to continue browsing wit hthe hub attached.\")) {"
+                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data → Track Hubs to find it again or re-entering the hub URL.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;"
                     "}",
