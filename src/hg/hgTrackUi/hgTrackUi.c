@@ -3854,7 +3854,8 @@ if (!ct)
     }
 
 char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-if (liftDb)
+// quickLiftChain has static html
+if (liftDb && differentString(trackHubSkipHubName(tdb->track), "quickLiftChain"))
     tdb->html = getTrackHtml(liftDb, tdb->table);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
