@@ -4522,8 +4522,10 @@ function addRecentGenomesToMenuBar() {
             let item = document.createElement("li");
             let link = document.createElement("a");
             // TODO: these links need to work if the result (ie: genark) does not have a db
-            link.href = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + recentObj.results[genome].db + "&position=lastDbPos";
-            link.textContent = recentObj.results[genome].label;
+            let res = recentObj.results[genome];
+            dbOrGenome = 'hubUrl' in res ? res.hubName + "_" + res.db : res.db;
+            link.href = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + dbOrGenome + "&position=lastDbPos";
+            link.textContent = res.label;
             item.appendChild(link);
             results.push(item);
         }
