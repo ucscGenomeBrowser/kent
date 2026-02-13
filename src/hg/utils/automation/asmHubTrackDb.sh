@@ -701,7 +701,6 @@ fi
 
 
 if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
-printf "working on ncbiGene\n" 1>&2
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
