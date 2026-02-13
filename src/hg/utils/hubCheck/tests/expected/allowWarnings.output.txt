@@ -1,0 +1,10 @@
+Found 9 problems:
+warning: missing description page for track. Add 'html max1.html' line to the 'max1' track stanza. 
+warning: missing description page for track. Add 'html max2.html' line to the 'max2' track stanza. 
+warning: missing description page for track. Add 'html myFirstTrackA.html' line to the 'myFirstTrackA' track stanza. 
+warning: missing description page for track. Add 'html myFirstTrackB.html' line to the 'myFirstTrackB' track stanza. 
+warning: missing description page for track. Add 'html myFirstTrackC.html' line to the 'myFirstTrackC' track stanza. 
+warning: missing description page for track. Add 'html mySecondTrackA.html' line to the 'mySecondTrackA' track stanza. 
+warning: missing description page for track. Add 'html mySecondTrackB.html' line to the 'mySecondTrackB' track stanza. 
+warning: missing description page for track. Add 'html mySecondTrackC.html' line to the 'mySecondTrackC' track stanza. 
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.
