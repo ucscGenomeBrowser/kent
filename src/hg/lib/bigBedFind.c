@@ -10,10 +10,11 @@
 #include "errCatch.h"
 #include "bigBedLabel.h"
 #include "bigBedFind.h"
+#include "genbank.h"
 
 static struct hgPos *bigBedIntervalListToHgPositions(struct cart *cart, struct trackDb *tdb,
                         struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList,
-                        char *description, struct hgFindSpec *hfs)
+                        char *description, struct hgFindSpec *hfs, char *db)
 /* Given an open bigBed file, and an interval list, return a pointer to a list of hgPos structures. */
 {
 struct hgPos *posList = NULL;
@@ -21,6 +22,25 @@ char chromName[bbi->chromBpt->keySize+1];
 int lastChromId = -1;
 struct bigBedInterval *interval;
 struct slInt *labelColumns = NULL;
+
+struct asObject *as = NULL;
+int ncbiIdIx = -1, geneNameIx = -1;
+struct sqlConnection *conn = NULL;
+if (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc"))
+    {
+    // TODO: right now we are only doing this for MANE and HGNC, but if we are gonna add
+    // special descriptions to more tracks in the future then we should have some generic
+    // way of attaching a description to an hfs, whether that hfs is a mysql search or a
+    // bigBed search
+    as = bigBedAsOrDefault(bbi);
+    if (sameString(hfs->searchName, "mane"))
+        {
+        conn = hAllocConn(db);
+        ncbiIdIx = asColumnFindIx(as->columnList, "ncbiId");
+        }
+    else if (sameString(hfs->searchName, "hgnc"))
+        geneNameIx = asColumnFindIx(as->columnList, "geneName");
+    }
 
 bigBedLabelCalculateFields(cart, tdb, bbi,  &labelColumns );
 for (interval = intervalList; interval != NULL; interval = interval->next)
@@ -52,14 +72,38 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
             if (hgPos->chromStart < 0)
                 hgPos->chromStart = 0;
             }
+        // special code here for per hfs bigBed searches
+        if (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc"))
+            {
+            char startBuf[256], endBuf[256], *row[bbi->fieldCount];
+            bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
+            if (sameString(hfs->searchName, "mane"))
+                {
+                // here the description comes from hgFixed.refLink.product, linked via mane.bb.ncbiId
+                if (ncbiIdIx > 0)
+                    {
+                    struct dyString *query = sqlDyStringCreate("select product from %s where mrnaAcc=substring_index('%s', '.', 1)", refLinkTable, row[ncbiIdIx]);
+                    hgPos->description = sqlQuickString(conn, dyStringCannibalize(&query));
+                    }
+                }
+            else
+                {
+                // the description is the geneName field of the bigBed
+                if (geneNameIx > 0)
+                    hgPos->description = cloneString(row[geneNameIx]);
+                }
+            }
         }
     }
+
+if (conn)
+    hFreeConn(&conn);
 
 return posList;
 }
 
 static struct hgPos *getPosFromBigBed(struct cart *cart, struct trackDb *tdb, struct bbiFile *bbi,
-                        char *indexField, char *term, char *description, struct hgFindSpec *hfs)
+                        char *indexField, char *term, char *description, struct hgFindSpec *hfs, char *db)
 /* Given a bigBed file with a search index, check for term. */
 {
 struct errCatch *errCatch = errCatchNew();
@@ -72,7 +116,7 @@ if (errCatchStart(errCatch))
     struct bigBedInterval *intervalList;
     intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
 
-    posList = bigBedIntervalListToHgPositions(cart, tdb,  bbi, term, intervalList, description, hfs);
+    posList = bigBedIntervalListToHgPositions(cart, tdb,  bbi, term, intervalList, description, hfs, db);
     bptFileDetach(&bpt);
     }
 errCatchEnd(errCatch);
@@ -87,7 +131,7 @@ return posList;
 
 static struct hgPos *doTrixSearch(struct cart *cart, struct trackDb *tdb, char *trixFile,
                         struct slName *indices, struct bbiFile *bbi, char *term, char *description,
-                        struct hgFindSpec *hfs)
+                        struct hgFindSpec *hfs, char *db)
 /* search a trix file in the "searchTrix" field of a bigBed trackDb */
 {
 struct trix *trix = trixOpen(trixFile);
@@ -129,7 +173,7 @@ for ( ; tsList != NULL; tsList = tsList->next)
     for (; oneIndex; oneIndex = oneIndex->next)
 	{
 	struct hgPos *posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name,
-                                                  tsList->itemId, tsList->snippet, hfs);
+                                                  tsList->itemId, tsList->snippet, hfs, db);
 
 	posList = slCat(posList, posList2);
 	}
@@ -234,7 +278,7 @@ if (trixFile != NULL)
     if (errCatchStart(errCatch))
         {
         posList1 = doTrixSearch(cart, tdb, hReplaceGbdb(trixFile), indexList, bbi, term,
-                                NULL, hfs);
+                                NULL, hfs, db);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
@@ -246,7 +290,7 @@ if (trixFile != NULL)
 struct slName *oneIndex=indexList;
 for (; oneIndex; oneIndex = oneIndex->next)
     {
-    posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name, term, NULL, hfs);
+    posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name, term, NULL, hfs, db);
     posList1 = slCat(posList1, posList2);
     }
 // the trix search and the id search may have found the same item so uniqify:
