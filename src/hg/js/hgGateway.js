@@ -1988,18 +1988,18 @@ var hgGateway = (function() {
             var recentGenomesInfo = document.getElementById('recentGenomesInfo');
             if (recentGenomesInfo) {
                 addMouseover(recentGenomesInfo,
-                    "Your recently selected genome assemblies, stored in this browser. " +
-                    "Click a card to quickly return to that genome. " +
+                    "Recently selected genome assemblies stored in this browser. " +
+                    "Click a card to quickly return to that genome.<br> " +
                     "\"UCSC Curated\" genomes are maintained by UCSC with curated annotation tracks. " +
-                    "\"External\" genomes are from track hubs you have connected.");
+                    "<br>\"External\" genomes are from connected track hubs.");
             }
             var connectedHubsInfo = document.getElementById('connectedHubsInfo');
             if (connectedHubsInfo) {
                 addMouseover(connectedHubsInfo,
-                    "Track data hubs you have connected. These are external data sets hosted " +
-                    "outside of UCSC. To connect a hub, use the top blue bar and navigate to " +
-                    "My Data -&gt; Track Hubs. Both UCSC-hosted and public hub assemblies are " +
-                    "searchable via the search bar above.");
+                    "Track data hubs currently connected to this browser. " +
+                    "These are external datasets hosted outside of UCSC. To connect a hub, use the " +
+                    "top blue bar and navigate to My Data -&gt; Track Hubs. UCSC-hosted and public " +
+                    "hub assemblies are searchable using the search bar above.");
             }
 
             // Gateway tutorial
