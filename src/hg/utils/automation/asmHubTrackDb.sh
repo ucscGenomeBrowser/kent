@@ -701,6 +701,7 @@ fi
 
 
 if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
+printf "working on ncbiGene\n" 1>&2
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
@@ -720,7 +721,7 @@ if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz ]; then
   ln -s ../trackData/ncbiGene/${asmId}.ncbiGene.gtf.gz $buildDir/genes/${asmId}.ncbiGene.gtf.gz
 fi
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
-if [ -s  $buildDir/ixIxx/${asmId}.ncbiGene.ix ]; then
+if [ -s  $buildDir/trackData/ncbiGene/${asmId}.ncbiGene.ix ]; then
   ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
   ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
 fi
