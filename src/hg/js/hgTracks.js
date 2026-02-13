@@ -2977,9 +2977,7 @@ var rightClick = {
                             title = title.substring(0, maxLength) + "...";
                         }
 
-                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
-                                            || href.indexOf('g=unip') !== -1 
-                                            || href.indexOf('g=knownGene') !== -1 )) {
+                        if (isHgc) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             let a = /i=([^&]+)/.exec(href);
