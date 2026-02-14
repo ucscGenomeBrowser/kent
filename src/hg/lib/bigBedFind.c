@@ -26,7 +26,7 @@ struct slInt *labelColumns = NULL;
 struct asObject *as = NULL;
 int ncbiIdIx = -1, geneNameIx = -1;
 struct sqlConnection *conn = NULL;
-if (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc"))
+if (hfs && (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc")))
     {
     // TODO: right now we are only doing this for MANE and HGNC, but if we are gonna add
     // special descriptions to more tracks in the future then we should have some generic
