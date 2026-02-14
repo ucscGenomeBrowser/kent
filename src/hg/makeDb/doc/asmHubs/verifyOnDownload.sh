@@ -51,9 +51,9 @@ fi
 # printf "# DBG subset '%s' min: %d\n" "${subset}" "${minTrackCount}" 1>&2
 
 export dbHost="localhost"
-export hubSource="hgdownload-test.gi.ucsc.edu"
+export hubSource="/gbdb/genark"
 if [ "${host}" = "apibeta.soe.ucsc.edu" ]; then
-  hubSource="hgdownload.soe.ucsc.edu"
+  hubSource="https://hgdownload.soe.ucsc.edu/hubs"
 fi
 
 export totalTrackCount=0
@@ -66,7 +66,7 @@ do
 
   case $genome in
      GC*)
-  trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1;hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" \
+  trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1" \
       2> /dev/null | python -mjson.tool | egrep ": {$" \
        | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
   if [ "${trackCount}" -gt "${minTrackCount}" ]; then
@@ -76,7 +76,7 @@ do
     printf "%03d\t%s\t%d (error <= %d) tracks:\t" "${doneCount}" "${genome}" "${trackCount}" "${minTrackCount}"
   fi
   totalTrackCount=`echo $totalTrackCount $trackCount | awk '{print $1+$2}'`
-  curl -L "https://$host/list/hubGenomes?hubUrl=https://$hubSource/hubs/${dirPath}/hub.txt" 2> /dev/null \
+  curl -L "https://$host/list/hubGenomes?hubUrl=$hubSource/${dirPath}/hub.txt" 2> /dev/null \
      | python -mjson.tool | egrep "organism\":|description\":" | sed -e "s/'/_/g;" \
        | tr -d '"'  | xargs echo \
           | sed -e 's/genomes: //; s/description: //; s/organism: //; s/{ //g;'
