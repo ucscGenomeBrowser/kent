@@ -1407,6 +1407,16 @@ if (id != NULL)
     // remove any visibilities in the cart
     safef(buffer, sizeof buffer, "hub_%s", id);
     cartRemovePrefix(cart, buffer);
+
+    // if the current db belongs to this hub, reset to a valid default
+    char *db = cartOptionalString(cart, "db");
+    safef(buffer, sizeof buffer, "hub_%s_", id);
+    if (db != NULL && startsWith(buffer, db))
+        {
+        cartSetString(cart, "db", hDefaultDb());
+        cartRemove(cart, "org");
+        cartRemove(cart, "genome");
+        }
     }
 
 cartRemove(cart, "hubId");
