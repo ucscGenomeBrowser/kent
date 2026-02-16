@@ -317,6 +317,24 @@ ul.nice-menu ul li a {
     padding: 5px 20px;
 }
 
+/* Bootstrap collapse component CSS (not included in our customized bootstrap.min.css) */
+.collapse {
+    display: none;
+}
+
+.collapse.in {
+    display: block;
+}
+
+.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    transition-property: height, visibility;
+    transition-duration: .35s;
+    transition-timing-function: ease;
+}
+
 /* Styling for bootstrap collapsible section, used as follows:
 
 <div class="collapse-section">
@@ -339,15 +357,15 @@ div.collapse-section .collapse-toggle {
 
 .collapse-section .collapse-toggle:after {
     vertical-align: -3px;
-    font-family: Glyphicons Halflings;
+    font-family: FontAwesome;
     margin-left: 2px;
     color: lightgray;
 }
 
 .collapse-section .collapse-toggle:not(.collapsed):after {
-    content: "\e252";
+    content: "\f0d7";
 }
 
 .collapse-section .collapse-toggle.collapsed:after {
-    content: "\e250";
+    content: "\f0da";
 }
