@@ -11577,7 +11577,7 @@ dyStringPrintf(dy,"Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
-dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c f', function() { gotoConfigurePage() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('#defaultTracksMenuLink')[0].click() }); \n");
