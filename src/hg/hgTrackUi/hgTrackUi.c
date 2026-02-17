@@ -2774,11 +2774,11 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 
         // First button: set all selectors that are not on 'hide' to the current value of the top select 
         printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
-	jsOnEventById("click", "superVizApplyButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').filter(function() { return $(this).val() !== 'hide'; }).val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText'); ");
+	jsOnEventById("click", "superVizApplyButton", "superUiSetAllTracks(true)");
 
         // Second button: set all selectors to the current value of the top select
         printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
-	jsOnEventById("click", "superVizApplyAllButton", "let newVal = $('#superSubViz').val(); $('#superTrackTable select').val(newVal).trigger('change').removeClass('hiddenText').addClass('normalText');");
+	jsOnEventById("click", "superVizApplyAllButton", "superUiSetAllTracks()");
         
         printf("</TD></TR>\n");
         }
