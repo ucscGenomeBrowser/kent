@@ -889,8 +889,8 @@ static char *requiredSetting(struct trackHub *hub, struct trackHubGenome *genome
 {
 char *val = trackDbSetting(tdb, setting);
 if (val == NULL)
-    errAbort("Missing required '%s' setting in hub %s genome %s track %s", setting,
-    	hub->url, genome->name, tdb->track);
+    errAbort("Missing required '%s' setting in hub %s genome %s track %s. Add a '%s' line to the track stanza.", setting,
+    	hub->url, genome->name, tdb->track, setting);
 return val;
 }
 
@@ -1447,7 +1447,7 @@ if (relativeUrl != NULL)
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
             if (numFields > bbi->fieldCount)
-                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+                errAbort("bigBed file '%s' has %d fields, but track \"%s\" declares 'type bigBed %d'. Either regenerate the bigBed with the correct number of fields, or change the type line to 'type bigBed %d' to match the file.", bigDataUrl, bbi->fieldCount, trackHubSkipHubName(tdb->track), numFields, bbi->fieldCount);
             }
         bbiFileClose(&bbi);
         }
@@ -1457,9 +1457,10 @@ if (relativeUrl != NULL)
         struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
         if (vcf == NULL)
             // Warnings already indicated whether the tabix file is missing etc.
-            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
-                     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
-                     bigDataUrl);
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file for track %s. "
+                     "Both the .vcf.gz file and a matching .vcf.gz.tbi index must be publicly accessible "
+                     "at the same URL path. Generate the index with: tabix -p vcf yourFile.vcf.gz",
+                     bigDataUrl, trackHubSkipHubName(tdb->track));
         vcfFileFree(&vcf);
         }
     else if (startsWithWord("bam", type))
@@ -1470,7 +1471,9 @@ if (relativeUrl != NULL)
         {
         struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
         if (btf == NULL)
-            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file for track %s. "
+                     "Both the file and a matching .tbi index must be publicly accessible "
+                     "at the same URL path.", bigDataUrl, trackHubSkipHubName(tdb->track));
         bedTabixFileClose(&btf);
         }
 #ifdef USE_HAL

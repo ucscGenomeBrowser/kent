@@ -1,2 +1,2 @@
 Found 1 problem:
-warning: missing hub overview description page (descriptionUrl setting)
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

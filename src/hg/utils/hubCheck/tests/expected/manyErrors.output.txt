@@ -6,50 +6,50 @@ Parent cpgIslandView of track cpgIslandExt_ doesn't exist in hub input/manyError
 SuperEnhancersBadSubgroupsComposite: No subtracks in group: Views.  This indicates a problem in the subGroup line for this group.
 SuperEnhancersComposite2: No subtracks in group: Tags.  This indicates a problem in the subGroup line for this group.
 container multiWig H2A_Z_MultiWig_ImputedComp has only one subtrack. multiWigs must have more than one subtrack
-missing 'subgroups' setting for subtrack RegBuildOverview
+missing 'subgroups' setting for subtrack RegBuildOverview. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'
 netConnect() failed
 repeatMasker_: No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
 state3 not a member of sortOrder subgroup tag
 state3 not a member of sortOrder subgroup view
-subtrack "repeatMaskerSINE_" has a subgroup "noGroup" not defined at parent level
-subtrack "state3" has a subgroup "badTag" not defined at parent level
+subtrack "repeatMaskerSINE_" declares subgroup "noGroup", but the parent composite does not define this subgroup. Check the 'subGroup' lines in the parent stanza for a matching group name.
+subtrack "state3" declares subgroup "badTag", but the parent composite does not define this subgroup. Check the 'subGroup' lines in the parent stanza for a matching group name.
 subtrack state3 not a member of subgroup view
 subtrack track2 not a member of subgroup sub1
 viewStanza: No subtracks in group: Views.  This indicates a problem in the subGroup line for this group.
-warning: missing description page for track: 'BuildOverview'
-warning: missing description page for track: 'H2A_Z_MultiWig_ImputedComp'
-warning: missing description page for track: 'MissingSubs'
-warning: missing description page for track: 'RegBuildOverview'
-warning: missing description page for track: 'SuperEnhancersBadSubgroupsComposite'
-warning: missing description page for track: 'SuperEnhancersComposite2'
-warning: missing description page for track: 'TFBSSummary'
-warning: missing description page for track: 'comp1'
-warning: missing description page for track: 'comp1View1'
-warning: missing description page for track: 'comp1View2'
-warning: missing description page for track: 'comp1Wig1'
-warning: missing description page for track: 'comp1Wig2'
-warning: missing description page for track: 'comp1Wig3'
-warning: missing description page for track: 'comp1Wig4'
-warning: missing description page for track: 'comp2'
-warning: missing description page for track: 'comp2View1'
-warning: missing description page for track: 'comp2View2'
-warning: missing description page for track: 'comp2Wig1'
-warning: missing description page for track: 'comp2Wig2'
-warning: missing description page for track: 'comp2Wig3'
-warning: missing description page for track: 'comp2Wig4'
-warning: missing description page for track: 'cpgIslandViewContainer'
-warning: missing description page for track: 'multiWigExample'
-warning: missing description page for track: 'multiWigSubtrack1'
-warning: missing description page for track: 'multiWigSubtrack2'
-warning: missing description page for track: 'multiWigSubtrack3'
-warning: missing description page for track: 'multiWigSubtrack4'
-warning: missing description page for track: 'multiWigSubtrack5'
-warning: missing description page for track: 'state1'
-warning: missing description page for track: 'state2'
-warning: missing description page for track: 'state3'
-warning: missing description page for track: 'state4'
-warning: missing description page for track: 'track1'
-warning: missing description page for track: 'track2'
-warning: missing description page for track: 'viewStanza'
-warning: missing description page for track: 'viewTrack'
+warning: missing description page for track. Add 'html BuildOverview.html' line to the 'BuildOverview' track stanza. 
+warning: missing description page for track. Add 'html H2A_Z_MultiWig_ImputedComp.html' line to the 'H2A_Z_MultiWig_ImputedComp' track stanza. 
+warning: missing description page for track. Add 'html MissingSubs.html' line to the 'MissingSubs' track stanza. 
+warning: missing description page for track. Add 'html RegBuildOverview.html' line to the 'RegBuildOverview' track stanza. 
+warning: missing description page for track. Add 'html SuperEnhancersBadSubgroupsComposite.html' line to the 'SuperEnhancersBadSubgroupsComposite' track stanza. 
+warning: missing description page for track. Add 'html SuperEnhancersComposite2.html' line to the 'SuperEnhancersComposite2' track stanza. 
+warning: missing description page for track. Add 'html TFBSSummary.html' line to the 'TFBSSummary' track stanza. 
+warning: missing description page for track. Add 'html comp1.html' line to the 'comp1' track stanza. 
+warning: missing description page for track. Add 'html comp1View1.html' line to the 'comp1View1' track stanza. 
+warning: missing description page for track. Add 'html comp1View2.html' line to the 'comp1View2' track stanza. 
+warning: missing description page for track. Add 'html comp1Wig1.html' line to the 'comp1Wig1' track stanza. 
+warning: missing description page for track. Add 'html comp1Wig2.html' line to the 'comp1Wig2' track stanza. 
+warning: missing description page for track. Add 'html comp1Wig3.html' line to the 'comp1Wig3' track stanza. 
+warning: missing description page for track. Add 'html comp1Wig4.html' line to the 'comp1Wig4' track stanza. 
+warning: missing description page for track. Add 'html comp2.html' line to the 'comp2' track stanza. 
+warning: missing description page for track. Add 'html comp2View1.html' line to the 'comp2View1' track stanza. 
+warning: missing description page for track. Add 'html comp2View2.html' line to the 'comp2View2' track stanza. 
+warning: missing description page for track. Add 'html comp2Wig1.html' line to the 'comp2Wig1' track stanza. 
+warning: missing description page for track. Add 'html comp2Wig2.html' line to the 'comp2Wig2' track stanza. 
+warning: missing description page for track. Add 'html comp2Wig3.html' line to the 'comp2Wig3' track stanza. 
+warning: missing description page for track. Add 'html comp2Wig4.html' line to the 'comp2Wig4' track stanza. 
+warning: missing description page for track. Add 'html cpgIslandViewContainer.html' line to the 'cpgIslandViewContainer' track stanza. 
+warning: missing description page for track. Add 'html multiWigExample.html' line to the 'multiWigExample' track stanza. 
+warning: missing description page for track. Add 'html multiWigSubtrack1.html' line to the 'multiWigSubtrack1' track stanza. 
+warning: missing description page for track. Add 'html multiWigSubtrack2.html' line to the 'multiWigSubtrack2' track stanza. 
+warning: missing description page for track. Add 'html multiWigSubtrack3.html' line to the 'multiWigSubtrack3' track stanza. 
+warning: missing description page for track. Add 'html multiWigSubtrack4.html' line to the 'multiWigSubtrack4' track stanza. 
+warning: missing description page for track. Add 'html multiWigSubtrack5.html' line to the 'multiWigSubtrack5' track stanza. 
+warning: missing description page for track. Add 'html state1.html' line to the 'state1' track stanza. 
+warning: missing description page for track. Add 'html state2.html' line to the 'state2' track stanza. 
+warning: missing description page for track. Add 'html state3.html' line to the 'state3' track stanza. 
+warning: missing description page for track. Add 'html state4.html' line to the 'state4' track stanza. 
+warning: missing description page for track. Add 'html track1.html' line to the 'track1' track stanza. 
+warning: missing description page for track. Add 'html track2.html' line to the 'track2' track stanza. 
+warning: missing description page for track. Add 'html viewStanza.html' line to the 'viewStanza' track stanza. 
+warning: missing description page for track. Add 'html viewTrack.html' line to the 'viewTrack' track stanza. 
 warning: missing htmlPath setting for assembly hub 'araTha1'

@@ -1,14 +1,12 @@
-Found 13 problems:
+Found 11 problems:
 error in type line "bigBed 6 %" for track "baddTypBogus". Only "+" or "." is allowed after bigBed numFields setting.
 error in type line "bigBed 6 +3" for track "badTypePlusMore". Only "+" or "." is allowed after bigBed numFields setting.
 error in type line "bigBed 6+" for track "badTypePlus". A space is needed after the "+" or "." character.
 error in type line "bigBed 6." for track "badTypeDot". A space is needed after the "+" or "." character.
-error in type line "wig" for track "invalidType". The only valid types for tracks that are not composites, views or supertracks are: bigWig, bigBed and bigBed variants like bigGenePred/bigChain/bigBarChart/etc, longTabix, vcfTabix, vcfPhasedTrio, bam, hic and halSnake.
-warning: missing description page for track: 'badTypeDot'
-warning: missing description page for track: 'badTypePlus'
-warning: missing description page for track: 'badTypePlusMore'
-warning: missing description page for track: 'baddTypBogus'
-warning: missing description page for track: 'goodTypeDot'
-warning: missing description page for track: 'goodTypePlus'
-warning: missing description page for track: 'invalidType'
-warning: missing hub overview description page (descriptionUrl setting)
+warning: missing description page for track. Add 'html badTypeDot.html' line to the 'badTypeDot' track stanza. 
+warning: missing description page for track. Add 'html badTypePlus.html' line to the 'badTypePlus' track stanza. 
+warning: missing description page for track. Add 'html badTypePlusMore.html' line to the 'badTypePlusMore' track stanza. 
+warning: missing description page for track. Add 'html baddTypBogus.html' line to the 'baddTypBogus' track stanza. 
+warning: missing description page for track. Add 'html goodTypeDot.html' line to the 'goodTypeDot' track stanza. 
+warning: missing description page for track. Add 'html goodTypePlus.html' line to the 'goodTypePlus' track stanza. 
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

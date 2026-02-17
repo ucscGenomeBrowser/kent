@@ -1,5 +1,5 @@
 Found 4 problems:
 
-Missing required 'longLabel' setting in hub input/noLongLabel.txt genome mm10 track Mouse
-Missing required 'longLabel' setting in hub input/noLongLabel.txt genome mm10 track fullTreeAnc35
-warning: input/hub.html descriptionUrl setting does not exist
+Missing required 'longLabel' setting in hub input/noLongLabel.txt genome mm10 track Mouse. Add a 'longLabel' line to the track stanza.
+Missing required 'longLabel' setting in hub input/noLongLabel.txt genome mm10 track fullTreeAnc35. Add a 'longLabel' line to the track stanza.
+warning: descriptionUrl 'input/hub.html' could not be accessed. Verify the file exists at the specified path and is publicly readable.

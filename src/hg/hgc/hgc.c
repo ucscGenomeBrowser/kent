@@ -3614,6 +3614,8 @@ static char *getHtmlFromSelfOrParent(struct trackDb *tdb, char *liftDb)
 {
 for (;tdb != NULL; tdb = tdb->parent)
     {
+    if (sameString(trackHubSkipHubName(tdb->track), "quickLiftChain"))
+        tdb->html = hFileContentsOrWarning(hHelpFile(trackHubSkipHubName(tdb->track)));
     if (liftDb && (tdb->html == NULL))
         tdb->html = getTrackHtml(liftDb, tdb->table);
     if (tdb->html != NULL && tdb->html[0] != 0)
