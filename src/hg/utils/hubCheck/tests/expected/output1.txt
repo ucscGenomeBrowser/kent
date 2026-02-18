@@ -1,2 +1,2 @@
 Found 1 problem:
-warning: input/hub.html descriptionUrl setting does not exist
+warning: descriptionUrl 'input/hub.html' could not be accessed. Verify the file exists at the specified path and is publicly readable.

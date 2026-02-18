@@ -631,28 +631,51 @@ var hgSearch = (function() {
         }
     }
 
-    function onGenomeSelect(item) {
-        // Called when user selects a genome from autocomplete
-        // item.genome is the db name from hubApi/findGenome
-        // Just update the label and store the selection - don't reload the page
-        if (item.disabled || !item.genome) return;
-        db = item.genome;
-        $("#currentGenome").text(item.commonName + ' - ' + item.genome);
-        $("#genomeSearchInput").val('');
-    }
-
-    function onSearchError(jqXHR, textStatus, errorThrown, term) {
-        return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+    function handleGenomeChange(jsonData) {
+        // Handle the response from getUiState after the user changes the genome.
+        // Unlike handleRefreshState, this shows an informational message instead
+        // of "No results", since no search has been performed on the new database yet.
+        if (checkJsonData(jsonData, 'handleGenomeChange')) {
+            _.assign(uiState, jsonData);
+            db = uiState.db;
+            // clear old search results that were for the previous database
+            uiState.resultHash = {};
+            uiState.positionMatches = [];
+            // update the category tree for the new database
+            updateFilters(uiState);
+            $("#searchCategories").jstree(true).refresh(false,true);
+            // show an informational message instead of "No results"
+            var parentDiv = $("#searchResults");
+            parentDiv.empty();
+            if (uiState.search) {
+                parentDiv.html("<p>Genome changed, click Search to search this assembly.</p>");
+            }
+            updateCurrentGenomeLabel();
+            changeSearchResultsLabel();
+        }
+        $("#spinner").remove();
     }
 
     function initGenomeAutocomplete() {
         // Initialize the genome search autocomplete using the standard function from utils.js
-        initSpeciesAutoCompleteDropdown('genomeSearchInput', onGenomeSelect, null, null, null, onSearchError);
-
-        // Add click handler for the Change Genome button to trigger autocomplete search
-        $("#genomeSearchButton").click(function(e) {
-            e.preventDefault();
-            $("#genomeSearchInput").autocomplete("search", $("#genomeSearchInput").val());
+        setupGenomeSearchBar({
+            inputId: 'genomeSearch',
+            labelElementId: 'currentGenome',
+            onSelect: function(item) {
+                db = item.genome;
+                uiState.db = item.genome;
+                // Send db as a cgiVar so cartNew() processes it during cart
+                // initialization. For GenArk assemblies, also send hubUrl and
+                // genome so hubConnectLoadHubs() can connect the hub and
+                // decorate the db name (e.g., GCF_XXX -> hub_115090_GCF_XXX).
+                var cmd = { cgiVar: {db: item.genome}, getUiState: {} };
+                if (item.hubUrl) {
+                    cmd.cgiVar.hubUrl = item.hubUrl;
+                    cmd.cgiVar.genome = item.genome;
+                }
+                cart.send(cmd, handleGenomeChange);
+                cart.flush();
+            }
         });
     }
 

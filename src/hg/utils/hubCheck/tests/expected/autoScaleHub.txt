@@ -1,10 +1,10 @@
 Found 9 problems:
-track "badTrack1" has value "group" for autoScale setting, valid autoScale values for individual bigWig tracks are "off" or "on" only. If "badTrack1" is part of a bigWig composite track and you want to use the "group" setting, only declare "autoScale group" in the parent stanza
-track "badTrack2" has value "group" for autoScale setting, valid autoScale values for individual bigWig tracks are "off" or "on" only. If "badTrack2" is part of a bigWig composite track and you want to use the "group" setting, only declare "autoScale group" in the parent stanza
-warning: missing description page for track: 'badTrack1'
-warning: missing description page for track: 'badTrack2'
-warning: missing description page for track: 'compBad'
-warning: missing description page for track: 'compGood'
-warning: missing description page for track: 'goodTrack1'
-warning: missing description page for track: 'goodTrack2'
-warning: missing hub overview description page (descriptionUrl setting)
+track "badTrack1" uses 'autoScale group', but individual bigWig tracks only accept 'autoScale on' or 'autoScale off'. To use 'autoScale group', move that setting to the parent composite stanza instead.
+track "badTrack2" uses 'autoScale group', but individual bigWig tracks only accept 'autoScale on' or 'autoScale off'. To use 'autoScale group', move that setting to the parent composite stanza instead.
+warning: missing description page for track. Add 'html badTrack1.html' line to the 'badTrack1' track stanza. 
+warning: missing description page for track. Add 'html badTrack2.html' line to the 'badTrack2' track stanza. 
+warning: missing description page for track. Add 'html compBad.html' line to the 'compBad' track stanza. 
+warning: missing description page for track. Add 'html compGood.html' line to the 'compGood' track stanza. 
+warning: missing description page for track. Add 'html goodTrack1.html' line to the 'goodTrack1' track stanza. 
+warning: missing description page for track. Add 'html goodTrack2.html' line to the 'goodTrack2' track stanza. 
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

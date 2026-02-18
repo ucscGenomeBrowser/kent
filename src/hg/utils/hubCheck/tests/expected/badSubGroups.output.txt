@@ -1,7 +1,7 @@
 Found 6 problems:
-subtrack "state1" has a subgroup "bogus" not defined at parent level
-subtrack "state1" has a subgroup "bogus2" not defined at parent level
-warning: missing description page for track: 'state1'
-warning: missing description page for track: 'state2'
-warning: missing description page for track: 'subgroupsComp'
-warning: missing hub overview description page (descriptionUrl setting)
+subtrack "state1" declares subgroup "bogus", but the parent composite does not define this subgroup. Check the 'subGroup' lines in the parent stanza for a matching group name.
+subtrack "state1" declares subgroup "bogus2", but the parent composite does not define this subgroup. Check the 'subGroup' lines in the parent stanza for a matching group name.
+warning: missing description page for track. Add 'html state1.html' line to the 'state1' track stanza. 
+warning: missing description page for track. Add 'html state2.html' line to the 'state2' track stanza. 
+warning: missing description page for track. Add 'html subgroupsComp.html' line to the 'subgroupsComp' track stanza. 
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

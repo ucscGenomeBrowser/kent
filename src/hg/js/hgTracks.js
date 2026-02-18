@@ -2977,9 +2977,7 @@ var rightClick = {
                             title = title.substring(0, maxLength) + "...";
                         }
 
-                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 
-                                            || href.indexOf('g=unip') !== -1 
-                                            || href.indexOf('g=knownGene') !== -1 )) {
+                        if (isHgc) {
                             // For GTEx gene and UniProt mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name. Also need to unescape the urlencoded characters and the + sign.
                             let a = /i=([^&]+)/.exec(href);
@@ -3902,6 +3900,18 @@ function hubQuickConnect() {
 
     // Show dialog
     $("#hubQuickDialog").dialog("open");
+}
+
+function gotoConfigurePage() {
+    let inp = $('input[name="hgTracksConfigPage"]');
+    if (inp.length) {
+        inp.submit().click();
+    } else {
+        // form a url to go there manually
+        let url = window.location.href;
+        url += "&hgTracksConfigPage=configure";
+        window.location.assign(url);
+    }
 }
 
 function onHideAllGroupButtonClick(ev) {

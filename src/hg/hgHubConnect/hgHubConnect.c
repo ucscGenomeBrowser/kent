@@ -340,9 +340,10 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     safef(id, sizeof id, "hubDisconnectButtonU%d", count);
     printf("<input name=\"hubDisconnectButton\" id='%s' "
 	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
-    jsOnEventByIdF("click", id, 
+    jsOnEventByIdF("click", id,
+	"removeRecentGenomesByHubUrl('%s');"
 	"document.disconnectHubForm.elements['hubId'].value='%d';"
-	"document.disconnectHubForm.submit(); return true;", hub->id);
+	"document.disconnectHubForm.submit(); return true;", javaScriptLiteralEncode(hub->hubUrl), hub->id);
     ourCellEnd();
 
     if (hub->trackHub != NULL)
@@ -669,9 +670,10 @@ if (id != 0)
         safef(jsId, sizeof jsId, "hubDisconnectButtonP%d", count);
         printf("<input name=\"hubDisconnectButton\" id='%s' "
             "class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
-        jsOnEventByIdF("click", jsId, 
+        jsOnEventByIdF("click", jsId,
+            "removeRecentGenomesByHubUrl('%s');"
             "document.disconnectHubForm.elements['hubId'].value= '%d';"
-            "document.disconnectHubForm.submit();return true;", id);
+            "document.disconnectHubForm.submit();return true;", javaScriptLiteralEncode(hubInfo->hubUrl), id);
         }
     else
         {
