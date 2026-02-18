@@ -40,3 +40,5 @@ canPack off
 track blastHg16KG override
 visibility pack
 
+track jaspar2026 override
+filterValues.TFName AP4,Arid3,Atbf,Atoh7,Brachyury,Bsx,Cdx,Cebpg,Creb1,Dlx-b,Dlx-c,Emx,Erf-a,Etv1/4/5,Fli-Erg-a,Fli-Erg-b,Fli-Erg-c,Fos-b,FoxA-a,FoxA-b,FoxB,FoxD-b,FoxE,FoxF,FoxG,FoxI-a,FoxI-b,FoxI-c,FoxK,FoxL2,FoxM,FoxO,FoxQ,GATA1/2/3,GATA-a,Gsx,Hes-b,Hes-c,Hex,Hey,Hmbox1,Hnf1,HNF4,Hox1,Hox3,Hox4,Hox5,Hsf1-2-4,Irf-b,Isx,Klf15,Klf3/8/12,Klf5-like,Klf6-7-like,large-Maf,Lhx3/4,Lmx-b,Macho-1,Max,Meis,Meox,Mitf,Mnx,Msx,NFkb,Nk-1,Nk-3,Nkx3,Noto,Otp,Otx,Pax2-5-8-a,Pax3-7-like,Pax6,Pou4,Prop,Rax,Rel,Six3/6,small-Maf,Snail,SoxB1,SoxB2,SoxC,SoxF,Tbox-a,Tbox-b,Tbx15/18/22,Tbx2/3,Tcf3-4-12,Tlx,Uncx-b,Usf,YY1-2
