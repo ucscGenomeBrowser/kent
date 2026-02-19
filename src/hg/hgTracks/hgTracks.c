@@ -9954,7 +9954,7 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
-                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data → Track Hubs to find it again or re-entering the hub URL.\")) {"
+                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data -> Track Hubs to find it again or re-entering the hub URL.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;"
                     "}",

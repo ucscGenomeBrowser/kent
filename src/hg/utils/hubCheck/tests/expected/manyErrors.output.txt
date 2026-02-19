@@ -6,7 +6,7 @@ Parent cpgIslandView of track cpgIslandExt_ doesn't exist in hub input/manyError
 SuperEnhancersBadSubgroupsComposite: No subtracks in group: Views.  This indicates a problem in the subGroup line for this group.
 SuperEnhancersComposite2: No subtracks in group: Tags.  This indicates a problem in the subGroup line for this group.
 container multiWig H2A_Z_MultiWig_ImputedComp has only one subtrack. multiWigs must have more than one subtrack
-missing 'subgroups' setting for subtrack RegBuildOverview. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'
+missing 'subGroups' setting for subtrack RegBuildOverview. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'
 netConnect() failed
 repeatMasker_: No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
 state3 not a member of sortOrder subgroup tag

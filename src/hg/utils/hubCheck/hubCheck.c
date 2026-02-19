@@ -671,7 +671,7 @@ if (errCatchStart(errCatch))
 
         if (membership == NULL)
             {
-            errAbort("missing 'subgroups' setting for subtrack %s. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'", subtrackName);
+            errAbort("missing 'subGroups' setting for subtrack %s. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'", subtrackName);
             }
 
         // if a sortOrder is defined, make sure every subtrack has that membership
@@ -774,9 +774,9 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
     // Containers should not have a bigDataUrl setting
     if (trackDbLocalSetting(tdb, "bigDataUrl"))
         {
-        errAbort("Track \"%s\" is a container (compositeTrack/superTrack/view) but also has "
-            "a 'bigDataUrl'. Container tracks organize subtracks and should not have data files. "
-            "Remove 'bigDataUrl' from this stanza, or remove the container declaration if this is "
+        errAbort("Track \"%s\" is a parent track (compositeTrack/superTrack/view/container) but also has "
+            "a 'bigDataUrl'. Parent tracks organize subtracks and should not have data files. "
+            "Remove 'bigDataUrl' from this stanza, or remove the parent declaration if this is "
             "a data track.", tdb->track);
         }
 
@@ -1021,9 +1021,9 @@ if (errCatchStart(errCatch))
         if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
             {
             errAbort("track \"%s\" uses 'autoScale %s', but individual bigWig tracks only accept "
-                    "'autoScale on' or 'autoScale off'. To use 'autoScale %s', move that setting to the "
-                    "parent composite stanza instead.",
-                    trackHubSkipHubName(tdb->track), autoScaleSetting, autoScaleSetting);
+                    "'autoScale on' or 'autoScale off'. If you're trying to set 'autoScale group', "
+                    "that setting belongs in the parent composite stanza instead.",
+                    trackHubSkipHubName(tdb->track), autoScaleSetting);
             }
         }
     }
@@ -1176,8 +1176,8 @@ return (options->genome == NULL) ||
 
 int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check a track data hub for integrity. Put errors in dyString.
- *      return 0 if hub has no errors, 1 otherwise
- *      if options->checkTracks is TRUE, check remote files of individual tracks
+ *      return 0 if hub has no errors, or a non-zero value if errors were found
+ *      if options->checkFiles is TRUE, check remote files of individual tracks
  */
 {
 struct errCatch *errCatch = errCatchNew();
