@@ -2321,8 +2321,10 @@ struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    char *hlArr[4096];
-    int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
+    int hlCount = chopByChar(highlightDef, '|', NULL, 0);
+    char **hlArr = AllocN(char *, hlCount);
+    char *hlStringCopy = cloneString(highlightDef);
+    chopByChar(hlStringCopy, '|', hlArr, hlCount);
     int i;
     for (i=0; i<hlCount; i++)
         {
@@ -2373,6 +2375,8 @@ if(highlightDef)
         }
 
     slReverse(&hlList);
+    freeMem(hlStringCopy);
+    freeMem(hlArr);
     }
 
 return hlList;
