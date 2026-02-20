@@ -139,9 +139,6 @@ clPos = optionVal("positions", clPos);
 skipChromCheck = optionExists("skipChromCheck");
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 
-if (argc != 3)
-    usage();
-
 if ((clBed || clPos || clRange) && (clChrom || (clStart >= 0) || (clEnd >= 0)))
     errAbort("-bed or -positions or -range can not be used with -chrom -start or -end options");
 if ((clBed && clPos) || (clBed && clRange) || (clPos && clRange))
