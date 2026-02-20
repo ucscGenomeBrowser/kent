@@ -64,7 +64,7 @@ static struct optionSpec options[] = {
 static void processChromChunk(struct bbiFile *bbi, char *chrom,
                               int start, int end, char *bedName, FILE *f)
 /* Output one chunk.  Only blocks where start is in the range will be written
- * to avoid outputting a block multiple tines.  */
+ * to avoid outputting a block multiple times.  */
 {
 boolean firstTime = TRUE;
 int saveStart = -1, prevEnd = -1;
