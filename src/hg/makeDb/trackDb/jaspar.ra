@@ -15,7 +15,7 @@ exonArrows on
 spectrum on
 tableBrowser tbNoGenome
 noGenomeReason JASPAR files contain billions of items. The Table Browser allows regional queries for this track, but those may timeout if the regions are too big. See the Data Access section in the track description page for other ways to query this data, such as command-line tools and our API.
-pennantIcon Updated red ../goldenPath/newsarch.html#NNNNNN "Updated NNN"
+pennantIcon Updated red ../goldenPath/newsarch.html#021826 "New JASPAR 2026 TFBS track Feb. 18, 2026"
 
         track jaspar2026
         parent jaspar on

@@ -104,14 +104,19 @@ Please refer to the supplementary information of the <a href="https://doi.org/10
 </p>
 <h3>Brief overview of each release</h3>
 <p>
-JASPAR 2026 features a deep learning (DL) collection, providing a paradigm shift in modeling 
-and characterizing TF-DNA interactions with 1259 BPNet models trained on Homo sapiens ENCODE 
-chromatin immunoprecipitation followed by sequencing (ChIP-seq) datasets from 240 TFs and 
-interpreted to reveal predictive motif patterns for the models. The motifs associated with 
-the same TF were clustered to provide a summary of the binding properties, resulting in 
-240 primary and 113 alternative motif patterns in the DL collection. See the <a 
-target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/41325984/">JASPAR 2026 publication</a>
-for more information.</p>
+The JASPAR 2026 update expanded the JASPAR CORE collection by 12% (306
+added or upgraded profiles), culminating to a set of 2633 non-redundant
+TF binding profiles.  Genome sequences were scanned with JASPAR 2026
+CORE TF binding profiles for each taxon independently using PWMScan.
+TFBS predictions were selected with a PWM relative score ≥ 0.8 and a
+p-value &lt; 0.05. P-values were scaled between 0 (corresponding to a
+p-value of 1) and 1000 (p-value ≤ 10⁻¹⁰) for coloring of the genome
+tracks and to allow for comparison of prediction confidence between
+different profiles. More information on the methods can be found in the
+<a href="https://doi.org/10.1093/nar/gkaf1209" target="_blank">JASPAR 2026 
+publication</a> or on the
+<a href="https://jaspar.elixir.no/" target="_blank">JASPAR website</a>.</p>
+
 <p>
 The JASPAR 2024 update expanded the JASPAR CORE collection by 20% (329 added and 72 upgraded
 profiles). The new profiles were introduced after manual curation, in which 26 629 TF binding
@@ -266,9 +271,27 @@ href="../cgi-bin/hgTrackUi?db=galGal6&g=jaspar">galGal6</a></td>
 The JASPAR database is a joint effort between several labs (please see the latest JASPAR 
 paper, below). Binding site predictions and UCSC tracks were computed by the CBGR team 
 at NCMBM using code developed at the Wasserman Lab. For enquiries about the data, 
-please contact Anthony Mathelier (<a href="mailto:"></a>
-<!-- above address is anthony.mathelier at ncmbm.uio.no -->) or Ieva Rauluseviciute (<a href="mailto:"></a>
-<!-- above address is ieva.rauluseviciute at ncmbm.uio.no -->).
+please contact Anthony Mathelier (
+<A HREF="mailto:&#97;&#110;&#116;&#104;&#111;&#110;y.
+&#109;&#97;&#116;&#104;e&#108;&#105;&#101;&#114;&#64;&#110;&#99;&#109;b&#109;.
+&#117;i&#111;.
+&#110;o">
+&#97;&#110;&#116;&#104;&#111;&#110;y.
+&#109;&#97;&#116;&#104;e&#108;&#105;&#101;&#114;&#64;&#110;&#99;&#109;b&#109;.
+&#117;i&#111;.
+&#110;o</A>
+<!-- above address is anthony.mathelier at ncmbm.uio.no -->
+) or Ieva Rauluseviciute (
+<A HREF="mailto:&#105;&#101;&#118;&#97;.
+&#114;&#97;&#117;&#108;us&#101;&#118;&#105;&#99;&#105;u&#116;&#101;&#64;&#110;&#99;m&#98;m.
+&#117;&#105;&#111;.
+&#110;o">
+&#105;&#101;&#118;&#97;.
+&#114;&#97;&#117;&#108;us&#101;&#118;&#105;&#99;&#105;u&#116;&#101;&#64;&#110;&#99;m&#98;m.
+&#117;&#105;&#111;.
+&#110;o</A>
+<!-- above address is ieva.rauluseviciute at ncmbm.uio.no -->
+).
 </p>
 
 <blockquote>
