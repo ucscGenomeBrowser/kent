@@ -80,7 +80,7 @@ else
                 }
             else
                 {
-                userName = userNameForApiKey(NULL, apiKey);
+                userName = hubSpaceUserNameForApiKey(NULL, apiKey);
                 if (!userName)
                     errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
                 }

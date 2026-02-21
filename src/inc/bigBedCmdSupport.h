@@ -13,16 +13,27 @@ void bigBedCmdOutputHeader(struct bbiFile *bbi, FILE *f);
 void bigBedCmdOutputTsvHeader(struct bbiFile *bbi, FILE *f);
 /* output a TSV-style header from the autoSql in the file */
 
+struct hash *makeChromHash(struct bbiChromInfo *chromList);
+/* make a fast searchable hash from chromList */
+
 struct bed *bed3FromPositions(char *fileName);
 /* Read positions file and retrun bed 3 list. */
 
-void genericBigToNonBigFromBed(struct bbiFile *bbi, char *bedFileName, FILE *outFile, 
+void genericBigToNonBigFromBed(struct bbiFile *bbi, struct hash *chromHash, char *bedFileName, FILE *outFile,  
  void (*processChromChunk)(struct bbiFile *bbi, char *chrom, int start, int end, char *bedName, FILE *f)
 );
 /* Read list of ranges from bed file chrom start end.
  * Automatically sort them by chrom, start */
 
-void genericBigToNonBigFromPos(struct bbiFile *bbi, char *posFileName, FILE *outFile, 
+void genericBigToNonBigFromRange(struct bbiFile *bbi, struct hash *chromHash, FILE *outFile, struct slName *ranges, 
+ void (*processChromChunk)(struct bbiFile *bbi, char *chrom, int start, int end, char *bedName, FILE *f)
+);
+/* Read list of ranges from commandline option as chrom start end or chrom:start-end.
+ * Supports multiple -range options.
+ * Automatically sort them by chrom, start. */
+
+
+void genericBigToNonBigFromPos(struct bbiFile *bbi, struct hash *chromHash, char *posFileName, FILE *outFile, 
  void (*processChromChunk)(struct bbiFile *bbi, char *chrom, int start, int end, char *bedName, FILE *f)
 );
 /* Read  positions from file (chrom:start-end). starts are 1-based,

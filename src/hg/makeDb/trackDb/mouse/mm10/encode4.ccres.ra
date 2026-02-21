@@ -1,0 +1,1222 @@
+track coreCcres
+type bigBed 12
+longLabel ENCODE4 Core Collection of 18 biosamples with sample-specific cCRE annotations & epigenomic signals
+parent cCREs
+compositeTrack on
+html coreCollection.html
+priority 1.5
+subGroup1 organ Organ_Tissue blood=Blood brain=Brain heart=Heart kidney=Kidney liver=Liver lung=Lung spleen=Spleen stomach=Stomach thymus=Thymus
+subGroup2 biosampleType Biosample_type tissue=Tissue cell_line=Cell_line
+subGroup3 view Views cCREs_view=cCREs DNase_view=DNase H3K4me3_view=H3K4me3 H3K27ac_view=H3K27ac CTCF_view=CTCF
+subGroup4 simpleBiosample Biosample CH12_LX=CH12_LX MEL=MEL cerebellum_male_adult_8_weeks=cerebellum_male_adult_8_weeks forebrain_postnatal_0_days=forebrain_postnatal_0_days heart_male_adult_8_weeks=heart_male_adult_8_weeks heart_postnatal_0_days=heart_postnatal_0_days hindbrain_postnatal_0_days=hindbrain_postnatal_0_days kidney_male_adult_8_weeks=kidney_male_adult_8_weeks kidney_postnatal_0_days=kidney_postnatal_0_days liver_embryo_14_5_days=liver_embryo_14_5_days liver_male_adult_8_weeks=liver_male_adult_8_weeks liver_postnatal_0_days=liver_postnatal_0_days lung_embryo_14_5_days=lung_embryo_14_5_days lung_postnatal_0_days=lung_postnatal_0_days midbrain_postnatal_0_days=midbrain_postnatal_0_days spleen_male_adult_8_weeks=spleen_male_adult_8_weeks stomach_postnatal_0_days=stomach_postnatal_0_days thymus_male_adult_8_weeks=thymus_male_adult_8_weeks
+subGroup5 dataType Data_type typeCcres=cCREs typeDNase=DNase typeH3k4me3=H3K4me3 typeH3k27ac=H3K27ac typeCtcf=CTCF
+dimensions dimX=biosampleType dimY=organ
+sortOrder dataType=+ organ=+ biosampleType=+
+shortLabel ENCODE4 Core Collection
+visibility hide
+dataVersion ENCODE release 4, 2024. (ENCODE4 data includes ENCODE2, ENCODE3, and the Roadmap Epigenomics Project)
+
+track cCREs_view
+view cCREs_view
+parent coreCcres
+shortLabel cCREs
+visibility squish
+type bigBed
+
+track ENCFF325FZS_ENCFF396LHC_ENCFF010WPI_ENCFF196GIY
+priority 1
+type bigBed 9 + 5
+longLabel Midbrain, postnatal (0 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF325FZS_ENCFF396LHC_ENCFF010WPI_ENCFF196GIY.bb
+subGroups organ=brain view=cCREs_view simpleBiosample=midbrain_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF325FZS_ENCFF396LHC_ENCFF010WPI_ENCFF196GIY
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN
+priority 2
+type bigBed 9 + 5
+longLabel Lung, postnatal (0 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN.bb
+subGroups organ=lung view=cCREs_view simpleBiosample=lung_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR
+priority 3
+type bigBed 9 + 5
+longLabel Kidney, postnatal (0 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR.bb
+subGroups organ=kidney view=cCREs_view simpleBiosample=kidney_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV
+priority 4
+type bigBed 9 + 5
+longLabel Hindbrain, postnatal (0 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV.bb
+subGroups organ=brain view=cCREs_view simpleBiosample=hindbrain_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY
+priority 5
+type bigBed 9 + 5
+longLabel Forebrain, postnatal (0 days): (1) cCREs
+parent cCREs_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY.bb
+subGroups organ=brain view=cCREs_view simpleBiosample=forebrain_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM
+priority 6
+type bigBed 9 + 5
+longLabel Heart, postnatal (0 days): (1) cCREs
+parent cCREs_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM.bb
+subGroups organ=heart view=cCREs_view simpleBiosample=heart_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU
+priority 7
+type bigBed 9 + 5
+longLabel Liver, postnatal (0 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU.bb
+subGroups organ=liver view=cCREs_view simpleBiosample=liver_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM
+priority 8
+type bigBed 9 + 5
+longLabel Lung, embryo (14.5 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM.bb
+subGroups organ=lung view=cCREs_view simpleBiosample=lung_embryo_14_5_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY
+priority 9
+type bigBed 9 + 5
+longLabel Stomach, postnatal (0 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY.bb
+subGroups organ=stomach view=cCREs_view simpleBiosample=stomach_postnatal_0_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK
+priority 10
+type bigBed 9 + 5
+longLabel Liver, male adult (8 weeks): (1) cCREs
+parent cCREs_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK.bb
+subGroups organ=liver view=cCREs_view simpleBiosample=liver_male_adult_8_weeks biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY
+priority 11
+type bigBed 9 + 5
+longLabel Kidney, male adult (8 weeks): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY.bb
+subGroups organ=kidney view=cCREs_view simpleBiosample=kidney_male_adult_8_weeks biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO
+priority 12
+type bigBed 9 + 5
+longLabel Thymus, male adult (8 weeks): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO.bb
+subGroups organ=thymus view=cCREs_view simpleBiosample=thymus_male_adult_8_weeks biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY
+priority 13
+type bigBed 9 + 5
+longLabel MEL: (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY.bb
+subGroups organ=spleen view=cCREs_view simpleBiosample=MEL biosampleType=cell_line dataType=typeCcres
+shortLabel ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB
+priority 14
+type bigBed 9 + 5
+longLabel Liver, embryo (14.5 days): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB.bb
+subGroups organ=liver view=cCREs_view simpleBiosample=liver_embryo_14_5_days biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ
+priority 15
+type bigBed 9 + 5
+longLabel CH12.LX: (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ.bb
+subGroups organ=blood view=cCREs_view simpleBiosample=CH12_LX biosampleType=cell_line dataType=typeCcres
+shortLabel ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR
+priority 16
+type bigBed 9 + 5
+longLabel Heart, male adult (8 weeks): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR.bb
+subGroups organ=heart view=cCREs_view simpleBiosample=heart_male_adult_8_weeks biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB
+priority 17
+type bigBed 9 + 5
+longLabel Spleen, male adult (8 weeks): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB.bb
+subGroups organ=spleen view=cCREs_view simpleBiosample=spleen_male_adult_8_weeks biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX
+priority 18
+type bigBed 9 + 5
+longLabel Cerebellum, male adult (8 weeks): (1) cCREs
+parent cCREs_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX.bb
+subGroups organ=brain view=cCREs_view simpleBiosample=cerebellum_male_adult_8_weeks biosampleType=tissue dataType=typeCcres
+shortLabel ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX
+visibility squish
+mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
+url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
+urlLabel cCRE details on SCREEN
+
+track DNase_view
+view DNase_view
+parent coreCcres
+shortLabel DNase
+visibility full
+type bigWig
+
+track ENCFF325FZS
+priority 1.1
+type bigWig
+longLabel Midbrain, postnatal (0 days): (2) DNase, ENCFF325FZS
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF325FZS.bw
+subGroups organ=brain view=DNase_view simpleBiosample=midbrain_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF325FZS
+visibility full
+
+track ENCFF784TNW
+priority 2.1
+type bigWig
+longLabel Lung, postnatal (0 days): (2) DNase, ENCFF784TNW
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF784TNW.bw
+subGroups organ=lung view=DNase_view simpleBiosample=lung_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF784TNW
+visibility full
+
+track ENCFF374LSN
+priority 3.1
+type bigWig
+longLabel Kidney, postnatal (0 days): (2) DNase, ENCFF374LSN
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF374LSN.bw
+subGroups organ=kidney view=DNase_view simpleBiosample=kidney_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF374LSN
+visibility full
+
+track ENCFF822FDB
+priority 4.1
+type bigWig
+longLabel Hindbrain, postnatal (0 days): (2) DNase, ENCFF822FDB
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF822FDB.bw
+subGroups organ=brain view=DNase_view simpleBiosample=hindbrain_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF822FDB
+visibility full
+
+track ENCFF727CYI
+priority 5.1
+type bigWig
+longLabel Forebrain, postnatal (0 days): (2) DNase, ENCFF727CYI
+autoScale on
+color 6,218,147
+parent DNase_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF727CYI.bw
+subGroups organ=brain view=DNase_view simpleBiosample=forebrain_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF727CYI
+visibility full
+
+track ENCFF947JCM
+priority 6.1
+type bigWig
+longLabel Heart, postnatal (0 days): (2) DNase, ENCFF947JCM
+autoScale on
+color 6,218,147
+parent DNase_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF947JCM.bw
+subGroups organ=heart view=DNase_view simpleBiosample=heart_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF947JCM
+visibility full
+
+track ENCFF907KGU
+priority 7.1
+type bigWig
+longLabel Liver, postnatal (0 days): (2) DNase, ENCFF907KGU
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF907KGU.bw
+subGroups organ=liver view=DNase_view simpleBiosample=liver_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF907KGU
+visibility full
+
+track ENCFF616XIK
+priority 8.1
+type bigWig
+longLabel Lung, embryo (14.5 days): (2) DNase, ENCFF616XIK
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF616XIK.bw
+subGroups organ=lung view=DNase_view simpleBiosample=lung_embryo_14_5_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF616XIK
+visibility full
+
+track ENCFF738YPD
+priority 9.1
+type bigWig
+longLabel Stomach, postnatal (0 days): (2) DNase, ENCFF738YPD
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF738YPD.bw
+subGroups organ=stomach view=DNase_view simpleBiosample=stomach_postnatal_0_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF738YPD
+visibility full
+
+track ENCFF389BAE
+priority 10.1
+type bigWig
+longLabel Liver, male adult (8 weeks): (2) DNase, ENCFF389BAE
+autoScale on
+color 6,218,147
+parent DNase_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF389BAE.bw
+subGroups organ=liver view=DNase_view simpleBiosample=liver_male_adult_8_weeks biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF389BAE
+visibility full
+
+track ENCFF744DCK
+priority 11.1
+type bigWig
+longLabel Kidney, male adult (8 weeks): (2) DNase, ENCFF744DCK
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF744DCK.bw
+subGroups organ=kidney view=DNase_view simpleBiosample=kidney_male_adult_8_weeks biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF744DCK
+visibility full
+
+track ENCFF686CDW
+priority 12.1
+type bigWig
+longLabel Thymus, male adult (8 weeks): (2) DNase, ENCFF686CDW
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF686CDW.bw
+subGroups organ=thymus view=DNase_view simpleBiosample=thymus_male_adult_8_weeks biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF686CDW
+visibility full
+
+track ENCFF145VWQ
+priority 13.1
+type bigWig
+longLabel MEL: (2) DNase, ENCFF145VWQ
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF145VWQ.bw
+subGroups organ=spleen view=DNase_view simpleBiosample=MEL biosampleType=cell_line dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF145VWQ
+visibility full
+
+track ENCFF323LVW
+priority 14.1
+type bigWig
+longLabel Liver, embryo (14.5 days): (2) DNase, ENCFF323LVW
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF323LVW.bw
+subGroups organ=liver view=DNase_view simpleBiosample=liver_embryo_14_5_days biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF323LVW
+visibility full
+
+track ENCFF228LWM
+priority 15.1
+type bigWig
+longLabel CH12.LX: (2) DNase, ENCFF228LWM
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF228LWM.bw
+subGroups organ=blood view=DNase_view simpleBiosample=CH12_LX biosampleType=cell_line dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF228LWM
+visibility full
+
+track ENCFF862WQC
+priority 16.1
+type bigWig
+longLabel Heart, male adult (8 weeks): (2) DNase, ENCFF862WQC
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF862WQC.bw
+subGroups organ=heart view=DNase_view simpleBiosample=heart_male_adult_8_weeks biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF862WQC
+visibility full
+
+track ENCFF514QGG
+priority 17.1
+type bigWig
+longLabel Spleen, male adult (8 weeks): (2) DNase, ENCFF514QGG
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF514QGG.bw
+subGroups organ=spleen view=DNase_view simpleBiosample=spleen_male_adult_8_weeks biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF514QGG
+visibility full
+
+track ENCFF265EIS
+priority 18.1
+type bigWig
+longLabel Cerebellum, male adult (8 weeks): (2) DNase, ENCFF265EIS
+autoScale on
+color 6,218,147
+parent DNase_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF265EIS.bw
+subGroups organ=brain view=DNase_view simpleBiosample=cerebellum_male_adult_8_weeks biosampleType=tissue dataType=typeDNase
+maxHeightPixels 30
+shortLabel ENCFF265EIS
+visibility full
+
+track H3K4me3_view
+view H3K4me3_view
+parent coreCcres
+shortLabel H3K4me3
+visibility full
+type bigWig
+
+track ENCFF396LHC
+priority 1.2
+type bigWig
+longLabel Midbrain, postnatal (0 days): (3) H3K4me3, ENCFF396LHC
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF396LHC.bw
+subGroups organ=brain view=H3K4me3_view simpleBiosample=midbrain_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF396LHC
+visibility full
+
+track ENCFF990HLQ
+priority 2.2
+type bigWig
+longLabel Lung, postnatal (0 days): (3) H3K4me3, ENCFF990HLQ
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF990HLQ.bw
+subGroups organ=lung view=H3K4me3_view simpleBiosample=lung_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF990HLQ
+visibility full
+
+track ENCFF887KNZ
+priority 3.2
+type bigWig
+longLabel Kidney, postnatal (0 days): (3) H3K4me3, ENCFF887KNZ
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF887KNZ.bw
+subGroups organ=kidney view=H3K4me3_view simpleBiosample=kidney_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF887KNZ
+visibility full
+
+track ENCFF615BKA
+priority 4.2
+type bigWig
+longLabel Hindbrain, postnatal (0 days): (3) H3K4me3, ENCFF615BKA
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF615BKA.bw
+subGroups organ=brain view=H3K4me3_view simpleBiosample=hindbrain_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF615BKA
+visibility full
+
+track ENCFF050AHA
+priority 5.2
+type bigWig
+longLabel Forebrain, postnatal (0 days): (3) H3K4me3, ENCFF050AHA
+autoScale on
+color 255,0,0
+parent H3K4me3_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF050AHA.bw
+subGroups organ=brain view=H3K4me3_view simpleBiosample=forebrain_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF050AHA
+visibility full
+
+track ENCFF738LHV
+priority 6.2
+type bigWig
+longLabel Heart, postnatal (0 days): (3) H3K4me3, ENCFF738LHV
+autoScale on
+color 255,0,0
+parent H3K4me3_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF738LHV.bw
+subGroups organ=heart view=H3K4me3_view simpleBiosample=heart_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF738LHV
+visibility full
+
+track ENCFF341GEF
+priority 7.2
+type bigWig
+longLabel Liver, postnatal (0 days): (3) H3K4me3, ENCFF341GEF
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF341GEF.bw
+subGroups organ=liver view=H3K4me3_view simpleBiosample=liver_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF341GEF
+visibility full
+
+track ENCFF127UZI
+priority 8.2
+type bigWig
+longLabel Lung, embryo (14.5 days): (3) H3K4me3, ENCFF127UZI
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF127UZI.bw
+subGroups organ=lung view=H3K4me3_view simpleBiosample=lung_embryo_14_5_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF127UZI
+visibility full
+
+track ENCFF083LRQ
+priority 9.2
+type bigWig
+longLabel Stomach, postnatal (0 days): (3) H3K4me3, ENCFF083LRQ
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF083LRQ.bw
+subGroups organ=stomach view=H3K4me3_view simpleBiosample=stomach_postnatal_0_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF083LRQ
+visibility full
+
+track ENCFF244PVS
+priority 10.2
+type bigWig
+longLabel Liver, male adult (8 weeks): (3) H3K4me3, ENCFF244PVS
+autoScale on
+color 255,0,0
+parent H3K4me3_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF244PVS.bw
+subGroups organ=liver view=H3K4me3_view simpleBiosample=liver_male_adult_8_weeks biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF244PVS
+visibility full
+
+track ENCFF673XLI
+priority 11.2
+type bigWig
+longLabel Kidney, male adult (8 weeks): (3) H3K4me3, ENCFF673XLI
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF673XLI.bw
+subGroups organ=kidney view=H3K4me3_view simpleBiosample=kidney_male_adult_8_weeks biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF673XLI
+visibility full
+
+track ENCFF200ISF
+priority 12.2
+type bigWig
+longLabel Thymus, male adult (8 weeks): (3) H3K4me3, ENCFF200ISF
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF200ISF.bw
+subGroups organ=thymus view=H3K4me3_view simpleBiosample=thymus_male_adult_8_weeks biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF200ISF
+visibility full
+
+track ENCFF430CHA
+priority 13.2
+type bigWig
+longLabel MEL: (3) H3K4me3, ENCFF430CHA
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF430CHA.bw
+subGroups organ=spleen view=H3K4me3_view simpleBiosample=MEL biosampleType=cell_line dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF430CHA
+visibility full
+
+track ENCFF186DCG
+priority 14.2
+type bigWig
+longLabel Liver, embryo (14.5 days): (3) H3K4me3, ENCFF186DCG
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF186DCG.bw
+subGroups organ=liver view=H3K4me3_view simpleBiosample=liver_embryo_14_5_days biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF186DCG
+visibility full
+
+track ENCFF420ORJ
+priority 15.2
+type bigWig
+longLabel CH12.LX: (3) H3K4me3, ENCFF420ORJ
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF420ORJ.bw
+subGroups organ=blood view=H3K4me3_view simpleBiosample=CH12_LX biosampleType=cell_line dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF420ORJ
+visibility full
+
+track ENCFF660WNU
+priority 16.2
+type bigWig
+longLabel Heart, male adult (8 weeks): (3) H3K4me3, ENCFF660WNU
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF660WNU.bw
+subGroups organ=heart view=H3K4me3_view simpleBiosample=heart_male_adult_8_weeks biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF660WNU
+visibility full
+
+track ENCFF523GNO
+priority 17.2
+type bigWig
+longLabel Spleen, male adult (8 weeks): (3) H3K4me3, ENCFF523GNO
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF523GNO.bw
+subGroups organ=spleen view=H3K4me3_view simpleBiosample=spleen_male_adult_8_weeks biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF523GNO
+visibility full
+
+track ENCFF288SAJ
+priority 18.2
+type bigWig
+longLabel Cerebellum, male adult (8 weeks): (3) H3K4me3, ENCFF288SAJ
+autoScale on
+color 255,0,0
+parent H3K4me3_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF288SAJ.bw
+subGroups organ=brain view=H3K4me3_view simpleBiosample=cerebellum_male_adult_8_weeks biosampleType=tissue dataType=typeH3k4me3
+maxHeightPixels 30
+shortLabel ENCFF288SAJ
+visibility full
+
+track H3K27ac_view
+view H3K27ac_view
+parent coreCcres
+shortLabel H3K27ac
+visibility full
+type bigWig
+
+track ENCFF010WPI
+priority 1.3
+type bigWig
+longLabel Midbrain, postnatal (0 days): (4) H3K27ac, ENCFF010WPI
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF010WPI.bw
+subGroups organ=brain view=H3K27ac_view simpleBiosample=midbrain_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF010WPI
+visibility full
+
+track ENCFF258KWF
+priority 2.3
+type bigWig
+longLabel Lung, postnatal (0 days): (4) H3K27ac, ENCFF258KWF
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF258KWF.bw
+subGroups organ=lung view=H3K27ac_view simpleBiosample=lung_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF258KWF
+visibility full
+
+track ENCFF269FYI
+priority 3.3
+type bigWig
+longLabel Kidney, postnatal (0 days): (4) H3K27ac, ENCFF269FYI
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF269FYI.bw
+subGroups organ=kidney view=H3K27ac_view simpleBiosample=kidney_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF269FYI
+visibility full
+
+track ENCFF683GNP
+priority 4.3
+type bigWig
+longLabel Hindbrain, postnatal (0 days): (4) H3K27ac, ENCFF683GNP
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF683GNP.bw
+subGroups organ=brain view=H3K27ac_view simpleBiosample=hindbrain_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF683GNP
+visibility full
+
+track ENCFF422JMO
+priority 5.3
+type bigWig
+longLabel Forebrain, postnatal (0 days): (4) H3K27ac, ENCFF422JMO
+autoScale on
+color 255,205,0
+parent H3K27ac_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF422JMO.bw
+subGroups organ=brain view=H3K27ac_view simpleBiosample=forebrain_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF422JMO
+visibility full
+
+track ENCFF306XSO
+priority 6.3
+type bigWig
+longLabel Heart, postnatal (0 days): (4) H3K27ac, ENCFF306XSO
+autoScale on
+color 255,205,0
+parent H3K27ac_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF306XSO.bw
+subGroups organ=heart view=H3K27ac_view simpleBiosample=heart_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF306XSO
+visibility full
+
+track ENCFF544RNA
+priority 7.3
+type bigWig
+longLabel Liver, postnatal (0 days): (4) H3K27ac, ENCFF544RNA
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF544RNA.bw
+subGroups organ=liver view=H3K27ac_view simpleBiosample=liver_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF544RNA
+visibility full
+
+track ENCFF865CCV
+priority 8.3
+type bigWig
+longLabel Lung, embryo (14.5 days): (4) H3K27ac, ENCFF865CCV
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF865CCV.bw
+subGroups organ=lung view=H3K27ac_view simpleBiosample=lung_embryo_14_5_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF865CCV
+visibility full
+
+track ENCFF500YJD
+priority 9.3
+type bigWig
+longLabel Stomach, postnatal (0 days): (4) H3K27ac, ENCFF500YJD
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF500YJD.bw
+subGroups organ=stomach view=H3K27ac_view simpleBiosample=stomach_postnatal_0_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF500YJD
+visibility full
+
+track ENCFF622QOD
+priority 10.3
+type bigWig
+longLabel Liver, male adult (8 weeks): (4) H3K27ac, ENCFF622QOD
+autoScale on
+color 255,205,0
+parent H3K27ac_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF622QOD.bw
+subGroups organ=liver view=H3K27ac_view simpleBiosample=liver_male_adult_8_weeks biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF622QOD
+visibility full
+
+track ENCFF859YPP
+priority 11.3
+type bigWig
+longLabel Kidney, male adult (8 weeks): (4) H3K27ac, ENCFF859YPP
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF859YPP.bw
+subGroups organ=kidney view=H3K27ac_view simpleBiosample=kidney_male_adult_8_weeks biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF859YPP
+visibility full
+
+track ENCFF284KSX
+priority 12.3
+type bigWig
+longLabel Thymus, male adult (8 weeks): (4) H3K27ac, ENCFF284KSX
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF284KSX.bw
+subGroups organ=thymus view=H3K27ac_view simpleBiosample=thymus_male_adult_8_weeks biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF284KSX
+visibility full
+
+track ENCFF770LBL
+priority 13.3
+type bigWig
+longLabel MEL: (4) H3K27ac, ENCFF770LBL
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF770LBL.bw
+subGroups organ=spleen view=H3K27ac_view simpleBiosample=MEL biosampleType=cell_line dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF770LBL
+visibility full
+
+track ENCFF595IQM
+priority 14.3
+type bigWig
+longLabel Liver, embryo (14.5 days): (4) H3K27ac, ENCFF595IQM
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF595IQM.bw
+subGroups organ=liver view=H3K27ac_view simpleBiosample=liver_embryo_14_5_days biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF595IQM
+visibility full
+
+track ENCFF666CND
+priority 15.3
+type bigWig
+longLabel CH12.LX: (4) H3K27ac, ENCFF666CND
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF666CND.bw
+subGroups organ=blood view=H3K27ac_view simpleBiosample=CH12_LX biosampleType=cell_line dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF666CND
+visibility full
+
+track ENCFF266FCV
+priority 16.3
+type bigWig
+longLabel Heart, male adult (8 weeks): (4) H3K27ac, ENCFF266FCV
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF266FCV.bw
+subGroups organ=heart view=H3K27ac_view simpleBiosample=heart_male_adult_8_weeks biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF266FCV
+visibility full
+
+track ENCFF920QDX
+priority 17.3
+type bigWig
+longLabel Spleen, male adult (8 weeks): (4) H3K27ac, ENCFF920QDX
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF920QDX.bw
+subGroups organ=spleen view=H3K27ac_view simpleBiosample=spleen_male_adult_8_weeks biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF920QDX
+visibility full
+
+track ENCFF645OJK
+priority 18.3
+type bigWig
+longLabel Cerebellum, male adult (8 weeks): (4) H3K27ac, ENCFF645OJK
+autoScale on
+color 255,205,0
+parent H3K27ac_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF645OJK.bw
+subGroups organ=brain view=H3K27ac_view simpleBiosample=cerebellum_male_adult_8_weeks biosampleType=tissue dataType=typeH3k27ac
+maxHeightPixels 30
+shortLabel ENCFF645OJK
+visibility full
+
+track CTCF_view
+view CTCF_view
+parent coreCcres
+shortLabel CTCF
+visibility full
+type bigWig
+
+track ENCFF196GIY
+priority 1.4
+type bigWig
+longLabel Midbrain, postnatal (0 days): (5) CTCF, ENCFF196GIY
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF196GIY.bw
+subGroups organ=brain view=CTCF_view simpleBiosample=midbrain_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF196GIY
+visibility full
+
+track ENCFF811CFN
+priority 2.4
+type bigWig
+longLabel Lung, postnatal (0 days): (5) CTCF, ENCFF811CFN
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF811CFN.bw
+subGroups organ=lung view=CTCF_view simpleBiosample=lung_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF811CFN
+visibility full
+
+track ENCFF644MRR
+priority 3.4
+type bigWig
+longLabel Kidney, postnatal (0 days): (5) CTCF, ENCFF644MRR
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF644MRR.bw
+subGroups organ=kidney view=CTCF_view simpleBiosample=kidney_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF644MRR
+visibility full
+
+track ENCFF494FQV
+priority 4.4
+type bigWig
+longLabel Hindbrain, postnatal (0 days): (5) CTCF, ENCFF494FQV
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF494FQV.bw
+subGroups organ=brain view=CTCF_view simpleBiosample=hindbrain_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF494FQV
+visibility full
+
+track ENCFF247XHY
+priority 5.4
+type bigWig
+longLabel Forebrain, postnatal (0 days): (5) CTCF, ENCFF247XHY
+autoScale on
+color 0,176,240
+parent CTCF_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF247XHY.bw
+subGroups organ=brain view=CTCF_view simpleBiosample=forebrain_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF247XHY
+visibility full
+
+track ENCFF055IZM
+priority 6.4
+type bigWig
+longLabel Heart, postnatal (0 days): (5) CTCF, ENCFF055IZM
+autoScale on
+color 0,176,240
+parent CTCF_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF055IZM.bw
+subGroups organ=heart view=CTCF_view simpleBiosample=heart_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF055IZM
+visibility full
+
+track ENCFF935ZIU
+priority 7.4
+type bigWig
+longLabel Liver, postnatal (0 days): (5) CTCF, ENCFF935ZIU
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF935ZIU.bw
+subGroups organ=liver view=CTCF_view simpleBiosample=liver_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF935ZIU
+visibility full
+
+track ENCFF355LDM
+priority 8.4
+type bigWig
+longLabel Lung, embryo (14.5 days): (5) CTCF, ENCFF355LDM
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF355LDM.bw
+subGroups organ=lung view=CTCF_view simpleBiosample=lung_embryo_14_5_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF355LDM
+visibility full
+
+track ENCFF394DGY
+priority 9.4
+type bigWig
+longLabel Stomach, postnatal (0 days): (5) CTCF, ENCFF394DGY
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF394DGY.bw
+subGroups organ=stomach view=CTCF_view simpleBiosample=stomach_postnatal_0_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF394DGY
+visibility full
+
+track ENCFF990MGK
+priority 10.4
+type bigWig
+longLabel Liver, male adult (8 weeks): (5) CTCF, ENCFF990MGK
+autoScale on
+color 0,176,240
+parent CTCF_view on
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF990MGK.bw
+subGroups organ=liver view=CTCF_view simpleBiosample=liver_male_adult_8_weeks biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF990MGK
+visibility full
+
+track ENCFF196NRY
+priority 11.4
+type bigWig
+longLabel Kidney, male adult (8 weeks): (5) CTCF, ENCFF196NRY
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF196NRY.bw
+subGroups organ=kidney view=CTCF_view simpleBiosample=kidney_male_adult_8_weeks biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF196NRY
+visibility full
+
+track ENCFF239UQO
+priority 12.4
+type bigWig
+longLabel Thymus, male adult (8 weeks): (5) CTCF, ENCFF239UQO
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF239UQO.bw
+subGroups organ=thymus view=CTCF_view simpleBiosample=thymus_male_adult_8_weeks biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF239UQO
+visibility full
+
+track ENCFF244ZJY
+priority 13.4
+type bigWig
+longLabel MEL: (5) CTCF, ENCFF244ZJY
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF244ZJY.bw
+subGroups organ=spleen view=CTCF_view simpleBiosample=MEL biosampleType=cell_line dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF244ZJY
+visibility full
+
+track ENCFF233QSB
+priority 14.4
+type bigWig
+longLabel Liver, embryo (14.5 days): (5) CTCF, ENCFF233QSB
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF233QSB.bw
+subGroups organ=liver view=CTCF_view simpleBiosample=liver_embryo_14_5_days biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF233QSB
+visibility full
+
+track ENCFF499GIZ
+priority 15.4
+type bigWig
+longLabel CH12.LX: (5) CTCF, ENCFF499GIZ
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF499GIZ.bw
+subGroups organ=blood view=CTCF_view simpleBiosample=CH12_LX biosampleType=cell_line dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF499GIZ
+visibility full
+
+track ENCFF809JIR
+priority 16.4
+type bigWig
+longLabel Heart, male adult (8 weeks): (5) CTCF, ENCFF809JIR
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF809JIR.bw
+subGroups organ=heart view=CTCF_view simpleBiosample=heart_male_adult_8_weeks biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF809JIR
+visibility full
+
+track ENCFF803MIB
+priority 17.4
+type bigWig
+longLabel Spleen, male adult (8 weeks): (5) CTCF, ENCFF803MIB
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF803MIB.bw
+subGroups organ=spleen view=CTCF_view simpleBiosample=spleen_male_adult_8_weeks biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF803MIB
+visibility full
+
+track ENCFF087SVX
+priority 18.4
+type bigWig
+longLabel Cerebellum, male adult (8 weeks): (5) CTCF, ENCFF087SVX
+autoScale on
+color 0,176,240
+parent CTCF_view off
+bigDataUrl /gbdb/mm10/encode4/ccre/coreCollection/ENCFF087SVX.bw
+subGroups organ=brain view=CTCF_view simpleBiosample=cerebellum_male_adult_8_weeks biosampleType=tissue dataType=typeCtcf
+maxHeightPixels 30
+shortLabel ENCFF087SVX
+visibility full

@@ -429,17 +429,6 @@ errCatchFree(&errCatch);
 return ret;
 }
 
-static char *getApiKey(char *userName)
-/* Grab the already created api key if it exists */
-{
-char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
-struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select apiKey from %s where userName='%s'", tableName, userName);
-char *apiKey = sqlQuickString(conn, dyStringCannibalize(&query));
-hDisconnectCentral(&conn);
-return apiKey;
-}
-
 void printApiKeySection()
 {
 puts("<div id='apiKeySection' class='tabSection'>");
@@ -454,7 +443,7 @@ if (userName==NULL || userId==NULL)
     }
 else
     {
-    char *existingKey = getApiKey(userName);
+    char *existingKey = hubSpaceGetApiKey(userName);
     if (existingKey)
         {
         puts("<div id='apiKeyInstructions' class='help'>You have <span id='removeOnGenerate'>already</span> generated an API key. If you would like to generate a new key (which revokes old keys), click 'Generate key'. To use your API key with Hubtools, copy and paste the below key to your ~/.hubtools.conf file. This is not necessary for URL use to <a href='/FAQ/FAQdownloads.html#CAPTCHA'>bypass the CAPTCHA</a>.<br><br>");
@@ -1769,8 +1758,8 @@ struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, hgHubGetHubSpaceUIState, getHubSpaceUIState);
 cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
 cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
-cartJsonRegisterHandler(cj, hgHubGenerateApiKey, generateApiKey);
-cartJsonRegisterHandler(cj, hgHubRevokeApiKey, revokeApiKey);
+cartJsonRegisterHandler(cj, hgHubGenerateApiKey, cjGenerateApiKey);
+cartJsonRegisterHandler(cj, hgHubRevokeApiKey, cjRevokeApiKey);
 cartJsonExecute(cj);
 }
 

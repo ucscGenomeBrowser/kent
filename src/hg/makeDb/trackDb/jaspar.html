@@ -1,11 +1,10 @@
 <h2>Description</h2>
 <p>
-This track represents genome-wide predicted binding sites for TF 
-(transcription factor) binding profiles in the 
-<a href="https://jaspar.genereg.net/about/" target="_blank">JASPAR 
-CORE collection</a>. This open-source database contains a curated, non-redundant 
-set of binding profiles derived from published collections of experimentally 
-defined transcription factor binding sites for eukaryotes.</p>
+This track represents the genome-wide predicted binding 
+sites for TF (transcription factor) binding profiles in the 
+<a href="https://jaspar.elixir.no/genome-tracks/" target="_blank">JASPAR</a> 
+database CORE collection.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -91,14 +90,33 @@ Zoom to a smaller region and click into an item to see more detail.</p>
 
 <h2>Methods</h2>
 <p>
-JASPAR 2026 features a deep learning (DL) collection, providing a paradigm shift in modeling 
-and characterizing TF-DNA interactions with 1259 BPNet models trained on Homo sapiens ENCODE 
-chromatin immunoprecipitation followed by sequencing (ChIP-seq) datasets from 240 TFs and 
-interpreted to reveal predictive motif patterns for the models. The motifs associated with 
-the same TF were clustered to provide a summary of the binding properties, resulting in 
-240 primary and 113 alternative motif patterns in the DL collection. See the <a 
-target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/41325984/">JASPAR 2026 publication</a>
-for more information.</p>
+For each TF binding profile in the JASPAR database CORE collection, genomes were scanned for matches.
+</p>
+<p>
+For the computation of relative scores and p-values, we used PWMScan (Ambrosini et al. 2018). 
+We selected TFBS predictions with a PWM relative score ≥ 0.8 and a p-value &lt; 0.05. 
+P-values were scaled between 0 (corresponding to a p-value of 1) and 1000 (p-value ≤ 10-10) 
+for colouring of the genome tracks and to allow for comparison of prediction confidence between 
+different profiles.
+</p>
+<p>
+Please refer to the supplementary information of the <a href="https://doi.org/10.1093/nar/gkz1001">JASPAR 2020 manuscript</a> for more details.
+</p>
+<h3>Brief overview of each release</h3>
+<p>
+The JASPAR 2026 update expanded the JASPAR CORE collection by 12% (306
+added or upgraded profiles), culminating to a set of 2633 non-redundant
+TF binding profiles.  Genome sequences were scanned with JASPAR 2026
+CORE TF binding profiles for each taxon independently using PWMScan.
+TFBS predictions were selected with a PWM relative score ≥ 0.8 and a
+p-value &lt; 0.05. P-values were scaled between 0 (corresponding to a
+p-value of 1) and 1000 (p-value ≤ 10⁻¹⁰) for coloring of the genome
+tracks and to allow for comparison of prediction confidence between
+different profiles. More information on the methods can be found in the
+<a href="https://doi.org/10.1093/nar/gkaf1209" target="_blank">JASPAR 2026 
+publication</a> or on the
+<a href="https://jaspar.elixir.no/" target="_blank">JASPAR website</a>.</p>
+
 <p>
 The JASPAR 2024 update expanded the JASPAR CORE collection by 20% (329 added and 72 upgraded
 profiles). The new profiles were introduced after manual curation, in which 26 629 TF binding
@@ -138,10 +156,6 @@ consistent between the two methods (TFBS Perl module and FIMO) were removed. The
 remaining TFBS predictions were colored according 
 to their FIMO p-value to allow for comparison of prediction confidence between 
 different profiles.</p>
-
-<p>
-Please refer to the JASPAR 2024, 2022, 2020, and 2018 publications for more 
-details (citation below).</p>
 
 <h2>Data Access</h2>
 <p>
@@ -184,16 +198,12 @@ Run a utility with no arguments to see a brief description of the utility and it
 All data are freely available.
 Additional resources are available directly from the JASPAR group:</p>
 <ul>
-<li>Binding site predictions for all and individual TF profiles are available 
-for download at 
-<a href="http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/"
-target="_blank">http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/</a>.</li>
-<li>Code and data used to create the UCSC tracks are available at 
-<a href="https://github.com/wassermanlab/JASPAR-UCSC-tracks" target="_blank">
-https://github.com/wassermanlab/JASPAR-UCSC-tracks</a>.</li>
-<li>The underlying JASPAR motif data is available through the JASPAR website at
-<a href="https://jaspar.genereg.net/" target="_blank">https://jaspar.genereg.net/</a>.</li>
+  <li>Binding site predictions for all and individual TF profiles are available for download 
+    at <a href="https://mencius.uio.no/JASPAR/JASPAR_genome_browser_tracks/" target="_blank">https://mencius.uio.no/JASPAR/JASPAR_genome_browser_tracks/</a>.</li>
+  <li>Code used to create the UCSC tracks are available at <a href="https://github.com/ievarau/JASPAR-UCSC-tracks/tree/master">https://github.com/ievarau/JASPAR-UCSC-tracks/tree/master</a>.</li>
+  <li>The underlying JASPAR motif data is available through the JASPAR website at <a href="https://jaspar.elixir.no/" target="_blank">https://jaspar.elixir.no</a>.</li>
 </ul>
+
 
 <h2>Other Genomes</h2>
 <p>The JASPAR group provides TFBS predictions for many additional species and 
@@ -230,7 +240,6 @@ href="../cgi-bin/hgTrackUi?db=dm6&g=jaspar">dm6</a></td>
     <tr>
       <td>Nematode - <em>Caenorhabditis elegans</em></td>
       <td><a target="_blank"
-      <a target="_blank"
 href="../cgi-bin/hgTrackUi?db=ce11&g=jaspar">ce11</a></td>
     </tr>
     <tr>
@@ -258,80 +267,66 @@ href="../cgi-bin/hgTrackUi?db=galGal6&g=jaspar">galGal6</a></td>
 
 <h2>Credits</h2>
 <p>
-The JASPAR database is a joint effort between several labs 
-(please see the latest JASPAR paper, below). 
-Binding site predictions and UCSC tracks were computed by the Wasserman Lab. For 
-enquiries about the data please contact Oriol Fornes 
-(<A HREF="mailto:&#111;&#114;&#105;&#111;l&#64;&#99;&#109;&#109;&#116;.
-u&#98;&#99;.c&#97;">
-&#111;&#114;&#105;&#111;l&#64;&#99;&#109;&#109;&#116;.
-u&#98;&#99;.c&#97;</A>
-<!-- above address is oriol at cmmt.ubc.ca -->).</p>
+The JASPAR database is a joint effort between several labs (please see the latest JASPAR 
+paper, below). Binding site predictions and UCSC tracks were computed by the CBGR team 
+at NCMBM using code developed at the Wasserman Lab. For enquiries about the data, 
+please contact Anthony Mathelier (
+<A HREF="mailto:&#97;&#110;&#116;&#104;&#111;&#110;y.
+&#109;&#97;&#116;&#104;e&#108;&#105;&#101;&#114;&#64;&#110;&#99;&#109;b&#109;.
+&#117;i&#111;.
+&#110;o">
+&#97;&#110;&#116;&#104;&#111;&#110;y.
+&#109;&#97;&#116;&#104;e&#108;&#105;&#101;&#114;&#64;&#110;&#99;&#109;b&#109;.
+&#117;i&#111;.
+&#110;o</A>
+<!-- above address is anthony.mathelier at ncmbm.uio.no -->
+) or Ieva Rauluseviciute (
+<A HREF="mailto:&#105;&#101;&#118;&#97;.
+&#114;&#97;&#117;&#108;us&#101;&#118;&#105;&#99;&#105;u&#116;&#101;&#64;&#110;&#99;m&#98;m.
+&#117;&#105;&#111;.
+&#110;o">
+&#105;&#101;&#118;&#97;.
+&#114;&#97;&#117;&#108;us&#101;&#118;&#105;&#99;&#105;u&#116;&#101;&#64;&#110;&#99;m&#98;m.
+&#117;&#105;&#111;.
+&#110;o</A>
+<!-- above address is ieva.rauluseviciute at ncmbm.uio.no -->
+).
+</p>
 
 <blockquote>
-  <p><em><a href="http://cisreg.ca/">Wasserman Lab</a></em><br/>
-   Centre for Molecular Medicine and Therapeutics<br/>
-   BC Children's Hospital Research Institute<br/>
-   Department of Medical Genetics<br/>   
-   University of British Columbia<br/>
-   Vancouver, Canada
-  </p>
+<p><em><a href="https://mathelierlab.com/">CBGR</a></em><br>
+Computational Biology &amp; Gene Regulation<br>
+Norwegian Centre for Molecular Biosciences and Medicine (NCMBM)<br>
+University of Oslo<br>
+Oslo, Norway
+</p>
+</blockquote>
+<blockquote>
+<p><em><a href="https://cisreg.info/">Wasserman Lab</a></em><br>
+Centre for Molecular Medicine and Therapeutics<br>
+BC Children's Hospital Research Institute<br>
+Department of Medical Genetics<br>   
+University of British Columbia<br>
+Vancouver, Canada
+</p>
 </blockquote>
 
+
 <h2>References</h2>
-<p>
-Castro-Mondragon JA, Riudavets-Puig R, Rauluseviciute I, Berhanu Lemma R, Turchi L, Blanc-Mathieu R,
-Lucas J, Boddie P, Khan A, Manosalva P&#233;rez N <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/34850907" target="_blank">
-JASPAR 2022: the 9th release of the open-access database of transcription factor binding
-profiles</a>.
-<em>Nucleic Acids Res</em>. 2021 Nov 30;.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34850907" target="_blank">34850907</a>
-</p>
-
-<p>
-Fornes O, Castro-Mondragon JA, Khan A, van der Lee R, Zhang X, Richmond PA, 
-Modi BP, Correard S, Gheorghe M, Barana&#353;i&#263; D <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/31701148" target="_blank">
-JASPAR 2020: update of the open-access database of transcription factor 
-binding profiles</a>.
-<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D87-D92.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31701148" 
-target="_blank">31701148</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7145627/" 
-target="_blank">PMC7145627</a>
-</p>
-
-<p>
-Khan A, Fornes O, Stigliani A, Gheorghe M, Castro-Mondragon JA, van der Lee R, 
-Bessy A, Ch&#232;neby J, Kulkarni SR, Tan G <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473" target="_blank">
-JASPAR 2018: update of the open-access database of transcription factor 
-binding profiles and its web framework</a>.
-<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D260-D266.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473" 
-target="_blank">29140473</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753243/" 
-target="_blank">PMC5753243</a>
-</p>
-
 <p>
 Ovek Baydar D, Rauluseviciute I, Aronsen DR, Blanc-Mathieu R, Bonthuis I, de Beukelaer H, Ferenc K,
 Jegou A, Kumar V, Lemma RB <em>et al</em>.
 <a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkaf1209" target="_blank">
-JASPAR 2026: expansion of transcription factor binding profiles and integration of deep learning
-models</a>.
-<em>Nucleic Acids Res</em>. 2026 Jan 6;54(D1):D184-D193.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41325984" target="_blank">41325984</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12807658/" target="_blank">PMC12807658</a>
+JASPAR 2026: expansion of transcription factor binding profiles and integration of deep learning models</a>.
+<em>Nucleic Acids Res</em>. 2026;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41325984" target="_blank">41325984</a>; PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12807658/" target="_blank">PMC12807658</a>
 </p>
 
 <p>
-Rauluseviciute I, Riudavets-Puig R, Blanc-Mathieu R, Castro-Mondragon JA, Ferenc K, Kumar V, Lemma
-RB, Lucas J, Ch&#232;neby J, Baranasic D <em>et al</em>.
-<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad1059" target="_blank">
-JASPAR 2024: 20th anniversary of the open-access database of transcription factor binding
-profiles</a>.
-<em>Nucleic Acids Res</em>. 2023 Nov 14;.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37962376" target="_blank">37962376</a>
+Sandelin A, Alkema W, Engstrom P, Wasserman WW, Lenhard B.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkh012" target="_blank">
+JASPAR: an open-access database for eukaryotic transcription factor binding profiles</a>.
+<em>Nucleic Acids Res</em>. 2004;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14681366" target="_blank">14681366</a>
 </p>
+
