@@ -1,12 +1,12 @@
 track genCC
 shortLabel GenCC
 longLabel GenCC: The Gene Curation Coalition Annotations
-type bigBed 9 + 33
+type bigBed 9 + 34
 bigDataUrl /gbdb/$D/bbi/genCC.bb
 group phenDis
 mouseOver <b>Disease title:</b> $disease_title<br><b>Classification:</b> $classification_title<br><b>MOI:</b> $moi_title<br><b>Submitter:</b> $sub_submitter_name
 itemRgb on
-urls ensTranscript="https://useast.ensembl.org/Multi/Search/Results?q=$$;site=ensembl_all" ensGene="https://useast.ensembl.org/Multi/Search/Results?q=$$;site=ensembl_all" refSeqAccession="https://www.ncbi.nlm.nih.gov/clinvar/?term=$$" uuid="https://search.thegencc.org/submissions/$$" gene_curie="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$" gene_symbol="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" disease_curie="https://www.pombase.org/term/$$" moi_curie="https://hpo.jax.org/app/browse/term/$$"
+urls ensTranscript="https://useast.ensembl.org/Multi/Search/Results?q=$$;site=ensembl_all" ensGene="https://useast.ensembl.org/Multi/Search/Results?q=$$;site=ensembl_all" refSeqAccession="https://www.ncbi.nlm.nih.gov/clinvar/?term=$$" sgc_id="https://search.thegencc.org/submissions/$$" gene_curie="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$" gene_symbol="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" disease_curie="https://www.pombase.org/term/$$" moi_curie="https://hpo.jax.org/app/browse/term/$$"
 filterValues.classification_title Supportive,Strong,Definitive,Limited,Moderate,No Known Disease Relationship,Disputed Evidence,Refuted Evidence
 filterLabel.classification_title evidence classification
 url https://search.thegencc.org/genes/$<gene_curie>
