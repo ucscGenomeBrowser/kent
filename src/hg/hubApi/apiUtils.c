@@ -274,7 +274,6 @@ struct trackHub *hub = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    unsigned getHubId(char *url, char **errorMessage);
     char *errMessage;
     unsigned hubId = hubFindOrAddUrlInStatusTable(NULL, hubUrl, &errMessage);
     

@@ -1,3 +1,72 @@
 <h2>Description</h2>
 <p>
-This track shows mismatches between the assembly from which the track was quickLifted and the current genome.
+The Alignment Differences track shows mismatches and indels between the assembly from which the
+track was QuickLifted and the current genome.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Visible tracks, custom tracks, and track hubs on the Browser graphic page are carried over (lifted)
+to the new assembly using the <font color="#008000">QuickLift</font> tracks checkbox. When a single
+track from a container track, such as a superTrack or composite, is lifted, the entire container
+track is carried over to the new assembly.
+</p>
+<font color="#008000">QuickLift</font> tracks appear under a green
+&quot;<font color="#008000">QuickLift</font> from ...&quot; group in the New assembly.
+<font color="#008000">QuickLift</font> tracks can be removed by the 
+<button>Disconnect</button> button. <font color="#008000">QuickLift</font> tracks have a green
+left-side button bar in the Browser graphic, instead of the usual gray.
+</p>
+<p>
+The &quot;Alignment Differences&quot; track displays liftOver differences using triangles and
+lines; mousing over a triangle displays base-pair (bp) information. Lines and triangles are
+color-coded as follows:
+</p>
+<ul>
+  <li>Insertions:
+  <font color="#407F00">green</font></li>
+  
+  <li>Deletions:
+  <font color="#00007F">blue</font></li>
+  
+  <li>Double-sided insertions:
+  <font color="#7F7F7F">gray</font></li>
+  
+  <li>Mismatches:
+  <font color="#FF0000">red</font></li>
+</ul>
+ <div class="text-center">
+ <img src="../../images/QuickLift/quickLiftTrianglesMouseOver.png" width='70%'>
+ </div>
+<p>Clicking a triangle provides additional information about the alignment.</p>
+
+<h2>Methods</h2>
+<p>
+An alignment between two DNA sequences maps every nucleotide in one sequence to a nucleotide in
+another sequence. By making and using whole-genome alignments (Kent et al., 2003),
+genome annotations can be &quot;lifted&quot; to another assembly
+(<a href="/cgi-bin/hgLiftOver" target="_blank">LiftOver</a>) in bulk, one track at a time.
+<font color="#008000">QuickLift</font> is a tool that uses the same algorithm, but it maps
+(&quot;liftOver&quot;) annotations on demand, in real-time, for all visible tracks. Only the
+annotations in the currently visible region are lifted, so this is usually fast enough when
+browsing a genome.
+</p>
+
+<p>
+<font color="#008000">QuickLift</font> functionality depends on the availability of alignment files
+(chains) that describe how sequences in one assembly correspond to another. The alignment files are
+currently made at UCSC, but we are working on making the pipeline to align two genomes more widely
+available.
+</p>
+
+<h2>References</h2>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/doi/10.1073/pnas.1932072100?url_ver=Z39.88-
+2003&amp;rfr_id=ori:rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+Evolution&#x27;s cauldron: duplication, deletion, and rearrangement in the mouse and human
+genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
