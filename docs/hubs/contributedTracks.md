@@ -15,11 +15,14 @@ genome assemblies.
 
 Development process:
 
-- Develop your annotations in a track hub under your control.
+- Develop your annotations in a track hub under your control. Follow the steps on
+   our [track hub basics](hubBasics.html) page to create your hub.
 - Provide a reference to your development track hub to the genome browser
    for inclusion consideration.
 - By following the suggested outline, the browser will be able to
    efficiently add your annotations to the genome browser system.
+- [Contact us](mailto:genome-www@soe.ucsc.edu) when you're ready to submit your
+   tracks for consideration.
 
 ## Your track hub file/directory structure
 

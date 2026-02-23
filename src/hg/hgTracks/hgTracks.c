@@ -2321,8 +2321,10 @@ struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    char *hlArr[4096];
-    int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
+    int hlCount = chopByChar(highlightDef, '|', NULL, 0);
+    char **hlArr = AllocN(char *, hlCount);
+    char *hlStringCopy = cloneString(highlightDef);
+    chopByChar(hlStringCopy, '|', hlArr, hlCount);
     int i;
     for (i=0; i<hlCount; i++)
         {
@@ -2373,6 +2375,8 @@ if(highlightDef)
         }
 
     slReverse(&hlList);
+    freeMem(hlStringCopy);
+    freeMem(hlArr);
     }
 
 return hlList;
@@ -9954,7 +9958,7 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
-                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data → Track Hubs to find it again or re-entering the hub URL.\")) {"
+                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data -> Track Hubs to find it again or re-entering the hub URL.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;"
                     "}",
@@ -11577,7 +11581,7 @@ dyStringPrintf(dy,"Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
-dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c f', function() { gotoConfigurePage() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('#defaultTracksMenuLink')[0].click() }); \n");

@@ -20,6 +20,9 @@ int clStart = -1;
 int clEnd = -1;
 char *clBed = NULL;	/* Bed file that specifies bounds of sequences. */
 char *clPos = NULL;	/* Positions file that specifies bounds of sequences. */
+struct slName *clRange = NULL;
+struct hash *chromHash = NULL;
+boolean skipChromCheck = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -34,9 +37,16 @@ errAbort(
   "   -chrom=chr1 - if set restrict output to given chromosome\n"
   "   -start=N - if set, restrict output to only that over start\n"
   "   -end=N - if set, restict output to only that under end\n"
+  "   -range=\"chrom start end\" - if set, restrict output to only that within range from start to end. \n"
+  "          This range start is a half-open 0-based coordinate like used in BED files. \n"
+  "   -range=chrom:start-end - if set, restrict output to only that within range from start to end. \n"
+  "          This range start is a 1-based start position. \n"
+  "    Do not use range with chrom, start, and/or end options. \n"
+  "   -range may be specified multiple times for multiple ranges. \n"
   "   -bed=input.bed  Extract values for all ranges specified by input.bed. If bed4, will also print the bed name.\n"
   "   -positions=in.pos - restrict output to all regions in a position file with 1-based start\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
+  "   -skipChromCheck - skip checking chrom name.\n"
   );
 }
 
@@ -46,7 +56,9 @@ static struct optionSpec options[] = {
    {"end", OPTION_INT},
    {"udcDir", OPTION_STRING},
    {"bed", OPTION_STRING},
+   {"range", OPTION_STRING|OPTION_MULTI},
    {"positions", OPTION_STRING},
+   {"skipChromCheck", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -73,34 +85,45 @@ void bigWigToWig(char *inFile, char *outFile)
 {
 struct bbiFile *bbi = bigWigFileOpen(inFile);
 FILE *f = mustOpen(outFile, "w");
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+if (!skipChromCheck)
+    chromHash = makeChromHash(chromList);
 if (clBed != NULL)
     {
-    genericBigToNonBigFromBed(bbi, clBed, f, &processChromChunk);
-    return;
+    genericBigToNonBigFromBed(bbi, chromHash, clBed, f, &processChromChunk);
     }
-if (clPos != NULL)
+else if (clPos != NULL)
     {
-    genericBigToNonBigFromPos(bbi, clPos, f, &processChromChunk);
-    return;
+    genericBigToNonBigFromPos(bbi, chromHash, clPos, f, &processChromChunk);
     }
-struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+else if (clRange != NULL)
     {
-    if (clChrom != NULL && !sameString(clChrom, chrom->name))
-        continue;
-    char *chromName = chrom->name;
-    int start = 0, end = chrom->size;
-    if (clStart >= 0)
-        start = clStart;
-    if (clEnd >= 0)
+    genericBigToNonBigFromRange(bbi, chromHash, f, clRange, &processChromChunk);
+    }
+else
+    {
+    boolean chromFound = FALSE;
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
-        end = clEnd;
-	if (end > chrom->size)
-	    end = chrom->size;
+	if (clChrom != NULL && !sameString(clChrom, chrom->name))
+	    continue;
+	chromFound = TRUE;
+	char *chromName = chrom->name;
+	int start = 0, end = chrom->size;
+	if (clStart >= 0)
+	    start = clStart;
+	if (clEnd >= 0)
+	    {
+	    end = clEnd;
+	    if (end > chrom->size)
+		end = chrom->size;
+	    }
+	if (start > end)
+	    errAbort("invalid range, start=%d > end=%d", start, end);
+	bigWigIntervalDump(bbi, chromName, start, end, 0, f);
 	}
-    if (start > end)
-	errAbort("invalid range, start=%d > end=%d", start, end);
-    bigWigIntervalDump(bbi, chromName, start, end, 0, f);
+    if (clChrom && !chromFound && !skipChromCheck)
+	errAbort("specified chrom %s not found in bigWig", clChrom);
     }
 bbiChromInfoFreeList(&chromList);
 carefulClose(&f);
@@ -117,14 +140,16 @@ if (argc != 3)
 clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
+clRange =optionMultiVal("range", clRange);
 clBed = optionVal("bed", clBed);
 clPos = optionVal("positions", clPos);
+skipChromCheck = optionExists("skipChromCheck");
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 
-if ((clBed || clPos) && (clChrom || (clStart >= 0) || (clEnd >= 0)))
-    errAbort("-bed or -positions can not be used with -chrom -start or -end options");
-if (clBed && clPos)
-    errAbort("-bed and -positions can not be used together");
+if ((clBed || clPos || clRange) && (clChrom || (clStart >= 0) || (clEnd >= 0)))
+    errAbort("-bed or -positions or -range can not be used with -chrom -start or -end options");
+if ((clBed && clPos) || (clBed && clRange) || (clPos && clRange))
+    errAbort("-bed, -positions, and -range can not be used together");
 
 bigWigToWig(argv[1], argv[2]);
 
