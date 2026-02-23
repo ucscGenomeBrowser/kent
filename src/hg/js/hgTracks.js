@@ -3902,6 +3902,18 @@ function hubQuickConnect() {
     $("#hubQuickDialog").dialog("open");
 }
 
+function gotoConfigurePage() {
+    let inp = $('input[name="hgTracksConfigPage"]');
+    if (inp.length) {
+        inp.submit().click();
+    } else {
+        // form a url to go there manually
+        let url = window.location.href;
+        url += "&hgTracksConfigPage=configure";
+        window.location.assign(url);
+    }
+}
+
 function onHideAllGroupButtonClick(ev) {
     /* called when 'hide all' button is clicked on group blue bar menu */
     let groupName = ev.target.getAttribute("data-group-name");

@@ -1447,7 +1447,7 @@ if (relativeUrl != NULL)
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
             if (numFields > bbi->fieldCount)
-                errAbort("bigBed file '%s' has %d fields, but track \"%s\" declares 'type bigBed %d'. Either regenerate the bigBed with the correct number of fields, or change the type line to 'type bigBed %d' to match the file.", bigDataUrl, bbi->fieldCount, trackHubSkipHubName(tdb->track), numFields, bbi->fieldCount);
+                errAbort("bigBed file '%s' has %d fields, but track \"%s\" declares 'type bigBed %d'. Either regenerate the bigBed with the correct number of fields, or change the type line to match the file's field count.", bigDataUrl, bbi->fieldCount, trackHubSkipHubName(tdb->track), numFields);
             }
         bbiFileClose(&bbi);
         }
@@ -1459,7 +1459,8 @@ if (relativeUrl != NULL)
             // Warnings already indicated whether the tabix file is missing etc.
             errAbort("Couldn't open %s and/or its tabix index (.tbi) file for track %s. "
                      "Both the .vcf.gz file and a matching .vcf.gz.tbi index must be publicly accessible "
-                     "at the same URL path. Generate the index with: tabix -p vcf yourFile.vcf.gz",
+                     "at the same URL path. Generate the index with: tabix -p vcf yourFile.vcf.gz "
+                     "See https://genome.ucsc.edu/goldenPath/help/vcf.html",
                      bigDataUrl, trackHubSkipHubName(tdb->track));
         vcfFileFree(&vcf);
         }

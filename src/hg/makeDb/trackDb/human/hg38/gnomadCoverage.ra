@@ -18,6 +18,7 @@ maxHeightPixels 100:24:8
     bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.mean.bw
     priority 0.1
     autoScale on
+    alwaysZero on
 
     track gnomad3MedianCoverage
     shortLabel Median Coverage
@@ -27,6 +28,7 @@ maxHeightPixels 100:24:8
     bigDataUrl /gbdb/hg38/gnomAD/coverage/v3-genome/gnomad.coverage.median.bw
     priority 0.2
     autoScale on
+    alwaysZero on
 
     track gnomad31XPercentage
     shortLabel Sample % > 1X
@@ -129,6 +131,7 @@ maxHeightPixels 100:24:8
     bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.mean.bw
     priority 0.1
     autoScale on
+    alwaysZero on
 
     track gnomad4ExomeMedianCoverage
     shortLabel Median Coverage
@@ -138,6 +141,7 @@ maxHeightPixels 100:24:8
     bigDataUrl /gbdb/hg38/gnomAD/coverage/v4-exome/gnomad.coverage.median.bw
     priority 0.2
     autoScale on
+    alwaysZero on
 
     track gnomad4Exome1XPercentage
     shortLabel Sample % > 1X

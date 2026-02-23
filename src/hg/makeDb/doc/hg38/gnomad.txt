@@ -717,9 +717,9 @@ python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py gnomad.genomes.r3.0.1.cove
 # Creates 11 bigWig files
 
 # Create symlinks in /gbdb
-mkdir -p /gbdb/hg38/gnomAD/coverage/v3-genome/
-cd /gbdb/hg38/gnomAD/coverage
-for f in /hive/data/genomes/hg38/bed/gnomad/coverage/*.bw; do ln -sf "$f" .; done
+mkdir -p /gbdb/hg38/gnomAD/coverage/v3-genome
+cd /gbdb/hg38/gnomAD/coverage/v3-genome
+for f in /hive/data/genomes/hg38/bed/gnomad/coverage/v3-genome/gnomad.coverage.*.bw; do ln -sf "$f" .; done
 
 ##############################################################################
 # gnomAD Exome Coverage v4 - Jan 29, 2026 - max
@@ -734,4 +734,18 @@ aria2c -x10 https://storage.googleapis.com/gcp-public-data--gnomad/release/4.0/c
 
 # Convert TSV to bigWig files using Python script
 python3 ~/kent/src/hg/makeDb/scripts/gnomadCovToBw.py gnomad.exomes.v4.0.coverage.summary.tsv.bgz
-# Creates 11 bigWig files
+# Creates 11 bigWig files:
+#   gnomad.coverage.mean.bw, gnomad.coverage.median.bw,
+#   gnomad.coverage.over_{1,5,10,15,20,25,30,50,100}.bw
+# Note: The script handles chromosome ordering (gnomAD uses chr1-22,X,Y,M order,
+# not the chrom.sizes order) and skips duplicate positions in the input data.
+# Processed 170,202,927 lines, skipped 2 duplicate positions.
+
+# Create symlinks in /gbdb
+mkdir -p /gbdb/hg38/gnomAD/coverage/v4-exome
+cd /gbdb/hg38/gnomAD/coverage/v4-exome
+for f in /hive/data/genomes/hg38/bed/gnomad/coverage/v4-exome/gnomad.coverage.*.bw; do ln -sf "$f" .; done
+
+# Add track to trackDb (gnomadCoverage.ra) and rebuild
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38

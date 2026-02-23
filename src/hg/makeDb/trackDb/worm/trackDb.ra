@@ -501,3 +501,6 @@ searchType genePred
 searchMethod fuzzy
 # shortCircuit 1
 searchPriority 18
+
+track jaspar2026 override
+filterValues.TFName atf-2,atf-7,atfs-1,blmp-1,cebp-1,ceh-10,ceh-10::ttx-3,ceh-14,ceh-18,ceh-22,ceh-23,ceh-28,ceh-36,ceh-38,ceh-39,ceh-43,CEH-48,ceh-60,ces-2,che-1,cnd-1,daf-12,daf-16,dmd-10,dsc-1,efl-1,egl-27,egl-38,egrh-1,elt-1,elt-2,elt-3,elt-6,elt-7,end-3,eor-1,ets-7,F10B5.3,fkh-2,fkh-3,fkh-9,fos-1,hif-1,hlh-1,hlh-30,hsf-1,jun-1,klf-3,klu-1,klu-2,let-381,lim-4,lim-7,lin-14,lin-31,lin-32,lin-48,lin-54,lsl-1,lsy-2,mab-3,mab-5,mdl-1,mef-2,mls-2,mxl-1,mxl-3,nfi-1,nfya-1,nhr-142,nhr-25,nhr-33,nhr-5,nhr-6,nhr-70,nhr-86,nsy-7,odd-2,odr-7,pag-3,pal-1,pax-2,pha-4,pqm-1,ref-1,sex-1,skn-1,sma-4,snai-1,snpc-4,sox-3,sptf-3,sta-1,tbx-37,tbx-38,unc-30,unc-62,unc-86,vab-7,xbp-1,zfh-2,zip-8,ztf-6

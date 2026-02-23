@@ -8,6 +8,4 @@ include encode3.chromHmm.ra
 include encode3.histone.ra
 include encode3.atac.ra
 
-track encodeCcreCombined override
-url https://screen.wenglab.org/search/?q=$$&assembly=mm10
-
+include encodeCcreCombined.old.ra beta,public
