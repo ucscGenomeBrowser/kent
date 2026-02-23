@@ -2360,33 +2360,22 @@ var rightClick = {
         }
         if (cmd === 'selectWholeGene' || cmd === 'getDna' || cmd === 'highlightItem' || cmd === 'highlightThisRegion') {
                 // bring whole gene into view or redirect to DNA screen.
-                href = rightClick.selectedMenuItem.href;
-                var chrom, chromStart, chromEnd;
+                let href = rightClick.selectedMenuItem.href;
+                let url = URL.parse(rightClick.selectedMenuItem.href);
+                let chrom = url.searchParams.get('hgg_chrom');
+                if (!chrom)
+                    chrom = url.searchParams.get('c');
+                let chromStart = url.searchParams.get('hgg_start');
+                if (!chromStart)
+                    chromStart = url.searchParams.get('o');
+                let chromEnd = url.searchParams.get('hgg_end');
+                if (!chromEnd)
+                    chromEnd = url.searchParams.get('t');
+                chromStart = parseInt(chromStart) + 1;
+                chromEnd = parseInt(chromEnd);
                 // Many links leave out the chrom (b/c it's in the server side cart as "c")
                 // var chrom = hgTracks.chromName; // This is no longer acceptable
                 // with multi-window capability drawing multiple positions on multiple chroms.
-                var a = /hgg_chrom=(\w+)&/.exec(href);
-                if (a) {
-                    if (a && a[1])
-                        chrom = a[1];
-                    a = /hgg_start=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromStart = parseInt(a[1]) + 1;
-                    a = /hgg_end=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromEnd = parseInt(a[1]);
-                } else {
-                    // a = /hgc.*\W+c=(\w+)/.exec(href);
-                    a = /hgc.*\W+c=(\w+)/.exec(href);
-                    if (a && a[1])
-                        chrom = a[1];
-                    a = /o=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromStart = parseInt(a[1]) + 1;
-                    a = /t=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromEnd = parseInt(a[1]);
-                }
                 if (!chrom || chrom.length === 0 || !chromStart || !chromEnd) {// 1-based chromStart
                     warn("couldn't parse out genomic coordinates");
                 } else {
