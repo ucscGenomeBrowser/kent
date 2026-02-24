@@ -4768,7 +4768,6 @@ function forceDisplayBedFile(url) {
     .catch(error => console.error('Error fetching BED file:', error));
 }
 
-<<<<<<< HEAD
 function processFindGenome(result, term) {
     // process the hubApi/findGenome?q= result set into somthing
     // jquery-ui autocomplete can use
