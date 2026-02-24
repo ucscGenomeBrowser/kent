@@ -426,15 +426,13 @@ VariantRecalibrator and ApplyRecalibration.
 from <a target="_blank" href="https://swefreq.nbis.se/dataset/SweGen/download">SweFreq</a>.
 </p>
 
-<p><b>Australia MGRB:</b> MGRB samples underwent whole-genome sequencing on
+<p><b>Australia MGRB:</b> The 4,011 MGRB samples underwent whole-genome sequencing on
 Illumina HiSeq X instruments at KCCG under ISO 15189 accreditation, using
-paired-end TruSeq DNA Nano libraries sequenced one lane per sample. Reads were
-aligned to human reference genome Build 37 (GRCh37) and processed following
-GATK best practices, including indel realignment and base quality score
-recalibration, with variant calling performed using GATK HaplotypeCaller to
-generate g.vcf files. Data processing utilized the Genome One Discovery
-pipeline and analysis was conducted using the Hail framework.
-</p>
+paired-end TruSeq DNA Nano libraries sequenced one lane per sample. Alignment
+of sequence reads to the hg38 reference genome assembly was with bwa
+0.7.15-r1140.  Variants were called following the Genome Analysis Toolkit
+(GATK) best practices procedure using GATK 4.1.4.0. A sites-only VCF with only
+passing variants (FILTER=PASS) was made with bcftools 1.20.</p>
 
 <p><b>NPM Singapore:</b> Whole Genome Sequencing (WGS) data processing followed
 GATK4 best practices. GATK4 germline variant analysis workflow written in WDL

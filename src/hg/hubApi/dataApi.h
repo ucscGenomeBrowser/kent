@@ -237,17 +237,17 @@ struct genark *genArkList(char *oneAccession);
 boolean isSupportedType(char *type);
 /* is given type in the supportedTypes list ? */
 
-void wigColumnTypes(struct jsonWrite *jw);
+void wigColumnTypes(struct jsonWrite *jw, char *track);
 /* output column headers for a wiggle data output schema */
 
 void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
     char *columnNames[], char *columnTypes[], int jsonTypes[],
 	struct hTableInfo *hti, int columnCount, int asColumnCount,
-	    struct asColumn *columnEl);
+	    struct asColumn *columnEl, char *track);
 /* print out the SQL schema for this trackDb */
 
 void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
-    struct asObject *as);
+    struct asObject *as, char *track);
 /* show the column types from a big file autoSql definitions */
 
 boolean trackHasData(struct trackDb *tdb);

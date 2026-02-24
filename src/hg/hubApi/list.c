@@ -460,7 +460,7 @@ struct asObject *as = bigBedAsOrDefault(bbi);
 if (! as)
     apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/list/schema' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
 struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-bigColumnTypes(jw, fiList, as);
+bigColumnTypes(jw, fiList, as, "columnTypes");
 
 apiFinishOutput(0, NULL, jw);
 }	/* static void hubSchemaJsonOutput(FILE *f, char *hubUrl,
@@ -589,7 +589,7 @@ if (bbi)
 	}
     if (startsWith("bigWig", thisTrack->type))
 	{
-	wigColumnTypes(jw);
+	wigColumnTypes(jw, "columnTypes");
 	}
     else
 	{
@@ -597,7 +597,7 @@ if (bbi)
 	if (! as)
 	    apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/list/schema'", bigDataUrl, track, db);
 	struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-	bigColumnTypes(jw, fiList, as);
+	bigColumnTypes(jw, fiList, as, "columnTypes");
 	}
     }
 else
@@ -628,7 +628,7 @@ if (hti && (hti->isSplit || debug))
     jsonWriteBoolean(jw, "splitTable", hti->isSplit);
 
 outputSchema(thisTrack, jw, columnNames, columnTypes, jsonTypes, hti,
-  columnCount, asColumnCount, columnEl);
+  columnCount, asColumnCount, columnEl, "columnTypes");
     }
 
 outputTrackDbVars(jw, db, thisTrack, itemCount);
