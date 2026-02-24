@@ -63,7 +63,6 @@ struct bed *bed = NULL;
 /* Convert input to bed record */
 char *val = cloneString(line);
 mustParseRange(val, &chrom, &start, &end);  // does not subtract 1
- verbose(1,"bed3FromPositionString after mustParseRange chrom=%s\n", chrom);
 
 // used to use parseRegion which checks for overflow,
 // but only catches start < 1 because of integer overflow.
@@ -92,13 +91,13 @@ char *line;
 while (lineFileNextReal(lf, &line))
     {
     bed = bed3FromPositionString(line);
+    slAddHead(&bedList, bed);
     }
-slAddHead(&bedList, bed);
 lineFileClose(&lf);
 return bedList;
 }
 
-struct bed *bedLoad3Plus(char *fileName)
+static struct bed *bedLoad3Plus(char *fileName)
 /* Determines how many fields are in a bedFile and load all beds from
  * a tab-separated file.  Dispose of this with bedFreeList(). 
  * Small change by Michael to require only 3 or more fields. Meaning we will accept bed3 
@@ -122,8 +121,7 @@ return list;
 
 struct bed *bedLoad3FromRangeOption(struct slName *ranges)
 /* Determines how many fields are in a bedFile and load all beds from
- * a tab-separated file.  Dispose of this with bedFreeList(). 
- * Small change by Michael to require only 3 or more fields. Meaning we will accept bed3 
+ * possibly multiple -range parameters.  Dispose of this with bedFreeList(). 
  */
 {
 struct slName *range = NULL;

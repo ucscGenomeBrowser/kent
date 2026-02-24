@@ -2360,33 +2360,22 @@ var rightClick = {
         }
         if (cmd === 'selectWholeGene' || cmd === 'getDna' || cmd === 'highlightItem' || cmd === 'highlightThisRegion') {
                 // bring whole gene into view or redirect to DNA screen.
-                href = rightClick.selectedMenuItem.href;
-                var chrom, chromStart, chromEnd;
+                let href = rightClick.selectedMenuItem.href;
+                let url = URL.parse(rightClick.selectedMenuItem.href);
+                let chrom = url.searchParams.get('hgg_chrom');
+                if (!chrom)
+                    chrom = url.searchParams.get('c');
+                let chromStart = url.searchParams.get('hgg_start');
+                if (!chromStart)
+                    chromStart = url.searchParams.get('o');
+                let chromEnd = url.searchParams.get('hgg_end');
+                if (!chromEnd)
+                    chromEnd = url.searchParams.get('t');
+                chromStart = parseInt(chromStart) + 1;
+                chromEnd = parseInt(chromEnd);
                 // Many links leave out the chrom (b/c it's in the server side cart as "c")
                 // var chrom = hgTracks.chromName; // This is no longer acceptable
                 // with multi-window capability drawing multiple positions on multiple chroms.
-                var a = /hgg_chrom=(\w+)&/.exec(href);
-                if (a) {
-                    if (a && a[1])
-                        chrom = a[1];
-                    a = /hgg_start=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromStart = parseInt(a[1]) + 1;
-                    a = /hgg_end=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromEnd = parseInt(a[1]);
-                } else {
-                    // a = /hgc.*\W+c=(\w+)/.exec(href);
-                    a = /hgc.*\W+c=(\w+)/.exec(href);
-                    if (a && a[1])
-                        chrom = a[1];
-                    a = /o=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromStart = parseInt(a[1]) + 1;
-                    a = /t=(\d+)/.exec(href);
-                    if (a && a[1])
-                        chromEnd = parseInt(a[1]);
-                }
                 if (!chrom || chrom.length === 0 || !chromStart || !chromEnd) {// 1-based chromStart
                     warn("couldn't parse out genomic coordinates");
                 } else {
@@ -5676,7 +5665,7 @@ var downloadCurrentTrackData = {
         downloadCurrentTrackData.downloadData[track] = data;
     },
 
-    convertJson: function(data, outType) {
+    convertJson: function(data, outType, withHeaders) {
         if (outType !== "tsv" && outType !== "csv") {
             alert("ERROR: incorrect output format option");
             return null;
@@ -5689,12 +5678,25 @@ var downloadCurrentTrackData = {
             "bigDataUrl", "chromSize", "hubUrl"]);
         // first get rid of top level non track object keys
         _.each(data, function(val, key) {
-            if (ignoredKeys.has(key)) {delete data[key];}
+            if (ignoredKeys.has(key)) {
+                // squirrel away the columnTypes if requested
+                if (key === "columnTypes") {
+                    columnTypes = data[key];
+                }
+                delete data[key];
+            }
         });
         // now go through each track and format it correctly
         str = "";
         _.each(data, function(val, track) {
             str += "track name=\"" + track + "\"\n";
+            if (withHeaders) {
+                headers = [];
+                for (let i of columnTypes[track]) {
+                    headers.push(i.name);
+                }
+                str += headers.join(outSep) + "\n";
+            }
             for (var row in val) {
                 for (var  i = 0; i < val[row].length; i++) {
                     str += JSON.stringify(val[row][i]);
@@ -5711,12 +5713,13 @@ var downloadCurrentTrackData = {
         if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
             // first stop the timer so we don't execute again
             clearInterval(downloadCurrentTrackData.intervalId);
-            outType = $("#outputFormat")[0].selectedOptions[0].value;
+            let outType = $("#outputFormat")[0].selectedOptions[0].value;
+            let withHeaders = document.getElementById("downloadTrackHeaders").checked;
             var blob = null;
             if (outType === 'json') {
                 blob = new Blob([JSON.stringify(downloadCurrentTrackData.downloadData[key])], {type: "text/plain"});
             } else {
-                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType);
+                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType, withHeaders);
             }
             if (blob) {
                 anchor = document.createElement("a");
@@ -5854,7 +5857,7 @@ var downloadCurrentTrackData = {
         });
         htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
         htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
-            " value='" + getDb() + ".tracks'</input>";
+            " value='" + getDb() + ".tracks'></input>";
         htmlStr += "<br>";
         htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
         htmlStr += "<select name='outputFormat' id='outputFormat'>";
@@ -5862,6 +5865,9 @@ var downloadCurrentTrackData = {
         htmlStr += "<option value='csv'>CSV</option>";
         htmlStr += "<option value='tsv'>TSV</option>";
         htmlStr += "</select>";
+        htmlStr += "<br>";
+        htmlStr += "<label style='padding-rught: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
+        htmlStr += "<input type='checkbox' id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;
         $("#checkAllDownloadTracks").on("click", function() {
