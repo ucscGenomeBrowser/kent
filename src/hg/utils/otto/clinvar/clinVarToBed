@@ -710,6 +710,38 @@ def makeSubLolly(maxDiff, isAlpha):
         cmd+= " --alpha"
     assert(os.system(cmd)==0)
 
+def makeVersionFile(versionFname, bigBedDir):
+    # create the version.txt file
+    clinvarVersion = open(versionFname).read()
+    versionString = "ClinVar Release: %s, converted at UCSC on %s" % (clinvarVersion, date.today().strftime("%Y-%m-%d"))
+    outFname = join(bigBedDir, "version.txt")
+    with open(outFname, "w") as ofh:
+        ofh.write(versionString)
+
+def copyFilesToArchive(tmpFnames):
+    " the 'archive' directory on hgdownload contains previous versions of a tracks, we create a copy there every months "
+    for db, trackName, tmpFname, finalFname in tmpFnames:
+        yearMonDay = date.today().strftime("%Y-%m-%d")
+        gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, trackName)
+        # put a copy into the archive
+        outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
+        if not isdir(outDir):
+            os.mkdir(outDir)
+        archiveFname = join(outDir, basename(gbdbFname))
+        logging.info("Creating %s" % archiveFname)
+        cmd = "cp %s %s" % (finalFname, archiveFname)
+        mustRun(cmd)
+
+        # copy the BED files to prevRun, so we can do a diff in the next run
+        cmd = "cp bed/%s.%s.bed prevRun/" % (basename(trackName), db)
+        mustRun(cmd)
+
+    # add the version.txt files
+    for db in ["hg38", "hg19"]:
+        archDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
+        cmd = "cp %s/version.txt %s" % (bigBedDir, archDir)
+        mustRun(cmd)
+
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -1112,45 +1144,21 @@ for fname in fnames:
 
     tmpFnames.append( (db, tableName, tmpFname, finalFname) )
 
-# make it atomic by renaming the temp files to the final file names at the very end
+loadSubmissions(summFname)
+makeSubLolly(options.maxDiff, options.isAlpha)
+
+# If we land here, the sub lolly tables and bigBed files were successfully built.
+# Now do the rest.
+# We rename the temp files to the final file names at the very end which will make the track live
 for db, tableName, tmpFname, finalFname in tmpFnames:
     logging.debug("Renaming %s to %s" % (tmpFname, finalFname))
     os.rename(tmpFname, finalFname)
 
-# create the version.txt file
-clinvarVersion = open(versionFname).read()
-versionString = "ClinVar Release: %s, converted at UCSC on %s" % (clinvarVersion, date.today().strftime("%Y-%m-%d"))
-outFname = join(bigBedDir, "version.txt")
-with open(outFname, "w") as ofh:
-    ofh.write(versionString)
+makeVersionFile(versionFname, bigBedDir)
 
-# put a copy of the files into the archive
 if not options.isAlpha:
-    for db, trackName, tmpFname, finalFname in tmpFnames:
-        yearMonDay = date.today().strftime("%Y-%m-%d")
-        gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, trackName)
-        # put a copy into the archive
-        outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
-        if not isdir(outDir):
-            os.mkdir(outDir)
-        archiveFname = join(outDir, basename(gbdbFname))
-        logging.info("Creating %s" % archiveFname)
-        cmd = "cp %s %s" % (finalFname, archiveFname)
-        mustRun(cmd)
-
-        # copy the BED files to prevRun, so we can do a diff in the next run
-        cmd = "cp bed/%s.%s.bed prevRun/" % (basename(trackName), db)
-        mustRun(cmd)
-
-    # add the version.txt files
-    for db in ["hg38", "hg19"]:
-        archDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
-        cmd = "cp %s/version.txt %s" % (bigBedDir, archDir)
-        mustRun(cmd)
-
-
-loadSubmissions(summFname)
-makeSubLolly(options.maxDiff, options.isAlpha)
+    # put a copy of the files into the archive
+    copyFilesToArchive()
 
 print("ClinVar update end: OK")
 
