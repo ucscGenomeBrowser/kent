@@ -1586,3 +1586,23 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     });
     $(inpSpec).spectrum("set", $(inpText).val());
 }
+
+function superUiSetAllTracks(onlyVisible) {
+    /* called when user clicks the 'Apply to all' buttons: sets all viz dropdowns to the #superSubViz value */
+    let newVal = $('#superSubViz').val();
+    var selects = document.querySelectorAll('#superTrackTable select');
+    for (var i = 0; i < selects.length; i++) {
+        var sel = selects[i];
+        if (sel.id==="superSubViz")
+            continue;
+        if (onlyVisible && sel.value === 'hide')
+            continue;
+        sel.value = newVal;
+        // if the dropdown cannot be set to a value (e.g. bigWig has no pack), set it to full or dense
+        if (sel.value === "")
+            sel.value = 'full';
+        if (sel.value === "")
+            sel.value = 'dense';
+        $(sel).trigger("change");
+    }
+}
