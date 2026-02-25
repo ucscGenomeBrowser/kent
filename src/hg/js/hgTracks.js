@@ -1622,14 +1622,15 @@ this.each(function(){
                         chr.right = parseInt(loc[2]);
                 }
 
-                var range = this.title.substr(this.title.lastIndexOf(':')+1);
+                let title = this.getAttribute("originalTitle") || this.getAttribute("title");
+                var range = title.substr(title.lastIndexOf(':')+1);
                 var pos = range.split('-');
                 if (pos.length === 2) {
                     if (chr.name.length === 0) {
                         chr.beg = parseInt(pos[0]);
                         //chr.end = parseInt(pos[1]);
-                        chr.name = this.title.substring(this.title.lastIndexOf(' ')+1,
-                                                        this.title.lastIndexOf(':'));
+                        chr.name = title.substring(title.lastIndexOf(' ')+1,
+                                                        title.lastIndexOf(':'));
                     } else {
                         if (chr.beg > parseInt(pos[0]))
                             chr.beg = parseInt(pos[0]);
