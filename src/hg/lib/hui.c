@@ -970,8 +970,7 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 // Make track visibility drop down for varName with style class, and potentially limited to visOnly
 {
 char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
-int visIx = (vis > 0) ? 1 : 0;
-char* checked = vizArr[visIx];
+char* checked = vizArr[vis];
 
 static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (visOnly && canPack)
