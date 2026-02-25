@@ -124,7 +124,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, FALSE, name);
     
     char chromBuf[2048];
-    bbiCachedChromLookup(bbi, bb->chromId, 0, chromBuf, sizeof chromBuf);
+    bbiCachedChromLookup(bbi, bb->chromId, -1, chromBuf, sizeof chromBuf);
     // print all the submissions that match the clinical significance of the
     // bead that the user clicked on.
     printSubmissions(tdb,  chromBuf, bb->start, bb->end, atoi(fields[4]), numSubs, FALSE);
