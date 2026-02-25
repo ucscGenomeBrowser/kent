@@ -553,16 +553,26 @@ instructions will show you how to upload, view, and share your data.</p>
 <p>
 You can view your own private data by uploading your annotation files to the Genome Browser as
 <em>custom tracks</em>; visit our <a href="customTrack.html">custom track help page</a> to learn
-more. To summarize the steps to upload your data, you will need to:</p>
+more. For binary-indexed files, such as bigBed, bigWig, BAM, and VCF, you will need to host the file
+on a web-accessible server. Please view the <a href="/goldenPath/help/hgTrackHubHelp.html#Hosting"
+target="_blank">Hosting</a> section of the Track Hub Help documentation for available resources.
+</p>
+
+<p>
+To summarize the steps to upload your data, you will need to:</p>
 
 <ol>
   <li>
     Ensure the data file is <a href="customTrack.html#format">formatted correctly.</a></li>
   <li>
+    Upload the data file to a web-accessbile server provided by your own institution or another
+    external resource, such as <a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect?#hubUpload"
+    target="_blank">Hub Space</a>, if necessary.</li>
+  <li>
     Create a <a href="customTrack.html#TRACK">track line</a> for your custom track.</li>
   <li>
     <a href="customTrack.html#ADD_CT">Load the custom track</a> by adding your track line to our
-    <a href="../../cgi-bin/hgCustom">Custom Tracks</a> page.</li>
+    <a href="/cgi-bin/hgCustom">Custom Tracks</a> page.</li>
   <li>
     View the data in the Genome Browser.</li>
 </ol>
@@ -613,7 +623,7 @@ BAM into a wiggle signal.</p>
 A bigWig file is useful when trying to display dense, continuous data. Read more on the 
 <a href="bigWig.html">bigWig track format</a> help page. Here is an example bigWig track that is
 colored red, instead of the default black color, that can be pasted directly into  the
-<a href="../../cgi-bin/hgCustom">Custom Tracks Page</a>:
+<a href="/cgi-bin/hgCustom">Custom Tracks Page</a>:
 <pre><code>track color=255,0,0 name="HeLa-S3 nucleus minus signal" description="RNA Subcellular CAGE Localization from ENCODE/RIKEN" type=bigWig visibility=full bigDataUrl=http://hgdownload.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1.bigWig</code></pre></p>
 
 <p>
@@ -634,14 +644,14 @@ tracks, such as changing the track height or type of graph.</p>
   <li>
     <strong>Navigate to the sessions page</strong><br>
     Once you are satisfied with the display, go to the 
-    <a href="../../cgi-bin/hgSession">My Sessions</a> page by either:
+    <a href="/cgi-bin/hgSession">My Sessions</a> page by either:
     <ul>
       <li>
         Going to <em><strong>My Data</strong></em> -&gt; <em><strong>My Sessions</strong></em> from
         the navigation bar.</li>
       <li>
         Using the &quot;<em><strong>s</strong> then <strong>s</strong></em>&quot; keyboard shortcut
-        when viewing the main page of the <a href="../../cgi-bin/hgTracks">Genome Browser</a>.</li>
+        when viewing the main page of the <a href="/cgi-bin/hgTracks">Genome Browser</a>.</li>
     </ul></li>
   <li>
     <strong>Login to the UCSC Genome Browser</strong><br>
@@ -668,7 +678,7 @@ tracks, such as changing the track height or type of graph.</p>
     If you eventually make a Public Session of your session after your paper is published, and
     provide a detailed description, anyone can find it by searching for terms you share.
     <ul>
-      <li>For example, navigate to the <a href="../../cgi-bin/hgPublicSessions">Public Sessions</a>
+      <li>For example, navigate to the <a href="/cgi-bin/hgPublicSessions">Public Sessions</a>
       page and search &quot;NAR&quot; to see some example sessions. Or click this link, which adds
       <a href="../../cgi-bin/hgPublicSessions?search=NAR" target="_blank"><code>?search=NAR</code></a>
       to the URL.</li>
@@ -697,7 +707,7 @@ three different ways that you can share your session: </p>
     Alternatively, you can right-click the session name and then click <em>Copy Link Address</em> to
     save the session URL.</li>
   <li>
-    Adding your session to the <a href="../../cgi-bin/hgPublicSessions">Public Sessions</a> page
+    Adding your session to the <a href="/cgi-bin/hgPublicSessions">Public Sessions</a> page
     will provide a useful way of sharing your session with the world in the long run. You can add
     your session to our Public Sessions by selecting the
     &quot;<em>post in public listing?</em>&quot; checkbox.</li>
@@ -722,7 +732,9 @@ Creating a track hub allows you to group and organize your annotation tracks, bu
 hosted. This will require the use of a web-accessible location to load the track hub in the UCSC
 Genome Browser. If your institution does not provide web space for you, you can look into hosting
 your binary files at a couple different web hosting services, such as
-<a href="http://www.cyverse.org/">CyVerse</a> or <a href="https://figshare.com/">figshare</a>. If
+<a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect?#hubUpload" target="_blank">Hub Space</a>,
+<a href="http://www.cyverse.org/" target="_blank">CyVerse</a>, or
+<a href="https://figshare.com/" target="_blank">figshare</a>. If
 you would like to learn more about using track hubs, please read our
 <a href="hgTrackHubHelp.html">Track Hub help page</a>.</p>
 
