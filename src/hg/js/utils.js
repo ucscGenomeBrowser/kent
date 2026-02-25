@@ -4380,7 +4380,7 @@ function parseUrl(url) {
     serverName = temp[2]; // "genome-test.gi.ucsc.edu"
     pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
     cgi = pathInfo.startsWith("cgi-bin") ? pathInfo.split('/')[1] : "";
-    let i, s = queryString.split('&');
+    let i, s = queryString ? queryString.split('&') : []; // Fix for when there is no query string in the URL
     for (i = 0; i < s.length; i++) {
         argVal = s[i].split('=');
         queryArgs[argVal[0]] = argVal[1];
