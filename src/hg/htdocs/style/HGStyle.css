@@ -496,6 +496,64 @@ div.trackUiHicHiddenAttributes
     border-width: thin;
 }
 
+#superTrackTable {
+    border-collapse: collapse;
+}
+
+#superTrackTable tr {
+    border-bottom: 1px solid #DDD;
+}
+
+#superTrackTable td {
+    vertical-align: top;
+}
+
+.seg-btn-group {
+    display: inline-flex;
+  }
+
+/* the buttons in the middle */
+.seg-btn-group button {
+    border-radius: 0px;
+    color: #777;
+    padding: 2px 3px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    margin: 0;
+    outline: none;
+    margin-left: -1px;
+  }
+
+/* the first button is round on the left */
+  .seg-btn-group button:first-child {
+    margin-left: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+/* the last button is round on the right */
+  .seg-btn-group button:last-child {
+    border-radius: 0 3px 3px 0;
+  }
+
+  .seg-btn-group button:hover:not(.seg-active) {
+    background: #f5f5f5;
+  }
+
+  /* the active button is the 'pressed' button, dark with bright text */
+  .seg-btn-group button.seg-active {
+    background: #888888;
+    color: #fff;
+    border-color: #AAAAAA;
+    z-index: 1;
+    position: relative;
+  }
+
+/* -------------- */
+
 /* hgTracks config page groups list */
 TABLE.groupLists { background-color: #FFFEE8; width: 50em; }
 TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }

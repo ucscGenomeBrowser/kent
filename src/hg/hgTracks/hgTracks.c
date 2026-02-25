@@ -10072,7 +10072,7 @@ if (!hideControls)
         hashFree(&superHash);
 	endControlGrid(&cg);
 
-        jsOnEventBySelector(".hgtButtonHideGroup", "click", "onHideAllGroupButtonClick(event)");
+        jsOnEventBySelector("click", ".hgtButtonHideGroup", "onHideAllGroupButtonClick(event)");
 	}
 
     if (measureTiming)
