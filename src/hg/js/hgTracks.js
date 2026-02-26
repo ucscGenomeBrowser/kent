@@ -5758,6 +5758,10 @@ var downloadCurrentTrackData = {
             }
             trackList.push(trackName);
         });
+        if (trackList.length == 0) {
+            alert("At least one track must be selected");
+            return;
+        }
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
