@@ -565,6 +565,13 @@ void wigColumnTypes(struct jsonWrite *jw, char *track)
 jsonWriteListStart(jw, track);
 
 jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "chrom");
+jsonWriteString(jw, "sqlType", "varchar");
+jsonWriteString(jw, "jsonType", "string");
+jsonWriteString(jw, "description", "chromosome name");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "name", "start");
 jsonWriteString(jw, "sqlType", "int");
 jsonWriteString(jw, "jsonType", "number");

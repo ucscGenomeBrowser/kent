@@ -28,6 +28,7 @@ for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->n
 	if (jsonOutputArrays)
 	    {
 	    jsonWriteListStart(jw, NULL);
+	    jsonWriteString(jw, NULL, chrom);
 	    jsonWriteNumber(jw, NULL, (long long)s);
 	    jsonWriteNumber(jw, NULL, (long long)e);
 	    jsonWriteDouble(jw, NULL, val);
@@ -36,6 +37,7 @@ for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->n
 	else
 	    {
 	    jsonWriteObjectStart(jw, NULL);
+	    jsonWriteString(jw, "chrom", chrom);
 	    jsonWriteNumber(jw, "start", (long long)s);
 	    jsonWriteNumber(jw, "end", (long long)e);
 	    jsonWriteDouble(jw, "value", val);
@@ -205,7 +207,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(columnTypesJw, track);
-	jsonWriteListStart(jw, chrom);
+	jsonWriteListStart(jw, track);
         itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
@@ -228,7 +230,7 @@ else	/* fully specified chrom:start-end */
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(columnTypesJw, track);
-	jsonWriteListStart(jw, chrom);
+	jsonWriteListStart(jw, track);
         itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
@@ -289,8 +291,8 @@ if (isEmpty(chrom))
 	else
 	    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, ci->chrom);
 	if (tdb && isWiggleDataTable(tdb->type))
-            itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
-		start, end, itemsDone);
+            itemsDone += wigTableDataOutput(jw, db, splitSqlTable, ci->chrom,
+		0, ci->size, itemsDone);
 	else
 	    itemsDone += sqlQueryJsonOutput(conn, jw, query->string,
 		columnCount, columnNames, jsonTypes, itemsDone);
@@ -385,7 +387,6 @@ struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, start, end, lm
 if (NULL == ivList)
     return itemCount;
 
-jsonWriteListStart(jw, chrom);
 for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     {
     int s = max(iv->start, start);
@@ -394,6 +395,7 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     if (jsonOutputArrays)
 	{
 	jsonWriteListStart(jw, NULL);
+	jsonWriteString(jw, NULL, chrom);
 	jsonWriteNumber(jw, NULL, (long long)s);
 	jsonWriteNumber(jw, NULL, (long long)e);
 	jsonWriteDouble(jw, NULL, val);
@@ -402,6 +404,7 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     else
 	{
 	jsonWriteObjectStart(jw, NULL);
+	jsonWriteString(jw, "chrom", chrom);
 	jsonWriteNumber(jw, "start", (long long)s);
 	jsonWriteNumber(jw, "end", (long long)e);
 	jsonWriteDouble(jw, "value", val);
@@ -409,7 +412,6 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
 	}
     ++itemCount;
     }
-jsonWriteListEnd(jw);
 if (itemCount >= maxItemsOutput)
     reachedMaxItems = TRUE;
 return itemCount;
@@ -557,9 +559,9 @@ for (i = 0; i < numTracks; i++)
         {
         if (jsonOutputArrays || debug)
         wigColumnTypes(columnTypesJw, track);
-        jsonWriteObjectStart(jw, track);
+        jsonWriteListStart(jw, track);
         bigWigData(jw, bbi, chrom, uStart, uEnd);
-        jsonWriteObjectEnd(jw);
+        jsonWriteListEnd(jw);
         }
     bbiFileClose(&bbi);
     }
@@ -801,9 +803,9 @@ for (i = 0; i < numTracks; i++)
         if (jsonOutputArrays || debug)
             wigColumnTypes(columnTypesJw, track);
 
-        jsonWriteObjectStart(jw, track);
+        jsonWriteListStart(jw, track);
         bigWigData(jw, bbi, chrom, uStart, uEnd);
-        jsonWriteObjectEnd(jw);
+        jsonWriteListEnd(jw);
         bbiFileClose(&bbi);
         }
     else
