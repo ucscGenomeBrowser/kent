@@ -1,23 +1,30 @@
 <h2>Description</h2>
 <p>
-The <strong>Genome Aggregation Database (gnomAD) v3 - Genome Coverage</strong> track shows how many times regions of the genomes were sequenced. This track includes several subtracks of average coverage metrics and sample percentage of coverage.
+The <strong>Genome Aggregation Database (gnomAD) v3 - Genome Coverage</strong> track shows how many
+times regions of the genomes were sequenced. This track includes several subtracks of average
+coverage metrics and sample percentage of coverage.
 </p>
-<p>There is no gnomAD v4 genome coverage track because the genomes were unchanged from V3. There is no gnomAD v3 exomes track because v3 was a genome-only release.</p>
+<p>
+There is no gnomAD v4 genome coverage track because the genomes were unchanged from V3. There is no
+gnomAD v3 exomes track because v3 was a genome-only release.</p>
 
 
 <p>
-Coverage was computed using all 71,702 gnomAD v3.01 samples from their GVCFs. The gVCFs were produced using a 3-bin blocking scheme:
+Coverage was computed using all 71,702 gnomAD v3.01 samples from their gVCFs. The gVCFs were
+produced using a 3-bin blocking scheme:
 </p>
-<p>
 <ul>
-    <li>No coverage
-    <li>Reference genotype quality < Q20
-    <li>Reference genotype quality >= Q20
+    <li>No coverage</li>
+    <li>Reference genotype quality &lt; Q20</li>
+    <li>Reference genotype quality &ge; Q20</li>
 </ul>
 </p>
 
 <p>
-The coverage was binned by quality using the thresholds above and the median coverage value for each of the resulting coverage blocks was used to compute the coverage metrics presented in the browser. Coverage was computed for all callable bases in the genome (all non-N bases, minus telomeres and centromeres).
+The coverage was binned by quality using the thresholds above and the median coverage value for each
+of the resulting coverage blocks was used to compute the coverage metrics presented in the browser.
+Coverage was computed for all callable bases in the genome (all non-N bases, minus telomeres and
+centromeres).
 </p>
 
 <h2>Display Conventions</h2>
