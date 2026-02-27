@@ -1622,14 +1622,15 @@ this.each(function(){
                         chr.right = parseInt(loc[2]);
                 }
 
-                var range = this.title.substr(this.title.lastIndexOf(':')+1);
+                let title = this.getAttribute("originalTitle") || this.getAttribute("title");
+                var range = title.substr(title.lastIndexOf(':')+1);
                 var pos = range.split('-');
                 if (pos.length === 2) {
                     if (chr.name.length === 0) {
                         chr.beg = parseInt(pos[0]);
                         //chr.end = parseInt(pos[1]);
-                        chr.name = this.title.substring(this.title.lastIndexOf(' ')+1,
-                                                        this.title.lastIndexOf(':'));
+                        chr.name = title.substring(title.lastIndexOf(' ')+1,
+                                                        title.lastIndexOf(':'));
                     } else {
                         if (chr.beg > parseInt(pos[0]))
                             chr.beg = parseInt(pos[0]);
@@ -5670,12 +5671,14 @@ var downloadCurrentTrackData = {
             alert("ERROR: incorrect output format option");
             return null;
         }
-        outSep = outType === "tsv" ? '\t' : ',';
+        let outSep = outType === "tsv" ? '\t' : ',';
         // TODO: someday we will probably want to include some of these fields
         // for each track downloaded, perhaps as an option
-        ignoredKeys = new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
+        let ignoredKeys = new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
             "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
             "bigDataUrl", "chromSize", "hubUrl"]);
+        let columnTypes;
+        let cleanData = {};
         // first get rid of top level non track object keys
         _.each(data, function(val, key) {
             if (ignoredKeys.has(key)) {
@@ -5683,24 +5686,29 @@ var downloadCurrentTrackData = {
                 if (key === "columnTypes") {
                     columnTypes = data[key];
                 }
-                delete data[key];
+            } else {
+                cleanData[key] = data[key];
             }
         });
         // now go through each track and format it correctly
-        str = "";
-        _.each(data, function(val, track) {
+        let str = "";
+        _.each(cleanData, function(val, track) {
             str += "track name=\"" + track + "\"\n";
             if (withHeaders) {
-                headers = [];
-                for (let i of columnTypes[track]) {
-                    headers.push(i.name);
+                let headers = [];
+                if (columnTypes) {
+                    for (let i of columnTypes[track]) {
+                        headers.push(i.name);
+                    }
+                    if (headers.length) {
+                        str += headers.join(outSep) + "\n";
+                    }
                 }
-                str += headers.join(outSep) + "\n";
             }
-            for (var row in val) {
-                for (var  i = 0; i < val[row].length; i++) {
-                    str += JSON.stringify(val[row][i]);
-                    if (i < val[row].length) { str += outSep; }
+            for (let row of val) {
+                for (let i = 0; i < row.length; i++) {
+                    str += JSON.stringify(row[i]);
+                    if (i+1 < row.length) { str += outSep; }
                 }
                 str += "\n";
             }
@@ -5757,6 +5765,10 @@ var downloadCurrentTrackData = {
             }
             trackList.push(trackName);
         });
+        if (trackList.length == 0) {
+            alert("At least one track must be selected");
+            return;
+        }
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
         end = hgTracks.winEnd;

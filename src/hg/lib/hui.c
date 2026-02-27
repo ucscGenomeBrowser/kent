@@ -899,35 +899,36 @@ else
 					   noPack[vis], class, TV_DROPDOWN_STYLE, events);
 }
 
-void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-				 boolean canPack, char *class, char *visOnly, struct slPair *events)
-// Make track visibility drop down for varName with style class, and potentially limited to visOnly
-{
 static char *denseOnly[] =
     {
     "hide",
     "dense",
+    NULL
     };
 static char *squishOnly[] =
     {
     "hide",
     "squish",
+    NULL
     };
 static char *packOnly[] =
     {
     "hide",
     "pack",
+    NULL
     };
 static char *fullOnly[] =
     {
     "hide",
     "full",
+    NULL
     };
 static char *noPack[] =
     {
     "hide",
     "dense",
     "full",
+    NULL
     };
 static char *pack[] =
     {
@@ -936,37 +937,48 @@ static char *pack[] =
     "squish",
     "pack",
     "full",
+    NULL
     };
-static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
+
+char ** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly) 
+/* return a NULL-terminated array of char* with possible track visibilities */
+{
 if (visOnly != NULL)
     {
-    int visIx = (vis > 0) ? 1 : 0;
     if (sameWord(visOnly,"dense"))
-	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
-						   denseOnly[visIx],class,TV_DROPDOWN_STYLE, events);
+        return denseOnly;
     else if (sameWord(visOnly,"squish"))
-	cgiMakeDropListClassWithStyleAndJavascript(varName, squishOnly,
-						   ArraySize(squishOnly), squishOnly[visIx],
-						   class, TV_DROPDOWN_STYLE, events);
+        return squishOnly;
     else if (sameWord(visOnly,"pack"))
-	cgiMakeDropListClassWithStyleAndJavascript(varName, packOnly, ArraySize(packOnly),
-						   packOnly[visIx], class, TV_DROPDOWN_STYLE, events);
+        return packOnly;
     else if (sameWord(visOnly,"full"))
-	cgiMakeDropListClassWithStyleAndJavascript(varName, fullOnly, ArraySize(fullOnly),
-						   fullOnly[visIx], class, TV_DROPDOWN_STYLE, events);
-    else                        /* default when not recognized */
-	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
-						   denseOnly[visIx], class, TV_DROPDOWN_STYLE, events);
+        return fullOnly;
+    else /* default when not recognized */
+        return denseOnly;
     }
 else
     {
     if (canPack)
-	cgiMakeDropListClassWithStyleAndJavascript(varName, pack, ArraySize(pack),
-						   pack[packIx[vis]], class, TV_DROPDOWN_STYLE, events);
+        return pack;
     else
-	cgiMakeDropListClassWithStyleAndJavascript(varName, noPack, ArraySize(noPack),
-						   noPack[vis], class, TV_DROPDOWN_STYLE, events);
+        return noPack;
     }
+}
+
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+				 boolean canPack, char *class, char *visOnly, struct slPair *events)
+// Make track visibility drop down for varName with style class, and potentially limited to visOnly
+{
+char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
+char* checked = vizArr[vis];
+
+static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
+if (visOnly && canPack)
+    checked = vizArr[packIx[vis]];
+
+int vizArrLen = arrNullLen(vizArr);
+
+cgiMakeDropListClassWithStyleAndJavascript(varName, vizArr, vizArrLen, checked, class,TV_DROPDOWN_STYLE, events);
 }
 
 void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
@@ -9667,7 +9679,7 @@ if (show && (visibleChild == -1))
         }
     }
 hideShowDropDownWithClassAndExtra(tdb->track, NULL, show, (show && visibleChild) ?
-                                  "normalText visDD" : "hiddenText visDD", events);
+                                  "superDropdown normalText visDD" : "superDropdown hiddenText visDD", events);
 return TRUE;
 }
 
@@ -10539,7 +10551,7 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Source data version:</B> %s <BR>\n", version);
+    printf("<B>Version:</B> %s <BR>\n", version);
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)

@@ -77,6 +77,14 @@ newBuf[len] = 0;
 return newBuf;
 }
 
+/* count elements of a NULL-terminated array */
+int arrNullLen(char **arr)
+{
+    int n = 0;
+    while (arr[n]) n++;
+    return n;
+}
+
 /* Reverse the order of the bytes. */
 void reverseBytes(char *bytes, long length)
 {
