@@ -2826,7 +2826,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         puts("</div>");
         
         printf("</TD>\n<TD>");
-        hPrintPennantIcon(tdb);
+        hPrintIcons(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
         // the <select> tag is only needed to send arguments to the hgTracks CGI. It will be hidden, see below.
         printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
@@ -2864,7 +2864,7 @@ jsInline("$('.seg-btn-group').on('click', 'button', function() {"
   "$('.superDropdown').val('show');"
   "});");
 // * Changing the dropdown updates the buttons
-jsInline("$('.vizSelect').on('change', function() {"
+jsInline("$('#superTrackTable .vizSelect').on('change', function() {"
   "$(this).next().children().removeClass('seg-active');"
   "let labelToFind = capitalizeFirstLetter($(this).val());"
   "$(this).next().find('button').filter(function() { return $(this).text().trim() === labelToFind; }).addClass('seg-active');"
