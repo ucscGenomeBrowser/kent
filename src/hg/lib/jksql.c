@@ -3249,7 +3249,7 @@ if (updateFieldIndex < 0)
 return updateFieldIndex;
 }
 
-char *sqlTableUpdate(struct sqlConnection *conn, char *table)
+char *sqlTableUpdateMaybeAbort(struct sqlConnection *conn, char *table, boolean shouldAbort)
 /* Get last update time for table as an SQL string 
  * Note: does NOT work on innoDB! */
 {
@@ -3286,8 +3286,14 @@ else
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
-    errAbort("Database table %s doesn't exist", table);
-ret = cloneString(row[updateIx]);
+    {
+    if (shouldAbort)
+        errAbort("Database table %s doesn't exist", table);
+
+    ret = NULL;
+    }
+else
+    ret = cloneString(row[updateIx]);
 sqlFreeResult(&sr);
 if (changeDb)
     {
@@ -3300,11 +3306,32 @@ freeMem(connDb);
 return ret;
 }
 
+char *sqlTableUpdate(struct sqlConnection *conn, char *table)
+/* Get last update time for table as an SQL string 
+ * Note: does NOT work on innoDB! */
+{
+return sqlTableUpdateMaybeAbort(conn, table, TRUE);
+}
+
 time_t sqlTableUpdateTime(struct sqlConnection *conn, char *table)
-/* Get last update time for table.
+/* Get last update time for table. ErrAbort if table not present
  * Note: does NOT work on innoDB! */
 {
 char *date = sqlTableUpdate(conn, table);
+time_t time = sqlDateToUnixTime(date);
+freeMem(date);
+return time;
+}
+
+time_t sqlTableMaybeUpdateTime(struct sqlConnection *conn, char *table)
+/* Get last update time for table. Return 0 if table doesn't exist
+ * Note: does NOT work on innoDB! */
+{
+char *date = sqlTableUpdateMaybeAbort(conn, table, FALSE);
+
+if (date == NULL)
+    return 0;
+
 time_t time = sqlDateToUnixTime(date);
 freeMem(date);
 return time;
