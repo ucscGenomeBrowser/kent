@@ -4306,8 +4306,9 @@ if (doCache)
     time_t newestTime = 0;
     for(; tableList; tableList = tableList->next)
         {
-        time_t tableTime = sqlTableUpdateTime(conn, tableList->name);
-        newestTime = tableTime > newestTime ? tableTime : newestTime;
+        time_t tableTime = sqlTableMaybeUpdateTime(conn, tableList->name);
+        if (tableTime != 0)
+            newestTime = tableTime > newestTime ? tableTime : newestTime;
         }
 
     hFreeConn(&conn);

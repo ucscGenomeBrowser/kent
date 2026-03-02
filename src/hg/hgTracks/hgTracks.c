@@ -3832,7 +3832,7 @@ if (knownCanonical) // filter out alt splicing variants
     }
 // knownToTag basic hash
 struct hash *ktHash = NULL;
-if (knownToTag) // filter out all but Basic
+if (knownToTag) // filter out all but Basic or Mane
     {
     // load up hash of canonical transcriptIds
     query = sqlDyStringCreate("select name from knownToTag where value='%s'", knownToTag);
@@ -3922,25 +3922,29 @@ while (1)
 		isEOF = TRUE;
 		}
 	    }
-	if (gene && !showNoncoding && (gene->cdsStart == gene->cdsEnd))
+	if (gene && hgFindMatches && !hashLookup(hgFindMatches, gene->name))
+	    // whitelist anything in search hash
 	    {
-	    //skip non-coding gene
-	    genePredFree(&gene);
-	    }
-	if (gene && knownCanonical && !hashLookup(kcHash, gene->name))
-	    {
-	    //skip gene not in knownCanonical hash
-	    genePredFree(&gene);
-	    }
-	if (gene && knownToTag && !hashLookup(ktHash, gene->name))
-	    {
-	    // skip gene not in knownToTag Basic hash
-	    genePredFree(&gene);
-	    }
-	if (gene && !showPseudo && hashLookup(kpHash, gene->name))
-	    {
-	    //skip gene in knownPseudo hash
-	    genePredFree(&gene);
+	    if (gene && !showNoncoding && (gene->cdsStart == gene->cdsEnd))
+		{
+		//skip non-coding gene
+		genePredFree(&gene);
+		}
+	    if (gene && knownCanonical && !hashLookup(kcHash, gene->name))
+		{
+		//skip gene not in knownCanonical hash
+		genePredFree(&gene);
+		}
+	    if (gene && knownToTag && !hashLookup(ktHash, gene->name))
+		{
+		// skip gene not in knownToTag Basic hash
+		genePredFree(&gene);
+		}
+	    if (gene && !showPseudo && hashLookup(kpHash, gene->name))
+		{
+		//skip gene in knownPseudo hash
+		genePredFree(&gene);
+		}
 	    }
 
 	boolean transferIt = FALSE;
