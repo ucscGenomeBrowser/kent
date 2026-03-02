@@ -5,7 +5,21 @@ export LC_ALL=en_US.UTF-8
 
 cd /hive/data/outside/otto/clinGen/clinGenCspec
 
-wget -q -O svis.json https://cspec.genome.network/cspec/api/svis
+# Check to see if svis.json is available for download and quit if it fails
+# after 4 attempts
+for i in 1 2 3; do
+    wget -q -O svis.json https://cspec.genome.network/cspec/api/svis && break
+    if [ $i -lt 3 ]; then
+        echo "Warning: Failed to download SVIs data.\n"
+        echo "Retrying in 5 minutes (attempt $i of 3)..."
+        sleep 300
+    fi
+done
+if [ $i -eq 3 ]; then
+    echo "Error: Failed to download the SVIs data. The ClinGen CSpec API appears to be down.\n"
+    echo "Please try again later or check https://cspec.genome.network for service status."
+    exit 1
+fi
 
 # Check if the files are the same
 if cmp -s svis.json svis.json.old; then
@@ -17,8 +31,39 @@ else
   echo "Updating ClinGen VCEP track..."
 fi
 
-wget -q http://purl.obolibrary.org/obo/mondo.json
-wget -q -O geneToDisease.csv https://search.clinicalgenome.org/kb/gene-validity/download
+# Check to see if mondo.json is available, and quit if it fails
+# after 3 attempts
+for i in 1 2 3; do
+    wget -q http://purl.obolibrary.org/obo/mondo.json && break
+    if [ $i -lt 3 ]; then
+        echo "Warning: Failed to download MONDO disease ontology.\n"
+        echo "Retrying in 5 minutes (attempt $i of 3)..."
+        sleep 300
+    fi
+done
+if [ $i -eq 3 ]; then
+    echo "Error: Failed to download the MONDO disease ontology.\n"
+    echo "The OBO Foundry API appears to be down.\n"
+    echo "Please try again later or check https://obofoundry.org for service status."
+    exit 1
+fi
+
+# Try to get the geneToDisease.csv file, and quit if it fails
+# after 3 attempts
+for i in 1 2 3; do
+    wget -q -O geneToDisease.csv https://search.clinicalgenome.org/kb/gene-validity/download && break
+    if [ $i -lt 3 ]; then
+        echo "Warning: Failed to download gene-disease data.\n"
+        echo "Retrying in 5 minutes (attempt $i of 3)..."
+        sleep 300
+    fi
+done
+if [ $i -eq 3 ]; then
+    echo "Error: Failed to download gene-disease data. The ClinGen API appears to be down.\n"
+    echo "Please try again later or check https://clinicalgenome.org for service status."
+    exit 1
+fi
+
 bigBedToBed /gbdb/hg38/hgnc/hgnc.bb hgnc.bed
 
 python3 - << END | sort -k1,1 -k2,2n > cspec.bed

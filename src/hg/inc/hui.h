@@ -228,6 +228,10 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 
 void hTvDropDownClassWithJavascript(char *varName, char *id, enum trackVisibility vis, boolean canPack,
                                     char *class, struct slPair *events);
+
+/* return a NULL-terminated array of char* with possible track visibilities */
+char** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly);
+
 /* Make track visibility drop down for varName with style class and javascript */
 #define hTvDropDownClass(varName,vis,canPack,class) \
         hTvDropDownClassWithJavascript((varName),NULL,(vis),(canPack),(class),NULL)

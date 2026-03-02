@@ -63,7 +63,7 @@ static struct optionSpec options[] = {
 static void processChromChunk(struct bbiFile *bbi, char *chrom,
                               int start, int end, char *bedName, FILE *f)
 /* Output one chunk.  Only blocks where start is in the range will be written
- * to avoid outputting a block multiple tines.  */
+ * to avoid outputting a block multiple times.  */
 {
     char *chromName = chrom;
     struct chain  *chains = chainLoadIdRangeHub(NULL, inChain, inLinks, chromName, start, end, -1);
@@ -94,7 +94,7 @@ else if (clRange != NULL)
     }
 else
     {
-    boolean chromFound;
+    boolean chromFound = FALSE;
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
 	if (clChrom != NULL && !sameString(clChrom, chrom->name))
@@ -132,7 +132,7 @@ if (argc != 4)
 clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
-clRange =optionMultiVal("range", clRange);
+clRange = optionMultiVal("range", clRange);
 clBed = optionVal("bed", clBed);
 clPos = optionVal("positions", clPos);
 skipChromCheck = optionExists("skipChromCheck");

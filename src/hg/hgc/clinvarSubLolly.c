@@ -95,6 +95,7 @@ else
 char *fields[bbi->fieldCount];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
+    int lastId = -1;
     struct bed *bed = NULL;;
     char startBuf[16], endBuf[16];
     struct bed tempBed;
@@ -124,7 +125,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, FALSE, name);
     
     char chromBuf[2048];
-    bbiCachedChromLookup(bbi, bb->chromId, 0, chromBuf, sizeof chromBuf);
+    bbiCachedChromLookup(bbi, bb->chromId, lastId, chromBuf, sizeof chromBuf);
+    lastId = bb->chromId;
+
     // print all the submissions that match the clinical significance of the
     // bead that the user clicked on.
     printSubmissions(tdb,  chromBuf, bb->start, bb->end, atoi(fields[4]), numSubs, FALSE);

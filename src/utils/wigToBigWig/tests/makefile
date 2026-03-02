@@ -55,7 +55,7 @@ test1: outputDir
 
 	# note that the text dumps have many small differences that make
 	# it difficult to simply compare input with output, things like 
-	# rounding of floating differneces, one has comments the other lacks,
+	# rounding of floating differences, one has comments the other lacks,
 	# having rows in different order by chromsome name.
 	# re-generate big wigs from dumped text
 	${A} output/testFixed.wig input/test.sizes tmp/testFixed.bigWig2

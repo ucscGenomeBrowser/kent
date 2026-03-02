@@ -94,8 +94,8 @@ For each TF binding profile in the JASPAR database CORE collection, genomes were
 </p>
 <p>
 For the computation of relative scores and p-values, we used PWMScan (Ambrosini et al. 2018). 
-We selected TFBS predictions with a PWM relative score ≥ 0.8 and a p-value &lt; 0.05. 
-P-values were scaled between 0 (corresponding to a p-value of 1) and 1000 (p-value ≤ 10-10) 
+We selected TFBS predictions with a PWM relative score &ge; 0.8 and a p-value &lt; 0.05.
+P-values were scaled between 0 (corresponding to a p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>)
 for colouring of the genome tracks and to allow for comparison of prediction confidence between 
 different profiles.
 </p>
@@ -108,9 +108,9 @@ The JASPAR 2026 update expanded the JASPAR CORE collection by 12% (306
 added or upgraded profiles), culminating to a set of 2633 non-redundant
 TF binding profiles.  Genome sequences were scanned with JASPAR 2026
 CORE TF binding profiles for each taxon independently using PWMScan.
-TFBS predictions were selected with a PWM relative score ≥ 0.8 and a
+TFBS predictions were selected with a PWM relative score &ge; 0.8 and a
 p-value &lt; 0.05. P-values were scaled between 0 (corresponding to a
-p-value of 1) and 1000 (p-value ≤ 10⁻¹⁰) for coloring of the genome
+p-value of 1) and 1000 (p-value &le; 10<sup>-10</sup>) for coloring of the genome
 tracks and to allow for comparison of prediction confidence between
 different profiles. More information on the methods can be found in the
 <a href="https://doi.org/10.1093/nar/gkaf1209" target="_blank">JASPAR 2026 
@@ -159,8 +159,9 @@ different profiles.</p>
 
 <h2>Data Access</h2>
 <p>
-JASPAR Transcription Factor Binding data includes billions of items. Limited regions can 
-be explored interactively with the 
+JASPAR Transcription Factor Binding data includes billions of items.
+Because of the data size, the Table Browser does not allow "Genome" as a query region for this
+track. Limited regions can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a> and cross-referenced with 
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>, although positional
 queries that are too big can lead to timing out. This results in a black page
@@ -200,7 +201,7 @@ Additional resources are available directly from the JASPAR group:</p>
 <ul>
   <li>Binding site predictions for all and individual TF profiles are available for download 
     at <a href="https://mencius.uio.no/JASPAR/JASPAR_genome_browser_tracks/" target="_blank">https://mencius.uio.no/JASPAR/JASPAR_genome_browser_tracks/</a>.</li>
-  <li>Code used to create the UCSC tracks are available at <a href="https://github.com/ievarau/JASPAR-UCSC-tracks/tree/master">https://github.com/ievarau/JASPAR-UCSC-tracks/tree/master</a>.</li>
+  <li>Code used to create the UCSC tracks is available at <a href="https://github.com/ievarau/JASPAR-UCSC-tracks/tree/master">https://github.com/ievarau/JASPAR-UCSC-tracks/tree/master</a>.</li>
   <li>The underlying JASPAR motif data is available through the JASPAR website at <a href="https://jaspar.elixir.no/" target="_blank">https://jaspar.elixir.no</a>.</li>
 </ul>
 

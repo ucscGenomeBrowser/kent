@@ -329,6 +329,9 @@ memset(vpt, '\0', count);
 
 #define ZeroVar(v) zeroBytes(v, sizeof(*v))
 
+/* count elements of a NULL-terminated array */
+int arrNullLen(char **arr);
+
 void reverseBytes(char *bytes, long length);
 /* Reverse the order of the bytes. */
 

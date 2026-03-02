@@ -4,6 +4,7 @@
 import subprocess
 import csv
 import re
+import sys
 from datetime import datetime
 
 def bash(cmd):
@@ -289,6 +290,16 @@ def checkIfUpdateIsNeeded():
     else:
         return(False)
 
+def checkItemCounts(oldBb, newBb):
+    """Compare item counts between old and new bigBed files. Exit if difference > 10%."""
+    oldItemCount = bash('bigBedInfo '+oldBb+' | grep "itemCount"')
+    oldItemCount = int(oldItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
+    newItemCount = bash('bigBedInfo '+newBb+' | grep "itemCount"')
+    newItemCount = int(newItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
+    if abs(newItemCount - oldItemCount) > 0.1 * max(newItemCount, oldItemCount):
+        sys.exit("Item count difference >10% for "+newBb+": old="+str(oldItemCount)+" new="+str(newItemCount))
+    print(oldBb+" old: "+str(oldItemCount)+" new: "+str(newItemCount))
+
 if checkIfUpdateIsNeeded():
     date = str(datetime.now()).split(" ")[0]
     workDir = "/hive/data/outside/otto/genCC/"+date
@@ -313,6 +324,9 @@ if checkIfUpdateIsNeeded():
     bash("bedSort "+hg19outPutFile+" "+hg19outPutFile)
     bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -sort -extraIndex=gene_symbol -type=bed9+34 -tab "+hg19outPutFile+" /cluster/data/hg19/chrom.sizes "+hg19outPutFile.split(".")[0]+".bb")
     print("Final file created: "+hg19outPutFile.split(".")[0]+".bb")
+
+    checkItemCounts("/gbdb/hg38/bbi/genCC.bb", hg38outPutFile.split(".")[0]+".bb")
+    checkItemCounts("/gbdb/hg19/bbi/genCC.bb", hg19outPutFile.split(".")[0]+".bb")
 
     bash("rm -f /gbdb/hg38/bbi/genCC.bb")
     bash("rm -f /gbdb/hg19/bbi/genCC.bb")

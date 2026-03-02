@@ -1244,8 +1244,13 @@ if (hubsToPrint != NULL)
             {
             searchResult = (struct hubSearchText *) hashMustFindVal(searchResultHash, hubInfo->hubUrl);
             }
-        printOutputForHub(hubInfo, searchResult, count);
-        count++;
+        struct errCatch *errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+            printOutputForHub(hubInfo, searchResult, count);
+        errCatchEnd(errCatch);
+        if (!errCatch->gotError)
+            count++;
+        errCatchFree(&errCatch);
         }
     printOutputForHubTime = clock1000();
     if (measureTiming)
