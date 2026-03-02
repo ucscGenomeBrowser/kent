@@ -971,12 +971,13 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 {
 char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
 char* checked = vizArr[vis];
-
-static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
-if (visOnly && canPack)
-    checked = vizArr[packIx[vis]];
-
 int vizArrLen = arrNullLen(vizArr);
+
+// Same as hTvDropDownClassWithJavascript():
+// Normal track with no special limits needs mapping to get back checked value
+static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
+if (visOnly==NULL && canPack)
+    checked = vizArr[packIx[vis]];
 
 cgiMakeDropListClassWithStyleAndJavascript(varName, vizArr, vizArrLen, checked, class,TV_DROPDOWN_STYLE, events);
 }
