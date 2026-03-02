@@ -293,12 +293,12 @@ driver.find_element(By.NAME, "submit").click()
 #    print("Add Custom Tracks")
 
 # click into hgTrackUi of customTrack
-driver.find_element(By.XPATH, "//td[@id='td_data_ct_barChartExampleOne_4976']/div[2]/map/area[29]").click()
-driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/p[2]/a").click()
+driver.find_element(By.XPATH, "//td[contains(@id,'td_data_ct_barChartExampleOne')]/div[2]/map/area[29]").click()
+driver.find_element(By.XPATH, "//div[@id='firstSection']//a[contains(@href,'hgTrackUi')]").click()
 driver.find_element(By.XPATH, "//a[contains(text(),'Data schema/format description and download')]")
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element(By.XPATH, "//td[@id='td_data_ct_interactExample_4634']/div[2]/map/area[5]").click()
-driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/p[2]/a").click()
+driver.find_element(By.XPATH, "//div[@id='firstSection']//a[contains(@href,'hgTrackUi')]").click()
 driver.find_element(By.XPATH, "//a[contains(text(),'Data schema/format description and download')]")
 
 ## Tests chromAlias hg38 custom track
@@ -311,8 +311,8 @@ driver.find_element(By.NAME, "Submit").click()
 driver.find_element(By.NAME, "submit").click()
 # click into hgTrackUi of customTrack
 
-driver.find_element(By.XPATH, "//td[@id='td_data_ct_chrmAliasTestHg38_4656']/div[2]/map/area").click()
-driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/p/a").click()
+driver.find_element(By.XPATH, "//td[contains(@id,'td_data_ct_chrmAliasTestHg38')]/div[2]/map/area").click()
+driver.find_element(By.XPATH, "//div[@id='firstSection']//a[contains(@href,'hgTrackUi')]").click()
 driver.find_element(By.XPATH, "//a[contains(text(),'Data schema/format description and download')]")
 
 # Tests mm10 ENCODE hub
