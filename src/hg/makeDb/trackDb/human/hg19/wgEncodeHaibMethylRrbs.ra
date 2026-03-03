@@ -52,7 +52,6 @@ controlledVocabulary encode/cv.ra cellType=cell treatment=treatment obtainedBy=l
 dragAndDrop subTracks
 priority 0
 type bed 9 +
-itemRgb on
 visibility dense
 boxedCfg on
 scoreFilter 10
@@ -144,7 +143,6 @@ scoreFilterLimits 0:1000
     longLabel GM12878 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=1GM12878 obtainedBy=HAIB treatment=zNone rep=rep2
     type bed 9
-    color 153,38,0
     # subId=1174 dateSubmitted=2010-07-15
     # was wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2 cricket Mon Apr 18 11:24:35 2011
 
@@ -154,7 +152,6 @@ scoreFilterLimits 0:1000
     longLabel GM12878 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=1GM12878 obtainedBy=HAIB treatment=zNone rep=rep1
     type bed 9
-    color 153,38,0
     # subId=1174 dateSubmitted=2010-07-15
     # was wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1 cricket Mon Apr 18 11:24:35 2011
 
@@ -660,7 +657,6 @@ scoreFilterLimits 0:1000
     longLabel LNCaP Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=LNCaP obtainedBy=UW treatment=zNone rep=rep1
     type bed 9
-    color 0,119,158
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsLncapUwSitesRep2
@@ -669,7 +665,6 @@ scoreFilterLimits 0:1000
     longLabel LNCaP Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=LNCaP obtainedBy=UW treatment=zNone rep=rep2
     type bed 9
-    color 0,119,158
     # subId=3159 dateSubmitted=2011-01-06
 
     # ATTIC
@@ -1195,7 +1190,6 @@ scoreFilterLimits 0:1000
     longLabel K562 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=1K562 obtainedBy=HAIB treatment=zNone rep=rep2
     type bed 9
-    color 46,0,184
     # subId=1152 dateSubmitted=2010-07-16
     # was wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
@@ -1205,7 +1199,6 @@ scoreFilterLimits 0:1000
     longLabel K562 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=1K562 obtainedBy=HAIB treatment=zNone rep=rep1
     type bed 9
-    color 46,0,184
     # subId=1152 dateSubmitted=2010-07-16
     # was wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1 cricket Mon Apr 18 11:24:38 2011
 
@@ -1215,7 +1208,6 @@ scoreFilterLimits 0:1000
     longLabel H1-hESC Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=1H1hESC obtainedBy=HAIB treatment=zNone rep=rep1
     type bed 9
-    color 0,107,27
     # subId=1152 dateSubmitted=2010-07-16
     # was wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1 cricket Mon Apr 18 11:24:35 2011
 
@@ -1245,7 +1237,6 @@ scoreFilterLimits 0:1000
     longLabel H1-hESC Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=1H1hESC obtainedBy=HAIB treatment=zNone rep=rep2
     type bed 9
-    color 0,107,27
     # subId=1152 dateSubmitted=2010-07-16
     # was wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2 cricket Mon Apr 18 11:24:36 2011
 
@@ -1255,7 +1246,6 @@ scoreFilterLimits 0:1000
     longLabel HeLa-S3 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=2HeLaS3 obtainedBy=HAIB treatment=zNone rep=rep2
     type bed 9
-    color 0,119,158
     # subId=1152 dateSubmitted=2010-07-16
     # was wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
@@ -1265,7 +1255,6 @@ scoreFilterLimits 0:1000
     longLabel HeLa-S3 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=2HeLaS3 obtainedBy=HAIB treatment=zNone rep=rep1
     type bed 9
-    color 0,119,158
     # subId=1152 dateSubmitted=2010-07-16
     # was wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1 cricket Mon Apr 18 11:24:37 2011
 
@@ -1395,7 +1384,6 @@ scoreFilterLimits 0:1000
     longLabel HepG2 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=2HepG2 obtainedBy=DUKE treatment=zNone rep=rep1
     type bed 9
-    color 189,0,157
     # subId=1220 dateSubmitted=2010-07-13
 
     track wgEncodeHaibMethylRrbsHepg2DukeSitesRep2
@@ -1404,7 +1392,6 @@ scoreFilterLimits 0:1000
     longLabel HepG2 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=2HepG2 obtainedBy=DUKE treatment=zNone rep=rep2
     type bed 9
-    color 189,0,157
     # subId=1220 dateSubmitted=2010-07-13
 
     track wgEncodeHaibMethylRrbsHcpeUwSitesRep2
@@ -1467,7 +1454,6 @@ scoreFilterLimits 0:1000
     longLabel LNCaP Androgen Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=LNCaP obtainedBy=DUKE treatment=ANDRO rep=rep1
     type bed 9
-    color 0,119,158
     # subId=2348 dateSubmitted=2010-09-22
     # was wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1 cricket Mon Apr 18 11:24:38 2011
 
@@ -1477,7 +1463,6 @@ scoreFilterLimits 0:1000
     longLabel LNCaP Androgen Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=LNCaP obtainedBy=DUKE treatment=ANDRO rep=rep2
     type bed 9
-    color 0,119,158
     # subId=2348 dateSubmitted=2010-09-22
     # was wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
