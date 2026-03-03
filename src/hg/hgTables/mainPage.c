@@ -168,8 +168,6 @@ else
 	if (allTracks || sameString(selGroup->name, track->grp))
 	    {
 	    hPrintf(" <OPTION VALUE=\"%s\"", track->track);
-            if (cartTrackDbIsNoGenome(database, track->table))
-                hPrintf(NO_GENOME_CLASS);
             if (disableNoGenome && isNoGenomeDisabled(database, track->table))
                 {
                 hPrintf(" DISABLED");
