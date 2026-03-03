@@ -93,8 +93,6 @@ max-width:100% makes the image take up the entire box
 |------|-------------|
 | Menu | Find BLAH   |
 
-(We need something below the table otherwise later markdown is not properly interpreted)
-
 # Guided Workthorugh
 
 Introduce what this workthrough is going to cover again. 
