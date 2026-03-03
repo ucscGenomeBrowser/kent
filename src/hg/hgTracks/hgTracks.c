@@ -3922,7 +3922,7 @@ while (1)
 		isEOF = TRUE;
 		}
 	    }
-	if (gene && hgFindMatches && !hashLookup(hgFindMatches, gene->name))
+	if (gene && (!hgFindMatches || !hashLookup(hgFindMatches, gene->name)))
 	    // whitelist anything in search hash
 	    {
 	    if (gene && !showNoncoding && (gene->cdsStart == gene->cdsEnd))

@@ -126,7 +126,6 @@ puts("</div>\n");
 /* Current selection display */
 char *selectedLabel = getCurrentGenomeLabel(liftOver->toDb);
 hPrintf("<div class='currentSelection' id='toGenomeLabel'>%s</div>\n", selectedLabel);
-
 /* Assembly dropdown (updates based on genome selection) */
 puts("<div class='fieldRow'>\n");
 puts("<span class='fieldLabel'>Assembly:</span>\n");
@@ -208,11 +207,30 @@ jsInlineF(
     "            $('[id=\\x27%s\\x27]').autocompleteCat('search', val);\n"
     "        });\n"
     "    }\n"
+    "    let toggle = document.getElementById('%sToggle');\n"
+    "    if (toggle) {\n"
+    "        let wasOpen = false;\n"
+    "        toggle.addEventListener('mousedown', () => {\n"
+    "            let $input = $('[id=\\x27%s\\x27]');\n"
+    "            wasOpen = $input.autocompleteCat('widget').is(':visible');\n"
+    "        });\n"
+    "        toggle.addEventListener('click', () => {\n"
+    "            let $input = $('[id=\\x27%s\\x27]');\n"
+    "            if (wasOpen) {\n"
+    "                $input.autocompleteCat('close');\n"
+    "            } else {\n"
+    "                $input.val('');\n"
+    "                $input.autocompleteCat('search', '');\n"
+    "                $input.focus();\n"
+    "            }\n"
+    "        });\n"
+    "    }\n"
     "});\n"
     , liftOver->fromDb
     , HGLFT_TOORG_VAR
     , HGLFT_TODB_VAR
     , searchBarId, searchBarId, searchBarId, searchBarId
+    , searchBarId, searchBarId, searchBarId
 );
 
 puts("</FORM>\n");

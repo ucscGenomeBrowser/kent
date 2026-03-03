@@ -4482,10 +4482,46 @@ function getRecentGenomes() {
         if (recentObj.results[genome]) {
             let item = Object.assign({}, recentObj.results[genome]);
             // Preserve original category for setDbFromAutocomplete to detect GenArk/hubs
-            // but also provide a display category for UI
+            item.originalCategory = item.category;
+            // Set category for autocomplete grouping header
+            item.category = "Recent";
             item.displayCategory = "Recent";
             results.push(item);
         }
+    }
+    return results;
+}
+
+function getPopularGenomes($inputEl) {
+    // Parse the popular assemblies JSON embedded in the page by printGenomeSearchBar().
+    // Returns an array of autocomplete-formatted items with category "Popular".
+    // Items already present in recents are excluded to avoid duplicates.
+    let inputId = $inputEl.attr('id');
+    let dataEl = document.getElementById(inputId + 'PopularData');
+    if (!dataEl) return [];
+    let popularData;
+    try {
+        popularData = JSON.parse(dataEl.textContent);
+    } catch (e) {
+        return [];
+    }
+    // Build a set of db names already in recents to avoid duplicates
+    let recentDbs = new Set();
+    let recents = getRecentGenomes();
+    for (let r of recents) {
+        recentDbs.add(r.db || r.genome);
+    }
+    let results = [];
+    for (let p of popularData) {
+        if (recentDbs.has(p.db)) continue;
+        results.push({
+            genome: p.db,
+            db: p.db,
+            label: p.label,
+            commonName: p.commonName,
+            category: "Popular",
+            displayCategory: "Popular"
+        });
     }
     return results;
 }
@@ -4508,6 +4544,7 @@ function removeRecentGenomesByHubUrl(hubUrl) {
     recentObj.stack = newStack;
     window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
 }
+
 
 function recentGenomeHref(res) {
     // Build an hgTracks URL for a recent genome entry. GenArk assemblies need
@@ -4915,7 +4952,8 @@ function setupGenomeSearchBar(config) {
         // Standard validation - all CGIs check this
         if (item.disabled || !item.genome) return;
         // Standard label update - all CGIs do this
-        labelElement.innerHTML = item.label;
+        if (labelElement)
+            labelElement.innerHTML = item.label;
         // Call user's custom callback for CGI-specific logic
         if (typeof config.onSelect === 'function') {
             config.onSelect(item, labelElement);
@@ -4936,6 +4974,26 @@ function setupGenomeSearchBar(config) {
             btn.addEventListener("click", () => {
                 let val = document.getElementById(config.inputId).value;
                 $("[id='" + config.inputId + "']").autocompleteCat("search", val);
+            });
+        }
+
+        // Dropdown toggle button: opens/closes the autocomplete with recent+popular
+        let toggle = document.getElementById(config.inputId + "Toggle");
+        if (toggle) {
+            let wasOpen = false;
+            toggle.addEventListener("mousedown", () => {
+                let $input = $("[id='" + config.inputId + "']");
+                wasOpen = $input.autocompleteCat("widget").is(":visible");
+            });
+            toggle.addEventListener("click", () => {
+                let $input = $("[id='" + config.inputId + "']");
+                if (wasOpen) {
+                    $input.autocompleteCat("close");
+                } else {
+                    $input.val("");
+                    $input.autocompleteCat("search", "");
+                    $input.focus();
+                }
             });
         }
     });

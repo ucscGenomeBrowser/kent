@@ -502,6 +502,35 @@ cartJsonRegisterHandler(cj, "getChromName", getChromName);
 cartJsonExecute(cj);
 }
 
+static void printPopularDataJson()
+/* Emit a <script type='application/json' id='genomeSearchPopularData'> block
+ * with the same format as printGenomeSearchBar() in web.c, so that
+ * setupGenomeSearchBar() in utils.js can show Popular items on empty input. */
+{
+char *popularStr = cfgOptionDefault("browser.popularGenomes",
+    "hg38,hg19,mm39,mm10,rn7,danRer11,dm6,ce11,sacCer3");
+struct slName *dbNames = slNameListFromComma(popularStr);
+struct dyString *json = dyStringNew(512);
+dyStringAppendC(json, '[');
+boolean first = TRUE;
+struct slName *dbIter;
+for (dbIter = dbNames; dbIter != NULL; dbIter = dbIter->next)
+    {
+    struct dbDb *info = hDbDb(dbIter->name);
+    if (info == NULL || !info->active)
+        continue;
+    if (!first)
+        dyStringAppendC(json, ',');
+    first = FALSE;
+    dyStringPrintf(json, "{\"db\":\"%s\",\"label\":\"%s - %s (%s)\",\"commonName\":\"%s\"}",
+        info->name, info->organism, info->description, info->name, info->organism);
+    }
+dyStringAppendC(json, ']');
+printf("<script type='application/json' id='genomeSearchPopularData'>%s</script>\n", dyStringContents(json));
+dyStringFree(&json);
+slFreeList(&dbNames);
+}
+
 void doMainPage()
 /* Print the basic HTML page and include any necessary Javascript. AJAX calls
  * will fill out the page later */
@@ -512,6 +541,7 @@ getDbAndGenome(cart, &database, &genome, oldVars);
 webStartGbNoBanner(cart, database, "Search Disambiguation");
 printMainPageIncludes();
 jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
+printPopularDataJson();
 struct jsonElement *cartJson = newJsonObject(hashNew(0));
 jsonObjectAdd(cartJson, "db", newJsonString(database));
 jsonObjectAdd(cartJson, "genomes", getGenomes());
@@ -615,6 +645,7 @@ else
     // Now we need to actually spit out the page + json
     webStartGbNoBanner(cart, db, "Search Disambiguation");
     printMainPageIncludes();
+    printPopularDataJson();
     cartJsonPrintWarnings(cj->jw);
     jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
     jsInline("var cartJson = {");
