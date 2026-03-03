@@ -954,6 +954,9 @@ if (isNotEmpty(placeholder))
     printf("placeholder='%s' ", placeholder);
 printf("class='%s' ", isNotEmpty(classStr) ? classStr : "genomeSearchBarDefault");
 printf("></input>\n");
+printf("<button id='%sToggle' type='button' class='genomeSearchToggle' tabindex='-1'"
+    " aria-label='Show popular assemblies'"
+    " title='Show recent and popular assemblies'>&#9660;</button>\n", id);
 if (withSearchButton)
     printf("<input id='%sButton' value='search' type='button'></input>", id);
 char *searchHelpText = "All genome searches are case-insensitive.  Single-word searches default to prefix "
@@ -966,6 +969,31 @@ char *searchHelpText = "All genome searches are case-insensitive.  Single-word s
 "</ul>";
 printInfoIcon(searchHelpText);
 printf("</div>\n"); // the search button is grouped with the input
+// Embed popular assemblies JSON for the autocomplete dropdown
+{
+char *popularStr = cfgOptionDefault("browser.popularGenomes",
+    "hg38,hg19,mm39,mm10,rn7,danRer11,dm6,ce11,sacCer3");
+struct slName *dbNames = slNameListFromComma(popularStr);
+struct dyString *json = dyStringNew(512);
+dyStringAppendC(json, '[');
+boolean first = TRUE;
+struct slName *dbIter;
+for (dbIter = dbNames; dbIter != NULL; dbIter = dbIter->next)
+    {
+    struct dbDb *info = hDbDb(dbIter->name);
+    if (info == NULL || !info->active)
+        continue;
+    if (!first)
+        dyStringAppendC(json, ',');
+    first = FALSE;
+    dyStringPrintf(json, "{\"db\":\"%s\",\"label\":\"%s - %s (%s)\",\"commonName\":\"%s\"}",
+        info->name, info->organism, info->description, info->name, info->organism);
+    }
+dyStringAppendC(json, ']');
+printf("<script type='application/json' id='%sPopularData'>%s</script>\n", id, dyStringContents(json));
+dyStringFree(&json);
+slFreeList(&dbNames);
+}
 printf("</div>\n");
 }
 
