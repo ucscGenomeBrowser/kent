@@ -19,6 +19,7 @@
 #include "vcf.h"
 #include "bedTabix.h"
 #include "knetUdc.h"
+#include "hgFind.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -1082,6 +1083,19 @@ if (errCatchStart(errCatch))
         char *twoBit = genome->twoBitPath;
         if (!extFileExists(twoBit))
             warn("Error: '%s' twoBitPath does not exist or is not accessible: '%s'", genome->name, twoBit);
+        else
+            {
+            // verify that the defaultPos references an actual chromosome and valid range for that chromosome
+            char *inpPos = cloneString(genome->defaultPos);
+            int relStart = 0, relEnd = 0;
+            boolean relativeFlag = FALSE, singleBaseSpec = FALSE;
+            if (!parseAndResolvePosition(&inpPos, genome->name, NULL, &relStart, &relEnd, &relativeFlag, &singleBaseSpec))
+                {
+                // again use a warn so we can continue checking other genome stanza settings that do not
+                // rely on the 2bit file
+                warn("Error: '%s' defaultPos '%s' does not reference a valid chromosome in the 2bit file: '%s'", trackHubSkipHubName(genome->name), genome->defaultPos, twoBit);
+                }
+            }
 
         // groups and htmlPath are optional settings, again only warn if they are malformed
         char *groupsFile = genome->groups;
@@ -1093,6 +1107,7 @@ if (errCatchStart(errCatch))
             warn("warning: missing htmlPath setting for assembly hub '%s'", genome->name);
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
+
         }
     boolean foundFirstGenome = FALSE;
     tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);

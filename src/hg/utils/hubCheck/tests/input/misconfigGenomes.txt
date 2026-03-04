@@ -11,7 +11,7 @@ trackDb noErrors.araTha1.trackDb.txt
 
 genome ricCom1
 description July 2011 Castor bean
-defaultPos EQ973772:1000000-2000000
+defaultPos abc:1000000-2000000
 scientificName Ricinus communis
 htmlPath https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/description.html
 organism Ricinus communis

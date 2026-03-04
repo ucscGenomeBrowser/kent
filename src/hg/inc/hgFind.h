@@ -101,6 +101,12 @@ void fixSinglePos(struct hgPositions *hgp);
 /* Fill in posCount and if proper singlePos fields of hgp
  * by going through tables... */
 
+boolean parseAndResolvePosition(char **inpPos, char *db, struct hgPositions *inpHgPos,
+        int *relStart, int *relEnd, boolean *relativeFlag, boolean *singleBaseSpec);
+/* If inpPos is a valid chromosome position string for db, fill out the associated
+ * hgPos, relative start and stop, and return TRUE. Otherwise return FALSE so our regular
+ * search code can deal with item name */
+
 struct hgPositions *hgPositionsFind(char *db, char *query, char *extraCgi,
 	char *hgAppName, struct cart *cart, boolean multiTerm, boolean measureTiming, struct searchCategory *categories);
 /* Return container of tracks and positions (if any) that match term. */
