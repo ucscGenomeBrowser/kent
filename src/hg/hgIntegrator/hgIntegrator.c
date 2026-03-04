@@ -37,6 +37,7 @@
 #include "annoGratorQuery.h"
 #include "windowsToAscii.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -932,7 +933,7 @@ webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
                               TRUE, FALSE, TRUE, TRUE);
 
 // Ideally these would go in the <HEAD>
-puts("<link rel=\"stylesheet\" href=\"//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css\">");
+webIncludeResourceFile("jquery-ui.css");
 puts("<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css\">");
 
 puts("<div id=\"appContainer\">Loading...</div>");
@@ -949,6 +950,32 @@ jsIncludeReactLibs();
 jsIncludeFile("reactHgIntegrator.js", NULL);
 jsIncludeFile("hgIntegratorModel.js", NULL);
 jsIncludeFile("autocompleteCat.js", NULL);
+
+// Embed popular assemblies JSON for the autocomplete dropdown
+{
+char *popularStr = cfgOptionDefault("browser.popularGenomes",
+    "hg38,hg19,mm39,mm10,rn7,danRer11,dm6,ce11,sacCer3");
+struct slName *dbNames = slNameListFromComma(popularStr);
+struct dyString *json = dyStringNew(512);
+dyStringAppendC(json, '[');
+boolean first = TRUE;
+struct slName *dbIter;
+for (dbIter = dbNames; dbIter != NULL; dbIter = dbIter->next)
+    {
+    struct dbDb *info = hDbDb(dbIter->name);
+    if (info == NULL || !info->active)
+        continue;
+    if (!first)
+        dyStringAppendC(json, ',');
+    first = FALSE;
+    dyStringPrintf(json, "{\"db\":\"%s\",\"label\":\"%s - %s (%s)\",\"commonName\":\"%s\"}",
+        info->name, info->organism, info->description, info->name, info->organism);
+    }
+dyStringAppendC(json, ']');
+printf("<script type='application/json' id='speciesSearchInputPopularData'>%s</script>\n", dyStringContents(json));
+dyStringFree(&json);
+slFreeList(&dbNames);
+}
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",

@@ -1,4 +1,5 @@
-Found 3 problems:
+Found 4 problems:
 Error: 'araTha1' twoBitPath does not exist or is not accessible: 'https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/noTwoBitPath.2bit'
+Error: 'ricCom1' defaultPos 'abc:1000000-2000000' does not reference a valid chromosome in the 2bit file: 'https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/ricCom1.2bit'
 warning: 'araTha1' groups file does not exist or is not accessible: 'input/badLocalPath.txt'
 warning: 'araTha1' htmlPath file does not exist or is not accessible: 'http://bad.url.path'

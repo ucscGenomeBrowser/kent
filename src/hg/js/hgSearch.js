@@ -656,26 +656,25 @@ var hgSearch = (function() {
         $("#spinner").remove();
     }
 
+    function onGenomeQuickSelect(item) {
+        // Shared handler for both search bar and quick-select dropdown
+        db = item.genome;
+        uiState.db = item.genome;
+        var cmd = { cgiVar: {db: item.genome}, getUiState: {} };
+        if (item.hubUrl) {
+            cmd.cgiVar.hubUrl = item.hubUrl;
+            cmd.cgiVar.genome = item.genome;
+        }
+        cart.send(cmd, handleGenomeChange);
+        cart.flush();
+    }
+
     function initGenomeAutocomplete() {
         // Initialize the genome search autocomplete using the standard function from utils.js
         setupGenomeSearchBar({
             inputId: 'genomeSearch',
             labelElementId: 'currentGenome',
-            onSelect: function(item) {
-                db = item.genome;
-                uiState.db = item.genome;
-                // Send db as a cgiVar so cartNew() processes it during cart
-                // initialization. For GenArk assemblies, also send hubUrl and
-                // genome so hubConnectLoadHubs() can connect the hub and
-                // decorate the db name (e.g., GCF_XXX -> hub_115090_GCF_XXX).
-                var cmd = { cgiVar: {db: item.genome}, getUiState: {} };
-                if (item.hubUrl) {
-                    cmd.cgiVar.hubUrl = item.hubUrl;
-                    cmd.cgiVar.genome = item.genome;
-                }
-                cart.send(cmd, handleGenomeChange);
-                cart.flush();
-            }
+            onSelect: onGenomeQuickSelect
         });
     }
 
