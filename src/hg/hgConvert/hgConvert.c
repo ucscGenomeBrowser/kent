@@ -114,7 +114,6 @@ puts("<div class='sectionLabel'>Destination</div>\n");
 
 /* Hidden fields for form submission */
 hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TOORG_VAR, toDb->organism);
-hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TODB_VAR, liftOver->toDb);
 
 /* Search bar */
 char *searchBarId = "toGenomeSearch";
@@ -294,7 +293,7 @@ if (sameWord(toOrg,"0"))
     toOrg = NULL;
 if (sameWord(toDb,"0"))
     toDb = NULL;
-if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
+if ((toDb != NULL) && !sameWordOk(toOrg, hOrganism(toDb)))
     toDb = NULL;
 
 if (toOrg == NULL)
