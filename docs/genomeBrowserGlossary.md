@@ -14,16 +14,18 @@ This page covers the following topics:
     - [Navigation Controls](#navigation-controls)
     - [Mouse Interactions](#mouse-interactions)
     - [Position and Search](#position-and-search)
-    - [Configuration and Settings](#configuration-and-search)
+    - [Configuration and Settings](#configuration-and-settings)
     - [Views, Output, and Export](#views-output-and-export)
 - [Tracks and Display](#tracks-and-display)
 - [User Data Features](#user-data-features)
 - [Data Formats](#data-formats)
 - [Genome Browser Data and Annotations](#genome-browser-data-and-annotations)
     - [Gene Annotations](#gene-annotations)
+    - [Mapping, Sequencing, and Repeats](#mapping-sequencing-and-repeats)
     - [Conservation and Comparative Genomics](#conservation-and-comparative-genomics)
     - [Variants and Clinical Data](#variants-and-clinical-data)
     - [Regulatory and Functional Data](#regulatory-and-functional-data)
+- [Table Browser](#table-browser)
 - [Technical Terms](#technical-terms)
 
 ## Genome Assemblies and Nomenclature
@@ -42,6 +44,22 @@ assemblies.
 **Chromosome Coordinates**: Genomic positions specified as chromosome name and
 base position (e.g., `chr7:155,799,529-155,812,871`). UCSC uses zero-based,
 half-open coordinates in its databases.
+
+**Scaffold / Contig**: Intermediate sequence units used in genome assembly.
+A contig is a contiguous stretch of assembled sequence with no gaps, while a
+scaffold is an ordered set of contigs joined by estimated gap lengths. In
+assemblies that are not fully resolved into chromosomes, sequences may be
+named as scaffolds (e.g., `scaffold10671`) rather than chromosomes. In
+chromosome-based assemblies, unplaced scaffolds appear as sequences like
+`chrUn_gl000220` and unlocalized scaffolds (known chromosome, unknown
+position) appear as `chr1_gl000191_random`.
+
+**Haplotype / Alternate Sequence**: Alternative versions of specific genomic
+regions representing common structural variation between individuals. In the
+Genome Browser, these appear as sequences with `_hap` or `_alt` suffixes
+(e.g., `chr6_cox_hap2`, `chr1_KI270762v1_alt`). Alternate sequences can be
+viewed in chromosomal context using
+[Multi-Region mode](/goldenPath/help/multiRegionHelp.html).
 
 
 ### Popular Genome Assemblies
@@ -185,7 +203,7 @@ Multiple highlights can be added with different colors.
 
 ### Position and Search
 
-**Position/Search box**: Text entry box at the top of the main genome genome browser image. Accepts
+**Position/Search Box**: Text entry box at the top of the main Genome Browser image. Accepts
 positions or one of a variety of search terms, including gene names, rsIDs, short sequences and
 [various other terms](/goldenPath/help/query.html).
 
@@ -248,6 +266,38 @@ can be configured for different display modes.
 **Track Group**: A set of related tracks grouped together under the main track
 image, e.g. "Mapping and Sequencing" or "Comparative Genomics".
 
+**Transcript / Isoform**: A transcript is a single RNA molecule produced from
+a gene. Many genes produce multiple transcripts (isoforms) through
+alternative splicing, alternative promoters, or alternative polyadenylation.
+In the browser, each isoform is drawn as a separate line within a gene
+track, which is why a single gene may appear as multiple stacked items.
+
+**Strand (+ / -)**: The orientation of a genomic feature relative to the
+reference sequence. The positive (+) strand reads 5' to 3' left to right;
+the negative (-) strand reads 3' to 5'. In gene tracks, chevrons (arrows)
+within intron lines indicate the direction of transcription.
+
+**Details Page**: The information page that opens when you click on an item
+in the browser graphic. Displays feature-specific data such as genomic
+coordinates, strand, score, and links to external databases. The content
+varies by track type.
+
+**[Multi-Region Mode](/goldenPath/help/multiRegionHelp.html)**: A display
+mode that shows non-contiguous genomic regions side by side. Options include
+exon-only view (hiding introns), gene-only view (hiding intergenic regions),
+and custom regions defined by a BED file. Also supports viewing alternate
+haplotype sequences in chromosomal context. Accessible from the View menu.
+
+**[Track Collection Builder](/cgi-bin/hgCollection)**: A tool for combining
+multiple wiggle-type tracks (bigWig, bedGraph) from native browser data,
+custom tracks, or track hubs into a single configurable composite. Supports
+overlay methods including transparent, stacked, add, and subtract.
+
+**Filtering**: Track-level configuration that limits the displayed items to
+those matching specified criteria such as score thresholds, name patterns, or
+field values. Filter settings are available on many track settings pages and
+persist across sessions.
+
 ### Display Modes
 
 | Mode | Description |
@@ -295,8 +345,8 @@ tracks.
 **[Public Hub](/cgi-bin/hgHubConnect#publicHubs)**: A track or assembly hub
 provided by an external group. Will show up as its own group under the main
 genome browser image. Questions about track data should be directed to the hub
-maintainers, whoe email address can be found on the description page for 
-any track in the hub. Public hubs are required to me a set of 
+maintainers, whose email address can be found on the description page for
+any track in the hub. Public hubs are required to meet a set of
 [guidelines](/goldenPath/help/publicHubGuidelines.html) and are reviewed by 
 Genome Browser staff before being added to the list.
 
@@ -351,13 +401,31 @@ for storing genetic variant data including SNPs, insertions, and deletions.
 **[PSL](/FAQ/FAQformat.html#format2)**: A format for storing sequence
 alignments, commonly used for BLAT output and mRNA/EST alignments.
 
+**[GenePred](/FAQ/FAQformat.html#format9)**: A table format used to represent
+gene prediction and transcript structure data. Fields include transcript
+name, chromosome, strand, transcription start/end, coding region start/end,
+exon count, and exon coordinates. An extended version (genePredExt) adds
+gene name and coding region status fields.
+
 **[MAF (Multiple Alignment Format)](/FAQ/FAQformat.html#format5)**: A format
 for storing multiple sequence alignments across species.
+
+**[interact / bigInteract](/goldenPath/help/interact.html)**: A format for
+displaying pairwise interactions between genomic regions, drawn as arcs or
+half-rectangles connecting two loci. Suitable for chromatin interaction data
+such as ChIA-PET and promoter-enhancer links. The bigInteract binary version
+is used for track hubs.
+
+**[HAL (Hierarchical Alignment Format)](/FAQ/FAQformat.html#format12)**: A
+graph-based binary format for storing multiple genome alignments organized
+according to a phylogenetic tree. Unlike MAF, HAL allows reference-free
+querying with respect to any genome in the alignment. Native output format of
+the Progressive Cactus alignment pipeline.
 
 **[twoBit](/FAQ/FAQformat.html#format7)**: An efficient binary format for
 storing genomic sequence data.
 
-See our [format page](/FAQ/FAQformat.html) for a full listing of track and data types. 
+See our [format page](/FAQ/FAQformat.html) for a full listing of track and data types.
 
 ## Genome Browser Data and Annotations
 ### Gene Annotations
@@ -417,6 +485,31 @@ filling each region. More details about net construction can be found in
 **Conservation Track**: A composite track displaying multiple species alignments and conservation scores (phastCons and phyloP) computed from those alignments.
 
 
+### Mapping, Sequencing, and Repeats
+
+**[RepeatMasker](http://www.repeatmasker.org/)**: A program that screens DNA
+sequences for interspersed repeats and low-complexity regions. The
+RepeatMasker track is one of the most prominent default tracks, displaying
+repeat classes including SINEs, LINEs, LTR elements, DNA transposons, simple
+repeats, and satellites. Items are color-coded by repeat class and shaded by
+divergence from the repeat consensus.
+
+**GC Percent**: A track showing the percentage of guanine (G) and cytosine
+(C) bases across the genome, calculated in fixed-size windows. Regions with
+higher GC content are drawn more darkly. High GC content is generally
+associated with gene-rich areas of the genome.
+
+**Mappability**: Tracks indicating how uniquely short sequences (k-mers) at
+each position can be mapped back to the genome. Regions with low mappability
+contain repetitive sequences where sequencing reads cannot be confidently
+placed, which is important for interpreting read coverage and variant calls.
+
+**Synteny**: Conservation of gene order and genomic organization between
+species. Syntenic regions share a common ancestral arrangement. The concept
+is central to the Chain and Net comparative genomics tracks, where Net
+tracks specifically display the highest-scoring syntenic alignments between
+two genomes.
+
 ### Variants and Clinical Data
 
 **SNP (Single Nucleotide Polymorphism)**: A single base position where
@@ -461,6 +554,20 @@ expression data across multiple human tissues.
 **[FANTOM5](https://fantom.gsc.riken.jp/5)**: A project mapping transcription
 start sites and promoter activity across cell types and tissues.
 
+## Table Browser
+
+**[Intersection](/goldenPath/help/hgTablesHelp.html#Intersection)**: A Table
+Browser feature that combines data from two tracks by finding overlapping
+genomic regions. For example, intersecting a gene track with a conservation
+track returns only the genes that overlap conserved elements. Supports both
+simple (two-table) and multiple intersection modes.
+
+**Data Format Description (Schema)**: A page describing the structure of a
+track's underlying data — its columns, data types, and example values. Found
+via the "Data schema/format description and download" link on track
+description pages, or via the "describe table schema" button in the Table
+Browser. Also provides a download link for the dataset.
+
 ## Technical Terms
 
 **Byte-Range Requests**: HTTP feature required for hosting bigBed, bigWig, and
@@ -482,5 +589,5 @@ Genome Browser tables and bigBed files.
 
 **hubCheck**: A command-line utility for validating track hub configuration files.
 Available from our
-[download server](https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads.)
+[download server](https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads).
 
