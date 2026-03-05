@@ -5768,6 +5768,15 @@ var downloadCurrentTrackData = {
         if (trackList.length == 0) {
             alert("At least one track must be selected");
             return;
+        } else if (trackList.length > 100) {
+            alert("Too many tracks requested. Please limit requests to 100 tracks or less");
+            return;
+        } else if (trackList.join(',').length > 7000) {
+            // tracks with too long of names and we hit the max URI length allowed
+            // by Apache, I doubt this could happen without requesting more than the
+            // 100 tracks allowed above, but just in case:
+            alert("Too many tracks requested");
+            return;
         }
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
