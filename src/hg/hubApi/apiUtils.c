@@ -276,10 +276,16 @@ if (errCatchStart(errCatch))
     {
     char *errMessage;
     unsigned hubId = hubFindOrAddUrlInStatusTable(NULL, hubUrl, &errMessage);
+    /* this hubFromIdNoAbort() call will update the hub status error message
+     *    if it has recovered from previous errors.
+     */
+    struct hubConnectStatus *hubStatus = hubFromIdNoAbort(hubId);
     
     // if we got an error, throw error
-    if (errMessage != NULL)
-        errAbort("%s", errMessage);
+    if (NULL == hubStatus)	/* this should not happen */
+        errAbort("could not find hub %u in status table", hubId);
+    if (!isEmpty(hubStatus->errorMessage))
+        errAbort("%s", hubStatus->errorMessage);
 
     // use hubId in hubName
     char buffer[4096];
