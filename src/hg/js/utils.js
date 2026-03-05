@@ -4825,7 +4825,7 @@ function processFindGenome(result, term) {
 }
 
 function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null,
-        watermark = null, onServerReply = null, onError = null) {
+        watermark = null, onServerReply = null, onError = null, onFilterDropdown = null) {
 /* Generic function for turning an <input> element into a species search bar with an autocomplete
  * list separating results by category.
  * Required arguments:
@@ -4901,10 +4901,16 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
                        label = label.replace(regex, '<b>$1</b>');
                    });
                 }
-                return $("<li></li>")
+                let $li = $("<li></li>")
                     .data("ui-autocomplete-item", item)
                     .append($("<a></a>").html(label))
                     .appendTo(ul);
+                if (item.disabled) {
+                    $li.attr('title', item.disabledReason || 'Not available');
+                    $li.css({'opacity': '0.5'});
+                    $li.find('a').css({'pointer-events': 'none'});
+                }
+                return $li;
             }
         }
     );
@@ -4914,6 +4920,7 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
         onSelect: selectFunction,
         onServerReply: onServerReply !== null ? onServerReply : processFindGenome,
         onError: onError,
+        onFilterDropdown: onFilterDropdown,
         showRecentGenomes: true,
         enterSelectsIdentical: false
     });
