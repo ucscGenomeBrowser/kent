@@ -164,6 +164,13 @@ jsInlineF(
     "            data.existingLiftOvers.forEach(chain => validTargets.add(chain.toDb));\n"
     "        }\n"
     "\n"
+    "        // Filter popular genomes to only those with a liftOver from source\n"
+    "        let dataEl = document.getElementById('%sPopularData');\n"
+    "        if (dataEl) {\n"
+    "            let popular = JSON.parse(dataEl.textContent);\n"
+    "            dataEl.textContent = JSON.stringify(popular.filter(p => validTargets.has(p.db)));\n"
+    "        }\n"
+    "\n"
     "        // Custom onServerReply that processes results and filters to valid targets\n"
     "        function processAndFilterResults(result, term) {\n"
     "            let processed = processFindGenome(result, term);\n"
@@ -226,6 +233,7 @@ jsInlineF(
     "    }\n"
     "});\n"
     , liftOver->fromDb
+    , searchBarId
     , HGLFT_TOORG_VAR
     , HGLFT_TODB_VAR
     , searchBarId, searchBarId, searchBarId, searchBarId
