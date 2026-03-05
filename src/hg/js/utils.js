@@ -4547,25 +4547,14 @@ function removeRecentGenomesByHubUrl(hubUrl) {
 
 
 function recentGenomeHref(res) {
-    // Build an hgTracks URL for a recent genome entry. GenArk assemblies need
-    // db=, genome=, and a fully qualified hubUrl= so that fixUpDb() and
-    // hubConnectLoadHubs() in cartNew() can connect the hub. UCSC native
-    // databases just need db=.
+    // Build an hgTracks URL for a recent genome entry. GenArk assemblies are
+    // handled transparently by fixUpDb() in cartNew() when given just db= with
+    // the accession. UCSC native databases also just need db=.
     let db = res.db || res.genome;
     let url = new URL("../cgi-bin/hgTracks", window.location.href);
     url.searchParams.set("hgsid", getHgsid());
     url.searchParams.set("db", db);
     url.searchParams.set("position", "lastDbPos");
-    if (res.hubUrl) {
-        // The findGenome API returns a relative hubUrl (e.g. GCA/.../hub.txt)
-        // while hgGateway stores it already prefixed (e.g. /gbdb/genark/GCA/.../hub.txt).
-        let hubUrl = res.hubUrl;
-        if (!hubUrl.startsWith("/gbdb/genark/")) {
-            hubUrl = "/gbdb/genark/" + hubUrl;
-        }
-        url.searchParams.set("genome", db);
-        url.searchParams.set("hubUrl", window.location.origin + hubUrl);
-    }
     return url.toString();
 }
 

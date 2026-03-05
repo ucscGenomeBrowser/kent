@@ -1727,21 +1727,12 @@ var hgGateway = (function() {
             position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
         }
         var $form;
-        var hubUrlField = '';
-        if (uiState.hubUrl) {
-            var fullHubUrl = uiState.hubUrl;
-            if (!fullHubUrl.startsWith("http")) {
-                fullHubUrl = window.location.origin + fullHubUrl;
-            }
-            hubUrlField = '<input type=hidden name="hubUrl" value="' + fullHubUrl + '">';
-        }
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
                   '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
                   '<input type=hidden name="org" value="' + uiState.genome + '">' +
                   '<input type=hidden name="db" value="' + uiState.db + '">' +
                   '<input type=hidden name="position" value="' + position + '">' +
                   '<input type=hidden name="pix" value="' + pix + '">' +
-                  hubUrlField +
                   '</form>');
         // helper functions for checking whether a plain chrom name was searched for
         function onSuccess(jqXHR, textStatus) {

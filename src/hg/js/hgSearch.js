@@ -661,10 +661,6 @@ var hgSearch = (function() {
         db = item.genome;
         uiState.db = item.genome;
         var cmd = { cgiVar: {db: item.genome}, getUiState: {} };
-        if (item.hubUrl) {
-            cmd.cgiVar.hubUrl = item.hubUrl;
-            cmd.cgiVar.genome = item.genome;
-        }
         cart.send(cmd, handleGenomeChange);
         cart.flush();
     }
