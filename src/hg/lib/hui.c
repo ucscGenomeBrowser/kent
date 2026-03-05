@@ -5479,8 +5479,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	else
 	    safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",
 			    (visibleCB ? "":" disabled"));
-	#define SUBTRACK_CFG_VIS "<div id='%s_faux' class='%s' style='width:65px;'>%s</div>\n"
-	printf(SUBTRACK_CFG_VIS,subtrack->track,classList,hStringFromTv(vis));
+	#define SUBTRACK_CFG_VIS "<div id='%s_faux' class='%s' style='width:65px;'>%c%s</div>\n"
+
+        char* visString = hStringFromTv(vis);
+	printf(SUBTRACK_CFG_VIS,subtrack->track,classList, toupper((unsigned char)visString[0]), visString+1);
+
 	char id[256];
 	safef(id, sizeof id, "%s_faux", subtrack->track);
 	jsOnEventByIdF("click", id, "return subCfg.replaceWithVis(this,\"%s\",true);", subtrack->track);

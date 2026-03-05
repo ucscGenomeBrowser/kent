@@ -673,8 +673,9 @@ var subCfg = { // subtrack config module.
         if (subCfg.canPack === false)
             visibilities = ['hide','dense','full'];
         $(visibilities).each( function (ix) {
-             selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+">";
-             selectHtml += visibilities[ix]+"</OPTION>";
+             var vis = visibilities[ix];
+             selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+" VALUE='"+vis+"'>";
+             selectHtml += capitalizeFirstLetter(vis)+"</OPTION>";
         });
         selectHtml += "</SELECT>";
         $(obj).replaceWith(selectHtml);

@@ -2855,7 +2855,11 @@ printf("</TABLE>");
 // Now configure the elements above with Javascript:
 
 // * Clicking a button sets the dropdown to the button's text
-jsOnEventBySelector("click", ".seg-btn-group > button", "let dropdown = $('#' + $(this).parent().data('trackname')); let buttonText=$(this).text().toLowerCase(); dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');");
+jsOnEventBySelector("click", ".seg-btn-group > button", 
+        "let dropdown = $('[name=\"' + $(this).parent().data('trackname')+'\"]'); " // cannot use #id, . has special meaning
+        "let buttonText=$(this).text().toLowerCase(); "
+        "dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');"
+    );
 // * Clicking buttons does not submit the form (default action of <button> is to submit, unless type=button)
 jsInline("$('.seg-btn-group button').attr('type', 'button');");
 // * Clicking buttons makes them pressed. Also, clicking any button shows the superTrack
