@@ -2145,7 +2145,9 @@ for (i=0; i<menuSize; ++i)
         selString = " SELECTED";
     else
         selString = "";
-    printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
+
+    char* opt = menu[i];
+    printf("<OPTION%s value='%s'>%c%s</OPTION>\n", selString, opt, toupper((unsigned char)opt[0]), opt+1);
     }
 printf("</SELECT>\n");
 }
