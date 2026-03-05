@@ -1810,7 +1810,7 @@ if (db && cgiOptionalString("db"))
         if (dbInfo->taxId > 0)
             dyStringPrintf(jsCall, ", taxId:%d", dbInfo->taxId);
         // For hub/GenArk assemblies, include hubUrl and category so hgGateway can route correctly
-        struct trackHubGenome *hubGenome = trackHubGetGenome(db);
+        struct trackHubGenome *hubGenome = trackHubDatabase(db) ? trackHubGetGenome(db) : NULL;
         if (hubGenome && hubGenome->trackHub)
             {
             char *safeHubUrl = jsonStringEscape(hubGenome->trackHub->url);
