@@ -5878,7 +5878,7 @@ var downloadCurrentTrackData = {
         htmlStr += "<option value='tsv'>TSV</option>";
         htmlStr += "</select>";
         htmlStr += "<br>";
-        htmlStr += "<label style='padding-rught: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
+        htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
         htmlStr += "<input type='checkbox' id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;

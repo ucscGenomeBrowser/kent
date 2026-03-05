@@ -114,7 +114,6 @@ puts("<div class='sectionLabel'>Destination</div>\n");
 
 /* Hidden fields for form submission */
 hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TOORG_VAR, toDb->organism);
-hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TODB_VAR, liftOver->toDb);
 
 /* Search bar */
 char *searchBarId = "toGenomeSearch";
@@ -163,6 +162,13 @@ jsInlineF(
     "    .then(data => {\n"
     "        if (data.existingLiftOvers) {\n"
     "            data.existingLiftOvers.forEach(chain => validTargets.add(chain.toDb));\n"
+    "        }\n"
+    "\n"
+    "        // Filter popular genomes to only those with a liftOver from source\n"
+    "        let dataEl = document.getElementById('%sPopularData');\n"
+    "        if (dataEl) {\n"
+    "            let popular = JSON.parse(dataEl.textContent);\n"
+    "            dataEl.textContent = JSON.stringify(popular.filter(p => validTargets.has(p.db)));\n"
     "        }\n"
     "\n"
     "        // Custom onServerReply that processes results and filters to valid targets\n"
@@ -227,6 +233,7 @@ jsInlineF(
     "    }\n"
     "});\n"
     , liftOver->fromDb
+    , searchBarId
     , HGLFT_TOORG_VAR
     , HGLFT_TODB_VAR
     , searchBarId, searchBarId, searchBarId, searchBarId
@@ -294,7 +301,7 @@ if (sameWord(toOrg,"0"))
     toOrg = NULL;
 if (sameWord(toDb,"0"))
     toDb = NULL;
-if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
+if ((toDb != NULL) && !sameWordOk(toOrg, hOrganism(toDb)))
     toDb = NULL;
 
 if (toOrg == NULL)

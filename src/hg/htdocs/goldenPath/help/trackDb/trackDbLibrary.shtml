@@ -5709,6 +5709,17 @@ and is particularly useful for tracks with large numbers of categories.
     </P>
 </DIV>
 
+<DIV class="singleCellColumnNames"><span class="types bigBarChart"></span>
+<div class="format"><code>singleCellColumnNames off</code></div>
+    <P>This setting changes <B>cell count</B> to <B>count</B> in the track details page
+    for the column named <i>count</i> in the facets file specified by
+    <code>barChartStatsUrl</code>. This setting is useful for non-single-cell datasets
+    such as bulk RNA-seq, where <i>count</i> represents the number of samples or
+    replicates rather than cells. See an example with images of barChartStatsUrl on the
+    <a target="_blank" href="../barChart.html#example6">barChart help page</a>.
+    </P>
+</DIV>
+
 <DIV class="barChartMerge"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMerge on</code></div>
     <P>This setting enables the <i>merge</i> button inside of the faceted selections.  It
