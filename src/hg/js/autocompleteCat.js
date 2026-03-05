@@ -146,6 +146,9 @@ var autocompleteCat = (function() {
                     if (request.term.length === 0) {
                         // On focus with empty input, show recent + popular genomes
                         let combined = recent.concat(popular);
+                        if (typeof options.onFilterDropdown === 'function') {
+                            combined = options.onFilterDropdown(combined);
+                        }
                         if (combined.length > 0) {
                             acCallback(combined);
                             return;
@@ -157,6 +160,9 @@ var autocompleteCat = (function() {
                             item.label.toLowerCase().includes(request.term.toLowerCase()) ||
                             item.genome.toLowerCase().includes(request.term.toLowerCase())
                         );
+                        if (typeof options.onFilterDropdown === 'function') {
+                            matching = options.onFilterDropdown(matching);
+                        }
                         if (matching.length > 0) {
                             acCallback(matching);
                             return;

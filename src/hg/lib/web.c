@@ -31,6 +31,7 @@
 #include "wikiLink.h"
 #include "googleAnalytics.h"
 #include "jsHelper.h"
+#include "jsonParse.h"
 #endif /* GBROWSE */
 
 
@@ -1792,6 +1793,41 @@ jsInline("$(\"#tools1 ul li a\").each( function (a) {\n"
 // if the user has previously searched for assemblies, add them to the "Genomes" menu heading,
 // above the "other" assemblies link
 jsInline("addRecentGenomesToMenuBar();\n");
+
+// If the user explicitly navigated to this genome (db= in CGI params), add it to recent genomes
+if (db && cgiOptionalString("db"))
+    {
+    struct dbDb *dbInfo = hDbDb(db);
+    if (dbInfo)
+        {
+        char *bareDb = jsonStringEscape(trackHubSkipHubName(db));
+        char *safeOrganism = jsonStringEscape(trackHubSkipHubName(dbInfo->organism));
+        char *safeDescription = jsonStringEscape(trackHubSkipHubName(dbInfo->description));
+        struct dyString *jsCall = dyStringNew(512);
+        dyStringPrintf(jsCall,
+            "addRecentGenome({db:'%s', genome:'%s', label:'%s - %s (%s)', commonName:'%s'",
+            bareDb, bareDb, safeOrganism, safeDescription, bareDb, safeOrganism);
+        if (dbInfo->taxId > 0)
+            dyStringPrintf(jsCall, ", taxId:%d", dbInfo->taxId);
+        // For hub/GenArk assemblies, include hubUrl and category so hgGateway can route correctly
+        struct trackHubGenome *hubGenome = trackHubDatabase(db) ? trackHubGetGenome(db) : NULL;
+        if (hubGenome && hubGenome->trackHub)
+            {
+            char *safeHubUrl = jsonStringEscape(hubGenome->trackHub->url);
+            dyStringPrintf(jsCall, ", hubUrl:'%s'", safeHubUrl);
+            if (startsWith("/gbdb", hubGenome->trackHub->url))
+                dyStringAppend(jsCall, ", category:'UCSC Curated'");
+            else
+                dyStringAppend(jsCall, ", category:'Assembly Hub'");
+            }
+        else
+            dyStringAppend(jsCall, ", category:'UCSC Curated'");
+        dyStringAppend(jsCall, "});\n");
+        jsInline(dyStringContents(jsCall));
+        dyStringFree(&jsCall);
+        }
+    }
+
 return menuStr;
 }
 

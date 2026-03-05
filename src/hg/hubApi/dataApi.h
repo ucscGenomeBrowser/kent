@@ -123,6 +123,9 @@ extern char *argLiftRequest[];
  * jsonWriteString
  */
 
+/* Maximum number of comma sep tracks that can be requested by /getData/track */
+#define MAX_NUM_TRACKS 100
+
 extern long enteredMainTime;	/* will become = clock1000() on entry */
 
 /* limit amount of output to a maximum to avoid overload */

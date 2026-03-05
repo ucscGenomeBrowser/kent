@@ -164,11 +164,18 @@ jsInlineF(
     "            data.existingLiftOvers.forEach(chain => validTargets.add(chain.toDb));\n"
     "        }\n"
     "\n"
-    "        // Filter popular genomes to only those with a liftOver from source\n"
-    "        let dataEl = document.getElementById('%sPopularData');\n"
-    "        if (dataEl) {\n"
-    "            let popular = JSON.parse(dataEl.textContent);\n"
-    "            dataEl.textContent = JSON.stringify(popular.filter(p => validTargets.has(p.db)));\n"
+    "        // Mark recent/popular genomes that don't have a liftOver from source as disabled\n"
+    "        function markInvalidTargets(items) {\n"
+    "            let sourceDb = '%s';\n"
+    "            return items.filter(function(item) {\n"
+    "                return (item.db || item.genome) !== sourceDb;\n"
+    "            }).map(function(item) {\n"
+    "                if (!validTargets.has(item.db || item.genome)) {\n"
+    "                    item.disabled = true;\n"
+    "                    item.disabledReason = 'No liftOver available from source assembly';\n"
+    "                }\n"
+    "                return item;\n"
+    "            });\n"
     "        }\n"
     "\n"
     "        // Custom onServerReply that processes results and filters to valid targets\n"
@@ -202,7 +209,7 @@ jsInlineF(
     "        }\n"
     "\n"
     "        let selectEle = document.getElementById('toGenomeLabel');\n"
-    "        initSpeciesAutoCompleteDropdown('%s', onGenomeSelect.bind(null, selectEle), null, null, processAndFilterResults, onSearchError);\n"
+    "        initSpeciesAutoCompleteDropdown('%s', onGenomeSelect.bind(null, selectEle), null, null, processAndFilterResults, onSearchError, markInvalidTargets);\n"
     "    });\n"
     "\n"
     "document.addEventListener('DOMContentLoaded', () => {\n"
@@ -233,7 +240,7 @@ jsInlineF(
     "    }\n"
     "});\n"
     , liftOver->fromDb
-    , searchBarId
+    , liftOver->fromDb
     , HGLFT_TOORG_VAR
     , HGLFT_TODB_VAR
     , searchBarId, searchBarId, searchBarId, searchBarId
