@@ -3774,20 +3774,125 @@ if (hgvsList)
 return foundIt;
 }
 
+boolean parseAndResolvePosition(char **inpPos, char *db, struct hgPositions *inpHgPos,
+        int *relStart, int *relEnd, boolean *relativeFlag, boolean *singleBaseSpec)
+/* If inpPos is a valid chromosome position string for db, fill out the associated
+ * hgPos, relative start and stop, and return TRUE. Otherwise return FALSE so our regular
+ * search code can deal with item name */
+{
+/* Allow any search term to end with a :Start-End range -- also support stuff
+ * pasted in from BED (chrom start end) or SQL query (chrom | start | end).
+ * If found, strip it off and remember the start and end. */
+char *originalTerm = cloneString(*inpPos);
+char *term = cloneString(*inpPos);
+regmatch_t substrs[7];
+boolean canonicalSpec = FALSE;
+boolean gbrowserSpec = FALSE;
+boolean lengthSpec = FALSE;
+boolean gnomadVarSpec = FALSE;
+boolean gnomadRangeSpec = FALSE;
+
+if ((canonicalSpec =
+        regexMatchSubstrNoCase(term, canonicalRangeExp, substrs, ArraySize(substrs))) ||
+    (gbrowserSpec =
+        regexMatchSubstrNoCase(term, gbrowserRangeExp, substrs, ArraySize(substrs))) ||
+    (lengthSpec =
+        regexMatchSubstrNoCase(term, lengthRangeExp, substrs, ArraySize(substrs))) ||
+    regexMatchSubstrNoCase(term, bedRangeExp, substrs, ArraySize(substrs)) ||
+    (*singleBaseSpec =
+        regexMatchSubstrNoCase(term, singleBaseExp, substrs, ArraySize(substrs))) ||
+    (gnomadVarSpec =
+        regexMatchSubstrNoCase(term, gnomadVarExp, substrs, ArraySize(substrs))) ||
+    (gnomadRangeSpec =
+        regexMatchSubstrNoCase(term, gnomadRangeExp, substrs, ArraySize(substrs))) ||
+    regexMatchSubstrNoCase(term, sqlRangeExp, substrs, ArraySize(substrs)))
+    {
+    if (gnomadVarSpec || gnomadRangeSpec)
+        {
+        /* Since we got a match, substrs[1] is the chrom/term, [4] is relStart,
+         * [5] is relEnd or an allele. ([0] is all.) */
+        term[substrs[1].rm_eo] = 0;
+        eraseTrailingSpaces(term);
+        term[substrs[4].rm_eo] = 0;
+        *relStart = atoi(term+substrs[4].rm_so);
+        term[substrs[5].rm_eo] = 0;
+        if (gnomadVarSpec)
+            *singleBaseSpec = TRUE; // relEnd = relStart, relStart -= 1
+        else
+            *relEnd = atoi(term+substrs[5].rm_so);
+        }
+    else
+        {
+        /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart,
+         * [3] is relEnd. ([0] is all.) */
+        term[substrs[1].rm_eo] = 0;
+        eraseTrailingSpaces(term);
+        term[substrs[2].rm_eo] = 0;
+        *relStart = atoi(stripCommas(term+substrs[2].rm_so));
+        term[substrs[3].rm_eo] = 0;
+        }
+    if (*singleBaseSpec)
+        {
+        *relEnd = *relStart;
+        (*relStart)--;
+        }
+    else if (!gnomadRangeSpec)
+        *relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
+    if (lengthSpec)
+        *relEnd += *relStart;
+    if (*relStart > *relEnd)
+        {
+        int tmp  = *relStart;
+        *relStart = *relEnd;
+        *relEnd   = tmp;
+        }
+    if (canonicalSpec || gbrowserSpec || lengthSpec)
+        (*relStart)--;
+    *relativeFlag = TRUE;
+    }
+
+// purposefully mangle the input term. We implicitly rely on this behavior of stripping
+// ranges off of search terms when the first part of the range does not match a
+// chromosome name
+*inpPos = term;
+
+if (hgOfficialChromName(db, term) != NULL)
+    {
+    char *chrom;
+    int start, end;
+
+    hgParseChromRange(db, term, &chrom, &start, &end);
+    // NOTE that if the above regexes catch the term, we clamp a wildly large range to
+    // the chromosome size. This is great for users inputting search coordinates, but
+    // maybe we should have a way to not force this clamp in the future.
+    if (*relativeFlag)
+        {
+        int chromSize = end;
+        end = start + *relEnd;
+        start = start + *relStart;
+        if (end > chromSize)
+            end = chromSize;
+        if (start < 0)
+            start = 0;
+        }
+    if (inpHgPos)
+        {
+        singlePos(inpHgPos, "Chromosome Range", NULL, "chromInfo", originalTerm,
+              "", chrom, start, end);
+        }
+    return TRUE;
+    }
+return FALSE;
+}
+
 struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm, boolean measureTiming, struct searchCategory *categories)
 /* Return container of tracks and positions (if any) that match term. */
 {
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
-regmatch_t substrs[7];
-boolean canonicalSpec = FALSE;
-boolean gbrowserSpec = FALSE;
-boolean lengthSpec = FALSE;
 boolean singleBaseSpec = FALSE;
-boolean gnomadVarSpec = FALSE;
-boolean gnomadRangeSpec = FALSE;
-boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
+boolean relativeFlag = FALSE;
 
 hgAppName = hgAppNameIn;
 
@@ -3814,30 +3919,22 @@ hgp->extraCgi = cloneString(extraCgi);
 if (singleSearch(db, term, limitResults, cart, hgp, measureTiming))
     return hgp;
 
+char *originalTerm = cloneString(term);
 if (categories != NULL)
     {
-    char *originalTerm = term;
-    if (hgOfficialChromName(db, term) != NULL) // this mangles the term
+    if (!parseAndResolvePosition(&term, db, hgp, &relStart, &relEnd, &relativeFlag, &singleBaseSpec))
         {
-        char *chrom;
-        int start, end;
-
-        hgParseChromRange(db, term, &chrom, &start, &end);
-        if (relativeFlag)
+        // Disable singleBaseSpec for any term that is not hgOfficialChromName
+        // because that mangles legitimate IDs that are [A-Z]:[0-9]+.
+        if (singleBaseSpec)
             {
-            int chromSize = end;
-            end = start + relEnd;
-            start = start + relStart;
-            if (end > chromSize)
-                end = chromSize;
-            if (start < 0)
-                start = 0;
+            singleBaseSpec = relativeFlag = FALSE;
+            term = cloneString(originalTerm); // restore original term
+            relStart = relEnd = 0;
             }
-        singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
-              "", chrom, start, end);
+        if (!matchesHgvs(cart, db, term, hgp, measureTiming))
+            userDefinedSearch(db, term, limitResults, cart, hgp, categories, multiTerm, measureTiming);
         }
-    else if (!matchesHgvs(cart, db, term, hgp, measureTiming))
-        userDefinedSearch(db, term, limitResults, cart, hgp, categories, multiTerm, measureTiming);
     slReverse(&hgp->tableList);
     if (multiTerm)
         collapseSamePos(hgp);
@@ -3852,161 +3949,80 @@ if (categories != NULL)
         return NULL;
     }
 
-/* Allow any search term to end with a :Start-End range -- also support stuff 
- * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
- * If found, strip it off and remember the start and end. */
-char *originalTerm = term;
-if ((canonicalSpec = 
-        regexMatchSubstrNoCase(term, canonicalRangeExp, substrs, ArraySize(substrs))) ||
-    (gbrowserSpec = 
-        regexMatchSubstrNoCase(term, gbrowserRangeExp, substrs, ArraySize(substrs))) ||
-    (lengthSpec = 
-        regexMatchSubstrNoCase(term, lengthRangeExp, substrs, ArraySize(substrs))) ||
-    regexMatchSubstrNoCase(term, bedRangeExp, substrs, ArraySize(substrs)) ||
-    (singleBaseSpec =
-	regexMatchSubstrNoCase(term, singleBaseExp, substrs, ArraySize(substrs))) ||
-    (gnomadVarSpec =
-	regexMatchSubstrNoCase(term, gnomadVarExp, substrs, ArraySize(substrs))) ||
-    (gnomadRangeSpec =
-	regexMatchSubstrNoCase(term, gnomadRangeExp, substrs, ArraySize(substrs))) ||
-    regexMatchSubstrNoCase(term, sqlRangeExp, substrs, ArraySize(substrs)))
+// NOTE: parseAndResolvePosition mangles the term on purpose
+if (!parseAndResolvePosition(&term, db, hgp, &relStart, &relEnd, &relativeFlag, &singleBaseSpec))
     {
-    term = cloneString(term);
-    if (gnomadVarSpec || gnomadRangeSpec)
-        {
-        /* Since we got a match, substrs[1] is the chrom/term, [4] is relStart,
-         * [5] is relEnd or an allele. ([0] is all.) */
-        term[substrs[1].rm_eo] = 0;
-        eraseTrailingSpaces(term);
-        term[substrs[4].rm_eo] = 0;
-        relStart = atoi(term+substrs[4].rm_so);
-        term[substrs[5].rm_eo] = 0;
-        if (gnomadVarSpec)
-            singleBaseSpec = TRUE; // relEnd = relStart, relStart -= 1
-        else
-            relEnd = atoi(term+substrs[5].rm_so);
-        }
-    else
-        {
-        /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart,
-         * [3] is relEnd. ([0] is all.) */
-        term[substrs[1].rm_eo] = 0;
-        eraseTrailingSpaces(term);
-        term[substrs[2].rm_eo] = 0;
-        relStart = atoi(stripCommas(term+substrs[2].rm_so));
-        term[substrs[3].rm_eo] = 0;
-        }
-    if (singleBaseSpec)
-        {
-        relEnd   = relStart;
-        relStart--;
-        }
-    else
-        relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
-    if (lengthSpec)
-        relEnd += relStart;
-    if (relStart > relEnd)
-        {
-        int tmp  = relStart;
-        relStart = relEnd;
-        relEnd   = tmp;
-        }
-    if (canonicalSpec || gbrowserSpec || lengthSpec)
-        relStart--;
-    relativeFlag = TRUE;
-    }
-term = cloneString(term); // because hgOfficialChromName mangles it
-
-if (hgOfficialChromName(db, term) != NULL) // this mangles the term
-    {
-    char *chrom;
-    int start, end;
-
-    hgParseChromRange(db, term, &chrom, &start, &end);
-    if (relativeFlag)
-	{
-	int chromSize = end;
-	end = start + relEnd;
-	start = start + relStart;
-	if (end > chromSize)
-	    end = chromSize;
-	if (start < 0)
-	    start = 0;
-	}
-    singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
-	      "", chrom, start, end);
-    }
-else if (!matchesHgvs(cart, db, term, hgp, measureTiming))
-    {
-    struct hgFindSpec *shortList = NULL, *longList = NULL;
-    struct hgFindSpec *hfs;
-    boolean done = FALSE;
-
     // Disable singleBaseSpec for any term that is not hgOfficialChromName
     // because that mangles legitimate IDs that are [A-Z]:[0-9]+.
     if (singleBaseSpec)
-	{
-	singleBaseSpec = relativeFlag = FALSE;
-	term = cloneString(originalTerm);  // restore original term
-	relStart = relEnd = 0;
-	}
-
-    if (!trackHubDatabase(db))
-	hgFindSpecGetAllSpecs(db, &shortList, &longList);
-    if ((cart == NULL) || (cartOptionalString(cart, "noShort") == NULL))
         {
-        hgp->shortCircuited = TRUE;
-        for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
-            {
-            if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
-                                multiTerm, measureTiming))
-                {
-                done = TRUE;
-                if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
-                    break;
-                }
-            }
+        singleBaseSpec = relativeFlag = FALSE;
+        term = cloneString(originalTerm); // restore original term
+        relStart = relEnd = 0;
         }
-    else
-        cartRemove(cart, "noShort");
-    if (! done)
-	{
-        hgp->shortCircuited = FALSE;
-	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
-	    {
-	    hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
-			    multiTerm, measureTiming);
-	    }
-	/* Lowe lab additions -- would like to replace these with specs, but 
-	 * will leave in for now. */
-	if (!trackHubDatabase(db))
-	    findTigrGenes(db, term, hgp);
-
-	trackHubFindPos(cart, db, term, hgp, measureTiming);
-	}
-    hgFindSpecFreeList(&shortList);
-    hgFindSpecFreeList(&longList);
-    if (cart != NULL)
+    if (!matchesHgvs(cart, db, term, hgp, measureTiming))
         {
-        if(hgpMatchNames == NULL)
-            hgpMatchNames = dyStringNew(256);
-        dyStringClear(hgpMatchNames);
-        int matchCount = 0;
-        for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
+        struct hgFindSpec *shortList = NULL, *longList = NULL;
+        struct hgFindSpec *hfs;
+        boolean done = FALSE;
+
+        if (!trackHubDatabase(db))
+            hgFindSpecGetAllSpecs(db, &shortList, &longList);
+        if ((cart == NULL) || (cartOptionalString(cart, "noShort") == NULL))
             {
-            struct hgPosTable *hpTable = NULL;
-            for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
+            hgp->shortCircuited = TRUE;
+            for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
                 {
-                struct hgPos *pos = NULL;
-                for(pos = hpTable->posList; pos != NULL; pos = pos->next)
+                if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
+                                    multiTerm, measureTiming))
                     {
-                    if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED && matchCount++ >= limitResults)
+                    done = TRUE;
+                    if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
                         break;
-                    dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
                     }
                 }
             }
-        cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
+        else
+            cartRemove(cart, "noShort");
+        if (! done)
+            {
+            hgp->shortCircuited = FALSE;
+            for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
+                {
+                hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
+                        multiTerm, measureTiming);
+                }
+            /* Lowe lab additions -- would like to replace these with specs, but
+             * will leave in for now. */
+            if (!trackHubDatabase(db))
+                findTigrGenes(db, term, hgp);
+
+            trackHubFindPos(cart, db, term, hgp, measureTiming);
+            }
+        hgFindSpecFreeList(&shortList);
+        hgFindSpecFreeList(&longList);
+        if (cart != NULL)
+            {
+            if(hgpMatchNames == NULL)
+                hgpMatchNames = dyStringNew(256);
+            dyStringClear(hgpMatchNames);
+            int matchCount = 0;
+            for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
+                {
+                struct hgPosTable *hpTable = NULL;
+                for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
+                    {
+                    struct hgPos *pos = NULL;
+                    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
+                        {
+                        if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED && matchCount++ >= limitResults)
+                            break;
+                        dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
+                        }
+                    }
+                }
+            cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
+            }
         }
     }
 slReverse(&hgp->tableList);

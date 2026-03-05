@@ -18,6 +18,9 @@ simpleTest: mkout
 	diff expected/$@.bigChain output/$@.bb.bed
 	bigBedToBed output/$@.link.bb output/$@.link.bb.bed
 	diff expected/$@.bigChainLink output/$@.link.bb.bed
+	bigChainToChain output/$@.bb output/$@.link.bb output/$@.test.chain
+	chainSort output/$@.test.chain output/$@.test.chain2
+	diff input/hg38.mm10.test.chain output/$@.test.chain2
 
 mkout:
 	@mkdir -p output

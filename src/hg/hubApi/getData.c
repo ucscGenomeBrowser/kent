@@ -28,6 +28,7 @@ for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->n
 	if (jsonOutputArrays)
 	    {
 	    jsonWriteListStart(jw, NULL);
+	    jsonWriteString(jw, NULL, chrom);
 	    jsonWriteNumber(jw, NULL, (long long)s);
 	    jsonWriteNumber(jw, NULL, (long long)e);
 	    jsonWriteDouble(jw, NULL, val);
@@ -36,6 +37,7 @@ for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->n
 	else
 	    {
 	    jsonWriteObjectStart(jw, NULL);
+	    jsonWriteString(jw, "chrom", chrom);
 	    jsonWriteNumber(jw, "start", (long long)s);
 	    jsonWriteNumber(jw, "end", (long long)e);
 	    jsonWriteDouble(jw, "value", val);
@@ -96,7 +98,7 @@ return itemCount;
 
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *track,
-    char *chrom, unsigned start, unsigned end)
+    char *chrom, unsigned start, unsigned end, struct jsonWrite *columnTypesJw)
 /* output the SQL table data for given track */
 {
 /* for MySQL select statements, name for 'chrom' 'start' 'end' to use
@@ -204,8 +206,8 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     if (tdb && isWiggleDataTable(tdb->type))
 	{
 	if (jsonOutputArrays || debug)
-	    wigColumnTypes(jw);
-	jsonWriteListStart(jw, chrom);
+	    wigColumnTypes(columnTypesJw, track);
+	jsonWriteListStart(jw, track);
         itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
@@ -227,8 +229,8 @@ else	/* fully specified chrom:start-end */
     if (tdb && isWiggleDataTable(tdb->type))
 	{
 	if (jsonOutputArrays || debug)
-	    wigColumnTypes(jw);
-	jsonWriteListStart(jw, chrom);
+	    wigColumnTypes(columnTypesJw, track);
+	jsonWriteListStart(jw, track);
         itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
@@ -262,8 +264,8 @@ int asColumnCount = slCount(columnEl);
 int columnCount = tableColumns(conn, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (jsonOutputArrays || debug)
     {
-    outputSchema(tdb, jw, columnNames, columnTypes, jsonTypes, hti,
-	columnCount, asColumnCount, columnEl);
+    outputSchema(tdb, columnTypesJw, columnNames, columnTypes, jsonTypes, hti,
+	columnCount, asColumnCount, columnEl, track);
     }
 
 unsigned itemsDone = 0;
@@ -289,8 +291,8 @@ if (isEmpty(chrom))
 	else
 	    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, ci->chrom);
 	if (tdb && isWiggleDataTable(tdb->type))
-            itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
-		start, end, itemsDone);
+            itemsDone += wigTableDataOutput(jw, db, splitSqlTable, ci->chrom,
+		0, ci->size, itemsDone);
 	else
 	    itemsDone += sqlQueryJsonOutput(conn, jw, query->string,
 		columnCount, columnNames, jsonTypes, itemsDone);
@@ -385,7 +387,6 @@ struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, start, end, lm
 if (NULL == ivList)
     return itemCount;
 
-jsonWriteListStart(jw, chrom);
 for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     {
     int s = max(iv->start, start);
@@ -394,6 +395,7 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     if (jsonOutputArrays)
 	{
 	jsonWriteListStart(jw, NULL);
+	jsonWriteString(jw, NULL, chrom);
 	jsonWriteNumber(jw, NULL, (long long)s);
 	jsonWriteNumber(jw, NULL, (long long)e);
 	jsonWriteDouble(jw, NULL, val);
@@ -402,6 +404,7 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     else
 	{
 	jsonWriteObjectStart(jw, NULL);
+	jsonWriteString(jw, "chrom", chrom);
 	jsonWriteNumber(jw, "start", (long long)s);
 	jsonWriteNumber(jw, "end", (long long)e);
 	jsonWriteDouble(jw, "value", val);
@@ -409,7 +412,6 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
 	}
     ++itemCount;
     }
-jsonWriteListEnd(jw);
 if (itemCount >= maxItemsOutput)
     reachedMaxItems = TRUE;
 return itemCount;
@@ -470,6 +472,13 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "hubUrl", hubUrl);
 jsonWriteString(jw, "genome", genome);
 
+struct jsonWrite *columnTypesJw = NULL;
+if (jsonOutputArrays || debug)
+    {
+    columnTypesJw = jsonWriteNew();
+    jsonWriteObjectStart(columnTypesJw, "columnTypes");
+    }
+
 // allow optional comma sep list of tracks
 char *tracks[100];
 int numTracks = chopByChar(trackArg, ',', tracks, sizeof(tracks));
@@ -525,7 +534,7 @@ for (i = 0; i < numTracks; i++)
         apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/getData/track' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
         struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
         if (jsonOutputArrays || debug)
-            bigColumnTypes(jw, fiList, as);
+            bigColumnTypes(columnTypesJw, fiList, as, track);
 
         jsonWriteListStart(jw, track);
         unsigned itemsDone = 0;
@@ -549,12 +558,18 @@ for (i = 0; i < numTracks; i++)
     else if (startsWith("bigWig", thisTrack->type))
         {
         if (jsonOutputArrays || debug)
-        wigColumnTypes(jw);
-        jsonWriteObjectStart(jw, track);
+        wigColumnTypes(columnTypesJw, track);
+        jsonWriteListStart(jw, track);
         bigWigData(jw, bbi, chrom, uStart, uEnd);
-        jsonWriteObjectEnd(jw);
+        jsonWriteListEnd(jw);
         }
     bbiFileClose(&bbi);
+    }
+if (jsonOutputArrays || debug)
+    {
+    jsonWriteObjectEnd(columnTypesJw);
+    jsonWriteAppend(jw, NULL, columnTypesJw);
+    jsonWriteFree(&columnTypesJw);
     }
 apiFinishOutput(0, NULL, jw);
 }	/*	static void getHubTrackData(char *hubUrl)	*/
@@ -608,6 +623,12 @@ char *tracks[100];
 int numTracks = chopByChar(trackArg, ',', tracks, sizeof(tracks));
 int i = 0;
 struct hash *trackHash = hashNew(0); // let hub tracks work
+struct jsonWrite *columnTypesJw = NULL;
+if (jsonOutputArrays || debug)
+    {
+    columnTypesJw = jsonWriteNew();
+    jsonWriteObjectStart(columnTypesJw, "columnTypes");
+    }
 for (i = 0; i < numTracks; i++)
     {
     char *track = cloneString(tracks[i]);
@@ -734,12 +755,12 @@ for (i = 0; i < numTracks; i++)
                 uEnd = chromSize;
             jsonWriteNumber(jw, "chromSize", (long long)chromSize);
             }
-    else
+        else
             {
             chromList = bbiChromList(bbi);
             jsonWriteNumber(jw, "chromCount", (long long)slCount(chromList));
             }
-         jsonWriteString(jw, "bigDataUrl", bigDataUrl);
+        jsonWriteString(jw, "bigDataUrl", bigDataUrl);
         }
 
     /* when start, end given, show them */
@@ -756,7 +777,7 @@ for (i = 0; i < numTracks; i++)
             apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome='%s' for endpoint '/getData/track'", bigDataUrl, track, db);
         struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
         if (jsonOutputArrays || debug)
-            bigColumnTypes(jw, fiList, as);
+            bigColumnTypes(columnTypesJw, fiList, as, track);
 
         jsonWriteListStart(jw, track);
         unsigned itemsDone = 0;
@@ -780,15 +801,21 @@ for (i = 0; i < numTracks; i++)
     else if (thisTrack && startsWith("bigWig", thisTrack->type))
         {
         if (jsonOutputArrays || debug)
-            wigColumnTypes(jw);
+            wigColumnTypes(columnTypesJw, track);
 
-        jsonWriteObjectStart(jw, track);
+        jsonWriteListStart(jw, track);
         bigWigData(jw, bbi, chrom, uStart, uEnd);
-        jsonWriteObjectEnd(jw);
+        jsonWriteListEnd(jw);
         bbiFileClose(&bbi);
         }
     else
-        tableDataOutput(db, thisTrack, conn, jw, track, chrom, uStart, uEnd);
+        tableDataOutput(db, thisTrack, conn, jw, track, chrom, uStart, uEnd, columnTypesJw);
+    }
+if (jsonOutputArrays || debug)
+    {
+    jsonWriteObjectEnd(columnTypesJw);
+    jsonWriteAppend(jw, NULL, columnTypesJw);
+    jsonWriteFree(&columnTypesJw);  
     }
 
 apiFinishOutput(0, NULL, jw);

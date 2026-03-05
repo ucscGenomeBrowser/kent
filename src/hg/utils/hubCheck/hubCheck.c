@@ -19,6 +19,7 @@
 #include "vcf.h"
 #include "bedTabix.h"
 #include "knetUdc.h"
+#include "hgFind.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -671,7 +672,7 @@ if (errCatchStart(errCatch))
 
         if (membership == NULL)
             {
-            errAbort("missing 'subgroups' setting for subtrack %s. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'", subtrackName);
+            errAbort("missing 'subGroups' setting for subtrack %s. Add a 'subGroups' line declaring this subtrack's group membership, e.g. 'subGroups view=signal'", subtrackName);
             }
 
         // if a sortOrder is defined, make sure every subtrack has that membership
@@ -774,9 +775,9 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
     // Containers should not have a bigDataUrl setting
     if (trackDbLocalSetting(tdb, "bigDataUrl"))
         {
-        errAbort("Track \"%s\" is a container (compositeTrack/superTrack/view) but also has "
-            "a 'bigDataUrl'. Container tracks organize subtracks and should not have data files. "
-            "Remove 'bigDataUrl' from this stanza, or remove the container declaration if this is "
+        errAbort("Track \"%s\" is a parent track (compositeTrack/superTrack/view/container) but also has "
+            "a 'bigDataUrl'. Parent tracks organize subtracks and should not have data files. "
+            "Remove 'bigDataUrl' from this stanza, or remove the parent declaration if this is "
             "a data track.", tdb->track);
         }
 
@@ -1021,9 +1022,9 @@ if (errCatchStart(errCatch))
         if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
             {
             errAbort("track \"%s\" uses 'autoScale %s', but individual bigWig tracks only accept "
-                    "'autoScale on' or 'autoScale off'. To use 'autoScale %s', move that setting to the "
-                    "parent composite stanza instead.",
-                    trackHubSkipHubName(tdb->track), autoScaleSetting, autoScaleSetting);
+                    "'autoScale on' or 'autoScale off'. If you're trying to set 'autoScale group', "
+                    "that setting belongs in the parent composite stanza instead.",
+                    trackHubSkipHubName(tdb->track), autoScaleSetting);
             }
         }
     }
@@ -1082,6 +1083,19 @@ if (errCatchStart(errCatch))
         char *twoBit = genome->twoBitPath;
         if (!extFileExists(twoBit))
             warn("Error: '%s' twoBitPath does not exist or is not accessible: '%s'", genome->name, twoBit);
+        else
+            {
+            // verify that the defaultPos references an actual chromosome and valid range for that chromosome
+            char *inpPos = cloneString(genome->defaultPos);
+            int relStart = 0, relEnd = 0;
+            boolean relativeFlag = FALSE, singleBaseSpec = FALSE;
+            if (!parseAndResolvePosition(&inpPos, genome->name, NULL, &relStart, &relEnd, &relativeFlag, &singleBaseSpec))
+                {
+                // again use a warn so we can continue checking other genome stanza settings that do not
+                // rely on the 2bit file
+                warn("Error: '%s' defaultPos '%s' does not reference a valid chromosome in the 2bit file: '%s'", trackHubSkipHubName(genome->name), genome->defaultPos, twoBit);
+                }
+            }
 
         // groups and htmlPath are optional settings, again only warn if they are malformed
         char *groupsFile = genome->groups;
@@ -1093,6 +1107,7 @@ if (errCatchStart(errCatch))
             warn("warning: missing htmlPath setting for assembly hub '%s'", genome->name);
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
+
         }
     boolean foundFirstGenome = FALSE;
     tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);
@@ -1176,8 +1191,8 @@ return (options->genome == NULL) ||
 
 int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check a track data hub for integrity. Put errors in dyString.
- *      return 0 if hub has no errors, 1 otherwise
- *      if options->checkTracks is TRUE, check remote files of individual tracks
+ *      return 0 if hub has no errors, or a non-zero value if errors were found
+ *      if options->checkFiles is TRUE, check remote files of individual tracks
  */
 {
 struct errCatch *errCatch = errCatchNew();

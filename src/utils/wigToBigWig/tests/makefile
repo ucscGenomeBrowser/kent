@@ -1,5 +1,6 @@
 kentSrc = ../../..
 A = ${DESTBINDIR}/wigToBigWig
+bigWigToWig = ${DESTBINDIR}/bigWigToWig
 include ../../../inc/common.mk
 
 # this can not be run in parallel due to each test removing and reusing output directories
@@ -47,6 +48,22 @@ test1: outputDir
 
 	# Do the diff
 	diff output expected
+	
+	${bigWigToWig} tmp/testFixed.bigWig output/testFixed.wig 
+	${bigWigToWig} tmp/testVar.bigWig output/testVar.wig
+	${bigWigToWig} tmp/testBedGraph.bigWig output/testBedGraph.wig
+
+	# note that the text dumps have many small differences that make
+	# it difficult to simply compare input with output, things like 
+	# rounding of floating differences, one has comments the other lacks,
+	# having rows in different order by chromsome name.
+	# re-generate big wigs from dumped text
+	${A} output/testFixed.wig input/test.sizes tmp/testFixed.bigWig2
+	${A} output/testVar.wig input/test.sizes tmp/testVar.bigWig2
+	${A} output/testBedGraph.wig input/test.sizes tmp/testBedGraph.bigWig2
+	diff tmp/testFixed.bigWig tmp/testFixed.bigWig2
+	diff tmp/testVar.bigWig tmp/testVar.bigWig2
+	diff tmp/testBedGraph.bigWig tmp/testBedGraph.bigWig2
 
 	# clean up temporary directories
 	rm -r output tmp

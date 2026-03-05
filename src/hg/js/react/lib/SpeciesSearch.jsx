@@ -45,6 +45,27 @@ var SpeciesSearch = React.createClass({
         var sel = document.getElementById("genomeLabel");
         var boundSel = this.onSpeciesSelect.bind(null, sel);
         initSpeciesAutoCompleteDropdown(inputNode.id, boundSel, null, null, null, this.onSearchError);
+
+        // Wire up toggle button for the autocomplete dropdown
+        var toggle = this.refs.toggle && this.refs.toggle.getDOMNode();
+        if (toggle) {
+            var inputId = inputNode.id;
+            var wasOpen = false;
+            toggle.addEventListener('mousedown', function() {
+                var $inp = $('[id=\'' + inputId + '\']');
+                wasOpen = $inp.autocompleteCat('widget').is(':visible');
+            });
+            toggle.addEventListener('click', function() {
+                var $inp = $('[id=\'' + inputId + '\']');
+                if (wasOpen) {
+                    $inp.autocompleteCat('close');
+                } else {
+                    $inp.val('');
+                    $inp.autocompleteCat('search', '');
+                    $inp.focus();
+                }
+            });
+        }
     },
 
     render: function() {
@@ -56,6 +77,10 @@ var SpeciesSearch = React.createClass({
               <div className="searchBarAndButton">
                   <TextInput id='speciesSearchInput' placeholder="Search for any species, genome or assembly name"
                              size={45} ref='input' update={this.noOpUpdate} />
+                  <button ref='toggle' type='button' className='genomeSearchToggle'
+                          tabIndex='-1' aria-label='Show popular assemblies'
+                          title='Show recent and popular assemblies'
+                          dangerouslySetInnerHTML={{__html: '&#9660;'}} />
                   <div className="searchCell">
                     Current Genome:
                     <span id="genomeLabel">{this.props.org + " (" + this.props.db + ")"}</span>

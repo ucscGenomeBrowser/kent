@@ -1637,8 +1637,10 @@ var hgGateway = (function() {
         // Detect GenArk: must have hubUrl, and either "UCSC Curated" category (GenArk hubs
         // under /gbdb) or a GCA_/GCF_ genome pattern.  The hubUrl check distinguishes GenArk
         // from native databases which also use "UCSC Curated" category.
+        // Recent genome items store the original category in originalCategory.
+        var cat = item.originalCategory || item.category;
         var isGenArk = item.hubUrl &&
-                       ((typeof item.category !== "undefined" && item.category.startsWith("UCSC Curated")) ||
+                       ((typeof cat !== "undefined" && cat.startsWith("UCSC Curated")) ||
                         (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
 
         if (isGenArk) {
@@ -1725,12 +1727,21 @@ var hgGateway = (function() {
             position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
         }
         var $form;
+        var hubUrlField = '';
+        if (uiState.hubUrl) {
+            var fullHubUrl = uiState.hubUrl;
+            if (!fullHubUrl.startsWith("http")) {
+                fullHubUrl = window.location.origin + fullHubUrl;
+            }
+            hubUrlField = '<input type=hidden name="hubUrl" value="' + fullHubUrl + '">';
+        }
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
                   '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
                   '<input type=hidden name="org" value="' + uiState.genome + '">' +
                   '<input type=hidden name="db" value="' + uiState.db + '">' +
                   '<input type=hidden name="position" value="' + position + '">' +
                   '<input type=hidden name="pix" value="' + pix + '">' +
+                  hubUrlField +
                   '</form>');
         // helper functions for checking whether a plain chrom name was searched for
         function onSuccess(jqXHR, textStatus) {
@@ -1863,7 +1874,8 @@ var hgGateway = (function() {
             // The indexOf check handles both the new "Assembly Hub" category from handleSetDb
             // and legacy localStorage entries from addHubsToList or older code.
             var shortCategory;
-            if (item.category && item.category.indexOf('Assembly Hub') >= 0) {
+            var catForDisplay = item.originalCategory || item.category;
+            if (catForDisplay && catForDisplay.indexOf('Assembly Hub') >= 0) {
                 shortCategory = 'External';
             } else {
                 shortCategory = 'UCSC Curated';

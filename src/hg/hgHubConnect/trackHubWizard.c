@@ -24,6 +24,7 @@
 #include "trackHub.h"
 #include "htmshell.h"
 #include <limits.h>
+#include "errCatch.h"
 
 void removeOneFile(char *userName, char *cgiFileName, char *fullPath, char *db, char *fileType)
 /* Remove one single file for userName */
@@ -192,6 +193,44 @@ void getHubSpaceUIState(struct cartJson *cj, struct hash *paramHash)
 outUiDataForUser(cj->jw);
 }
 
+void cjRevokeApiKey(struct cartJson *cj, struct hash *paramHash)
+/* Wrapper for cartJson to call lib function revokeApiKey, removes any api keys for the user */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *userName = getUserName();
+    hubSpaceRevokeApiKey(userName);
+    }
+errCatchEnd(errCatch);
+if (!(errCatch->gotError))
+    jsonWriteString(cj->jw, "revoke", "true");
+else
+    jsonWriteStringf(cj->jw, "error", "revokeApiKey() error: '%s'", errCatch->message->string);
+errCatchFree(&errCatch);
+}
+
+void cjGenerateApiKey(struct cartJson *cj, struct hash *paramHash)
+/* Wrapper for cartJson to call lib function generateApiKey, makes a random (but not crypto-secure api key for use of hubtools to upload to hubspace, or for skipping cloudflare */
+{
+struct errCatch *errCatch = errCatchNew();
+char *apiKey = NULL;
+
+if (errCatchStart(errCatch))
+    {
+    char *userName = getUserName();
+    apiKey = hubSpaceGenerateApiKey(userName);
+    }
+
+errCatchEnd(errCatch);
+if (apiKey)
+    jsonWriteString(cj->jw, "apiKey", apiKey);
+else if (errCatch->gotError)
+    jsonWriteStringf(cj->jw, "error", "generateApiKey() error: '%s'", errCatch->message->string);
+errCatchFree(&errCatch);
+}
+
+
 void doTrackHubWizard(char *database)
 /* Offer an upload form so users can upload all their hub files */
 {
@@ -222,35 +261,4 @@ jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl())
 jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
-}
-
-void revokeApiKey(struct cartJson *cj, struct hash *paramHash)
-/* Remove any api keys for the user */
-{
-char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
-char *userName = getUserName();
-struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("delete from %s where userName='%s'", tableName, userName);
-sqlUpdate(conn, dyStringCannibalize(&query));
-hDisconnectCentral(&conn);
-jsonWriteString(cj->jw, "revoke", "true");
-}
-
-void generateApiKey(struct cartJson *cj, struct hash *paramHash)
-/* Make a random (but not crypto-secure) api key for use of hubtools to upload to hubspace */
-{
-char *userName = getUserName();
-if (!userName)
-    {
-    jsonWriteString(cj->jw, "error", "generateApiKey: not logged in");
-    return;
-    }
-char *apiKey = makeRandomKey(256); // just needs some arbitrary length
-// save this key to the database for this user, the 'on duplicate' part automatically revokes old keys
-struct sqlConnection *conn = hConnectCentral();
-char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
-struct dyString *query = sqlDyStringCreate("insert into %s values ('%s', '%s') on duplicate key update apiKey='%s'", tableName, userName, apiKey, apiKey);
-sqlUpdate(conn, dyStringCannibalize(&query));
-jsonWriteString(cj->jw, "apiKey", apiKey);
-hDisconnectCentral(&conn);
 }

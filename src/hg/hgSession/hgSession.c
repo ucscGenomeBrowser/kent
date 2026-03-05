@@ -320,18 +320,19 @@ jsInlineF(
         "}\n"
         , jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
 
+printf("<style>#sessionTable_filter { float:left !important; margin-left:20px; }</style>\n");
 printf("<H3>My Sessions</H3>\n");
-printf("<div style=\"max-width:1024px\">");
 printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
 printf("<thead><tr>");
-printf("<TH><TD><B>Session name (click to load)</B></TD>"
-        "<TD><B>Created on</B></TD><TD><b>View count</b></TD>"
-        "<td><b>Assembly</b></td>"
-       "<TD align=center><B>View/edit&nbsp;<BR>details&nbsp;</B></TD>"
-       "<TD align=center><B>Delete this&nbsp;<BR>session&nbsp;</B></TD>"
-       "<TD align=center><B>Share with&nbsp;<BR>others?&nbsp;</B></TD>"
-       "<td align-center><b>Post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</b></td>"
-       "<TD align=center><B>Send to<BR>mail</B></TD></TH>",
+printf("<th></th>"
+       "<th style=\"white-space:nowrap;text-align:left\">Session name (click to load)</th>"
+       "<th style=\"text-align:left\">Created on</th><th style=\"text-align:left\">View count</th>"
+       "<th style=\"text-align:left\">Assembly</th>"
+       "<th style=\"text-align:left\">View/edit&nbsp;<BR>details&nbsp;</th>"
+       "<th style=\"text-align:left\">Delete this&nbsp;<BR>session&nbsp;</th>"
+       "<th style=\"text-align:left\">Share with&nbsp;<BR>others?&nbsp;</th>"
+       "<th style=\"text-align:left\">Post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</th>"
+       "<th style=\"text-align:left\">Send to<BR>mail</th>",
        cartSidUrlString(cart));
 printf("</tr></thead>");
 printf("<tbody>\n");
@@ -456,7 +457,6 @@ if (!foundAny)
 printf("</tbody>\n");
 
 printf("</TABLE>\n");
-printf("</div>\n");
 printf("<P></P>\n");
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);

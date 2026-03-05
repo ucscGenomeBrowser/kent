@@ -1,6 +1,6 @@
 Found 9 problems:
-track "badTrack1" uses 'autoScale group', but individual bigWig tracks only accept 'autoScale on' or 'autoScale off'. To use 'autoScale group', move that setting to the parent composite stanza instead.
-track "badTrack2" uses 'autoScale group', but individual bigWig tracks only accept 'autoScale on' or 'autoScale off'. To use 'autoScale group', move that setting to the parent composite stanza instead.
+track "badTrack1" uses 'autoScale group', but individual bigWig tracks only accept 'autoScale on' or 'autoScale off'. If you're trying to set 'autoScale group', that setting belongs in the parent composite stanza instead.
+track "badTrack2" uses 'autoScale group', but individual bigWig tracks only accept 'autoScale on' or 'autoScale off'. If you're trying to set 'autoScale group', that setting belongs in the parent composite stanza instead.
 warning: missing description page for track. Add 'html badTrack1.html' line to the 'badTrack1' track stanza. 
 warning: missing description page for track. Add 'html badTrack2.html' line to the 'badTrack2' track stanza. 
 warning: missing description page for track. Add 'html compBad.html' line to the 'compBad' track stanza. 

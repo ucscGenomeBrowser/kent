@@ -454,7 +454,7 @@ static boolean doCache = FALSE;
 
 if (!checkedCache)
     {
-    trackDbCacheDir = cfgOption("cacheTrackDbDir");
+    trackDbCacheDir = cfgOptionDefault("cacheTrackDbDir", "/dev/shm/trackDbCache");
     if (isNotEmpty(trackDbCacheDir))
         {
         makeDirsOnPath(trackDbCacheDir);

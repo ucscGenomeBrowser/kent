@@ -518,8 +518,11 @@ char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
 char *sqlTableUpdate(struct sqlConnection *conn, char *table);
 /* Get last update time for table as an SQL string */
 
+time_t sqlTableMaybeUpdateTime(struct sqlConnection *conn, char *table);
+/* Get last update time for table (in Unix terms). Return 0 if table doesn't exist. */
+
 time_t sqlTableUpdateTime(struct sqlConnection *conn, char *table);
-/* Get last update time for table (in Unix terms). */
+/* Get last update time for table (in Unix terms). ErrAbort if table doesn't exist. */
 
 char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table);
 /* Get primary key if any for table, return NULL if none. */

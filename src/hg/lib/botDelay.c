@@ -159,7 +159,7 @@ if (useNew)
             // The connection is closed right away, so if the bottleneck leads to a long sleep, it won't tie up
             // the MariaDB server. The cost of opening a connection is less than 1msec.
             struct sqlConnection *conn = hConnectCentralNoCache();
-            char *userName = userNameForApiKey(conn, apiKey);
+            char *userName = hubSpaceUserNameForApiKey(conn, apiKey);
             sqlDisconnect(&conn);
 
             if (userName)

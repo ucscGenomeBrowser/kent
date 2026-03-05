@@ -147,7 +147,7 @@ optionInit(&argc, argv, options);
 clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
-clRange =optionMultiVal("range", clRange);
+clRange = optionMultiVal("range", clRange);
 
 clBed = optionVal("bed", clBed);
 clPos = optionVal("positions", clPos);

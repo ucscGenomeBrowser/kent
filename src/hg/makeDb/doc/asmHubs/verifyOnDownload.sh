@@ -66,7 +66,7 @@ do
 
   case $genome in
      GC*)
-  trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1" \
+  trackCount=`curl -L "https://$host/list/tracks?genome=$genome;trackLeavesOnly=1;hubUrl=$hubSource/$dirPath/hub.txt" \
       2> /dev/null | python -mjson.tool | egrep ": {$" \
        | tr -d '"' | sed -e 's/^ \+//; s/ {//;' | xargs echo | wc -w`
   if [ "${trackCount}" -gt "${minTrackCount}" ]; then

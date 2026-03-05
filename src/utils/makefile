@@ -170,6 +170,7 @@ USER_APP_SCRIPTS = \
 	tdbRename \
 	tdbSort \
 	webSync \
+	genePredCompare \
 	chromToUcsc \
 	bigHeat \
 	bigGuessDb

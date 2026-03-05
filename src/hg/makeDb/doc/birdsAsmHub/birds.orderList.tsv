@@ -5,8 +5,9 @@ GCA_026170545.1_bMelFor1.0.p	acorn woodpecker (bairdi primary hap 2022)
 GCF_026170545.1_bMelFor1.0.p_v2	acorn woodpecker (bairdi primary hap 2022)
 GCF_000699105.1_ASM69910v1	Adelie penguin
 GCF_000698965.1_ASM69896v1	African ostrich
-GCF_040807025.1_bStrCam1.hap1	African ostrich (bStrCam1hap1 2024)
-GCA_040807015.1_bStrCam1.hap2	African ostrich (bStrCam1hap2 2024)
+GCA_000698965.1_ASM69896v1	African ostrich (BGI_N308 2014)
+GCF_040807025.1_bStrCam1.hap1	African ostrich (hap1  2024)
+GCA_040807015.1_bStrCam1.hap2	African ostrich (hap2 2024)
 GCF_000691975.1_ASM69197v1	American crow
 GCA_009819805.1_bPhoRub2.alt	American flamingo (alternate hap 2019)
 GCA_009819775.1_bPhoRub2.pri	American flamingo (primary hap 2019)

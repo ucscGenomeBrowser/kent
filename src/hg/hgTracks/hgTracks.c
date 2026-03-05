@@ -2321,8 +2321,10 @@ struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    char *hlArr[4096];
-    int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
+    int hlCount = chopByChar(highlightDef, '|', NULL, 0);
+    char **hlArr = AllocN(char *, hlCount);
+    char *hlStringCopy = cloneString(highlightDef);
+    chopByChar(hlStringCopy, '|', hlArr, hlCount);
     int i;
     for (i=0; i<hlCount; i++)
         {
@@ -2373,6 +2375,8 @@ if(highlightDef)
         }
 
     slReverse(&hlList);
+    freeMem(hlStringCopy);
+    freeMem(hlArr);
     }
 
 return hlList;
@@ -3828,7 +3832,7 @@ if (knownCanonical) // filter out alt splicing variants
     }
 // knownToTag basic hash
 struct hash *ktHash = NULL;
-if (knownToTag) // filter out all but Basic
+if (knownToTag) // filter out all but Basic or Mane
     {
     // load up hash of canonical transcriptIds
     query = sqlDyStringCreate("select name from knownToTag where value='%s'", knownToTag);
@@ -3918,25 +3922,29 @@ while (1)
 		isEOF = TRUE;
 		}
 	    }
-	if (gene && !showNoncoding && (gene->cdsStart == gene->cdsEnd))
+	if (gene && (!hgFindMatches || !hashLookup(hgFindMatches, gene->name)))
+	    // whitelist anything in search hash
 	    {
-	    //skip non-coding gene
-	    genePredFree(&gene);
-	    }
-	if (gene && knownCanonical && !hashLookup(kcHash, gene->name))
-	    {
-	    //skip gene not in knownCanonical hash
-	    genePredFree(&gene);
-	    }
-	if (gene && knownToTag && !hashLookup(ktHash, gene->name))
-	    {
-	    // skip gene not in knownToTag Basic hash
-	    genePredFree(&gene);
-	    }
-	if (gene && !showPseudo && hashLookup(kpHash, gene->name))
-	    {
-	    //skip gene in knownPseudo hash
-	    genePredFree(&gene);
+	    if (gene && !showNoncoding && (gene->cdsStart == gene->cdsEnd))
+		{
+		//skip non-coding gene
+		genePredFree(&gene);
+		}
+	    if (gene && knownCanonical && !hashLookup(kcHash, gene->name))
+		{
+		//skip gene not in knownCanonical hash
+		genePredFree(&gene);
+		}
+	    if (gene && knownToTag && !hashLookup(ktHash, gene->name))
+		{
+		// skip gene not in knownToTag Basic hash
+		genePredFree(&gene);
+		}
+	    if (gene && !showPseudo && hashLookup(kpHash, gene->name))
+		{
+		//skip gene in knownPseudo hash
+		genePredFree(&gene);
+		}
 	    }
 
 	boolean transferIt = FALSE;
@@ -9954,7 +9962,7 @@ if (!hideControls)
                         "id='%s'"
                     " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
-                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data → Track Hubs to find it again or re-entering the hub URL.\")) {"
+                    "if (window.confirm(\"Disconnect this hub?\\n\\nReconnecting later will require navigating to My Data -> Track Hubs to find it again or re-entering the hub URL.\")) {"
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;"
                     "}",
@@ -10068,7 +10076,7 @@ if (!hideControls)
         hashFree(&superHash);
 	endControlGrid(&cg);
 
-        jsOnEventBySelector(".hgtButtonHideGroup", "click", "onHideAllGroupButtonClick(event)");
+        jsOnEventBySelector("click", ".hgtButtonHideGroup", "onHideAllGroupButtonClick(event)");
 	}
 
     if (measureTiming)

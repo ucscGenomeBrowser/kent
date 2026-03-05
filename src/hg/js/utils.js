@@ -4380,7 +4380,7 @@ function parseUrl(url) {
     serverName = temp[2]; // "genome-test.gi.ucsc.edu"
     pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
     cgi = pathInfo.startsWith("cgi-bin") ? pathInfo.split('/')[1] : "";
-    let i, s = queryString.split('&');
+    let i, s = queryString ? queryString.split('&') : []; // Fix for when there is no query string in the URL
     for (i = 0; i < s.length; i++) {
         argVal = s[i].split('=');
         queryArgs[argVal[0]] = argVal[1];
@@ -4482,10 +4482,46 @@ function getRecentGenomes() {
         if (recentObj.results[genome]) {
             let item = Object.assign({}, recentObj.results[genome]);
             // Preserve original category for setDbFromAutocomplete to detect GenArk/hubs
-            // but also provide a display category for UI
+            item.originalCategory = item.category;
+            // Set category for autocomplete grouping header
+            item.category = "Recent";
             item.displayCategory = "Recent";
             results.push(item);
         }
+    }
+    return results;
+}
+
+function getPopularGenomes($inputEl) {
+    // Parse the popular assemblies JSON embedded in the page by printGenomeSearchBar().
+    // Returns an array of autocomplete-formatted items with category "Popular".
+    // Items already present in recents are excluded to avoid duplicates.
+    let inputId = $inputEl.attr('id');
+    let dataEl = document.getElementById(inputId + 'PopularData');
+    if (!dataEl) return [];
+    let popularData;
+    try {
+        popularData = JSON.parse(dataEl.textContent);
+    } catch (e) {
+        return [];
+    }
+    // Build a set of db names already in recents to avoid duplicates
+    let recentDbs = new Set();
+    let recents = getRecentGenomes();
+    for (let r of recents) {
+        recentDbs.add(r.db || r.genome);
+    }
+    let results = [];
+    for (let p of popularData) {
+        if (recentDbs.has(p.db)) continue;
+        results.push({
+            genome: p.db,
+            db: p.db,
+            label: p.label,
+            commonName: p.commonName,
+            category: "Popular",
+            displayCategory: "Popular"
+        });
     }
     return results;
 }
@@ -4509,6 +4545,30 @@ function removeRecentGenomesByHubUrl(hubUrl) {
     window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
 }
 
+
+function recentGenomeHref(res) {
+    // Build an hgTracks URL for a recent genome entry. GenArk assemblies need
+    // db=, genome=, and a fully qualified hubUrl= so that fixUpDb() and
+    // hubConnectLoadHubs() in cartNew() can connect the hub. UCSC native
+    // databases just need db=.
+    let db = res.db || res.genome;
+    let url = new URL("../cgi-bin/hgTracks", window.location.href);
+    url.searchParams.set("hgsid", getHgsid());
+    url.searchParams.set("db", db);
+    url.searchParams.set("position", "lastDbPos");
+    if (res.hubUrl) {
+        // The findGenome API returns a relative hubUrl (e.g. GCA/.../hub.txt)
+        // while hgGateway stores it already prefixed (e.g. /gbdb/genark/GCA/.../hub.txt).
+        let hubUrl = res.hubUrl;
+        if (!hubUrl.startsWith("/gbdb/genark/")) {
+            hubUrl = "/gbdb/genark/" + hubUrl;
+        }
+        url.searchParams.set("genome", db);
+        url.searchParams.set("hubUrl", window.location.origin + hubUrl);
+    }
+    return url.toString();
+}
+
 function addRecentGenomesToMenuBar() {
     // Retrieve recent genome selections from localStorage and add them to the "Genomes" menu heading
     // Tries not add duplicate genomes
@@ -4521,11 +4581,8 @@ function addRecentGenomesToMenuBar() {
         if (recentObj.results[genome]) {
             let item = document.createElement("li");
             let link = document.createElement("a");
-            // TODO: these links need to work if the result (ie: genark) does not have a db
-            let res = recentObj.results[genome];
-            dbOrGenome = 'hubUrl' in res ? res.hubName + "_" + res.db : res.db;
-            link.href = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + dbOrGenome + "&position=lastDbPos";
-            link.textContent = res.label;
+            link.href = recentGenomeHref(recentObj.results[genome]);
+            link.textContent = recentObj.results[genome].label;
             item.appendChild(link);
             results.push(item);
         }
@@ -4764,11 +4821,11 @@ function processFindGenome(result, term) {
             Object.keys(val).forEach((vkey) => {
                 d[vkey] = val[vkey];
             });
+            // Set db to the key (database name or accession) so the autocomplete
+            // select handler can save it to recent genomes
+            d.db = key;
             if (val.hubUrl !== null) {
                 d.category = "UCSC GenArk - bulk annotated assemblies from NCBI GenBank / Refseq";
-                // For GenArk items, ensure db is set to the accession (key) for consistent
-                // identification in recent genomes storage (avoids duplicate entries)
-                d.db = key;
             } else {
                 d.category = "UCSC Genome Browser assemblies - annotation tracks curated by UCSC";
             }
@@ -4895,7 +4952,8 @@ function setupGenomeSearchBar(config) {
         // Standard validation - all CGIs check this
         if (item.disabled || !item.genome) return;
         // Standard label update - all CGIs do this
-        labelElement.innerHTML = item.label;
+        if (labelElement)
+            labelElement.innerHTML = item.label;
         // Call user's custom callback for CGI-specific logic
         if (typeof config.onSelect === 'function') {
             config.onSelect(item, labelElement);
@@ -4918,5 +4976,30 @@ function setupGenomeSearchBar(config) {
                 $("[id='" + config.inputId + "']").autocompleteCat("search", val);
             });
         }
+
+        // Dropdown toggle button: opens/closes the autocomplete with recent+popular
+        let toggle = document.getElementById(config.inputId + "Toggle");
+        if (toggle) {
+            let wasOpen = false;
+            toggle.addEventListener("mousedown", () => {
+                let $input = $("[id='" + config.inputId + "']");
+                wasOpen = $input.autocompleteCat("widget").is(":visible");
+            });
+            toggle.addEventListener("click", () => {
+                let $input = $("[id='" + config.inputId + "']");
+                if (wasOpen) {
+                    $input.autocompleteCat("close");
+                } else {
+                    $input.val("");
+                    $input.autocompleteCat("search", "");
+                    $input.focus();
+                }
+            });
+        }
     });
 }
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+

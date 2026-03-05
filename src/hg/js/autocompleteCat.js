@@ -139,18 +139,21 @@ var autocompleteCat = (function() {
                 // See http://api.jqueryui.com/autocomplete/#option-source
                 // Note: 'this' is the widget instance
 
-                // Handle recent genomes for species search bars
+                // Handle recent + popular genomes for species search bars
                 if (options.showRecentGenomes && request.term.length < 2) {
                     let recent = getRecentGenomes();
+                    let popular = getPopularGenomes($el);
                     if (request.term.length === 0) {
-                        // On focus with empty input, show all recent genomes
-                        if (recent.length > 0) {
-                            acCallback(recent);
+                        // On focus with empty input, show recent + popular genomes
+                        let combined = recent.concat(popular);
+                        if (combined.length > 0) {
+                            acCallback(combined);
                             return;
                         }
                     } else {
-                        // On typing 1 char, filter recent genomes
-                        let matching = recent.filter(item =>
+                        // On typing 1 char, filter recent + popular genomes
+                        let all = recent.concat(popular);
+                        let matching = all.filter(item =>
                             item.label.toLowerCase().includes(request.term.toLowerCase()) ||
                             item.genome.toLowerCase().includes(request.term.toLowerCase())
                         );

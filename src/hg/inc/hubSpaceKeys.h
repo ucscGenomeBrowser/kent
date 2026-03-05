@@ -62,8 +62,20 @@ void hubSpaceKeysOutput(struct hubSpaceKeys *el, FILE *f, char sep, char lastSep
 
 #define AUTH_TABLE_DEFAULT "apiKeys"
 
-char *userNameForApiKey(struct sqlConnection *conn, char *apiKey);
+char *hubSpaceGetApiKey(char *userName);
+/* Grab the already created api key if it exists */
+
+char *hubSpaceUserNameForApiKey(struct sqlConnection *conn, char *apiKey);
 /* Return userName associated with apiKey else NULL. If conn is NULL, will create a connection and free it. */
+
+void hubSpaceRevokeApiKey(char *userName);
+/* Remove any api keys for userName. errAborts if userName is NULL.
+ * Run in an errCatch to handle errors. */
+
+char *hubSpaceGenerateApiKey(char *userName);
+/* Make a random (but not crypto-secure) api key for userName, for use of hubtools to upload
+ * to hubspace or for bypassing cloudflare. errAborts if userName is NULL.
+ * Run in an errCatch to handle errors. */
 
 #endif /* HUBSPACEKEYS_H */
 
