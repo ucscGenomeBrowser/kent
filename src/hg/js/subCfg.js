@@ -426,7 +426,7 @@ var subCfg = { // subtrack config module.
         var children = subCfg.visChildrenFind(viewObj);
         $(children).each(function (i) {
             if ($(this).hasClass('fauxInput')) {
-                $(this).text(visText);
+                $(this).text(capitalizeFirstLetter(visText));
             } else {
                 $(this).attr('selectedIndex',limitedVis);
                 subCfg.clearChange(this);
@@ -469,7 +469,7 @@ var subCfg = { // subtrack config module.
 
                     // apply the visibility to the subtrack
                     if ($(this).hasClass('fauxInput')) {
-                        $(this).text(visText);
+                        $(this).text(capitalizeFirstLetter(visText));
                     } else {
                         $(this).attr('selectedIndex',parentVis);
                         subCfg.clearChange(this);
@@ -668,7 +668,7 @@ var subCfg = { // subtrack config module.
         var view = classList[classList.length - 1]; // This relies on view being the last class!!!
         var selectHtml  = "<SELECT name='"+subtrack+"' class='normalText subVisDD "+view+"'";
             selectHtml += " style='width:70px;'>";
-        var selected = $(obj).text();
+        var selected = $(obj).text().toLowerCase();
         var visibilities = ['hide','dense','squish','pack','full'];
         if (subCfg.canPack === false)
             visibilities = ['hide','dense','full'];
