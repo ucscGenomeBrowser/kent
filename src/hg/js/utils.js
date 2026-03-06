@@ -4461,6 +4461,10 @@ function addRecentGenome(item) {
         if (!cleanItem.hubUrl && existingItem.hubUrl) {
             cleanItem.hubUrl = existingItem.hubUrl;
         }
+        // Preserve hubName if not present in new item
+        if (!cleanItem.hubName && existingItem.hubName) {
+            cleanItem.hubName = existingItem.hubName;
+        }
     }
 
     // Add to front
@@ -4553,6 +4557,18 @@ function recentGenomeHref(res) {
     let db = res.db || res.genome;
     let url = new URL("../cgi-bin/hgTracks", window.location.href);
     url.searchParams.set("hgsid", getHgsid());
+    if (res.hubUrl) {
+        if (res.category && res.category.startsWith("Assembly Hub")) {
+            url.searchParams.set("hubUrl", res.hubUrl);
+            if (res.hubName)
+                db = res.hubName + "_" + db;
+        } else if (!res.category) {
+            // in practice this shouldn't happen, but just in case:
+            let msg = "recentGenomeHref: item has hubUrl but no category: " + JSON.stringify(res);
+            console.warn(msg);
+            writeToApacheLog(msg);
+        }
+    }
     url.searchParams.set("db", db);
     url.searchParams.set("position", "lastDbPos");
     return url.toString();

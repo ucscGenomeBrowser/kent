@@ -1805,23 +1805,28 @@ if (db && cgiOptionalString("db"))
         char *safeDescription = jsonStringEscape(trackHubSkipHubName(dbInfo->description));
         struct dyString *jsCall = dyStringNew(512);
         dyStringPrintf(jsCall,
-            "addRecentGenome({db:'%s', genome:'%s', label:'%s - %s (%s)', commonName:'%s'",
+            "addRecentGenome({db:\"%s\", genome:\"%s\", label:\"%s - %s (%s)\", commonName:\"%s\"",
             bareDb, bareDb, safeOrganism, safeDescription, bareDb, safeOrganism);
         if (dbInfo->taxId > 0)
-            dyStringPrintf(jsCall, ", taxId:%d", dbInfo->taxId);
+            dyStringPrintf(jsCall, ", taxId: %d", dbInfo->taxId);
         // For hub/GenArk assemblies, include hubUrl and category so hgGateway can route correctly
         struct trackHubGenome *hubGenome = trackHubDatabase(db) ? trackHubGetGenome(db) : NULL;
         if (hubGenome && hubGenome->trackHub)
             {
             char *safeHubUrl = jsonStringEscape(hubGenome->trackHub->url);
-            dyStringPrintf(jsCall, ", hubUrl:'%s'", safeHubUrl);
+            dyStringPrintf(jsCall, ", hubUrl:\"%s\"", safeHubUrl);
             if (startsWith("/gbdb", hubGenome->trackHub->url))
-                dyStringAppend(jsCall, ", category:'UCSC Curated'");
+                dyStringAppend(jsCall, ", category:\"UCSC Curated\"");
             else
-                dyStringAppend(jsCall, ", category:'Assembly Hub'");
+                {
+                dyStringAppend(jsCall, ", category:\"Assembly Hub\"");
+                char *hubName = trackHubGetHubName(db);
+                if (hubName)
+                    dyStringPrintf(jsCall, ", hubName: \"%s\"", jsonStringEscape(hubName));
+                }
             }
         else
-            dyStringAppend(jsCall, ", category:'UCSC Curated'");
+            dyStringAppend(jsCall, ", category:\"UCSC Curated\"");
         dyStringAppend(jsCall, "});\n");
         jsInline(dyStringContents(jsCall));
         dyStringFree(&jsCall);
