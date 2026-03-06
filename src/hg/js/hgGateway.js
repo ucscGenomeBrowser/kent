@@ -1492,7 +1492,7 @@ var hgGateway = (function() {
                 }
                 var recentItem = {
                     db: dbForRecents,
-                    genome: uiState.genome,
+                    genome: dbForRecents,
                     label: label,
                     taxId: uiState.taxId
                 };
@@ -1538,7 +1538,7 @@ var hgGateway = (function() {
                 }
                 addRecentGenome({
                     db: dbForRecents,
-                    genome: uiState.genome,
+                    genome: dbForRecents,
                     label: label,
                     taxId: uiState.taxId,
                     category: "UCSC Curated"

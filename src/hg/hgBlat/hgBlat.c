@@ -2105,7 +2105,9 @@ jsInlineF(
     "setupGenomeSearchBar({\n"
     "    inputId: '%s',\n"
     "    onSelect: function(item) {\n"
-    "        document.mainForm.db.value = item.genome;\n"
+    "        let db = dbFromRecentItem(item);\n"
+    "        document.mainForm.db.value = db;\n"
+    "        document.mainForm.submit();\n"
     "    }\n"
     "});\n"
     , searchBarId

@@ -210,6 +210,9 @@ var autocompleteCat = (function() {
                 // Taxa-only selections (like "Human" without a specific db) are handled by the
                 // CGI's response handler after the actual db is determined.
                 if (options.showRecentGenomes && ui.item.db && !ui.item.disabled) {
+                    if (ui.item.originalCategory) {
+                        ui.item.category = ui.item.originalCategory;
+                    }
                     addRecentGenome(ui.item);
                 }
                 if (typeof opts.onSelect === 'function') {
