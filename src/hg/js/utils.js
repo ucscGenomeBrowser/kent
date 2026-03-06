@@ -4596,12 +4596,21 @@ function addRecentGenomesToMenuBar() {
     // construct the current list of labels
     const labelList = [];
     document.querySelectorAll("#tools1 > ul > li > a").forEach( (a) => {
-        labelList.push(a.textContent);
+        if (a.textContent.includes("/")) {
+            // try to extract just the 'hg38' or 'mm10' part
+            let splitLabel = a.textContent.split("/");
+            if (splitLabel[1].length > 0)
+                labelList.push(splitLabel[1]);
+        } else {
+            labelList.push(a.textContent);
+        }
     });
 
     // filter our list of recents against the list of "Genomes"
     let finalResult = results.filter( (result) => {
-        return !labelList.includes(result.firstChild.textContent);
+        return !labelList.some( (l) => {
+            return result.firstChild.textContent.includes(l);
+        });
     });
 
     // Only add separators and items if we have recents to add

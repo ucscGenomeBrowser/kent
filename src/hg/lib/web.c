@@ -1802,11 +1802,10 @@ if (db && cgiOptionalString("db"))
         {
         char *bareDb = jsonStringEscape(trackHubSkipHubName(db));
         char *safeOrganism = jsonStringEscape(trackHubSkipHubName(dbInfo->organism));
-        char *safeDescription = jsonStringEscape(trackHubSkipHubName(dbInfo->description));
         struct dyString *jsCall = dyStringNew(512);
         dyStringPrintf(jsCall,
-            "addRecentGenome({db:\"%s\", genome:\"%s\", label:\"%s - %s (%s)\", commonName:\"%s\"",
-            bareDb, bareDb, safeOrganism, safeDescription, bareDb, safeOrganism);
+            "addRecentGenome({db:\"%s\", genome:\"%s\", label:\"%s (%s)\", commonName:\"%s\"",
+            bareDb, bareDb, safeOrganism, bareDb, safeOrganism);
         if (dbInfo->taxId > 0)
             dyStringPrintf(jsCall, ", taxId: %d", dbInfo->taxId);
         // For hub/GenArk assemblies, include hubUrl and category so hgGateway can route correctly
