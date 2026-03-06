@@ -4549,19 +4549,23 @@ function removeRecentGenomesByHubUrl(hubUrl) {
     window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
 }
 
+function dbFromRecentItem(item) {
+    let db = item.db || item.genome;
+    if (item.hubName && item.category && item.category.startsWith('Assembly Hub'))
+        db = item.hubName + "_" + db;
+    return db;
+}
 
 function recentGenomeHref(res) {
     // Build an hgTracks URL for a recent genome entry. GenArk assemblies are
     // handled transparently by fixUpDb() in cartNew() when given just db= with
     // the accession. UCSC native databases also just need db=.
-    let db = res.db || res.genome;
+    let db = dbFromRecentItem(res);
     let url = new URL("../cgi-bin/hgTracks", window.location.href);
     url.searchParams.set("hgsid", getHgsid());
     if (res.hubUrl) {
         if (res.category && res.category.startsWith("Assembly Hub")) {
             url.searchParams.set("hubUrl", res.hubUrl);
-            if (res.hubName)
-                db = res.hubName + "_" + db;
         } else if (!res.category) {
             // in practice this shouldn't happen, but just in case:
             let msg = "recentGenomeHref: item has hubUrl but no category: " + JSON.stringify(res);
