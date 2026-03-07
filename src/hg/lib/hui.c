@@ -1618,7 +1618,7 @@ if (!hashLookup(settings, INDEL_DOUBLE_INSERT))
 if (!hashLookup(settings, INDEL_QUERY_INSERT))
     hashAdd(settings, INDEL_QUERY_INSERT, cloneString("on"));
 if (!hashLookup(settings, INDEL_POLY_A))
-    hashAdd(settings, INDEL_POLY_A, cloneString("on"));
+    hashAdd(settings, INDEL_POLY_A, cloneString("off"));
 if (!hashLookup(settings, "showDiffBasesMaxZoom"))
     hashAdd(settings, "showDiffBasesMaxZoom", cloneString(BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM));
 }
