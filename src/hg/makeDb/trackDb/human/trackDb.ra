@@ -5636,4 +5636,5 @@ priority 3
 pennantIcon New red ../goldenPath/newsarch.html#NNNN "Released NNNN"
 html dnaMethylation.html
 
-include humanMethylationAtlas.ra
+include methylationAtlas.ra
+include methylationAtlasSignals.ra
