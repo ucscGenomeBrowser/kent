@@ -4213,6 +4213,23 @@ function addMouseover(ele1, text = null, ele2 = null) {
         if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize !== null ? window.browserTextSize : 12;}
         mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
         document.body.append(mouseoverContainer);
+
+        // Tooltip mouseenter/mouseleave
+        mouseoverContainer.addEventListener("mouseenter", function() {
+            mouseoverContainer._isMouseOver = true;
+            // Clear any hide timeout when entering tooltip
+            if (mouseoverContainer._hideTimeout) {
+                clearTimeout(mouseoverContainer._hideTimeout);
+                mouseoverContainer._hideTimeout = null;
+            }
+        });
+        mouseoverContainer.addEventListener("mouseleave", function() {
+            mouseoverContainer._isMouseOver = false;
+            // Hide after a short delay to allow for quick mouse movements
+            mouseoverContainer._hideTimeout = setTimeout(function() {
+                hideMouseoverText(mouseoverContainer);
+            }, 100);
+        });
     }
 
     if (ele1) {
@@ -4255,28 +4272,13 @@ function addMouseover(ele1, text = null, ele2 = null) {
         ele1.addEventListener("mouseenter", ele1._mouseenterHandler);
         ele1.addEventListener("mouseleave", ele1._mouseleaveHandler);
     }
-
-    // Tooltip mouseenter/mouseleave
-    mouseoverContainer.addEventListener("mouseenter", function() {
-        mouseoverContainer._isMouseOver = true;
-        // Clear any hide timeout when entering tooltip
-        if (mouseoverContainer._hideTimeout) {
-            clearTimeout(mouseoverContainer._hideTimeout);
-            mouseoverContainer._hideTimeout = null;
-        }
-    });
-    mouseoverContainer.addEventListener("mouseleave", function() {
-        mouseoverContainer._isMouseOver = false;
-        // Hide after a short delay to allow for quick mouse movements
-        mouseoverContainer._hideTimeout = setTimeout(function() {
-            hideMouseoverText(mouseoverContainer);
-        }, 100);
-    });
 }
 
 function showTooltipForElement(ele, ev) {
     // Show the tooltip for the given element
     if (suppressTooltips) {return;}
+    // wiggle mouseovers have special code, don't use these tooltips for those:
+    if (typeof mouseOver !== "undefined" && mouseOver.visible) {return;}
     let text = ele.getAttribute("mouseoverText");
     if (!text) return;
     mouseoverContainer.replaceChildren();
@@ -4288,7 +4290,6 @@ function showTooltipForElement(ele, ev) {
     mouseoverContainer.classList.add("isShown");
     mouseoverContainer.style.opacity = "1";
     mouseoverContainer.style.visibility = "visible";
-    mouseoverContainer.setAttribute("origItemMouseoverId", ele.getAttribute("mouseoverid"));
 }
 
 function hideMouseoverText(ele) {
@@ -4328,11 +4329,22 @@ function convertTitleTagsToMouseovers() {
 
     /* Mouseover should clear if you leave the document window altogether */
     document.body.addEventListener("mouseleave", (ev) => {
-        hideMouseoverText(mouseoverContainer);
+        if (mouseoverContainer) {
+            hideMouseoverText(mouseoverContainer);
+        }
+    });
+
+    /* Mouseover should clear on scroll */
+    document.addEventListener("scroll", (ev) => {
+        if (mouseoverContainer) {
+            hideMouseoverText(mouseoverContainer);
+        }
     });
 
     function hideTooltips() {
-        hideMouseoverText(mouseoverContainer);
+        if (mouseoverContainer) {
+            hideMouseoverText(mouseoverContainer);
+        }
     }
 
     /* make the mouseovers go away if we are in an input */
@@ -4363,7 +4375,9 @@ function convertTitleTagsToMouseovers() {
     /* Make the ESC key hide tooltips */
     document.body.addEventListener("keyup", (ev) => {
         if (ev.keyCode === 27) {
-            hideMouseoverText(mouseoverContainer);
+            if (mouseoverContainer) {
+                hideMouseoverText(mouseoverContainer);
+            }
         }
     });
 }
