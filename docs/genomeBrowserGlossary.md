@@ -43,7 +43,9 @@ assemblies.
 
 **Chromosome Coordinates**: Genomic positions specified as chromosome name and
 base position (e.g., `chr7:155,799,529-155,812,871`). UCSC uses zero-based,
-half-open coordinates in its databases.
+half-open coordinates in its databases. See [this blog
+post](https://genome-blog.gi.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems)
+for details.
 
 **Scaffold / Contig**: Intermediate sequence units used in genome assembly.
 A contig is a contiguous stretch of assembled sequence with no gaps, while a
@@ -57,10 +59,15 @@ position) appear as `chr1_gl000191_random`.
 **Haplotype / Alternate Sequence**: Alternative versions of specific genomic
 regions representing common structural variation between individuals. In the
 Genome Browser, these appear as sequences with `_hap` or `_alt` suffixes
-(e.g., `chr6_cox_hap2`, `chr1_KI270762v1_alt`). Alternate sequences can be
-viewed in chromosomal context using
+(e.g., `chr6_cox_hap2`, `chr1_KI270762v1_alt`). See our [FAQ](/FAQ/FAQdownloads.html#downloadAlt)
+for more details. Alternate sequences can be viewed in chromosomal context using
 [Multi-Region mode](/goldenPath/help/multiRegionHelp.html).
 
+**Fix Sequences (Fix Patches)**: Patch sequences correct errors or improve
+the reference assembly without changing the coordinate system.
+In the UCSC Genome Browser, these sequences are identified
+by appending `_fix` to their names (e.g., `chr2_KN538362v1_fix`).
+See our [FAQ]( /FAQ/FAQdownloads.html#downloadFix) for more details.
 
 ### Popular Genome Assemblies
 
@@ -98,7 +105,9 @@ mRNA/EST alignments.
 
 **[Table Browser](/cgi-bin/hgTables)**: A web interface for querying,
 filtering, and downloading data from the underlying MySQL databases. Allows
-intersection of data tables and export in multiple formats.
+intersection of data tables and export in multiple formats. See
+[below](#table-browser) for more related terms, or our
+[documentation](/goldenPath/help/hgTablesHelp.html).
 
 **[LiftOver](/cgi-bin/hgLiftOver)**: A tool for converting genomic coordinates
 between different genome assemblies (e.g., hg19 to hg38). Requires chain files
@@ -129,12 +138,13 @@ activates the drag-and-select zoom feature.
 **Chromosome Ideogram**: A graphical representation of the entire chromosome
 shown above the browser graphic (for assemblies with cytological banding data).
 A red box indicates the currently viewed region's location on the chromosome.
+Can zoom to regions by dragging-and-selecting a region in the ideogram.
 
 **Scale Bar**: A reference bar in the center of the browser graphic showing the
 current viewing scale in bases, kilobases, or megabases.
 
-**Track Label (Long Label)**: The descriptive text displayed at the left edge
-of each track in the browser graphic (e.g., "GENCODE V41 Comprehensive
+**Track Label (Long Label)**: The descriptive text displayed above
+each track in the browser graphic (e.g., "GENCODE V41 Comprehensive
 Transcript Annotation").
 
 **Short Label**: The abbreviated track name shown in the track controls section
@@ -161,13 +171,13 @@ to navigate to specific locations.
 (`1.5x`, `3x`, `10x`, `base`) or out (`1.5x`, `3x`, `10x`, `100x`) on the
 current view.
 
-**Move/Pan Buttons**: Arrow buttons for shifting the view left or right along
+**Move Buttons**: Arrow buttons for shifting the view left or right along
 the chromosome while maintaining the current zoom level.
 
 **Reverse Button**: Flips the browser display to show the negative strand (3'
 to 5') instead of the default forward strand (5' to 3').
 
-**Next/Prev Item Navigation**: Gray double-headed arrows that appear at the ends
+**Next / Prev Item Navigation**: Gray double-headed arrows that appear at the ends
 of track items (when enabled in configuration) allowing you to jump to the next or
 previous feature in that track.
 
@@ -238,7 +248,8 @@ help align features across tracks. Can be toggled on/off in configuration.
 
 **Reset All User Settings**: Under top navigation menu "Genome Browser", clears all customizations
 including track visibility, custom tracks, and hubs, returning the browser
-to its original default state.
+to its original default state. Useful when browser configuration seems to be stuck
+in a broken state.
 
 ### Views, Output, and Export
 
@@ -266,12 +277,6 @@ can be configured for different display modes.
 **Track Group**: A set of related tracks grouped together under the main track
 image, e.g. "Mapping and Sequencing" or "Comparative Genomics".
 
-**Transcript / Isoform**: A transcript is a single RNA molecule produced from
-a gene. Many genes produce multiple transcripts (isoforms) through
-alternative splicing, alternative promoters, or alternative polyadenylation.
-In the browser, each isoform is drawn as a separate line within a gene
-track, which is why a single gene may appear as multiple stacked items.
-
 **Strand (+ / -)**: The orientation of a genomic feature relative to the
 reference sequence. The positive (+) strand reads 5' to 3' left to right;
 the negative (-) strand reads 3' to 5'. In gene tracks, chevrons (arrows)
@@ -286,17 +291,20 @@ varies by track type.
 mode that shows non-contiguous genomic regions side by side. Options include
 exon-only view (hiding introns), gene-only view (hiding intergenic regions),
 and custom regions defined by a BED file. Also supports viewing alternate
-haplotype sequences in chromosomal context. Accessible from the View menu.
+haplotype sequences in chromosomal context. Accessible from the View menu
+or button next to position box.
 
 **[Track Collection Builder](/cgi-bin/hgCollection)**: A tool for combining
 multiple wiggle-type tracks (bigWig, bedGraph) from native browser data,
 custom tracks, or track hubs into a single configurable composite. Supports
-overlay methods including transparent, stacked, add, and subtract.
+overlay methods including transparent, stacked, add, and subtract. Accessible
+from the My Data menu.
 
 **Filtering**: Track-level configuration that limits the displayed items to
 those matching specified criteria such as score thresholds, name patterns, or
 field values. Filter settings are available on many track settings pages and
-persist across sessions.
+persist across sessions. Click the minibutton or "Configure" from the
+right-click menu to see available filter options for a specific track.
 
 ### Display Modes
 
@@ -444,6 +452,12 @@ Ensembl project, available for many species.
 among other sources with extensive metadata and external database links. Now retired
 and replaced by GENCODE genes. 
 
+**Transcript / Isoform**: A transcript is a single RNA molecule produced from
+a gene. Many genes produce multiple transcripts (isoforms) through
+alternative splicing, alternative promoters, or alternative polyadenylation.
+In the browser, each isoform is drawn as a separate line within a gene
+track, which is why a single gene may appear as multiple stacked items.
+
 **Exon**: A coding or untranslated region of a gene that is retained in the
 mature mRNA after splicing. Displayed as thick boxes in gene tracks.
 
@@ -590,4 +604,8 @@ Genome Browser tables and bigBed files.
 **hubCheck**: A command-line utility for validating track hub configuration files.
 Available from our
 [download server](https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads).
+See the [hubCheck
+documentation](/goldenPath/help/hgTrackHubHelp.html#Compatibility) and related
+[blog post](https://genome-blog.gi.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/).
+
 
