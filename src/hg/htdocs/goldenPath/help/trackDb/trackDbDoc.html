@@ -144,6 +144,7 @@ used as a ready reference.</P>
         <UL>
             <LI><A HREF="#subGroups">Subgroups</A></LI>
             <LI><A HREF="#view">Views</A></LI>
+            <LI><A HREF="#faceted_composite">Faceted Composites</A></LI>
         </UL></LI>
         <LI><A HREF="#aggregate">Aggregate or Overlay Tracks: multiWig</A></LI>
     </UL></LI>
@@ -502,6 +503,9 @@ are described below along with the settings specific to their types.</P>
             <code>spectrum on</code><BR>
             <code>scoreMax &lt;integer&gt;</code><BR>
             <code>scoreMin &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="style"><A name="style"></A><IMG class='toggle detail'>
+        <div class="format"><code>style &lt;heatmap&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"></A><IMG class='toggle detail'>
         <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
@@ -1962,6 +1966,41 @@ hierarchical containers:
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="view_example"><IMG class='toggle detail'>
         <div class="format"><B>Example of a Composite track with Views:</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="faceted_composite"></A>
+<TABLE class="settingsTable" id="Faceted_Composite_Settings">
+<THEAD><TR><TD><DIV ID="faceted_composite_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Faceted composite track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="faceted"><IMG class='toggle detail'>
+        <div class="format"><code>compositeTrack faceted</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="metaDataUrl">
+        <A name="metaDataUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>metaDataUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="primaryKey">
+        <A name="metaDataUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>primaryKey &lt;field&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxCheckBoxes"><IMG class='toggle detail'>
+        <div class="format"><code>maxCheckBoxes &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dataTypes">
+        <A name="dataTypes"></A><IMG class='toggle detail'>
+        <div class="format"><code>dataTypes &lt;name1|"table title" name2|"table title" ...&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="faceted_example1">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a faceted composite track containing different track types:</B></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="faceted_example2">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a faceted composite track containing different track samples and data types:</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
