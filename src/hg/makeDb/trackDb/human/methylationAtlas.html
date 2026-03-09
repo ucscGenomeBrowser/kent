@@ -14,13 +14,18 @@ cell-type-specific methylation patterns.
 	  using a fragment-level analysis, retaining regions where at least 85% of sequenced DNA
 	  fragments covering four or more CpGs are unmethylated.</li><br>
   <li><b>Putative enhancers from unmethylated regions</b> track displays a genome-wide catalogue of
-	  putative transcriptional enhancers for each of the 39 cell types, derived from regions
-	  where at least 85% of sequenced DNA fragments are unmethylated and that overlap H3K27ac
-	  but not H3K4me3 ChIP-seq peaks, distinguishing distal enhancer elements from active
-	  promoters.</li><br>
+	  putative transcriptional enhancers derived from regions where at least 85% of sequenced
+	  DNA fragments are unmethylated, and that overlap H3K27ac but not H3K4me3 ChIP-seq peaks,
+	  distinguishing distal enhancer elements from active promoters. This track covers 32 of
+	  the 39 cell types, as H3K27ac ChIP-seq data were unavailable for Adipocytes, Bone
+	  Osteoblasts, Erythrocyte Progenitors, Fallopian Epithelium, Gallbladder, Ovary Epithelium,
+	  and Smooth Muscle. </li><br>
   <li><b>Top 250 unmethylated regions specific to each cell type</b> track displays the top 250
 	  genomic regions most specifically unmethylated in each of the 39 cell types, identified
-	  using a one-versus-all comparison approach.</li>
+	  using a one-versus-all comparison approach. Some regions are shared across closely related
+	  cell types (for example, Neuron:Oligodend or Colon-Ep:Gastric-Ep:Small-Int-Ep),
+	  indicating they are unmethylated across those cell types but methylated in all others in
+	  the atlas.</li>
 </ul>
 <p>
 Unsupervised clustering of these methylomes recapitulates key elements of tissue ontogeny and
@@ -76,6 +81,17 @@ Tracks are colored by tissue/cell type category as follows:
 <tr><td style="background-color:rgb(188,143,143);width:30px;">&nbsp;</td><td>Bone Osteoblasts</td></tr>
 <tr><td style="background-color:rgb(0,206,209);width:30px;">&nbsp;</td><td>Head Neck Epithelium</td></tr>
 </table>
+
+<p>
+Items in these tracks can be filtered by:
+</p>
+<ul>
+  <li><b>Cell/Tissue Type</b> - The cell or tissue type associated with each region.
+  Filter values include the 39 cell types for the <b>All Unmethylated Regions</b> track,
+  32 cell types for the <b>Putative Enhancers</b> track, and 39 cell types plus combined
+  cell type groups for the <b>Top 250 Unmethylated Regions</b> track. The default is no
+  filtering.</li>
+</ul>
 
 <h2>Methods</h2>
 
