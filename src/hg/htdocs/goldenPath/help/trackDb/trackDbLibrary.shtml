@@ -6947,9 +6947,12 @@ display custom genome assemblies in the Genome Browser.</p>
     <pre>   email contactEmail@institution.edu</pre>
 </DIV>
 
-<DIV class="hubGenome"><span class="types all"></span>
+<DIV class="genome"><span class="types all"></span>
 <div class="format"><code>genome &lt;str&gt;</code></div>
-    <P>For hubs on native assemblies, use the UCSC database name (e.g. hg38).</P>
+    <P>For hubs on native assemblies, use the UCSC database name (e.g. hg38).
+    Genome assemblies in our <a href="https://hgdownload.gi.ucsc.edu/hubs"
+    target="_blank">GenArk Archive</a> can be referenced using their
+    GCA_NNN or GCA_NNN identifier (e.g. GCF_000891275.1).</P>
     <p>For custom assemblies, create your own name. This will appear on title pages
     in the Genome Browser.</p>
     <P><B>Example:</B></P>
