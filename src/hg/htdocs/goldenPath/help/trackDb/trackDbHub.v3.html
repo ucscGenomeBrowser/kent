@@ -57,12 +57,15 @@
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
 <p>
 This page describes all of the settings one might use in creating a track or assembly hub.
+Hubs display your own data in the Genome Browser by hosting your files on a web
+server and connecting them with a simple text configuration file, giving you
+more control and permanence than custom tracks.
 This initial section touches on the files and settings needed in creating
 a hub before providing a listing of settings separated by track type.</p>
 
 <p>
 For those new to creating hubs: Our <a href="/docs/hubs/hubBasics.html"
-target"_blank">Hub Basics</a> page provides an introduction to creating hubs.</p>
+target"_blank">Hub Basics</a> page provides a simple introduction to creating hubs.</p>
 
 <p>
 For returning readers: We keep a <a href="changes.html">list of changes</a>
@@ -86,12 +89,19 @@ hub, genome, and track configuration settings into a single file with
 <h3 id="genomes_txt">Defining your hub's genomes</h3>
 <p>
 A genomes.txt is only necessary if you are <b>NOT</b> using the <code>useOneFile</code> setting
-as described <a href="#useOneFile">below</a>. If your hub contains tracks for more than one
+as described <a href="#useOneFile">below</a>. When using <code>useOneFile</code>, one only needs
+to include the <code><a href="#genome">genome</a></code> line. This line will reference
+a UCSC assembly name (e.g. hg38) or a GenBank assembly available through our
+<a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk archive</a>
+beginning with GCF or GCA (e.g. GCF_000891275.1).
+
+<p>
+If your hub contains tracks for more than one
 genome, you will need to define a <a target="_blank"
 href="../hgTrackHubHelp.html#genomes.txt"><code>genomes.txt</code></a>. A full listing of
 genomes.txt settings, including those needed for an <a
 href="#assembly_hubs">assembly hub</a>, settings can be found in the <a
-href="#assembly">Assembly hub "genome" settings</a> section below.
+href="#assembly">Assembly hub "genome" settings</a> section below.</p>
 
 <h3 id="useOneFile">Use <b><code>useOneFile on</code></b> for hubs with only one genome</h3>
 <p>
@@ -148,10 +158,38 @@ For some configurable features, like <a href="#filter">filters</a>, an additiona
 period or plus may be needed (<code>bigBed 5 .</code>) or (<code>bigBed 9 +</code>).
 </P>
 
-<P>While there are over 100 settings (providing a high level of flexibility for track
-display) defined in this document and supported at UCSC, only the above five
-are <font class="level-required">required</font>
-to define a track. The other support levels are:
+<p>
+Running hubCheck on your <code>hub.txt</code> file identifies errors in settings, file
+paths, and formatting that could prevent your hub from loading correctly. Download hubCheck from the <a
+href="https://hgdownload.soe.ucsc.edu/admin/exe/">utilities download page</a> and
+see the <a href="/goldenPath/help/hgTrackHubHelp.html#Compatibility">hubCheck
+documentation</a> and related
+<a href="https://genome-blog.gi.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
+target="_blank">blog post</a>
+for more information on validating hubs.</p>
+
+
+<h3 id="includes">Using trackDb include statements</h3>
+<p>
+Hubs also support the use of <a href="../hgTrackHubHelp.html#Includes">include
+statements</a>, allowing one to insert a file containing a set of trackDb
+stanzas into a primary trackDb. Use this when you have the same track across
+several assemblies, or several large, complex tracks.
+
+<h3 id="assembly_hubs">Assembly Hubs</h3>
+<p>
+Assembly hubs can display novel genome assemblies and annotations in the UCSC
+Genome Browser. Note: Many genome assemblies available in GenBank are also available in our
+<a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk archive</a>.
+However, if your genome is not available in GenBank, you can make a custom assembly hub.
+To create an assembly hub, refer to our
+<a href="../assemblyHubUserGuide.html" target="_blank">Assembly Hub User Guide</a> or our <a
+href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
+
+<h3 id="includes">Page Contents</h3>
+
+<P>The remainder of this document is divided into the following sections and should be
+used as a ready reference. Settings are colored based on their support level:
 <table style="margin-left: 50px;">
     <tr><td class="level-required">required</td><td>required settings</td></tr>
     <tr><td class="level-base">base</td><td>common settings supported
@@ -166,40 +204,6 @@ to define a track. The other support levels are:
 <p>See the <a href="changes.html">list of changes</a> to see
 recent additions.
 </p>
-<p>
-You can use the <code>hubCheck</code> utility to check the compatibility of your hub and its
-trackDb settings with the UCSC Genome Browser or other genome browsers, such as Ensembl.
-Our <a href="../hgTrackHubHelp.html#Compatibility">track hub help page</a>
-provides some examples of how you might use <code>hubCheck</code> to do this and
-you can read more in this related
-<a href="https://genome-blog.gi.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
-target="_blank">blog post.</a></p>
-
-<h3 id="includes">Using trackDb include statements</h3>
-<p>
-Hubs also support the use of <a href="../hgTrackHubHelp.html#Includes">include
-statements</a>, allowing one to insert a file containing a set of trackDb
-stanzas into a primary trackDb. Use this when you have the same track across
-several assemblies, or several large, complex tracks.
-
-<h3 id="assembly_hubs">Assembly Hubs</h3>
-<p>
-Assembly hubs can display novel genome assemblies and annotations in the UCSC
-Genome Browser. Most genome assemblies deposited in GenBank are also available through 
-our <a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk archive</a>
-and can be <a href="/goldenPath/help/hgTracksHelp.html#GenArkTrackHubs"
-target="_blank">referenced in your hub configuration</a>.</p>
-
-<p>
-However, if your genome is not available in GenBank, you can make a custom assembly hub.
-This involves creating a <a href="#assembly">genomes.txt</a>
-using several settings described below in addition to a trackDb file for each
-genome assembly. To create an assembly hub, refer to our
-<a href="../assemblyHubUserGuide.html" target="_blank">Assembly Hub User Guide</a> or our <a
-href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
-
-<P>The remainder of this document is divided into the following sections and should be
-used as a ready reference.</P>
 <IMG class='toggle all' />&nbsp;<I>Expand/close descriptions of settings
 in the sections below.</I>
 <OL>
@@ -1627,7 +1631,7 @@ to be placed in a single file without the need for separate
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Assembly hub &quot;genome&quot; settings
     </TH></TR>
-    <TR VALIGN=TOP><TD class="hubGenome"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="genome"><IMG class='toggle detail'>
         <div class="format"><code class="level-base">genome &lt;str&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="trackDbFile"><IMG class='toggle detail'>
