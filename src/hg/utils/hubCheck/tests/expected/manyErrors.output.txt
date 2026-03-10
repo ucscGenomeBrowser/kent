@@ -1,4 +1,4 @@
-Found 54 problems:
+Found 56 problems:
 
 Couldn't open https://bad.url.txt/missing.bb
 Host bad.url.txt not found --> Name or service not known
@@ -53,3 +53,5 @@ warning: missing description page for track. Add 'html track2.html' line to the 
 warning: missing description page for track. Add 'html viewStanza.html' line to the 'viewStanza' track stanza. 
 warning: missing description page for track. Add 'html viewTrack.html' line to the 'viewTrack' track stanza. 
 warning: missing htmlPath setting for assembly hub 'araTha1'
+warning: track name "H2A.Z_MultiWig_ImputedComp" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.
+warning: track name "macs2signal_impute_CS13-12383_H2A.Z_M" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.

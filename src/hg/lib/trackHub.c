@@ -1080,6 +1080,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     if (parentLine != NULL)
          {
 	 char *parentName = cloneFirstWord(parentLine);
+	 if (sameString(parentName, tdb->track))
+	    errAbort("Track %s lists itself as its own parent in hub %s genome %s", tdb->track,
+		hub->url, genome->name);
 	 struct trackDb *parent = hashFindVal(hash, parentName);
 	 if (parent == NULL)
 	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,

@@ -26,6 +26,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import anthropic
 
 # Configuration
@@ -471,6 +472,7 @@ def parse_raw_email_headers(raw_email):
     return subject, sender, body
 
 
+@retry(max_attempts=3, delay=2, exceptions=(HttpError,))
 def get_pending_moderation_emails(group_name):
     """Get pending moderation notification emails for a group."""
     creds = get_google_credentials()
