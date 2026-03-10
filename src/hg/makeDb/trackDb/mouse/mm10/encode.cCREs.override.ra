@@ -21,7 +21,7 @@ shortLabel ENCODE4 cCREs
 longLabel ENCODE4 Registry of candidate Cis-Regulatory Elements (cCREs)
 type bigBed 9 + 5
 bigDataUrl /gbdb/$D/encode4/ccre/encodeCcreRegistry.bb
-visibility dense
+visibility squish
 priority 1
 filterValues.cCRE_class CA|Chromatin accessibility (CA),CA-CTCF|Chromatin accessibility + CTCF (CA-CTCF),CA-H3K4me3|Chromatin accessibility + H3K4me3 (CA-H3K4me3),CA-TF|Chromatin accessibility + transcription factor (CA-TF),Distal enhancer|Distal enhancer,Proximal enhancer|Proximal enhancer,Promoter|Promoter,TF|Transcription factor (TF)
 parent cCREs

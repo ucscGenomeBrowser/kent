@@ -2,8 +2,8 @@
 #Lou Aug 2021
 """
 Given a server (dev/hgwbeta/rr) will query hubPublic table URLs and verify that the shortLabel,
-longLabel, dbCount and dbList matches what is in the hubPublic table. Any inconsistencies will be
-automatically updated. Will print out the commands as well as run them.
+longLabel, dbCount, dbList, and email matches what is in the hubPublic table. Any inconsistencies
+will be automatically updated. Will print out the commands as well as run them.
 
 Can optionally be run in test mode where it will only print commands without executing.
 
@@ -63,17 +63,17 @@ def evaluateServer(serverToQuery):
 
 def buildPubHubDic(hgsqlInput):
     """Build a dictionary out of the requested server's hubPublic table"""
-    hubPublicDic = {}    
+    hubPublicDic = {}
     hubPublic = subprocess.run("/cluster/bin/x86_64/hgsql "+hgsqlInput[0]+"-e 'select * from hubPublic' "+hgsqlInput[1],\
                          check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     hubPublicOutput = hubPublic.stdout.split('\n')[1:-1]
 
     for hub in hubPublicOutput:
         hub = hub.split('\t')
-        hubPublicDic[hub[0]] = {}
         hubPublicDic[hub[0]] = {'hubUrl':hub[0],'shortLabel':hub[1],'longLabel':hub[2],\
                             'registrationTime':hub[3],'dbCount':hub[4],\
-                            'dbList':hub[5],'descriptionUrl':hub[6]}
+                            'dbList':hub[5],'descriptionUrl':hub[6],
+                            'email':hub[7] if len(hub) > 7 else ''}
     return(hubPublicDic)
 
 def escapeDoubleQuotesOnLabels(label):
@@ -105,7 +105,7 @@ def buildCurrentHubTxtDic(hub):
         else:
             line = line.split(" ")
             currentHub[line[0]] = " ".join(line[1:])
-    if not currentHub['descriptionUrl'].startswith("http") or currentHub['descriptionUrl'].startswith("ftp"):
+    if not (currentHub['descriptionUrl'].startswith("http") or currentHub['descriptionUrl'].startswith("ftp")):
         currentHub['descriptionUrl'] = '/'.join(hub.split('/')[0:len(hub.split('/'))-1])+"/"+currentHub['descriptionUrl']
     return(currentHub)
                     
@@ -166,6 +166,10 @@ def compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode):
 
     if hubPublicDic[hub]['descriptionUrl'] != currentHub['descriptionUrl'].rstrip().lstrip():
         printHgsql(hub,'descriptionUrl',currentHub['descriptionUrl'].rstrip().lstrip(),hgsqlInput,testMode)
+
+    if 'email' in currentHub and currentHub['email'].strip():
+        if hubPublicDic[hub]['email'] != currentHub['email'].strip():
+            printHgsql(hub,'email',currentHub['email'].strip(),hgsqlInput,testMode)
     
 def hubPublicCompare(hubPublicDic,hgsqlInput,testMode,silent):
     """Query hub.txt files and compare values to hubPublic values"""
