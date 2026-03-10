@@ -211,6 +211,7 @@ SCRIPT_FILES = \
 	bigMaxPercDiff \
 	cancerMafToBigBed \
 	pq \
+	redmineDump \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
