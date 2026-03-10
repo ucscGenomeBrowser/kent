@@ -85,7 +85,7 @@ else if (sameString(value, "pack") || sameString(value, "3"))
 else if (sameString(value, "squish") || sameString(value, "4"))
     return tvSquish;
 else
-    errAbort("Unknown visibility %s ", value);
+    errAbort("Unknown visibility %s. Use one of: hide, dense, squish, pack, full", value);
 return tvHide;  /* never reached */
 }
 
