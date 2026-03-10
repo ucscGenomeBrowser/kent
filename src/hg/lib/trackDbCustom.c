@@ -658,6 +658,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     assert(differentString("on", words[0])); // already weeded out "superTrack on"
     char *parentName = maybeSkipHubPrefix(words[0]);
     tdb->parent = hashFindVal(superHash, parentName);
+    if (tdb->parent == tdb)
+        {
+        warn("Track %s lists itself as its own parent, ignoring.", tdb->track);
+        tdb->parent = NULL;
+        }
     if (tdb->parent)
         {
         tdbMarkAsSuperTrackChild(tdb);
@@ -1042,6 +1047,8 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
     && !tdbIsSuperTrackChild(tdb)) // superChildren cannot be in both subtracks list AND tdbList
         {
 	char *parentName = cloneFirstWord(subtrackSetting);
+	if (sameString(parentName, tdb->track))
+	    errAbort("Track %s lists itself as its own parent", tdb->track);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
         {
