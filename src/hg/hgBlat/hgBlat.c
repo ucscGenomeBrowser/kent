@@ -2172,7 +2172,7 @@ printf("</TR>\n");
 printf("<TR>\n"); 
 puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
     "Paste in a query sequence to find its location in the\n"
-    "the genome. Multiple sequences may be searched \n"
+    "genome. Multiple sequences may be searched \n"
     "if separated by lines starting with '>' followed by the sequence name.\n"
     "</TD>\n"
     "</TR>\n"
@@ -2193,7 +2193,7 @@ printf("%s",
 
 printf("%s", 
 "<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
-"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
+"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers. "
 "The new dynamic BLAT servers are not supported, and they are noted as skipped in the output. "
 "<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b>\n"
 );
@@ -2211,7 +2211,7 @@ if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
            " for best results instead of BLAT. " 
            "To search for short sequences &lt; 20bp only in the sequence shown on the Genome Browser, "
-           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
+           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
            "If you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
            "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.</p>",
            db, cartSessionVarName(), cartSessionId(cart));
