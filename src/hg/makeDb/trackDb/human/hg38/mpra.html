@@ -1,0 +1,209 @@
+<h2>Description</h2>
+<p>
+The <b>MPRAs</b> super track contains tracks with results from
+Massively Parallel Reporter Assays (MPRA), high-throughput experimental methods
+that test thousands of genetic variants for their effects on gene regulation.
+</p>
+
+<h3>MPRAVarDB</h3>
+<p>
+The <b>MPRAVarDB</b> track shows 242,818 variants from 18 MPRA studies compiled
+in the MPRAVarDB database
+(<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/">Wang et al., 2024</a>).
+Each variant was experimentally tested in an MPRA experiment to evaluate whether it
+affects transcriptional regulatory activity. The database covers over 30 cell lines
+and 30 human diseases and traits, including neurodegenerative diseases, immune
+disorders, melanoma, multiple myeloma, and autoimmune diseases.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Items are colored by statistical significance:
+<ul>
+<li><b><span style="color: #C80000;">Dark red</span></b>: FDR &lt; 0.05 (significant after multiple testing correction) &mdash; 22,465 variants (9.3%)</li>
+<li><b><span style="color: #FFA500;">Orange</span></b>: nominal p-value &lt; 0.05 but FDR &ge; 0.05 &mdash; 17,780 variants (7.3%)</li>
+<li><b><span style="color: #BEBEBE;">Grey</span></b>: not significant (p-value &ge; 0.05) &mdash; 202,573 variants (83.4%)</li>
+</ul>
+</p>
+<p>
+Each item shows the variant name (rsID when available, otherwise chr:pos:ref&gt;alt),
+the reference and alternate alleles, the associated disease or trait, cell line,
+log2 fold change, p-value, and FDR.
+</p>
+
+<h2>Studies</h2>
+<p>
+The following table lists the 18 MPRA studies included in MPRAVarDB, with the number of
+tested variants, diseases/traits, cell lines, and a brief description of the variant selection.
+</p>
+
+<table class="stdTbl">
+<tr>
+  <th>Study</th>
+  <th>Variants</th>
+  <th>Disease/Trait</th>
+  <th>Cell Line(s)</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/34534445/" target="_blank">Griesemer et al., 2021</a></td>
+  <td>72,588</td>
+  <td>NHGRI-EBI GWAS catalog</td>
+  <td>GM12878, HEK293FT, HMEC, HepG2, K562, SKNSH</td>
+  <td>3'UTR SNPs and indels in LD with GWAS catalog variants, variants under positive selection, and rare outlier expression variants from GTEx</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/31395865/" target="_blank">Kircher et al., 2019</a></td>
+  <td>44,647</td>
+  <td>Various (18 diseases including diabetes, cancer, blood disorders, limb malformations)</td>
+  <td>HEK293T, HEL92.1.7, HaCaT, HeLa, HepG2, K562, LNCaP, MIN6, NIH/3T3, Neuro-2a, SK-MEL-28, SF7996</td>
+  <td>Saturation mutagenesis of 20 disease-associated regulatory elements at single base-pair resolution</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/35298243/" target="_blank">Abell et al., 2022</a></td>
+  <td>29,582</td>
+  <td>eQTL (no specific disease)</td>
+  <td>GM12878</td>
+  <td>30,893 variants in LD with independent, common, top-ranked eQTL across 744 eGenes in the CEU cohort</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey et al., 2016</a></td>
+  <td>27,138</td>
+  <td>eQTL (no specific disease)</td>
+  <td>GM12878</td>
+  <td>32,373 variants associated with eQTLs in lymphoblastoid cell lines</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/37516102/" target="_blank">Schuster et al., 2023</a></td>
+  <td>26,546</td>
+  <td>Prostate cancer</td>
+  <td>PC3</td>
+  <td>14,497 single-nucleotide mutations enriched in oncogenic pathways and 3'UTR regulatory elements</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/35513721/" target="_blank">Mouri et al., 2022</a></td>
+  <td>14,551</td>
+  <td>Autoimmune diseases (Crohn's, IBD, psoriasis, MS, RA, T1D, ulcerative colitis)</td>
+  <td>Jurkat</td>
+  <td>GWAS variants from autoimmune disease loci tested for regulatory element activity in T cells</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/37868037/" target="_blank">McAfee et al., 2023</a></td>
+  <td>10,310</td>
+  <td>Schizophrenia</td>
+  <td>HEK293s, HNPS</td>
+  <td>5,173 fine-mapped schizophrenia GWAS variants</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/35981026/" target="_blank">Cooper et al., 2022</a></td>
+  <td>5,340</td>
+  <td>Alzheimer's disease, Progressive supranuclear palsy</td>
+  <td>HEK293T</td>
+  <td>5,706 noncoding SNVs from 25 AD and 9 PSP genome-wide significant loci</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/36423637/" target="_blank">Long et al., 2022</a></td>
+  <td>3,980</td>
+  <td>Melanoma</td>
+  <td>C283T, UACC903</td>
+  <td>1,992 risk-associated variants in tight LD (r2&gt;0.8) from 54 melanoma risk loci</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/31503409/" target="_blank">Myint et al., 2020</a></td>
+  <td>2,158</td>
+  <td>Schizophrenia, Alzheimer's disease</td>
+  <td>K562, SH-SY5Y</td>
+  <td>1,049 SZ and 30 AD variants in 64 SZ loci and 9 AD loci</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/32483191/" target="_blank">Choi et al., 2020</a></td>
+  <td>1,664</td>
+  <td>Melanoma</td>
+  <td>HEK293FT, UACC903</td>
+  <td>GWAS melanoma risk variants</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/35013207/" target="_blank">Ajore et al., 2022</a></td>
+  <td>1,582</td>
+  <td>Multiple myeloma</td>
+  <td>L363, MOLP8</td>
+  <td>1,039 variants in high LD (r2&gt;0.8) at 23 MM risk loci</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/31164647/" target="_blank">Klein et al., 2019</a></td>
+  <td>1,119</td>
+  <td>Osteoarthritis</td>
+  <td>Saos-2</td>
+  <td>1,605 SNPs in high LD (r2&gt;0.8) at 35 lead SNPs associated with OA via GWAS</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/33712590/" target="_blank">Lu et al., 2021</a></td>
+  <td>1,038</td>
+  <td>Systemic lupus erythematosus</td>
+  <td>GM12878, Jurkat</td>
+  <td>18,312 variants in tight LD (r2&gt;0.8) with 578 GWAS index variants at 531 loci</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/34294677/" target="_blank">Mulvey &amp; Dougherty, 2021</a></td>
+  <td>275</td>
+  <td>Major depressive disorder</td>
+  <td>N2A</td>
+  <td>Over 1,000 SNPs from 39 neuropsychiatric GWAS loci, selected by overlap with eQTL and histone marks</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/32913073/" target="_blank">Ferraro et al., 2020</a></td>
+  <td>150</td>
+  <td>Rare variant expression (no specific disease)</td>
+  <td>GM12878</td>
+  <td>Rare variants contributing to extreme expression, allelic expression, and splicing across 49 GTEx tissues</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/31477794/" target="_blank">Rao et al., 2021</a></td>
+  <td>88</td>
+  <td>Alcohol use disorder</td>
+  <td>BLA, CE, NAC, SFC</td>
+  <td>SNPs in 3'UTR of 88 genes from allele-specific expression analysis (30 AUD subjects vs 30 controls)</td>
+</tr>
+<tr>
+  <td><a href="https://pubmed.ncbi.nlm.nih.gov/27259154/" target="_blank">Ulirsch et al., 2016</a></td>
+  <td>62</td>
+  <td>Red blood cell traits</td>
+  <td>K562, K562+GATA1</td>
+  <td>2,756 variants in strong LD with 75 sentinel variants associated with RBC traits</td>
+</tr>
+</table>
+
+<h2>Methods</h2>
+<p>
+Data was downloaded from the
+<a href="https://mpravardb.rc.ufl.edu/" target="_blank">MPRAVarDB web server</a>.
+Variants originally mapped to hg19 (213,689 of 242,818) were lifted to hg38
+using <code>liftOver</code>. 114 variants could not be mapped and were excluded.
+The remaining variants were merged with the 29,129 natively hg38-mapped variants
+to produce a total of 239,028 hg38 records.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="/cgi-bin/hgTables">Table Browser</a> or the
+<a href="/cgi-bin/hgIntegrator">Data Integrator</a>.
+The data can also be accessed from the command line using
+<code>bigBedToBed</code>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Tao Wang and colleagues at the University of Florida for creating and
+maintaining the MPRAVarDB database.
+</p>
+
+<h2>References</h2>
+<p>
+Wang T, Matreyek KA, Yang X.
+<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">
+MPRAVarDB: an online database and web server for exploring regulatory effects of genetic variants using MPRA data</a>.
+<em>Bioinformatics</em>. 2024 Apr 15;40(4):btae201.
+PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">38617248</a>;
+PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11014600/" target="_blank">PMC11014600</a>
+</p>
