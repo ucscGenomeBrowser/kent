@@ -4,6 +4,7 @@ parent dnaMethylation
 shortLabel Human Methylation Atlas Signals
 longLabel Human Methylation Atlas WGBS cell type signals
 dimensions dimY=cellType dimX=dataType
+yLineOnOff on
 compositeTrack on
 subGroup2 dataType Data_Type Merged=Merged Replicate=Replicates
 visibility full
