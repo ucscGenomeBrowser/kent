@@ -1106,6 +1106,19 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 slFreeList(&seqList);
 }
 
+static void checkTrackNamesForDots(struct trackDb *tdbList)
+/* Warn about track names containing periods before they get polished away. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (strchr(tdb->track, '.'))
+        warn("warning: track name \"%s\" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.", tdb->track);
+    if (tdb->subtracks != NULL)
+        checkTrackNamesForDots(tdb->subtracks);
+    }
+}
+
 int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
                 struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check out genome within hub. */
@@ -1157,6 +1170,7 @@ if (errCatchStart(errCatch))
     tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
+    checkTrackNamesForDots(tdbList);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
