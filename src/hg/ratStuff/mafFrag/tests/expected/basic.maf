@@ -1,0 +1,5 @@
+##maf version=1 scoring=zero
+a score=0.000000
+s hg38.chr1 11000 100 + 248956422 aagcctacgggcgggggttgggggggcgtgtgttgcaggagcaaagtcgcacggcgccgggctggggcggggggagggtggcgccgtgcacgcgcagaaa
+s panTro4       0  94 +        94 acgcctatgggcgggggttgcgggg-cgcgtggtgcaggagcaaagtcgcacggagcctgtctgggg-----gcaggtgggctccgtgcaggcgcagaaa
+
