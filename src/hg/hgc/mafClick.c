@@ -460,6 +460,64 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 #endif
 
+static void mafStripEmptyRefGaps(struct mafAli *maf)
+/* Remove columns where the reference (first component) has a gap character
+ * AND no other component has actual sequence in that column. Columns where
+ * at least one non-reference species has a base are kept. */
+{
+struct mafComp *mc;
+struct mafComp *ref = maf->components;
+if (ref == NULL || ref->text == NULL)
+    return;
+int textSize = maf->textSize;
+
+/* Build boolean array of columns to keep */
+bool *keep = needMem(textSize);
+int newSize = 0;
+int ii;
+for (ii = 0; ii < textSize; ii++)
+    {
+    if (ref->text[ii] != '-')
+	{
+	keep[ii] = TRUE;
+	newSize++;
+	}
+    else
+	{
+	/* Reference has gap — check if any other species has sequence */
+	for (mc = ref->next; mc != NULL; mc = mc->next)
+	    {
+	    if (mc->text != NULL && isalpha(mc->text[ii]))
+		{
+		keep[ii] = TRUE;
+		newSize++;
+		break;
+		}
+	    }
+	}
+    }
+
+if (newSize == textSize)
+    {
+    freeMem(keep);
+    return;
+    }
+
+/* Compact all component texts in place */
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    if (mc->text == NULL)
+	continue;
+    int jj = 0;
+    for (ii = 0; ii < textSize; ii++)
+	if (keep[ii])
+	    mc->text[jj++] = mc->text[ii];
+    mc->text[jj] = '\0';
+    }
+maf->textSize = newSize;
+freeMem(keep);
+}
+
 static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn,struct sqlConnection *conn2,
                                             struct trackDb *tdb, char *chrom, int start, int end,
                                             char *axtOtherDb, char *file)
@@ -654,6 +712,10 @@ else
                                         mafList, NULL, orderList);
             mafList = NULL;  /* consumed by hgMafFragFromMafListNoDots */
             }
+
+        /* Strip ref gap columns where no other species has sequence */
+        for (maf = subList; maf != NULL; maf = maf->next)
+            mafStripEmptyRefGaps(maf);
 
         realCount = slCount(subList);
         }
