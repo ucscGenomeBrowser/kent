@@ -8,38 +8,26 @@ cell-type-specific methylation patterns.
 </p>
 
 <p>
-The atlas comprises two track sets:
+The 205 samples from 39 cell type groups are organized into two data types:
 </p>
-
 <ul>
-  <li><b>Human Methylation Atlas Summary</b> - Contains cell-type-specific marker regions 
-  identified from the atlas, including uniquely unmethylated loci and putative enhancer 
-  regions annotated with regulatory features.</li>
-  <li><b>Human Methylation Atlas Signals</b> - Contains per-cell-type methylation signal 
-  tracks (bigWig format) showing methylation beta values (0-1 scale) across the genome, 
-  with merged tracks for each cell type and individual sample replicates.</li>
+  <li><b>Merged</b> tracks display the combined methylation signal across all biological replicates
+	  for a given cell type, providing one representative track per cell type.</li><br>
+  <li><b>Replicate</b>  tracks display the methylation signal for each individual sample and are
+	  available for detailed analysis.</li>
 </ul>
 
 <p>
 DNA methylation patterns are highly reproducible across individuals of the same cell type 
-(>99.5% identical), reflecting the robustness of cell identity programs. Unsupervised 
-clustering of these methylomes recapitulates key elements of tissue ontogeny and 
-developmental lineage relationships.
+(&gt;99.5% identical), reflecting the robustness of cell identity programs.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
-
-<h3>Signal Tracks</h3>
 <p>
 Signal tracks display methylation beta values on a 0-1 scale, where 0 indicates fully 
 unmethylated CpGs and 1 indicates fully methylated CpGs. A value of -1 indicates 
 missing data. For optimal comparison across cell types, set the vertical viewing range 
 to 0-1 with auto-scale off.
-</p>
-
-<p>
-Merged signal tracks aggregate data across biological replicates for each cell type. 
-Individual replicate tracks are available for detailed analysis.
 </p>
 
 <h3>Track Colors</h3>
@@ -99,7 +87,15 @@ fluorescence-activated cell sorting (FACS), yielding high-purity preparations ac
 cell lineages. A total of 205 samples representing 77 primary cell types were collected from
 137 consenting donors and merged into 39 cell type groups based on methylation similarity.
 Average sample purity exceeded 90% as determined by flow cytometry, gene expression, and
-DNA methylation analysis.
+DNA methylation analysis. Some cell types showed lower purity, including colon fibroblasts (78%),
+smooth muscle cells (82%), endothelial cells (86%), and adipocytes (87%).
+</p>
+
+<p>
+Several cell types are absent from the atlas, typically due to limited availability of primary
+material. These include osteoblasts, cholangiocytes, cells of the adrenal gland, urethral
+epithelium, and haematopoietic stem cells. Subpopulations of interest, such as distinct neuronal or
+lymphocyte subtypes, were also not resolved separately.
 </p>
 
 <p>
@@ -158,11 +154,6 @@ Data generation and analysis were performed at the Hebrew University of Jerusale
 Dor, Kaplan, and Glaser laboratories and collaborators. Sample collection involved 
 collaboration with Hadassah Medical Center, Oregon Health &amp; Science University, 
 Karolinska Institute, and University of Alberta.
-</p>
-
-<p>
-Track development and UCSC Genome Browser integration by the 
-<a href="../contacts.html">UCSC Genome Browser Group</a>.
 </p>
 
 <h2>References</h2>

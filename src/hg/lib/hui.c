@@ -861,7 +861,7 @@ enum trackVisibility hTvFromString(char *s)
 {
 enum trackVisibility vis = hTvFromStringNoAbort(s);
 if ((int)vis < 0)
-    errAbort("Unknown visibility %s", s);
+    errAbort("Unknown visibility %s. Use one of: hide, dense, squish, pack, full.", s);
 return vis;
 }
 
@@ -4942,8 +4942,10 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 // When only one subtrack, then show it's cfg settings instead of composite/view level settings
 // This simplifies the UI where hgTrackUi won't have 2 levels of cfg,
 // while hgTracks still supports rightClick cfg of the subtrack.
+// Don't do this if noParentConfig is specified in the composite parent
+boolean noParentConfig = tdb && trackDbSetting(tdb, "noParentConfig");
 
-if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we
+if (!noParentConfig && (configurableByAjax(tdb,cType) > 0)) // Only if subtrack's configurable by ajax do we
     {                                  // consider this option
     if (tdbIsComposite(tdb)                       // called for the composite
         && !isCustomComposite(tdb)
@@ -5341,6 +5343,7 @@ struct slRef *subtrackRef;
 char *colors[2]   = { "bgLevel1",
 		  "bgLevel1" };
 int colorIx = settings->bgColorIx;
+boolean noParentConfig = parentTdb && trackDbSetting(parentTdb, "noParentConfig");
 
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
@@ -5378,7 +5381,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 		    }
 		}
 	    }
-	else if (slCount(subtrackRefList) < 2   // don't bother if there is a single subtrack
+	else if (!noParentConfig && slCount(subtrackRefList) < 2   // don't bother if there is a single subtrack without noParentConfig in the composite header
 	     && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone) // but the composite is configurable.
 	    cType = cfgNone;
 	}

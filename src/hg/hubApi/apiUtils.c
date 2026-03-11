@@ -285,7 +285,10 @@ if (errCatchStart(errCatch))
     if (NULL == hubStatus)	/* this should not happen */
         errAbort("could not find hub %u in status table", hubId);
     if (!isEmpty(hubStatus->errorMessage))
-        errAbort("%s", hubStatus->errorMessage);
+	{
+	stripChar(hubStatus->errorMessage, '\n');
+	    errAbort("%s", hubStatus->errorMessage);
+	}
 
     // use hubId in hubName
     char buffer[4096];

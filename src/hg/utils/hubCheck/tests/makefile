@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings
+test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName
 	${MAKE} clean
 
 one:	mkout
@@ -57,6 +57,22 @@ noCompositeGroup: mkout
 allowWarnings: mkout
 	${hubCheck} -allowWarnings input/supertrackChild.txt > output/allowWarnings.output.txt 2> /dev/null
 	diff expected/allowWarnings.output.txt output/allowWarnings.output.txt
+
+seqNameCheck: mkout
+	-${hubCheck} input/seqNameHub.txt > output/seqNameCheck.output.txt 2>/dev/null
+	diff expected/seqNameCheck.output.txt output/seqNameCheck.output.txt
+
+noSeqNameCheck: mkout
+	-${hubCheck} -noSeqNameCheck input/seqNameHub.txt > output/noSeqNameCheck.output.txt 2>/dev/null
+	diff expected/noSeqNameCheck.output.txt output/noSeqNameCheck.output.txt
+
+selfParent: mkout
+	-${hubCheck} input/selfParent.txt > output/selfParent.output.txt 2>/dev/null
+	diff expected/selfParent.output.txt output/selfParent.output.txt
+
+dotInName: mkout
+	-${hubCheck} input/dotInName.txt > output/dotInName.output.txt 2>/dev/null
+	diff expected/dotInName.output.txt output/dotInName.output.txt
 
 mkout::
 	@mkdir -p output

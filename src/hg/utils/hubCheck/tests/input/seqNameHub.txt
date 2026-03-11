@@ -1,0 +1,5 @@
+hub seqNameTest
+longLabel Sequence Name Test Hub
+genomesFile seqNameGenomes.txt
+email genome-www@soe.ucsc.edu
+shortLabel Seq Name Test

@@ -1,0 +1,8 @@
+Found 7 problems:
+warning: missing description page for track. Add 'html my_composite.html' line to the 'my_composite' track stanza. 
+warning: missing description page for track. Add 'html my_sub_track1.html' line to the 'my_sub_track1' track stanza. 
+warning: missing description page for track. Add 'html my_sub_track2.html' line to the 'my_sub_track2' track stanza. 
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.
+warning: track name "my.composite" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.
+warning: track name "my.sub.track1" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.
+warning: track name "my.sub.track2" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.
