@@ -460,51 +460,6 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 #endif
 
-static void mafStripRefGaps(struct mafAli *maf)
-/* Remove columns where the reference (first component) has a gap character.
- * These are insertions in non-reference species that should be collapsed
- * when displaying in reference coordinates. */
-{
-struct mafComp *mc;
-struct mafComp *ref = maf->components;
-if (ref == NULL || ref->text == NULL)
-    return;
-int textSize = maf->textSize;
-
-/* Build boolean array of columns to keep (where ref is not a gap) */
-bool *keep = needMem(textSize);
-int newSize = 0;
-int ii;
-for (ii = 0; ii < textSize; ii++)
-    {
-    if (ref->text[ii] != '-')
-        {
-        keep[ii] = TRUE;
-        newSize++;
-        }
-    }
-
-if (newSize == textSize)
-    {
-    freeMem(keep);
-    return;  /* nothing to strip */
-    }
-
-/* Compact all component texts in place */
-for (mc = maf->components; mc != NULL; mc = mc->next)
-    {
-    if (mc->text == NULL)
-        continue;
-    int jj = 0;
-    for (ii = 0; ii < textSize; ii++)
-        if (keep[ii])
-            mc->text[jj++] = mc->text[ii];
-    mc->text[jj] = '\0';
-    }
-maf->textSize = newSize;
-freeMem(keep);
-}
-
 static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn,struct sqlConnection *conn2,
                                             struct trackDb *tdb, char *chrom, int start, int end,
                                             char *axtOtherDb, char *file)
@@ -699,10 +654,6 @@ else
                                         mafList, NULL, orderList);
             mafList = NULL;  /* consumed by hgMafFragFromMafListNoDots */
             }
-
-        /* Remove insertion columns (where reference has gaps) */
-        for (maf = subList; maf != NULL; maf = maf->next)
-            mafStripRefGaps(maf);
 
         realCount = slCount(subList);
         }
