@@ -861,7 +861,7 @@ enum trackVisibility hTvFromString(char *s)
 {
 enum trackVisibility vis = hTvFromStringNoAbort(s);
 if ((int)vis < 0)
-    errAbort("Unknown visibility %s. Use one of: hide, dense, squish, pack, full", s);
+    errAbort("Unknown visibility %s. Use one of: hide, dense, squish, pack, full.", s);
 return vis;
 }
 
