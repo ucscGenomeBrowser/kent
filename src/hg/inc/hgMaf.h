@@ -117,6 +117,46 @@ struct mafAli *hgMafFragFromMafList(
  * of loading from database.  Caller should not free mafList
  * afterwards (it is consumed). */
 
+struct mafAli *hgBigMafFragNoDots(
+	char *database,     /* Database, must already have hSetDb to this */
+        struct bbiFile *bbi,
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand, 	    /* Chromosome strand. */
+	char *outName, 	    /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	);
+/* hgBigMafFragNoDots - Extract maf sequences for a region from a bigMaf.
+ * Returns a list of maf blocks with no dots - each block only contains
+ * assemblies that have actual sequence. */
+
+struct mafAli *hgMafFragNoDots(
+	char *database,     /* Database, must already have hSetDb to this */
+	char *track, 	    /* Name of MAF track */
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand, 	    /* Chromosome strand. */
+	char *outName, 	    /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	);
+/* hgMafFragNoDots - Extract maf sequences for a region from database.
+ * Returns a list of maf blocks with no dots - each block only contains
+ * assemblies that have actual sequence. */
+
+struct mafAli *hgMafFragFromMafListNoDots(
+	char *database,     /* Database, must already have hSetDb to this */
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand, 	    /* Chromosome strand. */
+	struct mafAli *mafList, /* Pre-loaded list of maf alignments */
+	char *outName, 	    /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	);
+/* Extract maf sequences for a region from a pre-loaded mafList.
+ * Returns a list of maf blocks with no dots - each block only contains
+ * assemblies that have actual sequence.  Caller should not free mafList
+ * afterwards (it is consumed). */
+
 int mafCmp(const void *va, const void *vb);
 /* Compare to sort based on start of first component. */
 

@@ -676,36 +676,35 @@ else
                 }
             }
 
-        /* Load stitched alignment using mafFrag approach */
+        /* Load alignment using mafFragNoDots approach — returns a list of
+         * maf blocks, each containing only assemblies with actual sequence. */
         if (sameString(tdb->type, "bigMaf"))
             {
             char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
             struct bbiFile *bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
-            maf = hgBigMafFrag(database, bbi, seqName, winStart, winEnd, '+', NULL, orderList);
+            subList = hgBigMafFragNoDots(database, bbi, seqName, winStart, winEnd, '+', NULL, orderList);
             bbiFileClose(&bbi);
             }
         else if (axtOtherDb == NULL && fileName == NULL)
             {
             /* Regular MAF from database */
-            maf = hgMafFrag(database, tdb->table, seqName, winStart, winEnd, '+', NULL, orderList);
+            subList = hgMafFragNoDots(database, tdb->table, seqName, winStart, winEnd, '+', NULL, orderList);
             }
         else
             {
             /* AXT or MAF with external file - load blocks, then stitch */
             mafList = mafOrAxtLoadInRegion2(conn, conn2, tdb, seqName,
                                         winStart, winEnd, axtOtherDb, fileName);
-            maf = hgMafFragFromMafList(database, seqName, winStart, winEnd, '+',
+            subList = hgMafFragFromMafListNoDots(database, seqName, winStart, winEnd, '+',
                                         mafList, NULL, orderList);
-            mafList = NULL;  /* consumed by hgMafFragFromMafList */
+            mafList = NULL;  /* consumed by hgMafFragFromMafListNoDots */
             }
 
         /* Remove insertion columns (where reference has gaps) */
-        if (maf != NULL)
+        for (maf = subList; maf != NULL; maf = maf->next)
             mafStripRefGaps(maf);
 
-        if (maf != NULL)
-            slAddHead(&subList, maf);
-        realCount = (subList != NULL) ? 1 : 0;
+        realCount = slCount(subList);
         }
     else
         {
