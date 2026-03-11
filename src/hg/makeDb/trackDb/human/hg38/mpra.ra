@@ -16,4 +16,15 @@ superTrack on
         dataVersion hg38CustomLift
         priority 1
 
-
+        track mpraVarDb
+        shortLabel MPRAVarDB
+        longLabel MPRAs: MPRAVarDB - MPRA-tested Regulatory Variant Effects - grey is non-significant
+        parent mpra on
+        bigDataUrl /gbdb/hg38/mpra/mpravardb.bb
+        type bigBed 9 +
+        itemRgb on
+        visibility dense
+        mouseOverField _mouseOverLog2FC,_mouseOverPvalue,_mouseOverFdr
+        mouseOver Ref: $ref Alt: $alt Cell: $cellLine log2FC: $_mouseOverLog2FC p: $_mouseOverPvalue FDR: $_mouseOverFdr
+        skipFields _mouseOverLog2FC,_mouseOverPvalue,_mouseOverFdr
+        priority 2

@@ -5601,7 +5601,9 @@ var mouseOver = {
            mouseOver.browserTextSize = window.browserTextSize;
         }
         window.addEventListener('scroll', mouseOver.scroll, false);
-        window.addEventListener('load', mouseOver.getData, false);
+        // Call getData directly since the DOM is already parsed by the time
+        // $(document).ready() calls addListener.
+        mouseOver.getData();
     }
 };	//	var mouseOver
 

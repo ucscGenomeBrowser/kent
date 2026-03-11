@@ -103,6 +103,20 @@ struct mafAli *hgMafFrag(
  * the sources just indicate the species.  You can mafFree this
  * as normal. */
 
+struct mafAli *hgMafFragFromMafList(
+	char *database,     /* Database, must already have hSetDb to this */
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand, 	    /* Chromosome strand. */
+	struct mafAli *mafList, /* Pre-loaded list of maf alignments */
+	char *outName, 	    /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	);
+/* Extract maf sequences for a region from a pre-loaded mafList.
+ * Same behavior as hgMafFrag but takes mafList directly instead
+ * of loading from database.  Caller should not free mafList
+ * afterwards (it is consumed). */
+
 int mafCmp(const void *va, const void *vb);
 /* Compare to sort based on start of first component. */
 

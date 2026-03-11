@@ -1,0 +1,7 @@
+Found 6 problems:
+warning: missing htmlPath setting for assembly hub 'seqNameTest'
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.
+warning: sequence name '#startshash' in genome 'seqNameTest' contains invalid character '#' -only [A-Za-z0-9._-] are allowed. Consider using chromAlias for alternative names.
+warning: sequence name '#startshash' in genome 'seqNameTest' starts with '#' -must start with a letter or digit
+warning: sequence name 'bad,comma' in genome 'seqNameTest' contains invalid character ',' -only [A-Za-z0-9._-] are allowed. Consider using chromAlias for alternative names.
+warning: sequence name 'bad=equals' in genome 'seqNameTest' contains invalid character '=' -only [A-Za-z0-9._-] are allowed. Consider using chromAlias for alternative names.

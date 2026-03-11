@@ -20,6 +20,7 @@
 #include "bedTabix.h"
 #include "knetUdc.h"
 #include "hgFind.h"
+#include "twoBit.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -49,6 +50,7 @@ errAbort(
   "   -httpsCertCheckDomainExceptions= - space separated list of domains to whitelist.\n"  
   "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
+  "   -noSeqNameCheck       - skip validation of sequence names in 2bit files\n"
   "   -allowWarnings        - return 0 exit code when only warnings are found (no errors)\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
@@ -70,6 +72,7 @@ static struct optionSpec options[] = {
    {"httpsCertCheckDomainExceptions", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
+   {"noSeqNameCheck", OPTION_BOOLEAN},
    {"allowWarnings", OPTION_BOOLEAN},
    // intentionally undocumented option for hgHubConnect
    {"htmlOut", OPTION_BOOLEAN},
@@ -91,6 +94,7 @@ struct trackHubCheckOptions
     struct hash *settings;      /* supported settings for this version */
     struct hash *extra;         /* additional trackDb settings to accept */
     struct slName *suggest;     /* list of supported settings for suggesting */
+    boolean noSeqNameCheck;     /* skip validation of sequence names in 2bit files */
     boolean allowWarnings;      /* return 0 exit code for warnings (no errors) */
     /* hgHubConnect only */
     boolean htmlOut;            /* put special formatted text into the errors dyString */
@@ -1064,6 +1068,57 @@ return retVal;
 }
 
 
+static boolean isValidSeqNameChar(char c)
+/* Return TRUE if c is a valid character for a sequence name: [A-Za-z0-9._-] */
+{
+return isalnum(c) || c == '.' || c == '_' || c == '-';
+}
+
+static void checkSequenceNames(char *twoBitPath, char *genomeName)
+/* Check that sequence names in the 2bit file contain only valid characters:
+ * ASCII letters, digits, period, underscore, hyphen.
+ * First character must be a letter or digit. Max length 254. */
+{
+struct slName *seqList = twoBitSeqNames(twoBitPath);
+struct slName *seq;
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    char *name = seq->name;
+    int len = strlen(name);
+    if (len > 254)
+        warn("warning: sequence name '%s' in genome '%s' exceeds 254 characters (length %d)",
+            name, genomeName, len);
+    if (len > 0 && !isalnum(name[0]))
+        warn("warning: sequence name '%s' in genome '%s' starts with '%c' -must start with a letter or digit",
+            name, genomeName, name[0]);
+    char *p;
+    for (p = name; *p != '\0'; p++)
+        {
+        if (!isValidSeqNameChar(*p))
+            {
+            warn("warning: sequence name '%s' in genome '%s' contains invalid character '%c' -"
+                "only [A-Za-z0-9._-] are allowed. Consider using chromAlias for alternative names.",
+                name, genomeName, *p);
+            break;
+            }
+        }
+    }
+slFreeList(&seqList);
+}
+
+static void checkTrackNamesForDots(struct trackDb *tdbList)
+/* Warn about track names containing periods before they get polished away. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (strchr(tdb->track, '.'))
+        warn("warning: track name \"%s\" contains a period which will be changed to an underscore. Periods in track names can cause problems with table browser filters. Consider using underscores instead.", tdb->track);
+    if (tdb->subtracks != NULL)
+        checkTrackNamesForDots(tdb->subtracks);
+    }
+}
+
 int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
                 struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check out genome within hub. */
@@ -1085,6 +1140,8 @@ if (errCatchStart(errCatch))
             warn("Error: '%s' twoBitPath does not exist or is not accessible: '%s'", genome->name, twoBit);
         else
             {
+            if (!options->noSeqNameCheck)
+                checkSequenceNames(twoBit, trackHubSkipHubName(genome->name));
             // verify that the defaultPos references an actual chromosome and valid range for that chromosome
             char *inpPos = cloneString(genome->defaultPos);
             int relStart = 0, relEnd = 0;
@@ -1113,6 +1170,7 @@ if (errCatchStart(errCatch))
     tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
+    checkTrackNamesForDots(tdbList);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
@@ -1348,6 +1406,7 @@ checkOptions->printMeta = optionExists("printMeta");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
 checkOptions->genome = optionVal("genome", NULL);
+checkOptions->noSeqNameCheck = optionExists("noSeqNameCheck");
 checkOptions->allowWarnings = optionExists("allowWarnings");
 
 struct trackHubSettingSpec *setting = NULL;

@@ -2755,7 +2755,7 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 {
 jsIncludeFile("hui.js",NULL);
 printf("<p style='margin-top:3px; margin-bottom:3px'>");
-printf("Tracks that are part of this container are listed below. Use the buttons below to set their visibilities.</p>");
+printf("Tracks that are part of this container are listed below. Use the buttons below to set their visibility. The grey button shows each track's current visibility.</p>");
 printf("\n<TABLE id='superTrackTable' CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
 struct slRef *childRef;
@@ -2776,14 +2776,15 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         printf("<option value='full'>Full</option>\n");
         printf("</select>\n");
 
-        printInfoIcon("The 'Apply to all' button sets all tracks below to the visibility selected on this dropdown. The 'Apply to all visible' button sets this visibility on all tracks below that are not hidden.");
+        printInfoIcon("The 'Apply to all visible tracks' button sets the visibility selected in this dropdown on all tracks below that are not hidden.<br>"
+		      "The 'Apply to all tracks' button sets the visibility selected in this dropdown on all tracks below, including hidden ones.");
 
         // First button: set all selectors that are not on 'hide' to the current value of the top select 
         printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
 	jsOnEventById("click", "superVizApplyButton", "superUiSetAllTracks(true)");
 
         // Second button: set all selectors to the current value of the top select
-        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all</button>&nbsp;\n");
+        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all tracks</button>&nbsp;\n");
 	jsOnEventById("click", "superVizApplyAllButton", "superUiSetAllTracks()");
         
         printf("</TD></TR>\n");
@@ -3733,7 +3734,7 @@ if (!tdbIsDownloadsOnly(tdb))
     else if (tdbIsSuper(tdb))
         {
         printf("<B>Show or hide this container and all tracks:&nbsp;</B>");
-        printInfoIcon("Switching off the entire container here will preserve the visibility settings below, so you can come back later and restore the visibility settings again with a single click.");
+        printInfoIcon("Hiding the entire container here will preserve the track visibility settings below, and they can be restored by selecting 'Show'.");
         }
     else
         printf("<B>Display&nbsp;mode:&nbsp;</B>");

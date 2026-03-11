@@ -147,6 +147,7 @@ UCSC_APPS = \
 	lineCount \
 	nt4Frag \
 	pslToXa \
+	redmineDump \
 	scrambleFa \
 	subs \
 	tabToMmHash \

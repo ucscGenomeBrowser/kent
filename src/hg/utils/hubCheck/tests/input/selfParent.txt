@@ -1,0 +1,14 @@
+hub selfParentHub
+shortLabel Self Parent Test Hub
+longLabel Hub to test self-referencing parent detection
+email braney@soe.ucsc.edu
+useOneFile on
+
+genome hg19
+
+track selfRef
+shortLabel Self Ref Track
+longLabel Self Ref Track
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
+parent selfRef
+type bigBed 3

@@ -219,7 +219,6 @@ function Link(s, src, tit, attr)
   else
       src = escape(src, true)
       tit = escape(tit, true)
-      s = escape(s, true)
   end
 
 
@@ -390,7 +389,7 @@ function Table(caption, aligns, widths, headers, rows)
   end
   if widths and widths[1] ~= 0 then
     for _, w in pairs(widths) do
-      add('<col width="' .. string.format("%d%%", w * 100) .. '" />')
+      add('<col width="' .. string.format("%.0f%%", w * 100) .. '" />')
     end
   end
   local header_row = {}

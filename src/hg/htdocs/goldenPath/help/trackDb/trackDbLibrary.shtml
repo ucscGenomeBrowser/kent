@@ -6685,6 +6685,167 @@ and is particularly useful for tracks with large numbers of categories.
     bigBeds and one with bigBeds, all inside of a superTrack.</p>
 </DIV>
 
+<!-- - - - - - - - FACETED COMPOSITE settings - - - - - - - -->
+<DIV class="faceted_composite_intro">
+<H3>Faceted Composite Tracks</H3>
+<p>Some data sets fit easily into the view- and subgroup-based organization scheme.  Other datasets, however,
+may consist of too many tracks to easily coherce into that structure, and may also benefit from mixing
+datasets with different underlying types (e.g. signals and peaks) together under the same heading.
+For those situations, a "faceted composite" track may be appropriate.</p>
+<p>A faceted composite track is a composite with no views or subgroups to organize the subtracks.  Instead,
+the subtracks are organized by a list of facets drawn from an accompanying tsv (tab-separated values) file.
+These facets can be combined with an optional <code>dataTypes</code> setting to control which subtracks are
+visible.  When <code>dataTypes</code> is absent, each row in the list represents an individual track
+that can be turned on or off.  When <code>dataTypes</code> is present, the rows instead represent sample
+IDs that are combined with the active dataTypes to control which tracks are turned on.</p>
+<p>Important: for this setting to be used, the subtrack names must be arranged carefully.
+Subtrack names in a faceted composite are derived from the parent track name and the metadata
+instead of being assigned freely.  The exact format depends on whether the <code>dataTypes</code>
+setting is present.</p>
+<p>Without <code>dataTypes</code>:
+<br>
+<pre>    &lt;parentTrackName&gt;_&lt;primaryKeyValue&gt;</pre>
+Each subtrack name is the composite's track name, an underscore, and the value from the primaryKey column
+in the metadata file indicated by metaDataUrl for that subtrack's row.  For example, if the composite is
+called "rnaseq" and the primaryKey is "sampleId", then a row with sampleId=liver in the metadata yields
+a subtrack named <code>rnaseq_liver</code>.</p>
+<p>With <code>dataTypes</code>:
+<br>
+<pre>    &lt;parentTrackName&gt;_&lt;primaryKeyValue&gt;_&lt;datatype&gt;</pre>
+When <code>dataTypes</code> is set (a space-separated list of data type names), each sample can have
+multiple subtracks - one per data type.  The subtrack name appends an additional underscore and the data type
+name.  For example, if the composite is "chipSeq", primaryKey is "sampleId", dataTypes includes "H3K27ac",
+and a row has sampleId=K562, then the subtrack for that row is <code>chipSeq_K562_H3K27ac</code>.
+</p>
+</DIV>
+
+<DIV class="faceted"><span class="types faceted composite"></span>
+<div class="format"><code>compositeTrack faceted</code></div>
+<p>
+This version of the <code>compositeTrack</code> setting indicates that the UI for this composite track
+should be handled with facets.
+</p>
+</div>
+
+<DIV class="metaDataUrl"><span class="types faceted composite"></span>
+<div class="format"><code>metaDataUrl &lt;url&gt;</code></div>
+<p>
+The URL here points to the tsv file that provides facet information.  This setting is required for
+faceted composite tracks.  The first row of the tsv file contains the field names; subsequent
+rows provide the metadata for each sample.
+<br> Example:
+<br><pre>
+accession       group        cell_type
+DRX118406       CellLine     iPSC
+DRX118407       CellLine     iPSC
+DRX118408       CellLine     iMeLC
+</pre>
+</p>
+</div>
+
+<DIV class="primaryKey"><span class="types faceted composite"></span>
+<div class="format"><code>primaryKey &lt;field&gt;</code></div>
+<p>
+This setting is required and works in tandem with the file specified in the metaDataUrl
+setting.  The named field will be used as a primary key for the metadata table, and
+those values will be used to identify subtracks.
+</p>
+</div>
+
+<DIV class="maxCheckBoxes"><span class="types faceted composite"></span>
+<div class="format"><code>maxCheckBoxes &lt;integer&gt;</code></div>
+<p>
+Frequently a facet may have a long list of possible values - too many to display at once in
+the track selection interface.  This setting limits the number of facet values displayed on
+the left to the N most common, where N is the value of this setting.  The default value is 20.
+</p>
+</div>
+
+
+<DIV class="dataTypes"><span class="types faceted composite"></span>
+<div class="format"><code>dataTypes &lt;name1(|"table title") name2(|"table title") ...&gt;</code></div>
+<p>
+This optional setting identifies a list of datatypes available for each sample in the metadata
+file (one sample per row). Each datatype is identified by a name, which is combined with the
+name of the parent track and a primary key to form track names as described above.  Spaces
+cannot be used in data type names; instead, spaces separate the various data types.  If present,
+the table title after the | character will be used as the display name for that data type in the
+track UI.  Titles can incorporate spaces if they are enclosed in quotes.</p>
+<p>Example:
+<pre>
+dataTypes sig|"Raw signal" peak|Peaks
+</pre>
+</p>
+</div>
+
+<DIV class="faceted_example1"><span class="types view"></span>
+<div class="format"><B>Example of a faceted composite track containing different track types:</B></div>
+    <pre>
+    track facetedExample
+    shortLabel Facet example
+    longLabel Example of a faceted composite with subtracks
+    type bed3
+    metaDataUrl https://server.com/path/to/metadata.tsv
+    primaryKey accession
+    compositeTrack faceted
+
+    track facetedExample_type1
+    type bigWig
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigWig1.bw
+
+    track facetedExample_type2
+    type bigWig
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigWig2.bw
+
+    track facetedExample_type3
+    type bigBed
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigBed.bb
+    </pre>
+    <p>Here, the metadata tsv file contains three rows - one for type1, one for type2,
+and one for type3.</p>
+</div>
+
+<DIV class="faceted_example2"><span class="types view"></span>
+<div class="format"><B>Example of a faceted composite track containing different samples and data types</B></div>
+    <pre>
+    track facetedExample
+    shortLabel Facet example
+    longLabel Example of a faceted composite with subtracks
+    type bed3
+    metaDataUrl https://server.com/path/to/metadata.tsv
+    primaryKey accession
+    dataTypes signal peaks
+    compositeTrack faceted
+
+    track facetedExample_pk1_signal
+    type bigWig
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigWig1.bw
+
+    track facetedExample_pk2_signal
+    type bigWig
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigWig2.bw
+
+    track facetedExample_pk1_peaks
+    type bigBed
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigBed1.bb
+
+    track facetedExample_pk2_peaks
+    type bigBed
+    parent facetedExample off
+    bigDataUrl https://server.com/path/to/bigBed2.bb
+    </pre>
+    <p>Here, the metadata tsv file contains two rows, one for pk1 and one for pk2.
+Each row provides metadata details for the collection of data type tracks associated with
+that row.  For example, the pk1 row of the table describes the peaks and signals tracks
+for the pk1 sample.
+</div>
+
 <!-- - - - - - - - CONTAINER/MULTIWIG/AGGREGATE settings - - - - - - - -->
 <DIV class="container_intro">
 <H3>Aggregate or Overlay Tracks: multiWig</H3>
@@ -6947,9 +7108,12 @@ display custom genome assemblies in the Genome Browser.</p>
     <pre>   email contactEmail@institution.edu</pre>
 </DIV>
 
-<DIV class="hubGenome"><span class="types all"></span>
+<DIV class="genome"><span class="types all"></span>
 <div class="format"><code>genome &lt;str&gt;</code></div>
-    <P>For hubs on native assemblies, use the UCSC database name (e.g. hg38).</P>
+    <P>For hubs on native assemblies, use the UCSC database name (e.g. hg38).
+    Genome assemblies in our <a href="https://hgdownload.gi.ucsc.edu/hubs"
+    target="_blank">GenArk Archive</a> can be referenced using their
+    GCA_NNN or GCA_NNN identifier (e.g. GCF_000891275.1).</P>
     <p>For custom assemblies, create your own name. This will appear on title pages
     in the Genome Browser.</p>
     <P><B>Example:</B></P>

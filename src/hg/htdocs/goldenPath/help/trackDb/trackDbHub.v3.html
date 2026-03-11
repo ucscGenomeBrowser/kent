@@ -52,117 +52,123 @@
 
 <!-- Finally to the content -->
 <div class="borderGuard">
-
 <DIV class="trackDbHub_intro">
 <H1>Hub Track Database Definition (<SPAN id="trackDbHub_version">v3</SPAN>)</H1>
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
+<p>
+This page describes all of the settings one might use in creating a
+<a href="/goldenPath/help/hgTrackHubHelp.html" target="_blank">track or assembly hub</a>.
+Hubs display your own data in the Genome Browser by hosting your files on a web
+server and connecting them with a simple text configuration file, giving you
+more control and permanence than custom tracks.
+This initial section touches on the files and settings needed in creating
+a hub before providing a listing of settings separated by track type.</p>
 
-    <p>For returning readers: We keep a <a href="changes.html">list of
-        changes</a> to the trackDb specification below.</p>
+<p>
+For those new to creating hubs: Our <a href="/docs/hubs/hubBasics.html"
+target="_blank">Hub Basics</a> page provides a simple introduction to creating hubs.</p>
 
-    <P>This document describes how to set dataset display characteristics
-    using "track database" or "trackDb" settings through name-value pair
-    associations used in a Track Hub's trackDb.txt file.
+<p>
+For returning readers: We keep a <a href="changes.html">list of changes</a>
+to the trackDb specification below.</p>
 
-    <P>The text file format for trackDb settings starts by creating a
-    text block, or "stanza", for each track dataset. These stanzas should be structured
-    according to the following format specification:
-    <ul>
-      <li>Lines consist of name-value pairs. The first line of the stanza
-          establishes the the <code>track</code> name. Additional
-          lines will contain further "setting" names followed
-          by "values" of one or more words of numbers.
-      <li>All trackDb stanzas must begin with a <code>track</code> line and a stanza ends
-          with a blank line.
-      <li>Periods should be avoided in <code>track</code> names, although there are some
-          settings that include periods in the name, e.g. filter.fieldName.
-      <li>The format supports '\' continuation characters. If the setting
-          is long or complex, break it into several lines using terminating
-          '\' characters to make it more readable.
-      <li>Text should be ASCII characters, but a limited set of Unicode characters are
-          <a href="/FAQ/FAQcustom.html#custom13">supported for longLabel and
-          shortLabel settings</a>.
-    </ul>
-    <p>Here is an example:</p>
+<h3 id="hub_txt">Start with a hub.txt</h3>
+<p>
+All hubs must include a top-level hub.txt file. This file contains general settings that
+identify your hub in our internal databases and in the Genome Browser interface.
+The URL to the hub.txt is used to load your hub. Our <a href="/docs/hubs/hubBasics.html"
+target="_blank">Hub Basics</a> describes how to create a hub.txt.
+A full listing of hub.txt settings can be found in the
+<a HREF="#hubGeneral">General hub configuration settings</a> section below.</p>
 
-    <pre>
-        track myFirstTrack
-        type bigBed 3
-        bigDataUrl myFirstTrack.bb
-        shortLabel Example Data
-        longLabel The data in this track is format "bigBed 3".    </pre>
+<p>
+If your hub contains tracks on a single genome assembly, then you can put all of the
+hub, genome, and track configuration settings into a single file with
+<code><a href="hgTracksHelp.html#UseOneFile" target="_blank">useOneFile</a></code>.</p>
 
-    <P>Every track stanza should have these five settings
-    (<code>track type bigDataUrl shortLabel longLabel</code>).
-    The first line's <code>track</code> key value (<code>myFirstTrack</code>) is the
-    identifier for the dataset given to the Browser and it must be
-    unique for each track within your data hub.  After the <code>track</code> key,
-    the most important setting is the <code>type</code> key. This value
-    (<code>bigBed 3</code>) tells the Browser the type of format the
-    data is in, defines how to display it, and determines
-    which options are available for fine control of that display.
-    For some configurable features, like <a href="#filter">filters</a>, an additional
-    period or plus may be needed (<code>bigBed 5 .</code>) or (<code>bigBed 9 +</code>).
-</P>
 
-    <P>While there are over 100 settings (providing a high level of flexibility for track
-    display) defined in this document and supported at UCSC, only the above five
-    are <font class="level-required">required</font>
-    to define a track and other sites that display hubs have more limited settings support.
-    To ease the task of hub developers and sites that
-    display hubs, each setting has been assigned a support level. The most
-    commonly used and broadly supported settings have
-    been designated as <font class="level-base">base</font> settings, to foster
-    hub portability.  The level for each setting is indicated in this document by
-    color, shown below and in each description
-    section as well as in the <A HREF="#toc">Table of Contents</A>.
-    The support levels are:
-    <table style="margin-left: 50px;">
-        <tr><td class="level-required">required</td><td>required settings</td></tr>
-        <tr><td class="level-base">base</td><td>common settings supported
-            at other sites</td></tr>
-        <tr><td class="level-deprecated">deprecated</td><td>settings that
-            are being retired (replacement is listed in details section)</td></tr>
-        <tr><td class="level-new">new</td><td>new settings not yet assigned
-            a level (may be replaced)</td></tr>
-        <tr><td class="level-full">full</td><td>other settings</td></tr>
-    </table>
-    </P>
-    <P>This documentation page has also been assigned a version number
-    so that when  <font class="level-new">new</font> settings are added, or
-    older settings are <font class="level-deprecated">deprecated</font>
-    other browser sites and track hub builders can verify the hub to
-    the relevant version. To learn about new settings you can view our
-    <a href="http://genomewiki.ucsc.edu/index.php/Genome_Browser_Software_Features"
-    target="_blank">software release log</a> or view news at a collaborative
-    <a href="http://groups.google.com/a/soe.ucsc.edu/group/track-hubs"
-    target="_blank"> track hub mailing list</a>. You can also see the
-    <a href="https://github.com/ucscGenomeBrowser/kent/commits/master/src/hg/htdocs/goldenPath/help/trackDb/trackDbLibrary.shtml"
-    target="_blank">commit history</a> of recent changes to the document library.
-    </P>
-    <p>
-    You can use the <code>hubCheck</code> utility to check the compatibility of your hub and its
-    trackDb settings with the UCSC Genome Browser or other genome browsers, such as Ensembl.
-    Our <a href="../hgTrackHubHelp.html#Compatibility">track hub help page</a>
-    provides some examples of how you might use <code>hubCheck</code> to do this and
-    you can read more in this related
-    <a href="https://genome-blog.gi.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
-    target="_blank">blog post.</a></p>
-</DIV>
+<h3 id="genomes_txt">Defining your hub's genomes</h3>
+<p>
+A genomes.txt is only necessary if you are <b>NOT</b> using the <code>useOneFile</code> setting
+as described <a href="#useOneFile">below</a>. When using <code>useOneFile</code>, one only needs
+to include the <code><a href="#genome">genome</a></code> line. This line will reference
+a UCSC assembly name (e.g. hg38) or a GenBank assembly available through our
+<a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk archive</a>
+beginning with GCF or GCA (e.g. GCF_000891275.1).
+
+<p>
+If your hub contains tracks for more than one
+genome, you will need to define a <a target="_blank"
+href="../hgTrackHubHelp.html#genomes.txt"><code>genomes.txt</code></a>. A full listing of
+genomes.txt settings, including those needed for an <a
+href="#assembly_hubs">assembly hub</a>, settings can be found in the <a
+href="#assembly">Assembly hub "genome" settings</a> section below.</p>
 
 <h3 id="useOneFile">Use <b><code>useOneFile on</code></b> for hubs with only one genome</h3>
 <p>
-This page focuses on the settings found in the <a target="_blank"
-href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a> file;
-however, all hubs must include a top-level <a target="_blank"
-href="../hgTrackHubHelp.html#hub.txt"><code>hub.txt</code></a>.
-If your hub is only displaying one genome, there is a way to put the <a target="_blank"
-href="../hgTrackHubHelp.html#genomes.txt"><code>genomes.txt</code></a> and
-<a target="_blank" href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a>
-all into one file. Read about the special <a target="_blank"
-href="../hgTracksHelp.html#UseOneFile"><code>useOneFile on</code></a> setting to
-allow all a hub to exist in one file. Load a working example <a target="_blank"
+If your hub is only displaying one genome, one can use the <a target="_blank"
+href="../hgTracksHelp.html#UseOneFile"><code>useOneFile on</code></a> setting
+to put all hub, genome, and track configuration settings into a single file.
+Load a working example <a target="_blank"
 href="../examples/hubExamples/hubUseOneFile/singleFileHubExample.txt">here</a>.</p>
+
+
+<h3 id="trackDb_txt">Declaring track settings</h3>
+<P>This document describes how to set dataset display characteristics
+using "track database" or "trackDb" settings through name-value pair
+associations used in a Track Hub's trackDb.txt file.
+
+<P>The text file format for trackDb settings starts by creating a
+text block, or "stanza", for each track dataset. These stanzas should be structured
+according to the following format specification:
+<ul>
+  <li>Lines consist of name-value pairs. The first line of the stanza
+      establishes the <code>track</code> name. Additional
+      lines will contain further "setting" names followed
+      by "values" of one or more words of numbers.
+  <li>All trackDb stanzas must begin with a <code>track</code> line and a stanza ends
+      with a blank line.
+  <li>Periods should be avoided in <code>track</code> names, although there are some
+      settings that include periods in the name, e.g. filter.fieldName.
+  <li>The format supports '\' continuation characters. If the setting
+      is long or complex, break it into several lines using terminating
+      '\' characters to make it more readable.
+  <li>Text should be ASCII characters, but a limited set of Unicode characters are
+      <a href="/FAQ/FAQcustom.html#custom13">supported for longLabel and
+      shortLabel settings</a>.
+</ul>
+<p>Here is an example:</p>
+
+<pre>
+    track myFirstTrack
+    type bigBed 3
+    bigDataUrl myFirstTrack.bb
+    shortLabel Example Data
+    longLabel The data in this track is format "bigBed 3".    </pre>
+
+<P>Every track stanza should have these five settings
+(<code>track type bigDataUrl shortLabel longLabel</code>).
+The first line's <code>track</code> key value (<code>myFirstTrack</code>) is the
+identifier for the dataset given to the Browser and it must be
+unique for each track within your data hub.  After the <code>track</code> key,
+the most important setting is the <code>type</code> key. This value
+(<code>bigBed 3</code>) tells the Browser the type of format the
+data is in, defines how to display it, and determines
+which options are available for fine control of that display.
+For some configurable features, like <a href="#filter">filters</a>, an additional
+period or plus may be needed (<code>bigBed 5 .</code>) or (<code>bigBed 9 +</code>).
+</P>
+
+<p>
+Running hubCheck on your <code>hub.txt</code> file identifies errors in settings, file
+paths, and formatting that could prevent your hub from loading correctly. Download hubCheck from the <a
+href="https://hgdownload.soe.ucsc.edu/admin/exe/">utilities download page</a> and
+see the <a href="/goldenPath/help/hgTrackHubHelp.html#Compatibility">hubCheck
+documentation</a> and related
+<a href="https://genome-blog.gi.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
+target="_blank">blog post</a>
+for more information on validating hubs.</p>
+
 
 <h3 id="includes">Using trackDb include statements</h3>
 <p>
@@ -174,17 +180,33 @@ several assemblies, or several large, complex tracks.
 <h3 id="assembly_hubs">Assembly Hubs</h3>
 <p>
 Assembly hubs can display novel genome assemblies and annotations in the UCSC
-Genome Browser. This involves creating a <a href="#assembly">genomes.txt</a>
-using several settings described below in addition to a trackDb file for each
-genome assembly. To create an assembly hub, refer to our
+Genome Browser. Note: Many genome assemblies available in GenBank are also available in our
+<a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk archive</a>.
+However, if your genome is not available in GenBank, you can make a custom assembly hub.
+To create an assembly hub, refer to our
 <a href="../assemblyHubUserGuide.html" target="_blank">Assembly Hub User Guide</a> or our <a
 href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
 
+<h3 id="includes">Page Contents</h3>
+
 <P>The remainder of this document is divided into the following sections and should be
-used as a ready reference.</P>
+used as a ready reference. Settings are colored based on their support level:
+<table style="margin-left: 50px;">
+    <tr><td class="level-required">required</td><td>required settings</td></tr>
+    <tr><td class="level-base">base</td><td>common settings supported
+        at other sites</td></tr>
+    <tr><td class="level-deprecated">deprecated</td><td>settings that
+        are being retired (replacement is listed in details section)</td></tr>
+    <tr><td class="level-new">new</td><td>new settings not yet assigned
+        a level (may be replaced)</td></tr>
+    <tr><td class="level-full">full</td><td>other settings</td></tr>
+</table>
+</P>
+<p>See the <a href="changes.html">list of changes</a> to see
+recent additions.
+</p>
 <IMG class='toggle all' />&nbsp;<I>Expand/close descriptions of settings
 in the sections below.</I>
-
 <OL>
 
     <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
@@ -214,6 +236,7 @@ in the sections below.</I>
         <UL>
             <LI><A HREF="#subGroups">Subgroups</A></LI>
             <LI><A HREF="#view">Views</A></LI>
+            <LI><A HREF="#faceted_composite">Faceted Composites</A></LI>
         </UL></LI>
         <LI><A HREF="#aggregate">Aggregate or Overlay Tracks: multiWig</A></LI>
     </UL></LI>
@@ -664,6 +687,9 @@ are described below along with settings specific to their types.</P>
             <code class="level-base">spectrum on</code><BR>
             <span class="scoreMax"><code class="level-full">scoreMax &lt;integer&gt;</code></span><BR>
             <span class="scoreMin"><code class="level-full">scoreMin &lt;integer&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="style"><A name="style"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">style &lt;heatmap&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">thickDrawItem &lt;off/on&gt;</code></div>
@@ -1529,6 +1555,41 @@ hierarchical containers:
 </TABLE>
 <BR><BR>
 
+<A name="faceted_composite"></A>
+<TABLE class="settingsTable" id="Faceted_Composite_Settings">
+<THEAD><TR><TD><DIV ID="faceted_composite_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Faceted composite track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="faceted"><IMG class='toggle detail'>
+        <div class="format"><code>compositeTrack faceted</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="metaDataUrl">
+        <A name="metaDataUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>metaDataUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="primaryKey">
+        <A name="metaDataUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>primaryKey &lt;field&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxCheckBoxes"><IMG class='toggle detail'>
+        <div class="format"><code>maxCheckBoxes &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dataTypes">
+        <A name="dataTypes"></A><IMG class='toggle detail'>
+        <div class="format"><code>dataTypes &lt;name1|"table title" name2|"table title" ...&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="faceted_example1">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a faceted composite track containing different track types:</B></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="faceted_example2">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a faceted composite track containing different track samples and data types:</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
 <A name="container"><A name="aggregate"><A name="multiWig"></A>
 <TABLE class="settingsTable" id="Aggregate_or_Overlay_Track_Settings">
 <THEAD><TR><TD><DIV ID="container_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -1610,7 +1671,7 @@ to be placed in a single file without the need for separate
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Assembly hub &quot;genome&quot; settings
     </TH></TR>
-    <TR VALIGN=TOP><TD class="hubGenome"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="genome"><IMG class='toggle detail'>
         <div class="format"><code class="level-base">genome &lt;str&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="trackDbFile"><IMG class='toggle detail'>
