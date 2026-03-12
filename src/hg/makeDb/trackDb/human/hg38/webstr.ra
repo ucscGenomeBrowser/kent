@@ -1,0 +1,21 @@
+track strVar
+shortLabel STR Variation
+longLabel Short Tandem Repeat Variation
+group varRep
+superTrack on
+html strVar.html
+visibility hide
+
+    track webstr
+    shortLabel WebSTR
+    longLabel WebSTR Short Tandem Repeat Loci (EnsembleTR Panel, 1000 Genomes)
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/hg38/webstr/webstr.bb
+    visibility dense
+    superTrack strVar dense
+    url https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38
+    urlLabel WebSTR locus page
+    searchIndex name
+    mouseOver $motif repeat, $numCopies copies, period $period
+    html webstr.html
