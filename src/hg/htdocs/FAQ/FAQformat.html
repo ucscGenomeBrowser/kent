@@ -174,7 +174,7 @@ The first three required BED fields are: </p>
   the stop codon in gene displays).</li> 
   <li>
   <strong>itemRgb</strong> - An RGB value of the form R,G,B (e.g. 255,0,0).  If the track line 
-  <em>itemRgb</em> attribute is set to &quot;On&quot;, this RBG value will determine the display 
+  <em>itemRgb</em> attribute is set to &quot;On&quot;, this RGB value will determine the display 
   color of the data contained in this BED line. NOTE: It is recommended that a simple color 
   scheme (eight colors or less) be used with this attribute to avoid overwhelming the color 
   resources of the Genome Browser and your Internet browser.</li>
@@ -448,7 +448,7 @@ Here is a brief description of the GFF fields:</p>
   <strong>source</strong> - The program that generated this feature.</li>
   <li>
   <strong>feature</strong> - The name of this type of feature. Some examples of standard feature 
-  types are &quot;CDS&quot; &quot;start_codon&quot; &quot;stop_codon&quot; and &quot;exon&quot;li>
+  types are &quot;CDS&quot; &quot;start_codon&quot; &quot;stop_codon&quot; and &quot;exon&quot;.</li>
   <li>
   <strong>start</strong> - The starting position of the feature in the sequence. The first base is 
   numbered 1.</li>
@@ -458,7 +458,7 @@ Here is a brief description of the GFF fields:</p>
   <strong>score</strong> - A score between 0 and 1000. If the track line <em>useScore</em> attribute
   is set to 1 for this annotation data set, the <em>score</em> value will determine the level of 
   gray in which this feature is displayed (higher numbers = darker gray). If there is no score 
-  value, enter &quot.&quot.        
+  value, enter &quot;.&quot;.        
   <li>
   <strong>strand</strong> - Valid entries include &quot;+&quot;, &quot;-&quot;, or &quot;.&quot; 
   (for don't know/don't care).</li>        
@@ -472,7 +472,7 @@ Here is a brief description of the GFF fields:</p>
 </ol>
 <p>
 <strong><em>Example:</em></strong><br>
-Here's an example of a GFF-based track. This data format require tabs and some operating systems convert tabs to spaces. If pasting doesn't work, this <a href="../goldenPath/help/regulatory.txt" 
+Here's an example of a GFF-based track. This data format requires tabs and some operating systems convert tabs to spaces. If pasting doesn't work, this <a href="../goldenPath/help/regulatory.txt" 
 target="blank">example's</a> contents or the url itself can be pasted into the custom track text box.
 <pre><code>browser position chr22:10000000-10025000
 browser hide all
@@ -541,7 +541,7 @@ issues such as forward and reverse strand directions, multiple pieces to the ali
 forth.</p> 
 <p> 
 <strong>General Structure</strong><br> 
-The <em>.maf</em> format is line-oriented. Each multiple alignment beigns with the reference genome
+The <em>.maf</em> format is line-oriented. Each multiple alignment begins with the reference genome
 line and ends with a blank line. Each 
 sequence in an alignment is on a single line, which can get quite long, but there is no length 
 limit. Words in a line are delimited by any white space. Lines starting with # are considered to be 
@@ -551,7 +551,7 @@ or another.</p>
 The file is divided into paragraphs that terminate in a blank line.  Within a paragraph, the first 
 word of a line indicates its type. Each multiple alignment is in a separate paragraph that begins 
 with an &quot;a&quot; line and contains an &quot;s&quot; line for each sequence in the multiple 
-alignment. The first sequence must be the reference genome on which the rest of the sequenes map. 
+alignment. The first sequence must be the reference genome on which the rest of the sequences map. 
 Some MAF files may contain other optional line types: </p>
 <ul>
   <li>
@@ -658,7 +658,7 @@ The &quot;s&quot; lines have the following fields which are defined by position.
   <li> 
   <strong>src</strong> -- The name of one of the source sequences for the alignment. For sequences 
   that are resident in a browser assembly, the form 'database.chromosome' allows automatic creation 
-  of links to other assemblies. Non-browser sequences are typically reference by the species name 
+  of links to other assemblies. Non-browser sequences are typically referenced by the species name 
   alone.</li>
   <li> 
   <strong>start</strong> -- The start of the aligning region in the source sequence. This is a 
@@ -833,7 +833,7 @@ fields are defined by position rather than name=value pairs:</p>
 <p> 
 <strong>A Simple Example</strong></p>                     
 <p>
-Here is a simple example of a three alignment blocks derived from five starting sequences. The 
+Here is a simple example of three alignment blocks derived from five starting sequences. The 
 first <strong>track</strong> line is necessary for custom tracks, but should be removed otherwise. Repeats are
 shown as lowercase, and each block may have a subset of the input sequences. All sequence columns 
 and rows must contain at least one nucleotide (no columns or rows that contain only insertions).</p>
@@ -993,7 +993,7 @@ and amino acids when zoomed in to the base level.</p>
 <a name=GenePredictions></a>
 <p><strong>Gene Predictions</strong></p>
 <p> 
-The following definition is used for gene prediction tables.In alternative-splicing situations, each
+The following definition is used for gene prediction tables. In alternative-splicing situations, each
 transcript has a row in this table.</p>
 <pre><code>table genePred
 "A gene prediction."

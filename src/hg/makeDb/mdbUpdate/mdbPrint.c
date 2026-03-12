@@ -61,7 +61,7 @@ errAbort(
 "  mdbPrint hg18 -obj=wgEncodeUncFAIREseqPeaksPanislets -line\n"
 "           Return a single formatted metadata line for one object.\n"
 "  mdbPrint hg18 -count -var=cell -val=GM%%\n"
-"           Return the count of objects which have a cell begining with 'GM'.\n");
+"           Return the count of objects which have a cell beginning with 'GM'.\n");
 }
 
 static struct optionSpec optionSpecs[] = {

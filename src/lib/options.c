@@ -371,9 +371,9 @@ lval = strtol(s, &valEnd, 10);  // use strtol since strtoi does not exist
 if ((*s == '\0') || (*valEnd != '\0'))
     errAbort("value of -%s is not a valid integer: \"%s\"", name, s);
 if (lval > INT_MAX)
-    errAbort("value of -%s is is too large: %ld, integer maximum is %d", name, lval, INT_MAX);
+    errAbort("value of -%s is too large: %ld, integer maximum is %d", name, lval, INT_MAX);
 if (lval < INT_MIN)
-    errAbort("value of -%s is is too small: %ld, integer minimum is %d", name, lval, INT_MIN);
+    errAbort("value of -%s is too small: %ld, integer minimum is %d", name, lval, INT_MIN);
 return lval;
 }
 

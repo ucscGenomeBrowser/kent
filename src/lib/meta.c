@@ -404,7 +404,7 @@ for (meta = list; meta != NULL; meta = meta->next)
 }
 
 struct hash *metaHash(struct meta *forest)
-/* Return hash of meta at all levels of heirarchy keyed by forest. */
+/* Return hash of meta at all levels of hierarchy keyed by forest. */
 {
 struct hash *hash = hashNew(0);
 rHashMetaList(hash, forest);

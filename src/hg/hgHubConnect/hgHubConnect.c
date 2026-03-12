@@ -284,8 +284,7 @@ puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not a
         "Alternatively, you may <a href=\"/goldenPath/help/hgTrackHubHelp.html#Sharing\" "
         "style='color:#121E9A' target=_blank>build a link with the hub URL</a> to allow users to retain their browser "
         "configuration, connected hubs, and custom tracks.</p>"
-        "</p>"
-        "<p>When you are ready to share you hub more widely, "
+        "<p>When you are ready to share your hub more widely, "
         "see our <a href=\"/goldenPath/help/publicHubGuidelines.html\" style='color:#121E9A'>public "
         "hub guidelines</A> for information on submitting a new public hub.</p>\n"
         );
@@ -299,7 +298,7 @@ if (unlistedHubCount == 0)
             "<li>Alternatively, you can go to the 'Public Hubs' tab on this page and connect one "
             "of the hubs that were submitted to us. </li>"
             "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected (adding &hubUrl=https://xxx to the URL). </li>"
-            "<li>You can also connect to hub by following a short link to a saved session, created though the menu "
+            "<li>You can also connect to a hub by following a short link to a saved session, created though the menu "
             "'My Data &gt; My Sessions', if the Genome Browser had connected hubs when the session was saved.</li>"
             "</ul></td></tr>");
     printf("</thead></table>\n");
@@ -507,12 +506,12 @@ printf("<label for=\"validateHubUrl\"><b>Hub URL:</b></label>");
 printf("<input id='validateHubUrl' name='validateHubUrl' class='hubField' "
        "type='text' size='65'%s>\n", hubUrlVal);
 printf("<button type='button' id='hubValidateButton'>Check</button>\n");
-printf("&nbsp;&nbsp<span style='font-size:90%%' class='link' id='loadSampleHub'>Load Example URL</span>\n");
+printf("&nbsp;&nbsp;<span style='font-size:90%%' class='link' id='loadSampleHub'>Load Example URL</span>\n");
 
 puts("<div class='help'>Use the URL bar above to check a hub for errors. This will "
         "validate the hub's configuration files, including hub.txt, "
         "genomes.txt and trackDb.txt. "
-    "It will also present a  hierarchical tree of tracks with any errors in red. A hub "
+    "It will also present a hierarchical tree of tracks with any errors in red. A hub "
     "with no errors still shows the tree which can be used to explore the track hierarchy. "
     "Hub error checking will always refresh the files and never use our remote file cache (see below)."
     "</div>\n "
@@ -1451,7 +1450,7 @@ hPrintf("<P><B>Hub Description:</B> %s</P>", tHub->longLabel);
 hPrintf("<P><B>Contact email:</B> <A HREF=\"mailto:%s\">%s</A>.</B> Use this contact for all data questions.</P>", tHub->email, tHub->email);
 struct trackHubGenome *genomeList = tHub->genomeList;
 
-hPrintf("<P><B>Assemblies:</B> Select an assembly below to starting browsing the tracks of this hub:<P>");
+hPrintf("<P><B>Assemblies:</B> Select an assembly below to start browsing the tracks of this hub:<P>");
 
 hPrintf("<ul>");
 

@@ -3505,7 +3505,7 @@ Will also robustly handle null strings
 param haystack - The string to be searched
 param needle - The string to look for in the haystack string
 
-return - The position of the first occurence of the desired substring
+return - The position of the first occurrence of the desired substring
 or -1 if it is not found
  */
 {

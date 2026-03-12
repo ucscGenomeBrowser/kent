@@ -246,7 +246,7 @@ if (ids != NULL)
                 slAddHead(&nameList,slNameNew(nameList->name));
             }
         else
-            errAbort("The number of of items in %s and %s must match for term %s",
+            errAbort("The number of items in %s and %s must match for term %s",
                      nameSetting,idSetting,(char *)hashMustFindVal(ra,CV_TERM));
         }
     }
@@ -261,7 +261,7 @@ if (urls != NULL)
         {
         urlList = slNameListFromString(urls, ';');
         if (slCount(urlList) > slCount(nameList))
-            errAbort("The number of of items in %s and %s must match for term %s",
+            errAbort("The number of items in %s and %s must match for term %s",
                      nameSetting,urlSetting,(char *)hashMustFindVal(ra,CV_TERM));
         }
     }
