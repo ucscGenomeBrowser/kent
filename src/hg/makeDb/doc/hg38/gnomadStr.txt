@@ -1,0 +1,33 @@
+# gnomAD STR - Short tandem repeat genotypes at disease-associated loci
+# Part of the gnomadVariants supertrack
+# 2026-03-12 (claude/max)
+
+# Data from gnomAD v3.1.3, 18,511 WGS samples
+# Genotyped with ExpansionHunter v5
+# 87 disease-associated STR loci, ~1.4M individual genotype records
+# gnomAD blog post: https://gnomad.broadinstitute.org/news/2022-01-the-addition-of-short-tandem-repeat-calls-to-gnomad/
+# Redmine tickets: #35420 (main), #36652 (STR supertrack)
+
+mkdir -p /hive/data/genomes/hg38/bed/gnomad/str
+cd /hive/data/genomes/hg38/bed/gnomad/str
+
+# Download genotype data from gnomAD
+wget https://storage.googleapis.com/gcp-public-data--gnomad/release/3.1.3/tsv/gnomAD_STR_genotypes__2025_03_17.tsv.gz
+
+# Aggregate individual genotypes into per-locus summaries
+# Computes allele frequency distributions, sample counts, population breakdown
+python3 ~/kent/src/hg/makeDb/scripts/gnomadStr/gnomadStrToBed.py \
+    gnomAD_STR_genotypes__2025_03_17.tsv.gz > gnomadStr.bed 2>/dev/null
+
+# Sort and convert to bigBed
+bedSort gnomadStr.bed gnomadStr.bed
+bedToBigBed gnomadStr.bed /hive/data/genomes/hg38/chrom.sizes gnomadStr.bb \
+    -type=bed9+ -tab -as=$HOME/kent/src/hg/makeDb/scripts/gnomadStr/gnomadStr.as
+
+# Symlink into /gbdb under gnomAD directory
+ln -sf /hive/data/genomes/hg38/bed/gnomad/str/gnomadStr.bb /gbdb/hg38/gnomAD/gnomadStr.bb
+
+# trackDb: gnomadStr track is inside the gnomadVariants supertrack
+# trackDb entry added to: ~/kent/src/hg/makeDb/trackDb/human/hg38/gnomad.ra
+# HTML doc: ~/kent/src/hg/makeDb/trackDb/human/hg38/gnomadStr.html
+# Related tracks: linked to strVar supertrack in relatedTracks.ra

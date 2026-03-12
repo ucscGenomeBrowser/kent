@@ -263,6 +263,20 @@ searchIndex name
 mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}<br> <b>Site frequency (non-neuro control samples)</b>: ${sf}
 html gnomadCNV
 
+track gnomadStr
+parent gnomadVariants on
+shortLabel gnomAD STR
+longLabel Genome Aggregation Database (gnomAD) - Short Tandem Repeat Genotypes at Disease-Associated Loci
+dataVersion gnomAD v3.1.3 STR genotypes (March 2025)
+type bigBed 9 +
+itemRgb on
+bigDataUrl /gbdb/hg38/gnomAD/gnomadStr.bb
+visibility pack
+url https://gnomad.broadinstitute.org/short-tandem-repeat/$$?dataset=gnomad_r3
+urlLabel View at gnomAD
+searchIndex name
+mouseOver $name: $motif repeat in $gene, $nSamples samples ($nPass PASS)
+html gnomadStr
 
 searchTable pliByTranscript
 searchType bigBed
