@@ -37,10 +37,7 @@ for (i=0; i<size; ++i)
     {
     if (r!=NULL && s[i]==r[i])
 	{
-	if (cfgOptionBooleanDefault("mafClickMafFrag", FALSE))
-	    fprintf(f, " ");
-	else
-	    fprintf(f, ".");
+	fprintf(f, ".");
 	}
     else
 	{
@@ -119,10 +116,12 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chopPrefix(dbOnly);
 
-	if ((org = hOrganism(dbOnly)) == NULL)
-	    len = strlen(dbOnly);
-	else
-	    len = strlen(org);
+	if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
+	    {
+	    if ((org = hOrganism(dbOnly)) == NULL)
+		org = dbOnly;
+	    }
+	len = strlen(org);
 	if (srcChars < len)
 	    srcChars = len;
 
@@ -966,6 +965,7 @@ else
 	    if (capTrack != NULL)
                 capMafOnTrack(maf, capTrack, onlyCds);
 #endif
+            ++aliIx;
             if (useMafFrag)
                 printf("<B>Alignment %d - %d, %d bps </B>\n",
                        maf->components->start + 1,
@@ -973,9 +973,9 @@ else
                        maf->components->size);
             else
                 printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
-                       ++aliIx,realCount,maf->components->start + 1,
+                       aliIx,realCount,maf->components->start + 1,
                        maf->components->start + maf->components->size, maf->components->size);
-            mafPrettyOut(stdout, maf, 70, onlyDiff, aliIx, labelHash);
+            mafPrettyOut(stdout, maf, useMafFrag ? maf->textSize : 70, onlyDiff, aliIx, labelHash);
             }
 	mafAliFreeList(&subList);
 	}

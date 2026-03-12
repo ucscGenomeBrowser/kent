@@ -157,6 +157,10 @@ struct oneOrg
     int end;		/* End in source (updated as we see more blocks). */
     int srcSize;	/* Source sequence size. */
     char strand;	/* Strand of alignment. */
+    char leftStatus;	/* i-row: syntenic status before this alignment. */
+    int leftLen;	/* i-row: length info for previous alignment. */
+    char rightStatus;	/* i-row: syntenic status after this alignment. */
+    int rightLen;	/* i-row: length info for following alignment. */
     };
 
 static int oneOrgCmp(const void *va, const void *vb)
@@ -810,6 +814,10 @@ for (org = orgList; org != NULL; org = org->next)
 	mc->size = size;
 	}
     mc->text = cloneString(org->dy->string);
+    mc->leftStatus = org->leftStatus;
+    mc->leftLen = org->leftLen;
+    mc->rightStatus = org->rightStatus;
+    mc->rightLen = org->rightLen;
     dyStringFree(&org->dy);
     slAddHead(&outMaf->components, mc);
     }
@@ -943,6 +951,10 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	org->strand = '+';
 	org->start = (outName != NULL) ? (subMaster->start - start)
 	                               : subMaster->start;
+	org->leftStatus = subMaster->leftStatus;
+	org->leftLen = subMaster->leftLen;
+	org->rightStatus = subMaster->rightStatus;
+	org->rightLen = subMaster->rightLen;
 
 	/* Create orgs for non-reference species in this block */
 	int order = 1;
@@ -972,6 +984,10 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    org->start = mc->start;
 	    org->srcSize = mc->srcSize;
 	    org->strand = mc->strand;
+	    org->leftStatus = mc->leftStatus;
+	    org->leftLen = mc->leftLen;
+	    org->rightStatus = mc->rightStatus;
+	    org->rightLen = mc->rightLen;
 	    }
 	}
     else
@@ -996,6 +1012,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     nativeOrg->end = (outName != NULL)
 	? (subMaster->start + subMaster->size - start)
 	: (subMaster->start + subMaster->size);
+    nativeOrg->rightStatus = subMaster->rightStatus;
+    nativeOrg->rightLen = subMaster->rightLen;
 
     struct mafComp *mc;
     boolean isFirst = TRUE;
@@ -1015,6 +1033,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	org->hit = TRUE;
 	dyStringAppendN(org->dy, mc->text, subMaf->textSize);
 	org->end = mc->start + mc->size;
+	org->rightStatus = mc->rightStatus;
+	org->rightLen = mc->rightLen;
 	}
 
     /* Safety: fill dashes for any org not hit (shouldn't happen normally) */
