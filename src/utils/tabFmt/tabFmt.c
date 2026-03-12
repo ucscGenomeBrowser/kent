@@ -1,4 +1,4 @@
-/* tabFmt - Format a tab-seperated file for human readability. */
+/* tabFmt - Format a tab-separated file for human readability. */
 #include "common.h"
 #include "linefile.h"
 #include "options.h"
@@ -7,7 +7,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "tabFmt - Format a tab-seperated file for human readability\n"
+  "tabFmt - Format a tab-separated file for human readability\n"
   "Usage:\n"
   "   tabFmt [options] inFile [outFile]\n"
   "\n"

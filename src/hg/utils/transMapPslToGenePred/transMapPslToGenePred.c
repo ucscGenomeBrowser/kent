@@ -522,7 +522,7 @@ return min(gp->exonEnds[iExon], gp->cdsEnd);
 }
 
 static int getExonCdsLen(struct genePred *gp, int iExon)
-/* get the length of the the CDS in an exon */
+/* get the length of the CDS in an exon */
 {
 int start, end;
 genePredCdsExon(gp, iExon, &start, &end);

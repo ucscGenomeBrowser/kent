@@ -7,7 +7,7 @@
 
 <h1>bigChain Track Format</h1>
 <p>
-The bigChain format describes a pairwise alignment that allow gaps in both sequences simultaneously,
+The bigChain format describes a pairwise alignment that allows gaps in both sequences simultaneously,
 just as <a href="chain.html">chain</a> files do; however, bigChain files are compressed and indexed 
 as <a href="/goldenPath/help/bigBed.html">bigBeds</a>. Chain files are converted to bigChain files
 using the program <code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a
@@ -171,7 +171,7 @@ In this example, you will create your own bigChain file from an existing chain i
   Run the utilities in <em>Steps 5-7</em>, above, to create the bigChain and bigLink output 
   files. </li> 
   <li>
-  Place the newly created bigChain (<em>bigChain.bb</em>) and and bigLink 
+  Place the newly created bigChain (<em>bigChain.bb</em>) and bigLink 
   (<em>bigChain.link.bb</em>) files on a web-accessible server (<em>Step 8</em>).</li>
   <li>
   Construct a track line that points to the bigChain file (<em>Step 9</em>, above).</li>
@@ -206,7 +206,7 @@ command line to view the usage statement.</p>
 <h2>Troubleshooting</h2>
 <p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
-file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+file for data coordinates that extend past the end of the chromosome. If these are present, run 
 the <code>bedClip</code> program 
 (<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
 row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 

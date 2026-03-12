@@ -488,7 +488,7 @@ checkUnalignedTxSeq(psl, gSeqWin, txSeq, cds, differencesList);
 }
 
 static void sortAndDumpBedPlus(char *outBaseName, struct txAliDiff *diffList)
-/* Sort the mostly-backwards bed list and and dump to file named outBaseName.bed. */
+/* Sort the mostly-backwards bed list and dump to file named outBaseName.bed. */
 {
 char fileName[PATH_LEN];
 safef(fileName, sizeof(fileName), "%s.bed", outBaseName);

@@ -13154,13 +13154,13 @@ term shortPolyA
 tag SHORTPOLYA
 type rnaExtract
 label Short PolyA+ RNA
-description Rna shorter than 200 nt that is Poly Adenalyated
+description Rna shorter than 200 nt that is Poly Adenylated
 
 term shortTotal
 tag SHORTTOTAL
 type rnaExtract
 label Short Total RNA
-description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
+description Rna shorter than 200 nt that has not been separated based on Poly Adenylation
 
 term longPolyA
 tag PAP

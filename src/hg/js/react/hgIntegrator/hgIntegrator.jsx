@@ -644,7 +644,7 @@ only when they overlap with the first data source.
 Under &quot;<b>Add Data Source</b>&quot;, several menus display available data sources:
 <ul>
   <li><b>track group</b>:
-      A category of data track, for example &quot;Genes and Gene Prediction&quot;
+      A category of data track, for example &quot;Genes and Gene Predictions&quot;
       or &quot;Regulation&quot;.</li>
   <li><b>track</b>:
       One or more data tables containing results of an experiment

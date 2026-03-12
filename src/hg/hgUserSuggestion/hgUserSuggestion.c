@@ -658,7 +658,7 @@ askForSuggest(organism,db);
 if (isNotEmpty(cfgOption(CFG_SUGGEST_SITE_KEY)))
     {
     printReCaptchaV3();
-    hPrintf("<div><p>this site protected by reCAPTCHA and the Google <a href='https://policies.google.com/privacy?hl=en' target='_blank'>privacy policy</a> and <a href='https://policies.google.com/terms?hl=en' target='_blank'>terms of service</a> apply</p></div>\n");
+    hPrintf("<div><p>This site is protected by reCAPTCHA and the Google <a href='https://policies.google.com/privacy?hl=en' target='_blank'>privacy policy</a> and <a href='https://policies.google.com/terms?hl=en' target='_blank'>terms of service</a> apply</p></div>\n");
 
     char footer[1024];
     safef(footer, sizeof(footer),

@@ -15,7 +15,7 @@ geneTrack ncbiGeneBGP
         track ucscStrainNucMutsUK
         parent ucscStrainNucMuts
         shortLabel B.1.1.7 Nuc Muts
-        longLabel B.1.1.7 strain ("UK variant", 20I/507.V1, VOC) nucleotide mutations identifed from GISAID sequences
+        longLabel B.1.1.7 strain ("UK variant", 20I/507.V1, VOC) nucleotide mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsUK.vcf.gz
         color 255,117,53
         priority 1
@@ -23,7 +23,7 @@ geneTrack ncbiGeneBGP
         track ucscStrainNucMutsSA
         parent ucscStrainNucMuts
         shortLabel B.1.351 Nuc Muts
-        longLabel B.1.351 strain ("South Africa Variant", 20H/501Y.V2) nucleotide mutations identifed from GISAID sequences
+        longLabel B.1.351 strain ("South Africa Variant", 20H/501Y.V2) nucleotide mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsSA.vcf.gz
         color 255,170,63
         priority 2
@@ -31,7 +31,7 @@ geneTrack ncbiGeneBGP
         track ucscStrainNucMutsBrz
         parent ucscStrainNucMuts
         shortLabel P.1 Nuc Muts 
-        longLabel P.1 strain ("Brazil Variant", 20J/501Y.V3) nucleotide mutations identifed from GISAID sequences
+        longLabel P.1 strain ("Brazil Variant", 20J/501Y.V3) nucleotide mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsBrz.vcf.gz
         color 249,53,41
         priority 3
@@ -39,7 +39,7 @@ geneTrack ncbiGeneBGP
         track ucscStrainNucMutsCA
         parent ucscStrainNucMuts
         shortLabel B.1.429 Nuc Muts 
-        longLabel B.1.429 ("California Variant", CA.20C) nucleotide mutations identifed from GISAID sequences
+        longLabel B.1.429 ("California Variant", CA.20C) nucleotide mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainNucMutsCA.vcf.gz
         color 105,190,185
         priority 4
@@ -47,7 +47,7 @@ geneTrack ncbiGeneBGP
         track ucscStrainNucMutsOmicron
         parent ucscStrainNucMuts
         shortLabel B.1.1.529 Nuc Muts 
-        longLabel B.1.1.529 (Omicron) nucleotide mutations identifed from GISAID sequences
+        longLabel B.1.1.529 (Omicron) nucleotide mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
         color 80,160,200
         priority 5
@@ -66,7 +66,7 @@ noScoreFilter on
         track ucscStrainMutsUK
         parent ucscStrainMuts
         shortLabel B.1.1.7 AA Muts 
-        longLabel B.1.1.7 strain ("UK Variant", 20I/507.V1, VOC) amino acid mutations identifed from GISAID
+        longLabel B.1.1.7 strain ("UK Variant", 20I/507.V1, VOC) amino acid mutations identified from GISAID
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsUK.bb
         url https://cov-lineages.org/global_report_B.1.1.7.html
         color 255,117,53
@@ -75,7 +75,7 @@ noScoreFilter on
         track ucscStrainMutsSA
         parent ucscStrainMuts
         shortLabel B.1.351 AA Muts
-        longLabel B.1.351 strain ("South Africa Variant", 20H/501Y.V2) amino acid mutations identifed from GISAID sequences
+        longLabel B.1.351 strain ("South Africa Variant", 20H/501Y.V2) amino acid mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsSA.bb
         url https://cov-lineages.org/global_report_B.1.351.html
         color 255,170,63
@@ -84,7 +84,7 @@ noScoreFilter on
         track ucscStrainMutsBrz
         parent ucscStrainMuts
         shortLabel P.1 AA Muts 
-        longLabel P.1 strain ("Brazil Variant", 20J/501Y.V3) amino acid mutations identifed from GISAID sequences
+        longLabel P.1 strain ("Brazil Variant", 20J/501Y.V3) amino acid mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsBrz.bb
         url https://cov-lineages.org/global_report_P.1.html
         color 249,53,41
@@ -93,7 +93,7 @@ noScoreFilter on
         track ucscStrainMutsCA
         parent ucscStrainMuts
         shortLabel B.1.429 AA Muts 
-        longLabel B.1.429 strain ("California Variant", CA.20C) amino acid mutations identifed from GISAID sequences
+        longLabel B.1.429 strain ("California Variant", CA.20C) amino acid mutations identified from GISAID sequences
         bigDataUrl /gbdb/wuhCor1/strainMuts/ucscStrainMutsCA.bb
         color 105,190,185
         priority 4

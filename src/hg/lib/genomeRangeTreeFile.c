@@ -406,7 +406,7 @@ for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
     }
 /* Now go back and rewrite the header, and close the file */
 if (tf->file && fseek(tf->file, 0, SEEK_SET))
-    errAbort("couldnt fseek(f,0,SEEK_SET) to rewrite header: errno(%d) = %s\n", errno, strerror(errno));
+    errAbort("couldn't fseek(f,0,SEEK_SET) to rewrite header: errno(%d) = %s\n", errno, strerror(errno));
 if (tf->file)
     genomeRangeTreeFileWriteHeader(tf);
 *nodes = i;
@@ -533,7 +533,7 @@ for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
 if (tf->file)
     {
     if (fseek(tf->file, 0, SEEK_SET))
-	errAbort("couldnt fseek(f,0,SEEK_SET) to rewrite header: errno(%d) = %s\n", errno, strerror(errno));
+	errAbort("couldn't fseek(f,0,SEEK_SET) to rewrite header: errno(%d) = %s\n", errno, strerror(errno));
     genomeRangeTreeFileWriteHeader(tf);
     for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
 	{

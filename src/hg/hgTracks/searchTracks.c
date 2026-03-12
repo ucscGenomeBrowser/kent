@@ -430,7 +430,7 @@ if (lockStatus == 0)
     // prevent still running threads from continuing
     pfdList = NULL;
     if (measureTiming)
-        fprintf(stdout, "<span class='timing'>Successfully aquired lock, adding any succesful thread data\n<br></span>");
+        fprintf(stdout, "<span class='timing'>Successfully acquired lock, adding any successful thread data\n<br></span>");
     for (pfd = pfdDone; pfd != NULL; pfd = pfd->next)
         {
         struct track *t;

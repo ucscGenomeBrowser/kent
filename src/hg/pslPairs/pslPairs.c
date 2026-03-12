@@ -54,7 +54,7 @@ errAbort(
 "  -max=N\t- maximum length of clone sequence (default=%d)\n"
 "  -min=N\t- minimum length of clone sequence (default=%d)\n"
 "  -slopval=N\t- deviation from max/min clone lengths allowed for slop report\n\t\t- (default=%d)\n"
-"  -nearTop=N\t- maximium deviation from best match allowed (default=%0.3f)\n"
+"  -nearTop=N\t- maximum deviation from best match allowed (default=%0.3f)\n"
 "  -minId=N\t- minimum pct ID of at least one end (default=%0.2f)\n"
 "  -minOrphanId=N - minimum pct ID for orphan alignment (default=%0.2f)\n"
 "  -tInsert=N\t- maximum insert bases allowed in sequence alignment\n\t\t- (default=%d)\n"

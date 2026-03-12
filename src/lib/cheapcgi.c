@@ -1118,7 +1118,7 @@ cgiParseInputAbort(inputString, &inputHash, &inputList);
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
 
-/* Set enviroment variables CGIs to enable sql tracing and/or profiling */
+/* Set environment variables CGIs to enable sql tracing and/or profiling */
 s = cgiOptionalString("JKSQL_TRACE");
 if (s != NULL)
     envUpdate("JKSQL_TRACE", s);
