@@ -15,7 +15,7 @@ can be replaced with a positional heatmap.  The heatmap provides a sparse 2-dime
 grid for information like expression of allele-specific point mutations across a transcript.</p>
 
 <div class="text-center">
-  <a href="http://genome.ucsc.edu/s/jcasper/heatmap_example" target="_blank">
+  <a href="https://genome.ucsc.edu/s/jcasper/heatmap_example" target="_blank">
   <img src="/images/heatmap_example.png" style="width:80%;max-width:1083px"></a>
 </div>
 
@@ -25,9 +25,9 @@ grid for information like expression of allele-specific point mutations across a
 <h6><a href="#gettingStarted">Getting Started</a></h6>
 <h6><a href="#troubleshooting">Troubleshooting</a></h6>
 
-<a id="annotating"></a>
+<a id="extrafields"></a>
 <h2>The Extra Fields</h2>
-<p>A heatmap file bigBed file starts with the standard 12 BED fields, but adds 7 more.  Moreover,
+<p>A heatmap bigBed file starts with the standard 12 BED fields, but adds 7 more.  Moreover,
 the blockSizes and chromStarts fields take on a slightly different interpretation.
 </p>
 <pre>
@@ -65,17 +65,17 @@ scores outside the bounds just copy the value of the nearest boundary.</p>
 is set to #000000,#FF0000,#FFFFFF (black, red, and white, respectively), then the following will hold.
 Any score 0 or below will be drawn in black, the score 500 will be drawn in pure red, and any score
 of 1000 or more will be drawn in white.  The score 250 is halfway between the black and red thresholds,
-so it would be drawn in a color halfway between #000000 and #FF0000, or about #490000.</p>
+so it would be drawn in a color halfway between #000000 and #FF0000, or about #800000.</p>
 <p>The <code>_scoreArray</code> and <code>_labelArray</code> fields contain the actual scores
 and mouseover text for each cell within the heatmap in row-major order, meaning the list of scores
 will fill the first row, then overflow to begin filling the second row, then the third row and so
 on.  Because these are comma-separated lists, a cell can be left empty simply by placing nothing
 between the commas that demarcate it.</p>
-<p>For example, if exonCount is 2 and _rowCount is 3, then the line will describe a 6-cell heatmap
+<p>For example, if blockCount is 2 and _rowCount is 3, then the line will describe a 6-cell heatmap
 with 3 rows and 2 columns.  If the accompanying <code>_scoreArray</code> is "1,0,2,,0.5,,", then
-that will describe a heatmap where the top-left corner has the score 1, the top-middle score is 0,
-the top-right score is 2, and the bottom-middle score is 0.5.  The bottom-left and bottom-right
-cells will be left empty, as no score was provided for them.</p>
+that will describe a heatmap where row 1 has scores 1 and 0, row 2 has the score 2 in the first
+column and an empty second column, and row 3 has 0.5 in the first column and an empty second
+column.</p>
 <p>This format is a bit awkward to describe with only 6 cells; it becomes difficult or impossible
 to edit manually when the heatmaps reach sufficient size (like hundreds or even thousands).
 We strongly recommend the use of automated scripts to create these files.
@@ -102,7 +102,7 @@ chr1 1200 2400 T2 1000 - 1200 2400 0 3 500,800,300 0,600,900
 of these transcripts.  For T1, the heatmap boxes cover bases 100-200 of the
 transcript (1100-1200 in the genome) and 700-800 (1700-1800 in the genome),
 each with two boxes labeled Case1 and Case2.  For T2, the labels are the same
-but the bases covered are 200-300 and 900-1000.</p> <p>Creating heapmaps for
+but the bases covered are 200-300 and 900-1000.</p> <p>Creating heatmaps for
 the transcripts means changing the exon structure of each one - instead of
 representing exon boundaries, those fields will be used to describe the regions
 where we want to draw the heatmap boxes.  We'll also need to add extra fields
@@ -119,7 +119,7 @@ those are the new bounds for our transcript (note that this means changing chrom
 thickStart/End, and the relative chromStarts values for the exons):</p>
 <pre>
 chr1 1100 1800 T1 1000 + 1100 1800 0 2 100,100 0,600
-chr1 1400 2200 T2 1000 - 1200 2400 0 2 100,100 0,700
+chr1 1400 2200 T2 1000 - 1400 2200 0 2 100,100 0,700
 </pre>
 <p>Note that in addition to changing the blockCount, blockSizes, and chromStarts, we also
 needed to change thickStart and thickEnd to indicate where the first exon "starts" and
@@ -151,7 +151,7 @@ chr1 1200 2400 T2 1000 - 1200 2400 0 4 1,100,100,1 0,200,900,1199 2 "Case 1","Ca
 </pre>
 <p>The next two fields, <code>_colorBounds</code> and <code>_colorValues</code>, are tied together.
 A heatmap displays a gradient of color, which is intended to convey score information.  Frequently
-only two colors bounds are used, for the minimum anc maximum values, and intermediate scores are transformed
+only two colors bounds are used, for the minimum and maximum values, and intermediate scores are transformed
 into a color shade between the two.  If the maximum score is 5, associated with red
 (<span style="background-color:red; color:red;">#</span>), and the minimum score is -5, associated with blue
 (<span style="background-color:blue; color:blue;">#</span>), then a score of 0 would be purple - midway
@@ -200,7 +200,7 @@ mouseover labels and a legend.  The mouseover labels can be used to do things li
 numerical score value (because viewers will otherwise only see the heatmap color) or provide other
 useful contextual information like "no data" or the HGVS term describing a mutation at that position.</p>
 <pre>
-chr1 1000 2000 T1 1000 + 1000 2000 0 4 1,100,100,1 0,100,700,999 2 "Case 1","Case 2" 3 -5,0,5 #0000ff,#ffffff,#ff0000 ,2.8,,,,-4,8.9,, ,"2.8, medium","no data",,,"-4.8, low","8.9, extreme",,, "Example on transcript 1"
+chr1 1000 2000 T1 1000 + 1000 2000 0 4 1,100,100,1 0,100,700,999 2 "Case 1","Case 2" 3 -5,0,5 #0000ff,#ffffff,#ff0000 ,2.8,,,,-4,8.9,, ,"2.8, medium","no data",,,"-4, low","8.9, extreme",,, "Example on transcript 1"
 chr1 1200 2400 T2 1000 - 1200 2400 0 4 1,100,100,1 0,200,900,1199 2 "Case 1","Case 2" 3 -5,0,5 #0000ff,#ffffff,#ff0000 ,0.1,-2,,,1.1,-3.5,, ,"0.1, negligible","-2, low",,,"1.1 marginal","-3.5 low",, "Example on transcript 2"
 </pre>
 <p>Here is this example in a <a href="examples/heatmap.bed" target="_blank">BED file</a> (using tabs as field
@@ -212,9 +212,10 @@ bedToBigBed -tab -type=bed12+ -as=heatmap.as heatmap.bed chrom.sizes heatmap.bb
 <p>A copy of heatmap.as is available <a href="examples/heatmap.as" target="_blank">here</a>.  chrom.sizes
 files for most assemblies can be found on our
 <a href="https://hgdownload.soe.ucsc.edu" target="_blank">download server</a>.
+</p>
 
 <div class="text-center">
-  <a href="http://genome.ucsc.edu/s/jcasper/heatmap_example" target="_blank">
+  <a href="https://genome.ucsc.edu/s/jcasper/heatmap_example" target="_blank">
   <img src="/images/heatmap_example2.png" style="width:80%;max-width:1083px"></a>
 </div>
 

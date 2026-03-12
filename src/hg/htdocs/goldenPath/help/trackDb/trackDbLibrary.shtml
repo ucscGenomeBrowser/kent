@@ -6689,7 +6689,7 @@ and is particularly useful for tracks with large numbers of categories.
 <DIV class="faceted_composite_intro">
 <H3>Faceted Composite Tracks</H3>
 <p>Some data sets fit easily into the view- and subgroup-based organization scheme.  Other datasets, however,
-may consist of too many tracks to easily coherce into that structure, and may also benefit from mixing
+may consist of too many tracks to easily coerce into that structure, and may also benefit from mixing
 datasets with different underlying types (e.g. signals and peaks) together under the same heading.
 For those situations, a "faceted composite" track may be appropriate.</p>
 <p>A faceted composite track is a composite with no views or subgroups to organize the subtracks.  Instead,
