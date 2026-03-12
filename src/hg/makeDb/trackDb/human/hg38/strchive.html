@@ -1,0 +1,98 @@
+<h2>Description</h2>
+<p>
+The <b>STRchive</b> track displays 75 disease-associated short tandem repeat (STR) loci
+curated by the <a href="https://strchive.org" target="_blank">STRchive</a> project.
+STRchive is a dynamic, community-driven resource that compiles population-level and
+locus-specific data for tandem repeat loci implicated in human genetic diseases.</p>
+
+<p>
+Tandem repeat expansion disorders are caused by the expansion of short repetitive DNA
+sequences beyond a pathogenic threshold. These expansions can cause a wide range of
+neurological, neuromuscular, and developmental disorders, including Huntington disease,
+fragile X syndrome, Friedreich ataxia, and many forms of spinocerebellar ataxia.</p>
+
+<p>
+This track shows the genomic positions of disease-associated STR loci from the STRchive
+catalog, along with the reference and pathogenic repeat motifs, minimum pathogenic repeat
+count thresholds, mode of inheritance, and associated diseases. The data are based on
+the GRCh38/hg38 reference assembly.</p>
+
+<h2>Display Conventions</h2>
+<p>
+Items are colored by mode of inheritance:</p>
+<ul>
+<li><span style="color: #0000C8;">Blue</span> &ndash; autosomal dominant (AD)</li>
+<li><span style="color: #C80000;">Red</span> &ndash; autosomal recessive (AR)</li>
+<li><span style="color: #C86400;">Orange</span> &ndash; both AD and AR</li>
+<li><span style="color: #800080;">Purple</span> &ndash; X-linked recessive (XR)</li>
+<li><span style="color: #B400B4;">Magenta</span> &ndash; X-linked dominant (XD)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; unknown</li>
+</ul>
+
+<p>
+Each item is labeled by its STRchive locus ID, which combines the disease abbreviation
+and gene symbol (e.g., &quot;HD_HTT&quot; for Huntington disease at the <em>HTT</em>
+gene). Hovering over an item shows the repeat motif, gene, pathogenic threshold,
+and inheritance mode. Clicking an item links to the corresponding
+<a href="https://strchive.org" target="_blank">STRchive</a> locus page with detailed
+clinical and population-level information.</p>
+
+<h2>Methods</h2>
+<p>
+The STRchive disease locus catalog was downloaded from the
+<a href="https://github.com/dashnowlab/STRchive" target="_blank">STRchive GitHub
+repository</a> (file <code>STRchive-disease-loci.hg38.general.bed</code>). The catalog is
+manually curated by the STRchive team from published literature and contains loci where
+tandem repeat expansions have been reported to cause or be associated with human disease.</p>
+
+<p>
+For each locus, the catalog provides:</p>
+<ul>
+<li><b>Reference motif</b> &ndash; the repeat unit found in the reference genome</li>
+<li><b>Pathogenic motif</b> &ndash; the repeat unit associated with disease (may differ
+from the reference motif, as in some familial adult myoclonic epilepsies where
+TTTCA insertions into TTTTA repeats are pathogenic)</li>
+<li><b>Pathogenic minimum</b> &ndash; the minimum number of repeat copies reported to
+cause disease</li>
+<li><b>Inheritance</b> &ndash; the mode of inheritance (AD, AR, XR, XD)</li>
+<li><b>Disease</b> &ndash; the associated disease name(s)</li>
+</ul>
+
+<p>
+The BED file was converted to bigBed format for display in the Genome Browser. Coordinates
+were used as provided (0-based half-open BED format).</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. For automated
+analysis, the data may be queried from our
+<a href="/goldenPath/help/api.html" target="_blank">REST API</a>. The underlying bigBed
+file can be downloaded from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/webstr/" target="_blank">download
+server</a>.</p>
+
+<p>
+The complete STRchive dataset, including additional annotations not shown in this track,
+is available from <a href="https://strchive.org" target="_blank">strchive.org</a> and
+the <a href="https://github.com/dashnowlab/STRchive" target="_blank">STRchive GitHub
+repository</a>. The data are released under a
+<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>
+license.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Harriet Dashnow (University of Colorado), Laurel Hiatt (University of Utah),
+Ben Weisburd (Broad Institute), and the STRchive team for creating and maintaining this
+resource.</p>
+
+<h2>References</h2>
+<p>
+Hiatt L, Weisburd B, Dolzhenko E, Rubinetti V, Rehm HL, Gymrek M, Dashnow H.
+<a href="https://doi.org/10.1186/s13073-025-01454-4" target="_blank">
+STRchive: a dynamic resource detailing population-level and locus-specific insights
+at tandem repeat disease loci</a>.
+<em>Genome Med</em>. 2025;17(1):30.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40140942" target="_blank">40140942</a>
+</p>
