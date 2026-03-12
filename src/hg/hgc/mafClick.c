@@ -37,10 +37,7 @@ for (i=0; i<size; ++i)
     {
     if (r!=NULL && s[i]==r[i])
 	{
-	if (cfgOptionBooleanDefault("mafClickMafFrag", FALSE))
-	    fprintf(f, " ");
-	else
-	    fprintf(f, ".");
+	fprintf(f, ".");
 	}
     else
 	{
@@ -119,10 +116,12 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chopPrefix(dbOnly);
 
-	if ((org = hOrganism(dbOnly)) == NULL)
-	    len = strlen(dbOnly);
-	else
-	    len = strlen(org);
+	if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
+	    {
+	    if ((org = hOrganism(dbOnly)) == NULL)
+		org = dbOnly;
+	    }
+	len = strlen(org);
 	if (srcChars < len)
 	    srcChars = len;
 
@@ -460,10 +459,10 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 #endif
 
-static void mafStripRefGaps(struct mafAli *maf)
-/* Remove columns where the reference (first component) has a gap character.
- * These are insertions in non-reference species that should be collapsed
- * when displaying in reference coordinates. */
+static void mafStripEmptyRefGaps(struct mafAli *maf)
+/* Remove columns where the reference (first component) has a gap character
+ * AND no other component has actual sequence in that column. Columns where
+ * at least one non-reference species has a base are kept. */
 {
 struct mafComp *mc;
 struct mafComp *ref = maf->components;
@@ -471,34 +470,47 @@ if (ref == NULL || ref->text == NULL)
     return;
 int textSize = maf->textSize;
 
-/* Build boolean array of columns to keep (where ref is not a gap) */
+/* Build boolean array of columns to keep */
 bool *keep = needMem(textSize);
 int newSize = 0;
 int ii;
 for (ii = 0; ii < textSize; ii++)
     {
     if (ref->text[ii] != '-')
-        {
-        keep[ii] = TRUE;
-        newSize++;
-        }
+	{
+	keep[ii] = TRUE;
+	newSize++;
+	}
+    else
+	{
+	/* Reference has gap — check if any other species has sequence */
+	for (mc = ref->next; mc != NULL; mc = mc->next)
+	    {
+	    if (mc->text != NULL && isalpha(mc->text[ii]))
+		{
+		keep[ii] = TRUE;
+		newSize++;
+		break;
+		}
+	    }
+	}
     }
 
 if (newSize == textSize)
     {
     freeMem(keep);
-    return;  /* nothing to strip */
+    return;
     }
 
 /* Compact all component texts in place */
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     if (mc->text == NULL)
-        continue;
+	continue;
     int jj = 0;
     for (ii = 0; ii < textSize; ii++)
-        if (keep[ii])
-            mc->text[jj++] = mc->text[ii];
+	if (keep[ii])
+	    mc->text[jj++] = mc->text[ii];
     mc->text[jj] = '\0';
     }
 maf->textSize = newSize;
@@ -676,36 +688,35 @@ else
                 }
             }
 
-        /* Load stitched alignment using mafFrag approach */
+        /* Load alignment using mafFragNoDots approach — returns a list of
+         * maf blocks, each containing only assemblies with actual sequence. */
         if (sameString(tdb->type, "bigMaf"))
             {
             char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
             struct bbiFile *bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
-            maf = hgBigMafFrag(database, bbi, seqName, winStart, winEnd, '+', NULL, orderList);
+            subList = hgBigMafFragNoDots(database, bbi, seqName, winStart, winEnd, '+', NULL, orderList);
             bbiFileClose(&bbi);
             }
         else if (axtOtherDb == NULL && fileName == NULL)
             {
             /* Regular MAF from database */
-            maf = hgMafFrag(database, tdb->table, seqName, winStart, winEnd, '+', NULL, orderList);
+            subList = hgMafFragNoDots(database, tdb->table, seqName, winStart, winEnd, '+', NULL, orderList);
             }
         else
             {
             /* AXT or MAF with external file - load blocks, then stitch */
             mafList = mafOrAxtLoadInRegion2(conn, conn2, tdb, seqName,
                                         winStart, winEnd, axtOtherDb, fileName);
-            maf = hgMafFragFromMafList(database, seqName, winStart, winEnd, '+',
+            subList = hgMafFragFromMafListNoDots(database, seqName, winStart, winEnd, '+',
                                         mafList, NULL, orderList);
-            mafList = NULL;  /* consumed by hgMafFragFromMafList */
+            mafList = NULL;  /* consumed by hgMafFragFromMafListNoDots */
             }
 
-        /* Remove insertion columns (where reference has gaps) */
-        if (maf != NULL)
-            mafStripRefGaps(maf);
+        /* Strip ref gap columns where no other species has sequence */
+        for (maf = subList; maf != NULL; maf = maf->next)
+            mafStripEmptyRefGaps(maf);
 
-        if (maf != NULL)
-            slAddHead(&subList, maf);
-        realCount = (subList != NULL) ? 1 : 0;
+        realCount = slCount(subList);
         }
     else
         {
@@ -954,6 +965,7 @@ else
 	    if (capTrack != NULL)
                 capMafOnTrack(maf, capTrack, onlyCds);
 #endif
+            ++aliIx;
             if (useMafFrag)
                 printf("<B>Alignment %d - %d, %d bps </B>\n",
                        maf->components->start + 1,
@@ -961,9 +973,9 @@ else
                        maf->components->size);
             else
                 printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
-                       ++aliIx,realCount,maf->components->start + 1,
+                       aliIx,realCount,maf->components->start + 1,
                        maf->components->start + maf->components->size, maf->components->size);
-            mafPrettyOut(stdout, maf, 70, onlyDiff, aliIx, labelHash);
+            mafPrettyOut(stdout, maf, useMafFrag ? maf->textSize : 70, onlyDiff, aliIx, labelHash);
             }
 	mafAliFreeList(&subList);
 	}
