@@ -28988,6 +28988,34 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
     # verify the convert link on the browser is now active from hg19 to hg38
 
 ##############################################################################
+# Bridge small double-sided gaps in hg38 liftOver chain (DONE 2026-03-13 - Angie)
+    cd /hive/data/genomes/hg19/bed/blat.hg38noMask.2013-12-31/run.chain
+    # Turn double-sided gaps in the all.chain into mismatches where appropriate:
+    chainBridge \
+        hg19.hg38.all.chain.gz \
+        /hive/data/genomes/hg19/hg19.2bit \
+        /hive/data/genomes/hg38/hg38.2bit \
+        stdout \
+    | pigz -p 8 > hg19.hg38.chainBridge.all.chain.gz
+
+    # Re-net the fixed all.chain:
+    chainNet \
+        hg19.hg38.chainBridge.all.chain.gz \
+        /hive/data/genomes/hg19/chrom.sizes \
+        /hive/data/genomes/hg38/chrom.sizes \
+        hg19.hg38.chainBridge.net /dev/null
+
+    # Extract the new & improved .over.chain from the new all.chain and net:
+    netChainSubset \
+        hg19.hg38.chainBridge.net \
+        hg19.hg38.chainBridge.all.chain.gz \
+        stdout \
+    | chainStitchId stdin stdout \
+    | pigz -p 8 \
+        > hg19ToHg38.chainBridge.over.chain.gz
+
+
+##############################################################################
 # hg19 <-> hg38 difference tracks (DONE - 2013-12-28 - Hiram)
     # note: the procedure for this is in the hg38.txt file under
     # this same heading.  The end result is the loading of the table:
