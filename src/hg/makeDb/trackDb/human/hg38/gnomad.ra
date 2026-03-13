@@ -3,8 +3,8 @@
 
 track gnomadVariants
 superTrack on
-shortLabel gnomAD Variants
-longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
+shortLabel gnomAD
+longLabel Genome Aggregation Database (gnomAD)
 group varRep
 cartVersion 6
 html gnomadV4.1
@@ -57,8 +57,8 @@ html gnomadV4.1
     track gnomadGenomesVariantsV3_1
     parent gnomadVariants
     visibility hide
-    shortLabel gnomAD v3.1
-    longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1
+    shortLabel Deprecated: gnomAD v3.1
+    longLabel Deprecated: Genome Aggregation Database (gnomAD) Genome Variants v3.1
     dataVersion Release 3.1 (October 29, 2020)
     type bigBed 9 +
     itemRgb on
@@ -263,6 +263,20 @@ searchIndex name
 mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}<br> <b>Site frequency (non-neuro control samples)</b>: ${sf}
 html gnomadCNV
 
+track gnomadStr
+parent gnomadVariants on
+shortLabel gnomAD STR
+longLabel Genome Aggregation Database (gnomAD) - Short Tandem Repeat Genotypes at Disease-Associated Loci
+dataVersion gnomAD v3.1.3 STR genotypes (March 2025)
+type bigBed 9 +
+itemRgb on
+bigDataUrl /gbdb/hg38/gnomAD/gnomadStr.bb
+visibility pack
+url https://gnomad.broadinstitute.org/short-tandem-repeat/$$?dataset=gnomad_r3
+urlLabel View at gnomAD
+searchIndex name
+mouseOver $name: $motif repeat in $gene, $nSamples samples ($nPass PASS)
+html gnomadStr
 
 searchTable pliByTranscript
 searchType bigBed

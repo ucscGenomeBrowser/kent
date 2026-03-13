@@ -80,7 +80,7 @@ static void positionalTblCheck(char *db, char *table)
 {
 struct hTableInfo *tblInfo = hFindTableInfo(db, NULL, table);
 if (tblInfo == NULL)
-    errAbort("cant find table %s.%s or %s.*_%s", db, table, db, table);
+    errAbort("can't find table %s.%s or %s.*_%s", db, table, db, table);
 if (!tblInfo->isPos)
     errAbort("%s.%s does not appear to be a positional table", db, table);
 struct slName *tbl, *tbls = hSplitTableNames(db, table);

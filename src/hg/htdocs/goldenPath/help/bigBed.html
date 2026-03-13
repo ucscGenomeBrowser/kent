@@ -275,22 +275,22 @@ improper input.</p>
   (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).</li>
   <li> 
   Save the file <a href="hg18.chrom.sizes"><em>hg18.chrom.sizes</em></a> to your computer. This file
-  contains the chrom.sizes for the human (hg18) assembly (<em>Step 4</em>, above).</li>
+  contains the chrom.sizes for the human (hg18) assembly (<em>Step 3</em>, above).</li>
   <li> 
   Save the AutoSql file <a href="examples/bedExample2.as"><em>bedExample2.as</em></a> to your 
   computer. This file contains descriptions of the BED fields, and is required when the BED file 
   contains a <em>color</em> field.</li>  
   <li> 
-  Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above).</li>
+  Download the <code>bedToBigBed</code> utility (<em>Step 2</em>, above).</li>
   <li> 
   Run the utility to create a bigBed output file with an index on the name field and the first 
-  extra field: (<em>Step 5</em>, above):
+  extra field: (<em>Step 4</em>, above):
   <pre><code>bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes myBigBed2.bb</code></pre></li>
-  Place the bigBed file you just created (<em>myBigBed2.bb</em>) on a web-accessible server 
-  (<em>Step 6</em>, above).</li> 
+  Place the bigBed file you just created (<em>myBigBed2.bb</em>) on a web-accessible server
+  (<em>Step 5</em>, above).</li> 
   <li> 
   Paste the URL of the file into the custom tracks entry form, or alternatively construct a track 
-  line that points to your bigBed file (<em>Step 7</em>, above). Because this bigBed file includes a
+  line that points to your bigBed file (<em>Step 6</em>, above). Because this bigBed file includes a
   field for color, you must include the 
   <a href="../../FAQ/FAQformat.html#format1"><code>itemRgb</code></a> attribute in the track line. 
   It will look somewhat similar to this (note that you must insert the URL specific to your own 

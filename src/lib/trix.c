@@ -567,7 +567,7 @@ static int findOrderedSpan(struct trixWordResult *twrList, char *itemId, int **r
 /* Find out smallest number of words in doc that will cover
  * all words in search. */
 {
-int minSpan = BIGNUM - 1;  // subtract 1 to accomodate adding 1 below
+int minSpan = BIGNUM - 1;  // subtract 1 to accommodate adding 1 below
 struct trixWordResult *twr;
 
 /* Set up iHit pointers we use to keep track of our 
@@ -611,7 +611,7 @@ for (;;)
         minSpan = span;
         }
 
-    /* Advance to next occurence of first word. */
+    /* Advance to next occurrence of first word. */
     hit = twrList->iHit = twrList->iHit->next;
     if (hit == NULL || !sameString(hit->itemId, itemId))
         {

@@ -232,7 +232,7 @@ file, a bed12+8 file.</p>
 <a name="Example4"></a>
 <h3>Example &num;4: GTF (or GFF) to BigGenePred </h3>
 <p>In this example, you will convert a GTF file to bigGenePred using command line utilities.
-You will need <code>gtfToGenePred</code>, <code>genePredTobigGenePred</code>,
+You will need <code>gtfToGenePred</code>, <code>genePredToBigGenePred</code>,
 and <code>bedToBigBed</code>. If you would like to convert a GFF file to bigGenePred, you will use
 <code>gff3ToGenePred</code> in place of the <code>gtfToGenePred</code>. You can download utilities from the
 <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">utilities directory</a>.</p>
@@ -262,13 +262,13 @@ and <code>bedToBigBed</code>. If you would like to convert a GFF file to bigGene
   Put your binary indexed file, bigGenePredEx4.bb, in a web-accessible location. See the 
   <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting">hosting section</a> for more information.</li>
   <li>
-  To view this example, you can click this into this Browser link. To view your own data, paste the
+  To view this example, you can click into this Browser link. To view your own data, paste the
   link into your web browser and replace the URL after "bigDataUrl=" with a link to your own 
   hosted data.
 <pre> <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr19:44905790-44909388&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr19:44905790-44909388&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb</a></pre>
 You can also add your data in the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management
-page</a>. This allows you to set position, configuration options, and write a more complete 
-desciption. If you want to see codons, you can right click, then click configure codon view or
+page</a>. This allows you to set position, configuration options, and write a more complete
+description. If you want to see codons, you can right click, then click configure codon view or
 set this options using <code>baseColorDefault=genomicCodons</code> as is done below.
 <pre><code>browser position chr19:44905790-44909388 
 track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Four" description="Ex4:BigGenePred Made from GTF" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb</code></pre>
@@ -314,7 +314,7 @@ where you will find additional instructions.
 you can paste the following link into the input box: 
 <a href="examples/hubExamples/hubBigGenePred/hub.txt">
 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBigGenePred/hub.txt</a>.
-Clicking the <button>Add Hub</button> button will connect to your track hub and navagate you to 
+Clicking the <button>Add Hub</button> button will connect to your track hub and navigate you to 
 your assembly of interest. For more instructions on setting up Track Hubs, visit the 
 <a href="hgTrackHubHelp.html#Setup">Track Hub set-up page</a>.</li>
 <p class='text-center'>

@@ -690,8 +690,8 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <strong>url=&lt;<em>external_url</em>&gt;</strong>
   <br>
   Defines a URL for an external link associated with 
-  this track. This URL will be used in the details page for the track. Any &quot;$$&quot;in this 
-  string this will be substituted with the item name. There is no default for this attribute.</li> 
+  this track. This URL will be used in the details page for the track. Any &quot;$$&quot; in this
+  string will be substituted with the item name. There is no default for this attribute.</li> 
   <li>
   <strong>htmlUrl=&lt;<em>external_url</em>&gt;</strong>
   <br>
@@ -953,11 +953,11 @@ cart variables, for example having both hide all and highlight features.)
   based on the numbers provided. You need to specify an order for every visible track when using this
   parameter<br>-
   <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene_imgOrd=2&knownGene=pack&gtexGeneV8=full&gtexGeneV8_imgOrd=1"
-  target="_blank">example link</a> to show two show knownGene track being listed second with gtex first</li>
+  target="_blank">example link</a> to show knownGene track being listed second with gtex first</li>
   <li>
   <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code>
   <br>
-  sets the height of the a bigWig track
+  sets the height of a bigWig track
   in pixels<br>- <a 
   href="../../cgi-bin/hgTracks?db=hg38&ignoreCookie=1&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100"
   target="_blank">example link</a> to set umap bigWig track height to 100 pixels
@@ -1116,7 +1116,7 @@ When I click the <em>submit</em> button, I get the error message
 <strong><em>Solution:</em></strong>
 <ul>
   <li>
-    This is most likely caused by a logical conflict in the Genome Browse software. It accepts
+    This is most likely caused by a logical conflict in the Genome Browser software. It accepts
     custom GFF tracks that have multiple &quot;exons&quot; at the same position,
     but not BED tracks.</li>
   <li>

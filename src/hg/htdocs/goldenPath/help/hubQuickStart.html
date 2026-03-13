@@ -74,7 +74,7 @@ target="_blank">trackDb settings</a>.</p>
 
 <p>
 Note that the Browser waits 5 minutes before checking for any changes to these files. <strong>When 
-editing hub.txt, genomes.txt,and trackDb.txt, you can shorten this delay by adding 
+editing hub.txt, genomes.txt, and trackDb.txt, you can shorten this delay by adding 
 <code>udcTimeout=1</code> to your URL.</strong> For more information, see the 
 <a href="hgTrackHubHelp.html#Debug" target="_blank">Debugging and Updating Track Hubs</a> section of
 the <a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>.</p>
@@ -117,7 +117,7 @@ Guide</a></strong></li>
 <strong>email</strong> <em>myEmail@address</em>
 <strong>descriptionUrl</strong> <em>aboutMyHub.html</em> </code></pre>
 <p>
-A hub starts with a few short lines in hubs.txt. The hub.txt file informs the UCSC Browser where to 
+A hub starts with a few short lines in hub.txt. The hub.txt file informs the UCSC Browser where to 
 find the underlying assemblies via the <code><strong> genomesFile</strong>genomes.txt</code> 
 parameter, which in turn will direct the Browser to each assembly's related binary indexed track 
 data outlined in the trackDb.txt. The optional <code><strong>descriptionUrl</strong></code> field 
@@ -163,7 +163,7 @@ target="_blank">bigBed</a>,
 target="_blank">bigWig</a>, <a href="trackDb/trackDbHub.html#bam" target="_blank">bam</a>,
 </code>and<code> <a href="trackDb/trackDbHub.html#vcfTabix" target="_blank">vcfTabix</a></code>) 
 has further customizable trackDb settings. The <code><strong>bigDataUrl</strong></code> can be a 
-relative path to a local file or a publicly-accessibly URL that accepts byte-ranges. The trackDb.txt
+relative path to a local file or a publicly-accessible URL that accepts byte-ranges. The trackDb.txt
 also allows for advanced <a href="trackDb/trackDbHub.html#groupingTracks" target="_blank">track 
 grouping</a> known as composites, superTracks and multiWigs. See a basic 
 <a href="../help/examples/hubDirectory/hg19/trackDb.txt" target="_blank">example 
@@ -177,7 +177,7 @@ For example, if a bigBed file has nine columns, which would include an itemRgb f
 R,G,B color value (e.g. 255,0,0), specify the type as <code>type bigBed 9</code>.
 If the file contains the first 9 <a href="../../FAQ/FAQformat.html#format1" target="_blank">
 standard BED columns</a>, one could use <code>type bigBed 9 +</code> to denote the additional 
-non-standard columns as defined in AutoSql format(.as) file, <code>-as=bedExample1.as</code>.
+non-standard columns as defined in AutoSql format (.as) file, <code>-as=bedExample1.as</code>.
 </p>
 <p>
 Creating a trackDb.txt file for an assembly hub, you can control where the track appears underneath

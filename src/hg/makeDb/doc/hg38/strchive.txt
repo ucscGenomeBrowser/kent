@@ -1,0 +1,32 @@
+# STRchive disease-associated STR loci track (part of strVar supertrack)
+# 2026-03-12 (max)
+
+# Data from STRchive (https://strchive.org/), CC BY 4.0
+# Paper: Hiatt et al. Genome Med 2025, PMID 40140942
+# 75 disease-associated tandem repeat expansion loci
+# Curated from published literature by the Dashnow lab
+
+# Source: downloaded from GitHub
+mkdir -p /hive/data/genomes/hg38/bed/str/strchive
+cd /hive/data/genomes/hg38/bed/str/strchive
+wget https://raw.githubusercontent.com/dashnowlab/STRchive/refs/heads/main/data/catalogs/STRchive-disease-loci.hg38.general.bed
+
+# Convert to BED9+ format (colored by inheritance mode)
+python3 ~/kent/src/hg/makeDb/scripts/strchive/strchiveToBed.py \
+    STRchive-disease-loci.hg38.general.bed > strchive.bed 2>/dev/null
+
+# Sort and convert to bigBed
+bedSort strchive.bed strchive.bed
+bedToBigBed strchive.bed /hive/data/genomes/hg38/chrom.sizes strchive.bb \
+    -type=bed9+ -tab -as=$HOME/kent/src/hg/makeDb/scripts/strchive/strchive.as
+
+# Symlink into /gbdb (under webstr/ directory with other STR tracks)
+ln -sf /hive/data/genomes/hg38/bed/str/strchive/strchive.bb /gbdb/hg38/webstr/strchive.bb
+
+# trackDb: strchive track is inside the strVar supertrack
+# trackDb entry: ~/kent/src/hg/makeDb/trackDb/human/hg38/webstr.ra
+# HTML doc: ~/kent/src/hg/makeDb/trackDb/human/hg38/strchive.html
+
+# Load trackDb
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38

@@ -184,7 +184,7 @@ for(i=0;i<nspecies;i++)
     {
     if(index==i)
 	continue;
-    printf("Species %-8s occured %5d (%2.2f %)\n",species[i],spec_breakdown[i],(float)(spec_breakdown[i] * 100)/total_columns);
+    printf("Species %-8s occurred %5d (%2.2f %)\n",species[i],spec_breakdown[i],(float)(spec_breakdown[i] * 100)/total_columns);
     }
 return 0;
 }

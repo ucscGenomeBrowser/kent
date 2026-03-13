@@ -14,6 +14,9 @@ hg38 gnomad caddSuper View CADD scores for this variant and region
 hg38 constraintSuper gnomadPLI Predicted constraint metrics from gnomAD
 hg38 gnomadPLI constraintSuper Container track of various constraint scores
 
+hg38 gnomadStr strVar gnomAD STR genotypes at disease-associated loci; STR Variation supertrack has population-level STR data
+hg38 strVar gnomadStr Population-level STR variation; gnomAD STR track has disease-associated locus genotypes
+
 hg38 revel liftHg38 Revel is based on hg19 and lifted to hg38. liftOver "chain" alignment from hg19 to hg38
 hg38 liftHg38 revel Revel scores were lifted using UCSC liftOver chains from hg38
 

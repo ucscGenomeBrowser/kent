@@ -181,7 +181,7 @@ cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINSIZEQ,(keepSettings) ? minSizeQ : chain->minSizeQ,4);
 puts("&nbsp;");
-printInfoIcon("In multiple output mode, repeated regions within longer input regions can lead to artifacts. The 'hit size' filter allows to keep only targets with a certain length.");
+printInfoIcon("In multiple output mode, repeated regions within longer input regions can lead to artifacts. The 'hit size' filter allows you to keep only targets with a certain length.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -206,7 +206,7 @@ cgiTableField("Minimum ratio of alignment blocks or exons that must map:");
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINBLOCKS,(keepSettings) ? minBlocks : chain->minBlocks,6);
 puts("&nbsp;");
-printInfoIcon("The minimum ratio of the number of exons (not their bases) covered by the alignment. Transcripts lower than this will not be output at all. If an exon (range thickStart-thickEnd) is not alignable at all, it will be skipped or, if the option below is checked, lifted it to the closest alignable base.");
+printInfoIcon("The minimum ratio of the number of exons (not their bases) covered by the alignment. Transcripts lower than this will not be output at all. If an exon (range thickStart-thickEnd) is not alignable at all, it will be skipped or, if the option below is checked, lifted to the closest alignable base.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 

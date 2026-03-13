@@ -8,7 +8,7 @@
 
 void usage()
 {
-errAbort("maxTranscriptomeExps - cycle through a list of of affy transcriptome\n"
+errAbort("maxTranscriptomeExps - cycle through a list of affy transcriptome\n"
 	 "experiments and select the max for each position.\n"
 	 "usage:\n\t"
 	 "maxTranscriptomeExps <outputfile> <trackName> <list of input files>\n");

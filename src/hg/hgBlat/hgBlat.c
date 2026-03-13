@@ -720,7 +720,7 @@ else  // hyperlink
 	    "var ct_blat = '';\n"
 	    "\n"
 	    "function buildBigPslCtSuccess (content, status)\n"
-	    "{ // Finishes the succesful creation of blat ct bigPsl.  Called by ajax return.\n"
+	    "{ // Finishes the successful creation of blat ct bigPsl.  Called by ajax return.\n"
 	    "  // saves the ct name so it can be used later for rename or delete.\n"
 	    "\n"
 	    "var matchWord = '&table=';\n"
@@ -2186,7 +2186,7 @@ puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit file\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
-"sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
+"sequence of 10,000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
 "submissions is 50,000 bases or 25,000 letters.<br> A valid example "
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
@@ -2212,7 +2212,7 @@ if (hgPcrOk(db))
            " for best results instead of BLAT. " 
            "To search for short sequences &lt; 20bp only in the sequence shown on the Genome Browser, "
            "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
-           "If you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
+           "If you are using the command line and want to search the entire genome, try our command line tool <tt>findMotifs</tt>, from the "
            "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.</p>",
            db, cartSessionVarName(), cartSessionId(cart));
 puts("</TD></TR></TABLE>\n");

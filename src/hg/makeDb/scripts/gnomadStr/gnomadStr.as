@@ -1,0 +1,21 @@
+table gnomadStr
+"gnomAD Short Tandem Repeat genotype summary at disease-associated loci"
+    (
+    string chrom;          "Chromosome"
+    uint chromStart;       "Start position (0-based)"
+    uint chromEnd;         "End position"
+    string name;           "Locus ID"
+    uint score;            "Score (0-1000)"
+    char[1] strand;        "Strand"
+    uint thickStart;       "Thick start"
+    uint thickEnd;         "Thick end"
+    uint reserved;         "Item color RGB"
+    string gene;           "Gene symbol"
+    lstring motif;         "Repeat motif(s)"
+    string isAdjacentRepeat; "Is adjacent repeat (True/False)"
+    uint nSamples;         "Total number of genotyped individuals"
+    uint nPass;            "Number passing quality filter"
+    lstring alleles;       "Allele sizes (comma-separated repeat counts)"
+    lstring alleleFreqs;   "Allele frequencies (comma-separated)"
+    lstring populations;   "Population sample counts (pop:n, comma-separated)"
+    )

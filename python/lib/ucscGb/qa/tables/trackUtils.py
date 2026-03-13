@@ -71,7 +71,7 @@ def getChromCol(trackType):
 def getChrStartEndCols(trackType):
     """Get columns names for chromosome, chromosome start and chromosome end
        based on track type"""
-    # genePred chromsome start/end col names are slightly different
+    # genePred chromosome start/end col names are slightly different
     # than others in chromType list
     if trackType == "genePred":
         colNames = ("chrom","txStart","txEnd")

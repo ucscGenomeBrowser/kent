@@ -24,7 +24,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encode2Meta - Create meta.txt file. This is a hierarchical .ra file with heirarchy defined\n"
+  "encode2Meta - Create meta.txt file. This is a hierarchical .ra file with hierarchy defined\n"
   "by indentation.  You might think of it as a meta tag tree.  It contains the contents of\n"
   "the hg19 and mm9 metaDb tables and the hgFixed.encodeExp table.\n"
   "usage:\n"

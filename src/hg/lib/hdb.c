@@ -4289,7 +4289,7 @@ if (isHubTrack(db))
                  " This may be due to the hub moving to a new hosting location. We recommend contacting"
                  " the hub authors for assistance.",hubConnectSkipHubPrefix(db), status->hubUrl, status->errorMessage); 
     else
-        errAbort("Error: The genome %s in in the hub is no longer available. Please reach out to the hub authors"
+        errAbort("Error: The genome %s in the hub is no longer available. Please reach out to the hub authors"
                  " for further information: %s\n", hubConnectSkipHubPrefix(db), status->hubUrl);
     }
 
