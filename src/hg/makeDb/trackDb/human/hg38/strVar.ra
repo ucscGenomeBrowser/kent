@@ -3,7 +3,6 @@ shortLabel STR Variation
 longLabel Short Tandem Repeat Variation
 group varRep
 superTrack on
-html strVar.html
 visibility hide
 
     track webstr
@@ -11,25 +10,23 @@ visibility hide
     longLabel WebSTR Short Tandem Repeat Loci (EnsembleTR Panel, 1000 Genomes)
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/webstr/webstr.bb
+    bigDataUrl /gbdb/hg38/strVar/webstr.bb
     visibility dense
     superTrack strVar dense
     url https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38
     urlLabel WebSTR locus page
     searchIndex name
     mouseOver $motif repeat, $numCopies copies, period $period
-    html webstr.html
 
     track strchive
     shortLabel STRchive
     longLabel STRchive Disease-Associated Short Tandem Repeat Loci
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/webstr/strchive.bb
+    bigDataUrl /gbdb/hg38/strVar/strchive.bb
     visibility pack
     superTrack strVar pack
     url https://strchive.org/loci/$$
     urlLabel STRchive locus page
     searchIndex name
     mouseOver $name: $referenceMotif repeat in $gene, pathogenic min $pathogenicMin ($inheritance)
-    html strchive.html
