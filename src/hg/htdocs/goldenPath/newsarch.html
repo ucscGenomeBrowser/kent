@@ -64,6 +64,85 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2026"></a>
 
+<a name="031326"></a>
+<h2>Mar. 13, 2026 &nbsp;&nbsp; gnomAD v4 Exome and v3 Genome coverage tracks for hg38</h2>
+<p>
+We are pleased to announce the release of two new coverage tracks from the
+<a href="https://gnomad.broadinstitute.org/" target="_blank">Genome Aggregation Database
+(gnomAD)</a> on the human GRCh38/hg38 assembly. These tracks are part of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariants">Genome Aggregation Database (gnomAD)</a>
+track collection.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomad4ExomeCoverage">gnomAD v4 Exome Coverage</a>
+track displays per-base sequencing coverage statistics derived from the gnomAD v4.0
+exome callset. Coverage was computed across all gnomAD v4 exome samples using gVCFs
+produced with a 3-bin blocking scheme based on reference genotype quality
+(&lt; Q20 and &ge; Q20). Note that there is no gnomAD v4 genome coverage track because
+the genome samples were unchanged from v3. The track contains the following subtracks:
+</p>
+
+<ul>
+  <li>
+    <b>Mean Coverage</b> &ndash; mean read depth across exome samples at each base
+    position
+  </li>
+  <li>
+    <b>Median Coverage</b> &ndash; median read depth across exome samples at each base
+    position
+  </li>
+  <li>
+    <b>Sample % &gt; 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, 100X</b> &ndash;
+    the percentage of exome samples with read depth at or above the indicated
+    coverage threshold at each base position
+  </li>
+</ul>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomad3Coverage">gnomAD v3 Genome Coverage</a>
+track displays equivalent per-base coverage statistics computed from 71,702 gnomAD
+v3.0.1 whole-genome samples, also using gVCFs and the same 3-bin quality blocking
+scheme. Note that there is no gnomAD v3 exome coverage track because gnomAD v3 was a
+genome-only release. The track contains the following subtracks:
+</p>
+
+<ul>
+  <li>
+    <b>Mean Coverage</b> &ndash; mean read depth across genome samples at each base
+    position
+  </li>
+  <li>
+    <b>Median Coverage</b> &ndash; median read depth across genome samples at each
+    base position
+  </li>
+  <li>
+    <b>Sample % &gt; 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, 100X</b> &ndash;
+    the percentage of genome samples with read depth at or above the indicated
+    coverage threshold at each base position
+  </li>
+</ul>
+
+<p>
+For both tracks, clicking on a feature opens a details page that shows calculated
+sample coverage percentages across the sequence range visible in the browser window.
+Coverage data files in <a href="/goldenPath/help/bigWig.html">bigWig</a>
+format are available from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/">download server</a>
+in the <code>coverage/</code> subdirectory, and data can also be explored interactively
+using the <a href="/cgi-bin/hgTables">Table Browser</a> or
+<a href="/cgi-bin/hgIntegrator">Data Integrator</a>.
+Raw data are also available directly from the gnomAD
+<a href="https://gnomad.broadinstitute.org/downloads">downloads page</a>.
+</p>
+
+<p>
+We would like to thank the
+<a href="https://gnomad.broadinstitute.org/about">Genome Aggregation Database
+Consortium</a> for making the data public. We also would like to thank Max Haeussler and Jairo
+Navarro Gonzalez for the creation and release of the UCSC Genome Browser tracks.
+</p>
+
 <a name="022426"></a>
 <h2>Feb. 24, 2026 &nbsp;&nbsp; Updates to the Genome Browser Gateway Page and Assembly Search</h2>
 
