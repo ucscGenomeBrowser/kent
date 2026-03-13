@@ -4710,7 +4710,7 @@ char suffix[512];
 safef(suffix, sizeof(suffix), "label.%s", sym);
 boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, suffix, defaultOn);
 char cartVar[1024];
-safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, suffix);
+safef(cartVar, sizeof cartVar, "%s.%s", trackHubSkipHubName(tdb->track), suffix);
 cgiMakeCheckBox(cartVar, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }

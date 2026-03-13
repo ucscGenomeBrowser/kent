@@ -1554,6 +1554,7 @@ static char *vettedTracks[] =
 "pubsMarkerBand",
 "pubsMarkerSnp",
 "pubsMarkerGene",
+"refSeqComposite",
 //"gtexGeneV8",
 };
 
