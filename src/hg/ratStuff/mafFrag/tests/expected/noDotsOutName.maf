@@ -1,6 +1,0 @@
-##maf version=1 scoring=zero
-a score=0.000000
-s testSeq           0 100 +      100 aagcctacgggcgggggttgggggggcgtgtgttgcaggagcaaagtcgcacggcgccgggctggggcggggggagggtggcgccgtgcacgcgcagaaa
-s panTro4.chr15 13681  94 - 99548318 acgcctatgggcgggggttgcgggg-cgcgtggtgcaggagcaaagtcgcacggagcctgtctgggg-----gcaggtgggctccgtgcaggcgcagaaa
-i panTro4.chr15 N 0 C 0
-

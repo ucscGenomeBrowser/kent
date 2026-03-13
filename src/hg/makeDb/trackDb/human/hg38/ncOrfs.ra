@@ -1,0 +1,60 @@
+track ncOrfs
+superTrack on
+shortLabel non-canonical ORFs
+longLabel Non-canonical Open Reading Frames
+group genes
+
+    track utrAnnotUorfs
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/utrAnnotUorfs.bb
+    shortLabel UTRannotator uORFs
+    longLabel ncORFs: Upstream Open Reading Frames (uORFs) from UTRannotator
+    type bigBed 9 +
+    itemRgb on
+    mouseOverField uorfType
+    #searchIndex name
+    html ../ncOrfs
+    visibility pack
+
+    track gencNcOrfs
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.bb
+    shortLabel Gencode non-canonical ORFs
+    longLabel ncORFs: Gencode non-canonical ORFs supported Ribo-seq data
+    type bigGenePred
+    itemRgb on
+    mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    html ../ncOrfs
+    visibility pack
+
+    track gencNcOrfsPrimary
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.bb
+    shortLabel Gencode non-canonical ORFs primary
+    longLabel ncORFs: Gencode non-canonical ORFs - primary
+    type bigBed 12 +
+    itemRgb on
+    #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    html ../ncOrfs
+    visibility pack
+
+    track gencNcOrfsComprehensive
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.bb
+    shortLabel Gencode non-canonical ORFs comprehensive
+    longLabel ncORFs: Gencode non-canonical ORFs - comprehensive
+    type bigBed 12 +
+    itemRgb on
+    #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    html ../ncOrfs
+    visibility pack
+
+    track metamorf
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/metamorf/MetamORF.bb
+    shortLabel MetamORF
+    longLabel ncORFs: MetamORF - meta-database of non-canonical ORFs
+    type bigBed 12 +
+    itemRgb on
+    html ../ncOrfs
+    visibility pack
