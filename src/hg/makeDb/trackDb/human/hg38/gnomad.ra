@@ -57,8 +57,8 @@ html gnomadV4.1
     track gnomadGenomesVariantsV3_1
     parent gnomadVariants
     visibility hide
-    shortLabel gnomAD v3.1
-    longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1
+    shortLabel Deprecated: gnomAD v3.1
+    longLabel Deprecated: Genome Aggregation Database (gnomAD) Genome Variants v3.1
     dataVersion Release 3.1 (October 29, 2020)
     type bigBed 9 +
     itemRgb on
