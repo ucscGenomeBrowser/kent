@@ -1,0 +1,2 @@
+137 bases (0 N's 137 real 137 upper 0 lower) in 1 sequences in 1 files
+%0.00 masked total, %0.00 masked real

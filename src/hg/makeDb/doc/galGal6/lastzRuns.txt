@@ -4139,6 +4139,34 @@ TMPDIR=/dev/shm
     # 1017361581 bases of 1053332251 (96.585%) in intersection
 
 ##############################################################################
+# Bridge small double-sided gaps in Chicken GalGal6 vs. chicken GCF_016699485.2 liftOver chain (DONE - 2026-03-10 - Angie)
+    # See MLQs #37156, #37185
+    cd /hive/data/genomes/galGal6/bed/lastzGCF_016699485.2.2021-10-14/axtChain
+    # Turn double-sided gaps in the all.chain into mismatches where appropriate:
+    chainBridge \
+        galGal6.GCF_016699485.2.all.chain.gz \
+        /hive/data/genomes/galGal6/galGal6.2bit \
+        /hive/data/genomes/asmHubs/allBuild/GCF/016/699/485/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.2bit \
+        stdout \
+    | pigz -p 8 > galGal6.GCF_016699485.2.chainBridge.all.chain.gz
+
+# chainNet the .chainBridge.all.chain file:
+    chainNet \
+        galGal6.GCF_016699485.2.chainBridge.all.chain.gz \
+        /hive/data/genomes/galGal6/chrom.sizes \
+        /hive/data/genomes/asmHubs/allBuild/GCF/016/699/485/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b.chrom.sizes \
+        galGal6.GCF_016699485.2.chainBridge.net /dev/null
+
+# Extract the new & improved .over.chain from the .chainBridge all.chain and net:
+    netChainSubset \
+        galGal6.GCF_016699485.2.chainBridge.net \
+        galGal6.GCF_016699485.2.chainBridge.all.chain.gz \
+        stdout \
+    | chainStitchId stdin stdout \
+    | pigz -p 8 \
+         > galGal6ToGCF_016699485.2.chainBridge.over.chain.gz
+
+##############################################################################
 # LASTZ Chicken GalGal6 vs. Ferret MusFur1
 #    (DONE - 2025-06-16 - Gerardo)
 
