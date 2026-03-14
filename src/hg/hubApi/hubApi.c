@@ -3,6 +3,7 @@
 #include "botDelay.h"
 #include "jsHelper.h"
 #include "srcVersion.h"
+#include "asmAlias.h"
 /* can not include bamFile.h with the liftOver business, there
  * is a conflict in a definition of the enum 'bed'
  */
@@ -47,7 +48,7 @@ struct dyString *downloadUrl = NULL;
 
 /* valid argument listings to verify extraneous arguments */
 char *argListPublicHubs[] = { NULL };
-char *argListUcscGenomes[] = { NULL };
+char *argListUcscGenomes[] = { argGenome, NULL };
 char *argListGenarkGenomes[] = { argMaxItemsOutput, argGenome, NULL };
 char *argListHubGenomes[] = { argHubUrl, NULL };
 char *argListTracks[] = { argGenome, argHubUrl, argTrackLeavesOnly, NULL };
@@ -1309,7 +1310,28 @@ if (isEmpty(hubUrl) && isNotEmpty(db))
 	{
 	struct sqlConnection *conn = hAllocConnMaybe(db);
 	if (NULL == conn)
-	    dyStringPrintf(errorMsg, "can not find genome='%s' for endpoint '%s'", db, pathInfo);
+	    {
+	    /* not found directly, try alias lookup before failing */
+	    char *origDb = db;
+	    char *aliasDb = asmAliasFind(db);
+	    if (differentString(aliasDb, db))
+		{
+		db = aliasDb;
+		cgiVarSet("genome", db);
+		cgiVarSet("genomeInput", origDb); /* preserve original for error messages */
+		/* re-validate with the resolved name */
+		if ( ! isGenArk(db) )
+		    {
+		    conn = hAllocConnMaybe(db);
+		    if (NULL == conn)
+			dyStringPrintf(errorMsg, "can not find genome='%s' for endpoint '%s'", origDb, pathInfo);
+		    else
+			hFreeConn(&conn);
+		    }
+		}
+	    else
+		dyStringPrintf(errorMsg, "can not find genome='%s' for endpoint '%s'", db, pathInfo);
+	    }
 	else
 	    hFreeConn(&conn);
 	}

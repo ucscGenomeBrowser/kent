@@ -1,0 +1,2 @@
+83 bases (5 N's 78 real 78 upper 0 lower) in 1 sequences in 1 files
+%0.00 masked total, %0.00 masked real

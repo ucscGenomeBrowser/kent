@@ -165,8 +165,15 @@ KP.3.1.1:
                   G7842A, T23948G, C3565T, T17334G, G19722A, G23055A, T28271A, T23063A, G22910A
                 ]
 
+BA.3.2:
+    # No inheritance
+    representative: SouthAfrica/NICD-N58822/2024
+    representativeBacktrack: 2
+    reversions: [ C27382G, A27395T, T27807C # dropout in Netherlands sequences
+                ]
+
 RE.1.1:
-    # No inheritance -- BA.3.2 descendant with lots of dropout in Australia/WA sequences
+    # Inherits from BA.3.2; lots of dropout in Australia/WA sequences
     # https://github.com/sars-cov-2-variants/lineage-proposals/issues/3093#issuecomment-3508425340
     representative: Australia/WA17392/2025
     reversions: [ A336G, C13375T, C22629A, T28996A ]

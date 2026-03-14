@@ -152,11 +152,6 @@ struct oneOrg
     int order;		/* Help sort organisms. */
     struct dyString *dy;	/* Associated alignment for this organism. */
     boolean hit;	/* Flag to see if hit this time around. */
-    char *src;		/* Full src from first maf component (e.g. "mm10.chr5") */
-    int start;		/* Start in source from first aligned block. */
-    int end;		/* End in source (updated as we see more blocks). */
-    int srcSize;	/* Source sequence size. */
-    char strand;	/* Strand of alignment. */
     };
 
 static int oneOrgCmp(const void *va, const void *vb)
@@ -397,11 +392,11 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                     org = hashFindVal(orgHash, orgName);
 		}
 
-	    /* create a  new org if necessary, or skip if not in orderList */
+	    /* create a  new org if necessary. */
 	    if (org == NULL)
 		{
 		if (orderList != NULL)
-		    continue;
+		   errAbort("%s is not in orderList", orgName);
 		AllocVar(org);
 		slAddHead(&orgList, org);
 		hashAddSaveName(orgHash, orgName, org, &org->name);
@@ -413,16 +408,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    if (orderList == NULL && order > org->order)
 		org->order = order;
 	    org->hit = TRUE;
-
-	    /* Track source coordinates for this organism */
-	    if (org->src == NULL)
-		{
-		org->src = cloneString(mc->src);
-		org->start = mc->start;
-		org->srcSize = mc->srcSize;
-		org->strand = mc->strand;
-		}
-	    org->end = mc->start + mc->size;
 
 	    /* Fill it up with alignment. */
 	    dyStringAppendN(org->dy, mc->text, subMaf->textSize);
@@ -483,23 +468,12 @@ for (org = orgList; org != NULL; org = org->next)
 	}
     else
         {
-	if (org->src != NULL)
-	    {
-	    mc->src = cloneString(org->src);
-	    mc->srcSize = org->srcSize;
-	    mc->strand = org->strand;
-	    mc->start = org->start;
-	    mc->size = org->end - org->start;
-	    }
-	else
-	    {
-	    int size = countAlpha(org->dy->string);
-	    mc->src = cloneString(org->name);
-	    mc->srcSize = size;
-	    mc->strand = '+';
-	    mc->start = 0;
-	    mc->size = size;
-	    }
+	int size = countAlpha(org->dy->string);
+	mc->src = cloneString(org->name);
+	mc->srcSize = size;
+	mc->strand = '+';
+	mc->start = 0;
+	mc->size = size;
 	}
     mc->text = cloneString(org->dy->string);
     dyStringFree(&org->dy);
@@ -545,23 +519,6 @@ struct mafAli *ret = hgMafFragHelper(database, chrom, start, end, strand, mafLis
 hFreeConn(&conn);
 
 return ret;
-}
-
-struct mafAli *hgMafFragFromMafList(
-	char *database,     /* Database, must already have hSetDb to this */
-	char *chrom,        /* Chromosome (in database genome) */
-	int start, int end, /* start/end in chromosome */
-	char strand,        /* Chromosome strand. */
-	struct mafAli *mafList, /* Pre-loaded list of maf alignments */
-	char *outName,      /* Optional name to use in first component */
-	struct slName *orderList /* Optional order of organisms. */
-	)
-/* Extract maf sequences for a region from a pre-loaded mafList.
- * Same behavior as hgMafFrag but takes mafList directly instead
- * of loading from database.  Caller should not free mafList
- * afterwards (it is consumed). */
-{
-return hgMafFragHelper(database, chrom, start, end, strand, mafList, outName, orderList);
 }
 
 struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb)

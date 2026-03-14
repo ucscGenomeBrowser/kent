@@ -18,7 +18,7 @@ errAbort(
   "usage:\n"
   "   hgsqlSwapTables database table1 table2 table3\n"
   "Renames table2 to table3, then renames table1 to table2.\n"
-  "Checks for existance of table1 and table2 and lack of existance\n"
+  "Checks for existence of table1 and table2 and lack of existence\n"
   "of table3 and fails without change if not verified\n"
   "options:\n"
   "   -okNoTable2  --  don't fail if table2 doesn't exist\n"

@@ -594,7 +594,7 @@ printf("File type returned: ");
 char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
 cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressNone,
 		   differentWord(textOutCompressGzip, compressType));
-printf("&nbsp;plain text&nbsp&nbsp");
+printf("&nbsp;plain text&nbsp;&nbsp;");
 cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
 		   sameWord(textOutCompressGzip, compressType));
 printf("&nbsp;gzip compressed (ignored if output file is blank)");

@@ -54,7 +54,7 @@ class RaStanza(OrderedDict):
         if scopes != None:
             i = self.checkIndent(stanza)
             
-            if len(scopes) == i: # if we havent hit a scope this low yet, append it
+            if len(scopes) == i: # if we haven't hit a scope this low yet, append it
                 scopes.append(self)
             else: # otherwise we should just set it
                 scopes[i] = self

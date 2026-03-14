@@ -84,7 +84,7 @@ struct sqlConnection *sc = hAllocConn(db);
 if (sqlTableExists(sc, realTable))
     time = sqlTableUpdateTime(sc, realTable);
 else
-    errAbort("cant find table %s or %s in %s database (using chromosomes from %s)\n", table, realTable, db, chromDb);
+    errAbort("can't find table %s or %s in %s database (using chromosomes from %s)\n", table, realTable, db, chromDb);
 if (time <= 0)
     errAbort("invalid table update time (%d)\n", (int)time);
 freeMem(realTable);

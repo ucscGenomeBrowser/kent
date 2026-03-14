@@ -383,7 +383,7 @@ class DuplicateVendorIdError(CvError):
         self.strict = 0
         
 class InvalidProtocolError(CvError):
-    '''raised if a protocol doesnt match anything in the directory'''
+    '''raised if a protocol doesn't match anything in the directory'''
     
     def __init__(self, stanza, key):
         CvError.__init__(self, stanza)

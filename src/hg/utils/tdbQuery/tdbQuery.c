@@ -53,7 +53,7 @@ errAbort(
 "   tdbQuery \"select count(*) from *\"\n"
 "counts all tracks in all databases.\n"
 "   tdbQuery \"select  track,shortLabel from hg18 where type like 'bigWig%%'\"\n"
-"prints to stdout a a two field .ra file containing just the track and shortLabels of bigWig \n"
+"prints to stdout a two field .ra file containing just the track and shortLabels of bigWig \n"
 "type tracks in the hg18 version of trackDb.\n"
 "   tdbQuery \"select * from hg18 where track='knownGene' or track='ensGene'\"\n"
 "prints the hg18 knownGene and ensGene track's information to stdout.\n"

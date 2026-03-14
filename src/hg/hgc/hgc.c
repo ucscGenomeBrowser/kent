@@ -24657,7 +24657,7 @@ if(row != NULL)
     }
 else
     {
-    errAbort("No alignment infomation\n");
+    errAbort("No alignment information\n");
     }
 qSeq = loadGenomePart(db, psl->qName, psl->qStart, psl->qEnd);
 safef(name, sizeof name, "%s in %s(%d-%d)", item,psl->qName, psl->qStart, psl->qEnd);

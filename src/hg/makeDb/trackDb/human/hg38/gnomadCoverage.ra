@@ -7,7 +7,7 @@ group varRep
 dataVersion Release 3.0.1
 visibility full
 type bigWig
-priority 4
+priority 5
 maxHeightPixels 100:24:8
 
     track gnomad3MeanCoverage
@@ -120,7 +120,7 @@ group varRep
 dataVersion Release 4.0
 visibility full
 type bigWig
-priority 5
+priority 4
 maxHeightPixels 100:24:8
 
     track gnomad4ExomeMeanCoverage

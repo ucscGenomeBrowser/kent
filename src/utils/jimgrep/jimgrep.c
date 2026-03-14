@@ -37,7 +37,7 @@ return NULL;
 
 char *findBefore(char *bufStart, char *pos, char c)
 /* Scan backwards from pos to bufStart looking for first
- * occurence of character.  Return position right after
+ * occurrence of character.  Return position right after
  * that.  */
 {
 for (;;)
@@ -51,7 +51,7 @@ for (;;)
 
 char *findAfter(char *pos, char *bufEnd, char c)
 /* Scan forwards from pos to bufEnd looking for 
- * last occurence of character. Return position 
+ * last occurrence of character. Return position 
  * just before that. */
 {
 for (;;)
