@@ -1,0 +1,115 @@
+<h2>Description</h2>
+<p>
+The <b>WebSTR</b> track displays 1,710,833 short tandem repeat (STR) loci across the
+human genome from the
+<a href="https://webstr.ucsd.edu" target="_blank">WebSTR</a> database. STRs (also known
+as microsatellites) are consecutive repetitions of 1&ndash;6 nucleotide motifs that are
+highly polymorphic due to repeat unit insertions and deletions caused primarily by
+polymerase slippage during replication. Genetic variation at STRs has been shown to
+influence gene expression, cancer risk, and neurodevelopmental traits.</p>
+
+<p>
+This track is based on the <b>EnsembleTR panel</b> for the GRCh38/hg38 assembly,
+which represents a combined set of tandem repeats genotyped by four separate methods
+(HipSTR, GangSTR, ExpansionHunter, and AdVNTR) on data from the
+<a href="https://www.internationalgenome.org/" target="_blank">1000 Genomes Project</a>
+and <a href="https://h3africa.org/" target="_blank">H3Africa</a>.
+<a href="https://github.com/gymrek-lab/EnsembleTR" target="_blank">EnsembleTR</a>
+was applied to jointly genotype all 3,550 samples, producing consensus calls at
+over 1.7 million autosomal tandem repeat loci.</p>
+
+<p>
+The track includes allele frequency distributions for five 1000 Genomes continental
+populations:</p>
+<ul>
+<li>AFR &ndash; African (893 samples)</li>
+<li>AMR &ndash; Admixed American (490 samples)</li>
+<li>EAS &ndash; East Asian (585 samples)</li>
+<li>EUR &ndash; European (633 samples)</li>
+<li>SAS &ndash; South Asian (601 samples)</li>
+</ul>
+
+<p>
+For each population, allele frequencies are defined as the number of copies of each allele
+divided by the total number of alleles in that population. Alleles are represented as
+the number of repeat unit copies.</p>
+
+<h2>Display Conventions</h2>
+<p>
+Items are colored by the length of the repeat motif (period):</p>
+<ul>
+<li><span style="color: #FF0000;">Red</span> &ndash; mononucleotide (period 1)</li>
+<li><span style="color: #0000FF;">Blue</span> &ndash; dinucleotide (period 2)</li>
+<li><span style="color: #008000;">Green</span> &ndash; trinucleotide (period 3)</li>
+<li><span style="color: #FFA500;">Orange</span> &ndash; tetranucleotide (period 4)</li>
+<li><span style="color: #800080;">Purple</span> &ndash; pentanucleotide (period 5)</li>
+<li><span style="color: #4682B4;">Steel blue</span> &ndash; hexanucleotide (period 6)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; longer motifs (period &gt;6)</li>
+</ul>
+
+<p>
+Each item is labeled by its WebSTR repeat ID. Hovering over an item shows the repeat
+motif, number of reference copies, and motif period. Clicking an item links to the
+corresponding
+<a href="https://webstr.ucsd.edu" target="_blank">WebSTR</a> locus page, which provides
+interactive allele frequency histograms and additional annotations.</p>
+
+<h2>Methods</h2>
+<p>
+The EnsembleTR reference panel was constructed as follows:</p>
+<ol>
+<li>Tandem repeat reference sets from four genotyping tools (HipSTR, GangSTR,
+ExpansionHunter, and AdVNTR) were merged.</li>
+<li>Each tool was run independently on 1000 Genomes and H3Africa whole-genome
+sequencing data.</li>
+<li><a href="https://github.com/gymrek-lab/EnsembleTR" target="_blank">EnsembleTR</a>
+was used to produce joint consensus genotype calls across all four methods.</li>
+<li>Loci called in fewer than 75% of samples were removed, yielding 1,710,833 loci.</li>
+<li>Allele frequencies were computed per population.</li>
+</ol>
+
+<p>
+For the UCSC Genome Browser track, the source data were converted from CSV to bigBed
+format. The 1-based start coordinates from the WebSTR database were converted to 0-based
+half-open coordinates for the BED format. Per-population allele frequency distributions
+are stored as extra bigBed fields.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. For automated
+analysis, the data may be queried from our
+<a href="/goldenPath/help/api.html" target="_blank">REST API</a>. The underlying bigBed
+file can be downloaded from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/webstr/" target="_blank">download
+server</a>.</p>
+
+<p>
+The complete WebSTR dataset, including additional cohorts and data types not included in
+this track, is available from the
+<a href="https://webstr.ucsd.edu" target="_blank">WebSTR web portal</a>. Programmatic
+access to the full WebSTR database is available through the
+<a href="http://webstr-api.ucsd.edu/docs" target="_blank">WebSTR REST API</a>.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Melissa Gymrek (UC San Diego), Oxana Sachenkova Lundstr&ouml;m
+(Stockholm University / ZHAW), and the WebSTR team for providing the data for this track.</p>
+
+<h2>References</h2>
+<p>
+Sachenkova Lundstr&ouml;m O, Adriaan Verbiest M, Xia F, Jam HZ, Zlobec I,
+Anisimova M, Gymrek M.
+<a href="https://doi.org/10.1016/j.jmb.2023.168260" target="_blank">
+WebSTR: A Population-wide Database of Short Tandem Repeat Variation in Humans</a>.
+<em>J Mol Biol</em>. 2023 Oct 15;435(20):168260.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37678708" target="_blank">37678708</a>
+</p>
+
+<p>
+Jam HZ, Revoir P, Gadgil R, Sun Y, Gymrek M.
+<a href="https://doi.org/10.1038/s41587-023-02057-3" target="_blank">
+EnsembleTR: a tool for combining tandem repeat genotyping results</a>.
+<em>Nat Biotechnol</em>. 2024.
+</p>

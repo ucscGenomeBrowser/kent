@@ -1,0 +1,6 @@
+440 bases (10 N's 430 real 430 upper 0 lower) in 4 sequences in 3 files
+Total size: mean 110.0 sd 31.2 min 83 (s1) max 137 (s2) median 137
+N count: mean 2.5 sd 2.9
+U count: mean 107.5 sd 34.1
+L count: mean 0.0 sd 0.0
+%0.00 masked total, %0.00 masked real

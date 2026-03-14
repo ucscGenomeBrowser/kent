@@ -1,0 +1,40 @@
+# WebSTR Short Tandem Repeat track (part of strVar supertrack)
+# 2026-03-12 (max)
+
+# Data provided by Melissa Gymrek lab (UC San Diego) via WebSTR
+# https://webstr.ucsd.edu/
+# Paper: Sachenkova Lundstrom et al. J Mol Biol 2023, PMID 37678708
+# EnsembleTR panel, hg38 coordinates, 1,710,833 STR loci
+# Allele frequency data from 1000 Genomes (AFR, AMR, EAS, EUR, SAS cohorts)
+# 3,550 individuals total
+
+# Source files in WebSTRDataDumpForMax/:
+#   hg38_repeats_withlinks.csv.gz - repeat loci with coordinates and metadata
+#   hg38_afreqs.csv.gz - allele frequency distributions per repeat per cohort
+#   Note: afreqs file has typo "repeadid" in header (should be "repeatid")
+#   Note: source coordinates are 1-based; script converts to 0-based BED
+
+mkdir -p /hive/data/genomes/hg38/bed/str/webstr
+cd /hive/data/genomes/hg38/bed/str/webstr
+
+# Convert CSV data to BED9+ format with allele frequency fields
+# Colors items by motif period, encodes per-population allele freqs as extra fields
+python3 ~/kent/src/hg/makeDb/scripts/webstr/webstrToBed.py WebSTRDataDumpForMax > webstr.bed
+
+# Sort and convert to bigBed
+bedSort webstr.bed webstr.bed
+bedToBigBed webstr.bed /hive/data/genomes/hg38/chrom.sizes webstr.bb \
+    -type=bed9+ -tab -as=$HOME/kent/src/hg/makeDb/scripts/webstr/webstr.as
+
+# Symlink into /gbdb
+mkdir -p /gbdb/hg38/webstr
+ln -sf /hive/data/genomes/hg38/bed/str/webstr/webstr.bb /gbdb/hg38/webstr/webstr.bb
+
+# trackDb: webstr track is inside the strVar supertrack
+# trackDb entry: ~/kent/src/hg/makeDb/trackDb/human/hg38/webstr.ra
+# HTML docs: ~/kent/src/hg/makeDb/trackDb/human/hg38/webstr.html (full)
+#            ~/kent/src/hg/makeDb/trackDb/human/hg38/strVar.html (supertrack summary)
+
+# Load trackDb
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38

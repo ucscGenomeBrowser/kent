@@ -445,7 +445,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=J_BA1 mutation=NUC designation=VOC
         shortLabel Omicron BA.1 Nuc Muts
-        longLabel Omicron VOC (BA.1 SA Nov-2021) nucleotide mutations identifed from GISAID sequences (Nov 2021)
+        longLabel Omicron VOC (BA.1 SA Nov-2021) nucleotide mutations identified from GISAID sequences (Nov 2021)
         url https://outbreak.info/situation-reports?pango=BA.1
         urlLabel BA.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
@@ -456,7 +456,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=K_BA2 mutation=NUC designation=VOC
         shortLabel Omicron BA.2 Nuc Muts
-        longLabel Omicron VOC (BA.2) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (BA.2) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=BA.2
         urlLabel BA.2 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2_nuc.bb
@@ -467,7 +467,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=L_BA4 mutation=NUC designation=VUM
         shortLabel Omicron BA.4 Nuc Muts 
-        longLabel Omicron VOC (BA.4) nucleotide mutations identifed from 573 GISAID sequences (May 2022)
+        longLabel Omicron VOC (BA.4) nucleotide mutations identified from 573 GISAID sequences (May 2022)
         url https://outbreak.info/situation-reports?pango=BA.4
         urlLabel BA.4 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_nuc.bb
@@ -478,7 +478,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=M_BA5 mutation=NUC designation=VUM
         shortLabel Omicron BA.5 Nuc Muts 
-        longLabel Omicron VOC (BA.5) nucleotide mutations identifed from 287 GISAID sequences (May 2022)
+        longLabel Omicron VOC (BA.5) nucleotide mutations identified from 287 GISAID sequences (May 2022)
         url https://outbreak.info/situation-reports?pango=BA.5
         urlLabel BA.5 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_nuc.bb
@@ -489,7 +489,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=N_BA2121 mutation=NUC designation=VUM
         shortLabel Omicron BA.2.12.1 Nuc Muts
-        longLabel Omicron VOC (BA.2.12.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (BA.2.12.1) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=BA.2.12.1
         urlLabel BA.2.12.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.12.1_nuc.bb
@@ -500,7 +500,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=O_BA275 mutation=NUC designation=VOC
         shortLabel Omicron BA.2.75 Nuc Muts
-        longLabel Omicron VOC (BA.2.75) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (BA.2.75) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=BA.2.75
         urlLabel BA.2.75 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.75_nuc.bb
@@ -511,7 +511,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=P_BQ1 mutation=NUC designation=VUM
         shortLabel Omicron BQ.1 Nuc Muts
-        longLabel Omicron VOC (BQ.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (BQ.1) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=BQ.1
         urlLabel BQ.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BQ.1_nuc.bb
@@ -522,7 +522,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=Q_XBB mutation=NUC designation=VUM
         shortLabel Omicron XBB Nuc Muts
-        longLabel Omicron VOC (XBB) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (XBB) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=XBB
         urlLabel XBB Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/XBB_nuc.bb
@@ -533,7 +533,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=R_XBB15 mutation=NUC designation=VOI
         shortLabel Omicron XBB.1.5 Nuc Muts
-        longLabel Omicron VOC (XBB.1.5) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (XBB.1.5) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=XBB.1.5
         urlLabel XBB.1.5 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.5_nuc.bb
@@ -544,7 +544,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=S_XBB116 mutation=NUC designation=VOI
         shortLabel Omicron XBB.1.16 Nuc Muts
-        longLabel Omicron VOC (XBB.1.16) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (XBB.1.16) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=XBB.1.16
         urlLabel XBB.1.16 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.16_nuc.bb
@@ -555,7 +555,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=T_CH11 mutation=NUC designation=VUM
         shortLabel Omicron CH.1.1 Nuc Muts
-        longLabel Omicron VOC (CH.1.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (CH.1.1) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=CH.1.1
         urlLabel CH.1.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/CH.1.1_nuc.bb
@@ -566,7 +566,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=U_XBB19 mutation=NUC designation=VUM
         shortLabel Omicron XBB.1.9 Nuc Muts
-        longLabel Omicron VOC (XBB.1.9) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (XBB.1.9) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=XBB.1.9
         urlLabel XBB.1.9 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.9_nuc.bb
@@ -577,7 +577,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=V_XBB23 mutation=NUC designation=VUM
         shortLabel Omicron XBB.2.3 Nuc Muts
-        longLabel Omicron VOC (XBB.2.3) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (XBB.2.3) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=XBB.2.3
         urlLabel XBB.2.3 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.2.3_nuc.bb
@@ -588,7 +588,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=W_EG51 mutation=NUC designation=VOI
         shortLabel Omicron EG.5.1 Nuc Muts
-        longLabel Omicron VOC (EG.5.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        longLabel Omicron VOC (EG.5.1) nucleotide mutations identified from GISAID sequences (Sep 2023)
         url https://outbreak.info/situation-reports?pango=EG.5.1
         urlLabel EG.5.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/EG.5.1_nuc.bb
@@ -599,7 +599,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=X_XBB1570 mutation=NUC designation=VOI
         shortLabel Omicron XBB.1.5.70 Nuc Muts
-        longLabel Omicron VOC (XBB.1.5.70) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        longLabel Omicron VOC (XBB.1.5.70) nucleotide mutations identified from GISAID sequences (Jan 2024)
         url https://outbreak.info/situation-reports?pango=XBB.1.5.70
         urlLabel XBB.1.5.70 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.5.70_nuc.bb
@@ -610,7 +610,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=Y_HK3 mutation=NUC designation=VOI
         shortLabel Omicron HK.3 Nuc Muts
-        longLabel Omicron VOC (HK.3) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        longLabel Omicron VOC (HK.3) nucleotide mutations identified from GISAID sequences (Jan 2024)
         url https://outbreak.info/situation-reports?pango=HK.3
         urlLabel HK.3 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/HK.3_nuc.bb
@@ -621,7 +621,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=Z_BA286 mutation=NUC designation=VOI
         shortLabel Omicron BA.2.86 Nuc Muts
-        longLabel Omicron VOC (BA.2.86) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        longLabel Omicron VOC (BA.2.86) nucleotide mutations identified from GISAID sequences (Jan 2024)
         url https://outbreak.info/situation-reports?pango=BA.2.86
         urlLabel BA.2.86 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.86_nuc.bb
@@ -632,7 +632,7 @@ html variantMuts
         parent variantMuts off
         subGroups variant=ZA_JN1 mutation=NUC designation=VOI
         shortLabel Omicron JN.1 Nuc Muts
-        longLabel Omicron VOC (JN.1) nucleotide mutations identifed from GISAID sequences (Jan 2024)
+        longLabel Omicron VOC (JN.1) nucleotide mutations identified from GISAID sequences (Jan 2024)
         url https://outbreak.info/situation-reports?pango=JN.1
         urlLabel JN.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/JN.1_nuc.bb

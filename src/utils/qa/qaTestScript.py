@@ -242,8 +242,8 @@ time.sleep(3)
 # Tests a session with custom tracks, multiRegion, and assembly hub
 driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=QAtester&hgS_otherUserSessionName=Custom_Tracks_AssemblyHub_MultiRegion_TrackCollection_BigWigs")
-driver.find_element(By.XPATH, "//td[@id='td_data_ct_UserTrack_3545']/div[2]/map/area[4]").click()
-driver.find_element(By.LINK_TEXT, "chr1:33719895-33742564").click()
+driver.find_element(By.XPATH, "//td[contains(@id,'td_data_ct_UserTrack')]/div[2]/map/area[contains(@href,'Rab23')]").click()
+driver.find_element(By.XPATH, "//div[@id='firstSection']//a[contains(@href,'position=chr1')]").click()
 
 # Tests a DNA search on hgTracks
 driver.get(machine + "/cgi-bin/cartReset")

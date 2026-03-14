@@ -47,7 +47,7 @@ struct twoBitFile
     struct twoBit *seqCache; /* Cache information about last sequence accessed, including
                               * nBlock and mask block.  This doesn't include the data.
                               * This speeds fragment reads.  */
-    bits64 dataOffsetCache;  /* file offset of data for seqCache seqeunce */
+    bits64 dataOffsetCache;  /* file offset of data for seqCache sequence */
 
     /* the routines we use to access the twoBit.
      * These may be UDC routines, or stdio

@@ -55,7 +55,7 @@ errAbort(
   "db is query database to match genes to pseudogene\n"
   "chrom is target chromosome to match genes to pseudogene\n"
   "syntenicNet.bed is a filter net file using netFilter -syn converted to bed format\n"
-  "query_repeatDir is the dirctory containing repeatMasker out files chrXX.fa.out\n"
+  "query_repeatDir is the directory containing repeatMasker out files chrXX.fa.out\n"
   "target.lst, query.lst is a list of chromosome names followed by size of each chromosome\n"
   "refGene.tab, genePred2,3 are bed12 files of genes in query database\n"
   );

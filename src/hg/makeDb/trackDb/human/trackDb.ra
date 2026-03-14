@@ -5630,10 +5630,10 @@ include phasedVars.ra
 track dnaMethylation
 superTrack on
 shortLabel DNA Methylation
-longLabel DNA Methylation Projects
+longLabel DNA Methylation
 group regulation
 priority 3
-pennantIcon New red ../goldenPath/newsarch.html#NNNN "Released NNNN"
+pennantIcon New red ../goldenPath/newsarch.html#031626 "Released Mar. 16, 2026"
 html dnaMethylation.html
 
 include methylationAtlas.ra

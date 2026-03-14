@@ -1,0 +1,125 @@
+<h2>Description</h2>
+<p>
+The <b>gnomAD STR</b> track displays short tandem repeat (STR) genotypes at 87
+disease-associated loci from the
+<a href="https://gnomad.broadinstitute.org/" target="_blank">Genome Aggregation
+Database (gnomAD)</a> v3.1.3. The data include individual-level STR genotypes from
+18,511 whole-genome sequenced samples across 10 populations, aggregated
+into per-locus allele frequency distributions.</p>
+
+<p>
+These loci were selected because tandem repeat expansions at these sites have been
+reported to cause human genetic diseases, including Huntington disease (<em>HTT</em>),
+fragile X syndrome (<em>FMR1</em>), Friedreich ataxia (<em>FXN</em>), various
+spinocerebellar ataxias, myotonic dystrophies, and other neurological and
+neuromuscular disorders. Most loci (56) have motifs between 3&ndash;6 bp, while
+additional loci have longer motifs of 10&ndash;24 bp.</p>
+
+<p>
+The genotypes were generated using
+<a href="https://github.com/Illumina/ExpansionHunter" target="_blank">ExpansionHunter
+v5</a> on gnomAD v3.1 whole-genome sequencing data (150 bp read lengths). Of the
+samples, 64% were PCR-free, 13% PCR-plus, and 23% had unknown PCR protocol.
+ExpansionHunter was selected because it had the best accuracy among existing tools
+for detecting expansions at disease-associated loci. Results were generated without
+off-target regions to minimize overestimation of repeat sizes.
+For each locus, the data show the distribution of repeat allele sizes observed
+across the gnomAD population, providing a reference for normal and expanded allele
+ranges. For more details on the methods, see the
+<a href="https://gnomad.broadinstitute.org/news/2022-01-the-addition-of-short-tandem-repeat-calls-to-gnomad/"
+target="_blank">gnomAD blog post on STR calls</a>.</p>
+
+<h2>Display Conventions</h2>
+<p>
+Items are colored by the length of the repeat motif:</p>
+<ul>
+<li><span style="color: #FF0000;">Red</span> &ndash; mononucleotide (period 1)</li>
+<li><span style="color: #0000FF;">Blue</span> &ndash; dinucleotide (period 2)</li>
+<li><span style="color: #008000;">Green</span> &ndash; trinucleotide (period 3)</li>
+<li><span style="color: #FFA500;">Orange</span> &ndash; tetranucleotide (period 4)</li>
+<li><span style="color: #800080;">Purple</span> &ndash; pentanucleotide (period 5)</li>
+<li><span style="color: #4682B4;">Steel blue</span> &ndash; hexanucleotide (period 6)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; longer or complex motifs</li>
+</ul>
+
+<p>
+Each item is labeled by the gene name. Hovering shows the repeat motif,
+gene, total sample count, and number passing quality filters. Clicking an item
+links to the corresponding gnomAD STR locus page with interactive allele
+frequency histograms and detailed population breakdowns.</p>
+
+<p>
+The detail page for each locus shows:</p>
+<ul>
+<li><b>Motif(s)</b> &ndash; the repeat unit(s) genotyped at this locus</li>
+<li><b>Samples</b> &ndash; total genotyped individuals and number passing filters</li>
+<li><b>Allele distribution</b> &ndash; allele sizes and their frequencies</li>
+<li><b>Populations</b> &ndash; sample counts per gnomAD population</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+The gnomAD STR genotype data file
+(<code>gnomAD_STR_genotypes__2025_03_17.tsv.gz</code>) was downloaded from the
+<a href="https://gnomad.broadinstitute.org/downloads#v3-short-tandem-repeats"
+target="_blank">gnomAD downloads page</a>. This file contains individual-level
+STR genotypes at 87 disease-associated loci generated using
+<a href="https://github.com/Illumina/ExpansionHunter" target="_blank">ExpansionHunter</a>
+on gnomAD v3.1.3 whole-genome sequencing data.</p>
+
+<p>
+For the UCSC Genome Browser track, the individual genotype records (~1.4 million rows)
+were aggregated per locus to produce summary statistics: total sample count,
+PASS-filter count, allele size frequency distributions, and per-population sample counts.
+Coordinates were used as provided (0-based). Some loci include genotypes for multiple
+motif patterns (e.g., complex repeat structures) and for adjacent repeats; these are
+represented as separate records.</p>
+
+<p>
+The 10 populations represented are: African/African American (afr),
+Admixed American/Latino (amr), Amish (ami), Ashkenazi Jewish (asj),
+East Asian (eas), Finnish (fin), Middle Eastern (mid), Non-Finnish European (nfe),
+South Asian (sas), and Other (oth).</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. For automated
+analysis, the data may be queried from our
+<a href="/goldenPath/help/api.html" target="_blank">REST API</a>. The underlying bigBed
+file can be downloaded from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download
+server</a>.</p>
+
+<p>
+The complete gnomAD STR dataset, including individual-level genotypes, is available
+from the <a href="https://gnomad.broadinstitute.org/downloads#v3-short-tandem-repeats"
+target="_blank">gnomAD downloads page</a>. Interactive locus-level views with
+allele frequency histograms are available at the
+<a href="https://gnomad.broadinstitute.org/short-tandem-repeats?dataset=gnomad_r3"
+target="_blank">gnomAD STR browser</a>.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">gnomAD
+production team</a> at the Broad Institute for generating and distributing this data.</p>
+
+<h2>References</h2>
+<p>
+Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alf&ouml;ldi J,
+Watts NA, Vittal C, Gauthier LD <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-024-07532-8" target="_blank">
+A genome-wide mutational constraint map quantified from variation in 76,156 human
+genomes</a>.
+<em>Nature</em>. 2024;625:92&ndash;100.
+</p>
+
+<p>
+Dolzhenko E, Deshpande V, Schlesinger F, Krusche P, Petrovski R, Chen S,
+Emez D, Menten B, Narzisi G, Mohiyuddin M <em>et al</em>.
+<a href="https://doi.org/10.1093/bioinformatics/btz431" target="_blank">
+ExpansionHunter: a sequence-graph-based tool to analyze variation in short tandem
+repeat regions</a>.
+<em>Bioinformatics</em>. 2019;35(22):4754&ndash;4756.
+</p>

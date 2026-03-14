@@ -16,7 +16,7 @@
 <li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#wrong">I think this transcript looks strange, what shall I do?</a></li>
 <li><a href="#duplicates">Why does the UCSC RefSeq track ("refGene") include duplicates, and some transcripts map to two loci?</a></li>
-<li><a href="#duplicatesEns">Why does the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</a></li>
+<li><a href="#duplicatesEns">Why do the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
@@ -55,7 +55,7 @@ The exact definition of &quot;gene&quot; depends on the context. In the context 
 genome annotation, a gene has at least a name and is defined by a collection of
 related RNA transcript sequences (&quot;isoforms&quot;). The naming of genes and the
 assignment of the most important transcript sequences is often done manually by
-a group of biological literature curators.  For human, genes names are created
+a group of biological literature curators.  For human, gene names are created
 by the <a target=_blank href="https://www.genenames.org/">Human Gene
 Nomenclature Committee (HGNC, formerly HUGO)</a>.  Non-human species have
 similar annotation groups, e.g. Mouse Genome Informatics, Wormbase, Flybase,
@@ -114,8 +114,8 @@ these in manuscripts.</p>
 The most common accession numbers encountered by users are either from Ensembl,
 GENCODE or RefSeq.  Human Ensembl/GENCODE gene accession numbers start with
 ENSG followed by a number and version number separated by a dot, e.g. 
-&quot;ENSG00000012048.21&quot for latest BRCA1.  Every ENSG-gene has at least
-one transcript assigned to it. The transcript identifiers start with with ENST
+&quot;ENSG00000012048.21&quot; for latest BRCA1.  Every ENSG-gene has at least
+one transcript assigned to it. The transcript identifiers start with ENST
 and are likewise followed by a version number, e.g. 
 &quot;ENST00000619216.1&quot;. Additional details on Ensembl IDs can be found
 on the <a target="_blank" 
@@ -208,7 +208,7 @@ But both RefSeq and Gencode have dedicated staff that look manually at each and 
 know everything there is to know about gene models.
 They are happy to answer your questions and they can change the transcript annotation. Submit your questions
 via the <a href="https://www.ncbi.nlm.nih.gov/projects/RefSeq/update.cgi" target=_blank>RefSeq contact form</a>
-or the <a href="https://www.gencodegenes.org/pages/contact.html" target=_blank>Gencode context form.</a>
+or the <a href="https://www.gencodegenes.org/pages/contact.html" target=_blank>Gencode contact form.</a>
 </p>
 
 <a name="duplicates"></a>
@@ -239,7 +239,7 @@ so "RefSeq curated" contains only transcripts.
 </p>
 
 <a name="duplicatesEns"></a>
-<h6>Why does the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</h6>
+<h6>Why do the Gencode/Ensembl tracks ("knownGene", "ensGene" or "wgEncodeGencodeVXX") include a few duplicates, and some transcripts map to two loci?</h6>
 
 <p>The human genome has seven genes located in the <a target=_blank
 href='https://en.wikipedia.org/wiki/Pseudoautosomal_region'>pseudoautosomal regions</a> (PARs),
@@ -435,7 +435,7 @@ SELECT matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tB
 <pre>and tName NOT LIKE '%_hap%' AND tName not like '%_alt%' AND tNAME NOT LIKE '%_fix%'</pre>
 
 <p>A word of caution on the NCBI RefSeq track on hg19: NCBI is not fully supporting hg19 anymore. As a result, 
-some genes are not located on the main chromosomes in anymore. An example is NM_001129826/CSAG3.
+some genes are not located on the main chromosomes anymore. An example is NM_001129826/CSAG3.
 For hg19, you may prefer UCSC RefSeq for now.</p>
 <a name="mito"></a>
 <h2>What is the best gene track for mitochondrial gene annotations</h2>
@@ -556,7 +556,7 @@ some mechanism, and this choice will affect your pipeline results. It may be
 easier to keep all transcripts. For example, instead of annotating enhancers
 with the closest &quot;best-transcript&quot;, you can annotate them with the closest exon
 of any transcript. When mapping variants to transcripts, you can map to all
-transcripts and and show the transcript with the worst impact first.  When
+transcripts and show the transcript with the worst impact first.  When
 segmenting the chromosomes into gene loci, you can use the union of all
 transcripts of a gene, adding some predefined distance, rather than selecting a
 single "best" transcript.</p>

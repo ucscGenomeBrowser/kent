@@ -14,7 +14,7 @@ errAbort(
   "usage:\n"
   "   fixTrackDb database trackDbTable\n"
   "options:\n"
-  "  -gbdbList=list - list of files to confirm existance of bigDataUrl files\n"
+  "  -gbdbList=list - list of files to confirm existence of bigDataUrl files\n"
   );
 }
 

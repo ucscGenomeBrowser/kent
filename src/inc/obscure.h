@@ -131,7 +131,7 @@ struct slName *commaSepToSlNames(char *commaSep);
 
 struct slName *charSepToSlNames(char *string, char c);
 /* Convert character-separated list of items to slName list. 
- * Note that the last occurence of c is optional.  (That
+ * Note that the last occurrence of c is optional.  (That
  * is for a comma-separated list a,b,c and a,b,c, are
  * equivalent. */
 

@@ -1,4 +1,4 @@
-/* countChars - Count the number of occurences of a particular char. */
+/* countChars - Count the number of occurrences of a particular char. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
@@ -54,7 +54,7 @@ return count;
 }
 
 void doIt(char *ch, int fileCount, char *fileNames[])
-/* doIt - Count the number of occurences of a particular char. */
+/* doIt - Count the number of occurrences of a particular char. */
 {
 char c;
 int i;

@@ -15,7 +15,7 @@
    */
 
 struct	font_hdr {
-WORD	id;			/* some random number, doesnt matter */
+WORD	id;			/* some random number, doesn't matter */
 WORD	size;		/* Size in points.  Somehow related to pixel height. */
 char	facename[32];	/* Give it a name, don't really matter. */
 WORD	ADE_lo;		/* Lowest ascii character in font */

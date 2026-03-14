@@ -958,7 +958,7 @@ for(i=0;i<numToRun;i++)
 carefulClose(&good);
 carefulClose(&bad);
 printf("\tDone.\n");
-printf("Out of %d attempts got %d 'succesfully converted' and %d 'had problems', %d had too many N's\n",
+printf("Out of %d attempts got %d 'successfully converted' and %d 'had problems', %d had too many N's\n",
        (numGood + numBad), numGood, numBad, tooManyNs);
 printf("After checking got %d of %d correctly called and %d incorrectly called.\n",
        hgTestCorrect, hgTestCorrect+hgTestWrong, hgTestWrong);

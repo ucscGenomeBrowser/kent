@@ -28,7 +28,7 @@ html ../tgpArchive
     visibility hide
     maxWindowToDraw 5000000
     bigDataUrl /gbdb/hg38/bbi/tgpLorax.bb
-    iframeUrl https://host.docker.internal:5173?chrom=$S&genomiccoordstart=$[&genomiccoordend=$]&regionstart=${&regionend=$}
+    iframeUrl https://lorax.ucsc.edu/ucgb?chrom=$S&genomiccoordstart=$[&genomiccoordend=$]&regionstart=${&regionend=$}
     iframeOptions width='100%' height='550px' border='none'
 
     track tgpTrios

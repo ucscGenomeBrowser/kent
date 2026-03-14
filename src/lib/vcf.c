@@ -1609,7 +1609,7 @@ static char *vcfDataLineAutoSqlString =
         "    string info;       \"Additional information encoded as a semicolon-separated series "
                                  "of short keys with optional comma-separated values\""
         "    string format;     \"If genotype columns are specified in header, a "
-                                 "semicolon-separated list of of short keys starting with GT\""
+                                 "semicolon-separated list of short keys starting with GT\""
         "    string genotypes;  \"If genotype columns are specified in header, a tab-separated "
                                  "set of genotype column values; each value is a colon-separated "
                                  "list of values corresponding to keys in the format column\""

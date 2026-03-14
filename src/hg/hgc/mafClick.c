@@ -18,7 +18,6 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "chromAlias.h"
-#include "hgConfig.h"
 
 extern boolean issueBotWarning;
 
@@ -36,12 +35,7 @@ int i;
 for (i=0; i<size; ++i)
     {
     if (r!=NULL && s[i]==r[i])
-	{
-	if (cfgOptionBooleanDefault("mafClickMafFrag", FALSE))
-	    fprintf(f, " ");
-	else
-	    fprintf(f, ".");
-	}
+	fprintf(f, ".");
     else
 	{
 	char c = s[i];
@@ -460,51 +454,6 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 #endif
 
-static void mafStripRefGaps(struct mafAli *maf)
-/* Remove columns where the reference (first component) has a gap character.
- * These are insertions in non-reference species that should be collapsed
- * when displaying in reference coordinates. */
-{
-struct mafComp *mc;
-struct mafComp *ref = maf->components;
-if (ref == NULL || ref->text == NULL)
-    return;
-int textSize = maf->textSize;
-
-/* Build boolean array of columns to keep (where ref is not a gap) */
-bool *keep = needMem(textSize);
-int newSize = 0;
-int ii;
-for (ii = 0; ii < textSize; ii++)
-    {
-    if (ref->text[ii] != '-')
-        {
-        keep[ii] = TRUE;
-        newSize++;
-        }
-    }
-
-if (newSize == textSize)
-    {
-    freeMem(keep);
-    return;  /* nothing to strip */
-    }
-
-/* Compact all component texts in place */
-for (mc = maf->components; mc != NULL; mc = mc->next)
-    {
-    if (mc->text == NULL)
-        continue;
-    int jj = 0;
-    for (ii = 0; ii < textSize; ii++)
-        if (keep[ii])
-            mc->text[jj++] = mc->text[ii];
-    mc->text[jj] = '\0';
-    }
-maf->textSize = newSize;
-freeMem(keep);
-}
-
 static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn,struct sqlConnection *conn2,
                                             struct trackDb *tdb, char *chrom, int start, int end,
                                             char *axtOtherDb, char *file)
@@ -549,7 +498,6 @@ winStart, winEnd, winStart, database, tdb->track, label);
 static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)
 /* Display details for MAF or AXT tracks. */
 {
-boolean useMafFrag = cfgOptionBooleanDefault("mafClickMafFrag", FALSE);
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
@@ -574,7 +522,6 @@ else
     int useTarg = FALSE;
     int useIrowChains = FALSE;
     struct hash *labelHash = mafGetLabelHash(tdb);
-    struct slName *orderList = NULL;
 
     safef(option, sizeof(option), "%s.%s", tdb->track, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) &&
@@ -595,232 +542,124 @@ else
             }
         }
 
-    if (useMafFrag)
+    if (sameString(tdb->type, "bigMaf"))
         {
-        /* New mafFrag code path: determine species order from trackDb settings,
-         * matching hgTracks logic, then use hgMafFrag to stitch into a single
-         * continuous alignment in reference coordinates */
-        char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
-        char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
-        speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
-
-        /* Check cart override for speciesOrder */
-        safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
-        char *cartOrder = cartUsualString(cart, option, NULL);
-        if (cartOrder != NULL)
-            speciesOrder = cartOrder;
-
-        if (speciesUseFile)
-            speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
-
-        /* Build hash of species that default to off */
-        char *speciesOff = trackDbSetting(tdb, SPECIES_DEFAULT_OFF_VAR);
-        struct hash *defaultOffHash = NULL;
-        if (speciesOff)
-            {
-            char *offSpecies[2048];
-            int offCt = chopLine(cloneString(speciesOff), offSpecies);
-            defaultOffHash = newHash(5);
-            int ii;
-            for (ii = 0; ii < offCt; ii++)
-                hashAdd(defaultOffHash, offSpecies[ii], NULL);
-            }
-
-        /* Build orderList of selected species for mafFrag, matching
-         * newSpeciesItems() logic in wigMafTrack.c */
-        if (speciesOrder || speciesGroup)
-            {
-            char *groups[1000];
-            char sGroup[2048];
-            int groupCt = 1;
-            int group;
-
-            if (speciesGroup)
-                groupCt = chopLine(cloneString(speciesGroup), groups);
-
-            /* Add reference database as first in list */
-            slNameAddHead(&orderList, database);
-
-            for (group = 0; group < groupCt; group++)
-                {
-                char *species[2048];
-                int speciesCt;
-                if (groupCt != 1 || !speciesOrder)
-                    {
-                    safef(sGroup, sizeof sGroup, "%s%s",
-                                            SPECIES_GROUP_PREFIX, groups[group]);
-                    speciesOrder = trackDbRequiredSetting(tdb, sGroup);
-                    }
-                speciesCt = chopLine(cloneString(speciesOrder), species);
-
-                int ii;
-                for (ii = 0; ii < speciesCt; ii++)
-                    {
-                    boolean defaultOn = (defaultOffHash == NULL
-                        || hashLookup(defaultOffHash, species[ii]) == NULL);
-                    if (useTarg || cartUsualBooleanClosestToHome(cart, tdb,
-                                                FALSE, species[ii], defaultOn))
-                        {
-                        slNameAddTail(&orderList, species[ii]);
-                        }
-                    else
-                        {
-                        if (speciesOffHash == NULL)
-                            speciesOffHash = newHash(4);
-                        char *organism = hOrganism(species[ii]);
-                        if (!organism)
-                            organism = species[ii];
-                        hashStoreName(speciesOffHash, organism);
-                        }
-                    }
-                }
-            }
-
-        /* Load stitched alignment using mafFrag approach */
-        if (sameString(tdb->type, "bigMaf"))
-            {
-            char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-            struct bbiFile *bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
-            maf = hgBigMafFrag(database, bbi, seqName, winStart, winEnd, '+', NULL, orderList);
-            bbiFileClose(&bbi);
-            }
-        else if (axtOtherDb == NULL && fileName == NULL)
-            {
-            /* Regular MAF from database */
-            maf = hgMafFrag(database, tdb->table, seqName, winStart, winEnd, '+', NULL, orderList);
-            }
-        else
-            {
-            /* AXT or MAF with external file - load blocks, then stitch */
-            mafList = mafOrAxtLoadInRegion2(conn, conn2, tdb, seqName,
-                                        winStart, winEnd, axtOtherDb, fileName);
-            maf = hgMafFragFromMafList(database, seqName, winStart, winEnd, '+',
-                                        mafList, NULL, orderList);
-            mafList = NULL;  /* consumed by hgMafFragFromMafList */
-            }
-
-        /* Remove insertion columns (where reference has gaps) */
-        if (maf != NULL)
-            mafStripRefGaps(maf);
-
-        if (maf != NULL)
-            slAddHead(&subList, maf);
-        realCount = (subList != NULL) ? 1 : 0;
+        char *fileName = trackDbSetting(tdb, "bigDataUrl");
+        struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+        mafList = bigMafLoadInRegion(bbi, seqName, winStart, winEnd);
         }
     else
+        mafList = mafOrAxtLoadInRegion2(conn,conn2, tdb, seqName, winStart, winEnd,
+                                        axtOtherDb, fileName);
+    safef(dbChrom, sizeof(dbChrom), "%s.%s", hubConnectSkipHubPrefix(database), seqName);
+
+    safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
+    speciesOrder = cartUsualString(cart, option, NULL);
+    if (speciesOrder == NULL)
+	speciesOrder = trackDbSetting(tdb, "speciesOrder");
+
+    int speciesCt = 0;
+    char *species[2048];
+    struct mafComp **newOrder;
+    if (speciesOrder)
         {
-        /* Original block-by-block code path */
-        if (sameString(tdb->type, "bigMaf"))
+        // chop up speciesOrder string and store it away, checking for errors along the way
+        speciesCt = chopLine(cloneString(speciesOrder), species);
+        newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
+
+        int ii;
+        struct hash *nameHash = newHash(5);
+        for(ii=0; ii < speciesCt; ii++)
             {
-            char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-            struct bbiFile *bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
-            mafList = bigMafLoadInRegion(bbi, seqName, winStart, winEnd);
+            if (hashLookup(nameHash, species[ii]))
+                errAbort("speciesOrder contains %s more than once.", species[ii]);
+            hashStore(nameHash, species[ii]);
             }
-        else
-            mafList = mafOrAxtLoadInRegion2(conn, conn2, tdb, seqName, winStart, winEnd,
-                                            axtOtherDb, fileName);
-        safef(dbChrom, sizeof(dbChrom), "%s.%s", hubConnectSkipHubPrefix(database), seqName);
-
-        safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
-        speciesOrder = cartUsualString(cart, option, NULL);
-        if (speciesOrder == NULL)
-            speciesOrder = trackDbSetting(tdb, "speciesOrder");
-
-        int speciesCt = 0;
-        char *species[2048];
-        struct mafComp **newOrder;
-        if (speciesOrder)
-            {
-            speciesCt = chopLine(cloneString(speciesOrder), species);
-            newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
-
-            int ii;
-            struct hash *nameHash = newHash(5);
-            for(ii=0; ii < speciesCt; ii++)
-                {
-                if (hashLookup(nameHash, species[ii]))
-                    errAbort("speciesOrder contains %s more than once.", species[ii]);
-                hashStore(nameHash, species[ii]);
-                }
-            }
-
-        for (maf = mafList; maf != NULL; maf = maf->next)
-            {
-            int mcCount = 0;
-            struct mafComp *mc;
-            struct mafAli *subset;
-            struct mafComp *nextMc;
-
-            if (!useTarg)
-                {
-                for (mc = maf->components->next; mc != NULL; mc = nextMc)
-                    {
-                    char buf[64];
-                    char *organism;
-                    mafSrcDb(mc->src, buf, sizeof buf);
-                    organism = hOrganism(buf);
-                    if (!organism)
-                        organism = buf;
-                    nextMc = mc->next;
-                    safef(option, sizeof(option), "%s.%s", tdb->track, buf);
-                    if (!cartUsualBoolean(cart, option, TRUE))
-                        {
-                        if (speciesOffHash == NULL)
-                            speciesOffHash = newHash(4);
-                        hashStoreName(speciesOffHash, organism);
-                        }
-                    if (!cartUsualBoolean(cart, option, TRUE))
-                        slRemoveEl(&maf->components, mc);
-                    else
-                        mcCount++;
-                    }
-                }
-            if (mcCount == 0)
-                continue;
-
-            if (speciesCt)
-                {
-                struct mafComp *mcThis;
-                int i;
-
-                mcCount = 0;
-                speciesCt = chopLine(cloneString(speciesOrder), species);
-                newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
-                newOrder[mcCount++] = maf->components;
-
-                for (i = 0; i < speciesCt; i++)
-                    {
-                    if ((mcThis = mafMayFindCompSpecies(maf, species[i], '.')) == NULL)
-                        continue;
-                    if (mcThis == maf->components)
-                        errAbort("Reference species (%s) shouldn't be in speciesOrder in trackDb", species[i]);
-                    newOrder[mcCount++] = mcThis;
-                    }
-
-                maf->components = NULL;
-                for (i = 0; i < mcCount; i++)
-                    {
-                    newOrder[i]->next = 0;
-                    slAddHead(&maf->components, newOrder[i]);
-                    }
-
-                slReverse(&maf->components);
-                }
-            subset = mafSubsetE(maf, dbChrom, winStart, winEnd, TRUE);
-            if (subset != NULL)
-                {
-                mafMoveComponentToTop(subset, dbChrom);
-                if (subset->components->strand == '-')
-                    mafFlipStrand(subset);
-                subset->score = mafScoreMultiz(subset);
-                slAddHead(&subList, subset);
-                ++realCount;
-                }
-            }
-        slReverse(&subList);
-        mafAliFreeList(&mafList);
         }
 
+    for (maf = mafList; maf != NULL; maf = maf->next)
+        {
+        int mcCount = 0;
+        struct mafComp *mc;
+        struct mafAli *subset;
+        struct mafComp *nextMc;
+
+        /* remove empty components and configured off components
+         * from MAF, and ignore
+         * the entire MAF if all components are empty
+         * (solely for gap annotation) */
+
+        if (!useTarg)
+            {
+            for (mc = maf->components->next; mc != NULL; mc = nextMc)
+		{
+		char buf[64];
+                char *organism;
+		mafSrcDb(mc->src, buf, sizeof buf);
+                organism = hOrganism(buf);
+                if (!organism)
+                    organism = buf;
+		nextMc = mc->next;
+		safef(option, sizeof(option), "%s.%s", tdb->track, buf);
+		if (!cartUsualBoolean(cart, option, TRUE))
+		    {
+		    if (speciesOffHash == NULL)
+			speciesOffHash = newHash(4);
+		    hashStoreName(speciesOffHash, organism);
+		    }
+		if (!cartUsualBoolean(cart, option, TRUE))
+		    slRemoveEl(&maf->components, mc);
+		else
+		    mcCount++;
+		}
+	    }
+        if (mcCount == 0)
+            continue;
+
+	if (speciesCt)
+	    {
+	    struct mafComp *mcThis;
+	    int i;
+
+	    mcCount = 0;
+	    speciesCt = chopLine(cloneString(speciesOrder), species);
+	    newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
+	    newOrder[mcCount++] = maf->components;
+
+	    for (i = 0; i < speciesCt; i++)
+		{
+		if ((mcThis = mafMayFindCompSpecies(maf, species[i], '.')) == NULL)
+		    continue;
+                if (mcThis == maf->components)
+                    errAbort("Reference species (%s) shouldn't be in speciesOrder in trackDb", species[i]);
+		newOrder[mcCount++] = mcThis;
+		}
+
+	    maf->components = NULL;
+	    for (i = 0; i < mcCount; i++)
+		{
+		newOrder[i]->next = 0;
+		slAddHead(&maf->components, newOrder[i]);
+		}
+
+	    slReverse(&maf->components);
+	    }
+	subset = mafSubsetE(maf, dbChrom, winStart, winEnd, TRUE);
+	if (subset != NULL)
+	    {
+	    /* Reformat MAF if needed so that sequence from current
+	     * database is the first component and on the
+	     * plus strand. */
+	    mafMoveComponentToTop(subset, dbChrom);
+	    if (subset->components->strand == '-')
+		mafFlipStrand(subset);
+	    subset->score = mafScoreMultiz(subset);
+	    slAddHead(&subList, subset);
+	    ++realCount;
+	    }
+	}
+    slReverse(&subList);
+    mafAliFreeList(&mafList);
     if (subList != NULL)
 	{
 	char *showVarName = "hgc.showMultiBase";
@@ -937,7 +776,7 @@ else
 	printf("<TT><PRE>");
 
         /* notify if species removed from alignment */
-        if (speciesOffHash)
+        if (speciesOffHash) 
             {
             char *species;
             struct hashCookie hc = hashFirst(speciesOffHash);
@@ -947,6 +786,7 @@ else
             puts("<BR>");
             }
 
+
 	for (maf = subList; maf != NULL; maf = maf->next)
 	    {
 	    mafLowerCase(maf);
@@ -954,16 +794,10 @@ else
 	    if (capTrack != NULL)
                 capMafOnTrack(maf, capTrack, onlyCds);
 #endif
-            if (useMafFrag)
-                printf("<B>Alignment %d - %d, %d bps </B>\n",
-                       maf->components->start + 1,
-                       maf->components->start + maf->components->size,
-                       maf->components->size);
-            else
-                printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
-                       ++aliIx,realCount,maf->components->start + 1,
-                       maf->components->start + maf->components->size, maf->components->size);
-            mafPrettyOut(stdout, maf, 70, onlyDiff, aliIx, labelHash);
+            printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
+                   ++aliIx,realCount,maf->components->start + 1,
+                   maf->components->start + maf->components->size, maf->components->size);
+            mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx, labelHash);
             }
 	mafAliFreeList(&subList);
 	}
@@ -972,7 +806,6 @@ else
         printf("No multiple alignment in browser window");
 	}
     printf("</PRE></TT>");
-    slNameFreeList(&orderList);
     }
 }
 

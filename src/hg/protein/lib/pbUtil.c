@@ -1043,7 +1043,7 @@ row = sqlNextRow(sr);
 
 if (row == NULL)
     {
-    errAbort("Error occured during mySQL query: %s\n", query);
+    errAbort("Error occurred during mySQL query: %s\n", query);
     }
 
 proteinCnt = atoi(row[0]);

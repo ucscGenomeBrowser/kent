@@ -2,6 +2,7 @@
 #include "common.h"
 #include "fa.h"
 #include "dnautil.h"
+#include "dnaLoad.h"
 #include "options.h"
 
 
@@ -17,9 +18,9 @@ static struct optionSpec optionSpecs[] =
 void usage()
 /* Print usage info and exit. */
 {
-errAbort("faSize - print total base count in fa files.\n"
+errAbort("faSize - print total base count in fa or 2bit files.\n"
 	 "usage:\n"
-	 "   faSize file(s).fa\n"
+	 "   faSize file(s).fa|file(s).2bit\n"
 	 "Command flags\n"
 	 "   -detailed        outputs name and size of each record\n"
          "                    has the side effect of printing nothing else\n"
@@ -160,74 +161,74 @@ return TRUE;
 
 
 void faSize(char *faFiles[], int faCount)
-/* faSize - print total size and total N count of FA files. */
+/* faSize - print total size and total N count of FA or 2bit files. */
 {
 char *fileName;
 int i;
-struct dnaSeq seq;
+struct dnaSeq *seq;
+struct dnaLoad *dl;
 int fileCount = 0;
 int seqCount = 0;
 unsigned long long baseCount = 0;
 unsigned long long nCount = 0;
 unsigned long long uCount = 0;
 unsigned long long lCount = 0;
-struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
 boolean veryDetailed = optionExists("veryDetailed");
 boolean detailed = optionExists("detailed");
 boolean tabFmt = optionExists("tab");
 
-ZeroVar(&seq);
-
 dnaUtilOpen();
 for (i = 0; i<faCount; ++i)
     {
     fileName = faFiles[i];
-    lf = lineFileOpen(fileName, FALSE);
+    dl = dnaLoadOpen(fileName);
     ++fileCount;
-    while (faSpeedReadNextPC(lf, &seq.dna, &seq.size, &seq.name))
+    while ((seq = dnaLoadNext(dl)) != NULL)
 	{
 	int j;
 	int ns = 0;
 	int us = 0;
 	int ls = 0;
+	faToDnaPC(seq->dna, seq->size);
 	++seqCount;
-	for (j=0; j<seq.size; ++j)
+	for (j=0; j<seq->size; ++j)
 	    {
-	    DNA d = seq.dna[j];
+	    DNA d = seq->dna[j];
 	    if (d == 'n' || d == 'N')
 		{
 		++ns;
 		}
 	    else
 		{
-		if (isupper(d)) 
+		if (isupper(d))
 		    ++us;
-		if (islower(d)) 
+		if (islower(d))
 		    ++ls;
 		}
 	    }
-	baseCount += seq.size;
+	baseCount += seq->size;
 	nCount += ns;
 	uCount += us;
 	lCount += ls;
 	AllocVar(fi);
-	fi->name = cloneString(seq.name);
-	fi->size = seq.size;
+	fi->name = cloneString(seq->name);
+	fi->size = seq->size;
 	fi->nCount = ns;
 	fi->uCount = us;
 	fi->lCount = ls;
         if (veryDetailed)
             {
-	    printf("%s\t%d\t%d\t%d\t%d\t%d\n", seq.name, seq.size, ns, seq.size-ns, us, ls);
+	    printf("%s\t%d\t%d\t%d\t%d\t%d\n", seq->name, seq->size, ns, seq->size-ns, us, ls);
             }
 	else if (detailed)
 	    {
-	    printf("%s\t%d\n", seq.name, seq.size);
+	    printf("%s\t%d\n", seq->name, seq->size);
 	    }
 	slAddHead(&fiList, fi);
+	dnaSeqFree(&seq);
 	}
-    lineFileClose(&lf);
+    dnaLoadClose(&dl);
     }
 if (!(detailed || veryDetailed))
     {

@@ -147,7 +147,6 @@ UCSC_APPS = \
 	lineCount \
 	nt4Frag \
 	pslToXa \
-	redmineDump \
 	scrambleFa \
 	subs \
 	tabToMmHash \
@@ -215,6 +214,8 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
+	redmineCli \
+	redmineDump \
 	browserRace \
 	${USER_APP_SCRIPTS}
 

@@ -23,7 +23,7 @@
 
 char *version = "2.10";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.8 on at least -
- * 2.10 - allow chromsomes to be in non-lexicographic order
+ * 2.10 - allow chromosomes to be in non-lexicographic order
  * 2.9 - ability to specify chromAlias bigBed as chromSizes file
  * 2.8  sync up version numbers with bedToBigBed 
  */

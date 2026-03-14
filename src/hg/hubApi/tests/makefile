@@ -33,7 +33,7 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 
 listFunctions: list01 list02 list04 list05 list06 list07 list08 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 \
-	list20 list21 list23 list24 list25 list27 list28 list29 \
+	list20 list21 list23 list24 list25 list27 list27b list27c list28 list29 \
 	list30 list31 list32
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
@@ -264,6 +264,18 @@ list25: setOutput
 list27: setOutput
 	@printf "### $@ '${SERVERNAME}/list/genarkGenomes?genome=GCA_000002765.3;maxItemsOutput=5'\n"
 	@./jsonConsumer.pl -genome=GCA_000002765.3 -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}|totalAssemblies" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/genarkGenomes verify existence of genome GCF_000001405.40
+list27b: setOutput
+	@printf "### $@ '${SERVERNAME}/list/genarkGenomes?genome=GCF_000001405.40;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -genome=GCF_000001405.40 -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}|totalAssemblies" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/ucscGenomes verify existence of genome GCF_000001405.40
+list27c: setOutput
+	@printf "### $@ '${SERVERNAME}/list/ucscGenomes?genome=GCF_000001405.40'\n"
+	@./jsonConsumer.pl -genome=GCF_000001405.40 -serverName="${SERVERNAME}" -endpoint="/list/ucscGenomes" 2>&1 | egrep -v "${excludeLines}|totalAssemblies" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/tracks?genome=GCA_001698545.1 without hubUrl

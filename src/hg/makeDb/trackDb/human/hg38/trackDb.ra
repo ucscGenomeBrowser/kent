@@ -1,3 +1,7 @@
+include ncOrfs.ra alpha
+
+include strVar.ra alpha
+
 include barCharts.ra
 
 include hoffMap.ra
@@ -305,6 +309,15 @@ type chain hg38
 otherDb hg38
 chainNormScoreAvailable yes
 scoreFilter 20000
+baseColorUseSequence 2bit
+indelQueryInsert on
+indelDoubleInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 100000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+otherTwoBitUrl /gbdb/hg38/hg38.2bit
 
 track multiz4way
 shortLabel Cons 4-way
