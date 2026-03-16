@@ -22,26 +22,24 @@ errAbort(
   "   mafFrag database mafTrack chrom start end strand out.maf\n"
   "options:\n"
   "   -outName=XXX  Use XXX instead of database.chrom for the name\n"
-  "   -noDots       Output only species with sequence (no dot-filled rows)\n"
   );
 }
 
 char *outName = NULL;
-boolean noDots = FALSE;
 
 static struct optionSpec options[] = {
    {"outName", OPTION_STRING},
-   {"noDots", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void mafFragCheck(char *database, char *track,
+void mafFragCheck(char *database, char *track, 
 	char *chrom, char *startString, char *endString,
 	char *strand, char *outMaf)
 /* mafFragCheck - Check parameters and convert to binary.
- * Call mafFrag or mafFragNoDots. */
+ * Call mafFrag. */
 {
 int start, end, chromSize;
+struct mafAli *maf;
 if (!isdigit(startString[0]) || !isdigit(endString[0]))
     errAbort("%s %s not numbers", startString, endString);
 start = atoi(startString);
@@ -51,37 +49,17 @@ if (end <= start)
 chromSize = hChromSize(database, chrom);
 if (end > chromSize)
    errAbort("End past chromSize (%d > %d)", end, chromSize);
-if (noDots)
-    {
-    struct mafAli *mafList = hgMafFragNoDots(database, track,
-	chrom, start, end, *strand,
+maf = hgMafFrag(database, track, 
+	chrom, start, end, *strand, 
 	outName, NULL);
-    if (mafList != NULL)
-	{
-	FILE *f = mustOpen(outMaf, "w");
-	mafWriteStart(f, "zero");
-	struct mafAli *maf;
-	for (maf = mafList; maf != NULL; maf = maf->next)
-	    mafWrite(f, maf);
-	mafWriteEnd(f);
-	carefulClose(&f);
-	mafAliFreeList(&mafList);
-	}
-    }
-else
+if (maf != NULL)
     {
-    struct mafAli *maf = hgMafFrag(database, track,
-	chrom, start, end, *strand,
-	outName, NULL);
-    if (maf != NULL)
-	{
-	FILE *f = mustOpen(outMaf, "w");
-	mafWriteStart(f, "zero");
-	mafWrite(f, maf);
-	mafWriteEnd(f);
-	carefulClose(&f);
-	mafAliFree(&maf);
-	}
+    FILE *f = mustOpen(outMaf, "w");
+    mafWriteStart(f, "zero");
+    mafWrite(f, maf);
+    mafWriteEnd(f);
+    carefulClose(&f);
+    mafAliFree(&maf);
     }
 }
 
@@ -91,7 +69,6 @@ int main(int argc, char *argv[])
 dnaUtilOpen();
 optionInit(&argc, argv, options);
 outName = optionVal("outName", NULL);
-noDots = optionExists("noDots");
 if (argc != 8)
     usage();
 mafFragCheck(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);

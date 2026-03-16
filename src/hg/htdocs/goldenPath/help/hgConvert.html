@@ -1,0 +1,147 @@
+<!-- This file is included in hgVai's "Using the Variant Annotation Integrator" section. -->
+<!-- HREF paths are relative to cgi-bin, not goldenPath/help. -->
+
+<a name="overview"></a>
+<h3>Overview</h3>
+<p>
+An alignment between two DNA sequences maps every nucleotide in one sequence to a nucleotide in
+another sequence. By making and using
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC208784/" target="_blank">whole-genome alignments</a>,
+the UCSC Genome Browser always allowed users to &quot;lift&quot; genome annotations to another
+assembly (<a href="/cgi-bin/hgLiftOver" target="_blank">liftOver</a>), in bulk, one track at a
+time. <font color="#008000">QuickLift</font> is a tool that uses the same algorithm, but it maps
+(liftOver) annotations on demand, in real-time, for all visible tracks. Only the
+annotations in the currently visible region are lifted, so this is usually fast enough when
+browsing a genome. For example, <font color="#008000">QuickLift</font> can be used to map
+annotations from hg38 or hg19 to any of the hundreds of new human high-quality genomes in GenArk
+(HPRC), with almost no additional delay. For instance, you can view GENCODE genes from hg38
+on a T2T assembly like hs1, carrying over your visible tracks to the target genome assembly.
+</p>
+<p>
+<font color="#008000">QuickLift</font> functionality depends on the availability of alignment files
+(chains) that describe how sequences in one assembly correspond to another. The alignment files are
+currently made at UCSC, and if no alignment file is available for the assembly in which you're
+interested, please send a request to the <a href="/contacts.html" target="_blank"
+>genome mailing list</a>, and we will attempt to provide you with one.
+</p>
+
+<a name="gettingStarted"></a>
+<h3>Getting Started</h3>
+<p>
+The <b>source assembly</b> is the assembly where the annotations come from, and the
+<b>destination (target) assembly</b> is the assembly you are converting to.
+To use <font color="#008000">QuickLift</font>, follow these steps:
+</p>
+<ol>
+    <li>Navigate to the genome assembly and position you want to convert in the
+        <a href="/cgi-bin/hgTracks" target="_blank">Genome Browser</a>. Make sure the
+        tracks you want to lift are visible.</li>
+    <li>Open the Convert page by going to <b>View &gt; In Other Genomes (Convert)</b>
+        from the top menu bar, or navigate directly to
+        the <a href="/cgi-bin/hgConvert" target="_blank">Convert page</a>.</li>
+    <li>Under <b>Destination</b>, choose the target genome assembly. You can either:
+        <ul>
+            <li>Use the <b>Search</b> bar to find a target genome by name. As you type,
+                an autocomplete dropdown appears with matching genomes. The search
+                automatically filters results to show only assemblies that have a liftOver
+                chain available from your source assembly. Genomes without an available
+                liftOver chain are excluded from the results. You can also click the
+                dropdown toggle button to browse recent and popular genomes.</li>
+            <li>Use the <b>Assembly</b> dropdown to select from other assemblies
+                of the same organism (e.g., other human assemblies when the source assembly is
+                hg38). To convert to a different organism, use the Search bar
+                instead.</li>
+        </ul>
+    </li>
+    <li>Check the <b>QuickLift tracks</b> checkbox to carry over your visible tracks,
+        custom tracks, and track hubs to the target assembly. Without this checkbox, only the
+        coordinate position is converted.
+        <ul>
+            <li>When a single track from a container track, such as a superTrack or
+                composite, is lifted, the entire container track is carried over to the
+                target genome assembly.</li>
+        </ul>
+        <div class="text-center">
+        <img src="../../images/QuickLift/quickLiftTracks.png" width='50%'>
+        </div>
+    </li>
+    <li>Click <b>Submit</b>. The results page will show the corresponding position(s)
+        in the target assembly with links to the Genome Browser. If
+        <font color="#008000">QuickLift</font> was enabled, clicking a link will display your
+        lifted tracks under a green
+        &quot;<font color="#008000">QuickLift</font> from ...&quot; group in the target
+        assembly. To remove <font color="#008000">QuickLift</font> tracks, click the
+        <button>Disconnect</button> button.</li>
+</ol>
+
+<a name="visualIndicators"></a>
+<h3>Visual Indicators</h3>
+<p>
+<font color="#008000">QuickLift</font> tracks have a green left-side button bar in the Browser
+graphic (instead of the usual gray):
+</p>
+<div class="text-center">
+<img src="../../images/QuickLift/quickLiftGreenbuttons.png" width='7%'>
+</div>
+<p>
+The Alignment Differences track displays liftOver differences using triangles and lines:
+</p>
+              <ul>
+		<li>Insertions: <font color="#407F00">green</font></li>
+		<li>Deletions: <font color="#00007F">blue</font></li>
+		<li>Double-sided insertions: <font color="#7F7F7F">gray</font> (Both the source
+		and target assemblies contain unalignable sequence between two regions of aligned
+		sequence)</li>
+		<li>Mismatches: <font color="#FF0000">red</font></li>
+              </ul>
+<p>
+Mousing over a triangle displays the size base-pair (bp) difference and the type of alignment
+difference.
+</p>
+<div class="text-center">
+<img src="../../images/QuickLift/quickLiftTrianglesMouseOver.png" width='70%'>
+</div>
+<p>
+Clicking a triangle provides the source and target assembly genome positions, DNA sequence
+alignment, including the type of alignment difference with the bases within the currently
+visible browser region.</p>
+
+<a name="unsupportedTypes"></a>
+<h3>Unsupported Track Formats</h3>
+<p><font color="#008000">QuickLift</font> does not support the following track formats:</p>
+      <ul>
+        <li>WIG &mdash; <a href="/goldenPath/help/bigWig.html" target="_blank">bigWig</a>
+            is supported; WIG tracks can be converted to bigWig using the
+            <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>wigToBigWig</code></a>
+            utility</li>
+        <li>BAM</li>
+	<li>CRAM</li>
+        <li>PSL &mdash; <a href="/FAQ/FAQformat.html#format1" target="_blank">BED</a>
+            is supported; PSL tracks can be converted to BED using the
+            <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>pslToBed</code></a>
+            utility</li>
+        <li>VCF</li>
+        <li>HIC</li>
+        <li>MAF</li>
+        <li>bigChain</li>
+        <li>Interact</li>
+        <li>narrowPeak / broadPeak &mdash;
+            <a href="/goldenPath/help/bigBed.html" target="_blank">bigBed</a>
+            is supported; since narrowPeak and broadPeak are BED-based formats, they can be
+            converted to bigBed using the
+            <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>bedToBigBed</code></a>
+            utility</li>
+        <li>pgSnp</li>
+      </ul>
+
+<a name="resources"></a>
+<h3>Resources &amp; Support</h3>
+<ul>
+    <li><a href="/cgi-bin/hgLiftOver" target="_blank">LiftOver</a> &mdash; convert
+        coordinates or annotation files in bulk between assemblies</li>
+    <li><a href="/goldenPath/help/chain.html" target="_blank">Chain format</a> &mdash;
+        description of the alignment chain files used by
+        <font color="#008000">QuickLift</font> and liftOver</li>
+    <li><a href="/contacts.html" target="_blank">Contact us</a> &mdash; request a new
+        liftOver chain or report issues via the genome mailing list</li>
+</ul>

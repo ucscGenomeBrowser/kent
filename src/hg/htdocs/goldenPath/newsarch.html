@@ -64,6 +64,130 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2025 archived news ============= -->
 <a name="2026"></a>
 
+<a name="031626"></a>
+<h2>Mar. 16, 2026 &nbsp;&nbsp; New DNA Methylation track: Human Methylation Atlas Summary and Signals tracks</h2>
+<p>
+We are excited to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=humanMethylationAtlasSummary&position=default" target="_blank"
+>Human Methylation Atlas Summary</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=humanMethylationAtlasSignals&position=default"
+target="_blank">Signals</a> tracks for hg38 and hg19, available in the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=dnaMethylation&position=default" target="_blank"
+>DNA Methylation superTrack</a>. The Human Methylation Atlas tracks display genome-wide DNA
+methylation profiles from deep whole-genome bisulfite sequencing (WGBS) of 39 primary human cell
+types sorted from 205 healthy tissue samples.
+</p>
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/QAtester/humanMethylationAtlas" target="_blank">
+  <img src="../images/newsArchImages/humanMethylationAtlas.png" alt="Example of cell-type specific
+  unmethylated regions and methylation signals (hg38, chr2:3,233,601-3,284,760) for blood,
+  neuronal, pancreatic, and thyroid cell types" width='60%'></a>
+</div>
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=humanMethylationAtlasSummary&position=default"
+target="_blank">Human Methylation Atlas Summary track</a> consists of three subtracks:
+</p>
+<ul>
+  <li><b>All Unmethylated Regions</b> - unmethylated genomic regions for each of the 39 cell
+  types.</li>
+  <li><b>Putative Enhancers from Unmethylated Regions</b> - putative enhancers derived from
+  unmethylated regions for 32 of the 39 cell types.
+  </li>
+  <li><b>Top 250 Unmethylated Regions per Cell Type</b> - the top 250 most specifically unmethylated
+  regions in each of the 39 cell types.
+  </li>
+</ul>
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=humanMethylationAtlasSignals&position=default"
+target="_blank">Human Methylation Atlas Signals track</a> displays per-cell-type methylation beta
+values (0-1 scale) across the genome, with <b>merged</b> tracks combining all replicates per cell
+type and <b>replicate</b> tracks for each individual sample.
+</p>
+<p>
+We would like to thank the Dor, Kaplan, and Glaser laboratories at the Hebrew University
+of Jerusalem and collaborating institutions for generating and providing these data.
+</p>
+
+
+<a name="031326"></a>
+<h2>Mar. 13, 2026 &nbsp;&nbsp; gnomAD v4 Exome and v3 Genome coverage tracks for hg38</h2>
+<p>
+We are pleased to announce the release of two new coverage tracks from the
+<a href="https://gnomad.broadinstitute.org/" target="_blank">Genome Aggregation Database
+(gnomAD)</a> on the human GRCh38/hg38 assembly. These tracks are part of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariants">Genome Aggregation Database (gnomAD)</a>
+track collection.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomad4ExomeCoverage">gnomAD v4 Exome Coverage</a>
+track displays per-base sequencing coverage statistics derived from the gnomAD v4.0
+exome callset. Coverage was computed across all gnomAD v4 exome samples using gVCFs
+produced with a 3-bin blocking scheme based on reference genotype quality
+(&lt; Q20 and &ge; Q20). Note that there is no gnomAD v4 genome coverage track because
+the genome samples were unchanged from v3. The track contains the following subtracks:
+</p>
+
+<ul>
+  <li>
+    <b>Mean Coverage</b> &ndash; mean read depth across exome samples at each base
+    position
+  </li>
+  <li>
+    <b>Median Coverage</b> &ndash; median read depth across exome samples at each base
+    position
+  </li>
+  <li>
+    <b>Sample % &gt; 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, 100X</b> &ndash;
+    the percentage of exome samples with read depth at or above the indicated
+    coverage threshold at each base position
+  </li>
+</ul>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomad3Coverage">gnomAD v3 Genome Coverage</a>
+track displays equivalent per-base coverage statistics computed from 71,702 gnomAD
+v3.0.1 whole-genome samples, also using gVCFs and the same 3-bin quality blocking
+scheme. Note that there is no gnomAD v3 exome coverage track because gnomAD v3 was a
+genome-only release. The track contains the following subtracks:
+</p>
+
+<ul>
+  <li>
+    <b>Mean Coverage</b> &ndash; mean read depth across genome samples at each base
+    position
+  </li>
+  <li>
+    <b>Median Coverage</b> &ndash; median read depth across genome samples at each
+    base position
+  </li>
+  <li>
+    <b>Sample % &gt; 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, 100X</b> &ndash;
+    the percentage of genome samples with read depth at or above the indicated
+    coverage threshold at each base position
+  </li>
+</ul>
+
+<p>
+For both tracks, clicking on a feature opens a details page that shows calculated
+sample coverage percentages across the sequence range visible in the browser window.
+Coverage data files in <a href="/goldenPath/help/bigWig.html">bigWig</a>
+format are available from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/">download server</a>
+in the <code>coverage/</code> subdirectory, and data can also be explored interactively
+using the <a href="/cgi-bin/hgTables">Table Browser</a> or
+<a href="/cgi-bin/hgIntegrator">Data Integrator</a>.
+Raw data are also available directly from the gnomAD
+<a href="https://gnomad.broadinstitute.org/downloads">downloads page</a>.
+</p>
+
+<p>
+We would like to thank the
+<a href="https://gnomad.broadinstitute.org/about">Genome Aggregation Database
+Consortium</a> for making the data public. We also would like to thank Max Haeussler and Jairo
+Navarro Gonzalez for the creation and release of the UCSC Genome Browser tracks.
+</p>
+
 <a name="022426"></a>
 <h2>Feb. 24, 2026 &nbsp;&nbsp; Updates to the Genome Browser Gateway Page and Assembly Search</h2>
 

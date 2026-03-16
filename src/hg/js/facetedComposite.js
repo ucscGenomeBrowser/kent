@@ -429,28 +429,6 @@ $(function() {
 
     function loadDataAndInit() {  // load data and call init functions
         const { mdid, primaryKey, metadataUrl, colorSettingsUrl } = embeddedData;
-
-        const CACHE_KEY = mdid;
-        const CACHE_TIMESTAMP = `${CACHE_KEY}_time_stamp`;
-        const CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-        const now = Date.now();
-        const cachedTime = parseInt(localStorage.getItem(CACHE_TIMESTAMP), 10);
-
-        let cachedData = null;
-        let useCache = false;
-
-        if (cachedTime && (now - cachedTime < CACHE_EXPIRY_MS)) {
-            const cachedStr = localStorage.getItem(CACHE_KEY);
-            cachedData = cachedStr ? JSON.parse(cachedStr) : null;
-            useCache = !!cachedData;
-        }
-
-        if (useCache) {
-            initAll(cachedData);
-            return;
-        }
-
         fetch(metadataUrl)
             .then(response => {
                 if (!response.ok) {  // a 404 will look like plain text
@@ -468,19 +446,11 @@ $(function() {
                         colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
                         return obj;
                     });
-                    if (!metadata.length || !colNames.length) {
-                        localStorage.removeItem(CACHE_KEY);
-                        localStorage.removeItem(CACHE_TIMESTAMP);
-                        return;
-                    }
                     const rowToIdx = Object.fromEntries(
                         metadata.map((row, i) => [row[primaryKey], i])
                     );
                     colorMap = isValidColorMap(colorMap) ? colorMap : null;
                     const freshData = { metadata, rowToIdx, colNames, colorMap };
-                    // cache the data
-                    localStorage.setItem(CACHE_KEY, JSON.stringify(freshData));
-                    localStorage.setItem(CACHE_TIMESTAMP, now.toString());
 
                     initAll(freshData);
                 });

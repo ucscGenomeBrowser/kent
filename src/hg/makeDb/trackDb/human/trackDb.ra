@@ -5633,7 +5633,7 @@ shortLabel DNA Methylation
 longLabel DNA Methylation
 group regulation
 priority 3
-pennantIcon New red ../goldenPath/newsarch.html#031326 "Released Mar. 13, 2026"
+pennantIcon New red ../goldenPath/newsarch.html#031626 "Released Mar. 16, 2026"
 html dnaMethylation.html
 
 include methylationAtlas.ra

@@ -37,9 +37,10 @@ produce better results. Find supported assemblies from the
 [gateway page](/cgi-bin/hgGateway) or request new ones from
 our [assembly search page](/assemblySearch.html).
 
-**[GenArk](https://hgdownload.gi.ucsc.edu/hubs/)**: UCSC's Genome Archive
+**[GenArk](https://hgdownload.gi.ucsc.edu/hubs/)**: UCSC's repository
 containing thousands of additional genome assemblies beyond the main featured
-assemblies.
+assemblies. Search for and request new ones from
+our [assembly search page](/assemblySearch.html).
 
 **Chromosome Coordinates**: Genomic positions specified as chromosome name and
 base position (e.g., `chr7:155,799,529-155,812,871`). UCSC uses zero-based,
