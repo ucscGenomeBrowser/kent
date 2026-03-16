@@ -43,7 +43,6 @@ UTILS_APPLIST = \
 	catUncomment \
 	chopFaLines \
 	colTransform \
-	codeReviewAi.py \
 	countChars \
 	endsInLf \
 	clusterMatrixToBarChartBed \
@@ -215,6 +214,7 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
+	codeReviewAi.py \
 	redmineCli \
 	redmineDump \
 	browserRace \
