@@ -43,6 +43,7 @@ UTILS_APPLIST = \
 	catUncomment \
 	chopFaLines \
 	colTransform \
+	codeReviewAi.py \
 	countChars \
 	endsInLf \
 	clusterMatrixToBarChartBed \
