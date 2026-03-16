@@ -2,6 +2,7 @@
 #include "common.h"
 #include "fa.h"
 #include "dnautil.h"
+#include "dnaLoad.h"
 #include "options.h"
 
 
@@ -19,9 +20,9 @@ bool strands = FALSE;
 void usage()
 /* Print usage info and exit. */
 {
-errAbort("faCount - count base statistics and CpGs in FA files.\n"
+errAbort("faCount - count base statistics and CpGs in FA or 2bit files.\n"
 	 "usage:\n"
-	 "   faCount file(s).fa\n"
+	 "   faCount file(s).fa|file(s).2bit\n"
          "     -summary  show only summary statistics\n"
          "     -dinuc    include statistics on dinucletoide frequencies\n"
          "     -strands  count bases on both strands\n"
@@ -32,13 +33,12 @@ void faCount(char *faFiles[], int faCount)
 /* faCount - count bases. */
 {
 int f, i, j, k;
-struct dnaSeq seq;
+struct dnaSeq *seq;
+struct dnaLoad *dl;
 unsigned long long totalLength = 0;
 unsigned long long totalBaseCount[5];
 unsigned long long totalDinucleotideCount[5][5];
 unsigned long long totalCpgCount = 0;
-struct lineFile *lf;
-ZeroVar(&seq);
 
 for (i = 0; i < ArraySize(totalBaseCount); i++)
     totalBaseCount[i] = 0;
@@ -55,8 +55,8 @@ printf("\n");
 dnaUtilOpen();
 for (f = 0; f<faCount; ++f)
     {
-    lf = lineFileOpen(faFiles[f], FALSE);
-    while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+    dl = dnaLoadOpen(faFiles[f]);
+    while ((seq = dnaLoadNext(dl)) != NULL)
         {
         int prevBase = -1;
         int prevRcBase = -1;
@@ -69,9 +69,9 @@ for (f = 0; f<faCount; ++f)
         for (i = 0; i < ArraySize(dinucleotideCount); i++)
             for (j = 0; j < ArraySize(dinucleotideCount[i]); j++)
                 dinucleotideCount[i][j] = 0;
-    	for (j=0; j<seq.size; ++j)
+        for (j=0; j<seq->size; ++j)
 	        {
-            int baseVal = ntVal5[(int)(seq.dna[j])];
+            int baseVal = ntVal5[(int)(seq->dna[j])];
             int rcBaseVal;
             assert(baseVal != -1);
             assert(baseVal <= 4);
@@ -104,7 +104,7 @@ for (f = 0; f<faCount; ++f)
         if (!summary)
             {
             printf("%s\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu",
-            seq.name, length,
+            seq->name, length,
             baseCount[A_BASE_VAL], baseCount[C_BASE_VAL],
             baseCount[G_BASE_VAL], baseCount[T_BASE_VAL],
             baseCount[N_BASE_VAL], cpgCount);
@@ -127,8 +127,9 @@ for (f = 0; f<faCount; ++f)
         for (i = 0; i < ArraySize(dinucleotideCount); i++)
             for (k = 0; k < ArraySize(dinucleotideCount[i]); k++)
                 totalDinucleotideCount[i][k] += dinucleotideCount[i][k];
+        dnaSeqFree(&seq);
         }
-    lineFileClose(&lf);
+    dnaLoadClose(&dl);
 	}
 
 

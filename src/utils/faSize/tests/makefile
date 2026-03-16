@@ -2,7 +2,9 @@ kentSrc = ../../..
 A = ${DESTBINDIR}/faSize
 include ../../../inc/common.mk
 
-test: s1 s2 s1_s2 s1_2bit s2_2bit s1_s2_2bit s1AndS2 s1AndS2_2bit allThree allThree_2bit detailed detailed_2bit tab tab_2bit veryDetailed veryDetailed_2bit
+test: s1 s2 s1_s2 s1_2bit s2_2bit s1_s2_2bit s1AndS2 s1AndS2_2bit \
+    allThree allThree_2bit detailed detailed_2bit tab tab_2bit \
+    veryDetailed veryDetailed_2bit mixed mixedDetailed mixedVeryDetailed
 
 s1: outputDir
 	${A} input/s1.fa.gz > output/s1.txt
@@ -67,6 +69,18 @@ tab_2bit: outputDir
 veryDetailed_2bit: outputDir
 	${A} -veryDetailed input/s1.s2.2bit > output/s1.s2_2bit.veryDetailed.txt
 	diff expected/s1.s2.veryDetailed.txt output/s1.s2_2bit.veryDetailed.txt
+
+mixed: outputDir
+	${A} input/s1.2bit input/s1.fa.gz input/s2.2bit input/s2.fa.gz input/s1.s2.2bit input/s1.s2.fa.gz > output/mixed.txt
+	diff expected/mixed.txt output/mixed.txt
+
+mixedDetailed: outputDir
+	${A} -detailed input/s1.2bit input/s1.fa.gz input/s2.2bit input/s2.fa.gz input/s1.s2.2bit input/s1.s2.fa.gz > output/mixedDetailed.txt
+	diff expected/mixedDetailed.txt output/mixedDetailed.txt
+
+mixedVeryDetailed: outputDir
+	${A} -veryDetailed input/s1.2bit input/s1.fa.gz input/s2.2bit input/s2.fa.gz input/s1.s2.2bit input/s1.s2.fa.gz > output/mixedVeryDetailed.txt
+	diff expected/mixedVeryDetailed.txt output/mixedVeryDetailed.txt
 
 outputDir:
 	@${MKDIR} -p output
