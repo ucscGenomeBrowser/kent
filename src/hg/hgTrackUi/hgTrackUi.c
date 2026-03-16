@@ -3084,8 +3084,10 @@ if (hasDataTypes)
                 }
             slPairFreeList(&dt_vars);
             }
+        char *label = htmlEncode(stripEnclosingDoubleQuotes(thisType->val));
         printf("%s\"%s\": {\"active\":%d, \"title\":\"%s\"}", COMMA_IF(not_first), thisType->name,
-                selected ? 1 : 0, stripEnclosingDoubleQuotes(thisType->val));
+                selected ? 1 : 0, label);
+        freeMem(label);
         }
     }
 // else: dataTypes dict is empty - JS will detect this

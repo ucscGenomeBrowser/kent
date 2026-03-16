@@ -114,13 +114,11 @@ of these transcripts.  For T1, the heatmap boxes cover bases 100-200 of the
 transcript (1100-1200 in the genome) and 700-800 (1700-1800 in the genome),
 each with two boxes labeled Case 1 and Case 2.  For T2, the labels are the same
 but the bases covered are 200-300 and 900-1000.</p>
-<p>Before we can fill in the heatmap-specific extra fields, we need to finalize the block
-structure of each item, since the number of blocks determines the number of columns in the
-heatmap (and therefore the number of entries in <code>_scoreArray</code> and
-<code>_labelArray</code>).  Creating heatmaps for
-the transcripts means changing the exon structure of each one - instead of
-representing exon boundaries, those fields will be used to describe the regions
-where we want to draw the heatmap boxes.  We'll also need to add extra fields
+<p>Creating heatmaps for the transcripts means changing the exon structure of each one -
+instead of representing exon boundaries, those fields will be used to describe the regions
+where we want to draw the heatmap boxes.  The number of blocks determines the number of columns
+in the heatmap (and therefore the number of entries in <code>_scoreArray</code> and
+<code>_labelArray</code>).  We'll also need to add extra fields
 with the remainder of the heatmap data, but let's start with the exons.  We
 immediately have a problem - in a BED file, the exons are expected to span the
 length of the item.  If our first line is intended to show a transcript on chr1

@@ -214,8 +214,8 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
+	codeReviewAi.py \
 	redmineCli \
-	redmineDump \
 	browserRace \
 	${USER_APP_SCRIPTS}
 
