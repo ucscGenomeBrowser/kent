@@ -160,3 +160,102 @@
     $('ul.nice-menu ul').css('display', 'none');
   });
 })(jQuery);
+
+
+// Keyboard accessibility for menu bar disclosure buttons (WCAG 2.1)
+(function ($) {
+  $(document).ready(function() {
+    var $menu = $('ul.nice-menu');
+    if (!$menu.length) return;
+    var suppressFocus = false; // prevent focus handler from interfering with click/escape
+
+    // Track mouse clicks so focus handler can distinguish Tab from click
+    $menu.on('mousedown', 'li.menuparent > button', function() {
+      suppressFocus = true;
+    });
+
+    // Toggle dropdown when a disclosure button is clicked (Enter/Space/click)
+    $menu.on('click', 'li.menuparent > button', function(e) {
+      e.preventDefault();
+      suppressFocus = false;
+      var $li = $(this).parent();
+      var isOpen = $li.hasClass('over');
+      // Close all open menus first
+      $menu.find('li.menuparent').removeClass('over')
+        .find('> ul').hide().css('visibility', 'hidden');
+      $menu.find('li.menuparent > button, li.menuparent > a')
+        .attr('aria-expanded', 'false');
+      if (!isOpen) {
+        $li.addClass('over').find('> ul').show().css('visibility', 'visible');
+        $(this).attr('aria-expanded', 'true');
+      }
+    });
+
+    // Focus on a button shows its dropdown (Tab navigation only, not mouse click)
+    $menu.on('focus', 'li.menuparent > button', function() {
+      if (suppressFocus) { suppressFocus = false; return; }
+      var $li = $(this).parent();
+      $li.showSuperfishUl().siblings().hideSuperfishUl();
+      $(this).attr('aria-expanded', 'true');
+      $li.siblings().find('> button, > a').attr('aria-expanded', 'false');
+    });
+
+    $menu.on('blur', 'li.menuparent > button', function() {
+      var $li = $(this).parent();
+      var o = $.fn.superfish.op;
+      var delay = (o && o.delay) ? o.delay : 800;
+      var menu = $menu[0];
+      clearTimeout(menu.sfTimer);
+      var $btn = $(this);
+      menu.sfTimer = setTimeout(function() {
+        $li.hideSuperfishUl();
+        $btn.attr('aria-expanded', 'false');
+      }, delay);
+    });
+
+    // Sync aria-expanded for <a>-based parent items (Genomes, Genome Browser)
+    $menu.on('focus', 'li.menuparent > a[aria-expanded]', function() {
+      $(this).attr('aria-expanded', 'true');
+    });
+
+    $menu.on('blur', 'li.menuparent > a[aria-expanded]', function() {
+      var $a = $(this);
+      setTimeout(function() {
+        if (!$a.parent().hasClass('over')) {
+          $a.attr('aria-expanded', 'false');
+        }
+      }, 900);
+    });
+
+    // Sync aria-expanded on mouse hover for all parent items
+    $menu.on('mouseenter', 'li.menuparent', function() {
+      $(this).find('> button, > a[aria-expanded]').attr('aria-expanded', 'true');
+    });
+
+    $menu.on('mouseleave', 'li.menuparent', function() {
+      var $trigger = $(this).find('> button, > a[aria-expanded]');
+      var o = $.fn.superfish.op;
+      var delay = (o && o.delay) ? o.delay : 800;
+      setTimeout(function() {
+        if (!$trigger.parent().hasClass('over')) {
+          $trigger.attr('aria-expanded', 'false');
+        }
+      }, delay + 100);
+    });
+
+    // Escape key closes any open dropdown and returns focus to its trigger
+    $(document).on('keydown', function(e) {
+      if (e.key === 'Escape' || e.keyCode === 27) {
+        var $openLi = $menu.find('li.menuparent.over');
+        if ($openLi.length) {
+          $openLi.removeClass('over').find('> ul').hide().css('visibility', 'hidden');
+          var $trigger = $openLi.find('> button, > a').first();
+          $trigger.attr('aria-expanded', 'false');
+          suppressFocus = true; // prevent focus handler from re-opening
+          $trigger.focus();
+          e.stopPropagation();
+        }
+      }
+    });
+  });
+})(jQuery);
