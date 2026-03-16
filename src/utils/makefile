@@ -216,7 +216,6 @@ SCRIPT_FILES = \
 	doClinvarLift \
 	codeReviewAi.py \
 	redmineCli \
-	redmineDump \
 	browserRace \
 	${USER_APP_SCRIPTS}
 
