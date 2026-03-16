@@ -229,10 +229,10 @@ def cmd_show(args):
     attachments = {a["id"]: a for a in issue.get("attachments", [])}
     attach_by_name = {a["filename"]: a for a in issue.get("attachments", [])}
 
-    img_dir = None
-    if args.images:
-        img_dir = tempfile.mkdtemp(prefix=f"redmine_{args.ticket_id}_")
-        print(f"<!-- Images downloaded to: {img_dir} -->", file=sys.stderr)
+    dl_dir = None
+    if args.images or args.download_all:
+        dl_dir = tempfile.mkdtemp(prefix=f"redmine_{args.ticket_id}_")
+        print(f"<!-- Attachments downloaded to: {dl_dir} -->", file=sys.stderr)
 
     def resolve_images(text):
         if not text:
@@ -241,8 +241,8 @@ def cmd_show(args):
             fname = m.group(1)
             if fname in attach_by_name:
                 a = attach_by_name[fname]
-                if img_dir:
-                    local = os.path.join(img_dir, fname)
+                if dl_dir:
+                    local = os.path.join(dl_dir, fname)
                     if not os.path.exists(local):
                         download_file(a["content_url"], local, args.api_key)
                         print(f"  Downloaded: {local}", file=sys.stderr)
@@ -319,10 +319,11 @@ def cmd_show(args):
         out.append("---")
         out.append("")
 
-    if img_dir:
+    if dl_dir:
         for a in issue["attachments"]:
-            if a.get("content_type", "").startswith("image/"):
-                local = os.path.join(img_dir, a["filename"])
+            is_image = a.get("content_type", "").startswith("image/")
+            if args.download_all or is_image:
+                local = os.path.join(dl_dir, a["filename"])
                 if not os.path.exists(local):
                     download_file(a["content_url"], local, args.api_key)
                     print(f"  Downloaded: {local}", file=sys.stderr)
@@ -545,10 +546,12 @@ def build_parser():
     sub = parser.add_subparsers(dest="command", required=True)
 
     # show
-    p_show = sub.add_parser("show", help="Display a ticket in Markdown")
+    p_show = sub.add_parser("show", help="Display a ticket in Markdown, optionally download attachments")
     p_show.add_argument("ticket_id", help="Ticket ID number")
     p_show.add_argument("--images", action="store_true",
                         help="Download images to a temp directory")
+    p_show.add_argument("--download-all", dest="download_all", action="store_true",
+                        help="Download all attachments to a temp directory")
 
     # list
     p_list = sub.add_parser("list", help="List/search tickets")
