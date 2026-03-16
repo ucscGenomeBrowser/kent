@@ -4,12 +4,12 @@
 Reads the Redmine API key from ~/.hg.conf (redmine.apiKey=...).
 
 Usage:
-    redmineClishow 33571
-    redmineClilist --project maillists --status open --limit 10
-    redmineClicreate --subject "Bug report" --description "Details here"
-    redmineClicomment 33571 --message "Adding a note"
-    redmineCliupdate 33571 --status 1 --assigned-to lou --note "Reopening"
-    redmineCliattach 33571 screenshot.png --note "See attached"
+    redmineCli show 33571
+    redmineCli list --project maillists --status open --limit 10
+    redmineCli create --subject "Bug report" --description "Details here"
+    redmineCli comment 33571 --message "Adding a note"
+    redmineCli update 33571 --status 1 --assigned-to lou --note "Reopening"
+    redmineCli attach 33571 screenshot.png --note "See attached"
 """
 
 import argparse
@@ -220,7 +220,7 @@ def format_details(details):
 # ---------------------------------------------------------------------------
 
 def cmd_show(args):
-    """Display a single ticket in Markdown (equivalent to redmineDump)."""
+    """Display a single ticket in Markdown."""
     data = api_get(args.base_url,
                    f"/issues/{args.ticket_id}.json?include=journals,attachments",
                    args.api_key)
@@ -334,7 +334,7 @@ def download_file(url, dest_path, api_key):
     """Download a file with API key auth."""
     req = urllib.request.Request(url)
     req.add_header("X-Redmine-API-Key", api_key)
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:
         with open(dest_path, "wb") as f:
             f.write(resp.read())
 
@@ -362,10 +362,7 @@ def cmd_list(args):
             params["assigned_to_id"] = str(resolve_user(args.assigned_to))
 
     if args.tracker:
-        if args.tracker.isdigit():
-            params["tracker_id"] = args.tracker
-        else:
-            params["tracker_id"] = args.tracker
+        params["tracker_id"] = args.tracker
 
     if args.search:
         params["subject"] = f"~{args.search}"
@@ -387,7 +384,7 @@ def cmd_list(args):
         tid = iss["id"]
         status = iss["status"]["name"]
         assignee = iss.get("assigned_to", {}).get("name", "—")
-        subject = iss["subject"][:60]
+        subject = iss["subject"][:60].replace("|", "\\|")
         out.append(f"| {tid} | {status} | {assignee} | {subject} |")
     out.append("")
     start = args.offset + 1
