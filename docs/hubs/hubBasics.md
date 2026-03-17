@@ -106,7 +106,7 @@ The `type` line consists of three parts:
 
 Here is a screenshot of what this basic bigBed track looks like displayed in the Genome Browser:
 
-![](/images/bigBedReqSettings.png)
+![Browser display of a basic bigBed track configured with required settings only](/images/bigBedReqSettings.png)
 
 The bigBed format also offers a wide range of customization options for the display, from decorators to highlights. 
 Additionally, it offers extensive [filter controls](/goldenPath/help/hubQuickStartFilter.html), 
@@ -131,11 +131,11 @@ mouseOver $name; CPP: $cpp
 
 And here is what that track looks like in the Genome Browser:
 
-![](/images/bigBedCommonSettings.png)
+![Browser display of a bigBed track configured with commonly used optional settings](/images/bigBedCommonSettings.png)
 
 These common settings added options to the track configuration pop-up:
 
-![](/images/bigBedCommonSettingsPopUp.png)
+![Track configuration pop-up showing filtering and mouseover options for a bigBed track](/images/bigBedCommonSettingsPopUp.png)
 
 ## bigWig Tracks
 
@@ -185,7 +185,7 @@ The `type` line consists of two parts:
 
 Here is what this looks like visualized in the Genome Browser:
 
-![](/images/bigWigReqSettings.png)
+![Browser display of a basic bigWig signal track with required settings only](/images/bigWigReqSettings.png)
 
 ## Grouping tracks
 
@@ -232,7 +232,7 @@ compositeTrack on
 
 This composite track configuration will display like so:
 
-![](/images/compositeBigWig.png)
+![Composite track displaying multiple bigWig subtracks grouped together in the browser](/images/compositeBigWig.png)
 
 ### Super Tracks
 
@@ -284,7 +284,7 @@ html examplePage
 
 Loading the example hub with this super track configuration looks like this:
 
-![](/images/superTrackEx.png)
+![Super track grouping bigBed, composite bigWig, and multiWig tracks in a folder hierarchy](/images/superTrackEx.png)
 
 ## Creating description pages
 

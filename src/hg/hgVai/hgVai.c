@@ -1322,7 +1322,7 @@ puts("This tool is for research use only. While this tool is open to the "
      "condition are urged to consult with a qualified physician for "
      "diagnosis and for answers to personal questions.");
 puts("</div><BR>");
-printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
+printf("<div><img alt='Loading' id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span></div>\n");
 cgiMakeOnClickButton("subDisclmAgrd","hgva.submitQueryIfDisclaimerAgreed();", "Get results");
 puts("<BR><BR>");
