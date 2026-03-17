@@ -483,7 +483,7 @@ if (jsonOutputArrays || debug)
 char *tracks[MAX_NUM_TRACKS + 1];
 int numTracks = chopByChar(trackArg, ',', tracks, MAX_NUM_TRACKS+1);
 if (numTracks > MAX_NUM_TRACKS)
-    apiErrAbort(err400, err400Msg, "too many tracks requested, limit to 100 tracks or less for endpoint '/getData/track");
+    apiErrAbort(err400, err400Msg, "too many tracks requested, limit to 100 tracks or less for endpoint '/getData/track'");
 int i = 0;
 for (i = 0; i < numTracks; i++)
     {
@@ -624,7 +624,7 @@ cartTrackDbInitForApi(NULL, db, &tdbList, NULL, TRUE);
 char *tracks[MAX_NUM_TRACKS+1];
 int numTracks = chopByChar(trackArg, ',', tracks, MAX_NUM_TRACKS+1);
 if (numTracks > MAX_NUM_TRACKS)
-    apiErrAbort(err400, err400Msg, "too many tracks requested, limit to 100 tracks or less for endpoint '/getData/track");
+    apiErrAbort(err400, err400Msg, "too many tracks requested, limit to 100 tracks or less for endpoint '/getData/track'");
 int i = 0;
 struct hash *trackHash = hashNew(0); // let hub tracks work
 struct jsonWrite *columnTypesJw = NULL;
