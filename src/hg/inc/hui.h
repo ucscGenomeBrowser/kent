@@ -219,6 +219,14 @@ char *hStringFromTv(enum trackVisibility vis);
 /* Standard width for visibility dropdowns */
 #define TV_DROPDOWN_STYLE "width: 70px"
 
+void hTvDropDownClassVisOnlyAndExtraWithLabel(char *varName, enum trackVisibility vis,
+                                     boolean canPack, char *class, char *visOnly,
+                                     struct slPair *events, char *label);
+/* Make track visibility drop down for varName with style class, optional aria-label,
+	and potentially limited to visOnly */
+#define hTvDropDownClassVisOnlyWithLabel(varName,vis,canPack,class,visOnly,label) \
+        hTvDropDownClassVisOnlyAndExtraWithLabel(varName,vis,canPack,class,visOnly,NULL,label)
+
 void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
                                      boolean canPack, char *class, char *visOnly, struct slPair *events);
 /* Make track visibility drop down for varName with style class,

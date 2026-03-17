@@ -55,7 +55,7 @@
               </svg>
             </span>
             <div>
-              <input id="speciesSearch" value="" size=42>
+              <input id="speciesSearch" value="" size=42 aria-label="Search species, common name or assembly ID">
             </div>
             <a href="/assemblySearch.html" id="assemblySearchLink" style="text-decoration: none;">
                 <div style="padding: 0px; display: flex; align-items: center; margin-top: 12px;">
@@ -259,18 +259,18 @@
              style="display: none;"> <!-- To avoid empty containers jumping around, hide first. -->
 
           <div id="findPosInputContainer" style="display: inline-block;">
-            <div id="selectAssemblyLabel" class="jwInputLabel">Assembly</div>
+            <label for="selectAssembly" id="selectAssemblyLabel" class="jwInputLabel">Assembly</label>
             <select id="selectAssembly">
             </select>
 
             <div class="vertSpacerAbovePosition"></div>
 
-            <div class="jwInputLabel">
+            <label for="positionInput" class="jwInputLabel">
               Position/Search Term
               <span style="font-size: smaller">
                 (<a href="../../goldenPath/help/query.html">Examples</a>)
               </span>
-            </div>
+            </label>
             <input id="positionInput" value="" size="40">
             <div class="jwCurrentPos">
               Current position:

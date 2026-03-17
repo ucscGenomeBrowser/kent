@@ -965,9 +965,11 @@ else
     }
 }
 
-void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-				 boolean canPack, char *class, char *visOnly, struct slPair *events)
-// Make track visibility drop down for varName with style class, and potentially limited to visOnly
+void hTvDropDownClassVisOnlyAndExtraWithLabel(char *varName, enum trackVisibility vis,
+				 boolean canPack, char *class, char *visOnly, struct slPair *events,
+				 char *label)
+// Make track visibility drop down for varName with style class, optional aria-label,
+// and potentially limited to visOnly
 {
 char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
 char* checked = vizArr[vis];
@@ -979,7 +981,14 @@ static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (visOnly==NULL && canPack)
     checked = vizArr[packIx[vis]];
 
-cgiMakeDropListClassWithStyleAndJavascript(varName, vizArr, vizArrLen, checked, class,TV_DROPDOWN_STYLE, events);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(varName, NULL, vizArr, vizArrLen, checked, class, TV_DROPDOWN_STYLE, events, label);
+}
+
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+				 boolean canPack, char *class, char *visOnly, struct slPair *events)
+// Make track visibility drop down for varName with style class, and potentially limited to visOnly
+{
+hTvDropDownClassVisOnlyAndExtraWithLabel(varName, vis, canPack, class, visOnly, events, NULL);
 }
 
 void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
