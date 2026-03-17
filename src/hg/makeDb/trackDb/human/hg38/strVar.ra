@@ -1,6 +1,6 @@
 track strVar
-shortLabel STR Variation
-longLabel Short Tandem Repeat Variation
+shortLabel Tandem Repeat Variation
+longLabel Tandem Repeat Variation
 group varRep
 superTrack on
 visibility hide
@@ -30,3 +30,17 @@ visibility hide
     urlLabel STRchive locus page
     searchIndex name
     mouseOver $name: $referenceMotif repeat in $gene, pathogenic min $pathogenicMin ($inheritance)
+    dataVersion  /gbdb/hg38/strVar/strchive.version.txt
+
+    track trexplorer
+    shortLabel TRExplorer
+    longLabel TRExplorer V2 Tandem Repeat Catalog
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/hg38/strVar/trexplorer.bb
+    visibility dense
+    superTrack strVar dense
+    urls region="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
+    urlLabel TRExplorer locus page
+    searchIndex name
+    mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
