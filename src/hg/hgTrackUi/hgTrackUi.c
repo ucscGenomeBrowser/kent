@@ -2283,6 +2283,24 @@ cgiMakeRadioButton(oligoMatchStrandVar, "reverse", sameString(strand, "reverse")
 puts(" Reverse (-) ");
 }
 
+static void gcOnFlyUi(struct trackDb *tdb)
+/* UI for oligo match track */
+{
+char *winSize = cartUsualString(cart, gcOnFlyWindowSize, gcOnFlyDefaultSize);
+puts("<P><B>GC Percent calculation window size:&nbsp;</B>");
+jsInline(
+"function fullTrack()\n"
+"{\n"
+"var box = jQuery('select[name$=gcOnFly]');\n"
+"if (box.val()=='hide')\n"
+"    box.val('full');\n"
+"}\n");
+printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
+    gcOnFlyWindowSize, gcOnFlySizeVar, 15, winSize);
+jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
+puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
+}
+
 void cutterUi(struct trackDb *tdb)
 /* UI for restriction enzyme track */
 {
@@ -3326,6 +3344,8 @@ else if (sameString(trackHubSkipHubName(track), "quickLiftChain"))
     quickLiftUi(tdb);
 else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
     oligoMatchUi(tdb);
+else if (sameString(track, GC_ON_FLY_TRACK_NAME))
+    gcOnFlyUi(tdb);
 else if (sameString(track, CUTTERS_TRACK_NAME))
     cutterUi(tdb);
 else if(sameString(track, "affyTransfrags"))
@@ -3993,6 +4013,17 @@ return trackDbForPseudoTrack(RULER_TRACK_NAME,
 	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
+static struct trackDb *trackDbForGcOnFly()
+/* Create a trackDb entry for the GC on the fly pseudo-track. */
+{
+char longLabel[1024];
+safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
+struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
+        GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
+tdb->canPack = 0;
+return tdb;
+}
+
 struct trackDb *trackDbForOligoMatch()
 /* Create a trackDb entry for the oligo matcher pseudo-track. */
 {
@@ -4106,6 +4137,8 @@ else if (sameWord(track, RULER_TRACK_NAME))
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
+else if (sameWord(track, GC_ON_FLY_TRACK_NAME))
+    tdb = trackDbForGcOnFly(cart);
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track))
