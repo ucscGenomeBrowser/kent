@@ -4,6 +4,27 @@
  src:local('Metrophobic'), url(/sites/all/themes/genome/images/font/Metrophobic.otf);
 } */
 
+/* Skip navigation link for keyboard accessibility */
+a.skipNav, a.skipNav:link, a.skipNav:visited {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 1000;
+	padding: 8px 16px;
+	background: #003a72;
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+}
+
+a.skipNav:focus {
+	left: 0;
+	outline: 2px solid #fff;
+	outline-offset: -2px;
+}
+
 /* Contains all css needed for drop-down global navigation menus */
 
 
@@ -327,6 +348,17 @@ ul.nice-menu li.menuparent span {
 	/* background:url('../images/plusesign-main-menu.png') no-repeat 5px center; */
 }
 
+ul.nice-menu li.menuparent button {
+	color:#f0f1f9;
+	font-size:14px;
+	cursor: pointer;
+	padding:0 18px 0 0;
+	background: none;
+	border: none;
+	font-family: inherit;
+	line-height: inherit;
+}
+
 ul.nice-menu a:hover, ul.nice-menu a.active {
 	/* color:#f0f1f9; */
 }
@@ -534,6 +566,18 @@ a:link {color: #121E9A;}
     border-radius: 2px;
 }
 
+
+/* Keyboard focus indicators for accessibility */
+ul.nice-menu a:focus-visible,
+ul.nice-menu button:focus-visible {
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
+ul.nice-menu ul a:focus-visible {
+	outline: 2px solid #327de4;
+	outline-offset: -2px;
+}
 
 /* Below are all the styles used by the superfish plugin
 I need SOME of these for the arrows in the dropdown menu. I'll

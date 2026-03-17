@@ -3040,7 +3040,9 @@ popWarnHandler();
 cartGenericStartup(cart);
 
 htmStartWithHead(stdout, head, titlePlus);
+puts("<main id=\"mainContent\">");
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
+puts("</main>");
 cartCheckout(&cart);
 cartFooter();
 }

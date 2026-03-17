@@ -198,7 +198,7 @@ twoBitToFa -seq=chrCp -udcDir=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/
 </pre>
 
 <h2>groups.txt</h2>
-<p>The <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/groups.txt">groups.txt</a> file defines the grouping of track controls under the primary genome browser image display. The example referenced here has the usual definitions as found in the UCSC Genome Browser.</p>
+<p>The groups.txt file defines the grouping of track controls under the primary genome browser image display. The example referenced here has the usual definitions as found in the UCSC Genome Browser.</p>
 <p>Each group is defined, for example the Mapping group:</p>
 <pre>
 name map
@@ -240,7 +240,7 @@ cat araTha1.chrom.sizes | sort -k1,1 -k2,2n | awk '{print $1,0,$2,$1,"gneg"}' > 
 <pre>
 bedToBigBed -type=bed4 cytoBandIdeo.bed -as=cytoBand.as araTha1.chrom.sizes cytoBandIdeo.bigBed
 </pre>
-<p>In the trackDb, as long as the track is named cytoBandIdeo (track <a href="exampleUrl">cytoBandIdeo example</a>) it will load in the assembly hub.</p>
+<p>In the trackDb, as long as the track is named cytoBandIdeo (track cytoBandIdeo) it will load in the assembly hub.</p>
 
 <a id="assemblyHubResources"></a>
 <h2>Assembly Hub Resources</h2>
@@ -248,7 +248,7 @@ bedToBigBed -type=bed4 cytoBandIdeo.bed -as=cytoBand.as araTha1.chrom.sizes cyto
 <p>There is also a collection of Example NCBI assembly hubs that are already working and can either be used or copied as a template to build further hubs.</p>
 <h3>G-OnRamp</h3>
 <p>
-    G-OnRamp is a Galaxy workflow that turns a genome assembly and RNA-Seq data into a Genome Browser with multiple evidence tracks. Because G-OnRamp is based on the Galaxy platform, developing some familiarity with the key concepts and functionalities of Galaxy would be beneficial prior to using G-OnRamp. Here is a link to their <a href="https://g-onramp.org/instruction" target="_blank">instruction page</a> that gives an overview of their process.
+    G-OnRamp is a Galaxy workflow that turns a genome assembly and RNA-Seq data into a Genome Browser with multiple evidence tracks. Because G-OnRamp is based on the Galaxy platform, developing some familiarity with the key concepts and functionalities of Galaxy would be beneficial prior to using G-OnRamp. Visit the <a href="https://g-onramp.org/" target="_blank">G-OnRamp website</a> for an overview of their process.
 </p>
 
 <h3>MakeHub</h3>
@@ -281,9 +281,9 @@ bedToBigBed -type=bed4 cytoBandIdeo.bed -as=cytoBand.as araTha1.chrom.sizes cyto
 
 <h3>Configuring assembly hubs to use a dedicated gfServer</h3>
 <p>By running your own BLAT server, you can add lines to the genomes.txt file of your assembly hub to enable the browser to access the server and activate blat searches.</p>
-<p>Please see <a href="http://example.com/running-gfserver">Running your own gfServer</a> for details on installing and configuring both dedicated and dynamic gfServers.</p>
+<p>Please see the gfServer documentation for details on installing and configuring both dedicated and dynamic gfServers.</p>
 <ul>
-    <li>Next edit your genomes.txt stanza that references yourAssembly to have two lines to inform the browser of where the blat servers are located and what ports to use. See an example of commented out lines <a href="http://example.com/commented-lines">here</a>. Please note the capital "B" in transBlat.</li>
+    <li>Next edit your genomes.txt stanza that references yourAssembly to have two lines to inform the browser of where the blat servers are located and what ports to use. Please note the capital "B" in transBlat.</li>
 </ul>
 <pre>
 transBlat yourServer.yourInstitution.edu 17777
@@ -295,7 +295,7 @@ isPcr yourServer.yourInstitution.edu 17779
     <li>Some institutions have firewalls that will prevent the browser from sending multiple inquiries to your blat servers, in which case you may need to request your admins add this IP range as exceptions that are not limited: 128.114.119.* That will cover the U.S. <a href="http://genome.ucsc.edu">genome.ucsc.edu</a> site. In case you may wish the requests to work from our European Mirror <a href="http://genome-euro.ucsc.edu">genome-euro.ucsc.edu</a> site, you would want to include 129.70.40.120 also to the exception list.</li>
 </ul>
 
-<p>Please see more about <a href="http://example.com/configuring-your-blat-gfserver">configuring your blat gfServer</a> to replicate the UCSC Browser's settings, which will also have information about optimizing PCR results. The <a href="http://example.com/source-downloads">Source Downloads</a> page offers access to utilities with pre-compiled binaries such as gfserver found in a blat/ directory for your machine type <a href="http://example.com/here">here</a> and further blat documentation <a href="http://example.com/here">here</a>, and the gfServer usage statement for further options.</p>
+<p>Please see the gfServer documentation for configuring your blat gfServer to replicate the UCSC Browser's settings, which will also have information about optimizing PCR results. The <a href="https://hgdownload.soe.ucsc.edu/admin/exe/">Source Downloads</a> page offers access to utilities with pre-compiled binaries such as gfserver found in a blat/ directory for your machine type, and the gfServer usage statement for further options.</p>
 <p>Please also know you can set up gfservers on <a href="docker.html">docker</a> and run it locally. 
 
 <p>Note: You can stop your instance of gfServer with a command. For example:</p>
