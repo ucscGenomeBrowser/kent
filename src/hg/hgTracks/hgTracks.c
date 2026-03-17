@@ -10044,11 +10044,12 @@ if (!hideControls)
 		    else
                         {
                         /* check for option of limiting visibility to one mode */
-                        hTvDropDownClassVisOnly(track->track, track->visibility,
+                        hTvDropDownClassVisOnlyWithLabel(track->track, track->visibility,
                                                 rTdbTreeCanPack(track->tdb),
                                                 (track->visibility == tvHide) ? "hiddenText"
                                                                               : "normalText",
-                                                trackDbSetting(track->tdb, "onlyVisibility"));
+                                                trackDbSetting(track->tdb, "onlyVisibility"),
+                                                track->tdb->shortLabel);
                         }
                     }
 		else

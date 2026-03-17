@@ -77,7 +77,7 @@ struct grp *showGroupField(char *groupVar, char *event, char *groupScript,
 {
 struct grp *group, *groupList = fullGroupList;
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
-hPrintf("<B>Group:</B>\n");
+hPrintf("<label for='%s'><B>Group:</B></label>\n", groupVar);
 hPrintf("<SELECT NAME=%s id='%s'>\n", groupVar, groupVar);
 jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
@@ -135,7 +135,7 @@ if (sameString(selGroup->name, "allTables"))
     {
     char *selDb = findSelDb();
     struct slName *dbList = getDbListForGenome(), *db;
-    hPrintf("<B>database:</B>\n");
+    hPrintf("<label for='%s'><B>database:</B></label>\n", trackVar);
     hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", trackVar, trackVar);
     jsOnEventById(event, trackVar, trackScript);
     for (db = dbList; db != NULL; db = db->next)
@@ -149,7 +149,7 @@ if (sameString(selGroup->name, "allTables"))
 else
     {
     boolean allTracks = sameString(selGroup->name, "allTracks");
-    hPrintf("<B>Track:</B>\n");
+    hPrintf("<label for='%s'><B>Track:</B></label>\n", trackVar);
     hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", trackVar, trackVar);
     jsOnEventById(event, trackVar, trackScript);
     if (allTracks)
@@ -264,7 +264,7 @@ if (!slNameInListUseCase(nameList, selTable))
     selTable = nameList->name;
 
 /* Print out label and drop-down list. */
-hPrintf("<B>Table: </B>");
+hPrintf("<label for='%s'><B>Table: </B></label>", varName);
 hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", varName, varName);
 jsOnEventById("change", varName, onChangeTable());
 struct trackDb *selTdb = NULL;
@@ -494,7 +494,7 @@ static void showOutputTypeRow(boolean isWig, boolean isBedGr,
 struct outputType *otList = NULL, *otDefault = NULL;
 boolean bedifiedOnly = (anySubtrackMerge(database, curTable) || anyIntersection());
 
-hPrintf("<TR><TD><DIV ID=\"output-select\"><B>Output format:</B>\n");
+hPrintf("<TR><TD><DIV ID=\"output-select\"><label for='outputTypeDropdown'><B>Output format:</B></label>\n");
 
 if (isBedGr)
     {
@@ -791,15 +791,15 @@ if (isPositional)
     else
         {
         makeRegionButton(hgtaRegionTypeGenome, regionType);
-        hPrintf("&nbsp;Genome&nbsp;");
+        hPrintf("&nbsp;<label for='%s_%s'>Genome</label>&nbsp;", hgtaRegionType, hgtaRegionTypeGenome);
         }
     if (doEncode)
         {
 	makeRegionButton(hgtaRegionTypeEncode, regionType);
-	hPrintf("&nbsp;ENCODE Pilot regions&nbsp;");
+	hPrintf("&nbsp;<label for='%s_%s'>ENCODE Pilot regions</label>&nbsp;", hgtaRegionType, hgtaRegionTypeEncode);
 	}
     makeRegionButton(hgtaRegionTypeRange, regionType);
-    hPrintf("&nbsp;Position&nbsp;");
+    hPrintf("&nbsp;<label for='%s'>Position</label>&nbsp;", hgtaRange);
     hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" id='%s' SIZE=26 VALUE=\"%s\">\n",
     	hgtaRange, hgtaRange, range);
     jsOnEventById("focus", hgtaRange, 
@@ -809,7 +809,7 @@ if (isPositional)
     if (userRegionsFileName() != NULL)
 	{
 	makeRegionButton(hgtaRegionTypeUserRegions, regionType);
-	hPrintf("&nbsp;Defined regions&nbsp;");
+	hPrintf("&nbsp;<label for='%s_%s'>Defined regions</label>&nbsp;", hgtaRegionType, hgtaRegionTypeUserRegions);
 	cgiMakeButton(hgtaDoSetUserRegions, "Change");
 	hPrintf("&nbsp;");
 	cgiMakeButton(hgtaDoClearUserRegions, "Clear");
@@ -971,28 +971,32 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
     char *fieldSep = cartUsualString(cart, hgtaOutSep, outTab);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
-    hPrintf("<DIV ID=\"filename-select\"><B>Output filename:</B>&nbsp;");
+    hPrintf("<DIV ID=\"filename-select\"><label for='%s'><B>Output filename:</B></label>&nbsp;", hgtaOutFileName);
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
     hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</DIV></TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>Output field separator:&nbsp;</B>");
 
     // tab or csv output
+    hPrintf("<label>");
     cgiMakeRadioButton(hgtaOutSep, outTab, sameWord(outTab, fieldSep));
-    hPrintf("&nbsp;tsv (tab-separated)&nbsp&nbsp;");
+    hPrintf("&nbsp;tsv (tab-separated)</label>&nbsp&nbsp;");
 
+    hPrintf("<label>");
     cgiMakeRadioButton(hgtaOutSep, outCsv, sameWord(outCsv, fieldSep));
-    hPrintf("&nbsp;csv (for excel)&nbsp;");
+    hPrintf("&nbsp;csv (for excel)</label>&nbsp;");
 
     hPrintf("</TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>File type returned:&nbsp;</B>");
+    hPrintf("<label>");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressNone,
         sameWord(textOutCompressNone, compressType));
-    hPrintf("&nbsp;Plain text&nbsp;");
+    hPrintf("&nbsp;Plain text</label>&nbsp;");
+    hPrintf("<label>");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressGzip,
         sameWord(textOutCompressGzip, compressType));
-    hPrintf("&nbsp;Gzip compressed");
+    hPrintf("&nbsp;Gzip compressed</label>");
     hPrintf("</TD></TR>\n");
     }
 
