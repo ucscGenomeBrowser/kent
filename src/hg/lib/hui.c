@@ -10627,3 +10627,15 @@ if (row != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+char *gcOnFlyWinSize(struct cart *cart)
+/* Return window size for GC on the fly track calculation */
+{
+char *returnSize = NULL;
+char *s = cartOptionalString(cart, gcOnFlyWindowSize);
+if (s != NULL)
+    returnSize = cloneString(s);
+else
+    returnSize = cloneString(gcOnFlyDefaultSize);
+return returnSize;
+}
