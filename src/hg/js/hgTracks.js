@@ -5890,7 +5890,7 @@ var downloadCurrentTrackData = {
         htmlStr += "</select>";
         htmlStr += "<br>";
         htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
-        htmlStr += "<input type='checkbox' id='downloadTrackHeaders'></input>";
+        htmlStr += "<input type='checkbox' checked id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;
         $("#checkAllDownloadTracks").on("click", function() {
