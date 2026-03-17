@@ -2299,6 +2299,8 @@ printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
     gcOnFlyWindowSize, gcOnFlySizeVar, 15, winSize);
 jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
+/* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
+wigCfgUi(cart, tdb, tdb->track, "Graph configuration:", FALSE);
 }
 
 void cutterUi(struct trackDb *tdb)
