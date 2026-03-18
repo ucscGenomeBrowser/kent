@@ -140,10 +140,12 @@ var hgSearch = (function() {
         hiddenTrackGroup.children = [];
         hiddenTrackGroup.numMatches = 0;
         hiddenTrackGroup.searchTime = -1;
+        var seenTracks = {};
         _.each(trackList, function(track) {
-            if (!(track.id in uiState.resultHash)) {
+            if (!(track.id in uiState.resultHash) || track.id in seenTracks) {
                 return;
             }
+            seenTracks[track.id] = true;
             var newCateg = {};
             _.assign(newCateg, track);
             newCateg.text = track.longLabel;
@@ -549,28 +551,29 @@ var hgSearch = (function() {
 
             clearOldFacetCounts();
             var categoryCount = 0;
-            // Loop through categories of match (public hubs, help docs, a single track, ...
-            _.each(uiState.positionMatches, function(categ) {
-                let title = categ.name;
+            // Loop through merged results (resultHash combines matches from
+            // multiple hgFindSpecs for the same track into one entry)
+            _.each(Object.keys(uiState.resultHash), function(title) {
+                let categ = uiState.resultHash[title];
                 let searchDesc = categ.description;
                 let matches = categ.matches;
-                let numMatches = matches.length;
-                let newListObj = document.createElement("li");
+                let idKey = title + 'Results';
                 let idAttr = document.createAttribute("id");
-                idAttr.value = title + 'Results';
+                idAttr.value = idKey;
+                let newListObj = document.createElement("li");
                 newListObj.setAttributeNode(idAttr);
                 let noLiStyle = document.createAttribute("class");
                 noLiStyle.value = "liNoStyle";
                 newListObj.setAttributeNode(noLiStyle);
                 let inp = document.createElement("input");
                 inp.type = "hidden";
-                inp.id = idAttr.value + categoryCount;
+                inp.id = idKey + categoryCount;
                 inp.value = "0";
                 newListObj.appendChild(inp);
                 let ctrlImg = document.createElement("img");
                 ctrlImg.height = "18";
                 ctrlImg.width = "18";
-                ctrlImg.id = idAttr.value + categoryCount + "_button";
+                ctrlImg.id = idKey + categoryCount + "_button";
                 ctrlImg.src = "../images/remove_sm.gif";
                 newListObj.appendChild(ctrlImg);
                 let descText = document.createTextNode(" " + searchDesc + ":");
@@ -580,7 +583,7 @@ var hgSearch = (function() {
                 // only print the first 10 at first
                 printMatches(subList, matches.slice(0,10), title, searchDesc, false);
                 if (matches.length > 10) {
-                    let idStr = idAttr.value + "_" + categoryCount;
+                    let idStr = idKey + "_" + categoryCount;
                     let showMoreLi = document.createElement("li");
                     showMoreLi.id = idStr;
                     showMoreLi.classList.add("liNoStyle","searchResult");
@@ -615,9 +618,9 @@ var hgSearch = (function() {
                 newList.append(newListObj);
 
                 // make result list collapsible:
-                $('#'+idAttr.value+categoryCount+"_button").click(collapseNode);
-                $('#'+idAttr.value+"_" +categoryCount+"_showMoreButton").click(showMoreResults);
-                $('#'+idAttr.value + "_" + categoryCount + "_showMoreLink").click(showMoreResults);
+                $('#'+idKey+categoryCount+"_button").click(collapseNode);
+                $('#'+idKey+"_" +categoryCount+"_showMoreButton").click(showMoreResults);
+                $('#'+idKey + "_" + categoryCount + "_showMoreLink").click(showMoreResults);
                 categoryCount += 1;
             });
         } else if (uiState && typeof uiState.search !== "undefined") {
@@ -743,10 +746,16 @@ var hgSearch = (function() {
             return;
         }
         if (typeof jsonData.positionMatches !== "undefined") {
-            // clear the old resultHash
+            // clear the old resultHash, merging matches from multiple hgFindSpecs
+            // for the same track into one entry
             uiState.resultHash = {};
             _.each(uiState.positionMatches, function(match) {
-                uiState.resultHash[match.name] = match;
+                if (match.name in uiState.resultHash) {
+                    uiState.resultHash[match.name].matches =
+                        uiState.resultHash[match.name].matches.concat(match.matches);
+                } else {
+                    uiState.resultHash[match.name] = match;
+                }
             });
         } else {
             // no results for this search
@@ -967,8 +976,14 @@ var hgSearch = (function() {
             }
             _.assign(uiState,cartJson);
             if (typeof cartJson.categs  !== "undefined") {
+                uiState.resultHash = {};
                 _.each(uiState.positionMatches, function(match) {
-                    uiState.resultHash[match.name] = match;
+                    if (match.name in uiState.resultHash) {
+                        uiState.resultHash[match.name].matches =
+                            uiState.resultHash[match.name].matches.concat(match.matches);
+                    } else {
+                        uiState.resultHash[match.name] = match;
+                    }
                 });
                 filtersToJstree();
                 makeCategoryTree();

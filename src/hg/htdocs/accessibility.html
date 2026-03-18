@@ -77,6 +77,23 @@ the rotor in VoiceOver).</p>
 tracks display supports keyboard shortcuts for common actions. Press <b>?</b> on the
 tracks page to see available shortcuts.</p>
 
+<h2>Form Control Labels</h2>
+<p>
+Form controls across the Genome Browser's main tools — including BLAT, Table Browser,
+In-Silico PCR, and the Gateway — are labeled for screen reader compatibility. When
+navigating by <b>Tab</b>, screen readers will announce each control's purpose
+(e.g., "Query type, combobox" rather than just "combobox").</p>
+
+<p>
+Clicking a label's text will also focus or activate its associated control. For example,
+clicking "Forward primer:" on the In-Silico PCR page focuses the primer input field, and
+clicking "Flip reverse primer:" toggles the checkbox.</p>
+
+<p>
+On the Genome Browser tracks display, track visibility dropdowns (Hide/Dense/Squish/Pack/Full)
+are labeled with the track's name, so screen reader users can identify which track they are
+adjusting.</p>
+
 <h2>Display and Color</h2>
 <p>
 <b>Inverted colors and high contrast display:</b> We recommend using native OS tools for color 
@@ -100,5 +117,14 @@ However, please note the <a target="_blank"
 href="https://github.com/belvederef/visual-snow-relief-overlay/blob/main/DISCLAIMER.md">
 Medical Disclaimer</a> regarding the use of this tool.</p>
 
+
+<h2>Image Descriptions</h2>
+<p>
+Images throughout our static documentation pages — including help guides, tutorials, the news
+archive, and portal pages — include descriptive alt text for screen reader compatibility.
+When a screen reader encounters an image, it will announce a brief description of the image
+content (e.g., "RepeatMasker track in dense mode showing color-coded repeat classes on a single
+line") rather than the filename. Purely decorative images such as icons and spacers are marked
+to be skipped by screen readers.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

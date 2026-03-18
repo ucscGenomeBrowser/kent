@@ -993,7 +993,7 @@ for (dbIter = dbNames; dbIter != NULL; dbIter = dbIter->next)
         dyStringAppendC(json, ',');
     first = FALSE;
     dyStringPrintf(json, "{\"db\":\"%s\",\"label\":\"%s - %s (%s)\",\"commonName\":\"%s\"}",
-        info->name, info->organism, info->description, info->name, info->organism);
+        jsonStringEscape(info->name), jsonStringEscape(info->organism), jsonStringEscape(info->description), jsonStringEscape(info->name), jsonStringEscape(info->organism));
     }
 dyStringAppendC(json, ']');
 printf("<script type='application/json' id='%sPopularData'>%s</script>\n", id, dyStringContents(json));

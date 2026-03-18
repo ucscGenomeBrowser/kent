@@ -294,7 +294,10 @@ void print_with_newlines(const char *str) {
 }
 
 static void panelPrompt(char *target, char *prompt)
-/* output span element for an expandable text element */
+/* output span element for an expandable text element
+ *  this opens a <div> element, you need to close it </div> after your text in
+ *  this section has been output.
+ */
 {
 printf("<span class='hideToggle' dataTarget='%s' style='cursor: pointer; color: blue;'><img height='18' width='18' src='../images/add_sm.gif'>&nbsp;%s:</span>\n", target, prompt);
 printf("<div id='%s' style='display: none;'>\n", target);

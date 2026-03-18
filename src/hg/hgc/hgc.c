@@ -24175,6 +24175,41 @@ printf("<B>Strand:</B> %c<BR>\n", item[0]);
 webIncludeHelpFile(OLIGO_MATCH_TRACK_NAME, TRUE);
 }
 
+static void doGcOnFly(void)
+/* Display GC percent info for visible window, computed on the fly from sequence.
+ * No tdb or bigWig file needed - this is a synthetic track with no database table. */
+{
+char *winSizeStr = cartUsualString(cart, gcOnFlyWindowSize, gcOnFlyDefaultSize);
+int span = atoi(winSizeStr);
+char num1Buf[64], num2Buf[64];
+
+cartWebStart(cart, database, "GC Percent On the Fly");
+sprintLongWithCommas(num1Buf, BASE_1(winStart));
+sprintLongWithCommas(num2Buf, winEnd);
+printf("<B>Position:</B> %s:%s-%s<BR>\n", seqName, num1Buf, num2Buf);
+sprintLongWithCommas(num1Buf, winEnd - winStart);
+printf("<B>Total bases in view:</B> %s<BR>\n", num1Buf);
+printf("<B>Window size for GC calculation:</B> %d bases<BR>\n", span);
+
+struct dnaSeq *seq = hChromSeq(database, seqName, winStart, winEnd);
+if (seq != NULL)
+    {
+    int gcCount = 0, validBases = 0;
+    int i;
+    for (i = 0; i < seq->size; i++)
+        {
+        char b = seq->dna[i];
+        if (b == 'g' || b == 'c') { gcCount++;  validBases++; }
+        else if (b != 'n')          validBases++;
+        }
+    if (validBases > 0)
+        printf("<B>GC percent in view:</B> %.3f%%<BR>\n",
+               100.0 * gcCount / validBases);
+    dnaSeqFree(&seq);
+    }
+webIncludeHelpFile(GC_ON_FLY_TRACK_NAME, TRUE);
+}
+
 struct slName *cutterIsoligamers(struct cutter *myEnzyme)
 /* Find enzymes with same cut site. */
 {
@@ -27161,6 +27196,8 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     doWikiTrack(item, seqName, winStart, winEnd);
 else if (sameWord(table, OLIGO_MATCH_TRACK_NAME))
     doOligoMatch(item);
+else if (sameWord(table, GC_ON_FLY_TRACK_NAME))
+    doGcOnFly();
 else if (sameWord(table, "refFullAli"))
     {
     doTSS(tdb, item);
