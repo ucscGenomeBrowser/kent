@@ -4708,14 +4708,14 @@ function addRecentSearch(db, searchTerm, extra={}) {
                 // remove it from wherever it is cause it's going to the front
                 searchList.splice(searchList.indexOf(searchTerm), 1);
             } else {
-                searchObj[db].results[searchTerm] = extra;
                 if (searchList.length >= 5) {
                     let toDelete = searchList.pop();
                     delete searchObj[db].results[toDelete];
                 }
             }
+            // always update results in case the extra data has changed
+            searchObj[db].results[searchTerm] = extra;
             searchList.unshift(searchTerm);
-            searchObj.stack = searchList;
         } else {
             searchObj[db] = {"stack": [searchTerm], "results": {}};
             searchObj[db].results[searchTerm] = extra;
