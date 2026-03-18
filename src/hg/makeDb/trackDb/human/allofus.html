@@ -1,0 +1,63 @@
+<h2>Description</h2>
+<p>
+The <a href="https://allofus.nih.gov/" target="_blank">All of Us</a> Research Program is a
+large-scale biomedical research initiative launched by the U.S. National Institutes of Health (NIH)
+in 2018. Its goal is to build one of the most diverse health databases, enrolling over one
+million participants who reflect the full diversity of the United States, including groups that
+have been historically underrepresented in biomedical research. Participants contribute health
+surveys, electronic health records (EHR), physical measurements, and biosamples for genomic
+analysis.
+</p>
+
+<p>
+This track shows allele frequencies from the v7 short-read whole-genome sequencing (srWGS)
+release of 245,388 participants. A minimum allele count filter of &ge;20 was applied.
+Frequencies are provided both overall and broken down by genetic ancestry using local ancestry
+inference: European (EUR), East Asian (EAS), African (AFR), Indigenous American (AMR),
+Oceanian (OCE), and South Asian (SAS). Some variants are flagged with an &quot;NW&quot; tag
+(not in window) when the variant was not within a genomic window covered by the ancestry
+reference files; in these cases the closest available position was used for ancestry assignment.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>allofus</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+Variant data and individual-level data are accessible through the
+<a href="https://workbench.researchallofus.org/" target="_blank">All of Us Researcher Workbench</a>,
+which requires registration and completion of a training program. Aggregate allele frequency
+data is freely available.
+</p>
+
+<h2>Methods</h2>
+<p>
+Whole-genome sequencing was performed on the Illumina NovaSeq 6000 platform with PCR-free library
+preparation targeting 30x coverage. Reads were aligned to GRCh38 and variants were called using
+the Illumina DRAGEN (Dynamic Read Analysis for GENomics) pipeline, which performs mapping,
+alignment, sorting, duplicate marking, and variant calling (SNVs and indels) in a single
+hardware-accelerated workflow. Joint genotyping was performed across all samples. Quality control
+included sample-level filtering for contamination, sex discordance, and relatedness, and
+variant-level filtering using VQSR.
+Population-specific allele frequencies were determined using local ancestry inference at UCSC by the Ioannidis group.
+The ancestry breakdown into European, East Asian, African, Indigenous American, Oceanian,
+and South Asian components is part of a pending publication.
+</p>
+<p>
+At UCSC, we provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+The All of Us Research Program is supported by the National Institutes of Health. We thank the
+participants and the program for making frequency data available.
+The local ancestry inference was performed by Qudsi Aljabiri and Cole Shanks under
+Prof. Alexander Ioannidis, UC Santa Cruz.
+</p>
