@@ -1,0 +1,45 @@
+<h2>Description</h2>
+<p>
+The <a href="https://sgc.garvan.org.au/initiatives/mgrb/index.html" target="_blank">Australian
+Medical Genome Reference Bank (MGRB)</a> collected whole-genome sequencing data of 4,011 healthy
+elderly individuals who lived &ge;70 years, to make sure that the dataset is depleted of damaging
+genetic variants. Age and sex summary graphs are available from
+<a href="https://sgc.garvan.org.au/initiatives/mgrb/index.html" target="_blank">the MGRB website</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
+</p>
+<p>
+VCF access can be requested via a form from
+<a href="https://sgc.garvan.org.au/terms/mgrb/index.html" target="_blank">Sydney Genomics</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+The 4,011 MGRB samples underwent whole-genome sequencing on Illumina HiSeq X instruments at KCCG
+under ISO 15189 accreditation, using paired-end TruSeq DNA Nano libraries sequenced one lane per
+sample. Alignment of sequence reads to the hg38 reference genome assembly was with bwa 0.7.15-r1140.
+Variants were called following the Genome Analysis Toolkit (GATK) best practices procedure using
+GATK 4.1.4.0. A sites-only VCF with only passing variants (FILTER=PASS) was made with bcftools 1.20.
+</p>
+<p>
+We received VCF files from m.hobbs@garvan.org.au via a transfer link and imported these VCFs.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Lacaze P, Pinese M, Kaplan W, Stone A, Brion MJ, Woods RL, McNamara M, McNeil JJ, Dinger ME, Thomas
+DM.
+<a href="https://doi.org/10.1038/s41431-018-0279-z" target="_blank">
+The Medical Genome Reference Bank: a whole-genome data resource of 4000 healthy elderly individuals.
+Rationale and cohort design</a>.
+<em>Eur J Hum Genet</em>. 2019 Feb;27(2):308-316.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30353151" target="_blank">30353151</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6336775/" target="_blank">PMC6336775</a>
+</p>

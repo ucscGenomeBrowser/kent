@@ -1,0 +1,53 @@
+<h2>Description</h2>
+<p>
+<a href="https://topmed.nhlbi.nih.gov/" target="_blank">NHLBI TOPMed</a> (Trans-Omics for Precision
+Medicine) is a program launched by the U.S. National Heart, Lung, and Blood Institute that
+integrates whole-genome sequencing with molecular, clinical, and environmental data from large,
+well-phenotyped cohorts. Its goal is to uncover the biological mechanisms underlying heart, lung,
+blood, and sleep disorders to advance precision medicine and improve population health. Freeze 10
+contains 868,581,653 variants from 150,899 whole genomes.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>topmed</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+VCFs with summarized allele frequencies are also available from
+the <a href="https://bravo.sph.umich.edu/" target="_blank">TOPMED BRAVO website</a>. They require a
+login. The VCFs were downloaded from
+<a href="https://bravo.sph.umich.edu/terms.html" target="_blank">BRAVO</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+TOPMed whole genome sequencing was performed at multiple NHLBI-funded sequencing centers
+using PCR-free library preparation with 150 bp paired-end reads on Illumina short-read
+platforms, targeting &ge;30x mean coverage. Reads were aligned to the GRCh38 reference genome
+(hs38DH, including decoy sequences) using BWA-MEM, followed by duplicate marking with
+Picard MarkDuplicates and base quality score recalibration (BQSR) with GATK. Variant calling
+was performed using the TOPMed GotCloud pipeline (developed at the Center for Statistical
+Genetics, University of Michigan), comprising: (1) per-sample candidate variant detection with
+<code>vt discover2</code> and normalization with <code>vt normalize</code>; (2) cross-sample variant site
+consolidation using <code>cramore vcf-merge-candidate-variants</code>; (3) joint genotyping across all
+samples; and (4) variant filtering using a Support Vector Machine (SVM) classifier
+(libsvm) trained on positive labels derived from HapMap 3.3 and 1000 Genomes Omni2.5
+array sites, and negative labels derived from Mendelian-inconsistent variants identified
+within the cohort's pedigree structure using <code>vt milk-filter</code>. Sample-level quality
+control included estimation of DNA contamination, genetic ancestry, and biological sex
+using <code>cramore cram-verify-bam</code> (verifyBamID2) and relative X/Y chromosomal depth. Full
+methods for TOPMed freeze 10 are available on the
+<a href="https://topmed.nhlbi.nih.gov/topmed-whole-genome-sequencing-methods-freeze-10"
+   target="_blank">TOPMed WGS Methods page</a>.
+</p>
+
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>

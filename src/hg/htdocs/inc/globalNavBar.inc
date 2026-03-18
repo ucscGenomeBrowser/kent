@@ -1,4 +1,4 @@
-<a href="#mainContent" class="skipNav">Skip to main content</a>
+<a href="#mainContent" class="skipNav" tabindex="-1">Skip to main content</a>
 <div id="main-menu-whole">
 
 		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">

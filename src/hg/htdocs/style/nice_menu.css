@@ -19,7 +19,7 @@ a.skipNav, a.skipNav:link, a.skipNav:visited {
 	text-decoration: none;
 }
 
-a.skipNav:focus-visible {
+a.skipNav:focus {
 	left: 0;
 	outline: 2px solid #fff;
 	outline-offset: -2px;

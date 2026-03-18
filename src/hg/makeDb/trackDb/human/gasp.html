@@ -1,0 +1,50 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.genomeasia100k.org/" target="_blank">GenomeAsia 100K</a> project aims
+to sequence 100,000 Asian individuals. This pilot release (GAsP) contains whole-genome sequencing
+data of 1,739 individuals from 219 population groups across Asia. Frequencies are broken down by
+Northeast Asian, Southeast Asian, and South Asian ancestry groups. The data is split into two
+subtracks: substitutions and indels.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>gasp</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+The original VCFs are also available from the
+<a href="https://browser.genomeasia100k.org/#tid=download" target="_blank">GenomeAsia 100K
+website</a>. No license nor login is required.
+</p>
+
+<h2>Methods</h2>
+<p>
+Samples were sequenced on Illumina HiSeq 2500, HiSeq 4000, and HiSeq X Ten instruments with
+2&times;100 bp or 2&times;150 bp paired-end reads at an average depth of 36x. Reads were aligned to
+GRCh37 using BWA-MEM. Duplicate reads were marked with SAMBLASTER and sorted with Sambamba.
+Per-sample variant calling was performed with GATK HaplotypeCaller in GVCF mode, followed by
+joint genotyping with GenotypeGVCFs. Variant quality score recalibration (VQSR) was applied at
+a 99% sensitivity tranche for both SNPs and indels. Sample-level QC included contamination
+checks with verifyBamID and sex concordance verification. The final callset contains
+&sim;65 million variants across 1,739 individuals from 219 populations.
+</p>
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>
+
+<h2>References</h2>
+<p>
+GenomeAsia100K Consortium.
+<a href="https://doi.org/10.1038/s41586-019-1793-z" target="_blank">
+The GenomeAsia 100K Project enables genetic discoveries across Asia</a>.
+<em>Nature</em>. 2019 Dec;576(7785):106-111.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31802016" target="_blank">31802016</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7054211/" target="_blank">PMC7054211</a>
+</p>

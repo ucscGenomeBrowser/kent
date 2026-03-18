@@ -1,0 +1,59 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.kobic.re.kr/kova/" target="_blank">Korean Variant Archive (KOVA)</a>
+contains 1,896 whole genome sequencing and 3,409 whole exome sequencing data from healthy
+individuals of Korean ethnicity. Most of the samples originated from normal tissue of cancer
+patients (40.16%), healthy parents of rare disease patients (28.4%), or healthy volunteers
+(31.44%). Japanese ancestry is broken down in the INFO field. Coverage 100x for WES, 30x for WGS.
+SVs called with Manta are also available.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
+</p>
+<p>
+TSV data can be requested on the <a href="https://www.kobic.re.kr/kova/downloads"
+target="_blank">KOVA Downloads</a> website. Our Github repo contains a script that
+converts this format to VCF.
+</p>
+
+<h2>Methods</h2>
+<p>
+Raw reads were aligned to the GRCh38+decoy reference using BWA-MEM v0.7.17 with default
+parameters, followed by duplicate marking and coordinate sorting with MarkDuplicatesSpark, and base
+quality score recalibration using BQSRPipelineSpark in GATK v4.1.3.0; mapping quality control
+metrics were generated with Qualimap v2.2.1. Single-nucleotide variants and small
+insertions/deletions were called per sample using GATK HaplotypeCaller in GVCF mode (-ERC GVCF), and
+joint genotyping was performed by creating a GenomicsDB with GenomicsDBImport and following GATK
+Best Practices, including variant quality score recalibration (VQSR) retaining 99.7% of true SNVs
+and 99.0% of true indels based on training sets (workflow detailed in Supplementary Fig. 1).
+Downstream analyses followed a modified version of the gnomAD quality-control framework and were
+primarily conducted using Hail; after merging WES and WGS data in Hail, multiallelic variants and
+variants with genotype quality &lt;20, read depth &lt;10, allelic balance &lt;0.2, or overlapping
+low-complexity regions were excluded.
+</p>
+<p>
+At UCSC, V7 of the TSV.gz was obtained from the KOVA staff by email and converted to VCF. It is not
+available for download from our site but can be requested from the KOVA website.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Insu Jang and the KOVA director for providing variant frequencies in TSV format.
+</p>
+
+<h2>References</h2>
+<p>
+Lee J, Lee J, Jeon S, Lee J, Jang I, Yang JO, Park S, Lee B, Choi J, Choi BO <em>et al</em>.
+<a href="https://doi.org/10.1038/s12276-022-00871-4" target="_blank">
+A database of 5305 healthy Korean individuals reveals genetic and clinical implications for an East
+Asian population</a>.
+<em>Exp Mol Med</em>. 2022 Nov;54(11):1862-1871.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36323850" target="_blank">36323850</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9628380/" target="_blank">PMC9628380</a>
+</p>
