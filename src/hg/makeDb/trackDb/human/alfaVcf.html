@@ -1,0 +1,44 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/" target="_blank">NCBI ALlele Frequency
+Aggregator (ALFA)</a> pipeline computes allele frequencies from approved, unrestricted dbGaP studies
+and makes them publicly available through dbSNP. Its goal is to release frequency data from over
+one million dbGaP subjects to aid discoveries involving common and rare variants with biological
+or disease relevance. The R4 release includes 408,709 subjects and allele frequencies for
+15.5 million rs sites, including nearly one million ClinVar variants.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>alfaVcf</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+We converted the NCBI track hub to VCF format; the data is freely available.
+Genotype and associated individual-level data are accessible through the dbGaP
+<a href="https://dbgap.ncbi.nlm.nih.gov/aa/wga.cgi?page=login"
+target="_blank">authorized access request</a> system.
+</p>
+
+<h2>Methods</h2>
+<p>
+The ALFA pipeline processes genotype data from approved, unrestricted dbGaP studies, including
+chip array, exome, and genomic sequencing data. Selected study data undergoes quality assurance
+and transformation to standard VCF format. Variants are converted to SPDI notation and normalized
+using VOCA, then aggregated, remapped, and clustered to existing dbSNP rs identifiers or assigned
+new ones. Sample ancestries are validated using GRAF-pop and assigned to 12 major populations.
+QC exclusions include variants and subjects with call rate &lt;95%, datasets failing Ancestry
+Informative Markers consistency checks, and array datasets with conflicting or flipped allele
+orientation.
+</p>
+<p>
+The ALFA R4 bigBed files (904M variants) were converted to VCF using a custom script, retaining
+the 163M variants with non-zero allele frequency (146M SNPs, 17M indels).
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>

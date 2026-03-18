@@ -1,0 +1,79 @@
+<h2>Description</h2>
+<p>
+A reprocessed callset by the <a href="https://gnomad.broadinstitute.org/news/2021-10-gnomad-v3-1-2-minor-release/"
+target="_blank">gnomAD project</a> combining the 1000 Genomes and Human Genome Diversity Project
+(HGDP) data, with 4,094 whole genomes from 80 populations. The dataset includes per-population
+allele frequencies for all 80 populations as well as broad continental groupings from gnomAD
+(African, Admixed American, East Asian, European, Middle Eastern, South Asian, and others).
+</p>
+
+<p>
+This track shows allele frequencies only. The full phased genotype data with haplotype
+clustering display is available in the
+<a href="hgTrackUi?g=hgdp1k">gnomAD HGDP+1000G track</a> under Phased Variants.
+The track here does not include the full variant frequencies for all subpopulations, instead, 
+it aggregates frequencies to the main groups, AFR, AMI, AMR, ASJ, EAS, FIN, MID, NFE, OTH, SAS. 
+To access the full frequency information, use the track under "Phased Variants".
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>hgdp1kFreq</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+The original VCFs with full genotypes can also be downloaded from
+<a href="https://gnomad.broadinstitute.org/downloads#v3-hgdp-1kg"
+target="_blank">gnomAD Downloads</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+The gnomAD project reprocessed 4,094 whole genomes from the 1000 Genomes Project and the Human
+Genome Diversity Project (HGDP) through a unified pipeline. Sequencing was performed on Illumina
+platforms at a mean coverage of 32&ndash;34x. Reads were aligned to GRCh38 (hs38DH reference with
+decoy and HLA sequences) using BWA-MEM 0.7.15. Variant calling followed GATK best practices:
+per-sample calling with GATK 3.5 HaplotypeCaller followed by joint genotyping with GATK4 using
+the Hail VCF combiner for scalable merging. Allele-specific variant quality score recalibration
+(AS-VQSR) was applied for both SNPs and indels. Sample QC included contamination estimation
+(verifyBamID), sex concordance, relatedness filtering (PC-Relate), and population assignment
+using PCA against gnomAD reference panels. Per-population allele frequencies were computed for
+80 fine-grained populations as well as broad continental groupings.
+</p>
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the gnomAD team at the Broad Institute for harmonizing and making this dataset
+publicly available, and to all participants of the 1000 Genomes Project and the Human Genome
+Diversity Project.
+</p>
+
+<h2>References</h2>
+<p>
+Koenig Z, Yohannes MT, Nkambule LL, Zhao X, Goodrich JK, Kim HA, Wilson MW, Tiao G, Hao SP, Sahakian
+N <em>et al</em>.
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/pmid/38749656/" target="_blank">
+A harmonized public resource of deeply sequenced diverse human genomes</a>.
+<em>Genome Res</em>. 2024 Jun 25;34(5):796-809.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38749656" target="_blank">38749656</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11216312/" target="_blank">PMC11216312</a>
+</p>
+
+<p>
+Bergstr&ouml;m A, McCarthy SA, Hui R, Almarri MA, Ayub Q, Danecek P, Chen Y, Felkel S, Hallast P, Kamm J
+<em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.aay5012" target="_blank">
+Insights into human genetic variation and population history from 929 diverse genomes</a>.
+<em>Science</em>. 2020 Mar 20;367(6484).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32193295" target="_blank">32193295</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7115999/" target="_blank">PMC7115999</a>
+</p>

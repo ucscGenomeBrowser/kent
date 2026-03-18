@@ -1,0 +1,78 @@
+<h2>Description</h2>
+<p>
+The <a href="https://gregorconsortium.org/" target="_blank">GREGoR Consortium</a>
+(Genomics Research to Elucidate the Genetics of Rare diseases) is a
+National Human Genome Research Institute (NHGRI)-funded research consortium
+focused on discovering the genetic basis of currently unexplained rare diseases.
+GREGoR brings together multiple research centers and a data coordinating center
+to apply advanced genomic technologies to rare disease cohorts.
+</p>
+
+<p>
+This track shows allele frequencies from the GREGoR Release 4 (R04, October 2025)
+joint variant callset of a subset of the 10,683 participants across
+4,366 families. The joint callset includes only the 8,161 short-read whole-genome sequencing (WGS) 
+samples, or rather a subset of these, as the GREGoR site does not specify how many samples exactly are part
+of the joint callset. The callset does not include any of the 2,629 whole-exome sequencing (WES) samples. 
+Gregor also provides some long-read WGS, RNA-seq, and ATAC-seq, but these were also not used for the joint callset.
+The VCF shown here contains variant calls with VEP consequence annotations.
+The INFO fields include allele count (AC), allele frequency (AF), allele number (AN),
+and counts broken down by affected status (AC_AFFECTED, AC_UNAFFECTED, AC_UNKNOWN).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+This is a VCF track. When zoomed in, variants are displayed with base-specific coloring.
+Mouseover shows the variant position, alleles, and allele frequency.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>gregor</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+The full controlled-access GREGoR data is available through the
+<a href="https://anvil.terra.bio/" target="_blank">AnVIL</a> platform
+via controlled dbGaP access. More information on data access is available at
+the <a href="https://gregorconsortium.org/data" target="_blank">GREGoR data page</a>.
+</p>
+
+<h2>Methods</h2>
+<p>The sample processing methods of the GREGoR project depends on the sequencing center, see the Methods document below for details. 
+As for data processing, the GREGoR R04 joint callset for short-read whole genome sequencing (srWGS) was generated
+by the GREGoR Data Coordinating Center (DCC) through a two-stage harmonization and joint
+genotyping pipeline. Raw srWGS data from GREGoR Consortium Research Centers were uniformly
+reprocessed using the Whole Genome Germline Single Sample WARP pipeline in DRAGEN-GATK
+mode (v3.1.6), comprising alignment to the GRCh38 reference genome
+(GCA_000001405.15_GRCh38_no_alt_analysis_set) with the DRAGMAP aligner, duplicate marking
+with Picard v2.26.10, and single-sample variant calling with GATK HaplotypeCaller using the
+DragSTR model with hard filtering, producing per-sample gVCFs. Joint variant calling across all
+harmonized samples was subsequently performed using the Genomic Variant Store (GVS), a
+scalable cloud-native joint genotyping pipeline developed for large cohort analysis in which
+variants are ingested into a query-optimized store and rendered to a multi-sample variant file
+format. The resulting joint callset was functionally annotated with Ensembl Variant Effect Predictor (VEP) v112.
+Full methods, including per-site library preparation and bioinformatics pipelines for independently
+processed samples, are available in the
+<a href="https://gregorconsortium.org/sites/default/files/2025/GREGoR%20R04%20Methods.pdf"
+   target="_blank">GREGoR R04 Methods document</a>.
+</p>
+<p>
+At UCSC, site VCF files were downloaded from <a href="https://drive.google.com/drive/folders/1v-BnW7nKcEjF-NyLqU1Up3YJuP5KJJAg" target=_blank>Gregor's Google Drive</a>. 
+The VCFs were merged with bcftools.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track. 
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The GREGoR Consortium is supported by the National Human Genome Research Institute (NHGRI).
+We thank the participants, their families, and the consortium for making this data available.
+For more information, see the
+<a href="https://gregorconsortium.org/about" target="_blank">GREGoR About page</a>.
+</p>

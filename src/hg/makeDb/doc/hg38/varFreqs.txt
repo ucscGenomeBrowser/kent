@@ -48,7 +48,7 @@ wget 'https://abraom.ib.usp.br/download/download-files.php?fid=RklEMTIzNDU2&key=
 tar xvfz abraom.tar
 ln -s  /hive/data/genomes/hg38/p14Clean/hg38.p14.fa
 samtools faidx hg38.p14.fa 
-python ~/kent/src/hg/makeDb/scripts/abraomToVcf.py SABE1171.Abraom.clean.tsv abraom.vcf hg38.p14.fa
+python ~/kent/src/hg/makeDb/scripts/varFreqs/abraomToVcf.py SABE1171.Abraom.clean.tsv abraom.vcf hg38.p14.fa
 tabix -p vcf abraom.vcf.gz 
 
 # SGDP
@@ -63,7 +63,7 @@ tabix -p vcf SGDP.nh2.vcf.gz
 cd /hive/data/genomes/hg38/bed/varFreqs/sgp/
 # got tsv file via google drive link from 장인수 <insoo078@kribb.re.kr> 
 # VCF converter, written by Claude Opus 4.1 using 2 lines of example input
-python ~/kent/src/hg/makeDb/scripts/kovaToVcf.py 1_KOVA.v7.tsv.gz kova.v7.vcf
+python ~/kent/src/hg/makeDb/scripts/varFreqs/kovaToVcf.py 1_KOVA.v7.tsv.gz kova.v7.vcf
 bgzip kova.v7.vcf
 tabix -p vcf kova.v7.vcf.gz
 
@@ -76,26 +76,26 @@ tabiv -p vcf SG10K_Health_r5.3.2.sites.vcf.bgz
 # Saudi 300 genomes
 cd /hive/data/genomes/hg38/bed/varFreqs/saudi
 wget https://figshare.com/ndownloader/files/51297884 -O 51297884.tsv.gz
-python3 ~/kent/src/hg/makeDb/scripts/saudiToVcf.py
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/saudiToVcf.py
 bgzip saudi.vcf
 tabix -p vcf saudi.vcf.gz
 
 # SFARI SPARK
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
 # used globus to download into vcf/
-sh ~/kent/src/hg/makeDb/scripts/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
 bcftools norm -m-  SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz -Oz > SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz && tabix -p vcf SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
 
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs/
 # used globus to download into vcf/
-sh ~/kent/src/hg/makeDb/scripts/sparkMergeVcfAddCounts.sh vcf/wgs_12519_genome.deepvariant 8
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh vcf/wgs_12519_genome.deepvariant 8
 bcftools norm -m-  wgs_12519_genome.deepvariant.sites.vcf.gz -Oz > wgs_12519_genome.deepvariant.norm.vcf.gz
 tabix -p vcf wgs_12519_genome.deepvariant.norm.vcf.gz
 
 # NCBI ALFA bigBed to VCF, Max Jan 26 2026
 # Source: ALFA R4 bigBed files, 904M variants, output 163M with non-zero AF
 cd /hive/data/genomes/hg38/bed/varFreqs/alfa
-python3 alfa_to_vcf.py --out ALFA.vcf --zero-af-file ALFA_zero.txt
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/alfa_to_vcf.py --out ALFA.vcf --zero-af-file ALFA_zero.txt
 # Compress and index
 bgzip ALFA.vcf
 tabix -p vcf ALFA.vcf.gz
@@ -106,7 +106,7 @@ tabix -p vcf ALFA.vcf.gz
 # 40M variants from 32,488 WGS samples, originally on GRCh37
 cd /hive/data/genomes/hg38/bed/varFreqs/hrc/
 # download HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz from http://www.haplotype-reference-consortium.org/site
-python3 ~/kent/src/hg/makeDb/scripts/hrcToVcf.py
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/hrcToVcf.py
 # 40,405,505 variants read, 8,052 unmapped, 40,397,453 lifted to hg38
 # sort, compress, index
 bcftools sort hrc.vcf -Oz -o hrc.vcf.gz
@@ -127,7 +127,7 @@ tabix MGRB.phase3.GRCh38.norm.vcf.gz
 cd /hive/data/genomes/hg38/bed/varFreqs/schema
 # SCHEMA_variant_results.vcf.bgz (384M, hg19 coordinates)
 # Step 1: Add AC, AN, AF fields by summing case+control counts
-~/kent/src/hg/makeDb/scripts/schema_addAcAnAf.py
+~/kent/src/hg/makeDb/scripts/varFreqs/schema_addAcAnAf.py
 bgzip SCHEMA_variant_results_withAF.vcf
 tabix -p vcf SCHEMA_variant_results_withAF.vcf.gz
 # Step 2: Liftover from hg19 to hg38
@@ -199,7 +199,7 @@ cd /hive/data/genomes/hg38/bed/varFreqs/finngen/
 # Source TSV was downloaded from FinnGen (via email link from Google Cloud bucket)                                         
 # finnge_R12_annotated_variants_v1.gz (32 GB TSV)                                                                          
 # Convert TSV to VCF using custom Python script (written by Claude Opus 4.5)                                               
-python ~/kent/src/hg/makeDb/scripts/finngen_to_vcf.py \                                                                    
+python ~/kent/src/hg/makeDb/scripts/varFreqs/finngen_to_vcf.py \                                                                    
     finnge_R12_annotated_variants_v1.gz \                                                                                    
     finnge_R12_annotated_variants_v1.vcf                                                                                     
 # Compress and index                                                                                                       

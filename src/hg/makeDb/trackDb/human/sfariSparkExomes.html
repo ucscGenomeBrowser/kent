@@ -1,0 +1,124 @@
+<h2>Description</h2>
+<p>
+The <a href="https://sparkforautism.org/" target="_blank">Simons Foundation Autism Research
+Initiative (SFARI)</a> recruited a large cohort of families with autistic children who provided
+DNA samples and phenotypes. 54,558 families, parents and their children were sequenced, a total
+of 142,357 individuals with whole-exome (WES) and 12,519 with whole-genome sequencing (WGS).
+The data contains 32,559 trios and 8,895 quads (one sibling without autism), and 824 twins.
+</p>
+
+<p>
+The same frequencies shown here are also available publicly on the
+<a href="https://genomes.sfari.org/" target="_blank">SFARI Genome Browser</a>.
+See (SPARK et al, Neuron 2018) for details.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>sfariSparkExomes</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+Allele frequencies can also be displayed on the
+<a href="https://genomes.sfari.org/" target="_blank">SFARI Genome Browser</a>.
+Full CRAMs and VCFs with genotypes are available from
+<a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
+They require a data access request, which is usually reviewed quickly. More information is
+available in the
+<a href="https://cohorts-cdn.simonsfoundation.org/spark/researcher_packets/SPARK_SFARI_Researcher_Welcome_Packet.pdf"
+target="_blank">SPARK Welcome Packet</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>The genome browser track project was approved by the Simons Foundation under request
+number 14584.1. WES and WGS data were downloaded from
+<a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
+pVCFs were downloaded, anonymized with a script using bcftools and its &quot;fill-tags&quot; plugin and
+normalized. There was no minimum allele frequency cutoff.</p>
+
+<p>The methods are documented as follows by SFARI:</p>
+<ul>
+  <li>
+    <b>WGS</b>:
+    This release consists of sequence and variant call data for 12,519
+    unique individuals, of which 12,517 (99.98%) have available genome-wide
+    SNP genotype data. Sequencing and genotyping of all samples in this
+    release was performed at New York Genome Center (NYGC). DNA from saliva
+    samples were extracted and prepared with PCR-free methods and sequenced
+    with paired-end sequencing of 150 bases on the Illumina NovaSeq 6000
+    system. Alignment of reads to the human reference genome version
+    GRCh38, duplicate read marking, and Base Quality Score Recalibration
+    (BQSR) were performed by New York Genome Center (NYGC). Whole-genome
+    sequencing data were processed using a standardized, functionally
+    equivalent CCDG pipeline with alignment to the GRCh38DH (1000 Genomes)
+    reference using BWA-MEM v0.7.15 (deterministic settings, no -M, use of
+    .alt contigs), Picard-equivalent duplicate marking (Picard &ge;2.4.1 or
+    equivalent), no indel realignment, and base quality score recalibration
+    with GATK (dbSNP138, Mills and 1000G gold-standard indels, known
+    indels). Final outputs were stored as lossless CRAM files with
+    complete SAM-compliant read-group annotations and mandatory 4-bin
+    base-quality compression (Q2&mdash;6, 10, 20, 30), and all implementations
+    were validated for functional equivalence across centers before use.
+    Variant Calling was performed using DeepVariant. See
+    <a href="https://github.com/CCDG/Pipeline-Standardization/blob/master/PipelineStandard.md"
+    target="_blank">CCDG pipeline details</a>.
+  </li>
+  <li>
+    <b>WES</b>: This release contains
+    sequence data for 142,357 individuals and genotyping data for
+    141,368 individuals. DNA was sequenced from saliva for all
+    samples and all participants consented to having their genetic
+    data shared by Regeneron. Exomes for all samples were sequenced with
+    short-read, paired-end sequencing of 150 bases on Illumina
+    NovaSeq 6000 machines using S2/S4 flow cells. Sequencing and
+    genotyping was performed across nine batches (WES1 through
+    WES9) at the Regeneron Genetics Center (RGC) and integrated
+    together for this data release. All sequencing batches were
+    processed using the same DNA extraction methods and sequencing
+    machines, however two different exome capture panels were used,
+    as described below. Genotyping was performed using a SNP
+    genotyping array for WES1 through WES4 and using
+    &quot;genotyping-by-sequencing&quot; (GxS) for WES5 through WES9. The
+    first four sequencing batches were sequenced at Regeneron using
+    custom NEB/Kapa reagents with the IDT (Integrated DNA
+    Technologies) xGen capture platform, including custom exome
+    capture regions. Samples starting with batch WES5 were
+    sequenced using the Twist Bioscience Human
+    Comprehensive Exome panel, combined with spike-ins for
+    sequencing genotyping sites (see Genotyping Methods), the full
+    mitochondrial genome, and coverage boosted at selected sites
+    for assaying clonal hematopoiesis of indeterminate potential
+    (CHIP). SFARI performed SNV/indel calling via DeepVariant and
+    GATK to generate gVCFs, pairwise relatedness inferred using
+    PLINK v1.9 IBD estimates from common SNPs (AF &ge; 0.01, dbSNP
+    v151) with &ge;15% relatedness flagged, and comprehensive
+    individual- and family-level quality control executed using the
+    internal GenomeCheckMate pipeline to exclude samples based on
+    contamination (&ge;5%), insufficient coverage (&lt;20x in &lt;80% of
+    targets), sex discordance, pedigree/IBD inconsistencies,
+    unregistered relationships, unexpected duplicates, or excess
+    relatedness, after which QC-passing individuals (selecting the
+    most recent passing sample per person) were retained for
+    variant calling and joint genotyping.
+    </li>
+</ul>
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+</p>
+
+<h2>References</h2>
+<p>
+SPARK Consortium. Electronic address: pfeliciano@simonsfoundation.org, SPARK Consortium.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0896-6273(18)30018-7" target="_blank">
+SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research</a>.
+<em>Neuron</em>. 2018 Feb 7;97(3):488-493.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29420931" target="_blank">29420931</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7444276/" target="_blank">PMC7444276</a>
+</p>
