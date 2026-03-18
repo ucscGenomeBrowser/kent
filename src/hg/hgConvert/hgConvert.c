@@ -88,6 +88,13 @@ jsIncludeAutoCompleteLibs();
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
+cgiParagraph(
+    "This tool converts the current genome browser position to the corresponding "
+    "region in another assembly or species using genome sequence alignments. "
+    "Select a target assembly below and click Submit to jump to the matching region. "
+    "If a pair of assemblies cannot be selected directly, a sequential conversion "
+    "may still be possible (e.g., mm9 to mm10 to mm39).");
+
 /* CSS for two-section layout */
 puts("<style>\n"
      ".convertGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; }\n"
@@ -137,9 +144,9 @@ if (askAboutQuickLift)
     {
     puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
     cgiMakeCheckBoxWithId("doQuickLift", quickLift, "doQuickLift");
-    puts(" <label for='doQuickLift'>QuickLift tracks</label>\n");
+    puts(" <label for='doQuickLift' title='Display tracks from the source assembly mapped onto the target assembly'>QuickLift tracks</label>\n");
     puts(" <a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' "
-         "target='ucscHelp' title='QuickLift is in beta testing' "
+         "target='ucscHelp' title='QuickLift is in beta testing. Click to view more documentation about this feature.' "
          "style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px "
          "4px;background:lavender;border-radius:3px;text-decoration:none;margin-left:6px;'>beta</a>\n");
     puts("</div>\n");
@@ -248,6 +255,16 @@ jsInlineF(
 );
 
 puts("</FORM>\n");
+
+webNewSection("Notes");
+cgiParagraph(
+    "<B>QuickLift tracks:</B> When enabled, QuickLift displays tracks from "
+    "the source assembly mapped onto the target assembly, allowing you to view "
+    "your current tracks in the context of the new genome.");
+cgiParagraph(
+    "If your desired target assembly is not available, you can search for it "
+    "and request it on our "
+    "<A HREF=\"../assemblySearch.html\">Assembly Search</A> page.");
 
 cartWebEnd();
 }
