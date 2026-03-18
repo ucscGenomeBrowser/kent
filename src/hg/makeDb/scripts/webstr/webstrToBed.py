@@ -23,6 +23,17 @@ PERIOD_COLORS = {
 }
 DEFAULT_COLOR = "128,128,128"  # gray for period > 6
 
+
+def truncateMotif(motif, maxLen=25):
+    """Truncate motif to maxLen characters with '..' in the middle."""
+    if len(motif) <= maxLen:
+        return motif
+    keepLen = maxLen - 2
+    leftLen = (keepLen + 1) // 2
+    rightLen = keepLen - leftLen
+    return motif[:leftLen] + ".." + motif[-rightLen:]
+
+
 COHORT_ORDER = ["AFR", "AMR", "EAS", "EUR", "SAS"]
 COHORT_MAP = {
     "1000 Genomes AFR": "AFR",
@@ -80,7 +91,7 @@ def main():
                 chrom,
                 start,
                 end,
-                repeatid,       # name
+                truncateMotif(motif) + "x" + numcopies,  # name
                 "0",            # score
                 ".",            # strand
                 start,          # thickStart
