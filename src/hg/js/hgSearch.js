@@ -820,6 +820,9 @@ var hgSearch = (function() {
             var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch || gnomadVarMatch || gnomadRangeMatch;
             if (positionMatch !== null) {
                 var prevCgi = uiState.prevCgi !== undefined ? uiState.prevCgi : "hgTracks";
+                // save this to the recents stack, strip any html content first
+                let newPos = searchTerm.replace(/<[^>]*>/g, '');
+                addRecentSearch(db, newPos, {id: newPos, value: newPos, label: newPos});
                 window.location.replace("../cgi-bin/" + prevCgi + "?db=" + db + "&position=" + encodeURIComponent(searchTerm));
                 return;
             }

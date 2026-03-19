@@ -5084,6 +5084,11 @@ var imageV2 = {
                     cache: true
                 });
                 return false;
+            } else {
+                // about to do a form submit with a regular position range, save this to the recents stack
+                // strip any html content first
+                newPos = newPos.replace(/<[^>]*>/g, '');
+                addRecentSearch(getDb(), newPos, {id: newPos, value: newPos, label: newPos});
             }
                 
             return true;

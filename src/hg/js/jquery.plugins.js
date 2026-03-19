@@ -165,6 +165,15 @@
 // Keyboard accessibility for menu bar disclosure buttons (WCAG 2.1)
 (function ($) {
   $(document).ready(function() {
+    // Enable skip nav link on first Tab keypress (starts with tabindex=-1 to prevent
+    // auto-focus in popup windows like hgc from making it visible)
+    $(document).one('keydown', function(e) {
+      if (e.key === 'Tab') {
+        var $skip = $('a.skipNav');
+        if ($skip.length) $skip.removeAttr('tabindex');
+      }
+    });
+
     var $menu = $('ul.nice-menu');
     if (!$menu.length) return;
     var suppressFocus = false; // prevent focus handler from interfering with click/escape
