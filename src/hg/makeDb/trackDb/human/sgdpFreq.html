@@ -26,7 +26,7 @@ The data can be explored interactively with the
 For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
 track name is <em>sgdpFreq</em>.
 For bulk download, the VCF file can be obtained from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
 </p>
 
 <p>The original source VCFs are available from
@@ -47,8 +47,8 @@ contains 34.4 million SNPs and 2.1 million short indels.
 <p>
 The VCFs were merged with bcftools and lifted to hg38 with CrossMap. At UCSC, genotypes were
 stripped to produce a sites-only frequency VCF retaining the existing AC, AF, and AN INFO fields.
-We provide documentation that indicates how all source files were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track.
-Python scripts are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>.
+We provide documentation that indicates how all source files were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+Python scripts are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>Credits</h2>

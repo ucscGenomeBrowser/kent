@@ -14,7 +14,7 @@ joint variant callset of a subset of the 10,683 participants across
 4,366 families. The joint callset includes only the 8,161 short-read whole-genome sequencing (WGS) 
 samples, or rather a subset of these, as the GREGoR site does not specify how many samples exactly are part
 of the joint callset. The callset does not include any of the 2,629 whole-exome sequencing (WES) samples. 
-Gregor also provides some long-read WGS, RNA-seq, and ATAC-seq, but these were also not used for the joint callset.
+GREGoR also provides some long-read WGS, RNA-seq, and ATAC-seq, but these were also not used for the joint callset.
 The VCF shown here contains variant calls with VEP consequence annotations.
 The INFO fields include allele count (AC), allele frequency (AF), allele number (AN),
 and counts broken down by affected status (AC_AFFECTED, AC_UNAFFECTED, AC_UNKNOWN).
@@ -34,7 +34,7 @@ The data can be explored interactively with the
 For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
 track name is <em>gregor</em>.
 For bulk download, the VCF file can be obtained from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
 </p>
 <p>
 The full controlled-access GREGoR data is available through the
@@ -44,7 +44,7 @@ the <a href="https://gregorconsortium.org/data" target="_blank">GREGoR data page
 </p>
 
 <h2>Methods</h2>
-<p>The sample processing methods of the GREGoR project depends on the sequencing center, see the Methods document below for details. 
+<p>The sample processing methods of the GREGoR project depend on the sequencing center, see the Methods document below for details. 
 As for data processing, the GREGoR R04 joint callset for short-read whole genome sequencing (srWGS) was generated
 by the GREGoR Data Coordinating Center (DCC) through a two-stage harmonization and joint
 genotyping pipeline. Raw srWGS data from GREGoR Consortium Research Centers were uniformly
@@ -63,10 +63,10 @@ processed samples, are available in the
    target="_blank">GREGoR R04 Methods document</a>.
 </p>
 <p>
-At UCSC, site VCF files were downloaded from <a href="https://drive.google.com/drive/folders/1v-BnW7nKcEjF-NyLqU1Up3YJuP5KJJAg" target=_blank>Gregor's Google Drive</a>. 
+At UCSC, site VCF files were downloaded from <a href="https://drive.google.com/drive/folders/1v-BnW7nKcEjF-NyLqU1Up3YJuP5KJJAg" target="_blank">GREGoR's Google Drive</a>. 
 The VCFs were merged with bcftools.
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target=_blank>makeDoc file</a> of the track. 
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target=_blank>Github</a>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track. 
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>
 </p>
 
 <h2>Credits</h2>
