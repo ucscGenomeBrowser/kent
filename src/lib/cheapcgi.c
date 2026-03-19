@@ -768,14 +768,14 @@ while (isNotEmpty(namePt))
     int dataSize = strlen(dataPt);
     int nameSize = strlen(namePt);
     if ((dataSize <= CGI_VAR_SIZE_LIMIT) && (nameSize < CGI_VAR_NAME_LIMIT))
-    {
+        {
         cgiDecode(namePt,namePt,nameSize);
         cgiDecode(dataPt,dataPt,dataSize);
         AllocVar(el);
         el->val = dataPt;
         slAddHead(&list, el);
         hashAddSaveName(hash, namePt, el, &el->name);
-    }
+        }
 #endif // FAST_CGI_DECODE
     namePt = nextNamePt;
     }
@@ -937,8 +937,9 @@ do
         return FALSE;
     }
     val = strchr(var, '=');
-    if (val == NULL)
+    if (val == NULL || var == val)
         errAbort("Mangled CGI input string %s", var);
+    varLength = val-var;
     *val++ = 0;
     char *end = strchr(val, '&');
     if (end == NULL)
@@ -958,7 +959,7 @@ do
     valLength = end-val;
     } while ((varLength > CGI_VAR_NAME_LIMIT) || (valLength > CGI_VAR_SIZE_LIMIT));
             // skip variables that are too big
-cgiDecode(var,var,valLength);
+cgiDecode(var,var,varLength);
 cgiDecode(val,val,valLength);
 #endif // FAST_CGI_DECODE
 return TRUE;
