@@ -432,7 +432,6 @@ void eatExcessDotsInPath(char *path)
 char *src = path;
 char *dst = path;
 boolean absolute = (*src == '/');
-int pathLen = strlen(path);
 
 if (absolute)
     *dst++ = *src++;
