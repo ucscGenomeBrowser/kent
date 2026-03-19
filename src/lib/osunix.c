@@ -407,7 +407,7 @@ if (err < 0)
     errnoAbort("Couldn't remove %s", path);
 }
 
-static void eatSlashSlashInPath(char *path)
+void eatSlashSlashInPath(char *path)
 /* Convert multiple // to single // */
 {
 char *s, *d;
@@ -421,6 +421,94 @@ while ((c = *s++) != 0)
     lastC = c;
     }
 *d = 0;
+}
+
+void eatExcessDotsInPath(char *path)
+/* Remove . and .. components from path in place using two pointers.
+ * Single dots are removed, double dots consume the preceding component
+ * unless it is also ".." or doesn't exist (relative path).
+ * Assumes no // in input (call eatSlashSlashInPath first). */
+{
+char *src = path;
+char *dst = path;
+boolean absolute = (*src == '/');
+int pathLen = strlen(path);
+
+if (absolute)
+    *dst++ = *src++;
+
+while (*src)
+    {
+    /* Find end of this component */
+    char *compEnd = strchr(src, '/');
+    int compLen;
+    if (compEnd)
+        compLen = compEnd - src;
+    else
+        compLen = strlen(src);
+
+    if (compLen == 1 && src[0] == '.')
+        {
+        /* Single dot: skip entirely */
+        src += compLen;
+        if (*src == '/')
+            src++;
+        }
+    else if (compLen == 2 && src[0] == '.' && src[1] == '.')
+        {
+        /* Double dot: try to consume previous component */
+        boolean consumed = FALSE;
+        if (dst > path + (absolute ? 1 : 0))
+            {
+            /* There is a previous component. Find its start. */
+            char *prevEnd = dst - 1;  /* points at trailing '/' (or last char) */
+            if (prevEnd > path && *(prevEnd) == '/')
+                prevEnd--;  /* back past trailing slash */
+            char *prevSlash = matchingCharBeforeInLimits(path, prevEnd + 1, '/');
+            char *prevStart;
+            if (prevSlash == NULL)
+                prevStart = path;
+            else
+                prevStart = prevSlash + 1;
+            int prevLen = (dst - prevStart);
+            if (prevStart < dst && *(dst-1) == '/')
+                prevLen--;  /* exclude trailing slash from comparison */
+            /* Only consume if previous component is not ".." */
+            if (!(prevLen == 2 && prevStart[0] == '.' && prevStart[1] == '.'))
+                {
+                dst = prevStart;
+                /* Also remove the preceding separator if present */
+                if (dst > path + (absolute ? 1 : 0) && *(dst-1) == '/')
+                    dst--;
+                consumed = TRUE;
+                }
+            }
+        if (!consumed)
+            {
+            /* Write ".." forward */
+            if (dst > path + (absolute ? 1 : 0))
+                *dst++ = '/';
+            *dst++ = '.';
+            *dst++ = '.';
+            }
+        src += compLen;
+        if (*src == '/')
+            src++;
+        }
+    else
+        {
+        /* Normal component: copy with leading slash separator if needed */
+        if (dst > path + (absolute ? 1 : 0))
+            *dst++ = '/';
+        memmove(dst, src, compLen);
+        dst += compLen;
+        src += compLen;
+        if (*src == '/')
+            src++;
+        }
+    }
+
+*dst = 0;
 }
 
 static void eatExcessDotDotInPath(char *path)
