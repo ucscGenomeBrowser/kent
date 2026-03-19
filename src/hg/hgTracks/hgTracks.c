@@ -2319,7 +2319,7 @@ struct highlightVar *parseHighlightInfo()
 {
 struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
-if(highlightDef)
+if(isNotEmpty(highlightDef))
     {
     int hlCount = chopByChar(highlightDef, '|', NULL, 0);
     char **hlArr = AllocN(char *, hlCount);
