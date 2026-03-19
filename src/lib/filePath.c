@@ -5,6 +5,8 @@
 
 #include "common.h"
 #include "filePath.h"
+#include "portable.h"
+#include "net.h"
 
 
 void undosPath(char *path)
@@ -234,4 +236,27 @@ while (TRUE)
         p = end++;
     }
 return TRUE;
+}
+
+char *resolveDotDots(char *pathOrUrl)
+/* Given a file path or URL, return a version with ".." components resolved.
+ * For URLs, only the path portion is simplified (scheme :// is preserved).
+ * Double slashes are collapsed for file paths but not for URLs.
+ * Result should be freeMem'd. */
+{
+if (hasProtocol(pathOrUrl))
+    {
+    struct netParsedUrl npu;
+    netParseUrl(pathOrUrl, &npu);
+    eatExcessDotsInPath(npu.file);
+    return urlFromNetParsedUrl(&npu);
+    }
+else
+    {
+    char result[PATH_LEN];
+    safecpy(result, sizeof(result), pathOrUrl);
+    eatSlashSlashInPath(result);
+    eatExcessDotsInPath(result);
+    return cloneString(result);
+    }
 }

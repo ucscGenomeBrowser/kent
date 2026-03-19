@@ -13,6 +13,14 @@
 #include "hash.h"
 #endif
 
+// #define FAST_CGI_DECODE
+#ifdef FAST_CGI_DECODE
+// 50kB per-variable limit on content length to prevent egregious
+// cart-stuffing, whether intentional or accidental.  5kB limit
+// on variable names for similar reasons.
+#define CGI_VAR_SIZE_LIMIT 50000
+#define CGI_VAR_NAME_LIMIT 5000
+#endif
 
 //============ javascript inline-separation routines ===============
 
