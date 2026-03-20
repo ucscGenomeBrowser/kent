@@ -16,7 +16,7 @@ visibility hide
     url https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38
     urlLabel WebSTR locus page
     searchIndex name
-    mouseOver <b>Repeat motif:</b> $motif <br> <b>Number of copies:</b> $numCopies <br> <b>Length of repeat:</b> $period <br> <b>Population sample counts:</b> <br> $afrN (AFR), $amrN (AMR), $easN (EAS), $eurN (EUR), $sasN (SAS)
+    mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Number of copies:</b> $numCopies <br> <b>Population sample counts:</b> <br> $afrN (AFR), $amrN (AMR), $easN (EAS), $eurN (EUR), $sasN (SAS)
 
     track strchive
     shortLabel STRchive
