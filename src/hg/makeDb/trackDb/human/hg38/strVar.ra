@@ -40,7 +40,11 @@ visibility hide
     bigDataUrl /gbdb/hg38/strVar/trexplorer.bb
     visibility dense
     superTrack strVar dense
-    urls region="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
+    urls locusId="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
     urlLabel TRExplorer locus page
     searchIndex name
     mouseOver <b>Gene:</b> $geneName ($geneRegion) <br> <b>Reference Motif:</b> $referenceMotif ($motifSize bp) <br> <b>Number of repeat copies:</b> $numRepeats repeats <br> <b>Purity:</b> $repeatPurity <br> <b>Number of called alleles:</b><br> $tenKNumAlleles (TenK10K), $hprcNumAlleles (HRPC256), $aouNumAlleles (AoU1027) <br><b>Source:</b> $source
+    #mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
+    detailsJs detailsHistogram.js
+    detailsJsFields tenKAlleleSizes,tenKAlleleCounts,hprcAlleleSizes,hprcAlleleCounts
+    detailsJsArgs {"histograms":[{"binsField":"tenKAlleleSizes","valuesField":"tenKAlleleCounts","title":"TenK10K Allele Distribution"},{"binsField":"hprcAlleleSizes","valuesField":"hprcAlleleCounts","title":"HPRC256 Allele Distribution"}]}

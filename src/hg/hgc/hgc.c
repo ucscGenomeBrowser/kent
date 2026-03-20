@@ -1757,16 +1757,19 @@ for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
     }
 }
 
-void printFieldLabel(char *entry)
+static void printFieldLabelInner(char *entry, char *fieldName)
 /* print the field label, the first column in the table, as a <td>. Allow a
  * longer description after a |-char, as some fields are not easy to
- * understand. */
+ * understand. If fieldName is not NULL, add id="bfld_<fieldName>" to <tr>. */
 {
 char *afterPipe = strchr(entry, '|');
 if (afterPipe)
     *afterPipe = 0;
 
-printf("<tr><td>%s", entry);
+if (fieldName)
+    printf("<tr id=\"bfld_%s\"><td>%s", fieldName, entry);
+else
+    printf("<tr><td>%s", entry);
 
 if (afterPipe)
     {
@@ -1776,6 +1779,21 @@ if (afterPipe)
     }
 
 puts("</td>");
+}
+
+void printFieldLabel(char *entry)
+/* print the field label, the first column in the table, as a <td>. Allow a
+ * longer description after a |-char, as some fields are not easy to
+ * understand. */
+{
+printFieldLabelInner(entry, NULL);
+}
+
+void printFieldLabelWithId(char *entry, char *fieldName)
+/* Like printFieldLabel but adds id="bfld_<fieldName>" to the <tr> element,
+ * so JavaScript can find the row by field name. */
+{
+printFieldLabelInner(entry, fieldName);
 }
 
 #define TDB_STATICTABLE_SETTING "extraDetailsTable"
@@ -1926,7 +1944,7 @@ for (;col != NULL && count < fieldCount;col=col->next)
     else
         entry = col->comment;
 
-    printFieldLabel(entry);
+    printFieldLabelWithId(entry, fieldName);
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);

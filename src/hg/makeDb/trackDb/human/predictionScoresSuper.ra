@@ -8,3 +8,4 @@ group phenDis
 include bayesDel.ra
 include mutscore.ra
 include mcap.ra
+include primateAi.ra alpha
