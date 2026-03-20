@@ -1,6 +1,6 @@
 include ncOrfs.ra alpha
 
-include strVar.ra alpha
+include strVar.ra alpha,beta
 
 include barCharts.ra
 
