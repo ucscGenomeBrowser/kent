@@ -224,6 +224,7 @@
 
     // Sync aria-expanded for <a>-based parent items (Genomes, Genome Browser)
     $menu.on('focus', 'li.menuparent > a[aria-expanded]', function() {
+      suppressFocus = false; // reset flag so next button Tab works
       $(this).attr('aria-expanded', 'true');
     });
 
