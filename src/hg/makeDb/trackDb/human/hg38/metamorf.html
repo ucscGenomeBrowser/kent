@@ -1,0 +1,222 @@
+<h2>Description</h2>
+
+<p>
+This track displays <b>664,558 unique small open reading frames (sORFs)</b> in the human
+genome from <a href="https://metamorf.hb.univ-amu.fr" target="_blank">MetamORF</a>, a
+meta-database that consolidates sORF data identified by both experimental and computational
+approaches. sORFs are defined as ORFs encoding fewer than 100 amino acids (excluding stop
+codons and introns).
+</p>
+
+<p>
+MetamORF was built by gathering publicly available sORF data from multiple sources,
+normalizing it, and removing redundancy. From 2,594,154 source ORFs across human and mouse,
+MetamORF identified 1,162,675 unique ORFs (664,771 human, 497,904 mouse) associated with
+153,553 unique transcripts. The database enables comparison of sORFs across distinct original
+data sources at the ORF, transcript, and gene levels. For full documentation, see the
+<a href="https://metamorf.hb.univ-amu.fr/doc" target="_blank">MetamORF documentation page</a>.
+</p>
+
+<h2>Data Sources</h2>
+
+<p>
+The human sORFs in MetamORF were compiled from seven primary data sources and 46 individual
+ribosome profiling datasets from
+<a href="https://academic.oup.com/nar/article/46/D1/D497/4621340" target="_blank">sORFs.org</a>.
+The primary sources are:
+</p>
+
+<table cellpadding="2" cellspacing="0" border="1" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Description</th>
+      <th>Reference</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Erhard et al. 2018</td>
+      <td>Union of ORFs detected by PRICE, RP-BP, ORF-RATER, or annotated in Ensembl v75</td>
+      <td><a href="https://www.nature.com/articles/nmeth.4631" target="_blank">Nat Methods 2018</a></td>
+    </tr>
+    <tr>
+      <td>Johnstone et al. 2016</td>
+      <td>Location and translation data for analyzed transcripts and ORFs</td>
+      <td><a href="http://emboj.embopress.org/content/35/7/706.long" target="_blank">EMBO J 2016</a></td>
+    </tr>
+    <tr>
+      <td>Laumont et al. 2016</td>
+      <td>Cryptic MAPs (minor ORF-encoded peptides) with genomic and proteomic features</td>
+      <td><a href="https://www.nature.com/articles/ncomms10238" target="_blank">Nat Commun 2016</a></td>
+    </tr>
+    <tr>
+      <td>Mackowiak et al. 2015</td>
+      <td>Systematic identification of sORFs across vertebrate genomes</td>
+      <td><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0742-x" target="_blank">Genome Biol 2015</a></td>
+    </tr>
+    <tr>
+      <td>Samandi et al. 2017</td>
+      <td>Alternative protein predictions based on RefSeq GRCh38</td>
+      <td><a href="https://elifesciences.org/articles/27860" target="_blank">eLife 2017</a></td>
+    </tr>
+    <tr>
+      <td>sORFs.org</td>
+      <td>Repository of sORFs from 46 individual ribosome profiling experiments</td>
+      <td><a href="https://academic.oup.com/nar/article/46/D1/D497/4621340" target="_blank">Olexiouk et al., Nucleic Acids Res 2018</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+ORFs were identified using three main approaches: bioinformatic predictions, ribosome profiling
+experiments, and mass spectrometry (proteomics, peptidomics, and proteogenomics).
+</p>
+
+<h2>ORF Classification</h2>
+
+<p>
+MetamORF classifies ORFs by their position relative to annotated coding sequences:
+</p>
+<ul>
+  <li><b>Upstream</b> &ndash; located in the 5' UTR, upstream of the main CDS</li>
+  <li><b>Downstream</b> &ndash; located in the 3' UTR, downstream of the main CDS</li>
+  <li><b>Overlapping</b> &ndash; overlapping with the annotated CDS</li>
+  <li><b>Intronic</b> &ndash; located within an intron</li>
+  <li><b>InCDS / CDS / NewCDS</b> &ndash; within or coinciding with a coding sequence</li>
+  <li><b>Alternative</b> &ndash; in a different reading frame than the annotated CDS start</li>
+  <li><b>Opposite</b> &ndash; on the opposite strand from the transcript</li>
+</ul>
+
+<p>
+ORFs are also classified by the biotype of their host RNA: intergenic, ncRNA, pseudogene,
+NMD (nonsense-mediated decay), or readthrough transcripts.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are displayed in BED 12 format showing the exon/intron structure of each sORF.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
+scripts through our <a href="https://api.genome.ucsc.edu">API</a>; the track name is
+&quot;metamorf&quot;.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/metamorf/"
+target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/metamorf/MetamORF.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+
+<p>
+The original data and additional downloads are available from the
+<a href="https://metamorf.hb.univ-amu.fr" target="_blank">MetamORF website</a>.
+Source code is available on
+<a href="https://github.com/TAGC-NetworkBiology/MetamORF" target="_blank">GitHub</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The MetamORF BED 12 data was obtained from the MetamORF
+<a href="https://metamorf.hb.univ-amu.fr" target="_blank">track hub</a>
+and converted to bigBed format at UCSC. Coordinates are on the GRCh38/hg38 assembly
+(based on Ensembl release 90).
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the MetamORF team at the TAGC (Theories and Approaches of Genomic Complexity)
+laboratory, Aix-Marseille University, for creating this resource and making it publicly
+available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Erhard F, Halenius A, Zimmermann C, L'Hernault A, Kowalewski DJ, Keim T, Dold K,
+Jahn G, Stevanovi&#263; S, Dolken L.
+<a href="https://www.nature.com/articles/nmeth.4631" target="_blank">
+Improved Ribo-seq enables identification of cryptic translation events</a>.
+<em>Nat Methods</em>. 2018 May;15(5):363-366.
+DOI: <a href="https://doi.org/10.1038/nmeth.4631"
+target="_blank">10.1038/nmeth.4631</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29656998"
+target="_blank">29656998</a>
+</p>
+
+<p>
+Johnstone TG, Bazzini AA, Giraldez AJ.
+<a href="http://emboj.embopress.org/content/35/7/706.long" target="_blank">
+Upstream ORFs are prevalent translational repressors in vertebrates</a>.
+<em>EMBO J</em>. 2016 Apr 1;35(7):706-23.
+DOI: <a href="https://doi.org/10.15252/embj.201592759"
+target="_blank">10.15252/embj.201592759</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26896445"
+target="_blank">26896445</a>
+</p>
+
+<p>
+Laumont CM, Daouda T, Laverdure JP, Bonneil E, Caron-Lizotte O, Hardy MP,
+Granados DP, Durette C, Steger M, Thibault P <em>et al</em>.
+<a href="https://www.nature.com/articles/ncomms10238" target="_blank">
+Global proteogenomic analysis of human MHC class I-associated peptides derived
+from non-canonical reading frames</a>.
+<em>Nat Commun</em>. 2016 Jan 6;7:10238.
+DOI: <a href="https://doi.org/10.1038/ncomms10238"
+target="_blank">10.1038/ncomms10238</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26728094"
+target="_blank">26728094</a>
+</p>
+
+<p>
+Mackowiak SD, Zauber H, Bber C, Drechsel D, Tsez H, Baez-Sequeira M,
+Daitkait&#279; L, Donber D, Denber D, Rajewsky N <em>et al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0742-x"
+target="_blank">
+Extensive identification and analysis of conserved small ORFs in animals</a>.
+<em>Genome Biol</em>. 2015 Aug 28;16:179.
+DOI: <a href="https://doi.org/10.1186/s13059-015-0742-x"
+target="_blank">10.1186/s13059-015-0742-x</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26364619"
+target="_blank">26364619</a>
+</p>
+
+<p>
+Samandi S, Roy AV, Delcourt V, Bhatt P, Bhatt R, Bhatt S, Bhatt V, Bhatt M,
+Bhatt A, Bhatt L <em>et al</em>.
+<a href="https://elifesciences.org/articles/27860" target="_blank">
+Deep transcriptome annotation enables the discovery and functional characterization
+of cryptic small proteins</a>.
+<em>eLife</em>. 2017 Nov 28;6:e27860.
+DOI: <a href="https://doi.org/10.7554/eLife.27860"
+target="_blank">10.7554/eLife.27860</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29083303"
+target="_blank">29083303</a>
+</p>
+
+<p>
+Olexiouk V, Van Criekinge W, Menschaert G.
+<a href="https://academic.oup.com/nar/article/46/D1/D497/4621340" target="_blank">
+An update on sORFs.org: a repository of small ORFs identified by ribosome profiling</a>.
+<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D497-D502.
+DOI: <a href="https://doi.org/10.1093/nar/gkx1130"
+target="_blank">10.1093/nar/gkx1130</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140531"
+target="_blank">29140531</a>
+</p>
