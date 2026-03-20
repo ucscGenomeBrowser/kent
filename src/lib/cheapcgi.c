@@ -18,6 +18,9 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
+// FAST_CGI_DECODE can be defined in cheapcgi.h to try a faster decode process that
+// also limits variable/value lengths and applies encoding to variable names
+
 //============ javascript inline-separation routines ===============
 
 // One of the main services that CSP (Content Security Policy) provides
@@ -755,11 +758,25 @@ while (isNotEmpty(namePt))
 	 if (*nextNamePt == ' ')
 	     nextNamePt++;
 	}
+#ifndef FAST_CGI_DECODE
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
     el->val = dataPt;
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
+#else
+    int dataSize = strlen(dataPt);
+    int nameSize = strlen(namePt);
+    if ((dataSize <= CGI_VAR_SIZE_LIMIT) && (nameSize < CGI_VAR_NAME_LIMIT))
+        {
+        cgiDecode(namePt,namePt,nameSize);
+        cgiDecode(dataPt,dataPt,dataSize);
+        AllocVar(el);
+        el->val = dataPt;
+        slAddHead(&list, el);
+        hashAddSaveName(hash, namePt, el, &el->name);
+        }
+#endif // FAST_CGI_DECODE
     namePt = nextNamePt;
     }
 
@@ -882,6 +899,7 @@ boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
  *     while (cgiParseNext(&pt, &var, &val))
  *          printf("%s\t%s\n", var, val); */
 {
+#ifndef FAST_CGI_DECODE
 char *var = *pInput;
 if (var == NULL || var[0] == 0)
     return FALSE;
@@ -905,6 +923,45 @@ else
 *retVar = var;
 *retVal = val;
 cgiDecode(val,val,end-val);
+#else
+char *val = NULL;
+char *var = NULL;
+int varLength = 0;
+int valLength = 0;
+do
+    {
+    var = *pInput;
+    if (var == NULL || var[0] == 0)
+    {
+        *retVar = *retVal = NULL;
+        return FALSE;
+    }
+    val = strchr(var, '=');
+    if (val == NULL || var == val)
+        errAbort("Mangled CGI input string %s", var);
+    varLength = val-var;
+    *val++ = 0;
+    char *end = strchr(val, '&');
+    if (end == NULL)
+        end = strchr(val, ';');  // For DAS
+    if (end == NULL)
+        {
+        end = val + strlen(val);
+        *pInput = NULL;
+        }
+    else
+        {
+        *pInput = end+1;
+        *end = 0;
+        }
+    *retVar = var;
+    *retVal = val;
+    valLength = end-val;
+    } while ((varLength > CGI_VAR_NAME_LIMIT) || (valLength > CGI_VAR_SIZE_LIMIT));
+            // skip variables that are too big
+cgiDecode(var,var,varLength);
+cgiDecode(val,val,valLength);
+#endif // FAST_CGI_DECODE
 return TRUE;
 }
 
@@ -952,12 +1009,24 @@ while (namePt != NULL && namePt[0] != 0)
     if (logMsg && dataPt && strlen(dataPt) < logCgiVarMaxLen)
         dyStringPrintf(logMsg, "%s=%s ", namePt, dataPt); // if dataPt is empty string, still print it, could be important
 
+#ifndef FAST_CGI_DECODE
     cgiDecode(namePt,namePt,strlen(namePt));	/* for unusual ct names */
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
     el->val = dataPt;
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
+#else
+    if ((strlen(namePt) < CGI_VAR_NAME_LIMIT) && (strlen(dataPt) < CGI_VAR_SIZE_LIMIT))
+        {
+        cgiDecode(namePt,namePt,strlen(namePt));	/* for unusual ct names */
+        cgiDecode(dataPt,dataPt,strlen(dataPt));
+        AllocVar(el);
+        el->val = dataPt;
+        slAddHead(&list, el);
+        hashAddSaveName(hash, namePt, el, &el->name);
+        }
+#endif // FAST_CGI_DECODE
     namePt = nextNamePt;
 
     }
@@ -2110,9 +2179,10 @@ if ((int)max != NO_VALUE)
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
-void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
-        int menuSize, char *checked, char *class, char *style, struct slPair *events)
-/* Make a drop-down list with name, id, text class, style and javascript. */
+void cgiMakeDropListClassWithIdStyleJavascriptAndLabel(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events,
+        char *ariaLabel)
+/* Make a drop-down list with name, id, text class, style, javascript and optional aria-label. */
 {
 int i;
 char *selString;
@@ -2134,10 +2204,12 @@ if (events)
     for(e = events; e; e = e->next)
 	{
 	jsOnEventById(e->name, id, e->val);
-	}    
+	}
     }
 if (style)
     printf(" style='%s'", style);
+if (ariaLabel)
+    printf(" aria-label=\"%s\"", ariaLabel);
 printf(">\n");
 for (i=0; i<menuSize; ++i)
     {
@@ -2150,6 +2222,13 @@ for (i=0; i<menuSize; ++i)
     printf("<OPTION%s value='%s'>%c%s</OPTION>\n", selString, opt, toupper((unsigned char)opt[0]), opt+1);
     }
 printf("</SELECT>\n");
+}
+
+void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events)
+/* Make a drop-down list with name, id, text class, style and javascript. */
+{
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, id, menu, menuSize, checked, class, style, events, NULL);
 }
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],

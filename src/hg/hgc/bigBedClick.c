@@ -16,6 +16,7 @@
 #include "chromAlias.h"
 #include "quickLift.h"
 #include "hgConfig.h"
+#include "jsHelper.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -291,7 +292,7 @@ for (i=0; i<fieldCount; i++)
         }
     else
         {
-        printFieldLabel(name);
+        printFieldLabelWithId(name, name);
         printf("<td>%s</td></tr>\n", val);
         }
     printCount++;
@@ -538,6 +539,93 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             reverseComplement(seq->dna, seq->size);
         struct dnaMotif *motif = loadDnaMotif(bed->name, motifPwmTable);
         motifHitSection(seq, motif);
+        }
+
+    // detailsJs: load JavaScript files and export selected field data as JSON
+    char *detailsJs = trackDbSetting(tdb, "detailsJs");
+    if (detailsJs)
+        {
+        // Include each comma-separated JS file
+        char *jsFiles = cloneString(detailsJs);
+        char *words[64];
+        int jsFileCount = chopCommas(jsFiles, words);
+        int ji;
+        for (ji = 0; ji < jsFileCount; ji++)
+            {
+            char *jsFile = trimSpaces(words[ji]);
+            if (isNotEmpty(jsFile))
+                jsIncludeFile(jsFile, NULL);
+            }
+
+        // Build the bedDetails JSON object
+        struct dyString *ds = dyStringNew(1024);
+        dyStringPrintf(ds, "var bedDetails = {\"track\":\"%s\",\"chrom\":\"%s\","
+            "\"start\":%d,\"end\":%d",
+            tdb->track, chrom, bed->chromStart, bed->chromEnd);
+
+        // Export requested fields
+        char *detailsJsFieldsStr = trackDbSetting(tdb, "detailsJsFields");
+        if (detailsJsFieldsStr && extraFieldPairs)
+            {
+            dyStringAppend(ds, ",\"fields\":{");
+            char *fieldsCopy = cloneString(detailsJsFieldsStr);
+            char *fieldNames[256];
+            int nFields = chopCommas(fieldsCopy, fieldNames);
+            boolean first = TRUE;
+            int fi;
+            for (fi = 0; fi < nFields; fi++)
+                {
+                char *fn = trimSpaces(fieldNames[fi]);
+                char *fv = slPairFindVal(extraFieldPairs, fn);
+                if (fv == NULL)
+                    fv = "";
+                if (!first)
+                    dyStringAppendC(ds, ',');
+                dyStringPrintf(ds, "\"%s\":", fn);
+                dyStringAppendC(ds, '"');
+                // JSON-escape the value
+                char *c;
+                for (c = fv; *c; c++)
+                    {
+                    if (*c == '"')
+                        dyStringAppend(ds, "\\\"");
+                    else if (*c == '\\')
+                        dyStringAppend(ds, "\\\\");
+                    else if (*c == '\n')
+                        dyStringAppend(ds, "\\n");
+                    else
+                        dyStringAppendC(ds, *c);
+                    }
+                dyStringAppendC(ds, '"');
+                first = FALSE;
+                }
+            dyStringAppendC(ds, '}');
+            }
+
+        // Include detailsJsArgs if present
+        char *detailsJsArgs = trackDbSetting(tdb, "detailsJsArgs");
+        if (detailsJsArgs)
+            dyStringPrintf(ds, ",\"args\":%s", detailsJsArgs);
+
+        dyStringAppend(ds, "};\n");
+
+        // Call the default function derived from each JS filename (strip .js)
+        // e.g. barChart.js -> barChart(bedDetails)
+        for (ji = 0; ji < jsFileCount; ji++)
+            {
+            char *jsFile = trimSpaces(words[ji]);
+            if (isEmpty(jsFile))
+                continue;
+            char funcName[256];
+            safecpy(funcName, sizeof(funcName), jsFile);
+            // strip .js extension
+            char *dot = strrchr(funcName, '.');
+            if (dot)
+                *dot = '\0';
+            dyStringPrintf(ds, "$(document).ready(function() { %s(bedDetails); });\n", funcName);
+            }
+
+        jsInline(dyStringCannibalize(&ds));
         }
     }
 if (!found)

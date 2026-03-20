@@ -182,7 +182,10 @@ var autocompleteCat = (function() {
                             let stack = searchObj[currDb].stack;
                             let callbackData = [];
                             for (let s of stack) {
-                                callbackData.push(searchObj[currDb].results[s]);
+                                let item = searchObj[currDb].results[s];
+                                if (item && item.label) {
+                                    callbackData.push(item);
+                                }
                             }
                             acCallback(callbackData);
                         }
@@ -204,7 +207,8 @@ var autocompleteCat = (function() {
                 // since we are in an autocomplete don't bother saving the
                 // prefix the user typed in, just keep the geneSymbol itself
                 if (this.id === "positionInput") {
-                    addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
+                    let key = typeof(ui.item.geneSymbol) !== 'undefined' ? ui.item.geneSymbol : ui.item.value;
+                    addRecentSearch(getDb(), key, ui.item);
                 }
                 // Save genome selection for species search bars, but only if item has a definite db.
                 // Taxa-only selections (like "Human" without a specific db) are handled by the

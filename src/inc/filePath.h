@@ -47,4 +47,10 @@ char *makeRelativePath(char *from, char *to);
 boolean isSafeRelativePath(char *path);
 /* check that path is relative and contains no ".." elements */
 
+char *resolveDotDots(char *pathOrUrl);
+/* Given a file path or URL, return a version with "." and ".." components resolved.
+ * For URLs, only the path portion is simplified (scheme :// is preserved).
+ * Double slashes are collapsed for file paths but not for URLs.
+ * Result should be freeMem'd. */
+
 #endif /* FILEPATH_H */

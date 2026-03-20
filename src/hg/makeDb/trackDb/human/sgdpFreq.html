@@ -1,0 +1,69 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.simonsfoundation.org/simons-genome-diversity-project/"
+target="_blank">Simons Genome Diversity Project (SGDP)</a>, funded by the Simons Foundation,
+sequenced high-coverage genomes from 300 individuals (279 in this track) representing 142 diverse
+and often indigenous populations worldwide. Its goal was to capture the full range of human
+genetic diversity to better understand population history, migration, and adaptation. It samples
+populations in a way that represents as much anthropological, linguistic and cultural diversity
+as possible, and thus includes many deeply divergent human populations that are not well
+represented in other datasets.
+</p>
+
+<p>
+This track shows allele frequencies only. The full phased genotype data with haplotype
+clustering display is available in the
+<a href="hgTrackUi?g=sgdp">SGDP track</a> under Phased Variants.
+Not all SGDP data is public, so this track contains only 279 genomes.
+The hg38 data was lifted from hg19.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>sgdpFreq</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
+</p>
+
+<p>The original source VCFs are available from
+<a href="https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/"
+target="_blank">https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+High-coverage whole-genome sequencing of 300 individuals (279 publicly available) from 142
+diverse populations was performed on Illumina instruments using PCR-free library preparation at
+an average depth of 43x. Reads were aligned to the hs37d5 reference (GRCh37 with decoy
+sequences) using BWA-MEM 0.7.12. SNP and indel genotyping was performed using GATK
+HaplotypeCaller with joint genotyping across all samples. An independent indel callset was
+generated using FermiKit for improved sensitivity at complex variants. The final dataset
+contains 34.4 million SNPs and 2.1 million short indels.
+</p>
+<p>
+The VCFs were merged with bcftools and lifted to hg38 with CrossMap. At UCSC, genotypes were
+stripped to produce a sites-only frequency VCF retaining the existing AC, AF, and AN INFO fields.
+We provide documentation that indicates how all source files were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+Python scripts are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This project was funded by the Simons Foundation. Thanks to David Reich and Swapan
+Mallick for help with importing the data.
+</p>
+
+<h2>References</h2>
+<p>
+Mallick S, Li H, Lipson M, Mathieson I, Gymrek M, Racimo F, Zhao M, Chennagiri N, Nordenfelt S,
+Tandon A <em>et al</em>.
+<a href="https://doi.org/10.1038/nature18964" target="_blank">
+The Simons Genome Diversity Project: 300 genomes from 142 diverse populations</a>.
+<em>Nature</em>. 2016 Oct 13;538(7624):201-206.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27654912" target="_blank">27654912</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5161557/" target="_blank">PMC5161557</a>
+</p>

@@ -245,6 +245,7 @@ if(menuStr)
     puts(menuStr);
     }
 
+puts("<main id=\"mainContent\">");
 webStartSectionTables();
 
 if (withLogo)
@@ -482,6 +483,7 @@ void webEnd()
 if(!webInTextMode)
     {
     webEndSectionTables();
+    puts("</main>");
 #ifndef GBROWSE
     googleAnalytics();
 #endif /* GBROWSE */
@@ -497,6 +499,7 @@ void webEndExtra(char *footer)
 if(!webInTextMode)
     {
     webEndSectionTables();
+    puts("</main>");
 #ifndef GBROWSE
     googleAnalytics();
 #endif /* GBROWSE */
@@ -551,6 +554,7 @@ if (navBar)
     // Override nice-menu.css's menu background and fonts:
     webIncludeResourceFile("gbAfterMenu.css");
     }
+puts("<main id=\"mainContent\">");
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
 }
@@ -564,6 +568,7 @@ webStartGbOptionalBanner(cart, db, title, FALSE, FALSE);
 void webEndGb()
 /* End HTML that was started with webStartJWest. */
 {
+puts("</main>");
 googleAnalytics();
 jsInlineFinish();
 puts("</body></html>");
@@ -988,7 +993,7 @@ for (dbIter = dbNames; dbIter != NULL; dbIter = dbIter->next)
         dyStringAppendC(json, ',');
     first = FALSE;
     dyStringPrintf(json, "{\"db\":\"%s\",\"label\":\"%s - %s (%s)\",\"commonName\":\"%s\"}",
-        info->name, info->organism, info->description, info->name, info->organism);
+        jsonStringEscape(info->name), jsonStringEscape(info->organism), jsonStringEscape(info->description), jsonStringEscape(info->name), jsonStringEscape(info->organism));
     }
 dyStringAppendC(json, ']');
 printf("<script type='application/json' id='%sPopularData'>%s</script>\n", id, dyStringContents(json));

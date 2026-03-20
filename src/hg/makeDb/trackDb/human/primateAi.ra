@@ -1,0 +1,15 @@
+track primateAi
+shortLabel PrimateAI-3D
+longLabel PrimateAI-3D Pathogenicity Predictions for Missense Variants
+type bigBed 9 +
+parent predictionScoresSuper
+bigDataUrl /gbdb/$D/primateAi/primateAi.bb
+itemRgb on
+visibility dense
+tableBrowser off
+scoreFilter 0
+scoreFilterLimits 0:1000
+mouseOverField _mouseOver
+filterValues.prediction benign|Benign,pathogenic|Pathogenic
+filterLabel.prediction Prediction
+urls gene="hgTrackUi?g=knownGene&hgt_tSearch=$S" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"

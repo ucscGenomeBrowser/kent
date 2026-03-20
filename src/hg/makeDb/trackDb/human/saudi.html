@@ -1,0 +1,51 @@
+<h2>Description</h2>
+<p>
+Variant frequencies from 302 whole genomes at 30x coverage from the
+<a href="https://www.vision2030.gov.sa/en/explore/projects/the-saudi-genome-program"
+target="_blank">Saudi Genome Program</a>. The genotyping data and imputations from 3,352
+individuals do not seem to be available publicly.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>saudi</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+The original data were downloaded from
+<a href="https://figshare.com/articles/dataset/A_list_of_Saudi_Arabian_variants_and_their_allele_frequencies/28059686/1?file=51297884"
+target="_blank">Figshare</a> and converted to VCF.
+</p>
+
+<h2>Methods</h2>
+<p>
+Whole-genome sequencing of 302 Saudi Arabian individuals was performed on the Illumina HiSeq
+X Ten platform using TruSeq Nano DNA library preparation at 30x target coverage. Sequencing and
+initial bioinformatics processing were carried out by deCODE Genetics (Reykjav&iacute;k, Iceland).
+Reads were aligned to the GRCh38 reference genome using BWA 0.7.10. Per-sample variant calling
+was performed with GATK HaplotypeCaller, followed by joint genotyping using CombineGVCFs and
+GenotypeGVCFs. Variant quality score recalibration (VQSR) was applied for both SNPs and indels.
+The final autosomal callset contains 25.5 million variants across the 302 individuals.
+</p>
+<p>
+The variant data were downloaded from
+<a href="https://figshare.com/articles/dataset/A_list_of_Saudi_Arabian_variants_and_their_allele_frequencies/28059686/1?file=51297884"
+target="_blank">Figshare</a> and converted to VCF format using a custom script.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Malomane DK, Williams MP, Huber CD, Mangul S, Abedalthagafi M, Chiang CWK.
+<a href="https://doi.org/10.1101/2025.01.10.632500" target="_blank">
+Patterns of population structure and genetic variation within the Saudi Arabian population</a>.
+<em>bioRxiv</em>. 2025 Jan 13;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39868174" target="_blank">39868174</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11761371/" target="_blank">PMC11761371</a>
+</p>

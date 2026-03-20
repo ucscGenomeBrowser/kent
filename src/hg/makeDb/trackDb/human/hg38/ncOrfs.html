@@ -1,0 +1,102 @@
+<h2>Description</h2>
+
+<p>
+The <b>non-canonical ORFs</b> supertrack contains tracks that display open reading frames (ORFs)
+found outside of annotated coding sequences, such as upstream ORFs (uORFs) in 5' untranslated
+regions (UTRs).
+</p>
+
+<h3>MetamORF</h3>
+<p>
+MetamORF provides a repository of unique sORFs identified in the human and
+mouse genomes with both experimental and computational approaches. It has been
+built by gathering publicly available sORF data (see documentation for
+references), normalizing it and summarizing redundant information. The data has
+been inserted, reprocessed and homogenized in order to allow comparison of
+sORFs from distinct original data sources. MetamORF enables analysis at both
+ORF, transcript and gene levels, which should help addressing new questions
+regarding sORF functions in the future.
+</p>
+
+<h3>UTRannotator uORFs</h3>
+<p>
+<a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a> is a tool 
+that analyzes variants in UTRs using the database of curated small ORFs supported by ribosome
+profiling in the database sorfs.org (http://www.ncbi.nlm.nih.gov/pubmed/29140531).
+The track shows <b>44,435 upstream open reading frames (uORFs)</b> in 5' UTRs of human genes.
+</p>
+
+<p>
+uORFs are small open reading frames located in the 5' UTR of mRNAs, upstream of the main
+protein-coding sequence. They play an important role in translational regulation: ribosomes
+scanning from the 5' cap may translate a uORF first, which can reduce translation of the
+downstream main ORF. Genetic variants that create or disrupt uORFs can therefore alter
+protein expression and contribute to disease.
+</p>
+
+<p>
+The UTRannotator is a plugin for the Ensembl Variant Effect Predictor (VEP) that annotates
+5' UTR variants with respect to uORFs. As part of the project, the authors compiled a
+reference set of existing uORFs in human 5' UTRs, which is displayed in this track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are colored by uORF type:
+<ul>
+  <li><b><font color="#0064C8">Blue</font></b> - uORFs contained entirely within the 5' UTR</li>
+  <li><b><font color="#C86400">Orange</font></b> - uORFs that start in the 5' UTR and extend into the 3' UTR (overlapping uORFs)</li>
+</ul>
+</p>
+
+<p>
+<b>Mouseover</b> on items shows the uORF type. Each item is labeled with the gene symbol
+of the associated transcript.
+</p>
+
+<h2>Data access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>, the track name is
+"utrAnnotUorfs".
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/" target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/utrAnnotUorfs.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The uORF reference data was downloaded from the
+<a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator
+GitHub repository</a> (file <tt>uORF_5UTR_GRCh38_PUBLIC.txt</tt>) and converted to bigBed format
+at UCSC. Coordinates for reverse-strand uORFs were swapped to genomic orientation. Four entries
+with invalid coordinates were excluded.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the UTRannotator team at the Imperial College London Cardiovascular Genetics group
+for making this data publicly available.
+</p>
+
+<h2>References</h2>
+<p>
+Zhang X, Wakeling M, Ware J, Whiffin N.
+<a href="https://academic.oup.com/bioinformatics/article/37/8/1171/5905476" target="_blank">
+UTRannotator: a versatile tool for annotating 5'UTR variants with functional impact predictions</a>.
+<em>Bioinformatics</em>. 2021 Apr 15;37(8):1171-1173.
+DOI: <a href="https://doi.org/10.1093/bioinformatics/btaa783" target="_blank">10.1093/bioinformatics/btaa783</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33165520" target="_blank">33165520</a>
+</p>

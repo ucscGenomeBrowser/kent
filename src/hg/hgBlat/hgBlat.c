@@ -2076,20 +2076,15 @@ puts("\n");
 puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
 puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
-printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
+printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'><label for='genomeSearch'>Genome:</label>");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search all genomes</span>");
+printf(" <label for='allGenomes'> Search all genomes</label>");
 printf("</TD>");
-// clicking on the Search ALL text clicks the checkbox.
-jsOnEventById("click", "searchAllText", 
-    "document.mainForm.allGenomes.click();"
-    "return false;"   // cancel the default
-    );
 
 printf("<TD ALIGN=CENTER>Assembly:</TD>");
-printf("<TD ALIGN=CENTER>Query type:</TD>");
-printf("<TD ALIGN=CENTER>Sort output:</TD>");
-printf("<TD ALIGN=CENTER>Output type:</TD>");
+printf("<TD ALIGN=CENTER><label for='type'>Query type:</label></TD>");
+printf("<TD ALIGN=CENTER><label for='sort'>Sort output:</label></TD>");
+printf("<TD ALIGN=CENTER><label for='output'>Output type:</label></TD>");
 printf("<TD ALIGN=CENTER>&nbsp;</TD>");
 printf("</TR>\n");
 
@@ -2120,30 +2115,26 @@ printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 if (orgChange)
     type = cartOptionalString(cart, "type");
-cgiMakeDropList("type", typeList, ArraySize(typeList), type);
+cgiMakeDropListClassWithIdStyleAndJavascript("type", "type", typeList, ArraySize(typeList), type, "normalText", NULL, NULL);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
-cgiMakeDropList("sort", pslSortList, ArraySize(pslSortList), cartOptionalString(cart, "sort"));
+cgiMakeDropListClassWithIdStyleAndJavascript("sort", "sort", pslSortList, ArraySize(pslSortList), cartOptionalString(cart, "sort"), "normalText", NULL, NULL);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
-cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
+cgiMakeDropListClassWithIdStyleAndJavascript("output", "output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"), "normalText", NULL, NULL);
 printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-htmlPrintf("<TEXTAREA NAME=userSeq ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
+printf("<label for='userSeq' style='display:block; margin-bottom:2px;'>Paste in a query sequence or upload a FASTA file:</label>");
+htmlPrintf("<TEXTAREA NAME=userSeq id=userSeq ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
 printf("</TR>\n");
 
 printf("<TR>\n");
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
 cgiMakeCheckBoxWithId("allResults", allResults, "allResults");
-printf("<span id=allResultsText>All Results (no minimum matches)</span>");
-// clicking on the All Results text clicks the checkbox.
-jsOnEventById("click", "allResultsText", 
-    "document.mainForm.allResults.click();"
-    "return false;"   // cancel the default
-    );
+printf("<label for='allResults'>All Results (no minimum matches)</label>");
 printf("</TD>\n");
 
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
@@ -2182,7 +2173,7 @@ puts("<TR><TD COLSPAN=5 WIDTH=\"100%\">\n");
 puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
-puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
+puts("<label>Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\"></label>");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit file\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"

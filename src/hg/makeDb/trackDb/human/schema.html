@@ -1,0 +1,73 @@
+<h2>Description</h2>
+<p>
+The <a href="https://schema.broadinstitute.org/" target="_blank">SCHEMA</a> (Schizophrenia Exome
+Meta-Analysis) consortium is an international collaboration that aggregated and harmonized
+whole-exome sequencing data to study the role of rare coding variants in schizophrenia.
+The dataset includes 24,248 cases and 97,322 controls from diverse global cohorts.
+SCHEMA identified genes with exome-wide significant rare variant burden in schizophrenia,
+providing insights into the biological underpinnings of the disorder.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Since the data can be downloaded from the SCHEMA website, and does not seem to be under a license,
+we assume that we are allowed to redistribute it in VCF format.
+The data can be explored on our website interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>schema</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+Summary statistics and variant-level results are also available from the
+<a href="https://schema.broadinstitute.org/" target="_blank">SCHEMA Browser</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+The SCHEMA (Schizophrenia Exome Meta-Analysis) consortium aggregated whole-exome sequencing
+data from 24,248 schizophrenia cases and 97,322 controls (including non-psychiatric,
+non-neurological samples from the gnomAD consortium) across multiple international cohorts.
+Exome sequencing was performed using various capture platforms and Illumina sequencing
+instruments across cohorts sequenced over approximately a decade. Sequence data were
+uniformly reprocessed through the BWA-Picard-GATK best practices pipeline as part of the
+gnomAD v2 infrastructure, including alignment to GRCh37/hg19, duplicate marking, base
+quality score recalibration, and per-sample variant calling with GATK HaplotypeCaller,
+followed by joint genotyping across all samples. A novel exon-by-exon coverage estimation
+pipeline was developed to account for differences in capture technology across sequencing
+batches, and both site-level and genotype-level quality filters were applied. Protein-truncating
+variants (PTVs) were annotated using LOFTEE (Loss-Of-Function Transcript Effect Estimator),
+and missense variant deleteriousness was scored using MPC (Missense badness, PolyPhen-2,
+and Constraint). Gene-level association testing combined: (1) a case-control rare variant
+burden test aggregating ultra-rare PTVs (Class I: PTV and MPC &gt; 3; Class II: missense
+MPC 2&ndash;3) across 18,321 protein-coding genes; and (2) de novo variant enrichment
+from 3,402 schizophrenia proband-parent trios assessed via a Poisson rate test against
+gnomAD-derived baseline mutation rates; with the two components combined using a weighted
+Z-score meta-analysis. This identified 10 genes at exome-wide significance (P &lt; 2.14
+&times; 10<sup>-6</sup>) with odds ratios for PTVs ranging from 3 to 50, and 32 genes at
+FDR &lt; 5%. Full data are available at
+<a href="https://schema.broadinstitute.org" target="_blank">schema.broadinstitute.org</a>
+(Singh, Neale, Daly &amp; the SCHEMA Consortium,
+<a href="https://doi.org/10.1038/s41586-022-04556-w" target="_blank"><em>Nature</em> 2022</a>).
+</p>
+<p>
+We downloaded the TSV data from the <a href="https://schema.broadinstitute.org/" target="_blank">SCHEMA</a> website
+and converted it to VCF format using a custom Python script. The VCF was lifted to hg38 using our hg19ToHg38 chain
+file. 
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Singh T, Poterba T, Curtis D, Akil H, Al Eissa M, Barchas JD, Bass N, Bigdeli TB, Breen G,
+Bromet EJ <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-022-04556-w" target="_blank">
+Exome sequencing identifies rare coding variants in 10 genes which confer substantial risk for
+schizophrenia</a>.
+<em>Nature</em>. 2022 Apr;604(7906):509-516.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35396579" target="_blank">35396579</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9392855/" target="_blank">PMC9392855</a>
+</p>
