@@ -44,3 +44,6 @@ visibility hide
     urlLabel TRExplorer locus page
     searchIndex name
     mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
+    detailsJs barChart.js
+    detailsJsFields tenKAlleleSizes,tenKAlleleCounts,hprcAlleleSizes,hprcAlleleCounts
+    detailsJsArgs {"charts":[{"sizesField":"tenKAlleleSizes","countsField":"tenKAlleleCounts","title":"TenK10K Allele Distribution"},{"sizesField":"hprcAlleleSizes","countsField":"hprcAlleleCounts","title":"HPRC256 Allele Distribution"}]}
