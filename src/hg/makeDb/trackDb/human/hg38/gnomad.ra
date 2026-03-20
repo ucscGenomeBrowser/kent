@@ -275,7 +275,7 @@ visibility pack
 url https://gnomad.broadinstitute.org/short-tandem-repeat/$$?dataset=gnomad_r3
 urlLabel View at gnomAD
 searchIndex name
-mouseOver $name: $motif repeat in $gene, $nSamples samples ($nPass PASS)
+mouseOver <b>Gene:</b> $gene<br> <b>Repeat Motif(s):</b> $motif<br> <b>Number of samples:</b> $nSamples <br> <b>Passing quality filter:</b> $nPass <br> <b>Population sample counts:</b> $populations
 html gnomadStr
 
 searchTable pliByTranscript
