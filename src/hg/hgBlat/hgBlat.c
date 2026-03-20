@@ -2126,8 +2126,7 @@ printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-printf("<label for='userSeq' style='display:block; margin-bottom:2px;'>Paste in a query sequence or upload a FASTA file:</label>");
-htmlPrintf("<TEXTAREA NAME=userSeq id=userSeq ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
+htmlPrintf("<TEXTAREA NAME=userSeq id=userSeq aria-label='Paste in a query sequence' ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
 printf("</TR>\n");
 
