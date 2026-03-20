@@ -548,6 +548,10 @@ void printFieldLabel(char *entry);
  * longer description after a |-char, as some fields are not easy to
  * understand. */
 
+void printFieldLabelWithId(char *entry, char *fieldName);
+/* Like printFieldLabel but adds id="bfld_<fieldName>" to the <tr> element,
+ * so JavaScript can find the row by field name. */
+
 struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
 /* return the extra field names and their values as a list of slPairs */
 
