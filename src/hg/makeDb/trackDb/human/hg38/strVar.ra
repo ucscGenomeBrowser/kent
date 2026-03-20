@@ -16,7 +16,7 @@ visibility hide
     url https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38
     urlLabel WebSTR locus page
     searchIndex name
-    mouseOver $motif repeat, $numCopies copies, period $period
+    mouseOver <b>Repeat motif:</b> $motif <br> <b>Number of copies:</b> $numCopies <br> <b>Length of repeat:</b> $period <br> <b>Population sample counts:</b> <br> $afrN (AFR), $amrN (AMR), $easN (EAS), $eurN (EUR), $sasN (SAS)
 
     track strchive
     shortLabel STRchive
@@ -29,7 +29,7 @@ visibility hide
     url https://strchive.org/loci/$$
     urlLabel STRchive locus page
     searchIndex name
-    mouseOver $name: $referenceMotif repeat in $gene, pathogenic min $pathogenicMin ($inheritance)
+    mouseOver <b>Gene:</b> $gene <br> <b>Motif:</b> $referenceMotif <br> <b>Minimum pathogenic repeat:</b> $pathogenicMin <br> <b>Mode of inheritance:</b> $inheritance <br> <b>Associated disease(s):</b> $disease
     dataVersion  /gbdb/hg38/strVar/strchive.version.txt
 
     track trexplorer
@@ -43,4 +43,4 @@ visibility hide
     urls region="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
     urlLabel TRExplorer locus page
     searchIndex name
-    mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
+    mouseOver <b>Gene:</b> $geneName ($geneRegion) <br> <b>Reference Motif:</b> $referenceMotif ($motifSize bp) <br> <b>Number of repeat copies:</b> $numRepeats repeats <br> <b>Purity:</b> $repeatPurity <br> <b>Number of called alleles:</b><br> $tenKNumAlleles (TenK10K), $hprcNumAlleles (HRPC256), $aouNumAlleles (AoU1027) <br><b>Source:</b> $source
