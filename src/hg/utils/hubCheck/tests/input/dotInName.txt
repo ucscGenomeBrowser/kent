@@ -1,0 +1,27 @@
+hub dotInNameHub
+shortLabel Dot In Name Test Hub
+longLabel Hub to test period in track name detection
+email braney@soe.ucsc.edu
+useOneFile on
+
+genome hg19
+
+track my.composite
+compositeTrack on
+shortLabel Dot Composite
+longLabel Composite with dots in name
+type bigBed 3
+
+    track my.sub.track1
+    parent my.composite
+    shortLabel Dot Sub 1
+    longLabel Subtrack one with dots
+    bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
+    type bigBed 3
+
+    track my.sub.track2
+    parent my.composite
+    shortLabel Dot Sub 2
+    longLabel Subtrack two with dots
+    bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
+    type bigBed 3

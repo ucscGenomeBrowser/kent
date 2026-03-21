@@ -139,21 +139,30 @@ var autocompleteCat = (function() {
                 // See http://api.jqueryui.com/autocomplete/#option-source
                 // Note: 'this' is the widget instance
 
-                // Handle recent genomes for species search bars
+                // Handle recent + popular genomes for species search bars
                 if (options.showRecentGenomes && request.term.length < 2) {
                     let recent = getRecentGenomes();
+                    let popular = getPopularGenomes($el);
                     if (request.term.length === 0) {
-                        // On focus with empty input, show all recent genomes
-                        if (recent.length > 0) {
-                            acCallback(recent);
+                        // On focus with empty input, show recent + popular genomes
+                        let combined = recent.concat(popular);
+                        if (typeof options.onFilterDropdown === 'function') {
+                            combined = options.onFilterDropdown(combined);
+                        }
+                        if (combined.length > 0) {
+                            acCallback(combined);
                             return;
                         }
                     } else {
-                        // On typing 1 char, filter recent genomes
-                        let matching = recent.filter(item =>
+                        // On typing 1 char, filter recent + popular genomes
+                        let all = recent.concat(popular);
+                        let matching = all.filter(item =>
                             item.label.toLowerCase().includes(request.term.toLowerCase()) ||
                             item.genome.toLowerCase().includes(request.term.toLowerCase())
                         );
+                        if (typeof options.onFilterDropdown === 'function') {
+                            matching = options.onFilterDropdown(matching);
+                        }
                         if (matching.length > 0) {
                             acCallback(matching);
                             return;
@@ -173,7 +182,10 @@ var autocompleteCat = (function() {
                             let stack = searchObj[currDb].stack;
                             let callbackData = [];
                             for (let s of stack) {
-                                callbackData.push(searchObj[currDb].results[s]);
+                                let item = searchObj[currDb].results[s];
+                                if (item && item.label) {
+                                    callbackData.push(item);
+                                }
                             }
                             acCallback(callbackData);
                         }
@@ -195,12 +207,16 @@ var autocompleteCat = (function() {
                 // since we are in an autocomplete don't bother saving the
                 // prefix the user typed in, just keep the geneSymbol itself
                 if (this.id === "positionInput") {
-                    addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
+                    let key = typeof(ui.item.geneSymbol) !== 'undefined' ? ui.item.geneSymbol : ui.item.value;
+                    addRecentSearch(getDb(), key, ui.item);
                 }
                 // Save genome selection for species search bars, but only if item has a definite db.
                 // Taxa-only selections (like "Human" without a specific db) are handled by the
                 // CGI's response handler after the actual db is determined.
                 if (options.showRecentGenomes && ui.item.db && !ui.item.disabled) {
+                    if (ui.item.originalCategory) {
+                        ui.item.category = ui.item.originalCategory;
+                    }
                     addRecentGenome(ui.item);
                 }
                 if (typeof opts.onSelect === 'function') {

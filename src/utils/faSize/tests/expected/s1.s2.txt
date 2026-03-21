@@ -1,0 +1,6 @@
+220 bases (5 N's 215 real 215 upper 0 lower) in 2 sequences in 1 files
+Total size: mean 110.0 sd 38.2 min 83 (s1) max 137 (s2) median 137
+N count: mean 2.5 sd 3.5
+U count: mean 107.5 sd 41.7
+L count: mean 0.0 sd 0.0
+%0.00 masked total, %0.00 masked real

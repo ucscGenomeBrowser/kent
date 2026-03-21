@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Heatmaps" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Positional Heatmap Display</h1>
+
+<h2>Overview</h2>
+<p>The standard display mode for a bigBed track is a simple block or exon/intron marker
+in the window.  Extra fields in the bigBed, however, can contain a variety of additional data.
+When data in the extra fields meet the schema described below, then the simple block display
+can be replaced with a positional heatmap.  The heatmap provides a sparse 2-dimensional
+grid for information like expression of allele-specific point mutations across a transcript.</p>
+
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/view/heatmap_example" target="_blank">
+  <img alt="Heatmap track showing a color-coded grid of expression values across genomic positions" src="/images/heatmap_example.png" style="width:80%;max-width:1083px"></a>
+</div>
+
+<h2>Contents</h2>
+
+<h6><a href="#extrafields">The Extra Fields</a></h6>
+<h6><a href="#gettingStarted">Getting Started</a></h6>
+<h6><a href="#displaying">Displaying Your Heatmap</a></h6>
+<h6><a href="#troubleshooting">Troubleshooting</a></h6>
+
+<a id="extrafields"></a>
+<h2>The Extra Fields</h2>
+<p>A heatmap bigBed file starts with the standard 12 BED fields, but adds 7 more.  In a heatmap,
+the standard BED <code>blockCount</code>, <code>blockSizes</code>, and <code>chromStarts</code>
+fields define the columns of the grid (one column per block), while the extra field
+<code>_rowCount</code> defines the number of rows.  The remaining extra fields provide row labels,
+a color gradient, per-cell scores, per-cell mouseover labels, and a legend.</p>
+<pre>
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    int _rowCount;    "Number of heatmap rows"
+    string[_rowCount] _labels; "Comma separated list of row labels"
+    lstring _colorBounds; "Comma-separated list of threshold scores for colors"
+    lstring _colorValues; "Comma-separated list of colors, one for each threshold score"
+    lstring _scoreArray; "Comma-separated row-first list of scores, ,, indicates N/A"
+    lstring _labelArray; "Comma-separated row-first list of mouseover labels, ,, indicates N/A"
+    lstring legend; "Legend"
+</pre>
+<p>
+The <code>_rowCount</code> field describes how many rows exist in each item's heatmap, while the
+<code>blockCount</code> field describes the number of columns.  The <code>_labels</code> field provides the labels for each row of the heatmap;
+no column labels are currently supported, as they are already tied to positions.</p>
+<p>The <code>_colorBounds</code> and <code>_colorValues</code> fields together control the color
+gradient used to display scores.  They define score thresholds and their associated colors; scores
+between thresholds are drawn in an interpolated color, and scores beyond the outer thresholds are
+clamped to the nearest boundary color.  See the <a href="#gettingStarted">Getting Started</a>
+section below for detailed examples of how to configure these fields.</p>
+<p>The <code>_scoreArray</code> and <code>_labelArray</code> fields contain the actual scores
+and mouseover text for each cell within the heatmap in row-major order, meaning the list of scores
+will fill the first row, then overflow to begin filling the second row, then the third row and so
+on.  Because these are comma-separated lists, a cell can be left empty simply by placing nothing
+between the commas that demarcate it.</p>
+<p>For example, if <code>blockCount</code> is 2 and <code>_rowCount</code> is 3, then the line will describe a 6-cell heatmap
+with 3 rows and 2 columns.  If the accompanying <code>_scoreArray</code> is "1,0,2,,0.5,,", then
+that describes the following grid:</p>
+<table border="1" cellpadding="4" style="border-collapse:collapse; text-align:center; margin:0.5em 2em;">
+<tr><th></th><th>Column 1</th><th>Column 2</th></tr>
+<tr><td><strong>Row 1</strong></td><td>1</td><td>0</td></tr>
+<tr><td><strong>Row 2</strong></td><td>2</td><td><em>(empty)</em></td></tr>
+<tr><td><strong>Row 3</strong></td><td>0.5</td><td><em>(empty)</em></td></tr>
+</table>
+<p>This format is a bit awkward to describe with only 6 cells; it becomes difficult or impossible
+to edit manually when the heatmaps reach sufficient size (like hundreds or even thousands).
+We strongly recommend the use of automated scripts to create these files.
+</p>
+<p>
+The final field is <code>legend</code>, which is much simpler.  The text in this field is used to
+create a legend for the heatmap that will be displayed at the top after the "name" from the
+BED file.
+</p>
+
+<a id="gettingStarted"></a>
+<h2>Getting started with heatmaps</h2>
+<p>To build a heatmap bigBed, you will need:</p>
+<ul>
+<li>The <code>bedToBigBed</code> utility (available from our
+    <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">downloads page</a>)</li>
+<li>An AutoSQL (<code>.as</code>) file describing the heatmap schema
+    (a copy is available <a href="examples/heatmap.as" target="_blank">here</a>)</li>
+<li>A <code>chrom.sizes</code> file for your assembly (available from our
+    <a href="https://hgdownload.soe.ucsc.edu" target="_blank">download server</a>)</li>
+</ul>
+<p>
+<strong>The basic BED fields</strong>:<br>
+It is difficult to manage sizeable heatmap examples without resorting to
+scripting and automation.  Small examples are the easiest ones to experiment with.  For the
+sake of this example, imagine that we already have a list of two transcripts, T1 and T2, that
+we want to make heatmaps for.  T1 and T2 themselves are described in a BED file like so:</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes   chromStarts
+chr1    1000        2000      T1    1000   +       1000        2000      0         2           200,200,     0,800
+chr1    1200        2400      T2    1000   -       1200        2400      0         3           500,800,300  0,600,900
+</pre>
+<p>Separately, we have a list of four heatmap boxes that we want to draw for each
+of these transcripts.  For T1, the heatmap boxes cover bases 100-200 of the
+transcript (1100-1200 in the genome) and 700-800 (1700-1800 in the genome),
+each with two boxes labeled Case 1 and Case 2.  For T2, the labels are the same
+but the bases covered are 200-300 and 900-1000.</p>
+<p>Creating heatmaps for the transcripts means changing the exon structure of each one -
+instead of representing exon boundaries, those fields will be used to describe the regions
+where we want to draw the heatmap boxes.  The number of blocks determines the number of columns
+in the heatmap (and therefore the number of entries in <code>_scoreArray</code> and
+<code>_labelArray</code>).  We'll also need to add extra fields
+with the remainder of the heatmap data, but let's start with the exons.  We
+immediately have a problem - in a BED file, the exons are expected to span the
+length of the item.  If our first line is intended to show a transcript on chr1
+from base 1000 to 2000, then the first exon needs to start at 1000 and the last
+exon needs to end at 2000, even though we don't have heatmap data for those
+"exons".  There are two ways to get around this.</p>
+<p>Option 1 is to simply reduce the size of each transcript to match the extent of where
+we want to draw the heatmap.  For that first line, if we only have heatmap data for bases
+100-200 and 700-800 in the transcript (bases 1100-1200 and 1700-1800 in the genome), then
+those are the new bounds for our transcript (note that this means changing chromStart/End,
+thickStart/End, and the relative chromStarts values for the exons):</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes  chromStarts
+chr1    1100        1800      T1    1000   +       1100        1800      0         2           100,100     0,600
+chr1    1400        2200      T2    1000   -       1400        2200      0         2           100,100     0,700
+</pre>
+<p>Note that in addition to changing the blockCount, blockSizes, and chromStarts, we also
+needed to change thickStart and thickEnd to indicate where the first exon "starts" and
+the last one "ends".
+</p>
+<p>Option 2 is to add a fake exon on each edge of the transcript to pad out the exon list
+(assuming that our heatmap data doesn't already reach the edges of the transcript - if
+it does, then this problem goes away).  These fake exons can then be associated with no
+score value in the list of heatmap scores, which means no heatmap color will be drawn
+there, but the bounding box of the heatmap will still extend for the full length of
+the transcript (1000-2000).</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes   chromStarts
+chr1    1000        2000      T1    1000   +       1000        2000      0         4           1,100,100,1  0,100,700,999
+chr1    1200        2400      T2    1000   -       1200        2400      0         4           1,100,100,1  0,200,900,1199
+</pre>
+<p>Either approach might be suitable for your use case.  Note that if you use Option 2,
+each phantom block still needs corresponding entries in the <code>_scoreArray</code> and
+<code>_labelArray</code> fields - just leave them empty between commas.  For this example,
+we'll continue with Option 2.
+</p>
+<p>
+<strong>The extra fields:</strong><br>
+Now that we've filled in the basic BED fields, we need to populate the remaining seven
+heatmap-specific fields.  As we said earlier, in this example we have two rows that
+we want to draw in each heatmap, which we've decided to label "Case 1" and "Case 2".
+This means that our <code>_rowCount</code> value will be 2, and the <code>_labels</code>
+value will be "Case 1","Case 2".  Here's the updated BED, though we're not done yet:</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes   chromStarts     _rowCount  _labels
+chr1    1000        2000      T1    1000   +       1000        2000      0         4           1,100,100,1  0,100,700,999   2          "Case 1","Case 2"
+chr1    1200        2400      T2    1000   -       1200        2400      0         4           1,100,100,1  0,200,900,1199  2          "Case 1","Case 2"
+</pre>
+<p>The next two fields, <code>_colorBounds</code> and <code>_colorValues</code>, are tied together.
+A heatmap displays a gradient of color, which is intended to convey score information.  Frequently
+only two color bounds are used, for the minimum and maximum values, and intermediate scores are transformed
+into a color shade between the two.  If the maximum score is 5, associated with red
+(<span style="background-color:red; color:red;">#</span>), and the minimum score is -5, associated with blue
+(<span style="background-color:blue; color:blue;">#</span>), then a score of 0 would be purple - midway
+between the two (<span style="background-color:#7f007f; color:#7f007f;">#</span>).  That would be a
+heatmap with two colorBounds and two colorValues - the bounds are -5 and 5, and the values are blue and red.
+If you reduced the colorBounds to -3 and 3, you'd keep the same color scheme, but some of your heatmap scores
+would now saturate at full red or blue because they went past the outer score boundary on either side.</p>
+<p>In some situations, though, you might want to keep the association of red with positive scores and blue
+with negative ones without mixing the two.  A score of 0 should instead be drawn in white, positive scores
+should range from faint red (for positive scores close to 0) to full red (for positive scores at or exceeding
+the max threshold).  Negative scores, meanwhile, should be drawn in blue (faint blue close to 0, intense blue
+at the minimum threshold).  This display would use three colorBounds and three colorValues - the bounds
+are -5, 0, and 5, and the values are blue, white, and red.  Here is an example of what that would look like
+in our BED:</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes   chromStarts     _rowCount  _labels            _colorBounds  _colorValues
+chr1    1000        2000      T1    1000   +       1000        2000      0         4           1,100,100,1  0,100,700,999   2          "Case 1","Case 2"  -5,0,5        #0000ff,#ffffff,#ff0000
+chr1    1200        2400      T2    1000   -       1200        2400      0         4           1,100,100,1  0,200,900,1199  2          "Case 1","Case 2"  -5,0,5        #0000ff,#ffffff,#ff0000
+</pre>
+<p>Note that we're using hexadecimal RGB colors here, and that the thresholds must be listed in ascending order by score.
+</p>
+<p>
+Finally, we need to add the scores themselves, the mouseover labels for each cell, and a legend for the figure.
+The scores are whatever your data scores are - we're using some random values here.  If you don't have data for a
+particular cell, for example if Case 1 doesn't have a score for the second exon, just leave that value empty in the
+comma-separated list of scores.  Also remember that in this example, we included phantom exons to pad out the BED
+window to the length of the full transcript, so we don't have scores for those end-caps either.  The scores list for
+each heatmap is just a long comma-separated list of the entire set of scores for the heatmap, which means we're compressing
+the scores for Case 1 and Case 2 together.  We do this by listing all of the scores for Case 1 first (the first row), followed
+by the scores for Case 2.  If we had a third row, we'd add those scores to the list after the ones for Case 2.  So here,
+if Case 1 has a score of 2.8 for the first exon and no score for the second exon, and Case 2 has a score of -4 for the
+first exon and 8.9 for the second exon, it would look like this:</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes   chromStarts     _rowCount  _labels            _colorBounds  _colorValues             _scoreArray
+chr1    1000        2000      T1    1000   +       1000        2000      0         4           1,100,100,1  0,100,700,999   2          "Case 1","Case 2"  -5,0,5        #0000ff,#ffffff,#ff0000  ,2.8,,,,-4,8.9,,
+chr1    1200        2400      T2    1000   -       1200        2400      0         4           1,100,100,1  0,200,900,1199  2          "Case 1","Case 2"  -5,0,5        #0000ff,#ffffff,#ff0000  ,0.1,-2,,,1.1,-3.5,,
+</pre>
+<p>
+Note the trailing comma at the end of the scores list.  If the last cell in the array is empty, a
+trailing comma is required to distinguish it from the end of the list (e.g., <code>,1.5,,</code>
+rather than <code>,1.5,</code>).  If the last cell has data, the trailing comma is optional.</p>
+<p>
+All that is left now is to fill in a similarly-structured comma-separated list for cell-specific
+mouseover labels and a legend.  The mouseover labels can be used to do things like indicate the
+numerical score value (because viewers will otherwise only see the heatmap color) or provide other
+useful contextual information like "no data" or the HGVS term describing a mutation at that position.</p>
+<pre>
+#chrom  chromStart  chromEnd  name  score  strand  thickStart  thickEnd  reserved  blockCount  blockSizes   chromStarts     _rowCount  _labels            _colorBounds  _colorValues             _scoreArray           _labelArray                                                 legend
+chr1    1000        2000      T1    1000   +       1000        2000      0         4           1,100,100,1  0,100,700,999   2          "Case 1","Case 2"  -5,0,5        #0000ff,#ffffff,#ff0000  ,2.8,,,,-4,8.9,,      ,"2.8, medium","no data",,,"-4, low","8.9, extreme",,,      "Example on transcript 1"
+chr1    1200        2400      T2    1000   -       1200        2400      0         4           1,100,100,1  0,200,900,1199  2          "Case 1","Case 2"  -5,0,5        #0000ff,#ffffff,#ff0000  ,0.1,-2,,,1.1,-3.5,,  ,"0.1, negligible","-2, low",,,"1.1 marginal","-3.5 low",,  "Example on transcript 2"
+</pre>
+<p>Here is this example in a <a href="examples/heatmap.bed" target="_blank">BED file</a> (using tabs as field
+separators), and the corresponding <a href="examples/heatmap.bb" target="_blank">bigBed file</a>.  The bigBed
+was created from the BED file using the following command:</p>
+<pre>
+bedToBigBed -tab -type=bed12+ -as=heatmap.as heatmap.bed chrom.sizes heatmap.bb
+</pre>
+<p>A copy of heatmap.as is available <a href="examples/heatmap.as" target="_blank">here</a>.  chrom.sizes
+files for most assemblies can be found on our
+<a href="https://hgdownload.soe.ucsc.edu" target="_blank">download server</a>.
+</p>
+
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/view/heatmap_example" target="_blank">
+  <img alt="Heatmap track with customized color scale displaying allele-specific data" src="/images/heatmap_example2.png" style="width:80%;max-width:1083px"></a>
+</div>
+
+<a id="displaying"></a>
+<h2>Displaying your heatmap</h2>
+<p>Once you have created a bigBed file, you need to tell the Genome Browser to display it
+as a heatmap rather than a standard bigBed track.  This is done by adding the
+<a href="trackDb/trackDbHub.v3.html#style"><code>style heatmap</code></a> setting to your
+track's trackDb configuration.  Without this setting, the browser will render the file as an
+ordinary bigBed track and the heatmap extra fields will be ignored.</p>
+<p>The most common way to load a heatmap track is through a
+<a href="hubBasics.html">track hub</a>.  A minimal trackDb entry for a
+heatmap track looks like this:</p>
+<pre>
+track myHeatmap
+shortLabel My Heatmap
+longLabel My heatmap track
+type bigBed 12 +
+bigDataUrl myHeatmap.bb
+style heatmap
+visibility pack
+</pre>
+<p>For details on setting up a track hub, including the required <code>hub.txt</code> and
+<code>genomes.txt</code> files, see the
+<a href="hubBasics.html">track hub basics</a> documentation.</p>
+
+<a id="troubleshooting"></a>
+<h2>Troubleshooting</h2>
+<p>
+The most likely place to encounter errors when building a heatmap file is when running the
+<code>bedToBigBed</code> program.  The score and label arrays can be difficult to organize,
+and we highly recommend making use of a bit of scripting to automate the process.
+Common issues include:</p>
+<ul>
+<li><strong>Wrong number of scores or labels:</strong> The <code>_scoreArray</code> and
+    <code>_labelArray</code> must each contain exactly <code>blockCount &times; _rowCount</code>
+    values (including empty values between commas for cells with no data).</li>
+<li><strong>Mismatched color bounds and values:</strong> The <code>_colorBounds</code> and
+    <code>_colorValues</code> fields must have the same number of entries, and the thresholds
+    must be listed in ascending order.</li>
+<li><strong>Trailing comma for empty final values:</strong> If the last cell in a score or label
+    array is empty, include a trailing comma to indicate the empty value
+    (e.g., <code>,1.5,,</code> rather than <code>,1.5,</code>).</li>
+<li><strong>Block/exon boundary issues:</strong> In a standard BED file, the first block must
+    start at chromStart and the last block must end at chromEnd.  If your heatmap data doesn't
+    cover the full extent of the item, see the padding strategies described in
+    <a href="#gettingStarted">Getting Started</a> above.</li>
+</ul>
+<p>The errors reported by <code>bedToBigBed</code> are usually helpful for identifying which part
+of the input isn't organized correctly, but please <a href="../../contacts.html">contact us</a>
+if you continue to have issues.
+</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

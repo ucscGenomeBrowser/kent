@@ -261,7 +261,7 @@ boolean isBig = FALSE;
 
 if (startsWith("vcf", type))
     {
-    hPrintf("See the <A HREF=\"%s\" target=_blank>Variant Call Format specification</A> for  more details<BR>\n",
+    hPrintf("See the <A HREF=\"%s\" target=_blank>Variant Call Format specification</A> for more details<BR>\n",
             "http://www.1000genomes.org/wiki/analysis/vcf4.0");
     }
 else if (startsWithWord("bigWig", type))

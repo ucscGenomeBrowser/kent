@@ -5084,6 +5084,11 @@ var imageV2 = {
                     cache: true
                 });
                 return false;
+            } else {
+                // about to do a form submit with a regular position range, save this to the recents stack
+                // strip any html content first
+                newPos = newPos.replace(/<[^>]*>/g, '');
+                addRecentSearch(getDb(), newPos, {id: newPos, value: newPos, label: newPos});
             }
                 
             return true;
@@ -5601,7 +5606,9 @@ var mouseOver = {
            mouseOver.browserTextSize = window.browserTextSize;
         }
         window.addEventListener('scroll', mouseOver.scroll, false);
-        window.addEventListener('load', mouseOver.getData, false);
+        // Call getData directly since the DOM is already parsed by the time
+        // $(document).ready() calls addListener.
+        mouseOver.getData();
     }
 };	//	var mouseOver
 
@@ -5768,6 +5775,15 @@ var downloadCurrentTrackData = {
         if (trackList.length == 0) {
             alert("At least one track must be selected");
             return;
+        } else if (trackList.length > 100) {
+            alert("Too many tracks requested. Please limit requests to 100 tracks or less");
+            return;
+        } else if (trackList.join(',').length > 7000) {
+            // tracks with too long of names and we hit the max URI length allowed
+            // by Apache, I doubt this could happen without requesting more than the
+            // 100 tracks allowed above, but just in case:
+            alert("Too many tracks requested");
+            return;
         }
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
@@ -5878,8 +5894,8 @@ var downloadCurrentTrackData = {
         htmlStr += "<option value='tsv'>TSV</option>";
         htmlStr += "</select>";
         htmlStr += "<br>";
-        htmlStr += "<label style='padding-rught: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
-        htmlStr += "<input type='checkbox' id='downloadTrackHeaders'></input>";
+        htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
+        htmlStr += "<input type='checkbox' checked id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;
         $("#checkAllDownloadTracks").on("click", function() {

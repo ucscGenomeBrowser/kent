@@ -22,7 +22,7 @@ provides two ways to characterize features and make them more visible -- stem he
 radius -- in addition to color. The lollipop graph type can be used to annotate bases for 
 variants, RNA editing, Selenocysteines, frameshifts, or any other reason.</p>
 <p class="text-center">
-<img "1080" height="148" src="../../images/CovidGwasLollies.png">
+<img "1080" height="148" alt="Lollipop track displaying COVID GWAS variant significance as circles on vertical stems" src="../../images/CovidGwasLollies.png">
 </p>
 <p>
 The bigBed files used in bigLolly type are in an indexed binary format. The main advantage of this format is that only 
@@ -155,7 +155,7 @@ ftp location. At this point you should have a URL to your data, such as &quot;ht
 </ol>
 
 <p class="text-center">
-<img "1080" height="148" src="../../images/bigLollyExample3.png">
+<img "1080" height="148" alt="Lollipop track with variable circle sizes showing clustered variant data" src="../../images/bigLollyExample3.png">
 </p>
 
 <a name=sharing_data></a>
@@ -194,7 +194,7 @@ command line to view the usage statement.</p>
 <h2>Troubleshooting</h2>
 <p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
-file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+file for data coordinates that extend past the end of the chromosome. If these are present, run 
 the <code>bedClip</code> program 
 (<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
 row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 

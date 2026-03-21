@@ -1,0 +1,22 @@
+# MPRAVarDB track
+# Mon Mar 10 2026 (claude/max)
+
+# Download data from https://mpravardb.rc.ufl.edu/
+mkdir -p /hive/data/genomes/hg38/bed/mpra/mpravardb
+cd /hive/data/genomes/hg38/bed/mpra/mpravardb
+wget 'https://mpravardb.rc.ufl.edu/session/27d7af46df917aed91f4cca7bee378a2/download/download_all?w=' -O mpravardb.csv
+
+# 242,818 variants from 18 MPRA studies, with both hg19 and hg38 coordinates.
+# 213,689 are hg19, 29,129 are hg38, 3,676 have no coordinates (NA).
+
+# Convert to BED, liftOver hg19->hg38, merge, and create bigBed:
+python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
+# Output: mpravardb.bb (239,028 variants after liftOver, 114 unmapped)
+
+# Create gbdb symlink
+mkdir -p /gbdb/hg38/mpra
+ln -sf /hive/data/genomes/hg38/bed/mpra/mpravardb/mpravardb.bb /gbdb/hg38/mpra/mpravardb.bb
+
+# Rebuild trackDb
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38

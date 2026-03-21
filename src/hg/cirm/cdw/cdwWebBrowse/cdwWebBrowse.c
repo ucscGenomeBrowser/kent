@@ -1040,7 +1040,7 @@ char *varVal = unquotedCartString(cart, varName);
 printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>",
         varName, varName, varVal);
 printf("&nbsp;");
-printf("<img src=\"../images/magnify.png\">\n");
+printf("<img alt=\"\" src=\"../images/magnify.png\">\n");
 jsInlineF(
     "$(function () {\n"
     "  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n" 

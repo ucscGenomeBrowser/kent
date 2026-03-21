@@ -424,7 +424,8 @@ jsInlineF(
     "    onSelect: function(item) {\n"
     "        " ORGFORM_KEEP_PARAMS "\n"
     "        document.orgForm.org.value = '0';\n"
-    "        document.orgForm.db.value = item.genome;\n"
+    "        let db = dbFromRecentItem(item);\n"
+    "        document.orgForm.db.value = db;\n"
     "        " ORGFORM_RESET_TARGET "\n"
     "        " ORGFORM_SUBMIT "\n"
     "    }\n"
@@ -443,8 +444,9 @@ if (gotTargetDb)
 	{
 	char *target = cartUsualString(cart, "wp_target", "genome");
 	printf("%s", "<TD><CENTER>\n");
-	printf("Target:<BR>");
+	printf("<label>Target:<BR>");
 	showTargets(target, targetServerList);
+	printf("</label>");
 	printf("%s", "</CENTER></TD>\n");
 	}
     else
@@ -454,12 +456,12 @@ else
     cgiMakeHiddenVar("wp_target", "genome");
 
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
-printf("Forward primer:<BR>");
+printf("<label for='wp_f'>Forward primer:</label><BR>");
 cgiMakeTextVar("wp_f", fPrimer, 22);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER COLWIDTH=2>\n");
-printf(" Reverse primer:<BR>");
+printf("<label for='wp_r'> Reverse primer:</label><BR>");
 cgiMakeTextVar("wp_r", rPrimer, 22);
 printf("%s", "</CENTER></TD>\n");
 
@@ -472,31 +474,34 @@ printf("</TR></TABLE><BR>");
 
 printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=4><TR>\n");
 printf("%s", "<TD><CENTER>\n");
-printf("Max product size: ");
+printf("<label>Max product size: ");
 cgiMakeIntVar("wp_size", maxSize, 5);
+printf("</label>");
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min perfect match: ");
+printf("<label> Min perfect match: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
+printf("</label>");
 printf("%s", "</CENTER></TD>\n");
 
 jsOnEventById("click", "Submit", "if ($('#wp_r').val()==='' || $('#wp_f').val()==='') "\
         "{ alert('Please specify at least a forward and reverse primer. Both input boxes need to be filled out.'); event.preventDefault(); }");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min good match: ");
+printf("<label> Min good match: ");
 cgiMakeIntVar("wp_good", minGood, 2);
+printf("</label>");
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Flip reverse primer: ");
-cgiMakeCheckBox("wp_flipReverse", flipReverse);
+printf("<label for='wp_flipReverse'> Flip reverse primer: </label>");
+cgiMakeCheckBoxWithId("wp_flipReverse", flipReverse, "wp_flipReverse");
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Append to existing PCR result: ");
-cgiMakeCheckBox("wp_append", appendToResults);
+printf("<label for='wp_append'> Append to existing PCR result: </label>");
+cgiMakeCheckBoxWithId("wp_append", appendToResults, "wp_append");
 printf("%s", "</CENTER></TD>\n");
 
 printf("</TR></TABLE><BR>");

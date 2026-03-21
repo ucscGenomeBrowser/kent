@@ -718,10 +718,10 @@ def makeVersionFile(versionFname, bigBedDir):
     with open(outFname, "w") as ofh:
         ofh.write(versionString)
 
-def copyFilesToArchive(tmpFnames):
+def copyFilesToArchive(tmpFnames, bigBedDir):
     " the 'archive' directory on hgdownload contains previous versions of a tracks, we create a copy there every months "
+    yearMonDay = date.today().strftime("%Y-%m-%d")
     for db, trackName, tmpFname, finalFname in tmpFnames:
-        yearMonDay = date.today().strftime("%Y-%m-%d")
         gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, trackName)
         # put a copy into the archive
         outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
@@ -1158,7 +1158,7 @@ makeVersionFile(versionFname, bigBedDir)
 
 if not options.isAlpha:
     # put a copy of the files into the archive
-    copyFilesToArchive()
+    copyFilesToArchive(tmpFnames, bigBedDir)
 
 print("ClinVar update end: OK")
 

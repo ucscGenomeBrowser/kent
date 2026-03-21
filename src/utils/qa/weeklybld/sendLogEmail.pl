@@ -13,10 +13,10 @@ my $lastNN = shift;
 my $branchNN = shift;
 
 my $buildMeisterOnly = $ENV{'BUILDMEISTEREMAIL'};
-my $buildMeisterEtc =  $buildMeisterOnly . ' clayfischer@ucsc.edu lrnassar@ucsc.edu';
+my $buildMeisterEtc =  $buildMeisterOnly . ' clayfischer@ucsc.edu jnavarr5@ucsc.edu';
 # the bounceEmail address needs to be in the ucsc.edu domain to work correctly
 my $bounceEmail = $buildMeisterOnly;
-my $returnEmail = ' lrnassar@ucsc.edu';
+my $returnEmail = ' jnavarr5@ucsc.edu';
 
 my @victims;
 my %victimEmail;
@@ -59,9 +59,9 @@ foreach my $victim (sort keys %victimEmail) {
        printf STDERR "# sending email to $toAddr\n";
        open (SH, "| /usr/sbin/sendmail -f $bounceEmail -t -oi") or die "can not run sendmail";
        printf SH "To: %s\n", $toAddr;
-       printf SH "From: \"Lou Nassar\" <lrnassar\@ucsc.edu>\n";
+       printf SH "From: \"Jairo Navarro Gonzalez\" <jnavarr5\@ucsc.edu>\n";
        printf SH "Subject: Code summaries are due for %s\n", $victim;
-       printf SH "Cc: \"Lou Nassar\" <lrnassar\@ucsc.edu>\n";
+       printf SH "Cc: \"Jairo Navarro Gonzalez\" <jnavarr5\@ucsc.edu>\n";
        printf SH "\n";
        print SH `./summaryEmail.sh $victim`;
   }

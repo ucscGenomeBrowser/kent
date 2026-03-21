@@ -88,6 +88,13 @@ jsIncludeAutoCompleteLibs();
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
+cgiParagraph(
+    "This tool converts the current genome browser position to the corresponding "
+    "region in another assembly or species using genome sequence alignments. "
+    "Select a target assembly below and click Submit to jump to the matching region. "
+    "If a pair of assemblies cannot be selected directly, a sequential conversion "
+    "may still be possible (e.g., mm9 to mm10 to mm39).");
+
 /* CSS for two-section layout */
 puts("<style>\n"
      ".convertGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; }\n"
@@ -114,7 +121,6 @@ puts("<div class='sectionLabel'>Destination</div>\n");
 
 /* Hidden fields for form submission */
 hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TOORG_VAR, toDb->organism);
-hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TODB_VAR, liftOver->toDb);
 
 /* Search bar */
 char *searchBarId = "toGenomeSearch";
@@ -126,7 +132,6 @@ puts("</div>\n");
 /* Current selection display */
 char *selectedLabel = getCurrentGenomeLabel(liftOver->toDb);
 hPrintf("<div class='currentSelection' id='toGenomeLabel'>%s</div>\n", selectedLabel);
-
 /* Assembly dropdown (updates based on genome selection) */
 puts("<div class='fieldRow'>\n");
 puts("<span class='fieldLabel'>Assembly:</span>\n");
@@ -139,9 +144,9 @@ if (askAboutQuickLift)
     {
     puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
     cgiMakeCheckBoxWithId("doQuickLift", quickLift, "doQuickLift");
-    puts(" <label for='doQuickLift'>QuickLift tracks</label>\n");
+    puts(" <label for='doQuickLift' title='Display tracks from the source assembly mapped onto the target assembly'>QuickLift tracks</label>\n");
     puts(" <a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' "
-         "target='ucscHelp' title='QuickLift is in beta testing' "
+         "target='ucscHelp' title='QuickLift is in beta testing. Click to view more documentation about this feature.' "
          "style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px "
          "4px;background:lavender;border-radius:3px;text-decoration:none;margin-left:6px;'>beta</a>\n");
     puts("</div>\n");
@@ -164,6 +169,20 @@ jsInlineF(
     "    .then(data => {\n"
     "        if (data.existingLiftOvers) {\n"
     "            data.existingLiftOvers.forEach(chain => validTargets.add(chain.toDb));\n"
+    "        }\n"
+    "\n"
+    "        // Mark recent/popular genomes that don't have a liftOver from source as disabled\n"
+    "        function markInvalidTargets(items) {\n"
+    "            let sourceDb = '%s';\n"
+    "            return items.filter(function(item) {\n"
+    "                return (item.db || item.genome) !== sourceDb;\n"
+    "            }).map(function(item) {\n"
+    "                if (!validTargets.has(item.db || item.genome)) {\n"
+    "                    item.disabled = true;\n"
+    "                    item.disabledReason = 'No liftOver available from source assembly';\n"
+    "                }\n"
+    "                return item;\n"
+    "            });\n"
     "        }\n"
     "\n"
     "        // Custom onServerReply that processes results and filters to valid targets\n"
@@ -197,7 +216,7 @@ jsInlineF(
     "        }\n"
     "\n"
     "        let selectEle = document.getElementById('toGenomeLabel');\n"
-    "        initSpeciesAutoCompleteDropdown('%s', onGenomeSelect.bind(null, selectEle), null, null, processAndFilterResults, onSearchError);\n"
+    "        initSpeciesAutoCompleteDropdown('%s', onGenomeSelect.bind(null, selectEle), null, null, processAndFilterResults, onSearchError, markInvalidTargets);\n"
     "    });\n"
     "\n"
     "document.addEventListener('DOMContentLoaded', () => {\n"
@@ -208,14 +227,44 @@ jsInlineF(
     "            $('[id=\\x27%s\\x27]').autocompleteCat('search', val);\n"
     "        });\n"
     "    }\n"
+    "    let toggle = document.getElementById('%sToggle');\n"
+    "    if (toggle) {\n"
+    "        let wasOpen = false;\n"
+    "        toggle.addEventListener('mousedown', () => {\n"
+    "            let $input = $('[id=\\x27%s\\x27]');\n"
+    "            wasOpen = $input.autocompleteCat('widget').is(':visible');\n"
+    "        });\n"
+    "        toggle.addEventListener('click', () => {\n"
+    "            let $input = $('[id=\\x27%s\\x27]');\n"
+    "            if (wasOpen) {\n"
+    "                $input.autocompleteCat('close');\n"
+    "            } else {\n"
+    "                $input.val('');\n"
+    "                $input.autocompleteCat('search', '');\n"
+    "                $input.focus();\n"
+    "            }\n"
+    "        });\n"
+    "    }\n"
     "});\n"
+    , liftOver->fromDb
     , liftOver->fromDb
     , HGLFT_TOORG_VAR
     , HGLFT_TODB_VAR
     , searchBarId, searchBarId, searchBarId, searchBarId
+    , searchBarId, searchBarId, searchBarId
 );
 
 puts("</FORM>\n");
+
+webNewSection("Notes");
+cgiParagraph(
+    "<B>QuickLift tracks:</B> When enabled, QuickLift displays tracks from "
+    "the source assembly mapped onto the target assembly, allowing you to view "
+    "your current tracks in the context of the new genome.");
+cgiParagraph(
+    "If your desired target assembly is not available, you can search for it "
+    "and request it on our "
+    "<A HREF=\"../assemblySearch.html\">Assembly Search</A> page.");
 
 cartWebEnd();
 }
@@ -276,7 +325,7 @@ if (sameWord(toOrg,"0"))
     toOrg = NULL;
 if (sameWord(toDb,"0"))
     toDb = NULL;
-if ((toDb != NULL) && !sameOk(toOrg, hOrganism(toDb)))
+if ((toDb != NULL) && !sameWordOk(toOrg, hOrganism(toDb)))
     toDb = NULL;
 
 if (toOrg == NULL)

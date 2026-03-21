@@ -1,0 +1,56 @@
+<h2>Description</h2>
+<p>
+<a href="https://www.finngen.fi/en" target="_blank">FinnGen</a> is a public-private partnership
+that combines genotype data from Finnish biobanks with digital health record data from Finnish
+health registries. The R12 release contains imputed variants from 500,348 biobank samples obtained
+using genotyping arrays. The imputation used phased variants obtained from 8,554 high-quality
+whole genome sequences, also from Finland. This represents approximately 10% of the Finnish
+population. Phenotype links can be viewed at the
+<a href="https://r12.finngen.fi/" target="_blank">FinnGen PheWeb</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
+</p>
+<p>
+TSV data can be requested via the form at
+<a href="https://finngen.gitbook.io/documentation/data-download" target="_blank">FinnGen</a>,
+which triggers an automated email containing the download link.
+A script in our GitHub repo converts this file to VCF (see Methods below).
+</p>
+
+<h2>Methods</h2>
+<p>
+FinnGen participants were genotyped using a custom Axiom FinnGen1 array, supplemented by legacy
+collections genotyped with other arrays. Imputation used a population-specific reference panel of
+high-coverage (25&ndash;30x) whole-genome sequences from Finnish individuals. Ancestry outliers were
+removed via PCA against 1000 Genomes reference samples, and 5,780 duplicates and monozygotic twins
+were excluded. Variant quality was assessed using VQSR.
+</p>
+<p>
+R12 annotated variants were downloaded from the Google Cloud bucket link received through an email
+and converted to VCF with a
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/finngen_to_vcf.py"
+target="_blank">custom Python script</a>.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+We want to acknowledge the participants and investigators of the FinnGen study.
+</p>
+
+<h2>References</h2>
+<p>
+Kurki MI, Karjalainen J, Palta P, Sipil&auml; TP, Kristiansson K, Donner KM, Reeve MP, Laivuori H,
+Aavikko M, Kaunisto MA <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-022-05473-8" target="_blank">
+FinnGen provides genetic insights from a well-phenotyped isolated population</a>.
+<em>Nature</em>. 2023 Jan;613(7944):508-518.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36653562" target="_blank">36653562</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9849126/" target="_blank">PMC9849126</a>
+</p>

@@ -435,7 +435,7 @@ appendLinkWithOnclick(&links, "#", "Highlight here", "highlightHereMenu", "Add a
 
 appendLinkWithShortcut(&links, "../cgi-bin/cartReset?skipLs=1", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
 
-struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
+struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><button type='button' aria-expanded='false'>View</button>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);
 dyStringAppend(viewMenu, "</ul>\n</li>\n");
 

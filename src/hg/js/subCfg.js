@@ -48,12 +48,6 @@ var subCfg = { // subtrack config module.
 
         $(obj).addClass('changed');
 
-        // if the user checked a child checkbox that used to be unchecked, and the parent composite is on hide,
-        // then set the parent composite to pack
-        var compEl = $("[name='"+this.compositeName+"'");
-        if (compEl.length!==0 && obj.type==="checkbox" && obj.checked && compEl.val()==="hide")
-            compEl.val("pack").change();
-
         // checkboxes have hidden boolshads which should be marked when unchecked
         if (obj.type === "checkbox") {
             var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
@@ -65,18 +59,26 @@ var subCfg = { // subtrack config module.
 		    $(boolshad).addClass('changed');
 		}
             }
-            
-            // if the user unchecked a child checkbox that used to be checked, and the parent composite is on pack,
-            // and no more child is checked, then set the parent composite to hide.
-            var subCfgs = $(".subCB:checked");
-            if (subCfgs.length===0) {
-                //$(obj).val("pack"); // 
-                //compEl.val("hide").change();
-                compEl.val("hide");
-                $(obj).val("hide");
-            }
         }
-        
+    },
+
+    // Called only on real user clicks (bound via native addEventListener, not jQuery,
+    // so jQuery .trigger('change') calls during init do not reach this).
+    // Handles both subCB and matCB clicks.
+    onUserCbChange: function () {
+        var compEl = $("[name='"+subCfg.compositeName+"']");
+        if (compEl.length === 0)
+            return;
+
+        var anyChecked = $(".subCB:checked:visible").length > 0;
+
+        // if any subtracks are now checked and the composite is on hide, set it to pack
+        if (anyChecked && compEl.val() === "hide")
+            compEl.val("pack").change();
+
+        // if no subtracks are checked, set the composite to hide
+        if (!anyChecked)
+            compEl.val("hide");
     },
 
     clearChange: function (obj)
@@ -426,7 +428,7 @@ var subCfg = { // subtrack config module.
         var children = subCfg.visChildrenFind(viewObj);
         $(children).each(function (i) {
             if ($(this).hasClass('fauxInput')) {
-                $(this).text(visText);
+                $(this).text(capitalizeFirstLetter(visText));
             } else {
                 $(this).attr('selectedIndex',limitedVis);
                 subCfg.clearChange(this);
@@ -469,7 +471,7 @@ var subCfg = { // subtrack config module.
 
                     // apply the visibility to the subtrack
                     if ($(this).hasClass('fauxInput')) {
-                        $(this).text(visText);
+                        $(this).text(capitalizeFirstLetter(visText));
                     } else {
                         $(this).attr('selectedIndex',parentVis);
                         subCfg.clearChange(this);
@@ -668,13 +670,14 @@ var subCfg = { // subtrack config module.
         var view = classList[classList.length - 1]; // This relies on view being the last class!!!
         var selectHtml  = "<SELECT name='"+subtrack+"' class='normalText subVisDD "+view+"'";
             selectHtml += " style='width:70px;'>";
-        var selected = $(obj).text();
+        var selected = $(obj).text().toLowerCase();
         var visibilities = ['hide','dense','squish','pack','full'];
         if (subCfg.canPack === false)
             visibilities = ['hide','dense','full'];
         $(visibilities).each( function (ix) {
-             selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+">";
-             selectHtml += visibilities[ix]+"</OPTION>";
+             var vis = visibilities[ix];
+             selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+" VALUE='"+vis+"'>";
+             selectHtml += capitalizeFirstLetter(vis)+"</OPTION>";
         });
         selectHtml += "</SELECT>";
         $(obj).replaceWith(selectHtml);
@@ -859,6 +862,18 @@ var subCfg = { // subtrack config module.
         $(subCbs).change( function (e) {
             subCfg.enableCfg(this, (this.checked && !isFauxDisabled(this, true)));
             subCfg.markChange(e,this);
+        });
+        // Native listener for user-only actions (auto-show/hide composite).
+        // jQuery .trigger('change') only fires jQuery handlers, not native ones,
+        // so this runs only on real user interactions.
+        $(subCbs).each(function () {
+            this.addEventListener('change', subCfg.onUserCbChange);
+        });
+        // Same for matCBs (matrix checkboxes that check/uncheck groups of subCBs).
+        // The inline onclick handler (matCbClick) updates subCBs first, then this
+        // native listener checks the resulting state.
+        $('input.matCB').each(function () {
+            this.addEventListener('click', subCfg.onUserCbChange);
         });
 
         // iterate through views

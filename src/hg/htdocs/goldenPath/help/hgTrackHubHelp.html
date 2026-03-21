@@ -326,7 +326,7 @@ target="_blank"><strong>http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&
 <p>
 You can create a URL for an assembly hub with track hubs using a combination of the
 <code>hubUrl=</code> and <code>genome=</code> URL parameters. URL parameters can be combined by
-using <code>&amp;</code>.For example, using the following assembly hub and track hubs:
+using <code>&amp;</code>. For example, using the following assembly hub and track hubs:
 </p>
 <pre>
 <b>Arabidopsis thaliana assembly hub</b>
@@ -628,7 +628,7 @@ is optional.</p>
 if you wish to put all information into only one file: hub.txt. This setting allows you
 to put the text lines of <a target="_blank" href="#genomes.txt"><code>genomes.txt</code></a>
 and <a target="_blank" href="#trackDb.txt"><code>trackDb.txt</code></a> all into the singular
-<a target="_blank" href="#hub.txt"><code>hub.txt</code></a>file. To learn more about
+<a target="_blank" href="#hub.txt"><code>hub.txt</code></a> file. To learn more about
 this setting click  <b><a target="_blank" href="hgTracksHelp.html#UseOneFile"><code>useOneFile on</code></a></b>
 and see a <a href="examples/hubExamples/hubUseOneFile/singleFileHubExample.txt"
 target="_blank">working example here</a>.</p>
@@ -848,7 +848,7 @@ file name should correspond to the symbolic name of the top-level track in the c
 To organize tracks within your track hub, you can utilize the <b>groups</b> setting, which references a
 separate text file that defines track groups for display under the genome browser graphic.</p>
 <div class="text-center">
-        <img class='text-center' width="95%" src="../../images/groupsEx.png">
+        <img class='text-center' width="95%" alt="Genome Browser track groups showing hub tracks organized into labeled sections" src="../../images/groupsEx.png">
 </div>
 <p>
 The <b>groups</b> setting can be applied to a UCSC genome, a GenArk assembly, or an assembly hub.
@@ -987,8 +987,7 @@ with the warning that the hub has no hub description page, no configuration erro
 and "Display load times" checked:</p>
 
 <p class='text-center'>
-  <img class='text-center' src="../../images/hubDevelopment.png" 
-alt="The Hub Development tool checks config setting" width="749" height="249">
+  <img alt="Hub Development tool checking track hub configuration settings" class='text-center' src="../../images/hubDevelopment.png" width="749" height="249">
   <p class='gbsCaption text-center'>The Hub Development tool checks for proper configuration 
 files and track hub settings, and allows access to debugging settings.</p>
 
@@ -999,7 +998,7 @@ first bring it online and whenever you make significant changes. This utility by
 that the files in the hub are correctly formatted, but it can also be configured to check a few
 other things including that various trackDb settings are correctly spelled and that they are
 supported by the UCSC Genome Browser. You can read more about using hubCheck to check the
-compatibility of your hub with other genome browsers <a href="#Compatibility"</a>below</a>.</p>
+compatibility of your hub with other genome browsers <a href="#Compatibility">below</a>.</p>
 
 <p>
 Here is the usage statement for the hubCheck utility:
@@ -1065,7 +1064,7 @@ The hubClone program is available from the UCSC downloads server at
 <h2>Setting up track item search</h2>
 <p> 
 The Genome Browser supports searching for items within bigBed tracks in track data hubs. To support 
-this behavior you have to add an index to the bigBed file when you initially create the the bigBed 
+this behavior you have to add an index to the bigBed file when you initially create the bigBed 
 file from the bed file input. Indices are usually created on the name field of the bed, but can be 
 created on any field of the bed. Free-text searches can also be enabled by creating a 
 <a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata. Further
@@ -1329,7 +1328,7 @@ research data and configuration files for free:
 <ul>
   <li><a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect?#hubUpload" target="_blank">Hub
       Space</a> -
-      UCSC's own hosting service which provides 10 GB of free storage per user. Please
+      UCSC's own hosting service, which provides 10 GB of free storage per user. Please
       <a href="/contacts.html" target="_blank">contact us</a>
       if you need to increase the storage limit.</li>
   <li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a> - Maximum size limit is
@@ -1380,7 +1379,7 @@ available for your analysis.</p>
   <li>To begin, sign into your Galaxy account and then click the &quot;Upload Data&quot; button on
       the left-hand side of the page. A pop-up will appear to upload the file to Galaxy.
     <div class="text-left">
-      <img src="../../images/Galaxy_Upload.png">
+      <img alt="Galaxy interface showing the Upload Data tool for importing files" src="../../images/Galaxy_Upload.png">
     </div></li>
   <li>On the pop-up menu, click the &quot;Choose local files&quot; to select the file to host. Once
       the file is selected, select the genome and file type from the drop-down menus, and click the
@@ -1388,7 +1387,7 @@ available for your analysis.</p>
       <a href="/goldenPath/help/examples/bigBedExample.bb">bigBed</a> file for the
       <a href="/cgi-bin/hgGateway?db=hg19" target="_blank">GRCh37/hg19</a> genome to Galaxy.
       <div class="text-left">
-        <img height="350px" src="../../images/Galaxy_file_uploading.png">
+        <img height="350px" alt="Galaxy interface showing file upload progress status" src="../../images/Galaxy_file_uploading.png">
       </div></li>
   <li>Once the file is uploaded to Galaxy, it will appear in the &quot;History&quot; section on the
       right-hand side. Click on the file to expand the menu, and additional information about the
@@ -1397,7 +1396,7 @@ available for your analysis.</p>
       &quot;graph icon&quot; will bring up another menu in the middle of the screen with a link to
       visualize the bigBed file on the UCSC Genome Browser.
     <div class="text-left">
-      <img height="450px" src="../../images/Galaxy_custom_bigBed.png">
+      <img height="450px" alt="Galaxy custom bigBed track configuration settings panel" src="../../images/Galaxy_custom_bigBed.png">
     </div></li>
 </ol>
 <h4>Creating and Viewing a Hub Hosted on Galaxy</h4>
@@ -1409,7 +1408,7 @@ available for your analysis.</p>
       <a href="/goldenPath/help/examples/vcfExample.vcf.gz.tbi">VCF index</a> file
       to view on the GRCh37/hg19 genome as a track hub.
       <div class="text-left">
-        <img src="../../images/Galaxy_hub_files.png">
+        <img alt="Galaxy file listing showing track hub component files" src="../../images/Galaxy_hub_files.png">
       </div>
   </li>
   <li>To create the hub, a URL to each of the files is needed to reference the Galaxy hosted data
@@ -1417,7 +1416,7 @@ available for your analysis.</p>
       at the bottom. Next, click on the &quot;chain-link&quot; icon to copy the URL to the
       hosted file. With these three URLs, we can now begin to build the hub.
       <div class="text-left">
-        <img src="../../images/Galaxy_file_URL.png">
+        <img alt="Galaxy interface showing how to copy a file URL for track hub use" src="../../images/Galaxy_file_URL.png">
       </div>
   </li>
   <li>When creating the hub, it is recommended to use the
@@ -1460,7 +1459,7 @@ bigDataUrl https://usegalaxy.org/api/datasets/f9cad7b01a4721358405ebd3fc34f65a/d
       the UCSC Genome Browser's <a href="/cgi-bin/hgHubConnect" target="_blank">Track Hubs</a> page
       and enter the URL to view the hub.
       <div class="text-left">
-        <img src="../../images/Galaxy_hub_URL.png">
+        <img alt="Galaxy interface showing the hub URL for connecting to UCSC Genome Browser" src="../../images/Galaxy_hub_URL.png">
       </div>
   </li>
   <li>
@@ -1487,7 +1486,7 @@ After creating an account and signing in, access the data screen by clicking the
 on the left.  Use the &quot;Upload&quot; button on the far right to import data from a URL or
 locally from your machine.
 <div class="text-center">
-  <img height="150px" src="../../images/cyverseUploadButton.png">
+  <img height="150px" alt="CyVerse Data Store interface with the upload button highlighted" src="../../images/cyverseUploadButton.png">
 </div></p>
 <p>
 You can also use the command line utility
@@ -1500,7 +1499,7 @@ target="_blank">Cyberduck</a> to bulk transfer up to 80 GB of data in one go.</p
 Once your file is available use the three dots on the far right to click the &quot;Public
 Links(s)&quot; option.</p>
 <div class="text-center">
-  <img height="250px" src="../../images/cyverseCreatePublicLink.png">
+  <img height="250px" alt="CyVerse dialog for creating a public shareable link to a data file" src="../../images/cyverseCreatePublicLink.png">
 </div>
 <p>
 Select this option for all the files you will be using with the Genome Browser, whether they
@@ -1514,7 +1513,7 @@ point to the CyVerse locations for the files.  For instance, the bigDataUrl sett
 to the location of the BAM, bigWig, or bigBed (i.e., <code>bigDataUrl https://data.cyverse.org/...
 /dataFile.bam</code>).</p>
 <div class="text-center">
-  <img height="200px" src="../../images/cyverseCreatePublicLink2.png">
+  <img height="200px" alt="CyVerse confirmation dialog displaying the generated public link URL" src="../../images/cyverseCreatePublicLink2.png">
 </div>
 <p>
 The hub.txt file (if not using the <a href="hgTracksHelp.html#UseOneFile"
@@ -1530,7 +1529,7 @@ Cyverse support&quot; staff directly via the blue question box icon on the top r
 Discovery Environment page.</p>
 <p>
 <div class="text-center">
-  <img height="200px" src="../../images/cyverseRefresh.png">
+  <img height="200px" alt="CyVerse interface showing the refresh option for updating file listings" src="../../images/cyverseRefresh.png">
 </div>
 <p>
 Note, if you need to replace files once they have been uploaded into CyVerse's DE and Public links
@@ -1639,7 +1638,7 @@ contains examples of how to include the information in your tracks.</p>
 <p>
 Click share on each data file, choose copy link, Ctrl-C
 and paste the dropbox URL into the hub oneFile the bigDataUrl field in the trackDb section of your useOneFile hub txt.
-It will look somehting like this:
+It will look something like this:
 </p>
 <pre>
  bigDataUrl https://www.dropbox.com/scl/fi/8t785o3sqidp0tmar91bf/dnaseRep3.bw?rlkey=37wucbhdvwqntw4ejvig4kg7c&st=11v8l216&dl=0

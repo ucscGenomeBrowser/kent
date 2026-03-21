@@ -1,0 +1,650 @@
+#!/usr/bin/env python3
+"""Comprehensive Redmine CLI for the UCSC Genome Browser team.
+
+Reads the Redmine API key from ~/.hg.conf (redmine.apiKey=...).
+
+Usage:
+    redmineCli show 33571
+    redmineCli list --project maillists --status open --limit 10
+    redmineCli create --subject "Bug report" --description "Details here"
+    redmineCli comment 33571 --message "Adding a note"
+    redmineCli update 33571 --status 1 --assigned-to lou --note "Reopening"
+    redmineCli attach 33571 screenshot.png --note "See attached"
+"""
+
+import argparse
+import json
+import mimetypes
+import os
+import re
+import sys
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+
+DEFAULT_REDMINE = "https://redmine.gi.ucsc.edu"
+DEFAULT_PROJECT = "maillists"
+
+TRACKER_MLQ = 7
+PRIORITY_UNPRIORITIZED = 12
+STATUS_NEW = 1
+
+CF_CATEGORY = 28
+CF_EMAIL = 40
+CF_MLM = 9
+
+# Name -> Redmine user ID mapping (case-insensitive lookup in resolve_user)
+USER_IDS = {
+    "jairo navarro": 163, "jairo": 163,
+    "lou nassar": 171, "lou": 171,
+    "gerardo perez": 179, "gerardo": 179, "gera": 179,
+    "clay fischer": 161, "clay": 161,
+    "matt speir": 150, "matt": 150,
+}
+
+ATTRIBUTION = "**From Claude:**\n\n"
+
+# ---------------------------------------------------------------------------
+# Shared helpers
+# ---------------------------------------------------------------------------
+
+def read_api_key(conf_path="~/.hg.conf"):
+    """Read redmine.apiKey from ~/.hg.conf."""
+    conf_path = os.path.expanduser(conf_path)
+    with open(conf_path) as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith("redmine.apiKey="):
+                return line.split("=", 1)[1]
+    sys.exit("Error: redmine.apiKey not found in " + conf_path)
+
+
+def api_get(base_url, path, api_key):
+    """GET a JSON endpoint from Redmine."""
+    url = base_url.rstrip("/") + path
+    req = urllib.request.Request(url)
+    req.add_header("X-Redmine-API-Key", api_key)
+    req.add_header("Accept", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")[:500]
+        sys.exit(f"Error: HTTP {e.code} GET {url}: {body}")
+    except urllib.error.URLError as e:
+        sys.exit(f"Error: {e.reason} connecting to {url}")
+
+
+def api_post(base_url, path, api_key, data):
+    """POST JSON to Redmine. Returns parsed JSON response."""
+    url = base_url.rstrip("/") + path
+    body = json.dumps(data).encode("utf-8")
+    req = urllib.request.Request(url, data=body, method="POST")
+    req.add_header("X-Redmine-API-Key", api_key)
+    req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        resp_body = e.read().decode("utf-8", errors="replace")[:500]
+        sys.exit(f"Error: HTTP {e.code} POST {url}: {resp_body}")
+    except urllib.error.URLError as e:
+        sys.exit(f"Error: {e.reason} connecting to {url}")
+
+
+def api_put(base_url, path, api_key, data):
+    """PUT JSON to Redmine. Returns True on success."""
+    url = base_url.rstrip("/") + path
+    body = json.dumps(data).encode("utf-8")
+    req = urllib.request.Request(url, data=body, method="PUT")
+    req.add_header("X-Redmine-API-Key", api_key)
+    req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return True
+    except urllib.error.HTTPError as e:
+        resp_body = e.read().decode("utf-8", errors="replace")[:500]
+        sys.exit(f"Error: HTTP {e.code} PUT {url}: {resp_body}")
+    except urllib.error.URLError as e:
+        sys.exit(f"Error: {e.reason} connecting to {url}")
+
+
+def api_upload(base_url, api_key, filename, file_data):
+    """Upload binary file to Redmine, returns upload token."""
+    encoded_name = urllib.parse.quote(filename)
+    url = f"{base_url.rstrip('/')}/uploads.json?filename={encoded_name}"
+    req = urllib.request.Request(url, data=file_data, method="POST")
+    req.add_header("X-Redmine-API-Key", api_key)
+    req.add_header("Content-Type", "application/octet-stream")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return json.loads(resp.read())["upload"]["token"]
+    except urllib.error.HTTPError as e:
+        resp_body = e.read().decode("utf-8", errors="replace")[:500]
+        sys.exit(f"Error: HTTP {e.code} uploading {filename}: {resp_body}")
+    except urllib.error.URLError as e:
+        sys.exit(f"Error: {e.reason} uploading {filename}")
+
+
+def format_date(iso_str):
+    """Format an ISO date string nicely."""
+    dt = datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
+    return dt.strftime("%Y-%m-%d %H:%M UTC")
+
+
+def redmine_textile_to_md(text):
+    """Convert common Redmine textile/wiki markup to Markdown."""
+    if not text:
+        return ""
+    text = re.sub(r'(?<!\w)\*(\S.*?\S)\*(?!\w)', r'**\1**', text)
+    text = re.sub(r'(?<!\w)_(\S.*?\S)_(?!\w)', r'*\1*', text)
+    text = re.sub(r'@([^@\n]+)@', r'`\1`', text)
+    text = re.sub(r'<pre>\s*', '\n```\n', text)
+    text = re.sub(r'\s*</pre>', '\n```\n', text)
+    for i in range(1, 7):
+        text = re.sub(rf'^h{i}\.\s*', '#' * i + ' ', text, flags=re.MULTILINE)
+    text = re.sub(r'!([^!\n]+\.(png|jpg|jpeg|gif))!', r'![image](\1)', text, flags=re.IGNORECASE)
+    text = re.sub(r'"([^"]+)":(\S+)', r'[\1](\2)', text)
+    return text
+
+
+def resolve_user(name_or_id):
+    """Resolve a user name to a Redmine user ID. Accepts name or numeric ID."""
+    if name_or_id.isdigit():
+        return int(name_or_id)
+    key = name_or_id.lower().strip()
+    if key in USER_IDS:
+        return USER_IDS[key]
+    sys.exit(f"Error: unknown user '{name_or_id}'. Known users: "
+             + ", ".join(sorted(set(f"{v} ({k})" for k, v in USER_IDS.items()
+                                    if " " in k))))
+
+
+def prepend_attribution(text):
+    """Prepend 'From Claude:' attribution to text for write operations."""
+    return ATTRIBUTION + text
+
+
+def strip_emoji(text):
+    """Strip 4-byte Unicode (emoji) that Redmine's MySQL may reject."""
+    if not text:
+        return text
+    return re.sub(r'[\U00010000-\U0010FFFF]', '', text)
+
+
+def read_text_input(direct, from_file):
+    """Read text from --message/--description or --message-file/--description-file."""
+    if from_file:
+        if from_file == "-":
+            return sys.stdin.read()
+        with open(from_file) as f:
+            return f.read()
+    return direct
+
+
+def make_url(base_url, ticket_id):
+    """Build the web URL for a ticket."""
+    return f"{base_url.rstrip('/')}/issues/{ticket_id}"
+
+
+def format_details(details):
+    """Format journal detail changes (status changes, assignments, etc.)."""
+    lines = []
+    for d in details:
+        prop = d.get("property", "")
+        name = d.get("name", "")
+        old = d.get("old_value", "")
+        new = d.get("new_value", "")
+        if prop == "attr":
+            if name == "status_id":
+                lines.append(f"  - Status changed: {old} -> {new}")
+            elif name == "assigned_to_id":
+                lines.append(f"  - Assignee changed: {old} -> {new}")
+            elif name == "done_ratio":
+                lines.append(f"  - Progress: {old}% -> {new}%")
+            else:
+                lines.append(f"  - {name}: {old} -> {new}")
+        elif prop == "attachment":
+            lines.append(f"  - Attached: {new}")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: show
+# ---------------------------------------------------------------------------
+
+def cmd_show(args):
+    """Display a single ticket in Markdown."""
+    data = api_get(args.base_url,
+                   f"/issues/{args.ticket_id}.json?include=journals,attachments",
+                   args.api_key)
+    issue = data["issue"]
+
+    attachments = {a["id"]: a for a in issue.get("attachments", [])}
+    attach_by_name = {a["filename"]: a for a in issue.get("attachments", [])}
+
+    dl_dir = None
+    if args.images or args.download_all:
+        dl_dir = tempfile.mkdtemp(prefix=f"redmine_{args.ticket_id}_")
+        print(f"<!-- Attachments downloaded to: {dl_dir} -->", file=sys.stderr)
+
+    def resolve_images(text):
+        if not text:
+            return text
+        def replace_img(m):
+            fname = m.group(1)
+            if fname in attach_by_name:
+                a = attach_by_name[fname]
+                if dl_dir:
+                    local = os.path.join(dl_dir, fname)
+                    if not os.path.exists(local):
+                        download_file(a["content_url"], local, args.api_key)
+                        print(f"  Downloaded: {local}", file=sys.stderr)
+                    return f"![image]({local})"
+                else:
+                    return f"![image]({a['content_url']})"
+            return m.group(0)
+        return re.sub(r'!\[image\]\(([^)]+\.(png|jpg|jpeg|gif))\)',
+                       replace_img, text, flags=re.IGNORECASE)
+
+    out = []
+    out.append(f"# #{issue['id']}: {issue['subject']}")
+    out.append("")
+    out.append(f"- **Project:** {issue['project']['name']}")
+    out.append(f"- **Tracker:** {issue['tracker']['name']}")
+    out.append(f"- **Status:** {issue['status']['name']}")
+    out.append(f"- **Priority:** {issue['priority']['name']}")
+    out.append(f"- **Author:** {issue['author']['name']}")
+    if issue.get("assigned_to"):
+        out.append(f"- **Assigned to:** {issue['assigned_to']['name']}")
+    out.append(f"- **Created:** {format_date(issue['created_on'])}")
+    out.append(f"- **Updated:** {format_date(issue['updated_on'])}")
+    if issue.get("closed_on"):
+        out.append(f"- **Closed:** {format_date(issue['closed_on'])}")
+    out.append(f"- **URL:** {make_url(args.base_url, issue['id'])}")
+
+    # Custom fields
+    for cf in issue.get("custom_fields", []):
+        if cf.get("value"):
+            out.append(f"- **{cf['name']}:** {cf['value']}")
+    out.append("")
+
+    if attachments:
+        out.append("## Attachments")
+        out.append("")
+        for a in issue["attachments"]:
+            out.append(f"- [{a['filename']}]({a['content_url']}) "
+                       f"({a['filesize']} bytes, {a['author']['name']}, "
+                       f"{format_date(a['created_on'])})")
+        out.append("")
+
+    out.append("## Description")
+    out.append("")
+    desc = redmine_textile_to_md(issue.get("description", ""))
+    desc = resolve_images(desc)
+    out.append(desc)
+    out.append("")
+
+    journals = issue.get("journals", [])
+    if journals:
+        out.append("---")
+        out.append("## Discussion")
+        out.append("")
+
+    for j in journals:
+        notes = j.get("notes", "")
+        details = j.get("details", [])
+        if not notes and not details:
+            continue
+        user = j["user"]["name"]
+        date = format_date(j["created_on"])
+        out.append(f"### {user} — {date}")
+        out.append("")
+        if details:
+            detail_text = format_details(details)
+            if detail_text:
+                out.append(detail_text)
+                out.append("")
+        if notes:
+            md_notes = redmine_textile_to_md(notes)
+            md_notes = resolve_images(md_notes)
+            out.append(md_notes)
+            out.append("")
+        out.append("---")
+        out.append("")
+
+    if dl_dir:
+        for a in issue["attachments"]:
+            is_image = a.get("content_type", "").startswith("image/")
+            if args.download_all or is_image:
+                local = os.path.join(dl_dir, a["filename"])
+                if not os.path.exists(local):
+                    download_file(a["content_url"], local, args.api_key)
+                    print(f"  Downloaded: {local}", file=sys.stderr)
+
+    print("\n".join(out))
+
+
+def download_file(url, dest_path, api_key):
+    """Download a file with API key auth."""
+    req = urllib.request.Request(url)
+    req.add_header("X-Redmine-API-Key", api_key)
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        with open(dest_path, "wb") as f:
+            f.write(resp.read())
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: list
+# ---------------------------------------------------------------------------
+
+def cmd_list(args):
+    """List/search tickets with filters."""
+    params = {
+        "project_id": args.project,
+        "limit": str(args.limit),
+        "offset": str(args.offset),
+        "sort": args.sort,
+    }
+
+    if args.status:
+        params["status_id"] = args.status
+
+    if args.assigned_to:
+        if args.assigned_to.lower() == "me":
+            params["assigned_to_id"] = "me"
+        else:
+            params["assigned_to_id"] = str(resolve_user(args.assigned_to))
+
+    if args.tracker:
+        params["tracker_id"] = args.tracker
+
+    if args.search:
+        params["subject"] = f"~{args.search}"
+
+    query = urllib.parse.urlencode(params)
+    data = api_get(args.base_url, f"/issues.json?{query}", args.api_key)
+
+    issues = data.get("issues", [])
+    total = data.get("total_count", 0)
+
+    if not issues:
+        print("No issues found.")
+        return
+
+    out = []
+    out.append("| # | Status | Assignee | Subject |")
+    out.append("|---|--------|----------|---------|")
+    for iss in issues:
+        tid = iss["id"]
+        status = iss["status"]["name"]
+        assignee = iss.get("assigned_to", {}).get("name", "—")
+        subject = iss["subject"][:60].replace("|", "\\|")
+        out.append(f"| {tid} | {status} | {assignee} | {subject} |")
+    out.append("")
+    start = args.offset + 1
+    end = args.offset + len(issues)
+    out.append(f"{total} issues total (showing {start}-{end})")
+
+    print("\n".join(out))
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: create
+# ---------------------------------------------------------------------------
+
+def cmd_create(args):
+    """Create a new Redmine ticket."""
+    description = read_text_input(args.description, args.description_file)
+    if not description:
+        sys.exit("Error: --description or --description-file is required")
+
+    description = strip_emoji(prepend_attribution(description))
+    subject = strip_emoji(args.subject)
+
+    issue_data = {
+        "issue": {
+            "project_id": args.project,
+            "subject": subject,
+            "description": description,
+            "tracker_id": args.tracker,
+            "priority_id": args.priority,
+            "status_id": args.status,
+        }
+    }
+
+    custom_fields = []
+    if args.category:
+        custom_fields.append({"id": CF_CATEGORY, "value": args.category})
+    if args.email:
+        custom_fields.append({"id": CF_EMAIL, "value": args.email})
+    if args.mlm:
+        custom_fields.append({"id": CF_MLM, "value": args.mlm})
+    if custom_fields:
+        issue_data["issue"]["custom_fields"] = custom_fields
+
+    if args.assigned_to:
+        issue_data["issue"]["assigned_to_id"] = resolve_user(args.assigned_to)
+
+    result = api_post(args.base_url, "/issues.json", args.api_key, issue_data)
+    ticket_id = result["issue"]["id"]
+    print(f"Created #{ticket_id}: {make_url(args.base_url, ticket_id)}")
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: comment
+# ---------------------------------------------------------------------------
+
+def cmd_comment(args):
+    """Add a comment to an existing ticket."""
+    message = read_text_input(args.message, args.message_file)
+    if not message:
+        sys.exit("Error: --message or --message-file is required")
+
+    message = strip_emoji(prepend_attribution(message))
+    data = {"issue": {"notes": message}}
+
+    api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
+    print(f"Commented on #{args.ticket_id}: {make_url(args.base_url, args.ticket_id)}")
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: update
+# ---------------------------------------------------------------------------
+
+def cmd_update(args):
+    """Update fields on an existing ticket."""
+    issue_data = {}
+
+    if args.status is not None:
+        issue_data["status_id"] = args.status
+    if args.assigned_to is not None:
+        if args.assigned_to == "":
+            issue_data["assigned_to_id"] = ""
+        else:
+            issue_data["assigned_to_id"] = resolve_user(args.assigned_to)
+    if args.priority is not None:
+        issue_data["priority_id"] = args.priority
+    if args.subject is not None:
+        issue_data["subject"] = strip_emoji(args.subject)
+
+    custom_fields = []
+    if args.category is not None:
+        custom_fields.append({"id": CF_CATEGORY, "value": args.category})
+    if args.mlm is not None:
+        custom_fields.append({"id": CF_MLM, "value": args.mlm})
+    if custom_fields:
+        issue_data["custom_fields"] = custom_fields
+
+    note = read_text_input(args.note, args.note_file)
+    if note:
+        issue_data["notes"] = strip_emoji(prepend_attribution(note))
+
+    if not issue_data:
+        sys.exit("Error: no fields to update. Provide at least one of: "
+                 "--status, --assigned-to, --priority, --subject, "
+                 "--category, --mlm, --note")
+
+    data = {"issue": issue_data}
+    api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
+    print(f"Updated #{args.ticket_id}: {make_url(args.base_url, args.ticket_id)}")
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: attach
+# ---------------------------------------------------------------------------
+
+def cmd_attach(args):
+    """Upload an attachment to a ticket."""
+    filepath = args.file
+    if not os.path.isfile(filepath):
+        sys.exit(f"Error: file not found: {filepath}")
+
+    filename = args.filename or os.path.basename(filepath)
+    with open(filepath, "rb") as f:
+        file_data = f.read()
+
+    token = api_upload(args.base_url, args.api_key, filename, file_data)
+
+    content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+    issue_data = {
+        "uploads": [{"token": token, "filename": filename,
+                      "content_type": content_type}]
+    }
+
+    if args.description:
+        issue_data["uploads"][0]["description"] = args.description
+
+    if args.note:
+        issue_data["notes"] = strip_emoji(prepend_attribution(args.note))
+
+    data = {"issue": issue_data}
+    api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
+    print(f"Attached {filename} to #{args.ticket_id}: "
+          f"{make_url(args.base_url, args.ticket_id)}")
+
+
+# ---------------------------------------------------------------------------
+# Argument parsing
+# ---------------------------------------------------------------------------
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        prog="redmineCli",
+        description="Redmine CLI for the UCSC Genome Browser team")
+    parser.add_argument("--redmine", default=DEFAULT_REDMINE,
+                        help="Redmine base URL (default: %(default)s)")
+    parser.add_argument("--conf", default="~/.hg.conf",
+                        help="Config file with redmine.apiKey (default: %(default)s)")
+
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    # show
+    p_show = sub.add_parser("show", help="Display a ticket in Markdown, optionally download attachments")
+    p_show.add_argument("ticket_id", help="Ticket ID number")
+    p_show.add_argument("--images", action="store_true",
+                        help="Download images to a temp directory")
+    p_show.add_argument("--download-all", dest="download_all", action="store_true",
+                        help="Download all attachments to a temp directory")
+
+    # list
+    p_list = sub.add_parser("list", help="List/search tickets")
+    p_list.add_argument("--project", default=DEFAULT_PROJECT,
+                        help="Project identifier (default: %(default)s)")
+    p_list.add_argument("--status", default="open",
+                        help="Status filter: open, closed, * (default: %(default)s)")
+    p_list.add_argument("--assigned-to", dest="assigned_to",
+                        help="Assignee name or 'me'")
+    p_list.add_argument("--tracker",
+                        help="Tracker name or ID")
+    p_list.add_argument("--search",
+                        help="Search in subject")
+    p_list.add_argument("--limit", type=int, default=25,
+                        help="Max results (default: %(default)s)")
+    p_list.add_argument("--offset", type=int, default=0,
+                        help="Pagination offset (default: %(default)s)")
+    p_list.add_argument("--sort", default="updated_on:desc",
+                        help="Sort field:direction (default: %(default)s)")
+
+    # create
+    p_create = sub.add_parser("create", help="Create a new ticket")
+    p_create.add_argument("--subject", required=True, help="Ticket subject")
+    p_create.add_argument("--description", help="Ticket description")
+    p_create.add_argument("--description-file", dest="description_file",
+                          help="Read description from file (- for stdin)")
+    p_create.add_argument("--project", default=DEFAULT_PROJECT,
+                          help="Project (default: %(default)s)")
+    p_create.add_argument("--tracker", type=int, default=TRACKER_MLQ,
+                          help="Tracker ID (default: %(default)s)")
+    p_create.add_argument("--priority", type=int, default=PRIORITY_UNPRIORITIZED,
+                          help="Priority ID (default: %(default)s)")
+    p_create.add_argument("--status", type=int, default=STATUS_NEW,
+                          help="Status ID (default: %(default)s)")
+    p_create.add_argument("--assigned-to", dest="assigned_to",
+                          help="Assignee name or user ID")
+    p_create.add_argument("--category", help="MLQ Category (custom field)")
+    p_create.add_argument("--email", help="Sender email (custom field)")
+    p_create.add_argument("--mlm", help="MLM name (custom field)")
+
+    # comment
+    p_comment = sub.add_parser("comment", help="Add a comment to a ticket")
+    p_comment.add_argument("ticket_id", help="Ticket ID number")
+    p_comment.add_argument("--message", help="Comment text")
+    p_comment.add_argument("--message-file", dest="message_file",
+                           help="Read comment from file (- for stdin)")
+
+    # update
+    p_update = sub.add_parser("update", help="Update ticket fields")
+    p_update.add_argument("ticket_id", help="Ticket ID number")
+    p_update.add_argument("--status", type=int, help="New status ID")
+    p_update.add_argument("--assigned-to", dest="assigned_to",
+                          help="Assignee name/ID (empty string to clear)")
+    p_update.add_argument("--priority", type=int, help="New priority ID")
+    p_update.add_argument("--subject", help="New subject")
+    p_update.add_argument("--category", help="MLQ Category")
+    p_update.add_argument("--mlm", help="MLM name")
+    p_update.add_argument("--note", help="Comment to include with update")
+    p_update.add_argument("--note-file", dest="note_file",
+                          help="Read note from file (- for stdin)")
+
+    # attach
+    p_attach = sub.add_parser("attach", help="Upload an attachment")
+    p_attach.add_argument("ticket_id", help="Ticket ID number")
+    p_attach.add_argument("file", help="File path to upload")
+    p_attach.add_argument("--filename", help="Override filename")
+    p_attach.add_argument("--description", help="Attachment description")
+    p_attach.add_argument("--note", help="Comment to add with attachment")
+
+    return parser
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def main():
+    parser = build_parser()
+    args = parser.parse_args()
+
+    args.api_key = read_api_key(args.conf)
+    args.base_url = args.redmine
+
+    commands = {
+        "show": cmd_show,
+        "list": cmd_list,
+        "create": cmd_create,
+        "comment": cmd_comment,
+        "update": cmd_update,
+        "attach": cmd_attach,
+    }
+    commands[args.command](args)
+
+
+if __name__ == "__main__":
+    main()

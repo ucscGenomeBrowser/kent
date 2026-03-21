@@ -1362,6 +1362,23 @@ span.gbSessionChanged {
     min-width: 0;
 }
 
+.genomeSearchToggle {
+    background: none;
+    border: 1px solid #ccc;
+    border-left: none;
+    padding: 2px 5px;
+    cursor: pointer;
+    color: #666;
+    font-size: 10px;
+    line-height: 1;
+    margin-left: -1px;
+}
+
+.genomeSearchToggle:hover {
+    color: #333;
+    background: #f0f0f0;
+}
+
 .tbSearchLabel {
     font-weight: bold;
     white-space: normal;

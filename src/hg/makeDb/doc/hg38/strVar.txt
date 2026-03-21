@@ -1,0 +1,27 @@
+# strVar supertrack build notes
+
+# TRExplorer track
+# Mon Mar 17 2026 (Claude/max)
+# Source: https://trexplorer.broadinstitute.org
+# Preprint: https://doi.org/10.1101/2024.10.04.615514
+
+cd /hive/data/genomes/hg38/bed/str/trexplorer
+
+# Download the catalog from TRExplorer (5,599,658 loci)
+# File: TR_catalog.5599658_loci.20260123_034640.tsv.gz
+
+# Convert TSV to BED9+ format (colors by motif size, parses allele histograms)
+python3 ~/kent/src/hg/makeDb/scripts/trexplorer/trexplorerToBed.py \
+    TR_catalog.5599658_loci.20260123_034640.tsv.gz > trexplorer.bed
+
+sort -k1,1 -k2,2n trexplorer.bed > trexplorer.sorted.bed
+
+bedToBigBed -type=bed9+ -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/trexplorer/trexplorer.as \
+    trexplorer.sorted.bed /hive/data/genomes/hg38/chrom.sizes trexplorer.bb
+
+# Symlink into /gbdb
+ln -s /hive/data/genomes/hg38/bed/str/trexplorer/trexplorer.bb /gbdb/hg38/strVar/trexplorer.bb
+
+# Clean up intermediate files
+rm trexplorer.bed trexplorer.sorted.bed

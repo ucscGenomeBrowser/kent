@@ -118,7 +118,7 @@ use one of the default 11.ooc repeat masking files.</p>
 extra matches?</h6>
 <p>
 This usually occurs on the newer genome assemblies, such as hg38, when you search a sequence that
-has an &quot;alternate&quot; or &quot;fix&quot; sequence. To improve the quality of the these 
+has an &quot;alternate&quot; or &quot;fix&quot; sequence. To improve the quality of these 
 assemblies, curators have added multiple versions of some important loci, e.g. the MHC regions. 
 They also add fix sequences to resolve errors without changing the reference. See our <a 
 target="_blank" href="https://genome-blog.gi.ucsc.edu/blog/patches/">patches blog post</a> for more 
@@ -443,7 +443,7 @@ wget http://hgdownload.gi.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
 ./gfServer start 127.0.0.1 1234 -stepSize=5 hg19.2bit
 </pre>
 <p>
-After a few moments, the gfServer will initialize and be ready to recieve queries. In order
+After a few moments, the gfServer will initialize and be ready to receive queries. In order
 to approximate web Blat, we will use the gfClient with the following parameters, designating
 our input and output files.</p>
 <pre>
@@ -454,7 +454,7 @@ our input and output files.</p>
 <a name="blat12"></a>
 <h2>Standalone or gfServer/gfClient result start positions off by one</h2>
 <h6>My standalone Blat results or gfServer/gfClient Blat results have a start
-position that is one less that what I see on web Blat results</h6>
+position that is one less than what I see on web Blat results</h6>
 <p>
 This is due to how we store internal coordinates in the Genome Browser. The default
 Blat <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our

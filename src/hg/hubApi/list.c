@@ -115,6 +115,7 @@ struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
+char *genome = cgiOptionalString(argGenome);
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
 struct jsonWrite *jw = apiStartOutput();
@@ -126,12 +127,23 @@ char **columnTypes = NULL;
 int *jsonTypes = NULL;
 int columnCount = tableColumns(conn, "dbDb", &columnNames, &columnTypes,
     &jsonTypes);
+long long itemCount = 0;
 jsonWriteObjectStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
-    dbDbJsonData(jw, el, columnCount, columnNames);
+    if (genome == NULL || sameWord(genome, el->name))
+        {
+        dbDbJsonData(jw, el, columnCount, columnNames);
+        ++itemCount;
+        }
     }
 jsonWriteObjectEnd(jw);
+if (genome && itemCount < 1)
+    {
+    char *genomeInput = cgiOptionalString("genomeInput");
+    apiErrAbort(err404, err404Msg, "genome '%s' not found",
+        isNotEmpty(genomeInput) ? genomeInput : genome);
+    }
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
@@ -153,7 +165,11 @@ char *genome = cgiOptionalString("genome");
 struct genark *list = genArkList(genome);
 struct jsonWrite *jw = apiStartOutput();
 if (genome && slCount(list) < 1)
-    apiErrAbort(err404, err404Msg, "genome '%s' not found", genome);
+    {
+    char *genomeInput = cgiOptionalString("genomeInput");
+    apiErrAbort(err404, err404Msg, "genome '%s' not found",
+        isNotEmpty(genomeInput) ? genomeInput : genome);
+    }
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 char *hubPrefix = cfgOption("genarkHubPrefix");
@@ -774,7 +790,6 @@ if (fileType)
         safef(outString, sizeof(outString), "https://%s/gbdb/%s/%s.2bit", DOWNLOAD_HOST, genome, genome);
         textLineOut(outString);
         }
-            
     }
 else if (genArkHub)
     {

@@ -1,0 +1,63 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.npm.sg/" target="_blank">National Precision Medicine (NPM)</a> program
+in Singapore sequenced 9,770 whole genomes, mostly of Chinese, Indian and Malay ancestry.
+A minimum allele count cutoff of &gt;5 was applied. CNV data is also available.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
+</p>
+<p>
+VCF download can be requested on the <a href="https://chorus.grids-platform.io/"
+target="_blank">Chorus Browser</a> website, which requires an
+<a href="https://npm.a-star.edu.sg/" target="_blank">account and data access request</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+Whole Genome Sequencing (WGS) data processing followed GATK4 best practices. GATK4 germline variant
+analysis workflow written in WDL was adapted to use Nextflow and deployed at the National
+Supercomputing Centre, Singapore (NSCC). WGS reads were aligned against GRCh38 using the BWA-MEM
+algorithm and used as input to GATK HaplotypeCaller to produce single sample gVCFs. The gVCF files
+were joint-called then loaded in Hail. Low-quality WGS libraries and low-quality variants were
+removed. QC-ed variants were functionally annotated using Ensembl Variant Effect Predictor (VEP)
+(version 95). Functional annotations for variants impacting protein-coding regions were also
+complemented with information on the potential alteration to their cognate protein&apos;s 3D structure
+and drug binding ability.
+</p>
+<p>
+Our data access request was approved by the NPM data access committee. It can be contacted at contact_npco@a-star.edu.sg.
+We downloaded the data from the NPM Chorus browser download section.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the NPM Data Access Committee and Eleanor for granting our data request.
+By browsing the data, you agree to use the data only for academic, non-commercial
+research to improve human health (biology/disease). We request all data users
+agree to protect the confidentiality of the data subjects in any research papers or publications
+that they may prepare, by taking all reasonable care to limit the possibility
+of identification. In particular, the data users shall not use, or attempt
+to use, the data to deliberately compromise or otherwise infringe the
+confidentiality of information on data subjects and their right to privacy.
+If you use any of the data obtained from the CHORUS variant browser, we request
+that you cite the NPM flagship paper (Wong et al, 2023). All data users of the
+data must take note that the data provider and relevant SG10K_Health cohort
+owners bear no responsibility for the further analysis or interpretation of the data.
+</p>
+
+<h2>References</h2>
+<p>
+Wong E, Bertin N, Hebrard M, Tirado-Magallanes R, Bellis C, Lim WK, Chua CY, Tong PML, Chua R, Mak K
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-022-01274-x" target="_blank">
+The Singapore National Precision Medicine Strategy</a>.
+<em>Nat Genet</em>. 2023 Feb;55(2):178-186.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36658435" target="_blank">36658435</a>
+</p>

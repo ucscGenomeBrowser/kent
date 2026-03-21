@@ -861,7 +861,7 @@ enum trackVisibility hTvFromString(char *s)
 {
 enum trackVisibility vis = hTvFromStringNoAbort(s);
 if ((int)vis < 0)
-    errAbort("Unknown visibility %s", s);
+    errAbort("Unknown visibility %s. Use one of: hide, dense, squish, pack, full.", s);
 return vis;
 }
 
@@ -965,9 +965,11 @@ else
     }
 }
 
-void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-				 boolean canPack, char *class, char *visOnly, struct slPair *events)
-// Make track visibility drop down for varName with style class, and potentially limited to visOnly
+void hTvDropDownClassVisOnlyAndExtraWithLabel(char *varName, enum trackVisibility vis,
+				 boolean canPack, char *class, char *visOnly, struct slPair *events,
+				 char *label)
+// Make track visibility drop down for varName with style class, optional aria-label,
+// and potentially limited to visOnly
 {
 char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
 char* checked = vizArr[vis];
@@ -979,7 +981,14 @@ static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (visOnly==NULL && canPack)
     checked = vizArr[packIx[vis]];
 
-cgiMakeDropListClassWithStyleAndJavascript(varName, vizArr, vizArrLen, checked, class,TV_DROPDOWN_STYLE, events);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(varName, NULL, vizArr, vizArrLen, checked, class, TV_DROPDOWN_STYLE, events, label);
+}
+
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+				 boolean canPack, char *class, char *visOnly, struct slPair *events)
+// Make track visibility drop down for varName with style class, and potentially limited to visOnly
+{
+hTvDropDownClassVisOnlyAndExtraWithLabel(varName, vis, canPack, class, visOnly, events, NULL);
 }
 
 void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
@@ -1618,7 +1627,7 @@ if (!hashLookup(settings, INDEL_DOUBLE_INSERT))
 if (!hashLookup(settings, INDEL_QUERY_INSERT))
     hashAdd(settings, INDEL_QUERY_INSERT, cloneString("on"));
 if (!hashLookup(settings, INDEL_POLY_A))
-    hashAdd(settings, INDEL_POLY_A, cloneString("on"));
+    hashAdd(settings, INDEL_POLY_A, cloneString("off"));
 if (!hashLookup(settings, "showDiffBasesMaxZoom"))
     hashAdd(settings, "showDiffBasesMaxZoom", cloneString(BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM));
 }
@@ -4942,8 +4951,10 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 // When only one subtrack, then show it's cfg settings instead of composite/view level settings
 // This simplifies the UI where hgTrackUi won't have 2 levels of cfg,
 // while hgTracks still supports rightClick cfg of the subtrack.
+// Don't do this if noParentConfig is specified in the composite parent
+boolean noParentConfig = tdb && trackDbSetting(tdb, "noParentConfig");
 
-if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we
+if (!noParentConfig && (configurableByAjax(tdb,cType) > 0)) // Only if subtrack's configurable by ajax do we
     {                                  // consider this option
     if (tdbIsComposite(tdb)                       // called for the composite
         && !isCustomComposite(tdb)
@@ -5341,6 +5352,7 @@ struct slRef *subtrackRef;
 char *colors[2]   = { "bgLevel1",
 		  "bgLevel1" };
 int colorIx = settings->bgColorIx;
+boolean noParentConfig = parentTdb && trackDbSetting(parentTdb, "noParentConfig");
 
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
@@ -5378,7 +5390,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 		    }
 		}
 	    }
-	else if (slCount(subtrackRefList) < 2   // don't bother if there is a single subtrack
+	else if (!noParentConfig && slCount(subtrackRefList) < 2   // don't bother if there is a single subtrack without noParentConfig in the composite header
 	     && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone) // but the composite is configurable.
 	    cType = cfgNone;
 	}
@@ -5479,8 +5491,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	else
 	    safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",
 			    (visibleCB ? "":" disabled"));
-	#define SUBTRACK_CFG_VIS "<div id='%s_faux' class='%s' style='width:65px;'>%s</div>\n"
-	printf(SUBTRACK_CFG_VIS,subtrack->track,classList,hStringFromTv(vis));
+	#define SUBTRACK_CFG_VIS "<div id='%s_faux' class='%s' style='width:65px;'>%c%s</div>\n"
+
+        char* visString = hStringFromTv(vis);
+	printf(SUBTRACK_CFG_VIS,subtrack->track,classList, toupper((unsigned char)visString[0]), visString+1);
+
 	char id[256];
 	safef(id, sizeof id, "%s_faux", subtrack->track);
 	jsOnEventByIdF("click", id, "return subCfg.replaceWithVis(this,\"%s\",true);", subtrack->track);
@@ -10611,4 +10626,16 @@ if (row != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+}
+
+char *gcOnFlyWinSize(struct cart *cart)
+/* Return window size for GC on the fly track calculation */
+{
+char *returnSize = NULL;
+char *s = cartOptionalString(cart, gcOnFlyWindowSize);
+if (s != NULL)
+    returnSize = cloneString(s);
+else
+    returnSize = cloneString(gcOnFlyDefaultSize);
+return returnSize;
 }

@@ -2319,7 +2319,7 @@ struct highlightVar *parseHighlightInfo()
 {
 struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
-if(highlightDef)
+if(isNotEmpty(highlightDef))
     {
     int hlCount = chopByChar(highlightDef, '|', NULL, 0);
     char **hlArr = AllocN(char *, hlCount);
@@ -7445,6 +7445,20 @@ if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
 if (userSeqString != NULL)
     slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
+if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
+    {
+    if (cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE))
+	{
+	slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
+	}
+    else
+	{
+	if (rFindTrackWithTable("gc5Base", trackList) == NULL &&
+	    rFindTrackWithTable("gc5BaseBw", trackList) == NULL)
+	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
+	}
+    }
+
 if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
@@ -10044,11 +10058,12 @@ if (!hideControls)
 		    else
                         {
                         /* check for option of limiting visibility to one mode */
-                        hTvDropDownClassVisOnly(track->track, track->visibility,
+                        hTvDropDownClassVisOnlyWithLabel(track->track, track->visibility,
                                                 rTdbTreeCanPack(track->tdb),
                                                 (track->visibility == tvHide) ? "hiddenText"
                                                                               : "normalText",
-                                                trackDbSetting(track->tdb, "onlyVisibility"));
+                                                trackDbSetting(track->tdb, "onlyVisibility"),
+                                                track->tdb->shortLabel);
                         }
                     }
 		else

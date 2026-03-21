@@ -4213,6 +4213,23 @@ function addMouseover(ele1, text = null, ele2 = null) {
         if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize !== null ? window.browserTextSize : 12;}
         mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
         document.body.append(mouseoverContainer);
+
+        // Tooltip mouseenter/mouseleave
+        mouseoverContainer.addEventListener("mouseenter", function() {
+            mouseoverContainer._isMouseOver = true;
+            // Clear any hide timeout when entering tooltip
+            if (mouseoverContainer._hideTimeout) {
+                clearTimeout(mouseoverContainer._hideTimeout);
+                mouseoverContainer._hideTimeout = null;
+            }
+        });
+        mouseoverContainer.addEventListener("mouseleave", function() {
+            mouseoverContainer._isMouseOver = false;
+            // Hide after a short delay to allow for quick mouse movements
+            mouseoverContainer._hideTimeout = setTimeout(function() {
+                hideMouseoverText(mouseoverContainer);
+            }, 100);
+        });
     }
 
     if (ele1) {
@@ -4255,28 +4272,13 @@ function addMouseover(ele1, text = null, ele2 = null) {
         ele1.addEventListener("mouseenter", ele1._mouseenterHandler);
         ele1.addEventListener("mouseleave", ele1._mouseleaveHandler);
     }
-
-    // Tooltip mouseenter/mouseleave
-    mouseoverContainer.addEventListener("mouseenter", function() {
-        mouseoverContainer._isMouseOver = true;
-        // Clear any hide timeout when entering tooltip
-        if (mouseoverContainer._hideTimeout) {
-            clearTimeout(mouseoverContainer._hideTimeout);
-            mouseoverContainer._hideTimeout = null;
-        }
-    });
-    mouseoverContainer.addEventListener("mouseleave", function() {
-        mouseoverContainer._isMouseOver = false;
-        // Hide after a short delay to allow for quick mouse movements
-        mouseoverContainer._hideTimeout = setTimeout(function() {
-            hideMouseoverText(mouseoverContainer);
-        }, 100);
-    });
 }
 
 function showTooltipForElement(ele, ev) {
     // Show the tooltip for the given element
     if (suppressTooltips) {return;}
+    // wiggle mouseovers have special code, don't use these tooltips for those:
+    if (typeof mouseOver !== "undefined" && mouseOver.visible) {return;}
     let text = ele.getAttribute("mouseoverText");
     if (!text) return;
     mouseoverContainer.replaceChildren();
@@ -4288,7 +4290,6 @@ function showTooltipForElement(ele, ev) {
     mouseoverContainer.classList.add("isShown");
     mouseoverContainer.style.opacity = "1";
     mouseoverContainer.style.visibility = "visible";
-    mouseoverContainer.setAttribute("origItemMouseoverId", ele.getAttribute("mouseoverid"));
 }
 
 function hideMouseoverText(ele) {
@@ -4328,11 +4329,22 @@ function convertTitleTagsToMouseovers() {
 
     /* Mouseover should clear if you leave the document window altogether */
     document.body.addEventListener("mouseleave", (ev) => {
-        hideMouseoverText(mouseoverContainer);
+        if (mouseoverContainer) {
+            hideMouseoverText(mouseoverContainer);
+        }
+    });
+
+    /* Mouseover should clear on scroll */
+    document.addEventListener("scroll", (ev) => {
+        if (mouseoverContainer) {
+            hideMouseoverText(mouseoverContainer);
+        }
     });
 
     function hideTooltips() {
-        hideMouseoverText(mouseoverContainer);
+        if (mouseoverContainer) {
+            hideMouseoverText(mouseoverContainer);
+        }
     }
 
     /* make the mouseovers go away if we are in an input */
@@ -4363,7 +4375,9 @@ function convertTitleTagsToMouseovers() {
     /* Make the ESC key hide tooltips */
     document.body.addEventListener("keyup", (ev) => {
         if (ev.keyCode === 27) {
-            hideMouseoverText(mouseoverContainer);
+            if (mouseoverContainer) {
+                hideMouseoverText(mouseoverContainer);
+            }
         }
     });
 }
@@ -4461,6 +4475,10 @@ function addRecentGenome(item) {
         if (!cleanItem.hubUrl && existingItem.hubUrl) {
             cleanItem.hubUrl = existingItem.hubUrl;
         }
+        // Preserve hubName if not present in new item
+        if (!cleanItem.hubName && existingItem.hubName) {
+            cleanItem.hubName = existingItem.hubName;
+        }
     }
 
     // Add to front
@@ -4482,10 +4500,46 @@ function getRecentGenomes() {
         if (recentObj.results[genome]) {
             let item = Object.assign({}, recentObj.results[genome]);
             // Preserve original category for setDbFromAutocomplete to detect GenArk/hubs
-            // but also provide a display category for UI
+            item.originalCategory = item.category;
+            // Set category for autocomplete grouping header
+            item.category = "Recent";
             item.displayCategory = "Recent";
             results.push(item);
         }
+    }
+    return results;
+}
+
+function getPopularGenomes($inputEl) {
+    // Parse the popular assemblies JSON embedded in the page by printGenomeSearchBar().
+    // Returns an array of autocomplete-formatted items with category "Popular".
+    // Items already present in recents are excluded to avoid duplicates.
+    let inputId = $inputEl.attr('id');
+    let dataEl = document.getElementById(inputId + 'PopularData');
+    if (!dataEl) return [];
+    let popularData;
+    try {
+        popularData = JSON.parse(dataEl.textContent);
+    } catch (e) {
+        return [];
+    }
+    // Build a set of db names already in recents to avoid duplicates
+    let recentDbs = new Set();
+    let recents = getRecentGenomes();
+    for (let r of recents) {
+        recentDbs.add(r.db || r.genome);
+    }
+    let results = [];
+    for (let p of popularData) {
+        if (recentDbs.has(p.db)) continue;
+        results.push({
+            genome: p.db,
+            db: p.db,
+            label: p.label,
+            commonName: p.commonName,
+            category: "Popular",
+            displayCategory: "Popular"
+        });
     }
     return results;
 }
@@ -4509,26 +4563,32 @@ function removeRecentGenomesByHubUrl(hubUrl) {
     window.localStorage.setItem("recentGenomes", JSON.stringify(recentObj));
 }
 
+function dbFromRecentItem(item) {
+    let db = item.db || item.genome;
+    if (item.hubName && item.category && item.category.startsWith('Assembly Hub'))
+        db = item.hubName + "_" + db;
+    return db;
+}
+
 function recentGenomeHref(res) {
-    // Build an hgTracks URL for a recent genome entry. GenArk assemblies need
-    // db=, genome=, and a fully qualified hubUrl= so that fixUpDb() and
-    // hubConnectLoadHubs() in cartNew() can connect the hub. UCSC native
-    // databases just need db=.
-    let db = res.db || res.genome;
+    // Build an hgTracks URL for a recent genome entry. GenArk assemblies are
+    // handled transparently by fixUpDb() in cartNew() when given just db= with
+    // the accession. UCSC native databases also just need db=.
+    let db = dbFromRecentItem(res);
     let url = new URL("../cgi-bin/hgTracks", window.location.href);
     url.searchParams.set("hgsid", getHgsid());
+    if (res.hubUrl) {
+        if (res.category && res.category.startsWith("Assembly Hub")) {
+            url.searchParams.set("hubUrl", res.hubUrl);
+        } else if (!res.category) {
+            // in practice this shouldn't happen, but just in case:
+            let msg = "recentGenomeHref: item has hubUrl but no category: " + JSON.stringify(res);
+            console.warn(msg);
+            writeToApacheLog(msg);
+        }
+    }
     url.searchParams.set("db", db);
     url.searchParams.set("position", "lastDbPos");
-    if (res.hubUrl) {
-        // The findGenome API returns a relative hubUrl (e.g. GCA/.../hub.txt)
-        // while hgGateway stores it already prefixed (e.g. /gbdb/genark/GCA/.../hub.txt).
-        let hubUrl = res.hubUrl;
-        if (!hubUrl.startsWith("/gbdb/genark/")) {
-            hubUrl = "/gbdb/genark/" + hubUrl;
-        }
-        url.searchParams.set("genome", db);
-        url.searchParams.set("hubUrl", window.location.origin + hubUrl);
-    }
     return url.toString();
 }
 
@@ -4554,12 +4614,21 @@ function addRecentGenomesToMenuBar() {
     // construct the current list of labels
     const labelList = [];
     document.querySelectorAll("#tools1 > ul > li > a").forEach( (a) => {
-        labelList.push(a.textContent);
+        if (a.textContent.includes("/")) {
+            // try to extract just the 'hg38' or 'mm10' part
+            let splitLabel = a.textContent.split("/");
+            if (splitLabel[1].length > 0)
+                labelList.push(splitLabel[1]);
+        } else {
+            labelList.push(a.textContent);
+        }
     });
 
     // filter our list of recents against the list of "Genomes"
     let finalResult = results.filter( (result) => {
-        return !labelList.includes(result.firstChild.textContent);
+        return !labelList.some( (l) => {
+            return result.firstChild.textContent.includes(l);
+        });
     });
 
     // Only add separators and items if we have recents to add
@@ -4639,14 +4708,14 @@ function addRecentSearch(db, searchTerm, extra={}) {
                 // remove it from wherever it is cause it's going to the front
                 searchList.splice(searchList.indexOf(searchTerm), 1);
             } else {
-                searchObj[db].results[searchTerm] = extra;
                 if (searchList.length >= 5) {
                     let toDelete = searchList.pop();
                     delete searchObj[db].results[toDelete];
                 }
             }
+            // always update results in case the extra data has changed
+            searchObj[db].results[searchTerm] = extra;
             searchList.unshift(searchTerm);
-            searchObj.stack = searchList;
         } else {
             searchObj[db] = {"stack": [searchTerm], "results": {}};
             searchObj[db].results[searchTerm] = extra;
@@ -4799,7 +4868,7 @@ function processFindGenome(result, term) {
 }
 
 function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null,
-        watermark = null, onServerReply = null, onError = null) {
+        watermark = null, onServerReply = null, onError = null, onFilterDropdown = null) {
 /* Generic function for turning an <input> element into a species search bar with an autocomplete
  * list separating results by category.
  * Required arguments:
@@ -4875,10 +4944,16 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
                        label = label.replace(regex, '<b>$1</b>');
                    });
                 }
-                return $("<li></li>")
+                let $li = $("<li></li>")
                     .data("ui-autocomplete-item", item)
                     .append($("<a></a>").html(label))
                     .appendTo(ul);
+                if (item.disabled) {
+                    $li.attr('title', item.disabledReason || 'Not available');
+                    $li.css({'opacity': '0.5'});
+                    $li.find('a').css({'pointer-events': 'none'});
+                }
+                return $li;
             }
         }
     );
@@ -4888,6 +4963,7 @@ function initSpeciesAutoCompleteDropdown(inputId, selectFunction, baseUrl = null
         onSelect: selectFunction,
         onServerReply: onServerReply !== null ? onServerReply : processFindGenome,
         onError: onError,
+        onFilterDropdown: onFilterDropdown,
         showRecentGenomes: true,
         enterSelectsIdentical: false
     });
@@ -4915,7 +4991,8 @@ function setupGenomeSearchBar(config) {
         // Standard validation - all CGIs check this
         if (item.disabled || !item.genome) return;
         // Standard label update - all CGIs do this
-        labelElement.innerHTML = item.label;
+        if (labelElement)
+            labelElement.innerHTML = item.label;
         // Call user's custom callback for CGI-specific logic
         if (typeof config.onSelect === 'function') {
             config.onSelect(item, labelElement);
@@ -4936,6 +5013,26 @@ function setupGenomeSearchBar(config) {
             btn.addEventListener("click", () => {
                 let val = document.getElementById(config.inputId).value;
                 $("[id='" + config.inputId + "']").autocompleteCat("search", val);
+            });
+        }
+
+        // Dropdown toggle button: opens/closes the autocomplete with recent+popular
+        let toggle = document.getElementById(config.inputId + "Toggle");
+        if (toggle) {
+            let wasOpen = false;
+            toggle.addEventListener("mousedown", () => {
+                let $input = $("[id='" + config.inputId + "']");
+                wasOpen = $input.autocompleteCat("widget").is(":visible");
+            });
+            toggle.addEventListener("click", () => {
+                let $input = $("[id='" + config.inputId + "']");
+                if (wasOpen) {
+                    $input.autocompleteCat("close");
+                } else {
+                    $input.val("");
+                    $input.autocompleteCat("search", "");
+                    $input.focus();
+                }
             });
         }
     });

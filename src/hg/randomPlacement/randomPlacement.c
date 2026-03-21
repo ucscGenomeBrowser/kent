@@ -548,7 +548,7 @@ if (placedItemCount)
 	"nearest bounding element\n", returnStats->placedWithinShoulder,
 		shoulder);
     if ((placedCount - returnStats->zeroNeighbor) > 0)
-	verbose(2,"%% %.04f - percent of of items of non-zero distance "
+	verbose(2,"%% %.04f - percent of items of non-zero distance "
 	    "within %d bp of nearest bounding element\n",
 		100.0 * returnStats->placedWithinShoulder /
 			(placedCount-returnStats->zeroNeighbor),

@@ -1,0 +1,86 @@
+<h2>Description</h2>
+<p>
+<a href="https://primateai3d.basespace.illumina.com/" target="_blank">PrimateAI-3D</a> is a
+semi-supervised 3D convolutional neural network that predicts the pathogenicity of all
+possible missense variants in the human genome. It was trained on 4.5 million benign
+missense variants: 4.3 million common variants from 809 non-human primate individuals
+across 233 species, plus common human variants (&gt;0.1% allele frequency) from gnomAD,
+TOPMed, and UK Biobank. These represent about 6% of all possible human missense variants.
+Activate the <a href="hgTrackUi&db=hg38&g=cons447way">Zoonomia 447 way Mammal/Primate</a> alignment
+track to show these variants.
+</p>
+
+<p>
+The model operates on voxelized protein structures at 2 &Aring; resolution (from
+AlphaFold or homology models) combined with multiple sequence alignments from 592 species.
+It uses three complementary loss functions: benign variant classification, 3D
+fill-in-the-blank prediction on masked amino acids, and a language model ranking component.
+This track shows 70.7 million scored variants across all protein-coding genes.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each variant is colored <span style="color:blue">blue (benign)</span> or
+<span style="color:red">red (pathogenic)</span> based on the raw score.
+The score field (0-1000) represents the percentile rank of the raw PrimateAI-3D score,
+where higher values indicate greater predicted pathogenicity.
+Mouseover shows the nucleotide change, amino acid change, raw score, percentile, and prediction.
+Items can be filtered by prediction (benign/pathogenic) and by percentile score.
+</p>
+
+<p>
+Score interpretation: raw scores range from 0 to 1, with higher values indicating greater
+predicted pathogenicity. The authors suggest a clinical threshold of 0.821 for
+distinguishing pathogenic from benign missense variants. The percentile field shows
+where a variant&apos;s score ranks relative to all other scored variants. 75% of variants
+are classified as benign, 25% as pathogenic.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to the data license, this track is not available for bulk download from UCSC and the API, the Table Browser
+and the "Download track data" button do not work. However, the source data can be downloaded from the
+<a href="https://primateai3d.basespace.illumina.com/" target="_blank">PrimateAI-3D website</a>
+(requires registration). The primate variant database is available at
+<a href="https://primad.basespace.illumina.com/" target="_blank">PrimAD</a>.
+Note that our <a href="hgTrackUi&db=hg38&g=cons447way">Zoonomia 447 way</a> alignment
+track includes the primate variants.
+</p>
+
+<h2>Methods</h2>
+<p>
+The PrimateAI-3D hg38 site list was downloaded from the Illumina BaseSpace website.
+The tab-separated file contains pre-computed scores for all possible single nucleotide
+missense variants. Positions were formatted as bigBed. The percentile score was put into
+the track score field (scaled to 0-1000). No filtering was applied; all 70.7 million
+scored variants are included.
+A conversion script is available from
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/primateAiToBigBed.py"
+target="_blank">our Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Illumina, in particular Gao Hong, for making PrimateAI-3D predictions publicly available.
+</p>
+
+<h2>References</h2>
+<p>
+Gao H, Hamp T, Ede J, Schraiber JG, McRae J, Singer-Berk M, Yang Y, Dietrich ASD,
+Fiziev PP, Kuderna LFK <em>et al</em>.
+<a href="https://doi.org/10.1126/science.abn8197" target="_blank">
+The landscape of tolerated genetic variation in humans and primates</a>.
+<em>Science</em>. 2023 Jun 2;380(6648):eabn8197.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">37262156</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10187174/" target="_blank">PMC10187174</a>
+</p>
+
+<p>
+Sundaram L, Gao H, Padigepati SR, McRae JF, Li Y, Kosmicki JA, Fritzilas N, Hakenberg J,
+Dutta A, Shon J <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-018-0167-z" target="_blank">
+Predicting the clinical impact of human mutation with deep neural networks</a>.
+<em>Nat Genet</em>. 2018 Aug;50(8):1161-1170.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30038395" target="_blank">30038395</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6237276/" target="_blank">PMC6237276</a>
+</p>

@@ -21,7 +21,7 @@ errAbort(
   "     -genePredExt - create a extended genePred, including frame\n"
   "      information and gene name\n"
   "     -allErrors - skip groups with errors rather than aborting.\n"
-  "      Useful for getting infomation about as many errors as possible.\n"
+  "      Useful for getting information about as many errors as possible.\n"
   "     -ignoreGroupsWithoutExons - skip groups contain no exons rather than\n"
   "      generate an error.\n"
   "     -infoOut=file - write a file with information on each transcript\n"

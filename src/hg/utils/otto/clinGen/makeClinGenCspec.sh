@@ -7,16 +7,16 @@ cd /hive/data/outside/otto/clinGen/clinGenCspec
 
 # Check to see if svis.json is available for download and quit if it fails
 # after 4 attempts
-for i in 1 2 3; do
+for i in 1 2 3 4; do
     wget -q -O svis.json https://cspec.genome.network/cspec/api/svis && break
-    if [ $i -lt 3 ]; then
-        echo "Warning: Failed to download SVIs data.\n"
+    if [ $i -lt 4 ]; then
+        echo -e "Warning: Failed to download SVIs data.\n"
         echo "Retrying in 5 minutes (attempt $i of 3)..."
         sleep 300
     fi
 done
-if [ $i -eq 3 ]; then
-    echo "Error: Failed to download the SVIs data. The ClinGen CSpec API appears to be down.\n"
+if [ $i -eq 4 ]; then
+    echo -e "Error: Failed to download the SVIs data. The ClinGen CSpec API appears to be down.\n"
     echo "Please try again later or check https://cspec.genome.network for service status."
     exit 1
 fi
@@ -32,34 +32,34 @@ else
 fi
 
 # Check to see if mondo.json is available, and quit if it fails
-# after 3 attempts
-for i in 1 2 3; do
+# after 4 attempts
+for i in 1 2 3 4; do
     wget -q http://purl.obolibrary.org/obo/mondo.json && break
-    if [ $i -lt 3 ]; then
-        echo "Warning: Failed to download MONDO disease ontology.\n"
+    if [ $i -lt 4 ]; then
+        echo -e "Warning: Failed to download MONDO disease ontology.\n"
         echo "Retrying in 5 minutes (attempt $i of 3)..."
         sleep 300
     fi
 done
-if [ $i -eq 3 ]; then
-    echo "Error: Failed to download the MONDO disease ontology.\n"
-    echo "The OBO Foundry API appears to be down.\n"
+if [ $i -eq 4 ]; then
+    echo -e "Error: Failed to download the MONDO disease ontology.\n"
+    echo -e "The OBO Foundry API appears to be down.\n"
     echo "Please try again later or check https://obofoundry.org for service status."
     exit 1
 fi
 
 # Try to get the geneToDisease.csv file, and quit if it fails
-# after 3 attempts
-for i in 1 2 3; do
+# after 4 attempts
+for i in 1 2 3 4; do
     wget -q -O geneToDisease.csv https://search.clinicalgenome.org/kb/gene-validity/download && break
-    if [ $i -lt 3 ]; then
-        echo "Warning: Failed to download gene-disease data.\n"
+    if [ $i -lt 4 ]; then
+        echo -e "Warning: Failed to download gene-disease data.\n"
         echo "Retrying in 5 minutes (attempt $i of 3)..."
         sleep 300
     fi
 done
-if [ $i -eq 3 ]; then
-    echo "Error: Failed to download gene-disease data. The ClinGen API appears to be down.\n"
+if [ $i -eq 4 ]; then
+    echo -e "Error: Failed to download gene-disease data. The ClinGen API appears to be down.\n"
     echo "Please try again later or check https://clinicalgenome.org for service status."
     exit 1
 fi

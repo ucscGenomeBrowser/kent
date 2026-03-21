@@ -137,6 +137,7 @@ install:
 	cp -p --remove-destination makeHub.sh              ${SCRIPTS}
 	cp -p --remove-destination makeTouchCommands.csh   ${SCRIPTS}
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
+	cp -p --remove-destination mlqAutomate.py	   ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination pairLastzWrapper.py     ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}

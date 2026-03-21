@@ -1,13 +1,27 @@
 <h2>Description</h2>
 <p>
 The <strong>Genome Aggregation Database (gnomAD) v4 - Exome Coverage</strong> track shows how many
-times regions of the genomes were sequenced. This track includes several subtracks of averager
+times regions of the genomes were sequenced. This track includes several subtracks of average
  coverage metrics and sample percentage of coverage.
 </p>
 <p>
 There is no gnomAD v4 genome coverage track because the genomes were unchanged from V3. There is no
 gnomAD v3 exomes track because v3 was a genome-only release.</p>
 
+<h2>Display Conventions</h2>
+<p>
+The <strong>Average/Median Sample Coverage</strong> tracks display the mean and median read depth of the
+samples at each base position. The details page shows calculated sample percentages for the range
+of sequence within the browser window.
+</p>
+
+<p>
+The <strong>nX Coverage Percentage</strong> tracks display the percentage of samples whose read
+depth is at least 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, and 100X at each base position. The details
+page shows calculated sample percentages for the range of sequence within the browser window.
+</p>
+
+<h2>Methods</h2>
 <p>
 Coverage was computed using all gnomAD 4 exome samples from their gVCFs. The gVCFs were produced
 using a 3-bin blocking scheme:
@@ -23,19 +37,6 @@ The coverage was binned by quality using the thresholds above and the median cov
 of the resulting coverage blocks was used to compute the coverage metrics presented in the browser.
 Coverage was computed for all callable bases in the genome (all non-N bases, minus telomeres and
 centromeres).
-</p>
-
-<h2>Display Conventions</h2>
-<p>
-The <strong>Average/Median Sample Coverage</strong> tracks display the mean and median read depth of the
-samples at each base position. The details page shows calculated sample percentages for the range
-of sequence within the browser window.
-</p>
-
-<p>
-The <strong>nX Coverage Percentage</strong> tracks display the percentage of samples whose read
-depth is at least 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, and 100X at each base position. The details
-page shows calculated sample percentages for the range of sequence within the browser window.
 </p>
 
 <h2>Data Access</h2>

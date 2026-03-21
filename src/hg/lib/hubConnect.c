@@ -1214,6 +1214,40 @@ if (isEmpty(curatedHubPrefix))
 return curatedHubPrefix;
 }
 
+static boolean genarkCurated(char *dirPath, char **hubUrl)
+/* Given a dirPath to a GenArk hub, find the appropriate hub.txt */
+{
+boolean ret = FALSE;
+if (dirPath != NULL && isDirectory(dirPath))
+    {
+    *hubUrl = NULL;
+    char *prefix = getCuratedHubPrefix();
+
+    /* Try <prefix>.hub.txt first */
+    char candidate[4096];
+    safef(candidate, sizeof candidate, "%s/%s.hub.txt", dirPath, prefix);
+    if (fileExists(candidate))
+        {
+        *hubUrl = cloneString(candidate);
+	ret = TRUE;
+        }
+    else	/* no specific 'prefix.hub.txt' than simply use the 'hub.txt' */
+        {
+        safef(candidate, sizeof candidate, "%s/hub.txt", dirPath);
+        if (fileExists(candidate))
+	    {
+	    *hubUrl = cloneString(candidate);
+	    ret = TRUE;
+	    }
+        }
+    }
+
+return ret;
+}
+
+
+// nibPath: hub:/gbdb/hs1/hubs - 'hs1' style
+// nibPath: hub:/gbdb/genark/GCF/036/323/735/GCF_036323735.1 - GenArk style
 
 boolean hubConnectGetCuratedUrl(char *db, char **hubUrl)
 /* Check to see if this db is a curated hub and if so return its hubUrl */
@@ -1234,8 +1268,19 @@ if (hubUrl != NULL) // if user passed in hubUrl, calculate what it should be
         {
         char *path = dir + sizeof(hubCuratedPrefix) - 1;
         char url[4096];
-        safef(url, sizeof url, "%s/%s/hub.txt", path, getCuratedHubPrefix());
-        *hubUrl = cloneString(url);
+        safef(url, sizeof url, "%s/%s", path, getCuratedHubPrefix());
+	if (isDirectory(url))	// 'hs1' style curated hub
+	    {
+	    safef(url, sizeof url, "%s/%s/hub.txt", path,getCuratedHubPrefix());
+            *hubUrl = cloneString(url);
+	    }
+	else
+	    {
+	    if (genarkCurated(path, hubUrl))
+		{
+                ret = TRUE;
+		}
+	    }
         }
     }
 
@@ -1264,15 +1309,41 @@ if (!isEmpty(dir))
     {
     char *path = &dir[sizeof hubCuratedPrefix - 1];
     char urlBuf[4096];
-    safef(urlBuf, sizeof urlBuf, "%s/%s/hub.txt", path, curatedHubPrefix);
-    char *url = hReplaceGbdb(urlBuf);
+    safef(urlBuf, sizeof urlBuf, "%s/%s", path, curatedHubPrefix);
+    char *url = NULL;
+    if (isDirectory(urlBuf))	// 'hs1' style curated hub
+	{
+	safef(urlBuf, sizeof urlBuf, "%s/%s/hub.txt", path, curatedHubPrefix);
+	url = hReplaceGbdb(urlBuf);
+	}
+    else	// GenArk style curated hub
+	{
+	safef(urlBuf, sizeof urlBuf, "%s/%s.hub.txt", path, curatedHubPrefix);
+	if (fileExists(urlBuf))
+	    url = hReplaceGbdb(urlBuf);
+	else
+	    {
+	    safef(urlBuf, sizeof urlBuf, "%s/hub.txt", path);
+	    url = hReplaceGbdb(urlBuf);
+	    }
+	}
 
     struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
 
     if (status && isEmpty(status->errorMessage))
-        {
-        char buffer[4096];
-        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+	{
+	char buffer[4096];
+	/* For GenArk-style hubs the hub.txt names the genome by accession
+	 * (e.g. GCF_036323735.1), not by the dbDb browser name (e.g. rn8).
+	 * Use the actual genome name from the fetched hub so that the cart
+	 * db matches what is registered in hubAssemblyHash.  The genome
+	 * name is already hub-decorated (hub_<id>_<genomeName>) at this
+	 * point, so use it directly.
+	  */
+	char *genomeName = db;
+	if (status->trackHub && status->trackHub->genomeList)
+           genomeName = trackHubSkipHubName(status->trackHub->genomeList->name);
+	safef(buffer, sizeof buffer, "hub_%d_%s", status->id, genomeName);
 
         cartSetString(cart, "db", buffer);
         if (cgiOptionalString("db"))
@@ -1285,7 +1356,7 @@ if (!isEmpty(dir))
         }
     else
         {
-        if (!isEmpty(status->errorMessage))
+        if (status && isNotEmpty(status->errorMessage))
             errAbort("Hub error: url %s: error  %s.", url, status->errorMessage);
         else
             errAbort("Cannot open hub %s.", url);

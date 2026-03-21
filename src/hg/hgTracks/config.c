@@ -446,10 +446,11 @@ for (group = groupList; group != NULL; group = group->next)
             else
                 {
                 /* check for option of limiting visibility to one mode */
-                hTvDropDownClassVisOnly(track->track, track->visibility,
+                hTvDropDownClassVisOnlyWithLabel(track->track, track->visibility,
                                         rTdbTreeCanPack(track->tdb),
                                         (track->visibility == tvHide) ? "hiddenText trackVis" : "normalText trackVis",
-                                        trackDbSetting(track->tdb, "onlyVisibility"));
+                                        trackDbSetting(track->tdb, "onlyVisibility"),
+                                        tdb->shortLabel);
                 }
 	    }
         else

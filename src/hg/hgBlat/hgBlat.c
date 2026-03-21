@@ -720,7 +720,7 @@ else  // hyperlink
 	    "var ct_blat = '';\n"
 	    "\n"
 	    "function buildBigPslCtSuccess (content, status)\n"
-	    "{ // Finishes the succesful creation of blat ct bigPsl.  Called by ajax return.\n"
+	    "{ // Finishes the successful creation of blat ct bigPsl.  Called by ajax return.\n"
 	    "  // saves the ct name so it can be used later for rename or delete.\n"
 	    "\n"
 	    "var matchWord = '&table=';\n"
@@ -2076,20 +2076,15 @@ puts("\n");
 puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
 puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
-printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
+printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'><label for='genomeSearch'>Genome:</label>");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search all genomes</span>");
+printf(" <label for='allGenomes'> Search all genomes</label>");
 printf("</TD>");
-// clicking on the Search ALL text clicks the checkbox.
-jsOnEventById("click", "searchAllText", 
-    "document.mainForm.allGenomes.click();"
-    "return false;"   // cancel the default
-    );
 
 printf("<TD ALIGN=CENTER>Assembly:</TD>");
-printf("<TD ALIGN=CENTER>Query type:</TD>");
-printf("<TD ALIGN=CENTER>Sort output:</TD>");
-printf("<TD ALIGN=CENTER>Output type:</TD>");
+printf("<TD ALIGN=CENTER><label for='type'>Query type:</label></TD>");
+printf("<TD ALIGN=CENTER><label for='sort'>Sort output:</label></TD>");
+printf("<TD ALIGN=CENTER><label for='output'>Output type:</label></TD>");
 printf("<TD ALIGN=CENTER>&nbsp;</TD>");
 printf("</TR>\n");
 
@@ -2105,7 +2100,9 @@ jsInlineF(
     "setupGenomeSearchBar({\n"
     "    inputId: '%s',\n"
     "    onSelect: function(item) {\n"
-    "        document.mainForm.db.value = item.genome;\n"
+    "        let db = dbFromRecentItem(item);\n"
+    "        document.mainForm.db.value = db;\n"
+    "        document.mainForm.submit();\n"
     "    }\n"
     "});\n"
     , searchBarId
@@ -2118,30 +2115,26 @@ printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 if (orgChange)
     type = cartOptionalString(cart, "type");
-cgiMakeDropList("type", typeList, ArraySize(typeList), type);
+cgiMakeDropListClassWithIdStyleAndJavascript("type", "type", typeList, ArraySize(typeList), type, "normalText", NULL, NULL);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
-cgiMakeDropList("sort", pslSortList, ArraySize(pslSortList), cartOptionalString(cart, "sort"));
+cgiMakeDropListClassWithIdStyleAndJavascript("sort", "sort", pslSortList, ArraySize(pslSortList), cartOptionalString(cart, "sort"), "normalText", NULL, NULL);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
-cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
+cgiMakeDropListClassWithIdStyleAndJavascript("output", "output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"), "normalText", NULL, NULL);
 printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-htmlPrintf("<TEXTAREA NAME=userSeq ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
+printf("<label for='userSeq' style='display:block; margin-bottom:2px;'>Paste in a query sequence or upload a FASTA file:</label>");
+htmlPrintf("<TEXTAREA NAME=userSeq id=userSeq ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
 printf("</TR>\n");
 
 printf("<TR>\n");
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
 cgiMakeCheckBoxWithId("allResults", allResults, "allResults");
-printf("<span id=allResultsText>All Results (no minimum matches)</span>");
-// clicking on the All Results text clicks the checkbox.
-jsOnEventById("click", "allResultsText", 
-    "document.mainForm.allResults.click();"
-    "return false;"   // cancel the default
-    );
+printf("<label for='allResults'>All Results (no minimum matches)</label>");
 printf("</TD>\n");
 
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
@@ -2170,7 +2163,7 @@ printf("</TR>\n");
 printf("<TR>\n"); 
 puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
     "Paste in a query sequence to find its location in the\n"
-    "the genome. Multiple sequences may be searched \n"
+    "genome. Multiple sequences may be searched \n"
     "if separated by lines starting with '>' followed by the sequence name.\n"
     "</TD>\n"
     "</TR>\n"
@@ -2180,18 +2173,18 @@ puts("<TR><TD COLSPAN=5 WIDTH=\"100%\">\n");
 puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
-puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
+puts("<label>Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\"></label>");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit file\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
-"sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
+"sequence of 10,000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
 "submissions is 50,000 bases or 25,000 letters.<br> A valid example "
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
 "<P>The <b>Search all</b> checkbox allows you to search all genomes at the same time. "
-"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers."
+"Search all is only available for default assemblies and attached hubs with dedicated BLAT servers. "
 "The new dynamic BLAT servers are not supported, and they are noted as skipped in the output. "
 "<b>See our <a href='/FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> for more information.</b>\n"
 );
@@ -2209,8 +2202,8 @@ if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
            " for best results instead of BLAT. " 
            "To search for short sequences &lt; 20bp only in the sequence shown on the Genome Browser, "
-           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
-           "If you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
+           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
+           "If you are using the command line and want to search the entire genome, try our command line tool <tt>findMotifs</tt>, from the "
            "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.</p>",
            db, cartSessionVarName(), cartSessionId(cart));
 puts("</TD></TR></TABLE>\n");

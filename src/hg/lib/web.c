@@ -31,6 +31,7 @@
 #include "wikiLink.h"
 #include "googleAnalytics.h"
 #include "jsHelper.h"
+#include "jsonParse.h"
 #endif /* GBROWSE */
 
 
@@ -244,6 +245,7 @@ if(menuStr)
     puts(menuStr);
     }
 
+puts("<main id=\"mainContent\">");
 webStartSectionTables();
 
 if (withLogo)
@@ -481,6 +483,7 @@ void webEnd()
 if(!webInTextMode)
     {
     webEndSectionTables();
+    puts("</main>");
 #ifndef GBROWSE
     googleAnalytics();
 #endif /* GBROWSE */
@@ -496,6 +499,7 @@ void webEndExtra(char *footer)
 if(!webInTextMode)
     {
     webEndSectionTables();
+    puts("</main>");
 #ifndef GBROWSE
     googleAnalytics();
 #endif /* GBROWSE */
@@ -550,6 +554,7 @@ if (navBar)
     // Override nice-menu.css's menu background and fonts:
     webIncludeResourceFile("gbAfterMenu.css");
     }
+puts("<main id=\"mainContent\">");
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
 }
@@ -563,6 +568,7 @@ webStartGbOptionalBanner(cart, db, title, FALSE, FALSE);
 void webEndGb()
 /* End HTML that was started with webStartJWest. */
 {
+puts("</main>");
 googleAnalytics();
 jsInlineFinish();
 puts("</body></html>");
@@ -954,6 +960,9 @@ if (isNotEmpty(placeholder))
     printf("placeholder='%s' ", placeholder);
 printf("class='%s' ", isNotEmpty(classStr) ? classStr : "genomeSearchBarDefault");
 printf("></input>\n");
+printf("<button id='%sToggle' type='button' class='genomeSearchToggle' tabindex='-1'"
+    " aria-label='Show popular assemblies'"
+    " title='Show recent and popular assemblies'>&#9660;</button>\n", id);
 if (withSearchButton)
     printf("<input id='%sButton' value='search' type='button'></input>", id);
 char *searchHelpText = "All genome searches are case-insensitive.  Single-word searches default to prefix "
@@ -966,6 +975,31 @@ char *searchHelpText = "All genome searches are case-insensitive.  Single-word s
 "</ul>";
 printInfoIcon(searchHelpText);
 printf("</div>\n"); // the search button is grouped with the input
+// Embed popular assemblies JSON for the autocomplete dropdown
+{
+char *popularStr = cfgOptionDefault("browser.popularGenomes",
+    "hg38,hg19,mm39,mm10,rn7,danRer11,dm6,ce11,sacCer3");
+struct slName *dbNames = slNameListFromComma(popularStr);
+struct dyString *json = dyStringNew(512);
+dyStringAppendC(json, '[');
+boolean first = TRUE;
+struct slName *dbIter;
+for (dbIter = dbNames; dbIter != NULL; dbIter = dbIter->next)
+    {
+    struct dbDb *info = hDbDb(dbIter->name);
+    if (info == NULL || !info->active)
+        continue;
+    if (!first)
+        dyStringAppendC(json, ',');
+    first = FALSE;
+    dyStringPrintf(json, "{\"db\":\"%s\",\"label\":\"%s - %s (%s)\",\"commonName\":\"%s\"}",
+        jsonStringEscape(info->name), jsonStringEscape(info->organism), jsonStringEscape(info->description), jsonStringEscape(info->name), jsonStringEscape(info->organism));
+    }
+dyStringAppendC(json, ']');
+printf("<script type='application/json' id='%sPopularData'>%s</script>\n", id, dyStringContents(json));
+dyStringFree(&json);
+slFreeList(&dbNames);
+}
 printf("</div>\n");
 }
 
@@ -1764,6 +1798,45 @@ jsInline("$(\"#tools1 ul li a\").each( function (a) {\n"
 // if the user has previously searched for assemblies, add them to the "Genomes" menu heading,
 // above the "other" assemblies link
 jsInline("addRecentGenomesToMenuBar();\n");
+
+// If the user explicitly navigated to this genome (db= in CGI params), add it to recent genomes
+if (db && cgiOptionalString("db"))
+    {
+    struct dbDb *dbInfo = hDbDb(db);
+    if (dbInfo)
+        {
+        char *bareDb = jsonStringEscape(trackHubSkipHubName(db));
+        char *safeOrganism = jsonStringEscape(trackHubSkipHubName(dbInfo->organism));
+        struct dyString *jsCall = dyStringNew(512);
+        dyStringPrintf(jsCall,
+            "addRecentGenome({db:\"%s\", genome:\"%s\", label:\"%s (%s)\", commonName:\"%s\"",
+            bareDb, bareDb, safeOrganism, bareDb, safeOrganism);
+        if (dbInfo->taxId > 0)
+            dyStringPrintf(jsCall, ", taxId: %d", dbInfo->taxId);
+        // For hub/GenArk assemblies, include hubUrl and category so hgGateway can route correctly
+        struct trackHubGenome *hubGenome = trackHubDatabase(db) ? trackHubGetGenome(db) : NULL;
+        if (hubGenome && hubGenome->trackHub)
+            {
+            char *safeHubUrl = jsonStringEscape(hubGenome->trackHub->url);
+            dyStringPrintf(jsCall, ", hubUrl:\"%s\"", safeHubUrl);
+            if (startsWith("/gbdb", hubGenome->trackHub->url))
+                dyStringAppend(jsCall, ", category:\"UCSC Curated\"");
+            else
+                {
+                dyStringAppend(jsCall, ", category:\"Assembly Hub\"");
+                char *hubName = trackHubGetHubName(db);
+                if (hubName)
+                    dyStringPrintf(jsCall, ", hubName: \"%s\"", jsonStringEscape(hubName));
+                }
+            }
+        else
+            dyStringAppend(jsCall, ", category:\"UCSC Curated\"");
+        dyStringAppend(jsCall, "});\n");
+        jsInline(dyStringContents(jsCall));
+        dyStringFree(&jsCall);
+        }
+    }
+
 return menuStr;
 }
 

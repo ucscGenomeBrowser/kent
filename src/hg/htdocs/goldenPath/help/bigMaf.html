@@ -84,7 +84,7 @@ option.</p>
     uint   chromStart; "Start range in chromosome"
     uint   chromEnd;   "End range in chromosome"
     string src;        "Name of sequence source in MAF"
-    ubyte frame;       "frame (0,1,2) for first base(+) or last bast(-)"
+    ubyte frame;       "frame (0,1,2) for first base(+) or last base(-)"
     char[1] strand;    "+ or -"
     string name;       "Name of gene used to define frame"
     int    prevFramePos;  "target position of the previous base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous"
@@ -279,7 +279,7 @@ command line to view the usage statement.</p>
 <h2>Troubleshooting</h2>
 <p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
-file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+file for data coordinates that extend past the end of the chromosome. If these are present, run 
 the <code>bedClip</code> program 
 (<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
 row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
