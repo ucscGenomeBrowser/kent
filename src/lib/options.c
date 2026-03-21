@@ -367,7 +367,12 @@ if (s == NULL)
     return defaultVal;
 if (sameString(s,"on"))
     return defaultVal;
+errno = 0;
 lval = strtol(s, &valEnd, 10);  // use strtol since strtoi does not exist
+if (errno == ERANGE) 
+    {
+    errnoAbort("optionInt strtol overflow or underflow in input string %s", s);
+    }
 if ((*s == '\0') || (*valEnd != '\0'))
     errAbort("value of -%s is not a valid integer: \"%s\"", name, s);
 if (lval > INT_MAX)
@@ -388,7 +393,12 @@ if (s == NULL)
     return defaultVal;
 if (sameString(s,"on"))
     return defaultVal;
+errno = 0;
 val = strtoll(s, &valEnd, 10);
+if (errno == ERANGE) 
+    {
+    errnoAbort("optionLongLong strtoll overflow or underflow in input string %s", s);
+    }
 if ((*s == '\0') || (*valEnd != '\0'))
     errAbort("value of -%s is not a valid long long: \"%s\"", name, s);
 return val;
