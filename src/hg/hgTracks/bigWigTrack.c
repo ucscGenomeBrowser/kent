@@ -478,22 +478,20 @@ tdb->shortLabel = cloneString(GC_ON_FLY_TRACK_LABEL);
 tdb->longLabel  = cloneString(longLabel);
 tdb->grp        = cloneString("map");
 tdb->canPack    = 0;
-tdb->visibility = tvFull;
+tdb->visibility = tvHide;
 
 /* Add wig display settings to match what gc5BaseBw trackDb would have. */
 trackDbAddSetting(tdb, "autoScale",         "Off");
-// trackDbAddSetting(tdb, "viewLimits",        "30:70");
-trackDbAddSetting(tdb, "viewLimits",        "0:100");
-// trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
-trackDbAddSetting(tdb, "maxHeightPixels",   "128:128:128");
+trackDbAddSetting(tdb, "viewLimits",        "30:70");
+trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
 trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
 trackDbAddSetting(tdb, "gridDefault",       "OFF");
 trackDbAddSetting(tdb, "windowingFunction", "Mean");
 trackDbAddSetting(tdb, "color",             "0,0,0");
 trackDbAddSetting(tdb, "altColor",          "128,128,128");
-trackDbAddSetting(tdb, "gcComputeOnTheFly", "on");
-trackDbAddSetting(tdb, "gcOnTheFlyMaxBases", "500000");
-trackDbAddSetting(tdb, "gcFallbackBigWig", "/gbdb/ce1x/bbi/gc5BaseBw/gc5Base.bw");
+// trackDbAddSetting(tdb, "gcComputeOnTheFly", "on");
+// trackDbAddSetting(tdb, "gcOnTheFlyMaxBases", "500000");
+// trackDbAddSetting(tdb, "gcFallbackBigWig", "/gbdb/ce1x/bbi/gc5BaseBw/gc5Base.bw");
 trackDbAddSetting(tdb, "calcWinSize", gcOnFlyWinSize(cart));
 trackDbPolish(tdb);
 

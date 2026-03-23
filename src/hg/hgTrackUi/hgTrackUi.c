@@ -3198,8 +3198,9 @@ printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
     printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
 if (colorSettingsUrl) // only if present in trackDb.settings entry
-    printf(",\"colorSettingsUrl\": \"%s\"", colorSettingsUrl);
-printf(",\"metadataUrl\": \"%s\"", metaDataUrl);
+    printf(",\"colorSettingsUrl\": \"%s\"", cgiEncode((char*) colorSettingsUrl));
+printf(",\"metadataUrl\": \"%s\"", cgiEncode((char*) metaDataUrl));
+printf(",\"track\": \"%s\"", tdb->track);
 printf(closeJSON);
 /* --- END embedded JSON data --- */
 
@@ -3733,7 +3734,8 @@ if (!ajax)
 puts("<BR><BR>");
 
 if (tdbIsSuperTrackChild(tdb))
-    showSupertrackInfo(tdb);
+    if (! (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) )
+        showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
