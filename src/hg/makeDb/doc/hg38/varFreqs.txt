@@ -171,8 +171,11 @@ nomad_AN_amr,INFO/gnomad_AC_asj,INFO/gnomad_AF_asj,INFO/gnomad_AN_asj,INFO/gnoma
 eas,INFO/gnomad_AC_fin,INFO/gnomad_AF_fin,INFO/gnomad_AN_fin,INFO/gnomad_AC_mid,INFO/gnomad_AF_mid,INFO/gnomad_AN_mid,INFO/
 gnomad_AC_nfe,INFO/gnomad_AF_nfe,INFO/gnomad_AN_nfe,INFO/gnomad_AC_oth,INFO/gnomad_AF_oth,INFO/gnomad_AN_oth,INFO/gnomad_AC
 _sas,INFO/gnomad_AF_sas,INFO/gnomad_AN_sas,INFO/gnomad_popmax,INFO/gnomad_faf95_popmax"
-bcftools view -G /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz --threads 8 \
-| bcftools annotate -x "^${KEEP}" -Oz --threads 4 -o hgdp1k.freq.vcf.gz
+# This took days to complete, so asked Claude to make it parallel
+#bcftools view -G /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz --threads 8 \
+#| bcftools annotate -x "^${KEEP}" -Oz --threads 4 -o hgdp1k.freq.vcf.gz
+# use 30 threads, and chunks of 50 Mbp
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/vcfFilterParallel.sh /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz hgdp1k.freq.parallel.vcf.gz "$KEEP" 30 50 &
 tabix -p vcf hgdp1k.freq.vcf.gz
 
 # Swefreq, Max, Feb 2026

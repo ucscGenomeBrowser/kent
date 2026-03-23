@@ -1,21 +1,44 @@
 <h2>Description</h2>
 <p>
 This supertrack collects variant allele frequencies from population-scale sequencing and
-genotyping projects worldwide. The goal is to provide a single place to compare how common
-a variant is across different populations, ancestries, and cohorts. Each subtrack contains
-normalized VCF data from one project; an additional
-<a href="#varFreqsAll">combined track</a> merges all databases for cross-project filtering.
-</p>
+genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
+The data was not reprocessed in a harmonized way but the variant VCFs were collected from the projects.
+The goal is to provide a single place to compare how common
+a variant is across different populations, ancestries, and cohorts, for
+projects that cannot be recomputed by gnomAD soon. The main 
+<a href="hgTrackUi?g=varFreqsAll">combined track</a> merges all databases into one single summary track, 
+with filters, summed population frequencies and recalculated protein-effect annotations.
+In addition, there is one subtrack per project with the original VCF data and all the annotations that the project provides.
+The different projects use different pipelines and sequencing technologies, click any of the projects 
+above or below for a summary of their sample selection, sequencing assay and software pipeline.
+Many projects do not allow us to distribute the data but we document how the
+data can be requested and provide all converters.</p>
 
 <p>
-More detailed data for projects that provide haplotype-phased genotypes can also be found
-in other tracks: 1000 Genomes is a separate track, and the projects HGDP, SGDP,
-HGDP+1000 Genomes and Mexico Biobank can be found in the &quot;Phased Variants&quot; track.
+Data from projects that provide haplotype-phased genotypes can also be found
+elsewhere: 1000 Genomes is also a separate track, and the phased genotypes HGDP, SGDP,
+HGDP+1000 Genomes and Mexico Biobank can also be found in the &quot;Phased Variants&quot; track.
+Their VCF versions below show only the isolate frequency per variant.
 </p>
 
-<p>If you want us to add other projects, please contact us. We were
-unable to obtain variant frequencies from the following projects: UK Biobank (request pending),
-Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected).
+<p>Please contact us (genome@soe.ucsc.edu), if you know a project that we should add. So far,
+we already requested these: UK Biobank (pending for a year),
+Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected), Taiwan Biobank (pending).
+</p>
+
+<h2>Combined Track (All Databases)</h2>
+<p>
+The &quot;All Databases Combined&quot; track merges variants from all individual databases into a single
+bigBed file with consequence annotations, a total of more than 1.2 billion variants from 1.7 mil individuals.
+The track supports filtering by variant type
+(SNV, insertion, deletion, MNV), predicted consequence (missense, synonymous, stop gained,
+frameshift, splice, intron, intergenic), source database, allele frequency (overall maximum
+and per-database), and allele count (total or per-database). This track is either useful in dense mode
+for getting a quick overview of variant density across all projects, or with filters to find
+variants present in specific databases or within certain frequency ranges. Not that with the "clone track" 
+feature you can clone this track and have multiple versions, each with different filters activated. 
+You can also use out "Density mode" checkbox on the track configuration page to show a plot with the
+density of variants passing a filter, one per track clone.
 </p>
 
 <h3>Available Datasets</h3>
@@ -29,6 +52,15 @@ Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected).
   <th>Cohort</th>
   <th>Sub-populations</th>
   <th>Access</th>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=varFreqsAll">All Databases combined</a></td>
+  <td>All below</td>
+  <td>1.7mil</td>
+  <td>WGS/WES/imputed</td>
+  <td></td>
+  <td></td>
+  <td>Not downloadable from UCSC</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=allofus">AllOfUs v7</a></td>
@@ -228,18 +260,6 @@ When zoomed in, tracks display alleles with base-specific coloring. Homozygote
 data are shown as one letter, while heterozygotes will be displayed with both
 letters. All VCF files are normalized, with one single allele per annotation (no multi-allele
 lines).
-</p>
-
-<a name="varFreqsAll"></a>
-<h2>Combined Track (All Databases)</h2>
-<p>
-The &quot;All Databases Combined&quot; track merges variants from all individual databases into a single
-bigBed file with consequence annotations (via VEP). It supports filtering by variant type
-(SNV, insertion, deletion, MNV), predicted consequence (missense, synonymous, stop gained,
-frameshift, splice, intron, intergenic), source database, allele frequency (overall maximum
-and per-database), and allele count (per-database). This track is most useful in dense mode
-for getting a quick overview of variant density across all projects, or with filters to find
-variants present in specific databases or within certain frequency ranges.
 </p>
 
 <h2>Data Access</h2>
