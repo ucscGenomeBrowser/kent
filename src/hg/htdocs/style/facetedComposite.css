@@ -23,11 +23,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.3em;
-    margin-bottom: 1em;
-}
-#filters > div > strong {
-    margin-bottom: 0.25em;
-    font-weight: bold;
 }
 #filters label {
     display: flex;
@@ -78,4 +73,118 @@ table.dataTable tbody tr:hover {
     height: 1em;
     vertical-align: middle;
     /* background-color set dynamically in JS */
+}
+
+.facet-heading {
+    cursor: pointer;
+    user-select: none;
+}
+.facet-heading::after {
+    content: "  ❯";
+    margin-left: 0.3em;
+    display: inline-block;
+    transition: transform 0.2s;
+    transform: rotate(90deg);   /* points down = expanded */
+}
+.facet-heading.collapsed::after {
+    transform: rotate(0deg);    /* points right = collapsed */
+}
+.facet-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+.facet-body.collapsed {
+    display: none;
+}
+
+/* "Show only selected" toggle in the toolbar */
+#selected-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-left: 1.5em;
+}
+.dataTables_length {
+    display: inline-flex !important;
+    align-items: center;
+}
+
+/* Toggle switch for "show only selected" filter */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 28px;
+    height: 16px;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background-color: #ccc;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+.toggle-switch input:checked + .toggle-slider {
+    background-color: #4a90d9;
+}
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(12px);
+}
+
+/* Active filter chips bar */
+#active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 0.4em;
+    padding: 0.5em 0;
+    border-top: 1px solid #ddd;
+    margin-top: 0.75em;
+    width: 100%;
+}
+.filter-chip-group-label {
+    font-weight: bold;
+    font-size: 0.85em;
+    margin-left: 0.3em;
+}
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e8f0fe;
+    border: 1px solid #c2d6f2;
+    border-radius: 12px;
+    padding: 0.15em 0.5em;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+.filter-chip .remove-chip {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    line-height: 1;
+    padding: 0 0 0 0.25em;
+    color: #666;
+}
+.filter-chip .remove-chip:hover {
+    color: #c00;
 }
