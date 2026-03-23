@@ -1214,9 +1214,10 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* Make track group for wig - wiggle tracks. */
 
-struct track *gc5BaseOnTheFlyTg(struct cart *cart);
+struct track *gc5BaseOnTheFlyTg(struct cart *cart, char *sessionVis);
 /* Create an on-the-fly GC percent track computed directly from
- *     from genome sequence.
+ *     from genome sequence.  sessionVis is the visibility string
+ *     from a restored session cart, or NULL for default visibility.
  */
 
 void mathWigMethods(struct track *track, struct trackDb *tdb, 

@@ -7447,15 +7447,25 @@ if (userSeqString != NULL)
 slSafeAddHead(&trackList, oligoMatchTg());
 if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
     {
-    if (cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE))
+    /* If a saved session is active but has no setting for the gcOnFly track,
+     * the session predates this track -- do not inject it. */
+    boolean sessionActive = isNotEmpty(cartOptionalString(cart, hgsOtherUserSessionName));
+    boolean gcOnFlyInSession = (cartOptionalString(cart, GC_ON_FLY_TRACK_NAME) != NULL);
+    boolean gcOnFlyAllowed = !sessionActive || gcOnFlyInSession;
+    if (gcOnFlyAllowed)
 	{
-	slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
-	}
-    else
-	{
-	if (rFindTrackWithTable("gc5Base", trackList) == NULL &&
-	    rFindTrackWithTable("gc5BaseBw", trackList) == NULL)
-	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
+	char *sessionVis = gcOnFlyInSession
+	    ? cartUsualString(cart, GC_ON_FLY_TRACK_NAME, "dense") : NULL;
+	if (cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE))
+	    {
+	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart, sessionVis));
+	    }
+	else
+	    {
+	    if (rFindTrackWithTable("gc5Base", trackList) == NULL &&
+		rFindTrackWithTable("gc5BaseBw", trackList) == NULL)
+		slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart, sessionVis));
+	    }
 	}
     }
 
