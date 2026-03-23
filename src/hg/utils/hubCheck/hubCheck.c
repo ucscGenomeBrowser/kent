@@ -802,6 +802,36 @@ else if (tdb->subtracks != NULL)
     }
 }
 
+static char *VALID_TRACK_TYPES[] = {
+    "bam", "bigBarChart", "bigBed", "bigChain", "bigGenePred", "bigInteract",
+    "bigLolly", "bigMaf", "bigMethyl", "bigNarrowPeak", "bigPsl", "bigRmsk",
+    "bigWig", "halSnake", "hic", "longTabix", "vcfPhasedTrio", "vcfTabix", NULL};
+
+static bool isValidTrackType(char *trackType)
+/* check that a track type is valid */
+{
+// **** DANGER, WILL ROBINSON! ****
+// There is also code in trackHub.c that checks track names.
+// both places must be changed or common code created.
+for (int i = 0; VALID_TRACK_TYPES[i] != NULL; i++)
+    if (sameString(trackType, VALID_TRACK_TYPES[i]))
+        return TRUE;
+return FALSE;
+}
+
+static char *getValidTrackTypesMsg()
+/* return descriptions of valid track types */
+{
+struct dyString *msg = dyStringNew(256);
+for (int i = 0; VALID_TRACK_TYPES[i] != NULL; i++)
+    {
+    if (i > 0)
+        dyStringAppend(msg, ", ");
+    dyStringAppend(msg, VALID_TRACK_TYPES[i]);
+    }
+return dyStringCannibalize(&msg);
+}
+
 boolean checkTypeLine(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
 {
 boolean retVal = FALSE;
@@ -813,22 +843,11 @@ if (errCatchStart(errCatch))
     int numWords = chopByWhite(cloneString(type), splitType, sizeof(splitType));
     char *trackType = splitType[0];
     boolean isParentTrack = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
-    if (!isParentTrack &&
-            // these are the valid trackDb types for hub data tracks:
-            !(sameString("bigNarrowPeak", trackType) || sameString("bigBed", trackType) ||
-                    sameString("bigGenePred", trackType)  || sameString("bigPsl", trackType)||
-                    sameString("bigChain", trackType)|| sameString("bigMaf", trackType) ||
-                    sameString("bigBarChart", trackType) || sameString("bigInteract", trackType) ||
-                    sameString("bigLolly", trackType) || sameString("bigRmsk", trackType) ||
-                    sameString("bigWig", trackType) || sameString("longTabix", trackType) ||
-                    sameString("vcfTabix", trackType) || sameString("vcfPhasedTrio", trackType) ||
-                    sameString("bam", trackType) || sameString("hic", trackType)
-            #ifdef USE_HAL
-                    || sameString("halSnake", trackType)
-            #endif
-            ))
+    if (!isParentTrack && !isValidTrackType(trackType))
         {
-        errAbort("error: unrecognized type \"%s\" for track \"%s\". Valid types include: bigWig, bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigBarChart, bigInteract, vcfTabix, bam, hic, and longTabix. See https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#type for the full list.", trackType, tdb->track);
+        errAbort("error: unrecognized type \"%s\" for track \"%s\". Valid types are: %s. "
+                 "See https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#type for the more incornation list.",
+                 trackType, tdb->track, getValidTrackTypesMsg());
         }
 
     if (sameString(splitType[0], "bigBed"))

@@ -15,12 +15,15 @@ superTrack on
         visibility dense
         itemRgb on
         maxWindowToDraw 5000000
+        priority 0.1
+        #mouseOver $aaChange $dnaChange
         # Variant type and consequence filters
         filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
         filterLabel.varType Variant Type
         filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,.|Intergenic
         filterLabel.consequence Consequence
-        filterValues.sources aou|AllOfUs,spk|SPARK_iWES,wgs|SFARI_WGS,ga|GenomeAsia100K,kov|KOVA,tom|ToMMo,mcp|MCPS,ind|IndiGenomes,fin|FinnGen,sau|Saudi,swe|SweGen,top|TOPMed,abr|ABraOM
+        # Source database filter
+        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA
         filterType.sources multipleListOr
         filterLabel.sources Source Database
         # Length filters
@@ -34,86 +37,189 @@ superTrack on
         filterByRange.maxAF on
         filterLabel.maxAF Max Allele Frequency
         filterLimits.maxAF 0:1
+        # Total AC filter
+        filterByRange.totalAC on
+        filterLabel.totalAC Total Allele Count (all databases)
         # Per-database AF filters
-        filterByRange.aouAF on
-        filterLabel.aouAF AllOfUs AF
-        filterByRange.spkAF on
-        filterLabel.spkAF SPARK AF
-        filterByRange.wgsAF on
-        filterLabel.wgsAF SFARI WGS AF
-        filterByRange.gaAF on
-        filterLabel.gaAF GenomeAsia AF
-        filterByRange.kovAF on
-        filterLabel.kovAF KOVA AF
-        filterByRange.tomAF on
-        filterLabel.tomAF ToMMo AF
-        filterByRange.mcpAF on
-        filterLabel.mcpAF MCPS AF
-        filterByRange.indAF on
-        filterLabel.indAF IndiGenomes AF
-        filterByRange.finAF on
-        filterLabel.finAF FinnGen AF
-        filterByRange.sauAF on
-        filterLabel.sauAF Saudi AF
-        filterByRange.sweAF on
-        filterLabel.sweAF SweGen AF
-        filterByRange.topAF on
-        filterLabel.topAF TOPMed AF
-        filterByRange.abrAF on
-        filterLabel.abrAF ABraOM AF
+        filterByRange.AllOfUsAF on
+        filterLabel.AllOfUsAF AllOfUs AF
+        filterByRange.SPARKAF on
+        filterLabel.SPARKAF SPARK WES AF
+        filterByRange.SFARI_WGSAF on
+        filterLabel.SFARI_WGSAF SFARI WGS AF
+        filterByRange.GenomeAsiaAF on
+        filterLabel.GenomeAsiaAF GenomeAsia SNVs AF
+        filterByRange.GenomeAsiaIndelAF on
+        filterLabel.GenomeAsiaIndelAF GenomeAsia Indels AF
+        filterByRange.KOVAAF on
+        filterLabel.KOVAAF KOVA Korea AF
+        filterByRange.ToMMoAF on
+        filterLabel.ToMMoAF ToMMo Japan AF
+        filterByRange.IndiGenAF on
+        filterLabel.IndiGenAF IndiGenomes India AF
+        filterByRange.FinnGenAF on
+        filterLabel.FinnGenAF FinnGen Finland AF
+        filterByRange.SaudiAF on
+        filterLabel.SaudiAF Saudi AF
+        filterByRange.SweGenAF on
+        filterLabel.SweGenAF SweGen Sweden AF
+        filterByRange.TOPMedAF on
+        filterLabel.TOPMedAF TOPMed AF
+        filterByRange.ABraOMAF on
+        filterLabel.ABraOMAF ABraOM Brazil AF
+        filterByRange.ALFAAF on
+        filterLabel.ALFAAF ALFA AF
+        filterByRange.MGRBAF on
+        filterLabel.MGRBAF MGRB Australia AF
+        filterByRange.HRCAF on
+        filterLabel.HRCAF HRC AF
+        filterByRange.MexBBAF on
+        filterLabel.MexBBAF Mexico Biobank AF
+        filterByRange.SGDPAF on
+        filterLabel.SGDPAF SGDP AF
+        filterByRange.HGDP1kGAF on
+        filterLabel.HGDP1kGAF gnomAD HGDP+1kG AF
+        filterByRange.GREGoRAF on
+        filterLabel.GREGoRAF GREGoR AF
+        filterByRange.SCHEMAAF on
+        filterLabel.SCHEMAAF SCHEMA AF
         # Per-database AC filters
-        filterByRange.aouAC on
-        filterLabel.aouAC AllOfUs AC
-        filterByRange.spkAC on
-        filterLabel.spkAC SPARK AC
-        filterByRange.wgsAC on
-        filterLabel.wgsAC SFARI WGS AC
-        filterByRange.gaAC on
-        filterLabel.gaAC GenomeAsia AC
-        filterByRange.kovAC on
-        filterLabel.kovAC KOVA AC
-        filterByRange.tomAC on
-        filterLabel.tomAC ToMMo AC
-        filterByRange.mcpAC on
-        filterLabel.mcpAC MCPS AC
-        filterByRange.indAC on
-        filterLabel.indAC IndiGenomes AC
-        filterByRange.finAC on
-        filterLabel.finAC FinnGen AC
-        filterByRange.sauAC on
-        filterLabel.sauAC Saudi AC
-        filterByRange.sweAC on
-        filterLabel.sweAC SweGen AC
-        filterByRange.topAC on
-        filterLabel.topAC TOPMed AC
-        filterByRange.abrAC on
-        filterLabel.abrAC ABraOM AC
-        # Population-specific AF filters (AllOfUs)
-        filterByRange.aouAF_AFR on
-        filterLabel.aouAF_AFR AllOfUs AFR AF
-        filterByRange.aouAF_AMR on
-        filterLabel.aouAF_AMR AllOfUs AMR AF
-        filterByRange.aouAF_EAS on
-        filterLabel.aouAF_EAS AllOfUs EAS AF
-        filterByRange.aouAF_EUR on
-        filterLabel.aouAF_EUR AllOfUs EUR AF
-        filterByRange.aouAF_SAS on
-        filterLabel.aouAF_SAS AllOfUs SAS AF
-        # Population-specific AF filters (GenomeAsia)
-        filterByRange.gaAF_NEA on
-        filterLabel.gaAF_NEA GenomeAsia NEA AF
-        filterByRange.gaAF_SEA on
-        filterLabel.gaAF_SEA GenomeAsia SEA AF
-        filterByRange.gaAF_SAS on
-        filterLabel.gaAF_SAS GenomeAsia SAS AF
-        # Population-specific AF filters (MCPS)
-        filterByRange.mcpAF_AFR on
-        filterLabel.mcpAF_AFR MCPS AFR AF
-        filterByRange.mcpAF_EUR on
-        filterLabel.mcpAF_EUR MCPS EUR AF
-        filterByRange.mcpAF_IMX on
-        filterLabel.mcpAF_IMX MCPS Indigenous MX AF
-        priority 0.1
+        filterByRange.AllOfUsAC on
+        filterLabel.AllOfUsAC AllOfUs AC
+        filterByRange.SPARKAC on
+        filterLabel.SPARKAC SPARK WES AC
+        filterByRange.SFARI_WGSAC on
+        filterLabel.SFARI_WGSAC SFARI WGS AC
+        filterByRange.GenomeAsiaAC on
+        filterLabel.GenomeAsiaAC GenomeAsia SNVs AC
+        filterByRange.GenomeAsiaIndelAC on
+        filterLabel.GenomeAsiaIndelAC GenomeAsia Indels AC
+        filterByRange.KOVAAC on
+        filterLabel.KOVAAC KOVA Korea AC
+        filterByRange.ToMMoAC on
+        filterLabel.ToMMoAC ToMMo Japan AC
+        filterByRange.IndiGenAC on
+        filterLabel.IndiGenAC IndiGenomes India AC
+        filterByRange.FinnGenAC on
+        filterLabel.FinnGenAC FinnGen Finland AC
+        filterByRange.SaudiAC on
+        filterLabel.SaudiAC Saudi AC
+        filterByRange.SweGenAC on
+        filterLabel.SweGenAC SweGen Sweden AC
+        filterByRange.TOPMedAC on
+        filterLabel.TOPMedAC TOPMed AC
+        filterByRange.ABraOMAC on
+        filterLabel.ABraOMAC ABraOM Brazil AC
+        filterByRange.ALFAAC on
+        filterLabel.ALFAAC ALFA AC
+        filterByRange.MGRBAC on
+        filterLabel.MGRBAC MGRB Australia AC
+        filterByRange.HRCAC on
+        filterLabel.HRCAC HRC AC
+        filterByRange.MexBBAC on
+        filterLabel.MexBBAC Mexico Biobank AC
+        filterByRange.SGDPAC on
+        filterLabel.SGDPAC SGDP AC
+        filterByRange.HGDP1kGAC on
+        filterLabel.HGDP1kGAC gnomAD HGDP+1kG AC
+        filterByRange.GREGoRAC on
+        filterLabel.GREGoRAC GREGoR AC
+        filterByRange.SCHEMAAC on
+        filterLabel.SCHEMAAC SCHEMA AC
+        # Population-specific AF filters
+        # AllOfUs populations
+        filterByRange.AllOfUsAF_AFR on
+        filterLabel.AllOfUsAF_AFR AllOfUs African AF
+        filterByRange.AllOfUsAF_AMR on
+        filterLabel.AllOfUsAF_AMR AllOfUs Indigenous American AF
+        filterByRange.AllOfUsAF_EAS on
+        filterLabel.AllOfUsAF_EAS AllOfUs East Asian AF
+        filterByRange.AllOfUsAF_EUR on
+        filterLabel.AllOfUsAF_EUR AllOfUs European AF
+        filterByRange.AllOfUsAF_OCE on
+        filterLabel.AllOfUsAF_OCE AllOfUs Oceanian AF
+        filterByRange.AllOfUsAF_SAS on
+        filterLabel.AllOfUsAF_SAS AllOfUs South Asian AF
+        filterByRange.AllOfUsAC_AFR on
+        filterLabel.AllOfUsAC_AFR AllOfUs African AC
+        filterByRange.AllOfUsAC_AMR on
+        filterLabel.AllOfUsAC_AMR AllOfUs Indigenous American AC
+        filterByRange.AllOfUsAC_EAS on
+        filterLabel.AllOfUsAC_EAS AllOfUs East Asian AC
+        filterByRange.AllOfUsAC_EUR on
+        filterLabel.AllOfUsAC_EUR AllOfUs European AC
+        filterByRange.AllOfUsAC_OCE on
+        filterLabel.AllOfUsAC_OCE AllOfUs Oceanian AC
+        filterByRange.AllOfUsAC_SAS on
+        filterLabel.AllOfUsAC_SAS AllOfUs South Asian AC
+        # GenomeAsia SNVs populations
+        filterByRange.GenomeAsiaAF_NEA on
+        filterLabel.GenomeAsiaAF_NEA GenomeAsia SNVs Northeast Asian AF
+        filterByRange.GenomeAsiaAF_SEA on
+        filterLabel.GenomeAsiaAF_SEA GenomeAsia SNVs Southeast Asian AF
+        filterByRange.GenomeAsiaAF_SAS on
+        filterLabel.GenomeAsiaAF_SAS GenomeAsia SNVs South Asian AF
+        filterByRange.GenomeAsiaAC_NEA on
+        filterLabel.GenomeAsiaAC_NEA GenomeAsia SNVs Northeast Asian AC
+        filterByRange.GenomeAsiaAC_SEA on
+        filterLabel.GenomeAsiaAC_SEA GenomeAsia SNVs Southeast Asian AC
+        filterByRange.GenomeAsiaAC_SAS on
+        filterLabel.GenomeAsiaAC_SAS GenomeAsia SNVs South Asian AC
+        # gnomAD HGDP+1kG populations
+        filterByRange.HGDP1kGAF_afr on
+        filterLabel.HGDP1kGAF_afr gnomAD HGDP+1kG African AF
+        filterByRange.HGDP1kGAF_ami on
+        filterLabel.HGDP1kGAF_ami gnomAD HGDP+1kG Amish AF
+        filterByRange.HGDP1kGAF_amr on
+        filterLabel.HGDP1kGAF_amr gnomAD HGDP+1kG Latino AF
+        filterByRange.HGDP1kGAF_asj on
+        filterLabel.HGDP1kGAF_asj gnomAD HGDP+1kG Ashkenazi Jewish AF
+        filterByRange.HGDP1kGAF_eas on
+        filterLabel.HGDP1kGAF_eas gnomAD HGDP+1kG East Asian AF
+        filterByRange.HGDP1kGAF_fin on
+        filterLabel.HGDP1kGAF_fin gnomAD HGDP+1kG Finnish AF
+        filterByRange.HGDP1kGAF_mid on
+        filterLabel.HGDP1kGAF_mid gnomAD HGDP+1kG Middle Eastern AF
+        filterByRange.HGDP1kGAF_nfe on
+        filterLabel.HGDP1kGAF_nfe gnomAD HGDP+1kG European AF
+        filterByRange.HGDP1kGAF_oth on
+        filterLabel.HGDP1kGAF_oth gnomAD HGDP+1kG Other AF
+        filterByRange.HGDP1kGAF_sas on
+        filterLabel.HGDP1kGAF_sas gnomAD HGDP+1kG South Asian AF
+        filterByRange.HGDP1kGAC_afr on
+        filterLabel.HGDP1kGAC_afr gnomAD HGDP+1kG African AC
+        filterByRange.HGDP1kGAC_ami on
+        filterLabel.HGDP1kGAC_ami gnomAD HGDP+1kG Amish AC
+        filterByRange.HGDP1kGAC_amr on
+        filterLabel.HGDP1kGAC_amr gnomAD HGDP+1kG Latino AC
+        filterByRange.HGDP1kGAC_asj on
+        filterLabel.HGDP1kGAC_asj gnomAD HGDP+1kG Ashkenazi Jewish AC
+        filterByRange.HGDP1kGAC_eas on
+        filterLabel.HGDP1kGAC_eas gnomAD HGDP+1kG East Asian AC
+        filterByRange.HGDP1kGAC_fin on
+        filterLabel.HGDP1kGAC_fin gnomAD HGDP+1kG Finnish AC
+        filterByRange.HGDP1kGAC_mid on
+        filterLabel.HGDP1kGAC_mid gnomAD HGDP+1kG Middle Eastern AC
+        filterByRange.HGDP1kGAC_nfe on
+        filterLabel.HGDP1kGAC_nfe gnomAD HGDP+1kG European AC
+        filterByRange.HGDP1kGAC_oth on
+        filterLabel.HGDP1kGAC_oth gnomAD HGDP+1kG Other AC
+        filterByRange.HGDP1kGAC_sas on
+        filterLabel.HGDP1kGAC_sas gnomAD HGDP+1kG South Asian AC
+        # GREGoR populations
+        filterByRange.GREGoRAF_AFF on
+        filterLabel.GREGoRAF_AFF GREGoR Affected AF
+        filterByRange.GREGoRAF_UNA on
+        filterLabel.GREGoRAF_UNA GREGoR Unaffected AF
+        filterByRange.GREGoRAF_UNK on
+        filterLabel.GREGoRAF_UNK GREGoR Unknown AF
+        filterByRange.GREGoRAC_AFF on
+        filterLabel.GREGoRAC_AFF GREGoR Affected AC
+        filterByRange.GREGoRAC_UNA on
+        filterLabel.GREGoRAC_UNA GREGoR Unaffected AC
+        filterByRange.GREGoRAC_UNK on
+        filterLabel.GREGoRAC_UNK GREGoR Unknown AC
+        skipEmptyFields on
        
         track allofus
         shortLabel AllOfUs v7 245k WGS

@@ -1002,15 +1002,15 @@ else
             }
         else 
             {
-            /* RMH: Added bigRmsk to support RepeatMasker data in bigBed track hub format */
+            // **** DANGER, WILL ROBINSON! ****
+            // There is also code in hubCheck.c that checks track names.
+            // both places must be changed or common code created.
             if (!(startsWithWord("wig", type)||  startsWithWord("bedGraph", type)))
                 {
                 if (!(startsWithWord("bigWig", type) ||
                   startsWithWord("bigBed", type) ||
-#ifdef USE_HAL
                   startsWithWord("pslSnake", type) ||
                   startsWithWord("halSnake", type) ||
-#endif
                   startsWithWord("vcfTabix", type) ||
                   startsWithWord("vcfPhasedTrio", type) ||
                   startsWithWord("bigPsl", type) ||
@@ -1435,12 +1435,12 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
-    /* RMH: Added support for bigRmsk track hub data type */
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
-                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
-                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
-                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
-                startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type))
+             startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
+             startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
+             startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
+             startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type) ||
+             startsWithWord("bigMethyl", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
@@ -1480,17 +1480,19 @@ if (relativeUrl != NULL)
                      "at the same URL path.", bigDataUrl, trackHubSkipHubName(tdb->track));
         bedTabixFileClose(&btf);
         }
-#ifdef USE_HAL
     else if (startsWithWord("halSnake", type))
         {
+#ifdef USE_HAL
         char *errString;
         int handle = halOpenLOD(bigDataUrl, &errString);
         if (handle < 0)
             errAbort("HAL open error: %s", errString);
         if (halClose(handle, &errString) < 0)
             errAbort("HAL close error: %s", errString);
-        }
+#else
+        warn("Note: can not check track %s, validation of halSnake tracks not compiled into this copy of hubCheck", trackHubSkipHubName(tdb->track));
 #endif
+        }
     else if (startsWithWord("hic", type))
         {
         struct hicMeta *header;

@@ -1,6 +1,155 @@
 <h2>Description</h2>
 <p>
-This track merges variants from all individual variant frequency databases into a single file
-with consequence annotations and cross-database filtering. For full documentation, see the
+This track merges variants from all individual variant frequency databases into a single
+bigBed file with predicted protein consequences and cross-database filtering. It contains
+over 1.1 billion variants from 20 population databases worldwide. For a summary of
+all available databases, see the
 <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page.
+</p>
+
+<p>
+Each variant is annotated with its predicted consequence on protein-coding genes
+(using <a href="https://samtools.github.io/bcftools/howtos/csq-calling.html"
+target="_blank">bcftools csq</a> with
+<a href="https://www.ensembl.org/info/data/ftp/index.html" target="_blank">Ensembl</a>
+gene models), and colored by severity.
+Allele counts and frequencies are shown for each source database and, where available,
+broken down by ancestry or population group.
+</p>
+
+<h2>Display Conventions</h2>
+
+<h3>Color by Consequence</h3>
+<p>Variants are colored by their most severe predicted consequence:</p>
+<table class="stdTbl">
+<tr><th>Color</th><th>Consequence class</th><th>Examples</th></tr>
+<tr>
+  <td style="background-color: rgb(255,0,0); color: white; text-align: center;"><b>Red</b></td>
+  <td>Protein-truncating / Loss-of-function</td>
+  <td>stop_gained, frameshift, splice_donor, splice_acceptor, stop_lost, start_lost</td>
+</tr>
+<tr>
+  <td style="background-color: rgb(31,119,180); color: white; text-align: center;"><b>Blue</b></td>
+  <td>Missense / In-frame</td>
+  <td>missense, inframe_insertion, inframe_deletion, protein_altering</td>
+</tr>
+<tr>
+  <td style="background-color: rgb(0,128,0); color: white; text-align: center;"><b>Green</b></td>
+  <td>Synonymous</td>
+  <td>synonymous, stop_retained</td>
+</tr>
+<tr>
+  <td style="background-color: rgb(128,128,128); color: white; text-align: center;"><b>Grey</b></td>
+  <td>Non-coding / Intergenic</td>
+  <td>intron, non_coding, intergenic, UTR</td>
+</tr>
+</table>
+
+<h3>Amino Acid Change Notation</h3>
+<p>
+The &quot;AA change&quot; field uses bcftools csq notation: <b>23I&gt;23V</b> means position
+23 changed from Isoleucine (I) to Valine (V) (missense). <b>23I</b> alone (no arrow)
+means position 23 is Isoleucine and unchanged (synonymous). A &quot;*&quot; indicates a
+stop codon (e.g. 45R&gt;45* is a stop_gained).
+</p>
+
+<h2>Filters</h2>
+<p>
+This track supports extensive filtering via the track settings page. Click on the track
+title or use the &quot;Configure&quot; button to access filters:
+</p>
+
+<h3>Variant Type and Consequence</h3>
+<ul>
+  <li><b>Variant Type</b>: Filter by SNV, Insertion, Deletion, or MNV.</li>
+  <li><b>Consequence</b>: Filter by predicted consequence (Missense, Synonymous, Stop Gained,
+      Frameshift, Splice Donor, Splice Acceptor, Intron, Intergenic).</li>
+</ul>
+
+<p><b>How to find protein-truncating variants:</b> Set the Consequence filter to include
+only &quot;Stop Gained&quot;, &quot;Frameshift&quot;, &quot;Splice Donor&quot;, and
+&quot;Splice Acceptor&quot;. These will appear as red items in the track display.</p>
+
+<h3>Frequency and Count Filters</h3>
+<ul>
+  <li><b>Max Allele Frequency</b>: Filter by the maximum allele frequency observed across
+      all databases. Useful for finding rare variants (e.g., set max to 0.01 for variants
+      with AF &lt; 1% in all databases).</li>
+  <li><b>Total Allele Count</b>: Filter by the sum of allele counts across all databases.
+      Useful for excluding singletons (e.g., set minimum to 2 to remove AC=1 variants
+      that may be sequencing errors).</li>
+  <li><b>Per-database AF and AC</b>: Filter by allele frequency or allele count in any
+      specific database. For example, filter to variants with TOPMed AF &gt; 0.001.</li>
+</ul>
+
+<h3>Source Database</h3>
+<p>
+The <b>Source Database</b> filter lets you restrict to variants present in specific databases.
+For example, select only &quot;GREGoR&quot; to see variants found in the rare disease cohort.
+This filter uses OR logic: selecting multiple databases shows variants found in
+<em>any</em> of the selected databases.
+</p>
+
+<h3>Population-Specific Filters</h3>
+<p>
+Several databases provide ancestry-specific allele frequencies:
+</p>
+<ul>
+  <li><b>AllOfUs</b>: African, Indigenous American, East Asian, European, Oceanian, South Asian
+      (from local ancestry inference)</li>
+  <li><b>GenomeAsia</b>: Northeast Asian, Southeast Asian, South Asian</li>
+  <li><b>gnomAD HGDP+1kG</b>: African, Amish, Latino, Ashkenazi Jewish, East Asian, Finnish,
+      Middle Eastern, European, Other, South Asian</li>
+  <li><b>GREGoR</b>: Affected, Unaffected, Unknown (disease status, not ancestry)</li>
+</ul>
+
+<h3>Length Filters</h3>
+<ul>
+  <li><b>Reference/Alternate Length</b>: Filter by the length of the reference or alternate allele.</li>
+  <li><b>Length Change</b>: Filter by the size difference between alternate and reference
+      (positive = insertion, negative = deletion, zero = SNV or MNV).</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+Variant frequency VCF files from 20 databases were stripped of their INFO fields
+(to reduce size), normalized with <code>bcftools norm</code> (splitting multi-allelic sites),
+and merged with <code>bcftools merge</code>. The merged VCF was then annotated with predicted
+protein consequences using <code>bcftools csq</code> with the
+<a href="https://www.ensembl.org/info/data/ftp/index.html" target="_blank">Ensembl</a>
+GRCh38 release 115 gene annotation (GFF3).
+</p>
+
+<p>
+The annotated VCF was converted to bigBed format using a custom Python script
+(<code>vcfToBigBed.py</code>) that reads frequency data from each source VCF in parallel,
+matches variants by position/ref/alt, and writes a BED file with consequence coloring,
+per-database allele counts and frequencies, and population breakdowns.
+The database configuration (which VCFs to include, field mappings, and population definitions)
+is stored in two TSV files
+(<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs/databases.tsv"
+target="_blank">databases.tsv</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs/populations.tsv"
+target="_blank">populations.tsv</a>)
+to make future updates easy.
+</p>
+
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were
+converted in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a> of the track.
+Scripts are available from
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This track is only possible thanks to the data from millions of volunteers around the world,
+who donated blood, signed consent forms and provided health information about themselves and
+sometimes their families. Click on any of the individual tracks in the
+<a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack to see the specific
+credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track
+and to Andreas Lahner, MGZ, for feedback.
 </p>

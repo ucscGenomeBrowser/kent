@@ -2284,7 +2284,7 @@ puts(" Reverse (-) ");
 }
 
 static void gcOnFlyUi(struct trackDb *tdb)
-/* UI for oligo match track */
+/* UI for GC on the fly track */
 {
 char *winSize = cartUsualString(cart, gcOnFlyWindowSize, gcOnFlyDefaultSize);
 puts("<P><B>GC Percent calculation window size:&nbsp;</B>");
@@ -4015,7 +4015,7 @@ return trackDbForPseudoTrack(RULER_TRACK_NAME,
 	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
-static struct trackDb *trackDbForGcOnFly()
+static struct trackDb *trackDbForGcOnFly(struct cart *cart)
 /* Create a trackDb entry for the GC on the fly pseudo-track. */
 {
 char longLabel[1024];

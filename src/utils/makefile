@@ -9,6 +9,9 @@ include ${kentSrc}/inc/common.mk
 # they are used in the wildcard target rules.  An oddity of gnu make
 
 # define the list of user applications to build
+# These will be distributed as part of the user apps build and we provide them 
+# as binaries and collect usage messages
+# These are C programs, so make clean will be run
 
 UTILS_APPLIST = \
 	addCols \
@@ -119,6 +122,8 @@ UTILS_APPLIST = \
 	wordLine \
 
 # list of utilities to build of interest only at UCSC
+# These are C tools and will run a make clean on each
+# These are not part of the user apps build.
 
 UCSC_APPS = \
 	addCols \
@@ -160,7 +165,8 @@ UCSC_APPS = \
 	verticalSplitSqlTable \
 	weedLines
 
-# list of scripts to install
+# These are parts of the user apps build, so they will land on hgdownload
+# These are not C programs, so no clean up
 
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset.py \
@@ -170,11 +176,12 @@ USER_APP_SCRIPTS = \
 	tdbRename \
 	tdbSort \
 	webSync \
-	genePredCompare \
 	chromToUcsc \
 	bigHeat \
 	bigGuessDb
 
+# Scripts that are not distributed outside of UCSC
+# They are not part of the user-apps build
 SCRIPT_FILES = \
 	agpToLift \
 	apacheLogParse \
@@ -202,6 +209,7 @@ SCRIPT_FILES = \
 	ggMsrToTab \
 	ggPidToTab \
 	ggPpiToTab \
+	genePredCompare \
 	ggSpfToTab \
 	bedNamePickFirst \
 	bedBestTranscript \

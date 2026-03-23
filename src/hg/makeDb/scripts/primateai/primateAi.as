@@ -1,0 +1,21 @@
+table primateAi
+"PrimateAI-3D pathogenicity predictions for all possible missense variants"
+    (
+    string chrom;        "Chromosome"
+    uint chromStart;     "Start position (0-based)"
+    uint chromEnd;       "End position"
+    string name;         "Amino acid change (e.g. V>M)"
+    uint score;          "Percentile score (0-1000)"
+    char[1] strand;      "Strand"
+    uint thickStart;     "Thick start (same as chromStart)"
+    uint thickEnd;       "Thick end (same as chromEnd)"
+    uint reserved;       "Item RGB color"
+    string ref;          "Reference allele"
+    string alt;          "Alternate allele"
+    string gene;         "Ensembl transcript ID"
+    string refSeq;       "RefSeq transcript ID"
+    float scorePAI3D;    "PrimateAI-3D raw score"
+    float percentile;    "PrimateAI-3D percentile"
+    string prediction;   "Prediction: benign or pathogenic"
+    string _mouseOver;   "Mouse over text"
+    )

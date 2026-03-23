@@ -4,7 +4,6 @@ include ../../../../inc/common.mk
 hubCheck = ${DESTBINDIR}/hubCheck
 
 test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName
-	${MAKE} clean
 
 one:	mkout
 	-${hubCheck} input/hub1.txt > output/output1.txt

@@ -19,6 +19,7 @@
 #include "udc.h"
 #include "bbiFile.h"
 #include "bigBed.h"
+#include <limits.h>
 
 struct bbiFile *bigBedFileOpenAlias(char *fileName, aliasFunc aliasFunc)
 /* Open up big bed file with chrom alias hash. */
@@ -48,7 +49,7 @@ int itemCount = 0;
 bbiAttachUnzoomedCir(bbi);
 // Find blocks with padded start and end to make sure we include zero-length insertions:
 bits32 paddedStart = (start > 0) ? start-1 : start;
-bits32 paddedEnd = end+1;
+bits32 paddedEnd = (end < UINT_MAX) ? end+1 : end;
 bits32 chromId;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir,
 	chrom, paddedStart, paddedEnd, &chromId);

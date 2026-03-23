@@ -17,6 +17,7 @@
 #include "quickLift.h"
 #include "hgConfig.h"
 #include "jsHelper.h"
+#include "jsonParse.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -581,22 +582,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                     fv = "";
                 if (!first)
                     dyStringAppendC(ds, ',');
-                dyStringPrintf(ds, "\"%s\":", fn);
-                dyStringAppendC(ds, '"');
-                // JSON-escape the value
-                char *c;
-                for (c = fv; *c; c++)
-                    {
-                    if (*c == '"')
-                        dyStringAppend(ds, "\\\"");
-                    else if (*c == '\\')
-                        dyStringAppend(ds, "\\\\");
-                    else if (*c == '\n')
-                        dyStringAppend(ds, "\\n");
-                    else
-                        dyStringAppendC(ds, *c);
-                    }
-                dyStringAppendC(ds, '"');
+                char *escaped = jsonStringEscape(fv);
+                dyStringPrintf(ds, "\"%s\":\"%s\"", fn, escaped);
+                freeMem(escaped);
                 first = FALSE;
                 }
             dyStringAppendC(ds, '}');
