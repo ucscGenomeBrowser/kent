@@ -204,6 +204,12 @@ var autocompleteCat = (function() {
             var autoCompleteSelect = function(event, ui) {
                 // This is a callback for autocomplete to let us know that the user selected
                 // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
+                // Strip any HTML tags from item.value before jQuery UI uses it to populate the
+                // input box.  item.value can contain HTML when jQuery UI's _normalize falls back to
+                // setting value = label (which contains <b> markup for bolding matched text).
+                if (ui.item.value) {
+                    ui.item.value = ui.item.value.replace(/<[^>]*>/g, '');
+                }
                 // since we are in an autocomplete don't bother saving the
                 // prefix the user typed in, just keep the geneSymbol itself
                 if (this.id === "positionInput") {
