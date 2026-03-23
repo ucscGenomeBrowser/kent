@@ -129,8 +129,11 @@ def hover_and_click(driver, main_id, submenu_id):
     action = ActionChains(driver)
     main = driver.find_element(By.ID, main_id)
     action.move_to_element(main).perform()
+    WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.ID, submenu_id)))
+    action2 = ActionChains(driver)
     submenu = driver.find_element(By.ID, submenu_id)
-    action.move_to_element(submenu).click().perform()
+    action2.move_to_element(submenu).click().perform()
 
 # Tests the Gateway page and home page
 driver.get(machine + "/cgi-bin/hgGateway")
@@ -466,7 +469,7 @@ driver.get(machine + "/cgi-bin/hgTracks")
 hover_and_click(driver, "view", "convertMenuLink")
 driver.find_element(By.NAME, "hglft_doConvert").click()
 driver.find_element(By.LINK_TEXT, "chrX:39460925-39461424").click()
-driver.find_element(By.CSS_SELECTOR, "#tools3 > span").click()
+driver.find_element(By.CSS_SELECTOR, "#tools3 > button").click()
 
 # Tests hgLiftOver
 cartReset()
@@ -572,7 +575,9 @@ else:
 
 # Tests hub with HAL tracks
 driver.get(machine + "/cgi-bin/cartReset")
+driver.set_page_load_timeout(300)
 driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://genecats.gi.ucsc.edu/qa/hubTesting/CICHLID2023/myHub/hub.txt&genome=hub_68124_Anc0&position=lastDbPos")
+driver.set_page_load_timeout(120)
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element(By.ID, "positionInput").clear()
 
@@ -580,7 +585,7 @@ driver.find_element(By.ID, "positionInput").clear()
 driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg19")
 hover_and_click(driver, "tools3", "blatMenuLink")
-driver.find_element(By.ID, "searchAllText").click()
+driver.find_element(By.ID, "allGenomes").click()
 driver.find_element(By.NAME, "userSeq").clear()
 driver.find_element(By.NAME, "userSeq").send_keys("MIPDTDLQVQLASRNRVGECSCQVSLMLQSSPGRAPLRGREPVSCEGLCS\\nQGAGAHGAGGDCYGTLRPGWPARGQGWPEEEDGEDVRGLLKRRVETRQHT\\nEEAIRQQEVEQLDFRDLLGKKVSTKTVSEEDLKEIPAEQMDFRANLQRQV\\nKPKTVSEEERKVHSPQQVDFRSVLAKKGTPKTPVPEKAPLPKPATPDFRS\\nVLGSKKKLPAENGSNNAEALNAKAAESPKAVSNAQPLGSLKPLGNAKPAE\\nTLRPVGNAKPAEPTKPVDNTKLAETLKPIGNAKPAETPKPMGNA")
 driver.find_element(By.NAME, "Submit").click()
