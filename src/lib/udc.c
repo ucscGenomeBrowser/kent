@@ -1309,7 +1309,7 @@ if (fileExists(cacheFname))
     // read URL from cache
     char *newUrl = NULL;
     readInGulp(cacheFname, &newUrl, NULL);
-    verbose(4, "Read resolved URL %s from cache", newUrl);
+    verbose(4, "Read resolved URL %s from cache\n", newUrl);
     file->connInfo.resolvedUrl = newUrl;
     }
 else if (file->connInfo.resolvedUrl)
@@ -1409,9 +1409,9 @@ if (!isTransparent)
     }
 
 if (useCacheInfo)
-    verbose(4, "Cache is used for %s", url);
+    verbose(4, "Cache is used for %s\n", url);
 else
-    verbose(4, "Cache is not used for %s", url);
+    verbose(4, "Cache is not used for %s\n", url);
 
 /* Allocate file object and start filling it in. */
 struct udcFile *file;
@@ -1843,7 +1843,7 @@ for (s = offset; s < endPos; s = e)
     else
 	{
 	ok = FALSE;
-	verbose(4, "udcCachePreload version check failed %d vs %d", 
+	verbose(4, "udcCachePreload version check failed %d vs %d\n", 
 		bits->version, file->bitmapVersion);
 	}
     if (!ok)
@@ -1930,7 +1930,7 @@ while(TRUE)
 
 	if (!udcCachePreload(file, start, size))
 	    {
-	    verbose(4, "udcCachePreload failed");
+	    verbose(4, "udcCachePreload failed\n");
 	    bytesRead = 0;
 	    break;
 	    }
@@ -2285,7 +2285,7 @@ off_t udcFileSize(char *url)
 /* fetch file size from given URL or local path 
  * returns -1 if not found. */
 {
-verbose(4, "getting file size for %s", url);
+verbose(4, "getting file size for %s\n", url);
 if (udcIsLocal(url))
     return fileSize(url);
 
