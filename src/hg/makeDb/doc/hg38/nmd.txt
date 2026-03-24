@@ -9,11 +9,11 @@ cd /hive/data/genomes/hg38/bed/nmd/gencode/
 # run the script on gencode bigGenePred - produces decorator + collapsed BED files
 ~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f bigGenePred \
     /hive/data/genomes/hg38/bed/gencodeV49/build/hg38.gencodeV49.bb \
-    knownGeneNmdProt.bed nmdEscRegions.bed
+    knownGeneNmdDeco.bed nmdEscRegions.bed
 
 # build decorator bigBed
-bedSort knownGeneNmdProt.bed knownGeneNmdProt.bed
-bedToBigBed knownGeneNmdProt.bed ../../../chrom.sizes knownGeneNmdProt.bb \
+bedSort knownGeneNmdDeco.bed knownGeneNmdDeco.bed
+bedToBigBed knownGeneNmdDeco.bed ../../../chrom.sizes knownGeneNmdDeco.bb \
     -tab -type=bed12+5 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscDecoration.as
 
 # build collapsed bigBed
@@ -33,6 +33,8 @@ cd /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/
 ~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f genePredExt \
     /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeq.txt.gz
     nmdNcbiRefSeqDeco.bed nmdEscNcbiRefSeq.bed
+
+# not building decorator file - needed? Useful?
 
 # build collapsed bigBed
 bedSort nmdEscNcbiRefSeq.bed nmdEscNcbiRefSeq.bed

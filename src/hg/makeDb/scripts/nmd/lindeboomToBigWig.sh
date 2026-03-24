@@ -1,6 +1,6 @@
 #!/bin/bash
 # Convert Lindeboom et al. NMDetective .ct (bedGraph custom track) files to bigWig
-# These are NMD efficiency predictions from Lindeboom et al. 2019, Nat Genet.
+# These are NMD efficiency predictions from Lindeboom et al. 2016, Nat Genet.
 
 set -beEu -o pipefail
 
