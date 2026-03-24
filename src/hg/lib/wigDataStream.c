@@ -2298,3 +2298,53 @@ wdstream->offset = 1;	/*	default 1-relative/based output	*/
 return wdstream;
 }
 
+int gcOnTheFlyCompute(char *db, char *chrom, int start, int end, int winSize,
+    struct gcOnTheFlyWindow **retWindows)
+/* Compute GC percent in non-overlapping windows of winSize bases from genome
+ * sequence.  Windows are aligned to chromosome boundaries (multiples of
+ * winSize).  N bases are excluded from both numerator and denominator.
+ * Values are 0-100 (percent).  Returns count of windows computed and fills
+ * retWindows with an allocated array.  Caller must freeMem(*retWindows). */
+{
+struct dnaSeq *seq = hChromSeq(db, chrom, start, end);
+if (seq == NULL)
+    {
+    *retWindows = NULL;
+    return 0;
+    }
+
+int seqLen = end - start;
+/* Align to winSize-base chromosome boundary, not the fetch boundary.
+ * startOffset is the number of bases into the fetched sequence where
+ * the first chromosome-aligned window begins. */
+int startOffset = (winSize - (start % winSize)) % winSize;
+
+/* Upper bound on number of windows */
+int maxWindows = (seqLen - startOffset + winSize - 1) / winSize;
+struct gcOnTheFlyWindow *windows;
+AllocArray(windows, maxWindows);
+
+int count = 0;
+int pos;
+for (pos = startOffset; pos + winSize <= seqLen; pos += winSize)
+    {
+    int gcCount = 0, validBases = 0;
+    int i;
+    for (i = pos; i < pos + winSize; i++)
+        {
+        char b = seq->dna[i];
+        if (b == 'g' || b == 'c')  { gcCount++;  validBases++; }
+        else if (b != 'n')           validBases++;
+        }
+    if (validBases == 0)
+        continue;
+    windows[count].chromStart = start + pos;
+    windows[count].gcPct = 100.0 * gcCount / validBases;
+    count++;
+    }
+
+dnaSeqFree(&seq);
+*retWindows = windows;
+return count;
+}
+

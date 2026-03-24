@@ -372,42 +372,27 @@ struct preDrawElement *preDraw = pre->preDraw;
 int preDrawZero = pre->preDrawZero;
 int preDrawSize = pre->preDrawSize;
 
-struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
-if (seq == NULL)
+struct gcOnTheFlyWindow *windows = NULL;
+int windowCount = gcOnTheFlyCompute(database, chromName, seqStart, seqEnd,
+    winSize, &windows);
+if (windowCount == 0)
     return pre;
 
-int seqLen = seqEnd - seqStart;
 /* pixelsPerBase is based on the visible window, not the extended fetch range,
  * so that pixel coordinates are correct relative to the display. */
 double pixelsPerBase = (double)width / (winEnd - winStart);
 int span = winSize;
-int pos;
+int wi;
 
-/* Align to the winSize-base chromosome boundary, not the window boundary.
- * startOffset is the number of bases into the fetched sequence where
- * the first chromosome-aligned winSize-base window begins. */
-int startOffset = (span - (seqStart % span)) % span;
-
-for (pos = startOffset; pos + span <= seqLen; pos += span)
+for (wi = 0; wi < windowCount; wi++)
     {
-    int gcCount = 0, validBases = 0;
-    int i;
-    for (i = pos; i < pos + span; i++)
-        {
-        char b = seq->dna[i];
-        if (b == 'g' || b == 'c')  { gcCount++;  validBases++; }
-        else if (b != 'n')           validBases++;
-        }
-    if (validBases == 0)
-        continue;
-
-    double gcPct = 100.0 * gcCount / validBases;   /* 0 - 100 */
+    double gcPct = windows[wi].gcPct;
+    int chromPos = windows[wi].chromStart;
 
     /* Map this span to pixel coordinates relative to winStart.
      * Data outside the visible window lands in the preDraw margin slots
      * (negative or >= width), which is correct for smoothing at edges.
-     * Fill every pixel covered by this 5-base span. */
-    int chromPos = seqStart + pos;
+     * Fill every pixel covered by this span. */
     int x1 = (int)((chromPos - winStart) * pixelsPerBase);
     int x2 = (int)((chromPos + span - winStart) * pixelsPerBase);
     int xi;
@@ -425,9 +410,7 @@ for (pos = startOffset; pos + span <= seqLen; pos += span)
         }
     }
 
-dnaSeqFree(&seq);
-// if (measureTiming)
-//     measureTime("GC5 on the fly calculation");
+freeMem(windows);
 return pre;
 }
 
