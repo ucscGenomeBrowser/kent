@@ -538,4 +538,21 @@ int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
 "    double sumSquares;    \"sum of data points squared, for stddev calc\"\n" \
 "    )\n"
 
+/*	in lib/wigDataStream.c - GC percent computed on the fly from sequence */
+
+struct gcOnTheFlyWindow
+/* One window of GC percent computed directly from genome sequence */
+    {
+    int chromStart;     /* chromosome start position of this window */
+    double gcPct;       /* GC percent 0-100 for this window */
+    };
+
+int gcOnTheFlyCompute(char *db, char *chrom, int start, int end, int winSize,
+    struct gcOnTheFlyWindow **retWindows);
+/* Compute GC percent in non-overlapping windows of winSize bases from genome
+ * sequence.  Windows are aligned to chromosome boundaries (multiples of
+ * winSize).  N bases are excluded from both numerator and denominator.
+ * Values are 0-100 (percent).  Returns count of windows computed and fills
+ * retWindows with an allocated array.  Caller must freeMem(*retWindows). */
+
 #endif /* WIGGLE_H */
