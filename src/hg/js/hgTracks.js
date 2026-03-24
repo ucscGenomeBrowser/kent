@@ -5084,6 +5084,11 @@ var imageV2 = {
                     cache: true
                 });
                 return false;
+            } else {
+                // about to do a form submit with a regular position range, save this to the recents stack
+                // strip any html content first
+                newPos = newPos.replace(/<[^>]*>/g, '');
+                addRecentSearch(getDb(), newPos, {id: newPos, value: newPos, label: newPos});
             }
                 
             return true;
@@ -5890,7 +5895,7 @@ var downloadCurrentTrackData = {
         htmlStr += "</select>";
         htmlStr += "<br>";
         htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
-        htmlStr += "<input type='checkbox' id='downloadTrackHeaders'></input>";
+        htmlStr += "<input type='checkbox' checked id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;
         $("#checkAllDownloadTracks").on("click", function() {

@@ -13,6 +13,14 @@
 #include "hash.h"
 #endif
 
+// #define FAST_CGI_DECODE
+#ifdef FAST_CGI_DECODE
+// 50kB per-variable limit on content length to prevent egregious
+// cart-stuffing, whether intentional or accidental.  5kB limit
+// on variable names for similar reasons.
+#define CGI_VAR_SIZE_LIMIT 50000
+#define CGI_VAR_NAME_LIMIT 5000
+#endif
 
 //============ javascript inline-separation routines ===============
 
@@ -417,6 +425,11 @@ void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked,
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names.
  * uses style "normalText" */
+
+void cgiMakeDropListClassWithIdStyleJavascriptAndLabel(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events,
+        char *ariaLabel);
+/* Make a drop-down list with name, id, text class, style, javascript and optional aria-label. */
 
 void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
         int menuSize, char *checked, char *class, char *style, struct slPair *events);

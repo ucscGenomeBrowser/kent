@@ -4,12 +4,12 @@
 Reads the Redmine API key from ~/.hg.conf (redmine.apiKey=...).
 
 Usage:
-    redmineClishow 33571
-    redmineClilist --project maillists --status open --limit 10
-    redmineClicreate --subject "Bug report" --description "Details here"
-    redmineClicomment 33571 --message "Adding a note"
-    redmineCliupdate 33571 --status 1 --assigned-to lou --note "Reopening"
-    redmineCliattach 33571 screenshot.png --note "See attached"
+    redmineCli show 33571
+    redmineCli list --project maillists --status open --limit 10
+    redmineCli create --subject "Bug report" --description "Details here"
+    redmineCli comment 33571 --message "Adding a note"
+    redmineCli update 33571 --status 1 --assigned-to lou --note "Reopening"
+    redmineCli attach 33571 screenshot.png --note "See attached"
 """
 
 import argparse
@@ -220,7 +220,7 @@ def format_details(details):
 # ---------------------------------------------------------------------------
 
 def cmd_show(args):
-    """Display a single ticket in Markdown (equivalent to redmineDump)."""
+    """Display a single ticket in Markdown."""
     data = api_get(args.base_url,
                    f"/issues/{args.ticket_id}.json?include=journals,attachments",
                    args.api_key)
@@ -229,10 +229,10 @@ def cmd_show(args):
     attachments = {a["id"]: a for a in issue.get("attachments", [])}
     attach_by_name = {a["filename"]: a for a in issue.get("attachments", [])}
 
-    img_dir = None
-    if args.images:
-        img_dir = tempfile.mkdtemp(prefix=f"redmine_{args.ticket_id}_")
-        print(f"<!-- Images downloaded to: {img_dir} -->", file=sys.stderr)
+    dl_dir = None
+    if args.images or args.download_all:
+        dl_dir = tempfile.mkdtemp(prefix=f"redmine_{args.ticket_id}_")
+        print(f"<!-- Attachments downloaded to: {dl_dir} -->", file=sys.stderr)
 
     def resolve_images(text):
         if not text:
@@ -241,8 +241,8 @@ def cmd_show(args):
             fname = m.group(1)
             if fname in attach_by_name:
                 a = attach_by_name[fname]
-                if img_dir:
-                    local = os.path.join(img_dir, fname)
+                if dl_dir:
+                    local = os.path.join(dl_dir, fname)
                     if not os.path.exists(local):
                         download_file(a["content_url"], local, args.api_key)
                         print(f"  Downloaded: {local}", file=sys.stderr)
@@ -319,10 +319,11 @@ def cmd_show(args):
         out.append("---")
         out.append("")
 
-    if img_dir:
+    if dl_dir:
         for a in issue["attachments"]:
-            if a.get("content_type", "").startswith("image/"):
-                local = os.path.join(img_dir, a["filename"])
+            is_image = a.get("content_type", "").startswith("image/")
+            if args.download_all or is_image:
+                local = os.path.join(dl_dir, a["filename"])
                 if not os.path.exists(local):
                     download_file(a["content_url"], local, args.api_key)
                     print(f"  Downloaded: {local}", file=sys.stderr)
@@ -334,7 +335,7 @@ def download_file(url, dest_path, api_key):
     """Download a file with API key auth."""
     req = urllib.request.Request(url)
     req.add_header("X-Redmine-API-Key", api_key)
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:
         with open(dest_path, "wb") as f:
             f.write(resp.read())
 
@@ -362,10 +363,7 @@ def cmd_list(args):
             params["assigned_to_id"] = str(resolve_user(args.assigned_to))
 
     if args.tracker:
-        if args.tracker.isdigit():
-            params["tracker_id"] = args.tracker
-        else:
-            params["tracker_id"] = args.tracker
+        params["tracker_id"] = args.tracker
 
     if args.search:
         params["subject"] = f"~{args.search}"
@@ -387,7 +385,7 @@ def cmd_list(args):
         tid = iss["id"]
         status = iss["status"]["name"]
         assignee = iss.get("assigned_to", {}).get("name", "—")
-        subject = iss["subject"][:60]
+        subject = iss["subject"][:60].replace("|", "\\|")
         out.append(f"| {tid} | {status} | {assignee} | {subject} |")
     out.append("")
     start = args.offset + 1
@@ -548,10 +546,12 @@ def build_parser():
     sub = parser.add_subparsers(dest="command", required=True)
 
     # show
-    p_show = sub.add_parser("show", help="Display a ticket in Markdown")
+    p_show = sub.add_parser("show", help="Display a ticket in Markdown, optionally download attachments")
     p_show.add_argument("ticket_id", help="Ticket ID number")
     p_show.add_argument("--images", action="store_true",
                         help="Download images to a temp directory")
+    p_show.add_argument("--download-all", dest="download_all", action="store_true",
+                        help="Download all attachments to a temp directory")
 
     # list
     p_list = sub.add_parser("list", help="List/search tickets")

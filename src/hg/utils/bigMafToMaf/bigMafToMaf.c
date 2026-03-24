@@ -8,10 +8,11 @@
 #include "udc.h"
 #include "hdb.h"
 #include "bigBedCmdSupport.h"
+#include <limits.h>
 
 char *clChrom = NULL;
-int clStart = -1;
-int clEnd = -1;
+long long clStart = 0;
+long long clEnd = 0;
 char *clBed = NULL;
 char *clPos = NULL;
 struct slName *clRange = NULL;
@@ -31,16 +32,16 @@ errAbort(
   "   -chrom=chr1 - if set restrict output to given chromosome\n"
   "   -start=N - if set, restrict output to only that over start 0 based coordinate\n"
   "   -end=N - if set, restrict output to only that under end\n"
-  "   -range=\"chrom start end\" - if set, restrict output to only that within range from start to end. \n"
-  "          This range start is a half-open 0-based coordinate like used in BED files. \n"
-  "   -range=chrom:start-end - if set, restrict output to only that within range from start to end. \n"
-  "          This range start is a 1-based start position. \n"
-  "    Do not use range with chrom, start, and/or end options. \n"
-  "   -range may be specified multiple times for multiple ranges. \n"
+  "   -range - restrict output to the given genomic range.\n"
+  "            Two formats are accepted:\n"
+  "            -range=\"chrom start end\"  - 0-based half-open coordinates (BED format)\n"
+  "            -range=chrom:start-end  - 1-based start position (colon/hyphen-separated)\n"
+  "            May be specified multiple times for multiple ranges.\n"
+  "            Do not combine -range with -chrom, -start, or -end.\n"
   "   -bed=in.bed - restrict output to all regions in a BED file\n"
   "   -positions=in.pos - restrict output to all regions in a position file with 1-based start\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
-  "   -skipChromCheck - skip checking chrom name.\n"
+  "   -skipChromCheck - skip chrom name validation and coordinate check for chrom size.\n"
   );
 }
 
@@ -50,8 +51,8 @@ static int chunkSizeBases = 1048576;
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
-   {"start", OPTION_INT},
-   {"end", OPTION_INT},
+   {"start", OPTION_LONG_LONG},
+   {"end", OPTION_LONG_LONG},
    {"bed", OPTION_STRING},
    {"range", OPTION_STRING|OPTION_MULTI},
    {"positions", OPTION_STRING},
@@ -75,7 +76,7 @@ fputc('\n', f);
 }
 
 static void processChromChunk(struct bbiFile *bbi, char *chrom,
-                              int start, int end, char *bedName, FILE *f)
+                              uint start, uint end, char *bedName, FILE *f)
 /* Output one chunk.  Only blocks where start is in the range will be written
  * to avoid outputting a block multiple times.  */
 {
@@ -92,22 +93,30 @@ void processChrom(struct bbiFile *bbi, struct bbiChromInfo *chrom,
                          FILE *f)
 /* output MAF blocks from one chrom */
 {
-int start = 0, end = chrom->size;
-if (clStart >= 0)
+uint start = 0, end = chrom->size;
+if (optionExists("start"))
     {
     start = clStart;
+    if (!skipChromCheck)
+	{
+	if (start > chrom->size)
+	    errAbort("invalid start=%u > chromSize=%u", start, chrom->size);
+	}
     }
-if (clEnd >= 0)
+if (optionExists("end"))
     {
     end = clEnd;
-    if (end > chrom->size)
-	end = chrom->size;
+    if (!skipChromCheck)
+	{
+	if (end > chrom->size)
+	    errAbort("invalid end=%u > chromSize=%u", end, chrom->size);
+	}
     }
 if (start > end)
-    errAbort("invalid range, start=%d > end=%d", start, end);
+    errAbort("invalid range, start=%u > end=%u", start, end);
 while (start < end)
     {
-    int chunkEnd = min(start + chunkSizeBases, end);
+    uint chunkEnd = min(start + chunkSizeBases, end);
     processChromChunk(bbi, chrom->name, start, chunkEnd, NULL, f);
     start = chunkEnd;
     }
@@ -162,14 +171,24 @@ if (argc != 3)
     usage();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 clChrom = optionVal("chrom", clChrom);
-clStart = optionInt("start", clStart);
-clEnd = optionInt("end", clEnd);
+clStart = optionLongLong("start", clStart);
+if (clStart > UINT_MAX)
+    errAbort("-start option too big. Should not exceed %u - the size of unsigned integer.", UINT_MAX);
+if (clStart < 0)
+    errAbort("-start option should not be less than 0.");
+
+clEnd = optionLongLong("end", clEnd);
+if (clEnd > UINT_MAX)
+    errAbort("-end option too big. Should not exceed %u - the size of an unsigned integer.", UINT_MAX);
+if (clEnd < 0)
+    errAbort("-end option should not be less than 0.");
+
 clBed = optionVal("bed", clBed);
 clRange = optionMultiVal("range", clRange);
 clPos = optionVal("positions", clPos);
 skipChromCheck = optionExists("skipChromCheck");
 
-if ((clBed || clPos || clRange) && (clChrom || (clStart >= 0) || (clEnd >= 0)))
+if ((clBed || clPos || clRange) && (clChrom || optionExists("start") || optionExists("end")))
     errAbort("-bed or -positions or -range can not be used with -chrom -start or -end options");
 if ((clBed && clPos) || (clBed && clRange) || (clPos && clRange))
     errAbort("-bed, -positions, and -range can not be used together");

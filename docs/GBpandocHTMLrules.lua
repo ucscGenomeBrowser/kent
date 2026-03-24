@@ -4,7 +4,7 @@ function add_image(src, width)
   if src == nil or width == nil then
     error("Error: src or width is nil in add_image")
   end
-  return string.format('<img src="%s" width="%s">', src, width)
+  return string.format('<img alt="" src="%s" width="%s">', src, width)
 end
 
 -- Function to detect and process code blocks with class "image"

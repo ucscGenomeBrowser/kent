@@ -1,0 +1,57 @@
+<h2>Description</h2>
+<p>
+<a href="https://clingen.igib.res.in/indigen/" target="_blank">IndiGenomes</a> provides
+whole genome sequencing data of 1,029 healthy Indian individuals under the pilot phase of the
+&quot;IndiGen&quot; program. Only the allele frequency is available from this project. The website
+also provides SV call and Alu insertion VCFs.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>indigenomes</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+The original data can also be downloaded from the <a href="https://clingen.igib.res.in/indigen/"
+target="_blank">IndiGen website</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+Genomic DNA was extracted from 5 ml of peripheral blood collected via venipuncture from
+1,029 self-declared healthy Indian individuals representing diverse geographic, ethnic, and
+linguistic groups, using the salting-out method. Whole-genome libraries were prepared using
+the TruSeq DNA PCR-free library preparation kit (Illumina). Sequencing was performed on the
+Illumina NovaSeq 6000 platform with 150&times;2 bp paired-end reads targeting &ge;30&times;
+mean coverage. Alignment to the GRCh38 reference genome, post-processing, and
+default quality-filtered variant calling were performed end-to-end on the Illumina DRAGEN
+v3.4 Bio-IT platform, which uses field-programmable gate array (FPGA) logic for
+high-throughput processing. This yielded a compendium of 55,898,122 single allelic
+genetic variants (SNVs and indels), of which 32.23% were unique to the Indian samples
+and absent from global reference databases. Variants were annotated using ANNOVAR with
+RefGene, and allele frequencies were cross-referenced against gnomAD v3, 1000 Genomes,
+ExAC, ESP6500, and the Greater Middle East Variome Project. The dataset is accessible via
+the <a href="https://clingen.igib.res.in/indigen/" target="_blank">IndiGenomes database</a>
+(Jain, Bhoyar, Scaria, Sivasubbu &amp; the IndiGen Consortium,
+<a href="https://doi.org/10.1093/nar/gkaa923" target="_blank"><em>Nucleic Acids Research</em> 2021</a>).
+</p>
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Jain A, Bhoyar RC, Pandhare K, Mishra A, Sharma D, Imran M, Senthivel V, Divakar MK, Rophina M,
+Jolly B <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkaa923" target="_blank">
+IndiGenomes: a comprehensive resource of genetic variants from over 1000 Indian genomes</a>.
+<em>Nucleic Acids Res</em>. 2021 Jan 8;49(D1):D1225-D1232.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33095885" target="_blank">33095885</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7778947/" target="_blank">PMC7778947</a>
+</p>

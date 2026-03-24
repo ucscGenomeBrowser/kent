@@ -1,0 +1,120 @@
+<h2>Description</h2>
+
+<p>
+This track displays <b>229,251 non-canonical open reading frames (ORFs)</b> from
+<a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb</a> v1.2
+(novel unannotated ORF database), a database of ORFs with evidence of translation detected by
+ribosome profiling (Ribo-seq). nuORFdb was developed by the Bhatt lab at the Broad Institute
+of MIT and Harvard as a resource for identifying non-canonical peptides in immunopeptidomic
+mass spectrometry datasets.
+</p>
+
+<p>
+The ORFs were predicted using a hierarchical pipeline that aggregates ribosome profiling signal
+across 29 primary healthy and cancer tissue samples and cell lines. The pipeline operates at
+multiple levels&mdash;individual samples, tissues, and combined across all samples&mdash;to predict
+lowly translated ORFs while maintaining sensitivity for tissue-specific variants.
+All ORFs have a minimum length of 8 amino acids.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are displayed in bigGenePred format, showing gene-structure-like visualization
+with thick and thin regions representing the predicted ORF and flanking transcript structure.
+</p>
+
+<p>
+<b>Mouseover</b> on items shows the simplified ORF category (<tt>plotType</tt>).
+Items are labeled with the nuORFdb ORF identifier, which encodes the source Ensembl transcript
+and ORF number (e.g. <tt>ENST00000488147.1_1_1</tt>).
+</p>
+
+<p>
+The track includes the following ORF categories (by <tt>mergeType</tt>):
+</p>
+<ul>
+  <li><b>Out-of-Frame</b> &ndash; ORFs overlapping a CDS but in a different reading frame (57,713)</li>
+  <li><b>5' uORF</b> &ndash; upstream ORFs in the 5' UTR (32,595)</li>
+  <li><b>3' dORF</b> &ndash; downstream ORFs in the 3' UTR (30,656)</li>
+  <li><b>lincRNA</b> &ndash; ORFs in long intergenic non-coding RNAs (20,399)</li>
+  <li><b>5' Overlap uORF</b> &ndash; upstream ORFs overlapping the main CDS (20,119)</li>
+  <li><b>ncRNA Retained Intron</b> &ndash; ORFs in retained-intron transcripts (19,259)</li>
+  <li><b>3' Overlap dORF</b> &ndash; downstream ORFs overlapping the main CDS (18,028)</li>
+  <li><b>ncRNA Processed Transcript</b> &ndash; ORFs in processed transcripts (14,173)</li>
+  <li><b>Pseudogene</b> &ndash; ORFs in pseudogenes (7,727)</li>
+  <li><b>Antisense</b> &ndash; ORFs in antisense transcripts (6,300)</li>
+  <li>and other minor categories</li>
+</ul>
+
+<p>
+Each item also includes the predicted protein sequence and additional classification fields
+(<tt>predictorType</tt>, <tt>plotType</tt>, <tt>geneType</tt>) from the nuORFdb annotations.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
+scripts through our <a href="https://api.genome.ucsc.edu">API</a>; the track name is
+&quot;nuorfdb&quot;.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/nuorfdb/"
+target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+
+<p>
+The original data files can be downloaded from the
+<a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb website</a>
+at the Broad Institute.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The nuORFdb v1.2 data files (BED12 coordinates, Excel annotations, and protein FASTA sequences)
+were downloaded from the Broad Institute. The BED12 file was combined with the annotation
+spreadsheet (keyed on <tt>ORF_ID_hg38</tt>) and protein FASTA (keyed on sequence header ID) to
+produce a bigGenePred+ format file with 23 fields (12 standard BED fields, 8 bigGenePred fields,
+and 3 extended fields: <tt>predictorType</tt>, <tt>plotType</tt>, and <tt>proteinSequence</tt>).
+</p>
+
+<p>
+A small number of entries (176 out of 229,251) used non-standard chromosome names
+(e.g. <tt>chrGL000008.2</tt>, <tt>chrMT</tt>) which were mapped to UCSC standard names
+(e.g. <tt>chr4_GL000008v2_random</tt>, <tt>chrM</tt>).
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Tatyana Ouspenskaia, Toph Law, Karl Clauser, and Steven Bhatt at the Broad Institute
+of MIT and Harvard for creating nuORFdb and making the data publicly available.
+Thanks to Eric Malekos, UCSC, for suggesting this database.
+</p>
+
+<h2>References</h2>
+
+<p>
+Ouspenskaia T, Law T, Clauser KR, Klaeger S, Sarkizova S, Aguet F, Li B, Christian E,
+Knisbacher BA, Le PM <em>et al</em>.
+<a href="https://www.nature.com/articles/s41587-021-01072-6" target="_blank">
+Unannotated proteins expand the MHC-I-restricted immunopeptidome in cancer</a>.
+<em>Nat Biotechnol</em>. 2022 Feb;40(2):209-217.
+DOI: <a href="https://doi.org/10.1038/s41587-021-01072-6"
+target="_blank">10.1038/s41587-021-01072-6</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34663921"
+target="_blank">34663921</a>
+</p>

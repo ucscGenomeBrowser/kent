@@ -1,0 +1,117 @@
+<h2>Description</h2>
+
+<p>
+The three Gencode ncORF tracks in the non-canonical ORF track container show 
+<b>non-canonical translated open reading frames (ncORFs)</b> identified
+from ribosome profiling (Ribo-seq) data and mapped to the GENCODE annotation by the
+<a href="https://www.gencodegenes.org/" target="_blank">GENCODE</a> / TransCODE consortium.
+The data is available in two phases:
+</p>
+
+<h3>Phase I</h3>
+<p>
+The Phase I catalog contains <b>7,264 unique human ncORFs</b> called from Ribo-seq data
+across seven publications and mapped to GENCODE v35. Only translations of 16 codons or above
+and initiating from ATG start codons were incorporated. Redundant sense-overlapping ORFs were
+merged. Of these, 3,085 ORFs were found by more than one publication, providing independent
+replication evidence. This catalog was developed as part of an effort to standardize the
+annotation of translated ORFs across reference databases including Ensembl/GENCODE, HGNC,
+UniProtKB, and PeptideAtlas.
+</p>
+
+<h3>Phase II</h3>
+<p>
+The Phase II catalog nearly quadruples the Phase I set, defining <b>28,359 ncORFs</b> in the
+<b>Comprehensive</b> set, mapped to GENCODE v45. Compared to Phase I, additional published
+Ribo-seq datasets were incorporated and the restrictions on ORF size and initiation codon
+were lifted.
+</p>
+
+<p>
+Two subsets are provided for the Phase II data:
+</p>
+<ul>
+  <li><b>Comprehensive</b> (28,359 ncORFs) &ndash; all mapped translations from the expanded catalog</li>
+  <li><b>Primary</b> (10,127 ncORFs) &ndash; a high-confidence subset filtered for translations
+      with especially robust translation signatures, as extrapolated from Ribo-seq data.
+      These ncORFs demonstrate translation evidence comparable to canonical protein-coding genes.</li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The Phase I track is displayed in bigGenePred format. <b>Mouseover</b> shows associated
+transcript IDs, gene IDs, replication status, and source studies. The Phase II tracks are
+displayed in BED 12 format.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
+scripts through our <a href="https://api.genome.ucsc.edu">API</a>; the track names are
+&quot;gencNcOrfs&quot; (Phase I), &quot;gencNcOrfsPrimary&quot; (Phase II Primary),
+and &quot;gencNcOrfsComprehensive&quot; (Phase II Comprehensive).
+</p>
+
+<p>
+For automated download and analysis, the genome annotations are stored in bigBed files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/gencNcOrf/"
+target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+<b>Phase I:</b> Ribo-seq ORFs were consolidated from seven publications and mapped to
+GENCODE v35. Translations shorter than 16 codons or initiating from near-cognate (non-ATG)
+start codons were excluded. Redundant sense-overlapping ORFs were merged, yielding 7,264
+unique ncORFs.
+</p>
+
+<p>
+<b>Phase II:</b> The TransCODE consortium expanded the catalog by incorporating additional
+published Ribo-seq datasets and mapping to GENCODE v45. The size and start-codon restrictions
+from Phase I were lifted. A data-driven framework was used to identify a Primary subset of
+ncORFs with translation signatures comparable to canonical protein-coding genes.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Jonathan Mudge, Jorge Ruiz-Orera, John Prensner, Sebastiaan van Heesch, and the
+GENCODE / TransCODE consortium for creating and maintaining these annotations.
+</p>
+
+<h2>References</h2>
+
+<p>
+Mudge JM, Ruiz-Orera J, Prensner JR, Brunet MA, Calvet F, Jungreis I,
+Gonzalez JM, Magrane M, Martinez TF, Schulz JF <em>et al</em>.
+<a href="https://www.nature.com/articles/s41587-022-01369-0" target="_blank">
+Standardized annotation of translated open reading frames</a>.
+<em>Nat Biotechnol</em>. 2022 Jul;40(7):994-999.
+DOI: <a href="https://doi.org/10.1038/s41587-022-01369-0"
+target="_blank">10.1038/s41587-022-01369-0</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35831657"
+target="_blank">35831657</a>
+</p>
+
+<p>
+Chothani S, Ruiz-Orera J, Tierney JAS, Clauwaert J, Deutsch EW, Alba MM,
+Aspden JL, Baranov PV, Bazzini AA, Bruford EA <em>et al</em>.
+<a href="https://doi.org/10.1101/2025.07.03.662928" target="_blank">
+An expanded reference catalog of translated open reading frames for biomedical research</a>.
+<em>bioRxiv</em>. 2025 Jul 7.
+DOI: <a href="https://doi.org/10.1101/2025.07.03.662928"
+target="_blank">10.1101/2025.07.03.662928</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40672165"
+target="_blank">40672165</a>
+</p>

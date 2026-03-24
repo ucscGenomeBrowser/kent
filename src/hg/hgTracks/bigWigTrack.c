@@ -353,7 +353,102 @@ bigWigMethods(track, tdb, wordCount, words);
 track->loadItems = mathWigLoadItems;
 }
 
-void bigWigMethods(struct track *track, struct trackDb *tdb, 
+static struct preDrawContainer *gc5BaseOnTheFlyLoadPreDraw(struct track *tg,
+    int seqStart, int seqEnd, int width)
+/* Compute GC percent directly from genome sequence in winSize-base
+ * non-overlapping windows.  Values are 0-100 to match gc5BaseBw type
+ * bigWig 0 100 range.  wigTrack.c windowing/smoothing handles averaging
+ * when multiple windows fall on the same pixel.
+ */
+{
+char *winSizeString = trackDbSetting(tg->tdb, "calcWinSize");
+int winSize = (int)sqlLongLong(winSizeString);
+
+if (tg->preDrawContainer)
+    return tg->preDrawContainer;
+
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
+struct preDrawElement *preDraw = pre->preDraw;
+int preDrawZero = pre->preDrawZero;
+int preDrawSize = pre->preDrawSize;
+
+struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
+if (seq == NULL)
+    return pre;
+
+int seqLen = seqEnd - seqStart;
+/* pixelsPerBase is based on the visible window, not the extended fetch range,
+ * so that pixel coordinates are correct relative to the display. */
+double pixelsPerBase = (double)width / (winEnd - winStart);
+int span = winSize;
+int pos;
+
+/* Align to the winSize-base chromosome boundary, not the window boundary.
+ * startOffset is the number of bases into the fetched sequence where
+ * the first chromosome-aligned winSize-base window begins. */
+int startOffset = (span - (seqStart % span)) % span;
+
+for (pos = startOffset; pos + span <= seqLen; pos += span)
+    {
+    int gcCount = 0, validBases = 0;
+    int i;
+    for (i = pos; i < pos + span; i++)
+        {
+        char b = seq->dna[i];
+        if (b == 'g' || b == 'c')  { gcCount++;  validBases++; }
+        else if (b != 'n')           validBases++;
+        }
+    if (validBases == 0)
+        continue;
+
+    double gcPct = 100.0 * gcCount / validBases;   /* 0 - 100 */
+
+    /* Map this span to pixel coordinates relative to winStart.
+     * Data outside the visible window lands in the preDraw margin slots
+     * (negative or >= width), which is correct for smoothing at edges.
+     * Fill every pixel covered by this 5-base span. */
+    int chromPos = seqStart + pos;
+    int x1 = (int)((chromPos - winStart) * pixelsPerBase);
+    int x2 = (int)((chromPos + span - winStart) * pixelsPerBase);
+    int xi;
+    for (xi = x1; xi <= x2; ++xi)
+        {
+        int xCoord = preDrawZero + xi;
+        if (xCoord >= 0 && xCoord < preDrawSize)
+            {
+            preDraw[xCoord].count++;
+            if (gcPct > preDraw[xCoord].max) preDraw[xCoord].max = gcPct;
+            if (gcPct < preDraw[xCoord].min) preDraw[xCoord].min = gcPct;
+            preDraw[xCoord].sumData    += gcPct;
+            preDraw[xCoord].sumSquares += gcPct * gcPct;
+            }
+        }
+    }
+
+dnaSeqFree(&seq);
+// if (measureTiming)
+//     measureTime("GC5 on the fly calculation");
+return pre;
+}
+
+static void gc5BaseOnTheFlyLoadItems(struct track *tg)
+/* Compute GC percent from genome sequence; called in the loadItems phase
+ * just as bigWigLoadItems calls bigWigLoadPreDraw to fill preDrawContainer.
+ * Fetch sequence that covers the preDraw smoothing margins on each side so
+ * the smoothing/averaging machinery has data at the window edges. */
+{
+tg->items = NULL;
+tg->mapsSelf = TRUE;
+/* Extend the fetch range by wiggleSmoothingMax pixels worth of bases on
+ * each side, rounded up to the nearest 5-base span. */
+double basesPerPixel = (double)(winEnd - winStart) / insideWidth;
+int marginBases = ((int)(wiggleSmoothingMax * basesPerPixel) / 5 + 1) * 5;
+int fetchStart = max(0, winStart - marginBases);
+int fetchEnd   = min(hChromSize(database, chromName), winEnd + marginBases);
+gc5BaseOnTheFlyLoadPreDraw(tg, fetchStart, fetchEnd, insideWidth);
+}
+
+void bigWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Set up bigWig methods. */
 {
@@ -363,4 +458,63 @@ track->preDrawItems = bigWigPreDrawItems;
 track->preDrawMultiRegion = wigMultiRegionGraphLimits;
 track->drawItems = bigWigDrawItems;
 track->loadPreDraw = bigWigLoadPreDraw;
+}
+
+struct track *gc5BaseOnTheFlyTg(struct cart *cart, char *vis)
+/* Create an on-the-fly GC percent track computed directly from
+ *     from genome sequence.  vis is the visibility string from the
+ *     cart (e.g. "hide", "dense", "full").
+ */
+{
+struct track *tg = trackNew();
+struct trackDb *tdb = trackDbNew();
+char longLabel[1024];
+safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
+
+/* Fill in trackDb fields needed by wigCartOptionsNew and bigWigMethods. */
+tdb->track      = cloneString(GC_ON_FLY_TRACK_NAME);
+tdb->table      = cloneString(GC_ON_FLY_TRACK_NAME);
+tdb->type       = cloneString("bigWig 0 100");
+tdb->shortLabel = cloneString(GC_ON_FLY_TRACK_LABEL);
+tdb->longLabel  = cloneString(longLabel);
+tdb->grp        = cloneString("map");
+tdb->canPack    = 0;
+tdb->visibility = hTvFromString(vis);
+
+/* Add wig display settings to match what gc5BaseBw trackDb would have. */
+trackDbAddSetting(tdb, "autoScale",         "Off");
+trackDbAddSetting(tdb, "viewLimits",        "30:70");
+trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
+trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
+trackDbAddSetting(tdb, "gridDefault",       "OFF");
+trackDbAddSetting(tdb, "windowingFunction", "Mean");
+trackDbAddSetting(tdb, "color",             "0,0,0");
+trackDbAddSetting(tdb, "altColor",          "128,128,128");
+// trackDbAddSetting(tdb, "gcComputeOnTheFly", "on");
+// trackDbAddSetting(tdb, "gcOnTheFlyMaxBases", "500000");
+// trackDbAddSetting(tdb, "gcFallbackBigWig", "/gbdb/ce1x/bbi/gc5BaseBw/gc5Base.bw");
+trackDbAddSetting(tdb, "calcWinSize", gcOnFlyWinSize(cart));
+trackDbPolish(tdb);
+
+/* Set up bigWig display methods (drawItems, preDrawItems, etc.) */
+char *words[] = {"bigWig", "0", "100"};
+bigWigMethods(tg, tdb, 3, words);
+
+/* Override data loading with on-the-fly sequence computation. */
+tg->loadItems   = gc5BaseOnTheFlyLoadItems;
+tg->loadPreDraw = gc5BaseOnTheFlyLoadPreDraw;
+
+/* Fill in track struct fields. */
+tg->tdb              = tdb;
+tg->track            = tdb->track;
+tg->table            = tdb->table;
+tg->visibility       = tdb->visibility;
+tg->shortLabel       = tdb->shortLabel;
+tg->longLabel        = tdb->longLabel;
+tg->priority         = tdb->priority;
+tg->defaultPriority  = tg->priority;
+tg->groupName        = tdb->grp;
+tg->defaultGroupName = cloneString(tg->groupName);
+tg->hasUi            = TRUE;
+return tg;
 }

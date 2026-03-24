@@ -1,3 +1,4 @@
+<a href="#mainContent" class="skipNav" tabindex="-1">Skip to main content</a>
 <div id="main-menu-whole">
 
 		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
@@ -7,11 +8,11 @@
 		<div class="blockcontent">
 						<div class="content">
 
-<ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
+<nav aria-label="Main menu"><ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
 
 <li class="first even" id="home"><a href="../index.html" ><span id="home-link">Home</span></a></li> 
 
-<li class="menuparent" id="tools1"><a href="../cgi-bin/hgGateway">Genomes</a>
+<li class="menuparent" id="tools1"><a href="../cgi-bin/hgGateway" aria-expanded="false">Genomes</a>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
 	<li class="defaultDropdownLink"><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
@@ -23,7 +24,7 @@
         </ul>
 </li>
 
-<li class="menuparent" id="tools2"><a href="../cgi-bin/hgTracks">Genome Browser</a>
+<li class="menuparent" id="tools2"><a href="../cgi-bin/hgTracks" aria-expanded="false">Genome Browser</a>
 	<ul style="display: none; visibility: hidden;">
 	<li id="backToBrowserLi" class="first"><a id="backToGenomeBrowser" href="../cgi-bin/hgTracks">Back to Genome Browser</a></li>
 	<li><a id="configureMenuLink" title="Configure track display or change the Genome Browser font and other display settings" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
@@ -36,7 +37,7 @@
 </li>
 
 
-<li class="menuparent" id="tools3"><span>Tools</span>
+<li class="menuparent" id="tools3"><button type="button" aria-expanded="false">Tools</button>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a id="blatMenuLink" title="Search the genome for sequence matches" href="../cgi-bin/hgBlat?command=start">Blat</a></li>
 	<li><a id="ispMenuLink" title="Check the specificity of short primers" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
@@ -48,7 +49,7 @@
 	<li class="last"><a title="See our other tools and external tools for working with Genome Browser data" href="../util.html">Other Tools</a></li>
 	</ul>
 </li>
-<li class="menuparent" id="mirrors"><span>Mirrors</span>
+<li class="menuparent" id="mirrors"><button type="button" aria-expanded="false">Mirrors</button>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a title="A Genome Browser mirror hosted closer to your location may improve speed" href="../mirror.html">Euro/Asia Mirrors</a></li>
 	<li><a href="../goldenPath/help/mirror.html">Mirroring Instructions</a></li>
@@ -56,7 +57,7 @@
 	</ul>
 
 </li>
-<li class="menuparent" id="downloads"><span>Downloads</span>
+<li class="menuparent" id="downloads"><button type="button" aria-expanded="false">Downloads</button>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a title="Download underlying Genome Browser data files" href="https://hgdownload.gi.ucsc.edu/downloads.html">Genome Data</a></li>
 	<li><a href="https://hgdownload.gi.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
@@ -68,7 +69,7 @@
 	<li class="last"><a href="../goldenPath/help/api.html">REST API</a></li>
 	</ul>
 </li>
-<li class="menuparent" id="myData"><span>My Data</span>
+<li class="menuparent" id="myData"><button type="button" aria-expanded="false">My Data</button>
 	<ul style="display: none; visibility: hidden;">
 	<li><a id="customTracksMenuLink" title="Manage your custom tracks" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
 	<li><a id="sessionsMenuLink" title="Create, manage, and share snapshots of Genome Browser configurations" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
@@ -81,7 +82,7 @@
 <!-- OPTIONAL_VIEW_MENU -->
 
 <!-- OPTIONAL_PROJECT_MENU_START -->
-<li class="menuparent" id="projects"><span>Projects</span>
+<li class="menuparent" id="projects"><button type="button" aria-expanded="false">Projects</button>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
 	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
@@ -91,7 +92,7 @@
 </li>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 
-<li class="menuparent" id="help"><span>Help</span>
+<li class="menuparent" id="help"><button type="button" aria-expanded="false">Help</button>
     <ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
     <li><a title="See frequently asked questions and search our help documentation" href="../FAQ/">FAQs & Search</a></li>
@@ -101,7 +102,7 @@
     </ul>
 </li>
 
-<li class="menuparent last" id="aboutUs"><span>About Us</span>
+<li class="menuparent last" id="aboutUs"><button type="button" aria-expanded="false">About Us</button>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../cite.html">Cite Us</a></li>
@@ -114,7 +115,7 @@
 	</ul>
 </li>
 
-</ul>
+</ul></nav>
 </div>
 		</div>
 	</div>

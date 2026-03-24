@@ -1,0 +1,17 @@
+# PrimateAI-3D, Claude max, Mar 19 2026
+
+# Source: PrimateAI-3D.hg38.txt.gz from https://primateai3d.basespace.illumina.com/
+# 70.7M missense variant pathogenicity predictions
+
+cd /hive/data/genomes/hg38/bed/primateai
+# download PrimateAI-3D.hg38.txt.gz from Illumina BaseSpace (requires registration)
+
+# convert to BED (1-based input -> 0-based BED), colored by percentile (blue=benign, red=pathogenic)
+python3 ~/kent/src/hg/makeDb/scripts/primateai/primateAiToBigBed.py
+# 70,667,466 variants written
+
+# sort and convert to bigBed
+sort -k1,1 -k2,2n primateAi.bed > primateAi.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/primateai/primateAi.as -tab \
+    primateAi.sorted.bed /hive/data/genomes/hg38/chrom.sizes primateAi.bb
+rm primateAi.bed primateAi.sorted.bed

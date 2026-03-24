@@ -1,0 +1,105 @@
+<h2>Description</h2>
+<p>
+The <b>NMDetective</b> tracks display genome-wide predictions of nonsense-mediated mRNA
+decay (NMD) efficiency from
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom et al. 2016</a>.
+NMDetective scores predict whether a premature termination codon (PTC) at a given position
+will trigger NMD and mRNA degradation, or whether the transcript will escape NMD and
+potentially produce a truncated protein.
+</p>
+
+<p>
+Scores range from approximately &minus;1 to +1. Positive values indicate that a PTC at
+that position is predicted to trigger NMD (the mRNA is degraded). Negative values indicate
+that the PTC is predicted to escape NMD (the truncated mRNA may be translated into an
+aberrant protein). Values near zero indicate intermediate or uncertain NMD efficiency.
+</p>
+
+<h3>Subtracks</h3>
+<table class="descTbl">
+<tr><th>Track</th><th>Description</th></tr>
+<tr><td><b>NMDetective-A</b></td>
+    <td>Random forest model predicting NMD efficiency for all possible PTCs introduced
+    by single-nucleotide variants. Explains ~71% of systematic variance in NMD
+    efficiency.</td></tr>
+<tr><td><b>NMDetective-B</b></td>
+    <td>Simplified decision tree model for all possible PTCs. Slightly lower accuracy
+    (~68% variance explained) but more interpretable, making it suitable for
+    clinical applications.</td></tr>
+<tr><td><b>NMDetective-A PTC</b></td>
+    <td>Random forest model predicting NMD efficiency specifically for the first
+    out-of-frame PTC introduced by frameshifting indel mutations.</td></tr>
+<tr><td><b>NMDetective-B PTC</b></td>
+    <td>Decision tree model for the first out-of-frame PTC from frameshifting
+    indels.</td></tr>
+</table>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each subtrack is displayed as a signal (bigWig) track. By default, the vertical axis
+ranges from &minus;1 to +1. Regions with positive values (predicted NMD-triggering) are
+shown above the baseline; regions with negative values (predicted NMD escape) are shown
+below.
+</p>
+<ul>
+  <li><font color="#0080FF"><b>Blue tracks</b></font> (NMDetective-A and -B): predictions
+    for all possible PTCs from single-nucleotide nonsense variants.</li>
+  <li><font color="#009966"><b>Green tracks</b></font> (NMDetective-A PTC and -B PTC):
+    predictions for the first out-of-frame PTC from frameshifting indels.</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+The NMDetective models were trained on somatic nonsense mutation data from 9,769 cancer
+patients and validated with frameshift mutations and germline variants
+(<a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom et al. 2016</a>).
+The models incorporate the following features to predict NMD efficiency:
+</p>
+<ul>
+  <li>Whether the PTC falls in the last exon</li>
+  <li>Distance to the last 50 nt of the penultimate exon (the EJC-based &ldquo;50 bp rule&rdquo;)</li>
+  <li>Distance from the coding start (start-proximal NMD insensitivity)</li>
+  <li>Exon length</li>
+  <li>mRNA half-life</li>
+  <li>Distance to the downstream exon-junction complex</li>
+  <li>Distance to the wild-type stop codon</li>
+</ul>
+
+<p>
+<b>NMDetective-A</b> (random forest regression) captures non-linear interactions among
+these features and achieves the highest predictive accuracy.
+<b>NMDetective-B</b> (decision tree) applies a simpler rule-based classification that
+is more transparent, with a modest reduction in accuracy.
+</p>
+
+<p>
+The predictions were generated for every possible PTC-introducing single-nucleotide
+variant and for the first out-of-frame PTC from every possible single-nucleotide
+frameshifting indel across all human protein-coding transcripts. The original bedGraph
+custom track files were downloaded from the
+<a href="https://figshare.com/articles/dataset/NMDetective/7803398" target="_blank">NMDetective Figshare page</a>
+resource and converted to bigWig format at UCSC.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Lindeboom RG, Supek F, Lehner B.
+<a href="https://doi.org/10.1038/ng.3664" target="_blank">
+The rules and impact of nonsense-mediated mRNA decay in human cancers</a>.
+<em>Nat Genet</em>. 2016 Oct;48(10):1112-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">27618451</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5045715/" target="_blank">PMC5045715</a>
+</p>
+
+<p>
+Lindeboom RGH, Vermeulen M, Lehner B, Supek F.
+<a href="https://doi.org/10.1038/s41588-019-0517-5" target="_blank">
+The impact of nonsense-mediated mRNA decay on genetic disease, gene editing and cancer
+immunotherapy</a>.
+<em>Nat Genet</em>. 2019 Nov;51(11):1645-1651.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">31659324</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6858879/" target="_blank">PMC6858879</a>
+</p>
+

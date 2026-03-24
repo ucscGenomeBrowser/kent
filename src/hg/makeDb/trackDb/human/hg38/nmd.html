@@ -1,0 +1,100 @@
+<h2>Description</h2>
+<p>
+NMD is a cellular quality control mechanism that
+detects and degrades mRNAs containing premature termination codons (PTCs),
+preventing the accumulation of truncated, potentially harmful proteins.
+However, not all PTCs trigger NMD. PTCs in certain regions of a transcript are
+predicted to escape NMD, meaning the truncated mRNA may be translated into a
+protein with unpredictable functional consequences.
+The <b>NMD Escape</b> container includes several tracks that display putative regions where
+PTC variants are assumed to escape the NMD mechanism. These are typically located
+close to the first or last splice junction site or in transcripts without any junction.
+</p>
+
+<h2>Subtracks</h2>
+
+<h3>NMD escape regions</h3>
+<p>
+Rule-based predictions of NMD escape regions, computed from transcript
+annotations. Two transcript sets are provided:
+</p>
+<ul>
+  <li><b><a href="hgTrackUi?g=nmdEscGencode">NMD escape Gencode</a></b>:
+    NMD escape regions derived from GENCODE V49 transcripts.</li>
+  <li><b><a href="hgTrackUi?g=nmdEscNcbiRefSeq">NMD escape NCBI RefSeq</a></b>:
+    NMD escape regions derived from NCBI RefSeq transcripts.</li>
+</ul>
+<p>
+Click either of the links to the track details here or above to show the three rules 
+there were used (50bp, intronless, 100bp).
+</p>
+
+<h3>NMDetective scores</h3>
+<p>
+Machine-learning predictions of NMD efficiency from
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom
+et al. 2016</a>. Two models (A = random forest, B = decision tree)
+predict whether a PTC at each position will trigger NMD or allow escape.
+Positive scores indicate predicted NMD triggering; negative scores indicate
+predicted escape.
+</p>
+<ul>
+  <li><b><a href="hgTrackUi?g=nmdDetectiveA">NMDetective-A</a></b>:
+    Random forest model for all possible PTCs from nonsense variants.</li>
+  <li><b><a href="hgTrackUi?g=nmdDetectiveB">NMDetective-B</a></b>:
+    Decision tree model for all possible PTCs from nonsense variants.</li>
+  <li><b><a href="hgTrackUi?g=nmdDetectiveA_ptc">NMDetective-A PTC</a></b>:
+    Random forest model for the first out-of-frame PTC from frameshifting indels.</li>
+  <li><b><a href="hgTrackUi?g=nmdDetectiveB_ptc">NMDetective-B PTC</a></b>:
+    Decision tree model for the first out-of-frame PTC from frameshifting indels.</li>
+</ul>
+
+<h2>Background</h2>
+<p>
+The ACMG guidelines say under PVS1:
+</p>
+<p>
+<i>
+(ii) One must also be cautious when interpreting truncating variants downstream of the most 3′ truncating variant established as pathogenic in the literature. This is especially true if the predicted stop codon occurs in the last exon or in the last 50 base pairs of the penultimate exon, such that nonsense-mediated decay would not be predicted, and there is a higher likelihood of an expressed protein.
+</i>
+</p>
+
+<h2>Credits</h2>
+Thanks to Guido Neidhardt for suggesting this track at HUGO VEPTC 2025 and Andreas Lahner for feedback.
+Thanks to the Decipher Genome Browser team for introducing the idea of a track.
+Thanks to Rik Lindeboom for providing custom tracks.
+
+<h2>References</h2>
+<p>
+Nagy E, Maquat LE.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/9601030" target="_blank">
+A rule for termination-codon position within intron-containing genes: when nonsense
+affects RNA abundance</a>.
+<em>Trends Biochem Sci</em>. 1998 Jun;23(6):198-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/9601030" target="_blank">9601030</a>
+</p>
+
+<p>
+Lindeboom RGH, Supek F, Lehner B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">
+The rules and impact of nonsense-mediated mRNA decay in human cancers</a>.
+<em>Nat Genet</em>. 2016 Oct;48(10):1112-1118.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">27618451</a>
+</p>
+
+<p>
+Lindeboom RGH, Supek F, Lehner B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">
+The impact of nonsense-mediated mRNA decay on genetic disease, gene editing and cancer
+immunotherapy</a>.
+<em>Nat Genet</em>. 2019 Nov;51(11):1645-1651.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">31659324</a>
+</p>
+
+<p>
+Kurosaki T, Popp MW, Maquat LE.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30765700" target="_blank">
+Quality and quantity control of gene expression by nonsense-mediated mRNA decay</a>.
+<em>Nat Rev Mol Cell Biol</em>. 2019 Jul;20(7):406-420.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30765700" target="_blank">30765700</a>
+</p>

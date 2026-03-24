@@ -1,0 +1,155 @@
+<h2>Description</h2>
+
+<p>
+The <b>non-canonical ORFs</b> supertrack contains tracks that display open reading frames (ORFs)
+found outside of annotated protein-coding sequences. While the human genome has approximately
+20,000 annotated protein-coding genes, recent advances in ribosome profiling (Ribo-seq) and
+proteomics have revealed widespread translation of ORFs that do not correspond to known
+protein-coding genes. These non-canonical ORFs are found in regions previously considered
+non-coding, including 5' and 3' UTRs, long non-coding RNAs, pseudogenes, and alternative
+reading frames of known genes.
+</p>
+
+<p>
+Several subtypes of non-canonical ORFs are commonly distinguished. <b>Upstream ORFs (uORFs)</b>
+are located in 5' UTRs and can regulate translation of the downstream main coding sequence;
+ribosomes that translate a uORF may fail to reinitiate at the main start codon, reducing
+protein output. <b>Small ORFs (sORFs)</b>, generally defined as encoding fewer than 100 amino
+acids, have been systematically overlooked by gene annotation pipelines due to their short
+length, but many produce functional micropeptides involved in signaling, metabolism, and
+development. Other types include <b>downstream ORFs (dORFs)</b> in 3' UTRs,
+<b>out-of-frame ORFs</b> that overlap known coding sequences in an alternative reading frame,
+and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
+</p>
+
+<p>Click any the track names below to show their configuration/documentation page:</p>
+
+<table cellpadding="2" cellspacing="0" border="1" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Track</th>
+      <th>Description</th>
+      <th>Items</th>
+      <th>Genome Coverage</th>
+      <th>Exon Coverage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=utrAnnotUorfs">UTRannotator uORFs</a></td>
+      <td>Upstream ORFs in 5' UTRs from UTRannotator</td>
+      <td style="text-align: right;">44,435</td>
+      <td style="text-align: right;">1.15%</td>
+      <td style="text-align: right;">1.15%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">Gencode ncORFs</a></td>
+      <td>Gencode non-canonical ORFs supported by Ribo-seq</td>
+      <td style="text-align: right;">7,264</td>
+      <td style="text-align: right;">1.02%</td>
+      <td style="text-align: right;">0.03%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary">Gencode ncORFs primary</a></td>
+      <td>Gencode non-canonical ORFs &ndash; primary set</td>
+      <td style="text-align: right;">10,127</td>
+      <td style="text-align: right;">0.45%</td>
+      <td style="text-align: right;">0.02%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsComprehensive">Gencode ncORFs comprehensive</a></td>
+      <td>Gencode non-canonical ORFs &ndash; comprehensive set</td>
+      <td style="text-align: right;">28,359</td>
+      <td style="text-align: right;">2.24%</td>
+      <td style="text-align: right;">0.06%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=nuorfdb">nuORFdb</a></td>
+      <td>Non-canonical ORFs from nuORFdb v1.2</td>
+      <td style="text-align: right;">229,251</td>
+      <td style="text-align: right;">22.14%</td>
+      <td style="text-align: right;">0.83%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=metamorf">MetamORF</a></td>
+      <td>Meta-database of small ORFs (sORFs)</td>
+      <td style="text-align: right;">664,558</td>
+      <td style="text-align: right;">33.53%</td>
+      <td style="text-align: right;">1.19%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=openprot">OpenProt</a></td>
+      <td>Alternative and reference proteins from OpenProt v2.2</td>
+      <td style="text-align: right;">921,170</td>
+      <td style="text-align: right;">49.85%</td>
+      <td style="text-align: right;">3.36%</td>
+    </tr>
+    <tr>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=openprotMs">OpenProt (MS>=2)</a></td>
+      <td>OpenProt proteins with mass spectrometry evidence (&ge;2 peptides)</td>
+      <td style="text-align: right;">377,916</td>
+      <td style="text-align: right;">40.29%</td>
+      <td style="text-align: right;">1.85%</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>UTRannotator uORFs</h3>
+<p>
+<a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a>
+is a VEP plugin for annotating 5' UTR variants with respect to upstream open reading frames (uORFs).
+As part of the project, the authors compiled a curated reference set of 44,435 uORFs in
+human 5' UTRs from the data in
+<a href="http://www.sorfs.org" target="_blank">sorfs.org</a>, which contains ORFs supported by Ribo-Seq.
+See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=utrAnnotUorfs">UTRannotator uORFs subtrack page</a>
+for more details.
+</p>
+
+<h3>nuORFdb</h3>
+<p>
+<a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb</a> (novel
+unannotated ORF database) is a database of 229,251 non-canonical open reading frames
+with evidence of translation from ribosome profiling (Ribo-seq), created by the
+Bhatt lab at the Broad Institute. ORF types include uORFs, dORFs,
+out-of-frame ORFs, pseudogene ORFs, lincRNA ORFs, and others.
+See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=nuorfdb">nuORFdb subtrack page</a> for more details.
+</p>
+
+<h3>MetamORF</h3>
+<p>
+<a href="https://metamorf.hb.univ-amu.fr" target="_blank">MetamORF</a> is a repository of
+664,558 unique small ORFs (sORFs) in the human genome, consolidated from seven primary data
+sources and 46 individual ribosome profiling datasets. It integrates data from bioinformatic
+predictions, ribosome profiling experiments, and mass spectrometry studies, normalizing
+heterogeneous data into a unified format.
+See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=metamorf">MetamORF subtrack page</a> for more details.
+</p>
+
+<h3>OpenProt</h3>
+<p>
+<a href="https://www.openprot.org" target="_blank">OpenProt</a> is a database that provides
+a comprehensive annotation of all possible protein-coding ORFs in eukaryotic genomes,
+including 921,170 unique ORFs in human (603,586 AltProts, 246,578 RefProts, 71,006 Isoforms).
+AltProts are predicted from alternative reading frames in UTRs, frameshifted CDS overlaps,
+and non-coding RNAs. Each ORF is annotated with mass spectrometry and ribosome profiling evidence.
+A pre-filtered version with only MS-supported entries (377,916 with &ge;2 unique peptides) is also available.
+See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=openprot">OpenProt subtrack page</a> for more details.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>. See the individual
+track pages for more details.
+</p>
+
+<p>
+For automated download and analysis, the genome annotations are stored as bigBed files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/" target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+</p>

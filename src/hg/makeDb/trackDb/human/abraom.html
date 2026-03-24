@@ -1,0 +1,63 @@
+<h2>Description</h2>
+<p>
+The <a href="https://abraom.ib.usp.br/" target="_blank">Arquivo Brasileiro Online de
+Muta&ccedil;&otilde;es (ABraOM)</a> provides genomic variants obtained with whole-genome sequencing
+from SABE, a census-based sample of elderly individuals from S&atilde;o Paulo, Brazil&apos;s largest
+city. The Brazilian population is constituted by ~500 years of admixture between Africans,
+Europeans, and Native Americans. Additionally, the cohort presents ~3% of individuals with
+non-admixed Japanese ancestry (early 20th century migration). Coverage 38.6x. TEs, HLAs and
+new sequence are also available.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+track name is <em>abraom</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
+</p>
+<p>
+The original data can also be downloaded from the <a href="https://abraom.ib.usp.br/download/"
+target="_blank">ABraOM website</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+For academic use only. Licensing for commercial use might be available under request and agreement.
+By using this resource you agree to cite the flagship paper (Naslavsky et al. Nat Comm 2022).
+</p>
+<p>
+Whole-genome sequencing was performed at Human Longevity Inc. using TruSeq Nano DNA HT libraries
+sequenced on Illumina HiSeqX instruments with 150 bp paired-end reads targeting 30x coverage, and
+reads were mapped to GRCh38 using ISIS software. Sample sex was validated by comparing CPMs of X
+chromosome and male-specific Y (MSY) reads relative to autosomes, yielding the expected female
+(~55,000 X CPM, &lt;200 MSY CPM) and male (~27,500 X CPM, &gt;550 MSY CPM) patterns. Germline SNVs
+and indels were called following GATK Best Practices (GATK v3.7) via per-sample GVCFs
+(HaplotypeCaller), joint genotyping (CombineGVCFs, GenotypeGVCFs), and Variant Quality Score
+Recalibration (VQSR-AS); multiallelic variants were split with an in-house script, left-aligned with
+BCFtools, and annotated using Annovar and custom scripts against dbSNP, 1000 Genomes, and gnomAD,
+with putative loss-of-function variants identified using LOFTEE v0.3-beta irrespective of confidence
+labels. Variant and genotype quality was further assessed using the in-house CEGH-Filter two-step
+algorithm based on depth and allele balance, and analyses retained only GATK VQSR-AS PASS variants
+and higher-confidence CEGH-Filter calls. Relatedness was assessed using KING and PC-Relate
+(GENESIS), retaining a single proband per related pair and excluding one contaminated sample
+(&gt;3% by verifyBAMID), resulting in a final dataset of 1,171 unrelated individuals. Final samples
+achieved mean coverages ranging from 31.3x to 64.8x, with an average of 38.65x and a median of
+36.6x.
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Naslavsky MS, Scliar MO, Yamamoto GL, Wang JYT, Zverinova S, Karp T, Nunes K, Ceroni JRM, de
+Carvalho DL, da Silva Sim&otilde;es CE <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-022-28648-3" target="_blank">
+Whole-genome sequencing of 1,171 elderly admixed individuals from S&atilde;o Paulo, Brazil</a>.
+<em>Nat Commun</em>. 2022 Mar 4;13(1):1004.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35246524" target="_blank">35246524</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8897431/" target="_blank">PMC8897431</a>
+</p>

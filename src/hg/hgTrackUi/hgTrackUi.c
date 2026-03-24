@@ -2283,6 +2283,26 @@ cgiMakeRadioButton(oligoMatchStrandVar, "reverse", sameString(strand, "reverse")
 puts(" Reverse (-) ");
 }
 
+static void gcOnFlyUi(struct trackDb *tdb)
+/* UI for GC on the fly track */
+{
+char *winSize = cartUsualString(cart, gcOnFlyWindowSize, gcOnFlyDefaultSize);
+puts("<P><B>GC Percent calculation window size:&nbsp;</B>");
+jsInline(
+"function fullTrack()\n"
+"{\n"
+"var box = jQuery('select[name$=gcOnFly]');\n"
+"if (box.val()=='hide')\n"
+"    box.val('full');\n"
+"}\n");
+printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
+    gcOnFlyWindowSize, gcOnFlySizeVar, 15, winSize);
+jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
+puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
+/* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
+wigCfgUi(cart, tdb, tdb->track, "Graph configuration:", FALSE);
+}
+
 void cutterUi(struct trackDb *tdb)
 /* UI for restriction enzyme track */
 {
@@ -3084,8 +3104,10 @@ if (hasDataTypes)
                 }
             slPairFreeList(&dt_vars);
             }
+        char *label = htmlEncode(stripEnclosingDoubleQuotes(thisType->val));
         printf("%s\"%s\": {\"active\":%d, \"title\":\"%s\"}", COMMA_IF(not_first), thisType->name,
-                selected ? 1 : 0, stripEnclosingDoubleQuotes(thisType->val));
+                selected ? 1 : 0, label);
+        freeMem(label);
         }
     }
 // else: dataTypes dict is empty - JS will detect this
@@ -3176,8 +3198,9 @@ printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
     printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
 if (colorSettingsUrl) // only if present in trackDb.settings entry
-    printf(",\"colorSettingsUrl\": \"%s\"", colorSettingsUrl);
-printf(",\"metadataUrl\": \"%s\"", metaDataUrl);
+    printf(",\"colorSettingsUrl\": \"%s\"", cgiEncode((char*) colorSettingsUrl));
+printf(",\"metadataUrl\": \"%s\"", cgiEncode((char*) metaDataUrl));
+printf(",\"track\": \"%s\"", tdb->track);
 printf(closeJSON);
 /* --- END embedded JSON data --- */
 
@@ -3324,6 +3347,8 @@ else if (sameString(trackHubSkipHubName(track), "quickLiftChain"))
     quickLiftUi(tdb);
 else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
     oligoMatchUi(tdb);
+else if (sameString(track, GC_ON_FLY_TRACK_NAME))
+    gcOnFlyUi(tdb);
 else if (sameString(track, CUTTERS_TRACK_NAME))
     cutterUi(tdb);
 else if(sameString(track, "affyTransfrags"))
@@ -3709,7 +3734,8 @@ if (!ajax)
 puts("<BR><BR>");
 
 if (tdbIsSuperTrackChild(tdb))
-    showSupertrackInfo(tdb);
+    if (! (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) )
+        showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -3991,6 +4017,17 @@ return trackDbForPseudoTrack(RULER_TRACK_NAME,
 	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
+static struct trackDb *trackDbForGcOnFly(struct cart *cart)
+/* Create a trackDb entry for the GC on the fly pseudo-track. */
+{
+char longLabel[1024];
+safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
+struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
+        GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
+tdb->canPack = 0;
+return tdb;
+}
+
 struct trackDb *trackDbForOligoMatch()
 /* Create a trackDb entry for the oligo matcher pseudo-track. */
 {
@@ -4104,6 +4141,8 @@ else if (sameWord(track, RULER_TRACK_NAME))
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
+else if (sameWord(track, GC_ON_FLY_TRACK_NAME))
+    tdb = trackDbForGcOnFly(cart);
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track))

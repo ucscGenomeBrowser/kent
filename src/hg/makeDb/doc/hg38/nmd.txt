@@ -1,0 +1,61 @@
+#######################################################################
+# NMD escape regions from Gencode (2025-03-24 max/Claude)
+# Two outputs: decorator bigBed (per-transcript) and collapsed bigBed (merged by coordinates)
+# Collapsed version uses gene symbols from input, colors by rule, transcript lists
+# Script accepts -f bigGenePred (gencode .bb) or -f genePredExt (ncbiRefSeq .txt.gz)
+
+cd /hive/data/genomes/hg38/bed/nmd/gencode/
+
+# run the script on gencode bigGenePred - produces decorator + collapsed BED files
+~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f bigGenePred \
+    /hive/data/genomes/hg38/bed/gencodeV49/build/hg38.gencodeV49.bb \
+    knownGeneNmdDeco.bed nmdEscRegions.bed
+
+# build decorator bigBed
+bedSort knownGeneNmdDeco.bed knownGeneNmdDeco.bed
+bedToBigBed knownGeneNmdDeco.bed ../../../chrom.sizes knownGeneNmdDeco.bb \
+    -tab -type=bed12+5 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscDecoration.as
+
+# build collapsed bigBed
+bedSort nmdEscRegions.bed nmdEscRegions.bed
+bedToBigBed nmdEscRegions.bed ../../../chrom.sizes nmdEscRegions.bb \
+    -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+
+
+#######################################################################
+# NMD escape regions from NCBI RefSeq (2025-03-24 max)
+
+cd /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/
+
+# run the script on ncbiRefSeq genePredExt
+# Using all of RefSeq, not just refseq curated - good idea?
+# This is the file for RefSeq curated: /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeqCurated.txt.gz 
+~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f genePredExt \
+    /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeq.txt.gz
+    nmdNcbiRefSeqDeco.bed nmdEscNcbiRefSeq.bed
+
+# not building decorator file - needed? Useful?
+
+# build collapsed bigBed
+bedSort nmdEscNcbiRefSeq.bed nmdEscNcbiRefSeq.bed
+bedToBigBed nmdEscNcbiRefSeq.bed ../../../chrom.sizes nmdEscNcbiRefSeq.bb \
+    -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+
+# symlink to gbdb
+ln -sf /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/nmdEscNcbiRefSeq.bb /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
+
+#######################################################################
+# Lindeboom et al. NMDetective scores (2025-03-23 max/Claude)
+# NMD efficiency predictions from Lindeboom et al. 2019, Nat Genet.
+# Four bedGraph custom track files downloaded to:
+#   /hive/data/genomes/hg38/bed/nmd/lindeboom/
+# Data downloaded from https://figshare.com/articles/dataset/NMDetective/7803398
+# Custom track data in the session links from that page
+# - NMDetectiveA.ct  - Random forest prediction of NMD efficiency
+# - NMDetectiveB.ct  - Decision tree prediction of NMD efficiency
+# - nmdDectA-ptc.ct  - Random forest, first out-of-frame PTC
+# - nmdDectB-ptc.ct  - Decision tree, first out-of-frame PTC
+
+# Convert bedGraph custom tracks to bigWig and symlink from /gbdb:
+cd /hive/data/genomes/hg38/bed/nmd/lindeboom/
+bash ~/kent/src/hg/makeDb/scripts/nmd/lindeboomToBigWig.sh

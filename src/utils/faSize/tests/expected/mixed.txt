@@ -1,0 +1,6 @@
+880 bases (20 N's 860 real 860 upper 0 lower) in 8 sequences in 6 files
+Total size: mean 110.0 sd 28.9 min 83 (s1) max 137 (s2) median 137
+N count: mean 2.5 sd 2.7
+U count: mean 107.5 sd 31.5
+L count: mean 0.0 sd 0.0
+%0.00 masked total, %0.00 masked real

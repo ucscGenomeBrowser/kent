@@ -398,6 +398,7 @@ GCA_038363095.1_mArtLit.hap1	mammals
 GCA_039877785.1_fChaTrf1.hap1	fish
 GCA_040894005.1_aEngPut4.maternal	vertebrate
 GCA_040894355.1_rMyuGeo1.pri.20230808	vertebrate
+GCA_040938575.1_UKY_AmexF1_1	vertebrate
 GCA_040954595.1_ASM4095459v1	invertebrate
 GCA_040954625.1_ASM4095462v1	invertebrate
 GCA_041506625.1_ASM4150662v1	bacteria

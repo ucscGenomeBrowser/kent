@@ -72,6 +72,15 @@ void makeDirsOnPath(char *pathName);
  * (It's not considered a problem for the directory to already
  * exist. ) */
 
+void eatSlashSlashInPath(char *path);
+/* Convert multiple // to single / in path.  Warning: do not use on URLs
+ * as it would eat the :// in the protocol. */
+
+void eatExcessDotsInPath(char *path);
+/* Remove . and .. components from path in place, e.g.
+ *   'this/long/../dir/file' becomes 'this/dir/file'
+ *   'a/./b' becomes 'a/b' */
+
 char *simplifyPathToDir(char *path);
 /* Return path with ~ (for home) and .. taken out.   freeMem result when done. */
 

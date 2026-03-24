@@ -21,9 +21,13 @@ $(function() {
               typeof x === "object" && x !== null && !Array.isArray(x) &&
                   Object.values(x).every(value => typeof value === "string"));
 
-    const loadOptional = url =>  // load if possible otherwise carry on
+    const loadOptional = (url, hgsid, track) =>  // load if possible otherwise carry on
           url ?
-          fetch(url).then(r => r.ok ? r.json() : null).catch(() => null)
+          fetch("/cgi-bin/hgFetch", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: `hgsid=${hgsid}&fileUrl=${url}&track=${track}`,
+          }).then(r => r.ok ? r.json() : null).catch(() => null)
           : Promise.resolve(null);
 
     const loadIfMissing = (condition, url, callback) =>  // for missing plugins
@@ -122,7 +126,7 @@ $(function() {
 
         const ordinaryColumns = colNames.map(key => ({  // all but checkboxes
             data: key,
-            title: toTitleCase(key),
+            title: toTitleCase(key.replace(/^_/, "")),
         }));
 
         const checkboxColumn = {
@@ -145,12 +149,13 @@ $(function() {
             deferRender: true,    // seems faster
             columns: columns,
             responsive: true,
+            dom: "lrtip",         // omit 'f' (global search); per-column inputs suffice
             // autoWidth: true,   // might help columns shrink to fit content
             order: [[1, "asc"]],  // sort by the first data column, not checkbox
             pageLength: 50,       // show 50 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             language: { lengthMenu: `Show _MENU_ ${itemLabel}`, },
-            select: { style: "multi", selector: "td:first-child" },
+            select: { style: "multi", selector: "td:not(:has(a))" },
             initComplete: function() {  // Check appropriate boxes
                 const api = this.api();
                 embeddedData.dataElements.forEach(rowName => {
@@ -169,20 +174,39 @@ $(function() {
             },
         });
 
+        // Create "show only selected" toggle in the toolbar
+        const lengthDiv = document.querySelector(
+            "#theMetaDataTable_wrapper .dataTables_length");
+        const toggleWrapper = document.createElement("div");
+        toggleWrapper.id = "selected-filter";
+        const toggleLabel = document.createElement("label");
+        toggleLabel.classList.add("toggle-switch");
+        const toggleCheckbox = document.createElement("input");
+        toggleCheckbox.type = "checkbox";
+        toggleCheckbox.dataset.selectFilter = "true";
+        toggleLabel.appendChild(toggleCheckbox);
+        toggleLabel.appendChild(Object.assign(
+            document.createElement("span"), {className: "toggle-slider"}));
+        toggleWrapper.appendChild(toggleLabel);
+        toggleWrapper.appendChild(Object.assign(
+            document.createElement("span"), {textContent: "Show only selected rows"}));
+        lengthDiv.appendChild(toggleWrapper);
+
+        // Create active-filters chip bar (hidden when empty)
+        const activeFiltersDiv = document.createElement("div");
+        activeFiltersDiv.id = "active-filters";
+        activeFiltersDiv.style.display = "none";
+        const wrapper = document.getElementById("theMetaDataTable_wrapper");
+        wrapper.insertBefore(activeFiltersDiv, lengthDiv.nextSibling);
+
         // define inputs for search functionality for each column in the table
         const row = document.querySelector("#theMetaDataTable thead").insertRow();
         columns.forEach((col) => {
             const cell = row.insertCell();
-            if (col.className === "select-checkbox") {  // show selected items
-                const label = document.createElement("label");
-                label.title = "Show only selected rows";
-
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.dataset.selectFilter = "true";
-
-                label.appendChild(checkbox);
-                cell.appendChild(label);
+            if (col.className === "select-checkbox") {
+                // left empty; toggle is now in the toolbar
+            } else if (col.data && col.data.startsWith("_")) {
+                // no search box for hidden-facet columns
             } else {
                 const input = document.createElement("input");
                 input.type = "text";
@@ -207,7 +231,7 @@ $(function() {
             const row = table.row(dataIndex);
             return row.select && row.selected();
         });
-        $("#theMetaDataTable thead input[data-select-filter]")
+        $("#selected-filter input[data-select-filter]")
             .on("change", function () { table.draw(); });
 
         // implement the 'select all' at the top of the checkbox column
@@ -221,6 +245,7 @@ $(function() {
         });
         return table;
     }  // end initTable
+
 
     function initFilters(table, allData) {
         const { metadata, colorMap, colNames } = allData;
@@ -244,21 +269,19 @@ $(function() {
         const excludeCheckboxes = [primaryKey];
 
         const filtersDiv = document.getElementById("filters");
-        colNames.forEach((key) => {
+        colNames.forEach((key, colIdx) => {
             // skip attributes if they should be excluded from checkbox sets
-            if (excludeCheckboxes.includes(key)) {
+            if (excludeCheckboxes.includes(key) || key.startsWith("_")) {
                 return;
             }
 
             const sortedPossibleVals = Array.from(possibleValues[key].entries());
-            sortedPossibleVals.sort((a, b) => // neg: less-than
-                 a[1] !== b[1] ? b[1] - a[1] : a[0].localeCompare(b[0]));
+            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // neg: less-than
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals
                 .filter(([val, count]) =>
-                    val.trim().toUpperCase() !== "NA")  // why only > 1?
-                    //val.trim().toUpperCase() !== "NA" && count > 1)
+                    val.trim().toUpperCase() !== "NA" && count > 1)
                 .slice(0, maxCheckboxes);
 
             // Any "other/Other/OTHER" entry will be put at the end
@@ -279,11 +302,29 @@ $(function() {
                 return;
             }
 
-            // Add headings and filter checkboxes (only top maxCheckboxes)
-            const cbSetsDiv = document.createElement("div");
-            cbSetsDiv.appendChild(Object.assign(document.createElement("strong"), {
-                textContent: toTitleCase(key)
-            }));
+            // --- Build the facet group with collapsible structure ---
+            const facetDiv = document.createElement("div");
+            facetDiv.classList.add("facet-group");
+
+            // Clickable heading that toggles collapse
+            const heading = Object.assign(document.createElement("strong"), {
+                textContent: toTitleCase(key),
+                className: "facet-heading collapsed",
+            });
+            facetDiv.appendChild(heading);
+
+            // Collapsible body: holds Clear button + all checkboxes
+            const facetBody = document.createElement("div");
+            facetBody.classList.add("facet-body", "collapsed");
+
+            // Clear button — built here so it lives inside the collapsible body
+            const clearBtn = document.createElement("button");
+            clearBtn.textContent = "Clear";
+            clearBtn.type = "button";
+            facetBody.appendChild(clearBtn);
+
+            // Build checkbox labels
+            const cboxes = [];
             topToShow.forEach(([val, count]) => {
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
@@ -299,43 +340,95 @@ $(function() {
                     label.appendChild(colorBox);
                 }
                 label.appendChild(document.createTextNode(`${val} (${count})`));
-                cbSetsDiv.appendChild(label);
+                facetBody.appendChild(label);
+                cboxes.push(checkbox);
             });
-            filtersDiv.appendChild(cbSetsDiv);
-        });  // done creating checkbox filters for each column
 
-        const checkboxAttributeIndexes =  // checkbox sets => cols in data table
-              colNames.reduce((acc, key, colIdx) => {
-                  if (!excludeCheckboxes.includes(key)) { acc.push(colIdx); }
-                  return acc;
-              }, []);
-        // Now do logic to implement checkboxes-based rows display
-        checkboxAttributeIndexes.forEach((colIdx, idx) => {
-            const attrDiv = filtersDiv.children[idx];
-            const cboxes = [  // need this to be 'array' to use 'filter'
-                ...attrDiv.querySelectorAll("input[type=checkbox]")
-            ];
-            cboxes.forEach(cb => {  // Add set of checkboxes for this attribute
+            facetDiv.appendChild(facetBody);
+            filtersDiv.appendChild(facetDiv);
+
+            // --- Wire up collapse toggle ---
+            heading.addEventListener("click", () => {
+                const isCollapsed = facetBody.classList.toggle("collapsed");
+                heading.classList.toggle("collapsed", isCollapsed);
+            });
+
+            // --- Wire up checkbox filtering (same logic as before) ---
+            // colIdx is the 0-based index into colNames; DataTable column is
+            // colIdx + 1 because column 0 is the select-checkbox column.
+            const dtColIdx = colIdx + 1;
+            cboxes.forEach(cb => {
                 cb.addEventListener("change", () => {
-                    const chk = cboxes.filter(c => c.checked).map(c => c.value);
-                    const query = chk.length ? "^(" + chk.join("|") + ")$" : "";
-                    table.column(colIdx + 1).search(query, true, false).draw();
+                    const checked = cboxes.filter(c => c.checked).map(c => c.value);
+                    const query = checked.length ? "^(" + checked.join("|") + ")$" : "";
+                    table.column(dtColIdx).search(query, true, false).draw();
+                    updateActiveFilters();
                 });
             });
-            // Make a "clear" button
-            const clearBtn = document.createElement("button");
-            clearBtn.textContent = "Clear";
-            clearBtn.type = "button";  // prevent form submit if inside a form
+
+            // --- Wire up Clear button ---
             clearBtn.addEventListener("click", () => {
-                cboxes.forEach(cb => cb.checked = false);  // Uncheck all
-                // Recalculate the (now cleared) search term and update table
-                table.column(colIdx + 1).search("", true, false).draw();
+                cboxes.forEach(cb => cb.checked = false);
+                table.column(dtColIdx).search("", true, false).draw();
+                updateActiveFilters();
             });
-            // Prepend the "clear" button
-            attrDiv.insertBefore(clearBtn, attrDiv.children[1] || null);
-        });
+        });  // done creating collapsible checkbox filters for each column
+
         return table;  // to chain calls
     }  // end initFilters
+
+    function updateActiveFilters() {
+        const container = document.getElementById("active-filters");
+        if (!container) return;
+        container.innerHTML = "";
+
+        const checked = document.querySelectorAll(
+            "#filters input[type='checkbox']:checked");
+        if (checked.length === 0) {
+            container.style.display = "none";
+            return;
+        }
+
+        // Group by facet name
+        const groups = new Map();
+        checked.forEach(cb => {
+            const facetGroup = cb.closest(".facet-group");
+            if (!facetGroup) return;
+            const heading = facetGroup.querySelector(".facet-heading");
+            if (!heading) return;
+            const facetName = heading.textContent.trim();
+            // Get the display text from the label (strip the count suffix)
+            const label = cb.parentElement;
+            const labelText = label.textContent.trim();
+            if (!groups.has(facetName)) groups.set(facetName, []);
+            groups.get(facetName).push({ labelText, checkbox: cb });
+        });
+
+        groups.forEach((chips, facetName) => {
+            const groupLabel = document.createElement("span");
+            groupLabel.className = "filter-chip-group-label";
+            groupLabel.textContent = facetName + ":";
+            container.appendChild(groupLabel);
+
+            chips.forEach(({ labelText, checkbox }) => {
+                const chip = document.createElement("span");
+                chip.className = "filter-chip";
+                chip.appendChild(document.createTextNode(labelText + " "));
+                const removeBtn = document.createElement("button");
+                removeBtn.className = "remove-chip";
+                removeBtn.type = "button";
+                removeBtn.textContent = "\u00d7";
+                removeBtn.addEventListener("click", () => {
+                    checkbox.checked = false;
+                    checkbox.dispatchEvent(new Event("change"));
+                });
+                chip.appendChild(removeBtn);
+                container.appendChild(chip);
+            });
+        });
+
+        container.style.display = "flex";
+    }
 
     function initSubmit(table) {  // logic for the submit event
         const { mdid, primaryKey } = embeddedData;  // mdid: metadata identifier
@@ -428,8 +521,20 @@ $(function() {
     }
 
     function loadDataAndInit() {  // load data and call init functions
-        const { mdid, primaryKey, metadataUrl, colorSettingsUrl } = embeddedData;
-        fetch(metadataUrl)
+        const { mdid, primaryKey, metadataUrl, colorSettingsUrl, track } = embeddedData;
+
+        const paramsFromUrl = new URLSearchParams(window.location.search);
+        const hgsid = paramsFromUrl.get("hgsid");
+        let fetchBody = `fileUrl=${metadataUrl}&track=${track}`;
+        if (hgsid !== null) {
+            fetchBody = fetchBody + `&hgsid=${hgsid}`;
+        }
+
+        fetch("/cgi-bin/hgFetch", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: fetchBody,
+        })
             .then(response => {
                 if (!response.ok) {  // a 404 will look like plain text
                     throw new Error(`HTTP Status: ${response.status}`);
@@ -437,7 +542,7 @@ $(function() {
                 return response.text();
             })
             .then(tsvText => {  // metadata table is a TSV file to parse
-                loadOptional(colorSettingsUrl).then(colorMap => {
+                loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
                     const rows = tsvText.trim().split("\n");
                     const colNames = rows[0].split("\t");
                     const metadata = rows.slice(1).map(row => {

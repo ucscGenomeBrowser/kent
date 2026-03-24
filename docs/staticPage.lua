@@ -227,7 +227,7 @@ function Link(s, src, tit, attr)
 end
 
 function Image(s, src, tit, attr)
-  return "<img src='" .. escape(src,true) .. "' title='" ..
+  return "<img alt='" .. escape(s,true) .. "' src='" .. escape(src,true) .. "' title='" ..
          escape(tit,true) .. "'/>"
 end
 

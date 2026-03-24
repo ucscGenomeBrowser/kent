@@ -64,6 +64,26 @@ target="_blank">Porretta et al</a> and <a href="https://pubmed.ncbi.nlm.nih.gov/
 target="_blank">Brock et al</a>.
 </p>
 
+<h3>PrimateAI-3D - hg38/hg19</h3>
+<p>
+<b>Interpretation:</b> Scores range from 0 to 1, with higher values indicating greater
+predicted pathogenicity. The authors suggest a clinical threshold of 0.821 for distinguishing
+pathogenic from benign missense variants. 75% of all possible missense variants are classified
+as benign, 25% as pathogenic.
+</p>
+<p>
+<a target="_blank" href="https://primateai3d.basespace.illumina.com/">PrimateAI-3D</a>
+(Gao et al, Science 2023) is a semi-supervised 3D convolutional neural network trained on
+4.5 million benign missense variants from 233 primate species and common human variants.
+It operates on voxelized protein structures at 2 &Aring; resolution (from AlphaFold or
+homology models) combined with multiple sequence alignments from 592 species. The track
+contains pre-computed scores for all 70.7 million possible single nucleotide missense
+variants.
+Pathogenic variants are shown in <span style="color:#C80000">red</span>,
+benign in <span style="color:#0000C8">blue</span>.
+Items can be filtered by prediction and by percentile score.
+</p>
+
 <h2>Display Conventions and Configuration</h2>
 
 <h3>BayesDel</h3>
@@ -187,6 +207,26 @@ improves prediction of pathogenicity</a>.
 <em>Am J Hum Genet</em>. 2022 Mar 3;109(3):457-470.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35120630" target="_blank">35120630</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8948164/" target="_blank">PMC8948164</a>
+</p>
+
+<p>
+Gao H, Hamp T, Ede J, Schraiber JG, McRae J, Singer-Berk M, Yang Y, Dietrich ASD,
+Fiziev PP, Kuderna LFK <em>et al</em>.
+<a href="https://doi.org/10.1126/science.abn8197" target="_blank">
+The landscape of tolerated genetic variation in humans and primates</a>.
+<em>Science</em>. 2023 Jun 2;380(6648):eabn8197.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">37262156</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10187174/" target="_blank">PMC10187174</a>
+</p>
+
+<p>
+Sundaram L, Gao H, Padigepati SR, McRae JF, Li Y, Kosmicki JA, Fritzilas N, Hakenberg J,
+Dutta A, Shon J <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-018-0167-z" target="_blank">
+Predicting the clinical impact of human mutation with deep neural networks</a>.
+<em>Nat Genet</em>. 2018 Aug;50(8):1161-1170.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30038395" target="_blank">30038395</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6237276/" target="_blank">PMC6237276</a>
 </p>
 
 <p>

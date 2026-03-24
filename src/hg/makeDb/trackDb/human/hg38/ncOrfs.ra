@@ -12,41 +12,39 @@ group genes
     type bigBed 9 +
     itemRgb on
     mouseOverField uorfType
-    #searchIndex name
-    html ../ncOrfs
     visibility pack
 
     track gencNcOrfs
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.bb
-    shortLabel Gencode non-canonical ORFs
-    longLabel ncORFs: Gencode non-canonical ORFs supported Ribo-seq data
+    shortLabel Gencode non-canonical ORFs Phase I
+    longLabel ncORFs: Gencode Phase I non-canonical ORFs supported by Ribo-seq data
     type bigGenePred
     itemRgb on
     mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
-    html ../ncOrfs
+    html gencNcOrfs
     visibility pack
 
     track gencNcOrfsPrimary
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.bb
-    shortLabel Gencode non-canonical ORFs primary
-    longLabel ncORFs: Gencode non-canonical ORFs - primary
+    shortLabel Gencode non-canonical ORFs Phase II primary
+    longLabel ncORFs: Gencode Phase II non-canonical ORFs - primary
     type bigBed 12 +
     itemRgb on
     #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
-    html ../ncOrfs
+    html gencNcOrfs
     visibility pack
 
     track gencNcOrfsComprehensive
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.bb
-    shortLabel Gencode non-canonical ORFs comprehensive
-    longLabel ncORFs: Gencode non-canonical ORFs - comprehensive
+    shortLabel Gencode non-canonical ORFs Phase II comprehensive
+    longLabel ncORFs: Gencode Phase II non-canonical ORFs - comprehensive
     type bigBed 12 +
     itemRgb on
     #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
-    html ../ncOrfs
+    html gencNcOrfs
     visibility pack
 
     track metamorf
@@ -56,5 +54,41 @@ group genes
     longLabel ncORFs: MetamORF - meta-database of non-canonical ORFs
     type bigBed 12 +
     itemRgb on
-    html ../ncOrfs
     visibility pack
+
+    track nuorfdb
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.bb
+    shortLabel nuORFdb
+    longLabel ncORFs: nuORFdb - non-canonical ORFs from nuORFdb v1.2
+    type bigGenePred
+    itemRgb on
+    mouseOverField plotType
+    visibility pack
+
+    track openprot
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/openprot/openprot.bb
+    shortLabel OpenProt
+    longLabel ncORFs: OpenProt - alternative and reference proteins v2.2
+    type bigGenePred
+    itemRgb on
+    mouseOverField localization
+    filterByRange.msScore on
+    filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
+    filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
+    visibility pack
+
+    track openprotMs
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/openprot/openprot.ms2.bb
+    shortLabel OpenProt (MS>=2)
+    longLabel ncORFs: OpenProt - proteins with at least 2 MS peptides v2.2
+    type bigGenePred
+    itemRgb on
+    mouseOverField localization
+    filterByRange.msScore on
+    filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
+    filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
+    html openprot
+    visibility hide

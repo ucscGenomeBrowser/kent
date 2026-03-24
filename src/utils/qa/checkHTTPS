@@ -2,7 +2,7 @@
 set -eEu -o pipefail
 
 recipients=("cluster-admin@soe.ucsc.edu" "browser-qa@soe.ucsc.edu" "mhaeussl@ucsc.edu")
-wiggleRoom=$(date +%s -d"30 days");  # Flag for renewal within 30 days of expiry, sec past epoch
+wiggleRoom=$(date +%s -d"14 days");  # Flag for renewal within 14 days of expiry, sec past epoch
 
 output=""
 
@@ -32,7 +32,8 @@ apibeta.soe.ucsc.edu \
 hgw0.soe.ucsc.edu \
 hgw1.soe.ucsc.edu \
 hgw2.soe.ucsc.edu \
-redmine.soe.ucsc.edu
+redmine.soe.ucsc.edu \
+psygene.gi.ucsc.edu
 do 
        expiryDate=$(echo -n | openssl s_client -servername $site -connect $site:443 2>/dev/null | openssl x509 -noout -dates | grep After | sed -e "s/23:59:59\|\=\|notAfter\|GMT\|//g")
        expiryEpoch=$(date -d"$expiryDate" +%s)
@@ -44,5 +45,5 @@ done
 
 if [ -n "$output" ]
 then
-    echo -e "$output" | mail -s "Site Certificates expiring in < 30 days" -S 'from=Reply All Includes All QA <browser-qa@soe.ucsc.edu>' "${recipients[@]}"
+    echo -e "$output" | mail -s "Site Certificates expiring in < 14 days" -S 'from=Reply All Includes All QA <browser-qa@soe.ucsc.edu>' "${recipients[@]}"
 fi

@@ -1,0 +1,78 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.mxbiobank.org/" target="_blank">Mexico Biobank (MXB)</a> project
+genotyped 6,011 individuals sampled across all 32 states of Mexico during the 2000 National
+Health Survey (ENSA 2000) conducted by the National Institute of Public Health (INSP).
+Genotyping was performed with the Illumina Multi-Ethnic Global Array (MEGA, ~1.8M SNPs),
+optimized for admixed populations and enriched for ancestry-informative and medically relevant
+variants. Only autosomal, biallelic SNPs passing quality control are included. Samples were
+selected from 898 recruitment sites, with prioritization of indigenous language speakers.
+</p>
+
+<p>
+This track shows allele frequencies computed from the phased genotypes. The full
+phased genotype data with haplotype clustering display is available in the
+<a href="hgTrackUi?g=mexbb">Mexico Biobank track</a> under Phased Variants.
+Frequencies can also be plotted onto a map on the
+<a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar platform</a>.
+The hg38 data was lifted from hg19 by UCSC (see below).
+</p>
+
+<h2>Data Access</h2>
+<p>
+We are not allowed to redistribute the VCF file.
+Allele frequencies by geographical state and ancestry are available via
+the <a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar platform</a>.
+Raw genotype data are available under controlled access at the
+EGA (Study: EGAS00001005797; Dataset: EGAD00010002361). For the VCFs, email
+andres.moreno@cinvestav.mx to obtain the data.
+</p>
+
+<h2>Methods</h2>
+<p>
+Data processing included GenomeStudio &rarr; PLINK conversion, strand alignment, removal
+of duplicates, update of map positions using dbSNP Build 151 and low-quality
+variants/individuals, and relatedness filtering.
+At UCSC, the phased VCF was lifted from hg19 to hg38 with CrossMap, then allele counts
+(AC, AF, AN) were computed using bcftools fill-tags and genotypes were stripped to produce
+a sites-only frequency VCF.
+</p>
+
+<p>
+We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+We thank the Center for Research and Advanced Studies (Cinvestav) of Mexico for
+generating and providing the frequency data, the National Institute of Medical
+Sciences and Nutrition (INCMNSZ) for DNA extraction, and the Ministry of Health
+together with the National Institute of Public Health (INSP) for the design and
+implementation of the National Health Survey 2000 (ENSA 2000). We also thank
+the ENSA-Genomics Consortium for their contributions to sample collection and
+data processing that made possible the construction of the MXB genomic resource.
+</p>
+
+<h2>References</h2>
+<p>
+Barberena-Jonas C, Medina-Mu&ntilde;oz SG, Cedillo-Castel&aacute;n V, Sep&uacute;lveda-Morales T,
+Gonzaga-J&aacute;uregui C, ENSA Genomics Consortium, Garc&iacute;a-Garc&iacute;a L, Ioannidis AG,
+Moreno-Estrada A.
+<a href="https://doi.org/10.1038/s41591-025-04100-z" target="_blank">
+Clinical genetic variation across Hispanic populations in the Mexican Biobank</a>.
+<em>Nat Med</em>. 2026 Jan 21;.
+DOI: <a href="https://doi.org/10.1038/s41591-025-04100-z"
+target="_blank">10.1038/s41591-025-04100-z</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/41566040" target="_blank">41566040</a>
+</p>
+
+<p>
+Sohail M, Palma-Mart&iacute;nez MJ, Chong AY, Quinto-Cor&eacute;s CD, Barberena-Jonas C, Medina-Mu&ntilde;oz SG,
+Ragsdale A, Delgado-S&aacute;nchez G, Cruz-Hervert LP, Ferreyra-Reyes L <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-023-06560-0" target="_blank">
+Mexican Biobank advances population and medical genomics of diverse ancestries</a>.
+<em>Nature</em>. 2023 Oct;622(7984):775-783.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37821706" target="_blank">37821706</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10600006/" target="_blank">PMC10600006</a>
+</p>

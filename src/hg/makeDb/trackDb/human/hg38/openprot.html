@@ -1,0 +1,141 @@
+<h2>Description</h2>
+
+<p>
+This track displays <b>921,170 protein-coding ORFs</b> from
+<a href="https://www.openprot.org" target="_blank">OpenProt</a> v2.2, a database that
+provides a comprehensive annotation of all possible protein-coding ORFs in the human genome.
+In addition to currently annotated coding sequences (CDSs) and their reference proteins
+(RefProts), OpenProt predicts alternative ORFs (AltORFs) and their corresponding alternative
+proteins (AltProts) that are hidden within transcripts previously considered to encode only
+a single protein.
+</p>
+
+<p>
+A pre-filtered subtrack (<b>OpenProt MS>=2</b>) is also available, containing only the
+377,916 ORFs with at least 2 unique mass spectrometry peptides detected across studies,
+matching the MS-evidence threshold used by OpenProt for their curated downloads.
+</p>
+
+<p>
+OpenProt classifies proteins into three types:
+</p>
+<ul>
+  <li><b>RefProt</b> (246,578) &ndash; reference proteins translated from annotated CDSs in mRNAs,
+      representing non-redundant sequences from UniProtKB/SwissProt, Ensembl, and NCBI RefSeq</li>
+  <li><b>AltProt</b> (603,586) &ndash; alternative proteins translated from AltORFs in mRNA UTRs,
+      in frameshifted reading frames overlapping the CDS, or from ORFs in non-coding RNAs</li>
+  <li><b>Isoform</b> (71,006) &ndash; novel predicted isoforms of known proteins, translated from
+      AltORFs that share clear sequence homology with a RefProt from the same gene</li>
+</ul>
+
+<p>
+AltORFs are further classified by their localization relative to the annotated CDS:
+</p>
+<ul>
+  <li><b>5'UTR</b> &ndash; start codon in the 5' UTR (upstream ORFs)</li>
+  <li><b>CDS</b> &ndash; overlapping the annotated CDS in a different reading frame</li>
+  <li><b>3'UTR</b> &ndash; start codon in the 3' UTR (downstream ORFs)</li>
+  <li><b>ncRNA</b> &ndash; ORFs in transcripts classified as non-coding RNAs</li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are displayed in bigGenePred format. <b>Mouseover</b> shows the ORF localization.
+Items are labeled with the protein accession number: IDs starting with <tt>IP_</tt> are
+predicted AltProts, <tt>II_</tt> are novel isoforms, and other IDs (e.g. <tt>NP_</tt>,
+<tt>ENSP</tt>) are RefProts from existing annotations.
+</p>
+
+<p>
+The track includes several <b>filter</b> options:
+</p>
+<ul>
+  <li><b>Protein type</b> &ndash; filter by AltProt, RefProt, or Isoform</li>
+  <li><b>Localization</b> &ndash; filter by 5'UTR, 3'UTR, CDS, or ncRNA</li>
+  <li><b>MS score</b> &ndash; filter by minimum number of unique mass spectrometry peptides</li>
+</ul>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
+scripts through our <a href="https://api.genome.ucsc.edu">API</a>; the track name is
+&quot;openprot&quot; (all ORFs) or &quot;openprotMs&quot; (MS-filtered).
+</p>
+
+<p>
+For automated download and analysis, the genome annotations are stored in bigBed files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/openprot/"
+target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/openprot/openprot.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+
+<p>
+The original data files can be downloaded from the
+<a href="https://www.openprot.org/p/download" target="_blank">OpenProt download page</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The OpenProt v2.2 BED12 and TSV annotation files were downloaded from the OpenProt API.
+The BED file (2,846,289 rows) contains genomic coordinates for all predicted ORFs; since the
+same protein can be mapped through multiple transcripts to identical genomic coordinates,
+deduplication reduced this to 921,170 unique genomic features (3 entries with overlapping
+BED blocks were excluded).
+</p>
+
+<p>
+Each BED entry was annotated with metadata from the TSV file by joining on protein accession.
+For proteins with multiple transcript entries in the TSV, the annotation with the highest
+MS score was retained. Extended fields include protein type (AltProt/RefProt/Isoform),
+ORF localization, MS score, TE (Translation Event) score, Kozak motif status, InterPro domain
+count, and reading frame.
+</p>
+
+<p>
+The annotation is based on GRCh38.p13, Ensembl release 106, and UniProt release 2022_06_01.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Xavier Roucou and the OpenProt team at the Universit&eacute; de Sherbrooke for
+creating OpenProt and making the data publicly available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Brunet MA, Leblanc S, Bhatt P, Bhatt R, Bhatt S, Brunelle M, Bhatt V, Bhatt M,
+Roucou X <em>et al</em>.
+<a href="https://academic.oup.com/nar/article/49/D1/D1175/5929173" target="_blank">
+OpenProt: a more comprehensive guide to explore eukaryotic coding potential and proteomes</a>.
+<em>Nucleic Acids Res</em>. 2021 Jan 8;49(D1):D1175-D1180.
+DOI: <a href="https://doi.org/10.1093/nar/gkaa1036"
+target="_blank">10.1093/nar/gkaa1036</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33196842"
+target="_blank">33196842</a>
+</p>
+
+<p>
+Leblanc S, Bhatt P, Bhatt R, Bhatt S, Bhatt V, Brunet MA, Bhatt M,
+Roucou X <em>et al</em>.
+<a href="https://academic.oup.com/nar/article/46/D1/D529/4584623" target="_blank">
+OpenProt: a database for a comprehensive listing of all predicted ORFs and their
+associated proteins</a>.
+<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D529-D533.
+DOI: <a href="https://doi.org/10.1093/nar/gkx1109"
+target="_blank">10.1093/nar/gkx1109</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140464"
+target="_blank">29140464</a>
+</p>

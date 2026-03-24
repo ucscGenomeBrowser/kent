@@ -48,7 +48,7 @@ wget 'https://abraom.ib.usp.br/download/download-files.php?fid=RklEMTIzNDU2&key=
 tar xvfz abraom.tar
 ln -s  /hive/data/genomes/hg38/p14Clean/hg38.p14.fa
 samtools faidx hg38.p14.fa 
-python ~/kent/src/hg/makeDb/scripts/abraomToVcf.py SABE1171.Abraom.clean.tsv abraom.vcf hg38.p14.fa
+python ~/kent/src/hg/makeDb/scripts/varFreqs/abraomToVcf.py SABE1171.Abraom.clean.tsv abraom.vcf hg38.p14.fa
 tabix -p vcf abraom.vcf.gz 
 
 # SGDP
@@ -63,7 +63,7 @@ tabix -p vcf SGDP.nh2.vcf.gz
 cd /hive/data/genomes/hg38/bed/varFreqs/sgp/
 # got tsv file via google drive link from 장인수 <insoo078@kribb.re.kr> 
 # VCF converter, written by Claude Opus 4.1 using 2 lines of example input
-python ~/kent/src/hg/makeDb/scripts/kovaToVcf.py 1_KOVA.v7.tsv.gz kova.v7.vcf
+python ~/kent/src/hg/makeDb/scripts/varFreqs/kovaToVcf.py 1_KOVA.v7.tsv.gz kova.v7.vcf
 bgzip kova.v7.vcf
 tabix -p vcf kova.v7.vcf.gz
 
@@ -76,30 +76,44 @@ tabiv -p vcf SG10K_Health_r5.3.2.sites.vcf.bgz
 # Saudi 300 genomes
 cd /hive/data/genomes/hg38/bed/varFreqs/saudi
 wget https://figshare.com/ndownloader/files/51297884 -O 51297884.tsv.gz
-python3 ~/kent/src/hg/makeDb/scripts/saudiToVcf.py
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/saudiToVcf.py
 bgzip saudi.vcf
 tabix -p vcf saudi.vcf.gz
 
 # SFARI SPARK
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
 # used globus to download into vcf/
-sh ~/kent/src/hg/makeDb/scripts/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
 bcftools norm -m-  SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz -Oz > SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz && tabix -p vcf SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
 
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs/
 # used globus to download into vcf/
-sh ~/kent/src/hg/makeDb/scripts/sparkMergeVcfAddCounts.sh vcf/wgs_12519_genome.deepvariant 8
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh vcf/wgs_12519_genome.deepvariant 8
 bcftools norm -m-  wgs_12519_genome.deepvariant.sites.vcf.gz -Oz > wgs_12519_genome.deepvariant.norm.vcf.gz
 tabix -p vcf wgs_12519_genome.deepvariant.norm.vcf.gz
 
 # NCBI ALFA bigBed to VCF, Max Jan 26 2026
 # Source: ALFA R4 bigBed files, 904M variants, output 163M with non-zero AF
 cd /hive/data/genomes/hg38/bed/varFreqs/alfa
-python3 alfa_to_vcf.py --out ALFA.vcf --zero-af-file ALFA_zero.txt
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/alfa_to_vcf.py --out ALFA.vcf --zero-af-file ALFA_zero.txt
 # Compress and index
 bgzip ALFA.vcf
 tabix -p vcf ALFA.vcf.gz
 # Final: 2.7GB, 163M variants (146M SNPs, 17M indels), ALFA_zero.txt has 26GB of zero-AF variants
+
+# HRC (Haplotype Reference Consortium), Claude max, Mar 17 2026
+# Source: HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz
+# 40M variants from 32,488 WGS samples, originally on GRCh37
+cd /hive/data/genomes/hg38/bed/varFreqs/hrc/
+# download HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz from http://www.haplotype-reference-consortium.org/site
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/hrcToVcf.py
+# 40,405,505 variants read, 8,052 unmapped, 40,397,453 lifted to hg38
+# sort, compress, index
+bcftools sort hrc.vcf -Oz -o hrc.vcf.gz
+tabix -p vcf hrc.vcf.gz
+rm hrc.vcf
+ln -s /hive/data/genomes/hg38/bed/varFreqs/hrc/hrc.vcf.gz /gbdb/hg38/varFreqs/hrc/hrc.vcf.gz
+ln -s /hive/data/genomes/hg38/bed/varFreqs/hrc/hrc.vcf.gz.tbi /gbdb/hg38/varFreqs/hrc/hrc.vcf.gz.tbi
 
 # Australia, Max, Jan 2026
 # received files from m.hobbs@garvan.org.au
@@ -107,3 +121,97 @@ cd /hive/data/genomes/hg38/bed/varFreqs/mgrb/
 bcftools norm -f hg38.fa -m-any MGRB.phase3.GRCh38.vcf.gz -o MGRB.phase3.GRCh38.norm.vcf.gz
 tabix MGRB.phase3.GRCh38.norm.vcf.gz
 
+# SCHEMA Schizophrenia Exome Meta-Analysis track for hg38, Max, Jan 22 2026
+# source: https://schema.broadinstitute.org/
+# Original is in hg19/GRCh37 coordinates
+cd /hive/data/genomes/hg38/bed/varFreqs/schema
+# SCHEMA_variant_results.vcf.bgz (384M, hg19 coordinates)
+# Step 1: Add AC, AN, AF fields by summing case+control counts
+~/kent/src/hg/makeDb/scripts/varFreqs/schema_addAcAnAf.py
+bgzip SCHEMA_variant_results_withAF.vcf
+tabix -p vcf SCHEMA_variant_results_withAF.vcf.gz
+# Step 2: Liftover from hg19 to hg38
+# prep hg38 reference FASTA
+zcat /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/hg38.fa.gz > hg38.fa
+samtools faidx hg38.fa
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    SCHEMA_variant_results_withAF.vcf.gz \
+    hg38.fa \
+    SCHEMA_variant_results_hg38.vcf
+# Output stats: Total entries: 8865268, Failed to map: 780
+# Sort
+grep "^#" SCHEMA_variant_results_hg38.vcf > SCHEMA_variant_results_hg38_sorted.vcf
+grep -v "^#" SCHEMA_variant_results_hg38.vcf | sort -k1,1V -k2,2n >> SCHEMA_variant_results_hg38_sorted.vcf
+# Compress and index
+bgzip SCHEMA_variant_results_hg38_sorted.vcf
+tabix -p vcf SCHEMA_variant_results_hg38_sorted.vcf.gz
+# Clean up temporary files
+rm -f SCHEMA_variant_results_hg38.vcf SCHEMA_variant_results_hg38.vcf.unmap hg38.fa hg38.fa.fai
+
+# Gregor rare disease project, Max, Mar 2026
+cd /hive/data/genomes/hg38/bed/varFreqs/gregor/
+# Downloaded from G Drive, pointed to by Jon Bernstein, Stanford
+# https://drive.google.com/drive/folders/1v-BnW7nKcEjF-NyLqU1Up3YJuP5KJJAg
+# created symlink into my UCSC G Drive, then used rclone
+rclone copy mhaeussldrive:RO4 ./
+bcftools concat --threads 16 -Oz -o gregor.vcf.gz chr{1..22}.vcf.gz chrX.vcf.gz chrY.vcf.gz
+tabix -p vcf gregor.vcf.gz
+# output ~20 GB, took 10 minutes.
+
+# HGDP1k data from the phased Vars track, Max/Claude, Mar 18 2026
+# Just flattening what we have and reducing details
+# Source: 3.2TB VCF with 4094 genomes and per-population INFO fields for 80 populations
+# Strip genotypes and keep only overall + continental group fields (drop per-population-per-sex)
+# Already has chr prefix, no rename needed
+# Note: first attempt kept all fields -> 169GB, too large. This version keeps only continental groups.
+cd /hive/data/genomes/hg38/bed/varFreqs/hgdp1kFreq/
+KEEP="INFO/AC,INFO/AF,INFO/AN,INFO/nhomalt,INFO/gnomad_AC,INFO/gnomad_AF,INFO/gnomad_AN,INFO/gnomad_AC_afr,INFO/gnomad_AF_a
+fr,INFO/gnomad_AN_afr,INFO/gnomad_AC_ami,INFO/gnomad_AF_ami,INFO/gnomad_AN_ami,INFO/gnomad_AC_amr,INFO/gnomad_AF_amr,INFO/g
+nomad_AN_amr,INFO/gnomad_AC_asj,INFO/gnomad_AF_asj,INFO/gnomad_AN_asj,INFO/gnomad_AC_eas,INFO/gnomad_AF_eas,INFO/gnomad_AN_
+eas,INFO/gnomad_AC_fin,INFO/gnomad_AF_fin,INFO/gnomad_AN_fin,INFO/gnomad_AC_mid,INFO/gnomad_AF_mid,INFO/gnomad_AN_mid,INFO/
+gnomad_AC_nfe,INFO/gnomad_AF_nfe,INFO/gnomad_AN_nfe,INFO/gnomad_AC_oth,INFO/gnomad_AF_oth,INFO/gnomad_AN_oth,INFO/gnomad_AC
+_sas,INFO/gnomad_AF_sas,INFO/gnomad_AN_sas,INFO/gnomad_popmax,INFO/gnomad_faf95_popmax"
+# This took days to complete, so asked Claude to make it parallel
+#bcftools view -G /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz --threads 8 \
+#| bcftools annotate -x "^${KEEP}" -Oz --threads 4 -o hgdp1k.freq.vcf.gz
+# use 30 threads, and chunks of 50 Mbp
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/vcfFilterParallel.sh /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz hgdp1k.freq.parallel.vcf.gz "$KEEP" 30 50 &
+tabix -p vcf hgdp1k.freq.vcf.gz
+
+# Swefreq, Max, Feb 2026
+# downloaded files from https://swefreq.nbis.se/dataset/SweGen/download
+# Access was approved through the website, but I emailed swefreq@scilifelab.se, it needed a reminder email
+# Also got email from adam.ameur@igp.uu.se with followup info and do-no-allow-downloads instruction
+cd /hive/data/genomes/hg38/bed/varFreqs/swefreq
+
+# Indigenomes, Max Jan 2026
+# downloaded from https://clingen.igib.res.in/indigen/, used as-is
+cd /hive/data/genomes/hg38/bed/varFreqs/indigenomes/
+
+# Japan Tommo 60k, Max Jan 2026
+# downloaded from https://jmorp.megabank.tohoku.ac.jp/downloads
+cd /hive/data/genomes/hg38/bed/varFreqs/tommo61kjpn/
+# copied urls from website
+wget -i urls.txt 
+bcftools concat --threads 16 -Oz -o tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz \
+    tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome-chr{1..22}.vcf.gz
+tabix -p vcf tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz
+
+# FinnGen, Max/Claude, Jan 2026
+cd /hive/data/genomes/hg38/bed/varFreqs/finngen/                                                                           
+# Source TSV was downloaded from FinnGen (via email link from Google Cloud bucket)                                         
+# finnge_R12_annotated_variants_v1.gz (32 GB TSV)                                                                          
+# Convert TSV to VCF using custom Python script (written by Claude Opus 4.5)                                               
+python ~/kent/src/hg/makeDb/scripts/varFreqs/finngen_to_vcf.py \                                                                    
+    finnge_R12_annotated_variants_v1.gz \                                                                                    
+    finnge_R12_annotated_variants_v1.vcf                                                                                     
+# Compress and index                                                                                                       
+bgzip finnge_R12_annotated_variants_v1.vcf -@8                                                                             
+tabix -p vcf finnge_R12_annotated_variants_v1.vcf.gz                                                                       
+
+# All of Us, Max Feb 2026
+# Received from Qudsi at UCSC in the Ioannidis group via phoenix
+# only concated and ran tabix on it
+cd /hive/data/genomes/hg38/bed/varFreqs/allofus/
+bcftools concat --threads 16 -Oz -o allOfUs.locAncFreq.vcf.gz clean/allele_freq_chr{1..22}.NW.clean.conf90.oneline.vcf.gz
+tabix allOfUs.locAncFreq.vcf.gz

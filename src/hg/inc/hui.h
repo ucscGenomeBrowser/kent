@@ -98,6 +98,15 @@ char *hTrackUiForTrack(char *trackName);
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
 #define OLIGO_MATCH_TRACK_PRIORITY 100
 
+/* Definition for GC on the fly track. */
+#define gcOnFlySizeVar "hgt.gcOnFly"
+#define gcOnFlyWindowSize "gcOnFlyWindowSize"
+#define gcOnFlyDefaultSize "5"
+#define GC_ON_FLY_TRACK_NAME "gcOnFly"
+#define GC_ON_FLY_TRACK_LABEL "GC FLY Percent"
+#define GC_ON_FLY_TRACK_LONGLABEL "GC FLY Percent in 5-Base Windows"
+#define GC_ON_FLY_TRACK_PRIORITY 110
+
 /* Definitions for User Psl track (hgBlat results). */
 #define USER_PSL_TRACK_NAME "hgUserPsl"
 #define USER_PSL_TRACK_LABEL "Blat Sequence"
@@ -218,6 +227,14 @@ char *hStringFromTv(enum trackVisibility vis);
 
 /* Standard width for visibility dropdowns */
 #define TV_DROPDOWN_STYLE "width: 70px"
+
+void hTvDropDownClassVisOnlyAndExtraWithLabel(char *varName, enum trackVisibility vis,
+                                     boolean canPack, char *class, char *visOnly,
+                                     struct slPair *events, char *label);
+/* Make track visibility drop down for varName with style class, optional aria-label,
+	and potentially limited to visOnly */
+#define hTvDropDownClassVisOnlyWithLabel(varName,vis,canPack,class,visOnly,label) \
+        hTvDropDownClassVisOnlyAndExtraWithLabel(varName,vis,canPack,class,visOnly,NULL,label)
 
 void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
                                      boolean canPack, char *class, char *visOnly, struct slPair *events);
@@ -1617,4 +1634,8 @@ struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name);
 
 char *getTrackHtml(char *db, char *trackName);
 /* Grab HTML from trackDb in native database for quickLift tracks. */
+
+char *gcOnFlyWinSize(struct cart *cart);
+/* Return window size for GC on the fly track calculation */
+
 #endif /* HUI_H */

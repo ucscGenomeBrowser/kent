@@ -4,25 +4,22 @@ The Genome Aggregation Database (gnomAD) is a resource developed by an
 international coalition of investigators at the Broad Institute and
 collaborating institutions, with the goal of aggregating and harmonizing exome
 and whole-genome sequencing data from large-scale sequencing projects spanning
-disease-specific cohorts and population genetics studies. The most current release
-on hg38 is v4.1.
-GRCh38/hg38 reference assembly. For each variant, gnomAD provides allele
+disease-specific cohorts and population genetics studies. For each variant, gnomAD provides allele
 frequencies stratified by genetic ancestry group, alongside quality metrics
 such as depth of coverage and genotype quality scores. The database also
 supplies sequencing coverage, structural variants, CNVs, short tandem repeats,
 non-coding constraint, gene-level constraint metrics — including pLI scores,
 observed/expected (oe) ratios, and LOEUF values
 — that quantify intolerance to loss-of-function variation and are widely used
-to prioritize candidate disease genes. 
+to prioritize candidate disease genes. The most current release
+on hg38 is v4.1, but we also provide the older v3 and v2 versions. 
 </p>
 
 <p>
-GnomAD 4 used the whole-genome data from gnomAD 3 and added more exomes. With
-the gnomAD v4.1 data release, the v4 Pre-Release track has been replaced with
-the gnomAD v4.1 track. The v4.1 release includes a fix for the allele number
-<a target="_blank"
-href="https://gnomad.broadinstitute.org/news/2024-04-gnomad-v4-1/">
-issue</a>. The v4.1 track shows variants from 807,162 individuals, including 730,947
+GnomAD 4 used the whole-genome data from gnomAD 3 and added more exomes. 
+The current v4.1 release includes a fix for the allele number
+<a target="_blank" href="https://gnomad.broadinstitute.org/news/2024-04-gnomad-v4-1/">issue</a>. 
+The v4.1 track shows variants from 807,162 individuals, including 730,947
 exomes and 76,215 genomes. This includes the 76,156 genomes from the gnomAD v3.1.2 release as well
 as new exome data from 416,555 UK Biobank individuals. For more detailed information on gnomAD
 v4.1, see the related <a target="_blank"
@@ -36,7 +33,7 @@ previous v3 release. For more detailed information on gnomAD v3.1, see the
 related <a target="_blank" href="https://gnomad.broadinstitute.org/blog/2020-10-gnomad-v3-1/">blog post</a>.
 A bugfix to v3.1 resulted in gnomAD3.1.1, see
 <a target="_blank" href="https://gnomad.broadinstitute.org/news/2021-03-gnomad-v3-1-1/">changelog</a>. 
-Do not use gnomAD v3.1 anymore, we will remove the track soon.
+Do not use gnomAD v3.1 anymore, we will remove the 3.1 track soon.
 </p>
 
 <p>GnomAD Genome Mutational Constraint is based on v3.1.2 and is available only on hg38. 
@@ -88,6 +85,8 @@ methylation, and regional genomic features predicts expected number of mutations
 and compares this number to the observed number of mutations using a Z-score (see Chen et al 2024 
 in the Reference section for details). The chrX scores were added as received from the authors, 
 as there are no mutations available for chrX, they are more speculative than the ones on the autosomes.</p>
+
+<p>The gnomAD MPC score (Missense Deleteriousness Prediction by Constraint) is available for now only on hg19.</p>
 
 <p>
 For questions on the gnomAD data, also see the <a target="_blank"
@@ -214,9 +213,10 @@ There are two additional filters available, one for the minimum minor allele fre
 <a name="UCSCMethods">
 <h2>UCSC Methods</h2>
 <p>
-The gnomAD v3.1.1  and v4.1 data is unfiltered. </p>
+The gnomAD v3.1.1 and v4.1 data is unfiltered. </p>
+
 <p>
-For the v3.1 update only, in order to cut 
+For the deprecated v3.1 update only, in order to cut 
 down on the amount of displayed data, the following variant
 types have been filtered out, but are still viewable in the gnomAD browser:
 <ul>

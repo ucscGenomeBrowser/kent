@@ -90,6 +90,7 @@ hideEmptySubtracksSourcesUrl *
 color *
 colorByStrand bigBed bed genePred bigGenePred
 colorChromDefault psl bigPsl
+colorSettingsUrl *
 compareGenomeLinks bed
 compositeTrack *
 configurable *
@@ -98,6 +99,7 @@ container *
 controlledVocabulary *
 coriellUrlBase bed bigBed
 darkerLabels *
+dataTypes *
 dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed
@@ -300,6 +302,7 @@ mafTrack bed
 mapDispatcher expRatio
 matrix netAlign bed chain psl bigPsl bigChain bigMaf
 matrixHeader netAlign bed chain psl bigPsl bigChain bigMaf
+maxCheckboxes *
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
@@ -308,6 +311,7 @@ maxScore broadPeak narrowPeak
 maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource lorax
 maxWindowCoverage *
 maxWindowToQuery bigWig bed bedlogR
+metaDataUrl *
 metadata *
 mergeSpannedItems bigBed
 mgiUrl bed
@@ -369,6 +373,7 @@ pgPolyphenPredTab bed pgSnp
 pgSiftPredTab bed pgSnp
 pred psl bigPsl
 prevExonText *
+primaryKey *
 priority *
 private bed
 pslSequence psl bigPsl
@@ -628,3 +633,6 @@ yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
 yAxisNumLabels bigBed bigLolly
+detailsJs bigBed
+detailsJsFields bigBed
+detailsJsArgs bigBed
