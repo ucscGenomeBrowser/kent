@@ -24209,22 +24209,14 @@ sprintLongWithCommas(num1Buf, winEnd - winStart);
 printf("<B>Total bases in view:</B> %s<BR>\n", num1Buf);
 printf("<B>Window size for GC calculation:</B> %d bases<BR>\n", span);
 
-struct dnaSeq *seq = hChromSeq(database, seqName, winStart, winEnd);
-if (seq != NULL)
-    {
-    int gcCount = 0, validBases = 0;
-    int i;
-    for (i = 0; i < seq->size; i++)
-        {
-        char b = seq->dna[i];
-        if (b == 'g' || b == 'c') { gcCount++;  validBases++; }
-        else if (b != 'n')          validBases++;
-        }
-    if (validBases > 0)
-        printf("<B>GC percent in view:</B> %.3f%%<BR>\n",
-               100.0 * gcCount / validBases);
-    dnaSeqFree(&seq);
-    }
+/* Use whole view as one window to get overall GC percent */
+struct gcOnTheFlyWindow *windows = NULL;
+int regionSize = winEnd - winStart;
+int windowCount = gcOnTheFlyCompute(database, seqName, winStart, winEnd,
+    regionSize, &windows);
+if (windowCount > 0)
+    printf("<B>GC percent in view:</B> %.3f%%<BR>\n", windows[0].gcPct);
+freeMem(windows);
 webIncludeHelpFile(GC_ON_FLY_TRACK_NAME, TRUE);
 }
 
