@@ -443,10 +443,10 @@ track->drawItems = bigWigDrawItems;
 track->loadPreDraw = bigWigLoadPreDraw;
 }
 
-struct track *gc5BaseOnTheFlyTg(struct cart *cart, char *vis)
+struct track *gc5BaseOnTheFlyTg(struct cart *cart)
 /* Create an on-the-fly GC percent track computed directly from
- *     from genome sequence.  vis is the visibility string from the
- *     cart (e.g. "hide", "dense", "full").
+ *     genome sequence.  Default visibility is dense; the cart
+ *     override happens later in the getTrackList() visibility loop.
  */
 {
 struct track *tg = trackNew();
@@ -462,7 +462,7 @@ tdb->shortLabel = cloneString(GC_ON_FLY_TRACK_LABEL);
 tdb->longLabel  = cloneString(longLabel);
 tdb->grp        = cloneString("map");
 tdb->canPack    = 0;
-tdb->visibility = hTvFromString(vis);
+tdb->visibility = tvHide;
 
 /* Add wig display settings to match what gc5BaseBw trackDb would have. */
 trackDbAddSetting(tdb, "autoScale",         "Off");
