@@ -84,7 +84,7 @@ A full listing of hub.txt settings can be found in the
 <p>
 If your hub contains tracks on a single genome assembly, then you can put all of the
 hub, genome, and track configuration settings into a single file with
-<code><a href="hgTracksHelp.html#UseOneFile" target="_blank">useOneFile</a></code>.</p>
+<code><a href="../hgTracksHelp.html#UseOneFile" target="_blank">useOneFile</a></code>.</p>
 
 
 <h3 id="genomes_txt">Defining your hub's genomes</h3>
@@ -94,7 +94,8 @@ as described <a href="#useOneFile">below</a>. When using <code>useOneFile</code>
 to include the <code><a href="#genome">genome</a></code> line. This line will reference
 a UCSC assembly name (e.g. hg38) or a GenBank assembly available through our
 <a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk repository</a>
-beginning with GCF or GCA (e.g. GCF_000891275.1).
+beginning with GCF or GCA (e.g. GCF_000891275.1). If an assembly is not available in GenArk,
+<a href=/assemblySearch.html" target="_blank">request it</a>.
 
 <p>
 If your hub contains tracks for more than one
@@ -182,7 +183,9 @@ several assemblies, or several large, complex tracks.
 Assembly hubs can display novel genome assemblies and annotations in the UCSC
 Genome Browser. Note: Many genome assemblies available in GenBank are also available in our
 <a href="https://hgdownload.gi.ucsc.edu/hubs" target="_blank">GenArk repository</a>.
-However, if your genome is not available in GenBank, you can make a custom assembly hub.
+If an assembly is not available in GenArk, but is available in GenBank,
+<a href=/assemblySearch.html" target="_blank">request it</a>.
+However, if your genome assembly is not yet publicly available, you can make a custom assembly hub.
 To create an assembly hub, refer to our
 <a href="../assemblyHubUserGuide.html" target="_blank">Assembly Hub User Guide</a> or our <a
 href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a>.</p>
@@ -196,7 +199,7 @@ used as a ready reference. Settings are colored based on their support level:
     <tr><td class="level-base">base</td><td>common settings supported
         at other sites</td></tr>
     <tr><td class="level-deprecated">deprecated</td><td>settings that
-        are being retired (replacement is listed in details section)</td></tr>
+        are being retired (replacement is listed in the details section)</td></tr>
     <tr><td class="level-new">new</td><td>new settings not yet assigned
         a level (may be replaced)</td></tr>
     <tr><td class="level-full">full</td><td>other settings</td></tr>
@@ -1671,7 +1674,7 @@ to be placed in a single file without the need for separate
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Assembly hub &quot;genome&quot; settings
     </TH></TR>
-    <TR VALIGN=TOP><TD class="genome"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="hubGenome"><IMG class='toggle detail'>
         <div class="format"><code class="level-base">genome &lt;str&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="trackDbFile"><IMG class='toggle detail'>
