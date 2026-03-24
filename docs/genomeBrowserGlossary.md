@@ -293,12 +293,12 @@ mode that shows non-contiguous genomic regions side by side. Options include
 exon-only view (hiding introns), gene-only view (hiding intergenic regions),
 and custom regions defined by a BED file. Also supports viewing alternate
 haplotype sequences in chromosomal context. Accessible from the View menu
-or button next to position box.
+or button next to the position box.
 
 **[Track Collection Builder](/cgi-bin/hgCollection)**: A tool for combining
 multiple wiggle-type tracks (bigWig, bedGraph) from native browser data,
 custom tracks, or track hubs into a single configurable composite. Supports
-overlay methods including transparent, stacked, add, and subtract. Accessible
+overlay methods, including transparent, stacked, add, and subtract. Accessible
 from the My Data menu.
 
 **Filtering**: Track-level configuration that limits the displayed items to
