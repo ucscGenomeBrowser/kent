@@ -5042,3 +5042,9 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// check whether an autocomplete item is for a genark assembly
+function isGenarkItem(item) {
+    return (typeof item.hubUrl !== "undefined" && item.hubUrl) &&
+        (typeof item.genome !== "undefined" && item.genome) &&
+        (item.genome.startsWith('GCA_') || item.genome.startsWith('GCF_'));
+}

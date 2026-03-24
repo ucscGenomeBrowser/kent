@@ -223,6 +223,11 @@ var autocompleteCat = (function() {
                     if (ui.item.originalCategory) {
                         ui.item.category = ui.item.originalCategory;
                     }
+                    // For GenArk results, normalize db to the accession (item.genome)
+                    // so localStorage keys match what the CGI response handler expects
+                    if (isGenarkItem(ui.item)) {
+                        ui.item.db = ui.item.genome;
+                    }
                     addRecentGenome(ui.item);
                 }
                 if (typeof opts.onSelect === 'function') {

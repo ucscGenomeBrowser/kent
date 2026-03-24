@@ -1633,20 +1633,15 @@ var hgGateway = (function() {
         // Check if db is a valid assembly name (not an organism name).
         // If db is the same as org, it's likely a taxon-only result, not an assembly.
         var isValidDb = db && db !== org;
-
-        // Detect GenArk: must have hubUrl, and either "UCSC Curated" category (GenArk hubs
-        // under /gbdb) or a GCA_/GCF_ genome pattern.  The hubUrl check distinguishes GenArk
-        // from native databases which also use "UCSC Curated" category.
-        // Recent genome items store the original category in originalCategory.
-        var cat = item.originalCategory || item.category;
-        var isGenArk = item.hubUrl &&
-                       ((typeof cat !== "undefined" && cat.startsWith("UCSC Curated")) ||
-                        (genome.startsWith('GCA_') || genome.startsWith('GCF_')));
+        let isGenArk = isGenarkItem(item);
 
         if (isGenArk) {
-            // For items from localStorage recents, db is the accession; for fresh autocomplete, genome is
-            db = item.db || item.genome;
-            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName || org, true);
+            // genark results should have item.db set to the genome name like GC[AF]_, however
+            // due to history some genark results come from the genark table and not the
+            // assemblyList table, and thus have item.db set to asmName and item.genome
+            // set to the actual identifier. Thus always force genark results to use item.genome
+            // (item.db is normalized to item.genome in autocompleteCat.js before saving to localStorage)
+            setHubDb(item.hubUrl, taxId, item.genome, "GenArk", item.scientificName || org, true);
         } else if (item.hubUrl && item.hubName) {
             // Public hub - the autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
