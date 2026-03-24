@@ -5,7 +5,7 @@ genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/array
 The data was not reprocessed in a harmonized way but the variant VCFs were collected from the projects.
 The goal is to provide a single place to compare how common
 a variant is across different populations, ancestries, and cohorts, for
-projects that cannot be recomputed by gnomAD soon. The main 
+projects that cannot be recomputed by gnomAD soon. The main
 <a href="hgTrackUi?g=varFreqsAll">combined track</a> merges all databases into one single summary track, 
 with filters, summed population frequencies and recalculated protein-effect annotations.
 In addition, there is one subtrack per project with the original VCF data and all the annotations that the project provides.
@@ -35,9 +35,9 @@ The track supports filtering by variant type
 frameshift, splice, intron, intergenic), source database, allele frequency (overall maximum
 and per-database), and allele count (total or per-database). This track is either useful in dense mode
 for getting a quick overview of variant density across all projects, or with filters to find
-variants present in specific databases or within certain frequency ranges. Not that with the "clone track" 
-feature you can clone this track and have multiple versions, each with different filters activated. 
-You can also use out "Density mode" checkbox on the track configuration page to show a plot with the
+variants present in specific databases or within certain frequency ranges. Note that with the "clone track"
+feature you can clone this track and have multiple versions, each with different filters activated.
+You can also use our "Density mode" checkbox on the track configuration page to show a plot with the
 density of variants passing a filter, one per track clone.
 </p>
 
@@ -51,7 +51,7 @@ density of variants passing a filter, one per track clone.
   <th>Data Type</th>
   <th>Cohort</th>
   <th>Sub-populations</th>
-  <th>Access</th>
+  <th>Downloadable from UCSC</th>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=varFreqsAll">All Databases combined</a></td>
@@ -60,7 +60,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS/WES/imputed</td>
   <td></td>
   <td></td>
-  <td>Not downloadable from UCSC</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=allofus">AllOfUs v7</a></td>
@@ -69,7 +69,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>General population, diverse</td>
   <td>European, East Asian, African, Indigenous American, Oceanian, South Asian</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=topmed">TOPMED Freeze 10</a></td>
@@ -78,7 +78,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Heart, lung, blood, sleep disorder cohorts</td>
   <td>&mdash;</td>
-  <td>Requires login</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=sfariSparkExomes">SFARI SPARK WES</a></td>
@@ -87,7 +87,7 @@ density of variants passing a filter, one per track clone.
   <td>WES</td>
   <td>Autism families (parents + affected children)</td>
   <td>&mdash;</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=sfariSparkWgs">SFARI SPARK WGS</a></td>
@@ -96,7 +96,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Autism families (parents + affected children)</td>
   <td>&mdash;</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=alfaVcf">NCBI ALFA R4</a></td>
@@ -105,7 +105,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS/WES/array mix</td>
   <td>Aggregated dbGaP studies, mixed phenotypes</td>
   <td>&mdash;</td>
-  <td>Available</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=finngen">FinnGen R12</a></td>
@@ -114,7 +114,7 @@ density of variants passing a filter, one per track clone.
   <td>Imputed (8.5k WGS ref panel)</td>
   <td>National biobank, ~10% of population</td>
   <td>&mdash;</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=swefreq">SweGen</a></td>
@@ -123,7 +123,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Cross-section of Swedish population</td>
   <td>&mdash;</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=schema">SCHEMA</a></td>
@@ -132,7 +132,7 @@ density of variants passing a filter, one per track clone.
   <td>WES</td>
   <td>Schizophrenia: 24k cases, 97k controls</td>
   <td>&mdash;</td>
-  <td>Available</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=tommo60kjpn">Japan ToMMO 61k</a></td>
@@ -141,7 +141,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>General population</td>
   <td>&mdash;</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=mgrb">Australia MGRB</a></td>
@@ -150,7 +150,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Healthy elderly (age &ge;70)</td>
   <td>&mdash;</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=gasp">GenomeAsia Pilot</a></td>
@@ -159,7 +159,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Diverse populations across Asia</td>
   <td>Northeast Asian, Southeast Asian, South Asian</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=abraom">ABraOM Brazil</a></td>
@@ -168,7 +168,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Elderly admixed individuals (S&atilde;o Paulo)</td>
   <td>&mdash;</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=indigenomes">IndiGenomes</a></td>
@@ -177,7 +177,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Healthy individuals</td>
   <td>&mdash;</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=kova">KOVA Korea</a></td>
@@ -186,7 +186,7 @@ density of variants passing a filter, one per track clone.
   <td>1.9k WGS + 3.4k WES</td>
   <td>Normal tissue from cancer patients, healthy parents, volunteers</td>
   <td>&mdash;</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=npm">NPM Singapore</a></td>
@@ -195,7 +195,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Chinese, Indian, Malay ancestry</td>
   <td>&mdash;</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=saudi">Saudi Genome</a></td>
@@ -204,7 +204,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS (30x)</td>
   <td>Saudi population</td>
   <td>&mdash;</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=hrc">HRC</a></td>
@@ -213,7 +213,7 @@ density of variants passing a filter, one per track clone.
   <td>Low-coverage WGS (7x)</td>
   <td>Imputation reference panel (excl. 1000 Genomes)</td>
   <td>&mdash;</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=mxbFreq">MXB Mexico Biobank</a></td>
@@ -222,7 +222,7 @@ density of variants passing a filter, one per track clone.
   <td>Genotyping array</td>
   <td>Diverse Mexican ancestries, 898 recruitment sites</td>
   <td>By state, by ancestry</td>
-  <td>Access request</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=sgdpFreq">SGDP</a></td>
@@ -231,7 +231,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>142 diverse populations worldwide</td>
   <td>By population</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=gregor">GREGoR R4</a></td>
@@ -240,7 +240,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>Rare disease families (10.7k participants, 4.4k families)</td>
   <td>&mdash;</td>
-  <td>Controlled (dbGaP/AnVIL)</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=hgdp1kFreq">gnomAD HGDP+1kG</a></td>
@@ -249,7 +249,7 @@ density of variants passing a filter, one per track clone.
   <td>WGS</td>
   <td>80 populations (HGDP + 1000 Genomes reprocessed)</td>
   <td>80 populations, continental groups</td>
-  <td>Downloadable</td>
+  <td>Yes</td>
 </tr>
 </table>
 
@@ -263,7 +263,9 @@ lines).
 </p>
 
 <h2>Data Access</h2>
-<p>All the data is publicly available. The table above indicates if we are allowed to distribute it in VCF format. Most of the databases do not allow us to redistribute the data files directly from our website, but it can always be downloaded from the original websites in some form. Click the database link in the table above and see the "Data Access" section of the respective track for description where to download the data. When the data is freely available from our website, the Data access section will also indicate the VCF file location on our download server. Because it contains some licensed data, the combined track is not available, but can be recreated using the conversion scripts in our Github repository and the accompanying documentation file.
+<p>All the data is publicly available. The table above indicates if we are allowed to distribute it in VCF format. Most of the databases do not allow us to redistribute the data files directly from our website, but it can always be downloaded from the original websites in some form. Click the database link in the table above and see the "Data Access" section of the respective track for a description of where to download the data. When the data is freely available from our website, the Data Access section will also indicate the VCF file location on our download server. Because it contains some licensed data, the combined track is not available for download, but can be recreated using the conversion scripts in our Github repository and the accompanying documentation file.
+</p>
+
 <h2>Credits</h2>
 
 <p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click on any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track and to Andreas Lahner, MGZ, for feedback.</p>
