@@ -1,0 +1,102 @@
+track nmd
+shortLabel NMD Escape
+longLabel NMD Escape: Regions where premature termination codons escape Nonsense-Mediated Decay (NMD)
+group genes
+type bed 4
+visibility hide
+superTrack on
+
+        #track nmdGencode
+        #shortLabel NMD escape 50bp-100bp rule: Gencode transcripts
+        #longLabel NMD escape 50bp-100bp rule: Gencode transcripts
+        #parent nmd on
+        #bigDataUrl /gbdb/hg38/nmd/knownGeneNmdProt.bb
+        #visibility pack
+        #type bigBed
+        #dataVersion Gencode V49
+        #skipFields decoratedItem,style,fillColor,glyph,mouseover
+        #mouseOverField mouseover
+        #priority 1
+
+        track nmdEscGencode
+        shortLabel NMD escape ruleset Gencode
+        longLabel NMD escape 50bp/100bp/intronless ruleset: Gencode transcripts
+        parent nmd on
+        bigDataUrl /gbdb/hg38/nmd/nmdEscRegions.bb
+        visibility pack
+        type bigBed 9 +
+        mouseOverField mouseover
+        html nmdEscTranscripts
+        # this could use a text file one day with the version
+        dataVersion Gencode V49
+        priority 1.5
+
+        track nmdEscNcbiRefSeq
+        shortLabel NMD escape ruleset NCBI RefSeq
+        longLabel NMD escape 50bp/100bp/intronless ruleset: NCBI RefSeq transcripts
+        parent nmd on
+        bigDataUrl /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
+        visibility pack
+        type bigBed 9 +
+        mouseOverField mouseover
+        html nmdEscTranscripts
+        # this could use a text file one day with the version
+        dataVersion GCF_000001405.40-RS_2025_08
+        priority 1.6
+
+        track nmdDetectiveA
+        shortLabel NMDetective-A
+        longLabel NMDetective-A: Random forest prediction of NMD efficiency (Lindeboom et al. 2016)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/NMDetectiveA.bw
+        type bigWig
+        visibility full
+        color 0,128,255
+        autoScale off
+        viewLimits -1:1
+        maxHeightPixels 128:32:8
+        html nmdDetective
+        priority 2
+
+        track nmdDetectiveB
+        shortLabel NMDetective-B
+        longLabel NMDetective-B: Decision tree prediction of NMD efficiency (Lindeboom et al. 2016)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/NMDetectiveB.bw
+        type bigWig
+        visibility full
+        color 0,128,255
+        autoScale off
+        viewLimits -1:1
+        maxHeightPixels 128:32:8
+        html nmdDetective
+        priority 3
+
+        track nmdDetectiveA_ptc
+        shortLabel NMDetective-A PTC
+        longLabel NMDetective-A: Random forest NMD efficiency for first out-of-frame PTC (Lindeboom et al. 2016)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdDectA-ptc.bw
+        type bigWig
+        visibility full
+        color 0,153,102
+        autoScale off
+        viewLimits -1:1
+        maxHeightPixels 128:32:8
+        html nmdDetective
+        priority 4
+
+        track nmdDetectiveB_ptc
+        shortLabel NMDetective-B PTC
+        longLabel NMDetective-B: Decision tree NMD efficiency for first out-of-frame PTC (Lindeboom et al. 2016)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdDectB-ptc.bw
+        type bigWig
+        visibility full
+        color 0,153,102
+        autoScale off
+        viewLimits -1:1
+        maxHeightPixels 128:32:8
+        html nmdDetective
+        priority 5
+

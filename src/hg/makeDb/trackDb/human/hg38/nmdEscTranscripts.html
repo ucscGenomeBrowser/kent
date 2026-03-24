@@ -1,0 +1,113 @@
+<h2>Description</h2>
+<p>
+The <b>NMD escape ruleset</b> tracks show predicted regions where a premature termination
+codon (PTC) or frameshift variant is likely to cause the transcript to
+<em>escape</em> nonsense-mediated decay (NMD), leading to the production of an
+aberrant truncated protein rather than degradation of the mRNA.
+</p>
+
+<p>
+The following rules were applied to transcript annotations to define predicted
+NMD escape regions (see Nagy et al, Trends Biochem Sci 1998):
+</p>
+
+<ol>
+  <li><b>50 bp rule</b>: The region less than 50 bp upstream of the last
+    exon-exon junction (after splicing). Non-protein-coding 3' exons are not
+    considered.</li>
+  <li><b>Intronless transcripts</b>: Transcripts with a single exon. Since no
+    EJCs are deposited on single-exon transcripts, all PTCs are predicted to
+    escape NMD.</li>
+  <li><b>Start-proximal region</b>: The first 100 bp of coding nucleotides.
+    PTCs in this region do not lead to NMD, a phenomenon known as start-proximal
+    NMD insensitivity. One proposed mechanism, supported by experimental
+    evidence, is re-initiation of translation at a downstream AUG codon.</li>
+</ol>
+
+<p>
+Non-coding transcripts (where CDS start equals CDS end) are excluded.
+Overlapping regions from multiple transcripts with identical coordinates and
+the same rule are collapsed into a single item, with the contributing
+transcript IDs stored as a comma-separated list.
+</p>
+
+<p>
+Two versions of this track are available, based on different transcript annotation sets:
+</p>
+<ul>
+  <li><b><a href="hgTrackUi?g=nmdEscGencode">NMD escape Gencode</a></b>:
+    Derived from GENCODE V49 transcript annotations.</li>
+  <li><b><a href="hgTrackUi?g=nmdEscNcbiRefSeq">NMD escape NCBI RefSeq</a></b>:
+    Derived from NCBI RefSeq transcript annotations.</li>
+</ul>
+
+<h2>Background</h2>
+<p>
+NMD escape regions were predicted based on the Exon Junction Complex
+(EJC)-dependent model of NMD. During normal translation, EJCs are deposited at
+exon-exon junctions after splicing. As the ribosome translates the mRNA, it
+displaces each EJC it encounters. When a PTC causes the ribosome to stall
+prematurely, any remaining downstream EJCs recruit surveillance factors
+(notably UPF1) that trigger mRNA degradation via NMD.
+</p>
+
+<p>
+However, if the PTC is located within approximately 50 bp upstream of the last
+exon-exon junction, the ribosome is close enough to the final EJC that the
+interaction does not trigger NMD&mdash;the transcript escapes degradation.
+Conversely, PTCs located more than 50&ndash;55 bp upstream of the last
+exon-exon junction are predicted to elicit NMD.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Regions from overlapping transcripts with the same coordinates are collapsed into
+a single item. The gene symbol is shown as the item name. Mouseover displays the
+NMD escape rule and the number of transcripts. The details page lists all
+contributing transcript IDs.
+</p>
+
+<p>
+Items are colored by the NMD escape rule that applies:
+</p>
+<ul>
+  <li><font color="#FF0000"><b>Red</b></font> &ndash; Rule 1: Last 50 bp
+    of the last coding exon-exon junction. A PTC here is too close to the
+    last exon junction complex (EJC) for NMD to be triggered.</li>
+  <li><font color="#FF8C00"><b>Orange</b></font> &ndash; Rule 2: Intronless
+    (single-exon) transcript. No EJCs are deposited, so all PTCs escape NMD.</li>
+  <li><font color="#8B0000"><b>Dark red</b></font> &ndash; Rule 3: First 100 bp
+    of coding nucleotides. PTCs in this start-proximal region are insensitive
+    to NMD, possibly due to translation re-initiation at a downstream AUG codon.</li>
+</ul>
+
+<h2>References</h2>
+
+<p>
+Kurosaki T, Popp MW, Maquat LE.
+<a href="https://doi.org/10.1038/s41580-019-0126-2" target="_blank">
+Quality and quantity control of gene expression by nonsense-mediated mRNA decay</a>.
+<em>Nat Rev Mol Cell Biol</em>. 2019 Jul;20(7):406-420.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30992545" target="_blank">30992545</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6855384/" target="_blank">PMC6855384</a>
+</p>
+
+<p>
+Lindeboom RG, Supek F, Lehner B.
+<a href="https://doi.org/10.1038/ng.3664" target="_blank">
+The rules and impact of nonsense-mediated mRNA decay in human cancers</a>.
+<em>Nat Genet</em>. 2016 Oct;48(10):1112-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">27618451</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5045715/" target="_blank">PMC5045715</a>
+</p>
+
+<p>
+Nagy E, Maquat LE.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0968-0004(98)01208-0" target="_blank">
+A rule for termination-codon position within intron-containing genes: when nonsense affects RNA
+abundance</a>.
+<em>Trends Biochem Sci</em>. 1998 Jun;23(6):198-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/9644970" target="_blank">9644970</a>
+</p>
+
+

@@ -27,7 +27,7 @@ squishyPackPoint 1
 squishyPackField rank
 squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
 decorator.default.blockMode Hide
-decorator.default.bigDataUrl /gbdb/hg38/knownGeneNmdProtV46.bb
+decorator.default.bigDataUrl /gbdb/hg38/nmd/knownGeneNmdProt.bb
 decorator.default.mouseOver ${mouseover}
 
 searchName knownGeneAccAlpha
