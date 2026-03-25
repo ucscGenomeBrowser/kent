@@ -9,10 +9,13 @@ include subdirs.mk
 UCSC_JS_FILES=ajax.js alleles.js assemblySearch.js autocomplete.js \
     autocompleteCat.js edwPersona.js facetedComposite.js \
     gar.js hgCustom.js hgCollection.js  hgGateway.js hgGtexTrackSettings.js \
-    detailsHistogram.js hgHubConnect.js hgTracks.js hgc.js hgMyData.js \
+    hgHubConnect.js hgTracks.js hgc.js hgMyData.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js \
 	cdwSummaryJs.js spectrum.min.js hgSearch.js lorax.js
+
+# ES6 module files loaded via dynamic import() on hgc details pages
+MODULE_FILES=hgc.histogram.js
 
 # STATIC files must pass jshint
 STATIC_FILES=staticDoc.js dbDbTaxonomy.js analytics.js
@@ -48,6 +51,7 @@ doInstallTop: jshintTop
 	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' \
 			-versionFile=../inc/versionInfo.h -destDir=${DEST} ${SYMLINKED_FILES}
 	rsync -a ${STATIC_FILES} ${DEST}/
+	rsync -a ${MODULE_FILES} ${DEST}/
 
 tags:
 	ctags ${UCSC_JS_FILES} model/*/*.js

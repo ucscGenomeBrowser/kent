@@ -17,6 +17,11 @@ visibility hide
     urlLabel WebSTR locus page
     searchIndex name
     mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Number of copies:</b> $numCopies <br> <b>Population sample counts:</b> <br> $afrN (AFR), $amrN (AMR), $easN (EAS), $eurN (EUR), $sasN (SAS)
+    detailsScript.histogram.afrHist {"title":"AFR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.amrHist {"title":"AMR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.easHist {"title":"EAS Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.sasHist {"title":"SAS Allele Frequencies","xLabel":"Allele size (repeat copies)"}
 
     track strchive
     shortLabel STRchive
@@ -45,6 +50,5 @@ visibility hide
     searchIndex name
     mouseOver <b>Gene:</b> $geneName ($geneRegion) <br> <b>Reference Motif:</b> $referenceMotif ($motifSize bp) <br> <b>Number of repeat copies:</b> $numRepeats repeats <br> <b>Purity:</b> $repeatPurity <br> <b>Number of called alleles:</b><br> $tenKNumAlleles (TenK10K), $hprcNumAlleles (HPRC256), $aouNumAlleles (AoU1027) <br><b>Source:</b> $source
     #mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
-    detailsJs detailsHistogram.js
-    detailsJsFields tenKAlleleSizes,tenKAlleleCounts,hprcAlleleSizes,hprcAlleleCounts
-    detailsJsArgs {"histograms":[{"binsField":"tenKAlleleSizes","valuesField":"tenKAlleleCounts","title":"TenK10K Allele Distribution"},{"binsField":"hprcAlleleSizes","valuesField":"hprcAlleleCounts","title":"HPRC256 Allele Distribution"}]}
+    detailsScript.histogram.tenKAlleleHist {"title":"TenK10K Allele Distribution","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.hprcAlleleHist {"title":"HPRC256 Allele Distribution","xLabel":"Allele size (repeat copies)"}

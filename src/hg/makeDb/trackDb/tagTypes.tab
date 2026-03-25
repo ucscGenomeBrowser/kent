@@ -633,6 +633,4 @@ yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
 yAxisNumLabels bigBed bigLolly
-detailsJs bigBed
-detailsJsFields bigBed
-detailsJsArgs bigBed
+detailsScript* bigBed

@@ -99,6 +99,9 @@ void jsonWriteAppend(struct jsonWrite *jwA, char *var, struct jsonWrite *jwB);
  * list or object).  If var is non-NULL, write it out as a tag before appending.
  * If both var and jwB are NULL, leave jwA unchanged. */
 
+void jsonWriteJsonElement(struct jsonWrite *jw, char *var, struct jsonElement *el);
+/* Write a jsonElement (parsed JSON) into jw.  Handles all types recursively. */
+
 int jsonWritePopToLevel(struct jsonWrite *jw, uint level);
 /* Close out the objects and lists that are deeper than level, so we end up at level ready to
  * add new items.  Return the level that we end up with, which may not be the same as level,
