@@ -423,11 +423,15 @@ static void gc5BaseOnTheFlyLoadItems(struct track *tg)
 tg->items = NULL;
 tg->mapsSelf = TRUE;
 /* Extend the fetch range by wiggleSmoothingMax pixels worth of bases on
- * each side, rounded up to the nearest 5-base span. */
+ * each side, rounded up to the nearest 5-base span.  Use long long for
+ * the arithmetic to avoid 32-bit overflow near the ends of large chroms. */
 double basesPerPixel = (double)(winEnd - winStart) / insideWidth;
 int marginBases = ((int)(wiggleSmoothingMax * basesPerPixel) / 5 + 1) * 5;
-int fetchStart = max(0, winStart - marginBases);
-int fetchEnd   = min(hChromSize(database, chromName), winEnd + marginBases);
+int chromSize = hChromSize(database, chromName);
+long long fetchStartLong = (long long)winStart - marginBases;
+int fetchStart = (fetchStartLong < 0) ? 0 : (int)fetchStartLong;
+long long fetchEndLong = (long long)winEnd + marginBases;
+int fetchEnd = (fetchEndLong > chromSize) ? chromSize : (int)fetchEndLong;
 gc5BaseOnTheFlyLoadPreDraw(tg, fetchStart, fetchEnd, insideWidth);
 }
 
