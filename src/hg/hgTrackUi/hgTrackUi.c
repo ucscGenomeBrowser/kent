@@ -53,6 +53,7 @@
 #include "customComposite.h"
 #include "hicUi.h"
 #include "decoratorUi.h"
+#include "genark.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -2301,6 +2302,26 @@ jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
 /* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
 wigCfgUi(cart, tdb, tdb->track, "Graph configuration:", FALSE);
+printf("<hr><h4>Data Access</h4>\n");
+printf("<p>This track is generated <em>on-the-fly</em> by the browser as needed.\n"
+ "There is no existing data file for this track.  To obtain the data for this track\n"
+ "use the following <a href='https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads'\n"
+ " target=_blank>kent command line</a> program <b>hgGcPercent</b>:</p>\n");
+
+/* Don't free asmName, it is not allocated */
+char *asmName = hubConnectSkipHubPrefix(database);
+boolean genArk = isGenArk(asmName);
+char twoBitUrl[PATH_LEN];
+if (genArk)
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%shubs/%s/%s.2bit", hDownloadsServer(), genArkPath(asmName), asmName);
+    }
+else
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%s/goldenPath/%s/bigZips/%s.2bit", hDownloadsServer(), asmName, asmName);
+    }
+
+printf("<code>hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\<br>&nbsp;&nbsp;&nbsp;%s | gzip -c > %s.varStep.gz</code>\n", twoBitUrl, asmName);
 }
 
 void cutterUi(struct trackDb *tdb)
