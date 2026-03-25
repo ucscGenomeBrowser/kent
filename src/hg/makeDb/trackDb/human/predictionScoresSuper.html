@@ -6,7 +6,8 @@ scores. Usually these are prediction algorithms that use protein features, conse
 signals to determine if a genome variant is pathogenic or not.</p>
 
 <h3>BayesDel - Only hg19</h3>
-<p>BayesDel is a deleteriousness meta-score for coding and non-coding variants, single nucleotide
+<p><a href="hgTrackUi?g=bayesDel">BayesDel</a> is a deleteriousness meta-score for coding and 
+non-coding variants, single nucleotide
 variants, and small insertion/deletions. The range of the score is from -1.29334 to 0.75731.
 The higher the score, the more likely the variant is pathogenic.</p>
 <p>
@@ -32,7 +33,7 @@ pathogenic variants are misclassified as benign. 0.025 is the recommended cutoff
 </p>
 
 <p>
-The <a target=_blank href="http://bejerano.stanford.edu/mcap/">Mendelian Clinically Applicable Pathogenicity (M-CAP)</a>
+The <a href="hgTrackUi?g=mcap">Mendelian Clinically Applicable Pathogenicity (M-CAP)</a>
 score (Jagadeesh et al, Nat Genetics 2016) is a
 pathogenicity likelihood score that aims to misclassify no more than 5% of
 pathogenic variants while aggressively reducing the list of variants of
@@ -52,7 +53,7 @@ to be benign, and &gt; 0.730 for pathogenic with 95% confidence.</p>
 <p>
 The within-gene clustering of pathogenic and benign DNA changes is an important
 feature of the human exome.
-<a target=_blank href="https://mutscore.iob.ch/">MutScore</a>
+<a href="hgTrackUi?g=mutScore">MutScore</a>
 score (Quinodoz, AJHG 2022) integrates qualitative features of
 DNA substitutions with new additional information derived from 
 positional clustering. Variants of unknown significance that are scored
@@ -72,7 +73,7 @@ pathogenic from benign missense variants. 75% of all possible missense variants 
 as benign, 25% as pathogenic.
 </p>
 <p>
-<a target="_blank" href="https://primateai3d.basespace.illumina.com/">PrimateAI-3D</a>
+<a href="hgTrackUi?g=primateAi">PrimateAI-3D</a>
 (Gao et al, Science 2023) is a semi-supervised 3D convolutional neural network trained on
 4.5 million benign missense variants from 233 primate species and common human variants.
 It operates on voxelized protein structures at 2 &Aring; resolution (from AlphaFold or
@@ -82,6 +83,20 @@ variants.
 Pathogenic variants are shown in <span style="color:#C80000">red</span>,
 benign in <span style="color:#0000C8">blue</span>.
 Items can be filtered by prediction and by percentile score.
+</p>
+
+<h3>PromoterAI - hg38</h3>
+<p>
+<b>Interpretation:</b> Scores range from -1 to 1. Positive scores indicate predicted
+disruption of promoter function, negative scores indicate the variant is tolerated.
+</p>
+<p>
+<a target="_blank" href="hgTrackUi?g=promoterAi">PromoterAI</a>
+ predicts the impact of single nucleotide variants in gene
+promoter regions, scoring all possible substitutions within 500 bp of annotated
+transcription start sites. The track contains four bigWig subtracks (one per alternate
+allele) covering 39.5 million positions, plus a bigBed track for the 3.8% of positions
+where overlapping transcripts produce different scores.
 </p>
 
 <h2>Display Conventions and Configuration</h2>

@@ -9,3 +9,4 @@ include bayesDel.ra
 include mutscore.ra
 include mcap.ra
 include primateAi.ra alpha
+include promoterAi.ra alpha
