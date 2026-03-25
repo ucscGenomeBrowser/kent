@@ -35,6 +35,43 @@ TRACKER_MLQ = 7
 PRIORITY_UNPRIORITIZED = 12
 STATUS_NEW = 1
 
+# Name -> Redmine status ID mapping (case-insensitive lookup in resolve_status)
+STATUS_IDS = {
+    "new": 1,
+    "looking for dev": 37,
+    "snoozed": 34,
+    "limbo": 36,
+    "researching/exploratory": 35, "researching": 35, "exploratory": 35,
+    "masked 2bit file": 29,
+    "initial sequence": 25,
+    "minimal browser": 26,
+    "docs in progress": 27,
+    "on deck": 33,
+    "in progress": 2,
+    "stalled": 13,
+    "qa ready": 10, "qa": 10,
+    "available": 30,
+    "loaded": 8,
+    "resolved": 3,
+    "written": 15,
+    "reviewing": 11,
+    "approved": 16,
+    "bounced": 24,
+    "feedback": 4,
+    "patched": 22,
+    "cgi-ready": 20,
+    "cgi-ready-open-issues": 21,
+    "hibernating": 32,
+    "preview1": 17,
+    "preview2": 18,
+    "final build": 19,
+    "rejected": 6,
+    "verified": 23,
+    "released": 12,
+    "closed": 5,
+    "reopened": 31,
+}
+
 CF_CATEGORY = 28
 CF_EMAIL = 40
 CF_MLM = 9
@@ -164,6 +201,18 @@ def resolve_user(name_or_id):
     sys.exit(f"Error: unknown user '{name_or_id}'. Known users: "
              + ", ".join(sorted(set(f"{v} ({k})" for k, v in USER_IDS.items()
                                     if " " in k))))
+
+
+def resolve_status(name_or_id):
+    """Resolve a status name to a Redmine status ID. Accepts name or numeric ID."""
+    if name_or_id.isdigit():
+        return int(name_or_id)
+    key = name_or_id.lower().strip()
+    if key in STATUS_IDS:
+        return STATUS_IDS[key]
+    sys.exit(f"Error: unknown status '{name_or_id}'. Known statuses: "
+             + ", ".join(sorted(k for k in STATUS_IDS if " " in k or not any(
+                 k2 != k and STATUS_IDS[k2] == STATUS_IDS[k] for k2 in STATUS_IDS))))
 
 
 def prepend_attribution(text):
@@ -463,7 +512,7 @@ def cmd_update(args):
     issue_data = {}
 
     if args.status is not None:
-        issue_data["status_id"] = args.status
+        issue_data["status_id"] = resolve_status(args.status)
     if args.assigned_to is not None:
         if args.assigned_to == "":
             issue_data["assigned_to_id"] = ""
@@ -602,7 +651,7 @@ def build_parser():
     # update
     p_update = sub.add_parser("update", help="Update ticket fields")
     p_update.add_argument("ticket_id", help="Ticket ID number")
-    p_update.add_argument("--status", type=int, help="New status ID")
+    p_update.add_argument("--status", help="New status name or ID (e.g. 'QA Ready' or 10)")
     p_update.add_argument("--assigned-to", dest="assigned_to",
                           help="Assignee name/ID (empty string to clear)")
     p_update.add_argument("--priority", type=int, help="New priority ID")

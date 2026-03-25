@@ -57,6 +57,7 @@ bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
+calcWinSize bigWig
 canPack *
 cartVersion *
 cdnaTable psl bigPsl
@@ -566,6 +567,7 @@ subgroups bed
 summary wigMaf bigMaf
 superTrack *
 symbolTable bed genePred
+syntheticTrack bigWig
 pubsArticleTable bed psl bigPsl
 pubsSequenceTable bed psl bigPsl
 pubsMarkerTable bed psl bigPsl
@@ -633,6 +635,4 @@ yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
 yAxisNumLabels bigBed bigLolly
-detailsJs bigBed
-detailsJsFields bigBed
-detailsJsArgs bigBed
+detailsScript* bigBed

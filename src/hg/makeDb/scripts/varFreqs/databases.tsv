@@ -1,0 +1,24 @@
+# Database configuration for varFreqsAll combined track
+# key	name	vcf	ac_field	af_field
+# Use "." for fields that don't exist in the VCF
+AllOfUs	AllOfUs	/gbdb/hg38/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz	.	.
+SPARK	SPARK WES	/gbdb/hg38/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz	AC	AF
+SFARI_WGS	SFARI WGS	/gbdb/hg38/varFreqs/sfari/wgs_12519_genome.deepvariant.norm.vcf.gz	AC	AF
+GenomeAsia	GenomeAsia SNVs	/gbdb/hg38/varFreqs/ga100k/ga100k.subst.vcf.gz	AC	AF
+GenomeAsiaIndel	GenomeAsia Indels	/gbdb/hg38/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz	AC	AF
+KOVA	KOVA Korea	/gbdb/hg38/varFreqs/kova/kova.v7.vcf.gz	AC	AF
+ToMMo	ToMMo Japan	/gbdb/hg38/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz	AC	AF
+IndiGen	IndiGenomes India	/gbdb/hg38/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz	AC	AF
+FinnGen	FinnGen Finland	/gbdb/hg38/varFreqs/finngen/finnge_R12_annotated_variants_v1.vcf.gz	AC	AF
+Saudi	Saudi	/gbdb/hg38/varFreqs/saudi/saudi.vcf.gz	AC	AF
+SweGen	SweGen Sweden	/gbdb/hg38/varFreqs/swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz	AC	AF
+TOPMed	TOPMed	/gbdb/hg38/varFreqs/topmed/topmed10.vcf.gz	AC	AF
+ABraOM	ABraOM Brazil	/gbdb/hg38/varFreqs/abraom/abraom.vcf.gz	.	AF
+ALFA	ALFA	/gbdb/hg38/varFreqs/alfa/ALFA.vcf.gz	.	AF_GLB
+MGRB	MGRB Australia	/gbdb/hg38/varFreqs/mgrb/MGRB.phase3.GRCh38.norm.vcf.gz	AC	AF
+HRC	HRC	/gbdb/hg38/varFreqs/hrc/hrc.vcf.gz	AC	AF
+MexBB	Mexico Biobank	/gbdb/hg38/varFreqs/mxb/mxb.freq.vcf.gz	AC	AF
+SGDP	SGDP	/gbdb/hg38/varFreqs/sgdpFreq/sgdp.freq.vcf.gz	AC	AF
+HGDP1kG	gnomAD HGDP+1kG	/gbdb/hg38/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz	AC	AF
+GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF
+SCHEMA	SCHEMA	/gbdb/hg38/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz	AC	AF

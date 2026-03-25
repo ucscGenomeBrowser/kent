@@ -14,6 +14,8 @@
 #ifndef JSONWRITE_H
 #define JSONWRITE_H
 
+#include "jsonParse.h"
+
 struct jwObjInfo
 /* Helps keep track of whether a comma is needed and whether we need to close an object or list */
     {
@@ -98,6 +100,9 @@ void jsonWriteAppend(struct jsonWrite *jwA, char *var, struct jsonWrite *jwB);
 /* Append jwB's contents to jwA's.  If jwB is non-NULL, it must be fully closed (no unclosed
  * list or object).  If var is non-NULL, write it out as a tag before appending.
  * If both var and jwB are NULL, leave jwA unchanged. */
+
+void jsonWriteJsonElement(struct jsonWrite *jw, char *var, struct jsonElement *el);
+/* Write a jsonElement (parsed JSON) into jw.  Handles all types recursively. */
 
 int jsonWritePopToLevel(struct jsonWrite *jw, uint level);
 /* Close out the objects and lists that are deeper than level, so we end up at level ready to
