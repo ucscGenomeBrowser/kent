@@ -1288,6 +1288,16 @@ var superT = {
                 $(cb).prop('checked', (selIx > 0));
             }
         }
+        // Auto-hide superTrack if all children are now hidden
+        if (selIx === 0) {
+            var anyVisible = false;
+            $('#superTrackTable select.vizSelect').each(function() {
+                if (this.selectedIndex > 0)
+                    anyVisible = true;
+            });
+            if (!anyVisible)
+                superT.topVis(false);
+        }
     }
 };
 

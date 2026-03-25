@@ -2875,24 +2875,32 @@ printf("</TABLE>");
 
 // Now configure the elements above with Javascript:
 
-// * Clicking a button sets the dropdown to the button's text
-jsOnEventBySelector("click", ".seg-btn-group > button", 
+// * Clicking a button sets the dropdown to the button's text and triggers change
+// so superT.selChanged() runs (handles checkbox sync, hiddenText class, auto-show/hide superTrack)
+jsOnEventBySelector("click", ".seg-btn-group > button",
         "let dropdown = $('[name=\"' + $(this).parent().data('trackname')+'\"]'); " // cannot use #id, . has special meaning
         "let buttonText=$(this).text().toLowerCase(); "
-        "dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');"
+        "dropdown.val(buttonText).trigger('change');"
     );
 // * Clicking buttons does not submit the form (default action of <button> is to submit, unless type=button)
 jsInline("$('.seg-btn-group button').attr('type', 'button');");
-// * Clicking buttons makes them pressed. Also, clicking any button shows the superTrack
+// * Clicking buttons makes them pressed
 jsInline("$('.seg-btn-group').on('click', 'button', function() {"
   "$(this).addClass('seg-active').siblings().removeClass('seg-active');"
-  "$('.superDropdown').val('show');"
   "});");
 // * Changing the dropdown updates the buttons
 jsInline("$('#superTrackTable .vizSelect').on('change', function() {"
   "$(this).next().children().removeClass('seg-active');"
   "let labelToFind = capitalizeFirstLetter($(this).val());"
   "$(this).next().find('button').filter(function() { return $(this).text().trim() === labelToFind; }).addClass('seg-active');"
+  "});");
+// * Grey out the superTrack dropdown when manually set to hide
+jsInline("$('.superDropdown').on('change', function() {"
+  "if ($(this).val() === 'hide') {"
+    "$(this).removeClass('normalText').addClass('hiddenText');"
+  "} else {"
+    "$(this).removeClass('hiddenText').addClass('normalText');"
+  "}"
   "});");
 // * Hide all subtrack dropdowns from the user. They are used so the CGI arguments
 // are sent to hgTracks, but are not necessary as UI elements anymore
