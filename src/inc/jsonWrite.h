@@ -14,6 +14,8 @@
 #ifndef JSONWRITE_H
 #define JSONWRITE_H
 
+#include "jsonParse.h"
+
 struct jwObjInfo
 /* Helps keep track of whether a comma is needed and whether we need to close an object or list */
     {
