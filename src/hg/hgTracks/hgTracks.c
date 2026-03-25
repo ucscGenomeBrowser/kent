@@ -7447,16 +7447,15 @@ if (userSeqString != NULL)
 slSafeAddHead(&trackList, oligoMatchTg());
 if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
     {
-    char *vis = cartUsualString(cart, GC_ON_FLY_TRACK_NAME, "hide");
     if (cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE))
 	{
-	slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart, vis));
+	slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
 	}
     else
 	{
 	if (rFindTrackWithTable("gc5Base", trackList) == NULL &&
 	    rFindTrackWithTable("gc5BaseBw", trackList) == NULL)
-	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart, vis));
+	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
 	}
     }
 
