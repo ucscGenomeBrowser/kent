@@ -443,6 +443,16 @@ track->drawItems = bigWigDrawItems;
 track->loadPreDraw = bigWigLoadPreDraw;
 }
 
+void gc5BaseOnTheFlyMethods(struct track *tg, struct cart *cart)
+/* Install on-the-fly GC computation methods on a track that was
+ *     loaded from trackDb.  Overrides the bigWig loadItems/loadPreDraw
+ *     so data is computed from genome sequence instead of read from a file.
+ */
+{
+tg->loadItems   = gc5BaseOnTheFlyLoadItems;
+tg->loadPreDraw = gc5BaseOnTheFlyLoadPreDraw;
+}
+
 struct track *gc5BaseOnTheFlyTg(struct cart *cart)
 /* Create an on-the-fly GC percent track computed directly from
  *     genome sequence.  Default visibility is dense; the cart
