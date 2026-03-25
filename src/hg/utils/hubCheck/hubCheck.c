@@ -569,7 +569,7 @@ else
     if (message)
         strippedMessage = cloneString(message);
     // multiple errors may be in a single message, chop by newline and make a node in the tree for each message
-    int numMessages = chopByChar(strippedMessage, '\n', errorMessages, sizeof(errorMessages));
+    int numMessages = chopByChar(strippedMessage, '\n', errorMessages, ArraySize(errorMessages));
     int i = 0;
     dyStringPrintf(errors, "trackData['%s'] = [", genomeName);
     for (; i < numMessages && isNotEmpty(errorMessages[i]); i++)
@@ -1093,6 +1093,7 @@ static boolean isValidSeqNameChar(char c)
 return isalnum(c) || c == '.' || c == '_' || c == '-';
 }
 
+#define MAX_NUM_SEQ_CHECKS 5
 static void checkSequenceNames(char *twoBitPath, char *genomeName)
 /* Check that sequence names in the 2bit file contain only valid characters:
  * ASCII letters, digits, period, underscore, hyphen.
@@ -1100,16 +1101,23 @@ static void checkSequenceNames(char *twoBitPath, char *genomeName)
 {
 struct slName *seqList = twoBitSeqNames(twoBitPath);
 struct slName *seq;
+int numWarns = 0;
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
     char *name = seq->name;
     int len = strlen(name);
     if (len > 254)
+        {
         warn("warning: sequence name '%s' in genome '%s' exceeds 254 characters (length %d)",
             name, genomeName, len);
+        numWarns++;
+        }
     if (len > 0 && !isalnum(name[0]))
+        {
         warn("warning: sequence name '%s' in genome '%s' starts with '%c' -must start with a letter or digit",
             name, genomeName, name[0]);
+        numWarns++;
+        }
     char *p;
     for (p = name; *p != '\0'; p++)
         {
@@ -1118,8 +1126,14 @@ for (seq = seqList; seq != NULL; seq = seq->next)
             warn("warning: sequence name '%s' in genome '%s' contains invalid character '%c' -"
                 "only [A-Za-z0-9._-] are allowed. Consider using chromAlias for alternative names.",
                 name, genomeName, *p);
+            numWarns++;
             break;
             }
+        }
+    if (numWarns > MAX_NUM_SEQ_CHECKS)
+        {
+        warn("Stopping at %d sequence name warnings. Please check the rest of your sequences for legality.", MAX_NUM_SEQ_CHECKS);
+        break;
         }
     }
 slFreeList(&seqList);
