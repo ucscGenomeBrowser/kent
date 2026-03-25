@@ -7445,7 +7445,16 @@ if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
 if (userSeqString != NULL)
     slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
-if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
+/* gcOnFly track: prefer trackDb entry if present, otherwise
+ * build synthetically when gcOnTheFly config is enabled. */
+{
+struct track *gcTg = rFindTrackWithTable(GC_ON_FLY_TRACK_NAME, trackList);
+if (gcTg != NULL)
+    {
+    /* trackDb entry exists - patch in on-the-fly methods */
+    gc5BaseOnTheFlyMethods(gcTg, cart);
+    }
+else if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
     {
     if (cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE))
 	{
@@ -7458,6 +7467,7 @@ if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
 	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart));
 	}
     }
+}
 
 if (restrictionEnzymesOk())
     {
