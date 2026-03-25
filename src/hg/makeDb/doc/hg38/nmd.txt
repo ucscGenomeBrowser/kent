@@ -31,7 +31,7 @@ cd /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/
 # Using all of RefSeq, not just refseq curated - good idea?
 # This is the file for RefSeq curated: /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeqCurated.txt.gz 
 ~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f genePredExt \
-    /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeq.txt.gz
+    /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeq.txt.gz \
     nmdNcbiRefSeqDeco.bed nmdEscNcbiRefSeq.bed
 
 # not building decorator file - needed? Useful?
@@ -46,7 +46,7 @@ ln -sf /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/nmdEscNcbiRefSeq.bb /gbdb/hg38
 
 #######################################################################
 # Lindeboom et al. NMDetective scores (2025-03-23 max/Claude)
-# NMD efficiency predictions from Lindeboom et al. 2019, Nat Genet.
+# NMD efficiency predictions from Lindeboom et al. 2016, Nat Genet.
 # Four bedGraph custom track files downloaded to:
 #   /hive/data/genomes/hg38/bed/nmd/lindeboom/
 # Data downloaded from https://figshare.com/articles/dataset/NMDetective/7803398
