@@ -1,0 +1,124 @@
+<h2>Description</h2>
+
+<p>
+This track shows <b>44,435 upstream open reading frames (uORFs)</b> in 5' UTRs of human genes,
+curated from ribosome profiling data by the
+<a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a>
+project.
+</p>
+
+<p>
+uORFs are small open reading frames located in the 5' UTR of mRNAs, upstream of the main
+protein-coding sequence. They play an important role in translational regulation: ribosomes
+scanning from the 5' cap may translate a uORF first, which can reduce translation of the
+downstream main ORF. Genetic variants that create or disrupt uORFs can therefore alter
+protein expression and contribute to disease.
+</p>
+
+<p>
+UTRannotator is a plugin for the
+<a href="https://www.ensembl.org/info/docs/tools/vep/index.html" target="_blank">Ensembl
+Variant Effect Predictor (VEP)</a> that annotates 5' UTR variants with respect to uORFs.
+It detects five types of uORF-perturbing events:
+</p>
+<ul>
+  <li><b>uAUG_gained</b> &ndash; variant creates a new upstream start codon</li>
+  <li><b>uAUG_lost</b> &ndash; variant removes an existing upstream start codon</li>
+  <li><b>uSTOP_lost</b> &ndash; variant removes the stop codon of an existing uORF</li>
+  <li><b>uSTOP_gained</b> &ndash; variant creates a new stop codon within an existing uORF</li>
+  <li><b>uFrameShift</b> &ndash; variant causes a frameshift in an existing uORF</li>
+</ul>
+
+<p>
+As part of the project, the authors compiled a curated reference set of translated small ORFs
+in human 5' UTRs, derived from ribosome profiling data in the
+<a href="http://www.sorfs.org" target="_blank">sorfs.org</a> database. This reference set
+is what is displayed in this track. The uORFs are classified into three types:
+</p>
+<ul>
+  <li><b>uORF</b> &ndash; contained entirely within the 5' UTR (has a stop codon before the CDS)</li>
+  <li><b>inframe_oORF</b> &ndash; overlapping ORF that is in-frame with the downstream CDS</li>
+  <li><b>OutOfFrame_oORF</b> &ndash; overlapping ORF that is out-of-frame with the downstream CDS</li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are colored by uORF type:
+</p>
+<ul>
+  <li><b><font color="#0064C8">Blue</font></b> &ndash; uORFs contained entirely within the 5' UTR</li>
+  <li><b><font color="#C86400">Orange</font></b> &ndash; overlapping uORFs that start in the 5' UTR
+      and extend into the CDS region</li>
+</ul>
+
+<p>
+<b>Mouseover</b> on items shows the uORF type. Each item is labeled with the gene symbol
+of the associated transcript.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
+scripts through our <a href="https://api.genome.ucsc.edu">API</a>; the track name is
+&quot;utrAnnotUorfs&quot;.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/"
+target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/utrAnnotUorfs.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+
+<h2>Methods</h2>
+
+<p>
+The uORF reference data was downloaded from the
+<a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator
+GitHub repository</a> (file <tt>uORF_5UTR_GRCh38_PUBLIC.txt</tt>) and converted to bigBed format
+at UCSC. Coordinates for reverse-strand uORFs were swapped to genomic orientation. Four entries
+with invalid coordinates were excluded.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Xiaolei Zhang, Nicola Whiffin, and the UTRannotator team at the Imperial College London
+Cardiovascular Genetics group for making this data publicly available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Zhang X, Wakeling M, Ware J, Whiffin N.
+<a href="https://academic.oup.com/bioinformatics/article/37/8/1171/5905476" target="_blank">
+Annotating high-impact 5'untranslated region variants with the UTRannotator</a>.
+<em>Bioinformatics</em>. 2021 Apr 15;37(8):1171-1173.
+DOI: <a href="https://doi.org/10.1093/bioinformatics/btaa783"
+target="_blank">10.1093/bioinformatics/btaa783</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33165520"
+target="_blank">33165520</a>
+</p>
+
+<p>
+Whiffin N, Karczewski KJ, Zhang X, Chothani S, Smith MJ, Evans DG, Roberts AM,
+Quaife NM, Schafer S, Rber L <em>et al</em>.
+<a href="https://www.nature.com/articles/s41467-020-16103-8" target="_blank">
+Characterising the loss-of-function impact of 5' untranslated region variants in
+15,708 individuals</a>.
+<em>Nat Commun</em>. 2020 May 22;11(1):2523.
+DOI: <a href="https://doi.org/10.1038/s41467-020-16103-8"
+target="_blank">10.1038/s41467-020-16103-8</a>.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32444597"
+target="_blank">32444597</a>
+</p>
