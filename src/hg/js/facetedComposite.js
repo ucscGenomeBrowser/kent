@@ -24,12 +24,16 @@ $(function() {
     // fetch file dynamically
     const loadOptional = (url, hgsid, track) =>  { // load if possible otherwise carry on
         if (!url) return Promise.resolve(null);
-        const fetchUrl = `/cgi-bin/hgTrackUi?hgsid=${hgsid}&fileUrl=${url}&track=${track}`;
+        let fetchBody = `fileUrl=${url}&track=${track}`;
+        if (hgsid !== null) {
+            fetchBody = fetchBody + `&hgsid=${hgsid}`;
+        }
+        const fetchUrl = `/cgi-bin/hgTrackUi?${fetchBody}`;
         const req = (fetchUrl.length > 2048 || embeddedData.udcTimeout) ?
             fetch("/cgi-bin/hgTrackUi", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `hgsid=${hgsid}&fileUrl=${url}&track=${track}`,
+                body: fetchBody,
             })
             : fetch(fetchUrl, {
                 method: "GET",
@@ -85,10 +89,17 @@ $(function() {
         const paramsFromUrl = new URLSearchParams(window.location.search);
         const db = paramsFromUrl.get("db");
         const hgsid = paramsFromUrl.get("hgsid");
+        let body = `${uriForUpdate}`;
+        if (db !== null) {
+            body = body + `&db=${db}`;
+        }
+        if (hgsid !== null) {
+            body = body + `&hgsid=${hgsid}`;
+        }
         fetch("/cgi-bin/cartDump", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `hgsid=${hgsid}&db=${db}&${uriForUpdate}`,
+            body: body,
         }).then(() => {
             // 'disable' any CSS named elements here to them keep out of cart
             const dtLength = submitBtnEvent.
@@ -543,7 +554,7 @@ $(function() {
         }
 
         // fetch file dynamically
-        let fetchUrl = "/cgi-bin/hgTrackUi?" + fetchBody;
+        const fetchUrl = "/cgi-bin/hgTrackUi?" + fetchBody;
         const req = (fetchUrl.length > 2048 || embeddedData.udcTimeout) ?
             fetch("/cgi-bin/hgTrackUi", {
                 method: "POST",
