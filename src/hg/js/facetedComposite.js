@@ -211,9 +211,19 @@ $(function() {
         toggleLabel.appendChild(Object.assign(
             document.createElement("span"), {className: "toggle-slider"}));
         toggleWrapper.appendChild(toggleLabel);
-        toggleWrapper.appendChild(Object.assign(
-            document.createElement("span"), {textContent: "Show only selected rows"}));
+        const toggleText = Object.assign(
+            document.createElement("span"), {id: "selected-filter-text"});
+        toggleWrapper.appendChild(toggleText);
         lengthDiv.appendChild(toggleWrapper);
+
+        function updateSelectedText() {
+            const selCount = table.rows({selected: true}).count();
+            const totalCount = table.rows().count();
+            toggleText.textContent =
+                `Show only selected rows (${selCount} of ${totalCount} selected)`;
+        }
+        updateSelectedText();
+        table.on("select deselect", updateSelectedText);
 
         // Create active-filters chip bar (hidden when empty)
         const activeFiltersDiv = document.createElement("div");
