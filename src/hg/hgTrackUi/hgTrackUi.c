@@ -53,6 +53,7 @@
 #include "customComposite.h"
 #include "hicUi.h"
 #include "decoratorUi.h"
+#include "genark.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -2301,6 +2302,26 @@ jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
 /* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
 wigCfgUi(cart, tdb, tdb->track, "Graph configuration:", FALSE);
+printf("<hr><h4>Data Access</h4>\n");
+printf("<p>This track is generated <em>on-the-fly</em> by the browser as needed.\n"
+ "There is no existing data file for this track.  To obtain the data for this track\n"
+ "use the following <a href='https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads'\n"
+ " target=_blank>kent command line</a> program <b>hgGcPercent</b>:</p>\n");
+
+/* Don't free asmName, it is not allocated */
+char *asmName = hubConnectSkipHubPrefix(database);
+boolean genArk = isGenArk(asmName);
+char twoBitUrl[PATH_LEN];
+if (genArk)
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%shubs/%s/%s.2bit", hDownloadsServer(), genArkPath(asmName), asmName);
+    }
+else
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%s/goldenPath/%s/bigZips/%s.2bit", hDownloadsServer(), asmName, asmName);
+    }
+
+printf("<code>hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\<br>&nbsp;&nbsp;&nbsp;%s | gzip -c > %s.varStep.gz</code>\n", twoBitUrl, asmName);
 }
 
 void cutterUi(struct trackDb *tdb)
@@ -4033,6 +4054,18 @@ safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFly
 struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
         GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
 tdb->canPack = 0;
+tdb->type = cloneString("bigWig 0 100");
+trackDbAddSetting(tdb, "autoScale",         "Off");
+trackDbAddSetting(tdb, "viewLimits",        "30:70");
+trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
+trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
+trackDbAddSetting(tdb, "gridDefault",       "OFF");
+trackDbAddSetting(tdb, "windowingFunction", "Mean");
+trackDbAddSetting(tdb, "color",             "0,0,0");
+trackDbAddSetting(tdb, "altColor",          "128,128,128");
+trackDbAddSetting(tdb, "calcWinSize",       gcOnFlyWinSize(cart));
+trackDbAddSetting(tdb, "syntheticTrack",    "on");
+trackDbPolish(tdb);
 return tdb;
 }
 

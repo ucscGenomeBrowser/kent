@@ -341,7 +341,7 @@ if (twoBitIsFile(nibDir))
     safef(twoBitFile, sizeof(twoBitFile), "%s", nibDir);
 else
     safef(twoBitFile, sizeof(twoBitFile), "%s/%s.2bit", nibDir, database);
-if (fileExists(twoBitFile))
+if (twoBitIsFile(twoBitFile))
     {
     verbose(1, "#\tUsing twoBit: %s\n", twoBitFile);
     makeGcTabFromTwoBit(twoBitFile, tabFile, bedRegionList);
