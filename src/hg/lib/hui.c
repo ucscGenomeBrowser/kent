@@ -10099,6 +10099,9 @@ void printUpdateTime(char *database, struct trackDb *tdb,
 {
 if (trackHubDatabase(database))
     return;
+/* synthetic tracks have no data file or table to check */
+if (trackDbSetting(tdb, "syntheticTrack") != NULL)
+    return;
 /* have not decided what to do for a composite container */
 if (tdbIsComposite(tdb) || tdbIsSuper(tdb))
     return;

@@ -4054,6 +4054,18 @@ safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFly
 struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
         GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
 tdb->canPack = 0;
+tdb->type = cloneString("bigWig 0 100");
+trackDbAddSetting(tdb, "autoScale",         "Off");
+trackDbAddSetting(tdb, "viewLimits",        "30:70");
+trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
+trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
+trackDbAddSetting(tdb, "gridDefault",       "OFF");
+trackDbAddSetting(tdb, "windowingFunction", "Mean");
+trackDbAddSetting(tdb, "color",             "0,0,0");
+trackDbAddSetting(tdb, "altColor",          "128,128,128");
+trackDbAddSetting(tdb, "calcWinSize",       gcOnFlyWinSize(cart));
+trackDbAddSetting(tdb, "syntheticTrack",    "on");
+trackDbPolish(tdb);
 return tdb;
 }
 
