@@ -3922,6 +3922,17 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
             }
         printf("&nbsp;</span>");
         }
+    else if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+        {
+        char *downArrow = "&dArr;";
+        enum browserType browser = cgiBrowser();
+        if (browser == btIE || browser == btFF)
+            downArrow = "&darr;";
+        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
+        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+               "Description%s</A>", downArrow);
+        printf("&nbsp;</span>");
+        }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
     puts("<BR>");

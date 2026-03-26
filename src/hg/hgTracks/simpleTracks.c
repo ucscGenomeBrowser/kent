@@ -11668,7 +11668,8 @@ return (tg->isBigBed &&
             !startsWith("bigInteract",tg->tdb->type) &&
             !startsWith("bigMaf",tg->tdb->type) &&
             !startsWith("bigLolly",tg->tdb->type) &&
-            !startsWith("bigRmsk",tg->tdb->type))
+            !startsWith("bigRmsk",tg->tdb->type) &&
+            !startsWith("bigQuickLiftChain",tg->tdb->type))
         || startsWith("vcfTabix", tg->tdb->type)
         || startsWith("bam", tg->tdb->type);
 }
