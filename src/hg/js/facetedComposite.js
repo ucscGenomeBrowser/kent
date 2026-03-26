@@ -7,11 +7,11 @@ $(function() {
     const DEFAULT_MAX_CHECKBOXES = 20;  // ADS: without default, can get crazy
 
     // ADS: need "matching" versions for the plugins
-    const DATATABLES_URL = "../js/dataTables-1.13.6.min.js";
-    const DATATABLES_SELECT_URL = "../js/dataTables.select-1.7.0.min.js";
+    const DATATABLES_URL = "../js/dataTables-2.2.2.min.js";
+    const DATATABLES_SELECT_URL = "../js/dataTables.select-3.0.0.min.js";
     const CSS_URLS = [
-        "../style/dataTables-1.13.6.min.css",  // dataTables CSS
-        "../style/dataTables.select-1.7.0.min.css",  // dataTables Select CSS
+        "../style/dataTables-2.2.2.min.css",  // dataTables CSS
+        "../style/dataTables.select-3.0.0.min.css",  // dataTables Select CSS
         "../style/facetedComposite.css",  // Local metadata table CSS
     ];
 
@@ -21,14 +21,26 @@ $(function() {
               typeof x === "object" && x !== null && !Array.isArray(x) &&
                   Object.values(x).every(value => typeof value === "string"));
 
-    const loadOptional = (url, hgsid, track) =>  // load if possible otherwise carry on
-          url ?
-          fetch("/cgi-bin/hgFetch", {
-              method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: `hgsid=${hgsid}&fileUrl=${url}&track=${track}`,
-          }).then(r => r.ok ? r.json() : null).catch(() => null)
-          : Promise.resolve(null);
+    // fetch file dynamically
+    const loadOptional = (url, hgsid, track) =>  { // load if possible otherwise carry on
+        if (!url) return Promise.resolve(null);
+        let fetchBody = `fileUrl=${url}&track=${track}`;
+        if (hgsid !== null) {
+            fetchBody = fetchBody + `&hgsid=${hgsid}`;
+        }
+        const fetchUrl = `/cgi-bin/hgTrackUi?${fetchBody}`;
+        const req = (fetchUrl.length > 2048 || embeddedData.udcTimeout) ?
+            fetch("/cgi-bin/hgTrackUi", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: fetchBody,
+            })
+            : fetch(fetchUrl, {
+                method: "GET",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            });
+        return req.then(r => r.ok ? r.json() : null).catch(() => null);
+    };
 
     const loadIfMissing = (condition, url, callback) =>  // for missing plugins
           condition ?
@@ -77,10 +89,17 @@ $(function() {
         const paramsFromUrl = new URLSearchParams(window.location.search);
         const db = paramsFromUrl.get("db");
         const hgsid = paramsFromUrl.get("hgsid");
+        let body = `${uriForUpdate}`;
+        if (db !== null) {
+            body = body + `&db=${db}`;
+        }
+        if (hgsid !== null) {
+            body = body + `&hgsid=${hgsid}`;
+        }
         fetch("/cgi-bin/cartDump", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `hgsid=${hgsid}&db=${db}&${uriForUpdate}`,
+            body: body,
         }).then(() => {
             // 'disable' any CSS named elements here to them keep out of cart
             const dtLength = submitBtnEvent.
@@ -132,7 +151,6 @@ $(function() {
         const checkboxColumn = {
             data: null,
             orderable: false,
-            className: "select-checkbox",
             defaultContent: "",
             title: `
             <label title="Select all visible rows">
@@ -141,16 +159,21 @@ $(function() {
         };
 
         const columns = [checkboxColumn, ...ordinaryColumns];
-        const hasDataTypes = embeddedData.dataTypes && 
+        const hasDataTypes = embeddedData.dataTypes &&
                              Object.keys(embeddedData.dataTypes).length > 0;
         const itemLabel = hasDataTypes ? "samples" : "tracks";
         const table = $("#theMetaDataTable").DataTable({
             data: metadata,
             deferRender: true,    // seems faster
             columns: columns,
+            columnDefs: [ { targets:0, render: DataTable.render.select() } ],
             responsive: true,
-            dom: "lrtip",         // omit 'f' (global search); per-column inputs suffice
-            // autoWidth: true,   // might help columns shrink to fit content
+            layout: {
+                topStart: 'pageLength',
+                topEnd: null,        // omit global search
+                bottomStart: 'info',
+                bottomEnd: 'paging'
+            },
             order: [[1, "asc"]],  // sort by the first data column, not checkbox
             pageLength: 50,       // show 50 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -176,7 +199,7 @@ $(function() {
 
         // Create "show only selected" toggle in the toolbar
         const lengthDiv = document.querySelector(
-            "#theMetaDataTable_wrapper .dataTables_length");
+            "#theMetaDataTable_wrapper .dt-length");
         const toggleWrapper = document.createElement("div");
         toggleWrapper.id = "selected-filter";
         const toggleLabel = document.createElement("label");
@@ -203,7 +226,7 @@ $(function() {
         const row = document.querySelector("#theMetaDataTable thead").insertRow();
         columns.forEach((col) => {
             const cell = row.insertCell();
-            if (col.className === "select-checkbox") {
+            if (col.data === null) {
                 // left empty; toggle is now in the toolbar
             } else if (col.data && col.data.startsWith("_")) {
                 // no search box for hidden-facet columns
@@ -432,7 +455,7 @@ $(function() {
 
     function initSubmit(table) {  // logic for the submit event
         const { mdid, primaryKey } = embeddedData;  // mdid: metadata identifier
-        const hasDataTypes = embeddedData.dataTypes && 
+        const hasDataTypes = embeddedData.dataTypes &&
                              Object.keys(embeddedData.dataTypes).length > 0;
         document.getElementById("Submit").addEventListener("click", (submitBtnEvent) => {
             submitBtnEvent.preventDefault();  // hold the submit button event
@@ -530,12 +553,19 @@ $(function() {
             fetchBody = fetchBody + `&hgsid=${hgsid}`;
         }
 
-        fetch("/cgi-bin/hgFetch", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: fetchBody,
-        })
-            .then(response => {
+        // fetch file dynamically
+        const fetchUrl = "/cgi-bin/hgTrackUi?" + fetchBody;
+        const req = (fetchUrl.length > 2048 || embeddedData.udcTimeout) ?
+            fetch("/cgi-bin/hgTrackUi", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: fetchBody,
+            })
+            : fetch(fetchUrl, {
+                method: "GET",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            });
+            req.then(response => {
                 if (!response.ok) {  // a 404 will look like plain text
                     throw new Error(`HTTP Status: ${response.status}`);
                 }

@@ -39,6 +39,7 @@
 #theMetaDataTable {
     width: 100% !important;
     box-sizing: border-box;
+    box-shadow: 0 0 0 1px #ddd;
 }
 #theMetaDataTable td:nth-child(n+2),
 #theMetaDataTable th:nth-child(n+2) {
@@ -47,8 +48,15 @@
     /* overflow: hidden;          /* hide overflow */
     min-width: 100px; /* Adjust width as needed */
 }
-#theMetaDataTable .select-checkbox {
-    width: 1em !important;   /* force narrow width */
+/* Override Select 3.0's custom checkbox styling to use native appearance */
+table.dataTable input.dt-select-checkbox {
+    appearance: auto;
+    width: auto;
+    height: auto;
+}
+table.dataTable input.dt-select-checkbox:checked::after,
+table.dataTable input.dt-select-checkbox:indeterminate::after {
+    display: none;
 }
 #theMetaDataTable input.row-select {
     /* additional checkbox styling */
@@ -105,7 +113,7 @@ table.dataTable tbody tr:hover {
     gap: 0.5em;
     margin-left: 1.5em;
 }
-.dataTables_length {
+.dt-length {
     display: inline-flex !important;
     align-items: center;
 }

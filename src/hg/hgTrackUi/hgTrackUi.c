@@ -54,6 +54,9 @@
 #include "hicUi.h"
 #include "decoratorUi.h"
 #include "genark.h"
+#include "cart.h"
+#include "filePath.h"
+#include "md5.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3230,6 +3233,8 @@ if (colorSettingsUrl) // only if present in trackDb.settings entry
     printf(",\"colorSettingsUrl\": \"%s\"", cgiEncode((char*) colorSettingsUrl));
 printf(",\"metadataUrl\": \"%s\"", cgiEncode((char*) metaDataUrl));
 printf(",\"track\": \"%s\"", tdb->track);
+if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
+    printf(",\"udcTimeout\": true");
 printf(closeJSON);
 /* --- END embedded JSON data --- */
 
@@ -3516,6 +3521,9 @@ printf("<b>Track collection: "
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
 
+if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+    return;
+
 if (tdbParent->html)
     {
     // collapsed panel for Description
@@ -3763,8 +3771,7 @@ if (!ajax)
 puts("<BR><BR>");
 
 if (tdbIsSuperTrackChild(tdb))
-    if (! (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) )
-        showSupertrackInfo(tdb);
+    showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -4107,9 +4114,148 @@ if (operation != NULL)
 return newTrack;
 }
 
+/* Setting names whose file contents are safe to serve via hgFetch.
+ * Only admin-configured (native track) values are checked -- never hub or custom tracks.
+ * Do NOT add bigDataUrl or bigDataIndex here -- those may be restricted (we
+ * might change this later to instead respect the tableBrowser setting in trackDb). */
+static char *fetchableSettings[] = {"metaDataUrl", "colorSettingsUrl", NULL};
+
+boolean fileUrlMatchesHub(char *fileUrl, struct hubConnectStatus *hubStatus)
+/* Ignores fetchableSettings for now, whitelisting anything that sits inside
+ * the hub.txt directory structure.  Assumes fileUrl has been canonicalized. */
+{
+char baseDir[2048];
+splitPath(hubStatus->hubUrl, baseDir, NULL, NULL);
+return startsWith(baseDir, fileUrl);
+}
+
+static boolean fileUrlMatchesTrackSetting(char *fileUrl, struct trackDb *tdb)
+/* Check if fileUrl matches any whitelisted setting in this trackDb.
+ * Assumes fileUrl has been canonicalized. */
+{
+char **p;
+for (p = fetchableSettings; *p != NULL; p++)
+    {
+    char *val = trackDbSetting(tdb, *p);
+    if (val != NULL && sameString(val, fileUrl))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void handleFileFetch(struct cart *cart)
+/* Checks if a requested file is a legal request based on an attached cart or
+ * native track.  If so, retrieves the file content via UDC and retransmits
+ * it as the page content. */
+{
+char *genome = NULL;
+getDbAndGenome(cart, &database, &genome, NULL);
+initGenbankTableNames(database);
+//knetUdcInstall();
+
+char *fileUrl = cartOptionalString(cart, "fileUrl");
+if (fileUrl == NULL)
+    {
+    puts("Status: 400 Bad Request");
+    errAbort("Missing required parameter: fileUrl");
+    }
+
+char *urlClone = cloneString(fileUrl);
+cgiDecode(urlClone, urlClone, strlen(urlClone));
+fileUrl = resolveDotDots(urlClone);
+freeMem(urlClone);
+
+boolean matchFound = FALSE;
+
+// Check if fileUrl falls under a connected hub's base directory
+struct slName *hubIds = hubConnectHubsInCart(cart);
+struct slName *thisHubId = hubIds;
+while (thisHubId != NULL)
+    {
+    struct hubConnectStatus *hubStatus = hubFromId(sqlUnsigned(thisHubId->name));
+    if (fileUrlMatchesHub(fileUrl, hubStatus))
+        {
+        matchFound = TRUE;
+        break;
+        }
+    thisHubId = thisHubId->next;
+    }
+
+// For native database tracks (not hub or custom tracks), check if fileUrl matches
+// a whitelisted trackDb setting.  Only native tracks are checked here because their
+// settings are admin-configured and trusted.  Hub and custom track settings are
+// user-controlled and could be used for SSRF attacks.
+if (!matchFound)
+    {
+    char *track = cartOptionalString(cart, "track");
+    char *sourceDb = cartOptionalString(cart, "sourceDb"); // for future quickLift use
+    if (sourceDb == NULL)
+        sourceDb = database;
+    if (track != NULL && !isHubTrack(track) && !isCustomTrack(track))
+        {
+        struct trackDb *tdb = tdbForTrack(sourceDb, track, NULL);
+        if (tdb != NULL)
+            matchFound = fileUrlMatchesTrackSetting(fileUrl, tdb);
+        }
+    }
+
+if (!matchFound)
+    {
+    puts("Status: 400 Bad Request");
+    errAbort("Supplied fileUrl does not match any connected hubs or track settings.");
+    }
+
+// By now we know that fileUrl points to something valid to fetch and return to the user.
+// Now we just have to fetch the file contents and retransmit it.
+
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+
+char maxAge[1024];
+safef(maxAge, sizeof(maxAge), "max-age=%d", timeout);
+printf("Cache-Control: %s\n", maxAge);
+
+// See if we're getting a "has it changed" request.
+// If so, return a 304 if nothing changed.
+char etag[1024];
+struct udcFile *udc = udcFileOpen(fileUrl, NULL);
+time_t mtime = udcUpdateTime(udc);
+safef(etag, sizeof(etag), "\"%ld\"", mtime);
+printf("ETag: %s\n", etag);
+udcFileClose(&udc);
+
+char *ifNone = getenv("HTTP_IF_NONE_MATCH");
+if (isNotEmpty(ifNone))
+    {
+    if (sameStringN(etag, ifNone, strlen(etag)-1)) // Apache can add -gzip to etags during transmission
+        {
+        puts("Status: 304 Not Modified\n");
+        freeMem(fileUrl);
+        return;
+        }
+    }
+
+puts("Content-Type: text/plain\n");
+char *content = udcFileReadAll(fileUrl, NULL, 0, NULL);
+puts(content);
+freeMem(content);
+freeMem(fileUrl);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
+boolean isFileFetch = isNotEmpty(cartOptionalString(theCart, "fileUrl"));
+
+if (isFileFetch)
+    {
+    handleFileFetch(theCart);  // file fetch workaround for CORS issues
+    return;
+    }
+else
+    cartWriteHeaderAndCont(theCart, NULL, NULL); // "normal" hgTrackUi
+
 struct trackDb *tdbList = NULL;
 struct trackDb *tdb = NULL;
 char *track;
@@ -4258,7 +4404,7 @@ else
     }
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};
+char *excludeVars[] = { "submit", "Submit", "g", "fileUrl", "track", "sourceDb", NULL, "ajax", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -4267,7 +4413,7 @@ long enteredMainTime = clock1000();
 /* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgTrackUi", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
+cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgTrackUi", enteredMainTime);
 return 0;
 }
