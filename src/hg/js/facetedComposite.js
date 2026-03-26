@@ -332,13 +332,13 @@ $(function() {
             // Clickable heading that toggles collapse
             const heading = Object.assign(document.createElement("strong"), {
                 textContent: toTitleCase(key),
-                className: "facet-heading collapsed",
+                className: "facet-heading",
             });
             facetDiv.appendChild(heading);
 
             // Collapsible body: holds Clear button + all checkboxes
             const facetBody = document.createElement("div");
-            facetBody.classList.add("facet-body", "collapsed");
+            facetBody.classList.add("facet-body");
 
             // Clear button — built here so it lives inside the collapsible body
             const clearBtn = document.createElement("button");
