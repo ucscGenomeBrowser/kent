@@ -390,6 +390,8 @@ for (setting = settings; setting != NULL; setting = setting->next)
         continue;
     *dot2 = '\0';
     char *plotType = dot1;
+    if (!isSymbolString(plotType)) // plotTypes must be simple strings - no XSS injection from hub
+        continue;
     char *fieldName = dot2 + 1;
     char *jsonConfig = trackDbSetting(tdb, setting->name);
 
