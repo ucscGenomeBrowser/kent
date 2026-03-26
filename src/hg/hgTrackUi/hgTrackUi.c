@@ -3521,6 +3521,9 @@ printf("<b>Track collection: "
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
 
+if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+    return;
+
 if (tdbParent->html)
     {
     // collapsed panel for Description
@@ -3768,8 +3771,7 @@ if (!ajax)
 puts("<BR><BR>");
 
 if (tdbIsSuperTrackChild(tdb))
-    if (! (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) )
-        showSupertrackInfo(tdb);
+    showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
