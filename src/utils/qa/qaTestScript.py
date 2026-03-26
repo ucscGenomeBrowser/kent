@@ -37,6 +37,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
+from selenium.common.exceptions import StaleElementReferenceException
 import unittest, time, re, sys, argparse
 import getpass
 import os
@@ -113,16 +114,26 @@ machine= args.machine
 
 def cartReset():
     """The function does a cart reset"""
-    a = ActionChains(driver)
-    #identify element
-    m = driver.find_element(By.LINK_TEXT, "Genome Browser")
+    #identify element, wait for page to load
+    m = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.LINK_TEXT, "Genome Browser")))
     #hover over element
+    a = ActionChains(driver)
     a.move_to_element(m).perform()
-    #identify sub menu element
-    n = driver.find_element(By.LINK_TEXT, "Reset All User Settings")
-    # hover over element and click
-    a.move_to_element(n).click().perform()
+    #identify sub menu element, wait for submenu to appear
+    n = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.LINK_TEXT, "Reset All User Settings")))
+    # hover over element and click with fresh ActionChains
+    a2 = ActionChains(driver)
+    a2.move_to_element(n).click().perform()
     driver.implicitly_wait(2)
+
+def wait_for_position_input():
+    """Waits for the position input to be present and interactable after a page reload"""
+    time.sleep(1)  # Let the page reload begin before searching for elements
+    return WebDriverWait(driver, 10,
+        ignored_exceptions=[StaleElementReferenceException]).until(
+        EC.element_to_be_clickable((By.NAME, "hgt.positionInput")))
 
 def hover_and_click(driver, main_id, submenu_id):
     """Function that hovers the blue bar menu and clicks a menu item"""
@@ -356,49 +367,38 @@ driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element(By.NAME, "hgt.positionInput").clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_007262.5(PARK7):c.-24+75_-24+92dup")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_006172.4(NPPA):c.456_*1delAA")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("MYH11:c.503-14_503-12del")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_198576.4(AGRN):c.1057C>T")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_198056.3:c.1654G>T")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NP_002993.1:p.Asp92Glu")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NP_002993.1:p.D92E")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.NAME, "hgt.positionInput").clear()
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("BRCA1 Ala744Cys")
 driver.find_element(By.ID, "goButton").click()
 time.sleep(2)
 driver.find_element(By.XPATH, "//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[3]").click()
-driver.get(machine + "/cgi-bin/hgTracks?db=hg38") 
-driver.find_element(By.NAME, "hgt.positionInput").clear()
-time.sleep(3)
+driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
+wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_000828.5:c.-2G>A")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(3)
-driver.find_element(By.NAME, "hgt.positionInput").send_keys("chr18:g.55234435G>T")
+wait_for_position_input().send_keys("chr18:g.55234435G>T")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(3)
-driver.find_element(By.NAME, "hgt.positionInput").send_keys("LRG_321:g.16409_16461del")
+wait_for_position_input().send_keys("LRG_321:g.16409_16461del")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(3)
-driver.find_element(By.NAME, "hgt.positionInput").send_keys("chrX:g.31500000_31600000del")
+wait_for_position_input().send_keys("chrX:g.31500000_31600000del")
 driver.find_element(By.ID, "goButton").click()
 time.sleep(3)
 
