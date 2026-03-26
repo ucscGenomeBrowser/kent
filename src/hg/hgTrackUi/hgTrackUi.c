@@ -4064,29 +4064,6 @@ return trackDbForPseudoTrack(RULER_TRACK_NAME,
 	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
-static struct trackDb *trackDbForGcOnFly(struct cart *cart)
-/* Create a trackDb entry for the GC on the fly pseudo-track. */
-{
-char longLabel[1024];
-safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
-struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
-        GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
-tdb->canPack = 0;
-tdb->type = cloneString("bigWig 0 100");
-trackDbAddSetting(tdb, "autoScale",         "Off");
-trackDbAddSetting(tdb, "viewLimits",        "30:70");
-trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
-trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
-trackDbAddSetting(tdb, "gridDefault",       "OFF");
-trackDbAddSetting(tdb, "windowingFunction", "Mean");
-trackDbAddSetting(tdb, "color",             "0,0,0");
-trackDbAddSetting(tdb, "altColor",          "128,128,128");
-trackDbAddSetting(tdb, "calcWinSize",       gcOnFlyWinSize(cart));
-trackDbAddSetting(tdb, "syntheticTrack",    "on");
-trackDbPolish(tdb);
-return tdb;
-}
-
 struct trackDb *trackDbForOligoMatch()
 /* Create a trackDb entry for the oligo matcher pseudo-track. */
 {
@@ -4339,8 +4316,6 @@ else if (sameWord(track, RULER_TRACK_NAME))
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
-else if (sameWord(track, GC_ON_FLY_TRACK_NAME))
-    tdb = trackDbForGcOnFly(cart);
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track))
