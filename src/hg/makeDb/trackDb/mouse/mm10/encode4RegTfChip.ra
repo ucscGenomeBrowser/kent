@@ -10,6 +10,7 @@ metaDataUrl /gbdb/mm10/encode4/regulation/encode4RegTfChip_metadata.tsv
 primaryKey accession
 maxCheckboxes 40
 noInherit on
+priority 2.2
 
     track encode4RegTfChip_ENCFF265VZJ
     type bigBed 5

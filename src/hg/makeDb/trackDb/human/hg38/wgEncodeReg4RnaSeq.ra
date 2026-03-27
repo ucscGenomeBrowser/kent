@@ -10,6 +10,7 @@ metaDataUrl /gbdb/hg38/encode4/regulation/wgEncodeReg4RnaSeq_metadata.tsv
 primaryKey accession
 maxCheckboxes 40
 noInherit on
+priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF102QGV
     type bigWig

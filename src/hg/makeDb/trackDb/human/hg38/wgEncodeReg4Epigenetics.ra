@@ -10,6 +10,7 @@ metaDataUrl /gbdb/hg38/encode4/regulation/wgEncodeReg4Epigenetics_metadata.tsv
 primaryKey accession
 maxCheckboxes 40
 noInherit on
+priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF094EYJ
     type bigWig

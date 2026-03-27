@@ -10,6 +10,7 @@ metaDataUrl /gbdb/hg38/encode4/regulation/wgEncodeReg4TfChip_metadata.tsv
 primaryKey accession
 maxCheckboxes 40
 noInherit on
+priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF492SKF
     type bigBed 5
